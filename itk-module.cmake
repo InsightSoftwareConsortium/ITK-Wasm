@@ -7,6 +7,8 @@ file formats.
 itk_module(BridgeJavaScript
   DEPENDS
     ITKCommon
+    ITKIOImageBase
+    ITKImageFunction
   TEST_DEPENDS
     ITKTestKernel
   EXCLUDE_FROM_DEFAULT
