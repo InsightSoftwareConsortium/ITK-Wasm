@@ -1,6 +1,6 @@
 
 if(process.argv.length < 4) {
-  console.error("itkImageJS example, set random pixels to the image.");
+  console.error("itkJSImageIO example, set random pixels to the image.");
   console.error("Use mode: .nrrd or .nii files");
   console.error(process.argv[0], process.argv[1], " moduleDir inputImage outputImage");
   process.exit(1);
@@ -12,8 +12,8 @@ console.log("Input image: ", inputImage);
 console.log("Output image: ", outputImage);
 
 var path = require("path");
-var Module = require(path.join(moduleDir, "itkImageJS.js"));
-var imagejs = new Module.itkImageJS();
+var Module = require(path.join(moduleDir, "itkJSImageIO.js"));
+var imagejs = new Module.itkJSImageIO();
 
 console.log("Reading image...");
 imagejs.MountDirectory(inputImage);

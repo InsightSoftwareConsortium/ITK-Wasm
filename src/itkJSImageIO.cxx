@@ -1,27 +1,27 @@
 
-#include "itkImageJS.h"
+#include "itkJSImageIO.h"
 
 // Binding code
 EMSCRIPTEN_BINDINGS(itk_image_j_s) {
-  class_<itkImageJS>("itkImageJS")
+  class_<itkJSImageIO>("itkJSImageIO")
     .constructor<>()
-    .function("ReadImage", &itkImageJS::ReadImage)
-    .function("WriteImage", &itkImageJS::WriteImage)
-    .function("MountDirectory", &itkImageJS::MountDirectory)
-    .function("GetBufferPointer", &itkImageJS::GetBufferPointer)
-    .function("GetBufferSize", &itkImageJS::GetBufferSize)
-    .function("GetSpacing", &itkImageJS::GetSpacing)
-    .function("GetOrigin", &itkImageJS::GetOrigin)
-    .function("GetDimensions", &itkImageJS::GetDimensions)
-    .function("GetDirection", &itkImageJS::GetDirection)
-    .function("GetPixel", &itkImageJS::GetPixel)
-    .function("GetPixelWorld", &itkImageJS::GetPixelWorld)
-    .function("SetPixel", &itkImageJS::SetPixel)
-    .function("GetDataType", &itkImageJS::GetDataType)
+    .function("ReadImage", &itkJSImageIO::ReadImage)
+    .function("WriteImage", &itkJSImageIO::WriteImage)
+    .function("MountDirectory", &itkJSImageIO::MountDirectory)
+    .function("GetBufferPointer", &itkJSImageIO::GetBufferPointer)
+    .function("GetBufferSize", &itkJSImageIO::GetBufferSize)
+    .function("GetSpacing", &itkJSImageIO::GetSpacing)
+    .function("GetOrigin", &itkJSImageIO::GetOrigin)
+    .function("GetDimensions", &itkJSImageIO::GetDimensions)
+    .function("GetDirection", &itkJSImageIO::GetDirection)
+    .function("GetPixel", &itkJSImageIO::GetPixel)
+    .function("GetPixelWorld", &itkJSImageIO::GetPixelWorld)
+    .function("SetPixel", &itkJSImageIO::SetPixel)
+    .function("GetDataType", &itkJSImageIO::GetDataType)
     ;
 }
 
-itkImageJS::itkImageJS(){
+itkJSImageIO::itkJSImageIO(){
   m_Interpolate = InterpolateFunctionType::New();  
 }
 
@@ -30,7 +30,7 @@ itkImageJS::itkImageJS(){
 * a path in the filesystem to the NODEFS system. 
 *
 */
-void itkImageJS::MountDirectory(const string filename){
+void itkJSImageIO::MountDirectory(const string filename){
   
   EM_ASM_({
 
@@ -63,12 +63,12 @@ void itkImageJS::MountDirectory(const string filename){
 }
 
 /*
-* This function reads an image from the NODEFS or IDBS system and sets up the different attributes in itkImageJS
+* This function reads an image from the NODEFS or IDBS system and sets up the different attributes in itkJSImageIO
 * If executing in the browser, you must save the image first using FS.write(filename, buffer).
 * If executing inside NODE.js use mound directory with the image filename. 
 */
 
-  void itkImageJS::ReadImage(string filename){
+  void itkJSImageIO::ReadImage(string filename){
 
     try{
       
@@ -90,7 +90,7 @@ void itkImageJS::MountDirectory(const string filename){
   /*
   * After reading the image, it sets up different attributes
   */
-  void itkImageJS::Initialize(){
+  void itkJSImageIO::Initialize(){
     SizeType size = this->GetImage()->GetLargestPossibleRegion().GetSize();
     m_Size[0] = size[0];
     m_Size[1] = size[1];
@@ -115,7 +115,7 @@ void itkImageJS::MountDirectory(const string filename){
   /*
   * Write the image to to the file system. 
   */
-  void itkImageJS::WriteImage(string filename){
+  void itkJSImageIO::WriteImage(string filename){
     try{
     
       ImageFileWriter::Pointer writer = ImageFileWriter::New();

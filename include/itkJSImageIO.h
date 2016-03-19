@@ -1,6 +1,6 @@
 
-#ifndef _itkImageJS_
-#define _itkImageJS_
+#ifndef _itkJSImageIO_
+#define _itkJSImageIO_
 
 #include <assert.h>
 #include <stdio.h>
@@ -17,7 +17,7 @@ using namespace std;
 using namespace emscripten;
 
 
-class itkImageJS {
+class itkJSImageIO {
 public:
 
   static const int dimension = 3;
@@ -37,7 +37,7 @@ public:
   typedef itk::LinearInterpolateImageFunction< InputImageType > InterpolateFunctionType;
   typedef typename InterpolateFunctionType::Pointer InterpolateFunctionPointerType;
 
-  itkImageJS();
+  itkJSImageIO();
 
   void Initialize();
 
