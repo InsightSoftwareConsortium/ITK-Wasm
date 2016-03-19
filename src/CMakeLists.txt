@@ -5,15 +5,15 @@ find_package(ITK REQUIRED
     ITKIONRRD
   )
 include(${ITK_USE_FILE})
-add_executable(itkImageJS itkImageJS.cxx)
-target_link_libraries(itkImageJS
+add_executable(itkJSImageIO itkJSImageIO.cxx)
+target_link_libraries(itkJSImageIO
   LINK_PRIVATE ${ITK_MODULE_BridgeJavaScript_PRIVATE_DEPENDS}
   LINK_PUBLIC ${ITK_MODULE_BridgeJavaScript_PUBLIC_DEPENDS})
-itk_module_target_label(itkImageJS)
-itk_module_target_export(itkImageJS)
-itk_module_target_install(itkImageJS)
+itk_module_target_label(itkJSImageIO)
+itk_module_target_export(itkJSImageIO)
+itk_module_target_install(itkJSImageIO)
 # For embind
-set_property(TARGET itkImageJS APPEND
+set_property(TARGET itkJSImageIO APPEND
   PROPERTY LINK_FLAGS " --bind"
   )
-target_link_libraries(itkImageJS LINK_PUBLIC ${ITK_LIBRARIES})
+target_link_libraries(itkJSImageIO LINK_PUBLIC ${ITK_LIBRARIES})
