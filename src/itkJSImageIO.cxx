@@ -2,7 +2,7 @@
 #include "itkJSImageIO.h"
 
 // Binding code
-EMSCRIPTEN_BINDINGS(itk_image_j_s) {
+EMSCRIPTEN_BINDINGS(itk_js_image_io) {
   class_<itkJSImageIO>("itkJSImageIO")
     .constructor<>()
     .function("ReadImage", &itkJSImageIO::ReadImage)
@@ -22,16 +22,16 @@ EMSCRIPTEN_BINDINGS(itk_image_j_s) {
 }
 
 itkJSImageIO::itkJSImageIO(){
-  m_Interpolate = InterpolateFunctionType::New();  
+  m_Interpolate = InterpolateFunctionType::New();
 }
 
 /*
-* This function should only be used when executing in NODE.js in order to mount 
-* a path in the filesystem to the NODEFS system. 
+* This function should only be used when executing in NODE.js in order to mount
+* a path in the filesystem to the NODEFS system.
 *
 */
 void itkJSImageIO::MountDirectory(const string filename){
-  
+
   EM_ASM_({
 
       var path = require('path');
@@ -59,19 +59,19 @@ void itkJSImageIO::MountDirectory(const string filename){
 
     }, filename.c_str()
   );
-  
+
 }
 
 /*
 * This function reads an image from the NODEFS or IDBS system and sets up the different attributes in itkJSImageIO
 * If executing in the browser, you must save the image first using FS.write(filename, buffer).
-* If executing inside NODE.js use mound directory with the image filename. 
+* If executing inside NODE.js use mound directory with the image filename.
 */
 
   void itkJSImageIO::ReadImage(string filename){
 
     try{
-      
+
       ImageFileReader::Pointer reader = ImageFileReader::New();
       reader->SetFileName(filename.c_str());
       reader->Update();
@@ -84,7 +84,7 @@ void itkJSImageIO::MountDirectory(const string filename){
     }catch(itk::ExceptionObject & err){
       cerr<<err<<endl;
     }
-    
+
   }
 
   /*
@@ -113,11 +113,11 @@ void itkJSImageIO::MountDirectory(const string filename){
   }
 
   /*
-  * Write the image to to the file system. 
+  * Write the image to to the file system.
   */
   void itkJSImageIO::WriteImage(string filename){
     try{
-    
+
       ImageFileWriter::Pointer writer = ImageFileWriter::New();
       writer->SetFileName(filename.c_str());
       writer->SetInput(this->GetImage());

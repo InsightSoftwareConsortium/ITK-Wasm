@@ -30,7 +30,7 @@ public:
   typedef typename InputImageType::RegionType RegionType;
   typedef typename InputImageType::SizeType SizeType;
   typedef typename InputImageType::DirectionType DirectionType;
-  
+
   typedef itk::ImageFileReader< InputImageType > ImageFileReader;
   typedef itk::ImageFileWriter< InputImageType > ImageFileWriter;
 
