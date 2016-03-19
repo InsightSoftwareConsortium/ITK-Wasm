@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef _itkJSImageIO_
-#define _itkJSImageIO_
+#ifndef itkJSImageIO_h
+#define itkJSImageIO_h
 
 #include <assert.h>
 #include <stdio.h>
