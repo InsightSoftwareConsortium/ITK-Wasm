@@ -18,19 +18,12 @@
 #ifndef itkJSImageIO_h
 #define itkJSImageIO_h
 
-#include <assert.h>
-#include <stdio.h>
-#include <string.h>
-#include <emscripten.h>
-#include <bind.h>
-
 #include <itkImage.h>
 #include <itkImageFileReader.h>
 #include <itkImageFileWriter.h>
 #include <itkLinearInterpolateImageFunction.h>
 
 using namespace std;
-using namespace emscripten;
 
 
 class itkJSImageIO {
