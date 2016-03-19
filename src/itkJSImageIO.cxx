@@ -41,7 +41,8 @@ EMSCRIPTEN_BINDINGS(itk_js_image_io) {
     ;
 }
 
-itkJSImageIO::itkJSImageIO(){
+itkJSImageIO::itkJSImageIO()
+{
   m_Interpolate = InterpolateFunctionType::New();
 }
 
@@ -50,7 +51,10 @@ itkJSImageIO::itkJSImageIO(){
 * a path in the filesystem to the NODEFS system.
 *
 */
-void itkJSImageIO::MountDirectory(const string filename){
+void
+itkJSImageIO
+::MountDirectory(const std::string filename)
+{
 
   EM_ASM_({
 
@@ -87,63 +91,73 @@ void itkJSImageIO::MountDirectory(const string filename){
 * If executing in the browser, you must save the image first using FS.write(filename, buffer).
 * If executing inside NODE.js use mound directory with the image filename.
 */
+void
+itkJSImageIO
+::ReadImage(std::string filename)
+{
+  try
+    {
+    ImageFileReader::Pointer reader = ImageFileReader::New();
+    reader->SetFileName(filename.c_str());
+    reader->Update();
 
-  void itkJSImageIO::ReadImage(string filename){
+    this->SetImage(reader->GetOutput());
+    m_Interpolate->SetInputImage(this->GetImage());
 
-    try{
-
-      ImageFileReader::Pointer reader = ImageFileReader::New();
-      reader->SetFileName(filename.c_str());
-      reader->Update();
-
-      this->SetImage(reader->GetOutput());
-      m_Interpolate->SetInputImage(this->GetImage());
-
-      this->Initialize();
-
-    }catch(itk::ExceptionObject & err){
-      cerr<<err<<endl;
+    this->Initialize();
     }
-
-  }
-
-  /*
-  * After reading the image, it sets up different attributes
-  */
-  void itkJSImageIO::Initialize(){
-    SizeType size = this->GetImage()->GetLargestPossibleRegion().GetSize();
-    m_Size[0] = size[0];
-    m_Size[1] = size[1];
-    m_Size[2] = size[2];
-
-    SpacingType spacing = this->GetImage()->GetSpacing();
-    m_Spacing[0] = spacing[0];
-    m_Spacing[1] = spacing[1];
-    m_Spacing[2] = spacing[2];
-
-    PointType origin = this->GetImage()->GetOrigin();
-    m_Origin[0] = origin[0];
-    m_Origin[1] = origin[1];
-    m_Origin[2] = origin[2];
-
-    DirectionType direction = this->GetImage()->GetDirection();
-    for(int i = 0; i < dimension*dimension; i++){
-      m_Direction[i] = direction[i/dimension][i%dimension];
+  catch( itk::ExceptionObject & err )
+    {
+    std::cerr << err << std::endl;
     }
-  }
+}
 
-  /*
-  * Write the image to to the file system.
-  */
-  void itkJSImageIO::WriteImage(string filename){
-    try{
+/*
+* After reading the image, it sets up different attributes
+*/
+void
+itkJSImageIO
+::Initialize()
+{
+  SizeType size = this->GetImage()->GetLargestPossibleRegion().GetSize();
+  m_Size[0] = size[0];
+  m_Size[1] = size[1];
+  m_Size[2] = size[2];
 
-      ImageFileWriter::Pointer writer = ImageFileWriter::New();
-      writer->SetFileName(filename.c_str());
-      writer->SetInput(this->GetImage());
-      writer->Update();
-    }catch(itk::ExceptionObject & err){
-      cerr<<err<<endl;
+  SpacingType spacing = this->GetImage()->GetSpacing();
+  m_Spacing[0] = spacing[0];
+  m_Spacing[1] = spacing[1];
+  m_Spacing[2] = spacing[2];
+
+  PointType origin = this->GetImage()->GetOrigin();
+  m_Origin[0] = origin[0];
+  m_Origin[1] = origin[1];
+  m_Origin[2] = origin[2];
+
+  DirectionType direction = this->GetImage()->GetDirection();
+  for(int i = 0; i < Dimension*Dimension; ++i)
+    {
+    m_Direction[i] = direction[i/Dimension][i%Dimension];
     }
+}
 
-  }
+/*
+* Write the image to to the file system.
+*/
+void
+itkJSImageIO
+::WriteImage(std::string filename)
+{
+  try
+    {
+
+    ImageFileWriter::Pointer writer = ImageFileWriter::New();
+    writer->SetFileName(filename.c_str());
+    writer->SetInput(this->GetImage());
+    writer->Update();
+    }
+  catch(itk::ExceptionObject & err)
+    {
+    std::cerr << err << std::endl;
+    }
+}
