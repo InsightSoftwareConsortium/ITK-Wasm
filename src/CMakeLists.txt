@@ -17,3 +17,16 @@ set_property(TARGET itkJSImageIO APPEND
   PROPERTY LINK_FLAGS " --bind"
   )
 target_link_libraries(itkJSImageIO LINK_PUBLIC ${ITK_LIBRARIES})
+
+add_executable(itkPNGImageIOJSBinding itkPNGImageIOJSBinding.cxx)
+target_link_libraries(itkPNGImageIOJSBinding
+  LINK_PRIVATE ${ITK_MODULE_BridgeJavaScript_PRIVATE_DEPENDS}
+  LINK_PUBLIC ${ITK_MODULE_BridgeJavaScript_PUBLIC_DEPENDS})
+itk_module_target_label(itkPNGImageIOJSBinding)
+itk_module_target_export(itkPNGImageIOJSBinding)
+itk_module_target_install(itkPNGImageIOJSBinding)
+# For embind
+set_property(TARGET itkPNGImageIOJSBinding APPEND
+  PROPERTY LINK_FLAGS " --bind"
+  )
+target_link_libraries(itkPNGImageIOJSBinding LINK_PUBLIC ${ITK_LIBRARIES})

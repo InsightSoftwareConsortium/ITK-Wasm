@@ -22,3 +22,10 @@ itk_add_test(NAME itkJSImageIOExampleTest
     DATA{Input/cthead1.png}
     ${ITK_TEST_OUTPUT_DIR}/cthead1.png
   )
+
+itk_add_test(NAME itkPNGImageIOJSBindingTest
+  COMMAND ${NODE_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/itkPNGImageIOJSBindingTest.js
+    ${moduleDir}
+    DATA{Input/cthead1.png}
+    ${ITK_TEST_OUTPUT_DIR}/cthead1.png
+  )
