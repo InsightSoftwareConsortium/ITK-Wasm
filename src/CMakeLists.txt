@@ -18,15 +18,24 @@ set_property(TARGET itkJSImageIO APPEND
   )
 target_link_libraries(itkJSImageIO LINK_PUBLIC ${ITK_LIBRARIES})
 
-add_executable(itkPNGImageIOJSBinding itkPNGImageIOJSBinding.cxx)
-target_link_libraries(itkPNGImageIOJSBinding
-  LINK_PRIVATE ${ITK_MODULE_BridgeJavaScript_PRIVATE_DEPENDS}
-  LINK_PUBLIC ${ITK_MODULE_BridgeJavaScript_PUBLIC_DEPENDS})
-itk_module_target_label(itkPNGImageIOJSBinding)
-itk_module_target_export(itkPNGImageIOJSBinding)
-itk_module_target_install(itkPNGImageIOJSBinding)
-# For embind
-set_property(TARGET itkPNGImageIOJSBinding APPEND
-  PROPERTY LINK_FLAGS " --bind"
-  )
-target_link_libraries(itkPNGImageIOJSBinding LINK_PUBLIC ${ITK_LIBRARIES})
+
+foreach(io_module ${BridgeJavaScript_IOModules})
+  find_package(ITK REQUIRED COMPONENTS ${io_module})
+  include(${ITK_USE_FILE})
+
+  if(NOT DEFINED imageio_${io_module})
+    message(FATAL_ERROR "Unknown ImageIOBase classes for module ${io_module}")
+  endif()
+  foreach(imageio ${imageio_${io_module}})
+    set(target ${imageio}JSBinding)
+    add_executable(${target} ${target}.cxx)
+    itk_module_target_label(${target})
+    itk_module_target_export(${target})
+    itk_module_target_install(${target})
+    # For embind
+    set_property(TARGET ${target} APPEND
+      PROPERTY LINK_FLAGS " --bind"
+      )
+    target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
+  endforeach()
+endforeach()

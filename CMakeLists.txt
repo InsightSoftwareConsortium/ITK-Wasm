@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(BridgeJavaScript)
 
+set(BridgeJavaScript_IOModules
+  "ITKIOPNG"
+  CACHE STRING
+  "String delimited list of ITK IO modules to support.")
+set(imageio_ITKIOPNG itkPNGImageIO)
+
+
 if(NOT ITK_SOURCE_DIR)
   find_package(ITK 4.9 REQUIRED)
   list(APPEND CMAKE_MODULE_PATH ${ITK_CMAKE_DIR})
