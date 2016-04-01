@@ -39,6 +39,7 @@ imagejs.MountDirectory(inputImage);
 imageio.SetFileName(inputImage);
 assert.equal(imageio.GetFileName(), inputImage);
 assert.equal(imageio.GetNumberOfDimensions(), 2);
+imageio.ReadImageInformation();
 
 //imagejs.ReadImage(inputImage);
 

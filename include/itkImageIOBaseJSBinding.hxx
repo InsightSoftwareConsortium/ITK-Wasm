@@ -66,6 +66,15 @@ ImageIOBaseJSBinding< TImageIO >
   return this->m_ImageIO->GetFileName();
 }
 
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::ReadImageInformation()
+{
+  return this->m_ImageIO->ReadImageInformation();
+}
+
 } // end namespace itk
 
 #endif

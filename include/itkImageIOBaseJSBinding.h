@@ -48,6 +48,9 @@ public:
   void SetFileName(std::string fileName);
   std::string GetFileName();
 
+  /** Read the spacing and dimensions of the image.
+   * Assumes SetFileName has been called with a valid file name. */
+  void ReadImageInformation();
 
 private:
   typename ImageIOType::Pointer m_ImageIO;
