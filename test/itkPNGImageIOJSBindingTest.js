@@ -26,16 +26,23 @@ var outputImage = process.argv[4];
 console.log("Input image: ", inputImage);
 console.log("Output image: ", outputImage);
 
+assert = require('assert');
+
 var path = require("path");
 var Module = require(path.join(moduleDir, "itkPNGImageIOJSBinding.js"));
 var imageio = new Module.itkPNGImageIO();
-
-console.log(imageio.GetNumberOfDimensions())
+var JSImageIOModule = require(path.join(moduleDir, "itkJSImageIO.js"));
+var imagejs = new JSImageIOModule.itkJSImageIO();
 
 console.log("Reading image...");
-//imagejs.MountDirectory(inputImage);
+imagejs.MountDirectory(inputImage);
+imageio.SetFileName(inputImage);
+assert.equal(imageio.GetFileName(), inputImage);
+assert.equal(imageio.GetNumberOfDimensions(), 2);
+
 //imagejs.ReadImage(inputImage);
 
 console.log("Writing image...");
-//imagejs.MountDirectory(outputImage);
+imagejs.MountDirectory(outputImage);
+imageio.SetNumberOfDimensions(2);
 //imagejs.WriteImage(outputImage);

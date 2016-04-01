@@ -22,6 +22,13 @@
 namespace itk
 {
 
+/** \class ImageIOBaseJSBinding
+ *
+ * \brief Provides as JavaScript binding interface to itk::ImageIOBase derived
+ * classes.
+ *
+ * \ingroup BridgeJavaScript
+ */
 template< typename TImageIO >
 class ImageIOBaseJSBinding
 {
@@ -35,6 +42,12 @@ public:
    * is written, rather the IORegion controls that. */
   void SetNumberOfDimensions(unsigned int numberOfDimensions);
   unsigned int GetNumberOfDimensions();
+
+  /** Set/Get the name of the file to be read. This file should exist on the
+   * Emscripten virtual filesystem. */
+  void SetFileName(std::string fileName);
+  std::string GetFileName();
+
 
 private:
   typename ImageIOType::Pointer m_ImageIO;

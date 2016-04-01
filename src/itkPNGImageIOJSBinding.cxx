@@ -17,7 +17,7 @@
  *=========================================================================*/
 
 #include <emscripten.h>
-#include <bind.h>
+#include <emscripten/bind.h>
 
 #include "itkPNGImageIO.h"
 
@@ -30,5 +30,7 @@ EMSCRIPTEN_BINDINGS(itk_png_image_io_js_binding) {
   .constructor<>()
   .function("SetNumberOfDimensions", &PNGImageIOJSBindingType::SetNumberOfDimensions)
   .function("GetNumberOfDimensions", &PNGImageIOJSBindingType::GetNumberOfDimensions)
+  .function("SetFileName", &PNGImageIOJSBindingType::SetFileName)
+  .function("GetFileName", &PNGImageIOJSBindingType::GetFileName)
   ;
 }

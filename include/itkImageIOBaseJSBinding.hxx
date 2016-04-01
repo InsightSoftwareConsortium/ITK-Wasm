@@ -39,6 +39,7 @@ ImageIOBaseJSBinding< TImageIO >
   this->m_ImageIO->SetNumberOfDimensions(numberOfDimensions);
 }
 
+
 template< typename TImageIO >
 unsigned int
 ImageIOBaseJSBinding< TImageIO >
@@ -47,6 +48,23 @@ ImageIOBaseJSBinding< TImageIO >
   return this->m_ImageIO->GetNumberOfDimensions();
 }
 
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::SetFileName(std::string fileName)
+{
+  this->m_ImageIO->SetFileName(fileName);
+}
+
+
+template< typename TImageIO >
+std::string
+ImageIOBaseJSBinding< TImageIO >
+::GetFileName()
+{
+  return this->m_ImageIO->GetFileName();
+}
 
 } // end namespace itk
 
