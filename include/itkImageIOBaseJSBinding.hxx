@@ -121,6 +121,24 @@ ImageIOBaseJSBinding< TImageIO >
 }
 
 
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::SetSpacing( unsigned int i, double dimension )
+{
+  this->m_ImageIO->SetSpacing( i, dimension );
+}
+
+
+template< typename TImageIO >
+double
+ImageIOBaseJSBinding< TImageIO >
+::GetSpacing( unsigned int i ) const
+{
+  return this->m_ImageIO->GetSpacing(i);
+}
+
+
 } // end namespace itk
 
 #endif

@@ -64,6 +64,11 @@ public:
   void SetOrigin(unsigned int i, double origin);
   double GetOrigin(unsigned int i) const;
 
+  /** Set/Get the image spacing on an axis-by-axis basis. The
+   * SetSpacing() method is required when writing the image. */
+  void SetSpacing(unsigned int i, double origin);
+  double GetSpacing(unsigned int i) const;
+
 private:
   typename ImageIOType::Pointer m_ImageIO;
 };

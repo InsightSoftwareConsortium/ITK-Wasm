@@ -41,5 +41,7 @@ EMSCRIPTEN_BINDINGS(itk_png_image_io_js_binding) {
   .function("GetDimensions", &PNGImageIOJSBindingType::GetDimensions)
   .function("SetOrigin", &PNGImageIOJSBindingType::SetOrigin)
   .function("GetOrigin", &PNGImageIOJSBindingType::GetOrigin)
+  .function("SetSpacing", &PNGImageIOJSBindingType::SetSpacing)
+  .function("GetSpacing", &PNGImageIOJSBindingType::GetSpacing)
   ;
 }

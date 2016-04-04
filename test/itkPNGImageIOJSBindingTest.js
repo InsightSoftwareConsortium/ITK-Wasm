@@ -46,6 +46,8 @@ assert.equal(imageio.GetDimensions(0), 256);
 assert.equal(imageio.GetDimensions(1), 256);
 assert.equal(imageio.GetOrigin(0), 0.0);
 assert.equal(imageio.GetOrigin(1), 0.0);
+assert.equal(imageio.GetSpacing(0), 1.0);
+assert.equal(imageio.GetSpacing(1), 1.0);
 Module.UnmountContainingDirectory(inputImage);
 
 ////imagejs.ReadImage(inputImage);
