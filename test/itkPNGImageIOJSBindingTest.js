@@ -35,15 +35,22 @@ var JSImageIOModule = require(path.join(moduleDir, "itkJSImageIO.js"));
 var imagejs = new JSImageIOModule.itkJSImageIO();
 
 console.log("Reading image...");
-imagejs.MountDirectory(inputImage);
+Module.MountContainingDirectory(inputImage);
 imageio.SetFileName(inputImage);
 assert.equal(imageio.GetFileName(), inputImage);
-assert.equal(imageio.GetNumberOfDimensions(), 2);
+assert(imageio.CanReadFile(inputImage), "Could not read the file");
 imageio.ReadImageInformation();
+dimension = 2;
+assert.equal(imageio.GetNumberOfDimensions(), dimension);
+assert.equal(imageio.GetDimensions(0), 256);
+assert.equal(imageio.GetDimensions(1), 256);
+assert.equal(imageio.GetOrigin(0), 0.0);
+assert.equal(imageio.GetOrigin(1), 0.0);
+Module.UnmountContainingDirectory(inputImage);
 
-//imagejs.ReadImage(inputImage);
+////imagejs.ReadImage(inputImage);
 
-console.log("Writing image...");
-imagejs.MountDirectory(outputImage);
-imageio.SetNumberOfDimensions(2);
+//console.log("Writing image...");
+//imagejs.MountDirectory(outputImage);
+//imageio.SetNumberOfDimensions(2);
 //imagejs.WriteImage(outputImage);

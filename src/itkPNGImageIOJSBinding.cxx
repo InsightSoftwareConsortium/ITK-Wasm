@@ -21,7 +21,10 @@
 
 #include "itkPNGImageIO.h"
 
+#include "itkNodeJSEmscriptenJSBinding.h"
 #include "itkImageIOBaseJSBinding.h"
+
+itkNodeJSEmscriptenJSBindingMacro();
 
 typedef itk::ImageIOBaseJSBinding< itk::PNGImageIO > PNGImageIOJSBindingType;
 
@@ -32,6 +35,11 @@ EMSCRIPTEN_BINDINGS(itk_png_image_io_js_binding) {
   .function("GetNumberOfDimensions", &PNGImageIOJSBindingType::GetNumberOfDimensions)
   .function("SetFileName", &PNGImageIOJSBindingType::SetFileName)
   .function("GetFileName", &PNGImageIOJSBindingType::GetFileName)
+  .function("CanReadFile", &PNGImageIOJSBindingType::CanReadFile)
   .function("ReadImageInformation", &PNGImageIOJSBindingType::ReadImageInformation)
+  .function("SetDimensions", &PNGImageIOJSBindingType::SetDimensions)
+  .function("GetDimensions", &PNGImageIOJSBindingType::GetDimensions)
+  .function("SetOrigin", &PNGImageIOJSBindingType::SetOrigin)
+  .function("GetOrigin", &PNGImageIOJSBindingType::GetOrigin)
   ;
 }

@@ -34,16 +34,16 @@ ImageIOBaseJSBinding< TImageIO >
 template< typename TImageIO >
 void
 ImageIOBaseJSBinding< TImageIO >
-::SetNumberOfDimensions(unsigned int numberOfDimensions)
+::SetNumberOfDimensions( unsigned int numberOfDimensions )
 {
-  this->m_ImageIO->SetNumberOfDimensions(numberOfDimensions);
+  this->m_ImageIO->SetNumberOfDimensions( numberOfDimensions );
 }
 
 
 template< typename TImageIO >
 unsigned int
 ImageIOBaseJSBinding< TImageIO >
-::GetNumberOfDimensions()
+::GetNumberOfDimensions() const
 {
   return this->m_ImageIO->GetNumberOfDimensions();
 }
@@ -54,16 +54,25 @@ void
 ImageIOBaseJSBinding< TImageIO >
 ::SetFileName(std::string fileName)
 {
-  this->m_ImageIO->SetFileName(fileName);
+  this->m_ImageIO->SetFileName( fileName );
 }
 
 
 template< typename TImageIO >
 std::string
 ImageIOBaseJSBinding< TImageIO >
-::GetFileName()
+::GetFileName() const
 {
   return this->m_ImageIO->GetFileName();
+}
+
+
+template< typename TImageIO >
+bool
+ImageIOBaseJSBinding< TImageIO >
+::CanReadFile( std::string fileName )
+{
+  return this->m_ImageIO->CanReadFile( fileName.c_str() );
 }
 
 
@@ -74,6 +83,43 @@ ImageIOBaseJSBinding< TImageIO >
 {
   return this->m_ImageIO->ReadImageInformation();
 }
+
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::SetDimensions( unsigned int i, unsigned long dimension )
+{
+  this->m_ImageIO->SetDimensions( i, dimension );
+}
+
+
+template< typename TImageIO >
+unsigned long
+ImageIOBaseJSBinding< TImageIO >
+::GetDimensions( unsigned int i ) const
+{
+  return this->m_ImageIO->GetDimensions(i);
+}
+
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::SetOrigin( unsigned int i, double dimension )
+{
+  this->m_ImageIO->SetOrigin( i, dimension );
+}
+
+
+template< typename TImageIO >
+double
+ImageIOBaseJSBinding< TImageIO >
+::GetOrigin( unsigned int i ) const
+{
+  return this->m_ImageIO->GetOrigin(i);
+}
+
 
 } // end namespace itk
 
