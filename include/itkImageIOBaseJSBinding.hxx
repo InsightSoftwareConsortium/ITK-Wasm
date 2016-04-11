@@ -135,9 +135,26 @@ double
 ImageIOBaseJSBinding< TImageIO >
 ::GetSpacing( unsigned int i ) const
 {
-  return this->m_ImageIO->GetSpacing(i);
+  return this->m_ImageIO->GetSpacing( i );
 }
 
+
+template< typename TImageIO >
+typename ImageIOBaseJSBinding< TImageIO >::AxisDirectionType
+ImageIOBaseJSBinding< TImageIO >
+::GetDirection( unsigned int i ) const
+{
+  return this->m_ImageIO->GetDirection( i );
+}
+
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::SetDirection( unsigned int i, const AxisDirectionType direction )
+{
+  return this->m_ImageIO->SetDirection( i, direction );
+}
 
 } // end namespace itk
 

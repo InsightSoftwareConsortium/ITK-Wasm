@@ -29,6 +29,7 @@ itkNodeJSEmscriptenJSBindingMacro();
 typedef itk::ImageIOBaseJSBinding< itk::PNGImageIO > PNGImageIOJSBindingType;
 
 EMSCRIPTEN_BINDINGS(itk_png_image_io_js_binding) {
+  emscripten::register_vector<double>("AxisDirectionType");
   emscripten::class_<PNGImageIOJSBindingType>("itkPNGImageIO")
   .constructor<>()
   .function("SetNumberOfDimensions", &PNGImageIOJSBindingType::SetNumberOfDimensions)
@@ -43,5 +44,7 @@ EMSCRIPTEN_BINDINGS(itk_png_image_io_js_binding) {
   .function("GetOrigin", &PNGImageIOJSBindingType::GetOrigin)
   .function("SetSpacing", &PNGImageIOJSBindingType::SetSpacing)
   .function("GetSpacing", &PNGImageIOJSBindingType::GetSpacing)
+  .function("SetDirection", &PNGImageIOJSBindingType::SetDirection)
+  .function("GetDirection", &PNGImageIOJSBindingType::GetDirection)
   ;
 }

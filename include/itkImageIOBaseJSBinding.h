@@ -34,6 +34,8 @@ class ImageIOBaseJSBinding
 public:
   typedef TImageIO ImageIOType;
 
+  typedef std::vector< double > AxisDirectionType;
+
   ImageIOBaseJSBinding();
 
   /** Set/Get the number of independent variables (dimensions) in the
@@ -61,13 +63,18 @@ public:
 
   /** Set/Get the image origin on a axis-by-axis basis. The SetOrigin() method
    * is required when writing the image. */
-  void SetOrigin(unsigned int i, double origin);
-  double GetOrigin(unsigned int i) const;
+  void SetOrigin( unsigned int i, double origin );
+  double GetOrigin( unsigned int i ) const;
 
   /** Set/Get the image spacing on an axis-by-axis basis. The
    * SetSpacing() method is required when writing the image. */
-  void SetSpacing(unsigned int i, double origin);
-  double GetSpacing(unsigned int i) const;
+  void SetSpacing( unsigned int i, double origin );
+  double GetSpacing( unsigned int i ) const;
+
+  /** Set/Get the image direction on an axis-by-axis basis. The
+   * SetDirection() method is required when writing the image. */
+  void SetDirection( unsigned int i, const AxisDirectionType direction );
+  AxisDirectionType GetDirection( unsigned int i ) const;
 
 private:
   typename ImageIOType::Pointer m_ImageIO;

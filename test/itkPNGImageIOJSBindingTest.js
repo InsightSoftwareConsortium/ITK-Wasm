@@ -31,8 +31,6 @@ assert = require('assert');
 var path = require("path");
 var Module = require(path.join(moduleDir, "itkPNGImageIOJSBinding.js"));
 var imageio = new Module.itkPNGImageIO();
-var JSImageIOModule = require(path.join(moduleDir, "itkJSImageIO.js"));
-var imagejs = new JSImageIOModule.itkJSImageIO();
 
 console.log("Reading image...");
 Module.MountContainingDirectory(inputImage);
@@ -48,6 +46,13 @@ assert.equal(imageio.GetOrigin(0), 0.0);
 assert.equal(imageio.GetOrigin(1), 0.0);
 assert.equal(imageio.GetSpacing(0), 1.0);
 assert.equal(imageio.GetSpacing(1), 1.0);
+axisDirection = new Module.AxisDirectionType();
+axisDirection.resize(dimension, 0.2);
+axisDirection.set(0, 0.707);
+imageio.SetDirection(0, axisDirection);
+retrievedAxisDirection = imageio.GetDirection(0);
+assert.equal(retrievedAxisDirection.get(0), 0.707);
+assert.equal(retrievedAxisDirection.get(1), 0.2);
 Module.UnmountContainingDirectory(inputImage);
 
 ////imagejs.ReadImage(inputImage);
