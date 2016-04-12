@@ -36,6 +36,22 @@ public:
 
   typedef std::vector< double > AxisDirectionType;
 
+  /** Enums used to manipulate the pixel type. The pixel type provides
+   * context for automatic data conversions (for instance, RGB to
+   * SCALAR, VECTOR to SCALAR). */
+  enum IOPixelType { UNKNOWNPIXELTYPE, SCALAR, RGB, RGBA, OFFSET, VECTOR,
+    POINT, COVARIANTVECTOR, SYMMETRICSECONDRANKTENSOR,
+    DIFFUSIONTENSOR3D, COMPLEX, FIXEDARRAY, MATRIX };
+
+  /** Enums used to manipulate the component type. The component type
+   * refers to the actual storage class associated with either a
+   * SCALAR pixel type or elements of a compound pixel.
+   */
+  enum IOComponentType
+    { UNKNOWNCOMPONENTTYPE, UCHAR, CHAR,
+    USHORT, SHORT, UINT, INT,
+    ULONG, LONG, FLOAT, DOUBLE };
+
   ImageIOBaseJSBinding();
 
   /** Set/Get the number of independent variables (dimensions) in the
