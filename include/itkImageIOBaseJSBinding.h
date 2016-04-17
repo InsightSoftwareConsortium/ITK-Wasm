@@ -39,18 +39,13 @@ public:
   /** Enums used to manipulate the pixel type. The pixel type provides
    * context for automatic data conversions (for instance, RGB to
    * SCALAR, VECTOR to SCALAR). */
-  enum IOPixelType { UNKNOWNPIXELTYPE, SCALAR, RGB, RGBA, OFFSET, VECTOR,
-    POINT, COVARIANTVECTOR, SYMMETRICSECONDRANKTENSOR,
-    DIFFUSIONTENSOR3D, COMPLEX, FIXEDARRAY, MATRIX };
+  typedef typename ImageIOType::IOPixelType IOPixelType;
 
   /** Enums used to manipulate the component type. The component type
    * refers to the actual storage class associated with either a
    * SCALAR pixel type or elements of a compound pixel.
    */
-  enum IOComponentType
-    { UNKNOWNCOMPONENTTYPE, UCHAR, CHAR,
-    USHORT, SHORT, UINT, INT,
-    ULONG, LONG, FLOAT, DOUBLE };
+  typedef typename ImageIOType::IOComponentType IOComponentType;
 
   ImageIOBaseJSBinding();
 
@@ -91,6 +86,27 @@ public:
    * SetDirection() method is required when writing the image. */
   void SetDirection( unsigned int i, const AxisDirectionType direction );
   AxisDirectionType GetDirection( unsigned int i ) const;
+
+  /** Set/Get the type of the pixel. The PixelTypes provides context
+   * to the IO mechanisms for data conversions.  PixelTypes can be
+   * SCALAR, RGB, RGBA, VECTOR, COVARIANTVECTOR, POINT, INDEX. If
+   * the PIXELTYPE is SCALAR, then the NumberOfComponents should be 1.
+   * Any other of PIXELTYPE will have more than one component. */
+  void SetPixelType( IOPixelType pixelType );
+  IOPixelType GetPixelType() const;
+
+  /** Convenience method returns the IOPixelType as a string. This can be
+   * used for writing output files. */
+  static std::string GetPixelTypeAsString( IOPixelType pixelType );
+
+  /** Set/Get the component type of the image. This is always a native
+   * type. */
+  void SetComponentType( IOComponentType componentType );
+  IOComponentType GetComponentType() const;
+
+  /** Convenience method returns the IOComponentType as a string. This can be
+   * used for writing output files. */
+  static std::string GetComponentTypeAsString( IOComponentType componentType );
 
 private:
   typename ImageIOType::Pointer m_ImageIO;

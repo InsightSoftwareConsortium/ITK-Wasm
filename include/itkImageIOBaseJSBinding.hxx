@@ -156,6 +156,60 @@ ImageIOBaseJSBinding< TImageIO >
   return this->m_ImageIO->SetDirection( i, direction );
 }
 
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::SetPixelType( IOPixelType pixelType )
+{
+  return this->m_ImageIO->SetPixelType( pixelType );
+}
+
+
+template< typename TImageIO >
+typename ImageIOBaseJSBinding< TImageIO >::IOPixelType
+ImageIOBaseJSBinding< TImageIO >
+::GetPixelType() const
+{
+  return this->m_ImageIO->GetPixelType();
+}
+
+
+template< typename TImageIO >
+std::string
+ImageIOBaseJSBinding< TImageIO >
+::GetPixelTypeAsString( IOPixelType pixelType )
+{
+  return ImageIOType::GetPixelTypeAsString( pixelType );
+}
+
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::SetComponentType( IOComponentType componentType )
+{
+  return this->m_ImageIO->SetComponentType( componentType );
+}
+
+
+template< typename TImageIO >
+typename ImageIOBaseJSBinding< TImageIO >::IOComponentType
+ImageIOBaseJSBinding< TImageIO >
+::GetComponentType() const
+{
+  return this->m_ImageIO->GetComponentType();
+}
+
+
+template< typename TImageIO >
+std::string
+ImageIOBaseJSBinding< TImageIO >
+::GetComponentTypeAsString( IOComponentType componentType )
+{
+  return ImageIOType::GetComponentTypeAsString( componentType );
+}
+
 } // end namespace itk
 
 #endif

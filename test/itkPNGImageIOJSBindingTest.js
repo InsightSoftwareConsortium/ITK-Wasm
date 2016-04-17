@@ -26,26 +26,35 @@ var outputImage = process.argv[4];
 console.log("Input image: ", inputImage);
 console.log("Output image: ", outputImage);
 
+
 assert = require('assert');
+
 
 var path = require("path");
 var Module = require(path.join(moduleDir, "itkPNGImageIOJSBinding.js"));
 var imageio = new Module.itkPNGImageIO();
 
+
 console.log("Reading image...");
 Module.MountContainingDirectory(inputImage);
+
 imageio.SetFileName(inputImage);
 assert.equal(imageio.GetFileName(), inputImage);
+
 assert(imageio.CanReadFile(inputImage), "Could not read the file");
 imageio.ReadImageInformation();
+
 dimension = 2;
 assert.equal(imageio.GetNumberOfDimensions(), dimension);
 assert.equal(imageio.GetDimensions(0), 256);
 assert.equal(imageio.GetDimensions(1), 256);
+
 assert.equal(imageio.GetOrigin(0), 0.0);
 assert.equal(imageio.GetOrigin(1), 0.0);
+
 assert.equal(imageio.GetSpacing(0), 1.0);
 assert.equal(imageio.GetSpacing(1), 1.0);
+
 axisDirection = new Module.AxisDirectionType();
 axisDirection.resize(dimension, 0.2);
 axisDirection.set(0, 0.707);
@@ -53,7 +62,19 @@ imageio.SetDirection(0, axisDirection);
 retrievedAxisDirection = imageio.GetDirection(0);
 assert.equal(retrievedAxisDirection.get(0), 0.707);
 assert.equal(retrievedAxisDirection.get(1), 0.2);
+
+var pixelType = imageio.GetPixelType();
+console.log("Pixel type: " + Module.itkPNGImageIO.GetPixelTypeAsString(pixelType));
+assert.equal(pixelType, Module.IOPixelType.RGB);
+imageio.SetPixelType(pixelType);
+
+var componentType = imageio.GetComponentType();
+console.log("Component type: " + Module.itkPNGImageIO.GetComponentTypeAsString(componentType));
+assert.equal(componentType, Module.IOComponentType.UCHAR);
+imageio.SetComponentType(componentType);
+
 Module.UnmountContainingDirectory(inputImage);
+
 
 ////imagejs.ReadImage(inputImage);
 
