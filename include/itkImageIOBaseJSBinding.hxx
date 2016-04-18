@@ -210,6 +210,33 @@ ImageIOBaseJSBinding< TImageIO >
   return ImageIOType::GetComponentTypeAsString( componentType );
 }
 
+
+template< typename TImageIO >
+unsigned long
+ImageIOBaseJSBinding< TImageIO >
+::GetImageSizeInPixels() const
+{
+  return static_cast< unsigned long >( this->m_ImageIO->GetImageSizeInPixels() );
+}
+
+
+template< typename TImageIO >
+unsigned long
+ImageIOBaseJSBinding< TImageIO >
+::GetImageSizeInBytes() const
+{
+  return static_cast< unsigned long >( this->m_ImageIO->GetImageSizeInBytes() );
+}
+
+
+template< typename TImageIO >
+unsigned long
+ImageIOBaseJSBinding< TImageIO >
+::GetImageSizeInComponents() const
+{
+  return static_cast< unsigned long >( this->m_ImageIO->GetImageSizeInComponents() );
+}
+
 } // end namespace itk
 
 #endif

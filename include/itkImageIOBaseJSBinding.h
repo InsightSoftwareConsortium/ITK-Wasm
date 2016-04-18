@@ -108,6 +108,16 @@ public:
    * used for writing output files. */
   static std::string GetComponentTypeAsString( IOComponentType componentType );
 
+  /** Return the number of pixels in the image. */
+  unsigned long GetImageSizeInPixels() const;
+
+  /** Return the number of bytes in the image. */
+  unsigned long GetImageSizeInBytes() const;
+
+  /** Return the number of pixels times the number
+   * of components in the image. */
+  unsigned long GetImageSizeInComponents() const;
+
 private:
   typename ImageIOType::Pointer m_ImageIO;
 };

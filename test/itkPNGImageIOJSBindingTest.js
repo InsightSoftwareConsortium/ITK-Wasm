@@ -64,7 +64,7 @@ assert.equal(retrievedAxisDirection.get(0), 0.707);
 assert.equal(retrievedAxisDirection.get(1), 0.2);
 
 var pixelType = imageio.GetPixelType();
-console.log("Pixel type: " + Module.itkPNGImageIO.GetPixelTypeAsString(pixelType));
+console.log("Pixel type:     " + Module.itkPNGImageIO.GetPixelTypeAsString(pixelType));
 assert.equal(pixelType, Module.IOPixelType.RGB);
 imageio.SetPixelType(pixelType);
 
@@ -72,6 +72,13 @@ var componentType = imageio.GetComponentType();
 console.log("Component type: " + Module.itkPNGImageIO.GetComponentTypeAsString(componentType));
 assert.equal(componentType, Module.IOComponentType.UCHAR);
 imageio.SetComponentType(componentType);
+
+console.log("\nPixels:     " + imageio.GetImageSizeInPixels())
+assert.equal(imageio.GetImageSizeInPixels(), 65536)
+console.log("Bytes:      " + imageio.GetImageSizeInBytes())
+assert.equal(imageio.GetImageSizeInBytes(), 196608)
+console.log("Components: " + imageio.GetImageSizeInComponents())
+assert.equal(imageio.GetImageSizeInComponents(), 196608)
 
 Module.UnmountContainingDirectory(inputImage);
 
