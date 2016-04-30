@@ -80,6 +80,9 @@ assert.equal(imageio.GetImageSizeInBytes(), 196608)
 console.log("Components: " + imageio.GetImageSizeInComponents())
 assert.equal(imageio.GetImageSizeInComponents(), 196608)
 
+pixelBuffer = imageio.Read();
+assert.equal(pixelBuffer.length, 196608)
+
 Module.UnmountContainingDirectory(inputImage);
 
 

@@ -86,5 +86,6 @@ EMSCRIPTEN_BINDINGS(itk_png_image_io_js_binding) {
   .function("GetImageSizeInPixels", &PNGImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &PNGImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &PNGImageIOJSBindingType::GetImageSizeInComponents)
+  .function("Read", &PNGImageIOJSBindingType::Read)
   ;
 }

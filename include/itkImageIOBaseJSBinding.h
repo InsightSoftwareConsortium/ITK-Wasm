@@ -18,6 +18,11 @@
 #ifndef itkImageIOBaseJSBinding_h
 #define itkImageIOBaseJSBinding_h
 
+#include <string>
+#include <vector>
+
+#include "emscripten/val.h"
+
 namespace itk
 {
 
@@ -118,8 +123,15 @@ public:
    * of components in the image. */
   unsigned long GetImageSizeInComponents() const;
 
+  /** Reads the pixel buffer data from the file and returns a JavaScript Typed
+   * Array of type corresponding to the IOComponentType */
+  emscripten::val Read();
+
 private:
   typename ImageIOType::Pointer m_ImageIO;
+
+  std::vector< unsigned char > m_PixelBuffer;
+
 };
 
 } // end namespace itk
