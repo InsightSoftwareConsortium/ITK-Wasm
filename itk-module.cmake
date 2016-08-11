@@ -8,6 +8,7 @@ itk_module(BridgeJavaScript
   DEPENDS
     ITKCommon
     ITKIOImageBase
+  COMPILE_DEPENDS
     ITKImageFunction
   TEST_DEPENDS
     ITKTestKernel
