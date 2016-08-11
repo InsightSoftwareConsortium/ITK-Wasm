@@ -29,6 +29,8 @@ RUN git clone https://itk.org/ITK.git && \
     -DModule_ITKImageFunction:BOOL=ON \
     ../ITK && \
   ninja && \
-  find . -name '*.o' -delete
+  find . -name '*.o' -delete && \
+  cd .. && chmod -R 777 ITK-build
 
 ENV DEFAULT_DOCKCROSS_IMAGE insighttoolkit/bridgejavascript-test
+WORKDIR /work
