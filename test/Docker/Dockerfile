@@ -30,3 +30,5 @@ RUN git clone https://itk.org/ITK.git && \
     ../ITK && \
   ninja && \
   find . -name '*.o' -delete
+
+ENV DEFAULT_DOCKCROSS_IMAGE insighttoolkit/bridgejavascript-test
