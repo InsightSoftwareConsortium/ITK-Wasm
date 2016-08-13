@@ -37,7 +37,8 @@ foreach(io_module ${BridgeJavaScript_IOModules})
       PROPERTY LINK_FLAGS " --bind"
       )
     set_property(TARGET ${target}
-      PROPERTY RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/itk-imageio
+      PROPERTY RUNTIME_OUTPUT_DIRECTORY
+      ${BridgeJavaScript_SOURCE_DIR}/dist/ImageIOs
       )
     target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
   endforeach()
