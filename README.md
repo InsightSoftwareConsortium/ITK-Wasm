@@ -4,6 +4,13 @@
 
 ## Hacking ITKBridgeJavaScript
 
+### Build dependencies
+
+- Node.js / NPM
+- Docker
+
+### Building
+
 To build ITKBridgeJavaScript itself:
 
 ```bash
