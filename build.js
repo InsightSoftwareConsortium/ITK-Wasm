@@ -1,28 +1,29 @@
 const fs = require('fs');
 const path = require('path');
+const spawnSync = require('child_process').spawnSync;
 
+// Make the "build" directory to hold build artifacts
 try {
   fs.mkdirSync('build');
 } catch(err) {
   if (err.code != 'EEXIST') throw err;
 }
 
-const spawn = require('child_process').spawn;
+// Ensure we have the 'dockcross' Docker build environment driver script
 const dockcross = path.join('build', 'dockcross');
 try {
   fs.statSync(dockcross);
 } catch(err) {
   if (err.code == 'ENOENT') {
     const output = fs.openSync(dockcross, 'w');
-    const dockerCall = spawn('docker', ['run', '--rm', 'insighttoolkit/bridgejavascript-test'], {
+    dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/bridgejavascript-test'], {
       env: process.env,
       stdio: [ 'ignore', output, null ]
     });
-    dockerCall.on('exit', function(code) {
-      if(code != 0) {
-        process.exit(code);
-      }
-    });
+    if(dockerCall.status != 0) {
+      process.exit(dockerCall.status);
+    };
+    fs.closeSync(output);
     fs.chmodSync(dockcross, '755');
   }
   else {
@@ -30,13 +31,41 @@ try {
   }
 }
 
+// Perform initial CMake configuration if required
+try {
+  fs.statSync(path.join('build', 'build.ninja'));
+} catch(err) {
+  if (err.code == 'ENOENT') {
+    console.log('Running CMake configuration...');
+    const cmakeCall = spawnSync(dockcross, ['cmake', '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/usr/src/ITK-build'], {
+      env: process.env,
+      stdio: 'inherit'
+    });
+    if(cmakeCall.status != 0) {
+      process.exit(cmakeCall.status);
+    };
+  }
+  else {
+    throw err;
+  }
+}
 
-webpackCall = spawn('webpack', [], {
+// Build the Emscripten mobules with ninja
+console.log('\nRunning ninja...');
+const ninjaCall = spawnSync(dockcross, ['ninja', '-Cbuild'], {
   env: process.env,
   stdio: 'inherit'
 });
+if(ninjaCall.status != 0) {
+  process.exit(ninjaCall.status);
+};
 
-webpackCall.on('close', function(code) {
-  process.exit(code);
+
+// Build the Node.js JavaScript code with webpack
+console.log('\nRunning webpack...');
+webpackCall = spawnSync('webpack', [], {
+  env: process.env,
+  stdio: 'inherit'
 });
+process.exit(webpackCall.status);
 
