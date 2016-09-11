@@ -29,10 +29,14 @@
   },
   "homepage": "https://github.com/InsightSoftwareConsortium/ITKBridgeJavaScript#readme",
   "devDependencies": {
+    "async": "^2.0.1",
+    "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.14.0",
     "fs": "0.0.1-security",
+    "glob": "^7.0.6",
     "json-loader": "^0.5.4",
+    "systemjs-builder": "^0.15.30",
     "webpack": "^1.13.2"
   },
   "dependencies": {

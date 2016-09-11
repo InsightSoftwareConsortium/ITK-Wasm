@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const spawnSync = require('child_process').spawnSync;
+const Builder = require('systemjs-builder');
+const glob = require('glob');
+const asyncMod = require('async');
 
 // Make the "build" directory to hold build artifacts
 try {
@@ -59,13 +62,81 @@ const ninjaCall = spawnSync(dockcross, ['ninja', '-Cbuild'], {
 if(ninjaCall.status != 0) {
   process.exit(ninjaCall.status);
 };
+console.log('');
 
-
-// Build the Node.js JavaScript code with webpack
-console.log('\nRunning webpack...');
-webpackCall = spawnSync('webpack', [], {
-  env: process.env,
-  stdio: 'inherit'
+// Compile all the ImageIO's into the System.register format
+const builder = new Builder();
+builder.config({
+  packages: {
+    'build/ImageIOs': {
+      format: 'cjs'
+    }
+  },
+  meta: {
+    'fs': {
+      build: false
+    },
+    'path': {
+      build: false
+    },
+    'crypto': {
+      build: false
+    }
+  }
 });
-process.exit(webpackCall.status);
 
+try {
+  fs.mkdirSync('dist');
+} catch(err) {
+  if (err.code != 'EEXIST') throw err;
+}
+try {
+  fs.mkdirSync(path.join('dist', 'ImageIOs'));
+} catch(err) {
+  if (err.code != 'EEXIST') throw err;
+}
+imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'));
+const buildSystemRegister = function(imageIOFile, callback) {
+  let io = path.basename(imageIOFile);
+  console.log('Converting ' + io + ' ...');
+  let output = path.join('dist', 'ImageIOs', io);
+
+  builder
+  .bundle(imageIOFile, output)
+  .then(function() {
+    console.log(io + ' conversion complete');
+  })
+  .catch(function(err) {
+    console.error('Conversion error');
+    console.error(err);
+    process.exit(1);
+  });
+
+  callback(null, io);
+}
+const buildSystemRegisterParallel = function () {
+  asyncMod.map(imageIOFiles, buildSystemRegister);
+}
+
+
+const callWebpack = function() {
+  // Build the Node.js JavaScript code with webpack
+  console.log('\nRunning webpack...');
+  webpackCall = spawnSync('webpack', [], {
+    env: process.env,
+    stdio: 'inherit'
+  });
+  if(webpackCall.status != 0) {
+    process.exit(webpackCall.status);
+  };
+}
+
+asyncMod.parallel([
+  buildSystemRegisterParallel,
+  callWebpack
+], function(err, results) {
+  if(err) {
+    console.error(err);
+    process.exit(1);
+  }
+});

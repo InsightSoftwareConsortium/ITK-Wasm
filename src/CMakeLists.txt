@@ -38,7 +38,7 @@ foreach(io_module ${BridgeJavaScript_IOModules})
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_SOURCE_DIR}/dist/ImageIOs
+      ${BridgeJavaScript_BINARY_DIR}/ImageIOs
       )
     target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
   endforeach()
