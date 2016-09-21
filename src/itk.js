@@ -1,7 +1,13 @@
-//var NodeESModuleLoader = require('node-es-module-loader');
-var SystemRegisterLoader = require('system-register-loader');
+const SystemRegisterLoader = require('system-register-loader');
 
-var loader = new SystemRegisterLoader();
+const loader = new SystemRegisterLoader();
+
+
+function Image(dimension) {
+  this.dimension = dimension;
+}
+
+exports.Image = Image;
 
 //require.ensure(["../build/itk-imageio/itkPNGImageIOJSBinding.js"], function(require) {
       //var a = require("../build/itk-imageio/itkPNGImageIOJSBinding.js");
