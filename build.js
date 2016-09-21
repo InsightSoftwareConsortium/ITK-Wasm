@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const spawnSync = require('child_process').spawnSync;
 const Builder = require('systemjs-builder');
@@ -118,25 +118,12 @@ const buildSystemRegisterParallel = function () {
   asyncMod.map(imageIOFiles, buildSystemRegister);
 }
 
-
-const callWebpack = function() {
-  // Build the Node.js JavaScript code with webpack
-  console.log('\nRunning webpack...');
-  webpackCall = spawnSync('webpack', [], {
-    env: process.env,
-    stdio: 'inherit'
-  });
-  if(webpackCall.status != 0) {
-    process.exit(webpackCall.status);
-  };
+console.log('Copying itk.js...');
+try {
+  fs.copySync(path.join('src', 'itk.js'), path.join('dist', 'itk.js'));
+} catch(err) {
+  console.error(err);
+  process.exit(1);
 }
 
-asyncMod.parallel([
-  buildSystemRegisterParallel,
-  callWebpack
-], function(err, results) {
-  if(err) {
-    console.error(err);
-    process.exit(1);
-  }
-});
+buildSystemRegisterParallel();
