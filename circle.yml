@@ -2,6 +2,10 @@ machine:
   services:
     - docker
 
+  node:
+    version: 6.6.0
+
+
 dependencies:
   cache_directories:
     - "~/docker"
