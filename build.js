@@ -121,6 +121,7 @@ const buildSystemRegisterParallel = function () {
 console.log('Copying itk.js...');
 try {
   fs.copySync(path.join('src', 'itk.js'), path.join('dist', 'itk.js'));
+  fs.copySync(path.join('src', 'itkImage.js'), path.join('dist', 'itkImage.js'));
 } catch(err) {
   console.error(err);
   process.exit(1);
