@@ -17,3 +17,8 @@ To build ITKBridgeJavaScript itself:
 npm install
 npm run build
 ```
+
+Run the tests:
+```bash
+npm test
+```
