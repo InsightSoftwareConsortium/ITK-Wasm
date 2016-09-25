@@ -114,17 +114,40 @@ const buildSystemRegister = function(imageIOFile, callback) {
 
   callback(null, io);
 }
-const buildSystemRegisterParallel = function () {
-  asyncMod.map(imageIOFiles, buildSystemRegister);
+const buildSystemRegisterParallel = function (callback) {
+  result = asyncMod.map(imageIOFiles, buildSystemRegister);
+  callback(null, result);
 }
 
-console.log('Copying itk.js...');
-try {
-  fs.copySync(path.join('src', 'itk.js'), path.join('dist', 'itk.js'));
-  fs.copySync(path.join('src', 'itkImage.js'), path.join('dist', 'itkImage.js'));
-} catch(err) {
-  console.error(err);
-  process.exit(1);
+const babelOptions = {
+  presets: [
+    ["es2015", { "modules": false }]
+  ]
+}
+const babel = require('babel-core');
+const babelBuild = function(es6File, callback) {
+  let basename = path.basename(es6File);
+  console.log('Converting ' + basename + ' ...');
+  let output = path.join('dist', basename);
+  babel.transformFile(es6File, babelOptions, function(err, result) {
+    if(err) {
+      console.error(err);
+      process.exit(1);
+    }
+    const outputFD = fs.openSync(output, 'w');
+    fs.writeSync(outputFD, result.code);
+    fs.closeSync(outputFD);
+    console.log(basename + ' conversion complete');
+  });
+  callback(null, basename);
+}
+es6Files = glob.sync(path.join('src', '*.js'));
+const babelBuildParallel = function (callback) {
+  result = asyncMod.map(es6Files, babelBuild);
+  callback(null, result);
 }
 
-buildSystemRegisterParallel();
+asyncMod.parallel([
+  buildSystemRegisterParallel,
+  babelBuildParallel,
+]);
