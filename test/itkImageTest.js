@@ -28,4 +28,19 @@ describe('Image', function() {
       assert.equal(image.origin[0], 0.0);
     });
   });
+
+  describe('#spacing', function() {
+    it('should have a length equal to the dimension', function() {
+      let image = new itk.Image(2);
+      assert.lengthOf(image.spacing, 2);
+
+      image = new itk.Image(3);
+      assert.lengthOf(image.spacing, 3);
+    });
+
+    it('should have a default value of 1.0', function() {
+      let image = new itk.Image(2);
+      assert.equal(image.spacing[0], 1.0);
+    });
+  });
 });
