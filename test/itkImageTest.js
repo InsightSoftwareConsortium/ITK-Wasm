@@ -13,4 +13,19 @@ describe('Image', function() {
       assert.equal(image.dimension, 3);
     });
   });
+
+  describe('#origin', function() {
+    it('should have a length equal to the dimension', function() {
+      let image = new itk.Image(2);
+      assert.lengthOf(image.origin, 2);
+
+      image = new itk.Image(3);
+      assert.lengthOf(image.origin, 3);
+    });
+
+    it('should have a default value of 0.0', function() {
+      let image = new itk.Image(2);
+      assert.equal(image.origin[0], 0.0);
+    });
+  });
 });
