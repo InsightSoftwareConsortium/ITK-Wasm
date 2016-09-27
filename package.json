@@ -33,6 +33,7 @@
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.14.0",
+    "chai": "^3.5.0",
     "fs": "0.0.1-security",
     "fs-extra": "^0.30.0",
     "glob": "^7.0.6",
