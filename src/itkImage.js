@@ -1,3 +1,5 @@
+const Matrix = require('./itkMatrix.js');
+
 function Image(dimension) {
   this.dimension = dimension;
 
