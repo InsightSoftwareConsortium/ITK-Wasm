@@ -1,4 +1,4 @@
-// const Matrix = require('./itkMatrix.js')
+const Matrix = require('./itkMatrix.js')
 
 function Image (dimension) {
   this.dimension = dimension
@@ -8,6 +8,9 @@ function Image (dimension) {
 
   this.spacing = new Array(dimension)
   this.spacing.fill(1.0)
+
+  this.direction = new Matrix(dimension, dimension)
+  this.direction.setIdentity()
 }
 
 module.exports = Image

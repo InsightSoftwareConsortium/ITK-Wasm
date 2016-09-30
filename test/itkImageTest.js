@@ -43,4 +43,20 @@ describe('Image', function () {
       assert.equal(image.spacing[0], 1.0)
     })
   })
+
+  describe('#direction', function () {
+    it('should same number of rows and colums as the dimension', function () {
+      let image = new itk.Image(3)
+      assert.equal(image.direction.rows, 3)
+      assert.equal(image.direction.columns, 3)
+    })
+
+    it('should be the identity by default', function () {
+      let image = new itk.Image(2)
+      assert.equal(image.direction.data[0], 1.0)
+      assert.equal(image.direction.data[1], 0.0)
+      assert.equal(image.direction.data[2], 0.0)
+      assert.equal(image.direction.data[3], 1.0)
+    })
+  })
 })
