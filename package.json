@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "node ./build.js",
-    "test": "mocha ./test.js"
+    "test": "./build/dockcross bash -c 'cd build && ctest -V' && mocha ./test.js"
   },
   "repository": {
     "type": "git",
