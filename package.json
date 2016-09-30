@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "node ./build.js",
-    "test": "mocha ./test.js && standard './src/*.js'"
+    "test": "mocha ./test.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +39,7 @@
     "glob": "^7.0.6",
     "json-loader": "^0.5.4",
     "mocha": "^3.0.2",
+    "mocha-standard": "^1.0.0",
     "standard": "^8.3.0",
     "systemjs-builder": "^0.15.30"
   },

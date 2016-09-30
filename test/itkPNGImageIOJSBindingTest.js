@@ -1,8 +1,7 @@
-/*=========================================================================
- *
+/*
  *  Copyright Insight Software Consortium
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  Licensed under the Apache License, Version 2.0 (the "License")
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
@@ -14,81 +13,77 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *
- *=========================================================================*/
+ */
 
-if(process.argv.length < 4) {
-  console.error("Usage: ", process.argv[0], process.argv[1], " moduleDir inputImage outputImage");
-  process.exit(1);
+const assert = require('chai').assert
+
+if (process.argv.length < 4) {
+  console.error('Usage: ', process.argv[0], process.argv[1], ' moduleDir inputImage outputImage')
+  process.exit(1)
 }
 var moduleDir = process.argv[2]
-var inputImage = process.argv[3];
-var outputImage = process.argv[4];
-console.log("Input image: ", inputImage);
-console.log("Output image: ", outputImage);
+var inputImage = process.argv[3]
+var outputImage = process.argv[4]
+console.log('Input image: ', inputImage)
+console.log('Output image: ', outputImage)
 
+var path = require('path')
+var Module = require(path.join(moduleDir, 'itkPNGImageIOJSBinding.js'))
+var imageio = new Module.ITKPNGImageIO()
 
-assert = require('assert');
+console.log('Reading image...')
+Module.MountContainingDirectory(inputImage)
 
+imageio.SetFileName(inputImage)
+assert.equal(imageio.GetFileName(), inputImage)
 
-var path = require("path");
-var Module = require(path.join(moduleDir, "itkPNGImageIOJSBinding.js"));
-var imageio = new Module.itkPNGImageIO();
+assert(imageio.CanReadFile(inputImage), 'Could not read the file')
+imageio.ReadImageInformation()
 
+var dimension = 2
+assert.equal(imageio.GetNumberOfDimensions(), dimension)
+assert.equal(imageio.GetDimensions(0), 256)
+assert.equal(imageio.GetDimensions(1), 256)
 
-console.log("Reading image...");
-Module.MountContainingDirectory(inputImage);
+assert.equal(imageio.GetOrigin(0), 0.0)
+assert.equal(imageio.GetOrigin(1), 0.0)
 
-imageio.SetFileName(inputImage);
-assert.equal(imageio.GetFileName(), inputImage);
+assert.equal(imageio.GetSpacing(0), 1.0)
+assert.equal(imageio.GetSpacing(1), 1.0)
 
-assert(imageio.CanReadFile(inputImage), "Could not read the file");
-imageio.ReadImageInformation();
+var axisDirection = new Module.AxisDirectionType()
+axisDirection.resize(dimension, 0.2)
+axisDirection.set(0, 0.707)
+imageio.SetDirection(0, axisDirection)
+var retrievedAxisDirection = imageio.GetDirection(0)
+assert.equal(retrievedAxisDirection.get(0), 0.707)
+assert.equal(retrievedAxisDirection.get(1), 0.2)
 
-dimension = 2;
-assert.equal(imageio.GetNumberOfDimensions(), dimension);
-assert.equal(imageio.GetDimensions(0), 256);
-assert.equal(imageio.GetDimensions(1), 256);
+var pixelType = imageio.GetPixelType()
+console.log('Pixel type:     ' + Module.itkPNGImageIO.GetPixelTypeAsString(pixelType))
+assert.equal(pixelType, Module.IOPixelType.RGB)
+imageio.SetPixelType(pixelType)
 
-assert.equal(imageio.GetOrigin(0), 0.0);
-assert.equal(imageio.GetOrigin(1), 0.0);
+var componentType = imageio.GetComponentType()
+console.log('Component type: ' + Module.itkPNGImageIO.GetComponentTypeAsString(componentType))
+assert.equal(componentType, Module.IOComponentType.UCHAR)
+imageio.SetComponentType(componentType)
 
-assert.equal(imageio.GetSpacing(0), 1.0);
-assert.equal(imageio.GetSpacing(1), 1.0);
-
-axisDirection = new Module.AxisDirectionType();
-axisDirection.resize(dimension, 0.2);
-axisDirection.set(0, 0.707);
-imageio.SetDirection(0, axisDirection);
-retrievedAxisDirection = imageio.GetDirection(0);
-assert.equal(retrievedAxisDirection.get(0), 0.707);
-assert.equal(retrievedAxisDirection.get(1), 0.2);
-
-var pixelType = imageio.GetPixelType();
-console.log("Pixel type:     " + Module.itkPNGImageIO.GetPixelTypeAsString(pixelType));
-assert.equal(pixelType, Module.IOPixelType.RGB);
-imageio.SetPixelType(pixelType);
-
-var componentType = imageio.GetComponentType();
-console.log("Component type: " + Module.itkPNGImageIO.GetComponentTypeAsString(componentType));
-assert.equal(componentType, Module.IOComponentType.UCHAR);
-imageio.SetComponentType(componentType);
-
-console.log("\nPixels:     " + imageio.GetImageSizeInPixels())
+console.log('\nPixels:     ' + imageio.GetImageSizeInPixels())
 assert.equal(imageio.GetImageSizeInPixels(), 65536)
-console.log("Bytes:      " + imageio.GetImageSizeInBytes())
+console.log('Bytes:      ' + imageio.GetImageSizeInBytes())
 assert.equal(imageio.GetImageSizeInBytes(), 196608)
-console.log("Components: " + imageio.GetImageSizeInComponents())
+console.log('Components: ' + imageio.GetImageSizeInComponents())
 assert.equal(imageio.GetImageSizeInComponents(), 196608)
 
-pixelBuffer = imageio.Read();
+var pixelBuffer = imageio.Read()
 assert.equal(pixelBuffer.length, 196608)
 
-Module.UnmountContainingDirectory(inputImage);
+Module.UnmountContainingDirectory(inputImage)
 
+// //imagejs.ReadImage(inputImage)
 
-////imagejs.ReadImage(inputImage);
-
-//console.log("Writing image...");
-//imagejs.MountDirectory(outputImage);
-//imageio.SetNumberOfDimensions(2);
-//imagejs.WriteImage(outputImage);
+// console.log("Writing image...")
+// imagejs.MountDirectory(outputImage)
+// imageio.SetNumberOfDimensions(2)
+// imagejs.WriteImage(outputImage)

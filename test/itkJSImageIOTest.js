@@ -1,8 +1,7 @@
-/*=========================================================================
- *
+/*
  *  Copyright Insight Software Consortium
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  Licensed under the Apache License, Version 2.0 (the "License")
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
@@ -14,26 +13,26 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *
- *=========================================================================*/
+ */
 
-if(process.argv.length < 4) {
-  console.error("Usage: ", process.argv[0], process.argv[1], " moduleDir inputImage outputImage");
-  process.exit(1);
+if (process.argv.length < 4) {
+  console.error('Usage: ', process.argv[0], process.argv[1], ' moduleDir inputImage outputImage')
+  process.exit(1)
 }
 var moduleDir = process.argv[2]
-var inputImage = process.argv[3];
-var outputImage = process.argv[4];
-console.log("Input image: ", inputImage);
-console.log("Output image: ", outputImage);
+var inputImage = process.argv[3]
+var outputImage = process.argv[4]
+console.log('Input image: ', inputImage)
+console.log('Output image: ', outputImage)
 
-var path = require("path");
-var Module = require(path.join(moduleDir, "itkJSImageIO.js"));
-var imagejs = new Module.itkJSImageIO();
+var path = require('path')
+var Module = require(path.join(moduleDir, 'itkJSImageIO.js'))
+var imagejs = new Module.ITKJSImageIO()
 
-console.log("Reading image...");
-imagejs.MountDirectory(inputImage);
-imagejs.ReadImage(inputImage);
+console.log('Reading image...')
+imagejs.MountDirectory(inputImage)
+imagejs.ReadImage(inputImage)
 
-console.log("Writing image...");
-imagejs.MountDirectory(outputImage);
-imagejs.WriteImage(outputImage);
+console.log('Writing image...')
+imagejs.MountDirectory(outputImage)
+imagejs.WriteImage(outputImage)
