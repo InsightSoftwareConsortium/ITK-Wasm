@@ -1,6 +1,6 @@
 const Matrix = require('./itkMatrix.js')
 
-function Image (dimension) {
+const Image = function (dimension) {
   this.dimension = dimension
 
   this.origin = new Array(dimension)

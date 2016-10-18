@@ -5,6 +5,7 @@ const itk = require(path.resolve(__dirname, 'dist', 'itk.js'))
 
 const FloatTypesTest = require(path.resolve(__dirname, 'test', 'itkFloatTypesTest.js'))
 const ImageTest = require(path.resolve(__dirname, 'test', 'itkImageTest.js'))
+const ImageTypeTest = require(path.resolve(__dirname, 'test', 'itkImageTypeTest.js'))
 const IntTypesTest = require(path.resolve(__dirname, 'test', 'itkIntTypesTest.js'))
 const MatrixTest = require(path.resolve(__dirname, 'test', 'itkMatrixTest.js'))
 
