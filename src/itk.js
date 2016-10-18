@@ -5,6 +5,7 @@
 const Image = require('./itkImage.js')
 const ImageType = require('./itkImageType.js')
 const IntTypes = require('./itkIntTypes.js')
+const FloatTypes = require('./itkFloatTypes.js')
 const Matrix = require('./itkMatrix.js')
 
 module.exports = {
@@ -20,6 +21,9 @@ module.exports = {
   IdentifierType: IntTypes.IdentifierType,
   IndexValueType: IntTypes.IndexValueType,
   OffsetValueType: IntTypes.OffsetValueType,
+  Float32: FloatTypes.Float32,
+  Float64: FloatTypes.Float64,
+  SpacePrecisionType: FloatTypes.SpacePrecisionType,
   Image: Image,
   ImageType: ImageType,
   Matrix: Matrix
