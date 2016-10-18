@@ -4,6 +4,7 @@ const assert = require('assert')
 const itk = require(path.resolve(__dirname, 'dist', 'itk.js'))
 
 const ImageTest = require(path.resolve(__dirname, 'test', 'itkImageTest.js'))
+const IntTypesTest = require(path.resolve(__dirname, 'test', 'itkIntTypesTest.js'))
 const MatrixTest = require(path.resolve(__dirname, 'test', 'itkMatrixTest.js'))
 
 describe('Code Style', function () {
