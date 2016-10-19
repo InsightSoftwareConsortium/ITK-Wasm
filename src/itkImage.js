@@ -1,8 +1,10 @@
+const ImageType = require('./itkImageType.js')
 const Matrix = require('./itkMatrix.js')
 
-const Image = function (dimension) {
-  this.dimension = dimension
+const Image = function (imageType = new ImageType()) {
+  this.imageType = imageType
 
+  const dimension = imageType.dimension
   this.origin = new Array(dimension)
   this.origin.fill(0.0)
 
