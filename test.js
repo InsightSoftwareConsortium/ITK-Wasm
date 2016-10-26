@@ -9,6 +9,9 @@ const ImageTypeTest = require(path.resolve(__dirname, 'test', 'itkImageTypeTest.
 const IntTypesTest = require(path.resolve(__dirname, 'test', 'itkIntTypesTest.js'))
 const MatrixTest = require(path.resolve(__dirname, 'test', 'itkMatrixTest.js'))
 
+const readEmscriptenFSFileTest = require(path.resolve(__dirname, 'test', 'itkreadImageEmscriptenFSFileTest.js'))
+const readImageFileTest = require(path.resolve(__dirname, 'test', 'itkreadImageFileTest.js'))
+
 describe('Code Style', function () {
   var standard = require('mocha-standard')
   this.timeout(5000)

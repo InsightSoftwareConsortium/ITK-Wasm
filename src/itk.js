@@ -7,6 +7,7 @@ const ImageType = require('./itkImageType.js')
 const IntTypes = require('./itkIntTypes.js')
 const FloatTypes = require('./itkFloatTypes.js')
 const Matrix = require('./itkMatrix.js')
+const readImageFile = require('./itkreadImageFile.js')
 
 module.exports = {
   Int8: IntTypes.Int8,
@@ -26,5 +27,6 @@ module.exports = {
   SpacePrecisionType: FloatTypes.SpacePrecisionType,
   Image: Image,
   ImageType: ImageType,
-  Matrix: Matrix
+  Matrix: Matrix,
+  readImageFile: readImageFile
 }
