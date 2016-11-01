@@ -21,10 +21,7 @@
 
 #include "itkPNGImageIO.h"
 
-#include "itkNodeJSEmscriptenJSBinding.h"
 #include "itkImageIOBaseJSBinding.h"
-
-itkNodeJSEmscriptenJSBindingMacro();
 
 typedef itk::ImageIOBaseJSBinding< itk::PNGImageIO > PNGImageIOJSBindingType;
 

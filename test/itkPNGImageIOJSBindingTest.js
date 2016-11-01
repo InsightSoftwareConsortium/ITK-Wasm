@@ -32,7 +32,7 @@ var Module = require(path.join(moduleDir, 'itkPNGImageIOJSBinding.js'))
 var imageio = new Module.ITKPNGImageIO()
 
 console.log('Reading image...')
-Module.MountContainingDirectory(inputImage)
+Module.mountContainingDirectory(inputImage)
 
 imageio.SetFileName(inputImage)
 assert.equal(imageio.GetFileName(), inputImage)
@@ -79,7 +79,7 @@ assert.equal(imageio.GetImageSizeInComponents(), 196608)
 var pixelBuffer = imageio.Read()
 assert.equal(pixelBuffer.length, 196608)
 
-Module.UnmountContainingDirectory(inputImage)
+Module.unmountContainingDirectory(inputImage)
 
 // //imagejs.ReadImage(inputImage)
 
