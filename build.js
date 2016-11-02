@@ -39,7 +39,7 @@ try {
 } catch(err) {
   if (err.code == 'ENOENT') {
     console.log('Running CMake configuration...')
-    const cmakeCall = spawnSync(dockcross, ['cmake', '-DCMAKE_BUILD_TYPE=Debug', '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/usr/src/ITK-build'], {
+    const cmakeCall = spawnSync(dockcross, ['cmake', '-DCMAKE_BUILD_TYPE=Release', '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/usr/src/ITK-build'], {
       env: process.env,
       stdio: 'inherit'
     })
