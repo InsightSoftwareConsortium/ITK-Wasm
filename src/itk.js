@@ -2,14 +2,19 @@
 
 // const loader = new SystemRegisterLoader()
 
+const fileSystem = require('./itkfileSystem.js')
+
 const Image = require('./itkImage.js')
 const ImageType = require('./itkImageType.js')
 const IntTypes = require('./itkIntTypes.js')
 const FloatTypes = require('./itkFloatTypes.js')
 const Matrix = require('./itkMatrix.js')
+
+const readImage = require('./itkreadImage.js')
 const readImageFile = require('./itkreadImageFile.js')
 
 module.exports = {
+  fileSystem: fileSystem,
   Int8: IntTypes.Int8,
   UInt8: IntTypes.UInt8,
   Int16: IntTypes.Int16,
@@ -28,5 +33,6 @@ module.exports = {
   Image: Image,
   ImageType: ImageType,
   Matrix: Matrix,
-  readImageFile: readImageFile
+  readImageFile: readImageFile,
+  readImage: readImage
 }

@@ -45,6 +45,7 @@
     "systemjs-builder": "^0.15.30"
   },
   "dependencies": {
+    "browserfs": "^1.0.0",
     "system-register-loader": "^0.1.6"
   },
   "standard": {

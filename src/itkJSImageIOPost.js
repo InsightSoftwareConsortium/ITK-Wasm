@@ -37,3 +37,13 @@ Module['unmountContainingDirectory'] = function (filePath) {
   var containingDir = path.dirname(filePath)
   FS.unmount(containingDir)
 }
+
+/** \brief Utilities for working with the Emscripten filesystem (FS) with the
+ * BrowserFS filesystem (BFS). */
+
+/** Mount the given BrowserFS filesystem on the Emscripten filesystem at /bfs/
+ * */
+Module['mountBrowserFS'] = function (bfs) {
+  FS.createFolder(FS.root, 'bfs', true, true)
+  FS.mount(bfs, {root: '/'}, '/bfs')
+}
