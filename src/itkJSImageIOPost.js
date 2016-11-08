@@ -1,3 +1,7 @@
+// Emscripten-generated asm.js code ends.
+}))
+
+
 /** \brief Utilites for exposing the local filesystem when running in Node.js. */
 
 /** Given an absolute path to a file, mount its containing directory in the
@@ -36,4 +40,14 @@ Module['unmountContainingDirectory'] = function (filePath) {
   var path = require('path')
   var containingDir = path.dirname(filePath)
   FS.unmount(containingDir)
+}
+
+/** \brief Utilities for working with the Emscripten filesystem (FS) with the
+ * BrowserFS filesystem (BFS). */
+
+/** Mount the given BrowserFS filesystem on the Emscripten filesystem at /bfs/
+ * */
+Module['mountBrowserFS'] = function (bfs) {
+  FS.createFolder(FS.root, 'bfs', true, true)
+  FS.mount(bfs, {root: '/'}, '/bfs')
 }

@@ -17,7 +17,7 @@ set_property(TARGET itkJSImageIO APPEND_STRING
   PROPERTY LINK_FLAGS " --bind"
   )
 set_property(TARGET itkJSImageIO APPEND_STRING
-  PROPERTY LINK_FLAGS " --post-js ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPost.js"
+  PROPERTY LINK_FLAGS " --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPost.js"
   )
 set_property(SOURCE ${target}.cxx APPEND
   PROPERTY OBJECT_DEPENDS
@@ -44,7 +44,7 @@ foreach(io_module ${BridgeJavaScript_IOModules})
       PROPERTY LINK_FLAGS " --bind"
       )
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " --post-js ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPost.js"
+      PROPERTY LINK_FLAGS " --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPost.js"
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
