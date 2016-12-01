@@ -39,14 +39,14 @@
     "fs-extra": "^0.30.0",
     "glob": "^7.0.6",
     "json-loader": "^0.5.4",
-    "mocha": "^3.0.2",
+    "mocha": "^3.1.2",
     "mocha-standard": "^1.0.0",
     "standard": "^8.4.0",
-    "systemjs-builder": "^0.15.30"
+    "systemjs-builder": "^0.15.34"
   },
   "dependencies": {
     "browserfs": "^1.0.0",
-    "system-register-loader": "^0.1.6"
+    "system-register-loader": "^0.2.1"
   },
   "standard": {
     "ignore": [

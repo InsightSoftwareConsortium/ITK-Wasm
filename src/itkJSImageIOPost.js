@@ -1,3 +1,7 @@
+// Emscripten-generated asm.js code ends.
+}))
+
+
 /** \brief Utilites for exposing the local filesystem when running in Node.js. */
 
 /** Given an absolute path to a file, mount its containing directory in the
