@@ -1,6 +1,4 @@
 // Emscripten-generated asm.js code ends.
-}))
-
 
 /** \brief Utilites for exposing the local filesystem when running in Node.js. */
 
@@ -51,3 +49,8 @@ Module['mountBrowserFS'] = function (bfs) {
   FS.createFolder(FS.root, 'bfs', true, true)
   FS.mount(bfs, {root: '/'}, '/bfs')
 }
+
+
+// UMD module code
+return Module
+}))

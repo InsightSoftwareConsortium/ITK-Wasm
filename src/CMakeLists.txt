@@ -5,25 +5,6 @@ find_package(ITK REQUIRED
     ITKIONRRD
   )
 include(${ITK_USE_FILE})
-add_executable(itkJSImageIO itkJSImageIO.cxx)
-target_link_libraries(itkJSImageIO
-  LINK_PRIVATE ${ITK_MODULE_BridgeJavaScript_PRIVATE_DEPENDS}
-  LINK_PUBLIC ${ITK_MODULE_BridgeJavaScript_PUBLIC_DEPENDS})
-itk_module_target_label(itkJSImageIO)
-itk_module_target_export(itkJSImageIO)
-itk_module_target_install(itkJSImageIO)
-# For embind
-set_property(TARGET itkJSImageIO APPEND_STRING
-  PROPERTY LINK_FLAGS " --bind"
-  )
-set_property(TARGET itkJSImageIO APPEND_STRING
-  PROPERTY LINK_FLAGS " --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPost.js"
-  )
-set_property(SOURCE ${target}.cxx APPEND
-  PROPERTY OBJECT_DEPENDS
-  ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPost.js
-  )
-target_link_libraries(itkJSImageIO LINK_PUBLIC ${ITK_LIBRARIES})
 
 
 foreach(io_module ${BridgeJavaScript_IOModules})
@@ -44,7 +25,7 @@ foreach(io_module ${BridgeJavaScript_IOModules})
       PROPERTY LINK_FLAGS " --bind"
       )
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPost.js"
+      PROPERTY LINK_FLAGS " --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPost.js"
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
@@ -52,7 +33,7 @@ foreach(io_module ${BridgeJavaScript_IOModules})
       )
     set_property(SOURCE ${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
-      ${CMAKE_CURRENT_SOURCE_DIR}/itkJSImageIOPost.js
+      ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPost.js
       )
     target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
   endforeach()

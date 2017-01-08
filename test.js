@@ -1,6 +1,9 @@
 const path = require('path')
 const assert = require('assert')
 
+const config = require(path.resolve(__dirname, 'dist', 'itkConfig.js'))
+config.imageIOsURL = path.resolve(__dirname, 'dist', 'ImageIOs')
+
 const itk = require(path.resolve(__dirname, 'dist', 'itk.js'))
 
 const FloatTypesTest = require(path.resolve(__dirname, 'test', 'itkFloatTypesTest.js'))

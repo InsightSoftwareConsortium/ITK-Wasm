@@ -41,12 +41,11 @@
     "json-loader": "^0.5.4",
     "mocha": "^3.1.2",
     "mocha-standard": "^1.0.0",
-    "standard": "^8.4.0",
-    "systemjs-builder": "^0.15.34"
+    "standard": "^8.4.0"
   },
   "dependencies": {
     "browserfs": "^1.0.0",
-    "system-register-loader": "^0.2.1"
+    "requirejs": "^2.3.2"
   },
   "standard": {
     "ignore": [

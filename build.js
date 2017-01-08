@@ -1,7 +1,6 @@
 const fs = require('fs-extra')
 const path = require('path')
 const spawnSync = require('child_process').spawnSync
-const Builder = require('systemjs-builder')
 const glob = require('glob')
 const asyncMod = require('async')
 
@@ -62,27 +61,6 @@ if (ninjaCall.status != 0) {
 }
 console.log('')
 
-// Compile all the ImageIO's into the System.register format
-const builder = new Builder()
-builder.config({
-  packages: {
-    'build/ImageIOs': {
-      format: 'cjs'
-    }
-  },
-  meta: {
-    'fs': {
-      build: false
-    },
-    'path': {
-      build: false
-    },
-    'crypto': {
-      build: false
-    }
-  }
-})
-
 try {
   fs.mkdirSync('dist')
 } catch(err) {
@@ -94,26 +72,18 @@ try {
   if (err.code != 'EEXIST') throw err
 }
 imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
-const buildSystemRegister = function (imageIOFile, callback) {
+const copyIOModules = function (imageIOFile, callback) {
   let io = path.basename(imageIOFile)
-  console.log('Converting ' + io + ' ...')
+  console.log('Copying ' + io + ' ...')
   let output = path.join('dist', 'ImageIOs', io)
 
-  builder
-    .bundle(imageIOFile, output)
-    .then(function () {
-      console.log(io + ' conversion complete')
-    })
-    .catch(function (err) {
-      console.error('Conversion error')
-      console.error(err)
-      process.exit(1)
-    })
+  fs.copySync(imageIOFile, output)
 
+  console.log(io + ' copy complete')
   callback(null, io)
 }
 const buildSystemRegisterParallel = function (callback) {
-  result = asyncMod.map(imageIOFiles, buildSystemRegister)
+  result = asyncMod.map(imageIOFiles, copyIOModules)
   callback(null, result)
 }
 

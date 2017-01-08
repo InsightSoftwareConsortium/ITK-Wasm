@@ -1,7 +1,3 @@
-// const SystemRegisterLoader = require('system-register-loader')
-
-// const loader = new SystemRegisterLoader()
-
 const fileSystem = require('./itkfileSystem.js')
 
 const Image = require('./itkImage.js')

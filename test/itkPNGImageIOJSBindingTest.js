@@ -28,7 +28,9 @@ console.log('Input image: ', inputImage)
 console.log('Output image: ', outputImage)
 
 var path = require('path')
-var Module = require(path.join(moduleDir, 'itkPNGImageIOJSBinding.js'))
+var modulePath = path.join(moduleDir, 'itkPNGImageIOJSBinding.js')
+
+var Module = require(modulePath)
 var imageio = new Module.ITKPNGImageIO()
 
 console.log('Reading image...')
@@ -36,6 +38,7 @@ Module.mountContainingDirectory(inputImage)
 
 imageio.SetFileName(inputImage)
 assert.equal(imageio.GetFileName(), inputImage)
+console.log(imageio.GetFileName())
 
 assert(imageio.CanReadFile(inputImage), 'Could not read the file')
 imageio.ReadImageInformation()
@@ -80,10 +83,3 @@ var pixelBuffer = imageio.Read()
 assert.equal(pixelBuffer.length, 196608)
 
 Module.unmountContainingDirectory(inputImage)
-
-// //imagejs.ReadImage(inputImage)
-
-// console.log("Writing image...")
-// imagejs.MountDirectory(outputImage)
-// imageio.SetNumberOfDimensions(2)
-// imagejs.WriteImage(outputImage)
