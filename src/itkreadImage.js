@@ -5,42 +5,33 @@ const requirejs = require('requirejs')
 const config = require('./itkConfig.js')
 requirejs.config({
   baseURL: config.imageIOsURL
-// baseURL: '../ImageIOs',
 })
 
-const readImage = (imageType, fileSystem, filePath) => {
+const internalReadImage = (imageIO, imageType, filePath) => {
+  const image = new Image(imageType)
+  imageIO.SetFileName(filePath)
+  return image
+}
+
+const readImage = (imageType, filePath) => {
   return new Promise(function (resolve, reject) {
     try {
       if (typeof (module) === 'object' && module.exports) {
         const modulePath = path.join(config.imageIOsURL, 'itkPNGImageIOJSBinding.js')
         const Module = require(modulePath)
-        const imageio = new Module.ITKPNGImageIO()
-        imageio.SetFileName(filePath)
-        const image = new Image(imageType)
+        const imageIO = new Module.ITKPNGImageIO()
+        const image = internalReadImage(imageIO, imageType, filePath)
         resolve(image)
       } else {
-        requirejs(['ImageIOs/itkPNGImageIOJSBinding'], function (Module) {
-          const image = new Image(imageType)
+        requirejs([path.join(config.imageIOsURL, 'itkPNGImageIOJSBinding.js')], function (Module) {
+          const imageIO = new Module.ITKPNGImageIO()
+          const image = internalReadImage(imageIO, imageType, filePath)
           resolve(image)
         })
       }
     } catch (err) {
-      console.log(err)
       reject(err)
     }
-  // let baseDir = './'
-  // if (__dirname) {
-  // baseDir = path.join(__dirname, '/')
-  // }
-  // return SystemJS.import(baseDir + 'ImageIOs/itkPNGImageIOJSBinding.js').then(function (imageIO) {
-  // const image = new Image(imageType)
-  // console.log(imageIO)
-  // resolve(image)
-  // })
-  // .catch(function (err) {
-  // console.log(err)
-  // reject(err)
-  // })
   })
 }
 

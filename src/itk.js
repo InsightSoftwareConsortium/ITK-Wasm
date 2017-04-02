@@ -1,5 +1,3 @@
-const fileSystem = require('./itkfileSystem.js')
-
 const Image = require('./itkImage.js')
 const ImageType = require('./itkImageType.js')
 const IntTypes = require('./itkIntTypes.js')
@@ -10,7 +8,6 @@ const readImage = require('./itkreadImage.js')
 const readImageFile = require('./itkreadImageFile.js')
 
 module.exports = {
-  fileSystem: fileSystem,
   Int8: IntTypes.Int8,
   UInt8: IntTypes.UInt8,
   Int16: IntTypes.Int16,

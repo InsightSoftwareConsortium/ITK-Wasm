@@ -44,7 +44,6 @@
     "standard": "^8.4.0"
   },
   "dependencies": {
-    "browserfs": "^1.0.0",
     "requirejs": "^2.3.2"
   },
   "standard": {
