@@ -6,6 +6,7 @@ const Matrix = require('./itkMatrix.js')
 
 const readImage = require('./itkreadImage.js')
 const readImageFile = require('./itkreadImageFile.js')
+const readImageLocalFile = require('./itkreadImageLocalFile.js')
 
 module.exports = {
   Int8: IntTypes.Int8,
@@ -27,5 +28,6 @@ module.exports = {
   ImageType: ImageType,
   Matrix: Matrix,
   readImageFile: readImageFile,
+  readImageLocalFile: readImageLocalFile,
   readImage: readImage
 }

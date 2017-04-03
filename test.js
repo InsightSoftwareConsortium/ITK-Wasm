@@ -13,6 +13,7 @@ const MatrixTest = require(path.resolve(__dirname, 'test', 'itkMatrixTest.js'))
 
 const readImageTest = require(path.resolve(__dirname, 'test', 'itkreadImageTest.js'))
 const readImageFileTest = require(path.resolve(__dirname, 'test', 'itkreadImageFileTest.js'))
+const readImageLocalFileTest = require(path.resolve(__dirname, 'test', 'itkreadImageLocalFileTest.js'))
 
 describe('Code Style', function () {
   var standard = require('mocha-standard')
