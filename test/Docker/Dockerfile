@@ -8,7 +8,7 @@ WORKDIR /usr/src
 ENV ITK_GIT_TAG f8979fb3eb80ccdefbc92c3aa2264c74a18e96f8
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0 -s ALLOW_MEMORY_GROWTH=1"
 ENV CXXFLAGS="${CFLAGS} -std=c++11"
-RUN git clone https://itk.org/ITK.git && \
+RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
   cd ../ && \
