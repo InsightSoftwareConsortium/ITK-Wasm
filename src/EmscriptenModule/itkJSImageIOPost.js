@@ -21,7 +21,7 @@ Module['mountContainingDirectory'] = function (filePath) {
   var splitContainingDir = containingDir.split(path.sep)
   for (var ii = 1; ii < splitContainingDir.length; ++ii) {
     currentDir += splitContainingDir[ii]
-    if (!FS.isDir(currentDir)) {
+    if (!FS.analyzePath(currentDir).exists) {
       FS.mkdir(currentDir)
     }
     currentDir += path.sep
