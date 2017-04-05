@@ -8,7 +8,7 @@ const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'tes
 describe('readImageLocalFile', function () {
   it('reads a file path given on the local filesystem', function () {
     const defaultImageType = new itk.ImageType()
-    return itk.readImage(defaultImageType, testFilePath).then(function (image) {
+    return itk.readImageLocalFile(defaultImageType, testFilePath).then(function (image) {
       console.log(image)
       assert.strictEqual(image.imageType.dimension, 2)
     })
