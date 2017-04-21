@@ -65,4 +65,22 @@ describe('Image', function () {
       assert.equal(image.direction.data[3], 1.0)
     })
   })
+
+  describe('#size', function () {
+    it('should have a length equal to the dimension', function () {
+      let imageType = new itk.ImageType(itk.UInt8, 2)
+      let image = new itk.Image(imageType)
+      assert.lengthOf(image.size, 2)
+
+      imageType = new itk.ImageType(itk.UInt8, 3)
+      image = new itk.Image(imageType)
+      assert.lengthOf(image.size, 3)
+    })
+
+    it('should have a default value of 0', function () {
+      let imageType = new itk.ImageType(itk.UInt8, 2)
+      let image = new itk.Image(imageType)
+      assert.equal(image.size[0], 0)
+    })
+  })
 })

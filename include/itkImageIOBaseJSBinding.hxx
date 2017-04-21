@@ -158,6 +158,13 @@ ImageIOBaseJSBinding< TImageIO >
   return this->m_ImageIO->SetDirection( i, direction );
 }
 
+template< typename TImageIO >
+typename ImageIOBaseJSBinding< TImageIO >::AxisDirectionType
+ImageIOBaseJSBinding< TImageIO >
+::GetDefaultDirection( unsigned int i ) const
+{
+  return this->m_ImageIO->GetDefaultDirection( i );
+}
 
 template< typename TImageIO >
 void

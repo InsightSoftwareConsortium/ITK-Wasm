@@ -92,6 +92,10 @@ public:
   void SetDirection( unsigned int i, const AxisDirectionType direction );
   AxisDirectionType GetDirection( unsigned int i ) const;
 
+  /** Return the directions to be assigned by default to recipient images
+   * whose dimension is smaller than the image dimension in file. */
+  AxisDirectionType GetDefaultDirection( unsigned int i ) const;
+
   /** Set/Get the type of the pixel. The PixelTypes provides context
    * to the IO mechanisms for data conversions.  PixelTypes can be
    * SCALAR, RGB, RGBA, VECTOR, COVARIANTVECTOR, POINT, INDEX. If

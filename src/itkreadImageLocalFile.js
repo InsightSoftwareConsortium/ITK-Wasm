@@ -2,6 +2,7 @@ const Image = require('./itkImage.js')
 const ImageType = require('./itkImageType.js')
 const IntTypes = require('./itkIntTypes.js')
 const FloatTypes = require('./itkFloatTypes.js')
+const Matrix = require('./itkMatrix.js')
 
 const path = require('path')
 const config = require('./itkConfig.js')
@@ -73,6 +74,55 @@ const internalReadImage = (module, imageType, filePath) => {
     }
   } else {
     image = new Image(imageType)
+  }
+
+  let ioDirection = new Matrix(ioDimensions, ioDimensions)
+  if (ioDimensions > image.imageType.dimension) {
+    for (let ii = 0; ii < ioDimensions; ++ii) {
+      let directionColumn = imageIO.GetDefaultDirection(ii)
+      for (let jj = 0; jj < ioDimensions; ++jj) {
+        ioDirection.setElement(jj, ii, directionColumn.get(jj))
+      }
+    }
+  } else {
+    for (let ii = 0; ii < ioDimensions; ++ii) {
+      let directionColumn = imageIO.GetDirection(ii)
+      for (let jj = 0; jj < ioDimensions; ++jj) {
+        ioDirection.setElement(jj, ii, directionColumn.get(jj))
+      }
+    }
+  }
+
+  for (let ii = 0; ii < image.imageType.dimension; ++ii) {
+    if (ii < ioDimensions) {
+      image.size[ii] = imageIO.GetDimensions(ii)
+      image.spacing[ii] = imageIO.GetSpacing(ii)
+      image.origin[ii] = imageIO.GetOrigin(ii)
+      for (let jj = 0; jj < image.imageType.dimension; ++jj) {
+        if (jj < ioDimensions) {
+          let element = ioDirection.getElement(jj, ii)
+          image.direction.setElement(jj, ii, element)
+        } else {
+          image.direction.setElement(jj, ii, 0.0)
+        }
+      }
+    } else {
+      image.size[ii] = 0
+      image.spacing[ii] = 1.0
+      image.origin[ii] = 0.0
+      image.direction.setIdentity()
+    }
+  }
+
+  // Spacing is expected to be greater than 0
+  // If negative, flip image direction along this axis.
+  for (let ii = 0; ii < image.imageType.dimension; ++ii) {
+    if (image.spacing[ii] < 0.0) {
+      image.spacing[ii] = -image.spacing[ii]
+      for (let jj = 0; jj < image.imageType.dimension; ++jj) {
+        image.direction.setElement(ii, jj, -1 * image.direction.getElement(ii, jj))
+      }
+    }
   }
 
   return image

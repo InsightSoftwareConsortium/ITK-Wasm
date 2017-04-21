@@ -13,6 +13,9 @@ const Image = function (imageType = new ImageType()) {
 
   this.direction = new Matrix(dimension, dimension)
   this.direction.setIdentity()
+
+  this.size = new Array(dimension)
+  this.size.fill(0)
 }
 
 module.exports = Image

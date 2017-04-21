@@ -35,4 +35,33 @@ describe('Matrix', function () {
       assert.equal(matrix.data[3], 1.0)
     })
   })
+
+  describe('#setElement()', function () {
+    it('should set elements of the matrix', function () {
+      let matrix = new itk.Matrix(2, 2)
+      matrix.setIdentity()
+      matrix.setElement(0, 0, 2.0)
+      matrix.setElement(0, 1, 3.0)
+      matrix.setElement(1, 0, 4.0)
+      matrix.setElement(1, 1, 5.0)
+      assert.equal(matrix.data[0], 2.0)
+      assert.equal(matrix.data[1], 3.0)
+      assert.equal(matrix.data[2], 4.0)
+      assert.equal(matrix.data[3], 5.0)
+    })
+  })
+
+  describe('#getElement()', function () {
+    it('should get elements of the matrix', function () {
+      let matrix = new itk.Matrix(2, 2)
+      matrix.setElement(0, 0, 2.0)
+      matrix.setElement(0, 1, 3.0)
+      matrix.setElement(1, 0, 4.0)
+      matrix.setElement(1, 1, 5.0)
+      assert.equal(matrix.getElement(0, 0), 2.0)
+      assert.equal(matrix.getElement(0, 1), 3.0)
+      assert.equal(matrix.getElement(1, 0), 4.0)
+      assert.equal(matrix.getElement(1, 1), 5.0)
+    })
+  })
 })

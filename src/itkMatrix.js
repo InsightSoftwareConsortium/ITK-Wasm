@@ -18,4 +18,12 @@ Matrix.prototype.setIdentity = function () {
   }
 }
 
+Matrix.prototype.setElement = function (row, column, value) {
+  this.data[column + row * this.columns] = value
+}
+
+Matrix.prototype.getElement = function (row, column) {
+  return this.data[column + row * this.columns]
+}
+
 module.exports = Matrix

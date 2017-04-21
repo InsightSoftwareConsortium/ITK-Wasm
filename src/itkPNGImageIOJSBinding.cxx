@@ -74,6 +74,7 @@ EMSCRIPTEN_BINDINGS(itk_png_image_io_js_binding) {
   .function("GetSpacing", &PNGImageIOJSBindingType::GetSpacing)
   .function("SetDirection", &PNGImageIOJSBindingType::SetDirection)
   .function("GetDirection", &PNGImageIOJSBindingType::GetDirection)
+  .function("GetDefaultDirection", &PNGImageIOJSBindingType::GetDefaultDirection)
   .function("SetPixelType", &PNGImageIOJSBindingType::SetPixelType)
   .function("GetPixelType", &PNGImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &PNGImageIOJSBindingType::SetComponentType)
