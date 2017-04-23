@@ -17,8 +17,6 @@ const Image = function (imageType = new ImageType()) {
   this.size = new Array(dimension)
   this.size.fill(0)
 
-  this.components = 1
-
   this.buffer = null
 }
 
