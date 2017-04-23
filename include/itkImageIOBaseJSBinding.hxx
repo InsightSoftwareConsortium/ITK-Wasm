@@ -248,6 +248,24 @@ ImageIOBaseJSBinding< TImageIO >
 
 
 template< typename TImageIO >
+unsigned int
+ImageIOBaseJSBinding< TImageIO >
+::GetNumberOfComponents() const
+{
+  return this->m_ImageIO->GetNumberOfComponents();
+}
+
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::SetNumberOfComponents(unsigned int components)
+{
+  return this->m_ImageIO->SetNumberOfComponents( components );
+}
+
+
+template< typename TImageIO >
 emscripten::val
 ImageIOBaseJSBinding< TImageIO >
 ::Read()

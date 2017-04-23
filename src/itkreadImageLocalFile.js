@@ -125,6 +125,9 @@ const internalReadImage = (module, imageType, filePath) => {
     }
   }
 
+  image.components = imageIO.GetNumberOfComponents()
+  image.buffer = imageIO.Read()
+
   return image
 }
 

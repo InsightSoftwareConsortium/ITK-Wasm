@@ -127,6 +127,14 @@ public:
    * of components in the image. */
   unsigned long GetImageSizeInComponents() const;
 
+  /** Set/Get the number of components per pixel in the image. This may be set
+   * by the reading process. For SCALAR pixel types, NumberOfComponents will
+   * be 1. For other pixel types, NumberOfComponents will be greater than or
+   * equal to one. */
+  void SetNumberOfComponents( unsigned int components );
+  unsigned int GetNumberOfComponents() const;
+
+
   /** Reads the pixel buffer data from the file and returns a JavaScript Typed
    * Array of type corresponding to the IOComponentType */
   emscripten::val Read();
