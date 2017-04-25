@@ -1,30 +1,30 @@
-const path = require('path')
-const assert = require('chai').assert
+import test from 'ava'
+import path from 'path'
 
 const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'itkIntTypes.js'))
 const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'itkPixelTypes.js'))
 const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'itkreadImageLocalFile.js'))
+const itkConfig = require(path.resolve(__dirname, '..', 'dist', 'itkConfig.js'))
+itkConfig.imageIOsURL = path.resolve(__dirname, '..', 'dist', 'ImageIOs')
 
 const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cthead1.png')
 
-describe('readImageLocalFile', function () {
-  it('reads a file path given on the local filesystem', function () {
-    return readImageLocalFile(testFilePath).then(function (image) {
-      assert.strictEqual(image.imageType.dimension, 2)
-      assert.strictEqual(image.imageType.componentType, IntTypes.UInt8)
-      assert.strictEqual(image.imageType.pixelType, PixelTypes.RGB)
-      assert.strictEqual(image.imageType.components, 3)
-      assert.strictEqual(image.origin[0], 0.0)
-      assert.strictEqual(image.origin[1], 0.0)
-      assert.strictEqual(image.spacing[0], 1.0)
-      assert.strictEqual(image.spacing[1], 1.0)
-      assert.strictEqual(image.direction.getElement(0, 0), 1.0)
-      assert.strictEqual(image.direction.getElement(0, 1), 0.0)
-      assert.strictEqual(image.direction.getElement(1, 0), 0.0)
-      assert.strictEqual(image.direction.getElement(1, 1), 1.0)
-      assert.strictEqual(image.size[0], 256)
-      assert.strictEqual(image.size[1], 256)
-      assert.strictEqual(image.buffer.length, 196608)
-    })
+test('readImageLocalFile reads a file path given on the local filesystem', t => {
+  return readImageLocalFile(testFilePath).then(function (image) {
+    t.is(image.imageType.dimension, 2)
+    t.is(image.imageType.componentType, IntTypes.UInt8)
+    t.is(image.imageType.pixelType, PixelTypes.RGB)
+    t.is(image.imageType.components, 3)
+    t.is(image.origin[0], 0.0)
+    t.is(image.origin[1], 0.0)
+    t.is(image.spacing[0], 1.0)
+    t.is(image.spacing[1], 1.0)
+    t.is(image.direction.getElement(0, 0), 1.0)
+    t.is(image.direction.getElement(0, 1), 0.0)
+    t.is(image.direction.getElement(1, 0), 0.0)
+    t.is(image.direction.getElement(1, 1), 1.0)
+    t.is(image.size[0], 256)
+    t.is(image.size[1], 256)
+    t.is(image.buffer.length, 196608)
   })
 })

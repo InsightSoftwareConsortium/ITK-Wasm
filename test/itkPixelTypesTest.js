@@ -1,13 +1,9 @@
-const path = require('path')
-const assert = require('chai').assert
+import test from 'ava'
+import path from 'path'
 
 const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'itkPixelTypes.js'))
 
-describe('PixelTypes', function () {
-  describe('#Unknown', function () {
-    it('should be defined', function () {
-      let type = PixelTypes.Unknown
-      assert.equal(type, 0)
-    })
-  })
+test('PixelTypes#Unknown should be defined', t => {
+  let type = PixelTypes.Unknown
+  t.is(type, 0)
 })

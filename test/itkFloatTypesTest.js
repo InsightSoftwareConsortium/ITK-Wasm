@@ -1,31 +1,19 @@
-const path = require('path')
-const assert = require('chai').assert
+import test from 'ava'
+import path from 'path'
 
-const itk = require(path.resolve(__dirname, '..', 'dist', 'itk.js'))
+const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'itkFloatTypes.js'))
 
-describe('FloatTypes', function () {
-  describe('#Float32', function () {
-    it('should be defined', function () {
-      let type = itk.Float32
-      assert.equal(type, 'float')
-    })
-  })
+test('Float32 should be defined', t => {
+  let type = FloatTypes.Float32
+  t.is(type, 'float')
+})
 
-  describe('#Float64', function () {
-    it('should be defined', function () {
-      let type = itk.Float64
-      assert.equal(type, 'double')
-    })
-  })
+test('Float64 should be defined', t => {
+  let type = FloatTypes.Float64
+  t.is(type, 'double')
+})
 
-  describe('#SpacePrecisionType', function () {
-    it('should be defined', function () {
-      let type = itk.SpacePrecisionType
-      assert.equal(type, 'double')
-    })
-    it('should be equal to double', function () {
-      let type = itk.SpacePrecisionType
-      assert.equal(type, 'double')
-    })
-  })
+test('SpacePrecisionType should be defined', t => {
+  let type = FloatTypes.SpacePrecisionType
+  t.is(type, 'double')
 })

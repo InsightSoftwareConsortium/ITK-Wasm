@@ -1,67 +1,53 @@
-const path = require('path')
-const assert = require('chai').assert
+import test from 'ava'
+import path from 'path'
 
-const itk = require(path.resolve(__dirname, '..', 'dist', 'itk.js'))
+const Matrix = require(path.resolve(__dirname, '..', 'dist', 'itkMatrix.js'))
 
-describe('Matrix', function () {
-  describe('#rows', function () {
-    it('should have the same number of rows as passed into the constructor', function () {
-      let matrix = new itk.Matrix(2, 3)
-      assert.equal(matrix.rows, 2)
-    })
-  })
+test('rows should have the same number of rows as passed into the constructor', t => {
+  let matrix = new Matrix(2, 3)
+  t.is(matrix.rows, 2)
+})
 
-  describe('#columns', function () {
-    it('should have the same number of columns as passed into the constructor', function () {
-      let matrix = new itk.Matrix(2, 3)
-      assert.equal(matrix.columns, 3)
-    })
-  })
+test('columns should have the same number of columns as passed into the constructor', t => {
+  let matrix = new Matrix(2, 3)
+  t.is(matrix.columns, 3)
+})
 
-  describe('#data', function () {
-    it('should have the same number of columns as passed into the constructor', function () {
-      let matrix = new itk.Matrix(2, 3)
-      assert.equal(matrix.columns, 3)
-    })
-  })
+test('data should have the same number of columns as passed into the constructor', t => {
+  let matrix = new Matrix(2, 3)
+  t.is(matrix.columns, 3)
+})
 
-  describe('#setIdentity()', function () {
-    it('should set the matrix to the identity', function () {
-      let matrix = new itk.Matrix(2, 2)
-      matrix.setIdentity()
-      assert.equal(matrix.data[0], 1.0)
-      assert.equal(matrix.data[1], 0.0)
-      assert.equal(matrix.data[2], 0.0)
-      assert.equal(matrix.data[3], 1.0)
-    })
-  })
+test('setIdentity() should set the matrix to the identity', t => {
+  let matrix = new Matrix(2, 2)
+  matrix.setIdentity()
+  t.is(matrix.data[0], 1.0)
+  t.is(matrix.data[1], 0.0)
+  t.is(matrix.data[2], 0.0)
+  t.is(matrix.data[3], 1.0)
+})
 
-  describe('#setElement()', function () {
-    it('should set elements of the matrix', function () {
-      let matrix = new itk.Matrix(2, 2)
-      matrix.setIdentity()
-      matrix.setElement(0, 0, 2.0)
-      matrix.setElement(0, 1, 3.0)
-      matrix.setElement(1, 0, 4.0)
-      matrix.setElement(1, 1, 5.0)
-      assert.equal(matrix.data[0], 2.0)
-      assert.equal(matrix.data[1], 3.0)
-      assert.equal(matrix.data[2], 4.0)
-      assert.equal(matrix.data[3], 5.0)
-    })
-  })
+test('setElement() should set elements of the matrix', t => {
+  let matrix = new Matrix(2, 2)
+  matrix.setIdentity()
+  matrix.setElement(0, 0, 2.0)
+  matrix.setElement(0, 1, 3.0)
+  matrix.setElement(1, 0, 4.0)
+  matrix.setElement(1, 1, 5.0)
+  t.is(matrix.data[0], 2.0)
+  t.is(matrix.data[1], 3.0)
+  t.is(matrix.data[2], 4.0)
+  t.is(matrix.data[3], 5.0)
+})
 
-  describe('#getElement()', function () {
-    it('should get elements of the matrix', function () {
-      let matrix = new itk.Matrix(2, 2)
-      matrix.setElement(0, 0, 2.0)
-      matrix.setElement(0, 1, 3.0)
-      matrix.setElement(1, 0, 4.0)
-      matrix.setElement(1, 1, 5.0)
-      assert.equal(matrix.getElement(0, 0), 2.0)
-      assert.equal(matrix.getElement(0, 1), 3.0)
-      assert.equal(matrix.getElement(1, 0), 4.0)
-      assert.equal(matrix.getElement(1, 1), 5.0)
-    })
-  })
+test('getElement() should get elements of the matrix', t => {
+  let matrix = new Matrix(2, 2)
+  matrix.setElement(0, 0, 2.0)
+  matrix.setElement(0, 1, 3.0)
+  matrix.setElement(1, 0, 4.0)
+  matrix.setElement(1, 1, 5.0)
+  t.is(matrix.getElement(0, 0), 2.0)
+  t.is(matrix.getElement(0, 1), 3.0)
+  t.is(matrix.getElement(1, 0), 4.0)
+  t.is(matrix.getElement(1, 1), 5.0)
 })
