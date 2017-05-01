@@ -4,6 +4,7 @@ const IntTypes = require('./itkIntTypes.js')
 const FloatTypes = require('./itkFloatTypes.js')
 const PixelTypes = require('./itkPixelTypes.js')
 const Matrix = require('./itkMatrix.js')
+const loadEmscriptenModule = require('./itkloadEmscriptenModule.js')
 
 const path = require('path')
 const config = require('./itkConfig.js')
@@ -178,7 +179,7 @@ const readImageLocalFile = (filePath) => {
   return new Promise(function (resolve, reject) {
     try {
       const modulePath = path.join(config.imageIOsURL, 'itkPNGImageIOJSBinding.js')
-      const Module = require(modulePath)
+      const Module = loadEmscriptenModule(modulePath)
       Module.mountContainingDirectory(filePath)
       const image = internalReadImage(Module, filePath)
       Module.unmountContainingDirectory(filePath)
