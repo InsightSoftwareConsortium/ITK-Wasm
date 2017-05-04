@@ -1,4 +1,4 @@
-import test from 'ava'
+const test = require('tape')
 // import path from 'path'
 
 // const File = require('file-api').File
@@ -11,5 +11,6 @@ test('readImageFile reads a File', t => {
   // const file = new File(testFilePath)
   // const image = itk.readImageFile(defaultImageType, file)
   // t.is(image.imageType.dimension, 2)
-  t.pass()
+  t.pass('it passes')
+  t.end()
 })
