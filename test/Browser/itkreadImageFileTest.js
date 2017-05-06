@@ -3,8 +3,6 @@ const test = require('tape')
 
 // const File = require('file-api').File
 
-// const itk = require(path.resolve(__dirname, '..', 'dist', 'itk.js'))
-
 // const testFilePath = path.resolve(__dirname, 'build', 'ExternalData', 'test', 'cthead1.png')
 
 test('readImageFile reads a File', t => {

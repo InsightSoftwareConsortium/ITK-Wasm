@@ -4,7 +4,7 @@ const path = require('path')
 const requirejs = require('requirejs')
 const config = require('./itkConfig.js')
 requirejs.config({
-  baseURL: config.imageIOsURL
+  baseURL: config.imageIOsPath
 })
 
 const internalReadImage = (imageIO, imageType, filePath) => {
@@ -17,13 +17,13 @@ const readImage = (imageType, filePath) => {
   return new Promise(function (resolve, reject) {
     try {
       if (typeof (module) === 'object' && module.exports) {
-        const modulePath = path.join(config.imageIOsURL, 'itkPNGImageIOJSBinding.js')
+        const modulePath = path.join(config.imageIOsPath, 'itkPNGImageIOJSBinding.js')
         const Module = require(modulePath)
         const imageIO = new Module.ITKPNGImageIO()
         const image = internalReadImage(imageIO, imageType, filePath)
         resolve(image)
       } else {
-        requirejs([path.join(config.imageIOsURL, 'itkPNGImageIOJSBinding.js')], function (Module) {
+        requirejs([path.join(config.imageIOsPath, 'itkPNGImageIOJSBinding.js')], function (Module) {
           const imageIO = new Module.ITKPNGImageIO()
           const image = internalReadImage(imageIO, imageType, filePath)
           resolve(image)

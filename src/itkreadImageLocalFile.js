@@ -8,7 +8,7 @@ const readImageEmscriptenFSFile = require('./itkreadImageEmscriptenFSFile.js')
 const readImageLocalFile = (filePath) => {
   return new Promise(function (resolve, reject) {
     try {
-      const modulePath = path.join(config.imageIOsURL, 'itkPNGImageIOJSBinding.js')
+      const modulePath = path.join(config.imageIOsPath, 'itkPNGImageIOJSBinding.js')
       const Module = loadEmscriptenModule(modulePath)
       Module.mountContainingDirectory(filePath)
       const image = readImageEmscriptenFSFile(Module, filePath)
