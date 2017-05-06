@@ -3,6 +3,7 @@ const path = require('path')
 const spawnSync = require('child_process').spawnSync
 const glob = require('glob')
 const asyncMod = require('async')
+const ramda = require('ramda')
 
 // Make the "build" directory to hold build artifacts
 try {
@@ -71,6 +72,11 @@ try {
 } catch(err) {
   if (err.code != 'EEXIST') throw err
 }
+try {
+  fs.mkdirSync(path.join('dist', 'itkWebWorkers'))
+} catch(err) {
+  if (err.code != 'EEXIST') throw err
+}
 imageIOFiles = glob.sync(path.join('build', 'itkImageIOs', '*.js'))
 const copyIOModules = function (imageIOFile, callback) {
   let io = path.basename(imageIOFile)
@@ -82,7 +88,7 @@ const copyIOModules = function (imageIOFile, callback) {
   console.log(io + ' copy complete')
   callback(null, io)
 }
-const buildSystemRegisterParallel = function (callback) {
+const buildImageIOsParallel = function (callback) {
   result = asyncMod.map(imageIOFiles, copyIOModules)
   callback(null, result)
 }
@@ -93,10 +99,10 @@ const babelOptions = {
   ]
 }
 const babel = require('babel-core')
-const babelBuild = function (es6File, callback) {
+const babelBuild = ramda.curry(function (outputDir, es6File, callback) {
   let basename = path.basename(es6File)
+  let output = path.join(outputDir, basename)
   console.log('Converting ' + basename + ' ...')
-  let output = path.join('dist', basename)
   babel.transformFile(es6File, babelOptions, function (err, result) {
     if (err) {
       console.error(err)
@@ -108,14 +114,24 @@ const babelBuild = function (es6File, callback) {
     console.log(basename + ' conversion complete')
   })
   callback(null, basename)
-}
-es6Files = glob.sync(path.join('src', '*.js'))
+})
 const babelBuildParallel = function (callback) {
-  result = asyncMod.map(es6Files, babelBuild)
+  const es6Files = glob.sync(path.join('src', '*.js'))
+  const outputDir = 'dist'
+  builder = babelBuild(outputDir)
+  result = asyncMod.map(es6Files, builder)
+  callback(null, result)
+}
+const babelWebWorkerBuildParallel = function (callback) {
+  const es6Files = glob.sync(path.join('src', 'WebWorkers', '*.js'))
+  const outputDir = path.join('dist', 'itkWebWorkers')
+  builder = babelBuild(outputDir)
+  result = asyncMod.map(es6Files, builder)
   callback(null, result)
 }
 
 asyncMod.parallel([
-  buildSystemRegisterParallel,
-  babelBuildParallel
+  buildImageIOsParallel,
+  babelBuildParallel,
+  babelWebWorkerBuildParallel
 ])
