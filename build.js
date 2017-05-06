@@ -67,15 +67,15 @@ try {
   if (err.code != 'EEXIST') throw err
 }
 try {
-  fs.mkdirSync(path.join('dist', 'ImageIOs'))
+  fs.mkdirSync(path.join('dist', 'itkImageIOs'))
 } catch(err) {
   if (err.code != 'EEXIST') throw err
 }
-imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
+imageIOFiles = glob.sync(path.join('build', 'itkImageIOs', '*.js'))
 const copyIOModules = function (imageIOFile, callback) {
   let io = path.basename(imageIOFile)
   console.log('Copying ' + io + ' ...')
-  let output = path.join('dist', 'ImageIOs', io)
+  let output = path.join('dist', 'itkImageIOs', io)
 
   fs.copySync(imageIOFile, output)
 

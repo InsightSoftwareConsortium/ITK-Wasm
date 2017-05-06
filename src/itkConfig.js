@@ -1,5 +1,5 @@
 const config = {
-  imageIOsURL: '/ImageIOs'
+  imageIOsURL: '/itkImageIOs'
 }
 
 module.exports = config

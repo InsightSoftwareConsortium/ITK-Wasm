@@ -11,7 +11,7 @@ set(moduleDir "${CMAKE_BINARY_DIR}/bin")
 
 itk_add_test(NAME itkPNGImageIOJSBindingTest
   COMMAND ${NODE_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/_itkPNGImageIOJSBindingTest.js
-    "${BridgeJavaScript_BINARY_DIR}/ImageIOs"
+    "${BridgeJavaScript_BINARY_DIR}/itkImageIOs"
     DATA{Input/cthead1.png}
     ${ITK_TEST_OUTPUT_DIR}/cthead1.png
   )

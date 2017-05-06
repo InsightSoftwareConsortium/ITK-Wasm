@@ -3,7 +3,7 @@ import path from 'path'
 
 const loadModule = require(path.resolve(__dirname, '..', 'dist', 'itkloadEmscriptenModule.js'))
 const itkConfig = require(path.resolve(__dirname, '..', 'dist', 'itkConfig.js'))
-itkConfig.imageIOsURL = path.resolve(__dirname, '..', 'dist', 'ImageIOs')
+itkConfig.imageIOsURL = path.resolve(__dirname, '..', 'dist', 'itkImageIOs')
 
 test('load a module', t => {
   const modulePath = path.join(itkConfig.imageIOsURL, 'itkPNGImageIOJSBinding.js')
