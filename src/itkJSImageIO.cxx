@@ -19,11 +19,11 @@
 #include "itkJSImageIO.h"
 
 #include <emscripten.h>
-#include <bind.h>
+#include <emscripten/bind.h>
 
 // Binding code
 EMSCRIPTEN_BINDINGS(itk_js_image_io) {
-  emscripten::class_<itkJSImageIO>("itkJSImageIO")
+  emscripten::class_<itkJSImageIO>("ITKJSImageIO")
     .constructor<>()
     .function("ReadImage", &itkJSImageIO::ReadImage)
     .function("WriteImage", &itkJSImageIO::WriteImage)

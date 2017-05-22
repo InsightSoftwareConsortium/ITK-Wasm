@@ -2,16 +2,28 @@ machine:
   services:
     - docker
 
+  node:
+    version: 6.9.1
+
+
 dependencies:
+  cache_directories:
+    - "~/docker"
+
   override:
     - docker info
+    - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
     - docker pull insighttoolkit/bridgejavascript-test
     - ~/ITKBridgeJavaScript/test/Docker/build.sh
+    - npm install
+    - mkdir -p ~/docker; docker save insighttoolkit/bridgejavascript-test > ~/docker/image.tar
 
 test:
   override:
     - mkdir ~/ITKBridgeJavaScript-build
     - ~/ITKBridgeJavaScript/test/Docker/run.sh
+    - npm run build
+    - npm test
 
 deployment:
   hub:

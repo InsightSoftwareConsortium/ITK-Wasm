@@ -10,6 +10,7 @@ itk_module(BridgeJavaScript
     ITKIOImageBase
   COMPILE_DEPENDS
     ITKImageFunction
+    ${BridgeJavaScript_IOModules}
   TEST_DEPENDS
     ITKTestKernel
   EXCLUDE_FROM_DEFAULT

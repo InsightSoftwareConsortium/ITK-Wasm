@@ -9,3 +9,5 @@
 *.ps
 *.toc
 build
+dist
+node_modules
