@@ -15,7 +15,7 @@
  *
  */
 
-const assert = require('chai').assert
+const assert = require('assert')
 
 if (process.argv.length < 4) {
   console.error('Usage: ', process.argv[0], process.argv[1], ' moduleDir inputImage outputImage')
