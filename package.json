@@ -1,6 +1,6 @@
 {
   "name": "itk",
-  "version": "0.1.0",
+  "version": "0.0.0-semantically-release",
   "description": "Read and write 2D, 3D, and ND images with the Insight Toolkit (ITK)",
   "main": "./dist/itk.js",
   "directories": {
@@ -8,8 +8,20 @@
     "test": "test"
   },
   "scripts": {
+    "doc"           : "kw-doc -c ./doc/config.js",
+    "doc:www"       : "kw-doc -c ./doc/config.js -s",
+    "doc:publish"   : "kw-doc -c ./doc/config.js -mp",
+
+    "commit"        : "git cz",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+
     "build": "node ./build.js",
     "test": "./build/dockcross bash -c \"cd build && ctest -V\" && standard \"src/*.js\" \"test/**/*.js\" && ava \"test/*.js\" && NODE_PATH=$PWD/dist browserify test/Browser/*.js | tape-run --render=\"tap-spec\" --static \"dist/\" --browser firefox"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   },
   "repository": {
     "type": "git",
@@ -29,6 +41,11 @@
   },
   "homepage": "https://github.com/InsightSoftwareConsortium/ITKBridgeJavaScript#readme",
   "devDependencies": {
+    "kw-doc": "1.0.20",
+    "commitizen": "2.9.6",
+    "cz-conventional-changelog": "2.0.0",
+    "semantic-release": "6.3.6",
+
     "async": "^2.0.1",
     "ava": "^0.19.1",
     "babel-core": "^6.24.1",

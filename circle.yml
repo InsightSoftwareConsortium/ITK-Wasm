@@ -26,6 +26,21 @@ test:
     - npm test
 
 deployment:
+  release:
+    branch: release
+    owner: InsightSoftwareConsortium
+    commands:
+      - npm run semantic-release
+
+  doc:
+    branch: master
+    owner: InsightSoftwareConsortium
+    commands:
+      - git config --global user.name "Circle CI"
+      - git config --global user.email "robot@itk.org"
+      - export GIT_PUBLISH_URL=https://${GH_TOKEN}@github.com/InsightSoftwareConsortium/ITKBridgeJavaScript.git
+      - npm run doc:publish
+
   hub:
     branch: master
     commands:
