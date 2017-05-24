@@ -5,6 +5,7 @@ const ImageType = require('../itkImageType.js')
 const Image = require('../itkImage.js')
 
 registerPromiseWorker(function (input, withTransferList) {
+  console.log('received:')
   console.log(input)
   // const modulePath = path.join(config.imageIOsPath, 'itkPNGImageIOJSBinding.js')
   // const Module = loadEmscriptenModule(modulePath)
