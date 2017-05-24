@@ -6,7 +6,7 @@ const PixelTypes = require('./itkPixelTypes.js')
 const Matrix = require('./itkMatrix.js')
 
 const readImageEmscriptenFSFile = (module, filePath) => {
-  const imageIO = new module.ITKPNGImageIO()
+  const imageIO = new module.ITKImageIO()
   imageIO.SetFileName(filePath)
   if (!imageIO.CanReadFile(filePath)) {
     return null

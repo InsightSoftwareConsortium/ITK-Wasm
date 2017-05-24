@@ -66,6 +66,7 @@
     "tape-run": "^3.0.0"
   },
   "dependencies": {
+    "mime-types": "^2.1.15",
     "requirejs": "^2.3.2"
   },
   "standard": {

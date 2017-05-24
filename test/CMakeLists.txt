@@ -15,3 +15,10 @@ itk_add_test(NAME itkPNGImageIOJSBindingTest
     DATA{Input/cthead1.png}
     ${ITK_TEST_OUTPUT_DIR}/cthead1.png
   )
+
+# Download testing data for the tests executed via `npm test`
+ExternalData_Expand_Arguments(
+  ITKData
+  npm_test_inputs
+  DATA{Input/vol-raw-little.nrrd}
+  )

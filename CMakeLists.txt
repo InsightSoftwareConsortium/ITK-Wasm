@@ -3,9 +3,11 @@ project(BridgeJavaScript)
 
 set(BridgeJavaScript_IOModules
   "ITKIOPNG"
+  "ITKIONRRD"
   CACHE STRING
   "String delimited list of ITK IO modules to support.")
 set(imageio_ITKIOPNG itkPNGImageIO)
+set(imageio_ITKIONRRD itkNrrdImageIO)
 
 
 if(NOT ITK_SOURCE_DIR)
