@@ -2,8 +2,13 @@
 
 [![CircleCI](https://circleci.com/gh/InsightSoftwareConsortium/ITKBridgeJavaScript.svg?style=svg)](https://circleci.com/gh/InsightSoftwareConsortium/ITKBridgeJavaScript)
 
+Provides general scientific image IO capability and bridges
+[ITK](https://itk.org) code running in the
+[Emscripten](http://emscripten.org/) runtime environment.
+
 ## Supported file formats
 
+- [DICOM](http://dicom.nema.org/)
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)
 - [Portable Network Graphics (PNG)](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
 
@@ -30,8 +35,8 @@ npm test
 
 ### Contributing
 
-We use semantic-release for handling change log and version. 
-Therefore we recommend using the following command line when 
+We use semantic-release for handling change log and version.
+Therefore we recommend using the following command line when
 creating a commit:
 
 ```sh

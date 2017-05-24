@@ -17,3 +17,8 @@ test('nhdr maps to itkNrrdImageIOJSBinding', t => {
   let io = ExtensionToIO['nhdr']
   t.is(io, 'itkNrrdImageIOJSBinding')
 })
+
+test('dcm maps to itkGDCMImageIOJSBinding', t => {
+  let io = ExtensionToIO['dcm']
+  t.is(io, 'itkGDCMImageIOJSBinding')
+})
