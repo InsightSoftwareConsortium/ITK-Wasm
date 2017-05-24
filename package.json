@@ -41,6 +41,7 @@
   },
   "homepage": "https://github.com/InsightSoftwareConsortium/ITKBridgeJavaScript#readme",
   "devDependencies": {
+    "kw-doc": "1.0.20",
     "commitizen": "2.9.6",
     "cz-conventional-changelog": "2.0.0",
     "semantic-release": "6.3.6",
