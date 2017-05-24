@@ -122,10 +122,24 @@ const babelBuildParallel = function (callback) {
   result = asyncMod.map(es6Files, builder)
   callback(null, result)
 }
-const babelWebWorkerBuildParallel = function (callback) {
+
+const browserify = require('browserify')
+const browserifyBuild = ramda.curry(function (outputDir, es6File, callback) {
+  let basename = path.basename(es6File)
+  let output = path.join(outputDir, basename)
+  console.log('Converting ' + basename + ' ...')
+  browserify(es6File)
+    .transform('babelify', {presets: ['es2015']})
+    .bundle()
+    .pipe(fs.createWriteStream(output))
+
+  console.log(basename + ' conversion complete')
+  callback(null, basename)
+})
+const browserifyWebWorkerBuildParallel = function (callback) {
   const es6Files = glob.sync(path.join('src', 'WebWorkers', '*.js'))
   const outputDir = path.join('dist', 'itkWebWorkers')
-  builder = babelBuild(outputDir)
+  builder = browserifyBuild(outputDir)
   result = asyncMod.map(es6Files, builder)
   callback(null, result)
 }
@@ -133,5 +147,5 @@ const babelWebWorkerBuildParallel = function (callback) {
 asyncMod.parallel([
   buildImageIOsParallel,
   babelBuildParallel,
-  babelWebWorkerBuildParallel
+  browserifyWebWorkerBuildParallel
 ])
