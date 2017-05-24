@@ -39,7 +39,6 @@ deployment:
     commands:
       - git config --global user.name "Circle CI"
       - git config --global user.email "robot@itk.org"
-      - export GIT_PUBLISH_URL=https://${GH_TOKEN}@github.com/InsightSoftwareConsortium/ITKBridgeJavaScript.git
       - npm run doc:publish
 
   hub:
