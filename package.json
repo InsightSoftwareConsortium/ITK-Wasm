@@ -45,6 +45,7 @@
     "commitizen": "2.9.6",
     "cz-conventional-changelog": "2.0.0",
     "semantic-release": "6.3.6",
+    "condition-circle": "1.5.0",
 
     "async": "^2.0.1",
     "ava": "^0.19.1",
@@ -73,5 +74,8 @@
     "ignore": [
       "itkJSImageIOPost.js"
     ]
+  },
+  "release": {
+    "verifyConditions": "condition-circle"
   }
 }
