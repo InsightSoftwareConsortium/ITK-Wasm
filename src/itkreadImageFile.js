@@ -1,4 +1,4 @@
-// const path = require('path')
+const PromiseWorker = require('promise-worker-transferable')
 
 const config = require('./itkConfig.js')
 
@@ -6,13 +6,20 @@ const config = require('./itkConfig.js')
 const ImageType = require('./itkImageType.js')
 const Image = require('./itkImage.js')
 
+const worker = new window.Worker(config.webWorkersPath + '/ImageIOWorker.js')
+const promiseWorker = new PromiseWorker(worker)
+
 const readImageFile = (file) => {
   return new Promise(function (resolve, reject) {
     try {
-      const worker = new window.Worker(config.webWorkersPath + '/ImageIOWorker.js')
       if (!worker) {
         reject(Error('Could not create ImageIOWorker'))
       }
+      promiseWorker.postMessage('File', [file]).then(function (image) {
+        resolve(image)
+      }).catch(function (error) {
+        reject(error)
+      })
       // const modulePath = path.join(config.imageIOsPath, 'itkPNGImageIOJSBinding.js')
       // const Module = loadEmscriptenModule(modulePath)
       // const image = readImageEmscriptenFSFile(Module, filePath)
