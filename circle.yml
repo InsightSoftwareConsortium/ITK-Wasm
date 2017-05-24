@@ -17,6 +17,7 @@ dependencies:
     - ~/ITKBridgeJavaScript/test/Docker/build.sh
     - npm install
     - mkdir -p ~/docker; docker save insighttoolkit/bridgejavascript-test > ~/docker/image.tar
+    - firefox --version
 
 test:
   override:
