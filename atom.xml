@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>ITKBridgeJavaScript</title>
+  <subtitle>Leverage ITK algorithms and IO in JavaScript.</subtitle>
+  <link href="/ITKBridgeJavaScript/atom.xml" rel="self"/>
+  
+  <link href="https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/"/>
+  <updated>2017-05-24T23:22:25.503Z</updated>
+  <id>https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/</id>
+  
+  <author>
+    <name>Kitware Inc.</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hexo</title>
+    <link href="https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/2016/04/28/kw-doc/"/>
+    <id>https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/2016/04/28/kw-doc/</id>
+    <published>2016-04-29T00:00:00.000Z</published>
+    <updated>2017-05-24T23:22:25.503Z</updated>
+    
+    <content type="html"><![CDATA[<p>Thanks for using kw-doc which is based on Hexo and its template from its own documentation.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Thanks for using kw-doc which is based on Hexo and its template from its own documentation.&lt;/p&gt;
+
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
