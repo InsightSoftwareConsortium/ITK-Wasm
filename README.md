@@ -2,6 +2,11 @@
 
 [![CircleCI](https://circleci.com/gh/InsightSoftwareConsortium/ITKBridgeJavaScript.svg?style=svg)](https://circleci.com/gh/InsightSoftwareConsortium/ITKBridgeJavaScript)
 
+## Supported file formats
+
+- [NRRD](http://teem.sourceforge.net/nrrd/format.html)
+- [Portable Network Graphics (PNG)](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
+
 ## Hacking ITKBridgeJavaScript
 
 ### Build dependencies
