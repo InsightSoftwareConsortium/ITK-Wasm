@@ -33,7 +33,7 @@ deployment:
     commands:
       - npm run semantic-release
 
-  doc:
+  iodoc:
     branch: master
     owner: InsightSoftwareConsortium
     commands:
