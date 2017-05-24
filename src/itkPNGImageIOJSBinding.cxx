@@ -58,7 +58,7 @@ EMSCRIPTEN_BINDINGS(itk_png_image_io_js_binding) {
     .value("FLOAT", itk::ImageIOBase::FLOAT)
     .value("DOUBLE", itk::ImageIOBase::DOUBLE)
     ;
-  emscripten::class_<PNGImageIOJSBindingType>("ITKPNGImageIO")
+  emscripten::class_<PNGImageIOJSBindingType>("ITKImageIO")
   .constructor<>()
   .function("SetNumberOfDimensions", &PNGImageIOJSBindingType::SetNumberOfDimensions)
   .function("GetNumberOfDimensions", &PNGImageIOJSBindingType::GetNumberOfDimensions)
