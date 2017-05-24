@@ -26,6 +26,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DModule_ITKIOPNG:BOOL=ON \
     -DModule_ITKIONRRD:BOOL=ON \
     -DModule_ITKIONIFTI:BOOL=ON \
+    -DModule_ITKIOGDCM:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
     ../ITK && \
   ninja && \
