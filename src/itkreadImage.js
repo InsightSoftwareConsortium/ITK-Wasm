@@ -19,12 +19,12 @@ const readImage = (imageType, filePath) => {
       if (typeof (module) === 'object' && module.exports) {
         const modulePath = path.join(config.imageIOsPath, 'itkPNGImageIOJSBinding.js')
         const Module = require(modulePath)
-        const imageIO = new Module.ITKPNGImageIO()
+        const imageIO = new Module.ITKImageIO()
         const image = internalReadImage(imageIO, imageType, filePath)
         resolve(image)
       } else {
         requirejs([path.join(config.imageIOsPath, 'itkPNGImageIOJSBinding.js')], function (Module) {
-          const imageIO = new Module.ITKPNGImageIO()
+          const imageIO = new Module.ITKImageIO()
           const image = internalReadImage(imageIO, imageType, filePath)
           resolve(image)
         })

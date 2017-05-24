@@ -31,7 +31,7 @@ var path = require('path')
 var modulePath = path.join(moduleDir, 'itkPNGImageIOJSBinding.js')
 
 var Module = require(modulePath)
-var imageio = new Module.ITKPNGImageIO()
+var imageio = new Module.ITKImageIO()
 
 console.log('Reading image...')
 Module.mountContainingDirectory(inputImage)
@@ -63,12 +63,12 @@ assert.equal(retrievedAxisDirection.get(0), 0.707)
 assert.equal(retrievedAxisDirection.get(1), 0.2)
 
 var pixelType = imageio.GetPixelType()
-console.log('Pixel type:     ' + Module.ITKPNGImageIO.GetPixelTypeAsString(pixelType))
+console.log('Pixel type:     ' + Module.ITKImageIO.GetPixelTypeAsString(pixelType))
 assert.equal(pixelType, Module.IOPixelType.RGB)
 imageio.SetPixelType(pixelType)
 
 var componentType = imageio.GetComponentType()
-console.log('Component type: ' + Module.ITKPNGImageIO.GetComponentTypeAsString(componentType))
+console.log('Component type: ' + Module.ITKImageIO.GetComponentTypeAsString(componentType))
 assert.equal(componentType, Module.IOComponentType.UCHAR)
 imageio.SetComponentType(componentType)
 
