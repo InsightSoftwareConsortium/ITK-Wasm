@@ -25,10 +25,10 @@ const readImageLocalFile = (filePath) => {
         // todo: Iterate through available IO's and have them run
         // .CanReadFile(filePath)
       }
-
       if (io === null) {
         reject(Error('Could not find IO for: ' + filePath))
       }
+
       const modulePath = path.join(config.imageIOsPath, io)
       const Module = loadEmscriptenModule(modulePath)
       Module.mountContainingDirectory(filePath)

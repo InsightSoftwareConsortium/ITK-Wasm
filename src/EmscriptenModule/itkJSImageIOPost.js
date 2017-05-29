@@ -40,6 +40,31 @@ Module['unmountContainingDirectory'] = function (filePath) {
   FS.unmount(containingDir)
 }
 
-// UMD module code
-return Module
-}))
+/** Mount file blobs into the Emscripten filesystem. The blobs argument should be an
+ * array of { name: 'filename', data: blob } objects. */
+Module['mountBlobs'] = function (mountpoint, blobs) {
+  if (! ENVIRONMENT_IS_WORKER) {
+    return
+  }
+
+  var currentDir = '/'
+  var splitMountpoint = mountpoint.split('/')
+
+  for (var ii = 1; ii < splitMountpoint.length; ++ii) {
+    currentDir += splitMountpoint[ii]
+    if (!FS.analyzePath(currentDir).exists) {
+      FS.mkdir(currentDir)
+    }
+    currentDir += '/'
+  }
+
+  FS.mount(WORKERFS, {blobs: blobs}, mountpoint)
+}
+
+Module['unmountBlobs'] = function (mountpoint) {
+  if (! ENVIRONMENT_IS_WORKER) {
+    return
+  }
+
+  FS.unmount(mountpoint)
+}
