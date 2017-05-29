@@ -54,8 +54,6 @@
     "glob": "^7.0.6",
     "json-loader": "^0.5.4",
     "kw-doc": "1.0.20",
-    "promise-file-reader": "^0.3.1",
-    "promise-worker-transferable": "^1.0.4",
     "ramda": "^0.23.0",
     "semantic-release": "6.3.6",
     "standard": "^8.6.0",
@@ -66,7 +64,8 @@
   },
   "dependencies": {
     "mime-types": "^2.1.15",
-    "requirejs": "^2.3.2"
+    "promise-file-reader": "^0.3.1",
+    "promise-worker-transferable": "^1.0.4"
   },
   "standard": {
     "ignore": [
