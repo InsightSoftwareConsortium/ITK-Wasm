@@ -51,3 +51,16 @@ test('getElement() should get elements of the matrix', t => {
   t.is(matrix.getElement(1, 0), 4.0)
   t.is(matrix.getElement(1, 1), 5.0)
 })
+
+test('passing a Matrix to the constructor should create a copy', t => {
+  let matrix = new Matrix(2, 2)
+  matrix.setElement(0, 0, 2.0)
+  matrix.setElement(0, 1, 3.0)
+  matrix.setElement(1, 0, 4.0)
+  matrix.setElement(1, 1, 5.0)
+  const matrixCopy = new Matrix(matrix)
+  t.is(matrixCopy.getElement(0, 0), 2.0)
+  t.is(matrixCopy.getElement(0, 1), 3.0)
+  t.is(matrixCopy.getElement(1, 0), 4.0)
+  t.is(matrixCopy.getElement(1, 1), 5.0)
+})

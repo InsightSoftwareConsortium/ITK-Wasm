@@ -1,9 +1,16 @@
 function Matrix (rows, columns) {
-  this.rows = rows
-  this.columns = columns
+  if (rows instanceof Matrix) {
+    const other = rows
+    this.rows = other.rows
+    this.columns = other.columns
+    this.data = other.data.slice()
+  } else {
+    this.rows = rows
+    this.columns = columns
 
-  this.data = new Array(rows * columns)
-  this.data.fill(0.0)
+    this.data = new Array(rows * columns)
+    this.data.fill(0.0)
+  }
 }
 
 Matrix.prototype.setIdentity = function () {
