@@ -128,7 +128,9 @@ const browserifyBuild = ramda.curry(function (outputDir, es6File, callback) {
   let basename = path.basename(es6File)
   let output = path.join(outputDir, basename)
   console.log('Converting ' + basename + ' ...')
-  browserify(es6File)
+  const bundler = browserify(es6File)
+  bundler.transform({global: true}, 'uglifyify')
+  bundler
     .transform('babelify', {presets: ['es2015']})
     .bundle()
     .pipe(fs.createWriteStream(output))
