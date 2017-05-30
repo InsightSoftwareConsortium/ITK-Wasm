@@ -24,4 +24,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/vol-raw-little.nrrd}
   DATA{Input/1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm}
   DATA{Input/ironProt.vtk}
+  DATA{Input/ShortTestImage.tiff}
   )
