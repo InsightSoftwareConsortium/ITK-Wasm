@@ -9,6 +9,7 @@ Provides general scientific image IO capability and bridges
 ## Supported file formats
 
 - [DICOM](http://dicom.nema.org/)
+- [MetaImage](https://itk.org/Wiki/ITK/MetaIO/Documentation)
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)
 - [Portable Network Graphics (PNG)](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
 - [VTK legacy image file format](http://www.vtk.org/VTK/img/file-formats.pdf)
