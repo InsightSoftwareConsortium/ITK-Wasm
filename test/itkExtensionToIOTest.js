@@ -22,3 +22,8 @@ test('dcm maps to itkGDCMImageIOJSBinding', t => {
   let io = ExtensionToIO['dcm']
   t.is(io, 'itkGDCMImageIOJSBinding')
 })
+
+test('vtk maps to itkVTKImageIOJSBinding', t => {
+  let io = ExtensionToIO['vtk']
+  t.is(io, 'itkVTKImageIOJSBinding')
+})
