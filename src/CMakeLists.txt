@@ -1,12 +1,3 @@
-find_package(ITK REQUIRED
-  COMPONENTS
-    ITKIOPNG
-    ITKIONIFTI
-    ITKIONRRD
-  )
-include(${ITK_USE_FILE})
-
-
 foreach(io_module ${BridgeJavaScript_IOModules})
   find_package(ITK REQUIRED COMPONENTS ${io_module})
   include(${ITK_USE_FILE})
