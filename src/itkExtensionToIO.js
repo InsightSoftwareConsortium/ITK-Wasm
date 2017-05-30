@@ -6,6 +6,12 @@ extensionToIO['DCM'] = 'itkGDCMImageIOJSBinding'
 extensionToIO['mha'] = 'itkMetaImageIOJSBinding'
 extensionToIO['mhd'] = 'itkMetaImageIOJSBinding'
 
+extensionToIO['nia'] = 'itkNiftiImageIOJSBinding'
+extensionToIO['nii'] = 'itkNiftiImageIOJSBinding'
+// todo: properly support .nii.gz
+extensionToIO['gz'] = 'itkNiftiImageIOJSBinding'
+extensionToIO['hdr'] = 'itkNiftiImageIOJSBinding'
+
 extensionToIO['nrrd'] = 'itkNrrdImageIOJSBinding'
 extensionToIO['NRRD'] = 'itkNrrdImageIOJSBinding'
 extensionToIO['nhdr'] = 'itkNrrdImageIOJSBinding'
