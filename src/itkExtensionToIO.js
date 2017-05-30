@@ -10,4 +10,6 @@ extensionToIO['NHDR'] = 'itkNrrdImageIOJSBinding'
 extensionToIO['png'] = 'itkPNGImageIOJSBinding'
 extensionToIO['PNG'] = 'itkPNGImageIOJSBinding'
 
+extensionToIO['vtk'] = 'itkVTKImageIOJSBinding'
+
 module.exports = extensionToIO

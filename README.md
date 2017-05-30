@@ -11,6 +11,7 @@ Provides general scientific image IO capability and bridges
 - [DICOM](http://dicom.nema.org/)
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)
 - [Portable Network Graphics (PNG)](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
+- [VTK legacy image file format](http://www.vtk.org/VTK/img/file-formats.pdf)
 
 ## Hacking ITKBridgeJavaScript
 

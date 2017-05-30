@@ -5,11 +5,13 @@ set(BridgeJavaScript_IOModules
   "ITKIOGDCM"
   "ITKIONRRD"
   "ITKIOPNG"
+  "ITKIOVTK"
   CACHE STRING
   "String delimited list of ITK IO modules to support.")
 set(imageio_ITKIOPNG itkPNGImageIO)
 set(imageio_ITKIONRRD itkNrrdImageIO)
 set(imageio_ITKIOGDCM itkGDCMImageIO)
+set(imageio_ITKIOVTK itkVTKImageIO)
 
 
 if(NOT ITK_SOURCE_DIR)
