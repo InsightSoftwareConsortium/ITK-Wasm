@@ -8,6 +8,7 @@ Provides general scientific image IO capability and bridges
 
 ## Supported file formats
 
+- [BMP](https://en.wikipedia.org/wiki/BMP_file_format)
 - [DICOM](http://dicom.nema.org/)
 - [MetaImage](https://itk.org/Wiki/ITK/MetaIO/Documentation)
 - [NifTi](https://nifti.nimh.nih.gov/nifti-1)

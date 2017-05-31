@@ -13,6 +13,21 @@ test('image/tiff maps to itkTIFFImageIOJSBinding', t => {
   t.is(io, 'itkTIFFImageIOJSBinding')
 })
 
+test('image/x-ms-bmp maps to itkBMPImageIOJSBinding', t => {
+  let io = MimeToIO['image/x-ms-bmp']
+  t.is(io, 'itkBMPImageIOJSBinding')
+})
+
+test('image/x-bmp maps to itkBMPImageIOJSBinding', t => {
+  let io = MimeToIO['image/x-bmp']
+  t.is(io, 'itkBMPImageIOJSBinding')
+})
+
+test('image/bmp maps to itkBMPImageIOJSBinding', t => {
+  let io = MimeToIO['image/bmp']
+  t.is(io, 'itkBMPImageIOJSBinding')
+})
+
 test('application/dicom maps to itkGDCMImageIOJSBinding', t => {
   let io = MimeToIO['application/dicom']
   t.is(io, 'itkGDCMImageIOJSBinding')

@@ -45,7 +45,7 @@ test('readImageArrayBuffer reads an ArrayBuffer', t => {
     })
 })
 
-test('readImageBlob reads an Blob', t => {
+test('readImageBlob reads a Blob', t => {
   return readImageBlob(cthead1SmallBlob, 'cthead1Small.png').then(function (image) {
     t.is(image.imageType.dimension, 2, 'dimension')
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
