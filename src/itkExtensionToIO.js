@@ -1,5 +1,8 @@
 let extensionToIO = {}
 
+extensionToIO['bmp'] = 'itkBMPImageIOJSBinding'
+extensionToIO['BMP'] = 'itkBMPImageIOJSBinding'
+
 extensionToIO['dcm'] = 'itkGDCMImageIOJSBinding'
 extensionToIO['DCM'] = 'itkGDCMImageIOJSBinding'
 

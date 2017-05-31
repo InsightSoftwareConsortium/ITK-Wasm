@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.9)
 project(BridgeJavaScript)
 
 set(BridgeJavaScript_IOModules
+  "ITKIOBMP"
   "ITKIOGDCM"
   "ITKIOMeta"
   "ITKIONIFTI"
@@ -11,6 +12,7 @@ set(BridgeJavaScript_IOModules
   "ITKIOVTK"
   CACHE STRING
   "String delimited list of ITK IO modules to support.")
+set(imageio_ITKIOBMP itkBMPImageIO)
 set(imageio_ITKIOPNG itkPNGImageIO)
 set(imageio_ITKIOMeta itkMetaImageIO)
 set(imageio_ITKIONIFTI itkNiftiImageIO)

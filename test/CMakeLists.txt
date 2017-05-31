@@ -26,4 +26,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/ironProt.vtk}
   DATA{Input/ShortTestImage.tiff}
   DATA{Input/r16slice.nii.gz}
+  DATA{Input/image_color.bmp}
   )
