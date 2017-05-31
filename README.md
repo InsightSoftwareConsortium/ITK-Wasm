@@ -10,6 +10,7 @@ Provides general scientific image IO capability and bridges
 
 - [DICOM](http://dicom.nema.org/)
 - [MetaImage](https://itk.org/Wiki/ITK/MetaIO/Documentation)
+- [NifTi](https://nifti.nimh.nih.gov/nifti-1)
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)
 - [Portable Network Graphics (PNG)](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
 - [Tagged Image File Format (TIFF)](https://en.wikipedia.org/wiki/TIFF)
