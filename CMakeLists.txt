@@ -4,6 +4,7 @@ project(BridgeJavaScript)
 set(BridgeJavaScript_IOModules
   "ITKIOGDCM"
   "ITKIOMeta"
+  "ITKIONIFTI"
   "ITKIONRRD"
   "ITKIOPNG"
   "ITKIOTIFF"
@@ -12,6 +13,7 @@ set(BridgeJavaScript_IOModules
   "String delimited list of ITK IO modules to support.")
 set(imageio_ITKIOPNG itkPNGImageIO)
 set(imageio_ITKIOMeta itkMetaImageIO)
+set(imageio_ITKIONIFTI itkNiftiImageIO)
 set(imageio_ITKIONRRD itkNrrdImageIO)
 set(imageio_ITKIOGDCM itkGDCMImageIO)
 set(imageio_ITKIOTIFF itkTIFFImageIO)
