@@ -1,0 +1,6 @@
+{
+  'itk': {
+    imageIOsPath: '/itkImageIOs',
+    webWorkersPath: '/itkWebWorkers'
+  }
+}
