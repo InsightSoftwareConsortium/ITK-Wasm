@@ -4,8 +4,8 @@ MAINTAINER Insight Software Consortium <community@itk.org>
 RUN mkdir -p /usr/src/ITKBridgeJavaScript-build
 WORKDIR /usr/src
 
-# 2017-04-29
-ENV ITK_GIT_TAG b8d495c1f2a91afff16148881f5fac1c153d5bfe
+# 2017-05-30
+ENV ITK_GIT_TAG 1601f45313c0eb7ae71268488ef810695f659a1a
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0 -s ALLOW_MEMORY_GROWTH=1"
 ENV CXXFLAGS="${CFLAGS} -std=c++11"
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
@@ -24,6 +24,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF \
     -DITKGroup_IO:BOOL=ON \
     -DModule_IOMINC:BOOL=ON \
+    -DModule_IOMGH:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
     ../ITK && \
   ninja && \
