@@ -20,7 +20,7 @@ foreach(io_module ${BridgeJavaScript_IOModules})
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/itkImageIOs
+      ${BridgeJavaScript_BINARY_DIR}/ImageIOs
       )
     set_property(SOURCE ${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS

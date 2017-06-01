@@ -1,12 +1,12 @@
 const registerPromiseWorker = require('promise-worker-transferable/register')
 
-const ImageType = require('../itkImageType.js')
-const Image = require('../itkImage.js')
+const ImageType = require('../ImageType.js')
+const Image = require('../Image.js')
 
-const mimeToIO = require('../itkMimeToIO.js')
-const getFileExtension = require('../itkgetFileExtension.js')
-const extensionToIO = require('../itkExtensionToIO.js')
-const readImageEmscriptenFSFile = require('../itkreadImageEmscriptenFSFile.js')
+const mimeToIO = require('../MimeToIO.js')
+const getFileExtension = require('../getFileExtension.js')
+const extensionToIO = require('../extensionToIO.js')
+const readImageEmscriptenFSFile = require('../readImageEmscriptenFSFile.js')
 
 // To cache loaded io modules
 let ioToModule = {}

@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'itkIntTypes.js'))
+const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
 
 test('Int8 should be defined', t => {
   let type = IntTypes.Int8

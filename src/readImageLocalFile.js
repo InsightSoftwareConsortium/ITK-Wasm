@@ -3,12 +3,12 @@ const mime = require('mime-types')
 
 const config = require('./itkConfig.js')
 
-const mimeToIO = require('./itkMimeToIO.js')
-const getFileExtension = require('./itkgetFileExtension.js')
-const extensionToIO = require('./itkExtensionToIO.js')
+const mimeToIO = require('./MimeToIO.js')
+const getFileExtension = require('./getFileExtension.js')
+const extensionToIO = require('./extensionToIO.js')
 
-const loadEmscriptenModule = require('./itkloadEmscriptenModule.js')
-const readImageEmscriptenFSFile = require('./itkreadImageEmscriptenFSFile.js')
+const loadEmscriptenModule = require('./loadEmscriptenModule.js')
+const readImageEmscriptenFSFile = require('./readImageEmscriptenFSFile.js')
 
 /**
  * Read an image from a file on the local filesystem in Node.js.

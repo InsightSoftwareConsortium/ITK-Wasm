@@ -1,9 +1,9 @@
-const Image = require('./itkImage.js')
-const ImageType = require('./itkImageType.js')
-const IntTypes = require('./itkIntTypes.js')
-const FloatTypes = require('./itkFloatTypes.js')
-const PixelTypes = require('./itkPixelTypes.js')
-const Matrix = require('./itkMatrix.js')
+const Image = require('./Image.js')
+const ImageType = require('./ImageType.js')
+const IntTypes = require('./IntTypes.js')
+const FloatTypes = require('./FloatTypes.js')
+const PixelTypes = require('./PixelTypes.js')
+const Matrix = require('./Matrix.js')
 
 const readImageEmscriptenFSFile = (module, filePath) => {
   const imageIO = new module.ITKImageIO()

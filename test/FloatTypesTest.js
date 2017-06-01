@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'itkFloatTypes.js'))
+const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
 
 test('Float32 should be defined', t => {
   let type = FloatTypes.Float32

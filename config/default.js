@@ -1,8 +1,8 @@
 const path = require('path')
 let config = {
   'itk': {
-    imageIOsPath: path.resolve(__dirname, '..', 'dist', 'itkImageIOs'),
-    webWorkersPath: path.resolve(__dirname, '..', 'dist', 'itkWebWorkers')
+    imageIOsPath: path.resolve(__dirname, '..', 'dist', 'ImageIOs'),
+    webWorkersPath: path.resolve(__dirname, '..', 'dist', 'WebWorkers')
   }
 }
 

@@ -1,5 +1,5 @@
-const ImageType = require('./itkImageType.js')
-const Matrix = require('./itkMatrix.js')
+const ImageType = require('./ImageType.js')
+const Matrix = require('./Matrix.js')
 
 const Image = function (imageType = new ImageType()) {
   this.imageType = imageType

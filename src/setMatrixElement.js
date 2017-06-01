@@ -1,4 +1,4 @@
-const Matrix = require('./itkMatrix.js')
+const Matrix = require('./Matrix.js')
 
 const setMatrixElement = (matrix, row, column, value) => {
   let newMatrix = new Matrix(matrix)
