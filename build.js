@@ -73,7 +73,7 @@ try {
   if (err.code != 'EEXIST') throw err
 }
 try {
-  fs.mkdirSync(path.join('dist', 'itkWebWorkers'))
+  fs.mkdirSync(path.join('dist', 'WebWorkers'))
 } catch(err) {
   if (err.code != 'EEXIST') throw err
 }
@@ -140,7 +140,7 @@ const browserifyBuild = ramda.curry(function (outputDir, es6File, callback) {
 })
 const browserifyWebWorkerBuildParallel = function (callback) {
   const es6Files = glob.sync(path.join('src', 'WebWorkers', '*.js'))
-  const outputDir = path.join('dist', 'itkWebWorkers')
+  const outputDir = path.join('dist', 'WebWorkers')
   builder = browserifyBuild(outputDir)
   result = asyncMod.map(es6Files, builder)
   callback(null, result)
