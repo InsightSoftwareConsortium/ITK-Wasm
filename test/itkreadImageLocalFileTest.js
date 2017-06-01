@@ -4,8 +4,6 @@ import path from 'path'
 const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'itkIntTypes.js'))
 const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'itkPixelTypes.js'))
 const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'itkreadImageLocalFile.js'))
-const itkConfig = require(path.resolve(__dirname, '..', 'dist', 'itkConfig.js'))
-itkConfig.imageIOsPath = path.resolve(__dirname, '..', 'dist', 'itkImageIOs')
 
 const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cthead1.png')
 

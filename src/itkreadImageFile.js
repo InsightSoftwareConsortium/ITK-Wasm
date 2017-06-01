@@ -9,7 +9,8 @@ const promiseWorker = new PromiseWorker(worker)
 const readImageFile = (file) => {
   return PromiseFileReader.readAsArrayBuffer(file)
     .then(arrayBuffer => {
-      return promiseWorker.postMessage({ name: file.name, type: file.type, buffer: arrayBuffer }, [arrayBuffer])
+      return promiseWorker.postMessage({ name: file.name, type: file.type, buffer: arrayBuffer, config: config },
+        [arrayBuffer])
     })
 }
 

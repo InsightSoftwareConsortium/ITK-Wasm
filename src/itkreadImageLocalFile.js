@@ -10,6 +10,11 @@ const extensionToIO = require('./itkExtensionToIO.js')
 const loadEmscriptenModule = require('./itkloadEmscriptenModule.js')
 const readImageEmscriptenFSFile = require('./itkreadImageEmscriptenFSFile.js')
 
+/**
+ * Read an image from a file on the local filesystem in Node.js.
+ *
+ * @param: filePath path to the file on the local filesystem.
+ */
 const readImageLocalFile = (filePath) => {
   return new Promise(function (resolve, reject) {
     try {

@@ -8,9 +8,6 @@ const getFileExtension = require('../itkgetFileExtension.js')
 const extensionToIO = require('../itkExtensionToIO.js')
 const readImageEmscriptenFSFile = require('../itkreadImageEmscriptenFSFile.js')
 
-// todo: How to make this configurable?
-const config = require('../itkConfig.js')
-
 // To cache loaded io modules
 let ioToModule = {}
 
@@ -19,6 +16,7 @@ let ioToModule = {}
  *    name: fileNameString
  *    type: mimeTypeString
  *    buffer: fileContentsArrayBuffer
+ *    config: itkConfig object
  **/
 registerPromiseWorker(function (input, withTransferList) {
   const extension = getFileExtension(input.name)
@@ -40,7 +38,7 @@ registerPromiseWorker(function (input, withTransferList) {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    const modulePath = config.imageIOsPath + '/' + io + '.js'
+    const modulePath = input.config.imageIOsPath + '/' + io + '.js'
     importScripts(modulePath)
     ioToModule[io] = Module
     ioModule = Module
