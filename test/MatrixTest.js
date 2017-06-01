@@ -1,9 +1,9 @@
 import test from 'ava'
 import path from 'path'
 
-const Matrix = require(path.resolve(__dirname, '..', 'dist', 'itkMatrix.js'))
-const getMatrixElement = require(path.resolve(__dirname, '..', 'dist', 'itkgetMatrixElement.js'))
-const setMatrixElement = require(path.resolve(__dirname, '..', 'dist', 'itksetMatrixElement.js'))
+const Matrix = require(path.resolve(__dirname, '..', 'dist', 'Matrix.js'))
+const getMatrixElement = require(path.resolve(__dirname, '..', 'dist', 'getMatrixElement.js'))
+const setMatrixElement = require(path.resolve(__dirname, '..', 'dist', 'setMatrixElement.js'))
 
 test('rows should have the same number of rows as passed into the constructor', t => {
   let matrix = new Matrix(2, 3)

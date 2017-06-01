@@ -53,7 +53,7 @@ try {
 
 // Build the Emscripten mobules with ninja
 console.log('\nRunning ninja...')
-const ninjaCall = spawnSync(dockcross, ['ninja', '-Cbuild'], {
+const ninjaCall = spawnSync(dockcross, ['ninja', '-j3', '-Cbuild'], {
   env: process.env,
   stdio: 'inherit'
 })
@@ -68,20 +68,20 @@ try {
   if (err.code != 'EEXIST') throw err
 }
 try {
-  fs.mkdirSync(path.join('dist', 'itkImageIOs'))
+  fs.mkdirSync(path.join('dist', 'ImageIOs'))
 } catch(err) {
   if (err.code != 'EEXIST') throw err
 }
 try {
-  fs.mkdirSync(path.join('dist', 'itkWebWorkers'))
+  fs.mkdirSync(path.join('dist', 'WebWorkers'))
 } catch(err) {
   if (err.code != 'EEXIST') throw err
 }
-imageIOFiles = glob.sync(path.join('build', 'itkImageIOs', '*.js'))
+imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
 const copyIOModules = function (imageIOFile, callback) {
   let io = path.basename(imageIOFile)
   console.log('Copying ' + io + ' ...')
-  let output = path.join('dist', 'itkImageIOs', io)
+  let output = path.join('dist', 'ImageIOs', io)
 
   fs.copySync(imageIOFile, output)
 
@@ -140,7 +140,7 @@ const browserifyBuild = ramda.curry(function (outputDir, es6File, callback) {
 })
 const browserifyWebWorkerBuildParallel = function (callback) {
   const es6Files = glob.sync(path.join('src', 'WebWorkers', '*.js'))
-  const outputDir = path.join('dist', 'itkWebWorkers')
+  const outputDir = path.join('dist', 'WebWorkers')
   builder = browserifyBuild(outputDir)
   result = asyncMod.map(es6Files, builder)
   callback(null, result)

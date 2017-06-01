@@ -1,9 +1,9 @@
 import test from 'ava'
 import path from 'path'
 
-const ImageType = require(path.resolve(__dirname, '..', 'dist', 'itkImageType.js'))
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'itkIntTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'itkPixelTypes.js'))
+const ImageType = require(path.resolve(__dirname, '..', 'dist', 'ImageType.js'))
+const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
+const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
 
 test('dimension should have a default value of 2', t => {
   let imageType = new ImageType()

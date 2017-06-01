@@ -1,9 +1,9 @@
 import test from 'ava'
 import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'itkIntTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'itkPixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'itkreadImageLocalFile.js'))
+const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
+const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
+const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
 
 const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cthead1.png')
 

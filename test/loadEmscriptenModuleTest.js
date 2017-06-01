@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-const loadModule = require(path.resolve(__dirname, '..', 'dist', 'itkloadEmscriptenModule.js'))
+const loadModule = require(path.resolve(__dirname, '..', 'dist', 'loadEmscriptenModule.js'))
 const itkConfig = require(path.resolve(__dirname, '..', 'dist', 'itkConfig.js'))
 
 test('load a module', t => {

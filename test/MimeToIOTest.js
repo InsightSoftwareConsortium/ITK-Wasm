@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-const MimeToIO = require(path.resolve(__dirname, '..', 'dist', 'itkMimeToIO.js'))
+const MimeToIO = require(path.resolve(__dirname, '..', 'dist', 'MimeToIO.js'))
 
 test('image/png maps to itkPNGImageIOJSBinding', t => {
   let io = MimeToIO['image/png']

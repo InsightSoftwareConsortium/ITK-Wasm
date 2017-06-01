@@ -1,5 +1,5 @@
-const IntTypes = require('./itkIntTypes.js')
-const PixelTypes = require('./itkPixelTypes.js')
+const IntTypes = require('./IntTypes.js')
+const PixelTypes = require('./PixelTypes.js')
 
 const ImageType = function (dimension = 2,
     componentType = IntTypes.UInt8,
