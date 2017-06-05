@@ -1,8 +1,8 @@
 const config = require('config')
 
 let itkConfig = {
-  imageIOsPath: '/ImageIOs',
-  webWorkersPath: '/WebWorkers'
+  webWorkersPath: 'itk/WebWorkers',
+  imageIOsPath: '../../itk/ImageIOs'
 }
 
 if (typeof config.has === 'function') {

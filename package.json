@@ -32,7 +32,7 @@
   },
   "aliasify": {
     "aliases": {
-      "config": "./config/browser-test.json"
+      "./itkConfig.js": "./config/itkConfigBrowserTest.js"
     }
   },
   "keywords": [

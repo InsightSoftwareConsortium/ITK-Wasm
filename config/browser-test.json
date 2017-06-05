@@ -1,6 +1,0 @@
-{
-  'itk': {
-    imageIOsPath: '/ImageIOs',
-    webWorkersPath: '/WebWorkers'
-  }
-}
