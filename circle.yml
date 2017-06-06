@@ -14,7 +14,6 @@ dependencies:
     - docker info
     - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
     - docker pull insighttoolkit/bridgejavascript-test:latest
-    - ~/ITKBridgeJavaScript/test/Docker/build.sh
     - npm install
     - mkdir -p ~/docker; docker save insighttoolkit/bridgejavascript-test > ~/docker/image.tar
     - firefox --version
