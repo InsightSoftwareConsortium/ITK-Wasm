@@ -1,5 +1,6 @@
 let mimeToIO = {}
 
+mimeToIO['image/jpeg'] = 'itkJPEGImageIOJSBinding'
 mimeToIO['image/png'] = 'itkPNGImageIOJSBinding'
 mimeToIO['image/tiff'] = 'itkTIFFImageIOJSBinding'
 mimeToIO['image/x-ms-bmp'] = 'itkBMPImageIOJSBinding'

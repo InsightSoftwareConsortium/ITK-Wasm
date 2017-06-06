@@ -6,6 +6,11 @@ extensionToIO['BMP'] = 'itkBMPImageIOJSBinding'
 extensionToIO['dcm'] = 'itkGDCMImageIOJSBinding'
 extensionToIO['DCM'] = 'itkGDCMImageIOJSBinding'
 
+extensionToIO['jpg'] = 'itkJPEGImageIOJSBinding'
+extensionToIO['JPG'] = 'itkJPEGImageIOJSBinding'
+extensionToIO['jpeg'] = 'itkJPEGImageIOJSBinding'
+extensionToIO['JPEG'] = 'itkJPEGImageIOJSBinding'
+
 extensionToIO['mha'] = 'itkMetaImageIOJSBinding'
 extensionToIO['mhd'] = 'itkMetaImageIOJSBinding'
 

@@ -4,6 +4,7 @@ project(BridgeJavaScript)
 set(BridgeJavaScript_IOModules
   "ITKIOBMP"
   "ITKIOGDCM"
+  "ITKIOJPEG"
   "ITKIOMeta"
   "ITKIONIFTI"
   "ITKIONRRD"
@@ -18,6 +19,7 @@ set(imageio_ITKIOMeta itkMetaImageIO)
 set(imageio_ITKIONIFTI itkNiftiImageIO)
 set(imageio_ITKIONRRD itkNrrdImageIO)
 set(imageio_ITKIOGDCM itkGDCMImageIO)
+set(imageio_ITKIOJPEG itkJPEGImageIO)
 set(imageio_ITKIOTIFF itkTIFFImageIO)
 set(imageio_ITKIOVTK itkVTKImageIO)
 
