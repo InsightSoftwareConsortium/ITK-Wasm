@@ -8,6 +8,16 @@ test('bmp maps to itkBMPImageIOJSBinding', t => {
   t.is(io, 'itkBMPImageIOJSBinding')
 })
 
+test('jpeg maps to itkJPEGImageIOJSBinding', t => {
+  let io = ExtensionToIO['jpeg']
+  t.is(io, 'itkJPEGImageIOJSBinding')
+})
+
+test('jpg maps to itkJPEGImageIOJSBinding', t => {
+  let io = ExtensionToIO['jpg']
+  t.is(io, 'itkJPEGImageIOJSBinding')
+})
+
 test('png maps to itkPNGImageIOJSBinding', t => {
   let io = ExtensionToIO['png']
   t.is(io, 'itkPNGImageIOJSBinding')

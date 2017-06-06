@@ -27,4 +27,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/ShortTestImage.tiff}
   DATA{Input/r16slice.nii.gz}
   DATA{Input/image_color.bmp}
+  DATA{Input/apple.jpg}
   )

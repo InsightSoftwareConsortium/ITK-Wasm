@@ -8,6 +8,11 @@ test('image/png maps to itkPNGImageIOJSBinding', t => {
   t.is(io, 'itkPNGImageIOJSBinding')
 })
 
+test('image/jpeg maps to itkJPEGImageIOJSBinding', t => {
+  let io = MimeToIO['image/jpeg']
+  t.is(io, 'itkJPEGImageIOJSBinding')
+})
+
 test('image/tiff maps to itkTIFFImageIOJSBinding', t => {
   let io = MimeToIO['image/tiff']
   t.is(io, 'itkTIFFImageIOJSBinding')

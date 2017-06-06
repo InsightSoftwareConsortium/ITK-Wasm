@@ -10,6 +10,7 @@ Provides general scientific image IO capability and bridges
 
 - [BMP](https://en.wikipedia.org/wiki/BMP_file_format)
 - [DICOM](http://dicom.nema.org/)
+- [JPEG](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format)
 - [MetaImage](https://itk.org/Wiki/ITK/MetaIO/Documentation)
 - [NifTi](https://nifti.nimh.nih.gov/nifti-1)
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)
