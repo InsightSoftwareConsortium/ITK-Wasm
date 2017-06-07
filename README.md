@@ -8,6 +8,7 @@ Provides general scientific image IO capability and bridges
 
 ## Supported file formats
 
+- [BioRad](http://www.bio-rad.com/)
 - [BMP](https://en.wikipedia.org/wiki/BMP_file_format)
 - [DICOM](http://dicom.nema.org/)
 - [JPEG](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format)

@@ -28,6 +28,9 @@ extensionToIO['NHDR'] = 'itkNrrdImageIOJSBinding'
 extensionToIO['png'] = 'itkPNGImageIOJSBinding'
 extensionToIO['PNG'] = 'itkPNGImageIOJSBinding'
 
+extensionToIO['pic'] = 'itkBioRadImageIOJSBinding'
+extensionToIO['PIC'] = 'itkBioRadImageIOJSBinding'
+
 extensionToIO['tif'] = 'itkTIFFImageIOJSBinding'
 extensionToIO['TIF'] = 'itkTIFFImageIOJSBinding'
 extensionToIO['tiff'] = 'itkTIFFImageIOJSBinding'
