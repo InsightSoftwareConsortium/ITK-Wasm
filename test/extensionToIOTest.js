@@ -23,6 +23,11 @@ test('png maps to itkPNGImageIOJSBinding', t => {
   t.is(io, 'itkPNGImageIOJSBinding')
 })
 
+test('pic maps to itkBioRadImageIOJSBinding', t => {
+  let io = ExtensionToIO['pic']
+  t.is(io, 'itkBioRadImageIOJSBinding')
+})
+
 test('mha maps to itkMetaImageIOJSBinding', t => {
   let io = ExtensionToIO['mha']
   t.is(io, 'itkMetaImageIOJSBinding')

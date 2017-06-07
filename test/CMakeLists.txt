@@ -28,4 +28,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/r16slice.nii.gz}
   DATA{Input/image_color.bmp}
   DATA{Input/apple.jpg}
+  DATA{Input/biorad.pic}
   )
