@@ -18,6 +18,7 @@ for (let ii = 0; ii < byteString.length; ++ii) {
   intArray[ii] = byteString.charCodeAt(ii)
 }
 const cthead1SmallBlob = new window.Blob([intArray], {type: mimeString})
+const cthead1SmallBlob1 = new window.Blob([intArray], {type: mimeString})
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
 test('readImageArrayBuffer reads an ArrayBuffer', t => {
@@ -47,6 +48,28 @@ test('readImageArrayBuffer reads an ArrayBuffer', t => {
 
 test('readImageBlob reads a Blob', t => {
   return readImageBlob(cthead1SmallBlob, 'cthead1Small.png').then(function (image) {
+    t.is(image.imageType.dimension, 2, 'dimension')
+    t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
+    t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
+    t.is(image.imageType.components, 1, 'components')
+    t.is(image.origin[0], 0.0, 'origin[0]')
+    t.is(image.origin[1], 0.0, 'origin[1]')
+    t.is(image.spacing[0], 1.0, 'spacing[0]')
+    t.is(image.spacing[1], 1.0, 'spacing[1]')
+    t.is(getMatrixElement(image.direction, 0, 0), 1.0, 'direction (0, 0)')
+    t.is(getMatrixElement(image.direction, 0, 1), 0.0, 'direction (0, 1)')
+    t.is(getMatrixElement(image.direction, 1, 0), 0.0, 'direction (1, 0)')
+    t.is(getMatrixElement(image.direction, 1, 1), 1.0, 'direction (1, 1)')
+    t.is(image.size[0], 32, 'size[0]')
+    t.is(image.size[1], 32, 'size[1]')
+    t.is(image.buffer.length, 1024, 'buffer.length')
+    t.is(image.buffer[512], 12, 'buffer[512]')
+    t.end()
+  })
+})
+
+test('readImageBlob without a file extension', t => {
+  return readImageBlob(cthead1SmallBlob1, 'cthead1Small').then(function (image) {
     t.is(image.imageType.dimension, 2, 'dimension')
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
     t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')

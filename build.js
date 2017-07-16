@@ -19,7 +19,7 @@ try {
 } catch(err) {
   if (err.code == 'ENOENT') {
     const output = fs.openSync(dockcross, 'w')
-    dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/bridgejavascript-test'], {
+    dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/bridgejavascript'], {
       env: process.env,
       stdio: [ 'ignore', output, null ]
     })

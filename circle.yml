@@ -13,9 +13,9 @@ dependencies:
   override:
     - docker info
     - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
-    - docker pull insighttoolkit/bridgejavascript-test:latest
+    - docker pull insighttoolkit/bridgejavascript:latest
     - npm install
-    - mkdir -p ~/docker; docker save insighttoolkit/bridgejavascript-test > ~/docker/image.tar
+    - mkdir -p ~/docker; docker save insighttoolkit/bridgejavascript > ~/docker/image.tar
     - firefox --version
 
 test:
@@ -44,7 +44,7 @@ deployment:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push insighttoolkit/bridgejavascript-test:latest
+      - docker push insighttoolkit/bridgejavascript:latest
 
 general:
   branches:
