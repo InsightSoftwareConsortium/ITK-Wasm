@@ -30,6 +30,7 @@ deployment:
     branch: release
     owner: InsightSoftwareConsortium
     commands:
+      - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
       - npm run semantic-release
 
   iodoc:
