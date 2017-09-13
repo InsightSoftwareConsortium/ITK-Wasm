@@ -1,11 +1,13 @@
+set(ImageIOIndex_ARRAY "")
 foreach(io_module ${BridgeJavaScript_IOModules})
   find_package(ITK REQUIRED COMPONENTS ${io_module})
   include(${ITK_USE_FILE})
 
-  if(NOT DEFINED imageio_${io_module})
+  if(NOT DEFINED imageios_${io_module})
     message(FATAL_ERROR "Unknown ImageIOBase classes for module ${io_module}")
   endif()
-  foreach(imageio ${imageio_${io_module}})
+  foreach(imageio ${imageios_${io_module}})
+    set(ImageIOIndex_ARRAY "${ImageIOIndex_ARRAY}'${imageio}JSBinding', ")
     set(target ${imageio}JSBinding)
     add_executable(${target} ${target}.cxx)
     itk_module_target_label(${target})
@@ -29,3 +31,6 @@ foreach(io_module ${BridgeJavaScript_IOModules})
     target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
   endforeach()
 endforeach()
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.js.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.js @ONLY)

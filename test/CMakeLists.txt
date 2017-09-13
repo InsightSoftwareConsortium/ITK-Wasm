@@ -29,4 +29,7 @@ ExternalData_Expand_Arguments(
   DATA{Input/image_color.bmp}
   DATA{Input/apple.jpg}
   DATA{Input/biorad.pic}
+  DATA{Input/19771.002.001}
+  DATA{Input/113766.003.001}
+  DATA{Input/I.001}
   )
