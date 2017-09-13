@@ -1,4 +1,5 @@
-# ITK Bridge JavaScript
+ITK Bridge JavaScript
+=====================
 
 [![CircleCI](https://circleci.com/gh/InsightSoftwareConsortium/ITKBridgeJavaScript.svg?style=svg)](https://circleci.com/gh/InsightSoftwareConsortium/ITKBridgeJavaScript)
 
@@ -6,7 +7,8 @@ Provides general scientific image IO capability and bridges
 [ITK](https://itk.org) code running in the
 [Emscripten](http://emscripten.org/) runtime environment.
 
-## Supported file formats
+Supported file formats
+----------------------
 
 - [BioRad](http://www.bio-rad.com/)
 - [BMP](https://en.wikipedia.org/wiki/BMP_file_format)
@@ -20,7 +22,15 @@ Provides general scientific image IO capability and bridges
 - [Tagged Image File Format (TIFF)](https://en.wikipedia.org/wiki/TIFF)
 - [VTK legacy image file format](http://www.vtk.org/VTK/img/file-formats.pdf)
 
-## Hacking ITKBridgeJavaScript
+Installation
+------------
+
+```bash
+npm install --save itk
+```
+
+Hacking ITKBridgeJavaScript
+---------------------------
 
 ### Build dependencies
 
