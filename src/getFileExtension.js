@@ -1,5 +1,10 @@
 const getFileExtension = (filePath) => {
-  return filePath.slice((filePath.lastIndexOf('.') - 1 >>> 0) + 2)
+  let extension = filePath.slice((filePath.lastIndexOf('.') - 1 >>> 0) + 2)
+  if (extension === 'gz') {
+    const index = filePath.slice(0, -3).lastIndexOf('.')
+    extension = filePath.slice((index - 1 >>> 0) + 2)
+  }
+  return extension
 }
 
 module.exports = getFileExtension
