@@ -15,6 +15,7 @@ Supported file formats
 - [DICOM](http://dicom.nema.org/)
 - [JPEG](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format)
 - [GE4,GE5,GEAdw](http://www3.gehealthcare.com)
+- [Gipl (Guys Image Processing Lab)](https://www.ncbi.nlm.nih.gov/pubmed/12956259)
 - [MetaImage](https://itk.org/Wiki/ITK/MetaIO/Documentation)
 - [NifTi](https://nifti.nimh.nih.gov/nifti-1)
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)

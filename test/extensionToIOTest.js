@@ -48,11 +48,6 @@ test('nii maps to itkNiftiImageIOJSBinding', t => {
   t.is(io, 'itkNiftiImageIOJSBinding')
 })
 
-test('gz maps to itkNiftiImageIOJSBinding', t => {
-  let io = ExtensionToIO['gz']
-  t.is(io, 'itkNiftiImageIOJSBinding')
-})
-
 test('hdr maps to itkNiftiImageIOJSBinding', t => {
   let io = ExtensionToIO['hdr']
   t.is(io, 'itkNiftiImageIOJSBinding')
@@ -66,6 +61,11 @@ test('nrrd maps to itkNrrdImageIOJSBinding', t => {
 test('nhdr maps to itkNrrdImageIOJSBinding', t => {
   let io = ExtensionToIO['nhdr']
   t.is(io, 'itkNrrdImageIOJSBinding')
+})
+
+test('gipl maps to itkGiplImageIOJSBinding', t => {
+  let io = ExtensionToIO['gipl']
+  t.is(io, 'itkGiplImageIOJSBinding')
 })
 
 test('dcm maps to itkGDCMImageIOJSBinding', t => {

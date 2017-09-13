@@ -6,6 +6,9 @@ extensionToIO['BMP'] = 'itkBMPImageIOJSBinding'
 extensionToIO['dcm'] = 'itkGDCMImageIOJSBinding'
 extensionToIO['DCM'] = 'itkGDCMImageIOJSBinding'
 
+extensionToIO['gipl'] = 'itkGiplImageIOJSBinding'
+extensionToIO['gipl.gz'] = 'itkGiplImageIOJSBinding'
+
 extensionToIO['jpg'] = 'itkJPEGImageIOJSBinding'
 extensionToIO['JPG'] = 'itkJPEGImageIOJSBinding'
 extensionToIO['jpeg'] = 'itkJPEGImageIOJSBinding'
@@ -16,8 +19,7 @@ extensionToIO['mhd'] = 'itkMetaImageIOJSBinding'
 
 extensionToIO['nia'] = 'itkNiftiImageIOJSBinding'
 extensionToIO['nii'] = 'itkNiftiImageIOJSBinding'
-// todo: properly support .nii.gz
-extensionToIO['gz'] = 'itkNiftiImageIOJSBinding'
+extensionToIO['nii.gz'] = 'itkNiftiImageIOJSBinding'
 extensionToIO['hdr'] = 'itkNiftiImageIOJSBinding'
 
 extensionToIO['nrrd'] = 'itkNrrdImageIOJSBinding'
