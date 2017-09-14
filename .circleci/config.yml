@@ -1,0 +1,44 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: Build Docker image
+          command: |
+            docker pull insighttoolkit/bridgejavascript:latest
+            ./test/Docker/build.sh
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+              docker push insighttoolkit/bridgejavascript:latest
+            fi
+      - run:
+          name: Install Node packages
+          command: |
+            npm install
+      - run:
+          name: Build
+          command: |
+            npm run build
+      - run:
+          name: Test
+          command: |
+            firefox --version
+            npm run test
+      - deploy:
+          name: Deploy to npm
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "release" ]; then
+              echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
+              npm run semantic-release
+            fi
+      - deploy:
+          name: Publish docs
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              git config --global user.name "Circle CI"
+              git config --global user.email "robot@itk.org"
+              npm run doc:publish
+            fi

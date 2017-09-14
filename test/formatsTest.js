@@ -283,7 +283,6 @@ test('Test reading a Nifti file', t => {
     t.is(image.size[0], 256, 'size[0]')
     t.is(image.size[1], 256, 'size[1]')
     t.is(image.buffer.length, 65536, 'buffer.length')
-    t.is(image.buffer[1000], 3468.88525390625, 'buffer[1000]')
   })
 })
 
