@@ -27,7 +27,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DModule_IOMGH:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
     ../ITK && \
-  ninja && \
+  ninja -j7 && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
