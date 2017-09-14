@@ -9,6 +9,8 @@ extensionToIO['DCM'] = 'itkGDCMImageIOJSBinding'
 extensionToIO['gipl'] = 'itkGiplImageIOJSBinding'
 extensionToIO['gipl.gz'] = 'itkGiplImageIOJSBinding'
 
+extensionToIO['hdf5'] = 'itkHDF5ImageIOJSBinding'
+
 extensionToIO['jpg'] = 'itkJPEGImageIOJSBinding'
 extensionToIO['JPG'] = 'itkJPEGImageIOJSBinding'
 extensionToIO['jpeg'] = 'itkJPEGImageIOJSBinding'

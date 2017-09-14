@@ -13,6 +13,7 @@ Supported file formats
 - [BioRad](http://www.bio-rad.com/)
 - [BMP](https://en.wikipedia.org/wiki/BMP_file_format)
 - [DICOM](http://dicom.nema.org/)
+- [ITK HDF5](https://support.hdfgroup.org/HDF5/)
 - [JPEG](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format)
 - [GE4,GE5,GEAdw](http://www3.gehealthcare.com)
 - [Gipl (Guys Image Processing Lab)](https://www.ncbi.nlm.nih.gov/pubmed/12956259)
