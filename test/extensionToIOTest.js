@@ -33,6 +33,36 @@ test('lsm maps to itkLSMImageIOJSBinding', t => {
   t.is(io, 'itkLSMImageIOJSBinding')
 })
 
+test('mnc maps to itkMINCImageIOJSBinding', t => {
+  let io = ExtensionToIO['mnc']
+  t.is(io, 'itkMINCImageIOJSBinding')
+})
+
+test('MNC maps to itkMINCImageIOJSBinding', t => {
+  let io = ExtensionToIO['MNC']
+  t.is(io, 'itkMINCImageIOJSBinding')
+})
+
+test('mnc.gz maps to itkMINCImageIOJSBinding', t => {
+  let io = ExtensionToIO['mnc.gz']
+  t.is(io, 'itkMINCImageIOJSBinding')
+})
+
+test('MNC.GZ maps to itkMINCImageIOJSBinding', t => {
+  let io = ExtensionToIO['MNC.GZ']
+  t.is(io, 'itkMINCImageIOJSBinding')
+})
+
+test('mnc2 maps to itkMINCImageIOJSBinding', t => {
+  let io = ExtensionToIO['mnc2']
+  t.is(io, 'itkMINCImageIOJSBinding')
+})
+
+test('MNC2 maps to itkMINCImageIOJSBinding', t => {
+  let io = ExtensionToIO['MNC2']
+  t.is(io, 'itkMINCImageIOJSBinding')
+})
+
 test('mha maps to itkMetaImageIOJSBinding', t => {
   let io = ExtensionToIO['mha']
   t.is(io, 'itkMetaImageIOJSBinding')
