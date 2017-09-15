@@ -14,7 +14,7 @@
     "commit": "git cz",
     "semantic-release": "semantic-release pre && cp LICENSE README.md package.json dist/ && cd dist && npm publish && cd .. && semantic-release post",
     "build": "node ./build.js",
-    "test": "./build/dockcross bash -c \"cd build && ctest -V\" && standard \"src/*.js\" \"test/**/*.js\" && ava \"test/*.js\" && NODE_PATH=$PWD/dist browserify test/Browser/*.js | tape-run --render=\"tap-spec\" --static \"dist/\" --browser firefox"
+    "test": "./build/dockcross bash -c \"cd build && ctest -V\" && standard \"src/*.js\" \"test/**/*.js\" && ava \"test/*.js\" && NODE_PATH=$PWD/dist browserify test/Browser/*.js | tape-run --render=\"tap-spec\" --static \"dist/\" --browser chrome"
   },
   "config": {
     "commitizen": {
