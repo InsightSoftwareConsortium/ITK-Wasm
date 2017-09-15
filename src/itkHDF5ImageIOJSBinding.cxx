@@ -25,7 +25,7 @@
 
 typedef itk::ImageIOBaseJSBinding< itk::HDF5ImageIO > HDF5ImageIOJSBindingType;
 
-EMSCRIPTEN_BINDINGS(itk_biorad_image_io_js_binding) {
+EMSCRIPTEN_BINDINGS(itk_hdf5_image_io_js_binding) {
   emscripten::register_vector<double>("AxisDirectionType");
   emscripten::enum_<HDF5ImageIOJSBindingType::IOPixelType>("IOPixelType")
     .value("UNKNOWNPIXELTYPE", itk::ImageIOBase::UNKNOWNPIXELTYPE)

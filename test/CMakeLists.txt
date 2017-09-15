@@ -34,4 +34,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/I.001}
   DATA{Input/ramp.gipl}
   DATA{Input/ITKImage.hdf5}
+  DATA{Input/cthead1.lsm}
   )

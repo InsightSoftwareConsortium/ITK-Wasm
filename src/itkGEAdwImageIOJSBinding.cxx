@@ -25,7 +25,7 @@
 
 typedef itk::ImageIOBaseJSBinding< itk::GEAdwImageIO > GEAdwImageIOJSBindingType;
 
-EMSCRIPTEN_BINDINGS(itk_vtk_image_io_js_binding) {
+EMSCRIPTEN_BINDINGS(itk_geadw_image_io_js_binding) {
   emscripten::register_vector<double>("AxisDirectionType");
   emscripten::enum_<GEAdwImageIOJSBindingType::IOPixelType>("IOPixelType")
     .value("UNKNOWNPIXELTYPE", itk::ImageIOBase::UNKNOWNPIXELTYPE)
