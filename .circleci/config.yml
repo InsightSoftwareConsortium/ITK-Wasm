@@ -3,6 +3,9 @@ jobs:
   build:
     machine: true
     resource_class: large
+    branches:
+      ignore:
+        - gh-pages
     steps:
       - checkout
       - run:

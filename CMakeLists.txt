@@ -13,6 +13,7 @@ set(BridgeJavaScript_IOModules
   "ITKIONRRD"
   "ITKIOVTK"
   "ITKIOBMP"
+  "ITKIOHDF5"
   "ITKIOBioRad"
   "ITKIOGIPL"
   "ITKIOGE"
@@ -20,6 +21,7 @@ set(BridgeJavaScript_IOModules
   "String delimited list of ITK IO modules to support.")
 set(imageios_ITKIOBioRad itkBioRadImageIO)
 set(imageios_ITKIOBMP itkBMPImageIO)
+set(imageios_ITKIOHDF5 itkHDF5ImageIO)
 set(imageios_ITKIOGE itkGEAdwImageIO itkGE4ImageIO itkGE5ImageIO)
 set(imageios_ITKIOGIPL itkGiplImageIO)
 set(imageios_ITKIOPNG itkPNGImageIO)

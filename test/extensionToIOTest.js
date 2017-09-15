@@ -53,6 +53,11 @@ test('hdr maps to itkNiftiImageIOJSBinding', t => {
   t.is(io, 'itkNiftiImageIOJSBinding')
 })
 
+test('hdf5 maps to itkHDF5ImageIOJSBinding', t => {
+  let io = ExtensionToIO['hdf5']
+  t.is(io, 'itkHDF5ImageIOJSBinding')
+})
+
 test('nrrd maps to itkNrrdImageIOJSBinding', t => {
   let io = ExtensionToIO['nrrd']
   t.is(io, 'itkNrrdImageIOJSBinding')
