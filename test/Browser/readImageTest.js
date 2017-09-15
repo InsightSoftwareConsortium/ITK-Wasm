@@ -68,7 +68,7 @@ test('readImageBlob reads a Blob', t => {
   })
 })
 
-test('readImageBlob without a file extension', t => {
+test('readImageBlob reads a Blob without a file extension', t => {
   return readImageBlob(cthead1SmallBlob1, 'cthead1Small').then(function (image) {
     t.is(image.imageType.dimension, 2, 'dimension')
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
