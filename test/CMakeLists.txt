@@ -35,4 +35,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/ramp.gipl}
   DATA{Input/ITKImage.hdf5}
   DATA{Input/cthead1.lsm}
+  DATA{Input/t1_z+_short_cor.mnc}
   )
