@@ -4,8 +4,8 @@ MAINTAINER Insight Software Consortium <community@itk.org>
 RUN mkdir -p /usr/src/ITKBridgeJavaScript-build
 WORKDIR /usr/src
 
-# 2017-09-14
-ENV ITK_GIT_TAG a1b892384942825629f36a04d80f8e0548015636
+# 2017-09-16
+ENV ITK_GIT_TAG bb7d57886584ad895ec7a1b80fa42f27c7d847de
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0 -s ALLOW_MEMORY_GROWTH=1"
 ENV CXXFLAGS="${CFLAGS} -std=c++11"
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \

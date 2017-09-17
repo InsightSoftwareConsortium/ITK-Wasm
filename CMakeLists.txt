@@ -14,6 +14,7 @@ set(BridgeJavaScript_IOModules
   "ITKIOVTK"
   "ITKIOBMP"
   "ITKIOHDF5"
+  "ITKIOMINC"
   "ITKIOLSM"
   "ITKIOBioRad"
   "ITKIOGIPL"
@@ -28,6 +29,7 @@ set(imageios_ITKIOGIPL itkGiplImageIO)
 set(imageios_ITKIOPNG itkPNGImageIO)
 set(imageios_ITKIOLSM itkLSMImageIO)
 set(imageios_ITKIOMeta itkMetaImageIO)
+set(imageios_ITKIOMINC itkMINCImageIO)
 set(imageios_ITKIONIFTI itkNiftiImageIO)
 set(imageios_ITKIONRRD itkNrrdImageIO)
 set(imageios_ITKIOGDCM itkGDCMImageIO)

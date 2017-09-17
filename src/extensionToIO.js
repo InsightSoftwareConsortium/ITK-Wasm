@@ -18,6 +18,13 @@ extensionToIO['JPEG'] = 'itkJPEGImageIOJSBinding'
 
 extensionToIO['lsm'] = 'itkLSMImageIOJSBinding'
 
+extensionToIO['mnc'] = 'itkMINCImageIOJSBinding'
+extensionToIO['MNC'] = 'itkMINCImageIOJSBinding'
+extensionToIO['mnc.gz'] = 'itkMINCImageIOJSBinding'
+extensionToIO['MNC.GZ'] = 'itkMINCImageIOJSBinding'
+extensionToIO['mnc2'] = 'itkMINCImageIOJSBinding'
+extensionToIO['MNC2'] = 'itkMINCImageIOJSBinding'
+
 extensionToIO['mha'] = 'itkMetaImageIOJSBinding'
 extensionToIO['mhd'] = 'itkMetaImageIOJSBinding'
 

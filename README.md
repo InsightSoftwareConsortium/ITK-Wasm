@@ -19,6 +19,7 @@ Supported file formats
 - [Gipl (Guys Image Processing Lab)](https://www.ncbi.nlm.nih.gov/pubmed/12956259)
 - [LSM](http://www.openwetware.org/wiki/Dissecting_LSM_files)
 - [MetaImage](https://itk.org/Wiki/ITK/MetaIO/Documentation)
+- [MINC 2.0](https://en.wikibooks.org/wiki/MINC/SoftwareDevelopment/MINC2.0_File_Format_Reference)
 - [NifTi](https://nifti.nimh.nih.gov/nifti-1)
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)
 - [Portable Network Graphics (PNG)](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
