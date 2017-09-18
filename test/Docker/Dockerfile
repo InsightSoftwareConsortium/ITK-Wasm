@@ -24,7 +24,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF \
     -DITKGroup_IO:BOOL=ON \
     -DModule_ITKIOMINC:BOOL=ON \
-    -DModule_ITKIOMGH:BOOL=ON \
+    -DModule_MGHIO:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
     ../ITK && \
   ninja -j7 && \

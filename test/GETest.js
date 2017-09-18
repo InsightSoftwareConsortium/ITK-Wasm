@@ -94,4 +94,3 @@ test('Test reading a GEAdw file', t => {
     t.is(image.buffer[10], 80, 'buffer[10]')
   })
 })
-
