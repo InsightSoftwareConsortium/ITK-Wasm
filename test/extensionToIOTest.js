@@ -63,6 +63,21 @@ test('MNC2 maps to itkMINCImageIOJSBinding', t => {
   t.is(io, 'itkMINCImageIOJSBinding')
 })
 
+test('mgh maps to itkMGHImageIOJSBinding', t => {
+  let io = ExtensionToIO['mgh']
+  t.is(io, 'itkMGHImageIOJSBinding')
+})
+
+test('mgz maps to itkMGHImageIOJSBinding', t => {
+  let io = ExtensionToIO['mgz']
+  t.is(io, 'itkMGHImageIOJSBinding')
+})
+
+test('mgh.gz maps to itkMGHImageIOJSBinding', t => {
+  let io = ExtensionToIO['mgh.gz']
+  t.is(io, 'itkMGHImageIOJSBinding')
+})
+
 test('mha maps to itkMetaImageIOJSBinding', t => {
   let io = ExtensionToIO['mha']
   t.is(io, 'itkMetaImageIOJSBinding')

@@ -25,4 +25,3 @@ test('Test reading a PNG file', t => {
     t.is(image.buffer.length, 196608, 'buffer.length')
   })
 })
-
