@@ -32,6 +32,8 @@ extensionToIO['mgh.gz'] = 'itkMGHImageIOJSBinding'
 extensionToIO['mha'] = 'itkMetaImageIOJSBinding'
 extensionToIO['mhd'] = 'itkMetaImageIOJSBinding'
 
+extensionToIO['mrc'] = 'itkMRCImageIOJSBinding'
+
 extensionToIO['nia'] = 'itkNiftiImageIOJSBinding'
 extensionToIO['nii'] = 'itkNiftiImageIOJSBinding'
 extensionToIO['nii.gz'] = 'itkNiftiImageIOJSBinding'
