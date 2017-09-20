@@ -65,6 +65,7 @@ EMSCRIPTEN_BINDINGS(itk_png_image_io_js_binding) {
   .function("SetFileName", &PNGImageIOJSBindingType::SetFileName)
   .function("GetFileName", &PNGImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &PNGImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &PNGImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &PNGImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &PNGImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &PNGImageIOJSBindingType::GetDimensions)
@@ -87,5 +88,7 @@ EMSCRIPTEN_BINDINGS(itk_png_image_io_js_binding) {
   .function("SetNumberOfComponents", &PNGImageIOJSBindingType::SetNumberOfComponents)
   .function("GetNumberOfComponents", &PNGImageIOJSBindingType::GetNumberOfComponents)
   .function("Read", &PNGImageIOJSBindingType::Read)
+  .function("Write", &PNGImageIOJSBindingType::Write)
+  .function("SetUseCompression", &PNGImageIOJSBindingType::SetUseCompression)
   ;
 }

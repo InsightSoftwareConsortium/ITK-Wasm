@@ -21,6 +21,7 @@
 #include "itkImageIOBaseJSBinding.h"
 
 #include "itkImageIOBase.h"
+#include "itkImageIORegion.h"
 
 namespace itk
 {
@@ -75,6 +76,15 @@ ImageIOBaseJSBinding< TImageIO >
 ::CanReadFile( std::string fileName )
 {
   return this->m_ImageIO->CanReadFile( fileName.c_str() );
+}
+
+
+template< typename TImageIO >
+bool
+ImageIOBaseJSBinding< TImageIO >
+::CanWriteFile( std::string fileName )
+{
+  return this->m_ImageIO->CanWriteFile( fileName.c_str() );
 }
 
 
@@ -359,6 +369,32 @@ ImageIOBaseJSBinding< TImageIO >
   default:
     return emscripten::val::undefined();
     }
+}
+
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::Write( uintptr_t cBuffer )
+{
+  const unsigned int dimension = this->m_ImageIO->GetNumberOfDimensions();
+  itk::ImageIORegion ioRegion( dimension );
+  for( unsigned int dim = 0; dim < dimension; ++dim )
+    {
+    ioRegion.SetSize( dim, this->m_ImageIO->GetDimensions( dim ) );
+    }
+  this->m_ImageIO->SetIORegion( ioRegion );
+
+  this->m_ImageIO->Write( reinterpret_cast< void * >( cBuffer ));
+}
+
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
+::SetUseCompression( bool compression )
+{
+  this->m_ImageIO->SetUseCompression( compression );
 }
 
 } // end namespace itk

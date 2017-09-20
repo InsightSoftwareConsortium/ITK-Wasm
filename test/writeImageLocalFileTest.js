@@ -7,7 +7,7 @@ const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readIm
 const writeImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'writeImageLocalFile.js'))
 
 const testInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cthead1.png')
-const testOutputFilePath = path.resolve(__dirname, '..', 'build', 'Testing', 'Temporary', 'TestPNG-cthead1.png')
+const testOutputFilePath = path.resolve(__dirname, '..', 'build', 'Testing', 'Temporary', 'writeImageLocalFileTest-cthead1.png')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')
@@ -27,20 +27,15 @@ const verifyImage = (t, image) => {
   t.is(image.buffer.length, 196608, 'buffer.length')
 }
 
-test('Test reading a PNG file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    verifyImage(t, image)
-  })
-})
-
-test('Test writing a PNG file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    const useCompression = false
-    return writeImageLocalFile(useCompression, image, testOutputFilePath)
-  })
-  .then(function () {
-    return readImageLocalFile(testOutputFilePath).then(function (image) {
-      verifyImage(t, image)
+test('writeImageLocalFile writes a file path on the local filesystem', t => {
+  return readImageLocalFile(testInputFilePath)
+    .then(function (image) {
+      const useCompression = false
+      return writeImageLocalFile(useCompression, image, testOutputFilePath)
     })
-  })
+    .then(function () {
+      return readImageLocalFile(testOutputFilePath).then(function (image) {
+        verifyImage(t, image)
+      })
+    })
 })
