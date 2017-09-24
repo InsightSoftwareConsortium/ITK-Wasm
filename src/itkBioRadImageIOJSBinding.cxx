@@ -65,6 +65,7 @@ EMSCRIPTEN_BINDINGS(itk_biorad_image_io_js_binding) {
   .function("SetFileName", &BioRadImageIOJSBindingType::SetFileName)
   .function("GetFileName", &BioRadImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &BioRadImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &BioRadImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &BioRadImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &BioRadImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &BioRadImageIOJSBindingType::GetDimensions)
@@ -87,5 +88,7 @@ EMSCRIPTEN_BINDINGS(itk_biorad_image_io_js_binding) {
   .function("SetNumberOfComponents", &BioRadImageIOJSBindingType::SetNumberOfComponents)
   .function("GetNumberOfComponents", &BioRadImageIOJSBindingType::GetNumberOfComponents)
   .function("Read", &BioRadImageIOJSBindingType::Read)
+  .function("Write", &BioRadImageIOJSBindingType::Write)
+  .function("SetUseCompression", &BioRadImageIOJSBindingType::SetUseCompression)
   ;
 }
