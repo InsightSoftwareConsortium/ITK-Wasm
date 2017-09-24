@@ -2,8 +2,7 @@ const test = require('tape')
 const PromiseFileReader = require('promise-file-reader')
 
 const readImageArrayBuffer = require('readImageArrayBuffer.js')
-const readImageBlob = require('readImageBlob.js')
-const readImageFile = require('readImageFile.js')
+const writeImageArrayBuffer = require('writeImageArrayBuffer.js')
 
 const IntTypes = require('IntTypes.js')
 const PixelTypes = require('PixelTypes.js')
@@ -18,7 +17,6 @@ for (let ii = 0; ii < byteString.length; ++ii) {
   intArray[ii] = byteString.charCodeAt(ii)
 }
 const cthead1SmallBlob = new window.Blob([intArray], {type: mimeString})
-const cthead1SmallBlob1 = new window.Blob([intArray], {type: mimeString})
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
 const verifyImage = (t, image) => {
@@ -41,29 +39,17 @@ const verifyImage = (t, image) => {
   t.end()
 }
 
-test('readImageArrayBuffer reads an ArrayBuffer', t => {
+test('writeImageArrayBuffer writes to an ArrayBuffer', t => {
   return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
     .then(arrayBuffer => {
       return readImageArrayBuffer(arrayBuffer, 'cthead1Small.png').then(function (image) {
+        const useCompression = false
+        return writeImageArrayBuffer(useCompression, image, 'cthead1Small.png')
+      })
+    })
+    .then(function (writtenArrayBuffer) {
+      return readImageArrayBuffer(writtenArrayBuffer, 'cthead1Small.png').then(function (image) {
         verifyImage(t, image)
       })
     })
-})
-
-test('readImageBlob reads a Blob', t => {
-  return readImageBlob(cthead1SmallBlob, 'cthead1Small.png').then(function (image) {
-    verifyImage(t, image)
-  })
-})
-
-test('readImageBlob reads a Blob without a file extension', t => {
-  return readImageBlob(cthead1SmallBlob1, 'cthead1Small').then(function (image) {
-    verifyImage(t, image)
-  })
-})
-
-test('readImageFile reads a File', t => {
-  return readImageFile(cthead1SmallFile).then(function (image) {
-    verifyImage(t, image)
-  })
 })

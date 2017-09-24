@@ -40,6 +40,19 @@ Module['unmountContainingDirectory'] = function (filePath) {
   FS.unmount(containingDir)
 }
 
+Module['mkdirs'] = function (dirs) {
+  var currentDir = '/'
+  var splitDirs = dirs.split('/')
+
+  for (var ii = 1; ii < splitDirs.length; ++ii) {
+    currentDir += splitDirs[ii]
+    if (!FS.analyzePath(currentDir).exists) {
+      FS.mkdir(currentDir)
+    }
+    currentDir += '/'
+  }
+}
+
 /** Mount file blobs into the Emscripten filesystem. The blobs argument should be an
  * array of { name: 'filename', data: blob } objects. */
 Module['mountBlobs'] = function (mountpoint, blobs) {
@@ -47,16 +60,7 @@ Module['mountBlobs'] = function (mountpoint, blobs) {
     return
   }
 
-  var currentDir = '/'
-  var splitMountpoint = mountpoint.split('/')
-
-  for (var ii = 1; ii < splitMountpoint.length; ++ii) {
-    currentDir += splitMountpoint[ii]
-    if (!FS.analyzePath(currentDir).exists) {
-      FS.mkdir(currentDir)
-    }
-    currentDir += '/'
-  }
+  Module['mkdirs'](mountpoint)
 
   FS.mount(WORKERFS, {blobs: blobs}, mountpoint)
 }
@@ -67,4 +71,12 @@ Module['unmountBlobs'] = function (mountpoint) {
   }
 
   FS.unmount(mountpoint)
+}
+
+Module['readFile'] = function (path, opts) {
+  return FS.readFile(path, opts)
+}
+
+Module['writeFile'] = function (path, data, opts) {
+  return FS.writeFile(path, data, opts)
 }
