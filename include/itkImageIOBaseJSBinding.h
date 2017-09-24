@@ -66,6 +66,7 @@ public:
   std::string GetFileName() const;
 
   bool CanReadFile( std::string fileName );
+  bool CanWriteFile( std::string fileName );
 
   /** Read the spacing and dimensions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -138,6 +139,12 @@ public:
   /** Reads the pixel buffer data from the file and returns a JavaScript Typed
    * Array of type corresponding to the IOComponentType */
   emscripten::val Read();
+  /** Writes the pixel buffer data from the JavaScript Typed
+   * Array of type corresponding to the IOComponentType to the FileName */
+  void Write( uintptr_t cBuffer );
+
+  /** Use compression when writing */
+  void SetUseCompression( bool compression );
 
 private:
   typename ImageIOType::Pointer m_ImageIO;

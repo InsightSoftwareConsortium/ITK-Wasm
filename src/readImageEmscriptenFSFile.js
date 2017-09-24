@@ -9,7 +9,7 @@ const readImageEmscriptenFSFile = (module, filePath) => {
   const imageIO = new module.ITKImageIO()
   imageIO.SetFileName(filePath)
   if (!imageIO.CanReadFile(filePath)) {
-    return null
+    throw new Error('Could not read file: ' + filePath)
   }
   imageIO.ReadImageInformation()
 
@@ -59,8 +59,7 @@ const readImageEmscriptenFSFile = (module, filePath) => {
       break
     }
     default:
-      console.error('Unknown IO component type')
-      return null
+      throw new Error('Unknown IO component type')
   }
 
   const ioPixelType = imageIO.GetPixelType()
@@ -118,8 +117,7 @@ const readImageEmscriptenFSFile = (module, filePath) => {
       break
     }
     default:
-      console.error('Unknown IO pixel type')
-      return null
+      throw new Error('Unknown IO pixel type')
   }
 
   imageType.components = imageIO.GetNumberOfComponents()

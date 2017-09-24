@@ -57,7 +57,7 @@ registerPromiseWorker(function (input, withTransferList) {
     }
   }
   if (io === null) {
-    return Error('Could not find IO for: ' + input.name)
+    return new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
