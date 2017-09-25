@@ -65,6 +65,7 @@ EMSCRIPTEN_BINDINGS(itk_biorad_image_io_js_binding) {
   .function("SetFileName", &GiplImageIOJSBindingType::SetFileName)
   .function("GetFileName", &GiplImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &GiplImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &GiplImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &GiplImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &GiplImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &GiplImageIOJSBindingType::GetDimensions)
@@ -87,5 +88,7 @@ EMSCRIPTEN_BINDINGS(itk_biorad_image_io_js_binding) {
   .function("SetNumberOfComponents", &GiplImageIOJSBindingType::SetNumberOfComponents)
   .function("GetNumberOfComponents", &GiplImageIOJSBindingType::GetNumberOfComponents)
   .function("Read", &GiplImageIOJSBindingType::Read)
+  .function("Write", &GiplImageIOJSBindingType::Write)
+  .function("SetUseCompression", &GiplImageIOJSBindingType::SetUseCompression)
   ;
 }
