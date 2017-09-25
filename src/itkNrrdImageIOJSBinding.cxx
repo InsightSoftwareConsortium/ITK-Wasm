@@ -65,6 +65,8 @@ EMSCRIPTEN_BINDINGS(itk_nrrd_image_io_js_binding) {
   .function("SetFileName", &NrrdImageIOJSBindingType::SetFileName)
   .function("GetFileName", &NrrdImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &NrrdImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &NrrdImageIOJSBindingType::CanWriteFile)
+  .function("CanWriteFile", &NrrdImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &NrrdImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &NrrdImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &NrrdImageIOJSBindingType::GetDimensions)
@@ -87,5 +89,9 @@ EMSCRIPTEN_BINDINGS(itk_nrrd_image_io_js_binding) {
   .function("SetNumberOfComponents", &NrrdImageIOJSBindingType::SetNumberOfComponents)
   .function("GetNumberOfComponents", &NrrdImageIOJSBindingType::GetNumberOfComponents)
   .function("Read", &NrrdImageIOJSBindingType::Read)
+  .function("Write", &NrrdImageIOJSBindingType::Write)
+  .function("SetUseCompression", &NrrdImageIOJSBindingType::SetUseCompression)
+  .function("Write", &NrrdImageIOJSBindingType::Write)
+  .function("SetUseCompression", &NrrdImageIOJSBindingType::SetUseCompression)
   ;
 }

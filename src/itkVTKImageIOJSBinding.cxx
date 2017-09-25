@@ -65,6 +65,7 @@ EMSCRIPTEN_BINDINGS(itk_vtk_image_io_js_binding) {
   .function("SetFileName", &VTKImageIOJSBindingType::SetFileName)
   .function("GetFileName", &VTKImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &VTKImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &VTKImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &VTKImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &VTKImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &VTKImageIOJSBindingType::GetDimensions)
@@ -87,5 +88,7 @@ EMSCRIPTEN_BINDINGS(itk_vtk_image_io_js_binding) {
   .function("SetNumberOfComponents", &VTKImageIOJSBindingType::SetNumberOfComponents)
   .function("GetNumberOfComponents", &VTKImageIOJSBindingType::GetNumberOfComponents)
   .function("Read", &VTKImageIOJSBindingType::Read)
+  .function("Write", &VTKImageIOJSBindingType::Write)
+  .function("SetUseCompression", &VTKImageIOJSBindingType::SetUseCompression)
   ;
 }

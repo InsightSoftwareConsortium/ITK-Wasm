@@ -65,6 +65,7 @@ EMSCRIPTEN_BINDINGS(itk_tiff_image_io_js_binding) {
   .function("SetFileName", &TIFFImageIOJSBindingType::SetFileName)
   .function("GetFileName", &TIFFImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &TIFFImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &TIFFImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &TIFFImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &TIFFImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &TIFFImageIOJSBindingType::GetDimensions)
@@ -87,5 +88,7 @@ EMSCRIPTEN_BINDINGS(itk_tiff_image_io_js_binding) {
   .function("SetNumberOfComponents", &TIFFImageIOJSBindingType::SetNumberOfComponents)
   .function("GetNumberOfComponents", &TIFFImageIOJSBindingType::GetNumberOfComponents)
   .function("Read", &TIFFImageIOJSBindingType::Read)
+  .function("Write", &TIFFImageIOJSBindingType::Write)
+  .function("SetUseCompression", &TIFFImageIOJSBindingType::SetUseCompression)
   ;
 }

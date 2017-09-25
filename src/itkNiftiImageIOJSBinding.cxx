@@ -65,6 +65,7 @@ EMSCRIPTEN_BINDINGS(itk_nifti_image_io_js_binding) {
   .function("SetFileName", &NiftiImageIOJSBindingType::SetFileName)
   .function("GetFileName", &NiftiImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &NiftiImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &NiftiImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &NiftiImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &NiftiImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &NiftiImageIOJSBindingType::GetDimensions)
@@ -87,5 +88,7 @@ EMSCRIPTEN_BINDINGS(itk_nifti_image_io_js_binding) {
   .function("SetNumberOfComponents", &NiftiImageIOJSBindingType::SetNumberOfComponents)
   .function("GetNumberOfComponents", &NiftiImageIOJSBindingType::GetNumberOfComponents)
   .function("Read", &NiftiImageIOJSBindingType::Read)
+  .function("Write", &NiftiImageIOJSBindingType::Write)
+  .function("SetUseCompression", &NiftiImageIOJSBindingType::SetUseCompression)
   ;
 }
