@@ -7,7 +7,7 @@ const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readIm
 const writeImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'writeImageLocalFile.js'))
 
 const testInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'biorad.pic')
-const testOutputFilePath = path.resolve(__dirname, '..', 'build', 'Testing', 'Temporary', 'TestBioRad-biorad.pic')
+const testOutputFilePath = path.resolve(__dirname, '..', 'build', 'Testing', 'Temporary', 'BioRadTest-biorad.pic')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')
