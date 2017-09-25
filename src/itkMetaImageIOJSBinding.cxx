@@ -65,6 +65,7 @@ EMSCRIPTEN_BINDINGS(itk_meta_image_io_js_binding) {
   .function("SetFileName", &MetaImageIOJSBindingType::SetFileName)
   .function("GetFileName", &MetaImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &MetaImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &MetaImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &MetaImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &MetaImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &MetaImageIOJSBindingType::GetDimensions)
@@ -87,5 +88,7 @@ EMSCRIPTEN_BINDINGS(itk_meta_image_io_js_binding) {
   .function("SetNumberOfComponents", &MetaImageIOJSBindingType::SetNumberOfComponents)
   .function("GetNumberOfComponents", &MetaImageIOJSBindingType::GetNumberOfComponents)
   .function("Read", &MetaImageIOJSBindingType::Read)
+  .function("Write", &MetaImageIOJSBindingType::Write)
+  .function("SetUseCompression", &MetaImageIOJSBindingType::SetUseCompression)
   ;
 }
