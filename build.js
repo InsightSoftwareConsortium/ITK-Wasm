@@ -77,7 +77,9 @@ try {
 } catch(err) {
   if (err.code != 'EEXIST') throw err
 }
-imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
+let imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
+const wasmFiles = glob.sync(path.join('build', 'ImageIOs', '*.wasm'))
+imageIOFiles = imageIOFiles.concat(wasmFiles)
 const copyIOModules = function (imageIOFile, callback) {
   let io = path.basename(imageIOFile)
   console.log('Copying ' + io + ' ...')
