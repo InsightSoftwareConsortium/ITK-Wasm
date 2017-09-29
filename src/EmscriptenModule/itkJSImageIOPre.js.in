@@ -1,0 +1,3 @@
+var Module = {
+  'wasmBinaryFile': '../ImageIOs/@wasm_target@.wasm'
+}
