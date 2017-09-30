@@ -1,7 +1,7 @@
 FROM dockcross/browser-asmjs:latest
 MAINTAINER Insight Software Consortium <community@itk.org>
 
-RUN mkdir -p /usr/src/ITKBridgeJavaScript-build
+RUN mkdir -p /usr/src/itk-js-build
 WORKDIR /usr/src
 
 # 2017-09-16

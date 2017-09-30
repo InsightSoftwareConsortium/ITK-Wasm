@@ -1,6 +1,6 @@
 
 
-NAME = ITKBridgeJavaScript
+NAME = itk-js
 
 BIBTEXDATABSENAME = InsightJournal
 

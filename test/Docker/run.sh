@@ -4,6 +4,6 @@ script_dir="`cd $(dirname $0); pwd`"
 
 docker run \
   --rm \
-  -v $script_dir/../..:/usr/src/ITKBridgeJavaScript \
+  -v $script_dir/../..:/usr/src/itk-js \
     insighttoolkit/bridgejavascript:latest \
-      /usr/src/ITKBridgeJavaScript/test/Docker/test.sh
+      /usr/src/itk-js/test/Docker/test.sh
