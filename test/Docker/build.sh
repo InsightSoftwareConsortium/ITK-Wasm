@@ -2,4 +2,4 @@
 
 script_dir="`cd $(dirname $0); pwd`"
 
-docker build -t insighttoolkit/bridgejavascript:latest $script_dir
+docker build -t insighttoolkit/itk-js:latest $script_dir
