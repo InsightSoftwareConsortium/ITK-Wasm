@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>ITKBridgeJavaScript</title>
+  <title>itk-js</title>
   
   <subtitle>Leverage ITK algorithms and IO in JavaScript.</subtitle>
-  <link href="/ITKBridgeJavaScript/atom.xml" rel="self"/>
+  <link href="/itk-js/atom.xml" rel="self"/>
   
-  <link href="https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/"/>
-  <updated>2017-09-25T13:38:34.754Z</updated>
-  <id>https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/</id>
+  <link href="https://InsightSoftwareConsortium.github.io/itk-js/"/>
+  <updated>2017-10-02T02:22:59.716Z</updated>
+  <id>https://InsightSoftwareConsortium.github.io/itk-js/</id>
   
   <author>
     <name>Kitware Inc.</name>
@@ -18,10 +18,10 @@
   
   <entry>
     <title>Hexo</title>
-    <link href="https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/2016/04/29/kw-doc/"/>
-    <id>https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/2016/04/29/kw-doc/</id>
+    <link href="https://InsightSoftwareConsortium.github.io/itk-js/2016/04/29/kw-doc/"/>
+    <id>https://InsightSoftwareConsortium.github.io/itk-js/2016/04/29/kw-doc/</id>
     <published>2016-04-29T00:00:00.000Z</published>
-    <updated>2017-09-25T13:38:34.754Z</updated>
+    <updated>2017-10-02T02:22:59.716Z</updated>
     
     <content type="html"><![CDATA[<p>Thanks for using kw-doc which is based on Hexo and its template from its own documentation.</p>]]></content>
     

@@ -2,30 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/index.html</loc>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/index.html</loc>
     
-    <lastmod>2017-09-25T13:38:34.766Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/api/index.html</loc>
-    
-    <lastmod>2017-09-25T13:38:34.762Z</lastmod>
+    <lastmod>2017-10-02T02:22:59.728Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/docs/index.html</loc>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/index.html</loc>
     
-    <lastmod>2017-09-25T13:38:34.762Z</lastmod>
+    <lastmod>2017-10-02T02:22:59.728Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://InsightSoftwareConsortium.github.io/ITKBridgeJavaScript/2016/04/29/kw-doc/</loc>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/docs/index.html</loc>
     
-    <lastmod>2017-09-25T13:38:34.754Z</lastmod>
+    <lastmod>2017-10-02T02:22:59.728Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/2016/04/29/kw-doc/</loc>
+    
+    <lastmod>2017-10-02T02:22:59.716Z</lastmod>
     
   </url>
   

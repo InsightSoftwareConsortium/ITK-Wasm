@@ -220,7 +220,7 @@ body {
   text-indent: 101%;
   white-space: nowrap;
   overflow: hidden;
-  background: url("/ITKBridgeJavaScript/logo.svg");
+  background: url("/itk-js/logo.svg");
   width: 50px;
   height: 50px;
   -webkit-background-size: 50px 50px;
