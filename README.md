@@ -5,7 +5,7 @@ itk.js
 
 Provides general scientific image IO capability and bridges
 [ITK](https://itk.org) code running in an
-JavaScript [asm.js](http://asmjs.org/) or [WebAssembly](http://webassembly.org/)
+[asm.js](http://asmjs.org/) or [WebAssembly](http://webassembly.org/)
 runtime environment.
 
 Supported file formats
