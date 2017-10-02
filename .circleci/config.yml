@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Test
           command: |
-            firefox --version
+            google-chrome --version
             npm run test
       - deploy:
           name: Deploy to npm
