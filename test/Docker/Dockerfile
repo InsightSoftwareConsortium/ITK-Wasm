@@ -1,8 +1,7 @@
 FROM dockcross/browser-asmjs:latest
 MAINTAINER Insight Software Consortium <community@itk.org>
 
-RUN mkdir -p /usr/src/ITKBridgeJavaScript-build
-WORKDIR /usr/src
+WORKDIR /
 
 # 2017-09-16
 ENV ITK_GIT_TAG bb7d57886584ad895ec7a1b80fa42f27c7d847de
@@ -31,5 +30,5 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
-ENV DEFAULT_DOCKCROSS_IMAGE insighttoolkit/bridgejavascript
+ENV DEFAULT_DOCKCROSS_IMAGE insighttoolkit/itk-js
 WORKDIR /work

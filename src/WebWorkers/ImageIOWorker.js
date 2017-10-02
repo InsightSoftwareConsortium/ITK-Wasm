@@ -11,6 +11,14 @@ const ImageIOIndex = require('../ImageIOIndex.js')
 const readImageEmscriptenFSFile = require('../readImageEmscriptenFSFile.js')
 const writeImageEmscriptenFSFile = require('../writeImageEmscriptenFSFile.js')
 
+const generateModulePath = (imageIOsPath, io) => {
+  let modulePath = imageIOsPath + '/' + io + '.js'
+  if (typeof WebAssembly === 'object' && typeof WebAssembly.Memory === 'function') {
+    modulePath = imageIOsPath + '/' + io + 'Wasm.js'
+  }
+  return modulePath
+}
+
 // To cache loaded io modules
 let ioToModule = {}
 
@@ -29,7 +37,7 @@ const readImage = (input, withTransferList) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        const modulePath = input.config.imageIOsPath + '/' + trialIO + '.js'
+        const modulePath = generateModulePath(input.config.imageIOsPath, trialIO)
         importScripts(modulePath)
         ioToModule[trialIO] = Module
         ioModule = Module
@@ -57,7 +65,7 @@ const readImage = (input, withTransferList) => {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    const modulePath = input.config.imageIOsPath + '/' + io + '.js'
+    const modulePath = generateModulePath(input.config.imageIOsPath, io)
     importScripts(modulePath)
     ioToModule[io] = Module
     ioModule = Module
@@ -89,7 +97,7 @@ const writeImage = (input, withTransferList) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        const modulePath = input.config.imageIOsPath + '/' + trialIO + '.js'
+        const modulePath = generateModulePath(input.config.imageIOsPath, trialIO)
         importScripts(modulePath)
         ioToModule[trialIO] = Module
         ioModule = Module
@@ -111,7 +119,7 @@ const writeImage = (input, withTransferList) => {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    const modulePath = input.config.imageIOsPath + '/' + io + '.js'
+    const modulePath = generateModulePath(input.config.imageIOsPath, io)
     importScripts(modulePath)
     ioToModule[io] = Module
     ioModule = Module

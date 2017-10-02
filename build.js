@@ -19,7 +19,7 @@ try {
 } catch(err) {
   if (err.code == 'ENOENT') {
     const output = fs.openSync(dockcross, 'w')
-    dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/bridgejavascript'], {
+    dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js'], {
       env: process.env,
       stdio: [ 'ignore', output, null ]
     })
@@ -39,7 +39,7 @@ try {
 } catch(err) {
   if (err.code == 'ENOENT') {
     console.log('Running CMake configuration...')
-    const cmakeCall = spawnSync(dockcross, ['cmake', '-DCMAKE_BUILD_TYPE=Release', '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/usr/src/ITK-build'], {
+    const cmakeCall = spawnSync(dockcross, ['cmake', '-DCMAKE_BUILD_TYPE=Release', '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build'], {
       env: process.env,
       stdio: 'inherit'
     })
@@ -77,7 +77,9 @@ try {
 } catch(err) {
   if (err.code != 'EEXIST') throw err
 }
-imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
+let imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
+const wasmFiles = glob.sync(path.join('build', 'ImageIOs', '*.wasm'))
+imageIOFiles = imageIOFiles.concat(wasmFiles)
 const copyIOModules = function (imageIOFile, callback) {
   let io = path.basename(imageIOFile)
   console.log('Copying ' + io + ' ...')
