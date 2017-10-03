@@ -1,6 +1,6 @@
 {
   "name": "itk",
-  "version": "0.0.0-semantically-release",
+  "version": "5.1.0",
   "description": "Read and write 2D, 3D, and ND images with the Insight Toolkit (ITK)",
   "main": "./dist/itk.js",
   "directories": {
@@ -12,7 +12,6 @@
     "doc:www": "kw-doc -c ./doc/config.js -s",
     "doc:publish": "kw-doc -c ./doc/config.js -mp",
     "commit": "git cz",
-    "semantic-release": "semantic-release pre && cp LICENSE README.md package.json dist/ && cd dist && npm publish && cd .. && semantic-release post",
     "build": "node ./build.js",
     "test": "./build/dockcross bash -c \"cd build && ctest -V\" && standard \"src/*.js\" \"test/**/*.js\" && ava \"test/*.js\" && npm run browser-test",
     "browser-test": "NODE_PATH=$PWD/dist browserify test/Browser/*.js | tape-run --render=\"tap-spec\" --static \"dist/\" --browser chrome"
@@ -67,7 +66,6 @@
     "json-loader": "^0.5.4",
     "kw-doc": "1.0.20",
     "ramda": "^0.23.0",
-    "semantic-release": "8.0.3",
     "standard": "^8.6.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.8.0",
@@ -84,9 +82,5 @@
     "ignore": [
       "itkJSImageIOPost.js"
     ]
-  },
-  "release": {
-    "verifyConditions": "condition-circle",
-    "branch": "release"
   }
 }
