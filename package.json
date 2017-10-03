@@ -67,7 +67,7 @@
     "json-loader": "^0.5.4",
     "kw-doc": "1.0.20",
     "ramda": "^0.23.0",
-    "semantic-release": "6.3.6",
+    "semantic-release": "8.0.3",
     "standard": "^8.6.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.8.0",
