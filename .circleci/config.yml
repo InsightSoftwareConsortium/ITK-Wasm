@@ -31,13 +31,6 @@ jobs:
             google-chrome --version
             npm run test
       - deploy:
-          name: Deploy to npm
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "release" ]; then
-              echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
-              npm run semantic-release
-            fi
-      - deploy:
           name: Publish docs
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
