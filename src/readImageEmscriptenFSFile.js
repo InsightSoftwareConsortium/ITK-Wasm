@@ -164,7 +164,7 @@ const readImageEmscriptenFSFile = (module, filePath) => {
     }
   }
 
-  image.buffer = imageIO.Read()
+  image.data = imageIO.Read()
 
   return image
 }

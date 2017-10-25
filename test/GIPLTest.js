@@ -32,8 +32,8 @@ const verifyImage = (t, image) => {
   t.is(image.size[0], 30, 'size[0]')
   t.is(image.size[1], 30, 'size[1]')
   t.is(image.size[2], 30, 'size[2]')
-  t.is(image.buffer.length, 27000, 'buffer.length')
-  t.is(image.buffer[2], 2, 'buffer[2]')
+  t.is(image.data.length, 27000, 'data.length')
+  t.is(image.data[2], 2, 'data[2]')
 }
 
 test('Test reading a GIPL file', t => {

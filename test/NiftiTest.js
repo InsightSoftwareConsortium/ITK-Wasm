@@ -24,7 +24,7 @@ const verifyImage = (t, image) => {
   t.is(image.direction.getElement(1, 1), -1.0, 'direction (1, 1)')
   t.is(image.size[0], 256, 'size[0]')
   t.is(image.size[1], 256, 'size[1]')
-  t.is(image.buffer.length, 65536, 'buffer.length')
+  t.is(image.data.length, 65536, 'data.length')
 }
 
 test('Test reading a Nifti file', t => {

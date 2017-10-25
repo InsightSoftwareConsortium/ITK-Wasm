@@ -24,8 +24,8 @@ const verifyImage = (t, image) => {
   t.is(image.direction.getElement(1, 1), 1.0, 'direction (1, 1)')
   t.is(image.size[0], 768, 'size[0]')
   t.is(image.size[1], 512, 'size[1]')
-  t.is(image.buffer.length, 393216, 'buffer.length')
-  t.is(image.buffer[1000], 27, 'buffer[1000]')
+  t.is(image.data.length, 393216, 'data.length')
+  t.is(image.data[1000], 27, 'data[1000]')
 }
 
 test('Test reading a BioRad file', t => {

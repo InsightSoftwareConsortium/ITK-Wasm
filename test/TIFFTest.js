@@ -24,8 +24,8 @@ const verifyImage = (t, image) => {
   t.is(image.direction.getElement(1, 1), 1.0, 'direction (1, 1)')
   t.is(image.size[0], 20, 'size[0]')
   t.is(image.size[1], 20, 'size[1]')
-  t.is(image.buffer.length, 400, 'buffer.length')
-  t.is(image.buffer[100], -9, 'buffer[100]')
+  t.is(image.data.length, 400, 'data.length')
+  t.is(image.data[100], -9, 'data[100]')
 }
 
 test('Test reading a TIFF file', t => {

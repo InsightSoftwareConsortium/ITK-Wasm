@@ -88,7 +88,7 @@ itkJSImageIO
 
 /*
 * This function reads an image from the NODEFS or IDBS system and sets up the different attributes in itkJSImageIO
-* If executing in the browser, you must save the image first using FS.write(filename, buffer).
+* If executing in the browser, you must save the image first using FS.write(filename, data).
 * If executing inside NODE.js use mound directory with the image filename.
 */
 void

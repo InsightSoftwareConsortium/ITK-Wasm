@@ -14,7 +14,7 @@ const promiseWorker = new PromiseWorker(worker)
 const readImageBlob = (blob, fileName, mimeType) => {
   return PromiseFileReader.readAsArrayBuffer(blob)
     .then(arrayBuffer => {
-      return promiseWorker.postMessage({ operation: 'readImage', name: fileName, type: mimeType, buffer: arrayBuffer, config: config },
+      return promiseWorker.postMessage({ operation: 'readImage', name: fileName, type: mimeType, data: arrayBuffer, config: config },
         [arrayBuffer])
     })
 }
