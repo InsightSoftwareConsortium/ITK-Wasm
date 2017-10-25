@@ -34,8 +34,8 @@ const verifyImage = (t, image) => {
   t.is(getMatrixElement(image.direction, 1, 1), 1.0, 'direction (1, 1)')
   t.is(image.size[0], 32, 'size[0]')
   t.is(image.size[1], 32, 'size[1]')
-  t.is(image.buffer.length, 1024, 'buffer.length')
-  t.is(image.buffer[512], 12, 'buffer[512]')
+  t.is(image.data.length, 1024, 'data.length')
+  t.is(image.data[512], 12, 'data[512]')
   t.end()
 }
 

@@ -32,8 +32,8 @@ const verifyImage = (t, image) => {
   t.is(image.size[0], 5, 'size[0]')
   t.is(image.size[1], 6, 'size[1]')
   t.is(image.size[2], 7, 'size[2]')
-  t.is(image.buffer.length, 210, 'buffer.length')
-  t.is(image.buffer[2], 5.0, 'buffer[2]')
+  t.is(image.data.length, 210, 'data.length')
+  t.is(image.data[2], 5.0, 'data[2]')
 }
 
 test('Test reading a NRRD file', t => {

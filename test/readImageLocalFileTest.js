@@ -23,6 +23,6 @@ test('readImageLocalFile reads a file path given on the local filesystem', t => 
     t.is(image.direction.getElement(1, 1), 1.0)
     t.is(image.size[0], 256)
     t.is(image.size[1], 256)
-    t.is(image.buffer.length, 196608)
+    t.is(image.data.length, 196608)
   })
 })

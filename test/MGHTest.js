@@ -32,8 +32,8 @@ const verifyImage = (t, image) => {
   t.is(image.size[0], 256, 'size[0]')
   t.is(image.size[1], 256, 'size[1]')
   t.is(image.size[2], 256, 'size[2]')
-  t.is(image.buffer.length, 16777216, 'buffer.length')
-  t.is(image.buffer[1000], 0, 'buffer[1000]')
+  t.is(image.data.length, 16777216, 'data.length')
+  t.is(image.data[1000], 0, 'data[1000]')
 }
 
 test('Test reading a MGH file', t => {

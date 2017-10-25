@@ -134,14 +134,14 @@ const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => 
   imageIO.SetUseCompression(useCompression)
 
   // Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
-  const numberOfBytes = image.buffer.length * image.buffer.BYTES_PER_ELEMENT
-  const bufferPtr = module._malloc(numberOfBytes)
-  const bufferHeap = new Uint8Array(module.HEAPU8.buffer, bufferPtr, numberOfBytes)
-  bufferHeap.set(new Uint8Array(image.buffer.buffer))
+  const numberOfBytes = image.data.length * image.data.BYTES_PER_ELEMENT
+  const dataPtr = module._malloc(numberOfBytes)
+  const dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
+  dataHeap.set(new Uint8Array(image.data.buffer))
 
-  imageIO.Write(bufferHeap.byteOffset)
+  imageIO.Write(dataHeap.byteOffset)
 
-  module._free(bufferHeap.byteOffset)
+  module._free(dataHeap.byteOffset)
 }
 
 module.exports = writeImageEmscriptenFSFile

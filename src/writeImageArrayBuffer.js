@@ -8,14 +8,14 @@ const promiseWorker = new PromiseWorker(worker)
 /**
  * Write a file ArrayBuffer from an image in the browser.
  *
- * @param: useCompression compression the pixel buffer when possible
+ * @param: useCompression compression the pixel data buffer when possible
  * @param: image itk.Image instance to write
  * @param: fileName string that contains the file name
  * @param: mimeType optional mime-type string
  */
 const writeImageArrayBuffer = (useCompression, image, fileName, mimeType) => {
   return promiseWorker.postMessage({ operation: 'writeImage', name: fileName, type: mimeType, image: image, useCompression: useCompression, config: config },
-    [image.buffer.buffer])
+    [image.data.buffer])
 }
 
 module.exports = writeImageArrayBuffer

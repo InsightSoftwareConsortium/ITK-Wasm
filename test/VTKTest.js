@@ -32,8 +32,8 @@ const verifyImage = (t, image) => {
   t.is(image.size[0], 68, 'size[0]')
   t.is(image.size[1], 68, 'size[1]')
   t.is(image.size[2], 68, 'size[2]')
-  t.is(image.buffer.length, 314432, 'buffer.length')
-  t.is(image.buffer[1000], 0, 'buffer[1000]')
+  t.is(image.data.length, 314432, 'data.length')
+  t.is(image.data[1000], 0, 'data[1000]')
 }
 
 test('Test reading a VTK legacy file', t => {

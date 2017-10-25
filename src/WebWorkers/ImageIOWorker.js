@@ -43,7 +43,7 @@ const readImage = (input, withTransferList) => {
         ioModule = Module
       }
       const imageIO = new ioModule.ITKImageIO()
-      const blob = new Blob([input.buffer])
+      const blob = new Blob([input.data])
       const blobs = [{ name: input.name, data: blob }]
       const mountpoint = '/work'
       ioModule.mountBlobs(mountpoint, blobs)
@@ -71,7 +71,7 @@ const readImage = (input, withTransferList) => {
     ioModule = Module
   }
 
-  const blob = new Blob([input.buffer])
+  const blob = new Blob([input.data])
   const blobs = [{ name: input.name, data: blob }]
   const mountpoint = '/work'
   ioModule.mountBlobs(mountpoint, blobs)
@@ -79,7 +79,7 @@ const readImage = (input, withTransferList) => {
   const image = readImageEmscriptenFSFile(ioModule, filePath)
   ioModule.unmountBlobs(mountpoint)
 
-  return withTransferList(image, [image.buffer.buffer])
+  return withTransferList(image, [image.data.buffer])
 }
 
 const writeImage = (input, withTransferList) => {
@@ -138,7 +138,7 @@ const writeImage = (input, withTransferList) => {
  * input is an object with keys:
  *    name: fileNameString
  *    type: mimeTypeString
- *    buffer: fileContentsArrayBuffer
+ *    data: fileContentsArrayBuffer
  *    operation: operation to perform: "read" or "write"
  *    config: itkConfig object
  **/
