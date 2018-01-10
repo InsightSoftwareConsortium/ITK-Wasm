@@ -14,7 +14,7 @@ jobs:
             docker pull insighttoolkit/itk-js:latest
             ./test/Docker/build.sh
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
               docker push insighttoolkit/itk-js:latest
             fi
       - run:
