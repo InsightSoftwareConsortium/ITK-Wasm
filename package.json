@@ -14,7 +14,7 @@
     "commit": "git cz",
     "build": "node ./build.js",
     "test": "./build/dockcross bash -c \"cd build && ctest -V\" && standard \"src/*.js\" \"test/**/*.js\" && ava \"test/*.js\" && npm run browser-test",
-    "browser-test": "NODE_PATH=$PWD/dist browserify test/Browser/*.js | tape-run --render=\"tap-spec\" --static \"dist/\" --browser firefox"
+    "browser-test": "karma start ./karma.conf.js"
   },
   "config": {
     "commitizen": {
@@ -24,16 +24,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/InsightSoftwareConsortium/itk-js.git"
-  },
-  "browserify": {
-    "transform": [
-      "aliasify"
-    ]
-  },
-  "aliasify": {
-    "aliases": {
-      "./itkConfig.js": "./config/itkConfigBrowserTest.js"
-    }
   },
   "keywords": [
     "itk",
@@ -49,13 +39,13 @@
   },
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-js#readme",
   "devDependencies": {
-    "aliasify": "^2.1.0",
     "async": "^2.0.1",
     "ava": "^0.22.0",
     "babel-core": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^7.3.0",
-    "browserify": "^14.3.0",
+    "browserify": "^15.0.0",
     "commitizen": "2.9.6",
     "condition-circle": "1.5.0",
     "cz-conventional-changelog": "2.0.0",
@@ -64,16 +54,21 @@
     "fs-extra": "^0.30.0",
     "glob": "^7.0.6",
     "json-loader": "^0.5.4",
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-tap": "^3.1.1",
+    "karma-tap-pretty-reporter": "^3.0.5",
+    "karma-webpack": "2.0.4",
     "kw-doc": "1.0.20",
     "ramda": "^0.23.0",
     "standard": "^8.6.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.8.0",
     "tape-run": "^3.0.0",
-    "uglifyify": "^3.0.4"
+    "uglifyify": "^3.0.4",
+    "webpack": "^3.10.0"
   },
   "dependencies": {
-    "config": "^1.26.1",
     "mime-types": "^2.1.15",
     "promise-file-reader": "^0.3.1",
     "promise-worker-transferable": "^1.0.4"
