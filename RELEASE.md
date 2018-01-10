@@ -15,6 +15,7 @@ Bump `version` in `package.json`.
 
 ```
 version=6.0.0 # change to correct version
+git add -- package.json
 git commit -m "feat(version): Bump NPM version to ${version}"
 cp LICENSE README.md package.json dist/
 cd dist
