@@ -3,8 +3,8 @@ let extensionToIO = {}
 extensionToIO['bmp'] = 'itkBMPImageIOJSBinding'
 extensionToIO['BMP'] = 'itkBMPImageIOJSBinding'
 
-extensionToIO['dcm'] = 'itkGDCMImageIOJSBinding'
-extensionToIO['DCM'] = 'itkGDCMImageIOJSBinding'
+extensionToIO['dcm'] = 'itkDCMTKImageIOJSBinding'
+extensionToIO['DCM'] = 'itkDCMTKImageIOJSBinding'
 
 extensionToIO['gipl'] = 'itkGiplImageIOJSBinding'
 extensionToIO['gipl.gz'] = 'itkGiplImageIOJSBinding'
