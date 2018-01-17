@@ -5,7 +5,7 @@ WORKDIR /
 
 # 2018-01-16
 ENV ITK_GIT_TAG 315857a026a44ff658d4a21c19c3641c8955c2fa
-ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0 -s ALLOW_MEMORY_GROWTH=1"
+ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0 -s ALLOW_MEMORY_GROWTH=1 -Wno-almost-asm"
 ENV CXXFLAGS="${CFLAGS} -std=c++11"
 RUN git clone https://github.com/thewtex/ITK.git && \
   cd ITK && \
