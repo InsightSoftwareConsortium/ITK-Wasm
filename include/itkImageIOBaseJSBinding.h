@@ -105,18 +105,10 @@ public:
   void SetPixelType( IOPixelType pixelType );
   IOPixelType GetPixelType() const;
 
-  /** Convenience method returns the IOPixelType as a string. This can be
-   * used for writing output files. */
-  static std::string GetPixelTypeAsString( IOPixelType pixelType );
-
   /** Set/Get the component type of the image. This is always a native
    * type. */
   void SetComponentType( IOComponentType componentType );
   IOComponentType GetComponentType() const;
-
-  /** Convenience method returns the IOComponentType as a string. This can be
-   * used for writing output files. */
-  static std::string GetComponentTypeAsString( IOComponentType componentType );
 
   /** Return the number of pixels in the image. */
   unsigned long GetImageSizeInPixels() const;

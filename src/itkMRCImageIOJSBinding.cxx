@@ -79,8 +79,6 @@ EMSCRIPTEN_BINDINGS(itk_mrc_image_io_js_binding) {
   .function("GetPixelType", &MRCImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &MRCImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &MRCImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &MRCImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &MRCImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &MRCImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &MRCImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &MRCImageIOJSBindingType::GetImageSizeInComponents)

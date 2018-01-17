@@ -79,8 +79,6 @@ EMSCRIPTEN_BINDINGS(itk_gdcm_image_io_js_binding) {
   .function("GetPixelType", &GDCMImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &GDCMImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &GDCMImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &GDCMImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &GDCMImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &GDCMImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &GDCMImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &GDCMImageIOJSBindingType::GetImageSizeInComponents)

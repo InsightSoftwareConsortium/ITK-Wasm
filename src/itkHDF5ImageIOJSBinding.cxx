@@ -79,8 +79,6 @@ EMSCRIPTEN_BINDINGS(itk_hdf5_image_io_js_binding) {
   .function("GetPixelType", &HDF5ImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &HDF5ImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &HDF5ImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &HDF5ImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &HDF5ImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &HDF5ImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &HDF5ImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &HDF5ImageIOJSBindingType::GetImageSizeInComponents)

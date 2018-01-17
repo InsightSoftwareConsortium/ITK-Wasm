@@ -80,8 +80,6 @@ EMSCRIPTEN_BINDINGS(itk_tiff_image_io_js_binding) {
   .function("GetPixelType", &TIFFImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &TIFFImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &TIFFImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &TIFFImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &TIFFImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &TIFFImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &TIFFImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &TIFFImageIOJSBindingType::GetImageSizeInComponents)

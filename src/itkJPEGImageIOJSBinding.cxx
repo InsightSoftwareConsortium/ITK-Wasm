@@ -80,8 +80,6 @@ EMSCRIPTEN_BINDINGS(itk_jpeg_image_io_js_binding) {
   .function("GetPixelType", &JPEGImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &JPEGImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &JPEGImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &JPEGImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &JPEGImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &JPEGImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &JPEGImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &JPEGImageIOJSBindingType::GetImageSizeInComponents)

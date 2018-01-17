@@ -79,8 +79,6 @@ EMSCRIPTEN_BINDINGS(itk_minc_image_io_js_binding) {
   .function("GetPixelType", &MINCImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &MINCImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &MINCImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &MINCImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &MINCImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &MINCImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &MINCImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &MINCImageIOJSBindingType::GetImageSizeInComponents)

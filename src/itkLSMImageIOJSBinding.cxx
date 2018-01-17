@@ -79,8 +79,6 @@ EMSCRIPTEN_BINDINGS(itk_lsm_image_io_js_binding) {
   .function("GetPixelType", &LSMImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &LSMImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &LSMImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &LSMImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &LSMImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &LSMImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &LSMImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &LSMImageIOJSBindingType::GetImageSizeInComponents)

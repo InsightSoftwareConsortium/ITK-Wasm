@@ -81,8 +81,6 @@ EMSCRIPTEN_BINDINGS(itk_nrrd_image_io_js_binding) {
   .function("GetPixelType", &NrrdImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &NrrdImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &NrrdImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &NrrdImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &NrrdImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &NrrdImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &NrrdImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &NrrdImageIOJSBindingType::GetImageSizeInComponents)

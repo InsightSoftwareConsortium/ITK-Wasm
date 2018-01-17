@@ -80,8 +80,6 @@ EMSCRIPTEN_BINDINGS(itk_nifti_image_io_js_binding) {
   .function("GetPixelType", &NiftiImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &NiftiImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &NiftiImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &NiftiImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &NiftiImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &NiftiImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &NiftiImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &NiftiImageIOJSBindingType::GetImageSizeInComponents)

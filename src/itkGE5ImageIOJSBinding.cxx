@@ -79,8 +79,6 @@ EMSCRIPTEN_BINDINGS(itk_ge5_image_io_js_binding) {
   .function("GetPixelType", &GE5ImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &GE5ImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &GE5ImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &GE5ImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &GE5ImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &GE5ImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &GE5ImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &GE5ImageIOJSBindingType::GetImageSizeInComponents)
