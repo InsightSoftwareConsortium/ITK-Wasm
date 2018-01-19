@@ -10,17 +10,20 @@ const ImageIOIndex = require('../ImageIOIndex.js')
 
 const readImageEmscriptenFSFile = require('../readImageEmscriptenFSFile.js')
 const writeImageEmscriptenFSFile = require('../writeImageEmscriptenFSFile.js')
+const readImageEmscriptenFSDICOMFileSeries = require('../readImageEmscriptenFSDICOMFileSeries.js')
 
-const generateModulePath = (imageIOsPath, io) => {
+const loadEmscriptenModule = (imageIOsPath, io) => {
   let modulePath = imageIOsPath + '/' + io + '.js'
   if (typeof WebAssembly === 'object' && typeof WebAssembly.Memory === 'function') {
     modulePath = imageIOsPath + '/' + io + 'Wasm.js'
   }
-  return modulePath
+  importScripts(modulePath)
+  return Module
 }
 
 // To cache loaded io modules
 let ioToModule = {}
+let seriesReaderModule = null
 
 const readImage = (input, withTransferList) => {
   const extension = getFileExtension(input.name)
@@ -37,10 +40,8 @@ const readImage = (input, withTransferList) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        const modulePath = generateModulePath(input.config.imageIOsPath, trialIO)
-        importScripts(modulePath)
-        ioToModule[trialIO] = Module
-        ioModule = Module
+        ioToModule[trialIO] = loadEmscriptenModule(input.config.imageIOsPath, trialIO)
+        ioModule = ioToModule[trialIO]
       }
       const imageIO = new ioModule.ITKImageIO()
       const blob = new Blob([input.data])
@@ -65,10 +66,8 @@ const readImage = (input, withTransferList) => {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    const modulePath = generateModulePath(input.config.imageIOsPath, io)
-    importScripts(modulePath)
-    ioToModule[io] = Module
-    ioModule = Module
+    ioToModule[io] = loadEmscriptenModule(input.config.imageIOsPath, io)
+    ioModule = ioToModule[io]
   }
 
   const blob = new Blob([input.data])
@@ -97,10 +96,8 @@ const writeImage = (input, withTransferList) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        const modulePath = generateModulePath(input.config.imageIOsPath, trialIO)
-        importScripts(modulePath)
-        ioToModule[trialIO] = Module
-        ioModule = Module
+        ioToModule[trialIO] = loadEmscriptenModule(input.config.imageIOsPath, trialIO)
+        ioModule = ioToModule[trialIO]
       }
       const imageIO = new ioModule.ITKImageIO()
       const filePath = mountpoint + '/' + input.name
@@ -119,10 +116,8 @@ const writeImage = (input, withTransferList) => {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    const modulePath = generateModulePath(input.config.imageIOsPath, io)
-    importScripts(modulePath)
-    ioToModule[io] = Module
-    ioModule = Module
+    ioToModule[io] = loadEmscriptenModule(input.config.imageIOsPath, io)
+    ioModule = ioToModule[io]
   }
 
   const mountpoint = '/work'
@@ -134,19 +129,33 @@ const writeImage = (input, withTransferList) => {
   return withTransferList(writtenFile.buffer, [writtenFile.buffer])
 }
 
-/**
- * input is an object with keys:
- *    name: fileNameString
- *    type: mimeTypeString
- *    data: fileContentsArrayBuffer
- *    operation: operation to perform: "read" or "write"
- *    config: itkConfig object
- **/
+const readDICOMImageSeries = (input, withTransferList) => {
+  const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
+  if(!seriesReaderModule) {
+    seriesReaderModule = loadEmscriptenModule(input.config.imageIOsPath, seriesReader)
+  }
+
+  const blobs = input.fileDescriptions.map((fileDescription) => {
+    const blob = new Blob([fileDescription.data])
+    return { name: fileDescription.name, data: blob }
+  })
+  const mountpoint = '/work'
+  seriesReaderModule.mountBlobs(mountpoint, blobs)
+  const filePath = mountpoint + '/' + input.fileDescriptions[0].name
+  const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
+    mountpoint, filePath)
+  seriesReaderModule.unmountBlobs(mountpoint)
+
+  return withTransferList(image, [image.data.buffer])
+}
+
 registerPromiseWorker(function (input, withTransferList) {
   if (input.operation === "readImage") {
     return readImage(input, withTransferList)
   } else if (input.operation === "writeImage") {
     return writeImage(input, withTransferList)
+  } else if (input.operation === "readDICOMImageSeries") {
+    return readDICOMImageSeries(input, withTransferList)
   } else {
     return new Error('Unknown worker operation')
   }

@@ -1,7 +1,5 @@
 const path = require('path')
-const fs = require('fs');
-
-const ImageIOIndex = require('./ImageIOIndex.js')
+const fs = require('fs')
 
 const loadEmscriptenModule = require('./loadEmscriptenModule.js')
 const readImageEmscriptenFSDICOMFileSeries = require('./readImageEmscriptenFSDICOMFileSeries.js')
@@ -16,20 +14,15 @@ const readImageEmscriptenFSDICOMFileSeries = require('./readImageEmscriptenFSDIC
 const readImageLocalDICOMFileSeries = (directory) => {
   return new Promise(function (resolve, reject) {
     const imageIOsPath = path.resolve(__dirname, '..', 'dist', 'ImageIOs')
-    const io = 'itkDCMTKImageIOJSBinding'
     const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
-    const files = fs.readdirSync(directory);
+    const files = fs.readdirSync(directory)
     try {
-      const modulePath = path.join(imageIOsPath, io)
-      const Module = loadEmscriptenModule(modulePath)
       const directoryWithFile = path.join(directory, 'myfile.dcm')
-      Module.mountContainingDirectory(directoryWithFile)
       const seriesReaderPath = path.join(imageIOsPath, seriesReader)
       const seriesReaderModule = loadEmscriptenModule(seriesReaderPath)
       seriesReaderModule.mountContainingDirectory(directoryWithFile)
-      const image = readImageEmscriptenFSDICOMFileSeries(Module, seriesReaderModule,
+      const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
         directory, path.join(directory, files[0]))
-      Module.unmountContainingDirectory(directoryWithFile)
       seriesReaderModule.unmountContainingDirectory(directoryWithFile)
       resolve(image)
     } catch (err) {

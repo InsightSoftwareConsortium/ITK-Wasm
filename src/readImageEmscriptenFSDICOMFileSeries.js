@@ -1,36 +1,34 @@
 const Image = require('./Image.js')
 const ImageType = require('./ImageType.js')
-const Matrix = require('./Matrix.js')
 
 const imageIOComponentToJSComponent = require('./imageIOComponentToJSComponent.js')
 const imageIOPixelTypeToJSPixelType = require('./imageIOPixelTypeToJSPixelType.js')
 
-const readImageEmscriptenFSDICOMFileSeries = (imageIOModule, seriesReaderModule, directory, firstFile) => {
-  const imageIO = new imageIOModule.ITKImageIO()
-  imageIO.SetFileName(firstFile)
-  if (!imageIO.CanReadFile(firstFile)) {
+const readImageEmscriptenFSDICOMFileSeries = (seriesReaderModule, directory, firstFile) => {
+  const seriesReader = new seriesReaderModule.ITKDICOMImageSeriesReader()
+  if (!seriesReader.CanReadTestFile(firstFile)) {
     throw new Error('Could not read file: ' + firstFile)
   }
-  imageIO.ReadImageInformation()
+  seriesReader.SetTestFileName(firstFile)
+  seriesReader.ReadTestImageInformation()
 
   const dimension = 3
   let imageType = new ImageType(dimension)
 
-  const ioComponentType = imageIO.GetComponentType()
-  imageType.componentType = imageIOComponentToJSComponent(imageIOModule, ioComponentType)
+  const ioComponentType = seriesReader.GetIOComponentType()
+  imageType.componentType = imageIOComponentToJSComponent(seriesReaderModule, ioComponentType)
 
-  const ioPixelType = imageIO.GetPixelType()
-  imageType.pixelType = imageIOPixelTypeToJSPixelType(imageIOModule, ioPixelType)
+  const ioPixelType = seriesReader.GetIOPixelType()
+  imageType.pixelType = imageIOPixelTypeToJSPixelType(seriesReaderModule, ioPixelType)
 
-  imageType.components = imageIO.GetNumberOfComponents()
+  imageType.components = seriesReader.GetNumberOfComponents()
 
   let image = new Image(imageType)
 
-  const seriesReader = new seriesReaderModule.ITKDICOMImageSeriesReader()
   seriesReader.SetIOComponentType(ioComponentType)
   seriesReader.SetIOPixelType(ioPixelType)
   seriesReader.SetDirectory(directory)
-  if(seriesReader.Read()) {
+  if (seriesReader.Read()) {
     throw new Error('Could not read series')
   }
 

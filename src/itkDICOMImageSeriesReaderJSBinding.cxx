@@ -17,6 +17,7 @@
  *=========================================================================*/
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include <emscripten/val.h>
 #include <emscripten.h>
@@ -57,6 +58,11 @@ public:
     m_IOPixelType = pixelType;
     }
 
+  IOPixelType GetIOPixelType()
+    {
+    return m_IOPixelType;
+    }
+
   /** Enums used to manipulate the component type. The component type
    * refers to the actual storage class associated with either a
    * SCALAR pixel type or elements of a compound pixel.
@@ -70,6 +76,13 @@ public:
     m_IOComponentType = componentType;
     }
 
+  /** Set/Get the component type of the image. This is always a native
+   * type. */
+  IOComponentType GetIOComponentType()
+    {
+    return m_IOComponentType;
+    }
+
   /** Set the number of components per pixel in the image. This may be set
    * by the reading process. For SCALAR pixel types, NumberOfComponents will
    * be 1. For other pixel types, NumberOfComponents will be greater than or
@@ -79,18 +92,47 @@ public:
     m_NumberOfComponents = components;
     }
 
+  unsigned int GetNumberOfComponents()
+    {
+    return m_NumberOfComponents;
+    }
+
   DICOMImageSeriesReaderJSBinding():
     m_NumberOfComponents(1),
     m_IOComponentType( ImageIOBase::UCHAR ),
     m_IOPixelType( ImageIOBase::SCALAR )
   {
+    m_DCMTKImageIO = DCMTKImageIO::New();
   }
+
+  /** Set a test file used to IOComponentType
+   * series files. */
+  void SetTestFileName( std::string testFile )
+    {
+    m_DCMTKImageIO->SetFileName( testFile );
+    }
+
+  /** Set a test file used to IOComponentType
+   * series files. */
+  bool CanReadTestFile( std::string testFile )
+    {
+    return m_DCMTKImageIO->CanReadFile( testFile.c_str() );
+    }
 
   /** Set the directory in the Emscripten filesystem that contains the DICOM
    * series files. */
   void SetDirectory( std::string directory )
     {
     m_Directory = directory;
+    }
+
+  /** Read information fr8om the TestFile. */
+  void ReadTestImageInformation()
+    {
+    m_DCMTKImageIO->ReadImageInformation();
+    m_IOComponentType = m_DCMTKImageIO->GetComponentType();
+    m_IOPixelType = m_DCMTKImageIO->GetPixelType();
+    m_NumberOfComponents = m_DCMTKImageIO->GetNumberOfComponents();
     }
 
   /** Do the actual file reading. Return EXIT_SUCCESS (0) on success and
@@ -322,9 +364,7 @@ private:
     const typename ReaderType::FileNamesContainer & fileNames = seriesFileNames->GetInputFileNames();
     reader->SetFileNames( fileNames );
 
-    typedef itk::DCMTKImageIO ImageIOType;
-    ImageIOType::Pointer dcmtkIO = ImageIOType::New();
-    reader->SetImageIO( dcmtkIO );
+    reader->SetImageIO( m_DCMTKImageIO );
 
     try
       {
@@ -346,6 +386,7 @@ private:
   IOPixelType m_IOPixelType;
   std::string m_Directory;
 
+  itk::DCMTKImageIO::Pointer m_DCMTKImageIO;
   ImageBase< ImageDimension >::Pointer m_ReadImage;
 };
 
@@ -389,6 +430,9 @@ EMSCRIPTEN_BINDINGS(itk_dicom_image_series_reader_js_binding) {
   .function("SetNumberOfComponents", &itk::DICOMImageSeriesReaderJSBinding::SetNumberOfComponents)
   .function("SetIOComponentType", &itk::DICOMImageSeriesReaderJSBinding::SetIOComponentType)
   .function("SetIOPixelType", &itk::DICOMImageSeriesReaderJSBinding::SetIOPixelType)
+  .function("GetNumberOfComponents", &itk::DICOMImageSeriesReaderJSBinding::GetNumberOfComponents)
+  .function("GetIOComponentType", &itk::DICOMImageSeriesReaderJSBinding::GetIOComponentType)
+  .function("GetIOPixelType", &itk::DICOMImageSeriesReaderJSBinding::GetIOPixelType)
   .function("SetDirectory", &itk::DICOMImageSeriesReaderJSBinding::SetDirectory)
   .function("Read", &itk::DICOMImageSeriesReaderJSBinding::Read)
   .function("GetSpacing", &itk::DICOMImageSeriesReaderJSBinding::GetSpacing)
@@ -396,5 +440,8 @@ EMSCRIPTEN_BINDINGS(itk_dicom_image_series_reader_js_binding) {
   .function("GetOrigin", &itk::DICOMImageSeriesReaderJSBinding::GetOrigin)
   .function("GetDirection", &itk::DICOMImageSeriesReaderJSBinding::GetDirection)
   .function("GetPixelBufferData", &itk::DICOMImageSeriesReaderJSBinding::GetPixelBufferData)
+  .function("SetTestFileName", &itk::DICOMImageSeriesReaderJSBinding::SetTestFileName)
+  .function("ReadTestImageInformation", &itk::DICOMImageSeriesReaderJSBinding::ReadTestImageInformation)
+  .function("CanReadTestFile", &itk::DICOMImageSeriesReaderJSBinding::CanReadTestFile)
   ;
 }
