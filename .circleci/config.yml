@@ -10,6 +10,7 @@ jobs:
       - checkout
       - run:
           name: Build Docker image
+          no_output_timeout: 2.0h
           command: |
             docker pull insighttoolkit/itk-js:latest
             ./src/Docker/build.sh
