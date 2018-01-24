@@ -20,6 +20,9 @@ git commit -m "feat(version): Bump NPM version to ${version}"
 cp LICENSE README.md package.json dist/
 cd dist
 npm publish
+cd ..
 git tag -m "itk.js ${version}" -s v$version HEAD
-git push --tags upstream master
+git checkout release
+git merge master
+git push --tags upstream release master
 ```
