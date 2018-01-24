@@ -64,7 +64,6 @@
     "standard": "^8.6.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.8.0",
-    "tape-run": "^3.0.0",
     "uglifyify": "^3.0.4",
     "webpack": "^3.10.0"
   },
