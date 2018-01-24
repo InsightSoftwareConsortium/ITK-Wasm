@@ -128,9 +128,9 @@ test('gipl maps to itkGiplImageIOJSBinding', t => {
   t.is(io, 'itkGiplImageIOJSBinding')
 })
 
-test('dcm maps to itkGDCMImageIOJSBinding', t => {
+test('dcm maps to itkDCMTKImageIOJSBinding', t => {
   let io = ExtensionToIO['dcm']
-  t.is(io, 'itkGDCMImageIOJSBinding')
+  t.is(io, 'itkDCMTKImageIOJSBinding')
 })
 
 test('tif maps to itkTIFFImageIOJSBinding', t => {

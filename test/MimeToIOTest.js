@@ -33,7 +33,7 @@ test('image/bmp maps to itkBMPImageIOJSBinding', t => {
   t.is(io, 'itkBMPImageIOJSBinding')
 })
 
-test('application/dicom maps to itkGDCMImageIOJSBinding', t => {
+test('application/dicom maps to itkDCMTKImageIOJSBinding', t => {
   let io = MimeToIO['application/dicom']
-  t.is(io, 'itkGDCMImageIOJSBinding')
+  t.is(io, 'itkDCMTKImageIOJSBinding')
 })

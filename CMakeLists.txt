@@ -6,7 +6,7 @@ project(BridgeJavaScript)
 set(BridgeJavaScript_IOModules
   "ITKIOPNG"
   "ITKIOMeta"
-  "ITKIOGDCM"
+  "ITKIODCMTK"
   "ITKIOTIFF"
   "ITKIONIFTI"
   "ITKIOJPEG"
@@ -21,6 +21,7 @@ set(BridgeJavaScript_IOModules
   "ITKIOBioRad"
   "ITKIOGIPL"
   "ITKIOGE"
+  "ITKIOGDCM"
   CACHE STRING
   "String delimited list of ITK IO modules to support.")
 set(imageios_ITKIOBioRad itkBioRadImageIO)
@@ -37,6 +38,7 @@ set(imageios_ITKIOMRC itkMRCImageIO)
 set(imageios_ITKIONIFTI itkNiftiImageIO)
 set(imageios_ITKIONRRD itkNrrdImageIO)
 set(imageios_ITKIOGDCM itkGDCMImageIO)
+set(imageios_ITKIODCMTK itkDCMTKImageIO)
 set(imageios_ITKIOJPEG itkJPEGImageIO)
 set(imageios_ITKIOTIFF itkTIFFImageIO)
 set(imageios_ITKIOVTK itkVTKImageIO)

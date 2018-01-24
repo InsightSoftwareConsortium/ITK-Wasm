@@ -63,12 +63,10 @@ assert.equal(retrievedAxisDirection.get(0), 0.707)
 assert.equal(retrievedAxisDirection.get(1), 0.2)
 
 var pixelType = imageio.GetPixelType()
-console.log('Pixel type:     ' + Module.ITKImageIO.GetPixelTypeAsString(pixelType))
 assert.equal(pixelType, Module.IOPixelType.RGB)
 imageio.SetPixelType(pixelType)
 
 var componentType = imageio.GetComponentType()
-console.log('Component type: ' + Module.ITKImageIO.GetComponentTypeAsString(componentType))
 assert.equal(componentType, Module.IOComponentType.UCHAR)
 imageio.SetComponentType(componentType)
 

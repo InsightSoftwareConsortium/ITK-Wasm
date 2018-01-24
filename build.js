@@ -95,33 +95,20 @@ const buildImageIOsParallel = function (callback) {
   callback(null, result)
 }
 
-const babelOptions = {
-  presets: [
-    ['es2015', { 'modules': false }]
-  ]
-}
-const babel = require('babel-core')
-const babelBuild = ramda.curry(function (outputDir, es6File, callback) {
-  let basename = path.basename(es6File)
-  let output = path.join(outputDir, basename)
-  console.log('Converting ' + basename + ' ...')
-  babel.transformFile(es6File, babelOptions, function (err, result) {
-    if (err) {
-      console.error(err)
-      process.exit(1)
-    }
-    const outputFD = fs.openSync(output, 'w')
-    fs.writeSync(outputFD, result.code)
-    fs.closeSync(outputFD)
-    console.log(basename + ' conversion complete')
-  })
-  callback(null, basename)
+const copySources = ramda.curry(function (sourceSubDir, sourceFile, callback) {
+  let source = path.basename(sourceFile)
+  console.log('Copying ' + source + ' ...')
+  let output = path.join('dist', sourceSubDir, source)
+
+  fs.copySync(sourceFile, output)
+
+  console.log(source + ' copy complete')
+  callback(null, source)
 })
-const babelBuildParallel = function (callback) {
-  const es6Files = glob.sync(path.join('src', '*.js'))
-  const outputDir = 'dist'
-  builder = babelBuild(outputDir)
-  result = asyncMod.map(es6Files, builder)
+const copyMainSources = function (callback) {
+  const sourceFiles = glob.sync(path.join('src', '*.js'))
+  const copier = copySources('.')
+  const result = asyncMod.map(sourceFiles, copier)
   callback(null, result)
 }
 
@@ -150,6 +137,6 @@ const browserifyWebWorkerBuildParallel = function (callback) {
 
 asyncMod.parallel([
   buildImageIOsParallel,
-  babelBuildParallel,
+  copyMainSources,
   browserifyWebWorkerBuildParallel
 ])

@@ -10,9 +10,10 @@ jobs:
       - checkout
       - run:
           name: Build Docker image
+          no_output_timeout: 2.0h
           command: |
             docker pull insighttoolkit/itk-js:latest
-            ./test/Docker/build.sh
+            ./src/Docker/build.sh
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker login -u $DOCKER_USER -p $DOCKER_PASS
               docker push insighttoolkit/itk-js:latest

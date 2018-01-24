@@ -195,15 +195,6 @@ ImageIOBaseJSBinding< TImageIO >
 
 
 template< typename TImageIO >
-std::string
-ImageIOBaseJSBinding< TImageIO >
-::GetPixelTypeAsString( IOPixelType pixelType )
-{
-  return ImageIOType::GetPixelTypeAsString( pixelType );
-}
-
-
-template< typename TImageIO >
 void
 ImageIOBaseJSBinding< TImageIO >
 ::SetComponentType( IOComponentType componentType )
@@ -218,15 +209,6 @@ ImageIOBaseJSBinding< TImageIO >
 ::GetComponentType() const
 {
   return this->m_ImageIO->GetComponentType();
-}
-
-
-template< typename TImageIO >
-std::string
-ImageIOBaseJSBinding< TImageIO >
-::GetComponentTypeAsString( IOComponentType componentType )
-{
-  return ImageIOType::GetComponentTypeAsString( componentType );
 }
 
 

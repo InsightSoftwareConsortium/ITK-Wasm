@@ -1,3 +1,7 @@
-var Module = {
-  'wasmBinaryFile': '../ImageIOs/@wasm_target@.wasm'
+var Module = {}
+Module['locateFile'] = function(fileName) {
+  if(fileName === '@wasm_target@.wasm') {
+    return '../ImageIOs/@wasm_target@.wasm'
+  }
+  return fileName
 }

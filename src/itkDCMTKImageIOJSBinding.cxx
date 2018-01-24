@@ -19,15 +19,15 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
-#include "itkHDF5ImageIO.h"
+#include "itkDCMTKImageIO.h"
 
 #include "itkImageIOBaseJSBinding.h"
 
-typedef itk::ImageIOBaseJSBinding< itk::HDF5ImageIO > HDF5ImageIOJSBindingType;
+typedef itk::ImageIOBaseJSBinding< itk::DCMTKImageIO > DCMTKImageIOJSBindingType;
 
-EMSCRIPTEN_BINDINGS(itk_hdf5_image_io_js_binding) {
+EMSCRIPTEN_BINDINGS(itk_gdcm_image_io_js_binding) {
   emscripten::register_vector<double>("AxisDirectionType");
-  emscripten::enum_<HDF5ImageIOJSBindingType::IOPixelType>("IOPixelType")
+  emscripten::enum_<DCMTKImageIOJSBindingType::IOPixelType>("IOPixelType")
     .value("UNKNOWNPIXELTYPE", itk::ImageIOBase::UNKNOWNPIXELTYPE)
     .value("SCALAR", itk::ImageIOBase::SCALAR)
     .value("RGB", itk::ImageIOBase::RGB)
@@ -45,7 +45,7 @@ EMSCRIPTEN_BINDINGS(itk_hdf5_image_io_js_binding) {
     .value("FIXEDARRAY", itk::ImageIOBase::FIXEDARRAY)
     .value("MATRIX", itk::ImageIOBase::MATRIX)
     ;
-  emscripten::enum_<HDF5ImageIOJSBindingType::IOComponentType>("IOComponentType")
+  emscripten::enum_<DCMTKImageIOJSBindingType::IOComponentType>("IOComponentType")
     .value("UNKNOWNCOMPONENTTYPE", itk::ImageIOBase::UNKNOWNCOMPONENTTYPE)
     .value("UCHAR", itk::ImageIOBase::UCHAR)
     .value("CHAR", itk::ImageIOBase::CHAR)
@@ -58,32 +58,32 @@ EMSCRIPTEN_BINDINGS(itk_hdf5_image_io_js_binding) {
     .value("FLOAT", itk::ImageIOBase::FLOAT)
     .value("DOUBLE", itk::ImageIOBase::DOUBLE)
     ;
-  emscripten::class_<HDF5ImageIOJSBindingType>("ITKImageIO")
+  emscripten::class_<DCMTKImageIOJSBindingType>("ITKImageIO")
   .constructor<>()
-  .function("SetNumberOfDimensions", &HDF5ImageIOJSBindingType::SetNumberOfDimensions)
-  .function("GetNumberOfDimensions", &HDF5ImageIOJSBindingType::GetNumberOfDimensions)
-  .function("SetFileName", &HDF5ImageIOJSBindingType::SetFileName)
-  .function("GetFileName", &HDF5ImageIOJSBindingType::GetFileName)
-  .function("CanReadFile", &HDF5ImageIOJSBindingType::CanReadFile)
-  .function("ReadImageInformation", &HDF5ImageIOJSBindingType::ReadImageInformation)
-  .function("SetDimensions", &HDF5ImageIOJSBindingType::SetDimensions)
-  .function("GetDimensions", &HDF5ImageIOJSBindingType::GetDimensions)
-  .function("SetOrigin", &HDF5ImageIOJSBindingType::SetOrigin)
-  .function("GetOrigin", &HDF5ImageIOJSBindingType::GetOrigin)
-  .function("SetSpacing", &HDF5ImageIOJSBindingType::SetSpacing)
-  .function("GetSpacing", &HDF5ImageIOJSBindingType::GetSpacing)
-  .function("SetDirection", &HDF5ImageIOJSBindingType::SetDirection)
-  .function("GetDirection", &HDF5ImageIOJSBindingType::GetDirection)
-  .function("GetDefaultDirection", &HDF5ImageIOJSBindingType::GetDefaultDirection)
-  .function("SetPixelType", &HDF5ImageIOJSBindingType::SetPixelType)
-  .function("GetPixelType", &HDF5ImageIOJSBindingType::GetPixelType)
-  .function("SetComponentType", &HDF5ImageIOJSBindingType::SetComponentType)
-  .function("GetComponentType", &HDF5ImageIOJSBindingType::GetComponentType)
-  .function("GetImageSizeInPixels", &HDF5ImageIOJSBindingType::GetImageSizeInPixels)
-  .function("GetImageSizeInBytes", &HDF5ImageIOJSBindingType::GetImageSizeInBytes)
-  .function("GetImageSizeInComponents", &HDF5ImageIOJSBindingType::GetImageSizeInComponents)
-  .function("SetNumberOfComponents", &HDF5ImageIOJSBindingType::SetNumberOfComponents)
-  .function("GetNumberOfComponents", &HDF5ImageIOJSBindingType::GetNumberOfComponents)
-  .function("Read", &HDF5ImageIOJSBindingType::Read)
+  .function("SetNumberOfDimensions", &DCMTKImageIOJSBindingType::SetNumberOfDimensions)
+  .function("GetNumberOfDimensions", &DCMTKImageIOJSBindingType::GetNumberOfDimensions)
+  .function("SetFileName", &DCMTKImageIOJSBindingType::SetFileName)
+  .function("GetFileName", &DCMTKImageIOJSBindingType::GetFileName)
+  .function("CanReadFile", &DCMTKImageIOJSBindingType::CanReadFile)
+  .function("ReadImageInformation", &DCMTKImageIOJSBindingType::ReadImageInformation)
+  .function("SetDimensions", &DCMTKImageIOJSBindingType::SetDimensions)
+  .function("GetDimensions", &DCMTKImageIOJSBindingType::GetDimensions)
+  .function("SetOrigin", &DCMTKImageIOJSBindingType::SetOrigin)
+  .function("GetOrigin", &DCMTKImageIOJSBindingType::GetOrigin)
+  .function("SetSpacing", &DCMTKImageIOJSBindingType::SetSpacing)
+  .function("GetSpacing", &DCMTKImageIOJSBindingType::GetSpacing)
+  .function("SetDirection", &DCMTKImageIOJSBindingType::SetDirection)
+  .function("GetDirection", &DCMTKImageIOJSBindingType::GetDirection)
+  .function("GetDefaultDirection", &DCMTKImageIOJSBindingType::GetDefaultDirection)
+  .function("SetPixelType", &DCMTKImageIOJSBindingType::SetPixelType)
+  .function("GetPixelType", &DCMTKImageIOJSBindingType::GetPixelType)
+  .function("SetComponentType", &DCMTKImageIOJSBindingType::SetComponentType)
+  .function("GetComponentType", &DCMTKImageIOJSBindingType::GetComponentType)
+  .function("GetImageSizeInPixels", &DCMTKImageIOJSBindingType::GetImageSizeInPixels)
+  .function("GetImageSizeInBytes", &DCMTKImageIOJSBindingType::GetImageSizeInBytes)
+  .function("GetImageSizeInComponents", &DCMTKImageIOJSBindingType::GetImageSizeInComponents)
+  .function("SetNumberOfComponents", &DCMTKImageIOJSBindingType::SetNumberOfComponents)
+  .function("GetNumberOfComponents", &DCMTKImageIOJSBindingType::GetNumberOfComponents)
+  .function("Read", &DCMTKImageIOJSBindingType::Read)
   ;
 }

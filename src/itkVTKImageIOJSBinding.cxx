@@ -80,8 +80,6 @@ EMSCRIPTEN_BINDINGS(itk_vtk_image_io_js_binding) {
   .function("GetPixelType", &VTKImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &VTKImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &VTKImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &VTKImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &VTKImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &VTKImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &VTKImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &VTKImageIOJSBindingType::GetImageSizeInComponents)

@@ -79,8 +79,6 @@ EMSCRIPTEN_BINDINGS(itk_bmp_image_io_js_binding) {
   .function("GetPixelType", &BMPImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &BMPImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &BMPImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &BMPImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &BMPImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &BMPImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &BMPImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &BMPImageIOJSBindingType::GetImageSizeInComponents)

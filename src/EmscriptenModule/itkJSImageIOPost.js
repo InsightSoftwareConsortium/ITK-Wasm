@@ -53,16 +53,16 @@ Module['mkdirs'] = function (dirs) {
   }
 }
 
-/** Mount file blobs into the Emscripten filesystem. The blobs argument should be an
+/** Mount file blobs into the Emscripten filesystem. The blobFiles argument should be an
  * array of { name: 'filename', data: blob } objects. */
-Module['mountBlobs'] = function (mountpoint, blobs) {
+Module['mountBlobs'] = function (mountpoint, blobFiles) {
   if (! ENVIRONMENT_IS_WORKER) {
     return
   }
 
   Module['mkdirs'](mountpoint)
 
-  FS.mount(WORKERFS, {blobs: blobs}, mountpoint)
+  FS.mount(WORKERFS, {blobs: blobFiles, files: []}, mountpoint)
 }
 
 Module['unmountBlobs'] = function (mountpoint) {

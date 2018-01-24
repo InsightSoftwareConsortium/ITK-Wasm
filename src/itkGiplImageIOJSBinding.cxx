@@ -80,8 +80,6 @@ EMSCRIPTEN_BINDINGS(itk_biorad_image_io_js_binding) {
   .function("GetPixelType", &GiplImageIOJSBindingType::GetPixelType)
   .function("SetComponentType", &GiplImageIOJSBindingType::SetComponentType)
   .function("GetComponentType", &GiplImageIOJSBindingType::GetComponentType)
-  .class_function("GetPixelTypeAsString", &GiplImageIOJSBindingType::GetPixelTypeAsString)
-  .class_function("GetComponentTypeAsString", &GiplImageIOJSBindingType::GetComponentTypeAsString)
   .function("GetImageSizeInPixels", &GiplImageIOJSBindingType::GetImageSizeInPixels)
   .function("GetImageSizeInBytes", &GiplImageIOJSBindingType::GetImageSizeInBytes)
   .function("GetImageSizeInComponents", &GiplImageIOJSBindingType::GetImageSizeInComponents)
