@@ -20,7 +20,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DBUILD_EXAMPLES:BOOL=OFF \
     -DBUILD_TESTING:BOOL=OFF \
     -DITK_LEGACY_REMOVE:BOOL=ON \
-    -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF \
+    -DITK_BUILD_DEFAULT_MODULES:BOOL=ON \
     -DITKGroup_IO:BOOL=ON \
     -DModule_ITKIODCMTK:BOOL=ON \
     -DModule_ITKIOMINC:BOOL=ON \
