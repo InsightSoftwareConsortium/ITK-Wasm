@@ -48,7 +48,7 @@ if(program.compile) {
   } catch(err) {
     if (err.code == 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
-      dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js:latest'], {
+      dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js-base:latest'], {
 	env: process.env,
 	stdio: [ 'ignore', output, null ]
       })
