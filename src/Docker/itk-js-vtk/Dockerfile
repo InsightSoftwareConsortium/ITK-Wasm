@@ -1,4 +1,4 @@
-FROM insighttoolkit/itk-js-base:latest
+FROM insighttoolkit/itk-js:latest
 MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
@@ -29,7 +29,9 @@ RUN cd /ITK-build && \
     -DModule_ITKVtkGlue:BOOL=ON \
     -DVTK_DIR=/VTK-build \
     . && \
-  ninja
+  ninja -j7 && \
+  find . -name '*.o' -delete && \
+  cd .. && chmod -R 777 ITK-build
 
 
 ENV DEFAULT_DOCKCROSS_IMAGE kitware/itk-js-vtk
