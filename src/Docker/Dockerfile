@@ -3,8 +3,8 @@ MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
 
-# 2018-01-28
-ENV ITK_GIT_TAG 1c4fe711d15f17a3005ef52bc254d15569f11e3b
+# 2018-02-13
+ENV ITK_GIT_TAG b6b69471f9ddcd190b0e15a146276863cb2ecc10
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0 -s ALLOW_MEMORY_GROWTH=1 -Wno-almost-asm"
 ENV CXXFLAGS="${CFLAGS} -std=c++11"
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
