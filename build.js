@@ -12,6 +12,21 @@ try {
   if (err.code != 'EEXIST') throw err
 }
 
+dockerVersion = spawnSync('docker', ['--version'], {
+  env: process.env,
+  stdio: [ 'ignore', 'ignore', 'ignore' ]
+})
+if (dockerVersion.status != 0) {
+  console.error("Could not run the 'docker' command.")
+  console.error("This package requires Docker to build.")
+  console.error("")
+  console.error("Please find installation instructions at:")
+  console.error("")
+  console.error("  https://docs.docker.com/install/")
+  console.error("")
+  process.exit(dockerVersion.status)
+}
+
 // Ensure we have the 'dockcross' Docker build environment driver script
 const dockcross = path.join('build', 'dockcross')
 try {
