@@ -76,7 +76,8 @@
   },
   "standard": {
     "ignore": [
-      "itkJSImageIOPost.js"
+      "itkJSImageIOPost.js",
+      "test/Browser/tests.js"
     ]
   }
 }
