@@ -24,6 +24,7 @@ const verifyImage = (t, image) => {
   t.is(image.size[1], 179, 'size[1]')
   t.is(image.data.length, 85920, 'data.length')
   t.is(image.data[1000], 255, 'data[1000]')
+  t.end()
 }
 
 test('Test reading a JPEG file', t => {

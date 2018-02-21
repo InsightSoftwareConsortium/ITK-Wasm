@@ -72,11 +72,12 @@
   "dependencies": {
     "mime-types": "^2.1.15",
     "promise-file-reader": "^0.3.1",
-    "promise-worker-transferable": "^1.0.4"
+    "webworker-promise": "^0.4.1"
   },
   "standard": {
     "ignore": [
-      "itkJSImageIOPost.js"
+      "itkJSImageIOPost.js",
+      "test/Browser/tests.js"
     ]
   }
 }

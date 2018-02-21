@@ -41,7 +41,7 @@ const verifyImage = (t, image) => {
   t.end()
 }
 
-test('readImageArrayBuffer reads an ArrayBuffer', t => {
+test('readImageArrayBuffer reads an ArrayBuffer', (t) => {
   return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
     .then(arrayBuffer => {
       return readImageArrayBuffer(arrayBuffer, 'cthead1Small.png').then(function (image) {
@@ -50,20 +50,34 @@ test('readImageArrayBuffer reads an ArrayBuffer', t => {
     })
 })
 
-test('readImageBlob reads a Blob', t => {
+test('readImageBlob reads a Blob', (t) => {
   return readImageBlob(cthead1SmallBlob, 'cthead1Small.png').then(function (image) {
     verifyImage(t, image)
   })
 })
 
-test('readImageBlob reads a Blob without a file extension', t => {
+test('readImageBlob reads a Blob without a file extension', (t) => {
   return readImageBlob(cthead1SmallBlob1, 'cthead1Small').then(function (image) {
     verifyImage(t, image)
   })
 })
 
-test('readImageFile reads a File', t => {
+test('readImageFile reads a File', (t) => {
   return readImageFile(cthead1SmallFile).then(function (image) {
     verifyImage(t, image)
+  })
+})
+
+test('readImageFile throws a catchable error for an invalid file', (t) => {
+  const invalidArray = new Uint8Array([21, 4, 4, 4, 4, 9, 5, 0, 82, 42])
+  const invalidBlob = new window.Blob([invalidArray])
+  const invalidFile = new window.File([invalidBlob], 'invalid.file')
+  return readImageFile(invalidFile).then(function (image) {
+    t.fail('should not have successfully read the image')
+    t.end()
+  }).catch(function (error) {
+    t.pass(String(error))
+    t.pass('thrown an error that was caught')
+    t.end()
   })
 })

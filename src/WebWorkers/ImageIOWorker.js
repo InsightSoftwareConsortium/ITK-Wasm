@@ -1,4 +1,4 @@
-const registerPromiseWorker = require('promise-worker-transferable/register')
+const registerWebworker = require('webworker-promise/lib/register')
 
 const ImageType = require('../ImageType.js')
 const Image = require('../Image.js')
@@ -78,7 +78,7 @@ const readImage = (input, withTransferList) => {
   const image = readImageEmscriptenFSFile(ioModule, filePath)
   ioModule.unmountBlobs(mountpoint)
 
-  return withTransferList(image, [image.data.buffer])
+  return new registerWebworker.TransferableResponse(image, [image.data.buffer])
 }
 
 const writeImage = (input, withTransferList) => {
@@ -126,7 +126,7 @@ const writeImage = (input, withTransferList) => {
   writeImageEmscriptenFSFile(ioModule, input.useCompression, input.image, filePath)
   const writtenFile = ioModule.readFile(filePath, { encoding: "binary" })
 
-  return withTransferList(writtenFile.buffer, [writtenFile.buffer])
+  return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }
 
 const readDICOMImageSeries = (input, withTransferList) => {
@@ -146,17 +146,17 @@ const readDICOMImageSeries = (input, withTransferList) => {
     mountpoint, filePath)
   seriesReaderModule.unmountBlobs(mountpoint)
 
-  return withTransferList(image, [image.data.buffer])
+  return new registerWebworker.TransferableResponse(image, [image.data.buffer])
 }
 
-registerPromiseWorker(function (input, withTransferList) {
+registerWebworker(function (input) {
   if (input.operation === "readImage") {
-    return readImage(input, withTransferList)
+    return Promise.resolve(readImage(input))
   } else if (input.operation === "writeImage") {
-    return writeImage(input, withTransferList)
+    return Promise.resolve(writeImage(input))
   } else if (input.operation === "readDICOMImageSeries") {
-    return readDICOMImageSeries(input, withTransferList)
+    return Promise.resolve(readDICOMImageSeries(input))
   } else {
-    return new Error('Unknown worker operation')
+    return Promise.resolve(new Error('Unknown worker operation'))
   }
 })
