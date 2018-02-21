@@ -68,7 +68,7 @@ try {
 
 // Build the Emscripten mobules with ninja
 console.log('\nRunning ninja...')
-const ninjaCall = spawnSync(dockcross, ['ninja', '-j5', '-Cbuild'], {
+const ninjaCall = spawnSync(dockcross, ['ninja', '-j8', '-Cbuild'], {
   env: process.env,
   stdio: 'inherit'
 })
