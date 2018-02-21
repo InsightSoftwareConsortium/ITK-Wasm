@@ -11,6 +11,11 @@ test('imageType should have the same imageType passed to the constructor', t => 
   t.deepEqual(image.imageType, defaultImageType)
 })
 
+test('name should have the default value of "Image"', t => {
+  let image = new Image()
+  t.deepEqual(image.name, 'Image')
+})
+
 test('origin should have a length equal to the dimension', t => {
   let imageType = new ImageType(2, IntTypes.UInt8)
   let image = new Image(imageType)
