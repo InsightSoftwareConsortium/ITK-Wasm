@@ -41,5 +41,6 @@ test('Test reading a DICOM file', t => {
     t.is(image.size[2], 1, 'size[2]')
     t.is(image.data.length, 65536, 'data.length')
     t.is(image.data[1000], 3, 'data[1000]')
+    t.end()
   })
 })
