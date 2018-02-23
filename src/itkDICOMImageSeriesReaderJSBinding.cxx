@@ -276,7 +276,7 @@ public:
         ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
         const unsigned long components = pixelContainer->Size();
         const emscripten::val view( emscripten::typed_memory_view( components, pixelContainer->GetBufferPointer() ) );
-        emscripten::val array = emscripten::val::global("UintImageDimension2Array");
+        emscripten::val array = emscripten::val::global("Uint32Array");
         emscripten::val data = array.new_( components );
         data.call<void>( "set", view );
         return data;
@@ -288,7 +288,7 @@ public:
         ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
         const unsigned long components = pixelContainer->Size();
         const emscripten::val view( emscripten::typed_memory_view( components, pixelContainer->GetBufferPointer() ) );
-        emscripten::val array = emscripten::val::global("IntImageDimension2Array");
+        emscripten::val array = emscripten::val::global("Int32Array");
         emscripten::val data = array.new_( components );
         data.call<void>( "set", view );
         return data;
@@ -324,7 +324,7 @@ public:
         ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
         const unsigned long components = pixelContainer->Size();
         const emscripten::val view( emscripten::typed_memory_view( components, pixelContainer->GetBufferPointer() ) );
-        emscripten::val array = emscripten::val::global("FloatImageDimension2Array");
+        emscripten::val array = emscripten::val::global("Float32Array");
         emscripten::val data = array.new_( components );
         data.call<void>( "set", view );
         return data;
