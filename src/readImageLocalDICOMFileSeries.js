@@ -13,7 +13,7 @@ const readImageEmscriptenFSDICOMFileSeries = require('./readImageEmscriptenFSDIC
  */
 const readImageLocalDICOMFileSeries = (directory) => {
   return new Promise(function (resolve, reject) {
-    const imageIOsPath = path.resolve(__dirname, '..', 'dist', 'ImageIOs')
+    const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
     const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
     const files = fs.readdirSync(directory)
     try {

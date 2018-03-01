@@ -16,7 +16,7 @@ const readImageEmscriptenFSFile = require('./readImageEmscriptenFSFile.js')
  */
 const readImageLocalFile = (filePath) => {
   return new Promise(function (resolve, reject) {
-    const imageIOsPath = path.resolve(__dirname, '..', 'dist', 'ImageIOs')
+    const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
     try {
       const mimeType = mime.lookup(filePath)
       const extension = getFileExtension(filePath)

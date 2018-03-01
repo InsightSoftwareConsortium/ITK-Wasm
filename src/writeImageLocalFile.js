@@ -15,10 +15,12 @@ const writeImageEmscriptenFSFile = require('./writeImageEmscriptenFSFile.js')
  * @param: useCompression compression the pixel data when possible
  * @param: image itk.Image instance to write
  * @param: filePath path to the file on the local filesystem.
+ *
+ * @return empty Promise
  */
 const writeImageLocalFile = (useCompression, image, filePath) => {
   return new Promise(function (resolve, reject) {
-    const imageIOsPath = path.resolve(__dirname, '..', 'dist', 'ImageIOs')
+    const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
     try {
       const mimeType = mime.lookup(filePath)
       const extension = getFileExtension(filePath)
