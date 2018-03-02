@@ -2,7 +2,6 @@ version: 2
 jobs:
   build:
     machine: true
-    resource_class: xlarge
     branches:
       ignore:
         - gh-pages
