@@ -12,11 +12,13 @@ jobs:
           name: Build Docker image
           no_output_timeout: 2.0h
           command: |
-            docker pull insighttoolkit/itk-js:latest
-            ./src/Docker/build.sh
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ./src/Docker/build.sh
               docker login -u $DOCKER_USER -p $DOCKER_PASS
               docker push insighttoolkit/itk-js:latest
+            else
+              docker pull insighttoolkit/itk-js:latest
+              ./src/Docker/build.sh --cache-from=insighttoolkit/itk-js:latest
             fi
       - run:
           name: Install Node packages
