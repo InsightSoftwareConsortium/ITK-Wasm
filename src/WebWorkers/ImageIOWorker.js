@@ -59,6 +59,7 @@ const readImage = (input, withTransferList) => {
     }
   }
   if (io === null) {
+    ioToModule = {}
     return Promise.reject(new Error('Could not find IO for: ' + input.name))
   }
 
@@ -109,6 +110,7 @@ const writeImage = (input, withTransferList) => {
     }
   }
   if (io === null) {
+    ioToModule = {}
     return Promise.reject(new Error('Could not find IO for: ' + input.name))
   }
 
