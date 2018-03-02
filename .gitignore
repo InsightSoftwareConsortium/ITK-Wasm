@@ -14,3 +14,5 @@ dist
 node_modules
 .DS_Store
 yarn.lock
+examples/nodejs/logo.tif
+examples/nodejs/package-lock.json
