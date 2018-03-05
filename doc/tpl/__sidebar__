@@ -1,3 +1,14 @@
 docs:
   getting_started:
     overview: index.html
+
+examples:
+  building:
+    nodejs: node.html
+
+api:
+  inputoutput:
+    nodejs: node.html
+  datastructures:
+    image: Image.html
+    imagetype: ImageType.html

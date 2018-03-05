@@ -50,10 +50,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Test nodejs example
+          name: Test Node.js example
           no_output_timeout: 0.5h
           command: |
-            cd examples/nodejs
+            cd examples/Node.js
             npm install
             npm run test
 

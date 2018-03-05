@@ -28,3 +28,16 @@ sidebar:
     testing: Testing
     tests: Tests
     coverage: Coverage
+
+  examples:
+    building: Building
+    nodejs: Node.js
+
+  api:
+    inputoutput: Input/Output
+    nodejs: Node.js
+    browser: Web Browser
+    datastructures: Data Structures
+    image: Image
+    imagetype: ImageType
+
