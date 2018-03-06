@@ -1,0 +1,36 @@
+{
+  "name": "itk-convert",
+  "version": "1.0.1",
+  "description": "Convert images files from one format to another.",
+  "bin": {
+    "itk-convert": "./src/itk-convert.js"
+  },
+  "scripts": {
+    "test": "node src/itk-convert.js ../../doc/content/logo.png ./logo.tif"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsightSoftwareConsortium/itk-js.git"
+  },
+  "keywords": [
+    "itk",
+    "image",
+    "format",
+    "convert",
+    "2D",
+    "3D",
+    "science",
+    "medical",
+    "microscopy"
+  ],
+  "author": "Matthew McCormick",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/InsightSoftwareConsortium/itk-js/issues"
+  },
+  "homepage": "https://github.com/InsightSoftwareConsortium/itk-js#readme",
+  "dependencies": {
+    "commander": "^2.14.1",
+    "itk": "^7.2.2"
+  }
+}

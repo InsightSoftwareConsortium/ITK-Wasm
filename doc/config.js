@@ -1,7 +1,6 @@
 module.exports = {
   baseUrl: '/itk-js',
   work: './build-tmp',
-  examples: [],
   config: {
     title: 'itk-js',
     description: '"ITK Bridge for JavaScript"',
@@ -13,5 +12,6 @@ module.exports = {
     github: 'InsightSoftwareConsortium/itk-js',
     google_analytics: 'UA-90338862-8',
   },
-  copy: [],
+  copy: [
+  ],
 };
