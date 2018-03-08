@@ -10,11 +10,11 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules})
     set(ImageIOIndex_ARRAY "${ImageIOIndex_ARRAY}'${imageio}JSBinding', ")
     set(target ${imageio}JSBinding)
     set(wasm_target ${imageio}JSBindingWasm)
-    add_executable(${target} ${target}.cxx)
+    add_executable(${target} Bindings/${target}.cxx)
     itk_module_target_label(${target})
     itk_module_target_export(${target})
     itk_module_target_install(${target})
-    add_executable(${wasm_target} ${target}.cxx)
+    add_executable(${wasm_target} Bindings/${target}.cxx)
     itk_module_target_label(${wasm_target})
     itk_module_target_export(${wasm_target})
     itk_module_target_install(${wasm_target})
@@ -42,7 +42,7 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules})
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
       ${BridgeJavaScript_BINARY_DIR}/ImageIOs
       )
-    set_property(SOURCE ${target}.cxx APPEND
+    set_property(SOURCE Bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSIOPost.js
       )
@@ -58,11 +58,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.js.in
 #include(${ITK_USE_FILE})
 #set(target itkDICOMImageSeriesReaderJSBinding)
 #set(wasm_target itkDICOMImageSeriesReaderJSBindingWasm)
-#add_executable(${target} ${target}.cxx)
+#add_executable(${target} Bindings/${target}.cxx)
 #itk_module_target_label(${target})
 #itk_module_target_export(${target})
 #itk_module_target_install(${target})
-#add_executable(${wasm_target} ${target}.cxx)
+#add_executable(${wasm_target} Bindings/${target}.cxx)
 #itk_module_target_label(${wasm_target})
 #itk_module_target_export(${wasm_target})
 #itk_module_target_install(${wasm_target})
@@ -90,7 +90,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.js.in
   #PROPERTY RUNTIME_OUTPUT_DIRECTORY
   #${BridgeJavaScript_BINARY_DIR}/ImageIOs
   #)
-#set_property(SOURCE ${target}.cxx APPEND
+#set_property(SOURCE Bindings/${target}.cxx APPEND
   #PROPERTY OBJECT_DEPENDS
   #${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSIOPost.js
   #)
@@ -109,11 +109,11 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
     set(MeshIOIndex_ARRAY "${MeshIOIndex_ARRAY}'${imageio}JSBinding', ")
     set(target ${imageio}JSBinding)
     set(wasm_target ${imageio}JSBindingWasm)
-    add_executable(${target} ${target}.cxx)
+    add_executable(${target} Bindings/${target}.cxx)
     itk_module_target_label(${target})
     itk_module_target_export(${target})
     itk_module_target_install(${target})
-    add_executable(${wasm_target} ${target}.cxx)
+    add_executable(${wasm_target} Bindings/${target}.cxx)
     itk_module_target_label(${wasm_target})
     itk_module_target_export(${wasm_target})
     itk_module_target_install(${wasm_target})
@@ -141,7 +141,7 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
       ${BridgeJavaScript_BINARY_DIR}/MeshIOs
       )
-    set_property(SOURCE ${target}.cxx APPEND
+    set_property(SOURCE Bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSIOPost.js
       )

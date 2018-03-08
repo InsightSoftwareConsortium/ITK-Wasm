@@ -55,6 +55,9 @@ public:
   bool CanReadFile( std::string fileName );
   bool CanWriteFile( std::string fileName );
 
+  void SetPointDimension( unsigned int dimension );
+  unsigned int GetPointDimension() const;
+
   void SetPointPixelType( IOPixelType pixelType );
   IOPixelType GetPointPixelType() const;
   void SetCellPixelType( IOPixelType pixelType );
@@ -72,13 +75,11 @@ public:
   IOComponentType GetPointPixelComponentType() const;
   void SetCellPixelComponentType( IOComponentType componentType );
   IOComponentType GetCellPixelComponentType() const;
-
   void SetNumberOfPointPixelComponents( unsigned int components );
   unsigned int GetNumberOfPointPixelComponents() const;
   void SetNumberOfCellPixelComponents( unsigned int components );
   unsigned int GetNumberOfCellPixelComponents() const;
-  void SetPointDimension( unsigned int dimension );
-  unsigned int GetPointDimension() const;
+
   void SetNumberOfPoints( unsigned long );
   unsigned long GetNumberOfPoints() const;
   void SetNumberOfCells( unsigned long );

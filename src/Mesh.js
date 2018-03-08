@@ -8,8 +8,8 @@ const Mesh = function (meshType = new MeshType()) {
   this.numberOfPoints = 0
   this.points = new ArrayBuffer(0)
 
-  this.pointData = new ArrayBuffer(0)
   this.numberOfPointPixels = 0
+  this.pointData = new ArrayBuffer(0)
 
   this.numberOfCells = 0
   this.cells = new ArrayBuffer(0)
