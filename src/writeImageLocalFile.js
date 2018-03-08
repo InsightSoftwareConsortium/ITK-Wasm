@@ -1,9 +1,9 @@
 const path = require('path')
 const mime = require('mime-types')
 
-const mimeToIO = require('./MimeToIO.js')
+const mimeToIO = require('./MimeToImageIO.js')
 const getFileExtension = require('./getFileExtension.js')
-const extensionToIO = require('./extensionToIO.js')
+const extensionToIO = require('./extensionToImageIO.js')
 const ImageIOIndex = require('./ImageIOIndex.js')
 
 const loadEmscriptenModule = require('./loadEmscriptenModule.js')

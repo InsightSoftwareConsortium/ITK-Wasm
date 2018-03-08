@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-const ExtensionToIO = require(path.resolve(__dirname, '..', 'dist', 'extensionToIO.js'))
+const ExtensionToIO = require(path.resolve(__dirname, '..', 'dist', 'extensionToImageIO.js'))
 
 test('bmp maps to itkBMPImageIOJSBinding', t => {
   let io = ExtensionToIO['bmp']
