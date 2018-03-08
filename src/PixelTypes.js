@@ -10,20 +10,26 @@ const SymmetricSecondRankTensor = 8
 const DiffusionTensor3D = 9
 const Complex = 10
 const FixedArray = 11
-const Matrix = 12
+const Array = 12
+const Matrix = 13
+const VariableLengthVector = 14
+const VariableSizeMatrix = 15
 
 module.exports = {
-  Unknown: Unknown,
-  Scalar: Scalar,
-  RGB: RGB,
-  RGBA: RGBA,
-  Offset: Offset,
-  Vector: Vector,
-  Point: Point,
-  CovariantVector: CovariantVector,
-  SymmetricSecondRankTensor: SymmetricSecondRankTensor,
-  DiffusionTensor3D: DiffusionTensor3D,
-  Complex: Complex,
-  FixedArray: FixedArray,
-  Matrix: Matrix
+  Unknown,
+  Scalar,
+  RGB,
+  RGBA,
+  Offset,
+  Vector,
+  Point,
+  CovariantVector,
+  SymmetricSecondRankTensor,
+  DiffusionTensor3D,
+  Complex,
+  FixedArray,
+  Array,
+  Matrix,
+  VariableLengthVector,
+  VariableSizeMatrix,
 }
