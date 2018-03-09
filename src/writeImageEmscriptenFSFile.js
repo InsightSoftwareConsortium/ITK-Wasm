@@ -2,6 +2,7 @@ const IntTypes = require('./IntTypes.js')
 const FloatTypes = require('./FloatTypes.js')
 const PixelTypes = require('./PixelTypes.js')
 const getMatrixElement = require('./getMatrixElement.js')
+const imageJSComponentToIOComponent = require('./imageJSComponentToIOComponent.js')
 
 const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => {
   const imageIO = new module.ITKImageIO()
@@ -13,51 +14,8 @@ const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => 
   const dimension = image.imageType.dimension
   imageIO.SetNumberOfDimensions(dimension)
 
-  const componentType = image.imageType.componentType
-  switch (componentType) {
-    case IntTypes.UInt8: {
-      imageIO.SetComponentType(module.IOComponentType.UCHAR)
-      break
-    }
-    case IntTypes.Int8: {
-      imageIO.SetComponentType(module.IOComponentType.CHAR)
-      break
-    }
-    case IntTypes.UInt16: {
-      imageIO.SetComponentType(module.IOComponentType.USHORT)
-      break
-    }
-    case IntTypes.Int16: {
-      imageIO.SetComponentType(module.IOComponentType.SHORT)
-      break
-    }
-    case IntTypes.UInt32: {
-      imageIO.SetComponentType(module.IOComponentType.UINT)
-      break
-    }
-    case IntTypes.Int32: {
-      imageIO.SetComponentType(module.IOComponentType.INT)
-      break
-    }
-    case IntTypes.UInt64: {
-      imageIO.SetComponentType(module.IOComponentType.ULONG)
-      break
-    }
-    case IntTypes.Int64: {
-      imageIO.SetComponentType(module.IOComponentType.LONG)
-      break
-    }
-    case FloatTypes.Float32: {
-      imageIO.SetComponentType(module.IOComponentType.FLOAT)
-      break
-    }
-    case FloatTypes.Float64: {
-      imageIO.SetComponentType(module.IOComponentType.DOUBLE)
-      break
-    }
-    default:
-      throw new Error('Unknown IO component type')
-  }
+  const ioComponentType = imageJSComponentToIOComponent(module, image.imageType.componentType)
+  imageIO.SetComponentType(ioComponentType)
 
   const pixelType = image.imageType.pixelType
   switch (pixelType) {

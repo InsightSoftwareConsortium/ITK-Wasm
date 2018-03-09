@@ -3,6 +3,7 @@ import path from 'path'
 
 const MeshType = require(path.resolve(__dirname, '..', 'dist', 'MeshType.js'))
 const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
+const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
 const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
 
 test('dimension should have a default value of 2', t => {
