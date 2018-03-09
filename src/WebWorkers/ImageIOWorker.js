@@ -3,9 +3,9 @@ const registerWebworker = require('webworker-promise/lib/register')
 const ImageType = require('../ImageType.js')
 const Image = require('../Image.js')
 
-const mimeToIO = require('../MimeToIO.js')
+const mimeToIO = require('../MimeToImageIO.js')
 const getFileExtension = require('../getFileExtension.js')
-const extensionToIO = require('../extensionToIO.js')
+const extensionToIO = require('../extensionToImageIO.js')
 const ImageIOIndex = require('../ImageIOIndex.js')
 
 const readImageEmscriptenFSFile = require('../readImageEmscriptenFSFile.js')

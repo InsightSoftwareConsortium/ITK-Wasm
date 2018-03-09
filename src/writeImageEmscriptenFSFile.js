@@ -2,6 +2,8 @@ const IntTypes = require('./IntTypes.js')
 const FloatTypes = require('./FloatTypes.js')
 const PixelTypes = require('./PixelTypes.js')
 const getMatrixElement = require('./getMatrixElement.js')
+const imageJSComponentToIOComponent = require('./imageJSComponentToIOComponent.js')
+const imageJSPixelTypeToIOPixelType = require('./imageJSPixelTypeToIOPixelType.js')
 
 const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => {
   const imageIO = new module.ITKImageIO()
@@ -13,109 +15,11 @@ const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => 
   const dimension = image.imageType.dimension
   imageIO.SetNumberOfDimensions(dimension)
 
-  const componentType = image.imageType.componentType
-  switch (componentType) {
-    case IntTypes.UInt8: {
-      imageIO.SetComponentType(module.IOComponentType.UCHAR)
-      break
-    }
-    case IntTypes.Int8: {
-      imageIO.SetComponentType(module.IOComponentType.CHAR)
-      break
-    }
-    case IntTypes.UInt16: {
-      imageIO.SetComponentType(module.IOComponentType.USHORT)
-      break
-    }
-    case IntTypes.Int16: {
-      imageIO.SetComponentType(module.IOComponentType.SHORT)
-      break
-    }
-    case IntTypes.UInt32: {
-      imageIO.SetComponentType(module.IOComponentType.UINT)
-      break
-    }
-    case IntTypes.Int32: {
-      imageIO.SetComponentType(module.IOComponentType.INT)
-      break
-    }
-    case IntTypes.UInt64: {
-      imageIO.SetComponentType(module.IOComponentType.ULONG)
-      break
-    }
-    case IntTypes.Int64: {
-      imageIO.SetComponentType(module.IOComponentType.LONG)
-      break
-    }
-    case FloatTypes.Float32: {
-      imageIO.SetComponentType(module.IOComponentType.FLOAT)
-      break
-    }
-    case FloatTypes.Float64: {
-      imageIO.SetComponentType(module.IOComponentType.DOUBLE)
-      break
-    }
-    default:
-      throw new Error('Unknown IO component type')
-  }
+  const ioComponentType = imageJSComponentToIOComponent(module, image.imageType.componentType)
+  imageIO.SetComponentType(ioComponentType)
 
-  const pixelType = image.imageType.pixelType
-  switch (pixelType) {
-    case PixelTypes.Unknown: {
-      imageIO.SetPixelType(module.IOPixelType.UNKNOWNPIXELTYPE)
-      break
-    }
-    case PixelTypes.Scalar: {
-      imageIO.SetPixelType(module.IOPixelType.SCALAR)
-      break
-    }
-    case PixelTypes.RGB: {
-      imageIO.SetPixelType(module.IOPixelType.RGB)
-      break
-    }
-    case PixelTypes.RGBA: {
-      imageIO.SetPixelType(module.IOPixelType.RGBA)
-      break
-    }
-    case PixelTypes.Offset: {
-      imageIO.SetPixelType(module.IOPixelType.OFFSET)
-      break
-    }
-    case PixelTypes.Vector: {
-      imageIO.SetPixelType(module.IOPixelType.VECTOR)
-      break
-    }
-    case PixelTypes.Point: {
-      imageIO.SetPixelType(module.IOPixelType.POINT)
-      break
-    }
-    case PixelTypes.CovariantVector: {
-      imageIO.SetPixelType(module.IOPixelType.COVARIANTVECTOR)
-      break
-    }
-    case PixelTypes.SymmetricSecondRankTensor: {
-      imageIO.SetPixelType(module.IOPixelType.SYMMETRICSECONDRANKTENSOR)
-      break
-    }
-    case PixelTypes.DiffusionTensor3D: {
-      imageIO.SetPixelType(module.IOPixelType.DIFFUSIONTENSOR3D)
-      break
-    }
-    case PixelTypes.Complex: {
-      imageIO.SetPixelType(module.IOPixelType.COMPLEX)
-      break
-    }
-    case PixelTypes.FixedArray: {
-      imageIO.SetPixelType(module.IOPixelType.FIXEDARRAY)
-      break
-    }
-    case PixelTypes.Matrix: {
-      imageIO.SetPixelType(module.IOPixelType.MATRIX)
-      break
-    }
-    default:
-      throw new Error('Unknown IO pixel type')
-  }
+  const ioPixelType = imageJSPixelTypeToIOPixelType(module, image.imageType.pixelType)
+  imageIO.SetPixelType(ioPixelType)
 
   imageIO.SetNumberOfComponents(image.imageType.components)
 

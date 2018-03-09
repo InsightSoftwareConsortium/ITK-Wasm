@@ -3,7 +3,7 @@ project(BridgeJavaScript)
 
 # This list should be ordered from approximately most commonly to least
 # commonly used modules.
-set(BridgeJavaScript_IOModules
+set(BridgeJavaScript_ImageIOModules
   "ITKIOPNG"
   "ITKIOMeta"
   "ITKIODCMTK"
@@ -23,7 +23,7 @@ set(BridgeJavaScript_IOModules
   "ITKIOGE"
   "ITKIOGDCM"
   CACHE STRING
-  "String delimited list of ITK IO modules to support.")
+  "String delimited list of ITK image IO modules to support.")
 set(imageios_ITKIOBioRad itkBioRadImageIO)
 set(imageios_ITKIOBMP itkBMPImageIO)
 set(imageios_ITKIOHDF5 itkHDF5ImageIO)
@@ -42,6 +42,12 @@ set(imageios_ITKIODCMTK itkDCMTKImageIO)
 set(imageios_ITKIOJPEG itkJPEGImageIO)
 set(imageios_ITKIOTIFF itkTIFFImageIO)
 set(imageios_ITKIOVTK itkVTKImageIO)
+
+set(BridgeJavaScript_MeshIOModules
+  "ITKIOMesh"
+  CACHE STRING
+  "String delimited list of ITK mesh IO modules to support.")
+set(meshios_ITKIOMesh itkVTKPolyDataMeshIO)
 
 
 if(NOT ITK_SOURCE_DIR)

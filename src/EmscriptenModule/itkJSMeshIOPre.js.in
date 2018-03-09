@@ -1,0 +1,7 @@
+var Module = {}
+Module['locateFile'] = function(fileName) {
+  if(fileName === '@wasm_target@.wasm') {
+    return '../MeshIOs/@wasm_target@.wasm'
+  }
+  return fileName
+}

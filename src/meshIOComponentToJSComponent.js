@@ -1,7 +1,7 @@
 const IntTypes = require('./IntTypes.js')
 const FloatTypes = require('./FloatTypes.js')
 
-const imageIOComponentToJSComponent = (module, ioComponentType) => {
+const meshIOComponentToJSComponent = (module, ioComponentType) => {
   let componentType = null
   switch (ioComponentType) {
     case module.IOComponentType.UCHAR: {
@@ -59,4 +59,4 @@ const imageIOComponentToJSComponent = (module, ioComponentType) => {
   return componentType
 }
 
-module.exports = imageIOComponentToJSComponent
+module.exports = meshIOComponentToJSComponent

@@ -1,26 +1,28 @@
 const path = require('path')
 const mime = require('mime-types')
 
-const mimeToIO = require('./MimeToImageIO.js')
+const mimeToIO = require('./MimeToMeshIO.js')
 const getFileExtension = require('./getFileExtension.js')
-const extensionToIO = require('./extensionToImageIO.js')
-const ImageIOIndex = require('./ImageIOIndex.js')
+const extensionToIO = require('./extensionToMeshIO.js')
+const MeshIOIndex = require('./MeshIOIndex.js')
 
 const loadEmscriptenModule = require('./loadEmscriptenModule.js')
-const writeImageEmscriptenFSFile = require('./writeImageEmscriptenFSFile.js')
+const writeMeshEmscriptenFSFile = require('./writeMeshEmscriptenFSFile.js')
 
 /**
- * Write an image to a file on the local filesystem in Node.js.
+ * Write an mesh to a file on the local filesystem in Node.js.
  *
  * @param: useCompression compression the pixel data when possible
- * @param: image itk.Image instance to write
+ * @param: binaryFileType write in an binary as opposed to a ascii format, if
+ * possible
+ * @param: mesh itk.Mesh instance to write
  * @param: filePath path to the file on the local filesystem.
  *
  * @return empty Promise
  */
-const writeImageLocalFile = (useCompression, image, filePath) => {
+const writeMeshLocalFile = ( { useCompression, binaryFileType }, mesh, filePath) => {
   return new Promise(function (resolve, reject) {
-    const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
+    const meshIOsPath = path.resolve(__dirname, 'MeshIOs')
     const absoluteFilePath = path.resolve(filePath)
     try {
       const mimeType = mime.lookup(absoluteFilePath)
@@ -32,14 +34,14 @@ const writeImageLocalFile = (useCompression, image, filePath) => {
       } else if (extensionToIO.hasOwnProperty(extension)) {
         io = extensionToIO[extension]
       } else {
-        for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
-          const modulePath = path.join(imageIOsPath, ImageIOIndex[idx])
+        for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
+          const modulePath = path.join(meshIOsPath, MeshIOIndex[idx])
           const Module = loadEmscriptenModule(modulePath)
-          const imageIO = new Module.ITKImageIO()
+          const meshIO = new Module.ITKMeshIO()
           Module.mountContainingDirectory(absoluteFilePath)
-          imageIO.SetFileName(absoluteFilePath)
-          if (imageIO.CanWriteFile(absoluteFilePath)) {
-            io = ImageIOIndex[idx]
+          meshIO.SetFileName(absoluteFilePath)
+          if (meshIO.CanWriteFile(absoluteFilePath)) {
+            io = MeshIOIndex[idx]
             Module.unmountContainingDirectory(absoluteFilePath)
             break
           }
@@ -50,10 +52,10 @@ const writeImageLocalFile = (useCompression, image, filePath) => {
         reject(Error('Could not find IO for: ' + absoluteFilePath))
       }
 
-      const modulePath = path.join(imageIOsPath, io)
+      const modulePath = path.join(meshIOsPath, io)
       const Module = loadEmscriptenModule(modulePath)
       Module.mountContainingDirectory(absoluteFilePath)
-      writeImageEmscriptenFSFile(Module, useCompression, image, absoluteFilePath)
+      writeMeshEmscriptenFSFile(Module, { useCompression, binaryFileType }, mesh, absoluteFilePath)
       Module.unmountContainingDirectory(absoluteFilePath)
       resolve(null)
     } catch (err) {
@@ -62,4 +64,4 @@ const writeImageLocalFile = (useCompression, image, filePath) => {
   })
 }
 
-module.exports = writeImageLocalFile
+module.exports = writeMeshLocalFile

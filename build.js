@@ -88,14 +88,19 @@ try {
   if (err.code != 'EEXIST') throw err
 }
 try {
+  fs.mkdirSync(path.join('dist', 'MeshIOs'))
+} catch(err) {
+  if (err.code != 'EEXIST') throw err
+}
+try {
   fs.mkdirSync(path.join('dist', 'WebWorkers'))
 } catch(err) {
   if (err.code != 'EEXIST') throw err
 }
 let imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
-const wasmFiles = glob.sync(path.join('build', 'ImageIOs', '*.wasm'))
+let wasmFiles = glob.sync(path.join('build', 'ImageIOs', '*.wasm'))
 imageIOFiles = imageIOFiles.concat(wasmFiles)
-const copyIOModules = function (imageIOFile, callback) {
+const copyImageIOModules = function (imageIOFile, callback) {
   let io = path.basename(imageIOFile)
   console.log('Copying ' + io + ' ...')
   let output = path.join('dist', 'ImageIOs', io)
@@ -106,7 +111,24 @@ const copyIOModules = function (imageIOFile, callback) {
   callback(null, io)
 }
 const buildImageIOsParallel = function (callback) {
-  result = asyncMod.map(imageIOFiles, copyIOModules)
+  result = asyncMod.map(imageIOFiles, copyImageIOModules)
+  callback(null, result)
+}
+let meshIOFiles = glob.sync(path.join('build', 'MeshIOs', '*.js'))
+wasmFiles = glob.sync(path.join('build', 'MeshIOs', '*.wasm'))
+meshIOFiles = meshIOFiles.concat(wasmFiles)
+const copyMeshIOModules = function (meshIOFile, callback) {
+  let io = path.basename(meshIOFile)
+  console.log('Copying ' + io + ' ...')
+  let output = path.join('dist', 'MeshIOs', io)
+
+  fs.copySync(meshIOFile, output)
+
+  console.log(io + ' copy complete')
+  callback(null, io)
+}
+const buildMeshIOsParallel = function (callback) {
+  result = asyncMod.map(meshIOFiles, copyMeshIOModules)
   callback(null, result)
 }
 
@@ -152,6 +174,7 @@ const browserifyWebWorkerBuildParallel = function (callback) {
 
 asyncMod.parallel([
   buildImageIOsParallel,
+  buildMeshIOsParallel,
   copyMainSources,
   browserifyWebWorkerBuildParallel
 ])

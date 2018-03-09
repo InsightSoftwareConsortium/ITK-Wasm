@@ -3,13 +3,15 @@ itk.js
 
 [![CircleCI](https://circleci.com/gh/InsightSoftwareConsortium/itk-js.svg?style=svg)](https://circleci.com/gh/InsightSoftwareConsortium/itk-js)
 
-Provides general scientific image IO capability and bridges
+Provides general scientific image, mesh, and point set IO capability and bridges
 [ITK](https://itk.org) code running in an
 [asm.js](http://asmjs.org/) or [WebAssembly](http://webassembly.org/)
 runtime environment.
 
 Supported file formats
 ----------------------
+
+Images
 
 - [BioRad](http://www.bio-rad.com/)
 - [BMP](https://en.wikipedia.org/wiki/BMP_file_format)
@@ -29,6 +31,10 @@ Supported file formats
 - [Portable Network Graphics (PNG)](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
 - [Tagged Image File Format (TIFF)](https://en.wikipedia.org/wiki/TIFF)
 - [VTK legacy image file format](http://www.vtk.org/VTK/img/file-formats.pdf)
+
+Meshes and point sets
+
+- [VTK Legacy File Format vtkPolyData](https://www.vtk.org/wp-content/uploads/2015/04/file-formats.pdf)
 
 Installation
 ------------
