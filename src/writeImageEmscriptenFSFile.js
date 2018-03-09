@@ -3,6 +3,7 @@ const FloatTypes = require('./FloatTypes.js')
 const PixelTypes = require('./PixelTypes.js')
 const getMatrixElement = require('./getMatrixElement.js')
 const imageJSComponentToIOComponent = require('./imageJSComponentToIOComponent.js')
+const imageJSPixelTypeToIOPixelType = require('./imageJSPixelTypeToIOPixelType.js')
 
 const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => {
   const imageIO = new module.ITKImageIO()
@@ -17,63 +18,8 @@ const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => 
   const ioComponentType = imageJSComponentToIOComponent(module, image.imageType.componentType)
   imageIO.SetComponentType(ioComponentType)
 
-  const pixelType = image.imageType.pixelType
-  switch (pixelType) {
-    case PixelTypes.Unknown: {
-      imageIO.SetPixelType(module.IOPixelType.UNKNOWNPIXELTYPE)
-      break
-    }
-    case PixelTypes.Scalar: {
-      imageIO.SetPixelType(module.IOPixelType.SCALAR)
-      break
-    }
-    case PixelTypes.RGB: {
-      imageIO.SetPixelType(module.IOPixelType.RGB)
-      break
-    }
-    case PixelTypes.RGBA: {
-      imageIO.SetPixelType(module.IOPixelType.RGBA)
-      break
-    }
-    case PixelTypes.Offset: {
-      imageIO.SetPixelType(module.IOPixelType.OFFSET)
-      break
-    }
-    case PixelTypes.Vector: {
-      imageIO.SetPixelType(module.IOPixelType.VECTOR)
-      break
-    }
-    case PixelTypes.Point: {
-      imageIO.SetPixelType(module.IOPixelType.POINT)
-      break
-    }
-    case PixelTypes.CovariantVector: {
-      imageIO.SetPixelType(module.IOPixelType.COVARIANTVECTOR)
-      break
-    }
-    case PixelTypes.SymmetricSecondRankTensor: {
-      imageIO.SetPixelType(module.IOPixelType.SYMMETRICSECONDRANKTENSOR)
-      break
-    }
-    case PixelTypes.DiffusionTensor3D: {
-      imageIO.SetPixelType(module.IOPixelType.DIFFUSIONTENSOR3D)
-      break
-    }
-    case PixelTypes.Complex: {
-      imageIO.SetPixelType(module.IOPixelType.COMPLEX)
-      break
-    }
-    case PixelTypes.FixedArray: {
-      imageIO.SetPixelType(module.IOPixelType.FIXEDARRAY)
-      break
-    }
-    case PixelTypes.Matrix: {
-      imageIO.SetPixelType(module.IOPixelType.MATRIX)
-      break
-    }
-    default:
-      throw new Error('Unknown IO pixel type')
-  }
+  const ioPixelType = imageJSPixelTypeToIOPixelType(module, image.imageType.pixelType)
+  imageIO.SetPixelType(ioPixelType)
 
   imageIO.SetNumberOfComponents(image.imageType.components)
 
