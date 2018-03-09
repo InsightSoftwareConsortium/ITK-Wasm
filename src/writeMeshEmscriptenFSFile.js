@@ -1,10 +1,7 @@
-const IntTypes = require('./IntTypes.js')
-const FloatTypes = require('./FloatTypes.js')
-const PixelTypes = require('./PixelTypes.js')
 const meshJSComponentToIOComponent = require('./meshJSComponentToIOComponent.js')
 const meshJSPixelTypeToIOPixelType = require('./meshJSPixelTypeToIOPixelType.js')
 
-const writeMeshEmscriptenFSFile = (module, useCompression, mesh, filePath) => {
+const writeMeshEmscriptenFSFile = (module, { useCompression, binaryFileType }, mesh, filePath) => {
   const meshIO = new module.ITKMeshIO()
   meshIO.SetFileName(filePath)
   if (!meshIO.CanWriteFile(filePath)) {
@@ -12,7 +9,7 @@ const writeMeshEmscriptenFSFile = (module, useCompression, mesh, filePath) => {
   }
 
   const dimension = mesh.meshType.dimension
-  meshIO.SetPointDimensions(dimension)
+  meshIO.SetPointDimension(dimension)
 
   const pointIOComponentType = meshJSComponentToIOComponent(module, mesh.meshType.pointComponentType)
   meshIO.SetPointComponentType(pointIOComponentType)
@@ -20,17 +17,45 @@ const writeMeshEmscriptenFSFile = (module, useCompression, mesh, filePath) => {
   const cellIOComponentType = meshJSComponentToIOComponent(module, mesh.meshType.cellComponentType)
   meshIO.SetCellComponentType(cellIOComponentType)
 
-  const pointIOPixelType = meshIOPixelTypeToJSPixelType(module, mesh.meshType.pointPixelType)
+  const pointIOPixelType = meshJSPixelTypeToIOPixelType(module, mesh.meshType.pointPixelType)
   meshIO.SetPointPixelType(pointIOPixelType)
-  meshIO.SetPointPixelComponents(mesh.meshType.pointPixelComponents)
+  meshIO.SetNumberOfPointPixelComponents(mesh.meshType.pointPixelComponents)
 
-  const cellIOPixelType = meshIOPixelTypeToJSPixelType(module, mesh.meshType.cellPixelType)
+  const cellIOPixelType = meshJSPixelTypeToIOPixelType(module, mesh.meshType.cellPixelType)
   meshIO.SetCellPixelType(cellIOPixelType)
-  meshIO.SetCellPixelComponents(mesh.meshType.cellPixelComponents)
+  meshIO.SetNumberOfCellPixelComponents(mesh.meshType.cellPixelComponents)
 
-  meshIO.SetUseCompression(useCompression)
+  meshIO.SetUseCompression(!!useCompression)
+
+  if (binaryFileType) {
+    meshIO.SetFileType(module.FileType.BINARY)
+  } else {
+    meshIO.SetFileType(module.FileType.ASCII)
+  }
+
+  meshIO.SetByteOrder(module.ByteOrder.LittleEndian)
 
   meshIO.SetNumberOfPoints(mesh.numberOfPoints)
+  if (mesh.numberOfPoints > 0) {
+    meshIO.SetUpdatePoints(true)
+  }
+  meshIO.SetNumberOfPointPixels(mesh.numberOfPointPixels)
+  if (mesh.numberOfPointPixels > 0) {
+    meshIO.SetUpdatePointData(true)
+  }
+
+  meshIO.SetNumberOfCells(mesh.numberOfCells)
+  if (mesh.numberOfCells > 0) {
+    meshIO.SetUpdateCells(true)
+  }
+  meshIO.SetNumberOfCellPixels(mesh.numberOfCellPixels)
+  meshIO.SetCellBufferSize(mesh.cellBufferSize)
+  if (mesh.numberOfCellPixels > 0) {
+    meshIO.SetUpdatePointData(true)
+  }
+
+  meshIO.WriteMeshInformation()
+
   if (mesh.numberOfPoints > 0) {
     let numberOfBytes = mesh.points.length * mesh.points.BYTES_PER_ELEMENT
     let dataPtr = module._malloc(numberOfBytes)
@@ -40,17 +65,6 @@ const writeMeshEmscriptenFSFile = (module, useCompression, mesh, filePath) => {
     module._free(dataHeap.byteOffset)
   }
 
-  meshIO.SetNumberOfPointPixels(mesh.numberOfPointPixels)
-  if (mesh.numberOfPointPixels > 0) {
-    let numberOfBytes = mesh.pointData.length * mesh.pointData.BYTES_PER_ELEMENT
-    let dataPtr = module._malloc(numberOfBytes)
-    let dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
-    dataHeap.set(new Uint8Array(mesh.pointData.buffer))
-    meshIO.WritePoints(dataHeap.byteOffset)
-    module._free(dataHeap.byteOffset)
-  }
-
-  meshIO.SetNumberOfCells(mesh.numberOfCells)
   if (mesh.numberOfCells > 0) {
     let numberOfBytes = mesh.cells.length * mesh.cells.BYTES_PER_ELEMENT
     let dataPtr = module._malloc(numberOfBytes)
@@ -60,16 +74,25 @@ const writeMeshEmscriptenFSFile = (module, useCompression, mesh, filePath) => {
     module._free(dataHeap.byteOffset)
   }
 
-  meshIO.SetNumberOfCellPixels(mesh.numberOfCellPixels)
-  meshIO.SetCellBufferSize(mesh.cellBufferSize)
+  if (mesh.numberOfPointPixels > 0) {
+    let numberOfBytes = mesh.pointData.length * mesh.pointData.BYTES_PER_ELEMENT
+    let dataPtr = module._malloc(numberOfBytes)
+    let dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
+    dataHeap.set(new Uint8Array(mesh.pointData.buffer))
+    meshIO.WritePointData(dataHeap.byteOffset)
+    module._free(dataHeap.byteOffset)
+  }
+
   if (mesh.numberOfCellPixels > 0) {
     let numberOfBytes = mesh.cellData.length * mesh.cellData.BYTES_PER_ELEMENT
     let dataPtr = module._malloc(numberOfBytes)
     let dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
     dataHeap.set(new Uint8Array(mesh.cellData.buffer))
-    meshIO.WriteCells(dataHeap.byteOffset)
+    meshIO.WriteCellData(dataHeap.byteOffset)
     module._free(dataHeap.byteOffset)
   }
+
+  meshIO.Write()
 }
 
 module.exports = writeMeshEmscriptenFSFile

@@ -91,6 +91,11 @@ public:
   void SetCellBufferSize( unsigned long );
   unsigned long GetCellBufferSize() const;
 
+  void SetUpdatePoints( bool );
+  void SetUpdateCells( bool );
+  void SetUpdatePointData( bool );
+  void SetUpdateCellData( bool );
+
   void ReadMeshInformation();
   void WriteMeshInformation();
 
@@ -102,6 +107,8 @@ public:
   void WriteCells( uintptr_t cBuffer );
   void WritePointData( uintptr_t cBuffer );
   void WriteCellData( uintptr_t cBuffer );
+
+  void Write();
 
   /** Use compression when writing */
   void SetUseCompression( bool compression );

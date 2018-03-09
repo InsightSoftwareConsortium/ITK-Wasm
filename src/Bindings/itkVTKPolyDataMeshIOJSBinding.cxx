@@ -108,6 +108,10 @@ EMSCRIPTEN_BINDINGS(itk_vtk_polydata_mesh_io_js_binding) {
   .function("GetNumberOfCellPixels", &VTKPolyDataMeshIOJSBindingType::GetNumberOfCellPixels)
   .function("SetCellBufferSize", &VTKPolyDataMeshIOJSBindingType::SetCellBufferSize)
   .function("GetCellBufferSize", &VTKPolyDataMeshIOJSBindingType::GetCellBufferSize)
+  .function("SetUpdatePoints", &VTKPolyDataMeshIOJSBindingType::SetUpdatePoints)
+  .function("SetUpdatePointData", &VTKPolyDataMeshIOJSBindingType::SetUpdatePointData)
+  .function("SetUpdateCells", &VTKPolyDataMeshIOJSBindingType::SetUpdateCells)
+  .function("SetUpdateCellData", &VTKPolyDataMeshIOJSBindingType::SetUpdateCellData)
   .function("ReadMeshInformation", &VTKPolyDataMeshIOJSBindingType::ReadMeshInformation)
   .function("WriteMeshInformation", &VTKPolyDataMeshIOJSBindingType::WriteMeshInformation)
   .function("ReadPoints", &VTKPolyDataMeshIOJSBindingType::ReadPoints)
@@ -118,6 +122,7 @@ EMSCRIPTEN_BINDINGS(itk_vtk_polydata_mesh_io_js_binding) {
   .function("WriteCells", &VTKPolyDataMeshIOJSBindingType::WriteCells)
   .function("WritePointData", &VTKPolyDataMeshIOJSBindingType::WritePointData)
   .function("WriteCellData", &VTKPolyDataMeshIOJSBindingType::WriteCellData)
+  .function("Write", &VTKPolyDataMeshIOJSBindingType::Write)
   .function("SetUseCompression", &VTKPolyDataMeshIOJSBindingType::SetUseCompression)
   ;
 }

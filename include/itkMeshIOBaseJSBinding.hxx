@@ -360,6 +360,42 @@ MeshIOBaseJSBinding< TMeshIO >
 template< typename TMeshIO >
 void
 MeshIOBaseJSBinding< TMeshIO >
+::SetUpdatePoints( bool update )
+{
+  this->m_MeshIO->SetUpdatePoints( update );
+}
+
+
+template< typename TMeshIO >
+void
+MeshIOBaseJSBinding< TMeshIO >
+::SetUpdatePointData( bool update )
+{
+  this->m_MeshIO->SetUpdatePointData( update );
+}
+
+
+template< typename TMeshIO >
+void
+MeshIOBaseJSBinding< TMeshIO >
+::SetUpdateCells( bool update )
+{
+  this->m_MeshIO->SetUpdateCells( update );
+}
+
+
+template< typename TMeshIO >
+void
+MeshIOBaseJSBinding< TMeshIO >
+::SetUpdateCellData( bool update )
+{
+  this->m_MeshIO->SetUpdateCellData( update );
+}
+
+
+template< typename TMeshIO >
+void
+MeshIOBaseJSBinding< TMeshIO >
 ::ReadMeshInformation()
 {
   this->m_MeshIO->ReadMeshInformation();
@@ -900,6 +936,15 @@ MeshIOBaseJSBinding< TMeshIO >
 ::WriteCellData( uintptr_t cBuffer )
 {
   this->m_MeshIO->WriteCellData( reinterpret_cast< void * >( cBuffer ));
+}
+
+
+template< typename TMeshIO >
+void
+MeshIOBaseJSBinding< TMeshIO >
+::Write()
+{
+  this->m_MeshIO->Write();
 }
 
 
