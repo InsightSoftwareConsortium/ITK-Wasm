@@ -22,27 +22,35 @@ const readMeshEmscriptenFSFile = (module, filePath) => {
   meshType.cellComponentType = meshIOComponentToJSComponent(module, cellComponentType)
 
   const pointPixelType = meshIO.GetPointPixelType()
-  meshType.pixelType = meshIOPixelTypeToJSPixelType(module, pointPixelType)
-  meshType.pointPixelComponents = meshIO.GetPointPixelComponents()
+  meshType.pointPixelType = meshIOPixelTypeToJSPixelType(module, pointPixelType)
+  meshType.pointPixelComponents = meshIO.GetNumberOfPointPixelComponents()
 
   const cellPixelType = meshIO.GetCellPixelType()
-  meshType.pixelType = meshIOPixelTypeToJSPixelType(module, cellPixelType)
-  meshType.cellPixelComponents = meshIO.GetCellPixelComponents()
+  meshType.cellPixelType = meshIOPixelTypeToJSPixelType(module, cellPixelType)
+  meshType.cellPixelComponents = meshIO.GetNumberOfCellPixelComponents()
 
   let mesh = new Mesh(meshType)
 
   mesh.numberOfPoints = meshIO.GetNumberOfPoints()
-  mesh.points = meshIO.ReadPoints()
+  if (mesh.numberOfPoints > 0) {
+    mesh.points = meshIO.ReadPoints()
+  }
 
   mesh.numberOfCells = meshIO.GetNumberOfCells()
-  mesh.cells = meshIO.ReadCells()
+  if (mesh.numberOfCells > 0) {
+    mesh.cells = meshIO.ReadCells()
+  }
 
   mesh.numberofPointPixels = meshIO.GetNumberOfPointPixels()
-  mesh.pointData = meshIO.ReadPointData()
+  if (mesh.numberOfPointPixels > 0) {
+    mesh.pointData = meshIO.ReadPointData()
+  }
 
   mesh.numberofCellPixels = meshIO.GetNumberOfCellPixels()
-  mesh.cellData = meshIO.ReadCellData()
-  mesh.cellBufferSize = meshIO.GetCellBufferSize()
+  if (mesh.numberOfCellPixels > 0) {
+    mesh.cellData = meshIO.ReadCellData()
+    mesh.cellBufferSize = meshIO.GetCellBufferSize()
+  }
 
   return mesh
 }

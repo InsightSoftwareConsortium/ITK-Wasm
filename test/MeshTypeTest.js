@@ -23,9 +23,9 @@ test('pointComponentType should have the same value passed to the constructor', 
   t.is(meshType.pointComponentType, FloatTypes.Float64)
 })
 
-test('cellComponentType should have a default value of Float32', t => {
+test('cellComponentType should have a default value of Int32', t => {
   let meshType = new MeshType()
-  t.is(meshType.cellComponentType, FloatTypes.Float32)
+  t.is(meshType.cellComponentType, IntTypes.Int32)
 })
 test('cellComponentType should have the same value passed to the constructor', t => {
   let meshType = new MeshType(3, FloatTypes.Float64, FloatTypes.Float64)
