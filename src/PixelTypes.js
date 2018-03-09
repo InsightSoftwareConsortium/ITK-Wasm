@@ -31,5 +31,5 @@ module.exports = {
   Array,
   Matrix,
   VariableLengthVector,
-  VariableSizeMatrix,
+  VariableSizeMatrix
 }
