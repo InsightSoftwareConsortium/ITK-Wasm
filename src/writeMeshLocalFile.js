@@ -20,7 +20,7 @@ const writeMeshEmscriptenFSFile = require('./writeMeshEmscriptenFSFile.js')
  *
  * @return empty Promise
  */
-const writeMeshLocalFile = ( { useCompression, binaryFileType }, mesh, filePath) => {
+const writeMeshLocalFile = ({ useCompression, binaryFileType }, mesh, filePath) => {
   return new Promise(function (resolve, reject) {
     const meshIOsPath = path.resolve(__dirname, 'MeshIOs')
     const absoluteFilePath = path.resolve(filePath)

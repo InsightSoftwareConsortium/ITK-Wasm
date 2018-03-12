@@ -3,7 +3,6 @@ import path from 'path'
 
 const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
 const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
 const readMeshLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readMeshLocalFile.js'))
 const writeMeshLocalFile = require(path.resolve(__dirname, '..', 'dist', 'writeMeshLocalFile.js'))
 
@@ -23,7 +22,7 @@ const verifyMesh = (t, mesh) => {
 test('writeMeshLocalFile writes a file path on the local filesystem', (t) => {
   return readMeshLocalFile(testInputFilePath)
     .then(function (mesh) {
-      return writeMeshLocalFile( { useCompression: false, binaryFileType: false }, mesh, testOutputFilePath)
+      return writeMeshLocalFile({ useCompression: false, binaryFileType: false }, mesh, testOutputFilePath)
     })
     .then(function () {
       return readMeshLocalFile(testOutputFilePath).then(function (mesh) {

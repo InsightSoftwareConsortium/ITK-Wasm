@@ -1,6 +1,3 @@
-const IntTypes = require('./IntTypes.js')
-const FloatTypes = require('./FloatTypes.js')
-const PixelTypes = require('./PixelTypes.js')
 const getMatrixElement = require('./getMatrixElement.js')
 const imageJSComponentToIOComponent = require('./imageJSComponentToIOComponent.js')
 const imageJSPixelTypeToIOPixelType = require('./imageJSPixelTypeToIOPixelType.js')
