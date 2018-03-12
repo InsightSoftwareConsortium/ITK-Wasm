@@ -16,6 +16,8 @@ extensionToIO['JPG'] = 'itkJPEGImageIOJSBinding'
 extensionToIO['jpeg'] = 'itkJPEGImageIOJSBinding'
 extensionToIO['JPEG'] = 'itkJPEGImageIOJSBinding'
 
+extensionToIO['json'] = 'itkJSONImageIOJSBinding'
+
 extensionToIO['lsm'] = 'itkLSMImageIOJSBinding'
 
 extensionToIO['mnc'] = 'itkMINCImageIOJSBinding'

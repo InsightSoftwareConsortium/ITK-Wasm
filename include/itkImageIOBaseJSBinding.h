@@ -71,6 +71,7 @@ public:
   /** Read the spacing and dimensions of the image.
    * Assumes SetFileName has been called with a valid file name. */
   void ReadImageInformation();
+  void WriteImageInformation();
 
   /** Set/Get the image dimensions in the x, y, z, etc. directions.
    * GetDimensions() is typically used after reading the data; the

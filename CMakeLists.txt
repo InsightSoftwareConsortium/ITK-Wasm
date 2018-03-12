@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(BridgeJavaScript)
 
+set(BridgeJavaScript_LIBRARIES BridgeJavaScript)
 # This list should be ordered from approximately most commonly to least
 # commonly used modules.
 set(BridgeJavaScript_ImageIOModules
@@ -42,6 +43,7 @@ set(imageios_ITKIODCMTK itkDCMTKImageIO)
 set(imageios_ITKIOJPEG itkJPEGImageIO)
 set(imageios_ITKIOTIFF itkTIFFImageIO)
 set(imageios_ITKIOVTK itkVTKImageIO)
+set(imageios_BridgeJavaScript itkJSONImageIO)
 
 set(BridgeJavaScript_MeshIOModules
   "ITKIOMesh"

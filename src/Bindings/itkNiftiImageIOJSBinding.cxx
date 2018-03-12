@@ -52,6 +52,8 @@ EMSCRIPTEN_BINDINGS(itk_nifti_image_io_js_binding) {
     .value("INT", itk::ImageIOBase::INT)
     .value("ULONG", itk::ImageIOBase::ULONG)
     .value("LONG", itk::ImageIOBase::LONG)
+    .value("ULONGLONG", itk::ImageIOBase::ULONGLONG)
+    .value("LONGLONG", itk::ImageIOBase::LONGLONG)
     .value("FLOAT", itk::ImageIOBase::FLOAT)
     .value("DOUBLE", itk::ImageIOBase::DOUBLE)
     ;
@@ -64,6 +66,7 @@ EMSCRIPTEN_BINDINGS(itk_nifti_image_io_js_binding) {
   .function("CanReadFile", &NiftiImageIOJSBindingType::CanReadFile)
   .function("CanWriteFile", &NiftiImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &NiftiImageIOJSBindingType::ReadImageInformation)
+  .function("WriteImageInformation", &NiftiImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &NiftiImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &NiftiImageIOJSBindingType::GetDimensions)
   .function("SetOrigin", &NiftiImageIOJSBindingType::SetOrigin)

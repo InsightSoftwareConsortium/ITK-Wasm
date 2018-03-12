@@ -52,6 +52,8 @@ EMSCRIPTEN_BINDINGS(itk_tiff_image_io_js_binding) {
     .value("INT", itk::ImageIOBase::INT)
     .value("ULONG", itk::ImageIOBase::ULONG)
     .value("LONG", itk::ImageIOBase::LONG)
+    .value("ULONGLONG", itk::ImageIOBase::ULONGLONG)
+    .value("LONGLONG", itk::ImageIOBase::LONGLONG)
     .value("FLOAT", itk::ImageIOBase::FLOAT)
     .value("DOUBLE", itk::ImageIOBase::DOUBLE)
     ;
@@ -64,6 +66,7 @@ EMSCRIPTEN_BINDINGS(itk_tiff_image_io_js_binding) {
   .function("CanReadFile", &TIFFImageIOJSBindingType::CanReadFile)
   .function("CanWriteFile", &TIFFImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &TIFFImageIOJSBindingType::ReadImageInformation)
+  .function("WriteImageInformation", &TIFFImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &TIFFImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &TIFFImageIOJSBindingType::GetDimensions)
   .function("SetOrigin", &TIFFImageIOJSBindingType::SetOrigin)

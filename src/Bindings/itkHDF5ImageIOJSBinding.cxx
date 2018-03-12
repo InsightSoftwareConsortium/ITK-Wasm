@@ -52,6 +52,8 @@ EMSCRIPTEN_BINDINGS(itk_hdf5_image_io_js_binding) {
     .value("INT", itk::ImageIOBase::INT)
     .value("ULONG", itk::ImageIOBase::ULONG)
     .value("LONG", itk::ImageIOBase::LONG)
+    .value("ULONGLONG", itk::ImageIOBase::ULONGLONG)
+    .value("LONGLONG", itk::ImageIOBase::LONGLONG)
     .value("FLOAT", itk::ImageIOBase::FLOAT)
     .value("DOUBLE", itk::ImageIOBase::DOUBLE)
     ;
@@ -63,6 +65,7 @@ EMSCRIPTEN_BINDINGS(itk_hdf5_image_io_js_binding) {
   .function("GetFileName", &HDF5ImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &HDF5ImageIOJSBindingType::CanReadFile)
   .function("ReadImageInformation", &HDF5ImageIOJSBindingType::ReadImageInformation)
+  .function("WriteImageInformation", &HDF5ImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &HDF5ImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &HDF5ImageIOJSBindingType::GetDimensions)
   .function("SetOrigin", &HDF5ImageIOJSBindingType::SetOrigin)

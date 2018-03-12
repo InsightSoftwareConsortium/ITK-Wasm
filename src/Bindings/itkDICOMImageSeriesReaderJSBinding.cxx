@@ -181,6 +181,16 @@ public:
         typedef VectorImage< long, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
+      case itk::ImageIOBase::ULONGLONG:
+        {
+        typedef VectorImage< unsigned long long, ImageDimension > ImageType;
+        return this->ReadTypedImage< ImageType >();
+        }
+      case itk::ImageIOBase::LONGLONG:
+        {
+        typedef VectorImage< long long, ImageDimension > ImageType;
+        return this->ReadTypedImage< ImageType >();
+        }
       case itk::ImageIOBase::FLOAT:
         {
         typedef VectorImage< float, ImageDimension > ImageType;
@@ -317,6 +327,30 @@ public:
         data.call<void>( "set", view );
         return data;
         }
+    case itk::ImageIOBase::ULONGLONG:
+        {
+        typedef itk::VectorImage< unsigned long, ImageDimension > ImageType;
+        ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
+        ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
+        const unsigned long components = pixelContainer->Size();
+        const emscripten::val view( emscripten::typed_memory_view( components, pixelContainer->GetBufferPointer() ) );
+        emscripten::val array = emscripten::val::global("Uint64Array");
+        emscripten::val data = array.new_( components );
+        data.call<void>( "set", view );
+        return data;
+        }
+    case itk::ImageIOBase::LONGLONG:
+        {
+        typedef itk::VectorImage< signed long, ImageDimension > ImageType;
+        ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
+        ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
+        const unsigned long components = pixelContainer->Size();
+        const emscripten::val view( emscripten::typed_memory_view( components, pixelContainer->GetBufferPointer() ) );
+        emscripten::val array = emscripten::val::global("Int64Array");
+        emscripten::val data = array.new_( components );
+        data.call<void>( "set", view );
+        return data;
+        }
     case itk::ImageIOBase::FLOAT:
         {
         typedef itk::VectorImage< float, ImageDimension > ImageType;
@@ -422,6 +456,8 @@ EMSCRIPTEN_BINDINGS(itk_dicom_image_series_reader_js_binding) {
     .value("INT", itk::ImageIOBase::INT)
     .value("ULONG", itk::ImageIOBase::ULONG)
     .value("LONG", itk::ImageIOBase::LONG)
+    .value("ULONGLONG", itk::ImageIOBase::ULONGLONG)
+    .value("LONGLONG", itk::ImageIOBase::LONGLONG)
     .value("FLOAT", itk::ImageIOBase::FLOAT)
     .value("DOUBLE", itk::ImageIOBase::DOUBLE)
     ;

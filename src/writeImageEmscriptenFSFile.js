@@ -1,6 +1,3 @@
-const IntTypes = require('./IntTypes.js')
-const FloatTypes = require('./FloatTypes.js')
-const PixelTypes = require('./PixelTypes.js')
 const getMatrixElement = require('./getMatrixElement.js')
 const imageJSComponentToIOComponent = require('./imageJSComponentToIOComponent.js')
 const imageJSPixelTypeToIOPixelType = require('./imageJSPixelTypeToIOPixelType.js')
@@ -36,6 +33,8 @@ const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => 
   }
 
   imageIO.SetUseCompression(useCompression)
+
+  imageIO.WriteImageInformation()
 
   // Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
   const numberOfBytes = image.data.length * image.data.BYTES_PER_ELEMENT

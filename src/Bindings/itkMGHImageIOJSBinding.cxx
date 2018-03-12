@@ -52,6 +52,8 @@ EMSCRIPTEN_BINDINGS(itk_mgh_image_io_js_binding) {
     .value("INT", itk::ImageIOBase::INT)
     .value("ULONG", itk::ImageIOBase::ULONG)
     .value("LONG", itk::ImageIOBase::LONG)
+    .value("ULONGLONG", itk::ImageIOBase::ULONGLONG)
+    .value("LONGLONG", itk::ImageIOBase::LONGLONG)
     .value("FLOAT", itk::ImageIOBase::FLOAT)
     .value("DOUBLE", itk::ImageIOBase::DOUBLE)
     ;
@@ -64,6 +66,7 @@ EMSCRIPTEN_BINDINGS(itk_mgh_image_io_js_binding) {
   .function("CanReadFile", &MGHImageIOJSBindingType::CanReadFile)
   .function("CanWriteFile", &MGHImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &MGHImageIOJSBindingType::ReadImageInformation)
+  .function("WriteImageInformation", &MGHImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &MGHImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &MGHImageIOJSBindingType::GetDimensions)
   .function("SetOrigin", &MGHImageIOJSBindingType::SetOrigin)

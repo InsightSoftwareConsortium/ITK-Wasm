@@ -52,6 +52,8 @@ EMSCRIPTEN_BINDINGS(itk_biorad_image_io_js_binding) {
     .value("INT", itk::ImageIOBase::INT)
     .value("ULONG", itk::ImageIOBase::ULONG)
     .value("LONG", itk::ImageIOBase::LONG)
+    .value("ULONGLONG", itk::ImageIOBase::ULONGLONG)
+    .value("LONGLONG", itk::ImageIOBase::LONGLONG)
     .value("FLOAT", itk::ImageIOBase::FLOAT)
     .value("DOUBLE", itk::ImageIOBase::DOUBLE)
     ;
@@ -64,6 +66,7 @@ EMSCRIPTEN_BINDINGS(itk_biorad_image_io_js_binding) {
   .function("CanReadFile", &GiplImageIOJSBindingType::CanReadFile)
   .function("CanWriteFile", &GiplImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &GiplImageIOJSBindingType::ReadImageInformation)
+  .function("WriteImageInformation", &GiplImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &GiplImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &GiplImageIOJSBindingType::GetDimensions)
   .function("SetOrigin", &GiplImageIOJSBindingType::SetOrigin)

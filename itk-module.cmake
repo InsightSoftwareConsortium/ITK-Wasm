@@ -17,4 +17,5 @@ itk_module(BridgeJavaScript
   EXCLUDE_FROM_DEFAULT
   DESCRIPTION
     "${DOCUMENTATION}"
+  ENABLE_SHARED
 )
