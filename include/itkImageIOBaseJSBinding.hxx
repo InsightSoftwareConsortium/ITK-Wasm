@@ -100,6 +100,15 @@ ImageIOBaseJSBinding< TImageIO >
 template< typename TImageIO >
 void
 ImageIOBaseJSBinding< TImageIO >
+::WriteImageInformation()
+{
+  return this->m_ImageIO->WriteImageInformation();
+}
+
+
+template< typename TImageIO >
+void
+ImageIOBaseJSBinding< TImageIO >
 ::SetDimensions( unsigned int i, unsigned long dimension )
 {
   this->m_ImageIO->SetDimensions( i, dimension );

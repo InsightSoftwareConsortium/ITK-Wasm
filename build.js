@@ -34,7 +34,7 @@ try {
 } catch(err) {
   if (err.code == 'ENOENT') {
     const output = fs.openSync(dockcross, 'w')
-    dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js'], {
+    dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js:latest'], {
       env: process.env,
       stdio: [ 'ignore', output, null ]
     })
@@ -54,7 +54,7 @@ try {
 } catch(err) {
   if (err.code == 'ENOENT') {
     console.log('Running CMake configuration...')
-    const cmakeCall = spawnSync(dockcross, ['cmake', '-DCMAKE_BUILD_TYPE=Release', '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build'], {
+    const cmakeCall = spawnSync(dockcross, ['cmake', '-DRapidJSON_INCLUDE_DIR=/rapidjson/include', '-DCMAKE_BUILD_TYPE=Release', '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build'], {
       env: process.env,
       stdio: 'inherit'
     })

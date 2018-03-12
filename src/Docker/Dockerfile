@@ -31,5 +31,10 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
+ENV RAPIDJSON_GIT_TAG v1.1.0
+RUN git clone https://github.com/Tencent/rapidjson.git && \
+  cd rapidjson && \
+  git checkout ${RAPIDJSON_GIT_TAG}
+
 ENV DEFAULT_DOCKCROSS_IMAGE insighttoolkit/itk-js
 WORKDIR /work

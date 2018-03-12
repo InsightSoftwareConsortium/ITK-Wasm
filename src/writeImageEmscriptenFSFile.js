@@ -37,6 +37,8 @@ const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => 
 
   imageIO.SetUseCompression(useCompression)
 
+  imageIO.WriteImageInformation()
+
   // Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
   const numberOfBytes = image.data.length * image.data.BYTES_PER_ELEMENT
   const dataPtr = module._malloc(numberOfBytes)

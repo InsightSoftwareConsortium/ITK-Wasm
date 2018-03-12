@@ -1,7 +1,24 @@
+find_path(RapidJSON_INCLUDE_DIR
+  NAMES rapidjson/document.h
+  )
+include_directories(${RapidJSON_INCLUDE_DIR})
+
+set(BridgeJavaScript_SRCS
+  itkJSONImageIOFactory.cxx
+  itkJSONImageIO.cxx
+  )
+itk_module_add_library(BridgeJavaScript ${BridgeJavaScript_SRCS})
+
 set(ImageIOIndex_ARRAY "")
-foreach(io_module ${BridgeJavaScript_ImageIOModules})
-  find_package(ITK REQUIRED COMPONENTS ${io_module})
-  include(${ITK_USE_FILE})
+foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
+  if(${io_module} STREQUAL "BridgeJavaScript")
+    find_package(ITK REQUIRED COMPONENTS ITKIOImageBase)
+    include(${ITK_USE_FILE})
+    list(APPEND ITK_LIBRARIES ${BridgeJavaScript_LIBRARIES})
+  else()
+    find_package(ITK REQUIRED COMPONENTS ${io_module})
+    include(${ITK_USE_FILE})
+  endif()
 
   if(NOT DEFINED imageios_${io_module})
     message(FATAL_ERROR "Unknown ImageIOBase classes for module ${io_module}")
