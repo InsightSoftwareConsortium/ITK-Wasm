@@ -52,6 +52,8 @@ EMSCRIPTEN_BINDINGS(itk_gdcm_image_io_js_binding) {
     .value("INT", itk::ImageIOBase::INT)
     .value("ULONG", itk::ImageIOBase::ULONG)
     .value("LONG", itk::ImageIOBase::LONG)
+    .value("ULONGLONG", itk::ImageIOBase::ULONGLONG)
+    .value("LONGLONG", itk::ImageIOBase::LONGLONG)
     .value("FLOAT", itk::ImageIOBase::FLOAT)
     .value("DOUBLE", itk::ImageIOBase::DOUBLE)
     ;
@@ -63,6 +65,7 @@ EMSCRIPTEN_BINDINGS(itk_gdcm_image_io_js_binding) {
   .function("GetFileName", &GDCMImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &GDCMImageIOJSBindingType::CanReadFile)
   .function("ReadImageInformation", &GDCMImageIOJSBindingType::ReadImageInformation)
+  .function("WriteImageInformation", &GDCMImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &GDCMImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &GDCMImageIOJSBindingType::GetDimensions)
   .function("SetOrigin", &GDCMImageIOJSBindingType::SetOrigin)
