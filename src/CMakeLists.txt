@@ -122,10 +122,10 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
   if(NOT DEFINED meshios_${io_module})
     message(FATAL_ERROR "Unknown MeshIOBase classes for module ${io_module}")
   endif()
-  foreach(imageio ${meshios_${io_module}})
-    set(MeshIOIndex_ARRAY "${MeshIOIndex_ARRAY}'${imageio}JSBinding', ")
-    set(target ${imageio}JSBinding)
-    set(wasm_target ${imageio}JSBindingWasm)
+  foreach(meshio ${meshios_${io_module}})
+    set(MeshIOIndex_ARRAY "${MeshIOIndex_ARRAY}'${meshio}JSBinding', ")
+    set(target ${meshio}JSBinding)
+    set(wasm_target ${meshio}JSBindingWasm)
     add_executable(${target} Bindings/${target}.cxx)
     itk_module_target_label(${target})
     itk_module_target_export(${target})
@@ -144,7 +144,7 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
     set_property(TARGET ${target} APPEND_STRING
       PROPERTY LINK_FLAGS " -s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSMeshIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSIOPost.js"
       )
-    set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSMeshIOPre${imageio}.js)
+    set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSMeshIOPre${meshio}.js)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSMeshIOPre.js.in
       ${pre_js} @ONLY)
     set_property(TARGET ${wasm_target} APPEND_STRING

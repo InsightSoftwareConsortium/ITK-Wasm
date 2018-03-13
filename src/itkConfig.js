@@ -2,7 +2,8 @@
 // '../ImageIOs' relative to webWorkersPath
 let itkConfig = {
   webWorkersPath: 'itk/WebWorkers',
-  imageIOsPath: '../../itk/ImageIOs'
+  imageIOsPath: '../../itk/ImageIOs',
+  meshIOsPath: '../../itk/MeshIOs',
 }
 
 module.exports = itkConfig
