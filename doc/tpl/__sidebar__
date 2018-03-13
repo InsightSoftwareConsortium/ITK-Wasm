@@ -5,6 +5,7 @@ docs:
 examples:
   building:
     nodejs: node.html
+    webpack: webpack.html
 
 api:
   inputoutput:
