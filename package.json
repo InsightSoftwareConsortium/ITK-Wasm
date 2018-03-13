@@ -14,7 +14,8 @@
     "commit": "git cz",
     "build": "node ./build.js",
     "test": "./build/dockcross bash -c \"cd build && ctest -V\" && standard \"src/*.js\" \"test/**/*.js\" && ava \"test/*.js\" && npm run browser-test",
-    "browser-test": "karma start ./karma.conf.js"
+    "browser-test": "karma start ./karma.conf.js",
+    "browser-test:debug": "karma start ./karma.conf.js --no-single-run"
   },
   "config": {
     "commitizen": {

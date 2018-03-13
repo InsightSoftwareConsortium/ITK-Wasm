@@ -3,7 +3,7 @@ const PromiseFileReader = require('promise-file-reader')
 
 const config = require('./itkConfig.js')
 
-const worker = new window.Worker(config.webWorkersPath + '/ImageIOWorker.js')
+const worker = new window.Worker(config.webWorkersPath + '/ImageIO.worker.js')
 const promiseWorker = new WebworkerPromise(worker)
 
 const readImageFile = (file) => {

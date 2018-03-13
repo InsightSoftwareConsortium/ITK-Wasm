@@ -23,6 +23,7 @@ module.exports = function init(config) {
       './node_modules/babel-polyfill/dist/polyfill.min.js',
       './test/Browser/tests.js',
       { pattern: './dist/ImageIOs/**', watched: true, served: true, included: false },
+      { pattern: './dist/MeshIOs/**', watched: true, served: true, included: false },
       { pattern: './dist/WebWorkers/**', watched: true, served: true, included: false },
       { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false },
     ],
