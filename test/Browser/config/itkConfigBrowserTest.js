@@ -1,7 +1,5 @@
 const itkConfig = {
-  webWorkersPath: '/base/dist/WebWorkers',
-  imageIOsPath: '/base/dist/ImageIOs',
-  meshIOsPath: '/base/dist/MeshIOs'
+  itkModulesPath: '/base/dist'
 }
 
-module.exports = itkConfig
+export default itkConfig

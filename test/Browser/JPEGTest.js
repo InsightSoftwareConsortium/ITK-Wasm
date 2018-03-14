@@ -1,11 +1,11 @@
-const test = require('tape')
-const axios = require('axios')
+import test from 'tape'
+import axios from 'axios'
 
-const IntTypes = require('IntTypes.js')
-const PixelTypes = require('PixelTypes.js')
-const readImageFile = require('readImageFile.js')
+import IntTypes from 'IntTypes'
+import PixelTypes from 'PixelTypes'
+import readImageFile from 'readImageFile'
 
-const getMatrixElement = require('getMatrixElement.js')
+import getMatrixElement from 'getMatrixElement'
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')

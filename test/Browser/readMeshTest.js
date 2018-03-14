@@ -1,14 +1,12 @@
-const test = require('tape')
-const axios = require('axios')
+import test from 'tape'
+import axios from 'axios'
 
-const PromiseFileReader = require('promise-file-reader')
+import readMeshArrayBuffer from 'readMeshArrayBuffer'
+import readMeshBlob from 'readMeshBlob'
+import readMeshFile from 'readMeshFile'
 
-const readMeshArrayBuffer = require('readMeshArrayBuffer.js')
-const readMeshBlob = require('readMeshBlob.js')
-const readMeshFile = require('readMeshFile.js')
-
-const IntTypes = require('IntTypes.js')
-const FloatTypes = require('FloatTypes.js')
+import IntTypes from 'IntTypes'
+import FloatTypes from 'FloatTypes'
 
 const fileName = 'cow.vtk'
 const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
@@ -35,15 +33,15 @@ test('readMeshArrayBuffer reads an ArrayBuffer', (t) => {
 })
 
 // Todo: fix me
-//test('readMeshFile reads a Blob without a file extension', (t) => {
-  //return axios.get(testFilePath, {responseType: 'blob'})
-  //.then(function (response) {
-    //return readMeshBlob(response.data, 'cow')
-  //})
-  //.then(function (mesh) {
-    //verifyMesh(t, mesh)
-  //})
-//})
+// test('readMeshFile reads a Blob without a file extension', (t) => {
+  // return axios.get(testFilePath, {responseType: 'blob'})
+  // .then(function (response) {
+    // return readMeshBlob(response.data, 'cow')
+  // })
+  // .then(function (mesh) {
+    // verifyMesh(t, mesh)
+  // })
+// })
 
 test('readMeshBlob reads a Blob', (t) => {
   return axios.get(testFilePath, {responseType: 'blob'})
@@ -54,7 +52,6 @@ test('readMeshBlob reads a Blob', (t) => {
     verifyMesh(t, mesh)
   })
 })
-
 
 test('readMeshFile reads a File', (t) => {
   return axios.get(testFilePath, {responseType: 'blob'}).then(function (response) {

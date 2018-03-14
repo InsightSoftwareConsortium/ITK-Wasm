@@ -1,9 +1,9 @@
-const WebworkerPromise = require('webworker-promise')
-const PromiseFileReader = require('promise-file-reader')
+import WebworkerPromise from 'webworker-promise'
+import PromiseFileReader from 'promise-file-reader'
 
-const config = require('./itkConfig.js')
+import config from './itkConfig'
 
-const worker = new window.Worker(config.webWorkersPath + '/ImageIO.worker.js')
+const worker = new window.Worker(config.itkModulesPath + '/WebWorkers/ImageIO.worker.js')
 const promiseWorker = new WebworkerPromise(worker)
 
 const readImageFile = (file) => {
@@ -14,4 +14,4 @@ const readImageFile = (file) => {
     })
 }
 
-module.exports = readImageFile
+export default readImageFile

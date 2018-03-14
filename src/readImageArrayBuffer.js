@@ -1,8 +1,8 @@
-const WebworkerPromise = require('webworker-promise')
+import WebworkerPromise from 'webworker-promise'
 
-const config = require('./itkConfig.js')
+import config from './itkConfig'
 
-const worker = new window.Worker(config.webWorkersPath + '/ImageIO.worker.js')
+const worker = new window.Worker(config.itkModulesPath + '/WebWorkers/ImageIO.worker.js')
 const promiseWorker = new WebworkerPromise(worker)
 
 /**
@@ -17,4 +17,4 @@ const readImageArrayBuffer = (arrayBuffer, fileName, mimeType) => {
     [arrayBuffer])
 }
 
-module.exports = readImageArrayBuffer
+export default readImageArrayBuffer

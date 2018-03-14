@@ -1,8 +1,8 @@
-const WebworkerPromise = require('webworker-promise')
+import WebworkerPromise from 'webworker-promise'
 
-const config = require('./itkConfig.js')
+import config from './itkConfig'
 
-const worker = new window.Worker(config.webWorkersPath + '/MeshIO.worker.js')
+const worker = new window.Worker(config.itkModulesPath + '/WebWorkers/MeshIO.worker.js')
 const promiseWorker = new WebworkerPromise(worker)
 
 const readMeshArrayBuffer = (arrayBuffer, fileName, mimeType) => {
@@ -10,4 +10,4 @@ const readMeshArrayBuffer = (arrayBuffer, fileName, mimeType) => {
     [arrayBuffer])
 }
 
-module.exports = readMeshArrayBuffer
+export default readMeshArrayBuffer

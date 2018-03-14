@@ -1,21 +1,21 @@
-const registerWebworker = require('webworker-promise/lib/register')
+import registerWebworker from 'webworker-promise/lib/register'
 
-const ImageType = require('../ImageType.js')
-const Image = require('../Image.js')
+import ImageType from '../ImageType'
+import Image from '../Image'
 
-const mimeToIO = require('../MimeToImageIO.js')
-const getFileExtension = require('../getFileExtension.js')
-const extensionToIO = require('../extensionToImageIO.js')
-const ImageIOIndex = require('../ImageIOIndex.js')
+import mimeToIO from '../MimeToImageIO'
+import getFileExtension from '../getFileExtension'
+import extensionToIO from '../extensionToImageIO'
+import ImageIOIndex from '../ImageIOIndex'
 
-const readImageEmscriptenFSFile = require('../readImageEmscriptenFSFile.js')
-const writeImageEmscriptenFSFile = require('../writeImageEmscriptenFSFile.js')
-const readImageEmscriptenFSDICOMFileSeries = require('../readImageEmscriptenFSDICOMFileSeries.js')
+import readImageEmscriptenFSFile from '../readImageEmscriptenFSFile'
+import writeImageEmscriptenFSFile from '../writeImageEmscriptenFSFile'
+import readImageEmscriptenFSDICOMFileSeries from '../readImageEmscriptenFSDICOMFileSeries'
 
-const loadEmscriptenModule = (imageIOsPath, io) => {
-  let modulePath = imageIOsPath + '/' + io + '.js'
+const loadEmscriptenModule = (itkModulesPath, io) => {
+  let modulePath = itkModulesPath + '/ImageIOs/' + io + '.js'
   if (typeof WebAssembly === 'object' && typeof WebAssembly.Memory === 'function') {
-    modulePath = imageIOsPath + '/' + io + 'Wasm.js'
+    modulePath = itkModulesPath + '/ImageIOs/' + io + 'Wasm.js'
   }
   importScripts(modulePath)
   return Module
@@ -40,7 +40,7 @@ const readImage = (input, withTransferList) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.imageIOsPath, trialIO)
+        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, trialIO)
         ioModule = ioToModule[trialIO]
       }
       const imageIO = new ioModule.ITKImageIO()
@@ -67,7 +67,7 @@ const readImage = (input, withTransferList) => {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.imageIOsPath, io)
+    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, io)
     ioModule = ioToModule[io]
   }
 
@@ -97,7 +97,7 @@ const writeImage = (input, withTransferList) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.imageIOsPath, trialIO)
+        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, trialIO)
         ioModule = ioToModule[trialIO]
       }
       const imageIO = new ioModule.ITKImageIO()
@@ -118,7 +118,7 @@ const writeImage = (input, withTransferList) => {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.imageIOsPath, io)
+    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, io)
     ioModule = ioToModule[io]
   }
 
@@ -134,7 +134,7 @@ const writeImage = (input, withTransferList) => {
 const readDICOMImageSeries = (input, withTransferList) => {
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
   if(!seriesReaderModule) {
-    seriesReaderModule = loadEmscriptenModule(input.config.imageIOsPath, seriesReader)
+    seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, seriesReader)
   }
 
   const blobs = input.fileDescriptions.map((fileDescription) => {

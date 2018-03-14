@@ -1,11 +1,11 @@
-const test = require('tape')
-const axios = require('axios')
+import test from 'tape'
+import axios from 'axios'
 
-const IntTypes = require('IntTypes.js')
-const PixelTypes = require('PixelTypes.js')
-const readImageDICOMFileSeries = require('readImageDICOMFileSeries.js')
+import IntTypes from 'IntTypes'
+import PixelTypes from 'PixelTypes'
+import readImageDICOMFileSeries from 'readImageDICOMFileSeries'
 
-const getMatrixElement = require('getMatrixElement.js')
+import getMatrixElement from 'getMatrixElement'
 
 test('Test reading DICOM file series', t => {
   const testSeriesDirectory = 'base/build/ExternalData/test/Input/DicomImageOrientationTest/'
