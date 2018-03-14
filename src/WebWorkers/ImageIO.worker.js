@@ -1,8 +1,5 @@
 import registerWebworker from 'webworker-promise/lib/register'
 
-import ImageType from '../ImageType'
-import Image from '../Image'
-
 import mimeToIO from '../MimeToImageIO'
 import getFileExtension from '../getFileExtension'
 import extensionToIO from '../extensionToImageIO'
@@ -27,6 +24,7 @@ let seriesReaderModule = null
 
 const readImage = (input, withTransferList) => {
   const extension = getFileExtension(input.name)
+  const mountpoint = '/work'
 
   let io = null
   if (mimeToIO.hasOwnProperty(input.type)) {
@@ -46,7 +44,6 @@ const readImage = (input, withTransferList) => {
       const imageIO = new ioModule.ITKImageIO()
       const blob = new Blob([input.data])
       const blobs = [{ name: input.name, data: blob }]
-      const mountpoint = '/work'
       ioModule.mountBlobs(mountpoint, blobs)
       const filePath = mountpoint + '/' + input.name
       imageIO.SetFileName(filePath)
@@ -73,7 +70,6 @@ const readImage = (input, withTransferList) => {
 
   const blob = new Blob([input.data])
   const blobs = [{ name: input.name, data: blob }]
-  const mountpoint = '/work'
   ioModule.mountBlobs(mountpoint, blobs)
   const filePath = mountpoint + '/' + input.name
   const image = readImageEmscriptenFSFile(ioModule, filePath)
@@ -84,6 +80,7 @@ const readImage = (input, withTransferList) => {
 
 const writeImage = (input, withTransferList) => {
   const extension = getFileExtension(input.name)
+  const mountpoint = '/work'
 
   let io = null
   if (mimeToIO.hasOwnProperty(input.type)) {
@@ -122,18 +119,17 @@ const writeImage = (input, withTransferList) => {
     ioModule = ioToModule[io]
   }
 
-  const mountpoint = '/work'
   const filePath = mountpoint + '/' + input.name
   ioModule.mkdirs(mountpoint)
   writeImageEmscriptenFSFile(ioModule, input.useCompression, input.image, filePath)
-  const writtenFile = ioModule.readFile(filePath, { encoding: "binary" })
+  const writtenFile = ioModule.readFile(filePath, { encoding: 'binary' })
 
   return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }
 
 const readDICOMImageSeries = (input, withTransferList) => {
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
-  if(!seriesReaderModule) {
+  if (!seriesReaderModule) {
     seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, seriesReader)
   }
 
@@ -152,11 +148,11 @@ const readDICOMImageSeries = (input, withTransferList) => {
 }
 
 registerWebworker(function (input) {
-  if (input.operation === "readImage") {
+  if (input.operation === 'readImage') {
     return Promise.resolve(readImage(input))
-  } else if (input.operation === "writeImage") {
+  } else if (input.operation === 'writeImage') {
     return Promise.resolve(writeImage(input))
-  } else if (input.operation === "readDICOMImageSeries") {
+  } else if (input.operation === 'readDICOMImageSeries') {
     return Promise.resolve(readDICOMImageSeries(input))
   } else {
     return Promise.resolve(new Error('Unknown worker operation'))
