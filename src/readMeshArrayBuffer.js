@@ -6,7 +6,14 @@ const worker = new window.Worker(config.itkModulesPath + '/WebWorkers/MeshIO.wor
 const promiseWorker = new WebworkerPromise(worker)
 
 const readMeshArrayBuffer = (arrayBuffer, fileName, mimeType) => {
-  return promiseWorker.postMessage({ operation: 'readMesh', name: fileName, type: mimeType, data: arrayBuffer, config: config },
+  return promiseWorker.postMessage(
+    {
+      operation: 'readMesh',
+      name: fileName,
+      type: mimeType,
+      data: arrayBuffer,
+      config
+    },
     [arrayBuffer])
 }
 

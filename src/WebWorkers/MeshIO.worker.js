@@ -1,8 +1,5 @@
 import registerWebworker from 'webworker-promise/lib/register'
 
-import MeshType from '../MeshType'
-import Mesh from '../Mesh'
-
 import mimeToIO from '../MimeToMeshIO'
 import getFileExtension from '../getFileExtension'
 import extensionToIO from '../extensionToMeshIO'
@@ -23,8 +20,9 @@ const loadEmscriptenModule = (itkModulesPath, io) => {
 // To cache loaded io modules
 let ioToModule = {}
 
-const readMesh = (input, withTransferList) => {
+const readMesh = (input) => {
   const extension = getFileExtension(input.name)
+  const mountpoint = '/work'
 
   let io = null
   if (mimeToIO.hasOwnProperty(input.type)) {
@@ -44,7 +42,6 @@ const readMesh = (input, withTransferList) => {
       const meshIO = new ioModule.ITKMeshIO()
       const blob = new Blob([input.data])
       const blobs = [{ name: input.name, data: blob }]
-      const mountpoint = '/work'
       ioModule.mountBlobs(mountpoint, blobs)
       const filePath = mountpoint + '/' + input.name
       meshIO.SetFileName(filePath)
@@ -71,30 +68,30 @@ const readMesh = (input, withTransferList) => {
 
   const blob = new Blob([input.data])
   const blobs = [{ name: input.name, data: blob }]
-  const mountpoint = '/work'
   ioModule.mountBlobs(mountpoint, blobs)
   const filePath = mountpoint + '/' + input.name
   const mesh = readMeshEmscriptenFSFile(ioModule, filePath)
   ioModule.unmountBlobs(mountpoint)
 
   const transferables = []
-  if(mesh.points.buffer) {
+  if (mesh.points.buffer) {
     transferables.push(mesh.points.buffer)
   }
-  if(mesh.pointData.buffer) {
+  if (mesh.pointData.buffer) {
     transferables.push(mesh.pointData.buffer)
   }
-  if(mesh.cells.buffer) {
+  if (mesh.cells.buffer) {
     transferables.push(mesh.cells.buffer)
   }
-  if(mesh.cellData.buffer) {
+  if (mesh.cellData.buffer) {
     transferables.push(mesh.cellData.buffer)
   }
   return new registerWebworker.TransferableResponse(mesh, transferables)
 }
 
-const writeMesh = (input, withTransferList) => {
+const writeMesh = (input) => {
   const extension = getFileExtension(input.name)
+  const mountpoint = '/work'
 
   let io = null
   if (mimeToIO.hasOwnProperty(input.type)) {
@@ -133,19 +130,20 @@ const writeMesh = (input, withTransferList) => {
     ioModule = ioToModule[io]
   }
 
-  const mountpoint = '/work'
   const filePath = mountpoint + '/' + input.name
   ioModule.mkdirs(mountpoint)
-  writeMeshEmscriptenFSFile(ioModule, input.useCompression, input.mesh, filePath)
-  const writtenFile = ioModule.readFile(filePath, { encoding: "binary" })
+  writeMeshEmscriptenFSFile(ioModule,
+    { useCompression: input.useCompression, binaryFileType: input.binaryFileType },
+    input.mesh, filePath)
+  const writtenFile = ioModule.readFile(filePath, { encoding: 'binary' })
 
   return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }
 
 registerWebworker(function (input) {
-  if (input.operation === "readMesh") {
+  if (input.operation === 'readMesh') {
     return Promise.resolve(readMesh(input))
-  } else if (input.operation === "writeMesh") {
+  } else if (input.operation === 'writeMesh') {
     return Promise.resolve(writeMesh(input))
   } else {
     return Promise.resolve(new Error('Unknown worker operation'))
