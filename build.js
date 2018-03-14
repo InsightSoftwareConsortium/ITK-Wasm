@@ -102,15 +102,12 @@ let wasmFiles = glob.sync(path.join('build', 'ImageIOs', '*.wasm'))
 imageIOFiles = imageIOFiles.concat(wasmFiles)
 const copyImageIOModules = function (imageIOFile, callback) {
   let io = path.basename(imageIOFile)
-  console.log('Copying ' + io + ' ...')
   let output = path.join('dist', 'ImageIOs', io)
-
   fs.copySync(imageIOFile, output)
-
-  console.log(io + ' copy complete')
   callback(null, io)
 }
 const buildImageIOsParallel = function (callback) {
+  console.log('Copying ImageIO modules...')
   result = asyncMod.map(imageIOFiles, copyImageIOModules)
   callback(null, result)
 }
@@ -119,30 +116,24 @@ wasmFiles = glob.sync(path.join('build', 'MeshIOs', '*.wasm'))
 meshIOFiles = meshIOFiles.concat(wasmFiles)
 const copyMeshIOModules = function (meshIOFile, callback) {
   let io = path.basename(meshIOFile)
-  console.log('Copying ' + io + ' ...')
   let output = path.join('dist', 'MeshIOs', io)
-
   fs.copySync(meshIOFile, output)
-
-  console.log(io + ' copy complete')
   callback(null, io)
 }
 const buildMeshIOsParallel = function (callback) {
+  console.log('Copying MeshIO modules...')
   result = asyncMod.map(meshIOFiles, copyMeshIOModules)
   callback(null, result)
 }
 
 const copySources = ramda.curry(function (sourceSubDir, sourceFile, callback) {
   let source = path.basename(sourceFile)
-  console.log('Copying ' + source + ' ...')
   let output = path.join('dist', sourceSubDir, source)
-
   fs.copySync(sourceFile, output)
-
-  console.log(source + ' copy complete')
   callback(null, source)
 })
 const copyMainSources = function (callback) {
+  console.log('Copying main sources...')
   const sourceFiles = glob.sync(path.join('src', '*.js'))
   const copier = copySources('.')
   const result = asyncMod.map(sourceFiles, copier)
@@ -153,18 +144,16 @@ const browserify = require('browserify')
 const browserifyBuild = ramda.curry(function (outputDir, es6File, callback) {
   let basename = path.basename(es6File)
   let output = path.join(outputDir, basename)
-  console.log('Converting ' + basename + ' ...')
   const bundler = browserify(es6File)
   bundler.transform({global: true}, 'uglifyify')
   bundler
     .transform('babelify', {presets: ['es2015']})
     .bundle()
     .pipe(fs.createWriteStream(output))
-
-  console.log(basename + ' conversion complete')
   callback(null, basename)
 })
 const browserifyWebWorkerBuildParallel = function (callback) {
+  console.log('Converting WebWorker sources...')
   const es6Files = glob.sync(path.join('src', 'WebWorkers', '*.js'))
   const outputDir = path.join('dist', 'WebWorkers')
   builder = browserifyBuild(outputDir)
