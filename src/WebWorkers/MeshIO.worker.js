@@ -20,7 +20,7 @@ const loadEmscriptenModule = (itkModulesPath, io) => {
 // To cache loaded io modules
 let ioToModule = {}
 
-const readMesh = (input, withTransferList) => {
+const readMesh = (input) => {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -89,7 +89,7 @@ const readMesh = (input, withTransferList) => {
   return new registerWebworker.TransferableResponse(mesh, transferables)
 }
 
-const writeMesh = (input, withTransferList) => {
+const writeMesh = (input) => {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 

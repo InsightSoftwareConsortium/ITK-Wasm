@@ -22,7 +22,7 @@ const loadEmscriptenModule = (itkModulesPath, io) => {
 let ioToModule = {}
 let seriesReaderModule = null
 
-const readImage = (input, withTransferList) => {
+const readImage = (input) => {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -78,7 +78,7 @@ const readImage = (input, withTransferList) => {
   return new registerWebworker.TransferableResponse(image, [image.data.buffer])
 }
 
-const writeImage = (input, withTransferList) => {
+const writeImage = (input) => {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -127,7 +127,7 @@ const writeImage = (input, withTransferList) => {
   return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }
 
-const readDICOMImageSeries = (input, withTransferList) => {
+const readDICOMImageSeries = (input) => {
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
   if (!seriesReaderModule) {
     seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, seriesReader)
