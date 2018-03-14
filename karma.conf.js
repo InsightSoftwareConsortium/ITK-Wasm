@@ -45,7 +45,7 @@ module.exports = function init(config) {
           sourcePath,
         ],
         alias: {
-          './itkConfig.js': path.resolve(__dirname, 'test', 'Browser', 'config', 'itkConfigBrowserTest.js'),
+          './itkConfig$': path.resolve(__dirname, 'test', 'Browser', 'config', 'itkConfigBrowserTest.js'),
         },
       },
       plugins: [

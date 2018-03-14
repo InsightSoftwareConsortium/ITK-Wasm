@@ -1,9 +1,9 @@
-const WebworkerPromise = require('webworker-promise')
-const PromiseFileReader = require('promise-file-reader')
+import WebworkerPromise from 'webworker-promise'
+import PromiseFileReader from 'promise-file-reader'
 
-const config = require('./itkConfig.js')
+import config from './itkConfig'
 
-const worker = new window.Worker(config.webWorkersPath + '/MeshIO.worker.js')
+const worker = new window.Worker(config.itkModulesPath + '/WebWorkers/MeshIO.worker.js')
 const promiseWorker = new WebworkerPromise(worker)
 
 const readMeshBlob = (blob, fileName, mimeType) => {
@@ -14,4 +14,4 @@ const readMeshBlob = (blob, fileName, mimeType) => {
     })
 }
 
-module.exports = readMeshBlob
+export default readMeshBlob

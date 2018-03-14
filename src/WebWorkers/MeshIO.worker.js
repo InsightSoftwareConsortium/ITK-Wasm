@@ -1,20 +1,20 @@
-const registerWebworker = require('webworker-promise/lib/register')
+import registerWebworker from 'webworker-promise/lib/register'
 
-const MeshType = require('../MeshType.js')
-const Mesh = require('../Mesh.js')
+import MeshType from '../MeshType'
+import Mesh from '../Mesh'
 
-const mimeToIO = require('../MimeToMeshIO.js')
-const getFileExtension = require('../getFileExtension.js')
-const extensionToIO = require('../extensionToMeshIO.js')
-const MeshIOIndex = require('../MeshIOIndex.js')
+import mimeToIO from '../MimeToMeshIO'
+import getFileExtension from '../getFileExtension'
+import extensionToIO from '../extensionToMeshIO'
+import MeshIOIndex from '../MeshIOIndex'
 
-const readMeshEmscriptenFSFile = require('../readMeshEmscriptenFSFile.js')
-const writeMeshEmscriptenFSFile = require('../writeMeshEmscriptenFSFile.js')
+import readMeshEmscriptenFSFile from '../readMeshEmscriptenFSFile'
+import writeMeshEmscriptenFSFile from '../writeMeshEmscriptenFSFile'
 
-const loadEmscriptenModule = (meshIOsPath, io) => {
-  let modulePath = meshIOsPath + '/' + io + '.js'
+const loadEmscriptenModule = (itkModulesPath, io) => {
+  let modulePath = itkModulesPath + '/MeshIOs/' + io + '.js'
   if (typeof WebAssembly === 'object' && typeof WebAssembly.Memory === 'function') {
-    modulePath = meshIOsPath + '/' + io + 'Wasm.js'
+    modulePath = itkModulesPath + '/MeshIOs/' + io + 'Wasm.js'
   }
   importScripts(modulePath)
   return Module
@@ -38,7 +38,7 @@ const readMesh = (input, withTransferList) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.meshIOsPath, trialIO)
+        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, trialIO)
         ioModule = ioToModule[trialIO]
       }
       const meshIO = new ioModule.ITKMeshIO()
@@ -65,7 +65,7 @@ const readMesh = (input, withTransferList) => {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.meshIOsPath, io)
+    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, io)
     ioModule = ioToModule[io]
   }
 
@@ -108,7 +108,7 @@ const writeMesh = (input, withTransferList) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.meshIOsPath, trialIO)
+        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, trialIO)
         ioModule = ioToModule[trialIO]
       }
       const meshIO = new ioModule.ITKMeshIO()
@@ -129,7 +129,7 @@ const writeMesh = (input, withTransferList) => {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.meshIOsPath, io)
+    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, io)
     ioModule = ioToModule[io]
   }
 
