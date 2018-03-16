@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-const loadModule = require(path.resolve(__dirname, '..', 'dist', 'loadEmscriptenModule.js'))
+const loadModule = require(path.resolve(__dirname, '..', 'dist', 'loadEmscriptenModuleNode.js'))
 
 test('load a module', t => {
   const imageIOsPath = path.resolve(__dirname, '..', 'dist', 'ImageIOs')
