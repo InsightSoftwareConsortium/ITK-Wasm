@@ -4,18 +4,10 @@ import mimeToIO from '../MimeToMeshIO'
 import getFileExtension from '../getFileExtension'
 import extensionToIO from '../extensionToMeshIO'
 import MeshIOIndex from '../MeshIOIndex'
+import loadEmscriptenModule from '../loadEmscriptenModuleBrowser'
 
 import readMeshEmscriptenFSFile from '../readMeshEmscriptenFSFile'
 import writeMeshEmscriptenFSFile from '../writeMeshEmscriptenFSFile'
-
-const loadEmscriptenModule = (itkModulesPath, io) => {
-  let modulePath = itkModulesPath + '/MeshIOs/' + io + '.js'
-  if (typeof WebAssembly === 'object' && typeof WebAssembly.Memory === 'function') {
-    modulePath = itkModulesPath + '/MeshIOs/' + io + 'Wasm.js'
-  }
-  importScripts(modulePath)
-  return Module
-}
 
 // To cache loaded io modules
 let ioToModule = {}
@@ -36,7 +28,7 @@ const readMesh = (input) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, trialIO)
+        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO)
         ioModule = ioToModule[trialIO]
       }
       const meshIO = new ioModule.ITKMeshIO()
@@ -62,7 +54,7 @@ const readMesh = (input) => {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, io)
+    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io)
     ioModule = ioToModule[io]
   }
 
@@ -105,7 +97,7 @@ const writeMesh = (input) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, trialIO)
+        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO)
         ioModule = ioToModule[trialIO]
       }
       const meshIO = new ioModule.ITKMeshIO()
@@ -126,7 +118,7 @@ const writeMesh = (input) => {
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, io)
+    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io)
     ioModule = ioToModule[io]
   }
 

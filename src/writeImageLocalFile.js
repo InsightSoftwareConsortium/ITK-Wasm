@@ -6,7 +6,7 @@ const getFileExtension = require('./getFileExtension.js')
 const extensionToIO = require('./extensionToImageIO.js')
 const ImageIOIndex = require('./ImageIOIndex.js')
 
-const loadEmscriptenModule = require('./loadEmscriptenModule.js')
+const loadEmscriptenModule = require('./loadEmscriptenModuleNode.js')
 const writeImageEmscriptenFSFile = require('./writeImageEmscriptenFSFile.js')
 
 /**

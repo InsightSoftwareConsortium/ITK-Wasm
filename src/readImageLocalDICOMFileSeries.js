@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 
-const loadEmscriptenModule = require('./loadEmscriptenModule.js')
+const loadEmscriptenModule = require('./loadEmscriptenModuleNode.js')
 const readImageEmscriptenFSDICOMFileSeries = require('./readImageEmscriptenFSDICOMFileSeries.js')
 
 /**

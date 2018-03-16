@@ -6,7 +6,7 @@ const getFileExtension = require('./getFileExtension.js')
 const extensionToIO = require('./extensionToMeshIO.js')
 const MeshIOIndex = require('./MeshIOIndex.js')
 
-const loadEmscriptenModule = require('./loadEmscriptenModule.js')
+const loadEmscriptenModule = require('./loadEmscriptenModuleNode.js')
 const writeMeshEmscriptenFSFile = require('./writeMeshEmscriptenFSFile.js')
 
 /**
