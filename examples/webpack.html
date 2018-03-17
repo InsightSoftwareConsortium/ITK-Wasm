@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>Using itk.js in a web browser application via Webpack | itk-js</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://InsightSoftwareConsortium.github.io/itk-js/examples/webpack.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://InsightSoftwareConsortium.github.io/itk-js/examples/webpack.html">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/itk-js/icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/itk-js/icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/itk-js/icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/itk-js/icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/itk-js/icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/itk-js/icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/itk-js/icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/itk-js/icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="/itk-js/icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="/itk-js/icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/itk-js/icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/itk-js/icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/itk-js/icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="/itk-js/icon/mstile-144x144.png">
+  <!-- CSS -->
+  <!-- build:css build/css/navy.css -->
+  <link rel="stylesheet" href="/itk-js/css/navy.css">
+  <!-- endbuild -->
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css">
+  <!-- RSS -->
+  <link rel="alternate" href="/itk-js/atom.xml" title="itk-js">
+  <!-- Open Graph -->
+  <meta name="description" content="This example demonstrates how to use itk.js in a web browser application built with Webpack. Since we asynchronously download the itk.js JavaScript and WebAssembly Emscripten modules, a few extra conf">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Using itk.js in a web browser application via Webpack">
+<meta property="og:url" content="https://InsightSoftwareConsortium.github.io/itk-js/examples/webpack.html">
+<meta property="og:site_name" content="itk-js">
+<meta property="og:description" content="This example demonstrates how to use itk.js in a web browser application built with Webpack. Since we asynchronously download the itk.js JavaScript and WebAssembly Emscripten modules, a few extra conf">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-03-17T02:13:38.315Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using itk.js in a web browser application via Webpack">
+<meta name="twitter:description" content="This example demonstrates how to use itk.js in a web browser application built with Webpack. Since we asynchronously download the itk.js JavaScript and WebAssembly Emscripten modules, a few extra conf">
+  <!-- Google Analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-90338862-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/itk-js/" id="logo">ParaViewWeb</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="/itk-js/docs/" class="main-nav-link">Docs</a><a href="/itk-js/api/" class="main-nav-link">API</a><a href="/itk-js/examples/" class="main-nav-link">Examples</a>
+      <a href="https://github.com/InsightSoftwareConsortium/itk-js" class="main-nav-link"><i class="fa fa-github-alt"></i></a>
+      <div id="search-input-wrap">
+        <div id="search-input-icon">
+          <i class="fa fa-search"></i>
+        </div>
+        <input type="search" id="search-input" placeholder="Search...">
+      </div>
+    </nav>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name">Using itk.js in a web browser application via Webpack</h1>
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <p>This example demonstrates how to use <em>itk.js</em> in a web browser application built with <a href="https://webpack.js.org/" target="_blank" rel="noopener">Webpack</a>.</p>
+<p>Since we asynchronously download the <em>itk.js</em> JavaScript and WebAssembly Emscripten modules, a few extra configuration steps are required.</p>
+<p>This example assumes you are creating a <a href="https://docs.npmjs.com/getting-started/what-is-npm" target="_blank" rel="noopener">Node.js package</a>. If you do not already have a <code>package.json</code> file, <a href="https://docs.npmjs.com/getting-started/using-a-package.json" target="_blank" rel="noopener">create one</a>, first.</p>
+<p>Add <code>itk</code> to your project’s dependencies:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install --save itk</span><br></pre></td></tr></table></figure>
+<p>Then, install Webpack-related development dependencies:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader copy-webpack-plugin babel-loader babel-preset-env</span><br></pre></td></tr></table></figure>
+<p>Next, create a <code>webpack.config.js</code> file like the following:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"><span class="keyword">const</span> CopyPlugin = <span class="built_in">require</span>(<span class="string">'copy-webpack-plugin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> entry = path.join(__dirname, <span class="string">'./src/index.js'</span>)</span><br><span class="line"><span class="keyword">const</span> outputPath = path.join(__dirname, <span class="string">'./dist'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  node: &#123;</span><br><span class="line">    fs: <span class="string">'empty'</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  entry,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: outputPath,</span><br><span class="line">    filename: <span class="string">'index.js'</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123; <span class="attr">test</span>: entry, <span class="attr">loader</span>: <span class="string">'expose-loader?index'</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">test</span>: <span class="regexp">/\.js$/</span>, <span class="attr">loader</span>: <span class="string">'babel-loader'</span> &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> CopyPlugin([</span><br><span class="line">      &#123;</span><br><span class="line">      <span class="keyword">from</span>: path.join(__dirname, <span class="string">'node_modules'</span>, <span class="string">'itk'</span>, <span class="string">'WebWorkers'</span>),</span><br><span class="line">      to: path.join(__dirname, <span class="string">'dist'</span>, <span class="string">'itk'</span>, <span class="string">'WebWorkers'</span>),</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">      <span class="keyword">from</span>: path.join(__dirname, <span class="string">'node_modules'</span>, <span class="string">'itk'</span>, <span class="string">'ImageIOs'</span>),</span><br><span class="line">      to: path.join(__dirname, <span class="string">'dist'</span>, <span class="string">'itk'</span>, <span class="string">'ImageIOs'</span>),</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">      <span class="keyword">from</span>: path.join(__dirname, <span class="string">'node_modules'</span>, <span class="string">'itk'</span>, <span class="string">'MeshIOs'</span>),</span><br><span class="line">      to: path.join(__dirname, <span class="string">'dist'</span>, <span class="string">'itk'</span>, <span class="string">'MeshIOs'</span>),</span><br><span class="line">      &#125;,</span><br><span class="line">    ]),</span><br><span class="line">  ],</span><br><span class="line">  performance: &#123;</span><br><span class="line">      maxAssetSize: <span class="number">10000000</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Replace <code>src/index.js</code> by your <a href="https://webpack.js.org/concepts/#entry" target="_blank" rel="noopener">Webpack entry point</a>. Replace <code>./dist/</code> and the output filename with where you <a href="https://webpack.js.org/concepts/#output" target="_blank" rel="noopener">want Webpack to place the generated JavaScript bundle</a>.</p>
+<p>The <a href="https://github.com/babel/babel-loader" target="_blank" rel="noopener">babel-loader</a> rule will <a href="https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them" target="_blank" rel="noopener">transpile</a> JavaScript from the latest language syntax to a syntax supported by existing browser clients. Configure the target browsers to support with a <code>.babelrc</code> file like the following:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  presets: [</span><br><span class="line">    [<span class="string">'env'</span>, &#123;</span><br><span class="line">      targets: &#123;</span><br><span class="line">        browsers: [<span class="string">'last 2 versions'</span>],</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;],</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The <em>itk.js</em> Emscripten modules are loaded and executed <strong>asynchronously</strong> and <strong>on demand</strong>. This means the client only download the content it needs and the user does not experience interruption of the main user interface thread during computation. However, a few extra configuration steps are required since the modules are not bundled by Webpack.</p>
+<p>The <code>CopyPlugin</code> copies <em>itk.js</em> Emscripten modules to distribute along with your Webpack bundle. In this example, we copy all <em>ImageIOs</em> and <em>MeshIOs</em>. In your project, you may want to copy only the <em>ImageIOs</em> or a subset of the <em>ImageIOs</em>, based on your needs. We also copy the <em>WebWorkers</em>, which asynchronously perform IO or run processing pipelines in a background thread.</p>
+<p>To change the location of the <em>itk.js</em> web worker and Emscripten modules, set the Webpack <code>resolve.alias</code> setting as described in the Karma configuration below.</p>
+<p>Next, define commands to build the project or build the project and start a local development web server in the <em>scripts</em> section of the <code>package.json</code> file,</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: &#123;</span><br><span class="line">  <span class="string">"build"</span>: <span class="string">"webpack --progress --colors -p"</span>,</span><br><span class="line">  <span class="string">"start"</span>: <span class="string">"webpack-dev-server --content-base ./dist/ --watch-content-base"</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>Build the project with</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
+<p>To start the development web server, run</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm run start</span><br></pre></td></tr></table></figure>
+<h2 id="Testing-with-Karma" class="article-heading"><a href="#Testing-with-Karma" class="headerlink" title="Testing with Karma"></a>Testing with Karma<a class="article-anchor" href="#Testing-with-Karma" aria-hidden="true"></a></h2><p>This section described how to configure browser-based testing with the <a href="https://karma-runner.github.io/2.0/index.html" target="_blank" rel="noopener">Karma test runner</a>.</p>
+<p>First, install Karma and a test harness library like <a href="https://github.com/substack/tape" target="_blank" rel="noopener">tape</a>.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install --save-dev karma karma-chrome-launcher karma-tap karma-tap-pretty-reporter karma-webpack tape tap-spec</span><br></pre></td></tr></table></figure>
+<p>Next write a <code>karma.config.js</code> file. The <em>itk.js</em> specific sections of this<br>file are:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">[...]</span><br><span class="line">    files: [</span><br><span class="line">      <span class="string">'./test/index.js'</span>,</span><br><span class="line">      &#123; <span class="attr">pattern</span>: <span class="string">'./dist/itk/ImageIOs/**'</span>, <span class="attr">watched</span>: <span class="literal">true</span>, <span class="attr">served</span>: <span class="literal">true</span>, <span class="attr">included</span>: <span class="literal">false</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">pattern</span>: <span class="string">'./dist/itk/MeshIOs/**'</span>, <span class="attr">watched</span>: <span class="literal">true</span>, <span class="attr">served</span>: <span class="literal">true</span>, <span class="attr">included</span>: <span class="literal">false</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">pattern</span>: <span class="string">'./dist/itk/WebWorkers/**'</span>, <span class="attr">watched</span>: <span class="literal">true</span>, <span class="attr">served</span>: <span class="literal">true</span>, <span class="attr">included</span>: <span class="literal">false</span> &#125;,</span><br><span class="line">    ],</span><br><span class="line">[...]</span><br></pre></td></tr></table></figure>
+<p>Here, <code>./test/index.js</code> can be replaced by the path to your testing module. We also serve the <em>itk.js</em> Emscripten and web worker files with Karma’s web server.</p>
+<p>Since Karma’s web server serves its files in <code>/base</code> by default, and our files are also in the <code>./dist/itk</code> directory, we can tell Webpack to use a different path for the <em>itk.js</em> modules when building for Karma tests with:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">[...]</span><br><span class="line">    webpack: &#123;</span><br><span class="line">[...]</span><br><span class="line">      resolve: &#123;</span><br><span class="line">        alias: &#123;</span><br><span class="line">          <span class="string">'./itkConfig$'</span>: path.resolve(__dirname, <span class="string">'test'</span>, <span class="string">'config'</span>, <span class="string">'itkConfigTest.js'</span>),</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">[...]</span><br></pre></td></tr></table></figure>
+<p>Where <code>itkConfigTest.js</code> contains:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> itkConfig = &#123;</span><br><span class="line">  itkModulesPath: <span class="string">'/base/dist/itk'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> itkConfig</span><br></pre></td></tr></table></figure>
+<p>Create entries in the <code>package.json</code> file to start Karma, and run the tests!</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: &#123;</span><br><span class="line">  <span class="string">"build"</span>: <span class="string">"webpack --progress --colors -p"</span>,</span><br><span class="line">  <span class="string">"start"</span>: <span class="string">"webpack-dev-server --mode development --content-base ./dist/ --watch-content-base"</span>,</span><br><span class="line">  <span class="string">"test"</span>: <span class="string">"karma start ./karma.conf.js"</span>,</span><br><span class="line">  <span class="string">"test:debug"</span>: <span class="string">"karma start ./karma.conf.js --no-single-run"</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>and</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm run test</span><br></pre></td></tr></table></figure>
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2018-03-17T02:13:38.315Z" itemprop="dateModified">Last updated: 2018-03-17</time>
+                <a href="node.html" class="article-footer-prev" title="Node.js"><i class="fa fa-chevron-left"></i><span>Prev</span></a>
+              </footer>
+              
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <strong class="sidebar-title">Contents</strong>
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Testing-with-Karma"><span class="toc-text">Testing with Karma</span></a></li></ol>
+              <a href="#" id="article-toc-top">Back to Top</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+      <aside id="sidebar" role="navigation">
+  <div class="inner"><strong class="sidebar-title">Building</strong><a href="node.html" class="sidebar-link">Node.js</a><a href="webpack.html" class="sidebar-link current">Webpack</a></div>
+</aside>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2018 <a href="http://www.kitware.com" target="_blank">Kitware Inc.</a>
+    </div>
+    <div id="footer-links">
+      <a href="https://github.com/InsightSoftwareConsortium/itk-js" class="footer-link" target="_blank"><i class="fa fa-github-alt"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="/itk-js/docs/" class="mobile-nav-link">Docs</a><a href="/itk-js/api/" class="mobile-nav-link">API</a><a href="/itk-js/examples/" class="mobile-nav-link">Examples</a>
+      <li class="mobile-nav-item">
+        <a href="https://github.com/InsightSoftwareConsortium/itk-js" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+      </li>
+    </ul>
+    
+      <strong class="mobile-nav-title">Building</strong><a href="node.html" class="mobile-nav-link">Node.js</a><a href="webpack.html" class="mobile-nav-link current">Webpack</a>
+    
+  </div>
+  <div id="mobile-lang-select-wrap">
+    <span id="mobile-lang-select-label"><i class="fa fa-globe"></i><span>English</span></span>
+    <select id="mobile-lang-select" data-canonical="">
+      
+        <option value="en" selected>English</option>
+      
+    </select>
+  </div>
+</nav>
+  <!-- Scripts -->
+<!-- build:js build/js/main.js -->
+<script src="/itk-js/js/lang_select.js"></script>
+<script src="/itk-js/js/toc.js"></script>
+<script src="/itk-js/js/mobile_nav.js"></script>
+<!-- endbuild -->
+<script src="https://cdn.jsdelivr.net/retinajs/1.3.0/retina.min.js" async></script>
+
+
+
+</body>
+</html>
