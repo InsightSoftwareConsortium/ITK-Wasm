@@ -32,6 +32,7 @@ sidebar:
   examples:
     building: Building
     nodejs: Node.js
+    webpack: Webpack
 
   api:
     inputoutput: Input/Output
