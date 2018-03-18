@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+#
+# Configure and build the CMake project with source code in the current
+# directory in "./web-build".
+#
+# Any extra arguments passed to the script and passed to the cmake
+# configuration step.
+#
+
+mkdir -p ./web-build
+
+cmake \
+   --no-ware-unused-vars \
+   -Bweb-build \
+   -H. \
+   -DCMAKE_BUILD_TYPE:STRING=Release \
+   -DITK_DIR=/ITK-build \
+   -GNinja \
+     "$@" && \
+ninja -Cweb-build
