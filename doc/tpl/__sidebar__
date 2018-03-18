@@ -1,6 +1,11 @@
 docs:
   getting_started:
     overview: index.html
+  formats:
+    imageformats: image_formats.html
+    meshformats: mesh_formats.html
+  development:
+    hacking: hacking_itk_js.html
 
 examples:
   building:
