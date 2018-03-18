@@ -1,6 +1,6 @@
 {
   "name": "itk",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "Read and write 2D, 3D, and ND images with the Insight Toolkit (ITK)",
   "main": "./dist/itk.js",
   "directories": {
