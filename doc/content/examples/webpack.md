@@ -1,7 +1,7 @@
 title: Using itk.js in a web browser application via Webpack
 ---
 
-This example demonstrates how to use *itk.js* in a web browser application built with [Webpack](https://webpack.js.org/).
+This example demonstrates how to use *itk.js* in a web browser application built with [Webpack](https://webpack.js.org/). Find the full example in the `itk-js/examples/Webpack` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-js/tree/master/examples/Webpack).
 
 Since we asynchronously download the *itk.js* JavaScript and WebAssembly Emscripten modules, a few extra configuration steps are required.
 
