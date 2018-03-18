@@ -1,3 +1,9 @@
+ignore-ghpages: &ignore-ghpages
+  filters:
+    branches:
+      ignore:
+        - gh-pages
+
 version: 2
 jobs:
   build-test-deploy:
@@ -38,7 +44,7 @@ jobs:
               npm run doc:publish
             fi
 
-  build-test-examples:
+  build-test-node-example:
     docker:
       - image: node:latest
     steps:
@@ -49,6 +55,19 @@ jobs:
           command: |
             cd examples/Node.js
             npm install
+            npm run test
+
+  build-test-webpack-example:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Test Webpack example
+          no_output_timeout: 0.5h
+          command: |
+            cd examples/Webpack
+            npm install
+            npm run build
             npm run test
 
 workflows:
@@ -62,8 +81,7 @@ workflows:
                   - gh-pages
     build-test-examples:
       jobs:
-        - build-test-deploy:
-            filters:
-              branches:
-                ignore:
-                  - gh-pages
+        - build-test-node-example:
+            <<: *ignore-ghpages
+        - build-test-webpack-example:
+            <<: *ignore-ghpages
