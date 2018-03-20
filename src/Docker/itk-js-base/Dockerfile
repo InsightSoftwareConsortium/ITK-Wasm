@@ -36,8 +36,5 @@ RUN git clone https://github.com/Tencent/rapidjson.git && \
   cd rapidjson && \
   git checkout ${RAPIDJSON_GIT_TAG}
 
-COPY ITKBridgeJavaScript.cmake /usr/share/cmake-3.10/Modules/
-COPY web-build /usr/local/bin/
-
-ENV DEFAULT_DOCKCROSS_IMAGE insighttoolkit/itk-js
+ENV DEFAULT_DOCKCROSS_IMAGE insighttoolkit/itk-js-base
 WORKDIR /work
