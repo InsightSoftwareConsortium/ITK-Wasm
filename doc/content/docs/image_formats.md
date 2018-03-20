@@ -13,7 +13,7 @@ title: Supported Image File Formats
 - [MetaImage](https://itk.org/Wiki/ITK/MetaIO/Documentation)
 - [MINC 2.0](https://en.wikibooks.org/wiki/MINC/SoftwareDevelopment/MINC2.0_File_Format_Reference)
 - [MGH](https://surfer.nmr.mgh.harvard.edu/fswiki/FsTutorial/MghFormat)
-- [MRC](https://en.wikipedia.org/wiki/MRC_(file_format))
+- [MRC](http://www.ccpem.ac.uk/mrc_format/mrc_format.php)
 - [NifTi](https://nifti.nimh.nih.gov/nifti-1)
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)
 - [Portable Network Graphics (PNG)](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
