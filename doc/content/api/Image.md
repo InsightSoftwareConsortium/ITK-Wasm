@@ -6,7 +6,6 @@ JSON object with the following attributes:
 
 **imageType**: The [ImageType](./ImageType.html) for this image.
 **name**: An optional name, a `String`, that describes this image.
-**dimension**: An integer that describes the dimension for the image, typically 2 or 3.
 **origin**: An Array with length *dimension* that describes the location of the center of the lower left pixel in physical units.
 **spacing**: An Array with length *dimension* that describes the spacing between pixel in physical units.
 **direction**: A *dimension* by *dimension* Matrix that describes the orientation of the image at its *origin*.  The orientation of each axis are the orthonormal columns.

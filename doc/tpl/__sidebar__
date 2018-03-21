@@ -18,3 +18,5 @@ api:
   datastructures:
     image: Image.html
     imagetype: ImageType.html
+    mesh: Mesh.html
+    meshtype: MeshType.html

@@ -45,4 +45,6 @@ sidebar:
     datastructures: Data Structures
     image: Image
     imagetype: ImageType
+    mesh: Mesh
+    meshtype: MeshType
 
