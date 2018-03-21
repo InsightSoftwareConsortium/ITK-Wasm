@@ -1,9 +1,7 @@
 title: Node.js Input/Output
 ---
 
-These Input/Output (IO) functions can be used from within a [Node.js](https://nodejs.org/)
-application or library. They will read from and write to directories on the
-local filesystem.
+These Input/Output (IO) functions can be used from within a [Node.js](https://nodejs.org/) application or library on a workstation or server. They will read from and write to directories on the local filesystem.
 
 ## readImageLocalFile(filePath) -> [itk/Image](./Image.html)
 

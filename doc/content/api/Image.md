@@ -2,7 +2,7 @@ title: Image
 ---
 
 An `itk/Image` is the N-dimensional image data structure for *itk.js*. It is a
-JSON object with the following attributes:
+JavaScript object with the following properties:
 
 **imageType**: The [ImageType](./ImageType.html) for this image.
 **name**: An optional name, a `String`, that describes this image.

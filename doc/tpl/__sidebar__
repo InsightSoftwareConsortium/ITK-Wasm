@@ -15,6 +15,7 @@ examples:
 api:
   inputoutput:
     nodejs: node.html
+    browser: browser.html
   datastructures:
     image: Image.html
     imagetype: ImageType.html
