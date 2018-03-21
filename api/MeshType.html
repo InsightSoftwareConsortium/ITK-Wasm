@@ -2,15 +2,15 @@
 <html lang="en">
 <head prefix="og: http://ogp.me/ns#">
   <meta charset="utf-8">
-  <title>Examples | itk-js</title>
+  <title>MeshType | itk-js</title>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://InsightSoftwareConsortium.github.io/itk-js/examples/index.html">
+  <link rel="canonical" href="https://InsightSoftwareConsortium.github.io/itk-js/api/MeshType.html">
   <!-- Alternative links -->
   
     
-      <link rel="alternative" hreflang="en" href="https://InsightSoftwareConsortium.github.io/itk-js/examples/index.html">
+      <link rel="alternative" hreflang="en" href="https://InsightSoftwareConsortium.github.io/itk-js/api/MeshType.html">
     
   
   <!-- Icon -->
@@ -39,17 +39,17 @@
   <!-- RSS -->
   <link rel="alternate" href="/itk-js/atom.xml" title="itk-js">
   <!-- Open Graph -->
-  <meta name="description" content="These examples demonstrate how to apply itk.js in your application.">
+  <meta name="description" content="The itk/MeshType describes the type of an Mesh. It is a JSON object with the following attributes: dimension: The spatial dimension of the mesh.pointComponentType: The type of the components used to r">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Examples">
-<meta property="og:url" content="https://InsightSoftwareConsortium.github.io/itk-js/examples/index.html">
+<meta property="og:title" content="MeshType">
+<meta property="og:url" content="https://InsightSoftwareConsortium.github.io/itk-js/api/MeshType.html">
 <meta property="og:site_name" content="itk-js">
-<meta property="og:description" content="These examples demonstrate how to apply itk.js in your application.">
+<meta property="og:description" content="The itk/MeshType describes the type of an Mesh. It is a JSON object with the following attributes: dimension: The spatial dimension of the mesh.pointComponentType: The type of the components used to r">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-03-21T05:06:19.962Z">
+<meta property="og:updated_time" content="2018-03-21T05:06:19.958Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Examples">
-<meta name="twitter:description" content="These examples demonstrate how to apply itk.js in your application.">
+<meta name="twitter:title" content="MeshType">
+<meta name="twitter:description" content="The itk/MeshType describes the type of an Mesh. It is a JSON object with the following attributes: dimension: The spatial dimension of the mesh.pointComponentType: The type of the components used to r">
   <!-- Google Analytics -->
   
 <script>
@@ -97,15 +97,16 @@
           <div class="article">
             <div class="inner">
               <header class="article-header">
-                <h1 class="article-title" itemprop="name">Examples</h1>
+                <h1 class="article-title" itemprop="name">MeshType</h1>
               </header>
               <div class="article-content" itemprop="articleBody">
-                <p>These examples demonstrate how to apply <em>itk.js</em> in your application.</p>
+                <p>The <code>itk/MeshType</code> describes the type of an <a href="./Mesh.html">Mesh</a>. It is a JSON object with the following attributes:</p>
+<p><strong>dimension</strong>: The spatial dimension of the mesh.<br><strong>pointComponentType</strong>: The type of the components used to represent the data at a point. This is one of the <a href="https://github.com/InsightSoftwareConsortium/itk-js/blob/master/src/IntTypes.js" target="_blank" rel="noopener">IntTypes</a> or <a href="https://github.com/InsightSoftwareConsortium/itk-js/blob/master/src/FloatTypes.js" target="_blank" rel="noopener">FloatTypes</a>.<br><strong>pointPixelType</strong>: The <a href="https://github.com/InsightSoftwareConsortium/itk-js/blob/master/src/PixelTypes.js" target="_blank" rel="noopener">PixelType</a> for data associated with a point. For example, <em>Scalar</em>, <em>Vector</em>, <em>CovariantVector</em>, or <em>SymmetricSecondRankTensor</em>.<br><strong>pointPixelComponents</strong>: The number of components in a point pixel. For a <em>Scalar</em> <em>pixelType</em>, this will be 1.<br><strong>cellComponentType</strong>: The type of the components used to represent the data at a point. This is one of the <a href="https://github.com/InsightSoftwareConsortium/itk-js/blob/master/src/IntTypes.js" target="_blank" rel="noopener">IntTypes</a> or <a href="https://github.com/InsightSoftwareConsortium/itk-js/blob/master/src/FloatTypes.js" target="_blank" rel="noopener">FloatTypes</a>.<br><strong>cellPixelType</strong>: The <a href="https://github.com/InsightSoftwareConsortium/itk-js/blob/master/src/PixelTypes.js" target="_blank" rel="noopener">PixelType</a> for data associated with a cell. For example, <em>Scalar</em>, <em>Vector</em>, <em>CovariantVector</em>, or <em>SymmetricSecondRankTensor</em>.<br><strong>cellPixelComponents</strong>: The number of components in a cell pixel. For a <em>Scalar</em> <em>pixelType</em>, this will be 1.</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2018-03-21T05:06:19.962Z" itemprop="dateModified">Last updated: 2018-03-21</time>
-                <a href="node.html" class="article-footer-next" title="Node.js"><span>Next</span><i class="fa fa-chevron-right"></i></a>
+                <time class="article-footer-updated" datetime="2018-03-21T05:06:19.958Z" itemprop="dateModified">Last updated: 2018-03-21</time>
+                <a href="Mesh.html" class="article-footer-prev" title="Mesh"><i class="fa fa-chevron-left"></i><span>Prev</span></a>
               </footer>
               
             </div>
@@ -120,7 +121,7 @@
         </div>
       </article>
       <aside id="sidebar" role="navigation">
-  <div class="inner"><strong class="sidebar-title">Building</strong><a href="node.html" class="sidebar-link">Node.js</a><a href="webpack.html" class="sidebar-link">Webpack</a></div>
+  <div class="inner"><strong class="sidebar-title">Input/Output</strong><a href="node.html" class="sidebar-link">Node.js</a><strong class="sidebar-title">Data Structures</strong><a href="Image.html" class="sidebar-link">Image</a><a href="ImageType.html" class="sidebar-link">ImageType</a><a href="Mesh.html" class="sidebar-link">Mesh</a><a href="MeshType.html" class="sidebar-link current">MeshType</a></div>
 </aside>
     </div>
   </div>
@@ -148,12 +149,12 @@
       </li>
     </ul>
     
-      <strong class="mobile-nav-title">Building</strong><a href="node.html" class="mobile-nav-link">Node.js</a><a href="webpack.html" class="mobile-nav-link">Webpack</a>
+      <strong class="mobile-nav-title">Input/Output</strong><a href="node.html" class="mobile-nav-link">Node.js</a><strong class="mobile-nav-title">Data Structures</strong><a href="Image.html" class="mobile-nav-link">Image</a><a href="ImageType.html" class="mobile-nav-link">ImageType</a><a href="Mesh.html" class="mobile-nav-link">Mesh</a><a href="MeshType.html" class="mobile-nav-link current">MeshType</a>
     
   </div>
   <div id="mobile-lang-select-wrap">
     <span id="mobile-lang-select-label"><i class="fa fa-globe"></i><span>English</span></span>
-    <select id="mobile-lang-select" data-canonical="">
+    <select id="mobile-lang-select" data-canonical="api/MeshType.html">
       
         <option value="en" selected>English</option>
       
