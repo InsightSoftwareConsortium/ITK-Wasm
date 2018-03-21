@@ -1,7 +1,7 @@
 itk.js
 ======
 
-[![CircleCI](https://circleci.com/gh/InsightSoftwareConsortium/itk-js.svg?style=svg)](https://circleci.com/gh/InsightSoftwareConsortium/itk-js)
+[![CircleCI](https://img.shields.io/circleci/project/github/InsightSoftwareConsortium/itk-js/master.svg)](https://circleci.com/gh/InsightSoftwareConsortium/itk-js)
 
 Provides general scientific image, mesh, and point set IO capability and bridges
 [ITK](https://itk.org) code running in an
