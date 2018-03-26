@@ -1,0 +1,7 @@
+var Module = {}
+Module['locateFile'] = function(fileName) {
+  if(fileName === '@wasm_target@.wasm') {
+    return '../Pipelines/@wasm_target@.wasm'
+  }
+  return fileName
+}
