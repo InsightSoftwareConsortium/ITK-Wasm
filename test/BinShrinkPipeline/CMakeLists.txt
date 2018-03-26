@@ -14,11 +14,12 @@ include(${ITK_USE_FILE})
 
 if(EMSCRIPTEN)
   include(ITKBridgeJavaScript)
-  add_web_executable(BinShrink BinShrink.cxx)
+  web_add_executable(BinShrink BinShrink.cxx)
+  web_target_link_libraries(BinShrink ${ITK_LIBRARIES})
 else()
   add_executable(BinShrink BinShrink.cxx)
+  target_link_libraries(BinShrink ${ITK_LIBRARIES})
 endif()
-target_link_libraries(BinShrink ${ITK_LIBRARIES})
 
 enable_testing()
 add_test(NAME BinShrinkTest
