@@ -1,11 +1,11 @@
-import WebworkerPromise from 'webworker-promise';
+import WebworkerPromise from 'webworker-promise'
 
-import config from './itkConfig';
+import config from './itkConfig'
 
 const worker = new window.Worker(
   config.itkModulesPath + '/WebWorkers/ImageIO.worker.js'
-);
-const promiseWorker = new WebworkerPromise(worker);
+)
+const promiseWorker = new WebworkerPromise(worker)
 
 /**
  * Write a file ArrayBuffer from an image in the browser.
@@ -23,10 +23,10 @@ const writeImageArrayBuffer = (useCompression, image, fileName, mimeType) => {
       type: mimeType,
       image: image,
       useCompression: useCompression,
-      config: config,
+      config: config
     },
     [image.data.buffer]
-  );
-};
+  )
+}
 
-export default writeImageArrayBuffer;
+export default writeImageArrayBuffer

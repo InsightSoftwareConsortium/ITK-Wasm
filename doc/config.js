@@ -10,8 +10,8 @@ module.exports = {
     url: 'https://InsightSoftwareConsortium.github.io/itk-js',
     root: '/itk-js/',
     github: 'InsightSoftwareConsortium/itk-js',
-    google_analytics: 'UA-90338862-8',
+    google_analytics: 'UA-90338862-8'
   },
   copy: [
-  ],
-};
+  ]
+}

@@ -1,11 +1,11 @@
-import WebworkerPromise from 'webworker-promise';
+import WebworkerPromise from 'webworker-promise'
 
-import config from './itkConfig';
+import config from './itkConfig'
 
 const worker = new window.Worker(
   config.itkModulesPath + '/WebWorkers/ImageIO.worker.js'
-);
-const promiseWorker = new WebworkerPromise(worker);
+)
+const promiseWorker = new WebworkerPromise(worker)
 
 /**
  * Read an image from a file ArrayBuffer in the browser.
@@ -21,10 +21,10 @@ const readImageArrayBuffer = (arrayBuffer, fileName, mimeType) => {
       name: fileName,
       type: mimeType,
       data: arrayBuffer,
-      config: config,
+      config: config
     },
     [arrayBuffer]
-  );
-};
+  )
+}
 
-export default readImageArrayBuffer;
+export default readImageArrayBuffer

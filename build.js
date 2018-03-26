@@ -10,7 +10,7 @@ const program = require('commander')
 // Make the "build" directory to hold build artifacts
 try {
   fs.mkdirSync('build')
-} catch(err) {
+} catch (err) {
   if (err.code != 'EEXIST') throw err
 }
 program
@@ -18,11 +18,11 @@ program
   .option('-s, --no-copy-sources', 'Do not copy JavaScript sources')
   .parse(process.argv)
 
-if(program.compile) {
+if (program.compile) {
   // Make the "build" directory to hold build artifacts
   try {
     fs.mkdirSync('build')
-  } catch(err) {
+  } catch (err) {
     if (err.code != 'EEXIST') throw err
   }
 
@@ -32,12 +32,12 @@ if(program.compile) {
   })
   if (dockerVersion.status != 0) {
     console.error("Could not run the 'docker' command.")
-    console.error("This package requires Docker to build.")
-    console.error("")
-    console.error("Please find installation instructions at:")
-    console.error("")
-    console.error("  https://docs.docker.com/install/")
-    console.error("")
+    console.error('This package requires Docker to build.')
+    console.error('')
+    console.error('Please find installation instructions at:')
+    console.error('')
+    console.error('  https://docs.docker.com/install/')
+    console.error('')
     process.exit(dockerVersion.status)
   }
 
@@ -45,19 +45,19 @@ if(program.compile) {
   const dockcross = path.join('build', 'dockcross')
   try {
     fs.statSync(dockcross)
-  } catch(err) {
+  } catch (err) {
     if (err.code == 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
       dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js-base:latest'], {
-	env: process.env,
-	stdio: [ 'ignore', output, null ]
+        env: process.env,
+        stdio: [ 'ignore', output, null ]
       })
       if (dockerCall.status != 0) {
-	process.exit(dockerCall.status)
+        process.exit(dockerCall.status)
       }
       fs.closeSync(output)
       fs.chmodSync(dockcross, '755')
-    }else {
+    } else {
       throw err
     }
   }
@@ -65,17 +65,17 @@ if(program.compile) {
   // Perform initial CMake configuration if required
   try {
     fs.statSync(path.join('build', 'build.ninja'))
-  } catch(err) {
+  } catch (err) {
     if (err.code == 'ENOENT') {
       console.log('Running CMake configuration...')
       const cmakeCall = spawnSync(dockcross, ['cmake', '-DRapidJSON_INCLUDE_DIR=/rapidjson/include', '-DCMAKE_BUILD_TYPE=Release', '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build'], {
-	env: process.env,
-	stdio: 'inherit'
+        env: process.env,
+        stdio: 'inherit'
       })
       if (cmakeCall.status != 0) {
-	process.exit(cmakeCall.status)
+        process.exit(cmakeCall.status)
       }
-    }else {
+    } else {
       throw err
     }
   }
@@ -92,25 +92,25 @@ if(program.compile) {
   console.log('')
 } // program.compile
 
-if(program.copySources) {
+if (program.copySources) {
   try {
     fs.mkdirSync('dist')
-  } catch(err) {
+  } catch (err) {
     if (err.code != 'EEXIST') throw err
   }
   try {
     fs.mkdirSync(path.join('dist', 'ImageIOs'))
-  } catch(err) {
+  } catch (err) {
     if (err.code != 'EEXIST') throw err
   }
   try {
     fs.mkdirSync(path.join('dist', 'MeshIOs'))
-  } catch(err) {
+  } catch (err) {
     if (err.code != 'EEXIST') throw err
   }
   try {
     fs.mkdirSync(path.join('dist', 'WebWorkers'))
-  } catch(err) {
+  } catch (err) {
     if (err.code != 'EEXIST') throw err
   }
   let imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))

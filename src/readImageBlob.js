@@ -1,12 +1,12 @@
-import WebworkerPromise from 'webworker-promise';
-import PromiseFileReader from 'promise-file-reader';
+import WebworkerPromise from 'webworker-promise'
+import PromiseFileReader from 'promise-file-reader'
 
-import config from './itkConfig';
+import config from './itkConfig'
 
 const worker = new window.Worker(
   config.itkModulesPath + '/WebWorkers/ImageIO.worker.js'
-);
-const promiseWorker = new WebworkerPromise(worker);
+)
+const promiseWorker = new WebworkerPromise(worker)
 
 /**
  * @param: blob Blob that contains the file contents
@@ -21,11 +21,11 @@ const readImageBlob = (blob, fileName, mimeType) => {
         name: fileName,
         type: mimeType,
         data: arrayBuffer,
-        config: config,
+        config: config
       },
       [arrayBuffer]
-    );
-  });
-};
+    )
+  })
+}
 
-export default readImageBlob;
+export default readImageBlob

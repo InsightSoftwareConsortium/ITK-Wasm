@@ -8,36 +8,36 @@ const outputPath = path.join(__dirname, './dist')
 
 module.exports = {
   node: {
-    fs: 'empty',
+    fs: 'empty'
   },
   entry,
   output: {
     path: outputPath,
-    filename: 'index.js',
+    filename: 'index.js'
   },
   module: {
     rules: [
       { test: entry, loader: 'expose-loader?index' },
-      { test: /\.js$/, loader: 'babel-loader' },
+      { test: /\.js$/, loader: 'babel-loader' }
     ]
   },
   plugins: [
     new CopyPlugin([
       {
-      from: path.join(__dirname, 'node_modules', 'itk', 'WebWorkers'),
-      to: path.join(__dirname, 'dist', 'itk', 'WebWorkers'),
+        from: path.join(__dirname, 'node_modules', 'itk', 'WebWorkers'),
+        to: path.join(__dirname, 'dist', 'itk', 'WebWorkers')
       },
       {
-      from: path.join(__dirname, 'node_modules', 'itk', 'ImageIOs'),
-      to: path.join(__dirname, 'dist', 'itk', 'ImageIOs'),
+        from: path.join(__dirname, 'node_modules', 'itk', 'ImageIOs'),
+        to: path.join(__dirname, 'dist', 'itk', 'ImageIOs')
       },
       {
-      from: path.join(__dirname, 'node_modules', 'itk', 'MeshIOs'),
-      to: path.join(__dirname, 'dist', 'itk', 'MeshIOs'),
-      },
-    ]),
+        from: path.join(__dirname, 'node_modules', 'itk', 'MeshIOs'),
+        to: path.join(__dirname, 'dist', 'itk', 'MeshIOs')
+      }
+    ])
   ],
   performance: {
-      maxAssetSize: 10000000
-  },
-};
+    maxAssetSize: 10000000
+  }
+}
