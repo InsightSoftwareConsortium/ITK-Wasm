@@ -23,3 +23,5 @@ examples/Node.js/package-lock.json
 
 test/BinShrinkPipeline/itk-js
 test/BinShrinkPipeline/web-build
+
+src/Docker/itk-js/ITKBridgeJavaScriptModuleCopy/
