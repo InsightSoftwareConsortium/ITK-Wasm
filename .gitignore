@@ -25,3 +25,5 @@ test/BinShrinkPipeline/itk-js
 test/BinShrinkPipeline/web-build
 
 src/Docker/itk-js/ITKBridgeJavaScriptModuleCopy/
+test/StdoutStderrPipeline/itk-js
+test/StdoutStderrPipeline/web-build/

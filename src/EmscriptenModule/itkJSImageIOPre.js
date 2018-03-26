@@ -1,1 +1,4 @@
-var Module = {}
+var Module = {
+  'preRun': function() {
+  }
+}
