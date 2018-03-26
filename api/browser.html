@@ -2,15 +2,15 @@
 <html lang="en">
 <head prefix="og: http://ogp.me/ns#">
   <meta charset="utf-8">
-  <title>Supported Mesh and Point Set File Formats | itk-js</title>
+  <title>Web Browser Input/Output | itk-js</title>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://InsightSoftwareConsortium.github.io/itk-js/docs/mesh_formats.html">
+  <link rel="canonical" href="https://InsightSoftwareConsortium.github.io/itk-js/api/browser.html">
   <!-- Alternative links -->
   
     
-      <link rel="alternative" hreflang="en" href="https://InsightSoftwareConsortium.github.io/itk-js/docs/mesh_formats.html">
+      <link rel="alternative" hreflang="en" href="https://InsightSoftwareConsortium.github.io/itk-js/api/browser.html">
     
   
   <!-- Icon -->
@@ -39,17 +39,17 @@
   <!-- RSS -->
   <link rel="alternate" href="/itk-js/atom.xml" title="itk-js">
   <!-- Open Graph -->
-  <meta name="description" content="VTK legacy file format for vtkPolyData">
+  <meta name="description" content="These Input/Output (IO) functions can be used from within a web browser’s JavaScript runtime. itk.js is best tested in Chrome, but it is used and designed to work on Chrome, Firefox, Microsoft Edge, S">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Supported Mesh and Point Set File Formats">
-<meta property="og:url" content="https://InsightSoftwareConsortium.github.io/itk-js/docs/mesh_formats.html">
+<meta property="og:title" content="Web Browser Input&#x2F;Output">
+<meta property="og:url" content="https://InsightSoftwareConsortium.github.io/itk-js/api/browser.html">
 <meta property="og:site_name" content="itk-js">
-<meta property="og:description" content="VTK legacy file format for vtkPolyData">
+<meta property="og:description" content="These Input/Output (IO) functions can be used from within a web browser’s JavaScript runtime. itk.js is best tested in Chrome, but it is used and designed to work on Chrome, Firefox, Microsoft Edge, S">
 <meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2018-03-26T22:14:30.597Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Supported Mesh and Point Set File Formats">
-<meta name="twitter:description" content="VTK legacy file format for vtkPolyData">
+<meta name="twitter:title" content="Web Browser Input&#x2F;Output">
+<meta name="twitter:description" content="These Input/Output (IO) functions can be used from within a web browser’s JavaScript runtime. itk.js is best tested in Chrome, but it is used and designed to work on Chrome, Firefox, Microsoft Edge, S">
   <!-- Google Analytics -->
   
 <script>
@@ -97,17 +97,17 @@
           <div class="article">
             <div class="inner">
               <header class="article-header">
-                <h1 class="article-title" itemprop="name">Supported Mesh and Point Set File Formats</h1>
+                <h1 class="article-title" itemprop="name">Web Browser Input/Output</h1>
               </header>
               <div class="article-content" itemprop="articleBody">
-                <ul>
-<li><a href="https://www.vtk.org/wp-content/uploads/2015/04/file-formats.pdf" target="_blank" rel="noopener">VTK legacy file format for vtkPolyData</a></li>
-</ul>
+                <p>These Input/Output (IO) functions can be used from within a web browser’s JavaScript runtime. <em>itk.js</em> is best tested in Chrome, but it is used and designed to work on Chrome, Firefox, Microsoft Edge, Safari, and other browsers, including mobile browsers. In general, older browsers will function, but users on newer browsers will experience improved performance.</p>
+<p>The <em>itk.js</em> IO functions convert native brower objects, <a href="https://developer.mozilla.org/en-US/docs/Web/API/File" target="_blank" rel="noopener">File</a>‘s, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Blob" target="_blank" rel="noopener">Blob</a>‘s, and <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer" target="_blank" rel="noopener">ArrayBuffer</a>‘s to / from JavaScript objects with <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray" target="_blank" rel="noopener">TypedArray</a>‘s for binary data.</p>
+<h2 id="readImageFile-file-gt-itk-Image" class="article-heading"><a href="#readImageFile-file-gt-itk-Image" class="headerlink" title="readImageFile(file) -&gt; itk/Image"></a>readImageFile(file) -&gt; <a href="./Image.html">itk/Image</a><a class="article-anchor" href="#readImageFile-file-gt-itk-Image" aria-hidden="true"></a></h2><p>Read an image from a <a href="https://developer.mozilla.org/en-US/docs/Web/API/File" target="_blank" rel="noopener">File</a>.</p>
 
               </div>
               <footer class="article-footer">
                 <time class="article-footer-updated" datetime="2018-03-26T22:14:30.597Z" itemprop="dateModified">Last updated: 2018-03-26</time>
-                <a href="image_formats.html" class="article-footer-prev" title="Images"><i class="fa fa-chevron-left"></i><span>Prev</span></a><a href="hacking_itk_js.html" class="article-footer-next" title="Hacking itk.js"><span>Next</span><i class="fa fa-chevron-right"></i></a>
+                <a href="node.html" class="article-footer-prev" title="Node.js"><i class="fa fa-chevron-left"></i><span>Prev</span></a><a href="Image.html" class="article-footer-next" title="Image"><span>Next</span><i class="fa fa-chevron-right"></i></a>
               </footer>
               
             </div>
@@ -115,14 +115,14 @@
           <aside id="article-toc" role="navigation">
             <div id="article-toc-inner">
               <strong class="sidebar-title">Contents</strong>
-              
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#readImageFile-file-gt-itk-Image"><span class="toc-text">readImageFile(file) -&gt; itk/Image</span></a></li></ol>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>
           </aside>
         </div>
       </article>
       <aside id="sidebar" role="navigation">
-  <div class="inner"><strong class="sidebar-title">Getting Started</strong><a href="index.html" class="sidebar-link">Overview</a><strong class="sidebar-title">Supported File Formats</strong><a href="image_formats.html" class="sidebar-link">Images</a><a href="mesh_formats.html" class="sidebar-link current">Meshes and Point Sets</a><strong class="sidebar-title">Development</strong><a href="hacking_itk_js.html" class="sidebar-link">Hacking itk.js</a></div>
+  <div class="inner"><strong class="sidebar-title">Input/Output</strong><a href="node.html" class="sidebar-link">Node.js</a><a href="browser.html" class="sidebar-link current">Web Browser</a><strong class="sidebar-title">Data Structures</strong><a href="Image.html" class="sidebar-link">Image</a><a href="ImageType.html" class="sidebar-link">ImageType</a><a href="Mesh.html" class="sidebar-link">Mesh</a><a href="MeshType.html" class="sidebar-link">MeshType</a></div>
 </aside>
     </div>
   </div>
@@ -150,12 +150,12 @@
       </li>
     </ul>
     
-      <strong class="mobile-nav-title">Getting Started</strong><a href="index.html" class="mobile-nav-link">Overview</a><strong class="mobile-nav-title">Supported File Formats</strong><a href="image_formats.html" class="mobile-nav-link">Images</a><a href="mesh_formats.html" class="mobile-nav-link current">Meshes and Point Sets</a><strong class="mobile-nav-title">Development</strong><a href="hacking_itk_js.html" class="mobile-nav-link">Hacking itk.js</a>
+      <strong class="mobile-nav-title">Input/Output</strong><a href="node.html" class="mobile-nav-link">Node.js</a><a href="browser.html" class="mobile-nav-link current">Web Browser</a><strong class="mobile-nav-title">Data Structures</strong><a href="Image.html" class="mobile-nav-link">Image</a><a href="ImageType.html" class="mobile-nav-link">ImageType</a><a href="Mesh.html" class="mobile-nav-link">Mesh</a><a href="MeshType.html" class="mobile-nav-link">MeshType</a>
     
   </div>
   <div id="mobile-lang-select-wrap">
     <span id="mobile-lang-select-label"><i class="fa fa-globe"></i><span>English</span></span>
-    <select id="mobile-lang-select" data-canonical="docs/mesh_formats.html">
+    <select id="mobile-lang-select" data-canonical="api/browser.html">
       
         <option value="en" selected>English</option>
       
