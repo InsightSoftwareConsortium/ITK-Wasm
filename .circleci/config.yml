@@ -43,6 +43,13 @@ jobs:
           command: |
             google-chrome --version
             npm run test
+      - run:
+          name: Test building a pipeline
+          command: |
+            cd test/BinShrinkPipeline
+            docker run --rm insighttoolkit/itk-js > ./itk-js
+            chmod +x ./itk-js
+            ./itk-js web-build
       - deploy:
           name: Publish docs
           command: |
