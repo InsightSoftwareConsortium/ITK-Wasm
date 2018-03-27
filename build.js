@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fs = require('fs-extra')
 const path = require('path')
 const spawnSync = require('child_process').spawnSync
@@ -16,6 +18,7 @@ try {
 program
   .option('-c, --no-compile', 'Do not compile Emscripten modules')
   .option('-s, --no-copy-sources', 'Do not copy JavaScript sources')
+  .option('-p, --no-build-pipelines', 'Do not build the test pipelines')
   .parse(process.argv)
 
 if (program.compile) {
@@ -184,3 +187,23 @@ if (program.copySources) {
     browserifyWebWorkerBuildParallel
   ])
 } // program.copySources
+
+if (program.buildPipelines) {
+  const buildPipeline = (pipelinePath) => {
+    console.log('Building ' + pipelinePath + ' ...')
+    const buildPipelineCall = spawnSync(path.join(__dirname, 'src', 'itk-js-cli.js'), ['build', pipelinePath], {
+      env: process.env,
+      stdio: 'inherit'
+    })
+    if (buildPipelineCall.status !== 0) {
+      process.exit(buildPipelineCall.status)
+    }
+  }
+
+  const pipelines = [
+    path.join(__dirname, 'test', 'StdoutStderrPipeline'),
+    path.join(__dirname, 'test', 'BinShrinkPipeline'),
+  ]
+  asyncMod.map(pipelines, buildPipeline)
+
+} // progrem
