@@ -2,7 +2,9 @@ import WebworkerPromise from 'webworker-promise'
 
 import config from './itkConfig'
 
-const worker = new window.Worker(config.itkModulesPath + '/WebWorkers/ImageIO.worker.js')
+const worker = new window.Worker(
+  config.itkModulesPath + '/WebWorkers/ImageIO.worker.js'
+)
 const promiseWorker = new WebworkerPromise(worker)
 
 /**
@@ -13,8 +15,16 @@ const promiseWorker = new WebworkerPromise(worker)
  * @param: mimeType optional mime-type string
  */
 const readImageArrayBuffer = (arrayBuffer, fileName, mimeType) => {
-  return promiseWorker.postMessage({ operation: 'readImage', name: fileName, type: mimeType, data: arrayBuffer, config: config },
-    [arrayBuffer])
+  return promiseWorker.postMessage(
+    {
+      operation: 'readImage',
+      name: fileName,
+      type: mimeType,
+      data: arrayBuffer,
+      config: config
+    },
+    [arrayBuffer]
+  )
 }
 
 export default readImageArrayBuffer

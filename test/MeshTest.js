@@ -59,4 +59,3 @@ test('cellBufferSize should have a default value of 0', t => {
   let mesh = new Mesh()
   t.is(mesh.cellBufferSize, 0)
 })
-

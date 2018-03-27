@@ -3,7 +3,6 @@ import axios from 'axios'
 
 import { outputFileInformation } from '../src/index'
 
-
 test('Loading an image file and displaying its contents', (t) => {
   const expectedOutput = `{
     "imageType": {
@@ -46,9 +45,9 @@ test('Loading an image file and displaying its contents', (t) => {
       const outputTextArea = document.createElement('textarea')
       document.body.appendChild(outputTextArea)
       outputFileInformation(outputTextArea, event)
-        .then(function() {
-        t.equal(outputTextArea.textContent, expectedOutput)
-        t.end()
-      })
+        .then(function () {
+          t.equal(outputTextArea.textContent, expectedOutput)
+          t.end()
+        })
     })
 })

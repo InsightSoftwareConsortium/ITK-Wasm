@@ -3,7 +3,9 @@ import PromiseFileReader from 'promise-file-reader'
 
 import config from './itkConfig'
 
-const worker = new window.Worker(config.itkModulesPath + '/WebWorkers/ImageIO.worker.js')
+const worker = new window.Worker(
+  config.itkModulesPath + '/WebWorkers/ImageIO.worker.js'
+)
 const promiseWorker = new WebworkerPromise(worker)
 
 /**
@@ -12,11 +14,18 @@ const promiseWorker = new WebworkerPromise(worker)
  * @param: mimeType optional mime-type string
  */
 const readImageBlob = (blob, fileName, mimeType) => {
-  return PromiseFileReader.readAsArrayBuffer(blob)
-    .then(arrayBuffer => {
-      return promiseWorker.postMessage({ operation: 'readImage', name: fileName, type: mimeType, data: arrayBuffer, config: config },
-        [arrayBuffer])
-    })
+  return PromiseFileReader.readAsArrayBuffer(blob).then((arrayBuffer) => {
+    return promiseWorker.postMessage(
+      {
+        operation: 'readImage',
+        name: fileName,
+        type: mimeType,
+        data: arrayBuffer,
+        config: config
+      },
+      [arrayBuffer]
+    )
+  })
 }
 
 export default readImageBlob

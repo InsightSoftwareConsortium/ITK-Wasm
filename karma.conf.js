@@ -4,17 +4,17 @@ var path = require('path')
 
 var webpack = require('webpack')
 
-var sourcePath = path.resolve(__dirname, './dist');
+var sourcePath = path.resolve(__dirname, './dist')
 
-if (!process.env.NODE_ENV) process.env.NODE_ENV = 'test';
+if (!process.env.NODE_ENV) process.env.NODE_ENV = 'test'
 
-module.exports = function init(config) {
+module.exports = function init (config) {
   config.set({
     plugins: [
       require('karma-webpack'),
       require('karma-tap'),
       require('karma-chrome-launcher'),
-      require('karma-tap-pretty-reporter'),
+      require('karma-tap-pretty-reporter')
     ],
 
     basePath: '',
@@ -25,53 +25,53 @@ module.exports = function init(config) {
       { pattern: './dist/ImageIOs/**', watched: true, served: true, included: false },
       { pattern: './dist/MeshIOs/**', watched: true, served: true, included: false },
       { pattern: './dist/WebWorkers/**', watched: true, served: true, included: false },
-      { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false },
+      { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false }
     ],
 
     preprocessors: {
-      './test/Browser/*.js': ['webpack'],
+      './test/Browser/*.js': ['webpack']
     },
 
     webpack: {
       node: {
-        fs: 'empty',
+        fs: 'empty'
       },
       module: {
-        rules: [].concat(),
+        rules: [].concat()
       },
       resolve: {
         modules: [
           path.resolve(__dirname, 'node_modules'),
-          sourcePath,
+          sourcePath
         ],
         alias: {
-          './itkConfig$': path.resolve(__dirname, 'test', 'Browser', 'config', 'itkConfigBrowserTest.js'),
-        },
+          './itkConfig$': path.resolve(__dirname, 'test', 'Browser', 'config', 'itkConfigBrowserTest.js')
+        }
       },
       plugins: [
         new webpack.DefinePlugin({
-          __BASE_PATH__: "'/base'",
-        }),
-      ],
+          __BASE_PATH__: "'/base'"
+        })
+      ]
     },
 
     webpackMiddleware: {
-      noInfo: true,
+      noInfo: true
     },
 
     reporters: [
-      'tap-pretty',
+      'tap-pretty'
     ],
 
     client: {
-      useIframe: true,
+      useIframe: true
     },
 
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox'],
-      },
+        flags: ['--no-sandbox']
+      }
     },
     // browserNoActivityTimeout: 600000,
     // browserDisconnectTimeout: 600000,
@@ -81,6 +81,6 @@ module.exports = function init(config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
-    singleRun: true,
-  });
-};
+    singleRun: true
+  })
+}

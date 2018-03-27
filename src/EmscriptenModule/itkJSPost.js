@@ -7,7 +7,7 @@
  * environment. If the containing directory already exists with the
  * Emscripten filesystem, it will not be mounted. */
 Module['mountContainingDirectory'] = function (filePath) {
-  if (! ENVIRONMENT_IS_NODE) {
+  if (!ENVIRONMENT_IS_NODE) {
     return
   }
   var path = require('path')
@@ -32,7 +32,7 @@ Module['mountContainingDirectory'] = function (filePath) {
 /** Given an absolute path to a file, unmount its containing directory in the
  * Emscripten virtual filesystem. */
 Module['unmountContainingDirectory'] = function (filePath) {
-  if (! ENVIRONMENT_IS_NODE) {
+  if (!ENVIRONMENT_IS_NODE) {
     return
   }
   var path = require('path')
@@ -56,7 +56,7 @@ Module['mkdirs'] = function (dirs) {
 /** Mount file blobs into the Emscripten filesystem. The blobFiles argument should be an
  * array of { name: 'filename', data: blob } objects. */
 Module['mountBlobs'] = function (mountpoint, blobFiles) {
-  if (! ENVIRONMENT_IS_WORKER) {
+  if (!ENVIRONMENT_IS_WORKER) {
     return
   }
 
@@ -66,7 +66,7 @@ Module['mountBlobs'] = function (mountpoint, blobFiles) {
 }
 
 Module['unmountBlobs'] = function (mountpoint) {
-  if (! ENVIRONMENT_IS_WORKER) {
+  if (!ENVIRONMENT_IS_WORKER) {
     return
   }
 
