@@ -11,7 +11,7 @@ const program = require('commander')
 try {
   fs.mkdirSync('build')
 } catch (err) {
-  if (err.code != 'EEXIST') throw err
+  if (err.code !== 'EEXIST') throw err
 }
 program
   .option('-c, --no-compile', 'Do not compile Emscripten modules')
@@ -23,14 +23,14 @@ if (program.compile) {
   try {
     fs.mkdirSync('build')
   } catch (err) {
-    if (err.code != 'EEXIST') throw err
+    if (err.code !== 'EEXIST') throw err
   }
 
-  dockerVersion = spawnSync('docker', ['--version'], {
+  const dockerVersion = spawnSync('docker', ['--version'], {
     env: process.env,
     stdio: [ 'ignore', 'ignore', 'ignore' ]
   })
-  if (dockerVersion.status != 0) {
+  if (dockerVersion.status !== 0) {
     console.error("Could not run the 'docker' command.")
     console.error('This package requires Docker to build.')
     console.error('')
@@ -46,13 +46,13 @@ if (program.compile) {
   try {
     fs.statSync(dockcross)
   } catch (err) {
-    if (err.code == 'ENOENT') {
+    if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
-      dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js-base:latest'], {
+      const dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js-base:latest'], {
         env: process.env,
         stdio: [ 'ignore', output, null ]
       })
-      if (dockerCall.status != 0) {
+      if (dockerCall.status !== 0) {
         process.exit(dockerCall.status)
       }
       fs.closeSync(output)
@@ -66,13 +66,13 @@ if (program.compile) {
   try {
     fs.statSync(path.join('build', 'build.ninja'))
   } catch (err) {
-    if (err.code == 'ENOENT') {
+    if (err.code === 'ENOENT') {
       console.log('Running CMake configuration...')
       const cmakeCall = spawnSync(dockcross, ['cmake', '-DRapidJSON_INCLUDE_DIR=/rapidjson/include', '-DCMAKE_BUILD_TYPE=Release', '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build'], {
         env: process.env,
         stdio: 'inherit'
       })
-      if (cmakeCall.status != 0) {
+      if (cmakeCall.status !== 0) {
         process.exit(cmakeCall.status)
       }
     } else {
@@ -86,7 +86,7 @@ if (program.compile) {
     env: process.env,
     stdio: 'inherit'
   })
-  if (ninjaCall.status != 0) {
+  if (ninjaCall.status !== 0) {
     process.exit(ninjaCall.status)
   }
   console.log('')
@@ -96,22 +96,22 @@ if (program.copySources) {
   try {
     fs.mkdirSync('dist')
   } catch (err) {
-    if (err.code != 'EEXIST') throw err
+    if (err.code !== 'EEXIST') throw err
   }
   try {
     fs.mkdirSync(path.join('dist', 'ImageIOs'))
   } catch (err) {
-    if (err.code != 'EEXIST') throw err
+    if (err.code !== 'EEXIST') throw err
   }
   try {
     fs.mkdirSync(path.join('dist', 'MeshIOs'))
   } catch (err) {
-    if (err.code != 'EEXIST') throw err
+    if (err.code !== 'EEXIST') throw err
   }
   try {
     fs.mkdirSync(path.join('dist', 'WebWorkers'))
   } catch (err) {
-    if (err.code != 'EEXIST') throw err
+    if (err.code !== 'EEXIST') throw err
   }
   let imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
   let wasmFiles = glob.sync(path.join('build', 'ImageIOs', '*.wasm'))
@@ -124,7 +124,7 @@ if (program.copySources) {
   }
   const buildImageIOsParallel = function (callback) {
     console.log('Copying ImageIO modules...')
-    result = asyncMod.map(imageIOFiles, copyImageIOModules)
+    const result = asyncMod.map(imageIOFiles, copyImageIOModules)
     callback(null, result)
   }
   let meshIOFiles = glob.sync(path.join('build', 'MeshIOs', '*.js'))
@@ -138,7 +138,7 @@ if (program.copySources) {
   }
   const buildMeshIOsParallel = function (callback) {
     console.log('Copying MeshIO modules...')
-    result = asyncMod.map(meshIOFiles, copyMeshIOModules)
+    const result = asyncMod.map(meshIOFiles, copyMeshIOModules)
     callback(null, result)
   }
 
@@ -172,8 +172,8 @@ if (program.copySources) {
     console.log('Converting WebWorker sources...')
     const es6Files = glob.sync(path.join('src', 'WebWorkers', '*.js'))
     const outputDir = path.join('dist', 'WebWorkers')
-    builder = browserifyBuild(outputDir)
-    result = asyncMod.map(es6Files, builder)
+    const builder = browserifyBuild(outputDir)
+    const result = asyncMod.map(es6Files, builder)
     callback(null, result)
   }
 
