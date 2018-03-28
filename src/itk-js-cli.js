@@ -73,11 +73,50 @@ const build = (sourceDir) => {
   }
 }
 
+const test = (sourceDir) => {
+  // Check that the source directory exists and chdir to it.
+  if (!fs.existsSync(sourceDir)) {
+    console.error('The source directory: ' + sourceDir + ' does not exist!')
+    process.exit(1)
+  }
+  process.chdir(sourceDir)
+
+  const dockcrossScript = path.join('web-build', 'itk-js-build-env')
+  try {
+    fs.statSync(dockcrossScript)
+  } catch (err) {
+    console.error('Could not find ' + sourceDir + '/web-build/itk-js-build-env')
+    console.error('')
+    console.error('Has')
+    console.error('')
+    console.error('  itk-js build ' + sourceDir)
+    console.error('')
+    console.error('been executed?')
+    process.exit(1)
+  }
+
+  const dockerBuild = spawnSync(dockcrossScript,
+    ['bash', '-c',
+      'cd web-build && ctest'],
+    {
+      env: process.env,
+      stdio: 'inherit'
+    })
+  if (dockerBuild.status !== 0) {
+    process.exit(dockerBuild.status)
+  }
+}
+
 program
   .command('build <sourceDir>')
   .description('build the CMake project found in the given source directory')
   .action(build)
   .option('-i, --image <image>', 'build environment Docker image, defaults to insighttoolkit/itk-js')
+
+program
+  .command('test <sourceDir>')
+  .description('run ctest on the project previously built from the given source directory')
+  .action(test)
 
 program
   .parse(process.argv)
