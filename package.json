@@ -82,6 +82,7 @@
   "standard": {
     "ignore": [
       "src/loadEmscriptenModuleBrowser.js",
+      "src/itk-js-cli.js",
       "itkJSImageIOPost.js",
       "test/Browser/tests.js"
     ]

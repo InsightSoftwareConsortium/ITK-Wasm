@@ -1,6 +1,12 @@
 import test from 'ava'
 import path from 'path'
 
+const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
+const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
+const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
+
+const testInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cthead1.png')
+
 // Todo changes src -> dist
 const runPipelineNode = require(path.resolve(__dirname, '..', 'src', 'runPipelineNode.js'))
 const IOTypes = require(path.resolve(__dirname, '..', 'src', 'IOTypes.js'))
@@ -49,5 +55,36 @@ test('runPipelineNode uses input and output files in the Emscripten filesystem',
 `)
       t.is(stderr, `Input binary: ffffffdeffffffadffffffbeffffffef
 `)
+    })
+})
+
+test('runPipelineNode uses writes and read itk/Image in the Emscripten filesystem', (t) => {
+  const verifyImage = (image) => {
+    t.is(image.imageType.dimension, 2, 'dimension')
+    t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
+    t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
+    t.is(image.imageType.components, 1, 'components')
+    t.is(image.origin[0], 1.5, 'origin[0]')
+    t.is(image.origin[1], 1.5, 'origin[1]')
+    t.is(image.spacing[0], 4.0, 'spacing[0]')
+    t.is(image.spacing[1], 4.0, 'spacing[1]')
+    t.is(image.size[0], 64, 'size[0]')
+    t.is(image.size[1], 64, 'size[1]')
+    t.is(image.data.byteLength, 4096, 'data.byteLength')
+  }
+
+  return readImageLocalFile(testInputFilePath)
+    .then(function (image) {
+      const pipelinePath = path.resolve(__dirname, 'BinShrinkPipeline', 'web-build', 'BinShrink')
+      const args = ['cthead1.png.json', 'cthead1.png.shrink.json', '4']
+      const desiredOutputs = [
+        { path: args[1], type: IOTypes.Image }
+      ]
+      const inputs = [
+        { path: args[0], type: IOTypes.Image, data: image }
+      ]
+      return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
+    }).then(function ({stdout, stderr, outputs}) {
+      verifyImage(outputs[0].data)
     })
 })

@@ -12,10 +12,12 @@ Module['resetModuleStderr'] = function() {
 }
 
 Module['print'] = function(text) {
+  console.log(text)
   moduleStdout += text + '\n'
 }
 
 Module['printErr'] = function(text) {
+  console.log(text)
   moduleStderr += text + '\n'
 }
 

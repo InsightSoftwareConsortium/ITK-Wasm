@@ -34,14 +34,14 @@ const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => 
 
   imageIO.SetUseCompression(useCompression)
 
-  imageIO.WriteImageInformation()
-
   // Copy data to Emscripten heap (directly accessed from Module.HEAPU8)
   const numberOfBytes = image.data.length * image.data.BYTES_PER_ELEMENT
   const dataPtr = module._malloc(numberOfBytes)
   const dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
   dataHeap.set(new Uint8Array(image.data.buffer))
 
+  // The ImageIO's also call WriteImageInformation() because
+  // itk::ImageFileWriter only calls Write()
   imageIO.Write(dataHeap.byteOffset)
 
   module._free(dataHeap.byteOffset)

@@ -255,8 +255,6 @@ JSONImageIO
     }
 
 
-  // We have the correct extension, so now check for the JSON magic "NRRD",
-  // while ignoring the format version (the next four characters)
   std::ifstream inputStream;
   try
     {
@@ -331,7 +329,8 @@ JSONImageIO
     ++count;
     }
 
-  const rapidjson::Value & direction = document["direction"];
+  const rapidjson::Value & directionContainer = document["direction"];
+  const rapidjson::Value & direction = directionContainer["data"];
   count = 0;
   for( rapidjson::Value::ConstValueIterator itr = direction.Begin(); itr != direction.End(); )
     {
@@ -491,6 +490,7 @@ void
 JSONImageIO
 ::Write( const void *buffer )
 {
+  this->WriteImageInformation();
   const std::string fileName = std::string( this->GetFileName() ) + ".data";
   std::ofstream outputStream;
   this->OpenFileForWriting( outputStream, fileName, true, false );
