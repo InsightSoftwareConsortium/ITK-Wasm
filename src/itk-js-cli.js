@@ -126,11 +126,13 @@ program
   .action(build)
   .option('-i, --image <image>', 'build environment Docker image, defaults to insighttoolkit/itk-js')
 
-program
-  .command('test <sourceDir>')
-  .usage('[options] <sourceDir> [-- <ctest arguments>]')
-  .description('run ctest on the project previously built from the given source directory')
-  .action(test)
+// todo: needs a wrapper in web_add_test that 1) mount /work into the emscripten filesystem
+// and 2) invokes the runtime
+// program
+//   .command('test <sourceDir>')
+//   .usage('[options] <sourceDir> [-- <ctest arguments>]')
+//   .description('run ctest on the project previously built from the given source directory')
+//   .action(test)
 
 program
   .parse(process.argv)
