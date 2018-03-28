@@ -64,7 +64,13 @@ const build = (sourceDir) => {
     }
   }
 
-  const dockerBuild = spawnSync(dockcrossScript, ['web-build'], {
+  const hypenIndex = program.rawArgs.findIndex((arg) => arg === '--')
+  let cmakeArgs = []
+  if (hypenIndex !== -1) {
+    cmakeArgs = program.rawArgs.slice(hypenIndex + 1)
+  }
+
+  const dockerBuild = spawnSync(dockcrossScript, ['web-build'].concat(cmakeArgs), {
     env: process.env,
     stdio: 'inherit'
   })
@@ -95,9 +101,15 @@ const test = (sourceDir) => {
     process.exit(1)
   }
 
+  const hypenIndex = program.rawArgs.findIndex((arg) => arg === '--')
+  let ctestArgs = ''
+  if (hypenIndex !== -1) {
+    ctestArgs = program.rawArgs.slice(hypenIndex + 1).join(' ')
+  }
+
   const dockerBuild = spawnSync(dockcrossScript,
     ['bash', '-c',
-      'cd web-build && ctest'],
+      'cd web-build && ctest ' + ctestArgs],
     {
       env: process.env,
       stdio: 'inherit'
@@ -109,12 +121,14 @@ const test = (sourceDir) => {
 
 program
   .command('build <sourceDir>')
+  .usage('[options] <sourceDir> [-- <cmake arguments>]')
   .description('build the CMake project found in the given source directory')
   .action(build)
   .option('-i, --image <image>', 'build environment Docker image, defaults to insighttoolkit/itk-js')
 
 program
   .command('test <sourceDir>')
+  .usage('[options] <sourceDir> [-- <ctest arguments>]')
   .description('run ctest on the project previously built from the given source directory')
   .action(test)
 
