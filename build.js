@@ -198,13 +198,25 @@ if (program.buildPipelines) {
     if (buildPipelineCall.status !== 0) {
       process.exit(buildPipelineCall.status)
     }
+    const jsIOFiles = glob.sync(path.join(pipelinePath, 'web-build', '*.js'))
+    const wasmFiles = glob.sync(path.join(pipelinePath, 'web-build', '*.wasm'))
+    const pipelineFiles = jsIOFiles.concat(wasmFiles)
+    pipelineFiles.forEach((file) => {
+      let filename = path.basename(file)
+      let output = path.join(__dirname, 'dist', 'Pipelines', filename)
+      fs.copySync(file, output)
+    })
   }
 
   const pipelines = [
     path.join(__dirname, 'test', 'StdoutStderrPipeline'),
     path.join(__dirname, 'test', 'BinShrinkPipeline'),
-    path.join(__dirname, 'test', 'InputOutputFilesPipeline'),
+    path.join(__dirname, 'test', 'InputOutputFilesPipeline')
   ]
+  try {
+    fs.mkdirSync(path.join(__dirname, 'dist', 'Pipelines'))
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err
+  }
   asyncMod.map(pipelines, buildPipeline)
-
 } // progrem

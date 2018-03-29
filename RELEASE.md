@@ -9,6 +9,7 @@ git clean -fdx
 npm install
 npm run build
 npm run test
+rm dist/Pipelines/*
 ```
 
 Bump `version` in `package.json`.
