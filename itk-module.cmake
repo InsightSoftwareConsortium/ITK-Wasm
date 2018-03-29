@@ -12,8 +12,13 @@ itk_module(BridgeJavaScript
     ITKImageFunction
     ${BridgeJavaScript_ImageIOModules}
     ${BridgeJavaScript_MeshIOModules}
+  PRIVATE_DEPENDS
+    # Todo  change to ITKIOMeshBase
+    ITKIOMesh
   TEST_DEPENDS
     ITKTestKernel
+  FACTORY_NAMES
+    ImageIO::JSON
   EXCLUDE_FROM_DEFAULT
   DESCRIPTION
     "${DOCUMENTATION}"

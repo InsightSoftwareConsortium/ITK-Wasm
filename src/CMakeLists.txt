@@ -9,6 +9,8 @@ set(BridgeJavaScript_SRCS
   )
 itk_module_add_library(BridgeJavaScript ${BridgeJavaScript_SRCS})
 
+if(BUILD_ITK_JS_IO_MODULES)
+
 set(ImageIOIndex_ARRAY "")
 foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
   if(${io_module} STREQUAL "BridgeJavaScript")
@@ -168,3 +170,5 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
 endforeach()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/MeshIOIndex.js.in
   ${CMAKE_CURRENT_SOURCE_DIR}/MeshIOIndex.js @ONLY)
+
+endif() # BUILD_ITK_JS_IO_MODULES

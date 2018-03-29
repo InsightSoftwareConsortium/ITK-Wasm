@@ -11,11 +11,12 @@
 mkdir -p ./web-build
 
 cmake \
-   --no-ware-unused-vars \
+   --no-warn-unused-cli \
    -Bweb-build \
    -H. \
    -DCMAKE_BUILD_TYPE:STRING=Release \
-   -DITK_DIR=/ITK-build \
+   -DITK_DIR:PATH=/ITK-build \
+   -DVTK_DIR:PATH=/VTK-build \
    -GNinja \
      "$@" && \
 ninja -Cweb-build
