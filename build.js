@@ -145,37 +145,59 @@ if (program.copySources) {
     callback(null, result)
   }
 
-  const copySources = ramda.curry(function (sourceSubDir, sourceFile, callback) {
-    let source = path.basename(sourceFile)
-    let output = path.join('dist', sourceSubDir, source)
-    fs.copySync(sourceFile, output)
-    callback(null, source)
-  })
-  const copyMainSources = function (callback) {
-    console.log('Copying main sources...')
-    const sourceFiles = glob.sync(path.join('src', '*.js'))
-    const copier = copySources('.')
-    const result = asyncMod.map(sourceFiles, copier)
-    callback(null, result)
-  }
-
   const browserify = require('browserify')
-  const browserifyBuild = ramda.curry(function (outputDir, es6File, callback) {
+  const browserifyBuild = ramda.curry(function (uglify, outputDir, es6File, callback) {
     let basename = path.basename(es6File)
     let output = path.join(outputDir, basename)
     const bundler = browserify(es6File)
-    bundler.transform({global: true}, 'uglifyify')
-    bundler
-      .transform('babelify', {presets: ['es2015']})
-      .bundle()
-      .pipe(fs.createWriteStream(output))
+    if (uglify) {
+      bundler.transform({global: true}, 'uglifyify')
+      bundler
+        .transform('babelify', {presets: ['es2015']})
+        .bundle()
+        .pipe(fs.createWriteStream(output))
+    } else {
+      bundler
+        .transform('babelify', {presets: ['es2015']})
+        .bundle()
+        .pipe(fs.createWriteStream(output))
+    }
     callback(null, basename)
   })
   const browserifyWebWorkerBuildParallel = function (callback) {
     console.log('Converting WebWorker sources...')
     const es6Files = glob.sync(path.join('src', 'WebWorkers', '*.js'))
     const outputDir = path.join('dist', 'WebWorkers')
-    const builder = browserifyBuild(outputDir)
+    const builder = browserifyBuild(true, outputDir)
+    const result = asyncMod.map(es6Files, builder)
+    callback(null, result)
+  }
+
+  const babelOptions = {
+    presets: [
+      ['es2015', { 'modules': false }]
+    ]
+  }
+  const babel = require('babel-core')
+  const babelBuild = ramda.curry(function (outputDir, es6File, callback) {
+    let basename = path.basename(es6File)
+    let output = path.join(outputDir, basename)
+    babel.transformFile(es6File, babelOptions, function (err, result) {
+      if (err) {
+        console.error(err)
+        process.exit(1)
+      }
+      const outputFD = fs.openSync(output, 'w')
+      fs.writeSync(outputFD, result.code)
+      fs.closeSync(outputFD)
+    })
+    callback(null, basename)
+  })
+  const babelBuildParallel = function (callback) {
+    console.log('Converting main sources...')
+    const es6Files = glob.sync(path.join('src', '*.js'))
+    const outputDir = 'dist'
+    const builder = babelBuild(outputDir)
     const result = asyncMod.map(es6Files, builder)
     callback(null, result)
   }
@@ -183,7 +205,7 @@ if (program.copySources) {
   asyncMod.parallel([
     buildImageIOsParallel,
     buildMeshIOsParallel,
-    copyMainSources,
+    babelBuildParallel,
     browserifyWebWorkerBuildParallel
   ])
 } // program.copySources
