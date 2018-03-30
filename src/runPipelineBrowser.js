@@ -2,7 +2,7 @@ import WebworkerPromise from 'webworker-promise'
 
 import config from './itkConfig'
 
-import IOTypes from 'IOTypes'
+import IOTypes from './IOTypes'
 
 const worker = new window.Worker(
   config.itkModulesPath + '/WebWorkers/Pipeline.worker.js'
