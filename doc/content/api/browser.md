@@ -24,7 +24,7 @@ Read an image from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web
 
 Read an image from a series of DICOM [File](https://developer.mozilla.org/en-US/docs/Web/API/File)'s stored in an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) or [FileList](https://developer.mozilla.org/en-US/docs/Web/API/FileList).
 
-## writeImageArrayBuffer(useCompression, image, fileName, mimeType) -> null
+## writeImageArrayBuffer(useCompression, image, fileName, mimeType) -> [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)
 
 Write an image to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
 
