@@ -22,3 +22,9 @@ Write an image to a file on the local filesystem in Node.js.
 *useCompression*: compress the pixel data when possible
 *image*:          [itk/Image](./Image.html) instance to write
 *filePath*:       path to the file on the local filesystem
+
+---
+
+## readMeshLocalFile(filePath) -> [itk/Mesh](./Mesh.html)
+
+Read a mesh from a file on the local filesystem.
