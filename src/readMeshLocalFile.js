@@ -9,11 +9,6 @@ const MeshIOIndex = require('./MeshIOIndex.js')
 const loadEmscriptenModule = require('./loadEmscriptenModuleNode.js')
 const readMeshEmscriptenFSFile = require('./readMeshEmscriptenFSFile.js')
 
-/**
- * Read an image from a file on the local filesystem in Node.js.
- *
- * @param: filePath path to the file on the local filesystem.
- */
 const readMeshLocalFile = (filePath) => {
   return new Promise(function (resolve, reject) {
     const meshIOsPath = path.resolve(__dirname, 'MeshIOs')
