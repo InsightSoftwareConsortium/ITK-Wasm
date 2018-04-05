@@ -5,6 +5,8 @@ These Input/Output (IO) functions can be used from within a [Node.js](https://no
 
 Similar to the [web browser API](./browser.html), most of these functions return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
+---
+
 ## readImageLocalFile(filePath) -> [itk/Image](./Image.html)
 
 Read an image from a file on the local filesystem.
@@ -17,7 +19,7 @@ It is assumed that all the files are located in the same directory.
 
 ## writeImageLocalFile(useCompression, image, filePath) -> null
 
-Write an image to a file on the local filesystem in Node.js.
+Write an image to a file on the local filesystem with Node.js.
 
 *useCompression*: compress the pixel data when possible
 *image*:          [itk/Image](./Image.html) instance to write
@@ -28,3 +30,12 @@ Write an image to a file on the local filesystem in Node.js.
 ## readMeshLocalFile(filePath) -> [itk/Mesh](./Mesh.html)
 
 Read a mesh from a file on the local filesystem.
+
+## writeMeshLocalFile({ useCompression, binaryFileType }, image, filePath) -> null
+
+Write a mesh to a file on the local filesystem with Node.js.
+
+*useCompression*: compress the pixel data when possible
+*binaryFileType*: write in an binary as opposed to a ascii format, if possible
+*mesh*:           [itk/Mesh](./Mesh.html) instance to write
+*filePath*:       path to the file on the local filesystem
