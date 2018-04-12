@@ -1,5 +1,5 @@
 const itkConfig = {
-  itkModulesPath: '/base/dist/itk'
+  itkModulesPath: __BASE_PATH__ + '/dist/itk'
 }
 
 export default itkConfig

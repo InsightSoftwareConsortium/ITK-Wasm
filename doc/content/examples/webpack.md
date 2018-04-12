@@ -148,6 +148,11 @@ Since Karma's web server serves its files in `/base` by default, and our files a
           './itkConfig$': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js'),
         },
       },
+      plugins: [
+        new webpack.DefinePlugin({
+          __BASE_PATH__: "'/base'"
+        })
+      ]
 [...]
 ```
 
@@ -155,11 +160,13 @@ Where `itkConfigTest.js` contains:
 
 ```js
 const itkConfig = {
-  itkModulesPath: '/base/dist/itk'
+  itkModulesPath: __BASE_PATH__ + '/dist/itk'
 }
 
 export default itkConfig
 ```
+
+When building for local development or production, as opposed to testing, `__BASE_PATH__` can be replaced with `__webpack_public_path__`, the [WebPack Public Path](https://webpack.js.org/guides/public-path/). This technique can be used to support alternate paths or delivery on a CDN.
 
 Create entries in the `package.json` file to start Karma, and run the tests!
 
