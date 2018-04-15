@@ -3,28 +3,28 @@ var Module = {}
 var moduleStdout = null
 var moduleStderr = null
 
-Module['resetModuleStdout'] = function() {
+Module['resetModuleStdout'] = function () {
   moduleStdout = ''
 }
 
-Module['resetModuleStderr'] = function() {
+Module['resetModuleStderr'] = function () {
   moduleStderr = ''
 }
 
-Module['print'] = function(text) {
+Module['print'] = function (text) {
   console.log(text)
   moduleStdout += text + '\n'
 }
 
-Module['printErr'] = function(text) {
+Module['printErr'] = function (text) {
   console.log(text)
   moduleStderr += text + '\n'
 }
 
-Module['getModuleStdout'] = function() {
+Module['getModuleStdout'] = function () {
   return moduleStdout
 }
 
-Module['getModuleStderr'] = function() {
+Module['getModuleStderr'] = function () {
   return moduleStderr
 }
