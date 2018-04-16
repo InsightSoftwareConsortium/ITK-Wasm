@@ -34,10 +34,10 @@ test('Test reading a JPEG file', t => {
     const jsFile = new window.File([response.data], fileName)
     return jsFile
   })
-  .then(function (jsFile) {
-    return readImageFile(jsFile)
-  })
-  .then(function (image) {
-    verifyImage(t, image)
-  })
+    .then(function (jsFile) {
+      return readImageFile(jsFile)
+    })
+    .then(function (image) {
+      verifyImage(t, image)
+    })
 })

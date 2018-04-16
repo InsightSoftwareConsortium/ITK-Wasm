@@ -1,4 +1,4 @@
 var Module = {
-  'preRun': function() {
+  'preRun': function () {
   }
 }

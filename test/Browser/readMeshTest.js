@@ -24,33 +24,33 @@ const verifyMesh = (t, mesh) => {
 
 test('readMeshArrayBuffer reads an ArrayBuffer', (t) => {
   return axios.get(testFilePath, {responseType: 'arraybuffer'})
-  .then(function (response) {
-    return readMeshArrayBuffer(response.data, 'cow.vtk')
-  })
-  .then(function (mesh) {
-    verifyMesh(t, mesh)
-  })
+    .then(function (response) {
+      return readMeshArrayBuffer(response.data, 'cow.vtk')
+    })
+    .then(function (mesh) {
+      verifyMesh(t, mesh)
+    })
 })
 
 // Todo: fix me
 // test('readMeshFile reads a Blob without a file extension', (t) => {
-  // return axios.get(testFilePath, {responseType: 'blob'})
-  // .then(function (response) {
-    // return readMeshBlob(response.data, 'cow')
-  // })
-  // .then(function (mesh) {
-    // verifyMesh(t, mesh)
-  // })
+// return axios.get(testFilePath, {responseType: 'blob'})
+// .then(function (response) {
+// return readMeshBlob(response.data, 'cow')
+// })
+// .then(function (mesh) {
+// verifyMesh(t, mesh)
+// })
 // })
 
 test('readMeshBlob reads a Blob', (t) => {
   return axios.get(testFilePath, {responseType: 'blob'})
-  .then(function (response) {
-    return readMeshBlob(response.data, 'cow.vtk')
-  })
-  .then(function (mesh) {
-    verifyMesh(t, mesh)
-  })
+    .then(function (response) {
+      return readMeshBlob(response.data, 'cow.vtk')
+    })
+    .then(function (mesh) {
+      verifyMesh(t, mesh)
+    })
 })
 
 test('readMeshFile reads a File', (t) => {
@@ -58,12 +58,12 @@ test('readMeshFile reads a File', (t) => {
     const jsFile = new window.File([response.data], fileName)
     return jsFile
   })
-  .then(function (jsFile) {
-    return readMeshFile(jsFile)
-  })
-  .then(function (mesh) {
-    verifyMesh(t, mesh)
-  })
+    .then(function (jsFile) {
+      return readMeshFile(jsFile)
+    })
+    .then(function (mesh) {
+      verifyMesh(t, mesh)
+    })
 })
 
 test('readMeshFile throws a catchable error for an invalid file', (t) => {

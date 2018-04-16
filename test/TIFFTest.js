@@ -39,9 +39,9 @@ test('Test writing a TIFF file', t => {
     const useCompression = false
     return writeImageLocalFile(useCompression, image, testOutputFilePath)
   })
-  .then(function () {
-    return readImageLocalFile(testOutputFilePath).then(function (image) {
-      verifyImage(t, image)
+    .then(function () {
+      return readImageLocalFile(testOutputFilePath).then(function (image) {
+        verifyImage(t, image)
+      })
     })
-  })
 })
