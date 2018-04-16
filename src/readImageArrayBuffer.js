@@ -2,19 +2,14 @@ import WebworkerPromise from 'webworker-promise'
 
 import config from './itkConfig'
 
-const worker = new window.Worker(
-  config.itkModulesPath + '/WebWorkers/ImageIO.worker.js'
-)
-const promiseWorker = new WebworkerPromise(worker)
-
-/**
- * Read an image from a file ArrayBuffer in the browser.
- *
- * @param: data arrayBuffer that contains the file contents
- * @param: fileName string that contains the file name
- * @param: mimeType optional mime-type string
- */
-const readImageArrayBuffer = (arrayBuffer, fileName, mimeType) => {
+const readImageArrayBuffer = (webWorker, arrayBuffer, fileName, mimeType) => {
+  let worker = webWorker
+  if (!worker) {
+    worker = new window.Worker(
+      config.itkModulesPath + '/WebWorkers/ImageIO.worker.js'
+    )
+  }
+  const promiseWorker = new WebworkerPromise(worker)
   return promiseWorker.postMessage(
     {
       operation: 'readImage',
@@ -24,7 +19,9 @@ const readImageArrayBuffer = (arrayBuffer, fileName, mimeType) => {
       config: config
     },
     [arrayBuffer]
-  )
+  ).then(function (image) {
+    return Promise.resolve({ image, webWorker: worker })
+  })
 }
 
 export default readImageArrayBuffer

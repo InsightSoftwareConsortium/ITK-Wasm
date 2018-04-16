@@ -3,10 +3,14 @@ import PromiseFileReader from 'promise-file-reader'
 
 import config from './itkConfig'
 
-const worker = new window.Worker(config.itkModulesPath + '/WebWorkers/MeshIO.worker.js')
-const promiseWorker = new WebworkerPromise(worker)
-
-const readMeshFile = (file) => {
+const readMeshFile = (webWorker, file) => {
+  let worker = webWorker
+  if (!worker) {
+    worker = new window.Worker(
+      config.itkModulesPath + '/WebWorkers/MeshIO.worker.js'
+    )
+  }
+  const promiseWorker = new WebworkerPromise(worker)
   return PromiseFileReader.readAsArrayBuffer(file)
     .then(arrayBuffer => {
       return promiseWorker.postMessage(
@@ -18,6 +22,9 @@ const readMeshFile = (file) => {
           config: config
         },
         [arrayBuffer])
+    }
+    ).then(function (mesh) {
+      return Promise.resolve({ mesh, webWorker: worker })
     })
 }
 

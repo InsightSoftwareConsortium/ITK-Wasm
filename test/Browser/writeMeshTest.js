@@ -24,13 +24,13 @@ const verifyMesh = (t, mesh) => {
 test('writeMeshArrayBuffer writes to an ArrayBuffer', t => {
   return axios.get(testFilePath, {responseType: 'arraybuffer'})
     .then(function (response) {
-      return readMeshArrayBuffer(response.data, 'cow.vtk').then(function (mesh) {
+      return readMeshArrayBuffer(null, response.data, 'cow.vtk').then(function (mesh) {
         const useCompression = false
-        return writeMeshArrayBuffer(useCompression, mesh, 'cow.vtk')
+        return writeMeshArrayBuffer(null, useCompression, mesh, 'cow.vtk')
       })
     })
     .then(function (writtenArrayBuffer) {
-      return readMeshArrayBuffer(writtenArrayBuffer, 'cow.vtk').then(function (mesh) {
+      return readMeshArrayBuffer(null, writtenArrayBuffer, 'cow.vtk').then(function (mesh) {
         verifyMesh(t, mesh)
       })
     })

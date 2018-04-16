@@ -2,10 +2,14 @@ import WebworkerPromise from 'webworker-promise'
 
 import config from './itkConfig'
 
-const worker = new window.Worker(config.itkModulesPath + '/WebWorkers/MeshIO.worker.js')
-const promiseWorker = new WebworkerPromise(worker)
-
-const writeMeshArrayBuffer = ({ useCompression, binaryFileType }, mesh, fileName, mimeType) => {
+const writeMeshArrayBuffer = (webWorker, { useCompression, binaryFileType }, mesh, fileName, mimeType) => {
+  let worker = webWorker
+  if (!worker) {
+    worker = new window.Worker(
+      config.itkModulesPath + '/WebWorkers/MeshIO.worker.js'
+    )
+  }
+  const promiseWorker = new WebworkerPromise(worker)
   const transferables = []
   if (mesh.points.buffer) {
     transferables.push(mesh.points.buffer)
@@ -38,7 +42,9 @@ const writeMeshArrayBuffer = ({ useCompression, binaryFileType }, mesh, fileName
       config
     },
     transferables
-  )
+  ).then(function () {
+    return Promise.resolve({ webWorker: worker })
+  })
 }
 
 export default writeMeshArrayBuffer

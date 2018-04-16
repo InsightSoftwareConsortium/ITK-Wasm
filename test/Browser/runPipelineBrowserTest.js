@@ -10,13 +10,14 @@ import readImageFile from 'readImageFile'
 import runPipelineBrowser from 'runPipelineBrowser'
 import IOTypes from 'IOTypes'
 
-test('runPipelineNode captures stdout and stderr', (t) => {
+test('runPipelineBrowser captures stdout and stderr', (t) => {
   const args = []
   const outputs = null
   const inputs = null
   const stdoutStderrPath = 'StdoutStderr'
-  return runPipelineBrowser(stdoutStderrPath, args, outputs, inputs)
-    .then(function ({stdout, stderr, outputs}) {
+  return runPipelineBrowser(null, stdoutStderrPath, args, outputs, inputs)
+    .then(function ({stdout, stderr, outputs, webWorker}) {
+      webWorker.terminate()
       t.is(stdout, `I’m writing my code,
 But I do not realize,
 Hours have gone by.
@@ -29,7 +30,29 @@ Click. Perfect success.
     })
 })
 
-test('runPipelineNode uses input and output files in the Emscripten filesystem', (t) => {
+test('runPipelineBrowser re-uses a WebWorker', (t) => {
+  const args = []
+  const outputs = null
+  const inputs = null
+  const stdoutStderrPath = 'StdoutStderr'
+  return runPipelineBrowser(null, stdoutStderrPath, args, outputs, inputs)
+    .then(function ({stdout, stderr, outputs, webWorker}) {
+      return runPipelineBrowser(webWorker, stdoutStderrPath, args, outputs, inputs)
+        .then(function ({stdout, stderr, outputs, webWorker}) {
+          t.is(stdout, `I’m writing my code,
+But I do not realize,
+Hours have gone by.
+`)
+          t.is(stderr, `The modem humming
+Code rapidly compiling.
+Click. Perfect success.
+`)
+          t.end()
+        })
+    })
+})
+
+test('runPipelineBrowser uses input and output files in the Emscripten filesystem', (t) => {
   const pipelinePath = 'InputOutputFiles'
   const args = ['input.txt', 'input.bin', 'output.txt', 'output.bin']
   const desiredOutputs = [
@@ -40,7 +63,7 @@ test('runPipelineNode uses input and output files in the Emscripten filesystem',
     { path: 'input.txt', type: IOTypes.Text, data: 'The answer is 42.' },
     { path: 'input.bin', type: IOTypes.Binary, data: new Uint8Array([222, 173, 190, 239]) }
   ]
-  return runPipelineBrowser(pipelinePath, args, desiredOutputs, inputs)
+  return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
     .then(function ({stdout, stderr, outputs}) {
       t.is(outputs[0].path, 'output.txt')
       t.is(outputs[0].type, IOTypes.Text)
@@ -60,7 +83,7 @@ test('runPipelineNode uses input and output files in the Emscripten filesystem',
 })
 
 /* todo: patch itk to avoid pthread_attr_setscope call
-test('runPipelineNode uses writes and read itk/Image in the Emscripten filesystem', (t) => {
+test('runPipelineBrowser uses writes and read itk/Image in the Emscripten filesystem', (t) => {
   const verifyImage = (image) => {
     t.is(image.imageType.dimension, 2, 'dimension')
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
@@ -93,7 +116,7 @@ test('runPipelineNode uses writes and read itk/Image in the Emscripten filesyste
       const inputs = [
         { path: args[0], type: IOTypes.Image, data: image }
       ]
-      return runPipelineBrowser(pipelinePath, args, desiredOutputs, inputs)
+      return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
     }).then(function ({stdout, stderr, outputs}) {
       verifyImage(outputs[0].data)
     })

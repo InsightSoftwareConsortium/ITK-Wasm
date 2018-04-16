@@ -25,9 +25,10 @@ const verifyMesh = (t, mesh) => {
 test('readMeshArrayBuffer reads an ArrayBuffer', (t) => {
   return axios.get(testFilePath, {responseType: 'arraybuffer'})
     .then(function (response) {
-      return readMeshArrayBuffer(response.data, 'cow.vtk')
+      return readMeshArrayBuffer(null, response.data, 'cow.vtk')
     })
-    .then(function (mesh) {
+    .then(function ({ mesh, webWorker }) {
+      webWorker.terminate()
       verifyMesh(t, mesh)
     })
 })
@@ -46,9 +47,9 @@ test('readMeshArrayBuffer reads an ArrayBuffer', (t) => {
 test('readMeshBlob reads a Blob', (t) => {
   return axios.get(testFilePath, {responseType: 'blob'})
     .then(function (response) {
-      return readMeshBlob(response.data, 'cow.vtk')
+      return readMeshBlob(null, response.data, 'cow.vtk')
     })
-    .then(function (mesh) {
+    .then(function ({ mesh }) {
       verifyMesh(t, mesh)
     })
 })
@@ -59,10 +60,32 @@ test('readMeshFile reads a File', (t) => {
     return jsFile
   })
     .then(function (jsFile) {
-      return readMeshFile(jsFile)
+      return readMeshFile(null, jsFile)
     })
-    .then(function (mesh) {
+    .then(function ({ mesh }) {
       verifyMesh(t, mesh)
+    })
+})
+
+test('readMeshFile re-uses a WebWorker', (t) => {
+  return axios.get(testFilePath, {responseType: 'blob'}).then(function (response) {
+    const jsFile = new window.File([response.data], fileName)
+    return jsFile
+  })
+    .then(function (jsFile) {
+      return readMeshFile(null, jsFile)
+    })
+    .then(function ({ webWorker }) {
+      axios.get(testFilePath, {responseType: 'blob'}).then(function (response) {
+        const jsFile = new window.File([response.data], fileName)
+        return jsFile
+      })
+        .then(function (jsFile) {
+          return readMeshFile(webWorker, jsFile)
+            .then(function ({ mesh, webWorker }) {
+              verifyMesh(t, mesh)
+            })
+        })
     })
 })
 
@@ -70,7 +93,7 @@ test('readMeshFile throws a catchable error for an invalid file', (t) => {
   const invalidArray = new Uint8Array([21, 4, 4, 4, 4, 9, 5, 0, 82, 42])
   const invalidBlob = new window.Blob([invalidArray])
   const invalidFile = new window.File([invalidBlob], 'invalid.file')
-  return readMeshFile(invalidFile).then(function (mesh) {
+  return readMeshFile(null, invalidFile).then(function ({ mesh }) {
     t.fail('should not have successfully read the mesh')
     t.end()
   }).catch(function (error) {
