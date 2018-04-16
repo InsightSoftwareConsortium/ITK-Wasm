@@ -10,7 +10,7 @@ function(web_add_executable target_name)
   configure_file(/ITKBridgeJavaScript/src/EmscriptenModule/itkJSPipelinePre.js.in
     ${pre_js} @ONLY)
   set_property(TARGET ${wasm_target_name} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s BINARYEN_ASYNC_COMPILATION=0 -s WASM=1 -s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js /ITKBridgeJavaScript/src/EmscriptenModule/itkJSPost.js"
+    PROPERTY LINK_FLAGS " -s BINARYEN_ASYNC_COMPILATION=0 -s SINGLE_FILE=1 -s WASM=1 -s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js /ITKBridgeJavaScript/src/EmscriptenModule/itkJSPost.js"
     )
 endfunction()
 
