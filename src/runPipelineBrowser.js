@@ -4,12 +4,14 @@ import config from './itkConfig'
 
 import IOTypes from './IOTypes'
 
-const worker = new window.Worker(
-  config.itkModulesPath + '/WebWorkers/Pipeline.worker.js'
-)
-const promiseWorker = new WebworkerPromise(worker)
-
-const runPipelineBrowser = (pipelinePath, args, outputs, inputs) => {
+const runPipelineBrowser = (webWorker, pipelinePath, args, outputs, inputs) => {
+  let worker = webWorker
+  if (!worker) {
+    worker = new window.Worker(
+      config.itkModulesPath + '/WebWorkers/Pipeline.worker.js'
+    )
+  }
+  const promiseWorker = new WebworkerPromise(worker)
   const transferables = []
   if (inputs) {
     inputs.forEach(function (input) {
@@ -41,7 +43,9 @@ const runPipelineBrowser = (pipelinePath, args, outputs, inputs) => {
       inputs
     },
     transferables
-  )
+  ).then(function ({ stdout, stderr, outputs }) {
+    return Promise.resolve({ stdout, stderr, outputs, webWorker: worker })
+  })
 }
 
 export default runPipelineBrowser

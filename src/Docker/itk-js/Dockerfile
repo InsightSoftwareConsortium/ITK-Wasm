@@ -18,7 +18,7 @@ RUN cd / && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITKBridgeJavaScript-build
 
-COPY ITKBridgeJavaScript.cmake /usr/share/cmake-3.10/Modules/
+COPY ITKBridgeJavaScript.cmake /usr/share/cmake-3.11/Modules/
 COPY web-build /usr/local/bin/
 
 ENV DEFAULT_DOCKCROSS_IMAGE insighttoolkit/itk-js

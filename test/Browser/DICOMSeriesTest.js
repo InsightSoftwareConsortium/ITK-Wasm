@@ -20,9 +20,9 @@ test('Test reading DICOM file series', t => {
 
   return Promise.all(fetchFiles)
     .then(function (files) {
-      return readImageDICOMFileSeries(files)
+      return readImageDICOMFileSeries(null, files)
     })
-    .then(function (image) {
+    .then(function ({ image }) {
       t.is(image.imageType.dimension, 3, 'dimension')
       t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
       t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')

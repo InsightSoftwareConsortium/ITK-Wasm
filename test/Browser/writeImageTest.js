@@ -39,16 +39,16 @@ const verifyImage = (t, image) => {
   t.end()
 }
 
-test('writeImageArrayBuffer writes to an ArrayBuffer', t => {
+test('writeImageArrayBuffer writes to an ArrayBuffer', (t) => {
   return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
-    .then(arrayBuffer => {
-      return readImageArrayBuffer(arrayBuffer, 'cthead1Small.png').then(function (image) {
+    .then((arrayBuffer) => {
+      return readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png').then(function ({ image }) {
         const useCompression = false
-        return writeImageArrayBuffer(useCompression, image, 'cthead1Small.png')
+        return writeImageArrayBuffer(null, useCompression, image, 'cthead1Small.png')
       })
     })
     .then(function (writtenArrayBuffer) {
-      return readImageArrayBuffer(writtenArrayBuffer, 'cthead1Small.png').then(function (image) {
+      return readImageArrayBuffer(null, writtenArrayBuffer, 'cthead1Small.png').then(function ({ image }) {
         verifyImage(t, image)
       })
     })

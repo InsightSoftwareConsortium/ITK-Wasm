@@ -3,10 +3,14 @@ import PromiseFileReader from 'promise-file-reader'
 
 import config from './itkConfig'
 
-const worker = new window.Worker(config.itkModulesPath + '/WebWorkers/ImageIO.worker.js')
-const promiseWorker = new WebworkerPromise(worker)
-
-const readImageDICOMFileSeries = (fileList) => {
+const readImageDICOMFileSeries = (webWorker, fileList) => {
+  let worker = webWorker
+  if (!worker) {
+    worker = new window.Worker(
+      config.itkModulesPath + '/WebWorkers/ImageIO.worker.js'
+    )
+  }
+  const promiseWorker = new WebworkerPromise(worker)
   const fetchFileDescriptions = Array.from(fileList, function (file) {
     return PromiseFileReader.readAsArrayBuffer(file).then(function (arrayBuffer) {
       const fileDescription = { name: file.name, type: file.type, data: arrayBuffer }
@@ -20,6 +24,9 @@ const readImageDICOMFileSeries = (fileList) => {
     })
     return promiseWorker.postMessage({ operation: 'readDICOMImageSeries', fileDescriptions: fileDescriptions, config: config },
       transferables)
+  }
+  ).then(function (image) {
+    return Promise.resolve({ image, webWorker: worker })
   })
 }
 
