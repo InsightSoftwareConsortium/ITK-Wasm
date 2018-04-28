@@ -20,15 +20,15 @@ jobs:
               docker push insighttoolkit/itk-js-base:latest
               ./src/Docker/itk-js/build.sh
               docker push insighttoolkit/itk-js:latest
-              #./src/Docker/itk-js-vtk/build.sh
-              #docker push kitware/itk-js-vtk:latest
+              ./src/Docker/itk-js-vtk/build.sh
+              docker push kitware/itk-js-vtk:latest
             else
               docker pull insighttoolkit/itk-js-base:latest
               ./src/Docker/itk-js-base/build.sh --cache-from=dockcross/browser-asmjs:latest,insighttoolkit/itk-js-base:latest
               docker pull insighttoolkit/itk-js:latest
               ./src/Docker/itk-js/build.sh --cache-from=insighttoolkit/itk-js-base:latest,insighttoolkit/itk-js:latest
-              #docker pull kitware/itk-js-vtk:latest
-              #./src/Docker/itk-js-vtk/build.sh --cache-from=insighttoolkit/itk-js:latest,kitware/itk-js-vtk:latest
+              docker pull kitware/itk-js-vtk:latest
+              ./src/Docker/itk-js-vtk/build.sh --cache-from=insighttoolkit/itk-js:latest,kitware/itk-js-vtk:latest
             fi
       - run:
           name: Install Node packages
