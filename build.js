@@ -117,8 +117,6 @@ if (program.copySources) {
     if (err.code !== 'EEXIST') throw err
   }
   let imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
-  let wasmFiles = glob.sync(path.join('build', 'ImageIOs', '*.wasm'))
-  imageIOFiles = imageIOFiles.concat(wasmFiles)
   const copyImageIOModules = function (imageIOFile, callback) {
     let io = path.basename(imageIOFile)
     let output = path.join('dist', 'ImageIOs', io)
@@ -131,8 +129,6 @@ if (program.copySources) {
     callback(null, result)
   }
   let meshIOFiles = glob.sync(path.join('build', 'MeshIOs', '*.js'))
-  wasmFiles = glob.sync(path.join('build', 'MeshIOs', '*.wasm'))
-  meshIOFiles = meshIOFiles.concat(wasmFiles)
   const copyMeshIOModules = function (meshIOFile, callback) {
     let io = path.basename(meshIOFile)
     let output = path.join('dist', 'MeshIOs', io)
@@ -220,9 +216,7 @@ if (program.buildPipelines) {
     if (buildPipelineCall.status !== 0) {
       process.exit(buildPipelineCall.status)
     }
-    const jsIOFiles = glob.sync(path.join(pipelinePath, 'web-build', '*.js'))
-    const wasmFiles = glob.sync(path.join(pipelinePath, 'web-build', '*.wasm'))
-    const pipelineFiles = jsIOFiles.concat(wasmFiles)
+    const pipelineFiles = glob.sync(path.join(pipelinePath, 'web-build', '*.js'))
     pipelineFiles.forEach((file) => {
       let filename = path.basename(file)
       let output = path.join(__dirname, 'dist', 'Pipelines', filename)

@@ -11,6 +11,7 @@ examples:
   building:
     nodejs: node.html
     webpack: webpack.html
+    unpkgio: unpkgio.html
 
 api:
   inputoutput:

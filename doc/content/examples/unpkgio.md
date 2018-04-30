@@ -1,9 +1,7 @@
-title: Using itk.js in a web browser application via Webpack
+title: Using itk.js with modules stored on a CDN
 ---
 
-This example demonstrates how to use *itk.js* in a web browser application built with [Webpack](https://webpack.js.org/). Find the full example in the `itk-js/examples/Webpack` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-js/tree/master/examples/Webpack).
-
-Since we asynchronously download the *itk.js* JavaScript and WebAssembly Emscripten modules, a few extra configuration steps are required.
+This example demonstrates how to use *itk.js* in a web browser application built with [Webpack](https://webpack.js.org/) where the itk.js modules are stored on a [Content Delivery Network (CDN)](https://en.wikipedia.org/wiki/Content_delivery_network). This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk.js IO modules published on [unpkg.com](https://unpkg.com). Find the full example in the `itk-js/examples/UnkpkgIO` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-js/tree/master/examples/Unpkg).
 
 This example assumes you are creating a [Node.js package](https://docs.npmjs.com/getting-started/what-is-npm). If you do not already have a `package.json` file, [create one](https://docs.npmjs.com/getting-started/using-a-package.json), first.
 
@@ -16,7 +14,7 @@ npm install --save itk
 Then, install Webpack-related development dependencies:
 
 ```
-npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader copy-webpack-plugin babel-loader babel-preset-env
+npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader babel-loader babel-preset-env
 ```
 
 Next, create a `webpack.config.js` file like the following:
@@ -25,46 +23,42 @@ Next, create a `webpack.config.js` file like the following:
 const path = require('path')
 
 const webpack = require('webpack')
-const CopyPlugin = require('copy-webpack-plugin')
 
 const entry = path.join(__dirname, './src/index.js')
 const outputPath = path.join(__dirname, './dist')
 
+const packageJSON = require('./package.json')
+const itkVersion = packageJSON.dependencies.itk.substring(1)
+const cdnPath = 'https://unpkg.com/itk@' + itkVersion + '/'
+
 module.exports = {
   node: {
-    fs: 'empty',
+    fs: 'empty'
   },
   entry,
   output: {
     path: outputPath,
     filename: 'index.js',
+    publicPath: cdnPath
   },
   module: {
     rules: [
       { test: entry, loader: 'expose-loader?index' },
-      { test: /\.js$/, loader: 'babel-loader' },
+      { test: /\.js$/, loader: 'babel-loader' }
     ]
   },
-  plugins: [
-    new CopyPlugin([
-      {
-      from: path.join(__dirname, 'node_modules', 'itk', 'WebWorkers'),
-      to: path.join(__dirname, 'dist', 'itk', 'WebWorkers'),
-      },
-      {
-      from: path.join(__dirname, 'node_modules', 'itk', 'ImageIOs'),
-      to: path.join(__dirname, 'dist', 'itk', 'ImageIOs'),
-      },
-      {
-      from: path.join(__dirname, 'node_modules', 'itk', 'MeshIOs'),
-      to: path.join(__dirname, 'dist', 'itk', 'MeshIOs'),
-      },
-    ]),
-  ],
-  performance: {
-      maxAssetSize: 10000000
+  resolve: {
+    modules: [
+      path.resolve(__dirname, 'node_modules'),
+    ],
+    alias: {
+      './itkConfig$': path.resolve(__dirname, 'src', 'itkConfigCDN.js'),
+    },
   },
-};
+  performance: {
+    maxAssetSize: 10000000
+  }
+}
 ```
 
 Replace `src/index.js` by your [Webpack entry point](https://webpack.js.org/concepts/#entry). Replace `./dist/` and the output filename with where you [want Webpack to place the generated JavaScript bundle](https://webpack.js.org/concepts/#output).
@@ -86,9 +80,29 @@ The [babel-loader](https://github.com/babel/babel-loader) rule will [transpile](
 
 The *itk.js* Emscripten modules are loaded and executed **asynchronously** and **on demand**. This means the client only download the content it needs and the user does not experience interruption of the main user interface thread during computation. However, a few extra configuration steps are required since the modules are not bundled by Webpack.
 
-The `CopyPlugin` copies *itk.js* Emscripten modules to distribute along with your Webpack bundle. In this example, we copy all *ImageIOs* and *MeshIOs*. In your project, you may want to copy only the *ImageIOs* or a subset of the *ImageIOs*, based on your needs. We also copy the *WebWorkers*, which asynchronously perform IO or run processing pipelines in a background thread.
+The Webpack [publicPath](https://webpack.js.org/guides/public-path/) setting specifies the location of static assets used by the application, and it defines `__webpack_public_path__`. We use `__webpack_public_path__` in `src/itkConfigCDN.js`:
 
-To change the location of the *itk.js* web worker and Emscripten modules, set the Webpack `resolve.alias` setting as described in the Karma configuration below.
+```js
+const itkConfig = {
+  itkModulesPath: __webpack_public_path__
+}
+
+module.exports = itkConfig
+```
+
+Webpack is directed to use this configuration with the setting:
+
+
+```js
+  resolve: {
+    modules: [
+      path.resolve(__dirname, 'node_modules'),
+    ],
+    alias: {
+      './itkConfig$': path.resolve(__dirname, 'src', 'itkConfigCDN.js'),
+    },
+  },
+```
 
 Next, define commands to build the project or build the project and start a local development web server in the *scripts* section of the `package.json` file,
 
@@ -126,31 +140,22 @@ file are:
 
 ```js
 [...]
-    files: [
-      './test/index.js',
-      { pattern: './dist/itk/ImageIOs/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/MeshIOs/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/WebWorkers/**', watched: true, served: true, included: false },
-    ],
-[...]
-```
-
-Here, `./test/index.js` can be replaced by the path to your testing module. We also serve the *itk.js* Emscripten and web worker files with Karma's web server.
-
-Since Karma's web server serves its files in `/base` by default, and our files are also in the `./dist/itk` directory, we can tell Webpack to use a different path for the *itk.js* modules when building for Karma tests with:
-
-```js
-[...]
-    webpack: {
+var packageJSON = require('./package.json')
+var itkVersion = packageJSON.dependencies.itk.substring(1)
+var cdnPath = '"https://unpkg.com/itk@' + itkVersion + '/"'
 [...]
       resolve: {
+        modules: [
+          path.resolve(__dirname, 'node_modules'),
+          sourcePath
+        ],
         alias: {
-          './itkConfig$': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js'),
-        },
+          './itkConfig$': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js')
+        }
       },
       plugins: [
         new webpack.DefinePlugin({
-          __BASE_PATH__: "'/base'"
+          __ITK_MODULES_PATH__: cdnPath
         })
       ]
 [...]
@@ -160,7 +165,7 @@ Where `itkConfigTest.js` contains:
 
 ```js
 const itkConfig = {
-  itkModulesPath: __BASE_PATH__ + '/dist/itk'
+  itkModulesPath: __ITK_MODULES_PATH__
 }
 
 export default itkConfig

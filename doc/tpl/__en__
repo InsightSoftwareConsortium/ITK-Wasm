@@ -37,6 +37,7 @@ sidebar:
     building: Building
     nodejs: Node.js
     webpack: Webpack
+    unpkgio: Unpkg.com / CDN
 
   api:
     inputoutput: Input/Output

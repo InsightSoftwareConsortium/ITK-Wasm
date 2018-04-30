@@ -17,7 +17,7 @@
 // extension
 const loadEmscriptenModule = (itkModulesPath, modulesDirectory, moduleBaseName) => {
   let prefix = itkModulesPath
-  if (itkModulesPath[0] !== '/') {
+  if (itkModulesPath[0] !== '/' && !itkModulesPath.startsWith('http')) {
     prefix = '..'
   }
   let modulePath = prefix + '/' + modulesDirectory + '/' + moduleBaseName + '.js'

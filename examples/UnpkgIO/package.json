@@ -1,0 +1,45 @@
+{
+  "name": "itk-webpack-example",
+  "version": "1.0.0",
+  "description": "This example demonstrates how to use itk.js in a Webpack project that targets the browser.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --progress --colors -p",
+    "start": "webpack-dev-server --mode development --content-base ./dist/ --watch-content-base",
+    "test": "karma start ./karma.conf.js",
+    "test:debug": "karma start ./karma.conf.js --no-single-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsightSoftwareConsortium/itk-js.git"
+  },
+  "keywords": [
+    "itk",
+    "webpack"
+  ],
+  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/InsightSoftwareConsortium/itk-js/issues"
+  },
+  "homepage": "https://github.com/InsightSoftwareConsortium/itk-js#readme",
+  "dependencies": {
+    "curry": "^1.2.0",
+    "expose-loader": "^0.7.5",
+    "itk": "^9.1.0"
+  },
+  "devDependencies": {
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-tap": "^4.1.3",
+    "karma-tap-pretty-reporter": "^4.0.0",
+    "karma-webpack": "^2.0.13",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.9.0",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11",
+    "webpack-dev-server": "^3.1.1"
+  }
+}
