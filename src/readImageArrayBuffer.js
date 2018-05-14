@@ -7,7 +7,7 @@ const readImageArrayBuffer = (webWorker, arrayBuffer, fileName, mimeType) => {
   return createWebworkerPromise('ImageIO', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
-      webworkerPromise.postMessage(
+      return webworkerPromise.postMessage(
         {
           operation: 'readImage',
           name: fileName,
