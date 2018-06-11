@@ -1,12 +1,9 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkBinShrinkImageFilter.h"
-#include "itkMultiThreader.h"
 
 int main( int argc, char * argv[] )
 {
-  //itk::MultiThreader::SetGlobalDefaultUseThreadPool( false );
-
   if( argc < 4 )
     {
     std::cerr << "Usage: " << argv[0] << " <inputImage> <outputImage> <shrinkFactor>" << std::endl;
