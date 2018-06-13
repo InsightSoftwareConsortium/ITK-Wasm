@@ -33,7 +33,7 @@ const verifyImage = (t, image) => {
   t.is(image.size[1], 217, 'size[1]')
   t.is(image.size[2], 180, 'size[2]')
   t.is(image.data.length, 7069860, 'data.length')
-  t.is(image.data[1000], 0, 'data[1000]')
+  t.is(image.data[1000], 17, 'data[1000]')
 }
 
 test('Test reading a MetaImage file', t => {

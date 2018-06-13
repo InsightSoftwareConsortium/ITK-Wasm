@@ -271,6 +271,14 @@ emscripten::val
 ImageIOBaseJSBinding< TImageIO >
 ::Read()
 {
+  const unsigned int dimension = this->m_ImageIO->GetNumberOfDimensions();
+  itk::ImageIORegion ioRegion( dimension );
+  for( unsigned int dim = 0; dim < dimension; ++dim )
+    {
+    ioRegion.SetSize( dim, this->m_ImageIO->GetDimensions( dim ) );
+    }
+  this->m_ImageIO->SetIORegion( ioRegion );
+
   m_PixelBuffer.reserve( this->GetImageSizeInBytes() );
   this->m_ImageIO->Read( reinterpret_cast< void * >( m_PixelBuffer.data() ) );
   const unsigned long components = this->GetImageSizeInComponents();
