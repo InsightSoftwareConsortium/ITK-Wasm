@@ -7,7 +7,9 @@ git checkout master
 git pull upstream master
 git clean -fdx
 npm install
+./src/Docker/itk-js-base/build.sh
 ./src/Docker/itk-js/build.sh
+./src/Docker/itk-js-vtk/build.sh
 npm run build
 npm run test
 rm dist/Pipelines/*
