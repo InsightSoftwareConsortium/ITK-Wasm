@@ -31,6 +31,6 @@ test('Test reading a MRC file', t => {
     t.is(image.size[1], 34, 'size[1]')
     t.is(image.size[2], 141, 'size[2]')
     t.is(image.data.length, 162996, 'data.length')
-    t.is(image.data[1000], 0, 'data[1000]')
+    t.is(image.data[1000], 162, 'data[1000]')
   })
 })

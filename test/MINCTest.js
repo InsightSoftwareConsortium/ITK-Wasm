@@ -31,6 +31,6 @@ test('Test reading a MINC file', t => {
     t.is(image.size[1], 40, 'size[1]')
     t.is(image.size[2], 10, 'size[2]')
     t.is(image.data.length, 12000, 'data.length')
-    t.is(image.data[1000], 0, 'data[1000]')
+    t.is(image.data[1000], 7.437521934509277, 'data[1000]')
   })
 })

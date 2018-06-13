@@ -31,6 +31,6 @@ test('Test reading an ITK HDF5 file', t => {
     t.is(image.size[1], 5, 'size[1]')
     t.is(image.size[2], 5, 'size[2]')
     t.is(image.data.length, 125, 'data.length')
-    t.is(image.data[10], 90, 'data[10]')
+    t.is(image.data[10], 132, 'data[10]')
   })
 })
