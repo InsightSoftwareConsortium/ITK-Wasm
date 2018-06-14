@@ -1,6 +1,6 @@
 {
   "name": "itk-convert",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Convert images files from one format to another.",
   "bin": {
     "itk-convert": "./src/itk-convert.js"
@@ -31,6 +31,6 @@
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-js#readme",
   "dependencies": {
     "commander": "^2.14.1",
-    "itk": "^9.0.0"
+    "itk": "^9.1.1"
   }
 }
