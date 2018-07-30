@@ -5,7 +5,7 @@ var sourcePath = path.resolve(__dirname, './dist')
 
 var packageJSON = require('./package.json')
 var itkVersion = packageJSON.dependencies.itk.substring(1)
-var cdnPath = '"https://unpkg.com/itk@' + itkVersion + '/"'
+var cdnPath = '"https://unpkg.com/itk@' + itkVersion + '"'
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'test'
 

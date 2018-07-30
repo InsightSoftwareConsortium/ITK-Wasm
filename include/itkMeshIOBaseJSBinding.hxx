@@ -17,6 +17,7 @@
  *=========================================================================*/
 #ifndef itkMeshIOBaseJSBinding_hxx
 #define itkMeshIOBaseJSBinding_hxx
+#if defined(EMSCRIPTEN)
 
 #include "itkMeshIOBaseJSBinding.h"
 
@@ -958,4 +959,5 @@ MeshIOBaseJSBinding< TMeshIO >
 
 } // end namespace itk
 
+#endif // #if defined(EMSCRIPTEN)
 #endif

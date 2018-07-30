@@ -29,7 +29,7 @@ const outputPath = path.join(__dirname, './dist')
 
 const packageJSON = require('./package.json')
 const itkVersion = packageJSON.dependencies.itk.substring(1)
-const cdnPath = 'https://unpkg.com/itk@' + itkVersion + '/'
+const cdnPath = 'https://unpkg.com/itk@' + itkVersion
 
 module.exports = {
   node: {
@@ -142,7 +142,7 @@ file are:
 [...]
 var packageJSON = require('./package.json')
 var itkVersion = packageJSON.dependencies.itk.substring(1)
-var cdnPath = '"https://unpkg.com/itk@' + itkVersion + '/"'
+var cdnPath = '"https://unpkg.com/itk@' + itkVersion + '"'
 [...]
       resolve: {
         modules: [

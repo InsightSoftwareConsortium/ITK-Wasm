@@ -17,6 +17,7 @@
  *=========================================================================*/
 #ifndef itkImageIOBaseJSBinding_h
 #define itkImageIOBaseJSBinding_h
+#if defined(EMSCRIPTEN)
 
 #include <string>
 #include <vector>
@@ -150,4 +151,5 @@ private:
 
 #include "itkImageIOBaseJSBinding.hxx"
 
+#endif // #if defined(EMSCRIPTEN)
 #endif
