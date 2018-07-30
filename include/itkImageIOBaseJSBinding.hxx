@@ -17,6 +17,7 @@
  *=========================================================================*/
 #ifndef itkImageIOBaseJSBinding_hxx
 #define itkImageIOBaseJSBinding_hxx
+#if defined(EMSCRIPTEN)
 
 #include "itkImageIOBaseJSBinding.h"
 
@@ -398,4 +399,5 @@ ImageIOBaseJSBinding< TImageIO >
 
 } // end namespace itk
 
+#endif // #if defined(EMSCRIPTEN)
 #endif

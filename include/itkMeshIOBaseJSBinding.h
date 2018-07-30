@@ -17,6 +17,7 @@
  *=========================================================================*/
 #ifndef itkMeshIOBaseJSBinding_h
 #define itkMeshIOBaseJSBinding_h
+#if defined(EMSCRIPTEN)
 
 #include <string>
 #include <vector>
@@ -129,4 +130,5 @@ private:
 
 #include "itkMeshIOBaseJSBinding.hxx"
 
+#endif // #if defined(EMSCRIPTEN)
 #endif
