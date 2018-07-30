@@ -7,7 +7,7 @@ const outputPath = path.join(__dirname, './dist')
 
 const packageJSON = require('./package.json')
 const itkVersion = packageJSON.dependencies.itk.substring(1)
-const cdnPath = 'https://unpkg.com/itk@' + itkVersion + '/'
+const cdnPath = 'https://unpkg.com/itk@' + itkVersion
 
 module.exports = {
   node: {
