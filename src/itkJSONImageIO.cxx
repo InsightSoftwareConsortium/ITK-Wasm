@@ -123,19 +123,19 @@ JSONImageIO
       return "int16_t";
 
     case USHORT:
-      return "uint16_t";;
+      return "uint16_t";
 
     case INT:
       return "int32_t";
 
     case UINT:
-      return "uint32_t";;
+      return "uint32_t";
 
     case LONG:
       return "int64_t";
 
     case ULONG:
-      return "uint64_t";;
+      return "uint64_t";
 
     case LONGLONG:
       return "int64_t";
