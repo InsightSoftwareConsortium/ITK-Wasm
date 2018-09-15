@@ -57,7 +57,7 @@ test('runPipelineNode uses input and output files in the Emscripten filesystem',
     })
 })
 
-test('runPipelineNode uses writes and read itk/Image in the Emscripten filesystem', (t) => {
+test('runPipelineNode writes and reads an itk/Image in the Emscripten filesystem', (t) => {
   const verifyImage = (image) => {
     t.is(image.imageType.dimension, 2, 'dimension')
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
