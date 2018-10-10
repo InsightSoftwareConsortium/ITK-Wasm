@@ -38,7 +38,7 @@
   "bugs": {
     "url": "https://github.com/InsightSoftwareConsortium/itk-js/issues"
   },
-  "homepage": "https://github.com/InsightSoftwareConsortium/itk-js#readme",
+  "homepage": "https://insightsoftwareconsortium.github.io/itk-js/",
   "devDependencies": {
     "async": "^2.6.0",
     "ava": "^0.22.0",
