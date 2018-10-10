@@ -22,7 +22,12 @@ module.exports = {
   module: {
     rules: [
       { test: entry, loader: 'expose-loader?index' },
-      { test: /\.js$/, loader: 'babel-loader' }
+      { test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: { presets: ['@babel/preset-env'] }
+          }
+      }
     ]
   },
   resolve: {
