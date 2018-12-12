@@ -29,8 +29,9 @@
     "itk": "^9.1.1"
   },
   "devDependencies": {
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "babel-loader": "^8.0.4",
     "copy-webpack-plugin": "^4.5.1",
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -39,8 +40,8 @@
     "karma-webpack": "^2.0.13",
     "tap-spec": "^4.1.1",
     "tape": "^4.9.0",
-    "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.11",
-    "webpack-dev-server": "^3.1.1"
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   }
 }

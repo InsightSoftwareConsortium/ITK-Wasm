@@ -16,7 +16,7 @@ npm install --save itk
 Then, install Webpack-related development dependencies:
 
 ```
-npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader copy-webpack-plugin babel-loader babel-preset-env
+npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader babel-loader '@babel/preset-env' '@babel/core'
 ```
 
 Next, create a `webpack.config.js` file like the following:
@@ -75,7 +75,7 @@ The [babel-loader](https://github.com/babel/babel-loader) rule will [transpile](
 ```js
 {
   presets: [
-    ['env', {
+    ['@babel/preset-env', {
       targets: {
         browsers: ['last 2 versions'],
       },
