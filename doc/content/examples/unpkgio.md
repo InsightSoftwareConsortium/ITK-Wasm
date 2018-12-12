@@ -14,7 +14,7 @@ npm install --save itk
 Then, install Webpack-related development dependencies:
 
 ```
-npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader babel-loader @babel/core @babel/preset-env
+npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader babel-loader '@babel/preset-env' '@babel/core'
 ```
 
 Next, create a `webpack.config.js` file like the following:
@@ -70,16 +70,17 @@ module.exports = {
 Replace `src/index.js` by your [Webpack entry point](https://webpack.js.org/concepts/#entry). Replace `./dist/` and the output filename with where you [want Webpack to place the generated JavaScript bundle](https://webpack.js.org/concepts/#output).
 
 
-The [babel-loader](https://github.com/babel/babel-loader) rule will [transpile](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) JavaScript from the latest language syntax to a syntax supported by existing browser clients. Configure the target browsers to support with a `babel.config.js` file like the following:
+The [babel-loader](https://github.com/babel/babel-loader) rule will [transpile](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) JavaScript from the latest language syntax to a syntax supported by existing browser clients. Configure the target browsers to support with a `.babelrc` file like the following:
 
 ```js
-module.exports = function (api) {
-  api.cache(false)
-  const presets = [ '@babel/preset-env' ]
-
-  return {
-    presets,
-  }
+{
+  presets: [
+    ['@babel/preset-env', {
+      targets: {
+        browsers: ['last 2 versions'],
+      },
+    }],
+  ],
 }
 ```
 
