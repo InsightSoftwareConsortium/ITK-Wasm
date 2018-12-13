@@ -16,7 +16,7 @@ test('runPipelineNode captures stdout and stderr', (t) => {
   const inputs = null
   const stdoutStderrPath = path.resolve(__dirname, 'StdoutStderrPipeline', 'web-build', 'StdoutStderr')
   return runPipelineNode(stdoutStderrPath, args, outputs, inputs)
-    .then(function ({stdout, stderr, outputs}) {
+    .then(function ({ stdout, stderr, outputs }) {
       t.is(stdout, `I’m writing my code,
 But I do not realize,
 Hours have gone by.
@@ -40,7 +40,7 @@ test('runPipelineNode uses input and output files in the Emscripten filesystem',
     { path: 'input.bin', type: IOTypes.Binary, data: new Uint8Array([222, 173, 190, 239]) }
   ]
   return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
-    .then(function ({stdout, stderr, outputs}) {
+    .then(function ({ stdout, stderr, outputs }) {
       t.is(outputs[0].path, 'output.txt')
       t.is(outputs[0].type, IOTypes.Text)
       t.is(outputs[0].data, 'The answer is 42.')
@@ -83,7 +83,7 @@ test('runPipelineNode writes and reads an itk/Image in the Emscripten filesystem
         { path: args[0], type: IOTypes.Image, data: image }
       ]
       return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
-    }).then(function ({stdout, stderr, outputs}) {
+    }).then(function ({ stdout, stderr, outputs }) {
       verifyImage(outputs[0].data)
     })
 })

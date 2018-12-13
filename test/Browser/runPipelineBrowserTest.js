@@ -16,7 +16,7 @@ test('runPipelineBrowser captures stdout and stderr', (t) => {
   const inputs = null
   const stdoutStderrPath = 'StdoutStderr'
   return runPipelineBrowser(null, stdoutStderrPath, args, outputs, inputs)
-    .then(function ({stdout, stderr, outputs, webWorker}) {
+    .then(function ({ stdout, stderr, outputs, webWorker }) {
       webWorker.terminate()
       t.is(stdout, `I’m writing my code,
 But I do not realize,
@@ -36,9 +36,9 @@ test('runPipelineBrowser re-uses a WebWorker', (t) => {
   const inputs = null
   const stdoutStderrPath = 'StdoutStderr'
   return runPipelineBrowser(null, stdoutStderrPath, args, outputs, inputs)
-    .then(function ({stdout, stderr, outputs, webWorker}) {
+    .then(function ({ stdout, stderr, outputs, webWorker }) {
       return runPipelineBrowser(webWorker, stdoutStderrPath, args, outputs, inputs)
-        .then(function ({stdout, stderr, outputs, webWorker}) {
+        .then(function ({ stdout, stderr, outputs, webWorker }) {
           t.is(stdout, `I’m writing my code,
 But I do not realize,
 Hours have gone by.
@@ -64,7 +64,7 @@ test('runPipelineBrowser uses input and output files in the Emscripten filesyste
     { path: 'input.bin', type: IOTypes.Binary, data: new Uint8Array([222, 173, 190, 239]) }
   ]
   return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
-    .then(function ({stdout, stderr, outputs}) {
+    .then(function ({ stdout, stderr, outputs }) {
       t.is(outputs[0].path, 'output.txt')
       t.is(outputs[0].type, IOTypes.Text)
       t.is(outputs[0].data, 'The answer is 42.')

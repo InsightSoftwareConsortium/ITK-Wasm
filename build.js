@@ -147,14 +147,14 @@ if (program.copySources) {
     let output = path.join(outputDir, basename)
     const bundler = browserify(es6File)
     if (uglify) {
-      bundler.transform({global: true}, 'uglifyify')
+      bundler.transform({ global: true }, 'uglifyify')
       bundler
-        .transform('babelify', {presets: ['es2015']})
+        .transform('babelify', { presets: ['@babel/preset-env'] })
         .bundle()
         .pipe(fs.createWriteStream(output))
     } else {
       bundler
-        .transform('babelify', {presets: ['es2015']})
+        .transform('babelify', { presets: ['@babel/preset-env'] })
         .bundle()
         .pipe(fs.createWriteStream(output))
     }
@@ -171,10 +171,10 @@ if (program.copySources) {
 
   const babelOptions = {
     presets: [
-      ['es2015', { 'modules': false }]
+      ['@babel/preset-env', { 'modules': false }]
     ]
   }
-  const babel = require('babel-core')
+  const babel = require('@babel/core')
   const babelBuild = ramda.curry(function (outputDir, es6File, callback) {
     let basename = path.basename(es6File)
     let output = path.join(outputDir, basename)

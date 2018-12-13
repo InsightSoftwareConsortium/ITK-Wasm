@@ -29,6 +29,6 @@ Module['getModuleStderr'] = function () {
   return moduleStderr
 }
 
-Module['preRun'] = function() {
-  ENV['ITK_GLOBAL_DEFAULT_THREADER'] = 'Platform';
+Module['preRun'] = function () {
+  ENV['ITK_GLOBAL_DEFAULT_THREADER'] = 'Platform'
 }

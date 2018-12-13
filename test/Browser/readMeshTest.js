@@ -23,7 +23,7 @@ const verifyMesh = (t, mesh) => {
 }
 
 test('readMeshArrayBuffer reads an ArrayBuffer', (t) => {
-  return axios.get(testFilePath, {responseType: 'arraybuffer'})
+  return axios.get(testFilePath, { responseType: 'arraybuffer' })
     .then(function (response) {
       return readMeshArrayBuffer(null, response.data, 'cow.vtk')
     })
@@ -45,7 +45,7 @@ test('readMeshArrayBuffer reads an ArrayBuffer', (t) => {
 // })
 
 test('readMeshBlob reads a Blob', (t) => {
-  return axios.get(testFilePath, {responseType: 'blob'})
+  return axios.get(testFilePath, { responseType: 'blob' })
     .then(function (response) {
       return readMeshBlob(null, response.data, 'cow.vtk')
     })
@@ -55,7 +55,7 @@ test('readMeshBlob reads a Blob', (t) => {
 })
 
 test('readMeshFile reads a File', (t) => {
-  return axios.get(testFilePath, {responseType: 'blob'}).then(function (response) {
+  return axios.get(testFilePath, { responseType: 'blob' }).then(function (response) {
     const jsFile = new window.File([response.data], fileName)
     return jsFile
   })
@@ -68,7 +68,7 @@ test('readMeshFile reads a File', (t) => {
 })
 
 test('readMeshFile re-uses a WebWorker', (t) => {
-  return axios.get(testFilePath, {responseType: 'blob'}).then(function (response) {
+  return axios.get(testFilePath, { responseType: 'blob' }).then(function (response) {
     const jsFile = new window.File([response.data], fileName)
     return jsFile
   })
@@ -76,7 +76,7 @@ test('readMeshFile re-uses a WebWorker', (t) => {
       return readMeshFile(null, jsFile)
     })
     .then(function ({ webWorker }) {
-      axios.get(testFilePath, {responseType: 'blob'}).then(function (response) {
+      axios.get(testFilePath, { responseType: 'blob' }).then(function (response) {
         const jsFile = new window.File([response.data], fileName)
         return jsFile
       })

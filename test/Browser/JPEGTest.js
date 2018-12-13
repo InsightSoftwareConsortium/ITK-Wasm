@@ -30,7 +30,7 @@ const verifyImage = (t, image) => {
 test('Test reading a JPEG file', t => {
   const fileName = 'apple.jpg'
   const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
-  return axios.get(testFilePath, {responseType: 'blob'}).then(function (response) {
+  return axios.get(testFilePath, { responseType: 'blob' }).then(function (response) {
     const jsFile = new window.File([response.data], fileName)
     return jsFile
   })

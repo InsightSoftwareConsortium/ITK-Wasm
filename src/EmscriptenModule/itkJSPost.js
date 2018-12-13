@@ -62,7 +62,7 @@ Module['mountBlobs'] = function (mountpoint, blobFiles) {
 
   Module['mkdirs'](mountpoint)
 
-  FS.mount(WORKERFS, {blobs: blobFiles, files: []}, mountpoint)
+  FS.mount(WORKERFS, { blobs: blobFiles, files: [] }, mountpoint)
 }
 
 Module['unmountBlobs'] = function (mountpoint) {
