@@ -17,7 +17,7 @@ test('Test reading a DICOM file', t => {
     t.is(image.origin[2], 116.7857, 'origin[2]')
     t.is(image.spacing[0], 1.0, 'spacing[0]')
     t.is(image.spacing[1], 1.0, 'spacing[1]')
-    t.is(image.spacing[2], 1.3, 'spacing[2]')
+    t.is(image.spacing[2], 1.0, 'spacing[2]')
     t.is(image.direction.getElement(0, 0), 0.0, 'direction (0, 0)')
     t.is(image.direction.getElement(0, 1), -0.0, 'direction (0, 1)')
     t.is(image.direction.getElement(0, 2), -1.0, 'direction (0, 2)')

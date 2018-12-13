@@ -5,3 +5,7 @@ Module['locateFile'] = function(fileName) {
   }
   return fileName
 }
+
+Module['preRun'] = function() {
+  ENV['ITK_GLOBAL_DEFAULT_THREADER'] = 'Platform';
+}
