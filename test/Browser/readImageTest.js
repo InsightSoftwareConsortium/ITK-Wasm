@@ -17,8 +17,8 @@ let intArray = new Uint8Array(byteString.length)
 for (let ii = 0; ii < byteString.length; ++ii) {
   intArray[ii] = byteString.charCodeAt(ii)
 }
-const cthead1SmallBlob = new window.Blob([intArray], {type: mimeString})
-const cthead1SmallBlob1 = new window.Blob([intArray], {type: mimeString})
+const cthead1SmallBlob = new window.Blob([intArray], { type: mimeString })
+const cthead1SmallBlob1 = new window.Blob([intArray], { type: mimeString })
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
 const verifyImage = (t, image) => {

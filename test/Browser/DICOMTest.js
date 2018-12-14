@@ -10,7 +10,7 @@ import getMatrixElement from 'getMatrixElement'
 test('Test reading a DICOM file', t => {
   const fileName = '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm'
   const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
-  return axios.get(testFilePath, {responseType: 'blob'}).then(function (response) {
+  return axios.get(testFilePath, { responseType: 'blob' }).then(function (response) {
     const jsFile = new window.File([response.data], fileName)
     return jsFile
   })

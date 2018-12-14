@@ -2,9 +2,9 @@ import test from 'tape'
 import axios from 'axios'
 
 import config from './itkConfig'
-console.log(config)
 
 import { outputFileInformation } from '../src/index'
+console.log(config)
 
 test('Loading an image file and displaying its contents', (t) => {
   const expectedOutput = `{
