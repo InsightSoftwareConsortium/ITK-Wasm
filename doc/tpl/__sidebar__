@@ -12,6 +12,8 @@ examples:
     nodejs: node.html
     webpack: webpack.html
     unpkgio: unpkgio.html
+  tasks:
+    hello_node: hello_world_node.html
 
 api:
   inputoutput:

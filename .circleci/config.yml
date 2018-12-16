@@ -98,6 +98,19 @@ jobs:
             npm run build
             npm run test
 
+  build-test-nodejs-hello-world-example:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Test Node.js Hello World examlpe
+          no_output_timeout: 0.5h
+          command: |
+            cd examples/Node.jsHelloWorld
+            npm install
+            npm run build
+            npm run test
+
 workflows:
     version: 2
     build-test-deploy:
@@ -114,4 +127,6 @@ workflows:
         - build-test-webpack-example:
             <<: *ignore-ghpages
         - build-test-unpkgio-example:
+            <<: *ignore-ghpages
+        - build-test-nodejs-hello-world-example:
             <<: *ignore-ghpages

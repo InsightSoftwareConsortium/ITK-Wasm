@@ -38,6 +38,8 @@ sidebar:
     nodejs: Node.js
     webpack: Webpack
     unpkgio: Unpkg.com / CDN
+    tasks: Tasks
+    hello_node: Node.js Hello World!
 
   api:
     inputoutput: Input/Output
