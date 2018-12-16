@@ -15,8 +15,11 @@ examples:
 
 api:
   inputoutput:
-    nodejs: node.html
-    browser: browser.html
+    nodejs_io: node_io.html
+    browser_io: browser_io.html
+  pipelines:
+    nodejs_pipelines: node_pipelines.html
+    browser_pipelines: browser_pipelines.html
   datastructures:
     image: Image.html
     imagetype: ImageType.html

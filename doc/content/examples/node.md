@@ -26,7 +26,7 @@ This adds `itk` to the `dependencies` section of your *package.json* file:
 }
 ```
 
-Next, call functions like [itk/readImageLocalFile](../api/node.html) or [itk/writeImageLocalFile](../api/node.html).
+Next, call functions like [itk/readImageLocalFile](../api/node_io.html) or [itk/writeImageLocalFile](../api/node_io.html).
 
 For example,
 
