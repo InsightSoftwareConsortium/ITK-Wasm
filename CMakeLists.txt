@@ -49,10 +49,12 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(imageios_BridgeJavaScript itkJSONImageIO)
 
   set(BridgeJavaScript_MeshIOModules
-    "ITKIOMesh"
+    "ITKIOMeshBYU"
+    "ITKIOMeshVTK"
     CACHE STRING
     "String delimited list of ITK mesh IO modules to support.")
-  set(meshios_ITKIOMesh itkVTKPolyDataMeshIO)
+  set(meshios_ITKIOMeshBYU itkBYUMeshIO)
+  set(meshios_ITKIOMeshVTK itkVTKPolyDataMeshIO)
 endif()
 
 

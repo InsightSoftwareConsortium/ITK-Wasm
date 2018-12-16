@@ -42,4 +42,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/tilt_series_little.mrc}
   DATA{Input/DicomImageOrientationTest/,REGEX:ImageOrientation.[0-9]+.dcm}
   DATA{Input/cow.vtk}
+  DATA{Input/cube.byu}
   )

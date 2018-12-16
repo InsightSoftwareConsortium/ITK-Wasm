@@ -12,3 +12,13 @@ test('VTK maps to itkVTKPolyDataMeshIOJSBinding', t => {
   let io = ExtensionToIO['VTK']
   t.is(io, 'itkVTKPolyDataMeshIOJSBinding')
 })
+
+test('byu maps to itkBYUMeshIOJSBinding', t => {
+  let io = ExtensionToIO['byu']
+  t.is(io, 'itkBYUMeshIOJSBinding')
+})
+
+test('BYU maps to itkBYUMeshIOJSBinding', t => {
+  let io = ExtensionToIO['BYU']
+  t.is(io, 'itkBYUMeshIOJSBinding')
+})
