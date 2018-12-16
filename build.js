@@ -19,6 +19,7 @@ program
   .option('-c, --no-compile', 'Do not compile Emscripten modules')
   .option('-s, --no-copy-sources', 'Do not copy JavaScript sources')
   .option('-p, --no-build-pipelines', 'Do not build the test pipelines')
+  .option('-d, --debug', 'Create a debug build of the Emscripten modules')
   .parse(process.argv)
 
 if (program.compile) {
@@ -71,7 +72,11 @@ if (program.compile) {
   } catch (err) {
     if (err.code === 'ENOENT') {
       console.log('Running CMake configuration...')
-      const cmakeCall = spawnSync(dockcross, ['cmake', '-DRapidJSON_INCLUDE_DIR=/rapidjson/include', '-DCMAKE_BUILD_TYPE=Release', '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build', '-DBUILD_ITK_JS_IO_MODULES=ON'], {
+      let buildType = '-DCMAKE_BUILD_TYPE:STRING=Release'
+      if (program.debug) {
+        buildType = '-DCMAKE_BUILD_TYPE:STRING=Debug'
+      }
+      const cmakeCall = spawnSync(dockcross, ['cmake', '-DRapidJSON_INCLUDE_DIR=/rapidjson/include', buildType, '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build', '-DBUILD_ITK_JS_IO_MODULES=ON'], {
         env: process.env,
         stdio: 'inherit'
       })
@@ -209,7 +214,11 @@ if (program.copySources) {
 if (program.buildPipelines) {
   const buildPipeline = (pipelinePath) => {
     console.log('Building ' + pipelinePath + ' ...')
-    const buildPipelineCall = spawnSync(path.join(__dirname, 'src', 'itk-js-cli.js'), ['build', pipelinePath], {
+    let debugFlags = []
+    if (program.debug) {
+      debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug']
+    }
+    const buildPipelineCall = spawnSync(path.join(__dirname, 'src', 'itk-js-cli.js'), ['build', pipelinePath, '--'].concat(debugFlags), {
       env: process.env,
       stdio: 'inherit'
     })
