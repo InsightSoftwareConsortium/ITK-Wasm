@@ -58,7 +58,7 @@ EMSCRIPTEN_BINDINGS(itk_vtk_polydata_mesh_io_js_binding) {
     .value("LONG", itk::MeshIOBase::LONGLONG)
     .value("FLOAT", itk::MeshIOBase::FLOAT)
     .value("DOUBLE", itk::MeshIOBase::DOUBLE)
-    .value("DOUBLE", itk::MeshIOBase::LDOUBLE)
+    .value("LDOUBLE", itk::MeshIOBase::LDOUBLE)
     ;
   emscripten::enum_<VTKPolyDataMeshIOJSBindingType::FileType>("FileType")
     .value("ASCII", itk::MeshIOBase::ASCII)
