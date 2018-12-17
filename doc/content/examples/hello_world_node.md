@@ -1,7 +1,7 @@
 title: Node.js Hello World!
 ---
 
-This example, walks through how to complie a *hello world* executable written in C++ to JavaScript and execute it with the [Node.js](https://nodejs.org/) runtime!
+This example, walks through how to compile a *hello world* executable written in C++ to JavaScript and execute it with the [Node.js](https://nodejs.org/) runtime!
 
 Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Docker](https://docs.docker.com/install/) are installed.
 
@@ -52,9 +52,9 @@ endif()
 
 We use the `web_add_executable` command to build executables with itk.js. This command is provided by the `ITKBridgeJavaScript` CMake module. This module, along with the [Emscripten](https://kripken.github.io/emscripten-site/) toolchain, is contained in the itk.js [dockcross](https://github.com/dockcross/dockcross) Docker image.
 
-The same code can also be build and tested with native build tools by using the standard `add_executable` CMake command.
+The same code can also be built and tested with native build tools with the standard `add_executable` CMake command.
 
-Next, build the program with the itk.js CLI, `itk-js`. This is shipped with the `itk` package, and can be executed from the local *node_modules* folder with [`npx`](https://www.npmjs.com/package/npx). The `itk-js` CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory into `itk-js build` to perform the build.
+Next, build the program with the itk.js CLI, `itk-js`. This is shipped with the `itk` package, and the CLI can be executed from the local *node_modules* folder with [`npx`](https://www.npmjs.com/package/npx). The `itk-js` CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory root into `itk-js build` to perform the build.
 
 ```
 npx itk-js build .
