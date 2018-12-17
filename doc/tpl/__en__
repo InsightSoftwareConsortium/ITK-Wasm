@@ -38,11 +38,16 @@ sidebar:
     nodejs: Node.js
     webpack: Webpack
     unpkgio: Unpkg.com / CDN
+    tasks: Tasks
+    hello_node: Node.js Hello World!
 
   api:
     inputoutput: Input/Output
-    nodejs: Node.js
-    browser: Web Browser
+    nodejs_io: Node.js
+    browser_io: Web Browser
+    pipelines: Processing Pipelines
+    nodejs_pipelines: Node.js
+    browser_pipelines: Web Browser
     datastructures: Data Structures
     image: Image
     imagetype: ImageType

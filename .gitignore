@@ -20,6 +20,8 @@ yarn.lock
 
 examples/Node.js/logo.tif
 examples/Node.js/package-lock.json
+examples/Node.jsHelloWorld/web-build
+examples/Node.jsHelloWorld/package-lock.json
 
 test/BinShrinkPipeline/itk-js
 test/BinShrinkPipeline/web-build
@@ -28,4 +30,3 @@ src/Docker/itk-js/ITKBridgeJavaScriptModuleCopy/
 test/StdoutStderrPipeline/itk-js
 test/StdoutStderrPipeline/web-build/
 test/InputOutputFilesPipeline/web-build/
-

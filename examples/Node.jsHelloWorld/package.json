@@ -1,0 +1,16 @@
+{
+  "name": "itk-hello-world-node",
+  "version": "1.0.0",
+  "description": "An itk.js Hello World! for Node",
+  "main": "index.js",
+  "scripts": {
+    "build": "itk-js build .",
+    "test": "node ./index.js"
+  },
+  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "itk": "^9.1.2"
+  }
+}
