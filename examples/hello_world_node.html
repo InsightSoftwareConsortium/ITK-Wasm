@@ -39,17 +39,17 @@
   <!-- RSS -->
   <link rel="alternate" href="/itk-js/atom.xml" title="itk-js">
   <!-- Open Graph -->
-  <meta name="description" content="This example, walks through how to complie a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
+  <meta name="description" content="This example, walks through how to compile a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Node.js Hello World!">
 <meta property="og:url" content="https://InsightSoftwareConsortium.github.io/itk-js/examples/hello_world_node.html">
 <meta property="og:site_name" content="itk-js">
-<meta property="og:description" content="This example, walks through how to complie a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
+<meta property="og:description" content="This example, walks through how to compile a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-12-18T00:02:39.366Z">
+<meta property="og:updated_time" content="2018-12-18T00:07:32.117Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node.js Hello World!">
-<meta name="twitter:description" content="This example, walks through how to complie a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
+<meta name="twitter:description" content="This example, walks through how to compile a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
   <!-- Google Analytics -->
   
 <script>
@@ -100,7 +100,7 @@
                 <h1 class="article-title" itemprop="name">Node.js Hello World!</h1>
               </header>
               <div class="article-content" itemprop="articleBody">
-                <p>This example, walks through how to complie a <em>hello world</em> executable written in C++ to JavaScript and execute it with the <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> runtime!</p>
+                <p>This example, walks through how to compile a <em>hello world</em> executable written in C++ to JavaScript and execute it with the <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> runtime!</p>
 <p>Before getting started, make sure <a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">Node.js</a> and <a href="https://docs.docker.com/install/" target="_blank" rel="noopener">Docker</a> are installed.</p>
 <p>First, let’s create a new folder to house our project.</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir Node.jsHelloWorld</span><br><span class="line">cd Node.jsHelloWorld</span><br></pre></td></tr></table></figure>
@@ -113,8 +113,8 @@
 <p>Next, provide a <a href="https://cmake.org/" target="_blank" rel="noopener">CMake</a> build configuration at <em>CMakeLists.txt</em>:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line">project(HelloWorld)</span><br><span class="line"></span><br><span class="line">set(hello_SRCS hello.cxx)</span><br><span class="line">if(EMSCRIPTEN)</span><br><span class="line">  include(ITKBridgeJavaScript)</span><br><span class="line">  web_add_executable(hello $&#123;hello_SRCS&#125;)</span><br><span class="line">else()</span><br><span class="line">  add_executable(hello $&#123;hello_SRCS&#125;)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
 <p>We use the <code>web_add_executable</code> command to build executables with itk.js. This command is provided by the <code>ITKBridgeJavaScript</code> CMake module. This module, along with the <a href="https://kripken.github.io/emscripten-site/" target="_blank" rel="noopener">Emscripten</a> toolchain, is contained in the itk.js <a href="https://github.com/dockcross/dockcross" target="_blank" rel="noopener">dockcross</a> Docker image.</p>
-<p>The same code can also be build and tested with native build tools by using the standard <code>add_executable</code> CMake command.</p>
-<p>Next, build the program with the itk.js CLI, <code>itk-js</code>. This is shipped with the <code>itk</code> package, and can be executed from the local <em>node_modules</em> folder with <a href="https://www.npmjs.com/package/npx" target="_blank" rel="noopener"><code>npx</code></a>. The <code>itk-js</code> CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory into <code>itk-js build</code> to perform the build.</p>
+<p>The same code can also be built and tested with native build tools with the standard <code>add_executable</code> CMake command.</p>
+<p>Next, build the program with the itk.js CLI, <code>itk-js</code>. This is shipped with the <code>itk</code> package, and the CLI can be executed from the local <em>node_modules</em> folder with <a href="https://www.npmjs.com/package/npx" target="_blank" rel="noopener"><code>npx</code></a>. The <code>itk-js</code> CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory root into <code>itk-js build</code> to perform the build.</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npx itk-js build .</span><br></pre></td></tr></table></figure>
 <p>The project is built in <code>./web-build</code>.</p>
 <p>To execute the project, create an <code>index.js</code> file to <a href="../api/node_pipelines.html">invoke the module</a>:</p>
@@ -125,7 +125,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2018-12-18T00:02:39.366Z" itemprop="dateModified">Last updated: 2018-12-18</time>
+                <time class="article-footer-updated" datetime="2018-12-18T00:07:32.117Z" itemprop="dateModified">Last updated: 2018-12-18</time>
                 <a href="unpkgio.html" class="article-footer-prev" title="Unpkg.com / CDN"><i class="fa fa-chevron-left"></i><span>Prev</span></a>
               </footer>
               
