@@ -15,13 +15,20 @@ jobs:
           no_output_timeout: 2.0h
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              ./src/Docker/itk-js-base/build.sh
               docker login -u $DOCKER_USER -p $DOCKER_PASS
+              TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
+              ./src/Docker/itk-js-base/build.sh
               docker push insighttoolkit/itk-js-base:latest
+              docker tag insighttoolkit/itk-js-base:latest insighttoolkit/itk-js-base:${TAG}
+              docker push insighttoolkit/itk-js-base:${TAG}
               ./src/Docker/itk-js/build.sh
               docker push insighttoolkit/itk-js:latest
+              docker tag insighttoolkit/itk-js:latest insighttoolkit/itk-js:${TAG}
+              docker push insighttoolkit/itk-js:${TAG}
               ./src/Docker/itk-js-vtk/build.sh
               docker push kitware/itk-js-vtk:latest
+              docker tag insighttoolkit/itk-js-vtk:latest insighttoolkit/itk-js-vtk:${TAG}
+              docker push insighttoolkit/itk-js-vtk:${TAG}
             else
               docker pull insighttoolkit/itk-js-base:latest
               ./src/Docker/itk-js-base/build.sh --cache-from=dockcross/browser-asmjs:latest,insighttoolkit/itk-js-base:latest
