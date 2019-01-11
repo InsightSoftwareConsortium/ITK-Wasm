@@ -50,10 +50,12 @@ if(BUILD_ITK_JS_IO_MODULES)
 
   set(BridgeJavaScript_MeshIOModules
     "ITKIOMeshBYU"
+    "ITKIOMeshFreeSurfer"
     "ITKIOMeshVTK"
     CACHE STRING
     "String delimited list of ITK mesh IO modules to support.")
   set(meshios_ITKIOMeshBYU itkBYUMeshIO)
+  set(meshios_ITKIOMeshFreeSurfer itkFreeSurferAsciiMeshIO itkFreeSurferBinaryMeshIO)
   set(meshios_ITKIOMeshVTK itkVTKPolyDataMeshIO)
 endif()
 
