@@ -8,8 +8,8 @@ Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and
 First, let's create a new folder to house our project.
 
 ```
-mkdir Node.jsHelloWorld
-cd Node.jsHelloWorld
+mkdir NodeHelloWorld
+cd NodeHelloWorld
 ```
 
 Initialize the Node *package.json* file:

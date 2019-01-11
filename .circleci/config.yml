@@ -113,7 +113,7 @@ jobs:
           name: Test Node.js Hello World examlpe
           no_output_timeout: 0.5h
           command: |
-            cd examples/Node.jsHelloWorld
+            cd examples/NodeHelloWorld
             npm install
             npm run build
             npm run test

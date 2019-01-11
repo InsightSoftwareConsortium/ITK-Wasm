@@ -20,8 +20,8 @@ yarn.lock
 
 examples/Node.js/logo.tif
 examples/Node.js/package-lock.json
-examples/Node.jsHelloWorld/web-build
-examples/Node.jsHelloWorld/package-lock.json
+examples/NodeHelloWorld/web-build
+examples/NodeHelloWorld/package-lock.json
 
 test/BinShrinkPipeline/itk-js
 test/BinShrinkPipeline/web-build
