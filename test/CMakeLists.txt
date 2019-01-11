@@ -43,4 +43,6 @@ ExternalData_Expand_Arguments(
   DATA{Input/DicomImageOrientationTest/,REGEX:ImageOrientation.[0-9]+.dcm}
   DATA{Input/cow.vtk}
   DATA{Input/cube.byu}
+  DATA{Input/sphere.fsa}
+  DATA{Input/sphere.fsb}
   )
