@@ -1,4 +1,4 @@
-FROM dockcross/browser-asmjs:latest
+FROM dockcross/browser-asmjs:20190107-6c36c46
 MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
