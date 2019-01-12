@@ -11,11 +11,19 @@ Similar to the [web browser API](./browser_io.html), most of these functions ret
 
 Read an image from a file on the local filesystem.
 
+## readImageLocalFileSync(filePath) -> [itk/Image](./Image.html)
+
+Similar to `readImageLocalFile`, but returns the image directly instead of a promise.
+
 ## readImageLocalDICOMFileSeries(directory) -> [itk/Image](./Image.html)
 
 Read an image from a series of DICOM files on the local filesystem.
 
 It is assumed that all the files are located in the same directory.
+
+## readImageLocalDICOMFileSeriesSync(directory) -> [itk/Image](./Image.html)
+
+Similar to `readImageLocalDICOMFileSeries`, but returns the image directly instead of a promise.
 
 ## writeImageLocalFile(useCompression, image, filePath) -> null
 
@@ -25,11 +33,19 @@ Write an image to a file on the local filesystem with Node.js.
 *image*:          [itk/Image](./Image.html) instance to write
 *filePath*:       path to the file on the local filesystem
 
+## writeImageLocalFileSync(useCompression, image, filePath) -> null
+
+Similar to `writeImageLocalFile`, but synchronous.
+
 ---
 
 ## readMeshLocalFile(filePath) -> [itk/Mesh](./Mesh.html)
 
 Read a mesh from a file on the local filesystem.
+
+## readMeshLocalFileSync(filePath) -> [itk/Mesh](./Mesh.html)
+
+Similar to `readMeshLocalFile`, but returns the mesh directly instead of a promise.
 
 ## writeMeshLocalFile({ useCompression, binaryFileType }, image, filePath) -> null
 
@@ -39,3 +55,7 @@ Write a mesh to a file on the local filesystem with Node.js.
 *binaryFileType*: write in an binary as opposed to a ascii format, if possible
 *mesh*:           [itk/Mesh](./Mesh.html) instance to write
 *filePath*:       path to the file on the local filesystem
+
+## writeMeshLocalFileSync({ useCompression, binaryFileType }, image, filePath) -> null
+
+Similar to `writeMeshLocalFile`, but synchronous.
