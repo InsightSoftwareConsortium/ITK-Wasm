@@ -21,6 +21,10 @@ Read an image from a series of DICOM files on the local filesystem.
 
 It is assumed that all the files are located in the same directory.
 
+## readImageLocalDICOMFileSeriesSync(directory) -> [itk/Image](./Image.html)
+
+Similar to `readImageLocalDICOMFileSeries`, but returns the image directly instead of a promise.
+
 ## writeImageLocalFile(useCompression, image, filePath) -> null
 
 Write an image to a file on the local filesystem with Node.js.
