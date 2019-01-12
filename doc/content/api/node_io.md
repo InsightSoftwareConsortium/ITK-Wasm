@@ -33,6 +33,10 @@ Write an image to a file on the local filesystem with Node.js.
 *image*:          [itk/Image](./Image.html) instance to write
 *filePath*:       path to the file on the local filesystem
 
+## writeImageLocalFileSync(useCompression, image, filePath) -> null
+
+Similar to `readImageLocalDICOMFileSeries`, but returns the image directly instead of a promise.
+
 ---
 
 ## readMeshLocalFile(filePath) -> [itk/Mesh](./Mesh.html)
