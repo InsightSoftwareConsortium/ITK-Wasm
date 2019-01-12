@@ -35,13 +35,17 @@ Write an image to a file on the local filesystem with Node.js.
 
 ## writeImageLocalFileSync(useCompression, image, filePath) -> null
 
-Similar to `readImageLocalDICOMFileSeries`, but returns the image directly instead of a promise.
+Similar to `readImageLocalDICOMFileSeries`, but synchronous.
 
 ---
 
 ## readMeshLocalFile(filePath) -> [itk/Mesh](./Mesh.html)
 
 Read a mesh from a file on the local filesystem.
+
+## readMeshLocalFileSync(filePath) -> [itk/Mesh](./Mesh.html)
+
+Similar to `readMeshLocalFile`, but returns the mesh directly instead of a promise.
 
 ## writeMeshLocalFile({ useCompression, binaryFileType }, image, filePath) -> null
 
