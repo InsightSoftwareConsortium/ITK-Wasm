@@ -35,7 +35,7 @@ Write an image to a file on the local filesystem with Node.js.
 
 ## writeImageLocalFileSync(useCompression, image, filePath) -> null
 
-Similar to `readImageLocalDICOMFileSeries`, but synchronous.
+Similar to `writeImageLocalFile`, but synchronous.
 
 ---
 
@@ -55,3 +55,7 @@ Write a mesh to a file on the local filesystem with Node.js.
 *binaryFileType*: write in an binary as opposed to a ascii format, if possible
 *mesh*:           [itk/Mesh](./Mesh.html) instance to write
 *filePath*:       path to the file on the local filesystem
+
+## writeMeshLocalFileSync({ useCompression, binaryFileType }, image, filePath) -> null
+
+Similar to `writeMeshLocalFile`, but synchronous.
