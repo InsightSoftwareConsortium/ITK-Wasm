@@ -11,6 +11,10 @@ Similar to the [web browser API](./browser_io.html), most of these functions ret
 
 Read an image from a file on the local filesystem.
 
+## readImageLocalFileSync(filePath) -> [itk/Image](./Image.html)
+
+Similar to `readImageLocalFile`, but returns the image directly instead of a promise.
+
 ## readImageLocalDICOMFileSeries(directory) -> [itk/Image](./Image.html)
 
 Read an image from a series of DICOM files on the local filesystem.
