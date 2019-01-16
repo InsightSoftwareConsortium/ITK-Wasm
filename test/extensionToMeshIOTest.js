@@ -42,3 +42,13 @@ test('FSB maps to itkFreeSurferBinaryMeshIOJSBinding', t => {
   let io = ExtensionToIO['FSB']
   t.is(io, 'itkFreeSurferBinaryMeshIOJSBinding')
 })
+
+test('obj maps to itkOBJMeshIOJSBinding', t => {
+  let io = ExtensionToIO['obj']
+  t.is(io, 'itkOBJMeshIOJSBinding')
+})
+
+test('OBJ maps to itkOBJMeshIOJSBinding', t => {
+  let io = ExtensionToIO['OBJ']
+  t.is(io, 'itkOBJMeshIOJSBinding')
+})

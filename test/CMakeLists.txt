@@ -45,4 +45,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/cube.byu}
   DATA{Input/sphere.fsa}
   DATA{Input/sphere.fsb}
+  DATA{Input/box.obj}
   )
