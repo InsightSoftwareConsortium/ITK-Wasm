@@ -114,7 +114,7 @@ public:
   /** Use compression when writing */
   void SetUseCompression( bool compression );
 
-private:
+protected:
   typename MeshIOType::Pointer m_MeshIO;
 
   std::vector< unsigned char > m_PointsBuffer;

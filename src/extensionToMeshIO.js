@@ -8,5 +8,7 @@ extensionToIO['fsa'] = 'itkFreeSurferAsciiMeshIOJSBinding'
 extensionToIO['FSA'] = 'itkFreeSurferAsciiMeshIOJSBinding'
 extensionToIO['fsb'] = 'itkFreeSurferBinaryMeshIOJSBinding'
 extensionToIO['FSB'] = 'itkFreeSurferBinaryMeshIOJSBinding'
+extensionToIO['obj'] = 'itkOBJMeshIOJSBinding'
+extensionToIO['OBJ'] = 'itkOBJMeshIOJSBinding'
 
 module.exports = extensionToIO
