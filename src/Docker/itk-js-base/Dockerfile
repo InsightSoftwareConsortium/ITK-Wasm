@@ -24,6 +24,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DITKGroup_IO:BOOL=ON \
     -DModule_ITKIODCMTK:BOOL=ON \
     -DDCMTK_USE_ICU:BOOL=OFF \
+    -DModule_IOSTL:BOOL=ON \
     -DModule_ITKIOMINC:BOOL=ON \
     -DModule_MGHIO:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
