@@ -3,8 +3,8 @@ MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
 
-# 2019-01-13
-ENV ITK_GIT_TAG 4f6b3d8fd4dbe3990984d9978f200d96bf66ede2
+# 2019-01-17
+ENV ITK_GIT_TAG d9a6a7a01384ba357ed7650fd27b7c759e53192d
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0 -s ALLOW_MEMORY_GROWTH=1 -Wno-almost-asm"
 ENV CXXFLAGS="${CFLAGS} -std=c++11"
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
@@ -24,6 +24,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DITKGroup_IO:BOOL=ON \
     -DModule_ITKIODCMTK:BOOL=ON \
     -DDCMTK_USE_ICU:BOOL=OFF \
+    -DModule_IOSTL:BOOL=ON \
     -DModule_ITKIOMINC:BOOL=ON \
     -DModule_MGHIO:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
