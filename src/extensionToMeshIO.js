@@ -10,5 +10,7 @@ extensionToIO['fsb'] = 'itkFreeSurferBinaryMeshIOJSBinding'
 extensionToIO['FSB'] = 'itkFreeSurferBinaryMeshIOJSBinding'
 extensionToIO['obj'] = 'itkOBJMeshIOJSBinding'
 extensionToIO['OBJ'] = 'itkOBJMeshIOJSBinding'
+extensionToIO['off'] = 'itkOFFMeshIOJSBinding'
+extensionToIO['OFF'] = 'itkOFFMeshIOJSBinding'
 
 module.exports = extensionToIO

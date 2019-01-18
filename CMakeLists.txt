@@ -52,6 +52,7 @@ if(BUILD_ITK_JS_IO_MODULES)
     "ITKIOMeshBYU"
     "ITKIOMeshFreeSurfer"
     "ITKIOMeshOBJ"
+    "ITKIOMeshOFF"
     "ITKIOMeshVTK"
     CACHE STRING
     "String delimited list of ITK mesh IO modules to support.")
@@ -59,6 +60,7 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(meshios_ITKIOMeshFreeSurfer itkFreeSurferAsciiMeshIO itkFreeSurferBinaryMeshIO)
   set(meshios_ITKIOMeshVTK itkVTKPolyDataMeshIO)
   set(meshios_ITKIOMeshOBJ itkOBJMeshIO)
+  set(meshios_ITKIOMeshOFF itkOFFMeshIO)
 endif()
 
 
