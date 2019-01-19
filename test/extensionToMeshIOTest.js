@@ -52,3 +52,13 @@ test('OBJ maps to itkOBJMeshIOJSBinding', t => {
   let io = ExtensionToIO['OBJ']
   t.is(io, 'itkOBJMeshIOJSBinding')
 })
+
+test('off maps to itkOFFMeshIOJSBinding', t => {
+  let io = ExtensionToIO['off']
+  t.is(io, 'itkOFFMeshIOJSBinding')
+})
+
+test('OFF maps to itkOFFMeshIOJSBinding', t => {
+  let io = ExtensionToIO['OFF']
+  t.is(io, 'itkOFFMeshIOJSBinding')
+})
