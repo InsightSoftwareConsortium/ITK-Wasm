@@ -3,9 +3,9 @@ MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
 
-# 2018-01-31
-ENV VTK_GIT_TAG 5e4514f0eba6190c678c61fe25c9b2240135bdcf
-RUN git clone https://github.com/Kitware/VTK.git && \
+# 2019-01-03 + Emscripten patches
+ENV VTK_GIT_TAG 6c0782ec65e2f911f108a02c7666d45337956cce
+RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK && \
   git checkout ${VTK_GIT_TAG} && \
   cd ../ && \
@@ -19,6 +19,7 @@ RUN git clone https://github.com/Kitware/VTK.git && \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
     -DBUILD_EXAMPLES:BOOL=OFF \
     -DBUILD_TESTING:BOOL=OFF \
+    -DVTK_NO_PLATFORM_SOCKETS:BOOL=ON \
     ../VTK && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
