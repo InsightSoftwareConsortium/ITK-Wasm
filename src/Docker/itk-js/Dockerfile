@@ -21,5 +21,17 @@ RUN cd / && \
 COPY ITKBridgeJavaScript.cmake /usr/share/cmake-3.13/Modules/
 COPY web-build /usr/local/bin/
 
-ENV DEFAULT_DOCKCROSS_IMAGE insighttoolkit/itk-js
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG IMAGE=insighttoolkit/itk-js
+ARG VERSION=latest
+ARG VCS_REF
+ARG VCS_URL
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name=$IMAGE \
+      org.label-schema.version=$VERSION \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url=$VCS_URL \
+      org.label-schema.schema-version="1.0"
+ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}
 WORKDIR /work
