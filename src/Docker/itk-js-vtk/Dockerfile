@@ -19,21 +19,33 @@ RUN git clone https://github.com/thewtex/VTK.git && \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
     -DBUILD_EXAMPLES:BOOL=OFF \
     -DBUILD_TESTING:BOOL=OFF \
+    -DVTK_RENDERING_BACKEND:STRING=None \
     -DVTK_NO_PLATFORM_SOCKETS:BOOL=ON \
     ../VTK && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 VTK-build
 
-RUN cd /ITK-build && \
+# 2019-01-27
+ENV ITKVtkGlue_GIT_TAG 6f3cd6fd697ec19ee12b65041537594bf295c0ca
+RUN git clone https://github.com/InsightSoftwareConsortium/ITKVtkGlue.git && \
+  cd ITKVtkGlue && \
+  git checkout ${ITKVtkGlue_GIT_TAG} && \
+  cd ../ && \
+  mkdir ITKVtkGlue-build && \
+  cd ITKVtkGlue-build && \
   cmake \
-    -DModule_ITKVtkGlue:BOOL=ON \
-    -DVTK_DIR=/VTK-build \
-    . && \
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE:STRING=Release \
+    -DBUILD_SHARED_LIBS:BOOL=OFF \
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
+    -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
+    -DITK_DIR:PATH=/ITK-build \
+    -DVTK_DIR:PATH=/VTK-build \
+    ../ITKVtkGlue && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
-
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
