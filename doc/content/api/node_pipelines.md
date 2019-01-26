@@ -9,7 +9,7 @@ Similar to the [web browser API](./browser_pipelines.html), most of these functi
 
 ## runPipelineNode(pipelinePath, args, outputs, inputs) -> result
 
-Read an itk.js Emscripten module with Node.js.
+Run an itk.js Emscripten module with Node.js.
 
 *pipelinePath*: Path the the built module, without `.js` or `Wasm.js` extensions.
 
@@ -17,7 +17,13 @@ Read an itk.js Emscripten module with Node.js.
 
 *outputs*:      A JavaScript Array containing JavaScript objects with two properties: `path` and `type`.
                 `path` is the file path on the virtual filesystem to read after execution has completed.
-                `type` is one of the `itk/IOTypes`, i.e. `IOTypes.Text`, `IOTypes.Binary`, `ITKTypes.Image`, or `ITKTypes.Mesh` to read as an UTF8-encoded string, binary `Uint8Array`, [`itk/Image`](./Image.html), or [`itk/Mesh`](./Mesh.html), respectively.
+                `type` is one of the `itk/IOTypes`:
+<dl>
+  <dt>`IOTypes.Text`</dt><dd>A UTF8-encoded string.</dd>
+  <dt>`IOTypes.Binary`</dt><dd>A binary [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array).</dd>
+  <dt>`IOTypes.Image`</dt><dd>An [`itk/Image`](./Image.html).</dd>
+  <dt>`IOTypes.Mesh`</dt><dd>An [`itk/Mesh`](./Mesh.html).</dd>
+</dl>
 
 *inputs*:       A JavaScript Array containing JavaScript objects with three properties: `path`, `type`, and `data`.
                 `path` and `type` are the same as *outputs*, while `data` contains the corresponding data to write to the virtual filesystem before executing the module.
