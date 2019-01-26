@@ -62,3 +62,13 @@ test('OFF maps to itkOFFMeshIOJSBinding', t => {
   let io = ExtensionToIO['OFF']
   t.is(io, 'itkOFFMeshIOJSBinding')
 })
+
+test('stl maps to itkSTLMeshIOJSBinding', t => {
+  let io = ExtensionToIO['stl']
+  t.is(io, 'itkSTLMeshIOJSBinding')
+})
+
+test('STL maps to itkSTLMeshIOJSBinding', t => {
+  let io = ExtensionToIO['STL']
+  t.is(io, 'itkSTLMeshIOJSBinding')
+})

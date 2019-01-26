@@ -47,4 +47,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/sphere.fsb}
   DATA{Input/box.obj}
   DATA{Input/octa.off}
+  DATA{Input/sphere.stl}
   )

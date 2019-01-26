@@ -24,12 +24,27 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DITKGroup_IO:BOOL=ON \
     -DModule_ITKIODCMTK:BOOL=ON \
     -DDCMTK_USE_ICU:BOOL=OFF \
-    -DModule_IOSTL:BOOL=ON \
     -DModule_ITKIOMINC:BOOL=ON \
     -DModule_MGHIO:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
     -DModule_SmoothingRecursiveYvvGaussianFilter:BOOL=ON \
     ../ITK && \
+  ninja -j7 && \
+  find . -name '*.o' -delete && \
+  cd .. && chmod -R 777 ITK-build
+
+ENV ITKIOMeshSTL_GIT_TAG 3153ccadce3452c047248687909b74d96211048b
+RUN git clone https://github.com/InsightSoftwareConsortium/ITKIOMeshSTL.git && \
+  cd ITKIOMeshSTL && \
+  git checkout ${ITKIOMeshSTL_GIT_TAG} && \
+  cd ../ && \
+  mkdir ITKIOMeshSTL-build && \
+  cd ITKIOMeshSTL-build && \
+  cmake -G Ninja \
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+    -DITK_DIR:PATH=/ITK-build \
+    ../ITKIOMeshSTL && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build

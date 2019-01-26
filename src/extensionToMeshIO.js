@@ -12,5 +12,7 @@ extensionToIO['obj'] = 'itkOBJMeshIOJSBinding'
 extensionToIO['OBJ'] = 'itkOBJMeshIOJSBinding'
 extensionToIO['off'] = 'itkOFFMeshIOJSBinding'
 extensionToIO['OFF'] = 'itkOFFMeshIOJSBinding'
+extensionToIO['stl'] = 'itkSTLMeshIOJSBinding'
+extensionToIO['STL'] = 'itkSTLMeshIOJSBinding'
 
 module.exports = extensionToIO
