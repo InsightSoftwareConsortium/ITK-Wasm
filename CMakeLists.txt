@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 3.10.2)
 project(BridgeJavaScript)
 
 set(BridgeJavaScript_LIBRARIES BridgeJavaScript)
@@ -65,7 +65,7 @@ endif()
 
 
 if(NOT ITK_SOURCE_DIR)
-  find_package(ITK 4.9 REQUIRED)
+  find_package(ITK 5.0 REQUIRED)
   list(APPEND CMAKE_MODULE_PATH ${ITK_CMAKE_DIR})
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
   include(ITKModuleExternal)
