@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
+set -eo pipefail
 
 script_dir="`cd $(dirname $0); pwd`"
 
