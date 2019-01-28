@@ -74,9 +74,7 @@ const build = (sourceDir) => {
     env: process.env,
     stdio: 'inherit'
   })
-  if (dockerBuild.status !== 0) {
-    process.exit(dockerBuild.status)
-  }
+  process.exit(dockerBuild.status)
 }
 
 const test = (sourceDir) => {
@@ -114,9 +112,7 @@ const test = (sourceDir) => {
       env: process.env,
       stdio: 'inherit'
     })
-  if (dockerBuild.status !== 0) {
-    process.exit(dockerBuild.status)
-  }
+  process.exit(dockerBuild.status)
 }
 
 program
