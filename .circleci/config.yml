@@ -19,19 +19,19 @@ jobs:
               TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
               ./src/Docker/itk-js-base/build.sh
               docker push insighttoolkit/itk-js-base:latest
-              docker tag insighttoolkit/itk-js-base:latest insighttoolkit/itk-js-base:${TAG}
-              docker push insighttoolkit/itk-js-base:${TAG}
+              tagged=$(docker images -q -f 'since=insighttoolkit/itk-js-base:latest' --format '{{.Repository}}:{{.Tag}}' | grep itk-js-base)
+              docker push $tagged
               ./src/Docker/itk-js/build.sh
               docker push insighttoolkit/itk-js:latest
-              docker tag insighttoolkit/itk-js:latest insighttoolkit/itk-js:${TAG}
-              docker push insighttoolkit/itk-js:${TAG}
+              tagged=$(docker images -q -f 'since=insighttoolkit/itk-js:latest' --format '{{.Repository}}:{{.Tag}}' | grep itk-js:)
+              docker push $tagged
               ./src/Docker/itk-js-vtk/build.sh
               docker push kitware/itk-js-vtk:latest
-              docker tag insighttoolkit/itk-js-vtk:latest insighttoolkit/itk-js-vtk:${TAG}
-              docker push insighttoolkit/itk-js-vtk:${TAG}
+              tagged=$(docker images -q -f 'since=kitware/itk-js-vtk:latest' --format '{{.Repository}}:{{.Tag}}' | grep itk-js-vtk)
+              docker push $tagged
             else
               docker pull insighttoolkit/itk-js-base:latest
-              ./src/Docker/itk-js-base/build.sh --cache-from=dockcross/browser-asmjs:latest,insighttoolkit/itk-js-base:latest
+              ./src/Docker/itk-js-base/build.sh --cache-from=dockcross/web-wasm:latest,insighttoolkit/itk-js-base:latest
               docker pull insighttoolkit/itk-js:latest
               ./src/Docker/itk-js/build.sh --cache-from=insighttoolkit/itk-js-base:latest,insighttoolkit/itk-js:latest
               docker pull kitware/itk-js-vtk:latest
