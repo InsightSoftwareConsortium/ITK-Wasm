@@ -21,7 +21,6 @@ const verifyMesh = (t, mesh) => {
 
 test('readMeshLocalFile reads a STL file path given on the local filesystem', t => {
   return readMeshLocalFile(testInputFilePath).then(function (mesh) {
-    console.log(mesh)
     verifyMesh(t, mesh)
   })
 })
