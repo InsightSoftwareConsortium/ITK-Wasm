@@ -11,6 +11,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "fs-extra": "^7.0.1",
-    "itk": "^9.1.2"
+    "itk": "^9.2.0"
   }
 }
