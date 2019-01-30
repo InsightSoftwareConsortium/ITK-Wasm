@@ -31,6 +31,6 @@
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-js#readme",
   "dependencies": {
     "commander": "^2.14.1",
-    "itk": "^9.1.1"
+    "itk": "^9.2.0"
   }
 }
