@@ -7,6 +7,12 @@ Similar to the [web browser API](./browser_io.html), most of these functions ret
 
 ---
 
+## readLocalFile(filePath) -> [itk/Image](./Image.html) or [itk/Mesh](./Mesh.html)
+
+Read an image or mesh from a file on the local filesystem.
+
+---
+
 ## readImageLocalFile(filePath) -> [itk/Image](./Image.html)
 
 Read an image from a file on the local filesystem.
