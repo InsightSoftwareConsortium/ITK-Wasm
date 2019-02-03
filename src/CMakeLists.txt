@@ -6,6 +6,8 @@ include_directories(${RapidJSON_INCLUDE_DIR})
 set(BridgeJavaScript_SRCS
   itkJSONImageIOFactory.cxx
   itkJSONImageIO.cxx
+  itkJSONMeshIOFactory.cxx
+  itkJSONMeshIO.cxx
   )
 itk_module_add_library(BridgeJavaScript ${BridgeJavaScript_SRCS})
 
