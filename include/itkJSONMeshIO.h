@@ -96,6 +96,8 @@ protected:
   static MeshIOBase::IOPixelType JSToITKPixelType( const int jsPixelType );
   static int ITKToJSPixelType( const MeshIOBase::IOPixelType );
 
+  static size_t ITKComponentSize( const MeshIOBase::IOComponentType );
+
   /** \brief Opens a file for reading and random access
    *
    * \param[out] inputStream is an istream presumed to be opened for reading
@@ -130,6 +132,7 @@ protected:
 
   /** Convenient method to read a buffer as binary. Return true on success. */
   bool ReadBufferAsBinary(std::istream & os, void *buffer, SizeValueType numberOfBytesToBeRead);
+
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(JSONMeshIO);
 };

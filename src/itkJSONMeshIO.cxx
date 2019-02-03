@@ -253,10 +253,57 @@ JSONMeshIO
       return "double";
 
     default:
-      return "int8_t";
+      return "null";
     }
 }
 
+
+size_t
+JSONMeshIO
+::ITKComponentSize(const MeshIOBase::IOComponentType itkComponentType)
+{
+  switch ( itkComponentType )
+    {
+    case CHAR:
+      return sizeof( uint8_t );
+
+    case UCHAR:
+      return sizeof( uint8_t );
+
+    case SHORT:
+      return sizeof( int16_t );
+
+    case USHORT:
+      return sizeof( uint16_t );
+
+    case INT:
+      return sizeof( int32_t );
+
+    case UINT:
+      return sizeof( uint32_t );
+
+    case LONG:
+      return sizeof( int64_t );
+
+    case ULONG:
+      return sizeof( uint64_t );
+
+    case LONGLONG:
+      return sizeof( int64_t );
+
+    case ULONGLONG:
+      return sizeof( uint64_t );
+
+    case FLOAT:
+      return sizeof( float );
+
+    case DOUBLE:
+      return sizeof( double );
+
+    default:
+      return sizeof( int8_t );
+    }
+}
 
 MeshIOBase::IOPixelType
 JSONMeshIO
@@ -425,6 +472,10 @@ JSONMeshIO
   const MeshIOBase::IOComponentType pointIOComponentType = this->JSToITKComponentType( pointComponentType );
   this->SetPointComponentType( pointIOComponentType );
 
+  const std::string pointPixelComponentType( meshType["pointPixelComponentType"].GetString() );
+  const MeshIOBase::IOComponentType pointPixelIOComponentType = this->JSToITKComponentType( pointPixelComponentType );
+  this->SetPointPixelComponentType( pointPixelIOComponentType );
+
   const int pointPixelType( meshType["pointPixelType"].GetInt() );
   const MeshIOBase::IOPixelType pointIOPixelType = this->JSToITKPixelType( pointPixelType );
   this->SetPointPixelType( pointIOPixelType );
@@ -435,6 +486,10 @@ JSONMeshIO
   const MeshIOBase::IOComponentType cellIOComponentType = this->JSToITKComponentType( cellComponentType );
   this->SetCellComponentType( cellIOComponentType );
 
+  const std::string cellPixelComponentType( meshType["cellPixelComponentType"].GetString() );
+  const MeshIOBase::IOComponentType cellPixelIOComponentType = this->JSToITKComponentType( cellPixelComponentType );
+  this->SetCellPixelComponentType( cellPixelIOComponentType );
+
   const int cellPixelType( meshType["cellPixelType"].GetInt() );
   const MeshIOBase::IOPixelType cellIOPixelType = this->JSToITKPixelType( cellPixelType );
   this->SetCellPixelType( cellIOPixelType );
@@ -443,15 +498,31 @@ JSONMeshIO
 
   const rapidjson::Value & numberOfPoints = document["numberOfPoints"];
   this->SetNumberOfPoints( numberOfPoints.GetInt() );
+  if ( numberOfPoints.GetInt() )
+    {
+    this->m_UpdatePoints = true;
+    }
 
   const rapidjson::Value & numberOfPointPixels = document["numberOfPointPixels"];
   this->SetNumberOfPointPixels( numberOfPointPixels.GetInt() );
+  if ( numberOfPointPixels.GetInt() )
+    {
+    this->m_UpdatePointData = true;
+    }
 
   const rapidjson::Value & numberOfCells = document["numberOfCells"];
   this->SetNumberOfCells( numberOfCells.GetInt() );
+  if ( numberOfCells.GetInt() )
+    {
+    this->m_UpdateCells = true;
+    }
 
   const rapidjson::Value & numberOfCellPixels = document["numberOfCellPixels"];
   this->SetNumberOfCellPixels( numberOfCellPixels.GetInt() );
+  if ( numberOfCellPixels.GetInt() )
+    {
+    this->m_UpdateCellData = true;
+    }
 
   const rapidjson::Value & cellBufferSize = document["cellBufferSize"];
   this->SetCellBufferSize( cellBufferSize.GetInt() );
@@ -478,7 +549,7 @@ JSONMeshIO
   this->OpenFileForReading( dataStream, dataFile.c_str() );
 
   const SizeValueType numberOfBytesToBeRead =
-    static_cast< SizeValueType >( this->GetNumberOfPoints() * this->GetPointDimension() );
+    static_cast< SizeValueType >( this->GetNumberOfPoints() * this->GetPointDimension() * ITKComponentSize( this->GetPointComponentType() ) );
   if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
     {
     itkExceptionMacro(<< "Read failed: Wanted "
@@ -507,11 +578,13 @@ JSONMeshIO
   const std::string dataFile( document["cells"].GetString() );
   std::ifstream dataStream;
   this->OpenFileForReading( dataStream, dataFile.c_str() );
+  const SizeValueType numberOfBytesToBeRead =
+    static_cast< SizeValueType >( this->GetCellBufferSize() * ITKComponentSize( this->GetCellComponentType() ) );
 
-  if ( !this->ReadBufferAsBinary( dataStream, buffer, this->GetCellBufferSize() ) )
+  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
     {
     itkExceptionMacro(<< "Read failed: Wanted "
-                      << this->GetCellBufferSize()
+                      << numberOfBytesToBeRead
                       << " bytes, but read "
                       << dataStream.gcount() << " bytes.");
     }
@@ -538,7 +611,7 @@ JSONMeshIO
   this->OpenFileForReading( dataStream, dataFile.c_str() );
 
   const SizeValueType numberOfBytesToBeRead =
-    static_cast< SizeValueType >( this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() );
+    static_cast< SizeValueType >( this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetPointPixelComponentType() ));
   if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
     {
     itkExceptionMacro(<< "Read failed: Wanted "
@@ -569,7 +642,7 @@ JSONMeshIO
   this->OpenFileForReading( dataStream, dataFile.c_str() );
 
   const SizeValueType numberOfBytesToBeRead =
-    static_cast< SizeValueType >( this->GetNumberOfCellPixels() * this->GetNumberOfCellPixelComponents() );
+    static_cast< SizeValueType >( this->GetNumberOfCellPixels() * this->GetNumberOfCellPixelComponents() * ITKComponentSize( this->GetCellPixelComponentType() ));
   if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
     {
     itkExceptionMacro(<< "Read failed: Wanted "
@@ -628,15 +701,29 @@ JSONMeshIO
   pointComponentType.SetString( pointComponentString.c_str(), allocator );
   meshType.AddMember("pointComponentType", pointComponentType.Move(), allocator );
 
+  const std::string pointPixelComponentString = this->ITKToJSComponentType( this->GetPointPixelComponentType() );
+  rapidjson::Value pointPixelComponentType;
+  pointPixelComponentType.SetString( pointPixelComponentString.c_str(), allocator );
+  meshType.AddMember("pointPixelComponentType", pointPixelComponentType.Move(), allocator );
+
   const int pointPixelType = this->ITKToJSPixelType( this->GetPointPixelType() );
   meshType.AddMember("pointPixelType", rapidjson::Value(pointPixelType).Move(), allocator );
 
   meshType.AddMember("pointPixelComponents", rapidjson::Value( this->GetNumberOfPointPixelComponents() ).Move(), allocator );
 
-  const std::string cellComponentString = this->ITKToJSComponentType( this->GetCellComponentType() );
+  // The MeshFileWriter sets this to CellIdentifier / IdentifierType /
+  // uint64_t. However, JavaScript does not support 64 bit integers, so force
+  // uint32_t
+  //const std::string cellComponentString = this->ITKToJSComponentType( this->GetCellComponentType() );
+  const std::string cellComponentString( "uint32_t" );
   rapidjson::Value cellComponentType;
   cellComponentType.SetString( cellComponentString.c_str(), allocator );
   meshType.AddMember("cellComponentType", cellComponentType.Move(), allocator );
+
+  const std::string cellPixelComponentString = this->ITKToJSComponentType( this->GetCellPixelComponentType() );
+  rapidjson::Value cellPixelComponentType;
+  cellPixelComponentType.SetString( cellPixelComponentString.c_str(), allocator );
+  meshType.AddMember("cellPixelComponentType", cellPixelComponentType.Move(), allocator );
 
   const int cellPixelType = this->ITKToJSPixelType( this->GetCellPixelType() );
   meshType.AddMember("cellPixelType", rapidjson::Value(cellPixelType).Move(), allocator );
@@ -648,39 +735,55 @@ JSONMeshIO
   rapidjson::Value numberOfPoints;
   numberOfPoints.SetInt( this->GetNumberOfPoints() );
   document.AddMember( "numberOfPoints", numberOfPoints.Move(), allocator );
+  if ( this->GetNumberOfPoints() )
+    {
+    this->m_UpdatePoints = true;
+    }
 
   rapidjson::Value numberOfPointPixels;
   numberOfPointPixels.SetInt( this->GetNumberOfPointPixels() );
   document.AddMember( "numberOfPointPixels", numberOfPointPixels.Move(), allocator );
+  if ( this->GetNumberOfPointPixels() )
+    {
+    this->m_UpdatePointData = true;
+    }
 
   rapidjson::Value numberOfCells;
   numberOfCells.SetInt( this->GetNumberOfCells() );
   document.AddMember( "numberOfCells", numberOfCells.Move(), allocator );
+  if ( this->GetNumberOfCells() )
+    {
+    this->m_UpdateCells = true;
+    }
 
   rapidjson::Value numberOfCellPixels;
   numberOfCellPixels.SetInt( this->GetNumberOfCellPixels() );
   document.AddMember( "numberOfCellPixels", numberOfCellPixels.Move(), allocator );
+  if ( this->GetNumberOfCellPixels() )
+    {
+    this->m_UpdateCellData = true;
+    }
 
   rapidjson::Value cellBufferSize;
   cellBufferSize.SetInt( this->GetCellBufferSize() );
   document.AddMember( "cellBufferSize", cellBufferSize.Move(), allocator );
 
-  std::string pointsDataFileString( std::string( this->GetFileName() ) + "points.data" );
+  std::string pointsDataFileString( std::string( this->GetFileName() ) + ".points.data" );
   rapidjson::Value pointsDataFile;
   pointsDataFile.SetString( pointsDataFileString.c_str(), allocator );
   document.AddMember( "points", pointsDataFile, allocator );
 
-  std::string cellsDataFileString( std::string( this->GetFileName() ) + "cells.data" );
+  std::string cellsDataFileString( std::string( this->GetFileName() ) + ".cells.data" );
   rapidjson::Value cellsDataFile;
   cellsDataFile.SetString( cellsDataFileString.c_str(), allocator );
   document.AddMember( "cells", cellsDataFile, allocator );
 
-  std::string pointDataDataFileString( std::string( this->GetFileName() ) + "pointData.data" );
+  std::string pointDataDataFileString( std::string( this->GetFileName() ) + ".pointData.data" );
   rapidjson::Value pointDataDataFile;
   pointDataDataFile.SetString( pointDataDataFileString.c_str(), allocator );
   document.AddMember( "pointData", pointDataDataFile, allocator );
 
-  std::string cellDataDataFileString( std::string( this->GetFileName() ) + "cellData.data" );
+  std::string cellDataDataFileString( std::string( this->GetFileName() ) + ".cellData.data" );
   rapidjson::Value cellDataDataFile;
   cellDataDataFile.SetString( cellDataDataFileString.c_str(), allocator );
   document.AddMember( "cellData", cellDataDataFile, allocator );
@@ -699,10 +802,10 @@ JSONMeshIO
 ::WritePoints( void *buffer )
 {
   this->WriteMeshInformation();
-  const std::string fileName = std::string( this->GetFileName() ) + "points.data";
+  const std::string fileName = std::string( this->GetFileName() ) + ".points.data";
   std::ofstream outputStream;
   this->OpenFileForWriting( outputStream, fileName, true, false );
-  const SizeValueType numberOfBytes = this->GetNumberOfPoints() * this->GetPointDimension();
+  const SizeValueType numberOfBytes = this->GetNumberOfPoints() * this->GetPointDimension() * ITKComponentSize( this->GetPointComponentType() );
   outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
 }
 
@@ -711,11 +814,17 @@ void
 JSONMeshIO
 ::WriteCells( void *buffer )
 {
-  const std::string fileName = std::string( this->GetFileName() ) + "cell.data";
+  const std::string fileName = std::string( this->GetFileName() ) + ".cells.data";
   std::ofstream outputStream;
   this->OpenFileForWriting( outputStream, fileName, true, false );
-  const SizeValueType numberOfBytes = this->GetCellBufferSize();
-  outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+  // Cast from 64 bit unsigned integers (not supported in JavaScript) to 32
+  // bit unsigned integers
+  const IdentifierType * bufferIdentifier = static_cast< IdentifierType * >( buffer );
+  const SizeValueType cellBufferSize = this->GetCellBufferSize();
+  for( SizeValueType ii = 0; ii < cellBufferSize; ++ii )
+    {
+    outputStream << static_cast< uint32_t >( bufferIdentifier[ii] );
+    }
 }
 
 
@@ -723,10 +832,10 @@ void
 JSONMeshIO
 ::WritePointData( void *buffer )
 {
-  const std::string fileName = std::string( this->GetFileName() ) + "pointData.data";
+  const std::string fileName = std::string( this->GetFileName() ) + ".pointData.data";
   std::ofstream outputStream;
   this->OpenFileForWriting( outputStream, fileName, true, false );
-  const SizeValueType numberOfBytes = this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents();
+  const SizeValueType numberOfBytes = this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetPointPixelComponentType() );
   outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
 }
 
@@ -735,10 +844,10 @@ void
 JSONMeshIO
 ::WriteCellData( void *buffer )
 {
-  const std::string fileName = std::string( this->GetFileName() ) + "cellData.data";
+  const std::string fileName = std::string( this->GetFileName() ) + ".cellData.data";
   std::ofstream outputStream;
   this->OpenFileForWriting( outputStream, fileName, true, false );
-  const SizeValueType numberOfBytes = this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents();
+  const SizeValueType numberOfBytes = this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetCellPixelComponentType() );
   outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
 }
 

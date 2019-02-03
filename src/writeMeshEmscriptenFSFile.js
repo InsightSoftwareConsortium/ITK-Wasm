@@ -17,10 +17,14 @@ const writeMeshEmscriptenFSFile = (module, { useCompression, binaryFileType }, m
   const cellIOComponentType = meshJSComponentToIOComponent(module, mesh.meshType.cellComponentType)
   meshIO.SetCellComponentType(cellIOComponentType)
 
+  const pointPixelIOComponentType = meshJSComponentToIOComponent(module, mesh.meshType.pointPixelComponentType)
+  meshIO.SetPointPixelComponentType(pointPixelIOComponentType)
   const pointIOPixelType = meshJSPixelTypeToIOPixelType(module, mesh.meshType.pointPixelType)
   meshIO.SetPointPixelType(pointIOPixelType)
   meshIO.SetNumberOfPointPixelComponents(mesh.meshType.pointPixelComponents)
 
+  const cellPixelIOComponentType = meshJSComponentToIOComponent(module, mesh.meshType.cellPixelComponentType)
+  meshIO.SetCellPixelComponentType(cellPixelIOComponentType)
   const cellIOPixelType = meshJSPixelTypeToIOPixelType(module, mesh.meshType.cellPixelType)
   meshIO.SetCellPixelType(cellIOPixelType)
   meshIO.SetNumberOfCellPixelComponents(mesh.meshType.cellPixelComponents)

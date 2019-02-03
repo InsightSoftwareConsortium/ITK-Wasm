@@ -4,6 +4,10 @@ const FloatTypes = require('./FloatTypes.js')
 const meshIOComponentToJSComponent = (module, ioComponentType) => {
   let componentType = null
   switch (ioComponentType) {
+    case module.IOComponentType.UNKNOWNCOMPONENTTYPE: {
+      componentType = null
+      break
+    }
     case module.IOComponentType.UCHAR: {
       componentType = IntTypes.UInt8
       break

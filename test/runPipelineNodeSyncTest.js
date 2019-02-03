@@ -2,10 +2,13 @@ import test from 'ava'
 import path from 'path'
 
 const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
+const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
 const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
 const readImageLocalFileSync = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFileSync.js'))
+const readMeshLocalFileSync = require(path.resolve(__dirname, '..', 'dist', 'readMeshLocalFileSync.js'))
 
 const testInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cthead1.png')
+const testMeshInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cow.vtk')
 
 const runPipelineNodeSync = require(path.resolve(__dirname, '..', 'dist', 'runPipelineNodeSync.js'))
 const IOTypes = require(path.resolve(__dirname, '..', 'dist', 'IOTypes.js'))
@@ -79,4 +82,28 @@ test('runPipelineNodeSync writes and reads an itk/Image in the Emscripten filesy
   ]
   const { outputs } = runPipelineNodeSync(pipelinePath, args, desiredOutputs, inputs)
   verifyImage(outputs[0].data)
+})
+
+test('runPipelineNode writes and reads an itk/Mesh in the Emscripten filesystem', (t) => {
+  const verifyMesh = (mesh) => {
+    t.is(mesh.meshType.dimension, 3)
+    t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
+    t.is(mesh.meshType.cellComponentType, IntTypes.UInt32)
+    t.is(mesh.meshType.pointPixelType, 1)
+    t.is(mesh.meshType.cellPixelType, 1)
+    t.is(mesh.numberOfPoints, 2903)
+    t.is(mesh.numberOfCells, 3263)
+  }
+
+  const mesh = readMeshLocalFileSync(testMeshInputFilePath)
+  const pipelinePath = path.resolve(__dirname, 'MeshReadWritePipeline', 'web-build', 'MeshReadWrite')
+  const args = ['cow.vtk.json', 'cow.vtk.written.json']
+  const desiredOutputs = [
+    { path: args[1], type: IOTypes.Mesh }
+  ]
+  const inputs = [
+    { path: args[0], type: IOTypes.Mesh, data: mesh }
+  ]
+  const { outputs } = runPipelineNodeSync(pipelinePath, args, desiredOutputs, inputs)
+  verifyMesh(outputs[0].data)
 })
