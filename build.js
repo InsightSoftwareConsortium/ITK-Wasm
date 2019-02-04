@@ -216,7 +216,7 @@ if (program.buildPipelines) {
     console.log('Building ' + pipelinePath + ' ...')
     let debugFlags = []
     if (program.debug) {
-      debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug']
+      debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug', "-DCMAKE_EXE_LINKER_FLAGS_DEBUG='-s DISABLE_EXCEPTION_CATCHING=0'"]
     }
     const buildPipelineCall = spawnSync(path.join(__dirname, 'src', 'itk-js-cli.js'), ['build', pipelinePath, '--'].concat(debugFlags), {
       env: process.env,
@@ -236,7 +236,8 @@ if (program.buildPipelines) {
   const pipelines = [
     path.join(__dirname, 'test', 'StdoutStderrPipeline'),
     path.join(__dirname, 'test', 'BinShrinkPipeline'),
-    path.join(__dirname, 'test', 'InputOutputFilesPipeline')
+    path.join(__dirname, 'test', 'InputOutputFilesPipeline'),
+    path.join(__dirname, 'test', 'MeshReadWritePipeline')
   ]
   try {
     fs.mkdirSync(path.join(__dirname, 'dist', 'Pipelines'))

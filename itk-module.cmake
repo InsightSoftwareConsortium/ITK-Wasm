@@ -19,6 +19,7 @@ itk_module(BridgeJavaScript
     ITKTestKernel
   FACTORY_NAMES
     ImageIO::JSON
+    MeshIO::JSON
   EXCLUDE_FROM_DEFAULT
   DESCRIPTION
     "${DOCUMENTATION}"

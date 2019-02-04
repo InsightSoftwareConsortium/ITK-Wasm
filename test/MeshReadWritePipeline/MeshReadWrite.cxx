@@ -15,38 +15,32 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
-#include "itkBinShrinkImageFilter.h"
+#include "itkMeshFileReader.h"
+#include "itkMeshFileWriter.h"
+#include "itkMesh.h"
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 4 )
+  if( argc < 3 )
     {
-    std::cerr << "Usage: " << argv[0] << " <inputImage> <outputImage> <shrinkFactor>" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <inputMesh> <outputMesh> " << std::endl;
     return EXIT_FAILURE;
     }
-  const char * inputImageFile = argv[1];
-  const char * outputImageFile = argv[2];
-  unsigned int shrinkFactor = atoi( argv[3] );
+  const char * inputMeshFile = argv[1];
+  const char * outputMeshFile = argv[2];
 
-  using PixelType = unsigned char;
-  constexpr unsigned int Dimension = 2;
-  using ImageType = itk::Image< PixelType, Dimension >;
+  using PixelType = float;
+  constexpr unsigned int Dimension = 3;
+  using MeshType = itk::Mesh< PixelType, Dimension >;
 
-  using ReaderType = itk::ImageFileReader< ImageType >;
+  using ReaderType = itk::MeshFileReader< MeshType >;
   auto reader = ReaderType::New();
-  reader->SetFileName( inputImageFile );
+  reader->SetFileName( inputMeshFile );
 
-  using ShrinkFilterType = itk::BinShrinkImageFilter< ImageType, ImageType >;
-  auto shrinker = ShrinkFilterType::New();
-  shrinker->SetInput( reader->GetOutput() );
-  shrinker->SetShrinkFactors( shrinkFactor );
-
-  using WriterType = itk::ImageFileWriter< ImageType >;
+  using WriterType = itk::MeshFileWriter< MeshType >;
   auto writer = WriterType::New();
-  writer->SetInput( shrinker->GetOutput() );
-  writer->SetFileName( outputImageFile );
+  writer->SetInput( reader->GetOutput() );
+  writer->SetFileName( outputMeshFile );
 
   try
     {

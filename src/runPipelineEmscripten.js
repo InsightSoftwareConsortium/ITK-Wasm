@@ -1,4 +1,5 @@
 const IOTypes = require('./IOTypes.js')
+const bufferToTypedArray = require('./bufferToTypedArray.js')
 
 const runPipelineEmscripten = (module, args, outputs, inputs) => {
   if (inputs) {
@@ -19,7 +20,36 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
           }
           imageJSON['data'] = input.path + '.data'
           module.writeFile(input.path, JSON.stringify(imageJSON))
-          module.writeFile(imageJSON.data, input.data.data)
+          module.writeFile(imageJSON.data, new Uint8Array(input.data.data.buffer))
+          break
+        case IOTypes.Mesh:
+          let meshJSON = {}
+          for (let key in input.data) {
+            if (input.data.hasOwnProperty(key) &&
+              key !== 'points' &&
+              key !== 'pointData' &&
+              key !== 'cells' &&
+              key !== 'cellData') {
+              meshJSON[key] = input.data[key]
+            }
+          }
+          meshJSON['points'] = input.path + '.points.data'
+          meshJSON['pointData'] = input.path + '.pointData.data'
+          meshJSON['cells'] = input.path + '.cells.data'
+          meshJSON['cellData'] = input.path + '.cellData.data'
+          module.writeFile(input.path, JSON.stringify(meshJSON))
+          if (meshJSON.numberOfPoints) {
+            module.writeFile(meshJSON.points, new Uint8Array(input.data.points.buffer))
+          }
+          if (meshJSON.numberOfPointPixels) {
+            module.writeFile(meshJSON.pointData, new Uint8Array(input.data.pointData.buffer))
+          }
+          if (meshJSON.numberOfCells) {
+            module.writeFile(meshJSON.cells, new Uint8Array(input.data.cells.buffer))
+          }
+          if (meshJSON.numberOfCellPixels) {
+            module.writeFile(meshJSON.cellData, new Uint8Array(input.data.cellData.buffer))
+          }
           break
         default:
           throw Error('Unsupported input IOType')
@@ -49,8 +79,37 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
           const imageJSON = module.readFile(output.path, { encoding: 'utf8' })
           let image = JSON.parse(imageJSON)
           const dataUint8 = module.readFile(image.data, { encoding: 'binary' })
-          image['data'] = dataUint8.buffer
+          image['data'] = bufferToTypedArray(image.imageType.componentType, dataUint8.buffer)
           populatedOutput['data'] = image
+          break
+        case IOTypes.Mesh:
+          const meshJSON = module.readFile(output.path, { encoding: 'utf8' })
+          let mesh = JSON.parse(meshJSON)
+          if (mesh.numberOfPoints) {
+            const dataUint8Points = module.readFile(mesh.points, { encoding: 'binary' })
+            mesh['points'] = bufferToTypedArray(mesh.meshType.pointComponentType, dataUint8Points.buffer)
+          } else {
+            mesh['points'] = bufferToTypedArray(mesh.meshType.pointComponentType, new ArrayBuffer(0))
+          }
+          if (mesh.numberOfPointPixels) {
+            const dataUint8PointData = module.readFile(mesh.pointData, { encoding: 'binary' })
+            mesh['pointData'] = bufferToTypedArray(mesh.meshType.pointPixelComponentType, dataUint8PointData.buffer)
+          } else {
+            mesh['pointData'] = bufferToTypedArray(mesh.meshType.pointPixelComponentType, new ArrayBuffer(0))
+          }
+          if (mesh.numberOfCells) {
+            const dataUint8Cells = module.readFile(mesh.cells, { encoding: 'binary' })
+            mesh['cells'] = bufferToTypedArray(mesh.meshType.cellComponentType, dataUint8Cells.buffer)
+          } else {
+            mesh['cells'] = bufferToTypedArray(mesh.meshType.cellComponentType, new ArrayBuffer(0))
+          }
+          if (mesh.numberOfCellPixels) {
+            const dataUint8CellData = module.readFile(mesh.cellData, { encoding: 'binary' })
+            mesh['cellData'] = bufferToTypedArray(mesh.meshType.cellPixelComponentType, dataUint8CellData.buffer)
+          } else {
+            mesh['cellData'] = bufferToTypedArray(mesh.meshType.cellPixelComponentType, new ArrayBuffer(0))
+          }
+          populatedOutput['data'] = mesh
           break
         default:
           throw Error('Unsupported output IOType')
