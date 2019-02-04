@@ -1,11 +1,9 @@
 import test from 'tape'
-/*
 import axios from 'axios'
 
 import IntTypes from 'IntTypes'
 import PixelTypes from 'PixelTypes'
 import readImageFile from 'readImageFile'
-*/
 
 import runPipelineBrowser from 'runPipelineBrowser'
 import IOTypes from 'IOTypes'
@@ -82,7 +80,6 @@ test('runPipelineBrowser uses input and output files in the Emscripten filesyste
     })
 })
 
-/* todo: patch itk to avoid pthread_attr_setscope call
 test('runPipelineBrowser uses writes and read itk/Image in the Emscripten filesystem', (t) => {
   const verifyImage = (image) => {
     t.is(image.imageType.dimension, 2, 'dimension')
@@ -101,13 +98,14 @@ test('runPipelineBrowser uses writes and read itk/Image in the Emscripten filesy
 
   const fileName = 'cthead1.png'
   const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
-  return axios.get(testFilePath, {responseType: 'blob'})
+  return axios.get(testFilePath, { responseType: 'blob' })
     .then(function (response) {
       const jsFile = new window.File([response.data], fileName)
       return jsFile
     }).then(function (jsFile) {
-      return readImageFile(jsFile)
-    }).then(function (image) {
+      return readImageFile(null, jsFile)
+    }).then(function ({ image, webWorker }) {
+      webWorker.terminate()
       const pipelinePath = 'BinShrink'
       const args = ['cthead1.png.json', 'cthead1.png.shrink.json', '4']
       const desiredOutputs = [
@@ -117,8 +115,7 @@ test('runPipelineBrowser uses writes and read itk/Image in the Emscripten filesy
         { path: args[0], type: IOTypes.Image, data: image }
       ]
       return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
-    }).then(function ({stdout, stderr, outputs}) {
+    }).then(function ({ stdout, stderr, outputs }) {
       verifyImage(outputs[0].data)
     })
 })
-*/
