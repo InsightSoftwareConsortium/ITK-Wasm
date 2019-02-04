@@ -34,3 +34,26 @@ Write an image to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/We
 *image*:          [itk/Image](./Image.html) instance to write
 *fileName*:       name that would be used for the resulting file
 *mimeType*:       optional mime-type for the resulting file
+
+---
+
+## readMeshFile(webWorker, file) -> { webWorker, [itk/Mesh](./Mesh.html) }
+
+Read a mesh from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
+
+## readMeshBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [itk/Mesh](./Mesh.html) }
+
+Read an mesh from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
+
+## readMeshArrayBuffer(webWorker, arrayBuffer, fileName, mimeType) -> { webWorker, [itk/Mesh](./Mesh.html) }
+
+Read an mesh from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
+
+## writeMeshArrayBuffer(webWorker, useCompression, mesh, fileName, mimeType) ->  { webWorker, [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
+
+Write an mesh to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
+
+*useCompression*: compress the pixel data when possible
+*mesh*:           [itk/Mesh](./Mesh.html) instance to write
+*fileName*:       name that would be used for the resulting file
+*mimeType*:       optional mime-type for the resulting file
