@@ -66,16 +66,16 @@ const readMesh = (input) => {
   ioModule.unmountBlobs(mountpoint)
 
   const transferables = []
-  if (mesh.points.buffer) {
+  if (mesh.points) {
     transferables.push(mesh.points.buffer)
   }
-  if (mesh.pointData.buffer) {
+  if (mesh.pointData) {
     transferables.push(mesh.pointData.buffer)
   }
-  if (mesh.cells.buffer) {
+  if (mesh.cells) {
     transferables.push(mesh.cells.buffer)
   }
-  if (mesh.cellData.buffer) {
+  if (mesh.cellData) {
     transferables.push(mesh.cellData.buffer)
   }
   return new registerWebworker.TransferableResponse(mesh, transferables)

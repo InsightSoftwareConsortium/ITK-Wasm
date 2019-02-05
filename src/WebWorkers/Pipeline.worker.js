@@ -36,6 +36,37 @@ const runPipeline = (pipelinePath, args, outputs, inputs, config) => {
           transferables.push(output.data.data)
         }
       }
+      // Mesh data
+      if (output.type === IOTypes.Mesh) {
+        if (output.data.points) {
+          if (output.data.points.buffer) {
+            transferables.push(output.data.points.buffer)
+          } else if (output.data.points.byteLength) {
+            transferables.push(output.data.points)
+          }
+        }
+        if (output.data.pointData) {
+          if (output.data.pointData.buffer) {
+            transferables.push(output.data.pointData.buffer)
+          } else if (output.data.pointData.byteLength) {
+            transferables.push(output.data.pointData)
+          }
+        }
+        if (output.data.cells) {
+          if (output.data.cells.buffer) {
+            transferables.push(output.data.cells.buffer)
+          } else if (output.data.cells.byteLength) {
+            transferables.push(output.data.cells)
+          }
+        }
+        if (output.data.cellData) {
+          if (output.data.cellData.buffer) {
+            transferables.push(output.data.cellData.buffer)
+          } else if (output.data.cellData.byteLength) {
+            transferables.push(output.data.cellData)
+          }
+        }
+      }
     })
   }
 

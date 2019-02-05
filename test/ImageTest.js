@@ -80,8 +80,8 @@ test('size should have a default value of 0', t => {
   t.is(image.size[0], 0)
 })
 
-test('data should have a default value of ArrayBuffer(0)', t => {
+test('data should have a default value of null', t => {
   let imageType = new ImageType(2)
   let image = new Image(imageType)
-  t.is(image.data.byteLength, 0)
+  t.is(image.data, null)
 })

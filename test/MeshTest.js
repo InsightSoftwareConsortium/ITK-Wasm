@@ -20,9 +20,9 @@ test('numberOfPoints should have a default value of 0', t => {
   t.is(mesh.numberOfPoints, 0)
 })
 
-test('points should have a default value of ArrayBuffer(0)', t => {
+test('points should have a default value of null', t => {
   let mesh = new Mesh()
-  t.is(mesh.points.byteLength, 0)
+  t.is(mesh.points, null)
 })
 
 test('numberOfPointPixels should have a default value of 0', t => {
@@ -30,9 +30,9 @@ test('numberOfPointPixels should have a default value of 0', t => {
   t.is(mesh.numberOfPointPixels, 0)
 })
 
-test('pointsData should have a default value of ArrayBuffer(0)', t => {
+test('pointData should have a default value of null', t => {
   let mesh = new Mesh()
-  t.is(mesh.pointData.byteLength, 0)
+  t.is(mesh.pointData, null)
 })
 
 test('numberOfCells should have a default value of 0', t => {
@@ -40,9 +40,9 @@ test('numberOfCells should have a default value of 0', t => {
   t.is(mesh.numberOfCells, 0)
 })
 
-test('cells should have a default value of ArrayBuffer(0)', t => {
+test('cells should have a default value of null', t => {
   let mesh = new Mesh()
-  t.is(mesh.cells.byteLength, 0)
+  t.is(mesh.cells, null)
 })
 
 test('numberOfCellPixels should have a default value of 0', t => {
@@ -50,9 +50,9 @@ test('numberOfCellPixels should have a default value of 0', t => {
   t.is(mesh.numberOfCellPixels, 0)
 })
 
-test('cellsData should have a default value of ArrayBuffer(0)', t => {
+test('cellsData should have a default value of null', t => {
   let mesh = new Mesh()
-  t.is(mesh.pointData.byteLength, 0)
+  t.is(mesh.cellData, null)
 })
 
 test('cellBufferSize should have a default value of 0', t => {

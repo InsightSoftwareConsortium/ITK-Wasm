@@ -28,6 +28,37 @@ const runPipelineBrowser = (webWorker, pipelinePath, args, outputs, inputs) => {
               transferables.push(input.data.data)
             }
           }
+          // Mesh data
+          if (input.type === IOTypes.Mesh) {
+            if (input.data.points) {
+              if (input.data.points.buffer) {
+                transferables.push(input.data.points.buffer)
+              } else if (input.data.points.byteLength) {
+                transferables.push(input.data.points)
+              }
+            }
+            if (input.data.pointData) {
+              if (input.data.pointData.buffer) {
+                transferables.push(input.data.pointData.buffer)
+              } else if (input.data.pointData.byteLength) {
+                transferables.push(input.data.pointData)
+              }
+            }
+            if (input.data.cells) {
+              if (input.data.cells.buffer) {
+                transferables.push(input.data.cells.buffer)
+              } else if (input.data.cells.byteLength) {
+                transferables.push(input.data.cells)
+              }
+            }
+            if (input.data.cellData) {
+              if (input.data.cellData.buffer) {
+                transferables.push(input.data.cellData.buffer)
+              } else if (input.data.cellData.byteLength) {
+                transferables.push(input.data.cellData)
+              }
+            }
+          }
         })
       }
       return webworkerPromise.postMessage(
