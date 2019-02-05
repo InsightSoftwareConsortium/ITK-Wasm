@@ -218,7 +218,7 @@ if (program.buildPipelines) {
     if (program.debug) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug', "-DCMAKE_EXE_LINKER_FLAGS_DEBUG='-s DISABLE_EXCEPTION_CATCHING=0'"]
     }
-    const buildPipelineCall = spawnSync(path.join(__dirname, 'src', 'itk-js-cli.js'), ['build', pipelinePath, '--'].concat(debugFlags), {
+    const buildPipelineCall = spawnSync(path.join(__dirname, 'src', 'itk-js-cli.js'), ['build', '--image', 'kitware/itk-js-vtk:latest', pipelinePath, '--'].concat(debugFlags), {
       env: process.env,
       stdio: 'inherit'
     })
@@ -237,7 +237,8 @@ if (program.buildPipelines) {
     path.join(__dirname, 'test', 'StdoutStderrPipeline'),
     path.join(__dirname, 'test', 'BinShrinkPipeline'),
     path.join(__dirname, 'test', 'InputOutputFilesPipeline'),
-    path.join(__dirname, 'test', 'MeshReadWritePipeline')
+    path.join(__dirname, 'test', 'MeshReadWritePipeline'),
+    path.join(__dirname, 'test', 'WriteVTKPolyDataPipeline')
   ]
   try {
     fs.mkdirSync(path.join(__dirname, 'dist', 'Pipelines'))

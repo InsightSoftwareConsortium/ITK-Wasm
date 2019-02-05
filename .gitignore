@@ -31,3 +31,4 @@ test/StdoutStderrPipeline/itk-js
 test/StdoutStderrPipeline/web-build/
 test/InputOutputFilesPipeline/web-build/
 test/MeshReadWritePipeline/web-build/
+test/WriteVTKPolyDataPipeline/web-build/
