@@ -1,6 +1,5 @@
 const ImageType = require('./ImageType.js')
 const Matrix = require('./Matrix.js')
-const bufferToTypedArray = require('./bufferToTypedArray.js')
 
 const Image = function (imageType = new ImageType()) {
   this.imageType = imageType
@@ -20,7 +19,7 @@ const Image = function (imageType = new ImageType()) {
   this.size = new Array(dimension)
   this.size.fill(0)
 
-  this.data = bufferToTypedArray(imageType.componentType, new ArrayBuffer(0))
+  this.data = null
 }
 
 module.exports = Image

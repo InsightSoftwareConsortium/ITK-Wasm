@@ -1,5 +1,4 @@
 const MeshType = require('./MeshType.js')
-const bufferToTypedArray = require('./bufferToTypedArray.js')
 
 const Mesh = function (meshType = new MeshType()) {
   this.meshType = meshType
@@ -7,16 +6,16 @@ const Mesh = function (meshType = new MeshType()) {
   this.name = 'Mesh'
 
   this.numberOfPoints = 0
-  this.points = bufferToTypedArray(meshType.pointComponentType, new ArrayBuffer(0))
+  this.points = null
 
   this.numberOfPointPixels = 0
-  this.pointData = bufferToTypedArray(meshType.pointPixelComponentType, new ArrayBuffer(0))
+  this.pointData = null
 
   this.numberOfCells = 0
-  this.cells = bufferToTypedArray(meshType.cellComponentType, new ArrayBuffer(0))
+  this.cells = null
 
   this.numberOfCellPixels = 0
-  this.cellData = bufferToTypedArray(meshType.cellPixelComponentType, new ArrayBuffer(0))
+  this.cellData = null
   this.cellBufferSize = 0
 }
 
