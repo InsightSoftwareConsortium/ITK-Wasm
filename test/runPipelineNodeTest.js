@@ -67,18 +67,18 @@ test('runPipelineNode writes and reads an itk/Image in the Emscripten filesystem
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
     t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
     t.is(image.imageType.components, 1, 'components')
-    t.is(image.origin[0], 1.5, 'origin[0]')
-    t.is(image.origin[1], 1.5, 'origin[1]')
-    t.is(image.spacing[0], 4.0, 'spacing[0]')
-    t.is(image.spacing[1], 4.0, 'spacing[1]')
-    t.is(image.size[0], 64, 'size[0]')
-    t.is(image.size[1], 64, 'size[1]')
-    t.is(image.data.byteLength, 4096, 'data.byteLength')
+    t.is(image.origin[0], 0.0, 'origin[0]')
+    t.is(image.origin[1], 0.0, 'origin[1]')
+    t.is(image.spacing[0], 1.0, 'spacing[0]')
+    t.is(image.spacing[1], 1.0, 'spacing[1]')
+    t.is(image.size[0], 256, 'size[0]')
+    t.is(image.size[1], 256, 'size[1]')
+    t.is(image.data.byteLength, 65536, 'data.byteLength')
   }
 
   return readImageLocalFile(testInputFilePath)
     .then(function (image) {
-      const pipelinePath = path.resolve(__dirname, 'BinShrinkPipeline', 'web-build', 'BinShrink')
+      const pipelinePath = path.resolve(__dirname, 'MedianFilterPipeline', 'web-build', 'MedianFilter')
       const args = ['cthead1.png.json', 'cthead1.png.shrink.json', '4']
       const desiredOutputs = [
         { path: args[1], type: IOTypes.Image }

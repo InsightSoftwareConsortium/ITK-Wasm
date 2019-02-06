@@ -53,7 +53,7 @@ jobs:
       - run:
           name: Test building a pipeline
           command: |
-            cd test/BinShrinkPipeline
+            cd test/MedianFilterPipeline
             docker run --rm insighttoolkit/itk-js > ./itk-js
             chmod +x ./itk-js
             ./itk-js web-build
