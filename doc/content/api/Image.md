@@ -1,8 +1,7 @@
 title: Image
 ---
 
-An `itk/Image` is the N-dimensional image data structure for *itk.js*. It is a
-JavaScript object with the following properties:
+An `itk/Image` is the N-dimensional image data structure for *itk.js*. To visualize an `itk/Image` with *vtk.js*, use `convertItkToVtkImage` from [`vtk.js/Sources/Common/DataModel/ITKHelper`](https://kitware.github.io/vtk-js/api/Common_DataModel_ITKHelper.html). `itk/Image` is a JavaScript object with the following properties:
 
 **imageType**: The [ImageType](./ImageType.html) for this image.
 **name**: An optional name, a `String`, that describes this image.
