@@ -4,7 +4,7 @@ MAINTAINER Insight Software Consortium <community@itk.org>
 WORKDIR /
 
 # 2019-01-03 + Emscripten patches
-ENV VTK_GIT_TAG 6c0782ec65e2f911f108a02c7666d45337956cce
+ENV VTK_GIT_TAG 75fa8e53cca78679db6cc0033f1d7dbe70163b8d
 RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK && \
   git checkout ${VTK_GIT_TAG} && \
@@ -19,7 +19,7 @@ RUN git clone https://github.com/thewtex/VTK.git && \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
     -DBUILD_EXAMPLES:BOOL=OFF \
     -DBUILD_TESTING:BOOL=OFF \
-    -DVTK_RENDERING_BACKEND:STRING=None \
+    -DVTK_RENDERING_BACKEND:STRING=OpenGL2 \
     -DVTK_NO_PLATFORM_SOCKETS:BOOL=ON \
     ../VTK && \
   ninja -j7 && \
@@ -40,6 +40,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKVtkGlue.git && \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
+    -DBUILD_TESTING:BOOL=OFF \
     -DITK_DIR:PATH=/ITK-build \
     -DVTK_DIR:PATH=/VTK-build \
     ../ITKVtkGlue && \

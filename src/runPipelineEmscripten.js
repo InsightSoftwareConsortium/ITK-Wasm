@@ -111,6 +111,36 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
           }
           populatedOutput['data'] = mesh
           break
+        case IOTypes.vtkPolyData:
+          const polyDataJSON = module.readFile(`${output.path}/index.json`, { encoding: 'utf8' })
+          const polyData = JSON.parse(polyDataJSON)
+          const cellTypes = ['points', 'verts', 'lines', 'polys', 'strips']
+          cellTypes.forEach((cellName) => {
+            if (polyData[cellName]) {
+              const cell = polyData[cellName]
+              if (cell['ref']) {
+                const dataUint8 = module.readFile(`${output.path}/${cell.ref.basepath}/${cell.ref.id}`, { encoding: 'binary' })
+                polyData[cellName]['buffer'] = dataUint8.buffer
+                delete cell.ref
+              }
+            }
+          })
+
+          const dataSetType = ['pointData', 'cellData', 'fieldData']
+          dataSetType.forEach((dataName) => {
+            if (polyData[dataName]) {
+              const data = polyData[dataName]
+              data.arrays.forEach((array) => {
+                if (array.data['ref']) {
+                  const dataUint8 = module.readFile(`${output.path}/${array.data.ref.basepath}/${array.data.ref.id}`, { encoding: 'binary' })
+                  array.data['buffer'] = dataUint8.buffer
+                  delete array.data.ref
+                }
+              })
+            }
+          })
+          populatedOutput['data'] = polyData
+          break
         default:
           throw Error('Unsupported output IOType')
       }

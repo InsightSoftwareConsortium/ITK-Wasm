@@ -1,5 +1,6 @@
 import test from 'ava'
 import path from 'path'
+import fs from 'fs'
 
 const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
 const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
@@ -115,5 +116,37 @@ test('runPipelineNode writes and reads an itk/Mesh in the Emscripten filesystem'
       return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
     }).then(function ({ stdout, stderr, outputs }) {
       verifyMesh(outputs[0].data)
+    })
+})
+
+test('runPipelineNode reads a vtkPolyData from the Emscripten filesystem', (t) => {
+  const verifyPolyData = (polyData) => {
+    t.is(polyData.vtkClass, 'vtkPolyData')
+    t.is(polyData.points.vtkClass, 'vtkPoints')
+    t.is(polyData.points.name, 'points')
+    t.is(polyData.points.numberOfComponents, 3)
+    t.is(polyData.points.dataType, 'Float32Array')
+    t.is(polyData.points.size, 8709)
+    t.is(polyData.points.buffer.byteLength, 34836)
+    t.is(polyData.polys.vtkClass, 'vtkCellArray')
+    t.is(polyData.polys.name, 'polys')
+    t.is(polyData.polys.numberOfComponents, 1)
+    t.is(polyData.polys.dataType, 'Int32Array')
+    t.is(polyData.polys.size, 15593)
+    t.is(polyData.polys.buffer.byteLength, 62372)
+  }
+
+  const polyDataFileContents = new Uint8Array(fs.readFileSync(testMeshInputFilePath))
+  const pipelinePath = path.resolve(__dirname, 'WriteVTKPolyDataPipeline', 'web-build', 'WriteVTKPolyData')
+  const args = ['cow.vtk', 'cow.vtk.written.json']
+  const desiredOutputs = [
+    { path: args[1], type: IOTypes.vtkPolyData }
+  ]
+  const inputs = [
+    { path: args[0], type: IOTypes.Binary, data: polyDataFileContents }
+  ]
+  return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
+    .then(function ({ stdout, stderr, outputs }) {
+      verifyPolyData(outputs[0].data)
     })
 })
