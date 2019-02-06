@@ -122,7 +122,7 @@ test('runPipelineBrowser uses writes and read itk/Image in the Emscripten filesy
     })
 })
 
-test('runPipelineNode writes and reads an itk/Mesh in the Emscripten filesystem', (t) => {
+test('runPipelineBrowser writes and reads an itk/Mesh in the Emscripten filesystem', (t) => {
   const verifyMesh = (mesh) => {
     t.is(mesh.meshType.dimension, 3)
     t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
@@ -155,5 +155,43 @@ test('runPipelineNode writes and reads an itk/Mesh in the Emscripten filesystem'
       return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
     }).then(function ({ stdout, stderr, outputs }) {
       verifyMesh(outputs[0].data)
+    })
+})
+
+test('runPipelineBrowser reads a vtkPolyData from the Emscripten filesystem', (t) => {
+  const verifyPolyData = (polyData) => {
+    t.is(polyData.vtkClass, 'vtkPolyData')
+    t.is(polyData.points.vtkClass, 'vtkPoints')
+    t.is(polyData.points.name, 'points')
+    t.is(polyData.points.numberOfComponents, 3)
+    t.is(polyData.points.dataType, 'Float32Array')
+    t.is(polyData.points.size, 8709)
+    t.is(polyData.points.buffer.byteLength, 34836)
+    t.is(polyData.polys.vtkClass, 'vtkCellArray')
+    t.is(polyData.polys.name, 'polys')
+    t.is(polyData.polys.numberOfComponents, 1)
+    t.is(polyData.polys.dataType, 'Int32Array')
+    t.is(polyData.polys.size, 15593)
+    t.is(polyData.polys.buffer.byteLength, 62372)
+    t.end()
+  }
+
+  const fileName = 'cow.vtk'
+  const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+  return axios.get(testFilePath, { responseType: 'arraybuffer' })
+    .then(function (response) {
+      const polyDataFileContents = new Uint8Array(response.data)
+      const pipelinePath = 'WriteVTKPolyData'
+      const args = ['cow.vtk', 'cow.vtk.written.json']
+      const desiredOutputs = [
+        { path: args[1], type: IOTypes.vtkPolyData }
+      ]
+      const inputs = [
+        { path: args[0], type: IOTypes.Binary, data: polyDataFileContents }
+      ]
+      return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
+        .then(function ({ outputs }) {
+          verifyPolyData(outputs[0].data)
+        })
     })
 })
