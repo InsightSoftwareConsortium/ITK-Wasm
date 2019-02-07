@@ -17,7 +17,7 @@ test('runPipelineNodeSync captures stdout and stderr', (t) => {
   const args = []
   const desiredOutputs = null
   const inputs = null
-  const stdoutStderrPath = path.resolve(__dirname, 'StdoutStderrPipeline', 'web-build', 'StdoutStderr')
+  const stdoutStderrPath = path.resolve(__dirname, 'StdoutStderrPipeline', 'web-build', 'StdoutStderrTest')
   const { stdout, stderr } = runPipelineNodeSync(stdoutStderrPath, args, desiredOutputs, inputs)
   t.is(stdout, `I’m writing my code,
 But I do not realize,
@@ -30,7 +30,7 @@ Click. Perfect success.
 })
 
 test('runPipelineNodeSync uses input and output files in the Emscripten filesystem', (t) => {
-  const pipelinePath = path.resolve(__dirname, 'InputOutputFilesPipeline', 'web-build', 'InputOutputFiles')
+  const pipelinePath = path.resolve(__dirname, 'InputOutputFilesPipeline', 'web-build', 'InputOutputFilesTest')
   const args = ['input.txt', 'input.bin', 'output.txt', 'output.bin']
   const desiredOutputs = [
     { path: 'output.txt', type: IOTypes.Text },
@@ -72,7 +72,7 @@ test('runPipelineNodeSync writes and reads an itk/Image in the Emscripten filesy
   }
 
   const image = readImageLocalFileSync(testInputFilePath)
-  const pipelinePath = path.resolve(__dirname, 'MedianFilterPipeline', 'web-build', 'MedianFilter')
+  const pipelinePath = path.resolve(__dirname, 'MedianFilterPipeline', 'web-build', 'MedianFilterTest')
   const args = ['cthead1.png.json', 'cthead1.png.shrink.json', '4']
   const desiredOutputs = [
     { path: args[1], type: IOTypes.Image }
@@ -96,7 +96,7 @@ test('runPipelineNode writes and reads an itk/Mesh in the Emscripten filesystem'
   }
 
   const mesh = readMeshLocalFileSync(testMeshInputFilePath)
-  const pipelinePath = path.resolve(__dirname, 'MeshReadWritePipeline', 'web-build', 'MeshReadWrite')
+  const pipelinePath = path.resolve(__dirname, 'MeshReadWritePipeline', 'web-build', 'MeshReadWriteTest')
   const args = ['cow.vtk.json', 'cow.vtk.written.json']
   const desiredOutputs = [
     { path: args[1], type: IOTypes.Mesh }

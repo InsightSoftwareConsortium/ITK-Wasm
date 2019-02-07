@@ -18,7 +18,7 @@ test('runPipelineNode captures stdout and stderr', (t) => {
   const args = []
   const outputs = null
   const inputs = null
-  const stdoutStderrPath = path.resolve(__dirname, 'StdoutStderrPipeline', 'web-build', 'StdoutStderr')
+  const stdoutStderrPath = path.resolve(__dirname, 'StdoutStderrPipeline', 'web-build', 'StdoutStderrTest')
   return runPipelineNode(stdoutStderrPath, args, outputs, inputs)
     .then(function ({ stdout, stderr, outputs }) {
       t.is(stdout, `I’m writing my code,
@@ -33,7 +33,7 @@ Click. Perfect success.
 })
 
 test('runPipelineNode uses input and output files in the Emscripten filesystem', (t) => {
-  const pipelinePath = path.resolve(__dirname, 'InputOutputFilesPipeline', 'web-build', 'InputOutputFiles')
+  const pipelinePath = path.resolve(__dirname, 'InputOutputFilesPipeline', 'web-build', 'InputOutputFilesTest')
   const args = ['input.txt', 'input.bin', 'output.txt', 'output.bin']
   const desiredOutputs = [
     { path: 'output.txt', type: IOTypes.Text },
@@ -78,7 +78,7 @@ test('runPipelineNode writes and reads an itk/Image in the Emscripten filesystem
 
   return readImageLocalFile(testInputFilePath)
     .then(function (image) {
-      const pipelinePath = path.resolve(__dirname, 'MedianFilterPipeline', 'web-build', 'MedianFilter')
+      const pipelinePath = path.resolve(__dirname, 'MedianFilterPipeline', 'web-build', 'MedianFilterTest')
       const args = ['cthead1.png.json', 'cthead1.png.shrink.json', '4']
       const desiredOutputs = [
         { path: args[1], type: IOTypes.Image }
@@ -105,7 +105,7 @@ test('runPipelineNode writes and reads an itk/Mesh in the Emscripten filesystem'
 
   return readMeshLocalFile(testMeshInputFilePath)
     .then(function (mesh) {
-      const pipelinePath = path.resolve(__dirname, 'MeshReadWritePipeline', 'web-build', 'MeshReadWrite')
+      const pipelinePath = path.resolve(__dirname, 'MeshReadWritePipeline', 'web-build', 'MeshReadWriteTest')
       const args = ['cow.vtk.json', 'cow.vtk.written.json']
       const desiredOutputs = [
         { path: args[1], type: IOTypes.Mesh }
@@ -137,7 +137,7 @@ test('runPipelineNode reads a vtkPolyData from the Emscripten filesystem', (t) =
   }
 
   const polyDataFileContents = new Uint8Array(fs.readFileSync(testMeshInputFilePath))
-  const pipelinePath = path.resolve(__dirname, 'WriteVTKPolyDataPipeline', 'web-build', 'WriteVTKPolyData')
+  const pipelinePath = path.resolve(__dirname, 'WriteVTKPolyDataPipeline', 'web-build', 'WriteVTKPolyDataTest')
   const args = ['cow.vtk', 'cow.vtk.written.json']
   const desiredOutputs = [
     { path: args[1], type: IOTypes.vtkPolyData }

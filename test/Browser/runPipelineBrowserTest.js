@@ -14,7 +14,7 @@ test('runPipelineBrowser captures stdout and stderr', (t) => {
   const args = []
   const outputs = null
   const inputs = null
-  const stdoutStderrPath = 'StdoutStderr'
+  const stdoutStderrPath = 'StdoutStderrTest'
   return runPipelineBrowser(null, stdoutStderrPath, args, outputs, inputs)
     .then(function ({ stdout, stderr, outputs, webWorker }) {
       webWorker.terminate()
@@ -34,7 +34,7 @@ test('runPipelineBrowser re-uses a WebWorker', (t) => {
   const args = []
   const outputs = null
   const inputs = null
-  const stdoutStderrPath = 'StdoutStderr'
+  const stdoutStderrPath = 'StdoutStderrTest'
   return runPipelineBrowser(null, stdoutStderrPath, args, outputs, inputs)
     .then(function ({ stdout, stderr, outputs, webWorker }) {
       return runPipelineBrowser(webWorker, stdoutStderrPath, args, outputs, inputs)
@@ -53,7 +53,7 @@ Click. Perfect success.
 })
 
 test('runPipelineBrowser uses input and output files in the Emscripten filesystem', (t) => {
-  const pipelinePath = 'InputOutputFiles'
+  const pipelinePath = 'InputOutputFilesTest'
   const args = ['input.txt', 'input.bin', 'output.txt', 'output.bin']
   const desiredOutputs = [
     { path: 'output.txt', type: IOTypes.Text },
@@ -108,7 +108,7 @@ test('runPipelineBrowser uses writes and read itk/Image in the Emscripten filesy
       return readImageFile(null, jsFile)
     }).then(function ({ image, webWorker }) {
       webWorker.terminate()
-      const pipelinePath = 'MedianFilter'
+      const pipelinePath = 'MedianFilterTest'
       const args = ['cthead1.png.json', 'cthead1.png.shrink.json', '4']
       const desiredOutputs = [
         { path: args[1], type: IOTypes.Image }
@@ -144,7 +144,7 @@ test('runPipelineBrowser writes and reads an itk/Mesh in the Emscripten filesyst
       return readMeshFile(null, jsFile)
     }).then(function ({ mesh, webWorker }) {
       webWorker.terminate()
-      const pipelinePath = 'MeshReadWrite'
+      const pipelinePath = 'MeshReadWriteTest'
       const args = ['cow.vtk.json', 'cow.vtk.written.json']
       const desiredOutputs = [
         { path: args[1], type: IOTypes.Mesh }
@@ -181,7 +181,7 @@ test('runPipelineBrowser reads a vtkPolyData from the Emscripten filesystem', (t
   return axios.get(testFilePath, { responseType: 'arraybuffer' })
     .then(function (response) {
       const polyDataFileContents = new Uint8Array(response.data)
-      const pipelinePath = 'WriteVTKPolyData'
+      const pipelinePath = 'WriteVTKPolyDataTest'
       const args = ['cow.vtk', 'cow.vtk.written.json']
       const desiredOutputs = [
         { path: args[1], type: IOTypes.vtkPolyData }
