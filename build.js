@@ -235,7 +235,7 @@ if (program.buildPipelines) {
 
   const pipelines = [
     path.join(__dirname, 'test', 'StdoutStderrPipeline'),
-    path.join(__dirname, 'test', 'BinShrinkPipeline'),
+    path.join(__dirname, 'test', 'MedianFilterPipeline'),
     path.join(__dirname, 'test', 'InputOutputFilesPipeline'),
     path.join(__dirname, 'test', 'MeshReadWritePipeline'),
     path.join(__dirname, 'test', 'WriteVTKPolyDataPipeline')

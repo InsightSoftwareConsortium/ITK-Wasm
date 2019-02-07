@@ -17,18 +17,18 @@
  *=========================================================================*/
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "itkBinShrinkImageFilter.h"
+#include "itkMedianImageFilter.h"
 
 int main( int argc, char * argv[] )
 {
   if( argc < 4 )
     {
-    std::cerr << "Usage: " << argv[0] << " <inputImage> <outputImage> <shrinkFactor>" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <inputImage> <outputImage> <radius>" << std::endl;
     return EXIT_FAILURE;
     }
   const char * inputImageFile = argv[1];
   const char * outputImageFile = argv[2];
-  unsigned int shrinkFactor = atoi( argv[3] );
+  unsigned int radius = atoi( argv[3] );
 
   using PixelType = unsigned char;
   constexpr unsigned int Dimension = 2;
@@ -38,14 +38,14 @@ int main( int argc, char * argv[] )
   auto reader = ReaderType::New();
   reader->SetFileName( inputImageFile );
 
-  using ShrinkFilterType = itk::BinShrinkImageFilter< ImageType, ImageType >;
-  auto shrinker = ShrinkFilterType::New();
-  shrinker->SetInput( reader->GetOutput() );
-  shrinker->SetShrinkFactors( shrinkFactor );
+  using SmoothingFilterType = itk::MedianImageFilter< ImageType, ImageType >;
+  auto smoother = SmoothingFilterType::New();
+  smoother->SetInput( reader->GetOutput() );
+  smoother->SetRadius( radius );
 
   using WriterType = itk::ImageFileWriter< ImageType >;
   auto writer = WriterType::New();
-  writer->SetInput( shrinker->GetOutput() );
+  writer->SetInput( smoother->GetOutput() );
   writer->SetFileName( outputImageFile );
 
   try
