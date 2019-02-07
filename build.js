@@ -238,7 +238,8 @@ if (program.buildPipelines) {
     path.join(__dirname, 'test', 'MedianFilterPipeline'),
     path.join(__dirname, 'test', 'InputOutputFilesPipeline'),
     path.join(__dirname, 'test', 'MeshReadWritePipeline'),
-    path.join(__dirname, 'test', 'WriteVTKPolyDataPipeline')
+    path.join(__dirname, 'test', 'WriteVTKPolyDataPipeline'),
+    path.join(__dirname, 'src', 'Pipelines', 'MeshToPolyData'),
   ]
   try {
     fs.mkdirSync(path.join(__dirname, 'dist', 'Pipelines'))
