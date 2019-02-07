@@ -12,7 +12,8 @@ npm install
 ./src/Docker/itk-js-vtk/build.sh
 npm run build
 npm run test
-rm dist/Pipelines/*
+rm dist/Pipelines/itkJSPipeline*
+rm dist/Pipelines/*Test*
 ```
 
 Bump `version` in `package.json`.
