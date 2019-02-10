@@ -6,6 +6,7 @@ const readMeshArrayBuffer = (webWorker, arrayBuffer, fileName, mimeType) => {
   let worker = webWorker
   return createWebworkerPromise('MeshIO', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
+      worker = usedWorker
       return webworkerPromise.postMessage(
         {
           operation: 'readMesh',

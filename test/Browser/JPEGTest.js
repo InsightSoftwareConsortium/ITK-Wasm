@@ -35,9 +35,10 @@ test('Test reading a JPEG file', t => {
     return jsFile
   })
     .then(function (jsFile) {
-      return readImageFile(jsFile)
+      return readImageFile(null, jsFile)
     })
-    .then(function (image) {
+    .then(function ({ image, webWorker }) {
+      webWorker.terminate()
       verifyImage(t, image)
     })
 })

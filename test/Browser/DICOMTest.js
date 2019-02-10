@@ -15,8 +15,9 @@ test('Test reading a DICOM file', t => {
     return jsFile
   })
     .then(function (jsFile) {
-      return readImageFile(jsFile)
-    }).then(function (image) {
+      return readImageFile(null, jsFile)
+    }).then(function ({ image, webWorker }) {
+      webWorker.terminate()
       t.is(image.imageType.dimension, 3, 'dimension')
       t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
       t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
@@ -26,7 +27,7 @@ test('Test reading a DICOM file', t => {
       t.is(image.origin[2], 116.7857, 'origin[2]')
       t.is(image.spacing[0], 1.0, 'spacing[0]')
       t.is(image.spacing[1], 1.0, 'spacing[1]')
-      t.is(image.spacing[2], 1.3, 'spacing[2]')
+      t.is(image.spacing[2], 1.0, 'spacing[2]')
       t.is(getMatrixElement(image.direction, 0, 0), 0.0, 'direction (0, 0)')
       t.is(getMatrixElement(image.direction, 0, 1), -0.0, 'direction (0, 1)')
       t.is(getMatrixElement(image.direction, 0, 2), -1.0, 'direction (0, 2)')
