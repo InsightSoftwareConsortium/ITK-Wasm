@@ -117,12 +117,18 @@ test('MeshToPolyData converts an itk/Mesh to a vtk.js vtkPolyData', (t) => {
     t.is(polyData.points.dataType, 'Float32Array')
     t.is(polyData.points.size, 8709)
     t.is(polyData.points.buffer.byteLength, 34836)
+    t.is(polyData.points.values[0], 3.716360092163086)
+    t.is(polyData.points.values[1], 2.3433899879455566)
+    t.is(polyData.points.values[2], 0.0)
     t.is(polyData.polys.vtkClass, 'vtkCellArray')
     t.is(polyData.polys.name, 'polys')
     t.is(polyData.polys.numberOfComponents, 1)
     t.is(polyData.polys.dataType, 'Int32Array')
     t.is(polyData.polys.size, 15593)
     t.is(polyData.polys.buffer.byteLength, 62372)
+    t.is(polyData.polys.values[0], 4)
+    t.is(polyData.polys.values[1], 250)
+    t.is(polyData.polys.values[2], 251)
   }
 
   const mesh = readMeshLocalFileSync(testMeshInputFilePath)
