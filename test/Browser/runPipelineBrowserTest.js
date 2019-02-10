@@ -39,6 +39,7 @@ test('runPipelineBrowser re-uses a WebWorker', (t) => {
     .then(function ({ stdout, stderr, outputs, webWorker }) {
       return runPipelineBrowser(webWorker, stdoutStderrPath, args, outputs, inputs)
         .then(function ({ stdout, stderr, outputs, webWorker }) {
+          webWorker.terminate()
           t.is(stdout, `I’m writing my code,
 But I do not realize,
 Hours have gone by.
@@ -64,7 +65,8 @@ test('runPipelineBrowser uses input and output files in the Emscripten filesyste
     { path: 'input.bin', type: IOTypes.Binary, data: new Uint8Array([222, 173, 190, 239]) }
   ]
   return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
-    .then(function ({ stdout, stderr, outputs }) {
+    .then(function ({ stdout, stderr, outputs, webWorker }) {
+      webWorker.terminate()
       t.is(outputs[0].path, 'output.txt')
       t.is(outputs[0].type, IOTypes.Text)
       t.is(outputs[0].data, 'The answer is 42.')
@@ -117,7 +119,8 @@ test('runPipelineBrowser uses writes and read itk/Image in the Emscripten filesy
         { path: args[0], type: IOTypes.Image, data: image }
       ]
       return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
-    }).then(function ({ stdout, stderr, outputs }) {
+    }).then(function ({ stdout, stderr, outputs, webWorker }) {
+      webWorker.terminate()
       verifyImage(outputs[0].data)
     })
 })
@@ -153,7 +156,8 @@ test('runPipelineBrowser writes and reads an itk/Mesh in the Emscripten filesyst
         { path: args[0], type: IOTypes.Mesh, data: mesh }
       ]
       return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
-    }).then(function ({ stdout, stderr, outputs }) {
+    }).then(function ({ stdout, stderr, outputs, webWorker }) {
+      webWorker.terminate()
       verifyMesh(outputs[0].data)
     })
 })
@@ -190,7 +194,8 @@ test('runPipelineBrowser reads a vtkPolyData from the Emscripten filesystem', (t
         { path: args[0], type: IOTypes.Binary, data: polyDataFileContents }
       ]
       return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
-        .then(function ({ outputs }) {
+        .then(function ({ outputs, webWorker }) {
+          webWorker.terminate()
           verifyPolyData(outputs[0].data)
         })
     })
@@ -233,7 +238,8 @@ test('MeshToPolyData converts an itk/Mesh to a vtk.js vtkPolyData', (t) => {
         { path: args[0], type: IOTypes.Mesh, data: mesh }
       ]
       return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
-        .then(function ({ stdout, stderr, outputs }) {
+        .then(function ({ stdout, stderr, outputs, webWorker }) {
+          webWorker.terminate()
           verifyPolyData(outputs[0].data)
         })
     })

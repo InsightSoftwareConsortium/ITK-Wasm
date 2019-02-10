@@ -8,25 +8,17 @@ const writeMeshArrayBuffer = (webWorker, { useCompression, binaryFileType }, mes
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       const transferables = []
-      if (mesh.points.buffer) {
+      if (mesh.points) {
         transferables.push(mesh.points.buffer)
-      } else if (mesh.points.byteLength) {
-        transferables.push(mesh.points)
       }
-      if (mesh.pointData.buffer) {
+      if (mesh.pointData) {
         transferables.push(mesh.pointData.buffer)
-      } else if (mesh.pointData.byteLength) {
-        transferables.push(mesh.pointData)
       }
-      if (mesh.cells.buffer) {
+      if (mesh.cells) {
         transferables.push(mesh.cells.buffer)
-      } else if (mesh.cells.byteLength) {
-        transferables.push(mesh.cells)
       }
-      if (mesh.cellData.buffer) {
+      if (mesh.cellData) {
         transferables.push(mesh.cellData.buffer)
-      } else if (mesh.cellData.byteLength) {
-        transferables.push(mesh.cellData)
       }
       return webworkerPromise.postMessage(
         {
@@ -39,8 +31,8 @@ const writeMeshArrayBuffer = (webWorker, { useCompression, binaryFileType }, mes
           config
         },
         transferables
-      ).then(function () {
-        return Promise.resolve({ webWorker: worker })
+      ).then(function (arrayBuffer) {
+        return Promise.resolve({ arrayBuffer, webWorker: worker })
       })
     })
 }

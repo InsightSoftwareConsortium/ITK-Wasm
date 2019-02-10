@@ -17,8 +17,8 @@ const writeImageArrayBuffer = (webWorker, useCompression, image, fileName, mimeT
           config: config
         },
         [image.data.buffer]
-      ).then(function () {
-        return Promise.resolve({ webWorker: worker })
+      ).then(function (arrayBuffer) {
+        return Promise.resolve({ arrayBuffer, webWorker: worker })
       })
     })
 }
