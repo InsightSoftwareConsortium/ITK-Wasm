@@ -1,6 +1,18 @@
 const IOTypes = require('./IOTypes.js')
 const bufferToTypedArray = require('./bufferToTypedArray.js')
 
+const typedArrayForBuffer = (typedArrayType, buffer) => {
+  let TypedArrayFunction = null
+  if (typeof window !== 'undefined') {
+    // browser
+    TypedArrayFunction = window[typedArrayType]
+  } else {
+    // Node.js
+    TypedArrayFunction = global[typedArrayType]
+  }
+  return new TypedArrayFunction(buffer)
+}
+
 const runPipelineEmscripten = (module, args, outputs, inputs) => {
   if (inputs) {
     inputs.forEach(function (input) {
@@ -121,6 +133,7 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
               if (cell['ref']) {
                 const dataUint8 = module.readFile(`${output.path}/${cell.ref.basepath}/${cell.ref.id}`, { encoding: 'binary' })
                 polyData[cellName]['buffer'] = dataUint8.buffer
+                polyData[cellName]['values'] = typedArrayForBuffer(polyData[cellName]['dataType'], dataUint8.buffer)
                 delete cell.ref
               }
             }
@@ -134,6 +147,7 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
                 if (array.data['ref']) {
                   const dataUint8 = module.readFile(`${output.path}/${array.data.ref.basepath}/${array.data.ref.id}`, { encoding: 'binary' })
                   array.data['buffer'] = dataUint8.buffer
+                  array.data['values'] = typedArrayForBuffer(array.data['dataType'], dataUint8.buffer)
                   delete array.data.ref
                 }
               })
