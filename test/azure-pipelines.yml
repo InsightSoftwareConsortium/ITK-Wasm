@@ -28,8 +28,9 @@ jobs:
     displayName: 'Build'
 
   - bash: |
-      # Allow writing test/output.html
-      sudo chmod 777 test
+      # To create node_modules/.cache
+      chmod 777 node_modules/
+      chmod -R 777 build/Testing/
       # To debug, run `./test/run.sh -d`
       ./test/run.sh
     displayName: 'Test'
