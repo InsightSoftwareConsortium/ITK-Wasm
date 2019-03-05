@@ -30,7 +30,7 @@ if (program.compile) {
     if (err.code !== 'EEXIST') throw err
   }
 
-  const dockerVersion = spawnSync('docker', ['--version'], {
+  const dockerVersion = spawnSync('bash', ['-c', 'docker', '--version'], {
     env: process.env,
     stdio: [ 'ignore', 'ignore', 'ignore' ]
   })
@@ -46,13 +46,13 @@ if (program.compile) {
   }
 
   // Ensure we have the 'dockcross' Docker build environment driver script
-  const dockcross = path.join('build', 'dockcross')
+  const dockcross = 'build/dockcross'
   try {
     fs.statSync(dockcross)
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
-      const dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js-base:latest'], {
+      const dockerCall = spawnSync('bash', ['-c', 'docker', 'run', '--rm', 'insighttoolkit/itk-js-base:latest'], {
         env: process.env,
         stdio: [ 'ignore', output, null ]
       })
@@ -76,7 +76,7 @@ if (program.compile) {
       if (program.debug) {
         buildType = '-DCMAKE_BUILD_TYPE:STRING=Debug'
       }
-      const cmakeCall = spawnSync(dockcross, ['cmake', '-DRapidJSON_INCLUDE_DIR=/rapidjson/include', buildType, '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build', '-DBUILD_ITK_JS_IO_MODULES=ON'], {
+      const cmakeCall = spawnSync('bash', [dockcross, 'cmake', '-DRapidJSON_INCLUDE_DIR=/rapidjson/include', buildType, '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build', '-DBUILD_ITK_JS_IO_MODULES=ON'], {
         env: process.env,
         stdio: 'inherit'
       })
@@ -90,7 +90,7 @@ if (program.compile) {
 
   // Build the Emscripten mobules with ninja
   console.log('\nRunning ninja...')
-  const ninjaCall = spawnSync(dockcross, ['ninja', '-j8', '-Cbuild'], {
+  const ninjaCall = spawnSync('bash', [dockcross, 'ninja', '-j8', '-Cbuild'], {
     env: process.env,
     stdio: 'inherit'
   })
@@ -218,7 +218,7 @@ if (program.buildPipelines) {
     if (program.debug) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug', "-DCMAKE_EXE_LINKER_FLAGS_DEBUG='-s DISABLE_EXCEPTION_CATCHING=0'"]
     }
-    const buildPipelineCall = spawnSync(path.join(__dirname, 'src', 'itk-js-cli.js'), ['build', '--image', 'kitware/itk-js-vtk:latest', pipelinePath, '--'].concat(debugFlags), {
+    const buildPipelineCall = spawnSync('node', [path.join(__dirname, 'src', 'itk-js-cli.js'), 'build', '--image', 'kitware/itk-js-vtk:latest', pipelinePath, '--'].concat(debugFlags), {
       env: process.env,
       stdio: 'inherit'
     })
