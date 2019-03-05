@@ -30,7 +30,7 @@ if (program.compile) {
     if (err.code !== 'EEXIST') throw err
   }
 
-  const dockerVersion = spawnSync('bash', ['-c', 'docker', '--version'], {
+  const dockerVersion = spawnSync('docker', ['--version'], {
     env: process.env,
     stdio: [ 'ignore', 'ignore', 'ignore' ]
   })
@@ -52,7 +52,7 @@ if (program.compile) {
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
-      const dockerCall = spawnSync('bash', ['-c', 'docker', 'run', '--rm', 'insighttoolkit/itk-js-base:latest'], {
+      const dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js-base:latest'], {
         env: process.env,
         stdio: [ 'ignore', output, null ]
       })
@@ -71,7 +71,6 @@ if (program.compile) {
     fs.statSync(path.join('build', 'build.ninja'))
   } catch (err) {
     if (err.code === 'ENOENT') {
-      console.log('Running CMake configuration...')
       let buildType = '-DCMAKE_BUILD_TYPE:STRING=Release'
       if (program.debug) {
         buildType = '-DCMAKE_BUILD_TYPE:STRING=Debug'
