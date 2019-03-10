@@ -1,4 +1,4 @@
-FROM dockcross/web-wasm:20190121-4dfa540
+FROM dockcross/web-wasm:20190310-7ff84ba
 MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
