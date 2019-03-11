@@ -1,10 +1,10 @@
-FROM dockcross/web-wasm:20190121-4dfa540
+FROM dockcross/web-wasm:20190310-7ff84ba
 MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
 
-# 2019-03-03
-ENV ITK_GIT_TAG 94463ead0ca4f33adfbc29b71d89ecd1820a79f1
+# 2019-03-07
+ENV ITK_GIT_TAG 036492cfad580004a280331ebaced97b380eda0a
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s ALLOW_MEMORY_GROWTH=1 -Wno-almost-asm -s WASM=0"
 ENV CXXFLAGS="${CFLAGS} -std=c++11"
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
