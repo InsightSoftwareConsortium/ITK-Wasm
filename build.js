@@ -46,7 +46,7 @@ if (program.compile) {
   }
 
   // Ensure we have the 'dockcross' Docker build environment driver script
-  const dockcross = path.join('build', 'dockcross')
+  const dockcross = 'build/dockcross'
   try {
     fs.statSync(dockcross)
   } catch (err) {
@@ -71,12 +71,11 @@ if (program.compile) {
     fs.statSync(path.join('build', 'build.ninja'))
   } catch (err) {
     if (err.code === 'ENOENT') {
-      console.log('Running CMake configuration...')
       let buildType = '-DCMAKE_BUILD_TYPE:STRING=Release'
       if (program.debug) {
         buildType = '-DCMAKE_BUILD_TYPE:STRING=Debug'
       }
-      const cmakeCall = spawnSync(dockcross, ['cmake', '-DRapidJSON_INCLUDE_DIR=/rapidjson/include', buildType, '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build', '-DBUILD_ITK_JS_IO_MODULES=ON'], {
+      const cmakeCall = spawnSync('bash', [dockcross, 'cmake', '-DRapidJSON_INCLUDE_DIR=/rapidjson/include', buildType, '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build', '-DBUILD_ITK_JS_IO_MODULES=ON'], {
         env: process.env,
         stdio: 'inherit'
       })
@@ -90,7 +89,7 @@ if (program.compile) {
 
   // Build the Emscripten mobules with ninja
   console.log('\nRunning ninja...')
-  const ninjaCall = spawnSync(dockcross, ['ninja', '-j8', '-Cbuild'], {
+  const ninjaCall = spawnSync('bash', [dockcross, 'ninja', '-j8', '-Cbuild'], {
     env: process.env,
     stdio: 'inherit'
   })
@@ -218,7 +217,7 @@ if (program.buildPipelines) {
     if (program.debug) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug', "-DCMAKE_EXE_LINKER_FLAGS_DEBUG='-s DISABLE_EXCEPTION_CATCHING=0'"]
     }
-    const buildPipelineCall = spawnSync(path.join(__dirname, 'src', 'itk-js-cli.js'), ['build', '--image', 'kitware/itk-js-vtk:latest', pipelinePath, '--'].concat(debugFlags), {
+    const buildPipelineCall = spawnSync('node', [path.join(__dirname, 'src', 'itk-js-cli.js'), 'build', '--image', 'kitware/itk-js-vtk:latest', pipelinePath, '--'].concat(debugFlags), {
       env: process.env,
       stdio: 'inherit'
     })

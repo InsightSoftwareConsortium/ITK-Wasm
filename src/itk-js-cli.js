@@ -44,7 +44,7 @@ const build = (sourceDir) => {
   }
 
   // Ensure we have the 'dockcross' Docker build environment driver script
-  const dockcrossScript = path.join('web-build', 'itk-js-build-env')
+  const dockcrossScript = 'web-build/itk-js-build-env'
   try {
     fs.statSync(dockcrossScript)
   } catch (err) {
@@ -85,7 +85,7 @@ const test = (sourceDir) => {
   }
   process.chdir(sourceDir)
 
-  const dockcrossScript = path.join('web-build', 'itk-js-build-env')
+  const dockcrossScript = path.join('web-build/itk-js-build-env')
   try {
     fs.statSync(dockcrossScript)
   } catch (err) {
@@ -105,8 +105,8 @@ const test = (sourceDir) => {
     ctestArgs = program.rawArgs.slice(hypenIndex + 1).join(' ')
   }
 
-  const dockerBuild = spawnSync(dockcrossScript,
-    ['bash', '-c',
+  const dockerBuild = spawnSync('bash', [dockcrossScript,
+    'bash', '-c',
       'cd web-build && ctest ' + ctestArgs],
     {
       env: process.env,
