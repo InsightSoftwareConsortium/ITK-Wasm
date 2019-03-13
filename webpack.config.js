@@ -3,25 +3,26 @@ const path = require('path')
 const webpack = require('webpack')
 
 const entry = path.join(__dirname, 'src', 'index.js')
-const outputPath = path.join(__dirname, 'dist')
+const outputPath = path.join(__dirname, 'dist', 'umd')
 
 const packageJSON = require('./package.json')
-const itkVersion = packageJSON.dependencies.itk.substring(1)
+const itkVersion = packageJSON.version
 const cdnPath = 'https://unpkg.com/itk@' + itkVersion
 
 module.exports = {
+  name: packageJSON.name,
   node: {
     fs: 'empty'
   },
   entry,
   output: {
     path: outputPath,
-    filename: 'index.js',
-    publicPath: cdnPath
+    filename: 'itk.js',
+    publicPath: cdnPath,
+    libraryTarget: 'umd'
   },
   module: {
     rules: [
-      { test: entry, loader: 'expose-loader?index' },
       {
         test: /\.js$/,
         use: {
@@ -34,7 +35,8 @@ module.exports = {
   resolve: {
     modules: [path.resolve(__dirname, 'node_modules')],
     alias: {
-      './itkConfig$': path.resolve(__dirname, 'src', 'itkConfigCDN.js')
+      './itkConfig$': path.resolve(__dirname, 'src', 'itkConfigCDN.js'),
+      'itk': __dirname
     }
   },
   performance: {
