@@ -10,15 +10,15 @@ npm install
 ./src/Docker/itk-js-base/build.sh
 ./src/Docker/itk-js/build.sh
 ./src/Docker/itk-js-vtk/build.sh
-npm run build
-npm run test
-rm dist/Pipelines/itkJSPipeline*
-rm dist/Pipelines/*Test*
 ```
 
 Bump `version` in `package.json`.
 
 ```
+npm run build
+npm run test
+rm dist/Pipelines/itkJSPipeline*
+rm dist/Pipelines/*Test*
 version=6.0.0 # change to correct version
 git add -- package.json package-lock.json
 git commit -m "feat(version): Bump NPM version to ${version}"
