@@ -3,7 +3,7 @@ const path = require('path')
 const webpack = require('webpack')
 const CopyPlugin = require('copy-webpack-plugin')
 
-const entry = path.join(__dirname, './src/index.js')
+const entry = path.join(__dirname, 'src', 'index.js')
 const outputPath = path.join(__dirname, './dist')
 
 module.exports = {
