@@ -11,13 +11,15 @@ Similar to the [web browser API](./browser_pipelines.html), most of these functi
 
 Run an itk.js Emscripten module with Node.js.
 
-*pipelinePath*: Path the built module, without `.js` or `Wasm.js` extensions.
+*pipelinePath*: Path to the pre-built pipeline module, without `.js` or `Wasm.js` extensions.
 
 *args*:         A JavaScript Array of strings to pass to the execution of the `main` function, i.e. arguments that would be passed on the command line to a native executable.
 
 *outputs*:      A JavaScript Array containing JavaScript objects with two properties: `path` and `type`.
-                `path` is the file path on the virtual filesystem to read after execution has completed.
-                `type` is one of the `itk/IOTypes`:
+
+`path` is the file path on the virtual filesystem to read after execution has completed.
+
+`type` is one of the `itk/IOTypes`:
 <dl>
   <dt>`IOTypes.Text`</dt><dd>A UTF8-encoded string. To write this data type in C++, write a plain text file with, e.g.  [std::ofstream](http://www.cplusplus.com/reference/fstream/ofstream/).</dd>
   <dt>`IOTypes.Binary`</dt><dd>A binary [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array). To write this data type in C++, read the binary file with, e.g.  [std::ofstream](http://www.cplusplus.com/reference/fstream/ofstream/) with the `std::ofstream::binary` flag to [std::ofstream::open](http://www.cplusplus.com/reference/fstream/ofstream/open/).</dd>
@@ -27,9 +29,12 @@ Run an itk.js Emscripten module with Node.js.
 </dl>
 
 *inputs*:       A JavaScript Array containing JavaScript objects with three properties: `path`, `type`, and `data`.
-                `data` contains the corresponding data to write to the virtual filesystem before executing the module.
-                `path` is the file path on the virtual filesystem to read after execution has completed.
-                `type` is one of the `itk/IOTypes`:
+
+`data` contains the corresponding data to write to the virtual filesystem before executing the module.
+
+`path` is the file path on the virtual filesystem to read after execution has completed.
+
+`type` is one of the `itk/IOTypes`:
 <dl>
   <dt>`IOTypes.Text`</dt><dd>A UTF8-encoded string. To read this data type in C++, read the plain text file with, e.g.  [std::ifstream](http://www.cplusplus.com/reference/fstream/ifstream/). </dd>
   <dt>`IOTypes.Binary`</dt><dd>A binary [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array). To read this data type in C++, read the binary file with, e.g.  [std::ifstream](http://www.cplusplus.com/reference/fstream/ifstream/) with the `std::ifstream::binary` flag to [std::ifstream::open](http://www.cplusplus.com/reference/fstream/ofstream/open/).</dd>
@@ -38,7 +43,7 @@ Run an itk.js Emscripten module with Node.js.
 </dl>
 
 *result*:       A JavaScript object with three properties: `stdout`, `stderr`, and `outputs`.
-                `stdout` and `stderr` are strings. `outputs` is an array with `{ path, type, data }` contents corresponding to the values specified in the function call.
+                `stdout` and `stderr` are strings. `outputs` is an array with `{ path, type, data }` content that corresponds to the values specified in the function call.
 
 ## runPipelineNodeSync(pipelinePath, args, outputs, inputs) -> result
 
