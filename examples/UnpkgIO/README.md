@@ -1,4 +1,4 @@
-itk-webpack-example
+itk-unpkgio-example
 ===================
 
 This example demonstrates how to configure Webpack to use the image and mesh
