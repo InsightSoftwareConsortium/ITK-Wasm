@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ws -d dist",
     "test": "karma start ./karma.conf.js",
-    "test:debug": "karma start ./karma.conf.js --no-single-run"
+    "test:debug": "karma start ./karma.conf.js --browsers Chrome --no-single-run"
   },
   "repository": {
     "type": "git",
