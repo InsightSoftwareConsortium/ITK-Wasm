@@ -75,7 +75,7 @@ if (program.compile) {
       if (program.debug) {
         buildType = '-DCMAKE_BUILD_TYPE:STRING=Debug'
       }
-      const cmakeCall = spawnSync('bash', [dockcross, 'cmake', '-DRapidJSON_INCLUDE_DIR=/rapidjson/include', buildType, '-Bbuild', '-H.', '-GNinja', '-DITK_DIR=/ITK-build', '-DBUILD_ITK_JS_IO_MODULES=ON'], {
+      const cmakeCall = spawnSync('bash', [dockcross, 'bash', '-c', `cmake -DRapidJSON_INCLUDE_DIR=/rapidjson/include ${buildType} -Bbuild -H. -GNinja -DITK_DIR=/ITK-build -DBUILD_ITK_JS_IO_MODULES=ON`], {
         env: process.env,
         stdio: 'inherit'
       })
