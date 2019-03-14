@@ -89,7 +89,7 @@ jobs:
           command: |
             cd examples/UMD
             npm install
-            npm run test
+            ./test/run.sh
 
   build-test-webpack-example:
     machine: true
