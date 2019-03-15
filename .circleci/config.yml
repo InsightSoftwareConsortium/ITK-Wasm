@@ -79,6 +79,18 @@ jobs:
             npm install
             npm run test
 
+  test-umd-example:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Test UMD example
+          no_output_timeout: 0.5h
+          command: |
+            cd examples/UMD
+            npm install
+            ./test/run.sh
+
   build-test-webpack-example:
     machine: true
     steps:
@@ -130,6 +142,8 @@ workflows:
     build-test-examples:
       jobs:
         - build-test-node-example:
+            <<: *ignore-ghpages
+        - test-umd-example:
             <<: *ignore-ghpages
         - build-test-webpack-example:
             <<: *ignore-ghpages

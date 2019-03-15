@@ -22,6 +22,7 @@ examples/Node.js/logo.tif
 examples/Node.js/package-lock.json
 examples/NodeHelloWorld/web-build
 examples/NodeHelloWorld/package-lock.json
+examples/UMD/package-lock.json
 
 test/MedianFilterPipeline/itk-js
 test/MedianFilterPipeline/web-build

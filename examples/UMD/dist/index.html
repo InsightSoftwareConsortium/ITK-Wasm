@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>itk.js UMD Example</title>
+    <meta charset="UTF-8" />
+    <script src="https://unpkg.com/itk@9.4.0/umd/itk.js"></script>
+  </head>
+
+  <body>
+    <div>
+      <label>Select image:</label>
+      <input name="inputFile" type="file">
+    </div>
+
+    <div>
+      <textarea name="fileInformation" rows="200" cols="80">File information...</textarea>
+    </div>
+    <script src="index.js"></script>
+    <script>
+      var fileInput = document.querySelector("input");
+      fileInput.addEventListener("change", processFile);
+    </script>
+  </body>
+</html>
+

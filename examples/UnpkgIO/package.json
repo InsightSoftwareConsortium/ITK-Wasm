@@ -1,5 +1,5 @@
 {
-  "name": "itk-webpack-example",
+  "name": "itk-unpkgio-example",
   "version": "1.0.1",
   "description": "This example demonstrates how to use itk.js in a Webpack project that targets the browser.",
   "main": "index.js",
