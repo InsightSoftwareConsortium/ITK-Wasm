@@ -1,6 +1,17 @@
 title: Using itk.js in a web browser application via Webpack
 ---
 
+<div class="glitch-embed-wrap" style="height: 420px; width: 100%; padding-bottom: 25px;">
+  <iframe
+    allow="geolocation; microphone; camera; midi; encrypted-media"
+    src="https://glitch.com/embed/#!/embed/itk-js-webpack-example?path=package.json&previewSize=100"
+    alt="itk-js-webpack-example on Glitch"
+    style="height: 100%; width: 100%; border: 0;">
+  </iframe>
+</div>
+
+---
+
 This example demonstrates how to use *itk.js* in a web browser application built with [Webpack](https://webpack.js.org/). Find the full example in the `itk-js/examples/Webpack` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-js/tree/master/examples/Webpack).
 
 Since we asynchronously download the *itk.js* JavaScript and WebAssembly Emscripten modules, a few extra configuration steps are required.
