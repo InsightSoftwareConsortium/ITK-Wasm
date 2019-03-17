@@ -1,6 +1,17 @@
 title: Using the itk.js UMD modules from an HTML script tag
 ---
 
+<div class="glitch-embed-wrap" style="height: 420px; width: 100%; padding-bottom: 25px;">
+  <iframe
+    allow="geolocation; microphone; camera; midi; encrypted-media"
+    src="https://glitch.com/embed/#!/embed/itk-js-umd-example?path=README.md&previewSize=100"
+    alt="itk-js-umd-example on Glitch"
+    style="height: 100%; width: 100%; border: 0;">
+  </iframe>
+</div>
+
+---
+
 This example demonstrates how to use *itk.js* in a web browser application via its pre-built [UMD](https://github.com/umdjs/umd) module. This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk.js IO modules published on [unpkg.com](https://unpkg.com). Find the full example in the `itk-js/examples/UMD` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-js/tree/master/examples/UMD).
 
 Add `itk` to your project's dependencies:
