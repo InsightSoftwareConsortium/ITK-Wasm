@@ -36,6 +36,7 @@ sidebar:
   examples:
     building: Building
     nodejs: Node.js
+    umd: UMD
     webpack: Webpack
     unpkgio: Unpkg.com / CDN
     tasks: Tasks
