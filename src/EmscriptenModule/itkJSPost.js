@@ -17,16 +17,17 @@ Module['mountContainingDirectory'] = function (filePath) {
     return
   }
 
-  var currentDir = path.sep
+  var currentDir = '/'
   var splitContainingDir = containingDir.split(path.sep)
-  for (var ii = 1; ii < splitContainingDir.length; ++ii) {
+  for (var ii = 1; ii < splitContainingDir.length; ii++) {
     currentDir += splitContainingDir[ii]
     if (!FS.analyzePath(currentDir).exists) {
       FS.mkdir(currentDir)
     }
-    currentDir += path.sep
+    currentDir += '/'
   }
-  FS.mount(NODEFS, { root: currentDir }, containingDir)
+  FS.mount(NODEFS, { root: containingDir }, currentDir)
+  return currentDir + path.basename(filePath)
 }
 
 /** Given an absolute path to a file, unmount its containing directory in the

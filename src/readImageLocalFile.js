@@ -32,14 +32,14 @@ const readImageLocalFile = (filePath) => {
           const modulePath = path.join(imageIOsPath, ImageIOIndex[idx])
           const Module = loadEmscriptenModule(modulePath)
           const imageIO = new Module.ITKImageIO()
-          Module.mountContainingDirectory(absoluteFilePath)
-          imageIO.SetFileName(absoluteFilePath)
-          if (imageIO.CanReadFile(absoluteFilePath)) {
+          const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
+          imageIO.SetFileName(mountedFilePath)
+          if (imageIO.CanReadFile(mountedFilePath)) {
             io = ImageIOIndex[idx]
-            Module.unmountContainingDirectory(absoluteFilePath)
+            Module.unmountContainingDirectory(mountedFilePath)
             break
           }
-          Module.unmountContainingDirectory(absoluteFilePath)
+          Module.unmountContainingDirectory(mountedFilePath)
         }
       }
       if (io === null) {
@@ -48,9 +48,9 @@ const readImageLocalFile = (filePath) => {
 
       const modulePath = path.join(imageIOsPath, io)
       const Module = loadEmscriptenModule(modulePath)
-      Module.mountContainingDirectory(absoluteFilePath)
-      const image = readImageEmscriptenFSFile(Module, absoluteFilePath)
-      Module.unmountContainingDirectory(absoluteFilePath)
+      const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
+      const image = readImageEmscriptenFSFile(Module, mountedFilePath)
+      Module.unmountContainingDirectory(mountedFilePath)
       resolve(image)
     } catch (err) {
       reject(err)

@@ -70,7 +70,7 @@ const build = (sourceDir) => {
     cmakeArgs = program.rawArgs.slice(hypenIndex + 1)
   }
 
-  const dockerBuild = spawnSync(dockcrossScript, ['web-build'].concat(cmakeArgs), {
+  const dockerBuild = spawnSync('bash', [dockcrossScript, 'web-build'].concat(cmakeArgs), {
     env: process.env,
     stdio: 'inherit'
   })

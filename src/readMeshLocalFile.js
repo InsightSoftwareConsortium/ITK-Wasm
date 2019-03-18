@@ -27,14 +27,14 @@ const readMeshLocalFile = (filePath) => {
           const modulePath = path.join(meshIOsPath, MeshIOIndex[idx])
           const Module = loadEmscriptenModule(modulePath)
           const meshIO = new Module.ITKMeshIO()
-          Module.mountContainingDirectory(absoluteFilePath)
-          meshIO.SetFileName(absoluteFilePath)
-          if (meshIO.CanReadFile(absoluteFilePath)) {
+          const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
+          meshIO.SetFileName(mountedFilePath)
+          if (meshIO.CanReadFile(mountedFilePath)) {
             io = MeshIOIndex[idx]
-            Module.unmountContainingDirectory(absoluteFilePath)
+            Module.unmountContainingDirectory(mountedFilePath)
             break
           }
-          Module.unmountContainingDirectory(absoluteFilePath)
+          Module.unmountContainingDirectory(mountedFilePath)
         }
       }
       if (io === null) {
@@ -43,9 +43,9 @@ const readMeshLocalFile = (filePath) => {
 
       const modulePath = path.join(meshIOsPath, io)
       const Module = loadEmscriptenModule(modulePath)
-      Module.mountContainingDirectory(absoluteFilePath)
-      const mesh = readMeshEmscriptenFSFile(Module, absoluteFilePath)
-      Module.unmountContainingDirectory(absoluteFilePath)
+      const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
+      const mesh = readMeshEmscriptenFSFile(Module, mountedFilePath)
+      Module.unmountContainingDirectory(mountedFilePath)
       resolve(mesh)
     } catch (err) {
       reject(err)

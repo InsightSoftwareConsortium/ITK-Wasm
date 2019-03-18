@@ -38,14 +38,14 @@ const writeMeshLocalFile = ({ useCompression, binaryFileType }, mesh, filePath) 
           const modulePath = path.join(meshIOsPath, MeshIOIndex[idx])
           const Module = loadEmscriptenModule(modulePath)
           const meshIO = new Module.ITKMeshIO()
-          Module.mountContainingDirectory(absoluteFilePath)
-          meshIO.SetFileName(absoluteFilePath)
-          if (meshIO.CanWriteFile(absoluteFilePath)) {
+          const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
+          meshIO.SetFileName(mountedFilePath)
+          if (meshIO.CanWriteFile(mountedFilePath)) {
             io = MeshIOIndex[idx]
-            Module.unmountContainingDirectory(absoluteFilePath)
+            Module.unmountContainingDirectory(mountedFilePath)
             break
           }
-          Module.unmountContainingDirectory(absoluteFilePath)
+          Module.unmountContainingDirectory(mountedFilePath)
         }
       }
       if (io === null) {
@@ -54,9 +54,9 @@ const writeMeshLocalFile = ({ useCompression, binaryFileType }, mesh, filePath) 
 
       const modulePath = path.join(meshIOsPath, io)
       const Module = loadEmscriptenModule(modulePath)
-      Module.mountContainingDirectory(absoluteFilePath)
-      writeMeshEmscriptenFSFile(Module, { useCompression, binaryFileType }, mesh, absoluteFilePath)
-      Module.unmountContainingDirectory(absoluteFilePath)
+      const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
+      writeMeshEmscriptenFSFile(Module, { useCompression, binaryFileType }, mesh, mountedFilePath)
+      Module.unmountContainingDirectory(mountedFilePath)
       resolve(null)
     } catch (err) {
       reject(err)

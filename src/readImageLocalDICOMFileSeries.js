@@ -21,10 +21,11 @@ const readImageLocalDICOMFileSeries = (directory) => {
       const absoluteDirectoryWithFile = path.join(absoluteDirectory, 'myfile.dcm')
       const seriesReaderPath = path.join(imageIOsPath, seriesReader)
       const seriesReaderModule = loadEmscriptenModule(seriesReaderPath)
-      seriesReaderModule.mountContainingDirectory(absoluteDirectoryWithFile)
+      const mountedFilePath = seriesReaderModule.mountContainingDirectory(absoluteDirectoryWithFile)
+      const mountedDir = path.dirname(mountedFilePath)
       const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
-        absoluteDirectory, path.join(absoluteDirectory, files[0]))
-      seriesReaderModule.unmountContainingDirectory(absoluteDirectoryWithFile)
+        mountedDir, mountedDir + '/' + files[0])
+      seriesReaderModule.unmountContainingDirectory(mountedFilePath)
       resolve(image)
     } catch (err) {
       reject(err)
