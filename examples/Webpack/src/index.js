@@ -2,6 +2,7 @@ import readImageFile from 'itk/readImageFile'
 import curry from 'curry'
 
 const outputFileInformation = curry(function outputFileInformation (outputTextArea, event) {
+  outputTextArea.textContent = "Loading...";
   const dataTransfer = event.dataTransfer
   const files = event.target.files || dataTransfer.files
   return readImageFile(null, files[0])
