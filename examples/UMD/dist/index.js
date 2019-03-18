@@ -1,4 +1,7 @@
 function processFile(event) {
+  var outputTextArea = document.querySelector("textarea");
+  outputTextArea.textContent = "Loading...";
+
   var dataTransfer = event.dataTransfer;
   var files = event.target.files || dataTransfer.files;
 
@@ -11,8 +14,6 @@ function processFile(event) {
       }
       return value;
     }
-    var outputTextArea = document.querySelector("textarea");
     outputTextArea.textContent = JSON.stringify(image, replacer, 4);
-
   });
 }

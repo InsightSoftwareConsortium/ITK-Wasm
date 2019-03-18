@@ -1,0 +1,14 @@
+html, body {
+  height: 90%;
+}
+
+textarea {
+  resize: none;
+  overflow-y: scroll;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+  top: 50px;
+}
