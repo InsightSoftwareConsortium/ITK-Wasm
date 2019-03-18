@@ -35,6 +35,12 @@ jobs:
       ./test/run.sh
     displayName: 'Test'
 
+  - bash: |
+      cd examples/Node.js
+      npm install
+      npm run test
+    displayName: 'Test Node.js example'
+
 - job: 'Build'
   displayName: 'Build and test'
 
@@ -54,7 +60,7 @@ jobs:
         nodeVersion: '10'
 
   pool:
-    imageName: $(imageName)
+    imageName: '$(imageName)'
 
   steps:
   - task: NodeTool@0
@@ -70,3 +76,9 @@ jobs:
   - bash: |
       npm run test:node
     displayName: 'Test'
+
+  - bash: |
+      cd examples/Node.js
+      npm install
+      npm run test
+    displayName: 'Test Node.js example'
