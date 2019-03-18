@@ -3,8 +3,12 @@ title: Hacking itk.js
 
 ### Build dependencies
 
-- Node.js / NPM
-- Docker
+- [Node.js / NPM](https://nodejs.org/en/download/)
+- [Docker](https://docs.docker.com/install/)
+  * On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo).
+- Bash
+  * Bash is installed by default on Linux and macOS.
+  * On Windows, we recommend [Git Bash](https://git-scm.com/).
 
 ### Building
 

@@ -3,7 +3,7 @@ title: Node.js Hello World!
 
 This example, walks through how to compile a *hello world* executable written in C++ to JavaScript and execute it with the [Node.js](https://nodejs.org/) runtime!
 
-Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Docker](https://docs.docker.com/install/) are installed. *Note: Make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo).*
+Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Docker](https://docs.docker.com/install/) are installed. On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). On Windows, install [Git Bash](https://git-scm.com/), and run shell commands in *Git Bash*.
 
 First, let's create a new folder to house our project.
 
