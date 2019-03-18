@@ -36,14 +36,14 @@ const writeImageLocalFile = (useCompression, image, filePath) => {
           const modulePath = path.join(imageIOsPath, ImageIOIndex[idx])
           const Module = loadEmscriptenModule(modulePath)
           const imageIO = new Module.ITKImageIO()
-          Module.mountContainingDirectory(absoluteFilePath)
-          imageIO.SetFileName(absoluteFilePath)
-          if (imageIO.CanWriteFile(absoluteFilePath)) {
+          const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
+          imageIO.SetFileName(mountedFilePath)
+          if (imageIO.CanWriteFile(mountedFilePath)) {
             io = ImageIOIndex[idx]
-            Module.unmountContainingDirectory(absoluteFilePath)
+            Module.unmountContainingDirectory(mountedFilePath)
             break
           }
-          Module.unmountContainingDirectory(absoluteFilePath)
+          Module.unmountContainingDirectory(mountedFilePath)
         }
       }
       if (io === null) {
@@ -52,9 +52,9 @@ const writeImageLocalFile = (useCompression, image, filePath) => {
 
       const modulePath = path.join(imageIOsPath, io)
       const Module = loadEmscriptenModule(modulePath)
-      Module.mountContainingDirectory(absoluteFilePath)
-      writeImageEmscriptenFSFile(Module, useCompression, image, absoluteFilePath)
-      Module.unmountContainingDirectory(absoluteFilePath)
+      const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
+      writeImageEmscriptenFSFile(Module, useCompression, image, mountedFilePath)
+      Module.unmountContainingDirectory(mountedFilePath)
       resolve(null)
     } catch (err) {
       reject(err)
