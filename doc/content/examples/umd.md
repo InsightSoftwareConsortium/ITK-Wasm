@@ -1,4 +1,4 @@
-title: Using the itk.js UMD modules from an HTML script tag
+title: Use the itk.js UMD module from a HTML script tag
 ---
 
 <div class="glitch-embed-wrap" style="height: 420px; width: 100%; padding-bottom: 25px;">
