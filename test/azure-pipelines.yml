@@ -14,6 +14,7 @@ jobs:
         nodeVersion: '10'
 
   pool:
+    name: 'Hosted Ubuntu 1604'
     imageName: 'ubuntu-16.04'
 
   steps:
@@ -35,26 +36,29 @@ jobs:
       ./test/run.sh
     displayName: 'Test'
 
+  - bash: |
+      cd examples/Node.js
+      npm install
+      npm run test
+    displayName: 'Test Node.js example'
+
 - job: 'Build'
   displayName: 'Build and test'
 
   strategy:
     matrix:
-      macOSNode8:
-        imageName: 'macos-10.13'
-        nodeVersion: '8'
-      macOSNode10:
-        imageName: 'macos-10.13'
-        nodeVersion: '10'
       WindowsNode8:
+        poolName: 'Hosted VS2017'
         imageName: 'vs2017-win2016'
         nodeVersion: '8'
       WindowsNode10:
+        poolName: 'Hosted VS2017'
         imageName: 'vs2017-win2016'
         nodeVersion: '10'
 
   pool:
-    imageName: $(imageName)
+    name: '$(poolName)'
+    imageName: '$(imageName)'
 
   steps:
   - task: NodeTool@0
@@ -62,11 +66,8 @@ jobs:
       versionSpec: '$(nodeVersion).x'
     displayName: 'Install Node.js'
 
-  - script: |
-      npm install
-      npm run build
-    displayName: 'Build'
-
   - bash: |
-      npm run test:node
-    displayName: 'Test'
+      cd examples/Node.js
+      npm install
+      npm run test
+    displayName: 'Test Node.js example'
