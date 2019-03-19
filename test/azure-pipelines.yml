@@ -67,15 +67,6 @@ jobs:
     displayName: 'Install Node.js'
 
   - bash: |
-      npm install
-      npm run build
-    displayName: 'Build'
-
-  - bash: |
-      npm run test:node
-    displayName: 'Test'
-
-  - bash: |
       cd examples/Node.js
       npm install
       npm run test
