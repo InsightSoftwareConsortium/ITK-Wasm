@@ -27,7 +27,7 @@ npm install --save itk
 Then, install Webpack-related development dependencies:
 
 ```
-npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader babel-loader '@babel/preset-env' '@babel/core'
+npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader babel-loader '@babel/preset-env' '@babel/core' copy-webpack-plugin
 ```
 
 Next, create a `webpack.config.js` file like the following:
