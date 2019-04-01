@@ -75,6 +75,9 @@ itk.MimeToMeshIO = MimeToMeshIO
 import PixelTypes from './PixelTypes.js'
 itk.PixelTypes = PixelTypes
 
+import readFile from './readFile.js'
+itk.readFile = readFile
+
 import readImageArrayBuffer from './readImageArrayBuffer.js'
 itk.readImageArrayBuffer = readImageArrayBuffer
 
