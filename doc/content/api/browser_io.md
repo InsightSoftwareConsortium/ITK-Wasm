@@ -9,6 +9,13 @@ Most of these functions return a [Promise](https://developer.mozilla.org/en-US/d
 
 These functions return the [WebWorker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) used for computation. They also optionally accept a web worker from a previous execution as their first argument -- pass the worker generated from execution or `null` if one is not available.
 
+---
+
+## readFile(webWorker, file) -> { webWorker, [image](./Image.html) or [mesh](./Mesh.html) }
+
+Read an image or mesh from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
+
+---
 
 ## readImageFile(webWorker, file) -> { webWorker, [image](./Image.html) }
 
