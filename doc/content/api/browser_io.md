@@ -15,6 +15,11 @@ These functions return the [WebWorker](https://developer.mozilla.org/en-US/docs/
 
 Read an image or mesh from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
+
+## readBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [image](./Image.html) or [mesh](./Mesh.html) }
+
+Read an image or mesh from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
+
 ---
 
 ## readImageFile(webWorker, file) -> { webWorker, [image](./Image.html) }

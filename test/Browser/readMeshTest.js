@@ -49,7 +49,8 @@ test('readMeshBlob reads a Blob', (t) => {
     .then(function (response) {
       return readMeshBlob(null, response.data, 'cow.vtk')
     })
-    .then(function ({ mesh }) {
+    .then(function ({ mesh, webWorker }) {
+      webWorker.terminate()
       verifyMesh(t, mesh)
     })
 })
@@ -62,7 +63,8 @@ test('readMeshFile reads a File', (t) => {
     .then(function (jsFile) {
       return readMeshFile(null, jsFile)
     })
-    .then(function ({ mesh }) {
+    .then(function ({ mesh, webWorker }) {
+      webWorker.terminate()
       verifyMesh(t, mesh)
     })
 })
@@ -83,6 +85,7 @@ test('readMeshFile re-uses a WebWorker', (t) => {
         .then(function (jsFile) {
           return readMeshFile(webWorker, jsFile)
             .then(function ({ mesh, webWorker }) {
+              webWorker.terminate()
               verifyMesh(t, mesh)
             })
         })
