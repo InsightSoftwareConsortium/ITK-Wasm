@@ -2,7 +2,7 @@ import test from 'tape'
 // import PromiseFileReader from 'promise-file-reader'
 
 // import readArrayBuffer from 'readArrayBuffer'
-// import readBlob from 'readBlob'
+import readBlob from 'readBlob'
 import readFile from 'readFile'
 
 import IntTypes from 'IntTypes'
@@ -18,7 +18,6 @@ for (let ii = 0; ii < byteString.length; ++ii) {
   intArray[ii] = byteString.charCodeAt(ii)
 }
 const cthead1SmallBlob = new window.Blob([intArray], { type: mimeString })
-// const cthead1SmallBlob1 = new window.Blob([intArray], { type: mimeString })
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
 const verifyImage = (t, image) => {
@@ -52,21 +51,13 @@ const verifyImage = (t, image) => {
 // })
 // })
 
-// test('readBlob reads a Blob', (t) => {
-// return readBlob(null, cthead1SmallBlob, 'cthead1Small.png')
-// .then(function ({ image, webWorker }) {
-// webWorker.terminate()
-// verify(t, image)
-// })
-// })
-
-// test('readBlob reads a Blob without a file extension', (t) => {
-// return readBlob(null, cthead1SmallBlob1, 'cthead1Small')
-// .then(function ({ image, webWorker }) {
-// webWorker.terminate()
-// verify(t, image)
-// })
-// })
+test('readBlob reads a Blob', (t) => {
+ return readBlob(null, cthead1SmallBlob, 'cthead1Small.png')
+  .then(function ({ image, webWorker }) {
+    webWorker.terminate()
+    verifyImage(t, image)
+  })
+})
 
 test('readFile reads a File', (t) => {
   return readFile(null, cthead1SmallFile)
