@@ -1,4 +1,5 @@
 import test from 'tape'
+import axios from 'axios'
 // import PromiseFileReader from 'promise-file-reader'
 
 // import readArrayBuffer from 'readArrayBuffer'
@@ -6,6 +7,7 @@ import readBlob from 'readBlob'
 import readFile from 'readFile'
 
 import IntTypes from 'IntTypes'
+import FloatTypes from 'FloatTypes'
 import PixelTypes from 'PixelTypes'
 
 import getMatrixElement from 'getMatrixElement'
@@ -19,6 +21,9 @@ for (let ii = 0; ii < byteString.length; ++ii) {
 }
 const cthead1SmallBlob = new window.Blob([intArray], { type: mimeString })
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
+
+const meshFileName = 'cow.vtk'
+const meshTestFilePath = 'base/build/ExternalData/test/Input/' + meshFileName
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')
@@ -40,6 +45,17 @@ const verifyImage = (t, image) => {
   t.end()
 }
 
+const verifyMesh = (t, mesh) => {
+  t.is(mesh.meshType.dimension, 3)
+  t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
+  t.is(mesh.meshType.cellComponentType, IntTypes.UInt32)
+  t.is(mesh.meshType.pointPixelType, 1)
+  t.is(mesh.meshType.cellPixelType, 1)
+  t.is(mesh.numberOfPoints, 2903)
+  t.is(mesh.numberOfCells, 3263)
+  t.end()
+}
+
 // test('readArrayBuffer reads an ArrayBuffer', (t) => {
 // return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
 // .then(arrayBuffer => {
@@ -52,11 +68,11 @@ const verifyImage = (t, image) => {
 // })
 
 test('readBlob reads a Blob', (t) => {
- return readBlob(null, cthead1SmallBlob, 'cthead1Small.png')
-  .then(function ({ image, webWorker }) {
-    webWorker.terminate()
-    verifyImage(t, image)
-  })
+  return readBlob(null, cthead1SmallBlob, 'cthead1Small.png')
+    .then(function ({ image, webWorker }) {
+      webWorker.terminate()
+      verifyImage(t, image)
+    })
 })
 
 test('readFile reads a File', (t) => {
@@ -91,4 +107,29 @@ test('readFile throws a catchable error for an invalid file', (t) => {
     t.pass('thrown an error that was caught')
     t.end()
   })
+})
+
+test('readBlob reads a mesh Blob', (t) => {
+  return axios.get(meshTestFilePath, { responseType: 'blob' })
+    .then(function (response) {
+      return readBlob(null, response.data, 'cow.vtk')
+    })
+    .then(function ({ mesh, webWorker }) {
+      webWorker.terminate()
+      verifyMesh(t, mesh)
+    })
+})
+
+test('readFile reads a mesh File', (t) => {
+  return axios.get(meshTestFilePath, { responseType: 'blob' }).then(function (response) {
+    const jsFile = new window.File([response.data], meshFileName)
+    return jsFile
+  })
+    .then(function (jsFile) {
+      return readFile(null, jsFile)
+    })
+    .then(function ({ mesh, webWorker }) {
+      webWorker.terminate()
+      verifyMesh(t, mesh)
+    })
 })
