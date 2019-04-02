@@ -28,6 +28,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DModule_MGHIO:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
     -DModule_SmoothingRecursiveYvvGaussianFilter:BOOL=ON \
+    -DModule_MorphologicalContourInterpolation:BOOL=ON \
     ../ITK && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
