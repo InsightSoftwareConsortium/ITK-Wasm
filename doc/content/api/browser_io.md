@@ -20,6 +20,10 @@ Read an image or mesh from a [File](https://developer.mozilla.org/en-US/docs/Web
 
 Read an image or mesh from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
+## readArrayBuffer(webWorker, arrayBuffer, fileName, mimeType) -> { webWorker, [image](./Image.html) or [mesh](./Mesh.html) }
+
+Read an image or mesh from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
+
 ---
 
 ## readImageFile(webWorker, file) -> { webWorker, [image](./Image.html) }
