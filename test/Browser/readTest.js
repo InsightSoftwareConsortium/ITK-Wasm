@@ -1,8 +1,8 @@
 import test from 'tape'
 import axios from 'axios'
-// import PromiseFileReader from 'promise-file-reader'
+import PromiseFileReader from 'promise-file-reader'
 
-// import readArrayBuffer from 'readArrayBuffer'
+import readArrayBuffer from 'readArrayBuffer'
 import readBlob from 'readBlob'
 import readFile from 'readFile'
 
@@ -56,16 +56,16 @@ const verifyMesh = (t, mesh) => {
   t.end()
 }
 
-// test('readArrayBuffer reads an ArrayBuffer', (t) => {
-// return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
-// .then(arrayBuffer => {
-// return readArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
-// .then(function ({ image, webWorker }) {
-// webWorker.terminate()
-// verify(t, image)
-// })
-// })
-// })
+test('readArrayBuffer reads an image ArrayBuffer', (t) => {
+  return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    .then(arrayBuffer => {
+      return readArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
+        .then(function ({ image, webWorker }) {
+          webWorker.terminate()
+          verifyImage(t, image)
+        })
+    })
+})
 
 test('readBlob reads a Blob', (t) => {
   return readBlob(null, cthead1SmallBlob, 'cthead1Small.png')
@@ -127,6 +127,17 @@ test('readFile reads a mesh File', (t) => {
   })
     .then(function (jsFile) {
       return readFile(null, jsFile)
+    })
+    .then(function ({ mesh, webWorker }) {
+      webWorker.terminate()
+      verifyMesh(t, mesh)
+    })
+})
+
+test('readArrayBuffer reads a mesh ArrayBuffer', (t) => {
+  return axios.get(meshTestFilePath, { responseType: 'arraybuffer' })
+    .then(function (response) {
+      return readArrayBuffer(null, response.data, 'cow.vtk')
     })
     .then(function ({ mesh, webWorker }) {
       webWorker.terminate()
