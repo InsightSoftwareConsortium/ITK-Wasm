@@ -5,8 +5,9 @@ function processFile(event) {
   var dataTransfer = event.dataTransfer;
   var files = event.target.files || dataTransfer.files;
 
-  return itk.readImageFile(null, files[0]).then(function({ image, webWorker }) {
+  return itk.readFile(null, files[0]).then(function({ image, mesh, webWorker }) {
     webWorker.terminate();
+    var imageOrMesh = image || mesh;
 
     function replacer(key, value) {
       if (!!value && value.byteLength !== undefined) {
@@ -14,6 +15,6 @@ function processFile(event) {
       }
       return value;
     }
-    outputTextArea.textContent = JSON.stringify(image, replacer, 4);
+    outputTextArea.textContent = JSON.stringify(imageOrMesh, replacer, 4);
   });
 }

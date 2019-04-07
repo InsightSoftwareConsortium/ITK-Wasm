@@ -22,7 +22,6 @@
     "url": "https://github.com/InsightSoftwareConsortium/itk-js/issues"
   },
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-js#readme",
-  "dependencies": {},
   "devDependencies": {
     "axios": "^0.18.0",
     "karma": "^2.0.0",
