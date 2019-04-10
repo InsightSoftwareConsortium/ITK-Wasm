@@ -15,6 +15,18 @@ Read an image or mesh from a file on the local filesystem.
 
 Similar to `readLocalFile`, but returns the image or mesh directly instead of a promise.
 
+## writeLocalFile(useCompression, imageOrMesh, filePath) -> null
+
+Write an image to a file on the local filesystem with Node.js.
+
+*useCompression*: compress the pixel data when possible
+*imageOrMesh*:    [itk/Image](./Image.html) or [itk/Mesh](./Mesh.html) instance to write
+*filePath*:       path to the file on the local filesystem
+
+## writeFileSync(useCompression, image, filePath) -> null
+
+Similar to `writeImageLocalFile`, but synchronous.
+
 ---
 
 ## readImageLocalFile(filePath) -> [itk/Image](./Image.html)
