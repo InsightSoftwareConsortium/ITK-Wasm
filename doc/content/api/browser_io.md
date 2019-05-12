@@ -24,6 +24,15 @@ Read an image or mesh from a [Blob](https://developer.mozilla.org/en-US/docs/Web
 
 Read an image or mesh from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
+## writeArrayBuffer(webWorker, useCompression, imageOrMesh, fileName, mimeType) ->  { webWorker, [arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
+
+Write an image or mesh to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
+
+*useCompression*: compress the pixel data when possible
+*imageOrMesh*:    [itk/Image](./Image.html) or [itk/Mesh](./Mesh.html) instance to write
+*fileName*:       name that would be used for the resulting file
+*mimeType*:       optional mime-type for the resulting file
+
 ---
 
 ## readImageFile(webWorker, file) -> { webWorker, [image](./Image.html) }
