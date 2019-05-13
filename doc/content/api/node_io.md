@@ -23,9 +23,9 @@ Write an image to a file on the local filesystem with Node.js.
 *imageOrMesh*:    [itk/Image](./Image.html) or [itk/Mesh](./Mesh.html) instance to write
 *filePath*:       path to the file on the local filesystem
 
-## writeFileSync(useCompression, image, filePath) -> null
+## writeLocalFileSync(useCompression, image, filePath) -> null
 
-Similar to `writeImageLocalFile`, but synchronous.
+Similar to `writeLocalFile`, but synchronous.
 
 ---
 
