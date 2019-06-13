@@ -6,7 +6,7 @@ Verify the source tree.
 git checkout master
 git pull upstream master
 git clean -fdx
-npm install
+npm ci
 ./src/Docker/itk-js-base/build.sh
 ./src/Docker/itk-js/build.sh
 ./src/Docker/itk-js-vtk/build.sh
