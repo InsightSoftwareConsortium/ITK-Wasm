@@ -111,6 +111,9 @@ itk.runPipelineBrowser = runPipelineBrowser
 import setMatrixElement from './setMatrixElement.js'
 itk.setMatrixElement = setMatrixElement
 
+import writeArrayBuffer from './writeArrayBuffer.js'
+itk.writeArrayBuffer = writeArrayBuffer
+
 import writeImageArrayBuffer from './writeImageArrayBuffer.js'
 itk.writeImageArrayBuffer = writeImageArrayBuffer
 
