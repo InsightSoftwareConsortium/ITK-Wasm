@@ -7,7 +7,9 @@ ignore-ghpages: &ignore-ghpages
 version: 2
 jobs:
   build-test-deploy:
-    machine: true
+    machine:
+      image: ubuntu-1604:201903-01
+      docker_layer_caching: true
     steps:
       - checkout
       - run:
