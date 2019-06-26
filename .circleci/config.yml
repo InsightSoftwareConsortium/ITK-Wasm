@@ -40,21 +40,33 @@ jobs:
               ./src/Docker/itk-js-vtk/build.sh --cache-from=insighttoolkit/itk-js:latest,kitware/itk-js-vtk:latest
             fi
       - run:
+          name: Install node@v10.15.3
+          command: |
+            . ./.circleci/load-nvm.sh
+            nvm install v10.15.3
+            nvm alias default v10.15.3
+      - run:
           name: Install Node packages
           command: |
+            . ./.circleci/load-nvm.sh
+            npm --version
+            node --version
             npm install
       - run:
           name: Build
           command: |
+            . ./.circleci/load-nvm.sh
             npm run build
       - run:
           name: Test
           command: |
+            . ./.circleci/load-nvm.sh
             google-chrome --version
             npm run test
       - run:
           name: Test building a pipeline
           command: |
+            . ./.circleci/load-nvm.sh
             cd test/MedianFilterPipeline
             docker run --rm insighttoolkit/itk-js > ./itk-js
             chmod +x ./itk-js
@@ -62,6 +74,7 @@ jobs:
       - deploy:
           name: Publish docs
           command: |
+            . ./.circleci/load-nvm.sh
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               git config --global user.name "Circle CI"
               git config --global user.email "robot@itk.org"
@@ -82,51 +95,71 @@ jobs:
             npm run test
 
   test-umd-example:
-    machine: true
+    machine:
+      image: ubuntu-1604:201903-01
+      docker_layer_caching: true
     steps:
       - checkout
       - run:
           name: Test UMD example
           no_output_timeout: 0.5h
           command: |
+            . ./.circleci/load-nvm.sh
+            nvm install v10.15.3
+            nvm alias default v10.15.3
             cd examples/UMD
             npm install
             ./test/run.sh
 
   build-test-webpack-example:
-    machine: true
+    machine:
+      image: ubuntu-1604:201903-01
+      docker_layer_caching: true
     steps:
       - checkout
       - run:
           name: Test Webpack example
           no_output_timeout: 0.5h
           command: |
+            . ./.circleci/load-nvm.sh
+            nvm install v10.15.3
+            nvm alias default v10.15.3
             cd examples/Webpack
             npm install
             npm run build
             npm run test
 
   build-test-unpkgio-example:
-    machine: true
+    machine:
+      image: ubuntu-1604:201903-01
+      docker_layer_caching: true
     steps:
       - checkout
       - run:
           name: Test Unpkg IO example
           no_output_timeout: 0.5h
           command: |
+            . ./.circleci/load-nvm.sh
+            nvm install v10.15.3
+            nvm alias default v10.15.3
             cd examples/UnpkgIO
             npm install
             npm run build
             npm run test
 
   build-test-nodejs-hello-world-example:
-    machine: true
+    machine:
+      image: ubuntu-1604:201903-01
+      docker_layer_caching: true
     steps:
       - checkout
       - run:
           name: Test Node.js Hello World examlpe
           no_output_timeout: 0.5h
           command: |
+            . ./.circleci/load-nvm.sh
+            nvm install v10.15.3
+            nvm alias default v10.15.3
             cd examples/NodeHelloWorld
             npm install
             npm run build
