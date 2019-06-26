@@ -85,11 +85,11 @@ protected:
   ~JSONImageIO() override;
   void PrintSelf(std::ostream & os, Indent indent) const override;
 
-  static ImageIOBase::IOComponentType JSToITKComponentType( const std::string & jsComponentType );
-  static std::string ITKToJSComponentType( const ImageIOBase::IOComponentType );
+  static ImageIOBase::IOComponentEnum JSToITKComponentType( const std::string & jsComponentType );
+  static std::string ITKToJSComponentType( const ImageIOBase::IOComponentEnum );
 
-  static ImageIOBase::IOPixelType JSToITKPixelType( const int jsPixelType );
-  static int ITKToJSPixelType( const ImageIOBase::IOPixelType );
+  static IOPixelEnum JSToITKPixelType( const int jsPixelType );
+  static int ITKToJSPixelType( const IOPixelEnum );
 
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(JSONImageIO);

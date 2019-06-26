@@ -40,11 +40,11 @@ class MeshIOBaseJSBinding
 public:
   typedef TMeshIO MeshIOType;
 
-  typedef typename MeshIOType::IOPixelType      IOPixelType;
-  typedef typename MeshIOType::IOComponentType  IOComponentType;
-  typedef typename MeshIOType::FileType         FileType;
-  typedef typename MeshIOType::ByteOrder        ByteOrder;
-  typedef typename MeshIOType::CellGeometryType CellGeometryType;
+  typedef typename CommonEnums::IOPixel      IOPixelType;
+  typedef typename CommonEnums::IOComponent  IOComponentType;
+  typedef typename CommonEnums::IOFile       FileType;
+  typedef typename CommonEnums::IOByteOrder  ByteOrder;
+  typedef typename CommonEnums::CellGeometry CellGeometryType;
 
   MeshIOBaseJSBinding();
 

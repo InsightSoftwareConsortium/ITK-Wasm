@@ -59,94 +59,94 @@ JSONImageIO
 }
 
 
-ImageIOBase::IOComponentType
+ImageIOBase::IOComponentEnum
 JSONImageIO
 ::JSToITKComponentType(const std::string & jsComponentType)
 {
   if( jsComponentType == "int8_t" )
     {
-    return CHAR;
+    return IOComponentEnum::CHAR;
     }
   else if( jsComponentType == "uint8_t" )
     {
-    return UCHAR;
+    return IOComponentEnum::UCHAR;
     }
   else if( jsComponentType == "int16_t" )
     {
-    return SHORT;
+    return IOComponentEnum::SHORT;
     }
   else if( jsComponentType == "uint16_t" )
     {
-    return USHORT;
+    return IOComponentEnum::USHORT;
     }
   else if( jsComponentType == "int32_t" )
     {
-    return INT;
+    return IOComponentEnum::INT;
     }
   else if( jsComponentType == "uint32_t" )
     {
-    return UINT;
+    return IOComponentEnum::UINT;
     }
   else if( jsComponentType == "int64_t" )
     {
-    return LONGLONG;
+    return IOComponentEnum::LONGLONG;
     }
   else if( jsComponentType == "uint64_t" )
     {
-    return ULONGLONG;
+    return IOComponentEnum::ULONGLONG;
     }
   else if( jsComponentType == "float" )
     {
-    return FLOAT;
+    return IOComponentEnum::FLOAT;
     }
   else if( jsComponentType == "double" )
     {
-    return DOUBLE;
+    return IOComponentEnum::DOUBLE;
     }
-  return UNKNOWNCOMPONENTTYPE;
+  return IOComponentEnum::UNKNOWNCOMPONENTTYPE;
 }
 
 
 std::string
 JSONImageIO
-::ITKToJSComponentType(const ImageIOBase::IOComponentType itkComponentType)
+::ITKToJSComponentType(const ImageIOBase::IOComponentEnum itkComponentType)
 {
   switch ( itkComponentType )
     {
-    case CHAR:
+    case IOComponentEnum::CHAR:
       return "int8_t";
 
-    case UCHAR:
+    case IOComponentEnum::UCHAR:
       return "uint8_t";
 
-    case SHORT:
+    case IOComponentEnum::SHORT:
       return "int16_t";
 
-    case USHORT:
+    case IOComponentEnum::USHORT:
       return "uint16_t";
 
-    case INT:
+    case IOComponentEnum::INT:
       return "int32_t";
 
-    case UINT:
+    case IOComponentEnum::UINT:
       return "uint32_t";
 
-    case LONG:
+    case IOComponentEnum::LONG:
       return "int64_t";
 
-    case ULONG:
+    case IOComponentEnum::ULONG:
       return "uint64_t";
 
-    case LONGLONG:
+    case IOComponentEnum::LONGLONG:
       return "int64_t";
 
-    case ULONGLONG:
+    case IOComponentEnum::ULONGLONG:
       return "uint64_t";
 
-    case FLOAT:
+    case IOComponentEnum::FLOAT:
       return "float";
 
-    case DOUBLE:
+    case IOComponentEnum::DOUBLE:
       return "double";
 
     default:
@@ -155,75 +155,75 @@ JSONImageIO
 }
 
 
-ImageIOBase::IOPixelType
+IOPixelEnum
 JSONImageIO
 ::JSToITKPixelType( const int jsPixelType )
 {
   switch ( jsPixelType )
     {
     case 0:
-      return UNKNOWNPIXELTYPE;
+      return IOPixelEnum::UNKNOWNPIXELTYPE;
     case 1:
-      return SCALAR;
+      return IOPixelEnum::SCALAR;
     case 2:
-      return RGB;
+      return IOPixelEnum::RGB;
     case 3:
-      return RGBA;
+      return IOPixelEnum::RGBA;
     case 4:
-      return OFFSET;
+      return IOPixelEnum::OFFSET;
     case 5:
-      return VECTOR;
+      return IOPixelEnum::VECTOR;
     case 6:
-      return POINT;
+      return IOPixelEnum::POINT;
     case 7:
-      return COVARIANTVECTOR;
+      return IOPixelEnum::COVARIANTVECTOR;
     case 8:
-      return SYMMETRICSECONDRANKTENSOR;
+      return IOPixelEnum::SYMMETRICSECONDRANKTENSOR;
     case 9:
-      return DIFFUSIONTENSOR3D;
+      return IOPixelEnum::DIFFUSIONTENSOR3D;
     case 10:
-      return COMPLEX;
+      return IOPixelEnum::COMPLEX;
     case 11:
-      return FIXEDARRAY;
+      return IOPixelEnum::FIXEDARRAY;
     case 13:
-      return MATRIX;
+      return IOPixelEnum::MATRIX;
     }
 
-  return UNKNOWNPIXELTYPE;
+  return IOPixelEnum::UNKNOWNPIXELTYPE;
 }
 
 
 int
 JSONImageIO
-::ITKToJSPixelType( const ImageIOBase::IOPixelType itkPixelType )
+::ITKToJSPixelType( const IOPixelEnum itkPixelType )
 {
   switch ( itkPixelType )
     {
-    case UNKNOWNPIXELTYPE:
+    case IOPixelEnum::UNKNOWNPIXELTYPE:
       return 0;
-    case SCALAR:
+    case IOPixelEnum::SCALAR:
       return 1;
-    case RGB:
+    case IOPixelEnum::RGB:
       return 2;
-    case RGBA:
+    case IOPixelEnum::RGBA:
       return 3;
-    case OFFSET:
+    case IOPixelEnum::OFFSET:
       return 4;
-    case VECTOR:
+    case IOPixelEnum::VECTOR:
       return 5;
-    case POINT:
+    case IOPixelEnum::POINT:
       return 6;
-    case COVARIANTVECTOR:
+    case IOPixelEnum::COVARIANTVECTOR:
       return 7;
-    case SYMMETRICSECONDRANKTENSOR:
+    case IOPixelEnum::SYMMETRICSECONDRANKTENSOR:
       return 7;
-    case DIFFUSIONTENSOR3D:
+    case IOPixelEnum::DIFFUSIONTENSOR3D:
       return 7;
-    case COMPLEX:
+    case IOPixelEnum::COMPLEX:
       return 10;
-    case FIXEDARRAY:
+    case IOPixelEnum::FIXEDARRAY:
       return 11;
-    case MATRIX:
+    case IOPixelEnum::MATRIX:
       return 13;
     }
 
@@ -306,10 +306,10 @@ JSONImageIO
   const int dimension = imageType["dimension"].GetInt();
   this->SetNumberOfDimensions( dimension );
   const std::string componentType( imageType["componentType"].GetString() );
-  const ImageIOBase::IOComponentType ioComponentType = this->JSToITKComponentType( componentType );
+  const ImageIOBase::IOComponentEnum ioComponentType = this->JSToITKComponentType( componentType );
   this->SetComponentType( ioComponentType );
   const int pixelType( imageType["pixelType"].GetInt() );
-  const ImageIOBase::IOPixelType ioPixelType = this->JSToITKPixelType( pixelType );
+  const IOPixelEnum ioPixelType = this->JSToITKPixelType( pixelType );
   this->SetPixelType( ioPixelType );
   this->SetNumberOfComponents( imageType["components"].GetInt() );
 

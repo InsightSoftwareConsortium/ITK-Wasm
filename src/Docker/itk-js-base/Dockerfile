@@ -4,10 +4,10 @@ MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
 
-# 2019-03-07
-ENV ITK_GIT_TAG 036492cfad580004a280331ebaced97b380eda0a
-ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s ALLOW_MEMORY_GROWTH=1 -Wno-almost-asm -s WASM=0"
-ENV CXXFLAGS="${CFLAGS} -std=c++11"
+# 2020-03-25 master branch
+ENV ITK_GIT_TAG 4b48c9025f66d179d7b134999e2398f5924093b4
+ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s WASM=0 -lnodefs.js -Wno-almost-asm "
+ENV CXXFLAGS="${CFLAGS} -std=c++14"
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
@@ -34,8 +34,10 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
+ENV CFLAGS="${CFLAGS} -s ALLOW_MEMORY_GROWTH=1"
+ENV CXXFLAGS="${CXXFLAGS} -s ALLOW_MEMORY_GROWTH=1"
 
-ENV ITKIOMeshSTL_GIT_TAG 3153ccadce3452c047248687909b74d96211048b
+ENV ITKIOMeshSTL_GIT_TAG 1dadc879d611f7e5bfdb0590b2ba3dd76b464e58
 RUN git clone https://github.com/InsightSoftwareConsortium/ITKIOMeshSTL.git && \
   cd ITKIOMeshSTL && \
   git checkout ${ITKIOMeshSTL_GIT_TAG} && \
