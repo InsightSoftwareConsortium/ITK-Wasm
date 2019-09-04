@@ -23,9 +23,10 @@
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-js#readme",
   "dependencies": {
     "curry": "^1.2.0",
+    "dicom-parser": "^1.8.3",
     "expose-loader": "^0.7.5",
     "itk": "^9.5.0",
-    "dicom-parser": "^1.8.3"
+    "regenerator-runtime": "^0.13.3"
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",

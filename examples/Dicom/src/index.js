@@ -1,31 +1,35 @@
+import readImageDICOMFileSeries from 'itk/readImageDICOMFileSeries'
+import PromiseFileReader from 'promise-file-reader'
 import curry from 'curry'
 import dicomParser from 'dicom-parser'
+import "regenerator-runtime/runtime";
 
-class DICOMStore {
-  constructor() {
-    this.patientDict = new Map()
-    this.fileLoaded = this.fileLoaded.bind(this)
-  }
+const parseDICOMFiles = async (fileList) => {
+  var patientDict = new Map()
 
-  fileLoaded(event) {
-    var arrayBuffer = event.target.result
-    var byteArray = new Uint8Array(arrayBuffer)
-    var dicomMetaData = dicomParser.parseDicom(byteArray)
-    var patientId = dicomMetaData.string('x00100020')
-    var patient = this.patientDict.get(patientId)
+  const parseFile = async (file) => {
+    // Read
+    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(file)
+
+    // Parse
+    const byteArray = new Uint8Array(arrayBuffer)
+    const dicomMetaData = dicomParser.parseDicom(byteArray)
+
+    // Add to patientDict
+    const patientId = dicomMetaData.string('x00100020')
+    var patient = patientDict.get(patientId)
     if (patient === undefined) {
       console.log(`New patient ${patientId}`)
       patient = new DICOMPatient()
-      this.patientDict.set(patientId, patient)
+      patientDict.set(patientId, patient)
     }
-    patient.parseMetaData(dicomMetaData)
+    patient.parseMetaData(dicomMetaData, file)
   }
 
-  readFile(file) {
-    var reader = new FileReader()
-    reader.onload = this.fileLoaded
-    reader.readAsArrayBuffer(file)
-  }
+  // Parse all files and populate patientDict
+  const parseFiles = [...fileList].map(parseFile)
+  await Promise.all(parseFiles)
+  return patientDict
 }
 
 class DICOMPatient {
@@ -37,7 +41,7 @@ class DICOMPatient {
     this.studyDict = new Map()
   }
 
-  parseMetaData(dicomMetaData) {
+  parseMetaData(dicomMetaData, file) {
     const id = dicomMetaData.string('x00100020')
     if (this.id === undefined) {
       this.id = id
@@ -73,7 +77,7 @@ class DICOMPatient {
       study = new DICOMStudy()
       this.studyDict.set(studyId, study)
     }
-    study.parseMetaData(dicomMetaData)
+    study.parseMetaData(dicomMetaData, file)
   }
 }
 
@@ -88,7 +92,7 @@ class DICOMStudy {
     this.serieDict = new Map()
   }
 
-  parseMetaData(dicomMetaData) {
+  parseMetaData(dicomMetaData, file) {
     const id = dicomMetaData.string('x00200010')
     if (this.id === undefined) {
       this.id = id
@@ -138,7 +142,7 @@ class DICOMStudy {
       serie = new DICOMSerie()
       this.serieDict.set(serieNumber, serie)
     }
-    serie.parseMetaData(dicomMetaData)
+    serie.parseMetaData(dicomMetaData, file)
   }
 }
 
@@ -152,10 +156,10 @@ class DICOMSerie {
     this.description = undefined  // x0008103e
     this.protocolName = undefined // x00181030
     this.bodyPart = undefined     // x00180015
-    this.imageDict = new Map()
+    this.files = []
   }
 
-  parseMetaData(dicomMetaData) {
+  parseMetaData(dicomMetaData, file) {
     const number = dicomMetaData.string('x00200011')
     if (this.number === undefined) {
       this.number = number
@@ -212,28 +216,38 @@ class DICOMSerie {
       console.assert(this.protocolName === protocolName, "Inconsistent protocol name")
     }
 
-    var imageNumber = dicomMetaData.string('x00200013')
-    if (this.imageDict.has(imageNumber)) {
-      console.warn(`Instance #${imageNumber} was already added to the serie`)
-    } else {
-      // TODO
-    }
+    this.files.push(file)
   }
 }
 
-
-var store = new DICOMStore()
-
-const outputFileInformation = curry(function outputFileInformation (outputTextArea, event) {
+const outputFileInformation = curry(async function outputFileInformation (outputTextArea, event) {
   outputTextArea.textContent = "Loading..."
 
+  // Get files
   const dataTransfer = event.dataTransfer
   const files = event.target.files || dataTransfer.files
 
-  Array.from(files).forEach( file => {
-    store.readFile(file)
-  })
-  console.log(store)
+  // Parse DICOM metadata
+  const patientDict = await parseDICOMFiles(files)
+
+  // Select DICOM serie
+  const patient = patientDict.values().next().value
+  const study = patient.studyDict.values().next().value
+  const serie = study.serieDict.values().next().value
+
+  // Read DICOM serie
+  const { image, webWorker } = await readImageDICOMFileSeries(null, serie.files)
+  console.log(image)
+  webWorker.terminate()
+
+  // Display
+  function replacer (key, value) {
+    if (!!value && value.byteLength !== undefined) {
+      return String(value.slice(0, 6)) + '...'
+    }
+    return value
+  }
+  outputTextArea.textContent = JSON.stringify(image, replacer, 4)
 })
 
 export { outputFileInformation }
