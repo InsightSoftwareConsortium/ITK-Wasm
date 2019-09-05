@@ -7,7 +7,7 @@ function setupDicomForm(patientDict, callback) {
   patientSelect.length = 1; // remove all options bar first
   const patients = Array.from(patientDict.values())
   patientDict.forEach((patient) => {
-    const value = patient.name + " - " + patient.dateOfBirth
+    const value = patient.patientName + " - " + patient.patientDateOfBirth
     patientSelect.options[patientSelect.options.length] = new Option(value, value);
   })
 
@@ -18,7 +18,7 @@ function setupDicomForm(patientDict, callback) {
     const patientId = this.selectedIndex - 1
     const patient = patients[patientId]
     patient.studyDict.forEach((study) => {
-      const value = study.description + " - " + study.date
+      const value = study.studyDescription + " - " + study.studyDate
       studySelect.options[studySelect.options.length] = new Option(value, value);
     })
   }
@@ -33,7 +33,7 @@ function setupDicomForm(patientDict, callback) {
     const studyId = this.selectedIndex - 1
     const study = studies[studyId]
     study.serieDict.forEach((serie) => {
-      const value = serie.description + " - " + serie.modality
+      const value = serie.seriesDescription + " - " + serie.seriesModality
       serieSelect.options[serieSelect.options.length] = new Option(value, value);
     })
   }

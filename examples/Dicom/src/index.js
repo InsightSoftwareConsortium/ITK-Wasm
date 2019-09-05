@@ -6,6 +6,27 @@ import dicomParser from 'dicom-parser'
 import setupDicomForm from './dicomForm'
 import "regenerator-runtime/runtime";
 
+const DICOM_DICTIONARY = {
+  patientId: 'x00100020',
+  patientName: 'x00100010',
+  patientDateOfBirth: 'x00100030',
+  patientSex: 'x00100040',
+  studyID: 'x00200010',
+  studyUID: 'x0020000d',
+  studyDate: 'x00080020',
+  studyTime: 'x00080030',
+  studyAccessionNumber: 'x00080050',
+  studyDescription: 'x00081030',
+  seriesNumber: 'x00200011',
+  seriesUid: 'x0020000e',
+  seriesDate: 'x00080021',
+  seriesTime: 'x00080031',
+  seriesModality: 'x00080060',
+  seriesDescription: 'x0008103e',
+  seriesProtocolName: 'x00181030',
+  seriesBodyPart: 'x00180015',
+}
+
 const parseDICOMFiles = async (fileList) => {
   var patientDict = new Map()
 
@@ -18,7 +39,8 @@ const parseDICOMFiles = async (fileList) => {
     const dicomMetaData = dicomParser.parseDicom(byteArray)
 
     // Add to patientDict
-    const patientId = dicomMetaData.string('x00100020')
+    const tag = DICOMPatient.primaryTag
+    const patientId = dicomMetaData.string(DICOM_DICTIONARY[tag])
     var patient = patientDict.get(patientId)
     if (patient === undefined) {
       console.log(`New patient ${patientId}`)
@@ -34,45 +56,65 @@ const parseDICOMFiles = async (fileList) => {
   return patientDict
 }
 
-class DICOMPatient {
+class DICOMEntity {
   constructor() {
-    this.id = undefined           // x00100020
-    this.name = undefined         // x00100010
-    this.dateOfBirth = undefined  // x00100030
-    this.sex = undefined          // x00100040
+    this.checkTagsValidity() // could it be a static assertion instead?
+  }
+
+  checkTagsValidity() {
+    const tags = this.constructor.tags
+    const primaryTag = this.constructor.primaryTag
+    console.assert(
+      tags.includes(primaryTag),
+      `The primary tag ${primaryTag} is not listed in ${tags}`
+      )
+    tags.forEach((tag) => {
+      console.assert(
+        tag in DICOM_DICTIONARY,
+        `The tag ${tag} is not defined in DICOM_DICTIONARY`
+        )
+    })
+  }
+
+  extractTags(dicomMetaData) {
+    const tags = this.constructor.tags
+    const primaryTag = this.constructor.primaryTag
+    tags.forEach((tag) => {
+      const value = dicomMetaData.string(DICOM_DICTIONARY[tag])
+      if (this[tag] === undefined) {
+        this[tag] = value
+      } else if (value != undefined) {
+        console.assert(this[tag] === value, `Inconsistent value for ${tag} property of ${this[primaryTag]}`)
+      }
+    })
+  }
+}
+
+class DICOMPatient extends DICOMEntity {
+  static get primaryTag() {
+    return 'patientId'
+  }
+
+  static get tags() {
+    return [
+      'patientId',
+      'patientName',
+      'patientDateOfBirth',
+      'patientSex',
+      ]
+    }
+
+  constructor() {
+    super()
     this.studyDict = new Map()
   }
 
   parseMetaData(dicomMetaData, file) {
-    const id = dicomMetaData.string('x00100020')
-    if (this.id === undefined) {
-      this.id = id
-    } else {
-      console.assert(this.id === id, "Inconsistent id")
-    }
+    this.extractTags(dicomMetaData)
 
-    const name = dicomMetaData.string('x00100010')
-    if (this.name === undefined) {
-      this.name = name
-    } else {
-      console.assert(this.name === name, "Inconsistent name")
-    }
 
-    const dob = dicomMetaData.string('x00100030')
-    if (this.dateOfBirth === undefined) {
-      this.dateOfBirth = dob
-    } else {
-      console.assert(this.dateOfBirth === dob, "Inconsistent date of birth")
-    }
-
-    const sex = dicomMetaData.string('x00100040')
-    if (this.sex === undefined) {
-      this.sex = sex
-    } else {
-      console.assert(this.sex === sex, "Inconsistent sex")
-    }
-
-    const studyId = dicomMetaData.string('x00200010')
+    const tag = DICOMStudy.primaryTag
+    const studyId = dicomMetaData.string(DICOM_DICTIONARY[tag])
     var study = this.studyDict.get(studyId)
     if (study === undefined) {
       console.log(`new study ${studyId}`)
@@ -83,61 +125,33 @@ class DICOMPatient {
   }
 }
 
-class DICOMStudy {
+
+class DICOMStudy extends DICOMEntity {
+  static get primaryTag() {
+    return 'studyID'
+  }
+
+  static get tags() {
+    return [
+      'studyID',
+      'studyUID',
+      'studyDate',
+      'studyTime',
+      'studyAccessionNumber',
+      'studyDescription',
+      ]
+    }
+
   constructor() {
-    this.id = undefined               // x00200010
-    this.uid = undefined              // x0020000d
-    this.date = undefined             // x00080020
-    this.time = undefined             // x00080030
-    this.accessionNumber = undefined  // x00080050
-    this.description = undefined      // x00081030
+    super()
     this.serieDict = new Map()
   }
 
   parseMetaData(dicomMetaData, file) {
-    const id = dicomMetaData.string('x00200010')
-    if (this.id === undefined) {
-      this.id = id
-    } else {
-      console.assert(this.id === id, "Inconsistent id")
-    }
+    this.extractTags(dicomMetaData)
 
-    const uid = dicomMetaData.string('x0020000d')
-    if (this.uid === undefined) {
-      this.uid = uid
-    } else {
-      console.assert(this.uid === uid, "Inconsistent uid")
-    }
-
-    const date = dicomMetaData.string('x00080020')
-    if (this.date === undefined) {
-      this.date = date
-    } else {
-      console.assert(this.date === date, "Inconsistent date")
-    }
-
-    const time = dicomMetaData.string('x00080030')
-    if (this.time === undefined) {
-      this.time = time
-    } else {
-      console.assert(this.time === time, "Inconsistent time")
-    }
-
-    const nbr = dicomMetaData.string('x00080050')
-    if (this.accessionNumber === undefined) {
-      this.accessionNumber = nbr
-    } else {
-      console.assert(this.accessionNumber === nbr, "Inconsistent accession number")
-    }
-
-    const description = dicomMetaData.string('x00081030')
-    if (this.description === undefined) {
-      this.description = description
-    } else {
-      console.assert(this.description === description, "Inconsistent description")
-    }
-
-    const serieNumber = dicomMetaData.string('x00200011')
+    const tag = DICOMSerie.primaryTag
+    const serieNumber = dicomMetaData.string(DICOM_DICTIONARY[tag])
     var serie = this.serieDict.get(serieNumber)
     if (serie === undefined) {
       console.log(`new serie ${serieNumber}`)
@@ -148,75 +162,31 @@ class DICOMStudy {
   }
 }
 
-class DICOMSerie {
+class DICOMSerie extends DICOMEntity {
+  static get primaryTag() {
+    return 'seriesNumber'
+  }
+
+  static get tags() {
+    return [
+      'seriesNumber',
+      'seriesUid',
+      'seriesDate',
+      'seriesTime',
+      'seriesModality',
+      'seriesDescription',
+      'seriesProtocolName',
+      'seriesBodyPart',
+      ]
+    }
+
   constructor() {
-    this.number = undefined       // x00200011
-    this.uid = undefined          // x0020000e
-    this.date = undefined         // x00080021
-    this.time = undefined         // x00080031
-    this.modality = undefined     // x00080060
-    this.description = undefined  // x0008103e
-    this.protocolName = undefined // x00181030
-    this.bodyPart = undefined     // x00180015
+    super()
     this.files = []
   }
 
   parseMetaData(dicomMetaData, file) {
-    const number = dicomMetaData.string('x00200011')
-    if (this.number === undefined) {
-      this.number = number
-    } else {
-      console.assert(this.number === number, "Inconsistent number")
-    }
-
-    const uid = dicomMetaData.string('x0020000e')
-    if (this.uid === undefined) {
-      this.uid = uid
-    } else {
-      console.assert(this.uid === uid, "Inconsistent number")
-    }
-
-    const date = dicomMetaData.string('x00080021')
-    if (this.date === undefined) {
-      this.date = date
-    } else {
-      console.assert(this.date === date, "Inconsistent date")
-    }
-
-    const time = dicomMetaData.string('x00080031')
-    if (this.time === undefined) {
-      this.time = time
-    } else {
-      console.assert(this.time === time, "Inconsistent time")
-    }
-
-    const modality = dicomMetaData.string('x00080060')
-    if (this.modality === undefined) {
-      this.modality = modality
-    } else {
-      console.assert(this.modality === modality, "Inconsistent modality")
-    }
-
-    const description = dicomMetaData.string('x0008103e')
-    if (this.description === undefined) {
-      this.description = description
-    } else {
-      console.assert(this.description === description, "Inconsistent description")
-    }
-
-    const bodyPart = dicomMetaData.string('x00180015')
-    if (this.bodyPart === undefined) {
-      this.bodyPart = bodyPart
-    } else {
-      console.assert(this.bodyPart === bodyPart, "Inconsistent body part")
-    }
-
-    const protocolName = dicomMetaData.string('x00181030')
-    if (this.protocolName === undefined) {
-      this.protocolName = protocolName
-    } else {
-      console.assert(this.protocolName === protocolName, "Inconsistent protocol name")
-    }
+    this.extractTags(dicomMetaData)
 
     this.files.push(file)
   }
