@@ -2,6 +2,8 @@ import readImageDICOMFileSeries from 'itk/readImageDICOMFileSeries'
 import PromiseFileReader from 'promise-file-reader'
 import curry from 'curry'
 import dicomParser from 'dicom-parser'
+
+import setupDicomForm from './dicomForm'
 import "regenerator-runtime/runtime";
 
 const parseDICOMFiles = async (fileList) => {
@@ -221,7 +223,7 @@ class DICOMSerie {
 }
 
 const outputFileInformation = curry(async function outputFileInformation (outputTextArea, event) {
-  outputTextArea.textContent = "Loading..."
+  outputTextArea.textContent = "Parsing..."
 
   // Get files
   const dataTransfer = event.dataTransfer
@@ -231,23 +233,23 @@ const outputFileInformation = curry(async function outputFileInformation (output
   const patientDict = await parseDICOMFiles(files)
 
   // Select DICOM serie
-  const patient = patientDict.values().next().value
-  const study = patient.studyDict.values().next().value
-  const serie = study.serieDict.values().next().value
+  outputTextArea.textContent = "Please select serie..."
+  setupDicomForm(patientDict, async (files) => {
+    outputTextArea.textContent = "Loading..."
 
-  // Read DICOM serie
-  const { image, webWorker } = await readImageDICOMFileSeries(null, serie.files)
-  console.log(image)
-  webWorker.terminate()
+    // Read DICOM serie
+    const { image, webWorker } = await readImageDICOMFileSeries(null, files)
+    webWorker.terminate()
 
-  // Display
-  function replacer (key, value) {
-    if (!!value && value.byteLength !== undefined) {
-      return String(value.slice(0, 6)) + '...'
+    // Display
+    function replacer (key, value) {
+      if (!!value && value.byteLength !== undefined) {
+        return String(value.slice(0, 6)) + '...'
+      }
+      return value
     }
-    return value
-  }
-  outputTextArea.textContent = JSON.stringify(image, replacer, 4)
+    outputTextArea.textContent = JSON.stringify(image, replacer, 4)
+  })
 })
 
 export { outputFileInformation }

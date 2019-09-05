@@ -14,6 +14,24 @@
       <input name="inputFile" type="file" multiple>
     </div>
 
+    <!-- Serie selector -->
+    <form name="dicomForm" id="dicomForm">
+      Patient:
+      <select id="patientSelect" size="1">
+        <option value="" selected="selected">Select patient</option>
+      </select>
+      <br>
+      Study:
+      <select id="studySelect" size="1">
+        <option value="" selected="selected">Please select patient first</option>
+      </select>
+      <br>
+      Serie:
+      <select id="serieSelect" size="1">
+        <option value="" selected="selected">Please select study first</option>
+      </select>
+    </form>
+
     <!-- File information -->
     <textarea readonly name="fileInformation">File information...</textarea>
 
