@@ -33,30 +33,26 @@ class DICOMEntity {
     const name = this.constructor.name
     const tags = this.constructor.tags
     const primaryTag = this.constructor.primaryTag
-    console.assert(
-      tags.includes(primaryTag),
-      `The primary tag of the ${name} class ("${primaryTag}") is not included in its list of tags ([${tags}]).`
-      )
+    if (!tags.includes(primaryTag)) {
+      throw Error(`The primary tag of the ${name} class ("${primaryTag}") is not included in its list of tags ([${tags}]).`)
+    }
     tags.forEach((tag) => {
-      console.assert(
-        tag in DICOM_DICTIONARY,
-        `The tag "${tag}" associated with the ${name} class is not defined in DICOM_DICTIONARY.`
-        )
+      if (!(tag in DICOM_DICTIONARY)) {
+        throw Error(`The tag "${tag}" associated with the ${name} class is not defined in DICOM_DICTIONARY.`)
+      }
     })
   }
 
   extractTags(dicomMetaData) {
+    const name = this.constructor.name
     const tags = this.constructor.tags
     const primaryTag = this.constructor.primaryTag
     tags.forEach((tag) => {
       const value = dicomMetaData.string(DICOM_DICTIONARY[tag])
       if (this[tag] === undefined) {
         this[tag] = value
-      } else if (value !== undefined) {
-        console.assert(
-          this[tag] === value,
-          `Inconsistent value for ${tag} property of ${this[primaryTag]}`
-          )
+      } else if (value !== undefined && this[tag] !== value) {
+        throw new Error(`Inconsistent value for the "${tag}" property of ${name} "${this[primaryTag]}": received "${this[tag]}" but already had "${value}".`)
       }
     })
   }
@@ -160,8 +156,21 @@ class DICOMSerie extends DICOMEntity {
   }
 }
 
-const parseDicomFiles = async (fileList) => {
-  var patientDict = {}
+class ParseDicomError extends Error {
+  constructor(failures) {
+    const message =
+      `Failed at parsing ${failures.length} DICOM file(s). ` +
+      `Find the list of files and associated errors in the ` +
+      `"failures" property of the thrown error, or ignore the ` +
+      `errors by calling "parseDicomFiles(fileList, true)".`
+    super(message)
+    this.failures = failures
+  }
+}
+
+const parseDicomFiles = async (fileList, ignoreFailedFiles = false) => {
+  const patientDict = {}
+  const failures = []
 
   const parseFile = async (file) => {
     // Read
@@ -182,13 +191,24 @@ const parseDicomFiles = async (fileList) => {
     patient.parseMetaData(dicomMetaData, file)
   }
 
+  // Set up promises
+  const parseFiles = [...fileList].map((file) => {
+    const promise = parseFile(file)
+    return promise.catch((error) => {
+      failures.push({ file, error })
+    })
+  })
+
   // Parse all files and populate patientDict
-  const parseFiles = [...fileList].map(parseFile)
   const logName = `Parsed ${fileList.length} DICOM files in`
   console.time(logName)
-  await Promise.all(parseFiles)
+  await Promise.all(parseFiles).then(() => {
+    if (!ignoreFailedFiles && failures.length > 0) {
+      throw new ParseDicomError(failures)
+    }
+  })
   console.timeEnd(logName)
-  return patientDict
+  return { patientDict, failures }
 }
 
 export default parseDicomFiles

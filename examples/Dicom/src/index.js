@@ -12,7 +12,7 @@ const outputFileInformation = curry(async function outputFileInformation (output
   const files = event.target.files || dataTransfer.files
 
   // Parse DICOM metadata
-  const patientDict = await parseDicomFiles(files)
+  const { patientDict, failures } = await parseDicomFiles(files, true)
 
   // Select DICOM serie
   outputTextArea.textContent = "Please select serie..."
