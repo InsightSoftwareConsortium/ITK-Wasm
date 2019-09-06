@@ -78,7 +78,7 @@ class DICOMPatient extends DICOMEntity {
 
   constructor() {
     super()
-    this.studyDict = new Map()
+    this.studyDict = {}
   }
 
   parseMetaData(dicomMetaData, file) {
@@ -86,10 +86,10 @@ class DICOMPatient extends DICOMEntity {
 
     const tag = DICOMStudy.primaryTag
     const studyId = dicomMetaData.string(DICOM_DICTIONARY[tag])
-    var study = this.studyDict.get(studyId)
+    var study = this.studyDict[studyId]
     if (study === undefined) {
       study = new DICOMStudy()
-      this.studyDict.set(studyId, study)
+      this.studyDict[studyId] = study
     }
     study.parseMetaData(dicomMetaData, file)
   }
@@ -113,7 +113,7 @@ class DICOMStudy extends DICOMEntity {
 
   constructor() {
     super()
-    this.serieDict = new Map()
+    this.serieDict = {}
   }
 
   parseMetaData(dicomMetaData, file) {
@@ -121,10 +121,10 @@ class DICOMStudy extends DICOMEntity {
 
     const tag = DICOMSerie.primaryTag
     const serieNumber = dicomMetaData.string(DICOM_DICTIONARY[tag])
-    var serie = this.serieDict.get(serieNumber)
+    var serie = this.serieDict[serieNumber]
     if (serie === undefined) {
       serie = new DICOMSerie()
-      this.serieDict.set(serieNumber, serie)
+      this.serieDict[serieNumber] = serie
     }
     serie.parseMetaData(dicomMetaData, file)
   }
@@ -161,7 +161,7 @@ class DICOMSerie extends DICOMEntity {
 }
 
 const parseDicomFiles = async (fileList) => {
-  var patientDict = new Map()
+  var patientDict = {}
 
   const parseFile = async (file) => {
     // Read
@@ -174,10 +174,10 @@ const parseDicomFiles = async (fileList) => {
     // Add to patientDict
     const tag = DICOMPatient.primaryTag
     const patientId = dicomMetaData.string(DICOM_DICTIONARY[tag])
-    var patient = patientDict.get(patientId)
+    var patient = patientDict[patientId]
     if (patient === undefined) {
       patient = new DICOMPatient()
-      patientDict.set(patientId, patient)
+      patientDict[patientId] = patient
     }
     patient.parseMetaData(dicomMetaData, file)
   }
