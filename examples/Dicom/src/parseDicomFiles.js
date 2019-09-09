@@ -25,24 +25,6 @@ const DICOM_DICTIONARY = {
 }
 
 class DICOMEntity {
-  constructor() {
-    this.checkTagsValidity() // could it be a static assertion instead?
-  }
-
-  checkTagsValidity() {
-    const name = this.constructor.name
-    const tags = this.constructor.tags
-    const primaryTag = this.constructor.primaryTag
-    if (!tags.includes(primaryTag)) {
-      throw Error(`The primary tag of the ${name} class ("${primaryTag}") is not included in its list of tags ([${tags}]).`)
-    }
-    tags.forEach((tag) => {
-      if (!(tag in DICOM_DICTIONARY)) {
-        throw Error(`The tag "${tag}" associated with the ${name} class is not defined in DICOM_DICTIONARY.`)
-      }
-    })
-  }
-
   extractTags(dicomMetaData) {
     const name = this.constructor.name
     const tags = this.constructor.tags
@@ -155,6 +137,23 @@ class DICOMSerie extends DICOMEntity {
     this.files.push(file)
   }
 }
+
+function checkTagsValidity(klass) {
+  const name = klass.name
+  const tags = klass.tags
+  const primaryTag = klass.primaryTag
+  if (!tags.includes(primaryTag)) {
+    throw Error(`The primary tag of the ${name} class ("${primaryTag}") is not included in its list of tags ([${tags}]).`)
+  }
+  tags.forEach((tag) => {
+    if (!(tag in DICOM_DICTIONARY)) {
+      throw Error(`The tag "${tag}" associated with the ${name} class is not defined in DICOM_DICTIONARY.`)
+    }
+  })
+}
+checkTagsValidity(DICOMPatient)
+checkTagsValidity(DICOMStudy)
+checkTagsValidity(DICOMSerie)
 
 class ParseDicomError extends Error {
   constructor(failures) {
