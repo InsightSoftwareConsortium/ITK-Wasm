@@ -12,14 +12,15 @@ const outputFileInformation = curry(async function outputFileInformation (output
   const files = event.target.files || dataTransfer.files
 
   // Parse DICOM metadata
-  const { patientDict, failures } = await parseDicomFiles(files, true)
+  const { patients, failures } = await parseDicomFiles(files, true)
 
   // Select DICOM serie
   outputTextArea.textContent = "Please select serie..."
-  setupDicomForm(patientDict, async (files) => {
+  setupDicomForm(patients, async (serie) => {
     outputTextArea.textContent = "Loading..."
 
     // Read DICOM serie
+    const files = Object.values(serie.images).map((image) => image.file)
     const { image, webWorker } = await readImageDICOMFileSeries(null, files)
     webWorker.terminate()
 

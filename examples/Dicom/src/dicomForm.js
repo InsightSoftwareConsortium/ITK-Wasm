@@ -1,27 +1,27 @@
 
-function setupDicomForm(patientDict, callback) {
+function setupDicomForm(patients, callback) {
   const patientSelect = document.getElementById("patientSelect")
   const studySelect = document.getElementById("studySelect")
   const serieSelect = document.getElementById("serieSelect")
 
   // Remove options
-  var patients = []
-  var studies = []
-  var series = []
+  var patientList = []
+  var studyList = []
+  var serieList = []
   patientSelect.length = 1;
 
   // Add patients
-  for (const key in patientDict) {
-    const patient = patientDict[key]
-    patients.push(patient)
-    const value = patient.patientName + " - " + patient.patientDateOfBirth
+  for (const key in patients) {
+    const patient = patients[key]
+    patientList.push(patient)
+    const value = patient.metaData.PatientName + " - " + patient.metaData.PatientBirthDate
     patientSelect.options[patientSelect.options.length] = new Option(value, value);
   }
 
   patientSelect.onchange = function () {
     // Remove options
-    studies = []
-    series = []
+    studyList = []
+    serieList = []
     studySelect.length = 1;
     serieSelect.length = 1;
 
@@ -29,11 +29,11 @@ function setupDicomForm(patientDict, callback) {
 
     // Add underneath studies
     const patientId = this.selectedIndex - 1
-    const patient = patients[patientId]
-    for (const key in patient.studyDict) {
-      const study = patient.studyDict[key]
-      studies.push(study)
-      const value = study.studyDescription + " - " + study.studyDate
+    const patient = patientList[patientId]
+    for (const key in patient.studies) {
+      const study = patient.studies[key]
+      studyList.push(study)
+      const value = study.metaData.StudyDescription + " - " + study.metaData.StudyDate
       studySelect.options[studySelect.options.length] = new Option(value, value);
     }
   }
@@ -41,18 +41,18 @@ function setupDicomForm(patientDict, callback) {
 
   studySelect.onchange = function () {
     // Remove options
-    series = []
+    serieList = []
     serieSelect.length = 1;
 
     if (this.selectedIndex < 1) return; // done
 
     // Add underneath series
     const studyId = this.selectedIndex - 1
-    const study = studies[studyId]
-    for (const key in study.serieDict) {
-      const serie = study.serieDict[key]
-      series.push(serie)
-      const value = serie.seriesDescription + " - " + serie.seriesModality
+    const study = studyList[studyId]
+    for (const key in study.series) {
+      const serie = study.series[key]
+      serieList.push(serie)
+      const value = serie.metaData.SeriesDescription + " - " + serie.metaData.Modality
       serieSelect.options[serieSelect.options.length] = new Option(value, value);
     }
   }
@@ -62,8 +62,8 @@ function setupDicomForm(patientDict, callback) {
 
     // Return files for serie
     const serieId = this.selectedIndex - 1
-    const serie = series[serieId]
-    callback(serie.files)
+    const serie = serieList[serieId]
+    callback(serie)
   }
 }
 

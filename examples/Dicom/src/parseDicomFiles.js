@@ -3,38 +3,17 @@ import dicomParser from 'dicom-parser'
 
 import "regenerator-runtime/runtime";
 
-const DICOM_DICTIONARY = {
-  patientId: 'x00100020',
-  patientName: 'x00100010',
-  patientDateOfBirth: 'x00100030',
-  patientSex: 'x00100040',
-  studyID: 'x00200010',
-  studyUID: 'x0020000d',
-  studyDate: 'x00080020',
-  studyTime: 'x00080030',
-  studyAccessionNumber: 'x00080050',
-  studyDescription: 'x00081030',
-  seriesNumber: 'x00200011',
-  seriesUid: 'x0020000e',
-  seriesDate: 'x00080021',
-  seriesTime: 'x00080031',
-  seriesModality: 'x00080060',
-  seriesDescription: 'x0008103e',
-  seriesProtocolName: 'x00181030',
-  seriesBodyPart: 'x00180015',
-}
+import DICOM_TAG_DICT from './dicomTags'
 
 class DICOMEntity {
-  extractTags(dicomMetaData) {
-    const name = this.constructor.name
-    const tags = this.constructor.tags
-    const primaryTag = this.constructor.primaryTag
-    tags.forEach((tag) => {
-      const value = dicomMetaData.string(DICOM_DICTIONARY[tag])
-      if (this[tag] === undefined) {
-        this[tag] = value
-      } else if (value !== undefined && this[tag] !== value) {
-        throw new Error(`Inconsistent value for the "${tag}" property of ${name} "${this[primaryTag]}": received "${this[tag]}" but already had "${value}".`)
+  constructor() {
+    this.metaData = {}
+  }
+
+  extractTags(metaData) {
+    this.constructor.tags.forEach((tag) => {
+      if (tag in metaData) {
+        this.metaData[tag] = metaData[tag]
       }
     })
   }
@@ -42,102 +21,143 @@ class DICOMEntity {
 
 class DICOMPatient extends DICOMEntity {
   static get primaryTag() {
-    return 'patientId'
+    return 'PatientID'
   }
 
   static get tags() {
     return [
-      'patientId',
-      'patientName',
-      'patientDateOfBirth',
-      'patientSex',
+      'PatientID',
+      'PatientName',
+      'PatientBirthDate',
+      'PatientSex',
       ]
     }
 
-  constructor() {
+  constructor(metaData, file) {
     super()
-    this.studyDict = {}
+    this.studies = {}
+    this.extractTags(metaData)
+    this.addMetaData(metaData, file)
   }
 
-  parseMetaData(dicomMetaData, file) {
-    this.extractTags(dicomMetaData)
-
-    const tag = DICOMStudy.primaryTag
-    const studyId = dicomMetaData.string(DICOM_DICTIONARY[tag])
-    var study = this.studyDict[studyId]
+  addMetaData(metaData, file) {
+    const studyId = metaData[DICOMStudy.primaryTag]
+    let study = this.studies[studyId]
     if (study === undefined) {
-      study = new DICOMStudy()
-      this.studyDict[studyId] = study
+      study = new DICOMStudy(metaData, file)
+      this.studies[studyId] = study
+    } else {
+      study.addMetaData(metaData, file)
     }
-    study.parseMetaData(dicomMetaData, file)
   }
 }
 
 class DICOMStudy extends DICOMEntity {
   static get primaryTag() {
-    return 'studyID'
+    return 'StudyID'
   }
 
   static get tags() {
     return [
-      'studyID',
-      'studyUID',
-      'studyDate',
-      'studyTime',
-      'studyAccessionNumber',
-      'studyDescription',
+      'StudyID',
+      'StudyInstanceUID',
+      'StudyDate',
+      'StudyTime',
+      'AccessionNumber',
+      'StudyDescription',
       ]
     }
 
-  constructor() {
+  constructor(metaData, file) {
     super()
-    this.serieDict = {}
+    this.series = {}
+    this.extractTags(metaData)
+    this.addMetaData(metaData, file)
   }
 
-  parseMetaData(dicomMetaData, file) {
-    this.extractTags(dicomMetaData)
-
-    const tag = DICOMSerie.primaryTag
-    const serieNumber = dicomMetaData.string(DICOM_DICTIONARY[tag])
-    var serie = this.serieDict[serieNumber]
+  addMetaData(metaData, file) {
+    const serieNumber = metaData[DICOMSeries.primaryTag]
+    let serie = this.series[serieNumber]
     if (serie === undefined) {
-      serie = new DICOMSerie()
-      this.serieDict[serieNumber] = serie
+      serie = new DICOMSeries(metaData, file)
+      this.series[serieNumber] = serie
+    } else {
+      serie.addMetaData(metaData, file)
     }
-    serie.parseMetaData(dicomMetaData, file)
   }
 }
 
-class DICOMSerie extends DICOMEntity {
+class DICOMSeries extends DICOMEntity {
   static get primaryTag() {
-    return 'seriesNumber'
+    return 'SeriesNumber'
   }
 
   static get tags() {
     return [
-      'seriesNumber',
-      'seriesUid',
-      'seriesDate',
-      'seriesTime',
-      'seriesModality',
-      'seriesDescription',
-      'seriesProtocolName',
-      'seriesBodyPart',
+      'SeriesNumber',
+      'SeriesInstanceUID',
+      'SeriesDate',
+      'SeriesTime',
+      'Modality',
+      'SeriesDescription',
+      'ProtocolName',
+      'FrameOfReferenceUID',
       ]
     }
 
-  constructor() {
+  constructor(metaData, file) {
     super()
-    this.files = []
+    this.images = {}
+    this.extractTags(metaData)
+    this.addMetaData(metaData, file)
   }
 
-  parseMetaData(dicomMetaData, file) {
-    this.extractTags(dicomMetaData)
-
-    this.files.push(file)
+  addMetaData(metaData, file) {
+    const imageNumber = metaData[DICOMImage.primaryTag]
+    if (imageNumber in this.images) {
+      const id = metaData[DICOMSeries.primaryTag]
+      throw Error(`Image ${imageNumber} already added to serie ${id}.`)
+    }
+    this.images[imageNumber] = new DICOMImage(metaData, file)
   }
 }
 
+class DICOMImage extends DICOMEntity {
+  static get primaryTag() {
+    return 'InstanceNumber'
+  }
+
+  static get tags() {
+    return [
+      'InstanceNumber',
+      'SOPInstanceUID',
+      'PatientPosition',
+      'PatientOrientation',
+      'ImagePositionPatient',
+      'ImageOrientationPatient',
+      'PixelSpacing',
+      'SliceThickness',
+      'SliceLocation',
+      'SamplesPerPixel',
+      'PlanarConfiguration',
+      'PhotometricInterpretation',
+      'Rows',
+      'Columns',
+      'BitsAllocated',
+      'BitsStored',
+      'HighBit',
+      'PixelRepresentation',
+      ]
+    }
+
+  constructor(metaData, file) {
+    super()
+    this.file = file
+    this.extractTags(metaData)
+  }
+}
+
+const allTagNames = Object.values(DICOM_TAG_DICT).map((tag) => tag.name)
 function checkTagsValidity(klass) {
   const name = klass.name
   const tags = klass.tags
@@ -146,14 +166,15 @@ function checkTagsValidity(klass) {
     throw Error(`The primary tag of the ${name} class ("${primaryTag}") is not included in its list of tags ([${tags}]).`)
   }
   tags.forEach((tag) => {
-    if (!(tag in DICOM_DICTIONARY)) {
+    if (!allTagNames.includes(tag)) {
       throw Error(`The tag "${tag}" associated with the ${name} class is not defined in DICOM_DICTIONARY.`)
     }
   })
 }
 checkTagsValidity(DICOMPatient)
 checkTagsValidity(DICOMStudy)
-checkTagsValidity(DICOMSerie)
+checkTagsValidity(DICOMSeries)
+checkTagsValidity(DICOMImage)
 
 class ParseDicomError extends Error {
   constructor(failures) {
@@ -167,27 +188,119 @@ class ParseDicomError extends Error {
   }
 }
 
-const parseDicomFiles = async (fileList, ignoreFailedFiles = false) => {
-  const patientDict = {}
+async function parseDicomFiles(fileList, ignoreFailedFiles = false) {
+  const patients = {}
   const failures = []
 
-  const parseFile = async (file) => {
+  async function parseFile(file) {
     // Read
     const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(file)
 
     // Parse
     const byteArray = new Uint8Array(arrayBuffer)
-    const dicomMetaData = dicomParser.parseDicom(byteArray)
+    const dataSet = dicomParser.parseDicom(byteArray)
 
-    // Add to patientDict
-    const tag = DICOMPatient.primaryTag
-    const patientId = dicomMetaData.string(DICOM_DICTIONARY[tag])
-    var patient = patientDict[patientId]
-    if (patient === undefined) {
-      patient = new DICOMPatient()
-      patientDict[patientId] = patient
+    // Read metadata (recursive)
+    async function readTags(dataSet) {
+      const metaData = {}
+
+      // Read value for a single tag
+      async function readTag(tag) {
+        const tagGroup = tag.substring(1,5)
+        const tagElement = tag.substring(5,9)
+        const tagKey = ("("+tagGroup+","+tagElement+")").toUpperCase();
+        const tagInfo = DICOM_TAG_DICT[tagKey];
+        const tagName = (tagInfo === undefined) ? tagKey : tagInfo.name
+        const element = dataSet.elements[tag]
+
+        if (element.items) {
+          metaData[tagName] = []
+          const readTagsOfItems = element.items.map(async (item) => {
+            const itemMetaData = await readTags(item.dataSet)
+            metaData[tagName].push(itemMetaData)
+          })
+          await Promise.all(readTagsOfItems)
+          return
+        }
+
+        if (element.fragments) {
+          console.warn(`${tagName} contains fragments which isn't supported`)
+          return
+        }
+
+        let vr = element.vr
+        if (vr === undefined) {
+          if (tagInfo === undefined || tagInfo.vr === undefined) {
+            console.warn(`${tagName} vr is unknown, skipping`)
+          }
+          vr = tagInfo.vr
+        }
+
+        let value = undefined
+        switch (vr) {
+          case 'US':
+            value = dataSet.uint16(tag)
+            break
+          case 'SS':
+            value = dataSet.int16(tag)
+            break
+          case 'UL':
+            value = dataSet.uint32(tag)
+            break
+          case 'US':
+            value = dataSet.int32(tag)
+            break
+          case 'FD':
+            value = dataSet.double(tag)
+            break
+          case 'FL':
+            value = dataSet.float(tag)
+            break
+          case 'AT':
+            value = `(${dataSet.uint16(tag, 0)},${dataSet.uint16(tag, 1)})`
+            break
+          case 'OB':
+          case 'OW':
+          case 'UN':
+          case 'OF':
+          case 'UT':
+            // TODO: binary data? is this correct?
+            if (element.length === 2) {
+              value = dataSet.uint16(tag)
+            } else if (element.length === 4) {
+              value = dataSet.uint32(tag)
+            } else {
+              // don't store binary data, only meta data
+              return
+            }
+            break
+          default: //string
+            value = dataSet.string(tag)
+            break
+        }
+
+        metaData[tagName] = value
+      }
+
+      // Set up promises for all tags
+      const tags = Object.keys(dataSet.elements)
+      const readAllTags = tags.map(readTag)
+
+      // Read all tags
+      await Promise.all(readAllTags)
+      return metaData
     }
-    patient.parseMetaData(dicomMetaData, file)
+    const metaData = await readTags(dataSet)
+
+    // Organize metadata
+    const patientId = metaData[DICOMPatient.primaryTag]
+    let patient = patients[patientId]
+    if (patient === undefined) {
+      patient = new DICOMPatient(metaData, file)
+      patients[patientId] = patient
+    } else {
+      patient.addMetaData(metaData, file)
+    }
   }
 
   // Set up promises
@@ -198,7 +311,7 @@ const parseDicomFiles = async (fileList, ignoreFailedFiles = false) => {
     })
   })
 
-  // Parse all files and populate patientDict
+  // Parse all files and populate patients
   const logName = `Parsed ${fileList.length} DICOM files in`
   console.time(logName)
   await Promise.all(parseFiles).then(() => {
@@ -207,7 +320,7 @@ const parseDicomFiles = async (fileList, ignoreFailedFiles = false) => {
     }
   })
   console.timeEnd(logName)
-  return { patientDict, failures }
+  return { patients, failures }
 }
 
 export default parseDicomFiles
