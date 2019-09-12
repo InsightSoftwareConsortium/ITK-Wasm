@@ -17,12 +17,21 @@ const outputFileInformation = curry(async function outputFileInformation (output
   // Select DICOM serie
   outputTextArea.textContent = "Please select serie..."
   setupDicomForm(patients, async (serie) => {
+    console.time('customRead:')
+    const image1 = serie.getImageData()
+    console.log(image1)
+    console.warn(image1.data.length)
+    console.timeEnd('customRead:')
     outputTextArea.textContent = "Loading..."
 
     // Read DICOM serie
+    console.time('itkRead:')
     const files = Object.values(serie.images).map((image) => image.file)
     const { image, webWorker } = await readImageDICOMFileSeries(null, files)
     webWorker.terminate()
+    console.log(image)
+    console.warn(image.data.length)
+    console.timeEnd('itkRead:')
 
     // Display
     function replacer (key, value) {
