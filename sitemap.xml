@@ -4,154 +4,154 @@
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/index.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.689Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.881Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/examples/webpack.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.685Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.873Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/examples/unpkgio.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.685Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://InsightSoftwareConsortium.github.io/itk-js/examples/umd.html</loc>
-    
-    <lastmod>2019-06-26T21:10:05.681Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://InsightSoftwareConsortium.github.io/itk-js/examples/node.html</loc>
-    
-    <lastmod>2019-06-26T21:10:05.681Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.873Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/examples/index.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.681Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.869Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://InsightSoftwareConsortium.github.io/itk-js/docs/index.html</loc>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/examples/umd.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.681Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://InsightSoftwareConsortium.github.io/itk-js/docs/installation.html</loc>
-    
-    <lastmod>2019-06-26T21:10:05.681Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.869Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://InsightSoftwareConsortium.github.io/itk-js/docs/mesh_formats.html</loc>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/examples/node.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.681Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.869Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/examples/hello_world_node.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.681Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.869Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/node_pipelines.html</loc>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/docs/mesh_formats.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.677Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.869Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://InsightSoftwareConsortium.github.io/itk-js/docs/hacking_itk_js.html</loc>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/docs/installation.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.677Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.865Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/docs/index.html</loc>
+    
+    <lastmod>2019-10-01T18:14:52.865Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/docs/image_formats.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.677Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.865Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/browser_io.html</loc>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/docs/hacking_itk_js.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.677Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/browser_pipelines.html</loc>
-    
-    <lastmod>2019-06-26T21:10:05.677Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.865Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/index.html</loc>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/node_pipelines.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.677Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.861Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/node_io.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.677Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.861Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/index.html</loc>
+    
+    <lastmod>2019-10-01T18:14:52.861Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/browser_pipelines.html</loc>
+    
+    <lastmod>2019-10-01T18:14:52.861Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/browser_io.html</loc>
+    
+    <lastmod>2019-10-01T18:14:52.861Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/MeshType.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.673Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.857Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/Mesh.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.673Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.857Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/ImageType.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.673Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.857Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/api/Image.html</loc>
     
-    <lastmod>2019-06-26T21:10:05.673Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.857Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://InsightSoftwareConsortium.github.io/itk-js/2016/04/29/kw-doc/</loc>
     
-    <lastmod>2019-06-26T21:10:05.649Z</lastmod>
+    <lastmod>2019-10-01T18:14:52.845Z</lastmod>
     
   </url>
   
