@@ -52,7 +52,7 @@ if (program.compile) {
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
-      const dockerCall = spawnSync('docker', ['run', '--rm', 'insighttoolkit/itk-js-base:latest'], {
+      const dockerCall = spawnSync('docker', ['run', '--rm', 'kitware/itk-js-vtk:latest'], {
         env: process.env,
         stdio: [ 'ignore', output, null ]
       })
@@ -75,7 +75,7 @@ if (program.compile) {
       if (program.debug) {
         buildType = '-DCMAKE_BUILD_TYPE:STRING=Debug'
       }
-      const cmakeCall = spawnSync('bash', [dockcross, 'bash', '-c', `cmake -DRapidJSON_INCLUDE_DIR=/rapidjson/include ${buildType} -Bbuild -H. -GNinja -DITK_DIR=/ITK-build -DBUILD_ITK_JS_IO_MODULES=ON`], {
+      const cmakeCall = spawnSync('bash', [dockcross, 'bash', '-c', `cmake -DRapidJSON_INCLUDE_DIR=/rapidjson/include ${buildType} -Bbuild -H. -GNinja -DITK_DIR=/ITK-build -DVTK_DIR=/VTK-build -DBUILD_ITK_JS_IO_MODULES=ON`], {
         env: process.env,
         stdio: 'inherit'
       })
@@ -116,6 +116,11 @@ if (program.copySources) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
+    fs.mkdirSync(path.join('dist', 'PolyDataIOs'))
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err
+  }
+  try {
     fs.mkdirSync(path.join('dist', 'WebWorkers'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
@@ -142,6 +147,19 @@ if (program.copySources) {
   const buildMeshIOsParallel = function (callback) {
     console.log('Copying MeshIO modules...')
     const result = asyncMod.map(meshIOFiles, copyMeshIOModules)
+    callback(null, result)
+  }
+
+  let polyDataIOFiles = glob.sync(path.join('build', 'PolyDataIOs', '*.js'))
+  const copyPolyDataIOModules = function (polyDataIOFile, callback) {
+    let io = path.basename(polyDataIOFile)
+    let output = path.join('dist', 'PolyDataIOs', io)
+    fs.copySync(polyDataIOFile, output)
+    callback(null, io)
+  }
+  const buildPolyDataIOsParallel = function (callback) {
+    console.log('Copying PolyDataIO modules...')
+    const result = asyncMod.map(polyDataIOFiles, copyPolyDataIOModules)
     callback(null, result)
   }
 
@@ -205,6 +223,7 @@ if (program.copySources) {
   asyncMod.parallel([
     buildImageIOsParallel,
     buildMeshIOsParallel,
+    buildPolyDataIOsParallel,
     babelBuildParallel,
     browserifyWebWorkerBuildParallel
   ])
@@ -238,7 +257,7 @@ if (program.buildPipelines) {
     path.join(__dirname, 'test', 'InputOutputFilesPipeline'),
     path.join(__dirname, 'test', 'MeshReadWritePipeline'),
     path.join(__dirname, 'test', 'WriteVTKPolyDataPipeline'),
-    path.join(__dirname, 'src', 'Pipelines', 'MeshToPolyData'),
+    path.join(__dirname, 'src', 'Pipelines', 'MeshToPolyData')
   ]
   try {
     fs.mkdirSync(path.join(__dirname, 'dist', 'Pipelines'))

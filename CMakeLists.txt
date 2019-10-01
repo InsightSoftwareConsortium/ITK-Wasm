@@ -63,6 +63,12 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(meshios_ITKIOMeshOBJ itkOBJMeshIO)
   set(meshios_ITKIOMeshOFF itkOFFMeshIO)
   set(meshios_IOMeshSTL itkSTLMeshIO)
+
+  set(PolyDataIOPipelines
+    "VTKLegacyFileReader"
+    CACHE STRING
+    "String delimited list of VTK PolyData IO pipelines to support.")
+  set(polydataios_VTKLegacyFileReader vtkIOLegacy)
 endif()
 
 
