@@ -177,4 +177,42 @@ endforeach()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/MeshIOIndex.js.in
   ${CMAKE_CURRENT_SOURCE_DIR}/MeshIOIndex.js @ONLY)
 
+# Pipelines for readPolyData
+find_package(VTK QUIET)
+if(VTK_FOUND)
+  foreach(io_pipeline ${PolyDataIOPipelines})
+
+  find_package(VTK REQUIRED COMPONENTS vtkIOExport ${polydataios_${io_pipeline}})
+  include(${VTK_USE_FILE})
+
+  set(target ${io_pipeline})
+  set(wasm_target ${io_pipeline}Wasm)
+  add_executable(${target} Bindings/${target}.cxx)
+  add_executable(${wasm_target} Bindings/${target}.cxx)
+  set_property(TARGET ${target} APPEND_STRING
+    PROPERTY LINK_FLAGS " -s WASM=0 -s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPipelinePre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+    )
+  set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSPipelinePre${meshio}.js)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPipelinePre.js.in
+    ${pre_js} @ONLY)
+  set_property(TARGET ${wasm_target} APPEND_STRING
+    PROPERTY LINK_FLAGS " -s BINARYEN_ASYNC_COMPILATION=0 -s SINGLE_FILE=1 -s WASM=1 -s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+    )
+  set_property(TARGET ${target}
+    PROPERTY RUNTIME_OUTPUT_DIRECTORY
+    ${BridgeJavaScript_BINARY_DIR}/PolyDataIOs
+    )
+  set_property(TARGET ${wasm_target}
+    PROPERTY RUNTIME_OUTPUT_DIRECTORY
+    ${BridgeJavaScript_BINARY_DIR}/PolyDataIOs
+    )
+  set_property(SOURCE Bindings/${target}.cxx APPEND
+    PROPERTY OBJECT_DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
+    )
+  target_link_libraries(${target} LINK_PUBLIC ${VTK_LIBRARIES})
+  target_link_libraries(${wasm_target} LINK_PUBLIC ${VTK_LIBRARIES})
+  endforeach()
+endif()
+
 endif() # BUILD_ITK_JS_IO_MODULES
