@@ -4,6 +4,7 @@
 // - WebWorkers/
 // - ImageIOs/
 // - MeshIOs/
+// - PolyDataIOs/
 //
 let itkConfig = {
   itkModulesPath: 'itk'

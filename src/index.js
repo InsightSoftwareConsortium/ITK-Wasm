@@ -105,6 +105,9 @@ itk.readMeshBlob = readMeshBlob
 import readMeshFile from './readMeshFile.js'
 itk.readMeshFile = readMeshFile
 
+import readPolyDataFile from './readPolyDataFile.js'
+itk.readPolyDataFile = readPolyDataFile
+
 import runPipelineBrowser from './runPipelineBrowser.js'
 itk.runPipelineBrowser = runPipelineBrowser
 
