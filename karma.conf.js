@@ -24,6 +24,7 @@ module.exports = function init (config) {
       './test/Browser/tests.js',
       { pattern: './dist/ImageIOs/**', watched: true, served: true, included: false },
       { pattern: './dist/MeshIOs/**', watched: true, served: true, included: false },
+      { pattern: './dist/PolyDataIOs/**', watched: true, served: true, included: false },
       { pattern: './dist/WebWorkers/**', watched: true, served: true, included: false },
       { pattern: './dist/Pipelines/**', watched: true, served: true, included: false },
       { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false }

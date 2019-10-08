@@ -7,14 +7,18 @@ import IOTypes from '../IOTypes'
 // To cache loaded pipeline modules
 let pipelinePathToModule = {}
 
-const runPipeline = (pipelinePath, args, outputs, inputs, config) => {
+function loadPipelineModule(moduleDirectory, pipelinePath, config) {
   let pipelineModule = null
   if (pipelinePath in pipelinePathToModule) {
     pipelineModule = pipelinePathToModule[pipelinePath]
   } else {
-    pipelinePathToModule[pipelinePath] = loadEmscriptenModule(config.itkModulesPath, 'Pipelines', pipelinePath)
+    pipelinePathToModule[pipelinePath] = loadEmscriptenModule(config.itkModulesPath, moduleDirectory, pipelinePath)
     pipelineModule = pipelinePathToModule[pipelinePath]
   }
+  return pipelineModule
+}
+
+const runPipeline = (pipelineModule, args, outputs, inputs) => {
   const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
 
   const transferables = []
@@ -100,9 +104,13 @@ const runPipeline = (pipelinePath, args, outputs, inputs, config) => {
 }
 
 registerWebworker(function (input) {
+  let pipelineModule = null
   if (input.operation === 'runPipeline') {
-    return Promise.resolve(runPipeline(input.pipelinePath, input.args, input.outputs, input.inputs, input.config))
+    pipelineModule = loadPipelineModule('Pipelines', input.pipelinePath, input.config)
+  } else if (input.operation === 'runPolyDataIOPipeline') {
+    pipelineModule = loadPipelineModule('PolyDataIOs', input.pipelinePath, input.config)
   } else {
     return Promise.resolve(new Error('Unknown worker operation'))
   }
+  return Promise.resolve(runPipeline(pipelineModule, input.args, input.outputs, input.inputs))
 })
