@@ -31,7 +31,7 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
         {
           const imageJSON = {}
           for (const key in input.data) {
-            if (input.data.hasOwnProperty(key) && key !== 'data') {
+            if (Object.prototype.hasOwnProperty.call(input.data, key) && key !== 'data') {
               imageJSON[key] = input.data[key]
             }
           }
@@ -44,7 +44,7 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
         {
           const meshJSON = {}
           for (const key in input.data) {
-            if (input.data.hasOwnProperty(key) &&
+            if (Object.prototype.hasOwnProperty.call(input.data, key) &&
               key !== 'points' &&
               key !== 'pointData' &&
               key !== 'cells' &&

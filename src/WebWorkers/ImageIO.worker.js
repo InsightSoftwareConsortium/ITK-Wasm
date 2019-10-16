@@ -19,10 +19,10 @@ const readImage = (input) => {
   const mountpoint = '/work'
 
   let io = null
-  if (mimeToIO.hasOwnProperty(input.type)) {
-    io = mimeToIO[input.type]
-  } else if (extensionToIO.hasOwnProperty(extension)) {
-    io = extensionToIO[extension]
+  if (mimeToIO.has(input.type)) {
+    io = mimeToIO.get(input.type)
+  } else if (extensionToIO.has(extension)) {
+    io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
       let ioModule = null
@@ -75,10 +75,10 @@ const writeImage = (input) => {
   const mountpoint = '/work'
 
   let io = null
-  if (mimeToIO.hasOwnProperty(input.type)) {
-    io = mimeToIO[input.type]
-  } else if (extensionToIO.hasOwnProperty(extension)) {
-    io = extensionToIO[extension]
+  if (mimeToIO.has(input.type)) {
+    io = mimeToIO.get(input.type)
+  } else if (extensionToIO.has(extension)) {
+    io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
       let ioModule = null

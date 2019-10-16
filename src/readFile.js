@@ -6,7 +6,7 @@ import extensionToMeshIO from './extensionToMeshIO'
 
 const readFile = (webWorker, file) => {
   const extension = getFileExtension(file.name)
-  const isMesh = extensionToMeshIO.hasOwnProperty(extension)
+  const isMesh = extensionToMeshIO.has(extension)
   if (isMesh) {
     return readMeshFile(webWorker, file)
       .catch(function () {

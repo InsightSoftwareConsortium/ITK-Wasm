@@ -88,9 +88,12 @@
       "src/loadEmscriptenModuleBrowser.js",
       "src/index.js",
       "src/itk-js-cli.js",
+      "src/EmscriptenModule/*",
       "itkJSImageIOPost.js",
       "test/Browser/tests.js",
-      "test/*Pipeline/"
+      "test/config/itkConfigTest.js",
+      "test/*Pipeline/",
+      "examples/UMD/test/index.js"
     ]
   }
 }

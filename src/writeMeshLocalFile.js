@@ -29,10 +29,10 @@ const writeMeshLocalFile = ({ useCompression, binaryFileType }, mesh, filePath) 
       const extension = getFileExtension(absoluteFilePath)
 
       let io = null
-      if (mimeToIO.hasOwnProperty(mimeType)) {
-        io = mimeToIO[mimeType]
-      } else if (extensionToIO.hasOwnProperty(extension)) {
-        io = extensionToIO[extension]
+      if (mimeToIO.has(mimeType)) {
+        io = mimeToIO.get(mimeType)
+      } else if (extensionToIO.has(extension)) {
+        io = extensionToIO.get(extension)
       } else {
         for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
           const modulePath = path.join(meshIOsPath, MeshIOIndex[idx])

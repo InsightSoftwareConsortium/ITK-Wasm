@@ -14,10 +14,10 @@ const readPolyDataArrayBuffer = (webWorker, arrayBuffer, fileName, mimeType) => 
       worker = usedWorker
       const extension = getFileExtension(fileName)
       let pipelinePath = null
-      if (mimeToIO.hasOwnProperty(mimeType)) {
-        pipelinePath = mimeToIO[mimeType]
-      } else if (extensionToIO.hasOwnProperty(extension)) {
-        pipelinePath = extensionToIO[extension]
+      if (mimeToIO.has(mimeType)) {
+        pipelinePath = mimeToIO.get(mimeType)
+      } else if (extensionToIO.has(extension)) {
+        pipelinePath = extensionToIO.get(extension)
       }
       if (pipelinePath === null) {
         Promise.reject(Error('Could not find IO for: ' + fileName))
