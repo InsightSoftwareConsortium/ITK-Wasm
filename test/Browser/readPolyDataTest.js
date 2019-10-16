@@ -1,7 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-// import readPolyDataArrayBuffer from 'readPolyDataArrayBuffer'
+ import readPolyDataArrayBuffer from 'readPolyDataArrayBuffer'
 // import readPolyDataBlob from 'readPolyDataBlob'
 import readPolyDataFile from 'readPolyDataFile'
 
@@ -25,16 +25,16 @@ const verifyPolyData = (t, polyData) => {
   t.end()
 }
 
-// test('readPolyDataArrayBuffer reads an ArrayBuffer', (t) => {
-// return axios.get(testFilePath, { responseType: 'arraybuffer' })
-// .then(function (response) {
-// return readPolyDataArrayBuffer(null, response.data, 'cow.vtk')
-// })
-// .then(function ({ polyData, webWorker }) {
-// webWorker.terminate()
-// verifyPolyData(t, polyData)
-// })
-// })
+ test('readPolyDataArrayBuffer reads an ArrayBuffer', (t) => {
+  return axios.get(testFilePath, { responseType: 'arraybuffer' })
+    .then(function (response) {
+      return readPolyDataArrayBuffer(null, response.data, 'cow.vtk')
+    })
+    .then(function ({ polyData, webWorker }) {
+      webWorker.terminate()
+      verifyPolyData(t, polyData)
+    })
+})
 
 // Todo: fix me
 // test('readPolyDataFile reads a Blob without a file extension', (t) => {
