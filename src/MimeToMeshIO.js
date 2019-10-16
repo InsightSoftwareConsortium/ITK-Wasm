@@ -1,3 +1,3 @@
-let mimeToIO = {}
+const mimeToIO = {}
 
 module.exports = mimeToIO

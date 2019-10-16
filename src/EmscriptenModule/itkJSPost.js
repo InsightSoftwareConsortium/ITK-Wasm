@@ -6,7 +6,7 @@
  * Emscripten virtual filesystem. Only relevant when within the Node.js
  * environment. If the containing directory already exists with the
  * Emscripten filesystem, it will not be mounted. */
-Module['mountContainingDirectory'] = function (filePath) {
+Module.mountContainingDirectory = function (filePath) {
   if (!ENVIRONMENT_IS_NODE) {
     return
   }
@@ -32,7 +32,7 @@ Module['mountContainingDirectory'] = function (filePath) {
 
 /** Given an absolute path to a file, unmount its containing directory in the
  * Emscripten virtual filesystem. */
-Module['unmountContainingDirectory'] = function (filePath) {
+Module.unmountContainingDirectory = function (filePath) {
   if (!ENVIRONMENT_IS_NODE) {
     return
   }
@@ -41,7 +41,7 @@ Module['unmountContainingDirectory'] = function (filePath) {
   FS.unmount(containingDir)
 }
 
-Module['mkdirs'] = function (dirs) {
+Module.mkdirs = function (dirs) {
   var currentDir = '/'
   var splitDirs = dirs.split('/')
 
@@ -56,17 +56,17 @@ Module['mkdirs'] = function (dirs) {
 
 /** Mount file blobs into the Emscripten filesystem. The blobFiles argument should be an
  * array of { name: 'filename', data: blob } objects. */
-Module['mountBlobs'] = function (mountpoint, blobFiles) {
+Module.mountBlobs = function (mountpoint, blobFiles) {
   if (!ENVIRONMENT_IS_WORKER) {
     return
   }
 
-  Module['mkdirs'](mountpoint)
+  Module.mkdirs(mountpoint)
 
   FS.mount(WORKERFS, { blobs: blobFiles, files: [] }, mountpoint)
 }
 
-Module['unmountBlobs'] = function (mountpoint) {
+Module.unmountBlobs = function (mountpoint) {
   if (!ENVIRONMENT_IS_WORKER) {
     return
   }
@@ -74,10 +74,10 @@ Module['unmountBlobs'] = function (mountpoint) {
   FS.unmount(mountpoint)
 }
 
-Module['readFile'] = function (path, opts) {
+Module.readFile = function (path, opts) {
   return FS.readFile(path, opts)
 }
 
-Module['writeFile'] = function (path, data, opts) {
+Module.writeFile = function (path, data, opts) {
   return FS.writeFile(path, data, opts)
 }

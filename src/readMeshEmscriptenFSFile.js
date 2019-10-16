@@ -13,7 +13,7 @@ const readMeshEmscriptenFSFile = (module, filePath) => {
   meshIO.ReadMeshInformation()
 
   const ioDimensions = meshIO.GetPointDimension()
-  let meshType = new MeshType(ioDimensions)
+  const meshType = new MeshType(ioDimensions)
 
   const pointComponentType = meshIO.GetPointComponentType()
   meshType.pointComponentType = meshIOComponentToJSComponent(module, pointComponentType)
@@ -33,7 +33,7 @@ const readMeshEmscriptenFSFile = (module, filePath) => {
   meshType.cellPixelType = meshIOPixelTypeToJSPixelType(module, cellPixelType)
   meshType.cellPixelComponents = meshIO.GetNumberOfCellPixelComponents()
 
-  let mesh = new Mesh(meshType)
+  const mesh = new Mesh(meshType)
 
   mesh.numberOfPoints = meshIO.GetNumberOfPoints()
   if (mesh.numberOfPoints > 0) {

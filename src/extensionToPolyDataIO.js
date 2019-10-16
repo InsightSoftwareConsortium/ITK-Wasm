@@ -1,6 +1,6 @@
-let extensionToIO = {}
+const extensionToIO = {}
 
-extensionToIO['vtk'] = 'VTKLegacyFileReader'
-extensionToIO['VTK'] = 'VTKLegacyFileReader'
+extensionToIO.vtk = 'VTKLegacyFileReader'
+extensionToIO.VTK = 'VTKLegacyFileReader'
 
 module.exports = extensionToIO

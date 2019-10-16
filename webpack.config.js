@@ -36,7 +36,7 @@ module.exports = {
     modules: [path.resolve(__dirname, 'node_modules')],
     alias: {
       './itkConfig$': path.resolve(__dirname, 'src', 'itkConfigCDN.js'),
-      'itk': __dirname
+      itk: __dirname
     }
   },
   performance: {

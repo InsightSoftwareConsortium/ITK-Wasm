@@ -61,36 +61,36 @@ const writeMeshEmscriptenFSFile = (module, { useCompression, binaryFileType }, m
   meshIO.WriteMeshInformation()
 
   if (mesh.numberOfPoints > 0) {
-    let numberOfBytes = mesh.points.length * mesh.points.BYTES_PER_ELEMENT
-    let dataPtr = module._malloc(numberOfBytes)
-    let dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
+    const numberOfBytes = mesh.points.length * mesh.points.BYTES_PER_ELEMENT
+    const dataPtr = module._malloc(numberOfBytes)
+    const dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
     dataHeap.set(new Uint8Array(mesh.points.buffer))
     meshIO.WritePoints(dataHeap.byteOffset)
     module._free(dataHeap.byteOffset)
   }
 
   if (mesh.numberOfCells > 0) {
-    let numberOfBytes = mesh.cells.length * mesh.cells.BYTES_PER_ELEMENT
-    let dataPtr = module._malloc(numberOfBytes)
-    let dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
+    const numberOfBytes = mesh.cells.length * mesh.cells.BYTES_PER_ELEMENT
+    const dataPtr = module._malloc(numberOfBytes)
+    const dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
     dataHeap.set(new Uint8Array(mesh.cells.buffer))
     meshIO.WriteCells(dataHeap.byteOffset)
     module._free(dataHeap.byteOffset)
   }
 
   if (mesh.numberOfPointPixels > 0) {
-    let numberOfBytes = mesh.pointData.length * mesh.pointData.BYTES_PER_ELEMENT
-    let dataPtr = module._malloc(numberOfBytes)
-    let dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
+    const numberOfBytes = mesh.pointData.length * mesh.pointData.BYTES_PER_ELEMENT
+    const dataPtr = module._malloc(numberOfBytes)
+    const dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
     dataHeap.set(new Uint8Array(mesh.pointData.buffer))
     meshIO.WritePointData(dataHeap.byteOffset)
     module._free(dataHeap.byteOffset)
   }
 
   if (mesh.numberOfCellPixels > 0) {
-    let numberOfBytes = mesh.cellData.length * mesh.cellData.BYTES_PER_ELEMENT
-    let dataPtr = module._malloc(numberOfBytes)
-    let dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
+    const numberOfBytes = mesh.cellData.length * mesh.cellData.BYTES_PER_ELEMENT
+    const dataPtr = module._malloc(numberOfBytes)
+    const dataHeap = new Uint8Array(module.HEAPU8.buffer, dataPtr, numberOfBytes)
     dataHeap.set(new Uint8Array(mesh.cellData.buffer))
     meshIO.WriteCellData(dataHeap.byteOffset)
     module._free(dataHeap.byteOffset)

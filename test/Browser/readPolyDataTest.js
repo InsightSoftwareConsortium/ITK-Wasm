@@ -1,7 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
- import readPolyDataArrayBuffer from 'readPolyDataArrayBuffer'
+import readPolyDataArrayBuffer from 'readPolyDataArrayBuffer'
 // import readPolyDataBlob from 'readPolyDataBlob'
 import readPolyDataFile from 'readPolyDataFile'
 
@@ -25,7 +25,7 @@ const verifyPolyData = (t, polyData) => {
   t.end()
 }
 
- test('readPolyDataArrayBuffer reads an ArrayBuffer', (t) => {
+test('readPolyDataArrayBuffer reads an ArrayBuffer', (t) => {
   return axios.get(testFilePath, { responseType: 'arraybuffer' })
     .then(function (response) {
       return readPolyDataArrayBuffer(null, response.data, 'cow.vtk')

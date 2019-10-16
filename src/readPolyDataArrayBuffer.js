@@ -1,5 +1,6 @@
 import createWebworkerPromise from './createWebworkerPromise'
 
+import mimeToIO from './MimeToPolyDataIO'
 import getFileExtension from './getFileExtension'
 import extensionToIO from './extensionToPolyDataIO'
 import IOTypes from './IOTypes'
@@ -22,7 +23,7 @@ const readPolyDataArrayBuffer = (webWorker, arrayBuffer, fileName, mimeType) => 
         Promise.reject(Error('Could not find IO for: ' + fileName))
       }
 
-      const args = [file.name, file.name + '.output.json']
+      const args = [fileName, fileName + '.output.json']
       const outputs = [
         { path: args[1], type: IOTypes.vtkPolyData }
       ]

@@ -6,22 +6,22 @@ const getMatrixElement = require(path.resolve(__dirname, '..', 'dist', 'getMatri
 const setMatrixElement = require(path.resolve(__dirname, '..', 'dist', 'setMatrixElement.js'))
 
 test('rows should have the same number of rows as passed into the constructor', t => {
-  let matrix = new Matrix(2, 3)
+  const matrix = new Matrix(2, 3)
   t.is(matrix.rows, 2)
 })
 
 test('columns should have the same number of columns as passed into the constructor', t => {
-  let matrix = new Matrix(2, 3)
+  const matrix = new Matrix(2, 3)
   t.is(matrix.columns, 3)
 })
 
 test('data should have the same number of columns as passed into the constructor', t => {
-  let matrix = new Matrix(2, 3)
+  const matrix = new Matrix(2, 3)
   t.is(matrix.columns, 3)
 })
 
 test('setIdentity() should set the matrix to the identity', t => {
-  let matrix = new Matrix(2, 2)
+  const matrix = new Matrix(2, 2)
   matrix.setIdentity()
   t.is(matrix.data[0], 1.0)
   t.is(matrix.data[1], 0.0)
@@ -30,7 +30,7 @@ test('setIdentity() should set the matrix to the identity', t => {
 })
 
 test('setElement() should set elements of the matrix', t => {
-  let matrix = new Matrix(2, 2)
+  const matrix = new Matrix(2, 2)
   matrix.setIdentity()
   matrix.setElement(0, 0, 2.0)
   matrix.setElement(0, 1, 3.0)
@@ -43,7 +43,7 @@ test('setElement() should set elements of the matrix', t => {
 })
 
 test('setMatrixElement() should set elements of the matrix', t => {
-  let matrix = new Matrix(2, 2)
+  const matrix = new Matrix(2, 2)
   matrix.setIdentity()
   let newMatrix = null
   newMatrix = setMatrixElement(matrix, 0, 0, 2.0)
@@ -57,7 +57,7 @@ test('setMatrixElement() should set elements of the matrix', t => {
 })
 
 test('getElement() should get elements of the matrix', t => {
-  let matrix = new Matrix(2, 2)
+  const matrix = new Matrix(2, 2)
   matrix.setElement(0, 0, 2.0)
   matrix.setElement(0, 1, 3.0)
   matrix.setElement(1, 0, 4.0)
@@ -69,7 +69,7 @@ test('getElement() should get elements of the matrix', t => {
 })
 
 test('getMatrixElement() should get elements of the matrix', t => {
-  let matrix = new Matrix(2, 2)
+  const matrix = new Matrix(2, 2)
   matrix.setElement(0, 0, 2.0)
   matrix.setElement(0, 1, 3.0)
   matrix.setElement(1, 0, 4.0)
@@ -81,7 +81,7 @@ test('getMatrixElement() should get elements of the matrix', t => {
 })
 
 test('passing a Matrix to the constructor should create a copy', t => {
-  let matrix = new Matrix(2, 2)
+  const matrix = new Matrix(2, 2)
   matrix.setElement(0, 0, 2.0)
   matrix.setElement(0, 1, 3.0)
   matrix.setElement(1, 0, 4.0)

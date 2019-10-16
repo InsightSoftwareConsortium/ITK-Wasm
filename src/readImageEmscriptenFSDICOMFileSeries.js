@@ -13,7 +13,7 @@ const readImageEmscriptenFSDICOMFileSeries = (seriesReaderModule, directory, fir
   seriesReader.ReadTestImageInformation()
 
   const dimension = 3
-  let imageType = new ImageType(dimension)
+  const imageType = new ImageType(dimension)
 
   const ioComponentType = seriesReader.GetIOComponentType()
   imageType.componentType = imageIOComponentToJSComponent(seriesReaderModule, ioComponentType)
@@ -23,7 +23,7 @@ const readImageEmscriptenFSDICOMFileSeries = (seriesReaderModule, directory, fir
 
   imageType.components = seriesReader.GetNumberOfComponents()
 
-  let image = new Image(imageType)
+  const image = new Image(imageType)
 
   seriesReader.SetIOComponentType(ioComponentType)
   seriesReader.SetIOPixelType(ioPixelType)

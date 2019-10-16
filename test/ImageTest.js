@@ -6,13 +6,13 @@ const ImageType = require(path.resolve(__dirname, '..', 'dist', 'ImageType.js'))
 const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
 
 test('imageType should have the same imageType passed to the constructor', t => {
-  let image = new Image()
+  const image = new Image()
   const defaultImageType = new ImageType()
   t.deepEqual(image.imageType, defaultImageType)
 })
 
 test('name should have the default value of "Image"', t => {
-  let image = new Image()
+  const image = new Image()
   t.deepEqual(image.name, 'Image')
 })
 
@@ -27,8 +27,8 @@ test('origin should have a length equal to the dimension', t => {
 })
 
 test('origin should have a default value of 0.0', t => {
-  let imageType = new ImageType(2, IntTypes.UInt8)
-  let image = new Image(imageType)
+  const imageType = new ImageType(2, IntTypes.UInt8)
+  const image = new Image(imageType)
   t.is(image.origin[0], 0.0)
 })
 
@@ -43,21 +43,21 @@ test('spacing should have a length equal to the dimension', t => {
 })
 
 test('spacing should have a default value of 1.0', t => {
-  let imageType = new ImageType(2, IntTypes.UInt8)
-  let image = new Image(imageType)
+  const imageType = new ImageType(2, IntTypes.UInt8)
+  const image = new Image(imageType)
   t.is(image.spacing[0], 1.0)
 })
 
 test('direction should same number of rows and colums as the dimension', t => {
-  let imageType = new ImageType(3, IntTypes.UInt8)
-  let image = new Image(imageType)
+  const imageType = new ImageType(3, IntTypes.UInt8)
+  const image = new Image(imageType)
   t.is(image.direction.rows, 3)
   t.is(image.direction.columns, 3)
 })
 
 test('direction should be the identity by default', t => {
-  let imageType = new ImageType(2)
-  let image = new Image(imageType)
+  const imageType = new ImageType(2)
+  const image = new Image(imageType)
   t.is(image.direction.data[0], 1.0)
   t.is(image.direction.data[1], 0.0)
   t.is(image.direction.data[2], 0.0)
@@ -75,13 +75,13 @@ test('size should have a length equal to the dimension', t => {
 })
 
 test('size should have a default value of 0', t => {
-  let imageType = new ImageType(2)
-  let image = new Image(imageType)
+  const imageType = new ImageType(2)
+  const image = new Image(imageType)
   t.is(image.size[0], 0)
 })
 
 test('data should have a default value of null', t => {
-  let imageType = new ImageType(2)
-  let image = new Image(imageType)
+  const imageType = new ImageType(2)
+  const image = new Image(imageType)
   t.is(image.data, null)
 })

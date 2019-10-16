@@ -1,4 +1,4 @@
-let mimeToIO = {}
+const mimeToIO = {}
 
 mimeToIO['image/jpeg'] = 'itkJPEGImageIOJSBinding'
 mimeToIO['image/png'] = 'itkPNGImageIOJSBinding'

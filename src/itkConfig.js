@@ -6,7 +6,7 @@
 // - MeshIOs/
 // - PolyDataIOs/
 //
-let itkConfig = {
+const itkConfig = {
   itkModulesPath: 'itk'
 }
 
