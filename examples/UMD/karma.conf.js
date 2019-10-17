@@ -1,5 +1,4 @@
 var path = require('path')
-var webpack = require('webpack')
 
 var sourcePath = path.resolve(__dirname, './dist')
 
@@ -38,17 +37,16 @@ module.exports = function init (config) {
         modules: [
           path.resolve(__dirname, 'node_modules'),
           sourcePath
-        ],
-      },
+        ]
+      }
     },
 
     webpackMiddleware: {
       noInfo: true
     },
 
-
     reporters: [
-      'tap-pretty',
+      'tap-pretty'
     ],
 
     client: {

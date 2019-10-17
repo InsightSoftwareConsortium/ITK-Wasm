@@ -14,7 +14,7 @@ const readImageEmscriptenFSFile = (module, filePath) => {
   imageIO.ReadImageInformation()
 
   const ioDimensions = imageIO.GetNumberOfDimensions()
-  let imageType = new ImageType(ioDimensions)
+  const imageType = new ImageType(ioDimensions)
 
   const ioComponentType = imageIO.GetComponentType()
   imageType.componentType = imageIOComponentToJSComponent(module, ioComponentType)
@@ -24,11 +24,11 @@ const readImageEmscriptenFSFile = (module, filePath) => {
 
   imageType.components = imageIO.GetNumberOfComponents()
 
-  let image = new Image(imageType)
+  const image = new Image(imageType)
 
-  let ioDirection = new Matrix(ioDimensions, ioDimensions)
+  const ioDirection = new Matrix(ioDimensions, ioDimensions)
   for (let ii = 0; ii < ioDimensions; ++ii) {
-    let directionColumn = imageIO.GetDirection(ii)
+    const directionColumn = imageIO.GetDirection(ii)
     for (let jj = 0; jj < ioDimensions; ++jj) {
       ioDirection.setElement(jj, ii, directionColumn.get(jj))
     }
@@ -41,7 +41,7 @@ const readImageEmscriptenFSFile = (module, filePath) => {
       image.origin[ii] = imageIO.GetOrigin(ii)
       for (let jj = 0; jj < image.imageType.dimension; ++jj) {
         if (jj < ioDimensions) {
-          let element = ioDirection.getElement(jj, ii)
+          const element = ioDirection.getElement(jj, ii)
           image.direction.setElement(jj, ii, element)
         } else {
           image.direction.setElement(jj, ii, 0.0)

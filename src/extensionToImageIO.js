@@ -1,63 +1,63 @@
-let extensionToIO = {}
+const extensionToIO = new Map([
+  ['bmp', 'itkBMPImageIOJSBinding'],
+  ['BMP', 'itkBMPImageIOJSBinding'],
 
-extensionToIO['bmp'] = 'itkBMPImageIOJSBinding'
-extensionToIO['BMP'] = 'itkBMPImageIOJSBinding'
+  ['dcm', 'itkDCMTKImageIOJSBinding'],
+  ['DCM', 'itkDCMTKImageIOJSBinding'],
 
-extensionToIO['dcm'] = 'itkDCMTKImageIOJSBinding'
-extensionToIO['DCM'] = 'itkDCMTKImageIOJSBinding'
+  ['gipl', 'itkGiplImageIOJSBinding'],
+  ['gipl.gz', 'itkGiplImageIOJSBinding'],
 
-extensionToIO['gipl'] = 'itkGiplImageIOJSBinding'
-extensionToIO['gipl.gz'] = 'itkGiplImageIOJSBinding'
+  ['hdf5', 'itkHDF5ImageIOJSBinding'],
 
-extensionToIO['hdf5'] = 'itkHDF5ImageIOJSBinding'
+  ['jpg', 'itkJPEGImageIOJSBinding'],
+  ['JPG', 'itkJPEGImageIOJSBinding'],
+  ['jpeg', 'itkJPEGImageIOJSBinding'],
+  ['JPEG', 'itkJPEGImageIOJSBinding'],
 
-extensionToIO['jpg'] = 'itkJPEGImageIOJSBinding'
-extensionToIO['JPG'] = 'itkJPEGImageIOJSBinding'
-extensionToIO['jpeg'] = 'itkJPEGImageIOJSBinding'
-extensionToIO['JPEG'] = 'itkJPEGImageIOJSBinding'
+  ['json', 'itkJSONImageIOJSBinding'],
 
-extensionToIO['json'] = 'itkJSONImageIOJSBinding'
+  ['lsm', 'itkLSMImageIOJSBinding'],
 
-extensionToIO['lsm'] = 'itkLSMImageIOJSBinding'
+  ['mnc', 'itkMINCImageIOJSBinding'],
+  ['MNC', 'itkMINCImageIOJSBinding'],
+  ['mnc.gz', 'itkMINCImageIOJSBinding'],
+  ['MNC.GZ', 'itkMINCImageIOJSBinding'],
+  ['mnc2', 'itkMINCImageIOJSBinding'],
+  ['MNC2', 'itkMINCImageIOJSBinding'],
 
-extensionToIO['mnc'] = 'itkMINCImageIOJSBinding'
-extensionToIO['MNC'] = 'itkMINCImageIOJSBinding'
-extensionToIO['mnc.gz'] = 'itkMINCImageIOJSBinding'
-extensionToIO['MNC.GZ'] = 'itkMINCImageIOJSBinding'
-extensionToIO['mnc2'] = 'itkMINCImageIOJSBinding'
-extensionToIO['MNC2'] = 'itkMINCImageIOJSBinding'
+  ['mgh', 'itkMGHImageIOJSBinding'],
+  ['mgz', 'itkMGHImageIOJSBinding'],
+  ['mgh.gz', 'itkMGHImageIOJSBinding'],
 
-extensionToIO['mgh'] = 'itkMGHImageIOJSBinding'
-extensionToIO['mgz'] = 'itkMGHImageIOJSBinding'
-extensionToIO['mgh.gz'] = 'itkMGHImageIOJSBinding'
+  ['mha', 'itkMetaImageIOJSBinding'],
+  ['mhd', 'itkMetaImageIOJSBinding'],
 
-extensionToIO['mha'] = 'itkMetaImageIOJSBinding'
-extensionToIO['mhd'] = 'itkMetaImageIOJSBinding'
+  ['mrc', 'itkMRCImageIOJSBinding'],
 
-extensionToIO['mrc'] = 'itkMRCImageIOJSBinding'
+  ['nia', 'itkNiftiImageIOJSBinding'],
+  ['nii', 'itkNiftiImageIOJSBinding'],
+  ['nii.gz', 'itkNiftiImageIOJSBinding'],
+  ['hdr', 'itkNiftiImageIOJSBinding'],
 
-extensionToIO['nia'] = 'itkNiftiImageIOJSBinding'
-extensionToIO['nii'] = 'itkNiftiImageIOJSBinding'
-extensionToIO['nii.gz'] = 'itkNiftiImageIOJSBinding'
-extensionToIO['hdr'] = 'itkNiftiImageIOJSBinding'
+  ['nrrd', 'itkNrrdImageIOJSBinding'],
+  ['NRRD', 'itkNrrdImageIOJSBinding'],
+  ['nhdr', 'itkNrrdImageIOJSBinding'],
+  ['NHDR', 'itkNrrdImageIOJSBinding'],
 
-extensionToIO['nrrd'] = 'itkNrrdImageIOJSBinding'
-extensionToIO['NRRD'] = 'itkNrrdImageIOJSBinding'
-extensionToIO['nhdr'] = 'itkNrrdImageIOJSBinding'
-extensionToIO['NHDR'] = 'itkNrrdImageIOJSBinding'
+  ['png', 'itkPNGImageIOJSBinding'],
+  ['PNG', 'itkPNGImageIOJSBinding'],
 
-extensionToIO['png'] = 'itkPNGImageIOJSBinding'
-extensionToIO['PNG'] = 'itkPNGImageIOJSBinding'
+  ['pic', 'itkBioRadImageIOJSBinding'],
+  ['PIC', 'itkBioRadImageIOJSBinding'],
 
-extensionToIO['pic'] = 'itkBioRadImageIOJSBinding'
-extensionToIO['PIC'] = 'itkBioRadImageIOJSBinding'
+  ['tif', 'itkTIFFImageIOJSBinding'],
+  ['TIF', 'itkTIFFImageIOJSBinding'],
+  ['tiff', 'itkTIFFImageIOJSBinding'],
+  ['TIFF', 'itkTIFFImageIOJSBinding'],
 
-extensionToIO['tif'] = 'itkTIFFImageIOJSBinding'
-extensionToIO['TIF'] = 'itkTIFFImageIOJSBinding'
-extensionToIO['tiff'] = 'itkTIFFImageIOJSBinding'
-extensionToIO['TIFF'] = 'itkTIFFImageIOJSBinding'
-
-extensionToIO['vtk'] = 'itkVTKImageIOJSBinding'
-extensionToIO['VTK'] = 'itkVTKImageIOJSBinding'
+  ['vtk', 'itkVTKImageIOJSBinding'],
+  ['VTK', 'itkVTKImageIOJSBinding']
+])
 
 module.exports = extensionToIO

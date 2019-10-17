@@ -18,10 +18,10 @@ const readPolyDataLocalFileSync = (filePath) => {
   const extension = getFileExtension(absoluteFilePath)
 
   let io = null
-  if (mimeToIO.hasOwnProperty(mimeType)) {
-    io = mimeToIO[mimeType]
-  } else if (extensionToIO.hasOwnProperty(extension)) {
-    io = extensionToIO[extension]
+  if (mimeToIO.has(mimeType)) {
+    io = mimeToIO.get(mimeType)
+  } else if (extensionToIO.has(extension)) {
+    io = extensionToIO.get(extension)
   }
   if (io === null) {
     throw Error('Could not find IO for: ' + absoluteFilePath)

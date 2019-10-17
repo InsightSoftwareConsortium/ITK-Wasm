@@ -18,26 +18,33 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
     inputs.forEach(function (input) {
       switch (input.type) {
         case IOTypes.Text:
+        {
           module.writeFile(input.path, input.data)
           break
+        }
         case IOTypes.Binary:
+        {
           module.writeFile(input.path, input.data)
           break
+        }
         case IOTypes.Image:
-          let imageJSON = {}
-          for (let key in input.data) {
-            if (input.data.hasOwnProperty(key) && key !== 'data') {
+        {
+          const imageJSON = {}
+          for (const key in input.data) {
+            if (Object.prototype.hasOwnProperty.call(input.data, key) && key !== 'data') {
               imageJSON[key] = input.data[key]
             }
           }
-          imageJSON['data'] = input.path + '.data'
+          imageJSON.data = input.path + '.data'
           module.writeFile(input.path, JSON.stringify(imageJSON))
           module.writeFile(imageJSON.data, new Uint8Array(input.data.data.buffer))
           break
+        }
         case IOTypes.Mesh:
-          let meshJSON = {}
-          for (let key in input.data) {
-            if (input.data.hasOwnProperty(key) &&
+        {
+          const meshJSON = {}
+          for (const key in input.data) {
+            if (Object.prototype.hasOwnProperty.call(input.data, key) &&
               key !== 'points' &&
               key !== 'pointData' &&
               key !== 'cells' &&
@@ -45,10 +52,10 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
               meshJSON[key] = input.data[key]
             }
           }
-          meshJSON['points'] = input.path + '.points.data'
-          meshJSON['pointData'] = input.path + '.pointData.data'
-          meshJSON['cells'] = input.path + '.cells.data'
-          meshJSON['cellData'] = input.path + '.cellData.data'
+          meshJSON.points = input.path + '.points.data'
+          meshJSON.pointData = input.path + '.pointData.data'
+          meshJSON.cells = input.path + '.cells.data'
+          meshJSON.cellData = input.path + '.cellData.data'
           module.writeFile(input.path, JSON.stringify(meshJSON))
           if (meshJSON.numberOfPoints) {
             module.writeFile(meshJSON.points, new Uint8Array(input.data.points.buffer))
@@ -63,6 +70,7 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
             module.writeFile(meshJSON.cellData, new Uint8Array(input.data.cellData.buffer))
           }
           break
+        }
         default:
           throw Error('Unsupported input IOType')
       }
@@ -75,65 +83,74 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
   const stdout = module.getModuleStdout()
   const stderr = module.getModuleStderr()
 
-  let populatedOutputs = []
+  const populatedOutputs = []
   if (outputs) {
     outputs.forEach(function (output) {
-      let populatedOutput = {}
+      const populatedOutput = {}
       Object.assign(populatedOutput, output)
       switch (output.type) {
         case IOTypes.Text:
-          populatedOutput['data'] = module.readFile(output.path, { encoding: 'utf8' })
+        {
+          populatedOutput.data = module.readFile(output.path, { encoding: 'utf8' })
           break
+        }
         case IOTypes.Binary:
-          populatedOutput['data'] = module.readFile(output.path, { encoding: 'binary' })
+        {
+          populatedOutput.data = module.readFile(output.path, { encoding: 'binary' })
           break
+        }
         case IOTypes.Image:
+        {
           const imageJSON = module.readFile(output.path, { encoding: 'utf8' })
-          let image = JSON.parse(imageJSON)
+          const image = JSON.parse(imageJSON)
           const dataUint8 = module.readFile(image.data, { encoding: 'binary' })
-          image['data'] = bufferToTypedArray(image.imageType.componentType, dataUint8.buffer)
-          populatedOutput['data'] = image
+          image.data = bufferToTypedArray(image.imageType.componentType, dataUint8.buffer)
+          populatedOutput.data = image
           break
+        }
         case IOTypes.Mesh:
+        {
           const meshJSON = module.readFile(output.path, { encoding: 'utf8' })
-          let mesh = JSON.parse(meshJSON)
+          const mesh = JSON.parse(meshJSON)
           if (mesh.numberOfPoints) {
             const dataUint8Points = module.readFile(mesh.points, { encoding: 'binary' })
-            mesh['points'] = bufferToTypedArray(mesh.meshType.pointComponentType, dataUint8Points.buffer)
+            mesh.points = bufferToTypedArray(mesh.meshType.pointComponentType, dataUint8Points.buffer)
           } else {
-            mesh['points'] = bufferToTypedArray(mesh.meshType.pointComponentType, new ArrayBuffer(0))
+            mesh.points = bufferToTypedArray(mesh.meshType.pointComponentType, new ArrayBuffer(0))
           }
           if (mesh.numberOfPointPixels) {
             const dataUint8PointData = module.readFile(mesh.pointData, { encoding: 'binary' })
-            mesh['pointData'] = bufferToTypedArray(mesh.meshType.pointPixelComponentType, dataUint8PointData.buffer)
+            mesh.pointData = bufferToTypedArray(mesh.meshType.pointPixelComponentType, dataUint8PointData.buffer)
           } else {
-            mesh['pointData'] = bufferToTypedArray(mesh.meshType.pointPixelComponentType, new ArrayBuffer(0))
+            mesh.pointData = bufferToTypedArray(mesh.meshType.pointPixelComponentType, new ArrayBuffer(0))
           }
           if (mesh.numberOfCells) {
             const dataUint8Cells = module.readFile(mesh.cells, { encoding: 'binary' })
-            mesh['cells'] = bufferToTypedArray(mesh.meshType.cellComponentType, dataUint8Cells.buffer)
+            mesh.cells = bufferToTypedArray(mesh.meshType.cellComponentType, dataUint8Cells.buffer)
           } else {
-            mesh['cells'] = bufferToTypedArray(mesh.meshType.cellComponentType, new ArrayBuffer(0))
+            mesh.cells = bufferToTypedArray(mesh.meshType.cellComponentType, new ArrayBuffer(0))
           }
           if (mesh.numberOfCellPixels) {
             const dataUint8CellData = module.readFile(mesh.cellData, { encoding: 'binary' })
-            mesh['cellData'] = bufferToTypedArray(mesh.meshType.cellPixelComponentType, dataUint8CellData.buffer)
+            mesh.cellData = bufferToTypedArray(mesh.meshType.cellPixelComponentType, dataUint8CellData.buffer)
           } else {
-            mesh['cellData'] = bufferToTypedArray(mesh.meshType.cellPixelComponentType, new ArrayBuffer(0))
+            mesh.cellData = bufferToTypedArray(mesh.meshType.cellPixelComponentType, new ArrayBuffer(0))
           }
-          populatedOutput['data'] = mesh
+          populatedOutput.data = mesh
           break
+        }
         case IOTypes.vtkPolyData:
+        {
           const polyDataJSON = module.readFile(`${output.path}/index.json`, { encoding: 'utf8' })
           const polyData = JSON.parse(polyDataJSON)
           const cellTypes = ['points', 'verts', 'lines', 'polys', 'strips']
           cellTypes.forEach((cellName) => {
             if (polyData[cellName]) {
               const cell = polyData[cellName]
-              if (cell['ref']) {
+              if (cell.ref) {
                 const dataUint8 = module.readFile(`${output.path}/${cell.ref.basepath}/${cell.ref.id}`, { encoding: 'binary' })
-                polyData[cellName]['buffer'] = dataUint8.buffer
-                polyData[cellName]['values'] = typedArrayForBuffer(polyData[cellName]['dataType'], dataUint8.buffer)
+                polyData[cellName].buffer = dataUint8.buffer
+                polyData[cellName].values = typedArrayForBuffer(polyData[cellName].dataType, dataUint8.buffer)
                 delete cell.ref
               }
             }
@@ -144,17 +161,18 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
             if (polyData[dataName]) {
               const data = polyData[dataName]
               data.arrays.forEach((array) => {
-                if (array.data['ref']) {
+                if (array.data.ref) {
                   const dataUint8 = module.readFile(`${output.path}/${array.data.ref.basepath}/${array.data.ref.id}`, { encoding: 'binary' })
-                  array.data['buffer'] = dataUint8.buffer
-                  array.data['values'] = typedArrayForBuffer(array.data['dataType'], dataUint8.buffer)
+                  array.data.buffer = dataUint8.buffer
+                  array.data.values = typedArrayForBuffer(array.data.dataType, dataUint8.buffer)
                   delete array.data.ref
                 }
               })
             }
           })
-          populatedOutput['data'] = polyData
+          populatedOutput.data = polyData
           break
+        }
         default:
           throw Error('Unsupported output IOType')
       }

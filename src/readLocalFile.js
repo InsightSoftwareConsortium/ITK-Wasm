@@ -17,7 +17,7 @@ const readLocalFile = (filePath) => {
 
   return new Promise(function (resolve, reject) {
     try {
-      const isMesh = extensionToMeshIO.hasOwnProperty(extension)
+      const isMesh = extensionToMeshIO.has(extension)
       if (isMesh) {
         try {
           const mesh = readMeshLocalFileSync(filePath)

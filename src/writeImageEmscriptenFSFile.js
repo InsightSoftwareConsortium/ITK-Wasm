@@ -24,7 +24,7 @@ const writeImageEmscriptenFSFile = (module, useCompression, image, filePath) => 
     imageIO.SetDimensions(ii, image.size[ii])
     imageIO.SetSpacing(ii, image.spacing[ii])
     imageIO.SetOrigin(ii, image.origin[ii])
-    let directionColumn = new module.AxisDirectionType()
+    const directionColumn = new module.AxisDirectionType()
     directionColumn.resize(dimension, 0.0)
     for (let jj = 0; jj < dimension; ++jj) {
       directionColumn.set(jj, getMatrixElement(image.direction, jj, ii))

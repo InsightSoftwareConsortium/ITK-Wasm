@@ -32,7 +32,7 @@ if (program.compile) {
 
   const dockerVersion = spawnSync('docker', ['--version'], {
     env: process.env,
-    stdio: [ 'ignore', 'ignore', 'ignore' ]
+    stdio: ['ignore', 'ignore', 'ignore']
   })
   if (dockerVersion.status !== 0) {
     console.error("Could not run the 'docker' command.")
@@ -54,7 +54,7 @@ if (program.compile) {
       const output = fs.openSync(dockcross, 'w')
       const dockerCall = spawnSync('docker', ['run', '--rm', 'kitware/itk-js-vtk:latest'], {
         env: process.env,
-        stdio: [ 'ignore', output, null ]
+        stdio: ['ignore', output, null]
       })
       if (dockerCall.status !== 0) {
         process.exit(dockerCall.status)
@@ -125,10 +125,10 @@ if (program.copySources) {
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
-  let imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
+  const imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
   const copyImageIOModules = function (imageIOFile, callback) {
-    let io = path.basename(imageIOFile)
-    let output = path.join('dist', 'ImageIOs', io)
+    const io = path.basename(imageIOFile)
+    const output = path.join('dist', 'ImageIOs', io)
     fs.copySync(imageIOFile, output)
     callback(null, io)
   }
@@ -137,10 +137,10 @@ if (program.copySources) {
     const result = asyncMod.map(imageIOFiles, copyImageIOModules)
     callback(null, result)
   }
-  let meshIOFiles = glob.sync(path.join('build', 'MeshIOs', '*.js'))
+  const meshIOFiles = glob.sync(path.join('build', 'MeshIOs', '*.js'))
   const copyMeshIOModules = function (meshIOFile, callback) {
-    let io = path.basename(meshIOFile)
-    let output = path.join('dist', 'MeshIOs', io)
+    const io = path.basename(meshIOFile)
+    const output = path.join('dist', 'MeshIOs', io)
     fs.copySync(meshIOFile, output)
     callback(null, io)
   }
@@ -150,10 +150,10 @@ if (program.copySources) {
     callback(null, result)
   }
 
-  let polyDataIOFiles = glob.sync(path.join('build', 'PolyDataIOs', '*.js'))
+  const polyDataIOFiles = glob.sync(path.join('build', 'PolyDataIOs', '*.js'))
   const copyPolyDataIOModules = function (polyDataIOFile, callback) {
-    let io = path.basename(polyDataIOFile)
-    let output = path.join('dist', 'PolyDataIOs', io)
+    const io = path.basename(polyDataIOFile)
+    const output = path.join('dist', 'PolyDataIOs', io)
     fs.copySync(polyDataIOFile, output)
     callback(null, io)
   }
@@ -165,8 +165,8 @@ if (program.copySources) {
 
   const browserify = require('browserify')
   const browserifyBuild = ramda.curry(function (uglify, outputDir, es6File, callback) {
-    let basename = path.basename(es6File)
-    let output = path.join(outputDir, basename)
+    const basename = path.basename(es6File)
+    const output = path.join(outputDir, basename)
     const bundler = browserify(es6File)
     if (uglify) {
       bundler.transform({ global: true }, 'uglifyify')
@@ -193,13 +193,13 @@ if (program.copySources) {
 
   const babelOptions = {
     presets: [
-      ['@babel/preset-env', { 'modules': false }]
+      ['@babel/preset-env', { modules: false }]
     ]
   }
   const babel = require('@babel/core')
   const babelBuild = ramda.curry(function (outputDir, es6File, callback) {
-    let basename = path.basename(es6File)
-    let output = path.join(outputDir, basename)
+    const basename = path.basename(es6File)
+    const output = path.join(outputDir, basename)
     babel.transformFile(es6File, babelOptions, function (err, result) {
       if (err) {
         console.error(err)
@@ -245,8 +245,8 @@ if (program.buildPipelines) {
     }
     const pipelineFiles = glob.sync(path.join(pipelinePath, 'web-build', '*.js'))
     pipelineFiles.forEach((file) => {
-      let filename = path.basename(file)
-      let output = path.join(__dirname, 'dist', 'Pipelines', filename)
+      const filename = path.basename(file)
+      const output = path.join(__dirname, 'dist', 'Pipelines', filename)
       fs.copySync(file, output)
     })
   }

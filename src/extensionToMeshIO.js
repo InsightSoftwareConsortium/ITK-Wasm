@@ -1,18 +1,17 @@
-let extensionToIO = {}
-
-extensionToIO['vtk'] = 'itkVTKPolyDataMeshIOJSBinding'
-extensionToIO['VTK'] = 'itkVTKPolyDataMeshIOJSBinding'
-extensionToIO['byu'] = 'itkBYUMeshIOJSBinding'
-extensionToIO['BYU'] = 'itkBYUMeshIOJSBinding'
-extensionToIO['fsa'] = 'itkFreeSurferAsciiMeshIOJSBinding'
-extensionToIO['FSA'] = 'itkFreeSurferAsciiMeshIOJSBinding'
-extensionToIO['fsb'] = 'itkFreeSurferBinaryMeshIOJSBinding'
-extensionToIO['FSB'] = 'itkFreeSurferBinaryMeshIOJSBinding'
-extensionToIO['obj'] = 'itkOBJMeshIOJSBinding'
-extensionToIO['OBJ'] = 'itkOBJMeshIOJSBinding'
-extensionToIO['off'] = 'itkOFFMeshIOJSBinding'
-extensionToIO['OFF'] = 'itkOFFMeshIOJSBinding'
-extensionToIO['stl'] = 'itkSTLMeshIOJSBinding'
-extensionToIO['STL'] = 'itkSTLMeshIOJSBinding'
-
+const extensionToIO = new Map([
+  ['vtk', 'itkVTKPolyDataMeshIOJSBinding'],
+  ['VTK', 'itkVTKPolyDataMeshIOJSBinding'],
+  ['byu', 'itkBYUMeshIOJSBinding'],
+  ['BYU', 'itkBYUMeshIOJSBinding'],
+  ['fsa', 'itkFreeSurferAsciiMeshIOJSBinding'],
+  ['FSA', 'itkFreeSurferAsciiMeshIOJSBinding'],
+  ['fsb', 'itkFreeSurferBinaryMeshIOJSBinding'],
+  ['FSB', 'itkFreeSurferBinaryMeshIOJSBinding'],
+  ['obj', 'itkOBJMeshIOJSBinding'],
+  ['OBJ', 'itkOBJMeshIOJSBinding'],
+  ['off', 'itkOFFMeshIOJSBinding'],
+  ['OFF', 'itkOFFMeshIOJSBinding'],
+  ['stl', 'itkSTLMeshIOJSBinding'],
+  ['STL', 'itkSTLMeshIOJSBinding']
+])
 module.exports = extensionToIO

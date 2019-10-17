@@ -15,7 +15,7 @@ const readLocalFileSync = (filePath) => {
   const absoluteFilePath = path.resolve(filePath)
   const extension = getFileExtension(absoluteFilePath)
 
-  const isMesh = extensionToMeshIO.hasOwnProperty(extension)
+  const isMesh = extensionToMeshIO.has(extension)
   if (isMesh) {
     try {
       const mesh = readMeshLocalFileSync(filePath)

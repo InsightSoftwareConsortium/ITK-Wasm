@@ -4,36 +4,36 @@ import path from 'path'
 const MimeToIO = require(path.resolve(__dirname, '..', 'dist', 'MimeToImageIO.js'))
 
 test('image/png maps to itkPNGImageIOJSBinding', t => {
-  let io = MimeToIO['image/png']
+  const io = MimeToIO.get('image/png')
   t.is(io, 'itkPNGImageIOJSBinding')
 })
 
 test('image/jpeg maps to itkJPEGImageIOJSBinding', t => {
-  let io = MimeToIO['image/jpeg']
+  const io = MimeToIO.get('image/jpeg')
   t.is(io, 'itkJPEGImageIOJSBinding')
 })
 
 test('image/tiff maps to itkTIFFImageIOJSBinding', t => {
-  let io = MimeToIO['image/tiff']
+  const io = MimeToIO.get('image/tiff')
   t.is(io, 'itkTIFFImageIOJSBinding')
 })
 
 test('image/x-ms-bmp maps to itkBMPImageIOJSBinding', t => {
-  let io = MimeToIO['image/x-ms-bmp']
+  const io = MimeToIO.get('image/x-ms-bmp')
   t.is(io, 'itkBMPImageIOJSBinding')
 })
 
 test('image/x-bmp maps to itkBMPImageIOJSBinding', t => {
-  let io = MimeToIO['image/x-bmp']
+  const io = MimeToIO.get('image/x-bmp')
   t.is(io, 'itkBMPImageIOJSBinding')
 })
 
 test('image/bmp maps to itkBMPImageIOJSBinding', t => {
-  let io = MimeToIO['image/bmp']
+  const io = MimeToIO.get('image/bmp')
   t.is(io, 'itkBMPImageIOJSBinding')
 })
 
 test('application/dicom maps to itkDCMTKImageIOJSBinding', t => {
-  let io = MimeToIO['application/dicom']
+  const io = MimeToIO.get('application/dicom')
   t.is(io, 'itkDCMTKImageIOJSBinding')
 })

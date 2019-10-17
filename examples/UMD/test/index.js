@@ -51,7 +51,6 @@ test('Load an image file and display its contents', (t) => {
     })
 })
 
-
 test('Load a mesh file and display its contents', (t) => {
   const expectedOutput = `{
     "meshType": {

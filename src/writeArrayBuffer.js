@@ -7,7 +7,7 @@ import mimeToMeshIO from './MimeToMeshIO'
 
 const writeArrayBuffer = (webWorker, useCompression, imageOrMesh, fileName, mimeType) => {
   const extension = getFileExtension(fileName)
-  const isMesh = !!extensionToMeshIO.hasOwnProperty(extension) || !!mimeToMeshIO.hasOwnProperty(mimeType)
+  const isMesh = !!extensionToMeshIO.has(extension) || !!mimeToMeshIO.has(mimeType)
   if (isMesh) {
     return writeMeshArrayBuffer(webWorker, useCompression, imageOrMesh, fileName, mimeType)
       .catch(function () {

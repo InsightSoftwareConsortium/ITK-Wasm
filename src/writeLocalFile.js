@@ -21,7 +21,7 @@ const writeLocalFile = (useCompression, imageOrMesh, filePath) => {
 
   return new Promise(function (resolve, reject) {
     try {
-      const isMesh = extensionToMeshIO.hasOwnProperty(extension)
+      const isMesh = extensionToMeshIO.has(extension)
       if (isMesh) {
         try {
           writeMeshLocalFileSync(useCompression, imageOrMesh, filePath)

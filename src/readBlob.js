@@ -7,7 +7,7 @@ import mimeToMeshIO from './MimeToMeshIO'
 
 const readBlob = (webWorker, blob, fileName, mimeType) => {
   const extension = getFileExtension(fileName)
-  const isMesh = !!extensionToMeshIO.hasOwnProperty(extension) || !!mimeToMeshIO.hasOwnProperty(mimeType)
+  const isMesh = !!extensionToMeshIO.has(extension) || !!mimeToMeshIO.has(mimeType)
   if (isMesh) {
     return readMeshBlob(webWorker, blob, fileName, mimeType)
       .catch(function () {
