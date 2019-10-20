@@ -3,6 +3,7 @@ project(MedianFilterTest)
 
 set(io_components ITKImageIO)
 if(EMSCRIPTEN)
+  include(ITKBridgeJavaScript)
   set(io_components BridgeJavaScript)
 endif()
 find_package(ITK REQUIRED
@@ -11,14 +12,8 @@ find_package(ITK REQUIRED
   )
 include(${ITK_USE_FILE})
 
-if(EMSCRIPTEN)
-  include(ITKBridgeJavaScript)
-  web_add_executable(MedianFilterTest MedianFilterTest.cxx)
-  web_target_link_libraries(MedianFilterTest ${ITK_LIBRARIES})
-else()
-  add_executable(MedianFilterTest MedianFilterTest.cxx)
-  target_link_libraries(MedianFilterTest ${ITK_LIBRARIES})
-endif()
+add_executable(MedianFilterTest MedianFilterTest.cxx)
+target_link_libraries(MedianFilterTest ${ITK_LIBRARIES})
 
 enable_testing()
 add_test(NAME MedianFilterTest

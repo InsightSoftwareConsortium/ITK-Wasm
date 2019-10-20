@@ -3,10 +3,9 @@ project(InputOutputFilesTest)
 
 if(EMSCRIPTEN)
   include(ITKBridgeJavaScript)
-  web_add_executable(InputOutputFilesTest InputOutputFilesTest.cxx)
-else()
-  add_executable(InputOutputFilesTest InputOutputFilesTest.cxx)
 endif()
+
+add_executable(InputOutputFilesTest InputOutputFilesTest.cxx)
 
 enable_testing()
 add_test(NAME InputOutputFilesTest
