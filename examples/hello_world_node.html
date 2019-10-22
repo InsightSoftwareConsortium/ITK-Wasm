@@ -46,7 +46,7 @@
 <meta property="og:site_name" content="itk-js">
 <meta property="og:description" content="This example, walks through how to compile a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-08T14:38:39.659Z">
+<meta property="og:updated_time" content="2019-10-22T08:30:53.624Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node.js Hello World!">
 <meta name="twitter:description" content="This example, walks through how to compile a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
@@ -111,8 +111,8 @@
 <p>Let’s write some code! Populate <em>hello.cxx</em> with our Hello World program:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">  std::cout &lt;&lt; &quot;Hello world!&quot; &lt;&lt; std::endl;</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Next, provide a <a href="https://cmake.org/" target="_blank" rel="noopener">CMake</a> build configuration at <em>CMakeLists.txt</em>:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line">project(HelloWorld)</span><br><span class="line"></span><br><span class="line">set(hello_SRCS hello.cxx)</span><br><span class="line">if(EMSCRIPTEN)</span><br><span class="line">  include(ITKBridgeJavaScript)</span><br><span class="line">  web_add_executable(hello $&#123;hello_SRCS&#125;)</span><br><span class="line">else()</span><br><span class="line">  add_executable(hello $&#123;hello_SRCS&#125;)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
-<p>We use the <code>web_add_executable</code> command to build executables with itk.js. This command is provided by the <code>ITKBridgeJavaScript</code> CMake module. This module, along with the <a href="https://kripken.github.io/emscripten-site/" target="_blank" rel="noopener">Emscripten</a> toolchain, is contained in the itk.js <a href="https://github.com/dockcross/dockcross" target="_blank" rel="noopener">dockcross</a> Docker image.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line">project(HelloWorld)</span><br><span class="line"></span><br><span class="line">set(hello_SRCS hello.cxx)</span><br><span class="line">if(EMSCRIPTEN)</span><br><span class="line">  include(ITKBridgeJavaScript)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line">add_executable(hello $&#123;hello_SRCS&#125;)</span><br></pre></td></tr></table></figure>
+<p>We use the <code>add_executable</code> command to build executables with itk.js. This command is augmented by the <code>ITKBridgeJavaScript</code> CMake module. This module, along with the <a href="https://kripken.github.io/emscripten-site/" target="_blank" rel="noopener">Emscripten</a> toolchain, is contained in the itk.js <a href="https://github.com/dockcross/dockcross" target="_blank" rel="noopener">dockcross</a> Docker image.</p>
 <p>The same code can also be built and tested with native build tools with the standard <code>add_executable</code> CMake command.</p>
 <p>Next, build the program with the itk.js CLI, <code>itk-js</code>. This is shipped with the <code>itk</code> package, and the CLI can be executed from the local <em>node_modules</em> folder with <a href="https://www.npmjs.com/package/npx" target="_blank" rel="noopener"><code>npx</code></a>. The <code>itk-js</code> CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory root into <code>itk-js build</code> to perform the build.</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npx itk-js build .</span><br></pre></td></tr></table></figure>
@@ -125,7 +125,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2019-10-08T14:38:39.659Z" itemprop="dateModified">Last updated: 2019-10-08</time>
+                <time class="article-footer-updated" datetime="2019-10-22T08:30:53.624Z" itemprop="dateModified">Last updated: 2019-10-22</time>
                 <a href="unpkgio.html" class="article-footer-prev" title="Unpkg.com / CDN"><i class="fa fa-chevron-left"></i><span>Prev</span></a>
               </footer>
               
