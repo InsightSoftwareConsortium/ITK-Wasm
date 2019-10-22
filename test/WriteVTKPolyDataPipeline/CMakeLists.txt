@@ -7,10 +7,6 @@ find_package(VTK REQUIRED
   )
 include(${VTK_USE_FILE})
 
-if(EMSCRIPTEN)
-  include(ITKBridgeJavaScript)
-endif()
-
 add_executable(WriteVTKPolyDataTest WriteVTKPolyDataTest.cxx)
 target_link_libraries(WriteVTKPolyDataTest ${VTK_LIBRARIES})
 

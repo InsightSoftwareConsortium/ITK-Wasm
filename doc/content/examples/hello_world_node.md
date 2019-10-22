@@ -41,17 +41,12 @@ Next, provide a [CMake](https://cmake.org/) build configuration at *CMakeLists.t
 cmake_minimum_required(VERSION 3.10)
 project(HelloWorld)
 
-set(hello_SRCS hello.cxx)
-if(EMSCRIPTEN)
-  include(ITKBridgeJavaScript)
-endif()
-
-add_executable(hello ${hello_SRCS})
+add_executable(hello hello.cxx)
 ```
 
-We use the `add_executable` command to build executables with itk.js. This command is augmented by the `ITKBridgeJavaScript` CMake module. This module, along with the [Emscripten](https://kripken.github.io/emscripten-site/) toolchain, is contained in the itk.js [dockcross](https://github.com/dockcross/dockcross) Docker image.
+We use the `add_executable` command to build executables with itk.js. The [Emscripten](https://kripken.github.io/emscripten-site/) toolchain along with itk.js build and execution configurations are contained in the itk.js [dockcross](https://github.com/dockcross/dockcross) Docker image used by the itk-js command line interface (CLI).
 
-The same code can also be built and tested with native build tools with the standard `add_executable` CMake command.
+Note that the same code can also be built and tested with native operating system build tools. This is useful for development and debugging.
 
 Next, build the program with the itk.js CLI, `itk-js`. This is shipped with the `itk` package, and the CLI can be executed from the local *node_modules* folder with [`npx`](https://www.npmjs.com/package/npx). The `itk-js` CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory root into `itk-js build` to perform the build.
 

@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(InputOutputFilesTest)
 
-if(EMSCRIPTEN)
-  include(ITKBridgeJavaScript)
-endif()
-
 add_executable(InputOutputFilesTest InputOutputFilesTest.cxx)
 
 enable_testing()

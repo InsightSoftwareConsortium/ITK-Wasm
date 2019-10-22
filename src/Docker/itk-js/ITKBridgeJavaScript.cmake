@@ -1,3 +1,5 @@
+if(NOT _ITKBridgeJavaScript_INCLUDED)
+
 set(_add_executable add_executable)
 function(add_executable target_name)
   _add_executable(${target_name} ${ARGN})
@@ -29,8 +31,13 @@ function(target_link_libraries target_name)
   _target_link_libraries(${target_name} ${ARGN})
 
   set(wasm_target_name ${target_name}Wasm)
-  _target_link_libraries(${wasm_target_name} ${ARGN})
+  if(TARGET ${wasm_target_name})
+    _target_link_libraries(${wasm_target_name} ${ARGN})
+  endif()
 endfunction()
 function(web_target_link_libraries)
   target_link_libraries(${ARGN})
 endfunction()
+
+set(_ITKBridgeJavaScript_INCLUDED 1)
+endif() # NOT _ITKBridgeJavaScript_INCLUDED
