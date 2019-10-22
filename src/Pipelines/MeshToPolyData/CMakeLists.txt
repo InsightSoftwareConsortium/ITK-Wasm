@@ -10,6 +10,7 @@ include(${VTK_USE_FILE})
 
 set(io_components ITKMeshIO)
 if(EMSCRIPTEN)
+  include(ITKBridgeJavaScript)
   set(io_components BridgeJavaScript)
 endif()
 find_package(ITK REQUIRED
@@ -20,14 +21,8 @@ find_package(ITK REQUIRED
   )
 include(${ITK_USE_FILE})
 
-if(EMSCRIPTEN)
-  include(ITKBridgeJavaScript)
-  web_add_executable(MeshToPolyData MeshToPolyData.cxx)
-  web_target_link_libraries(MeshToPolyData ${VTK_LIBRARIES} ${ITK_LIBRARIES})
-else()
-  add_executable(MeshToPolyData MeshToPolyData.cxx)
-  target_link_libraries(MeshToPolyData ${VTK_LIBRARIES} ${ITK_LIBRARIES})
-endif()
+add_executable(MeshToPolyData MeshToPolyData.cxx)
+target_link_libraries(MeshToPolyData ${VTK_LIBRARIES} ${ITK_LIBRARIES})
 
 enable_testing()
 add_test(NAME MeshToPolyData

@@ -3,10 +3,9 @@ project(StdoutStderrTest)
 
 if(EMSCRIPTEN)
   include(ITKBridgeJavaScript)
-  web_add_executable(StdoutStderrTest StdoutStderrTest.cxx)
-else()
-  add_executable(StdoutStderrTest StdoutStderrTest.cxx)
 endif()
+
+add_executable(StdoutStderrTest StdoutStderrTest.cxx)
 
 enable_testing()
 add_test(NAME StdoutStderrTest

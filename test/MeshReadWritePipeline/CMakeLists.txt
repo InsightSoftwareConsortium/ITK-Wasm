@@ -3,6 +3,7 @@ project(MeshReadWriteTest)
 
 set(io_components ITKMeshIO)
 if(EMSCRIPTEN)
+  include(ITKBridgeJavaScript)
   set(io_components BridgeJavaScript)
 endif()
 find_package(ITK REQUIRED
@@ -11,14 +12,8 @@ find_package(ITK REQUIRED
   )
 include(${ITK_USE_FILE})
 
-if(EMSCRIPTEN)
-  include(ITKBridgeJavaScript)
-  web_add_executable(MeshReadWriteTest MeshReadWriteTest.cxx)
-  web_target_link_libraries(MeshReadWriteTest ${ITK_LIBRARIES})
-else()
-  add_executable(MeshReadWriteTest MeshReadWriteTest.cxx)
-  target_link_libraries(MeshReadWriteTest ${ITK_LIBRARIES})
-endif()
+add_executable(MeshReadWriteTest MeshReadWriteTest.cxx)
+target_link_libraries(MeshReadWriteTest ${ITK_LIBRARIES})
 
 enable_testing()
 add_test(NAME MeshReadWriteTest

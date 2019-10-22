@@ -2,7 +2,7 @@ import test from 'tape'
 import axios from 'axios'
 
 import readPolyDataArrayBuffer from 'readPolyDataArrayBuffer'
-// import readPolyDataBlob from 'readPolyDataBlob'
+import readPolyDataBlob from 'readPolyDataBlob'
 import readPolyDataFile from 'readPolyDataFile'
 
 const fileName = 'cow.vtk'
@@ -36,27 +36,16 @@ test('readPolyDataArrayBuffer reads an ArrayBuffer', (t) => {
     })
 })
 
-// Todo: fix me
-// test('readPolyDataFile reads a Blob without a file extension', (t) => {
-// return axios.get(testFilePath, {responseType: 'blob'})
-// .then(function (response) {
-// return readPolyDataBlob(response.data, 'cow')
-// })
-// .then(function (polyData) {
-// verifyPolyData(t, polyData)
-// })
-// })
-
-// test('readPolyDataBlob reads a Blob', (t) => {
-// return axios.get(testFilePath, { responseType: 'blob' })
-// .then(function (response) {
-// return readPolyDataBlob(null, response.data, 'cow.vtk')
-// })
-// .then(function ({ polyData, webWorker }) {
-// webWorker.terminate()
-// verifyPolyData(t, polyData)
-// })
-// })
+test('readPolyDataBlob reads a Blob', (t) => {
+  return axios.get(testFilePath, { responseType: 'blob' })
+    .then(function (response) {
+      return readPolyDataBlob(null, response.data, 'cow.vtk')
+    })
+    .then(function ({ polyData, webWorker }) {
+      webWorker.terminate()
+      verifyPolyData(t, polyData)
+    })
+})
 
 test('readPolyDataFile reads a File', (t) => {
   return axios.get(testFilePath, { responseType: 'blob' }).then(function (response) {

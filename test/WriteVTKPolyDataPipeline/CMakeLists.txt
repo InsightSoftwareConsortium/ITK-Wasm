@@ -9,12 +9,10 @@ include(${VTK_USE_FILE})
 
 if(EMSCRIPTEN)
   include(ITKBridgeJavaScript)
-  web_add_executable(WriteVTKPolyDataTest WriteVTKPolyDataTest.cxx)
-  web_target_link_libraries(WriteVTKPolyDataTest ${VTK_LIBRARIES})
-else()
-  add_executable(WriteVTKPolyDataTest WriteVTKPolyDataTest.cxx)
-  target_link_libraries(WriteVTKPolyDataTest ${VTK_LIBRARIES})
 endif()
+
+add_executable(WriteVTKPolyDataTest WriteVTKPolyDataTest.cxx)
+target_link_libraries(WriteVTKPolyDataTest ${VTK_LIBRARIES})
 
 enable_testing()
 add_test(NAME WriteVTKPolyDataTest

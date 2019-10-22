@@ -44,13 +44,12 @@ project(HelloWorld)
 set(hello_SRCS hello.cxx)
 if(EMSCRIPTEN)
   include(ITKBridgeJavaScript)
-  web_add_executable(hello ${hello_SRCS})
-else()
-  add_executable(hello ${hello_SRCS})
 endif()
+
+add_executable(hello ${hello_SRCS})
 ```
 
-We use the `web_add_executable` command to build executables with itk.js. This command is provided by the `ITKBridgeJavaScript` CMake module. This module, along with the [Emscripten](https://kripken.github.io/emscripten-site/) toolchain, is contained in the itk.js [dockcross](https://github.com/dockcross/dockcross) Docker image.
+We use the `add_executable` command to build executables with itk.js. This command is augmented by the `ITKBridgeJavaScript` CMake module. This module, along with the [Emscripten](https://kripken.github.io/emscripten-site/) toolchain, is contained in the itk.js [dockcross](https://github.com/dockcross/dockcross) Docker image.
 
 The same code can also be built and tested with native build tools with the standard `add_executable` CMake command.
 
