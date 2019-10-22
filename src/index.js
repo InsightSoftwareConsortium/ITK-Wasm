@@ -96,6 +96,9 @@ itk.readImageDICOMFileSeries = readImageDICOMFileSeries
 import readImageFile from './readImageFile.js'
 itk.readImageFile = readImageFile
 
+import readImageHTTP from './readImageHTTP.js'
+itk.readImageHTTP = readImageHTTP
+
 import readMeshArrayBuffer from './readMeshArrayBuffer.js'
 itk.readMeshArrayBuffer = readMeshArrayBuffer
 

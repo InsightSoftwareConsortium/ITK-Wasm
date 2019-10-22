@@ -48,4 +48,6 @@ ExternalData_Expand_Arguments(
   DATA{Input/box.obj}
   DATA{Input/octa.off}
   DATA{Input/sphere.stl}
+  DATA{Input/cthead1.json}
+  DATA{Input/cthead1.json.data}
   )

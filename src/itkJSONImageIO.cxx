@@ -454,6 +454,10 @@ JSONImageIO
     }
   document.AddMember( "spacing", spacing.Move(), allocator );
 
+  rapidjson::Value directionContainer;
+  directionContainer.SetObject();
+  directionContainer.AddMember( "rows", rapidjson::Value(dimension).Move(), allocator );
+  directionContainer.AddMember( "columns", rapidjson::Value(dimension).Move(), allocator );
   rapidjson::Value direction(rapidjson::kArrayType);
   for( unsigned int ii = 0; ii < dimension; ++ii )
     {
@@ -463,7 +467,8 @@ JSONImageIO
       direction.PushBack(rapidjson::Value().SetDouble( dimensionDirection[jj] ), allocator);
       }
     }
-  document.AddMember( "direction", direction.Move(), allocator );
+  directionContainer.AddMember( "data", direction.Move(), allocator );
+  document.AddMember( "direction", directionContainer.Move(), allocator );
 
   rapidjson::Value size(rapidjson::kArrayType);
   for( unsigned int ii = 0; ii < dimension; ++ii )
