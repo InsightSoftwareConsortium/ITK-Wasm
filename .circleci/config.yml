@@ -9,7 +9,6 @@ jobs:
   build-test-deploy:
     machine:
       image: ubuntu-1604:201903-01
-      docker_layer_caching: true
     steps:
       - checkout
       - run:
@@ -97,7 +96,6 @@ jobs:
   test-umd-example:
     machine:
       image: ubuntu-1604:201903-01
-      docker_layer_caching: true
     steps:
       - checkout
       - run:
@@ -114,7 +112,6 @@ jobs:
   build-test-webpack-example:
     machine:
       image: ubuntu-1604:201903-01
-      docker_layer_caching: true
     steps:
       - checkout
       - run:
@@ -132,7 +129,6 @@ jobs:
   build-test-unpkgio-example:
     machine:
       image: ubuntu-1604:201903-01
-      docker_layer_caching: true
     steps:
       - checkout
       - run:
@@ -150,7 +146,6 @@ jobs:
   build-test-nodejs-hello-world-example:
     machine:
       image: ubuntu-1604:201903-01
-      docker_layer_caching: true
     steps:
       - checkout
       - run:
