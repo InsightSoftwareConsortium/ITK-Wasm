@@ -1,10 +1,4 @@
 cmake_minimum_required(VERSION 3.10)
 project(HelloWorld)
 
-set(hello_SRCS hello.cxx)
-if(EMSCRIPTEN)
-  include(ITKBridgeJavaScript)
-  web_add_executable(hello ${hello_SRCS})
-else()
-  add_executable(hello ${hello_SRCS})
-endif()
+add_executable(hello hello.cxx)
