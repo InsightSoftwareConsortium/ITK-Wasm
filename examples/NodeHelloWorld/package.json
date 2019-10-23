@@ -1,6 +1,6 @@
 {
   "name": "itk-hello-world-node",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An itk.js Hello World! for Node",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "fs-extra": "^7.0.1",
-    "itk": "^9.2.0"
+    "itk": "^10.0.1"
   }
 }
