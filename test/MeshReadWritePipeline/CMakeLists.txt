@@ -3,7 +3,6 @@ project(MeshReadWriteTest)
 
 set(io_components ITKMeshIO)
 if(EMSCRIPTEN)
-  include(ITKBridgeJavaScript)
   set(io_components BridgeJavaScript)
 endif()
 find_package(ITK REQUIRED

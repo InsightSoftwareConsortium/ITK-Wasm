@@ -3,8 +3,10 @@ MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
 
+# Work-around for VTK HDF5 build
+ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_DOCKCROSS}
 # 2019-01-03 + Emscripten patches
-ENV VTK_GIT_TAG 519acbcfba80c6e3861a2254781371cd4dfc78fb
+ENV VTK_GIT_TAG 32476744d0783a63c49a9e1cc1107a91f707275e
 RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK && \
   git checkout ${VTK_GIT_TAG} && \
@@ -48,6 +50,9 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKVtkGlue.git && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
+
+# Reset
+ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE

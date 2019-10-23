@@ -19,6 +19,11 @@ RUN cd / && \
   cd .. && chmod -R 777 ITKBridgeJavaScript-build
 
 COPY ITKBridgeJavaScript.cmake /usr/share/cmake-3.13/Modules/
+ENV CMAKE_TOOLCHAIN_FILE_DOCKCROSS ${CMAKE_TOOLCHAIN_FILE}
+ENV CMAKE_TOOLCHAIN_FILE_ITK /ITKBridgeJavaScript/toolchain.cmake
+RUN cp ${CMAKE_TOOLCHAIN_FILE} ${CMAKE_TOOLCHAIN_FILE_ITK}
+RUN echo "include(ITKBridgeJavaScript)" >> ${CMAKE_TOOLCHAIN_FILE_ITK}
+ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
 COPY web-build /usr/local/bin/
 
 # Build-time metadata as defined at http://label-schema.org
