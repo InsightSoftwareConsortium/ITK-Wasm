@@ -15,36 +15,51 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "vtkPolyDataReader.h"
+#include "vtkDataReader.h"
+#include "vtkGeometryFilter.h"
 #include "vtkJSONDataSetWriter.h"
-#include "vtkNew.h"
+#include "vtkPolyDataReader.h"
+#include "vtkSmartPointer.h"
+#include "vtkUnstructuredGridReader.h"
 
-int main( int argc, char * argv[] )
-{
-  if( argc < 3 )
-    {
-    std::cerr << "Usage: " << argv[0] << " <inputPolyData> <outputPolyData> " << std::endl;
+int main(int argc, char* argv[]) {
+  if (argc < 3) {
+    std::cerr << "Usage: " << argv[0] << " <inputFile> <outputPolyDataFile> "
+              << std::endl;
     return EXIT_FAILURE;
-    }
-  const char * inputPolyDataFile = argv[1];
-  const char * outputPolyDataFile = argv[2];
+  }
+  const char* inputFileFile = argv[1];
+  const char* outputPolyDataFile = argv[2];
 
-  vtkNew< vtkPolyDataReader > reader;
-  reader->SetFileName( inputPolyDataFile );
+  vtkSmartPointer<vtkDataReader> dataReader =
+      vtkSmartPointer<vtkDataReader>::New();
+  dataReader->SetFileName(inputFileFile);
 
-  vtkNew< vtkJSONDataSetWriter > writer;
-  writer->SetFileName( outputPolyDataFile );
-  writer->SetInputConnection( reader->GetOutputPort() );
+  vtkNew<vtkGeometryFilter> geometryFilter;
 
-  try
-    {
+  vtkNew<vtkJSONDataSetWriter> writer;
+  writer->SetFileName(outputPolyDataFile);
+
+  if (dataReader->IsFilePolyData()) {
+    dataReader = vtkSmartPointer<vtkPolyDataReader>::New();
+    dataReader->SetFileName(inputFileFile);
+    writer->SetInputConnection(dataReader->GetOutputPort());
+  } else if (dataReader->IsFileUnstructuredGrid()) {
+    dataReader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
+    dataReader->SetFileName(inputFileFile);
+    geometryFilter->SetInputConnection(dataReader->GetOutputPort());
+    writer->SetInputConnection(geometryFilter->GetOutputPort());
+  } else {
+    std::cerr << "Unsupported file." << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  try {
     writer->Update();
-    }
-  catch( const std::exception & error )
-    {
+  } catch (const std::exception& error) {
     std::cerr << "Error: " << error.what() << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }
