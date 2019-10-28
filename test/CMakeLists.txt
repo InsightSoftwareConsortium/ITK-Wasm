@@ -50,4 +50,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/sphere.stl}
   DATA{Input/cthead1.json}
   DATA{Input/cthead1.json.data}
+  DATA{Input/uGridEx.vtk}
   )

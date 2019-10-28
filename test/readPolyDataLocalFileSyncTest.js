@@ -3,7 +3,7 @@ import path from 'path'
 
 const readPolyDataLocalFileSync = require(path.resolve(__dirname, '..', 'dist', 'readPolyDataLocalFileSync.js'))
 
-test('readPolyDataLocalFileSync reads a vtkPolyData', (t) => {
+test('readPolyDataLocalFileSync reads a vtkPolyData in the legacy VTK file format', (t) => {
   const verifyPolyData = (polyData) => {
     t.is(polyData.vtkClass, 'vtkPolyData')
     t.is(polyData.points.vtkClass, 'vtkPoints')
@@ -21,6 +21,50 @@ test('readPolyDataLocalFileSync reads a vtkPolyData', (t) => {
   }
 
   const testPolyDataFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cow.vtk')
+  const polyData = readPolyDataLocalFileSync(testPolyDataFilePath)
+  verifyPolyData(polyData)
+})
+
+test('readPolyDataLocalFileSync reads a vtkUnstructuredGrid in the legacy VTK file format', (t) => {
+  const verifyPolyData = (polyData) => {
+    t.is(polyData.vtkClass, 'vtkPolyData')
+    t.is(polyData.points.vtkClass, 'vtkPoints')
+    t.is(polyData.points.name, 'points')
+    t.is(polyData.points.numberOfComponents, 3)
+    t.is(polyData.points.dataType, 'Float32Array')
+    t.is(polyData.points.size, 81)
+    t.is(polyData.verts.vtkClass, 'vtkCellArray')
+    t.is(polyData.verts.name, 'verts')
+    t.is(polyData.verts.numberOfComponents, 1)
+    t.is(polyData.verts.dataType, 'Int32Array')
+    t.is(polyData.verts.size, 2)
+    t.is(polyData.lines.vtkClass, 'vtkCellArray')
+    t.is(polyData.lines.name, 'lines')
+    t.is(polyData.lines.numberOfComponents, 1)
+    t.is(polyData.lines.dataType, 'Int32Array')
+    t.is(polyData.lines.size, 6)
+    t.is(polyData.strips.vtkClass, 'vtkCellArray')
+    t.is(polyData.strips.name, 'strips')
+    t.is(polyData.strips.numberOfComponents, 1)
+    t.is(polyData.strips.dataType, 'Int32Array')
+    t.is(polyData.strips.size, 7)
+    t.is(polyData.polys.vtkClass, 'vtkCellArray')
+    t.is(polyData.polys.name, 'polys')
+    t.is(polyData.polys.numberOfComponents, 1)
+    t.is(polyData.polys.dataType, 'Int32Array')
+    t.is(polyData.polys.size, 94)
+    t.is(polyData.pointData.vtkClass, 'vtkDataSetAttributes')
+    t.is(polyData.pointData.arrays[0].data.name, 'scalars')
+    t.is(polyData.pointData.arrays[0].data.numberOfComponents, 1)
+    t.is(polyData.pointData.arrays[0].data.dataType, 'Float32Array')
+    t.is(polyData.pointData.arrays[0].data.size, 27)
+    t.is(polyData.pointData.arrays[1].data.name, 'vectors')
+    t.is(polyData.pointData.arrays[1].data.numberOfComponents, 3)
+    t.is(polyData.pointData.arrays[1].data.dataType, 'Float32Array')
+    t.is(polyData.pointData.arrays[1].data.size, 81)
+  }
+
+  const testPolyDataFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'uGridEx.vtk')
   const polyData = readPolyDataLocalFileSync(testPolyDataFilePath)
   verifyPolyData(polyData)
 })
