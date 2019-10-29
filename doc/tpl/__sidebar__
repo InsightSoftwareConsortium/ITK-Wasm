@@ -4,6 +4,7 @@ docs:
   formats:
     imageformats: image_formats.html
     meshformats: mesh_formats.html
+    polydataformats: polydata_formats.html
   development:
     hacking: hacking_itk_js.html
 
