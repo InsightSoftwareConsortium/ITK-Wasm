@@ -108,6 +108,12 @@ itk.readMeshBlob = readMeshBlob
 import readMeshFile from './readMeshFile.js'
 itk.readMeshFile = readMeshFile
 
+import readPolyDataArrayBuffer from './readPolyDataArrayBuffer.js'
+itk.readPolyDataArrayBuffer = readPolyDataArrayBuffer
+
+import readPolyDataBlob from './readPolyDataBlob.js'
+itk.readPolyDataBlob = readPolyDataBlob
+
 import readPolyDataFile from './readPolyDataFile.js'
 itk.readPolyDataFile = readPolyDataFile
 

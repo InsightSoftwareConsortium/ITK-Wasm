@@ -86,3 +86,17 @@ Write an mesh to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web
 *mesh*:           [itk/Mesh](./Mesh.html) instance to write
 *fileName*:       name that would be used for the resulting file
 *mimeType*:       optional mime-type for the resulting file
+
+---
+
+## readPolyDataFile(webWorker, file) -> { webWorker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }
+
+Read a vtk.js PolyData from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
+
+## readPolyDataBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }
+
+Read a vtk.js PolyData from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
+
+## readPolyDataArrayBuffer(webWorker, arrayBuffer, fileName, mimeType) -> { webWorker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }
+
+Read a vtk.js PolyData from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
