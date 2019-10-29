@@ -28,12 +28,12 @@ int main(int argc, char* argv[]) {
               << std::endl;
     return EXIT_FAILURE;
   }
-  const char* inputFileFile = argv[1];
+  const char* inputFile = argv[1];
   const char* outputPolyDataFile = argv[2];
 
   vtkSmartPointer<vtkDataReader> dataReader =
       vtkSmartPointer<vtkDataReader>::New();
-  dataReader->SetFileName(inputFileFile);
+  dataReader->SetFileName(inputFile);
 
   vtkNew<vtkGeometryFilter> geometryFilter;
 
@@ -42,11 +42,11 @@ int main(int argc, char* argv[]) {
 
   if (dataReader->IsFilePolyData()) {
     dataReader = vtkSmartPointer<vtkPolyDataReader>::New();
-    dataReader->SetFileName(inputFileFile);
+    dataReader->SetFileName(inputFile);
     writer->SetInputConnection(dataReader->GetOutputPort());
   } else if (dataReader->IsFileUnstructuredGrid()) {
     dataReader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
-    dataReader->SetFileName(inputFileFile);
+    dataReader->SetFileName(inputFile);
     geometryFilter->SetInputConnection(dataReader->GetOutputPort());
     writer->SetInputConnection(geometryFilter->GetOutputPort());
   } else {
