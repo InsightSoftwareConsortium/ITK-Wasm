@@ -1,3 +1,6 @@
-const PolyDataIOIndex = ['VTKLegacyFileReader']
+const PolyDataIOIndex = [
+  'VTKLegacyFileReader',
+  'VTKXMLFileReader'
+]
 
 module.exports = PolyDataIOIndex

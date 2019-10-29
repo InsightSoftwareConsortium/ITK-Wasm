@@ -15,12 +15,13 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "vtkDataReader.h"
 #include "vtkGeometryFilter.h"
 #include "vtkJSONDataSetWriter.h"
 #include "vtkPolyDataReader.h"
 #include "vtkSmartPointer.h"
-#include "vtkUnstructuredGridReader.h"
+#include "vtkXMLPolyDataReader.h"
+#include "vtkXMLReader.h"
+#include "vtkXMLUnstructuredGridReader.h"
 
 int main(int argc, char* argv[]) {
   if (argc < 3) {
@@ -31,25 +32,30 @@ int main(int argc, char* argv[]) {
   const char* inputFile = argv[1];
   const char* outputPolyDataFile = argv[2];
 
-  vtkSmartPointer<vtkDataReader> dataReader =
-      vtkSmartPointer<vtkDataReader>::New();
-  dataReader->SetFileName(inputFile);
-
   vtkNew<vtkGeometryFilter> geometryFilter;
 
   vtkNew<vtkJSONDataSetWriter> writer;
   writer->SetFileName(outputPolyDataFile);
 
-  if (dataReader->IsFilePolyData()) {
-    dataReader = vtkSmartPointer<vtkPolyDataReader>::New();
-    dataReader->SetFileName(inputFile);
-    writer->SetInputConnection(dataReader->GetOutputPort());
-  } else if (dataReader->IsFileUnstructuredGrid()) {
-    dataReader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
-    dataReader->SetFileName(inputFile);
-    geometryFilter->SetInputConnection(dataReader->GetOutputPort());
+  bool canReadFile = false;
+
+  vtkSmartPointer<vtkXMLReader> reader =
+      vtkSmartPointer<vtkXMLPolyDataReader>::New();
+  if (reader->CanReadFile(inputFile)) {
+    canReadFile = true;
+    reader->SetFileName(inputFile);
+    writer->SetInputConnection(reader->GetOutputPort());
+  }
+
+  reader = vtkSmartPointer<vtkXMLUnstructuredGridReader>::New();
+  if (reader->CanReadFile(inputFile)) {
+    canReadFile = true;
+    reader->SetFileName(inputFile);
+    geometryFilter->SetInputConnection(reader->GetOutputPort());
     writer->SetInputConnection(geometryFilter->GetOutputPort());
-  } else {
+  }
+
+  if (!canReadFile) {
     std::cerr << "Unsupported file." << std::endl;
     return EXIT_FAILURE;
   }
