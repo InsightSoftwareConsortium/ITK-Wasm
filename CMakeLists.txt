@@ -66,9 +66,11 @@ if(BUILD_ITK_JS_IO_MODULES)
 
   set(PolyDataIOPipelines
     "VTKLegacyFileReader"
+    "VTKXMLFileReader"
     CACHE STRING
     "String delimited list of VTK PolyData IO pipelines to support.")
   set(polydataios_VTKLegacyFileReader vtkIOLegacy)
+  set(polydataios_VTKXMLFileReader vtkIOXML)
 endif()
 
 

@@ -51,4 +51,6 @@ ExternalData_Expand_Arguments(
   DATA{Input/cthead1.json}
   DATA{Input/cthead1.json.data}
   DATA{Input/uGridEx.vtk}
+  DATA{Input/diskout.vtp}
+  DATA{Input/elements.vtu}
   )
