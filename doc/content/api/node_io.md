@@ -81,3 +81,13 @@ Write a mesh to a file on the local filesystem with Node.js.
 ## writeMeshLocalFileSync({ useCompression, binaryFileType }, image, filePath) -> null
 
 Similar to `writeMeshLocalFile`, but synchronous.
+
+---
+
+## readPolyDataLocalFile(filePath) -> [vtk.js PolyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html)
+
+Read a vtk.js PolyData from a file on the local filesystem.
+
+## readPolyDataLocalFileSync(filePath) -> [vtk.js PolyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html)
+
+Similar to `readPolyDataLocalFile`, but returns the polydata directly instead of a promise.
