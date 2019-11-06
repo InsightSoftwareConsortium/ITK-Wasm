@@ -1,4 +1,5 @@
 const PolyDataIOIndex = [
+  'VTKExodusFileReader',
   'VTKLegacyFileReader',
   'VTKXMLFileReader'
 ]
