@@ -140,3 +140,28 @@ test('readPolyDataLocalFileSync reads a vtkUnstructuredGrid in the VTK XML file 
   const polyData = readPolyDataLocalFileSync(testPolyDataFilePath)
   verifyPolyData(polyData)
 })
+
+test('readPolyDataLocalFileSync reads an Exodus file', (t) => {
+  const verifyPolyData = (polyData) => {
+    t.is(polyData.vtkClass, 'vtkPolyData')
+    t.is(polyData.points.vtkClass, 'vtkPoints')
+    t.is(polyData.points.name, 'points')
+    t.is(polyData.points.numberOfComponents, 3)
+    t.is(polyData.points.dataType, 'Float32Array')
+    t.is(polyData.points.size, 25497)
+    t.is(polyData.polys.vtkClass, 'vtkCellArray')
+    t.is(polyData.polys.name, 'polys')
+    t.is(polyData.polys.numberOfComponents, 1)
+    t.is(polyData.polys.dataType, 'Int32Array')
+    t.is(polyData.polys.size, 9940)
+    t.is(polyData.cellData.vtkClass, 'vtkDataSetAttributes')
+    t.is(polyData.cellData.arrays[0].data.name, 'ObjectId')
+    t.is(polyData.cellData.arrays[0].data.numberOfComponents, 1)
+    t.is(polyData.cellData.arrays[0].data.dataType, 'Int32Array')
+    t.is(polyData.cellData.arrays[0].data.size, 1988)
+  }
+
+  const testPolyDataFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'disk_out_ref.ex2')
+  const polyData = readPolyDataLocalFileSync(testPolyDataFilePath)
+  verifyPolyData(polyData)
+})
