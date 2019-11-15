@@ -69,12 +69,28 @@ const build = (sourceDir) => {
   if (hypenIndex !== -1) {
     cmakeArgs = program.rawArgs.slice(hypenIndex + 1)
   }
+  if(process.platform === "win32"){
+    var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"', 
+      ["--login", "-i", "-c", '"web-build/itk-js-build-env web-build ' + cmakeArgs + '"'], {
+      env: process.env,
+      stdio: 'inherit',
+      shell: true
+    });
 
-  const dockerBuild = spawnSync('bash', [dockcrossScript, 'web-build'].concat(cmakeArgs), {
-    env: process.env,
-    stdio: 'inherit'
-  })
-  process.exit(dockerBuild.status)
+    if (dockerBuild.status !== 0) {
+      console.error(dockerBuild.error);
+    }
+    process.exit(dockerBuild.status);
+  } else {
+    const dockerBuild = spawnSync('bash', [dockcrossScript, 'web-build'].concat(cmakeArgs), {
+      env: process.env,
+      stdio: 'inherit'
+    })
+    if (dockerBuild.status !== 0) {
+      console.error(dockerBuild.error);
+    }
+    process.exit(dockerBuild.status)
+  }
 }
 
 const test = (sourceDir) => {
@@ -104,15 +120,28 @@ const test = (sourceDir) => {
   if (hypenIndex !== -1) {
     ctestArgs = program.rawArgs.slice(hypenIndex + 1).join(' ')
   }
-
-  const dockerBuild = spawnSync('bash', [dockcrossScript,
-    'bash', '-c',
-      'cd web-build && ctest ' + ctestArgs],
-    {
+  if(process.platform === "win32"){
+    var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"', 
+      ["--login", "-i", "-c", '"web-build/itk-js-build-env bash -c cd web-build && ctest ' + cmakeArgs + '"'], {
       env: process.env,
-      stdio: 'inherit'
-    })
-  process.exit(dockerBuild.status)
+      stdio: 'inherit',
+      shell: true
+    });
+
+    if (dockerBuild.status !== 0) {
+      console.error(dockerBuild.error);
+    }
+    process.exit(dockerBuild.status);
+  } else {
+    const dockerBuild = spawnSync('bash', [dockcrossScript,
+      'bash', '-c',
+        'cd web-build && ctest ' + ctestArgs],
+      {
+        env: process.env,
+        stdio: 'inherit'
+      })
+    process.exit(dockerBuild.status)
+  }
 }
 
 program
