@@ -174,12 +174,12 @@ if (program.copySources) {
     if (uglify) {
       bundler.transform({ global: true }, 'uglifyify')
       bundler
-        .transform('babelify', { presets: ['@babel/preset-env'] })
+        .transform('babelify', { presets: ['@babel/preset-env'], plugins: ['@babel/plugin-transform-runtime'] })
         .bundle()
         .pipe(fs.createWriteStream(output))
     } else {
       bundler
-        .transform('babelify', { presets: ['@babel/preset-env'] })
+        .transform('babelify', { presets: ['@babel/preset-env'], plugins: ['@babel/plugin-transform-runtime'] })
         .bundle()
         .pipe(fs.createWriteStream(output))
     }
@@ -189,7 +189,7 @@ if (program.copySources) {
     console.log('Converting WebWorker sources...')
     const es6Files = glob.sync(path.join('src', 'WebWorkers', '*.js'))
     const outputDir = path.join('dist', 'WebWorkers')
-    const builder = browserifyBuild(true, outputDir)
+    const builder = browserifyBuild(false, outputDir)
     const result = asyncMod.map(es6Files, builder)
     callback(null, result)
   }

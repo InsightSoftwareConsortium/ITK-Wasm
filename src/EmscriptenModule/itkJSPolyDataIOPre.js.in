@@ -1,4 +1,3 @@
-var Module = {}
 Module['locateFile'] = function(fileName) {
   if(fileName === '@wasm_target@.wasm') {
     return '../PolyDataIOs/@wasm_target@.wasm'
@@ -23,7 +22,7 @@ Module['print'] = function(text) {
 }
 
 Module['printErr'] = function(text) {
-  console.log(text)
+  console.error(text)
   moduleStderr += text + '\n'
 }
 

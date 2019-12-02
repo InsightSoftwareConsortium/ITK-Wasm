@@ -1,5 +1,3 @@
-var Module = {}
-
 Module['locateFile'] = function(fileName) {
   if(fileName === '@wasm_target_name@.wasm') {
     return '../Pipelines/@wasm_target_name@.wasm'
