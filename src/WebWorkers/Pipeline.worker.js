@@ -7,18 +7,18 @@ import IOTypes from '../IOTypes'
 // To cache loaded pipeline modules
 const pipelinePathToModule = {}
 
-function loadPipelineModule (moduleDirectory, pipelinePath, config) {
+async function loadPipelineModule (moduleDirectory, pipelinePath, config) {
   let pipelineModule = null
   if (pipelinePath in pipelinePathToModule) {
     pipelineModule = pipelinePathToModule[pipelinePath]
   } else {
-    pipelinePathToModule[pipelinePath] = loadEmscriptenModule(config.itkModulesPath, moduleDirectory, pipelinePath)
+    pipelinePathToModule[pipelinePath] = await loadEmscriptenModule(config.itkModulesPath, moduleDirectory, pipelinePath)
     pipelineModule = pipelinePathToModule[pipelinePath]
   }
   return pipelineModule
 }
 
-const runPipeline = (pipelineModule, args, outputs, inputs) => {
+async function runPipeline(pipelineModule, args, outputs, inputs) {
   const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
 
   const transferables = []
@@ -103,14 +103,14 @@ const runPipeline = (pipelineModule, args, outputs, inputs) => {
   return new registerWebworker.TransferableResponse(result, transferables)
 }
 
-registerWebworker(function (input) {
+registerWebworker(async function (input) {
   let pipelineModule = null
   if (input.operation === 'runPipeline') {
-    pipelineModule = loadPipelineModule('Pipelines', input.pipelinePath, input.config)
+    pipelineModule = await loadPipelineModule('Pipelines', input.pipelinePath, input.config)
   } else if (input.operation === 'runPolyDataIOPipeline') {
-    pipelineModule = loadPipelineModule('PolyDataIOs', input.pipelinePath, input.config)
+    pipelineModule = await loadPipelineModule('PolyDataIOs', input.pipelinePath, input.config)
   } else {
-    return Promise.resolve(new Error('Unknown worker operation'))
+    return new Error('Unknown worker operation')
   }
-  return Promise.resolve(runPipeline(pipelineModule, input.args, input.outputs, input.inputs))
+  return runPipeline(pipelineModule, input.args, input.outputs, input.inputs)
 })

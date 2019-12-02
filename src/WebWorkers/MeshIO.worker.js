@@ -12,7 +12,7 @@ import writeMeshEmscriptenFSFile from '../writeMeshEmscriptenFSFile'
 // To cache loaded io modules
 let ioToModule = {}
 
-const readMesh = (input) => {
+async function readMesh(input) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -28,7 +28,7 @@ const readMesh = (input) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO)
+        ioToModule[trialIO] = await loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO)
         ioModule = ioToModule[trialIO]
       }
       const meshIO = new ioModule.ITKMeshIO()
@@ -47,14 +47,14 @@ const readMesh = (input) => {
   }
   if (io === null) {
     ioToModule = {}
-    return Promise.reject(new Error('Could not find IO for: ' + input.name))
+    return new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io)
+    ioToModule[io] = await loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io)
     ioModule = ioToModule[io]
   }
 
@@ -81,7 +81,7 @@ const readMesh = (input) => {
   return new registerWebworker.TransferableResponse(mesh, transferables)
 }
 
-const writeMesh = (input) => {
+async function writeMesh(input) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -97,7 +97,7 @@ const writeMesh = (input) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO)
+        ioToModule[trialIO] = await loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO)
         ioModule = ioToModule[trialIO]
       }
       const meshIO = new ioModule.ITKMeshIO()
@@ -111,14 +111,14 @@ const writeMesh = (input) => {
   }
   if (io === null) {
     ioToModule = {}
-    return Promise.reject(new Error('Could not find IO for: ' + input.name))
+    return new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io)
+    ioToModule[io] = await loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io)
     ioModule = ioToModule[io]
   }
 
@@ -134,9 +134,9 @@ const writeMesh = (input) => {
 
 registerWebworker(function (input) {
   if (input.operation === 'readMesh') {
-    return Promise.resolve(readMesh(input))
+    return readMesh(input)
   } else if (input.operation === 'writeMesh') {
-    return Promise.resolve(writeMesh(input))
+    return writeMesh(input)
   } else {
     return Promise.resolve(new Error('Unknown worker operation'))
   }

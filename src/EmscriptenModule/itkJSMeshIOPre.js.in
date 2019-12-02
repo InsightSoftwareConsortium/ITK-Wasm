@@ -1,4 +1,13 @@
-var Module = {}
+var runtimeInitialized = typeof runtimeInitialized !== 'undefined' ? runtimeInitialized : false;
+Module.runtimeInitializedResolve = function(resolve) {
+  Module['onRuntimeInitialized'] = function() {
+    resolve(Module);
+  }
+  if (runtimeInitialized) {
+    resolve(Module);
+  }
+}
+
 Module['locateFile'] = function(fileName) {
   if(fileName === '@wasm_target@.wasm') {
     return '../MeshIOs/@wasm_target@.wasm'

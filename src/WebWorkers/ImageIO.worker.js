@@ -14,7 +14,7 @@ import readImageEmscriptenFSDICOMFileSeries from '../readImageEmscriptenFSDICOMF
 let ioToModule = {}
 let seriesReaderModule = null
 
-const readImage = (input) => {
+async function readImage(input) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -30,7 +30,7 @@ const readImage = (input) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', trialIO)
+        ioToModule[trialIO] = await loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', trialIO)
         ioModule = ioToModule[trialIO]
       }
       const imageIO = new ioModule.ITKImageIO()
@@ -49,14 +49,14 @@ const readImage = (input) => {
   }
   if (io === null) {
     ioToModule = {}
-    return Promise.reject(new Error('Could not find IO for: ' + input.name))
+    return new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io)
+    ioToModule[io] = await loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io)
     ioModule = ioToModule[io]
   }
 
@@ -70,7 +70,7 @@ const readImage = (input) => {
   return new registerWebworker.TransferableResponse(image, [image.data.buffer])
 }
 
-const writeImage = (input) => {
+async function writeImage(input) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -86,7 +86,7 @@ const writeImage = (input) => {
       if (trialIO in ioToModule) {
         ioModule = ioToModule[trialIO]
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', trialIO)
+        ioToModule[trialIO] = await loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', trialIO)
         ioModule = ioToModule[trialIO]
       }
       const imageIO = new ioModule.ITKImageIO()
@@ -100,14 +100,14 @@ const writeImage = (input) => {
   }
   if (io === null) {
     ioToModule = {}
-    return Promise.reject(new Error('Could not find IO for: ' + input.name))
+    return new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
   if (io in ioToModule) {
     ioModule = ioToModule[io]
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io)
+    ioToModule[io] = await loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io)
     ioModule = ioToModule[io]
   }
 
@@ -119,10 +119,10 @@ const writeImage = (input) => {
   return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }
 
-const readDICOMImageSeries = (input) => {
+async function readDICOMImageSeries(input) {
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
   if (!seriesReaderModule) {
-    seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', seriesReader)
+    seriesReaderModule = await loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', seriesReader)
   }
 
   const blobs = input.fileDescriptions.map((fileDescription) => {
@@ -141,11 +141,11 @@ const readDICOMImageSeries = (input) => {
 
 registerWebworker(function (input) {
   if (input.operation === 'readImage') {
-    return Promise.resolve(readImage(input))
+    return readImage(input)
   } else if (input.operation === 'writeImage') {
-    return Promise.resolve(writeImage(input))
+    return writeImage(input)
   } else if (input.operation === 'readDICOMImageSeries') {
-    return Promise.resolve(readDICOMImageSeries(input))
+    return readDICOMImageSeries(input)
   } else {
     return Promise.resolve(new Error('Unknown worker operation'))
   }

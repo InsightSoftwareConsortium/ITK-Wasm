@@ -24,8 +24,10 @@ const loadEmscriptenModule = (itkModulesPath, modulesDirectory, moduleBaseName) 
   if (typeof WebAssembly === 'object' && typeof WebAssembly.Memory === 'function') {
     modulePath = prefix + '/' + modulesDirectory + '/' + moduleBaseName + 'Wasm.js'
   }
-  importScripts(modulePath)
-  return Module
+  return new Promise((resolve) => {
+    importScripts(modulePath)
+    Module.runtimeInitializedResolve(resolve);
+  })
 }
 
 export default loadEmscriptenModule
