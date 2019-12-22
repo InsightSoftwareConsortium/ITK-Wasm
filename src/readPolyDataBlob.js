@@ -55,7 +55,6 @@ const readPolyDataBlob = (webWorker, blob, fileName, mimeType) => {
             },
             transferables
           ).then(function ({ stdout, stderr, outputs }) {
-            console.log(outputs)
             return Promise.resolve({ polyData: outputs[0].data, webWorker: worker })
           })
         })
