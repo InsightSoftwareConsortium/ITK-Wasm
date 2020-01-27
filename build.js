@@ -125,7 +125,8 @@ if (program.copySources) {
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
-  const imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
+  let imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
+  imageIOFiles = imageIOFiles.concat(glob.sync(path.join('build', 'ImageIOs', '*.wasm')))
   const copyImageIOModules = function (imageIOFile, callback) {
     const io = path.basename(imageIOFile)
     const output = path.join('dist', 'ImageIOs', io)
@@ -137,7 +138,8 @@ if (program.copySources) {
     const result = asyncMod.map(imageIOFiles, copyImageIOModules)
     callback(null, result)
   }
-  const meshIOFiles = glob.sync(path.join('build', 'MeshIOs', '*.js'))
+  let meshIOFiles = glob.sync(path.join('build', 'MeshIOs', '*.js'))
+  meshIOFiles = meshIOFiles.concat(glob.sync(path.join('build', 'MeshIOs', '*.wasm')))
   const copyMeshIOModules = function (meshIOFile, callback) {
     const io = path.basename(meshIOFile)
     const output = path.join('dist', 'MeshIOs', io)
@@ -150,7 +152,8 @@ if (program.copySources) {
     callback(null, result)
   }
 
-  const polyDataIOFiles = glob.sync(path.join('build', 'PolyDataIOs', '*.js'))
+  let polyDataIOFiles = glob.sync(path.join('build', 'PolyDataIOs', '*.js'))
+  polyDataIOFiles = polyDataIOFiles.concat(glob.sync(path.join('build', 'PolyDataIOs', '*.wasm')))
   const copyPolyDataIOModules = function (polyDataIOFile, callback) {
     const io = path.basename(polyDataIOFile)
     const output = path.join('dist', 'PolyDataIOs', io)
@@ -243,7 +246,8 @@ if (program.buildPipelines) {
     if (buildPipelineCall.status !== 0) {
       process.exit(buildPipelineCall.status)
     }
-    const pipelineFiles = glob.sync(path.join(pipelinePath, 'web-build', '*.js'))
+    let pipelineFiles = glob.sync(path.join(pipelinePath, 'web-build', '*.js'))
+    pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'web-build', '*.wasm')))
     pipelineFiles.forEach((file) => {
       const filename = path.basename(file)
       const output = path.join(__dirname, 'dist', 'Pipelines', filename)
