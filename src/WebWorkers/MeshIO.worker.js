@@ -47,7 +47,7 @@ async function readMesh(input) {
   }
   if (io === null) {
     ioToModule = {}
-    return new Error('Could not find IO for: ' + input.name)
+    throw new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
@@ -111,7 +111,7 @@ async function writeMesh(input) {
   }
   if (io === null) {
     ioToModule = {}
-    return new Error('Could not find IO for: ' + input.name)
+    throw new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
@@ -132,12 +132,12 @@ async function writeMesh(input) {
   return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }
 
-registerWebworker(function (input) {
+registerWebworker(async function (input) {
   if (input.operation === 'readMesh') {
     return readMesh(input)
   } else if (input.operation === 'writeMesh') {
     return writeMesh(input)
   } else {
-    return Promise.resolve(new Error('Unknown worker operation'))
+    throw new Error('Unknown worker operation')
   }
 })

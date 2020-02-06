@@ -1,6 +1,9 @@
 var runtimeInitialized = typeof runtimeInitialized !== 'undefined' ? runtimeInitialized : false;
 Module.runtimeInitializedResolve = function(resolve) {
+  console.log('runtimeInitialized')
+  console.log(runtimeInitialized)
   Module['onRuntimeInitialized'] = function() {
+    console.log('onRuntimeInitalized resolving')
     resolve(Module);
   }
   if (runtimeInitialized) {

@@ -110,7 +110,7 @@ registerWebworker(async function (input) {
   } else if (input.operation === 'runPolyDataIOPipeline') {
     pipelineModule = await loadPipelineModule('PolyDataIOs', input.pipelinePath, input.config)
   } else {
-    return new Error('Unknown worker operation')
+    throw new Error('Unknown worker operation')
   }
   return runPipeline(pipelineModule, input.args, input.outputs, input.inputs)
 })

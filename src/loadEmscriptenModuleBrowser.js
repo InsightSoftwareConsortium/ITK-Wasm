@@ -26,7 +26,8 @@ const loadEmscriptenModule = (itkModulesPath, modulesDirectory, moduleBaseName) 
   }
   return new Promise((resolve) => {
     importScripts(modulePath)
-    Module.runtimeInitializedResolve(resolve);
+    Module['runtimeInitializedResolve'](resolve);
+    console.log('imported, rutime initializer')
   })
 }
 
