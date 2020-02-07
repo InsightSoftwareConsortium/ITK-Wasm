@@ -1,4 +1,4 @@
-import DICOMSeriesTest from './DICOMSeriesTest'
+//import DICOMSeriesTest from './DICOMSeriesTest'
 import DICOMTest from './DICOMTest'
 import JPEGTest from './JPEGTest'
 import readImageTest from './readImageTest'

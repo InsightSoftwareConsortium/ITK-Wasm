@@ -1,13 +1,3 @@
-var runtimeInitialized = typeof runtimeInitialized !== 'undefined' ? runtimeInitialized : false;
-Module.runtimeInitializedResolve = function(resolve) {
-  Module['onRuntimeInitialized'] = function() {
-    resolve(Module);
-  }
-  if (runtimeInitialized) {
-    resolve(Module);
-  }
-}
-
 Module['locateFile'] = function(fileName) {
   if(fileName === '@wasm_target_name@.wasm') {
     return '../Pipelines/@wasm_target_name@.wasm'

@@ -1,16 +1,3 @@
-var runtimeInitialized = typeof runtimeInitialized !== 'undefined' ? runtimeInitialized : false;
-Module.runtimeInitializedResolve = function(resolve) {
-  console.log('runtimeInitialized')
-  console.log(runtimeInitialized)
-  Module['onRuntimeInitialized'] = function() {
-    console.log('onRuntimeInitalized resolving')
-    resolve(Module);
-  }
-  if (runtimeInitialized) {
-    resolve(Module);
-  }
-}
-
 Module['locateFile'] = function(fileName) {
   if(fileName === '@wasm_target@.wasm') {
     return '../ImageIOs/@wasm_target@.wasm'
@@ -18,5 +5,22 @@ Module['locateFile'] = function(fileName) {
   return fileName
 }
 
-Module['preRun'] = function() {
+Module['runtimeInitializedResolve'] = function(resolve) {
+  console.log('calledRun');
+  console.log(calledRun);
+  Module['onRuntimeInitialized'] = function() {
+  console.log('calledRun');
+  console.log(calledRun);
+    console.log('RESOLVING onRuntimeInitialized');
+    console.log(resolve);
+    console.log(Module);
+    resolve(Module);
+  }
+  console.log('runtimeInitialized value:');
+  console.log(runtimeInitialized);
+  console.log('calledRun');
+  console.log(calledRun);
+  if (runtimeInitialized) {
+    resolve(Module);
+  }
 }

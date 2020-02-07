@@ -12,7 +12,7 @@ import writeMeshEmscriptenFSFile from '../writeMeshEmscriptenFSFile'
 // To cache loaded io modules
 let ioToModule = {}
 
-async function readMesh(input) {
+async function readMesh (input) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -81,7 +81,7 @@ async function readMesh(input) {
   return new registerWebworker.TransferableResponse(mesh, transferables)
 }
 
-async function writeMesh(input) {
+async function writeMesh (input) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 

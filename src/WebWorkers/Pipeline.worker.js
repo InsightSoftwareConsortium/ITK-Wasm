@@ -18,7 +18,7 @@ async function loadPipelineModule (moduleDirectory, pipelinePath, config) {
   return pipelineModule
 }
 
-async function runPipeline(pipelineModule, args, outputs, inputs) {
+async function runPipeline (pipelineModule, args, outputs, inputs) {
   const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
 
   const transferables = []
