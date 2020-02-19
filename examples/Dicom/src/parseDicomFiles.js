@@ -245,13 +245,10 @@ class DICOMSeries extends DICOMEntity {
     const m = Number(meta.RescaleSlope)
     const hasIntercept = !Number.isNaN(b) && b !== 0
     const hasSlope = !Number.isNaN(m) && m !== 1
-    let rescaleFunction
-    if (hasIntercept && hasSlope) {
-      data = data.map((value) => m * value + b)
-    } else if (hasIntercept) {
-      data = data.map((value) => value + b)
-    } else if (hasSlope) {
-      data = data.map((value) => m * value)
+    if (hasIntercept || hasSlope) {
+      for (let i = 0; i < data.length; i++) {
+        data[i] = m * data[i] + b
+      }
     }
 
     return {
@@ -348,11 +345,10 @@ async function parseDicomFiles(fileList, ignoreFailedFiles = false) {
     const dataSet = dicomParser.parseDicom(byteArray)
 
     // Read metadata (recursive)
-    async function readTags(dataSet) {
+    function readTags(dataSet) {
       const metaData = {}
 
-      // Read value for a single tag
-      async function readTag(tag) {
+      for (const tag in dataSet.elements) {
         const tagGroup = tag.substring(1,5)
         const tagElement = tag.substring(5,9)
         const tagKey = ("("+tagGroup+","+tagElement+")").toUpperCase();
@@ -362,12 +358,12 @@ async function parseDicomFiles(fileList, ignoreFailedFiles = false) {
 
         if (element.items) {
           metaData[tagName] = []
-          const readTagsOfItems = element.items.map(async (item) => {
-            const itemMetaData = await readTags(item.dataSet)
-            metaData[tagName].push(itemMetaData)
-          })
-          await Promise.all(readTagsOfItems)
-          return
+          for (let j = 0; j < element.items.length; j++) {
+            const innerDataSet = element.items[j].dataSet
+            const innerMetaData = readTags(innerDataSet)
+            metaData[tagName].push(innerMetaData)
+          }
+          continue
         }
 
         let value = undefined
@@ -425,7 +421,7 @@ async function parseDicomFiles(fileList, ignoreFailedFiles = false) {
               } else if (element.length === 4) {
                 value = dataSet.uint32(tag)
               } else {
-                return
+                continue
               }
               break
             default: //string
@@ -437,15 +433,9 @@ async function parseDicomFiles(fileList, ignoreFailedFiles = false) {
         metaData[tagName] = value
       }
 
-      // Set up promises for all tags
-      const tags = Object.keys(dataSet.elements)
-      const readAllTags = tags.map(readTag)
-
-      // Read all tags
-      await Promise.all(readAllTags)
       return metaData
     }
-    const metaData = await readTags(dataSet)
+    const metaData = readTags(dataSet)
 
     // Organize metadata
     const patientId = metaData[DICOMPatient.primaryTag]
