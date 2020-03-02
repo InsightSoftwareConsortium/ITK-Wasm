@@ -4,8 +4,9 @@ const ImageType = require('./ImageType.js')
 const imageIOComponentToJSComponent = require('./imageIOComponentToJSComponent.js')
 const imageIOPixelTypeToJSPixelType = require('./imageIOPixelTypeToJSPixelType.js')
 
-const readImageEmscriptenFSDICOMFileSeries = (seriesReaderModule, directory, firstFile) => {
+const readImageEmscriptenFSDICOMFileSeries = (seriesReaderModule, fileNames, singleSortedSeries) => {
   const seriesReader = new seriesReaderModule.ITKDICOMImageSeriesReader()
+  const firstFile = fileNames[0]
   if (!seriesReader.CanReadTestFile(firstFile)) {
     throw new Error('Could not read file: ' + firstFile)
   }
@@ -27,7 +28,16 @@ const readImageEmscriptenFSDICOMFileSeries = (seriesReaderModule, directory, fir
 
   seriesReader.SetIOComponentType(ioComponentType)
   seriesReader.SetIOPixelType(ioPixelType)
-  seriesReader.SetDirectory(directory)
+  const fileNamesContainer = new seriesReaderModule.FileNamesContainerType()
+  fileNames.forEach((fileName) => {
+    fileNamesContainer.push_back(fileName)
+  })
+  if (singleSortedSeries) {
+    seriesReader.SetFileNames(fileNamesContainer)
+  } else {
+    const directory = fileNames[0].match(/.*\//)[0]
+    seriesReader.SetDirectory(directory)
+  }
   if (seriesReader.Read()) {
     throw new Error('Could not read series')
   }

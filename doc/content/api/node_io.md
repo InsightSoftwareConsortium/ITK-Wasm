@@ -37,13 +37,14 @@ Read an image from a file on the local filesystem.
 
 Similar to `readImageLocalFile`, but returns the image directly instead of a promise.
 
-## readImageLocalDICOMFileSeries(directory) -> [itk/Image](./Image.html)
+## readImageLocalDICOMFileSeries(filePaths, singleSortedSeries=false) -> [itk/Image](./Image.html)
 
 Read an image from a series of DICOM files on the local filesystem.
 
-It is assumed that all the files are located in the same directory.
+If the files are known to be from a single, sorted series, the last argument can be set to true for performance.
 
-## readImageLocalDICOMFileSeriesSync(directory) -> [itk/Image](./Image.html)
+
+## readImageLocalDICOMFileSeriesSync(filePaths, singleSortedSeries=False) -> [itk/Image](./Image.html)
 
 Similar to `readImageLocalDICOMFileSeries`, but returns the image directly instead of a promise.
 

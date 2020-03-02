@@ -129,9 +129,11 @@ async function readDICOMImageSeries (input) {
   })
   const mountpoint = '/work'
   seriesReaderModule.mountBlobs(mountpoint, blobs)
-  const filePath = mountpoint + '/' + input.fileDescriptions[0].name
+  const filePaths = input.fileDescriptions.map((fileDescription) => {
+    return `${mountpoint}/${fileDescription.name}`
+  })
   const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
-    mountpoint, filePath)
+    filePaths, input.singleSortedSeries)
   seriesReaderModule.unmountBlobs(mountpoint)
 
   return new registerWebworker.TransferableResponse(image, [image.data.buffer])
