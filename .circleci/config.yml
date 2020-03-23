@@ -1,8 +1,7 @@
 ignore-ghpages: &ignore-ghpages
-  filters:
-    branches:
-      ignore:
-        - gh-pages
+  branches:
+    ignore:
+      - gh-pages
 
 version: 2
 jobs:
@@ -165,10 +164,10 @@ workflows:
     build-test-deploy:
       jobs:
         - build-test-deploy:
-            filters:
-              branches:
-                ignore:
-                  - gh-pages
+            branches:
+              ignore:
+                - gh-pages
+
     build-test-examples:
       jobs:
         - build-test-node-example:
