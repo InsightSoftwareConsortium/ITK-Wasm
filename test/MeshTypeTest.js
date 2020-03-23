@@ -1,5 +1,5 @@
-import test from 'ava'
-import path from 'path'
+const test = require('ava')
+const path = require('path')
 
 const MeshType = require(path.resolve(__dirname, '..', 'dist', 'MeshType.js'))
 const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))

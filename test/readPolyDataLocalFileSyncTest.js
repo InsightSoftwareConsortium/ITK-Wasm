@@ -1,5 +1,5 @@
-import test from 'ava'
-import path from 'path'
+const test = require('ava')
+const path = require('path')
 
 const readPolyDataLocalFileSync = require(path.resolve(__dirname, '..', 'dist', 'readPolyDataLocalFileSync.js'))
 

@@ -1,5 +1,5 @@
-import test from 'ava'
-import path from 'path'
+const test = require('ava')
+const path = require('path')
 
 const Matrix = require(path.resolve(__dirname, '..', 'dist', 'Matrix.js'))
 const getMatrixElement = require(path.resolve(__dirname, '..', 'dist', 'getMatrixElement.js'))
