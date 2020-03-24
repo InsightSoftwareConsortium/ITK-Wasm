@@ -1,4 +1,4 @@
-FROM dockcross/web-wasm:20191120-659dfd5
+FROM dockcross/web-wasm:20200324-880bfd0
 
 MAINTAINER Insight Software Consortium <community@itk.org>
 
