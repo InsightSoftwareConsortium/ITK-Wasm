@@ -1,8 +1,3 @@
-ignore-ghpages: &ignore-ghpages
-  branches:
-    ignore:
-      - gh-pages
-
 version: 2
 jobs:
   build-test-deploy:
@@ -164,19 +159,35 @@ workflows:
     build-test-deploy:
       jobs:
         - build-test-deploy:
-            branches:
-              ignore:
-                - gh-pages
+            filters:
+              branches:
+                ignore:
+                  - gh-pages
 
     build-test-examples:
       jobs:
         - build-test-node-example:
-            <<: *ignore-ghpages
+            filters:
+              branches:
+                ignore:
+                  - gh-pages
         - test-umd-example:
-            <<: *ignore-ghpages
+            filters:
+              branches:
+                ignore:
+                  - gh-pages
         - build-test-webpack-example:
-            <<: *ignore-ghpages
+            filters:
+              branches:
+                ignore:
+                  - gh-pages
         - build-test-unpkgio-example:
-            <<: *ignore-ghpages
+            filters:
+              branches:
+                ignore:
+                  - gh-pages
         - build-test-nodejs-hello-world-example:
-            <<: *ignore-ghpages
+            filters:
+              branches:
+                ignore:
+                  - gh-pages
