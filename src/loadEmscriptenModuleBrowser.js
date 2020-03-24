@@ -15,7 +15,7 @@
 //
 // moduleBaseName is the file name of the emscripten module without the ".js"
 // extension
-const loadEmscriptenModule = (itkModulesPath, modulesDirectory, moduleBaseName) => {
+function loadEmscriptenModule(itkModulesPath, modulesDirectory, moduleBaseName) {
   let prefix = itkModulesPath
   if (itkModulesPath[0] !== '/' && !itkModulesPath.startsWith('http')) {
     prefix = '..'
@@ -23,9 +23,13 @@ const loadEmscriptenModule = (itkModulesPath, modulesDirectory, moduleBaseName) 
   let modulePath = prefix + '/' + modulesDirectory + '/' + moduleBaseName + '.js'
   if (typeof WebAssembly === 'object' && typeof WebAssembly.Memory === 'function') {
     modulePath = prefix + '/' + modulesDirectory + '/' + moduleBaseName + 'Wasm.js'
+    importScripts(modulePath)
+    const module = self[moduleBaseName]();
+    return module;
+  } else {
+    importScripts(modulePath)
+    return Module
   }
-  importScripts(modulePath)
-  return Module
 }
 
 export default loadEmscriptenModule

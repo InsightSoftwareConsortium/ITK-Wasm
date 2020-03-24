@@ -14,7 +14,15 @@ import readImageEmscriptenFSDICOMFileSeries from '../readImageEmscriptenFSDICOMF
 let ioToModule = {}
 let seriesReaderModule = null
 
-const readImage = (input) => {
+function * availableIOModules (input) {
+  for (let idx = 0; idx < ImageIOIndex.length; idx++) {
+    const trialIO = ImageIOIndex[idx]
+    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', trialIO)
+    yield ioModule
+  }
+}
+
+async function readImage (input) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -24,53 +32,51 @@ const readImage = (input) => {
   } else if (extensionToIO.has(extension)) {
     io = extensionToIO.get(extension)
   } else {
-    for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
-      let ioModule = null
+    let idx = 0
+    for (const mod of availableIOModules(input)) {
       const trialIO = ImageIOIndex[idx]
-      if (trialIO in ioToModule) {
-        ioModule = ioToModule[trialIO]
-      } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', trialIO)
-        ioModule = ioToModule[trialIO]
-      }
-      const imageIO = new ioModule.ITKImageIO()
+      const imageIO = new mod.ITKImageIO()
       const blob = new Blob([input.data])
       const blobs = [{ name: input.name, data: blob }]
-      ioModule.mountBlobs(mountpoint, blobs)
+      mod.mountBlobs(mountpoint, blobs)
       const filePath = mountpoint + '/' + input.name
       imageIO.SetFileName(filePath)
       if (imageIO.CanReadFile(filePath)) {
         io = trialIO
-        ioModule.unmountBlobs(mountpoint)
+        mod.unmountBlobs(mountpoint)
+        ioToModule[io] = mod
         break
       }
-      ioModule.unmountBlobs(mountpoint)
+      mod.unmountBlobs(mountpoint)
+      idx++
+    }
+    if (io === null) {
+      throw new Error('Could not find IO for: ' + input.name)
     }
   }
-  if (io === null) {
-    ioToModule = {}
-    return Promise.reject(new Error('Could not find IO for: ' + input.name))
+
+  function inputToResponse (ioModule) {
+    const blob = new Blob([input.data])
+    const blobs = [{ name: input.name, data: blob }]
+    ioModule.mountBlobs(mountpoint, blobs)
+    const filePath = mountpoint + '/' + input.name
+    const image = readImageEmscriptenFSFile(ioModule, filePath)
+    ioModule.unmountBlobs(mountpoint)
+
+    return new registerWebworker.TransferableResponse(image, [image.data.buffer])
   }
 
-  let ioModule = null
   if (io in ioToModule) {
-    ioModule = ioToModule[io]
+    const ioModule = ioToModule[io]
+    return inputToResponse(ioModule)
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io)
-    ioModule = ioToModule[io]
+    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io)
+    ioToModule[io] = ioModule
+    return inputToResponse(ioModule)
   }
-
-  const blob = new Blob([input.data])
-  const blobs = [{ name: input.name, data: blob }]
-  ioModule.mountBlobs(mountpoint, blobs)
-  const filePath = mountpoint + '/' + input.name
-  const image = readImageEmscriptenFSFile(ioModule, filePath)
-  ioModule.unmountBlobs(mountpoint)
-
-  return new registerWebworker.TransferableResponse(image, [image.data.buffer])
 }
 
-const writeImage = (input) => {
+async function writeImage (input) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -80,15 +86,7 @@ const writeImage = (input) => {
   } else if (extensionToIO.has(extension)) {
     io = extensionToIO.get(extension)
   } else {
-    for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
-      let ioModule = null
-      const trialIO = ImageIOIndex[idx]
-      if (trialIO in ioToModule) {
-        ioModule = ioToModule[trialIO]
-      } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', trialIO)
-        ioModule = ioToModule[trialIO]
-      }
+    for (const ioModule of availableIOModules(input)) {
       const imageIO = new ioModule.ITKImageIO()
       const filePath = mountpoint + '/' + input.name
       imageIO.SetFileName(filePath)
@@ -100,7 +98,7 @@ const writeImage = (input) => {
   }
   if (io === null) {
     ioToModule = {}
-    return Promise.reject(new Error('Could not find IO for: ' + input.name))
+    throw new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
@@ -119,7 +117,7 @@ const writeImage = (input) => {
   return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }
 
-const readDICOMImageSeries = (input) => {
+async function readDICOMImageSeries (input) {
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
   if (!seriesReaderModule) {
     seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', seriesReader)
@@ -139,14 +137,14 @@ const readDICOMImageSeries = (input) => {
   return new registerWebworker.TransferableResponse(image, [image.data.buffer])
 }
 
-registerWebworker(function (input) {
+registerWebworker(async function (input) {
   if (input.operation === 'readImage') {
-    return Promise.resolve(readImage(input))
+    return readImage(input)
   } else if (input.operation === 'writeImage') {
-    return Promise.resolve(writeImage(input))
+    return writeImage(input)
   } else if (input.operation === 'readDICOMImageSeries') {
-    return Promise.resolve(readDICOMImageSeries(input))
+    return readDICOMImageSeries(input)
   } else {
-    return Promise.resolve(new Error('Unknown worker operation'))
+    throw new Error('Unknown worker operation')
   }
 })

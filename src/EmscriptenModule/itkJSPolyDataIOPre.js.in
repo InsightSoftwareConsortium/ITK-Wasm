@@ -1,6 +1,6 @@
 Module['locateFile'] = function(fileName) {
-  if(fileName === '@wasm_target_name@.wasm') {
-    return '../Pipelines/@wasm_target_name@.wasm'
+  if(fileName === '@wasm_target@.wasm') {
+    return '../PolyDataIOs/@wasm_target@.wasm'
   }
   return fileName
 }
@@ -22,7 +22,7 @@ Module['print'] = function(text) {
 }
 
 Module['printErr'] = function(text) {
-  console.log(text)
+  console.error(text)
   moduleStderr += text + '\n'
 }
 

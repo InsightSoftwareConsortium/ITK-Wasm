@@ -13,18 +13,18 @@ const typedArrayForBuffer = (typedArrayType, buffer) => {
   return new TypedArrayFunction(buffer)
 }
 
-const runPipelineEmscripten = (module, args, outputs, inputs) => {
+const runPipelineEmscripten = (pipelineModule, args, outputs, inputs) => {
   if (inputs) {
     inputs.forEach(function (input) {
       switch (input.type) {
         case IOTypes.Text:
         {
-          module.writeFile(input.path, input.data)
+          pipelineModule.writeFile(input.path, input.data)
           break
         }
         case IOTypes.Binary:
         {
-          module.writeFile(input.path, input.data)
+          pipelineModule.writeFile(input.path, input.data)
           break
         }
         case IOTypes.Image:
@@ -36,8 +36,8 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
             }
           }
           imageJSON.data = input.path + '.data'
-          module.writeFile(input.path, JSON.stringify(imageJSON))
-          module.writeFile(imageJSON.data, new Uint8Array(input.data.data.buffer))
+          pipelineModule.writeFile(input.path, JSON.stringify(imageJSON))
+          pipelineModule.writeFile(imageJSON.data, new Uint8Array(input.data.data.buffer))
           break
         }
         case IOTypes.Mesh:
@@ -56,18 +56,18 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
           meshJSON.pointData = input.path + '.pointData.data'
           meshJSON.cells = input.path + '.cells.data'
           meshJSON.cellData = input.path + '.cellData.data'
-          module.writeFile(input.path, JSON.stringify(meshJSON))
+          pipelineModule.writeFile(input.path, JSON.stringify(meshJSON))
           if (meshJSON.numberOfPoints) {
-            module.writeFile(meshJSON.points, new Uint8Array(input.data.points.buffer))
+            pipelineModule.writeFile(meshJSON.points, new Uint8Array(input.data.points.buffer))
           }
           if (meshJSON.numberOfPointPixels) {
-            module.writeFile(meshJSON.pointData, new Uint8Array(input.data.pointData.buffer))
+            pipelineModule.writeFile(meshJSON.pointData, new Uint8Array(input.data.pointData.buffer))
           }
           if (meshJSON.numberOfCells) {
-            module.writeFile(meshJSON.cells, new Uint8Array(input.data.cells.buffer))
+            pipelineModule.writeFile(meshJSON.cells, new Uint8Array(input.data.cells.buffer))
           }
           if (meshJSON.numberOfCellPixels) {
-            module.writeFile(meshJSON.cellData, new Uint8Array(input.data.cellData.buffer))
+            pipelineModule.writeFile(meshJSON.cellData, new Uint8Array(input.data.cellData.buffer))
           }
           break
         }
@@ -77,11 +77,11 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
     })
   }
 
-  module.resetModuleStdout()
-  module.resetModuleStderr()
-  module.callMain(args)
-  const stdout = module.getModuleStdout()
-  const stderr = module.getModuleStderr()
+  pipelineModule.resetModuleStdout()
+  pipelineModule.resetModuleStderr()
+  pipelineModule.callMain(args)
+  const stdout = pipelineModule.getModuleStdout()
+  const stderr = pipelineModule.getModuleStderr()
 
   const populatedOutputs = []
   if (outputs) {
@@ -91,47 +91,47 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
       switch (output.type) {
         case IOTypes.Text:
         {
-          populatedOutput.data = module.readFile(output.path, { encoding: 'utf8' })
+          populatedOutput.data = pipelineModule.readFile(output.path, { encoding: 'utf8' })
           break
         }
         case IOTypes.Binary:
         {
-          populatedOutput.data = module.readFile(output.path, { encoding: 'binary' })
+          populatedOutput.data = pipelineModule.readFile(output.path, { encoding: 'binary' })
           break
         }
         case IOTypes.Image:
         {
-          const imageJSON = module.readFile(output.path, { encoding: 'utf8' })
+          const imageJSON = pipelineModule.readFile(output.path, { encoding: 'utf8' })
           const image = JSON.parse(imageJSON)
-          const dataUint8 = module.readFile(image.data, { encoding: 'binary' })
+          const dataUint8 = pipelineModule.readFile(image.data, { encoding: 'binary' })
           image.data = bufferToTypedArray(image.imageType.componentType, dataUint8.buffer)
           populatedOutput.data = image
           break
         }
         case IOTypes.Mesh:
         {
-          const meshJSON = module.readFile(output.path, { encoding: 'utf8' })
+          const meshJSON = pipelineModule.readFile(output.path, { encoding: 'utf8' })
           const mesh = JSON.parse(meshJSON)
           if (mesh.numberOfPoints) {
-            const dataUint8Points = module.readFile(mesh.points, { encoding: 'binary' })
+            const dataUint8Points = pipelineModule.readFile(mesh.points, { encoding: 'binary' })
             mesh.points = bufferToTypedArray(mesh.meshType.pointComponentType, dataUint8Points.buffer)
           } else {
             mesh.points = bufferToTypedArray(mesh.meshType.pointComponentType, new ArrayBuffer(0))
           }
           if (mesh.numberOfPointPixels) {
-            const dataUint8PointData = module.readFile(mesh.pointData, { encoding: 'binary' })
+            const dataUint8PointData = pipelineModule.readFile(mesh.pointData, { encoding: 'binary' })
             mesh.pointData = bufferToTypedArray(mesh.meshType.pointPixelComponentType, dataUint8PointData.buffer)
           } else {
             mesh.pointData = bufferToTypedArray(mesh.meshType.pointPixelComponentType, new ArrayBuffer(0))
           }
           if (mesh.numberOfCells) {
-            const dataUint8Cells = module.readFile(mesh.cells, { encoding: 'binary' })
+            const dataUint8Cells = pipelineModule.readFile(mesh.cells, { encoding: 'binary' })
             mesh.cells = bufferToTypedArray(mesh.meshType.cellComponentType, dataUint8Cells.buffer)
           } else {
             mesh.cells = bufferToTypedArray(mesh.meshType.cellComponentType, new ArrayBuffer(0))
           }
           if (mesh.numberOfCellPixels) {
-            const dataUint8CellData = module.readFile(mesh.cellData, { encoding: 'binary' })
+            const dataUint8CellData = pipelineModule.readFile(mesh.cellData, { encoding: 'binary' })
             mesh.cellData = bufferToTypedArray(mesh.meshType.cellPixelComponentType, dataUint8CellData.buffer)
           } else {
             mesh.cellData = bufferToTypedArray(mesh.meshType.cellPixelComponentType, new ArrayBuffer(0))
@@ -141,14 +141,14 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
         }
         case IOTypes.vtkPolyData:
         {
-          const polyDataJSON = module.readFile(`${output.path}/index.json`, { encoding: 'utf8' })
+          const polyDataJSON = pipelineModule.readFile(`${output.path}/index.json`, { encoding: 'utf8' })
           const polyData = JSON.parse(polyDataJSON)
           const cellTypes = ['points', 'verts', 'lines', 'polys', 'strips']
           cellTypes.forEach((cellName) => {
             if (polyData[cellName]) {
               const cell = polyData[cellName]
               if (cell.ref) {
-                const dataUint8 = module.readFile(`${output.path}/${cell.ref.basepath}/${cell.ref.id}`, { encoding: 'binary' })
+                const dataUint8 = pipelineModule.readFile(`${output.path}/${cell.ref.basepath}/${cell.ref.id}`, { encoding: 'binary' })
                 polyData[cellName].buffer = dataUint8.buffer
                 polyData[cellName].values = typedArrayForBuffer(polyData[cellName].dataType, dataUint8.buffer)
                 delete cell.ref
@@ -162,7 +162,7 @@ const runPipelineEmscripten = (module, args, outputs, inputs) => {
               const data = polyData[dataName]
               data.arrays.forEach((array) => {
                 if (array.data.ref) {
-                  const dataUint8 = module.readFile(`${output.path}/${array.data.ref.basepath}/${array.data.ref.id}`, { encoding: 'binary' })
+                  const dataUint8 = pipelineModule.readFile(`${output.path}/${array.data.ref.basepath}/${array.data.ref.id}`, { encoding: 'binary' })
                   array.data.buffer = dataUint8.buffer
                   array.data.values = typedArrayForBuffer(array.data.dataType, dataUint8.buffer)
                   delete array.data.ref

@@ -1,5 +1,5 @@
-import test from 'ava'
-import path from 'path'
+const test = require('ava')
+const path = require('path')
 
 const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
 const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))

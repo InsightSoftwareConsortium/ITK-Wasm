@@ -1,6 +1,6 @@
-import test from 'ava'
-import path from 'path'
-import fs from 'fs'
+const test = require('ava')
+const path = require('path')
+const fs = require('fs')
 
 const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
 const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))

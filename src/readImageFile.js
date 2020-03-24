@@ -3,27 +3,29 @@ import PromiseFileReader from 'promise-file-reader'
 
 import config from './itkConfig'
 
-const readImageFile = (webWorker, file) => {
+const readImageFile = async (webWorker, file) => {
   let worker = webWorker
-  return createWebworkerPromise('ImageIO', worker)
-    .then(({ webworkerPromise, worker: usedWorker }) => {
-      worker = usedWorker
-      return PromiseFileReader.readAsArrayBuffer(file)
-        .then((arrayBuffer) => {
-          return webworkerPromise.postMessage(
-            {
-              operation: 'readImage',
-              name: file.name,
-              type: file.type,
-              data: arrayBuffer,
-              config: config
-            },
-            [arrayBuffer]
-          )
-        }).then(function (image) {
-          return Promise.resolve({ image, webWorker: worker })
-        })
-    })
+  const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
+    'ImageIO',
+    worker
+  )
+  worker = usedWorker
+  const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(file)
+  try {
+    const image = await webworkerPromise.postMessage(
+      {
+        operation: 'readImage',
+        name: file.name,
+        type: file.type,
+        data: arrayBuffer,
+        config: config
+      },
+      [arrayBuffer]
+    )
+    return { image, webWorker: worker }
+  } catch (error) {
+    throw Error(error)
+  }
 }
 
 export default readImageFile

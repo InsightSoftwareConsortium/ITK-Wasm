@@ -1,5 +1,6 @@
 const loadEmscriptenModuleNode = (modulePath) => {
-  return require(modulePath)
+  const result = require(modulePath)
+  return result
 }
 
 module.exports = loadEmscriptenModuleNode

@@ -5,8 +5,8 @@ const Matrix = require('./Matrix.js')
 const imageIOComponentToJSComponent = require('./imageIOComponentToJSComponent.js')
 const imageIOPixelTypeToJSPixelType = require('./imageIOPixelTypeToJSPixelType.js')
 
-const readImageEmscriptenFSFile = (module, filePath) => {
-  const imageIO = new module.ITKImageIO()
+const readImageEmscriptenFSFile = (imageModule, filePath) => {
+  const imageIO = new imageModule.ITKImageIO()
   imageIO.SetFileName(filePath)
   if (!imageIO.CanReadFile(filePath)) {
     throw new Error('Could not read file: ' + filePath)
@@ -17,10 +17,10 @@ const readImageEmscriptenFSFile = (module, filePath) => {
   const imageType = new ImageType(ioDimensions)
 
   const ioComponentType = imageIO.GetComponentType()
-  imageType.componentType = imageIOComponentToJSComponent(module, ioComponentType)
+  imageType.componentType = imageIOComponentToJSComponent(imageModule, ioComponentType)
 
   const ioPixelType = imageIO.GetPixelType()
-  imageType.pixelType = imageIOPixelTypeToJSPixelType(module, ioPixelType)
+  imageType.pixelType = imageIOPixelTypeToJSPixelType(imageModule, ioPixelType)
 
   imageType.components = imageIO.GetNumberOfComponents()
 

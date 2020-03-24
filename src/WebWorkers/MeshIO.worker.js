@@ -12,7 +12,7 @@ import writeMeshEmscriptenFSFile from '../writeMeshEmscriptenFSFile'
 // To cache loaded io modules
 let ioToModule = {}
 
-const readMesh = (input) => {
+async function readMesh (input) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -47,7 +47,7 @@ const readMesh = (input) => {
   }
   if (io === null) {
     ioToModule = {}
-    return Promise.reject(new Error('Could not find IO for: ' + input.name))
+    throw new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
@@ -81,7 +81,7 @@ const readMesh = (input) => {
   return new registerWebworker.TransferableResponse(mesh, transferables)
 }
 
-const writeMesh = (input) => {
+async function writeMesh (input) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -111,7 +111,7 @@ const writeMesh = (input) => {
   }
   if (io === null) {
     ioToModule = {}
-    return Promise.reject(new Error('Could not find IO for: ' + input.name))
+    throw new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
@@ -132,12 +132,12 @@ const writeMesh = (input) => {
   return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }
 
-registerWebworker(function (input) {
+registerWebworker(async function (input) {
   if (input.operation === 'readMesh') {
-    return Promise.resolve(readMesh(input))
+    return readMesh(input)
   } else if (input.operation === 'writeMesh') {
-    return Promise.resolve(writeMesh(input))
+    return writeMesh(input)
   } else {
-    return Promise.resolve(new Error('Unknown worker operation'))
+    throw new Error('Unknown worker operation')
   }
 })
