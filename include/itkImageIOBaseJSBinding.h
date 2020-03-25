@@ -24,6 +24,8 @@
 
 #include "emscripten/val.h"
 
+#include "itkCommonEnums.h"
+
 namespace itk
 {
 
@@ -45,13 +47,13 @@ public:
   /** Enums used to manipulate the pixel type. The pixel type provides
    * context for automatic data conversions (for instance, RGB to
    * SCALAR, VECTOR to SCALAR). */
-  typedef typename ImageIOType::IOPixelType IOPixelType;
+  typedef ::itk::CommonEnums::IOPixel IOPixelType;
 
   /** Enums used to manipulate the component type. The component type
    * refers to the actual storage class associated with either a
    * SCALAR pixel type or elements of a compound pixel.
    */
-  typedef typename ImageIOType::IOComponentType IOComponentType;
+  typedef ::itk::CommonEnums::IOComponent IOComponentType;
 
   ImageIOBaseJSBinding();
 

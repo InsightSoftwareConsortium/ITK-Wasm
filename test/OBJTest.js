@@ -14,7 +14,7 @@ const verifyMesh = (t, mesh) => {
   t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
   t.is(mesh.meshType.cellComponentType, IntTypes.Int32)
   t.is(mesh.meshType.pointPixelType, 5)
-  t.is(mesh.meshType.cellPixelType, 1)
+  t.is(mesh.meshType.cellPixelType, 5)
   t.is(mesh.numberOfPoints, 8)
   t.is(mesh.numberOfCells, 6)
 }

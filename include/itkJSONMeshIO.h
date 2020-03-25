@@ -90,13 +90,13 @@ protected:
   ~JSONMeshIO() override;
   void PrintSelf(std::ostream & os, Indent indent) const override;
 
-  static MeshIOBase::IOComponentType JSToITKComponentType( const std::string & jsComponentType );
-  static std::string ITKToJSComponentType( const MeshIOBase::IOComponentType );
+  static CommonEnums::IOComponent JSToITKComponentType( const std::string & jsComponentType );
+  static std::string ITKToJSComponentType( const CommonEnums::IOComponent );
 
-  static MeshIOBase::IOPixelType JSToITKPixelType( const int jsPixelType );
-  static int ITKToJSPixelType( const MeshIOBase::IOPixelType );
+  static CommonEnums::IOPixel JSToITKPixelType( const int jsPixelType );
+  static int ITKToJSPixelType( const CommonEnums::IOPixel );
 
-  static size_t ITKComponentSize( const MeshIOBase::IOComponentType );
+  static size_t ITKComponentSize( const CommonEnums::IOComponent );
 
   /** \brief Opens a file for reading and random access
    *

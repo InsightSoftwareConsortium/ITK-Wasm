@@ -162,94 +162,94 @@ JSONMeshIO
 }
 
 
-MeshIOBase::IOComponentType
+CommonEnums::IOComponent
 JSONMeshIO
 ::JSToITKComponentType(const std::string & jsComponentType)
 {
   if( jsComponentType == "int8_t" )
     {
-    return CHAR;
+    return CommonEnums::IOComponent::CHAR;
     }
   else if( jsComponentType == "uint8_t" )
     {
-    return UCHAR;
+    return CommonEnums::IOComponent::UCHAR;
     }
   else if( jsComponentType == "int16_t" )
     {
-    return SHORT;
+    return CommonEnums::IOComponent::SHORT;
     }
   else if( jsComponentType == "uint16_t" )
     {
-    return USHORT;
+    return CommonEnums::IOComponent::USHORT;
     }
   else if( jsComponentType == "int32_t" )
     {
-    return INT;
+    return CommonEnums::IOComponent::INT;
     }
   else if( jsComponentType == "uint32_t" )
     {
-    return UINT;
+    return CommonEnums::IOComponent::UINT;
     }
   else if( jsComponentType == "int64_t" )
     {
-    return LONGLONG;
+    return CommonEnums::IOComponent::LONGLONG;
     }
   else if( jsComponentType == "uint64_t" )
     {
-    return ULONGLONG;
+    return CommonEnums::IOComponent::ULONGLONG;
     }
   else if( jsComponentType == "float" )
     {
-    return FLOAT;
+    return CommonEnums::IOComponent::FLOAT;
     }
   else if( jsComponentType == "double" )
     {
-    return DOUBLE;
+    return CommonEnums::IOComponent::DOUBLE;
     }
-  return UNKNOWNCOMPONENTTYPE;
+  return CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE;
 }
 
 
 std::string
 JSONMeshIO
-::ITKToJSComponentType(const MeshIOBase::IOComponentType itkComponentType)
+::ITKToJSComponentType(const CommonEnums::IOComponent itkComponentType)
 {
   switch ( itkComponentType )
     {
-    case CHAR:
+    case CommonEnums::IOComponent::CHAR:
       return "int8_t";
 
-    case UCHAR:
+    case CommonEnums::IOComponent::UCHAR:
       return "uint8_t";
 
-    case SHORT:
+    case CommonEnums::IOComponent::SHORT:
       return "int16_t";
 
-    case USHORT:
+    case CommonEnums::IOComponent::USHORT:
       return "uint16_t";
 
-    case INT:
+    case CommonEnums::IOComponent::INT:
       return "int32_t";
 
-    case UINT:
+    case CommonEnums::IOComponent::UINT:
       return "uint32_t";
 
-    case LONG:
+    case CommonEnums::IOComponent::LONG:
       return "int64_t";
 
-    case ULONG:
+    case CommonEnums::IOComponent::ULONG:
       return "uint64_t";
 
-    case LONGLONG:
+    case CommonEnums::IOComponent::LONGLONG:
       return "int64_t";
 
-    case ULONGLONG:
+    case CommonEnums::IOComponent::ULONGLONG:
       return "uint64_t";
 
-    case FLOAT:
+    case CommonEnums::IOComponent::FLOAT:
       return "float";
 
-    case DOUBLE:
+    case CommonEnums::IOComponent::DOUBLE:
       return "double";
 
     default:
@@ -260,44 +260,44 @@ JSONMeshIO
 
 size_t
 JSONMeshIO
-::ITKComponentSize(const MeshIOBase::IOComponentType itkComponentType)
+::ITKComponentSize(const CommonEnums::IOComponent itkComponentType)
 {
   switch ( itkComponentType )
     {
-    case CHAR:
+    case CommonEnums::IOComponent::CHAR:
       return sizeof( uint8_t );
 
-    case UCHAR:
+    case CommonEnums::IOComponent::UCHAR:
       return sizeof( uint8_t );
 
-    case SHORT:
+    case CommonEnums::IOComponent::SHORT:
       return sizeof( int16_t );
 
-    case USHORT:
+    case CommonEnums::IOComponent::USHORT:
       return sizeof( uint16_t );
 
-    case INT:
+    case CommonEnums::IOComponent::INT:
       return sizeof( int32_t );
 
-    case UINT:
+    case CommonEnums::IOComponent::UINT:
       return sizeof( uint32_t );
 
-    case LONG:
+    case CommonEnums::IOComponent::LONG:
       return sizeof( int64_t );
 
-    case ULONG:
+    case CommonEnums::IOComponent::ULONG:
       return sizeof( uint64_t );
 
-    case LONGLONG:
+    case CommonEnums::IOComponent::LONGLONG:
       return sizeof( int64_t );
 
-    case ULONGLONG:
+    case CommonEnums::IOComponent::ULONGLONG:
       return sizeof( uint64_t );
 
-    case FLOAT:
+    case CommonEnums::IOComponent::FLOAT:
       return sizeof( float );
 
-    case DOUBLE:
+    case CommonEnums::IOComponent::DOUBLE:
       return sizeof( double );
 
     default:
@@ -305,87 +305,87 @@ JSONMeshIO
     }
 }
 
-MeshIOBase::IOPixelType
+CommonEnums::IOPixel
 JSONMeshIO
 ::JSToITKPixelType( const int jsPixelType )
 {
   switch ( jsPixelType )
     {
     case 0:
-      return UNKNOWNPIXELTYPE;
+      return CommonEnums::IOPixel::UNKNOWNPIXELTYPE;
     case 1:
-      return SCALAR;
+      return CommonEnums::IOPixel::SCALAR;
     case 2:
-      return RGB;
+      return CommonEnums::IOPixel::RGB;
     case 3:
-      return RGBA;
+      return CommonEnums::IOPixel::RGBA;
     case 4:
-      return OFFSET;
+      return CommonEnums::IOPixel::OFFSET;
     case 5:
-      return VECTOR;
+      return CommonEnums::IOPixel::VECTOR;
     case 6:
-      return POINT;
+      return CommonEnums::IOPixel::POINT;
     case 7:
-      return COVARIANTVECTOR;
+      return CommonEnums::IOPixel::COVARIANTVECTOR;
     case 8:
-      return SYMMETRICSECONDRANKTENSOR;
+      return CommonEnums::IOPixel::SYMMETRICSECONDRANKTENSOR;
     case 9:
-      return DIFFUSIONTENSOR3D;
+      return CommonEnums::IOPixel::DIFFUSIONTENSOR3D;
     case 10:
-      return COMPLEX;
+      return CommonEnums::IOPixel::COMPLEX;
     case 11:
-      return FIXEDARRAY;
+      return CommonEnums::IOPixel::FIXEDARRAY;
     case 12:
-      return ARRAY;
+      return CommonEnums::IOPixel::ARRAY;
     case 13:
-      return MATRIX;
+      return CommonEnums::IOPixel::MATRIX;
     case 14:
-      return VARIABLELENGTHVECTOR;
+      return CommonEnums::IOPixel::VARIABLELENGTHVECTOR;
     case 15:
-      return VARIABLESIZEMATRIX;
+      return CommonEnums::IOPixel::VARIABLESIZEMATRIX;
     }
 
-  return UNKNOWNPIXELTYPE;
+  return CommonEnums::IOPixel::UNKNOWNPIXELTYPE;
 }
 
 
 int
 JSONMeshIO
-::ITKToJSPixelType( const MeshIOBase::IOPixelType itkPixelType )
+::ITKToJSPixelType( const CommonEnums::IOPixel itkPixelType )
 {
   switch ( itkPixelType )
     {
-    case UNKNOWNPIXELTYPE:
+    case CommonEnums::IOPixel::UNKNOWNPIXELTYPE:
       return 0;
-    case SCALAR:
+    case CommonEnums::IOPixel::SCALAR:
       return 1;
-    case RGB:
+    case CommonEnums::IOPixel::RGB:
       return 2;
-    case RGBA:
+    case CommonEnums::IOPixel::RGBA:
       return 3;
-    case OFFSET:
+    case CommonEnums::IOPixel::OFFSET:
       return 4;
-    case VECTOR:
+    case CommonEnums::IOPixel::VECTOR:
       return 5;
-    case POINT:
+    case CommonEnums::IOPixel::POINT:
       return 6;
-    case COVARIANTVECTOR:
+    case CommonEnums::IOPixel::COVARIANTVECTOR:
       return 7;
-    case SYMMETRICSECONDRANKTENSOR:
+    case CommonEnums::IOPixel::SYMMETRICSECONDRANKTENSOR:
       return 7;
-    case DIFFUSIONTENSOR3D:
+    case CommonEnums::IOPixel::DIFFUSIONTENSOR3D:
       return 7;
-    case COMPLEX:
+    case CommonEnums::IOPixel::COMPLEX:
       return 10;
-    case FIXEDARRAY:
+    case CommonEnums::IOPixel::FIXEDARRAY:
       return 11;
-    case ARRAY:
+    case CommonEnums::IOPixel::ARRAY:
       return 12;
-    case MATRIX:
+    case CommonEnums::IOPixel::MATRIX:
       return 13;
-    case VARIABLELENGTHVECTOR:
+    case CommonEnums::IOPixel::VARIABLELENGTHVECTOR:
       return 14;
-    case VARIABLESIZEMATRIX:
+    case CommonEnums::IOPixel::VARIABLESIZEMATRIX:
       return 15;
     }
 
@@ -469,29 +469,29 @@ JSONMeshIO
   this->SetPointDimension( dimension );
 
   const std::string pointComponentType( meshType["pointComponentType"].GetString() );
-  const MeshIOBase::IOComponentType pointIOComponentType = this->JSToITKComponentType( pointComponentType );
+  const CommonEnums::IOComponent pointIOComponentType = this->JSToITKComponentType( pointComponentType );
   this->SetPointComponentType( pointIOComponentType );
 
   const std::string pointPixelComponentType( meshType["pointPixelComponentType"].GetString() );
-  const MeshIOBase::IOComponentType pointPixelIOComponentType = this->JSToITKComponentType( pointPixelComponentType );
+  const CommonEnums::IOComponent pointPixelIOComponentType = this->JSToITKComponentType( pointPixelComponentType );
   this->SetPointPixelComponentType( pointPixelIOComponentType );
 
   const int pointPixelType( meshType["pointPixelType"].GetInt() );
-  const MeshIOBase::IOPixelType pointIOPixelType = this->JSToITKPixelType( pointPixelType );
+  const CommonEnums::IOPixel pointIOPixelType = this->JSToITKPixelType( pointPixelType );
   this->SetPointPixelType( pointIOPixelType );
 
   this->SetNumberOfPointPixelComponents( meshType["pointPixelComponents"].GetInt() );
 
   const std::string cellComponentType( meshType["cellComponentType"].GetString() );
-  const MeshIOBase::IOComponentType cellIOComponentType = this->JSToITKComponentType( cellComponentType );
+  const CommonEnums::IOComponent cellIOComponentType = this->JSToITKComponentType( cellComponentType );
   this->SetCellComponentType( cellIOComponentType );
 
   const std::string cellPixelComponentType( meshType["cellPixelComponentType"].GetString() );
-  const MeshIOBase::IOComponentType cellPixelIOComponentType = this->JSToITKComponentType( cellPixelComponentType );
+  const CommonEnums::IOComponent cellPixelIOComponentType = this->JSToITKComponentType( cellPixelComponentType );
   this->SetCellPixelComponentType( cellPixelIOComponentType );
 
   const int cellPixelType( meshType["cellPixelType"].GetInt() );
-  const MeshIOBase::IOPixelType cellIOPixelType = this->JSToITKPixelType( cellPixelType );
+  const CommonEnums::IOPixel cellIOPixelType = this->JSToITKPixelType( cellPixelType );
   this->SetCellPixelType( cellIOPixelType );
 
   this->SetNumberOfCellPixelComponents( meshType["cellPixelComponents"].GetInt() );

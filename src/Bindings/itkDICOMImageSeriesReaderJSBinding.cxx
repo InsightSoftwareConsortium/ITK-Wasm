@@ -23,6 +23,7 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
+#include "itkCommonEnums.h"
 #include "itkDCMTKSeriesFileNames.h"
 #include "itkImageIOBase.h"
 #include "itkImageSeriesReader.h"
@@ -47,7 +48,7 @@ public:
   /** Enums used to manipulate the pixel type. The pixel type provides
    * context for automatic data conversions (for instance, RGB to
    * SCALAR, VECTOR to SCALAR). */
-  typedef ImageIOBase::IOPixelType IOPixelType;
+  typedef CommonEnums::IOPixel IOPixelType;
   /** Set/Get the type of the pixel. The PixelTypes provides context
    * to the IO mechanisms for data conversions.  PixelTypes can be
    * SCALAR, RGB, RGBA, VECTOR, COVARIANTVECTOR, POINT, INDEX. If
@@ -67,7 +68,7 @@ public:
    * refers to the actual storage class associated with either a
    * SCALAR pixel type or elements of a compound pixel.
    */
-  typedef ImageIOBase::IOComponentType IOComponentType;
+  typedef CommonEnums::IOComponent IOComponentType;
 
   /** Set/Get the component type of the image. This is always a native
    * type. */
@@ -99,8 +100,8 @@ public:
 
   DICOMImageSeriesReaderJSBinding():
     m_NumberOfComponents(1),
-    m_IOComponentType( ImageIOBase::UCHAR ),
-    m_IOPixelType( ImageIOBase::SCALAR )
+    m_IOComponentType( ::itk::CommonEnums::IOComponent::UCHAR ),
+    m_IOPixelType( ::itk::CommonEnums::IOPixel::SCALAR )
   {
     m_DCMTKImageIO = DCMTKImageIO::New();
   }
@@ -141,67 +142,67 @@ public:
     {
     switch( m_IOComponentType )
       {
-      case itk::ImageIOBase::UCHAR:
+      case itk::CommonEnums::IOComponent::UCHAR:
         {
         typedef VectorImage< unsigned char, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::CHAR:
+      case itk::CommonEnums::IOComponent::CHAR:
         {
         typedef VectorImage< signed char, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::USHORT:
+      case itk::CommonEnums::IOComponent::USHORT:
         {
         typedef VectorImage< unsigned short, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::SHORT:
+      case itk::CommonEnums::IOComponent::SHORT:
         {
         typedef VectorImage< short, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::UINT:
+      case itk::CommonEnums::IOComponent::UINT:
         {
         typedef VectorImage< unsigned int, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::INT:
+      case itk::CommonEnums::IOComponent::INT:
         {
         typedef VectorImage< int, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::ULONG:
+      case itk::CommonEnums::IOComponent::ULONG:
         {
         typedef VectorImage< unsigned long, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::LONG:
+      case itk::CommonEnums::IOComponent::LONG:
         {
         typedef VectorImage< long, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::ULONGLONG:
+      case itk::CommonEnums::IOComponent::ULONGLONG:
         {
         typedef VectorImage< unsigned long long, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::LONGLONG:
+      case itk::CommonEnums::IOComponent::LONGLONG:
         {
         typedef VectorImage< long long, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::FLOAT:
+      case itk::CommonEnums::IOComponent::FLOAT:
         {
         typedef VectorImage< float, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::DOUBLE:
+      case itk::CommonEnums::IOComponent::DOUBLE:
         {
         typedef VectorImage< double, ImageDimension > ImageType;
         return this->ReadTypedImage< ImageType >();
         }
-      case itk::ImageIOBase::UNKNOWNCOMPONENTTYPE:
+      case itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE:
       default:
         return EXIT_FAILURE;
       }
@@ -231,7 +232,7 @@ public:
     {
     switch( m_IOComponentType )
       {
-    case itk::ImageIOBase::UCHAR:
+    case itk::CommonEnums::IOComponent::UCHAR:
         {
         typedef itk::VectorImage< unsigned char, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -243,7 +244,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::CHAR:
+    case itk::CommonEnums::IOComponent::CHAR:
         {
         typedef itk::VectorImage< signed char, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -255,7 +256,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::USHORT:
+    case itk::CommonEnums::IOComponent::USHORT:
         {
         typedef itk::VectorImage< unsigned short, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -267,7 +268,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::SHORT:
+    case itk::CommonEnums::IOComponent::SHORT:
         {
         typedef itk::VectorImage< short, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -279,7 +280,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::UINT:
+    case itk::CommonEnums::IOComponent::UINT:
         {
         typedef itk::VectorImage< unsigned int, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -291,7 +292,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::INT:
+    case itk::CommonEnums::IOComponent::INT:
         {
         typedef itk::VectorImage< signed int, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -303,7 +304,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::ULONG:
+    case itk::CommonEnums::IOComponent::ULONG:
         {
         typedef itk::VectorImage< unsigned long, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -315,7 +316,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::LONG:
+    case itk::CommonEnums::IOComponent::LONG:
         {
         typedef itk::VectorImage< signed long, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -327,7 +328,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::ULONGLONG:
+    case itk::CommonEnums::IOComponent::ULONGLONG:
         {
         typedef itk::VectorImage< unsigned long, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -339,7 +340,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::LONGLONG:
+    case itk::CommonEnums::IOComponent::LONGLONG:
         {
         typedef itk::VectorImage< signed long, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -351,7 +352,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::FLOAT:
+    case itk::CommonEnums::IOComponent::FLOAT:
         {
         typedef itk::VectorImage< float, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -363,7 +364,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::DOUBLE:
+    case itk::CommonEnums::IOComponent::DOUBLE:
         {
         typedef itk::VectorImage< double, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
@@ -375,7 +376,7 @@ public:
         data.call<void>( "set", view );
         return data;
         }
-    case itk::ImageIOBase::UNKNOWNCOMPONENTTYPE:
+    case itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE:
     default:
       return emscripten::val::undefined();
       }
@@ -429,37 +430,37 @@ private:
 EMSCRIPTEN_BINDINGS(itk_dicom_image_series_reader_js_binding) {
   emscripten::register_vector< std::string >("FileNamesContainerType");
   emscripten::enum_<itk::DICOMImageSeriesReaderJSBinding::IOPixelType>("IOPixelType")
-    .value("UNKNOWNPIXELTYPE", itk::ImageIOBase::UNKNOWNPIXELTYPE)
-    .value("SCALAR", itk::ImageIOBase::SCALAR)
-    .value("RGB", itk::ImageIOBase::RGB)
-    .value("RGBA", itk::ImageIOBase::RGBA)
-    .value("OFFSET", itk::ImageIOBase::OFFSET)
-    .value("VECTOR", itk::ImageIOBase::VECTOR)
-    .value("POINT", itk::ImageIOBase::POINT)
-    .value("COVARIANTVECTOR", itk::ImageIOBase::COVARIANTVECTOR)
-    .value("SYMMETRICSECONDRANKTENSOR", itk::ImageIOBase::SYMMETRICSECONDRANKTENSOR)
-    .value("POINT", itk::ImageIOBase::POINT)
-    .value("COVARIANTVECTOR", itk::ImageIOBase::COVARIANTVECTOR)
-    .value("SYMMETRICSECONDRANKTENSOR", itk::ImageIOBase::SYMMETRICSECONDRANKTENSOR)
-    .value("DIFFUSIONTENSOR3D", itk::ImageIOBase::DIFFUSIONTENSOR3D)
-    .value("COMPLEX", itk::ImageIOBase::COMPLEX)
-    .value("FIXEDARRAY", itk::ImageIOBase::FIXEDARRAY)
-    .value("MATRIX", itk::ImageIOBase::MATRIX)
+    .value("UNKNOWNPIXELTYPE", itk::CommonEnums::IOPixel::UNKNOWNPIXELTYPE)
+    .value("SCALAR", itk::CommonEnums::IOPixel::SCALAR)
+    .value("RGB", itk::CommonEnums::IOPixel::RGB)
+    .value("RGBA", itk::CommonEnums::IOPixel::RGBA)
+    .value("OFFSET", itk::CommonEnums::IOPixel::OFFSET)
+    .value("VECTOR", itk::CommonEnums::IOPixel::VECTOR)
+    .value("POINT", itk::CommonEnums::IOPixel::POINT)
+    .value("COVARIANTVECTOR", itk::CommonEnums::IOPixel::COVARIANTVECTOR)
+    .value("SYMMETRICSECONDRANKTENSOR", itk::CommonEnums::IOPixel::SYMMETRICSECONDRANKTENSOR)
+    .value("POINT", itk::CommonEnums::IOPixel::POINT)
+    .value("COVARIANTVECTOR", itk::CommonEnums::IOPixel::COVARIANTVECTOR)
+    .value("SYMMETRICSECONDRANKTENSOR", itk::CommonEnums::IOPixel::SYMMETRICSECONDRANKTENSOR)
+    .value("DIFFUSIONTENSOR3D", itk::CommonEnums::IOPixel::DIFFUSIONTENSOR3D)
+    .value("COMPLEX", itk::CommonEnums::IOPixel::COMPLEX)
+    .value("FIXEDARRAY", itk::CommonEnums::IOPixel::FIXEDARRAY)
+    .value("MATRIX", itk::CommonEnums::IOPixel::MATRIX)
     ;
   emscripten::enum_<itk::DICOMImageSeriesReaderJSBinding::IOComponentType>("IOComponentType")
-    .value("UNKNOWNCOMPONENTTYPE", itk::ImageIOBase::UNKNOWNCOMPONENTTYPE)
-    .value("UCHAR", itk::ImageIOBase::UCHAR)
-    .value("CHAR", itk::ImageIOBase::CHAR)
-    .value("USHORT", itk::ImageIOBase::USHORT)
-    .value("SHORT", itk::ImageIOBase::SHORT)
-    .value("UINT", itk::ImageIOBase::UINT)
-    .value("INT", itk::ImageIOBase::INT)
-    .value("ULONG", itk::ImageIOBase::ULONG)
-    .value("LONG", itk::ImageIOBase::LONG)
-    .value("ULONGLONG", itk::ImageIOBase::ULONGLONG)
-    .value("LONGLONG", itk::ImageIOBase::LONGLONG)
-    .value("FLOAT", itk::ImageIOBase::FLOAT)
-    .value("DOUBLE", itk::ImageIOBase::DOUBLE)
+    .value("UNKNOWNCOMPONENTTYPE", itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE)
+    .value("UCHAR", itk::CommonEnums::IOComponent::UCHAR)
+    .value("CHAR", itk::CommonEnums::IOComponent::CHAR)
+    .value("USHORT", itk::CommonEnums::IOComponent::USHORT)
+    .value("SHORT", itk::CommonEnums::IOComponent::SHORT)
+    .value("UINT", itk::CommonEnums::IOComponent::UINT)
+    .value("INT", itk::CommonEnums::IOComponent::INT)
+    .value("ULONG", itk::CommonEnums::IOComponent::ULONG)
+    .value("LONG", itk::CommonEnums::IOComponent::LONG)
+    .value("ULONGLONG", itk::CommonEnums::IOComponent::ULONGLONG)
+    .value("LONGLONG", itk::CommonEnums::IOComponent::LONGLONG)
+    .value("FLOAT", itk::CommonEnums::IOComponent::FLOAT)
+    .value("DOUBLE", itk::CommonEnums::IOComponent::DOUBLE)
     ;
   emscripten::class_<itk::DICOMImageSeriesReaderJSBinding>("ITKDICOMImageSeriesReader")
   .constructor<>()

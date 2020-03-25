@@ -419,33 +419,33 @@ MeshIOBaseJSBinding< TMeshIO >
 {
   switch( componentType )
     {
-  case itk::MeshIOBase::UCHAR:
+  case itk::CommonEnums::IOComponent::UCHAR:
     return sizeof(unsigned char);
-  case itk::MeshIOBase::CHAR:
+  case itk::CommonEnums::IOComponent::CHAR:
     return sizeof(signed char);
-  case itk::MeshIOBase::USHORT:
+  case itk::CommonEnums::IOComponent::USHORT:
     return sizeof(unsigned short);
-  case itk::MeshIOBase::SHORT:
+  case itk::CommonEnums::IOComponent::SHORT:
     return sizeof(signed short);
-  case itk::MeshIOBase::UINT:
+  case itk::CommonEnums::IOComponent::UINT:
     return sizeof(unsigned int);
-  case itk::MeshIOBase::INT:
+  case itk::CommonEnums::IOComponent::INT:
     return sizeof(signed int);
-  case itk::MeshIOBase::ULONG:
+  case itk::CommonEnums::IOComponent::ULONG:
     return sizeof(unsigned long);
-  case itk::MeshIOBase::LONG:
+  case itk::CommonEnums::IOComponent::LONG:
     return sizeof(signed long);
-  case itk::MeshIOBase::ULONGLONG:
+  case itk::CommonEnums::IOComponent::ULONGLONG:
     return sizeof(unsigned long long);
-  case itk::MeshIOBase::LONGLONG:
+  case itk::CommonEnums::IOComponent::LONGLONG:
     return sizeof(signed long long);
-  case itk::MeshIOBase::FLOAT:
+  case itk::CommonEnums::IOComponent::FLOAT:
     return sizeof(float);
-  case itk::MeshIOBase::DOUBLE:
+  case itk::CommonEnums::IOComponent::DOUBLE:
     return sizeof(double);
-  case itk::MeshIOBase::LDOUBLE:
+  case itk::CommonEnums::IOComponent::LDOUBLE:
     return sizeof(long double);
-  case itk::MeshIOBase::UNKNOWNCOMPONENTTYPE:
+  case itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE:
   default:
     return 0;
     }
@@ -462,7 +462,7 @@ MeshIOBaseJSBinding< TMeshIO >
   this->m_MeshIO->ReadPoints( reinterpret_cast< void * >( m_PointsBuffer.data() ) );
   switch( this->m_MeshIO->GetPointComponentType() )
     {
-  case itk::MeshIOBase::UCHAR:
+  case itk::CommonEnums::IOComponent::UCHAR:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned char * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint8Array");
@@ -470,7 +470,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::CHAR:
+  case itk::CommonEnums::IOComponent::CHAR:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed char * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int8Array");
@@ -478,7 +478,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::USHORT:
+  case itk::CommonEnums::IOComponent::USHORT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned short * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint16Array");
@@ -486,7 +486,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::SHORT:
+  case itk::CommonEnums::IOComponent::SHORT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed short * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int16Array");
@@ -494,7 +494,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::UINT:
+  case itk::CommonEnums::IOComponent::UINT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned int * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint32Array");
@@ -502,7 +502,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::INT:
+  case itk::CommonEnums::IOComponent::INT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed int * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int32Array");
@@ -510,7 +510,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::ULONG:
+  case itk::CommonEnums::IOComponent::ULONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint64Array");
@@ -518,7 +518,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::LONG:
+  case itk::CommonEnums::IOComponent::LONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int64Array");
@@ -526,7 +526,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::ULONGLONG:
+  case itk::CommonEnums::IOComponent::ULONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint64Array");
@@ -534,7 +534,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::LONGLONG:
+  case itk::CommonEnums::IOComponent::LONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int64Array");
@@ -542,7 +542,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::FLOAT:
+  case itk::CommonEnums::IOComponent::FLOAT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< float * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Float32Array");
@@ -550,7 +550,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::DOUBLE:
+  case itk::CommonEnums::IOComponent::DOUBLE:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< double * >( m_PointsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Float64Array");
@@ -558,7 +558,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::UNKNOWNCOMPONENTTYPE:
+  case itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE:
   default:
     return emscripten::val::undefined();
     }
@@ -575,7 +575,7 @@ MeshIOBaseJSBinding< TMeshIO >
   this->m_MeshIO->ReadCells( reinterpret_cast< void * >( m_CellsBuffer.data() ) );
   switch( this->m_MeshIO->GetCellComponentType() )
     {
-  case itk::MeshIOBase::UCHAR:
+  case itk::CommonEnums::IOComponent::UCHAR:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned char * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint8Array");
@@ -583,7 +583,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::CHAR:
+  case itk::CommonEnums::IOComponent::CHAR:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed char * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int8Array");
@@ -591,7 +591,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::USHORT:
+  case itk::CommonEnums::IOComponent::USHORT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned short * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint16Array");
@@ -599,7 +599,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::SHORT:
+  case itk::CommonEnums::IOComponent::SHORT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed short * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int16Array");
@@ -607,7 +607,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::UINT:
+  case itk::CommonEnums::IOComponent::UINT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned int * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint32Array");
@@ -615,7 +615,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::INT:
+  case itk::CommonEnums::IOComponent::INT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed int * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int32Array");
@@ -623,7 +623,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::ULONG:
+  case itk::CommonEnums::IOComponent::ULONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint64Array");
@@ -631,7 +631,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::LONG:
+  case itk::CommonEnums::IOComponent::LONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int64Array");
@@ -639,7 +639,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::ULONGLONG:
+  case itk::CommonEnums::IOComponent::ULONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint64Array");
@@ -647,7 +647,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::LONGLONG:
+  case itk::CommonEnums::IOComponent::LONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int64Array");
@@ -655,7 +655,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::FLOAT:
+  case itk::CommonEnums::IOComponent::FLOAT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< float * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Float32Array");
@@ -663,7 +663,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::DOUBLE:
+  case itk::CommonEnums::IOComponent::DOUBLE:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< double * >( m_CellsBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Float64Array");
@@ -671,7 +671,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::UNKNOWNCOMPONENTTYPE:
+  case itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE:
   default:
     return emscripten::val::undefined();
     }
@@ -688,7 +688,7 @@ MeshIOBaseJSBinding< TMeshIO >
   this->m_MeshIO->ReadPointData( reinterpret_cast< void * >( m_PointDataBuffer.data() ) );
   switch( this->m_MeshIO->GetPointComponentType() )
     {
-  case itk::MeshIOBase::UCHAR:
+  case itk::CommonEnums::IOComponent::UCHAR:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned char * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint8Array");
@@ -696,7 +696,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::CHAR:
+  case itk::CommonEnums::IOComponent::CHAR:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed char * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int8Array");
@@ -704,7 +704,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::USHORT:
+  case itk::CommonEnums::IOComponent::USHORT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned short * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint16Array");
@@ -712,7 +712,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::SHORT:
+  case itk::CommonEnums::IOComponent::SHORT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed short * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int16Array");
@@ -720,7 +720,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::UINT:
+  case itk::CommonEnums::IOComponent::UINT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned int * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint32Array");
@@ -728,7 +728,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::INT:
+  case itk::CommonEnums::IOComponent::INT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed int * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int32Array");
@@ -736,7 +736,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::ULONG:
+  case itk::CommonEnums::IOComponent::ULONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint64Array");
@@ -744,7 +744,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::LONG:
+  case itk::CommonEnums::IOComponent::LONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int64Array");
@@ -752,7 +752,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::ULONGLONG:
+  case itk::CommonEnums::IOComponent::ULONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint64Array");
@@ -760,7 +760,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::LONGLONG:
+  case itk::CommonEnums::IOComponent::LONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int64Array");
@@ -768,7 +768,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::FLOAT:
+  case itk::CommonEnums::IOComponent::FLOAT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< float * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Float32Array");
@@ -776,7 +776,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::DOUBLE:
+  case itk::CommonEnums::IOComponent::DOUBLE:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< double * >( m_PointDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Float64Array");
@@ -784,7 +784,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::UNKNOWNCOMPONENTTYPE:
+  case itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE:
   default:
     return emscripten::val::undefined();
     }
@@ -801,7 +801,7 @@ MeshIOBaseJSBinding< TMeshIO >
   this->m_MeshIO->ReadCellData( reinterpret_cast< void * >( m_CellDataBuffer.data() ) );
   switch( this->m_MeshIO->GetCellComponentType() )
     {
-  case itk::MeshIOBase::UCHAR:
+  case itk::CommonEnums::IOComponent::UCHAR:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned char * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint8Array");
@@ -809,7 +809,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::CHAR:
+  case itk::CommonEnums::IOComponent::CHAR:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed char * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int8Array");
@@ -817,7 +817,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::USHORT:
+  case itk::CommonEnums::IOComponent::USHORT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned short * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint16Array");
@@ -825,7 +825,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::SHORT:
+  case itk::CommonEnums::IOComponent::SHORT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed short * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int16Array");
@@ -833,7 +833,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::UINT:
+  case itk::CommonEnums::IOComponent::UINT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned int * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint32Array");
@@ -841,7 +841,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::INT:
+  case itk::CommonEnums::IOComponent::INT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed int * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int32Array");
@@ -849,7 +849,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::ULONG:
+  case itk::CommonEnums::IOComponent::ULONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint64Array");
@@ -857,7 +857,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::LONG:
+  case itk::CommonEnums::IOComponent::LONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int64Array");
@@ -865,7 +865,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::ULONGLONG:
+  case itk::CommonEnums::IOComponent::ULONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint64Array");
@@ -873,7 +873,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::LONGLONG:
+  case itk::CommonEnums::IOComponent::LONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int64Array");
@@ -881,7 +881,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::FLOAT:
+  case itk::CommonEnums::IOComponent::FLOAT:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< float * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Float32Array");
@@ -889,7 +889,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::DOUBLE:
+  case itk::CommonEnums::IOComponent::DOUBLE:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< double * >( m_CellDataBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Float64Array");
@@ -897,7 +897,7 @@ MeshIOBaseJSBinding< TMeshIO >
       data.call<void>( "set", view );
       return data;
       }
-  case itk::MeshIOBase::UNKNOWNCOMPONENTTYPE:
+  case itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE:
   default:
     return emscripten::val::undefined();
     }
