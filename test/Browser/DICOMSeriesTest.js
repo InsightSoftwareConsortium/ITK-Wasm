@@ -24,7 +24,7 @@ test('Test reading DICOM file series', t => {
     })
     .then(function ({ image, webWorkerPool }) {
       t.is(image.imageType.dimension, 3, 'dimension')
-      t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
+      t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')
       t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
       t.is(image.imageType.components, 1, 'components')
       t.is(image.origin[0], -17.3551, 'origin[0]')
@@ -69,7 +69,7 @@ test('Test reading DICOM file series, assume a single sorted series', t => {
     })
     .then(function ({ image, webWorkerPool }) {
       t.is(image.imageType.dimension, 3, 'dimension')
-      t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
+      t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')
       t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
       t.is(image.imageType.components, 1, 'components')
       t.is(image.origin[0], -17.3551, 'origin[0]')

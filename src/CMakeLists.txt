@@ -79,7 +79,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.js.in
   ${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.js @ONLY)
 
 # itkDICOMImageSeriesReader
-find_package(ITK REQUIRED COMPONENTS ITKIODCMTK)
+find_package(ITK REQUIRED COMPONENTS ITKIOGDCM)
 include(${ITK_USE_FILE})
 set(target itkDICOMImageSeriesReaderJSBinding)
 set(wasm_target itkDICOMImageSeriesReaderJSBindingWasm)
@@ -99,13 +99,13 @@ set_property(TARGET ${wasm_target} APPEND_STRING
   PROPERTY LINK_FLAGS " --bind"
   )
 set_property(TARGET ${target} APPEND_STRING
-  PROPERTY LINK_FLAGS " -s WASM=0 -lnodefs.js -s FORCE_FILESYSTEM=1 -s EXIT_RUNTIME=0 -s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=1 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+  PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s WASM=0 -lnodefs.js -s FORCE_FILESYSTEM=1 -s EXIT_RUNTIME=0 -s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
   )
 set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSImageIOPreDICOMImageSeriesReader.js)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js.in
   ${pre_js} @ONLY)
 set_property(TARGET ${wasm_target} APPEND_STRING
-  PROPERTY LINK_FLAGS " -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=itkDICOMImageSeriesReaderJSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lworkerfs.js -s EXIT_RUNTIME=0 -s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+  PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=itkDICOMImageSeriesReaderJSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lworkerfs.js -s EXIT_RUNTIME=0 -s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
   )
 set_property(TARGET ${target}
   PROPERTY RUNTIME_OUTPUT_DIRECTORY

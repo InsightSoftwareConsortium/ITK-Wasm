@@ -24,10 +24,10 @@
 #include <emscripten/bind.h>
 
 #include "itkCommonEnums.h"
-#include "itkDCMTKSeriesFileNames.h"
+#include "itkGDCMSeriesFileNames.h"
 #include "itkImageIOBase.h"
 #include "itkImageSeriesReader.h"
-#include "itkDCMTKImageIO.h"
+#include "itkGDCMImageIO.h"
 #include "itkVectorImage.h"
 
 namespace itk
@@ -180,7 +180,7 @@ class DICOMImageSeriesReaderJSBinding
 public:
   static const unsigned int ImageDimension = 3;
 
-  typedef DCMTKSeriesFileNames::FileNamesContainerType FileNamesContainerType;
+  typedef GDCMSeriesFileNames::FileNamesContainerType FileNamesContainerType;
 
   /** Enums used to manipulate the pixel type. The pixel type provides
    * context for automatic data conversions (for instance, RGB to
@@ -240,21 +240,21 @@ public:
     m_IOComponentType( ::itk::CommonEnums::IOComponent::UCHAR ),
     m_IOPixelType( ::itk::CommonEnums::IOPixel::SCALAR )
   {
-    m_DCMTKImageIO = DCMTKImageIO::New();
+    m_GDCMImageIO = GDCMImageIO::New();
   }
 
   /** Set a test file used to IOComponentType
    * series files. */
   void SetTestFileName( std::string testFile )
     {
-    m_DCMTKImageIO->SetFileName( testFile );
+    m_GDCMImageIO->SetFileName( testFile );
     }
 
   /** Set a test file used to IOComponentType
    * series files. */
   bool CanReadTestFile( std::string testFile )
     {
-    return m_DCMTKImageIO->CanReadFile( testFile.c_str() );
+    return m_GDCMImageIO->CanReadFile( testFile.c_str() );
     }
 
   /** Set the directory in the Emscripten filesystem that contains the DICOM
@@ -274,10 +274,10 @@ public:
   /** Read information fr8om the TestFile. */
   void ReadTestImageInformation()
     {
-    m_DCMTKImageIO->ReadImageInformation();
-    m_IOComponentType = m_DCMTKImageIO->GetComponentType();
-    m_IOPixelType = m_DCMTKImageIO->GetPixelType();
-    m_NumberOfComponents = m_DCMTKImageIO->GetNumberOfComponents();
+    m_GDCMImageIO->ReadImageInformation();
+    m_IOComponentType = m_GDCMImageIO->GetComponentType();
+    m_IOPixelType = m_GDCMImageIO->GetPixelType();
+    m_NumberOfComponents = m_GDCMImageIO->GetNumberOfComponents();
     }
 
   /** Do the actual file reading. Return EXIT_SUCCESS (0) on success and
@@ -539,11 +539,16 @@ private:
 
     if (!m_FileNames.size())
       {
-      typedef itk::DCMTKSeriesFileNames SeriesFileNames;
+      typedef itk::GDCMSeriesFileNames SeriesFileNames;
       SeriesFileNames::Pointer seriesFileNames = SeriesFileNames::New();
-      seriesFileNames->SetInputDirectory( m_Directory );
+      seriesFileNames->SetDirectory( m_Directory );
+      seriesFileNames->SetUseSeriesDetails(true);
+      seriesFileNames->SetGlobalWarningDisplay(false);
+      using SeriesIdContainer = std::vector<std::string>;
+      const SeriesIdContainer & seriesUID = seriesFileNames->GetSeriesUIDs();
 
-      const typename ReaderType::FileNamesContainer & fileNames = seriesFileNames->GetInputFileNames();
+      using FileNamesContainer = std::vector<std::string>;
+      FileNamesContainer fileNames = seriesFileNames->GetFileNames(seriesUID.begin()->c_str());
       reader->SetFileNames( fileNames );
       }
     else
@@ -551,7 +556,7 @@ private:
       reader->SetFileNames( m_FileNames );
       }
 
-    reader->SetImageIO( m_DCMTKImageIO );
+    reader->SetImageIO( m_GDCMImageIO );
 
     try
       {
@@ -574,7 +579,7 @@ private:
   std::string m_Directory;
   FileNamesContainerType m_FileNames;
 
-  itk::DCMTKImageIO::Pointer m_DCMTKImageIO;
+  itk::GDCMImageIO::Pointer m_GDCMImageIO;
   ImageBase< ImageDimension >::Pointer m_ReadImage;
 };
 
