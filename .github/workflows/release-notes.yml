@@ -16,10 +16,9 @@ jobs:
           node-version: '12.x'
       - name: Generate Changelog
         run: |
-          npm i -g conventional-changelog
           echo "# itk.js ${{ github.ref }}" > ./release-notes.md
           cat ./doc/release-introduction.md >> ./release-notes.md
-          conventional-changelog -p angular -r 2 -o ./CHANGELOG.md
+          npx conventional-changelog -p angular -r 2 -o ./CHANGELOG.md
           cat ./CHANGELOG.md >> ./release-notes.md
       - name: Release
         uses: softprops/action-gh-release@v1
