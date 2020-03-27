@@ -51,9 +51,9 @@ Read an image from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web
 
 Read a server-side generated image created with [`itk::JSONImageIO`](https://github.com/InsightSoftwareConsortium/itk-js/blob/master/include/itkJSONImageIO.h). The primary `*.json` file should be served at the given `url` and the pixel buffer file served at `url + ".data"`
 
-## readImageDICOMFileSeries(webWorker, fileList) -> { webWorker, [image](./Image.html) }
+## readImageDICOMFileSeries(webWorker, fileList, singleSortedSeries=false) -> { webWorker, [image](./Image.html) }
 
-Read an image from a series of DICOM [File](https://developer.mozilla.org/en-US/docs/Web/API/File)'s stored in an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) or [FileList](https://developer.mozilla.org/en-US/docs/Web/API/FileList).
+Read an image from a series of DICOM [File](https://developer.mozilla.org/en-US/docs/Web/API/File)'s stored in an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) or [FileList](https://developer.mozilla.org/en-US/docs/Web/API/FileList). If the files are known to be from a single, sorted series, the last argument can be set to true for performance.
 
 ## writeImageArrayBuffer(webWorker, useCompression, image, fileName, mimeType) ->  { webWorker, [arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
 

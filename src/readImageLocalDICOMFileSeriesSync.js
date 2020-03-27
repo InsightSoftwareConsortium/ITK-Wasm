@@ -1,28 +1,26 @@
 const path = require('path')
-const fs = require('fs')
 
 const loadEmscriptenModule = require('./loadEmscriptenModuleNode.js')
 const readImageEmscriptenFSDICOMFileSeries = require('./readImageEmscriptenFSDICOMFileSeries.js')
 
 /**
  * Read an image from a series of DICOM files on the local filesystem in Node.js.
- *
- * It is assumed that all the files are located in the same directory.
- *
- * @param: directory a directory containing a single study / series on the local filesystem.
+ * @param: filenames Array of filepaths containing a DICOM study / series on the local filesystem.
+ * @param: singleSortedSeries: it is known that the files are from a single
+ * sorted series.
  */
-const readImageLocalDICOMFileSeriesSync = (directory) => {
+const readImageLocalDICOMFileSeriesSync = (fileNames, singleSortedSeries = false) => {
   const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
-  const absoluteDirectory = path.resolve(directory)
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
-  const files = fs.readdirSync(absoluteDirectory)
-  const absoluteDirectoryWithFile = path.join(absoluteDirectory, 'myfile.dcm')
   const seriesReaderPath = path.join(imageIOsPath, seriesReader)
   const seriesReaderModule = loadEmscriptenModule(seriesReaderPath)
-  const mountedFilePath = seriesReaderModule.mountContainingDirectory(absoluteDirectoryWithFile)
+  const mountedFilePath = seriesReaderModule.mountContainingDirectory(fileNames[0])
   const mountedDir = path.dirname(mountedFilePath)
+  const mountedFileNames = fileNames.map((fileName) => {
+    return path.join(mountedDir, path.basename(fileName))
+  })
   const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
-    mountedDir, mountedDir + '/' + files[0])
+    mountedFileNames, singleSortedSeries)
   seriesReaderModule.unmountContainingDirectory(mountedFilePath)
   return image
 }
