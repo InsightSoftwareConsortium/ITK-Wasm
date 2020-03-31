@@ -474,7 +474,7 @@ public:
         }
     case itk::CommonEnums::IOComponent::ULONGLONG:
         {
-        typedef itk::VectorImage< unsigned long, ImageDimension > ImageType;
+        typedef itk::VectorImage< unsigned long long, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
         ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
         const unsigned long components = pixelContainer->Size();
@@ -486,7 +486,7 @@ public:
         }
     case itk::CommonEnums::IOComponent::LONGLONG:
         {
-        typedef itk::VectorImage< signed long, ImageDimension > ImageType;
+        typedef itk::VectorImage< signed long long, ImageDimension > ImageType;
         ImageType * image = static_cast< ImageType * >( m_ReadImage.GetPointer() );
         ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
         const unsigned long components = pixelContainer->Size();
