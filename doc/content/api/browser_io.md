@@ -7,7 +7,7 @@ The *itk.js* IO functions convert native brower objects, [File](https://develope
 
 Most of these functions return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
-These functions return the [WebWorker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) used for computation. They also optionally accept a web worker from a previous execution as their first argument -- pass the worker generated from execution or `null` if one is not available.
+These functions return the [WebWorker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) used for computation. They also optionally accept a web worker from a previous execution as their first argument -- pass the worker generated from execution or `null` if one is not available. Re-using workers can greatly improve performance.
 
 ---
 
@@ -51,9 +51,13 @@ Read an image from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web
 
 Read a server-side generated image created with [`itk::JSONImageIO`](https://github.com/InsightSoftwareConsortium/itk-js/blob/master/include/itkJSONImageIO.h). The primary `*.json` file should be served at the given `url` and the pixel buffer file served at `url + ".data"`
 
-## readImageDICOMFileSeries(webWorker, fileList, singleSortedSeries=false) -> { webWorker, [image](./Image.html) }
+## readImageDICOMFileSeries(fileList, singleSortedSeries=false) -> { [image](./Image.html), webWorkerPool }
 
-Read an image from a series of DICOM [File](https://developer.mozilla.org/en-US/docs/Web/API/File)'s stored in an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) or [FileList](https://developer.mozilla.org/en-US/docs/Web/API/FileList). If the files are known to be from a single, sorted series, the last argument can be set to true for performance.
+Read an image from a series of DICOM [File](https://developer.mozilla.org/en-US/docs/Web/API/File)'s stored in an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) or [FileList](https://developer.mozilla.org/en-US/docs/Web/API/FileList).
+
+If the files are known to be from a single, sorted series, the last argument can be set to true for performance.
+
+The used `webWorkerPool` is returned to enable resource cleanup, if required.
 
 ## writeImageArrayBuffer(webWorker, useCompression, image, fileName, mimeType) ->  { webWorker, [arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
 

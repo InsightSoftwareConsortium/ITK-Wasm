@@ -123,6 +123,12 @@ itk.runPipelineBrowser = runPipelineBrowser
 import setMatrixElement from './setMatrixElement.js'
 itk.setMatrixElement = setMatrixElement
 
+import stackImages from './stackImages.js'
+itk.stackImages = stackImages
+
+import WorkerPool from './WorkerPool.js'
+itk.WorkerPool = WorkerPool
+
 import writeArrayBuffer from './writeArrayBuffer.js'
 itk.writeArrayBuffer = writeArrayBuffer
 
