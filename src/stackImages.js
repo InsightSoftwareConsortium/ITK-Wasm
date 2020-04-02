@@ -21,14 +21,13 @@ function stackImages (images) {
   const dataSize = result.size.reduce((accumulator, currentValue) => { return accumulator * currentValue }, 1) * result.imageType.components
   result.data = new images[0].data.constructor(dataSize)
 
+  let offsetBase = result.imageType.components
+  for (let subIndex = 0; subIndex < result.size.length - 1; subIndex++) {
+    offsetBase *= result.size[subIndex]
+  }
   let stackIndex = 0
   for (let index = 0; index < images.length; index++) {
-    let offset = result.imageType.components
-    for (let subIndex = 0; subIndex < result.size.length - 1; subIndex++) {
-      offset *= result.size[subIndex]
-    }
-    offset *= stackIndex
-    result.data.set(images[index].data, offset)
+    result.data.set(images[index].data, offsetBase * stackIndex)
     stackIndex += images[index].size[stackOn]
   }
 
