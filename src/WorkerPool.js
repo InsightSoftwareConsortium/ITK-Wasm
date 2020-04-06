@@ -28,6 +28,8 @@ class WorkerPool {
         } else if (!this.addingTasks && !this.runningWorkers) {
           this.resolve(this.results)
         }
+      }).catch((error) => {
+        this.reject(error)
       })
     } else {
       this.taskQueue.push([resultIndex, taskArgs])
@@ -37,6 +39,7 @@ class WorkerPool {
   runTasks (taskArgsArray) {
     return new Promise((resolve, reject) => {
       this.resolve = resolve
+      this.reject = reject
       this.results = new Array(taskArgsArray.length)
       this.addingTasks = true
       taskArgsArray.forEach((taskArg, index) => {
