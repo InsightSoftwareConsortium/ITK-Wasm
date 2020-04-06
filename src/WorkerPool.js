@@ -24,13 +24,13 @@ class WorkerPool {
         this.results[resultIndex] = result
         if (this.taskQueue.length > 0) {
           const reTask = this.taskQueue.shift()
-          this.addTask(resultIndex, reTask)
+          this.addTask(...reTask)
         } else if (!this.addingTasks && !this.runningWorkers) {
           this.resolve(this.results)
         }
       })
     } else {
-      this.taskQueue.push(taskArgs)
+      this.taskQueue.push([resultIndex, taskArgs])
     }
   }
 
