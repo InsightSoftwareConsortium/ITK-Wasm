@@ -16,7 +16,7 @@ class WorkerPool {
   // proposal accepted and supported by default in Babel.
   addTask (resultIndex, taskArgs) {
     if (this.workerQueue.length > 0) {
-      const worker = this.workerQueue.shift()
+      const worker = this.workerQueue.pop()
       this.runningWorkers++
       this.fcn(worker, ...taskArgs).then(({ webWorker, ...result }) => {
         this.workerQueue.push(webWorker)
@@ -24,13 +24,13 @@ class WorkerPool {
         this.results[resultIndex] = result
         if (this.taskQueue.length > 0) {
           const reTask = this.taskQueue.shift()
-          this.addTask(resultIndex, reTask)
+          this.addTask(...reTask)
         } else if (!this.addingTasks && !this.runningWorkers) {
           this.resolve(this.results)
         }
       })
     } else {
-      this.taskQueue.push(taskArgs)
+      this.taskQueue.push([resultIndex, taskArgs])
     }
   }
 

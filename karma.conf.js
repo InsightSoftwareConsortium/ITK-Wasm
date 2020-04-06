@@ -8,7 +8,9 @@ var sourcePath = path.resolve(__dirname, './dist')
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'test'
 
-process.env.CHROME_BIN = require('puppeteer').executablePath()
+if (!process.env.CHROME_BIN) {
+  process.env.CHROME_BIN = require('puppeteer').executablePath()
+}
 
 module.exports = function init (config) {
   config.set({
