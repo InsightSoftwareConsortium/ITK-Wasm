@@ -5,7 +5,7 @@ const mimeToIO = new Map([
   ['image/x-ms-bmp', 'itkBMPImageIOJSBinding'],
   ['image/x-bmp', 'itkBMPImageIOJSBinding'],
   ['image/bmp', 'itkBMPImageIOJSBinding'],
-  ['application/dicom', 'itkDCMTKImageIOJSBinding']
+  ['application/dicom', 'itkGDCMImageIOJSBinding']
 ])
 
 module.exports = mimeToIO
