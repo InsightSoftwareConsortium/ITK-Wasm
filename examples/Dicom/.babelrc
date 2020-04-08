@@ -4,6 +4,8 @@
       targets: {
         browsers: ['last 2 versions'],
       },
+      corejs: 3,
+      useBuiltIns: "usage",
     }],
   ],
 }

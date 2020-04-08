@@ -1,8 +1,6 @@
 import PromiseFileReader from 'promise-file-reader'
 import dicomParser from 'dicom-parser'
 
-import "regenerator-runtime/runtime";
-
 import DICOM_TAG_DICT from './dicomTags'
 
 function concatenate(resultConstructor, arrays) {

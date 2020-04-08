@@ -22,15 +22,15 @@
   },
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-js#readme",
   "dependencies": {
+    "core-js": "^3.6.4",
     "curry": "^1.2.0",
     "dicom-parser": "^1.8.3",
     "expose-loader": "^0.7.5",
-    "itk": "^9.5.0",
-    "regenerator-runtime": "^0.13.3"
+    "itk": "^12.3.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.0",
-    "@babel/preset-env": "^7.2.0",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
     "babel-loader": "^8.0.4",
     "copy-webpack-plugin": "^4.5.1",
     "tap-spec": "^4.1.1",

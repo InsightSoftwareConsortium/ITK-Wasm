@@ -35,5 +35,6 @@ module.exports = {
   ],
   performance: {
     maxAssetSize: 10000000
-  }
+  },
+  devtool: 'source-map'
 }
