@@ -66,7 +66,7 @@ class DICOMPatient extends DICOMEntity {
 
 class DICOMStudy extends DICOMEntity {
   static get primaryTag() {
-    return 'StudyID'
+    return 'StudyInstanceUID'
   }
 
   static get tags() {
@@ -101,7 +101,7 @@ class DICOMStudy extends DICOMEntity {
 
 class DICOMSeries extends DICOMEntity {
   static get primaryTag() {
-    return 'SeriesNumber'
+    return 'SeriesInstanceUID'
   }
 
   static get tags() {
@@ -114,6 +114,7 @@ class DICOMSeries extends DICOMEntity {
       'SeriesDescription',
       'ProtocolName',
       'FrameOfReferenceUID',
+      'TransferSyntaxUID',
       ]
     }
 
