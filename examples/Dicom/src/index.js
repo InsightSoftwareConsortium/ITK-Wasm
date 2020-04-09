@@ -33,47 +33,98 @@ const outputFileInformation = curry(async function outputFileInformation (output
   const files = event.target.files || dataTransfer.files
 
   // Parse DICOM metadata
-  let start = startChrono("Parsing + organising all files using javascript")
-  const { patients, failures } = await parseDicomFiles(files, true)
+  let start = startChrono(`Parsing + organising ${files.length} files using javascript`)
+  const { patients, failures } = await parseDicomFiles(files, false)
   const parseTime = endChrono(start)
+  console.log(`PARSE: ${parseTime}`);
 
   // Select DICOM series
   setupDicomForm(patients, async (serie) => {
+    console.log(serie.metaData.Modality)
+    console.log(serie.metaData.SeriesDescription)
+    console.log(serie.metaData.TransferSyntaxUID)
+
+    const images = Object.values(serie.images);
+    const seriesFiles = images.map((image) => image.file)
+
+    // Read image data with itk (preSorted = true)
+    start = startChrono(`Parsing selected series ${seriesFiles.length} files + loading image data using itk (preSorted=true)`)
+    const readItkSortedTrue = await readImageDICOMFileSeries(seriesFiles, true)
+    const imageSortedTrue = readItkSortedTrue.image
+    const itkTimeSortedTrue = endChrono(start)
+    // outputTextArea.textContent += JSON.stringify(imageSortedTrue, replacer, 4)
+    // outputTextArea.textContent += '\n'
+    console.log(`ITK READ PRESORTED: ${itkTimeSortedTrue}`);
+
+    // Read image data with itk (preSorted = false)
+    start = startChrono(`Parsing selected series ${seriesFiles.length} files + loading image data using itk (preSorted=false)`)
+    const readItkSortedFalse = await readImageDICOMFileSeries(seriesFiles, false)
+    const imageSortedFalse = readItkSortedFalse.image
+    const itkTimeSortedFalse = endChrono(start)
+    // outputTextArea.textContent += JSON.stringify(imageSortedFalse, replacer, 4)
+    // outputTextArea.textContent += '\n'
+    console.log(`ITK SORT + READ: ${itkTimeSortedFalse}`);
+
     // Read image data with javascript code
     start = startChrono("Loading image data using javascript")
-    const image1 = serie.getImageData()
-    const loadTime = endChrono(start)
-    outputTextArea.textContent += JSON.stringify(image1, replacer, 4)
-    outputTextArea.textContent += '\n'
+    const imageDicomParser = serie.getImageData()
+    const dicomParserTime = endChrono(start)
+    // outputTextArea.textContent += JSON.stringify(imageDicomParser, replacer, 4)
+    // outputTextArea.textContent += '\n'
+    console.log(`DICOMPARSER READ: ${dicomParserTime}`);
 
-    // Read image data with itk
-    start = startChrono("Parsing selected series files + loading image data using itk")
-    const files = Object.values(serie.images).map((image) => image.file)
-    const { image, webWorker } = await readImageDICOMFileSeries(null, files)
-    webWorker.terminate()
-    const itkTime = endChrono(start)
-    outputTextArea.textContent += JSON.stringify(image, replacer, 4)
-    outputTextArea.textContent += '\n'
+    // Images compare
+    function arraysMatch(arr1, arr2) {
+      if (arr1.length !== arr2.length) {
+        outputTextArea.textContent += `⚠️ Mismatch in length (${arr1.length} vs ${arr2.length}) for `
+        return false;
+      }
+      for (let i = 0; i < arr1.length; i += 1) {
+        if (arr1[i] !== arr2[i]) {
+          outputTextArea.textContent += `⚠️ Values don't match (${arr1[i]} vs ${arr2[i]}) at index ${i} in `
+          return false;
+        }
+      }
+      return true;
+    }
+    function objectsMatch(a, b) {
+      const aProps = Object.getOwnPropertyNames(a);
+      const bProps = Object.getOwnPropertyNames(b);
+      if (aProps.length !== bProps.length) {
+        outputTextArea.textContent += `⚠️ Mismatch in number of properties (${aProps.length} vs ${aProps.length})\n`
+        return false;
+      }
+      let match = true;
+      for (let i = 0; i < aProps.length; i += 1) {
+        const propName = aProps[i];
+        if (a[propName] instanceof Array || ArrayBuffer.isView(a[propName])) {
+          if (!arraysMatch(a[propName], b[propName])) {
+            outputTextArea.textContent += `"${propName}"\n`
+            match = false;
+          }
+        } else if (a[propName] instanceof Object) {
+          match = match && objectsMatch(a[propName], b[propName])
+        } else if (a[propName] !== b[propName]) {
+          match = false;
+          outputTextArea.textContent += `⚠️ Values don't match (${a[propName]} vs ${b[propName]}) for "${propName}"\n`
+        }
+      }
+      return match;
+    }
+
+    outputTextArea.textContent += `-- Comparing image from js code and itk's webassembly dicom reader\n`
+    if (objectsMatch(imageDicomParser, imageSortedFalse)) {
+      outputTextArea.textContent += `✅ Perfect match\n`
+    } else {
+      outputTextArea.textContent += `❌ Mismatch\n`
+    }
 
     // Time compare
-    let ratio = (itkTime / (parseTime + loadTime)).toFixed(2)
-    outputTextArea.textContent += `-- js code was about ${ratio}x faster than itk's webassembly dicom reader\n`
+    let ratio = (itkTimeSortedTrue / (parseTime + dicomParserTime)).toFixed(2)
+    outputTextArea.textContent += `⚡ javascript code was ~${ratio}x faster than itk's webassembly dicom reader (preSorted=true)\n`
+    ratio = (itkTimeSortedFalse / (parseTime + dicomParserTime)).toFixed(2)
+    outputTextArea.textContent += `⚡ javascript code was ~${ratio}x faster than itk's webassembly dicom reader (preSorted=false)\n`
 
-    // Image compare
-    outputTextArea.textContent += "-- Comparing pixel data..."
-    if (image1.data.length !== image.data.length) {
-      let msg = 'Pixel data size differ 𐄂'
-      outputTextArea.textContent += ` ${msg}\n`
-      throw Error(msg)
-    }
-    for (let i = 0; i < image.data.length; i++) {
-      if (image1.data[i] !== image.data[i]) {
-        let msg = `Element ${i} differs: ${image1.data[i]} !== ${image.data[i]}`
-        outputTextArea.textContent += ` ${msg}\n`
-        throw Error(msg)
-      }
-    }
-    outputTextArea.textContent += ' they match ✓'
   })
 })
 
