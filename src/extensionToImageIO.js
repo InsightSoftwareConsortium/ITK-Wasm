@@ -2,8 +2,8 @@ const extensionToIO = new Map([
   ['bmp', 'itkBMPImageIOJSBinding'],
   ['BMP', 'itkBMPImageIOJSBinding'],
 
-  ['dcm', 'itkDCMTKImageIOJSBinding'],
-  ['DCM', 'itkDCMTKImageIOJSBinding'],
+  ['dcm', 'itkGDCMImageIOJSBinding'],
+  ['DCM', 'itkGDCMImageIOJSBinding'],
 
   ['gipl', 'itkGiplImageIOJSBinding'],
   ['gipl.gz', 'itkGiplImageIOJSBinding'],
