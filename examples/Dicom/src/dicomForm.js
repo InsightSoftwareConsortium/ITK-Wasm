@@ -36,8 +36,12 @@ function setupDicomForm(patients, callback) {
       const value = study.metaData.StudyDescription + " - " + study.metaData.StudyDate
       studySelect.options[studySelect.options.length] = new Option(value, value);
     }
+
+    if (studyList.length === 1) {
+      studySelect.selectedIndex = 1
+      studySelect.onchange()
+    }
   }
-  patientSelect.onchange(); // reset in case page is reloaded
 
   studySelect.onchange = function () {
     // Remove options
@@ -55,6 +59,11 @@ function setupDicomForm(patients, callback) {
       const value = serie.metaData.SeriesDescription + " - " + serie.metaData.Modality
       serieSelect.options[serieSelect.options.length] = new Option(value, value);
     }
+
+    if (serieList.length === 1) {
+      serieSelect.selectedIndex = 1
+      serieSelect.onchange()
+    }
   }
 
   serieSelect.onchange = function () {
@@ -65,6 +74,11 @@ function setupDicomForm(patients, callback) {
     const serie = serieList[serieId]
     callback(serie)
   }
+
+  if (patientList.length === 1) {
+    patientSelect.selectedIndex = 1
+  }
+  patientSelect.onchange(); // reset in case page is reloaded
 }
 
 export default setupDicomForm;
