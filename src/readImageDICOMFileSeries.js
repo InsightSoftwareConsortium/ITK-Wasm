@@ -1,3 +1,6 @@
+/* eslint-disable-next-line no-unused-vars */
+import regeneratorRuntime from 'regenerator-runtime'
+
 import createWebworkerPromise from './createWebworkerPromise'
 import PromiseFileReader from 'promise-file-reader'
 import WorkerPool from './WorkerPool'
