@@ -36,18 +36,17 @@ async function readImage (input) {
     for (const mod of availableIOModules(input)) {
       const trialIO = ImageIOIndex[idx]
       const imageIO = new mod.ITKImageIO()
-      const blob = new Blob([input.data])
-      const blobs = [{ name: input.name, data: blob }]
-      mod.mountBlobs(mountpoint, blobs)
-      const filePath = mountpoint + '/' + input.name
+      mod.mkdirs(mountpoint)
+      const filePath = `${mountpoint}/${input.name}`
+      mod.writeFile(filePath, new Uint8Array(input.data))
       imageIO.SetFileName(filePath)
       if (imageIO.CanReadFile(filePath)) {
         io = trialIO
-        mod.unmountBlobs(mountpoint)
+        mod.unlink(filePath)
         ioToModule[io] = mod
         break
       }
-      mod.unmountBlobs(mountpoint)
+      mod.unlink(filePath)
       idx++
     }
     if (io === null) {
@@ -56,12 +55,11 @@ async function readImage (input) {
   }
 
   function inputToResponse (ioModule) {
-    const blob = new Blob([input.data])
-    const blobs = [{ name: input.name, data: blob }]
-    ioModule.mountBlobs(mountpoint, blobs)
-    const filePath = mountpoint + '/' + input.name
+    ioModule.mkdirs(mountpoint)
+    const filePath = `${mountpoint}/${input.name}`
+    ioModule.writeFile(filePath, new Uint8Array(input.data))
     const image = readImageEmscriptenFSFile(ioModule, filePath)
-    ioModule.unmountBlobs(mountpoint)
+    ioModule.unlink(filePath)
 
     return new registerWebworker.TransferableResponse(image, [image.data.buffer])
   }
@@ -113,6 +111,7 @@ async function writeImage (input) {
   ioModule.mkdirs(mountpoint)
   writeImageEmscriptenFSFile(ioModule, input.useCompression, input.image, filePath)
   const writtenFile = ioModule.readFile(filePath, { encoding: 'binary' })
+  ioModule.unlink(filePath)
 
   return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }
@@ -123,18 +122,19 @@ async function readDICOMImageSeries (input) {
     seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', seriesReader)
   }
 
-  const blobs = input.fileDescriptions.map((fileDescription) => {
-    const blob = new Blob([fileDescription.data])
-    return { name: fileDescription.name, data: blob }
-  })
   const mountpoint = '/work'
-  seriesReaderModule.mountBlobs(mountpoint, blobs)
-  const filePaths = input.fileDescriptions.map((fileDescription) => {
-    return `${mountpoint}/${fileDescription.name}`
-  })
+  seriesReaderModule.mkdirs(mountpoint)
+  const filePaths = []
+  for (let ii = 0; ii < input.fileDescriptions.length; ii++) {
+    const filePath = `${mountpoint}/${input.fileDescriptions[ii].name}`
+    seriesReaderModule.writeFile(filePath, new Uint8Array(input.fileDescriptions[ii].data))
+    filePaths.push(filePath)
+  }
   const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
     filePaths, input.singleSortedSeries)
-  seriesReaderModule.unmountBlobs(mountpoint)
+  for (let ii = 0; ii < filePaths.length; ii++) {
+    seriesReaderModule.unlink(filePaths[ii])
+  }
 
   return new registerWebworker.TransferableResponse(image, [image.data.buffer])
 }
