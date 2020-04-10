@@ -81,3 +81,7 @@ Module.readFile = function (path, opts) {
 Module.writeFile = function (path, data, opts) {
   return FS.writeFile(path, data, opts)
 }
+
+Module.unlink = function (path) {
+  return FS.unlink(path)
+}
