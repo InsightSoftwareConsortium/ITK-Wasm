@@ -72,7 +72,6 @@ test('Test reading a DICOM file with the synchronous API, assume sorted', t => {
   t.is(image.imageType.dimension, 3, 'dimension')
   t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')
   t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
-  t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
   t.is(image.imageType.components, 1, 'components')
   t.is(image.origin[0], -17.3551, 'origin[0]')
   t.is(image.origin[1], -133.9286, 'origin[1]')
