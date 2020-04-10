@@ -3,8 +3,61 @@ import createWebworkerPromise from './createWebworkerPromise'
 import config from './itkConfig'
 
 import IOTypes from './IOTypes'
+import runPipelineEmscripten from './runPipelineEmscripten'
+
+// To cache loaded pipeline modules
+const pipelinePathToModule = {}
+
+function loadEmscriptenModuleMainThread (itkModulesPath, modulesDirectory, moduleBaseName) {
+  let prefix = itkModulesPath
+  if (itkModulesPath[0] !== '/' && !itkModulesPath.startsWith('http')) {
+    prefix = '..'
+  }
+  if (typeof window.WebAssembly === 'object' && typeof window.WebAssembly.Memory === 'function') {
+    const modulePath = prefix + '/' + modulesDirectory + '/' + moduleBaseName + 'Wasm.js'
+    return new Promise(function (resolve, reject) {
+      const s = document.createElement('script')
+      s.src = modulePath
+      s.onload = resolve
+      s.onerror = reject
+      document.head.appendChild(s)
+    }).then(() => {
+      const module = window[moduleBaseName]()
+      return module
+    })
+  } else {
+    const modulePath = prefix + '/' + modulesDirectory + '/' + moduleBaseName + '.js'
+    return new Promise(function (resolve, reject) {
+      const s = document.createElement('script')
+      s.src = modulePath
+      s.onload = resolve
+      s.onerror = reject
+      document.head.appendChild(s)
+    }).then(() => {
+      const module = window.Module
+      return module
+    })
+  }
+}
+
+async function loadPipelineModule (moduleDirectory, pipelinePath) {
+  let pipelineModule = null
+  if (pipelinePath in pipelinePathToModule) {
+    pipelineModule = pipelinePathToModule[pipelinePath]
+  } else {
+    pipelinePathToModule[pipelinePath] = await loadEmscriptenModuleMainThread(config.itkModulesPath, moduleDirectory, pipelinePath)
+    pipelineModule = pipelinePathToModule[pipelinePath]
+  }
+  return pipelineModule
+}
 
 const runPipelineBrowser = (webWorker, pipelinePath, args, outputs, inputs) => {
+  if (webWorker === false) {
+    loadPipelineModule('Pipelines', pipelinePath).then((pipelineModule) => {
+      const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
+      return result
+    })
+  }
   let worker = webWorker
   return createWebworkerPromise('Pipeline', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
