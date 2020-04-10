@@ -47,13 +47,12 @@
     "@babel/core": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
-    "@babel/runtime": "^7.8.3",
     "async": "^2.6.1",
     "ava": "^3.5.1",
     "babel-loader": "^8.0.6",
     "babelify": "^10.0.0",
     "browserify": "^16.5.0",
-    "commitizen": "^4.0.3",
+    "commitizen": "^4.0.4",
     "cz-conventional-changelog": "2.1.0",
     "file-api": "^0.10.4",
     "fs-extra": "^7.0.1",
@@ -75,6 +74,7 @@
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
+    "@babel/runtime": "^7.9.2",
     "axios": "^0.19.0",
     "commander": "^2.19.0",
     "mime-types": "^2.1.21",
