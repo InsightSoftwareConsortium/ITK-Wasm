@@ -5,8 +5,9 @@ WORKDIR /
 
 # Work-around for VTK HDF5 build
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_DOCKCROSS}
-# 2019-01-03 + Emscripten patches
-ENV VTK_GIT_TAG 32476744d0783a63c49a9e1cc1107a91f707275e
+# 2019-01-03 + Emscripten patches + DiceHub EGL patch
+ENV VTK_GIT_TAG 7ed51dceea648b99ac5e778d2808f77ea91be4a9
+ENV CXXFLAGS="${CXXFLAGS} -s USE_FREETYPE=1"
 RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK && \
   git checkout ${VTK_GIT_TAG} && \
@@ -25,6 +26,11 @@ RUN git clone https://github.com/thewtex/VTK.git && \
     -DH5_HAVE_GETPWUID:BOOL=OFF \
     -DModule_vtkIOExport:BOOL=ON \
     -DVTK_NO_PLATFORM_SOCKETS:BOOL=ON \
+    -DModule_vtkRenderingContextOpenGL2:BOOL=OFF \
+    -DVTK_USE_SYSTEM_FREETYPE:BOOL=ON \
+    -DFREETYPE_INCLUDE_DIRS:PATH=include \
+    -DFREETYPE_LIBRARY:STRING=freetype \
+    -DH5_HAVE_GETPWUID:BOOL=OFF \
     ../VTK && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
