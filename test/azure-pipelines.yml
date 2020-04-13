@@ -16,8 +16,8 @@ jobs:
         nodeVersion: '12'
 
   pool:
-    name: 'Hosted Ubuntu 1604'
-    imageName: 'ubuntu-16.04'
+    name: 'Hosted Ubuntu 1804'
+    imageName: 'ubuntu-18.04'
 
   steps:
   - task: NodeTool@0
@@ -50,16 +50,16 @@ jobs:
   strategy:
     matrix:
       WindowsNode8:
-        poolName: 'Hosted VS2017'
-        imageName: 'vs2017-win2016'
+        poolName: 'Hosted 2019'
+        imageName: 'windows-2019'
         nodeVersion: '8'
       WindowsNode10:
-        poolName: 'Hosted VS2017'
-        imageName: 'vs2017-win2016'
+        poolName: 'Hosted 2019'
+        imageName: 'windows-2019'
         nodeVersion: '10'
       WindowsNode12:
-        poolName: 'Hosted VS2017'
-        imageName: 'vs2017-win2016'
+        poolName: 'Hosted 2019'
+        imageName: 'windows-2019'
         nodeVersion: '12'
 
   pool:
