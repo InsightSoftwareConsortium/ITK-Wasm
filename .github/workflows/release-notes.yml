@@ -18,8 +18,7 @@ jobs:
         run: |
           echo "# itk.js ${{ github.ref }}" > ./release-notes.md
           cat ./doc/release-introduction.md >> ./release-notes.md
-          npm i -D conventional-changelog
-          npx conventional-changelog -p angular -r 2 -o ./CHANGELOG.md
+          npx conventional-changelog-cli -p angular -r 2 -o ./CHANGELOG.md
           cat ./CHANGELOG.md >> ./release-notes.md
       - name: Release
         uses: softprops/action-gh-release@v1
