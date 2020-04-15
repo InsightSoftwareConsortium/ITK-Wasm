@@ -1,6 +1,6 @@
-Module['locateFile'] = function(fileName) {
+Module['locateFile'] = function(fileName, prefix) {
   if(fileName === '@wasm_target@.wasm') {
-    return '../ImageIOs/@wasm_target@.wasm'
+    return prefix + '../ImageIOs/@wasm_target@.wasm'
   }
-  return fileName
+  return prefix + fileName
 }
