@@ -1,8 +1,8 @@
-Module['locateFile'] = function(fileName) {
+Module['locateFile'] = function(fileName, prefix) {
   if(fileName === '@wasm_target_name@.wasm') {
-    return '../Pipelines/@wasm_target_name@.wasm'
+    return prefix + '../Pipelines/@wasm_target_name@.wasm'
   }
-  return fileName
+  return prefix + fileName
 }
 
 var moduleStdout = null
