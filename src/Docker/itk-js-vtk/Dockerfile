@@ -22,6 +22,7 @@ RUN git clone https://github.com/thewtex/VTK.git && \
     -DBUILD_EXAMPLES:BOOL=OFF \
     -DBUILD_TESTING:BOOL=OFF \
     -DVTK_RENDERING_BACKEND:STRING=None \
+    -DH5_HAVE_GETPWUID:BOOL=OFF \
     -DModule_vtkIOExport:BOOL=ON \
     -DVTK_NO_PLATFORM_SOCKETS:BOOL=ON \
     ../VTK && \

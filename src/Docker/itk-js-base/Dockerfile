@@ -1,4 +1,4 @@
-FROM dockcross/web-wasm:20200324-880bfd0
+FROM dockcross/web-wasm:20200414-7299cbb
 
 MAINTAINER Insight Software Consortium <community@itk.org>
 
@@ -23,6 +23,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DITK_LEGACY_REMOVE:BOOL=ON \
     -DITK_BUILD_DEFAULT_MODULES:BOOL=ON \
     -DITKGroup_IO:BOOL=ON \
+    -DH5_HAVE_GETPWUID:BOOL=OFF \
     -DModule_ITKIODCMTK:BOOL=ON \
     -DDCMTK_USE_ICU:BOOL=OFF \
     -DModule_ITKIOMINC:BOOL=ON \
