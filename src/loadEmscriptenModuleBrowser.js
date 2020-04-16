@@ -20,13 +20,14 @@ function loadEmscriptenModule(itkModulesPath, modulesDirectory, moduleBaseName) 
   if (itkModulesPath[0] !== '/' && !itkModulesPath.startsWith('http')) {
     prefix = '..'
   }
+  const moduleScriptDir = prefix + '/' + modulesDirectory
   if (typeof WebAssembly === 'object' && typeof WebAssembly.Memory === 'function') {
-    const modulePath = prefix + '/' + modulesDirectory + '/' + moduleBaseName + 'Wasm.js'
+    const modulePath = moduleScriptDir + '/' + moduleBaseName + 'Wasm.js'
     importScripts(modulePath)
-    const module = self[moduleBaseName]();
+    const module = self[moduleBaseName]({ moduleScriptDir });
     return module;
   } else {
-    const modulePath = prefix + '/' + modulesDirectory + '/' + moduleBaseName + '.js'
+    const modulePath = moduleScriptDir + '/' + moduleBaseName + '.js'
     importScripts(modulePath)
     return Module
   }

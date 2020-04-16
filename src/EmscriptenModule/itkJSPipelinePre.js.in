@@ -1,6 +1,9 @@
 Module['locateFile'] = function(fileName, prefix) {
-  if(fileName === '@wasm_target_name@.wasm') {
-    return prefix + '../Pipelines/@wasm_target_name@.wasm'
+  if(fileName === '@wasm_target@.wasm') {
+    if (typeof @target@.moduleScriptDir !== 'undefined') {
+      return @target@.moduleScriptDir + '/@wasm_target@.wasm'
+    }
+    return prefix + '../Pipelines/@wasm_target@.wasm'
   }
   return prefix + fileName
 }
