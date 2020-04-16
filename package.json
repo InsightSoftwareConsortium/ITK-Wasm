@@ -55,7 +55,6 @@
     "commitizen": "^4.0.4",
     "cz-conventional-changelog": "2.1.0",
     "file-api": "^0.10.4",
-    "fs-extra": "^7.0.1",
     "glob": "^7.1.6",
     "json-loader": "^0.5.7",
     "karma": "^4.4.1",
@@ -77,6 +76,7 @@
     "@babel/runtime": "^7.9.2",
     "axios": "^0.19.0",
     "commander": "^2.19.0",
+    "fs-extra": "^9.0.0",
     "mime-types": "^2.1.21",
     "promise-file-reader": "^1.0.2",
     "webworker-promise": "^0.4.2"
