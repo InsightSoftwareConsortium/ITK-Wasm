@@ -1,6 +1,6 @@
 {
   "name": "itk",
-  "version": "12.3.0",
+  "version": "12.3.1",
   "description": "High performance spatial analysis in a JavaScript runtime environment.",
   "main": "./dist/itk.js",
   "directories": {
