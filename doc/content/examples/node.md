@@ -17,16 +17,16 @@ This adds `itk` to the `dependencies` section of your *package.json* file:
 {
   "name": "itk-convert",
   "version": "1.1.0",
-  "description": "Convert images files from one format to another.",
+  "description": "Convert image or mesh files from one format to another.",
 [...]
   "dependencies": {
     "commander": "^2.14.1",
-    "itk": "^9.2.0"
+    "itk": "^12.3.0"
   }
 }
 ```
 
-Next, call functions like [itk/readImageLocalFileSync](../api/node_io.html) or [itk/writeImageLocalFileSync](../api/node_io.html).
+Next, call functions like [itk/readLocalFileSync](../api/node_io.html) or [itk/writeLocalFileSync](../api/node_io.html).
 
 For example,
 
@@ -37,9 +37,9 @@ const inputFile = program.args[0]
 const outputFile = program.args[1]
 
 try {
-  const image = readImageLocalFileSync(inputFile);
+  const object = readLocalFileSync(inputFile);
   const useCompression = true;
-  writeImageLocalFileSync(useCompression, image, outputFile);
+  writeLocalFileSync(useCompression, object, outputFile);
 } catch (error) {
   console.error('Error during conversion:\n');
   console.error(error);
