@@ -51,6 +51,20 @@ async function loadPipelineModule (moduleDirectory, pipelinePath) {
   return pipelineModule
 }
 
+const haveSharedArrayBuffer = typeof window.SharedArrayBuffer === 'function'
+function getTransferable (data) {
+  let result = null
+  if (data.buffer) {
+    result = data.buffer
+  } else if (data.byteLength) {
+    result = data
+  }
+  if (!!result && haveSharedArrayBuffer && result instanceof SharedArrayBuffer) { // eslint-disable-line
+    result = null
+  }
+  return result
+}
+
 const runPipelineBrowser = (webWorker, pipelinePath, args, outputs, inputs) => {
   if (webWorker === false) {
     loadPipelineModule('Pipelines', pipelinePath).then((pipelineModule) => {
@@ -67,48 +81,42 @@ const runPipelineBrowser = (webWorker, pipelinePath, args, outputs, inputs) => {
         inputs.forEach(function (input) {
           // Binary data
           if (input.type === IOTypes.Binary) {
-            if (input.data.buffer) {
-              transferables.push(input.data.buffer)
-            } else if (input.data.byteLength) {
-              transferables.push(input.data)
+            const transferable = getTransferable(input.data)
+            if (transferable) {
+              transferables.push(transferable)
             }
           }
           // Image data
           if (input.type === IOTypes.Image) {
-            if (input.data.data.buffer) {
-              transferables.push(input.data.data.buffer)
-            } else if (input.data.data.byteLength) {
-              transferables.push(input.data.data)
+            const transferable = getTransferable(input.data.data)
+            if (transferable) {
+              transferables.push(transferable)
             }
           }
           // Mesh data
           if (input.type === IOTypes.Mesh) {
             if (input.data.points) {
-              if (input.data.points.buffer) {
-                transferables.push(input.data.points.buffer)
-              } else if (input.data.points.byteLength) {
-                transferables.push(input.data.points)
+              const transferable = getTransferable(input.data.points)
+              if (transferable) {
+                transferables.push(transferable)
               }
             }
             if (input.data.pointData) {
-              if (input.data.pointData.buffer) {
-                transferables.push(input.data.pointData.buffer)
-              } else if (input.data.pointData.byteLength) {
-                transferables.push(input.data.pointData)
+              const transferable = getTransferable(input.data.pointData)
+              if (transferable) {
+                transferables.push(transferable)
               }
             }
             if (input.data.cells) {
-              if (input.data.cells.buffer) {
-                transferables.push(input.data.cells.buffer)
-              } else if (input.data.cells.byteLength) {
-                transferables.push(input.data.cells)
+              const transferable = getTransferable(input.data.cells)
+              if (transferable) {
+                transferables.push(transferable)
               }
             }
             if (input.data.cellData) {
-              if (input.data.cellData.buffer) {
-                transferables.push(input.data.cellData.buffer)
-              } else if (input.data.cellData.byteLength) {
-                transferables.push(input.data.cellData)
+              const transferable = getTransferable(input.data.cellData)
+              if (transferable) {
+                transferables.push(transferable)
               }
             }
           }

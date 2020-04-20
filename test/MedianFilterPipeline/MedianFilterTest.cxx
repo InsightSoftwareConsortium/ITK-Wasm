@@ -18,17 +18,30 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkMedianImageFilter.h"
+#include "itkImageRegionSplitterSlowDimension.h"
+#include "itkExtractImageFilter.h"
 
 int main( int argc, char * argv[] )
 {
   if( argc < 4 )
     {
-    std::cerr << "Usage: " << argv[0] << " <inputImage> <outputImage> <radius>" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <inputImage> <outputImage> <radius> [maxTotalSplits] [split]" << std::endl;
     return EXIT_FAILURE;
     }
   const char * inputImageFile = argv[1];
+
   const char * outputImageFile = argv[2];
   unsigned int radius = atoi( argv[3] );
+  unsigned int maxTotalSplits = 1;
+  if (argc > 4)
+    {
+    maxTotalSplits = atoi( argv[4] );
+    }
+  unsigned int split = 1;
+  if (argc > 5)
+    {
+    split = atoi( argv[5] );
+    }
 
   using PixelType = unsigned char;
   constexpr unsigned int Dimension = 2;
@@ -48,15 +61,41 @@ int main( int argc, char * argv[] )
   writer->SetInput( smoother->GetOutput() );
   writer->SetFileName( outputImageFile );
 
+  using ROIFilterType = itk::ExtractImageFilter< ImageType, ImageType >;
+  auto roiFilter = ROIFilterType::New();
+  roiFilter->InPlaceOn();
+  if (maxTotalSplits > 1)
+  {
+    smoother->UpdateOutputInformation();
+    using RegionType = ImageType::RegionType;
+    smoother->UpdateOutputInformation();
+    const RegionType largestRegion( smoother->GetOutput()->GetLargestPossibleRegion() );
+
+    using SplitterType = itk::ImageRegionSplitterSlowDimension;
+    auto splitter = SplitterType::New();
+    const unsigned int numberOfSplits = splitter->GetNumberOfSplits( largestRegion, maxTotalSplits );
+    if (split >= numberOfSplits)
+    {
+      std::cerr << "Error: requested split: " << split << " is outside the number of splits: " << numberOfSplits << std::endl;
+      return EXIT_FAILURE;
+    }
+
+    RegionType requestedRegion( largestRegion );
+    splitter->GetSplit( split, numberOfSplits, requestedRegion );
+    roiFilter->SetInput( smoother->GetOutput() );
+    roiFilter->SetExtractionRegion( requestedRegion );
+    writer->SetInput( roiFilter->GetOutput() );
+  }
+
   try
-    {
+  {
     writer->Update();
-    }
-  catch( itk::ExceptionObject & error )
-    {
-    std::cerr << "Error: " << error << std::endl;
+  }
+  catch( std::exception & error )
+  {
+    std::cerr << "Error: " << error.what() << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }
