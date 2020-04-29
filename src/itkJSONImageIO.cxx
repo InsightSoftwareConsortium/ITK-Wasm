@@ -20,6 +20,7 @@
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
+#include "itksys/SystemTools.hxx"
 
 #include "rapidjson/document.h"
 #include "rapidjson/prettywriter.h"
@@ -373,15 +374,25 @@ JSONImageIO
   std::ifstream dataStream;
   this->OpenFileForReading( dataStream, dataFile.c_str() );
 
-  const SizeValueType numberOfBytesToBeRead =
-    static_cast< SizeValueType >( this->GetImageSizeInBytes() );
-  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-    {
-    itkExceptionMacro(<< "Read failed: Wanted "
-                      << numberOfBytesToBeRead
-                      << " bytes, but read "
-                      << dataStream.gcount() << " bytes.");
-    }
+  if (this->RequestedToStream())
+  {
+    this->OpenFileForReading( dataStream, dataFile.c_str() );
+    this->StreamReadBufferAsBinary( dataStream, buffer );
+  }
+
+  else
+  {
+    this->OpenFileForReading( dataStream, dataFile.c_str() );
+    const SizeValueType numberOfBytesToBeRead =
+      static_cast< SizeValueType >( this->GetImageSizeInBytes() );
+    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+      {
+      itkExceptionMacro(<< "Read failed: Wanted "
+                        << numberOfBytesToBeRead
+                        << " bytes, but read "
+                        << dataStream.gcount() << " bytes.");
+      }
+  }
 }
 
 
@@ -495,12 +506,40 @@ void
 JSONImageIO
 ::Write( const void *buffer )
 {
-  this->WriteImageInformation();
   const std::string fileName = std::string( this->GetFileName() ) + ".data";
-  std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, fileName, true, false );
-  const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
-  outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+
+  if (this->RequestedToStream())
+  {
+    if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
+    {
+      this->WriteImageInformation();
+
+      std::ofstream file;
+      this->OpenFileForWriting(file, fileName, false);
+
+      // write one byte at the end of the file to allocate (this is a
+      // nifty trick which should not write the entire size of the file
+      // just allocate it, if the system supports sparse files)
+      std::streampos seekPos = this->GetImageSizeInBytes();
+      file.seekp(seekPos, std::ios::cur);
+      file.write("\0", 1);
+      file.seekp(0);
+    }
+
+    std::ofstream file;
+    // open and stream write
+    this->OpenFileForWriting(file, fileName, false);
+
+    this->StreamWriteBufferAsBinary(file, buffer);
+  }
+  else
+  {
+    this->WriteImageInformation();
+    std::ofstream outputStream;
+    this->OpenFileForWriting( outputStream, fileName, true, false );
+    const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
+    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+  }
 }
 
 } // end namespace itk

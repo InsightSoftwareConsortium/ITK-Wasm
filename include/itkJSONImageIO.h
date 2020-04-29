@@ -20,7 +20,7 @@
 #include "BridgeJavaScriptExport.h"
 
 
-#include "itkImageIOBase.h"
+#include "itkStreamingImageIOBase.h"
 #include <fstream>
 
 namespace itk
@@ -38,19 +38,19 @@ namespace itk
  * \ingroup IOFilters
  * \ingroup BridgeJavaScript
  */
-class BridgeJavaScript_EXPORT JSONImageIO: public ImageIOBase
+class BridgeJavaScript_EXPORT JSONImageIO: public StreamingImageIOBase
 {
 public:
   /** Standard class typedefs. */
   typedef JSONImageIO          Self;
-  typedef ImageIOBase          Superclass;
+  typedef StreamingImageIOBase Superclass;
   typedef SmartPointer< Self > Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JSONImageIO, ImageIOBase);
+  itkTypeMacro(JSONImageIO, StreamingImageIOBase);
 
   /** The different types of ImageIO's can support data of varying
    * dimensionality. For example, some file formats are strictly 2D
@@ -90,6 +90,11 @@ protected:
 
   static IOPixelEnum JSToITKPixelType( const int jsPixelType );
   static int ITKToJSPixelType( const IOPixelEnum );
+
+  Superclass::SizeType GetHeaderSize() const override
+  {
+    return 0;
+  }
 
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(JSONImageIO);
