@@ -22,6 +22,7 @@
 #include "vtkMultiBlockDataSet.h"
 #include "vtkPolyData.h"
 #include "vtkSmartPointer.h"
+#include "vtkArchiver.h"
 
 vtkPolyData* FindPolyData(vtkMultiBlockDataSet* output)
 {
@@ -62,8 +63,10 @@ int main(int argc, char* argv[]) {
   vtkNew<vtkGeometryFilter> geometryFilter;
   vtkNew<vtkAppendCompositeDataLeaves> appendFilter;
 
+  vtkNew<vtkArchiver> archiver;
+  archiver->SetArchiveName(outputPolyDataFile);
   vtkNew<vtkJSONDataSetWriter> writer;
-  writer->SetFileName(outputPolyDataFile);
+  writer->SetArchiver(archiver);
 
   bool canReadFile = false;
 

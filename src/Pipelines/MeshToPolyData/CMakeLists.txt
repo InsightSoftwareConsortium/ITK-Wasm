@@ -3,10 +3,9 @@ project(MeshToPolyData)
 
 find_package(VTK REQUIRED
   COMPONENTS
-    vtkIOExport
-    vtkFiltersGeometry
+    IOExport
+    FiltersGeometry
   )
-include(${VTK_USE_FILE})
 
 set(io_components ITKMeshIO)
 if(EMSCRIPTEN)
