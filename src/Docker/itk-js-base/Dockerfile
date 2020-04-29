@@ -4,8 +4,8 @@ MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
 
-# 2020-03-25 master branch
-ENV ITK_GIT_TAG 4b48c9025f66d179d7b134999e2398f5924093b4
+# 2020-04-27 release branch
+ENV ITK_GIT_TAG v5.1.0
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s WASM=0 -lnodefs.js -Wno-almost-asm "
 ENV CXXFLAGS="${CFLAGS} -std=c++14"
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
