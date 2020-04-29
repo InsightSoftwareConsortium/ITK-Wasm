@@ -1,7 +1,7 @@
 itk-convert
 ===========
 
-Convert an image from one file format to another.
+Convert an image or mesh from one file format to another.
 
 This package provides a command line executable, `itk-convert` to convert
 image file formats with

@@ -2,9 +2,11 @@ const path = require('path')
 
 const getFileExtension = require('./getFileExtension.js')
 const extensionToMeshIO = require('./extensionToMeshIO.js')
+const extensionToPolyDataIO = require('./extensionToPolyDataIO.js')
 
 const readImageLocalFileSync = require('./readImageLocalFileSync.js')
 const readMeshLocalFileSync = require('./readMeshLocalFileSync.js')
+const readPolyDataLocalFileSync = require('./readPolyDataLocalFileSync.js')
 
 /**
  * Read an image or mesh from a file on the local filesystem in Node.js.
@@ -16,6 +18,7 @@ const readLocalFileSync = (filePath) => {
   const extension = getFileExtension(absoluteFilePath)
 
   const isMesh = extensionToMeshIO.has(extension)
+  const isPolyData = extensionToPolyDataIO.has(extension)
   if (isMesh) {
     try {
       const mesh = readMeshLocalFileSync(filePath)
@@ -25,6 +28,9 @@ const readLocalFileSync = (filePath) => {
       const image = readImageLocalFileSync(filePath)
       return image
     }
+  } else if (isPolyData) {
+    const polyData = readPolyDataLocalFileSync(filePath)
+    return polyData
   } else {
     const image = readImageLocalFileSync(filePath)
     return image
