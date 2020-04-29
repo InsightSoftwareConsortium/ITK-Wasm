@@ -11,6 +11,7 @@ const cdnPath = 'https://unpkg.com/itk@' + itkVersion
 
 module.exports = {
   name: packageJSON.name,
+  mode: 'production',
   node: {
     fs: 'empty'
   },
