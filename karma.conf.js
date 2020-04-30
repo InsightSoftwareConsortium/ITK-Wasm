@@ -41,6 +41,7 @@ module.exports = function init (config) {
       node: {
         fs: 'empty'
       },
+      mode: 'development',
       module: {
         rules: [].concat()
       },
