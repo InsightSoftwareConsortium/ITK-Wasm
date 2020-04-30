@@ -179,11 +179,10 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/MeshIOIndex.js.in
 
 # Pipelines for readPolyData
 find_package(VTK QUIET)
-include(${VTK_USE_FILE})
 if(VTK_FOUND)
   foreach(io_pipeline ${PolyDataIOPipelines})
 
-  find_package(VTK REQUIRED COMPONENTS vtkIOExport ${polydataios_${io_pipeline}})
+  find_package(VTK REQUIRED COMPONENTS IOExport ${polydataios_${io_pipeline}})
 
   set(target ${io_pipeline})
   set(wasm_target ${io_pipeline}Wasm)

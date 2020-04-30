@@ -65,14 +65,14 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(meshios_IOMeshSTL itkSTLMeshIO)
 
   set(PolyDataIOPipelines
-    "VTKExodusFileReader"
     "VTKLegacyFileReader"
     "VTKXMLFileReader"
+    "VTKExodusFileReader"
     CACHE STRING
     "String delimited list of VTK PolyData IO pipelines to support.")
-  set(polydataios_VTKExodusFileReader vtkIOExodus vtkCommonDataModel vtkFiltersCore vtkFiltersGeometry)
-  set(polydataios_VTKLegacyFileReader vtkIOLegacy)
-  set(polydataios_VTKXMLFileReader vtkIOXML)
+  set(polydataios_VTKExodusFileReader IOExodus CommonDataModel FiltersCore FiltersGeometry)
+  set(polydataios_VTKLegacyFileReader IOLegacy FiltersGeometry)
+  set(polydataios_VTKXMLFileReader IOXML FiltersGeometry IOLegacy)
 endif()
 
 

@@ -21,6 +21,7 @@
 #include "vtkPolyDataReader.h"
 #include "vtkSmartPointer.h"
 #include "vtkUnstructuredGridReader.h"
+#include "vtkArchiver.h"
 
 int main(int argc, char* argv[]) {
   if (argc < 3) {
@@ -37,8 +38,10 @@ int main(int argc, char* argv[]) {
 
   vtkNew<vtkGeometryFilter> geometryFilter;
 
+  vtkNew<vtkArchiver> archiver;
+  archiver->SetArchiveName(outputPolyDataFile);
   vtkNew<vtkJSONDataSetWriter> writer;
-  writer->SetFileName(outputPolyDataFile);
+  writer->SetArchiver(archiver);
 
   if (dataReader->IsFilePolyData()) {
     dataReader = vtkSmartPointer<vtkPolyDataReader>::New();

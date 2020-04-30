@@ -17,6 +17,7 @@
  *=========================================================================*/
 #include "vtkPolyDataReader.h"
 #include "vtkJSONDataSetWriter.h"
+#include "vtkArchiver.h"
 #include "vtkNew.h"
 
 int main( int argc, char * argv[] )
@@ -32,8 +33,10 @@ int main( int argc, char * argv[] )
   vtkNew< vtkPolyDataReader > reader;
   reader->SetFileName( inputPolyDataFile );
 
-  vtkNew< vtkJSONDataSetWriter > writer;
-  writer->SetFileName( outputPolyDataFile );
+  vtkNew<vtkArchiver> archiver;
+  archiver->SetArchiveName(outputPolyDataFile);
+  vtkNew<vtkJSONDataSetWriter> writer;
+  writer->SetArchiver(archiver);
   writer->SetInputConnection( reader->GetOutputPort() );
 
   try

@@ -2,10 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 project(WriteVTKPolyDataTest)
 
 find_package(VTK REQUIRED
-  COMPONENTS vtkIOLegacy
-    vtkIOExport
+  COMPONENTS IOLegacy
+    IOExport
   )
-include(${VTK_USE_FILE})
 
 add_executable(WriteVTKPolyDataTest WriteVTKPolyDataTest.cxx)
 target_link_libraries(WriteVTKPolyDataTest ${VTK_LIBRARIES})

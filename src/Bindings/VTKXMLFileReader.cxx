@@ -22,6 +22,7 @@
 #include "vtkXMLPolyDataReader.h"
 #include "vtkXMLReader.h"
 #include "vtkXMLUnstructuredGridReader.h"
+#include "vtkArchiver.h"
 
 int main(int argc, char* argv[]) {
   if (argc < 3) {
@@ -34,8 +35,10 @@ int main(int argc, char* argv[]) {
 
   vtkNew<vtkGeometryFilter> geometryFilter;
 
+  vtkNew<vtkArchiver> archiver;
+  archiver->SetArchiveName(outputPolyDataFile);
   vtkNew<vtkJSONDataSetWriter> writer;
-  writer->SetFileName(outputPolyDataFile);
+  writer->SetArchiver(archiver);
 
   bool canReadFile = false;
 

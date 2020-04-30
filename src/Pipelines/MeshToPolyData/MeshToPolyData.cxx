@@ -20,6 +20,7 @@
 #include "itkMeshToVTKUnstructuredGridFilter.h"
 #include "vtkGeometryFilter.h"
 #include "vtkJSONDataSetWriter.h"
+#include "vtkArchiver.h"
 #include "vtkNew.h"
 
 int main( int argc, char * argv[] )
@@ -50,8 +51,10 @@ int main( int argc, char * argv[] )
     vtkNew< vtkGeometryFilter > geometryFilter;
     geometryFilter->SetInputData( converter->GetOutput() );
 
-    vtkNew< vtkJSONDataSetWriter > writer;
-    writer->SetFileName( outputPolyDataFile );
+    vtkNew<vtkArchiver> archiver;
+    archiver->SetArchiveName(outputPolyDataFile);
+    vtkNew<vtkJSONDataSetWriter> writer;
+    writer->SetArchiver(archiver);
     writer->SetInputConnection( geometryFilter->GetOutputPort() );
     writer->Update();
     }
