@@ -7,12 +7,12 @@ import IOTypes from '../IOTypes'
 // To cache loaded pipeline modules
 const pipelinePathToModule = {}
 
-function loadPipelineModule (moduleDirectory, pipelinePath, config) {
+function loadPipelineModule (moduleDirectory, pipelinePath, config, isAbsoluteURL) {
   let pipelineModule = null
   if (pipelinePath in pipelinePathToModule) {
     pipelineModule = pipelinePathToModule[pipelinePath]
   } else {
-    pipelinePathToModule[pipelinePath] = loadEmscriptenModule(config.itkModulesPath, moduleDirectory, pipelinePath)
+    pipelinePathToModule[pipelinePath] = loadEmscriptenModule(config.itkModulesPath, moduleDirectory, pipelinePath, isAbsoluteURL)
     pipelineModule = pipelinePathToModule[pipelinePath]
   }
   return pipelineModule
@@ -106,9 +106,9 @@ async function runPipeline (pipelineModule, args, outputs, inputs) {
 registerWebworker(async function (input) {
   let pipelineModule = null
   if (input.operation === 'runPipeline') {
-    pipelineModule = loadPipelineModule('Pipelines', input.pipelinePath, input.config)
+    pipelineModule = loadPipelineModule('Pipelines', input.pipelinePath, input.config, input.isAbsoluteURL)
   } else if (input.operation === 'runPolyDataIOPipeline') {
-    pipelineModule = loadPipelineModule('PolyDataIOs', input.pipelinePath, input.config)
+    pipelineModule = loadPipelineModule('PolyDataIOs', input.pipelinePath, input.config, input.isAbsoluteURL)
   } else {
     throw new Error('Unknown worker operation')
   }

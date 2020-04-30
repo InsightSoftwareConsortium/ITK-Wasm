@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import createWebworkerPromise from './createWebworkerPromise'
 
 import config from './itkConfig'
@@ -8,25 +10,38 @@ import runPipelineEmscripten from './runPipelineEmscripten'
 // To cache loaded pipeline modules
 const pipelinePathToModule = {}
 
-function loadEmscriptenModuleMainThread (itkModulesPath, modulesDirectory, moduleBaseName) {
+function loadEmscriptenModuleMainThread (itkModulesPath, modulesDirectory, pipelinePath, isAbsoluteURL) {
   let prefix = itkModulesPath
   if (itkModulesPath[0] !== '/' && !itkModulesPath.startsWith('http')) {
     prefix = '..'
   }
+  const moduleScriptDir = prefix + '/' + modulesDirectory
   if (typeof window.WebAssembly === 'object' && typeof window.WebAssembly.Memory === 'function') {
-    const modulePath = prefix + '/' + modulesDirectory + '/' + moduleBaseName + 'Wasm.js'
+    let modulePath = moduleScriptDir + '/' + pipelinePath + 'Wasm.js'
+    if (isAbsoluteURL) {
+      modulePath = pipelinePath + 'Wasm.js'
+    }
     return new Promise(function (resolve, reject) {
       const s = document.createElement('script')
       s.src = modulePath
       s.onload = resolve
       s.onerror = reject
       document.head.appendChild(s)
-    }).then(() => {
-      const module = window[moduleBaseName]()
-      return module
+    }).then(async () => {
+      const moduleBaseName = pipelinePath.replace(/.*\//, '')
+      let wasmPath = moduleScriptDir + '/' + pipelinePath + 'Wasm.wasm'
+      if (isAbsoluteURL) {
+        wasmPath = pipelinePath + 'Wasm.wasm'
+      }
+      const response = await axios.get(wasmPath, { responseType: 'arraybuffer' })
+      const wasmBinary = response.data
+      return Promise.resolve(window[moduleBaseName]({ moduleScriptDir, isAbsoluteURL, pipelinePath, wasmBinary }))
     })
   } else {
-    const modulePath = prefix + '/' + modulesDirectory + '/' + moduleBaseName + '.js'
+    let modulePath = moduleScriptDir + '/' + pipelinePath + '.js'
+    if (isAbsoluteURL) {
+      modulePath = pipelinePath + '.js'
+    }
     return new Promise(function (resolve, reject) {
       const s = document.createElement('script')
       s.src = modulePath
@@ -40,12 +55,12 @@ function loadEmscriptenModuleMainThread (itkModulesPath, modulesDirectory, modul
   }
 }
 
-async function loadPipelineModule (moduleDirectory, pipelinePath) {
+async function loadPipelineModule (moduleDirectory, pipelinePath, isAbsoluteURL) {
   let pipelineModule = null
   if (pipelinePath in pipelinePathToModule) {
     pipelineModule = pipelinePathToModule[pipelinePath]
   } else {
-    pipelinePathToModule[pipelinePath] = await loadEmscriptenModuleMainThread(config.itkModulesPath, moduleDirectory, pipelinePath)
+    pipelinePathToModule[pipelinePath] = await loadEmscriptenModuleMainThread(config.itkModulesPath, moduleDirectory, pipelinePath, isAbsoluteURL)
     pipelineModule = pipelinePathToModule[pipelinePath]
   }
   return pipelineModule
@@ -66,8 +81,9 @@ function getTransferable (data) {
 }
 
 const runPipelineBrowser = (webWorker, pipelinePath, args, outputs, inputs) => {
+  const isAbsoluteURL = pipelinePath instanceof URL
   if (webWorker === false) {
-    loadPipelineModule('Pipelines', pipelinePath).then((pipelineModule) => {
+    loadPipelineModule('Pipelines', pipelinePath.toString(), isAbsoluteURL).then((pipelineModule) => {
       const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
       return result
     })
@@ -126,7 +142,8 @@ const runPipelineBrowser = (webWorker, pipelinePath, args, outputs, inputs) => {
         {
           operation: 'runPipeline',
           config: config,
-          pipelinePath,
+          pipelinePath: pipelinePath.toString(),
+          isAbsoluteURL,
           args,
           outputs,
           inputs
