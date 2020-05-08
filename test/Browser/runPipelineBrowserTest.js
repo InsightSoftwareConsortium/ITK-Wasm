@@ -53,6 +53,47 @@ Click. Perfect success.
     })
 })
 
+test('runPipelineBrowser runs a pipeline in a web worker with an absolute URL', (t) => {
+  const args = []
+  const outputs = null
+  const inputs = null
+  const absoluteURL = new URL('base/dist/Pipelines/StdoutStderrTest', document.location)
+  return runPipelineBrowser(null, absoluteURL, args, outputs, inputs)
+    .then(function ({ stdout, stderr, outputs, webWorker }) {
+      webWorker.terminate()
+      t.is(stdout, `I’m writing my code,
+But I do not realize,
+Hours have gone by.
+`)
+      t.is(stderr, `The modem humming
+Code rapidly compiling.
+Click. Perfect success.
+`)
+      t.end()
+    })
+})
+
+// Note: There are currently known issues with Chrome whining about
+// wasm compilation on the main thread.
+test('runPipelineBrowser runs a pipeline on the main thread with an absolute URL', (t) => {
+  const args = []
+  const outputs = null
+  const inputs = null
+  const absoluteURL = new URL('base/dist/Pipelines/StdoutStderrTest', document.location)
+  return runPipelineBrowser(false, absoluteURL, args, outputs, inputs)
+    .then(function ({ stdout, stderr, outputs }) {
+      t.is(stdout, `I’m writing my code,
+But I do not realize,
+Hours have gone by.
+`)
+      t.is(stderr, `The modem humming
+Code rapidly compiling.
+Click. Perfect success.
+`)
+      t.end()
+    })
+})
+
 test('runPipelineBrowser uses input and output files in the Emscripten filesystem', (t) => {
   const pipelinePath = 'InputOutputFilesTest'
   const args = ['input.txt', 'input.bin', 'output.txt', 'output.bin']
@@ -84,6 +125,8 @@ test('runPipelineBrowser uses input and output files in the Emscripten filesyste
     })
 })
 
+// Note: There are currently known issues with Chrome whining about
+// wasm compilation on the main thread.
 test('runPipelineBrowser runs on the main thread when first argument is false', (t) => {
   const pipelinePath = 'InputOutputFilesTest'
   const args = ['input.txt', 'input.bin', 'output.txt', 'output.bin']
