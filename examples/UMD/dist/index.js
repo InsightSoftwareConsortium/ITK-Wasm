@@ -5,6 +5,9 @@ function processFile(event) {
   const dataTransfer = event.dataTransfer;
   const files = event.target.files || dataTransfer.files;
 
+  const viewerElement = document.getElementById('viewer')
+  !!viewerElement && itkVtkViewer.createViewerFromFiles(viewerElement, files)
+
   return itk.readFile(null, files[0]).then(function({ image, mesh, polyData, webWorker }) {
     webWorker.terminate();
     var imageOrMeshOrPolyData = image || mesh || polyData;
