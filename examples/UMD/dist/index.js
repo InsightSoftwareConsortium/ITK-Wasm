@@ -1,13 +1,16 @@
 function processFile(event) {
-  var outputTextArea = document.querySelector("textarea");
+  const outputTextArea = document.querySelector("textarea");
   outputTextArea.textContent = "Loading...";
 
-  var dataTransfer = event.dataTransfer;
-  var files = event.target.files || dataTransfer.files;
+  const dataTransfer = event.dataTransfer;
+  const files = event.target.files || dataTransfer.files;
 
-  return itk.readFile(null, files[0]).then(function({ image, mesh, webWorker }) {
+  const viewerElement = document.getElementById('viewer')
+  !!viewerElement && itkVtkViewer.createViewerFromFiles(viewerElement, files)
+
+  return itk.readFile(null, files[0]).then(function({ image, mesh, polyData, webWorker }) {
     webWorker.terminate();
-    var imageOrMesh = image || mesh;
+    var imageOrMeshOrPolyData = image || mesh || polyData;
 
     function replacer(key, value) {
       if (!!value && value.byteLength !== undefined) {
@@ -15,6 +18,6 @@ function processFile(event) {
       }
       return value;
     }
-    outputTextArea.textContent = JSON.stringify(imageOrMesh, replacer, 4);
+    outputTextArea.textContent = JSON.stringify(imageOrMeshOrPolyData, replacer, 4);
   });
 }

@@ -19,7 +19,7 @@ Inside the HTML `head`, load the itk.js UMD script:
 ```html
   <head>
     [...]
-    <script src="https://unpkg.com/itk@9.4.0/umd/itk.js"></script>
+    <script src="https://unpkg.com/itk@12.4.0/umd/itk.js"></script>
   </head>
 ```
 
@@ -27,7 +27,7 @@ Inside body JavaScript code, the `itk` object provides [itk.js API functions and
 
 ```
   [...]
-  return itk.readImageFile(null, files[0]).then(function({ image, webWorker }) {
+  return itk.readFile(null, files[0]).then(function({ image, mesh, polyData, webWorker }) {
     webWorker.terminate();
 ```
 
