@@ -30,28 +30,15 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DModule_ITKImageFunction:BOOL=ON \
     -DModule_SmoothingRecursiveYvvGaussianFilter:BOOL=ON \
     -DModule_MorphologicalContourInterpolation:BOOL=ON \
+    -DModule_Cuberille:BOOL=ON \
+    -DModule_TotalVariation:BOOL=ON \
+    -DModule_IOMeshSTL:BOOL=ON \
     ../ITK && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 ENV CFLAGS="${CFLAGS} -s ALLOW_MEMORY_GROWTH=1"
 ENV CXXFLAGS="${CXXFLAGS} -s ALLOW_MEMORY_GROWTH=1"
-
-ENV ITKIOMeshSTL_GIT_TAG 1dadc879d611f7e5bfdb0590b2ba3dd76b464e58
-RUN git clone https://github.com/InsightSoftwareConsortium/ITKIOMeshSTL.git && \
-  cd ITKIOMeshSTL && \
-  git checkout ${ITKIOMeshSTL_GIT_TAG} && \
-  cd ../ && \
-  mkdir ITKIOMeshSTL-build && \
-  cd ITKIOMeshSTL-build && \
-  cmake -G Ninja \
-    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
-    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-    -DITK_DIR:PATH=/ITK-build \
-    ../ITKIOMeshSTL && \
-  ninja -j7 && \
-  find . -name '*.o' -delete && \
-  cd .. && chmod -R 777 ITK-build
 
 ENV RAPIDJSON_GIT_TAG v1.1.0
 RUN git clone https://github.com/Tencent/rapidjson.git && \
