@@ -13,7 +13,7 @@ const outputFileInformation = curry(function outputFileInformation (outputTextAr
   return readFile(null, files[0])
     .then(function ({ image, mesh, polyData, webWorker }) {
       webWorker.terminate()
-      const imageOrMeshOrPolyData = image || mesh || polyData;
+      const imageOrMeshOrPolyData = image || mesh || polyData
 
       function replacer (key, value) {
         if (!!value && value.byteLength !== undefined) {
