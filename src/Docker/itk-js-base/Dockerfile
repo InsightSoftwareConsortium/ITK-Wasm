@@ -1,6 +1,5 @@
-FROM dockcross/web-wasm:20200414-7299cbb
-
-MAINTAINER Insight Software Consortium <community@itk.org>
+FROM dockcross/web-wasm:20200511-ba6b062
+MAINTAINER Matt McCormick <matt.mccormick@kitware.com>
 
 WORKDIR /
 
