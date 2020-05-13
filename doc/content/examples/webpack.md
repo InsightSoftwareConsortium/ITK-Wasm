@@ -67,6 +67,10 @@ module.exports = {
       to: path.join(__dirname, 'dist', 'itk', 'ImageIOs'),
       },
       {
+      from: path.join(__dirname, 'node_modules', 'itk', 'PolyDataIOs'),
+      to: path.join(__dirname, 'dist', 'itk', 'PolyDataIOs'),
+      },
+      {
       from: path.join(__dirname, 'node_modules', 'itk', 'MeshIOs'),
       to: path.join(__dirname, 'dist', 'itk', 'MeshIOs'),
       },
