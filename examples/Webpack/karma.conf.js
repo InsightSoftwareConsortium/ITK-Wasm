@@ -20,6 +20,7 @@ module.exports = function init (config) {
       './test/index.js',
       { pattern: './dist/itk/ImageIOs/**', watched: true, served: true, included: false },
       { pattern: './dist/itk/MeshIOs/**', watched: true, served: true, included: false },
+      { pattern: './dist/itk/PolyDataIOs/**', watched: true, served: true, included: false },
       { pattern: './dist/itk/WebWorkers/**', watched: true, served: true, included: false }
     ],
 
