@@ -35,12 +35,14 @@ sidebar:
     hacking: Hacking itk.js
 
   examples:
+    getting_started: Getting Started
     building: Building
     nodejs: Node.js
     umd: UMD
     webpack: Webpack
     unpkgio: Unpkg.com / CDN
-    tasks: Tasks
+    recipes: Recipes
+    examples: Examples
     hello_node: Node.js Hello World!
 
   api:
