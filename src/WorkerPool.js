@@ -5,34 +5,46 @@ class WorkerPool {
    * It most also return and object with the used worker on the `webWorker`
    * property.  * Example: runPipelineBrowser.
    *
+   **/
+  constructor (poolSize, fcn) {
+    this.fcn = fcn
+
+    this.workerQueue = new Array(poolSize)
+    this.workerQueue.fill(null)
+
+    this.runInfo = []
+  }
+
+  /*
+   * Run the tasks specified by the arguments in the taskArgsArray that will
+   * be passed to the pool fcn.
+   *
    * An optional progressCallback will be cassed with the number of complete
    * tasks and the total number of tasks as arguments every time a task has
    * completed.
-   **/
-  constructor (poolSize, fcn, progressCallback) {
-    this.fcn = fcn
-    this.workerQueue = new Array(poolSize)
-    this.workerQueue.fill(null)
-    this.taskQueue = []
-    this.results = []
-    this.addingTasks = false
-    this.runningWorkers = 0
-    this.progressCallback = progressCallback
-  }
-
-  runTasks (taskArgsArray) {
+   */
+  runTasks (taskArgsArray, progressCallback) {
+    const info = {
+      taskQueue: [],
+      results: [],
+      addingTasks: false,
+      runningWorkers: 0,
+      progressCallback: progressCallback
+    }
+    this.runInfo.push(info)
+    info.index = this.runInfo.length - 1
     return new Promise((resolve, reject) => {
-      this.resolve = resolve
-      this.reject = reject
+      info.resolve = resolve
+      info.reject = reject
 
-      this.results = new Array(taskArgsArray.length)
-      this.completedTasks = 0
+      info.results = new Array(taskArgsArray.length)
+      info.completedTasks = 0
 
-      this.addingTasks = true
+      info.addingTasks = true
       taskArgsArray.forEach((taskArg, index) => {
-        this.addTask(index, taskArg)
+        this.addTask(info.index, index, taskArg)
       })
-      this.addingTasks = false
+      info.addingTasks = false
     })
   }
 
@@ -48,31 +60,45 @@ class WorkerPool {
 
   // todo: change to #addTask(resultIndex, taskArgs) { after private methods
   // proposal accepted and supported by default in Babel.
-  addTask (resultIndex, taskArgs) {
+  addTask (infoIndex, resultIndex, taskArgs) {
+    const info = this.runInfo[infoIndex]
     if (this.workerQueue.length > 0) {
       const worker = this.workerQueue.pop()
-      this.runningWorkers++
+      info.runningWorkers++
 
       this.fcn(worker, ...taskArgs).then(({ webWorker, ...result }) => {
         this.workerQueue.push(webWorker)
-        this.runningWorkers--
-        this.results[resultIndex] = result
-        this.completedTasks++
-        if (this.progressCallback) {
-          this.progressCallback(this.completedTasks, this.results.length)
+        info.runningWorkers--
+        info.results[resultIndex] = result
+        info.completedTasks++
+        if (info.progressCallback) {
+          info.progressCallback(info.completedTasks, info.results.length)
         }
 
-        if (this.taskQueue.length > 0) {
-          const reTask = this.taskQueue.shift()
-          this.addTask(...reTask)
-        } else if (!this.addingTasks && !this.runningWorkers) {
-          this.resolve(this.results)
+        if (info.taskQueue.length > 0) {
+          const reTask = info.taskQueue.shift()
+          this.addTask(infoIndex, ...reTask)
+        } else if (!info.addingTasks && !info.runningWorkers) {
+          const results = info.results
+          const clearIndex = info.index
+          this.runInfo[clearIndex] = null
+          info.resolve(results)
         }
       }).catch((error) => {
-        this.reject(error)
+        const reject = info.reject
+        const clearIndex = info.index
+        this.runInfo[clearIndex] = null
+        reject(error)
       })
     } else {
-      this.taskQueue.push([resultIndex, taskArgs])
+      if (info.runningWorkers) {
+        // At least one worker is working on these tasks, and it will pick up
+        // the next item in the taskQueue when done.
+        info.taskQueue.push([resultIndex, taskArgs])
+      } else {
+        // Try again later.
+        setTimeout(() => this.addTask(infoIndex, resultIndex, taskArgs), 50)
+      }
     }
   }
 }

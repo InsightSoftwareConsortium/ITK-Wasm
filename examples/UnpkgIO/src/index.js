@@ -2,7 +2,7 @@ import readFile from 'itk/readFile'
 import curry from 'curry'
 
 const outputFileInformation = curry(function outputFileInformation (outputTextArea, event) {
-  outputTextArea.textContent = "Loading...";
+  outputTextArea.textContent = 'Loading...'
 
   const dataTransfer = event.dataTransfer
   const files = event.target.files || dataTransfer.files
@@ -21,7 +21,7 @@ const outputFileInformation = curry(function outputFileInformation (outputTextAr
         }
         return value
       }
-      outputTextArea.textContent = JSON.stringify(imageOrMeshOrPolyData, replacer, 4);
+      outputTextArea.textContent = JSON.stringify(imageOrMeshOrPolyData, replacer, 4)
     })
 })
 
