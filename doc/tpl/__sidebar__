@@ -9,13 +9,15 @@ docs:
     hacking: hacking_itk_js.html
 
 examples:
+  getting_started:
+    hello_node: hello_world_node.html
   building:
     nodejs: node.html
     umd: umd.html
     webpack: webpack.html
     unpkgio: unpkgio.html
-  tasks:
-    hello_node: hello_world_node.html
+  recipes:
+  examples:
 
 api:
   inputoutput:
