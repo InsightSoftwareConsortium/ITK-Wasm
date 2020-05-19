@@ -6,7 +6,7 @@ import PixelTypes from 'PixelTypes'
 import readImageFile from 'readImageFile'
 import WorkerPool from 'WorkerPool'
 import stackImages from 'stackImages'
-import copyImage from 'copyImage'
+import imageSharedBufferOrCopy from 'imageSharedBufferOrCopy'
 
 import runPipelineBrowser from 'runPipelineBrowser'
 import IOTypes from 'IOTypes'
@@ -34,8 +34,6 @@ test('WorkerPool runs and reports progress', (t) => {
     reportedTotalSplits = totalSplits
   }
 
-  const haveSharedArrayBuffer = typeof window.SharedArrayBuffer === 'function'
-
   const poolSize = 2
   const maxTotalSplits = 4
   const workerPool = new WorkerPool(poolSize, runPipelineBrowser)
@@ -51,13 +49,6 @@ test('WorkerPool runs and reports progress', (t) => {
     }).then(function ({ image, webWorker }) {
       webWorker.terminate()
 
-      if (haveSharedArrayBuffer) {
-        const sharedBuffer = new SharedArrayBuffer(image.data.buffer.byteLength) // eslint-disable-line
-        const sharedTypedArray = new image.data.constructor(sharedBuffer)
-        sharedTypedArray.set(image.data, 0)
-        image.data = sharedTypedArray
-      }
-
       const taskArgsArray = []
       for (let index = 0; index < maxTotalSplits; index++) {
         const pipelinePath = 'MedianFilterTest'
@@ -65,10 +56,7 @@ test('WorkerPool runs and reports progress', (t) => {
         const desiredOutputs = [
           { path: args[1], type: IOTypes.Image }
         ]
-        let data = image
-        if (!haveSharedArrayBuffer) {
-          data = copyImage(image)
-        }
+        const data = imageSharedBufferOrCopy(image)
         const inputs = [
           { path: args[0], type: IOTypes.Image, data }
         ]
