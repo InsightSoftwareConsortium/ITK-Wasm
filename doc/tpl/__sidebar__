@@ -11,13 +11,14 @@ docs:
 examples:
   getting_started:
     hello_node: hello_world_node.html
+  recipes:
+    vue: paraview_glance.html
+  examples:
   building:
     nodejs: node.html
     umd: umd.html
     webpack: webpack.html
     unpkgio: unpkgio.html
-  recipes:
-  examples:
 
 api:
   inputoutput:
