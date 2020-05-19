@@ -38,7 +38,7 @@ test('WorkerPool runs and reports progress', (t) => {
 
   const poolSize = 2
   const maxTotalSplits = 4
-  const workerPool = new WorkerPool(poolSize, runPipelineBrowser, progressLogger)
+  const workerPool = new WorkerPool(poolSize, runPipelineBrowser)
 
   const fileName = 'cthead1.png'
   const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
@@ -75,7 +75,7 @@ test('WorkerPool runs and reports progress', (t) => {
         taskArgsArray.push([pipelinePath, args, desiredOutputs, inputs])
       }
 
-      return workerPool.runTasks(taskArgsArray)
+      return workerPool.runTasks(taskArgsArray, progressLogger)
     }).then((results) => {
       workerPool.terminateWorkers()
 

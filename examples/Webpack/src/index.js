@@ -21,7 +21,7 @@ const outputFileInformation = curry(function outputFileInformation (outputTextAr
         }
         return value
       }
-      outputTextArea.textContent = JSON.stringify(imageOrMeshOrPolyData, replacer, 4);
+      outputTextArea.textContent = JSON.stringify(imageOrMeshOrPolyData, replacer, 4)
     })
 })
 
