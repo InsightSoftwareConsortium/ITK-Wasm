@@ -1,10 +1,16 @@
 title: Examples
 ---
 
-These examples demonstrate how to apply *itk.js* in your application.
+These examples demonstrate how to use **itk.js** to create an interactive web app to provide
+scientific insights into your spatial data.
 
-The **Building** section details the processing of building your **itk.js**
-application with Node.js.
+Start with the **Getting Started** *Hello World!* example.
 
-The **Tasks** section provides simple demonstrations of how to achieve
+The **Recipes** section describes ways to use frameworks to build your web app
+quickly and easily.
+
+The **Examples** section provides simple demonstrations of how to achieve
 common tasks.
+
+The **Building** section details the processing of building your itk.js
+application with Node.js.

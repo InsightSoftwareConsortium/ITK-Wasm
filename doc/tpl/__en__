@@ -43,7 +43,8 @@ sidebar:
     unpkgio: Unpkg.com / CDN
     recipes: Recipes
     examples: Examples
-    hello_node: Node.js Hello World!
+    hello_node: Hello World!
+    vue: Vue.js
 
   api:
     inputoutput: Input/Output
