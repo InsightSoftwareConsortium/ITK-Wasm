@@ -1,5 +1,8 @@
 const itk = {}
 
+import copyImage from './copyImage'
+itk.copyImage = copyImage
+
 import extensionToImageIO from './extensionToImageIO'
 itk.extensionToImageIO = extensionToImageIO
 
@@ -32,6 +35,9 @@ itk.imageJSComponentToIOComponent = imageJSComponentToIOComponent
 
 import imageJSPixelTypeToIOPixelType from './imageJSPixelTypeToIOPixelType.js'
 itk.imageJSPixelTypeToIOPixelType = imageJSPixelTypeToIOPixelType
+
+import imageSharedBufferOrCopy from './imageSharedBufferOrCopy'
+itk.imageSharedBufferOrCopy = imageSharedBufferOrCopy
 
 import ImageType from './ImageType.js'
 itk.ImageType = ImageType
