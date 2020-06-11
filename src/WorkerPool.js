@@ -28,6 +28,7 @@ class WorkerPool {
       taskQueue: [],
       results: [],
       addingTasks: false,
+      postponed: false,
       runningWorkers: 0,
       progressCallback: progressCallback
     }
@@ -91,13 +92,14 @@ class WorkerPool {
         reject(error)
       })
     } else {
-      if (info.runningWorkers) {
+      if (info.runningWorkers || info.postponed === true) {
         // At least one worker is working on these tasks, and it will pick up
         // the next item in the taskQueue when done.
         info.taskQueue.push([resultIndex, taskArgs])
       } else {
         // Try again later.
-        setTimeout(() => this.addTask(infoIndex, resultIndex, taskArgs), 50)
+        info.postponed = true
+        setTimeout(() => this.addTask(info.index, resultIndex, taskArgs), 50)
       }
     }
   }
