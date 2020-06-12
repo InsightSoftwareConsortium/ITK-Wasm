@@ -87,22 +87,6 @@ jobs:
             npm install
             npm run test
 
-  test-umd-example:
-    machine:
-      image: ubuntu-1604:201903-01
-    steps:
-      - checkout
-      - run:
-          name: Test UMD example
-          no_output_timeout: 0.5h
-          command: |
-            . ./.circleci/load-nvm.sh
-            nvm install v10.15.3
-            nvm alias default v10.15.3
-            cd examples/UMD
-            npm install
-            ./test/run.sh
-
   build-test-webpack-example:
     machine:
       image: ubuntu-1604:201903-01
@@ -167,11 +151,6 @@ workflows:
     build-test-examples:
       jobs:
         - build-test-node-example:
-            filters:
-              branches:
-                ignore:
-                  - gh-pages
-        - test-umd-example:
             filters:
               branches:
                 ignore:
