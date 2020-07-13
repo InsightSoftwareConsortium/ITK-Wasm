@@ -194,25 +194,46 @@ if (program.copySources) {
     callback(null, result)
   }
 
-  const babelOptions = {
+  const babelOptionsPresetEnv = {
     presets: [
       ['@babel/preset-env', { modules: false }]
+    ],
+    "plugins": [
+      ["@babel/plugin-transform-runtime", {
+        "regenerator": true
+      }]
+    ]
+  }
+  const babelOptionsCJS = {
+    plugins: [
+      '@babel/plugin-transform-modules-commonjs'
     ]
   }
   const babel = require('@babel/core')
   const babelBuild = ramda.curry(function (outputDir, es6File, callback) {
-    const basename = path.basename(es6File)
-    const output = path.join(outputDir, basename)
-    babel.transformFile(es6File, babelOptions, function (err, result) {
+    babel.transformFile(es6File, babelOptionsPresetEnv, function (err, result) {
       if (err) {
         console.error(err)
         process.exit(1)
       }
+      const basename = path.basename(es6File)
+      const output = path.join(outputDir, basename)
       const outputFD = fs.openSync(output, 'w')
       fs.writeSync(outputFD, result.code)
       fs.closeSync(outputFD)
     })
-    callback(null, basename)
+    babel.transformFile(es6File, babelOptionsCJS, function (err, result) {
+      if (err) {
+        console.error(err)
+        process.exit(1)
+      }
+      const basename = path.basename(es6File, '.js')
+      const output = path.join(outputDir, `${basename}.cjs`)
+      const outputFD = fs.openSync(output, 'w')
+      fs.writeSync(outputFD, result.code)
+      fs.closeSync(outputFD)
+    })
+    callback(null, es6File)
   })
   const babelBuildParallel = function (callback) {
     console.log('Converting main sources...')
