@@ -141,6 +141,35 @@ test('readPolyDataLocalFileSync reads a vtkUnstructuredGrid in the VTK XML file 
   verifyPolyData(polyData)
 })
 
+test('readPolyDataLocalFileSync reads a vtkRectilinearGrid in the VTK XML file format', (t) => {
+  const verifyPolyData = (polyData) => {
+    t.is(polyData.vtkClass, 'vtkPolyData')
+    t.is(polyData.points.vtkClass, 'vtkPoints')
+    t.is(polyData.points.name, 'points')
+    t.is(polyData.points.numberOfComponents, 3)
+    t.is(polyData.points.dataType, 'Float32Array')
+    t.is(polyData.points.size, 13518)
+    t.is(polyData.polys.vtkClass, 'vtkCellArray')
+    t.is(polyData.polys.name, 'polys')
+    t.is(polyData.polys.numberOfComponents, 1)
+    t.is(polyData.polys.dataType, 'Int32Array')
+    t.is(polyData.polys.size, 22520)
+    t.is(polyData.pointData.vtkClass, 'vtkDataSetAttributes')
+    t.is(polyData.pointData.arrays[0].data.name, 'scalars')
+    t.is(polyData.pointData.arrays[0].data.numberOfComponents, 1)
+    t.is(polyData.pointData.arrays[0].data.dataType, 'Float32Array')
+    t.is(polyData.pointData.arrays[0].data.size, 4506)
+    t.is(polyData.pointData.arrays[1].data.name, 'vectors')
+    t.is(polyData.pointData.arrays[1].data.numberOfComponents, 3)
+    t.is(polyData.pointData.arrays[1].data.dataType, 'Float32Array')
+    t.is(polyData.pointData.arrays[1].data.size, 13518)
+  }
+
+  const testPolyDataFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'RectGrid2.vtr')
+  const polyData = readPolyDataLocalFileSync(testPolyDataFilePath)
+  verifyPolyData(polyData)
+})
+
 test('readPolyDataLocalFileSync reads an Exodus file', (t) => {
   const verifyPolyData = (polyData) => {
     t.is(polyData.vtkClass, 'vtkPolyData')

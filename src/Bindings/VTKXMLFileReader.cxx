@@ -22,6 +22,7 @@
 #include "vtkXMLPolyDataReader.h"
 #include "vtkXMLReader.h"
 #include "vtkXMLUnstructuredGridReader.h"
+#include "vtkXMLRectilinearGridReader.h"
 #include "vtkArchiver.h"
 
 int main(int argc, char* argv[]) {
@@ -51,6 +52,14 @@ int main(int argc, char* argv[]) {
   }
 
   reader = vtkSmartPointer<vtkXMLUnstructuredGridReader>::New();
+  if (reader->CanReadFile(inputFile)) {
+    canReadFile = true;
+    reader->SetFileName(inputFile);
+    geometryFilter->SetInputConnection(reader->GetOutputPort());
+    writer->SetInputConnection(geometryFilter->GetOutputPort());
+  }
+
+  reader = vtkSmartPointer<vtkXMLRectilinearGridReader>::New();
   if (reader->CanReadFile(inputFile)) {
     canReadFile = true;
     reader->SetFileName(inputFile);

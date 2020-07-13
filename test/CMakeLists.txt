@@ -54,4 +54,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/diskout.vtp}
   DATA{Input/elements.vtu}
   DATA{Input/disk_out_ref.ex2}
+  DATA{Input/RectGrid2.vtr}
   )
