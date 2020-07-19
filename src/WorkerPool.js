@@ -19,7 +19,7 @@ class WorkerPool {
    * Run the tasks specified by the arguments in the taskArgsArray that will
    * be passed to the pool fcn.
    *
-   * An optional progressCallback will be cassed with the number of complete
+   * An optional progressCallback will be called with the number of complete
    * tasks and the total number of tasks as arguments every time a task has
    * completed.
    */

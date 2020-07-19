@@ -10,7 +10,7 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(BridgeJavaScript_ImageIOModules
     "ITKIOPNG"
     "ITKIOMeta"
-    "ITKIODCMTK"
+    "ITKIOGDCM"
     "ITKIOTIFF"
     "ITKIONIFTI"
     "ITKIOJPEG"
@@ -25,7 +25,6 @@ if(BUILD_ITK_JS_IO_MODULES)
     "ITKIOBioRad"
     "ITKIOGIPL"
     "ITKIOGE"
-    "ITKIOGDCM"
     CACHE STRING
     "String delimited list of ITK image IO modules to support.")
   set(imageios_ITKIOBioRad itkBioRadImageIO)
@@ -42,7 +41,6 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(imageios_ITKIONIFTI itkNiftiImageIO)
   set(imageios_ITKIONRRD itkNrrdImageIO)
   set(imageios_ITKIOGDCM itkGDCMImageIO)
-  set(imageios_ITKIODCMTK itkDCMTKImageIO)
   set(imageios_ITKIOJPEG itkJPEGImageIO)
   set(imageios_ITKIOTIFF itkTIFFImageIO)
   set(imageios_ITKIOVTK itkVTKImageIO)
@@ -70,9 +68,10 @@ if(BUILD_ITK_JS_IO_MODULES)
     "VTKExodusFileReader"
     CACHE STRING
     "String delimited list of VTK PolyData IO pipelines to support.")
-  set(polydataios_VTKExodusFileReader IOExodus CommonDataModel FiltersCore FiltersGeometry)
-  set(polydataios_VTKLegacyFileReader IOLegacy FiltersGeometry)
-  set(polydataios_VTKXMLFileReader IOXML FiltersGeometry IOLegacy)
+  set(polydataios_VTKExodusFileReader VTK::IOExodus VTK::CommonDataModel
+    VTK::FiltersCore VTK::FiltersGeometry)
+  set(polydataios_VTKLegacyFileReader VTK::IOLegacy VTK::FiltersGeometry)
+  set(polydataios_VTKXMLFileReader VTK::IOXML VTK::FiltersGeometry VTK::IOLegacy)
 endif()
 
 

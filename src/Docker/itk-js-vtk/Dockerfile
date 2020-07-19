@@ -5,8 +5,8 @@ WORKDIR /
 
 # Work-around for VTK HDF5 build
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_DOCKCROSS}
-# 2020-04-28 master + VTK HDF5
-ENV VTK_GIT_TAG 02b7dc072a68d109d7d6670225e09ffc29765301
+# 2020-04-28 master + VTK HDF5 + No link to Threads::Threads
+ENV VTK_GIT_TAG 7c50dded0278686e23a3a6a432b2b0a365342050
 RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK && \
   git checkout ${VTK_GIT_TAG} && \
@@ -28,6 +28,9 @@ RUN git clone https://github.com/thewtex/VTK.git && \
     -DVTK_NO_PLATFORM_SOCKETS:BOOL=ON \
     -DBUILD_TESTING:BOOL=OFF \
     -DVTK_MODULE_ENABLE_VTK_IOExodus:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_IOLegacy:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_IOExport:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_FiltersGeometry:STRING=YES \
     -DH5_HAVE_GETPWUID:BOOL=OFF \
     ../VTK && \
   ninja -j7 && \
@@ -35,8 +38,8 @@ RUN git clone https://github.com/thewtex/VTK.git && \
   cd .. && chmod -R 777 VTK-build
 
 # 2020-04-29
-ENV ITKVtkGlue_GIT_TAG f4df3da42944519872df463cc55d9ea8929ea6a2
-RUN git clone https://github.com/InsightSoftwareConsortium/ITKVtkGlue.git && \
+ENV ITKVtkGlue_GIT_TAG bc2ea98619bdf7a6b1208f539d5bb72aa8cc8873
+RUN git clone https://github.com/thewtex/ITKVtkGlue.git && \
   cd ITKVtkGlue && \
   git checkout ${ITKVtkGlue_GIT_TAG} && \
   cd ../ && \
@@ -72,5 +75,4 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-url=$VCS_URL \
       org.label-schema.schema-version="1.0"
 ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}
-WORKDIR /work
 WORKDIR /work

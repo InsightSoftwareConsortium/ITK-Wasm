@@ -1,12 +1,13 @@
-FROM dockcross/web-wasm:20200511-ba6b062
+FROM dockcross/web-wasm:20201015-96d8741
 MAINTAINER Matt McCormick <matt.mccormick@kitware.com>
 
 WORKDIR /
 
-# 2020-04-27 release branch
-ENV ITK_GIT_TAG v5.1.0
-ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s WASM=0 -lnodefs.js -Wno-almost-asm "
-ENV CXXFLAGS="${CFLAGS} -std=c++14"
+# 2020-08-10 release branch
+ENV ITK_GIT_TAG v5.1.1
+ENV LDFLAGS="-lnodefs.js -flto"
+ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s WASM=0 -flto"
+ENV CXXFLAGS="${CFLAGS} -std=c++17"
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
@@ -25,8 +26,6 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DITK_BUILD_DEFAULT_MODULES:BOOL=ON \
     -DITKGroup_IO:BOOL=ON \
     -DH5_HAVE_GETPWUID:BOOL=OFF \
-    -DModule_ITKIODCMTK:BOOL=ON \
-    -DDCMTK_USE_ICU:BOOL=OFF \
     -DModule_ITKIOMINC:BOOL=ON \
     -DModule_MGHIO:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \

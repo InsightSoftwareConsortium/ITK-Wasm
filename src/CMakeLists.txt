@@ -51,7 +51,7 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
       set(exception_catching " -s DISABLE_EXCEPTION_CATCHING=0")
     endif()
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s WASM=0 -lnodefs.js ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+      PROPERTY LINK_FLAGS " -s WASM=0 -lnodefs.js ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
       )
     set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSImageIOPre${imageio}.js)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js.in
@@ -182,7 +182,8 @@ find_package(VTK QUIET)
 if(VTK_FOUND)
   foreach(io_pipeline ${PolyDataIOPipelines})
 
-  find_package(VTK REQUIRED COMPONENTS IOExport ${polydataios_${io_pipeline}})
+  # Workaround Threads issue
+  find_package(Threads)
 
   set(target ${io_pipeline})
   set(wasm_target ${io_pipeline}Wasm)
@@ -209,8 +210,8 @@ if(VTK_FOUND)
     PROPERTY OBJECT_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
     )
-  _target_link_libraries(${target} LINK_PUBLIC ${VTK_LIBRARIES})
-  _target_link_libraries(${wasm_target} LINK_PUBLIC ${VTK_LIBRARIES})
+  _target_link_libraries(${target} LINK_PUBLIC VTK::IOExport ${polydataios_${io_pipeline}})
+  _target_link_libraries(${wasm_target} LINK_PUBLIC VTK::IOExport ${polydataios_${io_pipeline}})
   endforeach()
 endif()
 
