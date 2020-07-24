@@ -7,13 +7,13 @@ Similar to the [web browser API](./browser_io.html), most of these functions ret
 
 ---
 
-## readLocalFile(filePath) -> [itk/Image](./Image.html) or [itk/Mesh](./Mesh.html)
+## readLocalFile(filePath) -> [itk/Image](./Image.html) or [itk/Mesh](./Mesh.html) or [polyData](https://insightsoftwareconsortium.github.io/itk-js/docs/polydata_formats.html) promise
 
-Read an image or mesh from a file on the local filesystem.
+Read an image or mesh or polyData from a file on the local filesystem.
 
-## readLocalFileSync(filePath) -> [itk/Image](./Image.html) or [itk/Mesh](./Mesh.html)
+## readLocalFileSync(filePath) -> [itk/Image](./Image.html) or [itk/Mesh](./Mesh.html) or  [polyData](https://insightsoftwareconsortium.github.io/itk-js/docs/polydata_formats.html)
 
-Similar to `readLocalFile`, but returns the image or mesh directly instead of a promise.
+Similar to `readLocalFile`, but returns the image or mesh or poly data directly instead of a promise.
 
 ## writeLocalFile(useCompression, imageOrMesh, filePath) -> null
 

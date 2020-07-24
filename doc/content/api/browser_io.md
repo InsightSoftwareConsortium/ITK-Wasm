@@ -11,14 +11,14 @@ These functions return the [WebWorker](https://developer.mozilla.org/en-US/docs/
 
 ---
 
-## readFile(webWorker, file) -> { webWorker, [image](./Image.html) or [mesh](./Mesh.html) }
+## readFile(webWorker, file) -> { webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-js/docs/polydata_formats.html) }
 
-Read an image or mesh from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
+Read an image or mesh or poly data from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
 
-## readBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [image](./Image.html) or [mesh](./Mesh.html) }
+## readBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-js/docs/polydata_formats.html) }
 
-Read an image or mesh from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
+Read an image or mesh or poly data from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
 ## readArrayBuffer(webWorker, arrayBuffer, fileName, mimeType) -> { webWorker, [image](./Image.html) or [mesh](./Mesh.html) }
 
