@@ -68,7 +68,6 @@ class WorkerPool {
       info.runningWorkers++
 
       this.fcn(worker, ...taskArgs).then(({ webWorker, ...result }) => {
-        info.postponed = false
         this.workerQueue.push(webWorker)
         info.runningWorkers--
         info.results[resultIndex] = result
@@ -100,7 +99,10 @@ class WorkerPool {
       } else {
         // Try again later.
         info.postponed = true
-        setTimeout(() => this.addTask(info.index, resultIndex, taskArgs), 50)
+        setTimeout(() => {
+          info.postponed = false
+          this.addTask(info.index, resultIndex, taskArgs)
+        }, 50)
       }
     }
   }
