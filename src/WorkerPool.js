@@ -68,6 +68,7 @@ class WorkerPool {
       info.runningWorkers++
 
       this.fcn(worker, ...taskArgs).then(({ webWorker, ...result }) => {
+        info.postponed = false
         this.workerQueue.push(webWorker)
         info.runningWorkers--
         info.results[resultIndex] = result
