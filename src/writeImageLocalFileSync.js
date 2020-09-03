@@ -36,6 +36,7 @@ const writeImageLocalFileSync = (useCompression, image, filePath) => {
       const imageIO = new Module.ITKImageIO()
       const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
       imageIO.SetFileName(mountedFilePath)
+      if (typeof imageIO.CanWriteFile !== "function") continue;
       if (imageIO.CanWriteFile(mountedFilePath)) {
         io = ImageIOIndex[idx]
         Module.unmountContainingDirectory(mountedFilePath)
