@@ -11,6 +11,8 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
   cd ../ && \
+  sed -i -e '/^option(OPJ_USE_THREAD/c\option(OPJ_USE_THREAD "use threads" OFF)' \
+    /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt && \
   mkdir ITK-build && \
   cd ITK-build && \
   cmake \
@@ -33,6 +35,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DModule_Cuberille:BOOL=ON \
     -DModule_TotalVariation:BOOL=ON \
     -DModule_IOMeshSTL:BOOL=ON \
+    -DOPJ_USE_THREAD:BOOL=OFF \
     ../ITK && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
