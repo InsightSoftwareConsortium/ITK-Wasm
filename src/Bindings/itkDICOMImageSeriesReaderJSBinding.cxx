@@ -526,6 +526,11 @@ public:
       }
     }
 
+  void DeleteImage()
+    {
+    m_ReadImage = nullptr;
+    }
+
 private:
 
   template< typename TImage >
@@ -631,6 +636,7 @@ EMSCRIPTEN_BINDINGS(itk_dicom_image_series_reader_js_binding) {
   .function("SetDirectory", &itk::DICOMImageSeriesReaderJSBinding::SetDirectory)
   .function("SetFileNames", &itk::DICOMImageSeriesReaderJSBinding::SetFileNames)
   .function("Read", &itk::DICOMImageSeriesReaderJSBinding::Read)
+  .function("DeleteImage", &itk::DICOMImageSeriesReaderJSBinding::DeleteImage)
   .function("GetSpacing", &itk::DICOMImageSeriesReaderJSBinding::GetSpacing)
   .function("GetSize", &itk::DICOMImageSeriesReaderJSBinding::GetSize)
   .function("GetOrigin", &itk::DICOMImageSeriesReaderJSBinding::GetOrigin)

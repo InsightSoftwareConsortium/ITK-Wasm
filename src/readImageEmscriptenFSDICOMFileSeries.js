@@ -51,6 +51,7 @@ const readImageEmscriptenFSDICOMFileSeries = (seriesReaderModule, fileNames, sin
     }
   }
   image.data = seriesReader.GetPixelBufferData()
+  seriesReader.DeleteImage()
 
   return image
 }
