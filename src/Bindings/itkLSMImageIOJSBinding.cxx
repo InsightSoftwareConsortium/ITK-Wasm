@@ -64,6 +64,7 @@ EMSCRIPTEN_BINDINGS(itk_lsm_image_io_js_binding) {
   .function("SetFileName", &LSMImageIOJSBindingType::SetFileName)
   .function("GetFileName", &LSMImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &LSMImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &LSMImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &LSMImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &LSMImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &LSMImageIOJSBindingType::GetDimensions)
