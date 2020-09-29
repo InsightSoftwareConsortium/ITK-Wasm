@@ -64,6 +64,7 @@ EMSCRIPTEN_BINDINGS(itk_bmp_image_io_js_binding) {
   .function("SetFileName", &BMPImageIOJSBindingType::SetFileName)
   .function("GetFileName", &BMPImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &BMPImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &BMPImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &BMPImageIOJSBindingType::ReadImageInformation)
   .function("WriteImageInformation", &BMPImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &BMPImageIOJSBindingType::SetDimensions)

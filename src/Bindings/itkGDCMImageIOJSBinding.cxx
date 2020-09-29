@@ -64,6 +64,7 @@ EMSCRIPTEN_BINDINGS(itk_gdcm_image_io_js_binding) {
   .function("SetFileName", &GDCMImageIOJSBindingType::SetFileName)
   .function("GetFileName", &GDCMImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &GDCMImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &GDCMImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &GDCMImageIOJSBindingType::ReadImageInformation)
   .function("WriteImageInformation", &GDCMImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &GDCMImageIOJSBindingType::SetDimensions)

@@ -65,6 +65,7 @@ EMSCRIPTEN_BINDINGS(itk_mrc_image_io_js_binding) {
   .function("SetFileName", &MRCImageIOJSBindingType::SetFileName)
   .function("GetFileName", &MRCImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &MRCImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &MRCImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &MRCImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &MRCImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &MRCImageIOJSBindingType::GetDimensions)

@@ -64,6 +64,7 @@ EMSCRIPTEN_BINDINGS(itk_minc_image_io_js_binding) {
   .function("SetFileName", &MINCImageIOJSBindingType::SetFileName)
   .function("GetFileName", &MINCImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &MINCImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &MINCImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &MINCImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &MINCImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &MINCImageIOJSBindingType::GetDimensions)

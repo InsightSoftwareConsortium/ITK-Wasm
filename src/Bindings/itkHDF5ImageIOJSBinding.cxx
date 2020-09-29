@@ -64,6 +64,7 @@ EMSCRIPTEN_BINDINGS(itk_hdf5_image_io_js_binding) {
   .function("SetFileName", &HDF5ImageIOJSBindingType::SetFileName)
   .function("GetFileName", &HDF5ImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &HDF5ImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &HDF5ImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &HDF5ImageIOJSBindingType::ReadImageInformation)
   .function("WriteImageInformation", &HDF5ImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &HDF5ImageIOJSBindingType::SetDimensions)

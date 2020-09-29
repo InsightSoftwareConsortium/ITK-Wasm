@@ -64,6 +64,7 @@ EMSCRIPTEN_BINDINGS(itk_ge5_image_io_js_binding) {
   .function("SetFileName", &GE5ImageIOJSBindingType::SetFileName)
   .function("GetFileName", &GE5ImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &GE5ImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &GE5ImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &GE5ImageIOJSBindingType::ReadImageInformation)
   .function("SetDimensions", &GE5ImageIOJSBindingType::SetDimensions)
   .function("GetDimensions", &GE5ImageIOJSBindingType::GetDimensions)
