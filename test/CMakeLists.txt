@@ -55,4 +55,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/elements.vtu}
   DATA{Input/disk_out_ref.ex2}
   DATA{Input/RectGrid2.vtr}
+  DATA{Input/bunny.ply}
   )
