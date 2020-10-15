@@ -198,9 +198,9 @@ if (program.copySources) {
     presets: [
       ['@babel/preset-env', { modules: false }]
     ],
-    "plugins": [
-      ["@babel/plugin-transform-runtime", {
-        "regenerator": true
+    plugins: [
+      ['@babel/plugin-transform-runtime', {
+        regenerator: true
       }]
     ]
   }

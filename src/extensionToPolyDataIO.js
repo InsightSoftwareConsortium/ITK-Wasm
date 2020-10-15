@@ -11,7 +11,9 @@ const extensionToIO = new Map([
   ['vtu', 'VTKXMLFileReader'],
   ['VTU', 'VTKXMLFileReader'],
   ['vtr', 'VTKXMLFileReader'],
-  ['VTR', 'VTKXMLFileReader']
+  ['VTR', 'VTKXMLFileReader'],
+  ['ply', 'VTKPLYFileReader'],
+  ['PLY', 'VTKPLYFileReader']
 ])
 
 module.exports = extensionToIO

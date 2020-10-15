@@ -1,7 +1,8 @@
 const PolyDataIOIndex = [
   'VTKExodusFileReader',
   'VTKLegacyFileReader',
-  'VTKXMLFileReader'
+  'VTKXMLFileReader',
+  'VTKPLYFileReader'
 ]
 
 module.exports = PolyDataIOIndex
