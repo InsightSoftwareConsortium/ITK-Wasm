@@ -27,18 +27,12 @@ const verifyImage = (t, image) => {
   t.end()
 }
 
-test('Test reading a JPEG file', t => {
+test('Test reading a JPEG file', async (t) => {
   const fileName = 'apple.jpg'
   const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
-  return axios.get(testFilePath, { responseType: 'blob' }).then(function (response) {
-    const jsFile = new window.File([response.data], fileName)
-    return jsFile
-  })
-    .then(function (jsFile) {
-      return readImageFile(null, jsFile)
-    })
-    .then(function ({ image, webWorker }) {
-      webWorker.terminate()
-      verifyImage(t, image)
-    })
+  const response = await axios.get(testFilePath, { responseType: 'blob' })
+  const jsFile = await new window.File([response.data], fileName)
+  const { image, webWorker } = await readImageFile(null, jsFile)
+  webWorker.terminate()
+  verifyImage(t, image)
 })

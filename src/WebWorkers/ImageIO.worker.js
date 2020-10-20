@@ -61,7 +61,11 @@ async function readImage (input) {
     const image = readImageEmscriptenFSFile(ioModule, filePath)
     ioModule.unlink(filePath)
 
-    return new registerWebworker.TransferableResponse(image, [image.data.buffer])
+    if (image.data.buffer instanceof SharedArrayBuffer) { // eslint-disable-line
+      return new registerWebworker.TransferableResponse(image, [])
+    } else {
+      return new registerWebworker.TransferableResponse(image, [image.data.buffer])
+    }
   }
 
   if (io in ioToModule) {

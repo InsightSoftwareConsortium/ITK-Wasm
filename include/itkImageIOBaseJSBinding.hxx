@@ -280,16 +280,24 @@ ImageIOBaseJSBinding< TImageIO >
     }
   this->m_ImageIO->SetIORegion( ioRegion );
 
-  m_PixelBuffer.reserve( this->GetImageSizeInBytes() );
+  const unsigned long imageSizeInBytes = this->GetImageSizeInBytes();
+  m_PixelBuffer.reserve( imageSizeInBytes );
   this->m_ImageIO->Read( reinterpret_cast< void * >( m_PixelBuffer.data() ) );
   const unsigned long components = this->GetImageSizeInComponents();
+  emscripten::val bufferObject = emscripten::val::global("SharedArrayBuffer");
+  if (!bufferObject.as<bool>())
+    {
+    // We do not have SharedArrayBuffer.
+    bufferObject = emscripten::val::global("ArrayBuffer");
+    }
+  emscripten::val buffer = bufferObject.new_(emscripten::val(imageSizeInBytes));
   switch( this->m_ImageIO->GetComponentType() )
     {
   case itk::ImageIOBase::IOComponentEnum::UCHAR:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned char * >( m_PixelBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint8Array");
-      emscripten::val data = array.new_( components );
+      emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
       }
@@ -297,7 +305,7 @@ ImageIOBaseJSBinding< TImageIO >
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed char * >( m_PixelBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int8Array");
-      emscripten::val data = array.new_( components );
+      emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
       }
@@ -305,7 +313,7 @@ ImageIOBaseJSBinding< TImageIO >
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned short * >( m_PixelBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint16Array");
-      emscripten::val data = array.new_( components );
+      emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
       }
@@ -313,7 +321,7 @@ ImageIOBaseJSBinding< TImageIO >
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed short * >( m_PixelBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int16Array");
-      emscripten::val data = array.new_( components );
+      emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
       }
@@ -321,7 +329,7 @@ ImageIOBaseJSBinding< TImageIO >
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned int * >( m_PixelBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint32Array");
-      emscripten::val data = array.new_( components );
+      emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
       }
@@ -329,7 +337,7 @@ ImageIOBaseJSBinding< TImageIO >
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed int * >( m_PixelBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int32Array");
-      emscripten::val data = array.new_( components );
+      emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
       }
@@ -337,7 +345,7 @@ ImageIOBaseJSBinding< TImageIO >
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PixelBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Uint64Array");
-      emscripten::val data = array.new_( components );
+      emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
       }
@@ -345,7 +353,7 @@ ImageIOBaseJSBinding< TImageIO >
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PixelBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Int64Array");
-      emscripten::val data = array.new_( components );
+      emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
       }
@@ -353,7 +361,7 @@ ImageIOBaseJSBinding< TImageIO >
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< float * >( m_PixelBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Float32Array");
-      emscripten::val data = array.new_( components );
+      emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
       }
@@ -361,7 +369,7 @@ ImageIOBaseJSBinding< TImageIO >
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< double * >( m_PixelBuffer.data() ) ) );
       emscripten::val array = emscripten::val::global("Float64Array");
-      emscripten::val data = array.new_( components );
+      emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
       }
