@@ -140,7 +140,11 @@ async function readDICOMImageSeries (input) {
     seriesReaderModule.unlink(filePaths[ii])
   }
 
-  return new registerWebworker.TransferableResponse(image, [image.data.buffer])
+  if (image.data.buffer instanceof SharedArrayBuffer) { // eslint-disable-line
+    return new registerWebworker.TransferableResponse(image, [])
+  } else {
+    return new registerWebworker.TransferableResponse(image, [image.data.buffer])
+  }
 }
 
 registerWebworker(async function (input) {
