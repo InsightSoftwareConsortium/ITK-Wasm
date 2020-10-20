@@ -85,3 +85,19 @@ Module.writeFile = function (path, data, opts) {
 Module.unlink = function (path) {
   return FS.unlink(path)
 }
+
+Module.open = function (path, flags, mode) {
+  return FS.open(path, flags, mode)
+}
+
+Module.stat = function (path) {
+  return FS.stat(path)
+}
+
+Module.read = function (stream, buffer, offset, length, position) {
+  return FS.read(stream, buffer, offset, length, position)
+}
+
+Module.close = function (stream) {
+  return FS.close(stream)
+}

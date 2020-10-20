@@ -6,6 +6,7 @@ import config from './itkConfig'
 
 import IOTypes from './IOTypes'
 import runPipelineEmscripten from './runPipelineEmscripten'
+import getTransferable from './getTransferable'
 
 // To cache loaded pipeline modules
 const pipelinePathToModule = {}
@@ -66,20 +67,6 @@ async function loadPipelineModule (moduleDirectory, pipelinePath, isAbsoluteURL)
   return pipelineModule
 }
 
-const haveSharedArrayBuffer = typeof window.SharedArrayBuffer === 'function'
-function getTransferable (data) {
-  let result = null
-  if (data.buffer) {
-    result = data.buffer
-  } else if (data.byteLength) {
-    result = data
-  }
-  if (!!result && haveSharedArrayBuffer && result instanceof SharedArrayBuffer) { // eslint-disable-line
-    result = null
-  }
-  return result
-}
-
 const runPipelineBrowser = (webWorker, pipelinePath, args, outputs, inputs) => {
   const isAbsoluteURL = pipelinePath instanceof URL
   if (webWorker === false) {
@@ -95,22 +82,20 @@ const runPipelineBrowser = (webWorker, pipelinePath, args, outputs, inputs) => {
       const transferables = []
       if (inputs) {
         inputs.forEach(function (input) {
-          // Binary data
           if (input.type === IOTypes.Binary) {
+            // Binary data
             const transferable = getTransferable(input.data)
             if (transferable) {
               transferables.push(transferable)
             }
-          }
-          // Image data
-          if (input.type === IOTypes.Image) {
+          } else if (input.type === IOTypes.Image) {
+            // Image data
             const transferable = getTransferable(input.data.data)
             if (transferable) {
               transferables.push(transferable)
             }
-          }
-          // Mesh data
-          if (input.type === IOTypes.Mesh) {
+          } else if (input.type === IOTypes.Mesh) {
+            // Mesh data
             if (input.data.points) {
               const transferable = getTransferable(input.data.points)
               if (transferable) {

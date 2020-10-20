@@ -1,12 +1,18 @@
 import createWebworkerPromise from './createWebworkerPromise'
 
 import config from './itkConfig'
+import getTransferable from './getTransferable'
 
 const writeImageArrayBuffer = (webWorker, useCompression, image, fileName, mimeType) => {
   let worker = webWorker
   return createWebworkerPromise('ImageIO', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
+      const transferables = []
+      const transferable = getTransferable(image.data)
+      if (transferable) {
+        transferables.push(transferable)
+      }
       return webworkerPromise.postMessage(
         {
           operation: 'writeImage',
@@ -16,7 +22,7 @@ const writeImageArrayBuffer = (webWorker, useCompression, image, fileName, mimeT
           useCompression: useCompression,
           config: config
         },
-        [image.data.buffer]
+        transferables
       ).then(function (arrayBuffer) {
         return Promise.resolve({ arrayBuffer, webWorker: worker })
       })
