@@ -13,6 +13,7 @@ import readImageEmscriptenFSDICOMFileSeries from '../readImageEmscriptenFSDICOMF
 // To cache loaded io modules
 let ioToModule = {}
 let seriesReaderModule = null
+const haveSharedArrayBuffer = typeof self.SharedArrayBuffer === 'function' // eslint-disable-line
 
 function * availableIOModules (input) {
   for (let idx = 0; idx < ImageIOIndex.length; idx++) {
@@ -61,7 +62,11 @@ async function readImage (input) {
     const image = readImageEmscriptenFSFile(ioModule, filePath)
     ioModule.unlink(filePath)
 
-    return new registerWebworker.TransferableResponse(image, [image.data.buffer])
+    if (haveSharedArrayBuffer && image.data.buffer instanceof SharedArrayBuffer) { // eslint-disable-line
+      return new registerWebworker.TransferableResponse(image, [])
+    } else {
+      return new registerWebworker.TransferableResponse(image, [image.data.buffer])
+    }
   }
 
   if (io in ioToModule) {
@@ -113,7 +118,11 @@ async function writeImage (input) {
   const writtenFile = ioModule.readFile(filePath, { encoding: 'binary' })
   ioModule.unlink(filePath)
 
-  return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
+  if (haveSharedArrayBuffer && writtenFile.buffer instanceof SharedArrayBuffer) { // eslint-disable-line
+    return new registerWebworker.TransferableResponse(writtenFile.buffer, [])
+  } else {
+    return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
+  }
 }
 
 async function readDICOMImageSeries (input) {
@@ -136,7 +145,11 @@ async function readDICOMImageSeries (input) {
     seriesReaderModule.unlink(filePaths[ii])
   }
 
-  return new registerWebworker.TransferableResponse(image, [image.data.buffer])
+  if (haveSharedArrayBuffer && image.data.buffer instanceof SharedArrayBuffer) { // eslint-disable-line
+    return new registerWebworker.TransferableResponse(image, [])
+  } else {
+    return new registerWebworker.TransferableResponse(image, [image.data.buffer])
+  }
 }
 
 registerWebworker(async function (input) {
