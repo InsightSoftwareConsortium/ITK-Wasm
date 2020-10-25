@@ -18,15 +18,16 @@ Bump `version` in `package.json`.
 
 ```
 npm run build
-npm run test
-rm dist/Pipelines/itkJSPipeline*
-rm dist/Pipelines/*Test*
 version=6.0.0 # change to correct version
 # Update the default CLI image in src/itk-js-cli.js
 git add -- src/itk-js-cli.js
 git commit -m "feat(itk-js-cli): Update default Docker image for ${version}"
 git add -- package.json package-lock.json
 git commit -m "feat(version): Bump NPM version to ${version}"
+npm run build
+npm run test
+rm dist/Pipelines/itkJSPipeline*
+rm dist/Pipelines/*Test*
 cp LICENSE README.md package.json dist/
 cd dist
 npm publish
