@@ -24,6 +24,8 @@
 
 #include "emscripten/val.h"
 
+#include "itkCommonEnums.h"
+
 namespace itk
 {
 
