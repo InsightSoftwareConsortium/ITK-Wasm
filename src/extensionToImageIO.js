@@ -57,7 +57,10 @@ const extensionToIO = new Map([
   ['TIFF', 'itkTIFFImageIOJSBinding'],
 
   ['vtk', 'itkVTKImageIOJSBinding'],
-  ['VTK', 'itkVTKImageIOJSBinding']
+  ['VTK', 'itkVTKImageIOJSBinding'],
+
+  ['isq', 'itkScancoImageIOJSBinding'],
+  ['ISQ', 'itkScancoImageIOJSBinding']
 ])
 
 module.exports = extensionToIO
