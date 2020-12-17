@@ -22,3 +22,4 @@ Read and write to and from [itk/Image](../api/Image.html) is supported. For visu
 - [Tagged Image File Format (TIFF)](https://en.wikipedia.org/wiki/TIFF)
 - [VTK legacy file format for images](http://www.vtk.org/VTK/img/file-formats.pdf)
 - [Scanco microCT volume file format](http://www.scanco.ch/en/support/customer-login/faq-customers/faq-customers-import-export.html)
+- [Varian FDF](https://github.com/InsightSoftwareConsortium/ITKIOFDF)
