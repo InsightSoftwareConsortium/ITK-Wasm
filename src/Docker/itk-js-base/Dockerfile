@@ -29,6 +29,8 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DDCMTK_USE_ICU:BOOL=OFF \
     -DModule_ITKIOMINC:BOOL=ON \
     -DModule_MGHIO:BOOL=ON \
+    -DModule_IOScanco:BOOL=ON \
+    -DModule_IOFDF:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
     -DModule_SmoothingRecursiveYvvGaussianFilter:BOOL=ON \
     -DModule_MorphologicalContourInterpolation:BOOL=ON \

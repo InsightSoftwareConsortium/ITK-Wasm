@@ -26,6 +26,8 @@ if(BUILD_ITK_JS_IO_MODULES)
     "ITKIOGIPL"
     "ITKIOGE"
     "ITKIOGDCM"
+    "IOScanco"
+    "IOFDF"
     CACHE STRING
     "String delimited list of ITK image IO modules to support.")
   set(imageios_ITKIOBioRad itkBioRadImageIO)
@@ -46,6 +48,8 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(imageios_ITKIOJPEG itkJPEGImageIO)
   set(imageios_ITKIOTIFF itkTIFFImageIO)
   set(imageios_ITKIOVTK itkVTKImageIO)
+  set(imageios_IOScanco itkScancoImageIO)
+  set(imageios_IOFDF itkFDFImageIO)
   set(imageios_BridgeJavaScript itkJSONImageIO)
 
   set(BridgeJavaScript_MeshIOModules

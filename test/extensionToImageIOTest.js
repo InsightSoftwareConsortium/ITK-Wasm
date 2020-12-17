@@ -162,3 +162,23 @@ test('VTK maps to itkVTKImageIOJSBinding', t => {
   const io = ExtensionToIO.get('VTK')
   t.is(io, 'itkVTKImageIOJSBinding')
 })
+
+test('isq maps to itkScancoImageIOJSBinding', t => {
+  const io = ExtensionToIO.get('isq')
+  t.is(io, 'itkScancoImageIOJSBinding')
+})
+
+test('ISQ maps to itkScancoImageIOJSBinding', t => {
+  const io = ExtensionToIO.get('ISQ')
+  t.is(io, 'itkScancoImageIOJSBinding')
+})
+
+test('fdf maps to itkFDFImageIOJSBinding', t => {
+  const io = ExtensionToIO.get('fdf')
+  t.is(io, 'itkFDFImageIOJSBinding')
+})
+
+test('FDF maps to itkFDFImageIOJSBinding', t => {
+  const io = ExtensionToIO.get('FDF')
+  t.is(io, 'itkFDFImageIOJSBinding')
+})
