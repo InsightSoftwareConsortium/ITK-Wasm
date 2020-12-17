@@ -5,15 +5,77 @@ WORKDIR /
 
 # 2020-04-27 release branch
 ENV ITK_GIT_TAG v5.1.0
-ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s WASM=0 -lnodefs.js -Wno-almost-asm "
-ENV CXXFLAGS="${CFLAGS} -std=c++14"
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
   cd ../ && \
   sed -i -e '/^option(OPJ_USE_THREAD/c\option(OPJ_USE_THREAD "use threads" OFF)' \
-    /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt && \
-  mkdir ITK-build && \
+    /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
+
+# For SlicerExecutionModel
+RUN mkdir ITK-Native-build && \
+  cd ITK-Native-build && \
+  CC=/usr/bin/cc CXX=/usr/bin/c++ /usr/bin/cmake \
+    -G Ninja \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+    -DBUILD_EXAMPLES:BOOL=OFF \
+    -DBUILD_TESTING:BOOL=OFF \
+    -DITK_LEGACY_REMOVE:BOOL=ON \
+    -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF \
+    -DITKGroup_Core:BOOL=ON \
+    -DModule_ITKCommon:BOOL=ON \
+    -DModule_ITKIOXML:BOOL=ON \
+    -DModule_ITKExpat:BOOL=ON \
+    ../ITK && \
+  ninja -j7 && \
+  find . -name '*.o' -delete && \
+  cd ..
+
+ENV jsoncpp_GIT_TAG 940982438d01fe2575acef8dd98a9b6893ccc9bb
+RUN git clone https://github.com/open-source-parsers/jsoncpp.git && \
+  cd jsoncpp && \
+  git checkout ${jsoncpp_GIT_TAG} && \
+  cd ../ && \
+  mkdir jsoncpp-build && \
+  cd jsoncpp-build && \
+  CC=/usr/bin/cc CXX=/usr/bin/c++ /usr/bin/cmake \
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE:STRING=Release \
+    -DBUILD_SHARED_LIBS:BOOL=OFF \
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
+    -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
+    -DBUILD_TESTING:BOOL=OFF \
+    -DJSONCPP_WITH_POST_BUILD_UNITTEST:BOOL=OFF \
+    ../jsoncpp && \
+  ninja -j7 && \
+  find . -name '*.o' -delete && \
+  cd .. && chmod -R 777 jsoncpp-build
+
+ENV SlicerExecutionModel_GIT_TAG dbc39c049b3721c5f3ea80f20acd32e3c8cc65f3
+RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
+  cd SlicerExecutionModel && \
+  git checkout ${SlicerExecutionModel_GIT_TAG} && \
+  cd ../ && \
+  mkdir SlicerExecutionModel-build && \
+  cd SlicerExecutionModel-build && \
+  CC=/usr/bin/cc CXX=/usr/bin/c++ /usr/bin/cmake \
+    -G Ninja \
+    -DJsonCpp_INCLUDE_DIR:FILEPATH=/jsoncpp/include \
+    -DJsonCpp_LIBRARY:PATH=/jsoncpp-build/lib/libjsoncpp.a \
+    -DSlicerExecutionModel_USE_JSONCPP:BOOL=ON \
+    -DCMAKE_BUILD_TYPE:STRING=Release \
+    -DBUILD_SHARED_LIBS:BOOL=OFF \
+    -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
+    -DBUILD_TESTING:BOOL=OFF \
+    -DITK_DIR:PATH=/ITK-Native-build \
+    ../SlicerExecutionModel && \
+  ninja -j7 && \
+  find . -name '*.o' -delete && \
+  cd .. && chmod -R 777 SlicerExecutionModel-build
+
+ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s WASM=0 -lnodefs.js -Wno-almost-asm "
+ENV CXXFLAGS="${CFLAGS} -std=c++14"
+RUN mkdir ITK-build && \
   cd ITK-build && \
   cmake \
     -G Ninja \

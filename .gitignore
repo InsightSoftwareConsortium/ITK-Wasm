@@ -33,4 +33,5 @@ test/StdoutStderrPipeline/web-build/
 test/InputOutputFilesPipeline/web-build/
 test/MeshReadWritePipeline/web-build/
 test/WriteVTKPolyDataPipeline/web-build/
+test/CLPExample1/web-build/
 src/Pipelines/MeshToPolyData/web-build/

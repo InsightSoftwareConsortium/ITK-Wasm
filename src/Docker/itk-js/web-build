@@ -17,6 +17,7 @@ cmake \
    -DCMAKE_BUILD_TYPE:STRING=Release \
    -DITK_DIR:PATH=/ITK-build \
    -DVTK_DIR:PATH=/VTK-build \
+   -DSlicerExecutionModel_DIR:PATH=/SlicerExecutionModel-build \
    -GNinja \
      "$@" && \
 ninja -Cweb-build
