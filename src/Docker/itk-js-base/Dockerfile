@@ -35,6 +35,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
     -DModule_Cuberille:BOOL=ON \
     -DModule_TotalVariation:BOOL=ON \
     -DModule_IOMeshSTL:BOOL=ON \
+    -DModule_GenericLabelInterpolator:BOOL=ON \
     -DOPJ_USE_THREAD:BOOL=OFF \
     ../ITK && \
   ninja -j7 && \
