@@ -63,7 +63,7 @@ test('WorkerPool runs and reports progress', (t) => {
         taskArgsArray.push([pipelinePath, args, desiredOutputs, inputs])
       }
 
-      return workerPool.runTasks(taskArgsArray, progressLogger)
+      return workerPool.runTasks(taskArgsArray, progressLogger).promise
     }).then((results) => {
       workerPool.terminateWorkers()
 
