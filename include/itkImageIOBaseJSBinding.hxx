@@ -344,7 +344,7 @@ ImageIOBaseJSBinding< TImageIO >
   case itk::ImageIOBase::IOComponentEnum::ULONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PixelBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Uint64Array");
+      emscripten::val array = emscripten::val::global("BigUint64Array");
       emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
@@ -352,7 +352,23 @@ ImageIOBaseJSBinding< TImageIO >
   case itk::ImageIOBase::IOComponentEnum::LONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PixelBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Int64Array");
+      emscripten::val array = emscripten::val::global("BigInt64Array");
+      emscripten::val data = array.new_( buffer );
+      data.call<void>( "set", view );
+      return data;
+      }
+  case itk::ImageIOBase::IOComponentEnum::ULONGLONG:
+      {
+      const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PixelBuffer.data() ) ) );
+      emscripten::val array = emscripten::val::global("BigUint64Array");
+      emscripten::val data = array.new_( buffer );
+      data.call<void>( "set", view );
+      return data;
+      }
+  case itk::ImageIOBase::IOComponentEnum::LONGLONG:
+      {
+      const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PixelBuffer.data() ) ) );
+      emscripten::val array = emscripten::val::global("BigInt64Array");
       emscripten::val data = array.new_( buffer );
       data.call<void>( "set", view );
       return data;
