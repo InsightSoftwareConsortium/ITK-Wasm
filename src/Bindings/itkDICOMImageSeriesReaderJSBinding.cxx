@@ -467,7 +467,7 @@ public:
         ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
         const unsigned long components = pixelContainer->Size();
         const emscripten::val view( emscripten::typed_memory_view( components, pixelContainer->GetBufferPointer() ) );
-        emscripten::val array = emscripten::val::global("Uint64Array");
+        emscripten::val array = emscripten::val::global("BigUint64Array");
         emscripten::val buffer = bufferObject.new_( emscripten::val(components * sizeof(unsigned long) ));
         emscripten::val data = array.new_( buffer );
         data.call<void>( "set", view );
@@ -480,7 +480,7 @@ public:
         ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
         const unsigned long components = pixelContainer->Size();
         const emscripten::val view( emscripten::typed_memory_view( components, pixelContainer->GetBufferPointer() ) );
-        emscripten::val array = emscripten::val::global("Int64Array");
+        emscripten::val array = emscripten::val::global("BigInt64Array");
         emscripten::val buffer = bufferObject.new_( emscripten::val(components * sizeof(long) ));
         emscripten::val data = array.new_( buffer );
         data.call<void>( "set", view );
@@ -493,7 +493,7 @@ public:
         ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
         const unsigned long components = pixelContainer->Size();
         const emscripten::val view( emscripten::typed_memory_view( components, pixelContainer->GetBufferPointer() ) );
-        emscripten::val array = emscripten::val::global("Uint64Array");
+        emscripten::val array = emscripten::val::global("BigUint64Array");
         emscripten::val buffer = bufferObject.new_( emscripten::val(components * sizeof(unsigned long long) ));
         emscripten::val data = array.new_( buffer );
         data.call<void>( "set", view );
@@ -506,7 +506,7 @@ public:
         ImageType::PixelContainer * pixelContainer = image->GetPixelContainer();
         const unsigned long components = pixelContainer->Size();
         const emscripten::val view( emscripten::typed_memory_view( components, pixelContainer->GetBufferPointer() ) );
-        emscripten::val array = emscripten::val::global("Int64Array");
+        emscripten::val array = emscripten::val::global("BigInt64Array");
         emscripten::val buffer = bufferObject.new_( emscripten::val(components * sizeof(long long) ));
         emscripten::val data = array.new_( buffer );
         data.call<void>( "set", view );

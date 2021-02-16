@@ -16,7 +16,7 @@
     "build:webpack": "webpack --progress --colors -p",
     "build:wasm": "node ./build.js",
     "test": "npm run test:lint && npm run test:node && npm run test:browser",
-    "test:lint": "standard \"src/*.js\" \"test/*.js\" \"test/Brower/*.js\"",
+    "test:lint": "standard \"src/*.js\" \"test/*.js\" \"test/Browser/*.js\"",
     "test:node": "ava test/*.js",
     "test:browser": "karma start ./karma.conf.js",
     "test:browser-debug": "karma start ./karma.conf.js --no-single-run"
@@ -66,7 +66,7 @@
     "kw-doc": "^1.3.2",
     "puppeteer": "^2.1.1",
     "ramda": "^0.26.1",
-    "standard": "^14.3.4",
+    "standard": "^16.0.3",
     "tap-spec": "^5.0.0",
     "tape": "^4.13.3",
     "uglifyify": "^5.0.2",

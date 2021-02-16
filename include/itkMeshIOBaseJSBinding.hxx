@@ -513,7 +513,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::ULONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PointsBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Uint64Array");
+      emscripten::val array = emscripten::val::global("BigUint64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -521,7 +521,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::LONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PointsBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Int64Array");
+      emscripten::val array = emscripten::val::global("BigInt64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -529,7 +529,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::ULONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PointsBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Uint64Array");
+      emscripten::val array = emscripten::val::global("BigUint64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -537,7 +537,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::LONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PointsBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Int64Array");
+      emscripten::val array = emscripten::val::global("BigInt64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -626,7 +626,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::ULONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_CellsBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Uint64Array");
+      emscripten::val array = emscripten::val::global("BigUint64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -634,7 +634,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::LONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_CellsBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Int64Array");
+      emscripten::val array = emscripten::val::global("BigInt64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -642,7 +642,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::ULONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_CellsBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Uint64Array");
+      emscripten::val array = emscripten::val::global("BigUint64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -650,7 +650,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::LONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_CellsBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Int64Array");
+      emscripten::val array = emscripten::val::global("BigInt64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -739,7 +739,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::ULONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PointDataBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Uint64Array");
+      emscripten::val array = emscripten::val::global("BigUint64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -747,7 +747,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::LONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PointDataBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Int64Array");
+      emscripten::val array = emscripten::val::global("BigInt64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -755,7 +755,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::ULONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_PointDataBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Uint64Array");
+      emscripten::val array = emscripten::val::global("BigUint64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -763,7 +763,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::LONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_PointDataBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Int64Array");
+      emscripten::val array = emscripten::val::global("BigInt64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -852,7 +852,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::ULONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_CellDataBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Uint64Array");
+      emscripten::val array = emscripten::val::global("BigUint64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -860,7 +860,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::LONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_CellDataBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Int64Array");
+      emscripten::val array = emscripten::val::global("BigInt64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -868,7 +868,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::ULONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< unsigned long * >( m_CellDataBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Uint64Array");
+      emscripten::val array = emscripten::val::global("BigUint64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
@@ -876,7 +876,7 @@ MeshIOBaseJSBinding< TMeshIO >
   case itk::CommonEnums::IOComponent::LONGLONG:
       {
       const emscripten::val view( emscripten::typed_memory_view( components, reinterpret_cast< signed long * >( m_CellDataBuffer.data() ) ) );
-      emscripten::val array = emscripten::val::global("Int64Array");
+      emscripten::val array = emscripten::val::global("BigInt64Array");
       emscripten::val data = array.new_( components );
       data.call<void>( "set", view );
       return data;
