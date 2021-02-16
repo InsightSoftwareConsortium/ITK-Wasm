@@ -186,8 +186,14 @@ JSONImageIO
       return IOPixelEnum::COMPLEX;
     case 11:
       return IOPixelEnum::FIXEDARRAY;
+    case 12:
+      return IOPixelEnum::ARRAY;
     case 13:
       return IOPixelEnum::MATRIX;
+    case 14:
+      return IOPixelEnum::VARIABLELENGTHVECTOR;
+    case 15:
+      return IOPixelEnum::VARIABLESIZEMATRIX;
     }
 
   return IOPixelEnum::UNKNOWNPIXELTYPE;
@@ -224,8 +230,14 @@ JSONImageIO
       return 10;
     case IOPixelEnum::FIXEDARRAY:
       return 11;
+    case IOPixelEnum::ARRAY:
+      return 12;
     case IOPixelEnum::MATRIX:
       return 13;
+    case IOPixelEnum::VARIABLELENGTHVECTOR:
+      return 14;
+    case IOPixelEnum::VARIABLESIZEMATRIX:
+      return 15;
     }
 
   return 0;
