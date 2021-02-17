@@ -1,4 +1,7 @@
-FROM insighttoolkit/itk-js-base:latest
+ARG CMAKE_BUILD_TYPE=Release
+ARG BASE_TAG=latest
+
+FROM insighttoolkit/itk-js-base:$BASE_TAG
 MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
@@ -12,7 +15,7 @@ RUN cd / && \
     -DITK_DIR=/ITK-build \
     -DRapidJSON_INCLUDE_DIR=/rapidjson/include \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
-    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
       ../ITKBridgeJavaScript && \
   ninja -j7 && \
   find . -name '*.o' -delete && \

@@ -52,7 +52,11 @@ if (program.compile) {
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
-      const dockerCall = spawnSync('docker', ['run', '--rm', 'kitware/itk-js-vtk:latest'], {
+      let buildImage = 'kitware/itk-js-vtk:latest'
+      if (program.debug) {
+        buildImage = 'kitware/itk-js-vtk:20210218-ea8e61e-debug'
+      }
+      const dockerCall = spawnSync('docker', ['run', '--rm', buildImage], {
         env: process.env,
         stdio: ['ignore', output, null]
       })
