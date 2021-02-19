@@ -46,7 +46,10 @@ if (program.compile) {
   }
 
   // Ensure we have the 'dockcross' Docker build environment driver script
-  const dockcross = 'build/dockcross'
+  let dockcross = 'build/dockcross'
+  if (program.debug) {
+    dockcross = 'build/dockcross-debug'
+  }
   try {
     fs.statSync(dockcross)
   } catch (err) {
