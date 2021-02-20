@@ -57,7 +57,7 @@ if (program.compile) {
       const output = fs.openSync(dockcross, 'w')
       let buildImage = 'kitware/itk-js-vtk:latest'
       if (program.debug) {
-        buildImage = 'kitware/itk-js-vtk:20210219-50b0b10-debug'
+        buildImage = 'kitware/itk-js-vtk:20210219-56503df-debug'
       }
       const dockerCall = spawnSync('docker', ['run', '--rm', buildImage], {
         env: process.env,

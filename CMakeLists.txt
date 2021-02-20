@@ -3,6 +3,11 @@ project(BridgeJavaScript)
 
 set(BridgeJavaScript_LIBRARIES BridgeJavaScript)
 
+set(dcmtk_module "ITKIODCMTK")
+# Note in the build image -- skip it
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+  set(dcmtk_module "")
+endif()
 option(BUILD_ITK_JS_IO_MODULES "Build the itk.js ImageIO's and MeshIO's" OFF)
 if(BUILD_ITK_JS_IO_MODULES)
   # This list should be ordered from approximately most commonly to least
@@ -10,7 +15,7 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(BridgeJavaScript_ImageIOModules
     "ITKIOPNG"
     "ITKIOMeta"
-    "ITKIODCMTK"
+    ${dcmtk_module}
     "ITKIOTIFF"
     "ITKIONIFTI"
     "ITKIOJPEG"
