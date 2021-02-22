@@ -3,8 +3,8 @@ module.exports = {
   work: './build-tmp',
   config: {
     title: 'itk-js',
-    description: '"ITK Bridge for JavaScript"',
-    subtitle: '"Leverage ITK algorithms and IO in JavaScript."',
+    description: '"Bring scientific computing to the web"',
+    subtitle: '"High performance spatial analysis in a Web Browser or Node.js."',
     author: 'Kitware Inc.',
     timezone: 'UTC',
     url: 'https://InsightSoftwareConsortium.github.io/itk-js',

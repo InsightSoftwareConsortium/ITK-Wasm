@@ -1,0 +1,15 @@
+{
+  "name": "itk-debugger-hello-world",
+  "version": "1.0.0",
+  "description": "An itk.js Debugger Hello World!",
+  "scripts": {
+    "build": "itk-js build . -- -DCMAKE_BUILD_TYPE=Debug",
+    "start": "http-server -o"
+  },
+  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "itk": "^13.3.2"
+  }
+}
