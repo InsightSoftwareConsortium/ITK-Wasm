@@ -61,13 +61,13 @@ const readImageDICOMFileSeries = async (
       const block = fileDescriptions.slice(index, index + seriesBlockSize)
       taskArgsArray.push([block, singleSortedSeries])
     }
-    const results = await workerPool.runTasks(taskArgsArray)
+    const results = await workerPool.runTasks(taskArgsArray).promise
     const images = results.map((result) => result.image)
     const stacked = stackImages(images)
     return { image: stacked, webWorkerPool: workerPool }
   } else {
     const taskArgsArray = [[fileDescriptions, singleSortedSeries]]
-    const results = await workerPool.runTasks(taskArgsArray)
+    const results = await workerPool.runTasks(taskArgsArray).promise
     return { image: results[0].image, webWorkerPool: workerPool }
   }
 }
