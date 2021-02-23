@@ -46,13 +46,20 @@ if (program.compile) {
   }
 
   // Ensure we have the 'dockcross' Docker build environment driver script
-  const dockcross = 'build/dockcross'
+  let dockcross = 'build/dockcross'
+  if (program.debug) {
+    dockcross = 'build/dockcross-debug'
+  }
   try {
     fs.statSync(dockcross)
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
-      const dockerCall = spawnSync('docker', ['run', '--rm', 'kitware/itk-js-vtk:latest'], {
+      let buildImage = 'kitware/itk-js-vtk:latest'
+      if (program.debug) {
+        buildImage = 'kitware/itk-js-vtk:20210219-56503df-debug'
+      }
+      const dockerCall = spawnSync('docker', ['run', '--rm', buildImage], {
         env: process.env,
         stdio: ['ignore', output, null]
       })

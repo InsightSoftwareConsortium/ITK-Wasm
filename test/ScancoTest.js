@@ -23,6 +23,6 @@ test('Test reading a Scanco ISQ file', t => {
     t.is(image.size[0], 1024, 'size[0]')
     t.is(image.size[1], 1024, 'size[1]')
     t.is(image.data.length, 53477376, 'data.length')
-    t.is(image.data[100000], 2038, 'data[100000]')
+    t.is(image.data[100000], -292, 'data[100000]')
   })
 })

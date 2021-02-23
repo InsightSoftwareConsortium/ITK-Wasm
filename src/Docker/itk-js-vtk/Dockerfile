@@ -1,4 +1,7 @@
-FROM insighttoolkit/itk-js:latest
+ARG CMAKE_BUILD_TYPE=Release
+ARG BASE_TAG=latest
+
+FROM insighttoolkit/itk-js:$BASE_TAG
 MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
@@ -15,7 +18,7 @@ RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK-build && \
   cmake \
     -G Ninja \
-    -DCMAKE_BUILD_TYPE:STRING=Release \
+    -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
@@ -44,7 +47,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKVtkGlue.git && \
   cd ITKVtkGlue-build && \
   cmake \
     -G Ninja \
-    -DCMAKE_BUILD_TYPE:STRING=Release \
+    -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \

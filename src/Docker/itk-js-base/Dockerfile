@@ -1,10 +1,13 @@
 FROM dockcross/web-wasm:20200511-ba6b062
 MAINTAINER Matt McCormick <matt.mccormick@kitware.com>
 
+ARG CMAKE_BUILD_TYPE=Release
+ARG USE_DCMTK=ON
+
 WORKDIR /
 
-# 2020-04-27 release branch
-ENV ITK_GIT_TAG v5.1.0
+# 2021-02-19 master branch
+ENV ITK_GIT_TAG 9ff84420e55d2f86984f40f14861bddf0812b82b
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
@@ -40,7 +43,7 @@ RUN git clone https://github.com/open-source-parsers/jsoncpp.git && \
   cd jsoncpp-build && \
   CC=/usr/bin/cc CXX=/usr/bin/c++ /usr/bin/cmake \
     -G Ninja \
-    -DCMAKE_BUILD_TYPE:STRING=Release \
+    -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
@@ -63,7 +66,7 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
     -DJsonCpp_INCLUDE_DIR:FILEPATH=/jsoncpp/include \
     -DJsonCpp_LIBRARY:PATH=/jsoncpp-build/lib/libjsoncpp.a \
     -DSlicerExecutionModel_USE_JSONCPP:BOOL=ON \
-    -DCMAKE_BUILD_TYPE:STRING=Release \
+    -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
     -DBUILD_TESTING:BOOL=OFF \
@@ -81,13 +84,14 @@ RUN mkdir ITK-build && \
     -G Ninja \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+    -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_EXAMPLES:BOOL=OFF \
     -DBUILD_TESTING:BOOL=OFF \
     -DITK_LEGACY_REMOVE:BOOL=ON \
     -DITK_BUILD_DEFAULT_MODULES:BOOL=ON \
     -DITKGroup_IO:BOOL=ON \
     -DH5_HAVE_GETPWUID:BOOL=OFF \
-    -DModule_ITKIODCMTK:BOOL=ON \
+    -DModule_ITKIODCMTK:BOOL=$USE_DCMTK \
     -DDCMTK_USE_ICU:BOOL=OFF \
     -DModule_ITKIOMINC:BOOL=ON \
     -DModule_MGHIO:BOOL=ON \
