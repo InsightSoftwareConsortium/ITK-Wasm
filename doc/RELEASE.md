@@ -22,8 +22,8 @@ Push the `latest` and date / hash tagged Docker images to DockerHub
 Bump `version` in `package.json`.
 
 ```
-git commit -m "feat(version): Bump NPM version to ${version}"
 git add -- package.json package-lock.json
+git commit -m "feat(version): Bump NPM version to ${version}"
 npm run build
 npm run test
 rm dist/Pipelines/itkJSPipeline*
