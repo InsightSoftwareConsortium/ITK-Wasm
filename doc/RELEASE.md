@@ -7,9 +7,14 @@ git checkout master
 git pull upstream master
 git clean -fdx
 npm ci
-./src/Docker/itk-js-base/build.sh
-./src/Docker/itk-js/build.sh
-./src/Docker/itk-js-vtk/build.sh
+version=6.0.0 # change to correct version
+
+# Update the default CLI image in src/itk-js-cli.js
+./src/Docker/itk-js-base/build.sh --with-debug
+./src/Docker/itk-js/build.sh --with-debug
+./src/Docker/itk-js-vtk/build.sh --with-debug
+git add -- src/itk-js-cli.js
+git commit -m "feat(itk-js-cli): Update default Docker image for ${version}"
 ```
 
 Push the `latest` and date / hash tagged Docker images to DockerHub
@@ -17,13 +22,8 @@ Push the `latest` and date / hash tagged Docker images to DockerHub
 Bump `version` in `package.json`.
 
 ```
-npm run build
-version=6.0.0 # change to correct version
-# Update the default CLI image in src/itk-js-cli.js
-git add -- src/itk-js-cli.js
-git commit -m "feat(itk-js-cli): Update default Docker image for ${version}"
-git add -- package.json package-lock.json
 git commit -m "feat(version): Bump NPM version to ${version}"
+git add -- package.json package-lock.json
 npm run build
 npm run test
 rm dist/Pipelines/itkJSPipeline*
