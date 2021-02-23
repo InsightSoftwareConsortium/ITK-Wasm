@@ -38,9 +38,12 @@ EMSCRIPTEN_BINDINGS(itk_minc_image_io_js_binding) {
     .value("COVARIANTVECTOR", itk::CommonEnums::IOPixel::COVARIANTVECTOR)
     .value("SYMMETRICSECONDRANKTENSOR", itk::CommonEnums::IOPixel::SYMMETRICSECONDRANKTENSOR)
     .value("DIFFUSIONTENSOR3D", itk::CommonEnums::IOPixel::DIFFUSIONTENSOR3D)
+    .value("FIXEDARRAY", itk::CommonEnums::IOPixel::ARRAY)
     .value("COMPLEX", itk::CommonEnums::IOPixel::COMPLEX)
     .value("FIXEDARRAY", itk::CommonEnums::IOPixel::FIXEDARRAY)
     .value("MATRIX", itk::CommonEnums::IOPixel::MATRIX)
+    .value("VARIABLELENGTHVECTOR", itk::CommonEnums::IOPixel::VARIABLELENGTHVECTOR)
+    .value("VARIABLESIZEMATRIX", itk::CommonEnums::IOPixel::VARIABLESIZEMATRIX)
     ;
   emscripten::enum_<MINCImageIOJSBindingType::IOComponentType>("IOComponentType")
     .value("UNKNOWNCOMPONENTTYPE", itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE)
