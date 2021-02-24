@@ -1,5 +1,7 @@
 var path = require('path')
 
+var webpack = require('webpack')
+
 var sourcePath = path.resolve(__dirname, './dist')
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'test'
@@ -16,7 +18,7 @@ module.exports = function init (config) {
     basePath: '',
     frameworks: ['tap'],
     files: [
-      'https://unpkg.com/itk@12.4.0/umd/itk.js',
+      'https://unpkg.com/itk@14.0.1/umd/itk.js',
       'https://unpkg.com/itk-vtk-viewer@9.23.2/dist/itkVtkViewerCDN.js',
       './dist/index.js',
       './test/index.js'
@@ -28,18 +30,26 @@ module.exports = function init (config) {
 
     webpack: {
       mode: 'development',
-      node: {
-        fs: 'empty'
-      },
       module: {
         rules: [].concat()
       },
       resolve: {
+        fallback: {
+          path: false,
+          fs: false,
+          "buffer": require.resolve("buffer/"),
+        },
         modules: [
           path.resolve(__dirname, 'node_modules'),
           sourcePath
-        ]
-      }
+        ],
+        alias: {
+          stream: 'stream-browserify',
+        }
+      },
+      plugins: [
+        new webpack.ProvidePlugin({ process: ['process/browser'] }),
+      ],
     },
 
     webpackMiddleware: {
