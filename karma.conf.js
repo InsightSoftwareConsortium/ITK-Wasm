@@ -22,7 +22,7 @@ module.exports = function init (config) {
     ],
 
     basePath: '',
-    frameworks: ['tap'],
+    frameworks: ['tap', 'webpack'],
     files: [
       './test/Browser/tests.js',
       { pattern: './dist/ImageIOs/**', watched: true, served: true, included: false },
@@ -38,9 +38,6 @@ module.exports = function init (config) {
     },
 
     webpack: {
-      node: {
-        fs: 'empty'
-      },
       mode: 'development',
       module: {
         rules: [].concat()
@@ -50,15 +47,21 @@ module.exports = function init (config) {
           path.resolve(__dirname, 'node_modules'),
           sourcePath
         ],
+        fallback: {
+          path: false,
+          fs: false,
+        },
         alias: {
-          './itkConfig$': path.resolve(__dirname, 'test', 'Browser', 'config', 'itkConfigBrowserTest.js')
+          './itkConfig$': path.resolve(__dirname, 'test', 'Browser', 'config', 'itkConfigBrowserTest.js'),
+          stream: 'stream-browserify',
         }
       },
       plugins: [
         new webpack.DefinePlugin({
-          __BASE_PATH__: "'/base'"
-        })
-      ]
+          __BASE_PATH__: "'/base'",
+        }),
+        new webpack.ProvidePlugin({ process: ['process/browser'] }),
+      ],
     },
 
     webpackMiddleware: {
