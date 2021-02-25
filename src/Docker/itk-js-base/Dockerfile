@@ -6,8 +6,8 @@ ARG USE_DCMTK=ON
 
 WORKDIR /
 
-# 2021-02-19 master branch
-ENV ITK_GIT_TAG 9ff84420e55d2f86984f40f14861bddf0812b82b
+# 2021-02-24 master branch
+ENV ITK_GIT_TAG b94d514d99dc8b48f311016d12115701b31996cc
 RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
