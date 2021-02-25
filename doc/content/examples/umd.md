@@ -19,7 +19,7 @@ Inside the HTML `head`, load the itk.js UMD script:
 ```html
   <head>
     [...]
-    <script src="https://unpkg.com/itk@12.4.0/umd/itk.js"></script>
+    <script src="https://unpkg.com/itk@14.0.1/umd/itk.js"></script>
   </head>
 ```
 
@@ -60,7 +60,7 @@ This section described how to configure browser-based testing with the [Karma te
 First, install Karma and a test harness library like [tape](https://github.com/substack/tape).
 
 ```
-npm install --save-dev karma karma-chrome-launcher karma-tap karma-tap-pretty-reporter karma-webpack tape tap-spec
+npm install --save-dev karma karma-chrome-launcher karma-tap karma-tap-pretty-reporter karma-webpack tape tap-spec stream-browserify buffer readable-stream process
 ```
 
 Next write a [karma.config.js](https://github.com/InsightSoftwareConsortium/itk-js/blob/master/examples/UMD/karma.conf.js) file, and a [test/index.js](https://github.com/InsightSoftwareConsortium/itk-js/blob/master/examples/UMD/test/index.js) test script.
