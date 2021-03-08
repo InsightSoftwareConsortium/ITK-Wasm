@@ -23,6 +23,7 @@ test('Test reading DICOM file series', t => {
       return readImageDICOMFileSeries(files)
     })
     .then(function ({ image, webWorkerPool }) {
+      webWorkerPool.terminateWorkers()
       t.is(image.imageType.dimension, 3, 'dimension')
       t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')
       t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
@@ -68,6 +69,7 @@ test('Test reading DICOM file series, assume a single sorted series', t => {
       return readImageDICOMFileSeries(files, singleSortedSeries)
     })
     .then(function ({ image, webWorkerPool }) {
+      webWorkerPool.terminateWorkers()
       t.is(image.imageType.dimension, 3, 'dimension')
       t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')
       t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
