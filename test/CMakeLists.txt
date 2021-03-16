@@ -57,4 +57,5 @@ ExternalData_Expand_Arguments(
   DATA{Input/RectGrid2.vtr}
   DATA{Input/bunny.ply}
   DATA{Input/C0004255.ISQ}
+  DATA{Input/PNGSeries/,REGEX:mri3D_.[0-9]+.png}
   )
