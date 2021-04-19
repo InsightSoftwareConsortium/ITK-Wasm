@@ -78,49 +78,56 @@ endforeach()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.js.in
   ${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.js @ONLY)
 
-# itkDICOMImageSeriesReader
+# DICOM-based readers
 find_package(ITK REQUIRED COMPONENTS ITKIOGDCM)
 include(${ITK_USE_FILE})
-set(target itkDICOMImageSeriesReaderJSBinding)
-set(wasm_target itkDICOMImageSeriesReaderJSBindingWasm)
-_add_executable(${target} Bindings/${target}.cxx)
-itk_module_target_label(${target})
-itk_module_target_export(${target})
-itk_module_target_install(${target})
-_add_executable(${wasm_target} Bindings/${target}.cxx)
-itk_module_target_label(${wasm_target})
-itk_module_target_export(${wasm_target})
-itk_module_target_install(${wasm_target})
-# For embind
-set_property(TARGET ${target} APPEND_STRING
-  PROPERTY LINK_FLAGS " --bind"
-  )
-set_property(TARGET ${wasm_target} APPEND_STRING
-  PROPERTY LINK_FLAGS " --bind"
-  )
-set_property(TARGET ${target} APPEND_STRING
-  PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s WASM=0 -lnodefs.js -s FORCE_FILESYSTEM=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
-  )
-set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSImageIOPreDICOMImageSeriesReader.js)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js.in
-  ${pre_js} @ONLY)
-set_property(TARGET ${wasm_target} APPEND_STRING
-  PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=itkDICOMImageSeriesReaderJSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lworkerfs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
-  )
-set_property(TARGET ${target}
-  PROPERTY RUNTIME_OUTPUT_DIRECTORY
-  ${BridgeJavaScript_BINARY_DIR}/ImageIOs
-  )
-set_property(TARGET ${wasm_target}
-  PROPERTY RUNTIME_OUTPUT_DIRECTORY
-  ${BridgeJavaScript_BINARY_DIR}/ImageIOs
-  )
-set_property(SOURCE Bindings/${target}.cxx APPEND
-  PROPERTY OBJECT_DEPENDS
-  ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
-  )
-_target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
-_target_link_libraries(${wasm_target} LINK_PUBLIC ${ITK_LIBRARIES})
+foreach(dicom_io_module
+    itkDICOMImageSeriesReader
+    itkDICOMTagReader
+)
+  set(target "${dicom_io_module}JSBinding")
+  set(wasm_target "${dicom_io_module}JSBindingWasm")
+  _add_executable(${target} Bindings/${target}.cxx)
+  itk_module_target_label(${target})
+  itk_module_target_export(${target})
+  itk_module_target_install(${target})
+  _add_executable(${wasm_target} Bindings/${target}.cxx)
+  itk_module_target_label(${wasm_target})
+  itk_module_target_export(${wasm_target})
+  itk_module_target_install(${wasm_target})
+
+  # For embind
+  set_property(TARGET ${target} APPEND_STRING
+    PROPERTY LINK_FLAGS " --bind"
+    )
+  set_property(TARGET ${wasm_target} APPEND_STRING
+    PROPERTY LINK_FLAGS " --bind"
+    )
+  set_property(TARGET ${target} APPEND_STRING
+    PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s WASM=0 -lnodefs.js -s FORCE_FILESYSTEM=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+    )
+  set(pre_js "${CMAKE_CURRENT_BINARY_DIR}/itkJSImageIOPre${dicom_io_module}.js")
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js.in
+    ${pre_js} @ONLY)
+  set_property(TARGET ${wasm_target} APPEND_STRING
+    PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=${target} -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lworkerfs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+    )
+  set_property(TARGET ${target}
+    PROPERTY RUNTIME_OUTPUT_DIRECTORY
+    ${BridgeJavaScript_BINARY_DIR}/ImageIOs
+    )
+  set_property(TARGET ${wasm_target}
+    PROPERTY RUNTIME_OUTPUT_DIRECTORY
+    ${BridgeJavaScript_BINARY_DIR}/ImageIOs
+    )
+  set_property(SOURCE Bindings/${target}.cxx APPEND
+    PROPERTY OBJECT_DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
+    )
+  _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
+  _target_link_libraries(${wasm_target} LINK_PUBLIC ${ITK_LIBRARIES})
+
+endforeach()
 
 set(MeshIOIndex_ARRAY "")
 foreach(io_module ${BridgeJavaScript_MeshIOModules})
