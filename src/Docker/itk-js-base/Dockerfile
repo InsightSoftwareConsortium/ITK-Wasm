@@ -1,5 +1,7 @@
 FROM dockcross/web-wasm:20200511-ba6b062
-MAINTAINER Matt McCormick <matt.mccormick@kitware.com>
+
+LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
+LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/itk-js"
 
 ARG CMAKE_BUILD_TYPE=Release
 ARG USE_DCMTK=ON

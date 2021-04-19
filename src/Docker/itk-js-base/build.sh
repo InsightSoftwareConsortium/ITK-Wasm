@@ -12,7 +12,7 @@ docker build -t insighttoolkit/itk-js-base:latest \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg VCS_URL=`git config --get remote.origin.url` \
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-        $script_dir
+        $script_dir $@
 docker build -t insighttoolkit/itk-js-base:${TAG} \
         --build-arg IMAGE=insighttoolkit/itk-js-base \
         --build-arg CMAKE_BUILD_TYPE=Release \
@@ -20,7 +20,7 @@ docker build -t insighttoolkit/itk-js-base:${TAG} \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg VCS_URL=`git config --get remote.origin.url` \
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-        $script_dir
+        $script_dir $@
 
 if [[ \ $*\  == *\ --with-debug\ * ]]; then
   docker build -t insighttoolkit/itk-js-base:${TAG}-debug \
@@ -31,5 +31,5 @@ if [[ \ $*\  == *\ --with-debug\ * ]]; then
           --build-arg VCS_REF=`git rev-parse --short HEAD` \
           --build-arg VCS_URL=`git config --get remote.origin.url` \
           --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-          $script_dir
+          $script_dir $@
 fi

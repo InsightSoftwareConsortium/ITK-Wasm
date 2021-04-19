@@ -16,14 +16,14 @@ docker build -t insighttoolkit/itk-js:latest \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg VCS_URL=`git config --get remote.origin.url` \
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-        $script_dir
+        $script_dir $@
 docker build -t insighttoolkit/itk-js:${TAG} \
         --build-arg IMAGE=insighttoolkit/itk-js \
         --build-arg VERSION=${TAG} \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         --build-arg VCS_URL=`git config --get remote.origin.url` \
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-        $script_dir
+        $script_dir $@
 
 
 if [[ \ $*\  == *\ --with-debug\ * ]]; then
@@ -35,5 +35,5 @@ if [[ \ $*\  == *\ --with-debug\ * ]]; then
           --build-arg VCS_REF=`git rev-parse --short HEAD` \
           --build-arg VCS_URL=`git config --get remote.origin.url` \
           --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-          $script_dir
+          $script_dir $@
 fi

@@ -1,79 +1,5 @@
 version: 2
 jobs:
-  build-test-deploy:
-    machine:
-      image: ubuntu-1604:201903-01
-    steps:
-      - checkout
-      - run:
-          name: Build Docker image
-          no_output_timeout: 2.0h
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker login -u $DOCKER_USER -p $DOCKER_PASS
-              TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
-              ./src/Docker/itk-js-base/build.sh
-              docker push insighttoolkit/itk-js-base:latest
-              tagged=$(docker images -q -f 'since=insighttoolkit/itk-js-base:latest' --format '{{.Repository}}:{{.Tag}}' | grep itk-js-base)
-              docker push $tagged
-              ./src/Docker/itk-js/build.sh
-              docker push insighttoolkit/itk-js:latest
-              tagged=$(docker images -q -f 'since=insighttoolkit/itk-js:latest' --format '{{.Repository}}:{{.Tag}}' | grep itk-js:)
-              docker push $tagged
-              ./src/Docker/itk-js-vtk/build.sh
-              docker push kitware/itk-js-vtk:latest
-              tagged=$(docker images -q -f 'since=kitware/itk-js-vtk:latest' --format '{{.Repository}}:{{.Tag}}' | grep itk-js-vtk)
-              docker push $tagged
-            else
-              docker pull insighttoolkit/itk-js-base:latest
-              ./src/Docker/itk-js-base/build.sh --cache-from=dockcross/web-wasm:latest,insighttoolkit/itk-js-base:latest
-              docker pull insighttoolkit/itk-js:latest
-              ./src/Docker/itk-js/build.sh --cache-from=insighttoolkit/itk-js-base:latest,insighttoolkit/itk-js:latest
-              docker pull kitware/itk-js-vtk:latest
-              ./src/Docker/itk-js-vtk/build.sh --cache-from=insighttoolkit/itk-js:latest,kitware/itk-js-vtk:latest
-            fi
-      - run:
-          name: Install node@v10.15.3
-          command: |
-            . ./.circleci/load-nvm.sh
-            nvm install v10.15.3
-            nvm alias default v10.15.3
-      - run:
-          name: Install Node packages
-          command: |
-            . ./.circleci/load-nvm.sh
-            npm --version
-            node --version
-            npm install
-      - run:
-          name: Build
-          command: |
-            . ./.circleci/load-nvm.sh
-            npm run build
-      - run:
-          name: Test
-          command: |
-            . ./.circleci/load-nvm.sh
-            google-chrome --version
-            npm run test
-      - run:
-          name: Test building a pipeline
-          command: |
-            . ./.circleci/load-nvm.sh
-            cd test/MedianFilterPipeline
-            docker run --rm insighttoolkit/itk-js > ./itk-js
-            chmod +x ./itk-js
-            ./itk-js web-build
-      - deploy:
-          name: Publish docs
-          command: |
-            . ./.circleci/load-nvm.sh
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              git config --global user.name "Circle CI"
-              git config --global user.email "robot@itk.org"
-              npm run doc:publish
-            fi
-
   build-test-node-example:
     docker:
       - image: node:latest
@@ -140,13 +66,6 @@ jobs:
 
 workflows:
     version: 2
-    build-test-deploy:
-      jobs:
-        - build-test-deploy:
-            filters:
-              branches:
-                ignore:
-                  - gh-pages
 
     build-test-examples:
       jobs:
