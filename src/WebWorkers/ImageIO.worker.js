@@ -9,10 +9,12 @@ import loadEmscriptenModule from '../loadEmscriptenModuleBrowser'
 import readImageEmscriptenFSFile from '../readImageEmscriptenFSFile'
 import writeImageEmscriptenFSFile from '../writeImageEmscriptenFSFile'
 import readImageEmscriptenFSDICOMFileSeries from '../readImageEmscriptenFSDICOMFileSeries'
+import readDICOMTagsEmscriptenFSFile from '../readDICOMTagsEmscriptenFSFile'
 
 // To cache loaded io modules
 let ioToModule = {}
 let seriesReaderModule = null
+let tagReaderModule = null
 const haveSharedArrayBuffer = typeof self.SharedArrayBuffer === 'function' // eslint-disable-line
 
 function * availableIOModules (input) {
@@ -152,6 +154,22 @@ async function readDICOMImageSeries (input) {
   }
 }
 
+async function readDICOMTags (input) {
+  const tagReader = 'itkDICOMTagReaderJSBinding'
+  if (!tagReaderModule) {
+    tagReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', tagReader)
+  }
+
+  const mountpoint = '/work'
+  tagReaderModule.mkdirs(mountpoint)
+  const filePath = `${mountpoint}/${input.name}`
+  tagReaderModule.writeFile(filePath, new Uint8Array(input.data))
+  const tagValues = readDICOMTagsEmscriptenFSFile(tagReaderModule, filePath, input.tags)
+  tagReaderModule.unlink(filePath)
+
+  return new registerWebworker.TransferableResponse(tagValues, [])
+}
+
 registerWebworker(async function (input) {
   if (input.operation === 'readImage') {
     return readImage(input)
@@ -159,6 +177,8 @@ registerWebworker(async function (input) {
     return writeImage(input)
   } else if (input.operation === 'readDICOMImageSeries') {
     return readDICOMImageSeries(input)
+  } else if (input.operation === 'readDICOMTags') {
+    return readDICOMTags(input)
   } else {
     throw new Error('Unknown worker operation')
   }

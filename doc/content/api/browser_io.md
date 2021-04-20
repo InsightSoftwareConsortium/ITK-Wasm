@@ -69,6 +69,19 @@ If the files are known to be from a single, sorted series, the last argument can
 
 The used `webWorkerPool` is returned to enable resource cleanup by calling `.terminateWorkers()`.
 
+## readDICOMTags(webWorker, file, tags=[]) -> { tags, webWorker }
+
+Read tags from a DICOM [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
+
+Tags should be of the form `"GGGG|EEEE"`, where `GGGG` is the group ID in hex and `EEEE` is the element ID in hex. As an example, "0010|0010" is the PatientID.
+Hexadecimal strings are treated case-insensitively.
+A web worker object can be optionally provided to re-use a previously created web worker.
+Otherwise, leave this null.
+
+Returns:
+- tags: a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) containing the mapping from tag to tag value.
+- webWorker: a webworker that can be re-used.
+
 ## writeImageArrayBuffer(webWorker, useCompression, image, fileName, mimeType) ->  { webWorker, [arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
 
 Write an image to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).

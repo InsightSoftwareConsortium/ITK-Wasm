@@ -48,6 +48,19 @@ If the files are known to be from a single, sorted series, the last argument can
 
 Similar to `readImageLocalDICOMFileSeries`, but returns the image directly instead of a promise.
 
+## readDICOMTagsLocalFile(file, tags=[]) -> Promise&lt;Map&gt;
+
+Read tags from a DICOM [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
+
+Tags should be of the form `"GGGG|EEEE"`, where `GGGG` is the group ID in hex and `EEEE` is the element ID in hex. As an example, "0010|0010" is the PatientID.
+Hexadecimal strings are treated case-insensitively.
+
+Returns a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) containing the mapping from tag to tag value.
+
+## readDICOMTagsLocalFileSync(file, tags=[]) -> Map
+
+Similar to `readDICOMTagsLocalFile`, but returns the tag Map directly instead of a promise.
+
 ## writeImageLocalFile(useCompression, image, filePath) -> null
 
 Write an image to a file on the local filesystem with Node.js.
