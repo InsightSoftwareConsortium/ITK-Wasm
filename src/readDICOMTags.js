@@ -13,7 +13,7 @@ const readDICOMTags = async (webWorker, file, tags = null) => {
   const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(file)
   try {
     const tagValues = await webworkerPromise.postMessage(
-     {
+      {
         operation: 'readDICOMTags',
         name: file.name,
         type: file.type,
