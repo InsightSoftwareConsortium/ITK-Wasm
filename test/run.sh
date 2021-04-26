@@ -3,7 +3,7 @@
 # Source: https://github.com/thewtex/docker-opengl/tree/webgl
 
 container=webgl
-image=thewtex/opengl:ubuntu1604
+image=thewtex/opengl:ubuntu2004
 port=6080
 extra_run_args=""
 quiet=""
@@ -142,7 +142,7 @@ docker run \
   --workdir /home/user/work \
   ${mount_local} \
   $port_arg \
-  --env="APP=npm run test" \
+  --env="APP=npm run test:browser --" \
   $extra_run_args \
   $debug_arg \
   $image >/dev/null
