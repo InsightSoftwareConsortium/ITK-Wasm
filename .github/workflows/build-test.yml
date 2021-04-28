@@ -30,16 +30,16 @@ jobs:
 
     - name: Build itk-js-base
       run: |
-        ./src/Docker/itk-js-base/build.sh --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        ./src/Docker/itk-js-base/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
 
     - name: Build itk-js
       run: |
-        ./src/Docker/itk-js/build.sh --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        ./src/Docker/itk-js/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
         sudo rm -rf ./src/Docker/itk-js/ITKBridgeJavaScriptModuleCopy
 
     - name: Build itk-js-vtk
       run: |
-        ./src/Docker/itk-js-vtk/build.sh --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        ./src/Docker/itk-js-vtk/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
 
     - uses: actions/setup-node@v2
       with:
