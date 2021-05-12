@@ -80,8 +80,9 @@ jobs:
     - name: Test building a pipeline
       run: |
         cd test/MedianFilterPipeline
-        docker run --rm insighttoolkit/itk-js > ./itk-js
+        docker run --rm insighttoolkit/itk-js:${{ env.DOCKER_TAG }} > ./itk-js
         chmod +x ./itk-js
+        rm -rf web-build
         ./itk-js web-build
         cd -
 
