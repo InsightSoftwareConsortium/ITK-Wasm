@@ -19,7 +19,8 @@ RUN cd / && \
       ../ITKBridgeJavaScript && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
-  cd .. && chmod -R 777 ITKBridgeJavaScript-build
+  cd .. && chmod -R 777 ITKBridgeJavaScript-build && \
+  chmod -R 777 /ITK-build
 
 COPY ITKBridgeJavaScript.cmake /usr/share/cmake-3.17/Modules/
 ENV CMAKE_TOOLCHAIN_FILE_DOCKCROSS ${CMAKE_TOOLCHAIN_FILE}
