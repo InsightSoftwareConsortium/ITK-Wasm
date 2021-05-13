@@ -119,6 +119,15 @@ RUN git clone https://github.com/Tencent/rapidjson.git && \
   cd rapidjson && \
   git checkout ${RAPIDJSON_GIT_TAG}
 
+ENV IPFS_TAG v0.8.0
+RUN curl -O https://ipfs.io/ipns/dist.ipfs.io/go-ipfs/${IPFS_TAG}/go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
+  tar xvzf go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
+  cp go-ipfs/ipfs /usr/local/bin/ && \
+  rm -rf go-ipfs
+ENV IPFS_PATH /home/emscripten/.ipfs
+RUN ipfs init
+RUN chmod -R 777 $IPFS_PATH
+
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG IMAGE=insighttoolkit/itk-js-base

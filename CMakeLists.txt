@@ -86,6 +86,8 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(polydataios_VTKPLYFileReader IOPLY)
 endif()
 
+get_filename_component(_module_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(CMAKE_MODULE_PATH "${_module_dir}/CMake/" ${CMAKE_MODULE_PATH})
 
 if(NOT ITK_SOURCE_DIR)
   find_package(ITK 5.0 REQUIRED)
