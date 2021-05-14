@@ -108,26 +108,6 @@ jobs:
         docker push insighttoolkit/itk-js:latest
         docker push insighttoolkit/itk-js:${{ env.DOCKER_TAG }}
 
-    - name: insighttoolkit GHCR login
-      if: github.ref == 'refs/heads/master'
-      uses: docker/login-action@v1
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Push insighttoolkit images to DockerHub
-      if: github.ref == 'refs/heads/master'
-      run: |
-        docker tag "insighttoolkit/itk-js-base:latest" ghcr.io/insighttoolkit/itk-js-base:latest"
-        docker push ghcr.io/insighttoolkit/itk-js-base:latest
-        docker tag "insighttoolkit/itk-js-base:${{ env.DOCKER_TAG }}" ghcr.io/insighttoolkit/itk-js-base:${{ env.DOCKER_TAG }}"
-        docker push ghcr.io/insighttoolkit/itk-js-base:${{ env.DOCKER_TAG }}
-        docker tag "insighttoolkit/itk-js:latest" ghcr.io/insighttoolkit/itk-js:latest"
-        docker push ghcr.io/insighttoolkit/itk-js:latest
-        docker tag "insighttoolkit/itk-js:${{ env.DOCKER_TAG }}" ghcr.io/insighttoolkit/itk-js:${{ env.DOCKER_TAG }}"
-        docker push ghcr.io/insighttoolkit/itk-js:${{ env.DOCKER_TAG }}
-
     - name: kitware DockerHub login
       if: github.ref == 'refs/heads/master'
       uses: docker/login-action@v1
