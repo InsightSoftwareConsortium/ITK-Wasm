@@ -89,7 +89,7 @@ jobs:
     - name: Build and publish docs
       if: github.ref == 'refs/heads/master'
       run: |
-        git config --global user.name "Circle CI"
+        git config --global user.name "GitHub Actions CI"
         git config --global user.email "robot@itk.org"
         npm run doc:publish
 
