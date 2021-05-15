@@ -9,6 +9,21 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^ghc-8.*'
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
+
     - name: Set docker image tag
       run: |
         TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
@@ -45,15 +60,6 @@ jobs:
       with:
         node-version: '10'
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
-
     - name: Install packages
       run: |
         npm ci
@@ -85,6 +91,27 @@ jobs:
         rm -rf web-build
         ./itk-js web-build
         cd -
+
+    - name: Setup ipfs
+      uses: ibnesayeed/setup-ipfs@master
+      with:
+        ipfs_version: ^0.8
+
+    - name: Pin testing data
+      if: github.ref == 'refs/heads/master'
+      env:
+        PINATA_JWT: ${{ secrets.PINATA_JWT }}
+      run: |
+        mkdir itk-js-testing-data
+        rsync -v -r --exclude=Objects --exclude='*-hash-stamp' ./build/ExternalData/
+        new_cid=$(ipfs add -r -Q --cid-version 1 --raw-leaves itk-js-testing-data)
+
+        ipfs pin remote service add pinata https://api.pinata.cloud/psa "$PINATA_JWT"
+        if ! ipfs pin remote ls --service=pinata --name=itk-js-testing-data | grep $new_cid; then
+          ipfs pin remote add --service=pinata --name=itk-js-testing-data $new_cid
+        else
+          echo "CID ${new_cid} already pinned on Pinata."
+        fi
 
     - name: Build and publish docs
       if: github.ref == 'refs/heads/master'
