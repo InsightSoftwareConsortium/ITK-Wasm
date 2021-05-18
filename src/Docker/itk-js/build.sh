@@ -11,6 +11,16 @@ rsync -a --exclude=../../../src/Docker ../../../{include,src,CMakeLists.txt,itk-
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 
+debug=false
+for param; do
+  if [[ $param == '--with-debug' ]]; then
+    debug=true
+  else
+    newparams+=("$param")
+  fi
+done
+set -- "${newparams[@]}"  # overwrites the original positional params
+
 docker build -t insighttoolkit/itk-js:latest \
         --build-arg IMAGE=insighttoolkit/itk-js \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
@@ -26,7 +36,7 @@ docker build -t insighttoolkit/itk-js:${TAG} \
         $script_dir $@
 
 
-if [[ \ $*\  == *\ --with-debug\ * ]]; then
+if $debug; then
   docker build -t insighttoolkit/itk-js:${TAG}-debug \
           --build-arg IMAGE=insighttoolkit/itk-js \
           --build-arg CMAKE_BUILD_TYPE=Debug \
