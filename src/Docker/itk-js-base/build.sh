@@ -6,6 +6,16 @@ script_dir="`cd $(dirname $0); pwd`"
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 
+debug=false
+for param; do
+  if [[ $param == '--with-debug' ]]; then
+    debug=true
+  else
+    newparams+=("$param")
+  fi
+done
+set -- "${newparams[@]}"  # overwrites the original positional params
+
 docker build -t insighttoolkit/itk-js-base:latest \
         --build-arg IMAGE=insighttoolkit/itk-js-base \
         --build-arg CMAKE_BUILD_TYPE=Release \
@@ -22,7 +32,7 @@ docker build -t insighttoolkit/itk-js-base:${TAG} \
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
         $script_dir $@
 
-if [[ \ $*\  == *\ --with-debug\ * ]]; then
+if $debug; then
   docker build -t insighttoolkit/itk-js-base:${TAG}-debug \
           --build-arg IMAGE=insighttoolkit/itk-js-base \
           --build-arg CMAKE_BUILD_TYPE=Debug \

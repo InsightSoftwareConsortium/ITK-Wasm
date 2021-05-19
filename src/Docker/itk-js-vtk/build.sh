@@ -6,6 +6,16 @@ script_dir="`cd $(dirname $0); pwd`"
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 
+debug=false
+for param; do
+  if [[ $param == '--with-debug' ]]; then
+    debug=true
+  else
+    newparams+=("$param")
+  fi
+done
+set -- "${newparams[@]}"  # overwrites the original positional params
+
 docker build -t kitware/itk-js-vtk:latest \
         --build-arg IMAGE=kitware/itk-js-vtk \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
@@ -20,7 +30,7 @@ docker build -t kitware/itk-js-vtk:${TAG} \
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
         $script_dir $@
 
-if [[ \ $*\  == *\ --with-debug\ * ]]; then
+if $debug; then
   docker build -t kitware/itk-js-vtk:${TAG}-debug \
           --build-arg IMAGE=kitware/itk-js-vtk \
           --build-arg CMAKE_BUILD_TYPE=Debug \
