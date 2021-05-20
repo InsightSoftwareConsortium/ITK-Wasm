@@ -38,7 +38,7 @@ const build = (sourceDir) => {
     process.exit(dockerVersion.status)
   }
 
-  let dockerImage = 'insighttoolkit/itk-js:20210224-b69e3ed'
+  let dockerImage = 'insighttoolkit/itk-js:20210517-7d190d5'
   if (program.commands[0].image) {
     dockerImage = program.commands[0].image
   }
