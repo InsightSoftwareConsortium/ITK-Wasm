@@ -4,7 +4,7 @@ module.exports = {
   config: {
     title: 'itk-js',
     description: '"ITK Bridge for JavaScript"',
-    subtitle: '"Leverage ITK algorithms and IO in JavaScript."',
+    subtitle: '"High performance spatial analysis in a Web Browser or Node.js."',
     author: 'Kitware Inc.',
     timezone: 'UTC',
     url: 'https://InsightSoftwareConsortium.github.io/itk-js',
