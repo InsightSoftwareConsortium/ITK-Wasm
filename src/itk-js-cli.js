@@ -38,7 +38,7 @@ const build = (sourceDir) => {
     process.exit(dockerVersion.status)
   }
 
-  let dockerImage = 'insighttoolkit/itk-js:20210517-7d190d5'
+  let dockerImage = 'insighttoolkit/itk-js:20210520-bafb1b5'
   if (program.commands[0].image) {
     dockerImage = program.commands[0].image
   }
@@ -55,6 +55,7 @@ const build = (sourceDir) => {
         stdio: [ 'ignore', output, null ]
       })
       if (dockerCall.status !== 0) {
+        console.error(dockerCall.stderr.toString())
         process.exit(dockerCall.status)
       }
       fs.closeSync(output)
