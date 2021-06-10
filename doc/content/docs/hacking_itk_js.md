@@ -6,7 +6,7 @@ title: Hacking itk.js
 - [Node.js / NPM](https://nodejs.org/en/download/)
 - [Docker](https://docs.docker.com/install/)
   * On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo).
-  * On Windows, make sure [Shared Drives are enabled in the Docker settings](https://docs.docker.com/docker-for-windows/troubleshoot/#volume-mounting-requires-shared-drives-for-linux-containers).
+  * On Windows, make sure [Shared Drives are enabled in the Docker settings](https://docs.docker.com/docker-for-windows/troubleshoot/#volumes).
 - Bash
   * Bash is installed by default on Linux and macOS.
   * On Windows, we recommend [Git Bash](https://git-scm.com/).
