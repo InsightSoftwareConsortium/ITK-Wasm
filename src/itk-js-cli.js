@@ -55,6 +55,7 @@ const build = (sourceDir) => {
         stdio: [ 'ignore', output, null ]
       })
       if (dockerCall.status !== 0) {
+        console.error(dockerCall.stderr.toString())
         process.exit(dockerCall.status)
       }
       fs.closeSync(output)
