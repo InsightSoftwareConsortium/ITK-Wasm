@@ -11,9 +11,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
+
       - name: Generate Changelog
         run: |
           echo "# itk.js ${GITHUB_REF/refs\/tags\//}" > ./release-notes.md
@@ -21,6 +25,7 @@ jobs:
           git fetch origin --tags -f
           npx conventional-changelog-cli -p angular -r 2 -o ./CHANGELOG.md
           cat ./CHANGELOG.md >> ./release-notes.md
+
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
