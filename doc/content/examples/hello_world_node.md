@@ -18,10 +18,10 @@ Initialize the Node *package.json* file:
 npm init --yes
 ```
 
-Add `itk` and [`fs-extra`](https://www.npmjs.com/package/fs-extra) to your project's dependencies:
+Add `itk` to your project's dependencies:
 
 ```
-npm install --save itk fs-extra
+npm install --save itk
 ```
 
 Let's write some code! Populate *hello.cxx* with our Hello World program:
