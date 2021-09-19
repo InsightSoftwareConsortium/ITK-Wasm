@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "outDir": "./built",
+    "allowJs": false,
+    "target": "es2015"
+  },
+  "include": ["./src/**/*"]
+}
