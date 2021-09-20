@@ -13,6 +13,7 @@
     "doc:publish": "kw-doc -c ./doc/config.js -mp",
     "commit": "git cz",
     "build": "npm run build:wasm && npm run build:webpack",
+    "build:tsc": "tsc --pretty",
     "build:debug": "node ./build.js --debug && webpack --progress --mode development",
     "build:webpack": "webpack --progress --mode production",
     "build:wasm": "node ./build.js",
