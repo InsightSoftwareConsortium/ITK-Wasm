@@ -1,3 +1,4 @@
+export { default as copyImage } from "./core/copyImage.js"
 export { default as Image } from "./core/Image.js"
 export { default as ImageType } from "./core/ImageType.js"
 export { default as IntTypes } from "./core/IntTypes.js"
