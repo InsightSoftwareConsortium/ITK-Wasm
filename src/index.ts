@@ -25,4 +25,6 @@ export { default as IOPixel } from "./io/IOPixel.js"
 export { default as ImageIOBaseJSBinding } from "./io/ImageIOBaseJSBinding.js"
 
 export { default as imageIOComponentToJSComponent } from "./io/imageIOComponentToJSComponent.js"
+export { default as imageJSComponentToIOComponent } from "./io/imageJSComponentToIOComponent.js"
 export { default as imageIOPixelTypeToJSPixelType } from "./io/imageIOPixelTypeToJSPixelType.js"
+export { default as imageJSPixelTypeToIOPixelType } from "./io/imageJSPixelTypeToIOPixelType.js"
