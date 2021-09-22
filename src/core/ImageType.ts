@@ -1,11 +1,11 @@
-import IntTypes, { UInt8 } from './IntTypes.js'
-import PixelTypes, { Scalar } from './PixelTypes.js'
+import IntTypes from './IntTypes.js'
+import PixelTypes from './PixelTypes.js'
 
 class ImageType {
   constructor(
     public readonly dimension: number = 2,
-    public readonly componentType: IntTypes = UInt8,
-    public readonly pixelType: PixelTypes = Scalar,
+    public readonly componentType: typeof IntTypes[keyof typeof IntTypes] = IntTypes.UInt8,
+    public readonly pixelType: typeof PixelTypes[keyof typeof PixelTypes] = PixelTypes.Scalar,
     public readonly components: number = 1
   ) {}
 }

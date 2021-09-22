@@ -1,8 +1,6 @@
 export { default as TypedArray } from "./core/TypedArray.js"
 export { default as IntTypes } from "./core/IntTypes.js"
-export * from "./core/IntTypes.js"
 export { default as FloatTypes } from "./core/FloatTypes.js"
-export * from "./core/FloatTypes.js"
 
 export { default as PixelTypes } from "./core/PixelTypes.js"
 export * from "./core/PixelTypes.js"

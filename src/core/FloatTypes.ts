@@ -1,8 +1,8 @@
-export const Float32 = 'float'
-export const Float64 = 'double'
+const FloatTypes = {
+  Float32: 'float',
+  Float64: 'double',
 
-export const SpacePrecisionType = 'double'
-
-type FloatTypes = 'float' | 'double'
+  SpacePrecisionType: 'double',
+} as const
 
 export default FloatTypes
