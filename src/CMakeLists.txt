@@ -83,8 +83,8 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
     _target_link_libraries(${wasm_target} LINK_PUBLIC ${ITK_LIBRARIES})
   endforeach()
 endforeach()
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.js.in
-  ${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.js @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/ImageIOIndex.ts.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/io/ImageIOIndex.ts @ONLY)
 
 
 # DICOM tag reading needs Iconv, and the docker image (currently)

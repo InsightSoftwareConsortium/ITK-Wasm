@@ -1,9 +1,10 @@
 import IntTypes from '../core/IntTypes.js'
 import FloatTypes from '../core/FloatTypes.js'
 import ImageIOBaseJSBinding from './ImageIOBaseJSBinding.js'
+import IOComponent from './IOComponent.js'
 
 function imageIOComponentToJSComponent(emscriptenModule: ImageIOBaseJSBinding,
-                                       ioComponentType: number):
+                                       ioComponentType: typeof IOComponent[keyof typeof IOComponent]):
   typeof IntTypes[keyof typeof IntTypes] |  typeof FloatTypes[keyof typeof FloatTypes] | null {
   let componentType = null
   switch (ioComponentType) {
