@@ -4,7 +4,7 @@ import axios from 'axios'
 import config from '../../itkConfig.js'
 
 // Internal function to create a web worker promise
-function createWebworkerPromise(name: string, existingWorker: Worker) {
+function createWebworkerPromise(name: string, existingWorker: Worker | null) {
   if (existingWorker) {
     const webworkerPromise = new WebworkerPromise(existingWorker)
     return Promise.resolve({ webworkerPromise, worker: existingWorker })
