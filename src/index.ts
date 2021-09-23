@@ -22,6 +22,7 @@ export { default as extensionToImageIO } from "./io/extensionToImageIO.js"
 export { default as extensionToMeshIO } from "./io/extensionToMeshIO.js"
 export { default as extensionToPolyDataIO } from "./io/extensionToPolyDataIO.js"
 // export { default as ImageIOIndex } from "./io/ImageIOIndex.js"
+// export { default as MeshIOIndex } from "./io/MeshIOIndex.js"
 
 export { default as IOComponent } from "./io/IOComponent.js"
 export { default as IOPixel } from "./io/IOPixel.js"
@@ -32,3 +33,8 @@ export { default as imageIOComponentToJSComponent } from "./io/imageIOComponentT
 export { default as imageJSComponentToIOComponent } from "./io/imageJSComponentToIOComponent.js"
 export { default as imageIOPixelTypeToJSPixelType } from "./io/imageIOPixelTypeToJSPixelType.js"
 export { default as imageJSPixelTypeToIOPixelType } from "./io/imageJSPixelTypeToIOPixelType.js"
+
+export { default as meshIOComponentToJSComponent } from "./io/meshIOComponentToJSComponent.js"
+export { default as meshJSComponentToIOComponent } from "./io/meshJSComponentToIOComponent.js"
+export { default as meshIOPixelTypeToJSPixelType } from "./io/meshIOPixelTypeToJSPixelType.js"
+export { default as meshJSPixelTypeToIOPixelType } from "./io/meshJSPixelTypeToIOPixelType.js"
