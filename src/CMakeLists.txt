@@ -223,8 +223,8 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
     _target_link_libraries(${wasm_target} LINK_PUBLIC ${ITK_LIBRARIES})
   endforeach()
 endforeach()
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/MeshIOIndex.js.in
-  ${CMAKE_CURRENT_SOURCE_DIR}/MeshIOIndex.js @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/MeshIOIndex.ts.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/io/MeshIOIndex.ts @ONLY)
 
 # Pipelines for readPolyData
 find_package(VTK QUIET)
