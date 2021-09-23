@@ -8,8 +8,12 @@ export { default as Matrix } from "./core/Matrix.js"
 export { default as Image } from "./core/Image.js"
 export { default as ImageType } from "./core/ImageType.js"
 
+export { default as Mesh } from "./core/Mesh.js"
+export { default as MeshType } from "./core/MeshType.js"
+
 export { default as bufferToTypedArray } from "./core/bufferToTypedArray.js"
 export { default as copyImage } from "./core/copyImage.js"
+export { default as imageSharedBufferOrCopy } from "./core/imageSharedBufferOrCopy.js"
 
 
 export { default as getFileExtension } from "./io/getFileExtension.js"
