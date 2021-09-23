@@ -1,11 +1,13 @@
-import createWebworkerPromise from './createWebworkerPromise'
 import { readAsArrayBuffer } from 'promise-file-reader'
 
+import createWebworkerPromise from "../core/internal/createWebworkerPromise.js"
 import Image from "../core/Image.js"
 
-import config from './itkConfig'
+import config from "../itkConfig.js"
 
-const readImageBlob = (webWorker, blob, fileName, mimeType) => {
+import ReadImageResult from "./ReadImageResult.js"
+
+function readImageBlob(webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadImageResult> {
   let worker = webWorker
   return createWebworkerPromise('ImageIO', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {

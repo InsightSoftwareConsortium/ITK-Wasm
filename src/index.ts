@@ -52,3 +52,8 @@ export { default as readImageArrayBuffer } from "./io/readImageArrayBuffer.js"
 export { default as readMeshArrayBuffer } from "./io/readMeshArrayBuffer.js"
 export { default as readPolyDataArrayBuffer } from "./io/readPolyDataArrayBuffer.js"
 export { default as readArrayBuffer } from "./io/readArrayBuffer.js"
+
+export { default as readImageBlob } from "./io/readImageBlob.js"
+export { default as readMeshBlob } from "./io/readMeshBlob.js"
+export { default as readPolyDataBlob } from "./io/readPolyDataBlob.js"
+export { default as readBlob } from "./io/readBlob.js"
