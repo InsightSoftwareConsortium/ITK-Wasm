@@ -15,6 +15,7 @@
     "commit": "git cz",
     "build": "npm run build:wasm && npm run build:webpack",
     "build:tsc": "tsc --pretty",
+    "build:tscWebWorkers": "tsc --lib webworker --outDir ./built --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleBrowser.ts",
     "prepublishOnly": "npm run build:tsc",
     "build:debug": "node ./build.js --debug && webpack --progress --mode development",
     "build:webpack": "webpack --progress --mode production",
