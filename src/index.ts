@@ -34,5 +34,8 @@ export { default as readMeshBlob } from "./io/readMeshBlob.js"
 export { default as readPolyDataBlob } from "./io/readPolyDataBlob.js"
 export { default as readBlob } from "./io/readBlob.js"
 
+export { default as readImageFile } from "./io/readImageFile.js"
+export { default as readImageFileSeries } from "./io/readImageFileSeries.js"
+
 export { default as getFileExtension } from "./io/getFileExtension.js"
 
