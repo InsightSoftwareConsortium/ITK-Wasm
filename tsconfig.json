@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./built",
+    "allowSyntheticDefaultImports": true,
     "allowJs": false,
     "moduleResolution": "node",
     "target": "es2017",

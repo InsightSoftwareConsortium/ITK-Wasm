@@ -38,5 +38,7 @@ export { default as readImageFile } from "./io/readImageFile.js"
 export { default as readImageFileSeries } from "./io/readImageFileSeries.js"
 export { default as readImageHTTP } from "./io/readImageHTTP.js"
 
+export { default as readImageLocalDICOMFileSeries } from "./io/readImageLocalDICOMFileSeries.js"
+
 export { default as getFileExtension } from "./io/getFileExtension.js"
 

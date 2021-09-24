@@ -1,9 +1,9 @@
 import IntTypes from '../../core/IntTypes.js'
 import FloatTypes from '../../core/FloatTypes.js'
-import ImageIOBaseEmscriptenModule from './ImageIOBaseEmscriptenModule.js'
+import IOEmscriptenModule from './IOEmscriptenModule.js'
 import IOComponent from './IOComponent.js'
 
-function imageIOComponentToJSComponent(emscriptenModule: ImageIOBaseEmscriptenModule,
+function imageIOComponentToJSComponent(emscriptenModule: IOEmscriptenModule,
                                        ioComponentType: typeof IOComponent[keyof typeof IOComponent]):
   typeof IntTypes[keyof typeof IntTypes] |  typeof FloatTypes[keyof typeof FloatTypes] {
   let componentType = null

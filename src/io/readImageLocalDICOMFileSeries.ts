@@ -1,9 +1,10 @@
 import path from 'path'
 
-import Image from '../core/Image.js'
-
-import loadEmscriptenModule from './internal/loadEmscriptenModuleNode.js'
+import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
 import readImageEmscriptenFSDICOMFileSeries from './internal/readImageEmscriptenFSDICOMFileSeries.js'
+import DICOMImageSeriesReaderEmscriptenModule from './internal/DICOMImageSeriesReaderEmscriptenModule.js'
+
+import Image from '../core/Image.js'
 
 /**
  * Read an image from a series of DICOM files on the local filesystem in Node.js.
@@ -18,7 +19,7 @@ function readImageLocalDICOMFileSeries(fileNames: string[], singleSortedSeries: 
     const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
     try {
       const seriesReaderPath = path.join(imageIOsPath, seriesReader)
-      const seriesReaderModule = loadEmscriptenModule(seriesReaderPath)
+      const seriesReaderModule = loadEmscriptenModule(seriesReaderPath) as DICOMImageSeriesReaderEmscriptenModule
       const mountedFilePath = seriesReaderModule.mountContainingDirectory(fileNames[0])
       const mountedDir = path.dirname(mountedFilePath)
 

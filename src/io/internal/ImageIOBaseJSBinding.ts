@@ -11,7 +11,7 @@ interface ImageIOBaseJSBinding {
   GetNumberOfComponents(): number
   GetComponentType(): typeof IOComponent[keyof typeof IOComponent]
   GetPixelType(): typeof IOPixel[keyof typeof IOPixel]
-  GetDirection(dim: number): VectorJSBinding<number>
+  GetDirection(dir1: number): VectorJSBinding<number>
   GetDimensions(dim: number): number
   GetSpacing(dim: number): number
   GetOrigin(dim: number): number
