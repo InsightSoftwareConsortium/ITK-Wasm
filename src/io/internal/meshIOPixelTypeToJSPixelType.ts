@@ -1,9 +1,9 @@
-import PixelTypes from '../core/PixelTypes.js'
+import PixelTypes from '../../core/PixelTypes.js'
 import IOPixel from './IOPixel.js'
 
-import ImageIOBaseEmscriptenModule from './ImageIOBaseEmscriptenModule.js'
+import MeshIOBaseEmscriptenModule from './MeshIOBaseEmscriptenModule.js'
 
-function imageIOPixelTypeToJSPixelType(emscriptenModule: ImageIOBaseEmscriptenModule, ioPixelType: typeof IOPixel[keyof typeof IOPixel]): typeof PixelTypes[keyof typeof PixelTypes] | null {
+function meshIOPixelTypeToJSPixelType(emscriptenModule: MeshIOBaseEmscriptenModule, ioPixelType: typeof IOPixel[keyof typeof IOPixel]): typeof PixelTypes[keyof typeof PixelTypes] | null {
   let pixelType = null
   switch (ioPixelType) {
     case emscriptenModule.IOPixelType.UNKNOWNPIXELTYPE: {
@@ -54,8 +54,20 @@ function imageIOPixelTypeToJSPixelType(emscriptenModule: ImageIOBaseEmscriptenMo
       pixelType = PixelTypes.FixedArray
       break
     }
+    case emscriptenModule.IOPixelType.ARRAY: {
+      pixelType = PixelTypes.Array
+      break
+    }
     case emscriptenModule.IOPixelType.MATRIX: {
       pixelType = PixelTypes.Matrix
+      break
+    }
+    case emscriptenModule.IOPixelType.VARIABLELENGTHVECTOR: {
+      pixelType = PixelTypes.VariableLengthVector
+      break
+    }
+    case emscriptenModule.IOPixelType.VARIABLESIZEMATRIX: {
+      pixelType = PixelTypes.VariableSizeMatrix
       break
     }
     default:
@@ -64,4 +76,4 @@ function imageIOPixelTypeToJSPixelType(emscriptenModule: ImageIOBaseEmscriptenMo
   return pixelType
 }
 
-export default imageIOPixelTypeToJSPixelType
+export default meshIOPixelTypeToJSPixelType

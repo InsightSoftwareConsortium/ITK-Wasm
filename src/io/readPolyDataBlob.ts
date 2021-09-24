@@ -3,9 +3,9 @@ import { readAsArrayBuffer } from 'promise-file-reader'
 import createWebworkerPromise from "../core/internal/createWebworkerPromise.js"
 import vtkPolyData from "../core/vtkPolyData.js"
 
-import mimeToIO from './MimeToPolyDataIO.js'
+import mimeToIO from './internal/mimeToPolyDataIO.js'
 import getFileExtension from './getFileExtension.js'
-import extensionToIO from './extensionToPolyDataIO.js'
+import extensionToIO from './internal/extensionToPolyDataIO.js'
 import IOTypes from '../core/IOTypes.js'
 
 import config from '../itkConfig.js'

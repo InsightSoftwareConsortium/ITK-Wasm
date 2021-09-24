@@ -1,5 +1,5 @@
-import IntTypes from '../core/IntTypes.js'
-import FloatTypes from '../core/FloatTypes.js'
+import IntTypes from '../../core/IntTypes.js'
+import FloatTypes from '../../core/FloatTypes.js'
 
 import IOComponent from './IOComponent.js'
 import ImageIOBaseEmscriptenModule from './ImageIOBaseEmscriptenModule.js'

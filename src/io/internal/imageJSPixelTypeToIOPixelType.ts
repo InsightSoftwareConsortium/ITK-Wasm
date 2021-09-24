@@ -1,4 +1,4 @@
-import PixelTypes from '../core/PixelTypes.js'
+import PixelTypes from '../../core/PixelTypes.js'
 
 import IOPixel from './IOPixel.js'
 import ImageIOBaseEmscriptenModule from './ImageIOBaseEmscriptenModule.js'

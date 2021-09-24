@@ -1,16 +1,13 @@
-import IntTypes from '../core/IntTypes.js'
-import FloatTypes from '../core/FloatTypes.js'
-import MeshIOBaseEmscriptenModule from './MeshIOBaseEmscriptenModule.js'
+import IntTypes from '../../core/IntTypes.js'
+import FloatTypes from '../../core/FloatTypes.js'
+import ImageIOBaseEmscriptenModule from './ImageIOBaseEmscriptenModule.js'
 import IOComponent from './IOComponent.js'
 
-function meshIOComponentToJSComponent(emscriptenModule: MeshIOBaseEmscriptenModule, ioComponentType: typeof IOComponent[keyof typeof IOComponent]):
-  typeof IntTypes[keyof typeof IntTypes] |  typeof FloatTypes[keyof typeof FloatTypes] | null {
+function imageIOComponentToJSComponent(emscriptenModule: ImageIOBaseEmscriptenModule,
+                                       ioComponentType: typeof IOComponent[keyof typeof IOComponent]):
+  typeof IntTypes[keyof typeof IntTypes] |  typeof FloatTypes[keyof typeof FloatTypes] {
   let componentType = null
   switch (ioComponentType) {
-    case emscriptenModule.IOComponentType.UNKNOWNCOMPONENTTYPE: {
-      componentType = null
-      break
-    }
     case emscriptenModule.IOComponentType.UCHAR: {
       componentType = IntTypes.UInt8
       break
@@ -66,4 +63,4 @@ function meshIOComponentToJSComponent(emscriptenModule: MeshIOBaseEmscriptenModu
   return componentType
 }
 
-export default meshIOComponentToJSComponent
+export default imageIOComponentToJSComponent

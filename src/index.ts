@@ -20,30 +20,6 @@ export { default as copyImage } from "./core/copyImage.js"
 export { default as imageSharedBufferOrCopy } from "./core/imageSharedBufferOrCopy.js"
 
 
-export { default as getFileExtension } from "./io/getFileExtension.js"
-
-export { default as extensionToImageIO } from "./io/extensionToImageIO.js"
-export { default as extensionToMeshIO } from "./io/extensionToMeshIO.js"
-export { default as extensionToPolyDataIO } from "./io/extensionToPolyDataIO.js"
-// export { default as ImageIOIndex } from "./io/ImageIOIndex.js"
-// export { default as MeshIOIndex } from "./io/MeshIOIndex.js"
-export { default as PolyDataIOIndex } from "./io/PolyDataIOIndex.js"
-
-export { default as IOComponent } from "./io/IOComponent.js"
-export { default as IOPixel } from "./io/IOPixel.js"
-
-export { default as ImageIOBaseEmscriptenModule } from "./io/ImageIOBaseEmscriptenModule.js"
-
-export { default as imageIOComponentToJSComponent } from "./io/imageIOComponentToJSComponent.js"
-export { default as imageJSComponentToIOComponent } from "./io/imageJSComponentToIOComponent.js"
-export { default as imageIOPixelTypeToJSPixelType } from "./io/imageIOPixelTypeToJSPixelType.js"
-export { default as imageJSPixelTypeToIOPixelType } from "./io/imageJSPixelTypeToIOPixelType.js"
-
-export { default as meshIOComponentToJSComponent } from "./io/meshIOComponentToJSComponent.js"
-export { default as meshJSComponentToIOComponent } from "./io/meshJSComponentToIOComponent.js"
-export { default as meshIOPixelTypeToJSPixelType } from "./io/meshIOPixelTypeToJSPixelType.js"
-export { default as meshJSPixelTypeToIOPixelType } from "./io/meshJSPixelTypeToIOPixelType.js"
-
 export { default as ReadImageResult } from "./io/ReadImageResult.js"
 export { default as ReadMeshResult } from "./io/ReadMeshResult.js"
 export { default as ReadPolyDataResult } from "./io/ReadPolyDataResult.js"
@@ -57,3 +33,6 @@ export { default as readImageBlob } from "./io/readImageBlob.js"
 export { default as readMeshBlob } from "./io/readMeshBlob.js"
 export { default as readPolyDataBlob } from "./io/readPolyDataBlob.js"
 export { default as readBlob } from "./io/readBlob.js"
+
+export { default as getFileExtension } from "./io/getFileExtension.js"
+

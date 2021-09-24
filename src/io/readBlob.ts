@@ -2,8 +2,8 @@ import readImageBlob from './readImageBlob.js'
 import readMeshBlob from './readMeshBlob.js'
 
 import getFileExtension from './getFileExtension.js'
-import extensionToMeshIO from './extensionToMeshIO.js'
-import mimeToMeshIO from './MimeToMeshIO.js'
+import extensionToMeshIO from './internal/extensionToMeshIO.js'
+import mimeToMeshIO from './internal/mimeToMeshIO.js'
 
 import ReadImageResult from "./ReadImageResult.js"
 import ReadMeshResult from "./ReadMeshResult.js"
