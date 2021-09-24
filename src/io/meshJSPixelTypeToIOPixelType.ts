@@ -1,9 +1,9 @@
 import PixelTypes from '../core/PixelTypes.js'
 
 import IOPixel from './IOPixel.js'
-import MeshIOBaseJSBinding from './MeshIOBaseJSBinding.js'
+import MeshIOBaseEmscriptenModule from './MeshIOBaseEmscriptenModule.js'
 
-function meshJSPixelTypeToIOPixelType(emscriptenModule: MeshIOBaseJSBinding,
+function meshJSPixelTypeToIOPixelType(emscriptenModule: MeshIOBaseEmscriptenModule,
   pixelType: typeof PixelTypes[keyof typeof PixelTypes]): typeof IOPixel[keyof typeof IOPixel] {
   let ioPixelType = null
   switch (pixelType) {

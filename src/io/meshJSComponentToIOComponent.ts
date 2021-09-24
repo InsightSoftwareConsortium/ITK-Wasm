@@ -2,9 +2,9 @@ import IntTypes from '../core/IntTypes.js'
 import FloatTypes from '../core/FloatTypes.js'
 
 import IOComponent from './IOComponent.js'
-import MeshIOBaseJSBinding from './MeshIOBaseJSBinding.js'
+import MeshIOBaseEmscriptenModule from './MeshIOBaseEmscriptenModule.js'
 
-function meshJSComponentToIOComponent(emscriptenModule: MeshIOBaseJSBinding,
+function meshJSComponentToIOComponent(emscriptenModule: MeshIOBaseEmscriptenModule,
   componentType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] | null): typeof IOComponent[keyof typeof IOComponent] | null {
   let ioComponentType = null
   switch (componentType) {

@@ -1,9 +1,9 @@
 import IOComponent from './IOComponent.js'
 import IOPixel from './IOPixel.js'
 
-interface MeshIOBaseJSBinding {
+interface MeshIOBaseEmscriptenModule {
   IOComponentType: typeof IOComponent,
   IOPixelType: typeof IOPixel,
 }
 
-export default MeshIOBaseJSBinding
+export default MeshIOBaseEmscriptenModule

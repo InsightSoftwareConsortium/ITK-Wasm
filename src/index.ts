@@ -32,7 +32,7 @@ export { default as PolyDataIOIndex } from "./io/PolyDataIOIndex.js"
 export { default as IOComponent } from "./io/IOComponent.js"
 export { default as IOPixel } from "./io/IOPixel.js"
 
-export { default as ImageIOBaseJSBinding } from "./io/ImageIOBaseJSBinding.js"
+export { default as ImageIOBaseEmscriptenModule } from "./io/ImageIOBaseEmscriptenModule.js"
 
 export { default as imageIOComponentToJSComponent } from "./io/imageIOComponentToJSComponent.js"
 export { default as imageJSComponentToIOComponent } from "./io/imageJSComponentToIOComponent.js"

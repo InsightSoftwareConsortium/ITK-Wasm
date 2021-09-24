@@ -1,9 +1,9 @@
 import PixelTypes from '../core/PixelTypes.js'
 
 import IOPixel from './IOPixel.js'
-import ImageIOBaseJSBinding from './ImageIOBaseJSBinding.js'
+import ImageIOBaseEmscriptenModule from './ImageIOBaseEmscriptenModule.js'
 
-function imageJSPixelTypeToIOPixelType(emscriptenModule: ImageIOBaseJSBinding,
+function imageJSPixelTypeToIOPixelType(emscriptenModule: ImageIOBaseEmscriptenModule,
   pixelType: typeof PixelTypes[keyof typeof PixelTypes]): typeof IOPixel[keyof typeof IOPixel] {
   let ioPixelType = null
   switch (pixelType) {
