@@ -11,8 +11,8 @@
 
 build
 built
-src/ImageIOIndex.js
-src/MeshIOIndex.js
+src/io/internal/ImageIOIndex.ts
+src/io/internal/MeshIOIndex.ts
 
 dist
 node_modules

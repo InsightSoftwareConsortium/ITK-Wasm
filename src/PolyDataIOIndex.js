@@ -5,4 +5,4 @@ const PolyDataIOIndex = [
   'VTKPLYFileReader'
 ]
 
-module.exports = PolyDataIOIndex
+export default PolyDataIOIndex
