@@ -1,58 +1,58 @@
 const IntTypes = require('./IntTypes.js')
 const FloatTypes = require('./FloatTypes.js')
 
-const meshIOComponentToJSComponent = (module, ioComponentType) => {
+function meshIOComponentToJSComponent(emscriptenModule, ioComponentType):  {
   let componentType = null
   switch (ioComponentType) {
-    case module.IOComponentType.UNKNOWNCOMPONENTTYPE: {
+    case emscriptenModule.IOComponentType.UNKNOWNCOMPONENTTYPE: {
       componentType = null
       break
     }
-    case module.IOComponentType.UCHAR: {
+    case emscriptenModule.IOComponentType.UCHAR: {
       componentType = IntTypes.UInt8
       break
     }
-    case module.IOComponentType.CHAR: {
+    case emscriptenModule.IOComponentType.CHAR: {
       componentType = IntTypes.Int8
       break
     }
-    case module.IOComponentType.USHORT: {
+    case emscriptenModule.IOComponentType.USHORT: {
       componentType = IntTypes.UInt16
       break
     }
-    case module.IOComponentType.SHORT: {
+    case emscriptenModule.IOComponentType.SHORT: {
       componentType = IntTypes.Int16
       break
     }
-    case module.IOComponentType.UINT: {
+    case emscriptenModule.IOComponentType.UINT: {
       componentType = IntTypes.UInt32
       break
     }
-    case module.IOComponentType.INT: {
+    case emscriptenModule.IOComponentType.INT: {
       componentType = IntTypes.Int32
       break
     }
-    case module.IOComponentType.ULONG: {
+    case emscriptenModule.IOComponentType.ULONG: {
       componentType = IntTypes.UInt64
       break
     }
-    case module.IOComponentType.LONG: {
+    case emscriptenModule.IOComponentType.LONG: {
       componentType = IntTypes.Int64
       break
     }
-    case module.IOComponentType.ULONGLONG: {
+    case emscriptenModule.IOComponentType.ULONGLONG: {
       componentType = IntTypes.UInt64
       break
     }
-    case module.IOComponentType.LONGLONG: {
+    case emscriptenModule.IOComponentType.LONGLONG: {
       componentType = IntTypes.Int64
       break
     }
-    case module.IOComponentType.FLOAT: {
+    case emscriptenModule.IOComponentType.FLOAT: {
       componentType = FloatTypes.Float32
       break
     }
-    case module.IOComponentType.DOUBLE: {
+    case emscriptenModule.IOComponentType.DOUBLE: {
       componentType = FloatTypes.Float64
       break
     }

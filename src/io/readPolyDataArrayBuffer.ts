@@ -1,7 +1,7 @@
 import createWebworkerPromise from "../core/internal/createWebworkerPromise.js"
 import vtkPolyData from "../core/vtkPolyData.js"
 
-import mimeToIO from "./internal/mimeToPolyDataIO.js"
+import mimeToIO from "./internal/MimeToPolyDataIO.js"
 import getFileExtension from "./getFileExtension.js"
 import extensionToIO from "./internal/extensionToPolyDataIO.js"
 import IOTypes from "../core/IOTypes.js"

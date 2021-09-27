@@ -6,7 +6,7 @@ import imageIOPixelTypeToJSPixelType from "./imageIOPixelTypeToJSPixelType.js"
 
 import DICOMImageSeriesReaderEmscriptenModule from "./DICOMImageSeriesReaderEmscriptenModule.js"
 
-function readImageEmscriptenFSDICOMFileSeries(seriesReaderModule: DICOMImageSeriesReaderEmscriptenModule, fileNames: string[], singleSortedSeries: boolean) {
+function readImageEmscriptenFSDICOMFileSeries(seriesReaderModule: DICOMImageSeriesReaderEmscriptenModule, fileNames: string[], singleSortedSeries: boolean): Image {
   const seriesReader = new seriesReaderModule.ITKDICOMImageSeriesReader()
   const firstFile = fileNames[0]
   if (!seriesReader.CanReadTestFile(firstFile)) {
@@ -17,6 +17,9 @@ function readImageEmscriptenFSDICOMFileSeries(seriesReaderModule: DICOMImageSeri
 
   const ioComponentType = seriesReader.GetIOComponentType()
   const componentType = imageIOComponentToJSComponent(seriesReaderModule, ioComponentType)
+  if (componentType === null) {
+    throw Error('image component type cannot be unknown / null')
+  }
 
   const ioPixelType = seriesReader.GetIOPixelType()
   const pixelType = imageIOPixelTypeToJSPixelType(seriesReaderModule, ioPixelType)

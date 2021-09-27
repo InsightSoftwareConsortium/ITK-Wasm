@@ -54,26 +54,6 @@ Module.mkdirs = function (dirs) {
   }
 }
 
-/** Mount file blobs into the Emscripten filesystem. The blobFiles argument should be an
- * array of { name: 'filename', data: blob } objects. */
-Module.mountBlobs = function (mountpoint, blobFiles) {
-  if (!ENVIRONMENT_IS_WORKER) {
-    return
-  }
-
-  Module.mkdirs(mountpoint)
-
-  FS.mount(WORKERFS, { blobs: blobFiles, files: [] }, mountpoint)
-}
-
-Module.unmountBlobs = function (mountpoint) {
-  if (!ENVIRONMENT_IS_WORKER) {
-    return
-  }
-
-  FS.unmount(mountpoint)
-}
-
 Module.readFile = function (path, opts) {
   return FS.readFile(path, opts)
 }

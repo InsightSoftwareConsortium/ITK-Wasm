@@ -19,6 +19,9 @@ function readImageEmscriptenFSFile(imageModule: ImageIOBaseEmscriptenModule, fil
 
   const ioComponentType = imageIO.GetComponentType()
   const componentType = imageIOComponentToJSComponent(imageModule, ioComponentType)
+  if (componentType === null) {
+    throw Error('image component type cannot be unknown / null')
+  }
 
   const ioPixelType = imageIO.GetPixelType()
   const pixelType = imageIOPixelTypeToJSPixelType(imageModule, ioPixelType)

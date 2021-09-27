@@ -5,7 +5,7 @@ import IOComponent from './IOComponent.js'
 
 function imageIOComponentToJSComponent(emscriptenModule: IOEmscriptenModule,
                                        ioComponentType: typeof IOComponent[keyof typeof IOComponent]):
-  typeof IntTypes[keyof typeof IntTypes] |  typeof FloatTypes[keyof typeof FloatTypes] {
+  typeof IntTypes[keyof typeof IntTypes] |  typeof FloatTypes[keyof typeof FloatTypes] | null {
   let componentType = null
   switch (ioComponentType) {
     case emscriptenModule.IOComponentType.UCHAR: {

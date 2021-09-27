@@ -55,4 +55,4 @@ function readImageLocalFileSync(filePath: string): Image {
   return image
 }
 
-module.exports = readImageLocalFileSync
+export default readImageLocalFileSync

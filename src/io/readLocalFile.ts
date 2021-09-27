@@ -6,14 +6,18 @@ import extensionToPolyDataIO from './internal/extensionToPolyDataIO.js'
 
 import readImageLocalFile from './readImageLocalFile.js'
 import readMeshLocalFileSync from './readMeshLocalFileSync.js'
-import readPolyDataLocalFileSync = require('./readPolyDataLocalFileSync.js')
+import readPolyDataLocalFileSync from './readPolyDataLocalFileSync.js'
+
+import Image from '../core/Image.js'
+import Mesh from '../core/Mesh.js'
+import PolyData from '../core/vtkPolyData.js'
 
 /**
  * Read an image or mesh from a file on the local filesystem in Node.js.
  *
  * @param: filePath path to the file on the local filesystem.
  */
-const readLocalFile = (filePath) => {
+function readLocalFile(filePath: string): Promise<Image | Mesh | PolyData> {
   const absoluteFilePath = path.resolve(filePath)
   const extension = getFileExtension(absoluteFilePath)
 
