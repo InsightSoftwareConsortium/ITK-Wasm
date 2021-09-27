@@ -1,24 +1,24 @@
 import createWebworkerPromise from "../core/internal/createWebworkerPromise.js"
 import { readAsArrayBuffer } from 'promise-file-reader'
 
-import Image from "../core/Image.js"
+import Mesh from "../core/Mesh.js"
 
 import config from '../itkConfig.js'
 
-import ReadImageResult from "./ReadImageResult.js"
+import ReadMeshResult from "./ReadMeshResult.js"
 
-async function readImageFile(webWorker: Worker | null, file: File): Promise<ReadImageResult> {
+async function readMeshFile(webWorker: Worker | null, file: File): Promise<ReadMeshResult> {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
-    'ImageIO',
+    'MeshIO',
     worker
   )
   worker = usedWorker
   const arrayBuffer = await readAsArrayBuffer(file)
   try {
-    const image: Image = await webworkerPromise.postMessage(
+    const mesh: Mesh = await webworkerPromise.postMessage(
       {
-        operation: 'readImage',
+        operation: 'readMesh',
         name: file.name,
         type: file.type,
         data: arrayBuffer,
@@ -26,10 +26,10 @@ async function readImageFile(webWorker: Worker | null, file: File): Promise<Read
       },
       [arrayBuffer]
     )
-    return { image, webWorker: worker }
+    return { mesh, webWorker: worker }
   } catch (error: any) {
     throw Error(error.toString())
   }
 }
 
-export default readImageFile
+export default readMeshFile
