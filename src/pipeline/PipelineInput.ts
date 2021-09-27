@@ -1,6 +1,6 @@
-import IOTypes from './IOTypes.js'
-import Image from './Image.js'
-import Mesh from './Mesh.js'
+import IOTypes from '../core/IOTypes.js'
+import Image from '../core/Image.js'
+import Mesh from '../core/Mesh.js'
 
 interface PipelineInput {
   path: string

@@ -1,4 +1,4 @@
-interface CLIEmscriptenModule {
+interface PipelineEmscriptenModule {
   mountContainingDirectory(filePath: string): void
   unmountContainingDirectory(filePath: string): void
   mkdirs(dirs: string[]): void
@@ -21,4 +21,4 @@ interface CLIEmscriptenModule {
   callMain(args: string[]): number
 }
 
-export default CLIEmscriptenModule
+export default PipelineEmscriptenModule

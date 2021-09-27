@@ -9,8 +9,8 @@ import IOTypes from '../core/IOTypes.js'
 import PolyData from '../core/vtkPolyData.js'
 
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
-import runPipelineEmscripten from '../core/internal/runPipelineEmscripten.js'
-import CLIEmscriptenModule from '../core/CLIEmscriptenModule.js'
+import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
+import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 
 function readPolyDataLocalFile(filePath: string): Promise<PolyData> {
   return new Promise(function (resolve, reject) {
@@ -32,7 +32,7 @@ function readPolyDataLocalFile(filePath: string): Promise<PolyData> {
       }
 
       const modulePath = path.join(polyDataIOsPath, io as string)
-      const Module = loadEmscriptenModule(modulePath) as CLIEmscriptenModule
+      const Module = loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
       const fileContents = new Uint8Array(fs.readFileSync(absoluteFilePath))
 
       const args = [filePathBasename, filePathBasename + '.output.json']

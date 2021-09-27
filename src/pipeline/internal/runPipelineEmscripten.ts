@@ -1,13 +1,13 @@
-import IOTypes from '../IOTypes.js'
-import bufferToTypedArray from '../bufferToTypedArray.js'
-import TypedArray from '../TypedArray.js'
+import IOTypes from '../../core/IOTypes.js'
+import bufferToTypedArray from '../../core/bufferToTypedArray.js'
+import TypedArray from '../../core/TypedArray.js'
+import Image from '../../core/Image.js'
+import Mesh from '../../core/Mesh.js'
+import PolyData from '../../core/vtkPolyData.js'
+
+import PipelineEmscriptenModule from '../PipelineEmscriptenModule.js'
 import PipelineInput from '../PipelineInput.js'
 import PipelineOutput from '../PipelineOutput.js'
-import Image from '../Image.js'
-import Mesh from '../Mesh.js'
-import PolyData from '../vtkPolyData.js'
-
-import CLIEmscriptenModule from '../CLIEmscriptenModule.js'
 
 let haveSharedArrayBuffer = false
 if (typeof window !== 'undefined') {
@@ -34,7 +34,7 @@ function typedArrayForBuffer(typedArrayType: string, buffer: ArrayBuffer) {
   return new TypedArrayFunction(buffer)
 }
 
-function readFileSharedArray(emscriptenModule: CLIEmscriptenModule, path: string): Uint8Array {
+function readFileSharedArray(emscriptenModule: PipelineEmscriptenModule, path: string): Uint8Array {
   const opts = { flags: 'r', encoding: 'binary' }
   const stream = emscriptenModule.open(path, opts.flags)
   const stat = emscriptenModule.stat(path)
@@ -51,7 +51,7 @@ function readFileSharedArray(emscriptenModule: CLIEmscriptenModule, path: string
   return array
 }
 
-function runPipelineEmscripten(pipelineModule: CLIEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
+function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
   if (inputs) {
     inputs.forEach(function (input) {
       switch (input.type) {
