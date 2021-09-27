@@ -4,7 +4,7 @@ interface RunPipelineResult {
   stdout: string
   stderr: string
   outputs: PipelineOutput[]
-  webWorker: Worker
+  webWorker?: Worker
 }
 
 export default RunPipelineResult
