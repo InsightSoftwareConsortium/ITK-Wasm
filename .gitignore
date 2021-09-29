@@ -28,7 +28,7 @@ examples/UMD/package-lock.json
 test/MedianFilterPipeline/itk-js
 test/MedianFilterPipeline/web-build
 
-src/Docker/itk-js/ITKBridgeJavaScriptModuleCopy/
+src/docker/itk-js/ITKBridgeJavaScriptModuleCopy/
 test/StdoutStderrPipeline/itk-js
 test/StdoutStderrPipeline/web-build/
 test/InputOutputFilesPipeline/web-build/

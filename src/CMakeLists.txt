@@ -39,11 +39,11 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
     set(ImageIOIndex_ARRAY "${ImageIOIndex_ARRAY}'${imageio}JSBinding', ")
     set(target ${imageio}JSBinding)
     set(wasm_target ${imageio}JSBindingWasm)
-    _add_executable(${target} Bindings/${target}.cxx)
+    _add_executable(${target} io/internal/bindings/${target}.cxx)
     itk_module_target_label(${target})
     itk_module_target_export(${target})
     itk_module_target_install(${target})
-    _add_executable(${wasm_target} Bindings/${target}.cxx)
+    _add_executable(${wasm_target} io/internal/bindings/${target}.cxx)
     itk_module_target_label(${wasm_target})
     itk_module_target_export(${wasm_target})
     itk_module_target_install(${wasm_target})
@@ -75,7 +75,7 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
       ${BridgeJavaScript_BINARY_DIR}/ImageIOs
       )
-    set_property(SOURCE Bindings/${target}.cxx APPEND
+    set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
       )
@@ -123,11 +123,11 @@ foreach(dicom_io_module
 )
   set(target "${dicom_io_module}JSBinding")
   set(wasm_target "${dicom_io_module}JSBindingWasm")
-  _add_executable(${target} Bindings/${target}.cxx)
+  _add_executable(${target} io/internal/bindings/${target}.cxx)
   itk_module_target_label(${target})
   itk_module_target_export(${target})
   itk_module_target_install(${target})
-  _add_executable(${wasm_target} Bindings/${target}.cxx)
+  _add_executable(${wasm_target} io/internal/bindings/${target}.cxx)
   itk_module_target_label(${wasm_target})
   itk_module_target_export(${wasm_target})
   itk_module_target_install(${wasm_target})
@@ -156,7 +156,7 @@ foreach(dicom_io_module
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
     ${BridgeJavaScript_BINARY_DIR}/ImageIOs
     )
-  set_property(SOURCE Bindings/${target}.cxx APPEND
+  set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
     PROPERTY OBJECT_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
     )
@@ -183,11 +183,11 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
     set(MeshIOIndex_ARRAY "${MeshIOIndex_ARRAY}'${meshio}JSBinding', ")
     set(target ${meshio}JSBinding)
     set(wasm_target ${meshio}JSBindingWasm)
-    _add_executable(${target} Bindings/${target}.cxx)
+    _add_executable(${target} io/internal/bindings/${target}.cxx)
     itk_module_target_label(${target})
     itk_module_target_export(${target})
     itk_module_target_install(${target})
-    _add_executable(${wasm_target} Bindings/${target}.cxx)
+    _add_executable(${wasm_target} io/internal/bindings/${target}.cxx)
     itk_module_target_label(${wasm_target})
     itk_module_target_export(${wasm_target})
     itk_module_target_install(${wasm_target})
@@ -215,7 +215,7 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
       ${BridgeJavaScript_BINARY_DIR}/MeshIOs
       )
-    set_property(SOURCE Bindings/${target}.cxx APPEND
+    set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
       ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
       )
@@ -235,8 +235,8 @@ if(VTK_FOUND)
 
   set(target ${io_pipeline})
   set(wasm_target ${io_pipeline}Wasm)
-  _add_executable(${target} Bindings/${target}.cxx)
-  _add_executable(${wasm_target} Bindings/${target}.cxx)
+  _add_executable(${target} io/internal/bindings/${target}.cxx)
+  _add_executable(${wasm_target} io/internal/bindings/${target}.cxx)
   set_property(TARGET ${target} APPEND_STRING
     PROPERTY LINK_FLAGS " -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' -s WASM=0 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPipelinePre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
     )
@@ -254,7 +254,7 @@ if(VTK_FOUND)
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
     ${BridgeJavaScript_BINARY_DIR}/PolyDataIOs
     )
-  set_property(SOURCE Bindings/${target}.cxx APPEND
+  set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
     PROPERTY OBJECT_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
     )

@@ -7,7 +7,7 @@ script_dir="`cd $(dirname $0); pwd`"
 cd $script_dir
 
 mkdir -p ITKBridgeJavaScriptModuleCopy
-rsync -a --exclude=../../../src/Docker ../../../{include,src,CMakeLists.txt,itk-module.cmake} ./ITKBridgeJavaScriptModuleCopy/
+rsync -a --exclude=../../../src/docker ../../../{include,src,CMakeLists.txt,itk-module.cmake} ./ITKBridgeJavaScriptModuleCopy/
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 
