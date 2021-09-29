@@ -1,18 +1,41 @@
-import registerWebworker from 'webworker-promise/lib/register'
+import registerWebworker from 'webworker-promise/lib/register.js'
 
-import mimeToIO from '../MimeToMeshIO'
-import getFileExtension from '../getFileExtension'
-import extensionToIO from '../extensionToMeshIO'
-import MeshIOIndex from '../MeshIOIndex'
-import loadEmscriptenModule from '../loadEmscriptenModuleBrowser'
+import mimeToIO from '../io/internal/MimeToMeshIO.js'
+import getFileExtension from '../io/getFileExtension.js'
+import extensionToIO from '../io/internal/extensionToMeshIO.js'
+import MeshIOIndex from '../io/internal/MeshIOIndex.js'
+import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleBrowser.js'
 
-import readMeshEmscriptenFSFile from '../readMeshEmscriptenFSFile'
-import writeMeshEmscriptenFSFile from '../writeMeshEmscriptenFSFile'
+import readMeshEmscriptenFSFile from '../io/internal/readMeshEmscriptenFSFile.js'
+import writeMeshEmscriptenFSFile from '../io/internal/writeMeshEmscriptenFSFile.js'
+
+import MeshIOBaseEmscriptenModule from '../io/internal/MeshIOBaseEmscriptenModule.js'
+
+import Mesh from '../core/Mesh.js'
+
+interface Input {
+  operation: 'readMesh' | 'writeMesh'
+  config: { itkModulesPath: string }
+}
+
+interface ReadMeshInput extends Input {
+  name: string
+  type: string
+  data: ArrayBuffer
+}
+
+interface WriteMeshInput extends Input {
+  name: string
+  type: string
+  mesh: Mesh
+  useCompression: boolean
+  binaryFileType: boolean
+}
 
 // To cache loaded io modules
-let ioToModule = {}
+const ioToModule: Map<string,MeshIOBaseEmscriptenModule> = new Map()
 
-async function readMesh (input) {
+async function readMesh (input: ReadMeshInput) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -25,11 +48,11 @@ async function readMesh (input) {
     for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
       let ioModule = null
       const trialIO = MeshIOIndex[idx]
-      if (trialIO in ioToModule) {
-        ioModule = ioToModule[trialIO]
+      if (ioToModule.has(trialIO)) {
+        ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO)
-        ioModule = ioToModule[trialIO]
+        ioToModule.set(trialIO, loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO, false) as MeshIOBaseEmscriptenModule)
+        ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       }
       const meshIO = new ioModule.ITKMeshIO()
       ioModule.mkdirs(mountpoint)
@@ -45,16 +68,16 @@ async function readMesh (input) {
     }
   }
   if (io === null) {
-    ioToModule = {}
+    ioToModule.clear()
     throw new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
-  if (io in ioToModule) {
-    ioModule = ioToModule[io]
+  if (ioToModule.has(io as string)) {
+    ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io)
-    ioModule = ioToModule[io]
+    ioToModule.set(io as string, loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io as string, false) as MeshIOBaseEmscriptenModule)
+    ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   }
 
   ioModule.mkdirs(mountpoint)
@@ -79,7 +102,7 @@ async function readMesh (input) {
   return new registerWebworker.TransferableResponse(mesh, transferables)
 }
 
-async function writeMesh (input) {
+async function writeMesh(input: WriteMeshInput) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -92,11 +115,11 @@ async function writeMesh (input) {
     for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
       let ioModule = null
       const trialIO = MeshIOIndex[idx]
-      if (trialIO in ioToModule) {
-        ioModule = ioToModule[trialIO]
+      if (ioToModule.has(trialIO)) {
+        ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       } else {
-        ioToModule[trialIO] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO)
-        ioModule = ioToModule[trialIO]
+        ioToModule.set(trialIO, loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO, false) as MeshIOBaseEmscriptenModule)
+        ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       }
       const meshIO = new ioModule.ITKMeshIO()
       const filePath = mountpoint + '/' + input.name
@@ -108,16 +131,16 @@ async function writeMesh (input) {
     }
   }
   if (io === null) {
-    ioToModule = {}
+    ioToModule.clear()
     throw new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
-  if (io in ioToModule) {
-    ioModule = ioToModule[io]
+  if (ioToModule.has(io as string)) {
+    ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io)
-    ioModule = ioToModule[io]
+    ioToModule.set(io as string, loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io as string, false) as MeshIOBaseEmscriptenModule)
+    ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   }
 
   const filePath = `${mountpoint}/${input.name}`
@@ -125,17 +148,17 @@ async function writeMesh (input) {
   writeMeshEmscriptenFSFile(ioModule,
     { useCompression: input.useCompression, binaryFileType: input.binaryFileType },
     input.mesh, filePath)
-  const writtenFile = ioModule.readFile(filePath, { encoding: 'binary' })
+  const writtenFile = ioModule.readFile(filePath, { encoding: 'binary' }) as Uint8Array
   ioModule.unlink(filePath)
 
   return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }
 
-registerWebworker(async function (input) {
+registerWebworker(async function (input: ReadMeshInput | WriteMeshInput) {
   if (input.operation === 'readMesh') {
-    return readMesh(input)
+    return readMesh(input as ReadMeshInput)
   } else if (input.operation === 'writeMesh') {
-    return writeMesh(input)
+    return writeMesh(input as WriteMeshInput)
   } else {
     throw new Error('Unknown worker operation')
   }
