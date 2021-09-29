@@ -1,31 +1,72 @@
-import registerWebworker from 'webworker-promise/lib/register'
+import registerWebworker from 'webworker-promise/lib/register.js'
 
-import mimeToIO from '../MimeToImageIO'
-import getFileExtension from '../getFileExtension'
-import extensionToIO from '../extensionToImageIO'
-import ImageIOIndex from '../ImageIOIndex'
-import loadEmscriptenModule from '../loadEmscriptenModuleBrowser'
+import mimeToIO from '../io/internal/MimeToImageIO.js'
+import getFileExtension from '../io/getFileExtension.js'
+import extensionToIO from '../io/internal/extensionToImageIO.js'
+import ImageIOIndex from '../io/internal/ImageIOIndex.js'
+import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleBrowser.js'
 
-import readImageEmscriptenFSFile from '../readImageEmscriptenFSFile'
-import writeImageEmscriptenFSFile from '../writeImageEmscriptenFSFile'
-import readImageEmscriptenFSDICOMFileSeries from '../readImageEmscriptenFSDICOMFileSeries'
-import readDICOMTagsEmscriptenFSFile from '../readDICOMTagsEmscriptenFSFile'
+import readImageEmscriptenFSFile from '../io/internal/readImageEmscriptenFSFile.js'
+import writeImageEmscriptenFSFile from '../io/internal/writeImageEmscriptenFSFile.js'
+import readImageEmscriptenFSDICOMFileSeries from '../io/internal/readImageEmscriptenFSDICOMFileSeries.js'
+import readDICOMTagsEmscriptenFSFile from '../io/internal/readDICOMTagsEmscriptenFSFile.js'
+import DICOMImageSeriesReaderEmscriptenModule from '../io/internal/DICOMImageSeriesReaderEmscriptenModule.js'
+import DICOMTagsReaderEmscriptenModule from '../io/internal/DICOMTagsReaderEmscriptenModule.js'
+import ImageIOBaseEmscriptenModule from '../io/internal/ImageIOBaseEmscriptenModule.js'
+
+import Image from '../core/Image.js'
+
+interface FileDescription {
+  name: string
+  type: string
+  data: ArrayBuffer
+}
+
+interface Input {
+  operation: 'readImage' | 'writeImage' | 'readDICOMImageSeries' | 'readDICOMTags'
+  config: { itkModulesPath: string }
+}
+
+interface ReadImageInput extends Input {
+  name: string
+  type: string
+  data: ArrayBuffer
+}
+
+interface WriteImageInput extends Input {
+  name: string
+  type: string
+  image: Image
+  useCompression: boolean
+}
+
+interface ReadDICOMImageSeriesInput extends Input {
+  singleSortedSeries: boolean
+  fileDescriptions: FileDescription[]
+}
+
+interface ReadDICOMTagsInput extends Input {
+  name: string
+  type: string
+  data: ArrayBuffer
+  tags: string[]
+}
 
 // To cache loaded io modules
-let ioToModule = {}
-let seriesReaderModule = null
-let tagReaderModule = null
+const ioToModule: Map<string,ImageIOBaseEmscriptenModule> = new Map()
+let seriesReaderModule: DICOMImageSeriesReaderEmscriptenModule | null = null
+let tagReaderModule: DICOMTagsReaderEmscriptenModule | null = null
 const haveSharedArrayBuffer = typeof self.SharedArrayBuffer === 'function' // eslint-disable-line
 
-function * availableIOModules (input) {
+function * availableIOModules (input: Input) {
   for (let idx = 0; idx < ImageIOIndex.length; idx++) {
     const trialIO = ImageIOIndex[idx]
-    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', trialIO)
+    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', trialIO, false) as ImageIOBaseEmscriptenModule
     yield ioModule
   }
 }
 
-async function readImage (input) {
+async function readImage (input: ReadImageInput) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -46,7 +87,7 @@ async function readImage (input) {
       if (imageIO.CanReadFile(filePath)) {
         io = trialIO
         mod.unlink(filePath)
-        ioToModule[io] = mod
+        ioToModule.set(io, mod)
         break
       }
       mod.unlink(filePath)
@@ -57,31 +98,33 @@ async function readImage (input) {
     }
   }
 
-  function inputToResponse (ioModule) {
+  function inputToResponse (ioModule: ImageIOBaseEmscriptenModule) {
     ioModule.mkdirs(mountpoint)
     const filePath = `${mountpoint}/${input.name}`
     ioModule.writeFile(filePath, new Uint8Array(input.data))
     const image = readImageEmscriptenFSFile(ioModule, filePath)
     ioModule.unlink(filePath)
 
+    // @ts-ignore: error TS2531: Object is possibly 'null'.
     if (haveSharedArrayBuffer && image.data.buffer instanceof SharedArrayBuffer) { // eslint-disable-line
       return new registerWebworker.TransferableResponse(image, [])
     } else {
+      // @ts-ignore: error TS2531: Object is possibly 'null'.
       return new registerWebworker.TransferableResponse(image, [image.data.buffer])
     }
   }
 
-  if (io in ioToModule) {
-    const ioModule = ioToModule[io]
+  if (ioToModule.has(io as string)) {
+    const ioModule = ioToModule.get(io as string) as ImageIOBaseEmscriptenModule
     return inputToResponse(ioModule)
   } else {
-    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io)
-    ioToModule[io] = ioModule
+    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io as string, false) as ImageIOBaseEmscriptenModule
+    ioToModule.set(io as string, ioModule)
     return inputToResponse(ioModule)
   }
 }
 
-async function writeImage (input) {
+async function writeImage(input: WriteImageInput) {
   const extension = getFileExtension(input.name)
   const mountpoint = '/work'
 
@@ -91,7 +134,9 @@ async function writeImage (input) {
   } else if (extensionToIO.has(extension)) {
     io = extensionToIO.get(extension)
   } else {
+    let idx = 0
     for (const ioModule of availableIOModules(input)) {
+      const trialIO = ImageIOIndex[idx]
       const imageIO = new ioModule.ITKImageIO()
       const filePath = mountpoint + '/' + input.name
       imageIO.SetFileName(filePath)
@@ -99,25 +144,26 @@ async function writeImage (input) {
         io = trialIO
         break
       }
+      idx++
     }
   }
   if (io === null) {
-    ioToModule = {}
+    ioToModule.clear()
     throw new Error('Could not find IO for: ' + input.name)
   }
 
   let ioModule = null
-  if (io in ioToModule) {
-    ioModule = ioToModule[io]
+  if (ioToModule.has(io as string)) {
+    ioModule = ioToModule.get(io as string) as ImageIOBaseEmscriptenModule
   } else {
-    ioToModule[io] = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io)
-    ioModule = ioToModule[io]
+    ioToModule.set(io as string, loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io as string, false) as ImageIOBaseEmscriptenModule)
+    ioModule = ioToModule.get(io as string) as ImageIOBaseEmscriptenModule
   }
 
   const filePath = mountpoint + '/' + input.name
   ioModule.mkdirs(mountpoint)
   writeImageEmscriptenFSFile(ioModule, input.useCompression, input.image, filePath)
-  const writtenFile = ioModule.readFile(filePath, { encoding: 'binary' })
+  const writtenFile = ioModule.readFile(filePath, { encoding: 'binary' }) as Uint8Array
   ioModule.unlink(filePath)
 
   if (haveSharedArrayBuffer && writtenFile.buffer instanceof SharedArrayBuffer) { // eslint-disable-line
@@ -127,10 +173,10 @@ async function writeImage (input) {
   }
 }
 
-async function readDICOMImageSeries (input) {
+async function readDICOMImageSeries(input: ReadDICOMImageSeriesInput) {
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
   if (!seriesReaderModule) {
-    seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', seriesReader)
+    seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', seriesReader, false) as DICOMImageSeriesReaderEmscriptenModule
   }
 
   const mountpoint = '/work'
@@ -147,17 +193,19 @@ async function readDICOMImageSeries (input) {
     seriesReaderModule.unlink(filePaths[ii])
   }
 
+  // @ts-ignore: error TS2531: Object is possibly 'null'.
   if (haveSharedArrayBuffer && image.data.buffer instanceof SharedArrayBuffer) { // eslint-disable-line
     return new registerWebworker.TransferableResponse(image, [])
   } else {
+    // @ts-ignore: error TS2531: Object is possibly 'null'.
     return new registerWebworker.TransferableResponse(image, [image.data.buffer])
   }
 }
 
-async function readDICOMTags (input) {
+async function readDICOMTags(input: ReadDICOMTagsInput) {
   const tagReader = 'itkDICOMTagReaderJSBinding'
   if (!tagReaderModule) {
-    tagReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', tagReader)
+    tagReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', tagReader, false) as DICOMTagsReaderEmscriptenModule
   }
 
   const mountpoint = '/work'
@@ -170,15 +218,15 @@ async function readDICOMTags (input) {
   return new registerWebworker.TransferableResponse(tagValues, [])
 }
 
-registerWebworker(async function (input) {
+registerWebworker(async function (input: ReadImageInput | WriteImageInput | ReadDICOMImageSeriesInput | ReadDICOMTagsInput) {
   if (input.operation === 'readImage') {
-    return readImage(input)
+    return readImage(input as ReadImageInput)
   } else if (input.operation === 'writeImage') {
-    return writeImage(input)
+    return writeImage(input as WriteImageInput)
   } else if (input.operation === 'readDICOMImageSeries') {
-    return readDICOMImageSeries(input)
+    return readDICOMImageSeries(input as ReadDICOMImageSeriesInput)
   } else if (input.operation === 'readDICOMTags') {
-    return readDICOMTags(input)
+    return readDICOMTags(input as ReadDICOMTagsInput)
   } else {
     throw new Error('Unknown worker operation')
   }

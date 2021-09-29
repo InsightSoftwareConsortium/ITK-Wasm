@@ -9,8 +9,8 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "typeRoots": ["./node_modules/@types", "./src/vendor/types"]
+    "typeRoots": ["./node_modules/@types", "./src/vendor-types"]
   },
   "include": ["./src/**/*"],
-  "exclude": ["./src/core/internal/loadEmscriptenModuleBrowser.ts"]
+  "exclude": ["./src/core/internal/loadEmscriptenModuleBrowser.ts", "./src/web-workers/*"]
 }

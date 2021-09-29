@@ -10,7 +10,7 @@ function createWebworkerPromise(name: string, existingWorker: Worker | null) {
     return Promise.resolve({ webworkerPromise, worker: existingWorker })
   }
 
-  const webWorkerUrl = `${config.itkModulesPath}/WebWorkers/${name}.worker.js`
+  const webWorkerUrl = `${config.itkModulesPath}/web-workers/${name}.worker.js`
   if (webWorkerUrl.startsWith('http')) {
     return axios.get(webWorkerUrl, { responseType: 'blob' })
       .then(function (response) {

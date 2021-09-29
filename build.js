@@ -5,7 +5,6 @@ const path = require('path')
 const spawnSync = require('child_process').spawnSync
 const glob = require('glob')
 const asyncMod = require('async')
-const ramda = require('ramda')
 
 const program = require('commander')
 
@@ -173,90 +172,10 @@ if (program.copySources) {
     callback(null, result)
   }
 
-  const browserify = require('browserify')
-  const browserifyBuild = ramda.curry(function (uglify, outputDir, es6File, callback) {
-    const basename = path.basename(es6File)
-    const output = path.join(outputDir, basename)
-    const bundler = browserify(es6File)
-    if (uglify) {
-      bundler.transform({ global: true }, 'uglifyify')
-      bundler
-        .transform('babelify', { presets: ['@babel/preset-env'], plugins: ['@babel/plugin-transform-runtime'] })
-        .bundle()
-        .pipe(fs.createWriteStream(output))
-    } else {
-      bundler
-        .transform('babelify', { presets: ['@babel/preset-env'], plugins: ['@babel/plugin-transform-runtime'] })
-        .bundle()
-        .pipe(fs.createWriteStream(output))
-    }
-    callback(null, basename)
-  })
-  const browserifyWebWorkerBuildParallel = function (callback) {
-    console.log('Converting WebWorker sources...')
-    const es6Files = glob.sync(path.join('src', 'WebWorkers', '*.js'))
-    const outputDir = path.join('dist', 'WebWorkers')
-    const builder = browserifyBuild(false, outputDir)
-    const result = asyncMod.map(es6Files, builder)
-    callback(null, result)
-  }
-
-  const babelOptionsPresetEnv = {
-    presets: [
-      ['@babel/preset-env', { modules: false }]
-    ],
-    plugins: [
-      ['@babel/plugin-transform-runtime', {
-        regenerator: true
-      }]
-    ]
-  }
-  const babelOptionsCJS = {
-    plugins: [
-      '@babel/plugin-transform-modules-commonjs'
-    ]
-  }
-  const babel = require('@babel/core')
-  const babelBuild = ramda.curry(function (outputDir, es6File, callback) {
-    babel.transformFile(es6File, babelOptionsPresetEnv, function (err, result) {
-      if (err) {
-        console.error(err)
-        process.exit(1)
-      }
-      const basename = path.basename(es6File)
-      const output = path.join(outputDir, basename)
-      const outputFD = fs.openSync(output, 'w')
-      fs.writeSync(outputFD, result.code)
-      fs.closeSync(outputFD)
-    })
-    babel.transformFile(es6File, babelOptionsCJS, function (err, result) {
-      if (err) {
-        console.error(err)
-        process.exit(1)
-      }
-      const basename = path.basename(es6File, '.js')
-      const output = path.join(outputDir, `${basename}.cjs`)
-      const outputFD = fs.openSync(output, 'w')
-      fs.writeSync(outputFD, result.code)
-      fs.closeSync(outputFD)
-    })
-    callback(null, es6File)
-  })
-  const babelBuildParallel = function (callback) {
-    console.log('Converting main sources...')
-    const es6Files = glob.sync(path.join('src', '*.js'))
-    const outputDir = 'dist'
-    const builder = babelBuild(outputDir)
-    const result = asyncMod.map(es6Files, builder)
-    callback(null, result)
-  }
-
   asyncMod.parallel([
     buildImageIOsParallel,
     buildMeshIOsParallel,
     buildPolyDataIOsParallel,
-    babelBuildParallel,
-    browserifyWebWorkerBuildParallel
   ])
 } // program.copySources
 
@@ -290,7 +209,7 @@ if (program.buildPipelines) {
     path.join(__dirname, 'test', 'MeshReadWritePipeline'),
     path.join(__dirname, 'test', 'WriteVTKPolyDataPipeline'),
     path.join(__dirname, 'test', 'CLPExample1'),
-    path.join(__dirname, 'src', 'Pipelines', 'MeshToPolyData')
+    path.join(__dirname, 'src', 'pipeline', 'mesh-to-polydata')
   ]
   try {
     fs.mkdirSync(path.join(__dirname, 'dist', 'Pipelines'))
