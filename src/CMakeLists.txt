@@ -59,13 +59,13 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
       set(exception_catching " -s DISABLE_EXCEPTION_CATCHING=0")
     endif()
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s WASM=0 -lnodefs.js ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+      PROPERTY LINK_FLAGS " -s WASM=0 -lnodefs.js ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
       )
     set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSImageIOPre${imageio}.js)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js.in
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSImageIOPre.js.in
       ${pre_js} @ONLY)
     set_property(TARGET ${wasm_target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lworkerfs.js ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lworkerfs.js ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
@@ -77,7 +77,7 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
       )
     set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
-      ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
+      ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
       )
     _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
     _target_link_libraries(${wasm_target} LINK_PUBLIC ${ITK_LIBRARIES})
@@ -140,13 +140,13 @@ foreach(dicom_io_module
     PROPERTY LINK_FLAGS " --bind"
     )
   set_property(TARGET ${target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s WASM=0 -lnodefs.js -s FORCE_FILESYSTEM=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+    PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s WASM=0 -lnodefs.js -s FORCE_FILESYSTEM=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
     )
   set(pre_js "${CMAKE_CURRENT_BINARY_DIR}/itkJSImageIOPre${dicom_io_module}.js")
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSImageIOPre.js.in
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSImageIOPre.js.in
     ${pre_js} @ONLY)
   set_property(TARGET ${wasm_target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=${target} -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lworkerfs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+    PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=${target} -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lworkerfs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
     )
   set_property(TARGET ${target}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
@@ -158,7 +158,7 @@ foreach(dicom_io_module
     )
   set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
     PROPERTY OBJECT_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
+    ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
     )
   _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
   _target_link_libraries(${wasm_target} LINK_PUBLIC ${ITK_LIBRARIES})
@@ -199,13 +199,13 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
       PROPERTY LINK_FLAGS " --bind"
       )
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s WASM=0 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSMeshIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+      PROPERTY LINK_FLAGS " -s WASM=0 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSMeshIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
       )
     set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSMeshIOPre${meshio}.js)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSMeshIOPre.js.in
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSMeshIOPre.js.in
       ${pre_js} @ONLY)
     set_property(TARGET ${wasm_target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${meshio}JSBinding -s MODULARIZE=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=0 -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${meshio}JSBinding -s MODULARIZE=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=0 -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
@@ -217,7 +217,7 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
       )
     set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
-      ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
+      ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
       )
     _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
     _target_link_libraries(${wasm_target} LINK_PUBLIC ${ITK_LIBRARIES})
@@ -238,13 +238,13 @@ if(VTK_FOUND)
   _add_executable(${target} io/internal/bindings/${target}.cxx)
   _add_executable(${wasm_target} io/internal/bindings/${target}.cxx)
   set_property(TARGET ${target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' -s WASM=0 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPipelinePre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+    PROPERTY LINK_FLAGS " -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' -s WASM=0 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPipelinePre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
     )
   set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSPolyDataIOPre${io_pipeline}.js)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPolyDataIOPre.js.in
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPolyDataIOPre.js.in
     ${pre_js} @ONLY)
   set_property(TARGET ${wasm_target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORT_NAME=${io_pipeline} -s EXPORTED_FUNCTIONS='[\"_main\"]' -s MODULARIZE=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=0 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js"
+    PROPERTY LINK_FLAGS " -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORT_NAME=${io_pipeline} -s EXPORTED_FUNCTIONS='[\"_main\"]' -s MODULARIZE=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=0 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
     )
   set_property(TARGET ${target}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
@@ -256,7 +256,7 @@ if(VTK_FOUND)
     )
   set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
     PROPERTY OBJECT_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/EmscriptenModule/itkJSPost.js
+    ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
     )
   _target_link_libraries(${target} LINK_PUBLIC ${VTK_LIBRARIES})
   _target_link_libraries(${wasm_target} LINK_PUBLIC ${VTK_LIBRARIES})

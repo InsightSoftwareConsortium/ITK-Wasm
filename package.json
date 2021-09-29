@@ -100,7 +100,7 @@
       "src/loadEmscriptenModuleBrowser.js",
       "src/index.js",
       "src/itk-js-cli.js",
-      "src/EmscriptenModule/*",
+      "src/emscripten-module/*",
       "itkJSImageIOPost.js",
       "test/Browser/tests.js",
       "test/config/itkConfigTest.js",
