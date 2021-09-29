@@ -10,7 +10,9 @@ import PipelineInput from '../PipelineInput.js'
 import PipelineOutput from '../PipelineOutput.js'
 
 let haveSharedArrayBuffer = false
+// @ts-ignore: error TS2304: Cannot find name 'window'.
 if (typeof window !== 'undefined') {
+  // @ts-ignore: error TS2304: Cannot find name 'window'.
   haveSharedArrayBuffer = typeof window.SharedArrayBuffer === 'function'
 } else {
   haveSharedArrayBuffer = typeof global.SharedArrayBuffer === 'function'
@@ -18,6 +20,7 @@ if (typeof window !== 'undefined') {
 
 function typedArrayForBuffer(typedArrayType: string, buffer: ArrayBuffer) {
   let TypedArrayFunction = null
+  // @ts-ignore: error TS2304: Cannot find name 'window'.
   if (typeof window !== 'undefined') {
     // browser
     // @ts-ignore: erorr TS7015: Element implicitly has an 'any' type because index

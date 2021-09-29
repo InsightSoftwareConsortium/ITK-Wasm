@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./built",
+    "outDir": "./dist",
     "allowSyntheticDefaultImports": true,
     "allowJs": false,
     "moduleResolution": "node",
