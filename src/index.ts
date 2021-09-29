@@ -17,12 +17,20 @@ export { default as vtkPolyData } from "./core/vtkPolyData.js"
 
 export { default as bufferToTypedArray } from "./core/bufferToTypedArray.js"
 export { default as copyImage } from "./core/copyImage.js"
+export { default as stackImages } from "./core/stackImages.js"
 export { default as imageSharedBufferOrCopy } from "./core/imageSharedBufferOrCopy.js"
+
+export { default as WorkerPool } from "./core/WorkerPool.js"
+export { default as WorkerPoolFunction } from "./core/WorkerPoolFunction.js"
+export { default as WorkerPoolProgressCallback } from "./core/WorkerPoolProgressCallback.js"
+export { default as WorkerPoolRunTasksResult } from "./core/WorkerPoolRunTasksResult.js"
 
 
 export { default as ReadImageResult } from "./io/ReadImageResult.js"
 export { default as ReadMeshResult } from "./io/ReadMeshResult.js"
 export { default as ReadPolyDataResult } from "./io/ReadPolyDataResult.js"
+
+export { default as WriteArrayBufferResult } from "./io/WriteArrayBufferResult.js"
 
 export { default as readImageArrayBuffer } from "./io/readImageArrayBuffer.js"
 export { default as readMeshArrayBuffer } from "./io/readMeshArrayBuffer.js"
@@ -36,9 +44,28 @@ export { default as readBlob } from "./io/readBlob.js"
 
 export { default as readImageFile } from "./io/readImageFile.js"
 export { default as readImageFileSeries } from "./io/readImageFileSeries.js"
+export { default as ReadImageFileSeriesResult } from "./io/ReadImageFileSeriesResult.js"
 export { default as readImageHTTP } from "./io/readImageHTTP.js"
 
 export { default as readImageLocalDICOMFileSeries } from "./io/readImageLocalDICOMFileSeries.js"
+export { default as readImageLocalDICOMFileSeriesSync } from "./io/readImageLocalDICOMFileSeriesSync.js"
+
+export { default as readImageLocalFile } from "./io/readImageLocalFile.js"
+export { default as readImageLocalFileSync } from "./io/readImageLocalFileSync.js"
+export { default as readMeshLocalFile } from "./io/readMeshLocalFile.js"
+export { default as readMeshLocalFileSync } from "./io/readMeshLocalFileSync.js"
+export { default as readPolyDataLocalFile } from "./io/readPolyDataLocalFile.js"
+export { default as readPolyDataLocalFileSync } from "./io/readPolyDataLocalFileSync.js"
+
+export { default as readDICOMTags } from "./io/readDICOMTags.js"
+export { default as ReadDICOMTagsResult } from "./io/ReadDICOMTagsResult.js"
 
 export { default as getFileExtension } from "./io/getFileExtension.js"
 
+
+export { default as PipelineInput } from "./pipeline/PipelineInput.js"
+export { default as PipelineOutput } from "./pipeline/PipelineOutput.js"
+export { default as runPipelineBrowser } from "./pipeline/runPipelineBrowser.js"
+export { default as runPipelineNode } from "./pipeline/runPipelineNode.js"
+export { default as runPipelineNodeSync } from "./pipeline/runPipelineNodeSync.js"
+export { default as RunPipelineResult } from "./pipeline/RunPipelineResult.js"
