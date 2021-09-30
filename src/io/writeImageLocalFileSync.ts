@@ -22,7 +22,7 @@ import Image from '../core/Image.js'
  * @return null
  */
 function writeImageLocalFileSync(useCompression: boolean, image: Image, filePath: string): null {
-  const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
+  const imageIOsPath = path.resolve(__dirname, 'image-io')
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)

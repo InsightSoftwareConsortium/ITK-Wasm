@@ -14,7 +14,7 @@ import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 
 function readPolyDataLocalFile(filePath: string): Promise<PolyData> {
   return new Promise(function (resolve, reject) {
-    const polyDataIOsPath = path.resolve(__dirname, 'PolyDataIOs')
+    const polyDataIOsPath = path.resolve(__dirname, 'polydata-io')
     const absoluteFilePath = path.resolve(filePath)
     const filePathBasename = path.basename(filePath)
     try {

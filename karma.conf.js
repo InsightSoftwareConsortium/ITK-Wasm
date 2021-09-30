@@ -25,10 +25,10 @@ module.exports = function init (config) {
     frameworks: ['tap', 'webpack'],
     files: [
       './test/Browser/tests.js',
-      { pattern: './dist/ImageIOs/**', watched: true, served: true, included: false },
-      { pattern: './dist/MeshIOs/**', watched: true, served: true, included: false },
-      { pattern: './dist/PolyDataIOs/**', watched: true, served: true, included: false },
-      { pattern: './dist/WebWorkers/**', watched: true, served: true, included: false },
+      { pattern: './dist/image-io/**', watched: true, served: true, included: false },
+      { pattern: './dist/mesh-io/**', watched: true, served: true, included: false },
+      { pattern: './dist/polydata-io/**', watched: true, served: true, included: false },
+      { pattern: './dist/web-workers/**', watched: true, served: true, included: false },
       { pattern: './dist/Pipelines/**', watched: true, served: true, included: false },
       { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false }
     ],

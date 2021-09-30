@@ -13,7 +13,7 @@ import Image from '../core/Image.js'
  * sorted series.
  */
 function readImageLocalDICOMFileSeriesSync(fileNames: string[], singleSortedSeries: boolean = false): Image {
-  const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
+  const imageIOsPath = path.resolve(__dirname, 'image-io')
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
   const seriesReaderPath = path.join(imageIOsPath, seriesReader)
   const seriesReaderModule = loadEmscriptenModule(seriesReaderPath) as DICOMImageSeriesReaderEmscriptenModule

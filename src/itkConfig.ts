@@ -1,10 +1,10 @@
 //
 // itkModulesPath is the path that contains the directories
 //
-// - WebWorkers/
-// - ImageIOs/
-// - MeshIOs/
-// - PolyDataIOs/
+// - web-workers/
+// - image-io/
+// - mesh-io/
+// - polydata-io/
 //
 const itkConfig = {
   itkModulesPath: 'itk'

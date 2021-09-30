@@ -13,7 +13,7 @@
 // If isAbsoluteURL is `true`, then itkModulesPath is not used, and
 // pipelinePath is assumed to be an absoluteURL.
 //
-// modulesDirectory is one of "ImageIOs", "MeshIOs", or "Pipelines"
+// modulesDirectory is one of "image-io", "mesh-io", or "pipelines"
 //
 // pipelinePath is the file name of the emscripten module without the ".js"
 // extension

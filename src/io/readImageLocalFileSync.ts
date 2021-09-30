@@ -18,7 +18,7 @@ import ImageIOBaseEmscriptenModule from './internal/ImageIOBaseEmscriptenModule.
  * @param: filePath path to the file on the local filesystem.
  */
 function readImageLocalFileSync(filePath: string): Image {
-  const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
+  const imageIOsPath = path.resolve(__dirname, 'image-io')
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)

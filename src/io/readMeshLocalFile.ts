@@ -14,7 +14,7 @@ import MeshIOBaseEmscriptenModule from './internal/MeshIOBaseEmscriptenModule.js
 
 function readMeshLocalFile(filePath: string): Promise<Mesh> {
   return new Promise(function (resolve, reject) {
-    const meshIOsPath = path.resolve(__dirname, 'MeshIOs')
+    const meshIOsPath = path.resolve(__dirname, 'mesh-io')
     const absoluteFilePath = path.resolve(filePath)
     try {
       const mimeType = mime.lookup(absoluteFilePath)

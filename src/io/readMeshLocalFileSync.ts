@@ -13,7 +13,7 @@ import readMeshEmscriptenFSFile from './internal/readMeshEmscriptenFSFile.js'
 import MeshIOBaseEmscriptenModule from './internal/MeshIOBaseEmscriptenModule.js'
 
 function readMeshLocalFileSync(filePath: string): Mesh {
-  const meshIOsPath = path.resolve(__dirname, 'MeshIOs')
+  const meshIOsPath = path.resolve(__dirname, 'mesh-io')
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)

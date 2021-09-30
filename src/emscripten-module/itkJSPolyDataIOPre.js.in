@@ -3,7 +3,7 @@ Module['locateFile'] = function(fileName, prefix) {
     if (typeof @target@.moduleScriptDir !== 'undefined') {
       return @target@.moduleScriptDir + '/@wasm_target@.wasm'
     }
-    return prefix + '../PolyDataIOs/@wasm_target@.wasm'
+    return prefix + '../polydata-io/@wasm_target@.wasm'
   }
   return prefix + fileName
 }

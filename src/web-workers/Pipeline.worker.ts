@@ -139,9 +139,9 @@ async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: strin
 registerWebworker(async function (input: RunPipelineInput) {
   let pipelineModule = null
   if (input.operation === 'runPipeline') {
-    pipelineModule = loadPipelineModule('Pipelines', input.pipelinePath, input.config, input.isAbsoluteURL) as PipelineEmscriptenModule
+    pipelineModule = loadPipelineModule('pipelines', input.pipelinePath, input.config, input.isAbsoluteURL) as PipelineEmscriptenModule
   } else if (input.operation === 'runPolyDataIOPipeline') {
-    pipelineModule = loadPipelineModule('PolyDataIOs', input.pipelinePath, input.config, input.isAbsoluteURL) as PipelineEmscriptenModule
+    pipelineModule = loadPipelineModule('polydata-io', input.pipelinePath, input.config, input.isAbsoluteURL) as PipelineEmscriptenModule
   } else {
     throw new Error('Unknown worker operation')
   }

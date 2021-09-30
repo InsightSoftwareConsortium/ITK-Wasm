@@ -61,7 +61,7 @@ const haveSharedArrayBuffer = typeof self.SharedArrayBuffer === 'function' // es
 function * availableIOModules (input: Input) {
   for (let idx = 0; idx < ImageIOIndex.length; idx++) {
     const trialIO = ImageIOIndex[idx]
-    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', trialIO, false) as ImageIOBaseEmscriptenModule
+    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'image-io', trialIO, false) as ImageIOBaseEmscriptenModule
     yield ioModule
   }
 }
@@ -118,7 +118,7 @@ async function readImage (input: ReadImageInput) {
     const ioModule = ioToModule.get(io as string) as ImageIOBaseEmscriptenModule
     return inputToResponse(ioModule)
   } else {
-    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io as string, false) as ImageIOBaseEmscriptenModule
+    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'image-io', io as string, false) as ImageIOBaseEmscriptenModule
     ioToModule.set(io as string, ioModule)
     return inputToResponse(ioModule)
   }
@@ -156,7 +156,7 @@ async function writeImage(input: WriteImageInput) {
   if (ioToModule.has(io as string)) {
     ioModule = ioToModule.get(io as string) as ImageIOBaseEmscriptenModule
   } else {
-    ioToModule.set(io as string, loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', io as string, false) as ImageIOBaseEmscriptenModule)
+    ioToModule.set(io as string, loadEmscriptenModule(input.config.itkModulesPath, 'image-io', io as string, false) as ImageIOBaseEmscriptenModule)
     ioModule = ioToModule.get(io as string) as ImageIOBaseEmscriptenModule
   }
 
@@ -176,7 +176,7 @@ async function writeImage(input: WriteImageInput) {
 async function readDICOMImageSeries(input: ReadDICOMImageSeriesInput) {
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
   if (!seriesReaderModule) {
-    seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', seriesReader, false) as DICOMImageSeriesReaderEmscriptenModule
+    seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'image-io', seriesReader, false) as DICOMImageSeriesReaderEmscriptenModule
   }
 
   const mountpoint = '/work'
@@ -205,7 +205,7 @@ async function readDICOMImageSeries(input: ReadDICOMImageSeriesInput) {
 async function readDICOMTags(input: ReadDICOMTagsInput) {
   const tagReader = 'itkDICOMTagReaderJSBinding'
   if (!tagReaderModule) {
-    tagReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'ImageIOs', tagReader, false) as DICOMTagsReaderEmscriptenModule
+    tagReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'image-io', tagReader, false) as DICOMTagsReaderEmscriptenModule
   }
 
   const mountpoint = '/work'

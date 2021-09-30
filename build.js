@@ -112,43 +112,43 @@ if (program.copySources) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'ImageIOs'))
+    fs.mkdirSync(path.join('dist', 'image-io'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'MeshIOs'))
+    fs.mkdirSync(path.join('dist', 'mesh-io'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'PolyDataIOs'))
+    fs.mkdirSync(path.join('dist', 'polydata-io'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'WebWorkers'))
+    fs.mkdirSync(path.join('dist', 'web-workers'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
-  let imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
-  imageIOFiles = imageIOFiles.concat(glob.sync(path.join('build', 'ImageIOs', '*.wasm')))
+  let imageIOFiles = glob.sync(path.join('build', 'image-io', '*.js'))
+  imageIOFiles = imageIOFiles.concat(glob.sync(path.join('build', 'image-io', '*.wasm')))
   const copyImageIOModules = function (imageIOFile, callback) {
     const io = path.basename(imageIOFile)
-    const output = path.join('dist', 'ImageIOs', io)
+    const output = path.join('dist', 'image-io', io)
     fs.copySync(imageIOFile, output)
     callback(null, io)
   }
   const buildImageIOsParallel = function (callback) {
-    console.log('Copying ImageIO modules...')
+    console.log('Copying image-io modules...')
     const result = asyncMod.map(imageIOFiles, copyImageIOModules)
     callback(null, result)
   }
-  let meshIOFiles = glob.sync(path.join('build', 'MeshIOs', '*.js'))
-  meshIOFiles = meshIOFiles.concat(glob.sync(path.join('build', 'MeshIOs', '*.wasm')))
+  let meshIOFiles = glob.sync(path.join('build', 'mesh-io', '*.js'))
+  meshIOFiles = meshIOFiles.concat(glob.sync(path.join('build', 'mesh-io', '*.wasm')))
   const copyMeshIOModules = function (meshIOFile, callback) {
     const io = path.basename(meshIOFile)
-    const output = path.join('dist', 'MeshIOs', io)
+    const output = path.join('dist', 'mesh-io', io)
     fs.copySync(meshIOFile, output)
     callback(null, io)
   }
@@ -158,16 +158,16 @@ if (program.copySources) {
     callback(null, result)
   }
 
-  let polyDataIOFiles = glob.sync(path.join('build', 'PolyDataIOs', '*.js'))
-  polyDataIOFiles = polyDataIOFiles.concat(glob.sync(path.join('build', 'PolyDataIOs', '*.wasm')))
+  let polyDataIOFiles = glob.sync(path.join('build', 'polydata-io', '*.js'))
+  polyDataIOFiles = polyDataIOFiles.concat(glob.sync(path.join('build', 'polydata-io', '*.wasm')))
   const copyPolyDataIOModules = function (polyDataIOFile, callback) {
     const io = path.basename(polyDataIOFile)
-    const output = path.join('dist', 'PolyDataIOs', io)
+    const output = path.join('dist', 'polydata-io', io)
     fs.copySync(polyDataIOFile, output)
     callback(null, io)
   }
   const buildPolyDataIOsParallel = function (callback) {
-    console.log('Copying PolyDataIO modules...')
+    console.log('Copying polydata-io modules...')
     const result = asyncMod.map(polyDataIOFiles, copyPolyDataIOModules)
     callback(null, result)
   }

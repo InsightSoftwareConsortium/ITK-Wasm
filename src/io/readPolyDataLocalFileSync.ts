@@ -13,7 +13,7 @@ import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js
 import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 
 function readPolyDataLocalFileSync(filePath: string): PolyData {
-  const polyDataIOsPath = path.resolve(__dirname, 'PolyDataIOs')
+  const polyDataIOsPath = path.resolve(__dirname, 'polydata-io')
   const absoluteFilePath = path.resolve(filePath)
   const filePathBasename = path.basename(filePath)
   const mimeType = mime.lookup(absoluteFilePath)

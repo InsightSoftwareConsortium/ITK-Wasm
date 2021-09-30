@@ -19,7 +19,7 @@ import ImageIOBaseEmscriptenModule from './internal/ImageIOBaseEmscriptenModule.
  */
 function readImageLocalFile(filePath: string): Promise<Image> {
   return new Promise(function (resolve, reject) {
-    const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
+    const imageIOsPath = path.resolve(__dirname, 'image-io')
     const absoluteFilePath = path.resolve(filePath)
     try {
       const mimeType = mime.lookup(absoluteFilePath)

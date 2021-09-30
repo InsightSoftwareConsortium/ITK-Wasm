@@ -13,3 +13,6 @@ build.js
 CMakeLists.txt
 CTestConfig.cmake
 itk-module.cmake
+dist/image-io/
+dist/mesh-io/
+dist/polydata-io/

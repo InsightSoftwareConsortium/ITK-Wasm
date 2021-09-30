@@ -51,7 +51,7 @@ async function readMesh (input: ReadMeshInput) {
       if (ioToModule.has(trialIO)) {
         ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       } else {
-        ioToModule.set(trialIO, loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO, false) as MeshIOBaseEmscriptenModule)
+        ioToModule.set(trialIO, loadEmscriptenModule(input.config.itkModulesPath, 'mesh-io', trialIO, false) as MeshIOBaseEmscriptenModule)
         ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       }
       const meshIO = new ioModule.ITKMeshIO()
@@ -76,7 +76,7 @@ async function readMesh (input: ReadMeshInput) {
   if (ioToModule.has(io as string)) {
     ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   } else {
-    ioToModule.set(io as string, loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io as string, false) as MeshIOBaseEmscriptenModule)
+    ioToModule.set(io as string, loadEmscriptenModule(input.config.itkModulesPath, 'mesh-io', io as string, false) as MeshIOBaseEmscriptenModule)
     ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   }
 
@@ -118,7 +118,7 @@ async function writeMesh(input: WriteMeshInput) {
       if (ioToModule.has(trialIO)) {
         ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       } else {
-        ioToModule.set(trialIO, loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', trialIO, false) as MeshIOBaseEmscriptenModule)
+        ioToModule.set(trialIO, loadEmscriptenModule(input.config.itkModulesPath, 'mesh-io', trialIO, false) as MeshIOBaseEmscriptenModule)
         ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       }
       const meshIO = new ioModule.ITKMeshIO()
@@ -139,7 +139,7 @@ async function writeMesh(input: WriteMeshInput) {
   if (ioToModule.has(io as string)) {
     ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   } else {
-    ioToModule.set(io as string, loadEmscriptenModule(input.config.itkModulesPath, 'MeshIOs', io as string, false) as MeshIOBaseEmscriptenModule)
+    ioToModule.set(io as string, loadEmscriptenModule(input.config.itkModulesPath, 'mesh-io', io as string, false) as MeshIOBaseEmscriptenModule)
     ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   }
 

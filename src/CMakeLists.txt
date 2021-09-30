@@ -69,11 +69,11 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/ImageIOs
+      ${BridgeJavaScript_BINARY_DIR}/image-io
       )
     set_property(TARGET ${wasm_target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/ImageIOs
+      ${BridgeJavaScript_BINARY_DIR}/image-io
       )
     set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
@@ -150,11 +150,11 @@ foreach(dicom_io_module
     )
   set_property(TARGET ${target}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${BridgeJavaScript_BINARY_DIR}/ImageIOs
+    ${BridgeJavaScript_BINARY_DIR}/image-io
     )
   set_property(TARGET ${wasm_target}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${BridgeJavaScript_BINARY_DIR}/ImageIOs
+    ${BridgeJavaScript_BINARY_DIR}/image-io
     )
   set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
     PROPERTY OBJECT_DEPENDS
@@ -209,11 +209,11 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/MeshIOs
+      ${BridgeJavaScript_BINARY_DIR}/mesh-io
       )
     set_property(TARGET ${wasm_target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/MeshIOs
+      ${BridgeJavaScript_BINARY_DIR}/mesh-io
       )
     set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
@@ -248,11 +248,11 @@ if(VTK_FOUND)
     )
   set_property(TARGET ${target}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${BridgeJavaScript_BINARY_DIR}/PolyDataIOs
+    ${BridgeJavaScript_BINARY_DIR}/polydata-io
     )
   set_property(TARGET ${wasm_target}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${BridgeJavaScript_BINARY_DIR}/PolyDataIOs
+    ${BridgeJavaScript_BINARY_DIR}/polydata-io
     )
   set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
     PROPERTY OBJECT_DEPENDS

@@ -23,7 +23,7 @@ import Image from '../core/Image.js'
  */
 function writeImageLocalFile(useCompression: boolean, image: Image, filePath: string): Promise<null> {
   return new Promise(function (resolve, reject) {
-    const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
+    const imageIOsPath = path.resolve(__dirname, 'image-io')
     const absoluteFilePath = path.resolve(filePath)
     try {
       const mimeType = mime.lookup(absoluteFilePath)

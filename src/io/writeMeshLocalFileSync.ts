@@ -26,7 +26,7 @@ import Mesh from '../core/Mesh.js'
  * @return null
  */
 function writeMeshLocalFileSync(options: WriteMeshOptions, mesh: Mesh, filePath: string): null {
-  const meshIOsPath = path.resolve(__dirname, 'MeshIOs')
+  const meshIOsPath = path.resolve(__dirname, 'mesh-io')
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)

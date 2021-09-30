@@ -15,7 +15,7 @@ import Image from '../core/Image.js'
  */
 function readImageLocalDICOMFileSeries(fileNames: string[], singleSortedSeries: boolean = false): Promise<Image> {
   return new Promise(function (resolve, reject) {
-    const imageIOsPath = path.resolve(__dirname, 'ImageIOs')
+    const imageIOsPath = path.resolve(__dirname, 'image-io')
     const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
     try {
       const seriesReaderPath = path.join(imageIOsPath, seriesReader)
