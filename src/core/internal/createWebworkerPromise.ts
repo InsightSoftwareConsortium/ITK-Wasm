@@ -1,5 +1,4 @@
 import WebworkerPromise from 'webworker-promise'
-import axios from 'axios'
 
 import config from '../../itkConfig.js'
 
@@ -10,19 +9,7 @@ function createWebworkerPromise(name: string, existingWorker: Worker | null) {
     return Promise.resolve({ webworkerPromise, worker: existingWorker })
   }
 
-  const webWorkerUrl = `${config.itkModulesPath}/web-workers/${name}.worker.js`
-  if (webWorkerUrl.startsWith('http')) {
-    return axios.get(webWorkerUrl, { responseType: 'blob' })
-      .then(function (response) {
-        const worker = new window.Worker(
-          URL.createObjectURL(response.data)  // eslint-disable-line
-        )
-        const webworkerPromise = new WebworkerPromise(worker)
-        return { webworkerPromise, worker }
-      })
-  }
-
-  const worker = new window.Worker(webWorkerUrl)
+  const worker = new Worker(new URL(`${config.itkModulesPath}/web-workers/${name}.worker.js`, import.meta.url))
   const webworkerPromise = new WebworkerPromise(worker)
   return Promise.resolve({ webworkerPromise, worker })
 }
