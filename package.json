@@ -54,7 +54,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.13.0",
     "@babel/plugin-transform-runtime": "^7.13.6",
     "@babel/preset-env": "^7.13.5",
-    "async": "^2.6.3",
+    "async": "^3.2.1",
     "ava": "^3.15.0",
     "babel-loader": "^8.2.2",
     "commitizen": "^4.2.4",
@@ -80,7 +80,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.13.6",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "commander": "^2.20.3",
     "fs-extra": "^9.1.0",
     "mime-types": "^2.1.29",
