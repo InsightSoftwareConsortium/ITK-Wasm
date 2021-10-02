@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
 
-import config from '../itkConfig'
+import config from '../itkConfig.js'
 
 import IOTypes from '../core/IOTypes.js'
 import runPipelineEmscripten from './internal/runPipelineEmscripten.js'

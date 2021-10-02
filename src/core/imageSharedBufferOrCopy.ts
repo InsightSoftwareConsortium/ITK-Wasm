@@ -1,7 +1,7 @@
 import copyImage from './copyImage.js'
 import Image from './Image.js'
 
-const haveSharedArrayBuffer = typeof window.SharedArrayBuffer === 'function'
+const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
 
 /** If SharedArrayBuffer's are available, ensure an itk.Image's buffer is a
  * SharedArrayBuffer. If SharedArrayBuffer's are not available, return a copy.

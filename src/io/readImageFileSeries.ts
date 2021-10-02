@@ -7,7 +7,7 @@ import { readAsArrayBuffer } from 'promise-file-reader'
 
 import ReadImageFileSeriesResult from "./ReadImageFileSeriesResult.js"
 
-const numberOfWorkers = navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 6
+const numberOfWorkers = (typeof globalThis.navigator === 'object' && globalThis.navigator.hardwareConcurrency) ? globalThis.navigator.hardwareConcurrency : 6
 const workerPool = new WorkerPool(numberOfWorkers, readImageArrayBuffer)
 
 async function readImageFileSeries(

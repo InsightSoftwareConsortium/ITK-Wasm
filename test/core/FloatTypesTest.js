@@ -1,7 +1,7 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
+import { FloatTypes } from '../../dist/index.js'
 
 test('Float32 should be defined', t => {
   const type = FloatTypes.Float32

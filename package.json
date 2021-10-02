@@ -3,6 +3,7 @@
   "version": "14.1.1",
   "description": "High performance spatial analysis in a JavaScript runtime environment.",
   "main": "./dist/index.js",
+  "type": "module",
   "types": "./dist/index.d.ts",
   "directories": {
     "doc": "doc",
@@ -17,7 +18,7 @@
     "build:tsc": "tsc --pretty",
     "build:tscWorkersModuleLoader": "tsc --lib webworker --outDir ./dist/core/internal/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleBrowser.ts",
     "build:tscWebWorkers": "tsc --lib webworker --outDir ./dist/web-workers/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames  --typeRoots \"./node_modules/@types,./src/vendor-types\" --declaration ./src/web-workers/*",
-    "prepublishOnly": "npm run build:tsc",
+    "prepublishOnly": "npm run build",
     "build:debug": "node ./build.js --debug && webpack --progress --mode development",
     "build:webpack": "webpack --progress --mode production",
     "build:wasm": "node ./build.js",

@@ -1,6 +1,6 @@
 import type TypedArray from "./TypedArray.js"
 
-const haveSharedArrayBuffer = typeof self.SharedArrayBuffer === 'function' // eslint-disable-line
+const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function' // eslint-disable-line
 
 function getTransferable(data: any):  null | ArrayBuffer {
   let result: null | ArrayBuffer = null
