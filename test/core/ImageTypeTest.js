@@ -1,9 +1,7 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const ImageType = require(path.resolve(__dirname, '..', 'dist', 'ImageType.js'))
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
+import { IntTypes, ImageType, PixelTypes } from '../../dist/index.js'
 
 test('dimension should have a default value of 2', t => {
   const imageType = new ImageType()

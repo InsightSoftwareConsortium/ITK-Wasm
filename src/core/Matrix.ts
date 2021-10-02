@@ -1,9 +1,20 @@
 class Matrix {
   public data: number[]
+  public readonly rows: number
+  public readonly columns: number
 
-  constructor(public readonly rows: number, public readonly columns: number) {
-    this.data = new Array(rows * columns)
-    this.data.fill(0.0)
+  constructor(rows: number | typeof Matrix, columns: number) {
+    if (rows instanceof Matrix) {
+      const other = rows
+      this.rows = other.rows
+      this.columns = other.columns as number
+      this.data = other.data.slice()
+    } else {
+      this.rows = rows as number
+      this.columns = columns as number
+      this.data = new Array(rows as number * columns as number)
+      this.data.fill(0.0)
+    }
   }
 
   setIdentity() {

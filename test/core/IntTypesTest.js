@@ -1,7 +1,7 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
+import { IntTypes } from '../../dist/index.js'
 
 test('Int8 should be defined', t => {
   const type = IntTypes.Int8

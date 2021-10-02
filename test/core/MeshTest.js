@@ -1,8 +1,7 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const Mesh = require(path.resolve(__dirname, '..', 'dist', 'Mesh.js'))
-const MeshType = require(path.resolve(__dirname, '..', 'dist', 'MeshType.js'))
+import { Mesh, MeshType } from '../../dist/index.js'
 
 test('meshType should have the same meshType passed to the constructor', t => {
   const mesh = new Mesh()

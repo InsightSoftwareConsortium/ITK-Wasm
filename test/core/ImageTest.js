@@ -1,9 +1,7 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const Image = require(path.resolve(__dirname, '..', 'dist', 'Image.js'))
-const ImageType = require(path.resolve(__dirname, '..', 'dist', 'ImageType.js'))
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
+import { Image, ImageType, IntTypes } from '../../dist/index.js'
 
 test('imageType should have the same imageType passed to the constructor', t => {
   const image = new Image()
