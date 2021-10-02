@@ -1,5 +1,5 @@
-function loadEmscriptenModuleNode(modulePath: string): object {
-  const result = require(modulePath)
+async function loadEmscriptenModuleNode(modulePath: string): Promise<object> {
+  const result = await import(modulePath)
   return result
 }
 

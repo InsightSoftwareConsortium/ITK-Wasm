@@ -13,27 +13,20 @@ import Image from '../core/Image.js'
  * @param: singleSortedSeries: it is known that the files are from a single
  * sorted series.
  */
-function readImageLocalDICOMFileSeries(fileNames: string[], singleSortedSeries: boolean = false): Promise<Image> {
-  return new Promise(function (resolve, reject) {
+async function readImageLocalDICOMFileSeries(fileNames: string[], singleSortedSeries: boolean = false): Promise<Image> {
     const imageIOsPath = path.resolve(__dirname, 'image-io')
     const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
-    try {
-      const seriesReaderPath = path.join(imageIOsPath, seriesReader)
-      const seriesReaderModule = loadEmscriptenModule(seriesReaderPath) as DICOMImageSeriesReaderEmscriptenModule
-      const mountedFilePath = seriesReaderModule.mountContainingDirectory(fileNames[0])
-      const mountedDir = path.dirname(mountedFilePath)
+    const seriesReaderPath = path.join(imageIOsPath, seriesReader)
+    const seriesReaderModule = await loadEmscriptenModule(seriesReaderPath) as DICOMImageSeriesReaderEmscriptenModule
+    const mountedFilePath = seriesReaderModule.mountContainingDirectory(fileNames[0])
+    const mountedDir = path.dirname(mountedFilePath)
 
-      const mountedFileNames = fileNames.map((fileName) => {
-        return path.join(mountedDir, path.basename(fileName))
-      })
-      const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
-        mountedFileNames, singleSortedSeries)
-      seriesReaderModule.unmountContainingDirectory(mountedFilePath)
-      resolve(image)
-    } catch (err) {
-      reject(err)
-    }
-  })
+    const mountedFileNames = fileNames.map((fileName) => {
+      return path.join(mountedDir, path.basename(fileName))
+    })
+    const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
+      mountedFileNames, singleSortedSeries)
+    seriesReaderModule.unmountContainingDirectory(mountedFilePath)
+    return image
 }
-
 export default readImageLocalDICOMFileSeries

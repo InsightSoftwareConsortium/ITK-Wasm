@@ -6,16 +6,10 @@ import PipelineOutput from './PipelineOutput.js'
 import PipelineInput from './PipelineInput.js'
 import RunPipelineResult from './RunPipelineResult.js'
 
-function runPipelineNode(pipelinePath: string, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]): Promise<RunPipelineResult> {
-  return new Promise(function (resolve, reject) {
-    try {
-      const Module = loadEmscriptenModule(pipelinePath) as PipelineEmscriptenModule
-      const result = runPipelineEmscripten(Module, args, outputs, inputs)
-      resolve(result)
-    } catch (err) {
-      reject(err)
-    }
-  })
+async function runPipelineNode(pipelinePath: string, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]): Promise<RunPipelineResult> {
+  const Module = await loadEmscriptenModule(pipelinePath) as PipelineEmscriptenModule
+  const result = runPipelineEmscripten(Module, args, outputs, inputs)
+  return result
 }
 
 export default runPipelineNode

@@ -48,14 +48,10 @@ export { default as ReadImageFileSeriesResult } from "./io/ReadImageFileSeriesRe
 export { default as readImageHTTP } from "./io/readImageHTTP.js"
 
 export { default as readImageLocalDICOMFileSeries } from "./io/readImageLocalDICOMFileSeries.js"
-export { default as readImageLocalDICOMFileSeriesSync } from "./io/readImageLocalDICOMFileSeriesSync.js"
 
 export { default as readImageLocalFile } from "./io/readImageLocalFile.js"
-export { default as readImageLocalFileSync } from "./io/readImageLocalFileSync.js"
 export { default as readMeshLocalFile } from "./io/readMeshLocalFile.js"
-export { default as readMeshLocalFileSync } from "./io/readMeshLocalFileSync.js"
 export { default as readPolyDataLocalFile } from "./io/readPolyDataLocalFile.js"
-export { default as readPolyDataLocalFileSync } from "./io/readPolyDataLocalFileSync.js"
 
 export { default as readDICOMTags } from "./io/readDICOMTags.js"
 export { default as ReadDICOMTagsResult } from "./io/ReadDICOMTagsResult.js"
@@ -67,5 +63,4 @@ export { default as PipelineInput } from "./pipeline/PipelineInput.js"
 export { default as PipelineOutput } from "./pipeline/PipelineOutput.js"
 export { default as runPipelineBrowser } from "./pipeline/runPipelineBrowser.js"
 export { default as runPipelineNode } from "./pipeline/runPipelineNode.js"
-export { default as runPipelineNodeSync } from "./pipeline/runPipelineNodeSync.js"
 export { default as RunPipelineResult } from "./pipeline/RunPipelineResult.js"

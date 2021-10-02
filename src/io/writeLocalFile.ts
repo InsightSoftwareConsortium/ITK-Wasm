@@ -4,7 +4,7 @@ import getFileExtension from './getFileExtension.js'
 import extensionToMeshIO from './internal/extensionToMeshIO.js'
 
 import writeImageLocalFile from './writeImageLocalFile.js'
-import writeMeshLocalFileSync from './writeMeshLocalFileSync.js'
+import writeMeshLocalFile from './writeMeshLocalFile.js'
 
 import Mesh from '../core/Mesh.js'
 import Image from '../core/Image.js'
@@ -18,32 +18,24 @@ import Image from '../core/Image.js'
  *
  * @return empty Promise
  */
-function writeLocalFile(useCompression: boolean, imageOrMesh: Image | Mesh, filePath: string): Promise<null> {
+async function writeLocalFile(useCompression: boolean, imageOrMesh: Image | Mesh, filePath: string): Promise<null> {
   const absoluteFilePath = path.resolve(filePath)
   const extension = getFileExtension(absoluteFilePath)
 
-  return new Promise(function (resolve, reject) {
+  const isMesh = extensionToMeshIO.has(extension)
+  if (isMesh) {
     try {
-      const isMesh = extensionToMeshIO.has(extension)
-      if (isMesh) {
-        try {
-          writeMeshLocalFileSync({ useCompression }, imageOrMesh as Mesh, filePath)
-          resolve(null)
-        } catch (err) {
-          // Was a .vtk image file? Continue to write as an image.
-          writeImageLocalFile(useCompression, imageOrMesh as Image, filePath).then(() => {
-            resolve(null)
-          })
-        }
-      } else {
-        writeImageLocalFile(useCompression, imageOrMesh as Image, filePath).then(() => {
-          resolve(null)
-        })
-      }
+      await writeMeshLocalFile({ useCompression }, imageOrMesh as Mesh, filePath)
+      return null
     } catch (err) {
-      reject(err)
+      // Was a .vtk image file? Continue to write as an image.
+      await writeImageLocalFile(useCompression, imageOrMesh as Image, filePath)
+      return  null
     }
-  })
+  } else {
+    await writeImageLocalFile(useCompression, imageOrMesh as Image, filePath)
+    return null
+  }
 }
 
 export default writeLocalFile

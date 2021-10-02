@@ -8,11 +8,9 @@ import MeshIOIndex from './internal/MeshIOIndex.js'
 
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
 import writeMeshEmscriptenFSFile from './internal/writeMeshEmscriptenFSFile.js'
-import MeshIOBaseEmscriptenModule from './internal/MeshIOBaseEmscriptenModule.js'
-
 import WriteMeshOptions from './WriteMeshOptions.js'
-
 import Mesh from '../core/Mesh.js'
+import MeshIOBaseEmscriptenModule from './internal/MeshIOBaseEmscriptenModule.js'
 
 /**
  * Write a mesh to a file on the local filesystem in Node.js.
@@ -23,14 +21,22 @@ import Mesh from '../core/Mesh.js'
  * @param: mesh itk.Mesh instance to write
  * @param: filePath path to the file on the local filesystem.
  *
- * @return null
+ * @return empty Promise
  */
-function writeMeshLocalFileSync(options: WriteMeshOptions, mesh: Mesh, filePath: string): null {
-  const meshIOsPath = path.resolve(__dirname, 'mesh-io')
+async function writeMeshLocalFile(options: WriteMeshOptions, mesh: Mesh, filePath: string): Promise<null> {
+  const meshIOsPath = path.resolve(__dirname, 'MeshIOs')
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)
 
+  let useCompression = false
+  if(typeof options.useCompression !== 'undefined') {
+    useCompression = options.useCompression
+  }
+  let binaryFileType = false
+  if(typeof options.binaryFileType !== 'undefined') {
+    binaryFileType = options.binaryFileType
+  }
   let io = null
   if (mimeToIO.has(mimeType)) {
     io = mimeToIO.get(mimeType)
@@ -39,7 +45,7 @@ function writeMeshLocalFileSync(options: WriteMeshOptions, mesh: Mesh, filePath:
   } else {
     for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
       const modulePath = path.join(meshIOsPath, MeshIOIndex[idx])
-      const Module = loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
+      const Module = await loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
       const meshIO = new Module.ITKMeshIO()
       const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
       meshIO.SetFileName(mountedFilePath)
@@ -56,19 +62,11 @@ function writeMeshLocalFileSync(options: WriteMeshOptions, mesh: Mesh, filePath:
   }
 
   const modulePath = path.join(meshIOsPath, io as string)
-  const Module = loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
+  const Module = await loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
   const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
-  let useCompression = false
-  if(typeof options.useCompression !== 'undefined') {
-    useCompression = options.useCompression
-  }
-  let binaryFileType = false
-  if(typeof options.binaryFileType !== 'undefined') {
-    binaryFileType = options.binaryFileType
-  }
   writeMeshEmscriptenFSFile(Module, { useCompression, binaryFileType }, mesh, mountedFilePath)
   Module.unmountContainingDirectory(mountedFilePath)
   return null
 }
 
-export default writeMeshLocalFileSync
+export default writeMeshLocalFile
