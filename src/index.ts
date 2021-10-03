@@ -56,6 +56,9 @@ export { default as readPolyDataLocalFile } from "./io/readPolyDataLocalFile.js"
 export { default as readDICOMTags } from "./io/readDICOMTags.js"
 export { default as ReadDICOMTagsResult } from "./io/ReadDICOMTagsResult.js"
 
+export { default as writeImageLocalFile } from "./io/writeImageLocalFile.js"
+export { default as writeMeshLocalFile } from "./io/writeMeshLocalFile.js"
+
 export { default as getFileExtension } from "./io/getFileExtension.js"
 
 

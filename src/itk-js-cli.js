@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const fs = require('fs-extra')
-const path = require('path')
-const spawnSync = require('child_process').spawnSync
+import fs from 'fs-extra'
+import path from 'path'
+import { spawnSync } from 'child_process'
 
-const program = require('commander')
+import program from 'commander'
 
 const build = (sourceDir) => {
   // Check that the source directory exists and chdir to it.

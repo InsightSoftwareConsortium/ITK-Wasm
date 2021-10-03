@@ -12,7 +12,7 @@ const cdnPath = 'https://unpkg.com/itk@' + itkVersion
 module.exports = {
   name: packageJSON.name,
   mode: 'production',
-  stats: 'summary',
+  stats: 'errors-only',
   entry,
   output: {
     path: outputPath,
@@ -33,7 +33,7 @@ module.exports = {
   },
   resolve: {
     modules: [path.resolve(__dirname, 'node_modules')],
-    fallback: { fs: false, path: false },
+    fallback: { fs: false, path: false, url: false, module: false },
     alias: {
       './itkConfig$': path.resolve(__dirname, 'src', 'itkConfigCDN.js'),
       itk: __dirname

@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 import mime from 'mime-types'
 
@@ -11,6 +12,7 @@ import Image from '../core/Image.js'
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
 import readImageEmscriptenFSFile from './internal/readImageEmscriptenFSFile.js'
 import ImageIOBaseEmscriptenModule from './internal/ImageIOBaseEmscriptenModule.js'
+import localPathRelativeToModule from './localPathRelativeToModule.js'
 
 /**
  * Read an image from a file on the local filesystem in Node.js.
@@ -18,7 +20,10 @@ import ImageIOBaseEmscriptenModule from './internal/ImageIOBaseEmscriptenModule.
  * @param: filePath path to the file on the local filesystem.
  */
 async function readImageLocalFile(filePath: string): Promise<Image> {
-  const imageIOsPath = path.resolve(__dirname, 'image-io')
+  const imageIOsPath = localPathRelativeToModule(import.meta.url, '../image-io')
+  if (!fs.existsSync(imageIOsPath)) {
+    throw Error("Cannot find path to itk image IO's")
+  }
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)
@@ -30,8 +35,8 @@ async function readImageLocalFile(filePath: string): Promise<Image> {
     io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
-      const modulePath = path.join(imageIOsPath, ImageIOIndex[idx])
-      const Module = await loadEmscriptenModule(modulePath) as ImageIOBaseEmscriptenModule
+      const modulePath = path.join(imageIOsPath, ImageIOIndex[idx] + 'Wasm.js')
+      const Module = await loadEmscriptenModule(modulePath, imageIOsPath) as ImageIOBaseEmscriptenModule
       const imageIO = new Module.ITKImageIO()
       const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
       imageIO.SetFileName(mountedFilePath)
@@ -47,8 +52,10 @@ async function readImageLocalFile(filePath: string): Promise<Image> {
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(imageIOsPath, io as string)
-  const Module = await loadEmscriptenModule(modulePath) as ImageIOBaseEmscriptenModule
+  const modulePath = path.join(imageIOsPath, io as string + 'Wasm.js')
+  console.log(modulePath)
+  const Module = await loadEmscriptenModule(modulePath, imageIOsPath) as ImageIOBaseEmscriptenModule
+  console.log(Module)
   const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
   const image = readImageEmscriptenFSFile(Module, mountedFilePath)
   Module.unmountContainingDirectory(mountedFilePath)

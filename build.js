@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-const fs = require('fs-extra')
-const path = require('path')
-const spawnSync = require('child_process').spawnSync
-const glob = require('glob')
-const asyncMod = require('async')
+import fs from 'fs-extra'
+import path from 'path'
+import { spawnSync } from 'child_process'
+import glob from 'glob'
+import asyncMod from 'async'
 
-const program = require('commander')
+import program from 'commander'
 
 // Make the "build" directory to hold build artifacts
 try {
@@ -153,7 +153,7 @@ if (program.copySources) {
     callback(null, io)
   }
   const buildMeshIOsParallel = function (callback) {
-    console.log('Copying MeshIO modules...')
+    console.log('Copying mesh-io modules...')
     const result = asyncMod.map(meshIOFiles, copyMeshIOModules)
     callback(null, result)
   }
@@ -186,7 +186,7 @@ if (program.buildPipelines) {
     if (program.debug) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug', "-DCMAKE_EXE_LINKER_FLAGS_DEBUG='-s DISABLE_EXCEPTION_CATCHING=0'"]
     }
-    const buildPipelineCall = spawnSync('node', [path.join(__dirname, 'src', 'itk-js-cli.js'), 'build', '--image', 'kitware/itk-js-vtk:latest', pipelinePath, '--'].concat(debugFlags), {
+    const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-js-cli.js'), 'build', '--image', 'kitware/itk-js-vtk:latest', pipelinePath, '--'].concat(debugFlags), {
       env: process.env,
       stdio: 'inherit'
     })
@@ -197,22 +197,22 @@ if (program.buildPipelines) {
     pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'web-build', '*.wasm')))
     pipelineFiles.forEach((file) => {
       const filename = path.basename(file)
-      const output = path.join(__dirname, 'dist', 'Pipelines', filename)
+      const output = path.join('dist', 'Pipelines', filename)
       fs.copySync(file, output)
     })
   }
 
   const pipelines = [
-    path.join(__dirname, 'test', 'StdoutStderrPipeline'),
-    path.join(__dirname, 'test', 'MedianFilterPipeline'),
-    path.join(__dirname, 'test', 'InputOutputFilesPipeline'),
-    path.join(__dirname, 'test', 'MeshReadWritePipeline'),
-    path.join(__dirname, 'test', 'WriteVTKPolyDataPipeline'),
-    path.join(__dirname, 'test', 'CLPExample1'),
-    path.join(__dirname, 'src', 'pipeline', 'mesh-to-polydata')
+    path.join('test', 'StdoutStderrPipeline'),
+    path.join('test', 'MedianFilterPipeline'),
+    path.join('test', 'InputOutputFilesPipeline'),
+    path.join('test', 'MeshReadWritePipeline'),
+    path.join('test', 'WriteVTKPolyDataPipeline'),
+    path.join('test', 'CLPExample1'),
+    path.join('src', 'pipeline', 'mesh-to-polydata')
   ]
   try {
-    fs.mkdirSync(path.join(__dirname, 'dist', 'Pipelines'))
+    fs.mkdirSync(path.join('dist', 'Pipelines'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
