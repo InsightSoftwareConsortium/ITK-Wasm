@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import fs from 'fs-extra'
+import fs from 'fs'
 import path from 'path'
 import { spawnSync } from 'child_process'
 import glob from 'glob'

@@ -1,21 +1,19 @@
-FROM dockcross/web-wasm:20200511-ba6b062
+FROM dockcross/web-wasm:20210922-cc45301
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
 LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/itk-js"
 
-ARG CMAKE_BUILD_TYPE=Release
-ARG USE_DCMTK=ON
-
 WORKDIR /
 
-# 2021-04-26 master branch
-ENV ITK_GIT_TAG 6c4d6da2698bc50d02594d691834bd50f28d2ef1
-RUN git clone https://github.com/InsightSoftwareConsortium/ITK.git && \
+# 2021-08-03 master branch
+ENV ITK_GIT_TAG 9233ef9a7de4e418077ad8271529ce3d000b7967
+RUN git clone https://github.com/thewtex/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
   cd ../ && \
   sed -i -e '/^option(OPJ_USE_THREAD/c\option(OPJ_USE_THREAD "use threads" OFF)' \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
+ARG CMAKE_BUILD_TYPE=Release
 
 # For SlicerExecutionModel
 RUN mkdir ITK-Native-build && \
@@ -47,7 +45,6 @@ RUN git clone https://github.com/open-source-parsers/jsoncpp.git && \
     -G Ninja \
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
-    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
     -DBUILD_TESTING:BOOL=OFF \
     -DJSONCPP_WITH_POST_BUILD_UNITTEST:BOOL=OFF \
@@ -78,8 +75,9 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 SlicerExecutionModel-build
 
-ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -s WASM=0 -lnodefs.js -Wno-almost-asm "
-ENV CXXFLAGS="${CFLAGS} -std=c++14"
+ENV LDFLAGS="-flto -s WASM=0"
+ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -flto"
+ENV CXXFLAGS="${CFLAGS}"
 RUN mkdir ITK-build && \
   cd ITK-build && \
   cmake \
@@ -93,8 +91,6 @@ RUN mkdir ITK-build && \
     -DITK_BUILD_DEFAULT_MODULES:BOOL=ON \
     -DITKGroup_IO:BOOL=ON \
     -DH5_HAVE_GETPWUID:BOOL=OFF \
-    -DModule_ITKIODCMTK:BOOL=$USE_DCMTK \
-    -DDCMTK_USE_ICU:BOOL=OFF \
     -DModule_ITKIOMINC:BOOL=ON \
     -DModule_MGHIO:BOOL=ON \
     -DModule_IOScanco:BOOL=ON \
@@ -111,8 +107,6 @@ RUN mkdir ITK-build && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
-ENV CFLAGS="${CFLAGS} -s ALLOW_MEMORY_GROWTH=1"
-ENV CXXFLAGS="${CXXFLAGS} -s ALLOW_MEMORY_GROWTH=1"
 
 ENV RAPIDJSON_GIT_TAG v1.1.0
 RUN git clone https://github.com/Tencent/rapidjson.git && \

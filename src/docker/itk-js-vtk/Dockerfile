@@ -8,8 +8,8 @@ WORKDIR /
 
 # Work-around for VTK HDF5 build
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_DOCKCROSS}
-# 2020-04-28 master + VTK HDF5
-ENV VTK_GIT_TAG 02b7dc072a68d109d7d6670225e09ffc29765301
+# 2020-04-28 master + VTK HDF5 + No link to Threads::Threads
+ENV VTK_GIT_TAG 5c2e41393d163c73212e92beb7ee1aa6797dba14
 RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK && \
   git checkout ${VTK_GIT_TAG} && \
@@ -18,7 +18,7 @@ RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK-build && \
   cmake \
     -G Ninja \
-    -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
+    -DCMAKE_BUILD_TYPE:STRING=Release \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
@@ -28,9 +28,17 @@ RUN git clone https://github.com/thewtex/VTK.git && \
     -DVTK_LEGACY_REMOVE:BOOL=ON \
     -DVTK_OPENGL_USE_GLES:BOOL=ON \
     -DVTK_USE_SDL2:BOOL=ON \
+    -DOPENGL_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
+    -DOPENGL_EGL_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
+    -DOPENGL_GLES2_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
+    -DOPENGL_GLES3_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
     -DVTK_NO_PLATFORM_SOCKETS:BOOL=ON \
     -DBUILD_TESTING:BOOL=OFF \
+    -DVTK_IGNORE_CMAKE_CXX11_CHECKS:BOOL=ON \
     -DVTK_MODULE_ENABLE_VTK_IOExodus:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_IOLegacy:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_IOExport:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_FiltersGeometry:STRING=YES \
     -DH5_HAVE_GETPWUID:BOOL=OFF \
     ../VTK && \
   ninja -j7 && \
