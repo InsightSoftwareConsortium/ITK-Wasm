@@ -22,7 +22,7 @@ RUN cd / && \
   cd .. && chmod -R 777 ITKBridgeJavaScript-build && \
   chmod -R 777 /ITK-build
 
-COPY ITKBridgeJavaScript.cmake /usr/share/cmake-3.17/Modules/
+COPY ITKBridgeJavaScript.cmake /usr/share/cmake-3.21/Modules/
 # For non-default toolchain file location
 ENV EMSCRIPTEN /emsdk/upstream/emscripten
 ENV CMAKE_TOOLCHAIN_FILE_DOCKCROSS ${CMAKE_TOOLCHAIN_FILE}

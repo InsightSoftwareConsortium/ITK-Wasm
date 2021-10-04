@@ -9,7 +9,7 @@ WORKDIR /
 # Work-around for VTK HDF5 build
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_DOCKCROSS}
 # 2020-04-28 master + VTK HDF5 + No link to Threads::Threads
-ENV VTK_GIT_TAG 5c2e41393d163c73212e92beb7ee1aa6797dba14
+ENV VTK_GIT_TAG 7c50dded0278686e23a3a6a432b2b0a365342050
 RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK && \
   git checkout ${VTK_GIT_TAG} && \

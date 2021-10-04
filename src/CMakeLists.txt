@@ -38,40 +38,25 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
   foreach(imageio ${imageios_${io_module}})
     set(ImageIOIndex_ARRAY "${ImageIOIndex_ARRAY}'${imageio}JSBinding', ")
     set(target ${imageio}JSBinding)
-    set(wasm_target ${imageio}JSBindingWasm)
     _add_executable(${target} io/internal/bindings/${target}.cxx)
     itk_module_target_label(${target})
     itk_module_target_export(${target})
     itk_module_target_install(${target})
-    _add_executable(${wasm_target} io/internal/bindings/${target}.cxx)
-    itk_module_target_label(${wasm_target})
-    itk_module_target_export(${wasm_target})
-    itk_module_target_install(${wasm_target})
     # For embind
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " --bind"
-      )
-    set_property(TARGET ${wasm_target} APPEND_STRING
       PROPERTY LINK_FLAGS " --bind"
       )
     set(exception_catching )
     if(${io_module} STREQUAL "ITKIOGE")
       set(exception_catching " -s DISABLE_EXCEPTION_CATCHING=0")
     endif()
-    set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s WASM=0 -lnodefs.js ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
-      )
-    set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSImageIOPre${imageio}.js)
+    set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/emscripten-module/itkJSImageIOPre${imageio}.js)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSImageIOPre.js.in
       ${pre_js} @ONLY)
-    set_property(TARGET ${wasm_target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lworkerfs.js ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+    set_property(TARGET ${target} APPEND_STRING
+      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=1 -s MODULARIZE=1 -s WASM=1 -s STANDALONE_WASM=1 -flto -lworkerfs.js ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
       )
     set_property(TARGET ${target}
-      PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/image-io
-      )
-    set_property(TARGET ${wasm_target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
       ${BridgeJavaScript_BINARY_DIR}/image-io
       )
@@ -80,11 +65,12 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
       ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
       )
     _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
-    _target_link_libraries(${wasm_target} LINK_PUBLIC ${ITK_LIBRARIES})
   endforeach()
 endforeach()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/ImageIOIndex.ts.in
   ${CMAKE_CURRENT_SOURCE_DIR}/io/internal/ImageIOIndex.ts @ONLY)
+
+if(0)
 
 
 # DICOM tag reading needs Iconv, and the docker image (currently)
@@ -146,7 +132,7 @@ foreach(dicom_io_module
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSImageIOPre.js.in
     ${pre_js} @ONLY)
   set_property(TARGET ${wasm_target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=${target} -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s EXPORT_ES6=1 -s WASM=1 -lworkerfs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+    PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=${target} -s WASM_ASYNC_COMPILATION=1 -s MODULARIZE=1 -s EXPORT_ES6=1 -s WASM=1 -lworkerfs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
     )
   set_property(TARGET ${target}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
@@ -205,7 +191,7 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSMeshIOPre.js.in
       ${pre_js} @ONLY)
     set_property(TARGET ${wasm_target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${meshio}JSBinding -s MODULARIZE=1 -s EXPORT_ES6=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=0 -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${meshio}JSBinding -s MODULARIZE=1 -s EXPORT_ES6=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
@@ -245,7 +231,7 @@ if(VTK_FOUND)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPolyDataIOPre.js.in
     ${pre_js} @ONLY)
   set_property(TARGET ${wasm_target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORT_NAME=${io_pipeline} -s EXPORTED_FUNCTIONS='[\"_main\"]' -s MODULARIZE=1 -s EXPORT_ES6=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=0 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+    PROPERTY LINK_FLAGS " -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORT_NAME=${io_pipeline} -s EXPORTED_FUNCTIONS='[\"_main\"]' -s MODULARIZE=1 -s EXPORT_ES6=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
     )
   set_property(TARGET ${target}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
@@ -263,5 +249,7 @@ if(VTK_FOUND)
   _target_link_libraries(${wasm_target} LINK_PUBLIC VTK::IOExport ${polydataios_${io_pipeline}})
   endforeach()
 endif()
+
+endif() # if(0)
 
 endif() # BUILD_ITK_JS_IO_MODULES

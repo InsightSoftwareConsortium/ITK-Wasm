@@ -54,7 +54,7 @@ if (program.compile) {
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
-      let buildImage = 'kitware/itk-js-vtk:latest'
+      let buildImage = 'insighttoolkit/itk-js:latest'
       if (program.debug) {
         buildImage = 'kitware/itk-js-vtk:20210219-56503df-debug'
       }
