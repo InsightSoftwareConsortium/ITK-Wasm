@@ -176,11 +176,8 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
     set_property(TARGET ${target} APPEND_STRING
       PROPERTY LINK_FLAGS " --bind"
       )
-    set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSMeshIOPre${meshio}.js)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSMeshIOPre.js.in
-      ${pre_js} @ONLY)
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${meshio}JSBinding --no-entry -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=0 -flto -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${meshio}JSBinding -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -s FORCE_FILESYSTEM=1 --no-entry -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=0 -flto -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY

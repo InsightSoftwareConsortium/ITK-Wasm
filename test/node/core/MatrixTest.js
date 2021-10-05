@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { Matrix } from '../../dist/index.js'
+import { Matrix } from '../../../dist/index.js'
 
 test('rows should have the same number of rows as passed into the constructor', t => {
   const matrix = new Matrix(2, 3)

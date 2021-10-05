@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 import mime from 'mime-types'
 
@@ -11,6 +12,7 @@ import writeMeshEmscriptenFSFile from './internal/writeMeshEmscriptenFSFile.js'
 import WriteMeshOptions from './WriteMeshOptions.js'
 import Mesh from '../core/Mesh.js'
 import MeshIOBaseEmscriptenModule from './internal/MeshIOBaseEmscriptenModule.js'
+import localPathRelativeToModule from './localPathRelativeToModule.js'
 
 /**
  * Write a mesh to a file on the local filesystem in Node.js.
@@ -24,7 +26,7 @@ import MeshIOBaseEmscriptenModule from './internal/MeshIOBaseEmscriptenModule.js
  * @return empty Promise
  */
 async function writeMeshLocalFile(options: WriteMeshOptions, mesh: Mesh, filePath: string): Promise<null> {
-  const meshIOsPath = path.resolve(__dirname, 'MeshIOs')
+  const meshIOsPath = localPathRelativeToModule(import.meta.url, '../mesh-io')
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)
@@ -44,8 +46,9 @@ async function writeMeshLocalFile(options: WriteMeshOptions, mesh: Mesh, filePat
     io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
-      const modulePath = path.join(meshIOsPath, MeshIOIndex[idx])
-      const Module = await loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
+      const modulePath = path.join(meshIOsPath, MeshIOIndex[idx] + '.js')
+      const wasmBinary = fs.readFileSync(path.join(meshIOsPath, MeshIOIndex[idx] + '.wasm'))
+      const Module = await loadEmscriptenModule(modulePath, wasmBinary) as MeshIOBaseEmscriptenModule
       const meshIO = new Module.ITKMeshIO()
       const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
       meshIO.SetFileName(mountedFilePath)
@@ -61,8 +64,9 @@ async function writeMeshLocalFile(options: WriteMeshOptions, mesh: Mesh, filePat
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(meshIOsPath, io as string)
-  const Module = await loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
+  const modulePath = path.join(meshIOsPath, io as string + '.js')
+  const wasmBinary = fs.readFileSync(path.join(meshIOsPath, io as string + '.wasm'))
+  const Module = await loadEmscriptenModule(modulePath, wasmBinary) as MeshIOBaseEmscriptenModule
   const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
   writeMeshEmscriptenFSFile(Module, { useCompression, binaryFileType }, mesh, mountedFilePath)
   Module.unmountContainingDirectory(mountedFilePath)

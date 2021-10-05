@@ -2,7 +2,7 @@ import test from 'ava'
 import path from 'path'
 import fs from 'fs'
 
-import loadModule from '../../dist/core/internal/loadEmscriptenModuleNode.js'
+import loadModule from '../../../dist/core/internal/loadEmscriptenModuleNode.js'
 
 test('load a module', async t => {
   const imageIOsPath = path.resolve('dist', 'image-io')

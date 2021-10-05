@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 import mime from 'mime-types'
 
@@ -11,9 +12,13 @@ import Mesh from '../core/Mesh.js'
 import loadEmscriptenModule from './../core/internal/loadEmscriptenModuleNode.js'
 import readMeshEmscriptenFSFile from './internal/readMeshEmscriptenFSFile.js'
 import MeshIOBaseEmscriptenModule from './internal/MeshIOBaseEmscriptenModule.js'
+import localPathRelativeToModule from './localPathRelativeToModule.js'
 
 async function readMeshLocalFile(filePath: string): Promise<Mesh> {
-  const meshIOsPath = path.resolve(__dirname, 'mesh-io')
+  const meshIOsPath = localPathRelativeToModule(import.meta.url, '../mesh-io')
+  if (!fs.existsSync(meshIOsPath)) {
+    throw Error("Cannot find path to itk mesh IO's")
+  }
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)
@@ -25,8 +30,9 @@ async function readMeshLocalFile(filePath: string): Promise<Mesh> {
     io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
-      const modulePath = path.join(meshIOsPath, MeshIOIndex[idx])
-      const Module = await loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
+      const modulePath = path.join(meshIOsPath, MeshIOIndex[idx] + '.js')
+      const wasmBinary = fs.readFileSync(path.join(meshIOsPath, MeshIOIndex[idx] + '.wasm'))
+      const Module = await loadEmscriptenModule(modulePath, wasmBinary) as MeshIOBaseEmscriptenModule
       const meshIO = new Module.ITKMeshIO()
       const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
       meshIO.SetFileName(mountedFilePath)
@@ -42,8 +48,9 @@ async function readMeshLocalFile(filePath: string): Promise<Mesh> {
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(meshIOsPath, io as string)
-  const Module = await loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
+  const modulePath = path.join(meshIOsPath, io as string + '.js')
+  const wasmBinary = fs.readFileSync(path.join(meshIOsPath, io as string + '.wasm'))
+  const Module = await loadEmscriptenModule(modulePath, wasmBinary) as MeshIOBaseEmscriptenModule
   const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
   const mesh = readMeshEmscriptenFSFile(Module, mountedFilePath)
   Module.unmountContainingDirectory(mountedFilePath)

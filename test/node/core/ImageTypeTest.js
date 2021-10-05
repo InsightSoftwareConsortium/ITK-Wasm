@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, ImageType, PixelTypes } from '../../dist/index.js'
+import { IntTypes, ImageType, PixelTypes } from '../../../dist/index.js'
 
 test('dimension should have a default value of 2', t => {
   const imageType = new ImageType()
