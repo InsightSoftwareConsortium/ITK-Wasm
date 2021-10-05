@@ -12,8 +12,7 @@ function(add_executable target)
   configure_file(/ITKBridgeJavaScript/src/emscripten-module/itkJSPipelinePre.js.in
     ${pre_js} @ONLY)
   get_property(_link_flags TARGET ${wasm_target} PROPERTY LINK_FLAGS)
-  set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS " -s
-  EXTRA_EXPORTED_RUNTIME_METHODS='[\"callMain\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' -flto -s STANDALONE_WASM=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=1 -s EXPORT_NAME=${target} -s MODULARIZE=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js /ITKBridgeJavaScript/src/emscripten-module/itkJSPost.js ${_link_flags}")
+  set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS " -s EXPORTED_RUNTIME_METHODS='[\"callMain\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' -flto -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=0 -s EXPORT_NAME=${target} -s MODULARIZE=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js /ITKBridgeJavaScript/src/emscripten-module/itkJSPost.js ${_link_flags}")
   get_property(_link_flags_debug TARGET ${wasm_target} PROPERTY LINK_FLAGS_DEBUG)
   set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS_DEBUG " -s DISABLE_EXCEPTION_CATCHING=0 ${_link_flags_debug}"
     )

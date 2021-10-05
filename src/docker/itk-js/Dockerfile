@@ -5,6 +5,7 @@ FROM insighttoolkit/itk-js-base:$BASE_TAG
 MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
+RUN chmod -R 777 /emsdk/upstream/emscripten/cache
 
 ADD ITKBridgeJavaScriptModuleCopy /ITKBridgeJavaScript
 RUN cd / && \

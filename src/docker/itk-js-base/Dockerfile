@@ -1,4 +1,4 @@
-FROM dockcross/web-wasm:20211004-09f1cc4
+FROM dockcross/web-wasm:20211005-32b58e0
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
 LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/itk-js"
@@ -83,7 +83,7 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 SlicerExecutionModel-build
 
-ENV LDFLAGS="-flto -s WASM=0 -s STANDALONE_WASM=1"
+ENV LDFLAGS="-flto -s WASM=0"
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -flto"
 ENV CXXFLAGS="${CFLAGS}"
 RUN mkdir ITK-build && \
