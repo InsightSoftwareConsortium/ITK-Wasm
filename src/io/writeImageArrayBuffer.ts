@@ -9,7 +9,7 @@ import WriteArrayBufferResult from './WriteArrayBufferResult.js'
 
 function writeImageArrayBuffer(webWorker: Worker | null, useCompression: boolean, image: Image, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
   let worker = webWorker
-  return createWebworkerPromise('ImageIO', worker)
+  return createWebworkerPromise('image-io', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       const transferables = []

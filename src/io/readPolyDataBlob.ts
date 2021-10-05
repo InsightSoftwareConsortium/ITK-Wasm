@@ -14,7 +14,7 @@ import ReadPolyDataResult from "./ReadPolyDataResult.js"
 
 function readPolyDataBlob(webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadPolyDataResult> {
   let worker = webWorker
-  return createWebworkerPromise('Pipeline', worker)
+  return createWebworkerPromise('pipeline', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       return readAsArrayBuffer(blob)

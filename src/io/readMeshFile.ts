@@ -10,10 +10,10 @@ import ReadMeshResult from "./ReadMeshResult.js"
 async function readMeshFile(webWorker: Worker | null, file: File): Promise<ReadMeshResult> {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
-    'MeshIO',
+    'mesh-io',
     worker
   )
-  worker = usedWorker
+  worker = usedWorker as Worker
   const arrayBuffer = await readAsArrayBuffer(file)
   try {
     const mesh: Mesh = await webworkerPromise.postMessage(

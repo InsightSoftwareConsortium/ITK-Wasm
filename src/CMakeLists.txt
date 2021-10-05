@@ -50,9 +50,8 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
     if(${io_module} STREQUAL "ITKIOGE")
       set(exception_catching " -s DISABLE_EXCEPTION_CATCHING=0")
     endif()
-    set(exported_functions )
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s SUPPORT_LONGJMP=1 -s FORCE_FILESYSTEM=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 --no-entry -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -flto ${exception_catching} ${exported_functions} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+      PROPERTY LINK_FLAGS " -s SUPPORT_LONGJMP=1 -s FORCE_FILESYSTEM=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 --no-entry -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -flto ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
@@ -68,9 +67,6 @@ endforeach()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/ImageIOIndex.ts.in
   ${CMAKE_CURRENT_SOURCE_DIR}/io/internal/ImageIOIndex.ts @ONLY)
 
-if(0)
-
-
 # DICOM tag reading needs Iconv, and the docker image (currently)
 # used for building does not have iconv installed
 set(Iconv_CONFIGURE_COMMAND
@@ -78,6 +74,7 @@ set(Iconv_CONFIGURE_COMMAND
   ${Iconv_DIR}/src/libiconv/configure
   --srcdir=${Iconv_DIR}/src/libiconv
   --prefix=${Iconv_DIR}
+  --host=wasm32
   --enable-static)
 set(Iconv_BUILD_COMMAND emmake make)
 
@@ -106,37 +103,19 @@ foreach(dicom_io_module
     itkDICOMTagReader
 )
   set(target "${dicom_io_module}JSBinding")
-  set(wasm_target "${dicom_io_module}JSBindingWasm")
   _add_executable(${target} io/internal/bindings/${target}.cxx)
   itk_module_target_label(${target})
   itk_module_target_export(${target})
   itk_module_target_install(${target})
-  _add_executable(${wasm_target} io/internal/bindings/${target}.cxx)
-  itk_module_target_label(${wasm_target})
-  itk_module_target_export(${wasm_target})
-  itk_module_target_install(${wasm_target})
 
   # For embind
   set_property(TARGET ${target} APPEND_STRING
     PROPERTY LINK_FLAGS " --bind"
     )
-  set_property(TARGET ${wasm_target} APPEND_STRING
-    PROPERTY LINK_FLAGS " --bind"
-    )
   set_property(TARGET ${target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s WASM=0 -lnodefs.js -s FORCE_FILESYSTEM=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSImageIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
-    )
-  set(pre_js "${CMAKE_CURRENT_BINARY_DIR}/itkJSImageIOPre${dicom_io_module}.js")
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSImageIOPre.js.in
-    ${pre_js} @ONLY)
-  set_property(TARGET ${wasm_target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=${target} -s WASM_ASYNC_COMPILATION=1 -s MODULARIZE=1 -s EXPORT_ES6=1 -s WASM=1 -lworkerfs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+    PROPERTY LINK_FLAGS " -s SUPPORT_LONGJMP=1 -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=${target} -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -s WASM=1 -lnodefs.js -flto -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
     )
   set_property(TARGET ${target}
-    PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${BridgeJavaScript_BINARY_DIR}/image-io
-    )
-  set_property(TARGET ${wasm_target}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
     ${BridgeJavaScript_BINARY_DIR}/image-io
     )
@@ -145,17 +124,13 @@ foreach(dicom_io_module
     ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
     )
   _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
-  _target_link_libraries(${wasm_target} LINK_PUBLIC ${ITK_LIBRARIES})
 
   # libiconv for DICOMTagReader
   if(${dicom_io_module} STREQUAL "itkDICOMTagReader")
     include_directories(${Iconv_INCLUDE_DIRS})
     _target_link_libraries(${target} LINK_PUBLIC ${Iconv_LIBRARIES} ${Iconv})
-    _target_link_libraries(${wasm_target} LINK_PUBLIC ${Iconv_LIBRARIES} ${Iconv})
   endif()
 endforeach()
-
-endif() # if 0
 
 set(MeshIOIndex_ARRAY "")
 foreach(io_module ${BridgeJavaScript_MeshIOModules})

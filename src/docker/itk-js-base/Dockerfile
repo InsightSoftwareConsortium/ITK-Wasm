@@ -83,9 +83,10 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 SlicerExecutionModel-build
 
-#ENV LDFLAGS="-flto -s WASM=0"
+# After the WASI exception / setjmp support may work? setjmp is lost in final
+# linking otherwise.
+#ENV LDFLAGS="-flto"
 #ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -flto"
-ENV LDFLAGS="-s WASM=0"
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0"
 ENV CXXFLAGS="${CFLAGS}"
 RUN mkdir ITK-build && \
@@ -124,7 +125,7 @@ RUN git clone https://github.com/Tencent/rapidjson.git && \
   cd rapidjson && \
   git checkout ${RAPIDJSON_GIT_TAG}
 
-ENV IPFS_TAG v0.8.0
+ENV IPFS_TAG v0.10.0
 RUN curl -O https://ipfs.io/ipns/dist.ipfs.io/go-ipfs/${IPFS_TAG}/go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
   tar xvzf go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
   cp go-ipfs/ipfs /usr/local/bin/ && \

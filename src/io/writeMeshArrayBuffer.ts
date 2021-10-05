@@ -9,7 +9,7 @@ import WriteMeshOptions from './WriteMeshOptions.js'
 
 function writeMeshArrayBuffer(webWorker: Worker | null, options: WriteMeshOptions, mesh: Mesh, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
   let worker = webWorker
-  return createWebworkerPromise('MeshIO', worker)
+  return createWebworkerPromise('mesh-io', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       const transferables = []

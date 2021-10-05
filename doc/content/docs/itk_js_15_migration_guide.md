@@ -33,3 +33,5 @@ import IntTypes from 'itk/core/IntTypes.js'
 ```
 
 Node `*Sync` functions have been removed -- use the async versions instead.
+
+The `getMatrixElement` function has been replaced by the `Matrix.getElement` method.

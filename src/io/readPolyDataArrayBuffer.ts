@@ -12,7 +12,7 @@ import config from "../itkConfig.js"
 
 function readPolyDataArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadPolyDataResult> {
   let worker = webWorker
-  return createWebworkerPromise('Pipeline', worker)
+  return createWebworkerPromise('pipeline', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       const extension = getFileExtension(fileName)

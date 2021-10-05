@@ -22,10 +22,10 @@ const workerFunction = async (
 ) => {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
-    'ImageIO',
+    'image-io',
     worker
   )
-  worker = usedWorker
+  worker = usedWorker as Worker
 
   const transferables = fileDescriptions.map(description => {
     return description.data

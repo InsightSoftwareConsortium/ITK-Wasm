@@ -10,10 +10,10 @@ import ReadImageResult from "./ReadImageResult.js"
 async function readImageFile(webWorker: Worker | null, file: File): Promise<ReadImageResult> {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
-    'ImageIO',
+    'image-io',
     worker
   )
-  worker = usedWorker
+  worker = usedWorker as Worker
   const arrayBuffer = await readAsArrayBuffer(file)
   try {
     const image: Image = await webworkerPromise.postMessage(

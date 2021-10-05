@@ -86,7 +86,7 @@ function runPipelineBrowser(webWorker: Worker | null | boolean, pipelinePath: st
     })
   }
   let worker = webWorker
-  return createWebworkerPromise('Pipeline', worker as Worker | null)
+  return createWebworkerPromise('pipeline', worker as Worker | null)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       const transferables: ArrayBuffer[] = []

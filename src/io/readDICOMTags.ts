@@ -8,7 +8,7 @@ import ReadDICOMTagsResult from "./ReadDICOMTagsResult.js"
 async function readDICOMTags(webWorker: Worker, file: File, tags: string[] | null = null): Promise<ReadDICOMTagsResult> {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
-    'ImageIO',
+    'image-io',
     worker
   )
   worker = usedWorker

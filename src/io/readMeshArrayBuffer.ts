@@ -7,7 +7,7 @@ import ReadMeshResult from "./ReadMeshResult.js"
 
 function readMeshArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadMeshResult> {
   let worker = webWorker
-  return createWebworkerPromise('MeshIO', worker)
+  return createWebworkerPromise('mesh-io', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       return webworkerPromise.postMessage(

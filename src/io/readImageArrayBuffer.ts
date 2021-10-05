@@ -7,7 +7,7 @@ import ReadImageResult from "./ReadImageResult.js"
 
 function readImageArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadImageResult> {
   let worker = webWorker
-  return createWebworkerPromise('ImageIO', worker)
+  return createWebworkerPromise('image-io', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       return webworkerPromise.postMessage(

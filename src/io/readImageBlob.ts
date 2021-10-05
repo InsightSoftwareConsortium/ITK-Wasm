@@ -9,7 +9,7 @@ import ReadImageResult from "./ReadImageResult.js"
 
 function readImageBlob(webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadImageResult> {
   let worker = webWorker
-  return createWebworkerPromise('ImageIO', worker)
+  return createWebworkerPromise('image-io', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       return readAsArrayBuffer(blob)

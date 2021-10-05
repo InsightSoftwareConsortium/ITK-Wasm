@@ -1,11 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import IntTypes from 'IntTypes'
-import PixelTypes from 'PixelTypes'
-import readImageDICOMFileSeries from 'readImageDICOMFileSeries'
-
-import getMatrixElement from 'getMatrixElement'
+import { IntTypes, PixelTypes, readImageDICOMFileSeries } from '../../../dist/index.js'
 
 test('Test reading DICOM file series', t => {
   const testSeriesDirectory = 'base/build/ExternalData/test/Input/DicomImageOrientationTest/'
@@ -34,15 +30,15 @@ test('Test reading DICOM file series', t => {
       t.is(image.spacing[0], 1.0, 'spacing[0]')
       t.is(image.spacing[1], 1.0, 'spacing[1]')
       t.is(image.spacing[2], 1.3000000000000007, 'spacing[2]')
-      t.is(getMatrixElement(image.direction, 0, 0), 0.0, 'direction (0, 0)')
-      t.is(getMatrixElement(image.direction, 0, 1), 0.0, 'direction (0, 1)')
-      t.is(getMatrixElement(image.direction, 0, 2), -1.0, 'direction (0, 2)')
-      t.is(getMatrixElement(image.direction, 1, 0), 1.0, 'direction (1, 0)')
-      t.is(getMatrixElement(image.direction, 1, 1), 0.0, 'direction (1, 1)')
-      t.is(getMatrixElement(image.direction, 1, 2), 0.0, 'direction (1, 2)')
-      t.is(getMatrixElement(image.direction, 2, 0), 0.0, 'direction (2, 0)')
-      t.is(getMatrixElement(image.direction, 2, 1), -1.0, 'direction (2, 1)')
-      t.is(getMatrixElement(image.direction, 2, 2), 0.0, 'direction (2, 2)')
+      t.is(image.direction.getElement(0, 0), 0.0, 'direction (0, 0)')
+      t.is(image.direction.getElement(0, 1), 0.0, 'direction (0, 1)')
+      t.is(image.direction.getElement(0, 2), -1.0, 'direction (0, 2)')
+      t.is(image.direction.getElement(1, 0), 1.0, 'direction (1, 0)')
+      t.is(image.direction.getElement(1, 1), 0.0, 'direction (1, 1)')
+      t.is(image.direction.getElement(1, 2), 0.0, 'direction (1, 2)')
+      t.is(image.direction.getElement(2, 0), 0.0, 'direction (2, 0)')
+      t.is(image.direction.getElement(2, 1), -1.0, 'direction (2, 1)')
+      t.is(image.direction.getElement(2, 2), 0.0, 'direction (2, 2)')
       t.is(image.size[0], 256, 'size[0]')
       t.is(image.size[1], 256, 'size[1]')
       t.is(image.size[2], 3, 'size[2]')
@@ -80,15 +76,15 @@ test('Test reading DICOM file series, assume a single sorted series', t => {
       t.is(image.spacing[0], 1.0, 'spacing[0]')
       t.is(image.spacing[1], 1.0, 'spacing[1]')
       t.is(image.spacing[2], 1.3000000000000007, 'spacing[2]')
-      t.is(getMatrixElement(image.direction, 0, 0), 0.0, 'direction (0, 0)')
-      t.is(getMatrixElement(image.direction, 0, 1), 0.0, 'direction (0, 1)')
-      t.is(getMatrixElement(image.direction, 0, 2), -1.0, 'direction (0, 2)')
-      t.is(getMatrixElement(image.direction, 1, 0), 1.0, 'direction (1, 0)')
-      t.is(getMatrixElement(image.direction, 1, 1), 0.0, 'direction (1, 1)')
-      t.is(getMatrixElement(image.direction, 1, 2), 0.0, 'direction (1, 2)')
-      t.is(getMatrixElement(image.direction, 2, 0), 0.0, 'direction (2, 0)')
-      t.is(getMatrixElement(image.direction, 2, 1), -1.0, 'direction (2, 1)')
-      t.is(getMatrixElement(image.direction, 2, 2), 0.0, 'direction (2, 2)')
+      t.is(image.direction.getElement(0, 0), 0.0, 'direction (0, 0)')
+      t.is(image.direction.getElement(0, 1), 0.0, 'direction (0, 1)')
+      t.is(image.direction.getElement(0, 2), -1.0, 'direction (0, 2)')
+      t.is(image.direction.getElement(1, 0), 1.0, 'direction (1, 0)')
+      t.is(image.direction.getElement(1, 1), 0.0, 'direction (1, 1)')
+      t.is(image.direction.getElement(1, 2), 0.0, 'direction (1, 2)')
+      t.is(image.direction.getElement(2, 0), 0.0, 'direction (2, 0)')
+      t.is(image.direction.getElement(2, 1), -1.0, 'direction (2, 1)')
+      t.is(image.direction.getElement(2, 2), 0.0, 'direction (2, 2)')
       t.is(image.size[0], 256, 'size[0]')
       t.is(image.size[1], 256, 'size[1]')
       t.is(image.size[2], 3, 'size[2]')
