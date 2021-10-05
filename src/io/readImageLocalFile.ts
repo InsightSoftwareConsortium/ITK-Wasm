@@ -35,8 +35,9 @@ async function readImageLocalFile(filePath: string): Promise<Image> {
     io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
-      const modulePath = path.join(imageIOsPath, ImageIOIndex[idx] + 'Wasm.js')
-      const Module = await loadEmscriptenModule(modulePath, imageIOsPath) as ImageIOBaseEmscriptenModule
+      const modulePath = path.join(imageIOsPath, ImageIOIndex[idx] + '.js')
+      const wasmBinary = fs.readFileSync(path.join(imageIOsPath, ImageIOIndex[idx] + '.wasm'))
+      const Module = await loadEmscriptenModule(modulePath, wasmBinary) as ImageIOBaseEmscriptenModule
       const imageIO = new Module.ITKImageIO()
       const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
       imageIO.SetFileName(mountedFilePath)
@@ -52,10 +53,9 @@ async function readImageLocalFile(filePath: string): Promise<Image> {
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(imageIOsPath, io as string + 'Wasm.js')
-  console.log(modulePath)
-  const Module = await loadEmscriptenModule(modulePath, imageIOsPath) as ImageIOBaseEmscriptenModule
-  console.log(Module)
+  const modulePath = path.join(imageIOsPath, io as string + '.js')
+  const wasmBinary = fs.readFileSync(path.join(imageIOsPath, io as string + '.wasm'))
+  const Module = await loadEmscriptenModule(modulePath, wasmBinary) as ImageIOBaseEmscriptenModule
   const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
   const image = readImageEmscriptenFSFile(Module, mountedFilePath)
   Module.unmountContainingDirectory(mountedFilePath)

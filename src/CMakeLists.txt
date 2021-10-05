@@ -51,11 +51,8 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
       set(exception_catching " -s DISABLE_EXCEPTION_CATCHING=0")
     endif()
     set(exported_functions )
-    set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/emscripten-module/itkJSImageIOPre${imageio}.js)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSImageIOPre.js.in
-      ${pre_js} @ONLY)
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s SUPPORT_LONGJMP=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 --no-entry -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -flto ${exception_catching} ${exported_functions} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+      PROPERTY LINK_FLAGS " -s SUPPORT_LONGJMP=1 -s FORCE_FILESYSTEM=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 --no-entry -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -flto ${exception_catching} ${exported_functions} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
       )
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
@@ -158,6 +155,8 @@ foreach(dicom_io_module
   endif()
 endforeach()
 
+endif() # if 0
+
 set(MeshIOIndex_ARRAY "")
 foreach(io_module ${BridgeJavaScript_MeshIOModules})
   find_package(ITK REQUIRED COMPONENTS ${io_module})
@@ -169,36 +168,21 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
   foreach(meshio ${meshios_${io_module}})
     set(MeshIOIndex_ARRAY "${MeshIOIndex_ARRAY}'${meshio}JSBinding', ")
     set(target ${meshio}JSBinding)
-    set(wasm_target ${meshio}JSBindingWasm)
     _add_executable(${target} io/internal/bindings/${target}.cxx)
     itk_module_target_label(${target})
     itk_module_target_export(${target})
     itk_module_target_install(${target})
-    _add_executable(${wasm_target} io/internal/bindings/${target}.cxx)
-    itk_module_target_label(${wasm_target})
-    itk_module_target_export(${wasm_target})
-    itk_module_target_install(${wasm_target})
     # For embind
     set_property(TARGET ${target} APPEND_STRING
       PROPERTY LINK_FLAGS " --bind"
       )
-    set_property(TARGET ${wasm_target} APPEND_STRING
-      PROPERTY LINK_FLAGS " --bind"
-      )
-    set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s WASM=0 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSMeshIOPre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
-      )
     set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSMeshIOPre${meshio}.js)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSMeshIOPre.js.in
       ${pre_js} @ONLY)
-    set_property(TARGET ${wasm_target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${meshio}JSBinding -s MODULARIZE=1 -s EXPORT_ES6=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+    set_property(TARGET ${target} APPEND_STRING
+      PROPERTY LINK_FLAGS " -s EXPORT_NAME=${meshio}JSBinding --no-entry -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=0 -flto -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
       )
     set_property(TARGET ${target}
-      PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/mesh-io
-      )
-    set_property(TARGET ${wasm_target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
       ${BridgeJavaScript_BINARY_DIR}/mesh-io
       )
@@ -207,11 +191,12 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
       ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
       )
     _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
-    _target_link_libraries(${wasm_target} LINK_PUBLIC ${ITK_LIBRARIES})
   endforeach()
 endforeach()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/MeshIOIndex.ts.in
   ${CMAKE_CURRENT_SOURCE_DIR}/io/internal/MeshIOIndex.ts @ONLY)
+
+if(0)
 
 # Pipelines for readPolyData
 find_package(VTK QUIET)

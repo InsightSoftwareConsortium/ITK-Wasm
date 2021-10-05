@@ -5,12 +5,9 @@ globalThis.__dirname = dirname(import.meta.url)
 import { createRequire } from 'module'
 globalThis.require = createRequire(import.meta.url)
 
-async function loadEmscriptenModuleNode(modulePath: string, moduleScriptDir?: string): Promise<object> {
-  //const result = await import(modulePath)
-  const result = require(modulePath)
-  console.log('result', result)
-  //return result
-  const instantiated = result({ moduleScriptDir })
+async function loadEmscriptenModuleNode(modulePath: string, wasmBinary?: ArrayBuffer | Buffer): Promise<object> {
+  const result = await import(modulePath)
+  const instantiated = result.default({ wasmBinary })
   return instantiated
 }
 

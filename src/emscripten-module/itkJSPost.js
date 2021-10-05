@@ -54,30 +54,30 @@ Module.mkdirs = function (dirs) {
   }
 }
 
-Module.readFile = function (path, opts) {
-  return FS.readFile(path, opts)
-}
+//Module.readFile = function (path, opts) {
+  //return FS.readFile(path, opts)
+//}
 
-Module.writeFile = function (path, data, opts) {
-  return FS.writeFile(path, data, opts)
-}
+//Module.writeFile = function (path, data, opts) {
+  //return FS.writeFile(path, data, opts)
+//}
 
-Module.unlink = function (path) {
-  return FS.unlink(path)
-}
+//Module.unlink = function (path) {
+  //return FS.unlink(path)
+//}
 
-Module.open = function (path, flags, mode) {
-  return FS.open(path, flags, mode)
-}
+//Module.open = function (path, flags, mode) {
+  //return FS.open(path, flags, mode)
+//}
 
-Module.stat = function (path) {
-  return FS.stat(path)
-}
+//Module.stat = function (path) {
+  //return FS.stat(path)
+//}
 
-Module.read = function (stream, buffer, offset, length, position) {
-  return FS.read(stream, buffer, offset, length, position)
-}
+//Module.read = function (stream, buffer, offset, length, position) {
+  //return FS.read(stream, buffer, offset, length, position)
+//}
 
-Module.close = function (stream) {
-  return FS.close(stream)
-}
+//Module.close = function (stream) {
+  //return FS.close(stream)
+//}

@@ -83,8 +83,10 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 SlicerExecutionModel-build
 
-ENV LDFLAGS="-flto -s WASM=0"
-ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -flto"
+#ENV LDFLAGS="-flto -s WASM=0"
+#ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -flto"
+ENV LDFLAGS="-s WASM=0"
+ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0"
 ENV CXXFLAGS="${CFLAGS}"
 RUN mkdir ITK-build && \
   cd ITK-build && \
