@@ -179,7 +179,7 @@ if (program.copySources) {
   ])
 } // program.copySources
 
-if (program.buildPipelines) {
+if (program.buildpipelines) {
   const buildPipeline = (pipelinePath) => {
     console.log('Building ' + pipelinePath + ' ...')
     let debugFlags = []
@@ -197,23 +197,23 @@ if (program.buildPipelines) {
     pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'web-build', '*.wasm')))
     pipelineFiles.forEach((file) => {
       const filename = path.basename(file)
-      const output = path.join('dist', 'Pipelines', filename)
+      const output = path.join('dist', 'pipelines', filename)
       fs.copySync(file, output)
     })
   }
 
   const pipelines = [
-    path.join('test', 'StdoutStderrPipeline'),
-    path.join('test', 'MedianFilterPipeline'),
-    path.join('test', 'InputOutputFilesPipeline'),
-    path.join('test', 'MeshReadWritePipeline'),
+    path.join('test', 'pipelines', 'StdoutStderrPipeline'),
+    path.join('test', 'pipelines', 'MedianFilterPipeline'),
+    path.join('test', 'pipelines', 'InputOutputFilesPipeline'),
+    path.join('test', 'pipelines', 'MeshReadWritePipeline'),
     // todo: re-enable with VTK image
-    // path.join('test', 'WriteVTKPolyDataPipeline'),
-    // path.join('test', 'CLPExample1'),
+    // path.join('test', 'pipelines', 'WriteVTKPolyDataPipeline'),
+    // path.join('test', 'pipelines', 'CLPExample1'),
     // path.join('src', 'pipeline', 'mesh-to-polydata')
   ]
   try {
-    fs.mkdirSync(path.join('dist', 'Pipelines'))
+    fs.mkdirSync(path.join('dist', 'pipelines'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }

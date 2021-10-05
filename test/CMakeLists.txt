@@ -1,23 +1,5 @@
 itk_module_test()
 
-find_program(NODE_EXECUTABLE
-  NAMES node nodejs
-  )
-if(NODE_EXECUTABLE-NOTFOUND)
-  message(SEND_ERROR "Node.js is required to run the test")
-endif()
-
-set(moduleDir "${CMAKE_BINARY_DIR}/bin")
-
-if(BUILD_ITK_JS_IO_MODULES)
-itk_add_test(NAME itkPNGImageIOJSBindingTest
-  COMMAND ${NODE_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PNGImageIOJSBinding/itkPNGImageIOJSBindingTest.js
-    "${BridgeJavaScript_BINARY_DIR}/image-io"
-    DATA{Input/cthead1.png}
-    ${ITK_TEST_OUTPUT_DIR}/cthead1.png
-  )
-endif()
-
 # Download testing data for the tests executed via `npm test`
 ExternalData_Expand_Arguments(
   ITKData
