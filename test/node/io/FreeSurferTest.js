@@ -1,15 +1,12 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
-const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
-const readMeshLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readMeshLocalFile.js'))
-const writeMeshLocalFile = require(path.resolve(__dirname, '..', 'dist', 'writeMeshLocalFile.js'))
+import { IntTypes, FloatTypes, PixelTypes, readMeshLocalFile, writeMeshLocalFile } from '../../../dist/index.js'
 
-const testAsciiInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'sphere.fsa')
-const testAsciiOutputFilePath = path.resolve(__dirname, '..', 'build', 'Testing', 'Temporary', 'FreeSurferTest-sphere.fsa')
-const testBinaryInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'sphere.fsb')
-const testBinaryOutputFilePath = path.resolve(__dirname, '..', 'build', 'Testing', 'Temporary', 'FreeSurferTest-sphere.fsb')
+const testAsciiInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'sphere.fsa')
+const testAsciiOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'FreeSurferTest-sphere.fsa')
+const testBinaryInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'sphere.fsb')
+const testBinaryOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'FreeSurferTest-sphere.fsb')
 
 const verifyMesh = (t, mesh) => {
   t.is(mesh.meshType.dimension, 3)

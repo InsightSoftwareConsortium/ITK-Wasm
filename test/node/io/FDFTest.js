@@ -1,12 +1,10 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
+import { FloatTypes, PixelTypes, readImageLocalFile } from '../../../dist/index.js'
 
 test('Test reading a FDF file', t => {
-  const testFilePath = path.resolve(__dirname, '..', 'test', 'Input', 'test.fdf')
+  const testFilePath = path.resolve('test', 'Input', 'test.fdf')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 2, 'dimension')
     t.is(image.imageType.componentType, FloatTypes.Float32, 'componentType')
