@@ -1,7 +1,7 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const ExtensionToIO = require(path.resolve(__dirname, '..', 'dist', 'extensionToImageIO.js'))
+import ExtensionToIO from '../../../dist/io/internal/extensionToImageIO.js'
 
 test('bmp maps to itkBMPImageIOJSBinding', t => {
   const io = ExtensionToIO.get('bmp')

@@ -1,7 +1,7 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const ExtensionToIO = require(path.resolve(__dirname, '..', 'dist', 'extensionToMeshIO.js'))
+import ExtensionToIO from '../../../dist/io/internal/extensionToMeshIO.js'
 
 test('vtk maps to itkVTKPolyDataMeshIOJSBinding', t => {
   const io = ExtensionToIO.get('vtk')
