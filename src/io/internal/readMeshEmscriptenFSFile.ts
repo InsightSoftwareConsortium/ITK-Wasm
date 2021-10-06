@@ -1,5 +1,7 @@
 import Mesh from '../../core/Mesh.js'
 import MeshType from '../../core/MeshType.js'
+import FloatTypes from '../../core/FloatTypes.js'
+import PixelTypes from '../../core/PixelTypes.js'
 
 import meshIOComponentToJSComponent from './meshIOComponentToJSComponent.js'
 import meshIOPixelTypeToJSPixelType from './meshIOPixelTypeToJSPixelType.js'
@@ -29,26 +31,31 @@ function readMeshEmscriptenFSFile(emscriptenModule: MeshIOBaseEmscriptenModule, 
   }
 
   const ioPointPixelComponentType = meshIO.GetPointPixelComponentType()
-  const pointPixelComponentType = meshIOComponentToJSComponent(emscriptenModule, ioPointPixelComponentType)
+  let pointPixelComponentType = meshIOComponentToJSComponent(emscriptenModule, ioPointPixelComponentType)
   if (pointPixelComponentType === null) {
-    throw Error('point pixel component type cannot be unknown / null')
+    // default
+    pointPixelComponentType = FloatTypes.Float32
   }
+
   const ioPointPixelType = meshIO.GetPointPixelType()
-  const pointPixelType = meshIOPixelTypeToJSPixelType(emscriptenModule, ioPointPixelType)
+  let pointPixelType = meshIOPixelTypeToJSPixelType(emscriptenModule, ioPointPixelType)
   if (pointPixelType === null) {
-    throw Error('point pixel type cannot be unknown / null')
+    // default
+    pointPixelType = PixelTypes.Scalar
   }
   const pointPixelComponents = meshIO.GetNumberOfPointPixelComponents()
 
   const ioCellPixelComponentType = meshIO.GetCellPixelComponentType()
-  const cellPixelComponentType = meshIOComponentToJSComponent(emscriptenModule, ioCellPixelComponentType)
+  let cellPixelComponentType = meshIOComponentToJSComponent(emscriptenModule, ioCellPixelComponentType)
   if (cellPixelComponentType === null) {
-    throw Error('point pixel type cannot be unknown / null')
+    // default
+    cellPixelComponentType = FloatTypes.Float32
   }
   const ioCellPixelType = meshIO.GetCellPixelType()
-  const cellPixelType = meshIOPixelTypeToJSPixelType(emscriptenModule, ioCellPixelType)
+  let cellPixelType = meshIOPixelTypeToJSPixelType(emscriptenModule, ioCellPixelType)
   if (cellPixelType === null) {
-    throw Error('cell pixel type cannot be unknown / null')
+    // default
+    cellPixelType = PixelTypes.Scalar
   }
   const cellPixelComponents = meshIO.GetNumberOfCellPixelComponents()
 
