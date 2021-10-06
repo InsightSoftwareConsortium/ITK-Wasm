@@ -1,12 +1,10 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
+import { FloatTypes, PixelTypes, readImageLocalFile } from '../../../dist/index.js'
 
 test('Test reading a MINC file', t => {
-  const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 't1_z+_short_cor.mnc')
+  const testFilePath = path.resolve('..', 'build', 'ExternalData', 'test', 'Input', 't1_z+_short_cor.mnc')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 3, 'dimension')
     t.is(image.imageType.componentType, FloatTypes.Float32, 'componentType')

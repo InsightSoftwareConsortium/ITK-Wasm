@@ -1,9 +1,7 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
+import { FloatTypes, PixelTypes, readImageLocalFile } from '../../../dist/index.js'
 
 test('Test reading a MRC file', t => {
   const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'tilt_series_little.mrc')
