@@ -1,4 +1,4 @@
-const test = require('ava')
+import test from 'ava'
 // const path = require('path')
 
 // const MimeToIO = require(path.resolve(__dirname, '..', 'dist', 'MimeToMeshIO.js'))
