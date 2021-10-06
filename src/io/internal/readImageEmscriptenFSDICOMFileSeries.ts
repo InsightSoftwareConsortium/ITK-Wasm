@@ -43,7 +43,14 @@ function readImageEmscriptenFSDICOMFileSeries(seriesReaderModule: DICOMImageSeri
     const directory = (fileNames[0].match(/.*\//) as string[])[0]
     seriesReader.SetDirectory(directory)
   }
-  if (seriesReader.Read()) {
+
+  let couldRead = null
+  try {
+    couldRead = seriesReader.Read()
+  } catch (exception) {
+    console.error(seriesReaderModule.getExceptionMessage(exception as number))
+  }
+  if (!couldRead) {
     throw new Error('Could not read series')
   }
 

@@ -1,13 +1,10 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
-const readDICOMTagsLocalFileSync = require(path.resolve(__dirname, '..', 'dist', 'readDICOMTagsLocalFileSync.js'))
+import { IntTypes, PixelTypes, readImageLocalFile, readDICOMTagsLocalFile } from '../../../dist/index.js'
 
 test('Test reading a DICOM file', t => {
-  const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
+  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 3, 'dimension')
     t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')
@@ -36,8 +33,8 @@ test('Test reading a DICOM file', t => {
   })
 })
 
-test('Test reading DICOM tags', t => {
-  const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
+test('Test reading DICOM tags', async t => {
+  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
   const expected = {
     '0010|0020': 'NOID',
     '0020|0032': '-3.295510e+01\\-1.339286e+02\\1.167857e+02',
@@ -46,7 +43,7 @@ test('Test reading DICOM tags', t => {
     '0008|103e': 'SAG/RF-FAST/VOL/FLIP 30 ',
     '0008|103E': 'SAG/RF-FAST/VOL/FLIP 30 '
   }
-  const result = readDICOMTagsLocalFileSync(testFilePath, Object.keys(expected))
+  const result = await readDICOMTagsLocalFile(testFilePath, Object.keys(expected))
 
   t.true(result instanceof Map)
   Object.keys(expected).forEach((tag) => {

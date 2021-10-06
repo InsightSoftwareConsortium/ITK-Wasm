@@ -11,9 +11,13 @@ import PolyData from '../core/vtkPolyData.js'
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
 import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
 import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
+import localPathRelativeToModule from './localPathRelativeToModule.js'
 
 async function readPolyDataLocalFile(filePath: string): Promise<PolyData> {
-  const polyDataIOsPath = path.resolve(__dirname, 'polydata-io')
+  const polyDataIOsPath = localPathRelativeToModule(import.meta.url, '../polydata-io')
+  if (!fs.existsSync(polyDataIOsPath)) {
+    throw Error("Cannot find path to itk polyData IO's")
+  }
   const absoluteFilePath = path.resolve(filePath)
   const filePathBasename = path.basename(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
@@ -29,8 +33,9 @@ async function readPolyDataLocalFile(filePath: string): Promise<PolyData> {
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(polyDataIOsPath, io as string)
-  const Module = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
+  const modulePath = path.join(polyDataIOsPath, io as string + '.js')
+  const wasmBinary = fs.readFileSync(path.join(polyDataIOsPath + '.wasm'))
+  const Module = await loadEmscriptenModule(modulePath, wasmBinary) as PipelineEmscriptenModule
   const fileContents = new Uint8Array(fs.readFileSync(absoluteFilePath))
 
   const args = [filePathBasename, filePathBasename + '.output.json']

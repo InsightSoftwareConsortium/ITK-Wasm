@@ -587,7 +587,7 @@ private:
       }
     catch (itk::ExceptionObject &excp)
       {
-      std::cerr << "Exception thrown while writing the image" << std::endl;
+      std::cerr << "Exception thrown while reading the image" << std::endl;
       std::cerr << excp << std::endl;
 
       return EXIT_FAILURE;
@@ -608,7 +608,15 @@ private:
 
 } // end namespace itk
 
+
+// https://emscripten.org/docs/porting/Debugging.html?highlight=debugging#handling-c-exceptions-from-javascript
+std::string getExceptionMessage(intptr_t exceptionPtr) {
+  return std::string(reinterpret_cast<std::exception *>(exceptionPtr)->what());
+}
+
+
 EMSCRIPTEN_BINDINGS(itk_dicom_image_series_reader_js_binding) {
+  emscripten::function("getExceptionMessage", &getExceptionMessage);
   emscripten::register_vector< std::string >("FileNamesContainerType");
   emscripten::enum_<itk::DICOMImageSeriesReaderJSBinding::IOPixelType>("IOPixelType")
     .value("UNKNOWNPIXELTYPE", itk::CommonEnums::IOPixel::UNKNOWNPIXELTYPE)

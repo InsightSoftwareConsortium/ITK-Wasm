@@ -1,5 +1,5 @@
 interface EmscriptenModule {
-  mountContainingDirectory(filePath: string): void
+  mountContainingDirectory(filePath: string): string
   unmountContainingDirectory(filePath: string): void
   mkdirs(dirs: string): void
 

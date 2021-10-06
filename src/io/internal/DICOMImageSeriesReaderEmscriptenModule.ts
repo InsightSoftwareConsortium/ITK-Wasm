@@ -13,6 +13,7 @@ interface DICOMImageSeriesReaderEmscriptenModule extends EmscriptenModule {
   FileNamesContainerType: { new(): VectorJSBinding<string> }
   mountContainingDirectory(dir: string): string
   unmountContainingDirectory(dir: string): void
+  getExceptionMessage(num: number): string
 }
 
 export default DICOMImageSeriesReaderEmscriptenModule
