@@ -52,6 +52,7 @@ export { default as readImageLocalDICOMFileSeries } from "./io/readImageLocalDIC
 export { default as readImageLocalFile } from "./io/readImageLocalFile.js"
 export { default as readMeshLocalFile } from "./io/readMeshLocalFile.js"
 export { default as readPolyDataLocalFile } from "./io/readPolyDataLocalFile.js"
+export { default as readLocalFile } from "./io/readLocalFile.js"
 
 export { default as readDICOMTags } from "./io/readDICOMTags.js"
 export { default as readDICOMTagsLocalFile } from "./io/readDICOMTagsLocalFile.js"
