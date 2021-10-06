@@ -22,12 +22,12 @@ async function readDICOMTagsLocalFile(fileName: string, tags: string[] | null = 
   const tagReaderPath = path.join(imageIOsPath, tagReader + '.js')
   const wasmBinary = fs.readFileSync(path.join(imageIOsPath, tagReader + '.wasm'))
   const tagReaderModule = await loadEmscriptenModule(tagReaderPath, wasmBinary) as DICOMTagsReaderEmscriptenModule
-  const mountedFilePath = tagReaderModule.mountContainingDirectory(fileName)
+  const mountedFilePath = tagReaderModule.mountContainingDir(fileName)
   const mountedDir = path.dirname(mountedFilePath)
   const mountedFileName = path.join(mountedDir, path.basename(fileName))
   const result = readDICOMTagsEmscriptenFSFile(tagReaderModule,
     mountedFileName, tags)
-  tagReaderModule.unmountContainingDirectory(mountedFilePath)
+  tagReaderModule.unmountContainingDir(mountedFilePath)
   return result
 }
 

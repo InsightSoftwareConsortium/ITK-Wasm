@@ -40,14 +40,14 @@ async function writeImageLocalFile(useCompression: boolean, image: Image, filePa
       const wasmBinary = fs.readFileSync(path.join(imageIOsPath, ImageIOIndex[idx] + '.wasm'))
       const Module = await loadEmscriptenModule(modulePath, wasmBinary) as ImageIOBaseEmscriptenModule
       const imageIO = new Module.ITKImageIO()
-      const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
+      const mountedFilePath = Module.mountContainingDir(absoluteFilePath)
       imageIO.SetFileName(mountedFilePath)
       if (imageIO.CanWriteFile(mountedFilePath)) {
         io = ImageIOIndex[idx]
-        Module.unmountContainingDirectory(mountedFilePath)
+        Module.unmountContainingDir(mountedFilePath)
         break
       }
-      Module.unmountContainingDirectory(mountedFilePath)
+      Module.unmountContainingDir(mountedFilePath)
     }
   }
   if (io === null) {
@@ -57,9 +57,9 @@ async function writeImageLocalFile(useCompression: boolean, image: Image, filePa
   const modulePath = path.join(imageIOsPath, io as string + '.js')
   const wasmBinary = fs.readFileSync(path.join(imageIOsPath, io as string + '.wasm'))
   const Module = await loadEmscriptenModule(modulePath, wasmBinary) as ImageIOBaseEmscriptenModule
-  const mountedFilePath = Module.mountContainingDirectory(absoluteFilePath)
+  const mountedFilePath = Module.mountContainingDir(absoluteFilePath)
   writeImageEmscriptenFSFile(Module, useCompression, image, mountedFilePath)
-  Module.unmountContainingDirectory(mountedFilePath)
+  Module.unmountContainingDir(mountedFilePath)
   return null
 }
 

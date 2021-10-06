@@ -12,8 +12,8 @@ interface MeshIOBaseEmscriptenModule extends EmscriptenModule {
   ITKMeshIO: { new (): MeshIOBaseJSBinding }
   IOComponentType: typeof IOComponent,
   IOPixelType: typeof IOPixel,
-  mountContainingDirectory(dir: string): string
-  unmountContainingDirectory(dir: string): void
+  mountContainingDir(dir: string): string
+  unmountContainingDir(dir: string): void
 
   FileType: typeof FileType
   ByteOrder: typeof ByteOrder

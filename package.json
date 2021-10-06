@@ -19,7 +19,7 @@
     "build:tscWorkersModuleLoader": "tsc --lib webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleBrowser.ts",
     "build:tscWebWorkers": "tsc --lib webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames  --typeRoots \"./node_modules/@types,./src/vendor-types\" --declaration ./src/web-workers/*",
     "prepublishOnly": "npm run build",
-    "build:debug": "node ./build.js --debug && webpack --progress --mode development",
+    "build:debug": "npm run build:wasm -- --debug && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:webpack -- --mode development",
     "build:webpack": "webpack --progress --mode production",
     "build:wasm": "node ./build.js",
     "test": "npm run test:lint && npm run test:node && npm run test:browser",

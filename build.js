@@ -16,7 +16,7 @@ try {
 }
 program
   .option('-c, --no-compile', 'Do not compile Emscripten modules')
-  .option('-s, --no-copy-sources', 'Do not copy JavaScript sources')
+  .option('-s, --no-copy-build-artifacts', 'Do not copy build artifacts')
   .option('-p, --no-build-pipelines', 'Do not build the test pipelines')
   .option('-d, --debug', 'Create a debug build of the Emscripten modules')
   .parse(process.argv)
@@ -105,7 +105,7 @@ if (program.compile) {
   console.log('')
 } // program.compile
 
-if (program.copySources) {
+if (program.copyBuildArtifacts) {
   try {
     fs.mkdirSync('dist')
   } catch (err) {
@@ -179,7 +179,7 @@ if (program.copySources) {
   ])
 } // program.copySources
 
-if (program.buildpipelines) {
+if (program.buildPipelines) {
   const buildPipeline = (pipelinePath) => {
     console.log('Building ' + pipelinePath + ' ...')
     let debugFlags = []
@@ -210,7 +210,7 @@ if (program.buildpipelines) {
     // todo: re-enable with VTK image
     // path.join('test', 'pipelines', 'WriteVTKPolyDataPipeline'),
     // path.join('test', 'pipelines', 'CLPExample1'),
-    // path.join('src', 'pipeline', 'mesh-to-polydata')
+    // path.join('src', 'pipelines', 'mesh-to-polydata'),
   ]
   try {
     fs.mkdirSync(path.join('dist', 'pipelines'))

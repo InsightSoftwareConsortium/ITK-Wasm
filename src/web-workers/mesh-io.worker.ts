@@ -55,16 +55,16 @@ async function readMesh (input: ReadMeshInput) {
         ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       }
       const meshIO = new ioModule.ITKMeshIO()
-      ioModule.mkdirs(mountpoint)
+      ioModule.fs_mkdirs(mountpoint)
       const filePath = `${mountpoint}/${input.name}`
-      ioModule.writeFile(filePath, new Uint8Array(input.data))
+      ioModule.fs_writeFile(filePath, new Uint8Array(input.data))
       meshIO.SetFileName(filePath)
       if (meshIO.CanReadFile(filePath)) {
         io = trialIO
-        ioModule.unlink(filePath)
+        ioModule.fs_unlink(filePath)
         break
       }
-      ioModule.unlink(filePath)
+      ioModule.fs_unlink(filePath)
     }
   }
   if (io === null) {
@@ -80,11 +80,11 @@ async function readMesh (input: ReadMeshInput) {
     ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   }
 
-  ioModule.mkdirs(mountpoint)
+  ioModule.fs_mkdirs(mountpoint)
   const filePath = `${mountpoint}/${input.name}`
-  ioModule.writeFile(filePath, new Uint8Array(input.data))
+  ioModule.fs_writeFile(filePath, new Uint8Array(input.data))
   const mesh = readMeshEmscriptenFSFile(ioModule, filePath)
-  ioModule.unlink(filePath)
+  ioModule.fs_unlink(filePath)
 
   const transferables = []
   if (mesh.points) {
@@ -144,12 +144,12 @@ async function writeMesh(input: WriteMeshInput) {
   }
 
   const filePath = `${mountpoint}/${input.name}`
-  ioModule.mkdirs(mountpoint)
+  ioModule.fs_mkdirs(mountpoint)
   writeMeshEmscriptenFSFile(ioModule,
     { useCompression: input.useCompression, binaryFileType: input.binaryFileType },
     input.mesh, filePath)
-  const writtenFile = ioModule.readFile(filePath, { encoding: 'binary' }) as Uint8Array
-  ioModule.unlink(filePath)
+  const writtenFile = ioModule.fs_readFile(filePath, { encoding: 'binary' }) as Uint8Array
+  ioModule.fs_unlink(filePath)
 
   return new registerWebworker.TransferableResponse(writtenFile.buffer, [writtenFile.buffer])
 }

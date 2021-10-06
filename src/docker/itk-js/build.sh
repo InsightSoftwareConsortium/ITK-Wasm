@@ -8,6 +8,8 @@ cd $script_dir
 
 mkdir -p ITKBridgeJavaScriptModuleCopy
 rsync -a --exclude=../../../src/docker ../../../{include,src,CMakeLists.txt,itk-module.cmake} ./ITKBridgeJavaScriptModuleCopy/
+mkdir -p MedianFilterPipelineCopy
+cp ../../../test/pipelines/MedianFilterPipeline/{CMakeLists.txt,MedianFilterTest.cxx} ./MedianFilterPipelineCopy
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 
@@ -49,3 +51,5 @@ if $debug; then
           --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
           $script_dir $@
 fi
+
+rm -rf ITKBridgeJavaScriptModuleCopy MedianFilterPipelineCopy

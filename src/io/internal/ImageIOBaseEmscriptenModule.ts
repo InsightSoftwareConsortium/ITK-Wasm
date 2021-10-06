@@ -10,8 +10,8 @@ interface ImageIOBaseEmscriptenModule extends EmscriptenModule {
   ITKImageIO: { new (): ImageIOBaseJSBinding }
   IOComponentType: typeof IOComponent
   IOPixelType: typeof IOPixel
-  mountContainingDirectory(dir: string): string
-  unmountContainingDirectory(dir: string): void
+  mountContainingDir(dir: string): string
+  unmountContainingDir(dir: string): void
 
   AxisDirectionType: { new(): VectorJSBinding<number> }
 }

@@ -39,8 +39,8 @@ function typedArrayForBuffer(typedArrayType: string, buffer: ArrayBuffer) {
 
 function readFileSharedArray(emscriptenModule: PipelineEmscriptenModule, path: string): Uint8Array {
   const opts = { flags: 'r', encoding: 'binary' }
-  const stream = emscriptenModule.open(path, opts.flags)
-  const stat = emscriptenModule.stat(path)
+  const stream = emscriptenModule.fs_open(path, opts.flags)
+  const stat = emscriptenModule.fs_stat(path)
   const length = stat.size
   let arrayBuffer = null
   if (haveSharedArrayBuffer) {
@@ -49,8 +49,8 @@ function readFileSharedArray(emscriptenModule: PipelineEmscriptenModule, path: s
     arrayBuffer = new ArrayBuffer(length)
   }
   const array = new Uint8Array(arrayBuffer)
-  emscriptenModule.read(stream, array, 0, length, 0)
-  emscriptenModule.close(stream)
+  emscriptenModule.fs_read(stream, array, 0, length, 0)
+  emscriptenModule.fs_close(stream)
   return array
 }
 
@@ -60,12 +60,12 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
       switch (input.type) {
         case IOTypes.Text:
         {
-          pipelineModule.writeFile(input.path, input.data as string)
+          pipelineModule.fs_writeFile(input.path, input.data as string)
           break
         }
         case IOTypes.Binary:
         {
-          pipelineModule.writeFile(input.path, input.data as Uint8Array)
+          pipelineModule.fs_writeFile(input.path, input.data as Uint8Array)
           break
         }
         case IOTypes.Image:
@@ -79,11 +79,11 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
             size: image.size,
             data: input.path + '.data',
           }
-          pipelineModule.writeFile(input.path, JSON.stringify(imageJSON))
+          pipelineModule.fs_writeFile(input.path, JSON.stringify(imageJSON))
           if (image.data === null) {
             throw Error('image.data is null')
           }
-          pipelineModule.writeFile(imageJSON.data, new Uint8Array(image.data.buffer))
+          pipelineModule.fs_writeFile(imageJSON.data, new Uint8Array(image.data.buffer))
           break
         }
         case IOTypes.Mesh:
@@ -106,30 +106,30 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
             cellBufferSize: mesh.cellBufferSize,
 
           }
-          pipelineModule.writeFile(input.path, JSON.stringify(meshJSON))
+          pipelineModule.fs_writeFile(input.path, JSON.stringify(meshJSON))
           if (meshJSON.numberOfPoints) {
             if (mesh.points === null) {
               throw Error('mesh.points is null')
             }
-            pipelineModule.writeFile(meshJSON.points, new Uint8Array(mesh.points.buffer))
+            pipelineModule.fs_writeFile(meshJSON.points, new Uint8Array(mesh.points.buffer))
           }
           if (meshJSON.numberOfPointPixels) {
             if (mesh.pointData === null) {
               throw Error('mesh.pointData is null')
             }
-            pipelineModule.writeFile(meshJSON.pointData, new Uint8Array(mesh.pointData.buffer))
+            pipelineModule.fs_writeFile(meshJSON.pointData, new Uint8Array(mesh.pointData.buffer))
           }
           if (meshJSON.numberOfCells) {
             if (mesh.cells === null) {
               throw Error('mesh.cells is null')
             }
-            pipelineModule.writeFile(meshJSON.cells, new Uint8Array(mesh.cells.buffer))
+            pipelineModule.fs_writeFile(meshJSON.cells, new Uint8Array(mesh.cells.buffer))
           }
           if (meshJSON.numberOfCellPixels) {
             if (mesh.cellData === null) {
               throw Error('mesh.cellData is null')
             }
-            pipelineModule.writeFile(meshJSON.cellData, new Uint8Array(mesh.cellData.buffer))
+            pipelineModule.fs_writeFile(meshJSON.cellData, new Uint8Array(mesh.cellData.buffer))
           }
           break
         }
@@ -152,7 +152,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
       switch (output.type) {
         case IOTypes.Text:
         {
-          data = pipelineModule.readFile(output.path, { encoding: 'utf8' }) as string
+          data = pipelineModule.fs_readFile(output.path, { encoding: 'utf8' }) as string
           break
         }
         case IOTypes.Binary:
@@ -162,7 +162,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
         }
         case IOTypes.Image:
         {
-          const imageJSON = pipelineModule.readFile(output.path, { encoding: 'utf8' }) as string
+          const imageJSON = pipelineModule.fs_readFile(output.path, { encoding: 'utf8' }) as string
           const image = JSON.parse(imageJSON)
           const dataUint8 = readFileSharedArray(pipelineModule, image.data as string)
           image.data = bufferToTypedArray(image.imageType.componentType, dataUint8.buffer)
@@ -171,7 +171,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
         }
         case IOTypes.Mesh:
         {
-          const meshJSON = pipelineModule.readFile(output.path, { encoding: 'utf8' }) as string
+          const meshJSON = pipelineModule.fs_readFile(output.path, { encoding: 'utf8' }) as string
           const mesh = JSON.parse(meshJSON)
           if (mesh.numberOfPoints) {
             const dataUint8Points = readFileSharedArray(pipelineModule, mesh.points)
@@ -202,7 +202,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
         }
         case IOTypes.vtkPolyData:
         {
-          const polyDataJSON = pipelineModule.readFile(`${output.path}/index.json`, { encoding: 'utf8' }) as string
+          const polyDataJSON = pipelineModule.fs_readFile(`${output.path}/index.json`, { encoding: 'utf8' }) as string
           const polyData = JSON.parse(polyDataJSON)
           const cellTypes = ['points', 'verts', 'lines', 'polys', 'strips']
           cellTypes.forEach((cellName) => {

@@ -11,8 +11,8 @@ interface DICOMImageSeriesReaderEmscriptenModule extends EmscriptenModule {
   IOComponentType: typeof IOComponent
   IOPixelType: typeof IOPixel
   FileNamesContainerType: { new(): VectorJSBinding<string> }
-  mountContainingDirectory(dir: string): string
-  unmountContainingDirectory(dir: string): void
+  mountContainingDir(dir: string): string
+  unmountContainingDir(dir: string): void
   getExceptionMessage(num: number): string
 }
 

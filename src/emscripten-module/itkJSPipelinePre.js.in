@@ -1,44 +1,28 @@
-//Module['locateFile'] = function(fileName, prefix) {
-  //if(fileName === '@wasm_target@.wasm') {
-    //if (@target@.isAbsoluteURL) {
-      //return @target@.pipelinePath + 'Wasm.wasm'
-    //}
-    //if (typeof @target@.moduleScriptDir !== 'undefined') {
-      //return @target@.moduleScriptDir + '/@wasm_target@.wasm'
-    //}
-    //return prefix + '../Pipelines/@wasm_target@.wasm'
-  //}
-  //return prefix + fileName
-//}
+var mStdout = null
+var mStderr = null
 
-//var moduleStdout = null
-//var moduleStderr = null
+Module['resetModuleStdout'] = function() {
+  mStdout = ''
+}
 
-//Module['resetModuleStdout'] = function() {
-  //moduleStdout = ''
-//}
+Module['resetModuleStderr'] = function() {
+  mStderr = ''
+}
 
-//Module['resetModuleStderr'] = function() {
-  //moduleStderr = ''
-//}
+Module['print'] = function(text) {
+  console.log(text)
+  mStdout += text + '\n'
+}
 
-//Module['print'] = function(text) {
-  //console.log(text)
-  //moduleStdout += text + '\n'
-//}
+Module['printErr'] = function(text) {
+  console.error(text)
+  mStderr += text + '\n'
+}
 
-//Module['printErr'] = function(text) {
-  //console.log(text)
-  //moduleStderr += text + '\n'
-//}
+Module['getModuleStdout'] = function() {
+  return mStdout
+}
 
-//Module['getModuleStdout'] = function() {
-  //return moduleStdout
-//}
-
-//Module['getModuleStderr'] = function() {
-  //return moduleStderr
-//}
-
-//Module['preRun'] = function() {
-//}
+Module['getModuleStderr'] = function() {
+  return mStderr
+}

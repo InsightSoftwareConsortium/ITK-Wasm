@@ -1,12 +1,8 @@
-// Emscripten-generated asm.js code ends.
-
-/** \brief Utilites for exposing the local filesystem when running in Node.js. */
-
 /** Given an absolute path to a file, mount its containing directory in the
  * Emscripten virtual filesystem. Only relevant when within the Node.js
  * environment. If the containing directory already exists with the
  * Emscripten filesystem, it will not be mounted. */
-Module.mountContainingDirectory = function (filePath) {
+Module.mountContainingDir = function (filePath) {
   if (!ENVIRONMENT_IS_NODE) {
     return
   }
@@ -32,7 +28,7 @@ Module.mountContainingDirectory = function (filePath) {
 
 /** Given an absolute path to a file, unmount its containing directory in the
  * Emscripten virtual filesystem. */
-Module.unmountContainingDirectory = function (filePath) {
+Module.unmountContainingDir = function (filePath) {
   if (!ENVIRONMENT_IS_NODE) {
     return
   }
@@ -41,7 +37,7 @@ Module.unmountContainingDirectory = function (filePath) {
   FS.unmount(containingDir)
 }
 
-Module.mkdirs = function (dirs) {
+Module.fs_mkdirs = function (dirs) {
   var currentDir = '/'
   var splitDirs = dirs.split('/')
 
@@ -54,30 +50,30 @@ Module.mkdirs = function (dirs) {
   }
 }
 
-//Module.readFile = function (path, opts) {
-  //return FS.readFile(path, opts)
-//}
+Module.fs_readFile = function (path, opts) {
+  return FS.readFile(path, opts)
+}
 
-//Module.writeFile = function (path, data, opts) {
-  //return FS.writeFile(path, data, opts)
-//}
+Module.fs_writeFile = function (path, data, opts) {
+  return FS.writeFile(path, data, opts)
+}
 
-//Module.unlink = function (path) {
-  //return FS.unlink(path)
-//}
+Module.fs_unlink = function (path) {
+  return FS.unlink(path)
+}
 
-//Module.open = function (path, flags, mode) {
-  //return FS.open(path, flags, mode)
-//}
+Module.fs_open = function (path, flags, mode) {
+  return FS.open(path, flags, mode)
+}
 
-//Module.stat = function (path) {
-  //return FS.stat(path)
-//}
+Module.fs_stat = function (path) {
+  return FS.stat(path)
+}
 
-//Module.read = function (stream, buffer, offset, length, position) {
-  //return FS.read(stream, buffer, offset, length, position)
-//}
+Module.fs_read = function (stream, buffer, offset, length, position) {
+  return FS.read(stream, buffer, offset, length, position)
+}
 
-//Module.close = function (stream) {
-  //return FS.close(stream)
-//}
+Module.fs_close = function (stream) {
+  return FS.close(stream)
+}

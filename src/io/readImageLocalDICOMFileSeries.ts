@@ -24,7 +24,7 @@ async function readImageLocalDICOMFileSeries(fileNames: string[], singleSortedSe
     const seriesReaderPath = path.join(imageIOsPath, seriesReader + '.js')
     const wasmBinary = fs.readFileSync(path.join(imageIOsPath, seriesReader + '.wasm'))
     const seriesReaderModule = await loadEmscriptenModule(seriesReaderPath, wasmBinary) as DICOMImageSeriesReaderEmscriptenModule
-    const mountedFilePath = seriesReaderModule.mountContainingDirectory(fileNames[0])
+    const mountedFilePath = seriesReaderModule.mountContainingDir(fileNames[0])
     const mountedDir = path.dirname(mountedFilePath)
 
     const mountedFileNames = fileNames.map((fileName) => {
@@ -32,7 +32,7 @@ async function readImageLocalDICOMFileSeries(fileNames: string[], singleSortedSe
     })
     const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
       mountedFileNames, singleSortedSeries)
-    seriesReaderModule.unmountContainingDirectory(mountedFilePath)
+    seriesReaderModule.unmountContainingDir(mountedFilePath)
     return image
 }
 export default readImageLocalDICOMFileSeries

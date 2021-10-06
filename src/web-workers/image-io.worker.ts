@@ -80,17 +80,17 @@ async function readImage (input: ReadImageInput) {
     for (const mod of availableIOModules(input)) {
       const trialIO = ImageIOIndex[idx]
       const imageIO = new mod.ITKImageIO()
-      mod.mkdirs(mountpoint)
+      mod.fs_mkdirs(mountpoint)
       const filePath = `${mountpoint}/${input.name}`
-      mod.writeFile(filePath, new Uint8Array(input.data))
+      mod.fs_writeFile(filePath, new Uint8Array(input.data))
       imageIO.SetFileName(filePath)
       if (imageIO.CanReadFile(filePath)) {
         io = trialIO
-        mod.unlink(filePath)
+        mod.fs_unlink(filePath)
         ioToModule.set(io, mod)
         break
       }
-      mod.unlink(filePath)
+      mod.fs_unlink(filePath)
       idx++
     }
     if (io === null) {
@@ -99,11 +99,11 @@ async function readImage (input: ReadImageInput) {
   }
 
   function inputToResponse (ioModule: ImageIOBaseEmscriptenModule) {
-    ioModule.mkdirs(mountpoint)
+    ioModule.fs_mkdirs(mountpoint)
     const filePath = `${mountpoint}/${input.name}`
-    ioModule.writeFile(filePath, new Uint8Array(input.data))
+    ioModule.fs_writeFile(filePath, new Uint8Array(input.data))
     const image = readImageEmscriptenFSFile(ioModule, filePath)
-    ioModule.unlink(filePath)
+    ioModule.fs_unlink(filePath)
 
     // @ts-ignore: error TS2531: Object is possibly 'null'.
     if (haveSharedArrayBuffer && image.data.buffer instanceof SharedArrayBuffer) { // eslint-disable-line
@@ -161,10 +161,10 @@ async function writeImage(input: WriteImageInput) {
   }
 
   const filePath = mountpoint + '/' + input.name
-  ioModule.mkdirs(mountpoint)
+  ioModule.fs_mkdirs(mountpoint)
   writeImageEmscriptenFSFile(ioModule, input.useCompression, input.image, filePath)
-  const writtenFile = ioModule.readFile(filePath, { encoding: 'binary' }) as Uint8Array
-  ioModule.unlink(filePath)
+  const writtenFile = ioModule.fs_readFile(filePath, { encoding: 'binary' }) as Uint8Array
+  ioModule.fs_unlink(filePath)
 
   if (haveSharedArrayBuffer && writtenFile.buffer instanceof SharedArrayBuffer) { // eslint-disable-line
     return new registerWebworker.TransferableResponse(writtenFile.buffer, [])
@@ -180,17 +180,17 @@ async function readDICOMImageSeries(input: ReadDICOMImageSeriesInput) {
   }
 
   const mountpoint = '/work'
-  seriesReaderModule.mkdirs(mountpoint)
+  seriesReaderModule.fs_mkdirs(mountpoint)
   const filePaths = []
   for (let ii = 0; ii < input.fileDescriptions.length; ii++) {
     const filePath = `${mountpoint}/${input.fileDescriptions[ii].name}`
-    seriesReaderModule.writeFile(filePath, new Uint8Array(input.fileDescriptions[ii].data))
+    seriesReaderModule.fs_writeFile(filePath, new Uint8Array(input.fileDescriptions[ii].data))
     filePaths.push(filePath)
   }
   const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
     filePaths, input.singleSortedSeries)
   for (let ii = 0; ii < filePaths.length; ii++) {
-    seriesReaderModule.unlink(filePaths[ii])
+    seriesReaderModule.fs_unlink(filePaths[ii])
   }
 
   // @ts-ignore: error TS2531: Object is possibly 'null'.
@@ -209,11 +209,11 @@ async function readDICOMTags(input: ReadDICOMTagsInput) {
   }
 
   const mountpoint = '/work'
-  tagReaderModule.mkdirs(mountpoint)
+  tagReaderModule.fs_mkdirs(mountpoint)
   const filePath = `${mountpoint}/${input.name}`
-  tagReaderModule.writeFile(filePath, new Uint8Array(input.data))
+  tagReaderModule.fs_writeFile(filePath, new Uint8Array(input.data))
   const tagValues = readDICOMTagsEmscriptenFSFile(tagReaderModule, filePath, input.tags)
-  tagReaderModule.unlink(filePath)
+  tagReaderModule.fs_unlink(filePath)
 
   return new registerWebworker.TransferableResponse(tagValues, [])
 }
