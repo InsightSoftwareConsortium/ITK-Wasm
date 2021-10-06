@@ -1,13 +1,10 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
-const writeImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'writeImageLocalFile.js'))
+import { IntTypes, PixelTypes, readImageLocalFile, writeImageLocalFile } from '../../../dist/index.js'
 
-const testInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'brainweb165a10f17.mha')
-const testOutputFilePath = path.resolve(__dirname, '..', 'build', 'Testing', 'Temporary', 'MetaImageTest-brainweb165a10f17.mha')
+const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'brainweb165a10f17.mha')
+const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'MetaImageTest-brainweb165a10f17.mha')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 3, 'dimension')
