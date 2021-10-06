@@ -1,11 +1,9 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
+import { IntTypes, PixelTypes, readImageLocalFile } from '../../../dist/index.js'
 
-const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cthead1.png')
+const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cthead1.png')
 
 test('readImageLocalFile reads a file path given on the local filesystem', t => {
   return readImageLocalFile(testFilePath).then(function (image) {
