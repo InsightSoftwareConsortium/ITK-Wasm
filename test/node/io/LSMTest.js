@@ -1,12 +1,10 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
+import { IntTypes, PixelTypes, readImageLocalFile } from '../../../dist/index.js'
 
 test('Test reading a LSM file', t => {
-  const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cthead1.lsm')
+  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cthead1.lsm')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 2, 'dimension')
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
