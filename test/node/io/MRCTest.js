@@ -1,10 +1,10 @@
 import test from 'ava'
 import path from 'path'
 
-import { FloatTypes, PixelTypes, readImageLocalFile } from '../../../dist/index.js'
+import { IntTypes, PixelTypes, readImageLocalFile } from '../../../dist/index.js'
 
 test('Test reading a MRC file', t => {
-  const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'tilt_series_little.mrc')
+  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'tilt_series_little.mrc')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 3, 'dimension')
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')

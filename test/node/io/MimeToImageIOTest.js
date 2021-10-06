@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import mimeToIO from '../../../dist/io/internal/MimeToImageIO.js'
+import MimeToIO from '../../../dist/io/internal/MimeToImageIO.js'
 
 test('image/png maps to itkPNGImageIOJSBinding', t => {
   const io = MimeToIO.get('image/png')

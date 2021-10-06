@@ -1,13 +1,10 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
-const writeImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'writeImageLocalFile.js'))
+import { FloatTypes, PixelTypes, readImageLocalFile, writeImageLocalFile } from '../../../dist/index.js'
 
-const testInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'vol-raw-little.nrrd')
-const testOutputFilePath = path.resolve(__dirname, '..', 'build', 'Testing', 'Temporary', 'NRRDTest-vol-raw-little.nrrd')
+const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'vol-raw-little.nrrd')
+const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'NRRDTest-vol-raw-little.nrrd')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 3, 'dimension')
