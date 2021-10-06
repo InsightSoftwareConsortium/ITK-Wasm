@@ -32,11 +32,10 @@ RUN echo "include(ITKBridgeJavaScript)" >> ${CMAKE_TOOLCHAIN_FILE_ITK}
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
 COPY web-build /usr/local/bin/
 
-# Cache build of required system libraries
+# Trigger Emscripten to cache builds of required system libraries
 ADD MedianFilterPipelineCopy /MedianFilterPipelineCopy
 WORKDIR /MedianFilterPipelineCopy
 RUN /usr/local/bin/web-build -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DCMAKE_EXE_LINKER_FLAGS='-fltothin -s DISABLE_EXCEPTION_CATCHING=0' && \
-   rm -rf ./web-build && /usr/local/bin/web-build -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DCMAKE_EXE_LINKER_FLAGS='-flto -s DISABLE_EXCEPTION_CATCHING=0' && \
    rm -rf ./web-build && /usr/local/bin/web-build -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DCMAKE_EXE_LINKER_FLAGS='-flto -s DISABLE_EXCEPTION_CATCHING=1' && \
  rm -rf /MedianFilterPipelineCopy
 RUN chmod -R 777 /emsdk/upstream/emscripten/cache

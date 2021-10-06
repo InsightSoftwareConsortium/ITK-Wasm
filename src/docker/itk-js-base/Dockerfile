@@ -87,7 +87,8 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
 # linking otherwise.
 #ENV LDFLAGS="-flto -s ALLOW_MEMORY_GROWTH=1"
 #ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -flto"
-ENV LDFLAGS="-flto=thin -s ALLOW_MEMORY_GROWTH=1"
+#ENV LDFLAGS="-flto=thin -s ALLOW_MEMORY_GROWTH=1"
+ENV LDFLAGS="-s ALLOW_MEMORY_GROWTH=1"
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0"
 ENV CXXFLAGS="${CFLAGS}"
 RUN mkdir ITK-build && \

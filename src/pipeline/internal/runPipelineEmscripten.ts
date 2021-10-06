@@ -72,6 +72,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
         {
           const image: Image = input.data as any
           const imageJSON = {
+            imageType: image.imageType,
             name: image.name,
             origin: image.origin,
             spacing: image.spacing,
@@ -90,6 +91,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
         {
           const mesh: Mesh = input.data as any
           const meshJSON = {
+            meshType: mesh.meshType,
             name: mesh.name,
 
             numberOfPoints: mesh.numberOfPoints,
@@ -141,7 +143,19 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
 
   pipelineModule.resetModuleStdout()
   pipelineModule.resetModuleStderr()
-  pipelineModule.callMain(args)
+  try {
+    pipelineModule.callMain(args)
+  } catch (exception) {
+    // Note: Module must be built with CMAKE_BUILD_TYPE set to Debug.
+    // e.g.: itk-js build my/project -- -DCMAKE_BUILD_TYPE:STRING=Debug
+    if (typeof exception === 'number') {
+      console.log('Exception while running pipeline:')
+      console.log('stdout:', pipelineModule.getModuleStdout())
+      console.error('stderr:', pipelineModule.getModuleStderr())
+      console.error('exception:', pipelineModule.getExceptionMessage(exception))
+    }
+    throw exception
+  }
   const stdout = pipelineModule.getModuleStdout()
   const stderr = pipelineModule.getModuleStderr()
 
