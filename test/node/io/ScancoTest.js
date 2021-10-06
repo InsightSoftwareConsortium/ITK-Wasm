@@ -1,12 +1,10 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
+import { IntTypes, PixelTypes, readImageLocalFile } from '../../../dist/index.js'
 
 test('Test reading a Scanco ISQ file', t => {
-  const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'C0004255.ISQ')
+  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'C0004255.ISQ')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 3, 'dimension')
     t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')
