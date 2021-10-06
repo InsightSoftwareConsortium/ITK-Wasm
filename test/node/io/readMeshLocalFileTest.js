@@ -1,11 +1,9 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
-const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
-const readMeshLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readMeshLocalFile.js'))
+import { IntTypes, FloatTypes, readMeshLocalFile } from '../../../dist/index.js'
 
-const testFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cow.vtk')
+const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cow.vtk')
 
 test('readMeshLocalFile reads a file path given on the local filesystem', t => {
   return readMeshLocalFile(testFilePath).then(function (mesh) {
