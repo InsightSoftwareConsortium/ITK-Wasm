@@ -85,8 +85,9 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
 
 # After the WASI exception / setjmp support may work? setjmp is lost in final
 # linking otherwise.
-#ENV LDFLAGS="-flto"
+#ENV LDFLAGS="-flto -s ALLOW_MEMORY_GROWTH=1"
 #ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -flto"
+ENV LDFLAGS="-flto=thin -s ALLOW_MEMORY_GROWTH=1"
 ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0"
 ENV CXXFLAGS="${CFLAGS}"
 RUN mkdir ITK-build && \
