@@ -1,5 +1,6 @@
 /* eslint-disable global-require */
 /* eslint-disable react/require-extension */
+const os = require('os')
 const path = require('path')
 const webpack = require('webpack')
 const sourcePath = path.resolve(__dirname, './dist')
@@ -8,6 +9,11 @@ if (!process.env.NODE_ENV) process.env.NODE_ENV = 'test'
 
 if (!process.env.CHROME_BIN) {
   process.env.CHROME_BIN = require('puppeteer').executablePath()
+}
+
+// https://github.com/ryanclark/karma-webpack/issues/498
+const output = {
+  path: path.join(os.tmpdir(), '_karma_webpack_') + Math.floor(Math.random() * 1000000),
 }
 
 module.exports = function init (config) {
@@ -28,7 +34,8 @@ module.exports = function init (config) {
       { pattern: './dist/polydata-io/**', watched: true, served: true, included: false },
       { pattern: './dist/web-workers/**', watched: true, served: true, included: false },
       { pattern: './dist/pipelines/**', watched: true, served: true, included: false },
-      { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false }
+      { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false },
+      { pattern: `${output.path}/**/*`, watched: false, included: false, },
     ],
 
     preprocessors: {
@@ -40,6 +47,7 @@ module.exports = function init (config) {
       module: {
         rules: [].concat()
       },
+      output,
       resolve: {
         modules: [
           path.resolve(__dirname, 'node_modules'),

@@ -12,10 +12,13 @@ function createWebworkerPromise(name: 'image-io' | 'mesh-io' | 'pipeline', exist
   switch (name) {
   case 'image-io':
     worker = new Worker(new URL('../../web-workers/image-io.worker.js', import.meta.url))
+    break
   case 'mesh-io':
     worker = new Worker(new URL('../../web-workers/mesh-io.worker.js', import.meta.url))
+    break
   case 'pipeline':
     worker = new Worker(new URL('../../web-workers/pipeline.worker.js', import.meta.url))
+    break
   default:
     throw Error(`Unsupported web worker type: ${name}`)
   }

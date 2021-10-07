@@ -5,12 +5,11 @@ import config from "../itkConfig.js"
 
 import ReadImageResult from "./ReadImageResult.js"
 
-function readImageArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadImageResult> {
+async function readImageArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadImageResult> {
   let worker = webWorker
-  return createWebworkerPromise('image-io', worker)
-    .then(({ webworkerPromise, worker: usedWorker }) => {
-      worker = usedWorker
-      return webworkerPromise.postMessage(
+  const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise('image-io', worker)
+  worker = usedWorker
+  const image: Image = await webworkerPromise.postMessage(
         {
           operation: 'readImage',
           name: fileName,
@@ -20,9 +19,7 @@ function readImageArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer
         },
         [arrayBuffer]
       )
-    }).then(function (image: Image) {
-      return Promise.resolve({ image, webWorker: worker as Worker})
-    })
+  return { image, webWorker: worker as Worker}
 }
 
 export default readImageArrayBuffer
