@@ -4,7 +4,7 @@ import mimeToIO from '../io/internal/MimeToImageIO.js'
 import getFileExtension from '../io/getFileExtension.js'
 import extensionToIO from '../io/internal/extensionToImageIO.js'
 import ImageIOIndex from '../io/internal/ImageIOIndex.js'
-import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleBrowser.js'
+import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleWebWorker.js'
 
 import readImageEmscriptenFSFile from '../io/internal/readImageEmscriptenFSFile.js'
 import writeImageEmscriptenFSFile from '../io/internal/writeImageEmscriptenFSFile.js'
@@ -58,10 +58,10 @@ let seriesReaderModule: DICOMImageSeriesReaderEmscriptenModule | null = null
 let tagReaderModule: DICOMTagsReaderEmscriptenModule | null = null
 const haveSharedArrayBuffer = typeof self.SharedArrayBuffer === 'function' // eslint-disable-line
 
-function * availableIOModules (input: Input) {
+async function * availableIOModules (input: Input) {
   for (let idx = 0; idx < ImageIOIndex.length; idx++) {
     const trialIO = ImageIOIndex[idx]
-    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'image-io', trialIO, false) as ImageIOBaseEmscriptenModule
+    const ioModule = await loadEmscriptenModule(trialIO, 'image-io', input.config.itkModulesPath) as ImageIOBaseEmscriptenModule
     yield ioModule
   }
 }
@@ -77,7 +77,7 @@ async function readImage (input: ReadImageInput) {
     io = extensionToIO.get(extension)
   } else {
     let idx = 0
-    for (const mod of availableIOModules(input)) {
+    for await (const mod of availableIOModules(input)) {
       const trialIO = ImageIOIndex[idx]
       const imageIO = new mod.ITKImageIO()
       mod.fs_mkdirs(mountpoint)
@@ -118,7 +118,7 @@ async function readImage (input: ReadImageInput) {
     const ioModule = ioToModule.get(io as string) as ImageIOBaseEmscriptenModule
     return inputToResponse(ioModule)
   } else {
-    const ioModule = loadEmscriptenModule(input.config.itkModulesPath, 'image-io', io as string, false) as ImageIOBaseEmscriptenModule
+    const ioModule = await loadEmscriptenModule(io as string, 'image-io', input.config.itkModulesPath) as ImageIOBaseEmscriptenModule
     ioToModule.set(io as string, ioModule)
     return inputToResponse(ioModule)
   }
@@ -135,7 +135,7 @@ async function writeImage(input: WriteImageInput) {
     io = extensionToIO.get(extension)
   } else {
     let idx = 0
-    for (const ioModule of availableIOModules(input)) {
+    for await (const ioModule of availableIOModules(input)) {
       const trialIO = ImageIOIndex[idx]
       const imageIO = new ioModule.ITKImageIO()
       const filePath = mountpoint + '/' + input.name
@@ -156,7 +156,7 @@ async function writeImage(input: WriteImageInput) {
   if (ioToModule.has(io as string)) {
     ioModule = ioToModule.get(io as string) as ImageIOBaseEmscriptenModule
   } else {
-    ioToModule.set(io as string, loadEmscriptenModule(input.config.itkModulesPath, 'image-io', io as string, false) as ImageIOBaseEmscriptenModule)
+    ioToModule.set(io as string, await loadEmscriptenModule(io as string, 'image-io', input.config.itkModulesPath) as ImageIOBaseEmscriptenModule)
     ioModule = ioToModule.get(io as string) as ImageIOBaseEmscriptenModule
   }
 
@@ -176,7 +176,7 @@ async function writeImage(input: WriteImageInput) {
 async function readDICOMImageSeries(input: ReadDICOMImageSeriesInput) {
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
   if (!seriesReaderModule) {
-    seriesReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'image-io', seriesReader, false) as DICOMImageSeriesReaderEmscriptenModule
+    seriesReaderModule = await loadEmscriptenModule(seriesReader, 'image-io', input.config.itkModulesPath) as DICOMImageSeriesReaderEmscriptenModule
   }
 
   const mountpoint = '/work'
@@ -205,7 +205,7 @@ async function readDICOMImageSeries(input: ReadDICOMImageSeriesInput) {
 async function readDICOMTags(input: ReadDICOMTagsInput) {
   const tagReader = 'itkDICOMTagReaderJSBinding'
   if (!tagReaderModule) {
-    tagReaderModule = loadEmscriptenModule(input.config.itkModulesPath, 'image-io', tagReader, false) as DICOMTagsReaderEmscriptenModule
+    tagReaderModule = await loadEmscriptenModule(tagReader, 'image-io', input.config.itkModulesPath) as DICOMTagsReaderEmscriptenModule
   }
 
   const mountpoint = '/work'

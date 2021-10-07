@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import loadEmscriptenModuleMainThread from '../core/internal/loadEmscriptenModuleMainThread.js'
 
 import config from '../itkConfig.js'
 
@@ -16,71 +17,27 @@ import PipelineInput from './PipelineInput.js'
 import RunPipelineResult from './RunPipelineResult.js'
 
 // To cache loaded pipeline modules
-const pipelinePathToModule: Map<string, PipelineEmscriptenModule> = new Map()
+const pipelineToModule: Map<string, PipelineEmscriptenModule> = new Map()
 
-function loadEmscriptenModuleMainThread (itkModulesPath: string, modulesDirectory: string, pipelinePath: string, isAbsoluteURL: boolean): Promise<PipelineEmscriptenModule> {
-  let prefix = itkModulesPath
-  if (itkModulesPath[0] !== '/' && !itkModulesPath.startsWith('http')) {
-    prefix = '..'
+async function loadPipelineModule (pipelinePath: string | URL): Promise<PipelineEmscriptenModule> {
+  const moduleRelativePathOrURL = pipelinePath
+  let pipeline = pipelinePath as string
+  let pipelineModule = null
+  if (typeof pipelinePath !== 'string') {
+    pipeline = pipelinePath.href
   }
-  const moduleScriptDir = prefix + '/' + modulesDirectory
-  if (typeof window.WebAssembly === 'object' && typeof window.WebAssembly.Memory === 'function') {
-    let modulePath = moduleScriptDir + '/' + pipelinePath + 'Wasm.js'
-    if (isAbsoluteURL) {
-      modulePath = pipelinePath + 'Wasm.js'
-    }
-    return new Promise(function (resolve, reject) {
-      const s = document.createElement('script')
-      s.src = modulePath
-      s.onload = resolve
-      s.onerror = reject
-      document.head.appendChild(s)
-    }).then(async () => {
-      const moduleBaseName = pipelinePath.replace(/.*\//, '')
-      let wasmPath = moduleScriptDir + '/' + pipelinePath + 'Wasm.wasm'
-      if (isAbsoluteURL) {
-        wasmPath = pipelinePath + 'Wasm.wasm'
-      }
-      const response = await axios.get(wasmPath, { responseType: 'arraybuffer' })
-      const wasmBinary = response.data
-      // @ts-ignore: error TS7015: Element implicitly has an 'any' type
-        // because index expression is not of type 'number'.
-      return Promise.resolve(window[moduleBaseName]({ moduleScriptDir, isAbsoluteURL, pipelinePath, wasmBinary }))
-    })
+  if (pipelineToModule.has(pipeline)) {
+    return pipelineToModule.get(pipeline) as PipelineEmscriptenModule
   } else {
-    let modulePath = moduleScriptDir + '/' + pipelinePath + '.js'
-    if (isAbsoluteURL) {
-      modulePath = pipelinePath + '.js'
-    }
-    return new Promise(function (resolve, reject) {
-      const s = document.createElement('script')
-      s.src = modulePath
-      s.onload = resolve
-      s.onerror = reject
-      document.head.appendChild(s)
-    }).then(() => {
-      // @ts-ignore: error TS2551: Property 'Module' does not exist on type
-      // 'Window & typeof globalThis'. Did you mean 'module'?
-      const emscriptenModule = window.Module
-      return emscriptenModule
-    })
-  }
-}
-
-async function loadPipelineModule (moduleDirectory: string, pipelinePath: string, isAbsoluteURL: boolean): Promise<PipelineEmscriptenModule> {
-  if (pipelinePathToModule.has(pipelinePath)) {
-    return pipelinePathToModule.get(pipelinePath) as PipelineEmscriptenModule
-  } else {
-    const pipelineModule = await loadEmscriptenModuleMainThread(config.itkModulesPath, moduleDirectory, pipelinePath, isAbsoluteURL) as PipelineEmscriptenModule
-    pipelinePathToModule.set(pipelinePath, pipelineModule)
+    const pipelineModule = await loadEmscriptenModuleMainThread(pipelinePath, 'pipeline', config.itkModulesPath) as PipelineEmscriptenModule
+    pipelineToModule.set(pipeline, pipelineModule)
     return pipelineModule
   }
 }
 
 function runPipelineBrowser(webWorker: Worker | null | boolean, pipelinePath: string | URL, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]): Promise<RunPipelineResult> {
-  const isAbsoluteURL = pipelinePath instanceof URL
   if (webWorker === false) {
-    loadPipelineModule('Pipelines', pipelinePath.toString(), isAbsoluteURL).then((pipelineModule) => {
+    loadPipelineModule(pipelinePath.toString()).then((pipelineModule) => {
       const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
       return result
     })
@@ -148,7 +105,6 @@ function runPipelineBrowser(webWorker: Worker | null | boolean, pipelinePath: st
           operation: 'runPipeline',
           config: config,
           pipelinePath: pipelinePath.toString(),
-          isAbsoluteURL,
           args,
           outputs,
           inputs

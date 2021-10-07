@@ -31,8 +31,7 @@ async function readMeshLocalFile(filePath: string): Promise<Mesh> {
   } else {
     for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
       const modulePath = path.join(meshIOsPath, MeshIOIndex[idx] + '.js')
-      const wasmBinary = fs.readFileSync(path.join(meshIOsPath, MeshIOIndex[idx] + '.wasm'))
-      const Module = await loadEmscriptenModule(modulePath, wasmBinary) as MeshIOBaseEmscriptenModule
+      const Module = await loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
       const meshIO = new Module.ITKMeshIO()
       const mountedFilePath = Module.mountContainingDir(absoluteFilePath)
       meshIO.SetFileName(mountedFilePath)
@@ -49,8 +48,7 @@ async function readMeshLocalFile(filePath: string): Promise<Mesh> {
   }
 
   const modulePath = path.join(meshIOsPath, io as string + '.js')
-  const wasmBinary = fs.readFileSync(path.join(meshIOsPath, io as string + '.wasm'))
-  const Module = await loadEmscriptenModule(modulePath, wasmBinary) as MeshIOBaseEmscriptenModule
+  const Module = await loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
   const mountedFilePath = Module.mountContainingDir(absoluteFilePath)
   const mesh = readMeshEmscriptenFSFile(Module, mountedFilePath)
   Module.unmountContainingDir(mountedFilePath)

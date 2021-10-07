@@ -1,6 +1,6 @@
 import registerWebworker from 'webworker-promise/lib/register.js'
 
-import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleBrowser.js'
+import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleWebWorker.js'
 import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
 import IOTypes from '../core/IOTypes.js'
 import getTransferable from '../core/getTransferable.js'
@@ -24,23 +24,28 @@ interface Input {
 }
 
 interface RunPipelineInput extends Input {
-  pipelinePath: string
-  isAbsoluteURL: boolean
+  pipelinePath: string | object
   args: string[]
   outputs: PipelineOutput[]
   inputs: PipelineInput[]
 }
 
 // To cache loaded pipeline modules
-const pipelinePathToModule: Map<string,PipelineEmscriptenModule> = new Map()
+const pipelineToModule: Map<string,PipelineEmscriptenModule> = new Map()
 
-function loadPipelineModule (moduleDirectory: string, pipelinePath: string, config: ITKConfig, isAbsoluteURL: boolean) {
+async function loadPipelineModule (moduleDirectory: string, pipelinePath: string | object, config: ITKConfig) {
+  let moduleRelativePathOrURL: string | URL = pipelinePath as string
+  let pipeline = pipelinePath as string
   let pipelineModule = null
-  if (pipelinePathToModule.has(pipelinePath)) {
-    pipelineModule = pipelinePathToModule.get(pipelinePath) as PipelineEmscriptenModule
+  if (typeof pipelinePath !== 'string') {
+    moduleRelativePathOrURL = new URL((pipelinePath as URL).href)
+    pipeline = moduleRelativePathOrURL.href
+  }
+  if (pipelineToModule.has(pipeline)) {
+    pipelineModule = pipelineToModule.get(pipeline) as PipelineEmscriptenModule
   } else {
-    pipelinePathToModule.set(pipelinePath, loadEmscriptenModule(config.itkModulesPath, moduleDirectory, pipelinePath, isAbsoluteURL) as PipelineEmscriptenModule)
-    pipelineModule = pipelinePathToModule.get(pipelinePath) as PipelineEmscriptenModule
+    pipelineToModule.set(pipeline, await loadEmscriptenModule(moduleRelativePathOrURL, 'pipeline', config.itkModulesPath) as PipelineEmscriptenModule)
+    pipelineModule = pipelineToModule.get(pipeline) as PipelineEmscriptenModule
   }
   return pipelineModule
 }
@@ -139,9 +144,9 @@ async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: strin
 registerWebworker(async function (input: RunPipelineInput) {
   let pipelineModule = null
   if (input.operation === 'runPipeline') {
-    pipelineModule = loadPipelineModule('pipelines', input.pipelinePath, input.config, input.isAbsoluteURL) as PipelineEmscriptenModule
+    pipelineModule = await loadPipelineModule('pipelines', input.pipelinePath, input.config) as PipelineEmscriptenModule
   } else if (input.operation === 'runPolyDataIOPipeline') {
-    pipelineModule = loadPipelineModule('polydata-io', input.pipelinePath, input.config, input.isAbsoluteURL) as PipelineEmscriptenModule
+    pipelineModule = await loadPipelineModule('polydata-io', input.pipelinePath, input.config) as PipelineEmscriptenModule
   } else {
     throw new Error('Unknown worker operation')
   }

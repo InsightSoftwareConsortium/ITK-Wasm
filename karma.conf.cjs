@@ -61,7 +61,7 @@ module.exports = function init (config) {
           fs: false,
         },
         alias: {
-          './itkConfig$': path.resolve(__dirname, 'test', 'browser', 'config', 'itkConfigBrowserTest.js'),
+          '../itkConfig.js': path.resolve(__dirname, 'test', 'browser', 'config', 'itkConfigBrowserTest.js'),
           stream: 'stream-browserify',
         }
       },

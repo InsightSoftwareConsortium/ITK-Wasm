@@ -20,8 +20,7 @@ async function readDICOMTagsLocalFile(fileName: string, tags: string[] | null = 
   }
   const tagReader = 'itkDICOMTagReaderJSBinding'
   const tagReaderPath = path.join(imageIOsPath, tagReader + '.js')
-  const wasmBinary = fs.readFileSync(path.join(imageIOsPath, tagReader + '.wasm'))
-  const tagReaderModule = await loadEmscriptenModule(tagReaderPath, wasmBinary) as DICOMTagsReaderEmscriptenModule
+  const tagReaderModule = await loadEmscriptenModule(tagReaderPath) as DICOMTagsReaderEmscriptenModule
   const mountedFilePath = tagReaderModule.mountContainingDir(fileName)
   const mountedDir = path.dirname(mountedFilePath)
   const mountedFileName = path.join(mountedDir, path.basename(fileName))

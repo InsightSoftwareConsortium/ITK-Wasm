@@ -34,8 +34,7 @@ async function readPolyDataLocalFile(filePath: string): Promise<PolyData> {
   }
 
   const modulePath = path.join(polyDataIOsPath, io as string + '.js')
-  const wasmBinary = fs.readFileSync(path.join(polyDataIOsPath + '.wasm'))
-  const Module = await loadEmscriptenModule(modulePath, wasmBinary) as PipelineEmscriptenModule
+  const Module = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
   const fileContents = new Uint8Array(fs.readFileSync(absoluteFilePath))
 
   const args = [filePathBasename, filePathBasename + '.output.json']

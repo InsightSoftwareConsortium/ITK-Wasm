@@ -8,8 +8,7 @@ import PipelineInput from './PipelineInput.js'
 import RunPipelineResult from './RunPipelineResult.js'
 
 async function runPipelineNode(pipelinePath: string, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]): Promise<RunPipelineResult> {
-  const wasmBinary = fs.readFileSync(pipelinePath + '.wasm')
-  const Module = await loadEmscriptenModule(pipelinePath + '.js', wasmBinary) as PipelineEmscriptenModule
+  const Module = await loadEmscriptenModule(pipelinePath) as PipelineEmscriptenModule
   const result = runPipelineEmscripten(Module, args, outputs, inputs)
   return result
 }

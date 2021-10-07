@@ -12,5 +12,5 @@
     "typeRoots": ["./node_modules/@types", "./src/vendor-types"]
   },
   "include": ["./src/**/*"],
-  "exclude": ["./src/core/internal/loadEmscriptenModuleBrowser.ts", "./src/web-workers/*"]
+  "exclude": ["./src/core/internal/loadEmscriptenModuleWebWorker.ts", "./src/web-workers/*"]
 }
