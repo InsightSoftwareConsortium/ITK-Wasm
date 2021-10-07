@@ -6,7 +6,7 @@ import { createRequire } from 'module'
 globalThis.require = createRequire(import.meta.url)
 
 async function loadEmscriptenModuleNode(modulePath: string, wasmBinary: ArrayBuffer | Buffer): Promise<object> {
-  const result = await import(modulePath)
+  const result = await import(/* webpackIgnore: true */ modulePath)
   const instantiated = result.default({ wasmBinary })
   return instantiated
 }

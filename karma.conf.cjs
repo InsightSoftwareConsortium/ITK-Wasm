@@ -1,10 +1,8 @@
 /* eslint-disable global-require */
 /* eslint-disable react/require-extension */
-var path = require('path')
-
-var webpack = require('webpack')
-
-var sourcePath = path.resolve(__dirname, './dist')
+const path = require('path')
+const webpack = require('webpack')
+const sourcePath = path.resolve(__dirname, './dist')
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'test'
 
@@ -24,17 +22,17 @@ module.exports = function init (config) {
     basePath: '',
     frameworks: ['tap', 'webpack'],
     files: [
-      './test/Browser/tests.js',
+      './test/browser/tests.js',
       { pattern: './dist/image-io/**', watched: true, served: true, included: false },
       { pattern: './dist/mesh-io/**', watched: true, served: true, included: false },
       { pattern: './dist/polydata-io/**', watched: true, served: true, included: false },
       { pattern: './dist/web-workers/**', watched: true, served: true, included: false },
-      { pattern: './dist/Pipelines/**', watched: true, served: true, included: false },
+      { pattern: './dist/pipelines/**', watched: true, served: true, included: false },
       { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false }
     ],
 
     preprocessors: {
-      './test/Browser/*.js': ['webpack']
+      './test/browser/**/*.js': ['webpack']
     },
 
     webpack: {
@@ -48,11 +46,14 @@ module.exports = function init (config) {
           sourcePath
         ],
         fallback: {
-          path: false,
+          assert: false,
+          module: false,
+          url: false,
+          path: require.resolve('path-browserify'),
           fs: false,
         },
         alias: {
-          './itkConfig$': path.resolve(__dirname, 'test', 'Browser', 'config', 'itkConfigBrowserTest.js'),
+          './itkConfig$': path.resolve(__dirname, 'test', 'browser', 'config', 'itkConfigBrowserTest.js'),
           stream: 'stream-browserify',
         }
       },
