@@ -1,17 +1,12 @@
-const test = require('ava')
-const path = require('path')
+import test from 'ava'
+import path from 'path'
 
-const IntTypes = require(path.resolve(__dirname, '..', 'dist', 'IntTypes.js'))
-const FloatTypes = require(path.resolve(__dirname, '..', 'dist', 'FloatTypes.js'))
-const PixelTypes = require(path.resolve(__dirname, '..', 'dist', 'PixelTypes.js'))
-const readImageLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readImageLocalFile.js'))
-const readMeshLocalFile = require(path.resolve(__dirname, '..', 'dist', 'readMeshLocalFile.js'))
-const writeLocalFile = require(path.resolve(__dirname, '..', 'dist', 'writeLocalFile.js'))
+import { IntTypes, FloatTypes, PixelTypes, readImageLocalFile, readMeshLocalFile, writeMeshLocalFile, writeLocalFile } from '../../../dist/index.js'
 
-const testImageInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cthead1.png')
-const testImageOutputFilePath = path.resolve(__dirname, '..', 'build', 'Testing', 'Temporary', 'writeLocalFileTest-cthead1.png')
-const testMeshInputFilePath = path.resolve(__dirname, '..', 'build', 'ExternalData', 'test', 'Input', 'cow.vtk')
-const testMeshOutputFilePath = path.resolve(__dirname, '..', 'build', 'Testing', 'Temporary', 'writeLocalFileTest-cow.vtk')
+const testImageInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cthead1.png')
+const testImageOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'writeLocalFileTest-cthead1.png')
+const testMeshInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cow.vtk')
+const testMeshOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'writeLocalFileTest-cow.vtk')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')

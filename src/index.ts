@@ -60,6 +60,7 @@ export { default as ReadDICOMTagsResult } from "./io/ReadDICOMTagsResult.js"
 
 export { default as writeImageLocalFile } from "./io/writeImageLocalFile.js"
 export { default as writeMeshLocalFile } from "./io/writeMeshLocalFile.js"
+export { default as writeLocalFile } from "./io/writeLocalFile.js"
 
 export { default as getFileExtension } from "./io/getFileExtension.js"
 
