@@ -24,7 +24,7 @@
     "build:wasm": "node ./build.js",
     "test": "npm run test:lint && npm run test:node && npm run test:browser",
     "test:lint": "standard \"src/*.js\" \"test/*.js\" \"test/Browser/*.js\"",
-    "test:node": "ava test/*.js",
+    "test:node": "ava test/node/**/*.js",
     "test:browser": "karma start ./karma.conf.js",
     "test:browser-debug": "karma start ./karma.conf.js --no-single-run"
   },
