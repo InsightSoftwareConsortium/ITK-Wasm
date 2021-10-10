@@ -38,21 +38,38 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
   foreach(imageio ${imageios_${io_module}})
     set(ImageIOIndex_ARRAY "${ImageIOIndex_ARRAY}'${imageio}JSBinding', ")
     set(target ${imageio}JSBinding)
+    set(target_umd ${imageio}JSBinding.umd)
+
     _add_executable(${target} io/internal/bindings/${target}.cxx)
     itk_module_target_label(${target})
     itk_module_target_export(${target})
     itk_module_target_install(${target})
+
+    _add_executable(${target_umd} io/internal/bindings/${target}.cxx)
+    itk_module_target_label(${target_umd})
+    itk_module_target_export(${target_umd})
+    itk_module_target_install(${target_umd})
+
     # For embind
     set_property(TARGET ${target} APPEND_STRING
       PROPERTY LINK_FLAGS " --bind"
       )
+    set_property(TARGET ${target_umd} APPEND_STRING
+      PROPERTY LINK_FLAGS " --bind"
+      )
+
     set(exception_catching )
     if(${io_module} STREQUAL "ITKIOGE")
       set(exception_catching " -s DISABLE_EXCEPTION_CATCHING=0")
     endif()
+    set(common_link_flags " -s SUPPORT_LONGJMP=1 -s FORCE_FILESYSTEM=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 --no-entry -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -flto ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js")
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " -s SUPPORT_LONGJMP=1 -s FORCE_FILESYSTEM=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 --no-entry -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -flto ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+      PROPERTY LINK_FLAGS " ${common_link_flags} -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 "
       )
+    set_property(TARGET ${target_umd} APPEND_STRING
+      PROPERTY LINK_FLAGS " ${common_link_flags} "
+      )
+
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
       ${BridgeJavaScript_BINARY_DIR}/image-io
@@ -62,6 +79,15 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
       ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
       )
     _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
+    set_property(TARGET ${target_umd}
+      PROPERTY RUNTIME_OUTPUT_DIRECTORY
+      ${BridgeJavaScript_BINARY_DIR}/image-io
+      )
+    set_property(SOURCE io/internal/bindings/${target_umd}.cxx APPEND
+      PROPERTY OBJECT_DEPENDS
+      ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
+      )
+    _target_link_libraries(${target_umd} LINK_PUBLIC ${ITK_LIBRARIES})
   endforeach()
 endforeach()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/ImageIOIndex.ts.in

@@ -25,11 +25,13 @@ async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | U
   if (modulePrefix.endsWith('.wasm')) {
     modulePrefix = modulePrefix.substring(0, modulePrefix.length - 5)
   }
-  console.log(`modulePrefix: ${modulePrefix}`)
-  const wasmBinaryPath = `${modulePrefix}.wasm`
+  // importScripts / UMD is required over dynamic ESM import until Firefox
+  // adds worker dynamic import support:
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
+  const wasmBinaryPath = `${modulePrefix}.umd.wasm`
   const response = await axios.get(wasmBinaryPath, { responseType: 'arraybuffer' })
   const wasmBinary = response.data
-  const modulePath = `${modulePrefix}.js`
+  const modulePath = `${modulePrefix}.umd.js`
   importScripts(modulePath)
   const moduleBaseName: string = modulePrefix.replace(/.*\//, '')
   // @ts-ignore: error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'WorkerGlobalScope & typeof globalThis'.
