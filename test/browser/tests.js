@@ -18,7 +18,8 @@ readMeshTest()
 
 import writeImageTest from './io/writeImageTest.js'
 writeImageTest()
-//import writeMeshTest from './writeMeshTest'
+import writeMeshTest from './io/writeMeshTest.js'
+writeMeshTest()
 //import writeTest from './writeTest'
 
 import runPipelineBrowserTest from './pipeline/runPipelineBrowserTest.js'

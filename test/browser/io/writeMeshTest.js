@@ -1,11 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import readMeshArrayBuffer from 'readMeshArrayBuffer'
-import writeMeshArrayBuffer from 'writeMeshArrayBuffer'
-
-import IntTypes from 'IntTypes'
-import FloatTypes from 'FloatTypes'
+import { IntTypes, FloatTypes, readMeshArrayBuffer, writeMeshArrayBuffer } from 'browser/index.js'
 
 const fileName = 'cow.vtk'
 const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
@@ -20,6 +16,8 @@ const verifyMesh = (t, mesh) => {
   t.is(mesh.numberOfCells, 3263)
   t.end()
 }
+
+export default function () {
 
 test('writeMeshArrayBuffer writes to an ArrayBuffer', t => {
   return axios.get(testFilePath, { responseType: 'arraybuffer' })
@@ -38,3 +36,5 @@ test('writeMeshArrayBuffer writes to an ArrayBuffer', t => {
       })
     })
 })
+
+}
