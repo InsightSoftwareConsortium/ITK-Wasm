@@ -14,7 +14,8 @@ readMeshTest()
 
 //import readPolyDataTest from './readPolyDataTest'
 //
-//import readTest from './readTest'
+import readTest from './io/readTest.js'
+readTest()
 
 import writeImageTest from './io/writeImageTest.js'
 writeImageTest()

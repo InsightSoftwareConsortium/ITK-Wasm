@@ -14,6 +14,8 @@ export { default as readImageFile } from "./../readImageFile.js"
 export { default as readMeshFile } from "./../readMeshFile.js"
 export { default as readImageFileSeries } from "./../readImageFileSeries.js"
 export { default as ReadImageFileSeriesResult } from "./../ReadImageFileSeriesResult.js"
+export { default as readFile } from "./../readFile.js"
+
 export { default as readImageHTTP } from "./../readImageHTTP.js"
 
 export { default as readDICOMTags } from "./../readDICOMTags.js"

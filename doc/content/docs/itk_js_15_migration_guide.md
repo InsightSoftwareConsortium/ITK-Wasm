@@ -20,14 +20,14 @@ From:
 import IntTypes from 'itk/IntTypes'
 ```
 
-to
+to:
 
 
 ```
 import { IntTypes } from 'itk'
 ```
 
-To help bundlers with limited tree shaking,
+Or, to help bundlers with limited tree shaking,
 
 ```
 import { IntTypes } from 'itk/browser/index.js'
@@ -42,16 +42,10 @@ From:
 const IntTypes = require('itk/IntTypes.js')
 ```
 
-To:
+to:
 
 ```
 import { IntTypes } from 'itk'
-```
-
-Or:
-
-```
-import IntTypes from 'itk/core/IntTypes.js'
 ```
 
 Node `*Sync` functions have been removed -- use the async versions instead.
