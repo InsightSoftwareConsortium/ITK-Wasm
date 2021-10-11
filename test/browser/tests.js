@@ -8,8 +8,12 @@ import JPEGTest from './io/JPEGTest.js'
 JPEGTest()
 import readImageFileSeriesTest from './io/readImageFileSeriesTest.js'
 readImageFileSeriesTest()
-//import readMeshTest from './readMeshTest
+
+import readMeshTest from './io/readMeshTest.js'
+readMeshTest()
+
 //import readPolyDataTest from './readPolyDataTest'
+//
 //import readTest from './readTest'
 
 //

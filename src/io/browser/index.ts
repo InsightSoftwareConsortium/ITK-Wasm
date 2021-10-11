@@ -11,6 +11,7 @@ export { default as readPolyDataBlob } from "./../readPolyDataBlob.js"
 export { default as readBlob } from "./../readBlob.js"
 
 export { default as readImageFile } from "./../readImageFile.js"
+export { default as readMeshFile } from "./../readMeshFile.js"
 export { default as readImageFileSeries } from "./../readImageFileSeries.js"
 export { default as ReadImageFileSeriesResult } from "./../ReadImageFileSeriesResult.js"
 export { default as readImageHTTP } from "./../readImageHTTP.js"

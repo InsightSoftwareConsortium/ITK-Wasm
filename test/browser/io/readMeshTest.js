@@ -1,12 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import readMeshArrayBuffer from 'readMeshArrayBuffer'
-import readMeshBlob from 'readMeshBlob'
-import readMeshFile from 'readMeshFile'
-
-import IntTypes from 'IntTypes'
-import FloatTypes from 'FloatTypes'
+import { IntTypes, FloatTypes, PixelTypes, getMatrixElement, readMeshArrayBuffer, readMeshBlob, readMeshFile } from 'browser/index.js'
 
 const fileName = 'cow.vtk'
 const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
@@ -21,6 +16,8 @@ const verifyMesh = (t, mesh) => {
   t.is(mesh.numberOfCells, 3263)
   t.end()
 }
+
+export default function () {
 
 test('readMeshArrayBuffer reads an ArrayBuffer', (t) => {
   return axios.get(testFilePath, { responseType: 'arraybuffer' })
@@ -105,3 +102,5 @@ test('readMeshFile throws a catchable error for an invalid file', (t) => {
     t.end()
   })
 })
+
+}
