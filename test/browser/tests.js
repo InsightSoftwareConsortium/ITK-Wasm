@@ -6,8 +6,9 @@ import DICOMTest from './io/DICOMTest.js'
 DICOMTest()
 import JPEGTest from './io/JPEGTest.js'
 JPEGTest()
-//import readImageFileSeriesTest from './readImageFileSeriesTest'
-//import readMeshTest from './readMeshTest'
+import readImageFileSeriesTest from './io/readImageFileSeriesTest.js'
+readImageFileSeriesTest()
+//import readMeshTest from './readMeshTest
 //import readPolyDataTest from './readPolyDataTest'
 //import readTest from './readTest'
 

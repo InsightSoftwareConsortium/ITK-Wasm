@@ -1,10 +1,9 @@
 import test from 'tape'
 import axios from 'axios'
 
-import readImageFileSeries from 'readImageFileSeries'
-import IntTypes from 'IntTypes'
-import PixelTypes from 'PixelTypes'
-import getMatrixElement from 'getMatrixElement'
+import { IntTypes, PixelTypes, getMatrixElement, readImageFileSeries } from 'browser/index.js'
+
+export default function() {
 
 function verifyImage (t, image) {
   t.is(image.imageType.dimension, 3, 'dimension')
@@ -77,3 +76,5 @@ test('Test reading unsorted PNG file series', t => {
       t.end()
     })
 })
+
+}

@@ -5,6 +5,7 @@ import { IntTypes, PixelTypes, readImageDICOMFileSeries } from '../../../dist/br
 
 export default function () {
 
+// Todo: debug
 //test('Test reading DICOM file series', t => {
   //const testSeriesDirectory = 'base/build/ExternalData/test/Input/DicomImageOrientationTest/'
   //const fileNames = ['ImageOrientation.1.dcm', 'ImageOrientation.2.dcm', 'ImageOrientation.3.dcm']
