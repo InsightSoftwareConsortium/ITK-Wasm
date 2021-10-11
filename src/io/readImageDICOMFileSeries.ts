@@ -39,7 +39,7 @@ const workerFunction = async (
   const image = await webworkerPromise.postMessage(message, transferables)
   return { image, webWorker: worker }
 }
-const numberOfWorkers = navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 4
+const numberOfWorkers = globalThis.navigator && globalThis.navigator.hardwareConcurrency ? globalThis.navigator.hardwareConcurrency : 4
 const workerPool = new WorkerPool(numberOfWorkers, workerFunction)
 
 const seriesBlockSize = 8

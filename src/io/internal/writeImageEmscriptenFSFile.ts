@@ -4,6 +4,7 @@ import imageJSPixelTypeToIOPixelType from './imageJSPixelTypeToIOPixelType.js'
 import ImageIOBaseEmscriptenModule from './ImageIOBaseEmscriptenModule.js'
 
 import Image from '../../core/Image.js'
+import getMatrixElement from '../../core/getMatrixElement.js'
 
 function writeImageEmscriptenFSFile(emscriptenModule: ImageIOBaseEmscriptenModule, useCompression: boolean, image: Image, filePath: string): void {
   const imageIO = new emscriptenModule.ITKImageIO()
@@ -33,7 +34,7 @@ function writeImageEmscriptenFSFile(emscriptenModule: ImageIOBaseEmscriptenModul
     const directionColumn = new emscriptenModule.AxisDirectionType()
     directionColumn.resize(dimension, 0.0)
     for (let jj = 0; jj < dimension; ++jj) {
-      directionColumn.set(jj, image.direction.getElement(jj, ii))
+      directionColumn.set(jj, getMatrixElement(image.direction, jj, ii))
     }
     imageIO.SetDirection(ii, directionColumn)
   }

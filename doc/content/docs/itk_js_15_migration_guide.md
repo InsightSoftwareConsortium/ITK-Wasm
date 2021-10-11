@@ -12,6 +12,28 @@ Improved approach for web workers for bundlers, CORS constraints
 Addresses an import issue in image orientation support.
 IO modules are available in separate packages.
 
+Browser module import migration:
+
+From:
+
+```
+import IntTypes from 'itk/IntTypes'
+```
+
+to
+
+
+```
+import { IntTypes } from 'itk'
+```
+
+To help bundlers with limited tree shaking,
+
+```
+import { IntTypes } from 'itk/browser/index.js'
+```
+
+
 Node module import migration:
 
 From:
@@ -33,5 +55,3 @@ import IntTypes from 'itk/core/IntTypes.js'
 ```
 
 Node `*Sync` functions have been removed -- use the async versions instead.
-
-The `getMatrixElement` function has been replaced by the `Matrix.getElement` method.

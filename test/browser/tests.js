@@ -16,8 +16,8 @@ readMeshTest()
 //
 //import readTest from './readTest'
 
-//
-//import writeImageTest from './writeImageTest'
+import writeImageTest from './io/writeImageTest.js'
+writeImageTest()
 //import writeMeshTest from './writeMeshTest'
 //import writeTest from './writeTest'
 
