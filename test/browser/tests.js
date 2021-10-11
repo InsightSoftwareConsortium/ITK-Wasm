@@ -20,7 +20,8 @@ import writeImageTest from './io/writeImageTest.js'
 writeImageTest()
 import writeMeshTest from './io/writeMeshTest.js'
 writeMeshTest()
-//import writeTest from './writeTest'
+import writeTest from './io/writeTest.js'
+writeTest()
 
 import runPipelineBrowserTest from './pipeline/runPipelineBrowserTest.js'
 runPipelineBrowserTest()
