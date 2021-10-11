@@ -16,6 +16,8 @@ async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | U
   let modulePrefix = null
   if (typeof moduleRelativePathOrURL !== 'string') {
     modulePrefix = moduleRelativePathOrURL.href
+  } else if (moduleRelativePathOrURL.startsWith('http')) {
+    modulePrefix = moduleRelativePathOrURL
   } else {
     modulePrefix = `${itkModulesPath}/${moduleType}/${moduleRelativePathOrURL}`
   }

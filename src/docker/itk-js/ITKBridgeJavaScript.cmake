@@ -15,7 +15,7 @@ function(add_executable target)
   configure_file(/ITKBridgeJavaScript/src/emscripten-module/itkJSPipelinePre.js.in ${pre_js} @ONLY)
 
   get_property(_link_flags TARGET ${target} PROPERTY LINK_FLAGS)
-  set(common_link_flags " -s FORCE_FILESYSTEM=1 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -s EXPORTED_RUNTIME_METHODS='[\"callMain\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' -flto -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=0 -s EXPORT_NAME=${target} -s MODULARIZE=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js /ITKBridgeJavaScript/src/emscripten-module/itkJSPost.js ${_link_flags}")
+  set(common_link_flags " -s FORCE_FILESYSTEM=1 -s EXPORTED_RUNTIME_METHODS='[\"callMain\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' -flto -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=0 -s EXPORT_NAME=${target} -s MODULARIZE=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js /ITKBridgeJavaScript/src/emscripten-module/itkJSPost.js ${_link_flags}")
   set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS "${common_link_flags} -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0")
   set_property(TARGET ${umd_target} PROPERTY LINK_FLAGS "${common_link_flags}")
 

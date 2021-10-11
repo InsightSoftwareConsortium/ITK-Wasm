@@ -197,7 +197,7 @@ if (program.buildPipelines) {
     pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'web-build', '*.wasm')))
     pipelineFiles.forEach((file) => {
       const filename = path.basename(file)
-      const output = path.join('dist', 'pipelines', filename)
+      const output = path.join('dist', 'pipeline', filename)
       fs.copySync(file, output)
     })
   }
@@ -213,7 +213,7 @@ if (program.buildPipelines) {
     // path.join('src', 'pipelines', 'mesh-to-polydata'),
   ]
   try {
-    fs.mkdirSync(path.join('dist', 'pipelines'))
+    fs.mkdirSync(path.join('dist', 'pipeline'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }

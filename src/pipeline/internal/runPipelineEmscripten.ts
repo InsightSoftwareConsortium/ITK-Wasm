@@ -15,7 +15,7 @@ if (typeof window !== 'undefined') {
   // @ts-ignore: error TS2304: Cannot find name 'window'.
   haveSharedArrayBuffer = typeof window.SharedArrayBuffer === 'function'
 } else {
-  haveSharedArrayBuffer = typeof global.SharedArrayBuffer === 'function'
+  haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
 }
 
 function typedArrayForBuffer(typedArrayType: string, buffer: ArrayBuffer) {
@@ -31,7 +31,7 @@ function typedArrayForBuffer(typedArrayType: string, buffer: ArrayBuffer) {
     // @ts-ignore: error TS7053: Element implicitly has an 'any' type because
     // expression of type 'string' can't be used to index type 'Global &
     // typeof globalThis'.
-    TypedArrayFunction = global[typedArrayType] as TypedArray
+    TypedArrayFunction = globalThis[typedArrayType] as TypedArray
   }
   // @ts-ignore: error TS2351: This expression is not constructable.
   return new TypedArrayFunction(buffer)

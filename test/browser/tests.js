@@ -21,6 +21,7 @@ readMeshTest()
 //import writeMeshTest from './writeMeshTest'
 //import writeTest from './writeTest'
 
-//import runPipelineBrowserTest from './runPipelineBrowserTest'
+import runPipelineBrowserTest from './pipeline/runPipelineBrowserTest.js'
+runPipelineBrowserTest()
 
 //import WebWorkerPoolTest from './WebWorkerPoolTest'
