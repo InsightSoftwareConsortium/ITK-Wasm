@@ -48,78 +48,76 @@ test('readImageArrayBuffer reads an ArrayBuffer', (t) => {
     })
 })
 
-//test('readImageBlob reads a Blob', (t) => {
-  //return readImageBlob(null, cthead1SmallBlob, 'cthead1Small.png')
-    //.then(function ({ image, webWorker }) {
-      //webWorker.terminate()
-      //verifyImage(t, image)
-    //})
-//})
+test('readImageBlob reads a Blob', (t) => {
+  return readImageBlob(null, cthead1SmallBlob, 'cthead1Small.png')
+    .then(function ({ image, webWorker }) {
+      webWorker.terminate()
+      verifyImage(t, image)
+    })
+})
 
-//test('readImageBlob reads a Blob without a file extension', (t) => {
-  //return readImageBlob(null, cthead1SmallBlob1, 'cthead1Small')
-    //.then(function ({ image, webWorker }) {
-      //webWorker.terminate()
-      //verifyImage(t, image)
-    //})
-//})
+test('readImageBlob reads a Blob without a file extension', (t) => {
+  return readImageBlob(null, cthead1SmallBlob1, 'cthead1Small')
+    .then(function ({ image, webWorker }) {
+      webWorker.terminate()
+      verifyImage(t, image)
+    })
+})
 
-//test('readImageFile reads a File', (t) => {
-  //return readImageFile(null, cthead1SmallFile)
-    //.then(function ({ image, webWorker }) {
-      //webWorker.terminate()
-      //verifyImage(t, image)
-    //})
-//})
+test('readImageFile reads a File', (t) => {
+  return readImageFile(null, cthead1SmallFile)
+    .then(function ({ image, webWorker }) {
+      webWorker.terminate()
+      verifyImage(t, image)
+    })
+})
 
-//test('readImageFile re-uses a WebWorker', (t) => {
-  //return readImageFile(null, cthead1SmallFile)
-    //.then(function ({ image, webWorker }) {
-      //return readImageFile(webWorker, cthead1SmallFile)
-        //.then(function ({ image, webWorker }) {
-          //webWorker.terminate()
-          //verifyImage(t, image)
-        //})
-    //})
-//})
+test('readImageFile re-uses a WebWorker', (t) => {
+  return readImageFile(null, cthead1SmallFile)
+    .then(function ({ image, webWorker }) {
+      return readImageFile(webWorker, cthead1SmallFile)
+        .then(function ({ image, webWorker }) {
+          webWorker.terminate()
+          verifyImage(t, image)
+        })
+    })
+})
 
-//test('readImageFile throws a catchable error for an invalid file', (t) => {
-  //const invalidArray = new Uint8Array([21, 4, 4, 4, 4, 9, 5, 0, 82, 42])
-  //const invalidBlob = new window.Blob([invalidArray])
-  //const invalidFile = new window.File([invalidBlob], 'invalid.file')
-  //return readImageFile(null, invalidFile).then(function ({ image, webWorker }) {
-    //webWorker.terminate()
-    //t.fail('should not have successfully read the image')
-    //t.end()
-  //}).catch(function (error) {
-    //t.pass(String(error))
-    //t.pass('thrown an error that was caught')
-    //t.end()
-  //})
-//})
+test('readImageFile throws a catchable error for an invalid file', (t) => {
+  const invalidArray = new Uint8Array([21, 4, 4, 4, 4, 9, 5, 0, 82, 42])
+  const invalidBlob = new window.Blob([invalidArray])
+  const invalidFile = new window.File([invalidBlob], 'invalid.file')
+  return readImageFile(null, invalidFile).then(function ({ image, webWorker }) {
+    webWorker.terminate()
+    t.fail('should not have successfully read the image')
+    t.end()
+  }).catch(function (error) {
+    t.pass(String(error))
+    t.pass('thrown an error that was caught')
+    t.end()
+  })
+})
 
-//test('readImageHTTP reads itk.js Image from a URL', (t) => {
-  //const testURL = 'base/build/ExternalData/test/Input/cthead1.json'
-  //return readImageHTTP(testURL)
-    //.then(function (image) {
-      //t.is(image.imageType.dimension, 2, 'dimension')
-      //t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
-      //t.is(image.imageType.pixelType, PixelTypes.RGB, 'pixelType')
-      //t.is(image.imageType.components, 3, 'components')
-      //t.is(image.origin[0], 0.0, 'origin[0]')
-      //t.is(image.origin[1], 0.0, 'origin[1]')
-      //t.is(image.spacing[0], 1.0, 'spacing[0]')
-      //t.is(image.spacing[1], 1.0, 'spacing[1]')
-      //t.is(image.direction.getElement(0, 0), 1.0, 'direction (0, 0)')
-      //t.is(image.direction.getElement(0, 1), 0.0, 'direction (0, 1)')
-      //t.is(image.direction.getElement(1, 0), 0.0, 'direction (1, 0)')
-      //t.is(image.direction.getElement(1, 1), 1.0, 'direction (1, 1)')
-      //t.is(image.size[0], 256, 'size[0]')
-      //t.is(image.size[1], 256, 'size[1]')
-      //t.is(image.data.length, 196608, 'data.length')
-      //t.is(image.data[512], 10, 'data[512]')
-      //t.end()
-    //})
-//})
+test('readImageHTTP reads itk.js Image from a URL', async (t) => {
+  const testURL = 'base/build/ExternalData/test/Input/cthead1.json'
+  const image = await readImageHTTP(testURL)
+  t.is(image.imageType.dimension, 2, 'dimension')
+  t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
+  t.is(image.imageType.pixelType, PixelTypes.RGB, 'pixelType')
+  t.is(image.imageType.components, 3, 'components')
+  t.is(image.origin[0], 0.0, 'origin[0]')
+  t.is(image.origin[1], 0.0, 'origin[1]')
+  t.is(image.spacing[0], 1.0, 'spacing[0]')
+  t.is(image.spacing[1], 1.0, 'spacing[1]')
+  t.is(getMatrixElement(image.direction, 0, 0), 1.0, 'direction (0, 0)')
+  t.is(getMatrixElement(image.direction, 0, 1), 0.0, 'direction (0, 1)')
+  t.is(getMatrixElement(image.direction, 1, 0), 0.0, 'direction (1, 0)')
+  t.is(getMatrixElement(image.direction, 1, 1), 1.0, 'direction (1, 1)')
+  t.is(image.size[0], 256, 'size[0]')
+  t.is(image.size[1], 256, 'size[1]')
+  t.is(image.data.length, 196608, 'data.length')
+  t.is(image.data[512], 10, 'data[512]')
+  t.end()
+})
 
 }
