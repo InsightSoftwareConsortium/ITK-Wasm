@@ -1,11 +1,9 @@
 import test from 'tape'
 import axios from 'axios'
 
-import IntTypes from 'IntTypes'
-import PixelTypes from 'PixelTypes'
-import readImageFile from 'readImageFile'
+import { IntTypes, PixelTypes, getMatrixElement, readImageFile } from 'browser/index.js'
 
-import getMatrixElement from 'getMatrixElement'
+export default function () {
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')
@@ -36,3 +34,5 @@ test('Test reading a JPEG file', async (t) => {
   webWorker.terminate()
   verifyImage(t, image)
 })
+
+}
