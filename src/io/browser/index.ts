@@ -16,5 +16,5 @@ export { default as ReadImageFileSeriesResult } from "./../ReadImageFileSeriesRe
 export { default as readImageHTTP } from "./../readImageHTTP.js"
 
 export { default as readDICOMTags } from "./../readDICOMTags.js"
-export { default as readImageDICOMFileSeries } from "./../readImageLocalDICOMFileSeries.js"
+export { default as readImageDICOMFileSeries } from "./../readImageDICOMFileSeries.js"
 

@@ -129,19 +129,39 @@ foreach(dicom_io_module
     itkDICOMTagReader
 )
   set(target "${dicom_io_module}JSBinding")
+  set(target_umd "${dicom_io_module}JSBinding.umd")
+
   _add_executable(${target} io/internal/bindings/${target}.cxx)
   itk_module_target_label(${target})
   itk_module_target_export(${target})
   itk_module_target_install(${target})
 
+  _add_executable(${target_umd} io/internal/bindings/${target}.cxx)
+  itk_module_target_label(${target_umd})
+  itk_module_target_export(${target_umd})
+  itk_module_target_install(${target_umd})
+
   # For embind
   set_property(TARGET ${target} APPEND_STRING
     PROPERTY LINK_FLAGS " --bind"
     )
-  set_property(TARGET ${target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s SUPPORT_LONGJMP=1 -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=${target} -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -s WASM=1 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
+  set_property(TARGET ${target_umd} APPEND_STRING
+    PROPERTY LINK_FLAGS " --bind"
     )
+
+  set(common_link_flags " -s SUPPORT_LONGJMP=1 -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=${target} -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js")
+  set_property(TARGET ${target} APPEND_STRING
+    PROPERTY LINK_FLAGS " ${common_link_flags} -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 "
+    )
+  set_property(TARGET ${target_umd} APPEND_STRING
+    PROPERTY LINK_FLAGS " ${common_link_flags}"
+    )
+
   set_property(TARGET ${target}
+    PROPERTY RUNTIME_OUTPUT_DIRECTORY
+    ${BridgeJavaScript_BINARY_DIR}/image-io
+    )
+  set_property(TARGET ${target_umd}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
     ${BridgeJavaScript_BINARY_DIR}/image-io
     )
@@ -149,12 +169,18 @@ foreach(dicom_io_module
     PROPERTY OBJECT_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
     )
+  set_property(SOURCE io/internal/bindings/${target_umd}.cxx APPEND
+    PROPERTY OBJECT_DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
+    )
   _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
+  _target_link_libraries(${target_umd} LINK_PUBLIC ${ITK_LIBRARIES})
 
   # libiconv for DICOMTagReader
   if(${dicom_io_module} STREQUAL "itkDICOMTagReader")
     include_directories(${Iconv_INCLUDE_DIRS})
     _target_link_libraries(${target} LINK_PUBLIC ${Iconv_LIBRARIES} ${Iconv})
+    _target_link_libraries(${target_umd} LINK_PUBLIC ${Iconv_LIBRARIES} ${Iconv})
   endif()
 endforeach()
 

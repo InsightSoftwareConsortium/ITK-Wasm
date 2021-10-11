@@ -1,12 +1,13 @@
 import readImageTest from './io/readImageTest.js'
-readImageTest()
+//readImageTest()
+import DICOMSeriesTest from './io/DICOMSeriesTest.js'
+DICOMSeriesTest()
 //import readImageFileSeriesTest from './readImageFileSeriesTest'
 //import readMeshTest from './readMeshTest'
 //import readPolyDataTest from './readPolyDataTest'
 //import readTest from './readTest'
 
 //import JPEGTest from './JPEGTest'
-//import DICOMSeriesTest from './DICOMSeriesTest'
 //import DICOMTest from './DICOMTest'
 //
 //import writeImageTest from './writeImageTest'
