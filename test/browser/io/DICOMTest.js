@@ -1,12 +1,9 @@
 import test from 'tape'
 import axios from 'axios'
 
-import IntTypes from 'IntTypes'
-import PixelTypes from 'PixelTypes'
-import readImageFile from 'readImageFile'
-import readDICOMTags from 'readDICOMTags'
+import { IntTypes, PixelTypes, getMatrixElement, readImageFile, readDICOMTags } from 'browser/index.js'
 
-import getMatrixElement from 'getMatrixElement'
+export default function() {
 
 test('Test reading a DICOM file', t => {
   const fileName = '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm'
@@ -77,3 +74,5 @@ test('Test reading DICOM tags', t => {
       t.fail(err)
     })
 })
+
+}
