@@ -19,6 +19,8 @@ function imageSharedBufferOrCopy(image: Image): Image {
     const ctor = image.data.constructor as { new(buffer: SharedArrayBuffer): typeof image.data }
     const sharedTypedArray = new ctor(sharedBuffer)
     if (sharedTypedArray !== null) {
+      // @ts-ignore: error TS2345: Argument of type 'TypedArray' is not assignable to parameter of type 'ArrayLike<number> & ArrayLike<bigint>'.
+
       sharedTypedArray.set(image.data, 0)
     }
     image.data = sharedTypedArray

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(MedianFilterTest)
 
 set(io_components ITKImageIO)
-if(EMSCRIPTEN)
+if(EMSCRIPTEN OR WASI)
   set(io_components BridgeJavaScript)
 endif()
 find_package(ITK REQUIRED
@@ -12,7 +12,7 @@ find_package(ITK REQUIRED
 include(${ITK_USE_FILE})
 
 add_executable(MedianFilterTest MedianFilterTest.cxx)
-target_link_libraries(MedianFilterTest ${ITK_LIBRARIES})
+target_link_libraries(MedianFilterTest PUBLIC ${ITK_LIBRARIES})
 
 enable_testing()
 add_test(NAME MedianFilterTest

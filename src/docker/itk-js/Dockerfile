@@ -1,8 +1,10 @@
-ARG CMAKE_BUILD_TYPE=Release
+ARG BASE_IMAGE=insighttoolkit/itk-js-base
 ARG BASE_TAG=latest
 
-FROM insighttoolkit/itk-js-base:$BASE_TAG
+FROM $BASE_IMAGE:$BASE_TAG
 MAINTAINER Insight Software Consortium <community@itk.org>
+ARG BASE_IMAGE
+ARG CMAKE_BUILD_TYPE=Release
 
 WORKDIR /
 
@@ -22,7 +24,8 @@ RUN cd / && \
   cd .. && chmod -R 777 ITKBridgeJavaScript-build && \
   chmod -R 777 /ITK-build
 
-COPY ITKBridgeJavaScript.cmake /usr/share/cmake-3.21/Modules/
+COPY ITKBridgeJavaScript.cmake /usr/src/
+RUN mv /usr/src/ITKBridgeJavaScript.cmake /usr/share/cmake-*/Modules/
 # For non-default toolchain file location
 ENV EMSCRIPTEN /emsdk/upstream/emscripten
 ENV CMAKE_TOOLCHAIN_FILE_DOCKCROSS ${CMAKE_TOOLCHAIN_FILE}
@@ -35,10 +38,10 @@ COPY web-build /usr/local/bin/
 # Trigger Emscripten to cache builds of required system libraries
 ADD MedianFilterPipelineCopy /MedianFilterPipelineCopy
 WORKDIR /MedianFilterPipelineCopy
-RUN /usr/local/bin/web-build -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DCMAKE_EXE_LINKER_FLAGS='-fltothin -s DISABLE_EXCEPTION_CATCHING=0' && \
+RUN if [ $BASE_IMAGE = "insighttoolkit/itk-js-base" ]; then /usr/local/bin/web-build -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DCMAKE_EXE_LINKER_FLAGS='-fltothin -s DISABLE_EXCEPTION_CATCHING=0' && \
    rm -rf ./web-build && /usr/local/bin/web-build -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DCMAKE_EXE_LINKER_FLAGS='-flto -s DISABLE_EXCEPTION_CATCHING=1' && \
- rm -rf /MedianFilterPipelineCopy
-RUN chmod -R 777 /emsdk/upstream/emscripten/cache
+ rm -rf /MedianFilterPipelineCopy && \
+ chmod -R 777 /emsdk/upstream/emscripten/cache; fi
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE

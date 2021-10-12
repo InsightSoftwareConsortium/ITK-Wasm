@@ -38,6 +38,7 @@ function stackImages(images: Image[]): Image {
   let stackIndex = 0
   if (result.data) {
     for (let index = 0; index < images.length; index++) {
+      // @ts-ignore: error TS2345: Argument of type 'TypedArray' is not assignable to parameter of type 'ArrayLike<number> & ArrayLike<bigint>'.
       result.data.set(images[index].data as TypedArray, offsetBase * stackIndex)
       stackIndex += images[index].size[stackOn]
     }

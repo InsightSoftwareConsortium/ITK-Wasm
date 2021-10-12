@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright Insight Software Consortium
+ *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@ int main( int argc, char * argv[] )
 
   try
     {
+      reader->Update();
+      std::cout << "reader output cell buffer size: " << reader->GetOutput()->GetNumberOfCells() << std::endl;
     writer->Update();
     }
   catch( itk::ExceptionObject & error )

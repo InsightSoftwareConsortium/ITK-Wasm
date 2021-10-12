@@ -30,10 +30,12 @@ function bufferToTypedArray(jsType: typeof IntTypes[keyof typeof IntTypes] | typ
       break
     }
     case IntTypes.UInt64: {
-      throw new BigUint64Array(buffer)
+      typedArray = new BigUint64Array(buffer)
+      break
     }
     case IntTypes.Int64: {
-      throw new BigInt64Array(buffer)
+      typedArray = new BigInt64Array(buffer)
+      break
     }
     case FloatTypes.Float32: {
       typedArray = new Float32Array(buffer)

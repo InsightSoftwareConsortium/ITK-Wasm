@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright Insight Software Consortium
+ *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -579,7 +579,7 @@ JSONMeshIO
   std::ifstream dataStream;
   this->OpenFileForReading( dataStream, dataFile.c_str() );
   const SizeValueType numberOfBytesToBeRead =
-    static_cast< SizeValueType >( this->GetCellBufferSize() * ITKComponentSize( this->GetCellComponentType() ) );
+    static_cast< SizeValueType >( this->GetCellBufferSize() * ITKComponentSize( this->GetCellComponentType() ));
 
   if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
     {
@@ -719,6 +719,7 @@ JSONMeshIO
   rapidjson::Value cellComponentType;
   cellComponentType.SetString( cellComponentString.c_str(), allocator );
   meshType.AddMember("cellComponentType", cellComponentType.Move(), allocator );
+  this->SetCellComponentType( CommonEnums::IOComponent::UINT );
 
   const std::string cellPixelComponentString = this->ITKToJSComponentType( this->GetCellPixelComponentType() );
   rapidjson::Value cellPixelComponentType;
@@ -801,7 +802,6 @@ void
 JSONMeshIO
 ::WritePoints( void *buffer )
 {
-  this->WriteMeshInformation();
   const std::string fileName = std::string( this->GetFileName() ) + ".points.data";
   std::ofstream outputStream;
   this->OpenFileForWriting( outputStream, fileName, true, false );
@@ -817,13 +817,22 @@ JSONMeshIO
   const std::string fileName = std::string( this->GetFileName() ) + ".cells.data";
   std::ofstream outputStream;
   this->OpenFileForWriting( outputStream, fileName, true, false );
+  const SizeValueType numberOfBytes = this->GetCellBufferSize() * ITKComponentSize( this->GetCellComponentType() );
   // Cast from 64 bit unsigned integers (not supported in JavaScript) to 32
   // bit unsigned integers
   const IdentifierType * bufferIdentifier = static_cast< IdentifierType * >( buffer );
   const SizeValueType cellBufferSize = this->GetCellBufferSize();
   for( SizeValueType ii = 0; ii < cellBufferSize; ++ii )
     {
-    outputStream << static_cast< uint32_t >( bufferIdentifier[ii] );
+    const uint32_t asInt32 = static_cast< uint32_t >( bufferIdentifier[ii] );
+    outputStream.write(reinterpret_cast< const char * >( &asInt32 ), sizeof( uint32_t ));
+    }
+  if (outputStream.tellp() != numberOfBytes )
+    {
+    itkExceptionMacro(<< "Write failed: Wanted to write "
+                      << numberOfBytes
+                      << " bytes, but wrote "
+                      << outputStream.tellp() << " bytes.");
     }
 }
 

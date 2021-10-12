@@ -20,11 +20,12 @@ import RunPipelineResult from './RunPipelineResult.js'
 const pipelineToModule: Map<string, PipelineEmscriptenModule> = new Map()
 
 async function loadPipelineModule (pipelinePath: string | URL): Promise<PipelineEmscriptenModule> {
-  const moduleRelativePathOrURL = pipelinePath
+  let moduleRelativePathOrURL: string | URL = pipelinePath as string
   let pipeline = pipelinePath as string
   let pipelineModule = null
   if (typeof pipelinePath !== 'string') {
-    pipeline = pipelinePath.href
+    moduleRelativePathOrURL = new URL((pipelinePath as URL).href)
+    pipeline = moduleRelativePathOrURL.href
   }
   if (pipelineToModule.has(pipeline)) {
     return pipelineToModule.get(pipeline) as PipelineEmscriptenModule
@@ -35,7 +36,7 @@ async function loadPipelineModule (pipelinePath: string | URL): Promise<Pipeline
   }
 }
 
-function runPipelineBrowser(webWorker: Worker | null | boolean, pipelinePath: string | URL, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]): Promise<RunPipelineResult> {
+async function runPipelineBrowser(webWorker: Worker | null | boolean, pipelinePath: string | URL, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]): Promise<RunPipelineResult> {
   if (webWorker === false) {
     loadPipelineModule(pipelinePath.toString()).then((pipelineModule) => {
       const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
@@ -43,77 +44,74 @@ function runPipelineBrowser(webWorker: Worker | null | boolean, pipelinePath: st
     })
   }
   let worker = webWorker
-  return createWebworkerPromise('pipeline', worker as Worker | null)
-    .then(({ webworkerPromise, worker: usedWorker }) => {
-      worker = usedWorker
-      const transferables: ArrayBuffer[] = []
-      if (inputs) {
-        inputs.forEach(function (input) {
-          if (input.type === IOTypes.Binary) {
-            // Binary data
-            const transferable = getTransferable(input.data as Uint8Array)
-            if (transferable) {
-              transferables.push(transferable)
-            }
-          } else if (input.type === IOTypes.Image) {
-            // Image data
-            const image = input.data as Image
-            if (image.data === null) {
-              throw Error('image data cannot be null')
-            }
-            const transferable = getTransferable(image.data)
-            if (transferable) {
-              transferables.push(transferable)
-            }
-          } else if (input.type === IOTypes.Mesh) {
-            // Mesh data
-            const mesh = input.data as Mesh
-            if (mesh.points) {
-              const transferable = getTransferable(mesh.points)
-              if (transferable) {
-                transferables.push(transferable)
-              }
-            }
-            if (mesh.pointData) {
-              const transferable = getTransferable(mesh.pointData)
-              if (transferable) {
-                transferables.push(transferable)
-              }
-            }
-            if (mesh.cells) {
-              const transferable = getTransferable(mesh.cells)
-              if (transferable) {
-                transferables.push(transferable)
-              }
-            }
-            if (mesh.cellData) {
-              const transferable = getTransferable(mesh.cellData)
-              if (transferable) {
-                transferables.push(transferable)
-              }
-            }
+  const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise('pipeline', worker as Worker | null)
+  worker = usedWorker
+  const transferables: ArrayBuffer[] = []
+  if (inputs) {
+    inputs.forEach(function (input) {
+      if (input.type === IOTypes.Binary) {
+        // Binary data
+        const transferable = getTransferable(input.data as Uint8Array)
+        if (transferable) {
+          transferables.push(transferable)
+        }
+      } else if (input.type === IOTypes.Image) {
+        // Image data
+        const image = input.data as Image
+        if (image.data === null) {
+          throw Error('image data cannot be null')
+        }
+        const transferable = getTransferable(image.data)
+        if (transferable) {
+          transferables.push(transferable)
+        }
+      } else if (input.type === IOTypes.Mesh) {
+        // Mesh data
+        const mesh = input.data as Mesh
+        if (mesh.points) {
+          const transferable = getTransferable(mesh.points)
+          if (transferable) {
+            transferables.push(transferable)
           }
-        })
+        }
+        if (mesh.pointData) {
+          const transferable = getTransferable(mesh.pointData)
+          if (transferable) {
+            transferables.push(transferable)
+          }
+        }
+        if (mesh.cells) {
+          const transferable = getTransferable(mesh.cells)
+          if (transferable) {
+            transferables.push(transferable)
+          }
+        }
+        if (mesh.cellData) {
+          const transferable = getTransferable(mesh.cellData)
+          if (transferable) {
+            transferables.push(transferable)
+          }
+        }
       }
-      interface RunPipelineWorkerResult {
-        stdout: string
-        stderr: string
-        outputs: PipelineOutput[]
-      }
-      return webworkerPromise.postMessage(
-        {
-          operation: 'runPipeline',
-          config: config,
-          pipelinePath: pipelinePath.toString(),
-          args,
-          outputs,
-          inputs
-        },
-        transferables
-      ).then(function (result: RunPipelineWorkerResult) {
-        return Promise.resolve({ stdout: result.stdout, stderr: result.stderr, outputs: result.outputs, webWorker: worker })
-      })
     })
+  }
+  interface RunPipelineWorkerResult {
+    stdout: string
+    stderr: string
+    outputs: PipelineOutput[]
+  }
+  const result: RunPipelineWorkerResult = await webworkerPromise.postMessage(
+    {
+      operation: 'runPipeline',
+      config: config,
+      pipelinePath: pipelinePath.toString(),
+      args,
+      outputs,
+      inputs
+    },
+    transferables
+  )
+  return { stdout: result.stdout, stderr: result.stderr, outputs: result.outputs, webWorker: worker }
 }
 
 export default runPipelineBrowser

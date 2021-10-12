@@ -4,13 +4,13 @@ const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
 
 function getTransferable(data: any):  null | ArrayBuffer {
   let result: null | ArrayBuffer = null
-  if ("buffer" in data) {
-    result: ArrayBuffer = data.buffer
-  } else if ("byteLength" in data) {
-    result = data
+  if (data.buffer) {
+    result = data.buffer as ArrayBuffer
+  } else if (data.byteLength) {
+    result = data as ArrayBuffer
   }
   if (!!result && haveSharedArrayBuffer && result instanceof SharedArrayBuffer) { // eslint-disable-line
-    result = null
+    return null
   }
   return result
 }

@@ -17,6 +17,7 @@ function copyImage(image: Image): Image {
     const ctor = image.data.constructor as { new(length: number): typeof image.data }
     copy.data = new ctor(image.data.length)
     if (copy.data) {
+      // @ts-ignore: error TS2345: Argument of type 'TypedArray' is not assignable to parameter of type 'ArrayLike<number> & ArrayLike<bigint>'
       copy.data.set(image.data, 0)
     }
   }

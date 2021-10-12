@@ -8,7 +8,11 @@ Typescript support was added, but, of course, you can still just use
 JavaScript if you wish.
 Uses modern JavaScript constructs when appropriate, e.g. classes.
 EcmaScript 2020 Modules
-Improved approach for web workers for bundlers, CORS constraints
+
+Improved approach for web workers for bundlers, CORS constraints.
+Workers will work transparently with the [Webpack 5 Web
+Worker](https://webpack.js.org/guides/web-workers/) support.
+
 Addresses an import issue in image orientation support.
 IO modules are available in separate packages.
 

@@ -27,6 +27,7 @@ examples/UMD/package-lock.json
 
 test/MedianFilterPipeline/itk-js
 test/pipelines/MedianFilterPipeline/web-build
+test/pipelines/MedianFilterPipeline/wasi-build
 
 src/docker/itk-js/ITKBridgeJavaScriptModuleCopy/
 test/StdoutStderrPipeline/itk-js
@@ -36,3 +37,9 @@ test/pipelines/MeshReadWritePipeline/web-build/
 test/pipelines/WriteVTKPolyDataPipeline/web-build/
 test/pipelines/CLPExample1/web-build/
 src/pipeline/mesh-to-polydata/web-build/
+test/pipelines/StdoutStderrPipeline/wasi-build/
+test/pipelines/InputOutputFilesPipeline/wasi-build/
+test/pipelines/MeshReadWritePipeline/wasi-build/
+test/pipelines/WriteVTKPolyDataPipeline/wasi-build/
+test/pipelines/CLPExample1/wasi-build/
+src/pipeline/mesh-to-polydata/wasi-build/

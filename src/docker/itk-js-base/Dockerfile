@@ -1,4 +1,6 @@
-FROM dockcross/web-wasm:20211005-32b58e0
+ARG BASE_IMAGE=dockcross/web-wasm
+FROM $BASE_IMAGE:20211015-2b6cd4a
+ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
 LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/itk-js"
@@ -6,7 +8,7 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 WORKDIR /
 
 # 2021-10-03 master branch
-ENV ITK_GIT_TAG 5121ee04ac8e66e56e574c13d95e1b728adcf17c
+ENV ITK_GIT_TAG 3b68b2092bc2db2978a1ed68efe5ec38fcade185
 RUN git clone https://github.com/thewtex/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
@@ -39,7 +41,7 @@ RUN mkdir ITK-Native-build && \
 
 ENV jsoncpp_GIT_TAG 940982438d01fe2575acef8dd98a9b6893ccc9bb
 RUN git clone https://github.com/open-source-parsers/jsoncpp.git && \
-  cd jsoncpp && \
+  cd jsoncpp &&\
   git checkout ${jsoncpp_GIT_TAG} && \
   cd ../ && \
   mkdir jsoncpp-build && \
@@ -88,9 +90,18 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
 #ENV LDFLAGS="-flto -s ALLOW_MEMORY_GROWTH=1"
 #ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -flto"
 #ENV LDFLAGS="-flto=thin -s ALLOW_MEMORY_GROWTH=1"
-ENV LDFLAGS="-s ALLOW_MEMORY_GROWTH=1"
-ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0"
-ENV CXXFLAGS="${CFLAGS}"
+
+ARG LDFLAGS
+ARG CFLAGS
+ARG CXXFLAGS
+ENV LDFLAGS=${LDFLAGS:-"-s ALLOW_MEMORY_GROWTH=1"}
+ENV CFLAGS=${CFLAGS:-"-Wno-warn-absolute-paths --memory-init-file 0"}
+ENV CXXFLAGS=${CXXFLAGS:-"${CFLAGS}"}
+
+#ENV LDFLAGS="-lwasi-emulated-signal"
+#ENV CFLAGS="-D_WASI_EMULATED_SIGNAL"
+#ENV CXXFLAGS="${CFLAGS}"
+
 RUN mkdir ITK-build && \
   cd ITK-build && \
   cmake \
@@ -132,9 +143,10 @@ RUN curl -O https://ipfs.io/ipns/dist.ipfs.io/go-ipfs/${IPFS_TAG}/go-ipfs_${IPFS
   tar xvzf go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
   cp go-ipfs/ipfs /usr/local/bin/ && \
   rm -rf go-ipfs
-ENV IPFS_PATH /home/emscripten/.ipfs
-RUN ipfs init
-RUN chmod -R 777 $IPFS_PATH
+ENV IPFS_PATH /home/ipfs/.ipfs
+RUN mkdir -p $IPFS_PATH && \
+ ipfs init && \
+ chmod -R 777 $IPFS_PATH
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE

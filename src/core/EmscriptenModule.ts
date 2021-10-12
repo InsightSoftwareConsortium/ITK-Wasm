@@ -4,7 +4,7 @@ interface EmscriptenModule {
 
   fs_mkdirs(dirs: string): void
   fs_readFile(path: string, opts: { encoding?: string, flags?: string }): string | Uint8Array
-  fs_writeFile(path: string, data: string | Uint8Array, opts?: { flags?: string }): void
+  fs_writeFile(path: string, data: string | ArrayBufferView, opts?: { flags?: string }): void
   fs_unlink(path: string): void
   fs_open(path: string, flags: string, mode?: string): object
   fs_stat(path: string): { size: number }

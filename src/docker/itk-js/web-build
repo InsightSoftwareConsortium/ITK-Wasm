@@ -2,17 +2,19 @@
 
 #
 # Configure and build the CMake project with source code in the current
-# directory in "./web-build".
+# directory in "$1", defaults to "./web-build"
 #
 # Any extra arguments passed to the script and passed to the cmake
 # configuration step.
 #
 
-mkdir -p ./web-build
+build_dir=$1
+shift
+mkdir -p ./$build_dir
 
 cmake \
    --no-warn-unused-cli \
-   -Bweb-build \
+   -B$build_dir \
    -H. \
    -DCMAKE_BUILD_TYPE:STRING=Release \
    -DITK_DIR:PATH=/ITK-build \
@@ -20,4 +22,4 @@ cmake \
    -DSlicerExecutionModel_DIR:PATH=/SlicerExecutionModel-build \
    -GNinja \
      "$@" && \
-ninja -Cweb-build
+ninja -C$build_dir
