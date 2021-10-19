@@ -1,5 +1,5 @@
-ARG CMAKE_BUILD_TYPE=Release
 ARG BASE_TAG=latest
+ARG CMAKE_BUILD_TYPE=Release
 
 FROM insighttoolkit/itk-js:$BASE_TAG
 MAINTAINER Insight Software Consortium <community@itk.org>
@@ -8,8 +8,8 @@ WORKDIR /
 
 # Work-around for VTK HDF5 build
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_DOCKCROSS}
-# 2020-04-28 master + VTK HDF5 + No link to Threads::Threads
-ENV VTK_GIT_TAG 7c50dded0278686e23a3a6a432b2b0a365342050
+# v9.1.0.rc2 + VTK HDF5 + No Threads::Threads link + netcdf patch
+ENV VTK_GIT_TAG cc0eddd8d46e3cab6692019769a2799e59904bd3
 RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK && \
   git checkout ${VTK_GIT_TAG} && \
@@ -25,6 +25,16 @@ RUN git clone https://github.com/thewtex/VTK.git && \
     -DVTK_ENABLE_LOGGING:BOOL=OFF \
     -DVTK_ENABLE_WRAPPING:BOOL=OFF \
     -DVTK_ENABLE_KITS:BOOL=OFF \
+    -DVTK_GROUP_ENABLE_MPI=NO \
+    -DVTK_GROUP_ENABLE_Qt=NO \
+    -DVTK_GROUP_ENABLE_Rendering=WANT \
+    -DVTK_GROUP_ENABLE_StandAlone=WANT \
+    -DVTK_GROUP_ENABLE_Views=NO \
+    -DVTK_GROUP_ENABLE_Web=NO \
+    -DVTK_MODULE_ENABLE_VTK_InteractionStyle=WANT \
+    -DVTK_MODULE_ENABLE_VTK_InteractionWidgets=WANT \
+    -DVTK_MODULE_ENABLE_VTK_RenderingContext2D=DONT_WANT \
+    -DVTK_MODULE_ENABLE_VTK_RenderingContextOpenGL2=DONT_WANT \
     -DVTK_LEGACY_REMOVE:BOOL=ON \
     -DVTK_OPENGL_USE_GLES:BOOL=ON \
     -DVTK_USE_SDL2:BOOL=ON \
@@ -62,10 +72,11 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKVtkGlue.git && \
     -DBUILD_TESTING:BOOL=OFF \
     -DITK_DIR:PATH=/ITK-build \
     -DVTK_DIR:PATH=/VTK-build \
-    ../ITKVtkGlue && \
-  ninja -j7 && \
-  find . -name '*.o' -delete && \
-  cd .. && chmod -R 777 ITK-build
+    ../ITKVtkGlue
+    #../ITKVtkGlue && \
+  #ninja -j7 && \
+  #find . -name '*.o' -delete && \
+  #cd .. && chmod -R 777 ITK-build
 
 # Reset
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
