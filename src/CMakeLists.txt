@@ -21,6 +21,11 @@ itk_module_add_library(BridgeJavaScript ${BridgeJavaScript_SRCS})
 
 if(BUILD_ITK_JS_IO_MODULES)
 
+# -s WASM_ASYNC_COMPILATION=0
+# -flto
+set(common_link_flags " -s FORCE_FILESYSTEM=1 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js")
+set(esm_link_flags " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0")
+
 set(ImageIOIndex_ARRAY "")
 foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
   if(${io_module} STREQUAL "BridgeJavaScript")
@@ -62,12 +67,12 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
     if(${io_module} STREQUAL "ITKIOGE")
       set(exception_catching " -s DISABLE_EXCEPTION_CATCHING=0")
     endif()
-    set(common_link_flags " -s SUPPORT_LONGJMP=1 -s FORCE_FILESYSTEM=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 --no-entry -s EXPORT_NAME=${imageio}JSBinding -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -flto ${exception_catching} -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js")
+    set(imageio_common_link_flags " ${common_link_flags} -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s SUPPORT_LONGJMP=1 --no-entry -s EXPORT_NAME=${imageio}JSBinding ${exception_catching}")
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " ${common_link_flags} -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 "
+      PROPERTY LINK_FLAGS " ${imageio_common_link_flags} ${esm_link_flags} "
       )
     set_property(TARGET ${target_umd} APPEND_STRING
-      PROPERTY LINK_FLAGS " ${common_link_flags} "
+      PROPERTY LINK_FLAGS " ${imageio_common_link_flags} "
       )
 
     set_property(TARGET ${target}
@@ -145,12 +150,12 @@ foreach(dicom_io_module
     PROPERTY LINK_FLAGS " --bind"
     )
 
-  set(common_link_flags " -s SUPPORT_LONGJMP=1 -s DISABLE_EXCEPTION_CATCHING=0 -s FORCE_FILESYSTEM=1 -s EXPORT_NAME=${target} -s WASM_ASYNC_COMPILATION=0 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js")
+  set(dicom_common_link_flags " ${common_link_flags} -s SUPPORT_LONGJMP=1 -s DISABLE_EXCEPTION_CATCHING=0 -s EXPORT_NAME=${target}")
   set_property(TARGET ${target} APPEND_STRING
-    PROPERTY LINK_FLAGS " ${common_link_flags} -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 "
+    PROPERTY LINK_FLAGS " ${dicom_common_link_flags} ${esm_link_flags} "
     )
   set_property(TARGET ${target_umd} APPEND_STRING
-    PROPERTY LINK_FLAGS " ${common_link_flags}"
+    PROPERTY LINK_FLAGS " ${dicom_common_link_flags}"
     )
 
   set_property(TARGET ${target}
@@ -211,13 +216,12 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
       PROPERTY LINK_FLAGS " --bind"
       )
 
-    set(common_link_flags " -s EXPORT_NAME=${meshio}JSBinding -s FORCE_FILESYSTEM=1 --no-entry -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=0 -flto -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
-      )
+    set(meshio_common_link_flags " ${common_link_flags} -s EXPORT_NAME=${meshio}JSBinding --no-entry")
     set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " ${common_link_flags} -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 "
+      PROPERTY LINK_FLAGS " ${meshio_common_link_flags} ${esm_link_flags}"
       )
     set_property(TARGET ${target_umd} APPEND_STRING
-      PROPERTY LINK_FLAGS " ${common_link_flags} "
+      PROPERTY LINK_FLAGS " ${meshio_common_link_flags} "
       )
 
     set_property(TARGET ${target}
@@ -239,46 +243,44 @@ endforeach()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/MeshIOIndex.ts.in
   ${CMAKE_CURRENT_SOURCE_DIR}/io/internal/MeshIOIndex.ts @ONLY)
 
-if(0)
-
 # Pipelines for readPolyData
 find_package(VTK QUIET)
 if(VTK_FOUND)
   foreach(io_pipeline ${PolyDataIOPipelines})
 
-  # Workaround Threads issue
-  find_package(Threads)
+    # Workaround Threads issue
+    find_package(Threads)
 
-  set(target ${io_pipeline})
-  set(wasm_target ${io_pipeline}Wasm)
-  _add_executable(${target} io/internal/bindings/${target}.cxx)
-  _add_executable(${wasm_target} io/internal/bindings/${target}.cxx)
-  set_property(TARGET ${target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' -s WASM=0 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPipelinePre.js --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
-    )
-  set(pre_js ${CMAKE_CURRENT_BINARY_DIR}/itkJSPolyDataIOPre${io_pipeline}.js)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPolyDataIOPre.js.in
-    ${pre_js} @ONLY)
-  set_property(TARGET ${wasm_target} APPEND_STRING
-    PROPERTY LINK_FLAGS " -s EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORT_NAME=${io_pipeline} -s EXPORTED_FUNCTIONS='[\"_main\"]' -s MODULARIZE=1 -s EXPORT_ES6=1 -s WASM=1 -lworkerfs.js -s WASM_ASYNC_COMPILATION=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js ${pre_js} --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js"
-    )
-  set_property(TARGET ${target}
-    PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${BridgeJavaScript_BINARY_DIR}/polydata-io
-    )
-  set_property(TARGET ${wasm_target}
-    PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${BridgeJavaScript_BINARY_DIR}/polydata-io
-    )
-  set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
-    PROPERTY OBJECT_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
-    )
-  _target_link_libraries(${target} LINK_PUBLIC VTK::IOExport ${polydataios_${io_pipeline}})
-  _target_link_libraries(${wasm_target} LINK_PUBLIC VTK::IOExport ${polydataios_${io_pipeline}})
+    set(target ${io_pipeline})
+    set(target_umd ${io_pipeline}.umd)
+
+    _add_executable(${target} io/internal/bindings/${target}.cxx)
+    _add_executable(${target_umd} io/internal/bindings/${target}.cxx)
+
+    set(polydata_common_link_flags " ${common_link_flags} -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORT_NAME=${io_pipeline} -s EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPipelinePre.js")
+    set_property(TARGET ${target} APPEND_STRING
+      PROPERTY LINK_FLAGS " ${polydata_common_link_flags} ${esm_link_flags}"
+      )
+    set_property(TARGET ${target_umd} APPEND_STRING
+      PROPERTY LINK_FLAGS " ${polydata_common_link_flags}"
+      )
+
+    set_property(TARGET ${target}
+      PROPERTY RUNTIME_OUTPUT_DIRECTORY
+      ${BridgeJavaScript_BINARY_DIR}/polydata-io
+      )
+    set_property(TARGET ${target_umd}
+      PROPERTY RUNTIME_OUTPUT_DIRECTORY
+      ${BridgeJavaScript_BINARY_DIR}/polydata-io
+      )
+    set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
+      PROPERTY OBJECT_DEPENDS
+      ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
+      )
+
+      _target_link_libraries(${target} LINK_PUBLIC VTK::IOExport ${polydataios_${io_pipeline}})
+      _target_link_libraries(${target_umd} LINK_PUBLIC VTK::IOExport ${polydataios_${io_pipeline}})
   endforeach()
 endif()
-
-endif() # if(0)
 
 endif() # BUILD_ITK_JS_IO_MODULES

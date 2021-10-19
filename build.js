@@ -21,6 +21,7 @@ program
   .option('-s, --no-copy-build-artifacts', 'Do not copy build artifacts')
   .option('-e, --no-build-emscripten-pipelines', 'Do not build the emscripten test pipelines')
   .option('-w, --no-build-wasi-pipelines', 'Do not build the wasi test pipelines')
+  .option('-v, --no-build-vtk', 'Do not build the VTK-dependent io and test pipelines')
   .option('-d, --debug', 'Create a debug build of the Emscripten modules')
   .parse(process.argv)
 
@@ -54,14 +55,23 @@ if (options.buildIo) {
   if (options.debug) {
     dockcross = 'build/dockcross-debug'
   }
+  if (options.buildVtk) {
+    dockcross = `${dockcross}-with-vtk`
+  }
   try {
     fs.statSync(dockcross)
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
       let buildImage = 'insighttoolkit/itk-js:latest'
+      if (options.buildVtk) {
+        buildImage = 'kitware/itk-js-vtk:latest'
+      }
       if (options.debug) {
         buildImage = 'insighttoolkit/itk-js:latest-debug'
+        if (options.buildVtk) {
+          buildImage = 'kitware/itk-js-vtk:latest-debug'
+        }
       }
       const dockerCall = spawnSync('docker', ['run', '--rm', buildImage], {
         env: process.env,
