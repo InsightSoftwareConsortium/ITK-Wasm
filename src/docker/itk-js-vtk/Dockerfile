@@ -8,8 +8,9 @@ WORKDIR /
 
 # Work-around for VTK HDF5 build
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_DOCKCROSS}
-# v9.1.0.rc2 + VTK HDF5 + No Threads::Threads link + netcdf patch
-ENV VTK_GIT_TAG ea6886c5ea6ff49a6bd2586f233f36d8b23e35f9
+# v9.1.0.rc2 + VTK HDF5 + No Threads::Threads link + netcdf patch + expat
+# patch
+ENV VTK_GIT_TAG 9c1a6eed199039e85c339aff4218890ca7fb4cab
 RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK && \
   git checkout ${VTK_GIT_TAG} && \

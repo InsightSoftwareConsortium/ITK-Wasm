@@ -15,19 +15,18 @@ import writeMeshTest from './writeMeshTest.js'
 import writeTest from './writeTest.js'
 
 export default function() {
-  //readImageTest()
-  //DICOMSeriesTest()
-  //DICOMTest()
-  //JPEGTest()
-  //readImageFileSeriesTest()
+  readImageTest()
+  DICOMSeriesTest()
+  DICOMTest()
+  JPEGTest()
+  readImageFileSeriesTest()
 
-  //readMeshTest()
+  readMeshTest()
 
   readPolyDataTest()
-  //
-  //readTest()
+  readTest()
 
-  //writeImageTest()
-  //writeMeshTest()
-  //writeTest()
+  writeImageTest()
+  writeMeshTest()
+  writeTest()
 }

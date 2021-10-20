@@ -3,7 +3,6 @@ import path from 'path'
 
 import { readPolyDataLocalFile } from '../../../dist/index.js'
 
-// todo:
 test('readPolyDataLocalFile reads a vtkPolyData', (t) => {
   const verifyPolyData = (polyData) => {
     t.is(polyData.vtkClass, 'vtkPolyData')
