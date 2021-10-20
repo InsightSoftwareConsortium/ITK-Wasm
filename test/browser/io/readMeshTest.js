@@ -62,7 +62,6 @@ test('readMeshFile reads a File', (t) => {
     })
     .then(function ({ mesh, webWorker }) {
       webWorker.terminate()
-      console.log('readmeshfile', mesh)
       verifyMesh(t, mesh)
     })
 })

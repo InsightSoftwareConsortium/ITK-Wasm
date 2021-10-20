@@ -33,7 +33,7 @@ interface RunPipelineInput extends Input {
 // To cache loaded pipeline modules
 const pipelineToModule: Map<string,PipelineEmscriptenModule> = new Map()
 
-async function loadPipelineModule (moduleDirectory: string, pipelinePath: string | object, config: ITKConfig) {
+async function loadPipelineModule (moduleDirectory: "polydata-io" | "pipeline", pipelinePath: string | object, config: ITKConfig) {
   let moduleRelativePathOrURL: string | URL = pipelinePath as string
   let pipeline = pipelinePath as string
   let pipelineModule = null
@@ -44,7 +44,7 @@ async function loadPipelineModule (moduleDirectory: string, pipelinePath: string
   if (pipelineToModule.has(pipeline)) {
     pipelineModule = pipelineToModule.get(pipeline) as PipelineEmscriptenModule
   } else {
-    pipelineToModule.set(pipeline, await loadEmscriptenModule(moduleRelativePathOrURL, 'pipeline', config.itkModulesPath) as PipelineEmscriptenModule)
+    pipelineToModule.set(pipeline, await loadEmscriptenModule(moduleRelativePathOrURL, moduleDirectory, config.itkModulesPath) as PipelineEmscriptenModule)
     pipelineModule = pipelineToModule.get(pipeline) as PipelineEmscriptenModule
   }
   return pipelineModule
@@ -143,8 +143,9 @@ async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: strin
 
 registerWebworker(async function (input: RunPipelineInput) {
   let pipelineModule = null
+  console.log('input', input)
   if (input.operation === 'runPipeline') {
-    pipelineModule = await loadPipelineModule('pipelines', input.pipelinePath, input.config) as PipelineEmscriptenModule
+    pipelineModule = await loadPipelineModule('pipeline', input.pipelinePath, input.config) as PipelineEmscriptenModule
   } else if (input.operation === 'runPolyDataIOPipeline') {
     pipelineModule = await loadPipelineModule('polydata-io', input.pipelinePath, input.config) as PipelineEmscriptenModule
   } else {

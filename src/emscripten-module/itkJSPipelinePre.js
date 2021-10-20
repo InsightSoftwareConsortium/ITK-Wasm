@@ -1,34 +1,28 @@
-var Module = {}
+var mStdout = null
+var mStderr = null
 
-var moduleStdout = null
-var moduleStderr = null
-
-Module.resetModuleStdout = function () {
-  moduleStdout = ''
+Module['resetModuleStdout'] = function() {
+  mStdout = ''
 }
 
-Module.resetModuleStderr = function () {
-  moduleStderr = ''
+Module['resetModuleStderr'] = function() {
+  mStderr = ''
 }
 
-Module.print = function (text) {
+Module['print'] = function(text) {
   console.log(text)
-  moduleStdout += text + '\n'
+  mStdout += text + '\n'
 }
 
-Module.printErr = function (text) {
-  console.log(text)
-  moduleStderr += text + '\n'
+Module['printErr'] = function(text) {
+  console.error(text)
+  mStderr += text + '\n'
 }
 
-Module.getModuleStdout = function () {
-  return moduleStdout
+Module['getModuleStdout'] = function() {
+  return mStdout
 }
 
-Module.getModuleStderr = function () {
-  return moduleStderr
-}
-
-Module.preRun = function () {
-  ENV.ITK_GLOBAL_DEFAULT_THREADER = 'Platform'
+Module['getModuleStderr'] = function() {
+  return mStderr
 }

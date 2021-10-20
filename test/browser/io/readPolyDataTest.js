@@ -1,9 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import readPolyDataArrayBuffer from 'readPolyDataArrayBuffer'
-import readPolyDataBlob from 'readPolyDataBlob'
-import readPolyDataFile from 'readPolyDataFile'
+import { readPolyDataArrayBuffer, readPolyDataBlob, readPolyDataFile } from 'browser/index.js'
 
 const fileName = 'cow.vtk'
 const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
@@ -24,6 +22,8 @@ const verifyPolyData = (t, polyData) => {
   t.is(polyData.polys.buffer.byteLength, 62372)
   t.end()
 }
+
+export default function () {
 
 test('readPolyDataArrayBuffer reads an ArrayBuffer', (t) => {
   return axios.get(testFilePath, { responseType: 'arraybuffer' })
@@ -60,3 +60,5 @@ test('readPolyDataFile reads a File', (t) => {
       verifyPolyData(t, polyData)
     })
 })
+
+}

@@ -33,7 +33,7 @@ async function readPolyDataLocalFile(filePath: string): Promise<PolyData> {
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(polyDataIOsPath, io as string + '.js')
+  const modulePath = path.join(polyDataIOsPath, io as string)
   const Module = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
   const fileContents = new Uint8Array(fs.readFileSync(absoluteFilePath))
 

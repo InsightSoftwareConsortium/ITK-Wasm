@@ -23,7 +23,7 @@ if(BUILD_ITK_JS_IO_MODULES)
 
 # -s WASM_ASYNC_COMPILATION=0
 # -flto
-set(common_link_flags " -s FORCE_FILESYSTEM=1 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js")
+set(common_link_flags " -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js")
 set(esm_link_flags " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0")
 
 set(ImageIOIndex_ARRAY "")
@@ -257,7 +257,7 @@ if(VTK_FOUND)
     _add_executable(${target} io/internal/bindings/${target}.cxx)
     _add_executable(${target_umd} io/internal/bindings/${target}.cxx)
 
-    set(polydata_common_link_flags " ${common_link_flags} -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORT_NAME=${io_pipeline} -s EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPipelinePre.js")
+    set(polydata_common_link_flags " ${common_link_flags} -s INVOKE_RUN=0 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORT_NAME=${io_pipeline} -s EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPipelinePre.js")
     set_property(TARGET ${target} APPEND_STRING
       PROPERTY LINK_FLAGS " ${polydata_common_link_flags} ${esm_link_flags}"
       )
