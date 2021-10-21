@@ -46,9 +46,18 @@ jobs:
       run: |
         ./src/docker/itk-js-base/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
 
+    - name: Build itk-js-base WASI
+      run: |
+        ./src/docker/itk-js-base/build.sh --with-wasi --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+
     - name: Build itk-js
       run: |
         ./src/docker/itk-js/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+
+    - name: Build itk-js WASI
+      run: |
+        ./src/docker/itk-js/build.sh --with-wasi --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+
 
     - name: Build itk-js-vtk
       run: |
