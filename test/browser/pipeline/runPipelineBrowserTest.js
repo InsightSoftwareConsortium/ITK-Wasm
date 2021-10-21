@@ -220,94 +220,93 @@ Click. Perfect success.
   verifyMesh(outputs[0].data)
 })
 
-// todo
-//test('runPipelineBrowser reads a vtkPolyData from the Emscripten filesystem', (t) => {
-  //const verifyPolyData = (polyData) => {
-    //t.is(polyData.vtkClass, 'vtkPolyData')
-    //t.is(polyData.points.vtkClass, 'vtkPoints')
-    //t.is(polyData.points.name, 'points')
-    //t.is(polyData.points.numberOfComponents, 3)
-    //t.is(polyData.points.dataType, 'Float32Array')
-    //t.is(polyData.points.size, 8709)
-    //t.is(polyData.points.buffer.byteLength, 34836)
-    //t.is(polyData.polys.vtkClass, 'vtkCellArray')
-    //t.is(polyData.polys.name, 'polys')
-    //t.is(polyData.polys.numberOfComponents, 1)
-    //t.is(polyData.polys.dataType, 'Int32Array')
-    //t.is(polyData.polys.size, 15593)
-    //t.is(polyData.polys.buffer.byteLength, 62372)
-    //t.end()
-  //}
+test('runPipelineBrowser reads a vtkPolyData from the Emscripten filesystem', (t) => {
+  const verifyPolyData = (polyData) => {
+    t.is(polyData.vtkClass, 'vtkPolyData')
+    t.is(polyData.points.vtkClass, 'vtkPoints')
+    t.is(polyData.points.name, 'points')
+    t.is(polyData.points.numberOfComponents, 3)
+    t.is(polyData.points.dataType, 'Float32Array')
+    t.is(polyData.points.size, 8709)
+    t.is(polyData.points.buffer.byteLength, 34836)
+    t.is(polyData.polys.vtkClass, 'vtkCellArray')
+    t.is(polyData.polys.name, 'polys')
+    t.is(polyData.polys.numberOfComponents, 1)
+    t.is(polyData.polys.dataType, 'Int32Array')
+    t.is(polyData.polys.size, 15593)
+    t.is(polyData.polys.buffer.byteLength, 62372)
+    t.end()
+  }
 
-  //const fileName = 'cow.vtk'
-  //const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
-  //return axios.get(testFilePath, { responseType: 'arraybuffer' })
-    //.then(function (response) {
-      //const polyDataFileContents = new Uint8Array(response.data)
-      //const pipelinePath = 'WriteVTKPolyDataTest'
-      //const args = ['cow.vtk', 'cow.vtk.written.json']
-      //const desiredOutputs = [
-        //{ path: args[1], type: IOTypes.vtkPolyData }
-      //]
-      //const inputs = [
-        //{ path: args[0], type: IOTypes.Binary, data: polyDataFileContents }
-      //]
-      //return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
-        //.then(function ({ outputs, webWorker }) {
-          //webWorker.terminate()
-          //verifyPolyData(outputs[0].data)
-        //})
-    //})
-//})
+  const fileName = 'cow.vtk'
+  const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+  return axios.get(testFilePath, { responseType: 'arraybuffer' })
+    .then(function (response) {
+      const polyDataFileContents = new Uint8Array(response.data)
+      const pipelinePath = 'WriteVTKPolyDataTest'
+      const args = ['cow.vtk', 'cow.vtk.written.json']
+      const desiredOutputs = [
+        { path: args[1], type: IOTypes.vtkPolyData }
+      ]
+      const inputs = [
+        { path: args[0], type: IOTypes.Binary, data: polyDataFileContents }
+      ]
+      return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
+        .then(function ({ outputs, webWorker }) {
+          webWorker.terminate()
+          verifyPolyData(outputs[0].data)
+        })
+    })
+})
 
-//test('MeshToPolyData converts an itk/Mesh to a vtk.js vtkPolyData', (t) => {
-  //const verifyPolyData = (polyData) => {
-    //t.is(polyData.vtkClass, 'vtkPolyData')
-    //t.is(polyData.points.vtkClass, 'vtkPoints')
-    //t.is(polyData.points.name, 'points')
-    //t.is(polyData.points.numberOfComponents, 3)
-    //t.is(polyData.points.dataType, 'Float32Array')
-    //t.is(polyData.points.size, 8709)
-    //t.is(polyData.points.buffer.byteLength, 34836)
-    //t.is(polyData.points.values[0], 3.716360092163086)
-    //t.is(polyData.points.values[1], 2.3433899879455566)
-    //t.is(polyData.points.values[2], 0.0)
-    //t.is(polyData.polys.vtkClass, 'vtkCellArray')
-    //t.is(polyData.polys.name, 'polys')
-    //t.is(polyData.polys.numberOfComponents, 1)
-    //t.is(polyData.polys.dataType, 'Int32Array')
-    //t.is(polyData.polys.size, 15593)
-    //t.is(polyData.polys.buffer.byteLength, 62372)
-    //t.is(polyData.polys.values[0], 4)
-    //t.is(polyData.polys.values[1], 250)
-    //t.is(polyData.polys.values[2], 251)
-    //t.end()
-  //}
+test('MeshToPolyData converts an itk/Mesh to a vtk.js vtkPolyData', (t) => {
+  const verifyPolyData = (polyData) => {
+    t.is(polyData.vtkClass, 'vtkPolyData')
+    t.is(polyData.points.vtkClass, 'vtkPoints')
+    t.is(polyData.points.name, 'points')
+    t.is(polyData.points.numberOfComponents, 3)
+    t.is(polyData.points.dataType, 'Float32Array')
+    t.is(polyData.points.size, 8709)
+    t.is(polyData.points.buffer.byteLength, 34836)
+    t.is(polyData.points.values[0], 3.716360092163086)
+    t.is(polyData.points.values[1], 2.3433899879455566)
+    t.is(polyData.points.values[2], 0.0)
+    t.is(polyData.polys.vtkClass, 'vtkCellArray')
+    t.is(polyData.polys.name, 'polys')
+    t.is(polyData.polys.numberOfComponents, 1)
+    t.is(polyData.polys.dataType, 'Int32Array')
+    t.is(polyData.polys.size, 15593)
+    t.is(polyData.polys.buffer.byteLength, 62372)
+    t.is(polyData.polys.values[0], 4)
+    t.is(polyData.polys.values[1], 250)
+    t.is(polyData.polys.values[2], 251)
+    t.end()
+  }
 
-  //const fileName = 'cow.vtk'
-  //const testMeshInputFilePath = `base/build/ExternalData/test/Input/${fileName}`
-  //return axios.get(testMeshInputFilePath, { responseType: 'blob' })
-    //.then(function (response) {
-      //const jsFile = new window.File([response.data], fileName)
-      //return jsFile
-    //}).then(function (jsFile) {
-      //return readMeshFile(null, jsFile)
-    //}).then(function ({ mesh, webWorker }) {
-      //webWorker.terminate()
-      //const pipelinePath = 'MeshToPolyData'
-      //const args = ['cow.vtk.json', 'cow.vtk.written.json']
-      //const desiredOutputs = [
-        //{ path: args[1], type: IOTypes.vtkPolyData }
-      //]
-      //const inputs = [
-        //{ path: args[0], type: IOTypes.Mesh, data: mesh }
-      //]
-      //return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
-        //.then(function ({ stdout, stderr, outputs, webWorker }) {
-          //webWorker.terminate()
-          //verifyPolyData(outputs[0].data)
-        //})
-    //})
-//})
+  const fileName = 'cow.vtk'
+  const testMeshInputFilePath = `base/build/ExternalData/test/Input/${fileName}`
+  return axios.get(testMeshInputFilePath, { responseType: 'blob' })
+    .then(function (response) {
+      const jsFile = new window.File([response.data], fileName)
+      return jsFile
+    }).then(function (jsFile) {
+      return readMeshFile(null, jsFile)
+    }).then(function ({ mesh, webWorker }) {
+      webWorker.terminate()
+      const pipelinePath = 'MeshToPolyData'
+      const args = ['cow.vtk.json', 'cow.vtk.written.json']
+      const desiredOutputs = [
+        { path: args[1], type: IOTypes.vtkPolyData }
+      ]
+      const inputs = [
+        { path: args[0], type: IOTypes.Mesh, data: mesh }
+      ]
+      return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
+        .then(function ({ stdout, stderr, outputs, webWorker }) {
+          webWorker.terminate()
+          verifyPolyData(outputs[0].data)
+        })
+    })
+})
 
 }
