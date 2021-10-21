@@ -17,7 +17,7 @@ class Matrix {
     }
   }
 
-  setIdentity () {
+  setIdentity (): void {
     for (let ii = 0; ii < this.rows; ++ii) {
       for (let jj = 0; jj < this.columns; ++jj) {
         if (ii === jj) {
