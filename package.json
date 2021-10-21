@@ -98,6 +98,9 @@
   },
   "sideEffects": false,
   "ts-standard": {
-    "ignore": []
+    "ignore": [
+      "src/core/internal/loadEmscriptenModuleWebWorker.ts",
+      "src/web-workers/*.worker.ts"
+    ]
   }
 }

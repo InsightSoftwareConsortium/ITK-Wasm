@@ -28,8 +28,8 @@ function stackImages (images: Image[]): Image {
   result.size[stackOn] = stackedSize
 
   const dataSize = result.size.reduce((accumulator, currentValue) => { return accumulator * currentValue }, 1) * result.imageType.components
-  const ctor = firstImage.data.constructor as new(length: number) => typeof firstImage.data
-  result.data = new ctor(dataSize)
+  const CTor = firstImage.data.constructor as new(length: number) => typeof firstImage.data
+  result.data = new CTor(dataSize)
 
   let offsetBase = result.imageType.components
   for (let subIndex = 0; subIndex < result.size.length - 1; subIndex++) {

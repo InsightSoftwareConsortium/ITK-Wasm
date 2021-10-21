@@ -17,7 +17,6 @@ async function loadEmscriptenModuleMainThread (moduleRelativePathOrURL: string |
   if (modulePrefix.endsWith('.wasm')) {
     modulePrefix = modulePrefix.substring(0, modulePrefix.length - 5)
   }
-  const moduleBaseName = modulePrefix.replace(/.*\//, '')
   const wasmBinaryPath = `${modulePrefix}.wasm`
   const response = await axios.get(wasmBinaryPath, { responseType: 'arraybuffer' })
   const wasmBinary = response.data

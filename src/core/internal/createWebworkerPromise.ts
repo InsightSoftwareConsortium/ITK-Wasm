@@ -1,7 +1,12 @@
 import WebworkerPromise from 'webworker-promise'
 
+interface CreateWebworkerPromiseResult {
+  webworkerPromise: typeof WebworkerPromise
+  worker: Worker
+}
+
 // Internal function to create a web worker promise
-async function createWebworkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline', existingWorker: Worker | null) {
+async function createWebworkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline', existingWorker: Worker | null): Promise<CreateWebworkerPromiseResult> {
   if (existingWorker != null) {
     const webworkerPromise = new WebworkerPromise(existingWorker)
     return await Promise.resolve({ webworkerPromise, worker: existingWorker })
@@ -20,10 +25,10 @@ async function createWebworkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline'
       worker = new Worker(new URL('../../web-workers/pipeline.worker.js', import.meta.url))
       break
     default:
-      throw Error(`Unsupported web worker type: ${name}`)
+      throw Error('Unsupported web worker type')
   }
   const webworkerPromise = new WebworkerPromise(worker)
-  return await Promise.resolve({ webworkerPromise, worker })
+  return { webworkerPromise, worker }
 }
 
 export default createWebworkerPromise

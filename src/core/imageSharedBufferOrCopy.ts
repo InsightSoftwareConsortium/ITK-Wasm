@@ -16,8 +16,8 @@ function imageSharedBufferOrCopy (image: Image): Image {
     }
 
     const sharedBuffer = new SharedArrayBuffer(image.data.buffer.byteLength) // eslint-disable-line
-    const ctor = image.data.constructor as new(buffer: SharedArrayBuffer) => typeof image.data
-    const sharedTypedArray = new ctor(sharedBuffer)
+    const CTor = image.data.constructor as new(buffer: SharedArrayBuffer) => typeof image.data
+    const sharedTypedArray = new CTor(sharedBuffer)
     if (sharedTypedArray !== null) {
       // @ts-expect-error: error TS2345: Argument of type 'TypedArray' is not assignable to parameter of type 'ArrayLike<number> & ArrayLike<bigint>'.
 
