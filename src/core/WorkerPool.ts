@@ -93,19 +93,20 @@ class WorkerPool {
     }
   }
 
-  public cancel (runId: number) {
+  public cancel (runId: number): void {
     const info = this.runInfo[runId]
-    if (info) {
+    if (info !== null && info !== undefined) {
       info.canceled = true
     }
   }
 
-  private addTask (infoIndex: number, resultIndex: number, taskArgs: []) {
+  private addTask (infoIndex: number, resultIndex: number, taskArgs: []): void {
     const info = this.runInfo[infoIndex]
 
-    if (info && info.canceled) {
+    if (info?.canceled === true) {
       this.clearTask(info.index)
-      ;(info.reject != null) && info.reject('Remaining tasks canceled')
+      // @ts-expect-error: error TS2722: Cannot invoke an object which is
+      info?.reject('Remaining tasks canceled')
       return
     }
 
@@ -126,18 +127,22 @@ class WorkerPool {
           if (info.taskQueue.length > 0) {
             const reTask = info.taskQueue.shift() as any[]
             this.addTask(infoIndex, reTask[0], reTask[1])
-          } else if (!info.addingTasks && !info.runningWorkers) {
+          } else if (!info.addingTasks && info.runningWorkers === 0) {
             const results = info.results
             this.clearTask(info.index)
-            ;(info.resolve != null) && info.resolve(results)
+            // @ts-expect-error: error TS2722: Cannot invoke an object which is
+            // possibly 'undefined'.
+            info?.resolve(results)
           }
         }
       }).catch((error) => {
         this.clearTask(info.index)
-        ;(info.reject != null) && info.reject(error)
+        // @ts-expect-error: error TS2722: Cannot invoke an object which is
+        // possibly 'undefined'.
+        info?.reject(error)
       })
     } else {
-      if (info.runningWorkers || info.postponed) {
+      if (info.runningWorkers !== 0 || info.postponed) {
         // At least one worker is working on these tasks, and it will pick up
         // the next item in the taskQueue when done.
         info.taskQueue.push([resultIndex, taskArgs])
@@ -152,7 +157,7 @@ class WorkerPool {
     }
   }
 
-  private clearTask (clearIndex: number) {
+  private clearTask (clearIndex: number): void {
     this.runInfo[clearIndex].results = []
     this.runInfo[clearIndex].taskQueue = []
     this.runInfo[clearIndex].progressCallback = null
