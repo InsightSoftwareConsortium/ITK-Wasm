@@ -19,7 +19,7 @@ import localPathRelativeToModule from './localPathRelativeToModule.js'
  *
  * @param: filePath path to the file on the local filesystem.
  */
-async function readImageLocalFile(filePath: string): Promise<Image> {
+async function readImageLocalFile (filePath: string): Promise<Image> {
   const imageIOsPath = localPathRelativeToModule(import.meta.url, '../image-io')
   if (!fs.existsSync(imageIOsPath)) {
     throw Error("Cannot find path to itk image IO's")

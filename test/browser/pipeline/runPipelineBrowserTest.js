@@ -68,8 +68,6 @@ Click. Perfect success.
   })
   })
 
-  // Note: There are currently known issues with Chrome whining about
-  // wasm compilation on the main thread.
   test('runPipelineBrowser runs a pipeline on the main thread with an absolute URL', (t) => {
   const args = []
   const outputs = null
@@ -118,8 +116,6 @@ Click. Perfect success.
     })
   })
 
-  // Note: There are currently known issues with Chrome whining about
-  // wasm compilation on the main thread.
   test('runPipelineBrowser runs on the main thread when first argument is false', (t) => {
   const pipelinePath = 'InputOutputFilesTest'
   const args = ['input.txt', 'input.bin', 'output.txt', 'output.bin']

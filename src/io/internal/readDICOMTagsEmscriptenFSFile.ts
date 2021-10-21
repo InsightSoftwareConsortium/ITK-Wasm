@@ -1,6 +1,6 @@
-import DICOMTagsReaderEmscriptenModule from "./DICOMTagsReaderEmscriptenModule.js"
+import DICOMTagsReaderEmscriptenModule from './DICOMTagsReaderEmscriptenModule.js'
 
-function readDICOMTagsEmscriptenFSFile(tagReaderModule: DICOMTagsReaderEmscriptenModule,
+function readDICOMTagsEmscriptenFSFile (tagReaderModule: DICOMTagsReaderEmscriptenModule,
   fileName: string,
   tags: string[] | null = null): Map<string, string> {
   const tagReader = new tagReaderModule.ITKDICOMTagReader()

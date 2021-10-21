@@ -25,18 +25,18 @@ import localPathRelativeToModule from './localPathRelativeToModule.js'
  *
  * @return empty Promise
  */
-async function writeMeshLocalFile(options: WriteMeshOptions, mesh: Mesh, filePath: string): Promise<null> {
+async function writeMeshLocalFile (options: WriteMeshOptions, mesh: Mesh, filePath: string): Promise<null> {
   const meshIOsPath = localPathRelativeToModule(import.meta.url, '../mesh-io')
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)
 
   let useCompression = false
-  if(typeof options.useCompression !== 'undefined') {
+  if (typeof options.useCompression !== 'undefined') {
     useCompression = options.useCompression
   }
   let binaryFileType = false
-  if(typeof options.binaryFileType !== 'undefined') {
+  if (typeof options.binaryFileType !== 'undefined') {
     binaryFileType = options.binaryFileType
   }
   let io = null

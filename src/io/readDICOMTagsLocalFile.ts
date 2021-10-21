@@ -6,14 +6,14 @@ import readDICOMTagsEmscriptenFSFile from './internal/readDICOMTagsEmscriptenFSF
 import localPathRelativeToModule from './localPathRelativeToModule.js'
 
 import DICOMTagsReaderEmscriptenModule from './internal/DICOMTagsReaderEmscriptenModule.js'
-import ReadDICOMTagsResult from "./ReadDICOMTagsResult.js"
+import ReadDICOMTagsResult from './ReadDICOMTagsResult.js'
 
 /**
  * Reads DICOM tags from a series of DICOM files on the local filesystem in Node.js.
  * @param: filename DICOM object filepath on the local filesystem.
  * @param: tags Array of tags to extract.
  */
-async function readDICOMTagsLocalFile(fileName: string, tags: string[] | null = null): Promise<Map<string,string>> {
+async function readDICOMTagsLocalFile (fileName: string, tags: string[] | null = null): Promise<Map<string, string>> {
   const imageIOsPath = localPathRelativeToModule(import.meta.url, '../image-io')
   if (!fs.existsSync(imageIOsPath)) {
     throw Error("Cannot find path to itk image IO's")

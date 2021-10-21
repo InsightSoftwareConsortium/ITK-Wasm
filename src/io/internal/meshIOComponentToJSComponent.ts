@@ -3,8 +3,8 @@ import FloatTypes from '../../core/FloatTypes.js'
 import MeshIOBaseEmscriptenModule from './MeshIOBaseEmscriptenModule.js'
 import IOComponent from './IOComponent.js'
 
-function meshIOComponentToJSComponent(emscriptenModule: MeshIOBaseEmscriptenModule, ioComponentType: typeof IOComponent[keyof typeof IOComponent]):
-  typeof IntTypes[keyof typeof IntTypes] |  typeof FloatTypes[keyof typeof FloatTypes] | null {
+function meshIOComponentToJSComponent (emscriptenModule: MeshIOBaseEmscriptenModule, ioComponentType: typeof IOComponent[keyof typeof IOComponent]):
+  typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] | null {
   let componentType = null
   switch (ioComponentType) {
     case emscriptenModule.IOComponentType.UNKNOWNCOMPONENTTYPE: {

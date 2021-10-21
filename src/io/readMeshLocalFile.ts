@@ -14,7 +14,7 @@ import readMeshEmscriptenFSFile from './internal/readMeshEmscriptenFSFile.js'
 import MeshIOBaseEmscriptenModule from './internal/MeshIOBaseEmscriptenModule.js'
 import localPathRelativeToModule from './localPathRelativeToModule.js'
 
-async function readMeshLocalFile(filePath: string): Promise<Mesh> {
+async function readMeshLocalFile (filePath: string): Promise<Mesh> {
   const meshIOsPath = localPathRelativeToModule(import.meta.url, '../mesh-io')
   if (!fs.existsSync(meshIOsPath)) {
     throw Error("Cannot find path to itk mesh IO's")

@@ -22,9 +22,9 @@ const pipelineToModule: Map<string, PipelineEmscriptenModule> = new Map()
 async function loadPipelineModule (pipelinePath: string | URL): Promise<PipelineEmscriptenModule> {
   let moduleRelativePathOrURL: string | URL = pipelinePath as string
   let pipeline = pipelinePath as string
-  let pipelineModule = null
+  const pipelineModule = null
   if (typeof pipelinePath !== 'string') {
-    moduleRelativePathOrURL = new URL((pipelinePath as URL).href)
+    moduleRelativePathOrURL = new URL((pipelinePath).href)
     pipeline = moduleRelativePathOrURL.href
   }
   if (pipelineToModule.has(pipeline)) {
@@ -36,12 +36,11 @@ async function loadPipelineModule (pipelinePath: string | URL): Promise<Pipeline
   }
 }
 
-async function runPipelineBrowser(webWorker: Worker | null | boolean, pipelinePath: string | URL, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]): Promise<RunPipelineResult> {
+async function runPipelineBrowser (webWorker: Worker | null | boolean, pipelinePath: string | URL, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]): Promise<RunPipelineResult> {
   if (webWorker === false) {
-    loadPipelineModule(pipelinePath.toString()).then((pipelineModule) => {
-      const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
-      return result
-    })
+    const pipelineModule = await loadPipelineModule(pipelinePath.toString())
+    const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
+    return result
   }
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise('pipeline', worker as Worker | null)
@@ -52,7 +51,7 @@ async function runPipelineBrowser(webWorker: Worker | null | boolean, pipelinePa
       if (input.type === IOTypes.Binary) {
         // Binary data
         const transferable = getTransferable(input.data as Uint8Array)
-        if (transferable) {
+        if (transferable != null) {
           transferables.push(transferable)
         }
       } else if (input.type === IOTypes.Image) {
@@ -62,33 +61,33 @@ async function runPipelineBrowser(webWorker: Worker | null | boolean, pipelinePa
           throw Error('image data cannot be null')
         }
         const transferable = getTransferable(image.data)
-        if (transferable) {
+        if (transferable != null) {
           transferables.push(transferable)
         }
       } else if (input.type === IOTypes.Mesh) {
         // Mesh data
         const mesh = input.data as Mesh
-        if (mesh.points) {
+        if (mesh.points != null) {
           const transferable = getTransferable(mesh.points)
-          if (transferable) {
+          if (transferable != null) {
             transferables.push(transferable)
           }
         }
-        if (mesh.pointData) {
+        if (mesh.pointData != null) {
           const transferable = getTransferable(mesh.pointData)
-          if (transferable) {
+          if (transferable != null) {
             transferables.push(transferable)
           }
         }
-        if (mesh.cells) {
+        if (mesh.cells != null) {
           const transferable = getTransferable(mesh.cells)
-          if (transferable) {
+          if (transferable != null) {
             transferables.push(transferable)
           }
         }
-        if (mesh.cellData) {
+        if (mesh.cellData != null) {
           const transferable = getTransferable(mesh.cellData)
-          if (transferable) {
+          if (transferable != null) {
             transferables.push(transferable)
           }
         }

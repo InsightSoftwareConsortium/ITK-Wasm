@@ -1,25 +1,25 @@
 import { readAsArrayBuffer } from 'promise-file-reader'
 
-import createWebworkerPromise from "../core/internal/createWebworkerPromise.js"
+import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
 
-import Mesh from "../core/Mesh.js"
+import Mesh from '../core/Mesh.js'
 
-import config from "../itkConfig.js"
+import config from '../itkConfig.js'
 
-import ReadMeshResult from "./ReadMeshResult.js"
+import ReadMeshResult from './ReadMeshResult.js'
 
-function readMeshBlob(webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadMeshResult> {
+async function readMeshBlob (webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadMeshResult> {
   let worker = webWorker
-  return createWebworkerPromise('mesh-io', worker)
-    .then(({ webworkerPromise, worker: usedWorker }) => {
+  return await createWebworkerPromise('mesh-io', worker)
+    .then(async ({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
-      return readAsArrayBuffer(blob)
+      return await readAsArrayBuffer(blob)
         .then(arrayBuffer => {
           return webworkerPromise.postMessage({ operation: 'readMesh', name: fileName, type: mimeType, data: arrayBuffer, config: config },
             [arrayBuffer])
         }
-        ).then(function (mesh: Mesh) {
-          return Promise.resolve({ mesh, webWorker: worker as Worker })
+        ).then(async function (mesh: Mesh) {
+          return await Promise.resolve({ mesh, webWorker: worker as Worker })
         })
     })
 }

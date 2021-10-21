@@ -1,8 +1,8 @@
-import IntTypes from "./IntTypes.js"
-import FloatTypes from "./FloatTypes.js"
-import type TypedArray from "./TypedArray.js"
+import IntTypes from './IntTypes.js'
+import FloatTypes from './FloatTypes.js'
+import type TypedArray from './TypedArray.js'
 
-function bufferToTypedArray(jsType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] | 'null' | null, buffer: ArrayBuffer): null | TypedArray {
+function bufferToTypedArray (jsType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] | 'null' | null, buffer: ArrayBuffer): null | TypedArray {
   let typedArray: null | TypedArray = null
   switch (jsType) {
     case IntTypes.UInt8: {

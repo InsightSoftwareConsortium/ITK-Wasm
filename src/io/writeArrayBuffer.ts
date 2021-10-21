@@ -10,19 +10,19 @@ import Mesh from '../core/Mesh.js'
 
 import WriteArrayBufferResult from './WriteArrayBufferResult.js'
 
-function writeArrayBuffer(webWorker: Worker | null, useCompression: boolean, imageOrMesh: Image | Mesh, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
+async function writeArrayBuffer (webWorker: Worker | null, useCompression: boolean, imageOrMesh: Image | Mesh, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
   const extension = getFileExtension(fileName)
   const isMesh = !!extensionToMeshIO.has(extension) || !!mimeToMeshIO.has(mimeType)
   if (isMesh) {
-    return writeMeshArrayBuffer(webWorker, { useCompression }, imageOrMesh as Mesh, fileName, mimeType)
-      .catch(function () {
-        if (webWorker) {
+    return await writeMeshArrayBuffer(webWorker, { useCompression }, imageOrMesh as Mesh, fileName, mimeType)
+      .catch(async function () {
+        if (webWorker != null) {
           webWorker.terminate()
         }
-        return writeImageArrayBuffer(null, useCompression, imageOrMesh as Image, fileName, mimeType)
+        return await writeImageArrayBuffer(null, useCompression, imageOrMesh as Image, fileName, mimeType)
       })
   } else {
-    return writeImageArrayBuffer(webWorker, useCompression, imageOrMesh as Image, fileName, mimeType)
+    return await writeImageArrayBuffer(webWorker, useCompression, imageOrMesh as Image, fileName, mimeType)
   }
 }
 

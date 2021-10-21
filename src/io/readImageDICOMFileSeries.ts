@@ -3,7 +3,7 @@
 
 import { readAsArrayBuffer } from 'promise-file-reader'
 
-import createWebworkerPromise from "../core/internal/createWebworkerPromise.js"
+import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
 import WorkerPool from '../core/WorkerPool.js'
 import stackImages from '../core/stackImages.js'
 
@@ -25,7 +25,7 @@ const workerFunction = async (
     'image-io',
     worker
   )
-  worker = usedWorker as Worker
+  worker = usedWorker
 
   const transferables = fileDescriptions.map(description => {
     return description.data
@@ -48,8 +48,8 @@ const readImageDICOMFileSeries = async (
   fileList: FileList | File[],
   singleSortedSeries = false
 ) => {
-  const fetchFileDescriptions = Array.from(fileList, function (file) {
-    return readAsArrayBuffer(file).then(function (
+  const fetchFileDescriptions = Array.from(fileList, async function (file) {
+    return await readAsArrayBuffer(file).then(function (
       arrayBuffer
     ) {
       const fileDescription = {

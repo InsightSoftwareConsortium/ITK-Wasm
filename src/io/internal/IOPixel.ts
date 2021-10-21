@@ -14,7 +14,7 @@ const IOPixel = {
   ARRAY: 12,
   MATRIX: 13,
   VARIABLELENGTHVECTOR: 14,
-  VARIABLESIZEMATRIX: 15,
+  VARIABLESIZEMATRIX: 15
 } as const
 
 export default IOPixel

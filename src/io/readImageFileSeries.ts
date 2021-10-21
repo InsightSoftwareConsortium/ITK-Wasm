@@ -5,19 +5,19 @@ import WorkerPool from '../core/WorkerPool.js'
 
 import { readAsArrayBuffer } from 'promise-file-reader'
 
-import ReadImageFileSeriesResult from "./ReadImageFileSeriesResult.js"
+import ReadImageFileSeriesResult from './ReadImageFileSeriesResult.js'
 
 const numberOfWorkers = (typeof globalThis.navigator === 'object' && globalThis.navigator.hardwareConcurrency) ? globalThis.navigator.hardwareConcurrency : 6
 const workerPool = new WorkerPool(numberOfWorkers, readImageArrayBuffer)
 
-async function readImageFileSeries(
+async function readImageFileSeries (
   fileList: File[] | FileList,
   zSpacing: number = 1.0,
   zOrigin: number = 0.0,
   sortedSeries: boolean = false
 ): Promise<ReadImageFileSeriesResult> {
-  const fetchFileDescriptions = Array.from(fileList, function (file) {
-    return readAsArrayBuffer(file).then(function (
+  const fetchFileDescriptions = Array.from(fileList, async function (file) {
+    return await readAsArrayBuffer(file).then(function (
       arrayBuffer
     ) {
       const fileDescription = {

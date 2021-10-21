@@ -23,7 +23,8 @@
     "build:webpack": "webpack --progress --mode production",
     "build:wasm": "node ./build.js",
     "test": "npm run test:lint && npm run test:node && npm run test:browser",
-    "test:lint": "standard \"src/*.js\" \"test/*.js\" \"test/Browser/*.js\"",
+    "test:lint": "ts-standard \"src/**/*.ts\"",
+    "test:lintFix": "ts-standard --fix \"src/**/*.ts\"",
     "test:node": "ava test/node/**/*.js",
     "test:browser": "karma start ./karma.conf.cjs",
     "test:browserDebug": "karma start ./karma.conf.cjs --no-single-run"
@@ -75,10 +76,10 @@
     "process": "^0.11.10",
     "puppeteer": "^10.4.0",
     "readable-stream": "^3.6.0",
-    "standard": "^16.0.3",
     "stream-browserify": "^3.0.0",
     "tap-spec": "^5.0.0",
     "tape": "^4.13.0",
+    "ts-standard": "^10.0.0",
     "typescript": "^4.4.3",
     "webpack": "^5.55.1",
     "webpack-cli": "^4.8.0"
@@ -96,18 +97,7 @@
     "itk-js": "./itk-js-cli.js"
   },
   "sideEffects": false,
-  "standard": {
-    "ignore": [
-      "src/itkConfigCDN.js",
-      "src/core/internal/loadEmscriptenModuleWebWorker.js",
-      "src/index.js",
-      "src/itk-js-cli.js",
-      "src/emscripten-module/*",
-      "itkJSImageIOPost.js",
-      "test/Browser/tests.js",
-      "test/config/itkConfigTest.js",
-      "test/*Pipeline/",
-      "examples/UMD/test/index.js"
-    ]
+  "ts-standard": {
+    "ignore": []
   }
 }

@@ -3,7 +3,7 @@ import PixelTypes from '../../core/PixelTypes.js'
 import IOPixel from './IOPixel.js'
 import ImageIOBaseEmscriptenModule from './ImageIOBaseEmscriptenModule.js'
 
-function imageJSPixelTypeToIOPixelType(emscriptenModule: ImageIOBaseEmscriptenModule,
+function imageJSPixelTypeToIOPixelType (emscriptenModule: ImageIOBaseEmscriptenModule,
   pixelType: typeof PixelTypes[keyof typeof PixelTypes]): typeof IOPixel[keyof typeof IOPixel] {
   let ioPixelType = null
   switch (pixelType) {

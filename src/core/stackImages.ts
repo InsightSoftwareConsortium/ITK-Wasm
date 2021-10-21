@@ -1,14 +1,14 @@
-import Image from "./Image.js"
-import Matrix from "./Matrix.js"
+import Image from './Image.js'
+import Matrix from './Matrix.js'
 
-import TypedArray from "./TypedArray.js"
+import TypedArray from './TypedArray.js'
 
 /** Join an array of sequential image slabs into a single image */
-function stackImages(images: Image[]): Image {
+function stackImages (images: Image[]): Image {
   if (images.length < 1) {
     throw Error('At least one images is required.')
   }
-  const firstImage = images[0] as Image
+  const firstImage = images[0]
   if (firstImage.data === null) {
     throw Error('Image data is null.')
   }
@@ -28,7 +28,7 @@ function stackImages(images: Image[]): Image {
   result.size[stackOn] = stackedSize
 
   const dataSize = result.size.reduce((accumulator, currentValue) => { return accumulator * currentValue }, 1) * result.imageType.components
-  const ctor = firstImage.data.constructor as { new(length: number): typeof firstImage.data }
+  const ctor = firstImage.data.constructor as new(length: number) => typeof firstImage.data
   result.data = new ctor(dataSize)
 
   let offsetBase = result.imageType.components
@@ -36,9 +36,9 @@ function stackImages(images: Image[]): Image {
     offsetBase *= result.size[subIndex]
   }
   let stackIndex = 0
-  if (result.data) {
+  if (result.data != null) {
     for (let index = 0; index < images.length; index++) {
-      // @ts-ignore: error TS2345: Argument of type 'TypedArray' is not assignable to parameter of type 'ArrayLike<number> & ArrayLike<bigint>'.
+      // @ts-expect-error: error TS2345: Argument of type 'TypedArray' is not assignable to parameter of type 'ArrayLike<number> & ArrayLike<bigint>'.
       result.data.set(images[index].data as TypedArray, offsetBase * stackIndex)
       stackIndex += images[index].size[stackOn]
     }

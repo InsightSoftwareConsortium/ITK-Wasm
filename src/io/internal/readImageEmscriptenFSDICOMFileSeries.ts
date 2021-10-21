@@ -1,12 +1,12 @@
-import Image from "../../core/Image.js"
-import ImageType from "../../core/ImageType.js"
+import Image from '../../core/Image.js'
+import ImageType from '../../core/ImageType.js'
 
-import imageIOComponentToJSComponent from "./imageIOComponentToJSComponent.js"
-import imageIOPixelTypeToJSPixelType from "./imageIOPixelTypeToJSPixelType.js"
+import imageIOComponentToJSComponent from './imageIOComponentToJSComponent.js'
+import imageIOPixelTypeToJSPixelType from './imageIOPixelTypeToJSPixelType.js'
 
-import DICOMImageSeriesReaderEmscriptenModule from "./DICOMImageSeriesReaderEmscriptenModule.js"
+import DICOMImageSeriesReaderEmscriptenModule from './DICOMImageSeriesReaderEmscriptenModule.js'
 
-function readImageEmscriptenFSDICOMFileSeries(seriesReaderModule: DICOMImageSeriesReaderEmscriptenModule, fileNames: string[], singleSortedSeries: boolean): Image {
+function readImageEmscriptenFSDICOMFileSeries (seriesReaderModule: DICOMImageSeriesReaderEmscriptenModule, fileNames: string[], singleSortedSeries: boolean): Image {
   const seriesReader = new seriesReaderModule.ITKDICOMImageSeriesReader()
   const firstFile = fileNames[0]
   if (!seriesReader.CanReadTestFile(firstFile)) {

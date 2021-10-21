@@ -17,7 +17,7 @@ import PolyData from '../core/vtkPolyData.js'
  *
  * @param: filePath path to the file on the local filesystem.
  */
-async function readLocalFile(filePath: string): Promise<Image | Mesh | PolyData> {
+async function readLocalFile (filePath: string): Promise<Image | Mesh | PolyData> {
   const absoluteFilePath = path.resolve(filePath)
   const extension = getFileExtension(absoluteFilePath)
 

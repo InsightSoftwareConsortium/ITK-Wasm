@@ -6,7 +6,7 @@ const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
 /** If SharedArrayBuffer's are available, ensure an itk.Image's buffer is a
  * SharedArrayBuffer. If SharedArrayBuffer's are not available, return a copy.
  * */
-function imageSharedBufferOrCopy(image: Image): Image {
+function imageSharedBufferOrCopy (image: Image): Image {
   if (image.data === null) {
     return image
   }
@@ -16,10 +16,10 @@ function imageSharedBufferOrCopy(image: Image): Image {
     }
 
     const sharedBuffer = new SharedArrayBuffer(image.data.buffer.byteLength) // eslint-disable-line
-    const ctor = image.data.constructor as { new(buffer: SharedArrayBuffer): typeof image.data }
+    const ctor = image.data.constructor as new(buffer: SharedArrayBuffer) => typeof image.data
     const sharedTypedArray = new ctor(sharedBuffer)
     if (sharedTypedArray !== null) {
-      // @ts-ignore: error TS2345: Argument of type 'TypedArray' is not assignable to parameter of type 'ArrayLike<number> & ArrayLike<bigint>'.
+      // @ts-expect-error: error TS2345: Argument of type 'TypedArray' is not assignable to parameter of type 'ArrayLike<number> & ArrayLike<bigint>'.
 
       sharedTypedArray.set(image.data, 0)
     }

@@ -14,7 +14,7 @@ const PixelTypes = {
   Array: 12,
   Matrix: 13,
   VariableLengthVector: 14,
-  VariableSizeMatrix: 15,
+  VariableSizeMatrix: 15
 } as const
 
 export default PixelTypes

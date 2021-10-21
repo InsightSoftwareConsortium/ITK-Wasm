@@ -6,7 +6,7 @@ import ImageIOBaseEmscriptenModule from './ImageIOBaseEmscriptenModule.js'
 import Image from '../../core/Image.js'
 import getMatrixElement from '../../core/getMatrixElement.js'
 
-function writeImageEmscriptenFSFile(emscriptenModule: ImageIOBaseEmscriptenModule, useCompression: boolean, image: Image, filePath: string): void {
+function writeImageEmscriptenFSFile (emscriptenModule: ImageIOBaseEmscriptenModule, useCompression: boolean, image: Image, filePath: string): void {
   const imageIO = new emscriptenModule.ITKImageIO()
   imageIO.SetFileName(filePath)
   if (!imageIO.CanWriteFile(filePath)) {

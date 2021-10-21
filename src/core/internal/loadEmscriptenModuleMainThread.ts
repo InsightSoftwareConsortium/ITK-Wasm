@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import EmscriptenModule from '../EmscriptenModule.js'
 
-async function loadEmscriptenModuleMainThread(moduleRelativePathOrURL: string | URL, moduleType: 'image-io' | 'mesh-io' | 'pipeline', itkModulesPath: string ): Promise<EmscriptenModule> {
+async function loadEmscriptenModuleMainThread (moduleRelativePathOrURL: string | URL, moduleType: 'image-io' | 'mesh-io' | 'pipeline', itkModulesPath: string): Promise<EmscriptenModule> {
   let modulePrefix: string = 'unknown'
   if (typeof moduleRelativePathOrURL !== 'string') {
     modulePrefix = moduleRelativePathOrURL.href

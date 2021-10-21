@@ -6,11 +6,11 @@ import getFileExtension from './getFileExtension.js'
 import extensionToMeshIO from './internal/extensionToMeshIO.js'
 import extensionToPolyDataIO from './internal/extensionToPolyDataIO.js'
 
-import ReadImageResult from "./ReadImageResult.js"
-import ReadMeshResult from "./ReadMeshResult.js"
-import ReadPolyDataResult from "./ReadPolyDataResult.js"
+import ReadImageResult from './ReadImageResult.js'
+import ReadMeshResult from './ReadMeshResult.js'
+import ReadPolyDataResult from './ReadPolyDataResult.js'
 
-async function readFile(webWorker: Worker | null, file: File): Promise<ReadImageResult | ReadMeshResult | ReadPolyDataResult> {
+async function readFile (webWorker: Worker | null, file: File): Promise<ReadImageResult | ReadMeshResult | ReadPolyDataResult> {
   const extension = getFileExtension(file.name)
   const isMesh = extensionToMeshIO.has(extension)
   const isPolyData = extensionToPolyDataIO.has(extension)
@@ -19,15 +19,15 @@ async function readFile(webWorker: Worker | null, file: File): Promise<ReadImage
       const result = await readMeshFile(webWorker, file)
       return result
     } catch (unused) {
-      if (webWorker) {
+      if (webWorker != null) {
         webWorker.terminate()
       }
-      return readImageFile(null, file)
+      return await readImageFile(null, file)
     }
   } else if (isPolyData) {
-    return readPolyDataFile(webWorker, file)
+    return await readPolyDataFile(webWorker, file)
   } else {
-    return readImageFile(webWorker, file)
+    return await readImageFile(webWorker, file)
   }
 }
 

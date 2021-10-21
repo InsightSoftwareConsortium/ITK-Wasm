@@ -5,23 +5,23 @@ import getFileExtension from './getFileExtension.js'
 import extensionToMeshIO from './internal/extensionToMeshIO.js'
 import mimeToMeshIO from './internal/MimeToMeshIO.js'
 
-import ReadImageResult from "./ReadImageResult.js"
-import ReadMeshResult from "./ReadMeshResult.js"
-import ReadPolyDataResult from "./ReadPolyDataResult.js"
+import ReadImageResult from './ReadImageResult.js'
+import ReadMeshResult from './ReadMeshResult.js'
+import ReadPolyDataResult from './ReadPolyDataResult.js'
 
-function readBlob(webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadImageResult | ReadMeshResult | ReadPolyDataResult> {
+async function readBlob (webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadImageResult | ReadMeshResult | ReadPolyDataResult> {
   const extension = getFileExtension(fileName)
   const isMesh = !!extensionToMeshIO.has(extension) || !!mimeToMeshIO.has(mimeType)
   if (isMesh) {
-    return readMeshBlob(webWorker, blob, fileName, mimeType)
-      .catch(function () {
+    return await readMeshBlob(webWorker, blob, fileName, mimeType)
+      .catch(async function () {
         if (webWorker !== null) {
           webWorker.terminate()
         }
-        return readImageBlob(null, blob, fileName, mimeType)
+        return await readImageBlob(null, blob, fileName, mimeType)
       })
   } else {
-    return readImageBlob(webWorker, blob, fileName, mimeType)
+    return await readImageBlob(webWorker, blob, fileName, mimeType)
   }
 }
 

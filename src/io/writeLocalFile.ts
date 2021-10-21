@@ -18,7 +18,7 @@ import Image from '../core/Image.js'
  *
  * @return empty Promise
  */
-async function writeLocalFile(useCompression: boolean, imageOrMesh: Image | Mesh, filePath: string): Promise<null> {
+async function writeLocalFile (useCompression: boolean, imageOrMesh: Image | Mesh, filePath: string): Promise<null> {
   const absoluteFilePath = path.resolve(filePath)
   const extension = getFileExtension(absoluteFilePath)
 
@@ -30,7 +30,7 @@ async function writeLocalFile(useCompression: boolean, imageOrMesh: Image | Mesh
     } catch (err) {
       // Was a .vtk image file? Continue to write as an image.
       await writeImageLocalFile(useCompression, imageOrMesh as Image, filePath)
-      return  null
+      return null
     }
   } else {
     await writeImageLocalFile(useCompression, imageOrMesh as Image, filePath)

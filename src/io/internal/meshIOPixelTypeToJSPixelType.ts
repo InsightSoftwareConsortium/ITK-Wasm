@@ -3,7 +3,7 @@ import IOPixel from './IOPixel.js'
 
 import MeshIOBaseEmscriptenModule from './MeshIOBaseEmscriptenModule.js'
 
-function meshIOPixelTypeToJSPixelType(emscriptenModule: MeshIOBaseEmscriptenModule, ioPixelType: typeof IOPixel[keyof typeof IOPixel]): typeof PixelTypes[keyof typeof PixelTypes] | null {
+function meshIOPixelTypeToJSPixelType (emscriptenModule: MeshIOBaseEmscriptenModule, ioPixelType: typeof IOPixel[keyof typeof IOPixel]): typeof PixelTypes[keyof typeof PixelTypes] | null {
   let pixelType = null
   switch (ioPixelType) {
     case emscriptenModule.IOPixelType.UNKNOWNPIXELTYPE: {

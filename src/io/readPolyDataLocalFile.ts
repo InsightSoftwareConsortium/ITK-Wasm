@@ -13,7 +13,7 @@ import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js
 import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 import localPathRelativeToModule from './localPathRelativeToModule.js'
 
-async function readPolyDataLocalFile(filePath: string): Promise<PolyData> {
+async function readPolyDataLocalFile (filePath: string): Promise<PolyData> {
   const polyDataIOsPath = localPathRelativeToModule(import.meta.url, '../polydata-io')
   if (!fs.existsSync(polyDataIOsPath)) {
     throw Error("Cannot find path to itk polyData IO's")

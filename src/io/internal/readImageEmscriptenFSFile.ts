@@ -1,13 +1,13 @@
-import Image from "../../core/Image.js"
-import ImageType from "../../core/ImageType.js"
-import Matrix from "../../core/Matrix.js"
+import Image from '../../core/Image.js'
+import ImageType from '../../core/ImageType.js'
+import Matrix from '../../core/Matrix.js'
 
 import imageIOComponentToJSComponent from './imageIOComponentToJSComponent.js'
 import imageIOPixelTypeToJSPixelType from './imageIOPixelTypeToJSPixelType.js'
 
-import ImageIOBaseEmscriptenModule from "./ImageIOBaseEmscriptenModule.js"
+import ImageIOBaseEmscriptenModule from './ImageIOBaseEmscriptenModule.js'
 
-function readImageEmscriptenFSFile(imageModule: ImageIOBaseEmscriptenModule, filePath: string): Image {
+function readImageEmscriptenFSFile (imageModule: ImageIOBaseEmscriptenModule, filePath: string): Image {
   const imageIO = new imageModule.ITKImageIO()
   imageIO.SetFileName(filePath)
   if (!imageIO.CanReadFile(filePath)) {

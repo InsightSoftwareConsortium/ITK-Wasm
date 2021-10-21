@@ -1,4 +1,4 @@
-import vtkPolyData from "../core/vtkPolyData.js"
+import vtkPolyData from '../core/vtkPolyData.js'
 
 interface ReadPolyDataResult {
   polyData: vtkPolyData

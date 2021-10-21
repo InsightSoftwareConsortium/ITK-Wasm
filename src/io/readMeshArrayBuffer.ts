@@ -1,13 +1,13 @@
-import createWebworkerPromise from "../core/internal/createWebworkerPromise.js"
-import Mesh from "../core/Mesh.js"
+import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import Mesh from '../core/Mesh.js'
 
-import config from "../itkConfig.js"
+import config from '../itkConfig.js'
 
-import ReadMeshResult from "./ReadMeshResult.js"
+import ReadMeshResult from './ReadMeshResult.js'
 
-function readMeshArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadMeshResult> {
+async function readMeshArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadMeshResult> {
   let worker = webWorker
-  return createWebworkerPromise('mesh-io', worker)
+  return await createWebworkerPromise('mesh-io', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       return webworkerPromise.postMessage(
@@ -19,8 +19,8 @@ function readMeshArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer,
           config
         },
         [arrayBuffer]
-      ).then(function (mesh: Mesh) {
-        return Promise.resolve({ mesh, webWorker: worker })
+      ).then(async function (mesh: Mesh) {
+        return await Promise.resolve({ mesh, webWorker: worker })
       })
     })
 }

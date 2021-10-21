@@ -15,7 +15,7 @@ class Image {
 
   data: null | TypedArray
 
-  constructor(public readonly imageType = new ImageType()) {
+  constructor (public readonly imageType = new ImageType()) {
     const dimension = imageType.dimension
     this.origin = new Array(dimension)
     this.origin.fill(0.0)

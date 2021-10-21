@@ -15,23 +15,23 @@ import localPathRelativeToModule from './localPathRelativeToModule.js'
  * @param: singleSortedSeries: it is known that the files are from a single
  * sorted series.
  */
-async function readImageLocalDICOMFileSeries(fileNames: string[], singleSortedSeries: boolean = false): Promise<Image> {
-    const imageIOsPath = localPathRelativeToModule(import.meta.url, '../image-io')
-    if (!fs.existsSync(imageIOsPath)) {
-      throw Error("Cannot find path to itk image IO's")
-    }
-    const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
-    const seriesReaderPath = path.join(imageIOsPath, seriesReader + '.js')
-    const seriesReaderModule = await loadEmscriptenModule(seriesReaderPath) as DICOMImageSeriesReaderEmscriptenModule
-    const mountedFilePath = seriesReaderModule.mountContainingDir(fileNames[0])
-    const mountedDir = path.dirname(mountedFilePath)
+async function readImageLocalDICOMFileSeries (fileNames: string[], singleSortedSeries: boolean = false): Promise<Image> {
+  const imageIOsPath = localPathRelativeToModule(import.meta.url, '../image-io')
+  if (!fs.existsSync(imageIOsPath)) {
+    throw Error("Cannot find path to itk image IO's")
+  }
+  const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
+  const seriesReaderPath = path.join(imageIOsPath, seriesReader + '.js')
+  const seriesReaderModule = await loadEmscriptenModule(seriesReaderPath) as DICOMImageSeriesReaderEmscriptenModule
+  const mountedFilePath = seriesReaderModule.mountContainingDir(fileNames[0])
+  const mountedDir = path.dirname(mountedFilePath)
 
-    const mountedFileNames = fileNames.map((fileName) => {
-      return path.join(mountedDir, path.basename(fileName))
-    })
-    const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
-      mountedFileNames, singleSortedSeries)
-    seriesReaderModule.unmountContainingDir(mountedFilePath)
-    return image
+  const mountedFileNames = fileNames.map((fileName) => {
+    return path.join(mountedDir, path.basename(fileName))
+  })
+  const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
+    mountedFileNames, singleSortedSeries)
+  seriesReaderModule.unmountContainingDir(mountedFilePath)
+  return image
 }
 export default readImageLocalDICOMFileSeries

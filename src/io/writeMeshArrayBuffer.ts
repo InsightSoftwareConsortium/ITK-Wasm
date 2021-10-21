@@ -7,30 +7,30 @@ import Mesh from '../core/Mesh.js'
 import WriteArrayBufferResult from './WriteArrayBufferResult.js'
 import WriteMeshOptions from './WriteMeshOptions.js'
 
-function writeMeshArrayBuffer(webWorker: Worker | null, options: WriteMeshOptions, mesh: Mesh, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
+async function writeMeshArrayBuffer (webWorker: Worker | null, options: WriteMeshOptions, mesh: Mesh, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
   let worker = webWorker
-  return createWebworkerPromise('mesh-io', worker)
+  return await createWebworkerPromise('mesh-io', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       const transferables = []
-      if (mesh.points) {
+      if (mesh.points != null) {
         transferables.push(mesh.points.buffer)
       }
-      if (mesh.pointData) {
+      if (mesh.pointData != null) {
         transferables.push(mesh.pointData.buffer)
       }
-      if (mesh.cells) {
+      if (mesh.cells != null) {
         transferables.push(mesh.cells.buffer)
       }
-      if (mesh.cellData) {
+      if (mesh.cellData != null) {
         transferables.push(mesh.cellData.buffer)
       }
       let useCompression = false
-      if(typeof options.useCompression !== 'undefined') {
+      if (typeof options.useCompression !== 'undefined') {
         useCompression = options.useCompression
       }
       let binaryFileType = false
-      if(typeof options.binaryFileType !== 'undefined') {
+      if (typeof options.binaryFileType !== 'undefined') {
         binaryFileType = options.binaryFileType
       }
       return webworkerPromise.postMessage(
@@ -44,8 +44,8 @@ function writeMeshArrayBuffer(webWorker: Worker | null, options: WriteMeshOption
           config
         },
         transferables
-      ).then(function (arrayBuffer: ArrayBuffer) {
-        return Promise.resolve({ arrayBuffer, webWorker: worker })
+      ).then(async function (arrayBuffer: ArrayBuffer) {
+        return await Promise.resolve({ arrayBuffer, webWorker: worker })
       })
     })
 }

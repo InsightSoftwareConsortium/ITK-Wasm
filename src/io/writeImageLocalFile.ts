@@ -23,7 +23,7 @@ import localPathRelativeToModule from './localPathRelativeToModule.js'
  *
  * @return Promise<null>
  */
-async function writeImageLocalFile(useCompression: boolean, image: Image, filePath: string): Promise<null> {
+async function writeImageLocalFile (useCompression: boolean, image: Image, filePath: string): Promise<null> {
   const imageIOsPath = localPathRelativeToModule(import.meta.url, '../image-io')
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)

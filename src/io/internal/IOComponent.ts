@@ -12,7 +12,7 @@ const IOComponent = {
   ULONGLONG: 10,
   FLOAT: 11,
   DOUBLE: 12,
-  LDOUBLE: 13,
+  LDOUBLE: 13
 } as const
 
 export default IOComponent

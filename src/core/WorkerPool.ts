@@ -1,6 +1,6 @@
-import WorkerPoolFunction from "./WorkerPoolFunction.js"
-import WorkerPoolProgressCallback from "./WorkerPoolProgressCallback.js"
-import WorkerPoolRunTasksResult from "./WorkerPoolRunTasksResult.js"
+import WorkerPoolFunction from './WorkerPoolFunction.js'
+import WorkerPoolProgressCallback from './WorkerPoolProgressCallback.js'
+import WorkerPoolRunTasksResult from './WorkerPoolRunTasksResult.js'
 
 interface RunInfo {
   taskQueue: any[]
@@ -30,7 +30,7 @@ class WorkerPool {
    * property.  * Example: runPipelineBrowser.
    *
    **/
-  constructor (poolSize: number, fcn: WorkerPoolFunction)  {
+  constructor (poolSize: number, fcn: WorkerPoolFunction) {
     this.fcn = fcn
 
     this.workerQueue = new Array(poolSize)
@@ -51,7 +51,7 @@ class WorkerPool {
    * as well as an id ('runId') which can be used to cancel any remaining pending
    * tasks before they complete.
    */
-  public runTasks (taskArgsArray: Array<any>, progressCallback: WorkerPoolProgressCallback | null = null): WorkerPoolRunTasksResult {
+  public runTasks (taskArgsArray: any[], progressCallback: WorkerPoolProgressCallback | null = null): WorkerPoolRunTasksResult {
     const info: RunInfo = {
       taskQueue: [],
       results: [],
@@ -86,7 +86,7 @@ class WorkerPool {
   public terminateWorkers (): void {
     for (let index = 0; index < this.workerQueue.length; index++) {
       const worker = this.workerQueue[index]
-      if (worker) {
+      if (worker != null) {
         worker.terminate()
       }
       this.workerQueue[index] = null
@@ -105,7 +105,7 @@ class WorkerPool {
 
     if (info && info.canceled) {
       this.clearTask(info.index)
-      info.reject && info.reject('Remaining tasks canceled')
+      ;(info.reject != null) && info.reject('Remaining tasks canceled')
       return
     }
 
@@ -119,25 +119,25 @@ class WorkerPool {
           info.runningWorkers--
           info.results[resultIndex] = result
           info.completedTasks++
-          if (info.progressCallback) {
+          if (info.progressCallback != null) {
             info.progressCallback(info.completedTasks, info.results.length)
           }
 
           if (info.taskQueue.length > 0) {
-            const reTask = info.taskQueue.shift() as Array<any>
+            const reTask = info.taskQueue.shift() as any[]
             this.addTask(infoIndex, reTask[0], reTask[1])
           } else if (!info.addingTasks && !info.runningWorkers) {
             const results = info.results
             this.clearTask(info.index)
-            info.resolve && info.resolve(results)
+            ;(info.resolve != null) && info.resolve(results)
           }
         }
       }).catch((error) => {
         this.clearTask(info.index)
-        info.reject && info.reject(error)
+        ;(info.reject != null) && info.reject(error)
       })
     } else {
-      if (info.runningWorkers || info.postponed === true) {
+      if (info.runningWorkers || info.postponed) {
         // At least one worker is working on these tasks, and it will pick up
         // the next item in the taskQueue when done.
         info.taskQueue.push([resultIndex, taskArgs])

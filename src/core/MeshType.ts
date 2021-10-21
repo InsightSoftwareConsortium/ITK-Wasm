@@ -3,7 +3,7 @@ import FloatTypes from './FloatTypes.js'
 import PixelTypes from './PixelTypes.js'
 
 class MeshType {
-  constructor(
+  constructor (
     public readonly dimension: number = 2,
     public readonly pointComponentType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] = FloatTypes.Float32,
     public readonly pointPixelComponentType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] = FloatTypes.Float32,

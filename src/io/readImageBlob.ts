@@ -1,18 +1,18 @@
 import { readAsArrayBuffer } from 'promise-file-reader'
 
-import createWebworkerPromise from "../core/internal/createWebworkerPromise.js"
-import Image from "../core/Image.js"
+import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import Image from '../core/Image.js'
 
-import config from "../itkConfig.js"
+import config from '../itkConfig.js'
 
-import ReadImageResult from "./ReadImageResult.js"
+import ReadImageResult from './ReadImageResult.js'
 
-function readImageBlob(webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadImageResult> {
+async function readImageBlob (webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadImageResult> {
   let worker = webWorker
-  return createWebworkerPromise('image-io', worker)
-    .then(({ webworkerPromise, worker: usedWorker }) => {
+  return await createWebworkerPromise('image-io', worker)
+    .then(async ({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
-      return readAsArrayBuffer(blob)
+      return await readAsArrayBuffer(blob)
         .then((arrayBuffer) => {
           return webworkerPromise.postMessage(
             {
@@ -24,8 +24,8 @@ function readImageBlob(webWorker: Worker | null, blob: Blob, fileName: string, m
             },
             [arrayBuffer]
           )
-        }).then(function (image: Image) {
-          return Promise.resolve({ image, webWorker: worker as Worker })
+        }).then(async function (image: Image) {
+          return await Promise.resolve({ image, webWorker: worker as Worker })
         })
     })
 }

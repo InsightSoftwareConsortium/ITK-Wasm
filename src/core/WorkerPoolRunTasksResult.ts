@@ -1,5 +1,5 @@
 interface WorkerPoolRunTasksResult {
-  promise: Promise<Array<any>>
+  promise: Promise<any[]>
   runId: number
 }
 

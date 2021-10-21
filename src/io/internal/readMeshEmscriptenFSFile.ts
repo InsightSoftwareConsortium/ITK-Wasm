@@ -8,7 +8,7 @@ import meshIOPixelTypeToJSPixelType from './meshIOPixelTypeToJSPixelType.js'
 
 import MeshIOBaseEmscriptenModule from './MeshIOBaseEmscriptenModule.js'
 
-function readMeshEmscriptenFSFile(emscriptenModule: MeshIOBaseEmscriptenModule, filePath: string): Mesh {
+function readMeshEmscriptenFSFile (emscriptenModule: MeshIOBaseEmscriptenModule, filePath: string): Mesh {
   const meshIO = new emscriptenModule.ITKMeshIO()
   meshIO.SetFileName(filePath)
   if (!meshIO.CanReadFile(filePath)) {

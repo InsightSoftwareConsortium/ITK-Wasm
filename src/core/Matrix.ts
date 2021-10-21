@@ -3,21 +3,21 @@ class Matrix {
   public readonly rows: number
   public readonly columns: number
 
-  constructor(rows: number | typeof Matrix, columns: number) {
+  constructor (rows: number | typeof Matrix, columns: number) {
     if (rows instanceof Matrix) {
       const other = rows
       this.rows = other.rows
-      this.columns = other.columns as number
+      this.columns = other.columns
       this.data = other.data.slice()
     } else {
       this.rows = rows as number
-      this.columns = columns as number
-      this.data = new Array(rows as number * columns as number)
+      this.columns = columns
+      this.data = new Array(rows as number * columns)
       this.data.fill(0.0)
     }
   }
 
-  setIdentity() {
+  setIdentity () {
     for (let ii = 0; ii < this.rows; ++ii) {
       for (let jj = 0; jj < this.columns; ++jj) {
         if (ii === jj) {
@@ -29,11 +29,11 @@ class Matrix {
     }
   }
 
-  setElement(row: number, column: number, value: number): void {
+  setElement (row: number, column: number, value: number): void {
     this.data[column + row * this.columns] = value
   }
 
-  getElement(row: number, column: number): number {
+  getElement (row: number, column: number): number {
     return this.data[column + row * this.columns]
   }
 }

@@ -9,35 +9,20 @@ import PipelineEmscriptenModule from '../PipelineEmscriptenModule.js'
 import PipelineInput from '../PipelineInput.js'
 import PipelineOutput from '../PipelineOutput.js'
 
-let haveSharedArrayBuffer = false
-// @ts-ignore: error TS2304: Cannot find name 'window'.
-if (typeof window !== 'undefined') {
-  // @ts-ignore: error TS2304: Cannot find name 'window'.
-  haveSharedArrayBuffer = typeof window.SharedArrayBuffer === 'function'
-} else {
-  haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
-}
+const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
 
-function typedArrayForBuffer(typedArrayType: string, buffer: ArrayBuffer) {
+function typedArrayForBuffer (typedArrayType: string, buffer: ArrayBuffer) {
   let TypedArrayFunction = null
-  // @ts-ignore: error TS2304: Cannot find name 'window'.
-  if (typeof window !== 'undefined') {
-    // browser
-    // @ts-ignore: erorr TS7015: Element implicitly has an 'any' type because index
-    // expression is not of type 'number'.
-    TypedArrayFunction = window[typedArrayType] as TypedArray
-  } else {
-    // Node.js
-    // @ts-ignore: error TS7053: Element implicitly has an 'any' type because
-    // expression of type 'string' can't be used to index type 'Global &
-    // typeof globalThis'.
-    TypedArrayFunction = globalThis[typedArrayType] as TypedArray
-  }
-  // @ts-ignore: error TS2351: This expression is not constructable.
+  // Node.js
+  // @ts-expect-error: error TS7053: Element implicitly has an 'any' type because
+  // expression of type 'string' can't be used to index type 'Global &
+  // typeof globalThis'.
+  TypedArrayFunction = globalThis[typedArrayType] as TypedArray
+  // @ts-expect-error: error TS2351: This expression is not constructable.
   return new TypedArrayFunction(buffer)
 }
 
-function readFileSharedArray(emscriptenModule: PipelineEmscriptenModule, path: string): Uint8Array {
+function readFileSharedArray (emscriptenModule: PipelineEmscriptenModule, path: string): Uint8Array {
   const opts = { flags: 'r', encoding: 'binary' }
   const stream = emscriptenModule.fs_open(path, opts.flags)
   const stat = emscriptenModule.fs_stat(path)
@@ -54,7 +39,7 @@ function readFileSharedArray(emscriptenModule: PipelineEmscriptenModule, path: s
   return array
 }
 
-function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
+function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
   if (inputs) {
     inputs.forEach(function (input) {
       switch (input.type) {
@@ -78,7 +63,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
             spacing: image.spacing,
             direction: image.direction,
             size: image.size,
-            data: input.path + '.data',
+            data: input.path + '.data'
           }
           pipelineModule.fs_writeFile(input.path, JSON.stringify(imageJSON))
           if (image.data === null) {
@@ -105,7 +90,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
 
             numberOfCellPixels: mesh.numberOfCellPixels,
             cellData: input.path + '.cellData.data',
-            cellBufferSize: mesh.cellBufferSize,
+            cellBufferSize: mesh.cellBufferSize
 
           }
           pipelineModule.fs_writeFile(input.path, JSON.stringify(meshJSON))
@@ -171,7 +156,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
         }
         case IOTypes.Binary:
         {
-          outputData = readFileSharedArray(pipelineModule, output.path) as Uint8Array
+          outputData = readFileSharedArray(pipelineModule, output.path)
           break
         }
         case IOTypes.Image:
@@ -236,7 +221,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
             if (polyData[dataName]) {
               const data = polyData[dataName]
               data.arrays.forEach((array: { data: { ref?: { basepath: string, id: string }, buffer: ArrayBuffer, values: TypedArray, dataType: string }}) => {
-                if (array.data.ref) {
+                if (array.data.ref != null) {
                   const dataUint8 = readFileSharedArray(pipelineModule, `${output.path}/${array.data.ref.basepath}/${array.data.ref.id}`)
                   array.data.buffer = dataUint8.buffer
                   array.data.values = typedArrayForBuffer(array.data.dataType, dataUint8.buffer)
@@ -254,7 +239,7 @@ function runPipelineEmscripten(pipelineModule: PipelineEmscriptenModule, args: s
       const populatedOutput = {
         path: output.path,
         type: output.type,
-        data: outputData,
+        data: outputData
       }
       populatedOutputs.push(populatedOutput)
     })

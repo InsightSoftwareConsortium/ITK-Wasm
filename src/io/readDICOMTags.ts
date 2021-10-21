@@ -1,11 +1,11 @@
-import createWebworkerPromise from "../core/internal/createWebworkerPromise.js"
+import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
 import { readAsArrayBuffer } from 'promise-file-reader'
 
-import config from "../itkConfig.js"
+import config from '../itkConfig.js'
 
-import ReadDICOMTagsResult from "./ReadDICOMTagsResult.js"
+import ReadDICOMTagsResult from './ReadDICOMTagsResult.js'
 
-async function readDICOMTags(webWorker: Worker, file: File, tags: string[] | null = null): Promise<ReadDICOMTagsResult> {
+async function readDICOMTags (webWorker: Worker, file: File, tags: string[] | null = null): Promise<ReadDICOMTagsResult> {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
     'image-io',

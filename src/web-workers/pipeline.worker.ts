@@ -143,7 +143,6 @@ async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: strin
 
 registerWebworker(async function (input: RunPipelineInput) {
   let pipelineModule = null
-  console.log('input', input)
   if (input.operation === 'runPipeline') {
     pipelineModule = await loadPipelineModule('pipeline', input.pipelinePath, input.config) as PipelineEmscriptenModule
   } else if (input.operation === 'runPolyDataIOPipeline') {

@@ -7,14 +7,14 @@ import getTransferable from '../core/getTransferable.js'
 
 import WriteArrayBufferResult from './WriteArrayBufferResult.js'
 
-function writeImageArrayBuffer(webWorker: Worker | null, useCompression: boolean, image: Image, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
+async function writeImageArrayBuffer (webWorker: Worker | null, useCompression: boolean, image: Image, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
   let worker = webWorker
-  return createWebworkerPromise('image-io', worker)
+  return await createWebworkerPromise('image-io', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       const transferables = []
       const transferable = getTransferable(image.data)
-      if (transferable) {
+      if (transferable != null) {
         transferables.push(transferable)
       }
       return webworkerPromise.postMessage(
@@ -27,8 +27,8 @@ function writeImageArrayBuffer(webWorker: Worker | null, useCompression: boolean
           config: config
         },
         transferables
-      ).then(function (arrayBuffer: ArrayBuffer) {
-        return Promise.resolve({ arrayBuffer, webWorker: worker })
+      ).then(async function (arrayBuffer: ArrayBuffer) {
+        return await Promise.resolve({ arrayBuffer, webWorker: worker })
       })
     })
 }
