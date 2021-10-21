@@ -34,22 +34,20 @@ const verifyImage = (t, image) => {
 }
 
 export default function () {
-
-test('writeImageArrayBuffer writes to an ArrayBuffer', (t) => {
-  return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
-    .then((arrayBuffer) => {
-      return readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png').then(function ({ image, webWorker }) {
+  test('writeImageArrayBuffer writes to an ArrayBuffer', (t) => {
+    return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+      .then((arrayBuffer) => {
+        return readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png').then(function ({ image, webWorker }) {
+          webWorker.terminate()
+          const useCompression = false
+          return writeImageArrayBuffer(null, useCompression, image, 'cthead1Small.png')
+        })
+      })
+      .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {
         webWorker.terminate()
-        const useCompression = false
-        return writeImageArrayBuffer(null, useCompression, image, 'cthead1Small.png')
+        return readImageArrayBuffer(null, writtenArrayBuffer, 'cthead1Small.png').then(function ({ image }) {
+          verifyImage(t, image)
+        })
       })
-    })
-    .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {
-      webWorker.terminate()
-      return readImageArrayBuffer(null, writtenArrayBuffer, 'cthead1Small.png').then(function ({ image }) {
-        verifyImage(t, image)
-      })
-    })
-})
-
+  })
 }

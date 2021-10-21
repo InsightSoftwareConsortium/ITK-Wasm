@@ -24,41 +24,39 @@ const verifyPolyData = (t, polyData) => {
 }
 
 export default function () {
-
-test('readPolyDataArrayBuffer reads an ArrayBuffer', (t) => {
-  return axios.get(testFilePath, { responseType: 'arraybuffer' })
-    .then(function (response) {
-      return readPolyDataArrayBuffer(null, response.data, 'cow.vtk')
-    })
-    .then(function ({ polyData, webWorker }) {
-      webWorker.terminate()
-      verifyPolyData(t, polyData)
-    })
-})
-
-test('readPolyDataBlob reads a Blob', (t) => {
-  return axios.get(testFilePath, { responseType: 'blob' })
-    .then(function (response) {
-      return readPolyDataBlob(null, response.data, 'cow.vtk')
-    })
-    .then(function ({ polyData, webWorker }) {
-      webWorker.terminate()
-      verifyPolyData(t, polyData)
-    })
-})
-
-test('readPolyDataFile reads a File', (t) => {
-  return axios.get(testFilePath, { responseType: 'blob' }).then(function (response) {
-    const jsFile = new window.File([response.data], fileName)
-    return jsFile
+  test('readPolyDataArrayBuffer reads an ArrayBuffer', (t) => {
+    return axios.get(testFilePath, { responseType: 'arraybuffer' })
+      .then(function (response) {
+        return readPolyDataArrayBuffer(null, response.data, 'cow.vtk')
+      })
+      .then(function ({ polyData, webWorker }) {
+        webWorker.terminate()
+        verifyPolyData(t, polyData)
+      })
   })
-    .then(function (jsFile) {
-      return readPolyDataFile(null, jsFile)
-    })
-    .then(function ({ polyData, webWorker }) {
-      webWorker.terminate()
-      verifyPolyData(t, polyData)
-    })
-})
 
+  test('readPolyDataBlob reads a Blob', (t) => {
+    return axios.get(testFilePath, { responseType: 'blob' })
+      .then(function (response) {
+        return readPolyDataBlob(null, response.data, 'cow.vtk')
+      })
+      .then(function ({ polyData, webWorker }) {
+        webWorker.terminate()
+        verifyPolyData(t, polyData)
+      })
+  })
+
+  test('readPolyDataFile reads a File', (t) => {
+    return axios.get(testFilePath, { responseType: 'blob' }).then(function (response) {
+      const jsFile = new window.File([response.data], fileName)
+      return jsFile
+    })
+      .then(function (jsFile) {
+        return readPolyDataFile(null, jsFile)
+      })
+      .then(function ({ polyData, webWorker }) {
+        webWorker.terminate()
+        verifyPolyData(t, polyData)
+      })
+  })
 }

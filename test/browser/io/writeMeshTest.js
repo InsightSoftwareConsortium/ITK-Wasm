@@ -18,23 +18,21 @@ const verifyMesh = (t, mesh) => {
 }
 
 export default function () {
-
-test('writeMeshArrayBuffer writes to an ArrayBuffer', t => {
-  return axios.get(testFilePath, { responseType: 'arraybuffer' })
-    .then(function (response) {
-      return readMeshArrayBuffer(null, response.data, 'cow.vtk').then(function ({ mesh, webWorker }) {
-        webWorker.terminate()
-        const useCompression = false
-        return writeMeshArrayBuffer(null, useCompression, mesh, 'cow.vtk')
+  test('writeMeshArrayBuffer writes to an ArrayBuffer', t => {
+    return axios.get(testFilePath, { responseType: 'arraybuffer' })
+      .then(function (response) {
+        return readMeshArrayBuffer(null, response.data, 'cow.vtk').then(function ({ mesh, webWorker }) {
+          webWorker.terminate()
+          const useCompression = false
+          return writeMeshArrayBuffer(null, useCompression, mesh, 'cow.vtk')
+        })
       })
-    })
-    .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {
-      webWorker.terminate()
-      return readMeshArrayBuffer(null, writtenArrayBuffer, 'cow.vtk').then(function ({ mesh, webWorker }) {
+      .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {
         webWorker.terminate()
-        verifyMesh(t, mesh)
+        return readMeshArrayBuffer(null, writtenArrayBuffer, 'cow.vtk').then(function ({ mesh, webWorker }) {
+          webWorker.terminate()
+          verifyMesh(t, mesh)
+        })
       })
-    })
-})
-
+  })
 }

@@ -14,7 +14,7 @@ import writeImageTest from './writeImageTest.js'
 import writeMeshTest from './writeMeshTest.js'
 import writeTest from './writeTest.js'
 
-export default function() {
+export default function () {
   readImageTest()
   DICOMSeriesTest()
   DICOMTest()

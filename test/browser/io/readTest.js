@@ -48,95 +48,93 @@ const verifyMesh = (t, mesh) => {
   t.end()
 }
 
-export default function() {
-
-test('readArrayBuffer reads an image ArrayBuffer', (t) => {
-  return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
-    .then(arrayBuffer => {
-      return readArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
-        .then(function ({ image, webWorker }) {
-          webWorker.terminate()
-          verifyImage(t, image)
-        })
-    })
-})
-
-test('readBlob reads a Blob', (t) => {
-  return readBlob(null, cthead1SmallBlob, 'cthead1Small.png')
-    .then(function ({ image, webWorker }) {
-      webWorker.terminate()
-      verifyImage(t, image)
-    })
-})
-
-test('readFile reads a File', (t) => {
-  return readFile(null, cthead1SmallFile)
-    .then(function ({ image, webWorker }) {
-      webWorker.terminate()
-      verifyImage(t, image)
-    })
-})
-
-test('readFile re-uses a WebWorker', (t) => {
-  return readFile(null, cthead1SmallFile)
-    .then(function ({ image, webWorker }) {
-      return readFile(webWorker, cthead1SmallFile)
-        .then(function ({ image, webWorker }) {
-          webWorker.terminate()
-          verifyImage(t, image)
-        })
-    })
-})
-
-test('readFile throws a catchable error for an invalid file', (t) => {
-  const invalidArray = new Uint8Array([21, 4, 4, 4, 4, 9, 5, 0, 82, 42])
-  const invalidBlob = new window.Blob([invalidArray])
-  const invalidFile = new window.File([invalidBlob], 'invalid.png')
-  return readFile(null, invalidFile).then(function ({ image, webWorker }) {
-    webWorker.terminate()
-    t.fail('should not have successfully read the image')
-    t.end()
-  }).catch(function (error) {
-    t.pass(String(error))
-    t.pass('thrown an error that was caught')
-    t.end()
+export default function () {
+  test('readArrayBuffer reads an image ArrayBuffer', (t) => {
+    return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+      .then(arrayBuffer => {
+        return readArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
+          .then(function ({ image, webWorker }) {
+            webWorker.terminate()
+            verifyImage(t, image)
+          })
+      })
   })
-})
 
-test('readBlob reads a mesh Blob', (t) => {
-  return axios.get(meshTestFilePath, { responseType: 'blob' })
-    .then(function (response) {
-      return readBlob(null, response.data, 'cow.vtk')
-    })
-    .then(function ({ mesh, webWorker }) {
-      webWorker.terminate()
-      verifyMesh(t, mesh)
-    })
-})
-
-test('readFile reads a mesh File', (t) => {
-  return axios.get(meshTestFilePath, { responseType: 'blob' }).then(function (response) {
-    const jsFile = new window.File([response.data], meshFileName)
-    return jsFile
+  test('readBlob reads a Blob', (t) => {
+    return readBlob(null, cthead1SmallBlob, 'cthead1Small.png')
+      .then(function ({ image, webWorker }) {
+        webWorker.terminate()
+        verifyImage(t, image)
+      })
   })
-    .then(function (jsFile) {
-      return readFile(null, jsFile)
-    })
-    .then(function ({ mesh, webWorker }) {
-      webWorker.terminate()
-      verifyMesh(t, mesh)
-    })
-})
 
-test('readArrayBuffer reads a mesh ArrayBuffer', (t) => {
-  return axios.get(meshTestFilePath, { responseType: 'arraybuffer' })
-    .then(function (response) {
-      return readArrayBuffer(null, response.data, 'cow.vtk')
-    })
-    .then(function ({ mesh, webWorker }) {
-      webWorker.terminate()
-      verifyMesh(t, mesh)
-    })
-})
+  test('readFile reads a File', (t) => {
+    return readFile(null, cthead1SmallFile)
+      .then(function ({ image, webWorker }) {
+        webWorker.terminate()
+        verifyImage(t, image)
+      })
+  })
 
+  test('readFile re-uses a WebWorker', (t) => {
+    return readFile(null, cthead1SmallFile)
+      .then(function ({ image, webWorker }) {
+        return readFile(webWorker, cthead1SmallFile)
+          .then(function ({ image, webWorker }) {
+            webWorker.terminate()
+            verifyImage(t, image)
+          })
+      })
+  })
+
+  test('readFile throws a catchable error for an invalid file', (t) => {
+    const invalidArray = new Uint8Array([21, 4, 4, 4, 4, 9, 5, 0, 82, 42])
+    const invalidBlob = new window.Blob([invalidArray])
+    const invalidFile = new window.File([invalidBlob], 'invalid.png')
+    return readFile(null, invalidFile).then(function ({ image, webWorker }) {
+      webWorker.terminate()
+      t.fail('should not have successfully read the image')
+      t.end()
+    }).catch(function (error) {
+      t.pass(String(error))
+      t.pass('thrown an error that was caught')
+      t.end()
+    })
+  })
+
+  test('readBlob reads a mesh Blob', (t) => {
+    return axios.get(meshTestFilePath, { responseType: 'blob' })
+      .then(function (response) {
+        return readBlob(null, response.data, 'cow.vtk')
+      })
+      .then(function ({ mesh, webWorker }) {
+        webWorker.terminate()
+        verifyMesh(t, mesh)
+      })
+  })
+
+  test('readFile reads a mesh File', (t) => {
+    return axios.get(meshTestFilePath, { responseType: 'blob' }).then(function (response) {
+      const jsFile = new window.File([response.data], meshFileName)
+      return jsFile
+    })
+      .then(function (jsFile) {
+        return readFile(null, jsFile)
+      })
+      .then(function ({ mesh, webWorker }) {
+        webWorker.terminate()
+        verifyMesh(t, mesh)
+      })
+  })
+
+  test('readArrayBuffer reads a mesh ArrayBuffer', (t) => {
+    return axios.get(meshTestFilePath, { responseType: 'arraybuffer' })
+      .then(function (response) {
+        return readArrayBuffer(null, response.data, 'cow.vtk')
+      })
+      .then(function ({ mesh, webWorker }) {
+        webWorker.terminate()
+        verifyMesh(t, mesh)
+      })
+  })
 }

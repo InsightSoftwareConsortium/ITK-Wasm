@@ -48,41 +48,39 @@ const verifyMesh = (t, mesh) => {
   t.end()
 }
 
-export default function() {
-
-test('writeArrayBuffer writes an image to an ArrayBuffer', (t) => {
-  return PromiseFileReader.readAsArrayBuffer(cthead1SmallFileWriteTest)
-    .then((arrayBuffer) => {
-      return readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png').then(function ({ image, webWorker }) {
+export default function () {
+  test('writeArrayBuffer writes an image to an ArrayBuffer', (t) => {
+    return PromiseFileReader.readAsArrayBuffer(cthead1SmallFileWriteTest)
+      .then((arrayBuffer) => {
+        return readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png').then(function ({ image, webWorker }) {
+          webWorker.terminate()
+          const useCompression = false
+          return writeArrayBuffer(null, useCompression, image, 'cthead1Small.png')
+        })
+      })
+      .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {
         webWorker.terminate()
-        const useCompression = false
-        return writeArrayBuffer(null, useCompression, image, 'cthead1Small.png')
+        return readImageArrayBuffer(null, writtenArrayBuffer, 'cthead1Small.png').then(function ({ image }) {
+          verifyImage(t, image)
+        })
       })
-    })
-    .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {
-      webWorker.terminate()
-      return readImageArrayBuffer(null, writtenArrayBuffer, 'cthead1Small.png').then(function ({ image }) {
-        verifyImage(t, image)
-      })
-    })
-})
+  })
 
-test('writeArrayBuffer writes a mesh to an ArrayBuffer', t => {
-  return axios.get(testMeshFilePath, { responseType: 'arraybuffer' })
-    .then(function (response) {
-      return readMeshArrayBuffer(null, response.data, 'cow.vtk').then(function ({ mesh, webWorker }) {
-        webWorker.terminate()
-        const useCompression = false
-        return writeArrayBuffer(null, useCompression, mesh, 'cow.vtk')
+  test('writeArrayBuffer writes a mesh to an ArrayBuffer', t => {
+    return axios.get(testMeshFilePath, { responseType: 'arraybuffer' })
+      .then(function (response) {
+        return readMeshArrayBuffer(null, response.data, 'cow.vtk').then(function ({ mesh, webWorker }) {
+          webWorker.terminate()
+          const useCompression = false
+          return writeArrayBuffer(null, useCompression, mesh, 'cow.vtk')
+        })
       })
-    })
-    .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {
-      webWorker.terminate()
-      return readMeshArrayBuffer(null, writtenArrayBuffer, 'cow.vtk').then(function ({ mesh, webWorker }) {
+      .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {
         webWorker.terminate()
-        verifyMesh(t, mesh)
+        return readMeshArrayBuffer(null, writtenArrayBuffer, 'cow.vtk').then(function ({ mesh, webWorker }) {
+          webWorker.terminate()
+          verifyMesh(t, mesh)
+        })
       })
-    })
-})
-
+  })
 }
