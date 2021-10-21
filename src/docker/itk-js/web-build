@@ -19,6 +19,10 @@ cmake \
    -DCMAKE_BUILD_TYPE:STRING=Release \
    -DITK_DIR:PATH=/ITK-build \
    -DVTK_DIR:PATH=/VTK-build \
+   -DOPENGL_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
+   -DOPENGL_EGL_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
+   -DOPENGL_GLES2_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
+   -DOPENGL_GLES3_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
    -DSlicerExecutionModel_DIR:PATH=/SlicerExecutionModel-build \
    -GNinja \
      "$@" && \

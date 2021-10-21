@@ -57,8 +57,8 @@ RUN git clone https://github.com/thewtex/VTK.git && \
   cd .. && chmod -R 777 VTK-build
 
 # 2020-04-29
-ENV ITKVtkGlue_GIT_TAG f4df3da42944519872df463cc55d9ea8929ea6a2
-RUN git clone https://github.com/InsightSoftwareConsortium/ITKVtkGlue.git && \
+ENV ITKVtkGlue_GIT_TAG 1650862cf82531b0a251066454e80053996311f2
+RUN git clone https://github.com/thewtex/ITKVTKGlue.git ITKVtkGlue && \
   cd ITKVtkGlue && \
   git checkout ${ITKVtkGlue_GIT_TAG} && \
   cd ../ && \
@@ -73,11 +73,16 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKVtkGlue.git && \
     -DBUILD_TESTING:BOOL=OFF \
     -DITK_DIR:PATH=/ITK-build \
     -DVTK_DIR:PATH=/VTK-build \
-    ../ITKVtkGlue
-    #../ITKVtkGlue && \
-  #ninja -j7 && \
-  #find . -name '*.o' -delete && \
-  #cd .. && chmod -R 777 ITK-build
+    -DOPENGL_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
+    -DOPENGL_EGL_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
+    -DOPENGL_GLES2_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
+    -DOPENGL_GLES3_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
+    ../ITKVtkGlue && \
+  ninja -j7 && \
+  find . -name '*.o' -delete && \
+  cd .. && chmod -R 777 ITK-build
+
+RUN chmod -R 777 /emsdk/upstream/emscripten/cache
 
 # Reset
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}

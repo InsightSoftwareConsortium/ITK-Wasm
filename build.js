@@ -199,10 +199,6 @@ const testPipelines = [
   path.join('test', 'pipelines', 'MedianFilterPipeline'),
   path.join('test', 'pipelines', 'InputOutputFilesPipeline'),
   path.join('test', 'pipelines', 'MeshReadWritePipeline'),
-  // todo: re-enable with VTK image
-  // path.join('test', 'pipelines', 'WriteVTKPolyDataPipeline'),
-  // path.join('test', 'pipelines', 'CLPExample1'),
-  // path.join('src', 'pipelines', 'mesh-to-polydata'),
 ]
 
 if (options.buildEmscriptenPipelines) {
@@ -210,9 +206,17 @@ if (options.buildEmscriptenPipelines) {
     console.log('Building ' + pipelinePath + ' with Emscripten...')
     let debugFlags = []
     let buildImage = 'insighttoolkit/itk-js:latest'
+    if (options.buildVtk) {
+      buildImage = 'kitware/itk-js-vtk:latest'
+    }
+    if (options.debug) {
+      buildImage = 'insighttoolkit/itk-js:latest-debug'
+      if (options.buildVtk) {
+        buildImage = 'kitware/itk-js-vtk:latest-debug'
+      }
+    }
     if (options.debug) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug', "-DCMAKE_EXE_LINKER_FLAGS_DEBUG='-s DISABLE_EXCEPTION_CATCHING=0'"]
-      buildImage = 'insighttoolkit/itk-js:latest-debug'
     }
     const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-js-cli.js'), 'build', '--image', buildImage, pipelinePath, '--'].concat(debugFlags), {
       env: process.env,
@@ -235,7 +239,14 @@ if (options.buildEmscriptenPipelines) {
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
-  asyncMod.map(testPipelines, buildPipeline)
+  let emscriptenTestPipelines = testPipelines
+  if (options.buildVtk) {
+    emscriptenTestPipelines = emscriptenTestPipelines.concat([
+      path.join('test', 'pipelines', 'WriteVTKPolyDataPipeline'),
+      path.join('test', 'pipelines', 'CLPExample1'),
+      path.join('src', 'pipeline', 'mesh-to-polydata'),])
+  }
+  asyncMod.map(emscriptenTestPipelines, buildPipeline)
 } // options.buildEmscriptenPipelines
 
 if (options.buildWasiPipelines) {

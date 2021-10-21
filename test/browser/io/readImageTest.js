@@ -15,7 +15,6 @@ const cthead1SmallBlob1 = new window.Blob([intArray], { type: mimeString })
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
 const verifyImage = (t, image) => {
-  console.log('image', image)
   t.is(image.imageType.dimension, 2, 'dimension')
   t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
   t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
