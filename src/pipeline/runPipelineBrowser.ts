@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
 import loadEmscriptenModuleMainThread from '../core/internal/loadEmscriptenModuleMainThread.js'
 
@@ -22,7 +20,6 @@ const pipelineToModule: Map<string, PipelineEmscriptenModule> = new Map()
 async function loadPipelineModule (pipelinePath: string | URL): Promise<PipelineEmscriptenModule> {
   let moduleRelativePathOrURL: string | URL = pipelinePath as string
   let pipeline = pipelinePath as string
-  const pipelineModule = null
   if (typeof pipelinePath !== 'string') {
     moduleRelativePathOrURL = new URL((pipelinePath).href)
     pipeline = moduleRelativePathOrURL.href
@@ -36,7 +33,7 @@ async function loadPipelineModule (pipelinePath: string | URL): Promise<Pipeline
   }
 }
 
-async function runPipelineBrowser (webWorker: Worker | null | boolean, pipelinePath: string | URL, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]): Promise<RunPipelineResult> {
+async function runPipelineBrowser (webWorker: Worker | null | boolean, pipelinePath: string | URL, args: string[], outputs: PipelineOutput[] | null, inputs: PipelineInput[] | null): Promise<RunPipelineResult> {
   if (webWorker === false) {
     const pipelineModule = await loadPipelineModule(pipelinePath.toString())
     const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
@@ -46,7 +43,7 @@ async function runPipelineBrowser (webWorker: Worker | null | boolean, pipelineP
   const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise('pipeline', worker as Worker | null)
   worker = usedWorker
   const transferables: ArrayBuffer[] = []
-  if (inputs) {
+  if (!(inputs == null) && inputs.length > 0) {
     inputs.forEach(function (input) {
       if (input.type === IOTypes.Binary) {
         // Binary data

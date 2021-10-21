@@ -8,10 +8,11 @@ import PolyData from '../../core/vtkPolyData.js'
 import PipelineEmscriptenModule from '../PipelineEmscriptenModule.js'
 import PipelineInput from '../PipelineInput.js'
 import PipelineOutput from '../PipelineOutput.js'
+import RunPipelineResult from '../RunPipelineResult.js'
 
 const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
 
-function typedArrayForBuffer (typedArrayType: string, buffer: ArrayBuffer) {
+function typedArrayForBuffer (typedArrayType: string, buffer: ArrayBuffer): TypedArray {
   let TypedArrayFunction = null
   // Node.js
   // @ts-expect-error: error TS7053: Element implicitly has an 'any' type because
@@ -39,8 +40,8 @@ function readFileSharedArray (emscriptenModule: PipelineEmscriptenModule, path: 
   return array
 }
 
-function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
-  if (inputs) {
+function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[] | null, inputs: PipelineInput[] | null): RunPipelineResult {
+  if (!(inputs == null) && inputs.length > 0) {
     inputs.forEach(function (input) {
       switch (input.type) {
         case IOTypes.Text:
@@ -94,25 +95,25 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
 
           }
           pipelineModule.fs_writeFile(input.path, JSON.stringify(meshJSON))
-          if (meshJSON.numberOfPoints) {
+          if (meshJSON.numberOfPoints > 0) {
             if (mesh.points === null) {
               throw Error('mesh.points is null')
             }
             pipelineModule.fs_writeFile(meshJSON.points, new Uint8Array(mesh.points.buffer))
           }
-          if (meshJSON.numberOfPointPixels) {
+          if (meshJSON.numberOfPointPixels > 0) {
             if (mesh.pointData === null) {
               throw Error('mesh.pointData is null')
             }
             pipelineModule.fs_writeFile(meshJSON.pointData, new Uint8Array(mesh.pointData.buffer))
           }
-          if (meshJSON.numberOfCells) {
+          if (meshJSON.numberOfCells > 0) {
             if (mesh.cells === null) {
               throw Error('mesh.cells is null')
             }
             pipelineModule.fs_writeFile(meshJSON.cells, new Uint8Array(mesh.cells.buffer))
           }
-          if (meshJSON.numberOfCellPixels) {
+          if (meshJSON.numberOfCellPixels > 0) {
             if (mesh.cellData === null) {
               throw Error('mesh.cellData is null')
             }
@@ -145,7 +146,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
   const stderr = pipelineModule.getModuleStderr()
 
   const populatedOutputs: PipelineOutput[] = []
-  if (outputs) {
+  if (!(outputs == null) && outputs.length > 0) {
     outputs.forEach(function (output) {
       let outputData: any = null
       switch (output.type) {
@@ -172,25 +173,25 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         {
           const meshJSON = pipelineModule.fs_readFile(output.path, { encoding: 'utf8' }) as string
           const mesh = JSON.parse(meshJSON)
-          if (mesh.numberOfPoints) {
+          if (mesh.numberOfPoints > 0) {
             const dataUint8Points = readFileSharedArray(pipelineModule, mesh.points)
             mesh.points = bufferToTypedArray(mesh.meshType.pointComponentType, dataUint8Points.buffer)
           } else {
             mesh.points = bufferToTypedArray(mesh.meshType.pointComponentType, new ArrayBuffer(0))
           }
-          if (mesh.numberOfPointPixels) {
+          if (mesh.numberOfPointPixels > 0) {
             const dataUint8PointData = readFileSharedArray(pipelineModule, mesh.pointData)
             mesh.pointData = bufferToTypedArray(mesh.meshType.pointPixelComponentType, dataUint8PointData.buffer)
           } else {
             mesh.pointData = bufferToTypedArray(mesh.meshType.pointPixelComponentType, new ArrayBuffer(0))
           }
-          if (mesh.numberOfCells) {
+          if (mesh.numberOfCells > 0) {
             const dataUint8Cells = readFileSharedArray(pipelineModule, mesh.cells)
             mesh.cells = bufferToTypedArray(mesh.meshType.cellComponentType, dataUint8Cells.buffer)
           } else {
             mesh.cells = bufferToTypedArray(mesh.meshType.cellComponentType, new ArrayBuffer(0))
           }
-          if (mesh.numberOfCellPixels) {
+          if (mesh.numberOfCellPixels > 0) {
             const dataUint8CellData = readFileSharedArray(pipelineModule, mesh.cellData)
             mesh.cellData = bufferToTypedArray(mesh.meshType.cellPixelComponentType, dataUint8CellData.buffer)
           } else {
@@ -205,10 +206,10 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           const polyData = JSON.parse(polyDataJSON)
           const cellTypes = ['points', 'verts', 'lines', 'polys', 'strips']
           cellTypes.forEach((cellName) => {
-            if (polyData[cellName]) {
+            if (polyData[cellName] !== undefined) {
               const cell = polyData[cellName]
-              if (cell.ref) {
-                const dataUint8 = readFileSharedArray(pipelineModule, `${output.path}/${cell.ref.basepath}/${cell.ref.id}`)
+              if (cell.ref !== null) {
+                const dataUint8 = readFileSharedArray(pipelineModule, `${output.path}/${cell.ref.basepath}/${cell.ref.id}`) // eslint-disable-line
                 polyData[cellName].buffer = dataUint8.buffer
                 polyData[cellName].values = typedArrayForBuffer(polyData[cellName].dataType, dataUint8.buffer)
                 delete cell.ref
@@ -218,10 +219,10 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
 
           const dataSetType = ['pointData', 'cellData', 'fieldData']
           dataSetType.forEach((dataName) => {
-            if (polyData[dataName]) {
+            if (polyData[dataName] !== undefined) {
               const data = polyData[dataName]
               data.arrays.forEach((array: { data: { ref?: { basepath: string, id: string }, buffer: ArrayBuffer, values: TypedArray, dataType: string }}) => {
-                if (array.data.ref != null) {
+                if (array.data.ref !== null && array.data.ref !== undefined) {
                   const dataUint8 = readFileSharedArray(pipelineModule, `${output.path}/${array.data.ref.basepath}/${array.data.ref.id}`)
                   array.data.buffer = dataUint8.buffer
                   array.data.values = typedArrayForBuffer(array.data.dataType, dataUint8.buffer)
