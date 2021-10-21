@@ -116,7 +116,7 @@ RUN git clone https://github.com/Tencent/rapidjson.git && \
   git checkout ${RAPIDJSON_GIT_TAG}
 
 ENV IPFS_TAG v0.10.0
-RUN curl -O https://ipfs.io/ipns/dist.ipfs.io/go-ipfs/${IPFS_TAG}/go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
+RUN curl -LO https://github.com/ipfs/go-ipfs/releases/download/${IPFS_TAG}/go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
   tar xvzf go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
   cp go-ipfs/ipfs /usr/local/bin/ && \
   rm -rf go-ipfs
