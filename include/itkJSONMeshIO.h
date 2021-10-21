@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright Insight Software Consortium
+ *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace itk
  * It reads and writes an itk.js itk/Mesh JSON object where TypedArrays are
  * replaced by binary files on the filesystem.
  *
- * The formt is experimental and subject to change. We mean it.
+ * The format is experimental and subject to change. We mean it.
  *
  * \ingroup IOFilters
  * \ingroup BridgeJavaScript

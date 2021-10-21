@@ -10,9 +10,9 @@ npm ci
 version=6.0.0 # change to correct version
 
 # Update the default CLI image in src/itk-js-cli.js
-./src/Docker/itk-js-base/build.sh --with-debug
-./src/Docker/itk-js/build.sh --with-debug
-./src/Docker/itk-js-vtk/build.sh --with-debug
+./src/docker/itk-js-base/build.sh --with-debug
+./src/docker/itk-js/build.sh --with-debug
+./src/docker/itk-js-vtk/build.sh --with-debug
 git add -- src/itk-js-cli.js
 git commit -m "feat(itk-js-cli): Update default Docker image for ${version}"
 ```

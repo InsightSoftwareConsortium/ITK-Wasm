@@ -1,13 +1,8 @@
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.16.3)
 project(BridgeJavaScript)
 
 set(BridgeJavaScript_LIBRARIES BridgeJavaScript)
 
-set(dcmtk_module "ITKIODCMTK")
-# Note in the build image -- skip it
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-  set(dcmtk_module "")
-endif()
 option(BUILD_ITK_JS_IO_MODULES "Build the itk.js ImageIO's and MeshIO's" OFF)
 if(BUILD_ITK_JS_IO_MODULES)
   # This list should be ordered from approximately most commonly to least
@@ -15,7 +10,6 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(BridgeJavaScript_ImageIOModules
     "ITKIOPNG"
     "ITKIOMeta"
-    ${dcmtk_module}
     "ITKIOTIFF"
     "ITKIONIFTI"
     "ITKIOJPEG"
@@ -49,7 +43,6 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(imageios_ITKIONIFTI itkNiftiImageIO)
   set(imageios_ITKIONRRD itkNrrdImageIO)
   set(imageios_ITKIOGDCM itkGDCMImageIO)
-  set(imageios_ITKIODCMTK itkDCMTKImageIO)
   set(imageios_ITKIOJPEG itkJPEGImageIO)
   set(imageios_ITKIOTIFF itkTIFFImageIO)
   set(imageios_ITKIOVTK itkVTKImageIO)
@@ -80,10 +73,11 @@ if(BUILD_ITK_JS_IO_MODULES)
     "VTKPLYFileReader"
     CACHE STRING
     "String delimited list of VTK PolyData IO pipelines to support.")
-  set(polydataios_VTKExodusFileReader IOExodus CommonDataModel FiltersCore FiltersGeometry)
-  set(polydataios_VTKLegacyFileReader IOLegacy FiltersGeometry)
-  set(polydataios_VTKXMLFileReader IOXML FiltersGeometry IOLegacy)
-  set(polydataios_VTKPLYFileReader IOPLY)
+  set(polydataios_VTKExodusFileReader VTK::IOExodus VTK::CommonDataModel
+    VTK::FiltersCore VTK::FiltersGeometry)
+  set(polydataios_VTKLegacyFileReader VTK::IOLegacy VTK::FiltersGeometry)
+  set(polydataios_VTKXMLFileReader VTK::IOXML VTK::FiltersGeometry VTK::IOLegacy)
+  set(polydataios_VTKPLYFileReader VTK::IOPLY)
 endif()
 
 get_filename_component(_module_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)

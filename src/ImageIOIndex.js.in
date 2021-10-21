@@ -1,3 +1,0 @@
-const ImageIOIndex = [@ImageIOIndex_ARRAY@]
-
-module.exports = ImageIOIndex

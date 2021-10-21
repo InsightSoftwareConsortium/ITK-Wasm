@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
-const fs = require('fs-extra')
-const path = require('path')
-const spawnSync = require('child_process').spawnSync
+import fs from 'fs-extra'
+import path from 'path'
+import { spawnSync } from 'child_process'
 
-const program = require('commander')
+import { Command } from 'commander/esm.mjs'
 
-const build = (sourceDir) => {
+const program = new Command()
+
+const build = (sourceDir, options) => {
   // Check that the source directory exists and chdir to it.
   if (!fs.existsSync(sourceDir)) {
     console.error('The source directory: ' + sourceDir + ' does not exist!')
@@ -14,10 +16,15 @@ const build = (sourceDir) => {
   }
   process.chdir(sourceDir)
 
-  // Make the 'web-build' directory to hold the dockcross script and the CMake
+  let buildDir = 'web-build'
+  if (options.buildDir) {
+    buildDir = options.buildDir
+  }
+
+  // Make the build directory to hold the dockcross script and the CMake
   // build.
   try {
-    fs.mkdirSync('web-build')
+    fs.mkdirSync(buildDir)
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
@@ -38,13 +45,13 @@ const build = (sourceDir) => {
     process.exit(dockerVersion.status)
   }
 
-  let dockerImage = 'insighttoolkit/itk-js:20210520-bafb1b5'
-  if (program.commands[0].image) {
-    dockerImage = program.commands[0].image
+  let dockerImage = 'insighttoolkit/itk-js:latest'
+  if (options.image) {
+    dockerImage = options.image
   }
 
   // Ensure we have the 'dockcross' Docker build environment driver script
-  const dockcrossScript = 'web-build/itk-js-build-env'
+  const dockcrossScript = `${buildDir}/itk-js-build-env`
   try {
     fs.statSync(dockcrossScript)
   } catch (err) {
@@ -71,8 +78,8 @@ const build = (sourceDir) => {
     cmakeArgs = program.rawArgs.slice(hypenIndex + 1)
   }
   if(process.platform === "win32"){
-    var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"', 
-      ["--login", "-i", "-c", '"web-build/itk-js-build-env web-build ' + cmakeArgs + '"'], {
+    var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
+      ["--login", "-i", "-c", `"${buildDir}/itk-js-build-env ${buildDir} ` + cmakeArgs + '"'], {
       env: process.env,
       stdio: 'inherit',
       shell: true
@@ -83,7 +90,7 @@ const build = (sourceDir) => {
     }
     process.exit(dockerBuild.status);
   } else {
-    const dockerBuild = spawnSync('bash', [dockcrossScript, 'web-build'].concat(cmakeArgs), {
+    const dockerBuild = spawnSync('bash', [dockcrossScript, 'web-build', buildDir].concat(cmakeArgs), {
       env: process.env,
       stdio: 'inherit'
     })
@@ -122,7 +129,7 @@ const test = (sourceDir) => {
     ctestArgs = program.rawArgs.slice(hypenIndex + 1).join(' ')
   }
   if(process.platform === "win32"){
-    var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"', 
+    var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
       ["--login", "-i", "-c", '"web-build/itk-js-build-env bash -c cd web-build && ctest ' + cmakeArgs + '"'], {
       env: process.env,
       stdio: 'inherit',
@@ -145,13 +152,6 @@ const test = (sourceDir) => {
   }
 }
 
-program
-  .command('build <sourceDir>')
-  .usage('[options] <sourceDir> [-- <cmake arguments>]')
-  .description('build the CMake project found in the given source directory')
-  .action(build)
-  .option('-i, --image <image>', 'build environment Docker image, defaults to insighttoolkit/itk-js')
-
 // todo: needs a wrapper in web_add_test that 1) mount /work into the emscripten filesystem
 // and 2) invokes the runtime
 // program
@@ -161,6 +161,15 @@ program
 //   .action(test)
 
 program
+  .command('build <sourceDir>')
+  .usage('[options] <sourceDir> [-- <cmake arguments>]')
+  .description('build the CMake project found in the given source directory')
+  .action(build)
+  .option('-i, --image <image>', 'build environment Docker image, defaults to insighttoolkit/itk-js')
+  .option('-b, --build-dir <build-directory>', 'relative path to build directory, defaults to web-build')
+
+program
   .parse(process.argv)
 
 program.help()
+

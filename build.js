@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
-const fs = require('fs-extra')
-const path = require('path')
-const spawnSync = require('child_process').spawnSync
-const glob = require('glob')
-const asyncMod = require('async')
-const ramda = require('ramda')
+import fs from 'fs-extra'
+import path from 'path'
+import { spawnSync } from 'child_process'
+import glob from 'glob'
+import asyncMod from 'async'
 
-const program = require('commander')
+import { Command } from 'commander/esm.mjs'
+
+const program = new Command()
 
 // Make the "build" directory to hold build artifacts
 try {
@@ -16,13 +17,17 @@ try {
   if (err.code !== 'EEXIST') throw err
 }
 program
-  .option('-c, --no-compile', 'Do not compile Emscripten modules')
-  .option('-s, --no-copy-sources', 'Do not copy JavaScript sources')
-  .option('-p, --no-build-pipelines', 'Do not build the test pipelines')
+  .option('-i, --no-build-io', 'Do not compile io modules')
+  .option('-s, --no-copy-build-artifacts', 'Do not copy build artifacts')
+  .option('-e, --no-build-emscripten-pipelines', 'Do not build the emscripten test pipelines')
+  .option('-w, --no-build-wasi-pipelines', 'Do not build the wasi test pipelines')
+  .option('-v, --no-build-vtk', 'Do not build the VTK-dependent io and test pipelines')
   .option('-d, --debug', 'Create a debug build of the Emscripten modules')
   .parse(process.argv)
 
-if (program.compile) {
+const options = program.opts()
+
+if (options.buildIo) {
   // Make the "build" directory to hold build artifacts
   try {
     fs.mkdirSync('build')
@@ -47,17 +52,26 @@ if (program.compile) {
 
   // Ensure we have the 'dockcross' Docker build environment driver script
   let dockcross = 'build/dockcross'
-  if (program.debug) {
+  if (options.debug) {
     dockcross = 'build/dockcross-debug'
+  }
+  if (options.buildVtk) {
+    dockcross = `${dockcross}-with-vtk`
   }
   try {
     fs.statSync(dockcross)
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
-      let buildImage = 'kitware/itk-js-vtk:latest'
-      if (program.debug) {
-        buildImage = 'kitware/itk-js-vtk:20210219-56503df-debug'
+      let buildImage = 'insighttoolkit/itk-js:latest'
+      if (options.buildVtk) {
+        buildImage = 'kitware/itk-js-vtk:latest'
+      }
+      if (options.debug) {
+        buildImage = 'insighttoolkit/itk-js:latest-debug'
+        if (options.buildVtk) {
+          buildImage = 'kitware/itk-js-vtk:latest-debug'
+        }
       }
       const dockerCall = spawnSync('docker', ['run', '--rm', buildImage], {
         env: process.env,
@@ -79,7 +93,7 @@ if (program.compile) {
   } catch (err) {
     if (err.code === 'ENOENT') {
       let buildType = '-DCMAKE_BUILD_TYPE:STRING=Release'
-      if (program.debug) {
+      if (options.debug) {
         buildType = '-DCMAKE_BUILD_TYPE:STRING=Debug'
       }
       const cmakeCall = spawnSync('bash', [dockcross, 'bash', '-c', `cmake -DRapidJSON_INCLUDE_DIR=/rapidjson/include ${buildType} -Bbuild -H. -GNinja -DITK_DIR=/ITK-build -DVTK_DIR=/VTK-build -DBUILD_ITK_JS_IO_MODULES=ON`], {
@@ -104,150 +118,72 @@ if (program.compile) {
     process.exit(ninjaCall.status)
   }
   console.log('')
-} // program.compile
+} // options.compile
 
-if (program.copySources) {
+if (options.copyBuildArtifacts) {
   try {
     fs.mkdirSync('dist')
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'ImageIOs'))
+    fs.mkdirSync(path.join('dist', 'image-io'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'MeshIOs'))
+    fs.mkdirSync(path.join('dist', 'mesh-io'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'PolyDataIOs'))
+    fs.mkdirSync(path.join('dist', 'polydata-io'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'WebWorkers'))
+    fs.mkdirSync(path.join('dist', 'web-workers'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
-  let imageIOFiles = glob.sync(path.join('build', 'ImageIOs', '*.js'))
-  imageIOFiles = imageIOFiles.concat(glob.sync(path.join('build', 'ImageIOs', '*.wasm')))
+  let imageIOFiles = glob.sync(path.join('build', 'image-io', '*.js'))
+  imageIOFiles = imageIOFiles.concat(glob.sync(path.join('build', 'image-io', '*.wasm')))
   const copyImageIOModules = function (imageIOFile, callback) {
     const io = path.basename(imageIOFile)
-    const output = path.join('dist', 'ImageIOs', io)
+    const output = path.join('dist', 'image-io', io)
     fs.copySync(imageIOFile, output)
     callback(null, io)
   }
   const buildImageIOsParallel = function (callback) {
-    console.log('Copying ImageIO modules...')
+    console.log('Copying image-io modules...')
     const result = asyncMod.map(imageIOFiles, copyImageIOModules)
     callback(null, result)
   }
-  let meshIOFiles = glob.sync(path.join('build', 'MeshIOs', '*.js'))
-  meshIOFiles = meshIOFiles.concat(glob.sync(path.join('build', 'MeshIOs', '*.wasm')))
+  let meshIOFiles = glob.sync(path.join('build', 'mesh-io', '*.js'))
+  meshIOFiles = meshIOFiles.concat(glob.sync(path.join('build', 'mesh-io', '*.wasm')))
   const copyMeshIOModules = function (meshIOFile, callback) {
     const io = path.basename(meshIOFile)
-    const output = path.join('dist', 'MeshIOs', io)
+    const output = path.join('dist', 'mesh-io', io)
     fs.copySync(meshIOFile, output)
     callback(null, io)
   }
   const buildMeshIOsParallel = function (callback) {
-    console.log('Copying MeshIO modules...')
+    console.log('Copying mesh-io modules...')
     const result = asyncMod.map(meshIOFiles, copyMeshIOModules)
     callback(null, result)
   }
 
-  let polyDataIOFiles = glob.sync(path.join('build', 'PolyDataIOs', '*.js'))
-  polyDataIOFiles = polyDataIOFiles.concat(glob.sync(path.join('build', 'PolyDataIOs', '*.wasm')))
+  let polyDataIOFiles = glob.sync(path.join('build', 'polydata-io', '*.js'))
+  polyDataIOFiles = polyDataIOFiles.concat(glob.sync(path.join('build', 'polydata-io', '*.wasm')))
   const copyPolyDataIOModules = function (polyDataIOFile, callback) {
     const io = path.basename(polyDataIOFile)
-    const output = path.join('dist', 'PolyDataIOs', io)
+    const output = path.join('dist', 'polydata-io', io)
     fs.copySync(polyDataIOFile, output)
     callback(null, io)
   }
   const buildPolyDataIOsParallel = function (callback) {
-    console.log('Copying PolyDataIO modules...')
+    console.log('Copying polydata-io modules...')
     const result = asyncMod.map(polyDataIOFiles, copyPolyDataIOModules)
-    callback(null, result)
-  }
-
-  const browserify = require('browserify')
-  const browserifyBuild = ramda.curry(function (uglify, outputDir, es6File, callback) {
-    const basename = path.basename(es6File)
-    const output = path.join(outputDir, basename)
-    const bundler = browserify(es6File)
-    if (uglify) {
-      bundler.transform({ global: true }, 'uglifyify')
-      bundler
-        .transform('babelify', { presets: ['@babel/preset-env'], plugins: ['@babel/plugin-transform-runtime'] })
-        .bundle()
-        .pipe(fs.createWriteStream(output))
-    } else {
-      bundler
-        .transform('babelify', { presets: ['@babel/preset-env'], plugins: ['@babel/plugin-transform-runtime'] })
-        .bundle()
-        .pipe(fs.createWriteStream(output))
-    }
-    callback(null, basename)
-  })
-  const browserifyWebWorkerBuildParallel = function (callback) {
-    console.log('Converting WebWorker sources...')
-    const es6Files = glob.sync(path.join('src', 'WebWorkers', '*.js'))
-    const outputDir = path.join('dist', 'WebWorkers')
-    const builder = browserifyBuild(false, outputDir)
-    const result = asyncMod.map(es6Files, builder)
-    callback(null, result)
-  }
-
-  const babelOptionsPresetEnv = {
-    presets: [
-      ['@babel/preset-env', { modules: false }]
-    ],
-    plugins: [
-      ['@babel/plugin-transform-runtime', {
-        regenerator: true
-      }]
-    ]
-  }
-  const babelOptionsCJS = {
-    plugins: [
-      '@babel/plugin-transform-modules-commonjs'
-    ]
-  }
-  const babel = require('@babel/core')
-  const babelBuild = ramda.curry(function (outputDir, es6File, callback) {
-    babel.transformFile(es6File, babelOptionsPresetEnv, function (err, result) {
-      if (err) {
-        console.error(err)
-        process.exit(1)
-      }
-      const basename = path.basename(es6File)
-      const output = path.join(outputDir, basename)
-      const outputFD = fs.openSync(output, 'w')
-      fs.writeSync(outputFD, result.code)
-      fs.closeSync(outputFD)
-    })
-    babel.transformFile(es6File, babelOptionsCJS, function (err, result) {
-      if (err) {
-        console.error(err)
-        process.exit(1)
-      }
-      const basename = path.basename(es6File, '.js')
-      const output = path.join(outputDir, `${basename}.cjs`)
-      const outputFD = fs.openSync(output, 'w')
-      fs.writeSync(outputFD, result.code)
-      fs.closeSync(outputFD)
-    })
-    callback(null, es6File)
-  })
-  const babelBuildParallel = function (callback) {
-    console.log('Converting main sources...')
-    const es6Files = glob.sync(path.join('src', '*.js'))
-    const outputDir = 'dist'
-    const builder = babelBuild(outputDir)
-    const result = asyncMod.map(es6Files, builder)
     callback(null, result)
   }
 
@@ -255,19 +191,34 @@ if (program.copySources) {
     buildImageIOsParallel,
     buildMeshIOsParallel,
     buildPolyDataIOsParallel,
-    babelBuildParallel,
-    browserifyWebWorkerBuildParallel
   ])
-} // program.copySources
+} // options.copySources
 
-if (program.buildPipelines) {
+const testPipelines = [
+  path.join('test', 'pipelines', 'StdoutStderrPipeline'),
+  path.join('test', 'pipelines', 'MedianFilterPipeline'),
+  path.join('test', 'pipelines', 'InputOutputFilesPipeline'),
+  path.join('test', 'pipelines', 'MeshReadWritePipeline'),
+]
+
+if (options.buildEmscriptenPipelines) {
   const buildPipeline = (pipelinePath) => {
-    console.log('Building ' + pipelinePath + ' ...')
+    console.log('Building ' + pipelinePath + ' with Emscripten...')
     let debugFlags = []
-    if (program.debug) {
+    let buildImage = 'insighttoolkit/itk-js:latest'
+    if (options.buildVtk) {
+      buildImage = 'kitware/itk-js-vtk:latest'
+    }
+    if (options.debug) {
+      buildImage = 'insighttoolkit/itk-js:latest-debug'
+      if (options.buildVtk) {
+        buildImage = 'kitware/itk-js-vtk:latest-debug'
+      }
+    }
+    if (options.debug) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug', "-DCMAKE_EXE_LINKER_FLAGS_DEBUG='-s DISABLE_EXCEPTION_CATCHING=0'"]
     }
-    const buildPipelineCall = spawnSync('node', [path.join(__dirname, 'src', 'itk-js-cli.js'), 'build', '--image', 'kitware/itk-js-vtk:latest', pipelinePath, '--'].concat(debugFlags), {
+    const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-js-cli.js'), 'build', '--image', buildImage, pipelinePath, '--'].concat(debugFlags), {
       env: process.env,
       stdio: 'inherit'
     })
@@ -278,24 +229,54 @@ if (program.buildPipelines) {
     pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'web-build', '*.wasm')))
     pipelineFiles.forEach((file) => {
       const filename = path.basename(file)
-      const output = path.join(__dirname, 'dist', 'Pipelines', filename)
+      const output = path.join('dist', 'pipeline', filename)
       fs.copySync(file, output)
     })
   }
 
-  const pipelines = [
-    path.join(__dirname, 'test', 'StdoutStderrPipeline'),
-    path.join(__dirname, 'test', 'MedianFilterPipeline'),
-    path.join(__dirname, 'test', 'InputOutputFilesPipeline'),
-    path.join(__dirname, 'test', 'MeshReadWritePipeline'),
-    path.join(__dirname, 'test', 'WriteVTKPolyDataPipeline'),
-    path.join(__dirname, 'test', 'CLPExample1'),
-    path.join(__dirname, 'src', 'Pipelines', 'MeshToPolyData')
-  ]
   try {
-    fs.mkdirSync(path.join(__dirname, 'dist', 'Pipelines'))
+    fs.mkdirSync(path.join('dist', 'pipeline'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
-  asyncMod.map(pipelines, buildPipeline)
-} // progrem
+  let emscriptenTestPipelines = testPipelines
+  if (options.buildVtk) {
+    emscriptenTestPipelines = emscriptenTestPipelines.concat([
+      path.join('test', 'pipelines', 'WriteVTKPolyDataPipeline'),
+      path.join('test', 'pipelines', 'CLPExample1'),
+      path.join('src', 'pipeline', 'mesh-to-polydata'),])
+  }
+  asyncMod.map(emscriptenTestPipelines, buildPipeline)
+} // options.buildEmscriptenPipelines
+
+if (options.buildWasiPipelines) {
+  const buildPipeline = (pipelinePath) => {
+    console.log('Building ' + pipelinePath + ' with wasi...')
+    let debugFlags = []
+    let buildImage = 'insighttoolkit/itk-js-wasi:latest'
+    if (options.debug) {
+      debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug']
+      buildImage = 'insighttoolkit/itk-js-wasi:latest-debug'
+    }
+    const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-js-cli.js'), 'build', '--image', buildImage, '--build-dir', 'wasi-build', pipelinePath, '--'].concat(debugFlags), {
+      env: process.env,
+      stdio: 'inherit'
+    })
+    if (buildPipelineCall.status !== 0) {
+      process.exit(buildPipelineCall.status)
+    }
+    const pipelineFiles = glob.sync(path.join(pipelinePath, 'wasi-build', '*.wasm'))
+    pipelineFiles.forEach((file) => {
+      const filename = path.basename(file)
+      const output = path.join('dist', 'pipeline', filename)
+      fs.copySync(file, output)
+    })
+  }
+
+  try {
+    fs.mkdirSync(path.join('dist', 'pipeline'))
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err
+  }
+  asyncMod.map(testPipelines, buildPipeline)
+} // options.buildWasiPipelines

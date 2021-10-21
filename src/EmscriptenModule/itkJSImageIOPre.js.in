@@ -1,9 +1,0 @@
-Module['locateFile'] = function(fileName, prefix) {
-  if(fileName === '@wasm_target@.wasm') {
-    if (typeof @target@.moduleScriptDir !== 'undefined') {
-      return @target@.moduleScriptDir + '/@wasm_target@.wasm'
-    }
-    return prefix + '../ImageIOs/@wasm_target@.wasm'
-  }
-  return prefix + fileName
-}

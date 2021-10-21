@@ -10,8 +10,9 @@
 *.toc
 
 build
-src/ImageIOIndex.js
-src/MeshIOIndex.js
+built
+src/io/internal/ImageIOIndex.ts
+src/io/internal/MeshIOIndex.ts
 
 dist
 node_modules
@@ -25,13 +26,20 @@ examples/NodeHelloWorld/package-lock.json
 examples/UMD/package-lock.json
 
 test/MedianFilterPipeline/itk-js
-test/MedianFilterPipeline/web-build
+test/pipelines/MedianFilterPipeline/web-build
+test/pipelines/MedianFilterPipeline/wasi-build
 
-src/Docker/itk-js/ITKBridgeJavaScriptModuleCopy/
+src/docker/itk-js/ITKBridgeJavaScriptModuleCopy/
 test/StdoutStderrPipeline/itk-js
-test/StdoutStderrPipeline/web-build/
-test/InputOutputFilesPipeline/web-build/
-test/MeshReadWritePipeline/web-build/
-test/WriteVTKPolyDataPipeline/web-build/
-test/CLPExample1/web-build/
-src/Pipelines/MeshToPolyData/web-build/
+test/pipelines/StdoutStderrPipeline/web-build/
+test/pipelines/InputOutputFilesPipeline/web-build/
+test/pipelines/MeshReadWritePipeline/web-build/
+test/pipelines/WriteVTKPolyDataPipeline/web-build/
+test/pipelines/CLPExample1/web-build/
+src/pipeline/mesh-to-polydata/web-build/
+test/pipelines/StdoutStderrPipeline/wasi-build/
+test/pipelines/InputOutputFilesPipeline/wasi-build/
+test/pipelines/MeshReadWritePipeline/wasi-build/
+test/pipelines/WriteVTKPolyDataPipeline/wasi-build/
+test/pipelines/CLPExample1/wasi-build/
+src/pipeline/mesh-to-polydata/wasi-build/
