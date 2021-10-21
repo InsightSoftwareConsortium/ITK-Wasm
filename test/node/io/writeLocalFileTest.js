@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, FloatTypes, PixelTypes, readImageLocalFile, readMeshLocalFile, writeMeshLocalFile, writeLocalFile } from '../../../dist/index.js'
+import { IntTypes, FloatTypes, PixelTypes, readImageLocalFile, readMeshLocalFile, writeLocalFile } from '../../../dist/index.js'
 
 const testImageInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cthead1.png')
 const testImageOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'writeLocalFileTest-cthead1.png')

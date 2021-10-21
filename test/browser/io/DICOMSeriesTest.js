@@ -1,7 +1,7 @@
-import test from 'tape'
-import axios from 'axios'
+// import test from 'tape'
+// import axios from 'axios'
 
-import { IntTypes, PixelTypes, readImageDICOMFileSeries } from '../../../dist/browser/index.js'
+// import { IntTypes, PixelTypes, readImageDICOMFileSeries } from '../../../dist/browser/index.js'
 
 export default function () {
 

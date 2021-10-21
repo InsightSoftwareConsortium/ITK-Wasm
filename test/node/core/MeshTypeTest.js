@@ -1,5 +1,4 @@
 import test from 'ava'
-import path from 'path'
 
 import { MeshType, FloatTypes, IntTypes, PixelTypes } from '../../../dist/index.js'
 

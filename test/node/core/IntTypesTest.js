@@ -1,5 +1,4 @@
 import test from 'ava'
-import path from 'path'
 
 import { IntTypes } from '../../../dist/index.js'
 

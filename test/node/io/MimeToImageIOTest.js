@@ -1,5 +1,4 @@
 import test from 'ava'
-import path from 'path'
 
 import MimeToIO from '../../../dist/io/internal/MimeToImageIO.js'
 

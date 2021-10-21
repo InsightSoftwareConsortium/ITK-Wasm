@@ -1,5 +1,4 @@
 import test from 'ava'
-import path from 'path'
 
 import { IntTypes, ImageType, PixelTypes } from '../../../dist/index.js'
 

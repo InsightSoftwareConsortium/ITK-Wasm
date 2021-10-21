@@ -1,10 +1,10 @@
-import test from 'ava'
-import path from 'path'
+ import test from 'ava'
+ import path from 'path'
 
-import { IntTypes, PixelTypes, readImageLocalFile, writeImageLocalFile } from '../../../dist/index.js'
+ import { IntTypes, PixelTypes, readImageLocalFile, writeImageLocalFile } from '../../../dist/index.js'
 
-const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'apple.jpg')
-const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'JPEGTest-apple.jpg')
+ const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'apple.jpg')
+ const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'JPEGTest-apple.jpg')
 
 // Todo: fix
 // const verifyImage = (t, image) => {

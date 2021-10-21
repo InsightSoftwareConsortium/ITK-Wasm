@@ -1,5 +1,4 @@
 import test from 'ava'
-import path from 'path'
 
 import ExtensionToIO from '../../../dist/io/internal/extensionToImageIO.js'
 

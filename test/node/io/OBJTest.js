@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, FloatTypes, PixelTypes, readMeshLocalFile, writeMeshLocalFile } from '../../../dist/index.js'
+import { IntTypes, FloatTypes, readMeshLocalFile, writeMeshLocalFile } from '../../../dist/index.js'
 
 const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'box.obj')
 const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'OBJTest-box.obj')

@@ -1,11 +1,11 @@
-import test from 'ava'
-import path from 'path'
-import glob from 'glob'
+ import test from 'ava'
+ import path from 'path'
+ import glob from 'glob'
 
-import { IntTypes, PixelTypes, readImageLocalDICOMFileSeries } from '../../../dist/index.js'
+ import { IntTypes, PixelTypes, readImageLocalDICOMFileSeries } from '../../../dist/index.js'
 
-const testSeriesDirectory = path.resolve('build', 'ExternalData', 'test', 'Input', 'DicomImageOrientationTest')
-const testFiles = glob.sync(`${testSeriesDirectory}/*.dcm`)
+ const testSeriesDirectory = path.resolve('build', 'ExternalData', 'test', 'Input', 'DicomImageOrientationTest')
+ const testFiles = glob.sync(`${testSeriesDirectory}/*.dcm`)
 
 // TODO: Debug
 //

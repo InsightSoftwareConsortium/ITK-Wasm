@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, FloatTypes, PixelTypes, readMeshLocalFile, writeMeshLocalFile } from '../../../dist/index.js'
+import { IntTypes, FloatTypes, readMeshLocalFile, writeMeshLocalFile } from '../../../dist/index.js'
 
 const testAsciiInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'sphere.fsa')
 const testAsciiOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'FreeSurferTest-sphere.fsa')

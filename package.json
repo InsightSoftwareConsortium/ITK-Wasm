@@ -103,5 +103,12 @@
       "src/core/internal/loadEmscriptenModuleWebWorker.ts",
       "src/web-workers/*.worker.ts"
     ]
+  },
+  "standard": {
+    "ignore": [
+      "test/node/io/DICOMSeriesTest.js",
+      "test/node/io/GETest.js",
+      "test/node/io/JPEGTest.js"
+    ]
   }
 }

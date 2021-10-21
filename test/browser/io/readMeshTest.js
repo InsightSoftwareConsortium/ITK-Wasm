@@ -1,7 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import { IntTypes, FloatTypes, PixelTypes, getMatrixElement, readMeshArrayBuffer, readMeshBlob, readMeshFile } from 'browser/index.js'
+import { IntTypes, FloatTypes, readMeshArrayBuffer, readMeshBlob, readMeshFile } from 'browser/index.js'
 
 const fileName = 'cow.vtk'
 const testFilePath = 'base/build/ExternalData/test/Input/' + fileName

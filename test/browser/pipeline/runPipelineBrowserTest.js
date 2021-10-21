@@ -210,7 +210,7 @@ Click. Perfect success.
     const inputs = [
       { path: args[0], type: IOTypes.Mesh, data: mesh }
     ]
-    const { stdout, stderr, outputs, webWorker: pipelineWorker } = await runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
+    const { outputs, webWorker: pipelineWorker } = await runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
     pipelineWorker.terminate()
     verifyMesh(outputs[0].data)
   })
