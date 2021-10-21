@@ -9,6 +9,9 @@ import stackImages from '../core/stackImages.js'
 
 import config from '../itkConfig.js'
 
+import ReadImageResult from './ReadImageResult.js'
+import ReadImageFileSeriesResult from './ReadImageFileSeriesResult.js'
+
 interface FileDescription {
   name: string
   type: string
@@ -19,7 +22,7 @@ const workerFunction = async (
   webWorker: Worker | null,
   fileDescriptions: FileDescription[],
   singleSortedSeries: boolean = false
-) => {
+): Promise<ReadImageResult> => {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
     'image-io',
@@ -39,7 +42,7 @@ const workerFunction = async (
   const image = await webworkerPromise.postMessage(message, transferables)
   return { image, webWorker: worker }
 }
-const numberOfWorkers = globalThis.navigator && globalThis.navigator.hardwareConcurrency ? globalThis.navigator.hardwareConcurrency : 4
+const numberOfWorkers = typeof globalThis.navigator?.hardwareConcurrency === 'number' ? globalThis.navigator.hardwareConcurrency : 4
 const workerPool = new WorkerPool(numberOfWorkers, workerFunction)
 
 const seriesBlockSize = 8
@@ -47,7 +50,7 @@ const seriesBlockSize = 8
 const readImageDICOMFileSeries = async (
   fileList: FileList | File[],
   singleSortedSeries = false
-) => {
+): Promise<ReadImageFileSeriesResult> => {
   const fetchFileDescriptions = Array.from(fileList, async function (file) {
     return await readAsArrayBuffer(file).then(function (
       arrayBuffer

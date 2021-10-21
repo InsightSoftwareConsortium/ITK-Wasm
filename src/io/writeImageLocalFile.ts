@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 import mime from 'mime-types'
 
@@ -30,7 +29,7 @@ async function writeImageLocalFile (useCompression: boolean, image: Image, fileP
   const extension = getFileExtension(absoluteFilePath)
 
   let io = null
-  if (mimeType && mimeToIO.has(mimeType)) {
+  if (mimeType !== false && mimeToIO.has(mimeType)) {
     io = mimeToIO.get(mimeType)
   } else if (extensionToIO.has(extension)) {
     io = extensionToIO.get(extension)

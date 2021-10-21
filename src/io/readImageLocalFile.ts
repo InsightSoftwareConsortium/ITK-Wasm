@@ -29,7 +29,7 @@ async function readImageLocalFile (filePath: string): Promise<Image> {
   const extension = getFileExtension(absoluteFilePath)
 
   let io = null
-  if (mimeType && mimeToIO.has(mimeType)) {
+  if (mimeType !== false && mimeToIO.has(mimeType)) {
     io = mimeToIO.get(mimeType)
   } else if (extensionToIO.has(extension)) {
     io = extensionToIO.get(extension)

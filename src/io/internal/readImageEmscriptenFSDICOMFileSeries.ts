@@ -44,7 +44,7 @@ function readImageEmscriptenFSDICOMFileSeries (seriesReaderModule: DICOMImageSer
     seriesReader.SetDirectory(directory)
   }
 
-  let couldRead = null
+  let couldRead = false
   try {
     couldRead = seriesReader.Read()
   } catch (exception) {

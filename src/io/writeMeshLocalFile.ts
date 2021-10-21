@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 import mime from 'mime-types'
 
@@ -40,7 +39,7 @@ async function writeMeshLocalFile (options: WriteMeshOptions, mesh: Mesh, filePa
     binaryFileType = options.binaryFileType
   }
   let io = null
-  if (mimeToIO.has(mimeType)) {
+  if (mimeType !== false && mimeToIO.has(mimeType)) {
     io = mimeToIO.get(mimeType)
   } else if (extensionToIO.has(extension)) {
     io = extensionToIO.get(extension)

@@ -6,7 +6,6 @@ import readDICOMTagsEmscriptenFSFile from './internal/readDICOMTagsEmscriptenFSF
 import localPathRelativeToModule from './localPathRelativeToModule.js'
 
 import DICOMTagsReaderEmscriptenModule from './internal/DICOMTagsReaderEmscriptenModule.js'
-import ReadDICOMTagsResult from './ReadDICOMTagsResult.js'
 
 /**
  * Reads DICOM tags from a series of DICOM files on the local filesystem in Node.js.

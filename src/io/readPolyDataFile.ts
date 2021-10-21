@@ -29,7 +29,7 @@ async function readPolyDataFile (webWorker: Worker | null, file: File): Promise<
             pipelinePath = extensionToIO.get(extension)
           }
           if (pipelinePath === null) {
-            Promise.reject(Error('Could not find IO for: ' + filePath))
+            throw Error('Could not find IO for: ' + filePath)
           }
 
           const args = [file.name, file.name + '.output.json']
@@ -43,9 +43,9 @@ async function readPolyDataFile (webWorker: Worker | null, file: File): Promise<
           inputs.forEach(function (input) {
             // Binary data
             if (input.type === IOTypes.Binary) {
-              if (input.data.buffer) {
+              if (input.data.buffer !== undefined) {
                 transferables.push(input.data.buffer)
-              } else if (input.data.byteLength) {
+              } else if (input.data.byteLength !== undefined) {
                 transferables.push(input.data)
               }
             }

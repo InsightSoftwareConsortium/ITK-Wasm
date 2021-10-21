@@ -1,4 +1,3 @@
-import VectorJSBinding from '../../core/internal/VectorJSBinding.js'
 import TypedArray from '../../core/TypedArray.js'
 import IOComponent from './IOComponent.js'
 import IOPixel from './IOPixel.js'

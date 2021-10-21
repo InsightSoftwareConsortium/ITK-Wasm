@@ -1,9 +1,9 @@
 import Image from '../core/Image.js'
 import WorkerPool from '../core/WorkerPool.js'
 
-interface ReadImageResult {
+interface ReadImageFileSeriesResult {
   image: Image
   webWorkerPool: WorkerPool
 }
 
-export default ReadImageResult
+export default ReadImageFileSeriesResult
