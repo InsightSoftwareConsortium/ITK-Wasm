@@ -1,5 +1,5 @@
-const path = require('path')
-const runPipelineNode = require('itk/runPipelineNode')
+import path from 'path'
+import { runPipelineNode } from 'itk-wasm'
 
-const pipelinePath = path.resolve(__dirname, 'web-build', 'hello')
+const pipelinePath = path.resolve('web-build', 'hello')
 runPipelineNode(pipelinePath)
