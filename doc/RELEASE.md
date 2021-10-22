@@ -10,14 +10,12 @@ npm ci
 version=6.0.0 # change to correct version
 
 # Update the default CLI image in src/itk-wasm-cli.js
-./src/docker/itk-wasm-base/build.sh --with-debug
-./src/docker/itk-wasm/build.sh --with-debug
-./src/docker/itk-wasm-vtk/build.sh --with-debug
+./src/docker/build.sh
+# DockerHub credential environmental variables must be set
+./src/docker/push.sh
 git add -- src/itk-wasm-cli.js
 git commit -m "feat(itk-wasm-cli): Update default Docker image for ${version}"
 ```
-
-Push the `latest` and date / hash tagged Docker images to DockerHub
 
 Bump `version` in `package.json`.
 
