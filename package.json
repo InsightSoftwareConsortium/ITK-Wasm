@@ -19,7 +19,7 @@
     "build:tsc": "tsc --pretty",
     "build:tscWorkersModuleLoader": "tsc --lib webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleWebWorker.ts",
     "build:tscWebWorkers": "tsc --lib webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames  --typeRoots \"./node_modules/@types,./src/vendor-types\" --declaration ./src/web-workers/*",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && rm dist/pipeline/*Test*",
     "build:webpack": "webpack --progress --mode production",
     "build:wasm": "node ./build.js",
     "test": "npm run test:lint && npm run test:node && npm run test:browser",
