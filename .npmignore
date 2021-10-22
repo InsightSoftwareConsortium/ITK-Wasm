@@ -1,15 +1,8 @@
+node_modules
 .DS_Store
 .gitmodules
 .npmrc
-.sass-cache
-circle.yml
-doc
 npm-debug.log
 build
-include
-src
 test
 build.js
-CMakeLists.txt
-CTestConfig.cmake
-itk-module.cmake
