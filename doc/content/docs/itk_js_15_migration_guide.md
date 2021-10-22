@@ -1,8 +1,8 @@
-# itk.js 15 Migration Guide
+# itk-wasm 15 Migration Guide
 
 **This is a work in progress.**
 
-itk.js is a major upgrade that ...
+itk-wasm is a major upgrade that ...
 
 Typescript support was added, but, of course, you can still just use
 JavaScript if you wish.

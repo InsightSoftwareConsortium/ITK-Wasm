@@ -1,4 +1,4 @@
-// itk.js Browser API interfaces, data structures, and functions
+// itk-wasm Browser API interfaces, data structures, and functions
 
 export * from '../core/index.js'
 

@@ -1,7 +1,7 @@
 {
   "name": "itk-umd-example",
   "version": "1.1.1",
-  "description": "This example demonstrates how to use the itk.js UMD module from an HTML script tag.",
+  "description": "This example demonstrates how to use the itk-wasm UMD module from an HTML script tag.",
   "main": "index.js",
   "scripts": {
     "start": "ws -d dist",

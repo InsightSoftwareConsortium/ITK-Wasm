@@ -3,7 +3,7 @@ project(BridgeJavaScript)
 
 set(BridgeJavaScript_LIBRARIES BridgeJavaScript)
 
-option(BUILD_ITK_JS_IO_MODULES "Build the itk.js ImageIO's and MeshIO's" OFF)
+option(BUILD_ITK_JS_IO_MODULES "Build the itk-wasm ImageIO's and MeshIO's" OFF)
 if(BUILD_ITK_JS_IO_MODULES)
   # This list should be ordered from approximately most commonly to least
   # commonly used modules.

@@ -9,7 +9,7 @@ Similar to the [web browser API](./browser_pipelines.html), most of these functi
 
 ## runPipelineNode(pipelinePath, args, outputs, inputs) -> result
 
-Run an itk.js Emscripten module with Node.js.
+Run an itk-wasm Emscripten module with Node.js.
 
 *pipelinePath*: Path to the pre-built pipeline module, without `.js` or `Wasm.js` extensions.
 

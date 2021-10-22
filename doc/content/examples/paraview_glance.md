@@ -1,4 +1,4 @@
-title: Use the Vue.js UI Framework with itk.js to create a Web App
+title: Use the Vue.js UI Framework with itk-wasm to create a Web App
 ---
 
 <div style="height: 520px; width: 100%; padding-bottom: 25px;">
@@ -17,6 +17,6 @@ title: Use the Vue.js UI Framework with itk.js to create a Web App
 ParaView Glance is based on the [Vue.js](https://vuejs.org/) user interface
 framework.
 
-ParaView Glance uses itk.js to provide segmentation, registration, and analysis algorithms that can be applied to data loaded with the app. All processing occurs within your browser, and no software needs to be downloaded or installed on your machine.
+ParaView Glance uses itk-wasm to provide segmentation, registration, and analysis algorithms that can be applied to data loaded with the app. All processing occurs within your browser, and no software needs to be downloaded or installed on your machine.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Petie0GbYTk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

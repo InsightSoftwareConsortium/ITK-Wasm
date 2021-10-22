@@ -6,7 +6,7 @@ docs:
     meshformats: mesh_formats.html
     polydataformats: polydata_formats.html
   development:
-    hacking: hacking_itk_js.html
+    hacking: hacking_itk-wasm.html
 
 examples:
   getting_started:

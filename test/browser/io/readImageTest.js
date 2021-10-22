@@ -96,7 +96,7 @@ export default function () {
     })
   })
 
-  test('readImageHTTP reads itk.js Image from a URL', async (t) => {
+  test('readImageHTTP reads itk-wasm Image from a URL', async (t) => {
     const testURL = 'base/build/ExternalData/test/Input/cthead1.json'
     const image = await readImageHTTP(testURL)
     t.is(image.imageType.dimension, 2, 'dimension')

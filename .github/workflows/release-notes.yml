@@ -20,7 +20,7 @@ jobs:
 
       - name: Generate Changelog
         run: |
-          echo "# itk.js ${GITHUB_REF/refs\/tags\//}" > ./release-notes.md
+          echo "# itk-wasm ${GITHUB_REF/refs\/tags\//}" > ./release-notes.md
           cat ./doc/release-introduction.md >> ./release-notes.md
           git fetch origin --tags -f
           npx conventional-changelog-cli -p angular -r 2 -o ./CHANGELOG.md

@@ -29,8 +29,8 @@ namespace itk
  *
  * \brief Read and write the an itk::Image in JSON format.
  *
- * This format is intended to facilitage data exchange in itk.js.
- * It reads and writes an itk.js itk/Image JSON object where TypedArrays are
+ * This format is intended to facilitage data exchange in itk-wasm.
+ * It reads and writes an itk-wasm itk/Image JSON object where TypedArrays are
  * replaced by binary files on the filesystem.
  *
  * The formt is experimental and subject to change. We mean it.

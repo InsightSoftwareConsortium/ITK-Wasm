@@ -32,7 +32,7 @@ sidebar:
     imageformats: Images
     meshformats: Meshes and Point Sets
     polydataformats: PolyData
-    hacking: Hacking itk.js
+    hacking: Hacking itk-wasm
 
   examples:
     getting_started: Getting Started

@@ -2,7 +2,7 @@ itk-unpkgio-example
 ===================
 
 This example demonstrates how to configure Webpack to use the image and mesh
-IO modules from [itk.js](https://insightsoftwareconsortium.github.io/itk-wasm/)
+IO modules from [itk-wasm](https://insightsoftwareconsortium.github.io/itk-wasm/)
 that are distributed on the [unpkg](https://unpkg.com/) [content delivery
 network](https://en.wikipedia.org/wiki/Content_delivery_network).
 

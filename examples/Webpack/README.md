@@ -2,7 +2,7 @@ itk-webpack-example
 ===================
 
 This example demonstrates how to configure Webpack to build a project that
-uses [itk.js](https://insightsoftwareconsortium.github.io/itk-wasm/).
+uses [itk-wasm](https://insightsoftwareconsortium.github.io/itk-wasm/).
 More information can be found in the [example
 documentation](https://insightsoftwareconsortium.github.io/itk-wasm/examples/webpack.html).
 

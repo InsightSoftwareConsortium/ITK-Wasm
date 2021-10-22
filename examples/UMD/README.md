@@ -2,7 +2,7 @@ itk-umd-example
 ===================
 
 This example demonstrates how to use the
-[itk.js](https://insightsoftwareconsortium.github.io/itk-wasm/) UMD module from
+[itk-wasm](https://insightsoftwareconsortium.github.io/itk-wasm/) UMD module from
 a an HTML script tag for access to the image and mesh IO module that are
 distributed on the [unpkg](https://unpkg.com/) [content delivery
 network](https://en.wikipedia.org/wiki/Content_delivery_network).

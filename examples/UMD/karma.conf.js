@@ -18,7 +18,7 @@ module.exports = function init (config) {
     basePath: '',
     frameworks: ['tap'],
     files: [
-      'https://unpkg.com/itk@14.0.1/umd/itk.js',
+      'https://unpkg.com/itk@14.0.1/umd/itk-wasm',
       'https://unpkg.com/itk-vtk-viewer@9.23.2/dist/itkVtkViewerCDN.js',
       './dist/index.js',
       './test/index.js'

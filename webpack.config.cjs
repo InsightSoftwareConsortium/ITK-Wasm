@@ -16,7 +16,7 @@ module.exports = {
   entry,
   output: {
     path: outputPath,
-    filename: 'itk.js',
+    filename: 'itk-wasm',
     publicPath: cdnPath,
     libraryTarget: 'umd'
   },

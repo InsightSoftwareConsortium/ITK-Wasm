@@ -1,4 +1,4 @@
-- To release a new version of itk.js on npmjs:
+- To release a new version of itk-wasm on npmjs:
 
 Verify the source tree.
 
@@ -32,7 +32,7 @@ cp LICENSE README.md package.json dist/
 cd dist
 npm publish
 cd ..
-git tag -m "itk.js ${version}" -s v$version HEAD
+git tag -m "itk-wasm ${version}" -s itk-wasm-v$version HEAD
 git checkout release
 git merge master
 git push --tags upstream release master

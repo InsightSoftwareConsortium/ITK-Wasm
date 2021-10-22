@@ -1,4 +1,4 @@
-// itk.js Node API interfaces, data structures, and functions
+// itk-wasm Node API interfaces, data structures, and functions
 
 export * from '../core/index.js'
 

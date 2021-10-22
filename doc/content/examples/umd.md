@@ -1,4 +1,4 @@
-title: Use the itk.js UMD module from a HTML script tag
+title: Use the itk-wasm UMD module from a HTML script tag
 ---
 
 <div class="glitch-embed-wrap" style="height: 420px; width: 100%; padding-bottom: 25px;">
@@ -12,18 +12,18 @@ title: Use the itk.js UMD module from a HTML script tag
 
 ---
 
-This example demonstrates how to use *itk.js* in a web browser application via its pre-built [UMD](https://github.com/umdjs/umd) module. This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk.js IO modules published on [unpkg.com](https://unpkg.com). Find the full example in the `itk-wasm/examples/UMD` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/UMD).
+This example demonstrates how to use *itk-wasm* in a web browser application via its pre-built [UMD](https://github.com/umdjs/umd) module. This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk-wasm IO modules published on [unpkg.com](https://unpkg.com). Find the full example in the `itk-wasm/examples/UMD` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/UMD).
 
-Inside the HTML `head`, load the itk.js UMD script:
+Inside the HTML `head`, load the itk-wasm UMD script:
 
 ```html
   <head>
     [...]
-    <script src="https://unpkg.com/itk@14.0.1/umd/itk.js"></script>
+    <script src="https://unpkg.com/itk@14.0.1/umd/itk-wasm"></script>
   </head>
 ```
 
-Inside body JavaScript code, the `itk` object provides [itk.js API functions and objects](https://insightsoftwareconsortium.github.io/itk-wasm/api/) as properties.
+Inside body JavaScript code, the `itk` object provides [itk-wasm API functions and objects](https://insightsoftwareconsortium.github.io/itk-wasm/api/) as properties.
 
 ```
   [...]

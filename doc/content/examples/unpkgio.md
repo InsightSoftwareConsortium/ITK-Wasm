@@ -1,7 +1,7 @@
-title: Using itk.js with modules stored on a CDN
+title: Using itk-wasm with modules stored on a CDN
 ---
 
-This example demonstrates how to use *itk.js* in a web browser application built with [Webpack](https://webpack.js.org/) where the itk.js modules are stored on a [Content Delivery Network (CDN)](https://en.wikipedia.org/wiki/Content_delivery_network). This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk.js IO modules published on [unpkg.com](https://unpkg.com). Find the full example in the `itk-wasm/examples/UnkpkgIO` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Unpkg).
+This example demonstrates how to use *itk-wasm* in a web browser application built with [Webpack](https://webpack.js.org/) where the itk-wasm modules are stored on a [Content Delivery Network (CDN)](https://en.wikipedia.org/wiki/Content_delivery_network). This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk-wasm IO modules published on [unpkg.com](https://unpkg.com). Find the full example in the `itk-wasm/examples/UnkpkgIO` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Unpkg).
 
 This example assumes you are creating a [Node.js package](https://docs.npmjs.com/getting-started/what-is-npm). If you do not already have a `package.json` file, [create one](https://docs.npmjs.com/getting-started/using-a-package.json), first.
 
@@ -84,7 +84,7 @@ The [babel-loader](https://github.com/babel/babel-loader) rule will [transpile](
 }
 ```
 
-The *itk.js* Emscripten modules are loaded and executed **asynchronously** and **on demand**. This means the client only download the content it needs and the user does not experience interruption of the main user interface thread during computation. However, a few extra configuration steps are required since the modules are not bundled by Webpack.
+The *itk-wasm* Emscripten modules are loaded and executed **asynchronously** and **on demand**. This means the client only download the content it needs and the user does not experience interruption of the main user interface thread during computation. However, a few extra configuration steps are required since the modules are not bundled by Webpack.
 
 The Webpack [publicPath](https://webpack.js.org/guides/public-path/) setting specifies the location of static assets used by the application, and it defines `__webpack_public_path__`. We use `__webpack_public_path__` in `src/itkConfigCDN.js`:
 
@@ -141,7 +141,7 @@ First, install Karma and a test harness library like [tape](https://github.com/s
 npm install --save-dev karma karma-chrome-launcher karma-tap karma-tap-pretty-reporter karma-webpack tape tap-spec
 ```
 
-Next write a `karma.config.js` file. The *itk.js* specific sections of this
+Next write a `karma.config.js` file. The *itk-wasm* specific sections of this
 file are:
 
 ```js

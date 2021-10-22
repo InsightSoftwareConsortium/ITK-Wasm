@@ -1,7 +1,7 @@
 title: API
 ---
 
-This documentation provides more detailed information about the *itk.js* API.
+This documentation provides more detailed information about the *itk-wasm* API.
 
 The **Input/Output** section describes functions who facilitate reading and
 writing data from the local filesystem, when executed in the Node.js runtime,

@@ -1,4 +1,4 @@
-title: Hacking itk.js
+title: Hacking itk-wasm
 ---
 
 ### Build dependencies
@@ -13,7 +13,7 @@ title: Hacking itk.js
 
 ### Building
 
-To build itk.js itself:
+To build itk-wasm itself:
 ```bash
 npm install
 npm run build

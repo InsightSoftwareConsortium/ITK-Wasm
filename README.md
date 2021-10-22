@@ -1,11 +1,11 @@
-itk.js
+itk-wasm
 ======
 
 [![Build, test](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/build-test.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/build-test.yml)
 [![CircleCI](https://img.shields.io/circleci/project/github/InsightSoftwareConsortium/itk-wasm/master.svg)](https://circleci.com/gh/InsightSoftwareConsortium/itk-wasm)
 [![DOI](https://zenodo.org/badge/45812381.svg)](https://zenodo.org/badge/latestdoi/45812381)
 
-*itk.js* combines [Emscripten](http://emscripten.org/) and
+*itk-wasm* combines [Emscripten](http://emscripten.org/) and
 [ITK](https://www.itk.org/) to enable high-performance spatial analysis in a
 JavaScript runtime environment.
 
@@ -14,7 +14,7 @@ The project provides tools to a) build C/C++ code to JavaScript
 bridge local filesystems, native JavaScript data structures, and traditional
 file formats, c) transfer data efficiently in and out of the Emscripten
 runtime, and d) asynchronously execute processing pipelines in a background
-thread. *itk.js* can be used to execute [ITK](https://www.itk.org/),
+thread. *itk-wasm* can be used to execute [ITK](https://www.itk.org/),
 [VTK](https://www.vtk.org/) or arbitrary C++ codes in the browser or on a
 workstation / server with Node.js.
 

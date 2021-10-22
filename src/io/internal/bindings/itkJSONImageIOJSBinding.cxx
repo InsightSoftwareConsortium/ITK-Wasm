@@ -25,7 +25,7 @@
 
 typedef itk::ImageIOBaseJSBinding< itk::JSONImageIO > JSONImageIOJSBindingType;
 
-EMSCRIPTEN_BINDINGS(itk_json_image_io_js_binding) {
+EMSCRIPTEN_BINDINGS(itk_wasm_json_image_io_js_binding) {
   emscripten::register_vector<double>("AxisDirectionType");
   emscripten::enum_<JSONImageIOJSBindingType::IOPixelType>("IOPixelType")
     .value("UNKNOWNPIXELTYPE", itk::CommonEnums::IOPixel::UNKNOWNPIXELTYPE)
