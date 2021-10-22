@@ -13,7 +13,6 @@ jobs:
       run: |
         # Workaround for https://github.com/actions/virtual-environments/issues/709
         df -h
-        sudo apt-get remove -y '^ghc-8.*'
         sudo apt-get remove -y '^dotnet-.*'
         sudo apt-get remove -y '^llvm-.*'
         sudo apt-get remove -y 'php.*'
@@ -45,16 +44,24 @@ jobs:
 
     - name: Build itk-js-base
       run: |
-        ./src/Docker/itk-js-base/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        ./src/docker/itk-js-base/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+
+    - name: Build itk-js-base WASI
+      run: |
+        ./src/docker/itk-js-base/build.sh --with-wasi --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
 
     - name: Build itk-js
       run: |
-        ./src/Docker/itk-js/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
-        sudo rm -rf ./src/Docker/itk-js/ITKBridgeJavaScriptModuleCopy
+        ./src/docker/itk-js/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+
+    - name: Build itk-js WASI
+      run: |
+        ./src/docker/itk-js/build.sh --with-wasi --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+
 
     - name: Build itk-js-vtk
       run: |
-        ./src/Docker/itk-js-vtk/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        ./src/docker/itk-js-vtk/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
 
     - uses: actions/setup-node@v2
       with:

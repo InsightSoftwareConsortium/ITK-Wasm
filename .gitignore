@@ -28,6 +28,7 @@ examples/UMD/package-lock.json
 test/MedianFilterPipeline/itk-js
 test/pipelines/MedianFilterPipeline/web-build
 test/pipelines/MedianFilterPipeline/wasi-build
+src/docker/itk-js/MedianFilterPipelineCopy/
 
 src/docker/itk-js/ITKBridgeJavaScriptModuleCopy/
 test/StdoutStderrPipeline/itk-js

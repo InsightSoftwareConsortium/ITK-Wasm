@@ -37,11 +37,8 @@ COPY web-build /usr/local/bin/
 
 # Trigger Emscripten to cache builds of required system libraries
 ADD MedianFilterPipelineCopy /MedianFilterPipelineCopy
-WORKDIR /MedianFilterPipelineCopy
-RUN if [ $BASE_IMAGE = "insighttoolkit/itk-js-base" ]; then /usr/local/bin/web-build -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DCMAKE_EXE_LINKER_FLAGS='-fltothin -s DISABLE_EXCEPTION_CATCHING=0' && \
-   rm -rf ./web-build && /usr/local/bin/web-build -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DCMAKE_EXE_LINKER_FLAGS='-flto -s DISABLE_EXCEPTION_CATCHING=1' && \
- rm -rf /MedianFilterPipelineCopy && \
- chmod -R 777 /emsdk/upstream/emscripten/cache; fi
+ADD populate-cache.sh /usr/local/bin/populate-cache.sh
+RUN /usr/local/bin/populate-cache.sh && rm /usr/local/bin/populate-cache.sh
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
