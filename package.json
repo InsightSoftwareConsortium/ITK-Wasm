@@ -97,7 +97,7 @@
     "webworker-promise": "^0.4.2"
   },
   "bin": {
-    "itk-wasm": "./itk-wasm-cli.js"
+    "itk-wasm": "./src/itk-wasm-cli.js"
   },
   "sideEffects": false,
   "ts-standard": {
