@@ -133,7 +133,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
     pipelineModule.callMain(args)
   } catch (exception) {
     // Note: Module must be built with CMAKE_BUILD_TYPE set to Debug.
-    // e.g.: itk-js build my/project -- -DCMAKE_BUILD_TYPE:STRING=Debug
+    // e.g.: itk-wasm build my/project -- -DCMAKE_BUILD_TYPE:STRING=Debug
     if (typeof exception === 'number') {
       console.log('Exception while running pipeline:')
       console.log('stdout:', pipelineModule.getModuleStdout())

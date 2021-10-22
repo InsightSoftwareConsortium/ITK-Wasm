@@ -1,6 +1,6 @@
 
 
-NAME = itk-js
+NAME = itk-wasm
 
 BIBTEXDATABSENAME = InsightJournal
 

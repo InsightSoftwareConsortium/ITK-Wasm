@@ -11,4 +11,4 @@ npm install itk
 
 ## Usage
 
-For more information, see the [itk.js documentation](https://insightsoftwareconsortium.github.io/itk-js/).
+For more information, see the [itk.js documentation](https://insightsoftwareconsortium.github.io/itk-wasm/).

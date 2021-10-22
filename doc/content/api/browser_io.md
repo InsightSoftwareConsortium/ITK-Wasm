@@ -11,12 +11,12 @@ These functions return the [WebWorker](https://developer.mozilla.org/en-US/docs/
 
 ---
 
-## readFile(webWorker, file) -> { webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-js/docs/polydata_formats.html) }
+## readFile(webWorker, file) -> { webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-wasm/docs/polydata_formats.html) }
 
 Read an image or mesh or poly data from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
 
-## readBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-js/docs/polydata_formats.html) }
+## readBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-wasm/docs/polydata_formats.html) }
 
 Read an image or mesh or poly data from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
@@ -49,7 +49,7 @@ Read an image from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web
 
 ## readImageHTTP(url) -> [image](./Image.html)
 
-Read a server-side generated image created with [`itk::JSONImageIO`](https://github.com/InsightSoftwareConsortium/itk-js/blob/master/include/itkJSONImageIO.h). The primary `*.json` file should be served at the given `url` and the pixel buffer file served at `url + ".data"`
+Read a server-side generated image created with [`itk::JSONImageIO`](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/include/itkJSONImageIO.h). The primary `*.json` file should be served at the given `url` and the pixel buffer file served at `url + ".data"`
 
 ## readImageFileSeries(fileList, zSpacing=1.0, zOrigin=0.0, sortedSeries=false) -> { [image](./Image.html), webWorkerPool }
 

@@ -12,7 +12,7 @@ interface PipelineEmscriptenModule extends EmscriptenModule {
 
   // Note: Only available if the module was built with CMAKE_BUILD_TYPE set to
   // Debug. For example:
-  //  itk-js-cli build my/project -- -DCMAKE_BUILD_TYPE:STRING=Debug
+  //  itk-wasm-cli build my/project -- -DCMAKE_BUILD_TYPE:STRING=Debug
   getExceptionMessage: (num: number) => string
 
 }

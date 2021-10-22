@@ -25,13 +25,13 @@ examples/NodeHelloWorld/web-build
 examples/NodeHelloWorld/package-lock.json
 examples/UMD/package-lock.json
 
-test/MedianFilterPipeline/itk-js
+test/MedianFilterPipeline/itk-wasm
 test/pipelines/MedianFilterPipeline/web-build
 test/pipelines/MedianFilterPipeline/wasi-build
-src/docker/itk-js/MedianFilterPipelineCopy/
+src/docker/itk-wasm/MedianFilterPipelineCopy/
 
-src/docker/itk-js/ITKBridgeJavaScriptModuleCopy/
-test/StdoutStderrPipeline/itk-js
+src/docker/itk-wasm/ITKBridgeJavaScriptModuleCopy/
+test/StdoutStderrPipeline/itk-wasm
 test/pipelines/StdoutStderrPipeline/web-build/
 test/pipelines/InputOutputFilesPipeline/web-build/
 test/pipelines/MeshReadWritePipeline/web-build/

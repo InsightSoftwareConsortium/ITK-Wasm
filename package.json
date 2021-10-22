@@ -1,5 +1,5 @@
 {
-  "name": "itk",
+  "name": "itk-wasm",
   "version": "14.1.1",
   "description": "High performance spatial analysis in a JavaScript runtime environment.",
   "main": "./dist/index.js",
@@ -35,11 +35,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/InsightSoftwareConsortium/itk-js.git"
+    "url": "git+https://github.com/InsightSoftwareConsortium/itk-wasm.git"
   },
   "keywords": [
     "itk",
     "imaging",
+    "wasm",
+    "webassembly",
+    "wasi",
     "io",
     "medical",
     "scientific"
@@ -47,9 +50,9 @@
   "author": "Insight Software Consortium",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/InsightSoftwareConsortium/itk-js/issues"
+    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
   },
-  "homepage": "https://insightsoftwareconsortium.github.io/itk-js/",
+  "homepage": "https://insightsoftwareconsortium.github.io/itk-wasm/",
   "devDependencies": {
     "@babel/core": "^7.13.1",
     "@babel/plugin-transform-modules-commonjs": "^7.13.0",
@@ -94,7 +97,7 @@
     "webworker-promise": "^0.4.2"
   },
   "bin": {
-    "itk-js": "./itk-js-cli.js"
+    "itk-wasm": "./itk-wasm-cli.js"
   },
   "sideEffects": false,
   "ts-standard": {

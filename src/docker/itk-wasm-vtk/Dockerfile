@@ -1,7 +1,7 @@
 ARG BASE_TAG=latest
 ARG CMAKE_BUILD_TYPE=Release
 
-FROM insighttoolkit/itk-js:$BASE_TAG
+FROM insighttoolkit/itk-wasm:$BASE_TAG
 MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /
@@ -89,7 +89,7 @@ ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=kitware/itk-js-vtk
+ARG IMAGE=kitware/itk-wasm-vtk
 ARG VERSION=latest
 ARG VCS_REF
 ARG VCS_URL

@@ -45,13 +45,13 @@ const build = (sourceDir, options) => {
     process.exit(dockerVersion.status)
   }
 
-  let dockerImage = 'insighttoolkit/itk-js:latest'
+  let dockerImage = 'insighttoolkit/itk-wasm:latest'
   if (options.image) {
     dockerImage = options.image
   }
 
   // Ensure we have the 'dockcross' Docker build environment driver script
-  const dockcrossScript = `${buildDir}/itk-js-build-env`
+  const dockcrossScript = `${buildDir}/itk-wasm-build-env`
   try {
     fs.statSync(dockcrossScript)
   } catch (err) {
@@ -79,7 +79,7 @@ const build = (sourceDir, options) => {
   }
   if(process.platform === "win32"){
     var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
-      ["--login", "-i", "-c", `"${buildDir}/itk-js-build-env ${buildDir} ` + cmakeArgs + '"'], {
+      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env ${buildDir} ` + cmakeArgs + '"'], {
       env: process.env,
       stdio: 'inherit',
       shell: true
@@ -109,15 +109,15 @@ const test = (sourceDir) => {
   }
   process.chdir(sourceDir)
 
-  const dockcrossScript = path.join('web-build/itk-js-build-env')
+  const dockcrossScript = path.join('web-build/itk-wasm-build-env')
   try {
     fs.statSync(dockcrossScript)
   } catch (err) {
-    console.error('Could not find ' + sourceDir + '/web-build/itk-js-build-env')
+    console.error('Could not find ' + sourceDir + '/web-build/itk-wasm-build-env')
     console.error('')
     console.error('Has')
     console.error('')
-    console.error('  itk-js build ' + sourceDir)
+    console.error('  itk-wasm build ' + sourceDir)
     console.error('')
     console.error('been executed?')
     process.exit(1)
@@ -130,7 +130,7 @@ const test = (sourceDir) => {
   }
   if(process.platform === "win32"){
     var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
-      ["--login", "-i", "-c", '"web-build/itk-js-build-env bash -c cd web-build && ctest ' + cmakeArgs + '"'], {
+      ["--login", "-i", "-c", '"web-build/itk-wasm-build-env bash -c cd web-build && ctest ' + cmakeArgs + '"'], {
       env: process.env,
       stdio: 'inherit',
       shell: true
@@ -165,7 +165,7 @@ program
   .usage('[options] <sourceDir> [-- <cmake arguments>]')
   .description('build the CMake project found in the given source directory')
   .action(build)
-  .option('-i, --image <image>', 'build environment Docker image, defaults to insighttoolkit/itk-js')
+  .option('-i, --image <image>', 'build environment Docker image, defaults to insighttoolkit/itk-wasm')
   .option('-b, --build-dir <build-directory>', 'relative path to build directory, defaults to web-build')
 
 program

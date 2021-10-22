@@ -2,6 +2,6 @@
 
 script_dir="`cd $(dirname $0); pwd`"
 
-$script_dir/itk-js-base/build.sh --with-debug --with-wasi $@
-$script_dir/itk-js/build.sh --with-debug --with-wasi $@
-$script_dir/itk-js-vtk/build.sh --with-debug $@
+$script_dir/itk-wasm-base/build.sh --with-debug --with-wasi $@
+$script_dir/itk-wasm/build.sh --with-debug --with-wasi $@
+$script_dir/itk-wasm-vtk/build.sh --with-debug $@

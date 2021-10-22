@@ -44,14 +44,14 @@ project(HelloWorld)
 add_executable(hello hello.cxx)
 ```
 
-We use the `add_executable` command to build executables with itk.js. The [Emscripten](https://kripken.github.io/emscripten-site/) toolchain along with itk.js build and execution configurations are contained in the itk.js [dockcross](https://github.com/dockcross/dockcross) Docker image used by the itk-js command line interface (CLI).
+We use the `add_executable` command to build executables with itk.js. The [Emscripten](https://kripken.github.io/emscripten-site/) toolchain along with itk.js build and execution configurations are contained in the itk.js [dockcross](https://github.com/dockcross/dockcross) Docker image used by the itk-wasm command line interface (CLI).
 
 Note that the same code can also be built and tested with native operating system build tools. This is useful for development and debugging.
 
-Next, build the program with the itk.js CLI, `itk-js`. This is shipped with the `itk` package, and the CLI can be executed from the local *node_modules* folder with [`npx`](https://www.npmjs.com/package/npx). The `itk-js` CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory root into `itk-js build` to perform the build.
+Next, build the program with the itk.js CLI, `itk-wasm`. This is shipped with the `itk` package, and the CLI can be executed from the local *node_modules* folder with [`npx`](https://www.npmjs.com/package/npx). The `itk-wasm` CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory root into `itk-wasm build` to perform the build.
 
 ```
-npx itk-js build .
+npx itk-wasm build .
 ```
 
 The project is built in `./web-build`.

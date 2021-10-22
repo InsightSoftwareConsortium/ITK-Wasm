@@ -3,7 +3,7 @@ FROM $BASE_IMAGE:20211015-2b6cd4a
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
-LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/itk-js"
+LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/itk-wasm"
 
 WORKDIR /
 
@@ -127,7 +127,7 @@ RUN mkdir -p $IPFS_PATH && \
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=insighttoolkit/itk-js-base
+ARG IMAGE=insighttoolkit/itk-wasm-base
 ARG VERSION=latest
 ARG VCS_REF
 ARG VCS_URL

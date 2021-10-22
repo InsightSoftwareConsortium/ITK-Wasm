@@ -1,8 +1,8 @@
 itk.js
 ======
 
-[![Build, test](https://github.com/InsightSoftwareConsortium/itk-js/actions/workflows/build-test.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/itk-js/actions/workflows/build-test.yml)
-[![CircleCI](https://img.shields.io/circleci/project/github/InsightSoftwareConsortium/itk-js/master.svg)](https://circleci.com/gh/InsightSoftwareConsortium/itk-js)
+[![Build, test](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/build-test.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/build-test.yml)
+[![CircleCI](https://img.shields.io/circleci/project/github/InsightSoftwareConsortium/itk-wasm/master.svg)](https://circleci.com/gh/InsightSoftwareConsortium/itk-wasm)
 [![DOI](https://zenodo.org/badge/45812381.svg)](https://zenodo.org/badge/latestdoi/45812381)
 
 *itk.js* combines [Emscripten](http://emscripten.org/) and
@@ -19,4 +19,4 @@ thread. *itk.js* can be used to execute [ITK](https://www.itk.org/),
 workstation / server with Node.js.
 
 For more information, please see [the project
-documentation](https://insightsoftwareconsortium.github.io/itk-js/).
+documentation](https://insightsoftwareconsortium.github.io/itk-wasm/).

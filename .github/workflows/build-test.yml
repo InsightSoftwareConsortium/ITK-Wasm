@@ -42,26 +42,26 @@ jobs:
       with:
         install: true
 
-    - name: Build itk-js-base
+    - name: Build itk-wasm-base
       run: |
-        ./src/docker/itk-js-base/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        ./src/docker/itk-wasm-base/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
 
-    - name: Build itk-js-base WASI
+    - name: Build itk-wasm-base WASI
       run: |
-        ./src/docker/itk-js-base/build.sh --with-wasi --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        ./src/docker/itk-wasm-base/build.sh --with-wasi --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
 
-    - name: Build itk-js
+    - name: Build itk-wasm
       run: |
-        ./src/docker/itk-js/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        ./src/docker/itk-wasm/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
 
-    - name: Build itk-js WASI
+    - name: Build itk-wasm WASI
       run: |
-        ./src/docker/itk-js/build.sh --with-wasi --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        ./src/docker/itk-wasm/build.sh --with-wasi --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
 
 
-    - name: Build itk-js-vtk
+    - name: Build itk-wasm-vtk
       run: |
-        ./src/docker/itk-js-vtk/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        ./src/docker/itk-wasm-vtk/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
 
     - uses: actions/setup-node@v2
       with:
@@ -93,10 +93,10 @@ jobs:
     - name: Test building a pipeline
       run: |
         cd test/MedianFilterPipeline
-        docker run --rm insighttoolkit/itk-js:${{ env.DOCKER_TAG }} > ./itk-js
-        chmod +x ./itk-js
+        docker run --rm insighttoolkit/itk-wasm:${{ env.DOCKER_TAG }} > ./itk-wasm
+        chmod +x ./itk-wasm
         rm -rf web-build
-        ./itk-js web-build
+        ./itk-wasm web-build
         cd -
 
     - name: Setup ipfs
@@ -109,13 +109,13 @@ jobs:
       env:
         PINATA_JWT: ${{ secrets.PINATA_JWT }}
       run: |
-        mkdir itk-js-testing-data
-        rsync -v -r --exclude=Objects --exclude='*-hash-stamp' ./build/ExternalData/ ./itk-js-testing-data/
-        new_cid=$(ipfs add -r -Q --cid-version 1 --raw-leaves itk-js-testing-data)
+        mkdir itk-wasm-testing-data
+        rsync -v -r --exclude=Objects --exclude='*-hash-stamp' ./build/ExternalData/ ./itk-wasm-testing-data/
+        new_cid=$(ipfs add -r -Q --cid-version 1 --raw-leaves itk-wasm-testing-data)
 
         ipfs pin remote service add pinata https://api.pinata.cloud/psa "$PINATA_JWT"
-        if ! ipfs pin remote ls --service=pinata --name=itk-js-testing-data | grep $new_cid; then
-          ipfs pin remote add --service=pinata --name=itk-js-testing-data $new_cid
+        if ! ipfs pin remote ls --service=pinata --name=itk-wasm-testing-data | grep $new_cid; then
+          ipfs pin remote add --service=pinata --name=itk-wasm-testing-data $new_cid
         else
           echo "CID ${new_cid} already pinned on Pinata."
         fi
@@ -137,10 +137,10 @@ jobs:
     - name: Push insighttoolkit images to DockerHub
       if: github.ref == 'refs/heads/master'
       run: |
-        docker push insighttoolkit/itk-js-base:latest
-        docker push insighttoolkit/itk-js-base:${{ env.DOCKER_TAG }}
-        docker push insighttoolkit/itk-js:latest
-        docker push insighttoolkit/itk-js:${{ env.DOCKER_TAG }}
+        docker push insighttoolkit/itk-wasm-base:latest
+        docker push insighttoolkit/itk-wasm-base:${{ env.DOCKER_TAG }}
+        docker push insighttoolkit/itk-wasm:latest
+        docker push insighttoolkit/itk-wasm:${{ env.DOCKER_TAG }}
 
     - name: kitware DockerHub login
       if: github.ref == 'refs/heads/master'
@@ -152,5 +152,5 @@ jobs:
     - name: Push kitware images to DockerHub
       if: github.ref == 'refs/heads/master'
       run: |
-        docker push kitware/itk-js-vtk:latest
-        docker push kitware/itk-js-vtk:${{ env.DOCKER_TAG }}
+        docker push kitware/itk-wasm-vtk:latest
+        docker push kitware/itk-wasm-vtk:${{ env.DOCKER_TAG }}

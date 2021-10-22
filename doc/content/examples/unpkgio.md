@@ -1,7 +1,7 @@
 title: Using itk.js with modules stored on a CDN
 ---
 
-This example demonstrates how to use *itk.js* in a web browser application built with [Webpack](https://webpack.js.org/) where the itk.js modules are stored on a [Content Delivery Network (CDN)](https://en.wikipedia.org/wiki/Content_delivery_network). This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk.js IO modules published on [unpkg.com](https://unpkg.com). Find the full example in the `itk-js/examples/UnkpkgIO` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-js/tree/master/examples/Unpkg).
+This example demonstrates how to use *itk.js* in a web browser application built with [Webpack](https://webpack.js.org/) where the itk.js modules are stored on a [Content Delivery Network (CDN)](https://en.wikipedia.org/wiki/Content_delivery_network). This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk.js IO modules published on [unpkg.com](https://unpkg.com). Find the full example in the `itk-wasm/examples/UnkpkgIO` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Unpkg).
 
 This example assumes you are creating a [Node.js package](https://docs.npmjs.com/getting-started/what-is-npm). If you do not already have a `package.json` file, [create one](https://docs.npmjs.com/getting-started/using-a-package.json), first.
 

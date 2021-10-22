@@ -6,7 +6,7 @@ script_dir="`cd $(dirname $0); pwd`"
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 VCS_REF=$(git rev-parse --short HEAD)
-VCS_URL="https://github.com/InsightSoftwareConsortium/itk-js"
+VCS_URL="https://github.com/InsightSoftwareConsortium/itk-wasm"
 BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 debug=false
@@ -22,15 +22,15 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
-docker build -t insighttoolkit/itk-js-base:latest \
-        --build-arg IMAGE=insighttoolkit/itk-js-base \
+docker build -t insighttoolkit/itk-wasm-base:latest \
+        --build-arg IMAGE=insighttoolkit/itk-wasm-base \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VCS_REF=${VCS_REF} \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
-docker build -t insighttoolkit/itk-js-base:${TAG} \
-        --build-arg IMAGE=insighttoolkit/itk-js-base \
+docker build -t insighttoolkit/itk-wasm-base:${TAG} \
+        --build-arg IMAGE=insighttoolkit/itk-wasm-base \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VERSION=${TAG} \
         --build-arg VCS_REF=${VCS_REF} \
@@ -39,8 +39,8 @@ docker build -t insighttoolkit/itk-js-base:${TAG} \
         $script_dir $@
 
 if $wasi; then
-  docker build -t insighttoolkit/itk-js-wasi-base:latest \
-          --build-arg IMAGE=insighttoolkit/itk-js-wasi-base \
+  docker build -t insighttoolkit/itk-wasi-base:latest \
+          --build-arg IMAGE=insighttoolkit/itk-wasi-base \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
@@ -49,8 +49,8 @@ if $wasi; then
           --build-arg LDFLAGS="-lwasi-emulated-signal" \
           --build-arg CFLAGS="-D_WASI_EMULATED_SIGNAL" \
           $script_dir $@
-  docker build -t insighttoolkit/itk-js-wasi-base:${TAG} \
-          --build-arg IMAGE=insighttoolkit/itk-js-wasi-base \
+  docker build -t insighttoolkit/itk-wasi-base:${TAG} \
+          --build-arg IMAGE=insighttoolkit/itk-wasi-base \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg VERSION=${TAG} \
           --build-arg VCS_REF=${VCS_REF} \
@@ -64,16 +64,16 @@ fi
 
 
 if $debug; then
-  docker build -t insighttoolkit/itk-js-base:latest-debug \
-          --build-arg IMAGE=insighttoolkit/itk-js-base \
+  docker build -t insighttoolkit/itk-wasm-base:latest-debug \
+          --build-arg IMAGE=insighttoolkit/itk-wasm-base \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg USE_DCMTK=OFF \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
-  docker build -t insighttoolkit/itk-js-base:${TAG}-debug \
-          --build-arg IMAGE=insighttoolkit/itk-js-base \
+  docker build -t insighttoolkit/itk-wasm-base:${TAG}-debug \
+          --build-arg IMAGE=insighttoolkit/itk-wasm-base \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg USE_DCMTK=OFF \
           --build-arg VERSION=${TAG}-debug \
@@ -82,8 +82,8 @@ if $debug; then
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $wasi; then
-    docker build -t insighttoolkit/itk-js-wasi-base:latest-debug \
-            --build-arg IMAGE=insighttoolkit/itk-js-wasi-base \
+    docker build -t insighttoolkit/itk-wasi-base:latest-debug \
+            --build-arg IMAGE=insighttoolkit/itk-wasi-base \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg VCS_REF=${VCS_REF} \
             --build-arg VCS_URL=${VCS_URL} \
@@ -92,8 +92,8 @@ if $debug; then
             --build-arg LDFLAGS="-lwasi-emulated-signal" \
             --build-arg CFLAGS="-D_WASI_EMULATED_SIGNAL" \
             $script_dir $@
-    docker build -t insighttoolkit/itk-js-wasi-base:${TAG}-debug \
-            --build-arg IMAGE=insighttoolkit/itk-js-wasi-base \
+    docker build -t insighttoolkit/itk-wasi-base:${TAG}-debug \
+            --build-arg IMAGE=insighttoolkit/itk-wasi-base \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg VERSION=${TAG} \
             --build-arg VCS_REF=${VCS_REF} \
