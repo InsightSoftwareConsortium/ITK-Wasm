@@ -14,19 +14,27 @@
     "doc:www": "kw-doc -c ./doc/config.js -s",
     "doc:publish": "kw-doc -c ./doc/config.js -mp",
     "commit": "git cz",
-    "build": "npm run build:wasm && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:webpack",
+    "build": "npm run build:wasm && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack",
     "build:debug": "npm run build:wasm -- --debug && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:webpack -- --mode development",
     "build:tsc": "tsc --pretty",
     "build:tscWorkersModuleLoader": "tsc --lib webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleWebWorker.ts",
     "build:tscWebWorkers": "tsc --lib webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames  --typeRoots \"./node_modules/@types,./src/vendor-types\" --declaration ./src/web-workers/*",
-    "prepublishOnly": "npm run build && rm dist/pipeline/*Test*",
-    "build:webpack": "webpack --progress --mode production",
+    "build:imageIOWorker": "rollup -c rollup.worker.config.js ./dist/web-workers/image-io.worker.js",
+    "build:meshIOWorker": "rollup -c rollup.worker.config.js ./dist/web-workers/mesh-io.worker.js",
+    "build:pipelineWorker": "rollup -c rollup.worker.config.js ./dist/web-workers/pipeline.worker.js",
+    "build:workerBundles": "npm run build:imageIOWorker && npm run build:meshIOWorker && npm run build:pipelineWorker",
+    "build:imageIOWorkerMin": "rollup -c rollup.worker.min.config.js ./dist/web-workers/image-io.worker.js",
+    "build:meshIOWorkerMin": "rollup -c rollup.worker.min.config.js ./dist/web-workers/mesh-io.worker.js",
+    "build:pipelineWorkerMin": "rollup -c rollup.worker.min.config.js ./dist/web-workers/pipeline.worker.js",
+    "build:workerMinBundles": "npm run build:imageIOWorkerMin && npm run build:meshIOWorkerMin && npm run build:pipelineWorkerMin",
+    "build:webpack": "webpack --progress --color --mode production",
     "build:wasm": "node ./build.js",
     "test": "npm run test:lint && npm run test:node && npm run test:browser",
     "test:lint": "ts-standard --fix \"src/**/*.ts\" && standard --fix \"test/**/*.js\"",
     "test:node": "ava test/node/**/*.js",
     "test:browser": "karma start ./karma.conf.cjs",
-    "test:browserDebug": "karma start ./karma.conf.cjs --no-single-run"
+    "test:browserDebug": "karma start ./karma.conf.cjs --no-single-run",
+    "prepublishOnly": "npm run build && rm dist/pipeline/*Test*"
   },
   "config": {
     "commitizen": {
@@ -56,14 +64,18 @@
   "devDependencies": {
     "@babel/core": "^7.13.1",
     "@babel/plugin-transform-modules-commonjs": "^7.13.0",
-    "@babel/plugin-transform-runtime": "^7.13.6",
     "@babel/preset-env": "^7.13.5",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@types/estree": "0.0.50",
     "@types/mime-types": "^2.1.1",
     "assert": "^2.0.0",
     "async": "^3.2.1",
     "ava": "^3.15.0",
     "babel-loader": "^8.2.2",
     "commitizen": "^4.2.4",
+    "core-js": "^3.19.0",
     "cz-conventional-changelog": "2.1.0",
     "file-api": "^0.10.4",
     "glob": "^7.1.6",
@@ -78,6 +90,8 @@
     "process": "^0.11.10",
     "puppeteer": "^10.4.0",
     "readable-stream": "^3.6.0",
+    "rollup": "^2.58.0",
+    "rollup-plugin-terser": "^7.0.2",
     "standard": "^16.0.4",
     "stream-browserify": "^3.0.0",
     "tap-spec": "^5.0.0",
@@ -88,7 +102,6 @@
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.13.6",
     "axios": "^0.23.0",
     "commander": "^8.2.0",
     "fs-extra": "^10.0.0",
@@ -103,7 +116,8 @@
   "ts-standard": {
     "ignore": [
       "src/core/internal/loadEmscriptenModuleWebWorker.ts",
-      "src/web-workers/*.worker.ts"
+      "src/web-workers/*.worker.ts",
+      "src/web-workers/*operations.ts"
     ]
   },
   "standard": {

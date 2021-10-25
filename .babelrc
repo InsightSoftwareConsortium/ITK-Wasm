@@ -4,12 +4,8 @@
       targets: {
         browsers: ['last 2 versions'],
       },
-      useBuiltIns: false,
+      useBuiltIns: 'usage',
+      corejs: '3.19',
     }],
   ],
-  "plugins": [
-    ["@babel/plugin-transform-runtime", {
-      "regenerator": true
-    }]
-  ]
 }

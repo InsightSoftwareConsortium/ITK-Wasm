@@ -7,40 +7,47 @@ const entry = path.join(__dirname, 'src', 'index.js')
 const outputPath = path.join(__dirname, './dist')
 
 module.exports = {
-  node: {
-    fs: 'empty'
-  },
   entry,
   output: {
     path: outputPath,
-    filename: 'index.js'
+    workerChunkLoading: 'import-scripts',
+    filename: 'index.js',
+    library: {
+      type: 'module',
+    },
+  },
+  experiments: {
+    outputModule: true,
   },
   module: {
     rules: [
-      { test: entry, loader: 'expose-loader?index' },
       { test: /\.js$/, loader: 'babel-loader' }
     ]
   },
   plugins: [
-    new CopyPlugin([
-      {
-        from: path.join(__dirname, 'node_modules', 'itk', 'WebWorkers'),
-        to: path.join(__dirname, 'dist', 'itk', 'WebWorkers')
-      },
-      {
-        from: path.join(__dirname, 'node_modules', 'itk', 'ImageIOs'),
-        to: path.join(__dirname, 'dist', 'itk', 'ImageIOs')
-      },
-      {
-        from: path.join(__dirname, 'node_modules', 'itk', 'PolyDataIOs'),
-        to: path.join(__dirname, 'dist', 'itk', 'PolyDataIOs')
-      },
-      {
-        from: path.join(__dirname, 'node_modules', 'itk', 'MeshIOs'),
-        to: path.join(__dirname, 'dist', 'itk', 'MeshIOs')
-      }
-    ])
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.join(__dirname, 'node_modules', 'itk-wasm', 'dist', 'web-workers'),
+          to: path.join(__dirname, 'dist', 'itk', 'web-workers')
+        },
+        {
+          from: path.join(__dirname, 'node_modules', 'itk-wasm', 'dist', 'image-io'),
+          to: path.join(__dirname, 'dist', 'itk', 'image-io')
+        },
+        {
+          from: path.join(__dirname, 'node_modules', 'itk-wasm', 'dist', 'polydata-io'),
+          to: path.join(__dirname, 'dist', 'itk', 'polydata-io')
+        },
+        {
+          from: path.join(__dirname, 'node_modules', 'itk-wasm', 'dist', 'mesh-io'),
+          to: path.join(__dirname, 'dist', 'itk', 'mesh-io')
+        }
+    ]})
   ],
+  resolve: {
+    fallback: { fs: false, path: false, url: false, module: false },
+  },
   performance: {
     maxAssetSize: 10000000
   }
