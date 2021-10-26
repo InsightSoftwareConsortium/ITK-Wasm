@@ -4,7 +4,7 @@ project(MeshReadWriteTest)
 find_package(ITK REQUIRED
   COMPONENTS ITKMeshIO
     ITKIOMeshBase
-    BridgeJavaScript
+    WebAssemblyInterface
   )
 include(${ITK_USE_FILE})
 

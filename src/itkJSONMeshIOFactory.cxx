@@ -59,7 +59,7 @@ JSONMeshIOFactory
 
 static bool JSONMeshIOFactoryHasBeenRegistered;
 
-void BridgeJavaScript_EXPORT JSONMeshIOFactoryRegister__Private(void)
+void WebAssemblyInterface_EXPORT JSONMeshIOFactoryRegister__Private(void)
 {
   if( ! JSONMeshIOFactoryHasBeenRegistered )
     {

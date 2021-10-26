@@ -11,13 +11,13 @@ set(Iconv_DIR ${CMAKE_BINARY_DIR}/libiconv)
 set(Iconv_INCLUDE_DIRS ${Iconv_DIR}/include)
 file(MAKE_DIRECTORY ${Iconv_DIR} ${Iconv_INCLUDE_DIRS})
 
-set(BridgeJavaScript_SRCS
+set(WebAssemblyInterface_SRCS
   itkJSONImageIOFactory.cxx
   itkJSONImageIO.cxx
   itkJSONMeshIOFactory.cxx
   itkJSONMeshIO.cxx
   )
-itk_module_add_library(BridgeJavaScript ${BridgeJavaScript_SRCS})
+itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 
 if(BUILD_ITK_JS_IO_MODULES)
 
@@ -27,11 +27,11 @@ set(common_link_flags " -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s MODULA
 set(esm_link_flags " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0")
 
 set(ImageIOIndex_ARRAY "")
-foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
-  if(${io_module} STREQUAL "BridgeJavaScript")
+foreach(io_module ${WebAssemblyInterface_ImageIOModules} WebAssemblyInterface)
+  if(${io_module} STREQUAL "WebAssemblyInterface")
     find_package(ITK REQUIRED COMPONENTS ITKIOImageBase)
     include(${ITK_USE_FILE})
-    list(APPEND ITK_LIBRARIES ${BridgeJavaScript_LIBRARIES})
+    list(APPEND ITK_LIBRARIES ${WebAssemblyInterface_LIBRARIES})
   else()
     find_package(ITK REQUIRED COMPONENTS ${io_module})
     include(${ITK_USE_FILE})
@@ -77,7 +77,7 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
 
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/image-io
+      ${WebAssemblyInterface_BINARY_DIR}/image-io
       )
     set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
@@ -86,7 +86,7 @@ foreach(io_module ${BridgeJavaScript_ImageIOModules} BridgeJavaScript)
     _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
     set_property(TARGET ${target_umd}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/image-io
+      ${WebAssemblyInterface_BINARY_DIR}/image-io
       )
     _target_link_libraries(${target_umd} LINK_PUBLIC ${ITK_LIBRARIES})
   endforeach()
@@ -160,11 +160,11 @@ foreach(dicom_io_module
 
   set_property(TARGET ${target}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${BridgeJavaScript_BINARY_DIR}/image-io
+    ${WebAssemblyInterface_BINARY_DIR}/image-io
     )
   set_property(TARGET ${target_umd}
     PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${BridgeJavaScript_BINARY_DIR}/image-io
+    ${WebAssemblyInterface_BINARY_DIR}/image-io
     )
   set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
     PROPERTY OBJECT_DEPENDS
@@ -186,7 +186,7 @@ foreach(dicom_io_module
 endforeach()
 
 set(MeshIOIndex_ARRAY "")
-foreach(io_module ${BridgeJavaScript_MeshIOModules})
+foreach(io_module ${WebAssemblyInterface_MeshIOModules})
   find_package(ITK REQUIRED COMPONENTS ${io_module})
   include(${ITK_USE_FILE})
 
@@ -226,11 +226,11 @@ foreach(io_module ${BridgeJavaScript_MeshIOModules})
 
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/mesh-io
+      ${WebAssemblyInterface_BINARY_DIR}/mesh-io
       )
     set_property(TARGET ${target_umd}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/mesh-io
+      ${WebAssemblyInterface_BINARY_DIR}/mesh-io
       )
     set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS
@@ -267,11 +267,11 @@ if(VTK_FOUND)
 
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/polydata-io
+      ${WebAssemblyInterface_BINARY_DIR}/polydata-io
       )
     set_property(TARGET ${target_umd}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${BridgeJavaScript_BINARY_DIR}/polydata-io
+      ${WebAssemblyInterface_BINARY_DIR}/polydata-io
       )
     set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
       PROPERTY OBJECT_DEPENDS

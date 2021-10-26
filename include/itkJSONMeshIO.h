@@ -17,7 +17,7 @@
  *=========================================================================*/
 #ifndef itkJSONMeshIO_h
 #define itkJSONMeshIO_h
-#include "BridgeJavaScriptExport.h"
+#include "WebAssemblyInterfaceExport.h"
 
 
 #include "itkMeshIOBase.h"
@@ -36,9 +36,9 @@ namespace itk
  * The format is experimental and subject to change. We mean it.
  *
  * \ingroup IOFilters
- * \ingroup BridgeJavaScript
+ * \ingroup WebAssemblyInterface
  */
-class BridgeJavaScript_EXPORT JSONMeshIO: public MeshIOBase
+class WebAssemblyInterface_EXPORT JSONMeshIO: public MeshIOBase
 {
 public:
   /** Standard class typedefs. */

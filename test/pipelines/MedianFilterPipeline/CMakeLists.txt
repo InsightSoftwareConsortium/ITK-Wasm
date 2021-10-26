@@ -3,7 +3,7 @@ project(MedianFilterTest)
 
 set(io_components ITKImageIO)
 if(EMSCRIPTEN OR WASI)
-  set(io_components BridgeJavaScript)
+  set(io_components WebAssemblyInterface)
 endif()
 find_package(ITK REQUIRED
   COMPONENTS ${io_components}

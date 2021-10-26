@@ -8,30 +8,30 @@ ARG CMAKE_BUILD_TYPE=Release
 
 WORKDIR /
 
-ADD ITKBridgeJavaScriptModuleCopy /ITKBridgeJavaScript
+ADD ITKWebAssemblyInterfaceModuleCopy /ITKWebAssemblyInterface
 RUN cd / && \
-  mkdir ITKBridgeJavaScript-build && \
-  cd ITKBridgeJavaScript-build && \
+  mkdir ITKWebAssemblyInterface-build && \
+  cd ITKWebAssemblyInterface-build && \
   cmake \
     -G Ninja \
     -DITK_DIR=/ITK-build \
     -DRapidJSON_INCLUDE_DIR=/rapidjson/include \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
-      ../ITKBridgeJavaScript && \
+      ../ITKWebAssemblyInterface && \
   ninja -j7 && \
   find . -name '*.o' -delete && \
-  cd .. && chmod -R 777 ITKBridgeJavaScript-build && \
+  cd .. && chmod -R 777 ITKWebAssemblyInterface-build && \
   chmod -R 777 /ITK-build
 
-COPY ITKBridgeJavaScript.cmake /usr/src/
-RUN mv /usr/src/ITKBridgeJavaScript.cmake /usr/share/cmake-*/Modules/
+COPY ITKWebAssemblyInterface.cmake /usr/src/
+RUN mv /usr/src/ITKWebAssemblyInterface.cmake /usr/share/cmake-*/Modules/
 # For non-default toolchain file location
 ENV EMSCRIPTEN /emsdk/upstream/emscripten
 ENV CMAKE_TOOLCHAIN_FILE_DOCKCROSS ${CMAKE_TOOLCHAIN_FILE}
-ENV CMAKE_TOOLCHAIN_FILE_ITK /ITKBridgeJavaScript/toolchain.cmake
+ENV CMAKE_TOOLCHAIN_FILE_ITK /ITKWebAssemblyInterface/toolchain.cmake
 RUN cp ${CMAKE_TOOLCHAIN_FILE} ${CMAKE_TOOLCHAIN_FILE_ITK}
-RUN echo "include(ITKBridgeJavaScript)" >> ${CMAKE_TOOLCHAIN_FILE_ITK}
+RUN echo "include(ITKWebAssemblyInterface)" >> ${CMAKE_TOOLCHAIN_FILE_ITK}
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
 COPY web-build /usr/local/bin/
 

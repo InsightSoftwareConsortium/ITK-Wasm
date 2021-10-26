@@ -34,7 +34,7 @@ namespace itk
  * \brief Provides as JavaScript binding interface to itk::MeshIOBase derived
  * classes.
  *
- * \ingroup BridgeJavaScript
+ * \ingroup WebAssemblyInterface
  */
 template< typename TMeshIO >
 class MeshIOBaseJSBinding
