@@ -25,6 +25,15 @@ git commit -m "feat(version): Bump NPM version to ${version}"
 npm run build
 npm run test
 npm publish
+cd dist/image-io
+npm publish
+cd -
+cd dist/mesh-io
+npm publish
+cd -
+cd dist/polydata-io
+npm publish
+cd -
 git tag -m "itk-wasm ${version}" -s itk-wasm-v$version HEAD
 git checkout release
 git merge master
