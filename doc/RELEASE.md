@@ -10,6 +10,7 @@ npm ci
 version=6.0.0 # change to correct version
 
 # Update the default CLI image in src/itk-wasm-cli.js
+# Based on `git rev-parse --short HEAD`
 ./src/docker/build.sh
 # DockerHub credential environmental variables must be set
 ./src/docker/push.sh
