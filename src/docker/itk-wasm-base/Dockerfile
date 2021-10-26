@@ -62,22 +62,12 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 SlicerExecutionModel-build
 
-# After the WASI exception / setjmp support may work? setjmp is lost in final
-# linking otherwise.
-#ENV LDFLAGS="-flto -s ALLOW_MEMORY_GROWTH=1"
-#ENV CFLAGS="-Wno-warn-absolute-paths --memory-init-file 0 -flto"
-#ENV LDFLAGS="-flto=thin -s ALLOW_MEMORY_GROWTH=1"
-
 ARG LDFLAGS
 ARG CFLAGS
 ARG CXXFLAGS
-ENV LDFLAGS=${LDFLAGS:-"-s ALLOW_MEMORY_GROWTH=1"}
-ENV CFLAGS=${CFLAGS:-"-Wno-warn-absolute-paths --memory-init-file 0"}
+ENV LDFLAGS=${LDFLAGS:-"-flto -s ALLOW_MEMORY_GROWTH=1"}
+ENV CFLAGS=${CFLAGS:-"-flto -Wno-warn-absolute-paths --memory-init-file 0"}
 ENV CXXFLAGS=${CXXFLAGS:-"${CFLAGS}"}
-
-#ENV LDFLAGS="-lwasi-emulated-signal"
-#ENV CFLAGS="-D_WASI_EMULATED_SIGNAL"
-#ENV CXXFLAGS="${CFLAGS}"
 
 RUN mkdir ITK-build && \
   cd ITK-build && \
