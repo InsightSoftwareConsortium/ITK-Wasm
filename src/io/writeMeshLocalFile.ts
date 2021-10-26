@@ -11,7 +11,7 @@ import writeMeshEmscriptenFSFile from './internal/writeMeshEmscriptenFSFile.js'
 import WriteMeshOptions from './WriteMeshOptions.js'
 import Mesh from '../core/Mesh.js'
 import MeshIOBaseEmscriptenModule from './internal/MeshIOBaseEmscriptenModule.js'
-import localPathRelativeToModule from './localPathRelativeToModule.js'
+import findLocalMeshIOPath from './internal/findLocalMeshIOPath.js'
 
 /**
  * Write a mesh to a file on the local filesystem in Node.js.
@@ -25,7 +25,7 @@ import localPathRelativeToModule from './localPathRelativeToModule.js'
  * @return empty Promise
  */
 async function writeMeshLocalFile (options: WriteMeshOptions, mesh: Mesh, filePath: string): Promise<null> {
-  const meshIOsPath = localPathRelativeToModule(import.meta.url, '../mesh-io')
+  const meshIOsPath = findLocalMeshIOPath()
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)

@@ -1,12 +1,11 @@
-import fs from 'fs'
 import path from 'path'
 
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
 import readImageEmscriptenFSDICOMFileSeries from './internal/readImageEmscriptenFSDICOMFileSeries.js'
 import DICOMImageSeriesReaderEmscriptenModule from './internal/DICOMImageSeriesReaderEmscriptenModule.js'
+import findLocalImageIOPath from './internal/findLocalImageIOPath.js'
 
 import Image from '../core/Image.js'
-import localPathRelativeToModule from './localPathRelativeToModule.js'
 
 /**
  * Read an image from a series of DICOM files on the local filesystem in Node.js.
@@ -16,10 +15,7 @@ import localPathRelativeToModule from './localPathRelativeToModule.js'
  * sorted series.
  */
 async function readImageLocalDICOMFileSeries (fileNames: string[], singleSortedSeries: boolean = false): Promise<Image> {
-  const imageIOsPath = localPathRelativeToModule(import.meta.url, '../image-io')
-  if (!fs.existsSync(imageIOsPath)) {
-    throw Error("Cannot find path to itk image IO's")
-  }
+  const imageIOsPath = findLocalImageIOPath()
   const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
   const seriesReaderPath = path.join(imageIOsPath, seriesReader + '.js')
   const seriesReaderModule = await loadEmscriptenModule(seriesReaderPath) as DICOMImageSeriesReaderEmscriptenModule
