@@ -1,9 +1,16 @@
-var path = require('path')
-var webpack = require('webpack')
+const os = require('os')
+const path = require('path')
+const webpack = require('webpack')
 
-var sourcePath = path.resolve(__dirname, './dist')
+const sourcePath = path.resolve(__dirname, './dist')
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'test'
+
+
+// https://github.com/ryanclark/karma-webpack/issues/498
+const output = {
+  path: path.join(os.tmpdir(), '_karma_webpack_') + Math.floor(Math.random() * 1000000),
+}
 
 module.exports = function init (config) {
   config.set({
@@ -15,13 +22,13 @@ module.exports = function init (config) {
     ],
 
     basePath: '',
-    frameworks: ['tap'],
+    frameworks: ['tap', 'webpack'],
     files: [
       './test/index.js',
-      { pattern: './dist/itk/ImageIOs/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/MeshIOs/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/PolyDataIOs/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/WebWorkers/**', watched: true, served: true, included: false }
+      { pattern: './dist/itk/image-io/**', watched: true, served: true, included: false },
+      { pattern: './dist/itk/mesh-io/**', watched: true, served: true, included: false },
+      { pattern: './dist/itk/polydata-io/**', watched: true, served: true, included: false },
+      { pattern: './dist/itk/web-workers/**', watched: true, served: true, included: false }
     ],
 
     preprocessors: {
@@ -30,9 +37,6 @@ module.exports = function init (config) {
 
     webpack: {
       mode: 'development',
-      node: {
-        fs: 'empty'
-      },
       module: {
         rules: [].concat()
       },
@@ -42,14 +46,25 @@ module.exports = function init (config) {
           sourcePath
         ],
         alias: {
-          './itkConfig$': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js')
-        }
+          '../itkConfig.js': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js'),
+          '../../itkConfig.js': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js'),
+          stream: 'stream-browserify',
+        },
+        fallback: {
+          assert: false,
+          module: false,
+          url: false,
+          buffer: false,
+          path: require.resolve('path-browserify'),
+          fs: false,
+        },
       },
       plugins: [
         new webpack.DefinePlugin({
-          __BASE_PATH__: "'/base'"
-        })
-      ]
+          __BASE_PATH__: "'/base'",
+        }),
+        new webpack.ProvidePlugin({ process: ['process/browser'] }),
+      ],
     },
 
     webpackMiddleware: {
