@@ -53,15 +53,15 @@ test('Load an image file and display its contents', (t) => {
 })
 
 test('Load a mesh file and display its contents', (t) => {
-  const expectedOutput = `{
+   const expectedOutput = `{
     "meshType": {
         "dimension": 3,
         "pointComponentType": "float",
-        "pointPixelComponentType": null,
+        "pointPixelComponentType": "float",
         "pointPixelType": 1,
         "pointPixelComponents": 0,
         "cellComponentType": "uint32_t",
-        "cellPixelComponentType": null,
+        "cellPixelComponentType": "float",
         "cellPixelType": 1,
         "cellPixelComponents": 0
     },
@@ -74,10 +74,9 @@ test('Load a mesh file and display its contents', (t) => {
     "cells": "4,4,250,251,210,252...",
     "numberOfCellPixels": 0,
     "cellData": null,
-    "cellBufferSize": 18856,
-    "numberofPointPixels": 0,
-    "numberofCellPixels": 0
+    "cellBufferSize": 18856
 }`
+
   const meshURL = 'https://data.kitware.com/api/v1/file/5c72abb18d777f072b610e69/download'
   return axios.get(meshURL, { responseType: 'blob' })
     .then((response) => {
