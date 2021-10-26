@@ -7,7 +7,8 @@ script_dir="`cd $(dirname $0); pwd`"
 cd $script_dir
 
 mkdir -p ITKWebAssemblyInterfaceModuleCopy
-rsync -a --exclude=../../../src/docker ../../../{include,src/*.cxx,src/CMakeLists.txt,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
+rsync -a ../../../{include,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
+rsync -a ../../../{src/*.cxx,src/CMakeLists.txt} ./ITKWebAssemblyInterfaceModuleCopy/src/
 mkdir -p MedianFilterPipelineCopy
 rsync -a ../../../test/pipelines/MedianFilterPipeline/{CMakeLists.txt,MedianFilterTest.cxx} ./MedianFilterPipelineCopy
 
