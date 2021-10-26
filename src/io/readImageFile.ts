@@ -15,21 +15,17 @@ async function readImageFile (webWorker: Worker | null, file: File): Promise<Rea
   )
   worker = usedWorker
   const arrayBuffer = await readAsArrayBuffer(file)
-  try {
-    const image: Image = await webworkerPromise.postMessage(
-      {
-        operation: 'readImage',
-        name: file.name,
-        type: file.type,
-        data: arrayBuffer,
-        config: config
-      },
-      [arrayBuffer]
-    )
-    return { image, webWorker: worker }
-  } catch (error: any) {
-    throw Error(error.toString())
-  }
+  const image: Image = await webworkerPromise.postMessage(
+    {
+      operation: 'readImage',
+      name: file.name,
+      type: file.type,
+      data: arrayBuffer,
+      config: config
+    },
+    [arrayBuffer]
+  )
+  return { image, webWorker: worker }
 }
 
 export default readImageFile

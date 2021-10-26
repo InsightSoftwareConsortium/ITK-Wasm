@@ -7,15 +7,13 @@ const outputFileInformation = curry(function outputFileInformation (outputTextAr
   const dataTransfer = event.dataTransfer
   const files = event.target.files || dataTransfer.files
 
-  //const viewerElement = document.getElementById('viewer')
-  //!!viewerElement && itkVtkViewer.createViewerFromFiles(viewerElement, files)
-
+  const viewerElement = document.getElementById('viewer')
+  !!viewerElement && itkVtkViewer.createViewerFromFiles(viewerElement, files)
 
   return readFile(null, files[0])
     .then(function ({ image, mesh, polyData, webWorker }) {
       webWorker.terminate()
       const imageOrMeshOrPolyData = image || mesh || polyData
-      console.log('imageOrMeshOrPolyData', imageOrMeshOrPolyData)
 
       function replacer (key, value) {
         if (!!value && value.byteLength !== undefined) {

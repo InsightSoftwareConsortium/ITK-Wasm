@@ -10,14 +10,11 @@ module.exports = {
   entry,
   output: {
     path: outputPath,
-    workerChunkLoading: 'import-scripts',
     filename: 'index.js',
     library: {
-      type: 'module',
+      type: 'umd',
+      name: 'bundle',
     },
-  },
-  experiments: {
-    outputModule: true,
   },
   module: {
     rules: [

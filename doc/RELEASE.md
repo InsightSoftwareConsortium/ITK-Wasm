@@ -24,7 +24,6 @@ git add -- package.json package-lock.json
 git commit -m "feat(version): Bump NPM version to ${version}"
 npm run build
 npm run test
-rm dist/pipeline/*Test*
 npm publish
 git tag -m "itk-wasm ${version}" -s itk-wasm-v$version HEAD
 git checkout release

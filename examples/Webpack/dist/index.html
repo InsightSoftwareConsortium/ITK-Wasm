@@ -21,12 +21,11 @@
     <div id="viewer"></div>
 
     <!-- Javascript -->
-    <!--<script src="index.js"></script>-->
+    <script src="index.js"></script>
     <script>
-      import { outputFileInformation } from "./index.js"
-      var outputTextArea = document.querySelector('textarea')
-      var handleFile = outputFileInformation(outputTextArea)
-      var fileInput = document.querySelector('input')
+      const outputTextArea = document.querySelector('textarea')
+      const handleFile = bundle.outputFileInformation(outputTextArea)
+      const fileInput = document.querySelector('input')
       fileInput.addEventListener('change', handleFile);
     </script>
   </body>
