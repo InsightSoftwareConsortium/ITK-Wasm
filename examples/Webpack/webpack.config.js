@@ -29,15 +29,15 @@ module.exports = {
           to: path.join(__dirname, 'dist', 'itk', 'web-workers')
         },
         {
-          from: path.join(__dirname, 'node_modules', 'itk-wasm', 'dist', 'image-io'),
+          from: path.join(__dirname, 'node_modules', 'itk-image-io'),
           to: path.join(__dirname, 'dist', 'itk', 'image-io')
         },
         {
-          from: path.join(__dirname, 'node_modules', 'itk-wasm', 'dist', 'polydata-io'),
+          from: path.join(__dirname, 'node_modules', 'itk-polydata-io'),
           to: path.join(__dirname, 'dist', 'itk', 'polydata-io')
         },
         {
-          from: path.join(__dirname, 'node_modules', 'itk-wasm', 'dist', 'mesh-io'),
+          from: path.join(__dirname, 'node_modules', 'itk-mesh-io'),
           to: path.join(__dirname, 'dist', 'itk', 'mesh-io')
         }
     ]})
