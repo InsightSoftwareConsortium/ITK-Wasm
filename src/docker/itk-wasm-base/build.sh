@@ -22,6 +22,15 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
+wasi_ld_flags="-flto -lwasi-emulated-signal"
+wasi_c_flags="-flto -D_WASI_EMULATED_SIGNAL"
+
+emscripten_debug_ld_flags="-fno-lto -s ALLOW_MEMORY_GROWTH=1"
+emscripten_debug_c_flags="-fno-lto -Wno-warn-absolute-paths --memory-init-file 0"
+
+wasi_debug_ld_flags="-fno-lto -lwasi-emulated-signal"
+wasi_debug_c_flags="-fno-lto -D_WASI_EMULATED_SIGNAL"
+
 docker build -t insighttoolkit/itk-wasm-base:latest \
         --build-arg IMAGE=insighttoolkit/itk-wasm-base \
         --build-arg CMAKE_BUILD_TYPE=Release \
@@ -46,8 +55,8 @@ if $wasi; then
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
           --build-arg BASE_IMAGE=dockcross/web-wasi \
-          --build-arg LDFLAGS="-lwasi-emulated-signal" \
-          --build-arg CFLAGS="-D_WASI_EMULATED_SIGNAL" \
+          --build-arg LDFLAGS="${wasi_ld_flags}" \
+          --build-arg CFLAGS="${wasi_c_flags}" \
           $script_dir $@
   docker build -t insighttoolkit/itk-wasi-base:${TAG} \
           --build-arg IMAGE=insighttoolkit/itk-wasi-base \
@@ -57,8 +66,8 @@ if $wasi; then
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
           --build-arg BASE_IMAGE=dockcross/web-wasi \
-          --build-arg LDFLAGS="-lwasi-emulated-signal" \
-          --build-arg CFLAGS="-D_WASI_EMULATED_SIGNAL" \
+          --build-arg LDFLAGS="${wasi_ld_flags}" \
+          --build-arg CFLAGS="${wasi_c_flags}" \
           $script_dir $@
 fi
 
@@ -71,6 +80,8 @@ if $debug; then
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
+          --build-arg LDFLAGS="${emscripten_debug_ld_flags}" \
+          --build-arg CFLAGS="${emscripten_debug_c_flags}" \
           $script_dir $@
   docker build -t insighttoolkit/itk-wasm-base:${TAG}-debug \
           --build-arg IMAGE=insighttoolkit/itk-wasm-base \
@@ -80,6 +91,8 @@ if $debug; then
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
+          --build-arg LDFLAGS="${emscripten_debug_ld_flags}" \
+          --build-arg CFLAGS="${emscripten_debug_c_flags}" \
           $script_dir $@
   if $wasi; then
     docker build -t insighttoolkit/itk-wasi-base:latest-debug \
@@ -89,8 +102,8 @@ if $debug; then
             --build-arg VCS_URL=${VCS_URL} \
             --build-arg BUILD_DATE=${BUILD_DATE} \
             --build-arg BASE_IMAGE=dockcross/web-wasi \
-            --build-arg LDFLAGS="-lwasi-emulated-signal" \
-            --build-arg CFLAGS="-D_WASI_EMULATED_SIGNAL" \
+            --build-arg LDFLAGS="${wasi_debug_ld_flags}" \
+            --build-arg CFLAGS="${wasi_debug_c_flags}" \
             $script_dir $@
     docker build -t insighttoolkit/itk-wasi-base:${TAG}-debug \
             --build-arg IMAGE=insighttoolkit/itk-wasi-base \
@@ -100,8 +113,8 @@ if $debug; then
             --build-arg VCS_URL=${VCS_URL} \
             --build-arg BUILD_DATE=${BUILD_DATE} \
             --build-arg BASE_IMAGE=dockcross/web-wasi \
-            --build-arg LDFLAGS="-lwasi-emulated-signal" \
-            --build-arg CFLAGS="-D_WASI_EMULATED_SIGNAL" \
+            --build-arg LDFLAGS="${wasi_debug_ld_flags}" \
+            --build-arg CFLAGS="${wasi_debug_c_flags}" \
             $script_dir $@
   fi
 fi

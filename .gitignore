@@ -30,7 +30,7 @@ test/pipelines/MedianFilterPipeline/web-build
 test/pipelines/MedianFilterPipeline/wasi-build
 src/docker/itk-wasm/MedianFilterPipelineCopy/
 
-src/docker/itk-wasm/ITKBridgeJavaScriptModuleCopy/
+src/docker/itk-wasm/ITKWebAssemblyInterfaceModuleCopy/
 test/StdoutStderrPipeline/itk-wasm
 test/pipelines/StdoutStderrPipeline/web-build/
 test/pipelines/InputOutputFilesPipeline/web-build/

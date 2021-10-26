@@ -9,7 +9,7 @@ find_package(VTK REQUIRED
 
 set(io_components ITKMeshIO)
 if(EMSCRIPTEN)
-  set(io_components BridgeJavaScript)
+  set(io_components WebAssemblyInterface)
 endif()
 find_package(ITK REQUIRED
   COMPONENTS

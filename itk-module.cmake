@@ -4,14 +4,14 @@ library of Emscription modules that provides IO for different ITK-supported
 file formats.
 ")
 
-itk_module(BridgeJavaScript
+itk_module(WebAssemblyInterface
   DEPENDS
     ITKCommon
     ITKIOImageBase
   COMPILE_DEPENDS
     ITKImageFunction
-    ${BridgeJavaScript_ImageIOModules}
-    ${BridgeJavaScript_MeshIOModules}
+    ${WebAssemblyInterface_ImageIOModules}
+    ${WebAssemblyInterface_MeshIOModules}
   PRIVATE_DEPENDS
     # Todo  change to ITKIOMeshBase
     ITKIOMesh

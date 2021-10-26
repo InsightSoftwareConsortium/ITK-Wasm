@@ -17,7 +17,7 @@
  *=========================================================================*/
 #ifndef itkJSONImageIOFactory_h
 #define itkJSONImageIOFactory_h
-#include "BridgeJavaScriptExport.h"
+#include "WebAssemblyInterfaceExport.h"
 
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
@@ -28,9 +28,9 @@ namespace itk
  *
  * \brief Create instances of JSONImageIO objects using an object factory.
  *
- * \ingroup BridgeJavaScript
+ * \ingroup WebAssemblyInterface
  */
-class BridgeJavaScript_EXPORT JSONImageIOFactory: public ObjectFactoryBase
+class WebAssemblyInterface_EXPORT JSONImageIOFactory: public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

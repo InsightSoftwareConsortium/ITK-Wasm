@@ -6,8 +6,8 @@ script_dir="`cd $(dirname $0); pwd`"
 
 cd $script_dir
 
-mkdir -p ITKBridgeJavaScriptModuleCopy
-rsync -a --exclude=../../../src/docker ../../../{include,src,CMakeLists.txt,itk-module.cmake} ./ITKBridgeJavaScriptModuleCopy/
+mkdir -p ITKWebAssemblyInterfaceModuleCopy
+rsync -a --exclude=../../../src/docker ../../../{include,src,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
 mkdir -p MedianFilterPipelineCopy
 cp ../../../test/pipelines/MedianFilterPipeline/{CMakeLists.txt,MedianFilterTest.cxx} ./MedianFilterPipelineCopy
 
@@ -108,4 +108,4 @@ if $debug; then
 fi
 
 
-rm -rf ITKBridgeJavaScriptModuleCopy MedianFilterPipelineCopy
+rm -rf ITKWebAssemblyInterfaceModuleCopy MedianFilterPipelineCopy

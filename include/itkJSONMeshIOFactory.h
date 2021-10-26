@@ -17,7 +17,7 @@
  *=========================================================================*/
 #ifndef itkJSONMeshIOFactory_h
 #define itkJSONMeshIOFactory_h
-#include "BridgeJavaScriptExport.h"
+#include "WebAssemblyInterfaceExport.h"
 
 #include "itkObjectFactoryBase.h"
 #include "itkMeshIOBase.h"
@@ -28,9 +28,9 @@ namespace itk
  *
  * \brief Create instances of JSONMeshIO objects using an object factory.
  *
- * \ingroup BridgeJavaScript
+ * \ingroup WebAssemblyInterface
  */
-class BridgeJavaScript_EXPORT JSONMeshIOFactory: public ObjectFactoryBase
+class WebAssemblyInterface_EXPORT JSONMeshIOFactory: public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */

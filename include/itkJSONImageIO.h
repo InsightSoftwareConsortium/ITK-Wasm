@@ -17,7 +17,7 @@
  *=========================================================================*/
 #ifndef itkJSONImageIO_h
 #define itkJSONImageIO_h
-#include "BridgeJavaScriptExport.h"
+#include "WebAssemblyInterfaceExport.h"
 
 
 #include "itkStreamingImageIOBase.h"
@@ -36,9 +36,9 @@ namespace itk
  * The formt is experimental and subject to change. We mean it.
  *
  * \ingroup IOFilters
- * \ingroup BridgeJavaScript
+ * \ingroup WebAssemblyInterface
  */
-class BridgeJavaScript_EXPORT JSONImageIO: public StreamingImageIOBase
+class WebAssemblyInterface_EXPORT JSONImageIO: public StreamingImageIOBase
 {
 public:
   /** Standard class typedefs. */

@@ -59,7 +59,7 @@ JSONImageIOFactory
 
 static bool JSONImageIOFactoryHasBeenRegistered;
 
-void BridgeJavaScript_EXPORT JSONImageIOFactoryRegister__Private(void)
+void WebAssemblyInterface_EXPORT JSONImageIOFactoryRegister__Private(void)
 {
   if( ! JSONImageIOFactoryHasBeenRegistered )
     {

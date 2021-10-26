@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.16.3)
-project(BridgeJavaScript)
+project(WebAssemblyInterface)
 
-set(BridgeJavaScript_LIBRARIES BridgeJavaScript)
+set(WebAssemblyInterface_LIBRARIES WebAssemblyInterface)
 
 option(BUILD_ITK_JS_IO_MODULES "Build the itk-wasm ImageIO's and MeshIO's" OFF)
 if(BUILD_ITK_JS_IO_MODULES)
   # This list should be ordered from approximately most commonly to least
   # commonly used modules.
-  set(BridgeJavaScript_ImageIOModules
+  set(WebAssemblyInterface_ImageIOModules
     "ITKIOPNG"
     "ITKIOMeta"
     "ITKIOTIFF"
@@ -48,9 +48,9 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(imageios_ITKIOVTK itkVTKImageIO)
   set(imageios_IOScanco itkScancoImageIO)
   set(imageios_IOFDF itkFDFImageIO)
-  set(imageios_BridgeJavaScript itkJSONImageIO)
+  set(imageios_WebAssemblyInterface itkJSONImageIO)
 
-  set(BridgeJavaScript_MeshIOModules
+  set(WebAssemblyInterface_MeshIOModules
     "ITKIOMeshBYU"
     "ITKIOMeshFreeSurfer"
     "ITKIOMeshOBJ"
