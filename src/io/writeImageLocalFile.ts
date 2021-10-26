@@ -9,9 +9,9 @@ import ImageIOIndex from './internal/ImageIOIndex.js'
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
 import writeImageEmscriptenFSFile from './internal/writeImageEmscriptenFSFile.js'
 import ImageIOBaseEmscriptenModule from './internal/ImageIOBaseEmscriptenModule.js'
+import findLocalImageIOPath from './internal/findLocalImageIOPath.js'
 
 import Image from '../core/Image.js'
-import localPathRelativeToModule from './localPathRelativeToModule.js'
 
 /**
  * Write an image to a file on the local filesystem in Node.js.
@@ -23,7 +23,7 @@ import localPathRelativeToModule from './localPathRelativeToModule.js'
  * @return Promise<null>
  */
 async function writeImageLocalFile (useCompression: boolean, image: Image, filePath: string): Promise<null> {
-  const imageIOsPath = localPathRelativeToModule(import.meta.url, '../image-io')
+  const imageIOsPath = findLocalImageIOPath()
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)

@@ -6,7 +6,7 @@
 // - polydata-io/
 //
 const itkConfig = {
-  itkModulesPath: 'itk'
+  itkModulesPath: '/itk'
 }
 
 export default itkConfig

@@ -33,6 +33,7 @@
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-wasm#readme",
   "dependencies": {
     "commander": "^8.2.0",
-    "itk-wasm": "^1.0.0-a.1"
+    "itk-image-io": "^1.0.0-a.3",
+    "itk-wasm": "^1.0.0-a.3"
   }
 }

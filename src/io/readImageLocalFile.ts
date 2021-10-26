@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 import mime from 'mime-types'
 
@@ -12,7 +11,7 @@ import Image from '../core/Image.js'
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
 import readImageEmscriptenFSFile from './internal/readImageEmscriptenFSFile.js'
 import ImageIOBaseEmscriptenModule from './internal/ImageIOBaseEmscriptenModule.js'
-import localPathRelativeToModule from './localPathRelativeToModule.js'
+import findLocalImageIOPath from './internal/findLocalImageIOPath.js'
 
 /**
  * Read an image from a file on the local filesystem in Node.js.
@@ -20,10 +19,7 @@ import localPathRelativeToModule from './localPathRelativeToModule.js'
  * @param: filePath path to the file on the local filesystem.
  */
 async function readImageLocalFile (filePath: string): Promise<Image> {
-  const imageIOsPath = localPathRelativeToModule(import.meta.url, '../image-io')
-  if (!fs.existsSync(imageIOsPath)) {
-    throw Error("Cannot find path to itk image IO's")
-  }
+  const imageIOsPath = findLocalImageIOPath()
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)

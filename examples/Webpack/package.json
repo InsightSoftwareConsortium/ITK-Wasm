@@ -26,7 +26,10 @@
   "dependencies": {
     "curry": "^1.2.0",
     "expose-loader": "^0.7.5",
-    "itk-wasm": "^1.0.0-a.2"
+    "itk-image-io": "^1.0.0-a.3",
+    "itk-mesh-io": "^1.0.0-a.3",
+    "itk-polydata-io": "^1.0.0-a.3",
+    "itk-wasm": "^1.0.0-a.3"
   },
   "devDependencies": {
     "@babel/core": "^7.13.1",

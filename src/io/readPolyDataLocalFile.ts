@@ -1,6 +1,6 @@
+import fs from 'fs'
 import path from 'path'
 import mime from 'mime-types'
-import fs from 'fs'
 
 import mimeToIO from './internal/MimeToPolyDataIO.js'
 import getFileExtension from './getFileExtension.js'
@@ -11,13 +11,10 @@ import PolyData from '../core/vtkPolyData.js'
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
 import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
 import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
-import localPathRelativeToModule from './localPathRelativeToModule.js'
+import findLocalPolyDataIOPath from './internal/findLocalPolyDataIOPath.js'
 
 async function readPolyDataLocalFile (filePath: string): Promise<PolyData> {
-  const polyDataIOsPath = localPathRelativeToModule(import.meta.url, '../polydata-io')
-  if (!fs.existsSync(polyDataIOsPath)) {
-    throw Error("Cannot find path to itk polyData IO's")
-  }
+  const polyDataIOsPath = findLocalPolyDataIOPath()
   const absoluteFilePath = path.resolve(filePath)
   const filePathBasename = path.basename(filePath)
   const mimeType = mime.lookup(absoluteFilePath)

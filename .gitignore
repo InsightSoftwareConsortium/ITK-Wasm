@@ -24,6 +24,7 @@ examples/Node.js/package-lock.json
 examples/NodeHelloWorld/web-build
 examples/NodeHelloWorld/package-lock.json
 examples/UMD/package-lock.json
+examples/Webpack/package-lock.json
 
 test/MedianFilterPipeline/itk-wasm
 test/pipelines/MedianFilterPipeline/web-build
