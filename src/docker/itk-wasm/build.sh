@@ -7,9 +7,9 @@ script_dir="`cd $(dirname $0); pwd`"
 cd $script_dir
 
 mkdir -p ITKWebAssemblyInterfaceModuleCopy
-rsync -a --exclude=../../../src/docker ../../../{include,src,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
+rsync -a --exclude=../../../src/docker ../../../{include,src/*.cxx,src/CMakeLists.txt,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
 mkdir -p MedianFilterPipelineCopy
-cp ../../../test/pipelines/MedianFilterPipeline/{CMakeLists.txt,MedianFilterTest.cxx} ./MedianFilterPipelineCopy
+rsync -a ../../../test/pipelines/MedianFilterPipeline/{CMakeLists.txt,MedianFilterTest.cxx} ./MedianFilterPipelineCopy
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 VCS_REF=$(git rev-parse --short HEAD)
