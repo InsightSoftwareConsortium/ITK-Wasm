@@ -11,6 +11,8 @@ if (!process.env.CHROME_BIN) {
   process.env.CHROME_BIN = require('puppeteer').executablePath()
 }
 
+const testConfig = path.resolve(__dirname, 'test', 'browser', 'config', 'itkConfigBrowserTest.js')
+
 // https://github.com/ryanclark/karma-webpack/issues/498
 const output = {
   path: path.join(os.tmpdir(), '_karma_webpack_') + Math.floor(Math.random() * 1000000),
@@ -61,8 +63,8 @@ module.exports = function init (config) {
           fs: false,
         },
         alias: {
-          '../itkConfig.js': path.resolve(__dirname, 'test', 'browser', 'config', 'itkConfigBrowserTest.js'),
-          '../../itkConfig.js': path.resolve(__dirname, 'test', 'browser', 'config', 'itkConfigBrowserTest.js'),
+          '../itkConfig.js': testConfig,
+          '../../itkConfig.js': testConfig,
           stream: 'stream-browserify',
         }
       },

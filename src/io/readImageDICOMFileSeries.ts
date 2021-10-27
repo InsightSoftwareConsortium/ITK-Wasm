@@ -1,6 +1,3 @@
-/* eslint-disable-next-line no-unused-vars */
-// import regeneratorRuntime from 'regenerator-runtime'
-
 import { readAsArrayBuffer } from 'promise-file-reader'
 
 import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
