@@ -28,44 +28,57 @@ jobs:
         TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
         echo "DOCKER_TAG=${TAG}" >> $GITHUB_ENV
 
-    - name: Cache Docker layers
-      uses: actions/cache@v2
+    - uses: actions/download-artifact@v2
+      continue-on-error: true
       with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ env.DOCKER_TAG }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
-
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: docker/setup-buildx-action@v1
-      with:
-        install: true
+        name: docker-cache
+        path: ./docker-cache
 
     - name: Build itk-wasm-base
       run: |
-        ./src/docker/itk-wasm-base/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        if [[ -e ./docker-cache/itk-wasm-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-base.tar.xz | docker load ; fi
+        ./src/docker/itk-wasm-base/build.sh
+        mkdir -p ./docker-cache
+        docker save insighttoolkit/itk-wasm-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-base.tar.xz
 
-    - name: Build itk-wasm-base WASI
+    - name: Build itk-wasi-base
       run: |
-        ./src/docker/itk-wasm-base/build.sh --with-wasi --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        if [[ -e ./docker-cache/itk-wasi-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasi-base.tar.xz | docker load ; fi
+        ./src/docker/itk-wasm-base/build.sh --with-wasi
+        mkdir -p ./docker-cache
+        docker save insighttoolkit/itk-wasi-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasi-base.tar.xz
 
     - name: Build itk-wasm
       run: |
-        ./src/docker/itk-wasm/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        if [[ -e ./docker-cache/itk-wasm.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm.tar.xz | docker load ; fi
+        ./src/docker/itk-wasm/build.sh
+        mkdir -p ./docker-cache
+        docker save insighttoolkit/itk-wasm:latest | xz -e9 -T0 > ./docker-cache/itk-wasm.tar.xz
 
-    - name: Build itk-wasm WASI
+    - name: Build itk-wasi
       run: |
-        ./src/docker/itk-wasm/build.sh --with-wasi --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
-
+        if [[ -e ./docker-cache/itk-wasi.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasi.tar.xz | docker load ; fi
+        ./src/docker/itk-wasm/build.sh --with-wasi
+        mkdir -p ./docker-cache
+        docker save insighttoolkit/itk-wasi:latest | xz -e9 -T0 > ./docker-cache/itk-wasi.tar.xz
 
     - name: Build itk-wasm-vtk
       run: |
-        ./src/docker/itk-wasm-vtk/build.sh --load --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+        if [[ -e ./docker-cache/itk-wasm-vtk.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-vtk.tar.xz | docker load ; fi
+        ./src/docker/itk-wasm-vtk/build.sh
+        mkdir -p ./docker-cache
+        docker save insighttoolkit/itk-wasm-vtk:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-vtk.tar.xz
+
+    - name: Cache docker results
+      uses: actions/upload-artifact@v2
+      with:
+        name: docker-cache
+        path: ./docker-cache
+        retention-days: 7
 
     - uses: actions/setup-node@v2
       with:
-        node-version: '10'
+        node-version: '14'
 
     - name: Install packages
       run: |
