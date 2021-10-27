@@ -45,7 +45,7 @@ const build = (sourceDir, options) => {
     process.exit(dockerVersion.status)
   }
 
-  let dockerImage = 'insighttoolkit/itk-wasm:20211026-515db0b'
+  let dockerImage = 'insighttoolkit/itk-wasm:20211026-eb1bf34'
   if (options.image) {
     dockerImage = options.image
   }
