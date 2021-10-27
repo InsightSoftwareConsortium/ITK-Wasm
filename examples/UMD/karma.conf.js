@@ -1,8 +1,8 @@
-var path = require('path')
+const path = require('path')
 
-var webpack = require('webpack')
+const webpack = require('webpack')
 
-var sourcePath = path.resolve(__dirname, './dist')
+const sourcePath = path.resolve(__dirname, './dist')
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'test'
 
@@ -16,9 +16,9 @@ module.exports = function init (config) {
     ],
 
     basePath: '',
-    frameworks: ['tap'],
+    frameworks: ['tap', 'webpack'],
     files: [
-      'https://unpkg.com/itk@14.0.1/umd/itk-wasm',
+      'https://unpkg.com/itk-wasm@1.0.0-a.4/dist/umd/itk.js',
       'https://unpkg.com/itk-vtk-viewer@9.23.2/dist/itkVtkViewerCDN.js',
       './dist/index.js',
       './test/index.js'
@@ -34,18 +34,21 @@ module.exports = function init (config) {
         rules: [].concat()
       },
       resolve: {
-        fallback: {
-          path: false,
-          fs: false,
-          "buffer": require.resolve("buffer/"),
-        },
         modules: [
           path.resolve(__dirname, 'node_modules'),
           sourcePath
         ],
         alias: {
           stream: 'stream-browserify',
-        }
+        },
+        fallback: {
+          assert: false,
+          module: false,
+          url: false,
+          buffer: false,
+          path: require.resolve('path-browserify'),
+          fs: false,
+        },
       },
       plugins: [
         new webpack.ProvidePlugin({ process: ['process/browser'] }),
@@ -74,7 +77,7 @@ module.exports = function init (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['ChromeHeadlessNoSandbox'],
+    browsers: ['Chrome'],
     singleRun: true
   })
 }

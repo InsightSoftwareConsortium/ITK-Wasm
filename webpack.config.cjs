@@ -8,6 +8,7 @@ const outputPath = path.join(__dirname, 'dist', 'umd')
 const packageJSON = require('./package.json')
 const itkVersion = packageJSON.version
 const cdnPath = `https://unpkg.com/itk-wasm@${itkVersion}/dist/`
+const cdnConfig = path.resolve(__dirname, 'src', 'itkConfigCDN.js')
 
 module.exports = {
   name: 'Unpkg',
@@ -15,7 +16,7 @@ module.exports = {
   entry,
   output: {
     path: outputPath,
-    filename: 'itk.js',
+    filename: 'itk-wasm.min.js',
     publicPath: cdnPath,
     library: {
       type: "umd",
@@ -37,7 +38,8 @@ module.exports = {
     modules: [path.resolve(__dirname, 'node_modules')],
     fallback: { fs: false, path: false, url: false, module: false },
     alias: {
-      '../itkConfig.js': path.resolve(__dirname, 'src', 'itkConfigCDN.js'),
+      '../itkConfig.js': cdnConfig,
+      '../../itkConfig.js': cdnConfig,
     }
   },
   performance: {
