@@ -110,7 +110,7 @@ if (options.buildIo) {
 
   // Build the Emscripten mobules with ninja
   console.log('\nRunning ninja...')
-  const ninjaCall = spawnSync('bash', [dockcross, 'ninja', '-j8', '-Cbuild'], {
+  const ninjaCall = spawnSync('bash', [dockcross, 'ninja', '-Cbuild'], {
     env: process.env,
     stdio: 'inherit'
   })

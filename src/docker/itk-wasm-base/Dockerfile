@@ -35,7 +35,7 @@ RUN mkdir ITK-Native-build && \
     -DCMAKE_CXX_COMPILER=/usr/bin/c++ \
     -DCMAKE_TOOLCHAIN_FILE="" \
     ../ITK && \
-  ninja -j7 && \
+  ninja && \
   find . -name '*.o' -delete && \
   cd ..
 
@@ -58,7 +58,7 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
     -DCMAKE_CXX_COMPILER=/usr/bin/c++ \
     -DCMAKE_TOOLCHAIN_FILE="" \
     ../SlicerExecutionModel && \
-  ninja -j7 && \
+  ninja && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 SlicerExecutionModel-build
 
@@ -96,7 +96,7 @@ RUN mkdir ITK-build && \
     -DDO_NOT_BUILD_ITK_TEST_DRIVER:BOOL=ON \
     -DOPJ_USE_THREAD:BOOL=OFF \
     ../ITK && \
-  ninja -j7 && \
+  ninja && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 

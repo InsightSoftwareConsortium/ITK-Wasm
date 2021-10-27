@@ -19,7 +19,7 @@ RUN cd / && \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
       ../ITKWebAssemblyInterface && \
-  ninja -j7 && \
+  ninja && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITKWebAssemblyInterface-build && \
   chmod -R 777 /ITK-build

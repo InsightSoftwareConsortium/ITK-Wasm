@@ -52,7 +52,7 @@ RUN git clone https://github.com/thewtex/VTK.git && \
     -DVTK_MODULE_ENABLE_VTK_FiltersGeometry:STRING=YES \
     -DH5_HAVE_GETPWUID:BOOL=OFF \
     ../VTK && \
-  ninja -j7 && \
+  ninja && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 VTK-build
 
@@ -78,7 +78,7 @@ RUN git clone https://github.com/thewtex/ITKVTKGlue.git ITKVtkGlue && \
     -DOPENGL_GLES2_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
     -DOPENGL_GLES3_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
     ../ITKVtkGlue && \
-  ninja -j7 && \
+  ninja && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
