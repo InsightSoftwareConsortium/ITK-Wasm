@@ -8,7 +8,8 @@ cd $script_dir
 
 mkdir -p ITKWebAssemblyInterfaceModuleCopy
 rsync -a ../../../{include,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
-rsync -a ../../../{src/*.cxx,src/CMakeLists.txt} ./ITKWebAssemblyInterfaceModuleCopy/src/
+rsync -a ../../../src/{*.cxx,CMakeLists.txt} ./ITKWebAssemblyInterfaceModuleCopy/src/
+rsync -a ../../../src/emscripten-module ./ITKWebAssemblyInterfaceModuleCopy/src/
 mkdir -p MedianFilterPipelineCopy
 rsync -a ../../../test/pipelines/MedianFilterPipeline/{CMakeLists.txt,MedianFilterTest.cxx} ./MedianFilterPipelineCopy
 
