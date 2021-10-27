@@ -8,6 +8,8 @@ import { Command } from 'commander/esm.mjs'
 
 const program = new Command()
 
+const defaultImageTag = '20211027-80d79b1'
+
 const build = (sourceDir, options) => {
   // Check that the source directory exists and chdir to it.
   if (!fs.existsSync(sourceDir)) {
@@ -45,7 +47,7 @@ const build = (sourceDir, options) => {
     process.exit(dockerVersion.status)
   }
 
-  let dockerImage = 'insighttoolkit/itk-wasm:20211026-eb1bf34'
+  let dockerImage = `insighttoolkit/itk-wasm:${defaultImageTag}`
   if (options.image) {
     dockerImage = options.image
   }
