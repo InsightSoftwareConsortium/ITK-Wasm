@@ -8,4 +8,5 @@
       corejs: '3.19',
     }],
   ],
+  "plugins": ["@babel/plugin-transform-runtime"]
 }
