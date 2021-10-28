@@ -1,3 +1,4 @@
+import axios from 'axios'
 import WebworkerPromise from 'webworker-promise'
 
 import config from '../../itkConfig.js'
@@ -36,19 +37,43 @@ async function createWebworkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline'
   const min = 'min-'
   // debug
   // const min = ''
-  switch (name) {
-    case 'image-io':
-      worker = new Worker(`${webWorkersUrl}/${min}bundles/image-io.worker.js`)
-      break
-    case 'mesh-io':
-      worker = new Worker(`${webWorkersUrl}/${min}bundles/mesh-io.worker.js`)
-      break
-    case 'pipeline':
-      worker = new Worker(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`)
-      break
-    default:
-      throw Error('Unsupported web worker type')
+
+  if (webWorkersUrl.startsWith('http')) {
+    switch (name) {
+      case 'image-io': {
+        const response = await axios.get(`${webWorkersUrl}/${min}bundles/image-io.worker.js`, { responseType: 'blob' })
+        worker = new Worker(URL.createObjectURL(response.data))
+        break
+      }
+      case 'mesh-io': {
+        const response = await axios.get(`${webWorkersUrl}/${min}bundles/mesh-io.worker.js`, { responseType: 'blob' })
+        worker = new Worker(URL.createObjectURL(response.data))
+        break
+      }
+      case 'pipeline': {
+        const response = await axios.get(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`, { responseType: 'blob' })
+        worker = new Worker(URL.createObjectURL(response.data))
+        break
+      }
+      default:
+        throw Error('Unsupported web worker type')
+    }
+  } else {
+    switch (name) {
+      case 'image-io':
+        worker = new Worker(`${webWorkersUrl}/${min}bundles/image-io.worker.js`)
+        break
+      case 'mesh-io':
+        worker = new Worker(`${webWorkersUrl}/${min}bundles/mesh-io.worker.js`)
+        break
+      case 'pipeline':
+        worker = new Worker(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`)
+        break
+      default:
+        throw Error('Unsupported web worker type')
+    }
   }
+
   const webworkerPromise = new WebworkerPromise(worker)
   return { webworkerPromise, worker }
 }
