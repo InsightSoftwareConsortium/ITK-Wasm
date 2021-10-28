@@ -7,7 +7,7 @@ function findLocalMeshIOPath (): string {
   if (fs.existsSync(buildPath)) {
     return buildPath
   }
-  const packagePath = localPathRelativeToModule(import.meta.url, '../../../../mesh-io')
+  const packagePath = localPathRelativeToModule(import.meta.url, '../../../../itk-mesh-io')
   if (fs.existsSync(packagePath)) {
     return packagePath
   }

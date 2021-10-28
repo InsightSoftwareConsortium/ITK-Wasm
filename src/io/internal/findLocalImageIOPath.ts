@@ -7,7 +7,7 @@ function findLocalImageIOPath (): string {
   if (fs.existsSync(buildPath)) {
     return buildPath
   }
-  const packagePath = localPathRelativeToModule(import.meta.url, '../../../../image-io')
+  const packagePath = localPathRelativeToModule(import.meta.url, '../../../../itk-image-io')
   if (fs.existsSync(packagePath)) {
     return packagePath
   }

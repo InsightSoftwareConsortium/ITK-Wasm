@@ -7,7 +7,7 @@ function findLocalPolyDataIOPath (): string {
   if (fs.existsSync(buildPath)) {
     return buildPath
   }
-  const packagePath = localPathRelativeToModule(import.meta.url, '../../../../polydata-io')
+  const packagePath = localPathRelativeToModule(import.meta.url, '../../../../itk-polydata-io')
   if (fs.existsSync(packagePath)) {
     return packagePath
   }
