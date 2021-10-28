@@ -106,10 +106,13 @@ jobs:
     - name: Test building a pipeline
       run: |
         cd test/pipelines/MedianFilterPipeline
-        docker run --rm insighttoolkit/itk-wasm:${{ env.DOCKER_TAG }} > ./itk-wasm
-        chmod +x ./itk-wasm
+
+        node ../../../src/itk-wasm-cli.js build -i insighttoolkit/itk-wasm:${{ env.DOCKER_TAG }} .
         rm -rf web-build
-        ./itk-wasm web-build
+
+        node ../../../src/itk-wasm-cli.js build -i insighttoolkit/itk-wasi:${{ env.DOCKER_TAG }} .
+        rm -rf web-build
+
         cd -
 
     - name: Setup ipfs
