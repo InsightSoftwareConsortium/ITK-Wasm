@@ -16,7 +16,7 @@ export default {
     babel({
       extensions: ['.js'],
       exclude: 'node_modules/**',
-      babelHelpers: 'bundled',
+      babelHelpers: 'runtime',
     }),
     terser(),
   ]

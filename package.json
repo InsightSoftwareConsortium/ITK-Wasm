@@ -27,7 +27,7 @@
     "build:meshIOWorkerMin": "rollup -c rollup.worker.min.config.js ./dist/web-workers/mesh-io.worker.js",
     "build:pipelineWorkerMin": "rollup -c rollup.worker.min.config.js ./dist/web-workers/pipeline.worker.js",
     "build:workerMinBundles": "npm run build:imageIOWorkerMin && npm run build:meshIOWorkerMin && npm run build:pipelineWorkerMin",
-    "build:webpack": "webpack --progress --color --mode production",
+    "build:webpack": "webpack --progress --color",
     "build:wasm": "node ./build.js",
     "test": "npm run test:lint && npm run test:node && npm run test:browser",
     "test:lint": "ts-standard --fix \"src/**/*.ts\" && standard --fix \"test/**/*.js\"",
@@ -103,6 +103,7 @@
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.15.4",
     "axios": "^0.23.0",
     "commander": "^8.2.0",
     "fs-extra": "^10.0.0",

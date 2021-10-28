@@ -15,7 +15,8 @@ import PolyData from '../core/vtkPolyData.js'
 import TypedArray from '../core/TypedArray.js'
 
 interface ITKConfig {
-  itkModulesPath: string
+  pipelinesUrl: string
+  polydataIOUrl: string
 }
 
 interface Input {
@@ -33,7 +34,7 @@ export interface RunPipelineInput extends Input {
 // To cache loaded pipeline modules
 const pipelineToModule: Map<string,PipelineEmscriptenModule> = new Map()
 
-export async function loadPipelineModule (moduleDirectory: "polydata-io" | "pipeline", pipelinePath: string | object, config: ITKConfig) {
+export async function loadPipelineModule (pipelinePath: string | object, baseUrl: string) {
   let moduleRelativePathOrURL: string | URL = pipelinePath as string
   let pipeline = pipelinePath as string
   let pipelineModule = null
@@ -44,7 +45,7 @@ export async function loadPipelineModule (moduleDirectory: "polydata-io" | "pipe
   if (pipelineToModule.has(pipeline)) {
     pipelineModule = pipelineToModule.get(pipeline) as PipelineEmscriptenModule
   } else {
-    pipelineToModule.set(pipeline, await loadEmscriptenModule(moduleRelativePathOrURL, moduleDirectory, config.itkModulesPath) as PipelineEmscriptenModule)
+    pipelineToModule.set(pipeline, await loadEmscriptenModule(moduleRelativePathOrURL, baseUrl) as PipelineEmscriptenModule)
     pipelineModule = pipelineToModule.get(pipeline) as PipelineEmscriptenModule
   }
   return pipelineModule

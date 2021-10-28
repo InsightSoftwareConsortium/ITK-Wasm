@@ -4,22 +4,16 @@ import EmscriptenModule from '../EmscriptenModule.js'
 
 // Load the Emscripten module in the browser in a WebWorker.
 //
-// moduleRelativePathOrURL specifies the module to load either
-// `${itkModulesPath}/${moduleType}/${moduleRelativePathOrURL}` or, if it is a
-// URL, `moduleRelativePathOrURL.href`.
-//
-// moduleType is one of "image-io", "mesh-io", "polydata-io", or "pipeline"
-//
-// itkModulesPath is usually taken from '../itkConfig.js', but a different value
+// baseUrl is usually taken from '../itkConfig.js', but a different value
 // could be passed.
-async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | URL, moduleType: "image-io" | "mesh-io" | "polydata-io" | "pipeline", itkModulesPath: string): Promise<EmscriptenModule> {
+async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | URL, baseUrl: string): Promise<EmscriptenModule> {
   let modulePrefix = null
   if (typeof moduleRelativePathOrURL !== 'string') {
     modulePrefix = moduleRelativePathOrURL.href
   } else if (moduleRelativePathOrURL.startsWith('http')) {
     modulePrefix = moduleRelativePathOrURL
   } else {
-    modulePrefix = `${itkModulesPath}/${moduleType}/${moduleRelativePathOrURL}`
+    modulePrefix = `${baseUrl}/${moduleRelativePathOrURL}`
   }
   if (modulePrefix.endsWith('.js')) {
     modulePrefix = modulePrefix.substring(0, modulePrefix.length - 3)

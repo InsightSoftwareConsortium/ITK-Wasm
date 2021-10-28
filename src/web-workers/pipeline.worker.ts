@@ -7,9 +7,9 @@ import { RunPipelineInput, loadPipelineModule, runPipeline } from "./pipeline-op
 registerWebworker(async function (input: RunPipelineInput) {
   let pipelineModule = null
   if (input.operation === 'runPipeline') {
-    pipelineModule = await loadPipelineModule('pipeline', input.pipelinePath, input.config) as PipelineEmscriptenModule
+    pipelineModule = await loadPipelineModule(input.pipelinePath, input.config.pipelinesUrl) as PipelineEmscriptenModule
   } else if (input.operation === 'runPolyDataIOPipeline') {
-    pipelineModule = await loadPipelineModule('polydata-io', input.pipelinePath, input.config) as PipelineEmscriptenModule
+    pipelineModule = await loadPipelineModule(input.pipelinePath, input.config.polydataIOUrl) as PipelineEmscriptenModule
   } else {
     throw new Error('Unknown worker operation')
   }

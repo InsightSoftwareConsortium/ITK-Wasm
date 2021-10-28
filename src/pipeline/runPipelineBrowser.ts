@@ -27,7 +27,7 @@ async function loadPipelineModule (pipelinePath: string | URL): Promise<Pipeline
   if (pipelineToModule.has(pipeline)) {
     return pipelineToModule.get(pipeline) as PipelineEmscriptenModule
   } else {
-    const pipelineModule = await loadEmscriptenModuleMainThread(pipelinePath, 'pipeline', config.itkModulesPath) as PipelineEmscriptenModule
+    const pipelineModule = await loadEmscriptenModuleMainThread(pipelinePath, config.pipelinesUrl) as PipelineEmscriptenModule
     pipelineToModule.set(pipeline, pipelineModule)
     return pipelineModule
   }

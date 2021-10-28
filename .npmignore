@@ -6,3 +6,6 @@ npm-debug.log
 build
 test
 build.js
+dist/image-io/
+dist/mesh-io/
+dist/polydata-io/

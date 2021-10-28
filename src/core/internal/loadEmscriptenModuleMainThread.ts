@@ -2,14 +2,14 @@ import axios from 'axios'
 
 import EmscriptenModule from '../EmscriptenModule.js'
 
-async function loadEmscriptenModuleMainThread (moduleRelativePathOrURL: string | URL, moduleType: 'image-io' | 'mesh-io' | 'pipeline', itkModulesPath: string): Promise<EmscriptenModule> {
+async function loadEmscriptenModuleMainThread (moduleRelativePathOrURL: string | URL, baseUrl: string): Promise<EmscriptenModule> {
   let modulePrefix: string = 'unknown'
   if (typeof moduleRelativePathOrURL !== 'string') {
     modulePrefix = moduleRelativePathOrURL.href
   } else if (moduleRelativePathOrURL.startsWith('http')) {
     modulePrefix = moduleRelativePathOrURL
   } else {
-    modulePrefix = `${itkModulesPath}/${moduleType}/${moduleRelativePathOrURL}`
+    modulePrefix = `${baseUrl}/${moduleRelativePathOrURL}`
   }
   if (modulePrefix.endsWith('.js')) {
     modulePrefix = modulePrefix.substring(0, modulePrefix.length - 3)

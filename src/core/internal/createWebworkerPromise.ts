@@ -32,19 +32,19 @@ async function createWebworkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline'
   // default:
   // throw Error('Unsupported web worker type')
   // }
-  const itkModulesPath = config.itkModulesPath
+  const webWorkersUrl = config.webWorkersUrl
   const min = 'min-'
   // debug
   // const min = ''
   switch (name) {
     case 'image-io':
-      worker = new Worker(`${itkModulesPath}/web-workers/${min}bundles/image-io.worker.js`)
+      worker = new Worker(`${webWorkersUrl}/${min}bundles/image-io.worker.js`)
       break
     case 'mesh-io':
-      worker = new Worker(`${itkModulesPath}/web-workers/${min}bundles/mesh-io.worker.js`)
+      worker = new Worker(`${webWorkersUrl}/${min}bundles/mesh-io.worker.js`)
       break
     case 'pipeline':
-      worker = new Worker(`${itkModulesPath}/web-workers/${min}bundles/pipeline.worker.js`)
+      worker = new Worker(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`)
       break
     default:
       throw Error('Unsupported web worker type')

@@ -15,7 +15,7 @@ import Mesh from '../core/Mesh.js'
 
 interface Input {
   operation: 'readMesh' | 'writeMesh'
-  config: { itkModulesPath: string }
+  config: { meshIOUrl: string }
 }
 
 export interface ReadMeshInput extends Input {
@@ -51,7 +51,7 @@ export async function readMesh (input: ReadMeshInput) {
       if (ioToModule.has(trialIO)) {
         ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       } else {
-        ioToModule.set(trialIO, await loadEmscriptenModule(trialIO, 'mesh-io', input.config.itkModulesPath) as MeshIOBaseEmscriptenModule)
+        ioToModule.set(trialIO, await loadEmscriptenModule(trialIO, input.config.meshIOUrl) as MeshIOBaseEmscriptenModule)
         ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       }
       const meshIO = new ioModule.ITKMeshIO()
@@ -76,7 +76,7 @@ export async function readMesh (input: ReadMeshInput) {
   if (ioToModule.has(io as string)) {
     ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   } else {
-    ioToModule.set(io as string, await loadEmscriptenModule(io as string, 'mesh-io', input.config.itkModulesPath) as MeshIOBaseEmscriptenModule)
+    ioToModule.set(io as string, await loadEmscriptenModule(io as string, input.config.meshIOUrl) as MeshIOBaseEmscriptenModule)
     ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   }
 
@@ -118,7 +118,7 @@ export async function writeMesh(input: WriteMeshInput) {
       if (ioToModule.has(trialIO)) {
         ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       } else {
-        ioToModule.set(trialIO, await loadEmscriptenModule(trialIO, 'mesh-io', input.config.itkModulesPath) as MeshIOBaseEmscriptenModule)
+        ioToModule.set(trialIO, await loadEmscriptenModule(trialIO, input.config.meshIOUrl) as MeshIOBaseEmscriptenModule)
         ioModule = ioToModule.get(trialIO) as MeshIOBaseEmscriptenModule
       }
       const meshIO = new ioModule.ITKMeshIO()
@@ -139,7 +139,7 @@ export async function writeMesh(input: WriteMeshInput) {
   if (ioToModule.has(io as string)) {
     ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   } else {
-    ioToModule.set(io as string, await loadEmscriptenModule(io as string, 'mesh-io', input.config.itkModulesPath) as MeshIOBaseEmscriptenModule)
+    ioToModule.set(io as string, await loadEmscriptenModule(io as string, input.config.meshIOUrl) as MeshIOBaseEmscriptenModule)
     ioModule = ioToModule.get(io as string) as MeshIOBaseEmscriptenModule
   }
 

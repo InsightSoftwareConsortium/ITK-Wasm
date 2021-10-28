@@ -21,10 +21,10 @@ git add -- src/itk-wasm-cli.js
 git commit -m "feat(itk-wasm-cli): Update default Docker image for ${version}"
 ```
 
-Bump `version` in `package.json`.
+Bump `version` in `package.json`, `package-lock.json`, `src/itkConfig.ts`.
 
 ```
-git add -- package.json package-lock.json
+git add -- package.json package-lock.json src/itkConfig.ts
 git commit -m "feat(version): Bump NPM version to ${version}"
 npm run build
 npm run test
