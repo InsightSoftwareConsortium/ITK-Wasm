@@ -14,4 +14,6 @@ packages.forEach((packageName) => {
   template.version = version
   template.dependencies['itk-wasm'] = version
   fs.writeFileSync(path.join('dist', packageName, 'package.json'), JSON.stringify(template))
+  readmeFile = path.join(__dirname, `README.${packageName}.md`)
+  fs.copyFileSync(readmeFile, path.join('dist', packageName, 'README.md'))
 })
