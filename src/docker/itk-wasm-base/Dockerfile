@@ -134,6 +134,12 @@ RUN mkdir -p $IPFS_PATH && \
  ipfs init && \
  chmod -R 777 $IPFS_PATH
 
+RUN mkdir /wasm-runtimes
+ENV WASMER_DIR /wasm-runtimes/wasmer
+RUN curl https://get.wasmer.io -sSfL | sh
+COPY wasmer-pwd.sh ${WASMER_DIR}/bin/
+ENV PATH "$WASMER_DIR/bin:$PATH"
+
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG IMAGE=insighttoolkit/itk-wasm-base
