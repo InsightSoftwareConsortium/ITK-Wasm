@@ -146,6 +146,13 @@ RUN mkdir ${WASMTIME_HOME} && curl https://wasmtime.dev/install.sh -sSf | bash
 COPY wasmtime-pwd.sh ${WASMTIME_HOME}/bin/
 ENV PATH "$WASMTIME_HOME/bin:$PATH"
 
+ENV WASM3_VERSION 0.5.0
+RUN mkdir -p /wasm-runtimes/wasm3/bin && \
+  curl -LO https://github.com/wasm3/wasm3/releases/download/v${WASM3_VERSION}/wasm3-linux-x64.elf && \
+  mv wasm3-linux-x64.elf /wasm-runtimes/wasm3/bin/wasm3 && \
+  chmod +x /wasm-runtimes/wasm3/bin/wasm3
+ENV PATH "/wasm-runtimes/wasm3/bin:$PATH"
+
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG IMAGE=insighttoolkit/itk-wasm-base
