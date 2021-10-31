@@ -100,7 +100,26 @@ RUN mkdir ITK-build && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
-ENV RAPIDJSON_GIT_TAG v1.1.0
+ENV ITKMeshToPolyData_GIT_TAG 8e04b0ae48a6b97b928c54cfa96feb0c87d0ccf0
+RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git && \
+  cd ITKMeshToPolyData && \
+  git checkout ${ITKMeshToPolyData_GIT_TAG} && \
+  cd / && \
+  mkdir ITKMeshToPolyData-build && \
+  cd ITKMeshToPolyData-build && \
+  cmake \
+    -G Ninja \
+    -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+    -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
+    -DBUILD_TESTING:BOOL=OFF \
+    -DITK_DIR:PATH=/ITK-build \
+    ../ITKMeshToPolyData && \
+  ninja && \
+  find . -name '*.o' -delete && \
+  cd .. && chmod -R 777 ITK-build
+
+ENV RAPIDJSON_GIT_TAG 0d4517f15a8d7167ba9ae67f3f22a559ca841e3b
 RUN git clone https://github.com/Tencent/rapidjson.git && \
   cd rapidjson && \
   git checkout ${RAPIDJSON_GIT_TAG}
