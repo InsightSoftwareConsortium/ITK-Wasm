@@ -8,7 +8,7 @@ import { Command } from 'commander/esm.mjs'
 
 const program = new Command()
 
-const defaultImageTag = '20211027-80d79b1'
+const defaultImageTag = '20211031-2b8dc12'
 
 const build = (sourceDir, options) => {
   // Check that the source directory exists and chdir to it.
