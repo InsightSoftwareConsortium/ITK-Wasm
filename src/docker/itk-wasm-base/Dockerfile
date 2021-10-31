@@ -119,7 +119,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
-ENV RAPIDJSON_GIT_TAG v1.1.0
+ENV RAPIDJSON_GIT_TAG 0d4517f15a8d7167ba9ae67f3f22a559ca841e3b
 RUN git clone https://github.com/Tencent/rapidjson.git && \
   cd rapidjson && \
   git checkout ${RAPIDJSON_GIT_TAG}
