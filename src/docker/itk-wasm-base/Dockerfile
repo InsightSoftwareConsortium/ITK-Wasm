@@ -135,10 +135,16 @@ RUN mkdir -p $IPFS_PATH && \
  chmod -R 777 $IPFS_PATH
 
 RUN mkdir /wasm-runtimes
+
 ENV WASMER_DIR /wasm-runtimes/wasmer
 RUN curl https://get.wasmer.io -sSfL | sh
 COPY wasmer-pwd.sh ${WASMER_DIR}/bin/
 ENV PATH "$WASMER_DIR/bin:$PATH"
+
+ENV WASMTIME_HOME /wasm-runtimes/wasmtime
+RUN mkdir ${WASMTIME_HOME} && curl https://wasmtime.dev/install.sh -sSf | bash
+COPY wasmtime-pwd.sh ${WASMTIME_HOME}/bin/
+ENV PATH "$WASMTIME_HOME/bin:$PATH"
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
