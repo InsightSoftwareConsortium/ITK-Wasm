@@ -153,6 +153,12 @@ RUN mkdir -p /wasm-runtimes/wasm3/bin && \
   chmod +x /wasm-runtimes/wasm3/bin/wasm3
 ENV PATH "/wasm-runtimes/wasm3/bin:$PATH"
 
+ENV WAVM_VERSION 2021-10-16
+RUN mkdir -p /wasm-runtimes/wavm/ && \
+  curl -LO https://github.com/WAVM/WAVM/releases/download/nightly%2F${WAVM_VERSION}/wavm-0.0.0-prerelease-linux.tar.gz && \
+  tar -xv -C /wasm-runtimes/wavm/ -f wavm-0.0.0-prerelease-linux.tar.gz
+ENV PATH "/wasm-runtimes/wavm/bin:$PATH"
+
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG IMAGE=insighttoolkit/itk-wasm-base
