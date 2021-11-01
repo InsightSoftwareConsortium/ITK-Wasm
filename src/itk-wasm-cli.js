@@ -4,7 +4,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import { spawnSync } from 'child_process'
 
-import { Command } from 'commander/esm.mjs'
+import { Command, Option } from 'commander/esm.mjs'
 
 const program = new Command()
 
@@ -84,17 +84,17 @@ function processCommonOptions() {
   return { dockerImage, dockcrossScript, buildDir }
 }
 
-function build(sourceDir, options) {
+function build(options) {
   const { buildDir, dockcrossScript } = processCommonOptions()
 
-  const hypenIndex = program.rawArgs.findIndex((arg) => arg === '--')
+  const hyphenIndex = program.rawArgs.findIndex((arg) => arg === '--')
   let cmakeArgs = []
-  if (hypenIndex !== -1) {
-    cmakeArgs = program.rawArgs.slice(hypenIndex + 1)
+  if (hyphenIndex !== -1) {
+    cmakeArgs = program.rawArgs.slice(hyphenIndex + 1)
   }
   if(process.platform === "win32"){
     var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
-      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env ${buildDir} ` + cmakeArgs + '"'], {
+      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env web-build ${buildDir} ` + cmakeArgs + '"'], {
       env: process.env,
       stdio: 'inherit',
       shell: true
@@ -113,6 +113,62 @@ function build(sourceDir, options) {
       console.error(dockerBuild.error);
     }
     process.exit(dockerBuild.status)
+  }
+}
+
+function run(wasmBinary, options) {
+  const { buildDir, dockcrossScript } = processCommonOptions()
+
+  const hyphenIndex = program.rawArgs.findIndex((arg) => arg === '--')
+  let wasmBinaryArgs = []
+  if (hyphenIndex !== -1) {
+    wasmBinaryArgs = program.rawArgs.slice(hyphenIndex + 1)
+  }
+  const wasmBinaryRelativePath = `${buildDir}/${wasmBinary}`
+
+  let wasmRuntime = 'wasmtime'
+  if (options.runtime) {
+    wasmRuntime = options.runtime
+  }
+  let wasmRuntimeArgs = []
+  switch (wasmRuntime) {
+  case 'wasmtime':
+    wasmRuntimeArgs = ['/wasm-runtimes/wasmtime/bin/wasmtime-pwd.sh',]
+    break
+  case 'wasmer':
+    wasmRuntimeArgs = ['sudo', '/wasm-runtimes/wasmer/bin/wasmer-pwd.sh',]
+    break
+  case 'wasm3':
+    wasmRuntimeArgs = ['/wasm-runtimes/wasm3/bin/wasm3',]
+    break
+  case 'wavm':
+    wasmRuntimeArgs = ['/wasm-runtimes/wavm/bin/wavm', 'run']
+    break
+  default:
+    throw Error('unexpected wasm runtime')
+  }
+
+  if(process.platform === "win32"){
+    var dockerRun = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
+      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env ` + wasmRuntimeArgs + wasmBinaryRelativePath + wasmBinaryArgs + '"'], {
+      env: process.env,
+      stdio: 'inherit',
+      shell: true
+    });
+
+    if (dockerRun.status !== 0) {
+      console.error(dockerRun.error);
+    }
+    process.exit(dockerRun.status);
+  } else {
+    const dockerRun = spawnSync('bash', [dockcrossScript,].concat(wasmRuntimeArgs).concat(wasmBinaryRelativePath).concat(wasmBinaryArgs), {
+      env: process.env,
+      stdio: 'inherit'
+    })
+    if (dockerRun.status !== 0) {
+      console.error(dockerRun.error);
+    }
+    process.exit(dockerRun.status)
   }
 }
 
@@ -138,10 +194,10 @@ const test = (sourceDir) => {
     process.exit(1)
   }
 
-  const hypenIndex = program.rawArgs.findIndex((arg) => arg === '--')
+  const hyphenIndex = program.rawArgs.findIndex((arg) => arg === '--')
   let ctestArgs = ''
-  if (hypenIndex !== -1) {
-    ctestArgs = program.rawArgs.slice(hypenIndex + 1).join(' ')
+  if (hyphenIndex !== -1) {
+    ctestArgs = program.rawArgs.slice(hyphenIndex + 1).join(' ')
   }
   if(process.platform === "win32"){
     var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
@@ -177,12 +233,20 @@ const test = (sourceDir) => {
 
 program
   .option('-i, --image <image>', 'build environment Docker image, defaults to insighttoolkit/itk-wasm')
-  .option('-s, --source-dir <source-directory>', 'path to build directory, defaults to ".pyolite"')
-  .option('-b, --build-dir <build-directory>', 'build directory path relative to the source directory, defaults to "web-build"')
+  .option('-s, --source-dir <source-directory>', 'path to build directory, defaults to "."')
+  .option('-b, --build-dir <build-directory>', 'build directory whose path is relative to the source directory, defaults to "web-build"')
+program
   .command('build')
-  .usage('[options] [-- <cmake arguments>]')
+  .usage('[-- <cmake arguments>]')
   .description('build the CMake project found in the source directory')
   .action(build)
+program
+  .command('run <wasmBinary>')
+  .addOption(new Option('-r, --runtime <wasm-runtime>', 'wasm runtime to use for execution, defaults to "wasmtime"').choices(['wasmtime', 'wasmer', 'wasm3', 'wavm']))
+  .option('-r, --runtime <wasm-runtime>', 'wasm runtime to use for execution, defaults to "wasmtime"')
+  .usage('[options] <wasmBinary> [-- <wasm binary arguments>]')
+  .description('run the wasm binary, whose path is specified relative to the build directory')
+  .action(run)
 
 program
   .parse(process.argv)
