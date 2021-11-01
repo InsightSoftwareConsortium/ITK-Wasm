@@ -12,6 +12,42 @@ Improved approach for web workers for bundlers, CORS constraints.
 
 Addresses an important issue in image orientation support.
 
+### Browser module import migration
+
+From:
+
+```
+import IntTypes from 'itk/IntTypes'
+```
+
+to:
+
+
+```
+import { IntTypes } from 'itk'
+```
+
+Or, to help bundlers with limited tree shaking,
+
+```
+import { IntTypes } from 'itk/browser/index.js'
+```
+
+
+Node module import migration:
+
+From:
+
+```
+const IntTypes = require('itk/IntTypes.js')
+```
+
+to:
+
+```
+import { IntTypes } from 'itk'
+```
+
 ## IO modules are available in separate packages.
 
 IO modules are now installed in separate npm packages to limit the `itk-wasm`
@@ -59,41 +95,21 @@ And it can be injected into an application bundle by setting defining
 `../../itkConfig.js`. For other override configuration options, see the Webpack (todo),
 Rollup (todo), and Unpkg (todo) examples.
 
+### CLI options
 
-### Browser module import migration
-
-From:
-
-```
-import IntTypes from 'itk/IntTypes'
-```
-
-to:
-
+The `--image, -i` command line option for the `build` subcommand is now a global option for all
+subcommands. For examples
 
 ```
-import { IntTypes } from 'itk'
+itk-wasm build --image insighttoolkit/itk-wasm src/dir
 ```
 
-Or, to help bundlers with limited tree shaking,
+is now:
 
 ```
-import { IntTypes } from 'itk/browser/index.js'
+itk-wasm --image --source-dir src/dir insighttoolkit/itk-wasm build
 ```
 
+### Node Sync functions
 
-Node module import migration:
-
-From:
-
-```
-const IntTypes = require('itk/IntTypes.js')
-```
-
-to:
-
-```
-import { IntTypes } from 'itk'
-```
-
-Node `*Sync` functions have been removed -- use the async versions instead.
+Node `*Sync` functions have been removed -- use the equivalent async versions instead.

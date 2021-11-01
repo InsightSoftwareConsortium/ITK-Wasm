@@ -134,6 +134,31 @@ RUN mkdir -p $IPFS_PATH && \
  ipfs init && \
  chmod -R 777 $IPFS_PATH
 
+RUN mkdir /wasm-runtimes
+
+ENV WASMER_DIR /wasm-runtimes/wasmer
+RUN curl https://get.wasmer.io -sSfL | sh
+COPY wasmer-pwd.sh ${WASMER_DIR}/bin/
+ENV PATH "$WASMER_DIR/bin:$PATH"
+
+ENV WASMTIME_HOME /wasm-runtimes/wasmtime
+RUN mkdir ${WASMTIME_HOME} && curl https://wasmtime.dev/install.sh -sSf | bash
+COPY wasmtime-pwd.sh ${WASMTIME_HOME}/bin/
+ENV PATH "$WASMTIME_HOME/bin:$PATH"
+
+ENV WASM3_VERSION 0.5.0
+RUN mkdir -p /wasm-runtimes/wasm3/bin && \
+  curl -LO https://github.com/wasm3/wasm3/releases/download/v${WASM3_VERSION}/wasm3-linux-x64.elf && \
+  mv wasm3-linux-x64.elf /wasm-runtimes/wasm3/bin/wasm3 && \
+  chmod +x /wasm-runtimes/wasm3/bin/wasm3
+ENV PATH "/wasm-runtimes/wasm3/bin:$PATH"
+
+ENV WAVM_VERSION 2021-10-16
+RUN mkdir -p /wasm-runtimes/wavm/ && \
+  curl -LO https://github.com/WAVM/WAVM/releases/download/nightly%2F${WAVM_VERSION}/wavm-0.0.0-prerelease-linux.tar.gz && \
+  tar -xv -C /wasm-runtimes/wavm/ -f wavm-0.0.0-prerelease-linux.tar.gz
+ENV PATH "/wasm-runtimes/wavm/bin:$PATH"
+
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG IMAGE=insighttoolkit/itk-wasm-base
