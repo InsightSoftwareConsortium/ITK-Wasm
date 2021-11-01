@@ -218,7 +218,7 @@ if (options.buildEmscriptenPipelines) {
     if (options.debug) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug', "-DCMAKE_EXE_LINKER_FLAGS_DEBUG='-s DISABLE_EXCEPTION_CATCHING=0'"]
     }
-    const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-wasm-cli.js'), 'build', '--image', buildImage, pipelinePath, '--'].concat(debugFlags), {
+    const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-wasm-cli.js'), '--image', buildImage, '--source-dir', pipelinePath, 'build', '--'].concat(debugFlags), {
       env: process.env,
       stdio: 'inherit'
     })
@@ -258,7 +258,7 @@ if (options.buildWasiPipelines) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug']
       buildImage = 'insighttoolkit/itk-wasi:latest-debug'
     }
-    const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-wasm-cli.js'), 'build', '--image', buildImage, '--build-dir', 'wasi-build', pipelinePath, '--'].concat(debugFlags), {
+    const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-wasm-cli.js'), '--image', buildImage, '--build-dir', 'wasi-build', '--source-dir', pipelinePath, 'build', '--'].concat(debugFlags), {
       env: process.env,
       stdio: 'inherit'
     })

@@ -10,7 +10,14 @@ const program = new Command()
 
 const defaultImageTag = '20211031-2b8dc12'
 
-const build = (sourceDir, options) => {
+function processCommonOptions() {
+  const options = program.opts()
+
+  let sourceDir = '.'
+  if (options.sourceDir) {
+    sourceDir = options.sourceDir
+  }
+
   // Check that the source directory exists and chdir to it.
   if (!fs.existsSync(sourceDir)) {
     console.error('The source directory: ' + sourceDir + ' does not exist!')
@@ -73,6 +80,12 @@ const build = (sourceDir, options) => {
       throw err
     }
   }
+
+  return { dockerImage, dockcrossScript, buildDir }
+}
+
+function build(sourceDir, options) {
+  const { buildDir, dockcrossScript } = processCommonOptions()
 
   const hypenIndex = program.rawArgs.findIndex((arg) => arg === '--')
   let cmakeArgs = []
@@ -163,15 +176,15 @@ const test = (sourceDir) => {
 //   .action(test)
 
 program
-  .command('build <sourceDir>')
-  .usage('[options] <sourceDir> [-- <cmake arguments>]')
-  .description('build the CMake project found in the given source directory')
-  .action(build)
   .option('-i, --image <image>', 'build environment Docker image, defaults to insighttoolkit/itk-wasm')
-  .option('-b, --build-dir <build-directory>', 'relative path to build directory, defaults to web-build')
+  .option('-s, --source-dir <source-directory>', 'path to build directory, defaults to ".pyolite"')
+  .option('-b, --build-dir <build-directory>', 'build directory path relative to the source directory, defaults to "web-build"')
+  .command('build')
+  .usage('[options] [-- <cmake arguments>]')
+  .description('build the CMake project found in the source directory')
+  .action(build)
 
 program
   .parse(process.argv)
 
 program.help()
-
