@@ -29,10 +29,11 @@
     "build:workerMinBundles": "npm run build:imageIOWorkerMin && npm run build:meshIOWorkerMin && npm run build:pipelineWorkerMin",
     "build:webpack": "webpack --progress --color",
     "build:wasm": "node ./build.js",
-    "test": "npm run test:lint && npm run test:node && npm run test:cliRun && npm run test:browser",
+    "test": "npm run test:lint && npm run test:node && npm run test:cliTest && npm run test:cliRun && npm run test:browser",
     "test:lint": "ts-standard --fix \"src/**/*.ts\" && standard --fix \"test/**/*.js\"",
     "test:node": "ava test/node/**/*.js",
     "test:cliRun": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/StdoutStderrPipeline run -r wasmtime StdoutStderrTest.wasi.wasm",
+    "test:cliTest": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/StdoutStderrPipeline test",
     "test:browser": "karma start ./karma.conf.cjs",
     "test:browserDebug": "karma start ./karma.conf.cjs --no-single-run",
     "prepublishOnly": "npm run build && rm dist/pipeline/*Test*"
