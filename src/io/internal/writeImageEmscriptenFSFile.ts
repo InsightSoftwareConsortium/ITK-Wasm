@@ -34,7 +34,7 @@ function writeImageEmscriptenFSFile (emscriptenModule: ImageIOBaseEmscriptenModu
     const directionColumn = new emscriptenModule.AxisDirectionType()
     directionColumn.resize(dimension, 0.0)
     for (let jj = 0; jj < dimension; ++jj) {
-      directionColumn.set(jj, getMatrixElement(image.direction, jj, ii))
+      directionColumn.set(jj, getMatrixElement(image.direction, dimension, jj, ii))
     }
     imageIO.SetDirection(ii, directionColumn)
   }

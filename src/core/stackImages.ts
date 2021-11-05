@@ -1,5 +1,4 @@
 import Image from './Image.js'
-import Matrix from './Matrix.js'
 
 import TypedArray from './TypedArray.js'
 
@@ -16,8 +15,7 @@ function stackImages (images: Image[]): Image {
   result.origin = Array.from(firstImage.origin)
   result.spacing = Array.from(firstImage.spacing)
   const dimension = result.imageType.dimension
-  result.direction = new Matrix(dimension, dimension)
-  result.direction.data = Array.from(firstImage.direction.data)
+  result.direction = firstImage.direction.slice()
 
   const stackOn = dimension - 1
 

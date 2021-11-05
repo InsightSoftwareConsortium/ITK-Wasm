@@ -1,35 +1,35 @@
 # itk.js to itk-wasm Migration Guide
 
-**This is a work in progress.**
+*Note: this migration guide is a work in progress.*
 
-itk-wasm is a major upgrade that ...
+**itk-wasm** is a major upgrade with a focus on univeral, performant computing in
+WebAssembly. The itk.js to itk-wasm transition also brings improvements
+including modern, elegant programming interfaces, accelerated performance,
+and execution beyond JavaScript thanks to [WASI](https://wasi.dev).
 
-Typescript support was added, but, of course, you can still just use
-JavaScript if you wish.  Uses modern JavaScript constructs when appropriate,
-e.g. classes.
+Most itk.js client code will simply need to update its import statements to
+leverage itk-wasm. However, there are other more advanced changes. A
+description of the changes, their motivation, and example migration code can
+be found below.
 
-Improved approach for web workers for bundlers, CORS constraints.
+### Module import statements
 
-Addresses an important issue in image orientation support.
+Browser module `import` statements have changed from:
 
-### Browser module import migration
-
-From:
-
-```
+```js
 import IntTypes from 'itk/IntTypes'
 ```
 
 to:
 
 
-```
+```js
 import { IntTypes } from 'itk'
 ```
 
 Or, to help bundlers with limited tree shaking,
 
-```
+```js
 import { IntTypes } from 'itk/browser/index.js'
 ```
 
@@ -38,15 +38,27 @@ Node module import migration:
 
 From:
 
-```
+```js
 const IntTypes = require('itk/IntTypes.js')
 ```
 
 to:
 
-```
+```js
 import { IntTypes } from 'itk'
 ```
+
+## Typescript support
+
+Typescript support was added, but, of course, you can still just use
+JavaScript if you wish.  Uses modern JavaScript constructs when appropriate,
+e.g. classes.
+
+## Bundlers
+
+EcmaScript Module (ESM) support was improved.
+
+There is now an improved approach for web workers for bundlers, CORS constraints.
 
 ## IO modules are available in separate packages.
 
@@ -109,6 +121,13 @@ is now:
 ```
 itk-wasm --image --source-dir src/dir insighttoolkit/itk-wasm build
 ```
+
+## Image orientation
+
+The `itk.Image.direction` is now directly a `Float64Array` -- `itk.Matrix` has
+been removed.
+
+Addresses an important issue in image orientation support.
 
 ### Node Sync functions
 

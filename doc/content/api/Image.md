@@ -7,7 +7,7 @@ An `itk/Image` is the N-dimensional image data structure for *itk-wasm*. `itk/Im
 **name**: An optional name, a `String`, that describes this image.
 **origin**: An Array with length *dimension* that describes the location of the center of the lower left pixel in physical units.
 **spacing**: An Array with length *dimension* that describes the spacing between pixel in physical units.
-**direction**: A *dimension* by *dimension* Matrix that describes the orientation of the image at its *origin*.  The orientation of each axis are the orthonormal columns.
+**direction**: A *dimension* by *dimension* Float64Array matrix in column-major order, that describes the orientation of the image at its *origin*.  The orientation of each axis are the orthonormal columns.
 **size**: An Array with length *dimension* that contains the number of pixels along dimension.
 **data**: A [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) containing the pixel buffer data.
 

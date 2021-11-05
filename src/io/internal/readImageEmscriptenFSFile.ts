@@ -1,6 +1,6 @@
 import Image from '../../core/Image.js'
 import ImageType from '../../core/ImageType.js'
-import Matrix from '../../core/Matrix.js'
+import setMatrixElement from '../../core/setMatrixElement.js'
 
 import imageIOComponentToJSComponent from './imageIOComponentToJSComponent.js'
 import imageIOPixelTypeToJSPixelType from './imageIOPixelTypeToJSPixelType.js'
@@ -32,11 +32,11 @@ function readImageEmscriptenFSFile (imageModule: ImageIOBaseEmscriptenModule, fi
 
   const image = new Image(imageType)
 
-  const ioDirection = new Matrix(ioDimensions, ioDimensions)
+  const ioDirection = new Float64Array(ioDimensions*ioDimensions)
   for (let ii = 0; ii < ioDimensions; ++ii) {
     const directionColumn = imageIO.GetDirection(ii)
     for (let jj = 0; jj < ioDimensions; ++jj) {
-      ioDirection.setElement(jj, ii, directionColumn.get(jj))
+      setMatrixElement(ioDirection, ioDimensions, jj, ii, directionColumn.get(jj))
     }
   }
 

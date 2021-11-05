@@ -7,8 +7,9 @@ export { default as FloatTypes } from './FloatTypes.js'
 export { default as IOTypes } from './IOTypes.js'
 
 export { default as PixelTypes } from './PixelTypes.js'
-export { default as Matrix } from './Matrix.js'
+
 export { default as getMatrixElement } from './getMatrixElement.js'
+export { default as setMatrixElement } from './setMatrixElement.js'
 
 export { default as Image } from './Image.js'
 export { default as ImageType } from './ImageType.js'
