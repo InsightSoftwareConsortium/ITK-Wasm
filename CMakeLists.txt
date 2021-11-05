@@ -80,6 +80,11 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(polydataios_VTKPLYFileReader VTK::IOPLY)
 endif()
 
+find_path(RapidJSON_INCLUDE_DIR
+ NAMES rapidjson/document.h
+  )
+set(WebAssemblyInterface_INCLUDE_DIRS ${RapidJSON_INCLUDE_DIR})
+
 get_filename_component(_module_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(CMAKE_MODULE_PATH "${_module_dir}/CMake/" ${CMAKE_MODULE_PATH})
 

@@ -42,3 +42,16 @@ ExternalData_Expand_Arguments(
   DATA{Input/C0004255.ISQ}
   DATA{Input/PNGSeries/,REGEX:mri3D_.[0-9]+.png}
   )
+
+set(WebAssemblyInterfaceTests
+  itkJSONImageInterfaceTest.cxx
+)
+
+CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
+  "${WebAssemblyInterfaceTests}" )
+
+itk_add_test(NAME itkJSONImageInterfaceTest
+    COMMAND WebAssemblyInterfaceTestDriver itkJSONImageInterfaceTest
+      DATA{Input/brainweb165a10f17.mha}
+      ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceTest.mha
+)

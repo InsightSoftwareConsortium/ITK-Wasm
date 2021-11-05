@@ -1,8 +1,3 @@
-find_path(RapidJSON_INCLUDE_DIR
- NAMES rapidjson/document.h
-  )
-include_directories(${RapidJSON_INCLUDE_DIR})
-
 # include iconv for reading dicom tags
 include(ExternalProject)
 set(Iconv iconv)
