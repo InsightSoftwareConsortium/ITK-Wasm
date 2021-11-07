@@ -15,7 +15,6 @@ RUN cd / && \
   cmake \
     -G Ninja \
     -DITK_DIR=/ITK-build \
-    -DRapidJSON_INCLUDE_DIR=/rapidjson/include \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
       ../ITKWebAssemblyInterface && \

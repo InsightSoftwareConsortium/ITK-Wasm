@@ -123,11 +123,6 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
-ENV RAPIDJSON_GIT_TAG 0d4517f15a8d7167ba9ae67f3f22a559ca841e3b
-RUN git clone https://github.com/Tencent/rapidjson.git && \
-  cd rapidjson && \
-  git checkout ${RAPIDJSON_GIT_TAG}
-
 ENV IPFS_TAG v0.10.0
 RUN curl -LO https://github.com/ipfs/go-ipfs/releases/download/${IPFS_TAG}/go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
   tar xvzf go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \

@@ -82,9 +82,30 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(polydataios_VTKPLYFileReader VTK::IOPLY)
 endif()
 
+include(FetchContent)
+set(_itk_build_testing ${BUILD_TESTING})
+set(_itk_build_shared ${BUILD_SHARED_LIBS})
+# Uses newer CMake
+set(RapidJSON_GIT_REPOSITORY "https://github.com/thewtex/rapidjson.git")
+set(RapidJSON_GIT_TAG        "67eb4fec88204714f6d0f63573569788135e41a5")
+set(RAPIDJSON_BUILD_CXX17 ON)
+set(RAPIDJSON_BUILD_DOC OFF)
+set(RAPIDJSON_BUILD_EXAMPLES OFF)
+set(RAPIDJSON_BUILD_TESTS OFF)
+set(RAPIDJSON_ENABLE_INSTRUMENTATION_OPT OFF)
+FetchContent_Declare(
+  rapidjson_lib
+  GIT_REPOSITORY ${RapidJSON_GIT_REPOSITORY}
+  GIT_TAG ${RapidJSON_GIT_TAG}
+  )
+FetchContent_MakeAvailable(rapidjson_lib)
+set(RapidJSON_INCLUDE_DIR "${rapidjson_lib_SOURCE_DIR}/include")
+set(BUILD_TESTING ${_itk_build_testing})
+set(BUILD_SHARED_LIBS ${_itk_build_shared})
+
 find_path(RapidJSON_INCLUDE_DIR
  NAMES rapidjson/document.h
-  )
+ )
 set(WebAssemblyInterface_INCLUDE_DIRS ${RapidJSON_INCLUDE_DIR})
 
 get_filename_component(_module_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
