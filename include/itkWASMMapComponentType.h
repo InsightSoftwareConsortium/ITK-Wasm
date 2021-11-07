@@ -17,6 +17,9 @@
  *=========================================================================*/
 #ifndef itkWASMMapComponentType_h
 #define itkWASMMapComponentType_h
+#include "WebAssemblyInterfaceExport.h"
+
+#include <string_view>
 
 namespace itk
 {
@@ -27,13 +30,13 @@ namespace wasm
 template <typename TComponent>
 struct MapComponentType
 {
-  static constexpr char ComponentString[] = "unknown";
+  static constexpr std::string_view ComponentString = "Unknown";
 };
 
 template <>
 struct MapComponentType<signed char>
 {
-  static constexpr char ComponentString[] = "int8_t";
+  static constexpr std::string_view ComponentString = "int8_t";
 };
 
 template <>
@@ -41,73 +44,73 @@ struct MapComponentType<char>
 {
   // Todo: does not compile:
   // std::numeric_limits<char>::is_signed ? "int8_t" : "uint8_t"
-  static constexpr char ComponentString[] = "int8_t";
+  static constexpr std::string_view ComponentString = "int8_t";
 };
 
 template <>
 struct MapComponentType<unsigned char>
 {
-  static constexpr char ComponentString[] = "uint8_t";
+  static constexpr std::string_view ComponentString = "uint8_t";
 };
 
 template <>
 struct MapComponentType<short>
 {
-  static constexpr char ComponentString[] = "int16_t";
+  static constexpr std::string_view ComponentString = "int16_t";
 };
 
 template <>
 struct MapComponentType<unsigned short>
 {
-  static constexpr char ComponentString[] = "uint16_t";
+  static constexpr std::string_view ComponentString = "uint16_t";
 };
 
 template <>
 struct MapComponentType<int>
 {
-  static constexpr char ComponentString[] = "int32_t";
+  static constexpr std::string_view ComponentString = "int32_t";
 };
 
 template <>
 struct MapComponentType<unsigned int>
 {
-  static constexpr char ComponentString[] = "uint32_t";
+  static constexpr std::string_view ComponentString = "uint32_t";
 };
 
 template <>
 struct MapComponentType<long>
 {
-  static constexpr char ComponentString[] = "int64_t";
+  static constexpr std::string_view ComponentString = "int64_t";
 };
 
 template <>
 struct MapComponentType<unsigned long>
 {
-  static constexpr char ComponentString[] = "uint64_t";
+  static constexpr std::string_view ComponentString = "uint64_t";
 };
 
 template <>
 struct MapComponentType<long long>
 {
-  static constexpr char ComponentString[] = "int64_t";
+  static constexpr std::string_view ComponentString = "int64_t";
 };
 
 template <>
 struct MapComponentType<unsigned long long>
 {
-  static constexpr char ComponentString[] = "uint64_t";
+  static constexpr std::string_view ComponentString = "uint64_t";
 };
 
 template <>
 struct MapComponentType<float>
 {
-  static constexpr char ComponentString[] = "float";
+  static constexpr std::string_view ComponentString = "float";
 };
 
 template <>
 struct MapComponentType<double>
 {
-  static constexpr char ComponentString[] = "double";
+  static constexpr std::string_view ComponentString = "double";
 };
 
 } // end namespace wasm

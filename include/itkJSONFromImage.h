@@ -15,12 +15,11 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkMakeJSONImageInterface_h
-#define itkMakeJSONImageInterface_h
+#ifndef itkJSONFromImage_h
+#define itkJSONFromImage_h
 
 #include "itkDefaultConvertPixelTraits.h"
 
-#include "itkJSONImageInterface.h"
 #include "itkWASMMapComponentType.h"
 #include "itkWASMMapPixelType.h"
 
@@ -35,8 +34,8 @@ namespace itk
 
 
 template<typename TImage >
-JSONImageInterface
-MakeJSONImageInterface(TImage * image)
+std::string
+JSONFromImage(TImage * image)
 {
   using ImageType = TImage;
   using PixelType = typename TImage::IOPixelType;
@@ -54,7 +53,7 @@ MakeJSONImageInterface(TImage * image)
   imageType.AddMember("dimension", rapidjson::Value(dimension).Move(), allocator );
 
   rapidjson::Value componentType;
-  componentType.SetString( wasm::MapComponentType<ComponentType>::ComponentString, allocator );
+  componentType.SetString( wasm::MapComponentType<ComponentType>::ComponentString.data(), allocator );
   imageType.AddMember("componentType", componentType.Move(), allocator );
 
   imageType.AddMember("pixelType", rapidjson::Value(wasm::MapPixelType<PixelType>::PixelTypeId).Move(), allocator );
@@ -84,12 +83,11 @@ MakeJSONImageInterface(TImage * image)
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
   document.Accept(writer);
 
-  const auto jsonMetaData = stringBuffer.GetString();
-  std::cout << "jsonMetaData" << jsonMetaData << std::endl;
+  const auto jsonImageInterface = stringBuffer.GetString();
+  std::cout << "jsonMetaData" << jsonImageInterface << std::endl;
 
-  JSONImageInterface imageInterface(jsonMetaData);
-  return imageInterface;
+  return jsonImageInterface;
 }
 
 } // end namespace itk
-#endif // itkMakeJSONImageInterface_h
+#endif // itkJSONFromImage_h

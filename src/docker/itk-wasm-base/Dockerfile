@@ -31,6 +31,7 @@ RUN mkdir ITK-Native-build && \
     -DModule_ITKCommon:BOOL=ON \
     -DModule_ITKIOXML:BOOL=ON \
     -DModule_ITKExpat:BOOL=ON \
+    -DCMAKE_CXX_STANDARD:STRING=17 \
     -DCMAKE_C_COMPILER=/usr/bin/cc \
     -DCMAKE_CXX_COMPILER=/usr/bin/c++ \
     -DCMAKE_TOOLCHAIN_FILE="" \
@@ -54,6 +55,7 @@ RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
     -DBUILD_TESTING:BOOL=OFF \
     -DITK_DIR:PATH=/ITK-Native-build \
+    -DCMAKE_CXX_STANDARD:STRING=17 \
     -DCMAKE_C_COMPILER=/usr/bin/cc \
     -DCMAKE_CXX_COMPILER=/usr/bin/c++ \
     -DCMAKE_TOOLCHAIN_FILE="" \
@@ -74,6 +76,7 @@ RUN mkdir ITK-build && \
   cmake \
     -G Ninja \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
+    -DCMAKE_CXX_STANDARD:STRING=17 \
     -DCMAKE_INSTALL_PREFIX:PATH=/usr \
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_EXAMPLES:BOOL=OFF \
@@ -110,6 +113,7 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git
   cmake \
     -G Ninja \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
+    -DCMAKE_CXX_STANDARD:STRING=17 \
     -DCMAKE_INSTALL_PREFIX:PATH=/usr \
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_TESTING:BOOL=OFF \

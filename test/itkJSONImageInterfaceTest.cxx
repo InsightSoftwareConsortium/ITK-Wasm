@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkMakeJSONImageInterface.h"
+#include "itkJSONFromImage.h"
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
@@ -41,7 +41,7 @@ itkJSONImageInterfaceTest(int argc, char * argv[])
   ImagePointer inputImage = nullptr;
   ITK_TRY_EXPECT_NO_EXCEPTION(inputImage = itk::ReadImage<ImageType>(inputImageFile));
 
-  const itk::JSONImageInterface imageInterface = itk::MakeJSONImageInterface<ImageType>(inputImage);
+  const std::string imageInterface = itk::JSONFromImage<ImageType>(inputImage);
 
   return EXIT_SUCCESS;
 }
