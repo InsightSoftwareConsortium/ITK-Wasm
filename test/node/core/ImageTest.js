@@ -45,20 +45,13 @@ test('spacing should have a default value of 1.0', t => {
   t.is(image.spacing[0], 1.0)
 })
 
-test('direction should same number of rows and colums as the dimension', t => {
-  const imageType = new ImageType(3, IntTypes.UInt8)
-  const image = new Image(imageType)
-  t.is(image.direction.rows, 3)
-  t.is(image.direction.columns, 3)
-})
-
 test('direction should be the identity by default', t => {
   const imageType = new ImageType(2)
   const image = new Image(imageType)
-  t.is(image.direction.data[0], 1.0)
-  t.is(image.direction.data[1], 0.0)
-  t.is(image.direction.data[2], 0.0)
-  t.is(image.direction.data[3], 1.0)
+  t.is(image.direction[0], 1.0)
+  t.is(image.direction[1], 0.0)
+  t.is(image.direction[2], 0.0)
+  t.is(image.direction[3], 1.0)
 })
 
 test('size should have a length equal to the dimension', t => {

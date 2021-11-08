@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, PixelTypes, readImageLocalFile } from '../../../dist/index.js'
+import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile } from '../../../dist/index.js'
 
 test('Test reading an ITK HDF5 file', t => {
   const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'ITKImage.hdf5')
@@ -16,15 +16,15 @@ test('Test reading an ITK HDF5 file', t => {
     t.is(image.spacing[0], 1, 'spacing[0]')
     t.is(image.spacing[1], 2, 'spacing[1]')
     t.is(image.spacing[2], 3, 'spacing[2]')
-    t.is(image.direction.getElement(0, 0), 0.866025403784439, 'direction (0, 0)')
-    t.is(image.direction.getElement(0, 1), -0.5, 'direction (0, 1)')
-    t.is(image.direction.getElement(0, 2), 0.0, 'direction (0, 2)')
-    t.is(image.direction.getElement(1, 0), 0.5, 'direction (1, 0)')
-    t.is(image.direction.getElement(1, 1), 0.866025403784439, 'direction (1, 1)')
-    t.is(image.direction.getElement(1, 2), 0, 'direction (1, 2)')
-    t.is(image.direction.getElement(2, 0), 0.0, 'direction (2, 0)')
-    t.is(image.direction.getElement(2, 1), 0.0, 'direction (2, 1)')
-    t.is(image.direction.getElement(2, 2), 1.0, 'direction (2, 2)')
+    t.is(getMatrixElement(image.direction, 3, 0, 0), 0.866025403784439, 'direction (0, 0)')
+    t.is(getMatrixElement(image.direction, 3, 0, 1), -0.5, 'direction (0, 1)')
+    t.is(getMatrixElement(image.direction, 3, 0, 2), 0.0, 'direction (0, 2)')
+    t.is(getMatrixElement(image.direction, 3, 1, 0), 0.5, 'direction (1, 0)')
+    t.is(getMatrixElement(image.direction, 3, 1, 1), 0.866025403784439, 'direction (1, 1)')
+    t.is(getMatrixElement(image.direction, 3, 1, 2), 0, 'direction (1, 2)')
+    t.is(getMatrixElement(image.direction, 3, 2, 0), 0.0, 'direction (2, 0)')
+    t.is(getMatrixElement(image.direction, 3, 2, 1), 0.0, 'direction (2, 1)')
+    t.is(getMatrixElement(image.direction, 3, 2, 2), 1.0, 'direction (2, 2)')
     t.is(image.size[0], 5, 'size[0]')
     t.is(image.size[1], 5, 'size[1]')
     t.is(image.size[2], 5, 'size[2]')

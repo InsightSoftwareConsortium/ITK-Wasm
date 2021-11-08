@@ -1,6 +1,7 @@
 import Image from '../../core/Image.js'
 import ImageType from '../../core/ImageType.js'
 import setMatrixElement from '../../core/setMatrixElement.js'
+import getMatrixElement from '../../core/getMatrixElement.js'
 
 import imageIOComponentToJSComponent from './imageIOComponentToJSComponent.js'
 import imageIOPixelTypeToJSPixelType from './imageIOPixelTypeToJSPixelType.js'
@@ -32,7 +33,7 @@ function readImageEmscriptenFSFile (imageModule: ImageIOBaseEmscriptenModule, fi
 
   const image = new Image(imageType)
 
-  const ioDirection = new Float64Array(ioDimensions*ioDimensions)
+  const ioDirection = new Float64Array(ioDimensions * ioDimensions)
   for (let ii = 0; ii < ioDimensions; ++ii) {
     const directionColumn = imageIO.GetDirection(ii)
     for (let jj = 0; jj < ioDimensions; ++jj) {
@@ -47,17 +48,23 @@ function readImageEmscriptenFSFile (imageModule: ImageIOBaseEmscriptenModule, fi
       image.origin[ii] = imageIO.GetOrigin(ii)
       for (let jj = 0; jj < image.imageType.dimension; ++jj) {
         if (jj < ioDimensions) {
-          const element = ioDirection.getElement(jj, ii)
-          image.direction.setElement(jj, ii, element)
+          const element = getMatrixElement(ioDirection, image.imageType.dimension, jj, ii)
+          setMatrixElement(image.direction, image.imageType.dimension, jj, ii, element)
         } else {
-          image.direction.setElement(jj, ii, 0.0)
+          setMatrixElement(image.direction, image.imageType.dimension, jj, ii, 0.0)
         }
       }
     } else {
       image.size[ii] = 0
       image.spacing[ii] = 1.0
       image.origin[ii] = 0.0
-      image.direction.setIdentity()
+      for (let jj = 0; jj < image.imageType.dimension; ++jj) {
+        if (ii === jj) {
+          setMatrixElement(image.direction, image.imageType.dimension, jj, ii, 1.0)
+        } else {
+          setMatrixElement(image.direction, image.imageType.dimension, jj, ii, 0.0)
+        }
+      }
     }
   }
 
@@ -67,7 +74,7 @@ function readImageEmscriptenFSFile (imageModule: ImageIOBaseEmscriptenModule, fi
     if (image.spacing[ii] < 0.0) {
       image.spacing[ii] = -image.spacing[ii]
       for (let jj = 0; jj < image.imageType.dimension; ++jj) {
-        image.direction.setElement(ii, jj, -1 * image.direction.getElement(ii, jj))
+        setMatrixElement(image.direction, image.imageType.dimension, ii, jj, -getMatrixElement(image.direction, image.imageType.dimension, ii, jj))
       }
     }
   }

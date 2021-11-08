@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { FloatTypes, PixelTypes, readImageLocalFile } from '../../../dist/index.js'
+import { FloatTypes, PixelTypes, getMatrixElement, readImageLocalFile } from '../../../dist/index.js'
 
 test('Test reading a MINC file', t => {
   const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 't1_z+_short_cor.mnc')
@@ -16,15 +16,15 @@ test('Test reading a MINC file', t => {
     t.is(image.spacing[0], 1.0, 'spacing[0]')
     t.is(image.spacing[1], 1.0, 'spacing[1]')
     t.is(image.spacing[2], 1.2, 'spacing[2]')
-    t.is(image.direction.getElement(0, 0), 0.9980212170406957, 'direction (0, 0)')
-    t.is(image.direction.getElement(0, 1), -0.05172001539071517, 'direction (0, 1)')
-    t.is(image.direction.getElement(0, 2), 0.03575998606925314, 'direction (0, 2)')
-    t.is(image.direction.getElement(1, 0), 0.0523040113746069, 'direction (1, 0)')
-    t.is(image.direction.getElement(1, 1), 0.9985092971339445, 'direction (1, 1)')
-    t.is(image.direction.getElement(1, 2), -0.015601993922049426, 'direction (1, 2)')
-    t.is(image.direction.getElement(2, 0), -0.034899007589522905, 'direction (2, 0)')
-    t.is(image.direction.getElement(2, 1), 0.01744200519034907, 'direction (2, 1)')
-    t.is(image.direction.getElement(2, 2), 0.9992386107341845, 'direction (2, 2)')
+    t.is(getMatrixElement(image.direction, 3, 0, 0), 0.9980212170406957, 'direction (0, 0)')
+    t.is(getMatrixElement(image.direction, 3, 0, 1), -0.05172001539071517, 'direction (0, 1)')
+    t.is(getMatrixElement(image.direction, 3, 0, 2), 0.03575998606925314, 'direction (0, 2)')
+    t.is(getMatrixElement(image.direction, 3, 1, 0), 0.0523040113746069, 'direction (1, 0)')
+    t.is(getMatrixElement(image.direction, 3, 1, 1), 0.9985092971339445, 'direction (1, 1)')
+    t.is(getMatrixElement(image.direction, 3, 1, 2), -0.015601993922049426, 'direction (1, 2)')
+    t.is(getMatrixElement(image.direction, 3, 2, 0), -0.034899007589522905, 'direction (2, 0)')
+    t.is(getMatrixElement(image.direction, 3, 2, 1), 0.01744200519034907, 'direction (2, 1)')
+    t.is(getMatrixElement(image.direction, 3, 2, 2), 0.9992386107341845, 'direction (2, 2)')
     t.is(image.size[0], 30, 'size[0]')
     t.is(image.size[1], 40, 'size[1]')
     t.is(image.size[2], 10, 'size[2]')

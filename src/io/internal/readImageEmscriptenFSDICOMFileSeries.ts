@@ -1,5 +1,6 @@
 import Image from '../../core/Image.js'
 import ImageType from '../../core/ImageType.js'
+import setMatrixElement from '../../core/setMatrixElement.js'
 
 import imageIOComponentToJSComponent from './imageIOComponentToJSComponent.js'
 import imageIOPixelTypeToJSPixelType from './imageIOPixelTypeToJSPixelType.js'
@@ -59,7 +60,7 @@ function readImageEmscriptenFSDICOMFileSeries (seriesReaderModule: DICOMImageSer
     image.size[ii] = seriesReader.GetSize(ii)
     image.origin[ii] = seriesReader.GetOrigin(ii)
     for (let jj = 0; jj < dimension; ++jj) {
-      image.direction.setElement(ii, jj, seriesReader.GetDirection(ii, jj))
+      setMatrixElement(image.direction, dimension, ii, jj, seriesReader.GetDirection(ii, jj))
     }
   }
   image.data = seriesReader.GetPixelBufferData()

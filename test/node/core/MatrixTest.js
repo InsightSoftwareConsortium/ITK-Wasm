@@ -5,7 +5,7 @@ import { getMatrixElement, setMatrixElement } from '../../../dist/index.js'
 test('setMatrixElement() should set elements of the matrix', t => {
   const columns = 2
   const rows = 2
-  const matrixData = new Float64Array(rows*columns)
+  const matrixData = new Float64Array(rows * columns)
   matrixData[0] = 1
   matrixData[1] = 2
   matrixData[2] = 3
@@ -24,7 +24,7 @@ test('setMatrixElement() should set elements of the matrix', t => {
 test('getMatrixElement() should get elements of the matrix', t => {
   const columns = 2
   const rows = 2
-  const matrixData = new Float64Array(rows*columns)
+  const matrixData = new Float64Array(rows * columns)
   matrixData[0] = 1
   matrixData[1] = 2
   matrixData[2] = 3

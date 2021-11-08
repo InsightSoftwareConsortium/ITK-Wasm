@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { FloatTypes, PixelTypes, readImageLocalFile, writeImageLocalFile } from '../../../dist/index.js'
+import { FloatTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../dist/index.js'
 
 const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'vol-raw-little.nrrd')
 const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'NRRDTest-vol-raw-little.nrrd')
@@ -17,15 +17,15 @@ const verifyImage = (t, image) => {
   t.is(image.spacing[0], 1.0, 'spacing[0]')
   t.is(image.spacing[1], 1.0, 'spacing[1]')
   t.is(image.spacing[2], 1.0, 'spacing[2]')
-  t.is(image.direction.getElement(0, 0), 1.0, 'direction (0, 0)')
-  t.is(image.direction.getElement(0, 1), 0.0, 'direction (0, 1)')
-  t.is(image.direction.getElement(0, 2), 0.0, 'direction (0, 2)')
-  t.is(image.direction.getElement(1, 0), 0.0, 'direction (1, 0)')
-  t.is(image.direction.getElement(1, 1), 1.0, 'direction (1, 1)')
-  t.is(image.direction.getElement(1, 2), 0.0, 'direction (1, 2)')
-  t.is(image.direction.getElement(2, 0), 0.0, 'direction (2, 0)')
-  t.is(image.direction.getElement(2, 1), 0.0, 'direction (2, 1)')
-  t.is(image.direction.getElement(2, 2), 1.0, 'direction (2, 2)')
+  t.is(getMatrixElement(image.direction, 3, 0, 0), 1.0, 'direction (0, 0)')
+  t.is(getMatrixElement(image.direction, 3, 0, 1), 0.0, 'direction (0, 1)')
+  t.is(getMatrixElement(image.direction, 3, 0, 2), 0.0, 'direction (0, 2)')
+  t.is(getMatrixElement(image.direction, 3, 1, 0), 0.0, 'direction (1, 0)')
+  t.is(getMatrixElement(image.direction, 3, 1, 1), 1.0, 'direction (1, 1)')
+  t.is(getMatrixElement(image.direction, 3, 1, 2), 0.0, 'direction (1, 2)')
+  t.is(getMatrixElement(image.direction, 3, 2, 0), 0.0, 'direction (2, 0)')
+  t.is(getMatrixElement(image.direction, 3, 2, 1), 0.0, 'direction (2, 1)')
+  t.is(getMatrixElement(image.direction, 3, 2, 2), 1.0, 'direction (2, 2)')
   t.is(image.size[0], 5, 'size[0]')
   t.is(image.size[1], 6, 'size[1]')
   t.is(image.size[2], 7, 'size[2]')

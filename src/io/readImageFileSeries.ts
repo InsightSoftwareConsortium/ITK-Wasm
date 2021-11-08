@@ -1,6 +1,5 @@
 import stackImages from '../core/stackImages.js'
 import readImageArrayBuffer from './readImageArrayBuffer.js'
-import setMatrixElement from '../core/setMatrixElement.js'
 import WorkerPool from '../core/WorkerPool.js'
 
 import { readAsArrayBuffer } from 'promise-file-reader'
@@ -52,7 +51,8 @@ async function readImageFileSeries (
     image.size.push(1)
     image.spacing.push(zSpacing)
     image.origin.push(zOrigin)
-    image.direction = new Float64Array(9, 0.0)
+    image.direction = new Float64Array(9)
+    image.direction.fill(0.0)
     image.direction[0] = 1.0
     image.direction[3] = 1.0
     image.direction[6] = 1.0

@@ -1,15 +1,12 @@
 import Image from './Image.js'
-import Matrix from './Matrix.js'
 
 function copyImage (image: Image): Image {
   const copy = new Image(image.imageType)
   copy.name = image.name
-  const dimension = image.imageType.dimension
 
   copy.origin = Array.from(image.origin)
   copy.spacing = Array.from(image.spacing)
-  copy.direction = new Matrix(dimension, dimension)
-  copy.direction.data = Array.from(image.direction.data)
+  copy.direction = image.direction.slice()
 
   copy.size = Array.from(image.size)
 

@@ -1,6 +1,6 @@
 import ImageType from './ImageType.js'
-import Matrix from './Matrix.js'
 import type TypedArray from './TypedArray.js'
+import setMatrixElement from './setMatrixElement.js'
 
 class Image {
   name: string = 'Image'
@@ -9,7 +9,7 @@ class Image {
 
   spacing: number[]
 
-  direction: Matrix
+  direction: TypedArray
 
   size: number[]
 
@@ -23,8 +23,11 @@ class Image {
     this.spacing = new Array(dimension)
     this.spacing.fill(1.0)
 
-    this.direction = new Matrix(dimension, dimension)
-    this.direction.setIdentity()
+    this.direction = new Float64Array(dimension * dimension)
+    this.direction.fill(0.0)
+    for (let ii = 0; ii < dimension; ii++) {
+      setMatrixElement(this.direction, dimension, ii, ii, 1.0)
+    }
 
     this.size = new Array(dimension)
     this.size.fill(0)

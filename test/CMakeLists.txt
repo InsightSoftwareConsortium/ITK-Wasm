@@ -55,3 +55,13 @@ itk_add_test(NAME itkJSONImageInterfaceTest
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceTest.mha
 )
+
+if(EMSCRIPTEN)
+  # setjmp workaround
+  set_property(TARGET WebAssemblyInterfaceTestDriver APPEND_STRING
+    PROPERTY LINK_FLAGS " -s ERROR_ON_UNDEFINED_SYMBOLS=0"
+  )
+  set_property(TARGET WebAssemblyInterfaceTestDriver.umd APPEND_STRING
+    PROPERTY LINK_FLAGS " -s ERROR_ON_UNDEFINED_SYMBOLS=0"
+  )
+endif()

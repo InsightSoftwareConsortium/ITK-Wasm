@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, PixelTypes, readImageLocalFile, readDICOMTagsLocalFile } from '../../../dist/index.js'
+import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, readDICOMTagsLocalFile } from '../../../dist/index.js'
 
 test('Test reading a DICOM file', t => {
   const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
@@ -16,15 +16,15 @@ test('Test reading a DICOM file', t => {
     t.is(image.spacing[0], 1.0, 'spacing[0]')
     t.is(image.spacing[1], 1.0, 'spacing[1]')
     t.is(image.spacing[2], 1.0, 'spacing[2]')
-    t.is(image.direction.getElement(0, 0), 0.0, 'direction (0, 0)')
-    t.is(image.direction.getElement(0, 1), 0.0, 'direction (0, 1)')
-    t.is(image.direction.getElement(0, 2), -1.0, 'direction (0, 2)')
-    t.is(image.direction.getElement(1, 0), 1.0, 'direction (1, 0)')
-    t.is(image.direction.getElement(1, 1), 0.0, 'direction (1, 1)')
-    t.is(image.direction.getElement(1, 2), 0.0, 'direction (1, 2)')
-    t.is(image.direction.getElement(2, 0), 0.0, 'direction (2, 0)')
-    t.is(image.direction.getElement(2, 1), -1.0, 'direction (2, 1)')
-    t.is(image.direction.getElement(2, 2), 0.0, 'direction (2, 2)')
+    t.is(getMatrixElement(image.direction, 3, 0, 0), 0.0, 'direction (0, 0)')
+    t.is(getMatrixElement(image.direction, 3, 0, 1), 0.0, 'direction (0, 1)')
+    t.is(getMatrixElement(image.direction, 3, 0, 2), -1.0, 'direction (0, 2)')
+    t.is(getMatrixElement(image.direction, 3, 1, 0), 1.0, 'direction (1, 0)')
+    t.is(getMatrixElement(image.direction, 3, 1, 1), 0.0, 'direction (1, 1)')
+    t.is(getMatrixElement(image.direction, 3, 1, 2), 0.0, 'direction (1, 2)')
+    t.is(getMatrixElement(image.direction, 3, 2, 0), 0.0, 'direction (2, 0)')
+    t.is(getMatrixElement(image.direction, 3, 2, 1), -1.0, 'direction (2, 1)')
+    t.is(getMatrixElement(image.direction, 3, 2, 2), 0.0, 'direction (2, 2)')
     t.is(image.size[0], 256, 'size[0]')
     t.is(image.size[1], 256, 'size[1]')
     t.is(image.size[2], 1, 'size[2]')
