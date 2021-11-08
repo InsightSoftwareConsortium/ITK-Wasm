@@ -27,8 +27,6 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
-#include <iostream>
-
 namespace itk
 {
 
@@ -81,13 +79,35 @@ JSONFromImage(TImage * image)
   document.AddMember( "spacing", spacing.Move(), allocator );
 
   const auto direction = reinterpret_cast< size_t >( image->GetDirection().GetVnlMatrix().begin() );
+  std::ostringstream directionStream;
+  directionStream << "address:";
+  directionStream << direction;
+  rapidjson::Value directionString;
+  directionString.SetString( directionStream.str().c_str(), allocator );
+  document.AddMember( "direction", directionString.Move(), allocator );
+
+  rapidjson::Value size(rapidjson::kArrayType);
+  const auto imageSize = image->GetBufferedRegion().GetSize();
+  for( unsigned int ii = 0; ii < dimension; ++ii )
+    {
+    size.PushBack(rapidjson::Value().SetInt(imageSize[ii]), allocator);
+    }
+
+  document.AddMember( "size", size.Move(), allocator );
+
+  const auto data = reinterpret_cast< size_t >( image->GetBufferPointer() );
+  std::ostringstream dataStream;
+  dataStream << "address:";
+  dataStream << data;
+  rapidjson::Value dataString;
+  dataString.SetString( dataStream.str().c_str(), allocator );
+  document.AddMember( "data", dataString.Move(), allocator );
 
   rapidjson::StringBuffer stringBuffer;
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
   document.Accept(writer);
 
   const auto jsonImageInterface = stringBuffer.GetString();
-  std::cout << "jsonMetaData" << jsonImageInterface << std::endl;
 
   return jsonImageInterface;
 }

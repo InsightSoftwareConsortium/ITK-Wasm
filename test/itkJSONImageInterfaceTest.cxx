@@ -42,6 +42,7 @@ itkJSONImageInterfaceTest(int argc, char * argv[])
   ITK_TRY_EXPECT_NO_EXCEPTION(inputImage = itk::ReadImage<ImageType>(inputImageFile));
 
   const std::string imageInterface = itk::JSONFromImage<ImageType>(inputImage);
+  std::cout << "imageInterface: " << imageInterface << std::endl;
 
   return EXIT_SUCCESS;
 }
