@@ -122,10 +122,12 @@ is now:
 itk-wasm --image --source-dir src/dir insighttoolkit/itk-wasm build
 ```
 
-## Image orientation
+## Image data structure
 
 The `itk.Image.direction` is now directly a `Float64Array` -- `itk.Matrix` has
 been removed.
+
+`imageType.pixelType` is now a string enumeration.
 
 Addresses an important issue in image orientation support.
 

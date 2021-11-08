@@ -158,89 +158,118 @@ JSONImageIO
 
 IOPixelEnum
 JSONImageIO
-::JSToITKPixelType( const int jsPixelType )
+::JSToITKPixelType( const std::string & jsPixelType )
 {
-  switch ( jsPixelType )
+  if ( jsPixelType == "Unknown" )
     {
-    case 0:
-      return IOPixelEnum::UNKNOWNPIXELTYPE;
-    case 1:
-      return IOPixelEnum::SCALAR;
-    case 2:
-      return IOPixelEnum::RGB;
-    case 3:
-      return IOPixelEnum::RGBA;
-    case 4:
-      return IOPixelEnum::OFFSET;
-    case 5:
-      return IOPixelEnum::VECTOR;
-    case 6:
-      return IOPixelEnum::POINT;
-    case 7:
-      return IOPixelEnum::COVARIANTVECTOR;
-    case 8:
-      return IOPixelEnum::SYMMETRICSECONDRANKTENSOR;
-    case 9:
-      return IOPixelEnum::DIFFUSIONTENSOR3D;
-    case 10:
-      return IOPixelEnum::COMPLEX;
-    case 11:
-      return IOPixelEnum::FIXEDARRAY;
-    case 12:
-      return IOPixelEnum::ARRAY;
-    case 13:
-      return IOPixelEnum::MATRIX;
-    case 14:
-      return IOPixelEnum::VARIABLELENGTHVECTOR;
-    case 15:
-      return IOPixelEnum::VARIABLESIZEMATRIX;
+    return IOPixelEnum::UNKNOWNPIXELTYPE;
+    }
+  else if ( jsPixelType == "Scalar" )
+    {
+    return IOPixelEnum::SCALAR;
+    }
+  else if ( jsPixelType == "RGB" )
+    {
+    return IOPixelEnum::RGB;
+    }
+  else if ( jsPixelType == "RGBA" )
+    {
+    return IOPixelEnum::RGBA;
+    }
+  else if ( jsPixelType == "Offset" )
+    {
+    return IOPixelEnum::OFFSET;
+    }
+  else if ( jsPixelType == "Vector" )
+    {
+    return IOPixelEnum::VECTOR;
+    }
+  else if ( jsPixelType == "Point" )
+    {
+    return IOPixelEnum::POINT;
+    }
+  else if ( jsPixelType == "CovariantVector" )
+    {
+    return IOPixelEnum::COVARIANTVECTOR;
+    }
+  else if ( jsPixelType == "SymmetricSecondRankTensor" )
+    {
+    return IOPixelEnum::SYMMETRICSECONDRANKTENSOR;
+    }
+  else if ( jsPixelType == "DiffusionTensor3D" )
+    {
+    return IOPixelEnum::DIFFUSIONTENSOR3D;
+    }
+  else if ( jsPixelType == "Complex" )
+    {
+    return IOPixelEnum::COMPLEX;
+    }
+  else if ( jsPixelType == "FixedArray" )
+    {
+    return IOPixelEnum::FIXEDARRAY;
+    }
+  else if ( jsPixelType == "Array" )
+    {
+    return IOPixelEnum::ARRAY;
+    }
+  else if ( jsPixelType == "Matrix" )
+    {
+    return IOPixelEnum::MATRIX;
+    }
+  else if ( jsPixelType == "VariableLengthVector" )
+    {
+    return IOPixelEnum::VARIABLELENGTHVECTOR;
+    }
+  else if ( jsPixelType == "VariableSizeMatrix" )
+    {
+    return IOPixelEnum::VARIABLESIZEMATRIX;
     }
 
   return IOPixelEnum::UNKNOWNPIXELTYPE;
 }
 
 
-int
+std::string
 JSONImageIO
 ::ITKToJSPixelType( const IOPixelEnum itkPixelType )
 {
   switch ( itkPixelType )
     {
     case IOPixelEnum::UNKNOWNPIXELTYPE:
-      return 0;
+      return "Unknown";
     case IOPixelEnum::SCALAR:
-      return 1;
+      return "Scalar";
     case IOPixelEnum::RGB:
-      return 2;
+      return "RGB";
     case IOPixelEnum::RGBA:
-      return 3;
+      return "RGBA";
     case IOPixelEnum::OFFSET:
-      return 4;
+      return "Offset";
     case IOPixelEnum::VECTOR:
-      return 5;
+      return "Vector";
     case IOPixelEnum::POINT:
-      return 6;
+      return "Point";
     case IOPixelEnum::COVARIANTVECTOR:
-      return 7;
+      return "CovariantVector";
     case IOPixelEnum::SYMMETRICSECONDRANKTENSOR:
-      return 7;
+      return "SymmetricSecondRankTensor";
     case IOPixelEnum::DIFFUSIONTENSOR3D:
-      return 7;
+      return "DiffusionTensor3D";
     case IOPixelEnum::COMPLEX:
-      return 10;
+      return "Complex";
     case IOPixelEnum::FIXEDARRAY:
-      return 11;
+      return "FixedArray";
     case IOPixelEnum::ARRAY:
-      return 12;
+      return "Array";
     case IOPixelEnum::MATRIX:
-      return 13;
+      return "Matrix";
     case IOPixelEnum::VARIABLELENGTHVECTOR:
-      return 14;
+      return "VariableLengthVector";
     case IOPixelEnum::VARIABLESIZEMATRIX:
-      return 15;
+      return "VariableSizeMatrix";
     }
 
-  return 0;
+  return "Unknown";
 }
 
 
@@ -321,7 +350,7 @@ JSONImageIO
   const std::string componentType( imageType["componentType"].GetString() );
   const ImageIOBase::IOComponentEnum ioComponentType = this->JSToITKComponentType( componentType );
   this->SetComponentType( ioComponentType );
-  const int pixelType( imageType["pixelType"].GetInt() );
+  const std::string pixelType( imageType["pixelType"].GetString() );
   const IOPixelEnum ioPixelType = this->JSToITKPixelType( pixelType );
   this->SetPixelType( ioPixelType );
   this->SetNumberOfComponents( imageType["components"].GetInt() );
@@ -456,8 +485,10 @@ JSONImageIO
   componentType.SetString( componentString.c_str(), allocator );
   imageType.AddMember("componentType", componentType.Move(), allocator );
 
-  const int pixelType = this->ITKToJSPixelType( this->GetPixelType() );
-  imageType.AddMember("pixelType", rapidjson::Value(pixelType).Move(), allocator );
+  const std::string pixelString = this->ITKToJSPixelType( this->GetPixelType() );
+  rapidjson::Value pixelType;
+  pixelType.SetString( pixelString.c_str(), allocator );
+  imageType.AddMember("pixelType", pixelType.Move(), allocator );
 
   imageType.AddMember("components", rapidjson::Value( this->GetNumberOfComponents() ).Move(), allocator );
 

@@ -31,9 +31,7 @@ namespace itk
  *
  * This format is intended to facilitage data exchange in itk-wasm.
  * It reads and writes an itk-wasm itk/Image JSON object where TypedArrays are
- * replaced by binary files on the filesystem.
- *
- * The formt is experimental and subject to change. We mean it.
+ * replaced by binary files in a .zip file.
  *
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
@@ -88,8 +86,8 @@ protected:
   static ImageIOBase::IOComponentEnum JSToITKComponentType( const std::string & jsComponentType );
   static std::string ITKToJSComponentType( const ImageIOBase::IOComponentEnum );
 
-  static IOPixelEnum JSToITKPixelType( const int jsPixelType );
-  static int ITKToJSPixelType( const IOPixelEnum );
+  static IOPixelEnum JSToITKPixelType( const std::string & jsPixelType );
+  static std::string ITKToJSPixelType( const IOPixelEnum );
 
   Superclass::SizeType GetHeaderSize() const override
   {

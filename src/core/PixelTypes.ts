@@ -1,20 +1,20 @@
 const PixelTypes = {
-  Unknown: 0,
-  Scalar: 1,
-  RGB: 2,
-  RGBA: 3,
-  Offset: 4,
-  Vector: 5,
-  Point: 6,
-  CovariantVector: 7,
-  SymmetricSecondRankTensor: 8,
-  DiffusionTensor3D: 9,
-  Complex: 10,
-  FixedArray: 11,
-  Array: 12,
-  Matrix: 13,
-  VariableLengthVector: 14,
-  VariableSizeMatrix: 15
+  Unknown: 'Unknown',
+  Scalar: 'Scalar',
+  RGB: 'RGB',
+  RGBA: 'RGBA',
+  Offset: 'Offset',
+  Vector: 'Vector',
+  Point: 'Point',
+  CovariantVector: 'CovariantVector',
+  SymmetricSecondRankTensor: 'SymmetricSecondRankTensor',
+  DiffusionTensor3D: 'DiffusionTensor3D',
+  Complex: 'Complex',
+  FixedArray: 'FixedArray',
+  Array: 'Array',
+  Matrix: 'Matrix',
+  VariableLengthVector: 'VariableLengthVector',
+  VariableSizeMatrix: 'VariableSizeMatrix'
 } as const
 
 export default PixelTypes
