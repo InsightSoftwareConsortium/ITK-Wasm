@@ -33,6 +33,8 @@
 #include "itkMatrix.h"
 #include "itkVariableSizeMatrix.h"
 
+#include <string_view>
+
 namespace itk
 {
 
@@ -43,92 +45,92 @@ template <typename TPixel>
 struct MapPixelType
 {
   // scalar
-  static constexpr unsigned int PixelTypeId = 1;
+  static constexpr std::string_view PixelString = "Scalar";
 };
 
 template <typename TPixel>
 struct MapPixelType<RGBPixel<TPixel>>
 {
-  static constexpr unsigned int PixelTypeId = 2;
+  static constexpr std::string_view PixelString = "RGB";
 };
 
 template <typename TPixel>
 struct MapPixelType<RGBAPixel<TPixel>>
 {
-  static constexpr unsigned int PixelTypeId = 3;
+  static constexpr std::string_view PixelString = "RGBA";
 };
 
 template <unsigned VLength>
 struct MapPixelType<Offset<VLength>>
 {
-  static constexpr unsigned int PixelTypeId = 4;
+  static constexpr std::string_view PixelString = "Offset";
 };
 
 template <typename TPixel, unsigned VLength>
 struct MapPixelType<Vector<TPixel, VLength>>
 {
-  static constexpr unsigned int PixelTypeId = 5;
+  static constexpr std::string_view PixelString = "Vector";
 };
 
 template <typename TCoordRep, unsigned NPointDimension>
 struct MapPixelType<Point<TCoordRep, NPointDimension>>
 {
-  static constexpr unsigned int PixelTypeId = 6;
+  static constexpr std::string_view PixelString = "Point";
 };
 
 template <typename TPixel, unsigned VLength>
 struct MapPixelType<CovariantVector<TPixel, VLength>>
 {
-  static constexpr unsigned int PixelTypeId = 7;
+  static constexpr std::string_view PixelString = "CovariantVector";
 };
 
 template <typename TPixel, unsigned VLength>
 struct MapPixelType<SymmetricSecondRankTensor<TPixel, VLength>>
 {
-  static constexpr unsigned int PixelTypeId = 8;
+  static constexpr std::string_view PixelString = "SymmetricSecondRankTensor";
 };
 
 template <typename TPixel >
 struct MapPixelType<DiffusionTensor3D<TPixel>>
 {
-  static constexpr unsigned int PixelTypeId = 9;
+  static constexpr std::string_view PixelString = "DiffusionTensor3D";
 };
 
 template <typename TPixel >
 struct MapPixelType<std::complex<TPixel>>
 {
-  static constexpr unsigned int PixelTypeId = 10;
+  static constexpr std::string_view PixelString = "Complex";
 };
 
 template <typename TPixel, unsigned VLength>
 struct MapPixelType<FixedArray<TPixel, VLength>>
 {
-  static constexpr unsigned int PixelTypeId = 11;
+  static constexpr std::string_view PixelString = "FixedArray";
 };
 
 template <typename TValue>
 struct MapPixelType<Array<TValue>>
 {
-  static constexpr unsigned int PixelTypeId = 12;
+  static constexpr std::string_view PixelString = "Array";
 };
 
 template <typename TValue, unsigned VLength>
 struct MapPixelType<Matrix<TValue, VLength, VLength>>
 {
-  static constexpr unsigned int PixelTypeId = 13;
+  static constexpr std::string_view PixelString = "Matrix";
 };
 
 template <typename TPixel>
 struct MapPixelType<VariableLengthVector<TPixel>>
 {
-  static constexpr unsigned int PixelTypeId = 14;
+  static constexpr std::string_view PixelString = "VariableLengthVector";
 };
 
 
 template <typename TValue>
 struct MapPixelType<VariableSizeMatrix<TValue>>
 {
-  static constexpr unsigned int PixelTypeId = 15;
+  static constexpr std::string_view PixelString = "VariableSizeMatrix";
 };
 
 

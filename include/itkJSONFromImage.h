@@ -56,9 +56,13 @@ JSONFromImage(TImage * image)
   componentType.SetString( wasm::MapComponentType<ComponentType>::ComponentString.data(), allocator );
   imageType.AddMember("componentType", componentType.Move(), allocator );
 
-  imageType.AddMember("pixelType", rapidjson::Value(wasm::MapPixelType<PixelType>::PixelTypeId).Move(), allocator );
+  rapidjson::Value pixelType;
+  pixelType.SetString( wasm::MapPixelType<PixelType>::PixelString.data(), allocator );
+  imageType.AddMember("pixelType", pixelType.Move(), allocator );
 
   imageType.AddMember("components", rapidjson::Value( ConvertPixelTraits::GetNumberOfComponents() ).Move(), allocator );
+
+  document.AddMember( "imageType", imageType.Move(), allocator );
 
   rapidjson::Value origin(rapidjson::kArrayType);
   const auto imageOrigin = image->GetOrigin();
@@ -76,8 +80,7 @@ JSONFromImage(TImage * image)
     }
   document.AddMember( "spacing", spacing.Move(), allocator );
 
-
-  document.AddMember( "imageType", imageType.Move(), allocator );
+  const auto direction = reinterpret_cast< size_t >( image->GetDirection().GetVnlMatrix().begin() );
 
   rapidjson::StringBuffer stringBuffer;
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);

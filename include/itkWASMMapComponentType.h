@@ -17,7 +17,6 @@
  *=========================================================================*/
 #ifndef itkWASMMapComponentType_h
 #define itkWASMMapComponentType_h
-#include "WebAssemblyInterfaceExport.h"
 
 #include <string_view>
 
