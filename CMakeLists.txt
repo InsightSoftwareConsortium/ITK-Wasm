@@ -98,7 +98,17 @@ FetchContent_Declare(
   GIT_REPOSITORY ${RapidJSON_GIT_REPOSITORY}
   GIT_TAG ${RapidJSON_GIT_TAG}
   )
-FetchContent_MakeAvailable(rapidjson_lib)
+set(zip_lib_GIT_REPOSITORY https://github.com/kuba--/zip.git)
+set(zip_lib_GIT_TAG d85a6e5ec124b3a084eab11e4fea9973330d664d)
+set(CMAKE_DISABLE_TESTING ON CACHE BOOL "Disable zip tests")
+option(CMAKE_DISABLE_TESTING ON "Disable zip tests")
+FetchContent_Declare(
+  zip_lib
+  GIT_REPOSITORY ${zip_lib_GIT_REPOSITORY}
+  GIT_TAG ${zip_lib_GIT_TAG}
+  )
+FetchContent_MakeAvailable(rapidjson_lib zip_lib)
+option(CMAKE_DISABLE_TESTING ON "Disable zip tests")
 set(RapidJSON_INCLUDE_DIR "${rapidjson_lib_SOURCE_DIR}/include")
 set(BUILD_TESTING ${_itk_build_testing})
 set(BUILD_SHARED_LIBS ${_itk_build_shared})
