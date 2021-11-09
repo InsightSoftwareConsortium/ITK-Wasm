@@ -28,7 +28,11 @@
 
 #include <filesystem>
 
-#include "zip.h"
+#include "mz.h"
+#include "mz_os.h"
+#include "mz_strm.h"
+#include "mz_zip.h"
+#include "mz_zip_rw.h"
 
 namespace itk
 {
@@ -317,28 +321,40 @@ WASMImageIO
   const auto dataPath = std::filesystem::path(path) / "data";
 
   std::string::size_type zipPos = path.rfind(".zip");
-  struct zip_t * zip = nullptr;
+  void * zip_reader = NULL;
   bool useZip = false;
   if ( ( zipPos != std::string::npos )
        && ( zipPos == path.length() - 4 ) )
   {
     useZip = true;
-    zip = zip_open(path.c_str(), 0, 'r');
+    mz_zip_reader_create(&zip_reader);
+    if (mz_zip_reader_open_file(zip_reader, path.c_str()) != MZ_OK)
+    {
+      itkExceptionMacro("Could not open zip file");
+    }
 
-    zip_entry_open(zip, "index.json");
-    const size_t bufsize = zip_entry_size(zip);
+    mz_zip_reader_set_pattern(zip_reader, "index.json", 0);
+    if (mz_zip_reader_goto_first_entry(zip_reader) != MZ_OK)
+    {
+      itkExceptionMacro("Could not find index.json entry");
+    }
+    mz_zip_file *file_info = NULL;
+    mz_zip_reader_entry_get_info(zip_reader, &file_info);
+    mz_zip_reader_entry_open(zip_reader);
+    const int64_t bufsize = file_info->uncompressed_size;
     void * buf = calloc(bufsize, sizeof(unsigned char));
-    zip_entry_noallocread(zip, buf, bufsize);
+    mz_zip_reader_entry_read(zip_reader, buf, bufsize);
     if (document.Parse(static_cast<const char *>(buf)).HasParseError())
       {
       free(buf);
-      zip_entry_close(zip);
-      zip_close(zip);
+      mz_zip_reader_entry_close(zip_reader);
+      mz_zip_reader_close(zip_reader);
+      mz_zip_reader_delete(&zip_reader);
       itkExceptionMacro("Could not parse JSON");
       return;
       }
     free(buf);
-    zip_entry_close(zip);
+    mz_zip_reader_entry_close(zip_reader);
   }
   else
   {
@@ -383,10 +399,11 @@ WASMImageIO
   const auto directionPath = dataPath / "direction.raw";
   if (useZip)
   {
-    zip_entry_open(zip, "data/direction.raw");
-    const size_t bufsize = zip_entry_size(zip);
+    mz_zip_reader_locate_entry(zip_reader, "data/direction.raw", 0);
+    mz_zip_reader_entry_open(zip_reader);
+    const int32_t bufsize = mz_zip_reader_entry_save_buffer_length(zip_reader);
     double * buf = static_cast< double * >(malloc(bufsize));
-    zip_entry_noallocread(zip, static_cast<void *>(buf), bufsize);
+    mz_zip_reader_entry_save_buffer(zip_reader, static_cast<void *>(buf), bufsize);
 
     count = 0;
     for( unsigned int jj = 0; jj < dimension; ++jj )
@@ -400,7 +417,7 @@ WASMImageIO
       ++count;
       }
     free(buf);
-    zip_entry_close(zip);
+    mz_zip_reader_entry_close(zip_reader);
   }
   else
   {
@@ -429,7 +446,8 @@ WASMImageIO
 
   if (useZip)
   {
-    zip_close(zip);
+    mz_zip_reader_close(zip_reader);
+    mz_zip_reader_delete(&zip_reader);
   }
 }
 
@@ -445,14 +463,19 @@ WASMImageIO
   if ( ( zipPos != std::string::npos )
        && ( zipPos == path.length() - 4 ) )
   {
-    struct zip_t * zip = zip_open(path.c_str(), 0, 'r');
+    void * zip_reader = NULL;
+    mz_zip_reader_create(&zip_reader);
+    mz_zip_reader_open_file(zip_reader, path.c_str());
 
-    zip_entry_open(zip, "data/data.raw");
+    mz_zip_reader_locate_entry(zip_reader, "data/data.raw", 0);
+    mz_zip_reader_entry_open(zip_reader);
+
     const SizeValueType numberOfBytesToBeRead =
       static_cast< SizeValueType >( this->GetImageSizeInBytes() );
-    zip_entry_noallocread(zip, buffer, numberOfBytesToBeRead);
-    zip_entry_close(zip);
-    zip_close(zip);
+    mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
+    mz_zip_reader_entry_close(zip_reader);
+    mz_zip_reader_close(zip_reader);
+    mz_zip_reader_delete(&zip_reader);
   }
   else
   {
@@ -518,13 +541,17 @@ WASMImageIO
   const auto indexPath = std::filesystem::path(path) / "index.json";
   const auto dataPath = std::filesystem::path(path) / "data";
   std::string::size_type zipPos = path.rfind(".zip");
-  struct zip_t * zip = nullptr;
   bool useZip = false;
+  void * zip_writer = NULL;
   if ( ( zipPos != std::string::npos )
        && ( zipPos == path.length() - 4 ) )
   {
     useZip = true;
-    zip = zip_open(path.c_str(), 0, 'w');
+    mz_zip_writer_create(&zip_writer);
+    if (mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 0) != MZ_OK)
+    {
+      itkExceptionMacro("Could not open zip file");
+    }
   }
   else
   {
@@ -578,16 +605,24 @@ WASMImageIO
 
   if (useZip)
   {
-    zip_entry_open(zip, "data/direction.raw");
+    mz_zip_file file_info = { 0 };
+    file_info.filename = "data/direction.raw";
+    file_info.modified_date = time(NULL);
+    file_info.version_madeby = MZ_VERSION_MADEBY;
+    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
+    if (mz_zip_writer_entry_open(zip_writer, &file_info) != MZ_OK)
+    {
+      itkExceptionMacro("Could not open writer entry for data/direction.raw");
+    }
     for( unsigned int ii = 0; ii < dimension; ++ii )
       {
       const std::vector< double > dimensionDirection = this->GetDirection( ii );
       for( unsigned int jj = 0; jj < dimension; ++jj )
         {
-        zip_entry_write(zip, reinterpret_cast< const char *>(&(dimensionDirection[jj])), sizeof(double) );
+        mz_zip_writer_entry_write(zip_writer, reinterpret_cast< const char *>(&(dimensionDirection[jj])), sizeof(double) );
         }
       }
-    zip_entry_close(zip);
+    mz_zip_writer_entry_close(zip_writer);
   }
   else
   {
@@ -624,9 +659,18 @@ WASMImageIO
     rapidjson::StringBuffer stringBuffer;
     rapidjson::Writer< rapidjson::StringBuffer > writer( stringBuffer );
     document.Accept( writer );
-    zip_entry_open(zip, "index.json");
-    zip_entry_write(zip, stringBuffer.GetString(), stringBuffer.GetLength());
-    zip_entry_close(zip);
+    mz_zip_file file_info = { 0 };
+    file_info.filename = "index.json";
+    file_info.modified_date = time(NULL);
+    file_info.version_madeby = MZ_VERSION_MADEBY;
+    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
+    file_info.flag = MZ_ZIP_FLAG_UTF8;
+    if (mz_zip_writer_entry_open(zip_writer, &file_info) != MZ_OK)
+    {
+      itkExceptionMacro("Could not open writer entry for index.json");
+    }
+    mz_zip_writer_entry_write(zip_writer, stringBuffer.GetString(), stringBuffer.GetLength());
+    mz_zip_writer_entry_close(zip_writer);
   }
   else
   {
@@ -640,7 +684,8 @@ WASMImageIO
 
   if (useZip)
   {
-    zip_close(zip);
+    mz_zip_writer_close(zip_writer);
+    mz_zip_writer_delete(&zip_writer);
   }
 }
 
@@ -663,12 +708,19 @@ WASMImageIO
   if (useZip)
   {
     this->WriteImageInformation();
-    zip = zip_open(path.c_str(), 0, 'a');
-    zip_entry_open(zip, "data/data.raw");
+    void * zip_writer = NULL;
+    mz_zip_writer_create(&zip_writer);
+    mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 1);
+    mz_zip_file file_info = { 0 };
+    file_info.filename = "data/data.raw";
+    file_info.modified_date = time(NULL);
+    file_info.version_madeby = MZ_VERSION_MADEBY;
+    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
+    mz_zip_writer_entry_open(zip_writer, &file_info);
     const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
-    zip_entry_write(zip, static_cast< const char * >( buffer ), numberOfBytes); \
-    zip_entry_close(zip);
-    zip_close(zip);
+    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes); \
+    mz_zip_writer_close(zip_writer);
+    mz_zip_writer_delete(&zip_writer);
   }
   else
   {

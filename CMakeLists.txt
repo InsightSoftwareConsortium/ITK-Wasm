@@ -98,31 +98,37 @@ FetchContent_Declare(
   GIT_REPOSITORY ${RapidJSON_GIT_REPOSITORY}
   GIT_TAG ${RapidJSON_GIT_TAG}
   )
-set(zip_lib_GIT_REPOSITORY https://github.com/kuba--/zip.git)
-set(zip_lib_GIT_TAG d85a6e5ec124b3a084eab11e4fea9973330d664d)
-set(CMAKE_DISABLE_TESTING ON CACHE BOOL "Disable zip tests")
-option(CMAKE_DISABLE_TESTING ON "Disable zip tests")
+set(minizip-ng_GIT_REPOSITORY https://github.com/zlib-ng/minizip-ng.git)
+set(minizip-ng_GIT_TAG 3.0.3)
+option(MZ_COMPAT OFF "Enables compatibility layer")
+option(MZ_ZLIB OFF "Enables ZLIB compression")
+option(MZ_BZIP2 OFF "Enables BZIP2 compression")
+option(MZ_LZMA OFF "Enables LZMA & XZ compression")
+option(MZ_ZSTD OFF "Enables ZSTD compression")
+option(MZ_PKCRYPT OFF "Enables PKWARE traditional encryption")
+option(MZ_WZAES OFF "Enables WinZIP AES encryption")
+option(MZ_OPENSSL OFF "Enables OpenSSL encryption")
+option(MZ_LIBBSD OFF "Build with libbsd for crypto random")
+option(MZ_SIGNING OFF "Enables zip signing support")
+option(MZ_ICONV OFF "Enables iconv string encoding conversion library")
 FetchContent_Declare(
-  zip_lib
-  GIT_REPOSITORY ${zip_lib_GIT_REPOSITORY}
-  GIT_TAG ${zip_lib_GIT_TAG}
+  minizip-ng
+  GIT_REPOSITORY ${minizip-ng_GIT_REPOSITORY}
+  GIT_TAG ${minizip-ng_GIT_TAG}
   )
-FetchContent_MakeAvailable(rapidjson_lib zip_lib)
-option(CMAKE_DISABLE_TESTING ON "Disable zip tests")
+FetchContent_MakeAvailable(rapidjson_lib minizip-ng)
 set(RapidJSON_INCLUDE_DIR "${rapidjson_lib_SOURCE_DIR}/include")
-set(zip_lib_INCLUDE_DIR "${zip_lib_SOURCE_DIR}/src")
+set(minizip-ng_INCLUDE_DIR "${minizip-ng_SOURCE_DIR}")
 set(BUILD_TESTING ${_itk_build_testing})
 set(BUILD_SHARED_LIBS ${_itk_build_shared})
 
 find_path(RapidJSON_INCLUDE_DIR
  NAMES rapidjson/document.h
  )
-find_path(zip_lib_INCLUDE_DIR
- NAMES zip.h
- )
 set(WebAssemblyInterface_INCLUDE_DIRS ${RapidJSON_INCLUDE_DIR}
-  ${zip_lib_INCLUDE_DIR})
-list(APPEND WebAssemblyInterface_LIBRARIES zip)
+  ${minizip-ng_INCLUDE_DIR}
+  )
+list(APPEND WebAssemblyInterface_LIBRARIES minizip)
 
 get_filename_component(_module_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(CMAKE_MODULE_PATH "${_module_dir}/CMake/" ${CMAKE_MODULE_PATH})
