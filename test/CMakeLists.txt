@@ -51,9 +51,21 @@ CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
   "${WebAssemblyInterfaceTests}" )
 
 itk_add_test(NAME itkJSONImageInterfaceTest
-    COMMAND WebAssemblyInterfaceTestDriver itkJSONImageInterfaceTest
+    COMMAND WebAssemblyInterfaceTestDriver
+      --compare DATA{Input/brainweb165a10f17.mha}
+      ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceTest.mha
+    itkJSONImageInterfaceTest
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceTest.mha
+)
+
+itk_add_test(NAME itkJSONImageInterfaceNiftiTest
+    COMMAND WebAssemblyInterfaceTestDriver
+      --compare DATA{Input/r16slice.nii.gz}
+      ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceNiftiTest.nii.gz
+    itkJSONImageInterfaceTest
+      DATA{Input/r16slice.nii.gz}
+      ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceNiftiTest.nii.gz
 )
 
 if(EMSCRIPTEN)

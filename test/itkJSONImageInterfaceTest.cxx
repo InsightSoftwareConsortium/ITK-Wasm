@@ -16,6 +16,7 @@
  *
  *=========================================================================*/
 #include "itkJSONFromImage.h"
+#include "itkImageFromJSON.h"
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
@@ -40,9 +41,14 @@ itkJSONImageInterfaceTest(int argc, char * argv[])
 
   ImagePointer inputImage = nullptr;
   ITK_TRY_EXPECT_NO_EXCEPTION(inputImage = itk::ReadImage<ImageType>(inputImageFile));
+  std::cout << "inputImage: " << inputImage << std::endl;
 
   const std::string imageInterface = itk::JSONFromImage<ImageType>(inputImage);
   std::cout << "imageInterface: " << imageInterface << std::endl;
+  ImageType::Pointer convertedImage = itk::ImageFromJSON<ImageType>(imageInterface);
+  std::cout << "convertedImage: " << convertedImage << std::endl;
+
+  ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(convertedImage, outputImageFile));
 
   return EXIT_SUCCESS;
 }
