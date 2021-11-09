@@ -90,11 +90,11 @@ protected:
   ~JSONMeshIO() override;
   void PrintSelf(std::ostream & os, Indent indent) const override;
 
-  static CommonEnums::IOComponent JSToITKComponentType( const std::string & jsComponentType );
-  static std::string ITKToJSComponentType( const CommonEnums::IOComponent );
+  static CommonEnums::IOComponent WASMToITKComponentType( const std::string & jsComponentType );
+  static std::string ITKToWASMComponentType( const CommonEnums::IOComponent );
 
-  static CommonEnums::IOPixel JSToITKPixelType( const int jsPixelType );
-  static int ITKToJSPixelType( const CommonEnums::IOPixel );
+  static CommonEnums::IOPixel WASMToITKPixelType( const int jsPixelType );
+  static int ITKToWASMPixelType( const CommonEnums::IOPixel );
 
   static size_t ITKComponentSize( const CommonEnums::IOComponent );
 

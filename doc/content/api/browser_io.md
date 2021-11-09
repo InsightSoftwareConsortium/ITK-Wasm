@@ -49,7 +49,7 @@ Read an image from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web
 
 ## readImageHTTP(url) -> [image](./Image.html)
 
-Read a server-side generated image created with [`itk::JSONImageIO`](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/include/itkJSONImageIO.h). The primary `*.json` file should be served at the given `url` and the pixel buffer file served at `url + ".data"`
+Read a server-side generated image created with [`itk::WASMImageIO`](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/include/itkWASMImageIO.h). The primary `*.json` file should be served at the given `url` and the pixel buffer file served at `url + ".data"`
 
 ## readImageFileSeries(fileList, zSpacing=1.0, zOrigin=0.0, sortedSeries=false) -> { [image](./Image.html), webWorkerPool }
 

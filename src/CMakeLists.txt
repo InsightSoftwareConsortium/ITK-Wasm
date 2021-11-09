@@ -7,8 +7,8 @@ set(Iconv_INCLUDE_DIRS ${Iconv_DIR}/include)
 file(MAKE_DIRECTORY ${Iconv_DIR} ${Iconv_INCLUDE_DIRS})
 
 set(WebAssemblyInterface_SRCS
-  itkJSONImageIOFactory.cxx
-  itkJSONImageIO.cxx
+  itkWASMImageIOFactory.cxx
+  itkWASMImageIO.cxx
   itkJSONMeshIOFactory.cxx
   itkJSONMeshIO.cxx
   )

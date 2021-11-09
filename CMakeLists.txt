@@ -50,7 +50,7 @@ if(BUILD_ITK_JS_IO_MODULES)
   set(imageios_ITKIOVTK itkVTKImageIO)
   set(imageios_IOScanco itkScancoImageIO)
   set(imageios_IOFDF itkFDFImageIO)
-  set(imageios_WebAssemblyInterface itkJSONImageIO)
+  set(imageios_WebAssemblyInterface itkWASMImageIO)
 
   set(WebAssemblyInterface_MeshIOModules
     "ITKIOMeshBYU"

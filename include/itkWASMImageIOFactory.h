@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkJSONImageIOFactory_h
-#define itkJSONImageIOFactory_h
+#ifndef itkWASMImageIOFactory_h
+#define itkWASMImageIOFactory_h
 #include "WebAssemblyInterfaceExport.h"
 
 #include "itkObjectFactoryBase.h"
@@ -24,17 +24,17 @@
 
 namespace itk
 {
-/** \class JSONImageIOFactory
+/** \class WASMImageIOFactory
  *
- * \brief Create instances of JSONImageIO objects using an object factory.
+ * \brief Create instances of WASMImageIO objects using an object factory.
  *
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT JSONImageIOFactory: public ObjectFactoryBase
+class WebAssemblyInterface_EXPORT WASMImageIOFactory: public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef JSONImageIOFactory         Self;
+  typedef WASMImageIOFactory         Self;
   typedef ObjectFactoryBase          Superclass;
   typedef SmartPointer< Self >       Pointer;
   typedef SmartPointer< const Self > ConstPointer;
@@ -48,22 +48,22 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JSONImageIOFactory, ObjectFactoryBase);
+  itkTypeMacro(WASMImageIOFactory, ObjectFactoryBase);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    JSONImageIOFactory::Pointer jsonFactory = JSONImageIOFactory::New();
+    WASMImageIOFactory::Pointer jsonFactory = WASMImageIOFactory::New();
 
     ObjectFactoryBase::RegisterFactoryInternal(jsonFactory);
   }
 
 protected:
-  JSONImageIOFactory();
-  ~JSONImageIOFactory() override;
+  WASMImageIOFactory();
+  ~WASMImageIOFactory() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(JSONImageIOFactory);
+  ITK_DISALLOW_COPY_AND_ASSIGN(WASMImageIOFactory);
 };
 } // end namespace itk
 

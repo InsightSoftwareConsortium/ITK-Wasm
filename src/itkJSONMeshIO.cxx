@@ -164,7 +164,7 @@ JSONMeshIO
 
 CommonEnums::IOComponent
 JSONMeshIO
-::JSToITKComponentType(const std::string & jsComponentType)
+::WASMToITKComponentType(const std::string & jsComponentType)
 {
   if( jsComponentType == "int8_t" )
     {
@@ -212,7 +212,7 @@ JSONMeshIO
 
 std::string
 JSONMeshIO
-::ITKToJSComponentType(const CommonEnums::IOComponent itkComponentType)
+::ITKToWASMComponentType(const CommonEnums::IOComponent itkComponentType)
 {
   switch ( itkComponentType )
     {
@@ -307,7 +307,7 @@ JSONMeshIO
 
 CommonEnums::IOPixel
 JSONMeshIO
-::JSToITKPixelType( const int jsPixelType )
+::WASMToITKPixelType( const int jsPixelType )
 {
   switch ( jsPixelType )
     {
@@ -351,7 +351,7 @@ JSONMeshIO
 
 int
 JSONMeshIO
-::ITKToJSPixelType( const CommonEnums::IOPixel itkPixelType )
+::ITKToWASMPixelType( const CommonEnums::IOPixel itkPixelType )
 {
   switch ( itkPixelType )
     {
@@ -469,29 +469,29 @@ JSONMeshIO
   this->SetPointDimension( dimension );
 
   const std::string pointComponentType( meshType["pointComponentType"].GetString() );
-  const CommonEnums::IOComponent pointIOComponentType = this->JSToITKComponentType( pointComponentType );
+  const CommonEnums::IOComponent pointIOComponentType = this->WASMToITKComponentType( pointComponentType );
   this->SetPointComponentType( pointIOComponentType );
 
   const std::string pointPixelComponentType( meshType["pointPixelComponentType"].GetString() );
-  const CommonEnums::IOComponent pointPixelIOComponentType = this->JSToITKComponentType( pointPixelComponentType );
+  const CommonEnums::IOComponent pointPixelIOComponentType = this->WASMToITKComponentType( pointPixelComponentType );
   this->SetPointPixelComponentType( pointPixelIOComponentType );
 
   const int pointPixelType( meshType["pointPixelType"].GetInt() );
-  const CommonEnums::IOPixel pointIOPixelType = this->JSToITKPixelType( pointPixelType );
+  const CommonEnums::IOPixel pointIOPixelType = this->WASMToITKPixelType( pointPixelType );
   this->SetPointPixelType( pointIOPixelType );
 
   this->SetNumberOfPointPixelComponents( meshType["pointPixelComponents"].GetInt() );
 
   const std::string cellComponentType( meshType["cellComponentType"].GetString() );
-  const CommonEnums::IOComponent cellIOComponentType = this->JSToITKComponentType( cellComponentType );
+  const CommonEnums::IOComponent cellIOComponentType = this->WASMToITKComponentType( cellComponentType );
   this->SetCellComponentType( cellIOComponentType );
 
   const std::string cellPixelComponentType( meshType["cellPixelComponentType"].GetString() );
-  const CommonEnums::IOComponent cellPixelIOComponentType = this->JSToITKComponentType( cellPixelComponentType );
+  const CommonEnums::IOComponent cellPixelIOComponentType = this->WASMToITKComponentType( cellPixelComponentType );
   this->SetCellPixelComponentType( cellPixelIOComponentType );
 
   const int cellPixelType( meshType["cellPixelType"].GetInt() );
-  const CommonEnums::IOPixel cellIOPixelType = this->JSToITKPixelType( cellPixelType );
+  const CommonEnums::IOPixel cellIOPixelType = this->WASMToITKPixelType( cellPixelType );
   this->SetCellPixelType( cellIOPixelType );
 
   this->SetNumberOfCellPixelComponents( meshType["cellPixelComponents"].GetInt() );
@@ -696,17 +696,17 @@ JSONMeshIO
   const unsigned int dimension = this->GetPointDimension();
   meshType.AddMember("dimension", rapidjson::Value(dimension).Move(), allocator );
 
-  const std::string pointComponentString = this->ITKToJSComponentType( this->GetPointComponentType() );
+  const std::string pointComponentString = this->ITKToWASMComponentType( this->GetPointComponentType() );
   rapidjson::Value pointComponentType;
   pointComponentType.SetString( pointComponentString.c_str(), allocator );
   meshType.AddMember("pointComponentType", pointComponentType.Move(), allocator );
 
-  const std::string pointPixelComponentString = this->ITKToJSComponentType( this->GetPointPixelComponentType() );
+  const std::string pointPixelComponentString = this->ITKToWASMComponentType( this->GetPointPixelComponentType() );
   rapidjson::Value pointPixelComponentType;
   pointPixelComponentType.SetString( pointPixelComponentString.c_str(), allocator );
   meshType.AddMember("pointPixelComponentType", pointPixelComponentType.Move(), allocator );
 
-  const int pointPixelType = this->ITKToJSPixelType( this->GetPointPixelType() );
+  const int pointPixelType = this->ITKToWASMPixelType( this->GetPointPixelType() );
   meshType.AddMember("pointPixelType", rapidjson::Value(pointPixelType).Move(), allocator );
 
   meshType.AddMember("pointPixelComponents", rapidjson::Value( this->GetNumberOfPointPixelComponents() ).Move(), allocator );
@@ -714,19 +714,19 @@ JSONMeshIO
   // The MeshFileWriter sets this to CellIdentifier / IdentifierType /
   // uint64_t. However, JavaScript does not support 64 bit integers, so force
   // uint32_t
-  //const std::string cellComponentString = this->ITKToJSComponentType( this->GetCellComponentType() );
+  //const std::string cellComponentString = this->ITKToWASMComponentType( this->GetCellComponentType() );
   const std::string cellComponentString( "uint32_t" );
   rapidjson::Value cellComponentType;
   cellComponentType.SetString( cellComponentString.c_str(), allocator );
   meshType.AddMember("cellComponentType", cellComponentType.Move(), allocator );
   this->SetCellComponentType( CommonEnums::IOComponent::UINT );
 
-  const std::string cellPixelComponentString = this->ITKToJSComponentType( this->GetCellPixelComponentType() );
+  const std::string cellPixelComponentString = this->ITKToWASMComponentType( this->GetCellPixelComponentType() );
   rapidjson::Value cellPixelComponentType;
   cellPixelComponentType.SetString( cellPixelComponentString.c_str(), allocator );
   meshType.AddMember("cellPixelComponentType", cellPixelComponentType.Move(), allocator );
 
-  const int cellPixelType = this->ITKToJSPixelType( this->GetCellPixelType() );
+  const int cellPixelType = this->ITKToWASMPixelType( this->GetCellPixelType() );
   meshType.AddMember("cellPixelType", rapidjson::Value(cellPixelType).Move(), allocator );
 
   meshType.AddMember("cellPixelComponents", rapidjson::Value( this->GetNumberOfCellPixelComponents() ).Move(), allocator );

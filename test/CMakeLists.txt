@@ -45,6 +45,7 @@ ExternalData_Expand_Arguments(
 
 set(WebAssemblyInterfaceTests
   itkJSONImageInterfaceTest.cxx
+  itkWASMImageIOTest.cxx
 )
 
 CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
@@ -67,6 +68,19 @@ itk_add_test(NAME itkJSONImageInterfaceNiftiTest
       DATA{Input/r16slice.nii.gz}
       ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceNiftiTest.nii.gz
 )
+
+itk_add_test(NAME itkWASMImageIOTest
+    COMMAND WebAssemblyInterfaceTestDriver
+      #--compare DATA{Input/brainweb165a10f17.mha}
+      #${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.mha
+    itkWASMImageIOTest
+      DATA{Input/brainweb165a10f17.mha}
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.iwi
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.iwi.zip
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.zip.mha
+)
+
 
 if(EMSCRIPTEN)
   # setjmp workaround

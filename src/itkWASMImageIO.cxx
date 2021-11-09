@@ -16,7 +16,7 @@
  *
  *=========================================================================*/
 
-#include "itkJSONImageIO.h"
+#include "itkWASMImageIO.h"
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
@@ -26,26 +26,30 @@
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/ostreamwrapper.h"
 
+#include <filesystem>
+
 namespace itk
 {
 
-JSONImageIO
-::JSONImageIO()
+WASMImageIO
+::WASMImageIO()
 {
   this->SetNumberOfDimensions(3);
-  this->AddSupportedWriteExtension(".json");
-  this->AddSupportedReadExtension(".json");
+  this->AddSupportedWriteExtension(".iwi");
+  this->AddSupportedWriteExtension(".iwi.zip");
+  this->AddSupportedReadExtension(".iwi");
+  this->AddSupportedReadExtension(".iwi.zip");
 }
 
 
-JSONImageIO
-::~JSONImageIO()
+WASMImageIO
+::~WASMImageIO()
 {
 }
 
 
 bool
-JSONImageIO
+WASMImageIO
 ::SupportsDimension(unsigned long itkNotUsed(dimension))
 {
   return true;
@@ -53,7 +57,7 @@ JSONImageIO
 
 
 void
-JSONImageIO
+WASMImageIO
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -61,8 +65,8 @@ JSONImageIO
 
 
 ImageIOBase::IOComponentEnum
-JSONImageIO
-::JSToITKComponentType(const std::string & jsComponentType)
+WASMImageIO
+::WASMToITKComponentType(const std::string & jsComponentType)
 {
   if( jsComponentType == "int8_t" )
     {
@@ -109,8 +113,8 @@ JSONImageIO
 
 
 std::string
-JSONImageIO
-::ITKToJSComponentType(const ImageIOBase::IOComponentEnum itkComponentType)
+WASMImageIO
+::ITKToWASMComponentType(const ImageIOBase::IOComponentEnum itkComponentType)
 {
   switch ( itkComponentType )
     {
@@ -157,8 +161,8 @@ JSONImageIO
 
 
 IOPixelEnum
-JSONImageIO
-::JSToITKPixelType( const std::string & jsPixelType )
+WASMImageIO
+::WASMToITKPixelType( const std::string & jsPixelType )
 {
   if ( jsPixelType == "Unknown" )
     {
@@ -230,8 +234,8 @@ JSONImageIO
 
 
 std::string
-JSONImageIO
-::ITKToJSPixelType( const IOPixelEnum itkPixelType )
+WASMImageIO
+::ITKToWASMPixelType( const IOPixelEnum itkPixelType )
 {
   switch ( itkPixelType )
     {
@@ -274,7 +278,7 @@ JSONImageIO
 
 
 bool
-JSONImageIO
+WASMImageIO
 ::CanReadFile(const char *filename)
 {
   // Check the extension first to avoid opening files that do not
@@ -283,9 +287,8 @@ JSONImageIO
   std::string fname = filename;
 
   bool extensionFound = false;
-  std::string::size_type jsonPos = fname.rfind(".json");
-  if ( ( jsonPos != std::string::npos )
-       && ( jsonPos == fname.length() - 5 ) )
+  std::string::size_type jsonPos = fname.rfind(".iwi");
+  if ( jsonPos != std::string::npos )
     {
     extensionFound = true;
     }
@@ -327,7 +330,7 @@ JSONImageIO
 
 
 void
-JSONImageIO
+WASMImageIO
 ::ReadImageInformation()
 {
   this->SetByteOrderToLittleEndian();
@@ -348,10 +351,10 @@ JSONImageIO
   const int dimension = imageType["dimension"].GetInt();
   this->SetNumberOfDimensions( dimension );
   const std::string componentType( imageType["componentType"].GetString() );
-  const ImageIOBase::IOComponentEnum ioComponentType = this->JSToITKComponentType( componentType );
+  const ImageIOBase::IOComponentEnum ioComponentType = this->WASMToITKComponentType( componentType );
   this->SetComponentType( ioComponentType );
   const std::string pixelType( imageType["pixelType"].GetString() );
-  const IOPixelEnum ioPixelType = this->JSToITKPixelType( pixelType );
+  const IOPixelEnum ioPixelType = this->WASMToITKPixelType( pixelType );
   this->SetPixelType( ioPixelType );
   this->SetNumberOfComponents( imageType["components"].GetInt() );
 
@@ -397,7 +400,7 @@ JSONImageIO
 
 
 void
-JSONImageIO
+WASMImageIO
 ::Read( void *buffer )
 {
   std::ifstream inputStream;
@@ -438,7 +441,7 @@ JSONImageIO
 
 
 bool
-JSONImageIO
+WASMImageIO
 ::CanWriteFile(const char *name)
 {
   std::string filename = name;
@@ -449,11 +452,15 @@ JSONImageIO
     }
 
   bool extensionFound = false;
-  std::string::size_type jsonPos = filename.rfind(".json");
-  if ( ( jsonPos != std::string::npos )
-       && ( jsonPos == filename.length() - 5 ) )
+  std::string::size_type jsonPos = filename.rfind(".iwi");
+  if ( jsonPos != std::string::npos )
     {
     extensionFound = true;
+    }
+
+  if ( std::filesystem::exists(filename) && !std::filesystem::is_directory(filename) )
+    {
+    return false;
     }
 
   if ( !extensionFound )
@@ -467,9 +474,21 @@ JSONImageIO
 
 
 void
-JSONImageIO
+WASMImageIO
 ::WriteImageInformation()
 {
+  const std::string path = this->GetFileName();
+  if ( !std::filesystem::exists(path) )
+    {
+    std::filesystem::create_directories(path);
+    }
+  const auto indexPath = std::filesystem::path(path) / "index.json";
+  const auto dataPath = std::filesystem::path(path) / "data";
+  if ( !std::filesystem::exists(dataPath) )
+    {
+    std::filesystem::create_directory(dataPath);
+    }
+
   rapidjson::Document document;
   document.SetObject();
   rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
@@ -480,12 +499,12 @@ JSONImageIO
   const unsigned int dimension = this->GetNumberOfDimensions();
   imageType.AddMember("dimension", rapidjson::Value(dimension).Move(), allocator );
 
-  const std::string componentString = this->ITKToJSComponentType( this->GetComponentType() );
+  const std::string componentString = this->ITKToWASMComponentType( this->GetComponentType() );
   rapidjson::Value componentType;
   componentType.SetString( componentString.c_str(), allocator );
   imageType.AddMember("componentType", componentType.Move(), allocator );
 
-  const std::string pixelString = this->ITKToJSPixelType( this->GetPixelType() );
+  const std::string pixelString = this->ITKToWASMPixelType( this->GetPixelType() );
   rapidjson::Value pixelType;
   pixelType.SetString( pixelString.c_str(), allocator );
   imageType.AddMember("pixelType", pixelType.Move(), allocator );
@@ -508,16 +527,20 @@ JSONImageIO
     }
   document.AddMember( "spacing", spacing.Move(), allocator );
 
-  rapidjson::Value direction(rapidjson::kArrayType);
+  const auto directionPath = dataPath / "direction.raw";
+  std::ofstream directionFile;
+  this->OpenFileForWriting(directionFile, directionPath.c_str(), false);
   for( unsigned int ii = 0; ii < dimension; ++ii )
     {
     const std::vector< double > dimensionDirection = this->GetDirection( ii );
     for( unsigned int jj = 0; jj < dimension; ++jj )
       {
-      direction.PushBack(rapidjson::Value().SetDouble( dimensionDirection[jj] ), allocator);
+      directionFile.write(reinterpret_cast< const char *>(&(dimensionDirection[jj])), sizeof(double) );
       }
     }
-  document.AddMember( "direction", direction.Move(), allocator );
+  rapidjson::Value directionValue;
+  directionValue.SetString( "path:data/direction.raw", allocator );
+  document.AddMember( "direction", directionValue.Move(), allocator );
 
   rapidjson::Value size(rapidjson::kArrayType);
   for( unsigned int ii = 0; ii < dimension; ++ii )
@@ -532,7 +555,7 @@ JSONImageIO
   document.AddMember( "data", dataFile, allocator );
 
   std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, this->GetFileName(), true, true );
+  this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );
   rapidjson::OStreamWrapper ostreamWrapper( outputStream );
   rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
   document.Accept( writer );
@@ -541,10 +564,11 @@ JSONImageIO
 
 
 void
-JSONImageIO
+WASMImageIO
 ::Write( const void *buffer )
 {
-  const std::string fileName = std::string( this->GetFileName() ) + ".data";
+  const std::filesystem::path path(this->GetFileName());
+  const std::string fileName = (path / "data" / "data.raw").c_str();
 
   if (this->RequestedToStream())
   {

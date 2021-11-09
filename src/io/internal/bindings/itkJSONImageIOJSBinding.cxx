@@ -19,15 +19,15 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
-#include "itkJSONImageIO.h"
+#include "itkWASMImageIO.h"
 
 #include "itkImageIOBaseJSBinding.h"
 
-typedef itk::ImageIOBaseJSBinding< itk::JSONImageIO > JSONImageIOJSBindingType;
+typedef itk::ImageIOBaseJSBinding< itk::WASMImageIO > WASMImageIOJSBindingType;
 
 EMSCRIPTEN_BINDINGS(itk_wasm_json_image_io_js_binding) {
   emscripten::register_vector<double>("AxisDirectionType");
-  emscripten::enum_<JSONImageIOJSBindingType::IOPixelType>("IOPixelType")
+  emscripten::enum_<WASMImageIOJSBindingType::IOPixelType>("IOPixelType")
     .value("UNKNOWNPIXELTYPE", itk::CommonEnums::IOPixel::UNKNOWNPIXELTYPE)
     .value("SCALAR", itk::CommonEnums::IOPixel::SCALAR)
     .value("RGB", itk::CommonEnums::IOPixel::RGB)
@@ -45,7 +45,7 @@ EMSCRIPTEN_BINDINGS(itk_wasm_json_image_io_js_binding) {
     .value("VARIABLELENGTHVECTOR", itk::CommonEnums::IOPixel::VARIABLELENGTHVECTOR)
     .value("VARIABLESIZEMATRIX", itk::CommonEnums::IOPixel::VARIABLESIZEMATRIX)
     ;
-  emscripten::enum_<JSONImageIOJSBindingType::IOComponentType>("IOComponentType")
+  emscripten::enum_<WASMImageIOJSBindingType::IOComponentType>("IOComponentType")
     .value("UNKNOWNCOMPONENTTYPE", itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE)
     .value("UCHAR", itk::CommonEnums::IOComponent::UCHAR)
     .value("CHAR", itk::CommonEnums::IOComponent::CHAR)
@@ -60,36 +60,36 @@ EMSCRIPTEN_BINDINGS(itk_wasm_json_image_io_js_binding) {
     .value("FLOAT", itk::CommonEnums::IOComponent::FLOAT)
     .value("DOUBLE", itk::CommonEnums::IOComponent::DOUBLE)
     ;
-  emscripten::class_<JSONImageIOJSBindingType>("ITKImageIO")
+  emscripten::class_<WASMImageIOJSBindingType>("ITKImageIO")
   .constructor<>()
-  .function("SetNumberOfDimensions", &JSONImageIOJSBindingType::SetNumberOfDimensions)
-  .function("GetNumberOfDimensions", &JSONImageIOJSBindingType::GetNumberOfDimensions)
-  .function("SetFileName", &JSONImageIOJSBindingType::SetFileName)
-  .function("GetFileName", &JSONImageIOJSBindingType::GetFileName)
-  .function("CanReadFile", &JSONImageIOJSBindingType::CanReadFile)
-  .function("CanWriteFile", &JSONImageIOJSBindingType::CanWriteFile)
-  .function("ReadImageInformation", &JSONImageIOJSBindingType::ReadImageInformation)
-  .function("WriteImageInformation", &JSONImageIOJSBindingType::WriteImageInformation)
-  .function("SetDimensions", &JSONImageIOJSBindingType::SetDimensions)
-  .function("GetDimensions", &JSONImageIOJSBindingType::GetDimensions)
-  .function("SetOrigin", &JSONImageIOJSBindingType::SetOrigin)
-  .function("GetOrigin", &JSONImageIOJSBindingType::GetOrigin)
-  .function("SetSpacing", &JSONImageIOJSBindingType::SetSpacing)
-  .function("GetSpacing", &JSONImageIOJSBindingType::GetSpacing)
-  .function("SetDirection", &JSONImageIOJSBindingType::SetDirection)
-  .function("GetDirection", &JSONImageIOJSBindingType::GetDirection)
-  .function("GetDefaultDirection", &JSONImageIOJSBindingType::GetDefaultDirection)
-  .function("SetPixelType", &JSONImageIOJSBindingType::SetPixelType)
-  .function("GetPixelType", &JSONImageIOJSBindingType::GetPixelType)
-  .function("SetComponentType", &JSONImageIOJSBindingType::SetComponentType)
-  .function("GetComponentType", &JSONImageIOJSBindingType::GetComponentType)
-  .function("GetImageSizeInPixels", &JSONImageIOJSBindingType::GetImageSizeInPixels)
-  .function("GetImageSizeInBytes", &JSONImageIOJSBindingType::GetImageSizeInBytes)
-  .function("GetImageSizeInComponents", &JSONImageIOJSBindingType::GetImageSizeInComponents)
-  .function("SetNumberOfComponents", &JSONImageIOJSBindingType::SetNumberOfComponents)
-  .function("GetNumberOfComponents", &JSONImageIOJSBindingType::GetNumberOfComponents)
-  .function("Read", &JSONImageIOJSBindingType::Read)
-  .function("Write", &JSONImageIOJSBindingType::Write)
-  .function("SetUseCompression", &JSONImageIOJSBindingType::SetUseCompression)
+  .function("SetNumberOfDimensions", &WASMImageIOJSBindingType::SetNumberOfDimensions)
+  .function("GetNumberOfDimensions", &WASMImageIOJSBindingType::GetNumberOfDimensions)
+  .function("SetFileName", &WASMImageIOJSBindingType::SetFileName)
+  .function("GetFileName", &WASMImageIOJSBindingType::GetFileName)
+  .function("CanReadFile", &WASMImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &WASMImageIOJSBindingType::CanWriteFile)
+  .function("ReadImageInformation", &WASMImageIOJSBindingType::ReadImageInformation)
+  .function("WriteImageInformation", &WASMImageIOJSBindingType::WriteImageInformation)
+  .function("SetDimensions", &WASMImageIOJSBindingType::SetDimensions)
+  .function("GetDimensions", &WASMImageIOJSBindingType::GetDimensions)
+  .function("SetOrigin", &WASMImageIOJSBindingType::SetOrigin)
+  .function("GetOrigin", &WASMImageIOJSBindingType::GetOrigin)
+  .function("SetSpacing", &WASMImageIOJSBindingType::SetSpacing)
+  .function("GetSpacing", &WASMImageIOJSBindingType::GetSpacing)
+  .function("SetDirection", &WASMImageIOJSBindingType::SetDirection)
+  .function("GetDirection", &WASMImageIOJSBindingType::GetDirection)
+  .function("GetDefaultDirection", &WASMImageIOJSBindingType::GetDefaultDirection)
+  .function("SetPixelType", &WASMImageIOJSBindingType::SetPixelType)
+  .function("GetPixelType", &WASMImageIOJSBindingType::GetPixelType)
+  .function("SetComponentType", &WASMImageIOJSBindingType::SetComponentType)
+  .function("GetComponentType", &WASMImageIOJSBindingType::GetComponentType)
+  .function("GetImageSizeInPixels", &WASMImageIOJSBindingType::GetImageSizeInPixels)
+  .function("GetImageSizeInBytes", &WASMImageIOJSBindingType::GetImageSizeInBytes)
+  .function("GetImageSizeInComponents", &WASMImageIOJSBindingType::GetImageSizeInComponents)
+  .function("SetNumberOfComponents", &WASMImageIOJSBindingType::SetNumberOfComponents)
+  .function("GetNumberOfComponents", &WASMImageIOJSBindingType::GetNumberOfComponents)
+  .function("Read", &WASMImageIOJSBindingType::Read)
+  .function("Write", &WASMImageIOJSBindingType::Write)
+  .function("SetUseCompression", &WASMImageIOJSBindingType::SetUseCompression)
   ;
 }

@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkJSONImageIO_h
-#define itkJSONImageIO_h
+#ifndef itkWASMImageIO_h
+#define itkWASMImageIO_h
 #include "WebAssemblyInterfaceExport.h"
 
 
@@ -25,7 +25,7 @@
 
 namespace itk
 {
-/** \class JSONImageIO
+/** \class WASMImageIO
  *
  * \brief Read and write the an itk::Image in JSON format.
  *
@@ -36,11 +36,11 @@ namespace itk
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT JSONImageIO: public StreamingImageIOBase
+class WebAssemblyInterface_EXPORT WASMImageIO: public StreamingImageIOBase
 {
 public:
   /** Standard class typedefs. */
-  typedef JSONImageIO          Self;
+  typedef WASMImageIO          Self;
   typedef StreamingImageIOBase Superclass;
   typedef SmartPointer< Self > Pointer;
 
@@ -48,7 +48,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JSONImageIO, StreamingImageIOBase);
+  itkTypeMacro(WASMImageIO, StreamingImageIOBase);
 
   /** The different types of ImageIO's can support data of varying
    * dimensionality. For example, some file formats are strictly 2D
@@ -79,15 +79,15 @@ public:
   void Write(const void *buffer) override;
 
 protected:
-  JSONImageIO();
-  ~JSONImageIO() override;
+  WASMImageIO();
+  ~WASMImageIO() override;
   void PrintSelf(std::ostream & os, Indent indent) const override;
 
-  static ImageIOBase::IOComponentEnum JSToITKComponentType( const std::string & jsComponentType );
-  static std::string ITKToJSComponentType( const ImageIOBase::IOComponentEnum );
+  static ImageIOBase::IOComponentEnum WASMToITKComponentType( const std::string & jsComponentType );
+  static std::string ITKToWASMComponentType( const ImageIOBase::IOComponentEnum );
 
-  static IOPixelEnum JSToITKPixelType( const std::string & jsPixelType );
-  static std::string ITKToJSPixelType( const IOPixelEnum );
+  static IOPixelEnum WASMToITKPixelType( const std::string & jsPixelType );
+  static std::string ITKToWASMPixelType( const IOPixelEnum );
 
   Superclass::SizeType GetHeaderSize() const override
   {
@@ -95,8 +95,8 @@ protected:
   }
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(JSONImageIO);
+  ITK_DISALLOW_COPY_AND_ASSIGN(WASMImageIO);
 };
 } // end namespace itk
 
-#endif // itkJSONImageIO_h
+#endif // itkWASMImageIO_h

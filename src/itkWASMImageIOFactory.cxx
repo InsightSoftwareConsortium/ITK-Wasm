@@ -15,31 +15,31 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkJSONImageIOFactory.h"
-#include "itkJSONImageIO.h"
+#include "itkWASMImageIOFactory.h"
+#include "itkWASMImageIO.h"
 #include "itkVersion.h"
 
 namespace itk
 {
 
-JSONImageIOFactory
-::JSONImageIOFactory()
+WASMImageIOFactory
+::WASMImageIOFactory()
 {
   this->RegisterOverride( "itkImageIOBase",
-                          "itkJSONImageIO",
-                          "JSON Image IO",
+                          "itkWASMImageIO",
+                          "WASM Image IO",
                           1,
-                          CreateObjectFunction< JSONImageIO >::New() );
+                          CreateObjectFunction< WASMImageIO >::New() );
 }
 
 
-JSONImageIOFactory
-::~JSONImageIOFactory()
+WASMImageIOFactory
+::~WASMImageIOFactory()
 {}
 
 
 const char *
-JSONImageIOFactory
+WASMImageIOFactory
 ::GetITKSourceVersion() const
 {
   return ITK_SOURCE_VERSION;
@@ -47,24 +47,24 @@ JSONImageIOFactory
 
 
 const char *
-JSONImageIOFactory
+WASMImageIOFactory
 ::GetDescription() const
 {
-  return "JSON ImageIO Factory, allows the loading of JSON images into insight";
+  return "WASM ImageIO Factory, allows the loading of ITK WASM images into insight";
 }
 
 
 // Undocumented API used to register during static initialization.
 // DO NOT CALL DIRECTLY.
 
-static bool JSONImageIOFactoryHasBeenRegistered;
+static bool WASMImageIOFactoryHasBeenRegistered;
 
-void WebAssemblyInterface_EXPORT JSONImageIOFactoryRegister__Private(void)
+void WebAssemblyInterface_EXPORT WASMImageIOFactoryRegister__Private(void)
 {
-  if( ! JSONImageIOFactoryHasBeenRegistered )
+  if( ! WASMImageIOFactoryHasBeenRegistered )
     {
-    JSONImageIOFactoryHasBeenRegistered = true;
-    JSONImageIOFactory::RegisterOneFactory();
+    WASMImageIOFactoryHasBeenRegistered = true;
+    WASMImageIOFactory::RegisterOneFactory();
     }
 }
 
