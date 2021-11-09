@@ -299,11 +299,17 @@ WASMImageIO
     return false;
     }
 
+  if ( !std::filesystem::exists(fname) || !std::filesystem::is_directory(fname) )
+    {
+    return false;
+    }
 
+
+  const auto indexPath = std::filesystem::path(fname) / "index.json";
   std::ifstream inputStream;
   try
     {
-    this->OpenFileForReading( inputStream, fname, true );
+    this->OpenFileForReading( inputStream, indexPath.c_str(), true );
     }
   catch( ExceptionObject & )
     {
@@ -335,8 +341,12 @@ WASMImageIO
 {
   this->SetByteOrderToLittleEndian();
 
+  const std::string path = this->GetFileName();
+  const auto indexPath = std::filesystem::path(path) / "index.json";
+  const auto dataPath = std::filesystem::path(path) / "data";
+
   std::ifstream inputStream;
-  this->OpenFileForReading( inputStream, this->GetFileName(), true );
+  this->OpenFileForReading( inputStream, indexPath.c_str(), true );
   rapidjson::Document document;
   std::string str((std::istreambuf_iterator<char>(inputStream)),
                    std::istreambuf_iterator<char>());
@@ -374,16 +384,16 @@ WASMImageIO
     ++count;
     }
 
-  const rapidjson::Value & directionContainer = document["direction"];
-  const rapidjson::Value & direction = directionContainer["data"];
+  const auto directionPath = dataPath / "direction.raw";
+  std::ifstream directionStream;
+  this->OpenFileForReading( directionStream, directionPath.c_str(), false );
   count = 0;
-  for( rapidjson::Value::ConstValueIterator itr = direction.Begin(); itr != direction.End(); )
+  for( unsigned int jj = 0; jj < dimension; ++jj )
     {
     std::vector< double > direction( dimension );
     for( unsigned int ii = 0; ii < dimension; ++ii )
       {
-      direction[ii] = itr->GetDouble();
-      ++itr;
+      directionStream.read(reinterpret_cast< char * >(&(direction[ii])), sizeof(double));
       }
     this->SetDirection( count, direction );
     ++count;
@@ -403,18 +413,9 @@ void
 WASMImageIO
 ::Read( void *buffer )
 {
-  std::ifstream inputStream;
-  this->OpenFileForReading( inputStream, this->GetFileName(), true );
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                   std::istreambuf_iterator<char>());
-  rapidjson::Document document;
-  if ( document.Parse( str.c_str() ).HasParseError())
-    {
-    itkExceptionMacro("Could not parse JSON");
-    return;
-    }
+  const std::filesystem::path path(this->GetFileName());
+  const std::string dataFile = (path / "data" / "data.raw").c_str();
 
-  const std::string dataFile( document["data"].GetString() );
   std::ifstream dataStream;
   this->OpenFileForReading( dataStream, dataFile.c_str() );
 
@@ -572,7 +573,7 @@ WASMImageIO
 
   if (this->RequestedToStream())
   {
-    if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
+    if (!itksys::SystemTools::FileExists(path.c_str()))
     {
       this->WriteImageInformation();
 

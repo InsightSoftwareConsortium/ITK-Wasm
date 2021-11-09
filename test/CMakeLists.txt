@@ -71,8 +71,8 @@ itk_add_test(NAME itkJSONImageInterfaceNiftiTest
 
 itk_add_test(NAME itkWASMImageIOTest
     COMMAND WebAssemblyInterfaceTestDriver
-      #--compare DATA{Input/brainweb165a10f17.mha}
-      #${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.mha
+      --compare DATA{Input/brainweb165a10f17.mha}
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.mha
     itkWASMImageIOTest
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.iwi

@@ -57,5 +57,14 @@ itkWASMImageIOTest(int argc, char * argv[])
 
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmWriter->Update());
 
+  using ReaderType = itk::ImageFileReader<ImageType>;
+  auto wasmReader = ReaderType::New();
+  //wasmReader->SetImageIO( imageIO );
+  wasmReader->SetFileName( imageDirectory );
+
+  ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
+
+  ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(wasmReader->GetOutput(), convertedDirectoryFile));
+
   return EXIT_SUCCESS;
 }
