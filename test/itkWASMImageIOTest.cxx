@@ -45,7 +45,6 @@ itkWASMImageIOTest(int argc, char * argv[])
 
   ImagePointer inputImage = nullptr;
   ITK_TRY_EXPECT_NO_EXCEPTION(inputImage = itk::ReadImage<ImageType>(inputImageFile));
-  std::cout << "inputImage: " << inputImage << std::endl;
 
   auto imageIO = itk::WASMImageIO::New();
 
@@ -65,6 +64,14 @@ itkWASMImageIOTest(int argc, char * argv[])
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
 
   ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(wasmReader->GetOutput(), convertedDirectoryFile));
+
+  wasmWriter->SetFileName( imageZip );
+  ITK_TRY_EXPECT_NO_EXCEPTION(wasmWriter->Update());
+
+  wasmReader->SetFileName( imageZip );
+  ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
+
+  ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(wasmReader->GetOutput(), convertedZipFile));
 
   return EXIT_SUCCESS;
 }

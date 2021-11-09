@@ -73,6 +73,8 @@ itk_add_test(NAME itkWASMImageIOTest
     COMMAND WebAssemblyInterfaceTestDriver
       --compare DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.mha
+      --compare DATA{Input/brainweb165a10f17.mha}
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.zip.mha
     itkWASMImageIOTest
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.iwi
@@ -81,6 +83,19 @@ itk_add_test(NAME itkWASMImageIOTest
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.zip.mha
 )
 
+itk_add_test(NAME itkWASMImageIONiftiTest
+    COMMAND WebAssemblyInterfaceTestDriver
+      --compare DATA{Input/r16slice.nii.gz}
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.mha
+      --compare DATA{Input/r16slice.nii.gz}
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.zip.mha
+    itkWASMImageIOTest
+      DATA{Input/r16slice.nii.gz}
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.iwi
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.iwi.zip
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.zip.mha
+)
 
 if(EMSCRIPTEN)
   # setjmp workaround

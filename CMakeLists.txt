@@ -110,13 +110,19 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(rapidjson_lib zip_lib)
 option(CMAKE_DISABLE_TESTING ON "Disable zip tests")
 set(RapidJSON_INCLUDE_DIR "${rapidjson_lib_SOURCE_DIR}/include")
+set(zip_lib_INCLUDE_DIR "${zip_lib_SOURCE_DIR}/src")
 set(BUILD_TESTING ${_itk_build_testing})
 set(BUILD_SHARED_LIBS ${_itk_build_shared})
 
 find_path(RapidJSON_INCLUDE_DIR
  NAMES rapidjson/document.h
  )
-set(WebAssemblyInterface_INCLUDE_DIRS ${RapidJSON_INCLUDE_DIR})
+find_path(zip_lib_INCLUDE_DIR
+ NAMES zip.h
+ )
+set(WebAssemblyInterface_INCLUDE_DIRS ${RapidJSON_INCLUDE_DIR}
+  ${zip_lib_INCLUDE_DIR})
+list(APPEND WebAssemblyInterface_LIBRARIES zip)
 
 get_filename_component(_module_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(CMAKE_MODULE_PATH "${_module_dir}/CMake/" ${CMAKE_MODULE_PATH})

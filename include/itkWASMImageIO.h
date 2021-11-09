@@ -19,7 +19,6 @@
 #define itkWASMImageIO_h
 #include "WebAssemblyInterfaceExport.h"
 
-
 #include "itkStreamingImageIOBase.h"
 #include <fstream>
 

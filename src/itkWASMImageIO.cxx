@@ -28,6 +28,8 @@
 
 #include <filesystem>
 
+#include "zip.h"
+
 namespace itk
 {
 
@@ -66,45 +68,45 @@ WASMImageIO
 
 ImageIOBase::IOComponentEnum
 WASMImageIO
-::WASMToITKComponentType(const std::string & jsComponentType)
+::WASMToITKComponentType(const std::string & wasmComponentType)
 {
-  if( jsComponentType == "int8_t" )
+  if( wasmComponentType == "int8_t" )
     {
     return IOComponentEnum::CHAR;
     }
-  else if( jsComponentType == "uint8_t" )
+  else if( wasmComponentType == "uint8_t" )
     {
     return IOComponentEnum::UCHAR;
     }
-  else if( jsComponentType == "int16_t" )
+  else if( wasmComponentType == "int16_t" )
     {
     return IOComponentEnum::SHORT;
     }
-  else if( jsComponentType == "uint16_t" )
+  else if( wasmComponentType == "uint16_t" )
     {
     return IOComponentEnum::USHORT;
     }
-  else if( jsComponentType == "int32_t" )
+  else if( wasmComponentType == "int32_t" )
     {
     return IOComponentEnum::INT;
     }
-  else if( jsComponentType == "uint32_t" )
+  else if( wasmComponentType == "uint32_t" )
     {
     return IOComponentEnum::UINT;
     }
-  else if( jsComponentType == "int64_t" )
+  else if( wasmComponentType == "int64_t" )
     {
     return IOComponentEnum::LONGLONG;
     }
-  else if( jsComponentType == "uint64_t" )
+  else if( wasmComponentType == "uint64_t" )
     {
     return IOComponentEnum::ULONGLONG;
     }
-  else if( jsComponentType == "float" )
+  else if( wasmComponentType == "float" )
     {
     return IOComponentEnum::FLOAT;
     }
-  else if( jsComponentType == "double" )
+  else if( wasmComponentType == "double" )
     {
     return IOComponentEnum::DOUBLE;
     }
@@ -162,69 +164,69 @@ WASMImageIO
 
 IOPixelEnum
 WASMImageIO
-::WASMToITKPixelType( const std::string & jsPixelType )
+::WASMToITKPixelType( const std::string & wasmPixelType )
 {
-  if ( jsPixelType == "Unknown" )
+  if ( wasmPixelType == "Unknown" )
     {
     return IOPixelEnum::UNKNOWNPIXELTYPE;
     }
-  else if ( jsPixelType == "Scalar" )
+  else if ( wasmPixelType == "Scalar" )
     {
     return IOPixelEnum::SCALAR;
     }
-  else if ( jsPixelType == "RGB" )
+  else if ( wasmPixelType == "RGB" )
     {
     return IOPixelEnum::RGB;
     }
-  else if ( jsPixelType == "RGBA" )
+  else if ( wasmPixelType == "RGBA" )
     {
     return IOPixelEnum::RGBA;
     }
-  else if ( jsPixelType == "Offset" )
+  else if ( wasmPixelType == "Offset" )
     {
     return IOPixelEnum::OFFSET;
     }
-  else if ( jsPixelType == "Vector" )
+  else if ( wasmPixelType == "Vector" )
     {
     return IOPixelEnum::VECTOR;
     }
-  else if ( jsPixelType == "Point" )
+  else if ( wasmPixelType == "Point" )
     {
     return IOPixelEnum::POINT;
     }
-  else if ( jsPixelType == "CovariantVector" )
+  else if ( wasmPixelType == "CovariantVector" )
     {
     return IOPixelEnum::COVARIANTVECTOR;
     }
-  else if ( jsPixelType == "SymmetricSecondRankTensor" )
+  else if ( wasmPixelType == "SymmetricSecondRankTensor" )
     {
     return IOPixelEnum::SYMMETRICSECONDRANKTENSOR;
     }
-  else if ( jsPixelType == "DiffusionTensor3D" )
+  else if ( wasmPixelType == "DiffusionTensor3D" )
     {
     return IOPixelEnum::DIFFUSIONTENSOR3D;
     }
-  else if ( jsPixelType == "Complex" )
+  else if ( wasmPixelType == "Complex" )
     {
     return IOPixelEnum::COMPLEX;
     }
-  else if ( jsPixelType == "FixedArray" )
+  else if ( wasmPixelType == "FixedArray" )
     {
     return IOPixelEnum::FIXEDARRAY;
     }
-  else if ( jsPixelType == "Array" )
+  else if ( wasmPixelType == "Array" )
     {
     return IOPixelEnum::ARRAY;
     }
-  else if ( jsPixelType == "Matrix" )
+  else if ( wasmPixelType == "Matrix" )
     {
     return IOPixelEnum::MATRIX;
     }
-  else if ( jsPixelType == "VariableLengthVector" )
+  else if ( wasmPixelType == "VariableLengthVector" )
     {
     return IOPixelEnum::VARIABLELENGTHVECTOR;
     }
-  else if ( jsPixelType == "VariableSizeMatrix" )
+  else if ( wasmPixelType == "VariableSizeMatrix" )
     {
     return IOPixelEnum::VARIABLESIZEMATRIX;
     }
@@ -287,8 +289,8 @@ WASMImageIO
   std::string fname = filename;
 
   bool extensionFound = false;
-  std::string::size_type jsonPos = fname.rfind(".iwi");
-  if ( jsonPos != std::string::npos )
+  std::string::size_type extensionPos = fname.rfind(".iwi");
+  if ( extensionPos != std::string::npos )
     {
     extensionFound = true;
     }
@@ -299,38 +301,6 @@ WASMImageIO
     return false;
     }
 
-  if ( !std::filesystem::exists(fname) || !std::filesystem::is_directory(fname) )
-    {
-    return false;
-    }
-
-
-  const auto indexPath = std::filesystem::path(fname) / "index.json";
-  std::ifstream inputStream;
-  try
-    {
-    this->OpenFileForReading( inputStream, indexPath.c_str(), true );
-    }
-  catch( ExceptionObject & )
-    {
-    return false;
-    }
-
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                   std::istreambuf_iterator<char>());
-  rapidjson::Document document;
-  if( document.Parse( str.c_str() ).HasParseError() )
-    {
-    inputStream.close();
-    return false;
-    }
-
-  if( !document.HasMember("imageType") )
-    {
-    return false;
-    }
-
-  inputStream.close();
   return true;
 }
 
@@ -340,22 +310,48 @@ WASMImageIO
 ::ReadImageInformation()
 {
   this->SetByteOrderToLittleEndian();
+  rapidjson::Document document;
 
   const std::string path = this->GetFileName();
   const auto indexPath = std::filesystem::path(path) / "index.json";
   const auto dataPath = std::filesystem::path(path) / "data";
 
-  std::ifstream inputStream;
-  this->OpenFileForReading( inputStream, indexPath.c_str(), true );
-  rapidjson::Document document;
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                   std::istreambuf_iterator<char>());
-  if (document.Parse(str.c_str()).HasParseError())
-    {
-    itkExceptionMacro("Could not parse JSON");
-    return;
-    }
+  std::string::size_type zipPos = path.rfind(".zip");
+  struct zip_t * zip = nullptr;
+  bool useZip = false;
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    useZip = true;
+    zip = zip_open(path.c_str(), 0, 'r');
 
+    zip_entry_open(zip, "index.json");
+    const size_t bufsize = zip_entry_size(zip);
+    void * buf = calloc(bufsize, sizeof(unsigned char));
+    zip_entry_noallocread(zip, buf, bufsize);
+    if (document.Parse(static_cast<const char *>(buf)).HasParseError())
+      {
+      free(buf);
+      zip_entry_close(zip);
+      zip_close(zip);
+      itkExceptionMacro("Could not parse JSON");
+      return;
+      }
+    free(buf);
+    zip_entry_close(zip);
+  }
+  else
+  {
+    std::ifstream inputStream;
+    this->OpenFileForReading( inputStream, indexPath.c_str(), true );
+    std::string str((std::istreambuf_iterator<char>(inputStream)),
+                     std::istreambuf_iterator<char>());
+    if (document.Parse(str.c_str()).HasParseError())
+      {
+      itkExceptionMacro("Could not parse JSON");
+      return;
+      }
+  }
 
   const rapidjson::Value & imageType = document["imageType"];
   const int dimension = imageType["dimension"].GetInt();
@@ -385,19 +381,43 @@ WASMImageIO
     }
 
   const auto directionPath = dataPath / "direction.raw";
-  std::ifstream directionStream;
-  this->OpenFileForReading( directionStream, directionPath.c_str(), false );
-  count = 0;
-  for( unsigned int jj = 0; jj < dimension; ++jj )
-    {
-    std::vector< double > direction( dimension );
-    for( unsigned int ii = 0; ii < dimension; ++ii )
+  if (useZip)
+  {
+    zip_entry_open(zip, "data/direction.raw");
+    const size_t bufsize = zip_entry_size(zip);
+    double * buf = static_cast< double * >(malloc(bufsize));
+    zip_entry_noallocread(zip, static_cast<void *>(buf), bufsize);
+
+    count = 0;
+    for( unsigned int jj = 0; jj < dimension; ++jj )
       {
-      directionStream.read(reinterpret_cast< char * >(&(direction[ii])), sizeof(double));
+      std::vector< double > direction( dimension );
+      for( unsigned int ii = 0; ii < dimension; ++ii )
+        {
+        direction[ii] = buf[ii + jj*dimension];
+        }
+      this->SetDirection( count, direction );
+      ++count;
       }
-    this->SetDirection( count, direction );
-    ++count;
-    }
+    free(buf);
+    zip_entry_close(zip);
+  }
+  else
+  {
+    std::ifstream directionStream;
+    this->OpenFileForReading( directionStream, directionPath.c_str(), false );
+    count = 0;
+    for( unsigned int jj = 0; jj < dimension; ++jj )
+      {
+      std::vector< double > direction( dimension );
+      for( unsigned int ii = 0; ii < dimension; ++ii )
+        {
+        directionStream.read(reinterpret_cast< char * >(&(direction[ii])), sizeof(double));
+        }
+      this->SetDirection( count, direction );
+      ++count;
+      }
+  }
 
   const rapidjson::Value & size = document["size"];
   count = 0;
@@ -406,6 +426,11 @@ WASMImageIO
     this->SetDimensions( count, itr->GetInt() );
     ++count;
     }
+
+  if (useZip)
+  {
+    zip_close(zip);
+  }
 }
 
 
@@ -413,30 +438,46 @@ void
 WASMImageIO
 ::Read( void *buffer )
 {
-  const std::filesystem::path path(this->GetFileName());
-  const std::string dataFile = (path / "data" / "data.raw").c_str();
+  const std::string path(this->GetFileName());
+  const std::string dataFile = (std::filesystem::path(path) / "data" / "data.raw").c_str();
 
-  std::ifstream dataStream;
-  this->OpenFileForReading( dataStream, dataFile.c_str() );
-
-  if (this->RequestedToStream())
+  std::string::size_type zipPos = path.rfind(".zip");
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
   {
-    this->OpenFileForReading( dataStream, dataFile.c_str() );
-    this->StreamReadBufferAsBinary( dataStream, buffer );
-  }
+    struct zip_t * zip = zip_open(path.c_str(), 0, 'r');
 
-  else
-  {
-    this->OpenFileForReading( dataStream, dataFile.c_str() );
+    zip_entry_open(zip, "data/data.raw");
     const SizeValueType numberOfBytesToBeRead =
       static_cast< SizeValueType >( this->GetImageSizeInBytes() );
-    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-      {
-      itkExceptionMacro(<< "Read failed: Wanted "
-                        << numberOfBytesToBeRead
-                        << " bytes, but read "
-                        << dataStream.gcount() << " bytes.");
-      }
+    zip_entry_noallocread(zip, buffer, numberOfBytesToBeRead);
+    zip_entry_close(zip);
+    zip_close(zip);
+  }
+  else
+  {
+    std::ifstream dataStream;
+    this->OpenFileForReading( dataStream, dataFile.c_str() );
+
+    if (this->RequestedToStream())
+    {
+      this->OpenFileForReading( dataStream, dataFile.c_str() );
+      this->StreamReadBufferAsBinary( dataStream, buffer );
+    }
+
+    else
+    {
+      this->OpenFileForReading( dataStream, dataFile.c_str() );
+      const SizeValueType numberOfBytesToBeRead =
+        static_cast< SizeValueType >( this->GetImageSizeInBytes() );
+      if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+        {
+        itkExceptionMacro(<< "Read failed: Wanted "
+                          << numberOfBytesToBeRead
+                          << " bytes, but read "
+                          << dataStream.gcount() << " bytes.");
+        }
+    }
   }
 }
 
@@ -453,15 +494,10 @@ WASMImageIO
     }
 
   bool extensionFound = false;
-  std::string::size_type jsonPos = filename.rfind(".iwi");
-  if ( jsonPos != std::string::npos )
+  std::string::size_type iwiPos = filename.rfind(".iwi");
+  if ( iwiPos != std::string::npos )
     {
     extensionFound = true;
-    }
-
-  if ( std::filesystem::exists(filename) && !std::filesystem::is_directory(filename) )
-    {
-    return false;
     }
 
   if ( !extensionFound )
@@ -479,16 +515,28 @@ WASMImageIO
 ::WriteImageInformation()
 {
   const std::string path = this->GetFileName();
-  if ( !std::filesystem::exists(path) )
-    {
-    std::filesystem::create_directories(path);
-    }
   const auto indexPath = std::filesystem::path(path) / "index.json";
   const auto dataPath = std::filesystem::path(path) / "data";
-  if ( !std::filesystem::exists(dataPath) )
-    {
-    std::filesystem::create_directory(dataPath);
-    }
+  std::string::size_type zipPos = path.rfind(".zip");
+  struct zip_t * zip = nullptr;
+  bool useZip = false;
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    useZip = true;
+    zip = zip_open(path.c_str(), 0, 'w');
+  }
+  else
+  {
+    if ( !std::filesystem::exists(path) )
+      {
+      std::filesystem::create_directories(path);
+      }
+    if ( !std::filesystem::exists(dataPath) )
+      {
+      std::filesystem::create_directory(dataPath);
+      }
+  }
 
   rapidjson::Document document;
   document.SetObject();
@@ -528,17 +576,33 @@ WASMImageIO
     }
   document.AddMember( "spacing", spacing.Move(), allocator );
 
-  const auto directionPath = dataPath / "direction.raw";
-  std::ofstream directionFile;
-  this->OpenFileForWriting(directionFile, directionPath.c_str(), false);
-  for( unsigned int ii = 0; ii < dimension; ++ii )
-    {
-    const std::vector< double > dimensionDirection = this->GetDirection( ii );
-    for( unsigned int jj = 0; jj < dimension; ++jj )
+  if (useZip)
+  {
+    zip_entry_open(zip, "data/direction.raw");
+    for( unsigned int ii = 0; ii < dimension; ++ii )
       {
-      directionFile.write(reinterpret_cast< const char *>(&(dimensionDirection[jj])), sizeof(double) );
+      const std::vector< double > dimensionDirection = this->GetDirection( ii );
+      for( unsigned int jj = 0; jj < dimension; ++jj )
+        {
+        zip_entry_write(zip, reinterpret_cast< const char *>(&(dimensionDirection[jj])), sizeof(double) );
+        }
       }
-    }
+    zip_entry_close(zip);
+  }
+  else
+  {
+    const auto directionPath = dataPath / "direction.raw";
+    std::ofstream directionFile;
+    this->OpenFileForWriting(directionFile, directionPath.c_str(), false);
+    for( unsigned int ii = 0; ii < dimension; ++ii )
+      {
+      const std::vector< double > dimensionDirection = this->GetDirection( ii );
+      for( unsigned int jj = 0; jj < dimension; ++jj )
+        {
+        directionFile.write(reinterpret_cast< const char *>(&(dimensionDirection[jj])), sizeof(double) );
+        }
+      }
+  }
   rapidjson::Value directionValue;
   directionValue.SetString( "path:data/direction.raw", allocator );
   document.AddMember( "direction", directionValue.Move(), allocator );
@@ -550,17 +614,34 @@ WASMImageIO
     }
   document.AddMember( "size", size.Move(), allocator );
 
-  std::string dataFileString( std::string( this->GetFileName() ) + ".data" );
+  std::string dataFileString( "path:data/data.raw" );
   rapidjson::Value dataFile;
   dataFile.SetString( dataFileString.c_str(), allocator );
   document.AddMember( "data", dataFile, allocator );
 
-  std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );
-  rapidjson::OStreamWrapper ostreamWrapper( outputStream );
-  rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
-  document.Accept( writer );
-  outputStream.close();
+  if (useZip)
+  {
+    rapidjson::StringBuffer stringBuffer;
+    rapidjson::Writer< rapidjson::StringBuffer > writer( stringBuffer );
+    document.Accept( writer );
+    zip_entry_open(zip, "index.json");
+    zip_entry_write(zip, stringBuffer.GetString(), stringBuffer.GetLength());
+    zip_entry_close(zip);
+  }
+  else
+  {
+    std::ofstream outputStream;
+    this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );
+    rapidjson::OStreamWrapper ostreamWrapper( outputStream );
+    rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
+    document.Accept( writer );
+    outputStream.close();
+  }
+
+  if (useZip)
+  {
+    zip_close(zip);
+  }
 }
 
 
@@ -568,40 +649,60 @@ void
 WASMImageIO
 ::Write( const void *buffer )
 {
-  const std::filesystem::path path(this->GetFileName());
-  const std::string fileName = (path / "data" / "data.raw").c_str();
-
-  if (this->RequestedToStream())
+  const std::string path(this->GetFileName());
+  const std::string fileName = (std::filesystem::path(path) / "data" / "data.raw").c_str();
+  std::string::size_type zipPos = path.rfind(".zip");
+  struct zip_t * zip = nullptr;
+  bool useZip = false;
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
   {
-    if (!itksys::SystemTools::FileExists(path.c_str()))
-    {
-      this->WriteImageInformation();
+    useZip = true;
+  }
 
-      std::ofstream file;
-      this->OpenFileForWriting(file, fileName, false);
-
-      // write one byte at the end of the file to allocate (this is a
-      // nifty trick which should not write the entire size of the file
-      // just allocate it, if the system supports sparse files)
-      std::streampos seekPos = this->GetImageSizeInBytes();
-      file.seekp(seekPos, std::ios::cur);
-      file.write("\0", 1);
-      file.seekp(0);
-    }
-
-    std::ofstream file;
-    // open and stream write
-    this->OpenFileForWriting(file, fileName, false);
-
-    this->StreamWriteBufferAsBinary(file, buffer);
+  if (useZip)
+  {
+    this->WriteImageInformation();
+    zip = zip_open(path.c_str(), 0, 'a');
+    zip_entry_open(zip, "data/data.raw");
+    const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
+    zip_entry_write(zip, static_cast< const char * >( buffer ), numberOfBytes); \
+    zip_entry_close(zip);
+    zip_close(zip);
   }
   else
   {
-    this->WriteImageInformation();
-    std::ofstream outputStream;
-    this->OpenFileForWriting( outputStream, fileName, true, false );
-    const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
-    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+    if (this->RequestedToStream())
+    {
+      if (!itksys::SystemTools::FileExists(path.c_str()))
+      {
+        this->WriteImageInformation();
+        std::ofstream file;
+        this->OpenFileForWriting(file, fileName, false);
+
+        // write one byte at the end of the file to allocate (this is a
+        // nifty trick which should not write the entire size of the file
+        // just allocate it, if the system supports sparse files)
+        std::streampos seekPos = this->GetImageSizeInBytes();
+        file.seekp(seekPos, std::ios::cur);
+        file.write("\0", 1);
+        file.seekp(0);
+      }
+
+      std::ofstream file;
+      // open and stream write
+      this->OpenFileForWriting(file, fileName, false);
+
+      this->StreamWriteBufferAsBinary(file, buffer);
+    }
+    else
+    {
+      this->WriteImageInformation();
+      std::ofstream outputStream;
+      this->OpenFileForWriting( outputStream, fileName, true, false );
+      const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
+      outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+    }
   }
 }
 
