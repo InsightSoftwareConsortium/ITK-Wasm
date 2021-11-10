@@ -26,7 +26,7 @@ wasi_ld_flags="-flto -lwasi-emulated-signal"
 wasi_c_flags="-flto -D_WASI_EMULATED_SIGNAL"
 
 emscripten_debug_ld_flags="-fno-lto -s ALLOW_MEMORY_GROWTH=1"
-emscripten_debug_c_flags="-fno-lto -Wno-warn-absolute-paths --memory-init-file 0"
+emscripten_debug_c_flags="-fno-lto -Wno-warn-absolute-paths"
 
 wasi_debug_ld_flags="-fno-lto -lwasi-emulated-signal"
 wasi_debug_c_flags="-fno-lto -D_WASI_EMULATED_SIGNAL"
