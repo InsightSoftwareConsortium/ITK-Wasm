@@ -111,6 +111,7 @@ option(MZ_OPENSSL OFF "Enables OpenSSL encryption")
 option(MZ_LIBBSD OFF "Build with libbsd for crypto random")
 option(MZ_SIGNING OFF "Enables zip signing support")
 option(MZ_ICONV OFF "Enables iconv string encoding conversion library")
+set(MZ_PROJECT_SUFFIX "-itk" CACHE STRING "Minizip name suffix")
 FetchContent_Declare(
   minizip-ng
   GIT_REPOSITORY ${minizip-ng_GIT_REPOSITORY}
@@ -128,7 +129,7 @@ find_path(RapidJSON_INCLUDE_DIR
 set(WebAssemblyInterface_INCLUDE_DIRS ${RapidJSON_INCLUDE_DIR}
   ${minizip-ng_INCLUDE_DIR}
   )
-list(APPEND WebAssemblyInterface_LIBRARIES minizip)
+list(APPEND WebAssemblyInterface_LIBRARIES minizip-itk)
 
 get_filename_component(_module_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(CMAKE_MODULE_PATH "${_module_dir}/CMake/" ${CMAKE_MODULE_PATH})
@@ -141,3 +142,6 @@ if(NOT ITK_SOURCE_DIR)
 else()
   itk_module_impl()
 endif()
+itk_module_target_label(minizip-itk)
+itk_module_target_export(minizip-itk)
+itk_module_target_install(minizip-itk)
