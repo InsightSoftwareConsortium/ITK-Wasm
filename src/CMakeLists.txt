@@ -6,6 +6,8 @@ set(Iconv_DIR ${CMAKE_BINARY_DIR}/libiconv)
 set(Iconv_INCLUDE_DIRS ${Iconv_DIR}/include)
 file(MAKE_DIRECTORY ${Iconv_DIR} ${Iconv_INCLUDE_DIRS})
 
+include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
+
 set(WebAssemblyInterface_SRCS
   itkWASMImageIOFactory.cxx
   itkWASMImageIO.cxx
@@ -15,7 +17,6 @@ set(WebAssemblyInterface_SRCS
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 
 if(BUILD_ITK_JS_IO_MODULES)
-include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
 
 # -s WASM_ASYNC_COMPILATION=0
 # -flto
