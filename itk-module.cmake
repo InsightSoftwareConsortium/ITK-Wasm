@@ -18,7 +18,7 @@ itk_module(WebAssemblyInterface
   TEST_DEPENDS
     ITKTestKernel
   FACTORY_NAMES
-    ImageIO::JSON
+    ImageIO::WASM
     MeshIO::JSON
   EXCLUDE_FROM_DEFAULT
   DESCRIPTION
