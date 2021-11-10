@@ -15,7 +15,7 @@ set(WebAssemblyInterface_SRCS
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 
 if(BUILD_ITK_JS_IO_MODULES)
-include_directories(${RapidJSON_INCLUDE_DIR})
+include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
 
 # -s WASM_ASYNC_COMPILATION=0
 # -flto
