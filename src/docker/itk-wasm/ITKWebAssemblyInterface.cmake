@@ -1,7 +1,7 @@
 # Override the default set in the Emscripten toolchain (11) to be compatible
 # with ITK's requirement for c++14 or newer.
 # C++17 for string_view support
-set(CMAKE_C_STANDARD_COMPUTED_DEFAULT 17)
+set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 17)
 
 if(NOT _ITKWebAssemblyInterface_INCLUDED)
 
