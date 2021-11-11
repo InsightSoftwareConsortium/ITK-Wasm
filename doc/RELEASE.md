@@ -14,7 +14,7 @@ version=6.0.0 # change to correct version
 #
 #   echo $(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 #
-./src/docker/build.sh
+./src/docker/build.sh --with-debug
 # DockerHub credential environmental variables must be set
 ./src/docker/push.sh
 git add -- src/itk-wasm-cli.js
