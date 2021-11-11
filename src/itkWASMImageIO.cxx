@@ -630,6 +630,10 @@ WASMImageIO
   else
   {
     const auto directionPath = dataPath + "/direction.raw";
+    if ( !itksys::SystemTools::FileExists(dataPath, false) )
+      {
+        itksys::SystemTools::MakeDirectory(dataPath);
+      }
     std::ofstream directionFile;
     this->OpenFileForWriting(directionFile, directionPath.c_str(), false);
     for( unsigned int ii = 0; ii < dimension; ++ii )
