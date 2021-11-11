@@ -67,6 +67,7 @@ EMSCRIPTEN_BINDINGS(itk_fdf_image_io_js_binding) {
   .function("SetFileName", &FDFImageIOJSBindingType::SetFileName)
   .function("GetFileName", &FDFImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &FDFImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &FDFImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &FDFImageIOJSBindingType::ReadImageInformation)
   .function("WriteImageInformation", &FDFImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &FDFImageIOJSBindingType::SetDimensions)

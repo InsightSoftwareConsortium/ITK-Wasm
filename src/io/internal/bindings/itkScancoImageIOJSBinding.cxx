@@ -67,6 +67,7 @@ EMSCRIPTEN_BINDINGS(itk_scanco_image_io_js_binding) {
   .function("SetFileName", &ScancoImageIOJSBindingType::SetFileName)
   .function("GetFileName", &ScancoImageIOJSBindingType::GetFileName)
   .function("CanReadFile", &ScancoImageIOJSBindingType::CanReadFile)
+  .function("CanWriteFile", &ScancoImageIOJSBindingType::CanWriteFile)
   .function("ReadImageInformation", &ScancoImageIOJSBindingType::ReadImageInformation)
   .function("WriteImageInformation", &ScancoImageIOJSBindingType::WriteImageInformation)
   .function("SetDimensions", &ScancoImageIOJSBindingType::SetDimensions)

@@ -15,7 +15,8 @@ const extensionToIO = new Map([
   ['jpeg', 'itkJPEGImageIOJSBinding'],
   ['JPEG', 'itkJPEGImageIOJSBinding'],
 
-  ['json', 'itkWASMImageIOJSBinding'],
+  ['iwi', 'itkWASMImageIOJSBinding'],
+  ['iwi.zip', 'itkWASMImageIOJSBinding'],
 
   ['lsm', 'itkLSMImageIOJSBinding'],
 
