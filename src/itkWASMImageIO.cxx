@@ -608,7 +608,10 @@ WASMImageIO
     mz_zip_file file_info = { 0 };
     file_info.filename = "data/direction.raw";
     file_info.modified_date = time(NULL);
-    file_info.version_madeby = MZ_VERSION_MADEBY;
+    file_info.creation_date = file_info.modified_date;
+    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
+    // 644
+    file_info.external_fa = 0x00008124;
     file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
     if (mz_zip_writer_entry_open(zip_writer, &file_info) != MZ_OK)
     {
@@ -662,7 +665,10 @@ WASMImageIO
     mz_zip_file file_info = { 0 };
     file_info.filename = "index.json";
     file_info.modified_date = time(NULL);
-    file_info.version_madeby = MZ_VERSION_MADEBY;
+    file_info.creation_date = file_info.modified_date;
+    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
+    // 644
+    file_info.external_fa = 0x00008124;
     file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
     file_info.flag = MZ_ZIP_FLAG_UTF8;
     if (mz_zip_writer_entry_open(zip_writer, &file_info) != MZ_OK)
@@ -714,7 +720,10 @@ WASMImageIO
     mz_zip_file file_info = { 0 };
     file_info.filename = "data/data.raw";
     file_info.modified_date = time(NULL);
-    file_info.version_madeby = MZ_VERSION_MADEBY;
+    file_info.creation_date = file_info.modified_date;
+    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
+    // 644
+    file_info.external_fa = 0x00008124;
     file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
     mz_zip_writer_entry_open(zip_writer, &file_info);
     const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
