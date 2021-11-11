@@ -138,7 +138,11 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
       console.log('Exception while running pipeline:')
       console.log('stdout:', pipelineModule.getModuleStdout())
       console.error('stderr:', pipelineModule.getModuleStderr())
-      console.error('exception:', pipelineModule.getExceptionMessage(exception))
+      if (typeof pipelineModule.getExceptionMessage !== 'undefined') {
+        console.error('exception:', pipelineModule.getExceptionMessage(exception))
+      } else {
+        console.error('Build module in Debug mode for exception message information.')
+      }
     }
     throw exception
   }
