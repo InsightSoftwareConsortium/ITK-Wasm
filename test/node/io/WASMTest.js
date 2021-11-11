@@ -4,7 +4,7 @@ import path from 'path'
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../dist/index.js'
 
 const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cthead1.png')
-const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'TestJSON-cthead1.json')
+const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'TestJSON-cthead1.iwi')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')
@@ -24,7 +24,7 @@ const verifyImage = (t, image) => {
   t.is(image.data.length, 196608, 'data.length')
 }
 
-test('Test writing and reading a JSON file', (t) => {
+test('Test writing and reading an ITK WASM file', (t) => {
   return readImageLocalFile(testInputFilePath).then(function (image) {
     const useCompression = false
     return writeImageLocalFile(useCompression, image, testOutputFilePath)
