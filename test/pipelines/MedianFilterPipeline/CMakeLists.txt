@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(MedianFilterTest)
 
+set(CMAKE_CXX_STANDARD 17)
+
 set(io_components ITKImageIO)
 if(EMSCRIPTEN OR WASI)
   set(io_components WebAssemblyInterface)
