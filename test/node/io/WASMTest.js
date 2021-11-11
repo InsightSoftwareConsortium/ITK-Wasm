@@ -4,7 +4,7 @@ import path from 'path'
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../dist/index.js'
 
 const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cthead1.png')
-const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'TestWASM-cthead1.iwi')
+const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'TestWASM-cthead1.iwi.zip')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')
