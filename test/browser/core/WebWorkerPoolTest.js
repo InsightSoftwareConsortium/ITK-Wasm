@@ -41,7 +41,7 @@ export default function () {
     const taskArgsArray = []
     for (let index = 0; index < maxTotalSplits; index++) {
       const pipelinePath = 'MedianFilterTest'
-      const args = ['cthead1.png.json', 'cthead1.png.shrink.json', '4', '' + maxTotalSplits, '' + index]
+      const args = ['cthead1.png.iwi', 'cthead1.png.shrink.iwi', '4', '' + maxTotalSplits, '' + index]
       const desiredOutputs = [
         { path: args[1], type: IOTypes.Image }
       ]
