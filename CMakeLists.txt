@@ -85,6 +85,7 @@ endif()
 include(FetchContent)
 set(_itk_build_testing ${BUILD_TESTING})
 set(_itk_build_shared ${BUILD_SHARED_LIBS})
+
 # Uses newer CMake
 set(RapidJSON_GIT_REPOSITORY "https://github.com/thewtex/rapidjson.git")
 set(RapidJSON_GIT_TAG        "67eb4fec88204714f6d0f63573569788135e41a5")
@@ -98,8 +99,10 @@ FetchContent_Declare(
   GIT_REPOSITORY ${RapidJSON_GIT_REPOSITORY}
   GIT_TAG ${RapidJSON_GIT_TAG}
   )
+
 set(minizip-ng_GIT_REPOSITORY https://github.com/zlib-ng/minizip-ng.git)
-set(minizip-ng_GIT_TAG 3.0.3)
+# 3.0.3
+set(minizip-ng_GIT_TAG 0930f1aebebb3554570a94357464f0a67b387c6d)
 option(MZ_COMPAT OFF "Enables compatibility layer")
 option(MZ_ZLIB OFF "Enables ZLIB compression")
 option(MZ_BZIP2 OFF "Enables BZIP2 compression")
@@ -117,17 +120,32 @@ FetchContent_Declare(
   GIT_REPOSITORY ${minizip-ng_GIT_REPOSITORY}
   GIT_TAG ${minizip-ng_GIT_TAG}
   )
-FetchContent_MakeAvailable(rapidjson_lib minizip-ng)
+
+set(CLI11_GIT_REPOSITORY "https://github.com/CLIUtils/CLI11")
+# v2.1.2
+set(CLI11_GIT_TAG "70f8072f9dd2292fd0b9f9e5f58e279f60483ed3")
+FetchContent_Declare(
+  cli11
+  GIT_REPOSITORY ${CLI11_GIT_REPOSITORY}
+  GIT_TAG        ${CLI11_GIT_TAG}
+)
+
+
+FetchContent_MakeAvailable(rapidjson_lib minizip-ng cli11)
 set(RapidJSON_INCLUDE_DIR "${rapidjson_lib_SOURCE_DIR}/include")
 set(minizip-ng_INCLUDE_DIR "${minizip-ng_SOURCE_DIR}")
+set(cli11_INCLUDE_DIR "${cli11_SOURCE_DIR}/include")
+
 set(BUILD_TESTING ${_itk_build_testing})
 set(BUILD_SHARED_LIBS ${_itk_build_shared})
 
 find_path(RapidJSON_INCLUDE_DIR
  NAMES rapidjson/document.h
  )
-set(WebAssemblyInterface_INCLUDE_DIRS ${RapidJSON_INCLUDE_DIR}
+set(WebAssemblyInterface_INCLUDE_DIRS
+  ${RapidJSON_INCLUDE_DIR}
   ${minizip-ng_INCLUDE_DIR}
+  ${cli11_INCLUDE_DIR}
   )
 list(APPEND WebAssemblyInterface_LIBRARIES minizip-itk)
 
