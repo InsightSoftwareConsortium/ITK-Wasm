@@ -26,7 +26,7 @@
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/ostreamwrapper.h"
 
-#include <filesystem>
+#include "itksys/SystemTools.hxx"
 
 #include "mz.h"
 #include "mz_os.h"
@@ -317,8 +317,8 @@ WASMImageIO
   rapidjson::Document document;
 
   const std::string path = this->GetFileName();
-  const auto indexPath = std::filesystem::path(path) / "index.json";
-  const auto dataPath = std::filesystem::path(path) / "data";
+  const auto indexPath = path + "/index.json";
+  const auto dataPath = path + "/data";
 
   std::string::size_type zipPos = path.rfind(".zip");
   void * zip_reader = NULL;
@@ -396,7 +396,7 @@ WASMImageIO
     ++count;
     }
 
-  const auto directionPath = dataPath / "direction.raw";
+  const auto directionPath = dataPath +  "/direction.raw";
   if (useZip)
   {
     mz_zip_reader_locate_entry(zip_reader, "data/direction.raw", 0);
@@ -457,7 +457,7 @@ WASMImageIO
 ::Read( void *buffer )
 {
   const std::string path(this->GetFileName());
-  const std::string dataFile = (std::filesystem::path(path) / "data" / "data.raw").c_str();
+  const std::string dataFile = (path + "/data/data.raw").c_str();
 
   std::string::size_type zipPos = path.rfind(".zip");
   if ( ( zipPos != std::string::npos )
@@ -538,8 +538,8 @@ WASMImageIO
 ::WriteImageInformation()
 {
   const std::string path = this->GetFileName();
-  const auto indexPath = std::filesystem::path(path) / "index.json";
-  const auto dataPath = std::filesystem::path(path) / "data";
+  const auto indexPath = path + "/index.json";
+  const auto dataPath = path + "/data";
   std::string::size_type zipPos = path.rfind(".zip");
   bool useZip = false;
   void * zip_writer = NULL;
@@ -555,13 +555,13 @@ WASMImageIO
   }
   else
   {
-    if ( !std::filesystem::exists(path) )
+    if ( !itksys::SystemTools::FileExists(path, false) )
       {
-      std::filesystem::create_directories(path);
+        itksys::SystemTools::MakeDirectory(path);
       }
-    if ( !std::filesystem::exists(dataPath) )
+    if ( !itksys::SystemTools::FileExists(dataPath, false) )
       {
-      std::filesystem::create_directory(dataPath);
+        itksys::SystemTools::FileExists(dataPath);
       }
   }
 
@@ -626,7 +626,7 @@ WASMImageIO
   }
   else
   {
-    const auto directionPath = dataPath / "direction.raw";
+    const auto directionPath = dataPath + "/direction.raw";
     std::ofstream directionFile;
     this->OpenFileForWriting(directionFile, directionPath.c_str(), false);
     for( unsigned int ii = 0; ii < dimension; ++ii )
@@ -695,7 +695,7 @@ WASMImageIO
 ::Write( const void *buffer )
 {
   const std::string path(this->GetFileName());
-  const std::string fileName = (std::filesystem::path(path) / "data" / "data.raw").c_str();
+  const std::string fileName = path + "/data/data.raw";
   std::string::size_type zipPos = path.rfind(".zip");
   struct zip_t * zip = nullptr;
   bool useZip = false;
