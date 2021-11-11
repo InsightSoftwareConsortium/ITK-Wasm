@@ -62,15 +62,17 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             name: image.name,
             origin: image.origin,
             spacing: image.spacing,
-            direction: image.direction,
+            direction: 'path:data/direction.raw',
             size: image.size,
-            data: input.path + '.data'
+            data: 'path:data/data.raw'
           }
-          pipelineModule.fs_writeFile(input.path, JSON.stringify(imageJSON))
+          pipelineModule.fs_mkdirs(`${input.path}/data`)
+          pipelineModule.fs_writeFile(`${input.path}/index.json`, JSON.stringify(imageJSON))
           if (image.data === null) {
             throw Error('image.data is null')
           }
-          pipelineModule.fs_writeFile(imageJSON.data, new Uint8Array(image.data.buffer))
+          pipelineModule.fs_writeFile(`${input.path}/data/data.raw`, new Uint8Array(image.data.buffer))
+          pipelineModule.fs_writeFile(`${input.path}/data/direction.raw`, new Uint8Array(image.direction.buffer))
           break
         }
         case IOTypes.Mesh:
@@ -166,10 +168,12 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case IOTypes.Image:
         {
-          const imageJSON = pipelineModule.fs_readFile(output.path, { encoding: 'utf8' }) as string
+          const imageJSON = pipelineModule.fs_readFile(`${output.path}/index.json`, { encoding: 'utf8' }) as string
           const image = JSON.parse(imageJSON)
-          const dataUint8 = readFileSharedArray(pipelineModule, image.data as string)
+          const dataUint8 = readFileSharedArray(pipelineModule, `${output.path}/data/data.raw`)
           image.data = bufferToTypedArray(image.imageType.componentType, dataUint8.buffer)
+          const directionUint8 = readFileSharedArray(pipelineModule, `${output.path}/data/direction.raw`)
+          image.direction = bufferToTypedArray('double', directionUint8.buffer)
           outputData = image as Image
           break
         }

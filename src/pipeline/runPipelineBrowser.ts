@@ -57,7 +57,11 @@ async function runPipelineBrowser (webWorker: Worker | null | boolean, pipelineP
         if (image.data === null) {
           throw Error('image data cannot be null')
         }
-        const transferable = getTransferable(image.data)
+        let transferable = getTransferable(image.data)
+        if (transferable != null) {
+          transferables.push(transferable)
+        }
+        transferable = getTransferable(image.direction)
         if (transferable != null) {
           transferables.push(transferable)
         }

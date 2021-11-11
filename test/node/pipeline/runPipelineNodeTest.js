@@ -72,7 +72,7 @@ test('runPipelineNode writes and reads an itk.Image in the Emscripten filesystem
   return readImageLocalFile(testInputFilePath)
     .then(function (image) {
       const pipelinePath = path.resolve('test', 'pipelines', 'MedianFilterPipeline', 'web-build', 'MedianFilterTest')
-      const args = ['cthead1.png.iwi.zip', 'cthead1.png.shrink.iwi.zip', '4']
+      const args = ['./cthead1.png.iwi', './cthead1.png.median.iwi', '4']
       const desiredOutputs = [
         { path: args[1], type: IOTypes.Image }
       ]
