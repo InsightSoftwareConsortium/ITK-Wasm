@@ -7,11 +7,11 @@ Similar to the [web browser API](./browser_pipelines.html), most of these functi
 
 ---
 
-## runPipelineNode(pipelinePath, args, outputs, inputs) -> result
+## runPipelineNode(pipelinePath: string, args: string[], outputs: [PipelineOutput](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/src/pipeline/PipelineInput.ts)[], inputs: [PipelineInput](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/src/pipeline/PipelineOutput.ts)[] | null): Promise<[RunPipelineResult](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/src/pipeline/RunPipelineResult.ts)>
 
 Run an itk-wasm Emscripten module with Node.js.
 
-*pipelinePath*: Path to the pre-built pipeline module, without `.js` or `Wasm.js` extensions.
+*pipelinePath*: Path to the pre-built pipeline module, without `.js` or `.wasm` extensions.
 
 *args*:         A JavaScript Array of strings to pass to the execution of the `main` function, i.e. arguments that would be passed on the command line to a native executable.
 
@@ -19,13 +19,13 @@ Run an itk-wasm Emscripten module with Node.js.
 
 `path` is the file path on the virtual filesystem to read after execution has completed.
 
-`type` is one of the `itk/IOTypes`:
+`type` is one of the [IOTypes](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/src/core/IOTypes.ts):
 <dl>
-  <dt>`IOTypes.Text`</dt><dd>A UTF8-encoded string. To write this data type in C++, write a plain text file with, e.g.  [std::ofstream](http://www.cplusplus.com/reference/fstream/ofstream/).</dd>
-  <dt>`IOTypes.Binary`</dt><dd>A binary [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array). To write this data type in C++, read the binary file with, e.g.  [std::ofstream](http://www.cplusplus.com/reference/fstream/ofstream/) with the `std::ofstream::binary` flag to [std::ofstream::open](http://www.cplusplus.com/reference/fstream/ofstream/open/).</dd>
-  <dt>`IOTypes.Image`</dt><dd>An [itk/Image](./Image.html). To write this data type in C++, use the [itk::ImageFileWriter](https://itk.org/Doxygen/html/classitk_1_1ImageFileWriter.html), add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.json` for the image file name extension.</dd>
-  <dt>`IOTypes.Mesh`</dt><dd>An [itk/Mesh](./Mesh.html). To write this data type in C++, use the [itk::MeshFileWriter](https://itk.org/Doxygen/html/classitk_1_1MeshFileWriter.html), add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.json` for the image file name extension.</dd>
-  <dt>`IOTypes.vtkPolyData`</dt><dd>A vtk.js [PolyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html). To write this data type in C++, use the [vtkJSONDataSetWriter](https://vtk.org/doc/nightly/html/classvtkJSONDataSetWriter.html), and add `vtkIOExport` module to the VTK `find_package` `COMPONENTS` in your *CMakeLists.txt*</dd>
+  <dt><b>IOTypes.Text</b><dt><dd>A string. To write this data type in C++, write a plain text file with, e.g.  <a href="http://www.cplusplus.com/reference/fstream/ofstream">std::ofstream</a>.</dd>
+  <dt><b>IOTypes.Binary</b><dt><dd>A binary <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>. To write this data type in C++, read the binary file with, e.g.  <a href="http://www.cplusplus.com/reference/fstream/ofstream/">std::ofstream</a> with the `std::ofstream::binary` flag to <a href="http://www.cplusplus.com/reference/fstream/ofstream/open/">std::ofstream::open</a>.</dd>
+  <dt><b>IOTypes.Image</b></dt><dd>An <a href="./Image.html">Image</a>. To write this data type in C++, use the <href a="https://itk.org/Doxygen/html/classitk_1_1ImageFileWriter.html">itk::ImageFileWriter</a>, add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.iwi` for the image file name extension.</dd>
+  <dt><b>IOTypes.Mesh</b></dt><dd>An <a href="Mesh.html">Mesh</a>. To write this data type in C++, use the <a href="https://itk.org/Doxygen/html/classitk_1_1MeshFileWriter.html">itk::MeshFileWriter</a>, add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.json` for the image file name extension.</dd>
+  <dt><b>IOTypes.vtkPolyData</b><dt><dd>A vtk.js <a href="https://kitware.github.io/vtk-js/docs/structures_PolyData.html">PolyData</a> To write this data type in C++, use the <a href="https://vtk.org/doc/nightly/html/classvtkJSONDataSetWriter.html">vtkJSONDataSetWriter</a>, and add `vtkIOExport` module to the VTK `find_package` `COMPONENTS` in your *CMakeLists.txt*</dd>
 </dl>
 
 *inputs*:       A JavaScript Array containing JavaScript objects with three properties: `path`, `type`, and `data`.
@@ -34,13 +34,13 @@ Run an itk-wasm Emscripten module with Node.js.
 
 `path` is the file path on the virtual filesystem to read after execution has completed.
 
-`type` is one of the `itk/IOTypes`:
+`type` is one of the `IOTypes`:
 <dl>
-  <dt>`IOTypes.Text`</dt><dd>A UTF8-encoded string. To read this data type in C++, read the plain text file with, e.g.  [std::ifstream](http://www.cplusplus.com/reference/fstream/ifstream/). </dd>
-  <dt>`IOTypes.Binary`</dt><dd>A binary [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array). To read this data type in C++, read the binary file with, e.g.  [std::ifstream](http://www.cplusplus.com/reference/fstream/ifstream/) with the `std::ifstream::binary` flag to [std::ifstream::open](http://www.cplusplus.com/reference/fstream/ofstream/open/).</dd>
-  <dt>`IOTypes.Image`</dt><dd>An [itk/Image](./Image.html). To read this data type in C++, use the [itk::ImageFileReader](https://itk.org/Doxygen/html/classitk_1_1ImageFileReader.html), add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.json` for the image file name extension.</dd>
-  <dt>`IOTypes.Mesh`</dt><dd>An [itk/Mesh](./Mesh.html). To read this data type in C++, use the [itk::MeshFileReader](https://itk.org/Doxygen/html/classitk_1_1MeshFileReader.html), add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.json` for the image file name extension.</dd>
+  <dt><b>IOTypes.Text</b></dt><dd>A string. To read this data type in C++, read the plain text file with, e.g.  <a href="http://www.cplusplus.com/reference/fstream/ifstream/">std::ifstream</a>. </dd>
+  <dt><b>IOTypes.Binary</b></dt><dd>A binary <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>. To read this data type in C++, read the binary file with, e.g. <a href="http://www.cplusplus.com/reference/fstream/ifstream/">std::ifstream</a> with the `std::ifstream::binary` flag to <a href="http://www.cplusplus.com/reference/fstream/ofstream/open/">std::ifstream::open</a>.</dd>
+  <dt><b>IOTypes.Image</b></dt><dd>An <a href="./Image.html">Image</a>. To read this data type in C++, use the <a href="https://itk.org/Doxygen/html/classitk_1_1ImageFileReader.html">itk::ImageFileReader</a>, add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.iwi` for the image file name extension.</dd>
+  <dt><b>IOTypes.Mesh</b><dt><dd>An <a href="./Mesh.html">Mesh</a>. To read this data type in C++, use the <a href="https://itk.org/Doxygen/html/classitk_1_1MeshFileReader.html">itk::MeshFileReader</a>, add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.json` for the image file name extension.</dd>
 </dl>
 
-*result*:       A JavaScript object with three properties: `stdout`, `stderr`, and `outputs`.
+**result**:       A JavaScript object with three properties: `stdout`, `stderr`, and `outputs`.
                 `stdout` and `stderr` are strings. `outputs` is an array with `{ path, type, data }` content that corresponds to the values specified in the function call.
