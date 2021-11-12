@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>itk-wasm</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://insightsoftwareconsortium.github.io/itk-wasm/docs/itk_js_to_itk_wasm_migration_guide.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://InsightSoftwareConsortium.github.io/itk-wasm/docs/itk_js_to_itk_wasm_migration_guide.html">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/itk-wasm/icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/itk-wasm/icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/itk-wasm/icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/itk-wasm/icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/itk-wasm/icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/itk-wasm/icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/itk-wasm/icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/itk-wasm/icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="/itk-wasm/icon/mstile-144x144.png">
+  <!-- CSS -->
+  <!-- build:css build/css/navy.css -->
+  
+<link rel="stylesheet" href="/itk-wasm/css/navy.css">
+
+  <!-- endbuild -->
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css">
+  <!-- RSS -->
+  <link rel="alternate" href="/itk-wasm/atom.xml" title="itk-wasm" type="application/atom+xml">
+  <!-- Open Graph -->
+  <meta name="description" content="itk.js to itk-wasm Migration GuideNote: this migration guide is a work in progress. itk-wasm is a major upgrade with a focus on univeral, performant computing inWebAssembly. The itk.js to itk-wasm tra">
+<meta property="og:type" content="website">
+<meta property="og:title" content="itk-wasm">
+<meta property="og:url" content="https://insightsoftwareconsortium.github.io/itk-wasm/docs/itk_js_to_itk_wasm_migration_guide.html">
+<meta property="og:site_name" content="itk-wasm">
+<meta property="og:description" content="itk.js to itk-wasm Migration GuideNote: this migration guide is a work in progress. itk-wasm is a major upgrade with a focus on univeral, performant computing inWebAssembly. The itk.js to itk-wasm tra">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-11-12T04:48:17.987Z">
+<meta property="article:modified_time" content="2021-11-12T04:48:17.987Z">
+<meta property="article:author" content="Insight Software Consortium">
+<meta name="twitter:card" content="summary">
+  <!-- Google Analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-90338862-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/itk-wasm/" id="logo">itk-wasm</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="/itk-wasm/docs/" class="main-nav-link">Docs</a><a href="/itk-wasm/api/" class="main-nav-link">API</a><a href="/itk-wasm/examples/" class="main-nav-link">Examples</a>
+      <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="main-nav-link"><i class="fa fa-github-alt"></i></a>
+      <div id="search-input-wrap">
+        <div id="search-input-icon">
+          <i class="fa fa-search"></i>
+        </div>
+        <input type="search" id="search-input" placeholder="Search...">
+      </div>
+    </nav>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name"></h1>
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <h1 id="itk-js-to-itk-wasm-Migration-Guide" class="article-heading"><a href="#itk-js-to-itk-wasm-Migration-Guide" class="headerlink" title="itk.js to itk-wasm Migration Guide"></a>itk.js to itk-wasm Migration Guide<a class="article-anchor" href="#itk-js-to-itk-wasm-Migration-Guide" aria-hidden="true"></a></h1><p><em>Note: this migration guide is a work in progress.</em></p>
+<p><strong>itk-wasm</strong> is a major upgrade with a focus on univeral, performant computing in<br>WebAssembly. The itk.js to itk-wasm transition also brings improvements<br>including modern, elegant programming interfaces, accelerated performance,<br>and execution beyond JavaScript thanks to <a target="_blank" rel="noopener" href="https://wasi.dev/">WASI</a>.</p>
+<p>Most itk.js client code will simply need to update its import statements to<br>leverage itk-wasm. However, there are other more advanced changes. A<br>description of the changes, their motivation, and example migration code can<br>be found below.</p>
+<h3 id="Module-import-statements" class="article-heading"><a href="#Module-import-statements" class="headerlink" title="Module import statements"></a>Module import statements<a class="article-anchor" href="#Module-import-statements" aria-hidden="true"></a></h3><p>Browser module <code>import</code> statements have changed from:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> IntTypes <span class="keyword">from</span> <span class="string">&#x27;itk/IntTypes&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>to:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; IntTypes &#125; <span class="keyword">from</span> <span class="string">&#x27;itk&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>Or, to help bundlers with limited tree shaking,</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; IntTypes &#125; <span class="keyword">from</span> <span class="string">&#x27;itk/browser/index.js&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>Node module import migration:</p>
+<p>From:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> IntTypes = <span class="built_in">require</span>(<span class="string">&#x27;itk/IntTypes.js&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>to:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; IntTypes &#125; <span class="keyword">from</span> <span class="string">&#x27;itk&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Typescript-support" class="article-heading"><a href="#Typescript-support" class="headerlink" title="Typescript support"></a>Typescript support<a class="article-anchor" href="#Typescript-support" aria-hidden="true"></a></h2><p>Typescript support was added, but, of course, you can still just use<br>JavaScript if you wish.  Uses modern JavaScript constructs when appropriate,<br>e.g. classes.</p>
+<h2 id="Bundlers" class="article-heading"><a href="#Bundlers" class="headerlink" title="Bundlers"></a>Bundlers<a class="article-anchor" href="#Bundlers" aria-hidden="true"></a></h2><p>EcmaScript Module (ESM) support was improved.</p>
+<p>There is now an improved approach for web workers for bundlers, CORS constraints.</p>
+<h2 id="IO-modules-are-available-in-separate-packages" class="article-heading"><a href="#IO-modules-are-available-in-separate-packages" class="headerlink" title="IO modules are available in separate packages."></a>IO modules are available in separate packages.<a class="article-anchor" href="#IO-modules-are-available-in-separate-packages" aria-hidden="true"></a></h2><p>IO modules are now installed in separate npm packages to limit the <code>itk-wasm</code><br>package size. You can install only the packages that you need.</p>
+<p>The version of these packages follow the <code>itk-wasm</code> package version and should<br>be kept in sync. The io packages are:</p>
+<ol>
+<li><code>itk-image-io</code></li>
+<li><code>itk-mesh-io</code></li>
+<li><code>itk-polydata-io</code></li>
+</ol>
+<p>An example that vendors these package’s webassembly assets into an<br>application for deployment can be found in the <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack">Webpack<br>Example</a>.</p>
+<h2 id="itkConfig-js-content-and-usage" class="article-heading"><a href="#itkConfig-js-content-and-usage" class="headerlink" title="itkConfig.js content and usage"></a>itkConfig.js content and usage<a class="article-anchor" href="#itkConfig-js-content-and-usage" aria-hidden="true"></a></h2><p>The <code>itkConfig.js</code> specifies where to look for the io webassembly modules and<br>an optional default base URL for pipeline modules.</p>
+<p>The default <code>itkConfig.js</code> is configured to use the<br><a target="_blank" rel="noopener" href="https://www.jsdelivr.com/">JsDelivr</a> CDN, but you may want to override this<br>default.</p>
+<p>In the <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack">Webpack<br>Example</a><br>the io webassembly module assets are vendored into <code>/itk</code> directories,<br>this module looks like:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> itkConfig = &#123;</span><br><span class="line">  <span class="attr">webWorkersUrl</span>: <span class="string">&#x27;/itk/web-workers&#x27;</span>,</span><br><span class="line">  <span class="attr">imageIOUrl</span>: <span class="string">&#x27;/itk/image-io&#x27;</span>,</span><br><span class="line">  <span class="attr">meshIOUrl</span>: <span class="string">&#x27;/itk/mesh-io&#x27;</span>,</span><br><span class="line">  <span class="attr">polydataIOUrl</span>: <span class="string">&#x27;/itk/polydata-io&#x27;</span>,</span><br><span class="line">  <span class="attr">pipelinesUrl</span>: <span class="string">&#x27;/itk/pipelines&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> itkConfig</span><br></pre></td></tr></table></figure>
+
+<p>And it can be injected into an application bundle by setting defining<br><code>alias</code>‘s to the configuration module for <code>../itkConfig.js</code> and<br><code>../../itkConfig.js</code>. For other override configuration options, see the Webpack (todo),<br>Rollup (todo), and Unpkg (todo) examples.</p>
+<h3 id="CLI-options" class="article-heading"><a href="#CLI-options" class="headerlink" title="CLI options"></a>CLI options<a class="article-anchor" href="#CLI-options" aria-hidden="true"></a></h3><p>The <code>--image, -i</code> command line option for the <code>build</code> subcommand is now a global option for all<br>subcommands. For examples</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">itk-wasm build --image insighttoolkit/itk-wasm src/dir</span><br></pre></td></tr></table></figure>
+
+<p>is now:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">itk-wasm --image --source-dir src/dir insighttoolkit/itk-wasm build</span><br></pre></td></tr></table></figure>
+
+<h2 id="Image-data-structure" class="article-heading"><a href="#Image-data-structure" class="headerlink" title="Image data structure"></a>Image data structure<a class="article-anchor" href="#Image-data-structure" aria-hidden="true"></a></h2><p>The <code>itk.Image.direction</code> is now directly a <code>Float64Array</code> – <code>itk.Matrix</code> has<br>been removed.</p>
+<p><code>imageType.pixelType</code> is now a string enumeration.</p>
+<p>Addresses an important issue in image orientation support.</p>
+<h2 id="Image-file-format" class="article-heading"><a href="#Image-file-format" class="headerlink" title="Image file format"></a>Image file format<a class="article-anchor" href="#Image-file-format" aria-hidden="true"></a></h2><p>The JSON file format is replaced by a WASM file format with a different<br>layout. A directory, ending in <code>.iwi</code> or a <code>.iwi.zip</code> file is supported.</p>
+<h3 id="Node-Sync-functions" class="article-heading"><a href="#Node-Sync-functions" class="headerlink" title="Node Sync functions"></a>Node Sync functions<a class="article-anchor" href="#Node-Sync-functions" aria-hidden="true"></a></h3><p>Node <code>*Sync</code> functions have been removed – use the equivalent async versions instead.</p>
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2021-11-12T04:48:17.987Z" itemprop="dateModified">Last updated: 2021-11-12</time>
+                <a href="hacking_itk_wasm.html" class="article-footer-prev" title="Hacking itk-wasm"><i class="fa fa-chevron-left"></i><span>Prev</span></a>
+              </footer>
+              
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <strong class="sidebar-title">Contents</strong>
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#itk-js-to-itk-wasm-Migration-Guide"><span class="toc-text">itk.js to itk-wasm Migration Guide</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Module-import-statements"><span class="toc-text">Module import statements</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Typescript-support"><span class="toc-text">Typescript support</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bundlers"><span class="toc-text">Bundlers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IO-modules-are-available-in-separate-packages"><span class="toc-text">IO modules are available in separate packages.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#itkConfig-js-content-and-usage"><span class="toc-text">itkConfig.js content and usage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CLI-options"><span class="toc-text">CLI options</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Image-data-structure"><span class="toc-text">Image data structure</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Image-file-format"><span class="toc-text">Image file format</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Node-Sync-functions"><span class="toc-text">Node Sync functions</span></a></li></ol></li></ol></li></ol>
+              <a href="#" id="article-toc-top">Back to Top</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+      <aside id="sidebar" role="navigation">
+  <div class="inner"><strong class="sidebar-title">Getting Started</strong><a href="index.html" class="sidebar-link">Overview</a><strong class="sidebar-title">Supported File Formats</strong><a href="image_formats.html" class="sidebar-link">Images</a><a href="mesh_formats.html" class="sidebar-link">Meshes and Point Sets</a><a href="polydata_formats.html" class="sidebar-link">PolyData</a><strong class="sidebar-title">Development</strong><a href="hacking_itk_wasm.html" class="sidebar-link">Hacking itk-wasm</a><a href="itk_js_to_itk_wasm_migration_guide.html" class="sidebar-link current">itk.js Migration Guide</a></div>
+</aside>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2021 <a href="https://www.kitware.com/" target="_blank">Insight Software Consortium</a>
+    </div>
+    <div id="footer-links">
+      <a href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="footer-link" target="_blank"><i class="fa fa-github-alt"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="/itk-wasm/docs/" class="mobile-nav-link">Docs</a><a href="/itk-wasm/api/" class="mobile-nav-link">API</a><a href="/itk-wasm/examples/" class="mobile-nav-link">Examples</a>
+      <li class="mobile-nav-item">
+        <a href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+      </li>
+    </ul>
+    
+      <strong class="mobile-nav-title">Getting Started</strong><a href="index.html" class="mobile-nav-link">Overview</a><strong class="mobile-nav-title">Supported File Formats</strong><a href="image_formats.html" class="mobile-nav-link">Images</a><a href="mesh_formats.html" class="mobile-nav-link">Meshes and Point Sets</a><a href="polydata_formats.html" class="mobile-nav-link">PolyData</a><strong class="mobile-nav-title">Development</strong><a href="hacking_itk_wasm.html" class="mobile-nav-link">Hacking itk-wasm</a><a href="itk_js_to_itk_wasm_migration_guide.html" class="mobile-nav-link current">itk.js Migration Guide</a>
+    
+  </div>
+  <div id="mobile-lang-select-wrap">
+    <span id="mobile-lang-select-label"><i class="fa fa-globe"></i><span>English</span></span>
+    <select id="mobile-lang-select" data-canonical="docs/itk_js_to_itk_wasm_migration_guide.html">
+      
+        <option value="en" selected>English</option>
+      
+    </select>
+  </div>
+</nav>
+  <!-- Scripts -->
+<!-- build:js build/js/main.js -->
+
+<script src="/itk-wasm/js/lang_select.js"></script>
+
+
+<script src="/itk-wasm/js/toc.js"></script>
+
+
+<script src="/itk-wasm/js/mobile_nav.js"></script>
+
+<!-- endbuild -->
+<script src="https://cdn.jsdelivr.net/retinajs/1.3.0/retina.min.js" async></script>
+
+
+
+</body>
+</html>
