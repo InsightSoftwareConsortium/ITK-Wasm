@@ -5,13 +5,13 @@ An `itk-convert` command line interface (CLI) example demonstrates how to use *i
 
 This example assumes you are creating a [Node.js package](https://docs.npmjs.com/getting-started/what-is-npm). If you do not already have a `package.json` file, [create one](https://docs.npmjs.com/getting-started/using-a-package.json), first.
 
-Add `itk` to your project's dependencies:
+Add `itk-wasm` to your project's dependencies:
 
 ```
-npm install --save itk
+npm install --save itk-wasm itk-image-io itk-mesh-io itk-polydata-io
 ```
 
-This adds `itk` to the `dependencies` section of your *package.json* file:
+This adds `itk-wasm` and `itk-wasm` IO packages to the `dependencies` section of your *package.json* file:
 
 ```js
 {
@@ -20,13 +20,16 @@ This adds `itk` to the `dependencies` section of your *package.json* file:
   "description": "Convert image or mesh files from one format to another.",
 [...]
   "dependencies": {
-    "commander": "^2.14.1",
-    "itk": "^12.3.0"
+    "commander": "^8.2.0",
+    "itk-image-io": "^1.0.0-a.7",
+    "itk-mesh-io": "^1.0.0-a.7",
+    "itk-polydata-io": "^1.0.0-a.7",
+    "itk-wasm": "^1.0.0-a.7"
   }
 }
 ```
 
-Next, call functions like [itk/readLocalFileSync](../api/node_io.html) or [itk/writeLocalFileSync](../api/node_io.html).
+Next, call functions like [readLocalFileSync](../api/node_io.html) or [writeLocalFileSync](../api/node_io.html).
 
 For example,
 
@@ -37,11 +40,11 @@ const inputFile = program.args[0]
 const outputFile = program.args[1]
 
 try {
-  const object = readLocalFileSync(inputFile);
-  const useCompression = true;
-  writeLocalFileSync(useCompression, object, outputFile);
+  const object = await readLocalFile(inputFile)
+  const useCompression = true
+  await writeLocalFile(useCompression, object, outputFile)
 } catch (error) {
-  console.error('Error during conversion:\n');
-  console.error(error);
+  console.error('Error during conversion:\n')
+  console.error(error)
 }
 ```
