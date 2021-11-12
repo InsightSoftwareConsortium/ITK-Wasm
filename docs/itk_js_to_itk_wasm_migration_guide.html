@@ -41,15 +41,15 @@
   <!-- RSS -->
   <link rel="alternate" href="/itk-wasm/atom.xml" title="itk-wasm" type="application/atom+xml">
   <!-- Open Graph -->
-  <meta name="description" content="itk.js to itk-wasm Migration GuideNote: this migration guide is a work in progress. itk-wasm is a major upgrade with a focus on univeral, performant computing inWebAssembly. The itk.js to itk-wasm tra">
+  <meta name="description" content="itk.js to itk-wasm Migration GuideNote: this migration guide is a work in progress. itk-wasm is currently inthe alpha development stage with additional changes anticipatedinto December. Also, nearly a">
 <meta property="og:type" content="website">
 <meta property="og:title" content="itk-wasm">
 <meta property="og:url" content="https://insightsoftwareconsortium.github.io/itk-wasm/docs/itk_js_to_itk_wasm_migration_guide.html">
 <meta property="og:site_name" content="itk-wasm">
-<meta property="og:description" content="itk.js to itk-wasm Migration GuideNote: this migration guide is a work in progress. itk-wasm is a major upgrade with a focus on univeral, performant computing inWebAssembly. The itk.js to itk-wasm tra">
+<meta property="og:description" content="itk.js to itk-wasm Migration GuideNote: this migration guide is a work in progress. itk-wasm is currently inthe alpha development stage with additional changes anticipatedinto December. Also, nearly a">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-11-12T04:48:17.987Z">
-<meta property="article:modified_time" content="2021-11-12T04:48:17.987Z">
+<meta property="article:published_time" content="2021-11-12T14:01:43.879Z">
+<meta property="article:modified_time" content="2021-11-12T14:01:43.879Z">
 <meta property="article:author" content="Insight Software Consortium">
 <meta name="twitter:card" content="summary">
   <!-- Google Analytics -->
@@ -104,7 +104,7 @@
                 <h1 class="article-title" itemprop="name"></h1>
               </header>
               <div class="article-content" itemprop="articleBody">
-                <h1 id="itk-js-to-itk-wasm-Migration-Guide" class="article-heading"><a href="#itk-js-to-itk-wasm-Migration-Guide" class="headerlink" title="itk.js to itk-wasm Migration Guide"></a>itk.js to itk-wasm Migration Guide<a class="article-anchor" href="#itk-js-to-itk-wasm-Migration-Guide" aria-hidden="true"></a></h1><p><em>Note: this migration guide is a work in progress.</em></p>
+                <h1 id="itk-js-to-itk-wasm-Migration-Guide" class="article-heading"><a href="#itk-js-to-itk-wasm-Migration-Guide" class="headerlink" title="itk.js to itk-wasm Migration Guide"></a>itk.js to itk-wasm Migration Guide<a class="article-anchor" href="#itk-js-to-itk-wasm-Migration-Guide" aria-hidden="true"></a></h1><p><em>Note: this migration guide is a work in progress. itk-wasm is currently in<br>the alpha development stage with additional changes anticipated<br>into December. Also, nearly all tests in the test suite pass, but DICOM series<br>reading, GE and JPEG format currently have issues.</em></p>
 <p><strong>itk-wasm</strong> is a major upgrade with a focus on univeral, performant computing in<br>WebAssembly. The itk.js to itk-wasm transition also brings improvements<br>including modern, elegant programming interfaces, accelerated performance,<br>and execution beyond JavaScript thanks to <a target="_blank" rel="noopener" href="https://wasi.dev/">WASI</a>.</p>
 <p>Most itk.js client code will simply need to update its import statements to<br>leverage itk-wasm. However, there are other more advanced changes. A<br>description of the changes, their motivation, and example migration code can<br>be found below.</p>
 <h3 id="Module-import-statements" class="article-heading"><a href="#Module-import-statements" class="headerlink" title="Module import statements"></a>Module import statements<a class="article-anchor" href="#Module-import-statements" aria-hidden="true"></a></h3><p>Browser module <code>import</code> statements have changed from:</p>
@@ -127,21 +127,21 @@
 <h2 id="Typescript-support" class="article-heading"><a href="#Typescript-support" class="headerlink" title="Typescript support"></a>Typescript support<a class="article-anchor" href="#Typescript-support" aria-hidden="true"></a></h2><p>Typescript support was added, but, of course, you can still just use<br>JavaScript if you wish.  Uses modern JavaScript constructs when appropriate,<br>e.g. classes.</p>
 <h2 id="Bundlers" class="article-heading"><a href="#Bundlers" class="headerlink" title="Bundlers"></a>Bundlers<a class="article-anchor" href="#Bundlers" aria-hidden="true"></a></h2><p>EcmaScript Module (ESM) support was improved.</p>
 <p>There is now an improved approach for web workers for bundlers, CORS constraints.</p>
-<h2 id="IO-modules-are-available-in-separate-packages" class="article-heading"><a href="#IO-modules-are-available-in-separate-packages" class="headerlink" title="IO modules are available in separate packages."></a>IO modules are available in separate packages.<a class="article-anchor" href="#IO-modules-are-available-in-separate-packages" aria-hidden="true"></a></h2><p>IO modules are now installed in separate npm packages to limit the <code>itk-wasm</code><br>package size. You can install only the packages that you need.</p>
-<p>The version of these packages follow the <code>itk-wasm</code> package version and should<br>be kept in sync. The io packages are:</p>
+<h2 id="IO-modules-are-available-in-separate-packages" class="article-heading"><a href="#IO-modules-are-available-in-separate-packages" class="headerlink" title="IO modules are available in separate packages."></a>IO modules are available in separate packages.<a class="article-anchor" href="#IO-modules-are-available-in-separate-packages" aria-hidden="true"></a></h2><p>IO modules are now installed in separate npm packages to limit the <code>itk-wasm</code> package size. You can install only the packages that you need.</p>
+<p>The version of these packages follow the <code>itk-wasm</code> package version and should be kept in sync. The io packages are:</p>
 <ol>
 <li><code>itk-image-io</code></li>
 <li><code>itk-mesh-io</code></li>
 <li><code>itk-polydata-io</code></li>
 </ol>
-<p>An example that vendors these package’s webassembly assets into an<br>application for deployment can be found in the <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack">Webpack<br>Example</a>.</p>
-<h2 id="itkConfig-js-content-and-usage" class="article-heading"><a href="#itkConfig-js-content-and-usage" class="headerlink" title="itkConfig.js content and usage"></a>itkConfig.js content and usage<a class="article-anchor" href="#itkConfig-js-content-and-usage" aria-hidden="true"></a></h2><p>The <code>itkConfig.js</code> specifies where to look for the io webassembly modules and<br>an optional default base URL for pipeline modules.</p>
-<p>The default <code>itkConfig.js</code> is configured to use the<br><a target="_blank" rel="noopener" href="https://www.jsdelivr.com/">JsDelivr</a> CDN, but you may want to override this<br>default.</p>
-<p>In the <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack">Webpack<br>Example</a><br>the io webassembly module assets are vendored into <code>/itk</code> directories,<br>this module looks like:</p>
+<p>An example that vendors these package’s webassembly assets into an application for deployment can be found in the <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack">Webpack Example</a>.</p>
+<h2 id="itkConfig-js-content-and-usage" class="article-heading"><a href="#itkConfig-js-content-and-usage" class="headerlink" title="itkConfig.js content and usage"></a>itkConfig.js content and usage<a class="article-anchor" href="#itkConfig-js-content-and-usage" aria-hidden="true"></a></h2><p>The <code>itkConfig.js</code> specifies where to look for the io webassembly modules and an optional default base URL for pipeline modules.</p>
+<p>The default <code>itkConfig.js</code> is configured to use the <a target="_blank" rel="noopener" href="https://www.jsdelivr.com/">JsDelivr</a> CDN, but you may want to override this<br>default.</p>
+<p>In the <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack">Webpack Example</a><br>the io webassembly module assets are vendored into <code>/itk</code> directories,<br>this module looks like:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> itkConfig = &#123;</span><br><span class="line">  <span class="attr">webWorkersUrl</span>: <span class="string">&#x27;/itk/web-workers&#x27;</span>,</span><br><span class="line">  <span class="attr">imageIOUrl</span>: <span class="string">&#x27;/itk/image-io&#x27;</span>,</span><br><span class="line">  <span class="attr">meshIOUrl</span>: <span class="string">&#x27;/itk/mesh-io&#x27;</span>,</span><br><span class="line">  <span class="attr">polydataIOUrl</span>: <span class="string">&#x27;/itk/polydata-io&#x27;</span>,</span><br><span class="line">  <span class="attr">pipelinesUrl</span>: <span class="string">&#x27;/itk/pipelines&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> itkConfig</span><br></pre></td></tr></table></figure>
 
-<p>And it can be injected into an application bundle by setting defining<br><code>alias</code>‘s to the configuration module for <code>../itkConfig.js</code> and<br><code>../../itkConfig.js</code>. For other override configuration options, see the Webpack (todo),<br>Rollup (todo), and Unpkg (todo) examples.</p>
-<h3 id="CLI-options" class="article-heading"><a href="#CLI-options" class="headerlink" title="CLI options"></a>CLI options<a class="article-anchor" href="#CLI-options" aria-hidden="true"></a></h3><p>The <code>--image, -i</code> command line option for the <code>build</code> subcommand is now a global option for all<br>subcommands. For examples</p>
+<p>And it can be injected into an application bundle by setting defining <code>alias</code>‘s to the configuration module for <code>../itkConfig.js</code> and <code>../../itkConfig.js</code>. For other override configuration options, see the <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack">Webpack</a> and Rollup (todo) examples.</p>
+<h3 id="CLI-options" class="article-heading"><a href="#CLI-options" class="headerlink" title="CLI options"></a>CLI options<a class="article-anchor" href="#CLI-options" aria-hidden="true"></a></h3><p>The <code>--image, -i</code> command line option for the <code>build</code> subcommand is now a global option for all subcommands. For examples</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">itk-wasm build --image insighttoolkit/itk-wasm src/dir</span><br></pre></td></tr></table></figure>
 
 <p>is now:</p>
@@ -155,7 +155,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-11-12T04:48:17.987Z" itemprop="dateModified">Last updated: 2021-11-12</time>
+                <time class="article-footer-updated" datetime="2021-11-12T14:01:43.879Z" itemprop="dateModified">Last updated: 2021-11-12</time>
                 <a href="hacking_itk_wasm.html" class="article-footer-prev" title="Hacking itk-wasm"><i class="fa fa-chevron-left"></i><span>Prev</span></a>
               </footer>
               

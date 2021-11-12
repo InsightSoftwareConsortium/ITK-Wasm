@@ -2,28 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/node.html</loc>
+    
+    <lastmod>2021-11-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/hello_world_node.html</loc>
+    
+    <lastmod>2021-11-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/node_pipelines.html</loc>
+    
+    <lastmod>2021-11-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/browser_io.html</loc>
+    
+    <lastmod>2021-11-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/itk_js_to_itk_wasm_migration_guide.html</loc>
+    
+    <lastmod>2021-11-12</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/index.html</loc>
-    
-    <lastmod>2021-11-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/umd.html</loc>
-    
-    <lastmod>2021-11-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/webpack.html</loc>
-    
-    <lastmod>2021-11-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/unpkgio.html</loc>
     
     <lastmod>2021-11-12</lastmod>
     
@@ -51,14 +65,7 @@
   </url>
   
   <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/browser_io.html</loc>
-    
-    <lastmod>2021-11-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/browser_pipelines.html</loc>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/ImageType.html</loc>
     
     <lastmod>2021-11-12</lastmod>
     
@@ -72,7 +79,7 @@
   </url>
   
   <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/node_pipelines.html</loc>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/browser_pipelines.html</loc>
     
     <lastmod>2021-11-12</lastmod>
     
@@ -86,35 +93,7 @@
   </url>
   
   <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/ImageType.html</loc>
-    
-    <lastmod>2021-11-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/hello_world_node.html</loc>
-    
-    <lastmod>2021-11-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/index.html</loc>
-    
-    <lastmod>2021-11-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/node.html</loc>
-    
-    <lastmod>2021-11-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/paraview_glance.html</loc>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/hacking_itk_wasm.html</loc>
     
     <lastmod>2021-11-12</lastmod>
     
@@ -135,13 +114,6 @@
   </url>
   
   <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/hacking_itk_wasm.html</loc>
-    
-    <lastmod>2021-11-12</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/installation.html</loc>
     
     <lastmod>2021-11-12</lastmod>
@@ -149,7 +121,7 @@
   </url>
   
   <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/itk_js_to_itk_wasm_migration_guide.html</loc>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/mesh_formats.html</loc>
     
     <lastmod>2021-11-12</lastmod>
     
@@ -163,7 +135,35 @@
   </url>
   
   <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/mesh_formats.html</loc>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/index.html</loc>
+    
+    <lastmod>2021-11-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/paraview_glance.html</loc>
+    
+    <lastmod>2021-11-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/umd.html</loc>
+    
+    <lastmod>2021-11-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/unpkgio.html</loc>
+    
+    <lastmod>2021-11-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/webpack.html</loc>
     
     <lastmod>2021-11-12</lastmod>
     
