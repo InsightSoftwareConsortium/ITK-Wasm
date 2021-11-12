@@ -87,7 +87,7 @@
     "karma-tap": "^4.2.0",
     "karma-tap-pretty-reporter": "^4.2.0",
     "karma-webpack": "^5.0.0",
-    "kw-doc": "^3.0.6",
+    "kw-doc": "^3.1.2",
     "node-module-polyfill": "^1.0.1",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
