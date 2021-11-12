@@ -11,7 +11,7 @@ async function readImageHTTP (url: string): Promise<Image> {
   const dataResponse = await axios.get(`${url}/data/data.raw`, { responseType: 'arraybuffer' })
   image.data = bufferToTypedArray(image.imageType.componentType, dataResponse.data as ArrayBuffer) as TypedArray
   const directionResponse = await axios.get(`${url}/data/direction.raw`, { responseType: 'arraybuffer' })
-  image.data = bufferToTypedArray(FloatTypes.Float64, directionResponse.data as ArrayBuffer) as TypedArray
+  image.direction = bufferToTypedArray(FloatTypes.Float64, directionResponse.data as ArrayBuffer) as TypedArray
   return image
 }
 

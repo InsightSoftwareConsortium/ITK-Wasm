@@ -1,7 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import { IntTypes, FloatTypes, readMeshArrayBuffer, writeMeshArrayBuffer } from 'browser/index.js'
+import { IntTypes, FloatTypes, PixelTypes, readMeshArrayBuffer, writeMeshArrayBuffer } from 'browser/index.js'
 
 const fileName = 'cow.vtk'
 const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
@@ -10,8 +10,8 @@ const verifyMesh = (t, mesh) => {
   t.is(mesh.meshType.dimension, 3)
   t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
   t.is(mesh.meshType.cellComponentType, IntTypes.UInt32)
-  t.is(mesh.meshType.pointPixelType, 1)
-  t.is(mesh.meshType.cellPixelType, 1)
+  t.is(mesh.meshType.pointPixelType, PixelTypes.Scalar)
+  t.is(mesh.meshType.cellPixelType, PixelTypes.Scalar)
   t.is(mesh.numberOfPoints, 2903)
   t.is(mesh.numberOfCells, 3263)
   t.end()

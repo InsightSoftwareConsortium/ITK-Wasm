@@ -170,7 +170,7 @@ Click. Perfect success.
       }).then(function ({ image, webWorker }) {
         webWorker.terminate()
         const pipelinePath = 'MedianFilterTest'
-        const args = ['cthead1.png.iwi', 'cthead1.png.shrink.iwi', '4']
+        const args = ['./cthead1.png.iwi', './cthead1.png.median.iwi', '4']
         const desiredOutputs = [
           { path: args[1], type: IOTypes.Image }
         ]

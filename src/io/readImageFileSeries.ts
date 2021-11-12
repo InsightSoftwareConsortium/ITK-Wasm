@@ -54,8 +54,8 @@ async function readImageFileSeries (
     image.direction = new Float64Array(9)
     image.direction.fill(0.0)
     image.direction[0] = 1.0
-    image.direction[3] = 1.0
-    image.direction[6] = 1.0
+    image.direction[4] = 1.0
+    image.direction[8] = 1.0
     return image
   })
   const stacked = stackImages(images)
