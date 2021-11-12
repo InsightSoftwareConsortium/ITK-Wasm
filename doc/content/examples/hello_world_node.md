@@ -18,7 +18,7 @@ Initialize the Node *package.json* file:
 npm init --yes
 ```
 
-Add `itk` to your project's dependencies:
+Add `itk-wasm` to your project's dependencies:
 
 ```
 npm install --save itk-wasm
@@ -38,7 +38,7 @@ int main() {
 Next, provide a [CMake](https://cmake.org/) build configuration at *CMakeLists.txt*:
 
 ```
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 project(HelloWorld)
 
 add_executable(hello hello.cxx)
