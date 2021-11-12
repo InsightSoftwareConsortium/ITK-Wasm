@@ -1,55 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head prefix="og: http://ogp.me/ns#"><meta name="generator" content="Hexo 3.9.0">
+<head prefix="og: http://ogp.me/ns#">
   <meta charset="utf-8">
-  <title>Node.js Hello World! | itk-js</title>
+  <title>Node.js Hello World! | itk-wasm</title>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://InsightSoftwareConsortium.github.io/itk-js/examples/hello_world_node.html">
+  <link rel="canonical" href="https://insightsoftwareconsortium.github.io/itk-wasm/examples/hello_world_node.html">
   <!-- Alternative links -->
   
     
-      <link rel="alternative" hreflang="en" href="https://InsightSoftwareConsortium.github.io/itk-js/examples/hello_world_node.html">
+      <link rel="alternative" hreflang="en" href="https://InsightSoftwareConsortium.github.io/itk-wasm/examples/hello_world_node.html">
     
   
   <!-- Icon -->
-  <link rel="apple-touch-icon" sizes="57x57" href="/itk-js/icon/apple-touch-icon-57x57.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="/itk-js/icon/apple-touch-icon-114x114.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="/itk-js/icon/apple-touch-icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="/itk-js/icon/apple-touch-icon-144x144.png">
-  <link rel="apple-touch-icon" sizes="60x60" href="/itk-js/icon/apple-touch-icon-60x60.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="/itk-js/icon/apple-touch-icon-120x120.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="/itk-js/icon/apple-touch-icon-76x76.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="/itk-js/icon/apple-touch-icon-152x152.png">
-  <link rel="icon" type="image/png" href="/itk-js/icon/favicon-196x196.png" sizes="196x196">
-  <link rel="icon" type="image/png" href="/itk-js/icon/favicon-160x160.png" sizes="160x160">
-  <link rel="icon" type="image/png" href="/itk-js/icon/favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/png" href="/itk-js/icon/favicon-16x16.png" sizes="16x16">
-  <link rel="icon" type="image/png" href="/itk-js/icon/favicon-32x32.png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="57x57" href="/itk-wasm/icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/itk-wasm/icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/itk-wasm/icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/itk-wasm/icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/itk-wasm/icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/itk-wasm/icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/itk-wasm/icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/itk-wasm/icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-32x32.png" sizes="32x32">
   <meta name="msapplication-TileColor" content="#2f83cd">
-  <meta name="msapplication-TileImage" content="/itk-js/icon/mstile-144x144.png">
+  <meta name="msapplication-TileImage" content="/itk-wasm/icon/mstile-144x144.png">
   <!-- CSS -->
   <!-- build:css build/css/navy.css -->
-  <link rel="stylesheet" href="/itk-js/css/navy.css">
+  
+<link rel="stylesheet" href="/itk-wasm/css/navy.css">
+
   <!-- endbuild -->
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css">
   <!-- RSS -->
-  <link rel="alternate" href="/itk-js/atom.xml" title="itk-js">
+  <link rel="alternate" href="/itk-wasm/atom.xml" title="itk-wasm" type="application/atom+xml">
   <!-- Open Graph -->
   <meta name="description" content="This example, walks through how to compile a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Node.js Hello World!">
-<meta property="og:url" content="https://InsightSoftwareConsortium.github.io/itk-js/examples/hello_world_node.html">
-<meta property="og:site_name" content="itk-js">
+<meta property="og:url" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/hello_world_node.html">
+<meta property="og:site_name" content="itk-wasm">
 <meta property="og:description" content="This example, walks through how to compile a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
-<meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-02-23T01:06:01.149Z">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-11-12T04:02:46.972Z">
+<meta property="article:modified_time" content="2021-11-12T04:02:46.972Z">
+<meta property="article:author" content="Insight Software Consortium">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Node.js Hello World!">
-<meta name="twitter:description" content="This example, walks through how to compile a hello world executable written in C++ to JavaScript and execute it with the Node.js runtime! Before getting started, make sure Node.js and Docker are insta">
   <!-- Google Analytics -->
   
 <script>
@@ -62,18 +64,20 @@
   ga('send', 'pageview');
 </script>
 
-</head>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container">
     <header id="header" class="wrapper">
   <div id="header-inner" class="inner">
     <h1 id="logo-wrap">
-      <a href="/itk-js/" id="logo">itk-js</a>
+      <a href="/itk-wasm/" id="logo">itk-wasm</a>
     </h1>
     <nav id="main-nav">
-      <a href="/itk-js/docs/" class="main-nav-link">Docs</a><a href="/itk-js/api/" class="main-nav-link">API</a><a href="/itk-js/examples/" class="main-nav-link">Examples</a>
-      <a href="https://github.com/InsightSoftwareConsortium/itk-js" class="main-nav-link"><i class="fa fa-github-alt"></i></a>
+      <a href="/itk-wasm/docs/" class="main-nav-link">Docs</a><a href="/itk-wasm/api/" class="main-nav-link">API</a><a href="/itk-wasm/examples/" class="main-nav-link">Examples</a>
+      <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="main-nav-link"><i class="fa fa-github-alt"></i></a>
       <div id="search-input-wrap">
         <div id="search-input-icon">
           <i class="fa fa-search"></i>
@@ -100,32 +104,40 @@
                 <h1 class="article-title" itemprop="name">Node.js Hello World!</h1>
               </header>
               <div class="article-content" itemprop="articleBody">
-                <p>This example, walks through how to compile a <em>hello world</em> executable written in C++ to JavaScript and execute it with the <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> runtime!</p>
-<p>Before getting started, make sure <a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">Node.js</a> and <a href="https://docs.docker.com/install/" target="_blank" rel="noopener">Docker</a> are installed. On Linux, make sure you can run <a href="https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo" target="_blank" rel="noopener"><code>docker</code> without <code>sudo</code></a>. On Windows, make sure <a href="https://docs.docker.com/docker-for-windows/troubleshoot/#volume-mounting-requires-shared-drives-for-linux-containers" target="_blank" rel="noopener">Shared Drives are enabled in the Docker settings</a>. On Windows, also install <a href="https://git-scm.com/" target="_blank" rel="noopener">Git Bash</a>, and run shell commands in <em>Git Bash</em>.</p>
+                <p>This example, walks through how to compile a <em>hello world</em> executable written in C++ to JavaScript and execute it with the <a target="_blank" rel="noopener" href="https://nodejs.org/">Node.js</a> runtime!</p>
+<p>Before getting started, make sure <a target="_blank" rel="noopener" href="https://nodejs.org/en/download/">Node.js</a> and <a target="_blank" rel="noopener" href="https://docs.docker.com/install/">Docker</a> are installed. On Linux, make sure you can run <a target="_blank" rel="noopener" href="https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo"><code>docker</code> without <code>sudo</code></a>. On Windows, make sure <a target="_blank" rel="noopener" href="https://docs.docker.com/docker-for-windows/troubleshoot/#volumes">Shared Drives are enabled in the Docker settings</a>. On Windows, also install <a target="_blank" rel="noopener" href="https://git-scm.com/">Git Bash</a>, and run shell commands in <em>Git Bash</em>.</p>
 <p>First, let’s create a new folder to house our project.</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir NodeHelloWorld</span><br><span class="line">cd NodeHelloWorld</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir NodeHelloWorld</span><br><span class="line">cd NodeHelloWorld</span><br></pre></td></tr></table></figure>
+
 <p>Initialize the Node <em>package.json</em> file:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm init --yes</span><br></pre></td></tr></table></figure>
-<p>Add <code>itk</code> and <a href="https://www.npmjs.com/package/fs-extra" target="_blank" rel="noopener"><code>fs-extra</code></a> to your project’s dependencies:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install --save itk fs-extra</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm init --yes</span><br></pre></td></tr></table></figure>
+
+<p>Add <code>itk</code> to your project’s dependencies:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install --save itk-wasm</span><br></pre></td></tr></table></figure>
+
 <p>Let’s write some code! Populate <em>hello.cxx</em> with our Hello World program:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">  std::cout &lt;&lt; &quot;Hello world!&quot; &lt;&lt; std::endl;</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Next, provide a <a href="https://cmake.org/" target="_blank" rel="noopener">CMake</a> build configuration at <em>CMakeLists.txt</em>:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line">project(HelloWorld)</span><br><span class="line"></span><br><span class="line">add_executable(hello hello.cxx)</span><br></pre></td></tr></table></figure>
-<p>We use the <code>add_executable</code> command to build executables with itk.js. The <a href="https://kripken.github.io/emscripten-site/" target="_blank" rel="noopener">Emscripten</a> toolchain along with itk.js build and execution configurations are contained in the itk.js <a href="https://github.com/dockcross/dockcross" target="_blank" rel="noopener">dockcross</a> Docker image used by the itk-js command line interface (CLI).</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">  std::cout &lt;&lt; &quot;Hello world!&quot; &lt;&lt; std::endl;</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Next, provide a <a target="_blank" rel="noopener" href="https://cmake.org/">CMake</a> build configuration at <em>CMakeLists.txt</em>:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line">project(HelloWorld)</span><br><span class="line"></span><br><span class="line">add_executable(hello hello.cxx)</span><br></pre></td></tr></table></figure>
+
+<p>We use the <code>add_executable</code> command to build executables with itk-wasm. The <a target="_blank" rel="noopener" href="https://kripken.github.io/emscripten-site/">Emscripten</a> toolchain along with itk-wasm build and execution configurations are contained in the itk-wasm <a target="_blank" rel="noopener" href="https://github.com/dockcross/dockcross">dockcross</a> Docker image used by the itk-wasm command line interface (CLI).</p>
 <p>Note that the same code can also be built and tested with native operating system build tools. This is useful for development and debugging.</p>
-<p>Next, build the program with the itk.js CLI, <code>itk-js</code>. This is shipped with the <code>itk</code> package, and the CLI can be executed from the local <em>node_modules</em> folder with <a href="https://www.npmjs.com/package/npx" target="_blank" rel="noopener"><code>npx</code></a>. The <code>itk-js</code> CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory root into <code>itk-js build</code> to perform the build.</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npx itk-js build .</span><br></pre></td></tr></table></figure>
+<p>Next, build the program with the itk-wasm CLI, <code>itk-wasm</code>. This is shipped with the <code>itk</code> package, and the CLI can be executed from the local <em>node_modules</em> folder with <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/npx"><code>npx</code></a>. The <code>itk-wasm</code> CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory root into <code>itk-wasm build</code> to perform the build.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npx itk-wasm build .</span><br></pre></td></tr></table></figure>
+
 <p>The project is built in <code>./web-build</code>.</p>
 <p>To execute the project, create an <code>index.js</code> file to <a href="../api/node_pipelines.html">invoke the module</a>:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">const path = require(&apos;path&apos;)</span><br><span class="line">const runPipelineNode = require(&apos;itk/runPipelineNode&apos;)</span><br><span class="line"></span><br><span class="line">const pipelinePath = path.resolve(__dirname, &apos;web-build&apos;, &apos;hello&apos;)</span><br><span class="line">runPipelineNode(pipelinePath)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const path = require(&#x27;path&#x27;)</span><br><span class="line">const runPipelineNode = require(&#x27;itk/runPipelineNode&#x27;)</span><br><span class="line"></span><br><span class="line">const pipelinePath = path.resolve(__dirname, &#x27;web-build&#x27;, &#x27;hello&#x27;)</span><br><span class="line">runPipelineNode(pipelinePath)</span><br></pre></td></tr></table></figure>
+
 <p>And run it!</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npx node ./index.js</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npx node ./index.js</span><br></pre></td></tr></table></figure>
+
 <p>Congratulations! You just executed a C++ program compiled to JavaScript. 🎉</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-02-23T01:06:01.149Z" itemprop="dateModified">Last updated: 2021-02-23</time>
+                <time class="article-footer-updated" datetime="2021-11-12T04:02:46.972Z" itemprop="dateModified">Last updated: 2021-11-12</time>
                 <a href="paraview_glance.html" class="article-footer-next" title="Vue.js"><span>Next</span><i class="fa fa-chevron-right"></i></a>
               </footer>
               
@@ -150,10 +162,10 @@
     <footer id="footer" class="wrapper">
   <div class="inner">
     <div id="footer-copyright">
-      &copy; 2021 <a href="https://www.kitware.com/" target="_blank">Kitware Inc.</a>
+      &copy; 2021 <a href="https://www.kitware.com/" target="_blank">Insight Software Consortium</a>
     </div>
     <div id="footer-links">
-      <a href="https://github.com/InsightSoftwareConsortium/itk-js" class="footer-link" target="_blank"><i class="fa fa-github-alt"></i></a>
+      <a href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="footer-link" target="_blank"><i class="fa fa-github-alt"></i></a>
     </div>
   </div>
 </footer>
@@ -163,9 +175,9 @@
   <nav id="mobile-nav">
   <div id="mobile-nav-inner">
     <ul id="mobile-nav-list">
-      <a href="/itk-js/docs/" class="mobile-nav-link">Docs</a><a href="/itk-js/api/" class="mobile-nav-link">API</a><a href="/itk-js/examples/" class="mobile-nav-link">Examples</a>
+      <a href="/itk-wasm/docs/" class="mobile-nav-link">Docs</a><a href="/itk-wasm/api/" class="mobile-nav-link">API</a><a href="/itk-wasm/examples/" class="mobile-nav-link">Examples</a>
       <li class="mobile-nav-item">
-        <a href="https://github.com/InsightSoftwareConsortium/itk-js" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+        <a href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
       </li>
     </ul>
     
@@ -183,9 +195,15 @@
 </nav>
   <!-- Scripts -->
 <!-- build:js build/js/main.js -->
-<script src="/itk-js/js/lang_select.js"></script>
-<script src="/itk-js/js/toc.js"></script>
-<script src="/itk-js/js/mobile_nav.js"></script>
+
+<script src="/itk-wasm/js/lang_select.js"></script>
+
+
+<script src="/itk-wasm/js/toc.js"></script>
+
+
+<script src="/itk-wasm/js/mobile_nav.js"></script>
+
 <!-- endbuild -->
 <script src="https://cdn.jsdelivr.net/retinajs/1.3.0/retina.min.js" async></script>
 
