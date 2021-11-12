@@ -1,6 +1,9 @@
 # itk.js to itk-wasm Migration Guide
 
-*Note: this migration guide is a work in progress.*
+*Note: this migration guide is a work in progress. itk-wasm is currently in
+the alpha development stage with additional changes anticipated
+into December. Also, nearly all tests in the test suite pass, but DICOM series
+reading, GE and JPEG format currently have issues.*
 
 **itk-wasm** is a major upgrade with a focus on univeral, performant computing in
 WebAssembly. The itk.js to itk-wasm transition also brings improvements
@@ -62,31 +65,24 @@ There is now an improved approach for web workers for bundlers, CORS constraints
 
 ## IO modules are available in separate packages.
 
-IO modules are now installed in separate npm packages to limit the `itk-wasm`
-package size. You can install only the packages that you need.
+IO modules are now installed in separate npm packages to limit the `itk-wasm` package size. You can install only the packages that you need.
 
-The version of these packages follow the `itk-wasm` package version and should
-be kept in sync. The io packages are:
+The version of these packages follow the `itk-wasm` package version and should be kept in sync. The io packages are:
 
 1. `itk-image-io`
 2. `itk-mesh-io`
 3. `itk-polydata-io`
 
-An example that vendors these package's webassembly assets into an
-application for deployment can be found in the [Webpack
-Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack).
+An example that vendors these package's webassembly assets into an application for deployment can be found in the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack).
 
 ## itkConfig.js content and usage
 
-The `itkConfig.js` specifies where to look for the io webassembly modules and
-an optional default base URL for pipeline modules.
+The `itkConfig.js` specifies where to look for the io webassembly modules and an optional default base URL for pipeline modules.
 
-The default `itkConfig.js` is configured to use the
-[JsDelivr](https://www.jsdelivr.com/) CDN, but you may want to override this
+The default `itkConfig.js` is configured to use the [JsDelivr](https://www.jsdelivr.com/) CDN, but you may want to override this
 default.
 
-In the [Webpack
-Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack)
+In the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack)
 the io webassembly module assets are vendored into `/itk` directories,
 this module looks like:
 
@@ -102,15 +98,11 @@ const itkConfig = {
 export default itkConfig
 ```
 
-And it can be injected into an application bundle by setting defining
-`alias`'s to the configuration module for `../itkConfig.js` and
-`../../itkConfig.js`. For other override configuration options, see the Webpack (todo),
-Rollup (todo), and Unpkg (todo) examples.
+And it can be injected into an application bundle by setting defining `alias`'s to the configuration module for `../itkConfig.js` and `../../itkConfig.js`. For other override configuration options, see the [Webpack](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack) and Rollup (todo) examples.
 
 ### CLI options
 
-The `--image, -i` command line option for the `build` subcommand is now a global option for all
-subcommands. For examples
+The `--image, -i` command line option for the `build` subcommand is now a global option for all subcommands. For examples
 
 ```
 itk-wasm build --image insighttoolkit/itk-wasm src/dir
