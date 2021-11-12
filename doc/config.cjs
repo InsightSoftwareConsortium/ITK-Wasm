@@ -3,9 +3,9 @@ module.exports = {
   work: './build-tmp',
   config: {
     title: 'itk-wasm',
-    description: '"ITK Bridge for JavaScript"',
-    subtitle: '"High performance spatial analysis in a Web Browser or Node.js."',
-    author: 'Kitware Inc.',
+    description: '"ITK WebAssembly"',
+    subtitle: '"Universal spatial analysis and visualization"',
+    author: 'Insight Software Consortium',
     timezone: 'UTC',
     url: 'https://InsightSoftwareConsortium.github.io/itk-wasm',
     root: '/itk-wasm/',

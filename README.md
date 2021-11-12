@@ -18,7 +18,7 @@ asynchronous, parallel execution of processing pipelines in a worker pool.
 *itk-wasm* can be used to execute [ITK](https://www.itk.org/),
 [VTK](https://www.vtk.org/) or arbitrary C++ codes in the browser, on a
 workstation / server with [Node.js](https://nodejs.org/), or standalone
-execution or wrapped in [WASI](https://wasi.dev/) runtimes.
+execution and wrapped in [WASI](https://wasi.dev/) runtimes.
 
 For more information, please see [the project
 documentation](https://insightsoftwareconsortium.github.io/itk-wasm/).

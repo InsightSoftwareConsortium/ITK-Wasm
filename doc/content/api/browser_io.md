@@ -11,20 +11,20 @@ These functions return the [WebWorker](https://developer.mozilla.org/en-US/docs/
 
 ---
 
-## readFile(webWorker, file) -> { webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-wasm/docs/polydata_formats.html) }
+## readFile(webWorker: Worker | null, file: File): Promise<{ webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-wasm/docs/polydata_formats.html) }>
 
 Read an image or mesh or poly data from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
 
-## readBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-wasm/docs/polydata_formats.html) }
+## readBlob(webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<{ webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-wasm/docs/polydata_formats.html) }>
 
 Read an image or mesh or poly data from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
-## readArrayBuffer(webWorker, arrayBuffer, fileName, mimeType) -> { webWorker, [image](./Image.html) or [mesh](./Mesh.html) }
+## readArrayBuffer(webWorker, arrayBuffer, fileName, mimeType): { webWorker, [image](./Image.html) or [mesh](./Mesh.html) }
 
 Read an image or mesh from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
-## writeArrayBuffer(webWorker, useCompression, imageOrMesh, fileName, mimeType) ->  { webWorker, [arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
+## writeArrayBuffer(webWorker, useCompression, imageOrMesh, fileName, mimeType):  { webWorker, [arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
 
 Write an image or mesh to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
 
@@ -35,23 +35,23 @@ Write an image or mesh to a an [ArrayBuffer](https://developer.mozilla.org/en-US
 
 ---
 
-## readImageFile(webWorker, file) -> { webWorker, [image](./Image.html) }
+## readImageFile(webWorker, file): { webWorker, [image](./Image.html) }
 
 Read an image from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
-## readImageBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [image](./Image.html) }
+## readImageBlob(webWorker, blob, fileName, mimeType): { webWorker, [image](./Image.html) }
 
 Read an image from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
-## readImageArrayBuffer(webWorker, arrayBuffer, fileName, mimeType) -> { webWorker, [image](./Image.html) }
+## readImageArrayBuffer(webWorker, arrayBuffer, fileName, mimeType): { webWorker, [image](./Image.html) }
 
 Read an image from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
-## readImageHTTP(url) -> [image](./Image.html)
+## readImageHTTP(url): [image](./Image.html)
 
 Read a server-side generated image created with [`itk::WASMImageIO`](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/include/itkWASMImageIO.h). The primary `*.json` file should be served at the given `url` and the pixel buffer file served at `url + ".data"`
 
-## readImageFileSeries(fileList, zSpacing=1.0, zOrigin=0.0, sortedSeries=false) -> { [image](./Image.html), webWorkerPool }
+## readImageFileSeries(fileList, zSpacing=1.0, zOrigin=0.0, sortedSeries=false): { [image](./Image.html), webWorkerPool }
 
 Read an image from a series of [File](https://developer.mozilla.org/en-US/docs/Web/API/File)'s or [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob)'s stored in an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) or [FileList](https://developer.mozilla.org/en-US/docs/Web/API/FileList).
 
@@ -61,7 +61,7 @@ By default, files are sorted by name, lexicographically. To sort by a different 
 
 The used `webWorkerPool` is returned to enable resource cleanup by calling `.terminateWorkers()`.
 
-## readImageDICOMFileSeries(fileList, singleSortedSeries=false) -> { [image](./Image.html), webWorkerPool }
+## readImageDICOMFileSeries(fileList, singleSortedSeries=false): { [image](./Image.html), webWorkerPool }
 
 Read an image from a series of DICOM [File](https://developer.mozilla.org/en-US/docs/Web/API/File)'s or [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob)'s stored in an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) or [FileList](https://developer.mozilla.org/en-US/docs/Web/API/FileList).
 
@@ -69,7 +69,7 @@ If the files are known to be from a single, sorted series, the last argument can
 
 The used `webWorkerPool` is returned to enable resource cleanup by calling `.terminateWorkers()`.
 
-## readDICOMTags(webWorker, file, tags=[]) -> { tags, webWorker }
+## readDICOMTags(webWorker, file, tags=[]): { tags, webWorker }
 
 Read tags from a DICOM [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
@@ -82,7 +82,7 @@ Returns:
 - tags: a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) containing the mapping from tag to tag value.
 - webWorker: a webworker that can be re-used.
 
-## writeImageArrayBuffer(webWorker, useCompression, image, fileName, mimeType) ->  { webWorker, [arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
+## writeImageArrayBuffer(webWorker, useCompression, image, fileName, mimeType):  { webWorker, [arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
 
 Write an image to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
 
@@ -93,19 +93,19 @@ Write an image to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/We
 
 ---
 
-## readMeshFile(webWorker, file) -> { webWorker, [mesh](./Mesh.html) }
+## readMeshFile(webWorker, file): { webWorker, [mesh](./Mesh.html) }
 
 Read a mesh from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
-## readMeshBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [mesh](./Mesh.html) }
+## readMeshBlob(webWorker, blob, fileName, mimeType): { webWorker, [mesh](./Mesh.html) }
 
 Read an mesh from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
-## readMeshArrayBuffer(webWorker, arrayBuffer, fileName, mimeType) -> { webWorker, [mesh](./Mesh.html) }
+## readMeshArrayBuffer(webWorker, arrayBuffer, fileName, mimeType): { webWorker, [mesh](./Mesh.html) }
 
 Read an mesh from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
-## writeMeshArrayBuffer(webWorker, useCompression, mesh, fileName, mimeType) ->  { webWorker, [arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
+## writeMeshArrayBuffer(webWorker, useCompression, mesh, fileName, mimeType):  { webWorker, [arrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }
 
 Write an mesh to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
 
@@ -116,14 +116,14 @@ Write an mesh to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web
 
 ---
 
-## readPolyDataFile(webWorker, file) -> { webWorker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }
+## readPolyDataFile(webWorker, file): { webWorker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }
 
 Read a vtk.js PolyData from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
-## readPolyDataBlob(webWorker, blob, fileName, mimeType) -> { webWorker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }
+## readPolyDataBlob(webWorker, blob, fileName, mimeType): { webWorker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }
 
 Read a vtk.js PolyData from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
-## readPolyDataArrayBuffer(webWorker, arrayBuffer, fileName, mimeType) -> { webWorker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }
+## readPolyDataArrayBuffer(webWorker, arrayBuffer, fileName, mimeType): { webWorker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }
 
 Read a vtk.js PolyData from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.

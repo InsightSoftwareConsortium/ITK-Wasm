@@ -21,7 +21,7 @@ npm init --yes
 Add `itk` to your project's dependencies:
 
 ```
-npm install --save itk
+npm install --save itk-wasm
 ```
 
 Let's write some code! Populate *hello.cxx* with our Hello World program:

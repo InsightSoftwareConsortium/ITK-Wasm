@@ -1,7 +1,7 @@
 title: Supported Mesh and Point Set File Formats
 ---
 
-Read and write to and from [itk/Mesh](../api/Mesh.html) is supported. For visualization with [vtk.js](https://kitware.github.io/vtk-js/index.html), use the `MeshToPolyData` WebAssembly pipeline included with itk-wasm.
+Read and write to and from [Mesh](../api/Mesh.html) is supported. For visualization with [vtk.js](https://kitware.github.io/vtk-js/index.html), use the `MeshToPolyData` WebAssembly pipeline included with itk-wasm.
 
 - [BYU Geometry File Format](http://www.eg-models.de/formats/Format_Byu.html)
 - [FreeSurfer surface file formats, binary and ASCII](http://www.grahamwideman.com/gw/brain/fs/surfacefileformats.htm)

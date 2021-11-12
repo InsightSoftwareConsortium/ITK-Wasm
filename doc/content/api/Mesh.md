@@ -1,7 +1,7 @@
 title: Mesh
 ---
 
-An `itk/Mesh` is the N-dimensional data structure to represent points sets and meshes for *itk-wasm*. It is intended to be used for data transfer and exchange as opposed to processing. A Mesh is a JavaScript object with the following properties:
+An `Mesh` is the N-dimensional data structure to represent points sets and meshes for *itk-wasm*. It is intended to be used for data transfer and exchange as opposed to processing. A Mesh is a JavaScript object with the following properties:
 
 **meshType**: The [MeshType](./MeshType.html) for this mesh.
 **name**: An optional name, a `String`, that describes this mesh.

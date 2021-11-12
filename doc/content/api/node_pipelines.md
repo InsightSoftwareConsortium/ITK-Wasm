@@ -44,7 +44,3 @@ Run an itk-wasm Emscripten module with Node.js.
 
 *result*:       A JavaScript object with three properties: `stdout`, `stderr`, and `outputs`.
                 `stdout` and `stderr` are strings. `outputs` is an array with `{ path, type, data }` content that corresponds to the values specified in the function call.
-
-## runPipelineNodeSync(pipelinePath, args, outputs, inputs) -> result
-
-Similar to `runPipelineNode`, but returns the result directly instead of a promise.

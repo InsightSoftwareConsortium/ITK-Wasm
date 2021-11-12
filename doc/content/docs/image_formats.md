@@ -1,7 +1,7 @@
 title: Supported Image File Formats
 ---
 
-Read and write to and from [itk/Image](../api/Image.html) is supported. For visualization with [vtk.js](https://kitware.github.io/vtk-js/index.html), use [convertItkToVtkImage](https://kitware.github.io/vtk-js/api/Common_DataModel_ITKHelper.html).
+Read and write to and from [Image](../api/Image.html) is supported. For visualization with [vtk.js](https://kitware.github.io/vtk-js/index.html), use [convertItkToVtkImage](https://kitware.github.io/vtk-js/api/Common_DataModel_ITKHelper.html).
 
 - [BioRad](http://www.bio-rad.com/)
 - [BMP](https://en.wikipedia.org/wiki/BMP_file_format)

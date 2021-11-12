@@ -4,7 +4,7 @@ title: Installation
 Install with:
 
 ```bash
-npm install --save itk
+npm install --save itk-wasm
 ```
 
 For more information on build configuration, see how to use *itk-wasm* [in a
