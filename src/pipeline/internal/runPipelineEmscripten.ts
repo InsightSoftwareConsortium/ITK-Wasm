@@ -4,6 +4,7 @@ import TypedArray from '../../core/TypedArray.js'
 import Image from '../../core/Image.js'
 import Mesh from '../../core/Mesh.js'
 import PolyData from '../../core/vtkPolyData.js'
+import FloatTypes from '../../core/FloatTypes.js'
 
 import PipelineEmscriptenModule from '../PipelineEmscriptenModule.js'
 import PipelineInput from '../PipelineInput.js'
@@ -173,7 +174,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           const dataUint8 = readFileSharedArray(pipelineModule, `${output.path}/data/data.raw`)
           image.data = bufferToTypedArray(image.imageType.componentType, dataUint8.buffer)
           const directionUint8 = readFileSharedArray(pipelineModule, `${output.path}/data/direction.raw`)
-          image.direction = bufferToTypedArray('double', directionUint8.buffer)
+          image.direction = bufferToTypedArray(FloatTypes.Float64, directionUint8.buffer)
           outputData = image as Image
           break
         }

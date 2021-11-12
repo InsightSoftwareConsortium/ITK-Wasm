@@ -131,6 +131,11 @@ been removed.
 
 Addresses an important issue in image orientation support.
 
+## Image file format
+
+The JSON file format is replaced by a WASM file format with a different
+layout. A directory, ending in `.iwi` or a `.iwi.zip` file is supported.
+
 ### Node Sync functions
 
 Node `*Sync` functions have been removed -- use the equivalent async versions instead.
