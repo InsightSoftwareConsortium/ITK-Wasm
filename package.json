@@ -10,9 +10,9 @@
     "test": "test"
   },
   "scripts": {
-    "doc": "kw-doc -c ./doc/config.js",
-    "doc:www": "kw-doc -c ./doc/config.js -s",
-    "doc:publish": "kw-doc -c ./doc/config.js -mp",
+    "doc": "kw-doc -c ./doc/config.cjs",
+    "doc:www": "kw-doc -c ./doc/config.cjs -s",
+    "doc:publish": "kw-doc -c ./doc/config.cjs -mp",
     "commit": "git cz",
     "build": "npm run build:wasm && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack && node ./src/io/internal/bindings/package-json-gen.cjs",
     "build:debug": "npm run build:wasm -- --debug && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack -- --mode development",
