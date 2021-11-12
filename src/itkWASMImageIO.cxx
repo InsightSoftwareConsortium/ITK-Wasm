@@ -608,6 +608,7 @@ WASMImageIO
     mz_zip_file file_info = { 0 };
     file_info.filename = "data/direction.raw";
     file_info.modified_date = time(NULL);
+    file_info.accessed_date = file_info.modified_date;
     file_info.creation_date = file_info.modified_date;
     file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
     // 644
@@ -669,6 +670,7 @@ WASMImageIO
     mz_zip_file file_info = { 0 };
     file_info.filename = "index.json";
     file_info.modified_date = time(NULL);
+    file_info.accessed_date = file_info.modified_date;
     file_info.creation_date = file_info.modified_date;
     file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
     // 644
@@ -724,6 +726,7 @@ WASMImageIO
     mz_zip_file file_info = { 0 };
     file_info.filename = "data/data.raw";
     file_info.modified_date = time(NULL);
+    file_info.accessed_date = file_info.modified_date;
     file_info.creation_date = file_info.modified_date;
     file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
     // 644
