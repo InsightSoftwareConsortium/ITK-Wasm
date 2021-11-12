@@ -24,6 +24,8 @@
 #include "itkWASMMapPixelType.h"
 #include "itkDefaultConvertPixelTraits.h"
 
+#include "rapidjson/document.h"
+
 namespace itk
 {
 
