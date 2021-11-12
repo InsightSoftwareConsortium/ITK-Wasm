@@ -517,12 +517,12 @@ set(_ExternalData_REGEX_ALGO "MD5|SHA1|SHA224|SHA256|SHA384|SHA512|SHA3_224|SHA3
 set(_ExternalData_REGEX_EXT "md5|sha1|sha224|sha256|sha384|sha512|sha3-224|sha3-256|sha3-384|sha3-512|ipfs")
 set(_ExternalData_SELF "${CMAKE_CURRENT_LIST_FILE}")
 get_filename_component(_ExternalData_SELF_DIR "${_ExternalData_SELF}" PATH)
-set(_ExternalData_ipfs_add_flags -Q --cid-version 1 --raw-leaves)
+set(_ExternalData_ipfs_add_flags --cid-version 1 -Q --chunker=size-1048576 --raw-leaves --cid-base=base32)
 
 function(_ExternalData_compute_hash var_hash algo file)
   if("${algo}" STREQUAL "IPFS")
     find_program(IPFS_EXECUTABLE
-      NAMES ipfs
+      NAMES jsipfs
       DOC "Interplanetary Filesystem (IPFS) executable"
       REQUIRED)
     if(NOT IPFS_EXECUTABLE)
@@ -1050,8 +1050,12 @@ function(_ExternalData_download_object name hash algo var_obj var_success var_er
     else()
       # Verify downloaded object.
       if("${algo}" STREQUAL "IPFS")
+        # Skip per flag options with web3.storage
+        # https://github.com/web3-storage/docs/issues/155
+        set(found 1)
+        break()
         find_program(IPFS_EXECUTABLE
-          NAMES ipfs
+          NAMES jsipfs
           DOC "Interplanetary Filesystem (IPFS) executable")
         if(NOT IPFS_EXECUTABLE)
           message(STATUS "Skipping ${name} download verification because IPFS_EXECUTABLE is not found.")

@@ -32,6 +32,9 @@ ExternalData_Expand_Arguments(
   DATA{Input/octa.off}
   DATA{Input/sphere.stl}
   DATA{Input/cthead1.iwi.zip}
+  DATA{Input/cthead1.iwi/index.json}
+  DATA{Input/cthead1.iwi/data/direction.raw}
+  DATA{Input/cthead1.iwi/data/data.raw}
   DATA{Input/uGridEx.vtk}
   DATA{Input/diskout.vtp}
   DATA{Input/elements.vtu}
