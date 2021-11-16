@@ -256,18 +256,60 @@ WASMMeshIO
 ::ReadMeshInformation()
 {
   this->SetByteOrderToLittleEndian();
-
-  std::ifstream inputStream;
-  this->OpenFileForReading( inputStream, this->GetFileName(), true );
   rapidjson::Document document;
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                   std::istreambuf_iterator<char>());
-  if (document.Parse(str.c_str()).HasParseError())
+
+  const std::string path = this->GetFileName();
+  const auto indexPath = path + "/index.json";
+  const auto dataPath = path + "/data";
+
+  std::string::size_type zipPos = path.rfind(".zip");
+  void * zip_reader = NULL;
+  bool useZip = false;
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    useZip = true;
+    mz_zip_reader_create(&zip_reader);
+    if (mz_zip_reader_open_file(zip_reader, path.c_str()) != MZ_OK)
     {
-    itkExceptionMacro("Could not parse JSON");
-    return;
+      itkExceptionMacro("Could not open zip file");
     }
 
+    mz_zip_reader_set_pattern(zip_reader, "index.json", 0);
+    if (mz_zip_reader_goto_first_entry(zip_reader) != MZ_OK)
+    {
+      itkExceptionMacro("Could not find index.json entry");
+    }
+    mz_zip_file *file_info = NULL;
+    mz_zip_reader_entry_get_info(zip_reader, &file_info);
+    mz_zip_reader_entry_open(zip_reader);
+    const int64_t bufsize = file_info->uncompressed_size;
+    void * buf = calloc(bufsize, sizeof(unsigned char));
+    mz_zip_reader_entry_read(zip_reader, buf, bufsize);
+    if (document.Parse(static_cast<const char *>(buf)).HasParseError())
+      {
+      free(buf);
+      mz_zip_reader_entry_close(zip_reader);
+      mz_zip_reader_close(zip_reader);
+      mz_zip_reader_delete(&zip_reader);
+      itkExceptionMacro("Could not parse JSON");
+      return;
+      }
+    free(buf);
+    mz_zip_reader_entry_close(zip_reader);
+  }
+  else
+  {
+    std::ifstream inputStream;
+    this->OpenFileForReading( inputStream, indexPath.c_str(), true );
+    std::string str((std::istreambuf_iterator<char>(inputStream)),
+                     std::istreambuf_iterator<char>());
+    if (document.Parse(str.c_str()).HasParseError())
+      {
+      itkExceptionMacro("Could not parse JSON");
+      return;
+      }
+  }
 
   const rapidjson::Value & meshType = document["meshType"];
   const int dimension = meshType["dimension"].GetInt();
