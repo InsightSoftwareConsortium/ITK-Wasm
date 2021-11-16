@@ -27,7 +27,7 @@ WASMMeshIOFactory
 {
   this->RegisterOverride( "itkMeshIOBase",
                           "itkWASMMeshIO",
-                          "JSON Mesh IO",
+                          "WASM Mesh IO",
                           1,
                           CreateObjectFunction< WASMMeshIO >::New() );
 }
@@ -50,7 +50,7 @@ const char *
 WASMMeshIOFactory
 ::GetDescription() const
 {
-  return "JSON MeshIO Factory, allows the loading of JSON images into insight";
+  return "WASM MeshIO Factory, allows the loading of WASM images into Insight";
 }
 
 

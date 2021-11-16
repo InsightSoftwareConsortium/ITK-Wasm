@@ -50,7 +50,7 @@ const char *
 WASMImageIOFactory
 ::GetDescription() const
 {
-  return "WASM ImageIO Factory, allows the loading of ITK WASM images into insight";
+  return "WASM ImageIO Factory, allows the loading of ITK WASM images into Insight";
 }
 
 

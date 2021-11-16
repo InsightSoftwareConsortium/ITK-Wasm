@@ -48,6 +48,7 @@ ExternalData_Expand_Arguments(
 set(WebAssemblyInterfaceTests
   itkJSONImageInterfaceTest.cxx
   itkWASMImageIOTest.cxx
+  itkWASMMeshIOTest.cxx
 )
 
 CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
@@ -97,6 +98,16 @@ itk_add_test(NAME itkWASMImageIONiftiTest
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.mha
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.iwi.zip
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.zip.mha
+)
+
+itk_add_test(NAME itkWASMMeshIOTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkWASMMeshIOTest
+      DATA{Input/cow.vtk}
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.vtk
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm.zip
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.zip.vtk
 )
 
 if(EMSCRIPTEN)

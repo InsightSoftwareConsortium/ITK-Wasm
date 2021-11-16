@@ -18,6 +18,11 @@
 
 #include "itkWASMMeshIO.h"
 
+#include "itkWASMComponentTypeFromIOComponentEnum.h"
+#include "itkIOComponentEnumFromWASMComponentType.h"
+#include "itkWASMPixelTypeFromIOPixelEnum.h"
+#include "itkIOPixelEnumFromWASMPixelType.h"
+
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
 #include "itksys/SystemTools.hxx"
@@ -26,14 +31,24 @@
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/ostreamwrapper.h"
 
+#include "itksys/SystemTools.hxx"
+
+#include "mz.h"
+#include "mz_os.h"
+#include "mz_strm.h"
+#include "mz_zip.h"
+#include "mz_zip_rw.h"
+
 namespace itk
 {
 
 WASMMeshIO
 ::WASMMeshIO()
 {
-  this->AddSupportedWriteExtension(".json");
-  this->AddSupportedReadExtension(".json");
+  this->AddSupportedWriteExtension(".iwm");
+  this->AddSupportedWriteExtension(".iwm.zip");
+  this->AddSupportedReadExtension(".iwm");
+  this->AddSupportedReadExtension(".iwm.zip");
 }
 
 
@@ -162,102 +177,6 @@ WASMMeshIO
 }
 
 
-CommonEnums::IOComponent
-WASMMeshIO
-::WASMToITKComponentType(const std::string & jsComponentType)
-{
-  if( jsComponentType == "int8" )
-    {
-    return CommonEnums::IOComponent::CHAR;
-    }
-  else if( jsComponentType == "uint8" )
-    {
-    return CommonEnums::IOComponent::UCHAR;
-    }
-  else if( jsComponentType == "int16" )
-    {
-    return CommonEnums::IOComponent::SHORT;
-    }
-  else if( jsComponentType == "uint16" )
-    {
-    return CommonEnums::IOComponent::USHORT;
-    }
-  else if( jsComponentType == "int32" )
-    {
-    return CommonEnums::IOComponent::INT;
-    }
-  else if( jsComponentType == "uint32" )
-    {
-    return CommonEnums::IOComponent::UINT;
-    }
-  else if( jsComponentType == "int64" )
-    {
-    return CommonEnums::IOComponent::LONGLONG;
-    }
-  else if( jsComponentType == "uint64" )
-    {
-    return CommonEnums::IOComponent::ULONGLONG;
-    }
-  else if( jsComponentType == "float32" )
-    {
-    return CommonEnums::IOComponent::FLOAT;
-    }
-  else if( jsComponentType == "float64" )
-    {
-    return CommonEnums::IOComponent::DOUBLE;
-    }
-  return CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE;
-}
-
-
-std::string
-WASMMeshIO
-::ITKToWASMComponentType(const CommonEnums::IOComponent itkComponentType)
-{
-  switch ( itkComponentType )
-    {
-    case CommonEnums::IOComponent::CHAR:
-      return "int8";
-
-    case CommonEnums::IOComponent::UCHAR:
-      return "uint8";
-
-    case CommonEnums::IOComponent::SHORT:
-      return "int16";
-
-    case CommonEnums::IOComponent::USHORT:
-      return "uint16";
-
-    case CommonEnums::IOComponent::INT:
-      return "int32";
-
-    case CommonEnums::IOComponent::UINT:
-      return "uint32";
-
-    case CommonEnums::IOComponent::LONG:
-      return "int64";
-
-    case CommonEnums::IOComponent::ULONG:
-      return "uint64";
-
-    case CommonEnums::IOComponent::LONGLONG:
-      return "int64";
-
-    case CommonEnums::IOComponent::ULONGLONG:
-      return "uint64";
-
-    case CommonEnums::IOComponent::FLOAT:
-      return "float32";
-
-    case CommonEnums::IOComponent::DOUBLE:
-      return "float64";
-
-    default:
-      return "null";
-    }
-}
-
-
 size_t
 WASMMeshIO
 ::ITKComponentSize(const CommonEnums::IOComponent itkComponentType)
@@ -305,93 +224,6 @@ WASMMeshIO
     }
 }
 
-CommonEnums::IOPixel
-WASMMeshIO
-::WASMToITKPixelType( const int jsPixelType )
-{
-  switch ( jsPixelType )
-    {
-    case 0:
-      return CommonEnums::IOPixel::UNKNOWNPIXELTYPE;
-    case 1:
-      return CommonEnums::IOPixel::SCALAR;
-    case 2:
-      return CommonEnums::IOPixel::RGB;
-    case 3:
-      return CommonEnums::IOPixel::RGBA;
-    case 4:
-      return CommonEnums::IOPixel::OFFSET;
-    case 5:
-      return CommonEnums::IOPixel::VECTOR;
-    case 6:
-      return CommonEnums::IOPixel::POINT;
-    case 7:
-      return CommonEnums::IOPixel::COVARIANTVECTOR;
-    case 8:
-      return CommonEnums::IOPixel::SYMMETRICSECONDRANKTENSOR;
-    case 9:
-      return CommonEnums::IOPixel::DIFFUSIONTENSOR3D;
-    case 10:
-      return CommonEnums::IOPixel::COMPLEX;
-    case 11:
-      return CommonEnums::IOPixel::FIXEDARRAY;
-    case 12:
-      return CommonEnums::IOPixel::ARRAY;
-    case 13:
-      return CommonEnums::IOPixel::MATRIX;
-    case 14:
-      return CommonEnums::IOPixel::VARIABLELENGTHVECTOR;
-    case 15:
-      return CommonEnums::IOPixel::VARIABLESIZEMATRIX;
-    }
-
-  return CommonEnums::IOPixel::UNKNOWNPIXELTYPE;
-}
-
-
-int
-WASMMeshIO
-::ITKToWASMPixelType( const CommonEnums::IOPixel itkPixelType )
-{
-  switch ( itkPixelType )
-    {
-    case CommonEnums::IOPixel::UNKNOWNPIXELTYPE:
-      return 0;
-    case CommonEnums::IOPixel::SCALAR:
-      return 1;
-    case CommonEnums::IOPixel::RGB:
-      return 2;
-    case CommonEnums::IOPixel::RGBA:
-      return 3;
-    case CommonEnums::IOPixel::OFFSET:
-      return 4;
-    case CommonEnums::IOPixel::VECTOR:
-      return 5;
-    case CommonEnums::IOPixel::POINT:
-      return 6;
-    case CommonEnums::IOPixel::COVARIANTVECTOR:
-      return 7;
-    case CommonEnums::IOPixel::SYMMETRICSECONDRANKTENSOR:
-      return 7;
-    case CommonEnums::IOPixel::DIFFUSIONTENSOR3D:
-      return 7;
-    case CommonEnums::IOPixel::COMPLEX:
-      return 10;
-    case CommonEnums::IOPixel::FIXEDARRAY:
-      return 11;
-    case CommonEnums::IOPixel::ARRAY:
-      return 12;
-    case CommonEnums::IOPixel::MATRIX:
-      return 13;
-    case CommonEnums::IOPixel::VARIABLELENGTHVECTOR:
-      return 14;
-    case CommonEnums::IOPixel::VARIABLESIZEMATRIX:
-      return 15;
-    }
-
-  return 0;
-}
-
 
 bool
 WASMMeshIO
@@ -403,9 +235,8 @@ WASMMeshIO
   std::string fname = filename;
 
   bool extensionFound = false;
-  std::string::size_type jsonPos = fname.rfind(".json");
-  if ( ( jsonPos != std::string::npos )
-       && ( jsonPos == fname.length() - 5 ) )
+  std::string::size_type extensionPos = fname.rfind(".iwm");
+  if ( extensionPos != std::string::npos )
     {
     extensionFound = true;
     }
@@ -416,32 +247,6 @@ WASMMeshIO
     return false;
     }
 
-
-  std::ifstream inputStream;
-  try
-    {
-    this->OpenFileForReading( inputStream, fname, true );
-    }
-  catch( ExceptionObject & )
-    {
-    return false;
-    }
-
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                   std::istreambuf_iterator<char>());
-  rapidjson::Document document;
-  if( document.Parse( str.c_str() ).HasParseError() )
-    {
-    inputStream.close();
-    return false;
-    }
-
-  if( !document.HasMember("meshType") )
-    {
-    return false;
-    }
-
-  inputStream.close();
   return true;
 }
 
@@ -469,29 +274,29 @@ WASMMeshIO
   this->SetPointDimension( dimension );
 
   const std::string pointComponentType( meshType["pointComponentType"].GetString() );
-  const CommonEnums::IOComponent pointIOComponentType = this->WASMToITKComponentType( pointComponentType );
+  const CommonEnums::IOComponent pointIOComponentType = IOComponentEnumFromWASMComponentType( pointComponentType );
   this->SetPointComponentType( pointIOComponentType );
 
   const std::string pointPixelComponentType( meshType["pointPixelComponentType"].GetString() );
-  const CommonEnums::IOComponent pointPixelIOComponentType = this->WASMToITKComponentType( pointPixelComponentType );
+  const CommonEnums::IOComponent pointPixelIOComponentType = IOComponentEnumFromWASMComponentType( pointPixelComponentType );
   this->SetPointPixelComponentType( pointPixelIOComponentType );
 
-  const int pointPixelType( meshType["pointPixelType"].GetInt() );
-  const CommonEnums::IOPixel pointIOPixelType = this->WASMToITKPixelType( pointPixelType );
+  const std::string pointPixelType( meshType["pointPixelType"].GetString() );
+  const CommonEnums::IOPixel pointIOPixelType = IOPixelEnumFromWASMPixelType( pointPixelType );
   this->SetPointPixelType( pointIOPixelType );
 
   this->SetNumberOfPointPixelComponents( meshType["pointPixelComponents"].GetInt() );
 
   const std::string cellComponentType( meshType["cellComponentType"].GetString() );
-  const CommonEnums::IOComponent cellIOComponentType = this->WASMToITKComponentType( cellComponentType );
+  const CommonEnums::IOComponent cellIOComponentType = IOComponentEnumFromWASMComponentType( cellComponentType );
   this->SetCellComponentType( cellIOComponentType );
 
   const std::string cellPixelComponentType( meshType["cellPixelComponentType"].GetString() );
-  const CommonEnums::IOComponent cellPixelIOComponentType = this->WASMToITKComponentType( cellPixelComponentType );
+  const CommonEnums::IOComponent cellPixelIOComponentType = IOComponentEnumFromWASMComponentType( cellPixelComponentType );
   this->SetCellPixelComponentType( cellPixelIOComponentType );
 
-  const int cellPixelType( meshType["cellPixelType"].GetInt() );
-  const CommonEnums::IOPixel cellIOPixelType = this->WASMToITKPixelType( cellPixelType );
+  const std::string cellPixelType( meshType["cellPixelType"].GetString() );
+  const CommonEnums::IOPixel cellIOPixelType = IOPixelEnumFromWASMPixelType( cellPixelType );
   this->SetCellPixelType( cellIOPixelType );
 
   this->SetNumberOfCellPixelComponents( meshType["cellPixelComponents"].GetInt() );
@@ -665,9 +470,8 @@ WASMMeshIO
     }
 
   bool extensionFound = false;
-  std::string::size_type jsonPos = filename.rfind(".json");
-  if ( ( jsonPos != std::string::npos )
-       && ( jsonPos == filename.length() - 5 ) )
+  std::string::size_type extensionPos = filename.rfind(".iwm");
+  if ( extensionPos != std::string::npos )
     {
     extensionFound = true;
     }
@@ -696,18 +500,19 @@ WASMMeshIO
   const unsigned int dimension = this->GetPointDimension();
   meshType.AddMember("dimension", rapidjson::Value(dimension).Move(), allocator );
 
-  const std::string pointComponentString = this->ITKToWASMComponentType( this->GetPointComponentType() );
+  const std::string pointComponentString = WASMComponentTypeFromIOComponentEnum( this->GetPointComponentType() );
   rapidjson::Value pointComponentType;
   pointComponentType.SetString( pointComponentString.c_str(), allocator );
   meshType.AddMember("pointComponentType", pointComponentType.Move(), allocator );
 
-  const std::string pointPixelComponentString = this->ITKToWASMComponentType( this->GetPointPixelComponentType() );
+  const std::string pointPixelComponentString = WASMComponentTypeFromIOComponentEnum( this->GetPointPixelComponentType() );
   rapidjson::Value pointPixelComponentType;
   pointPixelComponentType.SetString( pointPixelComponentString.c_str(), allocator );
   meshType.AddMember("pointPixelComponentType", pointPixelComponentType.Move(), allocator );
 
-  const int pointPixelType = this->ITKToWASMPixelType( this->GetPointPixelType() );
-  meshType.AddMember("pointPixelType", rapidjson::Value(pointPixelType).Move(), allocator );
+  rapidjson::Value pointPixelType;
+  pointPixelType.SetString( WASMPixelTypeFromIOPixelEnum( this->GetPointPixelType()).c_str(), allocator );
+  meshType.AddMember("pointPixelType", pointPixelType.Move(), allocator );
 
   meshType.AddMember("pointPixelComponents", rapidjson::Value( this->GetNumberOfPointPixelComponents() ).Move(), allocator );
 
@@ -721,13 +526,14 @@ WASMMeshIO
   meshType.AddMember("cellComponentType", cellComponentType.Move(), allocator );
   this->SetCellComponentType( CommonEnums::IOComponent::UINT );
 
-  const std::string cellPixelComponentString = this->ITKToWASMComponentType( this->GetCellPixelComponentType() );
+  const std::string cellPixelComponentString = WASMComponentTypeFromIOComponentEnum( this->GetCellPixelComponentType() );
   rapidjson::Value cellPixelComponentType;
   cellPixelComponentType.SetString( cellPixelComponentString.c_str(), allocator );
   meshType.AddMember("cellPixelComponentType", cellPixelComponentType.Move(), allocator );
 
-  const int cellPixelType = this->ITKToWASMPixelType( this->GetCellPixelType() );
-  meshType.AddMember("cellPixelType", rapidjson::Value(cellPixelType).Move(), allocator );
+  rapidjson::Value cellPixelType;
+  cellPixelType.SetString(WASMPixelTypeFromIOPixelEnum( this->GetCellPixelType() ).c_str(), allocator);
+  meshType.AddMember("cellPixelType", cellPixelType, allocator );
 
   meshType.AddMember("cellPixelComponents", rapidjson::Value( this->GetNumberOfCellPixelComponents() ).Move(), allocator );
 

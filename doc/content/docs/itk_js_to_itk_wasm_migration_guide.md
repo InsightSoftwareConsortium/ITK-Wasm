@@ -15,7 +15,7 @@ leverage itk-wasm. However, there are other more advanced changes. A
 description of the changes, their motivation, and example migration code can
 be found below.
 
-### Module import statements
+## Module import statements
 
 Browser module `import` statements have changed from:
 
@@ -100,7 +100,7 @@ export default itkConfig
 
 And it can be injected into an application bundle by setting defining `alias`'s to the configuration module for `../itkConfig.js` and `../../itkConfig.js`. For other override configuration options, see the [Webpack](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack) and Rollup (todo) examples.
 
-### CLI options
+## CLI options
 
 The `--image, -i` command line option for the `build` subcommand is now a global option for all subcommands. For examples
 
@@ -121,17 +121,17 @@ been removed.
 
 Addresses an important issue in image orientation support.
 
-### Pixel type, component type identifiers
+## Pixel type, component type identifiers
 
 `PixelTypes`, used in `imageType.pixelType`, is now a string enumeration to make the type immediately evident in JSON serializations.
 
 `IntTypes` and `FloatTypes` string identifiers have new string identifiers with explicit sizes.
 
-### Image file format
+## Image file format
 
 The JSON file format is replaced by a WASM file format with a different
 layout. A directory, ending in `.iwi` or a `.iwi.zip` file is supported.
 
-### Node Sync functions
+## Node Sync functions
 
 Node `*Sync` functions have been removed -- use the equivalent async versions instead.

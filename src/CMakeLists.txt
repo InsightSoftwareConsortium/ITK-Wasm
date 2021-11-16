@@ -13,6 +13,10 @@ set(WebAssemblyInterface_SRCS
   itkWASMImageIO.cxx
   itkWASMMeshIOFactory.cxx
   itkWASMMeshIO.cxx
+  itkIOComponentEnumFromWASMComponentType.cxx
+  itkIOPixelEnumFromWASMPixelType.cxx
+  itkWASMComponentTypeFromIOComponentEnum.cxx
+  itkWASMPixelTypeFromIOPixelEnum.cxx
   )
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 

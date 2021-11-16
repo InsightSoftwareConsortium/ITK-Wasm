@@ -53,9 +53,9 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory()
   {
-    WASMMeshIOFactory::Pointer jsonFactory = WASMMeshIOFactory::New();
+    WASMMeshIOFactory::Pointer wasmFactory = WASMMeshIOFactory::New();
 
-    ObjectFactoryBase::RegisterFactoryInternal(jsonFactory);
+    ObjectFactoryBase::RegisterFactoryInternal(wasmFactory);
   }
 
 protected:

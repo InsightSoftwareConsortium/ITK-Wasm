@@ -18,6 +18,11 @@
 
 #include "itkWASMImageIO.h"
 
+#include "itkWASMComponentTypeFromIOComponentEnum.h"
+#include "itkIOComponentEnumFromWASMComponentType.h"
+#include "itkWASMPixelTypeFromIOPixelEnum.h"
+#include "itkIOPixelEnumFromWASMPixelType.h"
+
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
 #include "itksys/SystemTools.hxx"
@@ -67,219 +72,6 @@ WASMImageIO
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-}
-
-
-ImageIOBase::IOComponentEnum
-WASMImageIO
-::WASMToITKComponentType(const std::string & wasmComponentType)
-{
-  if( wasmComponentType == "int8" )
-    {
-    return IOComponentEnum::CHAR;
-    }
-  else if( wasmComponentType == "uint8" )
-    {
-    return IOComponentEnum::UCHAR;
-    }
-  else if( wasmComponentType == "int16" )
-    {
-    return IOComponentEnum::SHORT;
-    }
-  else if( wasmComponentType == "uint16" )
-    {
-    return IOComponentEnum::USHORT;
-    }
-  else if( wasmComponentType == "int32" )
-    {
-    return IOComponentEnum::INT;
-    }
-  else if( wasmComponentType == "uint32" )
-    {
-    return IOComponentEnum::UINT;
-    }
-  else if( wasmComponentType == "int64" )
-    {
-    return IOComponentEnum::LONGLONG;
-    }
-  else if( wasmComponentType == "uint64" )
-    {
-    return IOComponentEnum::ULONGLONG;
-    }
-  else if( wasmComponentType == "float32" )
-    {
-    return IOComponentEnum::FLOAT;
-    }
-  else if( wasmComponentType == "float64" )
-    {
-    return IOComponentEnum::DOUBLE;
-    }
-  return IOComponentEnum::UNKNOWNCOMPONENTTYPE;
-}
-
-
-std::string
-WASMImageIO
-::ITKToWASMComponentType(const ImageIOBase::IOComponentEnum itkComponentType)
-{
-  switch ( itkComponentType )
-    {
-    case IOComponentEnum::CHAR:
-      return "int8";
-
-    case IOComponentEnum::UCHAR:
-      return "uint8";
-
-    case IOComponentEnum::SHORT:
-      return "int16";
-
-    case IOComponentEnum::USHORT:
-      return "uint16";
-
-    case IOComponentEnum::INT:
-      return "int32";
-
-    case IOComponentEnum::UINT:
-      return "uint32";
-
-    case IOComponentEnum::LONG:
-      return "int64";
-
-    case IOComponentEnum::ULONG:
-      return "uint64";
-
-    case IOComponentEnum::LONGLONG:
-      return "int64";
-
-    case IOComponentEnum::ULONGLONG:
-      return "uint64";
-
-    case IOComponentEnum::FLOAT:
-      return "float32";
-
-    case IOComponentEnum::DOUBLE:
-      return "float64";
-
-    default:
-      return "int8";
-    }
-}
-
-
-IOPixelEnum
-WASMImageIO
-::WASMToITKPixelType( const std::string & wasmPixelType )
-{
-  if ( wasmPixelType == "Unknown" )
-    {
-    return IOPixelEnum::UNKNOWNPIXELTYPE;
-    }
-  else if ( wasmPixelType == "Scalar" )
-    {
-    return IOPixelEnum::SCALAR;
-    }
-  else if ( wasmPixelType == "RGB" )
-    {
-    return IOPixelEnum::RGB;
-    }
-  else if ( wasmPixelType == "RGBA" )
-    {
-    return IOPixelEnum::RGBA;
-    }
-  else if ( wasmPixelType == "Offset" )
-    {
-    return IOPixelEnum::OFFSET;
-    }
-  else if ( wasmPixelType == "Vector" )
-    {
-    return IOPixelEnum::VECTOR;
-    }
-  else if ( wasmPixelType == "Point" )
-    {
-    return IOPixelEnum::POINT;
-    }
-  else if ( wasmPixelType == "CovariantVector" )
-    {
-    return IOPixelEnum::COVARIANTVECTOR;
-    }
-  else if ( wasmPixelType == "SymmetricSecondRankTensor" )
-    {
-    return IOPixelEnum::SYMMETRICSECONDRANKTENSOR;
-    }
-  else if ( wasmPixelType == "DiffusionTensor3D" )
-    {
-    return IOPixelEnum::DIFFUSIONTENSOR3D;
-    }
-  else if ( wasmPixelType == "Complex" )
-    {
-    return IOPixelEnum::COMPLEX;
-    }
-  else if ( wasmPixelType == "FixedArray" )
-    {
-    return IOPixelEnum::FIXEDARRAY;
-    }
-  else if ( wasmPixelType == "Array" )
-    {
-    return IOPixelEnum::ARRAY;
-    }
-  else if ( wasmPixelType == "Matrix" )
-    {
-    return IOPixelEnum::MATRIX;
-    }
-  else if ( wasmPixelType == "VariableLengthVector" )
-    {
-    return IOPixelEnum::VARIABLELENGTHVECTOR;
-    }
-  else if ( wasmPixelType == "VariableSizeMatrix" )
-    {
-    return IOPixelEnum::VARIABLESIZEMATRIX;
-    }
-
-  return IOPixelEnum::UNKNOWNPIXELTYPE;
-}
-
-
-std::string
-WASMImageIO
-::ITKToWASMPixelType( const IOPixelEnum itkPixelType )
-{
-  switch ( itkPixelType )
-    {
-    case IOPixelEnum::UNKNOWNPIXELTYPE:
-      return "Unknown";
-    case IOPixelEnum::SCALAR:
-      return "Scalar";
-    case IOPixelEnum::RGB:
-      return "RGB";
-    case IOPixelEnum::RGBA:
-      return "RGBA";
-    case IOPixelEnum::OFFSET:
-      return "Offset";
-    case IOPixelEnum::VECTOR:
-      return "Vector";
-    case IOPixelEnum::POINT:
-      return "Point";
-    case IOPixelEnum::COVARIANTVECTOR:
-      return "CovariantVector";
-    case IOPixelEnum::SYMMETRICSECONDRANKTENSOR:
-      return "SymmetricSecondRankTensor";
-    case IOPixelEnum::DIFFUSIONTENSOR3D:
-      return "DiffusionTensor3D";
-    case IOPixelEnum::COMPLEX:
-      return "Complex";
-    case IOPixelEnum::FIXEDARRAY:
-      return "FixedArray";
-    case IOPixelEnum::ARRAY:
-      return "Array";
-    case IOPixelEnum::MATRIX:
-      return "Matrix";
-    case IOPixelEnum::VARIABLELENGTHVECTOR:
-      return "VariableLengthVector";
-    case IOPixelEnum::VARIABLESIZEMATRIX:
-      return "VariableSizeMatrix";
-    }
-
-  return "Unknown";
 }
 
 
@@ -373,10 +165,10 @@ WASMImageIO
   const int dimension = imageType["dimension"].GetInt();
   this->SetNumberOfDimensions( dimension );
   const std::string componentType( imageType["componentType"].GetString() );
-  const ImageIOBase::IOComponentEnum ioComponentType = this->WASMToITKComponentType( componentType );
+  const ImageIOBase::IOComponentEnum ioComponentType = IOComponentEnumFromWASMComponentType( componentType );
   this->SetComponentType( ioComponentType );
   const std::string pixelType( imageType["pixelType"].GetString() );
-  const IOPixelEnum ioPixelType = this->WASMToITKPixelType( pixelType );
+  const IOPixelEnum ioPixelType = IOPixelEnumFromWASMPixelType( pixelType );
   this->SetPixelType( ioPixelType );
   this->SetNumberOfComponents( imageType["components"].GetInt() );
 
@@ -575,12 +367,12 @@ WASMImageIO
   const unsigned int dimension = this->GetNumberOfDimensions();
   imageType.AddMember("dimension", rapidjson::Value(dimension).Move(), allocator );
 
-  const std::string componentString = this->ITKToWASMComponentType( this->GetComponentType() );
+  const std::string componentString = WASMComponentTypeFromIOComponentEnum( this->GetComponentType() );
   rapidjson::Value componentType;
   componentType.SetString( componentString.c_str(), allocator );
   imageType.AddMember("componentType", componentType.Move(), allocator );
 
-  const std::string pixelString = this->ITKToWASMPixelType( this->GetPixelType() );
+  const std::string pixelString = WASMPixelTypeFromIOPixelEnum( this->GetPixelType() );
   rapidjson::Value pixelType;
   pixelType.SetString( pixelString.c_str(), allocator );
   imageType.AddMember("pixelType", pixelType.Move(), allocator );

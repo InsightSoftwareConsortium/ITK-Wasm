@@ -83,12 +83,6 @@ protected:
   ~WASMImageIO() override;
   void PrintSelf(std::ostream & os, Indent indent) const override;
 
-  static ImageIOBase::IOComponentEnum WASMToITKComponentType( const std::string & jsComponentType );
-  static std::string ITKToWASMComponentType( const ImageIOBase::IOComponentEnum );
-
-  static IOPixelEnum WASMToITKPixelType( const std::string & jsPixelType );
-  static std::string ITKToWASMPixelType( const IOPixelEnum );
-
   Superclass::SizeType GetHeaderSize() const override
   {
     return 0;
