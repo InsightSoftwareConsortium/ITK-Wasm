@@ -380,23 +380,32 @@ void
 WASMMeshIO
 ::ReadPoints( void *buffer )
 {
-  std::ifstream inputStream;
-  this->OpenFileForReading( inputStream, this->GetFileName(), true );
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                   std::istreambuf_iterator<char>());
-  rapidjson::Document document;
-  if ( document.Parse( str.c_str() ).HasParseError())
-    {
-    itkExceptionMacro("Could not parse JSON");
-    return;
-    }
+  const std::string path(this->GetFileName());
+  const std::string dataFile = (path + "/data/points.raw").c_str();
+  const SizeValueType numberOfBytesToBeRead =
+    static_cast< SizeValueType >( this->GetNumberOfPoints() * this->GetPointDimension() * ITKComponentSize( this->GetPointComponentType() ) );
 
-  const std::string dataFile( document["points"].GetString() );
+  std::string::size_type zipPos = path.rfind(".zip");
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    void * zip_reader = NULL;
+    mz_zip_reader_create(&zip_reader);
+    mz_zip_reader_open_file(zip_reader, path.c_str());
+
+    mz_zip_reader_locate_entry(zip_reader, "data/points.raw", 0);
+    mz_zip_reader_entry_open(zip_reader);
+
+    mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
+    mz_zip_reader_entry_close(zip_reader);
+    mz_zip_reader_close(zip_reader);
+    mz_zip_reader_delete(&zip_reader);
+  }
+  else
+  {
   std::ifstream dataStream;
   this->OpenFileForReading( dataStream, dataFile.c_str() );
 
-  const SizeValueType numberOfBytesToBeRead =
-    static_cast< SizeValueType >( this->GetNumberOfPoints() * this->GetPointDimension() * ITKComponentSize( this->GetPointComponentType() ) );
   if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
     {
     itkExceptionMacro(<< "Read failed: Wanted "
@@ -404,6 +413,7 @@ WASMMeshIO
                       << " bytes, but read "
                       << dataStream.gcount() << " bytes.");
     }
+  }
 }
 
 
