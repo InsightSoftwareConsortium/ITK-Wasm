@@ -119,11 +119,15 @@ itk-wasm --image --source-dir src/dir insighttoolkit/itk-wasm build
 The `itk.Image.direction` is now directly a `Float64Array` -- `itk.Matrix` has
 been removed.
 
-`imageType.pixelType` is now a string enumeration.
-
 Addresses an important issue in image orientation support.
 
-## Image file format
+### Pixel type, component type identifiers
+
+`PixelTypes`, used in `imageType.pixelType`, is now a string enumeration to make the type immediately evident in JSON serializations.
+
+`IntTypes` and `FloatTypes` string identifiers have new string identifiers with explicit sizes.
+
+### Image file format
 
 The JSON file format is replaced by a WASM file format with a different
 layout. A directory, ending in `.iwi` or a `.iwi.zip` file is supported.

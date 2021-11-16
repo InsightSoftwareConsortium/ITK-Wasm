@@ -74,43 +74,43 @@ ImageIOBase::IOComponentEnum
 WASMImageIO
 ::WASMToITKComponentType(const std::string & wasmComponentType)
 {
-  if( wasmComponentType == "int8_t" )
+  if( wasmComponentType == "int8" )
     {
     return IOComponentEnum::CHAR;
     }
-  else if( wasmComponentType == "uint8_t" )
+  else if( wasmComponentType == "uint8" )
     {
     return IOComponentEnum::UCHAR;
     }
-  else if( wasmComponentType == "int16_t" )
+  else if( wasmComponentType == "int16" )
     {
     return IOComponentEnum::SHORT;
     }
-  else if( wasmComponentType == "uint16_t" )
+  else if( wasmComponentType == "uint16" )
     {
     return IOComponentEnum::USHORT;
     }
-  else if( wasmComponentType == "int32_t" )
+  else if( wasmComponentType == "int32" )
     {
     return IOComponentEnum::INT;
     }
-  else if( wasmComponentType == "uint32_t" )
+  else if( wasmComponentType == "uint32" )
     {
     return IOComponentEnum::UINT;
     }
-  else if( wasmComponentType == "int64_t" )
+  else if( wasmComponentType == "int64" )
     {
     return IOComponentEnum::LONGLONG;
     }
-  else if( wasmComponentType == "uint64_t" )
+  else if( wasmComponentType == "uint64" )
     {
     return IOComponentEnum::ULONGLONG;
     }
-  else if( wasmComponentType == "float" )
+  else if( wasmComponentType == "float32" )
     {
     return IOComponentEnum::FLOAT;
     }
-  else if( wasmComponentType == "double" )
+  else if( wasmComponentType == "float64" )
     {
     return IOComponentEnum::DOUBLE;
     }
@@ -125,43 +125,43 @@ WASMImageIO
   switch ( itkComponentType )
     {
     case IOComponentEnum::CHAR:
-      return "int8_t";
+      return "int8";
 
     case IOComponentEnum::UCHAR:
-      return "uint8_t";
+      return "uint8";
 
     case IOComponentEnum::SHORT:
-      return "int16_t";
+      return "int16";
 
     case IOComponentEnum::USHORT:
-      return "uint16_t";
+      return "uint16";
 
     case IOComponentEnum::INT:
-      return "int32_t";
+      return "int32";
 
     case IOComponentEnum::UINT:
-      return "uint32_t";
+      return "uint32";
 
     case IOComponentEnum::LONG:
-      return "int64_t";
+      return "int64";
 
     case IOComponentEnum::ULONG:
-      return "uint64_t";
+      return "uint64";
 
     case IOComponentEnum::LONGLONG:
-      return "int64_t";
+      return "int64";
 
     case IOComponentEnum::ULONGLONG:
-      return "uint64_t";
+      return "uint64";
 
     case IOComponentEnum::FLOAT:
-      return "float";
+      return "float32";
 
     case IOComponentEnum::DOUBLE:
-      return "double";
+      return "float64";
 
     default:
-      return "int8_t";
+      return "int8";
     }
 }
 

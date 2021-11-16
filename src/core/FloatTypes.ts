@@ -1,8 +1,8 @@
 const FloatTypes = {
-  Float32: 'float',
-  Float64: 'double',
+  Float32: 'float32',
+  Float64: 'float64',
 
-  SpacePrecisionType: 'double'
+  SpacePrecisionType: 'float64'
 } as const
 
 export default FloatTypes

@@ -166,43 +166,43 @@ CommonEnums::IOComponent
 JSONMeshIO
 ::WASMToITKComponentType(const std::string & jsComponentType)
 {
-  if( jsComponentType == "int8_t" )
+  if( jsComponentType == "int8" )
     {
     return CommonEnums::IOComponent::CHAR;
     }
-  else if( jsComponentType == "uint8_t" )
+  else if( jsComponentType == "uint8" )
     {
     return CommonEnums::IOComponent::UCHAR;
     }
-  else if( jsComponentType == "int16_t" )
+  else if( jsComponentType == "int16" )
     {
     return CommonEnums::IOComponent::SHORT;
     }
-  else if( jsComponentType == "uint16_t" )
+  else if( jsComponentType == "uint16" )
     {
     return CommonEnums::IOComponent::USHORT;
     }
-  else if( jsComponentType == "int32_t" )
+  else if( jsComponentType == "int32" )
     {
     return CommonEnums::IOComponent::INT;
     }
-  else if( jsComponentType == "uint32_t" )
+  else if( jsComponentType == "uint32" )
     {
     return CommonEnums::IOComponent::UINT;
     }
-  else if( jsComponentType == "int64_t" )
+  else if( jsComponentType == "int64" )
     {
     return CommonEnums::IOComponent::LONGLONG;
     }
-  else if( jsComponentType == "uint64_t" )
+  else if( jsComponentType == "uint64" )
     {
     return CommonEnums::IOComponent::ULONGLONG;
     }
-  else if( jsComponentType == "float" )
+  else if( jsComponentType == "float32" )
     {
     return CommonEnums::IOComponent::FLOAT;
     }
-  else if( jsComponentType == "double" )
+  else if( jsComponentType == "float64" )
     {
     return CommonEnums::IOComponent::DOUBLE;
     }
@@ -217,40 +217,40 @@ JSONMeshIO
   switch ( itkComponentType )
     {
     case CommonEnums::IOComponent::CHAR:
-      return "int8_t";
+      return "int8";
 
     case CommonEnums::IOComponent::UCHAR:
-      return "uint8_t";
+      return "uint8";
 
     case CommonEnums::IOComponent::SHORT:
-      return "int16_t";
+      return "int16";
 
     case CommonEnums::IOComponent::USHORT:
-      return "uint16_t";
+      return "uint16";
 
     case CommonEnums::IOComponent::INT:
-      return "int32_t";
+      return "int32";
 
     case CommonEnums::IOComponent::UINT:
-      return "uint32_t";
+      return "uint32";
 
     case CommonEnums::IOComponent::LONG:
-      return "int64_t";
+      return "int64";
 
     case CommonEnums::IOComponent::ULONG:
-      return "uint64_t";
+      return "uint64";
 
     case CommonEnums::IOComponent::LONGLONG:
-      return "int64_t";
+      return "int64";
 
     case CommonEnums::IOComponent::ULONGLONG:
-      return "uint64_t";
+      return "uint64";
 
     case CommonEnums::IOComponent::FLOAT:
-      return "float";
+      return "float32";
 
     case CommonEnums::IOComponent::DOUBLE:
-      return "double";
+      return "float64";
 
     default:
       return "null";
