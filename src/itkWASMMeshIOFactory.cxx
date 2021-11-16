@@ -15,31 +15,31 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkJSONMeshIOFactory.h"
-#include "itkJSONMeshIO.h"
+#include "itkWASMMeshIOFactory.h"
+#include "itkWASMMeshIO.h"
 #include "itkVersion.h"
 
 namespace itk
 {
 
-JSONMeshIOFactory
-::JSONMeshIOFactory()
+WASMMeshIOFactory
+::WASMMeshIOFactory()
 {
   this->RegisterOverride( "itkMeshIOBase",
-                          "itkJSONMeshIO",
+                          "itkWASMMeshIO",
                           "JSON Mesh IO",
                           1,
-                          CreateObjectFunction< JSONMeshIO >::New() );
+                          CreateObjectFunction< WASMMeshIO >::New() );
 }
 
 
-JSONMeshIOFactory
-::~JSONMeshIOFactory()
+WASMMeshIOFactory
+::~WASMMeshIOFactory()
 {}
 
 
 const char *
-JSONMeshIOFactory
+WASMMeshIOFactory
 ::GetITKSourceVersion() const
 {
   return ITK_SOURCE_VERSION;
@@ -47,7 +47,7 @@ JSONMeshIOFactory
 
 
 const char *
-JSONMeshIOFactory
+WASMMeshIOFactory
 ::GetDescription() const
 {
   return "JSON MeshIO Factory, allows the loading of JSON images into insight";
@@ -57,14 +57,14 @@ JSONMeshIOFactory
 // Undocumented API used to register during static initialization.
 // DO NOT CALL DIRECTLY.
 
-static bool JSONMeshIOFactoryHasBeenRegistered;
+static bool WASMMeshIOFactoryHasBeenRegistered;
 
-void WebAssemblyInterface_EXPORT JSONMeshIOFactoryRegister__Private(void)
+void WebAssemblyInterface_EXPORT WASMMeshIOFactoryRegister__Private(void)
 {
-  if( ! JSONMeshIOFactoryHasBeenRegistered )
+  if( ! WASMMeshIOFactoryHasBeenRegistered )
     {
-    JSONMeshIOFactoryHasBeenRegistered = true;
-    JSONMeshIOFactory::RegisterOneFactory();
+    WASMMeshIOFactoryHasBeenRegistered = true;
+    WASMMeshIOFactory::RegisterOneFactory();
     }
 }
 

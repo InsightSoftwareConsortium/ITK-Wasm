@@ -19,6 +19,7 @@
 #define itkWASMImageIO_h
 #include "WebAssemblyInterfaceExport.h"
 
+
 #include "itkStreamingImageIOBase.h"
 #include <fstream>
 
@@ -26,11 +27,11 @@ namespace itk
 {
 /** \class WASMImageIO
  *
- * \brief Read and write the an itk::Image in JSON format.
+ * \brief Read and write the an itk::Image in  format.
  *
  * This format is intended to facilitage data exchange in itk-wasm.
- * It reads and writes an itk-wasm itk/Image JSON object where TypedArrays are
- * replaced by binary files in a .zip file.
+ * It reads and writes an itk-wasm Image object where TypedArrays are
+ * replaced by binary files on the file system or in a ZIP file.
  *
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface

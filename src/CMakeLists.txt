@@ -11,8 +11,8 @@ include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
 set(WebAssemblyInterface_SRCS
   itkWASMImageIOFactory.cxx
   itkWASMImageIO.cxx
-  itkJSONMeshIOFactory.cxx
-  itkJSONMeshIO.cxx
+  itkWASMMeshIOFactory.cxx
+  itkWASMMeshIO.cxx
   )
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 

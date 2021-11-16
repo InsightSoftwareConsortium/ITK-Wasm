@@ -16,7 +16,7 @@
  *
  *=========================================================================*/
 
-#include "itkJSONMeshIO.h"
+#include "itkWASMMeshIO.h"
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
@@ -29,22 +29,22 @@
 namespace itk
 {
 
-JSONMeshIO
-::JSONMeshIO()
+WASMMeshIO
+::WASMMeshIO()
 {
   this->AddSupportedWriteExtension(".json");
   this->AddSupportedReadExtension(".json");
 }
 
 
-JSONMeshIO
-::~JSONMeshIO()
+WASMMeshIO
+::~WASMMeshIO()
 {
 }
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -52,7 +52,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::OpenFileForReading(std::ifstream & inputStream, const std::string & filename, bool ascii)
 {
   // Make sure that we have a file to
@@ -90,7 +90,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::OpenFileForWriting(std::ofstream & outputStream, const std::string & filename, bool truncate, bool ascii)
 {
   // Make sure that we have a file to
@@ -144,7 +144,7 @@ JSONMeshIO
 
 
 bool
-JSONMeshIO
+WASMMeshIO
 ::ReadBufferAsBinary(std::istream & is, void *buffer, SizeValueType num)
 {
   const auto numberOfBytesToBeRead = Math::CastWithRangeCheck< std::streamsize >(num);
@@ -163,7 +163,7 @@ JSONMeshIO
 
 
 CommonEnums::IOComponent
-JSONMeshIO
+WASMMeshIO
 ::WASMToITKComponentType(const std::string & jsComponentType)
 {
   if( jsComponentType == "int8" )
@@ -211,7 +211,7 @@ JSONMeshIO
 
 
 std::string
-JSONMeshIO
+WASMMeshIO
 ::ITKToWASMComponentType(const CommonEnums::IOComponent itkComponentType)
 {
   switch ( itkComponentType )
@@ -259,7 +259,7 @@ JSONMeshIO
 
 
 size_t
-JSONMeshIO
+WASMMeshIO
 ::ITKComponentSize(const CommonEnums::IOComponent itkComponentType)
 {
   switch ( itkComponentType )
@@ -306,7 +306,7 @@ JSONMeshIO
 }
 
 CommonEnums::IOPixel
-JSONMeshIO
+WASMMeshIO
 ::WASMToITKPixelType( const int jsPixelType )
 {
   switch ( jsPixelType )
@@ -350,7 +350,7 @@ JSONMeshIO
 
 
 int
-JSONMeshIO
+WASMMeshIO
 ::ITKToWASMPixelType( const CommonEnums::IOPixel itkPixelType )
 {
   switch ( itkPixelType )
@@ -394,7 +394,7 @@ JSONMeshIO
 
 
 bool
-JSONMeshIO
+WASMMeshIO
 ::CanReadFile(const char *filename)
 {
   // Check the extension first to avoid opening files that do not
@@ -447,7 +447,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::ReadMeshInformation()
 {
   this->SetByteOrderToLittleEndian();
@@ -530,7 +530,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::ReadPoints( void *buffer )
 {
   std::ifstream inputStream;
@@ -561,7 +561,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::ReadCells( void *buffer )
 {
   std::ifstream inputStream;
@@ -592,7 +592,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::ReadPointData( void *buffer )
 {
   std::ifstream inputStream;
@@ -623,7 +623,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::ReadCellData( void *buffer )
 {
   std::ifstream inputStream;
@@ -654,7 +654,7 @@ JSONMeshIO
 
 
 bool
-JSONMeshIO
+WASMMeshIO
 ::CanWriteFile(const char *name)
 {
   std::string filename = name;
@@ -683,7 +683,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::WriteMeshInformation()
 {
   rapidjson::Document document;
@@ -799,7 +799,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::WritePoints( void *buffer )
 {
   const std::string fileName = std::string( this->GetFileName() ) + ".points.data";
@@ -811,7 +811,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::WriteCells( void *buffer )
 {
   const std::string fileName = std::string( this->GetFileName() ) + ".cells.data";
@@ -838,7 +838,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::WritePointData( void *buffer )
 {
   const std::string fileName = std::string( this->GetFileName() ) + ".pointData.data";
@@ -850,7 +850,7 @@ JSONMeshIO
 
 
 void
-JSONMeshIO
+WASMMeshIO
 ::WriteCellData( void *buffer )
 {
   const std::string fileName = std::string( this->GetFileName() ) + ".cellData.data";
@@ -861,7 +861,7 @@ JSONMeshIO
 }
 
 void
-JSONMeshIO
+WASMMeshIO
 ::Write()
 {
 }

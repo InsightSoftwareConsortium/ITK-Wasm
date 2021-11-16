@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkJSONMeshIO_h
-#define itkJSONMeshIO_h
+#ifndef itkWASMMeshIO_h
+#define itkWASMMeshIO_h
 #include "WebAssemblyInterfaceExport.h"
 
 
@@ -25,24 +25,24 @@
 
 namespace itk
 {
-/** \class JSONMeshIO
+/** \class WASMMeshIO
  *
- * \brief Read and write the an itk::Mesh in JSON format.
+ * \brief Read and write the an itk::Mesh in a format for interfacing in WebAssembly (WASM).
  *
- * This format is intended to facilitage data exchange in itk-wasm.
- * It reads and writes an itk-wasm itk/Mesh JSON object where TypedArrays are
- * replaced by binary files on the filesystem.
+ * This format is intended to facilitate data exchange in itk-wasm.
+ * It reads and writes an itk-wasm Mesh object where TypedArrays are
+ * replaced by binary files on the filesystem or in a ZIP file.
  *
  * The format is experimental and subject to change. We mean it.
  *
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT JSONMeshIO: public MeshIOBase
+class WebAssemblyInterface_EXPORT WASMMeshIO: public MeshIOBase
 {
 public:
   /** Standard class typedefs. */
-  typedef JSONMeshIO           Self;
+  typedef WASMMeshIO           Self;
   typedef MeshIOBase           Superclass;
   typedef SmartPointer< Self > Pointer;
 
@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JSONMeshIO, MeshIOBase);
+  itkTypeMacro(WASMMeshIO, MeshIOBase);
 
   bool CanReadFile(const char *) override;
 
@@ -86,8 +86,8 @@ public:
   void Write() override;
 
 protected:
-  JSONMeshIO();
-  ~JSONMeshIO() override;
+  WASMMeshIO();
+  ~WASMMeshIO() override;
   void PrintSelf(std::ostream & os, Indent indent) const override;
 
   static CommonEnums::IOComponent WASMToITKComponentType( const std::string & jsComponentType );
@@ -134,8 +134,8 @@ protected:
   bool ReadBufferAsBinary(std::istream & os, void *buffer, SizeValueType numberOfBytesToBeRead);
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(JSONMeshIO);
+  ITK_DISALLOW_COPY_AND_ASSIGN(WASMMeshIO);
 };
 } // end namespace itk
 
-#endif // itkJSONMeshIO_h
+#endif // itkWASMMeshIO_h

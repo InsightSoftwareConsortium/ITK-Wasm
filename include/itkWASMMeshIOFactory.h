@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkJSONMeshIOFactory_h
-#define itkJSONMeshIOFactory_h
+#ifndef itkWASMMeshIOFactory_h
+#define itkWASMMeshIOFactory_h
 #include "WebAssemblyInterfaceExport.h"
 
 #include "itkObjectFactoryBase.h"
@@ -24,17 +24,17 @@
 
 namespace itk
 {
-/** \class JSONMeshIOFactory
+/** \class WASMMeshIOFactory
  *
- * \brief Create instances of JSONMeshIO objects using an object factory.
+ * \brief Create instances of WASMMeshIO objects using an object factory.
  *
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT JSONMeshIOFactory: public ObjectFactoryBase
+class WebAssemblyInterface_EXPORT WASMMeshIOFactory: public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef JSONMeshIOFactory          Self;
+  typedef WASMMeshIOFactory          Self;
   typedef ObjectFactoryBase          Superclass;
   typedef SmartPointer< Self >       Pointer;
   typedef SmartPointer< const Self > ConstPointer;
@@ -48,22 +48,22 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JSONMeshIOFactory, ObjectFactoryBase);
+  itkTypeMacro(WASMMeshIOFactory, ObjectFactoryBase);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory()
   {
-    JSONMeshIOFactory::Pointer jsonFactory = JSONMeshIOFactory::New();
+    WASMMeshIOFactory::Pointer jsonFactory = WASMMeshIOFactory::New();
 
     ObjectFactoryBase::RegisterFactoryInternal(jsonFactory);
   }
 
 protected:
-  JSONMeshIOFactory();
-  ~JSONMeshIOFactory() override;
+  WASMMeshIOFactory();
+  ~WASMMeshIOFactory() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(JSONMeshIOFactory);
+  ITK_DISALLOW_COPY_AND_ASSIGN(WASMMeshIOFactory);
 };
 } // end namespace itk
 
