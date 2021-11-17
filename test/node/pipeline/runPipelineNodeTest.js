@@ -89,9 +89,9 @@ test('runPipelineNode writes and reads an itk.Mesh in the Emscripten filesystem'
   const verifyMesh = (mesh) => {
     t.is(mesh.meshType.dimension, 3)
     t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
-    t.is(mesh.meshType.cellComponentType, IntTypes.UInt32)
-    t.is(mesh.meshType.pointPixelType, 1)
-    t.is(mesh.meshType.cellPixelType, 1)
+    t.is(mesh.meshType.cellComponentType, IntTypes.UInt64)
+    t.is(mesh.meshType.pointPixelType, PixelTypes.Scalar)
+    t.is(mesh.meshType.cellPixelType, PixelTypes.Scalar)
     t.is(mesh.numberOfPoints, 2903)
     t.is(mesh.numberOfCells, 3263)
   }
@@ -99,7 +99,7 @@ test('runPipelineNode writes and reads an itk.Mesh in the Emscripten filesystem'
   return readMeshLocalFile(testMeshInputFilePath)
     .then(function (mesh) {
       const pipelinePath = path.resolve('test', 'pipelines', 'MeshReadWritePipeline', 'web-build', 'MeshReadWriteTest')
-      const args = ['cow.vtk.json', 'cow.vtk.written.json']
+      const args = ['./cow.vtk.iwm', './cow.vtk.written.iwm']
       const desiredOutputs = [
         { path: args[1], type: IOTypes.Mesh }
       ]
@@ -144,7 +144,7 @@ test('runPipelineNode reads a vtkPolyData from the Emscripten filesystem', (t) =
     })
 })
 
-test('mesh-to-polydata converts an itk/Mesh to a vtk.js vtkPolyData', (t) => {
+test('mesh-to-polydata converts an Mesh to a vtk.js vtkPolyData', (t) => {
   const verifyPolyData = (polyData) => {
     t.is(polyData.vtkClass, 'vtkPolyData')
     t.is(polyData.points.vtkClass, 'vtkPoints')
@@ -170,7 +170,7 @@ test('mesh-to-polydata converts an itk/Mesh to a vtk.js vtkPolyData', (t) => {
   return readMeshLocalFile(testMeshInputFilePath)
     .then(function (mesh) {
       const pipelinePath = path.resolve('src', 'pipeline', 'mesh-to-polydata', 'web-build', 'MeshToPolyData')
-      const args = ['cow.vtk.json', 'cow.vtk.written.json']
+      const args = ['./cow.vtk.iwm', './cow.vtk.written.iwm']
       const desiredOutputs = [
         { path: args[1], type: IOTypes.vtkPolyData }
       ]

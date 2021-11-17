@@ -2,9 +2,10 @@ import IntTypes from './IntTypes.js'
 import FloatTypes from './FloatTypes.js'
 import type TypedArray from './TypedArray.js'
 
-function bufferToTypedArray (jsType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] | 'null' | null, buffer: ArrayBuffer): null | TypedArray {
+function bufferToTypedArray (wasmType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] | 'null' | null, buffer: ArrayBuffer): null | TypedArray {
   let typedArray: null | TypedArray = null
-  switch (jsType) {
+  console.log(wasmType)
+  switch (wasmType) {
     case IntTypes.UInt8: {
       typedArray = new Uint8Array(buffer)
       break
@@ -30,11 +31,23 @@ function bufferToTypedArray (jsType: typeof IntTypes[keyof typeof IntTypes] | ty
       break
     }
     case IntTypes.UInt64: {
-      typedArray = new BigUint64Array(buffer)
+      if (typeof globalThis.BigUint64Array === 'function') {
+        typedArray = new BigUint64Array(buffer)
+      } else {
+        // Sub with reasonable default. Will get cast to Uint8Array when
+        // transferred to WebAssembly.
+        typedArray = new Uint8Array(buffer)
+      }
       break
     }
     case IntTypes.Int64: {
-      typedArray = new BigInt64Array(buffer)
+      if (typeof globalThis.BigInt64Array === 'function') {
+        typedArray = new BigInt64Array(buffer)
+      } else {
+        // Sub with reasonable default. Will get cast to Uint8Array when
+        // transferred to WebAssembly.
+        typedArray = new Uint8Array(buffer)
+      }
       break
     }
     case FloatTypes.Float32: {

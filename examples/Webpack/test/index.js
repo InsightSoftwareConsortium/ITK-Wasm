@@ -7,8 +7,8 @@ test('Load an image file and display its contents', (t) => {
   const expectedOutput = `{
     "imageType": {
         "dimension": 2,
-        "componentType": "uint8_t",
-        "pixelType": 1,
+        "componentType": "uint8",
+        "pixelType": "Scalar",
         "components": 1
     },
     "name": "Image",
