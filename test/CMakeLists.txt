@@ -47,6 +47,7 @@ ExternalData_Expand_Arguments(
 
 set(WebAssemblyInterfaceTests
   itkJSONImageInterfaceTest.cxx
+  itkJSONMeshInterfaceTest.cxx
   itkWASMImageIOTest.cxx
   itkWASMMeshIOTest.cxx
 )
@@ -61,6 +62,13 @@ itk_add_test(NAME itkJSONImageInterfaceTest
     itkJSONImageInterfaceTest
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceTest.mha
+)
+
+itk_add_test(NAME itkJSONMeshInterfaceTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkJSONMeshInterfaceTest
+      DATA{Input/cow.vtk}
+      ${ITK_TEST_OUTPUT_DIR}/itkJSONMeshInterfaceTest.vtk
 )
 
 itk_add_test(NAME itkJSONImageInterfaceNiftiTest
