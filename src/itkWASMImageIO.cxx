@@ -353,7 +353,7 @@ WASMImageIO
       }
     if ( !itksys::SystemTools::FileExists(dataPath, false) )
       {
-        itksys::SystemTools::FileExists(dataPath);
+        itksys::SystemTools::MakeDirectory(dataPath);
       }
   }
 
@@ -526,7 +526,7 @@ WASMImageIO
     file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
     mz_zip_writer_entry_open(zip_writer, &file_info);
     const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
-    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes); \
+    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes);
     mz_zip_writer_close(zip_writer);
     mz_zip_writer_delete(&zip_writer);
   }

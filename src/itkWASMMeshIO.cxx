@@ -381,7 +381,7 @@ WASMMeshIO
 ::ReadPoints( void *buffer )
 {
   const std::string path(this->GetFileName());
-  const std::string dataFile = (path + "/data/points.raw").c_str();
+  const std::string dataPath = "data/points.raw";
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetNumberOfPoints() * this->GetPointDimension() * ITKComponentSize( this->GetPointComponentType() ) );
 
@@ -393,7 +393,7 @@ WASMMeshIO
     mz_zip_reader_create(&zip_reader);
     mz_zip_reader_open_file(zip_reader, path.c_str());
 
-    mz_zip_reader_locate_entry(zip_reader, "data/points.raw", 0);
+    mz_zip_reader_locate_entry(zip_reader, dataPath.c_str(), 0);
     mz_zip_reader_entry_open(zip_reader);
 
     mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
@@ -403,16 +403,17 @@ WASMMeshIO
   }
   else
   {
-  std::ifstream dataStream;
-  this->OpenFileForReading( dataStream, dataFile.c_str() );
+    std::ifstream dataStream;
+    const std::string dataFile = path + "/" + dataPath;
+    this->OpenFileForReading( dataStream, dataFile.c_str() );
 
-  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-    {
-    itkExceptionMacro(<< "Read failed: Wanted "
-                      << numberOfBytesToBeRead
-                      << " bytes, but read "
-                      << dataStream.gcount() << " bytes.");
-    }
+    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+      {
+      itkExceptionMacro(<< "Read failed: Wanted "
+                        << numberOfBytesToBeRead
+                        << " bytes, but read "
+                        << dataStream.gcount() << " bytes.");
+      }
   }
 }
 
@@ -421,30 +422,41 @@ void
 WASMMeshIO
 ::ReadCells( void *buffer )
 {
-  std::ifstream inputStream;
-  this->OpenFileForReading( inputStream, this->GetFileName(), true );
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                   std::istreambuf_iterator<char>());
-  rapidjson::Document document;
-  if ( document.Parse( str.c_str() ).HasParseError())
-    {
-    itkExceptionMacro("Could not parse JSON");
-    return;
-    }
-
-  const std::string dataFile( document["cells"].GetString() );
-  std::ifstream dataStream;
-  this->OpenFileForReading( dataStream, dataFile.c_str() );
+  const std::string path(this->GetFileName());
+  const std::string dataPath = "data/cells.raw";
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetCellBufferSize() * ITKComponentSize( this->GetCellComponentType() ));
 
-  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-    {
-    itkExceptionMacro(<< "Read failed: Wanted "
-                      << numberOfBytesToBeRead
-                      << " bytes, but read "
-                      << dataStream.gcount() << " bytes.");
-    }
+  std::string::size_type zipPos = path.rfind(".zip");
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    void * zip_reader = NULL;
+    mz_zip_reader_create(&zip_reader);
+    mz_zip_reader_open_file(zip_reader, path.c_str());
+
+    mz_zip_reader_locate_entry(zip_reader, dataPath.c_str(), 0);
+    mz_zip_reader_entry_open(zip_reader);
+
+    mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
+    mz_zip_reader_entry_close(zip_reader);
+    mz_zip_reader_close(zip_reader);
+    mz_zip_reader_delete(&zip_reader);
+  }
+  else
+  {
+    std::ifstream dataStream;
+    const std::string dataFile = path + "/" + dataPath;
+    this->OpenFileForReading( dataStream, dataFile.c_str() );
+
+    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+      {
+      itkExceptionMacro(<< "Read failed: Wanted "
+                        << numberOfBytesToBeRead
+                        << " bytes, but read "
+                        << dataStream.gcount() << " bytes.");
+      }
+  }
 }
 
 
@@ -452,30 +464,41 @@ void
 WASMMeshIO
 ::ReadPointData( void *buffer )
 {
-  std::ifstream inputStream;
-  this->OpenFileForReading( inputStream, this->GetFileName(), true );
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                   std::istreambuf_iterator<char>());
-  rapidjson::Document document;
-  if ( document.Parse( str.c_str() ).HasParseError())
-    {
-    itkExceptionMacro("Could not parse JSON");
-    return;
-    }
-
-  const std::string dataFile( document["pointData"].GetString() );
-  std::ifstream dataStream;
-  this->OpenFileForReading( dataStream, dataFile.c_str() );
-
+  const std::string path(this->GetFileName());
+  const std::string dataPath = "data/pointData.raw";
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetPointPixelComponentType() ));
-  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-    {
-    itkExceptionMacro(<< "Read failed: Wanted "
-                      << numberOfBytesToBeRead
-                      << " bytes, but read "
-                      << dataStream.gcount() << " bytes.");
-    }
+
+  std::string::size_type zipPos = path.rfind(".zip");
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    void * zip_reader = NULL;
+    mz_zip_reader_create(&zip_reader);
+    mz_zip_reader_open_file(zip_reader, path.c_str());
+
+    mz_zip_reader_locate_entry(zip_reader, dataPath.c_str(), 0);
+    mz_zip_reader_entry_open(zip_reader);
+
+    mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
+    mz_zip_reader_entry_close(zip_reader);
+    mz_zip_reader_close(zip_reader);
+    mz_zip_reader_delete(&zip_reader);
+  }
+  else
+  {
+    std::ifstream dataStream;
+    const std::string dataFile = path + "/" + dataPath;
+    this->OpenFileForReading( dataStream, dataFile.c_str() );
+
+    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+      {
+      itkExceptionMacro(<< "Read failed: Wanted "
+                        << numberOfBytesToBeRead
+                        << " bytes, but read "
+                        << dataStream.gcount() << " bytes.");
+      }
+  }
 }
 
 
@@ -483,30 +506,41 @@ void
 WASMMeshIO
 ::ReadCellData( void *buffer )
 {
-  std::ifstream inputStream;
-  this->OpenFileForReading( inputStream, this->GetFileName(), true );
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                   std::istreambuf_iterator<char>());
-  rapidjson::Document document;
-  if ( document.Parse( str.c_str() ).HasParseError())
-    {
-    itkExceptionMacro("Could not parse JSON");
-    return;
-    }
-
-  const std::string dataFile( document["cellData"].GetString() );
-  std::ifstream dataStream;
-  this->OpenFileForReading( dataStream, dataFile.c_str() );
-
+  const std::string path(this->GetFileName());
+  const std::string dataPath = "data/cellData.raw";
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetNumberOfCellPixels() * this->GetNumberOfCellPixelComponents() * ITKComponentSize( this->GetCellPixelComponentType() ));
-  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-    {
-    itkExceptionMacro(<< "Read failed: Wanted "
-                      << numberOfBytesToBeRead
-                      << " bytes, but read "
-                      << dataStream.gcount() << " bytes.");
-    }
+
+  std::string::size_type zipPos = path.rfind(".zip");
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    void * zip_reader = NULL;
+    mz_zip_reader_create(&zip_reader);
+    mz_zip_reader_open_file(zip_reader, path.c_str());
+
+    mz_zip_reader_locate_entry(zip_reader, dataPath.c_str(), 0);
+    mz_zip_reader_entry_open(zip_reader);
+
+    mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
+    mz_zip_reader_entry_close(zip_reader);
+    mz_zip_reader_close(zip_reader);
+    mz_zip_reader_delete(&zip_reader);
+  }
+  else
+  {
+    std::ifstream dataStream;
+    const std::string dataFile = path + "/" + dataPath;
+    this->OpenFileForReading( dataStream, dataFile.c_str() );
+
+    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+      {
+      itkExceptionMacro(<< "Read failed: Wanted "
+                        << numberOfBytesToBeRead
+                        << " bytes, but read "
+                        << dataStream.gcount() << " bytes.");
+      }
+  }
 }
 
 
@@ -542,6 +576,34 @@ void
 WASMMeshIO
 ::WriteMeshInformation()
 {
+  const std::string path = this->GetFileName();
+  const auto indexPath = path + "/index.json";
+  const auto dataPath = path + "/data";
+  std::string::size_type zipPos = path.rfind(".zip");
+  bool useZip = false;
+  void * zip_writer = NULL;
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    useZip = true;
+    mz_zip_writer_create(&zip_writer);
+    if (mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 0) != MZ_OK)
+    {
+      itkExceptionMacro("Could not open zip file");
+    }
+  }
+  else
+  {
+    if ( !itksys::SystemTools::FileExists(path, false) )
+      {
+        itksys::SystemTools::MakeDirectory(path);
+      }
+    if ( !itksys::SystemTools::FileExists(dataPath, false) )
+      {
+        itksys::SystemTools::MakeDirectory(dataPath);
+      }
+  }
+
   rapidjson::Document document;
   document.SetObject();
   rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
@@ -568,15 +630,10 @@ WASMMeshIO
 
   meshType.AddMember("pointPixelComponents", rapidjson::Value( this->GetNumberOfPointPixelComponents() ).Move(), allocator );
 
-  // The MeshFileWriter sets this to CellIdentifier / IdentifierType /
-  // uint64_t. However, JavaScript does not support 64 bit integers, so force
-  // uint32_t
-  //const std::string cellComponentString = this->ITKToWASMComponentType( this->GetCellComponentType() );
-  const std::string cellComponentString( "uint32_t" );
+  const std::string cellComponentString = WASMComponentTypeFromIOComponentEnum( this->GetCellComponentType() );
   rapidjson::Value cellComponentType;
   cellComponentType.SetString( cellComponentString.c_str(), allocator );
   meshType.AddMember("cellComponentType", cellComponentType.Move(), allocator );
-  this->SetCellComponentType( CommonEnums::IOComponent::UINT );
 
   const std::string cellPixelComponentString = WASMComponentTypeFromIOComponentEnum( this->GetCellPixelComponentType() );
   rapidjson::Value cellPixelComponentType;
@@ -627,32 +684,63 @@ WASMMeshIO
   cellBufferSize.SetInt( this->GetCellBufferSize() );
   document.AddMember( "cellBufferSize", cellBufferSize.Move(), allocator );
 
-  std::string pointsDataFileString( std::string( this->GetFileName() ) + ".points.data" );
+  std::string pointsDataFileString( "path:data/points.raw" );
   rapidjson::Value pointsDataFile;
   pointsDataFile.SetString( pointsDataFileString.c_str(), allocator );
   document.AddMember( "points", pointsDataFile, allocator );
 
-  std::string cellsDataFileString( std::string( this->GetFileName() ) + ".cells.data" );
+  std::string cellsDataFileString( "path:data/cells.raw" );
   rapidjson::Value cellsDataFile;
   cellsDataFile.SetString( cellsDataFileString.c_str(), allocator );
   document.AddMember( "cells", cellsDataFile, allocator );
 
-  std::string pointDataDataFileString( std::string( this->GetFileName() ) + ".pointData.data" );
+  std::string pointDataDataFileString( "path:data/pointData.raw" );
   rapidjson::Value pointDataDataFile;
   pointDataDataFile.SetString( pointDataDataFileString.c_str(), allocator );
   document.AddMember( "pointData", pointDataDataFile, allocator );
 
-  std::string cellDataDataFileString( std::string( this->GetFileName() ) + ".cellData.data" );
+  std::string cellDataDataFileString( "path:data/cellData.raw" );
   rapidjson::Value cellDataDataFile;
   cellDataDataFile.SetString( cellDataDataFileString.c_str(), allocator );
   document.AddMember( "cellData", cellDataDataFile, allocator );
 
-  std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, this->GetFileName(), true, true );
-  rapidjson::OStreamWrapper ostreamWrapper( outputStream );
-  rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
-  document.Accept( writer );
-  outputStream.close();
+  if (useZip)
+  {
+    rapidjson::StringBuffer stringBuffer;
+    rapidjson::Writer< rapidjson::StringBuffer > writer( stringBuffer );
+    document.Accept( writer );
+    mz_zip_file file_info = { 0 };
+    file_info.filename = "index.json";
+    file_info.modified_date = time(NULL);
+    file_info.accessed_date = file_info.modified_date;
+    file_info.creation_date = file_info.modified_date;
+    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
+    // 644
+    file_info.external_fa = 0x00008124;
+    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
+    file_info.flag = MZ_ZIP_FLAG_UTF8;
+    if (mz_zip_writer_entry_open(zip_writer, &file_info) != MZ_OK)
+    {
+      itkExceptionMacro("Could not open writer entry for index.json");
+    }
+    mz_zip_writer_entry_write(zip_writer, stringBuffer.GetString(), stringBuffer.GetLength());
+    mz_zip_writer_entry_close(zip_writer);
+  }
+  else
+  {
+    std::ofstream outputStream;
+    this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );
+    rapidjson::OStreamWrapper ostreamWrapper( outputStream );
+    rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
+    document.Accept( writer );
+    outputStream.close();
+  }
+
+  if (useZip)
+  {
+    mz_zip_writer_close(zip_writer);
+    mz_zip_writer_delete(&zip_writer);
+  }
 }
 
 
@@ -660,11 +748,52 @@ void
 WASMMeshIO
 ::WritePoints( void *buffer )
 {
-  const std::string fileName = std::string( this->GetFileName() ) + ".points.data";
-  std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, fileName, true, false );
+  const std::string path(this->GetFileName());
+  const std::string filePath = "data/points.raw";
+  const std::string::size_type zipPos = path.rfind(".zip");
+  struct zip_t * zip = nullptr;
+  bool useZip = false;
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    useZip = true;
+  }
+
   const SizeValueType numberOfBytes = this->GetNumberOfPoints() * this->GetPointDimension() * ITKComponentSize( this->GetPointComponentType() );
-  outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+
+  if (useZip)
+  {
+    void * zip_writer = NULL;
+    mz_zip_writer_create(&zip_writer);
+    mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 1);
+    mz_zip_file file_info = { 0 };
+    file_info.filename = filePath.c_str();
+    file_info.modified_date = time(NULL);
+    file_info.accessed_date = file_info.modified_date;
+    file_info.creation_date = file_info.modified_date;
+    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
+    // 644
+    file_info.external_fa = 0x00008124;
+    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
+    mz_zip_writer_entry_open(zip_writer, &file_info);
+    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes);
+    mz_zip_writer_close(zip_writer);
+    mz_zip_writer_delete(&zip_writer);
+  }
+  else
+  {
+    const std::string fileName = path + "/" + filePath;
+    std::ofstream outputStream;
+    this->OpenFileForWriting( outputStream, fileName, true, false );
+    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes);
+    if (outputStream.tellp() != numberOfBytes )
+      {
+      itkExceptionMacro(<< "Write failed: Wanted to write "
+                        << numberOfBytes
+                        << " bytes, but wrote "
+                        << outputStream.tellp() << " bytes.");
+      }
+  }
 }
 
 
@@ -672,25 +801,51 @@ void
 WASMMeshIO
 ::WriteCells( void *buffer )
 {
-  const std::string fileName = std::string( this->GetFileName() ) + ".cells.data";
-  std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, fileName, true, false );
+  const std::string path(this->GetFileName());
+  const std::string filePath = "data/cells.raw";
+  const std::string::size_type zipPos = path.rfind(".zip");
+  struct zip_t * zip = nullptr;
+  bool useZip = false;
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    useZip = true;
+  }
+
   const SizeValueType numberOfBytes = this->GetCellBufferSize() * ITKComponentSize( this->GetCellComponentType() );
-  // Cast from 64 bit unsigned integers (not supported in JavaScript) to 32
-  // bit unsigned integers
-  const IdentifierType * bufferIdentifier = static_cast< IdentifierType * >( buffer );
-  const SizeValueType cellBufferSize = this->GetCellBufferSize();
-  for( SizeValueType ii = 0; ii < cellBufferSize; ++ii )
-    {
-    const uint32_t asInt32 = static_cast< uint32_t >( bufferIdentifier[ii] );
-    outputStream.write(reinterpret_cast< const char * >( &asInt32 ), sizeof( uint32_t ));
-    }
-  if (outputStream.tellp() != numberOfBytes )
-    {
-    itkExceptionMacro(<< "Write failed: Wanted to write "
-                      << numberOfBytes
-                      << " bytes, but wrote "
-                      << outputStream.tellp() << " bytes.");
+
+  if (useZip)
+  {
+    void * zip_writer = NULL;
+    mz_zip_writer_create(&zip_writer);
+    mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 1);
+    mz_zip_file file_info = { 0 };
+    file_info.filename = filePath.c_str();
+    file_info.modified_date = time(NULL);
+    file_info.accessed_date = file_info.modified_date;
+    file_info.creation_date = file_info.modified_date;
+    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
+    // 644
+    file_info.external_fa = 0x00008124;
+    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
+    mz_zip_writer_entry_open(zip_writer, &file_info);
+    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes);
+    mz_zip_writer_close(zip_writer);
+    mz_zip_writer_delete(&zip_writer);
+  }
+  else
+  {
+    const std::string fileName = path + "/" + filePath;
+    std::ofstream outputStream;
+    this->OpenFileForWriting( outputStream, fileName, true, false );
+    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+    if (outputStream.tellp() != numberOfBytes )
+      {
+      itkExceptionMacro(<< "Write failed: Wanted to write "
+                        << numberOfBytes
+                        << " bytes, but wrote "
+                        << outputStream.tellp() << " bytes.");
+      }
     }
 }
 
@@ -699,11 +854,52 @@ void
 WASMMeshIO
 ::WritePointData( void *buffer )
 {
-  const std::string fileName = std::string( this->GetFileName() ) + ".pointData.data";
-  std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, fileName, true, false );
+  const std::string path(this->GetFileName());
+  const std::string filePath = "data/pointData.raw";
+  const std::string::size_type zipPos = path.rfind(".zip");
+  struct zip_t * zip = nullptr;
+  bool useZip = false;
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    useZip = true;
+  }
+
   const SizeValueType numberOfBytes = this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetPointPixelComponentType() );
-  outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+
+  if (useZip)
+  {
+    void * zip_writer = NULL;
+    mz_zip_writer_create(&zip_writer);
+    mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 1);
+    mz_zip_file file_info = { 0 };
+    file_info.filename = filePath.c_str();
+    file_info.modified_date = time(NULL);
+    file_info.accessed_date = file_info.modified_date;
+    file_info.creation_date = file_info.modified_date;
+    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
+    // 644
+    file_info.external_fa = 0x00008124;
+    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
+    mz_zip_writer_entry_open(zip_writer, &file_info);
+    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes);
+    mz_zip_writer_close(zip_writer);
+    mz_zip_writer_delete(&zip_writer);
+  }
+  else
+  {
+    const std::string fileName = path + "/" + filePath;
+    std::ofstream outputStream;
+    this->OpenFileForWriting( outputStream, fileName, true, false );
+    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+    if (outputStream.tellp() != numberOfBytes )
+      {
+      itkExceptionMacro(<< "Write failed: Wanted to write "
+                        << numberOfBytes
+                        << " bytes, but wrote "
+                        << outputStream.tellp() << " bytes.");
+      }
+  }
 }
 
 
@@ -711,11 +907,52 @@ void
 WASMMeshIO
 ::WriteCellData( void *buffer )
 {
-  const std::string fileName = std::string( this->GetFileName() ) + ".cellData.data";
-  std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, fileName, true, false );
+  const std::string path(this->GetFileName());
+  const std::string filePath = "data/cellData.raw";
+  const std::string::size_type zipPos = path.rfind(".zip");
+  struct zip_t * zip = nullptr;
+  bool useZip = false;
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    useZip = true;
+  }
+
   const SizeValueType numberOfBytes = this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetCellPixelComponentType() );
-  outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+
+  if (useZip)
+  {
+    void * zip_writer = NULL;
+    mz_zip_writer_create(&zip_writer);
+    mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 1);
+    mz_zip_file file_info = { 0 };
+    file_info.filename = filePath.c_str();
+    file_info.modified_date = time(NULL);
+    file_info.accessed_date = file_info.modified_date;
+    file_info.creation_date = file_info.modified_date;
+    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
+    // 644
+    file_info.external_fa = 0x00008124;
+    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
+    mz_zip_writer_entry_open(zip_writer, &file_info);
+    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes);
+    mz_zip_writer_close(zip_writer);
+    mz_zip_writer_delete(&zip_writer);
+  }
+  else
+  {
+    const std::string fileName = path + "/" + filePath;
+    std::ofstream outputStream;
+    this->OpenFileForWriting( outputStream, fileName, true, false );
+    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+    if (outputStream.tellp() != numberOfBytes )
+      {
+      itkExceptionMacro(<< "Write failed: Wanted to write "
+                        << numberOfBytes
+                        << " bytes, but wrote "
+                        << outputStream.tellp() << " bytes.");
+      }
+  }
 }
 
 void
