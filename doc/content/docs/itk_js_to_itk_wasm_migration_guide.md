@@ -11,7 +11,7 @@ including modern, elegant programming interfaces, accelerated performance,
 and execution beyond JavaScript thanks to [WASI](https://wasi.dev).
 
 Most itk.js client code will simply need to update its import statements to
-leverage itk-wasm. However, there are other more advanced changes. A
+leverage itk-wasm. However, there are also other more advanced changes. A
 description of the changes, their motivation, and example migration code can
 be found below.
 
@@ -53,13 +53,11 @@ import { IntTypes } from 'itk'
 
 ## Typescript support
 
-Typescript support was added, but, of course, you can still just use
-JavaScript if you wish.  Uses modern JavaScript constructs when appropriate,
-e.g. classes.
+Typescript support was added, but, of course, you can still just use JavaScript if you wish. In itk-wasm, adoption of modern JavaScript constructs was extended, e.g. classes.
 
 ## Bundlers
 
-EcmaScript Module (ESM) support was improved.
+ECMAScript Module (ESM) support was improved.
 
 There is now an improved approach for web workers for bundlers, CORS constraints.
 
@@ -82,9 +80,7 @@ The `itkConfig.js` specifies where to look for the io webassembly modules and an
 The default `itkConfig.js` is configured to use the [JsDelivr](https://www.jsdelivr.com/) CDN, but you may want to override this
 default.
 
-In the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack)
-the io webassembly module assets are vendored into `/itk` directories,
-this module looks like:
+In the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack) the io webassembly module assets are vendored into `/itk` directories, this module looks like:
 
 ```js
 const itkConfig = {
@@ -111,13 +107,12 @@ itk-wasm build --image insighttoolkit/itk-wasm src/dir
 is now:
 
 ```
-itk-wasm --image --source-dir src/dir insighttoolkit/itk-wasm build
+itk-wasm --image insighttoolkit/itk-wasm --source-dir src/dir  build
 ```
 
 ## Image data structure
 
-The `itk.Image.direction` is now directly a `Float64Array` -- `itk.Matrix` has
-been removed.
+The `itk.Image.direction` is now directly a `Float64Array` -- `itk.Matrix` has been removed.
 
 Addresses an important issue in image orientation support.
 
@@ -129,8 +124,7 @@ Addresses an important issue in image orientation support.
 
 ## Image file format
 
-The JSON file format is replaced by a WASM file format with a different
-layout. A directory, ending in `.iwi` or a `.iwi.zip` file is supported.
+The JSON file format is replaced by a WASM file format with a different layout. A directory, ending in `.iwi` or a `.iwi.zip` file is supported.
 
 ## Node Sync functions
 

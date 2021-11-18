@@ -25,5 +25,5 @@ target_link_libraries(MeshToPolyData ${VTK_LIBRARIES} ${ITK_LIBRARIES})
 enable_testing()
 add_test(NAME MeshToPolyData
   COMMAND MeshToPolyData ${CMAKE_CURRENT_BINARY_DIR}/cow.vtk
-  ${CMAKE_CURRENT_BINARY_DIR}/cow.written.vtk.json
+  ${CMAKE_CURRENT_BINARY_DIR}/cow.written.vtk.iwi
   )

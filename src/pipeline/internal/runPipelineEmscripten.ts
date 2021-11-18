@@ -84,43 +84,44 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             name: mesh.name,
 
             numberOfPoints: mesh.numberOfPoints,
-            points: input.path + '.points.data',
+            points: 'path:data/points.raw',
 
             numberOfPointPixels: mesh.numberOfPointPixels,
-            pointData: input.path + '.pointData.data',
+            pointData: 'path:data/pointData.raw',
 
             numberOfCells: mesh.numberOfCells,
-            cells: input.path + '.cells.data',
+            cells: 'path:data/cells.raw',
 
             numberOfCellPixels: mesh.numberOfCellPixels,
-            cellData: input.path + '.cellData.data',
+            cellData: 'path:data/cellData.raw',
             cellBufferSize: mesh.cellBufferSize
 
           }
-          pipelineModule.fs_writeFile(input.path, JSON.stringify(meshJSON))
+          pipelineModule.fs_mkdirs(`${input.path}/data`)
+          pipelineModule.fs_writeFile(`${input.path}/index.json`, JSON.stringify(meshJSON))
           if (meshJSON.numberOfPoints > 0) {
             if (mesh.points === null) {
               throw Error('mesh.points is null')
             }
-            pipelineModule.fs_writeFile(meshJSON.points, new Uint8Array(mesh.points.buffer))
+            pipelineModule.fs_writeFile(`${input.path}/data/points.raw`, new Uint8Array(mesh.points.buffer))
           }
           if (meshJSON.numberOfPointPixels > 0) {
             if (mesh.pointData === null) {
               throw Error('mesh.pointData is null')
             }
-            pipelineModule.fs_writeFile(meshJSON.pointData, new Uint8Array(mesh.pointData.buffer))
+            pipelineModule.fs_writeFile(`${input.path}/data/pointData.raw`, new Uint8Array(mesh.pointData.buffer))
           }
           if (meshJSON.numberOfCells > 0) {
             if (mesh.cells === null) {
               throw Error('mesh.cells is null')
             }
-            pipelineModule.fs_writeFile(meshJSON.cells, new Uint8Array(mesh.cells.buffer))
+            pipelineModule.fs_writeFile(`${input.path}/data/cells.raw`, new Uint8Array(mesh.cells.buffer))
           }
           if (meshJSON.numberOfCellPixels > 0) {
             if (mesh.cellData === null) {
               throw Error('mesh.cellData is null')
             }
-            pipelineModule.fs_writeFile(meshJSON.cellData, new Uint8Array(mesh.cellData.buffer))
+            pipelineModule.fs_writeFile(`${input.path}/data/cellData.raw`, new Uint8Array(mesh.cellData.buffer))
           }
           break
         }
@@ -180,28 +181,28 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case IOTypes.Mesh:
         {
-          const meshJSON = pipelineModule.fs_readFile(output.path, { encoding: 'utf8' }) as string
+          const meshJSON = pipelineModule.fs_readFile(`${output.path}/index.json`, { encoding: 'utf8' }) as string
           const mesh = JSON.parse(meshJSON)
           if (mesh.numberOfPoints > 0) {
-            const dataUint8Points = readFileSharedArray(pipelineModule, mesh.points)
+            const dataUint8Points = readFileSharedArray(pipelineModule, `${output.path}/data/points.raw`)
             mesh.points = bufferToTypedArray(mesh.meshType.pointComponentType, dataUint8Points.buffer)
           } else {
             mesh.points = bufferToTypedArray(mesh.meshType.pointComponentType, new ArrayBuffer(0))
           }
           if (mesh.numberOfPointPixels > 0) {
-            const dataUint8PointData = readFileSharedArray(pipelineModule, mesh.pointData)
+            const dataUint8PointData = readFileSharedArray(pipelineModule, `${output.path}/data/pointData.raw`)
             mesh.pointData = bufferToTypedArray(mesh.meshType.pointPixelComponentType, dataUint8PointData.buffer)
           } else {
             mesh.pointData = bufferToTypedArray(mesh.meshType.pointPixelComponentType, new ArrayBuffer(0))
           }
           if (mesh.numberOfCells > 0) {
-            const dataUint8Cells = readFileSharedArray(pipelineModule, mesh.cells)
+            const dataUint8Cells = readFileSharedArray(pipelineModule, `${output.path}/data/cells.raw`)
             mesh.cells = bufferToTypedArray(mesh.meshType.cellComponentType, dataUint8Cells.buffer)
           } else {
             mesh.cells = bufferToTypedArray(mesh.meshType.cellComponentType, new ArrayBuffer(0))
           }
           if (mesh.numberOfCellPixels > 0) {
-            const dataUint8CellData = readFileSharedArray(pipelineModule, mesh.cellData)
+            const dataUint8CellData = readFileSharedArray(pipelineModule, `${output.path}/data/cellData.raw`)
             mesh.cellData = bufferToTypedArray(mesh.meshType.cellPixelComponentType, dataUint8CellData.buffer)
           } else {
             mesh.cellData = bufferToTypedArray(mesh.meshType.cellPixelComponentType, new ArrayBuffer(0))

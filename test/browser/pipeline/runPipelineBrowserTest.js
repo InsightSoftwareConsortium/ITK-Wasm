@@ -188,9 +188,9 @@ Click. Perfect success.
     const verifyMesh = (mesh) => {
       t.is(mesh.meshType.dimension, 3)
       t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
-      t.is(mesh.meshType.cellComponentType, IntTypes.UInt32)
-      t.is(mesh.meshType.pointPixelType, 1)
-      t.is(mesh.meshType.cellPixelType, 1)
+      t.is(mesh.meshType.cellComponentType, IntTypes.UInt64)
+      t.is(mesh.meshType.pointPixelType, PixelTypes.Scalar)
+      t.is(mesh.meshType.cellPixelType, PixelTypes.Scalar)
       t.is(mesh.numberOfPoints, 2903)
       t.is(mesh.numberOfCells, 3263)
       t.end()
@@ -203,7 +203,7 @@ Click. Perfect success.
     const { mesh, webWorker } = await readMeshFile(null, jsFile)
     webWorker.terminate()
     const pipelinePath = 'MeshReadWriteTest'
-    const args = ['cow.vtk.json', 'cow.vtk.written.json']
+    const args = ['./cow.vtk.iwm', './cow.vtk.written.iwm']
     const desiredOutputs = [
       { path: args[1], type: IOTypes.Mesh }
     ]
@@ -239,7 +239,7 @@ Click. Perfect success.
       .then(function (response) {
         const polyDataFileContents = new Uint8Array(response.data)
         const pipelinePath = 'WriteVTKPolyDataTest'
-        const args = ['cow.vtk', 'cow.vtk.written.json']
+        const args = ['./cow.iwm', './cow.vtk.written.iwm']
         const desiredOutputs = [
           { path: args[1], type: IOTypes.vtkPolyData }
         ]
@@ -254,7 +254,7 @@ Click. Perfect success.
       })
   })
 
-  test('MeshToPolyData converts an itk/Mesh to a vtk.js vtkPolyData', (t) => {
+  test('MeshToPolyData converts an Mesh to a vtk.js vtkPolyData', (t) => {
     const verifyPolyData = (polyData) => {
       t.is(polyData.vtkClass, 'vtkPolyData')
       t.is(polyData.points.vtkClass, 'vtkPoints')
@@ -289,7 +289,7 @@ Click. Perfect success.
       }).then(function ({ mesh, webWorker }) {
         webWorker.terminate()
         const pipelinePath = 'MeshToPolyData'
-        const args = ['cow.vtk.json', 'cow.vtk.written.json']
+        const args = ['./cow.vtk.iwm', './cow.vtk.written.iwm']
         const desiredOutputs = [
           { path: args[1], type: IOTypes.vtkPolyData }
         ]
