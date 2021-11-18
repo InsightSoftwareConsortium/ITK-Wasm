@@ -15,8 +15,10 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkImageFromJSON_h
-#define itkImageFromJSON_h
+#ifndef itkJSONToImageFilter_hxx
+#define itkJSONToImageFilter_hxx
+
+#include "itkJSONToImageFilter.h"
 
 #include "itkImportImageFilter.h"
 #include <exception>
@@ -29,11 +31,109 @@
 namespace itk
 {
 
-template< typename TImage >
-typename TImage::Pointer
-ImageFromJSON(const std::string & json)
+template <typename TImage>
+JSONToImageFilter<TImage>
+::JSONToImageFilter()
 {
-  using ImageType = TImage;
+  this->SetNumberOfRequiredInputs(1);
+
+  typename ImageType::Pointer output = static_cast<ImageType *>(this->MakeOutput(0).GetPointer());
+  this->ProcessObject::SetNumberOfRequiredOutputs(1);
+  this->ProcessObject::SetNthOutput(0, output.GetPointer());
+}
+
+template <typename TImage>
+ProcessObject::DataObjectPointer
+JSONToImageFilter<TImage>
+::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+{
+  return ImageType::New().GetPointer();
+}
+
+template <typename TImage>
+ProcessObject::DataObjectPointer
+JSONToImageFilter<TImage>
+::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+{
+  return ImageType::New().GetPointer();
+}
+
+template <typename TImage>
+auto
+JSONToImageFilter<TImage>
+::GetOutput() -> ImageType *
+{
+  // we assume that the first output is of the templated type
+  return itkDynamicCastInDebugMode<ImageType *>(this->GetPrimaryOutput());
+}
+
+template <typename TImage>
+auto
+JSONToImageFilter<TImage>
+::GetOutput() const -> const ImageType *
+{
+  // we assume that the first output is of the templated type
+  return itkDynamicCastInDebugMode<const ImageType *>(this->GetPrimaryOutput());
+}
+
+template <typename TImage>
+auto
+JSONToImageFilter<TImage>
+::GetOutput(unsigned int idx) -> ImageType *
+{
+  auto * out = dynamic_cast<ImageType *>(this->ProcessObject::GetOutput(idx));
+
+  if (out == nullptr && this->ProcessObject::GetOutput(idx) != nullptr)
+  {
+    itkWarningMacro(<< "Unable to convert output number " << idx << " to type " << typeid(ImageType).name());
+  }
+  return out;
+}
+
+template <typename TImage>
+void
+JSONToImageFilter<TImage>
+::SetInput(const ImageJSONType * input)
+{
+  // Process object is not const-correct so the const_cast is required here
+  this->ProcessObject::SetNthInput(0, const_cast<ImageJSONType *>(input));
+}
+
+template <typename TImage>
+void
+JSONToImageFilter<TImage>
+::SetInput(unsigned int index, const ImageJSONType * image)
+{
+  // Process object is not const-correct so the const_cast is required here
+  this->ProcessObject::SetNthInput(index, const_cast<ImageJSONType *>(image));
+}
+
+template <typename TImage>
+const typename JSONToImageFilter<TImage>::ImageJSONType *
+JSONToImageFilter<TImage>
+::GetInput()
+{
+  return itkDynamicCastInDebugMode<const ImageJSONType *>(this->GetPrimaryInput());
+}
+
+template <typename TImage>
+const typename JSONToImageFilter<TImage>::ImageJSONType *
+JSONToImageFilter<TImage>
+::GetInput(unsigned int idx)
+{
+  return itkDynamicCastInDebugMode<const TImage *>(this->ProcessObject::GetInput(idx));
+}
+
+template <typename TImage>
+void
+JSONToImageFilter<TImage>
+::GenerateData()
+{
+  // Get the input and output pointers
+  const ImageJSONType * imageJSON = this->GetInput();
+  const std::string json(imageJSON->GetJSON());
+  ImageType * image = this->GetOutput();
+
   using PixelType = typename TImage::IOPixelType;
   using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
   constexpr unsigned int Dimension = TImage::ImageDimension;
@@ -124,8 +224,16 @@ ImageFromJSON(const std::string & json)
   filter->SetImportPointer( dataPtr, totalSize, letImageContainerManageMemory );
 
   filter->Update();
-  return filter->GetOutput();
+  image->Graft(filter->GetOutput());
 }
 
+template <typename TImage>
+void
+JSONToImageFilter<TImage>
+::PrintSelf(std::ostream & os, Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+}
 } // end namespace itk
-#endif // itkImageFromJSON_h
+
+#endif

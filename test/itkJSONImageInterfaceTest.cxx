@@ -16,7 +16,7 @@
  *
  *=========================================================================*/
 #include "itkImageToJSONFilter.h"
-#include "itkImageFromJSON.h"
+#include "itkJSONToImageFilter.h"
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
@@ -50,7 +50,12 @@ itkJSONImageInterfaceTest(int argc, char * argv[])
   auto imageJSON = imageToJSON->GetOutput();
   std::cout << "Image JSON: " << imageJSON->GetJSON() << std::endl;
 
-  ImageType::Pointer convertedImage = itk::ImageFromJSON<ImageType>(imageJSON->GetJSON());
+  using JSONToImageFilterType = itk::JSONToImageFilter<ImageType>;
+  auto jsonToImage = JSONToImageFilterType::New();
+  jsonToImage->SetInput(imageToJSON->GetOutput());
+  jsonToImage->Update();
+  ImageType::Pointer convertedImage = jsonToImage->GetOutput();
+
   std::cout << "convertedImage: " << convertedImage << std::endl;
 
   ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(convertedImage, outputImageFile));
