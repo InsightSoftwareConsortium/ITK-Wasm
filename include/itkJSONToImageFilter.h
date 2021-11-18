@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkImageToJSONFilter_h
-#define itkImageToJSONFilter_h
+#ifndef itkJSONToImageFilter_h
+#define itkJSONToImageFilter_h
 
 #include "itkProcessObject.h"
 #include "itkImageJSON.h"
@@ -24,19 +24,19 @@
 namespace itk
 {
 /**
- *\class ImageToJSONFilter
- * \brief Convert an Image to an ImageJSON object.
+ *\class JSONToImageFilter
+ * \brief Convert an ImageJSON to an Image object.
  * 
  * \ingroup WebAssemblyInterface
  */
 template <typename TImage>
-class ITK_TEMPLATE_EXPORT ImageToJSONFilter : public ProcessObject
+class ITK_TEMPLATE_EXPORT JSONToImageFilter : public ProcessObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_MOVE(ImageToJSONFilter);
+  ITK_DISALLOW_COPY_AND_MOVE(JSONToImageFilter);
 
   /** Standard class type aliases. */
-  using Self = ImageToJSONFilter;
+  using Self = JSONToImageFilter;
   using Superclass = ProcessObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
@@ -45,7 +45,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToJSONFilter, ProcessObject);
+  itkTypeMacro(JSONToImageFilter, ProcessObject);
 
   using DataObjectIdentifierType = Superclass::DataObjectIdentifierType;
   using DataObjectPointerArraySizeType = Superclass::DataObjectPointerArraySizeType;
@@ -56,28 +56,28 @@ public:
   /** Set/Get the path input of this process object.  */
   using Superclass::SetInput;
   virtual void
-  SetInput(const ImageType * image);
+  SetInput(const ImageJSONType * image);
 
   virtual void
-  SetInput(unsigned int, const ImageType * image);
+  SetInput(unsigned int, const ImageJSONType * image);
 
-  const ImageType *
+  const ImageJSONType *
   GetInput();
 
-  const ImageType *
+  const ImageJSONType *
   GetInput(unsigned int idx);
 
-  ImageJSONType *
+  ImageType *
   GetOutput();
-  const ImageJSONType *
+  const ImageType *
   GetOutput() const;
 
-  ImageJSONType *
+  ImageType *
   GetOutput(unsigned int idx);
 
 protected:
-  ImageToJSONFilter();
-  ~ImageToJSONFilter() override = default;
+  JSONToImageFilter();
+  ~JSONToImageFilter() override = default;
 
   ProcessObject::DataObjectPointer
   MakeOutput(ProcessObject::DataObjectPointerArraySizeType idx) override;
@@ -96,7 +96,7 @@ protected:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#  include "itkImageToJSONFilter.hxx"
+#  include "itkJSONToImageFilter.hxx"
 #endif
 
 #endif

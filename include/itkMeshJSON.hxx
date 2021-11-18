@@ -89,7 +89,7 @@ MeshJSON<TMesh>
       unsigned int numberOfPoints = cellPtr->GetNumberOfPoints();
       for (unsigned int ii = 0; ii < numberOfPoints; ++ii)
       {
-        this->m_CellBufferContainer[index++] = static_cast<Output>(ptIds[ii]);
+        this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(ptIds[ii]);
       }
 
       ++cter;
