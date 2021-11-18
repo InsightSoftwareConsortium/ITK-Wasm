@@ -12,10 +12,10 @@ class Mesh {
 
   numberOfCells: number
   cells: null | TypedArray
+  cellBufferSize: number
 
   numberOfCellPixels: number
   cellData: null | TypedArray
-  cellBufferSize: number
 
   constructor (public readonly meshType = new MeshType()) {
     this.meshType = meshType
@@ -29,11 +29,11 @@ class Mesh {
     this.pointData = null
 
     this.numberOfCells = 0
+    this.cellBufferSize = 0
     this.cells = null
 
     this.numberOfCellPixels = 0
     this.cellData = null
-    this.cellBufferSize = 0
   }
 }
 
