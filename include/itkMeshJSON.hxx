@@ -51,45 +51,45 @@ MeshJSON<TMesh>
       switch (cellPtr->GetType())
       {
         case CellGeometryEnum::VERTEX_CELL:
-          this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(CellGeometryEnum::VERTEX_CELL);
+          this->m_CellBufferContainer->SetElement(index++, static_cast<PointIdentifier>(CellGeometryEnum::VERTEX_CELL));
           break;
         case CellGeometryEnum::LINE_CELL:
-          this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(CellGeometryEnum::LINE_CELL);
+          this->m_CellBufferContainer->SetElement(index++, static_cast<PointIdentifier>(CellGeometryEnum::LINE_CELL));
           break;
         case CellGeometryEnum::TRIANGLE_CELL:
-          this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(CellGeometryEnum::TRIANGLE_CELL);
+          this->m_CellBufferContainer->SetElement(index++, static_cast<PointIdentifier>(CellGeometryEnum::TRIANGLE_CELL));
           break;
         case CellGeometryEnum::QUADRILATERAL_CELL:
-          this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(CellGeometryEnum::QUADRILATERAL_CELL);
+          this->m_CellBufferContainer->SetElement(index++, static_cast<PointIdentifier>(CellGeometryEnum::QUADRILATERAL_CELL));
           break;
         case CellGeometryEnum::POLYGON_CELL:
-          this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(CellGeometryEnum::POLYGON_CELL);
+          this->m_CellBufferContainer->SetElement(index++, static_cast<PointIdentifier>(CellGeometryEnum::POLYGON_CELL));
           break;
         case CellGeometryEnum::TETRAHEDRON_CELL:
-          this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(CellGeometryEnum::TETRAHEDRON_CELL);
+          this->m_CellBufferContainer->SetElement(index++, static_cast<PointIdentifier>(CellGeometryEnum::TETRAHEDRON_CELL));
           break;
         case CellGeometryEnum::HEXAHEDRON_CELL:
-          this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(CellGeometryEnum::HEXAHEDRON_CELL);
+          this->m_CellBufferContainer->SetElement(index++, static_cast<PointIdentifier>(CellGeometryEnum::HEXAHEDRON_CELL));
           break;
         case CellGeometryEnum::QUADRATIC_EDGE_CELL:
-          this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(CellGeometryEnum::QUADRATIC_EDGE_CELL);
+          this->m_CellBufferContainer->SetElement(index++, static_cast<PointIdentifier>(CellGeometryEnum::QUADRATIC_EDGE_CELL));
           break;
         case CellGeometryEnum::QUADRATIC_TRIANGLE_CELL:
-          this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(CellGeometryEnum::QUADRATIC_TRIANGLE_CELL);
+          this->m_CellBufferContainer->SetElement(index++, static_cast<PointIdentifier>(CellGeometryEnum::QUADRATIC_TRIANGLE_CELL));
           break;
         default:
           itkExceptionMacro(<< "Unknown mesh cell");
       }
 
       // The second element is number of points for each cell
-      this->m_CellBufferContainer[index++] = cellPtr->GetNumberOfPoints();
+      this->m_CellBufferContainer->SetElement(index++, cellPtr->GetNumberOfPoints());
 
       // Others are point identifiers in the cell
       ptIds = cellPtr->GetPointIds();
       unsigned int numberOfPoints = cellPtr->GetNumberOfPoints();
       for (unsigned int ii = 0; ii < numberOfPoints; ++ii)
       {
-        this->m_CellBufferContainer[index++] = static_cast<PointIdentifierType>(ptIds[ii]);
+        this->m_CellBufferContainer->SetElement(index++, static_cast<PointIdentifier>(ptIds[ii]));
       }
 
       ++cter;

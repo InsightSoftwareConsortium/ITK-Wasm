@@ -15,6 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
+#include "itkMeshToJSONFilter.h"
 #include "itkJSONFromMesh.h"
 #include "itkMeshFromJSON.h"
 
@@ -47,8 +48,13 @@ itkJSONMeshInterfaceTest(int argc, char * argv[])
   MeshPointer inputMesh = reader->GetOutput();
   std::cout << "inputMesh: " << inputMesh << std::endl;
 
-  const std::string imageInterface = itk::JSONFromMesh<MeshType>(inputMesh);
-  std::cout << "imageInterface: " << imageInterface << std::endl;
+  using MeshToJSONFilterType = itk::MeshToJSONFilter<MeshType>;
+  auto meshToJSONFilter = MeshToJSONFilterType::New();
+  meshToJSONFilter->SetInput(inputMesh);
+  ITK_TRY_EXPECT_NO_EXCEPTION(meshToJSONFilter->Update());
+  auto meshJSON = meshToJSONFilter->GetOutput();
+
+  std::cout << "Mesh JSON: " << meshJSON->GetJSON() << std::endl;
 /*
   MeshType::Pointer convertedMesh = itk::MeshFromJSON<MeshType>(imageInterface);
   std::cout << "convertedMesh: " << convertedMesh << std::endl;

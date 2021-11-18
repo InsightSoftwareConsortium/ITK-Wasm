@@ -51,13 +51,17 @@ public:
 
   using MeshType = TMesh;
 
-  using PointIdentifierType = typename MeshType::PointIdentifierType;
-  using CellBufferContainerType = VectorContainer<SizeValueType, PointIdentifierType>;
+  using PointIdentifier = typename MeshType::PointIdentifier;
+  using CellBufferContainerType = VectorContainer<SizeValueType, PointIdentifier>;
 
   void SetMesh(const MeshType * mesh);
 
   const MeshType * GetMesh() const {
     return static_cast< const MeshType * >(this->GetDataObject());
+  }
+
+  const CellBufferContainerType * GetCellBuffer() const {
+    return this->m_CellBufferContainer.GetPointer();
   }
 
 protected:
