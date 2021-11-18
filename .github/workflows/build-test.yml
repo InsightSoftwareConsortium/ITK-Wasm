@@ -23,6 +23,10 @@ jobs:
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
         df -h
 
+    - name: Pull latest Docker images
+      run: |
+        ./src/docker/pull.sh
+
     - name: Set docker image tag
       run: |
         TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
