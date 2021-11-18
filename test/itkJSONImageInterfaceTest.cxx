@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkJSONFromImage.h"
+#include "itkImageToJSONFilter.h"
 #include "itkImageFromJSON.h"
 
 #include "itkImageFileReader.h"
@@ -43,9 +43,14 @@ itkJSONImageInterfaceTest(int argc, char * argv[])
   ITK_TRY_EXPECT_NO_EXCEPTION(inputImage = itk::ReadImage<ImageType>(inputImageFile));
   std::cout << "inputImage: " << inputImage << std::endl;
 
-  const std::string imageInterface = itk::JSONFromImage<ImageType>(inputImage);
-  std::cout << "imageInterface: " << imageInterface << std::endl;
-  ImageType::Pointer convertedImage = itk::ImageFromJSON<ImageType>(imageInterface);
+  using ImageToJSONFilterType = itk::ImageToJSONFilter<ImageType>;
+  auto imageToJSON = ImageToJSONFilterType::New();
+  imageToJSON->SetInput(inputImage);
+  imageToJSON->Update();
+  auto imageJSON = imageToJSON->GetOutput();
+  std::cout << "Image JSON: " << imageJSON->GetJSON() << std::endl;
+
+  ImageType::Pointer convertedImage = itk::ImageFromJSON<ImageType>(imageJSON->GetJSON());
   std::cout << "convertedImage: " << convertedImage << std::endl;
 
   ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(convertedImage, outputImageFile));

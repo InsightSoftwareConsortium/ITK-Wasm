@@ -50,12 +50,12 @@ public:
 
   using ImageType = TImage;
 
-  void SetImage(ImageType * image) {
-    this->SetDataObject(image);
+  void SetImage(const ImageType * image) {
+    this->SetDataObject(const_cast<ImageType *>(image));
   }
 
   const ImageType * GetImage() const {
-    return static_cast< ImageType * >(this->GetDataObject());
+    return static_cast< const ImageType * >(this->GetDataObject());
   }
 
 protected:

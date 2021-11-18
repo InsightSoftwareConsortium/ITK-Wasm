@@ -64,7 +64,7 @@ protected:
   PrintSelf(std::ostream & os, Indent indent) const override;
 
   std::string m_JSON;
-  DataObject::Pointer m_DataObject;
+  DataObject::ConstPointer m_DataObject;
 };
 } // end namespace itk
 
