@@ -52,7 +52,8 @@ public:
   using MeshType = TMesh;
 
   using PointIdentifier = typename MeshType::PointIdentifier;
-  using CellBufferContainerType = VectorContainer<SizeValueType, PointIdentifier>;
+  using CellIdentifier = typename MeshType::CellIdentifier;
+  using CellBufferContainerType = VectorContainer<SizeValueType, CellIdentifier>;
 
   void SetMesh(const MeshType * mesh);
 

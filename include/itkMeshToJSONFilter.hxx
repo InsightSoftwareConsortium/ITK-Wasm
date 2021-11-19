@@ -214,9 +214,9 @@ MeshToJSONFilter<TMesh>
   cellBufferSizeMember.SetInt( meshJSON->GetCellBuffer()->Size() );
   document.AddMember( "cellBufferSize", cellBufferSizeMember.Move(), allocator );
 
-  const auto pointsAddress = reinterpret_cast< size_t >( &(mesh->GetPoints()[0]) );
+  const auto pointsAddress = reinterpret_cast< size_t >( &(mesh->GetPoints()->at(0)) );
   std::ostringstream pointsStream;
-  pointsStream << "address:";
+  pointsStream << "data:application/vnd.itk.address,";
   pointsStream << pointsAddress;
   rapidjson::Value pointsString;
   pointsString.SetString( pointsStream.str().c_str(), allocator );
@@ -225,10 +225,10 @@ MeshToJSONFilter<TMesh>
   size_t cellsAddress = 0;
   if (mesh->GetNumberOfCells() > 0)
   {
-    cellsAddress = reinterpret_cast< size_t >( &(meshJSON->GetCellBuffer()[0]) );
+    cellsAddress = reinterpret_cast< size_t >( &(meshJSON->GetCellBuffer()->at(0)) );
   }
   std::ostringstream cellsStream;
-  cellsStream << "address:";
+  cellsStream << "data:application/vnd.itk.address,";
   cellsStream << cellsAddress;
   rapidjson::Value cellsString;
   cellsString.SetString( cellsStream.str().c_str(), allocator );
@@ -237,22 +237,22 @@ MeshToJSONFilter<TMesh>
   size_t pointDataAddress = 0;
   if (mesh->GetPointData() != nullptr)
   {
-    pointDataAddress = reinterpret_cast< size_t >( &(mesh->GetPointData()[0]) );
+    pointDataAddress = reinterpret_cast< size_t >( &(mesh->GetPointData()->at(0)) );
   }
   std::ostringstream pointDataStream;
-  pointDataStream << "address:";
+  pointDataStream << "data:application/vnd.itk.address,";
   pointDataStream << pointDataAddress;
   rapidjson::Value pointDataString;
   pointDataString.SetString( pointDataStream.str().c_str(), allocator );
   document.AddMember( "pointData", pointDataString.Move(), allocator );
 
   size_t cellDataAddress = 0;
-  if (mesh->GetPointData() != nullptr)
+  if (mesh->GetCellData() != nullptr)
   {
-    cellDataAddress = reinterpret_cast< size_t >( &(mesh->GetCellData()[0]) );
+    cellDataAddress = reinterpret_cast< size_t >( &(mesh->GetCellData()->at(0)) );
   }
   std::ostringstream cellDataStream;
-  cellDataStream << "address:";
+  cellDataStream <<  "data:application/vnd.itk.address,";
   cellDataStream << cellDataAddress;
   rapidjson::Value cellDataString;
   cellDataString.SetString( cellDataStream.str().c_str(), allocator );

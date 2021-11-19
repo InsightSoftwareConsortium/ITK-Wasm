@@ -15,30 +15,30 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkJSONToImageFilter_h
-#define itkJSONToImageFilter_h
+#ifndef itkJSONToMeshFilter_h
+#define itkJSONToMeshFilter_h
 
 #include "itkProcessObject.h"
-#include "itkImageJSON.h"
+#include "itkMeshJSON.h"
 
 namespace itk
 {
 /**
- *\class JSONToImageFilter
- * \brief Convert an ImageJSON to an Image object.
+ *\class JSONToMeshFilter
+ * \brief Convert an MeshJSON to an Mesh object.
  * 
- * TImage must match the type stored in the JSON representation or an exception will be shown.
+ * TMesh must match the type stored in the JSON representation or an exception will be shown.
  * 
  * \ingroup WebAssemblyInterface
  */
-template <typename TImage>
-class ITK_TEMPLATE_EXPORT JSONToImageFilter : public ProcessObject
+template <typename TMesh>
+class ITK_TEMPLATE_EXPORT JSONToMeshFilter : public ProcessObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_MOVE(JSONToImageFilter);
+  ITK_DISALLOW_COPY_AND_MOVE(JSONToMeshFilter);
 
   /** Standard class type aliases. */
-  using Self = JSONToImageFilter;
+  using Self = JSONToMeshFilter;
   using Superclass = ProcessObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
@@ -47,39 +47,39 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(JSONToImageFilter, ProcessObject);
+  itkTypeMacro(JSONToMeshFilter, ProcessObject);
 
   using DataObjectIdentifierType = Superclass::DataObjectIdentifierType;
   using DataObjectPointerArraySizeType = Superclass::DataObjectPointerArraySizeType;
 
-  using ImageType = TImage;
-  using ImageJSONType = ImageJSON<ImageType>;
+  using MeshType = TMesh;
+  using MeshJSONType = MeshJSON<MeshType>;
 
   /** Set/Get the path input of this process object.  */
   using Superclass::SetInput;
   virtual void
-  SetInput(const ImageJSONType * image);
+  SetInput(const MeshJSONType * mesh);
 
   virtual void
-  SetInput(unsigned int, const ImageJSONType * image);
+  SetInput(unsigned int, const MeshJSONType * mesh);
 
-  const ImageJSONType *
+  const MeshJSONType *
   GetInput();
 
-  const ImageJSONType *
+  const MeshJSONType *
   GetInput(unsigned int idx);
 
-  ImageType *
+  MeshType *
   GetOutput();
-  const ImageType *
+  const MeshType *
   GetOutput() const;
 
-  ImageType *
+  MeshType *
   GetOutput(unsigned int idx);
 
 protected:
-  JSONToImageFilter();
-  ~JSONToImageFilter() override = default;
+  JSONToMeshFilter();
+  ~JSONToMeshFilter() override = default;
 
   ProcessObject::DataObjectPointer
   MakeOutput(ProcessObject::DataObjectPointerArraySizeType idx) override;
@@ -98,7 +98,7 @@ protected:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#  include "itkJSONToImageFilter.hxx"
+#  include "itkJSONToMeshFilter.hxx"
 #endif
 
 #endif

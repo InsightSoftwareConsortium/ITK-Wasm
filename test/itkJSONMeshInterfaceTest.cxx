@@ -16,8 +16,7 @@
  *
  *=========================================================================*/
 #include "itkMeshToJSONFilter.h"
-#include "itkJSONFromMesh.h"
-#include "itkMeshFromJSON.h"
+#include "itkJSONToMeshFilter.h"
 
 #include "itkMesh.h"
 #include "itkMeshFileReader.h"
@@ -55,12 +54,19 @@ itkJSONMeshInterfaceTest(int argc, char * argv[])
   auto meshJSON = meshToJSONFilter->GetOutput();
 
   std::cout << "Mesh JSON: " << meshJSON->GetJSON() << std::endl;
-/*
-  MeshType::Pointer convertedMesh = itk::MeshFromJSON<MeshType>(imageInterface);
+
+  using JSONToMeshFilterType = itk::JSONToMeshFilter<MeshType>;
+  auto jsonToMeshFilter = JSONToMeshFilterType::New();
+  jsonToMeshFilter->SetInput(meshJSON);
+  ITK_TRY_EXPECT_NO_EXCEPTION(jsonToMeshFilter->Update());
+  MeshType::Pointer convertedMesh = jsonToMeshFilter->GetOutput();
   std::cout << "convertedMesh: " << convertedMesh << std::endl;
 
-  ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteMesh(convertedMesh, outputMeshFile));
-  */
+  using WriterType = itk::MeshFileWriter<MeshType>;
+  auto writer = WriterType::New();
+  writer->SetFileName(outputMeshFile);
+  writer->SetInput(convertedMesh);
+  ITK_TRY_EXPECT_NO_EXCEPTION(writer->Update());
 
   return EXIT_SUCCESS;
 }
