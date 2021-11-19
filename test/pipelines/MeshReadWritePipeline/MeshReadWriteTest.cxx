@@ -44,8 +44,6 @@ int main( int argc, char * argv[] )
 
   try
     {
-      reader->Update();
-      std::cout << "reader output cell buffer size: " << reader->GetOutput()->GetNumberOfCells() << std::endl;
     writer->Update();
     }
   catch( itk::ExceptionObject & error )
