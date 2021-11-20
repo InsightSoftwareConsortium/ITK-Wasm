@@ -26,9 +26,9 @@ namespace itk
 /**
  *\class JSONToMeshFilter
  * \brief Convert an MeshJSON to an Mesh object.
- * 
+ *
  * TMesh must match the type stored in the JSON representation or an exception will be shown.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TMesh>

@@ -28,9 +28,9 @@ namespace itk
  * \brief JSON representation for an itk::Mesh
  *
  * JSON representation for an itk::Mesh for interfacing across programming languages and runtimes.
- * 
+ *
  * Point, CellBuffer, PointData, and CellData binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TMesh>
