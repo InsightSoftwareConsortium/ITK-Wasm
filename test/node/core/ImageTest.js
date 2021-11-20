@@ -70,6 +70,12 @@ test('size should have a default value of 0', t => {
   t.is(image.size[0], 0)
 })
 
+test('metadata should be an object', t => {
+  const imageType = new ImageType(2)
+  const image = new Image(imageType)
+  t.is(typeof image.metadata, 'object')
+})
+
 test('data should have a default value of null', t => {
   const imageType = new ImageType(2)
   const image = new Image(imageType)

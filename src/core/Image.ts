@@ -13,6 +13,8 @@ class Image {
 
   size: number[]
 
+  metadata: Record<string, string | number | number[] | number[][]>
+
   data: null | TypedArray
 
   constructor (public readonly imageType = new ImageType()) {
@@ -31,6 +33,8 @@ class Image {
 
     this.size = new Array(dimension)
     this.size.fill(0)
+
+    this.metadata = {}
 
     this.data = null
   }
