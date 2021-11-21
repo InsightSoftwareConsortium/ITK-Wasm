@@ -4,7 +4,9 @@ set -eo pipefail
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 
-echo $DOCKERHUB_ITKWASM_PASSWORD | docker login --username "$DOCKERHUB_ITKWASM_USERNAME" --password-stdin
+if test ! -z ${DOCKERHUB_ITKWASM_PASSWORD+x}; then
+  echo $DOCKERHUB_ITKWASM_PASSWORD | docker login --username "$DOCKERHUB_ITKWASM_USERNAME" --password-stdin
+fi
 
 docker push itkwasm/wasi:${TAG}-debug
 docker push itkwasm/wasi:${TAG}

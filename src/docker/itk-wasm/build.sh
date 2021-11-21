@@ -20,11 +20,14 @@ BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 debug=false
 wasi=false
+version_tag=false
 for param; do
   if [[ $param == '--with-debug' ]]; then
     debug=true
   elif [[ $param == '--with-wasi' ]]; then
     wasi=true
+  elif [[ $param == '--version-tag' ]]; then
+    version_tag=true
   else
     newparams+=("$param")
   fi
@@ -38,14 +41,16 @@ docker build -t itkwasm/emscripten:latest \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
-docker build -t itkwasm/emscripten:${TAG} \
-        --build-arg IMAGE=itkwasm/emscripten \
-        --build-arg CMAKE_BUILD_TYPE=Release \
-        --build-arg VERSION=${TAG} \
-        --build-arg VCS_REF=${VCS_REF} \
-        --build-arg VCS_URL=${VCS_URL} \
-        --build-arg BUILD_DATE=${BUILD_DATE} \
-        $script_dir $@
+if $version_tag; then
+        docker build -t itkwasm/emscripten:${TAG} \
+                --build-arg IMAGE=itkwasm/emscripten \
+                --build-arg CMAKE_BUILD_TYPE=Release \
+                --build-arg VERSION=${TAG} \
+                --build-arg VCS_REF=${VCS_REF} \
+                --build-arg VCS_URL=${VCS_URL} \
+                --build-arg BUILD_DATE=${BUILD_DATE} \
+                $script_dir $@
+fi
 
 if $wasi; then
   docker build -t itkwasm/wasi:latest  \
@@ -56,16 +61,18 @@ if $wasi; then
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
-  docker build -t itkwasm/wasi:${TAG} \
-          --build-arg IMAGE=itkwasm/wasi \
-          --build-arg CMAKE_BUILD_TYPE=Release \
-          --build-arg VERSION=${TAG} \
-          --build-arg BASE_TAG=${TAG} \
-          --build-arg BASE_IMAGE=itkwasm/wasi-base \
-          --build-arg VCS_REF=${VCS_REF} \
-          --build-arg VCS_URL=${VCS_URL} \
-          --build-arg BUILD_DATE=${BUILD_DATE} \
-          $script_dir $@
+  if $version_tag; then
+        docker build -t itkwasm/wasi:${TAG} \
+                --build-arg IMAGE=itkwasm/wasi \
+                --build-arg CMAKE_BUILD_TYPE=Release \
+                --build-arg VERSION=${TAG} \
+                --build-arg BASE_TAG=${TAG} \
+                --build-arg BASE_IMAGE=itkwasm/wasi-base \
+                --build-arg VCS_REF=${VCS_REF} \
+                --build-arg VCS_URL=${VCS_URL} \
+                --build-arg BUILD_DATE=${BUILD_DATE} \
+                $script_dir $@
+  fi
 fi
 
 if $debug; then
@@ -77,15 +84,17 @@ if $debug; then
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
-  docker build -t itkwasm/emscripten:${TAG}-debug \
-          --build-arg IMAGE=itkwasm/emscripten \
-          --build-arg CMAKE_BUILD_TYPE=Debug \
-          --build-arg VERSION=${TAG}-debug \
-          --build-arg BASE_TAG=${TAG}-debug \
-          --build-arg VCS_REF=${VCS_REF} \
-          --build-arg VCS_URL=${VCS_URL} \
-          --build-arg BUILD_DATE=${BUILD_DATE} \
-          $script_dir $@
+  if $version_tag; then
+        docker build -t itkwasm/emscripten:${TAG}-debug \
+                --build-arg IMAGE=itkwasm/emscripten \
+                --build-arg CMAKE_BUILD_TYPE=Debug \
+                --build-arg VERSION=${TAG}-debug \
+                --build-arg BASE_TAG=${TAG}-debug \
+                --build-arg VCS_REF=${VCS_REF} \
+                --build-arg VCS_URL=${VCS_URL} \
+                --build-arg BUILD_DATE=${BUILD_DATE} \
+                $script_dir $@
+  fi
   if $wasi; then
     docker build -t itkwasm/wasi:latest-debug  \
             --build-arg IMAGE=itkwasm/wasi \
@@ -96,16 +105,18 @@ if $debug; then
             --build-arg VCS_URL=${VCS_URL} \
             --build-arg BUILD_DATE=${BUILD_DATE} \
             $script_dir $@
-    docker build -t itkwasm/wasi:${TAG}-debug \
-            --build-arg IMAGE=itkwasm/wasi \
-            --build-arg CMAKE_BUILD_TYPE=Debug \
-            --build-arg VERSION=${TAG} \
-            --build-arg BASE_TAG=${TAG}-debug \
-            --build-arg BASE_IMAGE=itkwasm/wasi-base \
-            --build-arg VCS_REF=${VCS_REF} \
-            --build-arg VCS_URL=${VCS_URL} \
-            --build-arg BUILD_DATE=${BUILD_DATE} \
-            $script_dir $@
+    if $version_tag; then
+        docker build -t itkwasm/wasi:${TAG}-debug \
+                --build-arg IMAGE=itkwasm/wasi \
+                --build-arg CMAKE_BUILD_TYPE=Debug \
+                --build-arg VERSION=${TAG} \
+                --build-arg BASE_TAG=${TAG}-debug \
+                --build-arg BASE_IMAGE=itkwasm/wasi-base \
+                --build-arg VCS_REF=${VCS_REF} \
+                --build-arg VCS_URL=${VCS_URL} \
+                --build-arg BUILD_DATE=${BUILD_DATE} \
+                $script_dir $@
+    fi
   fi
 fi
 
