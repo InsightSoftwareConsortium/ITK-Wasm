@@ -50,6 +50,7 @@ set(WebAssemblyInterfaceTests
   itkJSONMeshInterfaceTest.cxx
   itkWASMImageIOTest.cxx
   itkWASMMeshIOTest.cxx
+  itkCLITest.cxx
 )
 
 CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
@@ -111,6 +112,18 @@ itk_add_test(NAME itkWASMImageIONiftiTest
 itk_add_test(NAME itkWASMMeshIOTest
     COMMAND WebAssemblyInterfaceTestDriver
     itkWASMMeshIOTest
+      DATA{Input/cow.vtk}
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.vtk
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm.zip
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.zip.vtk
+)
+
+itk_add_test(NAME itkCLITest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkCLITest
+      DATA{Input/brainweb165a10f17.mha}
+      ${ITK_TEST_OUTPUT_DIR}/itkCLITest.mha
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm
       ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.vtk
