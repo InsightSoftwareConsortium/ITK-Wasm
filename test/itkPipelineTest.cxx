@@ -16,11 +16,15 @@
  *
  *=========================================================================*/
 #include "itkTestingMacros.h"
-#include "itkCLI.h"
+#include "itkPipeline.h"
 
 int
-itkCLITest(int argc, char * argv[])
+itkPipelineTest(int argc, char * argv[])
 {
+
+  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", argc, argv);
+
+  ITK_WASM_PARSE(pipeline, argc, argv);
 
   return EXIT_SUCCESS;
 }

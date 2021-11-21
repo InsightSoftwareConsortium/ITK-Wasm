@@ -130,11 +130,21 @@ FetchContent_Declare(
   GIT_TAG        ${CLI11_GIT_TAG}
 )
 
+set(rang_GIT_REPOSITORY "https://github.com/agauniyal/rang.git")
+# v3.2
+set(rang_GIT_TAG "09f2f05bea29d61b1df99e4b36f63d961156a580")
+FetchContent_Declare(
+  rang
+  GIT_REPOSITORY ${rang_GIT_REPOSITORY}
+  GIT_TAG        ${rang_GIT_TAG}
+)
 
-FetchContent_MakeAvailable(rapidjson_lib minizip-ng cli11)
+
+FetchContent_MakeAvailable(rapidjson_lib minizip-ng cli11 rang)
 set(RapidJSON_INCLUDE_DIR "${rapidjson_lib_SOURCE_DIR}/include")
 set(minizip-ng_INCLUDE_DIR "${minizip-ng_SOURCE_DIR}")
 set(cli11_INCLUDE_DIR "${cli11_SOURCE_DIR}/include")
+set(rang_INCLUDE_DIR "${rang_SOURCE_DIR}/include")
 
 set(BUILD_TESTING ${_itk_build_testing})
 set(BUILD_SHARED_LIBS ${_itk_build_shared})
@@ -146,6 +156,7 @@ set(WebAssemblyInterface_INCLUDE_DIRS
   ${RapidJSON_INCLUDE_DIR}
   ${minizip-ng_INCLUDE_DIR}
   ${cli11_INCLUDE_DIR}
+  ${rang_INCLUDE_DIR}
   )
 list(APPEND WebAssemblyInterface_LIBRARIES minizip-itk)
 

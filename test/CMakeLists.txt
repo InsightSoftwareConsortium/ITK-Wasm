@@ -50,7 +50,7 @@ set(WebAssemblyInterfaceTests
   itkJSONMeshInterfaceTest.cxx
   itkWASMImageIOTest.cxx
   itkWASMMeshIOTest.cxx
-  itkCLITest.cxx
+  itkPipelineTest.cxx
 )
 
 CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
@@ -119,16 +119,11 @@ itk_add_test(NAME itkWASMMeshIOTest
       ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.zip.vtk
 )
 
-itk_add_test(NAME itkCLITest
+itk_add_test(NAME itkPipelineTest
     COMMAND WebAssemblyInterfaceTestDriver
-    itkCLITest
+    itkPipelineTest
       DATA{Input/brainweb165a10f17.mha}
-      ${ITK_TEST_OUTPUT_DIR}/itkCLITest.mha
-      DATA{Input/cow.vtk}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.vtk
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm.zip
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.zip.vtk
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineTest.mha
 )
 
 if(EMSCRIPTEN)
