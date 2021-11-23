@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkMeshJSON_h
-#define itkMeshJSON_h
+#ifndef itkWASMMesh_h
+#define itkWASMMesh_h
 
 #include "itkWASMDataObject.h"
 #include "itkVectorContainer.h"
@@ -24,7 +24,7 @@
 namespace itk
 {
 /**
- *\class MeshJSON
+ *\class WASMMesh
  * \brief JSON representation for an itk::Mesh
  *
  * JSON representation for an itk::Mesh for interfacing across programming languages and runtimes.
@@ -34,20 +34,20 @@ namespace itk
  * \ingroup WebAssemblyInterface
  */
 template <typename TMesh>
-class ITK_TEMPLATE_EXPORT MeshJSON : public WASMDataObject
+class ITK_TEMPLATE_EXPORT WASMMesh : public WASMDataObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_MOVE(MeshJSON);
+  ITK_DISALLOW_COPY_AND_MOVE(WASMMesh);
 
   /** Standard class type aliases. */
-  using Self = MeshJSON;
+  using Self = WASMMesh;
   using Superclass = WASMDataObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeshJSON, WASMDataObject);
+  itkTypeMacro(WASMMesh, WASMDataObject);
 
   using MeshType = TMesh;
 
@@ -66,11 +66,11 @@ public:
   }
 
 protected:
-  MeshJSON()
+  WASMMesh()
   {
     this->m_CellBufferContainer = CellBufferContainerType::New();
   }
-  ~MeshJSON() override = default;
+  ~WASMMesh() override = default;
 
   typename CellBufferContainerType::Pointer m_CellBufferContainer;
 };
@@ -78,7 +78,7 @@ protected:
 } // namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#  include "itkMeshJSON.hxx"
+#  include "itkWASMMesh.hxx"
 #endif
 
 #endif

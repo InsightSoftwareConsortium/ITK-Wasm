@@ -15,10 +15,10 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkJSONToMeshFilter_hxx
-#define itkJSONToMeshFilter_hxx
+#ifndef itkWASMMeshToMeshFilter_hxx
+#define itkWASMMeshToMeshFilter_hxx
 
-#include "itkJSONToMeshFilter.h"
+#include "itkWASMMeshToMeshFilter.h"
 #include "itkNumericTraits.h"
 #include "itkCommonEnums.h"
 #include "itkHexahedronCell.h"
@@ -42,8 +42,8 @@ namespace itk
 {
 
 template <typename TMesh>
-JSONToMeshFilter<TMesh>
-::JSONToMeshFilter()
+WASMMeshToMeshFilter<TMesh>
+::WASMMeshToMeshFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -54,7 +54,7 @@ JSONToMeshFilter<TMesh>
 
 template <typename TMesh>
 ProcessObject::DataObjectPointer
-JSONToMeshFilter<TMesh>
+WASMMeshToMeshFilter<TMesh>
 ::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return MeshType::New().GetPointer();
@@ -62,7 +62,7 @@ JSONToMeshFilter<TMesh>
 
 template <typename TMesh>
 ProcessObject::DataObjectPointer
-JSONToMeshFilter<TMesh>
+WASMMeshToMeshFilter<TMesh>
 ::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return MeshType::New().GetPointer();
@@ -70,7 +70,7 @@ JSONToMeshFilter<TMesh>
 
 template <typename TMesh>
 auto
-JSONToMeshFilter<TMesh>
+WASMMeshToMeshFilter<TMesh>
 ::GetOutput() -> MeshType *
 {
   // we assume that the first output is of the templated type
@@ -79,7 +79,7 @@ JSONToMeshFilter<TMesh>
 
 template <typename TMesh>
 auto
-JSONToMeshFilter<TMesh>
+WASMMeshToMeshFilter<TMesh>
 ::GetOutput() const -> const MeshType *
 {
   // we assume that the first output is of the templated type
@@ -88,7 +88,7 @@ JSONToMeshFilter<TMesh>
 
 template <typename TMesh>
 auto
-JSONToMeshFilter<TMesh>
+WASMMeshToMeshFilter<TMesh>
 ::GetOutput(unsigned int idx) -> MeshType *
 {
   auto * out = dynamic_cast<MeshType *>(this->ProcessObject::GetOutput(idx));
@@ -102,33 +102,33 @@ JSONToMeshFilter<TMesh>
 
 template <typename TMesh>
 void
-JSONToMeshFilter<TMesh>
-::SetInput(const MeshJSONType * input)
+WASMMeshToMeshFilter<TMesh>
+::SetInput(const WASMMeshType * input)
 {
   // Process object is not const-correct so the const_cast is required here
-  this->ProcessObject::SetNthInput(0, const_cast<MeshJSONType *>(input));
+  this->ProcessObject::SetNthInput(0, const_cast<WASMMeshType *>(input));
 }
 
 template <typename TMesh>
 void
-JSONToMeshFilter<TMesh>
-::SetInput(unsigned int index, const MeshJSONType * mesh)
+WASMMeshToMeshFilter<TMesh>
+::SetInput(unsigned int index, const WASMMeshType * mesh)
 {
   // Process object is not const-correct so the const_cast is required here
-  this->ProcessObject::SetNthInput(index, const_cast<MeshJSONType *>(mesh));
+  this->ProcessObject::SetNthInput(index, const_cast<WASMMeshType *>(mesh));
 }
 
 template <typename TMesh>
-const typename JSONToMeshFilter<TMesh>::MeshJSONType *
-JSONToMeshFilter<TMesh>
+const typename WASMMeshToMeshFilter<TMesh>::WASMMeshType *
+WASMMeshToMeshFilter<TMesh>
 ::GetInput()
 {
-  return itkDynamicCastInDebugMode<const MeshJSONType *>(this->GetPrimaryInput());
+  return itkDynamicCastInDebugMode<const WASMMeshType *>(this->GetPrimaryInput());
 }
 
 template <typename TMesh>
-const typename JSONToMeshFilter<TMesh>::MeshJSONType *
-JSONToMeshFilter<TMesh>
+const typename WASMMeshToMeshFilter<TMesh>::WASMMeshType *
+WASMMeshToMeshFilter<TMesh>
 ::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TMesh *>(this->ProcessObject::GetInput(idx));
@@ -136,11 +136,11 @@ JSONToMeshFilter<TMesh>
 
 template <typename TMesh>
 void
-JSONToMeshFilter<TMesh>
+WASMMeshToMeshFilter<TMesh>
 ::GenerateData()
 {
   // Get the input and output pointers
-  const MeshJSONType * meshJSON = this->GetInput();
+  const WASMMeshType * meshJSON = this->GetInput();
   const std::string json(meshJSON->GetJSON());
   MeshType * mesh = this->GetOutput();
 
@@ -223,7 +223,7 @@ JSONToMeshFilter<TMesh>
   using CellAutoPointer = typename MeshType::CellAutoPointer;
   const rapidjson::Value & cellsJson = document["cells"];
   const std::string cellsString( cellsJson.GetString() );
-  using CellBufferType = typename MeshJSONType::CellBufferContainerType::Element;
+  using CellBufferType = typename WASMMeshType::CellBufferContainerType::Element;
   CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::atol(cellsString.substr(33).c_str())) );
   SizeValueType        index = NumericTraits<SizeValueType>::ZeroValue();
   CellIdentifier id = NumericTraits<CellIdentifier>::ZeroValue();
@@ -452,7 +452,7 @@ JSONToMeshFilter<TMesh>
 
 template <typename TMesh>
 void
-JSONToMeshFilter<TMesh>
+WASMMeshToMeshFilter<TMesh>
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

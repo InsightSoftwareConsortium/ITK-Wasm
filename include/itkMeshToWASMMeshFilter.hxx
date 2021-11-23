@@ -15,10 +15,10 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkMeshToJSONFilter_hxx
-#define itkMeshToJSONFilter_hxx
+#ifndef itkMeshToWASMMeshFilter_hxx
+#define itkMeshToWASMMeshFilter_hxx
 
-#include "itkMeshToJSONFilter.h"
+#include "itkMeshToWASMMeshFilter.h"
 
 #include "itkMeshConvertPixelTraits.h"
 
@@ -33,67 +33,67 @@ namespace itk
 {
 
 template <typename TMesh>
-MeshToJSONFilter<TMesh>
-::MeshToJSONFilter()
+MeshToWASMMeshFilter<TMesh>
+::MeshToWASMMeshFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
-  typename MeshJSONType::Pointer output = static_cast<MeshJSONType *>(this->MakeOutput(0).GetPointer());
+  typename WASMMeshType::Pointer output = static_cast<WASMMeshType *>(this->MakeOutput(0).GetPointer());
   this->ProcessObject::SetNumberOfRequiredOutputs(1);
   this->ProcessObject::SetNthOutput(0, output.GetPointer());
 }
 
 template <typename TMesh>
 ProcessObject::DataObjectPointer
-MeshToJSONFilter<TMesh>
+MeshToWASMMeshFilter<TMesh>
 ::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
-  return MeshJSONType::New().GetPointer();
+  return WASMMeshType::New().GetPointer();
 }
 
 template <typename TMesh>
 ProcessObject::DataObjectPointer
-MeshToJSONFilter<TMesh>
+MeshToWASMMeshFilter<TMesh>
 ::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
-  return MeshJSONType::New().GetPointer();
+  return WASMMeshType::New().GetPointer();
 }
 
 template <typename TMesh>
 auto
-MeshToJSONFilter<TMesh>
-::GetOutput() -> MeshJSONType *
+MeshToWASMMeshFilter<TMesh>
+::GetOutput() -> WASMMeshType *
 {
   // we assume that the first output is of the templated type
-  return itkDynamicCastInDebugMode<MeshJSONType *>(this->GetPrimaryOutput());
+  return itkDynamicCastInDebugMode<WASMMeshType *>(this->GetPrimaryOutput());
 }
 
 template <typename TMesh>
 auto
-MeshToJSONFilter<TMesh>
-::GetOutput() const -> const MeshJSONType *
+MeshToWASMMeshFilter<TMesh>
+::GetOutput() const -> const WASMMeshType *
 {
   // we assume that the first output is of the templated type
-  return itkDynamicCastInDebugMode<const MeshJSONType *>(this->GetPrimaryOutput());
+  return itkDynamicCastInDebugMode<const WASMMeshType *>(this->GetPrimaryOutput());
 }
 
 template <typename TMesh>
 auto
-MeshToJSONFilter<TMesh>
-::GetOutput(unsigned int idx) -> MeshJSONType *
+MeshToWASMMeshFilter<TMesh>
+::GetOutput(unsigned int idx) -> WASMMeshType *
 {
-  auto * out = dynamic_cast<MeshJSONType *>(this->ProcessObject::GetOutput(idx));
+  auto * out = dynamic_cast<WASMMeshType *>(this->ProcessObject::GetOutput(idx));
 
   if (out == nullptr && this->ProcessObject::GetOutput(idx) != nullptr)
   {
-    itkWarningMacro(<< "Unable to convert output number " << idx << " to type " << typeid(MeshJSONType).name());
+    itkWarningMacro(<< "Unable to convert output number " << idx << " to type " << typeid(WASMMeshType).name());
   }
   return out;
 }
 
 template <typename TMesh>
 void
-MeshToJSONFilter<TMesh>
+MeshToWASMMeshFilter<TMesh>
 ::SetInput(const MeshType * input)
 {
   // Process object is not const-correct so the const_cast is required here
@@ -102,7 +102,7 @@ MeshToJSONFilter<TMesh>
 
 template <typename TMesh>
 void
-MeshToJSONFilter<TMesh>
+MeshToWASMMeshFilter<TMesh>
 ::SetInput(unsigned int index, const MeshType * mesh)
 {
   // Process object is not const-correct so the const_cast is required here
@@ -110,16 +110,16 @@ MeshToJSONFilter<TMesh>
 }
 
 template <typename TMesh>
-const typename MeshToJSONFilter<TMesh>::MeshType *
-MeshToJSONFilter<TMesh>
+const typename MeshToWASMMeshFilter<TMesh>::MeshType *
+MeshToWASMMeshFilter<TMesh>
 ::GetInput()
 {
   return itkDynamicCastInDebugMode<const MeshType *>(this->GetPrimaryInput());
 }
 
 template <typename TMesh>
-const typename MeshToJSONFilter<TMesh>::MeshType *
-MeshToJSONFilter<TMesh>
+const typename MeshToWASMMeshFilter<TMesh>::MeshType *
+MeshToWASMMeshFilter<TMesh>
 ::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TMesh *>(this->ProcessObject::GetInput(idx));
@@ -127,12 +127,12 @@ MeshToJSONFilter<TMesh>
 
 template <typename TMesh>
 void
-MeshToJSONFilter<TMesh>
+MeshToWASMMeshFilter<TMesh>
 ::GenerateData()
 {
   // Get the input and output pointers
   const MeshType * mesh = this->GetInput();
-  MeshJSONType * meshJSON = this->GetOutput();
+  WASMMeshType * meshJSON = this->GetOutput();
 
   meshJSON->SetMesh(mesh);
 
@@ -267,7 +267,7 @@ MeshToJSONFilter<TMesh>
 
 template <typename TMesh>
 void
-MeshToJSONFilter<TMesh>
+MeshToWASMMeshFilter<TMesh>
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

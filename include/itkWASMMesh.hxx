@@ -15,17 +15,17 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkMeshJSON_hxx
-#define itkMeshJSON_hxx
+#ifndef itkWASMMesh_hxx
+#define itkWASMMesh_hxx
 
-#include "itkMeshJSON.h"
+#include "itkWASMMesh.h"
 
 namespace itk
 {
 
 template <typename TMesh>
 void
-MeshJSON<TMesh>
+WASMMesh<TMesh>
 ::SetMesh(const MeshType * mesh)
 {
     SizeValueType cellBufferSize = 2 * mesh->GetNumberOfCells();

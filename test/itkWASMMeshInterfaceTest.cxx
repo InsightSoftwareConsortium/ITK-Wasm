@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkMeshToJSONFilter.h"
-#include "itkJSONToMeshFilter.h"
+#include "itkMeshToWASMMeshFilter.h"
+#include "itkWASMMeshToMeshFilter.h"
 
 #include "itkMesh.h"
 #include "itkMeshFileReader.h"
@@ -24,7 +24,7 @@
 #include "itkTestingMacros.h"
 
 int
-itkJSONMeshInterfaceTest(int argc, char * argv[])
+itkWASMMeshInterfaceTest(int argc, char * argv[])
 {
   if (argc < 3)
   {
@@ -47,16 +47,16 @@ itkJSONMeshInterfaceTest(int argc, char * argv[])
   MeshPointer inputMesh = reader->GetOutput();
   std::cout << "inputMesh: " << inputMesh << std::endl;
 
-  using MeshToJSONFilterType = itk::MeshToJSONFilter<MeshType>;
-  auto meshToJSONFilter = MeshToJSONFilterType::New();
+  using MeshToWASMMeshFilterType = itk::MeshToWASMMeshFilter<MeshType>;
+  auto meshToJSONFilter = MeshToWASMMeshFilterType::New();
   meshToJSONFilter->SetInput(inputMesh);
   ITK_TRY_EXPECT_NO_EXCEPTION(meshToJSONFilter->Update());
   auto meshJSON = meshToJSONFilter->GetOutput();
 
   std::cout << "Mesh JSON: " << meshJSON->GetJSON() << std::endl;
 
-  using JSONToMeshFilterType = itk::JSONToMeshFilter<MeshType>;
-  auto jsonToMeshFilter = JSONToMeshFilterType::New();
+  using WASMMeshToMeshFilterType = itk::WASMMeshToMeshFilter<MeshType>;
+  auto jsonToMeshFilter = WASMMeshToMeshFilterType::New();
   jsonToMeshFilter->SetInput(meshJSON);
   ITK_TRY_EXPECT_NO_EXCEPTION(jsonToMeshFilter->Update());
   MeshType::Pointer convertedMesh = jsonToMeshFilter->GetOutput();

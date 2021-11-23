@@ -15,28 +15,30 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkMeshToJSONFilter_h
-#define itkMeshToJSONFilter_h
+#ifndef itkWASMMeshToMeshFilter_h
+#define itkWASMMeshToMeshFilter_h
 
 #include "itkProcessObject.h"
-#include "itkMeshJSON.h"
+#include "itkWASMMesh.h"
 
 namespace itk
 {
 /**
- *\class MeshToJSONFilter
- * \brief Convert an Mesh to an MeshJSON object.
- * 
+ *\class WASMMeshToMeshFilter
+ * \brief Convert an WASMMesh to an Mesh object.
+ *
+ * TMesh must match the type stored in the JSON representation or an exception will be shown.
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TMesh>
-class ITK_TEMPLATE_EXPORT MeshToJSONFilter : public ProcessObject
+class ITK_TEMPLATE_EXPORT WASMMeshToMeshFilter : public ProcessObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_MOVE(MeshToJSONFilter);
+  ITK_DISALLOW_COPY_AND_MOVE(WASMMeshToMeshFilter);
 
   /** Standard class type aliases. */
-  using Self = MeshToJSONFilter;
+  using Self = WASMMeshToMeshFilter;
   using Superclass = ProcessObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
@@ -45,39 +47,39 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeshToJSONFilter, ProcessObject);
+  itkTypeMacro(WASMMeshToMeshFilter, ProcessObject);
 
   using DataObjectIdentifierType = Superclass::DataObjectIdentifierType;
   using DataObjectPointerArraySizeType = Superclass::DataObjectPointerArraySizeType;
 
   using MeshType = TMesh;
-  using MeshJSONType = MeshJSON<MeshType>;
+  using WASMMeshType = WASMMesh<MeshType>;
 
   /** Set/Get the path input of this process object.  */
   using Superclass::SetInput;
   virtual void
-  SetInput(const MeshType * mesh);
+  SetInput(const WASMMeshType * mesh);
 
   virtual void
-  SetInput(unsigned int, const MeshType * mesh);
+  SetInput(unsigned int, const WASMMeshType * mesh);
 
-  const MeshType *
+  const WASMMeshType *
   GetInput();
 
-  const MeshType *
+  const WASMMeshType *
   GetInput(unsigned int idx);
 
-  MeshJSONType *
+  MeshType *
   GetOutput();
-  const MeshJSONType *
+  const MeshType *
   GetOutput() const;
 
-  MeshJSONType *
+  MeshType *
   GetOutput(unsigned int idx);
 
 protected:
-  MeshToJSONFilter();
-  ~MeshToJSONFilter() override = default;
+  WASMMeshToMeshFilter();
+  ~WASMMeshToMeshFilter() override = default;
 
   ProcessObject::DataObjectPointer
   MakeOutput(ProcessObject::DataObjectPointerArraySizeType idx) override;
@@ -96,7 +98,7 @@ protected:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#  include "itkMeshToJSONFilter.hxx"
+#  include "itkWASMMeshToMeshFilter.hxx"
 #endif
 
 #endif
