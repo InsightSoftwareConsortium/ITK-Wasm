@@ -15,15 +15,15 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkImageJSON_h
-#define itkImageJSON_h
+#ifndef itkWASMImage_h
+#define itkWASMImage_h
 
 #include "itkWASMDataObject.h"
 
 namespace itk
 {
 /**
- *\class ImageJSON
+ *\class WASMImage
  * \brief JSON representation for an itk::ImageBase
  *
  * JSON representation for an itk::ImageBase for interfacing across programming languages and runtimes.
@@ -33,20 +33,20 @@ namespace itk
  * \ingroup WebAssemblyInterface
  */
 template <typename TImage>
-class ITK_TEMPLATE_EXPORT ImageJSON : public WASMDataObject
+class ITK_TEMPLATE_EXPORT WASMImage : public WASMDataObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_MOVE(ImageJSON);
+  ITK_DISALLOW_COPY_AND_MOVE(WASMImage);
 
   /** Standard class type aliases. */
-  using Self = ImageJSON;
+  using Self = WASMImage;
   using Superclass = WASMDataObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageJSON, WASMDataObject);
+  itkTypeMacro(WASMImage, WASMDataObject);
 
   using ImageType = TImage;
 
@@ -59,8 +59,8 @@ public:
   }
 
 protected:
-  ImageJSON() = default;
-  ~ImageJSON() override = default;
+  WASMImage() = default;
+  ~WASMImage() override = default;
 };
 } // namespace itk
 

@@ -15,15 +15,15 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkImageToJSONFilter.h"
-#include "itkJSONToImageFilter.h"
+#include "itkImageToWASMImageFilter.h"
+#include "itkWASMImageToImageFilter.h"
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkTestingMacros.h"
 
 int
-itkJSONImageInterfaceTest(int argc, char * argv[])
+itkWASMImageInterfaceTest(int argc, char * argv[])
 {
   if (argc < 3)
   {
@@ -43,15 +43,15 @@ itkJSONImageInterfaceTest(int argc, char * argv[])
   ITK_TRY_EXPECT_NO_EXCEPTION(inputImage = itk::ReadImage<ImageType>(inputImageFile));
   std::cout << "inputImage: " << inputImage << std::endl;
 
-  using ImageToJSONFilterType = itk::ImageToJSONFilter<ImageType>;
-  auto imageToJSON = ImageToJSONFilterType::New();
+  using ImageToWASMImageFilterType = itk::ImageToWASMImageFilter<ImageType>;
+  auto imageToJSON = ImageToWASMImageFilterType::New();
   imageToJSON->SetInput(inputImage);
   imageToJSON->Update();
   auto imageJSON = imageToJSON->GetOutput();
   std::cout << "Image JSON: " << imageJSON->GetJSON() << std::endl;
 
-  using JSONToImageFilterType = itk::JSONToImageFilter<ImageType>;
-  auto jsonToImage = JSONToImageFilterType::New();
+  using WASMImageToImageFilterType = itk::WASMImageToImageFilter<ImageType>;
+  auto jsonToImage = WASMImageToImageFilterType::New();
   jsonToImage->SetInput(imageToJSON->GetOutput());
   jsonToImage->Update();
   ImageType::Pointer convertedImage = jsonToImage->GetOutput();

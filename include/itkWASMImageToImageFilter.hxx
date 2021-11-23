@@ -15,10 +15,10 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkJSONToImageFilter_hxx
-#define itkJSONToImageFilter_hxx
+#ifndef itkWASMImageToImageFilter_hxx
+#define itkWASMImageToImageFilter_hxx
 
-#include "itkJSONToImageFilter.h"
+#include "itkWASMImageToImageFilter.h"
 
 #include "itkImportImageFilter.h"
 #include <exception>
@@ -32,8 +32,8 @@ namespace itk
 {
 
 template <typename TImage>
-JSONToImageFilter<TImage>
-::JSONToImageFilter()
+WASMImageToImageFilter<TImage>
+::WASMImageToImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -44,7 +44,7 @@ JSONToImageFilter<TImage>
 
 template <typename TImage>
 ProcessObject::DataObjectPointer
-JSONToImageFilter<TImage>
+WASMImageToImageFilter<TImage>
 ::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return ImageType::New().GetPointer();
@@ -52,7 +52,7 @@ JSONToImageFilter<TImage>
 
 template <typename TImage>
 ProcessObject::DataObjectPointer
-JSONToImageFilter<TImage>
+WASMImageToImageFilter<TImage>
 ::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return ImageType::New().GetPointer();
@@ -60,7 +60,7 @@ JSONToImageFilter<TImage>
 
 template <typename TImage>
 auto
-JSONToImageFilter<TImage>
+WASMImageToImageFilter<TImage>
 ::GetOutput() -> ImageType *
 {
   // we assume that the first output is of the templated type
@@ -69,7 +69,7 @@ JSONToImageFilter<TImage>
 
 template <typename TImage>
 auto
-JSONToImageFilter<TImage>
+WASMImageToImageFilter<TImage>
 ::GetOutput() const -> const ImageType *
 {
   // we assume that the first output is of the templated type
@@ -78,7 +78,7 @@ JSONToImageFilter<TImage>
 
 template <typename TImage>
 auto
-JSONToImageFilter<TImage>
+WASMImageToImageFilter<TImage>
 ::GetOutput(unsigned int idx) -> ImageType *
 {
   auto * out = dynamic_cast<ImageType *>(this->ProcessObject::GetOutput(idx));
@@ -92,33 +92,33 @@ JSONToImageFilter<TImage>
 
 template <typename TImage>
 void
-JSONToImageFilter<TImage>
-::SetInput(const ImageJSONType * input)
+WASMImageToImageFilter<TImage>
+::SetInput(const WASMImageType * input)
 {
   // Process object is not const-correct so the const_cast is required here
-  this->ProcessObject::SetNthInput(0, const_cast<ImageJSONType *>(input));
+  this->ProcessObject::SetNthInput(0, const_cast<WASMImageType *>(input));
 }
 
 template <typename TImage>
 void
-JSONToImageFilter<TImage>
-::SetInput(unsigned int index, const ImageJSONType * image)
+WASMImageToImageFilter<TImage>
+::SetInput(unsigned int index, const WASMImageType * image)
 {
   // Process object is not const-correct so the const_cast is required here
-  this->ProcessObject::SetNthInput(index, const_cast<ImageJSONType *>(image));
+  this->ProcessObject::SetNthInput(index, const_cast<WASMImageType *>(image));
 }
 
 template <typename TImage>
-const typename JSONToImageFilter<TImage>::ImageJSONType *
-JSONToImageFilter<TImage>
+const typename WASMImageToImageFilter<TImage>::WASMImageType *
+WASMImageToImageFilter<TImage>
 ::GetInput()
 {
-  return itkDynamicCastInDebugMode<const ImageJSONType *>(this->GetPrimaryInput());
+  return itkDynamicCastInDebugMode<const WASMImageType *>(this->GetPrimaryInput());
 }
 
 template <typename TImage>
-const typename JSONToImageFilter<TImage>::ImageJSONType *
-JSONToImageFilter<TImage>
+const typename WASMImageToImageFilter<TImage>::WASMImageType *
+WASMImageToImageFilter<TImage>
 ::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TImage *>(this->ProcessObject::GetInput(idx));
@@ -126,11 +126,11 @@ JSONToImageFilter<TImage>
 
 template <typename TImage>
 void
-JSONToImageFilter<TImage>
+WASMImageToImageFilter<TImage>
 ::GenerateData()
 {
   // Get the input and output pointers
-  const ImageJSONType * imageJSON = this->GetInput();
+  const WASMImageType * imageJSON = this->GetInput();
   const std::string json(imageJSON->GetJSON());
   ImageType * image = this->GetOutput();
 
@@ -229,7 +229,7 @@ JSONToImageFilter<TImage>
 
 template <typename TImage>
 void
-JSONToImageFilter<TImage>
+WASMImageToImageFilter<TImage>
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

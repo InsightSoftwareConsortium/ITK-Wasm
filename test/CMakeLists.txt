@@ -46,7 +46,7 @@ ExternalData_Expand_Arguments(
   )
 
 set(WebAssemblyInterfaceTests
-  itkJSONImageInterfaceTest.cxx
+  itkWASMImageInterfaceTest.cxx
   itkJSONMeshInterfaceTest.cxx
   itkWASMImageIOTest.cxx
   itkWASMMeshIOTest.cxx
@@ -56,13 +56,13 @@ set(WebAssemblyInterfaceTests
 CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
   "${WebAssemblyInterfaceTests}" )
 
-itk_add_test(NAME itkJSONImageInterfaceTest
+itk_add_test(NAME itkWASMImageInterfaceTest
     COMMAND WebAssemblyInterfaceTestDriver
       --compare DATA{Input/brainweb165a10f17.mha}
-      ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceTest.mha
-    itkJSONImageInterfaceTest
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageInterfaceTest.mha
+    itkWASMImageInterfaceTest
       DATA{Input/brainweb165a10f17.mha}
-      ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceTest.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageInterfaceTest.mha
 )
 
 itk_add_test(NAME itkJSONMeshInterfaceTest
@@ -72,13 +72,13 @@ itk_add_test(NAME itkJSONMeshInterfaceTest
       ${ITK_TEST_OUTPUT_DIR}/itkJSONMeshInterfaceTest.vtk
 )
 
-itk_add_test(NAME itkJSONImageInterfaceNiftiTest
+itk_add_test(NAME itkWASMImageInterfaceNiftiTest
     COMMAND WebAssemblyInterfaceTestDriver
       --compare DATA{Input/r16slice.nii.gz}
-      ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceNiftiTest.nii.gz
-    itkJSONImageInterfaceTest
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageInterfaceNiftiTest.nii.gz
+    itkWASMImageInterfaceTest
       DATA{Input/r16slice.nii.gz}
-      ${ITK_TEST_OUTPUT_DIR}/itkJSONImageInterfaceNiftiTest.nii.gz
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageInterfaceNiftiTest.nii.gz
 )
 
 itk_add_test(NAME itkWASMImageIOTest

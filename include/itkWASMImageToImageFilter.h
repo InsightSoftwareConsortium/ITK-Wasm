@@ -15,28 +15,30 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkImageToJSONFilter_h
-#define itkImageToJSONFilter_h
+#ifndef itkWASMImageToImageFilter_h
+#define itkWASMImageToImageFilter_h
 
 #include "itkProcessObject.h"
-#include "itkImageJSON.h"
+#include "itkWASMImage.h"
 
 namespace itk
 {
 /**
- *\class ImageToJSONFilter
- * \brief Convert an Image to an ImageJSON object.
+ *\class WASMImageToImageFilter
+ * \brief Convert an WASMImage to an Image object.
+ * 
+ * TImage must match the type stored in the JSON representation or an exception will be shown.
  * 
  * \ingroup WebAssemblyInterface
  */
 template <typename TImage>
-class ITK_TEMPLATE_EXPORT ImageToJSONFilter : public ProcessObject
+class ITK_TEMPLATE_EXPORT WASMImageToImageFilter : public ProcessObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_MOVE(ImageToJSONFilter);
+  ITK_DISALLOW_COPY_AND_MOVE(WASMImageToImageFilter);
 
   /** Standard class type aliases. */
-  using Self = ImageToJSONFilter;
+  using Self = WASMImageToImageFilter;
   using Superclass = ProcessObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
@@ -45,39 +47,39 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToJSONFilter, ProcessObject);
+  itkTypeMacro(WASMImageToImageFilter, ProcessObject);
 
   using DataObjectIdentifierType = Superclass::DataObjectIdentifierType;
   using DataObjectPointerArraySizeType = Superclass::DataObjectPointerArraySizeType;
 
   using ImageType = TImage;
-  using ImageJSONType = ImageJSON<ImageType>;
+  using WASMImageType = WASMImage<ImageType>;
 
   /** Set/Get the path input of this process object.  */
   using Superclass::SetInput;
   virtual void
-  SetInput(const ImageType * image);
+  SetInput(const WASMImageType * image);
 
   virtual void
-  SetInput(unsigned int, const ImageType * image);
+  SetInput(unsigned int, const WASMImageType * image);
 
-  const ImageType *
+  const WASMImageType *
   GetInput();
 
-  const ImageType *
+  const WASMImageType *
   GetInput(unsigned int idx);
 
-  ImageJSONType *
+  ImageType *
   GetOutput();
-  const ImageJSONType *
+  const ImageType *
   GetOutput() const;
 
-  ImageJSONType *
+  ImageType *
   GetOutput(unsigned int idx);
 
 protected:
-  ImageToJSONFilter();
-  ~ImageToJSONFilter() override = default;
+  WASMImageToImageFilter();
+  ~WASMImageToImageFilter() override = default;
 
   ProcessObject::DataObjectPointer
   MakeOutput(ProcessObject::DataObjectPointerArraySizeType idx) override;
@@ -96,7 +98,7 @@ protected:
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#  include "itkImageToJSONFilter.hxx"
+#  include "itkWASMImageToImageFilter.hxx"
 #endif
 
 #endif

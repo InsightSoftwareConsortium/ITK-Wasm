@@ -15,10 +15,10 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkImageToJSONFilter_hxx
-#define itkImageToJSONFilter_hxx
+#ifndef itkImageToWASMImageFilter_hxx
+#define itkImageToWASMImageFilter_hxx
 
-#include "itkImageToJSONFilter.h"
+#include "itkImageToWASMImageFilter.h"
 
 #include "itkDefaultConvertPixelTraits.h"
 
@@ -33,67 +33,67 @@ namespace itk
 {
 
 template <typename TImage>
-ImageToJSONFilter<TImage>
-::ImageToJSONFilter()
+ImageToWASMImageFilter<TImage>
+::ImageToWASMImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
-  typename ImageJSONType::Pointer output = static_cast<ImageJSONType *>(this->MakeOutput(0).GetPointer());
+  typename WASMImageType::Pointer output = static_cast<WASMImageType *>(this->MakeOutput(0).GetPointer());
   this->ProcessObject::SetNumberOfRequiredOutputs(1);
   this->ProcessObject::SetNthOutput(0, output.GetPointer());
 }
 
 template <typename TImage>
 ProcessObject::DataObjectPointer
-ImageToJSONFilter<TImage>
+ImageToWASMImageFilter<TImage>
 ::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
-  return ImageJSONType::New().GetPointer();
+  return WASMImageType::New().GetPointer();
 }
 
 template <typename TImage>
 ProcessObject::DataObjectPointer
-ImageToJSONFilter<TImage>
+ImageToWASMImageFilter<TImage>
 ::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
-  return ImageJSONType::New().GetPointer();
+  return WASMImageType::New().GetPointer();
 }
 
 template <typename TImage>
 auto
-ImageToJSONFilter<TImage>
-::GetOutput() -> ImageJSONType *
+ImageToWASMImageFilter<TImage>
+::GetOutput() -> WASMImageType *
 {
   // we assume that the first output is of the templated type
-  return itkDynamicCastInDebugMode<ImageJSONType *>(this->GetPrimaryOutput());
+  return itkDynamicCastInDebugMode<WASMImageType *>(this->GetPrimaryOutput());
 }
 
 template <typename TImage>
 auto
-ImageToJSONFilter<TImage>
-::GetOutput() const -> const ImageJSONType *
+ImageToWASMImageFilter<TImage>
+::GetOutput() const -> const WASMImageType *
 {
   // we assume that the first output is of the templated type
-  return itkDynamicCastInDebugMode<const ImageJSONType *>(this->GetPrimaryOutput());
+  return itkDynamicCastInDebugMode<const WASMImageType *>(this->GetPrimaryOutput());
 }
 
 template <typename TImage>
 auto
-ImageToJSONFilter<TImage>
-::GetOutput(unsigned int idx) -> ImageJSONType *
+ImageToWASMImageFilter<TImage>
+::GetOutput(unsigned int idx) -> WASMImageType *
 {
-  auto * out = dynamic_cast<ImageJSONType *>(this->ProcessObject::GetOutput(idx));
+  auto * out = dynamic_cast<WASMImageType *>(this->ProcessObject::GetOutput(idx));
 
   if (out == nullptr && this->ProcessObject::GetOutput(idx) != nullptr)
   {
-    itkWarningMacro(<< "Unable to convert output number " << idx << " to type " << typeid(ImageJSONType).name());
+    itkWarningMacro(<< "Unable to convert output number " << idx << " to type " << typeid(WASMImageType).name());
   }
   return out;
 }
 
 template <typename TImage>
 void
-ImageToJSONFilter<TImage>
+ImageToWASMImageFilter<TImage>
 ::SetInput(const ImageType * input)
 {
   // Process object is not const-correct so the const_cast is required here
@@ -102,7 +102,7 @@ ImageToJSONFilter<TImage>
 
 template <typename TImage>
 void
-ImageToJSONFilter<TImage>
+ImageToWASMImageFilter<TImage>
 ::SetInput(unsigned int index, const ImageType * image)
 {
   // Process object is not const-correct so the const_cast is required here
@@ -110,16 +110,16 @@ ImageToJSONFilter<TImage>
 }
 
 template <typename TImage>
-const typename ImageToJSONFilter<TImage>::ImageType *
-ImageToJSONFilter<TImage>
+const typename ImageToWASMImageFilter<TImage>::ImageType *
+ImageToWASMImageFilter<TImage>
 ::GetInput()
 {
   return itkDynamicCastInDebugMode<const ImageType *>(this->GetPrimaryInput());
 }
 
 template <typename TImage>
-const typename ImageToJSONFilter<TImage>::ImageType *
-ImageToJSONFilter<TImage>
+const typename ImageToWASMImageFilter<TImage>::ImageType *
+ImageToWASMImageFilter<TImage>
 ::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TImage *>(this->ProcessObject::GetInput(idx));
@@ -127,12 +127,12 @@ ImageToJSONFilter<TImage>
 
 template <typename TImage>
 void
-ImageToJSONFilter<TImage>
+ImageToWASMImageFilter<TImage>
 ::GenerateData()
 {
   // Get the input and output pointers
   const ImageType * image = this->GetInput();
-  ImageJSONType * imageJSON = this->GetOutput();
+  WASMImageType * imageJSON = this->GetOutput();
 
   imageJSON->SetImage(image);
 
@@ -212,7 +212,7 @@ ImageToJSONFilter<TImage>
 
 template <typename TImage>
 void
-ImageToJSONFilter<TImage>
+ImageToWASMImageFilter<TImage>
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
