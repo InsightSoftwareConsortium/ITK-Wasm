@@ -18,7 +18,7 @@
 #ifndef itkImageJSON_h
 #define itkImageJSON_h
 
-#include "itkDataJSON.h"
+#include "itkWASMDataObject.h"
 
 namespace itk
 {
@@ -33,20 +33,20 @@ namespace itk
  * \ingroup WebAssemblyInterface
  */
 template <typename TImage>
-class ITK_TEMPLATE_EXPORT ImageJSON : public DataJSON
+class ITK_TEMPLATE_EXPORT ImageJSON : public WASMDataObject
 {
 public:
   ITK_DISALLOW_COPY_AND_MOVE(ImageJSON);
 
   /** Standard class type aliases. */
   using Self = ImageJSON;
-  using Superclass = DataJSON;
+  using Superclass = WASMDataObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageJSON, DataJSON);
+  itkTypeMacro(ImageJSON, WASMDataObject);
 
   using ImageType = TImage;
 

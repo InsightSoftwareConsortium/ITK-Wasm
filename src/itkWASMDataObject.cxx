@@ -15,13 +15,13 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkDataJSON.h"
+#include "itkWASMDataObject.h"
 
 namespace itk
 {
 
 void
-DataJSON::PrintSelf(std::ostream & os, Indent indent) const
+WASMDataObject::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "JSON: " << this->m_JSON << std::endl;

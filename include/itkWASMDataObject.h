@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkDataJSON_h
-#define itkDataJSON_h
+#ifndef itkWASMDataObject_h
+#define itkWASMDataObject_h
 #include "WebAssemblyInterfaceExport.h"
 
 
@@ -25,27 +25,27 @@
 
 namespace itk
 {
-/** \class DataJSON
+/** \class WASMDataObject
  * \brief JSON representation for an itk::DataObject
  *
- * JSON representation for itk::DataObject's for interfacing across programming languages and runtimes.
+ * JSON-based WASM representation for itk::DataObject's for interfacing across programming languages and runtimes.
  * 
  * Binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
  * 
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT DataJSON : public DataObject
+class WebAssemblyInterface_EXPORT WASMDataObject : public DataObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_MOVE(DataJSON);
+  ITK_DISALLOW_COPY_AND_MOVE(WASMDataObject);
 
   /** Standard smart pointer declarations */
-  using Self = DataJSON;
+  using Self = WASMDataObject;
   using Superclass = DataObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
   itkNewMacro(Self);
-  itkTypeMacro(DataJSON, DataObject);
+  itkTypeMacro(WASMDataObject, DataObject);
 
   /** Get/Set the DataObject JSON representation. */
   itkSetStringMacro(JSON);
@@ -58,8 +58,8 @@ public:
   itkSetObjectMacro(DataObject, DataObject);
 
 protected:
-  DataJSON() = default;
-  ~DataJSON() override = default;
+  WASMDataObject() = default;
+  ~WASMDataObject() override = default;
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 

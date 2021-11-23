@@ -9,7 +9,7 @@ file(MAKE_DIRECTORY ${Iconv_DIR} ${Iconv_INCLUDE_DIRS})
 include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
 
 set(WebAssemblyInterface_SRCS
-  itkDataJSON.cxx
+  itkWASMDataObject.cxx
   itkWASMImageIOFactory.cxx
   itkWASMImageIO.cxx
   itkWASMMeshIOFactory.cxx

@@ -212,8 +212,8 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case IOTypes.vtkPolyData:
         {
-          const polyDataJSON = pipelineModule.fs_readFile(`${output.path}/index.json`, { encoding: 'utf8' }) as string
-          const polyData = JSON.parse(polyDataJSON)
+          const polyWASMDataObject = pipelineModule.fs_readFile(`${output.path}/index.json`, { encoding: 'utf8' }) as string
+          const polyData = JSON.parse(polyWASMDataObject)
           const cellTypes = ['points', 'verts', 'lines', 'polys', 'strips']
           cellTypes.forEach((cellName) => {
             if (polyData[cellName] !== undefined) {

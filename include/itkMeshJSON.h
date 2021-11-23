@@ -18,7 +18,7 @@
 #ifndef itkMeshJSON_h
 #define itkMeshJSON_h
 
-#include "itkDataJSON.h"
+#include "itkWASMDataObject.h"
 #include "itkVectorContainer.h"
 
 namespace itk
@@ -34,20 +34,20 @@ namespace itk
  * \ingroup WebAssemblyInterface
  */
 template <typename TMesh>
-class ITK_TEMPLATE_EXPORT MeshJSON : public DataJSON
+class ITK_TEMPLATE_EXPORT MeshJSON : public WASMDataObject
 {
 public:
   ITK_DISALLOW_COPY_AND_MOVE(MeshJSON);
 
   /** Standard class type aliases. */
   using Self = MeshJSON;
-  using Superclass = DataJSON;
+  using Superclass = WASMDataObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MeshJSON, DataJSON);
+  itkTypeMacro(MeshJSON, WASMDataObject);
 
   using MeshType = TMesh;
 

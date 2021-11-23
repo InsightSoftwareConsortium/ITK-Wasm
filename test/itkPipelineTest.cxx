@@ -17,12 +17,28 @@
  *=========================================================================*/
 #include "itkTestingMacros.h"
 #include "itkPipeline.h"
+#include <vector>
 
 int
 itkPipelineTest(int argc, char * argv[])
 {
 
   itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", argc, argv);
+
+  std::string example_string_option = "default";
+  pipeline.add_option("-s,--string", example_string_option, "A help string");
+
+  int example_int_option = 3;
+  pipeline.add_option("-i,--int", example_int_option, "Example int option");
+
+  double example_double_option = 3.5;
+  pipeline.add_option("-d,--double", example_double_option, "Example double option");
+
+  std::vector<double> example_vector_double_option = {3.5, 8.8};
+  pipeline.add_option("-v,--vector", example_vector_double_option, "Example double vector option");
+
+  bool flag = false;
+  pipeline.add_flag("-f,--flag", flag, "A flag");
 
   ITK_WASM_PARSE(pipeline, argc, argv);
 
