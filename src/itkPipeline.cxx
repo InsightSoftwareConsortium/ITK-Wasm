@@ -15,9 +15,6 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkPipeline_hxx
-#define itkPipeline_hxx
-
 #include "itkPipeline.h"
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include <rang.hpp>
@@ -77,10 +74,26 @@ _____\/\\\___________\/\\\_______\/\\\__/\\\//_____
 
 Pipeline
 ::Pipeline(std::string description, int argc, char **argv):
-  App(description)
+  App(description),
+  m_argc(argc),
+  m_argv(argv)
 {
   auto fmt = std::make_shared<ITKFormatter>();
   this->formatter(fmt);
+
+  this->add_flag("--memory-io", m_UseMemoryIO, "Use WebAssembly Memory IO")->group("WebAssembly Pipeline");
+  // Set m_UseMemoryIO before it is used by other memory parsers
+  this->preparse_callback([this](size_t arg)
+   {
+   m_UseMemoryIO = false;
+    for (int ii = 0; ii < this->m_argc; ++ii)
+    {
+      if (std::string(this->m_argv[ii]) == "--memory-io")
+      {
+        m_UseMemoryIO = true;
+      }
+    }
+   });
 }
 
 auto
@@ -103,7 +116,7 @@ Pipeline
 
 }
 
+bool Pipeline::m_UseMemoryIO{false};
+
 } // end namespace wasm
 } // end namespace itk
-
-#endif

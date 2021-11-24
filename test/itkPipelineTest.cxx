@@ -18,6 +18,9 @@
 #include "itkTestingMacros.h"
 #include "itkPipeline.h"
 #include <vector>
+#include "itkImage.h"
+#include "itkInputImage.h"
+#include "itkWASMOutputImage.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
@@ -40,7 +43,22 @@ itkPipelineTest(int argc, char * argv[])
   bool flag = false;
   pipeline.add_flag("-f,--flag", flag, "A flag");
 
+  constexpr unsigned int Dimension = 2;
+  using PixelType = float;
+  using ImageType = itk::Image<PixelType, Dimension>;
+
+  using InputImageType = itk::wasm::InputImage<ImageType>;
+  InputImageType inputImage;
+  pipeline.add_option("inputImage", inputImage, "The inputImage")->required();
+
+  using WASMOutputImageType = itk::WASMOutputImage<ImageType>;
+  // WASMOutputImageType::Pointer inputImage;
+  WASMOutputImageType outputImage;
+  pipeline.add_option("outputImage", outputImage, "The outputImage")->required();
+
   ITK_WASM_PARSE(pipeline, argc, argv);
+
+  outputImage.SetImage(inputImage.GetImage());
 
   return EXIT_SUCCESS;
 }

@@ -1,1 +1,1 @@
-itkPipeline\.hxx Spaces Disable
+itkPipeline\.cxx Spaces Disable

@@ -19,9 +19,7 @@
 #define itkWASMDataObject_h
 #include "WebAssemblyInterfaceExport.h"
 
-
 #include "itkDataObject.h"
-#include <string>
 
 namespace itk
 {
@@ -49,7 +47,10 @@ public:
 
   /** Get/Set the DataObject JSON representation. */
   itkSetStringMacro(JSON);
-  itkGetStringMacro(JSON);
+  const std::string & GetJSON() const
+  {
+    return this->m_JSON;
+  }
 
   /** Get/Set the DataObject used to generate the JSON representation.
    * 
@@ -66,6 +67,7 @@ protected:
   std::string m_JSON;
   DataObject::ConstPointer m_DataObject;
 };
+
 } // end namespace itk
 
 #endif

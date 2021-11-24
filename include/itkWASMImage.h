@@ -62,6 +62,7 @@ protected:
   WASMImage() = default;
   ~WASMImage() override = default;
 };
+
 } // namespace itk
 
 #endif

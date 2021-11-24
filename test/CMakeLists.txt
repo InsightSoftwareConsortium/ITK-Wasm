@@ -51,6 +51,7 @@ set(WebAssemblyInterfaceTests
   itkWASMImageIOTest.cxx
   itkWASMMeshIOTest.cxx
   itkPipelineTest.cxx
+  itkPipelineMemoryIOTest.cxx
 )
 
 CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
@@ -124,6 +125,14 @@ itk_add_test(NAME itkPipelineTest
     itkPipelineTest
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineTest.mha
+)
+
+itk_add_test(NAME itkPipelineMemoryIOTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkPipelineMemoryIOTest
+      --memory-io
+      DATA{Input/brainweb165a10f17.mha}
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTest.mha
 )
 
 if(EMSCRIPTEN)

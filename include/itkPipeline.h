@@ -22,6 +22,8 @@
 #include <CLI/Formatter.hpp>
 #include <CLI/Config.hpp>
 
+#include "itkWASMOutputImage.h"
+
 #define ITK_WASM_PARSE(pipeline, argc, argv) \
     try { \
         pipeline.parse(argc, argv); \
@@ -30,6 +32,13 @@
     }
 
 namespace itk {
+
+template <typename TImage>
+bool lexical_cast(const std::string &input, WASMOutputImage<TImage> &outputImage)
+{
+  outputImage.SetIdentifier(input);
+  return true;
+}
 
 namespace wasm {
 
@@ -66,14 +75,19 @@ public:
     /** Exit. */
     auto exit(const CLI::Error &e) -> int;
 
+    static auto GetUseMemoryIO()
+    {
+      return m_UseMemoryIO;
+    }
+
     ~Pipeline() override;
+private:
+    static bool m_UseMemoryIO;
+    int m_argc;
+    char **m_argv;
 };
 
 } // end namespace wasm
 } // end namespace itk
-
-#ifndef ITK_MANUAL_INSTANTIATION
-#  include "itkPipeline.hxx"
-#endif
 
 #endif
