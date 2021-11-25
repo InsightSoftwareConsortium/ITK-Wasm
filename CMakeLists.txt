@@ -131,8 +131,9 @@ FetchContent_Declare(
 )
 
 set(rang_GIT_REPOSITORY "https://github.com/agauniyal/rang.git")
-# v3.2
-set(rang_GIT_TAG "09f2f05bea29d61b1df99e4b36f63d961156a580")
+set(rang_GIT_REPOSITORY "https://github.com/thewtex/rang.git")
+# v3.2 + WASI
+set(rang_GIT_TAG "12a863f29c678b913b924102cf61a058a9eb4b4e")
 FetchContent_Declare(
   rang
   GIT_REPOSITORY ${rang_GIT_REPOSITORY}
