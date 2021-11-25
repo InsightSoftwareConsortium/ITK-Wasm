@@ -21,63 +21,35 @@
 #ifndef ITK_WASM_NO_MEMORY_IO
 // WebAssembly exports
 
-#include <map>
-#include <utility>
-#include <vector>
+#include "itkWASMDataObject.h"
 
-// dataset index, array index
-using ArrayStoreSubKeyType = std::pair<unsigned int, unsigned int>;
-// isInput, index pair
-using ArrayStoreKeyType = std::pair<unsigned int, ArrayStoreSubKeyType>;
-using ArrayStoreType = std::map<ArrayStoreKeyType, std::vector<char>>;
-static ArrayStoreType ArrayStore;
+namespace itk
+{
+namespace wasm
+{
 
-// isInput, index
-using JSONStoreKeyType = std::pair<unsigned int, unsigned int>;
-using JSONStoreType = std::map<JSONStoreKeyType, std::string>;
-static JSONStoreType JSONStore;
+const std::string & getMemoryStoreInputJSON(unsigned int index);
+
+void setMemoryStoreOutputDataObject(unsigned int index, const WASMDataObject * dataObject);
+
+void setMemoryStoreOutputArray(unsigned int index, unsigned int subIndex, size_t address, size_t size);
+
+
+} // end namespace wasm
+} // end namespace itk
 
 extern "C"
 {
 
-size_t itk_wasm_array_alloc(unsigned int isInput, unsigned int index, unsigned int subIndex, size_t size)
-{
-  const auto subKey = std::make_pair(index, subIndex);
-  const auto key = std::make_pair(isInput, subKey);
-  if (ArrayStore.count(key))
-  {
-    ArrayStore[key] = std::vector<char>(size);
-  }
-  else
-  {
-    ArrayStore[key].resize(size);
-  }
-  return reinterpret_cast< size_t >(ArrayStore[key].data());
-}
+size_t itk_wasm_input_array_alloc(unsigned int index, unsigned int subIndex, size_t size);
+size_t itk_wasm_input_json_alloc(unsigned int index, size_t size);
 
-void itk_wasm_array_free_all()
-{
-  ArrayStore.clear();
-}
+size_t itk_wasm_output_json_address(unsigned int index);
+size_t itk_wasm_output_json_size(unsigned int index);
+size_t itk_wasm_output_array_address(unsigned int index, unsigned int subIndex);
+size_t itk_wasm_output_array_size(unsigned int index, unsigned int subIndex);
 
-size_t itk_wasm_json_alloc(unsigned int isInput, unsigned int index, size_t size)
-{
-  const auto key = std::make_pair(isInput, index);
-  if (JSONStore.count(key))
-  {
-    JSONStore[key] = std::string(size, ' ');
-  }
-  else
-  {
-    JSONStore[key].resize(size);
-  }
-  return reinterpret_cast< size_t >(JSONStore[key].data());
-}
-
-void itk_wasm_json_free_all()
-{
-  JSONStore.clear();
-}
+void itk_wasm_free_all();
 
 } // end extern "C"
 

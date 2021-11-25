@@ -19,7 +19,7 @@
 #include "itkPipeline.h"
 #include "itkImage.h"
 #include "itkInputImage.h"
-#include "itkWASMOutputImage.h"
+#include "itkOutputImage.h"
 #include "itkWASMImage.h"
 #include "itkImageToWASMImageFilter.h"
 #include "itkWASMExports.h"
@@ -44,22 +44,22 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   auto readWASMImageData = reinterpret_cast< const void * >(readWASMImage->GetImage()->GetBufferPointer());
   const auto readWASMImageDataSize = readWASMImage->GetImage()->GetPixelContainer()->Size();
-  const size_t readWASMImageDataPointerAddress = itk_wasm_array_alloc(1, 0, 0, readWASMImageDataSize);
+  const size_t readWASMImageDataPointerAddress = itk_wasm_input_array_alloc(0, 0, readWASMImageDataSize);
   auto readWASMImageDataPointer = reinterpret_cast< void * >(readWASMImageDataPointerAddress);
   std::memcpy(readWASMImageDataPointer, readWASMImageData, readWASMImageDataSize);
 
   // auto direction = reinterpret_cast< const void * >( readWASMImage->GetImage()->GetDirection().GetVnlMatrix().begin() );
   // const auto directionSize = readWASMImage->GetImage()->GetDirection().GetVnlMatrix().size() * sizeof(double);
-  // const size_t readWASMImageDirectionPointerAddress = itk_wasm_array_alloc(1, 0, 1, directionSize);
+  // const size_t readWASMImageDirectionPointerAddress = itk_wasm_array_alloc(0, 1, directionSize);
   // auto readWASMImageDirectionPointer = reinterpret_cast< void * >(readWASMImageDirectionPointerAddress);
   // std::memcpy(readWASMImageDirectionPointer, direction, directionSize);
 
   auto readImageJSON = readWASMImage->GetJSON();
-  void * readWASMImagePointer = reinterpret_cast< void * >( itk_wasm_json_alloc(1, 0, readImageJSON.size()));
+  void * readWASMImagePointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, readImageJSON.size()));
   std::memcpy(readWASMImagePointer, readImageJSON.data(), readImageJSON.size());
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", NULL};
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 3, const_cast< char ** >(mockArgv));
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", NULL};
+  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 4, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -80,14 +80,13 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   InputImageType inputImage;
   pipeline.add_option("inputImage", inputImage, "The inputImage")->required();
 
-  using WASMOutputImageType = itk::WASMOutputImage<ImageType>;
-  // WASMOutputImageType::Pointer inputImage;
-  WASMOutputImageType outputImage;
+  using OutputImageType = itk::wasm::OutputImage<ImageType>;
+  OutputImageType outputImage;
   pipeline.add_option("outputImage", outputImage, "The outputImage")->required();
 
-  ITK_WASM_PARSE(pipeline, argc, argv);
+  ITK_WASM_PARSE(pipeline);
 
-  outputImage.SetImage(inputImage.GetImage());
+  outputImage.Set(inputImage.Get());
 
   return EXIT_SUCCESS;
 }

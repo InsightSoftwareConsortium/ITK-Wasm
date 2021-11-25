@@ -22,25 +22,17 @@
 #include <CLI/Formatter.hpp>
 #include <CLI/Config.hpp>
 
-#include "itkWASMOutputImage.h"
-
-#define ITK_WASM_PARSE(pipeline, argc, argv) \
+#define ITK_WASM_PARSE(pipeline) \
     try { \
-        pipeline.parse(argc, argv); \
+        pipeline.parse(); \
     } catch(const CLI::ParseError &e) { \
         return pipeline.exit(e); \
     }
 
-namespace itk {
-
-template <typename TImage>
-bool lexical_cast(const std::string &input, WASMOutputImage<TImage> &outputImage)
+namespace itk
 {
-  outputImage.SetIdentifier(input);
-  return true;
-}
-
-namespace wasm {
+namespace wasm
+{
 
 // Importing into the itk namespace the main classes from CLI11
 using CLI::App;
@@ -74,6 +66,10 @@ public:
 
     /** Exit. */
     auto exit(const CLI::Error &e) -> int;
+
+    void parse() {
+        CLI::App::parse(m_argc, m_argv);
+    }
 
     static auto GetUseMemoryIO()
     {

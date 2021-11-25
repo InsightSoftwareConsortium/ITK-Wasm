@@ -20,7 +20,7 @@
 #include <vector>
 #include "itkImage.h"
 #include "itkInputImage.h"
-#include "itkWASMOutputImage.h"
+#include "itkOutputImage.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
@@ -51,14 +51,14 @@ itkPipelineTest(int argc, char * argv[])
   InputImageType inputImage;
   pipeline.add_option("inputImage", inputImage, "The inputImage")->required();
 
-  using WASMOutputImageType = itk::WASMOutputImage<ImageType>;
-  // WASMOutputImageType::Pointer inputImage;
-  WASMOutputImageType outputImage;
+  using OutputImageType = itk::wasm::OutputImage<ImageType>;
+  // OutputImageType::Pointer inputImage;
+  OutputImageType outputImage;
   pipeline.add_option("outputImage", outputImage, "The outputImage")->required();
 
-  ITK_WASM_PARSE(pipeline, argc, argv);
+  ITK_WASM_PARSE(pipeline);
 
-  outputImage.SetImage(inputImage.GetImage());
+  outputImage.Set(inputImage.Get());
 
   return EXIT_SUCCESS;
 }

@@ -20,11 +20,13 @@
 
 #include "itkPipeline.h"
 
+#ifndef ITK_WASM_NO_MEMORY_IO
+#include "itkWASMExports.h"
+#include "itkWASMImage.h"
+#include "itkWASMImageToImageFilter.h"
+#endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include "itkImageFileReader.h"
-#endif
-#ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMImage.h"
 #endif
 
 namespace itk
@@ -38,7 +40,7 @@ namespace wasm
  *
  * This image is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
  * 
- * Call `GetImage()` to get the TImage * to use an input to a pipeline.
+ * Call `Get()` to get the TImage * to use an input to a pipeline.
  * 
  * \ingroup WebAssemblyInterface
  */
@@ -48,11 +50,11 @@ class ITK_TEMPLATE_EXPORT InputImage
 public:
   using ImageType = TImage;
 
-  void SetImage(const ImageType * image) {
+  void Set(const ImageType * image) {
     this->m_Image = image;
   }
 
-  const ImageType * GetImage() const {
+  const ImageType * Get() const {
     return this->m_Image.GetPointer();
   }
 
@@ -62,13 +64,22 @@ protected:
   typename TImage::ConstPointer m_Image;
 };
 
+
 template <typename TImage>
 bool lexical_cast(const std::string &input, InputImage<TImage> &inputImage)
 {
   if (wasm::Pipeline::GetUseMemoryIO())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    std::cout << "yes memory io" << std::endl;
+    using WASMImageToImageFilterType = WASMImageToImageFilter<TImage>;
+    auto wasmImageToImageFilter = WASMImageToImageFilterType::New();
+    auto wasmImage = WASMImageToImageFilterType::WASMImageType::New();
+    const unsigned int index = std::stoi(input);
+    auto json = getMemoryStoreInputJSON(index);
+    wasmImage->SetJSON(json);
+    wasmImageToImageFilter->SetInput(wasmImage);
+    wasmImageToImageFilter->Update();
+    inputImage.Set(wasmImageToImageFilter->GetOutput());
 #else
     return false;
 #endif
@@ -77,13 +88,11 @@ bool lexical_cast(const std::string &input, InputImage<TImage> &inputImage)
   {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
     auto image = itk::ReadImage<TImage>(input);
-    inputImage.SetImage(image);
-    std::cout << "no memory io" << std::endl;
+    inputImage.Set(image);
 #else
     return false;
 #endif
   }
-  std::cout << "called InputImage lexical cast" << std::endl;
   return true;
 }
 

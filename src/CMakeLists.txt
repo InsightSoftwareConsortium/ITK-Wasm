@@ -10,6 +10,7 @@ include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
 
 set(WebAssemblyInterface_SRCS
   itkPipeline.cxx
+  itkWASMExports.cxx
   itkWASMDataObject.cxx
   itkWASMImageIOFactory.cxx
   itkWASMImageIO.cxx
