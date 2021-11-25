@@ -28,6 +28,8 @@ namespace itk
 namespace wasm
 {
 
+// Function for the Pipeline Input's and Output's to set / get from the memory store
+
 const std::string & getMemoryStoreInputJSON(unsigned int index);
 
 void setMemoryStoreOutputDataObject(unsigned int index, const WASMDataObject * dataObject);
