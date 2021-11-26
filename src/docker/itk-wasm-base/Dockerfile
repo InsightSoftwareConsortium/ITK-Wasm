@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=dockcross/web-wasm
-FROM $BASE_IMAGE:20211109-79e9940
+FROM $BASE_IMAGE:20211126-f096312
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 WORKDIR /
 
 # 2021-10-03 master branch
-ENV ITK_GIT_TAG 3b68b2092bc2db2978a1ed68efe5ec38fcade185
+ENV ITK_GIT_TAG db30a3a9c30bccae4dad6701d35e7c63c73e5ce5
 RUN git clone https://github.com/thewtex/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \

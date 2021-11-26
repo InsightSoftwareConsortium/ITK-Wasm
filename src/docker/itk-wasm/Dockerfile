@@ -9,6 +9,15 @@ ARG CMAKE_BUILD_TYPE=Release
 WORKDIR /
 
 ADD ITKWebAssemblyInterfaceModuleCopy /ITKWebAssemblyInterface
+COPY ITKWebAssemblyInterface.cmake /usr/src/
+RUN mv /usr/src/ITKWebAssemblyInterface.cmake /usr/share/cmake-*/Modules/
+# For non-default toolchain file location
+ENV EMSCRIPTEN /emsdk/upstream/emscripten
+ENV CMAKE_TOOLCHAIN_FILE_DOCKCROSS ${CMAKE_TOOLCHAIN_FILE}
+ENV CMAKE_TOOLCHAIN_FILE_ITK /ITKWebAssemblyInterface/toolchain.cmake
+RUN cp ${CMAKE_TOOLCHAIN_FILE} ${CMAKE_TOOLCHAIN_FILE_ITK}
+RUN echo "include(ITKWebAssemblyInterface)" >> ${CMAKE_TOOLCHAIN_FILE_ITK}
+ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
 RUN cd / && \
   mkdir ITKWebAssemblyInterface-build && \
   cd ITKWebAssemblyInterface-build && \
@@ -23,15 +32,6 @@ RUN cd / && \
   cd .. && chmod -R 777 ITKWebAssemblyInterface-build && \
   chmod -R 777 /ITK-build
 
-COPY ITKWebAssemblyInterface.cmake /usr/src/
-RUN mv /usr/src/ITKWebAssemblyInterface.cmake /usr/share/cmake-*/Modules/
-# For non-default toolchain file location
-ENV EMSCRIPTEN /emsdk/upstream/emscripten
-ENV CMAKE_TOOLCHAIN_FILE_DOCKCROSS ${CMAKE_TOOLCHAIN_FILE}
-ENV CMAKE_TOOLCHAIN_FILE_ITK /ITKWebAssemblyInterface/toolchain.cmake
-RUN cp ${CMAKE_TOOLCHAIN_FILE} ${CMAKE_TOOLCHAIN_FILE_ITK}
-RUN echo "include(ITKWebAssemblyInterface)" >> ${CMAKE_TOOLCHAIN_FILE_ITK}
-ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
 COPY web-build /usr/local/bin/
 
 # Trigger Emscripten to cache builds of required system libraries

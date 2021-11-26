@@ -18,8 +18,12 @@ docker push insighttoolkit/itk-wasi:${TAG}-debug
 docker push insighttoolkit/itk-wasi:${TAG}
 docker push insighttoolkit/itk-wasi:latest
 docker push insighttoolkit/itk-wasi:latest-debug
+docker push insighttoolkit/itk-wasi-base:latest
+docker push insighttoolkit/itk-wasi-base:latest-debug
 
 docker push insighttoolkit/itk-wasm:${TAG}-debug
 docker push insighttoolkit/itk-wasm:${TAG}
 docker push insighttoolkit/itk-wasm:latest
 docker push insighttoolkit/itk-wasm:latest-debug
+docker push insighttoolkit/itk-wasm-base:latest
+docker push insighttoolkit/itk-wasm-base:latest-debug
