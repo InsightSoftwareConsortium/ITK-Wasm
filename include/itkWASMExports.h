@@ -30,11 +30,11 @@ namespace wasm
 
 // Function for the Pipeline Input's and Output's to set / get from the memory store
 
-const std::string & getMemoryStoreInputJSON(unsigned int index);
+const std::string & getMemoryStoreInputJSON(uint32_t memoryIndex, uint32_t index);
 
-void setMemoryStoreOutputDataObject(unsigned int index, const WASMDataObject * dataObject);
+void setMemoryStoreOutputDataObject(uint32_t memoryIndex, uint32_t index, const WASMDataObject * dataObject);
 
-void setMemoryStoreOutputArray(unsigned int index, unsigned int subIndex, size_t address, size_t size);
+void setMemoryStoreOutputArray(uint32_t memoryIndex, uint32_t index, uint32_t subIndex, size_t address, size_t size);
 
 
 } // end namespace wasm
@@ -43,13 +43,13 @@ void setMemoryStoreOutputArray(unsigned int index, unsigned int subIndex, size_t
 extern "C"
 {
 
-size_t itk_wasm_input_array_alloc(unsigned int index, unsigned int subIndex, size_t size);
-size_t itk_wasm_input_json_alloc(unsigned int index, size_t size);
+size_t itk_wasm_input_array_alloc(uint32_t memoryIndex, uint32_t index, uint32_t subIndex, size_t size);
+size_t itk_wasm_input_json_alloc(uint32_t memoryIndex, uint32_t index, size_t size);
 
-size_t itk_wasm_output_json_address(unsigned int index);
-size_t itk_wasm_output_json_size(unsigned int index);
-size_t itk_wasm_output_array_address(unsigned int index, unsigned int subIndex);
-size_t itk_wasm_output_array_size(unsigned int index, unsigned int subIndex);
+size_t itk_wasm_output_json_address(uint32_t memoryIndex, uint32_t index);
+size_t itk_wasm_output_json_size(uint32_t memoryIndex, uint32_t index);
+size_t itk_wasm_output_array_address(uint32_t memoryIndex, uint32_t index, uint32_t subIndex);
+size_t itk_wasm_output_array_size(uint32_t memoryIndex, uint32_t index, uint32_t subIndex);
 
 void itk_wasm_free_all();
 

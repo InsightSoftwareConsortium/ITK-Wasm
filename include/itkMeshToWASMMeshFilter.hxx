@@ -216,7 +216,7 @@ MeshToWASMMeshFilter<TMesh>
 
   const auto pointsAddress = reinterpret_cast< size_t >( &(mesh->GetPoints()->at(0)) );
   std::ostringstream pointsStream;
-  pointsStream << "data:application/vnd.itk.address,";
+  pointsStream << "data:application/vnd.itk.address,0:";
   pointsStream << pointsAddress;
   rapidjson::Value pointsString;
   pointsString.SetString( pointsStream.str().c_str(), allocator );
@@ -228,7 +228,7 @@ MeshToWASMMeshFilter<TMesh>
     cellsAddress = reinterpret_cast< size_t >( &(meshJSON->GetCellBuffer()->at(0)) );
   }
   std::ostringstream cellsStream;
-  cellsStream << "data:application/vnd.itk.address,";
+  cellsStream << "data:application/vnd.itk.address,0:";
   cellsStream << cellsAddress;
   rapidjson::Value cellsString;
   cellsString.SetString( cellsStream.str().c_str(), allocator );
@@ -240,7 +240,7 @@ MeshToWASMMeshFilter<TMesh>
     pointDataAddress = reinterpret_cast< size_t >( &(mesh->GetPointData()->at(0)) );
   }
   std::ostringstream pointDataStream;
-  pointDataStream << "data:application/vnd.itk.address,";
+  pointDataStream << "data:application/vnd.itk.address,0:";
   pointDataStream << pointDataAddress;
   rapidjson::Value pointDataString;
   pointDataString.SetString( pointDataStream.str().c_str(), allocator );
@@ -252,7 +252,7 @@ MeshToWASMMeshFilter<TMesh>
     cellDataAddress = reinterpret_cast< size_t >( &(mesh->GetCellData()->at(0)) );
   }
   std::ostringstream cellDataStream;
-  cellDataStream <<  "data:application/vnd.itk.address,";
+  cellDataStream <<  "data:application/vnd.itk.address,0:";
   cellDataStream << cellDataAddress;
   rapidjson::Value cellDataString;
   cellDataString.SetString( cellDataStream.str().c_str(), allocator );

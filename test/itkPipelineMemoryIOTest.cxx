@@ -44,18 +44,18 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   auto readWASMImageData = reinterpret_cast< const void * >(readWASMImage->GetImage()->GetBufferPointer());
   const auto readWASMImageDataSize = readWASMImage->GetImage()->GetPixelContainer()->Size();
-  const size_t readWASMImageDataPointerAddress = itk_wasm_input_array_alloc(0, 0, readWASMImageDataSize);
+  const size_t readWASMImageDataPointerAddress = itk_wasm_input_array_alloc(0, 0, 0, readWASMImageDataSize);
   auto readWASMImageDataPointer = reinterpret_cast< void * >(readWASMImageDataPointerAddress);
   std::memcpy(readWASMImageDataPointer, readWASMImageData, readWASMImageDataSize);
 
   // auto direction = reinterpret_cast< const void * >( readWASMImage->GetImage()->GetDirection().GetVnlMatrix().begin() );
   // const auto directionSize = readWASMImage->GetImage()->GetDirection().GetVnlMatrix().size() * sizeof(double);
-  // const size_t readWASMImageDirectionPointerAddress = itk_wasm_array_alloc(0, 1, directionSize);
+  // const size_t readWASMImageDirectionPointerAddress = itk_wasm_array_alloc(0, 0, 1, directionSize);
   // auto readWASMImageDirectionPointer = reinterpret_cast< void * >(readWASMImageDirectionPointerAddress);
   // std::memcpy(readWASMImageDirectionPointer, direction, directionSize);
 
   auto readImageJSON = readWASMImage->GetJSON();
-  void * readWASMImagePointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, readImageJSON.size()));
+  void * readWASMImagePointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readImageJSON.size()));
   std::memcpy(readWASMImagePointer, readImageJSON.data(), readImageJSON.size());
 
   const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", NULL};

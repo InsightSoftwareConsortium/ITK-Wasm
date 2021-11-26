@@ -76,16 +76,16 @@ public:
         imageToWASMImageFilter->Update();
         auto wasmImage = imageToWASMImageFilter->GetOutput();
         const auto index = std::stoi(this->m_Identifier);
-        setMemoryStoreOutputDataObject(index, wasmImage);
+        setMemoryStoreOutputDataObject(0, index, wasmImage);
 
         const auto dataAddress = reinterpret_cast< size_t >( wasmImage->GetImage()->GetBufferPointer() );
         using ConvertPixelTraits = DefaultConvertPixelTraits<typename ImageType::PixelType>;
         const auto dataSize = wasmImage->GetImage()->GetPixelContainer()->Size() * sizeof(typename ConvertPixelTraits::ComponentType) * ConvertPixelTraits::GetNumberOfComponents();
-        setMemoryStoreOutputArray(index, 0, dataAddress, dataSize);
+        setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);
 
         const auto directionAddress = reinterpret_cast< size_t >( wasmImage->GetImage()->GetDirection().GetVnlMatrix().begin() );
         const auto directionSize = wasmImage->GetImage()->GetDirection().GetVnlMatrix().size() * sizeof(double);
-        setMemoryStoreOutputArray(index, 1, directionAddress, directionSize);
+        setMemoryStoreOutputArray(0, index, 1, directionAddress, directionSize);
       }
 #else
     throw std::logic_error("Memory IO not supported");

@@ -180,7 +180,7 @@ ImageToWASMImageFilter<TImage>
 
   const auto direction = reinterpret_cast< size_t >( image->GetDirection().GetVnlMatrix().begin() );
   std::ostringstream directionStream;
-  directionStream << "data:application/vnd.itk.address,";
+  directionStream << "data:application/vnd.itk.address,0:";
   directionStream << direction;
   rapidjson::Value directionString;
   directionString.SetString( directionStream.str().c_str(), allocator );
@@ -197,7 +197,7 @@ ImageToWASMImageFilter<TImage>
 
   const auto data = reinterpret_cast< size_t >( image->GetBufferPointer() );
   std::ostringstream dataStream;
-  dataStream << "data:application/vnd.itk.address,";
+  dataStream << "data:application/vnd.itk.address,0:";
   dataStream << data;
   rapidjson::Value dataString;
   dataString.SetString( dataStream.str().c_str(), allocator );

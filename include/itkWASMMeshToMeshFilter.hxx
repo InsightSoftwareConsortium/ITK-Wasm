@@ -202,7 +202,7 @@ WASMMeshToMeshFilter<TMesh>
   using CoordRepType = typename MeshType::CoordRepType;
   const rapidjson::Value & pointsJson = document["points"];
   const std::string pointsString( pointsJson.GetString() );
-  CoordRepType * pointsPtr = reinterpret_cast< CoordRepType * >( std::atol(pointsString.substr(33).c_str()) );
+  CoordRepType * pointsPtr = reinterpret_cast< CoordRepType * >( std::atol(pointsString.substr(35).c_str()) );
   mesh->GetPoints()->resize(numberOfPoints);
   mesh->GetPoints()->assign(pointsPtr, pointsPtr + numberOfPoints);
 
@@ -224,7 +224,7 @@ WASMMeshToMeshFilter<TMesh>
   const rapidjson::Value & cellsJson = document["cells"];
   const std::string cellsString( cellsJson.GetString() );
   using CellBufferType = typename WASMMeshType::CellBufferContainerType::Element;
-  CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::atol(cellsString.substr(33).c_str())) );
+  CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::atol(cellsString.substr(35).c_str())) );
   SizeValueType        index = NumericTraits<SizeValueType>::ZeroValue();
   CellIdentifier id = NumericTraits<CellIdentifier>::ZeroValue();
   while (index < cellBufferSize)
@@ -428,7 +428,7 @@ WASMMeshToMeshFilter<TMesh>
   using PointPixelType = typename TMesh::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
   const std::string pointDataString( pointDataJson.GetString() );
-  auto pointDataPtr = reinterpret_cast< typename ConvertPointPixelTraits::ComponentType * >( std::atol(pointDataString.substr(33).c_str()) );
+  auto pointDataPtr = reinterpret_cast< typename ConvertPointPixelTraits::ComponentType * >( std::atol(pointDataString.substr(35).c_str()) );
   mesh->GetPointData()->resize(numberOfPointPixels * pointPixelComponents);
   mesh->GetPointData()->assign(pointDataPtr, pointDataPtr + numberOfPointPixels * pointPixelComponents);
 
@@ -440,7 +440,7 @@ WASMMeshToMeshFilter<TMesh>
   using CellPixelType = typename TMesh::CellPixelType;
   using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
   const std::string cellDataString( cellDataJson.GetString() );
-  auto cellDataPtr = reinterpret_cast< typename ConvertCellPixelTraits::ComponentType * >( std::atol(cellDataString.substr(33).c_str()) );
+  auto cellDataPtr = reinterpret_cast< typename ConvertCellPixelTraits::ComponentType * >( std::atol(cellDataString.substr(35).c_str()) );
   if (mesh->GetCellData() == nullptr)
   {
     mesh->SetCellData(MeshType::CellDataContainer::New());

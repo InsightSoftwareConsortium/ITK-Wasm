@@ -75,7 +75,7 @@ bool lexical_cast(const std::string &input, InputImage<TImage> &inputImage)
     auto wasmImageToImageFilter = WASMImageToImageFilterType::New();
     auto wasmImage = WASMImageToImageFilterType::WASMImageType::New();
     const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(index);
+    auto json = getMemoryStoreInputJSON(0, index);
     wasmImage->SetJSON(json);
     wasmImageToImageFilter->SetInput(wasmImage);
     wasmImageToImageFilter->Update();
