@@ -7,6 +7,24 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 
 WORKDIR /
 
+ENV BINARYEN_GIT_TAG 7f8d7ac89bd916f2fcbec2e14b40f653139ce5b6
+RUN git clone https://github.com/webassembly/binaryen.git && \
+  cd binaryen && \
+  git checkout ${BINARYEN_GIT_TAG} && \
+  cd ../ && \
+  mkdir binaryen-build && \
+  cd binaryen-build && \
+  /usr/bin/cmake \
+    -DCMAKE_C_COMPILER=/usr/bin/cc \
+    -DCMAKE_CXX_COMPILER=/usr/bin/c++ \
+    -G Ninja \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+    -DCMAKE_TOOLCHAIN_FILE="" \
+    ../binaryen && \
+  ninja && \
+  ninja install && \
+  rm -rf binaryen*
+
 # 2021-10-03 master branch
 ENV ITK_GIT_TAG db30a3a9c30bccae4dad6701d35e7c63c73e5ce5
 RUN git clone https://github.com/thewtex/ITK.git && \
