@@ -23,6 +23,7 @@ RUN git clone https://github.com/webassembly/binaryen.git && \
     ../binaryen && \
   ninja && \
   ninja install && \
+  cd ../ && \
   rm -rf binaryen*
 
 # 2021-10-03 master branch
