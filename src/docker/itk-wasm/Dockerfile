@@ -25,6 +25,7 @@ RUN cd / && \
     -G Ninja \
     -DITK_DIR=/ITK-build \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
+    -DITK_WASM_NO_INTERFACE_LINK:BOOL=1 \
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
       ../ITKWebAssemblyInterface && \
   ninja && \

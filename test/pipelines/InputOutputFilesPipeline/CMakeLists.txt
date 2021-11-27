@@ -4,7 +4,7 @@ project(InputOutputFilesTest)
 find_package(ITK REQUIRED
   COMPONENTS WebAssemblyInterface)
 add_executable(InputOutputFilesTest InputOutputFilesTest.cxx)
-target_link_libraries(InputOutputFilesTest WebAssemblyInterface)
+target_link_libraries(InputOutputFilesTest PUBLIC WebAssemblyInterface)
 
 enable_testing()
 add_test(NAME InputOutputFilesTest
