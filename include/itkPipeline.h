@@ -19,7 +19,6 @@
 #define itkPipeline_h
 
 #include <CLI/App.hpp>
-#include <CLI/Formatter.hpp>
 #include <CLI/Config.hpp>
 
 #define ITK_WASM_PARSE(pipeline) \
@@ -44,15 +43,7 @@ using CLI::NonexistentPath;
 using CLI::Option;
 using CLI::ParseError;
 using CLI::Success;
-using CLI::Formatter;
 using CLI::Config;
-
-class ITKFormatter : public CLI::Formatter
-{
-  public:
-    ITKFormatter() : Formatter() {}
-    std::string make_description(const CLI::App * app) const override;
-};
 
 class Pipeline: public CLI::App
 {

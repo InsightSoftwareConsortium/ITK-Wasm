@@ -19,58 +19,12 @@
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include <rang.hpp>
 #endif
+#include "CLI/Formatter.hpp"
 
 namespace itk
 {
 namespace wasm
 {
-
-std::string
-ITKFormatter
-::make_description(const CLI::App * app) const
-{
-  // Based on GooFit
-#ifndef ITK_WASM_NO_FILESYSTEM_IO
-  std::cout << rang::fg::reset << rang::fgB::blue << rang::style::italic << rang::style::dim << "       Welcome to";
-  // Just in case, for clang format:
-  // clang-format off
-  std::string splash = R"raw(
-__/\\\\\\\\\\\__/\\\\\\\\\\\\\\\__/\\\________/\\\_        
-_\/////\\\///__\///////\\\/////__\/\\\_____/\\\//__       
-_____\/\\\___________\/\\\_______\/\\\__/\\\//_____      
-  _____\/\\\___________\/\\\_______\/\\\\\\//\\\_____     
-  _____\/\\\___________\/\\\_______\/\\\//_\//\\\____    
-    _____\/\\\___________\/\\\_______\/\\\____\//\\\___   
-    _____\/\\\___________\/\\\_______\/\\\_____\//\\\__  
-      __/\\\\\\\\\\\_______\/\\\_______\/\\\______\//\\\_ 
-      _\///////////________\///________\///________\///__
-)raw";
-  // clang-format on
-
-  std::cout << rang::fg::reset << rang::style::bold;
-  bool cur_yellow = false;
-  for(int i = 0; i < splash.size(); i++) {
-      const char splash_char = splash[i];
-      bool is_letter = splash_char == '/' || splash_char == '\\';
-
-      if(is_letter && !cur_yellow) {
-          std::cout << rang::fg::reset << rang::fgB::yellow;
-          cur_yellow = true;
-      } else if(!is_letter && cur_yellow) {
-          std::cout << rang::fg::reset << rang::fgB::blue;
-          cur_yellow = false;
-      }
-      std::cout << splash[i];
-      if(splash[i] == '\n')
-          std::cout << std::flush;
-  }
-  std::cout << rang::style::reset << rang::bg::reset << rang::fg::reset;
-  std::cout << std::endl;
-#else
-  std::cout << "       Welcome to ITK\n" << std::endl;
-#endif
-  return this->::CLI::Formatter::make_description(app);
-}
 
 Pipeline
 ::Pipeline(std::string description, int argc, char **argv):
@@ -78,10 +32,9 @@ Pipeline
   m_argc(argc),
   m_argv(argv)
 {
-  auto fmt = std::make_shared<ITKFormatter>();
-  this->formatter(fmt);
+  this->footer("Enjoy ITK!");
 
-  this->add_flag("--memory-io", m_UseMemoryIO, "Use WebAssembly Memory IO")->group("WebAssembly Pipeline");
+  this->add_flag("--memory-io", m_UseMemoryIO, "Use itk-wasm memory IO")->group("WebAssembly Pipeline");
   // Set m_UseMemoryIO before it is used by other memory parsers
   this->preparse_callback([this](size_t arg)
    {
@@ -100,6 +53,126 @@ auto
 Pipeline
 ::exit(const CLI::Error &e) -> int
 {
+  /// Avoid printing anything if this is a CLI::RuntimeError
+  if(e.get_name() == "RuntimeError")
+      return e.get_exit_code();
+
+  if(e.get_name() == "CallForHelp" || e.get_name() == "CallForAllHelp")
+  {
+    std::string outputString;
+    if(e.get_name() == "CallForHelp")
+    {
+      outputString = help();
+    }
+    else
+    {
+      outputString = help("", CLI::AppFormatMode::All);
+    }
+
+    // Based on GooFit
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
+    std::cout << rang::fg::reset << rang::fgB::blue << rang::style::italic << rang::style::dim << "       Welcome to";
+    // Just in case, for clang format:
+    // clang-format off
+    std::string splash = R"raw(
+  __/\\\\\\\\\\\__/\\\\\\\\\\\\\\\__/\\\________/\\\_        
+  _\/////\\\///__\///////\\\/////__\/\\\_____/\\\//__       
+  _____\/\\\___________\/\\\_______\/\\\__/\\\//_____      
+    _____\/\\\___________\/\\\_______\/\\\\\\//\\\_____     
+    _____\/\\\___________\/\\\_______\/\\\//_\//\\\____    
+      _____\/\\\___________\/\\\_______\/\\\____\//\\\___   
+      _____\/\\\___________\/\\\_______\/\\\_____\//\\\__  
+        __/\\\\\\\\\\\_______\/\\\_______\/\\\______\//\\\_ 
+        _\///////////________\///________\///________\///__
+  )raw";
+    // clang-format on
+
+    std::cout << rang::fg::reset << rang::style::bold;
+    bool cur_yellow = false;
+    for(int i = 0; i < splash.size(); i++) {
+        const char splash_char = splash[i];
+        bool is_letter = splash_char == '/' || splash_char == '\\';
+
+        if(is_letter && !cur_yellow) {
+            std::cout << rang::fg::reset << rang::fgB::yellow;
+            cur_yellow = true;
+        } else if(!is_letter && cur_yellow) {
+            std::cout << rang::fg::reset << rang::fgB::blue;
+            cur_yellow = false;
+        }
+        std::cout << splash[i];
+        if(splash[i] == '\n')
+            std::cout << std::flush;
+    }
+    std::cout << rang::style::reset << rang::bg::reset << rang::fg::reset;
+    std::cout << std::endl;
+#else
+    std::cout << "       Welcome to ITK\n" << std::endl;
+#endif
+    std::istringstream stream(outputString);
+    std::string line;
+    bool description = true;
+    bool usage = false;
+    bool positionals = false;
+    bool options = false;
+    while (std::getline(stream, line)) {
+      if (description) {
+        std::cout << rang::fgB::yellow << rang::style::bold;
+        std::cout << line << std::endl;
+        std::cout << rang::fg::reset << rang::style::reset;
+        description = false;
+        usage = true;
+      } else if(usage) {
+        std::cout << rang::fg::yellow;
+        std::cout << line.substr(0, 6);
+        std::cout << rang::fg::reset; 
+        std::cout << rang::fg::green << rang::style::bold; 
+        std::cout << line.substr(6) << std::endl;
+        std::cout << rang::fg::reset << rang::style::reset; 
+        usage = false;
+      } else if(positionals) {
+        if (line == "") {
+          std::cout << line << std::endl;
+          positionals = false;
+        } else {
+          const size_t loc = line.find(' ', 3);
+          std::cout << rang::fg::green;
+          std::cout << line.substr(0, loc);
+          std::cout << rang::fg::reset; 
+          std::cout << line.substr(loc) << std::endl;
+        }
+      } else if(options) {
+        if (line == "") {
+          std::cout << line << std::endl;
+          options = false;
+        } else {
+          const size_t loc = line.find(' ', 3);
+          std::cout << rang::fg::green;
+          std::cout << line.substr(0, loc);
+          std::cout << rang::fg::reset; 
+          std::cout << line.substr(loc) << std::endl;
+        }
+      } else if(line == "Positionals:") {
+        std::cout << rang::fg::yellow;
+        std::cout << line << std::endl;
+        std::cout << rang::fg::reset; 
+        positionals = true;
+      } else if(line == "Options:") {
+        std::cout << rang::fg::yellow;
+        std::cout << line << std::endl;
+        std::cout << rang::fg::reset; 
+        options = true;
+      } else if(line == "Enjoy ITK!") {
+        std::cout << rang::fg::blue << rang::style::italic;
+        std::cout << line << std::endl;
+        std::cout << rang::fg::reset << rang::style::reset; 
+        options = true;
+      } else {
+        std::cout << line << std::endl;
+      }
+    }
+    return e.get_exit_code();
+  }
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
   std::cout << (e.get_exit_code() == 0 ? rang::fgB::blue : rang::fgB::red);
 #endif
