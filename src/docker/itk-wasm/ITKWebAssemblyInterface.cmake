@@ -43,7 +43,7 @@ function(add_executable target)
     set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS_DEBUG " -fno-lto -s DISABLE_EXCEPTION_CATCHING=0 --bind ${_link_flags_debug}")
     set_property(TARGET ${umd_target} PROPERTY LINK_FLAGS_DEBUG " -fno-lto -s DISABLE_EXCEPTION_CATCHING=0 --bind ${_link_flags_debug}")
   else()
-    set_property(TARGET ${wasm_target} PROPERTY SUFFIX ".wasi.no-opt.wasm")
+    set_property(TARGET ${wasm_target} PROPERTY SUFFIX ".wasi.wasm")
     if (NOT TARGET wasi-exception-shim AND DEFINED CMAKE_CXX_COMPILE_OBJECT)
       add_library(wasi-exception-shim STATIC /ITKWebAssemblyInterface/src/exceptionShim.cxx)
     endif()
@@ -52,14 +52,6 @@ function(add_executable target)
       _target_link_libraries(${target} PRIVATE $<$<LINK_LANGUAGE:CXX>:wasi-exception-shim>)
       get_property(_link_flags TARGET ${wasm_target} PROPERTY LINK_FLAGS)
       set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS "-Wl,--export-if-defined=main -Wl,--export-if-defined=itk_wasm_input_array_alloc -Wl,--export-if-defined=itk_wasm_input_json_alloc -Wl,--export-if-defined=itk_wasm_output_json_address -Wl,--export-if-defined=itk_wasm_output_json_size -Wl,--export-if-defined=itk_wasm_output_array_address -Wl,--export-if-defined=itk_wasm_output_array_size -Wl,--export-if-defined=itk_wasm_free_all ${_link_flags}")
-      if(NOT DEFINED ITK_WASM_WASM_OPT_FLAGS)
-        set(ITK_WASM_WASM_OPT_FLAGS "-O2")
-      endif()
-      add_custom_command(TARGET ${wasm_target} POST_BUILD
-        COMMAND /usr/bin/wasm-opt ${ITK_WASM_WASM_OPT_FLAGS}
-            "$<TARGET_FILE:${wasm_target}>"
-            -o "$<TARGET_FILE_BASE_NAME:${wasm_target}>.wasi.wasm"
-        VERBATIM)
       endif()
   endif()
 endfunction()
