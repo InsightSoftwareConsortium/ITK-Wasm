@@ -36,53 +36,6 @@ RUN git clone https://github.com/thewtex/ITK.git && \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
 ARG CMAKE_BUILD_TYPE=Release
 
-# For SlicerExecutionModel
-RUN mkdir ITK-Native-build && \
-  cd ITK-Native-build && \
-  /usr/bin/cmake \
-    -G Ninja \
-    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-    -DBUILD_EXAMPLES:BOOL=OFF \
-    -DBUILD_TESTING:BOOL=OFF \
-    -DITK_LEGACY_REMOVE:BOOL=ON \
-    -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF \
-    -DITKGroup_Core:BOOL=ON \
-    -DModule_ITKCommon:BOOL=ON \
-    -DModule_ITKIOXML:BOOL=ON \
-    -DModule_ITKExpat:BOOL=ON \
-    -DCMAKE_CXX_STANDARD:STRING=17 \
-    -DCMAKE_C_COMPILER=/usr/bin/cc \
-    -DCMAKE_CXX_COMPILER=/usr/bin/c++ \
-    -DCMAKE_TOOLCHAIN_FILE="" \
-    ../ITK && \
-  ninja && \
-  find . -name '*.o' -delete && \
-  cd ..
-
-ENV SlicerExecutionModel_GIT_TAG dbc39c049b3721c5f3ea80f20acd32e3c8cc65f3
-RUN git clone https://github.com/thewtex/SlicerExecutionModel.git && \
-  cd SlicerExecutionModel && \
-  git checkout ${SlicerExecutionModel_GIT_TAG} && \
-  cd ../ && \
-  mkdir SlicerExecutionModel-build && \
-  cd SlicerExecutionModel-build && \
-  /usr/bin/cmake \
-    -G Ninja \
-    -DSlicerExecutionModel_USE_JSONCPP:BOOL=OFF \
-    -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
-    -DBUILD_SHARED_LIBS:BOOL=OFF \
-    -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
-    -DBUILD_TESTING:BOOL=OFF \
-    -DITK_DIR:PATH=/ITK-Native-build \
-    -DCMAKE_CXX_STANDARD:STRING=17 \
-    -DCMAKE_C_COMPILER=/usr/bin/cc \
-    -DCMAKE_CXX_COMPILER=/usr/bin/c++ \
-    -DCMAKE_TOOLCHAIN_FILE="" \
-    ../SlicerExecutionModel && \
-  ninja && \
-  find . -name '*.o' -delete && \
-  cd .. && chmod -R 777 SlicerExecutionModel-build
-
 ARG LDFLAGS
 ARG CFLAGS
 ARG CXXFLAGS

@@ -243,7 +243,6 @@ if (options.buildEmscriptenPipelines) {
   if (options.buildVtk) {
     emscriptenTestPipelines = emscriptenTestPipelines.concat([
       path.join('test', 'pipelines', 'WriteVTKPolyDataPipeline'),
-      path.join('test', 'pipelines', 'CLPExample1'),
       path.join('src', 'pipeline', 'mesh-to-polydata'),])
   }
   asyncMod.map(emscriptenTestPipelines, buildPipeline)
