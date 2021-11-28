@@ -10,7 +10,7 @@ WORKDIR /
 ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_DOCKCROSS}
 # v9.1.0.rc2 + VTK HDF5 + No Threads::Threads link + netcdf patches + expat
 # patch
-ENV VTK_GIT_TAG 0983f8c18c70421185b02c1b6116e22e4b8d8c78
+ENV VTK_GIT_TAG bf422b7c6f376ee547c0db89f46e489376cec380
 RUN git clone https://github.com/thewtex/VTK.git && \
   cd VTK && \
   git checkout ${VTK_GIT_TAG} && \

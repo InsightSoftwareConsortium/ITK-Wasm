@@ -15,18 +15,18 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkWASMImage_h
-#define itkWASMImage_h
+#ifndef itkWASMText_h
+#define itkWASMText_h
 
 #include "itkWASMDataObject.h"
 
 namespace itk
 {
 /**
- *\class WASMImage
- * \brief JSON representation for an itk::ImageBase
+ *\class WASMText
+ * \brief JSON representation for an itk::TextBase
  *
- * JSON representation for an itk::ImageBase for interfacing across programming languages and runtimes.
+ * JSON representation for an itk::TextBase for interfacing across programming languages and runtimes.
  * 
  * Pixel and Direction binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
  * 
@@ -37,35 +37,35 @@ namespace itk
  * 
  * \ingroup WebAssemblyInterface
  */
-template <typename TImage>
-class ITK_TEMPLATE_EXPORT WASMImage : public WASMDataObject
+template <typename TText>
+class ITK_TEMPLATE_EXPORT WASMText : public WASMDataObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_MOVE(WASMImage);
+  ITK_DISALLOW_COPY_AND_MOVE(WASMText);
 
   /** Standard class type aliases. */
-  using Self = WASMImage;
+  using Self = WASMText;
   using Superclass = WASMDataObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WASMImage, WASMDataObject);
+  itkTypeMacro(WASMText, WASMDataObject);
 
-  using ImageType = TImage;
+  using TextType = TText;
 
-  void SetImage(const ImageType * image) {
-    this->SetDataObject(const_cast<ImageType *>(image));
+  void SetText(const TextType * image) {
+    this->SetDataObject(const_cast<TextType *>(image));
   }
 
-  const ImageType * GetImage() const {
-    return static_cast< const ImageType * >(this->GetDataObject());
+  const TextType * GetText() const {
+    return static_cast< const TextType * >(this->GetDataObject());
   }
 
 protected:
-  WASMImage() = default;
-  ~WASMImage() override = default;
+  WASMText() = default;
+  ~WASMText() override = default;
 };
 
 } // namespace itk
