@@ -20,6 +20,7 @@
 #include "itkImage.h"
 #include "itkInputImage.h"
 #include "itkOutputImage.h"
+#include "itkInputTextStream.h"
 #include "itkWASMImage.h"
 #include "itkImageToWASMImageFilter.h"
 #include "itkWASMExports.h"
@@ -58,8 +59,24 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   void * readWASMImagePointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readImageJSON.size()));
   std::memcpy(readWASMImagePointer, readImageJSON.data(), readImageJSON.size());
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", NULL};
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 4, const_cast< char ** >(mockArgv));
+  std::ifstream mockTextFStream( argv[4] );
+  const std::string mockTextStream{ std::istreambuf_iterator<char>(mockTextFStream),
+                                    std::istreambuf_iterator<char>() };
+  const size_t textStreamInputAddress = itk_wasm_input_array_alloc(0, 1, 0, mockTextStream.size());
+  auto textStreamInputPointer = reinterpret_cast< void * >(textStreamInputAddress);
+  std::memcpy(textStreamInputPointer, mockTextStream.data(), mockTextStream.size() + 1);
+
+  std::ostringstream textStreamStream;
+  textStreamStream << "{ \"data\": \"data:application/vnd.itk.address,0:";
+  textStreamStream << textStreamInputAddress;
+  textStreamStream << "\", \"size\": ";
+  textStreamStream << mockTextStream.size() + 1;
+  textStreamStream << "}";
+  void * textStreamInputJSONPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 1, textStreamStream.str().size()));
+  std::memcpy(textStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size() + 1);
+
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", NULL};
+  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 5, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -84,7 +101,14 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   OutputImageType outputImage;
   pipeline.add_option("outputImage", outputImage, "The outputImage")->required();
 
+  itk::wasm::InputTextStream inputTextStream;
+  pipeline.add_option("InputText", inputTextStream, "The input text")->required();
+
   ITK_WASM_PARSE(pipeline);
+
+  const std::string inputTextStreamContent{ std::istreambuf_iterator<char>(inputTextStream.Get()),
+                                            std::istreambuf_iterator<char>() };
+  ITK_TEST_EXPECT_TRUE(inputTextStreamContent == "test 123\n");
 
   outputImage.Set(inputImage.Get());
 

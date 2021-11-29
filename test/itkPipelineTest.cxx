@@ -21,6 +21,7 @@
 #include "itkImage.h"
 #include "itkInputImage.h"
 #include "itkOutputImage.h"
+#include "itkInputTextStream.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
@@ -49,14 +50,20 @@ itkPipelineTest(int argc, char * argv[])
 
   using InputImageType = itk::wasm::InputImage<ImageType>;
   InputImageType inputImage;
-  pipeline.add_option("inputImage", inputImage, "The inputImage")->required();
+  pipeline.add_option("InputImage", inputImage, "The input image")->required();
 
   using OutputImageType = itk::wasm::OutputImage<ImageType>;
-  // OutputImageType::Pointer inputImage;
   OutputImageType outputImage;
-  pipeline.add_option("outputImage", outputImage, "The outputImage")->required();
+  pipeline.add_option("OutputImage", outputImage, "The output image")->required();
+
+  itk::wasm::InputTextStream inputTextStream;
+  pipeline.add_option("InputText", inputTextStream, "The input text")->required();
 
   ITK_WASM_PARSE(pipeline);
+
+  const std::string inputTextStreamContent{ std::istreambuf_iterator<char>(inputTextStream.Get()),
+                                            std::istreambuf_iterator<char>() };
+  ITK_TEST_EXPECT_TRUE(inputTextStreamContent == "test 123\n");
 
   outputImage.Set(inputImage.Get());
 

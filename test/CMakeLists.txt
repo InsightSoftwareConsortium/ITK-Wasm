@@ -125,6 +125,7 @@ itk_add_test(NAME itkPipelineTest
     itkPipelineTest
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineTest.mha
+      ${CMAKE_CURRENT_SOURCE_DIR}/Input/itk-wasm-text.txt
 )
 
 itk_add_test(NAME itkPipelineMemoryIOTest
@@ -133,6 +134,7 @@ itk_add_test(NAME itkPipelineMemoryIOTest
       --memory-io
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTest.mha
+      ${CMAKE_CURRENT_SOURCE_DIR}/Input/itk-wasm-text.txt
 )
 
 if(EMSCRIPTEN)
