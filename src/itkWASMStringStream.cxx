@@ -15,40 +15,18 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkInputTextStream.h"
-
-#include <string>
-#ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
-#endif
+#include "itkWASMStringStream.h"
 
 namespace itk
 {
-namespace wasm
-{
 
-bool lexical_cast(const std::string &input, InputTextStream &inputStream)
+void
+WASMStringStream::PrintSelf(std::ostream & os, Indent indent) const
 {
-  if (wasm::Pipeline::GetUseMemoryIO())
-  {
-#ifndef ITK_WASM_NO_MEMORY_IO
-    const unsigned int index = std::stoi(input);
-    const auto json = getMemoryStoreInputJSON(0, index);
-    inputStream.SetJSON(json);
-#else
-    return false;
-#endif
-  }
-  else
-  {
-#ifndef ITK_WASM_NO_FILESYSTEM_IO
-    inputStream.SetFileName(input);
-#else
-    return false;
-#endif
-  }
-  return true;
+  // Skip WASMDataObject since we do not have a DataObject
+  Superclass::Superclass::PrintSelf(os, indent);
+  os << indent << "JSON: " << this->m_JSON << std::endl;
+  os << indent << "String: " << this->m_StringStream.str() << std::endl;
 }
 
-} // end namespace wasm
 } // end namespace itk

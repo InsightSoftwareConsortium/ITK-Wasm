@@ -16,7 +16,9 @@ set(WebAssemblyInterface_SRCS
   itkWASMImageIO.cxx
   itkWASMMeshIOFactory.cxx
   itkWASMMeshIO.cxx
+  itkWASMStringStream.cxx
   itkInputTextStream.cxx
+  itkOutputTextStream.cxx
   itkIOComponentEnumFromWASMComponentType.cxx
   itkIOPixelEnumFromWASMPixelType.cxx
   itkWASMComponentTypeFromIOComponentEnum.cxx

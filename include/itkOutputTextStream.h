@@ -15,15 +15,19 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkInputTextStream_h
-#define itkInputTextStream_h
+#ifndef itkOutputTextStream_h
+#define itkOutputTextStream_h
 
 #include "itkPipeline.h"
 #include "itkWASMStringStream.h"
 
 #include <string>
+#ifndef ITK_WASM_NO_MEMORY_IO
 #include <sstream>
+#endif
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include <fstream>
+#endif
 
 namespace itk
 {
@@ -31,7 +35,7 @@ namespace wasm
 {
 
 /**
- *\class InputTextStream
+ *\class OutputTextStream
  * \brief Input text std::istream for an itk::wasm::Pipeline
  *
  * This stream is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
@@ -40,53 +44,50 @@ namespace wasm
  * 
  * \ingroup WebAssemblyInterface
  */
-class InputTextStream
+class OutputTextStream
 {
 public:
-  std::istream & Get() {
-    return *m_IStream;
-  }
-
-  void SetJSON(const std::string & json)
-  {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
-    m_DeleteIStream = false;
-    m_WASMStringStream = WASMStringStream::New();
-    m_WASMStringStream->SetJSON(json.c_str());
-
-    m_IStream = &(m_WASMStringStream->GetStringStream());
+  std::ostream & Get() {
+    return *m_OStream;
   }
 
   void SetFileName(const std::string & fileName)
   {
-    if (m_DeleteIStream && m_IStream != nullptr)
+    if (m_DeleteOStream && m_OStream != nullptr)
     {
-      delete m_IStream;
+      delete m_OStream;
     }
-    m_IStream = new std::ifstream(fileName, std::ifstream::in);
-    m_DeleteIStream = true;
+    m_OStream = new std::ofstream(fileName, std::ofstream::out);
+    m_DeleteOStream = true;
   }
 
-  InputTextStream() = default;
-  ~InputTextStream()
+  OutputTextStream() = default;
+  ~OutputTextStream();
+
+  /** Output index. */
+  void SetIdentifier(const std::string & identifier)
   {
-    if (m_DeleteIStream && m_IStream != nullptr)
+    if (m_DeleteOStream && m_OStream != nullptr)
     {
-      delete m_IStream;
+      delete m_OStream;
     }
+    m_DeleteOStream = false;
+    m_WASMStringStream = WASMStringStream::New();
+
+    m_OStream = &(m_WASMStringStream->GetStringStream());
+    this->m_Identifier = identifier;
   }
 protected:
-  std::istream * m_IStream{nullptr};
-  bool m_DeleteIStream{false};
-  
+  std::ostream * m_OStream{nullptr};
+  bool m_DeleteOStream{false};
+
+  std::string m_Identifier;
+
   WASMStringStream::Pointer m_WASMStringStream;
 };
 
 
-bool lexical_cast(const std::string &input, InputTextStream &inputStream);
+bool lexical_cast(const std::string &output, OutputTextStream &outputStream);
 
 } // end namespace wasm
 } // end namespace itk

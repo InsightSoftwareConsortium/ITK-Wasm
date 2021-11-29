@@ -15,15 +15,18 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkInputTextStream_h
-#define itkInputTextStream_h
+#ifndef itkInputBinaryStream_h
+#define itkInputBinaryStream_h
 
 #include "itkPipeline.h"
-#include "itkWASMStringStream.h"
 
 #include <string>
+#ifndef ITK_WASM_NO_MEMORY_IO
 #include <sstream>
+#endif
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include <fstream>
+#endif
 
 namespace itk
 {
@@ -31,8 +34,8 @@ namespace wasm
 {
 
 /**
- *\class InputTextStream
- * \brief Input text std::istream for an itk::wasm::Pipeline
+ *\class InputBinaryStream
+ * \brief Input binary std::istream for an itk::wasm::Pipeline
  *
  * This stream is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
  * 
@@ -40,53 +43,37 @@ namespace wasm
  * 
  * \ingroup WebAssemblyInterface
  */
-class InputTextStream
+class InputBinaryStream
 {
 public:
   std::istream & Get() {
     return *m_IStream;
   }
 
-  void SetJSON(const std::string & json)
+  void SetString(const std::string & string)
   {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
-    m_DeleteIStream = false;
-    m_WASMStringStream = WASMStringStream::New();
-    m_WASMStringStream->SetJSON(json.c_str());
-
-    m_IStream = &(m_WASMStringStream->GetStringStream());
+    m_IStream = new std::stringstream(string);
   }
 
   void SetFileName(const std::string & fileName)
   {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
     m_IStream = new std::ifstream(fileName, std::ifstream::in);
-    m_DeleteIStream = true;
   }
 
-  InputTextStream() = default;
-  ~InputTextStream()
+  InputBinaryStream() = default;
+  ~InputBinaryStream()
   {
-    if (m_DeleteIStream && m_IStream != nullptr)
+    if (m_IStream != nullptr)
     {
       delete m_IStream;
     }
   }
 protected:
   std::istream * m_IStream{nullptr};
-  bool m_DeleteIStream{false};
-  
-  WASMStringStream::Pointer m_WASMStringStream;
 };
 
 
-bool lexical_cast(const std::string &input, InputTextStream &inputStream);
+bool lexical_cast(const std::string &input, InputBinaryStream &inputStream);
 
 } // end namespace wasm
 } // end namespace itk

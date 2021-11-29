@@ -22,6 +22,7 @@
 #include "itkInputImage.h"
 #include "itkOutputImage.h"
 #include "itkInputTextStream.h"
+#include "itkOutputTextStream.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
@@ -59,13 +60,18 @@ itkPipelineTest(int argc, char * argv[])
   itk::wasm::InputTextStream inputTextStream;
   pipeline.add_option("InputText", inputTextStream, "The input text")->required();
 
+  itk::wasm::OutputTextStream outputTextStream;
+  pipeline.add_option("OutputText", outputTextStream, "The output text")->required();
+
   ITK_WASM_PARSE(pipeline);
+
+  outputImage.Set(inputImage.Get());
 
   const std::string inputTextStreamContent{ std::istreambuf_iterator<char>(inputTextStream.Get()),
                                             std::istreambuf_iterator<char>() };
   ITK_TEST_EXPECT_TRUE(inputTextStreamContent == "test 123\n");
 
-  outputImage.Set(inputImage.Get());
+  outputTextStream.Get() << inputTextStreamContent;
 
   return EXIT_SUCCESS;
 }

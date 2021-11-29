@@ -15,11 +15,14 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkInputTextStream.h"
+#include "itkOutputTextStream.h"
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
 #include "itkWASMExports.h"
+#include <sstream>
+#include "rapidjson/document.h"
+#include "itkWASMStringStream.h"
 #endif
 
 namespace itk
@@ -27,14 +30,42 @@ namespace itk
 namespace wasm
 {
 
-bool lexical_cast(const std::string &input, InputTextStream &inputStream)
+OutputTextStream
+::~OutputTextStream()
+{
+  if(wasm::Pipeline::GetUseMemoryIO())
+  {
+#ifndef ITK_WASM_NO_MEMORY_IO
+    const auto index = std::stoi(this->m_Identifier);
+    setMemoryStoreOutputDataObject(0, index, this->m_WASMStringStream);
+
+    const auto dataAddress = reinterpret_cast< size_t >( this->m_WASMStringStream->GetStringStream().str().data() );
+    const auto dataSize = this->m_WASMStringStream->GetStringStream().str().size() + 1;
+    setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);
+#else
+    throw std::logic_error("Memory IO not supported");
+#endif
+  }
+  else
+  {
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
+    // ofstream will close when deleted
+#else
+    throw std::logic_error("Filesystem IO not supported");
+#endif
+  if (m_DeleteOStream && m_OStream != nullptr)
+    {
+      delete m_OStream;
+    }
+  }
+}
+
+bool lexical_cast(const std::string &output, OutputTextStream &outputStream)
 {
   if (wasm::Pipeline::GetUseMemoryIO())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    const unsigned int index = std::stoi(input);
-    const auto json = getMemoryStoreInputJSON(0, index);
-    inputStream.SetJSON(json);
+    outputStream.SetIdentifier(output);
 #else
     return false;
 #endif
@@ -42,7 +73,7 @@ bool lexical_cast(const std::string &input, InputTextStream &inputStream)
   else
   {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    inputStream.SetFileName(input);
+    outputStream.SetFileName(output);
 #else
     return false;
 #endif

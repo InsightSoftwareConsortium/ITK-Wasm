@@ -21,6 +21,7 @@
 #include "itkInputImage.h"
 #include "itkOutputImage.h"
 #include "itkInputTextStream.h"
+#include "itkOutputTextStream.h"
 #include "itkWASMImage.h"
 #include "itkImageToWASMImageFilter.h"
 #include "itkWASMExports.h"
@@ -75,8 +76,8 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   void * textStreamInputJSONPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 1, textStreamStream.str().size()));
   std::memcpy(textStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size() + 1);
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", NULL};
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 5, const_cast< char ** >(mockArgv));
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", NULL};
+  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 6, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -104,13 +105,18 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   itk::wasm::InputTextStream inputTextStream;
   pipeline.add_option("InputText", inputTextStream, "The input text")->required();
 
+  itk::wasm::OutputTextStream outputTextStream;
+  pipeline.add_option("OutputText", outputTextStream, "The output text")->required();
+
   ITK_WASM_PARSE(pipeline);
+
+  outputImage.Set(inputImage.Get());
 
   const std::string inputTextStreamContent{ std::istreambuf_iterator<char>(inputTextStream.Get()),
                                             std::istreambuf_iterator<char>() };
   ITK_TEST_EXPECT_TRUE(inputTextStreamContent == "test 123\n");
 
-  outputImage.Set(inputImage.Get());
+  outputTextStream.Get() << inputTextStreamContent;
 
   return EXIT_SUCCESS;
 }

@@ -19,6 +19,7 @@
 #define itkWASMStringStream_h
 
 #include "itkWASMDataObject.h"
+#include "rapidjson/document.h"
 
 namespace itk
 {
@@ -51,6 +52,7 @@ public:
 
   void SetString(const std::string & string) {
     this->m_StringStream.str(string);
+    this->UpdateJSON();
   }
 
   std::string GetString() const {
@@ -61,11 +63,42 @@ public:
     return this->m_StringStream;
   }
 
+  void SetJSON(const char * jsonChar) override
+  {
+    std::string json(jsonChar);
+    rapidjson::Document document;
+    if (document.Parse(json.c_str()).HasParseError())
+      {
+      throw std::runtime_error("Could not parse JSON");
+      }
+    const rapidjson::Value & dataJson = document["data"];
+    const std::string dataString( dataJson.GetString() );
+    const char * dataPtr = reinterpret_cast< char * >( std::atol(dataString.substr(35).c_str()) );
+    const size_t size = document["size"].GetInt();
+    const std::string string(dataPtr, size - 1);
+    m_StringStream.str(string);
+
+    Superclass::SetJSON(jsonChar);
+  }
 protected:
   WASMStringStream() = default;
   ~WASMStringStream() override = default;
 
+  void UpdateJSON()
+  {
+    std::ostringstream jsonStream;
+    jsonStream << "{ \"data\": \"data:application/vnd.itk.address,0:";
+    jsonStream << reinterpret_cast< size_t >( m_StringStream.str().data() );
+    jsonStream << "\", \"size\": ";
+    jsonStream << m_StringStream.str().size() + 1;
+    jsonStream << "}";
+    this->m_JSON = jsonStream.str();
+  }
+
   std::stringstream m_StringStream;
+
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 };
 
 } // namespace itk

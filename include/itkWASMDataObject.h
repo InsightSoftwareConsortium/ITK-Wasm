@@ -47,7 +47,7 @@ public:
 
   /** Get/Set the DataObject JSON representation. */
   itkSetStringMacro(JSON);
-  const std::string & GetJSON() const
+  virtual const std::string & GetJSON() const
   {
     return this->m_JSON;
   }
