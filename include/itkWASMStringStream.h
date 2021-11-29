@@ -15,57 +15,57 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkWASMText_h
-#define itkWASMText_h
+#ifndef itkWASMStringStream_h
+#define itkWASMStringStream_h
 
 #include "itkWASMDataObject.h"
 
 namespace itk
 {
 /**
- *\class WASMText
- * \brief JSON representation for an itk::TextBase
+ *\class WASMStringStream
+ * \brief JSON representation for a std::stringstream
  *
- * JSON representation for an itk::TextBase for interfacing across programming languages and runtimes.
- * 
- * Pixel and Direction binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
+ * JSON representation for a std::stringstream for interfacing across programming languages and runtimes.
  * 
  * Arrays:
  * 
- * - 0: Pixel buffer `data`
- * - 1: Orientation `direction`
+ * - 0: The associated std::string data.
  * 
  * \ingroup WebAssemblyInterface
  */
-template <typename TText>
-class ITK_TEMPLATE_EXPORT WASMText : public WASMDataObject
+class ITK_TEMPLATE_EXPORT WASMStringStream : public WASMDataObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_MOVE(WASMText);
+  ITK_DISALLOW_COPY_AND_MOVE(WASMStringStream);
 
   /** Standard class type aliases. */
-  using Self = WASMText;
+  using Self = WASMStringStream;
   using Superclass = WASMDataObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WASMText, WASMDataObject);
+  itkTypeMacro(WASMStringStream, WASMDataObject);
 
-  using TextType = TText;
-
-  void SetText(const TextType * image) {
-    this->SetDataObject(const_cast<TextType *>(image));
+  void SetString(const std::string & string) {
+    this->m_StringStream.str(string);
   }
 
-  const TextType * GetText() const {
-    return static_cast< const TextType * >(this->GetDataObject());
+  std::string GetString() const {
+    return this->m_StringStream.str();
+  }
+
+  std::stringstream & GetStringStream() {
+    return this->m_StringStream;
   }
 
 protected:
-  WASMText() = default;
-  ~WASMText() override = default;
+  WASMStringStream() = default;
+  ~WASMStringStream() override = default;
+
+  std::stringstream m_StringStream;
 };
 
 } // namespace itk
