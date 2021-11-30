@@ -283,7 +283,7 @@ The following hash algorithms are supported::
  SHA3_256    .sha3-256 Keccak SHA-3
  SHA3_384    .sha3-384 Keccak SHA-3
  SHA3_512    .sha3-512 Keccak SHA-3
- IPFS        .ipfs     Interplanetary Filesystem Content Identifier (CID)
+ CID         .cid      Interplanetary Filesystem (IPFS) Content Identifier (CID)
 
 Note that the hashes are used only for unique data identification and
 download verification.
@@ -513,30 +513,32 @@ endfunction()
 #-----------------------------------------------------------------------------
 # Private helper interface
 
-set(_ExternalData_REGEX_ALGO "MD5|SHA1|SHA224|SHA256|SHA384|SHA512|SHA3_224|SHA3_256|SHA3_384|SHA3_512|IPFS")
-set(_ExternalData_REGEX_EXT "md5|sha1|sha224|sha256|sha384|sha512|sha3-224|sha3-256|sha3-384|sha3-512|ipfs")
+set(_ExternalData_REGEX_ALGO "MD5|SHA1|SHA224|SHA256|SHA384|SHA512|SHA3_224|SHA3_256|SHA3_384|SHA3_512|CID")
+set(_ExternalData_REGEX_EXT "md5|sha1|sha224|sha256|sha384|sha512|sha3-224|sha3-256|sha3-384|sha3-512|cid")
 set(_ExternalData_SELF "${CMAKE_CURRENT_LIST_FILE}")
 get_filename_component(_ExternalData_SELF_DIR "${_ExternalData_SELF}" PATH)
 set(_ExternalData_ipfs_add_flags --cid-version 1 -Q --chunker=size-1048576 --raw-leaves --cid-base=base32)
 
 function(_ExternalData_compute_hash var_hash algo file)
-  if("${algo}" STREQUAL "IPFS")
-    find_program(IPFS_EXECUTABLE
-      NAMES jsipfs
-      DOC "Interplanetary Filesystem (IPFS) executable"
+  if("${algo}" STREQUAL "CID")
+    find_program(W3_EXECUTABLE
+      NAMES w3
+      DOC "web3.storage CLI executable"
       REQUIRED)
-    if(NOT IPFS_EXECUTABLE)
-      message(FATAL_ERROR "Please set IPFS_EXECUTABLE to the path ipfs to add ExternalData.")
+    if(NOT W3_EXECUTABLE)
+      message(FATAL_ERROR "Please set W3_EXECUTABLE to the path for the w3 CLI to add ExternalData. Install with `npm i -g w3`")
     endif()
-    execute_process(COMMAND "${IPFS_EXECUTABLE}" add ${_ExternalData_ipfs_add_flags} "${file}"
-      RESULT_VARIABLE ipfs_add_result
-      ERROR_VARIABLE ipfs_error
+    get_filename_component(file_name "${file}" NAME)
+    execute_process(COMMAND "${W3_EXECUTABLE}" put "${file}" --no-wrap --hidden --name "${file_name}"
+      RESULT_VARIABLE w3_put_result
+      ERROR_VARIABLE w3_put_error
       OUTPUT_STRIP_TRAILING_WHITESPACE
-      OUTPUT_VARIABLE file_cid)
-    if(NOT ${ipfs_add_result} EQUAL 0)
-      message(FATAL_ERROR "Error while calling 'ipfs add': ${ipfs_error}")
+      OUTPUT_VARIABLE w3_put_output)
+    if(NOT ${w3_put_result} EQUAL 0)
+      message(FATAL_ERROR "Error while calling 'w3 put': ${w3_put_error}")
     endif()
-    set("${var_hash}" "${file_cid}" PARENT_SCOPE)
+    # todo: parse w3 put output
+    set("${var_hash}" "${w3_put_output}" PARENT_SCOPE)
   elseif("${algo}" MATCHES "^${_ExternalData_REGEX_ALGO}$")
     file("${algo}" "${file}" hash)
     set("${var_hash}" "${hash}" PARENT_SCOPE)
@@ -1049,7 +1051,7 @@ function(_ExternalData_download_object name hash algo var_obj var_success var_er
       string(APPEND tried " (${errMsg})")
     else()
       # Verify downloaded object.
-      if("${algo}" STREQUAL "IPFS")
+      if("${algo}" STREQUAL "CID")
         # Skip per flag options with web3.storage
         # https://github.com/web3-storage/docs/issues/155
         set(found 1)

@@ -23,7 +23,7 @@ list(APPEND ExternalData_OBJECT_STORES
 
 set(ExternalData_BINARY_ROOT ${CMAKE_BINARY_DIR}/ExternalData)
 
-set(ExternalData_URL_ALGO_IPFS_lower ipfs)
+set(ExternalData_URL_ALGO_CID_lower cid)
 set(ExternalData_URL_TEMPLATES "" CACHE STRING
   "Additional URL templates for the ExternalData CMake script to look for testing data. E.g.
 file:///var/bigharddrive/%(algo)/%(hash)")
@@ -31,25 +31,25 @@ mark_as_advanced(ExternalData_URL_TEMPLATES)
 if(NOT ITK_FORBID_DOWNLOADS)
   list(APPEND ExternalData_URL_TEMPLATES
     # Local IPFS gateway
-    "http://127.0.0.1:8080/%(algo:lower)/%(hash)"
+    "http://127.0.0.1:8080/ipfs/%(hash)"
 
     # Protocol Labs gateway
-    "https://ipfs.io/%(algo:lower)/%(hash)"
+    "https://ipfs.io/ipfs/%(hash)"
 
     # Gateway for data pinned on pinata
-    "https://gateway.pinata.cloud/%(algo:lower)/%(hash)"
+    "https://gateway.pinata.cloud/ipfs/%(hash)"
 
     # Cloudflare gateway
-    "https://cloudflare-ipfs.com/%(algo:lower)/%(hash)"
+    "https://cloudflare-ipfs.com/ipfs/%(hash)"
 
     # Additional gateway (modern but has redirect)
-    "https://dweb.link/%(algo:lower)/%(hash)"
+    "https://dweb.link/ipfs/%(hash)"
     )
 endif()
 
 # Tell ExternalData commands to transform raw files to content links.
 # TODO: Condition this feature on presence of our pre-commit hook.
-set(ExternalData_LINK_CONTENT ipfs)
+set(ExternalData_LINK_CONTENT cid)
 
 # Emscripten currently has difficulty reading symlinks.
 if(EMSCRIPTEN)
