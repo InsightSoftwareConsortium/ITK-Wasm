@@ -26,10 +26,15 @@
 #include "itkOutputBinaryStream.h"
 #include "itkWASMImage.h"
 #include "itkImageToWASMImageFilter.h"
+#include "itkWASMMesh.h"
+#include "itkMeshToWASMMeshFilter.h"
 #include "itkWASMExports.h"
 #include <cstring>
+#include "itkInputMesh.h"
+#include "itkMesh.h"
 
 #include "itkImageFileReader.h"
+#include "itkMeshFileReader.h"
 
 int
 itkPipelineMemoryIOTest(int argc, char * argv[])
@@ -85,8 +90,25 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   void * binaryStreamInputJSONPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 1, textStreamStream.str().size()));
   std::memcpy(binaryStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size() + 1);
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", NULL};
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 8, const_cast< char ** >(mockArgv));
+  const char * inputMeshFile = argv[8];
+  using MeshType = itk::Mesh<float, 3>;
+  using MeshReaderType = itk::MeshFileReader<MeshType>;
+  auto meshReader = MeshReaderType::New();
+  meshReader->SetFileName(inputMeshFile);
+  meshReader->Update();
+  auto readInputMesh = meshReader->GetOutput();
+  using MeshToWASMMeshFilterType = itk::MeshToWASMMeshFilter<MeshType>;
+  auto meshToWASMMeshFilter = MeshToWASMMeshFilterType::New();
+  meshToWASMMeshFilter->SetInput(readInputMesh);
+  meshToWASMMeshFilter->Update();
+  auto readWASMMesh = meshToWASMMeshFilter->GetOutput();
+
+  auto readMeshJSON = readWASMMesh->GetJSON();
+  void * readWASMMeshPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 3, readMeshJSON.size()));
+  std::memcpy(readWASMMeshPointer, readMeshJSON.data(), readMeshJSON.size());
+
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", NULL};
+  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 9, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -123,6 +145,10 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   itk::wasm::OutputBinaryStream outputBinaryStream;
   pipeline.add_option("OutputBinary", outputBinaryStream, "The output binary")->required();
 
+  using InputMeshType = itk::wasm::InputMesh<MeshType>;
+  InputMeshType inputMesh;
+  pipeline.add_option("InputMesh", inputMesh, "The input mesh")->required();
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -138,6 +164,8 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   ITK_TEST_EXPECT_TRUE(inputBinaryStreamContent == "test 123\n");
 
   outputBinaryStream.Get() << inputBinaryStreamContent;
+
+  inputMesh.Get();
 
   return EXIT_SUCCESS;
 }

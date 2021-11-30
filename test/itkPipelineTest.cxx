@@ -25,6 +25,8 @@
 #include "itkOutputTextStream.h"
 #include "itkInputBinaryStream.h"
 #include "itkOutputBinaryStream.h"
+#include "itkInputMesh.h"
+#include "itkMesh.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
@@ -50,6 +52,7 @@ itkPipelineTest(int argc, char * argv[])
   constexpr unsigned int Dimension = 2;
   using PixelType = float;
   using ImageType = itk::Image<PixelType, Dimension>;
+  using MeshType = itk::Mesh<PixelType, 3>;
 
   using InputImageType = itk::wasm::InputImage<ImageType>;
   InputImageType inputImage;
@@ -68,8 +71,13 @@ itkPipelineTest(int argc, char * argv[])
   itk::wasm::InputBinaryStream inputBinaryStream;
   pipeline.add_option("InputBinary", inputBinaryStream, "The input text")->required();
 
+  using InputImageType = itk::wasm::InputImage<ImageType>;
   itk::wasm::OutputBinaryStream outputBinaryStream;
   pipeline.add_option("OutputBinary", outputBinaryStream, "The output binary")->required();
+
+  using InputMeshType = itk::wasm::InputMesh<MeshType>;
+  InputMeshType inputMesh;
+  pipeline.add_option("InputMesh", inputMesh, "The input mesh")->required();
 
   ITK_WASM_PARSE(pipeline);
 
@@ -86,6 +94,8 @@ itkPipelineTest(int argc, char * argv[])
   ITK_TEST_EXPECT_TRUE(inputBinaryStreamContent == "test 123\n");
 
   outputBinaryStream.Get() << inputBinaryStreamContent;
+
+  inputMesh.Get();
 
   return EXIT_SUCCESS;
 }
