@@ -439,7 +439,7 @@ WASMImageIO
       }
   }
   rapidjson::Value directionValue;
-  directionValue.SetString( "path:data/direction.raw", allocator );
+  directionValue.SetString( "data:application/vnd.itk.path,data/direction.raw", allocator );
   document.AddMember( "direction", directionValue.Move(), allocator );
 
   rapidjson::Value size(rapidjson::kArrayType);
@@ -449,7 +449,7 @@ WASMImageIO
     }
   document.AddMember( "size", size.Move(), allocator );
 
-  std::string dataFileString( "path:data/data.raw" );
+  std::string dataFileString( "data:application/vnd.itk.path,data/data.raw" );
   rapidjson::Value dataFile;
   dataFile.SetString( dataFileString.c_str(), allocator );
   document.AddMember( "data", dataFile, allocator );

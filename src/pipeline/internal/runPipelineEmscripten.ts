@@ -63,9 +63,9 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             name: image.name,
             origin: image.origin,
             spacing: image.spacing,
-            direction: 'path:data/direction.raw',
+            direction: 'data:application/vnd.itk.path,data/direction.raw',
             size: image.size,
-            data: 'path:data/data.raw'
+            data: 'data:application/vnd.itk.path,data/data.raw'
           }
           pipelineModule.fs_mkdirs(`${input.path}/data`)
           pipelineModule.fs_writeFile(`${input.path}/index.json`, JSON.stringify(imageJSON))
@@ -84,16 +84,16 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             name: mesh.name,
 
             numberOfPoints: mesh.numberOfPoints,
-            points: 'path:data/points.raw',
+            points: 'data:application/vnd.itk.path,data/points.raw',
 
             numberOfPointPixels: mesh.numberOfPointPixels,
-            pointData: 'path:data/pointData.raw',
+            pointData: 'data:application/vnd.itk.path,data/pointData.raw',
 
             numberOfCells: mesh.numberOfCells,
-            cells: 'path:data/cells.raw',
+            cells: 'data:application/vnd.itk.path,data/cells.raw',
 
             numberOfCellPixels: mesh.numberOfCellPixels,
-            cellData: 'path:data/cellData.raw',
+            cellData: 'data:application/vnd.itk.path,data/cellData.raw',
             cellBufferSize: mesh.cellBufferSize
 
           }

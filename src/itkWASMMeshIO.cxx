@@ -684,22 +684,22 @@ WASMMeshIO
   cellBufferSize.SetInt( this->GetCellBufferSize() );
   document.AddMember( "cellBufferSize", cellBufferSize.Move(), allocator );
 
-  std::string pointsDataFileString( "path:data/points.raw" );
+  std::string pointsDataFileString( "data:application/vnd.itk.path,data/points.raw" );
   rapidjson::Value pointsDataFile;
   pointsDataFile.SetString( pointsDataFileString.c_str(), allocator );
   document.AddMember( "points", pointsDataFile, allocator );
 
-  std::string cellsDataFileString( "path:data/cells.raw" );
+  std::string cellsDataFileString( "data:application/vnd.itk.path,data/cells.raw" );
   rapidjson::Value cellsDataFile;
   cellsDataFile.SetString( cellsDataFileString.c_str(), allocator );
   document.AddMember( "cells", cellsDataFile, allocator );
 
-  std::string pointDataDataFileString( "path:data/pointData.raw" );
+  std::string pointDataDataFileString( "data:application/vnd.itk.path,data/pointData.raw" );
   rapidjson::Value pointDataDataFile;
   pointDataDataFile.SetString( pointDataDataFileString.c_str(), allocator );
   document.AddMember( "pointData", pointDataDataFile, allocator );
 
-  std::string cellDataDataFileString( "path:data/cellData.raw" );
+  std::string cellDataDataFileString( "data:application/vnd.itk.path,data/cellData.raw" );
   rapidjson::Value cellDataDataFile;
   cellDataDataFile.SetString( cellDataDataFileString.c_str(), allocator );
   document.AddMember( "cellData", cellDataDataFile, allocator );
