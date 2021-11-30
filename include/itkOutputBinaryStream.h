@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkOutputTextStream_h
-#define itkOutputTextStream_h
+#ifndef itkOutputBinaryStream_h
+#define itkOutputBinaryStream_h
 
 #include "itkPipeline.h"
 #include "itkWASMStringStream.h"
@@ -35,7 +35,7 @@ namespace wasm
 {
 
 /**
- *\class OutputTextStream
+ *\class OutputBinaryStream
  * \brief Output text std::ostream for an itk::wasm::Pipeline
  *
  * This stream is written to the filesystem or memory when the object goes out of scope.
@@ -44,7 +44,7 @@ namespace wasm
  * 
  * \ingroup WebAssemblyInterface
  */
-class OutputTextStream
+class OutputBinaryStream
 {
 public:
   std::ostream & Get() {
@@ -57,12 +57,12 @@ public:
     {
       delete m_OStream;
     }
-    m_OStream = new std::ofstream(fileName, std::ofstream::out);
+    m_OStream = new std::ofstream(fileName, std::ofstream::out | std::ofstream::binary);
     m_DeleteOStream = true;
   }
 
-  OutputTextStream() = default;
-  ~OutputTextStream();
+  OutputBinaryStream() = default;
+  ~OutputBinaryStream();
 
   /** Output index. */
   void SetIdentifier(const std::string & identifier)
@@ -87,7 +87,7 @@ protected:
 };
 
 
-bool lexical_cast(const std::string &output, OutputTextStream &outputStream);
+bool lexical_cast(const std::string &output, OutputBinaryStream &outputStream);
 
 } // end namespace wasm
 } // end namespace itk

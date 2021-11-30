@@ -24,6 +24,7 @@
 #include "itkInputTextStream.h"
 #include "itkOutputTextStream.h"
 #include "itkInputBinaryStream.h"
+#include "itkOutputBinaryStream.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
@@ -67,6 +68,9 @@ itkPipelineTest(int argc, char * argv[])
   itk::wasm::InputBinaryStream inputBinaryStream;
   pipeline.add_option("InputBinary", inputBinaryStream, "The input text")->required();
 
+  itk::wasm::OutputBinaryStream outputBinaryStream;
+  pipeline.add_option("OutputBinary", outputBinaryStream, "The output binary")->required();
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -80,6 +84,8 @@ itkPipelineTest(int argc, char * argv[])
   const std::string inputBinaryStreamContent{ std::istreambuf_iterator<char>(inputBinaryStream.Get()),
                                             std::istreambuf_iterator<char>() };
   ITK_TEST_EXPECT_TRUE(inputBinaryStreamContent == "test 123\n");
+
+  outputBinaryStream.Get() << inputBinaryStreamContent;
 
   return EXIT_SUCCESS;
 }

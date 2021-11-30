@@ -128,6 +128,7 @@ itk_add_test(NAME itkPipelineTest
       ${CMAKE_CURRENT_SOURCE_DIR}/Input/itk-wasm-text.txt
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputText.txt
       ${CMAKE_CURRENT_SOURCE_DIR}/Input/itk-wasm-text.txt
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputBinary.bin
 )
 
 itk_add_test(NAME itkPipelineMemoryIOTest
@@ -139,6 +140,7 @@ itk_add_test(NAME itkPipelineMemoryIOTest
       ${CMAKE_CURRENT_SOURCE_DIR}/Input/itk-wasm-text.txt
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputText.txt
       ${CMAKE_CURRENT_SOURCE_DIR}/Input/itk-wasm-text.txt
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputBinary.bin
 )
 
 if(EMSCRIPTEN)

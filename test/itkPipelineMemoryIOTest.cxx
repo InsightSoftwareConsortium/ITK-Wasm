@@ -23,6 +23,7 @@
 #include "itkInputTextStream.h"
 #include "itkOutputTextStream.h"
 #include "itkInputBinaryStream.h"
+#include "itkOutputBinaryStream.h"
 #include "itkWASMImage.h"
 #include "itkImageToWASMImageFilter.h"
 #include "itkWASMExports.h"
@@ -84,8 +85,8 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   void * binaryStreamInputJSONPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 1, textStreamStream.str().size()));
   std::memcpy(binaryStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size() + 1);
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", NULL};
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 7, const_cast< char ** >(mockArgv));
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", NULL};
+  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 8, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -119,6 +120,9 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   itk::wasm::InputBinaryStream inputBinaryStream;
   pipeline.add_option("InputBinary", inputBinaryStream, "The input text")->required();
 
+  itk::wasm::OutputBinaryStream outputBinaryStream;
+  pipeline.add_option("OutputBinary", outputBinaryStream, "The output binary")->required();
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -132,6 +136,8 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   const std::string inputBinaryStreamContent{ std::istreambuf_iterator<char>(inputBinaryStream.Get()),
                                             std::istreambuf_iterator<char>() };
   ITK_TEST_EXPECT_TRUE(inputBinaryStreamContent == "test 123\n");
+
+  outputBinaryStream.Get() << inputBinaryStreamContent;
 
   return EXIT_SUCCESS;
 }
