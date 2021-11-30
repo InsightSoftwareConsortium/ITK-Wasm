@@ -17,12 +17,17 @@ add_test(NAME MeshReadWriteTest
   ${CMAKE_CURRENT_BINARY_DIR}/cow.written.vtk
   )
 
-add_test(NAME MeshReadWriteJSONTest
+add_test(NAME MeshReadWriteWASMTest
   COMMAND MeshReadWriteTest ${CMAKE_CURRENT_SOURCE_DIR}/cow.vtk
-  ${CMAKE_CURRENT_BINARY_DIR}/cow.written.vtk.iwm
+  ${CMAKE_CURRENT_BINARY_DIR}/cow.iwm
   )
 
-add_test(NAME MeshReadWriteJSONInputTest
-  COMMAND MeshReadWriteTest ${CMAKE_CURRENT_BINARY_DIR}/cow.written.vtk.iwm
-  ${CMAKE_CURRENT_BINARY_DIR}/cow.written.out.vtk.iwm
+add_test(NAME MeshReadWriteWASMZipTest
+  COMMAND MeshReadWriteTest ${CMAKE_CURRENT_SOURCE_DIR}/cow.vtk
+  ${CMAKE_CURRENT_BINARY_DIR}/cow.iwm.zip
+  )
+
+add_test(NAME MeshReadWriteWASMInputTest
+  COMMAND MeshReadWriteTest ${CMAKE_CURRENT_BINARY_DIR}/cow.iwm
+  ${CMAKE_CURRENT_BINARY_DIR}/cow.out.iwm
   )
