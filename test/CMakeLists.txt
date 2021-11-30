@@ -35,6 +35,10 @@ ExternalData_Expand_Arguments(
   DATA{Input/cthead1.iwi/index.json}
   DATA{Input/cthead1.iwi/data/direction.raw}
   DATA{Input/cthead1.iwi/data/data.raw}
+  DATA{Input/cow.iwm.zip}
+  DATA{Input/cow.iwm/index.json}
+  DATA{Input/cow.iwm/data/cells.raw}
+  DATA{Input/cow.iwm/data/points.raw}
   DATA{Input/uGridEx.vtk}
   DATA{Input/diskout.vtp}
   DATA{Input/elements.vtu}

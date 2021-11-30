@@ -49,7 +49,7 @@ endif()
 
 # Tell ExternalData commands to transform raw files to content links.
 # TODO: Condition this feature on presence of our pre-commit hook.
-set(ExternalData_LINK_CONTENT cid)
+set(ExternalData_LINK_CONTENT CID)
 
 # Emscripten currently has difficulty reading symlinks.
 if(EMSCRIPTEN)
