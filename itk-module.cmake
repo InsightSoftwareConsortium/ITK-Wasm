@@ -9,6 +9,7 @@ itk_module(WebAssemblyInterface
     ITKCommon
     ITKIOImageBase
   COMPILE_DEPENDS
+    MeshToPolyData
     ITKImageFunction
     ${WebAssemblyInterface_ImageIOModules}
     ${WebAssemblyInterface_MeshIOModules}

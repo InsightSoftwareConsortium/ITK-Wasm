@@ -75,8 +75,8 @@ RUN mkdir ITK-build && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
-ENV ITKMeshToPolyData_GIT_TAG 8e04b0ae48a6b97b928c54cfa96feb0c87d0ccf0
-RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git && \
+ENV ITKMeshToPolyData_GIT_TAG 8ec9c1efda34fb588079b67dfffe5418712307ab
+RUN git clone https://github.com/thewtex/ITKMeshToPolyData.git && \
   cd ITKMeshToPolyData && \
   git checkout ${ITKMeshToPolyData_GIT_TAG} && \
   cd / && \

@@ -2,6 +2,8 @@ import MeshType from './MeshType.js'
 import type TypedArray from './TypedArray.js'
 
 class Mesh {
+  meshType: typeof MeshType
+
   name: string = 'Mesh'
 
   numberOfPoints: number

@@ -18,6 +18,7 @@ export { default as Mesh } from './Mesh.js'
 export { default as MeshType } from './MeshType.js'
 
 export { default as PolyData } from './PolyData.js'
+export { default as PolyDataType } from './PolyDataType.js'
 // Todo: remove
 export { default as vtkPolyData } from './vtkPolyData.js'
 
