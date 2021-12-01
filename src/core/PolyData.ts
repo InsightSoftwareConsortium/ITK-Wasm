@@ -1,3 +1,5 @@
+import { TypedArray } from "./TypedArray.js"
+
 class PolyData {
   name: string = 'PolyData'
 
@@ -11,6 +13,10 @@ class PolyData {
 
   triangleStrips: null | Uint32Array
 
+  pointData: null | TypedArray
+
+  cellData: null | TypedArray
+
   constructor () {
     this.name = 'PolyData'
 
@@ -19,6 +25,8 @@ class PolyData {
     this.vertices = null
     this.polygons = null
     this.triangleStrips = null
+    this.pointData = null
+    this.cellData = null
   }
 }
 
