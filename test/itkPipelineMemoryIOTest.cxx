@@ -31,6 +31,7 @@
 #include "itkWASMExports.h"
 #include <cstring>
 #include "itkInputMesh.h"
+#include "itkOutputMesh.h"
 #include "itkMesh.h"
 
 #include "itkImageFileReader.h"
@@ -91,6 +92,7 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   std::memcpy(binaryStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size() + 1);
 
   const char * inputMeshFile = argv[8];
+  std::cout << "inputMeshFile: " << inputMeshFile << std::endl;
   using MeshType = itk::Mesh<float, 3>;
   using MeshReaderType = itk::MeshFileReader<MeshType>;
   auto meshReader = MeshReaderType::New();
@@ -104,11 +106,12 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   auto readWASMMesh = meshToWASMMeshFilter->GetOutput();
 
   auto readMeshJSON = readWASMMesh->GetJSON();
+  std::cout << "readMeshJSON: " << readMeshJSON << std::endl;
   void * readWASMMeshPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 3, readMeshJSON.size()));
   std::memcpy(readWASMMeshPointer, readMeshJSON.data(), readMeshJSON.size());
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", NULL};
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 9, const_cast< char ** >(mockArgv));
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", NULL};
+  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 10, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -149,6 +152,10 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   InputMeshType inputMesh;
   pipeline.add_option("InputMesh", inputMesh, "The input mesh")->required();
 
+  using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
+  OutputMeshType outputMesh;
+  pipeline.add_option("OutputMesh", outputMesh, "The output mesh")->required();
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -165,7 +172,7 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   outputBinaryStream.Get() << inputBinaryStreamContent;
 
-  inputMesh.Get();
+  outputMesh.Set(inputMesh.Get());
 
   return EXIT_SUCCESS;
 }

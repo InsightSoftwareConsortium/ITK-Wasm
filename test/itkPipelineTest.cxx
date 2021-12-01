@@ -26,12 +26,12 @@
 #include "itkInputBinaryStream.h"
 #include "itkOutputBinaryStream.h"
 #include "itkInputMesh.h"
+#include "itkOutputMesh.h"
 #include "itkMesh.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
 {
-
   itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", argc, argv);
 
   std::string example_string_option = "default";
@@ -79,6 +79,10 @@ itkPipelineTest(int argc, char * argv[])
   InputMeshType inputMesh;
   pipeline.add_option("InputMesh", inputMesh, "The input mesh")->required();
 
+  using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
+  OutputMeshType outputMesh;
+  pipeline.add_option("OutputMesh", outputMesh, "The output mesh")->required();
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -95,7 +99,7 @@ itkPipelineTest(int argc, char * argv[])
 
   outputBinaryStream.Get() << inputBinaryStreamContent;
 
-  inputMesh.Get();
+  outputMesh.Set(inputMesh.Get());
 
   return EXIT_SUCCESS;
 }

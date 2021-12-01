@@ -132,9 +132,9 @@ MeshToWASMMeshFilter<TMesh>
 {
   // Get the input and output pointers
   const MeshType * mesh = this->GetInput();
-  WASMMeshType * meshJSON = this->GetOutput();
+  WASMMeshType * wasmMesh = this->GetOutput();
 
-  meshJSON->SetMesh(mesh);
+  wasmMesh->SetMesh(mesh);
 
   rapidjson::Document document;
   document.SetObject();
@@ -211,7 +211,7 @@ MeshToWASMMeshFilter<TMesh>
   document.AddMember( "numberOfCellPixels", numberOfCellPixels.Move(), allocator );
 
   rapidjson::Value cellBufferSizeMember;
-  cellBufferSizeMember.SetInt( meshJSON->GetCellBuffer()->Size() );
+  cellBufferSizeMember.SetInt( wasmMesh->GetCellBuffer()->Size() );
   document.AddMember( "cellBufferSize", cellBufferSizeMember.Move(), allocator );
 
   const auto pointsAddress = reinterpret_cast< size_t >( &(mesh->GetPoints()->at(0)) );
@@ -225,7 +225,7 @@ MeshToWASMMeshFilter<TMesh>
   size_t cellsAddress = 0;
   if (mesh->GetNumberOfCells() > 0)
   {
-    cellsAddress = reinterpret_cast< size_t >( &(meshJSON->GetCellBuffer()->at(0)) );
+    cellsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetCellBuffer()->at(0)) );
   }
   std::ostringstream cellsStream;
   cellsStream << "data:application/vnd.itk.address,0:";
@@ -235,7 +235,7 @@ MeshToWASMMeshFilter<TMesh>
   document.AddMember( "cells", cellsString.Move(), allocator );
 
   size_t pointDataAddress = 0;
-  if (mesh->GetPointData() != nullptr)
+  if (mesh->GetPointData() != nullptr && mesh->GetPointData()->Size() > 0)
   {
     pointDataAddress = reinterpret_cast< size_t >( &(mesh->GetPointData()->at(0)) );
   }
@@ -247,7 +247,7 @@ MeshToWASMMeshFilter<TMesh>
   document.AddMember( "pointData", pointDataString.Move(), allocator );
 
   size_t cellDataAddress = 0;
-  if (mesh->GetCellData() != nullptr)
+  if (mesh->GetCellData() != nullptr && mesh->GetCellData()->Size() > 0)
   {
     cellDataAddress = reinterpret_cast< size_t >( &(mesh->GetCellData()->at(0)) );
   }
@@ -262,7 +262,7 @@ MeshToWASMMeshFilter<TMesh>
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
   document.Accept(writer);
 
-  meshJSON->SetJSON(stringBuffer.GetString());
+  wasmMesh->SetJSON(stringBuffer.GetString());
 }
 
 template <typename TMesh>

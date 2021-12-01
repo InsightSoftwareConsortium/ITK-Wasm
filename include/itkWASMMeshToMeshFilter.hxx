@@ -446,8 +446,10 @@ WASMMeshToMeshFilter<TMesh>
     mesh->SetCellData(MeshType::CellDataContainer::New());
   }
   if (numberOfCellPixels)
-  mesh->GetCellData()->resize(numberOfCellPixels * cellPixelComponents);
-  mesh->GetCellData()->assign(cellDataPtr, cellDataPtr + numberOfCellPixels * cellPixelComponents);
+  {
+    mesh->GetCellData()->resize(numberOfCellPixels * cellPixelComponents);
+    mesh->GetCellData()->assign(cellDataPtr, cellDataPtr + numberOfCellPixels * cellPixelComponents);
+  }
 }
 
 template <typename TMesh>

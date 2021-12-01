@@ -30,6 +30,11 @@ namespace itk
  * JSON representation for an itk::Mesh for interfacing across programming languages and runtimes.
  *
  * Point, CellBuffer, PointData, and CellData binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
+ * 
+ * - 0: Point buffer
+ * - 1: Cell buffer
+ * - 2: Point data buffer
+ * - 2: Cell data buffer
  *
  * \ingroup WebAssemblyInterface
  */
