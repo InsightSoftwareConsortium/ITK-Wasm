@@ -59,7 +59,9 @@ public:
 
   using PolyDataType = TPolyData;
 
-  void SetPolyData(const PolyDataType * polyData);
+  void SetPolyData(const PolyDataType * polyData) {
+    this->SetDataObject(const_cast<PolyDataType *>(polyData));
+  }
 
   const PolyDataType * GetPolyData() const {
     return static_cast< const PolyDataType * >(this->GetDataObject());

@@ -52,6 +52,7 @@ ExternalData_Expand_Arguments(
 set(WebAssemblyInterfaceTests
   itkWASMImageInterfaceTest.cxx
   itkWASMMeshInterfaceTest.cxx
+  itkWASMPolyDataInterfaceTest.cxx
   itkWASMImageIOTest.cxx
   itkWASMMeshIOTest.cxx
   itkPipelineTest.cxx
@@ -75,6 +76,13 @@ itk_add_test(NAME itkWASMMeshInterfaceTest
     itkWASMMeshInterfaceTest
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshInterfaceTest.vtk
+)
+
+itk_add_test(NAME itkWASMPolyDataInterfaceTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkWASMPolyDataInterfaceTest
+      DATA{Input/cow.vtk}
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMPolyDataInterfaceTest.vtk
 )
 
 itk_add_test(NAME itkWASMImageInterfaceNiftiTest
