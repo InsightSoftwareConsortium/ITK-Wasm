@@ -87,7 +87,7 @@ bool lexical_cast(const std::string &input, InputMesh<TMesh> &inputMesh)
   else
   {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    using ReaderType = itk::MeshFileReader<TMesh>;
+    using ReaderType = MeshFileReader<TMesh>;
     auto reader = ReaderType::New();
     reader->SetFileName(input);
     reader->Update();

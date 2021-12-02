@@ -33,9 +33,14 @@
 #include "itkInputMesh.h"
 #include "itkOutputMesh.h"
 #include "itkMesh.h"
+#include "itkInputPolyData.h"
+#include "itkPolyData.h"
+#include "itkPolyDataToWASMPolyDataFilter.h"
 
 #include "itkImageFileReader.h"
 #include "itkMeshFileReader.h"
+#include "itkMeshToPolyDataFilter.h"
+#include "itkPolyDataToMeshFilter.h"
 
 int
 itkPipelineMemoryIOTest(int argc, char * argv[])
@@ -92,7 +97,6 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   std::memcpy(binaryStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size() + 1);
 
   const char * inputMeshFile = argv[8];
-  std::cout << "inputMeshFile: " << inputMeshFile << std::endl;
   using MeshType = itk::Mesh<float, 3>;
   using MeshReaderType = itk::MeshFileReader<MeshType>;
   auto meshReader = MeshReaderType::New();
@@ -106,12 +110,25 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   auto readWASMMesh = meshToWASMMeshFilter->GetOutput();
 
   auto readMeshJSON = readWASMMesh->GetJSON();
-  std::cout << "readMeshJSON: " << readMeshJSON << std::endl;
   void * readWASMMeshPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 3, readMeshJSON.size()));
   std::memcpy(readWASMMeshPointer, readMeshJSON.data(), readMeshJSON.size());
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", NULL};
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 10, const_cast< char ** >(mockArgv));
+  using PolyDataType = itk::PolyData<float>;
+  using MeshToPolyDataFilterType = itk::MeshToPolyDataFilter<MeshType>;
+  auto meshToPolyData = MeshToPolyDataFilterType::New();
+  meshToPolyData->SetInput(meshReader->GetOutput());
+  using PolyDataToWASMPolyDataFilterType = itk::PolyDataToWASMPolyDataFilter<PolyDataType>;
+  auto polyDataToWASMPolyDataFilter = PolyDataToWASMPolyDataFilterType::New();
+  polyDataToWASMPolyDataFilter->SetInput(meshToPolyData->GetOutput());
+  polyDataToWASMPolyDataFilter->Update();
+  auto readWASMPolyData = polyDataToWASMPolyDataFilter->GetOutput();
+
+  auto readPolyDataJSON = readWASMPolyData->GetJSON();
+  void * readWASMPolyDataPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 4, readPolyDataJSON.size()));
+  std::memcpy(readWASMPolyDataPointer, readPolyDataJSON.data(), readPolyDataJSON.size());
+
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", NULL};
+  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 11, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -155,6 +172,10 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
   OutputMeshType outputMesh;
   pipeline.add_option("OutputMesh", outputMesh, "The output mesh")->required();
+
+  using InputPolyDataType = itk::wasm::InputPolyData<PolyDataType>;
+  InputPolyDataType inputPolyData;
+  pipeline.add_option("InputPolyData", inputPolyData, "The input polydata")->required();
 
   ITK_WASM_PARSE(pipeline);
 

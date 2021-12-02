@@ -143,6 +143,7 @@ itk_add_test(NAME itkPipelineTest
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputBinary.bin
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineTest.vtk
+      DATA{Input/cow.vtk}
 )
 
 itk_add_test(NAME itkPipelineMemoryIOTest
@@ -157,6 +158,7 @@ itk_add_test(NAME itkPipelineMemoryIOTest
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputBinary.bin
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTest.vtk
+      DATA{Input/cow.vtk}
 )
 
 if(EMSCRIPTEN)

@@ -74,7 +74,6 @@ public:
         using MeshToWASMMeshFilterType = MeshToWASMMeshFilter<MeshType>;
         auto meshToWASMMeshFilter = MeshToWASMMeshFilterType::New();
         meshToWASMMeshFilter->SetInput(this->m_Mesh);
-        this->m_Mesh->Print(std::cout);
         meshToWASMMeshFilter->Update();
         auto wasmMesh = meshToWASMMeshFilter->GetOutput();
         const auto index = std::stoi(this->m_Identifier);

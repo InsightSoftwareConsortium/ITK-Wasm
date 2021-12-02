@@ -28,6 +28,7 @@
 #include "itkInputMesh.h"
 #include "itkOutputMesh.h"
 #include "itkMesh.h"
+#include "itkInputPolyData.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
@@ -53,6 +54,7 @@ itkPipelineTest(int argc, char * argv[])
   using PixelType = float;
   using ImageType = itk::Image<PixelType, Dimension>;
   using MeshType = itk::Mesh<PixelType, 3>;
+  using PolyDataType = itk::PolyData<PixelType>;
 
   using InputImageType = itk::wasm::InputImage<ImageType>;
   InputImageType inputImage;
@@ -82,6 +84,10 @@ itkPipelineTest(int argc, char * argv[])
   using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
   OutputMeshType outputMesh;
   pipeline.add_option("OutputMesh", outputMesh, "The output mesh")->required();
+
+  using InputPolyDataType = itk::wasm::InputPolyData<PolyDataType>;
+  InputPolyDataType inputPolyData;
+  pipeline.add_option("InputPolyData", inputPolyData, "The input polydata")->required();
 
   ITK_WASM_PARSE(pipeline);
 
