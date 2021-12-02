@@ -36,6 +36,7 @@
 #include "itkInputPolyData.h"
 #include "itkPolyData.h"
 #include "itkPolyDataToWASMPolyDataFilter.h"
+#include "itkOutputPolyData.h"
 
 #include "itkImageFileReader.h"
 #include "itkMeshFileReader.h"
@@ -127,8 +128,8 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   void * readWASMPolyDataPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 4, readPolyDataJSON.size()));
   std::memcpy(readWASMPolyDataPointer, readPolyDataJSON.data(), readPolyDataJSON.size());
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", NULL};
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 11, const_cast< char ** >(mockArgv));
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", NULL};
+  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 12, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -177,6 +178,10 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   InputPolyDataType inputPolyData;
   pipeline.add_option("InputPolyData", inputPolyData, "The input polydata")->required();
 
+  using OutputPolyDataType = itk::wasm::OutputPolyData<PolyDataType>;
+  OutputPolyDataType outputPolyData;
+  pipeline.add_option("OutputPolyData", outputPolyData, "The output polydata")->required();
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -194,6 +199,8 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   outputBinaryStream.Get() << inputBinaryStreamContent;
 
   outputMesh.Set(inputMesh.Get());
+
+  outputPolyData.Set(inputPolyData.Get());
 
   return EXIT_SUCCESS;
 }

@@ -1,1 +1,2 @@
 itkPipeline\.cxx Spaces Disable
+itkOutputPolyData\.h DeclarationOrder Disable

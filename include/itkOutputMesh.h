@@ -79,9 +79,12 @@ public:
         const auto index = std::stoi(this->m_Identifier);
         setMemoryStoreOutputDataObject(0, index, wasmMesh);
 
-        const auto pointsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetMesh()->GetPoints()->at(0)) );
-        const auto pointsSize = wasmMesh->GetMesh()->GetPoints()->Size() * sizeof(typename MeshType::CoordRepType);
-        setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
+        if (this->m_Mesh->GetNumberOfPoints() > 0)
+        {
+          const auto pointsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetMesh()->GetPoints()->at(0)) );
+          const auto pointsSize = wasmMesh->GetMesh()->GetPoints()->Size() * sizeof(typename MeshType::CoordRepType);
+          setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
+        }
 
         if (this->m_Mesh->GetNumberOfCells() > 0)
         {

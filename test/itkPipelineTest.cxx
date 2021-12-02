@@ -29,6 +29,7 @@
 #include "itkOutputMesh.h"
 #include "itkMesh.h"
 #include "itkInputPolyData.h"
+#include "itkOutputPolyData.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
@@ -89,6 +90,10 @@ itkPipelineTest(int argc, char * argv[])
   InputPolyDataType inputPolyData;
   pipeline.add_option("InputPolyData", inputPolyData, "The input polydata")->required();
 
+  using OutputPolyDataType = itk::wasm::OutputPolyData<PolyDataType>;
+  OutputPolyDataType outputPolyData;
+  pipeline.add_option("OutputPolyData", outputPolyData, "The output polydata")->required();
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -106,6 +111,8 @@ itkPipelineTest(int argc, char * argv[])
   outputBinaryStream.Get() << inputBinaryStreamContent;
 
   outputMesh.Set(inputMesh.Get());
+
+  outputPolyData.Set(inputPolyData.Get());
 
   return EXIT_SUCCESS;
 }
