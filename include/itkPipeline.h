@@ -20,13 +20,37 @@
 
 #include <CLI/App.hpp>
 #include <CLI/Config.hpp>
+#include <CLI/Error.hpp>
+#include "itkMacro.h"
 
 #define ITK_WASM_PARSE(pipeline) \
     try { \
-        pipeline.parse(); \
+        (pipeline).parse(); \
     } catch(const CLI::ParseError &e) { \
-        return pipeline.exit(e); \
+        return (pipeline).exit(e); \
     }
+
+#define ITK_WASM_CATCH_EXCEPTION(pipeline, command) \
+  try \
+  { \
+    command; \
+  } \
+  catch (const itk::ExceptionObject & excp) \
+  { \
+    std::ostringstream ostrm; \
+    ostrm << excp; \
+    ostrm << "  In " __FILE__ ", line " << __LINE__ << std::endl; \
+    CLI::Error err("Runtime error", ostrm.str(), 1); \
+    return (pipeline).exit(err); \
+  } \
+  catch (const std::exception & excp) \
+  { \
+    std::ostringstream ostrm; \
+    ostrm << excp.what(); \
+    ostrm << "  In " __FILE__ ", line " << __LINE__ << std::endl; \
+    CLI::Error err("Runtime error", ostrm.str(), 1); \
+    return (pipeline).exit(err); \
+  }
 
 namespace itk
 {
