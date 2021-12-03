@@ -55,8 +55,9 @@ public:
     this->UpdateJSON();
   }
 
-  std::string GetString() const {
-    return this->m_StringStream.str();
+  const std::string & GetString() {
+    this->m_String = m_StringStream.str();
+    return this->m_String;
   }
 
   std::stringstream & GetStringStream() {
@@ -96,6 +97,7 @@ protected:
   }
 
   std::stringstream m_StringStream;
+  std::string m_String;
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
