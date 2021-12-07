@@ -1,5 +1,5 @@
 interface BinaryFile {
-  data: Uint8Array,
+  data: Uint8Array
   path: string
 }
 

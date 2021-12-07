@@ -15,8 +15,34 @@ These interfaces types are supported in the [Emscripten interface](../api/runPip
 
 ---
 
-The following [`itk::wasm::Pipeline`](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/include/itkPipeline.h) components can be included in a C++ to ingest and produce these interface types.
+The following [`itk::wasm::Pipeline`](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/include/itkPipeline.h) components can be included in a C++ to ingest and produce these interface types. For `Input` types, use `Get()` to get the corresponding C++ object value after `ITK_WASM_PARSE_ARGS` is called. For `Output` types, use `Set(value)` to output the value before `main` exits. For example,
+
+```cpp
+#include "itkPipeline.h"
+#include "itkInputTextStream.h"
+#include "itkOutputTextStream.h"
+
+int main(argc, char * argv[])
+{
+  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", argc, argv);
+
+  itk::wasm::InputTextStream inputTextStream;
+  pipeline.add_option("InputText", inputTextStream, "The input text")->required();
+
+  itk::wasm::OutputTextStream outputTextStream;
+  pipeline.add_option("OutputText", outputTextStream, "The output text")->required();
+
+
+  ITK_WASM_PARSE(pipeline);
+
+
+  const std::string inputTextStreamContent{ std::istreambuf_iterator<char>(inputTextStream.Get()),
+                                            std::istreambuf_iterator<char>() };
+
+  outputTextStream.Get() << inputTextStreamContent;
+}
+```
 
 <dl>
-  <dt><b>InputTextStream</b><dt><dd>A string. To write this data type in C++, write a plain text file with, e.g.  <a href="http://www.cplusplus.com/reference/fstream/ofstream">std::ofstream</a>.</dd>
+  <dt><b>InputTextStream</b><dt><dd>A string. To reader this data type in C++, using the resulting  <a href="https://www.cplusplus.com/reference/istream/istream/">std::istream</a>.</dd>
 </dl>

@@ -1,5 +1,5 @@
 interface TextFile {
-  data: string,
+  data: string
   path: string
 }
 
