@@ -1,8 +1,8 @@
-import EmscriptenModule from '../../core/EmscriptenModule.js'
+import ITKWASMEmscriptenModule from '../../core/ITKWASMEmscriptenModule.js'
 
 import DICOMTagsReaderJSBinding from './DICOMTagsReaderJSBinding.js'
 
-interface DICOMTagsReaderEmscriptenModule extends EmscriptenModule {
+interface DICOMTagsReaderEmscriptenModule extends ITKWASMEmscriptenModule {
   ITKDICOMTagReader: new () => DICOMTagsReaderJSBinding
 }
 

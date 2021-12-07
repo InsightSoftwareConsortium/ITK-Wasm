@@ -4,7 +4,7 @@ import fs from 'fs'
 import { dirname } from 'path'
 import { createRequire } from 'module'
 
-import EmscriptenModule from '../EmscriptenModule.js'
+import EmscriptenModule from '../ITKWASMEmscriptenModule.js'
 globalThis.__dirname = dirname(import.meta.url)
 globalThis.require = createRequire(import.meta.url)
 

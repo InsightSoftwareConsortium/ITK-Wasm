@@ -1,4 +1,4 @@
-import EmscriptenModule from '../../core/EmscriptenModule.js'
+import ITKWASMEmscriptenModule from '../../core/ITKWASMEmscriptenModule.js'
 
 import MeshIOBaseJSBinding from './MeshIOBaseJSBinding.js'
 
@@ -8,7 +8,7 @@ import IOPixel from './IOPixel.js'
 import FileType from './FileType.js'
 import ByteOrder from './ByteOrder.js'
 
-interface MeshIOBaseEmscriptenModule extends EmscriptenModule {
+interface MeshIOBaseEmscriptenModule extends ITKWASMEmscriptenModule {
   ITKMeshIO: new () => MeshIOBaseJSBinding
   IOComponentType: typeof IOComponent
   IOPixelType: typeof IOPixel

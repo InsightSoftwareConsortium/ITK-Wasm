@@ -1,5 +1,5 @@
 import PolyDataType from './PolyDataType.js'
-import { TypedArray } from "./TypedArray.js"
+import TypedArray from './TypedArray.js'
 
 class PolyData {
   name: string = 'PolyData'
@@ -33,16 +33,16 @@ class PolyData {
     this.numberOfPoints = 0
     this.points = new Float32Array()
 
-    this.verticesBufferSize = 0;
+    this.verticesBufferSize = 0
     this.vertices = null
 
-    this.linesBufferSize = 0;
+    this.linesBufferSize = 0
     this.lines = null
 
-    this.polygonsBufferSize = 0;
+    this.polygonsBufferSize = 0
     this.polygons = null
 
-    this.triangleStripsBufferSize = 0;
+    this.triangleStripsBufferSize = 0
     this.triangleStrips = null
 
     this.numberOfPointPixels = 0

@@ -106,6 +106,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.15.4",
+    "@types/emscripten": "^1.39.6",
     "axios": "^0.23.0",
     "commander": "^8.2.0",
     "fs-extra": "^10.0.0",
@@ -121,7 +122,9 @@
     "ignore": [
       "src/core/internal/loadEmscriptenModuleWebWorker.ts",
       "src/web-workers/*.worker.ts",
-      "src/web-workers/*operations.ts"
+      "src/web-workers/*operations.ts",
+      "src/core/ITKWASMEmscriptenModule.ts",
+      "src/pipeline/PipelineEmscriptenModule.ts"
     ]
   },
   "standard": {

@@ -27,7 +27,7 @@ RUN git clone https://github.com/webassembly/binaryen.git && \
   rm -rf binaryen*
 
 # 2021-10-03 master branch
-ENV ITK_GIT_TAG db30a3a9c30bccae4dad6701d35e7c63c73e5ce5
+ENV ITK_GIT_TAG ca0756235a7c7ca635ecbd4318ebbd9b535690f1
 RUN git clone https://github.com/thewtex/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
@@ -75,8 +75,8 @@ RUN mkdir ITK-build && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
-ENV ITKMeshToPolyData_GIT_TAG 3d3b20c8f1c9906e89540099ed118040096584f1
-RUN git clone https://github.com/thewtex/ITKMeshToPolyData.git && \
+ENV ITKMeshToPolyData_GIT_TAG 1e594b7437a43be348b0ccea827c66fb5aa13e1f
+RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git && \
   cd ITKMeshToPolyData && \
   git checkout ${ITKMeshToPolyData_GIT_TAG} && \
   cd / && \

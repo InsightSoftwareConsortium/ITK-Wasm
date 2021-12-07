@@ -1,7 +1,14 @@
-import EmscriptenModule from '../core/EmscriptenModule.js'
+/// <reference types="emscripten" />
+// import { cwrap, ccall } from '@types/emscripten'
+import EmscriptenModule from '../core/ITKWASMEmscriptenModule.js'
 
 interface PipelineEmscriptenModule extends EmscriptenModule {
   callMain: (args: string[]) => number
+  // var c_javascript_add = Module.cwrap('c_add', // name of C function
+  // 'number', // return type
+  // ['number', 'number']); // argument types
+  cwrap: typeof cwrap
+  ccall: typeof ccall
 
   resetModuleStdout: () => void
   resetModuleStderr: () => void

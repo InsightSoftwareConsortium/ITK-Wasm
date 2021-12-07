@@ -1,4 +1,4 @@
-import EmscriptenModule from '../../core/EmscriptenModule.js'
+import ITKWASMEmscriptenModule from '../../core/ITKWASMEmscriptenModule.js'
 
 import VectorJSBinding from '../../core/internal/VectorJSBinding.js'
 import ImageIOBaseJSBinding from './ImageIOBaseJSBinding.js'
@@ -6,7 +6,7 @@ import ImageIOBaseJSBinding from './ImageIOBaseJSBinding.js'
 import IOComponent from './IOComponent.js'
 import IOPixel from './IOPixel.js'
 
-interface ImageIOBaseEmscriptenModule extends EmscriptenModule {
+interface ImageIOBaseEmscriptenModule extends ITKWASMEmscriptenModule {
   ITKImageIO: new () => ImageIOBaseJSBinding
   IOComponentType: typeof IOComponent
   IOPixelType: typeof IOPixel

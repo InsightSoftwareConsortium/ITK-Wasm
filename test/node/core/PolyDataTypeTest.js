@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { PolyDataType, FloatTypes, IntTypes, PixelTypes } from '../../../dist/index.js'
+import { PolyDataType, FloatTypes, PixelTypes } from '../../../dist/index.js'
 
 test('pointPixelComponentType should have a default value of Float32', t => {
   const polyDataType = new PolyDataType()
