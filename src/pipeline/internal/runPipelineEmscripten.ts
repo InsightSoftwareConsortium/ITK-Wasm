@@ -1,3 +1,4 @@
+import InterfaceTypes from '../../core/InterfaceTypes.js'
 import IOTypes from '../../core/IOTypes.js'
 import bufferToTypedArray from '../../core/bufferToTypedArray.js'
 import TypedArray from '../../core/TypedArray.js'
@@ -45,6 +46,11 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
   if (!(inputs == null) && inputs.length > 0) {
     inputs.forEach(function (input) {
       switch (input.type) {
+        case InterfaceTypes.InterfaceTextFile:
+        {
+          pipelineModule.fs_writeFile(input.path, input.data as string)
+          break
+        }
         case IOTypes.Text:
         {
           pipelineModule.fs_writeFile(input.path, input.data as string)

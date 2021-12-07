@@ -3,13 +3,13 @@ title: Interface Types
 
 itk-wasm execution pipelines support the following [interface types](https://github.com/InsightSoftwareConsortum/itk-wasm/tree/master/src/core/InterfaceTypes.ts):
 
-- TextFile
-- BinaryFile
-- TextStream
-- BinaryStream
-- [Image](../Image.html)
-- [Mesh](../Mesh.html)
-- [PolyData](../PolyData.html)
+- [TextFile](../api/TextFile.html)
+- [BinaryFile](../api/BinaryFile.html)
+- [TextStream](../api/TextStream.html)
+- [BinaryStream](../api/BinaryStream.html)
+- [Image](../api/Image.html)
+- [Mesh](../api/Mesh.html)
+- [PolyData](../api/PolyData.html)
 
 These interfaces types are supported in the [Emscripten interface](../api/runPipelineBrowser.html), WASI embedding interfaces, and native or virtual [filesystem IO](./file_formats.html).
 

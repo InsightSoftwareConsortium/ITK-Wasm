@@ -1,5 +1,12 @@
 // Core API interfaces, data structures, and functions
 
+export { default as InterfaceTypes } from './InterfaceTypes.js'
+
+export { default as TextStream } from './TextStream.js'
+export { default as BinaryStream } from './BinaryStream.js'
+export { default as TextFile } from './TextFile.js'
+export { default as BinaryFile } from './BinaryFile.js'
+
 export { default as TypedArray } from './TypedArray.js'
 export { default as IntTypes } from './IntTypes.js'
 export { default as FloatTypes } from './FloatTypes.js'
