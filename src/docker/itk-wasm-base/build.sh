@@ -31,15 +31,15 @@ emscripten_debug_c_flags="-fno-lto -Wno-warn-absolute-paths"
 wasi_debug_ld_flags="-fno-lto -lwasi-emulated-process-clocks -lwasi-emulated-signal"
 wasi_debug_c_flags="-fno-lto -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_SIGNAL"
 
-docker build -t insighttoolkit/itk-wasm-base:latest \
-        --build-arg IMAGE=insighttoolkit/itk-wasm-base \
+docker build -t itkwasm/emscripten-base:latest \
+        --build-arg IMAGE=itkwasm/emscripten-base \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VCS_REF=${VCS_REF} \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
-docker build -t insighttoolkit/itk-wasm-base:${TAG} \
-        --build-arg IMAGE=insighttoolkit/itk-wasm-base \
+docker build -t itkwasm/emscripten-base:${TAG} \
+        --build-arg IMAGE=itkwasm/emscripten-base \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VERSION=${TAG} \
         --build-arg VCS_REF=${VCS_REF} \
@@ -48,8 +48,8 @@ docker build -t insighttoolkit/itk-wasm-base:${TAG} \
         $script_dir $@
 
 if $wasi; then
-  docker build -t insighttoolkit/itk-wasi-base:latest \
-          --build-arg IMAGE=insighttoolkit/itk-wasi-base \
+  docker build -t itkwasm/wasi-base:latest \
+          --build-arg IMAGE=itkwasm/wasi-base \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
@@ -58,8 +58,8 @@ if $wasi; then
           --build-arg LDFLAGS="${wasi_ld_flags}" \
           --build-arg CFLAGS="${wasi_c_flags}" \
           $script_dir $@
-  docker build -t insighttoolkit/itk-wasi-base:${TAG} \
-          --build-arg IMAGE=insighttoolkit/itk-wasi-base \
+  docker build -t itkwasm/wasi-base:${TAG} \
+          --build-arg IMAGE=itkwasm/wasi-base \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg VERSION=${TAG} \
           --build-arg VCS_REF=${VCS_REF} \
@@ -73,8 +73,8 @@ fi
 
 
 if $debug; then
-  docker build -t insighttoolkit/itk-wasm-base:latest-debug \
-          --build-arg IMAGE=insighttoolkit/itk-wasm-base \
+  docker build -t itkwasm/emscripten-base:latest-debug \
+          --build-arg IMAGE=itkwasm/emscripten-base \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg USE_DCMTK=OFF \
           --build-arg VCS_REF=${VCS_REF} \
@@ -83,8 +83,8 @@ if $debug; then
           --build-arg LDFLAGS="${emscripten_debug_ld_flags}" \
           --build-arg CFLAGS="${emscripten_debug_c_flags}" \
           $script_dir $@
-  docker build -t insighttoolkit/itk-wasm-base:${TAG}-debug \
-          --build-arg IMAGE=insighttoolkit/itk-wasm-base \
+  docker build -t itkwasm/emscripten-base:${TAG}-debug \
+          --build-arg IMAGE=itkwasm/emscripten-base \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg USE_DCMTK=OFF \
           --build-arg VERSION=${TAG}-debug \
@@ -95,8 +95,8 @@ if $debug; then
           --build-arg CFLAGS="${emscripten_debug_c_flags}" \
           $script_dir $@
   if $wasi; then
-    docker build -t insighttoolkit/itk-wasi-base:latest-debug \
-            --build-arg IMAGE=insighttoolkit/itk-wasi-base \
+    docker build -t itkwasm/wasi-base:latest-debug \
+            --build-arg IMAGE=itkwasm/wasi-base \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg VCS_REF=${VCS_REF} \
             --build-arg VCS_URL=${VCS_URL} \
@@ -105,8 +105,8 @@ if $debug; then
             --build-arg LDFLAGS="${wasi_debug_ld_flags}" \
             --build-arg CFLAGS="${wasi_debug_c_flags}" \
             $script_dir $@
-    docker build -t insighttoolkit/itk-wasi-base:${TAG}-debug \
-            --build-arg IMAGE=insighttoolkit/itk-wasi-base \
+    docker build -t itkwasm/wasi-base:${TAG}-debug \
+            --build-arg IMAGE=itkwasm/wasi-base \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg VERSION=${TAG} \
             --build-arg VCS_REF=${VCS_REF} \

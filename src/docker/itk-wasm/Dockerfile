@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=insighttoolkit/itk-wasm-base
+ARG BASE_IMAGE=itkwasm/base
 ARG BASE_TAG=latest
 
 FROM $BASE_IMAGE:$BASE_TAG

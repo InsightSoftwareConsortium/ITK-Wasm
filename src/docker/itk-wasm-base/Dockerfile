@@ -132,7 +132,7 @@ ENV PATH "/wasm-runtimes/wavm/bin:$PATH"
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=insighttoolkit/itk-wasm-base
+ARG IMAGE=itkwasm/base
 ARG VERSION=latest
 ARG VCS_REF
 ARG VCS_URL

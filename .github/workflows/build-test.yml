@@ -43,7 +43,7 @@ jobs:
         if [[ -e ./docker-cache/itk-wasm-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-base.tar.xz | docker load ; fi
         ./src/docker/itk-wasm-base/build.sh
         mkdir -p ./docker-cache
-        docker save insighttoolkit/itk-wasm-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-base.tar.xz
+        docker save itkwasm/base:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-base.tar.xz
 
     - name: Build itk-wasi-base
       run: |
@@ -157,8 +157,8 @@ jobs:
     - name: Push insighttoolkit images to DockerHub
       if: github.ref == 'refs/heads/master'
       run: |
-        docker push insighttoolkit/itk-wasm-base:latest
-        docker push insighttoolkit/itk-wasm-base:${{ env.DOCKER_TAG }}
+        docker push itkwasm/base:latest
+        docker push itkwasm/base:${{ env.DOCKER_TAG }}
         docker push insighttoolkit/itk-wasm:latest
         docker push insighttoolkit/itk-wasm:${{ env.DOCKER_TAG }}
 
