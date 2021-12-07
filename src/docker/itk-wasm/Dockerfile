@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=itkwasm/base
+ARG BASE_IMAGE=itkwasm/emscripten-base
 ARG BASE_TAG=latest
 
 FROM $BASE_IMAGE:$BASE_TAG
@@ -42,7 +42,7 @@ RUN /usr/local/bin/populate-cache.sh && rm /usr/local/bin/populate-cache.sh
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=insighttoolkit/itk-wasm
+ARG IMAGE=itkwasm/emscripten
 ARG VERSION=latest
 ARG VCS_REF
 ARG VCS_URL

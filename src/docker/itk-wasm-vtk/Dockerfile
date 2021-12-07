@@ -1,7 +1,7 @@
 ARG BASE_TAG=latest
 ARG CMAKE_BUILD_TYPE=Release
 
-FROM insighttoolkit/itk-wasm:$BASE_TAG
+FROM itkwasm/emscripten:$BASE_TAG
 MAINTAINER Insight Software Consortium <community@itk.org>
 
 WORKDIR /

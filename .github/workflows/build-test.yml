@@ -50,28 +50,28 @@ jobs:
         if [[ -e ./docker-cache/itk-wasi-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasi-base.tar.xz | docker load ; fi
         ./src/docker/itk-wasm-base/build.sh --with-wasi
         mkdir -p ./docker-cache
-        docker save insighttoolkit/itk-wasi-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasi-base.tar.xz
+        docker save itkwasm/wasi-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasi-base.tar.xz
 
     - name: Build itk-wasm
       run: |
         if [[ -e ./docker-cache/itk-wasm.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm.tar.xz | docker load ; fi
         ./src/docker/itk-wasm/build.sh
         mkdir -p ./docker-cache
-        docker save insighttoolkit/itk-wasm:latest | xz -e9 -T0 > ./docker-cache/itk-wasm.tar.xz
+        docker save itkwasm/emscripten:latest | xz -e9 -T0 > ./docker-cache/itk-wasm.tar.xz
 
     - name: Build itk-wasi
       run: |
         if [[ -e ./docker-cache/itk-wasi.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasi.tar.xz | docker load ; fi
         ./src/docker/itk-wasm/build.sh --with-wasi
         mkdir -p ./docker-cache
-        docker save insighttoolkit/itk-wasi:latest | xz -e9 -T0 > ./docker-cache/itk-wasi.tar.xz
+        docker save itkwasm/wasi:latest | xz -e9 -T0 > ./docker-cache/itk-wasi.tar.xz
 
     - name: Build itk-wasm-vtk
       run: |
         if [[ -e ./docker-cache/itk-wasm-vtk.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-vtk.tar.xz | docker load ; fi
         ./src/docker/itk-wasm-vtk/build.sh
         mkdir -p ./docker-cache
-        docker save insighttoolkit/itk-wasm-vtk:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-vtk.tar.xz
+        docker save itkwasm/emscripten-vtk:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-vtk.tar.xz
 
     - name: Cache docker results
       uses: actions/upload-artifact@v2
@@ -111,10 +111,10 @@ jobs:
       run: |
         cd test/pipelines/MedianFilterPipeline
 
-        node ../../../src/itk-wasm-cli.js build -i insighttoolkit/itk-wasm:${{ env.DOCKER_TAG }} .
+        node ../../../src/itk-wasm-cli.js build -i itkwasm/emscripten:${{ env.DOCKER_TAG }} .
         rm -rf web-build
 
-        node ../../../src/itk-wasm-cli.js build -i insighttoolkit/itk-wasi:${{ env.DOCKER_TAG }} .
+        node ../../../src/itk-wasm-cli.js build -i itkwasm/wasi:${{ env.DOCKER_TAG }} .
         rm -rf web-build
 
         cd -
@@ -159,8 +159,8 @@ jobs:
       run: |
         docker push itkwasm/base:latest
         docker push itkwasm/base:${{ env.DOCKER_TAG }}
-        docker push insighttoolkit/itk-wasm:latest
-        docker push insighttoolkit/itk-wasm:${{ env.DOCKER_TAG }}
+        docker push itkwasm/emscripten:latest
+        docker push itkwasm/emscripten:${{ env.DOCKER_TAG }}
 
     - name: kitware DockerHub login
       if: github.ref == 'refs/heads/master'

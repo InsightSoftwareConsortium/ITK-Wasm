@@ -101,13 +101,13 @@ And it can be injected into an application bundle by setting defining `alias`'s 
 The `--image, -i` command line option for the `build` subcommand is now a global option for all subcommands. For examples
 
 ```
-itk-wasm build --image insighttoolkit/itk-wasm src/dir
+itk-wasm build --image itkwasm/emscripten src/dir
 ```
 
 is now:
 
 ```
-itk-wasm --image insighttoolkit/itk-wasm --source-dir src/dir  build
+itk-wasm --image itkwasm/emscripten --source-dir src/dir  build
 ```
 
 ## Image data structure

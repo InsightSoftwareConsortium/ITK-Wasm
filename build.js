@@ -63,12 +63,12 @@ if (options.buildIo) {
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
-      let buildImage = 'insighttoolkit/itk-wasm:latest'
+      let buildImage = 'itkwasm/emscripten:latest'
       if (options.buildVtk) {
         buildImage = 'kitware/itk-wasm-vtk:latest'
       }
       if (options.debug) {
-        buildImage = 'insighttoolkit/itk-wasm:latest-debug'
+        buildImage = 'itkwasm/emscripten:latest-debug'
         if (options.buildVtk) {
           buildImage = 'kitware/itk-wasm-vtk:latest-debug'
         }
@@ -205,12 +205,12 @@ if (options.buildEmscriptenPipelines) {
   const buildPipeline = (pipelinePath) => {
     console.log('Building ' + pipelinePath + ' with Emscripten...')
     let debugFlags = []
-    let buildImage = 'insighttoolkit/itk-wasm:latest'
+    let buildImage = 'itkwasm/emscripten:latest'
     if (options.buildVtk) {
       buildImage = 'kitware/itk-wasm-vtk:latest'
     }
     if (options.debug) {
-      buildImage = 'insighttoolkit/itk-wasm:latest-debug'
+      buildImage = 'itkwasm/emscripten:latest-debug'
       if (options.buildVtk) {
         buildImage = 'kitware/itk-wasm-vtk:latest-debug'
       }
@@ -252,10 +252,10 @@ if (options.buildWasiPipelines) {
   const buildPipeline = (pipelinePath) => {
     console.log('Building ' + pipelinePath + ' with wasi...')
     let debugFlags = []
-    let buildImage = 'insighttoolkit/itk-wasi:latest'
+    let buildImage = 'itkwasm/wasi:latest'
     if (options.debug) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug']
-      buildImage = 'insighttoolkit/itk-wasi:latest-debug'
+      buildImage = 'itkwasm/wasi:latest-debug'
     }
     const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-wasm-cli.js'), '--image', buildImage, '--build-dir', 'wasi-build', '--source-dir', pipelinePath, 'build', '--'].concat(debugFlags), {
       env: process.env,

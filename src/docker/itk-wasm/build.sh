@@ -31,15 +31,15 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
-docker build -t insighttoolkit/itk-wasm:latest \
-        --build-arg IMAGE=insighttoolkit/itk-wasm \
+docker build -t itkwasm/emscripten:latest \
+        --build-arg IMAGE=itkwasm/emscripten \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VCS_REF=${VCS_REF} \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
-docker build -t insighttoolkit/itk-wasm:${TAG} \
-        --build-arg IMAGE=insighttoolkit/itk-wasm \
+docker build -t itkwasm/emscripten:${TAG} \
+        --build-arg IMAGE=itkwasm/emscripten \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VERSION=${TAG} \
         --build-arg VCS_REF=${VCS_REF} \
@@ -48,20 +48,20 @@ docker build -t insighttoolkit/itk-wasm:${TAG} \
         $script_dir $@
 
 if $wasi; then
-  docker build -t insighttoolkit/itk-wasi:latest  \
-          --build-arg IMAGE=insighttoolkit/itk-wasi \
+  docker build -t itkwasm/wasi:latest  \
+          --build-arg IMAGE=itkwasm/wasi \
           --build-arg CMAKE_BUILD_TYPE=Release \
-          --build-arg BASE_IMAGE=insighttoolkit/itk-wasi-base \
+          --build-arg BASE_IMAGE=itkwasm/wasi-base \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
-  docker build -t insighttoolkit/itk-wasi:${TAG} \
-          --build-arg IMAGE=insighttoolkit/itk-wasi \
+  docker build -t itkwasm/wasi:${TAG} \
+          --build-arg IMAGE=itkwasm/wasi \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg VERSION=${TAG} \
           --build-arg BASE_TAG=${TAG} \
-          --build-arg BASE_IMAGE=insighttoolkit/itk-wasi-base \
+          --build-arg BASE_IMAGE=itkwasm/wasi-base \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
@@ -69,16 +69,16 @@ if $wasi; then
 fi
 
 if $debug; then
-  docker build -t insighttoolkit/itk-wasm:latest-debug \
-          --build-arg IMAGE=insighttoolkit/itk-wasm \
+  docker build -t itkwasm/emscripten:latest-debug \
+          --build-arg IMAGE=itkwasm/emscripten \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg BASE_TAG=${TAG}-debug \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
-  docker build -t insighttoolkit/itk-wasm:${TAG}-debug \
-          --build-arg IMAGE=insighttoolkit/itk-wasm \
+  docker build -t itkwasm/emscripten:${TAG}-debug \
+          --build-arg IMAGE=itkwasm/emscripten \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg VERSION=${TAG}-debug \
           --build-arg BASE_TAG=${TAG}-debug \
@@ -87,21 +87,21 @@ if $debug; then
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $wasi; then
-    docker build -t insighttoolkit/itk-wasi:latest-debug  \
-            --build-arg IMAGE=insighttoolkit/itk-wasi \
+    docker build -t itkwasm/wasi:latest-debug  \
+            --build-arg IMAGE=itkwasm/wasi \
             --build-arg CMAKE_BUILD_TYPE=Debug \
-            --build-arg BASE_IMAGE=insighttoolkit/itk-wasi-base \
+            --build-arg BASE_IMAGE=itkwasm/wasi-base \
             --build-arg BASE_TAG=${TAG}-debug \
             --build-arg VCS_REF=${VCS_REF} \
             --build-arg VCS_URL=${VCS_URL} \
             --build-arg BUILD_DATE=${BUILD_DATE} \
             $script_dir $@
-    docker build -t insighttoolkit/itk-wasi:${TAG}-debug \
-            --build-arg IMAGE=insighttoolkit/itk-wasi \
+    docker build -t itkwasm/wasi:${TAG}-debug \
+            --build-arg IMAGE=itkwasm/wasi \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg VERSION=${TAG} \
             --build-arg BASE_TAG=${TAG}-debug \
-            --build-arg BASE_IMAGE=insighttoolkit/itk-wasi-base \
+            --build-arg BASE_IMAGE=itkwasm/wasi-base \
             --build-arg VCS_REF=${VCS_REF} \
             --build-arg VCS_URL=${VCS_URL} \
             --build-arg BUILD_DATE=${BUILD_DATE} \
