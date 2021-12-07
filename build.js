@@ -65,12 +65,12 @@ if (options.buildIo) {
       const output = fs.openSync(dockcross, 'w')
       let buildImage = 'itkwasm/emscripten:latest'
       if (options.buildVtk) {
-        buildImage = 'kitware/itk-wasm-vtk:latest'
+        buildImage = 'itkwasm/emscripten-vtk:latest'
       }
       if (options.debug) {
         buildImage = 'itkwasm/emscripten:latest-debug'
         if (options.buildVtk) {
-          buildImage = 'kitware/itk-wasm-vtk:latest-debug'
+          buildImage = 'itkwasm/emscripten-vtk:latest-debug'
         }
       }
       const dockerCall = spawnSync('docker', ['run', '--rm', buildImage], {
@@ -207,12 +207,12 @@ if (options.buildEmscriptenPipelines) {
     let debugFlags = []
     let buildImage = 'itkwasm/emscripten:latest'
     if (options.buildVtk) {
-      buildImage = 'kitware/itk-wasm-vtk:latest'
+      buildImage = 'itkwasm/emscripten-vtk:latest'
     }
     if (options.debug) {
       buildImage = 'itkwasm/emscripten:latest-debug'
       if (options.buildVtk) {
-        buildImage = 'kitware/itk-wasm-vtk:latest-debug'
+        buildImage = 'itkwasm/emscripten-vtk:latest-debug'
       }
     }
     if (options.debug) {

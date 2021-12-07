@@ -172,5 +172,5 @@ jobs:
     - name: Push kitware images to DockerHub
       if: github.ref == 'refs/heads/master'
       run: |
-        docker push kitware/itk-wasm-vtk:latest
-        docker push kitware/itk-wasm-vtk:${{ env.DOCKER_TAG }}
+        docker push itkwasm/emscripten-vtk:latest
+        docker push itkwasm/emscripten-vtk:${{ env.DOCKER_TAG }}

@@ -89,7 +89,7 @@ ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=kitware/itk-wasm-vtk
+ARG IMAGE=itkwasm/emscripten-vtk
 ARG VERSION=latest
 ARG VCS_REF
 ARG VCS_URL
