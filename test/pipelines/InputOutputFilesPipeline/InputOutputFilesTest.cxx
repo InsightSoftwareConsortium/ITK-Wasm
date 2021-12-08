@@ -114,7 +114,7 @@ int main( int argc, char * argv[] )
       {
       std::cerr << "Could not open inputBinFile." << std::endl;
       delete[] buffer;
-      return 1;
+      return EXIT_FAILURE;
       }
     inputBin.read( buffer, bufferLength );
     readLength = inputBin.gcount();
@@ -141,7 +141,7 @@ int main( int argc, char * argv[] )
       {
       std::cerr << "Could not open outputBinFile." << std::endl;
       delete[] buffer;
-      return 1;
+      return EXIT_FAILURE;
       }
     outputBin.write( buffer, readLength );
     outputBin.close();
