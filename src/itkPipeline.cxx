@@ -115,6 +115,7 @@ Pipeline
     bool usage = false;
     bool positionals = false;
     bool options = false;
+    bool optionGroup = false;
     while (std::getline(stream, line)) {
       if (description) {
         std::cout << rang::fgB::yellow << rang::style::bold;
@@ -127,7 +128,19 @@ Pipeline
         std::cout << line.substr(0, 6);
         std::cout << rang::fg::reset; 
         std::cout << rang::fg::green << rang::style::bold; 
-        std::cout << line.substr(6) << std::endl;
+        const size_t optionsLoc = line.rfind("[OPTIONS]");
+        size_t stop = std::string::npos;  
+        if (optionsLoc != std::string::npos)
+        {
+          stop = optionsLoc + 3;
+        }
+        std::cout << line.substr(6, stop);
+        if (optionsLoc != std::string::npos)
+        {
+          std::cout << rang::fg::cyan;
+          std::cout << line.substr(optionsLoc + 9);
+        }
+        std::cout << std::endl;
         std::cout << rang::fg::reset << rang::style::reset; 
         usage = false;
       } else if(positionals) {
@@ -136,7 +149,7 @@ Pipeline
           positionals = false;
         } else {
           const size_t loc = line.find(' ', 3);
-          std::cout << rang::fg::green;
+          std::cout << rang::fg::cyan;
           std::cout << line.substr(0, loc);
           std::cout << rang::fg::reset; 
           std::cout << line.substr(loc) << std::endl;
@@ -145,6 +158,17 @@ Pipeline
         if (line == "") {
           std::cout << line << std::endl;
           options = false;
+        } else {
+          const size_t loc = line.find(' ', 3);
+          std::cout << rang::fg::green;
+          std::cout << line.substr(0, loc);
+          std::cout << rang::fg::reset; 
+          std::cout << line.substr(loc) << std::endl;
+        }
+      } else if(optionGroup) {
+        if (line == "") {
+          std::cout << line << std::endl;
+          optionGroup = false;
         } else {
           const size_t loc = line.find(' ', 3);
           std::cout << rang::fg::green;
@@ -167,6 +191,11 @@ Pipeline
         std::cout << line << std::endl;
         std::cout << rang::fg::reset << rang::style::reset; 
         options = true;
+      } else if(line.back() == ':') {
+        optionGroup = true;
+        std::cout << rang::fg::yellow;
+        std::cout << line << std::endl;
+        std::cout << rang::fg::reset; 
       } else {
         std::cout << line << std::endl;
       }
