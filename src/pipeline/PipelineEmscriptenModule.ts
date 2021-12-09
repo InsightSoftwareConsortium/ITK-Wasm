@@ -9,6 +9,8 @@ interface PipelineEmscriptenModule extends EmscriptenModule {
   // ['number', 'number']); // argument types
   cwrap: typeof cwrap
   ccall: typeof ccall
+  writeArrayToMemory: typeof writeArrayToMemory
+  writeAsciiToMemory: typeof writeAsciiToMemory
 
   resetModuleStdout: () => void
   resetModuleStderr: () => void

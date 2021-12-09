@@ -29,6 +29,10 @@ namespace itk
  *
  * JSON representation for a std::stringstream for interfacing across programming languages and runtimes.
  * 
+ * { size: sizeInBytes, data: stringDataURI }
+ * 
+ * When representing text objects, `data` is not expected to include a C null termination character and sizeInBytes does not include this character.
+ * 
  * Arrays:
  * 
  * - 0: The associated std::string data.
@@ -75,9 +79,9 @@ public:
     const rapidjson::Value & dataJson = document["data"];
     const std::string dataString( dataJson.GetString() );
     const char * dataPtr = reinterpret_cast< char * >( std::atol(dataString.substr(35).c_str()) );
-    const size_t size = document["size"].GetInt();
-    const std::string string(dataPtr, size - 1);
-    m_StringStream.str(string);
+    size_t size = document["size"].GetInt();
+    const std::string_view string(dataPtr, size);
+    m_StringStream.str(std::string{string});
 
     Superclass::SetJSON(jsonChar);
   }

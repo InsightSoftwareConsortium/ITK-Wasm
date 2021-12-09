@@ -9,6 +9,11 @@ import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import PipelineOutput from '../pipeline/PipelineOutput.js'
 
+import InterfaceTypes from '../core/InterfaceTypes.js'
+import TextStream from '../core/TextStream.js'
+import BinaryStream from '../core/BinaryStream.js'
+import TextFile from '../core/TextFile.js'
+import BinaryFile from '../core/BinaryFile.js'
 import Image from '../core/Image.js'
 import Mesh from '../core/Mesh.js'
 import PolyData from '../core/vtkPolyData.js'
@@ -57,7 +62,14 @@ export async function runPipeline(pipelineModule: PipelineEmscriptenModule, args
   const transferables: ArrayBuffer[] = []
   if (result.outputs) {
     result.outputs.forEach(function (output) {
-      if (output.type === IOTypes.Binary) {
+      if (output.type === InterfaceTypes.BinaryStream || output.type === InterfaceTypes.BinaryFile) {
+        // Binary data
+        const binary = output.data as Uint8Array
+        const transferable = getTransferable(binary)
+        if (transferable) {
+          transferables.push(transferable)
+        }
+      } else if (output.type === IOTypes.Binary) {
         // Binary data
         const binary = output.data as Uint8Array
         const transferable = getTransferable(binary)

@@ -42,17 +42,17 @@ async function createWebworkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline'
     switch (name) {
       case 'image-io': {
         const response = await axios.get(`${webWorkersUrl}/${min}bundles/image-io.worker.js`, { responseType: 'blob' })
-        worker = new Worker(URL.createObjectURL(response.data))
+        worker = new Worker(URL.createObjectURL(response.data as Blob))
         break
       }
       case 'mesh-io': {
         const response = await axios.get(`${webWorkersUrl}/${min}bundles/mesh-io.worker.js`, { responseType: 'blob' })
-        worker = new Worker(URL.createObjectURL(response.data))
+        worker = new Worker(URL.createObjectURL(response.data as Blob))
         break
       }
       case 'pipeline': {
         const response = await axios.get(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`, { responseType: 'blob' })
-        worker = new Worker(URL.createObjectURL(response.data))
+        worker = new Worker(URL.createObjectURL(response.data as Blob))
         break
       }
       default:

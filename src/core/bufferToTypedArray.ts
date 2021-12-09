@@ -4,7 +4,6 @@ import type TypedArray from './TypedArray.js'
 
 function bufferToTypedArray (wasmType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] | 'null' | null, buffer: ArrayBuffer): null | TypedArray {
   let typedArray: null | TypedArray = null
-  console.log(wasmType)
   switch (wasmType) {
     case IntTypes.UInt8: {
       typedArray = new Uint8Array(buffer)

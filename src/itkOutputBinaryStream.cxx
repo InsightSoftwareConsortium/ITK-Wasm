@@ -41,7 +41,7 @@ OutputBinaryStream
 
     const std::string & string = this->m_WASMStringStream->GetString();
     const auto dataAddress = reinterpret_cast< size_t >( string.data() );
-    const auto dataSize = string.size() + 1;
+    const auto dataSize = string.size();
     setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);
 #else
     throw std::logic_error("Memory IO not supported");

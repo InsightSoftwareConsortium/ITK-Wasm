@@ -79,23 +79,23 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
                                     std::istreambuf_iterator<char>() };
   const size_t textStreamInputAddress = itk_wasm_input_array_alloc(0, 2, 0, mockTextStream.size());
   auto textStreamInputPointer = reinterpret_cast< void * >(textStreamInputAddress);
-  std::memcpy(textStreamInputPointer, mockTextStream.data(), mockTextStream.size() + 1);
+  std::memcpy(textStreamInputPointer, mockTextStream.data(), mockTextStream.size());
 
   std::ostringstream textStreamStream;
   textStreamStream << "{ \"data\": \"data:application/vnd.itk.address,0:";
   textStreamStream << textStreamInputAddress;
   textStreamStream << "\", \"size\": ";
-  textStreamStream << mockTextStream.size() + 1;
+  textStreamStream << mockTextStream.size();
   textStreamStream << "}";
   void * textStreamInputJSONPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 2, textStreamStream.str().size()));
-  std::memcpy(textStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size() + 1);
+  std::memcpy(textStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size());
 
   const size_t binaryStreamInputAddress = itk_wasm_input_array_alloc(0, 1, 0, mockTextStream.size());
   auto binaryStreamInputPointer = reinterpret_cast< void * >(textStreamInputAddress);
-  std::memcpy(binaryStreamInputPointer, mockTextStream.data(), mockTextStream.size() + 1);
+  std::memcpy(binaryStreamInputPointer, mockTextStream.data(), mockTextStream.size());
 
   void * binaryStreamInputJSONPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 1, textStreamStream.str().size()));
-  std::memcpy(binaryStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size() + 1);
+  std::memcpy(binaryStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size());
 
   const char * inputMeshFile = argv[8];
   using MeshType = itk::Mesh<float, 3>;

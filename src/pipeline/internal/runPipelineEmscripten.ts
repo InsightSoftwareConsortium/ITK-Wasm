@@ -2,6 +2,10 @@ import InterfaceTypes from '../../core/InterfaceTypes.js'
 import IOTypes from '../../core/IOTypes.js'
 import bufferToTypedArray from '../../core/bufferToTypedArray.js'
 import TypedArray from '../../core/TypedArray.js'
+import TextStream from '../../core/TextStream.js'
+import BinaryStream from '../../core/BinaryStream.js'
+import TextFile from '../../core/TextFile.js'
+import BinaryFile from '../../core/BinaryFile.js'
 import Image from '../../core/Image.js'
 import Mesh from '../../core/Mesh.js'
 import PolyData from '../../core/vtkPolyData.js'
@@ -13,6 +17,8 @@ import PipelineOutput from '../PipelineOutput.js'
 import RunPipelineResult from '../RunPipelineResult.js'
 
 const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
+const encoder = new TextEncoder()
+const decoder = new TextDecoder('utf-8')
 
 function typedArrayForBuffer (typedArrayType: string, buffer: ArrayBuffer): TypedArray {
   let TypedArrayFunction = null
@@ -42,13 +48,51 @@ function readFileSharedArray (emscriptenModule: PipelineEmscriptenModule, path: 
   return array
 }
 
+function memoryUint8SharedArray (emscriptenModule: PipelineEmscriptenModule, byteOffset: number, length: number): Uint8Array {
+  let arrayBufferData = null
+  if (haveSharedArrayBuffer) {
+    arrayBufferData = new SharedArrayBuffer(length) // eslint-disable-line
+  } else {
+    arrayBufferData = new ArrayBuffer(length)
+  }
+  const array = new Uint8Array(arrayBufferData)
+  const dataArrayView = new Uint8Array(emscriptenModule.HEAPU8.buffer, byteOffset, length)
+  array.set(dataArrayView)
+  return array
+}
+
 function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[] | null, inputs: PipelineInput[] | null): RunPipelineResult {
   if (!(inputs == null) && inputs.length > 0) {
-    inputs.forEach(function (input) {
+    inputs.forEach(function (input, index) {
       switch (input.type) {
-        case InterfaceTypes.InterfaceTextFile:
+        case InterfaceTypes.TextStream:
         {
-          pipelineModule.fs_writeFile(input.path, input.data as string)
+          const dataArray = encoder.encode((input.data as TextStream).data)
+          const arrayPtr = pipelineModule.ccall('itk_wasm_input_array_alloc', 'number', ['number', 'number', 'number', 'number'], [0, index, 0, dataArray.buffer.byteLength])
+          pipelineModule.HEAPU8.set(dataArray, arrayPtr)
+          const dataJSON = JSON.stringify({ size: dataArray.buffer.byteLength, data: `data:application/vnd.itk.address,0:${arrayPtr}` })
+          const jsonPtr = pipelineModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, index, dataJSON.length])
+          pipelineModule.writeAsciiToMemory(dataJSON, jsonPtr, true)
+          break
+        }
+        case InterfaceTypes.BinaryStream:
+        {
+          const dataArray = (input.data as BinaryStream).data
+          const arrayPtr = pipelineModule.ccall('itk_wasm_input_array_alloc', 'number', ['number', 'number', 'number', 'number'], [0, index, 0, dataArray.buffer.byteLength])
+          pipelineModule.HEAPU8.set(dataArray, arrayPtr)
+          const dataJSON = JSON.stringify({ size: dataArray.buffer.byteLength, data: `data:application/vnd.itk.address,0:${arrayPtr}` })
+          const jsonPtr = pipelineModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, index, dataJSON.length])
+          pipelineModule.writeAsciiToMemory(dataJSON, jsonPtr, false)
+          break
+        }
+        case InterfaceTypes.TextFile:
+        {
+          pipelineModule.fs_writeFile((input.data as TextFile).path, (input.data as TextFile).data)
+          break
+        }
+        case InterfaceTypes.BinaryFile:
+        {
+          pipelineModule.fs_writeFile((input.data as BinaryFile).path, (input.data as BinaryFile).data)
           break
         }
         case IOTypes.Text:
@@ -161,9 +205,42 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
 
   const populatedOutputs: PipelineOutput[] = []
   if (!(outputs == null) && outputs.length > 0) {
-    outputs.forEach(function (output) {
+    outputs.forEach(function (output, index) {
       let outputData: any = null
       switch (output.type) {
+        case InterfaceTypes.TextStream:
+        {
+          // const jsonPtr = pipelineModule.ccall('itk_wasm_output_json_address', 'number', ['number', 'number'], [0, index])
+          // const jsonSize = pipelineModule.ccall('itk_wasm_output_json_size', 'number', ['number', 'number'], [0, index])
+          // const jsonArray = pipelineModule.HEAPU8.slice(jsonPtr, jsonPtr + jsonSize)
+          // const dataJSON = JSON.parse(decoder.decode(jsonArray))
+          const dataPtr = pipelineModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, index, 0])
+          const dataSize = pipelineModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, index, 0])
+          const dataArrayView = new Uint8Array(pipelineModule.HEAPU8.buffer, dataPtr, dataSize)
+          outputData = { data: decoder.decode(dataArrayView) }
+          break
+        }
+        case InterfaceTypes.BinaryStream:
+        {
+          // const jsonPtr = pipelineModule.ccall('itk_wasm_output_json_address', 'number', ['number', 'number'], [0, index])
+          // const jsonSize = pipelineModule.ccall('itk_wasm_output_json_size', 'number', ['number', 'number'], [0, index])
+          // const jsonArray = pipelineModule.HEAPU8.slice(jsonPtr, jsonPtr + jsonSize)
+          // const dataJSON = JSON.parse(decoder.decode(jsonArray))
+          const dataPtr = pipelineModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, index, 0])
+          const dataSize = pipelineModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, index, 0])
+          outputData = { data: memoryUint8SharedArray(pipelineModule, dataPtr, dataSize) }
+          break
+        }
+        case InterfaceTypes.TextFile:
+        {
+          outputData = { path: (output.data as TextFile).path, data: pipelineModule.fs_readFile((output.data as TextFile).path, { encoding: 'utf8' }) as string }
+          break
+        }
+        case InterfaceTypes.BinaryFile:
+        {
+          outputData = { path: (output.data as BinaryFile).path, data: readFileSharedArray(pipelineModule, (output.data as BinaryFile).path) }
+          break
+        }
         case IOTypes.Text:
         {
           outputData = pipelineModule.fs_readFile(output.path, { encoding: 'utf8' }) as string

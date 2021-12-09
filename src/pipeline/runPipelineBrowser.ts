@@ -4,8 +4,11 @@ import loadEmscriptenModuleMainThread from '../core/internal/loadEmscriptenModul
 import config from '../itkConfig.js'
 
 import IOTypes from '../core/IOTypes.js'
+import InterfaceTypes from '../core/InterfaceTypes.js'
 import runPipelineEmscripten from './internal/runPipelineEmscripten.js'
 import getTransferable from '../core/getTransferable.js'
+import BinaryStream from '../core/BinaryStream.js'
+import BinaryFile from '../core/BinaryFile.js'
 import Image from '../core/Image.js'
 import Mesh from '../core/Mesh.js'
 
@@ -45,7 +48,21 @@ async function runPipelineBrowser (webWorker: Worker | null | boolean, pipelineP
   const transferables: ArrayBuffer[] = []
   if (!(inputs == null) && inputs.length > 0) {
     inputs.forEach(function (input) {
-      if (input.type === IOTypes.Binary) {
+      if (input.type === InterfaceTypes.BinaryStream) {
+        // Binary data
+        const dataArray = (input.data as BinaryStream).data
+        const transferable = getTransferable(dataArray)
+        if (transferable != null) {
+          transferables.push(transferable)
+        }
+      } else if (input.type === InterfaceTypes.BinaryFile) {
+        // Binary data
+        const dataArray = (input.data as BinaryFile).data
+        const transferable = getTransferable(dataArray)
+        if (transferable != null) {
+          transferables.push(transferable)
+        }
+      } else if (input.type === IOTypes.Binary) {
         // Binary data
         const transferable = getTransferable(input.data as Uint8Array)
         if (transferable != null) {

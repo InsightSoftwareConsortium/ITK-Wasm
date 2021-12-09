@@ -19,7 +19,7 @@
 #define itkWASMExports_h
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-// WebAssembly exports
+// WebAssembly exports for memory io
 
 #include "itkWASMDataObject.h"
 

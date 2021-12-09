@@ -1,7 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import { IntTypes, FloatTypes, PixelTypes, readImageFile, readMeshFile, runPipelineBrowser, IOTypes } from 'browser/index.js'
+import { IntTypes, FloatTypes, PixelTypes, readImageFile, readMeshFile, runPipelineBrowser, IOTypes, InterfaceTypes } from 'browser/index.js'
 
 export default function () {
   test('runPipelineBrowser captures stdout and stderr', (t) => {
@@ -88,57 +88,109 @@ Click. Perfect success.
 
   test('runPipelineBrowser uses input and output files in the Emscripten filesystem', (t) => {
     const pipelinePath = 'InputOutputFilesTest'
-    const args = ['input.txt', 'input.bin', 'output.txt', 'output.bin']
+    const args = ['--use-files',
+      '--input-text-file', './input.txt',
+      '--input-binary-file', './input.bin',
+      '--output-text-file', './output.txt',
+      '--output-binary-file', './output.bin'
+    ]
+    const outputText = { path: './output.txt' }
+    const outputBinary = { path: './output.bin' }
     const desiredOutputs = [
-      { path: 'output.txt', type: IOTypes.Text },
-      { path: 'output.bin', type: IOTypes.Binary }
+      { data: outputText, type: InterfaceTypes.TextFile },
+      { data: outputBinary, type: InterfaceTypes.BinaryFile }
     ]
     const inputs = [
-      { path: 'input.txt', type: IOTypes.Text, data: 'The answer is 42.' },
-      { path: 'input.bin', type: IOTypes.Binary, data: new Uint8Array([222, 173, 190, 239]) }
+      { type: InterfaceTypes.TextFile, data: { path: './input.txt', data: 'The answer is 42.' } },
+      { type: InterfaceTypes.BinaryFile, data: { path: './input.bin', data: new Uint8Array([222, 173, 190, 239]) } }
     ]
     return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
       .then(function ({ stdout, stderr, outputs, webWorker }) {
         webWorker.terminate()
-        t.is(outputs[0].path, 'output.txt')
-        t.is(outputs[0].type, IOTypes.Text)
-        t.is(outputs[0].data, 'The answer is 42.')
-        t.is(outputs[1].path, 'output.bin')
-        t.is(outputs[1].type, IOTypes.Binary)
-        t.is(outputs[1].data[0], 222)
-        t.is(outputs[1].data[1], 173)
-        t.is(outputs[1].data[2], 190)
-        t.is(outputs[1].data[3], 239)
-        t.is(stdout, 'Input text: The answer is 42.\n')
-        t.is(stderr, 'Input binary: ffffffdeffffffadffffffbeffffffef\n')
+        t.is(outputs[0].type, InterfaceTypes.TextFile)
+        t.is(outputs[0].data.path, './output.txt')
+        t.is(outputs[0].data.data, 'The answer is 42.')
+        t.is(outputs[1].type, InterfaceTypes.BinaryFile)
+        t.is(outputs[1].data.path, './output.bin')
+        t.is(outputs[1].data.data[0], 222)
+        t.is(outputs[1].data.data[1], 173)
+        t.is(outputs[1].data.data[2], 190)
+        t.is(outputs[1].data.data[3], 239)
+        t.is(stdout, `Input text: The answer is 42.
+`)
+        t.is(stderr, `Input binary: ffffffdeffffffadffffffbeffffffef
+`)
+        t.end()
+      })
+  })
+
+  test('runPipelineNode uses input and output text and binary data via memory io', (t) => {
+    const pipelinePath = 'InputOutputFilesTest'
+    const args = ['--memory-io',
+      '--input-text-stream', '0',
+      '--input-binary-stream', '1',
+      '--output-text-stream', '0',
+      '--output-binary-stream', '1'
+    ]
+    const desiredOutputs = [
+      { type: InterfaceTypes.TextStream },
+      { type: InterfaceTypes.BinaryStream }
+    ]
+    const inputs = [
+      { type: InterfaceTypes.TextStream, data: { data: 'The answer is 42.' } },
+      { type: InterfaceTypes.BinaryStream, data: { data: new Uint8Array([222, 173, 190, 239]) } }
+    ]
+    return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
+      .then(function ({ stdout, stderr, outputs, webWorker }) {
+        webWorker.terminate()
+        t.is(outputs[0].type, InterfaceTypes.TextStream)
+        t.is(outputs[0].data.data, 'The answer is 42.')
+        t.is(outputs[1].type, InterfaceTypes.BinaryStream)
+        t.is(outputs[1].data.data[0], 222)
+        t.is(outputs[1].data.data[1], 173)
+        t.is(outputs[1].data.data[2], 190)
+        t.is(outputs[1].data.data[3], 239)
+        t.is(stdout, `Input text: The answer is 42.
+`)
+        t.is(stderr, `Input binary: ffffffdeffffffadffffffbeffffffef
+`)
         t.end()
       })
   })
 
   test('runPipelineBrowser runs on the main thread when first argument is false', (t) => {
     const pipelinePath = 'InputOutputFilesTest'
-    const args = ['input.txt', 'input.bin', 'output.txt', 'output.bin']
+    const args = ['--use-files',
+      '--input-text-file', './input.txt',
+      '--input-binary-file', './input.bin',
+      '--output-text-file', './output.txt',
+      '--output-binary-file', './output.bin'
+    ]
+    const outputText = { path: './output.txt' }
+    const outputBinary = { path: './output.bin' }
     const desiredOutputs = [
-      { path: 'output.txt', type: IOTypes.Text },
-      { path: 'output.bin', type: IOTypes.Binary }
+      { data: outputText, type: InterfaceTypes.TextFile },
+      { data: outputBinary, type: InterfaceTypes.BinaryFile }
     ]
     const inputs = [
-      { path: 'input.txt', type: IOTypes.Text, data: 'The answer is 42.' },
-      { path: 'input.bin', type: IOTypes.Binary, data: new Uint8Array([222, 173, 190, 239]) }
+      { type: InterfaceTypes.TextFile, data: { path: './input.txt', data: 'The answer is 42.' } },
+      { type: InterfaceTypes.BinaryFile, data: { path: './input.bin', data: new Uint8Array([222, 173, 190, 239]) } }
     ]
     return runPipelineBrowser(false, pipelinePath, args, desiredOutputs, inputs)
       .then(function ({ stdout, stderr, outputs }) {
-        t.is(outputs[0].path, 'output.txt')
-        t.is(outputs[0].type, IOTypes.Text)
-        t.is(outputs[0].data, 'The answer is 42.')
-        t.is(outputs[1].path, 'output.bin')
-        t.is(outputs[1].type, IOTypes.Binary)
-        t.is(outputs[1].data[0], 222)
-        t.is(outputs[1].data[1], 173)
-        t.is(outputs[1].data[2], 190)
-        t.is(outputs[1].data[3], 239)
-        t.is(stdout, 'Input text: The answer is 42.\n')
-        t.is(stderr, 'Input binary: ffffffdeffffffadffffffbeffffffef\n')
+        t.is(outputs[0].type, InterfaceTypes.TextFile)
+        t.is(outputs[0].data.path, './output.txt')
+        t.is(outputs[0].data.data, 'The answer is 42.')
+        t.is(outputs[1].type, InterfaceTypes.BinaryFile)
+        t.is(outputs[1].data.path, './output.bin')
+        t.is(outputs[1].data.data[0], 222)
+        t.is(outputs[1].data.data[1], 173)
+        t.is(outputs[1].data.data[2], 190)
+        t.is(outputs[1].data.data[3], 239)
+        t.is(stdout, `Input text: The answer is 42.
+`)
+        t.is(stderr, `Input binary: ffffffdeffffffadffffffbeffffffef
+`)
         t.end()
       })
   })
