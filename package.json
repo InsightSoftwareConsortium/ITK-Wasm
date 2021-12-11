@@ -18,7 +18,7 @@
     "build:debug": "npm run build:wasm -- --debug && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack -- --mode development",
     "build:tsc": "tsc --pretty",
     "build:tscWorkersModuleLoader": "tsc --lib webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleWebWorker.ts",
-    "build:tscWebWorkers": "tsc --lib webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames  --typeRoots \"./node_modules/@types,./src/vendor-types\" --declaration ./src/web-workers/*",
+    "build:tscWebWorkers": "tsc -p ./tsconfigWebWorkers.json",
     "build:imageIOWorker": "rollup -c rollup.worker.config.js ./dist/web-workers/image-io.worker.js",
     "build:meshIOWorker": "rollup -c rollup.worker.config.js ./dist/web-workers/mesh-io.worker.js",
     "build:pipelineWorker": "rollup -c rollup.worker.config.js ./dist/web-workers/pipeline.worker.js",
