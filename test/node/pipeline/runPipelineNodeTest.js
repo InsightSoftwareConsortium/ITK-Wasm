@@ -93,7 +93,7 @@ test('runPipelineNode uses input and output text and binary data via memory io',
     })
 })
 
-test('runPipelineNode writes and reads an itk.Image in the Emscripten filesystem', (t) => {
+test('runPipelineNode writes and reads an itk.Image via memory io', (t) => {
   const verifyImage = (image) => {
     t.is(image.imageType.dimension, 2, 'dimension')
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
@@ -111,12 +111,15 @@ test('runPipelineNode writes and reads an itk.Image in the Emscripten filesystem
   return readImageLocalFile(testInputFilePath)
     .then(function (image) {
       const pipelinePath = path.resolve('test', 'pipelines', 'MedianFilterPipeline', 'web-build', 'MedianFilterTest')
-      const args = ['./cthead1.png.iwi', './cthead1.png.median.iwi', '4']
+      const args = ['--memory-io',
+        '--radius', '4',
+        '0',
+        '0']
       const desiredOutputs = [
-        { path: args[1], type: IOTypes.Image }
+        { type: InterfaceTypes.Image }
       ]
       const inputs = [
-        { path: args[0], type: IOTypes.Image, data: image }
+        { type: InterfaceTypes.Image, data: image }
       ]
       return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
     }).then(function ({ stdout, stderr, outputs }) {

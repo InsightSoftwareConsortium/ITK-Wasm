@@ -69,6 +69,17 @@ export async function runPipeline(pipelineModule: PipelineEmscriptenModule, args
         if (transferable) {
           transferables.push(transferable)
         }
+      } else if (output.type === InterfaceTypes.Image) {
+        // Image data
+        const image = output.data as Image
+        let transferable = getTransferable(image.data)
+        if (transferable) {
+          transferables.push(transferable)
+        }
+        transferable = getTransferable(image.direction)
+        if (transferable) {
+          transferables.push(transferable)
+        }
       } else if (output.type === IOTypes.Binary) {
         // Binary data
         const binary = output.data as Uint8Array

@@ -95,6 +95,34 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           pipelineModule.fs_writeFile((input.data as BinaryFile).path, (input.data as BinaryFile).data)
           break
         }
+        case InterfaceTypes.Image:
+        {
+          const image = input.data as Image
+          const dataArray = image.data
+          let dataPtr = 0
+          if (dataArray !== null) {
+            dataPtr = pipelineModule.ccall('itk_wasm_input_array_alloc', 'number', ['number', 'number', 'number', 'number'], [0, index, 0, dataArray.buffer.byteLength])
+            pipelineModule.HEAPU8.set(new Uint8Array(dataArray.buffer), dataPtr)
+          }
+          const directionArray = image.direction
+          let directionPtr = 0
+          if (directionArray !== null) {
+            directionPtr = pipelineModule.ccall('itk_wasm_input_array_alloc', 'number', ['number', 'number', 'number', 'number'], [0, index, 1, directionArray.buffer.byteLength])
+            pipelineModule.HEAPU8.set(new Uint8Array(directionArray.buffer), directionPtr)
+          }
+          const imageJSON = JSON.stringify({
+            imageType: image.imageType,
+            name: image.name,
+            origin: image.origin,
+            spacing: image.spacing,
+            direction: `data:application/vnd.itk.address,0:${directionPtr}`,
+            size: image.size,
+            data: `data:application/vnd.itk.address,0:${dataPtr}`
+          })
+          const jsonPtr = pipelineModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, index, imageJSON.length])
+          pipelineModule.writeAsciiToMemory(imageJSON, jsonPtr, false)
+          break
+        }
         case IOTypes.Text:
         {
           pipelineModule.fs_writeFile(input.path, input.data as string)

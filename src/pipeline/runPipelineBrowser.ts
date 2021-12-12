@@ -62,6 +62,20 @@ async function runPipelineBrowser (webWorker: Worker | null | boolean, pipelineP
         if (transferable != null) {
           transferables.push(transferable)
         }
+      } else if (input.type === InterfaceTypes.Image) {
+        // Image data
+        const image = input.data as Image
+        if (image.data === null) {
+          throw Error('image data cannot be null')
+        }
+        let transferable = getTransferable(image.data)
+        if (transferable != null) {
+          transferables.push(transferable)
+        }
+        transferable = getTransferable(image.direction)
+        if (transferable != null) {
+          transferables.push(transferable)
+        }
       } else if (input.type === IOTypes.Binary) {
         // Binary data
         const transferable = getTransferable(input.data as Uint8Array)
