@@ -3,7 +3,10 @@ project(MedianFilterTest)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(io_components ITKImageIO)
+set(io_components
+  ITKImageIO
+  WebAssemblyInterface
+  )
 if(EMSCRIPTEN OR WASI)
   set(io_components WebAssemblyInterface)
 endif()
@@ -18,7 +21,7 @@ target_link_libraries(MedianFilterTest PUBLIC ${ITK_LIBRARIES})
 
 enable_testing()
 add_test(NAME MedianFilterTest
-  COMMAND MedianFilterTest ${CMAKE_CURRENT_SOURCE_DIR}/cthead1.png
-  ${CMAKE_CURRENT_BINARY_DIR}/cthead1.shrink.png
-  4
+  COMMAND MedianFilterTest ${CMAKE_CURRENT_SOURCE_DIR}/cthead1.iwi.zip
+  ${CMAKE_CURRENT_BINARY_DIR}/cthead1.shrink.iwi
+  --radius 4
   )

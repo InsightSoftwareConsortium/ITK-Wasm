@@ -15,51 +15,46 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
 #include "itkMedianImageFilter.h"
 #include "itkImageRegionSplitterSlowDimension.h"
 #include "itkExtractImageFilter.h"
+#include "itkPipeline.h"
+#include "itkInputImage.h"
+#include "itkOutputImage.h"
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 4 )
-    {
-    std::cerr << "Usage: " << argv[0] << " <inputImage> <outputImage> <radius> [maxTotalSplits] [split]" << std::endl;
-    return EXIT_FAILURE;
-    }
-  const char * inputImageFile = argv[1];
-
-  const char * outputImageFile = argv[2];
-  unsigned int radius = atoi( argv[3] );
-  unsigned int maxTotalSplits = 1;
-  if (argc > 4)
-    {
-    maxTotalSplits = atoi( argv[4] );
-    }
-  unsigned int split = 1;
-  if (argc > 5)
-    {
-    split = atoi( argv[5] );
-    }
+  itk::wasm::Pipeline pipeline("Apply a median filter to an image", argc, argv);
 
   using PixelType = unsigned char;
   constexpr unsigned int Dimension = 2;
   using ImageType = itk::Image< PixelType, Dimension >;
 
-  using ReaderType = itk::ImageFileReader< ImageType >;
-  auto reader = ReaderType::New();
-  reader->SetFileName( inputImageFile );
+  const char * inputImageFile = argv[1];
+  using InputImageType = itk::wasm::InputImage<ImageType>;
+  InputImageType inputImage;
+  pipeline.add_option("InputImage", inputImage, "The input image")->required();
+
+  using OutputImageType = itk::wasm::OutputImage<ImageType>;
+  OutputImageType outputImage;
+  pipeline.add_option("OutputImage", outputImage, "The output image")->required();
+
+  unsigned int radius = 1;
+  pipeline.add_option("-r,--radius", radius, "Kernel radius in pixels");
+
+  unsigned int maxTotalSplits = 1;
+  pipeline.add_option("-m,--max-splits", radius, "Max total processing splits");
+
+  unsigned int split = 1;
+  pipeline.add_option("-s,--split", radius, "Split to process");
+
+  ITK_WASM_PARSE(pipeline);
+
 
   using SmoothingFilterType = itk::MedianImageFilter< ImageType, ImageType >;
   auto smoother = SmoothingFilterType::New();
-  smoother->SetInput( reader->GetOutput() );
+  smoother->SetInput( inputImage.Get() );
   smoother->SetRadius( radius );
-
-  using WriterType = itk::ImageFileWriter< ImageType >;
-  auto writer = WriterType::New();
-  writer->SetInput( smoother->GetOutput() );
-  writer->SetFileName( outputImageFile );
 
   using ROIFilterType = itk::ExtractImageFilter< ImageType, ImageType >;
   auto roiFilter = ROIFilterType::New();
@@ -84,17 +79,13 @@ int main( int argc, char * argv[] )
     splitter->GetSplit( split, numberOfSplits, requestedRegion );
     roiFilter->SetInput( smoother->GetOutput() );
     roiFilter->SetExtractionRegion( requestedRegion );
-    writer->SetInput( roiFilter->GetOutput() );
+    roiFilter->Update();
+    outputImage.Set( roiFilter->GetOutput() );
   }
-
-  try
+  else
   {
-    writer->Update();
-  }
-  catch( std::exception & error )
-  {
-    std::cerr << "Error: " << error.what() << std::endl;
-    return EXIT_FAILURE;
+    smoother->Update();
+    outputImage.Set( smoother->GetOutput() );
   }
 
   return EXIT_SUCCESS;

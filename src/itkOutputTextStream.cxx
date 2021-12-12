@@ -51,7 +51,7 @@ OutputTextStream
   {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
     // ofstream will close when deleted
-#else
+# else
     throw std::logic_error("Filesystem IO not supported");
 #endif
   if (m_DeleteOStream && m_OStream != nullptr)
