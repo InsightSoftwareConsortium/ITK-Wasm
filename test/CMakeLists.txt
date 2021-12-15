@@ -57,6 +57,7 @@ set(WebAssemblyInterfaceTests
   itkWASMMeshIOTest.cxx
   itkPipelineTest.cxx
   itkPipelineMemoryIOTest.cxx
+  itkSupportInputImageTypesTest.cxx
 )
 
 CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
@@ -161,6 +162,13 @@ itk_add_test(NAME itkPipelineMemoryIOTest
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputMesh.vtk
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputPolyData.vtk
+)
+
+itk_add_test(NAME itkSupportInputImageTypesTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkSupportInputImageTypesTest
+      DATA{Input/brainweb165a10f17.mha}
+      ${ITK_TEST_OUTPUT_DIR}/itkSupportInputImageTypesTest.mha
 )
 
 if(EMSCRIPTEN)

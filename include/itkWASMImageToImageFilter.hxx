@@ -165,6 +165,8 @@ WASMImageToImageFilter<TImage>
     throw std::runtime_error("Unexpected pixel type");
   }
 
+  // todo
+  // image->SetNumberOfComponentsPerPixel( imageType["components"].GetInt() );
   if ( imageType["components"].GetInt() != ConvertPixelTraits::GetNumberOfComponents() )
   {
     throw std::runtime_error("Unexpected number of components");

@@ -1,2 +1,3 @@
 itkPipeline\.cxx Spaces Disable
 itkOutputPolyData\.h DeclarationOrder Disable
+itkSupportInputImageTypesTest\.cxx Namespace Disable
