@@ -25,6 +25,7 @@ set(WebAssemblyInterface_SRCS
   itkIOPixelEnumFromWASMPixelType.cxx
   itkWASMComponentTypeFromIOComponentEnum.cxx
   itkWASMPixelTypeFromIOPixelEnum.cxx
+  itkSupportInputImageTypes.cxx
   )
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 

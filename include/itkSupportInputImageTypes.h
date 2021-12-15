@@ -24,6 +24,8 @@
 #include "itkWASMMapComponentType.h"
 #include "itkWASMMapPixelType.h"
 
+#include "itkImage.h"
+#include "itkVectorImage.h"
 #include "itkImageIOBase.h"
 #include "itkImageIOFactory.h"
 
@@ -41,44 +43,7 @@ struct InterfaceImageType
   unsigned int components{1};
 };
 
-bool lexical_cast(const std::string &input, InterfaceImageType & imageType)
-{
-  if (wasm::Pipeline::GetUseMemoryIO())
-  {
-#ifndef ITK_WASM_NO_MEMORY_IO
-    // using WASMImageToImageFilterType = WASMImageToImageFilter<TImage>;
-    // auto wasmImageToImageFilter = WASMImageToImageFilterType::New();
-    // auto wasmImage = WASMImageToImageFilterType::WASMImageType::New();
-    // const unsigned int index = std::stoi(input);
-    // auto json = getMemoryStoreInputJSON(0, index);
-#else
-    return false;
-#endif
-  }
-  else
-  {
-#ifndef ITK_WASM_NO_FILESYSTEM_IO
-    ImageIOBase::Pointer imageIO = ImageIOFactory::CreateImageIO(input.c_str(), CommonEnums::IOFileMode::ReadMode);
-    imageIO->SetFileName(input);
-    imageIO->ReadImageInformation();
-
-    imageType.dimension = imageIO->GetNumberOfDimensions();
-
-    using IOComponentType = itk::IOComponentEnum;
-    const IOComponentType ioComponentEnum = imageIO->GetComponentType();
-    imageType.componentType = WASMComponentTypeFromIOComponentEnum( ioComponentEnum );
-
-    using IOPixelType = itk::IOPixelEnum;
-    const IOPixelType ioPixelEnum = imageIO->GetPixelType();
-    imageType.pixelType = WASMPixelTypeFromIOPixelEnum( ioPixelEnum );
-
-    imageType.components = imageIO->GetNumberOfComponents();
-#else
-    return false;
-#endif
-  }
-  return true;
-}
+bool lexical_cast(const std::string &input, InterfaceImageType & imageType);
 
 /** \class SupportInputImageTypes
  * 
@@ -165,7 +130,7 @@ private:
       }
       else if( imageType.components == ConvertPixelTraits::GetNumberOfComponents() )
       {
-        using ImageType = itk::Image<PixelType, Dimension>;
+        using ImageType = Image<PixelType, Dimension>;
 
         using PipelineType = TPipelineFunctor<ImageType>;
         return PipelineType()(pipeline);
