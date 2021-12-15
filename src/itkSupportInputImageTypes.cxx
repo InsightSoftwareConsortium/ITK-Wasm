@@ -16,6 +16,9 @@
  *
  *=========================================================================*/
 #include "itkSupportInputImageTypes.h"
+#include "itkWASMExports.h"
+
+#include "rapidjson/document.h"
 
 namespace itk
 {
@@ -28,11 +31,19 @@ bool lexical_cast(const std::string &input, InterfaceImageType & imageType)
   if (wasm::Pipeline::GetUseMemoryIO())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    // using WASMImageToImageFilterType = WASMImageToImageFilter<TImage>;
-    // auto wasmImageToImageFilter = WASMImageToImageFilterType::New();
-    // auto wasmImage = WASMImageToImageFilterType::WASMImageType::New();
-    // const unsigned int index = std::stoi(input);
-    // auto json = getMemoryStoreInputJSON(0, index);
+    const unsigned int index = std::stoi(input);
+    auto json = getMemoryStoreInputJSON(0, index);
+    rapidjson::Document document;
+    if (document.Parse(json.c_str()).HasParseError())
+      {
+      throw std::runtime_error("Could not parse JSON");
+      }
+
+    const rapidjson::Value & jsonImageType = document["imageType"];
+    imageType.dimension = jsonImageType["dimension"].GetInt();
+    imageType.componentType = jsonImageType["componentType"].GetString();
+    imageType.pixelType = jsonImageType["pixelType"].GetString();
+    imageType.components = jsonImageType["components"].GetInt();
 #else
     return false;
 #endif
