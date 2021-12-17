@@ -112,9 +112,9 @@ test('runPipelineNode writes and reads an itk.Image via memory io', (t) => {
     .then(function (image) {
       const pipelinePath = path.resolve('test', 'pipelines', 'MedianFilterPipeline', 'web-build', 'MedianFilterTest')
       const args = ['--memory-io',
-        '--radius', '4',
         '0',
-        '0']
+        '0',
+        '--radius', '4']
       const desiredOutputs = [
         { type: InterfaceTypes.Image }
       ]

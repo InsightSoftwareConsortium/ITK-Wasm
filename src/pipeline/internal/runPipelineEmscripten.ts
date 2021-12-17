@@ -204,7 +204,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           break
         }
         default:
-          throw Error('Unsupported input IOType')
+          throw Error('Unsupported input InterfaceType')
       }
     })
   }
@@ -267,6 +267,22 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         case InterfaceTypes.BinaryFile:
         {
           outputData = { path: (output.data as BinaryFile).path, data: readFileSharedArray(pipelineModule, (output.data as BinaryFile).path) }
+          break
+        }
+        case InterfaceTypes.Image:
+        {
+          const jsonPtr = pipelineModule.ccall('itk_wasm_output_json_address', 'number', ['number', 'number'], [0, index])
+          const imageJSON = pipelineModule.AsciiToString(jsonPtr)
+          const image = JSON.parse(imageJSON)
+          const dataPtr = pipelineModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, index, 0])
+          const dataSize = pipelineModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, index, 0])
+          const dataUint8 = memoryUint8SharedArray(pipelineModule, dataPtr, dataSize)
+          image.data = bufferToTypedArray(image.imageType.componentType, dataUint8.buffer)
+          const directionPtr = pipelineModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, index, 1])
+          const directionSize = pipelineModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, index, 1])
+          const directionUint8 = memoryUint8SharedArray(pipelineModule, directionPtr, directionSize)
+          image.direction = bufferToTypedArray(FloatTypes.Float64, directionUint8.buffer)
+          outputData = image as Image
           break
         }
         case IOTypes.Text:
@@ -356,7 +372,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           break
         }
         default:
-          throw Error('Unsupported output IOType')
+          throw Error('Unsupported output InterfaceType')
       }
       const populatedOutput = {
         path: output.path,

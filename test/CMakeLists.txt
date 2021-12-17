@@ -61,6 +61,11 @@ set(WebAssemblyInterfaceTests
   itkSupportInputImageTypesMemoryIOTest.cxx
 )
 
+if (EMSCRIPTEN)
+  # Currently crashing during link
+  return()
+endif()
+
 CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
   "${WebAssemblyInterfaceTests}" )
 

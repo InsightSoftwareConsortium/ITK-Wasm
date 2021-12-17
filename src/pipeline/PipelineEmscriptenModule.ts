@@ -11,6 +11,7 @@ interface PipelineEmscriptenModule extends EmscriptenModule {
   ccall: typeof ccall
   writeArrayToMemory: typeof writeArrayToMemory
   writeAsciiToMemory: typeof writeAsciiToMemory
+  AsciiToString: (ptr: number) => string
 
   resetModuleStdout: () => void
   resetModuleStderr: () => void

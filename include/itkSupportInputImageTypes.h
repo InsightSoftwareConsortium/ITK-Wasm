@@ -164,30 +164,6 @@ private:
     CLI::Error err("Runtime error", ostrm.str(), 1);
     return pipeline.exit(err);
   }
-  // template<unsigned int VDimension, unsigned int ...VDimensions>
-  // static int
-  // SupportInputImageDimensions(itk::wasm::Pipeline & pipeline, const InterfaceImageType & imageType)
-  // {
-  //   constexpr unsigned int Dimension = VDimension;
-  //   using PixelType = float;
-  //   using ImageType = itk::Image<PixelType, Dimension>;
-
-  //   using PipelineType = TPipelineFunctor<ImageType>;
-
-  //   if (Dimension == imageType.dimension)
-  //   {
-  //     return PipelineType()(pipeline);
-  //   }
-    
-  //   if constexpr (sizeof...(VDimensions) > 0) {
-  //     return SupportInputImageDimensions<VDimensions...>(pipeline, imageType);
-  //   }
-
-  //   std::ostringstream ostrm;
-  //   ostrm << "Unsupported image dimension: " << imageType.dimension;
-  //   CLI::Error err("Runtime error", ostrm.str(), 1);
-  //   return pipeline.exit(err);
-  // }
 };
 
 } // end namespace wasm
