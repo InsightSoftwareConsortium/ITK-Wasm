@@ -13,6 +13,7 @@ endif()
 find_package(ITK REQUIRED
   COMPONENTS ${io_components}
     ITKSmoothing
+    ITKImageIntensity
   )
 include(${ITK_USE_FILE})
 

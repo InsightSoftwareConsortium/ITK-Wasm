@@ -117,8 +117,7 @@ private:
     using PixelType = TPixel;
     using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
 
-    if (imageType.componentType == MapComponentType<PixelType>::ComponentString &&
-        imageType.pixelType == MapPixelType<PixelType>::PixelString)
+    if (imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString && imageType.pixelType == MapPixelType<PixelType>::PixelString)
     {
       if (imageType.pixelType == "VariableLengthVector" || imageType.pixelType == "VariableSizeMatrix" )
       {

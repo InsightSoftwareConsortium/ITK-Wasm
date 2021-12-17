@@ -154,7 +154,7 @@ WASMImageToImageFilter<TImage>
     throw std::runtime_error("Unexpected dimension");
   }
   const std::string componentType( imageType["componentType"].GetString() );
-  if ( componentType != itk::wasm::MapComponentType<PixelType>::ComponentString )
+  if ( componentType != itk::wasm::MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString )
   {
     throw std::runtime_error("Unexpected component type");
   }

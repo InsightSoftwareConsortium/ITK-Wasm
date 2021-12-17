@@ -21,19 +21,16 @@
 #include "itkPipeline.h"
 #include "itkInputImage.h"
 #include "itkOutputImage.h"
+#include "itkSupportInputImageTypes.h"
+#include "itkRGBPixel.h"
+#include "itkRGBToLuminanceImageFilter.h"
+#include "itkNumericTraits.h"
 
-int main( int argc, char * argv[] )
+template<typename TImage>
+int
+MedianFilter(itk::wasm::Pipeline & pipeline, const TImage * inputImage)
 {
-  itk::wasm::Pipeline pipeline("Apply a median filter to an image", argc, argv);
-
-  using PixelType = unsigned char;
-  constexpr unsigned int Dimension = 2;
-  using ImageType = itk::Image< PixelType, Dimension >;
-
-  const char * inputImageFile = argv[1];
-  using InputImageType = itk::wasm::InputImage<ImageType>;
-  InputImageType inputImage;
-  pipeline.add_option("InputImage", inputImage, "The input image")->required();
+  using ImageType = TImage;
 
   using OutputImageType = itk::wasm::OutputImage<ImageType>;
   OutputImageType outputImage;
@@ -50,10 +47,9 @@ int main( int argc, char * argv[] )
 
   ITK_WASM_PARSE(pipeline);
 
-
   using SmoothingFilterType = itk::MedianImageFilter< ImageType, ImageType >;
   auto smoother = SmoothingFilterType::New();
-  smoother->SetInput( inputImage.Get() );
+  smoother->SetInput( inputImage );
   smoother->SetRadius( radius );
 
   using ROIFilterType = itk::ExtractImageFilter< ImageType, ImageType >;
@@ -62,7 +58,7 @@ int main( int argc, char * argv[] )
   if (maxTotalSplits > 1)
   {
     smoother->UpdateOutputInformation();
-    using RegionType = ImageType::RegionType;
+    using RegionType = typename ImageType::RegionType;
     smoother->UpdateOutputInformation();
     const RegionType largestRegion( smoother->GetOutput()->GetLargestPossibleRegion() );
 
@@ -89,4 +85,62 @@ int main( int argc, char * argv[] )
   }
 
   return EXIT_SUCCESS;
+}
+
+template<typename TImage>
+class PipelineFunctor
+{
+public:
+  int operator()(itk::wasm::Pipeline & pipeline)
+  {
+    using ImageType = TImage;
+
+    using InputImageType = itk::wasm::InputImage<ImageType>;
+    InputImageType inputImage;
+    pipeline.add_option("InputImage", inputImage, "The input image")->required();
+
+    ITK_WASM_PARSE(pipeline);
+
+    return MedianFilter<ImageType>(pipeline, inputImage.Get());
+  }
+};
+
+template<unsigned int VDimension>
+class PipelineFunctor<itk::Image<itk::RGBPixel<uint8_t>, VDimension>>
+{
+public:
+  int operator()(itk::wasm::Pipeline & pipeline)
+  {
+    constexpr unsigned int Dimension = VDimension;
+    using PixelType = itk::RGBPixel<uint8_t>;
+    using ImageType = itk::Image<PixelType, Dimension>;
+
+    using InputImageType = itk::wasm::InputImage<ImageType>;
+    InputImageType inputImage;
+    pipeline.add_option("InputImage", inputImage, "The input image")->required();
+
+    pipeline.allow_extras(true);
+    ITK_WASM_PARSE(pipeline);
+    pipeline.allow_extras(false);
+
+    using ScalarImageType = itk::Image<uint8_t, Dimension>;
+
+    using LuminanceFilterType = itk::RGBToLuminanceImageFilter<ImageType, ScalarImageType>;
+    auto luminanceFilter = LuminanceFilterType::New();
+    luminanceFilter->SetInput( inputImage.Get() );
+    luminanceFilter->Update();
+
+    return MedianFilter<ScalarImageType>(pipeline, luminanceFilter->GetOutput());
+  }
+};
+
+int main( int argc, char * argv[] )
+{
+  itk::wasm::Pipeline pipeline("Apply a median filter to an image", argc, argv);
+
+  return itk::wasm::SupportInputImageTypes<PipelineFunctor,
+   uint8_t,
+   itk::RGBPixel< uint8_t >,
+   float>
+  ::Dimensions<2U,3U>("InputImage", pipeline);
 }
