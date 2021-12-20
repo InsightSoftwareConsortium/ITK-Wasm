@@ -222,12 +222,15 @@ Click. Perfect success.
       }).then(function ({ image, webWorker }) {
         webWorker.terminate()
         const pipelinePath = 'MedianFilterTest'
-        const args = ['./cthead1.png.iwi', './cthead1.png.median.iwi', '4']
+        const args = ['--memory-io',
+          '0',
+          '0',
+          '--radius', '4']
         const desiredOutputs = [
-          { path: args[1], type: IOTypes.Image }
+          { type: InterfaceTypes.Image }
         ]
         const inputs = [
-          { path: args[0], type: IOTypes.Image, data: image }
+          { type: InterfaceTypes.Image, data: image }
         ]
         return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
       }).then(function ({ stdout, stderr, outputs, webWorker }) {
