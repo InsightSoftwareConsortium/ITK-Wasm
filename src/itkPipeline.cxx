@@ -120,7 +120,7 @@ Pipeline
     bool optionGroup = false;
     while (std::getline(stream, line)) {
       if (description) {
-        std::cout << rang::fgB::yellow << rang::style::bold;
+        std::cout << rang::fgB::magenta << rang::style::bold;
         std::cout << line << std::endl;
         std::cout << rang::fg::reset << rang::style::reset;
         description = false;
@@ -129,7 +129,7 @@ Pipeline
         std::cout << rang::fg::yellow;
         std::cout << line.substr(0, 6);
         std::cout << rang::fg::reset; 
-        std::cout << rang::fg::green << rang::style::bold; 
+        std::cout << rang::fg::magenta;
         size_t optionsLoc = line.find("[OPTIONS]");
         size_t stop = optionsLoc - 6;
         size_t start = optionsLoc + 10;
@@ -139,6 +139,7 @@ Pipeline
           start = stop;
         }
         std::cout << line.substr(6, stop);
+        std::cout << rang::style::bold; 
         std::cout << rang::fg::cyan;
         std::cout << line.substr(start);
         if (optionsLoc != std::string::npos)
