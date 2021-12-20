@@ -34,7 +34,9 @@ Pipeline
 {
   this->footer("Enjoy ITK!");
 
-  this->add_flag("--memory-io", m_UseMemoryIO, "Use itk-wasm memory IO")->group("WebAssembly Pipeline");
+  this->positionals_at_end(false);
+
+  this->add_flag("--memory-io", m_UseMemoryIO, "Use itk-wasm memory IO")->group("");
   // Set m_UseMemoryIO before it is used by other memory parsers
   this->preparse_callback([this](size_t arg)
    {
@@ -128,17 +130,23 @@ Pipeline
         std::cout << line.substr(0, 6);
         std::cout << rang::fg::reset; 
         std::cout << rang::fg::green << rang::style::bold; 
-        const size_t optionsLoc = line.rfind("[OPTIONS]");
-        size_t stop = std::string::npos;  
-        if (optionsLoc != std::string::npos)
+        size_t optionsLoc = line.find("[OPTIONS]");
+        size_t stop = optionsLoc - 6;
+        size_t start = optionsLoc + 10;
+        if (optionsLoc == std::string::npos)
         {
-          stop = optionsLoc + 3;
+          stop = line.find("[");
+          start = stop;
         }
         std::cout << line.substr(6, stop);
+        std::cout << rang::fg::cyan;
+        std::cout << line.substr(start);
         if (optionsLoc != std::string::npos)
         {
-          std::cout << rang::fg::cyan;
-          std::cout << line.substr(optionsLoc + 9);
+          std::cout << rang::fg::green;
+          // Options should be passed after positions so the pipeline can be
+          // specialized based on the type of the positionals
+          std::cout << " [OPTIONS]";
         }
         std::cout << std::endl;
         std::cout << rang::fg::reset << rang::style::reset; 
