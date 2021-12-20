@@ -32,6 +32,8 @@ MedianFilter(itk::wasm::Pipeline & pipeline, const TImage * inputImage)
 {
   using ImageType = TImage;
 
+  pipeline.get_option("InputImage")->required();
+
   using OutputImageType = itk::wasm::OutputImage<ImageType>;
   OutputImageType outputImage;
   pipeline.add_option("OutputImage", outputImage, "The output image")->required();
@@ -97,9 +99,9 @@ public:
 
     using InputImageType = itk::wasm::InputImage<ImageType>;
     InputImageType inputImage;
-    pipeline.add_option("InputImage", inputImage, "The input image")->required();
+    pipeline.add_option("InputImage", inputImage, "The input image");
 
-    ITK_WASM_PARSE(pipeline);
+    ITK_WASM_PRE_PARSE(pipeline);
 
     return MedianFilter<ImageType>(pipeline, inputImage.Get());
   }
@@ -117,11 +119,9 @@ public:
 
     using InputImageType = itk::wasm::InputImage<ImageType>;
     InputImageType inputImage;
-    pipeline.add_option("InputImage", inputImage, "The input image")->required();
+    pipeline.add_option("InputImage", inputImage, "The input image");
 
-    pipeline.allow_extras(true);
-    ITK_WASM_PARSE(pipeline);
-    pipeline.allow_extras(false);
+    ITK_WASM_PRE_PARSE(pipeline);
 
     using ScalarImageType = itk::Image<uint8_t, Dimension>;
 

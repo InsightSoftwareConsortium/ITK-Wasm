@@ -99,9 +99,7 @@ public:
     InterfaceImageType imageType;
     auto tempOption = pipeline.add_option(inputImageOptionName, imageType, "Read image type.");
 
-    pipeline.allow_extras(true);
-    ITK_WASM_PARSE(pipeline);
-    pipeline.allow_extras(false);
+    ITK_WASM_PRE_PARSE(pipeline);
 
     pipeline.remove_option(tempOption);
 

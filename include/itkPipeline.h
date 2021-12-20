@@ -30,6 +30,24 @@
         return (pipeline).exit(e); \
     }
 
+// Parse options while allowing extra flags, not exiting with help flags, and clearning parse state after finished.
+// Use this to parse some positionals or options before all options have been added.
+#define ITK_WASM_PRE_PARSE(pipeline) \
+    try { \
+        (pipeline).set_help_flag(); \
+        (pipeline).set_help_all_flag(); \
+        (pipeline).allow_extras(true); \
+        (pipeline).parse(); \
+    } catch(const CLI::CallForHelp &e) { \
+    } catch(const CLI::CallForAllHelp &e) { \
+    } catch(const CLI::ParseError &e) { \
+        return (pipeline).exit(e); \
+    } \
+    (pipeline).allow_extras(false); \
+    (pipeline).set_help_flag("-h,--help", "Print this help message and exit"); \
+    // (pipeline).set_help_all_flag("-h,--help", "Print this help message and exit"); \
+    (pipeline).clear();
+
 #define ITK_WASM_CATCH_EXCEPTION(pipeline, command) \
   try \
   { \
