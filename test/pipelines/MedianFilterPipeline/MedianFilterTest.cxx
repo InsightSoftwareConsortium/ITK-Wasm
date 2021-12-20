@@ -42,10 +42,10 @@ MedianFilter(itk::wasm::Pipeline & pipeline, const TImage * inputImage)
   pipeline.add_option("-r,--radius", radius, "Kernel radius in pixels");
 
   unsigned int maxTotalSplits = 1;
-  pipeline.add_option("-m,--max-splits", radius, "Max total processing splits");
+  pipeline.add_option("-m,--max-splits", maxTotalSplits, "Max total processing splits");
 
   unsigned int split = 1;
-  pipeline.add_option("-s,--split", radius, "Split to process");
+  pipeline.add_option("-s,--split", split, "Split to process");
 
   ITK_WASM_PARSE(pipeline);
 
