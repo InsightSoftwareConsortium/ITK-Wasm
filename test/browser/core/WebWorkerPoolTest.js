@@ -1,7 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import { IntTypes, PixelTypes, readImageFile, WorkerPool, stackImages, imageSharedBufferOrCopy, runPipelineBrowser, IOTypes, InterfaceTypes } from 'browser/index.js'
+import { IntTypes, PixelTypes, readImageFile, WorkerPool, stackImages, imageSharedBufferOrCopy, runPipelineBrowser, InterfaceTypes } from 'browser/index.js'
 
 export default function () {
   test('WorkerPool runs and reports progress', async (t) => {
@@ -41,7 +41,7 @@ export default function () {
     const taskArgsArray = []
     for (let index = 0; index < maxTotalSplits; index++) {
       const pipelinePath = 'MedianFilterTest'
-      const args = ["--memory-io", "0", "0", "--radius", "4", "-m", '' + maxTotalSplits, "-s", '' + index]
+      const args = ['--memory-io', '0', '0', '--radius', '4', '-m', '' + maxTotalSplits, '-s', '' + index]
       const desiredOutputs = [
         { type: InterfaceTypes.Image }
       ]
