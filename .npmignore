@@ -9,4 +9,3 @@ build.js
 dist/image-io/
 dist/mesh-io/
 dist/polydata-io/
-src/pipeline/mesh-to-polydata/web-build/

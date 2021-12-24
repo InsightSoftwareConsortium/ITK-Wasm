@@ -37,8 +37,6 @@ test/StdoutStderrPipeline/itk-wasm
 test/pipelines/StdoutStderrPipeline/web-build/
 test/pipelines/InputOutputFilesPipeline/web-build/
 test/pipelines/MeshReadWritePipeline/web-build/
-src/pipeline/mesh-to-polydata/web-build/
 test/pipelines/StdoutStderrPipeline/wasi-build/
 test/pipelines/InputOutputFilesPipeline/wasi-build/
 test/pipelines/MeshReadWritePipeline/wasi-build/
-src/pipeline/mesh-to-polydata/wasi-build/

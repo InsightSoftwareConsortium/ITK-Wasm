@@ -240,10 +240,6 @@ if (options.buildEmscriptenPipelines) {
     if (err.code !== 'EEXIST') throw err
   }
   let emscriptenTestPipelines = testPipelines
-  if (options.buildVtk) {
-    emscriptenTestPipelines = emscriptenTestPipelines.concat([
-      path.join('src', 'pipeline', 'mesh-to-polydata'),])
-  }
   asyncMod.map(emscriptenTestPipelines, buildPipeline)
 } // options.buildEmscriptenPipelines
 
