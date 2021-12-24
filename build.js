@@ -21,7 +21,7 @@ program
   .option('-s, --no-copy-build-artifacts', 'Do not copy build artifacts')
   .option('-e, --no-build-emscripten-pipelines', 'Do not build the emscripten test pipelines')
   .option('-w, --no-build-wasi-pipelines', 'Do not build the wasi test pipelines')
-  .option('-v, --no-build-vtk', 'Do not build the VTK-dependent io and test pipelines')
+  .option('-v, --no-build-vtk', 'Do not build the VTK-dependent io')
   .option('-d, --debug', 'Create a debug build of the Emscripten modules')
   .parse(process.argv)
 
