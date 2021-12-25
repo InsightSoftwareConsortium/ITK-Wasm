@@ -6,13 +6,8 @@ import readImageFileSeriesTest from './readImageFileSeriesTest.js'
 
 import readMeshTest from './readMeshTest.js'
 
-import readPolyDataTest from './readPolyDataTest.js'
-
-import readTest from './readTest.js'
-
 import writeImageTest from './writeImageTest.js'
 import writeMeshTest from './writeMeshTest.js'
-import writeTest from './writeTest.js'
 
 export default function () {
   readImageTest()
@@ -23,10 +18,6 @@ export default function () {
 
   readMeshTest()
 
-  readPolyDataTest()
-  readTest()
-
   writeImageTest()
   writeMeshTest()
-  writeTest()
 }

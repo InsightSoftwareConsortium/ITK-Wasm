@@ -11,11 +11,16 @@ if (!process.env.CHROME_BIN) {
   process.env.CHROME_BIN = require('puppeteer').executablePath()
 }
 
+const testFiles = ['./test/browser/tests.js',]
+if (process.env.NO_VTK !== '1') {
+  testFiles.push('./test/browser/testsVTK.js')
+}
+
 const testConfig = path.resolve(__dirname, 'test', 'browser', 'config', 'itkConfigBrowserTest.js')
 
-// https://github.com/ryanclark/karma-webpack/issues/498
+// https://github.com/ryanclark/karma-webpack/issues/498]
 const output = {
-  path: path.join(os.tmpdir(), '_karma_webpack_') + Math.floor(Math.random() * 1000000),
+  path: path.join(os.tmpdir(), '_karma_webpack_') + Math.floor(Math.random() * 1000000)
 }
 
 module.exports = function init (config) {
@@ -30,7 +35,6 @@ module.exports = function init (config) {
     basePath: '',
     frameworks: ['tap', 'webpack'],
     files: [
-      './test/browser/tests.js',
       { pattern: './dist/image-io/**', watched: true, served: true, included: false },
       { pattern: './dist/mesh-io/**', watched: true, served: true, included: false },
       { pattern: './dist/polydata-io/**', watched: true, served: true, included: false },
@@ -38,7 +42,7 @@ module.exports = function init (config) {
       { pattern: './dist/pipeline/**', watched: true, served: true, included: false },
       { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false },
       { pattern: `${output.path}/**/*`, watched: false, included: false, },
-    ],
+    ].concat(testFiles),
 
     preprocessors: {
       './test/browser/**/*.js': ['webpack']
