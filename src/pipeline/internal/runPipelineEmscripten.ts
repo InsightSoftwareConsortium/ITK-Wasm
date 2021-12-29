@@ -10,6 +10,7 @@ import Image from '../../core/Image.js'
 import Mesh from '../../core/Mesh.js'
 import PolyData from '../../core/vtkPolyData.js'
 import FloatTypes from '../../core/FloatTypes.js'
+import IntTypes from '../../core/IntTypes.js'
 
 import PipelineEmscriptenModule from '../PipelineEmscriptenModule.js'
 import PipelineInput from '../PipelineInput.js'
@@ -70,10 +71,25 @@ function setPipelineModuleInputArray(emscriptenModule: PipelineEmscriptenModule,
   return dataPtr
 }
 
-function setPipelineModuleJSON(emscriptenModule: PipelineEmscriptenModule, dataObject: object, inputIndex: number): void {
+function setPipelineModuleInputJSON(emscriptenModule: PipelineEmscriptenModule, dataObject: object, inputIndex: number): void {
   const dataJSON = JSON.stringify(dataObject)
   const jsonPtr = emscriptenModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, inputIndex, dataJSON.length])
   emscriptenModule.writeAsciiToMemory(dataJSON, jsonPtr, false)
+}
+
+function getPipelineModuleOutputArray(emscriptenModule: PipelineEmscriptenModule, outputIndex: number, subIndex: number, componentType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes]): TypedArray | null {
+  const dataPtr = emscriptenModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, outputIndex, subIndex])
+  const dataSize = emscriptenModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, outputIndex, subIndex])
+  const dataUint8 = memoryUint8SharedArray(emscriptenModule, dataPtr, dataSize)
+  const data = bufferToTypedArray(componentType, dataUint8.buffer)
+  return data
+}
+
+function getPipelineModuleOutputJSON(emscriptenModule: PipelineEmscriptenModule, outputIndex: number): object {
+  const jsonPtr = emscriptenModule.ccall('itk_wasm_output_json_address', 'number', ['number', 'number'], [0, outputIndex])
+  const dataJSON = emscriptenModule.AsciiToString(jsonPtr)
+  const dataObject = JSON.parse(dataJSON)
+  return dataObject
 }
 
 function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[] | null, inputs: PipelineInput[] | null): RunPipelineResult {
@@ -83,21 +99,17 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         case InterfaceTypes.TextStream:
         {
           const dataArray = encoder.encode((input.data as TextStream).data)
-          const arrayPtr = pipelineModule.ccall('itk_wasm_input_array_alloc', 'number', ['number', 'number', 'number', 'number'], [0, index, 0, dataArray.buffer.byteLength])
-          pipelineModule.HEAPU8.set(dataArray, arrayPtr)
-          const dataJSON = JSON.stringify({ size: dataArray.buffer.byteLength, data: `data:application/vnd.itk.address,0:${arrayPtr}` })
-          const jsonPtr = pipelineModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, index, dataJSON.length])
-          pipelineModule.writeAsciiToMemory(dataJSON, jsonPtr, true)
+          const arrayPtr = setPipelineModuleInputArray(pipelineModule, dataArray, index, 0)
+          const dataJSON = { size: dataArray.buffer.byteLength, data: `data:application/vnd.itk.address,0:${arrayPtr}` }
+          setPipelineModuleInputJSON(pipelineModule, dataJSON, index)
           break
         }
         case InterfaceTypes.BinaryStream:
         {
           const dataArray = (input.data as BinaryStream).data
-          const arrayPtr = pipelineModule.ccall('itk_wasm_input_array_alloc', 'number', ['number', 'number', 'number', 'number'], [0, index, 0, dataArray.buffer.byteLength])
-          pipelineModule.HEAPU8.set(dataArray, arrayPtr)
-          const dataJSON = JSON.stringify({ size: dataArray.buffer.byteLength, data: `data:application/vnd.itk.address,0:${arrayPtr}` })
-          const jsonPtr = pipelineModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, index, dataJSON.length])
-          pipelineModule.writeAsciiToMemory(dataJSON, jsonPtr, false)
+          const arrayPtr = setPipelineModuleInputArray(pipelineModule, dataArray, index, 0)
+          const dataJSON = { size: dataArray.buffer.byteLength, data: `data:application/vnd.itk.address,0:${arrayPtr}` }
+          setPipelineModuleInputJSON(pipelineModule, dataJSON, index)
           break
         }
         case InterfaceTypes.TextFile:
@@ -124,7 +136,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             size: image.size,
             data: `data:application/vnd.itk.address,0:${dataPtr}`
           }
-          setPipelineModuleJSON(pipelineModule, imageJSON, index)
+          setPipelineModuleInputJSON(pipelineModule, imageJSON, index)
           break
         }
         case InterfaceTypes.Mesh:
@@ -151,7 +163,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             numberOfCellPixels: mesh.numberOfCellPixels,
             cellData: `data:application/vnd.itk.address,0:${cellDataPtr}`,
           }
-          setPipelineModuleJSON(pipelineModule, meshJSON, index)
+          setPipelineModuleInputJSON(pipelineModule, meshJSON, index)
           break
         }
         case IOTypes.Text:
@@ -302,18 +314,36 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case InterfaceTypes.Image:
         {
-          const jsonPtr = pipelineModule.ccall('itk_wasm_output_json_address', 'number', ['number', 'number'], [0, index])
-          const imageJSON = pipelineModule.AsciiToString(jsonPtr)
-          const image = JSON.parse(imageJSON)
-          const dataPtr = pipelineModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, index, 0])
-          const dataSize = pipelineModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, index, 0])
-          const dataUint8 = memoryUint8SharedArray(pipelineModule, dataPtr, dataSize)
-          image.data = bufferToTypedArray(image.imageType.componentType, dataUint8.buffer)
-          const directionPtr = pipelineModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, index, 1])
-          const directionSize = pipelineModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, index, 1])
-          const directionUint8 = memoryUint8SharedArray(pipelineModule, directionPtr, directionSize)
-          image.direction = bufferToTypedArray(FloatTypes.Float64, directionUint8.buffer)
-          outputData = image as Image
+          const image = getPipelineModuleOutputJSON(pipelineModule, index) as Image
+          image.data = getPipelineModuleOutputArray(pipelineModule, index, 0, image.imageType.componentType)
+          image.direction = getPipelineModuleOutputArray(pipelineModule, index, 1, FloatTypes.Float64) as Float64Array
+          outputData = image
+          break
+        }
+        case InterfaceTypes.Mesh:
+        {
+          const mesh = getPipelineModuleOutputJSON(pipelineModule, index) as Mesh
+          if (mesh.numberOfPoints > 0) {
+            mesh.points = getPipelineModuleOutputArray(pipelineModule, index, 0, mesh.meshType.pointComponentType)
+          } else {
+            mesh.points = bufferToTypedArray(mesh.meshType.pointComponentType, new ArrayBuffer(0))
+          }
+          if (mesh.numberOfCells > 0) {
+            mesh.cells = getPipelineModuleOutputArray(pipelineModule, index, 1, mesh.meshType.cellComponentType)
+          } else {
+            mesh.cells = bufferToTypedArray(mesh.meshType.cellComponentType, new ArrayBuffer(0))
+          }
+          if (mesh.numberOfPointPixels > 0) {
+            mesh.pointData = getPipelineModuleOutputArray(pipelineModule, index, 2, mesh.meshType.pointPixelComponentType)
+          } else {
+            mesh.pointData = bufferToTypedArray(mesh.meshType.pointPixelComponentType, new ArrayBuffer(0))
+          }
+          if (mesh.numberOfCellPixels > 0) {
+            mesh.cellData = getPipelineModuleOutputArray(pipelineModule, index, 3, mesh.meshType.cellPixelComponentType)
+          } else {
+            mesh.cellData = bufferToTypedArray(mesh.meshType.cellPixelComponentType, new ArrayBuffer(0))
+          }
+          outputData = mesh
           break
         }
         case IOTypes.Text:
