@@ -191,12 +191,6 @@ WASMMeshToMeshFilter<TMesh>
     throw std::runtime_error("Unexpected cell pixel type");
   }
 
-  const std::string cellComponentType( meshType["cellComponentType"].GetString() );
-  if ( cellComponentType != itk::wasm::MapComponentType<typename MeshType::CellIdentifier>::ComponentString )
-  {
-    throw std::runtime_error("Unexpected cell component type");
-  }
-
   const rapidjson::Value & numberOfPointsJson = document["numberOfPoints"];
   const SizeValueType numberOfPoints = numberOfPointsJson.GetInt();
   using CoordRepType = typename MeshType::CoordRepType;
