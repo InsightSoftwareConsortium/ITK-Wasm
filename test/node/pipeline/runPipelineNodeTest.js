@@ -167,7 +167,7 @@ test('runPipelineNode writes and reads an itk.Mesh via memory io', (t) => {
   return readMeshLocalFile(testMeshInputFilePath)
     .then(function (mesh) {
       const pipelinePath = path.resolve('test', 'pipelines', 'MeshReadWritePipeline', 'web-build', 'MeshReadWriteTest')
-      const args = ['--memory-io', '0', '0']
+      const args = ['0', '0', '--memory-io']
       const desiredOutputs = [
         { type: InterfaceTypes.Mesh }
       ]

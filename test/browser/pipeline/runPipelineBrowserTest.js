@@ -1,7 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import { IntTypes, FloatTypes, PixelTypes, readImageFile, readMeshFile, runPipelineBrowser, IOTypes, InterfaceTypes } from 'browser/index.js'
+import { IntTypes, FloatTypes, PixelTypes, readImageFile, readMeshFile, runPipelineBrowser, InterfaceTypes } from 'browser/index.js'
 
 export default function () {
   test('runPipelineBrowser captures stdout and stderr', (t) => {
@@ -222,10 +222,11 @@ Click. Perfect success.
       }).then(function ({ image, webWorker }) {
         webWorker.terminate()
         const pipelinePath = 'MedianFilterTest'
-        const args = ['--memory-io',
+        const args = [
           '0',
           '0',
-          '--radius', '4']
+          '--radius', '4',
+          '--memory-io']
         const desiredOutputs = [
           { type: InterfaceTypes.Image }
         ]
@@ -239,7 +240,7 @@ Click. Perfect success.
       })
   })
 
-  test('runPipelineBrowser writes and reads an itk.Mesh in the Emscripten filesystem', async (t) => {
+  test('runPipelineBrowser writes and reads an itk.Mesh via memory io', async (t) => {
     const verifyMesh = (mesh) => {
       t.is(mesh.meshType.dimension, 3)
       t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
@@ -258,12 +259,12 @@ Click. Perfect success.
     const { mesh, webWorker } = await readMeshFile(null, jsFile)
     webWorker.terminate()
     const pipelinePath = 'MeshReadWriteTest'
-    const args = ['./cow.vtk.iwm', './cow.vtk.written.iwm']
+    const args = ['0', '0', '--memory-io']
     const desiredOutputs = [
-      { path: args[1], type: IOTypes.Mesh }
+      { type: InterfaceTypes.Mesh }
     ]
     const inputs = [
-      { path: args[0], type: IOTypes.Mesh, data: mesh }
+      { type: InterfaceTypes.Mesh, data: mesh }
     ]
     const { outputs, webWorker: pipelineWorker } = await runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
     pipelineWorker.terminate()

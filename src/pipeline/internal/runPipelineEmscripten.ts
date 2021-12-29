@@ -62,7 +62,7 @@ function memoryUint8SharedArray (emscriptenModule: PipelineEmscriptenModule, byt
   return array
 }
 
-function setPipelineModuleInputArray(emscriptenModule: PipelineEmscriptenModule, dataArray: TypedArray | null, inputIndex: number, subIndex: number): number {
+function setPipelineModuleInputArray (emscriptenModule: PipelineEmscriptenModule, dataArray: TypedArray | null, inputIndex: number, subIndex: number): number {
   let dataPtr = 0
   if (dataArray !== null) {
     dataPtr = emscriptenModule.ccall('itk_wasm_input_array_alloc', 'number', ['number', 'number', 'number', 'number'], [0, inputIndex, subIndex, dataArray.buffer.byteLength])
@@ -71,13 +71,13 @@ function setPipelineModuleInputArray(emscriptenModule: PipelineEmscriptenModule,
   return dataPtr
 }
 
-function setPipelineModuleInputJSON(emscriptenModule: PipelineEmscriptenModule, dataObject: object, inputIndex: number): void {
+function setPipelineModuleInputJSON (emscriptenModule: PipelineEmscriptenModule, dataObject: object, inputIndex: number): void {
   const dataJSON = JSON.stringify(dataObject)
   const jsonPtr = emscriptenModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, inputIndex, dataJSON.length])
   emscriptenModule.writeAsciiToMemory(dataJSON, jsonPtr, false)
 }
 
-function getPipelineModuleOutputArray(emscriptenModule: PipelineEmscriptenModule, outputIndex: number, subIndex: number, componentType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes]): TypedArray | null {
+function getPipelineModuleOutputArray (emscriptenModule: PipelineEmscriptenModule, outputIndex: number, subIndex: number, componentType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes]): TypedArray | null {
   const dataPtr = emscriptenModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, outputIndex, subIndex])
   const dataSize = emscriptenModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, outputIndex, subIndex])
   const dataUint8 = memoryUint8SharedArray(emscriptenModule, dataPtr, dataSize)
@@ -85,7 +85,7 @@ function getPipelineModuleOutputArray(emscriptenModule: PipelineEmscriptenModule
   return data
 }
 
-function getPipelineModuleOutputJSON(emscriptenModule: PipelineEmscriptenModule, outputIndex: number): object {
+function getPipelineModuleOutputJSON (emscriptenModule: PipelineEmscriptenModule, outputIndex: number): object {
   const jsonPtr = emscriptenModule.ccall('itk_wasm_output_json_address', 'number', ['number', 'number'], [0, outputIndex])
   const dataJSON = emscriptenModule.AsciiToString(jsonPtr)
   const dataObject = JSON.parse(dataJSON)
@@ -161,7 +161,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             pointData: `data:application/vnd.itk.address,0:${pointDataPtr}`,
 
             numberOfCellPixels: mesh.numberOfCellPixels,
-            cellData: `data:application/vnd.itk.address,0:${cellDataPtr}`,
+            cellData: `data:application/vnd.itk.address,0:${cellDataPtr}`
           }
           setPipelineModuleInputJSON(pipelineModule, meshJSON, index)
           break
