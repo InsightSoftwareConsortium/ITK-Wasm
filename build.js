@@ -5,6 +5,7 @@ import path from 'path'
 import { spawnSync } from 'child_process'
 import glob from 'glob'
 import asyncMod from 'async'
+import promiseSpawn from '@npmcli/promise-spawn'
 
 import { Command } from 'commander/esm.mjs'
 
@@ -17,7 +18,8 @@ try {
   if (err.code !== 'EEXIST') throw err
 }
 program
-  .option('-i, --no-build-io', 'Do not compile io modules')
+  .option('-b, --no-build-io', 'Do not compile io modules')
+  .option('-i, --no-image-io', 'Do not compile image io modules')
   .option('-s, --no-copy-build-artifacts', 'Do not copy build artifacts')
   .option('-e, --no-build-emscripten-pipelines', 'Do not build the emscripten test pipelines')
   .option('-w, --no-build-wasi-pipelines', 'Do not build the wasi test pipelines')
@@ -202,7 +204,7 @@ const testPipelines = [
 ]
 
 if (options.buildEmscriptenPipelines) {
-  const buildPipeline = (pipelinePath) => {
+  const buildPipeline = async (pipelinePath) => {
     console.log('Building ' + pipelinePath + ' with Emscripten...')
     let debugFlags = []
     let buildImage = 'itkwasm/emscripten:latest'
@@ -218,12 +220,14 @@ if (options.buildEmscriptenPipelines) {
     if (options.debug) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug', "-DCMAKE_EXE_LINKER_FLAGS_DEBUG='-s DISABLE_EXCEPTION_CATCHING=0'"]
     }
-    const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-wasm-cli.js'), '--image', buildImage, '--source-dir', pipelinePath, 'build', '--'].concat(debugFlags), {
+    const buildPipelineCall = await promiseSpawn('node', [path.join('src', 'itk-wasm-cli.js'), '--image', buildImage, '--source-dir', pipelinePath, 'build', '--'].concat(debugFlags), {
       env: process.env,
       stdio: 'inherit'
     })
-    if (buildPipelineCall.status !== 0) {
-      process.exit(buildPipelineCall.status)
+    if (buildPipelineCall.code !== 0) {
+      console.log(buildPipelineCall.stdout)
+      console.error(buildPipelineCall.stderr)
+      process.exit(buildPipelineCall.code)
     }
     let pipelineFiles = glob.sync(path.join(pipelinePath, 'web-build', '*.js'))
     pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'web-build', '*.wasm')))
@@ -240,11 +244,11 @@ if (options.buildEmscriptenPipelines) {
     if (err.code !== 'EEXIST') throw err
   }
   let emscriptenTestPipelines = testPipelines
-  asyncMod.map(emscriptenTestPipelines, buildPipeline)
+  await Promise.all(emscriptenTestPipelines.map(buildPipeline))
 } // options.buildEmscriptenPipelines
 
 if (options.buildWasiPipelines) {
-  const buildPipeline = (pipelinePath) => {
+  const buildPipeline = async (pipelinePath) => {
     console.log('Building ' + pipelinePath + ' with wasi...')
     let debugFlags = []
     let buildImage = 'itkwasm/wasi:latest'
@@ -252,12 +256,14 @@ if (options.buildWasiPipelines) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug']
       buildImage = 'itkwasm/wasi:latest-debug'
     }
-    const buildPipelineCall = spawnSync('node', [path.join('src', 'itk-wasm-cli.js'), '--image', buildImage, '--build-dir', 'wasi-build', '--source-dir', pipelinePath, 'build', '--'].concat(debugFlags), {
+    const buildPipelineCall = await promiseSpawn('node', [path.join('src', 'itk-wasm-cli.js'), '--image', buildImage, '--build-dir', 'wasi-build', '--source-dir', pipelinePath, 'build', '--'].concat(debugFlags), {
       env: process.env,
       stdio: 'inherit'
     })
-    if (buildPipelineCall.status !== 0) {
-      process.exit(buildPipelineCall.status)
+    if (buildPipelineCall.code !== 0) {
+      console.log(buildPipelineCall.stdout)
+      console.error(buildPipelineCall.stderr)
+      process.exit(buildPipelineCall.code)
     }
     const pipelineFiles = glob.sync(path.join(pipelinePath, 'wasi-build', '*.wasm'))
     pipelineFiles.forEach((file) => {
@@ -272,5 +278,5 @@ if (options.buildWasiPipelines) {
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
-  asyncMod.map(testPipelines, buildPipeline)
+  await Promise.all(testPipelines.map(buildPipeline))
 } // options.buildWasiPipelines
