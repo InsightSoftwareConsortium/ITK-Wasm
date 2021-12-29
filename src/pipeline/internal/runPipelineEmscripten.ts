@@ -61,6 +61,21 @@ function memoryUint8SharedArray (emscriptenModule: PipelineEmscriptenModule, byt
   return array
 }
 
+function setPipelineModuleInputArray(emscriptenModule: PipelineEmscriptenModule, dataArray: TypedArray | null, inputIndex: number, subIndex: number): number {
+  let dataPtr = 0
+  if (dataArray !== null) {
+    dataPtr = emscriptenModule.ccall('itk_wasm_input_array_alloc', 'number', ['number', 'number', 'number', 'number'], [0, inputIndex, subIndex, dataArray.buffer.byteLength])
+    emscriptenModule.HEAPU8.set(new Uint8Array(dataArray.buffer), dataPtr)
+  }
+  return dataPtr
+}
+
+function setPipelineModuleJSON(emscriptenModule: PipelineEmscriptenModule, dataObject: object, inputIndex: number): void {
+  const dataJSON = JSON.stringify(dataObject)
+  const jsonPtr = emscriptenModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, inputIndex, dataJSON.length])
+  emscriptenModule.writeAsciiToMemory(dataJSON, jsonPtr, false)
+}
+
 function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[] | null, inputs: PipelineInput[] | null): RunPipelineResult {
   if (!(inputs == null) && inputs.length > 0) {
     inputs.forEach(function (input, index) {
@@ -98,19 +113,9 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         case InterfaceTypes.Image:
         {
           const image = input.data as Image
-          const dataArray = image.data
-          let dataPtr = 0
-          if (dataArray !== null) {
-            dataPtr = pipelineModule.ccall('itk_wasm_input_array_alloc', 'number', ['number', 'number', 'number', 'number'], [0, index, 0, dataArray.buffer.byteLength])
-            pipelineModule.HEAPU8.set(new Uint8Array(dataArray.buffer), dataPtr)
-          }
-          const directionArray = image.direction
-          let directionPtr = 0
-          if (directionArray !== null) {
-            directionPtr = pipelineModule.ccall('itk_wasm_input_array_alloc', 'number', ['number', 'number', 'number', 'number'], [0, index, 1, directionArray.buffer.byteLength])
-            pipelineModule.HEAPU8.set(new Uint8Array(directionArray.buffer), directionPtr)
-          }
-          const imageJSON = JSON.stringify({
+          const dataPtr = setPipelineModuleInputArray(pipelineModule, image.data, index, 0)
+          const directionPtr = setPipelineModuleInputArray(pipelineModule, image.direction, index, 1)
+          const imageJSON = {
             imageType: image.imageType,
             name: image.name,
             origin: image.origin,
@@ -118,9 +123,35 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             direction: `data:application/vnd.itk.address,0:${directionPtr}`,
             size: image.size,
             data: `data:application/vnd.itk.address,0:${dataPtr}`
-          })
-          const jsonPtr = pipelineModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, index, imageJSON.length])
-          pipelineModule.writeAsciiToMemory(imageJSON, jsonPtr, false)
+          }
+          setPipelineModuleJSON(pipelineModule, imageJSON, index)
+          break
+        }
+        case InterfaceTypes.Mesh:
+        {
+          const mesh = input.data as Mesh
+          const pointsPtr = setPipelineModuleInputArray(pipelineModule, mesh.points, index, 0)
+          const cellsPtr = setPipelineModuleInputArray(pipelineModule, mesh.cells, index, 1)
+          const pointDataPtr = setPipelineModuleInputArray(pipelineModule, mesh.pointData, index, 2)
+          const cellDataPtr = setPipelineModuleInputArray(pipelineModule, mesh.pointData, index, 3)
+          const meshJSON = {
+            meshType: mesh.meshType,
+            name: mesh.name,
+
+            numberOfPoints: mesh.numberOfPoints,
+            points: `data:application/vnd.itk.address,0:${pointsPtr}`,
+
+            numberOfCells: mesh.numberOfCells,
+            cells: `data:application/vnd.itk.address,0:${cellsPtr}`,
+            cellBufferSize: mesh.cellBufferSize,
+
+            numberOfPointPixels: mesh.numberOfPointPixels,
+            pointData: `data:application/vnd.itk.address,0:${pointDataPtr}`,
+
+            numberOfCellPixels: mesh.numberOfCellPixels,
+            cellData: `data:application/vnd.itk.address,0:${cellDataPtr}`,
+          }
+          setPipelineModuleJSON(pipelineModule, meshJSON, index)
           break
         }
         case IOTypes.Text:

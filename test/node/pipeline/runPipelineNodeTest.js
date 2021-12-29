@@ -152,3 +152,30 @@ test('runPipelineNode writes and reads an itk.Mesh in the Emscripten filesystem'
       verifyMesh(outputs[0].data)
     })
 })
+
+test('runPipelineNode writes and reads an itk.Mesh via memory io', (t) => {
+  const verifyMesh = (mesh) => {
+    t.is(mesh.meshType.dimension, 3)
+    t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
+    t.is(mesh.meshType.cellComponentType, IntTypes.UInt64)
+    t.is(mesh.meshType.pointPixelType, PixelTypes.Scalar)
+    t.is(mesh.meshType.cellPixelType, PixelTypes.Scalar)
+    t.is(mesh.numberOfPoints, 2903)
+    t.is(mesh.numberOfCells, 3263)
+  }
+
+  return readMeshLocalFile(testMeshInputFilePath)
+    .then(function (mesh) {
+      const pipelinePath = path.resolve('test', 'pipelines', 'MeshReadWritePipeline', 'web-build', 'MeshReadWriteTest')
+      const args = ['--memory-io', '0', '0']
+      const desiredOutputs = [
+        { type: InterfaceTypes.Mesh }
+      ]
+      const inputs = [
+        { type: InterfaceTypes.Mesh, data: mesh }
+      ]
+      return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
+    }).then(function ({ stdout, stderr, outputs }) {
+      verifyMesh(outputs[0].data)
+    })
+})
