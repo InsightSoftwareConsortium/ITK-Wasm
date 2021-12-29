@@ -11,11 +11,9 @@ itk_module(WebAssemblyInterface
   COMPILE_DEPENDS
     MeshToPolyData
     ITKImageFunction
+    ITKIOMeshBase
     ${WebAssemblyInterface_ImageIOModules}
     ${WebAssemblyInterface_MeshIOModules}
-  PRIVATE_DEPENDS
-    # Todo  change to ITKIOMeshBase
-    ITKIOMesh
   TEST_DEPENDS
     ITKTestKernel
     ITKMesh
