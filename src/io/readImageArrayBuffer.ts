@@ -1,4 +1,4 @@
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import Image from '../core/Image.js'
 
 import config from '../itkConfig.js'
@@ -7,7 +7,7 @@ import ReadImageResult from './ReadImageResult.js'
 
 async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadImageResult> {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise('image-io', worker)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise('image-io', worker)
   worker = usedWorker
   const image: Image = await webworkerPromise.postMessage(
     {

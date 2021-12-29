@@ -1,6 +1,6 @@
 import { readAsArrayBuffer } from 'promise-file-reader'
 
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import vtkPolyData from '../core/vtkPolyData.js'
 
 import mimeToIO from './internal/MimeToPolyDataIO.js'
@@ -14,7 +14,7 @@ import ReadPolyDataResult from './ReadPolyDataResult.js'
 
 async function readPolyDataBlob (webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadPolyDataResult> {
   let worker = webWorker
-  return await createWebworkerPromise('pipeline', worker)
+  return await createWebWorkerPromise('pipeline', worker)
     .then(async ({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       return await readAsArrayBuffer(blob)

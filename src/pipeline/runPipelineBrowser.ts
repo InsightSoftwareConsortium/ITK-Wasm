@@ -1,4 +1,4 @@
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import loadEmscriptenModuleMainThread from '../core/internal/loadEmscriptenModuleMainThread.js'
 
 import config from '../itkConfig.js'
@@ -43,7 +43,7 @@ async function runPipelineBrowser (webWorker: Worker | null | boolean, pipelineP
     return result
   }
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise('pipeline', worker as Worker | null)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise('pipeline', worker as Worker | null)
   worker = usedWorker
   const transferables: ArrayBuffer[] = []
   if (!(inputs == null) && inputs.length > 0) {

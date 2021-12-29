@@ -1,4 +1,4 @@
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import { readAsArrayBuffer } from 'promise-file-reader'
 
 import Image from '../core/Image.js'
@@ -9,7 +9,7 @@ import ReadImageResult from './ReadImageResult.js'
 
 async function readImageFile (webWorker: Worker | null, file: File): Promise<ReadImageResult> {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
     'image-io',
     worker
   )

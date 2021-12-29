@@ -1,6 +1,6 @@
 import { readAsArrayBuffer } from 'promise-file-reader'
 
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import WorkerPool from '../core/WorkerPool.js'
 import stackImages from '../core/stackImages.js'
 
@@ -21,7 +21,7 @@ const workerFunction = async (
   singleSortedSeries: boolean = false
 ): Promise<ReadImageResult> => {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
     'image-io',
     worker
   )

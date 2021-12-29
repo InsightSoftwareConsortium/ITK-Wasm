@@ -1,4 +1,4 @@
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 
 import config from '../itkConfig.js'
 
@@ -9,7 +9,7 @@ import WriteMeshOptions from './WriteMeshOptions.js'
 
 async function writeMeshArrayBuffer (webWorker: Worker | null, options: WriteMeshOptions, mesh: Mesh, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
   let worker = webWorker
-  return await createWebworkerPromise('mesh-io', worker)
+  return await createWebWorkerPromise('mesh-io', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       const transferables = []

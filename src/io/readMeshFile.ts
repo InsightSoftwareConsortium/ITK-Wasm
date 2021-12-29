@@ -1,4 +1,4 @@
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import { readAsArrayBuffer } from 'promise-file-reader'
 
 import Mesh from '../core/Mesh.js'
@@ -9,7 +9,7 @@ import ReadMeshResult from './ReadMeshResult.js'
 
 async function readMeshFile (webWorker: Worker | null, file: File): Promise<ReadMeshResult> {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise(
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
     'mesh-io',
     worker
   )

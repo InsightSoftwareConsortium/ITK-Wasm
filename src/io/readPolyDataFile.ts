@@ -1,4 +1,4 @@
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import { readAsArrayBuffer } from 'promise-file-reader'
 
 import mimeToIO from './internal/MimeToPolyDataIO.js'
@@ -14,7 +14,7 @@ import ReadPolyDataResult from './ReadPolyDataResult.js'
 
 async function readPolyDataFile (webWorker: Worker | null, file: File): Promise<ReadPolyDataResult> {
   let worker = webWorker
-  return await createWebworkerPromise('pipeline', worker)
+  return await createWebWorkerPromise('pipeline', worker)
     .then(async ({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       return await readAsArrayBuffer(file)

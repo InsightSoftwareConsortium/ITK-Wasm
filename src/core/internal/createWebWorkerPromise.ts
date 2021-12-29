@@ -3,13 +3,13 @@ import WebworkerPromise from 'webworker-promise'
 
 import config from '../../itkConfig.js'
 
-interface CreateWebworkerPromiseResult {
+interface createWebWorkerPromiseResult {
   webworkerPromise: typeof WebworkerPromise
   worker: Worker
 }
 
 // Internal function to create a web worker promise
-async function createWebworkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline', existingWorker: Worker | null): Promise<CreateWebworkerPromiseResult> {
+async function createWebWorkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline', existingWorker: Worker | null): Promise<createWebWorkerPromiseResult> {
   if (existingWorker != null) {
     const webworkerPromise = new WebworkerPromise(existingWorker)
     return await Promise.resolve({ webworkerPromise, worker: existingWorker })
@@ -78,4 +78,4 @@ async function createWebworkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline'
   return { webworkerPromise, worker }
 }
 
-export default createWebworkerPromise
+export default createWebWorkerPromise

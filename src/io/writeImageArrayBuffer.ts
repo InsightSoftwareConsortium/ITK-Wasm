@@ -1,4 +1,4 @@
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 
 import Image from '../core/Image.js'
 
@@ -9,7 +9,7 @@ import WriteArrayBufferResult from './WriteArrayBufferResult.js'
 
 async function writeImageArrayBuffer (webWorker: Worker | null, useCompression: boolean, image: Image, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
   let worker = webWorker
-  return await createWebworkerPromise('image-io', worker)
+  return await createWebWorkerPromise('image-io', worker)
     .then(({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       const transferables = []

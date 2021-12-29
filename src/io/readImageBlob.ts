@@ -1,6 +1,6 @@
 import { readAsArrayBuffer } from 'promise-file-reader'
 
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import Image from '../core/Image.js'
 
 import config from '../itkConfig.js'
@@ -9,7 +9,7 @@ import ReadImageResult from './ReadImageResult.js'
 
 async function readImageBlob (webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<ReadImageResult> {
   let worker = webWorker
-  return await createWebworkerPromise('image-io', worker)
+  return await createWebWorkerPromise('image-io', worker)
     .then(async ({ webworkerPromise, worker: usedWorker }) => {
       worker = usedWorker
       return await readAsArrayBuffer(blob)

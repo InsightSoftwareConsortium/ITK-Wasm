@@ -1,4 +1,4 @@
-import createWebworkerPromise from '../core/internal/createWebworkerPromise.js'
+import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import vtkPolyData from '../core/vtkPolyData.js'
 
 import mimeToIO from './internal/MimeToPolyDataIO.js'
@@ -12,7 +12,7 @@ import config from '../itkConfig.js'
 
 async function readPolyDataArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadPolyDataResult> {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebworkerPromise('pipeline', worker)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise('pipeline', worker)
   worker = usedWorker
   const extension = getFileExtension(fileName)
   let pipelinePath = null
