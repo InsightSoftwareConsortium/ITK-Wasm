@@ -15,42 +15,30 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkMeshFileReader.h"
-#include "itkMeshFileWriter.h"
 #include "itkMesh.h"
+#include "itkInputMesh.h"
+#include "itkOutputMesh.h"
+#include "itkPipeline.h"
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 3 )
-    {
-    std::cerr << "Usage: " << argv[0] << " <inputMesh> <outputMesh> " << std::endl;
-    return EXIT_FAILURE;
-    }
-  const char * inputMeshFile = argv[1];
-  const char * outputMeshFile = argv[2];
+  itk::wasm::Pipeline pipeline("A test for reading and writing meshes", argc, argv);
 
   using PixelType = float;
   constexpr unsigned int Dimension = 3;
   using MeshType = itk::Mesh< PixelType, Dimension >;
 
-  using ReaderType = itk::MeshFileReader< MeshType >;
-  auto reader = ReaderType::New();
-  reader->SetFileName( inputMeshFile );
+  using InputMeshType = itk::wasm::InputMesh<MeshType>;
+  InputMeshType inputMesh;
+  pipeline.add_option("InputMesh", inputMesh, "The input mesh")->required();
 
-  using WriterType = itk::MeshFileWriter< MeshType >;
-  auto writer = WriterType::New();
-  writer->SetInput( reader->GetOutput() );
-  writer->SetFileName( outputMeshFile );
+  using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
+  OutputMeshType outputMesh;
+  pipeline.add_option("OutputMesh", outputMesh, "The output mesh")->required();
 
-  try
-    {
-    writer->Update();
-    }
-  catch( itk::ExceptionObject & error )
-    {
-    std::cerr << "Error: " << error << std::endl;
-    return EXIT_FAILURE;
-    }
+  ITK_WASM_PARSE(pipeline);
+
+  outputMesh.Set(inputMesh.Get());
 
   return EXIT_SUCCESS;
 }

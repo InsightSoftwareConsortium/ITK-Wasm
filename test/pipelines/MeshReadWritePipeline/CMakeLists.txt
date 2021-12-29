@@ -3,9 +3,13 @@ project(MeshReadWriteTest)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(io_components)
+if(NOT EMSCRIPTEN)
+  set(io_components ITKMeshIO)
+endif()
 find_package(ITK REQUIRED
-  COMPONENTS ITKMeshIO
-    ITKIOMeshBase
+  COMPONENTS
+    ${io_components}
     WebAssemblyInterface
   )
 include(${ITK_USE_FILE})
