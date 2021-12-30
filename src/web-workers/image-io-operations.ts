@@ -8,19 +8,16 @@ import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleWebWorker
 
 import readImageEmscriptenFSFile from '../io/internal/readImageEmscriptenFSFile.js'
 import writeImageEmscriptenFSFile from '../io/internal/writeImageEmscriptenFSFile.js'
-import readImageEmscriptenFSDICOMFileSeries from '../io/internal/readImageEmscriptenFSDICOMFileSeries.js'
 import readDICOMTagsEmscriptenFSFile from '../io/internal/readDICOMTagsEmscriptenFSFile.js'
-import DICOMImageSeriesReaderEmscriptenModule from '../io/internal/DICOMImageSeriesReaderEmscriptenModule.js'
+import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 import DICOMTagsReaderEmscriptenModule from '../io/internal/DICOMTagsReaderEmscriptenModule.js'
 import ImageIOBaseEmscriptenModule from '../io/internal/ImageIOBaseEmscriptenModule.js'
+import PipelineInput from '../pipeline/PipelineInput.js'
+import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
 
 import Image from '../core/Image.js'
-
-interface FileDescription {
-  name: string
-  type: string
-  data: ArrayBuffer
-}
+import BinaryFile from '../core/BinaryFile.js'
+import InterfaceTypes from '../core/InterfaceTypes.js'
 
 interface Input {
   operation: 'readImage' | 'writeImage' | 'readDICOMImageSeries' | 'readDICOMTags'
@@ -42,7 +39,7 @@ export interface WriteImageInput extends Input {
 
 export interface ReadDICOMImageSeriesInput extends Input {
   singleSortedSeries: boolean
-  fileDescriptions: FileDescription[]
+  fileDescriptions: BinaryFile[]
 }
 
 export interface ReadDICOMTagsInput extends Input {
@@ -54,7 +51,7 @@ export interface ReadDICOMTagsInput extends Input {
 
 // To cache loaded io modules
 const ioToModule: Map<string,ImageIOBaseEmscriptenModule> = new Map()
-let seriesReaderModule: DICOMImageSeriesReaderEmscriptenModule | null = null
+let seriesReaderModule: PipelineEmscriptenModule | null = null
 let tagReaderModule: DICOMTagsReaderEmscriptenModule | null = null
 const haveSharedArrayBuffer = typeof self.SharedArrayBuffer === 'function' // eslint-disable-line
 
@@ -174,21 +171,33 @@ export async function writeImage(input: WriteImageInput) {
 }
 
 export async function readDICOMImageSeries(input: ReadDICOMImageSeriesInput) {
-  const seriesReader = 'itkDICOMImageSeriesReaderJSBinding'
+  const seriesReader = 'ReadImageDICOMFileSeries'
   if (!seriesReaderModule) {
-    seriesReaderModule = await loadEmscriptenModule(seriesReader, input.config.imageIOUrl) as DICOMImageSeriesReaderEmscriptenModule
+    seriesReaderModule = await loadEmscriptenModule(seriesReader, input.config.imageIOUrl) as PipelineEmscriptenModule
   }
 
   const mountpoint = '/work'
   seriesReaderModule.fs_mkdirs(mountpoint)
   const filePaths = []
   for (let ii = 0; ii < input.fileDescriptions.length; ii++) {
-    const filePath = `${mountpoint}/${input.fileDescriptions[ii].name}`
-    seriesReaderModule.fs_writeFile(filePath, new Uint8Array(input.fileDescriptions[ii].data))
+    const filePath = `${mountpoint}/${input.fileDescriptions[ii].path}`
+    seriesReaderModule.fs_writeFile(filePath, input.fileDescriptions[ii].data)
     filePaths.push(filePath)
   }
-  const image = readImageEmscriptenFSDICOMFileSeries(seriesReaderModule,
-    filePaths, input.singleSortedSeries)
+  const args = ['--memory-io', '--output-image', '0', '--input-images']
+  filePaths.forEach((fn) => {
+    args.push(fn)
+  })
+  if (input.singleSortedSeries) {
+    args.push('--single-sorted-series')
+  }
+  const desiredOutputs = [
+    { type: InterfaceTypes.Image }
+  ]
+  const inputs = [
+  ] as PipelineInput[]
+  const { outputs } = runPipelineEmscripten(seriesReaderModule, args, desiredOutputs, inputs)
+  const image = outputs[0].data as Image
   for (let ii = 0; ii < filePaths.length; ii++) {
     seriesReaderModule.fs_unlink(filePaths[ii])
   }

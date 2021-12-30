@@ -17,7 +17,7 @@ import PipelineInput from '../pipeline/PipelineInput.js'
  * sorted series.
  */
 async function readImageLocalDICOMFileSeries (fileNames: string[], singleSortedSeries: boolean = false): Promise<Image> {
-  if (!fileNames || fileNames.length < 1) {
+  if (fileNames.length < 1) {
     throw new Error('No fileNames provided')
   }
   const imageIOsPath = findLocalImageIOPath()

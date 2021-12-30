@@ -364,6 +364,9 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case IOTypes.Image:
         {
+          if (typeof output.path === 'undefined') {
+            throw new Error('output.path not defined')
+          }
           const imageJSON = pipelineModule.fs_readFile(`${output.path}/index.json`, { encoding: 'utf8' }) as string
           const image = JSON.parse(imageJSON)
           const dataUint8 = readFileSharedArray(pipelineModule, `${output.path}/data/data.raw`)
@@ -375,6 +378,9 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case IOTypes.Mesh:
         {
+          if (typeof output.path === 'undefined') {
+            throw new Error('output.path not defined')
+          }
           const meshJSON = pipelineModule.fs_readFile(`${output.path}/index.json`, { encoding: 'utf8' }) as string
           const mesh = JSON.parse(meshJSON)
           if (mesh.numberOfPoints > 0) {
@@ -406,6 +412,9 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case IOTypes.vtkPolyData:
         {
+          if (typeof output.path === 'undefined') {
+            throw new Error('output.path not defined')
+          }
           const polyWASMDataObject = pipelineModule.fs_readFile(`${output.path}/index.json`, { encoding: 'utf8' }) as string
           const polyData = JSON.parse(polyWASMDataObject)
           const cellTypes = ['points', 'verts', 'lines', 'polys', 'strips']
@@ -427,6 +436,9 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
               const data = polyData[dataName]
               data.arrays.forEach((array: { data: { ref?: { basepath: string, id: string }, buffer: ArrayBuffer, values: TypedArray, dataType: string }}) => {
                 if (array.data.ref !== null && array.data.ref !== undefined) {
+                  if (typeof output.path === 'undefined') {
+                    throw new Error('output.path not defined')
+                  }
                   const dataUint8 = readFileSharedArray(pipelineModule, `${output.path}/${array.data.ref.basepath}/${array.data.ref.id}`)
                   array.data.buffer = dataUint8.buffer
                   array.data.values = typedArrayForBuffer(array.data.dataType, dataUint8.buffer)
@@ -442,7 +454,6 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           throw Error('Unsupported output InterfaceType')
       }
       const populatedOutput = {
-        path: output.path,
         type: output.type,
         data: outputData
       }

@@ -3,21 +3,16 @@ import { readAsArrayBuffer } from 'promise-file-reader'
 import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import WorkerPool from '../core/WorkerPool.js'
 import stackImages from '../core/stackImages.js'
+import BinaryFile from '../core/BinaryFile.js'
 
 import config from '../itkConfig.js'
 
 import ReadImageResult from './ReadImageResult.js'
 import ReadImageFileSeriesResult from './ReadImageFileSeriesResult.js'
 
-interface FileDescription {
-  name: string
-  type: string
-  data: ArrayBuffer
-}
-
 const workerFunction = async (
   webWorker: Worker | null,
-  fileDescriptions: FileDescription[],
+  fileDescriptions: BinaryFile[],
   singleSortedSeries: boolean = false
 ): Promise<ReadImageResult> => {
   let worker = webWorker
@@ -28,7 +23,7 @@ const workerFunction = async (
   worker = usedWorker
 
   const transferables = fileDescriptions.map(description => {
-    return description.data
+    return description.data.buffer
   })
   const message = {
     operation: 'readDICOMImageSeries',
@@ -53,9 +48,9 @@ const readImageDICOMFileSeries = async (
       arrayBuffer
     ) {
       const fileDescription = {
-        name: file.name,
+        path: file.name,
         type: file.type,
-        data: arrayBuffer
+        data: new Uint8Array(arrayBuffer)
       }
       return fileDescription
     })

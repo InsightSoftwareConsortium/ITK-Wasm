@@ -138,7 +138,6 @@ add_subdirectory(io/internal/pipelines/image/ReadImageDICOMFileSeries)
 find_package(ITK REQUIRED COMPONENTS ITKIOGDCM)
 include(${ITK_USE_FILE})
 foreach(dicom_io_module
-    itkDICOMImageSeriesReader
     itkDICOMTagReader
 )
   set(target "${dicom_io_module}JSBinding")
