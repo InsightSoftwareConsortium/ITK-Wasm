@@ -19,7 +19,6 @@ try {
 }
 program
   .option('-b, --no-build-io', 'Do not compile io modules')
-  .option('-i, --no-image-io', 'Do not compile image io modules')
   .option('-s, --no-copy-build-artifacts', 'Do not copy build artifacts')
   .option('-e, --no-build-emscripten-pipelines', 'Do not build the emscripten test pipelines')
   .option('-w, --no-build-wasi-pipelines', 'Do not build the wasi test pipelines')
@@ -98,7 +97,7 @@ if (options.buildIo) {
       if (options.debug) {
         buildType = '-DCMAKE_BUILD_TYPE:STRING=Debug'
       }
-      const cmakeCall = spawnSync('bash', [dockcross, 'bash', '-c', `cmake ${buildType} -Bbuild -H. -GNinja -DITK_DIR=/ITK-build -DVTK_DIR=/VTK-build -DITK_WASM_NO_INTERFACE_LINK=1 -DBUILD_ITK_WASM_IO_MODULES=ON`], {
+      const cmakeCall = spawnSync('bash', [dockcross, 'bash', '-c', `cmake ${buildType} -Bbuild -H. -GNinja -DITK_DIR=/ITK-build -DVTK_DIR=/VTK-build -DITK_WASM_NO_INTERFACE_LINK=1 -DBUILD_TESTING:BOOL=OFF -DBUILD_ITK_WASM_IO_MODULES=ON`], {
         env: process.env,
         stdio: 'inherit'
       })

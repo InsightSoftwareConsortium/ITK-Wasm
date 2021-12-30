@@ -133,6 +133,7 @@ set_target_properties(${Iconv} PROPERTIES
 
 add_dependencies(${Iconv} ${Iconv_LIBRARY})
 
+add_subdirectory(io/internal/pipelines/image/ReadImageDICOMFileSeries)
 # DICOM-based readers
 find_package(ITK REQUIRED COMPONENTS ITKIOGDCM)
 include(${ITK_USE_FILE})
