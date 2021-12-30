@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(WebAssemblyInterface_LIBRARIES WebAssemblyInterface)
 
-option(BUILD_ITK_JS_IO_MODULES "Build the itk-wasm ImageIO's and MeshIO's" OFF)
-if(BUILD_ITK_JS_IO_MODULES)
+option(BUILD_ITK_WASM_IO_MODULES "Build the itk-wasm ImageIO's and MeshIO's" OFF)
+if(BUILD_ITK_WASM_IO_MODULES)
   # This list should be ordered from approximately most commonly to least
   # commonly used modules.
   set(WebAssemblyInterface_ImageIOModules

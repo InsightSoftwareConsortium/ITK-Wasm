@@ -29,7 +29,7 @@ set(WebAssemblyInterface_SRCS
   )
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 
-if(BUILD_ITK_JS_IO_MODULES)
+if(BUILD_ITK_WASM_IO_MODULES)
 
 # -s WASM_ASYNC_COMPILATION=0
 # -flto
@@ -294,4 +294,4 @@ if(VTK_FOUND)
   endforeach()
 endif()
 
-endif() # BUILD_ITK_JS_IO_MODULES
+endif() # BUILD_ITK_WASM_IO_MODULES
