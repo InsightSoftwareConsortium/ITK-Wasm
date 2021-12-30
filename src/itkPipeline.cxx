@@ -131,8 +131,8 @@ Pipeline
         std::cout << rang::fg::reset; 
         std::cout << rang::fg::magenta;
         size_t optionsLoc = line.find("[OPTIONS]");
-        size_t stop = optionsLoc - 6;
-        size_t start = optionsLoc + 10;
+        size_t stop = optionsLoc - 7;
+        size_t start = optionsLoc + 9;
         if (optionsLoc == std::string::npos)
         {
           stop = line.find("[");

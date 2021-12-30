@@ -184,7 +184,6 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
   OutputImageType outputImage;
   pipeline.add_option("-o,--output-image", outputImage, "Output image volume")->required();
 
-  pipeline.allow_extras(false);
   ITK_WASM_PARSE(pipeline);
 
   typedef itk::QuickDICOMImageSeriesReader< ImageType > ReaderType;
@@ -226,8 +225,16 @@ int main (int argc, char * argv[])
   std::vector<std::string> inputFileNames;
   pipeline.add_option("-i,--input-images", inputFileNames, "File names in the series")->required()->check(CLI::ExistingFile)->expected(1,-1);
 
-  pipeline.allow_extras(true);
+  bool singleSortedSeries = false;
+  auto sortedOption = pipeline.add_flag("-s,--single-sorted-series", singleSortedSeries, "There is a single sorted series in the files");
+
+  std::string outputImage;
+  auto outputImageOption = pipeline.add_option("-o,--output-image", outputImage, "Output image volume")->required();
+
   ITK_WASM_PARSE(pipeline);
+
+  pipeline.remove_option(sortedOption);
+  pipeline.remove_option(outputImageOption);
 
   auto gdcmImageIO = itk::GDCMImageIO::New();
 
