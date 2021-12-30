@@ -135,7 +135,6 @@
   },
   "standard": {
     "ignore": [
-      "test/node/io/image/DICOMSeriesTest.js",
       "test/node/io/image/GETest.js",
       "test/node/io/image/JPEGTest.js"
     ]

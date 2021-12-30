@@ -348,11 +348,17 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case IOTypes.Text:
         {
+          if (typeof output.path === 'undefined') {
+            throw new Error('output.path not defined')
+          }
           outputData = pipelineModule.fs_readFile(output.path, { encoding: 'utf8' }) as string
           break
         }
         case IOTypes.Binary:
         {
+          if (typeof output.path === 'undefined') {
+            throw new Error('output.path not defined')
+          }
           outputData = readFileSharedArray(pipelineModule, output.path)
           break
         }

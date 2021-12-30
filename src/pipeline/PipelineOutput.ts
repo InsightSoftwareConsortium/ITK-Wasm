@@ -9,7 +9,7 @@ import Mesh from '../core/Mesh.js'
 import PolyData from '../core/vtkPolyData.js'
 
 interface PipelineOutput {
-  path: string
+  path?: string
   type: typeof IOTypes[keyof typeof IOTypes] | typeof InterfaceTypes[keyof typeof InterfaceTypes]
   data?: string | Uint8Array | TextStream | BinaryStream | TextFile | BinaryFile | Image | Mesh | PolyData
 }

@@ -18,9 +18,10 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <memory>
 
 #include "itkCommonEnums.h"
-#include "itkGDCMSeriesFileNames.h"
+#include "gdcmSerieHelper.h"
 #include "itkImageIOBase.h"
 #include "itkImageSeriesReader.h"
 #include "itkGDCMImageIO.h"
@@ -29,6 +30,15 @@
 
 #include "itkPipeline.h"
 #include "itkOutputImage.h"
+
+class CustomSerieHelper: public gdcm::SerieHelper
+{
+public:
+  void AddFileName(std::string const &fileName)
+  {
+    SerieHelper::AddFileName(fileName);
+  }
+};
 
 namespace itk
 {
@@ -192,16 +202,58 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
 
   if (!singleSortedSeries)
     {
-    typedef itk::GDCMSeriesFileNames SeriesFileNames;
-    SeriesFileNames::Pointer seriesFileNames = SeriesFileNames::New();
-    seriesFileNames->SetDirectory( itksys::SystemTools::GetParentDirectory(inputFileNames[0]) );
-    seriesFileNames->SetUseSeriesDetails(true);
-    seriesFileNames->SetGlobalWarningDisplay(false);
+    std::unique_ptr<CustomSerieHelper> serieHelper(new CustomSerieHelper());
+    for (const std::string & fileName: inputFileNames)
+    {
+      serieHelper->AddFileName(fileName);
+    }
+    serieHelper->SetUseSeriesDetails(true);
     using SeriesIdContainer = std::vector<std::string>;
-    const SeriesIdContainer & seriesUID = seriesFileNames->GetSeriesUIDs();
+    SeriesIdContainer seriesUIDs;
+    // Accessing the first serie found (assume there is at least one)
+    gdcm::FileList * flist = serieHelper->GetFirstSingleSerieUIDFileSet();
+    while (flist)
+    {
+      if (!flist->empty()) // make sure we have at leat one serie
+      {
+        gdcm::File * file = (*flist)[0]; // for example take the first one
+
+        // Create its unique series ID
+        const std::string id( serieHelper->CreateUniqueSeriesIdentifier(file));
+
+        seriesUIDs.push_back(id);
+      }
+      flist = serieHelper->GetNextSingleSerieUIDFileSet();
+    }
 
     using FileNamesContainer = std::vector<std::string>;
-    FileNamesContainer fileNames = seriesFileNames->GetFileNames(seriesUID.begin()->c_str());
+    FileNamesContainer fileNames; 
+    flist = serieHelper->GetFirstSingleSerieUIDFileSet();
+    const std::string serie = seriesUIDs[0];
+    bool found = false;
+    while (flist && !found)
+    {
+      if (!flist->empty()) // make sure we have at leat one serie
+      {
+        gdcm::File * file = (*flist)[0]; // for example take the first one
+        const std::string id( serieHelper->CreateUniqueSeriesIdentifier(file));
+        if (id == serie)
+        {
+          found = true; // we found a match
+          break;
+        }
+      }
+      flist = serieHelper->GetNextSingleSerieUIDFileSet();
+    }
+    serieHelper->OrderFileList(flist);
+
+    gdcm::FileList::iterator it;
+    for (it = flist->begin(); it != flist->end(); ++it)
+    {
+      gdcm::FileWithName * header = *it;
+      fileNames.push_back(header->filename);
+    }
+
     reader->SetFileNames(fileNames);
     }
   else

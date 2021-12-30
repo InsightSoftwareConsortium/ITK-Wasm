@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(ITK REQUIRED
   COMPONENTS ITKCommon
+    ITKGDCM
     ITKIOGDCM
     ITKIOImageBase
     WebAssemblyInterface
