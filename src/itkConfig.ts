@@ -1,4 +1,4 @@
-const version = '1.0.0-a.9'
+const version = '1.0.0-a.10'
 
 const itkConfig = {
   webWorkersUrl: `https://cdn.jsdelivr.net/npm/itk-wasm@${version}/dist/web-workers`,
