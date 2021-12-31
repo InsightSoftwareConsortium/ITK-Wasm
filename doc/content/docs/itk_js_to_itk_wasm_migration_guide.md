@@ -2,8 +2,7 @@
 
 *Note: this migration guide is a work in progress. itk-wasm is currently in
 the alpha development stage with additional changes anticipated
-into December. Also, nearly all tests in the test suite pass, but DICOM series
-reading, GE and JPEG format currently have issues.*
+into December. Also, while nearly all tests in the test suite pass, GE and JPEG format currently have issues. Last updated December 20th, 2021.*
 
 **itk-wasm** is a major upgrade with a focus on univeral, performant computing in
 WebAssembly. The itk.js to itk-wasm transition also brings improvements
@@ -51,7 +50,7 @@ to:
 import { IntTypes } from 'itk'
 ```
 
-## Typescript support
+## TypeScript support
 
 Typescript support was added, but, of course, you can still just use JavaScript if you wish. In itk-wasm, adoption of modern JavaScript constructs was extended, e.g. classes.
 
@@ -124,7 +123,7 @@ Addresses an important issue in image orientation support.
 
 ## Image file format
 
-The JSON file format is replaced by a WASM file format with a different layout. A directory, ending in `.iwi` or a `.iwi.zip` file is supported.
+The JSON file format is replaced by a WASM file format with a different layout. A directory ending in `.iwi` or a `.iwi.zip` file is supported for images and a directory ending in `.iwm` and `.iwm.zip` is supported for meshes.
 
 ## Node Sync functions
 
