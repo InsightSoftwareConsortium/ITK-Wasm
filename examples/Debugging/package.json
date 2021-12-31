@@ -1,0 +1,25 @@
+{
+  "name": "itk-wasm-debugging-example",
+  "version": "1.0.0",
+  "description": "An example to demonstrate WebAssembly debugging",
+  "scripts": {
+    "native-build": "cmake -Bbuild -S. -DCMAKE_BUILD_TYPE=Debug && cmake --build build/ --config Debug",
+    "native-debug-linux": "gdb --args ./build/DebugMe",
+    "emscripten-build-release": "itk-wasm --build-dir web-build-release build",
+    "run-node-release": "node ./runEmscriptenNode.js ./web-build-release/DebugMe",
+    "emscripten-build-debug": "itk-wasm --build-dir web-build-debug build -- -DCMAKE_BUILD_TYPE=Debug",
+    "run-node-debug": "node ./runEmscriptenNode.js ./web-build-debug/DebugMe",
+    "wasi-build-release": "itk-wasm -i itkwasm/wasi:latest --build-dir wasi-build-release build",
+    "node-inspect": "node --inspect-brk ./runEmscriptenNode.js ./web-build-debug/DebugMe",
+    "wasi-build-debug": "itk-wasm -i itkwasm/wasi --build-dir wasi-build-debug build -- -DCMAKE_BUILD_TYPE=Debug",
+    "run-wasi-debug": "itk-wasm --build-dir wasi-build-debug run DebugMe.wasi.wasm",
+    "start": "http-server -o"
+  },
+  "type": "module",
+  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "http-server": "^14.1.0",
+    "itk-wasm": "^1.0.0-a.11"
+  }
+}

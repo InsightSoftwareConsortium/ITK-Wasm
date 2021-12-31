@@ -23,7 +23,6 @@ sidebar:
     development: Development
     requirement: Requirements
     troubleshooting: Troubleshooting
-    debugging: Debugging
     contributing: Contributing
     testing: Testing
     tests: Tests
@@ -37,6 +36,7 @@ sidebar:
   examples:
     getting_started: Getting Started
     building: Building
+    debugging: Debugging
     nodejs: Node.js
     umd: UMD
     webpack: Webpack
