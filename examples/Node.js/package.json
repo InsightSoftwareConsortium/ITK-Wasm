@@ -1,6 +1,6 @@
 {
   "name": "itk-convert",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Convert image or mesh files from one format to another.",
   "bin": {
     "itk-convert": "./src/itk-convert.js"
@@ -33,9 +33,9 @@
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-wasm#readme",
   "dependencies": {
     "commander": "^8.2.0",
-    "itk-image-io": "^1.0.0-a.7",
-    "itk-mesh-io": "^1.0.0-a.7",
-    "itk-polydata-io": "^1.0.0-a.7",
-    "itk-wasm": "^1.0.0-a.7"
+    "itk-image-io": "^1.0.0-a.10",
+    "itk-mesh-io": "^1.0.0-a.10",
+    "itk-polydata-io": "^1.0.0-a.10",
+    "itk-wasm": "^1.0.0-a.10"
   }
 }
