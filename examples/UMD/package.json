@@ -30,6 +30,7 @@
     "karma-tap-pretty-reporter": "^4.2.0",
     "karma-webpack": "^5.0.0",
     "local-web-server": "^5.1.1",
+    "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "readable-stream": "^3.6.0",
     "stream-browserify": "^3.0.0",
