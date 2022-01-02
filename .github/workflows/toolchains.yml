@@ -1,6 +1,6 @@
 name: Toolchains
 
-on: [push]
+on: [push,pull_request]
 
 jobs:
   build-itk-wasm-base:

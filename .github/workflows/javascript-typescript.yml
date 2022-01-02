@@ -1,6 +1,6 @@
 name: JavaScript,TypeScript
 
-on: [push]
+on: [push,pull_request]
 
 jobs:
   build-test-deploy:
