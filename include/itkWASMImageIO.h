@@ -19,9 +19,9 @@
 #define itkWASMImageIO_h
 #include "WebAssemblyInterfaceExport.h"
 
-
 #include "itkStreamingImageIOBase.h"
 #include <fstream>
+#include "rapidjson/document.h"
 
 namespace itk
 {
@@ -67,12 +67,18 @@ public:
   /** Reads the data from disk into the memory buffer provided. */
   void Read(void *buffer) override;
 
+  /** Set the JSON representation of the image information. */
+  void SetJSON(rapidjson::Document & json);
+
   /** Determine the file type. Returns true if this ImageIO can write the
    * file specified. */
   bool CanWriteFile(const char *) override;
 
   /** Set the spacing and dimension information for the set filename. */
   void WriteImageInformation() override;
+
+  /** Get the JSON representation of the image information. */
+  rapidjson::Document GetJSON();
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. */

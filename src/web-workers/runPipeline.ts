@@ -1,11 +1,10 @@
 import registerWebworker from 'webworker-promise/lib/register.js'
 
-import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleWebWorker.js'
+import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
 import IOTypes from '../core/IOTypes.js'
 import getTransferable from '../core/getTransferable.js'
 
-import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import PipelineOutput from '../pipeline/PipelineOutput.js'
 
@@ -19,44 +18,7 @@ import Mesh from '../core/Mesh.js'
 import PolyData from '../core/vtkPolyData.js'
 import TypedArray from '../core/TypedArray.js'
 
-interface ITKConfig {
-  pipelinesUrl: string
-  polydataIOUrl: string
-}
-
-interface Input {
-  operation: 'runPipeline' | 'runPolyDataIOPipeline'
-  config: ITKConfig
-}
-
-export interface RunPipelineInput extends Input {
-  pipelinePath: string | object
-  args: string[]
-  outputs: PipelineOutput[]
-  inputs: PipelineInput[]
-}
-
-// To cache loaded pipeline modules
-const pipelineToModule: Map<string,PipelineEmscriptenModule> = new Map()
-
-export async function loadPipelineModule (pipelinePath: string | object, baseUrl: string) {
-  let moduleRelativePathOrURL: string | URL = pipelinePath as string
-  let pipeline = pipelinePath as string
-  let pipelineModule = null
-  if (typeof pipelinePath !== 'string') {
-    moduleRelativePathOrURL = new URL((pipelinePath as URL).href)
-    pipeline = moduleRelativePathOrURL.href
-  }
-  if (pipelineToModule.has(pipeline)) {
-    pipelineModule = pipelineToModule.get(pipeline) as PipelineEmscriptenModule
-  } else {
-    pipelineToModule.set(pipeline, await loadEmscriptenModule(moduleRelativePathOrURL, baseUrl) as PipelineEmscriptenModule)
-    pipelineModule = pipelineToModule.get(pipeline) as PipelineEmscriptenModule
-  }
-  return pipelineModule
-}
-
-export async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
+async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
   const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
 
   const transferables: ArrayBuffer[] = []
@@ -79,6 +41,33 @@ export async function runPipeline(pipelineModule: PipelineEmscriptenModule, args
         transferable = getTransferable(image.direction)
         if (transferable) {
           transferables.push(transferable)
+        }
+      } else if (output.type === InterfaceTypes.Mesh) {
+        // Image data
+        const mesh = output.data as Mesh
+        if (mesh.points) {
+          const transferable = getTransferable(mesh.points)
+          if (transferable) {
+            transferables.push(transferable)
+          }
+        }
+        if (mesh.pointData) {
+          const transferable = getTransferable(mesh.pointData)
+          if (transferable) {
+            transferables.push(transferable)
+          }
+        }
+        if (mesh.cells) {
+          const transferable = getTransferable(mesh.cells)
+          if (transferable) {
+            transferables.push(transferable)
+          }
+        }
+        if (mesh.cellData) {
+          const transferable = getTransferable(mesh.cellData)
+          if (transferable) {
+            transferables.push(transferable)
+          }
         }
       } else if (output.type === IOTypes.Binary) {
         // Binary data
@@ -168,3 +157,5 @@ export async function runPipeline(pipelineModule: PipelineEmscriptenModule, args
 
   return new registerWebworker.TransferableResponse(result, transferables)
 }
+
+export default runPipeline

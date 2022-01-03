@@ -103,6 +103,50 @@ WASMImageIO
 
 void
 WASMImageIO
+::SetJSON(rapidjson::Document & document)
+{
+  const rapidjson::Value & imageType = document["imageType"];
+  const unsigned int dimension = imageType["dimension"].GetInt();
+  this->SetNumberOfDimensions( dimension );
+
+  const std::string componentType( imageType["componentType"].GetString() );
+  const ImageIOBase::IOComponentEnum ioComponentType = IOComponentEnumFromWASMComponentType( componentType );
+  this->SetComponentType( ioComponentType );
+
+  const std::string pixelType( imageType["pixelType"].GetString() );
+  const IOPixelEnum ioPixelType = IOPixelEnumFromWASMPixelType( pixelType );
+  this->SetPixelType( ioPixelType );
+
+  this->SetNumberOfComponents( imageType["components"].GetInt() );
+
+  const rapidjson::Value & origin = document["origin"];
+  int count = 0;
+  for( rapidjson::Value::ConstValueIterator itr = origin.Begin(); itr != origin.End(); ++itr )
+    {
+    this->SetOrigin( count, itr->GetDouble() );
+    ++count;
+    }
+
+  const rapidjson::Value & spacing = document["spacing"];
+  count = 0;
+  for( rapidjson::Value::ConstValueIterator itr = spacing.Begin(); itr != spacing.End(); ++itr )
+    {
+    this->SetSpacing( count, itr->GetDouble() );
+    ++count;
+    }
+
+  const rapidjson::Value & size = document["size"];
+  count = 0;
+  for( rapidjson::Value::ConstValueIterator itr = size.Begin(); itr != size.End(); ++itr )
+    {
+    this->SetDimensions( count, itr->GetInt() );
+    ++count;
+    }
+}
+
+
+void
+WASMImageIO
 ::ReadImageInformation()
 {
   this->SetByteOrderToLittleEndian();
@@ -161,32 +205,10 @@ WASMImageIO
       }
   }
 
-  const rapidjson::Value & imageType = document["imageType"];
-  const int dimension = imageType["dimension"].GetInt();
-  this->SetNumberOfDimensions( dimension );
-  const std::string componentType( imageType["componentType"].GetString() );
-  const ImageIOBase::IOComponentEnum ioComponentType = IOComponentEnumFromWASMComponentType( componentType );
-  this->SetComponentType( ioComponentType );
-  const std::string pixelType( imageType["pixelType"].GetString() );
-  const IOPixelEnum ioPixelType = IOPixelEnumFromWASMPixelType( pixelType );
-  this->SetPixelType( ioPixelType );
-  this->SetNumberOfComponents( imageType["components"].GetInt() );
+  this->SetJSON(document);
 
-  const rapidjson::Value & origin = document["origin"];
+  const unsigned int dimension = this->GetNumberOfDimensions();
   int count = 0;
-  for( rapidjson::Value::ConstValueIterator itr = origin.Begin(); itr != origin.End(); ++itr )
-    {
-    this->SetOrigin( count, itr->GetDouble() );
-    ++count;
-    }
-
-  const rapidjson::Value & spacing = document["spacing"];
-  count = 0;
-  for( rapidjson::Value::ConstValueIterator itr = spacing.Begin(); itr != spacing.End(); ++itr )
-    {
-    this->SetSpacing( count, itr->GetDouble() );
-    ++count;
-    }
 
   const auto directionPath = dataPath +  "/direction.raw";
   if (useZip)
@@ -227,14 +249,6 @@ WASMImageIO
       ++count;
       }
   }
-
-  const rapidjson::Value & size = document["size"];
-  count = 0;
-  for( rapidjson::Value::ConstValueIterator itr = size.Begin(); itr != size.End(); ++itr )
-    {
-    this->SetDimensions( count, itr->GetInt() );
-    ++count;
-    }
 
   if (useZip)
   {
@@ -325,38 +339,10 @@ WASMImageIO
 }
 
 
-void
+rapidjson::Document
 WASMImageIO
-::WriteImageInformation()
+::GetJSON()
 {
-  const std::string path = this->GetFileName();
-  const auto indexPath = path + "/index.json";
-  const auto dataPath = path + "/data";
-  std::string::size_type zipPos = path.rfind(".zip");
-  bool useZip = false;
-  void * zip_writer = NULL;
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
-  {
-    useZip = true;
-    mz_zip_writer_create(&zip_writer);
-    if (mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 0) != MZ_OK)
-    {
-      itkExceptionMacro("Could not open zip file");
-    }
-  }
-  else
-  {
-    if ( !itksys::SystemTools::FileExists(path, false) )
-      {
-        itksys::SystemTools::MakeDirectory(path);
-      }
-    if ( !itksys::SystemTools::FileExists(dataPath, false) )
-      {
-        itksys::SystemTools::MakeDirectory(dataPath);
-      }
-  }
-
   rapidjson::Document document;
   document.SetObject();
   rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
@@ -394,6 +380,60 @@ WASMImageIO
     spacing.PushBack(rapidjson::Value().SetDouble(this->GetSpacing( ii )), allocator);
     }
   document.AddMember( "spacing", spacing.Move(), allocator );
+
+  rapidjson::Value directionValue;
+  directionValue.SetString( "data:application/vnd.itk.path,data/direction.raw", allocator );
+  document.AddMember( "direction", directionValue.Move(), allocator );
+
+  rapidjson::Value size(rapidjson::kArrayType);
+  for( unsigned int ii = 0; ii < dimension; ++ii )
+    {
+    size.PushBack(rapidjson::Value().SetInt( this->GetDimensions( ii ) ), allocator);
+    }
+  document.AddMember( "size", size.Move(), allocator );
+
+  std::string dataFileString( "data:application/vnd.itk.path,data/data.raw" );
+  rapidjson::Value dataFile;
+  dataFile.SetString( dataFileString.c_str(), allocator );
+  document.AddMember( "data", dataFile, allocator );
+
+  return document;
+}
+
+void
+WASMImageIO
+::WriteImageInformation()
+{
+  const std::string path = this->GetFileName();
+  const auto indexPath = path + "/index.json";
+  const auto dataPath = path + "/data";
+  std::string::size_type zipPos = path.rfind(".zip");
+  bool useZip = false;
+  void * zip_writer = NULL;
+  if ( ( zipPos != std::string::npos )
+       && ( zipPos == path.length() - 4 ) )
+  {
+    useZip = true;
+    mz_zip_writer_create(&zip_writer);
+    if (mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 0) != MZ_OK)
+    {
+      itkExceptionMacro("Could not open zip file");
+    }
+  }
+  else
+  {
+    if ( !itksys::SystemTools::FileExists(path, false) )
+      {
+        itksys::SystemTools::MakeDirectory(path);
+      }
+    if ( !itksys::SystemTools::FileExists(dataPath, false) )
+      {
+        itksys::SystemTools::MakeDirectory(dataPath);
+      }
+  }
+
+  rapidjson::Document document = this->GetJSON();
+  const unsigned int dimension = this->GetNumberOfDimensions();
 
   if (useZip)
   {
@@ -438,21 +478,6 @@ WASMImageIO
         }
       }
   }
-  rapidjson::Value directionValue;
-  directionValue.SetString( "data:application/vnd.itk.path,data/direction.raw", allocator );
-  document.AddMember( "direction", directionValue.Move(), allocator );
-
-  rapidjson::Value size(rapidjson::kArrayType);
-  for( unsigned int ii = 0; ii < dimension; ++ii )
-    {
-    size.PushBack(rapidjson::Value().SetInt( this->GetDimensions( ii ) ), allocator);
-    }
-  document.AddMember( "size", size.Move(), allocator );
-
-  std::string dataFileString( "data:application/vnd.itk.path,data/data.raw" );
-  rapidjson::Value dataFile;
-  dataFile.SetString( dataFileString.c_str(), allocator );
-  document.AddMember( "data", dataFile, allocator );
 
   if (useZip)
   {

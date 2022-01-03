@@ -254,8 +254,9 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
 
   pipelineModule.resetModuleStdout()
   pipelineModule.resetModuleStderr()
+  let returnValue = 0
   try {
-    pipelineModule.callMain(args)
+    returnValue = pipelineModule.callMain(args)
   } catch (exception) {
     // Note: Module must be built with CMAKE_BUILD_TYPE set to Debug.
     // e.g.: itk-wasm build my/project -- -DCMAKE_BUILD_TYPE:STRING=Debug
@@ -275,7 +276,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
   const stderr = pipelineModule.getModuleStderr()
 
   const populatedOutputs: PipelineOutput[] = []
-  if (!(outputs == null) && outputs.length > 0) {
+  if (!(outputs == null) && outputs.length > 0 && returnValue === 0) {
     outputs.forEach(function (output, index) {
       let outputData: any = null
       switch (output.type) {
@@ -461,7 +462,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
     })
   }
 
-  return { stdout, stderr, outputs: populatedOutputs }
+  return { returnValue, stdout, stderr, outputs: populatedOutputs }
 }
 
 export default runPipelineEmscripten

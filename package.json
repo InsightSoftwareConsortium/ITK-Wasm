@@ -127,8 +127,7 @@
   "ts-standard": {
     "ignore": [
       "src/core/internal/loadEmscriptenModuleWebWorker.ts",
-      "src/web-workers/*.worker.ts",
-      "src/web-workers/*operations.ts",
+      "src/web-workers/*.ts",
       "src/core/ITKWASMEmscriptenModule.ts",
       "src/pipeline/PipelineEmscriptenModule.ts"
     ]

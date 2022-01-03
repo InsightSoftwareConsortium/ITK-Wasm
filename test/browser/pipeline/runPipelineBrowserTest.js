@@ -10,8 +10,9 @@ export default function () {
     const inputs = null
     const stdoutStderrPath = 'StdoutStderrTest'
     return runPipelineBrowser(null, stdoutStderrPath, args, outputs, inputs)
-      .then(function ({ stdout, stderr, outputs, webWorker }) {
+      .then(function ({ returnValue, stdout, stderr, webWorker }) {
         webWorker.terminate()
+        t.is(returnValue, 0)
         t.is(stdout, `I’m writing my code,
 But I do not realize,
 Hours have gone by.
@@ -32,8 +33,9 @@ Click. Perfect success.
     return runPipelineBrowser(null, stdoutStderrPath, args, outputs, inputs)
       .then(function ({ stdout, stderr, outputs, webWorker }) {
         return runPipelineBrowser(webWorker, stdoutStderrPath, args, outputs, inputs)
-          .then(function ({ stdout, stderr, outputs, webWorker }) {
+          .then(function ({ returnValue, stdout, stderr, webWorker }) {
             webWorker.terminate()
+            t.is(returnValue, 0)
             t.is(stdout, `I’m writing my code,
 But I do not realize,
 Hours have gone by.

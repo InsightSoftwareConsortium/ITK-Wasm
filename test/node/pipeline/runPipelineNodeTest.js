@@ -12,7 +12,8 @@ test('runPipelineNode captures stdout and stderr', (t) => {
   const inputs = null
   const stdoutStderrPath = path.resolve('test', 'pipelines', 'StdoutStderrPipeline', 'web-build', 'StdoutStderrTest')
   return runPipelineNode(stdoutStderrPath, args, outputs, inputs)
-    .then(function ({ stdout, stderr, outputs }) {
+    .then(function ({ returnValue, stdout, stderr }) {
+      t.is(returnValue, 0)
       t.is(stdout, `I’m writing my code,
 But I do not realize,
 Hours have gone by.
@@ -43,7 +44,8 @@ test('runPipelineNode uses input and output files in the Emscripten filesystem',
     { type: InterfaceTypes.BinaryFile, data: { path: './input.bin', data: new Uint8Array([222, 173, 190, 239]) } }
   ]
   return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
-    .then(function ({ stdout, stderr, outputs }) {
+    .then(function ({ returnValue, stdout, stderr, outputs }) {
+      t.is(returnValue, 0)
       t.is(outputs[0].type, InterfaceTypes.TextFile)
       t.is(outputs[0].data.path, './output.txt')
       t.is(outputs[0].data.data, 'The answer is 42.')
