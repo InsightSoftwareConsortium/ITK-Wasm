@@ -2,7 +2,7 @@ import registerWebworker from 'webworker-promise/lib/register.js'
 
 import { ReadDICOMTagsInput, readDICOMTags } from "./image-io-operations.js"
 
-registerWebworker(async function (input: ReadDICOMImageSeriesInput | ReadDICOMTagsInput) {
+registerWebworker(async function (input: ReadDICOMTagsInput) {
   if (input.operation === 'readDICOMTags') {
     return readDICOMTags(input as ReadDICOMTagsInput)
   } else {
