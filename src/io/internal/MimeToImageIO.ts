@@ -1,11 +1,11 @@
 const mimeToIO = new Map([
-  ['image/jpeg', 'itkJPEGImageIOJSBinding'],
-  ['image/png', 'itkPNGImageIOJSBinding'],
-  ['image/tiff', 'itkTIFFImageIOJSBinding'],
-  ['image/x-ms-bmp', 'itkBMPImageIOJSBinding'],
-  ['image/x-bmp', 'itkBMPImageIOJSBinding'],
-  ['image/bmp', 'itkBMPImageIOJSBinding'],
-  ['application/dicom', 'itkGDCMImageIOJSBinding']
+  ['image/jpeg', 'itkJPEGImageIO'],
+  ['image/png', 'itkPNGImageIO'],
+  ['image/tiff', 'itkTIFFImageIO'],
+  ['image/x-ms-bmp', 'itkBMPImageIO'],
+  ['image/x-bmp', 'itkBMPImageIO'],
+  ['image/bmp', 'itkBMPImageIO'],
+  ['application/dicom', 'itkGDCMImageIO']
 ])
 
 export default mimeToIO

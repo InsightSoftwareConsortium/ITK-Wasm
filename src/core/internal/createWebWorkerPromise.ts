@@ -34,9 +34,9 @@ async function createWebWorkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline'
   // throw Error('Unsupported web worker type')
   // }
   const webWorkersUrl = config.webWorkersUrl
-  const min = 'min-'
+  // const min = 'min-'
   // debug
-  // const min = ''
+  const min = ''
 
   if (webWorkersUrl.startsWith('http')) {
     switch (name) {

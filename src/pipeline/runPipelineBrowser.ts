@@ -127,6 +127,7 @@ async function runPipelineBrowser (webWorker: Worker | null | boolean, pipelineP
     })
   }
   interface RunPipelineWorkerResult {
+    returnValue: number
     stdout: string
     stderr: string
     outputs: PipelineOutput[]
@@ -142,7 +143,7 @@ async function runPipelineBrowser (webWorker: Worker | null | boolean, pipelineP
     },
     transferables
   )
-  return { stdout: result.stdout, stderr: result.stderr, outputs: result.outputs, webWorker: worker }
+  return { returnValue: result.returnValue, stdout: result.stdout, stderr: result.stderr, outputs: result.outputs, webWorker: worker }
 }
 
 export default runPipelineBrowser

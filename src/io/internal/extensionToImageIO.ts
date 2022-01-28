@@ -1,70 +1,70 @@
 const extensionToIO = new Map([
-  ['bmp', 'itkBMPImageIOJSBinding'],
-  ['BMP', 'itkBMPImageIOJSBinding'],
+  ['bmp', 'itkBMPImageIO'],
+  ['BMP', 'itkBMPImageIO'],
 
-  ['dcm', 'itkGDCMImageIOJSBinding'],
-  ['DCM', 'itkGDCMImageIOJSBinding'],
+  ['dcm', 'itkGDCMImageIO'],
+  ['DCM', 'itkGDCMImageIO'],
 
-  ['gipl', 'itkGiplImageIOJSBinding'],
-  ['gipl.gz', 'itkGiplImageIOJSBinding'],
+  ['gipl', 'itkGiplImageIO'],
+  ['gipl.gz', 'itkGiplImageIO'],
 
-  ['hdf5', 'itkHDF5ImageIOJSBinding'],
+  ['hdf5', 'itkHDF5ImageIO'],
 
-  ['jpg', 'itkJPEGImageIOJSBinding'],
-  ['JPG', 'itkJPEGImageIOJSBinding'],
-  ['jpeg', 'itkJPEGImageIOJSBinding'],
-  ['JPEG', 'itkJPEGImageIOJSBinding'],
+  ['jpg', 'itkJPEGImageIO'],
+  ['JPG', 'itkJPEGImageIO'],
+  ['jpeg', 'itkJPEGImageIO'],
+  ['JPEG', 'itkJPEGImageIO'],
 
-  ['iwi', 'itkWASMImageIOJSBinding'],
-  ['iwi.zip', 'itkWASMImageIOJSBinding'],
+  ['iwi', 'itkWASMImageIO'],
+  ['iwi.zip', 'itkWASMImageIO'],
 
-  ['lsm', 'itkLSMImageIOJSBinding'],
+  ['lsm', 'itkLSMImageIO'],
 
-  ['mnc', 'itkMINCImageIOJSBinding'],
-  ['MNC', 'itkMINCImageIOJSBinding'],
-  ['mnc.gz', 'itkMINCImageIOJSBinding'],
-  ['MNC.GZ', 'itkMINCImageIOJSBinding'],
-  ['mnc2', 'itkMINCImageIOJSBinding'],
-  ['MNC2', 'itkMINCImageIOJSBinding'],
+  ['mnc', 'itkMINCImageIO'],
+  ['MNC', 'itkMINCImageIO'],
+  ['mnc.gz', 'itkMINCImageIO'],
+  ['MNC.GZ', 'itkMINCImageIO'],
+  ['mnc2', 'itkMINCImageIO'],
+  ['MNC2', 'itkMINCImageIO'],
 
-  ['mgh', 'itkMGHImageIOJSBinding'],
-  ['mgz', 'itkMGHImageIOJSBinding'],
-  ['mgh.gz', 'itkMGHImageIOJSBinding'],
+  ['mgh', 'itkMGHImageIO'],
+  ['mgz', 'itkMGHImageIO'],
+  ['mgh.gz', 'itkMGHImageIO'],
 
-  ['mha', 'itkMetaImageIOJSBinding'],
-  ['mhd', 'itkMetaImageIOJSBinding'],
+  ['mha', 'itkMetaImageIO'],
+  ['mhd', 'itkMetaImageIO'],
 
-  ['mrc', 'itkMRCImageIOJSBinding'],
+  ['mrc', 'itkMRCImageIO'],
 
-  ['nia', 'itkNiftiImageIOJSBinding'],
-  ['nii', 'itkNiftiImageIOJSBinding'],
-  ['nii.gz', 'itkNiftiImageIOJSBinding'],
-  ['hdr', 'itkNiftiImageIOJSBinding'],
+  ['nia', 'itkNiftiImageIO'],
+  ['nii', 'itkNiftiImageIO'],
+  ['nii.gz', 'itkNiftiImageIO'],
+  ['hdr', 'itkNiftiImageIO'],
 
-  ['nrrd', 'itkNrrdImageIOJSBinding'],
-  ['NRRD', 'itkNrrdImageIOJSBinding'],
-  ['nhdr', 'itkNrrdImageIOJSBinding'],
-  ['NHDR', 'itkNrrdImageIOJSBinding'],
+  ['nrrd', 'itkNrrdImageIO'],
+  ['NRRD', 'itkNrrdImageIO'],
+  ['nhdr', 'itkNrrdImageIO'],
+  ['NHDR', 'itkNrrdImageIO'],
 
-  ['png', 'itkPNGImageIOJSBinding'],
-  ['PNG', 'itkPNGImageIOJSBinding'],
+  ['png', 'itkPNGImageIO'],
+  ['PNG', 'itkPNGImageIO'],
 
-  ['pic', 'itkBioRadImageIOJSBinding'],
-  ['PIC', 'itkBioRadImageIOJSBinding'],
+  ['pic', 'itkBioRadImageIO'],
+  ['PIC', 'itkBioRadImageIO'],
 
-  ['tif', 'itkTIFFImageIOJSBinding'],
-  ['TIF', 'itkTIFFImageIOJSBinding'],
-  ['tiff', 'itkTIFFImageIOJSBinding'],
-  ['TIFF', 'itkTIFFImageIOJSBinding'],
+  ['tif', 'itkTIFFImageIO'],
+  ['TIF', 'itkTIFFImageIO'],
+  ['tiff', 'itkTIFFImageIO'],
+  ['TIFF', 'itkTIFFImageIO'],
 
-  ['vtk', 'itkVTKImageIOJSBinding'],
-  ['VTK', 'itkVTKImageIOJSBinding'],
+  ['vtk', 'itkVTKImageIO'],
+  ['VTK', 'itkVTKImageIO'],
 
-  ['isq', 'itkScancoImageIOJSBinding'],
-  ['ISQ', 'itkScancoImageIOJSBinding'],
+  ['isq', 'itkScancoImageIO'],
+  ['ISQ', 'itkScancoImageIO'],
 
-  ['fdf', 'itkFDFImageIOJSBinding'],
-  ['FDF', 'itkFDFImageIOJSBinding']
+  ['fdf', 'itkFDFImageIO'],
+  ['FDF', 'itkFDFImageIO']
 ])
 
 export default extensionToIO

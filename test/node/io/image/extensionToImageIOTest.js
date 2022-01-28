@@ -2,182 +2,182 @@ import test from 'ava'
 
 import ExtensionToIO from '../../../../dist/io/internal/extensionToImageIO.js'
 
-test('bmp maps to itkBMPImageIOJSBinding', t => {
+test('bmp maps to itkBMPImageIO', t => {
   const io = ExtensionToIO.get('bmp')
-  t.is(io, 'itkBMPImageIOJSBinding')
+  t.is(io, 'itkBMPImageIO')
 })
 
-test('jpeg maps to itkJPEGImageIOJSBinding', t => {
+test('jpeg maps to itkJPEGImageIO', t => {
   const io = ExtensionToIO.get('jpeg')
-  t.is(io, 'itkJPEGImageIOJSBinding')
+  t.is(io, 'itkJPEGImageIO')
 })
 
-test('jpg maps to itkJPEGImageIOJSBinding', t => {
+test('jpg maps to itkJPEGImageIO', t => {
   const io = ExtensionToIO.get('jpg')
-  t.is(io, 'itkJPEGImageIOJSBinding')
+  t.is(io, 'itkJPEGImageIO')
 })
 
-test('png maps to itkPNGImageIOJSBinding', t => {
+test('png maps to itkPNGImageIO', t => {
   const io = ExtensionToIO.get('png')
-  t.is(io, 'itkPNGImageIOJSBinding')
+  t.is(io, 'itkPNGImageIO')
 })
 
-test('pic maps to itkBioRadImageIOJSBinding', t => {
+test('pic maps to itkBioRadImageIO', t => {
   const io = ExtensionToIO.get('pic')
-  t.is(io, 'itkBioRadImageIOJSBinding')
+  t.is(io, 'itkBioRadImageIO')
 })
 
-test('lsm maps to itkLSMImageIOJSBinding', t => {
+test('lsm maps to itkLSMImageIO', t => {
   const io = ExtensionToIO.get('lsm')
-  t.is(io, 'itkLSMImageIOJSBinding')
+  t.is(io, 'itkLSMImageIO')
 })
 
-test('mnc maps to itkMINCImageIOJSBinding', t => {
+test('mnc maps to itkMINCImageIO', t => {
   const io = ExtensionToIO.get('mnc')
-  t.is(io, 'itkMINCImageIOJSBinding')
+  t.is(io, 'itkMINCImageIO')
 })
 
-test('MNC maps to itkMINCImageIOJSBinding', t => {
+test('MNC maps to itkMINCImageIO', t => {
   const io = ExtensionToIO.get('MNC')
-  t.is(io, 'itkMINCImageIOJSBinding')
+  t.is(io, 'itkMINCImageIO')
 })
 
-test('mnc.gz maps to itkMINCImageIOJSBinding', t => {
+test('mnc.gz maps to itkMINCImageIO', t => {
   const io = ExtensionToIO.get('mnc.gz')
-  t.is(io, 'itkMINCImageIOJSBinding')
+  t.is(io, 'itkMINCImageIO')
 })
 
-test('MNC.GZ maps to itkMINCImageIOJSBinding', t => {
+test('MNC.GZ maps to itkMINCImageIO', t => {
   const io = ExtensionToIO.get('MNC.GZ')
-  t.is(io, 'itkMINCImageIOJSBinding')
+  t.is(io, 'itkMINCImageIO')
 })
 
-test('mnc2 maps to itkMINCImageIOJSBinding', t => {
+test('mnc2 maps to itkMINCImageIO', t => {
   const io = ExtensionToIO.get('mnc2')
-  t.is(io, 'itkMINCImageIOJSBinding')
+  t.is(io, 'itkMINCImageIO')
 })
 
-test('MNC2 maps to itkMINCImageIOJSBinding', t => {
+test('MNC2 maps to itkMINCImageIO', t => {
   const io = ExtensionToIO.get('MNC2')
-  t.is(io, 'itkMINCImageIOJSBinding')
+  t.is(io, 'itkMINCImageIO')
 })
 
-test('mgh maps to itkMGHImageIOJSBinding', t => {
+test('mgh maps to itkMGHImageIO', t => {
   const io = ExtensionToIO.get('mgh')
-  t.is(io, 'itkMGHImageIOJSBinding')
+  t.is(io, 'itkMGHImageIO')
 })
 
-test('mgz maps to itkMGHImageIOJSBinding', t => {
+test('mgz maps to itkMGHImageIO', t => {
   const io = ExtensionToIO.get('mgz')
-  t.is(io, 'itkMGHImageIOJSBinding')
+  t.is(io, 'itkMGHImageIO')
 })
 
-test('mgh.gz maps to itkMGHImageIOJSBinding', t => {
+test('mgh.gz maps to itkMGHImageIO', t => {
   const io = ExtensionToIO.get('mgh.gz')
-  t.is(io, 'itkMGHImageIOJSBinding')
+  t.is(io, 'itkMGHImageIO')
 })
 
-test('mha maps to itkMetaImageIOJSBinding', t => {
+test('mha maps to itkMetaImageIO', t => {
   const io = ExtensionToIO.get('mha')
-  t.is(io, 'itkMetaImageIOJSBinding')
+  t.is(io, 'itkMetaImageIO')
 })
 
-test('mhd maps to itkMetaImageIOJSBinding', t => {
+test('mhd maps to itkMetaImageIO', t => {
   const io = ExtensionToIO.get('mhd')
-  t.is(io, 'itkMetaImageIOJSBinding')
+  t.is(io, 'itkMetaImageIO')
 })
 
-test('mrc maps to itkMRCImageIOJSBinding', t => {
+test('mrc maps to itkMRCImageIO', t => {
   const io = ExtensionToIO.get('mrc')
-  t.is(io, 'itkMRCImageIOJSBinding')
+  t.is(io, 'itkMRCImageIO')
 })
 
-test('nia maps to itkNiftiImageIOJSBinding', t => {
+test('nia maps to itkNiftiImageIO', t => {
   const io = ExtensionToIO.get('nia')
-  t.is(io, 'itkNiftiImageIOJSBinding')
+  t.is(io, 'itkNiftiImageIO')
 })
 
-test('nii maps to itkNiftiImageIOJSBinding', t => {
+test('nii maps to itkNiftiImageIO', t => {
   const io = ExtensionToIO.get('nii')
-  t.is(io, 'itkNiftiImageIOJSBinding')
+  t.is(io, 'itkNiftiImageIO')
 })
 
-test('hdr maps to itkNiftiImageIOJSBinding', t => {
+test('hdr maps to itkNiftiImageIO', t => {
   const io = ExtensionToIO.get('hdr')
-  t.is(io, 'itkNiftiImageIOJSBinding')
+  t.is(io, 'itkNiftiImageIO')
 })
 
-test('hdf5 maps to itkHDF5ImageIOJSBinding', t => {
+test('hdf5 maps to itkHDF5ImageIO', t => {
   const io = ExtensionToIO.get('hdf5')
-  t.is(io, 'itkHDF5ImageIOJSBinding')
+  t.is(io, 'itkHDF5ImageIO')
 })
 
-test('nrrd maps to itkNrrdImageIOJSBinding', t => {
+test('nrrd maps to itkNrrdImageIO', t => {
   const io = ExtensionToIO.get('nrrd')
-  t.is(io, 'itkNrrdImageIOJSBinding')
+  t.is(io, 'itkNrrdImageIO')
 })
 
-test('nhdr maps to itkNrrdImageIOJSBinding', t => {
+test('nhdr maps to itkNrrdImageIO', t => {
   const io = ExtensionToIO.get('nhdr')
-  t.is(io, 'itkNrrdImageIOJSBinding')
+  t.is(io, 'itkNrrdImageIO')
 })
 
-test('gipl maps to itkGiplImageIOJSBinding', t => {
+test('gipl maps to itkGiplImageIO', t => {
   const io = ExtensionToIO.get('gipl')
-  t.is(io, 'itkGiplImageIOJSBinding')
+  t.is(io, 'itkGiplImageIO')
 })
 
-test('dcm maps to itkGDCMImageIOJSBinding', t => {
+test('dcm maps to itkGDCMImageIO', t => {
   const io = ExtensionToIO.get('dcm')
-  t.is(io, 'itkGDCMImageIOJSBinding')
+  t.is(io, 'itkGDCMImageIO')
 })
 
-test('tif maps to itkTIFFImageIOJSBinding', t => {
+test('tif maps to itkTIFFImageIO', t => {
   const io = ExtensionToIO.get('tif')
-  t.is(io, 'itkTIFFImageIOJSBinding')
+  t.is(io, 'itkTIFFImageIO')
 })
 
-test('TIF maps to itkTIFFImageIOJSBinding', t => {
+test('TIF maps to itkTIFFImageIO', t => {
   const io = ExtensionToIO.get('TIF')
-  t.is(io, 'itkTIFFImageIOJSBinding')
+  t.is(io, 'itkTIFFImageIO')
 })
 
-test('tiff maps to itkTIFFImageIOJSBinding', t => {
+test('tiff maps to itkTIFFImageIO', t => {
   const io = ExtensionToIO.get('tiff')
-  t.is(io, 'itkTIFFImageIOJSBinding')
+  t.is(io, 'itkTIFFImageIO')
 })
 
-test('TIFF maps to itkTIFFImageIOJSBinding', t => {
+test('TIFF maps to itkTIFFImageIO', t => {
   const io = ExtensionToIO.get('TIFF')
-  t.is(io, 'itkTIFFImageIOJSBinding')
+  t.is(io, 'itkTIFFImageIO')
 })
 
-test('vtk maps to itkVTKImageIOJSBinding', t => {
+test('vtk maps to itkVTKImageIO', t => {
   const io = ExtensionToIO.get('vtk')
-  t.is(io, 'itkVTKImageIOJSBinding')
+  t.is(io, 'itkVTKImageIO')
 })
 
-test('VTK maps to itkVTKImageIOJSBinding', t => {
+test('VTK maps to itkVTKImageIO', t => {
   const io = ExtensionToIO.get('VTK')
-  t.is(io, 'itkVTKImageIOJSBinding')
+  t.is(io, 'itkVTKImageIO')
 })
 
-test('isq maps to itkScancoImageIOJSBinding', t => {
+test('isq maps to itkScancoImageIO', t => {
   const io = ExtensionToIO.get('isq')
-  t.is(io, 'itkScancoImageIOJSBinding')
+  t.is(io, 'itkScancoImageIO')
 })
 
-test('ISQ maps to itkScancoImageIOJSBinding', t => {
+test('ISQ maps to itkScancoImageIO', t => {
   const io = ExtensionToIO.get('ISQ')
-  t.is(io, 'itkScancoImageIOJSBinding')
+  t.is(io, 'itkScancoImageIO')
 })
 
-test('fdf maps to itkFDFImageIOJSBinding', t => {
+test('fdf maps to itkFDFImageIO', t => {
   const io = ExtensionToIO.get('fdf')
-  t.is(io, 'itkFDFImageIOJSBinding')
+  t.is(io, 'itkFDFImageIO')
 })
 
-test('FDF maps to itkFDFImageIOJSBinding', t => {
+test('FDF maps to itkFDFImageIO', t => {
   const io = ExtensionToIO.get('FDF')
-  t.is(io, 'itkFDFImageIOJSBinding')
+  t.is(io, 'itkFDFImageIO')
 })

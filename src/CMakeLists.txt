@@ -12,6 +12,7 @@ set(WebAssemblyInterface_SRCS
   itkPipeline.cxx
   itkWASMExports.cxx
   itkWASMDataObject.cxx
+  itkWASMImageIOBase.cxx
   itkWASMImageIOFactory.cxx
   itkWASMImageIO.cxx
   itkWASMMeshIOFactory.cxx
@@ -36,74 +37,7 @@ if(BUILD_ITK_WASM_IO_MODULES)
 set(common_link_flags " -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js")
 set(esm_link_flags " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0")
 
-set(ImageIOIndex_ARRAY "")
-foreach(io_module ${WebAssemblyInterface_ImageIOModules} WebAssemblyInterface)
-  if(${io_module} STREQUAL "WebAssemblyInterface")
-    find_package(ITK REQUIRED COMPONENTS ITKIOImageBase)
-    include(${ITK_USE_FILE})
-    include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
-    list(APPEND ITK_LIBRARIES ${WebAssemblyInterface_LIBRARIES})
-  else()
-    find_package(ITK REQUIRED COMPONENTS ${io_module})
-    include(${ITK_USE_FILE})
-  endif()
-
-  if(NOT DEFINED imageios_${io_module})
-    message(FATAL_ERROR "Unknown ImageIOBase classes for module ${io_module}")
-  endif()
-  foreach(imageio ${imageios_${io_module}})
-    set(ImageIOIndex_ARRAY "${ImageIOIndex_ARRAY}'${imageio}JSBinding', ")
-    set(target ${imageio}JSBinding)
-    set(target_umd ${imageio}JSBinding.umd)
-
-    _add_executable(${target} io/internal/bindings/${target}.cxx)
-    itk_module_target_label(${target})
-    itk_module_target_export(${target})
-    itk_module_target_install(${target})
-
-    _add_executable(${target_umd} io/internal/bindings/${target}.cxx)
-    itk_module_target_label(${target_umd})
-    itk_module_target_export(${target_umd})
-    itk_module_target_install(${target_umd})
-
-    # For embind
-    set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " --bind"
-      )
-    set_property(TARGET ${target_umd} APPEND_STRING
-      PROPERTY LINK_FLAGS " --bind"
-      )
-
-    set(exception_catching )
-    if(${io_module} STREQUAL "ITKIOGE")
-      set(exception_catching " -s DISABLE_EXCEPTION_CATCHING=0")
-    endif()
-    set(imageio_common_link_flags " ${common_link_flags} -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s SUPPORT_LONGJMP=1 --no-entry -s EXPORT_NAME=${imageio}JSBinding ${exception_catching}")
-    set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " ${imageio_common_link_flags} ${esm_link_flags} "
-      )
-    set_property(TARGET ${target_umd} APPEND_STRING
-      PROPERTY LINK_FLAGS " ${imageio_common_link_flags} "
-      )
-
-    set_property(TARGET ${target}
-      PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${WebAssemblyInterface_BINARY_DIR}/image-io
-      )
-    set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
-      PROPERTY OBJECT_DEPENDS
-      ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
-      )
-    _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
-    set_property(TARGET ${target_umd}
-      PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${WebAssemblyInterface_BINARY_DIR}/image-io
-      )
-    _target_link_libraries(${target_umd} LINK_PUBLIC ${ITK_LIBRARIES})
-  endforeach()
-endforeach()
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/ImageIOIndex.ts.in
-  ${CMAKE_CURRENT_SOURCE_DIR}/io/internal/ImageIOIndex.ts @ONLY)
+add_subdirectory(io/internal/pipelines/image/ConvertImage)
 
 # DICOM tag reading needs Iconv, and the docker image (currently)
 # used for building does not have iconv installed

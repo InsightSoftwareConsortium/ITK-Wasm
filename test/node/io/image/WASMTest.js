@@ -24,14 +24,10 @@ const verifyImage = (t, image) => {
   t.is(image.data.length, 196608, 'data.length')
 }
 
-test('Test writing and reading an ITK WASM file', (t) => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    const useCompression = false
-    return writeImageLocalFile(useCompression, image, testOutputFilePath)
-  })
-    .then(function () {
-      return readImageLocalFile(testOutputFilePath).then(function (image) {
-        verifyImage(t, image)
-      })
-    })
+test('Test writing and reading an ITK WASM file', async (t) => {
+  const image = await readImageLocalFile(testInputFilePath)
+  const useCompression = false
+  await writeImageLocalFile(useCompression, image, testOutputFilePath)
+  const resultImage = await readImageLocalFile(testOutputFilePath)
+  verifyImage(t, resultImage)
 })

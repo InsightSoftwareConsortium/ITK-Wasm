@@ -9,9 +9,11 @@ import ImageIOIndex from './internal/ImageIOIndex.js'
 import Image from '../core/Image.js'
 
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
-import readImageEmscriptenFSFile from './internal/readImageEmscriptenFSFile.js'
-import ImageIOBaseEmscriptenModule from './internal/ImageIOBaseEmscriptenModule.js'
+import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
+import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 import findLocalImageIOPath from './internal/findLocalImageIOPath.js'
+import InterfaceTypes from '../core/InterfaceTypes.js'
+import PipelineInput from '../pipeline/PipelineInput.js'
 
 /**
  * Read an image from a file on the local filesystem in Node.js.
@@ -24,6 +26,12 @@ async function readImageLocalFile (filePath: string): Promise<Image> {
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)
 
+  const args = [absoluteFilePath, '0', '--memory-io', '--quiet']
+  const desiredOutputs = [
+    { type: InterfaceTypes.Image }
+  ]
+  const inputs = [] as PipelineInput[]
+
   let io = null
   if (mimeType !== false && mimeToIO.has(mimeType)) {
     io = mimeToIO.get(mimeType)
@@ -31,29 +39,26 @@ async function readImageLocalFile (filePath: string): Promise<Image> {
     io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
-      const modulePath = path.join(imageIOsPath, ImageIOIndex[idx] + '.js')
-      const Module = await loadEmscriptenModule(modulePath) as ImageIOBaseEmscriptenModule
-      const imageIO = new Module.ITKImageIO()
-      const mountedFilePath = Module.mountContainingDir(absoluteFilePath)
-      imageIO.SetFileName(mountedFilePath)
-      if (imageIO.CanReadFile(mountedFilePath)) {
-        io = ImageIOIndex[idx]
-        Module.unmountContainingDir(mountedFilePath)
-        break
+      const modulePath = path.join(imageIOsPath, ImageIOIndex[idx] + 'ReadImage.js')
+      const readImageModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
+      const mountedFilePath = readImageModule.mountContainingDir(absoluteFilePath)
+      const { returnValue, outputs } = runPipelineEmscripten(readImageModule, args, desiredOutputs, inputs)
+      readImageModule.unmountContainingDir(mountedFilePath)
+      if (returnValue === 0) {
+        return outputs[0].data as Image
       }
-      Module.unmountContainingDir(mountedFilePath)
     }
   }
   if (io === null) {
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(imageIOsPath, io as string + '.js')
-  const Module = await loadEmscriptenModule(modulePath) as ImageIOBaseEmscriptenModule
-  const mountedFilePath = Module.mountContainingDir(absoluteFilePath)
-  const image = readImageEmscriptenFSFile(Module, mountedFilePath)
-  Module.unmountContainingDir(mountedFilePath)
-  return image
+  const modulePath = path.join(imageIOsPath, io as string + 'ReadImage.js')
+  const readImageModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
+  const mountedFilePath = readImageModule.mountContainingDir(absoluteFilePath)
+  const { outputs } = runPipelineEmscripten(readImageModule, args, desiredOutputs, inputs)
+  readImageModule.unmountContainingDir(mountedFilePath)
+  return outputs[0].data as Image
 }
 
 export default readImageLocalFile

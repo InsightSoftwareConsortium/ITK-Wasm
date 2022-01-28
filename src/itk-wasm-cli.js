@@ -166,16 +166,16 @@ function run(wasmBinary, options) {
   let wasmRuntimeArgs = []
   switch (wasmRuntime) {
   case 'wasmtime':
-    wasmRuntimeArgs = ['/wasm-runtimes/wasmtime/bin/wasmtime-pwd.sh',]
+    wasmRuntimeArgs = ['/wasi-runtimes/wasmtime/bin/wasmtime-pwd.sh',]
     break
   case 'wasmer':
-    wasmRuntimeArgs = ['sudo', '/wasm-runtimes/wasmer/bin/wasmer-pwd.sh',]
+    wasmRuntimeArgs = ['sudo', '/wasi-runtimes/wasmer/bin/wasmer-pwd.sh',]
     break
   case 'wasm3':
-    wasmRuntimeArgs = ['/wasm-runtimes/wasm3/bin/wasm3',]
+    wasmRuntimeArgs = ['/wasi-runtimes/wasm3/bin/wasm3',]
     break
   case 'wavm':
-    wasmRuntimeArgs = ['/wasm-runtimes/wavm/bin/wavm', 'run']
+    wasmRuntimeArgs = ['/wasi-runtimes/wavm/bin/wavm', 'run']
     break
   default:
     throw Error('unexpected wasm runtime')

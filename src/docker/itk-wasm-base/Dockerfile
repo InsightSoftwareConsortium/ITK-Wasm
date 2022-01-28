@@ -1,30 +1,11 @@
 ARG BASE_IMAGE=dockcross/web-wasm
-FROM $BASE_IMAGE:20211126-f096312
+FROM $BASE_IMAGE:20220127-ce9c068
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
 LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/itk-wasm"
 
 WORKDIR /
-
-ENV BINARYEN_GIT_TAG 7f8d7ac89bd916f2fcbec2e14b40f653139ce5b6
-RUN git clone https://github.com/webassembly/binaryen.git && \
-  cd binaryen && \
-  git checkout ${BINARYEN_GIT_TAG} && \
-  cd ../ && \
-  mkdir binaryen-build && \
-  cd binaryen-build && \
-  /usr/bin/cmake \
-    -DCMAKE_C_COMPILER=/usr/bin/cc \
-    -DCMAKE_CXX_COMPILER=/usr/bin/c++ \
-    -G Ninja \
-    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-    -DCMAKE_TOOLCHAIN_FILE="" \
-    ../binaryen && \
-  ninja && \
-  ninja install && \
-  cd ../ && \
-  rm -rf binaryen*
 
 # 2021-10-03 master branch
 ENV ITK_GIT_TAG ca0756235a7c7ca635ecbd4318ebbd9b535690f1
@@ -104,31 +85,6 @@ ENV IPFS_PATH /home/ipfs/.ipfs
 RUN mkdir -p $IPFS_PATH && \
  ipfs init && \
  chmod -R 777 $IPFS_PATH
-
-RUN mkdir /wasm-runtimes
-
-ENV WASMER_DIR /wasm-runtimes/wasmer
-RUN curl https://get.wasmer.io -sSfL | sh
-COPY wasmer-pwd.sh ${WASMER_DIR}/bin/
-ENV PATH "$WASMER_DIR/bin:$PATH"
-
-ENV WASMTIME_HOME /wasm-runtimes/wasmtime
-RUN mkdir ${WASMTIME_HOME} && curl https://wasmtime.dev/install.sh -sSf | bash
-COPY wasmtime-pwd.sh ${WASMTIME_HOME}/bin/
-ENV PATH "$WASMTIME_HOME/bin:$PATH"
-
-ENV WASM3_VERSION 0.5.0
-RUN mkdir -p /wasm-runtimes/wasm3/bin && \
-  curl -LO https://github.com/wasm3/wasm3/releases/download/v${WASM3_VERSION}/wasm3-linux-x64.elf && \
-  mv wasm3-linux-x64.elf /wasm-runtimes/wasm3/bin/wasm3 && \
-  chmod +x /wasm-runtimes/wasm3/bin/wasm3
-ENV PATH "/wasm-runtimes/wasm3/bin:$PATH"
-
-ENV WAVM_VERSION 2021-10-16
-RUN mkdir -p /wasm-runtimes/wavm/ && \
-  curl -LO https://github.com/WAVM/WAVM/releases/download/nightly%2F${WAVM_VERSION}/wavm-0.0.0-prerelease-linux.tar.gz && \
-  tar -xv -C /wasm-runtimes/wavm/ -f wavm-0.0.0-prerelease-linux.tar.gz
-ENV PATH "/wasm-runtimes/wavm/bin:$PATH"
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE

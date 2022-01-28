@@ -1,15 +1,22 @@
 import registerWebworker from 'webworker-promise/lib/register.js'
 
-import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
+import loadPipelineModule from './loadPipelineModule.js'
+import loadImageIOPipelineModule from './loadImageIOPipelineModule.js'
+import runPipeline from './runPipeline.js'
+import RunPipelineInput from './RunPipelineInput.js'
+import IOInput from './IOInput.js'
 
-import { RunPipelineInput, loadPipelineModule, runPipeline } from "./pipeline-operations.js"
-
-registerWebworker(async function (input: RunPipelineInput) {
+registerWebworker(async function (input: RunPipelineInput | IOInput) {
   let pipelineModule = null
+  console.log('input', input)
   if (input.operation === 'runPipeline') {
-    pipelineModule = await loadPipelineModule(input.pipelinePath, input.config.pipelinesUrl) as PipelineEmscriptenModule
+    pipelineModule = await loadPipelineModule(input.pipelinePath, input.config.pipelinesUrl)
+  } else if (input.operation === 'readImage') {
+    pipelineModule = await loadImageIOPipelineModule(input as IOInput, 'ReadImage')
+  } else if (input.operation === 'writeImage') {
+    pipelineModule = await loadImageIOPipelineModule(input as IOInput, 'WriteImage')
   } else if (input.operation === 'runPolyDataIOPipeline') {
-    pipelineModule = await loadPipelineModule(input.pipelinePath, input.config.polydataIOUrl) as PipelineEmscriptenModule
+    pipelineModule = await loadPipelineModule(input.pipelinePath, input.config.polydataIOUrl)
   } else {
     throw new Error('Unknown worker operation')
   }
