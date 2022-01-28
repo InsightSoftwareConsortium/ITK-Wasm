@@ -23,6 +23,12 @@
 
 #include "itkWASMDataObject.h"
 
+#if defined(__EMSCRIPTEN__)
+#  include "emscripten/em_macros.h"
+#else
+#  define EMSCRIPTEN_KEEPALIVE
+#endif
+
 namespace itk
 {
 namespace wasm
@@ -43,15 +49,15 @@ void setMemoryStoreOutputArray(uint32_t memoryIndex, uint32_t index, uint32_t su
 extern "C"
 {
 
-size_t itk_wasm_input_array_alloc(uint32_t memoryIndex, uint32_t index, uint32_t subIndex, size_t size);
-size_t itk_wasm_input_json_alloc(uint32_t memoryIndex, uint32_t index, size_t size);
+size_t EMSCRIPTEN_KEEPALIVE itk_wasm_input_array_alloc(uint32_t memoryIndex, uint32_t index, uint32_t subIndex, size_t size);
+size_t EMSCRIPTEN_KEEPALIVE itk_wasm_input_json_alloc(uint32_t memoryIndex, uint32_t index, size_t size);
 
-size_t itk_wasm_output_json_address(uint32_t memoryIndex, uint32_t index);
-size_t itk_wasm_output_json_size(uint32_t memoryIndex, uint32_t index);
-size_t itk_wasm_output_array_address(uint32_t memoryIndex, uint32_t index, uint32_t subIndex);
-size_t itk_wasm_output_array_size(uint32_t memoryIndex, uint32_t index, uint32_t subIndex);
+size_t EMSCRIPTEN_KEEPALIVE itk_wasm_output_json_address(uint32_t memoryIndex, uint32_t index);
+size_t EMSCRIPTEN_KEEPALIVE itk_wasm_output_json_size(uint32_t memoryIndex, uint32_t index);
+size_t EMSCRIPTEN_KEEPALIVE itk_wasm_output_array_address(uint32_t memoryIndex, uint32_t index, uint32_t subIndex);
+size_t EMSCRIPTEN_KEEPALIVE itk_wasm_output_array_size(uint32_t memoryIndex, uint32_t index, uint32_t subIndex);
 
-void itk_wasm_free_all();
+void EMSCRIPTEN_KEEPALIVE itk_wasm_free_all();
 
 } // end extern "C"
 
