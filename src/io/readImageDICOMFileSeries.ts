@@ -4,6 +4,8 @@ import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import WorkerPool from '../core/WorkerPool.js'
 import stackImages from '../core/stackImages.js'
 import BinaryFile from '../core/BinaryFile.js'
+import InterfaceTypes from '../core/InterfaceTypes.js'
+import Image from '../core/Image.js'
 
 import config from '../itkConfig.js'
 
@@ -17,22 +19,45 @@ const workerFunction = async (
 ): Promise<ReadImageResult> => {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
-    'image-io',
+    'pipeline',
     worker
   )
   worker = usedWorker
 
+  const args = ['--memory-io', '--output-image', '0', '--input-images']
+  fileDescriptions.forEach((desc) => {
+    args.push(`./${desc.path}`)
+  })
+  if (singleSortedSeries) {
+    args.push('--single-sorted-series')
+  }
+  const outputs = [
+    { type: InterfaceTypes.Image }
+  ]
+  const inputs = fileDescriptions.map((fd) => {
+    return { type: InterfaceTypes.BinaryFile, data: fd }
+  })
+
   const transferables = fileDescriptions.map(description => {
     return description.data.buffer
   })
+  interface PipelineResult {
+    stdout: string
+    stderr: string
+    outputs: any[]
+  }
   const message = {
     operation: 'readDICOMImageSeries',
+    config: config,
     fileDescriptions: fileDescriptions,
     singleSortedSeries,
-    config
+    pipelinePath: 'ReadDICOMImageFileSeries', // placeholder
+    args,
+    outputs,
+    inputs
   }
-  const image = await webworkerPromise.postMessage(message, transferables)
-  return { image, webWorker: worker }
+  const result: PipelineResult = await webworkerPromise.postMessage(message, transferables)
+  return { image: result.outputs[0].data as Image, webWorker: worker }
 }
 const numberOfWorkers = typeof globalThis.navigator?.hardwareConcurrency === 'number' ? globalThis.navigator.hardwareConcurrency : 4
 const workerPool = new WorkerPool(numberOfWorkers, workerFunction)
