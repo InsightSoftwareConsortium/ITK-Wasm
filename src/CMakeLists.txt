@@ -1,11 +1,3 @@
-# include iconv for reading dicom tags
-include(ExternalProject)
-set(Iconv iconv)
-set(Iconv_LIBRARY libiconv)
-set(Iconv_DIR ${CMAKE_BINARY_DIR}/libiconv)
-set(Iconv_INCLUDE_DIRS ${Iconv_DIR}/include)
-file(MAKE_DIRECTORY ${Iconv_DIR} ${Iconv_INCLUDE_DIRS})
-
 include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
 
 set(WebAssemblyInterface_SRCS
@@ -38,97 +30,7 @@ set(common_link_flags " -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s MODULA
 set(esm_link_flags " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0")
 
 add_subdirectory(io/internal/pipelines/image/ConvertImage)
-
-# DICOM tag reading needs Iconv, and the docker image (currently)
-# used for building does not have iconv installed
-set(Iconv_CONFIGURE_COMMAND
-  emconfigure
-  ${Iconv_DIR}/src/libiconv/configure
-  --srcdir=${Iconv_DIR}/src/libiconv
-  --prefix=${Iconv_DIR}
-  --host=wasm32
-  --enable-static)
-set(Iconv_BUILD_COMMAND emmake make)
-
-ExternalProject_Add(${Iconv_LIBRARY}
-  PREFIX ${Iconv_DIR}
-  URL "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.16.tar.gz"
-  URL_HASH SHA256=e6a1b1b589654277ee790cce3734f07876ac4ccfaecbee8afa0b649cf529cc04
-  CONFIGURE_COMMAND ${Iconv_CONFIGURE_COMMAND}
-  BUILD_COMMAND ${Iconv_BUILD_COMMAND}
-  # needed for ninja generator
-  BUILD_BYPRODUCTS ${Iconv_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}iconv${CMAKE_STATIC_LIBRARY_SUFFIX}
-)
-
-add_library(${Iconv} STATIC IMPORTED)
-set_target_properties(${Iconv} PROPERTIES
-  IMPORTED_LOCATION ${Iconv_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}iconv${CMAKE_STATIC_LIBRARY_SUFFIX}
-  INTERFACE_INCLUDE_DIRECTORIES ${Iconv_INCLUDE_DIRS})
-
-add_dependencies(${Iconv} ${Iconv_LIBRARY})
-
-add_subdirectory(io/internal/pipelines/image/ReadImageDICOMFileSeries)
-# DICOM-based readers
-find_package(ITK REQUIRED COMPONENTS ITKIOGDCM)
-include(${ITK_USE_FILE})
-foreach(dicom_io_module
-    itkDICOMTagReader
-)
-  set(target "${dicom_io_module}JSBinding")
-  set(target_umd "${dicom_io_module}JSBinding.umd")
-
-  _add_executable(${target} io/internal/bindings/${target}.cxx)
-  itk_module_target_label(${target})
-  itk_module_target_export(${target})
-  itk_module_target_install(${target})
-
-  _add_executable(${target_umd} io/internal/bindings/${target}.cxx)
-  itk_module_target_label(${target_umd})
-  itk_module_target_export(${target_umd})
-  itk_module_target_install(${target_umd})
-
-  # For embind
-  set_property(TARGET ${target} APPEND_STRING
-    PROPERTY LINK_FLAGS " --bind"
-    )
-  set_property(TARGET ${target_umd} APPEND_STRING
-    PROPERTY LINK_FLAGS " --bind"
-    )
-
-  set(dicom_common_link_flags " ${common_link_flags} -s SUPPORT_LONGJMP=1 -s DISABLE_EXCEPTION_CATCHING=0 -s EXPORT_NAME=${target}")
-  set_property(TARGET ${target} APPEND_STRING
-    PROPERTY LINK_FLAGS " ${dicom_common_link_flags} ${esm_link_flags} "
-    )
-  set_property(TARGET ${target_umd} APPEND_STRING
-    PROPERTY LINK_FLAGS " ${dicom_common_link_flags}"
-    )
-
-  set_property(TARGET ${target}
-    PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${WebAssemblyInterface_BINARY_DIR}/image-io
-    )
-  set_property(TARGET ${target_umd}
-    PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${WebAssemblyInterface_BINARY_DIR}/image-io
-    )
-  set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
-    PROPERTY OBJECT_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
-    )
-  set_property(SOURCE io/internal/bindings/${target_umd}.cxx APPEND
-    PROPERTY OBJECT_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
-    )
-  _target_link_libraries(${target} LINK_PUBLIC ${ITK_LIBRARIES})
-  _target_link_libraries(${target_umd} LINK_PUBLIC ${ITK_LIBRARIES})
-
-  # libiconv for DICOMTagReader
-  if(${dicom_io_module} STREQUAL "itkDICOMTagReader")
-    include_directories(${Iconv_INCLUDE_DIRS})
-    _target_link_libraries(${target} LINK_PUBLIC ${Iconv_LIBRARIES} ${Iconv})
-    _target_link_libraries(${target_umd} LINK_PUBLIC ${Iconv_LIBRARIES} ${Iconv})
-  endif()
-endforeach()
+add_subdirectory(io/internal/pipelines/image/ReadDICOM)
 
 set(MeshIOIndex_ARRAY "")
 foreach(io_module ${WebAssemblyInterface_MeshIOModules})

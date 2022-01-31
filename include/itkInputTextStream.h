@@ -47,6 +47,10 @@ public:
     return *m_IStream;
   }
 
+  std::istream * GetPointer() {
+    return m_IStream;
+  }
+
   void SetJSON(const std::string & json)
   {
     if (m_DeleteIStream && m_IStream != nullptr)
