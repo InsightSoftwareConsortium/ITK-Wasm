@@ -168,4 +168,4 @@ jobs:
     - name: Push images to DockerHub
       if: github.ref == 'refs/heads/master'
       run: |
-        ./src/docker/push.sh
+        ./src/docker/push.sh --no-debug
