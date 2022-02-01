@@ -25,17 +25,21 @@
 #include <vector>
 #include <string.h>
 
-#include <emscripten.h>
-#include <emscripten/bind.h>
-#include <emscripten/val.h>
-
 #include <iconv.h>
+
+#include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 
 #include "itkCommonEnums.h"
 #include "itkGDCMImageIO.h"
 #include "itkGDCMSeriesFileNames.h"
 #include "itkImageIOBase.h"
 #include "itkMetaDataObject.h"
+
+#include "itkPipeline.h"
+#include "itkInputTextStream.h"
+#include "itkOutputTextStream.h"
 
 const std::string      DEFAULT_ENCODING("ISO_IR 6");
 const std::string      DEFAULT_ISO_2022_ENCODING("ISO 2022 IR 6");
@@ -491,17 +495,17 @@ private:
 namespace itk
 {
 
-/** \class DICOMTagReaderJSBinding
+/** \class DICOMTagReader
  *
  * \brief Reads DICOM tags from a DICOM object.
  */
-class DICOMTagReaderJSBinding
+class DICOMTagReader
 {
 public:
   using MetaDictType = itk::MetaDataDictionary;
   using TagMapType = std::map<std::string, std::string>;
 
-  DICOMTagReaderJSBinding()
+  DICOMTagReader()
     : m_dirtyCache(true)
   {
     m_GDCMImageIO = GDCMImageIO::New();
@@ -509,7 +513,7 @@ public:
 
   /** Sets file name. */
   void
-  SetFileName(std::string file)
+  SetFileName(const std::string & file)
   {
     m_fileName = file;
     m_GDCMImageIO->SetFileName(file);
@@ -518,13 +522,13 @@ public:
 
   /** Verify file can be read. */
   bool
-  CanReadFile(std::string file)
+  CanReadFile(const std::string & file)
   {
     return m_GDCMImageIO->CanReadFile(file.c_str());
   }
 
   std::string
-  ReadTag(std::string tag)
+  ReadTag(const std::string & tag)
   {
 
     if (m_dirtyCache)
@@ -575,14 +579,106 @@ private:
 
 } // end namespace itk
 
-EMSCRIPTEN_BINDINGS(itk_dicom_tag_reader_js_binding)
+int main( int argc, char * argv[] )
 {
-  emscripten::register_vector<std::string>("vector<std::string>");
-  emscripten::register_map<std::string, std::string>("TagMapType");
-  emscripten::class_<itk::DICOMTagReaderJSBinding>("ITKDICOMTagReader")
-    .constructor<>()
-    .function("SetFileName", &itk::DICOMTagReaderJSBinding::SetFileName)
-    .function("CanReadFile", &itk::DICOMTagReaderJSBinding::CanReadFile)
-    .function("ReadTag", &itk::DICOMTagReaderJSBinding::ReadTag)
-    .function("ReadAllTags", &itk::DICOMTagReaderJSBinding::ReadAllTags);
+  itk::wasm::Pipeline pipeline("Read the tags from a DICOM file", argc, argv);
+
+  std::string dicomFile;
+  pipeline.add_option("DICOMFile", dicomFile, "Input DICOM file.")->required()->check(CLI::ExistingFile);
+
+  itk::wasm::InputTextStream tagsToReadStream;
+  pipeline.add_option("--tags-to-read", tagsToReadStream, "A JSON object with a \"tags\" array of the tags to read. If not provided, all tags are read. Example tag: \"0010|0020\".");
+
+  itk::wasm::OutputTextStream tagsStream;
+  pipeline.add_option("Tags", tagsStream, "Output tags in the file. JSON object with a \"tags\" array of arrays. Values are encoded as UTF-8 strings.")->required();
+
+  ITK_WASM_PARSE(pipeline);
+
+  itk::DICOMTagReader dicomTagReader;
+
+  dicomTagReader.SetFileName(dicomFile);
+  if (!dicomTagReader.CanReadFile(dicomFile))
+  {
+    std::cerr << "Could not read the input DICOM file" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  if (tagsToReadStream.GetPointer() == nullptr)
+  {
+    const auto dicomTags = dicomTagReader.ReadAllTags();
+
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    rapidjson::Value tagsArray(rapidjson::kArrayType);
+    for (const auto& [tag, value] : dicomTags) {
+      rapidjson::Value tagArray(rapidjson::kArrayType);
+
+      rapidjson::Value tagName;
+      tagName.SetString(tag.c_str(), allocator);
+      tagArray.PushBack(tagName, allocator);
+
+      rapidjson::Value tagValue;
+      tagValue.SetString(value.c_str(), allocator);
+      tagArray.PushBack(tagValue, allocator);
+
+      tagsArray.PushBack(tagArray.Move(), allocator);
+    }
+    document.AddMember("tags", tagsArray.Move(), allocator);
+
+    rapidjson::StringBuffer stringBuffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
+    document.Accept(writer);
+
+    tagsStream.Get() << stringBuffer.GetString();
+  }
+  else
+  {
+    rapidjson::Document inputTagsDocument;
+    const std::string inputTagsString((std::istreambuf_iterator<char>(tagsToReadStream.Get())),
+                                       std::istreambuf_iterator<char>());
+    if (inputTagsDocument.Parse(inputTagsString.c_str()).HasParseError())
+      {
+      CLI::Error err("Runtime error", "Could not parse input tags JSON.", 1);
+      return pipeline.exit(err);
+      }
+    if (!inputTagsDocument.HasMember("tags"))
+      {
+      CLI::Error err("Runtime error", "Input tags does not have expected \"tags\" member", 1);
+      return pipeline.exit(err);
+      }
+
+    rapidjson::Document document;
+    document.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    rapidjson::Value tagsArray(rapidjson::kArrayType);
+    const rapidjson::Value & inputTagsArray = inputTagsDocument["tags"];
+
+    for( rapidjson::Value::ConstValueIterator itr = inputTagsArray.Begin(); itr != inputTagsArray.End(); ++itr )
+    {
+      rapidjson::Value tagArray(rapidjson::kArrayType);
+
+      const std::string tagString(itr->GetString());
+      rapidjson::Value tagName;
+      tagName.SetString(tagString.c_str(), allocator);
+      tagArray.PushBack(tagName, allocator);
+
+      rapidjson::Value tagValue;
+      std::string tagLower(tagString);
+      std::transform(tagLower.begin(), tagLower.end(), tagLower.begin(), ::tolower);
+      tagValue.SetString(dicomTagReader.ReadTag(tagLower).c_str(), allocator);
+      tagArray.PushBack(tagValue, allocator);
+
+      tagsArray.PushBack(tagArray.Move(), allocator);
+    }
+    document.AddMember("tags", tagsArray.Move(), allocator);
+
+    rapidjson::StringBuffer stringBuffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
+    document.Accept(writer);
+
+    tagsStream.Get() << stringBuffer.GetString();
+  }
+
+  return EXIT_SUCCESS;
 }

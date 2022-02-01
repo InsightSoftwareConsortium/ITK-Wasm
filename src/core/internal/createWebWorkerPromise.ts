@@ -9,7 +9,7 @@ interface createWebWorkerPromiseResult {
 }
 
 // Internal function to create a web worker promise
-async function createWebWorkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline', existingWorker: Worker | null): Promise<createWebWorkerPromiseResult> {
+async function createWebWorkerPromise (name: 'mesh-io' | 'pipeline', existingWorker: Worker | null): Promise<createWebWorkerPromiseResult> {
   if (existingWorker != null) {
     const webworkerPromise = new WebworkerPromise(existingWorker)
     return await Promise.resolve({ webworkerPromise, worker: existingWorker })
@@ -21,9 +21,6 @@ async function createWebWorkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline'
   // adds worker dynamic import support:
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
   // switch (name) {
-  // case 'image-io':
-  // worker = new Worker(new URL('../../web-workers/image-io.worker.js', import.meta.url))
-  // break
   // case 'mesh-io':
   // worker = new Worker(new URL('../../web-workers/mesh-io.worker.js', import.meta.url))
   // break
@@ -40,11 +37,6 @@ async function createWebWorkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline'
 
   if (webWorkersUrl.startsWith('http')) {
     switch (name) {
-      case 'image-io': {
-        const response = await axios.get(`${webWorkersUrl}/${min}bundles/image-io.worker.js`, { responseType: 'blob' })
-        worker = new Worker(URL.createObjectURL(response.data as Blob))
-        break
-      }
       case 'mesh-io': {
         const response = await axios.get(`${webWorkersUrl}/${min}bundles/mesh-io.worker.js`, { responseType: 'blob' })
         worker = new Worker(URL.createObjectURL(response.data as Blob))
@@ -60,9 +52,6 @@ async function createWebWorkerPromise (name: 'image-io' | 'mesh-io' | 'pipeline'
     }
   } else {
     switch (name) {
-      case 'image-io':
-        worker = new Worker(`${webWorkersUrl}/${min}bundles/image-io.worker.js`)
-        break
       case 'mesh-io':
         worker = new Worker(`${webWorkersUrl}/${min}bundles/mesh-io.worker.js`)
         break

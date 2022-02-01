@@ -168,12 +168,12 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case IOTypes.Text:
         {
-          pipelineModule.fs_writeFile(input.path, input.data as string)
+          pipelineModule.fs_writeFile(input.path as string, input.data as string)
           break
         }
         case IOTypes.Binary:
         {
-          pipelineModule.fs_writeFile(input.path, input.data as Uint8Array)
+          pipelineModule.fs_writeFile(input.path as string, input.data as Uint8Array)
           break
         }
         case IOTypes.Image:
@@ -188,13 +188,13 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             size: image.size,
             data: 'data:application/vnd.itk.path,data/data.raw'
           }
-          pipelineModule.fs_mkdirs(`${input.path}/data`)
-          pipelineModule.fs_writeFile(`${input.path}/index.json`, JSON.stringify(imageJSON))
+          pipelineModule.fs_mkdirs(`${input.path as string}/data`)
+          pipelineModule.fs_writeFile(`${input.path as string}/index.json`, JSON.stringify(imageJSON))
           if (image.data === null) {
             throw Error('image.data is null')
           }
-          pipelineModule.fs_writeFile(`${input.path}/data/data.raw`, new Uint8Array(image.data.buffer))
-          pipelineModule.fs_writeFile(`${input.path}/data/direction.raw`, new Uint8Array(image.direction.buffer))
+          pipelineModule.fs_writeFile(`${input.path as string}/data/data.raw`, new Uint8Array(image.data.buffer))
+          pipelineModule.fs_writeFile(`${input.path as string}/data/direction.raw`, new Uint8Array(image.direction.buffer))
           break
         }
         case IOTypes.Mesh:
@@ -218,31 +218,31 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             cellBufferSize: mesh.cellBufferSize
 
           }
-          pipelineModule.fs_mkdirs(`${input.path}/data`)
-          pipelineModule.fs_writeFile(`${input.path}/index.json`, JSON.stringify(meshJSON))
+          pipelineModule.fs_mkdirs(`${input.path as string}/data`)
+          pipelineModule.fs_writeFile(`${input.path as string}/index.json`, JSON.stringify(meshJSON))
           if (meshJSON.numberOfPoints > 0) {
             if (mesh.points === null) {
               throw Error('mesh.points is null')
             }
-            pipelineModule.fs_writeFile(`${input.path}/data/points.raw`, new Uint8Array(mesh.points.buffer))
+            pipelineModule.fs_writeFile(`${input.path as string}/data/points.raw`, new Uint8Array(mesh.points.buffer))
           }
           if (meshJSON.numberOfPointPixels > 0) {
             if (mesh.pointData === null) {
               throw Error('mesh.pointData is null')
             }
-            pipelineModule.fs_writeFile(`${input.path}/data/pointData.raw`, new Uint8Array(mesh.pointData.buffer))
+            pipelineModule.fs_writeFile(`${input.path as string}/data/pointData.raw`, new Uint8Array(mesh.pointData.buffer))
           }
           if (meshJSON.numberOfCells > 0) {
             if (mesh.cells === null) {
               throw Error('mesh.cells is null')
             }
-            pipelineModule.fs_writeFile(`${input.path}/data/cells.raw`, new Uint8Array(mesh.cells.buffer))
+            pipelineModule.fs_writeFile(`${input.path as string}/data/cells.raw`, new Uint8Array(mesh.cells.buffer))
           }
           if (meshJSON.numberOfCellPixels > 0) {
             if (mesh.cellData === null) {
               throw Error('mesh.cellData is null')
             }
-            pipelineModule.fs_writeFile(`${input.path}/data/cellData.raw`, new Uint8Array(mesh.cellData.buffer))
+            pipelineModule.fs_writeFile(`${input.path as string}/data/cellData.raw`, new Uint8Array(mesh.cellData.buffer))
           }
           break
         }

@@ -17,6 +17,8 @@ registerWebworker(async function (input: RunPipelineInput | IOInput) {
     pipelineModule = await loadImageIOPipelineModule(input as IOInput, 'WriteImage')
   } else if (input.operation === 'readDICOMImageSeries') {
     pipelineModule = await loadPipelineModule('ReadImageDICOMFileSeries', input.config.imageIOUrl)
+  } else if (input.operation === 'readDICOMTags') {
+    pipelineModule = await loadPipelineModule('ReadDICOMTags', input.config.imageIOUrl)
   } else if (input.operation === 'runPolyDataIOPipeline') {
     pipelineModule = await loadPipelineModule(input.pipelinePath, input.config.polydataIOUrl)
   } else {

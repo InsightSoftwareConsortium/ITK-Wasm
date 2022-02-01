@@ -50,3 +50,20 @@ test('Test reading DICOM tags', async t => {
     t.is(result.get(tag), expected[tag], tag)
   })
 })
+
+test('Test reading all DICOM tags', async t => {
+  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
+  const expected = {
+    '0010|0020': 'NOID',
+    '0020|0032': '-3.295510e+01\\-1.339286e+02\\1.167857e+02',
+    '0020|0037': '0.00000e+00\\ 1.00000e+00\\-0.00000e+00\\-0.00000e+00\\ 0.00000e+00\\-1.00000e+00',
+    '0008|103e': 'SAG/RF-FAST/VOL/FLIP 30 '
+  }
+  const result = await readDICOMTagsLocalFile(testFilePath)
+
+  t.true(result instanceof Map)
+  Object.keys(expected).forEach((tag) => {
+    t.is(result.get(tag), expected[tag], tag)
+  })
+  t.is(result.size, 73, 'Number of tags')
+})
