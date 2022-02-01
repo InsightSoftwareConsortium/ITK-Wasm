@@ -46,7 +46,7 @@ endif()
 
 ExternalProject_Add(${Iconv_LIBRARY}
   PREFIX ${Iconv_DIR}
-  URL "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.16.tar.gz"
+  URL "https://bafybeid2yl6aeunciy5rynjmaoxkhhau3jgjpv7x25pylby7hq6n23c57i.ipfs.dweb.link/libiconv-1.16.tar.gz"
   URL_HASH SHA256=e6a1b1b589654277ee790cce3734f07876ac4ccfaecbee8afa0b649cf529cc04
   CONFIGURE_COMMAND ${Iconv_CONFIGURE_COMMAND}
   BUILD_COMMAND ${Iconv_BUILD_COMMAND}
