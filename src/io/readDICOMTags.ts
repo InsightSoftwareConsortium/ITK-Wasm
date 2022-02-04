@@ -6,7 +6,7 @@ import TextStream from '../core/TextStream.js'
 import config from '../itkConfig.js'
 
 import ReadDICOMTagsResult from './ReadDICOMTagsResult.js'
-import { InterfaceTypes } from '../index.js'
+import InterfaceTypes from '../core/InterfaceTypes.js'
 
 async function readDICOMTags (webWorker: Worker, file: File, tags: string[] | null = null): Promise<ReadDICOMTagsResult> {
   let worker = webWorker
