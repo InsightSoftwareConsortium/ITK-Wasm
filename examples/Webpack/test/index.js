@@ -11,7 +11,6 @@ test('Load an image file and display its contents', (t) => {
         "pixelType": "Scalar",
         "components": 1
     },
-    "name": "Image",
     "origin": [
         0,
         0
@@ -25,7 +24,6 @@ test('Load an image file and display its contents', (t) => {
         100,
         100
     ],
-    "metadata": {},
     "data": "0,0,0,0,0,0..."
 }`
   const imageURL = 'https://data.kitware.com/api/v1/file/57b76d848d777f10f269bcdf/download'
@@ -38,7 +36,9 @@ test('Load an image file and display its contents', (t) => {
       document.body.appendChild(outputTextArea)
       outputFileInformation(outputTextArea, event)
         .then(function () {
-          t.equal(outputTextArea.textContent, expectedOutput)
+          const expectedJSON = JSON.parse(expectedOutput)
+          const outputJSON = JSON.parse(outputTextArea.textContent)
+          t.deepEqual(expectedJSON, outputJSON, 'Output image comparison')
           t.end()
         })
     })
@@ -91,7 +91,9 @@ test('Load a mesh file and display its contents', (t) => {
       outputFileInformation(outputTextArea, event)
         .then(function () {
           outputTextArea.remove()
-          t.equal(outputTextArea.textContent, expectedOutput, 'Text area matches expected output')
+          const expectedJSON = JSON.parse(expectedOutput)
+          const outputJSON = JSON.parse(outputTextArea.textContent)
+          t.deepEqual(expectedJSON, outputJSON, 'Output mesh comparison')
           t.end()
         })
     })
