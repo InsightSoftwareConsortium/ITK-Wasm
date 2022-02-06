@@ -60,7 +60,7 @@ function processCommonOptions() {
   }
 
   // Ensure we have the 'dockcross' Docker build environment driver script
-  const dockcrossScript = `${buildDir}/itk-wasm-build-env`
+  const dockcrossScript = path.join(buildDir, 'itk-wasm-build-env')
   try {
     fs.statSync(dockcrossScript)
   } catch (err) {
