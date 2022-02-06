@@ -48,13 +48,13 @@ We use the `add_executable` command to build executables with itk-wasm. The [Ems
 
 Note that the same code can also be built and tested with native operating system build tools. This is useful for development and debugging.
 
-Next, build the program with the itk-wasm CLI, `itk-wasm`. This is shipped with the `itk` package, and the CLI can be executed from the local *node_modules* folder with [`npx`](https://www.npmjs.com/package/npx). The `itk-wasm` CLI will invoke the toolchain contained in the dockcross Docker image. Pass the local source code directory root into `itk-wasm build` to perform the build.
+Next, build the program with the itk-wasm CLI, `itk-wasm`. This is shipped with the `itk-wasm` package, and the CLI can be executed from the local *node_modules* folder with [`npx`](https://www.npmjs.com/package/npx). The `itk-wasm` CLI will invoke the toolchain contained in the dockcross Docker image. Build the project from the source directory containing the top level *CMakeLists.txt* file.
 
 ```
-npx itk-wasm build .
+npx itk-wasm build
 ```
 
-The project is built in `./web-build`.
+The project is built in `./web-build` by default.
 
 To execute the project, create an `index.js` file to [invoke the module](../api/node_pipelines.html):
 
