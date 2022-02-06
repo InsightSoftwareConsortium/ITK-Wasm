@@ -157,15 +157,3 @@ jobs:
         name: docker-cache
         path: ./docker-cache
         retention-days: 7
-
-    - name: DockerHub login
-      if: github.ref == 'refs/heads/master'
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_ITKWASM_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_ITKWASM_PASSWORD }}
-
-    - name: Push images to DockerHub
-      if: github.ref == 'refs/heads/master'
-      run: |
-        ./src/docker/push.sh --no-debug
