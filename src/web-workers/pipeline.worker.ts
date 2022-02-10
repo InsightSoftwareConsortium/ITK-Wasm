@@ -8,7 +8,6 @@ import IOInput from './IOInput.js'
 
 registerWebworker(async function (input: RunPipelineInput | IOInput) {
   let pipelineModule = null
-  console.log('input', input)
   if (input.operation === 'runPipeline') {
     pipelineModule = await loadPipelineModule(input.pipelinePath, input.config.pipelinesUrl)
   } else if (input.operation === 'readImage') {
