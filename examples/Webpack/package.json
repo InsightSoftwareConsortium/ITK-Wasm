@@ -1,6 +1,6 @@
 {
   "name": "itk-webpack-example",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "This example demonstrates how to use itk-wasm in a Webpack project that targets the browser.",
   "main": "index.js",
   "scripts": {
@@ -25,10 +25,10 @@
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-wasm#readme",
   "dependencies": {
     "curry": "^1.2.0",
-    "itk-image-io": "^1.0.0-a.10",
-    "itk-mesh-io": "^1.0.0-a.10",
-    "itk-polydata-io": "^1.0.0-a.10",
-    "itk-wasm": "^1.0.0-a.10"
+    "itk-image-io": "^1.0.0-a.12",
+    "itk-mesh-io": "^1.0.0-a.12",
+    "itk-polydata-io": "^1.0.0-a.12",
+    "itk-wasm": "^1.0.0-a.12"
   },
   "devDependencies": {
     "@babel/core": "^7.13.1",

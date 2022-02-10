@@ -5,6 +5,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 
 const entry = path.join(__dirname, 'src', 'index.js')
 const outputPath = path.join(__dirname, './dist')
+const itkConfig = path.resolve(__dirname, 'src', 'itkConfig.js')
 
 module.exports = {
   entry,
@@ -44,6 +45,10 @@ module.exports = {
   ],
   resolve: {
     fallback: { fs: false, path: false, url: false, module: false },
+    alias: {
+      '../itkConfig.js': itkConfig,
+      '../../itkConfig.js': itkConfig,
+    },
   },
   performance: {
     maxAssetSize: 10000000
