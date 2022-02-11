@@ -3,6 +3,7 @@
   "version": "sem-ver",
   "description": "Scientific polydata io with itk-wasm.",
   "type": "module",
+  "main": "./index.js",
   "scripts": {
   },
   "repository": {

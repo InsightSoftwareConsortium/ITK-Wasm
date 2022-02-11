@@ -147,3 +147,5 @@ foreach(io_module ${WebAssemblyInterface_ImageIOModules} WebAssemblyInterface)
 endforeach()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts.in
   ${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../dist/image-io/index.js @ONLY)
