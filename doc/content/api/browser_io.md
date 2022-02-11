@@ -69,6 +69,14 @@ If the files are known to be from a single, sorted series, the last argument can
 
 The used `webWorkerPool` is returned to enable resource cleanup by calling `.terminateWorkers()`.
 
+## readImageDICOMArrayBufferSeries(arrayBuffers: ArrayBuffer[], singleSortedSeries: boolean = false): Promise<{ image: [Image](./Image.html), webWorkerPool: WorkerPool }>
+
+Read an image from a series of DICOM [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)[ArrayBuffer]s stored in an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
+
+If the files are known to be from a single, sorted series, the last argument can be set to true for performance.
+
+The used `webWorkerPool` is returned to enable resource cleanup by calling `.terminateWorkers()`.
+
 ## readDICOMTags(webWorker: Worker | null, file: File, tags: string[] | null = null): Promise<{ tags: Map<string, string>, webWorker: Worker }>
 
 Read tags from a DICOM [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
