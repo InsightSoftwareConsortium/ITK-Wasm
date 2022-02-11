@@ -22,16 +22,16 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
-docker build -t itkwasm/emscripten-vtk:latest \
-        --build-arg IMAGE=itkwasm/emscripten-vtk \
+docker build -t itkwasm/emscripten-vtk-io:latest \
+        --build-arg IMAGE=itkwasm/emscripten-vtk-io \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VCS_REF=${VCS_REF} \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
 if $version_tag; then
-  docker build -t itkwasm/emscripten-vtk:${TAG} \
-          --build-arg IMAGE=itkwasm/emscripten-vtk \
+  docker build -t itkwasm/emscripten-vtk-io:${TAG} \
+          --build-arg IMAGE=itkwasm/emscripten-vtk-io \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg VERSION=${TAG} \
           --build-arg BASE_TAG=${TAG} \
@@ -42,8 +42,8 @@ if $version_tag; then
 fi
 
 if $debug; then
-  docker build -t itkwasm/emscripten-vtk:latest-debug \
-          --build-arg IMAGE=itkwasm/emscripten-vtk \
+  docker build -t itkwasm/emscripten-vtk-io:latest-debug \
+          --build-arg IMAGE=itkwasm/emscripten-vtk-io \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg BASE_TAG=latest-debug \
           --build-arg VCS_REF=${VCS_REF} \
@@ -51,8 +51,8 @@ if $debug; then
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $version_tag; then
-    docker build -t itkwasm/emscripten-vtk:${TAG}-debug \
-            --build-arg IMAGE=itkwasm/emscripten-vtk \
+    docker build -t itkwasm/emscripten-vtk-io:${TAG}-debug \
+            --build-arg IMAGE=itkwasm/emscripten-vtk-io \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg VERSION=${TAG}-debug \
             --build-arg BASE_TAG=${TAG}-debug \

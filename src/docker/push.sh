@@ -26,8 +26,8 @@ docker push itkwasm/emscripten:${TAG}
 docker push itkwasm/emscripten:latest
 docker push itkwasm/wasi-base:latest
 
-docker push itkwasm/emscripten-vtk:${TAG}
-docker push itkwasm/emscripten-vtk:latest
+docker push itkwasm/emscripten-vtk-io:${TAG}
+docker push itkwasm/emscripten-vtk-io:latest
 
 if $debug; then
   docker push itkwasm/wasi:${TAG}-debug
@@ -38,6 +38,6 @@ if $debug; then
   docker push itkwasm/emscripten:latest-debug
   docker push itkwasm/wasi-base:latest-debug
 
-  docker push itkwasm/emscripten-vtk:${TAG}-debug
-  docker push itkwasm/emscripten-vtk:latest-debug
+  docker push itkwasm/emscripten-vtk-io:${TAG}-debug
+  docker push itkwasm/emscripten-vtk-io:latest-debug
 fi
