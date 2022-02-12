@@ -89,6 +89,8 @@ foreach(io_module ${WebAssemblyInterface_MeshIOModules})
 endforeach()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/MeshIOIndex.ts.in
   ${CMAKE_CURRENT_SOURCE_DIR}/io/internal/MeshIOIndex.ts @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/MeshIOIndex.ts.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/../dist/mesh-io/index.js @ONLY)
 
 # Pipelines for readPolyData
 find_package(VTK QUIET)
