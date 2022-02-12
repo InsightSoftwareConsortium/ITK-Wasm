@@ -110,8 +110,8 @@ jobs:
         path: ./docker-cache
         retention-days: 7
 
-  build-itk-wasm-vtk:
-    name: "Build itk-wasm-vtk"
+  build-itk-wasm-vtk-io:
+    name: "Build itk-wasm-vtk-io"
     needs: build-itk-wasm
     runs-on: ubuntu-20.04
 
@@ -142,14 +142,14 @@ jobs:
         name: docker-cache
         path: ./docker-cache
 
-    - name: Build itk-wasm-vtk
+    - name: Build itk-wasm-vtk-io
       run: |
         if [[ -e ./docker-cache/itk-wasm-emscripten-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-emscripten-base.tar.xz | docker load ; fi
         if [[ -e ./docker-cache/itk-wasm-emscripten.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-emscripten.tar.xz | docker load ; fi
-        if [[ -e ./docker-cache/itk-wasm-emscripten-vtk.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-emscripten-vtk.tar.xz | docker load ; fi
-        ./src/docker/itk-wasm-vtk/build.sh
+        if [[ -e ./docker-cache/itk-wasm-emscripten-vtk-io.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-emscripten-vtk-io.tar.xz | docker load ; fi
+        ./src/docker/itk-wasm-vtk-io/build.sh
         mkdir -p ./docker-cache
-        docker save insighttoolkit/itk-wasm-emscripten-vtk:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-emscripten-vtk.tar.xz
+        docker save insighttoolkit/itk-wasm-emscripten-vtk-io:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-emscripten-vtk-io.tar.xz
 
     - name: Cache docker results
       uses: actions/upload-artifact@v2

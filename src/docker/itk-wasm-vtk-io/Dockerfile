@@ -28,13 +28,16 @@ RUN git clone https://github.com/thewtex/VTK.git && \
     -DVTK_ENABLE_KITS:BOOL=OFF \
     -DVTK_GROUP_ENABLE_MPI=NO \
     -DVTK_GROUP_ENABLE_Qt=NO \
-    -DVTK_GROUP_ENABLE_Rendering=WANT \
-    -DVTK_GROUP_ENABLE_StandAlone=WANT \
+    -DVTK_GROUP_ENABLE_Rendering=NO \
+    -DVTK_GROUP_ENABLE_Imaging=NO \
+    -DVTK_GROUP_ENABLE_StandAlone=DEFAULT \
     -DVTK_GROUP_ENABLE_Views=NO \
     -DVTK_GROUP_ENABLE_Web=NO \
-    -DVTK_MODULE_ENABLE_VTK_InteractionStyle=WANT \
-    -DVTK_MODULE_ENABLE_VTK_InteractionWidgets=WANT \
-    -DVTK_MODULE_ENABLE_VTK_RenderingContext2D=DONT_WANT \
+    -DVTK_MODULE_ENABLE_VTK_InteractionStyle=DONT_WANT \
+    -DVTK_MODULE_ENABLE_VTK_InteractionWidgets=DONT_WANT \
+    -DVTK_MODULE_ENABLE_VTK_RenderingContext2D=YES \
+    -DVTK_MODULE_ENABLE_VTK_RenderingCore=YES \
+    -DVTK_MODULE_ENABLE_VTK_RenderingFreeType=YES \
     -DVTK_MODULE_ENABLE_VTK_RenderingContextOpenGL2=DONT_WANT \
     -DVTK_LEGACY_REMOVE:BOOL=ON \
     -DVTK_OPENGL_USE_GLES:BOOL=ON \
@@ -47,9 +50,14 @@ RUN git clone https://github.com/thewtex/VTK.git && \
     -DBUILD_TESTING:BOOL=OFF \
     -DVTK_IGNORE_CMAKE_CXX11_CHECKS:BOOL=ON \
     -DVTK_MODULE_ENABLE_VTK_IOExodus:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_IOGeometry:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_FiltersHybrid:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_ImagingSources:STRING=YES \
     -DVTK_MODULE_ENABLE_VTK_IOLegacy:STRING=YES \
     -DVTK_MODULE_ENABLE_VTK_IOExport:STRING=YES \
     -DVTK_MODULE_ENABLE_VTK_FiltersGeometry:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_IOPLY:STRING=YES \
+    -DVTK_MODULE_ENABLE_VTK_IOXML:STRING=YES \
     -DH5_HAVE_GETPWUID:BOOL=OFF \
     ../VTK && \
   ninja && \
@@ -67,16 +75,13 @@ RUN git clone https://github.com/thewtex/ITKVTKGlue.git ITKVtkGlue && \
   cmake \
     -G Ninja \
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
+    -DVTK_RENDERING_BACKEND:STRING=None \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} \
     -DCMAKE_INSTALL_PREFIX:PATH=/install-prefix \
     -DBUILD_TESTING:BOOL=OFF \
     -DITK_DIR:PATH=/ITK-build \
     -DVTK_DIR:PATH=/VTK-build \
-    -DOPENGL_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
-    -DOPENGL_EGL_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
-    -DOPENGL_GLES2_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
-    -DOPENGL_GLES3_INCLUDE_DIR:PATH=/emsdk/upstream/emscripten/system/include/ \
     ../ITKVtkGlue && \
   ninja && \
   find . -name '*.o' -delete && \
@@ -89,7 +94,7 @@ ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=itkwasm/emscripten-vtk
+ARG IMAGE=itkwasm/emscripten-vtk-io
 ARG VERSION=latest
 ARG VCS_REF
 ARG VCS_URL
