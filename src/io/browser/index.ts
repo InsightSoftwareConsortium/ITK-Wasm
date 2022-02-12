@@ -21,6 +21,7 @@ export { default as readImageHTTP } from './../readImageHTTP.js'
 
 export { default as readDICOMTags } from './../readDICOMTags.js'
 export { default as readImageDICOMFileSeries } from './../readImageDICOMFileSeries.js'
+export { default as readImageDICOMArrayBufferSeries } from './../readImageDICOMArrayBufferSeries.js'
 
 export { default as writeImageArrayBuffer } from './../writeImageArrayBuffer.js'
 export { default as writeMeshArrayBuffer } from './../writeMeshArrayBuffer.js'

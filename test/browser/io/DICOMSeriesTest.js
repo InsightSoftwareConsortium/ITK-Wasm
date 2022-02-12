@@ -1,7 +1,10 @@
 import test from 'tape'
 import axios from 'axios'
 
-import { IntTypes, PixelTypes, getMatrixElement, readImageDICOMFileSeries } from '../../../dist/browser/index.js'
+import { IntTypes, PixelTypes, getMatrixElement, readImageDICOMFileSeries, readImageDICOMArrayBufferSeries } from '../../../dist/browser/index.js'
+
+const testSeriesDirectory = 'base/build/ExternalData/test/Input/DicomImageOrientationTest/'
+const fileNames = ['ImageOrientation.1.dcm', 'ImageOrientation.2.dcm', 'ImageOrientation.3.dcm']
 
 function verifyImage (t, image) {
   t.is(image.imageType.dimension, 3, 'dimension')
@@ -33,8 +36,6 @@ function verifyImage (t, image) {
 
 export default function () {
   test('Test reading DICOM file series', t => {
-    const testSeriesDirectory = 'base/build/ExternalData/test/Input/DicomImageOrientationTest/'
-    const fileNames = ['ImageOrientation.1.dcm', 'ImageOrientation.2.dcm', 'ImageOrientation.3.dcm']
     const fetchFiles = fileNames.map(function (file) {
       const path = testSeriesDirectory + file
       return axios.get(path, { responseType: 'blob' }).then(function (response) {
@@ -54,8 +55,6 @@ export default function () {
   })
 
   test('Test reading DICOM file series, assume a single sorted series', t => {
-    const testSeriesDirectory = 'base/build/ExternalData/test/Input/DicomImageOrientationTest/'
-    const fileNames = ['ImageOrientation.1.dcm', 'ImageOrientation.2.dcm', 'ImageOrientation.3.dcm']
     const fetchFiles = fileNames.map(function (file) {
       const path = testSeriesDirectory + file
       return axios.get(path, { responseType: 'blob' }).then(function (response) {
@@ -73,5 +72,32 @@ export default function () {
         webWorkerPool.terminateWorkers()
         verifyImage(t, image)
       })
+  })
+
+  test('Test reading DICOM array buffer series', async t => {
+    const fetchFiles = fileNames.map(async function (file) {
+      const path = testSeriesDirectory + file
+      const response = await axios.get(path, { responseType: 'arraybuffer' })
+      return response.data
+    })
+
+    const arrayBuffers = await Promise.all(fetchFiles)
+    const { image, webWorkerPool } = await readImageDICOMArrayBufferSeries(arrayBuffers)
+    webWorkerPool.terminateWorkers()
+    verifyImage(t, image)
+  })
+
+  test('Test reading DICOM array buffer series, assume a single sorted series', async t => {
+    const fetchFiles = fileNames.map(async function (file) {
+      const path = testSeriesDirectory + file
+      const response = await axios.get(path, { responseType: 'arraybuffer' })
+      return response.data
+    })
+
+    const arrayBuffers = await Promise.all(fetchFiles)
+    const singleSortedSeries = true
+    const { image, webWorkerPool } = await readImageDICOMArrayBufferSeries(arrayBuffers, singleSortedSeries)
+    webWorkerPool.terminateWorkers()
+    verifyImage(t, image)
   })
 }
