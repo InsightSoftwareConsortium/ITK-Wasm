@@ -33,11 +33,7 @@
 
 #include "itksys/SystemTools.hxx"
 
-#include "mz.h"
-#include "mz_os.h"
-#include "mz_strm.h"
-#include "mz_zip.h"
-#include "mz_zip_rw.h"
+#include "cbor.h"
 
 namespace itk
 {
@@ -46,9 +42,9 @@ WASMMeshIO
 ::WASMMeshIO()
 {
   this->AddSupportedWriteExtension(".iwm");
-  this->AddSupportedWriteExtension(".iwm.zip");
+  this->AddSupportedWriteExtension(".iwm.cbor");
   this->AddSupportedReadExtension(".iwm");
-  this->AddSupportedReadExtension(".iwm.zip");
+  this->AddSupportedReadExtension(".iwm.cbor");
 }
 
 
@@ -224,6 +220,104 @@ WASMMeshIO
     }
 }
 
+bool
+WASMMeshIO
+::FileNameIsCBOR()
+{
+  const std::string path(this->GetFileName());
+  std::string::size_type cborPos = path.rfind(".cbor");
+  if ( ( cborPos != std::string::npos )
+       && ( cborPos == path.length() - 5 ) )
+  {
+    return true;
+  }
+  return false;
+}
+
+
+void
+WASMMeshIO
+::ReadCBORBuffer(const char * dataName, void * buffer, SizeValueType numberOfBytesToBeRead)
+{
+  cbor_item_t * index = this->m_CBORRoot;
+  if (index == nullptr) {
+    itkExceptionMacro("Call ReadMeshInformation before reading the data buffer");
+  }
+  const size_t indexCount = cbor_map_size(index);
+  const struct cbor_pair * indexHandle = cbor_map_handle(index);
+  for (size_t ii = 0; ii < indexCount; ++ii)
+  {
+    const std::string_view key(reinterpret_cast<char *>(cbor_string_handle(indexHandle[ii].key)), cbor_string_length(indexHandle[ii].key));
+    if (key == dataName)
+    {
+      const cbor_item_t * dataItem = cbor_tag_item(indexHandle[ii].value);
+      const char * dataHandle = reinterpret_cast< char * >( cbor_bytestring_handle(dataItem) );
+      std::memcpy(buffer, dataHandle, numberOfBytesToBeRead);
+    }
+  }
+}
+
+
+void
+WASMMeshIO
+::WriteCBORBuffer(const char * dataName, void * buffer, SizeValueType numberOfBytesToWrite, IOComponentEnum ioComponent)
+{
+  cbor_item_t * index = this->m_CBORRoot;
+  if (index == nullptr) {
+    itkExceptionMacro("Call WriteMeshInformation before writing the data buffer");
+  }
+  cbor_item_t * dataItem = cbor_build_bytestring(reinterpret_cast< const unsigned char *>(buffer), numberOfBytesToWrite);
+  uint64_t tag = 0;
+  // Todo: support endianness
+  // https://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml
+  switch (ioComponent) {
+    case IOComponentEnum::CHAR:
+      tag = 64;
+      break;
+    case IOComponentEnum::UCHAR:
+      tag = 64;
+      break;
+    case IOComponentEnum::SHORT:
+      tag = 73;
+      break;
+    case IOComponentEnum::USHORT:
+      tag = 69;
+      break;
+    case IOComponentEnum::INT:
+      tag = 74;
+      break;
+    case IOComponentEnum::UINT:
+      tag = 70;
+      break;
+    case IOComponentEnum::LONG:
+      tag = 75;
+      break;
+    case IOComponentEnum::ULONG:
+      tag = 71;
+      break;
+    case IOComponentEnum::LONGLONG:
+      tag = 75;
+      break;
+    case IOComponentEnum::ULONGLONG:
+      tag = 71;
+      break;
+    case IOComponentEnum::FLOAT:
+      tag = 85;
+      break;
+    case IOComponentEnum::DOUBLE:
+      tag = 86;
+      break;
+    default:
+      itkExceptionMacro("Unexpected component type");
+  }
+  cbor_item_t * dataTag = cbor_new_tag(tag);
+  cbor_tag_set_item(dataTag, cbor_move(dataItem));
+  cbor_map_add(index,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string(dataName)),
+      .value = cbor_move(dataTag)});
+}
+
 
 bool
 WASMMeshIO
@@ -253,63 +347,301 @@ WASMMeshIO
 
 void
 WASMMeshIO
+::ReadCBOR()
+{
+  FILE* file = fopen(this->GetFileName(), "rb");
+  if (file == NULL) {
+    itkExceptionMacro("Could not read file: " << this->GetFileName());
+  }
+  fseek(file, 0, SEEK_END);
+  const size_t length = (size_t)ftell(file);
+  fseek(file, 0, SEEK_SET);
+  unsigned char* cborBuffer = static_cast< unsigned char *>(malloc(length));
+  if (!fread(cborBuffer, length, 1, file))
+  {
+    itkExceptionMacro("Could not successfully read " << this->GetFileName());
+
+  }
+  fclose(file);
+
+  if (this->m_CBORRoot != nullptr) {
+    cbor_decref(&(this->m_CBORRoot));
+  }
+  struct cbor_load_result result;
+  this->m_CBORRoot = cbor_load(cborBuffer, length, &result);
+  free(cborBuffer);
+  if (result.error.code != CBOR_ERR_NONE) {
+    std::string errorDescription;
+    switch (result.error.code) {
+      case CBOR_ERR_MALFORMATED: {
+        errorDescription = "Malformed data\n";
+        break;
+      }
+      case CBOR_ERR_MEMERROR: {
+        errorDescription = "Memory error -- perhaps the input is too large?\n";
+        break;
+      }
+      case CBOR_ERR_NODATA: {
+        errorDescription = "The input is empty\n";
+        break;
+      }
+      case CBOR_ERR_NOTENOUGHDATA: {
+        errorDescription = "Data seem to be missing -- is the input complete?\n";
+        break;
+      }
+      case CBOR_ERR_SYNTAXERROR: {
+        errorDescription = 
+            "Syntactically malformed data -- see http://tools.ietf.org/html/rfc7049\n";
+        break;
+      }
+      case CBOR_ERR_NONE: {
+        break;
+      }
+    }
+    itkExceptionMacro("" << errorDescription << "There was an error while reading the input near byte " << result.error.position << " (read " << result.read << " bytes in total): ");
+  }
+
+  cbor_item_t * index = this->m_CBORRoot;
+  const size_t indexCount = cbor_map_size(index);
+  const struct cbor_pair * indexHandle = cbor_map_handle(index);
+  for (size_t ii = 0; ii < indexCount; ++ii)
+  {
+    const std::string_view key(reinterpret_cast<char *>(cbor_string_handle(indexHandle[ii].key)), cbor_string_length(indexHandle[ii].key));
+    if (key == "meshType")
+    {
+      const cbor_item_t * meshTypeItem = indexHandle[ii].value;
+      const size_t meshTypeCount = cbor_map_size(meshTypeItem);
+      const struct cbor_pair * meshTypeHandle = cbor_map_handle(meshTypeItem);
+      for (size_t jj = 0; jj < meshTypeCount; ++jj)
+      {
+        const std::string_view meshTypeKey(reinterpret_cast<char *>(cbor_string_handle(meshTypeHandle[jj].key)), cbor_string_length(meshTypeHandle[jj].key));
+        if (meshTypeKey == "dimension")
+        {
+          const auto dimension = cbor_get_uint32(meshTypeHandle[jj].value);
+          this->SetPointDimension( dimension );
+        }
+        else if (meshTypeKey == "pointComponentType")
+        {
+          const std::string pointComponentType(reinterpret_cast<char *>(cbor_string_handle(meshTypeHandle[jj].value)), cbor_string_length(meshTypeHandle[jj].value));
+          const CommonEnums::IOComponent pointIOComponentType = IOComponentEnumFromWASMComponentType( pointComponentType );
+          this->SetPointComponentType( pointIOComponentType );
+        }
+        else if (meshTypeKey == "pointPixelType")
+        {
+          const std::string pointPixelType(reinterpret_cast<char *>(cbor_string_handle(meshTypeHandle[jj].value)), cbor_string_length(meshTypeHandle[jj].value));
+          const CommonEnums::IOPixel pointIOPixelType = IOPixelEnumFromWASMPixelType( pointPixelType );
+          this->SetPointPixelType( pointIOPixelType );
+        }
+        else if (meshTypeKey == "pointPixelComponentType")
+        {
+          const std::string pointPixelComponentType(reinterpret_cast<char *>(cbor_string_handle(meshTypeHandle[jj].value)), cbor_string_length(meshTypeHandle[jj].value));
+          const CommonEnums::IOComponent pointPixelIOComponentType = IOComponentEnumFromWASMComponentType( pointPixelComponentType );
+          this->SetPointPixelComponentType( pointPixelIOComponentType );
+        }
+        else if (meshTypeKey == "pointPixelComponents")
+        {
+          const auto components = cbor_get_uint32(meshTypeHandle[jj].value);
+          this->SetNumberOfPointPixelComponents( components );
+        }
+        else if (meshTypeKey == "cellComponentType")
+        {
+          const std::string cellComponentType(reinterpret_cast<char *>(cbor_string_handle(meshTypeHandle[jj].value)), cbor_string_length(meshTypeHandle[jj].value));
+          const CommonEnums::IOComponent cellIOComponentType = IOComponentEnumFromWASMComponentType( cellComponentType );
+          this->SetCellComponentType( cellIOComponentType );
+        }
+        else if (meshTypeKey == "cellPixelType")
+        {
+          const std::string cellPixelType(reinterpret_cast<char *>(cbor_string_handle(meshTypeHandle[jj].value)), cbor_string_length(meshTypeHandle[jj].value));
+          const CommonEnums::IOPixel cellIOPixelType = IOPixelEnumFromWASMPixelType( cellPixelType );
+          this->SetCellPixelType( cellIOPixelType );
+        }
+        else if (meshTypeKey == "cellPixelComponentType")
+        {
+          const std::string cellPixelComponentType(reinterpret_cast<char *>(cbor_string_handle(meshTypeHandle[jj].value)), cbor_string_length(meshTypeHandle[jj].value));
+          const CommonEnums::IOComponent cellPixelIOComponentType = IOComponentEnumFromWASMComponentType( cellPixelComponentType );
+          this->SetCellPixelComponentType( cellPixelIOComponentType );
+        }
+        else if (meshTypeKey == "cellPixelComponents")
+        {
+          const auto components = cbor_get_uint32(meshTypeHandle[jj].value);
+          this->SetNumberOfCellPixelComponents( components );
+        }
+        else
+        {
+          itkExceptionMacro("Unexpected meshType cbor map key: " << meshTypeKey);
+        }
+      }
+    }
+    else if (key == "numberOfPoints")
+    {
+      const auto components = cbor_get_uint64(indexHandle[ii].value);
+      this->SetNumberOfPoints( components );
+      if ( components )
+        {
+        this->m_UpdatePoints = true;
+        }
+    }
+    else if (key == "numberOfPointPixels")
+    {
+      const auto components = cbor_get_uint64(indexHandle[ii].value);
+      this->SetNumberOfPointPixels( components );
+      if ( components )
+        {
+        this->m_UpdatePointData = true;
+        }
+    }
+    else if (key == "numberOfCells")
+    {
+      const auto components = cbor_get_uint64(indexHandle[ii].value);
+      this->SetNumberOfCells( components );
+      if ( components )
+        {
+        this->m_UpdateCells = true;
+        }
+    }
+    else if (key == "numberOfCellPixels")
+    {
+      const auto components = cbor_get_uint64(indexHandle[ii].value);
+      this->SetNumberOfCellPixels( components );
+      if ( components )
+        {
+        this->m_UpdateCellData = true;
+        }
+    }
+    else if (key == "cellBufferSize")
+    {
+      const auto components = cbor_get_uint64(indexHandle[ii].value);
+      this->SetCellBufferSize( components );
+    }
+ }
+}
+
+void
+WASMMeshIO
+::WriteCBOR()
+{
+  if (this->m_CBORRoot != nullptr) {
+    cbor_decref(&(this->m_CBORRoot));
+  }
+  this->m_CBORRoot = cbor_new_definite_map(10);
+
+  cbor_item_t * index = this->m_CBORRoot;
+  cbor_item_t * meshTypeItem = cbor_new_definite_map(9);
+  cbor_map_add(meshTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("dimension")),
+      .value = cbor_move(cbor_build_uint32(this->GetPointDimension()))});
+  std::string componentString = WASMComponentTypeFromIOComponentEnum( this->GetPointComponentType() );
+  cbor_map_add(meshTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("pointComponentType")),
+      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+  std::string pixelString = WASMPixelTypeFromIOPixelEnum( this->GetPointPixelType() );
+  cbor_map_add(meshTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("pointPixelType")),
+      .value = cbor_move(cbor_build_string(pixelString.c_str()))});
+  componentString = WASMComponentTypeFromIOComponentEnum( this->GetPointPixelComponentType() );
+  cbor_map_add(meshTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("pointPixelComponentType")),
+      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+  cbor_map_add(meshTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("pointPixelComponents")),
+      .value = cbor_move(cbor_build_uint32(this->GetNumberOfPointPixelComponents()))});
+  componentString = WASMComponentTypeFromIOComponentEnum( this->GetCellComponentType() );
+  cbor_map_add(meshTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("cellComponentType")),
+      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+  pixelString = WASMPixelTypeFromIOPixelEnum( this->GetCellPixelType() );
+  cbor_map_add(meshTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("cellPixelType")),
+      .value = cbor_move(cbor_build_string(pixelString.c_str()))});
+  componentString = WASMComponentTypeFromIOComponentEnum( this->GetCellPixelComponentType() );
+  cbor_map_add(meshTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("cellPixelComponentType")),
+      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+  cbor_map_add(meshTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("cellPixelComponents")),
+      .value = cbor_move(cbor_build_uint32(this->GetNumberOfCellPixelComponents()))});
+  cbor_map_add(index,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("meshType")),
+      .value = cbor_move(meshTypeItem)});
+
+  cbor_map_add(index,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("numberOfPoints")),
+      .value = cbor_move(cbor_build_uint64(this->GetNumberOfPoints()))});
+  if ( this->GetNumberOfPoints() )
+    {
+    this->m_UpdatePoints = true;
+    }
+
+  cbor_map_add(index,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("numberOfPointPixels")),
+      .value = cbor_move(cbor_build_uint64(this->GetNumberOfPointPixels()))});
+  if ( this->GetNumberOfPointPixels() )
+    {
+    this->m_UpdatePointData = true;
+    }
+
+  cbor_map_add(index,
+      (struct cbor_pair){
+        .key = cbor_move(cbor_build_string("numberOfCells")),
+        .value = cbor_move(cbor_build_uint64(this->GetNumberOfCells()))});
+  if ( this->GetNumberOfCells() )
+    {
+    this->m_UpdateCells = true;
+    }
+
+  cbor_map_add(index,
+      (struct cbor_pair){
+        .key = cbor_move(cbor_build_string("numberOfCellPixels")),
+        .value = cbor_move(cbor_build_uint64(this->GetNumberOfCellPixels()))});
+  if ( this->GetNumberOfCellPixels() )
+    {
+    this->m_UpdateCellData = true;
+    }
+
+  cbor_map_add(index,
+      (struct cbor_pair){
+        .key = cbor_move(cbor_build_string("cellBufferSize")),
+        .value = cbor_move(cbor_build_uint64(this->GetCellBufferSize()))});
+}
+
+void
+WASMMeshIO
 ::ReadMeshInformation()
 {
   this->SetByteOrderToLittleEndian();
-  rapidjson::Document document;
 
+  if ( this->FileNameIsCBOR() )
+  {
+    this->ReadCBOR();
+    return;
+  }
+
+  rapidjson::Document document;
   const std::string path = this->GetFileName();
   const auto indexPath = path + "/index.json";
   const auto dataPath = path + "/data";
 
-  std::string::size_type zipPos = path.rfind(".zip");
-  void * zip_reader = NULL;
-  bool useZip = false;
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
-  {
-    useZip = true;
-    mz_zip_reader_create(&zip_reader);
-    if (mz_zip_reader_open_file(zip_reader, path.c_str()) != MZ_OK)
+  std::ifstream inputStream;
+  this->OpenFileForReading( inputStream, indexPath.c_str(), true );
+  std::string str((std::istreambuf_iterator<char>(inputStream)),
+                    std::istreambuf_iterator<char>());
+  if (document.Parse(str.c_str()).HasParseError())
     {
-      itkExceptionMacro("Could not open zip file");
+    itkExceptionMacro("Could not parse JSON");
+    return;
     }
-
-    mz_zip_reader_set_pattern(zip_reader, "index.json", 0);
-    if (mz_zip_reader_goto_first_entry(zip_reader) != MZ_OK)
-    {
-      itkExceptionMacro("Could not find index.json entry");
-    }
-    mz_zip_file *file_info = NULL;
-    mz_zip_reader_entry_get_info(zip_reader, &file_info);
-    mz_zip_reader_entry_open(zip_reader);
-    const int64_t bufsize = file_info->uncompressed_size;
-    void * buf = calloc(bufsize, sizeof(unsigned char));
-    mz_zip_reader_entry_read(zip_reader, buf, bufsize);
-    if (document.Parse(static_cast<const char *>(buf)).HasParseError())
-      {
-      free(buf);
-      mz_zip_reader_entry_close(zip_reader);
-      mz_zip_reader_close(zip_reader);
-      mz_zip_reader_delete(&zip_reader);
-      itkExceptionMacro("Could not parse JSON");
-      return;
-      }
-    free(buf);
-    mz_zip_reader_entry_close(zip_reader);
-  }
-  else
-  {
-    std::ifstream inputStream;
-    this->OpenFileForReading( inputStream, indexPath.c_str(), true );
-    std::string str((std::istreambuf_iterator<char>(inputStream)),
-                     std::istreambuf_iterator<char>());
-    if (document.Parse(str.c_str()).HasParseError())
-      {
-      itkExceptionMacro("Could not parse JSON");
-      return;
-      }
-  }
 
   const rapidjson::Value & meshType = document["meshType"];
   const int dimension = meshType["dimension"].GetInt();
@@ -380,41 +712,27 @@ void
 WASMMeshIO
 ::ReadPoints( void *buffer )
 {
-  const std::string path(this->GetFileName());
-  const std::string dataPath = "data/points.raw";
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetNumberOfPoints() * this->GetPointDimension() * ITKComponentSize( this->GetPointComponentType() ) );
 
-  std::string::size_type zipPos = path.rfind(".zip");
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
+  if ( this->FileNameIsCBOR() )
   {
-    void * zip_reader = NULL;
-    mz_zip_reader_create(&zip_reader);
-    mz_zip_reader_open_file(zip_reader, path.c_str());
-
-    mz_zip_reader_locate_entry(zip_reader, dataPath.c_str(), 0);
-    mz_zip_reader_entry_open(zip_reader);
-
-    mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
-    mz_zip_reader_entry_close(zip_reader);
-    mz_zip_reader_close(zip_reader);
-    mz_zip_reader_delete(&zip_reader);
+    this->ReadCBORBuffer("points", buffer, numberOfBytesToBeRead);
+    return;
   }
-  else
-  {
-    std::ifstream dataStream;
-    const std::string dataFile = path + "/" + dataPath;
-    this->OpenFileForReading( dataStream, dataFile.c_str() );
 
-    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-      {
-      itkExceptionMacro(<< "Read failed: Wanted "
-                        << numberOfBytesToBeRead
-                        << " bytes, but read "
-                        << dataStream.gcount() << " bytes.");
-      }
-  }
+  std::ifstream dataStream;
+  const std::string path(this->GetFileName());
+  const std::string dataFile = path + "/data/points.raw";
+  this->OpenFileForReading( dataStream, dataFile.c_str() );
+
+  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+    {
+    itkExceptionMacro(<< "Read failed: Wanted "
+                      << numberOfBytesToBeRead
+                      << " bytes, but read "
+                      << dataStream.gcount() << " bytes.");
+    }
 }
 
 
@@ -422,41 +740,28 @@ void
 WASMMeshIO
 ::ReadCells( void *buffer )
 {
-  const std::string path(this->GetFileName());
-  const std::string dataPath = "data/cells.raw";
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetCellBufferSize() * ITKComponentSize( this->GetCellComponentType() ));
 
-  std::string::size_type zipPos = path.rfind(".zip");
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
+  if ( this->FileNameIsCBOR() )
   {
-    void * zip_reader = NULL;
-    mz_zip_reader_create(&zip_reader);
-    mz_zip_reader_open_file(zip_reader, path.c_str());
-
-    mz_zip_reader_locate_entry(zip_reader, dataPath.c_str(), 0);
-    mz_zip_reader_entry_open(zip_reader);
-
-    mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
-    mz_zip_reader_entry_close(zip_reader);
-    mz_zip_reader_close(zip_reader);
-    mz_zip_reader_delete(&zip_reader);
+    this->ReadCBORBuffer("cells", buffer, numberOfBytesToBeRead);
+    return;
   }
-  else
-  {
-    std::ifstream dataStream;
-    const std::string dataFile = path + "/" + dataPath;
-    this->OpenFileForReading( dataStream, dataFile.c_str() );
 
-    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-      {
-      itkExceptionMacro(<< "Read failed: Wanted "
-                        << numberOfBytesToBeRead
-                        << " bytes, but read "
-                        << dataStream.gcount() << " bytes.");
-      }
-  }
+  const std::string path(this->GetFileName());
+  const std::string dataPath = "data/cells.raw";
+  std::ifstream dataStream;
+  const std::string dataFile = path + "/" + dataPath;
+  this->OpenFileForReading( dataStream, dataFile.c_str() );
+
+  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+    {
+    itkExceptionMacro(<< "Read failed: Wanted "
+                      << numberOfBytesToBeRead
+                      << " bytes, but read "
+                      << dataStream.gcount() << " bytes.");
+    }
 }
 
 
@@ -464,41 +769,28 @@ void
 WASMMeshIO
 ::ReadPointData( void *buffer )
 {
-  const std::string path(this->GetFileName());
-  const std::string dataPath = "data/pointData.raw";
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetPointPixelComponentType() ));
 
-  std::string::size_type zipPos = path.rfind(".zip");
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
+  if ( this->FileNameIsCBOR() )
   {
-    void * zip_reader = NULL;
-    mz_zip_reader_create(&zip_reader);
-    mz_zip_reader_open_file(zip_reader, path.c_str());
-
-    mz_zip_reader_locate_entry(zip_reader, dataPath.c_str(), 0);
-    mz_zip_reader_entry_open(zip_reader);
-
-    mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
-    mz_zip_reader_entry_close(zip_reader);
-    mz_zip_reader_close(zip_reader);
-    mz_zip_reader_delete(&zip_reader);
+    this->ReadCBORBuffer("pointData", buffer, numberOfBytesToBeRead);
+    return;
   }
-  else
-  {
-    std::ifstream dataStream;
-    const std::string dataFile = path + "/" + dataPath;
-    this->OpenFileForReading( dataStream, dataFile.c_str() );
 
-    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-      {
-      itkExceptionMacro(<< "Read failed: Wanted "
-                        << numberOfBytesToBeRead
-                        << " bytes, but read "
-                        << dataStream.gcount() << " bytes.");
-      }
-  }
+  const std::string path(this->GetFileName());
+  const std::string dataPath = "data/pointData.raw";
+  std::ifstream dataStream;
+  const std::string dataFile = path + "/" + dataPath;
+  this->OpenFileForReading( dataStream, dataFile.c_str() );
+
+  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+    {
+    itkExceptionMacro(<< "Read failed: Wanted "
+                      << numberOfBytesToBeRead
+                      << " bytes, but read "
+                      << dataStream.gcount() << " bytes.");
+    }
 }
 
 
@@ -506,41 +798,28 @@ void
 WASMMeshIO
 ::ReadCellData( void *buffer )
 {
-  const std::string path(this->GetFileName());
-  const std::string dataPath = "data/cellData.raw";
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetNumberOfCellPixels() * this->GetNumberOfCellPixelComponents() * ITKComponentSize( this->GetCellPixelComponentType() ));
 
-  std::string::size_type zipPos = path.rfind(".zip");
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
+  if ( this->FileNameIsCBOR() )
   {
-    void * zip_reader = NULL;
-    mz_zip_reader_create(&zip_reader);
-    mz_zip_reader_open_file(zip_reader, path.c_str());
-
-    mz_zip_reader_locate_entry(zip_reader, dataPath.c_str(), 0);
-    mz_zip_reader_entry_open(zip_reader);
-
-    mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
-    mz_zip_reader_entry_close(zip_reader);
-    mz_zip_reader_close(zip_reader);
-    mz_zip_reader_delete(&zip_reader);
+    this->ReadCBORBuffer("cellData", buffer, numberOfBytesToBeRead);
+    return;
   }
-  else
-  {
-    std::ifstream dataStream;
-    const std::string dataFile = path + "/" + dataPath;
-    this->OpenFileForReading( dataStream, dataFile.c_str() );
 
-    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-      {
-      itkExceptionMacro(<< "Read failed: Wanted "
-                        << numberOfBytesToBeRead
-                        << " bytes, but read "
-                        << dataStream.gcount() << " bytes.");
-      }
-  }
+  const std::string path(this->GetFileName());
+  const std::string dataPath = "data/cellData.raw";
+  std::ifstream dataStream;
+  const std::string dataFile = path + "/" + dataPath;
+  this->OpenFileForReading( dataStream, dataFile.c_str() );
+
+  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+    {
+    itkExceptionMacro(<< "Read failed: Wanted "
+                      << numberOfBytesToBeRead
+                      << " bytes, but read "
+                      << dataStream.gcount() << " bytes.");
+    }
 }
 
 
@@ -576,33 +855,23 @@ void
 WASMMeshIO
 ::WriteMeshInformation()
 {
+  if ( this->FileNameIsCBOR() )
+  {
+    this->WriteCBOR();
+    return;
+  }
+
   const std::string path = this->GetFileName();
   const auto indexPath = path + "/index.json";
   const auto dataPath = path + "/data";
-  std::string::size_type zipPos = path.rfind(".zip");
-  bool useZip = false;
-  void * zip_writer = NULL;
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
-  {
-    useZip = true;
-    mz_zip_writer_create(&zip_writer);
-    if (mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 0) != MZ_OK)
+  if ( !itksys::SystemTools::FileExists(path, false) )
     {
-      itkExceptionMacro("Could not open zip file");
+      itksys::SystemTools::MakeDirectory(path);
     }
-  }
-  else
-  {
-    if ( !itksys::SystemTools::FileExists(path, false) )
-      {
-        itksys::SystemTools::MakeDirectory(path);
-      }
-    if ( !itksys::SystemTools::FileExists(dataPath, false) )
-      {
-        itksys::SystemTools::MakeDirectory(dataPath);
-      }
-  }
+  if ( !itksys::SystemTools::FileExists(dataPath, false) )
+    {
+      itksys::SystemTools::MakeDirectory(dataPath);
+    }
 
   rapidjson::Document document;
   document.SetObject();
@@ -704,43 +973,12 @@ WASMMeshIO
   cellDataDataFile.SetString( cellDataDataFileString.c_str(), allocator );
   document.AddMember( "cellData", cellDataDataFile, allocator );
 
-  if (useZip)
-  {
-    rapidjson::StringBuffer stringBuffer;
-    rapidjson::Writer< rapidjson::StringBuffer > writer( stringBuffer );
-    document.Accept( writer );
-    mz_zip_file file_info = { 0 };
-    file_info.filename = "index.json";
-    file_info.modified_date = time(NULL);
-    file_info.accessed_date = file_info.modified_date;
-    file_info.creation_date = file_info.modified_date;
-    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
-    // 644
-    file_info.external_fa = 0x00008124;
-    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
-    file_info.flag = MZ_ZIP_FLAG_UTF8;
-    if (mz_zip_writer_entry_open(zip_writer, &file_info) != MZ_OK)
-    {
-      itkExceptionMacro("Could not open writer entry for index.json");
-    }
-    mz_zip_writer_entry_write(zip_writer, stringBuffer.GetString(), stringBuffer.GetLength());
-    mz_zip_writer_entry_close(zip_writer);
-  }
-  else
-  {
-    std::ofstream outputStream;
-    this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );
-    rapidjson::OStreamWrapper ostreamWrapper( outputStream );
-    rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
-    document.Accept( writer );
-    outputStream.close();
-  }
-
-  if (useZip)
-  {
-    mz_zip_writer_close(zip_writer);
-    mz_zip_writer_delete(&zip_writer);
-  }
+  std::ofstream outputStream;
+  this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );
+  rapidjson::OStreamWrapper ostreamWrapper( outputStream );
+  rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
+  document.Accept( writer );
+  outputStream.close();
 }
 
 
@@ -748,52 +986,27 @@ void
 WASMMeshIO
 ::WritePoints( void *buffer )
 {
-  const std::string path(this->GetFileName());
-  const std::string filePath = "data/points.raw";
-  const std::string::size_type zipPos = path.rfind(".zip");
-  struct zip_t * zip = nullptr;
-  bool useZip = false;
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
-  {
-    useZip = true;
-  }
-
   const SizeValueType numberOfBytes = this->GetNumberOfPoints() * this->GetPointDimension() * ITKComponentSize( this->GetPointComponentType() );
 
-  if (useZip)
+  if (this->FileNameIsCBOR())
   {
-    void * zip_writer = NULL;
-    mz_zip_writer_create(&zip_writer);
-    mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 1);
-    mz_zip_file file_info = { 0 };
-    file_info.filename = filePath.c_str();
-    file_info.modified_date = time(NULL);
-    file_info.accessed_date = file_info.modified_date;
-    file_info.creation_date = file_info.modified_date;
-    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
-    // 644
-    file_info.external_fa = 0x00008124;
-    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
-    mz_zip_writer_entry_open(zip_writer, &file_info);
-    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes);
-    mz_zip_writer_close(zip_writer);
-    mz_zip_writer_delete(&zip_writer);
+    this->WriteCBORBuffer( "points", buffer, numberOfBytes, this->GetPointComponentType() );
+    return;
   }
-  else
-  {
-    const std::string fileName = path + "/" + filePath;
-    std::ofstream outputStream;
-    this->OpenFileForWriting( outputStream, fileName, true, false );
-    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes);
-    if (outputStream.tellp() != numberOfBytes )
-      {
-      itkExceptionMacro(<< "Write failed: Wanted to write "
-                        << numberOfBytes
-                        << " bytes, but wrote "
-                        << outputStream.tellp() << " bytes.");
-      }
-  }
+
+  const std::string path(this->GetFileName());
+  const std::string filePath = "data/points.raw";
+  const std::string fileName = path + "/" + filePath;
+  std::ofstream outputStream;
+  this->OpenFileForWriting( outputStream, fileName, true, false );
+  outputStream.write(static_cast< const char * >( buffer ), numberOfBytes);
+  if (outputStream.tellp() != numberOfBytes )
+    {
+    itkExceptionMacro(<< "Write failed: Wanted to write "
+                      << numberOfBytes
+                      << " bytes, but wrote "
+                      << outputStream.tellp() << " bytes.");
+    }
 }
 
 
@@ -801,51 +1014,26 @@ void
 WASMMeshIO
 ::WriteCells( void *buffer )
 {
-  const std::string path(this->GetFileName());
-  const std::string filePath = "data/cells.raw";
-  const std::string::size_type zipPos = path.rfind(".zip");
-  struct zip_t * zip = nullptr;
-  bool useZip = false;
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
-  {
-    useZip = true;
-  }
-
   const SizeValueType numberOfBytes = this->GetCellBufferSize() * ITKComponentSize( this->GetCellComponentType() );
 
-  if (useZip)
+  if (this->FileNameIsCBOR())
   {
-    void * zip_writer = NULL;
-    mz_zip_writer_create(&zip_writer);
-    mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 1);
-    mz_zip_file file_info = { 0 };
-    file_info.filename = filePath.c_str();
-    file_info.modified_date = time(NULL);
-    file_info.accessed_date = file_info.modified_date;
-    file_info.creation_date = file_info.modified_date;
-    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
-    // 644
-    file_info.external_fa = 0x00008124;
-    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
-    mz_zip_writer_entry_open(zip_writer, &file_info);
-    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes);
-    mz_zip_writer_close(zip_writer);
-    mz_zip_writer_delete(&zip_writer);
+    this->WriteCBORBuffer( "cells", buffer, numberOfBytes, this->GetCellComponentType() );
+    return;
   }
-  else
-  {
-    const std::string fileName = path + "/" + filePath;
-    std::ofstream outputStream;
-    this->OpenFileForWriting( outputStream, fileName, true, false );
-    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
-    if (outputStream.tellp() != numberOfBytes )
-      {
-      itkExceptionMacro(<< "Write failed: Wanted to write "
-                        << numberOfBytes
-                        << " bytes, but wrote "
-                        << outputStream.tellp() << " bytes.");
-      }
+
+  const std::string path(this->GetFileName());
+  const std::string filePath = "data/cells.raw";
+  const std::string fileName = path + "/" + filePath;
+  std::ofstream outputStream;
+  this->OpenFileForWriting( outputStream, fileName, true, false );
+  outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+  if (outputStream.tellp() != numberOfBytes )
+    {
+    itkExceptionMacro(<< "Write failed: Wanted to write "
+                      << numberOfBytes
+                      << " bytes, but wrote "
+                      << outputStream.tellp() << " bytes.");
     }
 }
 
@@ -854,52 +1042,27 @@ void
 WASMMeshIO
 ::WritePointData( void *buffer )
 {
-  const std::string path(this->GetFileName());
-  const std::string filePath = "data/pointData.raw";
-  const std::string::size_type zipPos = path.rfind(".zip");
-  struct zip_t * zip = nullptr;
-  bool useZip = false;
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
-  {
-    useZip = true;
-  }
-
   const SizeValueType numberOfBytes = this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetPointPixelComponentType() );
 
-  if (useZip)
+  if (this->FileNameIsCBOR())
   {
-    void * zip_writer = NULL;
-    mz_zip_writer_create(&zip_writer);
-    mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 1);
-    mz_zip_file file_info = { 0 };
-    file_info.filename = filePath.c_str();
-    file_info.modified_date = time(NULL);
-    file_info.accessed_date = file_info.modified_date;
-    file_info.creation_date = file_info.modified_date;
-    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
-    // 644
-    file_info.external_fa = 0x00008124;
-    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
-    mz_zip_writer_entry_open(zip_writer, &file_info);
-    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes);
-    mz_zip_writer_close(zip_writer);
-    mz_zip_writer_delete(&zip_writer);
+    this->WriteCBORBuffer( "pointData", buffer, numberOfBytes, this->GetPointPixelComponentType() );
+    return;
   }
-  else
-  {
-    const std::string fileName = path + "/" + filePath;
-    std::ofstream outputStream;
-    this->OpenFileForWriting( outputStream, fileName, true, false );
-    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
-    if (outputStream.tellp() != numberOfBytes )
-      {
-      itkExceptionMacro(<< "Write failed: Wanted to write "
-                        << numberOfBytes
-                        << " bytes, but wrote "
-                        << outputStream.tellp() << " bytes.");
-      }
-  }
+
+  const std::string path(this->GetFileName());
+  const std::string filePath = "data/pointData.raw";
+  const std::string fileName = path + "/" + filePath;
+  std::ofstream outputStream;
+  this->OpenFileForWriting( outputStream, fileName, true, false );
+  outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+  if (outputStream.tellp() != numberOfBytes )
+    {
+    itkExceptionMacro(<< "Write failed: Wanted to write "
+                      << numberOfBytes
+                      << " bytes, but wrote "
+                      << outputStream.tellp() << " bytes.");
+    }
 }
 
 
@@ -907,58 +1070,46 @@ void
 WASMMeshIO
 ::WriteCellData( void *buffer )
 {
-  const std::string path(this->GetFileName());
-  const std::string filePath = "data/cellData.raw";
-  const std::string::size_type zipPos = path.rfind(".zip");
-  struct zip_t * zip = nullptr;
-  bool useZip = false;
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
-  {
-    useZip = true;
-  }
-
   const SizeValueType numberOfBytes = this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetCellPixelComponentType() );
 
-  if (useZip)
+  if (this->FileNameIsCBOR())
   {
-    void * zip_writer = NULL;
-    mz_zip_writer_create(&zip_writer);
-    mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 1);
-    mz_zip_file file_info = { 0 };
-    file_info.filename = filePath.c_str();
-    file_info.modified_date = time(NULL);
-    file_info.accessed_date = file_info.modified_date;
-    file_info.creation_date = file_info.modified_date;
-    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
-    // 644
-    file_info.external_fa = 0x00008124;
-    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
-    mz_zip_writer_entry_open(zip_writer, &file_info);
-    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes);
-    mz_zip_writer_close(zip_writer);
-    mz_zip_writer_delete(&zip_writer);
+    this->WriteCBORBuffer( "cellData", buffer, numberOfBytes, this->GetCellPixelComponentType() );
+    return;
   }
-  else
-  {
-    const std::string fileName = path + "/" + filePath;
-    std::ofstream outputStream;
-    this->OpenFileForWriting( outputStream, fileName, true, false );
-    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
-    if (outputStream.tellp() != numberOfBytes )
-      {
-      itkExceptionMacro(<< "Write failed: Wanted to write "
-                        << numberOfBytes
-                        << " bytes, but wrote "
-                        << outputStream.tellp() << " bytes.");
-      }
-  }
+
+  const std::string path(this->GetFileName());
+  const std::string filePath = "data/cellData.raw";
+  const std::string fileName = path + "/" + filePath;
+  std::ofstream outputStream;
+  this->OpenFileForWriting( outputStream, fileName, true, false );
+  outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
+  if (outputStream.tellp() != numberOfBytes )
+    {
+    itkExceptionMacro(<< "Write failed: Wanted to write "
+                      << numberOfBytes
+                      << " bytes, but wrote "
+                      << outputStream.tellp() << " bytes.");
+    }
 }
 
 void
 WASMMeshIO
 ::Write()
 {
+  if (this->FileNameIsCBOR())
+    {
+    unsigned char* cborBuffer;
+    size_t cborBufferSize;
+    size_t length = cbor_serialize_alloc(this->m_CBORRoot, &cborBuffer, &cborBufferSize);
+
+    FILE* file = fopen(this->GetFileName(), "wb");
+    fwrite(cborBuffer, 1, length, file);
+    free(cborBuffer);
+    fclose(file);
+
+    cbor_decref(&(this->m_CBORRoot));
+    }
 }
 
 } // end namespace itk

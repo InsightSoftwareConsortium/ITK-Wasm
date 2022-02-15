@@ -32,7 +32,7 @@ ExternalData_Expand_Arguments(
   DATA{Input/box.obj}
   DATA{Input/octa.off}
   DATA{Input/sphere.stl}
-  DATA{Input/cthead1.iwi.zip}
+  DATA{Input/cthead1.iwi.cbor}
   DATA{Input/cthead1.iwi/index.json}
   DATA{Input/cthead1.iwi/data/direction.raw}
   DATA{Input/cthead1.iwi/data/data.raw}
@@ -107,13 +107,13 @@ itk_add_test(NAME itkWASMImageIOTest
       --compare DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.mha
       --compare DATA{Input/brainweb165a10f17.mha}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.zip.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.cbor.mha
     itkWASMImageIOTest
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.iwi
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.mha
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.iwi.zip
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.zip.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.iwi.cbor
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.cbor.mha
 )
 
 itk_add_test(NAME itkWASMImageIONiftiTest
@@ -121,13 +121,13 @@ itk_add_test(NAME itkWASMImageIONiftiTest
       --compare DATA{Input/r16slice.nii.gz}
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.mha
       --compare DATA{Input/r16slice.nii.gz}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.zip.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.cbor.mha
     itkWASMImageIOTest
       DATA{Input/r16slice.nii.gz}
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.iwi
       ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.mha
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.iwi.zip
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.zip.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.iwi.cbor
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.cbor.mha
 )
 
 itk_add_test(NAME itkWASMMeshIOTest
@@ -136,8 +136,8 @@ itk_add_test(NAME itkWASMMeshIOTest
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm
       ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.vtk
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm.zip
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.zip.vtk
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm.cbor
+      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.cbor.vtk
 )
 
 itk_add_test(NAME itkPipelineTest

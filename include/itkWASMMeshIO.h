@@ -19,9 +19,10 @@
 #define itkWASMMeshIO_h
 #include "WebAssemblyInterfaceExport.h"
 
-
 #include "itkMeshIOBase.h"
 #include <fstream>
+
+#include "cbor.h"
 
 namespace itk
 {
@@ -127,8 +128,19 @@ protected:
   /** Convenient method to read a buffer as binary. Return true on success. */
   bool ReadBufferAsBinary(std::istream & os, void *buffer, SizeValueType numberOfBytesToBeRead);
 
+  bool FileNameIsCBOR();
+  void ReadCBORBuffer(const char * dataName, void * buffer, SizeValueType numberOfBytesToBeRead);
+  void WriteCBORBuffer(const char * dataName, void * buffer, SizeValueType numberOfBytesToWrite, IOComponentEnum ioComponent);
+
+  /** Reads in the mesh information and populates the related buffers. */
+  void ReadCBOR();
+  /** Writes the buffers into the CBOR item and the buffer out to disk. */
+  void WriteCBOR();
+
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(WASMMeshIO);
+
+  cbor_item_t * m_CBORRoot{ nullptr };
 };
 } // end namespace itk
 

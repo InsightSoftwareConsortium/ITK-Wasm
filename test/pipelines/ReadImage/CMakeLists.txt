@@ -15,5 +15,5 @@ target_link_libraries(ReadImage PUBLIC ${ITK_LIBRARIES})
 enable_testing()
 add_test(NAME ReadImageTest
   COMMAND ReadImage ${CMAKE_CURRENT_SOURCE_DIR}/cthead1.png
-  ${CMAKE_CURRENT_BINARY_DIR}/cthead1.iwi.zip
+  ${CMAKE_CURRENT_BINARY_DIR}/cthead1.iwi.cbor
   )

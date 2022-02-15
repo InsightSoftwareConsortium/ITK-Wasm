@@ -16,7 +16,7 @@ const extensionToIO = new Map([
   ['JPEG', 'itkJPEGImageIO'],
 
   ['iwi', 'itkWASMImageIO'],
-  ['iwi.zip', 'itkWASMImageIO'],
+  ['iwi.cbor', 'itkWASMImageIO'],
 
   ['lsm', 'itkLSMImageIO'],
 

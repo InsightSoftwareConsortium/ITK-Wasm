@@ -27,17 +27,12 @@
 #include "itkIOCommon.h"
 #include "itksys/SystemTools.hxx"
 
-#include "rapidjson/document.h"
+#include "itksys/SystemTools.hxx"
+
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/ostreamwrapper.h"
 
-#include "itksys/SystemTools.hxx"
-
-#include "mz.h"
-#include "mz_os.h"
-#include "mz_strm.h"
-#include "mz_zip.h"
-#include "mz_zip_rw.h"
+#include "cbor.h"
 
 namespace itk
 {
@@ -47,9 +42,9 @@ WASMImageIO
 {
   this->SetNumberOfDimensions(3);
   this->AddSupportedWriteExtension(".iwi");
-  this->AddSupportedWriteExtension(".iwi.zip");
+  this->AddSupportedWriteExtension(".iwi.cbor");
   this->AddSupportedReadExtension(".iwi");
-  this->AddSupportedReadExtension(".iwi.zip");
+  this->AddSupportedReadExtension(".iwi.cbor");
 }
 
 
@@ -147,114 +142,369 @@ WASMImageIO
 
 void
 WASMImageIO
+::ReadCBOR( void *buffer )
+{
+  FILE* file = fopen(this->GetFileName(), "rb");
+  if (file == NULL) {
+    itkExceptionMacro("Could not read file: " << this->GetFileName());
+  }
+  fseek(file, 0, SEEK_END);
+  const size_t length = (size_t)ftell(file);
+  fseek(file, 0, SEEK_SET);
+  unsigned char* cborBuffer = static_cast< unsigned char *>(malloc(length));
+  if (!fread(cborBuffer, length, 1, file))
+  {
+    itkExceptionMacro("Could not successfully read " << this->GetFileName());
+  }
+  fclose(file);
+
+  struct cbor_load_result result;
+  cbor_item_t* index = cbor_load(cborBuffer, length, &result);
+  free(cborBuffer);
+  if (result.error.code != CBOR_ERR_NONE) {
+    std::string errorDescription;
+    switch (result.error.code) {
+      case CBOR_ERR_MALFORMATED: {
+        errorDescription = "Malformed data\n";
+        break;
+      }
+      case CBOR_ERR_MEMERROR: {
+        errorDescription = "Memory error -- perhaps the input is too large?\n";
+        break;
+      }
+      case CBOR_ERR_NODATA: {
+        errorDescription = "The input is empty\n";
+        break;
+      }
+      case CBOR_ERR_NOTENOUGHDATA: {
+        errorDescription = "Data seem to be missing -- is the input complete?\n";
+        break;
+      }
+      case CBOR_ERR_SYNTAXERROR: {
+        errorDescription = 
+            "Syntactically malformed data -- see http://tools.ietf.org/html/rfc7049\n";
+        break;
+      }
+      case CBOR_ERR_NONE: {
+        break;
+      }
+    }
+    itkExceptionMacro("" << errorDescription << "There was an error while reading the input near byte " << result.error.position << " (read " << result.read << " bytes in total): ");
+  }
+
+  const size_t indexCount = cbor_map_size(index);
+  const struct cbor_pair * indexHandle = cbor_map_handle(index);
+  for (size_t ii = 0; ii < indexCount; ++ii)
+  {
+    const std::string_view key(reinterpret_cast<char *>(cbor_string_handle(indexHandle[ii].key)), cbor_string_length(indexHandle[ii].key));
+    if (key == "imageType")
+    {
+      const cbor_item_t * imageTypeItem = indexHandle[ii].value;
+      const size_t imageTypeCount = cbor_map_size(imageTypeItem);
+      const struct cbor_pair * imageTypeHandle = cbor_map_handle(imageTypeItem);
+      for (size_t jj = 0; jj < imageTypeCount; ++jj)
+      {
+        const std::string_view imageTypeKey(reinterpret_cast<char *>(cbor_string_handle(imageTypeHandle[jj].key)), cbor_string_length(imageTypeHandle[jj].key));
+        if (imageTypeKey == "dimension")
+        {
+          const auto dimension = cbor_get_uint32(imageTypeHandle[jj].value);
+          this->SetNumberOfDimensions( dimension );
+        }
+        else if (imageTypeKey == "componentType")
+        {
+          const std::string componentType(reinterpret_cast<char *>(cbor_string_handle(imageTypeHandle[jj].value)), cbor_string_length(imageTypeHandle[jj].value));
+          const ImageIOBase::IOComponentEnum ioComponentType = IOComponentEnumFromWASMComponentType( componentType );
+          this->SetComponentType( ioComponentType );
+        }
+        else if (imageTypeKey == "pixelType")
+        {
+          const std::string pixelType(reinterpret_cast<char *>(cbor_string_handle(imageTypeHandle[jj].value)), cbor_string_length(imageTypeHandle[jj].value));
+          const IOPixelEnum ioPixelType = IOPixelEnumFromWASMPixelType( pixelType );
+          this->SetPixelType( ioPixelType );
+        }
+        else if (imageTypeKey == "components")
+        {
+          const auto components = cbor_get_uint32(imageTypeHandle[jj].value);
+          this->SetNumberOfComponents( components );
+        }
+        else
+        {
+          itkExceptionMacro("Unexpected imageType cbor map key: " << imageTypeKey);
+        }
+      }
+    }
+    else if (key == "origin")
+    {
+      const auto originHandle = cbor_array_handle(indexHandle[ii].value);
+      const size_t originSize = cbor_array_size(indexHandle[ii].value);
+      for( int dim = 0; dim < originSize; ++dim )
+        {
+        const auto item = originHandle[dim];
+        this->SetOrigin( dim, cbor_float_get_float(item) );
+        }
+    }
+    else if (key == "spacing")
+    {
+      const auto spacingHandle = cbor_array_handle(indexHandle[ii].value);
+      const size_t spacingSize = cbor_array_size(indexHandle[ii].value);
+      for( int dim = 0; dim < spacingSize; ++dim )
+        {
+        const auto item = spacingHandle[dim];
+        this->SetSpacing( dim, cbor_float_get_float(item) );
+        }
+    }
+    else if (key == "size")
+    {
+      const auto sizeHandle = cbor_array_handle(indexHandle[ii].value);
+      const size_t sizeSize = cbor_array_size(indexHandle[ii].value);
+      for( int dim = 0; dim < sizeSize; ++dim )
+        {
+        const auto item = sizeHandle[dim];
+        this->SetDimensions( dim, cbor_get_uint64(item) );
+        }
+    }
+    else if (key == "direction")
+    {
+      cbor_item_t * directionItem = cbor_tag_item(indexHandle[ii].value);
+      const double * directionHandle = reinterpret_cast< double * >( cbor_bytestring_handle(directionItem) );
+      const size_t directionSize = cbor_bytestring_length(directionItem);
+      const unsigned int dimension = std::sqrt( directionSize / sizeof(double) );
+      for( unsigned int jj = 0; jj < dimension; ++jj )
+        {
+        std::vector< double > direction( dimension );
+        for( unsigned int kk = 0; kk < dimension; ++kk )
+          {
+          direction[kk] = directionHandle[kk + jj*dimension];
+          }
+        this->SetDirection( jj, direction );
+        }
+    }
+    else if (key == "data")
+    {
+      if( buffer != nullptr )
+      {
+        const SizeValueType numberOfBytesToBeRead =
+          static_cast< SizeValueType >( this->GetImageSizeInBytes() );
+        const cbor_item_t * dataItem = cbor_tag_item(indexHandle[ii].value);
+        const char * dataHandle = reinterpret_cast< char * >( cbor_bytestring_handle(dataItem) );
+        std::memcpy(buffer, dataHandle, numberOfBytesToBeRead);
+      }
+    }
+    else if (key == "metadata")
+    {
+      // todo
+    }
+    else
+    {
+      itkExceptionMacro("Unexpected cbor map key: " << key);
+    }
+  }
+
+  cbor_decref(&index);
+}
+
+void
+WASMImageIO
+::WriteCBOR(const void *buffer )
+{
+  cbor_item_t * index  = cbor_new_definite_map(7);
+
+  cbor_item_t * imageTypeItem = cbor_new_definite_map(4);
+  cbor_map_add(imageTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("dimension")),
+      .value = cbor_move(cbor_build_uint32(this->GetNumberOfDimensions()))});
+  const std::string componentString = WASMComponentTypeFromIOComponentEnum( this->GetComponentType() );
+  cbor_map_add(imageTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("componentType")),
+      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+  const std::string pixelString = WASMPixelTypeFromIOPixelEnum( this->GetPixelType() );
+  cbor_map_add(imageTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("pixelType")),
+      .value = cbor_move(cbor_build_string(pixelString.c_str()))});
+  cbor_map_add(imageTypeItem,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("components")),
+      .value = cbor_move(cbor_build_uint32(this->GetNumberOfComponents()))});
+  cbor_map_add(index,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("imageType")),
+      .value = cbor_move(imageTypeItem)});
+
+  const unsigned int dimension = this->GetNumberOfDimensions();
+
+  cbor_item_t * originItem = cbor_new_definite_array(dimension);
+  for( unsigned int ii = 0; ii < dimension; ++ii )
+  {
+    cbor_array_set(originItem, ii, cbor_move(cbor_build_float8(this->GetOrigin(ii))));
+  }
+  cbor_map_add(index,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("origin")),
+      .value = cbor_move(originItem)});
+
+  cbor_item_t * spacingItem = cbor_new_definite_array(dimension);
+  for( unsigned int ii = 0; ii < dimension; ++ii )
+  {
+    cbor_array_set(spacingItem, ii, cbor_move(cbor_build_float8(this->GetSpacing(ii))));
+  }
+  cbor_map_add(index,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("spacing")),
+      .value = cbor_move(spacingItem)});
+
+  std::vector< double > direction( dimension * dimension );
+  for( unsigned int ii = 0; ii < dimension; ++ii )
+    {
+    const std::vector< double > dimensionDirection = this->GetDirection( ii );
+    for( unsigned int jj = 0; jj < dimension; ++jj )
+      {
+      direction[jj + ii*dimension] = dimensionDirection[jj];
+      }
+    }
+  cbor_item_t * directionItem = cbor_build_bytestring(reinterpret_cast<unsigned char *>(&(direction.at(0))), dimension*dimension*sizeof(double));
+  cbor_item_t * directionTag = cbor_new_tag(86);
+  cbor_tag_set_item(directionTag, cbor_move(directionItem));
+  cbor_map_add(index,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("direction")),
+      .value = cbor_move(directionTag)});
+
+  cbor_item_t * sizeItem = cbor_new_definite_array(dimension);
+  for( unsigned int ii = 0; ii < dimension; ++ii )
+  {
+    cbor_array_set(sizeItem, ii, cbor_move(cbor_build_uint64(this->GetDimensions(ii))));
+  }
+  cbor_map_add(index,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("size")),
+      .value = cbor_move(sizeItem)});
+
+  cbor_item_t * metaDataItem = cbor_new_definite_map(0);
+  cbor_map_add(index,
+    (struct cbor_pair){
+      .key = cbor_move(cbor_build_string("metadata")),
+      .value = cbor_move(metaDataItem)});
+
+  if( buffer != nullptr )
+  {
+    const SizeValueType numberOfBytesToWrite =
+      static_cast< SizeValueType >( this->GetImageSizeInBytes() );
+    cbor_item_t * dataItem = cbor_build_bytestring(reinterpret_cast< const unsigned char *>(buffer), numberOfBytesToWrite);
+    uint64_t tag = 0;
+    // Todo: support endianness
+    // https://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml
+    switch (this->GetComponentType()) {
+      case IOComponentEnum::CHAR:
+        tag = 64;
+        break;
+      case IOComponentEnum::UCHAR:
+        tag = 64;
+        break;
+      case IOComponentEnum::SHORT:
+        tag = 73;
+        break;
+      case IOComponentEnum::USHORT:
+        tag = 69;
+        break;
+      case IOComponentEnum::INT:
+        tag = 74;
+        break;
+      case IOComponentEnum::UINT:
+        tag = 70;
+        break;
+      case IOComponentEnum::LONG:
+        tag = 75;
+        break;
+      case IOComponentEnum::ULONG:
+        tag = 71;
+        break;
+      case IOComponentEnum::LONGLONG:
+        tag = 75;
+        break;
+      case IOComponentEnum::ULONGLONG:
+        tag = 71;
+        break;
+      case IOComponentEnum::FLOAT:
+        tag = 85;
+        break;
+      case IOComponentEnum::DOUBLE:
+        tag = 86;
+        break;
+      default:
+        itkExceptionMacro("Unexpected component type");
+    }
+    cbor_item_t * dataTag = cbor_new_tag(tag);
+    cbor_tag_set_item(dataTag, cbor_move(dataItem));
+    cbor_map_add(index,
+      (struct cbor_pair){
+        .key = cbor_move(cbor_build_string("data")),
+        .value = cbor_move(dataTag)});
+  }
+
+  unsigned char* cborBuffer;
+  size_t cborBufferSize;
+  size_t length = cbor_serialize_alloc(index, &cborBuffer, &cborBufferSize);
+
+  FILE* file = fopen(this->GetFileName(), "wb");
+  fwrite(cborBuffer, 1, length, file);
+  free(cborBuffer);
+  fclose(file);
+
+  cbor_decref(&index);
+}
+
+
+void
+WASMImageIO
 ::ReadImageInformation()
 {
   this->SetByteOrderToLittleEndian();
-  rapidjson::Document document;
 
   const std::string path = this->GetFileName();
+
+  std::string::size_type cborPos = path.rfind(".cbor");
+  if ( ( cborPos != std::string::npos )
+       && ( cborPos == path.length() - 5 ) )
+  {
+    this->ReadCBOR(nullptr);
+    return;
+  }
+
+  rapidjson::Document document;
+  std::ifstream inputStream;
   const auto indexPath = path + "/index.json";
-  const auto dataPath = path + "/data";
-
-  std::string::size_type zipPos = path.rfind(".zip");
-  void * zip_reader = NULL;
-  bool useZip = false;
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
-  {
-    useZip = true;
-    mz_zip_reader_create(&zip_reader);
-    if (mz_zip_reader_open_file(zip_reader, path.c_str()) != MZ_OK)
+  this->OpenFileForReading( inputStream, indexPath.c_str(), true );
+  std::string str((std::istreambuf_iterator<char>(inputStream)),
+                    std::istreambuf_iterator<char>());
+  if (document.Parse(str.c_str()).HasParseError())
     {
-      itkExceptionMacro("Could not open zip file");
+    itkExceptionMacro("Could not parse JSON");
+    return;
     }
-
-    mz_zip_reader_set_pattern(zip_reader, "index.json", 0);
-    if (mz_zip_reader_goto_first_entry(zip_reader) != MZ_OK)
-    {
-      itkExceptionMacro("Could not find index.json entry");
-    }
-    mz_zip_file *file_info = NULL;
-    mz_zip_reader_entry_get_info(zip_reader, &file_info);
-    mz_zip_reader_entry_open(zip_reader);
-    const int64_t bufsize = file_info->uncompressed_size;
-    void * buf = calloc(bufsize, sizeof(unsigned char));
-    mz_zip_reader_entry_read(zip_reader, buf, bufsize);
-    if (document.Parse(static_cast<const char *>(buf)).HasParseError())
-      {
-      free(buf);
-      mz_zip_reader_entry_close(zip_reader);
-      mz_zip_reader_close(zip_reader);
-      mz_zip_reader_delete(&zip_reader);
-      itkExceptionMacro("Could not parse JSON");
-      return;
-      }
-    free(buf);
-    mz_zip_reader_entry_close(zip_reader);
-  }
-  else
-  {
-    std::ifstream inputStream;
-    this->OpenFileForReading( inputStream, indexPath.c_str(), true );
-    std::string str((std::istreambuf_iterator<char>(inputStream)),
-                     std::istreambuf_iterator<char>());
-    if (document.Parse(str.c_str()).HasParseError())
-      {
-      itkExceptionMacro("Could not parse JSON");
-      return;
-      }
-  }
-
   this->SetJSON(document);
 
   const unsigned int dimension = this->GetNumberOfDimensions();
+  const auto dataPath = path + "/data";
   int count = 0;
 
   const auto directionPath = dataPath +  "/direction.raw";
-  if (useZip)
+  std::ifstream directionStream;
+  this->OpenFileForReading( directionStream, directionPath.c_str(), false );
+  count = 0;
+  for( unsigned int jj = 0; jj < dimension; ++jj )
   {
-    mz_zip_reader_locate_entry(zip_reader, "data/direction.raw", 0);
-    mz_zip_reader_entry_open(zip_reader);
-    const int32_t bufsize = mz_zip_reader_entry_save_buffer_length(zip_reader);
-    double * buf = static_cast< double * >(malloc(bufsize));
-    mz_zip_reader_entry_save_buffer(zip_reader, static_cast<void *>(buf), bufsize);
-
-    count = 0;
-    for( unsigned int jj = 0; jj < dimension; ++jj )
+    std::vector< double > direction( dimension );
+    for( unsigned int ii = 0; ii < dimension; ++ii )
       {
-      std::vector< double > direction( dimension );
-      for( unsigned int ii = 0; ii < dimension; ++ii )
-        {
-        direction[ii] = buf[ii + jj*dimension];
-        }
-      this->SetDirection( count, direction );
-      ++count;
+      directionStream.read(reinterpret_cast< char * >(&(direction[ii])), sizeof(double));
       }
-    free(buf);
-    mz_zip_reader_entry_close(zip_reader);
-  }
-  else
-  {
-    std::ifstream directionStream;
-    this->OpenFileForReading( directionStream, directionPath.c_str(), false );
-    count = 0;
-    for( unsigned int jj = 0; jj < dimension; ++jj )
-      {
-      std::vector< double > direction( dimension );
-      for( unsigned int ii = 0; ii < dimension; ++ii )
-        {
-        directionStream.read(reinterpret_cast< char * >(&(direction[ii])), sizeof(double));
-        }
-      this->SetDirection( count, direction );
-      ++count;
-      }
+    this->SetDirection( count, direction );
+    ++count;
   }
 
-  if (useZip)
-  {
-    mz_zip_reader_close(zip_reader);
-    mz_zip_reader_delete(&zip_reader);
-  }
 }
 
 
@@ -263,50 +513,36 @@ WASMImageIO
 ::Read( void *buffer )
 {
   const std::string path(this->GetFileName());
-  const std::string dataFile = (path + "/data/data.raw").c_str();
 
-  std::string::size_type zipPos = path.rfind(".zip");
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
+  std::string::size_type cborPos = path.rfind(".cbor");
+  if ( ( cborPos != std::string::npos )
+       && ( cborPos == path.length() - 5 ) )
   {
-    void * zip_reader = NULL;
-    mz_zip_reader_create(&zip_reader);
-    mz_zip_reader_open_file(zip_reader, path.c_str());
+    this->ReadCBOR(buffer);
+    return;
+  }
 
-    mz_zip_reader_locate_entry(zip_reader, "data/data.raw", 0);
-    mz_zip_reader_entry_open(zip_reader);
+  const std::string dataFile = (path + "/data/data.raw").c_str();
+  std::ifstream dataStream;
+  this->OpenFileForReading( dataStream, dataFile.c_str() );
 
-    const SizeValueType numberOfBytesToBeRead =
-      static_cast< SizeValueType >( this->GetImageSizeInBytes() );
-    mz_zip_reader_entry_save_buffer(zip_reader, buffer, numberOfBytesToBeRead);
-    mz_zip_reader_entry_close(zip_reader);
-    mz_zip_reader_close(zip_reader);
-    mz_zip_reader_delete(&zip_reader);
+  if (this->RequestedToStream())
+  {
+    this->OpenFileForReading( dataStream, dataFile.c_str() );
+    this->StreamReadBufferAsBinary( dataStream, buffer );
   }
   else
   {
-    std::ifstream dataStream;
     this->OpenFileForReading( dataStream, dataFile.c_str() );
-
-    if (this->RequestedToStream())
-    {
-      this->OpenFileForReading( dataStream, dataFile.c_str() );
-      this->StreamReadBufferAsBinary( dataStream, buffer );
-    }
-
-    else
-    {
-      this->OpenFileForReading( dataStream, dataFile.c_str() );
-      const SizeValueType numberOfBytesToBeRead =
-        static_cast< SizeValueType >( this->GetImageSizeInBytes() );
-      if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
-        {
-        itkExceptionMacro(<< "Read failed: Wanted "
-                          << numberOfBytesToBeRead
-                          << " bytes, but read "
-                          << dataStream.gcount() << " bytes.");
-        }
-    }
+    const SizeValueType numberOfBytesToBeRead =
+      static_cast< SizeValueType >( this->GetImageSizeInBytes() );
+    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+      {
+      itkExceptionMacro(<< "Read failed: Wanted "
+                        << numberOfBytesToBeRead
+                        << " bytes, but read "
+                        << dataStream.gcount() << " bytes.");
+      }
   }
 }
 
@@ -405,117 +641,51 @@ WASMImageIO
 ::WriteImageInformation()
 {
   const std::string path = this->GetFileName();
+
+  std::string::size_type cborPos = path.rfind(".cbor");
+  if ( ( cborPos != std::string::npos )
+       && ( cborPos == path.length() - 5 ) )
+  {
+    this->WriteCBOR(nullptr);
+    return;
+  }
+
   const auto indexPath = path + "/index.json";
   const auto dataPath = path + "/data";
-  std::string::size_type zipPos = path.rfind(".zip");
-  bool useZip = false;
-  void * zip_writer = NULL;
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
-  {
-    useZip = true;
-    mz_zip_writer_create(&zip_writer);
-    if (mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 0) != MZ_OK)
+  if ( !itksys::SystemTools::FileExists(path, false) )
     {
-      itkExceptionMacro("Could not open zip file");
+      itksys::SystemTools::MakeDirectory(path);
     }
-  }
-  else
-  {
-    if ( !itksys::SystemTools::FileExists(path, false) )
-      {
-        itksys::SystemTools::MakeDirectory(path);
-      }
-    if ( !itksys::SystemTools::FileExists(dataPath, false) )
-      {
-        itksys::SystemTools::MakeDirectory(dataPath);
-      }
-  }
+  if ( !itksys::SystemTools::FileExists(dataPath, false) )
+    {
+      itksys::SystemTools::MakeDirectory(dataPath);
+    }
 
   rapidjson::Document document = this->GetJSON();
   const unsigned int dimension = this->GetNumberOfDimensions();
 
-  if (useZip)
-  {
-    mz_zip_file file_info = { 0 };
-    file_info.filename = "data/direction.raw";
-    file_info.modified_date = time(NULL);
-    file_info.accessed_date = file_info.modified_date;
-    file_info.creation_date = file_info.modified_date;
-    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
-    // 644
-    file_info.external_fa = 0x00008124;
-    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
-    if (mz_zip_writer_entry_open(zip_writer, &file_info) != MZ_OK)
+  const auto directionPath = dataPath + "/direction.raw";
+  if ( !itksys::SystemTools::FileExists(dataPath, false) )
     {
-      itkExceptionMacro("Could not open writer entry for data/direction.raw");
+      itksys::SystemTools::MakeDirectory(dataPath);
     }
-    for( unsigned int ii = 0; ii < dimension; ++ii )
-      {
-      const std::vector< double > dimensionDirection = this->GetDirection( ii );
-      for( unsigned int jj = 0; jj < dimension; ++jj )
-        {
-        mz_zip_writer_entry_write(zip_writer, reinterpret_cast< const char *>(&(dimensionDirection[jj])), sizeof(double) );
-        }
-      }
-    mz_zip_writer_entry_close(zip_writer);
-  }
-  else
-  {
-    const auto directionPath = dataPath + "/direction.raw";
-    if ( !itksys::SystemTools::FileExists(dataPath, false) )
-      {
-        itksys::SystemTools::MakeDirectory(dataPath);
-      }
-    std::ofstream directionFile;
-    this->OpenFileForWriting(directionFile, directionPath.c_str(), false);
-    for( unsigned int ii = 0; ii < dimension; ++ii )
-      {
-      const std::vector< double > dimensionDirection = this->GetDirection( ii );
-      for( unsigned int jj = 0; jj < dimension; ++jj )
-        {
-        directionFile.write(reinterpret_cast< const char *>(&(dimensionDirection[jj])), sizeof(double) );
-        }
-      }
-  }
-
-  if (useZip)
-  {
-    rapidjson::StringBuffer stringBuffer;
-    rapidjson::Writer< rapidjson::StringBuffer > writer( stringBuffer );
-    document.Accept( writer );
-    mz_zip_file file_info = { 0 };
-    file_info.filename = "index.json";
-    file_info.modified_date = time(NULL);
-    file_info.accessed_date = file_info.modified_date;
-    file_info.creation_date = file_info.modified_date;
-    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
-    // 644
-    file_info.external_fa = 0x00008124;
-    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
-    file_info.flag = MZ_ZIP_FLAG_UTF8;
-    if (mz_zip_writer_entry_open(zip_writer, &file_info) != MZ_OK)
+  std::ofstream directionFile;
+  this->OpenFileForWriting(directionFile, directionPath.c_str(), false);
+  for( unsigned int ii = 0; ii < dimension; ++ii )
     {
-      itkExceptionMacro("Could not open writer entry for index.json");
+    const std::vector< double > dimensionDirection = this->GetDirection( ii );
+    for( unsigned int jj = 0; jj < dimension; ++jj )
+      {
+      directionFile.write(reinterpret_cast< const char *>(&(dimensionDirection[jj])), sizeof(double) );
+      }
     }
-    mz_zip_writer_entry_write(zip_writer, stringBuffer.GetString(), stringBuffer.GetLength());
-    mz_zip_writer_entry_close(zip_writer);
-  }
-  else
-  {
-    std::ofstream outputStream;
-    this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );
-    rapidjson::OStreamWrapper ostreamWrapper( outputStream );
-    rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
-    document.Accept( writer );
-    outputStream.close();
-  }
 
-  if (useZip)
-  {
-    mz_zip_writer_close(zip_writer);
-    mz_zip_writer_delete(&zip_writer);
-  }
+  std::ofstream outputStream;
+  this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );
+  rapidjson::OStreamWrapper ostreamWrapper( outputStream );
+  rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
+  document.Accept( writer );
+  outputStream.close();
 }
 
 
@@ -524,70 +694,47 @@ WASMImageIO
 ::Write( const void *buffer )
 {
   const std::string path(this->GetFileName());
-  const std::string fileName = path + "/data/data.raw";
-  std::string::size_type zipPos = path.rfind(".zip");
-  struct zip_t * zip = nullptr;
-  bool useZip = false;
-  if ( ( zipPos != std::string::npos )
-       && ( zipPos == path.length() - 4 ) )
+
+  std::string::size_type cborPos = path.rfind(".cbor");
+  if ( ( cborPos != std::string::npos )
+       && ( cborPos == path.length() - 5 ) )
   {
-    useZip = true;
+    this->WriteCBOR(buffer);
+    return;
   }
 
-  if (useZip)
+  const std::string fileName = path + "/data/data.raw";
+
+  if (this->RequestedToStream())
   {
-    this->WriteImageInformation();
-    void * zip_writer = NULL;
-    mz_zip_writer_create(&zip_writer);
-    mz_zip_writer_open_file(zip_writer, path.c_str(), 0, 1);
-    mz_zip_file file_info = { 0 };
-    file_info.filename = "data/data.raw";
-    file_info.modified_date = time(NULL);
-    file_info.accessed_date = file_info.modified_date;
-    file_info.creation_date = file_info.modified_date;
-    file_info.version_madeby = MZ_HOST_SYSTEM_UNIX;
-    // 644
-    file_info.external_fa = 0x00008124;
-    file_info.compression_method = MZ_COMPRESS_METHOD_STORE;
-    mz_zip_writer_entry_open(zip_writer, &file_info);
-    const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
-    mz_zip_writer_entry_write(zip_writer, static_cast< const char * >( buffer ), numberOfBytes);
-    mz_zip_writer_close(zip_writer);
-    mz_zip_writer_delete(&zip_writer);
+    if (!itksys::SystemTools::FileExists(path.c_str()))
+    {
+      this->WriteImageInformation();
+      std::ofstream file;
+      this->OpenFileForWriting(file, fileName, false);
+
+      // write one byte at the end of the file to allocate (this is a
+      // nifty trick which should not write the entire size of the file
+      // just allocate it, if the system supports sparse files)
+      std::streampos seekPos = this->GetImageSizeInBytes();
+      file.seekp(seekPos, std::ios::cur);
+      file.write("\0", 1);
+      file.seekp(0);
+    }
+
+    std::ofstream file;
+    // open and stream write
+    this->OpenFileForWriting(file, fileName, false);
+
+    this->StreamWriteBufferAsBinary(file, buffer);
   }
   else
   {
-    if (this->RequestedToStream())
-    {
-      if (!itksys::SystemTools::FileExists(path.c_str()))
-      {
-        this->WriteImageInformation();
-        std::ofstream file;
-        this->OpenFileForWriting(file, fileName, false);
-
-        // write one byte at the end of the file to allocate (this is a
-        // nifty trick which should not write the entire size of the file
-        // just allocate it, if the system supports sparse files)
-        std::streampos seekPos = this->GetImageSizeInBytes();
-        file.seekp(seekPos, std::ios::cur);
-        file.write("\0", 1);
-        file.seekp(0);
-      }
-
-      std::ofstream file;
-      // open and stream write
-      this->OpenFileForWriting(file, fileName, false);
-
-      this->StreamWriteBufferAsBinary(file, buffer);
-    }
-    else
-    {
-      this->WriteImageInformation();
-      std::ofstream outputStream;
-      this->OpenFileForWriting( outputStream, fileName, true, false );
-      const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
-      outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
-    }
+    this->WriteImageInformation();
+    std::ofstream outputStream;
+    this->OpenFileForWriting( outputStream, fileName, true, false );
+    const SizeValueType numberOfBytes = this->GetImageSizeInBytes();
+    outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
   }
 }
 
