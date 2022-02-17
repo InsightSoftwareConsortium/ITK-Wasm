@@ -15,7 +15,6 @@ import TextFile from '../core/TextFile.js'
 import BinaryFile from '../core/BinaryFile.js'
 import Image from '../core/Image.js'
 import Mesh from '../core/Mesh.js'
-import PolyData from '../core/vtkPolyData.js'
 import TypedArray from '../core/TypedArray.js'
 
 async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
@@ -114,43 +113,6 @@ async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: strin
             transferables.push(transferable)
           }
         }
-      } else if (output.type === IOTypes.vtkPolyData) {
-        // vtkPolyData data
-        const polyData = output.data as PolyData
-        const cellTypes = ['points', 'verts', 'lines', 'polys', 'strips']
-        cellTypes.forEach((cellName) => {
-          // @ts-ignore: error TS7053: Element implicitly has an 'any' type
-          // because expression of type 'string' can't be used to index type
-          // 'vtkPolyData'.
-          if (polyData[cellName]) {
-            // @ts-ignore: error TS7053: Element implicitly has an 'any' type
-            // because expression of type 'string' can't be used to index type
-            // 'vtkPolyData'.
-            const transferable = getTransferable(polyData[cellName])
-            if (transferable) {
-              transferables.push(transferable)
-            }
-          }
-        })
-
-        const dataSetType = ['pointData', 'cellData', 'fieldData']
-        dataSetType.forEach((dataName) => {
-          // @ts-ignore: error TS7053: Element implicitly has an 'any' type
-          // because expression of type 'string' can't be used to index type
-          // 'vtkPolyData'.
-          if (polyData[dataName]) {
-            // @ts-ignore: error TS7053: Element implicitly has an 'any' type
-            // because expression of type 'string' can't be used to index type
-            // 'vtkPolyData'.
-            const data = polyData[dataName]
-            data.arrays.forEach((array: { data: TypedArray }) => {
-              const transferable = getTransferable(array.data)
-              if (transferable) {
-                transferables.push(transferable)
-              }
-            })
-          }
-        })
       }
     })
   }

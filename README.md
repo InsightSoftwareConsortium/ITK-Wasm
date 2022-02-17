@@ -16,8 +16,8 @@ The project provides tools to a) build C/C++ code to
 JavaScript/Typescript data structures, and traditional file formats, c)
 transfer data efficiently in and out of the WebAssembly runtime, and d)
 asynchronous, parallel execution of processing pipelines in a worker pool.
-*itk-wasm* can be used to execute [ITK](https://www.itk.org/),
-[VTK](https://www.vtk.org/) or arbitrary C++ codes in the browser, on a
+*itk-wasm* can be used to execute [ITK](https://www.itk.org/)
+or arbitrary C++ codes in the browser, on a
 workstation / server with [Node.js](https://nodejs.org/), or standalone
 execution and wrapped in [WASI](https://wasi.dev/) runtimes.
 

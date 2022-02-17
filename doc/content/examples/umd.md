@@ -27,7 +27,7 @@ Inside body JavaScript code, the `itk` object provides [itk-wasm API functions a
 
 ```
   [...]
-  return itk.readFile(null, files[0]).then(function({ image, mesh, polyData, webWorker }) {
+  return itk.readFile(null, files[0]).then(function({ image, mesh, webWorker }) {
     webWorker.terminate();
 ```
 

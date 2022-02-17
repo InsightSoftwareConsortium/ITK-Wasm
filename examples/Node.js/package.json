@@ -35,7 +35,6 @@
     "commander": "^8.2.0",
     "itk-image-io": "^1.0.0-a.10",
     "itk-mesh-io": "^1.0.0-a.10",
-    "itk-polydata-io": "^1.0.0-a.10",
     "itk-wasm": "^1.0.0-a.10"
   }
 }

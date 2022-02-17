@@ -7,9 +7,8 @@ import mimeToMeshIO from './internal/MimeToMeshIO.js'
 
 import ReadImageResult from './ReadImageResult.js'
 import ReadMeshResult from './ReadMeshResult.js'
-import ReadPolyDataResult from './ReadPolyDataResult.js'
 
-async function readArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadImageResult | ReadMeshResult | ReadPolyDataResult> {
+async function readArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadImageResult | ReadMeshResult > {
   const extension = getFileExtension(fileName)
   const isMesh = !!extensionToMeshIO.has(extension) || !!mimeToMeshIO.has(mimeType)
   if (isMesh) {

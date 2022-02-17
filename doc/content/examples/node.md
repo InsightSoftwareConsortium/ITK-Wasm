@@ -8,7 +8,7 @@ This example assumes you are creating a [Node.js package](https://docs.npmjs.com
 Add `itk-wasm` to your project's dependencies:
 
 ```
-npm install --save itk-wasm itk-image-io itk-mesh-io itk-polydata-io
+npm install --save itk-wasm itk-image-io itk-mesh-io
 ```
 
 This adds `itk-wasm` and `itk-wasm` IO packages to the `dependencies` section of your *package.json* file:
@@ -23,7 +23,6 @@ This adds `itk-wasm` and `itk-wasm` IO packages to the `dependencies` section of
     "commander": "^8.2.0",
     "itk-image-io": "^1.0.0-a.7",
     "itk-mesh-io": "^1.0.0-a.7",
-    "itk-polydata-io": "^1.0.0-a.7",
     "itk-wasm": "^1.0.0-a.7"
   }
 }

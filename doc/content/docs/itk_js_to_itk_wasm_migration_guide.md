@@ -68,7 +68,6 @@ The version of these packages follow the `itk-wasm` package version and should b
 
 1. `itk-image-io`
 2. `itk-mesh-io`
-3. `itk-polydata-io`
 
 An example that vendors these package's webassembly assets into an application for deployment can be found in the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack).
 
@@ -86,7 +85,6 @@ const itkConfig = {
   webWorkersUrl: '/itk/web-workers',
   imageIOUrl: '/itk/image-io',
   meshIOUrl: '/itk/mesh-io',
-  polydataIOUrl: '/itk/polydata-io',
   pipelinesUrl: '/itk/pipelines',
 }
 
@@ -128,3 +126,7 @@ The JSON file format is replaced by a WASM file format with a different layout. 
 ## Node Sync functions
 
 Node `*Sync` functions have been removed -- use the equivalent async versions instead.
+
+## VTK support
+
+The VTK Docker images, VTK PolyData IO, `readPolyDataFile`, `readPolyDataBlob`, `readPolyDataArrayBuffer`, based on VTK were removed.

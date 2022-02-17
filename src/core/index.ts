@@ -26,8 +26,6 @@ export { default as MeshType } from './MeshType.js'
 
 export { default as PolyData } from './PolyData.js'
 export { default as PolyDataType } from './PolyDataType.js'
-// Todo: remove
-export { default as vtkPolyData } from './vtkPolyData.js'
 
 export { default as bufferToTypedArray } from './bufferToTypedArray.js'
 export { default as copyImage } from './copyImage.js'

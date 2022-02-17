@@ -22,19 +22,6 @@ if(BUILD_ITK_WASM_IO_MODULES)
   set(meshios_ITKIOMeshOBJ itkOBJMeshIO)
   set(meshios_ITKIOMeshOFF itkOFFMeshIO)
   set(meshios_IOMeshSTL itkSTLMeshIO)
-
-  set(PolyDataIOPipelines
-    "VTKLegacyFileReader"
-    "VTKXMLFileReader"
-    "VTKExodusFileReader"
-    "VTKPLYFileReader"
-    CACHE STRING
-    "String delimited list of VTK PolyData IO pipelines to support.")
-  set(polydataios_VTKExodusFileReader VTK::IOExodus VTK::CommonDataModel
-    VTK::FiltersCore VTK::FiltersGeometry)
-  set(polydataios_VTKLegacyFileReader VTK::IOLegacy VTK::FiltersGeometry)
-  set(polydataios_VTKXMLFileReader VTK::IOXML VTK::FiltersGeometry VTK::IOLegacy)
-  set(polydataios_VTKPLYFileReader VTK::IOPLY)
 endif()
 
 include(FetchContent)

@@ -35,9 +35,6 @@ cd -
 cd dist/mesh-io
 npm publish
 cd -
-cd dist/polydata-io
-npm publish
-cd -
 git tag -m "itk-wasm ${version}" -s itk-wasm-v$version HEAD
 git checkout release
 git merge master

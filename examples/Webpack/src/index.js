@@ -11,9 +11,9 @@ const outputFileInformation = curry(function outputFileInformation (outputTextAr
   !!viewerElement && itkVtkViewer.createViewerFromFiles(viewerElement, files)
 
   return readFile(null, files[0])
-    .then(function ({ image, mesh, polyData, webWorker }) {
+    .then(function ({ image, mesh, webWorker }) {
       webWorker.terminate()
-      const imageOrMeshOrPolyData = image || mesh || polyData
+      const imageOrMesh = image || mesh
 
       function replacer (key, value) {
         if (!!value && value.byteLength !== undefined) {
@@ -21,7 +21,7 @@ const outputFileInformation = curry(function outputFileInformation (outputTextAr
         }
         return value
       }
-      outputTextArea.textContent = JSON.stringify(imageOrMeshOrPolyData, replacer, 4)
+      outputTextArea.textContent = JSON.stringify(imageOrMesh, replacer, 4)
     })
 })
 

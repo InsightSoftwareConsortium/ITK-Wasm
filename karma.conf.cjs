@@ -37,7 +37,6 @@ module.exports = function init (config) {
     files: [
       { pattern: './dist/image-io/**', watched: true, served: true, included: false },
       { pattern: './dist/mesh-io/**', watched: true, served: true, included: false },
-      { pattern: './dist/polydata-io/**', watched: true, served: true, included: false },
       { pattern: './dist/web-workers/**', watched: true, served: true, included: false },
       { pattern: './dist/pipeline/**', watched: true, served: true, included: false },
       { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false },

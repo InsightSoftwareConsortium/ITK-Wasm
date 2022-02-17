@@ -7,7 +7,7 @@ mainPackageFile = fs.readFileSync(path.join('package.json'))
 mainPackage = JSON.parse(mainPackageFile)
 version = mainPackage.version
 
-const packages = ['image-io', 'mesh-io', 'polydata-io']
+const packages = ['image-io', 'mesh-io']
 packages.forEach((packageName) => {
   const templateFile = fs.readFileSync(path.join(__dirname, `${packageName}.package.json.in`))
   const template = JSON.parse(templateFile)

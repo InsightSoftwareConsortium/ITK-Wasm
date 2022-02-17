@@ -7,9 +7,9 @@ Similar to the [web browser API](./browser_io.html), most of these functions ret
 
 ---
 
-## readLocalFile(filePath: string): Promise<[Image](./Image.html) | [Mesh](./Mesh.html) | [PolyData](https://insightsoftwareconsortium.github.io/itk-wasm/docs/polydata_formats.html)>
+## readLocalFile(filePath: string): Promise<[Image](./Image.html) | [Mesh](./Mesh.html) >
 
-Read an image or mesh or polyData from a file on the local filesystem.
+Read an image or mesh from a file on the local filesystem.
 
 ## writeLocalFile(useCompression: boolean, imageOrMesh: [Image](./Image.html) | [Mesh](./Mesh.html), filePath: string): Promise<null>
 
@@ -62,9 +62,3 @@ Write a mesh to a file on the local filesystem with Node.js.
 *binaryFileType*: write in an binary as opposed to a ascii format, if possible
 *mesh*:           [Mesh](./Mesh.html) instance to write
 *filePath*:       path to the file on the local filesystem
-
----
-
-## readPolyDataLocalFile(filePath: string): [vtk.js PolyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html)
-
-Read a vtk.js PolyData from a file on the local filesystem.

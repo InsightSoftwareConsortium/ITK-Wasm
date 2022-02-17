@@ -10,7 +10,7 @@ This example assumes you are creating a [Node.js package](https://docs.npmjs.com
 Add `itk-wasm` and the io-packages to your project's dependencies:
 
 ```
-npm install --save itk-wasm itk-image-io itk-mesh-io itk-polydata-io
+npm install --save itk-wasm itk-image-io itk-mesh-io
 ```
 
 Then, install Webpack-related development dependencies:
@@ -58,10 +58,6 @@ module.exports = {
           to: path.join(__dirname, 'dist', 'itk', 'image-io')
         },
         {
-          from: path.join(__dirname, 'node_modules', 'itk-polydata-io'),
-          to: path.join(__dirname, 'dist', 'itk', 'polydata-io')
-        },
-        {
           from: path.join(__dirname, 'node_modules', 'itk-mesh-io'),
           to: path.join(__dirname, 'dist', 'itk', 'mesh-io')
         }
@@ -99,7 +95,7 @@ The [babel-loader](https://github.com/babel/babel-loader) rule will [transpile](
 
 The *itk-wasm* Emscripten modules are loaded and executed **asynchronously** and **on demand**. This means the client only download the content it needs and the user does not experience interruption of the main user interface thread during computation. However, a few extra configuration steps are required since the modules are not bundled by Webpack.
 
-The `CopyPlugin` copies *itk-wasm* Emscripten modules to distribute along with your Webpack bundle. In this example, we copy all *image-io*, and *mesh-io*, and *polydata-io*. In your project, you may want to copy only the *image-io* or a subset of the *image-io*, based on your needs. We also copy the *web-workers*, which asynchronously perform IO or run processing pipelines in a background thread.
+The `CopyPlugin` copies *itk-wasm* Emscripten modules to distribute along with your Webpack bundle. In this example, we copy all *image-io*, and *mesh-io*. In your project, you may want to copy only the *image-io* or a subset of the *image-io*, based on your needs. We also copy the *web-workers*, which asynchronously perform IO or run processing pipelines in a background thread.
 
 To change the location of the *itk-wasm* web worker and Emscripten modules, set the Webpack `resolve.alias` setting as described in the Karma configuration below.
 
@@ -143,7 +139,6 @@ file are:
       './test/index.js',
       { pattern: './dist/itk/image-io/**', watched: true, served: true, included: false },
       { pattern: './dist/itk/mesh-io/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/polydata-io/**', watched: true, served: true, included: false },
       { pattern: './dist/itk/web-workers/**', watched: true, served: true, included: false }
     ],
 [...]
@@ -180,7 +175,6 @@ const itkConfig = {
   webWorkersUrl: __BASE_PATH__ + '/dist/itk/web-workers',
   imageIOUrl: __BASE_PATH__ + '/dist/itk/image-io',
   meshIOUrl: __BASE_PATH__ + '/dist/itk/mesh-io',
-  polydataIOUrl: __BASE_PATH__ + '/dist/itk/polydata-io',
   pipelinesUrl: __BASE_PATH__ + '/dist/itk/pipelines',
 }
 
