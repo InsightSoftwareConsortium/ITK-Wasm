@@ -1,27 +1,16 @@
 title: Using itk-wasm in a web browser application via Webpack
 ---
 
-<div class="glitch-embed-wrap" style="height: 420px; width: 100%; padding-bottom: 25px;">
-  <iframe
-    allow="geolocation; microphone; camera; midi; encrypted-media"
-    src="https://glitch.com/embed/#!/embed/itk-wasm-webpack-example?path=package.json&previewSize=100"
-    alt="itk-wasm-webpack-example on Glitch"
-    style="height: 100%; width: 100%; border: 0;">
-  </iframe>
-</div>
-
----
-
 This example demonstrates how to use *itk-wasm* in a web browser application built with [Webpack](https://webpack.js.org/). Find the full example in the `itk-wasm/examples/Webpack` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack).
 
 Since we asynchronously download the *itk-wasm* JavaScript and WebAssembly Emscripten modules, a few extra configuration steps are required.
 
 This example assumes you are creating a [Node.js package](https://docs.npmjs.com/getting-started/what-is-npm). If you do not already have a `package.json` file, [create one](https://docs.npmjs.com/getting-started/using-a-package.json), first.
 
-Add `itk` to your project's dependencies:
+Add `itk-wasm` and the io-packages to your project's dependencies:
 
 ```
-npm install --save itk
+npm install --save itk-wasm itk-image-io itk-mesh-io itk-polydata-io
 ```
 
 Then, install Webpack-related development dependencies:
@@ -38,48 +27,57 @@ const path = require('path')
 const webpack = require('webpack')
 const CopyPlugin = require('copy-webpack-plugin')
 
-const entry = path.join(__dirname, './src/index.js')
+const entry = path.join(__dirname, 'src', 'index.js')
 const outputPath = path.join(__dirname, './dist')
+const itkConfig = path.resolve(__dirname, 'src', 'itkConfig.js')
 
 module.exports = {
-  node: {
-    fs: 'empty',
-  },
   entry,
   output: {
     path: outputPath,
     filename: 'index.js',
+    library: {
+      type: 'umd',
+      name: 'bundle',
+    },
   },
   module: {
     rules: [
-      { test: entry, loader: 'expose-loader?index' },
-      { test: /\.js$/, loader: 'babel-loader' },
+      { test: /\.js$/, loader: 'babel-loader' }
     ]
   },
   plugins: [
-    new CopyPlugin([
-      {
-      from: path.join(__dirname, 'node_modules', 'itk', 'WebWorkers'),
-      to: path.join(__dirname, 'dist', 'itk', 'WebWorkers'),
-      },
-      {
-      from: path.join(__dirname, 'node_modules', 'itk', 'ImageIOs'),
-      to: path.join(__dirname, 'dist', 'itk', 'ImageIOs'),
-      },
-      {
-      from: path.join(__dirname, 'node_modules', 'itk', 'PolyDataIOs'),
-      to: path.join(__dirname, 'dist', 'itk', 'PolyDataIOs'),
-      },
-      {
-      from: path.join(__dirname, 'node_modules', 'itk', 'MeshIOs'),
-      to: path.join(__dirname, 'dist', 'itk', 'MeshIOs'),
-      },
-    ]),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.join(__dirname, 'node_modules', 'itk-wasm', 'dist', 'web-workers'),
+          to: path.join(__dirname, 'dist', 'itk', 'web-workers')
+        },
+        {
+          from: path.join(__dirname, 'node_modules', 'itk-image-io'),
+          to: path.join(__dirname, 'dist', 'itk', 'image-io')
+        },
+        {
+          from: path.join(__dirname, 'node_modules', 'itk-polydata-io'),
+          to: path.join(__dirname, 'dist', 'itk', 'polydata-io')
+        },
+        {
+          from: path.join(__dirname, 'node_modules', 'itk-mesh-io'),
+          to: path.join(__dirname, 'dist', 'itk', 'mesh-io')
+        }
+    ]})
   ],
-  performance: {
-      maxAssetSize: 10000000
+  resolve: {
+    fallback: { fs: false, path: false, url: false, module: false },
+    alias: {
+      '../itkConfig.js': itkConfig,
+      '../../itkConfig.js': itkConfig,
+    },
   },
-};
+  performance: {
+    maxAssetSize: 10000000
+  }
+}
 ```
 
 Replace `src/index.js` by your [Webpack entry point](https://webpack.js.org/concepts/#entry). Replace `./dist/` and the output filename with where you [want Webpack to place the generated JavaScript bundle](https://webpack.js.org/concepts/#output).
@@ -101,7 +99,7 @@ The [babel-loader](https://github.com/babel/babel-loader) rule will [transpile](
 
 The *itk-wasm* Emscripten modules are loaded and executed **asynchronously** and **on demand**. This means the client only download the content it needs and the user does not experience interruption of the main user interface thread during computation. However, a few extra configuration steps are required since the modules are not bundled by Webpack.
 
-The `CopyPlugin` copies *itk-wasm* Emscripten modules to distribute along with your Webpack bundle. In this example, we copy all *ImageIOs* and *MeshIOs*. In your project, you may want to copy only the *ImageIOs* or a subset of the *ImageIOs*, based on your needs. We also copy the *WebWorkers*, which asynchronously perform IO or run processing pipelines in a background thread.
+The `CopyPlugin` copies *itk-wasm* Emscripten modules to distribute along with your Webpack bundle. In this example, we copy all *image-io*, and *mesh-io*, and *polydata-io*. In your project, you may want to copy only the *image-io* or a subset of the *image-io*, based on your needs. We also copy the *web-workers*, which asynchronously perform IO or run processing pipelines in a background thread.
 
 To change the location of the *itk-wasm* web worker and Emscripten modules, set the Webpack `resolve.alias` setting as described in the Karma configuration below.
 
@@ -143,9 +141,10 @@ file are:
 [...]
     files: [
       './test/index.js',
-      { pattern: './dist/itk/ImageIOs/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/MeshIOs/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/WebWorkers/**', watched: true, served: true, included: false },
+      { pattern: './dist/itk/image-io/**', watched: true, served: true, included: false },
+      { pattern: './dist/itk/mesh-io/**', watched: true, served: true, included: false },
+      { pattern: './dist/itk/polydata-io/**', watched: true, served: true, included: false },
+      { pattern: './dist/itk/web-workers/**', watched: true, served: true, included: false }
     ],
 [...]
 ```
@@ -160,13 +159,16 @@ Since Karma's web server serves its files in `/base` by default, and our files a
 [...]
       resolve: {
         alias: {
-          './itkConfig$': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js'),
+          '../itkConfig.js': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js'),
+          '../../itkConfig.js': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js'),
         },
+        fallback: { fs: false, path: false, buffer: false, url: false, module: false },
       },
       plugins: [
         new webpack.DefinePlugin({
           __BASE_PATH__: "'/base'"
-        })
+        }),
+        new webpack.ProvidePlugin({ process: ['process/browser'] }),
       ]
 [...]
 ```
@@ -175,7 +177,11 @@ Where `itkConfigTest.js` contains:
 
 ```js
 const itkConfig = {
-  itkModulesPath: __BASE_PATH__ + '/dist/itk'
+  webWorkersUrl: __BASE_PATH__ + '/dist/itk/web-workers',
+  imageIOUrl: __BASE_PATH__ + '/dist/itk/image-io',
+  meshIOUrl: __BASE_PATH__ + '/dist/itk/mesh-io',
+  polydataIOUrl: __BASE_PATH__ + '/dist/itk/polydata-io',
+  pipelinesUrl: __BASE_PATH__ + '/dist/itk/pipelines',
 }
 
 export default itkConfig

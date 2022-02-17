@@ -50,14 +50,7 @@ module.exports = function init (config) {
           '../../itkConfig.js': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js'),
           stream: 'stream-browserify',
         },
-        fallback: {
-          assert: false,
-          module: false,
-          url: false,
-          buffer: false,
-          path: require.resolve('path-browserify'),
-          fs: false,
-        },
+        fallback: { fs: false, path: false, buffer: false, url: false, module: false },
       },
       plugins: [
         new webpack.DefinePlugin({
