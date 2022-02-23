@@ -92,44 +92,4 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/MeshIOIndex.ts.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/MeshIOIndex.ts.in
   ${CMAKE_CURRENT_SOURCE_DIR}/../dist/mesh-io/index.js @ONLY)
 
-# Pipelines for readPolyData
-find_package(VTK QUIET)
-if(VTK_FOUND)
-  foreach(io_pipeline ${PolyDataIOPipelines})
-
-    # Workaround Threads issue
-    find_package(Threads)
-
-    set(target ${io_pipeline})
-    set(target_umd ${io_pipeline}.umd)
-
-    _add_executable(${target} io/internal/bindings/${target}.cxx)
-    _add_executable(${target_umd} io/internal/bindings/${target}.cxx)
-
-    set(polydata_common_link_flags " ${common_link_flags} -s INVOKE_RUN=0 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORT_NAME=${io_pipeline} -s EXPORTED_RUNTIME_METHODS='[\"callMain\", \"print\", \"printErr\"]' -s EXPORTED_FUNCTIONS='[\"_main\"]' --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPipelinePre.js")
-    set_property(TARGET ${target} APPEND_STRING
-      PROPERTY LINK_FLAGS " ${polydata_common_link_flags} ${esm_link_flags}"
-      )
-    set_property(TARGET ${target_umd} APPEND_STRING
-      PROPERTY LINK_FLAGS " ${polydata_common_link_flags}"
-      )
-
-    set_property(TARGET ${target}
-      PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${WebAssemblyInterface_BINARY_DIR}/polydata-io
-      )
-    set_property(TARGET ${target_umd}
-      PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${WebAssemblyInterface_BINARY_DIR}/polydata-io
-      )
-    set_property(SOURCE io/internal/bindings/${target}.cxx APPEND
-      PROPERTY OBJECT_DEPENDS
-      ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js
-      )
-
-      _target_link_libraries(${target} LINK_PUBLIC VTK::IOExport ${polydataios_${io_pipeline}})
-      _target_link_libraries(${target_umd} LINK_PUBLIC VTK::IOExport ${polydataios_${io_pipeline}})
-  endforeach()
-endif()
-
 endif() # BUILD_ITK_WASM_IO_MODULES

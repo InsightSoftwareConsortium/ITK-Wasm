@@ -27,14 +27,14 @@ itkWASMImageIOTest(int argc, char * argv[])
   if (argc < 6)
   {
     std::cerr << "Missing parameters" << std::endl;
-    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " InputImage ImageDirectory ConvertedDirectory ImageZip ConvertedZip" << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " InputImage ImageDirectory ConvertedDirectory ImageCBOR ConvertedCBOR" << std::endl;
     return EXIT_FAILURE;
   }
   const char * inputImageFile = argv[1];
   const char * imageDirectory = argv[2];
   const char * convertedDirectoryFile = argv[3];
-  const char * imageZip = argv[4];
-  const char * convertedZipFile = argv[5];
+  const char * imageCBOR = argv[4];
+  const char * convertedCBORFile = argv[5];
 
   itk::WASMImageIOFactory::RegisterOneFactory();
 
@@ -65,13 +65,13 @@ itkWASMImageIOTest(int argc, char * argv[])
 
   ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(wasmReader->GetOutput(), convertedDirectoryFile));
 
-  wasmWriter->SetFileName( imageZip );
+  wasmWriter->SetFileName( imageCBOR );
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmWriter->Update());
 
-  wasmReader->SetFileName( imageZip );
+  wasmReader->SetFileName( imageCBOR );
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
 
-  ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(wasmReader->GetOutput(), convertedZipFile));
+  ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(wasmReader->GetOutput(), convertedCBORFile));
 
   return EXIT_SUCCESS;
 }

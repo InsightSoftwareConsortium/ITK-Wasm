@@ -27,7 +27,6 @@
     "curry": "^1.2.0",
     "itk-image-io": "^1.0.0-a.12",
     "itk-mesh-io": "^1.0.0-a.12",
-    "itk-polydata-io": "^1.0.0-a.12",
     "itk-wasm": "^1.0.0-a.12"
   },
   "devDependencies": {

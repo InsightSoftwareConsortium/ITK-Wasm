@@ -27,7 +27,6 @@ module.exports = function init (config) {
       './test/index.js',
       { pattern: './dist/itk/image-io/**', watched: true, served: true, included: false },
       { pattern: './dist/itk/mesh-io/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/polydata-io/**', watched: true, served: true, included: false },
       { pattern: './dist/itk/web-workers/**', watched: true, served: true, included: false }
     ],
 

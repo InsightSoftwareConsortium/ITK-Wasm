@@ -2,8 +2,7 @@ const IOTypes = {
   Text: 'Text',
   Binary: 'Binary',
   Image: 'Image',
-  Mesh: 'Mesh',
-  vtkPolyData: 'vtkPolyData'
+  Mesh: 'Mesh'
 } as const
 
 export default IOTypes

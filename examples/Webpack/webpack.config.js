@@ -34,10 +34,6 @@ module.exports = {
           to: path.join(__dirname, 'dist', 'itk', 'image-io')
         },
         {
-          from: path.join(__dirname, 'node_modules', 'itk-polydata-io'),
-          to: path.join(__dirname, 'dist', 'itk', 'polydata-io')
-        },
-        {
           from: path.join(__dirname, 'node_modules', 'itk-mesh-io'),
           to: path.join(__dirname, 'dist', 'itk', 'mesh-io')
         }

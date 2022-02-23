@@ -11,12 +11,12 @@ These functions return the [WebWorker](https://developer.mozilla.org/en-US/docs/
 
 ---
 
-## readFile(webWorker: Worker | null, file: File): Promise<{ webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-wasm/docs/polydata_formats.html) }>
+## readFile(webWorker: Worker | null, file: File): Promise<{ webWorker, [image](./Image.html), [mesh](./Mesh.html) }>
 
 Read an image or mesh or poly data from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
 
-## readBlob(webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<{ webWorker, [image](./Image.html), [mesh](./Mesh.html), [polyData](https://insightsoftwareconsortium.github.io/itk-wasm/docs/polydata_formats.html) }>
+## readBlob(webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise<{ webWorker, [image](./Image.html), [mesh](./Mesh.html), }>
 
 Read an image or mesh or poly data from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
@@ -121,17 +121,3 @@ Write an mesh to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web
 *mesh*:           [Mesh](./Mesh.html) instance to write
 *fileName*:       name that would be used for the resulting file
 *mimeType*:       optional mime-type for the resulting file
-
----
-
-## readPolyDataFile(webWorker: Worker | null, file: File): Promise<{ webWorker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }>
-
-Read a vtk.js PolyData from a [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
-
-## readPolyDataBlob(webWorker: Worker | null, blob: Blob, fileName: string, mimeType: string): Promise< { webWorker: Worker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }>
-
-Read a vtk.js PolyData from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
-
-## readPolyDataArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<{ webWorker: Worker, [polyData](https://kitware.github.io/vtk-js/docs/structures_PolyData.html) }>
-
-Read a vtk.js PolyData from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.

@@ -6,12 +6,11 @@ import TextStream from '../core/TextStream.js'
 import BinaryStream from '../core/BinaryStream.js'
 import Image from '../core/Image.js'
 import Mesh from '../core/Mesh.js'
-import PolyData from '../core/vtkPolyData.js'
 
 interface PipelineOutput {
   path?: string
   type: typeof IOTypes[keyof typeof IOTypes] | typeof InterfaceTypes[keyof typeof InterfaceTypes]
-  data?: string | Uint8Array | TextStream | BinaryStream | TextFile | BinaryFile | Image | Mesh | PolyData
+  data?: string | Uint8Array | TextStream | BinaryStream | TextFile | BinaryFile | Image | Mesh
 }
 
 export default PipelineOutput

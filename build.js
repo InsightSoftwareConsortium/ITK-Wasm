@@ -22,7 +22,6 @@ program
   .option('-s, --no-copy-build-artifacts', 'Do not copy build artifacts')
   .option('-e, --no-build-emscripten-pipelines', 'Do not build the emscripten test pipelines')
   .option('-w, --no-build-wasi-pipelines', 'Do not build the wasi test pipelines')
-  .option('-v, --no-build-vtk', 'Do not build the VTK-dependent io')
   .option('-d, --debug', 'Create a debug build of the Emscripten modules')
   .parse(process.argv)
 
@@ -56,23 +55,14 @@ if (options.buildIo) {
   if (options.debug) {
     dockcross = 'build/dockcross-debug'
   }
-  if (options.buildVtk) {
-    dockcross = `${dockcross}-with-vtk`
-  }
   try {
     fs.statSync(dockcross)
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcross, 'w')
       let buildImage = 'itkwasm/emscripten:latest'
-      if (options.buildVtk) {
-        buildImage = 'itkwasm/emscripten-vtk-io:latest'
-      }
       if (options.debug) {
         buildImage = 'itkwasm/emscripten:latest-debug'
-        if (options.buildVtk) {
-          buildImage = 'itkwasm/emscripten-vtk-io:latest-debug'
-        }
       }
       const dockerCall = spawnSync('docker', ['run', '--rm', buildImage], {
         env: process.env,
@@ -97,7 +87,7 @@ if (options.buildIo) {
       if (options.debug) {
         buildType = '-DCMAKE_BUILD_TYPE:STRING=Debug'
       }
-      const cmakeCall = spawnSync('bash', [dockcross, 'bash', '-c', `cmake ${buildType} -Bbuild -H. -GNinja -DITK_DIR=/ITK-build -DVTK_DIR=/VTK-build -DITK_WASM_NO_INTERFACE_LINK=1 -DBUILD_ITK_WASM_IO_MODULES=ON`], {
+      const cmakeCall = spawnSync('bash', [dockcross, 'bash', '-c', `cmake ${buildType} -Bbuild -H. -GNinja -DITK_DIR=/ITK-build -DITK_WASM_NO_INTERFACE_LINK=1 -DBUILD_ITK_WASM_IO_MODULES=ON`], {
         env: process.env,
         stdio: 'inherit'
       })
@@ -138,11 +128,6 @@ if (options.copyBuildArtifacts) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'polydata-io'))
-  } catch (err) {
-    if (err.code !== 'EEXIST') throw err
-  }
-  try {
     fs.mkdirSync(path.join('dist', 'web-workers'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
@@ -174,24 +159,9 @@ if (options.copyBuildArtifacts) {
     callback(null, result)
   }
 
-  let polyDataIOFiles = glob.sync(path.join('build', 'polydata-io', '*.js'))
-  polyDataIOFiles = polyDataIOFiles.concat(glob.sync(path.join('build', 'polydata-io', '*.wasm')))
-  const copyPolyDataIOModules = function (polyDataIOFile, callback) {
-    const io = path.basename(polyDataIOFile)
-    const output = path.join('dist', 'polydata-io', io)
-    fs.copySync(polyDataIOFile, output)
-    callback(null, io)
-  }
-  const buildPolyDataIOsParallel = function (callback) {
-    console.log('Copying polydata-io modules...')
-    const result = asyncMod.map(polyDataIOFiles, copyPolyDataIOModules)
-    callback(null, result)
-  }
-
   asyncMod.parallel([
     buildImageIOsParallel,
     buildMeshIOsParallel,
-    buildPolyDataIOsParallel,
   ])
 } // options.copySources
 
@@ -207,14 +177,8 @@ if (options.buildEmscriptenPipelines) {
     console.log('Building ' + pipelinePath + ' with Emscripten...')
     let debugFlags = []
     let buildImage = 'itkwasm/emscripten:latest'
-    if (options.buildVtk) {
-      buildImage = 'itkwasm/emscripten-vtk-io:latest'
-    }
     if (options.debug) {
       buildImage = 'itkwasm/emscripten:latest-debug'
-      if (options.buildVtk) {
-        buildImage = 'itkwasm/emscripten-vtk-io:latest-debug'
-      }
     }
     if (options.debug) {
       debugFlags = ['-DCMAKE_BUILD_TYPE:STRING=Debug', "-DCMAKE_EXE_LINKER_FLAGS_DEBUG='-s DISABLE_EXCEPTION_CATCHING=0'"]

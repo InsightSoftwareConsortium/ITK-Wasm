@@ -22,7 +22,7 @@ target_link_libraries(MedianFilterTest PUBLIC ${ITK_LIBRARIES})
 
 enable_testing()
 add_test(NAME MedianFilterTest
-  COMMAND MedianFilterTest ${CMAKE_CURRENT_SOURCE_DIR}/cthead1.iwi.zip
+  COMMAND MedianFilterTest ${CMAKE_CURRENT_SOURCE_DIR}/cthead1.iwi.cbor
   ${CMAKE_CURRENT_BINARY_DIR}/cthead1.shrink.iwi
   --radius 4
   )

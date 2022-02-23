@@ -31,7 +31,6 @@ sidebar:
     formats: Supported File Formats
     imageformats: Images
     meshformats: Meshes and Point Sets
-    polydataformats: PolyData
     hacking: Hacking itk-wasm
     migration: itk.js Migration Guide
 

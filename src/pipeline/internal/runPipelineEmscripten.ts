@@ -8,7 +8,6 @@ import TextFile from '../../core/TextFile.js'
 import BinaryFile from '../../core/BinaryFile.js'
 import Image from '../../core/Image.js'
 import Mesh from '../../core/Mesh.js'
-import PolyData from '../../core/vtkPolyData.js'
 import FloatTypes from '../../core/FloatTypes.js'
 import IntTypes from '../../core/IntTypes.js'
 
@@ -20,17 +19,6 @@ import RunPipelineResult from '../RunPipelineResult.js'
 const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
 const encoder = new TextEncoder()
 const decoder = new TextDecoder('utf-8')
-
-function typedArrayForBuffer (typedArrayType: string, buffer: ArrayBuffer): TypedArray {
-  let TypedArrayFunction = null
-  // Node.js
-  // @ts-expect-error: error TS7053: Element implicitly has an 'any' type because
-  // expression of type 'string' can't be used to index type 'Global &
-  // typeof globalThis'.
-  TypedArrayFunction = globalThis[typedArrayType] as TypedArray
-  // @ts-expect-error: error TS2351: This expression is not constructable.
-  return new TypedArrayFunction(buffer)
-}
 
 function readFileSharedArray (emscriptenModule: PipelineEmscriptenModule, path: string): Uint8Array {
   const opts = { flags: 'r', encoding: 'binary' }
@@ -409,46 +397,6 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             mesh.cellData = bufferToTypedArray(mesh.meshType.cellPixelComponentType, new ArrayBuffer(0))
           }
           outputData = mesh as Mesh
-          break
-        }
-        case IOTypes.vtkPolyData:
-        {
-          if (typeof output.path === 'undefined') {
-            throw new Error('output.path not defined')
-          }
-          const polyWASMDataObject = pipelineModule.fs_readFile(`${output.path}/index.json`, { encoding: 'utf8' }) as string
-          const polyData = JSON.parse(polyWASMDataObject)
-          const cellTypes = ['points', 'verts', 'lines', 'polys', 'strips']
-          cellTypes.forEach((cellName) => {
-            if (polyData[cellName] !== undefined) {
-              const cell = polyData[cellName]
-              if (cell.ref !== null) {
-                const dataUint8 = readFileSharedArray(pipelineModule, `${output.path}/${cell.ref.basepath}/${cell.ref.id}`) // eslint-disable-line
-                polyData[cellName].buffer = dataUint8.buffer
-                polyData[cellName].values = typedArrayForBuffer(polyData[cellName].dataType, dataUint8.buffer)
-                delete cell.ref
-              }
-            }
-          })
-
-          const dataSetType = ['pointData', 'cellData', 'fieldData']
-          dataSetType.forEach((dataName) => {
-            if (polyData[dataName] !== undefined) {
-              const data = polyData[dataName]
-              data.arrays.forEach((array: { data: { ref?: { basepath: string, id: string }, buffer: ArrayBuffer, values: TypedArray, dataType: string }}) => {
-                if (array.data.ref !== null && array.data.ref !== undefined) {
-                  if (typeof output.path === 'undefined') {
-                    throw new Error('output.path not defined')
-                  }
-                  const dataUint8 = readFileSharedArray(pipelineModule, `${output.path}/${array.data.ref.basepath}/${array.data.ref.id}`)
-                  array.data.buffer = dataUint8.buffer
-                  array.data.values = typedArrayForBuffer(array.data.dataType, dataUint8.buffer)
-                  delete array.data.ref
-                }
-              })
-            }
-          })
-          outputData = polyData as PolyData
           break
         }
         default:

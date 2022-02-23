@@ -94,6 +94,9 @@ protected:
     return 0;
   }
 
+  void ReadCBOR(void * buffer = nullptr);
+  void WriteCBOR(const void * buffer = nullptr);
+
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(WASMImageIO);
 };

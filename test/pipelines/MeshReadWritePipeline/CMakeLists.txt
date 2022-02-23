@@ -28,9 +28,9 @@ add_test(NAME MeshReadWriteWASMTest
   ${CMAKE_CURRENT_BINARY_DIR}/cow.iwm
   )
 
-add_test(NAME MeshReadWriteWASMZipTest
+add_test(NAME MeshReadWriteWASMCBORTest
   COMMAND MeshReadWriteTest ${CMAKE_CURRENT_SOURCE_DIR}/cow.vtk
-  ${CMAKE_CURRENT_BINARY_DIR}/cow.iwm.zip
+  ${CMAKE_CURRENT_BINARY_DIR}/cow.iwm.cbor
   )
 
 add_test(NAME MeshReadWriteWASMInputTest
