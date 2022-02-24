@@ -74,37 +74,14 @@ FetchContent_Declare(
 set(WITH_TESTS OFF CACHE BOOL "Build libcbor tests")
 set(WITH_EXAMPLES OFF CACHE BOOL "Build libcbor examples")
 
-option(ZSTD_BUILD_CONTRIB "BUILD_CONTRIB" OFF)
-option(ZSTD_BUILD_PROGRAMS "BUILD_PROGRAMS" OFF)
-option(ZSTD_BUILD_SHARED "BUILD_SHARED" OFF)
-option(ZSTD_BUILD_STATIC "BUILD_STATIC" ON)
-option(ZSTD_BUILD_TESTS "BUILD_TESTS" OFF)
-option(ZSTD_BUILD_LEGACY_SUPPORT "BUILD_LEGACY_SUPPORT" OFF)
-option(ZSTD_MULTITHREAD_SUPPORT "BUILD_MULTITHREAD_SUPPORT" OFF)
-option(ZSTD_BUILD_PROGRAMS_LINK_SHARED "BUILD_PROGRAMS_LINK_SHARED" OFF)
-option(ZSTD_BUILD_LZ4 "BUILD_LZ4" OFF)
-option(ZSTD_BUILD_LZMA "BUILD_LZMA" OFF)
-option(ZSTD_BUILD_ZLIB "BUILD_ZLIB" OFF)
-set(zstd_GIT_REPOSITORY "https://github.com/facebook/zstd.git")
-# v1.5.0
-set(zstd_GIT_TAG fe616643e0f17552025f50b84508ac5b286dd30f)
-FetchContent_Declare(
-  zstd_lib
-  GIT_REPOSITORY ${zstd_GIT_REPOSITORY}
-  GIT_TAG        ${zstd_GIT_TAG}
-)
-
 list(APPEND CMAKE_MODULE_PATH ${libcbor_SOURCE_DIR}/CMakeModules)
-FetchContent_MakeAvailable(rapidjson_lib cli11 rang libcbor zstd_lib)
+FetchContent_MakeAvailable(rapidjson_lib cli11 rang libcbor)
 set(RapidJSON_INCLUDE_DIR "${rapidjson_lib_SOURCE_DIR}/include")
 set(cli11_INCLUDE_DIR "${cli11_SOURCE_DIR}/include")
 set(rang_INCLUDE_DIR "${rang_SOURCE_DIR}/include")
 set(libcbor_INCLUDE_DIR "${libcbor_SOURCE_DIR}/src")
 set(libcbor_EXPORT_DIR "${libcbor_BINARY_DIR}/src")
 set(libcbor_CONFIGURATION_DIR "${libcbor_BINARY_DIR}/")
-set(zstd_lib_INCLUDE_DIR "${zstd_lib_SOURCE_DIR}/lib")
-
-add_subdirectory("${zstd_lib_SOURCE_DIR}/build/cmake" "${zstd_lib_BINARY_DIR}")
 
 set(BUILD_TESTING ${_itk_build_testing})
 set(BUILD_SHARED_LIBS ${_itk_build_shared})
@@ -119,7 +96,6 @@ set(WebAssemblyInterface_INCLUDE_DIRS
   ${libcbor_INCLUDE_DIR}
   ${libcbor_EXPORT_DIR}
   ${libcbor_CONFIGURATION_DIR}
-  ${zstd_lib_INCLUDE_DIR}
   )
 list(APPEND WebAssemblyInterface_LIBRARIES cbor)
 
