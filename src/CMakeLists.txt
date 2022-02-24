@@ -29,6 +29,7 @@ if(BUILD_ITK_WASM_IO_MODULES)
 set(common_link_flags " -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js")
 set(esm_link_flags " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0")
 
+add_subdirectory(io/internal/pipelines/common/CompressStringify)
 add_subdirectory(io/internal/pipelines/image/ConvertImage)
 add_subdirectory(io/internal/pipelines/image/ReadDICOM)
 

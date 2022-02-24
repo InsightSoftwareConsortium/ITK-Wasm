@@ -1,5 +1,5 @@
 /*=========================================================================
- *
+
  *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@
 #include <iterator>
 
 #include "zstd.h"
-#include "Base64.h"
+#include "cpp-base64/base64.h"
 
 #include "itkPipeline.h"
 #include "itkInputBinaryStream.h"
@@ -68,23 +68,25 @@ int compressStringify(itk::wasm::Pipeline & pipeline, itk::wasm::InputBinaryStre
 
 
   const size_t compressedBufferSize = ZSTD_compressBound(inputBinary.size());
-  std::vector<char> compressedBinary(compressedBufferSize);
+  std::string compressedBinary;
+  compressedBinary.resize(compressedBufferSize);
 
   const size_t compressedSize = ZSTD_compress(compressedBinary.data(), compressedBufferSize, inputBinary.data(), inputBinary.size(), compressionLevel);
   compressedBinary.resize(compressedSize);
 
-  std::ostringstream outputText;
-  tgk::utils::b64::b64_encode(compressedBinary, outputText, compressedSize);
+  // Do we want/need this?
+  constexpr bool urlFriendly = false;
+  auto outputText = base64_encode(compressedBinary, urlFriendly);
 
   outputTextStream.Get() << dataURLPrefix;
-  outputTextStream.Get() << outputText.str();
+  outputTextStream.Get() << outputText;
 
   return EXIT_SUCCESS;
 }
 
 int main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Given a binary, compress with stringify and optionally base64 encode", argc, argv);
+  itk::wasm::Pipeline pipeline("Given a binary, compress optionally base64 encode", argc, argv);
 
   itk::wasm::InputBinaryStream inputBinaryStream;
   pipeline.add_option("InputBinary", inputBinaryStream, "Input binary");
