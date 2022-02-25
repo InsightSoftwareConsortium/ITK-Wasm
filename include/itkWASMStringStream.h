@@ -20,6 +20,7 @@
 
 #include "itkWASMDataObject.h"
 #include "rapidjson/document.h"
+#include <string_view>
 
 namespace itk
 {

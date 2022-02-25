@@ -74,9 +74,6 @@ bool
 WASMImageIO
 ::CanReadFile(const char *filename)
 {
-  // Check the extension first to avoid opening files that do not
-  // look like nrrds.  The file must have an appropriate extension to be
-  // recognized.
   std::string fname = filename;
 
   bool extensionFound = false;
@@ -89,6 +86,13 @@ WASMImageIO
   if ( !extensionFound )
     {
     itkDebugMacro(<< "The filename extension is not recognized");
+    return false;
+    }
+
+  std::string::size_type zstdPos = fname.rfind(".zstd");
+  // WASMZstdImageIO is required
+  if ( zstdPos != std::string::npos )
+    {
     return false;
     }
 
@@ -142,25 +146,34 @@ WASMImageIO
 
 void
 WASMImageIO
-::ReadCBOR( void *buffer )
+::ReadCBOR( void *buffer, unsigned char * cborBuffer, size_t cborBufferLength )
 {
-  FILE* file = fopen(this->GetFileName(), "rb");
-  if (file == NULL) {
-    itkExceptionMacro("Could not read file: " << this->GetFileName());
-  }
-  fseek(file, 0, SEEK_END);
-  const size_t length = (size_t)ftell(file);
-  fseek(file, 0, SEEK_SET);
-  unsigned char* cborBuffer = static_cast< unsigned char *>(malloc(length));
-  if (!fread(cborBuffer, length, 1, file))
+  bool cborBufferAllocated = false;
+  size_t length = cborBufferLength;
+  if (cborBuffer == nullptr)
   {
-    itkExceptionMacro("Could not successfully read " << this->GetFileName());
+    FILE* file = fopen(this->GetFileName(), "rb");
+    if (file == NULL) {
+      itkExceptionMacro("Could not read file: " << this->GetFileName());
+    }
+    fseek(file, 0, SEEK_END);
+    length = (size_t)ftell(file);
+    fseek(file, 0, SEEK_SET);
+    cborBuffer = static_cast< unsigned char *>(malloc(length));
+    cborBufferAllocated = true;
+    if (!fread(cborBuffer, length, 1, file))
+    {
+      itkExceptionMacro("Could not successfully read " << this->GetFileName());
+    }
+    fclose(file);
   }
-  fclose(file);
 
   struct cbor_load_result result;
   cbor_item_t* index = cbor_load(cborBuffer, length, &result);
-  free(cborBuffer);
+  if (cborBufferAllocated)
+  {
+    free(cborBuffer);
+  }
   if (result.error.code != CBOR_ERR_NONE) {
     std::string errorDescription;
     switch (result.error.code) {
@@ -303,9 +316,9 @@ WASMImageIO
   cbor_decref(&index);
 }
 
-void
+size_t
 WASMImageIO
-::WriteCBOR(const void *buffer )
+::WriteCBOR(const void *buffer, unsigned char ** cborBufferPtr, bool allocateCBORBuffer )
 {
   cbor_item_t * index  = cbor_new_definite_map(7);
 
@@ -444,16 +457,26 @@ WASMImageIO
         .value = cbor_move(dataTag)});
   }
 
-  unsigned char* cborBuffer;
   size_t cborBufferSize;
-  size_t length = cbor_serialize_alloc(index, &cborBuffer, &cborBufferSize);
+  size_t length;
+  unsigned char * cborBuffer;
 
-  FILE* file = fopen(this->GetFileName(), "wb");
-  fwrite(cborBuffer, 1, length, file);
-  free(cborBuffer);
-  fclose(file);
+  if (allocateCBORBuffer)
+  {
+    length = cbor_serialize_alloc(index, cborBufferPtr, &cborBufferSize);
+  }
+  else
+  {
+    length = cbor_serialize_alloc(index, &cborBuffer, &cborBufferSize);
+    FILE* file = fopen(this->GetFileName(), "wb");
+    fwrite(cborBuffer, 1, length, file);
+    free(cborBuffer);
+    fclose(file);
+  }
 
   cbor_decref(&index);
+  
+  return length;
 }
 
 
@@ -571,6 +594,13 @@ WASMImageIO
     return false;
     }
 
+  std::string::size_type zstdPos = filename.rfind(".zstd");
+  // WASMZstdImageIO is required
+  if ( zstdPos != std::string::npos )
+    {
+    return false;
+    }
+
   return true;
 }
 
@@ -643,10 +673,8 @@ WASMImageIO
   const std::string path = this->GetFileName();
 
   std::string::size_type cborPos = path.rfind(".cbor");
-  if ( ( cborPos != std::string::npos )
-       && ( cborPos == path.length() - 5 ) )
+  if (cborPos != std::string::npos)
   {
-    this->WriteCBOR(nullptr);
     return;
   }
 

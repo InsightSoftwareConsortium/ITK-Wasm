@@ -87,6 +87,8 @@
 #elif IMAGE_IO_CLASS == 20
 #include "itkFDFImageIO.h"
 #elif IMAGE_IO_CLASS == 21
+#elif IMAGE_IO_CLASS == 22
+#include "itkWASMZstdImageIO.h"
 #else
 #error "Unsupported IMAGE_IO_CLASS"
 #endif
@@ -176,6 +178,8 @@ int main (int argc, char * argv[])
   return readImage<itk::FDFImageIO>(inputFileName, outputImageIO, quiet);
 #elif IMAGE_IO_CLASS == 21
   return readImage<itk::WASMImageIO>(inputFileName, outputImageIO, quiet);
+#elif IMAGE_IO_CLASS == 22
+  return readImage<itk::WASMZstdImageIO>(inputFileName, outputImageIO, quiet);
 #else
 #error "Unsupported IMAGE_IO_CLASS"
 #endif
