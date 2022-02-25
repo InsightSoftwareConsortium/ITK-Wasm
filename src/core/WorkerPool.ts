@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-non-null-assertion */
+
 import WorkerPoolFunction from './WorkerPoolFunction.js'
 import WorkerPoolProgressCallback from './WorkerPoolProgressCallback.js'
 import WorkerPoolRunTasksResult from './WorkerPoolRunTasksResult.js'
@@ -104,9 +106,8 @@ class WorkerPool {
     const info = this.runInfo[infoIndex]
 
     if (info?.canceled === true) {
+      info.reject!('Remaining tasks canceled')
       this.clearTask(info.index)
-      // @ts-expect-error: error TS2722: Cannot invoke an object which is
-      info?.reject('Remaining tasks canceled')
       return
     }
 
@@ -129,17 +130,13 @@ class WorkerPool {
             this.addTask(infoIndex, reTask[0], reTask[1])
           } else if (!info.addingTasks && info.runningWorkers === 0) {
             const results = info.results
+            info.resolve!(results)
             this.clearTask(info.index)
-            // @ts-expect-error: error TS2722: Cannot invoke an object which is
-            // possibly 'undefined'.
-            info?.resolve(results)
           }
         }
       }).catch((error) => {
+        info.reject!(error)
         this.clearTask(info.index)
-        // @ts-expect-error: error TS2722: Cannot invoke an object which is
-        // possibly 'undefined'.
-        info?.reject(error)
       })
     } else {
       if (info.runningWorkers !== 0 || info.postponed) {
@@ -162,6 +159,8 @@ class WorkerPool {
     this.runInfo[clearIndex].taskQueue = []
     this.runInfo[clearIndex].progressCallback = null
     this.runInfo[clearIndex].canceled = null
+    this.runInfo[clearIndex].reject = () => {}
+    this.runInfo[clearIndex].resolve = () => {}
   }
 }
 
