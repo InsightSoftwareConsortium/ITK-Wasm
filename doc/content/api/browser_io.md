@@ -90,6 +90,19 @@ Returns:
 - tags: a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) containing the mapping from tag to tag value.
 - webWorker: a webworker that can be re-used.
 
+## readDICOMTagsArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, tags: string[] | null = null): Promise<{ tags: Map<string, string>, webWorker: Worker }>
+
+Read tags from a DICOM [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
+
+Tags should be of the form `"GGGG|EEEE"`, where `GGGG` is the group ID in hex and `EEEE` is the element ID in hex. As an example, "0010|0010" is the PatientID.
+Hexadecimal strings are treated case-insensitively.
+A web worker object can be optionally provided to re-use a previously created web worker.
+Otherwise, leave this null.
+
+Returns:
+- tags: a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) containing the mapping from tag to tag value.
+- webWorker: a webworker that can be re-used.
+
 ## writeImageArrayBuffer(webWorker: Worker | null, useCompression: boolean, image: [Image](./Image.html), fileName: string, mimeType: string):  Promise<{ webWorker: Worker, arrayBuffer: [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }>
 
 Write an image to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).

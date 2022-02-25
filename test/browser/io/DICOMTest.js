@@ -1,7 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import { IntTypes, PixelTypes, getMatrixElement, readImageFile, readDICOMTags } from 'browser/index.js'
+import { IntTypes, PixelTypes, getMatrixElement, readImageFile, readDICOMTags, readDICOMTagsArrayBuffer } from 'browser/index.js'
 
 export default function () {
   test('Test reading a DICOM file', t => {
@@ -65,6 +65,27 @@ export default function () {
     t.end()
   })
 
+  test('Test reading DICOM tags ArrayBuffer', async t => {
+    const expected = {
+      '0010|0020': 'NOID',
+      '0020|0032': '-3.295510e+01\\-1.339286e+02\\1.167857e+02',
+      '0020|0037': '0.00000e+00\\ 1.00000e+00\\-0.00000e+00\\-0.00000e+00\\ 0.00000e+00\\-1.00000e+00',
+      // case sensitivity test
+      '0008|103e': 'SAG/RF-FAST/VOL/FLIP 30 ',
+      '0008|103E': 'SAG/RF-FAST/VOL/FLIP 30 '
+    }
+    const fileName = '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm'
+    const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+    const response = await axios.get(testFilePath, { responseType: 'arraybuffer' })
+    const arrayBuffer = response.data
+    const { tags: result, webWorker } = await readDICOMTagsArrayBuffer(null, arrayBuffer, Object.keys(expected))
+    webWorker.terminate()
+    t.true(result instanceof Map)
+    Object.keys(expected).forEach((tag) => {
+      t.is(result.get(tag), expected[tag], tag)
+    })
+    t.end()
+  })
   test('Test reading all DICOM tags', async t => {
     const expected = {
       '0010|0020': 'NOID',
