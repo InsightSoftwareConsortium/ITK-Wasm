@@ -3,6 +3,10 @@ project(ConvertImage)
 
 set(CMAKE_CXX_STANDARD 17)
 
+if (NOT TARGET libzstd_static)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/../../common/CompressStringify/BuildZstd.cmake)
+endif()
+
 # This list should be ordered from approximately most commonly to least
 # commonly used modules.
 set(WebAssemblyInterface_ImageIOModules
@@ -86,8 +90,9 @@ set(imageio_id_itkScancoImageIO 19)
 set(imageios_IOFDF itkFDFImageIO)
 set(imageio_id_itkFDFImageIO 20)
 
-set(imageios_WebAssemblyInterface itkWASMImageIO)
+set(imageios_WebAssemblyInterface itkWASMImageIO itkWASMZstdImageIO)
 set(imageio_id_itkWASMImageIO 21)
+set(imageio_id_itkWASMZstdImageIO 22)
 
 set(ITK_NO_IO_FACTORY_REGISTER_MANAGER 1)
 set(ImageIOIndex_ARRAY "")
@@ -97,6 +102,7 @@ foreach(io_module ${WebAssemblyInterface_ImageIOModules} WebAssemblyInterface)
       find_package(ITK REQUIRED COMPONENTS ITKIOImageBase)
       include(${ITK_USE_FILE})
       include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
+      include_directories(${CMAKE_CURRENT_SOURCE_DIR})
       list(APPEND ITK_LIBRARIES ${WebAssemblyInterface_LIBRARIES})
     else()
       find_package(ITK REQUIRED COMPONENTS ${io_module} WebAssemblyInterface)
@@ -112,11 +118,16 @@ foreach(io_module ${WebAssemblyInterface_ImageIOModules} WebAssemblyInterface)
   endif()
   foreach(imageio ${imageios_${io_module}})
     set(ImageIOIndex_ARRAY "${ImageIOIndex_ARRAY}'${imageio}', ")
+    set(extra_srcs)
+    if(${imageio} STREQUAL "itkWASMZstdImageIO")
+      list(APPEND ITK_LIBRARIES libzstd_static)
+      list(APPEND extra_srcs itkWASMZstdImageIO.cxx)
+    endif()
 
-    add_executable(${imageio}ReadImage ReadImage.cxx)
+    add_executable(${imageio}ReadImage ReadImage.cxx ${extra_srcs})
     target_link_libraries(${imageio}ReadImage PUBLIC ${ITK_LIBRARIES})
     target_compile_definitions(${imageio}ReadImage PUBLIC -DIMAGE_IO_CLASS=${imageio_id_${imageio}})
-    add_executable(${imageio}WriteImage WriteImage.cxx)
+    add_executable(${imageio}WriteImage WriteImage.cxx ${extra_srcs})
     target_link_libraries(${imageio}WriteImage PUBLIC ${ITK_LIBRARIES})
     target_compile_definitions(${imageio}WriteImage PUBLIC -DIMAGE_IO_CLASS=${imageio_id_${imageio}})
     if (EMSCRIPTEN AND DEFINED WebAssemblyInterface_BINARY_DIR)

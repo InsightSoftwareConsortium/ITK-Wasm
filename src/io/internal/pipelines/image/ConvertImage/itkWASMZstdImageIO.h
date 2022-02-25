@@ -15,17 +15,15 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkWASMImageIO_h
-#define itkWASMImageIO_h
+#ifndef itkWASMZstdImageIO_h
+#define itkWASMZstdImageIO_h
 #include "WebAssemblyInterfaceExport.h"
 
-#include "itkStreamingImageIOBase.h"
-#include <fstream>
-#include "rapidjson/document.h"
+#include "itkWASMImageIO.h"
 
 namespace itk
 {
-/** \class WASMImageIO
+/** \class WASMZstdImageIO
  *
  * \brief Read and write an itk::Image in a web-friendly format.
  *
@@ -33,31 +31,26 @@ namespace itk
  * It reads and writes an itk-wasm Image object in a CbOR file on the
  * filesystem with JSON files and binary files for TypedArrays.
  * 
- * The file extensions used are .iwi and .iwi.cbor.
+ * This class extends WASMImageIO by adding support for zstandard compression.
  *
+ * The file extensions used are .iwi, .iwi.cbor, and .iwi.cbor.zstd.
+ * 
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT WASMImageIO: public StreamingImageIOBase
+class WebAssemblyInterface_EXPORT WASMZstdImageIO: public WASMImageIO
 {
 public:
   /** Standard class typedefs. */
-  typedef WASMImageIO          Self;
-  typedef StreamingImageIOBase Superclass;
+  typedef WASMZstdImageIO      Self;
+  typedef WASMImageIO          Superclass;
   typedef SmartPointer< Self > Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WASMImageIO, StreamingImageIOBase);
-
-  /** The different types of ImageIO's can support data of varying
-   * dimensionality. For example, some file formats are strictly 2D
-   * while others can support 2D, 3D, or even n-D. This method returns
-   * true/false as to whether the ImageIO can support the dimension
-   * indicated. */
-  bool SupportsDimension(unsigned long) override;
+  itkTypeMacro(WASMZstdImageIO, WASMImageIO);
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
@@ -69,9 +62,6 @@ public:
   /** Reads the data from disk into the memory buffer provided. */
   void Read(void *buffer) override;
 
-  /** Set the JSON representation of the image information. */
-  void SetJSON(rapidjson::Document & json);
-
   /** Determine the file type. Returns true if this ImageIO can write the
    * file specified. */
   bool CanWriteFile(const char *) override;
@@ -79,29 +69,17 @@ public:
   /** Set the spacing and dimension information for the set filename. */
   void WriteImageInformation() override;
 
-  /** Get the JSON representation of the image information. */
-  rapidjson::Document GetJSON();
-
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. */
   void Write(const void *buffer) override;
 
 protected:
-  WASMImageIO();
-  ~WASMImageIO() override;
-  void PrintSelf(std::ostream & os, Indent indent) const override;
-
-  Superclass::SizeType GetHeaderSize() const override
-  {
-    return 0;
-  }
-
-  void ReadCBOR(void * buffer = nullptr, unsigned char * cborBuffer = nullptr, size_t cborBufferLength = 0);
-  size_t WriteCBOR(const void * buffer = nullptr, unsigned char ** cborBuffer = nullptr, bool allocateCBORBuffer = false);
+  WASMZstdImageIO();
+  ~WASMZstdImageIO() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WASMImageIO);
+  ITK_DISALLOW_COPY_AND_ASSIGN(WASMZstdImageIO);
 };
 } // end namespace itk
 
-#endif // itkWASMImageIO_h
+#endif // itkWASMZstdImageIO_h

@@ -5,6 +5,7 @@ import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageL
 
 const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cthead1.png')
 const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'TestWASM-cthead1.iwi.cbor')
+const testZstdOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'TestWASM-cthead1.iwi.cbor.zstd')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')
@@ -28,6 +29,14 @@ test('Test writing and reading an ITK WASM file', async (t) => {
   const image = await readImageLocalFile(testInputFilePath)
   const useCompression = false
   await writeImageLocalFile(useCompression, image, testOutputFilePath)
+  const resultImage = await readImageLocalFile(testOutputFilePath)
+  verifyImage(t, resultImage)
+})
+
+test('Test writing and reading a ZSTD compressed ITK WASM file', async (t) => {
+  const image = await readImageLocalFile(testInputFilePath)
+  const useCompression = false
+  await writeImageLocalFile(useCompression, image, testZstdOutputFilePath)
   const resultImage = await readImageLocalFile(testOutputFilePath)
   verifyImage(t, resultImage)
 })

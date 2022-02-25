@@ -73,6 +73,7 @@ FetchContent_Declare(
 )
 set(WITH_TESTS OFF CACHE BOOL "Build libcbor tests")
 set(WITH_EXAMPLES OFF CACHE BOOL "Build libcbor examples")
+set(SANITIZE OFF CACHE BOOL "Enable sanitizers in Debug mode in libcbor")
 
 list(APPEND CMAKE_MODULE_PATH ${libcbor_SOURCE_DIR}/CMakeModules)
 FetchContent_MakeAvailable(rapidjson_lib cli11 rang libcbor)
