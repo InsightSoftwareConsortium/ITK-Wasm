@@ -1,4 +1,4 @@
-import { readFile } from 'itk-wasm/dist/browser/index.js'
+import { readFile } from 'itk-wasm'
 import curry from 'curry'
 
 const outputFileInformation = curry(function outputFileInformation (outputTextArea, event) {

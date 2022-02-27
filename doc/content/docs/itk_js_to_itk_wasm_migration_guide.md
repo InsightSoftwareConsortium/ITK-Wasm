@@ -26,15 +26,8 @@ to:
 
 
 ```js
-import { IntTypes } from 'itk'
+import { IntTypes } from 'itk-wasm'
 ```
-
-Or, to help bundlers with limited tree shaking,
-
-```js
-import { IntTypes } from 'itk/browser/index.js'
-```
-
 
 Node module import migration:
 
@@ -47,7 +40,7 @@ const IntTypes = require('itk/IntTypes.js')
 to:
 
 ```js
-import { IntTypes } from 'itk'
+import { IntTypes } from 'itk-wasm'
 ```
 
 ## TypeScript support
