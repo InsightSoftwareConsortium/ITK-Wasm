@@ -3,6 +3,18 @@
   "version": "1.0.0-a.14",
   "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
   "main": "./dist/index.js",
+  "browser": {
+    "./index.js": "./dist/browser/index.js"
+  },
+  "exports": {
+    ".": {
+      "browser": "./dist/browser/index.js",
+      "import": "./dist/node/index.js",
+      "umd": "./dist/umd/itk-wasm.js",
+      "package.json": "./package.json",
+      "./index.d.ts": "./dist/index.d.ts"
+    }
+  },
   "type": "module",
   "types": "./dist/index.d.ts",
   "directories": {
