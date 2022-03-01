@@ -8,3 +8,4 @@ test
 build.js
 dist/image-io/
 dist/mesh-io/
+examples/
