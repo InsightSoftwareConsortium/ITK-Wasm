@@ -8,12 +8,10 @@ itk_module(WebAssemblyInterface
   DEPENDS
     ITKCommon
     ITKIOImageBase
+    ITKIOMeshBase
   COMPILE_DEPENDS
     MeshToPolyData
     ITKImageFunction
-    ITKIOMeshBase
-    ${WebAssemblyInterface_ImageIOModules}
-    ${WebAssemblyInterface_MeshIOModules}
   TEST_DEPENDS
     ITKTestKernel
     ITKMesh

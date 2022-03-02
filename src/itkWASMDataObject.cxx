@@ -26,7 +26,14 @@ WASMDataObject::PrintSelf(std::ostream & os, Indent indent) const
   Superclass::PrintSelf(os, indent);
   os << indent << "JSON: " << this->m_JSON << std::endl;
   os << indent << "DataObject: ";
-  this->m_DataObject->Print(os, indent);
+  if (this->m_DataObject)
+  {
+    this->m_DataObject->Print(os, indent);
+  }
+  else
+  {
+    os << "ABSENT" << std::endl;
+  }
 }
 
 } // end namespace itk

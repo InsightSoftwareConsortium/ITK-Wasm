@@ -9,7 +9,7 @@ interface createWebWorkerPromiseResult {
 }
 
 // Internal function to create a web worker promise
-async function createWebWorkerPromise (name: 'mesh-io' | 'pipeline', existingWorker: Worker | null): Promise<createWebWorkerPromiseResult> {
+async function createWebWorkerPromise (name: 'pipeline', existingWorker: Worker | null): Promise<createWebWorkerPromiseResult> {
   if (existingWorker != null) {
     const webworkerPromise = new WebworkerPromise(existingWorker)
     return await Promise.resolve({ webworkerPromise, worker: existingWorker })
@@ -21,9 +21,6 @@ async function createWebWorkerPromise (name: 'mesh-io' | 'pipeline', existingWor
   // adds worker dynamic import support:
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
   // switch (name) {
-  // case 'mesh-io':
-  // worker = new Worker(new URL('../../web-workers/mesh-io.worker.js', import.meta.url))
-  // break
   // case 'pipeline':
   // worker = new Worker(new URL('../../web-workers/pipeline.worker.js', import.meta.url))
   // break
@@ -37,11 +34,6 @@ async function createWebWorkerPromise (name: 'mesh-io' | 'pipeline', existingWor
 
   if (webWorkersUrl.startsWith('http')) {
     switch (name) {
-      case 'mesh-io': {
-        const response = await axios.get(`${webWorkersUrl}/${min}bundles/mesh-io.worker.js`, { responseType: 'blob' })
-        worker = new Worker(URL.createObjectURL(response.data as Blob))
-        break
-      }
       case 'pipeline': {
         const response = await axios.get(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`, { responseType: 'blob' })
         worker = new Worker(URL.createObjectURL(response.data as Blob))
@@ -52,9 +44,6 @@ async function createWebWorkerPromise (name: 'mesh-io' | 'pipeline', existingWor
     }
   } else {
     switch (name) {
-      case 'mesh-io':
-        worker = new Worker(`${webWorkersUrl}/${min}bundles/mesh-io.worker.js`)
-        break
       case 'pipeline':
         worker = new Worker(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`)
         break

@@ -9,7 +9,7 @@ const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'OBJTes
 const verifyMesh = (t, mesh) => {
   t.is(mesh.meshType.dimension, 3)
   t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
-  t.is(mesh.meshType.cellComponentType, IntTypes.Int32)
+  t.is(mesh.meshType.cellComponentType, IntTypes.Int64)
   t.is(mesh.meshType.pointPixelType, PixelTypes.Vector)
   t.is(mesh.meshType.cellPixelType, PixelTypes.Vector)
   t.is(mesh.numberOfPoints, 8)

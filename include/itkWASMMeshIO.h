@@ -22,6 +22,7 @@
 #include "itkMeshIOBase.h"
 #include <fstream>
 
+#include "rapidjson/document.h"
 #include "cbor.h"
 
 namespace itk
@@ -68,6 +69,9 @@ public:
 
   void ReadCellData(void *buffer) override;
 
+  /** Set the JSON representation of the image information. */
+  void SetJSON(rapidjson::Document & json);
+
   /*-------- This part of the interfaces deals with writing data ----- */
 
   /** Writes the data to disk from the memory buffer provided. Make sure
@@ -86,12 +90,15 @@ public:
 
   void Write() override;
 
+  /** Get the JSON representation of the mesh information. */
+  rapidjson::Document GetJSON();
+
+  static size_t ITKComponentSize( const CommonEnums::IOComponent );
+
 protected:
   WASMMeshIO();
   ~WASMMeshIO() override;
   void PrintSelf(std::ostream & os, Indent indent) const override;
-
-  static size_t ITKComponentSize( const CommonEnums::IOComponent );
 
   /** \brief Opens a file for reading and random access
    *
@@ -133,14 +140,14 @@ protected:
   void WriteCBORBuffer(const char * dataName, void * buffer, SizeValueType numberOfBytesToWrite, IOComponentEnum ioComponent);
 
   /** Reads in the mesh information and populates the related buffers. */
-  void ReadCBOR();
+  void ReadCBOR(void * buffer = nullptr, unsigned char * cborBuffer = nullptr, size_t cborBufferLength = 0);
   /** Writes the buffers into the CBOR item and the buffer out to disk. */
   void WriteCBOR();
 
+  cbor_item_t * m_CBORRoot{ nullptr };
+
 private:
   ITK_DISALLOW_COPY_AND_ASSIGN(WASMMeshIO);
-
-  cbor_item_t * m_CBORRoot{ nullptr };
 };
 } // end namespace itk
 

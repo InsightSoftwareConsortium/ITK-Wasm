@@ -1,18 +1,21 @@
 const extensionToIO = new Map([
-  ['vtk', 'itkVTKPolyDataMeshIOJSBinding'],
-  ['VTK', 'itkVTKPolyDataMeshIOJSBinding'],
-  ['byu', 'itkBYUMeshIOJSBinding'],
-  ['BYU', 'itkBYUMeshIOJSBinding'],
-  ['fsa', 'itkFreeSurferAsciiMeshIOJSBinding'],
-  ['FSA', 'itkFreeSurferAsciiMeshIOJSBinding'],
-  ['fsb', 'itkFreeSurferBinaryMeshIOJSBinding'],
-  ['FSB', 'itkFreeSurferBinaryMeshIOJSBinding'],
-  ['obj', 'itkOBJMeshIOJSBinding'],
-  ['OBJ', 'itkOBJMeshIOJSBinding'],
-  ['off', 'itkOFFMeshIOJSBinding'],
-  ['OFF', 'itkOFFMeshIOJSBinding'],
-  ['stl', 'itkSTLMeshIOJSBinding'],
-  ['STL', 'itkSTLMeshIOJSBinding']
+  ['vtk', 'itkVTKPolyDataMeshIO'],
+  ['VTK', 'itkVTKPolyDataMeshIO'],
+  ['byu', 'itkBYUMeshIO'],
+  ['BYU', 'itkBYUMeshIO'],
+  ['fsa', 'itkFreeSurferAsciiMeshIO'],
+  ['FSA', 'itkFreeSurferAsciiMeshIO'],
+  ['fsb', 'itkFreeSurferBinaryMeshIO'],
+  ['FSB', 'itkFreeSurferBinaryMeshIO'],
+  ['obj', 'itkOBJMeshIO'],
+  ['OBJ', 'itkOBJMeshIO'],
+  ['off', 'itkOFFMeshIO'],
+  ['OFF', 'itkOFFMeshIO'],
+  ['stl', 'itkSTLMeshIO'],
+  ['STL', 'itkSTLMeshIO'],
+  ['iwm', 'itkWASMMeshIO'],
+  ['iwm.cbor', 'itkWASMMeshIO'],
+  ['iwm.cbor.zstd', 'itkWASMZstdMeshIO']
 ])
 
 export default extensionToIO

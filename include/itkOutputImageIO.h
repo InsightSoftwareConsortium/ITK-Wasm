@@ -107,7 +107,6 @@ public:
       }
 
       std::vector<char> pixelData(this->m_ImageIO->GetImageSizeInBytes());
-      const std::unique_ptr<char[]> loadBuffer(new char[this->m_ImageIO->GetImageSizeInBytes()]);
       itk::ImageIORegion ioRegion( dimension );
       for(unsigned int dim = 0; dim < dimension; ++dim)
         {
@@ -115,8 +114,7 @@ public:
         }
       this->m_ImageIO->SetIORegion( ioRegion );
       this->m_ImageIO->SetUseStreamedReading(false);
-      this->m_ImageIO->Read( reinterpret_cast< void * >( &(pixelData.at(0)) ));
-      this->m_ImageIO->Read(static_cast<void *>(loadBuffer.get()));
+      this->m_ImageIO->Read(reinterpret_cast< void * >( &(pixelData.at(0)) ));
 
       wasmImageIO->SetFileName(this->m_Identifier);
       wasmImageIO->WriteImageInformation();

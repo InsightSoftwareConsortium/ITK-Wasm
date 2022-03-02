@@ -45,7 +45,7 @@ test('readMeshLocalFile reads a FreeSurfer Binary file path given on the local f
 test('writeMeshLocalFile writes a FreeSurfer Binary file path on the local filesystem', (t) => {
   return readMeshLocalFile(testBinaryInputFilePath)
     .then(function (mesh) {
-      return writeMeshLocalFile({ useCompression: false, binaryFileType: false }, mesh, testBinaryOutputFilePath)
+      return writeMeshLocalFile({ useCompression: false, binaryFileType: true }, mesh, testBinaryOutputFilePath)
     })
     .then(function () {
       return readMeshLocalFile(testBinaryOutputFilePath).then(function (mesh) {
