@@ -98,3 +98,28 @@ jobs:
     - name: Test
       run: |
         ./test/run.sh
+
+  test-debugging-example:
+    name: Debugging
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ./examples/Debugging
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install
+      run: |
+        npm install
+
+    - name: Build
+      run: |
+        npm run native-build
+        npm run emscripten-build-release
+        npm run emscripten-build-debug
+        npm run wasi-build-debug

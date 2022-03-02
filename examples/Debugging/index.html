@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-a.11/dist/umd/itk-wasm.js"></script>
+  </head>
+  <body>
+    <p>This is an example to demonstrate browser-based debugging of
+    C++-generated WebAssembly. For more information, please see the
+    <a target="_blank" href="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging.html">associated
+      documentation</a>.</p>
+
+    <script>
+      window.addEventListener('load', (event) => {
+        const pipeline = new URL('web-build-debug/DebugMe', document.location)
+        itk.runPipelineBrowser(null, pipeline)
+      });
+    </script>
+
+  </body>
+</html>

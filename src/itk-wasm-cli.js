@@ -166,7 +166,7 @@ function run(wasmBinary, options) {
   let wasmRuntimeArgs = []
   switch (wasmRuntime) {
   case 'wasmtime':
-    wasmRuntimeArgs = ['/wasi-runtimes/wasmtime/bin/wasmtime-pwd.sh',]
+    wasmRuntimeArgs = ['--args', '-e WASMTIME_BACKTRACE_DETAILS=1', '/wasi-runtimes/wasmtime/bin/wasmtime-pwd.sh',]
     break
   case 'wasmer':
     wasmRuntimeArgs = ['sudo', '/wasi-runtimes/wasmer/bin/wasmer-pwd.sh',]
