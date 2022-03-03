@@ -1,6 +1,6 @@
 {
   "name": "itk-wasm",
-  "version": "1.0.0-a.14",
+  "version": "1.0.0-a.15",
   "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
   "main": "./dist/index.js",
   "browser": {
