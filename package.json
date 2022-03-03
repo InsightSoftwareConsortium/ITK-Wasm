@@ -11,8 +11,7 @@
       "browser": "./dist/browser/index.js",
       "import": "./dist/node/index.js",
       "umd": "./dist/umd/itk-wasm.js",
-      "package.json": "./package.json",
-      "./index.d.ts": "./dist/index.d.ts"
+      "package.json": "./package.json"
     }
   },
   "type": "module",
