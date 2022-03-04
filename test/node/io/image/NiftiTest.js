@@ -28,8 +28,7 @@ test('Test reading a Nifti file', t => {
 
 test('Test writing a Nifti file', t => {
   return readImageLocalFile(testInputFilePath).then(function (image) {
-    const useCompression = false
-    return writeImageLocalFile(useCompression, image, testOutputFilePath)
+    return writeImageLocalFile(image, testOutputFilePath)
   })
     .then(function () {
       return readImageLocalFile(testOutputFilePath).then(function (image) {

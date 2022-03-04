@@ -19,13 +19,17 @@ import Image from '../core/Image.js'
 /**
  * Write an image to a file on the local filesystem in Node.js.
  *
- * @param: useCompression compression the pixel data when possible
  * @param: image itk.Image instance to write
  * @param: filePath path to the file on the local filesystem.
+ * @param: useCompression compression the pixel data when possible
  *
  * @return Promise<null>
  */
-async function writeImageLocalFile (useCompression: boolean, image: Image, filePath: string): Promise<null> {
+async function writeImageLocalFile (image: Image, filePath: string, useCompression: boolean = false): Promise<null> {
+  if (typeof image === 'boolean') {
+    throw new Error('useCompression is now the last argument in itk-wasm')
+  }
+
   const imageIOsPath = findLocalImageIOPath()
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)

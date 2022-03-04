@@ -46,8 +46,7 @@ test('Test reading a MetaImage file', t => {
 
 test('Test writing a MetaImage file', t => {
   return readImageLocalFile(testInputFilePath).then(function (image) {
-    const useCompression = false
-    return writeImageLocalFile(useCompression, image, testOutputFilePath)
+    return writeImageLocalFile(image, testOutputFilePath)
   })
     .then(function () {
       return readImageLocalFile(testOutputFilePath).then(function (image) {
@@ -88,8 +87,7 @@ test('Test reading a small MetaImage file', async t => {
 test('Test writing a small MetaImage file', async t => {
   let image = await readImageLocalFile(testSmallInputFilePath)
   verifySmallImage(t, image)
-  const useCompression = false
-  await writeImageLocalFile(useCompression, image, testSmallOutputFilePath)
+  await writeImageLocalFile(image, testSmallOutputFilePath)
   image = await readImageLocalFile(testSmallOutputFilePath)
   verifySmallImage(t, image)
 })

@@ -24,7 +24,7 @@ export default function () {
         return readMeshArrayBuffer(null, response.data, 'cow.vtk').then(function ({ mesh, webWorker }) {
           webWorker.terminate()
           const useCompression = false
-          return writeMeshArrayBuffer(null, useCompression, mesh, 'cow.vtk')
+          return writeMeshArrayBuffer(null, mesh, 'cow.vtk', { useCompression })
         })
       })
       .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {

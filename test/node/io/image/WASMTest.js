@@ -27,16 +27,14 @@ const verifyImage = (t, image) => {
 
 test('Test writing and reading an ITK WASM file', async (t) => {
   const image = await readImageLocalFile(testInputFilePath)
-  const useCompression = false
-  await writeImageLocalFile(useCompression, image, testOutputFilePath)
+  await writeImageLocalFile(image, testOutputFilePath)
   const resultImage = await readImageLocalFile(testOutputFilePath)
   verifyImage(t, resultImage)
 })
 
 test('Test writing and reading a ZSTD compressed ITK WASM file', async (t) => {
   const image = await readImageLocalFile(testInputFilePath)
-  const useCompression = false
-  await writeImageLocalFile(useCompression, image, testZstdOutputFilePath)
+  await writeImageLocalFile(image, testZstdOutputFilePath)
   const resultImage = await readImageLocalFile(testOutputFilePath)
   verifyImage(t, resultImage)
 })

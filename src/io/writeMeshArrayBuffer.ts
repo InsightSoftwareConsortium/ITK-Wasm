@@ -9,17 +9,21 @@ import PipelineInput from '../pipeline/PipelineInput.js'
 import PipelineOutput from '../pipeline/PipelineOutput.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 
-async function writeMeshArrayBuffer (webWorker: Worker | null, options: WriteMeshOptions, mesh: Mesh, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
+async function writeMeshArrayBuffer (webWorker: Worker | null, mesh: Mesh, fileName: string, mimeType: string, options: WriteMeshOptions): Promise<WriteArrayBufferResult> {
+  if ('useCompression' in (mesh as any) || 'binaryFileType' in (mesh as any)) {
+    throw new Error('options are now in the last argument position in itk-wasm')
+  }
+
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise('pipeline', worker)
   worker = usedWorker
 
   const filePath = `./${fileName}`
   const args = ['0', filePath, '--memory-io', '--quiet']
-  if (options.useCompression === true) {
+  if (options?.useCompression === true) {
     args.push('--use-compression')
   }
-  if (options.binaryFileType === true) {
+  if (options?.binaryFileType === true) {
     args.push('--binary-file-type')
   }
   const outputs = [

@@ -127,3 +127,7 @@ The VTK Docker images, VTK PolyData IO, `readPolyDataFile`, `readPolyDataBlob`, 
 ## IOTypes
 
 The use of `IOTypes` in pipelines is deprecated and not expected to work in the future. These have been replaced by `InterfaceTypes`.
+
+## Argument order when writing image, mesh binaries
+
+The `useCompression` argument is now last in `writeArrayBuffer`, `writeImageArrayBuffer`, `writeImageLocalFile`, `writeMeshArrayBuffer`, `writeMeshLocalFile`.

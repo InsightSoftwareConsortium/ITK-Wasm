@@ -19,25 +19,29 @@ import Mesh from '../core/Mesh.js'
 /**
  * Write a mesh to a file on the local filesystem in Node.js.
  *
- * @param: useCompression compression the pixel data when possible
- * @param: binaryFileType write in an binary as opposed to a ascii format, if
- * possible
  * @param: mesh itk.Mesh instance to write
  * @param: filePath path to the file on the local filesystem.
+ * @param: options.useCompression compression the pixel data when possible
+ * @param: options.binaryFileType write in an binary as opposed to a ascii format, if
+ * possible
  *
  * @return empty Promise
  */
-async function writeMeshLocalFile (options: WriteMeshOptions, mesh: Mesh, filePath: string): Promise<null> {
+async function writeMeshLocalFile (mesh: Mesh, filePath: string, options: WriteMeshOptions): Promise<null> {
+  if ('useCompression' in (mesh as any) || 'binaryFileType' in (mesh as any)) {
+    throw new Error('options are now in the last argument position in itk-wasm')
+  }
+
   const meshIOsPath = findLocalMeshIOPath()
   const absoluteFilePath = path.resolve(filePath)
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)
 
   const args = ['0', absoluteFilePath, '--memory-io', '--quiet']
-  if (options.useCompression === true) {
+  if (options?.useCompression === true) {
     args.push('--use-compression')
   }
-  if (options.binaryFileType === true) {
+  if (options?.binaryFileType === true) {
     args.push('--binary-file-type')
   }
   const desiredOutputs = [
