@@ -20,6 +20,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "http-server": "^14.1.0",
-    "itk-wasm": "^1.0.0-a.11"
+    "itk-wasm": "^1.0.0-a.15"
   }
 }
