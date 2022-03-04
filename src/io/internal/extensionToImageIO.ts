@@ -1,71 +1,71 @@
 const extensionToIO = new Map([
-  ['bmp', 'itkBMPImageIO'],
-  ['BMP', 'itkBMPImageIO'],
+  ['bmp', 'BMPImageIO'],
+  ['BMP', 'BMPImageIO'],
 
-  ['dcm', 'itkGDCMImageIO'],
-  ['DCM', 'itkGDCMImageIO'],
+  ['dcm', 'GDCMImageIO'],
+  ['DCM', 'GDCMImageIO'],
 
-  ['gipl', 'itkGiplImageIO'],
-  ['gipl.gz', 'itkGiplImageIO'],
+  ['gipl', 'GiplImageIO'],
+  ['gipl.gz', 'GiplImageIO'],
 
-  ['hdf5', 'itkHDF5ImageIO'],
+  ['hdf5', 'HDF5ImageIO'],
 
-  ['jpg', 'itkJPEGImageIO'],
-  ['JPG', 'itkJPEGImageIO'],
-  ['jpeg', 'itkJPEGImageIO'],
-  ['JPEG', 'itkJPEGImageIO'],
+  ['jpg', 'JPEGImageIO'],
+  ['JPG', 'JPEGImageIO'],
+  ['jpeg', 'JPEGImageIO'],
+  ['JPEG', 'JPEGImageIO'],
 
-  ['iwi', 'itkWASMImageIO'],
-  ['iwi.cbor', 'itkWASMImageIO'],
-  ['iwi.cbor.zstd', 'itkWASMZstdImageIO'],
+  ['iwi', 'WASMImageIO'],
+  ['iwi.cbor', 'WASMImageIO'],
+  ['iwi.cbor.zstd', 'WASMZstdImageIO'],
 
-  ['lsm', 'itkLSMImageIO'],
+  ['lsm', 'LSMImageIO'],
 
-  ['mnc', 'itkMINCImageIO'],
-  ['MNC', 'itkMINCImageIO'],
-  ['mnc.gz', 'itkMINCImageIO'],
-  ['MNC.GZ', 'itkMINCImageIO'],
-  ['mnc2', 'itkMINCImageIO'],
-  ['MNC2', 'itkMINCImageIO'],
+  ['mnc', 'MINCImageIO'],
+  ['MNC', 'MINCImageIO'],
+  ['mnc.gz', 'MINCImageIO'],
+  ['MNC.GZ', 'MINCImageIO'],
+  ['mnc2', 'MINCImageIO'],
+  ['MNC2', 'MINCImageIO'],
 
-  ['mgh', 'itkMGHImageIO'],
-  ['mgz', 'itkMGHImageIO'],
-  ['mgh.gz', 'itkMGHImageIO'],
+  ['mgh', 'MGHImageIO'],
+  ['mgz', 'MGHImageIO'],
+  ['mgh.gz', 'MGHImageIO'],
 
-  ['mha', 'itkMetaImageIO'],
-  ['mhd', 'itkMetaImageIO'],
+  ['mha', 'MetaImageIO'],
+  ['mhd', 'MetaImageIO'],
 
-  ['mrc', 'itkMRCImageIO'],
+  ['mrc', 'MRCImageIO'],
 
-  ['nia', 'itkNiftiImageIO'],
-  ['nii', 'itkNiftiImageIO'],
-  ['nii.gz', 'itkNiftiImageIO'],
-  ['hdr', 'itkNiftiImageIO'],
+  ['nia', 'NiftiImageIO'],
+  ['nii', 'NiftiImageIO'],
+  ['nii.gz', 'NiftiImageIO'],
+  ['hdr', 'NiftiImageIO'],
 
-  ['nrrd', 'itkNrrdImageIO'],
-  ['NRRD', 'itkNrrdImageIO'],
-  ['nhdr', 'itkNrrdImageIO'],
-  ['NHDR', 'itkNrrdImageIO'],
+  ['nrrd', 'NrrdImageIO'],
+  ['NRRD', 'NrrdImageIO'],
+  ['nhdr', 'NrrdImageIO'],
+  ['NHDR', 'NrrdImageIO'],
 
-  ['png', 'itkPNGImageIO'],
-  ['PNG', 'itkPNGImageIO'],
+  ['png', 'PNGImageIO'],
+  ['PNG', 'PNGImageIO'],
 
-  ['pic', 'itkBioRadImageIO'],
-  ['PIC', 'itkBioRadImageIO'],
+  ['pic', 'BioRadImageIO'],
+  ['PIC', 'BioRadImageIO'],
 
-  ['tif', 'itkTIFFImageIO'],
-  ['TIF', 'itkTIFFImageIO'],
-  ['tiff', 'itkTIFFImageIO'],
-  ['TIFF', 'itkTIFFImageIO'],
+  ['tif', 'TIFFImageIO'],
+  ['TIF', 'TIFFImageIO'],
+  ['tiff', 'TIFFImageIO'],
+  ['TIFF', 'TIFFImageIO'],
 
-  ['vtk', 'itkVTKImageIO'],
-  ['VTK', 'itkVTKImageIO'],
+  ['vtk', 'VTKImageIO'],
+  ['VTK', 'VTKImageIO'],
 
-  ['isq', 'itkScancoImageIO'],
-  ['ISQ', 'itkScancoImageIO'],
+  ['isq', 'ScancoImageIO'],
+  ['ISQ', 'ScancoImageIO'],
 
-  ['fdf', 'itkFDFImageIO'],
-  ['FDF', 'itkFDFImageIO']
+  ['fdf', 'FDFImageIO'],
+  ['FDF', 'FDFImageIO']
 ])
 
 export default extensionToIO
