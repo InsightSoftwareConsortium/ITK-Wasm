@@ -18,6 +18,8 @@
 #ifndef itkImageToWASMImageFilter_hxx
 #define itkImageToWASMImageFilter_hxx
 
+#include "itkImageToWASMImageFilter.h"
+
 #include "itkDefaultConvertPixelTraits.h"
 
 #include "itkWASMMapComponentType.h"
