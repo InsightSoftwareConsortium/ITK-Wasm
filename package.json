@@ -25,7 +25,7 @@
     "doc:www": "kw-doc -c ./doc/config.cjs -s",
     "doc:publish": "kw-doc -c ./doc/config.cjs -mp",
     "commit": "git cz",
-    "build": "npm run build:wasm && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack && node ./src/io/internal/bindings/package-json-gen.cjs",
+    "build": "npm run build:wasm && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack && node ./src/io/internal/packages/package-json-gen.cjs",
     "build:debug": "npm run build:wasm -- --debug && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack -- --mode development",
     "build:tsc": "tsc --pretty",
     "build:tscWorkersModuleLoader": "tsc --lib webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleWebWorker.ts",
