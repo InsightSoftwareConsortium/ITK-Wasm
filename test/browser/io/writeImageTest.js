@@ -40,7 +40,7 @@ export default function () {
         return readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png').then(function ({ image, webWorker }) {
           webWorker.terminate()
           const useCompression = false
-          return writeImageArrayBuffer(null, useCompression, image, 'cthead1Small.png')
+          return writeImageArrayBuffer(null, image, 'cthead1Small.png', useCompression)
         })
       })
       .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {

@@ -27,8 +27,7 @@ const verifyImage = (t, image) => {
 test('writeImageLocalFile writes a file path on the local filesystem', t => {
   return readImageLocalFile(testInputFilePath)
     .then(function (image) {
-      const useCompression = false
-      return writeImageLocalFile(useCompression, image, testOutputFilePath)
+      return writeImageLocalFile(image, testOutputFilePath)
     })
     .then(function () {
       return readImageLocalFile(testOutputFilePath).then(function (image) {

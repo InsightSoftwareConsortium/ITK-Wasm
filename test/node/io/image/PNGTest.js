@@ -33,7 +33,7 @@ test('Test reading a PNG file', t => {
 test('Test writing a PNG file', t => {
   return readImageLocalFile(testInputFilePath).then(function (image) {
     const useCompression = false
-    return writeImageLocalFile(useCompression, image, testOutputFilePath)
+    return writeImageLocalFile(image, testOutputFilePath, useCompression)
   })
     .then(function () {
       return readImageLocalFile(testOutputFilePath).then(function (image) {

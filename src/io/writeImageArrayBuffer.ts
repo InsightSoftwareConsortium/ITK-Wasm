@@ -10,7 +10,11 @@ import getTransferable from '../core/getTransferable.js'
 
 import WriteArrayBufferResult from './WriteArrayBufferResult.js'
 
-async function writeImageArrayBuffer (webWorker: Worker | null, useCompression: boolean, image: Image, fileName: string, mimeType: string): Promise<WriteArrayBufferResult> {
+async function writeImageArrayBuffer (webWorker: Worker | null, image: Image, fileName: string, mimeType: string = '', useCompression: boolean = false): Promise<WriteArrayBufferResult> {
+  if (typeof image === 'boolean') {
+    throw new Error('useCompression is now at the last argument position in itk-wasm')
+  }
+
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise('pipeline', worker)
   worker = usedWorker

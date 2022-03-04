@@ -25,7 +25,7 @@ test('readMeshLocalFile reads a OBJ file path given on the local filesystem', t 
 test('writeMeshLocalFile writes a OBJ file path on the local filesystem', (t) => {
   return readMeshLocalFile(testInputFilePath)
     .then(function (mesh) {
-      return writeMeshLocalFile({ useCompression: false, binaryFileType: false }, mesh, testOutputFilePath)
+      return writeMeshLocalFile(mesh, testOutputFilePath)
     })
     .then(function () {
       return readMeshLocalFile(testOutputFilePath).then(function (mesh) {
