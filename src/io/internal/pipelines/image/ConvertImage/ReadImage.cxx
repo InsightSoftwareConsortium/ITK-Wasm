@@ -20,26 +20,6 @@
 #include "itkImage.h"
 #include "itkOutputImageIO.h"
 
-#define ITKIOPNG 0
-#define ITKIOMeta 1
-#define ITKIOTIFF 2
-#define ITKIONIFTI 3
-#define ITKIOJPEG 4
-#define ITKIONRRD 5
-#define ITKIOVTK 6
-#define ITKIOBMP 7
-#define ITKIOHDF5 8
-#define ITKIOMINC 9
-#define ITKIOMRC 10
-#define ITKIOLSM 11
-#define MGHIO 12
-#define ITKIOBioRad 13
-#define ITKIOGIPL 14
-#define ITKIOGE 15
-#define ITKIOGDCM 16
-#define IOScanco 17
-#define IOFDF 18
-
 #ifndef IMAGE_IO_CLASS
 #error "IMAGE_IO_CLASS definition must be provided"
 #endif

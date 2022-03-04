@@ -226,8 +226,7 @@ WASMMeshIO
 {
   const std::string path(this->GetFileName());
   std::string::size_type cborPos = path.rfind(".cbor");
-  if ( ( cborPos != std::string::npos )
-       && ( cborPos == path.length() - 5 ) )
+  if ( cborPos != std::string::npos )
   {
     return true;
   }
@@ -347,29 +346,38 @@ WASMMeshIO
 
 void
 WASMMeshIO
-::ReadCBOR()
+::ReadCBOR( void *buffer, unsigned char * cborBuffer, size_t cborBufferLength )
 {
-  FILE* file = fopen(this->GetFileName(), "rb");
-  if (file == NULL) {
-    itkExceptionMacro("Could not read file: " << this->GetFileName());
-  }
-  fseek(file, 0, SEEK_END);
-  const size_t length = (size_t)ftell(file);
-  fseek(file, 0, SEEK_SET);
-  unsigned char* cborBuffer = static_cast< unsigned char *>(malloc(length));
-  if (!fread(cborBuffer, length, 1, file))
+  bool cborBufferAllocated = false;
+  size_t length = cborBufferLength;
+  if (cborBuffer == nullptr)
   {
-    itkExceptionMacro("Could not successfully read " << this->GetFileName());
+    FILE* file = fopen(this->GetFileName(), "rb");
+    if (file == NULL) {
+      itkExceptionMacro("Could not read file: " << this->GetFileName());
+    }
+    fseek(file, 0, SEEK_END);
+    length = (size_t)ftell(file);
+    fseek(file, 0, SEEK_SET);
+    cborBuffer = static_cast< unsigned char *>(malloc(length));
+    cborBufferAllocated = true;
+    if (!fread(cborBuffer, length, 1, file))
+    {
+      itkExceptionMacro("Could not successfully read " << this->GetFileName());
 
+    }
+    fclose(file);
   }
-  fclose(file);
 
   if (this->m_CBORRoot != nullptr) {
     cbor_decref(&(this->m_CBORRoot));
   }
   struct cbor_load_result result;
   this->m_CBORRoot = cbor_load(cborBuffer, length, &result);
-  free(cborBuffer);
+  if (cborBufferAllocated)
+  {
+    free(cborBuffer);
+  }
   if (result.error.code != CBOR_ERR_NONE) {
     std::string errorDescription;
     switch (result.error.code) {
@@ -516,6 +524,151 @@ WASMMeshIO
  }
 }
 
+rapidjson::Document
+WASMMeshIO
+::GetJSON()
+{
+  rapidjson::Document document;
+  document.SetObject();
+  rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+
+  rapidjson::Value meshType;
+  meshType.SetObject();
+
+  const unsigned int dimension = this->GetPointDimension();
+  meshType.AddMember("dimension", rapidjson::Value(dimension).Move(), allocator );
+
+  const std::string pointComponentString = WASMComponentTypeFromIOComponentEnum( this->GetPointComponentType() );
+  rapidjson::Value pointComponentType;
+  pointComponentType.SetString( pointComponentString.c_str(), allocator );
+  meshType.AddMember("pointComponentType", pointComponentType.Move(), allocator );
+
+  const std::string pointPixelComponentString = WASMComponentTypeFromIOComponentEnum( this->GetPointPixelComponentType() );
+  rapidjson::Value pointPixelComponentType;
+  pointPixelComponentType.SetString( pointPixelComponentString.c_str(), allocator );
+  meshType.AddMember("pointPixelComponentType", pointPixelComponentType.Move(), allocator );
+
+  rapidjson::Value pointPixelType;
+  pointPixelType.SetString( WASMPixelTypeFromIOPixelEnum( this->GetPointPixelType()).c_str(), allocator );
+  meshType.AddMember("pointPixelType", pointPixelType.Move(), allocator );
+
+  meshType.AddMember("pointPixelComponents", rapidjson::Value( this->GetNumberOfPointPixelComponents() ).Move(), allocator );
+
+  const std::string cellComponentString = WASMComponentTypeFromIOComponentEnum( this->GetCellComponentType() );
+  rapidjson::Value cellComponentType;
+  cellComponentType.SetString( cellComponentString.c_str(), allocator );
+  meshType.AddMember("cellComponentType", cellComponentType.Move(), allocator );
+
+  const std::string cellPixelComponentString = WASMComponentTypeFromIOComponentEnum( this->GetCellPixelComponentType() );
+  rapidjson::Value cellPixelComponentType;
+  cellPixelComponentType.SetString( cellPixelComponentString.c_str(), allocator );
+  meshType.AddMember("cellPixelComponentType", cellPixelComponentType.Move(), allocator );
+
+  rapidjson::Value cellPixelType;
+  cellPixelType.SetString(WASMPixelTypeFromIOPixelEnum( this->GetCellPixelType() ).c_str(), allocator);
+  meshType.AddMember("cellPixelType", cellPixelType, allocator );
+
+  meshType.AddMember("cellPixelComponents", rapidjson::Value( this->GetNumberOfCellPixelComponents() ).Move(), allocator );
+
+  document.AddMember( "meshType", meshType.Move(), allocator );
+
+  rapidjson::Value numberOfPoints;
+  numberOfPoints.SetInt( this->GetNumberOfPoints() );
+  document.AddMember( "numberOfPoints", numberOfPoints.Move(), allocator );
+
+  rapidjson::Value numberOfPointPixels;
+  numberOfPointPixels.SetInt( this->GetNumberOfPointPixels() );
+  document.AddMember( "numberOfPointPixels", numberOfPointPixels.Move(), allocator );
+
+  rapidjson::Value numberOfCells;
+  numberOfCells.SetInt( this->GetNumberOfCells() );
+  document.AddMember( "numberOfCells", numberOfCells.Move(), allocator );
+
+  rapidjson::Value numberOfCellPixels;
+  numberOfCellPixels.SetInt( this->GetNumberOfCellPixels() );
+  document.AddMember( "numberOfCellPixels", numberOfCellPixels.Move(), allocator );
+
+  rapidjson::Value cellBufferSize;
+  cellBufferSize.SetInt( this->GetCellBufferSize() );
+  document.AddMember( "cellBufferSize", cellBufferSize.Move(), allocator );
+
+  std::string pointsDataFileString( "data:application/vnd.itk.path,data/points.raw" );
+  rapidjson::Value pointsDataFile;
+  pointsDataFile.SetString( pointsDataFileString.c_str(), allocator );
+  document.AddMember( "points", pointsDataFile, allocator );
+
+  std::string cellsDataFileString( "data:application/vnd.itk.path,data/cells.raw" );
+  rapidjson::Value cellsDataFile;
+  cellsDataFile.SetString( cellsDataFileString.c_str(), allocator );
+  document.AddMember( "cells", cellsDataFile, allocator );
+
+  std::string pointDataDataFileString( "data:application/vnd.itk.path,data/pointData.raw" );
+  rapidjson::Value pointDataDataFile;
+  pointDataDataFile.SetString( pointDataDataFileString.c_str(), allocator );
+  document.AddMember( "pointData", pointDataDataFile, allocator );
+
+  std::string cellDataDataFileString( "data:application/vnd.itk.path,data/cellData.raw" );
+  rapidjson::Value cellDataDataFile;
+  cellDataDataFile.SetString( cellDataDataFileString.c_str(), allocator );
+  document.AddMember( "cellData", cellDataDataFile, allocator );
+
+  return document;
+}
+
+
+void
+WASMMeshIO
+::SetJSON(rapidjson::Document & document)
+{
+  const rapidjson::Value & meshType = document["meshType"];
+  const int dimension = meshType["dimension"].GetInt();
+  this->SetPointDimension( dimension );
+
+  const std::string pointComponentType( meshType["pointComponentType"].GetString() );
+  const CommonEnums::IOComponent pointIOComponentType = IOComponentEnumFromWASMComponentType( pointComponentType );
+  this->SetPointComponentType( pointIOComponentType );
+
+  const std::string pointPixelComponentType( meshType["pointPixelComponentType"].GetString() );
+  const CommonEnums::IOComponent pointPixelIOComponentType = IOComponentEnumFromWASMComponentType( pointPixelComponentType );
+  this->SetPointPixelComponentType( pointPixelIOComponentType );
+
+  const std::string pointPixelType( meshType["pointPixelType"].GetString() );
+  const CommonEnums::IOPixel pointIOPixelType = IOPixelEnumFromWASMPixelType( pointPixelType );
+  this->SetPointPixelType( pointIOPixelType );
+
+  this->SetNumberOfPointPixelComponents( meshType["pointPixelComponents"].GetInt() );
+
+  const std::string cellComponentType( meshType["cellComponentType"].GetString() );
+  const CommonEnums::IOComponent cellIOComponentType = IOComponentEnumFromWASMComponentType( cellComponentType );
+  this->SetCellComponentType( cellIOComponentType );
+
+  const std::string cellPixelComponentType( meshType["cellPixelComponentType"].GetString() );
+  const CommonEnums::IOComponent cellPixelIOComponentType = IOComponentEnumFromWASMComponentType( cellPixelComponentType );
+  this->SetCellPixelComponentType( cellPixelIOComponentType );
+
+  const std::string cellPixelType( meshType["cellPixelType"].GetString() );
+  const CommonEnums::IOPixel cellIOPixelType = IOPixelEnumFromWASMPixelType( cellPixelType );
+  this->SetCellPixelType( cellIOPixelType );
+
+  this->SetNumberOfCellPixelComponents( meshType["cellPixelComponents"].GetInt() );
+
+  const rapidjson::Value & numberOfPoints = document["numberOfPoints"];
+  this->SetNumberOfPoints( numberOfPoints.GetInt() );
+
+  const rapidjson::Value & numberOfPointPixels = document["numberOfPointPixels"];
+  this->SetNumberOfPointPixels( numberOfPointPixels.GetInt() );
+
+  const rapidjson::Value & numberOfCells = document["numberOfCells"];
+  this->SetNumberOfCells( numberOfCells.GetInt() );
+
+  const rapidjson::Value & numberOfCellPixels = document["numberOfCellPixels"];
+  this->SetNumberOfCellPixels( numberOfCellPixels.GetInt() );
+
+  const rapidjson::Value & cellBufferSize = document["cellBufferSize"];
+  this->SetCellBufferSize( cellBufferSize.GetInt() );
+}
+
+
 void
 WASMMeshIO
 ::WriteCBOR()
@@ -643,68 +796,27 @@ WASMMeshIO
     return;
     }
 
-  const rapidjson::Value & meshType = document["meshType"];
-  const int dimension = meshType["dimension"].GetInt();
-  this->SetPointDimension( dimension );
+  this->SetJSON(document);
 
-  const std::string pointComponentType( meshType["pointComponentType"].GetString() );
-  const CommonEnums::IOComponent pointIOComponentType = IOComponentEnumFromWASMComponentType( pointComponentType );
-  this->SetPointComponentType( pointIOComponentType );
-
-  const std::string pointPixelComponentType( meshType["pointPixelComponentType"].GetString() );
-  const CommonEnums::IOComponent pointPixelIOComponentType = IOComponentEnumFromWASMComponentType( pointPixelComponentType );
-  this->SetPointPixelComponentType( pointPixelIOComponentType );
-
-  const std::string pointPixelType( meshType["pointPixelType"].GetString() );
-  const CommonEnums::IOPixel pointIOPixelType = IOPixelEnumFromWASMPixelType( pointPixelType );
-  this->SetPointPixelType( pointIOPixelType );
-
-  this->SetNumberOfPointPixelComponents( meshType["pointPixelComponents"].GetInt() );
-
-  const std::string cellComponentType( meshType["cellComponentType"].GetString() );
-  const CommonEnums::IOComponent cellIOComponentType = IOComponentEnumFromWASMComponentType( cellComponentType );
-  this->SetCellComponentType( cellIOComponentType );
-
-  const std::string cellPixelComponentType( meshType["cellPixelComponentType"].GetString() );
-  const CommonEnums::IOComponent cellPixelIOComponentType = IOComponentEnumFromWASMComponentType( cellPixelComponentType );
-  this->SetCellPixelComponentType( cellPixelIOComponentType );
-
-  const std::string cellPixelType( meshType["cellPixelType"].GetString() );
-  const CommonEnums::IOPixel cellIOPixelType = IOPixelEnumFromWASMPixelType( cellPixelType );
-  this->SetCellPixelType( cellIOPixelType );
-
-  this->SetNumberOfCellPixelComponents( meshType["cellPixelComponents"].GetInt() );
-
-  const rapidjson::Value & numberOfPoints = document["numberOfPoints"];
-  this->SetNumberOfPoints( numberOfPoints.GetInt() );
-  if ( numberOfPoints.GetInt() )
+  if ( this->GetNumberOfPoints() )
     {
     this->m_UpdatePoints = true;
     }
 
-  const rapidjson::Value & numberOfPointPixels = document["numberOfPointPixels"];
-  this->SetNumberOfPointPixels( numberOfPointPixels.GetInt() );
-  if ( numberOfPointPixels.GetInt() )
+  if ( this->GetNumberOfPointPixels() )
     {
     this->m_UpdatePointData = true;
     }
 
-  const rapidjson::Value & numberOfCells = document["numberOfCells"];
-  this->SetNumberOfCells( numberOfCells.GetInt() );
-  if ( numberOfCells.GetInt() )
+  if ( this->GetNumberOfCells() )
     {
     this->m_UpdateCells = true;
     }
 
-  const rapidjson::Value & numberOfCellPixels = document["numberOfCellPixels"];
-  this->SetNumberOfCellPixels( numberOfCellPixels.GetInt() );
-  if ( numberOfCellPixels.GetInt() )
+  if ( this->GetNumberOfCellPixels() )
     {
     this->m_UpdateCellData = true;
     }
-
-  const rapidjson::Value & cellBufferSize = document["cellBufferSize"];
-  this->SetCellBufferSize( cellBufferSize.GetInt() );
 }
 
 
@@ -873,105 +985,27 @@ WASMMeshIO
       itksys::SystemTools::MakeDirectory(dataPath);
     }
 
-  rapidjson::Document document;
-  document.SetObject();
-  rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+  rapidjson::Document document = this->GetJSON();
 
-  rapidjson::Value meshType;
-  meshType.SetObject();
-
-  const unsigned int dimension = this->GetPointDimension();
-  meshType.AddMember("dimension", rapidjson::Value(dimension).Move(), allocator );
-
-  const std::string pointComponentString = WASMComponentTypeFromIOComponentEnum( this->GetPointComponentType() );
-  rapidjson::Value pointComponentType;
-  pointComponentType.SetString( pointComponentString.c_str(), allocator );
-  meshType.AddMember("pointComponentType", pointComponentType.Move(), allocator );
-
-  const std::string pointPixelComponentString = WASMComponentTypeFromIOComponentEnum( this->GetPointPixelComponentType() );
-  rapidjson::Value pointPixelComponentType;
-  pointPixelComponentType.SetString( pointPixelComponentString.c_str(), allocator );
-  meshType.AddMember("pointPixelComponentType", pointPixelComponentType.Move(), allocator );
-
-  rapidjson::Value pointPixelType;
-  pointPixelType.SetString( WASMPixelTypeFromIOPixelEnum( this->GetPointPixelType()).c_str(), allocator );
-  meshType.AddMember("pointPixelType", pointPixelType.Move(), allocator );
-
-  meshType.AddMember("pointPixelComponents", rapidjson::Value( this->GetNumberOfPointPixelComponents() ).Move(), allocator );
-
-  const std::string cellComponentString = WASMComponentTypeFromIOComponentEnum( this->GetCellComponentType() );
-  rapidjson::Value cellComponentType;
-  cellComponentType.SetString( cellComponentString.c_str(), allocator );
-  meshType.AddMember("cellComponentType", cellComponentType.Move(), allocator );
-
-  const std::string cellPixelComponentString = WASMComponentTypeFromIOComponentEnum( this->GetCellPixelComponentType() );
-  rapidjson::Value cellPixelComponentType;
-  cellPixelComponentType.SetString( cellPixelComponentString.c_str(), allocator );
-  meshType.AddMember("cellPixelComponentType", cellPixelComponentType.Move(), allocator );
-
-  rapidjson::Value cellPixelType;
-  cellPixelType.SetString(WASMPixelTypeFromIOPixelEnum( this->GetCellPixelType() ).c_str(), allocator);
-  meshType.AddMember("cellPixelType", cellPixelType, allocator );
-
-  meshType.AddMember("cellPixelComponents", rapidjson::Value( this->GetNumberOfCellPixelComponents() ).Move(), allocator );
-
-  document.AddMember( "meshType", meshType.Move(), allocator );
-
-  rapidjson::Value numberOfPoints;
-  numberOfPoints.SetInt( this->GetNumberOfPoints() );
-  document.AddMember( "numberOfPoints", numberOfPoints.Move(), allocator );
   if ( this->GetNumberOfPoints() )
     {
     this->m_UpdatePoints = true;
     }
 
-  rapidjson::Value numberOfPointPixels;
-  numberOfPointPixels.SetInt( this->GetNumberOfPointPixels() );
-  document.AddMember( "numberOfPointPixels", numberOfPointPixels.Move(), allocator );
   if ( this->GetNumberOfPointPixels() )
     {
     this->m_UpdatePointData = true;
     }
 
-  rapidjson::Value numberOfCells;
-  numberOfCells.SetInt( this->GetNumberOfCells() );
-  document.AddMember( "numberOfCells", numberOfCells.Move(), allocator );
   if ( this->GetNumberOfCells() )
     {
     this->m_UpdateCells = true;
     }
 
-  rapidjson::Value numberOfCellPixels;
-  numberOfCellPixels.SetInt( this->GetNumberOfCellPixels() );
-  document.AddMember( "numberOfCellPixels", numberOfCellPixels.Move(), allocator );
   if ( this->GetNumberOfCellPixels() )
     {
     this->m_UpdateCellData = true;
     }
-
-  rapidjson::Value cellBufferSize;
-  cellBufferSize.SetInt( this->GetCellBufferSize() );
-  document.AddMember( "cellBufferSize", cellBufferSize.Move(), allocator );
-
-  std::string pointsDataFileString( "data:application/vnd.itk.path,data/points.raw" );
-  rapidjson::Value pointsDataFile;
-  pointsDataFile.SetString( pointsDataFileString.c_str(), allocator );
-  document.AddMember( "points", pointsDataFile, allocator );
-
-  std::string cellsDataFileString( "data:application/vnd.itk.path,data/cells.raw" );
-  rapidjson::Value cellsDataFile;
-  cellsDataFile.SetString( cellsDataFileString.c_str(), allocator );
-  document.AddMember( "cells", cellsDataFile, allocator );
-
-  std::string pointDataDataFileString( "data:application/vnd.itk.path,data/pointData.raw" );
-  rapidjson::Value pointDataDataFile;
-  pointDataDataFile.SetString( pointDataDataFileString.c_str(), allocator );
-  document.AddMember( "pointData", pointDataDataFile, allocator );
-
-  std::string cellDataDataFileString( "data:application/vnd.itk.path,data/cellData.raw" );
-  rapidjson::Value cellDataDataFile;
-  cellDataDataFile.SetString( cellDataDataFileString.c_str(), allocator );
-  document.AddMember( "cellData", cellDataDataFile, allocator );
 
   std::ofstream outputStream;
   this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );

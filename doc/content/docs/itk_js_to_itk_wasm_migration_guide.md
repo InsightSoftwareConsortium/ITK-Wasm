@@ -114,7 +114,7 @@ Addresses an important issue in image orientation support.
 
 ## Image file format
 
-The JSON file format is replaced by a WASM file format with a different layout. A directory ending in `.iwi` or a `.iwi.cbor` file is supported for images and a directory ending in `.iwm` and `.iwm.cbor` is supported for meshes.
+The JSON file format is replaced by a WASM file format with a different layout. A directory ending in `.iwi` or a `.iwi.cbor` file is supported for images and a directory ending in `.iwm` and `.iwm.cbor` is supported for meshes and geometry data structures.
 
 ## Node Sync functions
 
@@ -123,3 +123,7 @@ Node `*Sync` functions have been removed -- use the equivalent async versions in
 ## VTK support
 
 The VTK Docker images, VTK PolyData IO, `readPolyDataFile`, `readPolyDataBlob`, `readPolyDataArrayBuffer`, based on VTK were removed.
+
+## IOTypes
+
+The use of `IOTypes` in pipelines is deprecated and not expected to work in the future. These have been replaced by `InterfaceTypes`.

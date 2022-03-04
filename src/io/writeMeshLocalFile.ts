@@ -7,11 +7,14 @@ import extensionToIO from './internal/extensionToMeshIO.js'
 import MeshIOIndex from './internal/MeshIOIndex.js'
 
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
-import writeMeshEmscriptenFSFile from './internal/writeMeshEmscriptenFSFile.js'
-import WriteMeshOptions from './WriteMeshOptions.js'
-import Mesh from '../core/Mesh.js'
-import MeshIOBaseEmscriptenModule from './internal/MeshIOBaseEmscriptenModule.js'
+import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
+import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 import findLocalMeshIOPath from './internal/findLocalMeshIOPath.js'
+import WriteMeshOptions from './WriteMeshOptions.js'
+import InterfaceTypes from '../core/InterfaceTypes.js'
+import PipelineInput from '../pipeline/PipelineInput.js'
+import PipelineOutput from '../pipeline/PipelineOutput.js'
+import Mesh from '../core/Mesh.js'
 
 /**
  * Write a mesh to a file on the local filesystem in Node.js.
@@ -30,14 +33,19 @@ async function writeMeshLocalFile (options: WriteMeshOptions, mesh: Mesh, filePa
   const mimeType = mime.lookup(absoluteFilePath)
   const extension = getFileExtension(absoluteFilePath)
 
-  let useCompression = false
-  if (typeof options.useCompression !== 'undefined') {
-    useCompression = options.useCompression
+  const args = ['0', absoluteFilePath, '--memory-io', '--quiet']
+  if (options.useCompression === true) {
+    args.push('--use-compression')
   }
-  let binaryFileType = false
-  if (typeof options.binaryFileType !== 'undefined') {
-    binaryFileType = options.binaryFileType
+  if (options.binaryFileType === true) {
+    args.push('--binary-file-type')
   }
+  const desiredOutputs = [
+  ] as PipelineOutput[]
+  const inputs = [
+    { type: InterfaceTypes.Mesh, data: mesh }
+  ] as PipelineInput[]
+
   let io = null
   if (mimeType !== false && mimeToIO.has(mimeType)) {
     io = mimeToIO.get(mimeType)
@@ -45,28 +53,25 @@ async function writeMeshLocalFile (options: WriteMeshOptions, mesh: Mesh, filePa
     io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
-      const modulePath = path.join(meshIOsPath, MeshIOIndex[idx] + '.js')
-      const Module = await loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
-      const meshIO = new Module.ITKMeshIO()
-      const mountedFilePath = Module.mountContainingDir(absoluteFilePath)
-      meshIO.SetFileName(mountedFilePath)
-      if (meshIO.CanWriteFile(mountedFilePath)) {
-        io = MeshIOIndex[idx]
-        Module.unmountContainingDir(mountedFilePath)
-        break
+      const modulePath = path.join(meshIOsPath, MeshIOIndex[idx] + 'WriteMesh.js')
+      const writeMeshModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
+      const mountedFilePath = writeMeshModule.mountContainingDir(absoluteFilePath)
+      const { returnValue } = runPipelineEmscripten(writeMeshModule, args, desiredOutputs, inputs)
+      writeMeshModule.unmountContainingDir(mountedFilePath)
+      if (returnValue === 0) {
+        return null
       }
-      Module.unmountContainingDir(mountedFilePath)
     }
   }
   if (io === null) {
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(meshIOsPath, io as string + '.js')
-  const Module = await loadEmscriptenModule(modulePath) as MeshIOBaseEmscriptenModule
-  const mountedFilePath = Module.mountContainingDir(absoluteFilePath)
-  writeMeshEmscriptenFSFile(Module, { useCompression, binaryFileType }, mesh, mountedFilePath)
-  Module.unmountContainingDir(mountedFilePath)
+  const modulePath = path.join(meshIOsPath, io as string + 'WriteMesh.js')
+  const writeMeshModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
+  const mountedFilePath = writeMeshModule.mountContainingDir(absoluteFilePath)
+  runPipelineEmscripten(writeMeshModule, args, desiredOutputs, inputs)
+  writeMeshModule.unmountContainingDir(mountedFilePath)
   return null
 }
 

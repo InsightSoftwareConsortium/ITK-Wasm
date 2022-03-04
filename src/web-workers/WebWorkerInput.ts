@@ -1,7 +1,7 @@
 import ITKConfig from './ITKConfig.js'
 
 interface WebWorkerInput {
-  operation: 'runPipeline' | 'runPolyDataIOPipeline' | 'readImage' | 'writeImage' | 'readDICOMImageSeries' | 'readDICOMTags'
+  operation: 'runPipeline' | 'runPolyDataIOPipeline' | 'readImage' | 'writeImage' | 'readMesh' | 'writeMesh' | 'readDICOMImageSeries' | 'readDICOMTags'
   config: ITKConfig
 }
 
