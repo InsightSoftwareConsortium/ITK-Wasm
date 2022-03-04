@@ -2,87 +2,87 @@ import test from 'ava'
 
 import ExtensionToIO from '../../../../dist/io/internal/extensionToMeshIO.js'
 
-test('vtk maps to itkVTKPolyDataMeshIO', t => {
+test('vtk maps to VTKPolyDataMeshIO', t => {
   const io = ExtensionToIO.get('vtk')
-  t.is(io, 'itkVTKPolyDataMeshIO')
+  t.is(io, 'VTKPolyDataMeshIO')
 })
 
-test('VTK maps to itkVTKPolyDataMeshIO', t => {
+test('VTK maps to VTKPolyDataMeshIO', t => {
   const io = ExtensionToIO.get('VTK')
-  t.is(io, 'itkVTKPolyDataMeshIO')
+  t.is(io, 'VTKPolyDataMeshIO')
 })
 
-test('byu maps to itkBYUMeshIO', t => {
+test('byu maps to BYUMeshIO', t => {
   const io = ExtensionToIO.get('byu')
-  t.is(io, 'itkBYUMeshIO')
+  t.is(io, 'BYUMeshIO')
 })
 
-test('BYU maps to itkBYUMeshIO', t => {
+test('BYU maps to BYUMeshIO', t => {
   const io = ExtensionToIO.get('BYU')
-  t.is(io, 'itkBYUMeshIO')
+  t.is(io, 'BYUMeshIO')
 })
 
-test('fsa maps to itkFreeSurferAsciiMeshIO', t => {
+test('fsa maps to FreeSurferAsciiMeshIO', t => {
   const io = ExtensionToIO.get('fsa')
-  t.is(io, 'itkFreeSurferAsciiMeshIO')
+  t.is(io, 'FreeSurferAsciiMeshIO')
 })
 
-test('FSA maps to itkFreeSurferAsciiMeshIO', t => {
+test('FSA maps to FreeSurferAsciiMeshIO', t => {
   const io = ExtensionToIO.get('FSA')
-  t.is(io, 'itkFreeSurferAsciiMeshIO')
+  t.is(io, 'FreeSurferAsciiMeshIO')
 })
 
-test('fsb maps to itkFreeSurferBinaryMeshIO', t => {
+test('fsb maps to FreeSurferBinaryMeshIO', t => {
   const io = ExtensionToIO.get('fsb')
-  t.is(io, 'itkFreeSurferBinaryMeshIO')
+  t.is(io, 'FreeSurferBinaryMeshIO')
 })
 
-test('FSB maps to itkFreeSurferBinaryMeshIO', t => {
+test('FSB maps to FreeSurferBinaryMeshIO', t => {
   const io = ExtensionToIO.get('FSB')
-  t.is(io, 'itkFreeSurferBinaryMeshIO')
+  t.is(io, 'FreeSurferBinaryMeshIO')
 })
 
-test('obj maps to itkOBJMeshIO', t => {
+test('obj maps to OBJMeshIO', t => {
   const io = ExtensionToIO.get('obj')
-  t.is(io, 'itkOBJMeshIO')
+  t.is(io, 'OBJMeshIO')
 })
 
-test('OBJ maps to itkOBJMeshIO', t => {
+test('OBJ maps to OBJMeshIO', t => {
   const io = ExtensionToIO.get('OBJ')
-  t.is(io, 'itkOBJMeshIO')
+  t.is(io, 'OBJMeshIO')
 })
 
-test('off maps to itkOFFMeshIO', t => {
+test('off maps to OFFMeshIO', t => {
   const io = ExtensionToIO.get('off')
-  t.is(io, 'itkOFFMeshIO')
+  t.is(io, 'OFFMeshIO')
 })
 
-test('OFF maps to itkOFFMeshIO', t => {
+test('OFF maps to OFFMeshIO', t => {
   const io = ExtensionToIO.get('OFF')
-  t.is(io, 'itkOFFMeshIO')
+  t.is(io, 'OFFMeshIO')
 })
 
-test('stl maps to itkSTLMeshIO', t => {
+test('stl maps to STLMeshIO', t => {
   const io = ExtensionToIO.get('stl')
-  t.is(io, 'itkSTLMeshIO')
+  t.is(io, 'STLMeshIO')
 })
 
-test('STL maps to itkSTLMeshIO', t => {
+test('STL maps to STLMeshIO', t => {
   const io = ExtensionToIO.get('STL')
-  t.is(io, 'itkSTLMeshIO')
+  t.is(io, 'STLMeshIO')
 })
 
-test('iwm maps to itkWASMMeshIO', t => {
+test('iwm maps to WASMMeshIO', t => {
   const io = ExtensionToIO.get('iwm')
-  t.is(io, 'itkWASMMeshIO')
+  t.is(io, 'WASMMeshIO')
 })
 
-test('iwm.cbor maps to itkWASMMeshIO', t => {
+test('iwm.cbor maps to WASMMeshIO', t => {
   const io = ExtensionToIO.get('iwm.cbor')
-  t.is(io, 'itkWASMMeshIO')
+  t.is(io, 'WASMMeshIO')
 })
 
-test('iwm.cbor.zstd maps to itkWASMMeshIO', t => {
+test('iwm.cbor.zstd maps to WASMMeshIO', t => {
   const io = ExtensionToIO.get('iwm.cbor.zstd')
-  t.is(io, 'itkWASMZstdMeshIO')
+  t.is(io, 'WASMZstdMeshIO')
 })
