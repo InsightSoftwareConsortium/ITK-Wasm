@@ -4,7 +4,16 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/index.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -13,7 +22,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/hello_world_node.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -22,7 +31,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/index.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -31,7 +40,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/node.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -40,7 +49,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/paraview_glance.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -49,7 +58,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/umd.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -58,7 +67,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/unpkgio.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -67,133 +76,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/examples/webpack.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/itk_js_to_itk_wasm_migration_guide.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/mesh_formats.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/polydata_formats.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/BinaryFile.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/ImageType.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/BinaryStream.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/Mesh.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/MeshType.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/TextFile.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/Image.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/TextStream.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/browser_io.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/browser_pipelines.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/index.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -202,25 +85,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/node_pipelines.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/node_io.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/hacking_itk_wasm.html</loc>
-    
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -229,7 +94,16 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/file_formats.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/hacking_itk_wasm.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -238,7 +112,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/image_formats.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -247,7 +121,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/index.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -256,7 +130,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/installation.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -265,7 +139,133 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/interface_types.html</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/itk_js_to_itk_wasm_migration_guide.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/docs/mesh_formats.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/BinaryFile.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/BinaryStream.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/Image.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/ImageType.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/Mesh.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/MeshType.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/TextFile.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/TextStream.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/browser_io.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/browser_pipelines.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/index.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://insightsoftwareconsortium.github.io/itk-wasm/api/node_io.html</loc>
+    
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -274,7 +274,7 @@
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm/2016/04/28/kw-doc/</loc>
     
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -283,7 +283,7 @@
 
   <url>
     <loc>https://insightsoftwareconsortium.github.io/itk-wasm</loc>
-    <lastmod>2022-02-07</lastmod>
+    <lastmod>2022-03-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>

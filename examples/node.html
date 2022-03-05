@@ -48,8 +48,8 @@
 <meta property="og:site_name" content="itk-wasm">
 <meta property="og:description" content="An itk-convert command line interface (CLI) example demonstrates how to use itk-wasm in a Node.js application. Find the full example in the itk-wasm&#x2F;examples&#x2F;Node.js directory of the GitHub repository">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-02-07T18:08:46.550Z">
-<meta property="article:modified_time" content="2022-02-07T18:08:46.550Z">
+<meta property="article:published_time" content="2022-03-05T20:11:35.494Z">
+<meta property="article:modified_time" content="2022-03-05T20:11:35.494Z">
 <meta property="article:author" content="Insight Software Consortium">
 <meta name="twitter:card" content="summary">
   <!-- Google Analytics -->
@@ -107,10 +107,10 @@
                 <p>An <code>itk-convert</code> command line interface (CLI) example demonstrates how to use <em>itk-wasm</em> in a Node.js application. Find the full example in the <code>itk-wasm/examples/Node.js</code> <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Node.js">directory of the GitHub repository</a>.</p>
 <p>This example assumes you are creating a <a target="_blank" rel="noopener" href="https://docs.npmjs.com/getting-started/what-is-npm">Node.js package</a>. If you do not already have a <code>package.json</code> file, <a target="_blank" rel="noopener" href="https://docs.npmjs.com/getting-started/using-a-package.json">create one</a>, first.</p>
 <p>Add <code>itk-wasm</code> to your project’s dependencies:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install --save itk-wasm itk-image-io itk-mesh-io itk-polydata-io</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install --save itk-wasm itk-image-io itk-mesh-io</span><br></pre></td></tr></table></figure>
 
 <p>This adds <code>itk-wasm</code> and <code>itk-wasm</code> IO packages to the <code>dependencies</code> section of your <em>package.json</em> file:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;itk-convert&quot;</span>,</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;1.1.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;description&quot;</span>: <span class="string">&quot;Convert image or mesh files from one format to another.&quot;</span>,</span><br><span class="line">[...]</span><br><span class="line">  <span class="string">&quot;dependencies&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;commander&quot;</span>: <span class="string">&quot;^8.2.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;itk-image-io&quot;</span>: <span class="string">&quot;^1.0.0-a.7&quot;</span>,</span><br><span class="line">    <span class="string">&quot;itk-mesh-io&quot;</span>: <span class="string">&quot;^1.0.0-a.7&quot;</span>,</span><br><span class="line">    <span class="string">&quot;itk-polydata-io&quot;</span>: <span class="string">&quot;^1.0.0-a.7&quot;</span>,</span><br><span class="line">    <span class="string">&quot;itk-wasm&quot;</span>: <span class="string">&quot;^1.0.0-a.7&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;itk-convert&quot;</span>,</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;1.1.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;description&quot;</span>: <span class="string">&quot;Convert image or mesh files from one format to another.&quot;</span>,</span><br><span class="line">[...]</span><br><span class="line">  <span class="string">&quot;dependencies&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;commander&quot;</span>: <span class="string">&quot;^8.2.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;itk-image-io&quot;</span>: <span class="string">&quot;^1.0.0-a.7&quot;</span>,</span><br><span class="line">    <span class="string">&quot;itk-mesh-io&quot;</span>: <span class="string">&quot;^1.0.0-a.7&quot;</span>,</span><br><span class="line">    <span class="string">&quot;itk-wasm&quot;</span>: <span class="string">&quot;^1.0.0-a.7&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Next, call functions like <a href="../api/node_io.html">readLocalFileSync</a> or <a href="../api/node_io.html">writeLocalFileSync</a>.</p>
 <p>For example,</p>
@@ -118,7 +118,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-02-07T18:08:46.550Z" itemprop="dateModified">Last updated: 2022-02-07</time>
+                <time class="article-footer-updated" datetime="2022-03-05T20:11:35.494Z" itemprop="dateModified">Last updated: 2022-03-05</time>
                 <a href="paraview_glance.html" class="article-footer-prev" title="Vue.js"><i class="fa fa-chevron-left"></i><span>Prev</span></a><a href="umd.html" class="article-footer-next" title="UMD"><span>Next</span><i class="fa fa-chevron-right"></i></a>
               </footer>
               
@@ -134,7 +134,7 @@
         </div>
       </article>
       <aside id="sidebar" role="navigation">
-  <div class="inner"><strong class="sidebar-title">Getting Started</strong><a href="hello_world_node.html" class="sidebar-link">Hello World!</a><strong class="sidebar-title">Recipes</strong><a href="paraview_glance.html" class="sidebar-link">Vue.js</a><strong class="sidebar-title">Examples</strong><strong class="sidebar-title">Building</strong><a href="node.html" class="sidebar-link current">Node.js</a><a href="umd.html" class="sidebar-link">UMD</a><a href="webpack.html" class="sidebar-link">Webpack</a><a href="unpkgio.html" class="sidebar-link">Unpkg.com / CDN</a></div>
+  <div class="inner"><strong class="sidebar-title">Getting Started</strong><a href="hello_world_node.html" class="sidebar-link">Hello World!</a><a href="debugging.html" class="sidebar-link">Debugging</a><strong class="sidebar-title">Recipes</strong><a href="paraview_glance.html" class="sidebar-link">Vue.js</a><strong class="sidebar-title">Examples</strong><strong class="sidebar-title">Building</strong><a href="node.html" class="sidebar-link current">Node.js</a><a href="umd.html" class="sidebar-link">UMD</a><a href="webpack.html" class="sidebar-link">Webpack</a><a href="unpkgio.html" class="sidebar-link">Unpkg.com / CDN</a></div>
 </aside>
     </div>
   </div>
@@ -162,7 +162,7 @@
       </li>
     </ul>
     
-      <strong class="mobile-nav-title">Getting Started</strong><a href="hello_world_node.html" class="mobile-nav-link">Hello World!</a><strong class="mobile-nav-title">Recipes</strong><a href="paraview_glance.html" class="mobile-nav-link">Vue.js</a><strong class="mobile-nav-title">Examples</strong><strong class="mobile-nav-title">Building</strong><a href="node.html" class="mobile-nav-link current">Node.js</a><a href="umd.html" class="mobile-nav-link">UMD</a><a href="webpack.html" class="mobile-nav-link">Webpack</a><a href="unpkgio.html" class="mobile-nav-link">Unpkg.com / CDN</a>
+      <strong class="mobile-nav-title">Getting Started</strong><a href="hello_world_node.html" class="mobile-nav-link">Hello World!</a><a href="debugging.html" class="mobile-nav-link">Debugging</a><strong class="mobile-nav-title">Recipes</strong><a href="paraview_glance.html" class="mobile-nav-link">Vue.js</a><strong class="mobile-nav-title">Examples</strong><strong class="mobile-nav-title">Building</strong><a href="node.html" class="mobile-nav-link current">Node.js</a><a href="umd.html" class="mobile-nav-link">UMD</a><a href="webpack.html" class="mobile-nav-link">Webpack</a><a href="unpkgio.html" class="mobile-nav-link">Unpkg.com / CDN</a>
     
   </div>
   <div id="mobile-lang-select-wrap">
