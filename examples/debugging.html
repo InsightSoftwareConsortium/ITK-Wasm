@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>itk-wasm</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://InsightSoftwareConsortium.github.io/itk-wasm/examples/debugging.html">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/itk-wasm/icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/itk-wasm/icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/itk-wasm/icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/itk-wasm/icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/itk-wasm/icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/itk-wasm/icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/itk-wasm/icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/itk-wasm/icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="/itk-wasm/icon/mstile-144x144.png">
+  <!-- CSS -->
+  <!-- build:css build/css/navy.css -->
+  
+<link rel="stylesheet" href="/itk-wasm/css/navy.css">
+
+  <!-- endbuild -->
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css">
+  <!-- RSS -->
+  <link rel="alternate" href="/itk-wasm/atom.xml" title="itk-wasm" type="application/atom+xml">
+  <!-- Open Graph -->
+  <meta name="description" content="Debugging WebAssemblyEffective debugging results in effective programming. itk-wasm makes effective debugging of WebAssembly possible. This example walks through the different techniques that can be u">
+<meta property="og:type" content="website">
+<meta property="og:title" content="itk-wasm">
+<meta property="og:url" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging.html">
+<meta property="og:site_name" content="itk-wasm">
+<meta property="og:description" content="Debugging WebAssemblyEffective debugging results in effective programming. itk-wasm makes effective debugging of WebAssembly possible. This example walks through the different techniques that can be u">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/native-build.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/native-debug-linux.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/wasi-build-debug.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/run-wasi-debug.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/lldb-wasi-debug.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/emscripten-build-release.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/run-node-release.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/emscripten-build-debug.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/run-node-debug.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/node-inspect.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/node-inspect-remote-target.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/node-inspect-chrome-dev-tools.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/enable-chrome-wasm-debugging.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/devtools-options.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/path-substitution.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/emscripten-build-debug.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/http-server.png">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/debug-cxx-devtools.png">
+<meta property="article:published_time" content="2022-03-05T20:11:35.494Z">
+<meta property="article:modified_time" content="2022-03-05T20:11:35.494Z">
+<meta property="article:author" content="Insight Software Consortium">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging/native-build.png">
+  <!-- Google Analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-90338862-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/itk-wasm/" id="logo">itk-wasm</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="/itk-wasm/docs/" class="main-nav-link">Docs</a><a href="/itk-wasm/api/" class="main-nav-link">API</a><a href="/itk-wasm/examples/" class="main-nav-link">Examples</a>
+      <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="main-nav-link"><i class="fa fa-github-alt"></i></a>
+      <div id="search-input-wrap">
+        <div id="search-input-icon">
+          <i class="fa fa-search"></i>
+        </div>
+        <input type="search" id="search-input" placeholder="Search...">
+      </div>
+    </nav>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name"></h1>
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <h1 id="Debugging-WebAssembly" class="article-heading"><a href="#Debugging-WebAssembly" class="headerlink" title="Debugging WebAssembly"></a>Debugging WebAssembly<a class="article-anchor" href="#Debugging-WebAssembly" aria-hidden="true"></a></h1><p>Effective debugging results in effective programming. <strong>itk-wasm</strong> makes effective debugging of WebAssembly possible.</p>
+<p>This example walks through the different techniques that can be used with itk-wasm to debug WebAssembly during development.</p>
+<p>We will debug the following C++ code:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;Hello debugger world!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> * wasmDetails = <span class="string">&quot;are no longer hidden&quot;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="type">const</span> <span class="type">int</span> a = <span class="number">1</span>;</span><br><span class="line">  <span class="type">const</span> <span class="type">int</span> b = <span class="number">2</span>;</span><br><span class="line">  <span class="type">const</span> <span class="keyword">auto</span> c = a + b;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Simulate a crash.</span></span><br><span class="line">  <span class="built_in">abort</span>();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Debugging">The example</a> provides npm scripts as a convenient way to execute debugging commands that you may also invoke directly in a command line shell.</p>
+<p>To run these examples, first <a href="../hello_world_node.html">install and test</a> Docker and Node/NPM. Then, install the package dependencies and run the example commands.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd itk-wasm/examples/Debugging/</span><br><span class="line">npm install</span><br><span class="line">npm run &lt;name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>where <code>&lt;name&gt;</code> is the npm script. Available names can be found by calling <code>npm run</code> without any arguments.</p>
+<h2 id="Native" class="article-heading"><a href="#Native" class="headerlink" title="Native"></a>Native<a class="article-anchor" href="#Native" aria-hidden="true"></a></h2><p>The CMake-based itk-wasm build system tooling enables the same C++ build system configuration and code to be reused when building a native system binary or a WebAssembly binary. As a result, native binary debugging tools, such as <a target="_blank" rel="noopener" href="https://sourceware.org/gdb/">GDB</a>, <a target="_blank" rel="noopener" href="https://lldb.llvm.org/">LLDB</a>, or the <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/visualstudio/debugger/?view=vs-2022">Visual Studio debugger</a>.</p>
+<p>We can build the project’s standard CMake build configuration,</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"><span class="keyword">project</span>(DebuggingWebAssemblyExample)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(DebugMe DebugMe.cxx)</span><br></pre></td></tr></table></figure>
+
+<p>with standard CMake commands,</p>
+<p><img src="./debugging/native-build.png" alt="Native build"></p>
+<p>The native binary can then be debugged in the standard way. For example, with <code>gdb</code> on Linux:</p>
+<p><img src="./debugging/native-debug-linux.png" alt="Native debug Linux"></p>
+<h2 id="WASI" class="article-heading"><a href="#WASI" class="headerlink" title="WASI"></a>WASI<a class="article-anchor" href="#WASI" aria-hidden="true"></a></h2><p>The most direct way to debug WebAssembly is through the <a target="_blank" rel="noopener" href="https://wasi.dev/">WebAssembly System Interface (WASI)</a>. In itk-wasm we can build to WASI with the <a target="_blank" rel="noopener" href="https://github.com/WebAssembly/wasi-sdk">WASI SDK</a> by specifying the <code>itkwasm/wasi</code> toolchain image. A backtrace can quickly be obtained with the <code>itk-wasm</code> CLI. Or, a fully fledged debugger session can be started with LLDB.</p>
+<p>First, build to WASI WebAssembly with debugging symbols available:</p>
+<p><img src="./debugging/wasi-build-debug.png" alt="WASI debug build"></p>
+<p>Then, the <code>itk-wasm</code> CLI can conveniently run the WASM binary with the included WASI runtime:</p>
+<p><img src="./debugging/run-wasi-debug.png" alt="Run WASI debug"></p>
+<p>We can see that <code>abort</code> is called in the <code>main</code> function at line 13 in <code>DebugMe.cxx</code>.</p>
+<p>A full debugging session is also possible after <a target="_blank" rel="noopener" href="https://lldb.llvm.org/">LLDB</a> &gt;= 13 and <a target="_blank" rel="noopener" href="https://wasmtime.dev/">Wasmtime</a> are installed.</p>
+<p><img src="./debugging/lldb-wasi-debug.png" alt="LLDB WASI debug"></p>
+<h2 id="Node-js" class="article-heading"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js<a class="article-anchor" href="#Node-js" aria-hidden="true"></a></h2><p>When debugging WebAssembly built with the itk-wasm Emscripten toolchain, set the <code>CMAKE_BUILD_TYPE</code> to <code>Debug</code> as is required to debug native builds.</p>
+<p>As with native builds, this builds debugging symbols, the human-readable names of functions, variables, etc., into the binary.  This also adds support for C++ exceptions and retrieving the string name associated with exceptions. Without this itk-wasm instrumentation, a C++ exception will through an error with an opaque integer value. And, Emscripten JavaScript WebAssembly bindings will not be minified, which facilitates debugging.</p>
+<p>When built with the default <code>Release</code> build type:</p>
+<p><img src="./debugging/emscripten-build-release.png" alt="Emscripten build Release"></p>
+<p>the JavaScript support code is minified, and difficult to debug:</p>
+<p><img src="./debugging/run-node-release.png" alt="Run Node Release"></p>
+<p>However, when built with the <code>Debug</code> build type:</p>
+<p><img src="./debugging/emscripten-build-debug.png" alt="Emscripten build Debug"></p>
+<p>a useful backtrace can be obtained:</p>
+<p><img src="./debugging/run-node-debug.png" alt="Run Node Debug"></p>
+<p>In order to run a debugger with Node, add the <code>--inspect-brk</code> flag when invoking <code>node</code>:</p>
+<p><img src="./debugging/node-inspect.png" alt="Node inspect"></p>
+<p>This will pause execution on start a debugging remote interface. To connect to the remote interface with a Chromium browser, visit <code>chrome://inspect</code> and click the <em>inspect</em> link on the corresponding <em>Remote Target</em>:</p>
+<p><img src="./debugging/node-inspect-remote-target.png" alt="Node inspect Remote Target"></p>
+<p>This will open the Chrome Dev Tools debugger:</p>
+<p><img src="./debugging/node-inspect-chrome-dev-tools.png" alt="Node inspect Chrome DevTools"></p>
+<p>Other debugger interfaces <a target="_blank" rel="noopener" href="https://nodejs.org/en/docs/inspector">are also available</a>, like a CLI debugger or the VSCode debugger.</p>
+<p>This is helpful for debugging issues that occur in Emscripten JavaScript interface. The next section describes how to debug issues inside the Emscripten-generated WebAssembly.</p>
+<h2 id="Chromium-based-browsers" class="article-heading"><a href="#Chromium-based-browsers" class="headerlink" title="Chromium-based browsers"></a>Chromium-based browsers<a class="article-anchor" href="#Chromium-based-browsers" aria-hidden="true"></a></h2><p>Recent Chromium-based browsers have support for debugging C++-based WebAssembly in the browser. With a few extra steps described in this section, it is possible to interactively step through and inspect C++-compiled WebAssembly running in the browser.</p>
+<p>WebAssembly debugging in DevTools requires a few extra setup steps from a default browser installation.</p>
+<p>First, <a target="_blank" rel="noopener" href="https://goo.gle/wasm-debugging-extension">install the Chrome WebAssembly Debugging extension</a>.</p>
+<p>Next, enable it in DevTools.</p>
+<p>  Open DevTools -&gt; Click the <em>gear (⚙)</em> icon in the top right corner -&gt; go to the <em>Experiments</em> panel -&gt; and tick <em>WebAssembly Debugging: Enable DWARF support</em>.</p>
+<p><img src="./debugging/enable-chrome-wasm-debugging.png" alt="Enable WASM Debugging"></p>
+<p>After exitting Settings, you will be prompted to reload DevTools – reload.</p>
+<p>Next, open the options for Chrome WebAssembly Debugging extension:</p>
+<p><img src="./debugging/devtools-options.png" alt="WASM Debugging Options"></p>
+<p>Since itk-wasm performs builds in a clean Docker environment, the debugging source paths in the Docker environment are different than the paths on the host system. The debugging extension has a path substitution system that allows to account for these differences. In the Docker image, the directory where <code>itk-wasm</code> is invoked is mounted as <code>/work</code>. Substitute <code>/work</code> with the directory where the <code>itk-wasm</code> CLI is invoked. For example, if <code>itk-wasm</code> was invoked at <code>/home/matt/src/itk-wasm/examples/Debugging</code>, then:</p>
+<p><img src="./debugging/path-substitution.png" alt="Path substitution"></p>
+<p>Build the project with itk-wasm and the <code>Debug</code> <code>CMAKE_BUILD_TYPE</code> to include DWARF debugging information:</p>
+<p><img src="./debugging/emscripten-build-debug.png" alt="Emscripten build Debug"></p>
+<p>Here we load and run the WebAssembly with a simple HTML file and server:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-a.11/dist/umd/itk-wasm.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;p&gt;This is an example to demonstrate browser-based debugging of</span><br><span class="line">    C++-generated WebAssembly. For more information, please see the</span><br><span class="line">    &lt;a target=&quot;_blank&quot; href=&quot;https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging.html&quot;&gt;associated</span><br><span class="line">      documentation&lt;/a&gt;.&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">    &lt;script&gt;</span><br><span class="line">      window.addEventListener(&#x27;load&#x27;, (event) =&gt; &#123;</span><br><span class="line">        const pipeline = new URL(&#x27;web-build-debug/DebugMe&#x27;, document.location)</span><br><span class="line">        itk.runPipelineBrowser(null, pipeline)</span><br><span class="line">      &#125;);</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line"></span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="./debugging/http-server.png" alt="HTTP Server"></p>
+<p>And we can debug the C++ code in Chrome’s DevTools debugger along side the executing JavaScript!</p>
+<p><img src="./debugging/debug-cxx-devtools.png" alt="Debug C++ DevTools"></p>
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2022-03-05T20:11:35.494Z" itemprop="dateModified">Last updated: 2022-03-05</time>
+                <a href="hello_world_node.html" class="article-footer-prev" title="Hello World!"><i class="fa fa-chevron-left"></i><span>Prev</span></a><a href="paraview_glance.html" class="article-footer-next" title="Vue.js"><span>Next</span><i class="fa fa-chevron-right"></i></a>
+              </footer>
+              
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <strong class="sidebar-title">Contents</strong>
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Debugging-WebAssembly"><span class="toc-text">Debugging WebAssembly</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Native"><span class="toc-text">Native</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WASI"><span class="toc-text">WASI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js"><span class="toc-text">Node.js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Chromium-based-browsers"><span class="toc-text">Chromium-based browsers</span></a></li></ol></li></ol>
+              <a href="#" id="article-toc-top">Back to Top</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+      <aside id="sidebar" role="navigation">
+  <div class="inner"><strong class="sidebar-title">Getting Started</strong><a href="hello_world_node.html" class="sidebar-link">Hello World!</a><a href="debugging.html" class="sidebar-link current">Debugging</a><strong class="sidebar-title">Recipes</strong><a href="paraview_glance.html" class="sidebar-link">Vue.js</a><strong class="sidebar-title">Examples</strong><strong class="sidebar-title">Building</strong><a href="node.html" class="sidebar-link">Node.js</a><a href="umd.html" class="sidebar-link">UMD</a><a href="webpack.html" class="sidebar-link">Webpack</a><a href="unpkgio.html" class="sidebar-link">Unpkg.com / CDN</a></div>
+</aside>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2022 <a href="https://www.kitware.com/" target="_blank">Insight Software Consortium</a>
+    </div>
+    <div id="footer-links">
+      <a href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="footer-link" target="_blank"><i class="fa fa-github-alt"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="/itk-wasm/docs/" class="mobile-nav-link">Docs</a><a href="/itk-wasm/api/" class="mobile-nav-link">API</a><a href="/itk-wasm/examples/" class="mobile-nav-link">Examples</a>
+      <li class="mobile-nav-item">
+        <a href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+      </li>
+    </ul>
+    
+      <strong class="mobile-nav-title">Getting Started</strong><a href="hello_world_node.html" class="mobile-nav-link">Hello World!</a><a href="debugging.html" class="mobile-nav-link current">Debugging</a><strong class="mobile-nav-title">Recipes</strong><a href="paraview_glance.html" class="mobile-nav-link">Vue.js</a><strong class="mobile-nav-title">Examples</strong><strong class="mobile-nav-title">Building</strong><a href="node.html" class="mobile-nav-link">Node.js</a><a href="umd.html" class="mobile-nav-link">UMD</a><a href="webpack.html" class="mobile-nav-link">Webpack</a><a href="unpkgio.html" class="mobile-nav-link">Unpkg.com / CDN</a>
+    
+  </div>
+  <div id="mobile-lang-select-wrap">
+    <span id="mobile-lang-select-label"><i class="fa fa-globe"></i><span>English</span></span>
+    <select id="mobile-lang-select" data-canonical="">
+      
+        <option value="en" selected>English</option>
+      
+    </select>
+  </div>
+</nav>
+  <!-- Scripts -->
+<!-- build:js build/js/main.js -->
+
+<script src="/itk-wasm/js/lang_select.js"></script>
+
+
+<script src="/itk-wasm/js/toc.js"></script>
+
+
+<script src="/itk-wasm/js/mobile_nav.js"></script>
+
+<!-- endbuild -->
+<script src="https://cdn.jsdelivr.net/retinajs/1.3.0/retina.min.js" async></script>
+
+
+
+</body>
+</html>
