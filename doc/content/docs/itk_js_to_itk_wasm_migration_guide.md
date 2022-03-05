@@ -1,8 +1,7 @@
 # itk.js to itk-wasm Migration Guide
 
 *Note: this migration guide is a work in progress. itk-wasm is currently in
-the alpha development stage with additional changes anticipated
-into December. Also, while nearly all tests in the test suite pass, GE and JPEG format currently have issues. Last updated December 20th, 2021.*
+the beta development stage. The interface is relatively stable while functionality is currently being fleshed out. While nearly all tests in the test suite pass, GE and JPEG format currently have issues. Last updated March 5th, 2022.*
 
 **itk-wasm** is a major upgrade with a focus on univeral, performant computing in
 WebAssembly. The itk.js to itk-wasm transition also brings improvements
