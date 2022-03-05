@@ -103,14 +103,14 @@ Returns:
 - tags: a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) containing the mapping from tag to tag value.
 - webWorker: a webworker that can be re-used.
 
-## writeImageArrayBuffer(webWorker: Worker | null, useCompression: boolean, image: [Image](./Image.html), fileName: string, mimeType: string):  Promise<{ webWorker: Worker, arrayBuffer: [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }>
+## writeImageArrayBuffer(webWorker: Worker | null, image: [Image](./Image.html), fileName: string, mimeType: string, useCompression: boolean = false):  Promise<{ webWorker: Worker, arrayBuffer: [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }>
 
 Write an image to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
 
-*useCompression*: compress the pixel data when possible
 *image*:          [Image](./Image.html) instance to write
 *fileName*:       name that would be used for the resulting file
 *mimeType*:       optional mime-type for the resulting file
+*useCompression*: compress the pixel data when possible
 
 ---
 
@@ -126,11 +126,11 @@ Read an mesh from a [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob
 
 Read an mesh from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer). `fileName` is a string with the file name. `mimeType` is an optional mime-type string.
 
-## writeMeshArrayBuffer(webWorker: Worker | null, useCompression: boolean, mesh: [Mesh](./Mesh.html), fileName: string, mimeType: string):  Promise<{ webWorker: Worker, arrayBuffer: [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }>
+## writeMeshArrayBuffer(webWorker: Worker | null, mesh: [Mesh](./Mesh.html), fileName: string, mimeType: string, { useCompression?: boolean, binaryFileType?: boolean }):  Promise<{ webWorker: Worker, arrayBuffer: [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) }>
 
 Write an mesh to a an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
 
-*useCompression*: compress the pixel data when possible
 *mesh*:           [Mesh](./Mesh.html) instance to write
 *fileName*:       name that would be used for the resulting file
 *mimeType*:       optional mime-type for the resulting file
+*useCompression*: compress the pixel data when possible

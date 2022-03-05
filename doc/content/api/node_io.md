@@ -40,13 +40,13 @@ Hexadecimal strings are treated case-insensitively.
 
 Returns a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) containing the mapping from tag to tag value.
 
-## writeImageLocalFile(useCompression: boolean, image: [Image](./Image.html), filePath: string): null
+## writeImageLocalFile(image: [Image](./Image.html), filePath: string, useCompression: boolean): null
 
 Write an image to a file on the local filesystem with Node.js.
 
-*useCompression*: compress the pixel data when possible
 *image*:          [Image](./Image.html) instance to write
 *filePath*:       path to the file on the local filesystem
+*useCompression*: compress the pixel data when possible
 
 ---
 
@@ -54,11 +54,11 @@ Write an image to a file on the local filesystem with Node.js.
 
 Read a mesh from a file on the local filesystem.
 
-## writeMeshLocalFile({ useCompression?: boolean, binaryFileType?: boolean }, [Mesh](./Mesh.html), filePath: string): null
+## writeMeshLocalFile([Mesh](./Mesh.html), filePath: string, { useCompression?: boolean, binaryFileType?: boolean }): null
 
 Write a mesh to a file on the local filesystem with Node.js.
 
-*useCompression*: compress the pixel data when possible
-*binaryFileType*: write in an binary as opposed to a ascii format, if possible
 *mesh*:           [Mesh](./Mesh.html) instance to write
 *filePath*:       path to the file on the local filesystem
+*useCompression*: compress the pixel data when possible
+*binaryFileType*: write in an binary as opposed to a ascii format, if possible
