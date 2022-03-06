@@ -1,0 +1,21 @@
+{
+  "name": "itk-wasm-hello-world",
+  "version": "2.0.3",
+  "description": "An itk-wasm Hello World!",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:wasi && npm run build:emscripten",
+    "build:wasi": "itk-wasm -b wasi-build -i itkwasm/wasi build",
+    "build:emscripten": "itk-wasm build",
+    "test": "npm run test:wasi && npm run test:node",
+    "test:wasi": "npx itk-wasm -b wasi-build run hello.wasi.wasm",
+    "test:node": "node ./index.mjs"
+  },
+  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fs-extra": "^10.0.0",
+    "itk-wasm": "^1.0.0-b.1"
+  }
+}

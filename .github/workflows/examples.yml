@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: '16'
 
-    - name: Install 
+    - name: Install
       run: |
         npm install
 
@@ -26,11 +26,11 @@ jobs:
         npm run test
 
   build-test-node-example:
-    name: Node Hello World
+    name: Hello World
     runs-on: ubuntu-20.04
     defaults:
       run:
-        working-directory: ./examples/NodeHelloWorld
+        working-directory: ./examples/HelloWorld
 
     steps:
     - uses: actions/checkout@v2
@@ -39,7 +39,7 @@ jobs:
       with:
         node-version: '16'
 
-    - name: Install 
+    - name: Install
       run: |
         npm install
 
