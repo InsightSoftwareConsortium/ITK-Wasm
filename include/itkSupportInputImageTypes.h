@@ -46,15 +46,15 @@ struct InterfaceImageType
 bool lexical_cast(const std::string &input, InterfaceImageType & imageType);
 
 /** \class SupportInputImageTypes
- * 
+ *
  * \brief Instantiatiate a Pipeline functor over multiple pixel types and dimensions and match to the input image type.
- * 
+ *
  * Instantiate the PipelineFunctor (function object) over multiple pixel types and image dimensions.
  *  If the input image matches these pixel types or dimensions, use the compile-time optimized pipeline for that image type.
  *  Otherwise, exit the pipeline with an error identifying the unsupported image type.
- * 
+ *
  * Example usage:
- * 
+ *
 ```
 template<typename TImage>
 class PipelineFunctor
@@ -133,7 +133,7 @@ private:
         return PipelineType()(pipeline);
       }
     }
-    
+
     if constexpr (sizeof...(TPixelsRest) > 0) {
       return IteratePixelTypes<VDimension, TPixelsRest...>(pipeline, imageType);
     }
@@ -152,7 +152,7 @@ private:
     {
       return IteratePixelTypes<VDimension, TPixels...>(pipeline, imageType);
     }
-    
+
     if constexpr (sizeof...(VDimensions) > 0) {
       return IterateDimensions<VDimensions...>(pipeline, imageType);
     }

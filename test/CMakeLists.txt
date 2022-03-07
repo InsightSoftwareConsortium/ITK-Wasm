@@ -36,7 +36,7 @@ ExternalData_Expand_Arguments(
   DATA{Input/cthead1.iwi/index.json}
   DATA{Input/cthead1.iwi/data/direction.raw}
   DATA{Input/cthead1.iwi/data/data.raw}
-  DATA{Input/cow.iwm.zip}
+  DATA{Input/cow.iwm.cbor}
   DATA{Input/cow.iwm/index.json}
   DATA{Input/cow.iwm/data/cells.raw}
   DATA{Input/cow.iwm/data/points.raw}
@@ -60,6 +60,8 @@ set(WebAssemblyInterfaceTests
   itkPipelineMemoryIOTest.cxx
   itkSupportInputImageTypesTest.cxx
   itkSupportInputImageTypesMemoryIOTest.cxx
+  itkSupportInputMeshTypesTest.cxx
+  itkSupportInputMeshTypesMemoryIOTest.cxx
 )
 
 if (EMSCRIPTEN)
@@ -183,6 +185,20 @@ itk_add_test(NAME itkSupportInputImageTypesMemoryIOTest
     itkSupportInputImageTypesMemoryIOTest
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkSupportInputImageTypesMemoryIOTest.mha
+)
+
+itk_add_test(NAME itkSupportInputMeshTypesTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkSupportInputMeshTypesTest
+      DATA{Input/cow.iwm.cbor}
+      ${ITK_TEST_OUTPUT_DIR}/itkSupportInputMeshTypesTest.iwm
+)
+
+itk_add_test(NAME itkSupportInputMeshTypesMemoryIOTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkSupportInputMeshTypesMemoryIOTest
+      DATA{Input/cow.iwm.cbor}
+      ${ITK_TEST_OUTPUT_DIR}/itkSupportInputMeshTypesMemoryIOTest.iwm
 )
 
 if(EMSCRIPTEN)
