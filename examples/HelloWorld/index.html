@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>itk-wasm Browser Hello World!</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.1/dist/umd/itk-wasm.min.js"></script>
+  </head>
+
+  <body>
+    <textarea readonly>WebAssembly output...</textarea>
+
+    <script>
+      const outputTextArea = document.querySelector("textarea");
+      outputTextArea.textContent = "Loading...";
+
+      const wasmURL = new URL('web-build/hello', document.location)
+      const args = []
+      const inputs = null
+      const outputs = null
+      itk.runPipelineBrowser(null, wasmURL, args, inputs, outputs).then(
+        ({ stdout, webWorker }) => {
+          webWorker.terminate()
+          outputTextArea.textContent = stdout
+          })
+    </script>
+  </body>
+</html>
+
