@@ -3,8 +3,8 @@ import path from 'path'
 
 import { FloatTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
 
-const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'vol-raw-little.nrrd')
-const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'NRRDTest-vol-raw-little.nrrd')
+const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'vol-raw-little.nrrd')
+const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'NRRDTest-vol-raw-little.nrrd')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 3, 'dimension')

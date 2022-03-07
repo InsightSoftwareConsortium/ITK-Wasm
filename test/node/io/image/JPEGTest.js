@@ -3,8 +3,8 @@ import path from 'path'
 
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
 
-const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'apple.jpg')
-const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'JPEGTest-apple.jpg')
+const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'apple.jpg')
+const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'JPEGTest-apple.jpg')
 
 // Todo: fix
 // const verifyImage = (t, image) => {

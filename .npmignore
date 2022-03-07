@@ -3,9 +3,13 @@ node_modules
 .gitmodules
 .npmrc
 npm-debug.log
-build
+build-emscripten
+build-wasi
 test
-build.js
+src/build-emscripten.js
+src/build-wasi.js
 dist/image-io/
 dist/mesh-io/
+dist/wasi-image-io/
+dist/wasi-mesh-io/
 examples/

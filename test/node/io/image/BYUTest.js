@@ -3,8 +3,8 @@ import path from 'path'
 
 import { IntTypes, FloatTypes, PixelTypes, readMeshLocalFile, writeMeshLocalFile } from '../../../../dist/index.js'
 
-const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cube.byu')
-const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'BYUTest-cube.byu')
+const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cube.byu')
+const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'BYUTest-cube.byu')
 
 const verifyMesh = (t, mesh) => {
   t.is(mesh.meshType.dimension, 3)

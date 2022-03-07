@@ -28,7 +28,7 @@ export default function () {
   //
   // test('Test reading a JPEG file', async (t) => {
   // const fileName = 'apple.jpg'
-  // const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+  // const testFilePath = 'base/build-emscripten/ExternalData/test/Input/' + fileName
   // const response = await axios.get(testFilePath, { responseType: 'blob' })
   // const jsFile = await new window.File([response.data], fileName)
   // const { image, webWorker } = await readImageFile(null, jsFile)

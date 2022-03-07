@@ -3,7 +3,7 @@ import path from 'path'
 
 import { IntTypes, FloatTypes, PixelTypes, readMeshLocalFile } from '../../../../dist/index.js'
 
-const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cow.vtk')
+const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cow.vtk')
 
 test('readMeshLocalFile reads a file path given on the local filesystem', t => {
   return readMeshLocalFile(testFilePath).then(function (mesh) {

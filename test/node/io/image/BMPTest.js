@@ -4,7 +4,7 @@ import path from 'path'
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile } from '../../../../dist/index.js'
 
 test('Test reading a BMP file', t => {
-  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'image_color.bmp')
+  const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'image_color.bmp')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 2, 'dimension')
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')

@@ -101,10 +101,22 @@ foreach(io_module ${WebAssemblyInterface_MeshIOModules} WebAssemblyInterface)
           ${WebAssemblyInterface_BINARY_DIR}/mesh-io
           )
       endforeach()
+    elseif (WASI AND DEFINED WebAssemblyInterface_BINARY_DIR)
+      foreach(target ${read_binary} ${write_binary})
+        itk_module_target_label(${target})
+        itk_module_target_export(${target})
+        itk_module_target_install(${target})
+        set_property(TARGET ${target}
+          PROPERTY RUNTIME_OUTPUT_DIRECTORY
+          ${WebAssemblyInterface_BINARY_DIR}/wasi-mesh-io
+          )
+      endforeach()
     endif()
   endforeach()
 endforeach()
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../MeshIOIndex.ts.in
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../../MeshIOIndex.ts @ONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../MeshIOIndex.ts.in
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../dist/mesh-io/index.js @ONLY)
+if(EMSCRIPTEN)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../MeshIOIndex.ts.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../MeshIOIndex.ts @ONLY)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../MeshIOIndex.ts.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../dist/mesh-io/index.js @ONLY)
+endif()

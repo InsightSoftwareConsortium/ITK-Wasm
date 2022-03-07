@@ -77,7 +77,7 @@ jobs:
         PINATA_JWT: ${{ secrets.PINATA_JWT }}
       run: |
         mkdir itk-wasm-testing-data
-        rsync -v -r --exclude=Objects --exclude='*-hash-stamp' ./build/ExternalData/ ./itk-wasm-testing-data/
+        rsync -v -r --exclude=Objects --exclude='*-hash-stamp' ./build-emscripten/ExternalData/ ./itk-wasm-testing-data/
         new_cid=$(ipfs add -r -Q --cid-version 1 --raw-leaves itk-wasm-testing-data)
 
         ipfs pin remote service add pinata https://api.pinata.cloud/psa "$PINATA_JWT"

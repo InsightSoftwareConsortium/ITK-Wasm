@@ -3,10 +3,10 @@ import path from 'path'
 
 import { IntTypes, FloatTypes, PixelTypes, readMeshLocalFile, writeMeshLocalFile } from '../../../../dist/index.js'
 
-const testAsciiInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'sphere.fsa')
-const testAsciiOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'FreeSurferTest-sphere.fsa')
-const testBinaryInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'sphere.fsb')
-const testBinaryOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'FreeSurferTest-sphere.fsb')
+const testAsciiInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'sphere.fsa')
+const testAsciiOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'FreeSurferTest-sphere.fsa')
+const testBinaryInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'sphere.fsb')
+const testBinaryOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'FreeSurferTest-sphere.fsb')
 
 const verifyMesh = (t, mesh) => {
   t.is(mesh.meshType.dimension, 3)

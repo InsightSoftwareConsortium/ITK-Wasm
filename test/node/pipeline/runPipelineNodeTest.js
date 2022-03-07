@@ -3,8 +3,8 @@ import path from 'path'
 
 import { IntTypes, FloatTypes, PixelTypes, readImageLocalFile, readMeshLocalFile, runPipelineNode, IOTypes, InterfaceTypes } from '../../../dist/index.js'
 
-const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cthead1.png')
-const testMeshInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cow.vtk')
+const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cthead1.png')
+const testMeshInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cow.vtk')
 
 test('runPipelineNode captures stdout and stderr', (t) => {
   const args = []

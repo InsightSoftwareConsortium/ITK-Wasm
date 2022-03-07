@@ -4,7 +4,7 @@ import path from 'path'
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile } from '../../../../dist/index.js'
 
 test('Test reading an ITK HDF5 file', t => {
-  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'ITKImage.hdf5')
+  const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'ITKImage.hdf5')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 3, 'dimension')
     t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')

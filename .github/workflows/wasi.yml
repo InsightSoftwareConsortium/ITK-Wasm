@@ -1,0 +1,44 @@
+name: WASI
+
+on: [push,pull_request]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
+
+    - name: Pull latest Docker images
+      run: |
+        ./src/docker/pull.sh
+
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install packages
+      run: |
+        npm ci
+
+    - name: Build
+      run: |
+        npm run build:wasi
+
+    - name: Test
+      run: |
+        npm run test:wasi

@@ -15,6 +15,17 @@ include(${ITK_USE_FILE})
 add_executable(ReadImageDICOMFileSeries ReadImageDICOMFileSeries.cxx)
 target_link_libraries(ReadImageDICOMFileSeries PUBLIC ${ITK_LIBRARIES})
 
+if (WASI AND DEFINED WebAssemblyInterface_BINARY_DIR)
+  itk_module_target_label(ReadImageDICOMFileSeries)
+  itk_module_target_export(ReadImageDICOMFileSeries)
+  itk_module_target_install(ReadImageDICOMFileSeries)
+  set_property(TARGET ReadImageDICOMFileSeries
+    PROPERTY RUNTIME_OUTPUT_DIRECTORY
+    ${WebAssemblyInterface_BINARY_DIR}/wasi-image-io
+    )
+  return()
+endif()
+
 # include iconv for reading dicom tags
 include(ExternalProject)
 set(Iconv iconv)

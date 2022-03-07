@@ -5,7 +5,7 @@ import { IntTypes, PixelTypes, readImageLocalFile } from '../../../../dist/index
 
 // Todo: fix
 // test('Test reading a GE4 file', t => {
-// const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', '19771.002.001')
+// const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', '19771.002.001')
 // return readImageLocalFile(testFilePath).then(function (image) {
 // t.is(image.imageType.dimension, 3, 'dimension')
 // t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')
@@ -35,7 +35,7 @@ import { IntTypes, PixelTypes, readImageLocalFile } from '../../../../dist/index
 // })
 
 // test('Test reading a GE5 file', t => {
-// const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', '113766.003.001')
+// const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', '113766.003.001')
 // return readImageLocalFile(testFilePath).then(function (image) {
 // t.is(image.imageType.dimension, 3, 'dimension')
 // t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')
@@ -65,7 +65,7 @@ import { IntTypes, PixelTypes, readImageLocalFile } from '../../../../dist/index
 // })
 
 // test('Test reading a GEAdw file', t => {
-// const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'I.001')
+// const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'I.001')
 // return readImageLocalFile(testFilePath).then(function (image) {
 // t.is(image.imageType.dimension, 3, 'dimension')
 // t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')

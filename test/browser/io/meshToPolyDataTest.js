@@ -4,7 +4,7 @@ import axios from 'axios'
 import { IntTypes, FloatTypes, PixelTypes, readMeshArrayBuffer, meshToPolyData, polyDataToMesh } from 'browser/index.js'
 
 const fileName = 'cow.vtk'
-const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+const testFilePath = 'base/build-emscripten/ExternalData/test/Input/' + fileName
 
 const verifyMesh = (t, mesh) => {
   t.is(mesh.meshType.dimension, 3)

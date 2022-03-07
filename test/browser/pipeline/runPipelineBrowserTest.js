@@ -214,7 +214,7 @@ Click. Perfect success.
     }
 
     const fileName = 'cthead1.png'
-    const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+    const testFilePath = 'base/build-emscripten/ExternalData/test/Input/' + fileName
     return axios.get(testFilePath, { responseType: 'blob' })
       .then(function (response) {
         const jsFile = new window.File([response.data], fileName)
@@ -255,7 +255,7 @@ Click. Perfect success.
     }
 
     const fileName = 'cow.vtk'
-    const testMeshInputFilePath = `base/build/ExternalData/test/Input/${fileName}`
+    const testMeshInputFilePath = `base/build-emscripten/ExternalData/test/Input/${fileName}`
     const response = await axios.get(testMeshInputFilePath, { responseType: 'blob' })
     const jsFile = await new window.File([response.data], fileName)
     const { mesh, webWorker } = await readMeshFile(null, jsFile)

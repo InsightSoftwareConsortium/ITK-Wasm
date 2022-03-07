@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import { IntTypes, PixelTypes, getMatrixElement, readImageDICOMFileSeries, readImageDICOMArrayBufferSeries } from '../../../dist/browser/index.js'
 
-const testSeriesDirectory = 'base/build/ExternalData/test/Input/DicomImageOrientationTest/'
+const testSeriesDirectory = 'base/build-emscripten/ExternalData/test/Input/DicomImageOrientationTest/'
 const fileNames = ['ImageOrientation.1.dcm', 'ImageOrientation.2.dcm', 'ImageOrientation.3.dcm']
 
 function verifyImage (t, image) {

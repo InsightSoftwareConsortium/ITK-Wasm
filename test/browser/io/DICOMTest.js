@@ -6,7 +6,7 @@ import { IntTypes, PixelTypes, getMatrixElement, readImageFile, readDICOMTags, r
 export default function () {
   test('Test reading a DICOM file', t => {
     const fileName = '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm'
-    const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+    const testFilePath = 'base/build-emscripten/ExternalData/test/Input/' + fileName
     return axios.get(testFilePath, { responseType: 'blob' }).then(function (response) {
       const jsFile = new window.File([response.data], fileName)
       return jsFile
@@ -53,7 +53,7 @@ export default function () {
       '0008|103E': 'SAG/RF-FAST/VOL/FLIP 30 '
     }
     const fileName = '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm'
-    const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+    const testFilePath = 'base/build-emscripten/ExternalData/test/Input/' + fileName
     const response = await axios.get(testFilePath, { responseType: 'blob' })
     const jsFile = new window.File([response.data], fileName)
     const { tags: result, webWorker } = await readDICOMTags(null, jsFile, Object.keys(expected))
@@ -75,7 +75,7 @@ export default function () {
       '0008|103E': 'SAG/RF-FAST/VOL/FLIP 30 '
     }
     const fileName = '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm'
-    const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+    const testFilePath = 'base/build-emscripten/ExternalData/test/Input/' + fileName
     const response = await axios.get(testFilePath, { responseType: 'arraybuffer' })
     const arrayBuffer = response.data
     const { tags: result, webWorker } = await readDICOMTagsArrayBuffer(null, arrayBuffer, Object.keys(expected))
@@ -94,7 +94,7 @@ export default function () {
       '0008|103e': 'SAG/RF-FAST/VOL/FLIP 30 '
     }
     const fileName = '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm'
-    const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+    const testFilePath = 'base/build-emscripten/ExternalData/test/Input/' + fileName
     const response = await axios.get(testFilePath, { responseType: 'blob' })
     const jsFile = new window.File([response.data], fileName)
     const { tags: result, webWorker } = await readDICOMTags(null, jsFile)

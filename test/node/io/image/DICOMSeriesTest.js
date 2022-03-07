@@ -4,7 +4,7 @@ import glob from 'glob'
 
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalDICOMFileSeries } from '../../../../dist/index.js'
 
-const testSeriesDirectory = path.resolve('build', 'ExternalData', 'test', 'Input', 'DicomImageOrientationTest')
+const testSeriesDirectory = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'DicomImageOrientationTest')
 const testFiles = glob.sync(`${testSeriesDirectory}/*.dcm`)
 
 test('Test reading a DICOM file', async t => {
