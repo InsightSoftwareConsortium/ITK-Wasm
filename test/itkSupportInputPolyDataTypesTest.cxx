@@ -15,14 +15,12 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkMesh.h"
-#include "itkPolyData.h"
-#include "itkInputPolyData.h"
-#include "itkOutputMesh.h"
+
 #include "itkPipeline.h"
+#include "itkInputPolyData.h"
+#include "itkOutputPolyData.h"
 #include "itkSupportInputPolyDataTypes.h"
 #include "itkWASMMeshIOFactory.h"
-#include "itkPolyDataToMeshFilter.h"
 
 template<typename TPolyData>
 class PipelineFunctor
@@ -34,32 +32,27 @@ public:
 
     using InputPolyDataType = itk::wasm::InputPolyData<PolyDataType>;
     InputPolyDataType inputPolyData;
-    pipeline.add_option("InputPolyData", inputPolyData, "Input polydata")->required();
+    pipeline.add_option("InputPolyData", inputPolyData, "The input mesh")->required();
 
-    using MeshType = itk::Mesh<typename PolyDataType::PixelType, 3>;
-    using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
-    OutputMeshType outputMesh;
-    pipeline.add_option("OutputMesh", outputMesh, "Output mesh")->required();
+    using OutputPolyDataType = itk::wasm::OutputPolyData<PolyDataType>;
+    OutputPolyDataType outputPolyData;
+    pipeline.add_option("OutputPolyData", outputPolyData, "The output mesh")->required();
 
     ITK_WASM_PARSE(pipeline);
 
-    using PolyDataToMeshFilterType = itk::PolyDataToMeshFilter<PolyDataType>;
-    auto polyDataToMeshFilter = PolyDataToMeshFilterType::New();
-    polyDataToMeshFilter->SetInput(inputPolyData.Get());
-    polyDataToMeshFilter->Update();
-
-    outputMesh.Set(polyDataToMeshFilter->GetOutput());
+    outputPolyData.Set(inputPolyData.Get());
 
     return EXIT_SUCCESS;
   }
 };
 
-int main (int argc, char * argv[])
+int
+itkSupportInputPolyDataTypesTest(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Convert an itk::PolyData to an itk::Mesh", argc, argv);
+  itk::wasm::Pipeline pipeline("Test supporting multiple input mesh types", argc, argv);
 
   itk::WASMMeshIOFactory::RegisterOneFactory();
 
   return itk::wasm::SupportInputPolyDataTypes<PipelineFunctor>
-  ::PixelTypes<uint8_t,float>("InputPolyData", pipeline);
+  ::PixelTypes<uint8_t, float>("InputPolyData", pipeline);
 }

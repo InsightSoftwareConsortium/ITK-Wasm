@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkSupportInputMeshTypes.h"
+#include "itkSupportInputPolyDataTypes.h"
 #include "itkWASMExports.h"
 
 #include "rapidjson/document.h"
@@ -26,7 +26,7 @@ namespace itk
 namespace wasm
 {
 
-bool lexical_cast(const std::string &input, InterfaceMeshType & meshType)
+bool lexical_cast(const std::string &input, InterfacePolyDataType & polyDataType)
 {
   if (wasm::Pipeline::GetUseMemoryIO())
   {
@@ -39,14 +39,13 @@ bool lexical_cast(const std::string &input, InterfaceMeshType & meshType)
       throw std::runtime_error("Could not parse JSON");
       }
 
-    const rapidjson::Value & jsonMeshType = document["meshType"];
-    meshType.dimension = jsonMeshType["dimension"].GetInt();
-    meshType.componentType = jsonMeshType["pointPixelComponentType"].GetString();
-    meshType.pixelType = jsonMeshType["pointPixelType"].GetString();
-    meshType.components = jsonMeshType["pointPixelComponents"].GetInt();
-    if (meshType.components == 0)
+    const rapidjson::Value & jsonPolyDataType = document["polyDataType"];
+    polyDataType.componentType = jsonPolyDataType["pointPixelComponentType"].GetString();
+    polyDataType.pixelType = jsonPolyDataType["pointPixelType"].GetString();
+    polyDataType.components = jsonPolyDataType["pointPixelComponents"].GetInt();
+    if (polyDataType.components == 0)
     {
-      meshType.components = jsonMeshType["cellPixelComponents"].GetInt();
+      polyDataType.components = jsonPolyDataType["cellPixelComponents"].GetInt();
     }
 #else
     return false;
@@ -59,20 +58,18 @@ bool lexical_cast(const std::string &input, InterfaceMeshType & meshType)
     meshIO->SetFileName(input);
     meshIO->ReadMeshInformation();
 
-    meshType.dimension = meshIO->GetPointDimension();
-
     using IOComponentType = itk::IOComponentEnum;
     const IOComponentType ioComponentEnum = meshIO->GetPointPixelComponentType();
-    meshType.componentType = WASMComponentTypeFromIOComponentEnum( ioComponentEnum );
+    polyDataType.componentType = WASMComponentTypeFromIOComponentEnum( ioComponentEnum );
 
     using IOPixelType = itk::IOPixelEnum;
     const IOPixelType ioPixelEnum = meshIO->GetPointPixelType();
-    meshType.pixelType = WASMPixelTypeFromIOPixelEnum( ioPixelEnum );
+    polyDataType.pixelType = WASMPixelTypeFromIOPixelEnum( ioPixelEnum );
 
-    meshType.components = meshIO->GetNumberOfPointPixelComponents();
-    if (meshType.components == 0)
+    polyDataType.components = meshIO->GetNumberOfPointPixelComponents();
+    if (polyDataType.components == 0)
     {
-      meshType.components = meshIO->GetNumberOfPointPixelComponents();
+      polyDataType.components = meshIO->GetNumberOfPointPixelComponents();
     }
 #else
     return false;

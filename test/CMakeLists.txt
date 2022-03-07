@@ -62,6 +62,7 @@ set(WebAssemblyInterfaceTests
   itkSupportInputImageTypesMemoryIOTest.cxx
   itkSupportInputMeshTypesTest.cxx
   itkSupportInputMeshTypesMemoryIOTest.cxx
+  itkSupportInputPolyDataTypesTest.cxx
 )
 
 if (EMSCRIPTEN)
@@ -199,6 +200,13 @@ itk_add_test(NAME itkSupportInputMeshTypesMemoryIOTest
     itkSupportInputMeshTypesMemoryIOTest
       DATA{Input/cow.iwm.cbor}
       ${ITK_TEST_OUTPUT_DIR}/itkSupportInputMeshTypesMemoryIOTest.iwm
+)
+
+itk_add_test(NAME itkSupportInputPolyDataTypesTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkSupportInputPolyDataTypesTest
+      DATA{Input/cow.iwm.cbor}
+      ${ITK_TEST_OUTPUT_DIR}/itkSupportInputPolyDataTypesTest.iwm
 )
 
 if(EMSCRIPTEN)
