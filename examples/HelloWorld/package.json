@@ -10,12 +10,21 @@
     "build:emscripten": "itk-wasm build",
     "test": "npm run test:wasi && npm run test:node",
     "test:wasi": "npx itk-wasm -b wasi-build run hello.wasi.wasm",
-    "test:node": "node ./index.mjs"
+    "test:node": "node ./index.mjs",
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npx cypress run",
+    "start": "http-server",
+    "test:browser": "start-server-and-test start http://localhost:8080 cypress:run"
   },
   "author": "Matt McCormick <matt.mccormick@kitware.com>",
   "license": "Apache-2.0",
   "dependencies": {
     "fs-extra": "^10.0.0",
     "itk-wasm": "^1.0.0-b.1"
+  },
+  "devDependencies": {
+    "cypress": "^9.5.1",
+    "http-server": "^14.1.0",
+    "start-server-and-test": "^1.14.0"
   }
 }
