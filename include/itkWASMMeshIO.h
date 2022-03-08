@@ -90,8 +90,10 @@ public:
 
   void Write() override;
 
+#if !defined(ITK_WRAPPING_PARSER)
   /** Get the JSON representation of the mesh information. */
   rapidjson::Document GetJSON();
+#endif
 
   static size_t ITKComponentSize( const CommonEnums::IOComponent );
 
