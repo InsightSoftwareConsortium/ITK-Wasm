@@ -19,6 +19,10 @@ registerWebworker(async function (input: RunPipelineInput | IOInput) {
     pipelineModule = await loadMeshIOPipelineModule(input as IOInput, 'ReadMesh')
   } else if (input.operation === 'writeMesh') {
     pipelineModule = await loadMeshIOPipelineModule(input as IOInput, 'WriteMesh')
+  } else if (input.operation === 'meshToPolyData') {
+    pipelineModule = await loadPipelineModule('MeshToPolyData', input.config.meshIOUrl)
+  } else if (input.operation === 'polyDataToMesh') {
+    pipelineModule = await loadPipelineModule('PolyDataToMesh', input.config.meshIOUrl)
   } else if (input.operation === 'readDICOMImageSeries') {
     pipelineModule = await loadPipelineModule('ReadImageDICOMFileSeries', input.config.imageIOUrl)
   } else if (input.operation === 'readDICOMTags') {

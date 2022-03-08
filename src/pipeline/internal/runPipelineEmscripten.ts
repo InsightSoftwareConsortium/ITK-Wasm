@@ -8,6 +8,7 @@ import TextFile from '../../core/TextFile.js'
 import BinaryFile from '../../core/BinaryFile.js'
 import Image from '../../core/Image.js'
 import Mesh from '../../core/Mesh.js'
+import PolyData from '../../core/PolyData.js'
 import FloatTypes from '../../core/FloatTypes.js'
 import IntTypes from '../../core/IntTypes.js'
 
@@ -65,7 +66,7 @@ function setPipelineModuleInputJSON (emscriptenModule: PipelineEmscriptenModule,
   emscriptenModule.writeAsciiToMemory(dataJSON, jsonPtr, false)
 }
 
-function getPipelineModuleOutputArray (emscriptenModule: PipelineEmscriptenModule, outputIndex: number, subIndex: number, componentType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes]): TypedArray | null {
+function getPipelineModuleOutputArray (emscriptenModule: PipelineEmscriptenModule, outputIndex: number, subIndex: number, componentType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes]): TypedArray | Float32Array | Uint32Array | null {
   const dataPtr = emscriptenModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, outputIndex, subIndex])
   const dataSize = emscriptenModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, outputIndex, subIndex])
   const dataUint8 = memoryUint8SharedArray(emscriptenModule, dataPtr, dataSize)
@@ -152,6 +153,44 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             cellData: `data:application/vnd.itk.address,0:${cellDataPtr}`
           }
           setPipelineModuleInputJSON(pipelineModule, meshJSON, index)
+          break
+        }
+        case InterfaceTypes.PolyData:
+        {
+          const polyData = input.data as PolyData
+          const pointsPtr = setPipelineModuleInputArray(pipelineModule, polyData.points, index, 0)
+          const verticesPtr = setPipelineModuleInputArray(pipelineModule, polyData.vertices, index, 1)
+          const linesPtr = setPipelineModuleInputArray(pipelineModule, polyData.lines, index, 2)
+          const polygonsPtr = setPipelineModuleInputArray(pipelineModule, polyData.polygons, index, 3)
+          const triangleStripsPtr = setPipelineModuleInputArray(pipelineModule, polyData.triangleStrips, index, 4)
+          const pointDataPtr = setPipelineModuleInputArray(pipelineModule, polyData.pointData, index, 5)
+          const cellDataPtr = setPipelineModuleInputArray(pipelineModule, polyData.pointData, index, 6)
+          const polyDataJSON = {
+            polyDataType: polyData.polyDataType,
+            name: polyData.name,
+
+            numberOfPoints: polyData.numberOfPoints,
+            points: `data:application/vnd.itk.address,0:${pointsPtr}`,
+
+            verticesBufferSize: polyData.verticesBufferSize,
+            vertices: `data:application/vnd.itk.address,0:${verticesPtr}`,
+
+            linesBufferSize: polyData.linesBufferSize,
+            lines: `data:application/vnd.itk.address,0:${linesPtr}`,
+
+            polygonsBufferSize: polyData.polygonsBufferSize,
+            polygons: `data:application/vnd.itk.address,0:${polygonsPtr}`,
+
+            triangleStripsBufferSize: polyData.triangleStripsBufferSize,
+            triangleStrips: `data:application/vnd.itk.address,0:${triangleStripsPtr}`,
+
+            numberOfPointPixels: polyData.numberOfPointPixels,
+            pointData: `data:application/vnd.itk.address,0:${pointDataPtr}`,
+
+            numberOfCellPixels: polyData.numberOfCellPixels,
+            cellData: `data:application/vnd.itk.address,0:${cellDataPtr}`
+          }
+          setPipelineModuleInputJSON(pipelineModule, polyDataJSON, index)
           break
         }
         case IOTypes.Text:
@@ -333,6 +372,47 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             mesh.cellData = bufferToTypedArray(mesh.meshType.cellPixelComponentType, new ArrayBuffer(0))
           }
           outputData = mesh
+          break
+        }
+        case InterfaceTypes.PolyData:
+        {
+          const polyData = getPipelineModuleOutputJSON(pipelineModule, index) as PolyData
+          if (polyData.numberOfPoints > 0) {
+            polyData.points = getPipelineModuleOutputArray(pipelineModule, index, 0, FloatTypes.Float32) as Float32Array
+          } else {
+            polyData.points = new Float32Array()
+          }
+          if (polyData.verticesBufferSize > 0) {
+            polyData.vertices = getPipelineModuleOutputArray(pipelineModule, index, 1, IntTypes.UInt32) as Uint32Array
+          } else {
+            polyData.vertices = new Uint32Array()
+          }
+          if (polyData.linesBufferSize > 0) {
+            polyData.lines = getPipelineModuleOutputArray(pipelineModule, index, 1, IntTypes.UInt32) as Uint32Array
+          } else {
+            polyData.lines = new Uint32Array()
+          }
+          if (polyData.polygonsBufferSize > 0) {
+            polyData.polygons = getPipelineModuleOutputArray(pipelineModule, index, 1, IntTypes.UInt32) as Uint32Array
+          } else {
+            polyData.polygons = new Uint32Array()
+          }
+          if (polyData.triangleStripsBufferSize > 0) {
+            polyData.triangleStrips = getPipelineModuleOutputArray(pipelineModule, index, 1, IntTypes.UInt32) as Uint32Array
+          } else {
+            polyData.triangleStrips = new Uint32Array()
+          }
+          if (polyData.numberOfPointPixels > 0) {
+            polyData.pointData = getPipelineModuleOutputArray(pipelineModule, index, 2, polyData.polyDataType.pointPixelComponentType)
+          } else {
+            polyData.pointData = bufferToTypedArray(polyData.polyDataType.pointPixelComponentType, new ArrayBuffer(0))
+          }
+          if (polyData.numberOfCellPixels > 0) {
+            polyData.cellData = getPipelineModuleOutputArray(pipelineModule, index, 3, polyData.polyDataType.cellPixelComponentType)
+          } else {
+            polyData.cellData = bufferToTypedArray(polyData.polyDataType.cellPixelComponentType, new ArrayBuffer(0))
+          }
+          outputData = polyData
           break
         }
         case IOTypes.Text:

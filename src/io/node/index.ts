@@ -11,3 +11,6 @@ export { default as readImageLocalDICOMFileSeries } from './../readImageLocalDIC
 export { default as writeImageLocalFile } from './../writeImageLocalFile.js'
 export { default as writeMeshLocalFile } from './../writeMeshLocalFile.js'
 export { default as writeLocalFile } from './../writeLocalFile.js'
+
+export { default as meshToPolyDataNode } from './../meshToPolyDataNode.js'
+export { default as polyDataToMeshNode } from './../polyDataToMeshNode.js'

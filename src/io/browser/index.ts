@@ -24,3 +24,6 @@ export { default as readImageDICOMArrayBufferSeries } from './../readImageDICOMA
 export { default as writeImageArrayBuffer } from './../writeImageArrayBuffer.js'
 export { default as writeMeshArrayBuffer } from './../writeMeshArrayBuffer.js'
 export { default as writeArrayBuffer } from './../writeArrayBuffer.js'
+
+export { default as meshToPolyData } from './../meshToPolyData.js'
+export { default as polyDataToMesh } from './../polyDataToMesh.js'
