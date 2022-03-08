@@ -20,6 +20,8 @@ set(WebAssemblyInterface_SRCS
   itkWASMComponentTypeFromIOComponentEnum.cxx
   itkWASMPixelTypeFromIOPixelEnum.cxx
   itkSupportInputImageTypes.cxx
+  itkSupportInputMeshTypes.cxx
+  itkSupportInputPolyDataTypes.cxx
   )
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 
@@ -35,5 +37,6 @@ add_subdirectory(io/internal/pipelines/common/CompressStringify)
 add_subdirectory(io/internal/pipelines/image/ConvertImage)
 add_subdirectory(io/internal/pipelines/image/ReadDICOM)
 add_subdirectory(io/internal/pipelines/mesh/ConvertMesh)
+add_subdirectory(io/internal/pipelines/mesh/MeshToPolyData)
 
 endif() # BUILD_ITK_WASM_IO_MODULES

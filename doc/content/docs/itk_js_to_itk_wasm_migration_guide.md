@@ -130,3 +130,7 @@ The use of `IOTypes` in pipelines is deprecated and not expected to work in the 
 ## Argument order when writing image, mesh binaries
 
 The `useCompression` argument is now last in `writeArrayBuffer`, `writeImageArrayBuffer`, `writeImageLocalFile`, `writeMeshArrayBuffer`, `writeMeshLocalFile`.
+
+## runPipeline
+
+`runPipelineBrowser` was renamed to `runPipeline`.

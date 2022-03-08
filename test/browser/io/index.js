@@ -9,6 +9,8 @@ import readMeshTest from './readMeshTest.js'
 import writeImageTest from './writeImageTest.js'
 import writeMeshTest from './writeMeshTest.js'
 
+import meshToPolyDataTest from './meshToPolyDataTest.js'
+
 export default function () {
   readImageTest()
   DICOMSeriesTest()
@@ -20,4 +22,6 @@ export default function () {
 
   writeImageTest()
   writeMeshTest()
+
+  meshToPolyDataTest()
 }

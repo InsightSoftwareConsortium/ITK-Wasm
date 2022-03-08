@@ -15,7 +15,10 @@ import TextFile from '../core/TextFile.js'
 import BinaryFile from '../core/BinaryFile.js'
 import Image from '../core/Image.js'
 import Mesh from '../core/Mesh.js'
+import PolyData from '../core/PolyData.js'
 import TypedArray from '../core/TypedArray.js'
+import meshTransferables from '../core/internal/meshTransferables.js'
+import polyDataTransferables from '../core/internal/polyDataTransferables.js'
 
 async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
   const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
@@ -42,32 +45,13 @@ async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: strin
           transferables.push(transferable)
         }
       } else if (output.type === InterfaceTypes.Mesh) {
-        // Image data
         const mesh = output.data as Mesh
-        if (mesh.points) {
-          const transferable = getTransferable(mesh.points)
-          if (transferable) {
-            transferables.push(transferable)
-          }
-        }
-        if (mesh.pointData) {
-          const transferable = getTransferable(mesh.pointData)
-          if (transferable) {
-            transferables.push(transferable)
-          }
-        }
-        if (mesh.cells) {
-          const transferable = getTransferable(mesh.cells)
-          if (transferable) {
-            transferables.push(transferable)
-          }
-        }
-        if (mesh.cellData) {
-          const transferable = getTransferable(mesh.cellData)
-          if (transferable) {
-            transferables.push(transferable)
-          }
-        }
+        const mt = meshTransferables(mesh)
+        transferables.push(...mt)
+      } else if (output.type === InterfaceTypes.PolyData) {
+        const polyData = output.data as PolyData
+        const pt = polyDataTransferables(polyData)
+        transferables.push(...pt)
       } else if (output.type === IOTypes.Binary) {
         // Binary data
         const binary = output.data as Uint8Array
