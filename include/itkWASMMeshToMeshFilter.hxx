@@ -205,10 +205,10 @@ WASMMeshToMeshFilter<TMesh>
     throw std::runtime_error("Unexpected cell pixel type");
   }
 
-  using CoordRepType = typename MeshType::CoordRepType;
+  using PointType = typename MeshType::PointType;
   const rapidjson::Value & pointsJson = document["points"];
   const std::string pointsString( pointsJson.GetString() );
-  CoordRepType * pointsPtr = reinterpret_cast< CoordRepType * >( std::atol(pointsString.substr(35).c_str()) );
+  const auto * pointsPtr = reinterpret_cast< PointType * >( std::atol(pointsString.substr(35).c_str()) );
   mesh->GetPoints()->resize(numberOfPoints);
   mesh->GetPoints()->assign(pointsPtr, pointsPtr + numberOfPoints);
 

@@ -185,10 +185,10 @@ WASMPolyDataToPolyDataFilter<TPolyData>
   const SizeValueType numberOfPoints = numberOfPointsJson.GetInt();
   if (numberOfPoints)
   {
-    using CoordRepType = typename PolyDataType::CoordRepType;
+    using PointType = typename PolyDataType::PointType;
     const rapidjson::Value & pointsJson = document["points"];
     const std::string pointsString( pointsJson.GetString() );
-    CoordRepType * pointsPtr = reinterpret_cast< CoordRepType * >( std::atol(pointsString.substr(35).c_str()) );
+    const auto * pointsPtr = reinterpret_cast< PointType * >( std::atol(pointsString.substr(35).c_str()) );
     polyData->GetPoints()->resize(numberOfPoints);
     polyData->GetPoints()->assign(pointsPtr, pointsPtr + numberOfPoints);
   }
