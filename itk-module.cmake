@@ -1,8 +1,8 @@
-set(DOCUMENTATION "This module provides a wrapper to an itk::Image in
-JavaScript when working with ITK and Emscripten. It is also used to generate a
-library of Emscription modules that provides IO for different ITK-supported
-file formats.
-")
+set(DOCUMENTATION "itk-wasm combines ITK and WebAssembly to enable high-performance
+spatial analysis in a web browser, Node.js, and reproducible execution across
+programming languages and hardware architectures.
+The WebAssemblyInterface ITK module from itk-wasm provides IO file formats,
+web-friendly in-memory ABI's, and a pipeline execution system.")
 
 itk_module(WebAssemblyInterface
   DEPENDS
