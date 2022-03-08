@@ -25,9 +25,10 @@ jobs:
       run: |
         npm run test
 
-  build-test-node-example:
-    name: Hello World
+  build-hello-world-example:
+    name: Hello World Build
     runs-on: ubuntu-20.04
+
     defaults:
       run:
         working-directory: ./examples/HelloWorld
@@ -47,9 +48,41 @@ jobs:
       run: |
         npm run build
 
+    - name: Save wasm builds
+      uses: actions/upload-artifact@v2
+      with:
+        name: hello-world-build
+        if-no-files-found: error
+        path: |
+          examples/HelloWorld/web-build
+          examples/HelloWorld/wasi-build
+
+
+  test-hello-world-example:
+    name: Hello World Test
+    needs: build-hello-world-example
+    runs-on: ubuntu-20.04
+    container: cypress/browsers:node16.13.2-chrome97-ff96
+
+    defaults:
+      run:
+        working-directory: ./examples/HelloWorld
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Load wasm builds
+      uses: actions/download-artifact@v2
+      with:
+        name: hello-world-build
+        path: examples/HelloWorld
+
     - name: Test
-      run: |
-        npm run test
+      uses: cypress-io/github-action@v2
+      with:
+        working-directory: ./examples/HelloWorld
+        browser: chrome
+        start: npm start
 
   test-umd-example:
     name: UMD
@@ -65,7 +98,7 @@ jobs:
       with:
         node-version: '16'
 
-    - name: Install 
+    - name: Install
       run: |
         npm install
 
