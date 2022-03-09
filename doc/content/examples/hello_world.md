@@ -107,7 +107,7 @@ its output in the HTML DOM:
   <head>
     <title>itk-wasm Browser Hello World!</title>
     <meta charset="UTF-8" />
-    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.1/dist/umd/itk-wasm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.2/dist/umd/itk-wasm.min.js"></script>
   </head>
 
   <body>
@@ -121,7 +121,7 @@ its output in the HTML DOM:
       const args = []
       const inputs = null
       const outputs = null
-      itk.runPipelineBrowser(null, wasmURL, args, inputs, outputs).then(
+      itk.runPipeline(null, wasmURL, args, inputs, outputs).then(
         ({ stdout, webWorker }) => {
           webWorker.terminate()
           outputTextArea.textContent = stdout

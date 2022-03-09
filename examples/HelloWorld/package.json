@@ -1,6 +1,6 @@
 {
   "name": "itk-wasm-hello-world",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "An itk-wasm Hello World!",
   "main": "index.js",
   "type": "module",
@@ -20,7 +20,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "fs-extra": "^10.0.0",
-    "itk-wasm": "^1.0.0-b.1"
+    "itk-wasm": "^1.0.0-b.2"
   },
   "devDependencies": {
     "cypress": "^9.5.1",
