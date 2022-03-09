@@ -35,7 +35,7 @@ sidebar:
 
   examples:
     getting_started: Getting Started
-    building: Building
+    distribution: Distribution
     debugging: Debugging
     nodejs: Node.js
     umd: UMD

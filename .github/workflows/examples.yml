@@ -87,24 +87,17 @@ jobs:
   test-umd-example:
     name: UMD
     runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: ./examples/UMD
+    container: cypress/browsers:node16.13.2-chrome97-ff96
 
     steps:
     - uses: actions/checkout@v2
 
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16'
-
-    - name: Install
-      run: |
-        npm install
-
     - name: Test
-      run: |
-        ./test/run.sh
+      uses: cypress-io/github-action@v2
+      with:
+        working-directory: ./examples/UMD
+        browser: chrome
+        start: npm start
 
   test-webpack-example:
     name: Webpack
