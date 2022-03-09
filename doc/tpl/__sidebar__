@@ -14,8 +14,7 @@ examples:
     debugging: debugging.html
   recipes:
     vue: paraview_glance.html
-  examples:
-  building:
+  distribution:
     nodejs: node.html
     umd: umd.html
     webpack: webpack.html

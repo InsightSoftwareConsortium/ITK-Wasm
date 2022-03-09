@@ -1,12 +1,13 @@
 {
   "name": "itk-umd-example",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "This example demonstrates how to use the itk-wasm UMD module from an HTML script tag.",
-  "main": "index.js",
   "scripts": {
-    "start": "ws -d dist",
-    "test": "karma start ./karma.conf.js",
-    "test:debug": "karma start ./karma.conf.js --no-single-run"
+    "start": "http-server ./dist/",
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npx cypress run",
+    "test:debug": "start-server-and-test start http://localhost:8080 cypress:open",
+    "test": "start-server-and-test start http://localhost:8080 cypress:run"
   },
   "repository": {
     "type": "git",
@@ -23,19 +24,8 @@
   },
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-wasm#readme",
   "devDependencies": {
-    "axios": "^0.24.0",
-    "karma": "^6.3.2",
-    "karma-chrome-launcher": "^3.1.0",
-    "karma-tap": "^4.2.0",
-    "karma-tap-pretty-reporter": "^4.2.0",
-    "karma-webpack": "^5.0.0",
-    "local-web-server": "^5.1.1",
-    "path-browserify": "^1.0.1",
-    "process": "^0.11.10",
-    "readable-stream": "^3.6.0",
-    "stream-browserify": "^3.0.0",
-    "tap-spec": "^5.0.0",
-    "tape": "^4.13.0",
-    "webpack": "^5.55.1"
+    "cypress": "^9.5.1",
+    "http-server": "^14.1.0",
+    "start-server-and-test": "^1.14.0"
   }
 }

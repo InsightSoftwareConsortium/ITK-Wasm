@@ -1,25 +1,14 @@
 title: Use the itk-wasm UMD module from a HTML script tag
 ---
 
-<div class="glitch-embed-wrap" style="height: 420px; width: 100%; padding-bottom: 25px;">
-  <iframe
-    allow="geolocation; microphone; camera; midi; encrypted-media"
-    src="https://glitch.com/embed/#!/embed/itk-wasm-umd-example?path=README.md&previewSize=100"
-    alt="itk-wasm-umd-example on Glitch"
-    style="height: 100%; width: 100%; border: 0;">
-  </iframe>
-</div>
-
----
-
-This example demonstrates how to use *itk-wasm* in a web browser application via its pre-built [UMD](https://github.com/umdjs/umd) module. This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk-wasm IO modules published on [unpkg.com](https://unpkg.com). Find the full example in the `itk-wasm/examples/UMD` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/UMD).
+This example demonstrates how to use *itk-wasm* in a web browser application via its pre-built [UMD](https://github.com/umdjs/umd) module. This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk-wasm IO modules published on [jsdelivr.com](https://jsdelivr.com). Find the full example in the `itk-wasm/examples/UMD` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/UMD).
 
 Inside the HTML `head`, load the itk-wasm UMD script:
 
 ```html
   <head>
     [...]
-    <script src="https://unpkg.com/itk@14.0.1/umd/itk-wasm"></script>
+    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.2/dist/umd/itk-wasm.min.js"></script>
   </head>
 ```
 
@@ -31,53 +20,107 @@ Inside body JavaScript code, the `itk` object provides [itk-wasm API functions a
     webWorker.terminate();
 ```
 
+These JavaScript itk-wasm components are used by the HTML, CSS, and JavaScript of [the full example](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/examples/UMD/dist/index.html)
+
 ## Simple HTTP server
 
 Optionally, add an npm script that will start a local web server for development.
 
 ```
-  npm install --save-dev local-web-server
+  npm install --save-dev http-server
 ```
 
 Next, define a `start` command to start a local development web server in the *scripts* section of the `package.json` file,
 
 ```js
   "scripts": {
-    "start": "ws -d dist"
+    "start": "http-server ./dist/"
   },
 ```
 
-To start the development web server hosting the `dist/` directory contents, run
+To start the development web server hosting the `./dist/` directory contents, run
 
 ```sh
 npm run start
 ```
 
-## Testing with Karma
+![UMD Example](./umd/umd_example.gif)
 
-This section described how to configure browser-based testing with the [Karma test runner](https://karma-runner.github.io/2.0/index.html).
+## Testing with Cypress
 
-First, install Karma and a test harness library like [tape](https://github.com/substack/tape).
+This section described how to configure browser-based testing with the [Cypress](https://www.cypress.io/)
+
+First, install Cypress and the `start-server-and-test` package.
+
+```sh
+npm install --save-dev cypress start-server-and-test
+```
+
+The `start-server-and-test` tool can start our development server for testing with Cypress.
+
+Create directories to house our tests and test data:
+
+```sh
+mkdir -p cypress/integration cypress/fixtures
+```
+
+Provide a test dataset:
+
+```sh
+cp /path/to/cow.vtk cypress/fixtures/cow.vtk
+```
+
+Create our test script at *cypress/integration/load_data_spec.js*. The test files names should end in **_spec.js*.
 
 ```
-npm install --save-dev karma karma-chrome-launcher karma-tap karma-tap-pretty-reporter karma-webpack tape tap-spec stream-browserify buffer readable-stream process
+describe('Load data', () => {
+  it('successfully loads a mesh', () => {
+    cy.visit('http://localhost:8080/')
+    cy.fixture('cow.vtk', null).then((cowBuffer) => {
+      cy.get('input[type=file]').selectFile({ contents: cowBuffer, fileName: 'cow.vtk' })
+      cy.get('textarea').contains('"numberOfPoints": 2903,')
+    })
+  })
+})
 ```
 
-Next write a [karma.config.js](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/examples/UMD/karma.conf.js) file, and a [test/index.js](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/examples/UMD/test/index.js) test script.
-Webpack builds test scripts in `test/*.js`, resolves module dependencies, and Karma serves and runs the resulting scripts.
-
-Create entries in the `package.json` file to start Karma, and run the tests!
+Then, specify npm scripts to develop and debug the tests and run them in an automated way.
 
 ```js
   "scripts": {
-    [...]
-    "test": "karma start ./karma.conf.js",
-    "test:debug": "karma start ./karma.conf.js --browsers Chrome --no-single-run"
+    "start": "http-server ./dist/"
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npx cypress run",
+    "test:debug": "start-server-and-test start http://localhost:8080 cypress:open",
+    "test": "start-server-and-test start http://localhost:8080 cypress:run"
   },
 ```
 
-and
+To develop or debug tests, run
 
+```sh
+npm run test:debug
 ```
+
+This will open Cypress. Select the test to run:
+
+
+![Select load_data_spec](./umd/umd_select_load_data_spec.png)
+
+This will load the selected browser to see the test status and web page that is tested.  You can also open the browser's development console.
+
+![Develop and debug tests](./umd/umd_test_debug.png)
+
+To run the tests during continuous integration:
+
+```sh
 npm run test
 ```
+
+This will output the tests results in the console:
+
+![Console test output](./umd/umd_run_tests.png)
+
+And produce a video of the result at *cypress/videos/*.
+
+![Console test output](./umd/umd_cypress_video.gif)
