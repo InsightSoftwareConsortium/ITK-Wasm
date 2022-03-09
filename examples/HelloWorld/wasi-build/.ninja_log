@@ -1,0 +1,5 @@
+# ninja log v5
+0	22	1646765057211459630	CMakeFiles/wasi-exception-shim.dir/ITKWebAssemblyInterface/src/exceptionShim.cxx.o	87a9c1843cf6a754
+23	27	1646765057215459629	libwasi-exception-shim.a	1716e91048e5dfda
+1	776	1646765057963459429	CMakeFiles/hello.dir/hello.cxx.o	b31b0491d733d890
+778	1337	1646765058519459280	hello.wasi.wasm	863ad9300e7183a7

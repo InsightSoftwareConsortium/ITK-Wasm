@@ -1,0 +1,68 @@
+The target system is: WASI - 1 - wasm32
+The host system is: Linux - 5.13.0-30-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/local/bin/clang-wasi-sysroot.sh 
+Build flags: -flto;-D_WASI_EMULATED_PROCESS_CLOCKS;-D_WASI_EMULATED_SIGNAL
+Id flags: -c;--target=wasm32-wasi 
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/local/bin/clang-wasi-sysroot.sh 
+Build flags: -flto;-D_WASI_EMULATED_PROCESS_CLOCKS;-D_WASI_EMULATED_SIGNAL
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is Clang, found in "/work/wasi-build/CMakeFiles/3.21.1/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/local/bin/clang++-wasi-sysroot.sh 
+Build flags: -flto;-D_WASI_EMULATED_PROCESS_CLOCKS;-D_WASI_EMULATED_SIGNAL
+Id flags: -c;--target=wasm32-wasi 
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.o"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/local/bin/clang++-wasi-sysroot.sh 
+Build flags: -flto;-D_WASI_EMULATED_PROCESS_CLOCKS;-D_WASI_EMULATED_SIGNAL
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is Clang, found in "/work/wasi-build/CMakeFiles/3.21.1/CompilerIdCXX/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /work/wasi-build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_e7656 && [1/2] Building C object CMakeFiles/cmTC_e7656.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_e7656.wasi.wasm
+
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /work/wasi-build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_41580 && [1/4] Building CXX object CMakeFiles/cmTC_41580.dir/testCXXCompiler.cxx.o
+[2/4] Building CXX object CMakeFiles/wasi-exception-shim.dir/exceptionShim.cxx.o
+[3/4] Linking CXX static library libwasi-exception-shim.a
+[4/4] Linking CXX executable cmTC_41580.wasi.wasm
+
+
+

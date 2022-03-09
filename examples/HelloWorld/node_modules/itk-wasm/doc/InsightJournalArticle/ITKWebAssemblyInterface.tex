@@ -1,0 +1,252 @@
+%
+% Complete documentation on the extended LaTeX markup used for Insight
+% documentation is available in ``Documenting Insight'', which is part
+% of the standard documentation for Insight.  It may be found online
+% at:
+%
+%     http://www.itk.org/
+
+\documentclass{InsightArticle}
+
+\usepackage[dvips]{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  hyperref should be the last package to be loaded.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[dvips,
+bookmarks,
+bookmarksopen,
+backref,
+colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
+]{hyperref}
+
+
+%  This is a template for Papers to the Insight Journal.
+%  It is comparable to a technical report format.
+
+% The title should be descriptive enough for people to be able to find
+% the relevant document.
+\title{The Importance of Open Access in Scientific Publications}
+
+%
+% NOTE: This is the last number of the "handle" URL that
+% The Insight Journal assigns to your paper as part of the
+% submission process. Please replace the number "1338" with
+% the actual handle number that you get assigned.
+%
+\newcommand{\IJhandlerIDnumber}{1338}
+
+% Increment the release number whenever significant changes are made.
+% The author and/or editor can define 'significant' however they like.
+\release{0.00}
+
+% At minimum, give your name and an email address.  You can include a
+% snail-mail address if you like.
+\author{Galileo Galilei$^{1}$, Giordano Bruno$^{2}$ and Anthony Leeuwenhoek$^{3}$}
+\authoraddress{$^{1}$Pisa University, Tower drive\\
+               $^{2}$Rome University, Inquisition street\\
+               $^{3}$Netherlands Pragmatic University, Port street}
+
+\begin{document}
+
+%
+% Add hyperlink to the web location and license of the paper.
+% The argument of this command is the handler identifier given
+% by the Insight Journal to this paper.
+%
+\IJhandlefooter{\IJhandlerIDnumber}
+
+
+\ifpdf
+\else
+   %
+   % Commands for including Graphics when using latex
+   %
+   \DeclareGraphicsExtensions{.eps,.jpg,.gif,.tiff,.bmp,.png}
+   \DeclareGraphicsRule{.jpg}{eps}{.jpg.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.gif}{eps}{.gif.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.tiff}{eps}{.tiff.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.bmp}{eps}{.bmp.bb}{`convert #1 eps:-}
+   \DeclareGraphicsRule{.png}{eps}{.png.bb}{`convert #1 eps:-}
+\fi
+
+
+\maketitle
+
+
+\ifhtml
+\chapter*{Front Matter\label{front}}
+\fi
+
+
+% The abstract should be a paragraph or two long, and describe the
+% scope of the document.
+\begin{abstract}
+\noindent
+This document describes a new algorithm implemented using the Insight Toolkit
+ITK \url{www.itk.org}.  The code of the algorithm is written following the
+ITK CodingStyle as described in the directory
+
+\code{ITK/Documentation/Style.pdf}
+
+This paper is accompanied with the source code, input data, parameters and
+output data that the authors used for validating the algorithm described in
+this paper. This adheres to the fundamental principle that scientific
+publications must facilitate reproducibility of the reported results.
+
+\end{abstract}
+
+\IJhandlenote{\IJhandlerIDnumber}
+
+\tableofcontents
+
+Using filters from the Insight Toolkit, we develop an algorithm for detecting
+and tracking thje movement of solar spots. As it is widely known, celestial
+objects such as the sun are ethereal and perfect, and therefore can not harbor
+artifacts such as spots. However, observations performed with our open source
+telescope have revealed the presence of such spots. The spots seems to continuously change positions on the solar surface.
+
+Automatic detection and tracking of the solar spot movements are of fundamental
+importance for allowing the authors to dedicate more time to perfectioning
+optical instruments and less time to the supervised acquisition of reliable
+data.
+
+The reader should be warned that direct observation of the sun without proper
+equipment may result in personal injury, loss of vision and burned brains.
+
+\section{Principles of Solar Spot Detection}
+
+Solar spots can be classified as the darkest objects present on an image of the
+solar surface. Algorithms such as watersheds, statistical classification and
+mathematical morphology are suitable for automatically detecting these features
+in images of the solar surface.
+
+
+\section{Why Image Processing Papers must include Source Code, Images and Parameters }
+
+Modern Image Processing is most of the time performed with computers. An
+attempt to replicate the results of an algorithm described in a paper entails
+to reimplement the algorithm into source code. This task is far from trivial
+and consumes months of work. The final result can not be guarranted to be
+equivalent to the actual code that was used for testing the algorithm when the
+paper was written, and therefore it cannot be considered a baseline for
+comparing the algoritm with other algorithms availble to the reader.
+
+Papers to the Insight Journal are written in the spirit of facilitating and
+encouraging readers to perform replication of work. In this sense, the Insight
+Journal is compliant with essential concepts of the scientific method.
+
+Since the code is included with the paper, less time has to be spent in
+describing the code, and more time can be used for describing how to use the
+algorithm in particular types of images.
+
+For questions on the basis of the scientific method the reader is refered to
+\cite{Popper2002,Popper1971}.
+
+
+
+\section{Pointing to other material}
+
+The format of this LaTeX file, allows authors to include code snippets, like
+the following
+
+\small
+\begin{verbatim}
+typedef itk::Image< unsigned char, 3 > ImageType;
+
+ImageType::Pointer image = ImageType::New();
+\end{verbatim}
+\normalsize
+
+and to cite the online documentation of the Insitght Toolkit, for example, the
+link to the doxygen documentation of the ImageToImageFilter
+
+\doxygen{ImageToImageFilter}
+
+LaTeX macros are also available for typesetting code in familiar courier fonts.
+Like the following method of an ITK class.
+
+\code{SetNumberOfIterations()}
+
+
+
+% The preceding sections will have been written in a gentler,
+% introductory style.  You may also wish to include a reference
+% section, documenting all the functions/exceptions/constants.
+% Often, these will be placed in separate files and input like this:
+
+
+
+\appendix
+
+\section{This is an Appendix}
+
+To create an appendix in a Insight HOWTO document, use markup like
+this:
+
+\begin{verbatim}
+\appendix
+
+\section{This is an Appendix}
+
+To create an appendix in a Insight HOWTO document, ....
+
+
+\section{This is another}
+
+Just add another \section{}, but don't say \appendix again.
+\end{verbatim}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Example on how to insert a figure
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}
+\center
+\includegraphics[width=0.8\textwidth]{RegistrationComponentsDiagram.eps}
+\itkcaption[Registration Framework Components]{The basic components of the
+registration framework are two input images, a transform, a metric, an
+interpolator and an optimizer.}
+\label{fig:RegistrationComponents}
+\end{figure}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Example on how to insert an equation.
+%  Never forget to put an equation in your paper.
+%  They make them look professional and impress the reviewers.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+To support shape-guidance, the generic level set equation
+(Eqn(~\ref{eqn:ShapeInfluenceTerm})) is extended to incorporate a shape guidance
+term:
+
+\begin{equation}
+\label{eqn:ShapeInfluenceTerm}
+\xi \left(\psi^{*}(\mathbf{x}) - \psi(\mathbf{x})\right)
+\end{equation}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Insert the bibliography using BibTeX
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{plain}
+\bibliography{InsightJournal}
+
+
+\end{document}
+

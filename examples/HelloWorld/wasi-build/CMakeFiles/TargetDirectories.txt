@@ -1,0 +1,4 @@
+/work/wasi-build/CMakeFiles/rebuild_cache.dir
+/work/wasi-build/CMakeFiles/edit_cache.dir
+/work/wasi-build/CMakeFiles/wasi-exception-shim.dir
+/work/wasi-build/CMakeFiles/hello.dir

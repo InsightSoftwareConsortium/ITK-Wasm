@@ -1,0 +1,5 @@
+# ninja log v5
+1	642	1646765075011454874	CMakeFiles/hello.dir/hello.cxx.o	366d3f95b22f06a0
+0	647	1646765075015454873	CMakeFiles/hello.umd.dir/hello.cxx.o	14df9d4aec9dd26
+643	4971	1646765079331453725	hello.js	8eaebcc91efe8fe0
+647	4975	1646765079335453724	hello.umd.js	e863dc07138bb0c9

@@ -1,0 +1,93 @@
+The C compiler identification could not be found in "/work/wasi-build/CMakeFiles/3.21.1/CompilerIdC/CMakeCCompilerId.o"
+
+The CXX compiler identification could not be found in "/work/wasi-build/CMakeFiles/3.21.1/CompilerIdCXX/CMakeCXXCompilerId.o"
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: /work/wasi-build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_5c2da && [1/2] Building C object CMakeFiles/cmTC_5c2da.dir/CMakeCCompilerABI.c.o
+clang version 13.0.0 (https://github.com/llvm/llvm-project fd1d8c2f04dde23bee0fb3a7d069a9b1046da979)
+Target: wasm32-unknown-wasi
+Thread model: posix
+InstalledDir: /usr/wasi-sdk-14.0/bin
+ (in-process)
+ "/usr/wasi-sdk-14.0/bin/clang-13" -cc1 -triple wasm32-unknown-wasi -emit-llvm-bc -flto -flto-unit -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model static -mframe-pointer=none -fno-rounding-math -mconstructor-aliases -target-cpu generic -fvisibility hidden -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -fcoverage-compilation-dir=/work/wasi-build/CMakeFiles/CMakeTmp -resource-dir /usr/wasi-sdk-14.0/lib/clang/13.0.0 -dependency-file CMakeFiles/cmTC_5c2da.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_5c2da.dir/CMakeCCompilerABI.c.o -sys-header-deps -D _WASI_EMULATED_PROCESS_CLOCKS -D _WASI_EMULATED_SIGNAL -isysroot /usr/wasi-sdk-14.0/share/wasi-sysroot -internal-isystem /usr/wasi-sdk-14.0/lib/clang/13.0.0/include -internal-isystem /usr/wasi-sdk-14.0/share/wasi-sysroot/include/wasm32-wasi -internal-isystem /usr/wasi-sdk-14.0/share/wasi-sysroot/include -fdebug-compilation-dir=/work/wasi-build/CMakeFiles/CMakeTmp -ferror-limit 19 -fgnuc-version=4.2.1 -o CMakeFiles/cmTC_5c2da.dir/CMakeCCompilerABI.c.o -x c /usr/share/cmake-3.21/Modules/CMakeCCompilerABI.c
+clang -cc1 version 13.0.0 based upon LLVM 13.0.0 default target wasm32-wasi
+ignoring nonexistent directory "/usr/wasi-sdk-14.0/share/wasi-sysroot/include/wasm32-wasi"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/wasi-sdk-14.0/lib/clang/13.0.0/include
+ /usr/wasi-sdk-14.0/share/wasi-sysroot/include
+End of search list.
+[2/2] Linking C executable cmTC_5c2da.wasi.wasm
+clang version 13.0.0 (https://github.com/llvm/llvm-project fd1d8c2f04dde23bee0fb3a7d069a9b1046da979)
+Target: wasm32-unknown-wasi
+Thread model: posix
+InstalledDir: /usr/wasi-sdk-14.0/bin
+ "/usr/wasi-sdk-14.0/bin/wasm-ld" -m wasm32 -L/usr/wasi-sdk-14.0/share/wasi-sysroot/lib/wasm32-wasi/llvm-lto/13.0.0 -L/usr/wasi-sdk-14.0/share/wasi-sysroot/lib/wasm32-wasi /usr/wasi-sdk-14.0/share/wasi-sysroot/lib/wasm32-wasi/crt1-command.o -lwasi-emulated-process-clocks -lwasi-emulated-signal --export-if-defined=main --export-if-defined=itk_wasm_input_array_alloc --export-if-defined=itk_wasm_input_json_alloc --export-if-defined=itk_wasm_output_json_address --export-if-defined=itk_wasm_output_json_size --export-if-defined=itk_wasm_output_array_address --export-if-defined=itk_wasm_output_array_size --export-if-defined=itk_wasm_free_all CMakeFiles/cmTC_5c2da.dir/CMakeCCompilerABI.c.o -lc /usr/wasi-sdk-14.0/lib/clang/13.0.0/lib/wasi/libclang_rt.builtins-wasm32.a -o cmTC_5c2da.wasi.wasm
+
+
+Cannot copy output executable
+  ''
+to destination specified by COPY_FILE:
+  '/work/wasi-build/CMakeFiles/3.21.1/CMakeDetermineCompilerABI_C.bin'
+Unable to find the executable at any of:
+  /work/wasi-build/CMakeFiles/CMakeTmp/cmTC_5c2da
+  /work/wasi-build/CMakeFiles/CMakeTmp/Debug/cmTC_5c2da
+  /work/wasi-build/CMakeFiles/CMakeTmp/Development/cmTC_5c2da
+
+
+Detecting CXX compiler ABI info failed to compile with the following output:
+Change Dir: /work/wasi-build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/ninja cmTC_f92b8 && [1/4] Building CXX object CMakeFiles/cmTC_f92b8.dir/CMakeCXXCompilerABI.cpp.o
+clang version 13.0.0 (https://github.com/llvm/llvm-project fd1d8c2f04dde23bee0fb3a7d069a9b1046da979)
+Target: wasm32-unknown-wasi
+Thread model: posix
+InstalledDir: /usr/wasi-sdk-14.0/bin
+ (in-process)
+ "/usr/wasi-sdk-14.0/bin/clang-13" -cc1 -triple wasm32-unknown-wasi -emit-llvm-bc -flto -flto-unit -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model static -mframe-pointer=none -fno-rounding-math -mconstructor-aliases -target-cpu generic -fvisibility hidden -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -fcoverage-compilation-dir=/work/wasi-build/CMakeFiles/CMakeTmp -resource-dir /usr/wasi-sdk-14.0/lib/clang/13.0.0 -dependency-file CMakeFiles/cmTC_f92b8.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_f92b8.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -D _WASI_EMULATED_PROCESS_CLOCKS -D _WASI_EMULATED_SIGNAL -isysroot /usr/wasi-sdk-14.0/share/wasi-sysroot -internal-isystem /usr/wasi-sdk-14.0/share/wasi-sysroot/include/wasm32-wasi/c++/v1 -internal-isystem /usr/wasi-sdk-14.0/share/wasi-sysroot/include/c++/v1 -internal-isystem /usr/wasi-sdk-14.0/lib/clang/13.0.0/include -internal-isystem /usr/wasi-sdk-14.0/share/wasi-sysroot/include/wasm32-wasi -internal-isystem /usr/wasi-sdk-14.0/share/wasi-sysroot/include -fdeprecated-macro -fdebug-compilation-dir=/work/wasi-build/CMakeFiles/CMakeTmp -ferror-limit 19 -fgnuc-version=4.2.1 -fcxx-exceptions -fexceptions -o CMakeFiles/cmTC_f92b8.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake-3.21/Modules/CMakeCXXCompilerABI.cpp
+clang -cc1 version 13.0.0 based upon LLVM 13.0.0 default target wasm32-wasi
+ignoring nonexistent directory "/usr/wasi-sdk-14.0/share/wasi-sysroot/include/wasm32-wasi/c++/v1"
+ignoring nonexistent directory "/usr/wasi-sdk-14.0/share/wasi-sysroot/include/wasm32-wasi"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/wasi-sdk-14.0/share/wasi-sysroot/include/c++/v1
+ /usr/wasi-sdk-14.0/lib/clang/13.0.0/include
+ /usr/wasi-sdk-14.0/share/wasi-sysroot/include
+End of search list.
+[2/4] Building CXX object CMakeFiles/wasi-exception-shim.dir/exceptionShim.cxx.o
+clang version 13.0.0 (https://github.com/llvm/llvm-project fd1d8c2f04dde23bee0fb3a7d069a9b1046da979)
+Target: wasm32-unknown-wasi
+Thread model: posix
+InstalledDir: /usr/wasi-sdk-14.0/bin
+ (in-process)
+ "/usr/wasi-sdk-14.0/bin/clang-13" -cc1 -triple wasm32-unknown-wasi -emit-llvm-bc -flto -flto-unit -disable-free -disable-llvm-verifier -discard-value-names -main-file-name exceptionShim.cxx -mrelocation-model static -mframe-pointer=none -fno-rounding-math -mconstructor-aliases -target-cpu generic -fvisibility hidden -mllvm -treat-scalable-fixed-error-as-warning -debugger-tuning=gdb -v -fcoverage-compilation-dir=/work/wasi-build/CMakeFiles/CMakeTmp -resource-dir /usr/wasi-sdk-14.0/lib/clang/13.0.0 -dependency-file CMakeFiles/wasi-exception-shim.dir/exceptionShim.cxx.o.d -MT CMakeFiles/wasi-exception-shim.dir/exceptionShim.cxx.o -sys-header-deps -D _WASI_EMULATED_PROCESS_CLOCKS -D _WASI_EMULATED_SIGNAL -isysroot /usr/wasi-sdk-14.0/share/wasi-sysroot -internal-isystem /usr/wasi-sdk-14.0/share/wasi-sysroot/include/wasm32-wasi/c++/v1 -internal-isystem /usr/wasi-sdk-14.0/share/wasi-sysroot/include/c++/v1 -internal-isystem /usr/wasi-sdk-14.0/lib/clang/13.0.0/include -internal-isystem /usr/wasi-sdk-14.0/share/wasi-sysroot/include/wasm32-wasi -internal-isystem /usr/wasi-sdk-14.0/share/wasi-sysroot/include -fdeprecated-macro -fdebug-compilation-dir=/work/wasi-build/CMakeFiles/CMakeTmp -ferror-limit 19 -fgnuc-version=4.2.1 -fcxx-exceptions -fexceptions -o CMakeFiles/wasi-exception-shim.dir/exceptionShim.cxx.o -x c++ /ITKWebAssemblyInterface/src/exceptionShim.cxx
+clang -cc1 version 13.0.0 based upon LLVM 13.0.0 default target wasm32-wasi
+ignoring nonexistent directory "/usr/wasi-sdk-14.0/share/wasi-sysroot/include/wasm32-wasi/c++/v1"
+ignoring nonexistent directory "/usr/wasi-sdk-14.0/share/wasi-sysroot/include/wasm32-wasi"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/wasi-sdk-14.0/share/wasi-sysroot/include/c++/v1
+ /usr/wasi-sdk-14.0/lib/clang/13.0.0/include
+ /usr/wasi-sdk-14.0/share/wasi-sysroot/include
+End of search list.
+[3/4] Linking CXX static library libwasi-exception-shim.a
+[4/4] Linking CXX executable cmTC_f92b8.wasi.wasm
+clang version 13.0.0 (https://github.com/llvm/llvm-project fd1d8c2f04dde23bee0fb3a7d069a9b1046da979)
+Target: wasm32-unknown-wasi
+Thread model: posix
+InstalledDir: /usr/wasi-sdk-14.0/bin
+ "/usr/wasi-sdk-14.0/bin/wasm-ld" -m wasm32 -L/usr/wasi-sdk-14.0/share/wasi-sysroot/lib/wasm32-wasi/llvm-lto/13.0.0 -L/usr/wasi-sdk-14.0/share/wasi-sysroot/lib/wasm32-wasi /usr/wasi-sdk-14.0/share/wasi-sysroot/lib/wasm32-wasi/crt1-command.o -lwasi-emulated-process-clocks -lwasi-emulated-signal --export-if-defined=main --export-if-defined=itk_wasm_input_array_alloc --export-if-defined=itk_wasm_input_json_alloc --export-if-defined=itk_wasm_output_json_address --export-if-defined=itk_wasm_output_json_size --export-if-defined=itk_wasm_output_array_address --export-if-defined=itk_wasm_output_array_size --export-if-defined=itk_wasm_free_all CMakeFiles/cmTC_f92b8.dir/CMakeCXXCompilerABI.cpp.o libwasi-exception-shim.a -lc++ -lc++abi -lc /usr/wasi-sdk-14.0/lib/clang/13.0.0/lib/wasi/libclang_rt.builtins-wasm32.a -o cmTC_f92b8.wasi.wasm
+
+
+Cannot copy output executable
+  ''
+to destination specified by COPY_FILE:
+  '/work/wasi-build/CMakeFiles/3.21.1/CMakeDetermineCompilerABI_CXX.bin'
+Unable to find the executable at any of:
+  /work/wasi-build/CMakeFiles/CMakeTmp/cmTC_f92b8
+  /work/wasi-build/CMakeFiles/CMakeTmp/Debug/cmTC_f92b8
+  /work/wasi-build/CMakeFiles/CMakeTmp/Development/cmTC_f92b8
+
+

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>Hello World! | itk-wasm</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://insightsoftwareconsortium.github.io/itk-wasm/examples/hello_world.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://InsightSoftwareConsortium.github.io/itk-wasm/examples/hello_world.html">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/itk-wasm/icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/itk-wasm/icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/itk-wasm/icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/itk-wasm/icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/itk-wasm/icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/itk-wasm/icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/itk-wasm/icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/itk-wasm/icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/itk-wasm/icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="/itk-wasm/icon/mstile-144x144.png">
+  <!-- CSS -->
+  <!-- build:css build/css/navy.css -->
+  
+<link rel="stylesheet" href="/itk-wasm/css/navy.css">
+
+  <!-- endbuild -->
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css">
+  <!-- RSS -->
+  <link rel="alternate" href="/itk-wasm/atom.xml" title="itk-wasm" type="application/atom+xml">
+  <!-- Open Graph -->
+  <meta name="description" content="This example, walks through how to compile a hello world executable written in C++ to WebAssembly and how execute it with standalone WebAssembly runtimes, the Node.js JavaScript runtime, and web brows">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hello World!">
+<meta property="og:url" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/hello_world.html">
+<meta property="og:site_name" content="itk-wasm">
+<meta property="og:description" content="This example, walks through how to compile a hello world executable written in C++ to WebAssembly and how execute it with standalone WebAssembly runtimes, the Node.js JavaScript runtime, and web brows">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/hello_wasm_world.png">
+<meta property="article:published_time" content="2022-03-09T02:17:56.669Z">
+<meta property="article:modified_time" content="2022-03-09T02:17:56.669Z">
+<meta property="article:author" content="Insight Software Consortium">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://insightsoftwareconsortium.github.io/itk-wasm/examples/hello_wasm_world.png">
+  <!-- Google Analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-90338862-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/itk-wasm/" id="logo">itk-wasm</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="/itk-wasm/docs/" class="main-nav-link">Docs</a><a href="/itk-wasm/api/" class="main-nav-link">API</a><a href="/itk-wasm/examples/" class="main-nav-link">Examples</a>
+      <a target="_blank" rel="noopener" href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="main-nav-link"><i class="fa fa-github-alt"></i></a>
+      <div id="search-input-wrap">
+        <div id="search-input-icon">
+          <i class="fa fa-search"></i>
+        </div>
+        <input type="search" id="search-input" placeholder="Search...">
+      </div>
+    </nav>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name">Hello World!</h1>
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <p>This example, walks through how to compile a <em>hello world</em> executable written in C++ to <a target="_blank" rel="noopener" href="https://webassembly.org/">WebAssembly</a> and how execute it with standalone WebAssembly runtimes, the Node.js JavaScript runtime, and web browser runtimes!</p>
+<p>Before getting started, make sure <a target="_blank" rel="noopener" href="https://nodejs.org/en/download/">Node.js</a> and <a target="_blank" rel="noopener" href="https://docs.docker.com/install/">Docker</a> are installed. On Linux, make sure you can run <a target="_blank" rel="noopener" href="https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo"><code>docker</code> without <code>sudo</code></a>. On Windows, make sure <a target="_blank" rel="noopener" href="https://docs.docker.com/docker-for-windows/troubleshoot/#volumes">Shared Drives are enabled in the Docker settings</a>. On Windows, also install <a target="_blank" rel="noopener" href="https://git-scm.com/">Git Bash</a>, and run shell commands in <em>Git Bash</em>.</p>
+<p>First, let’s create a new directory to house our project.</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> itk-wasm-hello-world</span><br><span class="line"><span class="built_in">cd</span> itk-wasm-hello-world</span><br></pre></td></tr></table></figure>
+
+<p>Let’s write some code! Populate <em>hello.cxx</em> with our Hello World program:</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;Hello WASM world!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Next, provide a <a target="_blank" rel="noopener" href="https://cmake.org/">CMake</a> build configuration at <em>CMakeLists.txt</em>:</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.16</span>)</span><br><span class="line"><span class="keyword">project</span>(HelloWorld)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(hello hello.cxx)</span><br></pre></td></tr></table></figure>
+
+<p>We use the <code>add_executable</code> command to build executables with itk-wasm. The <a target="_blank" rel="noopener" href="https://kripken.github.io/emscripten-site/">Emscripten</a> and <a target="_blank" rel="noopener" href="https://github.com/WebAssembly/wasi-sdk">WASI</a> toolchains along with itk-wasm build and execution configurations are contained in the itk-wasm <a target="_blank" rel="noopener" href="https://github.com/dockcross/dockcross">dockcross</a> Docker images used by the itk-wasm command line interface (CLI).  Note that the same code can also be built and tested with native operating system toolchains. This is useful for development and debugging.</p>
+<p>Build the program with the itk-wasm CLI, <code>itk-wasm</code>. This is shipped with the <code>itk-wasm</code> Node.js package. First install <em>itk-wasm</em> with the Node Package Manager, <code>npm</code>, the CLI that ships with Node.js.</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm install --global itk-wasm</span><br></pre></td></tr></table></figure>
+
+<h2 id="WASI" class="article-heading"><a href="#WASI" class="headerlink" title="WASI"></a>WASI<a class="article-anchor" href="#WASI" aria-hidden="true"></a></h2><p>Build the project with the WASI <code>itkwasm/wasi</code> toolchain in the <code>./wasi-build/</code> directory:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">itk-wasm -i itkwasm/wasi -b ./wasi-build/ build</span><br></pre></td></tr></table></figure>
+
+<p>A <code>hello.wasi.wasm</code> WebAssembly binary is built in the <code>./wasi-build/</code> directory.</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">❯ <span class="built_in">ls</span> wasi-build</span><br><span class="line">build.ninja          CMakeFiles          libwasi-exception-shim.a</span><br><span class="line">cmake_install.cmake  hello.wasi.wasm</span><br></pre></td></tr></table></figure>
+
+<p>Execute the binary with the <code>run</code> <code>itk-wasm</code> subcommand.</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">❯ itk-wasm -b ./wasi-build/ run hello.wasi.wasm</span><br><span class="line">Hello WASM world!</span><br></pre></td></tr></table></figure>
+
+<p>Congratulations! You just executed a C++ program compiled to WebAssembly. 🎉</p>
+<p>The binary can also be executed with any of the available <a target="_blank" rel="noopener" href="https://github.com/mbasso/awesome-wasm#non-web-embeddings">WASI runtimes</a>.</p>
+<h2 id="Node-js" class="article-heading"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js<a class="article-anchor" href="#Node-js" aria-hidden="true"></a></h2><p>For Node.js or the Browser, build the project with the default <a target="_blank" rel="noopener" href="https://emscripten.org/">Emscripten</a> toolchain. The project is built in the <code>./web-build</code> directory by default.</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">itk-wasm build</span><br></pre></td></tr></table></figure>
+
+<p>To execute the project, create an <code>index.mjs</code> JavaScript file to <a href="../api/node_pipelines.html">invoke the module</a>:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import path from &#x27;path&#x27;</span><br><span class="line">import &#123; runPipelineNode &#125; from &#x27;itk-wasm&#x27;</span><br><span class="line"></span><br><span class="line">const pipelinePath = path.resolve(&#x27;web-build&#x27;, &#x27;hello&#x27;)</span><br><span class="line">runPipelineNode(pipelinePath)</span><br></pre></td></tr></table></figure>
+
+<p>And run it!</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">❯ npx node ./index.mjs</span><br><span class="line">Hello WASM world!</span><br></pre></td></tr></table></figure>
+
+<p>Congratulations! You just executed a C++ program in JavaScript. 🎉</p>
+<h2 id="Browser" class="article-heading"><a href="#Browser" class="headerlink" title="Browser"></a>Browser<a class="article-anchor" href="#Browser" aria-hidden="true"></a></h2><p>The same Emscripten WebAssembly module can be executed in a web browser.</p>
+<p>Create an HTML file that will call the WebAssembly module through JavaScript and display<br>its output in the HTML DOM:</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>itk-wasm Browser Hello World!<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.1/dist/umd/itk-wasm.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">textarea</span> <span class="attr">readonly</span>&gt;</span>WebAssembly output...<span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">const</span> outputTextArea = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;textarea&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">      outputTextArea.<span class="property">textContent</span> = <span class="string">&quot;Loading...&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">const</span> wasmURL = <span class="keyword">new</span> <span class="title function_">URL</span>(<span class="string">&#x27;web-build/hello&#x27;</span>, <span class="variable language_">document</span>.<span class="property">location</span>)</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">const</span> args = []</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">const</span> inputs = <span class="literal">null</span></span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">const</span> outputs = <span class="literal">null</span></span></span><br><span class="line"><span class="language-javascript">      itk.<span class="title function_">runPipelineBrowser</span>(<span class="literal">null</span>, wasmURL, args, inputs, outputs).<span class="title function_">then</span>(</span></span><br><span class="line"><span class="language-javascript">        <span class="function">(<span class="params">&#123; stdout, webWorker &#125;</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">          webWorker.<span class="title function_">terminate</span>()</span></span><br><span class="line"><span class="language-javascript">          outputTextArea.<span class="property">textContent</span> = stdout</span></span><br><span class="line"><span class="language-javascript">          &#125;)</span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Serve the with an http server:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm install --global http-server</span><br><span class="line">http-server .</span><br></pre></td></tr></table></figure>
+
+<p>And point your browser to <code>http://127.0.0.1:8080/</code>.</p>
+<p><img src="./hello_wasm_world.png" alt="Hello WASM World!"></p>
+<p>Congratulations! You just executed a C++ program in your web browser. 🎉</p>
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2022-03-09T02:17:56.669Z" itemprop="dateModified">Last updated: 2022-03-09</time>
+                <a href="debugging.html" class="article-footer-next" title="Debugging"><span>Next</span><i class="fa fa-chevron-right"></i></a>
+              </footer>
+              
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <strong class="sidebar-title">Contents</strong>
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#WASI"><span class="toc-text">WASI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js"><span class="toc-text">Node.js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Browser"><span class="toc-text">Browser</span></a></li></ol>
+              <a href="#" id="article-toc-top">Back to Top</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+      <aside id="sidebar" role="navigation">
+  <div class="inner"><strong class="sidebar-title">Getting Started</strong><a href="hello_world.html" class="sidebar-link current">Hello World!</a><a href="debugging.html" class="sidebar-link">Debugging</a><strong class="sidebar-title">Recipes</strong><a href="paraview_glance.html" class="sidebar-link">Vue.js</a><strong class="sidebar-title">Examples</strong><strong class="sidebar-title">Building</strong><a href="node.html" class="sidebar-link">Node.js</a><a href="umd.html" class="sidebar-link">UMD</a><a href="webpack.html" class="sidebar-link">Webpack</a><a href="unpkgio.html" class="sidebar-link">Unpkg.com / CDN</a></div>
+</aside>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2022 <a href="https://www.kitware.com/" target="_blank">Insight Software Consortium</a>
+    </div>
+    <div id="footer-links">
+      <a href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="footer-link" target="_blank"><i class="fa fa-github-alt"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="/itk-wasm/docs/" class="mobile-nav-link">Docs</a><a href="/itk-wasm/api/" class="mobile-nav-link">API</a><a href="/itk-wasm/examples/" class="mobile-nav-link">Examples</a>
+      <li class="mobile-nav-item">
+        <a href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+      </li>
+    </ul>
+    
+      <strong class="mobile-nav-title">Getting Started</strong><a href="hello_world.html" class="mobile-nav-link current">Hello World!</a><a href="debugging.html" class="mobile-nav-link">Debugging</a><strong class="mobile-nav-title">Recipes</strong><a href="paraview_glance.html" class="mobile-nav-link">Vue.js</a><strong class="mobile-nav-title">Examples</strong><strong class="mobile-nav-title">Building</strong><a href="node.html" class="mobile-nav-link">Node.js</a><a href="umd.html" class="mobile-nav-link">UMD</a><a href="webpack.html" class="mobile-nav-link">Webpack</a><a href="unpkgio.html" class="mobile-nav-link">Unpkg.com / CDN</a>
+    
+  </div>
+  <div id="mobile-lang-select-wrap">
+    <span id="mobile-lang-select-label"><i class="fa fa-globe"></i><span>English</span></span>
+    <select id="mobile-lang-select" data-canonical="">
+      
+        <option value="en" selected>English</option>
+      
+    </select>
+  </div>
+</nav>
+  <!-- Scripts -->
+<!-- build:js build/js/main.js -->
+
+<script src="/itk-wasm/js/lang_select.js"></script>
+
+
+<script src="/itk-wasm/js/toc.js"></script>
+
+
+<script src="/itk-wasm/js/mobile_nav.js"></script>
+
+<!-- endbuild -->
+<script src="https://cdn.jsdelivr.net/retinajs/1.3.0/retina.min.js" async></script>
+
+
+
+</body>
+</html>
