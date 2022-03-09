@@ -135,6 +135,7 @@ if (options.copyBuildArtifacts) {
   }
   let imageIOFiles = glob.sync(path.join(buildDir, 'image-io', '*.js'))
   imageIOFiles = imageIOFiles.concat(glob.sync(path.join(buildDir, 'image-io', '*.wasm')))
+  imageIOFiles = imageIOFiles.filter((fn) => !fn.endsWith('.umd.wasm'))
   const copyImageIOModules = function (imageIOFile, callback) {
     const io = path.basename(imageIOFile)
     const output = path.join('dist', 'image-io', io)
@@ -148,6 +149,7 @@ if (options.copyBuildArtifacts) {
   }
   let meshIOFiles = glob.sync(path.join(buildDir, 'mesh-io', '*.js'))
   meshIOFiles = meshIOFiles.concat(glob.sync(path.join(buildDir, 'mesh-io', '*.wasm')))
+  meshIOFiles = meshIOFiles.filter((fn) => !fn.endsWith('.umd.wasm'))
   const copyMeshIOModules = function (meshIOFile, callback) {
     const io = path.basename(meshIOFile)
     const output = path.join('dist', 'mesh-io', io)

@@ -24,7 +24,7 @@ async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | U
   // importScripts / UMD is required over dynamic ESM import until Firefox
   // adds worker dynamic import support:
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
-  const wasmBinaryPath = `${modulePrefix}.umd.wasm`
+  const wasmBinaryPath = `${modulePrefix}.wasm`
   const response = await axios.get(wasmBinaryPath, { responseType: 'arraybuffer' })
   const wasmBinary = response.data
   const modulePath = `${modulePrefix}.umd.js`
