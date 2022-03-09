@@ -3,8 +3,8 @@ import path from 'path'
 
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
 
-const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'biorad.pic')
-const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'BioRadTest-biorad.pic')
+const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'biorad.pic')
+const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'BioRadTest-biorad.pic')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')

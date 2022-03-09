@@ -4,7 +4,7 @@ import path from 'path'
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, readDICOMTagsLocalFile } from '../../../../dist/index.js'
 
 test('Test reading a DICOM file', t => {
-  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
+  const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 3, 'dimension')
     t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')
@@ -34,7 +34,7 @@ test('Test reading a DICOM file', t => {
 })
 
 test('Test reading DICOM tags', async t => {
-  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
+  const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
   const expected = {
     '0010|0020': 'NOID',
     '0020|0032': '-3.295510e+01\\-1.339286e+02\\1.167857e+02',
@@ -52,7 +52,7 @@ test('Test reading DICOM tags', async t => {
 })
 
 test('Test reading all DICOM tags', async t => {
-  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
+  const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', '1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm')
   const expected = {
     '0010|0020': 'NOID',
     '0020|0032': '-3.295510e+01\\-1.339286e+02\\1.167857e+02',

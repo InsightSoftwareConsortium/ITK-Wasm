@@ -39,7 +39,7 @@ module.exports = function init (config) {
       { pattern: './dist/mesh-io/**', watched: true, served: true, included: false },
       { pattern: './dist/web-workers/**', watched: true, served: true, included: false },
       { pattern: './dist/pipeline/**', watched: true, served: true, included: false },
-      { pattern: './build/ExternalData/test/**', watched: true, served: true, included: false },
+      { pattern: './build-emscripten/ExternalData/test/**', watched: true, served: true, included: false },
       { pattern: `${output.path}/**/*`, watched: false, included: false, },
     ].concat(testFiles),
 

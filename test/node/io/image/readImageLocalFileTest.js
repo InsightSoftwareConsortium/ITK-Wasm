@@ -3,7 +3,7 @@ import path from 'path'
 
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile } from '../../../../dist/index.js'
 
-const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cthead1.png')
+const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cthead1.png')
 
 test('readImageLocalFile reads a file path given on the local filesystem', t => {
   return readImageLocalFile(testFilePath).then(function (image) {

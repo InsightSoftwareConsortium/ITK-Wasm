@@ -3,8 +3,8 @@ import path from 'path'
 
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
 
-const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'ramp.gipl')
-const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'GIPLTest-ramp.gipl')
+const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'ramp.gipl')
+const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'GIPLTest-ramp.gipl')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 3, 'dimension')

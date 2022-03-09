@@ -3,8 +3,8 @@ import path from 'path'
 
 import { FloatTypes, PixelTypes, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
 
-const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'r16slice.nii.gz')
-const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'NiftiTest-r16slice.nii.gz')
+const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'r16slice.nii.gz')
+const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'NiftiTest-r16slice.nii.gz')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')

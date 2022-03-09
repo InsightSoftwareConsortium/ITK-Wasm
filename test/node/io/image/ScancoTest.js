@@ -4,7 +4,7 @@ import path from 'path'
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile } from '../../../../dist/index.js'
 
 test('Test reading a Scanco ISQ file', t => {
-  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'C0004255.ISQ')
+  const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'C0004255.ISQ')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 3, 'dimension')
     t.is(image.imageType.componentType, IntTypes.Int16, 'componentType')

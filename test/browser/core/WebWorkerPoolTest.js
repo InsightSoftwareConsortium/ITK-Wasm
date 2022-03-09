@@ -32,7 +32,7 @@ export default function () {
     const workerPool = new WorkerPool(poolSize, runPipelineBrowser)
 
     const fileName = 'cthead1.png'
-    const testFilePath = 'base/build/ExternalData/test/Input/' + fileName
+    const testFilePath = 'base/build-emscripten/ExternalData/test/Input/' + fileName
     const response = await axios.get(testFilePath, { responseType: 'blob' })
     const jsFile = await new window.File([response.data], fileName)
     const { image, webWorker } = await readImageFile(null, jsFile)

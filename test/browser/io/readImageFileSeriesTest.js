@@ -34,7 +34,7 @@ export default function () {
   const zSpacing = 3.0
   const zOrigin = 2.0
   function fetchTestFiles (fileNames) {
-    const testSeriesDirectory = 'base/build/ExternalData/test/Input/PNGSeries/'
+    const testSeriesDirectory = 'base/build-emscripten/ExternalData/test/Input/PNGSeries/'
     const fetchFiles = fileNames.map(function (file) {
       const path = testSeriesDirectory + file
       return axios.get(path, { responseType: 'blob' }).then(function (response) {

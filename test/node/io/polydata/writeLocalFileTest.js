@@ -3,10 +3,10 @@ import path from 'path'
 
 import { IntTypes, FloatTypes, PixelTypes, getMatrixElement, readImageLocalFile, readMeshLocalFile, writeLocalFile } from '../../../../dist/index.js'
 
-const testImageInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cthead1.png')
-const testImageOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'writeLocalFileTest-cthead1.png')
-const testMeshInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cow.vtk')
-const testMeshOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'writeLocalFileTest-cow.vtk')
+const testImageInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cthead1.png')
+const testImageOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'writeLocalFileTest-cthead1.png')
+const testMeshInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cow.vtk')
+const testMeshOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'writeLocalFileTest-cow.vtk')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')

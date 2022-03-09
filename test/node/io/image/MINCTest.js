@@ -4,7 +4,7 @@ import path from 'path'
 import { FloatTypes, PixelTypes, getMatrixElement, readImageLocalFile } from '../../../../dist/index.js'
 
 test('Test reading a MINC file', t => {
-  const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 't1_z+_short_cor.mnc')
+  const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 't1_z+_short_cor.mnc')
   return readImageLocalFile(testFilePath).then(function (image) {
     t.is(image.imageType.dimension, 3, 'dimension')
     t.is(image.imageType.componentType, FloatTypes.Float32, 'componentType')

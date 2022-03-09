@@ -7,30 +7,53 @@ if (NOT TARGET libzstd_static)
   include(${CMAKE_CURRENT_SOURCE_DIR}/../../common/CompressStringify/BuildZstd.cmake)
 endif()
 
-# This list should be ordered from approximately most commonly to least
-# commonly used modules.
-set(WebAssemblyInterface_ImageIOModules
-  "ITKIOPNG"
-  "ITKIOMeta"
-  "ITKIOTIFF"
-  "ITKIONIFTI"
-  "ITKIOJPEG"
-  "ITKIONRRD"
-  "ITKIOVTK"
-  "ITKIOBMP"
-  "ITKIOHDF5"
-  "ITKIOMINC"
-  "ITKIOMRC"
-  "ITKIOLSM"
-  "MGHIO"
-  "ITKIOBioRad"
-  "ITKIOGIPL"
-  "ITKIOGE"
-  "ITKIOGDCM"
-  "IOScanco"
-  "IOFDF"
-  CACHE STRING
-  "String delimited list of ITK image IO modules to support.")
+if(WASI)
+  set(WebAssemblyInterface_ImageIOModules
+    "ITKIOPNG"
+    "ITKIOMeta"
+    "ITKIOTIFF"
+    "ITKIONIFTI"
+    "ITKIOJPEG"
+    "ITKIONRRD"
+    "ITKIOVTK"
+    "ITKIOBMP"
+    "ITKIOMRC"
+    "ITKIOLSM"
+    "MGHIO"
+    "ITKIOBioRad"
+    "ITKIOGIPL"
+    "ITKIOGE"
+    "ITKIOGDCM"
+    "IOScanco"
+    "IOFDF"
+    CACHE STRING
+    "String delimited list of ITK image IO modules to support.")
+else()
+  # This list should be ordered from approximately most commonly to least
+  # commonly used modules.
+  set(WebAssemblyInterface_ImageIOModules
+    "ITKIOPNG"
+    "ITKIOMeta"
+    "ITKIOTIFF"
+    "ITKIONIFTI"
+    "ITKIOJPEG"
+    "ITKIONRRD"
+    "ITKIOVTK"
+    "ITKIOBMP"
+    "ITKIOHDF5"
+    "ITKIOMINC"
+    "ITKIOMRC"
+    "ITKIOLSM"
+    "MGHIO"
+    "ITKIOBioRad"
+    "ITKIOGIPL"
+    "ITKIOGE"
+    "ITKIOGDCM"
+    "IOScanco"
+    "IOFDF"
+    CACHE STRING
+    "String delimited list of ITK image IO modules to support.")
+endif()
 set(imageios_ITKIOPNG itkPNGImageIO)
 set(imageio_id_itkPNGImageIO 0)
 
@@ -156,10 +179,23 @@ foreach(io_module ${WebAssemblyInterface_ImageIOModules} WebAssemblyInterface)
           ${WebAssemblyInterface_BINARY_DIR}/image-io
           )
       endforeach()
+    elseif (WASI AND DEFINED WebAssemblyInterface_BINARY_DIR)
+      foreach(target ${read_binary} ${write_binary})
+        set(exception_catching )
+        itk_module_target_label(${target})
+        itk_module_target_export(${target})
+        itk_module_target_install(${target})
+        set_property(TARGET ${target}
+          PROPERTY RUNTIME_OUTPUT_DIRECTORY
+          ${WebAssemblyInterface_BINARY_DIR}/wasi-image-io
+          )
+      endforeach()
     endif()
   endforeach()
 endforeach()
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts.in
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts @ONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts.in
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../dist/image-io/index.js @ONLY)
+if(EMSCRIPTEN)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts @ONLY)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../dist/image-io/index.js @ONLY)
+endif()

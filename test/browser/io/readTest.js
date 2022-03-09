@@ -15,7 +15,7 @@ const cthead1SmallBlob = new window.Blob([intArray], { type: mimeString })
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
 const meshFileName = 'cow.vtk'
-const meshTestFilePath = 'base/build/ExternalData/test/Input/' + meshFileName
+const meshTestFilePath = 'base/build-emscripten/ExternalData/test/Input/' + meshFileName
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')

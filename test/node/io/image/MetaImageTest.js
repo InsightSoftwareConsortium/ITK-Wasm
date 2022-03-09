@@ -3,10 +3,10 @@ import path from 'path'
 
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
 
-const testInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'brainweb165a10f17.mha')
-const testOutputFilePath = path.resolve('build', 'Testing', 'Temporary', 'MetaImageTest-brainweb165a10f17.mha')
-const testSmallInputFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', '3x2.mha')
-const testSmallOutputFilePath = path.resolve('build', 'Testing', 'Temporary', '3x2.mha')
+const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'brainweb165a10f17.mha')
+const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'MetaImageTest-brainweb165a10f17.mha')
+const testSmallInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', '3x2.mha')
+const testSmallOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', '3x2.mha')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 3, 'dimension')

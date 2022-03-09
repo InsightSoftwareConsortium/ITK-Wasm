@@ -9,8 +9,8 @@
 *.ps
 *.toc
 
-build
-built
+build-emscripten
+build-wasi
 src/io/internal/ImageIOIndex.ts
 src/io/internal/MeshIOIndex.ts
 

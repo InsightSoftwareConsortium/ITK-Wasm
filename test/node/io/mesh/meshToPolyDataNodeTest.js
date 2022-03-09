@@ -3,7 +3,7 @@ import path from 'path'
 
 import { IntTypes, FloatTypes, PixelTypes, readMeshLocalFile, meshToPolyDataNode, polyDataToMeshNode } from '../../../../dist/index.js'
 
-const testFilePath = path.resolve('build', 'ExternalData', 'test', 'Input', 'cow.vtk')
+const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cow.vtk')
 
 test('meshToPolyData converts a mesh to a polydata', async (t) => {
   const mesh = await readMeshLocalFile(testFilePath)

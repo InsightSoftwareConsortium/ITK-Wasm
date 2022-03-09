@@ -35,7 +35,7 @@ const verifyImage = (t, image) => {
 }
 
 const meshFileName = 'cow.vtk'
-const testMeshFilePath = 'base/build/ExternalData/test/Input/' + meshFileName
+const testMeshFilePath = 'base/build-emscripten/ExternalData/test/Input/' + meshFileName
 
 const verifyMesh = (t, mesh) => {
   t.is(mesh.meshType.dimension, 3)
