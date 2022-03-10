@@ -69,7 +69,7 @@
   "bugs": {
     "url": "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
   },
-  "homepage": "https://insightsoftwareconsortium.github.io/itk-wasm/",
+  "homepage": "https://itkwasm.on.fleek.co/",
   "devDependencies": {
     "@babel/core": "^7.13.1",
     "@babel/plugin-transform-modules-commonjs": "^7.13.0",

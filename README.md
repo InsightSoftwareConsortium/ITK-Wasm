@@ -26,4 +26,4 @@ workstation / server with [Node.js](https://nodejs.org/), or standalone
 execution and wrapped in [WASI](https://wasi.dev/) runtimes.
 
 For more information, please see [the project
-documentation](https://insightsoftwareconsortium.github.io/itk-wasm/).
+documentation](https://itkwasm.on.fleek.co/).

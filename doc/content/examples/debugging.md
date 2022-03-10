@@ -152,7 +152,7 @@ Here we load and run the WebAssembly with a simple HTML file and server:
   <body>
     <p>This is an example to demonstrate browser-based debugging of
     C++-generated WebAssembly. For more information, please see the
-    <a target="_blank" href="https://insightsoftwareconsortium.github.io/itk-wasm/examples/debugging.html">associated
+    <a target="_blank" href="https://itkwasm.on.fleek.co/examples/debugging.html">associated
       documentation</a>.</p>
 
     <script>
