@@ -22,7 +22,7 @@ const outputFile = program.args[1]
 try {
   const object = await readLocalFile(inputFile)
   const useCompression = true
-  await writeLocalFile(useCompression, object, outputFile)
+  await writeLocalFile(object, outputFile, useCompression)
 } catch (error) {
   console.error('Error during conversion:\n')
   console.error(error)
