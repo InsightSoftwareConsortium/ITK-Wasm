@@ -175,12 +175,6 @@ WASMMeshToMeshFilter<TMesh>
   {
     throw std::runtime_error("Unexpected dimension");
   }
-  const std::string pointComponentType( meshType["pointComponentType"].GetString() );
-  if (numberOfPoints && pointComponentType != itk::wasm::MapComponentType<typename MeshType::CoordRepType>::ComponentString )
-  {
-    throw std::runtime_error("Unexpected point component type");
-  }
-
   const std::string pointPixelComponentType( meshType["pointPixelComponentType"].GetString() );
   if (numberOfPointPixels && pointPixelComponentType != itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::ComponentString )
   {
@@ -205,12 +199,38 @@ WASMMeshToMeshFilter<TMesh>
     throw std::runtime_error("Unexpected cell pixel type");
   }
 
+  mesh->GetPoints()->resize(numberOfPoints);
   using PointType = typename MeshType::PointType;
   const rapidjson::Value & pointsJson = document["points"];
   const std::string pointsString( pointsJson.GetString() );
-  const auto * pointsPtr = reinterpret_cast< PointType * >( std::atol(pointsString.substr(35).c_str()) );
-  mesh->GetPoints()->resize(numberOfPoints);
-  mesh->GetPoints()->assign(pointsPtr, pointsPtr + numberOfPoints);
+  const std::string pointComponentType( meshType["pointComponentType"].GetString() );
+  if (numberOfPoints)
+  {
+    if (pointComponentType == itk::wasm::MapComponentType<typename MeshType::CoordRepType>::ComponentString )
+    {
+      const auto * pointsPtr = reinterpret_cast< PointType * >( std::atol(pointsString.substr(35).c_str()) );
+      mesh->GetPoints()->assign(pointsPtr, pointsPtr + numberOfPoints);
+    }
+    else if (pointComponentType == itk::wasm::MapComponentType<float>::ComponentString)
+    {
+      auto * pointsPtr = reinterpret_cast< float * >( std::atol(pointsString.substr(35).c_str()) );
+      const size_t pointComponents = numberOfPoints * dimension;
+      auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordRepType *>(&(mesh->GetPoints()->at(0)) );
+      std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
+    }
+    else if (pointComponentType == itk::wasm::MapComponentType<double>::ComponentString)
+    {
+      auto * pointsPtr = reinterpret_cast< double * >( std::atol(pointsString.substr(35).c_str()) );
+      const size_t pointComponents = numberOfPoints * dimension;
+      auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordRepType *>(&(mesh->GetPoints()->at(0)) );
+      std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
+    }
+    else
+    {
+      throw std::runtime_error("Unexpected point component type");
+    }
+  }
+
 
   const rapidjson::Value & cellBufferSizeJson = document["cellBufferSize"];
   const SizeValueType cellBufferSize = cellBufferSizeJson.GetInt();
