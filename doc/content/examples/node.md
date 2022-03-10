@@ -18,22 +18,24 @@ This adds `itk-wasm` and `itk-wasm` IO packages to the `dependencies` section of
   "name": "itk-convert",
   "version": "1.1.0",
   "description": "Convert image or mesh files from one format to another.",
+  "type": "module",
 [...]
   "dependencies": {
     "commander": "^8.2.0",
-    "itk-image-io": "^1.0.0-a.7",
-    "itk-mesh-io": "^1.0.0-a.7",
-    "itk-wasm": "^1.0.0-a.7"
+    "itk-image-io": "^1.0.0-b.3",
+    "itk-mesh-io": "^1.0.0-b.3",
+    "itk-wasm": "^1.0.0-b.3"
   }
 }
 ```
 
-Next, call functions like [readLocalFileSync](../api/node_io.html) or [writeLocalFileSync](../api/node_io.html).
+Next, call functions like [readLocalFile](../api/node_io.html) or [writeLocalFile](../api/node_io.html).
 
 For example,
 
 ```js
 [...]
+import { readLocalFile, writeLocalFile } from 'itk-wasm'
 
 const inputFile = program.args[0]
 const outputFile = program.args[1]
@@ -41,7 +43,7 @@ const outputFile = program.args[1]
 try {
   const object = await readLocalFile(inputFile)
   const useCompression = true
-  await writeLocalFile(useCompression, object, outputFile)
+  await writeLocalFile(object, outputFile, useCompression)
 } catch (error) {
   console.error('Error during conversion:\n')
   console.error(error)
