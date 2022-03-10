@@ -90,7 +90,7 @@ if (EMSCRIPTEN AND DEFINED WebAssemblyInterface_BINARY_DIR)
         PROPERTY RUNTIME_OUTPUT_DIRECTORY
         ${WebAssemblyInterface_BINARY_DIR}/image-io
         )
-      set_property(TARGET ${target_umd} APPEND_STRING
+      set_property(TARGET ${target} APPEND_STRING
         PROPERTY LINK_FLAGS " ${dicom_common_link_flags}"
         )
     endforeach()
