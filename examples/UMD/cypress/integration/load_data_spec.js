@@ -6,4 +6,12 @@ describe('Load data', () => {
       cy.get('textarea').contains('"numberOfPoints": 2903,')
     })
   })
+
+  it('successfully loads an image', () => {
+    cy.visit('http://localhost:8080/')
+    cy.fixture('cthead1.png', null).then((headBuffer) => {
+      cy.get('input[type=file]').selectFile({ contents: headBuffer, fileName: 'cthead1.png' })
+      cy.get('textarea').contains('"imageType"')
+    })
+  })
 })
