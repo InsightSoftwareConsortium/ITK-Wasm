@@ -8,7 +8,7 @@ Inside the HTML `head`, load the itk-wasm UMD script:
 ```html
   <head>
     [...]
-    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.2/dist/umd/itk-wasm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.3/dist/umd/itk-wasm.min.js"></script>
   </head>
 ```
 
