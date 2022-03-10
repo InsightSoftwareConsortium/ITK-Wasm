@@ -2,13 +2,13 @@ itk-umd-example
 ===================
 
 This example demonstrates how to use the
-[itk-wasm](https://insightsoftwareconsortium.github.io/itk-wasm/) UMD module from
+[itk-wasm](https://itkwasm.on.fleek.co/) UMD module from
 a an HTML script tag for access to the image and mesh IO module that are
 distributed on the [jsDelivr](https://www.jsdelivr.com/) [content delivery
 network](https://en.wikipedia.org/wiki/Content_delivery_network).
 
 More information can be found in the [example
-documentation](https://insightsoftwareconsortium.github.io/itk-wasm/examples/umd.html).
+documentation](https://itkwasm.on.fleek.co/examples/umd.html).
 
 ## Run Locally
 

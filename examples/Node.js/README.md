@@ -29,6 +29,6 @@ npm test
 ## More Information
 
 This example demonstrates how to use
-[itk-wasm](https://insightsoftwareconsortium.github.io/itk-wasm/) in a Node.js
+[itk-wasm](https://itkwasm.on.fleek.co/) in a Node.js
 application. More information can be found in the [example
-documentation](https://insightsoftwareconsortium.github.io/itk-wasm/examples/node.html).
+documentation](https://itkwasm.on.fleek.co/examples/node.html).
