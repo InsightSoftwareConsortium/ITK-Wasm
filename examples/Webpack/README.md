@@ -2,9 +2,9 @@ itk-webpack-example
 ===================
 
 This example demonstrates how to configure Webpack to build a project that
-uses [itk-wasm](https://itkwasm.on.fleek.co/).
+uses [itk-wasm](https://wasm.itk.org/).
 More information can be found in the [example
-documentation](https://itkwasm.on.fleek.co/examples/webpack.html).
+documentation](https://wasm.itk.org/examples/webpack.html).
 
 ## Run Locally
 

@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
   },
-  "homepage": "https://itkwasm.on.fleek.co/",
+  "homepage": "https://wasm.itk.org/",
   "devDependencies": {
   },
   "dependencies": {
