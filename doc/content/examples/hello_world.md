@@ -1,4 +1,4 @@
-title: Hello World!
+title: Hello WASM World!
 ---
 
 This example, walks through how to compile a *hello world* executable written in C++ to [WebAssembly](https://webassembly.org/) and how execute it with standalone WebAssembly runtimes, the Node.js JavaScript runtime, and web browser runtimes!
