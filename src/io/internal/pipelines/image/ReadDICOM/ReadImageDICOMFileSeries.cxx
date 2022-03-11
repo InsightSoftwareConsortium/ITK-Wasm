@@ -208,6 +208,8 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
       serieHelper->AddFileName(fileName);
     }
     serieHelper->SetUseSeriesDetails(true);
+    // Add the default restrictions to refine the file set into multiple series.
+    serieHelper->CreateDefaultUniqueSeriesIdentifier();
     using SeriesIdContainer = std::vector<std::string>;
     SeriesIdContainer seriesUIDs;
     // Accessing the first serie found (assume there is at least one)
@@ -227,7 +229,7 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
     }
 
     using FileNamesContainer = std::vector<std::string>;
-    FileNamesContainer fileNames; 
+    FileNamesContainer fileNames;
     flist = serieHelper->GetFirstSingleSerieUIDFileSet();
     const std::string serie = seriesUIDs[0];
     bool found = false;
