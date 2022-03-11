@@ -9,7 +9,6 @@ Read and write to and from [Image](../api/Image.html) is supported. For visualiz
 - [DICOM Series](http://dicom.nema.org/)
 - [ITK HDF5](https://support.hdfgroup.org/HDF5/)
 - [JPEG](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format)
-- [GE4,GE5,GEAdw](http://www3.gehealthcare.com)
 - [Gipl (Guys Image Processing Lab)](https://www.ncbi.nlm.nih.gov/pubmed/12956259)
 - [LSM](http://www.openwetware.org/wiki/Dissecting_LSM_files)
 - [MetaImage](https://itk.org/Wiki/ITK/MetaIO/Documentation)

@@ -23,7 +23,6 @@
   "scripts": {
     "doc": "kw-doc -c ./doc/config.cjs",
     "doc:www": "kw-doc -c ./doc/config.cjs -s",
-    "doc:publish": "kw-doc -c ./doc/config.cjs -mp",
     "commit": "git cz",
     "build": "npm run build:emscripten && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack && node ./src/io/internal/packages/package-json-gen.cjs",
     "build:debug": "npm run build:emscripten -- --debug && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack -- --mode development",
@@ -132,12 +131,6 @@
       "src/web-workers/*.ts",
       "src/core/ITKWASMEmscriptenModule.ts",
       "src/pipeline/PipelineEmscriptenModule.ts"
-    ]
-  },
-  "standard": {
-    "ignore": [
-      "test/node/io/image/GETest.js",
-      "test/node/io/image/JPEGTest.js"
     ]
   }
 }

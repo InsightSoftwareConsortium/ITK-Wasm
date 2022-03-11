@@ -86,10 +86,3 @@ jobs:
         else
           echo "CID ${new_cid} already pinned on Pinata."
         fi
-
-    - name: Build and publish docs
-      if: github.ref == 'refs/heads/master'
-      run: |
-        git config --global user.name "GitHub Actions CI"
-        git config --global user.email "robot@itk.org"
-        npm run doc:publish

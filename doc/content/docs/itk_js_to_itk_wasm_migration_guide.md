@@ -1,7 +1,6 @@
 # itk.js to itk-wasm Migration Guide
 
-*Note: this migration guide is a work in progress. itk-wasm is currently in
-the beta development stage. The interface is relatively stable while functionality is currently being fleshed out. While nearly all tests in the test suite pass, GE and JPEG format currently have issues. Last updated March 5th, 2022.*
+*Note: itk-wasm is currently in the beta development stage. The interface is relatively stable while functionality is currently being fleshed out. Updates for the rest of the documentation for changes from itk.js to itk-wasm is in progress. Last updated March 11th, 2022.*
 
 **itk-wasm** is a major upgrade with a focus on univeral, performant computing in
 WebAssembly. The itk.js to itk-wasm transition also brings improvements
@@ -122,6 +121,10 @@ Node `*Sync` functions have been removed -- use the equivalent async versions in
 ## VTK support
 
 The VTK Docker images, VTK PolyData IO, `readPolyDataFile`, `readPolyDataBlob`, `readPolyDataArrayBuffer`, based on VTK were removed.
+
+## GE image file formats
+
+Support for the legacy GE image file formats, i.e. GE4, GE5, GEAdw, is no longer provided.
 
 ## IOTypes
 

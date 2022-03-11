@@ -7,8 +7,8 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 
 WORKDIR /
 
-# 2021-10-03 master branch
-ENV ITK_GIT_TAG ca0756235a7c7ca635ecbd4318ebbd9b535690f1
+# 2022-03-10 master branch
+ENV ITK_GIT_TAG 5d1d5d5e6f99dbc574756425dd6d747ee3857482
 RUN git clone https://github.com/thewtex/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
