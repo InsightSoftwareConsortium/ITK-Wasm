@@ -134,7 +134,7 @@ Next, open the options for Chrome WebAssembly Debugging extension:
 
 ![WASM Debugging Options](./debugging/devtools-options.png)
 
-Since itk-wasm performs builds in a clean Docker environment, the debugging source paths in the Docker environment are different than the paths on the host system. The debugging extension has a path substitution system that allows to account for these differences. In the Docker image, the directory where `itk-wasm` is invoked is mounted as `/work`. Substitute `/work` with the directory where the `itk-wasm` CLI is invoked. For example, if `itk-wasm` was invoked at `/home/matt/src/itk-wasm/examples/Debugging`, then:
+Since itk-wasm performs builds in a clean Docker environment, the debugging source paths in the Docker environment are different than the paths on the host system. The debugging extension has a path substitution system that can account for these differences. In the Docker image, the directory where `itk-wasm` is invoked is mounted as `/work`. Substitute `/work` with the directory where the `itk-wasm` CLI is invoked. For example, if `itk-wasm` was invoked at `/home/matt/src/itk-wasm/examples/Debugging`, then:
 
 ![Path substitution](./debugging/path-substitution.png)
 
