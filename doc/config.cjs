@@ -1,5 +1,5 @@
 module.exports = {
-  baseUrl: '/',
+  baseUrl: '',
   work: './build-tmp',
   config: {
     title: 'itk-wasm',
@@ -7,7 +7,7 @@ module.exports = {
     subtitle: '"Universal spatial analysis and visualization"',
     author: 'Insight Software Consortium',
     timezone: 'UTC',
-    url: 'https://itkwasm.on.fleek.co/',
+    url: 'https://wasm.itk.org',
     root: '/',
     github: 'InsightSoftwareConsortium/itk-wasm',
     google_analytics: 'UA-90338862-8'

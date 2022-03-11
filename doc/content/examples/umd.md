@@ -12,7 +12,7 @@ Inside the HTML `head`, load the itk-wasm UMD script:
   </head>
 ```
 
-Inside body JavaScript code, the `itk` object provides [itk-wasm API functions and objects](https://itkwasm.on.fleek.co/api/) as properties.
+Inside body JavaScript code, the `itk` object provides [itk-wasm API functions and objects](https://wasm.itk.org/api/) as properties.
 
 ```
   [...]

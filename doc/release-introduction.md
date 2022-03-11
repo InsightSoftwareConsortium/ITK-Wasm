@@ -10,4 +10,4 @@ npm install itk-wasm
 
 ## Usage
 
-For more information, see the [itk-wasm documentation](https://itkwasm.on.fleek.co/).
+For more information, see the [itk-wasm documentation](https://wasm.itk.org/).
