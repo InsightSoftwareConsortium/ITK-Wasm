@@ -388,27 +388,27 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             polyData.vertices = new Uint32Array()
           }
           if (polyData.linesBufferSize > 0) {
-            polyData.lines = getPipelineModuleOutputArray(pipelineModule, index, 1, IntTypes.UInt32) as Uint32Array
+            polyData.lines = getPipelineModuleOutputArray(pipelineModule, index, 2, IntTypes.UInt32) as Uint32Array
           } else {
             polyData.lines = new Uint32Array()
           }
           if (polyData.polygonsBufferSize > 0) {
-            polyData.polygons = getPipelineModuleOutputArray(pipelineModule, index, 1, IntTypes.UInt32) as Uint32Array
+            polyData.polygons = getPipelineModuleOutputArray(pipelineModule, index, 3, IntTypes.UInt32) as Uint32Array
           } else {
             polyData.polygons = new Uint32Array()
           }
           if (polyData.triangleStripsBufferSize > 0) {
-            polyData.triangleStrips = getPipelineModuleOutputArray(pipelineModule, index, 1, IntTypes.UInt32) as Uint32Array
+            polyData.triangleStrips = getPipelineModuleOutputArray(pipelineModule, index, 4, IntTypes.UInt32) as Uint32Array
           } else {
             polyData.triangleStrips = new Uint32Array()
           }
           if (polyData.numberOfPointPixels > 0) {
-            polyData.pointData = getPipelineModuleOutputArray(pipelineModule, index, 2, polyData.polyDataType.pointPixelComponentType)
+            polyData.pointData = getPipelineModuleOutputArray(pipelineModule, index, 5, polyData.polyDataType.pointPixelComponentType)
           } else {
             polyData.pointData = bufferToTypedArray(polyData.polyDataType.pointPixelComponentType, new ArrayBuffer(0))
           }
           if (polyData.numberOfCellPixels > 0) {
-            polyData.cellData = getPipelineModuleOutputArray(pipelineModule, index, 3, polyData.polyDataType.cellPixelComponentType)
+            polyData.cellData = getPipelineModuleOutputArray(pipelineModule, index, 6, polyData.polyDataType.cellPixelComponentType)
           } else {
             polyData.cellData = bufferToTypedArray(polyData.polyDataType.cellPixelComponentType, new ArrayBuffer(0))
           }

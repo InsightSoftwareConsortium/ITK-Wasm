@@ -83,7 +83,7 @@ public:
         if (this->m_PolyData->GetNumberOfPoints() > 0)
         {
           const auto pointsAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetPoints()->at(0)) );
-          const auto pointsSize = wasmPolyData->GetPolyData()->GetPoints()->Size() * sizeof(typename PolyDataType::CoordRepType);
+          const auto pointsSize = wasmPolyData->GetPolyData()->GetPoints()->Size() * PolyDataType::PointDimension * sizeof(typename PolyDataType::CoordRepType);
           setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
         }
 
@@ -98,21 +98,21 @@ public:
         {
           const auto linesAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetLines()->at(0)) );
           const auto linesSize = wasmPolyData->GetPolyData()->GetLines()->Size() * sizeof(uint32_t);
-          setMemoryStoreOutputArray(0, index, 1, linesAddress, linesSize);
+          setMemoryStoreOutputArray(0, index, 2, linesAddress, linesSize);
         }
 
         if (this->m_PolyData->GetPolygons() && this->m_PolyData->GetPolygons()->Size() > 0)
         {
           const auto polygonsAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetPolygons()->at(0)) );
           const auto polygonsSize = wasmPolyData->GetPolyData()->GetPolygons()->Size() * sizeof(uint32_t);
-          setMemoryStoreOutputArray(0, index, 1, polygonsAddress, polygonsSize);
+          setMemoryStoreOutputArray(0, index, 3, polygonsAddress, polygonsSize);
         }
 
         if (this->m_PolyData->GetTriangleStrips() && this->m_PolyData->GetTriangleStrips()->Size() > 0)
         {
           const auto triangleStripsAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetTriangleStrips()->at(0)) );
           const auto triangleStripsSize = wasmPolyData->GetPolyData()->GetTriangleStrips()->Size() * sizeof(uint32_t);
-          setMemoryStoreOutputArray(0, index, 1, triangleStripsAddress, triangleStripsSize);
+          setMemoryStoreOutputArray(0, index, 4, triangleStripsAddress, triangleStripsSize);
         }
 
         if (this->m_PolyData->GetPointData() != nullptr && this->m_PolyData->GetPointData()->Size() > 0)
@@ -121,7 +121,7 @@ public:
           using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
           const auto pointDataAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetPointData()->at(0)) );
           const auto pointDataSize = wasmPolyData->GetPolyData()->GetPointData()->Size() * sizeof(typename ConvertPointPixelTraits::ComponentType) * ConvertPointPixelTraits::GetNumberOfComponents();
-          setMemoryStoreOutputArray(0, index, 2, pointDataAddress, pointDataSize);
+          setMemoryStoreOutputArray(0, index, 5, pointDataAddress, pointDataSize);
         }
 
         if (this->m_PolyData->GetCellData() != nullptr && this->m_PolyData->GetCellData()->Size() > 0)
@@ -130,7 +130,7 @@ public:
           using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
           const auto cellDataAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetCellData()->at(0)) );
           const auto cellDataSize = wasmPolyData->GetPolyData()->GetCellData()->Size() * sizeof(typename ConvertCellPixelTraits::ComponentType) * ConvertCellPixelTraits::GetNumberOfComponents();
-          setMemoryStoreOutputArray(0, index, 3, cellDataAddress, cellDataSize);
+          setMemoryStoreOutputArray(0, index, 6, cellDataAddress, cellDataSize);
         }
       }
 #else
