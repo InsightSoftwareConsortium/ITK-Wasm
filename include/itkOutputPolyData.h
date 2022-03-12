@@ -83,7 +83,7 @@ public:
         if (this->m_PolyData->GetNumberOfPoints() > 0)
         {
           const auto pointsAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetPoints()->at(0)) );
-          const auto pointsSize = wasmPolyData->GetPolyData()->GetPoints()->Size() * sizeof(typename PolyDataType::CoordRepType);
+          const auto pointsSize = wasmPolyData->GetPolyData()->GetPoints()->Size() * PolyDataType::PointDimension * sizeof(typename PolyDataType::CoordRepType);
           setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
         }
 
