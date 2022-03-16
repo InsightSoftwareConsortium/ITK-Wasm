@@ -9,7 +9,7 @@ interface createWebWorkerPromiseResult {
 }
 
 // Internal function to create a web worker promise
-async function createWebWorkerPromise (name: 'pipeline', existingWorker: Worker | null): Promise<createWebWorkerPromiseResult> {
+async function createWebWorkerPromise (existingWorker: Worker | null): Promise<createWebWorkerPromiseResult> {
   if (existingWorker != null) {
     const webworkerPromise = new WebworkerPromise(existingWorker)
     return await Promise.resolve({ webworkerPromise, worker: existingWorker })
@@ -20,36 +20,17 @@ async function createWebWorkerPromise (name: 'pipeline', existingWorker: Worker 
   // importScripts / UMD is required over dynamic ESM import until Firefox
   // adds worker dynamic import support:
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
-  // switch (name) {
-  // case 'pipeline':
   // worker = new Worker(new URL('../../web-workers/pipeline.worker.js', import.meta.url))
-  // break
-  // default:
-  // throw Error('Unsupported web worker type')
-  // }
   const webWorkersUrl = config.webWorkersUrl
   const min = 'min-'
   // debug
   // const min = ''
 
   if (webWorkersUrl.startsWith('http')) {
-    switch (name) {
-      case 'pipeline': {
-        const response = await axios.get(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`, { responseType: 'blob' })
-        worker = new Worker(URL.createObjectURL(response.data as Blob))
-        break
-      }
-      default:
-        throw Error('Unsupported web worker type')
-    }
+    const response = await axios.get(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`, { responseType: 'blob' })
+    worker = new Worker(URL.createObjectURL(response.data as Blob))
   } else {
-    switch (name) {
-      case 'pipeline':
-        worker = new Worker(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`)
-        break
-      default:
-        throw Error('Unsupported web worker type')
-    }
+    worker = new Worker(`${webWorkersUrl}/${min}bundles/pipeline.worker.js`)
   }
 
   const webworkerPromise = new WebworkerPromise(worker)

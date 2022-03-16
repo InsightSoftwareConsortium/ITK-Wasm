@@ -9,7 +9,7 @@ import ReadImageResult from './ReadImageResult.js'
 
 async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadImageResult> {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise('pipeline', worker)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker)
   worker = usedWorker
 
   const filePath = `./${fileName}`
