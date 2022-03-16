@@ -23,6 +23,7 @@
 #include "itkSupportInputMeshTypes.h"
 #include "itkWASMMeshIOFactory.h"
 #include "itkMeshToPolyDataFilter.h"
+#include "itkVector.h"
 
 template<typename TMesh>
 class PipelineFunctor
@@ -62,6 +63,9 @@ int main (int argc, char * argv[])
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
    uint8_t,
-   float>
+   float,
+   itk::Vector<uint8_t, 3>,
+   itk::Vector<float, 3>
+   >
   ::Dimensions<2U,3U>("InputMesh", pipeline);
 }
