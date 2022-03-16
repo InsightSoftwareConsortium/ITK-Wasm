@@ -1,4 +1,4 @@
-const version = '1.0.0-b.5'
+const version = '1.0.0-b.6'
 
 const itkConfig = {
   webWorkersUrl: undefined,
