@@ -1,15 +1,15 @@
 import test from 'tape'
 import axios from 'axios'
 
-import { IntTypes, FloatTypes, PixelTypes, readImageFile, readMeshFile, runPipelineBrowser, InterfaceTypes } from 'browser/index.js'
+import { IntTypes, FloatTypes, PixelTypes, readImageFile, readMeshFile, runPipeline, InterfaceTypes } from 'browser/index.js'
 
 export default function () {
-  test('runPipelineBrowser captures stdout and stderr', (t) => {
+  test('runPipeline captures stdout and stderr', (t) => {
     const args = []
     const outputs = null
     const inputs = null
     const stdoutStderrPath = 'StdoutStderrTest'
-    return runPipelineBrowser(null, stdoutStderrPath, args, outputs, inputs)
+    return runPipeline(null, stdoutStderrPath, args, outputs, inputs)
       .then(function ({ returnValue, stdout, stderr, webWorker }) {
         webWorker.terminate()
         t.is(returnValue, 0)
@@ -25,14 +25,14 @@ Click. Perfect success.
       })
   })
 
-  test('runPipelineBrowser re-uses a WebWorker', (t) => {
+  test('runPipeline re-uses a WebWorker', (t) => {
     const args = []
     const outputs = null
     const inputs = null
     const stdoutStderrPath = 'StdoutStderrTest'
-    return runPipelineBrowser(null, stdoutStderrPath, args, outputs, inputs)
+    return runPipeline(null, stdoutStderrPath, args, outputs, inputs)
       .then(function ({ stdout, stderr, outputs, webWorker }) {
-        return runPipelineBrowser(webWorker, stdoutStderrPath, args, outputs, inputs)
+        return runPipeline(webWorker, stdoutStderrPath, args, outputs, inputs)
           .then(function ({ returnValue, stdout, stderr, webWorker }) {
             webWorker.terminate()
             t.is(returnValue, 0)
@@ -49,12 +49,12 @@ Click. Perfect success.
       })
   })
 
-  test('runPipelineBrowser runs a pipeline in a web worker with an absolute URL', (t) => {
+  test('runPipeline runs a pipeline in a web worker with an absolute URL', (t) => {
     const args = []
     const outputs = null
     const inputs = null
     const absoluteURL = new URL('base/dist/pipeline/StdoutStderrTest', document.location)
-    return runPipelineBrowser(null, absoluteURL, args, outputs, inputs)
+    return runPipeline(null, absoluteURL, args, outputs, inputs)
       .then(function ({ stdout, stderr, outputs, webWorker }) {
         webWorker.terminate()
         t.is(stdout, `I’m writing my code,
@@ -69,12 +69,12 @@ Click. Perfect success.
       })
   })
 
-  test('runPipelineBrowser runs a pipeline on the main thread with an absolute URL', (t) => {
+  test('runPipeline runs a pipeline on the main thread with an absolute URL', (t) => {
     const args = []
     const outputs = null
     const inputs = null
     const absoluteURL = new URL('base/dist/pipeline/StdoutStderrTest', document.location)
-    return runPipelineBrowser(false, absoluteURL, args, outputs, inputs)
+    return runPipeline(false, absoluteURL, args, outputs, inputs)
       .then(function ({ stdout, stderr, outputs }) {
         t.is(stdout, `I’m writing my code,
 But I do not realize,
@@ -88,7 +88,7 @@ Click. Perfect success.
       })
   })
 
-  test('runPipelineBrowser uses input and output files in the Emscripten filesystem', (t) => {
+  test('runPipeline uses input and output files in the Emscripten filesystem', (t) => {
     const pipelinePath = 'InputOutputFilesTest'
     const args = ['--use-files',
       '--input-text-file', './input.txt',
@@ -106,7 +106,7 @@ Click. Perfect success.
       { type: InterfaceTypes.TextFile, data: { path: './input.txt', data: 'The answer is 42.' } },
       { type: InterfaceTypes.BinaryFile, data: { path: './input.bin', data: new Uint8Array([222, 173, 190, 239]) } }
     ]
-    return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
+    return runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
       .then(function ({ stdout, stderr, outputs, webWorker }) {
         webWorker.terminate()
         t.is(outputs[0].type, InterfaceTypes.TextFile)
@@ -142,7 +142,7 @@ Click. Perfect success.
       { type: InterfaceTypes.TextStream, data: { data: 'The answer is 42.' } },
       { type: InterfaceTypes.BinaryStream, data: { data: new Uint8Array([222, 173, 190, 239]) } }
     ]
-    return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
+    return runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
       .then(function ({ stdout, stderr, outputs, webWorker }) {
         webWorker.terminate()
         t.is(outputs[0].type, InterfaceTypes.TextStream)
@@ -160,7 +160,7 @@ Click. Perfect success.
       })
   })
 
-  test('runPipelineBrowser runs on the main thread when first argument is false', (t) => {
+  test('runPipeline runs on the main thread when first argument is false', (t) => {
     const pipelinePath = 'InputOutputFilesTest'
     const args = ['--use-files',
       '--input-text-file', './input.txt',
@@ -178,7 +178,7 @@ Click. Perfect success.
       { type: InterfaceTypes.TextFile, data: { path: './input.txt', data: 'The answer is 42.' } },
       { type: InterfaceTypes.BinaryFile, data: { path: './input.bin', data: new Uint8Array([222, 173, 190, 239]) } }
     ]
-    return runPipelineBrowser(false, pipelinePath, args, desiredOutputs, inputs)
+    return runPipeline(false, pipelinePath, args, desiredOutputs, inputs)
       .then(function ({ stdout, stderr, outputs }) {
         t.is(outputs[0].type, InterfaceTypes.TextFile)
         t.is(outputs[0].data.path, './output.txt')
@@ -197,7 +197,7 @@ Click. Perfect success.
       })
   })
 
-  test('runPipelineBrowser uses writes and read itk.Image in the Emscripten filesystem', (t) => {
+  test('runPipeline uses writes and read itk.Image in the Emscripten filesystem', (t) => {
     const verifyImage = (image) => {
       t.is(image.imageType.dimension, 2, 'dimension')
       t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
@@ -235,14 +235,14 @@ Click. Perfect success.
         const inputs = [
           { type: InterfaceTypes.Image, data: image }
         ]
-        return runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
+        return runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
       }).then(function ({ stdout, stderr, outputs, webWorker }) {
         webWorker.terminate()
         verifyImage(outputs[0].data)
       })
   })
 
-  test('runPipelineBrowser writes and reads an itk.Mesh via memory io', async (t) => {
+  test('runPipeline writes and reads an itk.Mesh via memory io', async (t) => {
     const verifyMesh = (mesh) => {
       t.is(mesh.meshType.dimension, 3)
       t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
@@ -268,7 +268,7 @@ Click. Perfect success.
     const inputs = [
       { type: InterfaceTypes.Mesh, data: mesh }
     ]
-    const { outputs, webWorker: pipelineWorker } = await runPipelineBrowser(null, pipelinePath, args, desiredOutputs, inputs)
+    const { outputs, webWorker: pipelineWorker } = await runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
     pipelineWorker.terminate()
     verifyMesh(outputs[0].data)
   })
