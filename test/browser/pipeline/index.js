@@ -1,5 +1,5 @@
-import runPipelineBrowserTest from './runPipelineBrowserTest.js'
+import runPipelineTest from './runPipelineTest.js'
 
 export default function () {
-  runPipelineBrowserTest()
+  runPipelineTest()
 }

@@ -11,7 +11,7 @@ itk-wasm execution pipelines support the following [interface types](https://git
 - [Mesh](../api/Mesh.html)
 - [PolyData](../api/PolyData.html)
 
-These interfaces types are supported in the [Emscripten interface](../api/runPipelineBrowser.html), WASI embedding interfaces, and native or virtual [filesystem IO](./file_formats.html).
+These interfaces types are supported in the [Emscripten interface](../api/runPipeline.html), WASI embedding interfaces, and native or virtual [filesystem IO](./file_formats.html).
 
 ---
 

@@ -158,7 +158,7 @@ Here we load and run the WebAssembly with a simple HTML file and server:
     <script>
       window.addEventListener('load', (event) => {
         const pipeline = new URL('web-build-debug/DebugMe', document.location)
-        itk.runPipelineBrowser(null, pipeline)
+        itk.runPipeline(null, pipeline)
       });
     </script>
 

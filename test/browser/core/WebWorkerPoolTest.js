@@ -1,7 +1,7 @@
 import test from 'tape'
 import axios from 'axios'
 
-import { IntTypes, PixelTypes, readImageFile, WorkerPool, stackImages, imageSharedBufferOrCopy, runPipelineBrowser, InterfaceTypes } from 'browser/index.js'
+import { IntTypes, PixelTypes, readImageFile, WorkerPool, stackImages, imageSharedBufferOrCopy, runPipeline, InterfaceTypes } from 'browser/index.js'
 
 export default function () {
   test('WorkerPool runs and reports progress', async (t) => {
@@ -29,7 +29,7 @@ export default function () {
 
     const poolSize = 2
     const maxTotalSplits = 4
-    const workerPool = new WorkerPool(poolSize, runPipelineBrowser)
+    const workerPool = new WorkerPool(poolSize, runPipeline)
 
     const fileName = 'cthead1.png'
     const testFilePath = 'base/build-emscripten/ExternalData/test/Input/' + fileName

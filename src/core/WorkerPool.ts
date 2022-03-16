@@ -29,7 +29,7 @@ class WorkerPool {
    *
    * The function, fcn, should accept null or an existing worker as its first argument.
    * It most also return and object with the used worker on the `webWorker`
-   * property.  * Example: runPipelineBrowser.
+   * property.  * Example: runPipeline.
    *
    **/
   constructor (poolSize: number, fcn: WorkerPoolFunction) {
