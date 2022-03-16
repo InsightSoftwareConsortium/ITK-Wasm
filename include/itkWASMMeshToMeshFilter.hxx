@@ -448,25 +448,23 @@ WASMMeshToMeshFilter<TMesh>
 
   const rapidjson::Value & pointDataJson = document["pointData"];
   using PointPixelType = typename TMesh::PixelType;
-  using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
   const std::string pointDataString( pointDataJson.GetString() );
-  auto pointDataPtr = reinterpret_cast< typename ConvertPointPixelTraits::ComponentType * >( std::atol(pointDataString.substr(35).c_str()) );
-  mesh->GetPointData()->resize(numberOfPointPixels * pointPixelComponents);
-  mesh->GetPointData()->assign(pointDataPtr, pointDataPtr + numberOfPointPixels * pointPixelComponents);
+  auto pointDataPtr = reinterpret_cast< PointPixelType * >( std::atol(pointDataString.substr(35).c_str()) );
+  mesh->GetPointData()->resize(numberOfPointPixels);
+  mesh->GetPointData()->assign(pointDataPtr, pointDataPtr + numberOfPointPixels);
 
   const rapidjson::Value & cellDataJson = document["cellData"];
   using CellPixelType = typename TMesh::CellPixelType;
-  using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
   const std::string cellDataString( cellDataJson.GetString() );
-  auto cellDataPtr = reinterpret_cast< typename ConvertCellPixelTraits::ComponentType * >( std::atol(cellDataString.substr(35).c_str()) );
+  auto cellDataPtr = reinterpret_cast< CellPixelType * >( std::atol(cellDataString.substr(35).c_str()) );
   if (mesh->GetCellData() == nullptr)
   {
     mesh->SetCellData(MeshType::CellDataContainer::New());
   }
   if (numberOfCellPixels)
   {
-    mesh->GetCellData()->resize(numberOfCellPixels * cellPixelComponents);
-    mesh->GetCellData()->assign(cellDataPtr, cellDataPtr + numberOfCellPixels * cellPixelComponents);
+    mesh->GetCellData()->resize(numberOfCellPixels);
+    mesh->GetCellData()->assign(cellDataPtr, cellDataPtr + numberOfCellPixels);
   }
 }
 
