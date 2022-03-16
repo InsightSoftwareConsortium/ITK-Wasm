@@ -8,7 +8,7 @@ import config from '../itkConfig.js'
 
 async function meshToPolyData (webWorker: Worker | null, mesh: Mesh): Promise<{ polyData: PolyData, webWorker: Worker }> {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise('pipeline', worker)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker)
   worker = usedWorker
 
   const args = ['0', '0', '--memory-io']

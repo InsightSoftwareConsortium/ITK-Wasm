@@ -17,7 +17,6 @@ const workerFunction = async (
 ): Promise<ReadImageResult> => {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
-    'pipeline',
     worker
   )
   worker = usedWorker

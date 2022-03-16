@@ -43,7 +43,7 @@ async function runPipeline (webWorker: Worker | null | boolean, pipelinePath: st
     return result
   }
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise('pipeline', worker as Worker | null)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker as Worker | null)
   worker = usedWorker
   const transferables: ArrayBuffer[] = []
   if (!(inputs == null) && inputs.length > 0) {

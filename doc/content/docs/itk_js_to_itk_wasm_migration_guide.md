@@ -73,7 +73,7 @@ In the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/t
 
 ```js
 const itkConfig = {
-  webWorkersUrl: '/itk/web-workers',
+  pipelineWorkerUrl: '/itk/web-workers/bundles/pipeline-worker.js',
   imageIOUrl: '/itk/image-io',
   meshIOUrl: '/itk/mesh-io',
   pipelinesUrl: '/itk/pipelines',

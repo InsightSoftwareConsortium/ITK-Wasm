@@ -10,7 +10,6 @@ import InterfaceTypes from '../core/InterfaceTypes.js'
 async function readDICOMTagsArrayBuffer (webWorker: Worker, arrayBuffer: ArrayBuffer, tags: string[] | null = null): Promise<ReadDICOMTagsResult> {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
-    'pipeline',
     worker
   )
   worker = usedWorker

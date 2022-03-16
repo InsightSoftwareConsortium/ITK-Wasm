@@ -42,7 +42,7 @@ set(meshios_WebAssemblyInterface itkWASMMeshIO itkWASMZstdMeshIO)
 set(meshio_id_itkWASMMeshIO 7)
 set(meshio_id_itkWASMZstdMeshIO 8)
 
-set(ITK_NO_IO_FACTORY_REGISTER_MANAGER 1)
+set(ITK_NO_MESHIO_FACTORY_REGISTER_MANAGER 1)
 set(MeshIOIndex_ARRAY "")
 foreach(io_module ${WebAssemblyInterface_MeshIOModules} WebAssemblyInterface)
   if (DEFINED WebAssemblyInterface_INCLUDE_DIRS)

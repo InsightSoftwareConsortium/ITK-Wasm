@@ -117,7 +117,7 @@ set(imageios_WebAssemblyInterface itkWASMImageIO itkWASMZstdImageIO)
 set(imageio_id_itkWASMImageIO 21)
 set(imageio_id_itkWASMZstdImageIO 22)
 
-set(ITK_NO_IO_FACTORY_REGISTER_MANAGER 1)
+set(ITK_NO_IMAGEIO_FACTORY_REGISTER_MANAGER 1)
 set(ImageIOIndex_ARRAY "")
 foreach(io_module ${WebAssemblyInterface_ImageIOModules} WebAssemblyInterface)
   if (DEFINED WebAssemblyInterface_INCLUDE_DIRS)
