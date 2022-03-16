@@ -10,6 +10,8 @@ itk-wasm
 
 [![DOI](https://zenodo.org/badge/45812381.svg)](https://zenodo.org/badge/latestdoi/45812381)
 
+![License](https://img.shields.io/github/license/InsightSoftwareConsortium/itk-wasm) ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/InsightSoftwareConsortium/itk-wasm)
+
 *itk-wasm* combines [ITK](https://www.itk.org/) and
 [WebAssembly](http://webassembly.org/) to enable high-performance spatial
 analysis in a web browser, Node.js, and reproducible execution across
