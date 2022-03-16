@@ -10,7 +10,7 @@
     "cypress:open": "npx cypress open",
     "cypress:run": "npx cypress run",
     "cypress:runChrome": "npx cypress run --browser chrome",
-    "cypress:runFirefox": "npx cypress run --browser firefox",
+    "cypress:runFirefox": "npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
     "test:debug": "start-server-and-test start http-get://localhost:8080 cypress:open",
     "test": "start-server-and-test start:production http-get://localhost:8080 cypress:run",
     "test:chrome": "start-server-and-test start:production http-get://localhost:8080 cypress:runChrome",
