@@ -107,7 +107,7 @@
     "tap-spec": "^5.0.0",
     "tape": "^4.13.0",
     "ts-standard": "^11.0.0",
-    "typescript": "^4.5.3",
+    "typescript": "^4.6.2",
     "webpack": "^5.55.1",
     "webpack-cli": "^4.8.0"
   },
