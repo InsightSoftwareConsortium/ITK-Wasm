@@ -99,8 +99,45 @@ jobs:
         browser: chrome
         start: npm start
 
-  test-webpack-example:
-    name: Webpack
+  test-webpack-example-chrome-electron:
+    name: Webpack, Chrome, Electron
+    runs-on: ubuntu-20.04
+    container: cypress/browsers:node16.13.2-chrome97-ff96
+    defaults:
+      run:
+        working-directory: ./examples/Webpack
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install
+      run: |
+        npm install
+
+    - name: Build
+      run: |
+        npm run build
+
+    - name: Test Electron
+      uses: cypress-io/github-action@v2
+      with:
+        working-directory: ./examples/Webpack
+        browser: electron
+        start: npm start
+
+    - name: Test Chrome
+      uses: cypress-io/github-action@v2
+      with:
+        working-directory: ./examples/Webpack
+        browser: chrome
+        start: npm start
+
+  test-webpack-example-firefox:
+    name: Webpack, Firefox
     runs-on: ubuntu-20.04
     defaults:
       run:
@@ -121,9 +158,12 @@ jobs:
       run: |
         npm run build
 
-    - name: Test
+    - name: Test Firefox
       run: |
-        ./test/run.sh
+        # Allow writing test output in the Docker image
+        sudo chmod -R 777 cypress
+        # To debug locally, run `./cypress/run-docker-firefox.sh -d`
+        ./cypress/run-docker-firefox.sh
 
   test-debugging-example:
     name: Debugging

@@ -120,80 +120,83 @@ To start the development web server, run
 npm run start
 ```
 
-## Testing with Karma
+## Testing with Cypress
 
-This section described how to configure browser-based testing with the [Karma test runner](https://karma-runner.github.io/2.0/index.html).
+This section described how to configure browser-based testing with the [Cypress](https://www.cypress.io/)
 
-First, install Karma and a test harness library like [tape](https://github.com/substack/tape).
+First, install Cypress and the `start-server-and-test` package.
 
-```
-npm install --save-dev karma karma-chrome-launcher karma-tap karma-tap-pretty-reporter karma-webpack tape tap-spec
-```
-
-Next write a `karma.config.js` file. The *itk-wasm* specific sections of this
-file are:
-
-```js
-[...]
-    files: [
-      './test/index.js',
-      { pattern: './dist/itk/image-io/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/mesh-io/**', watched: true, served: true, included: false },
-      { pattern: './dist/itk/web-workers/**', watched: true, served: true, included: false }
-    ],
-[...]
+```sh
+npm install --save-dev cypress start-server-and-test
 ```
 
-Here, `./test/index.js` can be replaced by the path to your testing module. We also serve the *itk-wasm* Emscripten and web worker files with Karma's web server.
+The `start-server-and-test` tool can start our development server for testing with Cypress.
 
-Since Karma's web server serves its files in `/base` by default, and our files are also in the `./dist/itk` directory, we can tell Webpack to use a different path for the *itk-wasm* modules when building for Karma tests with:
+Create directories to house our tests and test data:
 
-```js
-[...]
-    webpack: {
-[...]
-      resolve: {
-        alias: {
-          '../itkConfig.js': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js'),
-          '../../itkConfig.js': path.resolve(__dirname, 'test', 'config', 'itkConfigTest.js'),
-        },
-        fallback: { fs: false, path: false, buffer: false, url: false, module: false },
-      },
-      plugins: [
-        new webpack.DefinePlugin({
-          __BASE_PATH__: "'/base'"
-        }),
-        new webpack.ProvidePlugin({ process: ['process/browser'] }),
-      ]
-[...]
+```sh
+mkdir -p cypress/integration cypress/fixtures
 ```
 
-Where `itkConfigTest.js` contains:
+Provide a test dataset:
 
-```js
-const itkConfig = {
-  webWorkersUrl: __BASE_PATH__ + '/dist/itk/web-workers',
-  imageIOUrl: __BASE_PATH__ + '/dist/itk/image-io',
-  meshIOUrl: __BASE_PATH__ + '/dist/itk/mesh-io',
-  pipelinesUrl: __BASE_PATH__ + '/dist/itk/pipelines',
-}
-
-export default itkConfig
+```sh
+cp /path/to/cow.vtk cypress/fixtures/cow.vtk
 ```
 
-Create entries in the `package.json` file to start Karma, and run the tests!
+Create our test script at *cypress/integration/load_data_spec.js*. The test files names should end in **_spec.js*.
+
+```
+describe('Load data', () => {
+  it('successfully loads a mesh', () => {
+    cy.visit('http://localhost:8080/')
+    cy.fixture('cow.vtk', null).then((cowBuffer) => {
+      cy.get('input[type=file]').selectFile({ contents: cowBuffer, fileName: 'cow.vtk' })
+      cy.get('textarea').contains('"numberOfPoints": 2903,')
+    })
+  })
+})
+```
+
+Then, specify npm scripts to develop and debug the tests and run them in an automated way.
 
 ```js
   "scripts": {
-    "build": "webpack --progress --colors -p",
-    "start": "webpack-dev-server --mode development --content-base ./dist/ --watch-content-base",
-    "test": "karma start ./karma.conf.js",
-    "test:debug": "karma start ./karma.conf.js --no-single-run"
+    "start": "webpack-dev-server --mode development --static ./dist/",
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npx cypress run",
+    "test:debug": "start-server-and-test start http-get://localhost:8080 cypress:open",
+    "test": "start-server-and-test start http-get://localhost:8080 cypress:run"
   },
 ```
 
-and
+Note that [with webpack-dev-server](https://github.com/bahmutov/start-server-and-test#note-for-webpack-dev-server-users) we need to use `http-get` with `start-server-and-test`.
 
+To develop or debug tests, run
+
+```sh
+npm run test:debug
 ```
+
+This will open Cypress. Select the test to run:
+
+
+![Select load_data_spec](./umd/umd_select_load_data_spec.png)
+
+This will load the selected browser to see the test status and web page that is tested.  You can also open the browser's development console.
+
+![Develop and debug tests](./umd/umd_test_debug.png)
+
+To run the tests during continuous integration:
+
+```sh
 npm run test
 ```
+
+This will output the tests results in the console:
+
+![Console test output](./umd/umd_run_tests.png)
+
+And produce a video of the result at *cypress/videos/*.
+
+![Console test output](./umd/umd_cypress_video.gif)

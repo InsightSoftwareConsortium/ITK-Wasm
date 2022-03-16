@@ -1,13 +1,20 @@
 {
   "name": "itk-webpack-example",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "This example demonstrates how to use itk-wasm in a Webpack project that targets the browser.",
   "main": "index.js",
   "scripts": {
     "build": "webpack --progress --color --mode production",
     "start": "webpack-dev-server --mode development --static ./dist/",
-    "test": "karma start ./karma.conf.js",
-    "test:debug": "karma start ./karma.conf.js --no-single-run"
+    "start:production": "webpack-dev-server --mode production --static ./dist/",
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npx cypress run",
+    "cypress:runChrome": "npx cypress run --browser chrome",
+    "cypress:runFirefox": "npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
+    "test:debug": "start-server-and-test start http-get://localhost:8080 cypress:open",
+    "test": "start-server-and-test start:production http-get://localhost:8080 cypress:run",
+    "test:chrome": "start-server-and-test start:production http-get://localhost:8080 cypress:runChrome",
+    "test:firefox": "start-server-and-test start:production http-get://localhost:8080 cypress:runFirefox"
   },
   "repository": {
     "type": "git",
@@ -25,26 +32,17 @@
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-wasm#readme",
   "dependencies": {
     "curry": "^1.2.0",
-    "itk-image-io": "^1.0.0-b.1",
-    "itk-mesh-io": "^1.0.0-b.1",
-    "itk-wasm": "^1.0.0-b.1"
+    "itk-image-io": "^1.0.0-b.5",
+    "itk-mesh-io": "^1.0.0-b.5",
+    "itk-wasm": "^1.0.0-b.5"
   },
   "devDependencies": {
     "@babel/core": "^7.13.1",
     "@babel/preset-env": "^7.13.5",
     "babel-loader": "^8.2.3",
     "copy-webpack-plugin": "^9.0.1",
-    "karma": "^6.3.2",
-    "karma-chrome-launcher": "^3.1.0",
-    "karma-tap": "^4.2.0",
-    "karma-tap-pretty-reporter": "^4.2.0",
-    "karma-webpack": "^5.0.0",
-    "path-browserify": "^1.0.1",
-    "process": "^0.11.10",
-    "readable-stream": "^3.6.0",
-    "stream-browserify": "^3.0.0",
-    "tap-spec": "^5.0.0",
-    "tape": "^4.13.0",
+    "cypress": "^9.5.2",
+    "start-server-and-test": "^1.14.0",
     "webpack": "^5.65.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.7.2"
