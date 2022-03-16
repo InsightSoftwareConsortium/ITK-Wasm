@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-wasm#readme",
   "devDependencies": {
-    "cypress": "^9.5.1",
+    "cypress": "^9.5.2",
     "http-server": "^14.1.0",
     "start-server-and-test": "^1.14.0"
   }
