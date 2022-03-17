@@ -98,6 +98,7 @@ jobs:
         working-directory: ./examples/UMD
         browser: chrome
         start: npm start
+        config: defaultCommandTimeout=8000
 
   test-webpack-example-chrome-electron:
     name: Webpack, Chrome, Electron
@@ -128,6 +129,7 @@ jobs:
         working-directory: ./examples/Webpack
         browser: electron
         start: npm start
+        config: defaultCommandTimeout=8000
 
     - name: Test Chrome
       uses: cypress-io/github-action@v2
@@ -135,6 +137,7 @@ jobs:
         working-directory: ./examples/Webpack
         browser: chrome
         start: npm start
+        config: defaultCommandTimeout=8000
 
   test-webpack-example-firefox:
     name: Webpack, Firefox
