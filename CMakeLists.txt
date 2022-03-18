@@ -31,7 +31,7 @@ set(_itk_build_shared ${BUILD_SHARED_LIBS})
 
 # Uses newer CMake
 set(RapidJSON_GIT_REPOSITORY "https://github.com/thewtex/rapidjson.git")
-set(RapidJSON_GIT_TAG        "67eb4fec88204714f6d0f63573569788135e41a5")
+set(RapidJSON_GIT_TAG        "0f4a1318287791446652209ab94edeef5a8b68b9")
 set(RAPIDJSON_BUILD_CXX17 ON)
 set(RAPIDJSON_BUILD_DOC OFF)
 set(RAPIDJSON_BUILD_EXAMPLES OFF)
