@@ -1,8 +1,9 @@
 {
   "name": "itk-wasm-debugging-example",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An example to demonstrate WebAssembly debugging",
   "scripts": {
+    "build": "npm run native-build && npm run emscripten-build-release && npm run emscripten-build-debug && npm run wasi-build-release && npm run wasi-build-debug",
     "native-build": "cmake -Bbuild -S. -DCMAKE_BUILD_TYPE=Debug && cmake --build build/ --config Debug",
     "native-debug-linux": "gdb --args ./build/DebugMe",
     "emscripten-build-release": "itk-wasm --build-dir web-build-release build",
@@ -20,6 +21,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "http-server": "^14.1.0",
-    "itk-wasm": "^1.0.0-a.15"
+    "itk-wasm": "^1.0.0-b.6"
   }
 }
