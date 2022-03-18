@@ -1,4 +1,6 @@
 package-lock.json
+build
 web-build-debug
 web-build-release
 wasi-build-debug
+wasi-build-release
