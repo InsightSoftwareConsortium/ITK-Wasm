@@ -1,0 +1,46 @@
+{
+  "name": "itk-vite-example",
+  "version": "1.0.0",
+  "description": "This example demonstrates how to use itk-wasm in a Rollup project that targets the browser.",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build",
+    "start": "vite dist/",
+    "start:production": "webpack-dev-server --mode production --static ./dist/",
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npx cypress run --config defaultCommandTimeout=8000",
+    "cypress:runChrome": "npx cypress run --config defaultCommandTimeout=8000 --browser chrome",
+    "cypress:runFirefox": "npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
+    "test:debug": "start-server-and-test start http-get://localhost:8080 cypress:open",
+    "test": "start-server-and-test start:production http-get://localhost:8080 cypress:run",
+    "test:chrome": "start-server-and-test start:production http-get://localhost:8080 cypress:runChrome",
+    "test:firefox": "start-server-and-test start:production http-get://localhost:8080 cypress:runFirefox"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InsightSoftwareConsortium/itk-wasm.git"
+  },
+  "keywords": [
+    "itk",
+    "rollup",
+    "vite"
+  ],
+  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
+  },
+  "homepage": "https://github.com/InsightSoftwareConsortium/itk-wasm#readme",
+  "dependencies": {
+    "curry": "^1.2.0",
+    "itk-image-io": "^1.0.0-b.6",
+    "itk-mesh-io": "^1.0.0-b.6",
+    "itk-wasm": "^1.0.0-b.6"
+  },
+  "devDependencies": {
+    "cypress": "^9.5.2",
+    "rollup-plugin-copy": "^3.4.0",
+    "start-server-and-test": "^1.14.0",
+    "vite": "^2.8.6"
+  }
+}
