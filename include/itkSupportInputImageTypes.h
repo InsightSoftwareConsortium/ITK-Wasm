@@ -119,11 +119,10 @@ private:
     {
       if (imageType.pixelType == "VariableLengthVector" || imageType.pixelType == "VariableSizeMatrix" )
       {
-        // todo: VectorImage support for ImportImageFilter?
-        // using ImageType = itk::VectorImage<typename ConvertPixelTraits::ComponentType, Dimension>;
+        using ImageType = itk::VectorImage<typename ConvertPixelTraits::ComponentType, Dimension>;
 
-        // using PipelineType = TPipelineFunctor<ImageType>;
-        // return PipelineType()(pipeline);
+        using PipelineType = TPipelineFunctor<ImageType>;
+        return PipelineType()(pipeline);
       }
       else if( imageType.components == ConvertPixelTraits::GetNumberOfComponents() )
       {
