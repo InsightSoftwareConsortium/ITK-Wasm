@@ -20,7 +20,7 @@
 
 #include "itkWASMImageToImageFilter.h"
 
-#include "itkImportImageFilter.h"
+#include "itkImportVectorImageFilter.h"
 #include <exception>
 #include "itkWASMMapComponentType.h"
 #include "itkWASMMapPixelType.h"
@@ -138,9 +138,6 @@ WASMImageToImageFilter<TImage>
   using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
   constexpr unsigned int Dimension = TImage::ImageDimension;
 
-  using FilterType = ImportImageFilter< PixelType, Dimension >;
-  auto filter = FilterType::New();
-
   rapidjson::Document document;
   if (document.Parse(json.c_str()).HasParseError())
     {
@@ -165,8 +162,9 @@ WASMImageToImageFilter<TImage>
     throw std::runtime_error("Unexpected pixel type");
   }
 
-  // todo
-  // image->SetNumberOfComponentsPerPixel( imageType["components"].GetInt() );
+  using FilterType = ImportVectorImageFilter< TImage >;
+  auto filter = FilterType::New();
+
   if ( imageType["components"].GetInt() != ConvertPixelTraits::GetNumberOfComponents() )
   {
     throw std::runtime_error("Unexpected number of components");
@@ -223,7 +221,14 @@ WASMImageToImageFilter<TImage>
   const std::string dataString( dataJson.GetString() );
   PixelType * dataPtr = reinterpret_cast< PixelType * >( std::atol(dataString.substr(35).c_str()) );
   const bool letImageContainerManageMemory = false;
-  filter->SetImportPointer( dataPtr, totalSize, letImageContainerManageMemory );
+  if (pixelType == "VariableLengthVector" || pixelType == "VariableSizeMatrix")
+    {
+    filter->SetImportPointer( dataPtr, totalSize, letImageContainerManageMemory, imageType["components"].GetInt());
+    }
+  else
+    {
+    filter->SetImportPointer( dataPtr, totalSize, letImageContainerManageMemory);
+    }
 
   filter->Update();
   image->Graft(filter->GetOutput());
