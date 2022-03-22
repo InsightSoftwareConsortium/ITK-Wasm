@@ -260,10 +260,10 @@ WASMMeshToMeshFilter<TMesh>
     {
       case CellGeometryEnum::VERTEX_CELL:
       {
-        auto numberOfPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (numberOfPoints != VertexCellType::NumberOfPoints)
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != VertexCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Vertex Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro(<< "Invalid Vertex Cell with number of points = " << cellPoints);
         }
         CellAutoPointer cell;
         auto *                vertexCell = new VertexCellType;
@@ -279,13 +279,13 @@ WASMMeshToMeshFilter<TMesh>
       case CellGeometryEnum::LINE_CELL:
       {
         // for polylines will be loaded as individual edges.
-        auto numberOfPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (numberOfPoints < 2)
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints < 2)
         {
-          itkExceptionMacro(<< "Invalid Line Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro(<< "Invalid Line Cell with number of points = " << cellPoints);
         }
         auto pointIDBuffer = static_cast<PointIdentifier>(cellsBufferPtr[index++]);
-        for (unsigned int jj = 1; jj < numberOfPoints; ++jj)
+        for (unsigned int jj = 1; jj < cellPoints; ++jj)
         {
           CellAutoPointer cell;
           auto *                lineCell = new LineCellType;
@@ -299,10 +299,10 @@ WASMMeshToMeshFilter<TMesh>
       }
       case CellGeometryEnum::TRIANGLE_CELL:
       {
-        auto numberOfPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (numberOfPoints != TriangleCellType::NumberOfPoints)
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != TriangleCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Triangle Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro(<< "Invalid Triangle Cell with number of points = " << cellPoints);
         }
 
         CellAutoPointer cell;
@@ -318,10 +318,10 @@ WASMMeshToMeshFilter<TMesh>
       }
       case CellGeometryEnum::QUADRILATERAL_CELL:
       {
-        auto numberOfPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (numberOfPoints != QuadrilateralCellType::NumberOfPoints)
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != QuadrilateralCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Quadrilateral Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro(<< "Invalid Quadrilateral Cell with number of points = " << cellPoints);
         }
 
         CellAutoPointer cell;
@@ -340,8 +340,8 @@ WASMMeshToMeshFilter<TMesh>
         // For polyhedron, if the number of points is 3, then we treat it as
         // triangle cell
         CellAutoPointer cell;
-        auto                  numberOfPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (numberOfPoints == TriangleCellType::NumberOfPoints)
+        auto                  cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints == TriangleCellType::NumberOfPoints)
         {
           auto * triangleCell = new TriangleCellType;
           for (unsigned int jj = 0; jj < TriangleCellType::NumberOfPoints; ++jj)
@@ -353,7 +353,7 @@ WASMMeshToMeshFilter<TMesh>
         else
         {
           auto * polygonCell = new PolygonCellType;
-          for (unsigned int jj = 0; jj < numberOfPoints; ++jj)
+          for (unsigned int jj = 0; jj < cellPoints; ++jj)
           {
             polygonCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
           }
@@ -365,10 +365,10 @@ WASMMeshToMeshFilter<TMesh>
       }
       case CellGeometryEnum::TETRAHEDRON_CELL:
       {
-        auto numberOfPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (numberOfPoints != TetrahedronCellType::NumberOfPoints)
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != TetrahedronCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Tetrahedron Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro(<< "Invalid Tetrahedron Cell with number of points = " << cellPoints);
         }
 
         CellAutoPointer cell;
@@ -384,10 +384,10 @@ WASMMeshToMeshFilter<TMesh>
       }
       case CellGeometryEnum::HEXAHEDRON_CELL:
       {
-        auto numberOfPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (numberOfPoints != HexahedronCellType::NumberOfPoints)
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != HexahedronCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Hexahedron Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro(<< "Invalid Hexahedron Cell with number of points = " << cellPoints);
         }
 
         CellAutoPointer cell;
@@ -403,10 +403,10 @@ WASMMeshToMeshFilter<TMesh>
       }
       case CellGeometryEnum::QUADRATIC_EDGE_CELL:
       {
-        auto numberOfPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (numberOfPoints != QuadraticEdgeCellType::NumberOfPoints)
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != QuadraticEdgeCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Quadratic edge Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro(<< "Invalid Quadratic edge Cell with number of points = " << cellPoints);
         }
 
         CellAutoPointer cell;
@@ -422,10 +422,10 @@ WASMMeshToMeshFilter<TMesh>
       }
       case CellGeometryEnum::QUADRATIC_TRIANGLE_CELL:
       {
-        auto numberOfPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (numberOfPoints != QuadraticTriangleCellType::NumberOfPoints)
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != QuadraticTriangleCellType::NumberOfPoints)
         {
-          itkExceptionMacro(<< "Invalid Quadratic triangle Cell with number of points = " << numberOfPoints);
+          itkExceptionMacro(<< "Invalid Quadratic triangle Cell with number of points = " << cellPoints);
         }
 
         CellAutoPointer cell;
