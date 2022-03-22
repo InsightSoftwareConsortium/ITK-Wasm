@@ -162,13 +162,13 @@ WASMMeshToMeshFilter<TMesh>
 
   const rapidjson::Value & numberOfPointPixelsJson = document["numberOfPointPixels"];
   const SizeValueType numberOfPointPixels = numberOfPointPixelsJson.GetInt();
-  const rapidjson::Value & pointPixelComponentsJson = meshType["pointPixelComponents"];
-  const SizeValueType pointPixelComponents = pointPixelComponentsJson.GetInt();
+  // const rapidjson::Value & pointPixelComponentsJson = meshType["pointPixelComponents"];
+  // const SizeValueType pointPixelComponents = pointPixelComponentsJson.GetInt();
 
   const rapidjson::Value & numberOfCellPixelsJson = document["numberOfCellPixels"];
   const SizeValueType numberOfCellPixels = numberOfCellPixelsJson.GetInt();
-  const rapidjson::Value & cellPixelComponentsJson = meshType["cellPixelComponents"];
-  const SizeValueType cellPixelComponents = cellPixelComponentsJson.GetInt();
+  // const rapidjson::Value & cellPixelComponentsJson = meshType["cellPixelComponents"];
+  // const SizeValueType cellPixelComponents = cellPixelComponentsJson.GetInt();
 
   const int dimension = meshType["dimension"].GetInt();
   if (dimension != MeshType::PointDimension)
