@@ -13,3 +13,4 @@ dist/mesh-io/
 dist/wasi-image-io/
 dist/wasi-mesh-io/
 examples/
+doc/
