@@ -63,13 +63,17 @@ public:
   {
     this->m_Identifier = identifier;
   }
+  const std::string & GetIdentifier() const
+  {
+    return this->m_Identifier;
+  }
 
   OutputMesh() = default;
   ~OutputMesh() {
     if(wasm::Pipeline::GetUseMemoryIO())
     {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    if (!this->m_Mesh.IsNull())
+    if (!this->m_Mesh.IsNull() && !this->m_Identifier.empty())
       {
         using MeshToWASMMeshFilterType = MeshToWASMMeshFilter<MeshType>;
         auto meshToWASMMeshFilter = MeshToWASMMeshFilterType::New();
@@ -118,7 +122,7 @@ public:
     else
     {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    if (!this->m_Mesh.IsNull())
+    if (!this->m_Mesh.IsNull() && !this->m_Identifier.empty())
       {
       using MeshWriterType = itk::MeshFileWriter<TMesh>;
       auto meshWriter = MeshWriterType::New();

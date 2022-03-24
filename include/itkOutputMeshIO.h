@@ -59,13 +59,17 @@ public:
   {
     this->m_Identifier = identifier;
   }
+  const std::string & GetIdentifier() const
+  {
+    return this->m_Identifier;
+  }
 
   OutputMeshIO() = default;
   ~OutputMeshIO() {
     if(wasm::Pipeline::GetUseMemoryIO())
     {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    if (!this->m_MeshIO.IsNull())
+    if (!this->m_MeshIO.IsNull() && !this->m_Identifier.empty())
     {
     const auto index = std::stoi(this->m_Identifier);
     auto wasmMeshIOBase = itk::WASMMeshIOBase::New();
@@ -108,7 +112,7 @@ public:
     else
     {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    if (!this->m_MeshIO.IsNull())
+    if (!this->m_MeshIO.IsNull() && !this->m_Identifier.empty())
     {
       this->m_MeshIO->ReadMeshInformation();
 

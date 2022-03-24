@@ -38,9 +38,9 @@ namespace wasm
  * \brief Input image for an itk::wasm::Pipeline from an itk::ImageIOBase
  *
  * This image is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
- * 
+ *
  * This class is for the WriteImage itk-wasm pipeline. Most pipelines will use itk::wasm::InputImage.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 class InputImageIO
@@ -63,6 +63,11 @@ protected:
 
 bool lexical_cast(const std::string &input, InputImageIO &inputImageIO)
 {
+  if (input.empty())
+  {
+    return false;
+  }
+
   if (wasm::Pipeline::GetUseMemoryIO())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
