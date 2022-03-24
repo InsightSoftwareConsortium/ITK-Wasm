@@ -39,9 +39,9 @@ namespace wasm
  * \brief Input mesh for an itk::wasm::Pipeline
  *
  * This mesh is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
- * 
+ *
  * Call `Get()` to get the TMesh * to use an input to a pipeline.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TMesh>
@@ -68,6 +68,11 @@ protected:
 template <typename TMesh>
 bool lexical_cast(const std::string &input, InputMesh<TMesh> &inputMesh)
 {
+  if (input.empty())
+  {
+    return false;
+  }
+
   if (wasm::Pipeline::GetUseMemoryIO())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO

@@ -36,6 +36,10 @@ OutputTextStream
   if(wasm::Pipeline::GetUseMemoryIO())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
+    if (this->m_Identifier.empty())
+      {
+      return;
+      }
     const auto index = std::stoi(this->m_Identifier);
     setMemoryStoreOutputDataObject(0, index, this->m_WASMStringStream);
 

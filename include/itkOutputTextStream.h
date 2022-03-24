@@ -77,6 +77,11 @@ public:
     m_OStream = &(m_WASMStringStream->GetStringStream());
     this->m_Identifier = identifier;
   }
+  const std::string & GetIdentifier() const
+  {
+    return this->m_Identifier;
+  }
+
 protected:
   std::ostream * m_OStream{nullptr};
   bool m_DeleteOStream{false};

@@ -38,9 +38,9 @@ namespace wasm
  * \brief Input mesh for an itk::wasm::Pipeline from an itk::MeshIOBase
  *
  * This mesh is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
- * 
+ *
  * This class is for the WriteMesh itk-wasm pipeline. Most pipelines will use itk::wasm::InputMesh.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 class InputMeshIO
@@ -63,6 +63,11 @@ protected:
 
 bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
 {
+  if (input.empty())
+  {
+    return false;
+  }
+
   if (wasm::Pipeline::GetUseMemoryIO())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
