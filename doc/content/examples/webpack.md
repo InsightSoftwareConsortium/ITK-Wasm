@@ -97,9 +97,20 @@ The *itk-wasm* Emscripten modules are loaded and executed **asynchronously** and
 
 The `CopyPlugin` copies *itk-wasm* Emscripten modules to distribute along with your Webpack bundle. In this example, we copy all *image-io*, and *mesh-io*. In your project, you may want to copy only the *image-io* or a subset of the *image-io*, based on your needs. We also copy the *web-workers*, which asynchronously perform IO or run processing pipelines in a background thread.
 
-To change the location of the *itk-wasm* web worker and Emscripten modules, set the Webpack `resolve.alias` setting as described in the Karma configuration below.
+To change the location of the *itk-wasm* web worker and Emscripten modules, set the Webpack `resolve.alias` setting for an `itkConfig.js` module so the bundle will use our included web worker and io WebAssembly modules. The `src/itkConfig.js` for this example is:
 
-Next, define commands to build the project or build the project and start a local development web server in the *scripts* section of the `package.json` file,
+```js
+const itkConfig = {
+  pipelineWorkerUrl: '/itk/web-workers/min-bundles/pipeline.worker.js',
+  imageIOUrl: '/itk/image-io',
+  meshIOUrl: '/itk/mesh-io',
+  pipelinesUrl: '/itk/pipelines',
+}
+
+export default itkConfig
+```
+
+Define commands to build the project or build the project and start a local development web server in the *scripts* section of the `package.json` file,
 
 ```js
   "scripts": {

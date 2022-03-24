@@ -62,13 +62,17 @@ public:
   {
     this->m_Identifier = identifier;
   }
+  const std::string & GetIdentifier() const
+  {
+    return this->m_Identifier;
+  }
 
   OutputImage() = default;
   ~OutputImage() {
     if(wasm::Pipeline::GetUseMemoryIO())
     {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    if (!this->m_Image.IsNull())
+    if (!this->m_Image.IsNull() && !this->m_Identifier.empty())
       {
         using ImageToWASMImageFilterType = ImageToWASMImageFilter<ImageType>;
         auto imageToWASMImageFilter = ImageToWASMImageFilterType::New();
@@ -94,7 +98,7 @@ public:
     else
     {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    if (!this->m_Image.IsNull())
+    if (!this->m_Image.IsNull() && !this->m_Identifier.empty())
       {
       itk::WriteImage(this->m_Image, this->m_Identifier);
       }

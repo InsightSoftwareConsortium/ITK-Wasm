@@ -8,7 +8,7 @@ import { Command, Option } from 'commander/esm.mjs'
 
 const program = new Command()
 
-const defaultImageTag = '20220320-f3b22afe'
+const defaultImageTag = '20220324-152e1e97'
 
 function processCommonOptions() {
   const options = program.opts()

@@ -41,9 +41,9 @@ namespace wasm
  * \brief Input polyData for an itk::wasm::Pipeline
  *
  * This polyData is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
- * 
+ *
  * Call `Get()` to get the TPolyData * to use an input to a pipeline.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TPolyData>
@@ -70,6 +70,11 @@ protected:
 template <typename TPolyData>
 bool lexical_cast(const std::string &input, InputPolyData<TPolyData> &inputPolyData)
 {
+  if (input.empty())
+  {
+    return false;
+  }
+
   if (wasm::Pipeline::GetUseMemoryIO())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO

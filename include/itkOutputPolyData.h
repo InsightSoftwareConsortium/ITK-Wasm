@@ -64,13 +64,17 @@ public:
   {
     this->m_Identifier = identifier;
   }
+  const std::string & GetIdentifier() const
+  {
+    return this->m_Identifier;
+  }
 
   OutputPolyData() = default;
   ~OutputPolyData() {
     if(wasm::Pipeline::GetUseMemoryIO())
     {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    if (!this->m_PolyData.IsNull())
+    if (!this->m_PolyData.IsNull() && !this->m_Identifier.empty())
       {
         using PolyDataToWASMPolyDataFilterType = PolyDataToWASMPolyDataFilter<PolyDataType>;
         auto polyDataToWASMPolyDataFilter = PolyDataToWASMPolyDataFilterType::New();
@@ -140,7 +144,7 @@ public:
     else
     {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    if (!this->m_PolyData.IsNull())
+    if (!this->m_PolyData.IsNull() && !this->m_Identifier.empty())
       {
       using PolyDataToMeshFilterType = PolyDataToMeshFilter<TPolyData>;
       auto polyDataToMeshFilter = PolyDataToMeshFilterType::New();

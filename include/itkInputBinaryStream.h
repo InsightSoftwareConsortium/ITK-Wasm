@@ -39,9 +39,9 @@ namespace wasm
  * \brief Input binary std::istream for an itk::wasm::Pipeline
  *
  * This stream is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
- * 
+ *
  * Call `Get()` to get the std::istream & to use an input to a pipeline.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 class InputBinaryStream
@@ -85,7 +85,7 @@ public:
 protected:
   std::istream * m_IStream{nullptr};
   bool m_DeleteIStream{false};
-  
+
   WASMStringStream::Pointer m_WASMStringStream;
 };
 

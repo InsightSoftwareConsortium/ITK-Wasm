@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkSupportInputImageTypes_h
-#define itkSupportInputImageTypes_h
+#ifndef itkSupportInputImageTypesNoVectorImage_h
+#define itkSupportInputImageTypesNoVectorImage_h
 #include "itkPipeline.h"
 #include "itkWASMPixelTypeFromIOPixelEnum.h"
 #include "itkWASMComponentTypeFromIOComponentEnum.h"
@@ -35,7 +35,7 @@ namespace itk
 namespace wasm
 {
 
-struct InterfaceImageType
+struct InterfaceImageTypeNoVectorImage
 {
   unsigned int dimension{2};
   std::string componentType{"uint8"};
@@ -43,9 +43,9 @@ struct InterfaceImageType
   unsigned int components{1};
 };
 
-bool lexical_cast(const std::string &input, InterfaceImageType & imageType);
+bool lexical_cast(const std::string &input, InterfaceImageTypeNoVectorImage & imageType);
 
-/** \class SupportInputImageTypes
+/** \class SupportInputImageTypesNoVectorImage
  *
  * \brief Instantiatiate a Pipeline functor over multiple pixel types and dimensions and match to the input image type.
  *
@@ -78,7 +78,7 @@ main(int argc, char * argv[])
 
   // Supports the pixels types uint8_t, float
   // Supports the image dimensions 2, 3
-  return itk::wasm::SupportInputImageTypes<PipelineFunctor,
+  return itk::wasm::SupportInputImageTypesNoVectorImage<PipelineFunctor,
    uint8_t,
    float>
   ::Dimensions<2U,3U>("InputImage", pipeline);
@@ -89,14 +89,14 @@ main(int argc, char * argv[])
  */
 template<template <typename TImage> class TPipelineFunctor, typename ...TPixels>
 class
-SupportInputImageTypes
+SupportInputImageTypesNoVectorImage
 {
 public:
   template<unsigned int ...VDimensions>
   static int
   Dimensions(const std::string & inputImageOptionName, Pipeline & pipeline)
   {
-    InterfaceImageType imageType;
+    InterfaceImageTypeNoVectorImage imageType;
     auto tempOption = pipeline.add_option(inputImageOptionName, imageType, "Read image type.");
 
     ITK_WASM_PRE_PARSE(pipeline);
@@ -109,7 +109,7 @@ public:
 private:
   template<unsigned int VDimension, typename TPixel, typename ...TPixelsRest>
   static int
-  IteratePixelTypes(Pipeline & pipeline, const InterfaceImageType & imageType)
+  IteratePixelTypes(Pipeline & pipeline, const InterfaceImageTypeNoVectorImage & imageType)
   {
     constexpr unsigned int Dimension = VDimension;
     using PixelType = TPixel;
@@ -119,10 +119,8 @@ private:
     {
       if (imageType.pixelType == "VariableLengthVector" || imageType.pixelType == "VariableSizeMatrix" )
       {
-        using ImageType = itk::VectorImage<typename ConvertPixelTraits::ComponentType, Dimension>;
-
-        using PipelineType = TPipelineFunctor<ImageType>;
-        return PipelineType()(pipeline);
+        CLI::Error err("Runtime error", "VectorImage is not supported", 1);
+        return pipeline.exit(err);
       }
       else if( imageType.components == ConvertPixelTraits::GetNumberOfComponents() )
       {
@@ -145,7 +143,7 @@ private:
 
   template<unsigned int VDimension, unsigned int ...VDimensions>
   static int
-  IterateDimensions(Pipeline & pipeline, const InterfaceImageType & imageType)
+  IterateDimensions(Pipeline & pipeline, const InterfaceImageTypeNoVectorImage & imageType)
   {
     if (VDimension == imageType.dimension)
     {
