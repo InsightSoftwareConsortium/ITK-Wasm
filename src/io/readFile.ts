@@ -2,7 +2,7 @@ import readImageFile from './readImageFile.js'
 import readMeshFile from './readMeshFile.js'
 
 import getFileExtension from './getFileExtension.js'
-import extensionToMeshIO from './internal/extensionToMeshIO.js'
+import extensionToMeshIO from './extensionToMeshIO.js'
 
 import ReadImageResult from './ReadImageResult.js'
 import ReadMeshResult from './ReadMeshResult.js'

@@ -3,7 +3,7 @@ import mime from 'mime-types'
 
 import mimeToIO from './internal/MimeToImageIO.js'
 import getFileExtension from './getFileExtension.js'
-import extensionToIO from './internal/extensionToImageIO.js'
+import extensionToIO from './extensionToImageIO.js'
 import ImageIOIndex from './internal/ImageIOIndex.js'
 
 import Image from '../core/Image.js'
