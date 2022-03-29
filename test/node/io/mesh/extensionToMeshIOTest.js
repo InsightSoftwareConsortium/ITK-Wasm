@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import ExtensionToIO from '../../../../dist/io/internal/extensionToMeshIO.js'
+import ExtensionToIO from '../../../../dist/io/extensionToMeshIO.js'
 
 test('vtk maps to VTKPolyDataMeshIO', t => {
   const io = ExtensionToIO.get('vtk')
