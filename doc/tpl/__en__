@@ -40,7 +40,6 @@ sidebar:
     nodejs: Node.js
     umd: UMD
     webpack: Webpack
-    unpkgio: Unpkg.com / CDN
     recipes: Recipes
     examples: Examples
     hello_world: Hello World!

@@ -18,7 +18,6 @@ examples:
     nodejs: node.html
     umd: umd.html
     webpack: webpack.html
-    unpkgio: unpkgio.html
 
 api:
   inputoutput:
