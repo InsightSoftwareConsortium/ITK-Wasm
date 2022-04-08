@@ -104,6 +104,8 @@ The `itk.Image.direction` is now directly a `Float64Array` -- `itk.Matrix` has b
 
 Addresses an important issue in image orientation support.
 
+For compatibility with vtk.js `vtkImageData`, use vtk.js [vtkITKHelper](https://kitware.github.io/vtk-js/api/Common_DataModel_ITKHelper.html) 23.4.1 or later ([vtkITKHelper.convertItkToVtkImage example](https://kitware.github.io/vtk-js/examples/ItkWasmVolume.html)).
+
 ## Pixel type, component type identifiers
 
 `PixelTypes`, used in `imageType.pixelType`, is now a string enumeration to make the type immediately evident in JSON serializations.
