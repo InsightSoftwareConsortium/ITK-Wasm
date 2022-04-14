@@ -100,6 +100,23 @@ public:
   Dimensions(const std::string & inputMeshOptionName, Pipeline & pipeline)
   {
     InterfaceMeshType meshType;
+
+    const auto iwpArgc = pipeline.GetArgc();
+    const auto iwpArgv = pipeline.GetArgv();
+    bool passThrough = false;
+    for (int ii = 0; ii < iwpArgc; ++ii)
+      {
+        const std::string arg(iwpArgv[ii]);
+        if (arg == "-h" || arg == "--help")
+        {
+          passThrough = true;
+        }
+      }
+    if (passThrough)
+    {
+      return IterateDimensions<VDimensions...>(pipeline, meshType, passThrough);
+    }
+
     auto tempOption = pipeline.add_option(inputMeshOptionName, meshType, "Read mesh type.");
 
     ITK_WASM_PRE_PARSE(pipeline);
@@ -112,13 +129,13 @@ public:
 private:
   template<unsigned int VDimension, typename TPixel, typename ...TPixelsRest>
   static int
-  IteratePixelTypes(Pipeline & pipeline, const InterfaceMeshType & meshType)
+  IteratePixelTypes(Pipeline & pipeline, const InterfaceMeshType & meshType, bool passThrough = false)
   {
     constexpr unsigned int Dimension = VDimension;
     using PixelType = TPixel;
     using ConvertPixelTraits = MeshConvertPixelTraits<PixelType>;
 
-    if ( meshType.components == 0
+    if (passThrough || meshType.components == 0
      || meshType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString
      && meshType.pixelType == MapPixelType<PixelType>::PixelString)
     {
@@ -130,7 +147,7 @@ private:
         // using PipelineType = TPipelineFunctor<MeshType>;
         // return PipelineType()(pipeline);
       }
-      else if( meshType.components == ConvertPixelTraits::GetNumberOfComponents() || meshType.components == 0 )
+      else if(passThrough || meshType.components == ConvertPixelTraits::GetNumberOfComponents() || meshType.components == 0 )
       {
         using MeshType = Mesh<PixelType, Dimension>;
 
@@ -151,9 +168,9 @@ private:
 
   template<unsigned int VDimension, unsigned int ...VDimensions>
   static int
-  IterateDimensions(Pipeline & pipeline, const InterfaceMeshType & meshType)
+  IterateDimensions(Pipeline & pipeline, const InterfaceMeshType & meshType, bool passThrough = false)
   {
-    if (VDimension == meshType.dimension)
+    if (passThrough || VDimension == meshType.dimension)
     {
       return IteratePixelTypes<VDimension, TPixels...>(pipeline, meshType);
     }
