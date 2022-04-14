@@ -63,7 +63,9 @@ int main (int argc, char * argv[])
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
    uint8_t,
+   int8_t,
    float,
+   double,
    itk::Vector<uint8_t, 3>,
    itk::Vector<float, 3>
    >
