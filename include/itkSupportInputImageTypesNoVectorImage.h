@@ -97,32 +97,47 @@ public:
   Dimensions(const std::string & inputImageOptionName, Pipeline & pipeline)
   {
     InterfaceImageTypeNoVectorImage imageType;
+    const auto iwpArgc = pipeline.GetArgc();
+    const auto iwpArgv = pipeline.GetArgv();
+    bool passThrough = false;
+    for (int ii = 0; ii < iwpArgc; ++ii)
+      {
+        const std::string arg(iwpArgv[ii]);
+        if (arg == "-h" || arg == "--help")
+        {
+          passThrough = true;
+        }
+      }
+    if (passThrough)
+    {
+      return IterateDimensions<VDimensions...>(pipeline, imageType, passThrough);
+    }
     auto tempOption = pipeline.add_option(inputImageOptionName, imageType, "Read image type.");
 
     ITK_WASM_PRE_PARSE(pipeline);
 
     pipeline.remove_option(tempOption);
 
-    return IterateDimensions<VDimensions...>(pipeline, imageType);
+    return IterateDimensions<VDimensions...>(pipeline, imageType, passThrough);
   }
 
 private:
   template<unsigned int VDimension, typename TPixel, typename ...TPixelsRest>
   static int
-  IteratePixelTypes(Pipeline & pipeline, const InterfaceImageTypeNoVectorImage & imageType)
+  IteratePixelTypes(Pipeline & pipeline, const InterfaceImageTypeNoVectorImage & imageType, bool passThrough = false)
   {
     constexpr unsigned int Dimension = VDimension;
     using PixelType = TPixel;
     using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
 
-    if (imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString && imageType.pixelType == MapPixelType<PixelType>::PixelString)
+    if (passThrough || imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString && imageType.pixelType == MapPixelType<PixelType>::PixelString)
     {
       if (imageType.pixelType == "VariableLengthVector" || imageType.pixelType == "VariableSizeMatrix" )
       {
         CLI::Error err("Runtime error", "VectorImage is not supported", 1);
         return pipeline.exit(err);
       }
-      else if( imageType.components == ConvertPixelTraits::GetNumberOfComponents() )
+      else if(passThrough || imageType.components == ConvertPixelTraits::GetNumberOfComponents() )
       {
         using ImageType = Image<PixelType, Dimension>;
 
@@ -143,11 +158,11 @@ private:
 
   template<unsigned int VDimension, unsigned int ...VDimensions>
   static int
-  IterateDimensions(Pipeline & pipeline, const InterfaceImageTypeNoVectorImage & imageType)
+  IterateDimensions(Pipeline & pipeline, const InterfaceImageTypeNoVectorImage & imageType, bool passThrough = false)
   {
-    if (VDimension == imageType.dimension)
+    if (passThrough || VDimension == imageType.dimension)
     {
-      return IteratePixelTypes<VDimension, TPixels...>(pipeline, imageType);
+      return IteratePixelTypes<VDimension, TPixels...>(pipeline, imageType, passThrough);
     }
 
     if constexpr (sizeof...(VDimensions) > 0) {
