@@ -4,9 +4,9 @@
   "description": "This example demonstrates how to use itk-wasm in a Rollup project that targets the browser.",
   "main": "index.js",
   "scripts": {
+    "start": "vite --port 8080",
     "build": "vite build",
-    "start": "vite dist/",
-    "start:production": "webpack-dev-server --mode production --static ./dist/",
+    "start:production": "vite preview --port 8080",
     "cypress:open": "npx cypress open",
     "cypress:run": "npx cypress run --config defaultCommandTimeout=8000",
     "cypress:runChrome": "npx cypress run --config defaultCommandTimeout=8000 --browser chrome",
