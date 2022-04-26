@@ -1,7 +1,7 @@
 title: Using itk-wasm in a web browser application via Vite
 ---
 
-This example demonstrates how to use *itk-wasm* in a web browser application built with [Vite](https://vitejs.dev/). Find the code in [`itk-wasm/examples/Vite`](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Vite).
+This example demonstrates how to use *itk-wasm* in a web browser application built with [Vite](https://vitejs.dev/). Find the code in [itk-wasm/examples/Vite](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Vite).
 
 *itk-wasm* **asynchronously** downloads web worker JavaScript and WebAssembly Emscripten modules **on demand**.  For *itk-wasm* to work:
 
@@ -38,9 +38,9 @@ export default defineConfig({
 })
 ```
 
-This example copies the *web-workers* directory, which asynchronously perform IO or run processing pipelines in a background thread.
+The Vite config copies *web-workers* directory, which asynchronously perform IO or runs processing pipelines in a background thread.
 
-The example also copies all of *image-io* and *mesh-io*. You may want to copy a subset of *image-io* or *mesh-io* files, based on what features you use of *itk-wasm*. 
+The config copies the complete *image-io* and *mesh-io* directories. You may want to copy a subset of *image-io* or *mesh-io* files, based on what features you use of *itk-wasm*. 
 
 ## Tell *itk-wasm* the location to download the Javascript and WebAssembly files
 
@@ -79,7 +79,7 @@ export default itkConfig
 
 ## Test the example
 
-[Directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Vite)
+In the example [directory](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Vite)
 
 ### Development 
 

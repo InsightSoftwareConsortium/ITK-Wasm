@@ -40,6 +40,7 @@ sidebar:
     nodejs: Node.js
     umd: UMD
     webpack: Webpack
+    vite: Vite
     unpkgio: Unpkg.com / CDN
     recipes: Recipes
     examples: Examples
