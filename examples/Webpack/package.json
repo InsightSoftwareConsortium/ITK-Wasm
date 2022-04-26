@@ -9,11 +9,14 @@
     "start:production": "webpack-dev-server --mode production --static ./dist/",
     "cypress:open": "npx cypress open",
     "cypress:run": "npx cypress run --config defaultCommandTimeout=8000",
+    "cypress:install": "npx cypress install",
     "cypress:runChrome": "npx cypress run --config defaultCommandTimeout=8000 --browser chrome",
     "cypress:runFirefox": "npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
+    "cypress:runFirefox:ci": "npm run cypress:install && npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
     "test:debug": "start-server-and-test start http-get://localhost:8080 cypress:open",
     "test": "start-server-and-test start:production http-get://localhost:8080 cypress:run",
     "test:chrome": "start-server-and-test start:production http-get://localhost:8080 cypress:runChrome",
+    "test:firefox:ci": "start-server-and-test start:production http-get://localhost:8080 cypress:runFirefox:ci",
     "test:firefox": "start-server-and-test start:production http-get://localhost:8080 cypress:runFirefox"
   },
   "repository": {
@@ -32,9 +35,9 @@
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-wasm#readme",
   "dependencies": {
     "curry": "^1.2.0",
-    "itk-image-io": "^1.0.0-b.5",
-    "itk-mesh-io": "^1.0.0-b.5",
-    "itk-wasm": "^1.0.0-b.5"
+    "itk-image-io": "^1.0.0-b.6",
+    "itk-mesh-io": "^1.0.0-b.6",
+    "itk-wasm": "^1.0.0-b.6"
   },
   "devDependencies": {
     "@babel/core": "^7.13.1",

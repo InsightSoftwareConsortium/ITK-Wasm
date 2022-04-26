@@ -1,5 +1,9 @@
 // Browser IO functions
 
+export { default as getFileExtension } from './../getFileExtension.js'
+export { default as extensionToImageIO } from './../extensionToImageIO.js'
+export { default as extensionToMeshIO } from './../extensionToMeshIO.js'
+
 export { default as readImageArrayBuffer } from './../readImageArrayBuffer.js'
 export { default as readMeshArrayBuffer } from './../readMeshArrayBuffer.js'
 export { default as readArrayBuffer } from './../readArrayBuffer.js'

@@ -1,5 +1,9 @@
 // Node IO functions
 
+export { default as getFileExtension } from './../getFileExtension.js'
+export { default as extensionToImageIO } from './../extensionToImageIO.js'
+export { default as extensionToMeshIO } from './../extensionToMeshIO.js'
+
 export { default as readLocalFile } from './../readLocalFile.js'
 
 export { default as readImageLocalFile } from './../readImageLocalFile.js'

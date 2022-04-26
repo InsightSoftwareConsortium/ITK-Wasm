@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import ExtensionToIO from '../../../../dist/io/internal/extensionToImageIO.js'
+import ExtensionToIO from '../../../../dist/io/extensionToImageIO.js'
 
 test('bmp maps to BMPImageIO', t => {
   const io = ExtensionToIO.get('bmp')

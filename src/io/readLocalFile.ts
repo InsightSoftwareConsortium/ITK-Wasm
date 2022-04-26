@@ -1,7 +1,7 @@
 import path from 'path'
 
 import getFileExtension from './getFileExtension.js'
-import extensionToMeshIO from './internal/extensionToMeshIO.js'
+import extensionToMeshIO from './extensionToMeshIO.js'
 
 import readImageLocalFile from './readImageLocalFile.js'
 import readMeshLocalFile from './readMeshLocalFile.js'

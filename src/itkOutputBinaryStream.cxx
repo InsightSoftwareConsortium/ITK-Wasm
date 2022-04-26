@@ -35,6 +35,10 @@ OutputBinaryStream
 {
   if(wasm::Pipeline::GetUseMemoryIO())
   {
+    if (this->m_Identifier.empty())
+      {
+      return;
+      }
 #ifndef ITK_WASM_NO_MEMORY_IO
     const auto index = std::stoi(this->m_Identifier);
     setMemoryStoreOutputDataObject(0, index, this->m_WASMStringStream);

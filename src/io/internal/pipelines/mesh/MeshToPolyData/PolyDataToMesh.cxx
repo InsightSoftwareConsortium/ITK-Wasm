@@ -61,5 +61,5 @@ int main (int argc, char * argv[])
   itk::WASMMeshIOFactory::RegisterOneFactory();
 
   return itk::wasm::SupportInputPolyDataTypes<PipelineFunctor>
-  ::PixelTypes<uint8_t,float>("InputPolyData", pipeline);
+  ::PixelTypes<uint8_t,int8_t,float,double>("InputPolyData", pipeline);
 }

@@ -22,3 +22,5 @@ Read and write to and from [Image](../api/Image.html) is supported. For visualiz
 - [VTK legacy file format for images](http://www.vtk.org/VTK/img/file-formats.pdf)
 - [Scanco microCT volume file format](http://www.scanco.ch/en/support/customer-login/faq-customers/faq-customers-import-export.html)
 - [Varian FDF](https://github.com/InsightSoftwareConsortium/ITKIOFDF)
+
+For visualization with [vtk.js](https://kitware.github.io/vtk-js/index.html), use [vtkITKHelper.convertItkToVtkImage](https://kitware.github.io/vtk-js/api/Common_DataModel_ITKHelper.html) ([example](https://kitware.github.io/vtk-js/examples/ItkWasmVolume.html)).

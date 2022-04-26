@@ -23,8 +23,21 @@
 #include <CLI/Error.hpp>
 #include "itkMacro.h"
 
+// Short circuit help output without raising an exception (currently not
+// available in WASI)
 #define ITK_WASM_PARSE(pipeline) \
     try { \
+        const auto iwpArgc = (pipeline).GetArgc(); \
+        const auto iwpArgv = (pipeline).GetArgv(); \
+        for (int ii = 0; ii < iwpArgc; ++ii) \
+          { \
+            const std::string arg(iwpArgv[ii]); \
+            if (arg == "-h" || arg == "--help") \
+            { \
+              (pipeline).exit(CLI::CallForAllHelp()); \
+              std::exit(0); \
+            } \
+          } \
         (pipeline).parse(); \
     } catch(const CLI::ParseError &e) { \
         return (pipeline).exit(e); \
@@ -105,6 +118,16 @@ public:
     static auto GetUseMemoryIO()
     {
       return m_UseMemoryIO;
+    }
+
+    int GetArgc() const
+    {
+      return m_argc;
+    }
+
+    char ** GetArgv() const
+    {
+      return m_argv;
     }
 
     ~Pipeline() override;

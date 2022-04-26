@@ -41,7 +41,6 @@ sidebar:
     umd: UMD
     webpack: Webpack
     vite: Vite
-    unpkgio: Unpkg.com / CDN
     recipes: Recipes
     examples: Examples
     hello_world: Hello World!

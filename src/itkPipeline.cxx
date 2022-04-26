@@ -43,7 +43,8 @@ Pipeline
    m_UseMemoryIO = false;
     for (int ii = 0; ii < this->m_argc; ++ii)
     {
-      if (std::string(this->m_argv[ii]) == "--memory-io")
+      const std::string arg(this->m_argv[ii]);
+      if (arg == "--memory-io")
       {
         m_UseMemoryIO = true;
       }

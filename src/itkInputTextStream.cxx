@@ -29,6 +29,10 @@ namespace wasm
 
 bool lexical_cast(const std::string &input, InputTextStream &inputStream)
 {
+  if (input.empty())
+  {
+    return false;
+  }
   if (wasm::Pipeline::GetUseMemoryIO())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO

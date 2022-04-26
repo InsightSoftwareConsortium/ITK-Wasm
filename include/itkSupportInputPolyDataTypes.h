@@ -96,6 +96,22 @@ public:
   PixelTypes(const std::string & inputPolyDataOptionName, Pipeline & pipeline)
   {
     InterfacePolyDataType polyDataType;
+    const auto iwpArgc = pipeline.GetArgc();
+    const auto iwpArgv = pipeline.GetArgv();
+    bool passThrough = false;
+    for (int ii = 0; ii < iwpArgc; ++ii)
+      {
+        const std::string arg(iwpArgv[ii]);
+        if (arg == "-h" || arg == "--help")
+        {
+          passThrough = true;
+        }
+      }
+    if (passThrough)
+    {
+      return IteratePixelTypes<TPixels...>(pipeline, polyDataType, passThrough);
+    }
+
     auto tempOption = pipeline.add_option(inputPolyDataOptionName, polyDataType, "Read PolyData type.");
 
     ITK_WASM_PRE_PARSE(pipeline);
@@ -108,12 +124,12 @@ public:
 private:
   template<typename TPixel, typename ...TPixelsRest>
   static int
-  IteratePixelTypes(Pipeline & pipeline, const InterfacePolyDataType & polyDataType)
+  IteratePixelTypes(Pipeline & pipeline, const InterfacePolyDataType & polyDataType, bool passThrough = false)
   {
     using PixelType = TPixel;
     using ConvertPixelTraits = MeshConvertPixelTraits<PixelType>;
 
-    if ( polyDataType.components == 0
+    if (passThrough || polyDataType.components == 0
      || polyDataType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString
      && polyDataType.pixelType == MapPixelType<PixelType>::PixelString)
     {
@@ -125,7 +141,7 @@ private:
         // using PipelineType = TPipelineFunctor<MeshType>;
         // return PipelineType()(pipeline);
       }
-      else if( polyDataType.components == ConvertPixelTraits::GetNumberOfComponents() || polyDataType.components == 0 )
+      else if(passThrough || polyDataType.components == ConvertPixelTraits::GetNumberOfComponents() || polyDataType.components == 0 )
       {
         using PolyDataType = PolyData<PixelType>;
 

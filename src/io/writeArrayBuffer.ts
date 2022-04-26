@@ -2,7 +2,7 @@ import writeImageArrayBuffer from './writeImageArrayBuffer.js'
 import writeMeshArrayBuffer from './writeMeshArrayBuffer.js'
 
 import getFileExtension from './getFileExtension.js'
-import extensionToMeshIO from './internal/extensionToMeshIO.js'
+import extensionToMeshIO from './extensionToMeshIO.js'
 import mimeToMeshIO from './internal/MimeToMeshIO.js'
 
 import Image from '../core/Image.js'

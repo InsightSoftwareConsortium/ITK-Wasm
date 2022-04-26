@@ -39,9 +39,9 @@ namespace wasm
  * \brief Input image for an itk::wasm::Pipeline
  *
  * This image is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
- * 
+ *
  * Call `Get()` to get the TImage * to use an input to a pipeline.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TImage>
@@ -68,6 +68,11 @@ protected:
 template <typename TImage>
 bool lexical_cast(const std::string &input, InputImage<TImage> &inputImage)
 {
+  if (input.empty())
+  {
+    return false;
+  }
+
   if (wasm::Pipeline::GetUseMemoryIO())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO

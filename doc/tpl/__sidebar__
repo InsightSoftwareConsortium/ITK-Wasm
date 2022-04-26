@@ -19,7 +19,6 @@ examples:
     umd: umd.html
     webpack: webpack.html
     vite: vite.html
-    unpkgio: unpkgio.html
 
 api:
   inputoutput:

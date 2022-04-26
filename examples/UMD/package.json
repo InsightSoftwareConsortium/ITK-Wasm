@@ -1,6 +1,6 @@
 {
   "name": "itk-umd-example",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "This example demonstrates how to use the itk-wasm UMD module from an HTML script tag.",
   "scripts": {
     "start": "http-server ./dist/",

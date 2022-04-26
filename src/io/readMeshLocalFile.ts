@@ -3,7 +3,7 @@ import mime from 'mime-types'
 
 import mimeToIO from './internal/MimeToMeshIO.js'
 import getFileExtension from './getFileExtension.js'
-import extensionToIO from './internal/extensionToMeshIO.js'
+import extensionToIO from './extensionToMeshIO.js'
 import MeshIOIndex from './internal/MeshIOIndex.js'
 
 import Mesh from '../core/Mesh.js'
