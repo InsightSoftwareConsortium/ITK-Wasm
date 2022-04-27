@@ -18,6 +18,7 @@ examples:
     nodejs: node.html
     umd: umd.html
     webpack: webpack.html
+    vite: vite.html
 
 api:
   inputoutput:
