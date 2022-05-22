@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from typing import Sequence, Optional
+from typing import Optional
 
 try:
     from numpy.typing import ArrayLike

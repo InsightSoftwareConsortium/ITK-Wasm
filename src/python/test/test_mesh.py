@@ -21,6 +21,7 @@ def test_mesh():
     meshType = itk_mesh_dict["meshType"]
     meshType_roundtrip = itk_mesh_roundtrip_dict["meshType"]
     assert meshType["dimension"] == meshType_roundtrip["dimension"]
+
     assert meshType["pointComponentType"] == meshType_roundtrip["pointComponentType"]
     assert meshType["pointPixelComponentType"] == meshType_roundtrip["pointPixelComponentType"]
     assert meshType["pointPixelType"] == meshType_roundtrip["pointPixelType"]
