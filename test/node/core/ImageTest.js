@@ -10,7 +10,7 @@ test('imageType should have the same imageType passed to the constructor', t => 
 
 test('name should have the default value of "Image"', t => {
   const image = new Image()
-  t.deepEqual(image.name, 'Image')
+  t.deepEqual(image.name, 'image')
 })
 
 test('origin should have a length equal to the dimension', t => {
