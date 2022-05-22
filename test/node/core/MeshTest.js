@@ -10,7 +10,7 @@ test('meshType should have the same meshType passed to the constructor', t => {
 
 test('name should have the default value of "Mesh"', t => {
   const mesh = new Mesh()
-  t.deepEqual(mesh.name, 'Mesh')
+  t.deepEqual(mesh.name, 'mesh')
 })
 
 test('numberOfPoints should have a default value of 0', t => {
