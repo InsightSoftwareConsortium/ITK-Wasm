@@ -22,7 +22,7 @@ class Mesh {
   constructor (public readonly mt = new MeshType()) {
     this.meshType = mt
 
-    this.name = 'Mesh'
+    this.name = 'mesh'
 
     this.numberOfPoints = 0
     this.points = null

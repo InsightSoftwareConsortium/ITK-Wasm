@@ -5,7 +5,6 @@ An `Mesh` is the N-dimensional data structure to represent points sets and meshe
 
 **meshType**: The [MeshType](./MeshType.html) for this mesh.
 **name**: An optional name, a `String`, that describes this mesh.
-**dimension**: An integer that describes the dimension for the mesh, typically 2 or 3.
 **numberOfPoints**: The number of points in the mesh.
 **points**: A [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) containing the point locations.
 **numberOfPointPixels**: The number of points pixels in the mesh.

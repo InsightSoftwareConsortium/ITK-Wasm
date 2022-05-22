@@ -3,7 +3,7 @@ import type TypedArray from './TypedArray.js'
 import setMatrixElement from './setMatrixElement.js'
 
 class Image {
-  name: string = 'Image'
+  name: string = 'image'
 
   origin: number[]
 
