@@ -48,6 +48,7 @@ ExternalData_Expand_Arguments(
   DATA{Input/bunny.ply}
   DATA{Input/C0004255.ISQ}
   DATA{Input/PNGSeries/,REGEX:mri3D_.[0-9]+.png}
+  DATA{Input/11706c2.CNG.swc}
   )
 
 set(WebAssemblyInterfaceTests
