@@ -72,6 +72,16 @@ test('STL maps to STLMeshIO', t => {
   t.is(io, 'STLMeshIO')
 })
 
+test('swc maps to SWCMeshIO', t => {
+  const io = ExtensionToIO.get('swc')
+  t.is(io, 'SWCMeshIO')
+})
+
+test('SWC maps to SWCMeshIO', t => {
+  const io = ExtensionToIO.get('SWC')
+  t.is(io, 'SWCMeshIO')
+})
+
 test('iwm maps to WASMMeshIO', t => {
   const io = ExtensionToIO.get('iwm')
   t.is(io, 'WASMMeshIO')
