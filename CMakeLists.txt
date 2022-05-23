@@ -13,6 +13,7 @@ if(BUILD_ITK_WASM_IO_MODULES)
     "ITKIOMeshOBJ"
     "ITKIOMeshOFF"
     "IOMeshSTL"
+    "IOMeshSWC"
     "ITKIOMeshVTK"
     CACHE STRING
     "String delimited list of ITK mesh IO modules to support.")
@@ -22,6 +23,7 @@ if(BUILD_ITK_WASM_IO_MODULES)
   set(meshios_ITKIOMeshOBJ itkOBJMeshIO)
   set(meshios_ITKIOMeshOFF itkOFFMeshIO)
   set(meshios_IOMeshSTL itkSTLMeshIO)
+  set(meshios_IOMeshSWC itkSWCMeshIO)
 endif()
 
 include(FetchContent)

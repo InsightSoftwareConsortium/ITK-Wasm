@@ -39,7 +39,9 @@
 #elif MESH_IO_CLASS == 6
 #include "itkSTLMeshIO.h"
 #elif MESH_IO_CLASS == 7
+#include "itkSWCMeshIO.h"
 #elif MESH_IO_CLASS == 8
+#elif MESH_IO_CLASS == 9
 #include "itkWASMZstdMeshIO.h"
 #elif MESH_IO_CLASS == 21
 #elif MESH_IO_CLASS == 22
@@ -86,7 +88,7 @@ int main (int argc, char * argv[])
 
   bool quiet = false;
   pipeline.add_flag("-q,--quiet", quiet, "Less verbose output");
-  
+
   ITK_WASM_PARSE(pipeline);
 
 #if MESH_IO_CLASS == 0
@@ -104,8 +106,10 @@ int main (int argc, char * argv[])
 #elif MESH_IO_CLASS == 6
   return readMesh<itk::STLMeshIO>(inputFileName, outputMeshIO, quiet);
 #elif MESH_IO_CLASS == 7
-  return readMesh<itk::WASMMeshIO>(inputFileName, outputMeshIO, quiet);
+  return readMesh<itk::SWCMeshIO>(inputFileName, outputMeshIO, quiet);
 #elif MESH_IO_CLASS == 8
+  return readMesh<itk::WASMMeshIO>(inputFileName, outputMeshIO, quiet);
+#elif MESH_IO_CLASS == 9
   return readMesh<itk::WASMZstdMeshIO>(inputFileName, outputMeshIO, quiet);
 #else
 #error "Unsupported MESH_IO_CLASS"

@@ -15,6 +15,7 @@ set(WebAssemblyInterface_MeshIOModules
   "ITKIOMeshOBJ"
   "ITKIOMeshOFF"
   "IOMeshSTL"
+  "IOMeshSWC"
   "ITKIOMeshVTK"
   CACHE STRING
   "String delimited list of ITK mesh IO modules to support.")
@@ -38,9 +39,12 @@ set(meshio_id_itkOFFMeshIO 5)
 set(meshios_IOMeshSTL itkSTLMeshIO)
 set(meshio_id_itkSTLMeshIO 6)
 
+set(meshios_IOMeshSWC itkSWCMeshIO)
+set(meshio_id_itkSWCMeshIO 7)
+
 set(meshios_WebAssemblyInterface itkWASMMeshIO itkWASMZstdMeshIO)
-set(meshio_id_itkWASMMeshIO 7)
-set(meshio_id_itkWASMZstdMeshIO 8)
+set(meshio_id_itkWASMMeshIO 8)
+set(meshio_id_itkWASMZstdMeshIO 9)
 
 set(ITK_NO_MESHIO_FACTORY_REGISTER_MANAGER 1)
 set(MeshIOIndex_ARRAY "")
