@@ -13,6 +13,8 @@ const extensionToIO = new Map([
   ['OFF', 'OFFMeshIO'],
   ['stl', 'STLMeshIO'],
   ['STL', 'STLMeshIO'],
+  ['swc', 'SWCMeshIO'],
+  ['SWC', 'SWCMeshIO'],
   ['iwm', 'WASMMeshIO'],
   ['iwm.cbor', 'WASMMeshIO'],
   ['iwm.cbor.zstd', 'WASMZstdMeshIO']

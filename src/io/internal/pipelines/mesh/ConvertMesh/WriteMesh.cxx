@@ -39,7 +39,9 @@
 #elif MESH_IO_CLASS == 6
 #include "itkSTLMeshIO.h"
 #elif MESH_IO_CLASS == 7
+#include "itkSWCMeshIO.h"
 #elif MESH_IO_CLASS == 8
+#elif MESH_IO_CLASS == 9
 #include "itkWASMZstdMeshIO.h"
 #elif MESH_IO_CLASS == 21
 #elif MESH_IO_CLASS == 22
@@ -149,13 +151,13 @@ int main (int argc, char * argv[])
 
   bool quiet = false;
   pipeline.add_flag("-q,--quiet", quiet, "Less verbose output");
-  
+
   bool useCompression = false;
   pipeline.add_flag("-c,--use-compression", quiet, "Use compression in the written file, if supported");
-  
+
   bool binaryFileType = false;
   pipeline.add_flag("-b,--binary-file-type", quiet, "Use a binary file type in the written file, if supported");
-  
+
   ITK_WASM_PARSE(pipeline);
 
 #if MESH_IO_CLASS == 0
@@ -173,8 +175,10 @@ int main (int argc, char * argv[])
 #elif MESH_IO_CLASS == 6
   return writeMesh<itk::STLMeshIO>(inputMeshIO, outputFileName, quiet, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 7
-  return writeMesh<itk::WASMMeshIO>(inputMeshIO, outputFileName, quiet, useCompression, binaryFileType);
+  return writeMesh<itk::SWCMeshIO>(inputMeshIO, outputFileName, quiet, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 8
+  return writeMesh<itk::WASMMeshIO>(inputMeshIO, outputFileName, quiet, useCompression, binaryFileType);
+#elif MESH_IO_CLASS == 9
   return writeMesh<itk::WASMZstdMeshIO>(inputMeshIO, outputFileName, quiet, useCompression, binaryFileType);
 #else
 #error "Unsupported MESH_IO_CLASS"

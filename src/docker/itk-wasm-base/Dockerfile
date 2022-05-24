@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 WORKDIR /
 
 # 2022-05-07 master branch
-ENV ITK_GIT_TAG 1ba263fa1b77e88b92580d4ce4a5e1b70965525b
+ENV ITK_GIT_TAG aa52038c23c5d5ffd9fc68e2f408f6e49addb091
 RUN git clone https://github.com/thewtex/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
@@ -40,6 +40,7 @@ RUN mkdir ITK-build && \
     -DH5_HAVE_GETPWUID:BOOL=OFF \
     -DModule_ITKIOMINC:BOOL=ON \
     -DModule_MGHIO:BOOL=ON \
+    -DModule_IOMeshSWC:BOOL=ON \
     -DModule_IOScanco:BOOL=ON \
     -DModule_IOFDF:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
