@@ -6,7 +6,7 @@
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *         https://www.apache.org/licenses/LICENSE-2.0.txt
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
@@ -46,7 +46,7 @@ const std::string      DEFAULT_ISO_2022_ENCODING("ISO 2022 IR 6");
 constexpr const char * ASCII = "ASCII";
 
 // delimiters: CR, LF, FF, ESC, TAB (see
-//  http://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_6.1.3,
+//  https://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_6.1.3,
 //  table 6.1-1)
 // Also includes 05/12 (BACKSLASH in IR 13 or YEN SIGN in IR 14), since that
 //  separates Data Element Values and it resets to initial charset.
@@ -110,7 +110,7 @@ definedTermToIconvCharset(const std::string & defTerm)
   // be strict about comparing defined terms, so no fancy parsing
   // that could possibly make these operations faster.
   // See:
-  // http://dicom.nema.org/medical/dicom/current/output/chtml/part02/sect_D.6.2.html
+  // https://dicom.nema.org/medical/dicom/current/output/chtml/part02/sect_D.6.2.html
   if (defTerm == "ISO_IR 6" || defTerm == "ISO 2022 IR 6")
   {
     return ASCII;
@@ -299,7 +299,7 @@ public:
   /**
    * Input must be the DICOM SpecificCharacterSet element value.
    * See:
-   * http://dicom.nema.org/medical/dicom/current/output/html/part03.html#sect_C.12.1.1.2
+   * https://dicom.nema.org/medical/dicom/current/output/html/part03.html#sect_C.12.1.1.2
    */
   void
   setSpecificCharacterSet(const char * spcharsets)
