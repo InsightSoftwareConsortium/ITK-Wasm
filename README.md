@@ -14,12 +14,12 @@ itk-wasm
 ![License](https://img.shields.io/github/license/InsightSoftwareConsortium/itk-wasm) ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/InsightSoftwareConsortium/itk-wasm)
 
 *itk-wasm* combines [ITK](https://www.itk.org/) and
-[WebAssembly](http://webassembly.org/) to enable high-performance spatial
+[WebAssembly](https://webassembly.org/) to enable high-performance spatial
 analysis in a web browser, Node.js, and reproducible execution across
 programming languages and hardware architectures.
 
 The project provides tools to a) build C/C++ code to
-[WebAssembly](http://webassembly.org/), b) bridge local filesystems,
+[WebAssembly](https://webassembly.org/), b) bridge local filesystems,
 JavaScript/Typescript data structures, and traditional file formats, c)
 transfer data efficiently in and out of the WebAssembly runtime, and d)
 asynchronous, parallel execution of processing pipelines in a worker pool.

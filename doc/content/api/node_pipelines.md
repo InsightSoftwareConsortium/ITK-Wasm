@@ -21,8 +21,8 @@ Run an itk-wasm Emscripten module with Node.js.
 
 `type` is one of the [IOTypes](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/src/core/IOTypes.ts):
 <dl>
-  <dt><b>IOTypes.Text</b><dt><dd>A string. To write this data type in C++, write a plain text file with, e.g.  <a href="http://www.cplusplus.com/reference/fstream/ofstream">std::ofstream</a>.</dd>
-  <dt><b>IOTypes.Binary</b><dt><dd>A binary <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>. To write this data type in C++, read the binary file with, e.g.  <a href="http://www.cplusplus.com/reference/fstream/ofstream/">std::ofstream</a> with the `std::ofstream::binary` flag to <a href="http://www.cplusplus.com/reference/fstream/ofstream/open/">std::ofstream::open</a>.</dd>
+  <dt><b>IOTypes.Text</b><dt><dd>A string. To write this data type in C++, write a plain text file with, e.g.  <a href="https://www.cplusplus.com/reference/fstream/ofstream">std::ofstream</a>.</dd>
+  <dt><b>IOTypes.Binary</b><dt><dd>A binary <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>. To write this data type in C++, read the binary file with, e.g.  <a href="https://www.cplusplus.com/reference/fstream/ofstream/">std::ofstream</a> with the `std::ofstream::binary` flag to <a href="https://www.cplusplus.com/reference/fstream/ofstream/open/">std::ofstream::open</a>.</dd>
   <dt><b>IOTypes.Image</b></dt><dd>An <a href="./Image.html">Image</a>. To write this data type in C++, use the <href a="https://itk.org/Doxygen/html/classitk_1_1ImageFileWriter.html">itk::ImageFileWriter</a>, add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.iwi` for the image file name extension.</dd>
   <dt><b>IOTypes.Mesh</b></dt><dd>An <a href="Mesh.html">Mesh</a>. To write this data type in C++, use the <a href="https://itk.org/Doxygen/html/classitk_1_1MeshFileWriter.html">itk::MeshFileWriter</a>, add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.json` for the image file name extension.</dd>
 </dl>
@@ -35,8 +35,8 @@ Run an itk-wasm Emscripten module with Node.js.
 
 `type` is one of the `IOTypes`:
 <dl>
-  <dt><b>IOTypes.Text</b></dt><dd>A string. To read this data type in C++, read the plain text file with, e.g.  <a href="http://www.cplusplus.com/reference/fstream/ifstream/">std::ifstream</a>. </dd>
-  <dt><b>IOTypes.Binary</b></dt><dd>A binary <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>. To read this data type in C++, read the binary file with, e.g. <a href="http://www.cplusplus.com/reference/fstream/ifstream/">std::ifstream</a> with the `std::ifstream::binary` flag to <a href="http://www.cplusplus.com/reference/fstream/ofstream/open/">std::ifstream::open</a>.</dd>
+  <dt><b>IOTypes.Text</b></dt><dd>A string. To read this data type in C++, read the plain text file with, e.g.  <a href="https://www.cplusplus.com/reference/fstream/ifstream/">std::ifstream</a>. </dd>
+  <dt><b>IOTypes.Binary</b></dt><dd>A binary <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>. To read this data type in C++, read the binary file with, e.g. <a href="https://www.cplusplus.com/reference/fstream/ifstream/">std::ifstream</a> with the `std::ifstream::binary` flag to <a href="https://www.cplusplus.com/reference/fstream/ofstream/open/">std::ifstream::open</a>.</dd>
   <dt><b>IOTypes.Image</b></dt><dd>An <a href="./Image.html">Image</a>. To read this data type in C++, use the <a href="https://itk.org/Doxygen/html/classitk_1_1ImageFileReader.html">itk::ImageFileReader</a>, add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.iwi` for the image file name extension.</dd>
   <dt><b>IOTypes.Mesh</b><dt><dd>An <a href="./Mesh.html">Mesh</a>. To read this data type in C++, use the <a href="https://itk.org/Doxygen/html/classitk_1_1MeshFileReader.html">itk::MeshFileReader</a>, add `WebAssemblyInterface` module to the ITK `find_package` `COMPONENTS` in your *CMakeLists.txt*, and use `.json` for the image file name extension.</dd>
 </dl>
