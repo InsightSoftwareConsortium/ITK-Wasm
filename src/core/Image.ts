@@ -13,7 +13,7 @@ class Image {
 
   size: number[]
 
-  metadata: Record<string, string | number | number[] | number[][]>
+  metadata: Record<string, string | string[] | number | number[] | number[][]>
 
   data: null | TypedArray
 

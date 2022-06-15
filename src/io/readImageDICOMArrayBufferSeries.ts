@@ -21,7 +21,7 @@ const workerFunction = async (
   )
   worker = usedWorker
 
-  const args = ['--memory-io', '--output-image', '0', '--input-images']
+  const args = ['--memory-io', '--output-image', '0', '--output-filenames', '1', '--input-images']
   fileDescriptions.forEach((desc) => {
     args.push(`./${desc.path}`)
   })
@@ -29,7 +29,8 @@ const workerFunction = async (
     args.push('--single-sorted-series')
   }
   const outputs = [
-    { type: InterfaceTypes.Image }
+    { type: InterfaceTypes.Image },
+    { type: InterfaceTypes.TextStream }
   ]
   const inputs = fileDescriptions.map((fd) => {
     return { type: InterfaceTypes.BinaryFile, data: fd }
@@ -54,6 +55,20 @@ const workerFunction = async (
     inputs
   }
   const result: PipelineResult = await webworkerPromise.postMessage(message, transferables)
+  const image: Image = result.outputs[0].data
+  const filenames: string[] = result.outputs[1].data.data.split('\0')
+  // remove the last element since we expect it to be empty
+  filenames?.pop()
+
+  if (image.metadata === undefined) {
+    const metadata:
+    Record<string, string | string[] | number | number[] | number[][]> = {}
+    metadata.orderedFileNames = filenames
+    image.metadata = metadata
+  } else {
+    image.metadata.orderedFileNames = filenames
+  }
+
   return { image: result.outputs[0].data as Image, webWorker: worker }
 }
 const numberOfWorkers = typeof globalThis.navigator?.hardwareConcurrency === 'number' ? globalThis.navigator.hardwareConcurrency : 4
@@ -63,10 +78,12 @@ const seriesBlockSize = 8
 
 const readImageDICOMArrayBufferSeries = async (
   arrayBuffers: ArrayBuffer[],
-  singleSortedSeries = false
+  singleSortedSeries = false,
+  fileNames?: string[]
 ): Promise<ReadImageFileSeriesResult> => {
+  const validFileNames = (fileNames != null) && fileNames.length === arrayBuffers.length
   const fileDescriptions = arrayBuffers.map((ab, index) => {
-    return { path: `${index}.dcm`, data: new Uint8Array(ab) }
+    return { path: validFileNames ? fileNames[index] : `${index}.dcm`, data: new Uint8Array(ab) }
   })
   if (singleSortedSeries) {
     const taskArgsArray = []
