@@ -21,7 +21,7 @@ async function loadMeshIOPipelineModule(input: IOInput, postfix: string): Promis
     const ioModule = await loadPipelineModule(io, input.config.meshIOUrl)
     return ioModule
   }
-  
+
   const extension = getFileExtension(input.fileName)
   if (extensionToIO.has(extension)) {
     const io = extensionToIO.get(extension) + postfix
@@ -32,9 +32,13 @@ async function loadMeshIOPipelineModule(input: IOInput, postfix: string): Promis
   for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
     let idx = 0
     for await (const pipelineModule of availableIOModules(input)) {
-      const { returnValue, outputs } = await runPipelineEmscripten(pipelineModule, input.args, input.outputs, input.inputs)
-      if (returnValue === 0) {
-        return pipelineModule
+      try {
+        const { returnValue, outputs } = await runPipelineEmscripten(pipelineModule, input.args, input.outputs, input.inputs)
+        if (returnValue === 0) {
+          return pipelineModule
+        }
+      } catch (error) {
+        // continue
       }
       idx++
     }
