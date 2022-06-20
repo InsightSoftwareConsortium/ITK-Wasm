@@ -21,7 +21,7 @@ async function loadImageIOPipelineModule(input: IOInput, postfix: string): Promi
     const ioModule = await loadPipelineModule(io, input.config.imageIOUrl)
     return ioModule
   }
-  
+
   const extension = getFileExtension(input.fileName)
   if (extensionToIO.has(extension)) {
     const io = extensionToIO.get(extension) + postfix
@@ -32,9 +32,13 @@ async function loadImageIOPipelineModule(input: IOInput, postfix: string): Promi
   for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
     let idx = 0
     for await (const pipelineModule of availableIOModules(input)) {
-      const { returnValue, outputs } = await runPipelineEmscripten(pipelineModule, input.args, input.outputs, input.inputs)
-      if (returnValue === 0) {
-        return pipelineModule
+      try {
+        const { returnValue, outputs } = await runPipelineEmscripten(pipelineModule, input.args, input.outputs, input.inputs)
+        if (returnValue === 0) {
+          return pipelineModule
+        }
+      } catch (error) {
+        // continue
       }
       idx++
     }

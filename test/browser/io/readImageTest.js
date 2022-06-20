@@ -11,7 +11,6 @@ for (let ii = 0; ii < byteString.length; ++ii) {
   intArray[ii] = byteString.charCodeAt(ii)
 }
 const cthead1SmallBlob = new window.Blob([intArray], { type: mimeString })
-const cthead1SmallBlob1 = new window.Blob([intArray], { type: mimeString })
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
 const verifyImage = (t, image) => {
@@ -48,14 +47,6 @@ export default function () {
 
   test('readImageBlob reads a Blob', (t) => {
     return readImageBlob(null, cthead1SmallBlob, 'cthead1Small.png')
-      .then(function ({ image, webWorker }) {
-        webWorker.terminate()
-        verifyImage(t, image)
-      })
-  })
-
-  test('readImageBlob reads a Blob without a file extension', (t) => {
-    return readImageBlob(null, cthead1SmallBlob1, 'cthead1Small')
       .then(function ({ image, webWorker }) {
         webWorker.terminate()
         verifyImage(t, image)

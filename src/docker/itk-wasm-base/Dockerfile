@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=dockcross/web-wasm
-FROM $BASE_IMAGE:20220308-9764a2e
+FROM $BASE_IMAGE:20220612-21326cc
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
