@@ -27,6 +27,7 @@ examples/HelloWorld/wasi-build
 examples/HelloWorld/package-lock.json
 examples/UMD/package-lock.json
 examples/Webpack/package-lock.json
+examples/Webpack/cypress/videos/
 
 test/MedianFilterPipeline/itk-wasm
 test/pipelines/MedianFilterPipeline/web-build
@@ -41,3 +42,6 @@ test/pipelines/MeshReadWritePipeline/web-build/
 test/pipelines/StdoutStderrPipeline/wasi-build/
 test/pipelines/InputOutputFilesPipeline/wasi-build/
 test/pipelines/MeshReadWritePipeline/wasi-build/
+
+cypress/screenshots/
+cypress/videos/
