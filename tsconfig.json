@@ -10,6 +10,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
+    "sourceMap": true,
     "typeRoots": ["./node_modules/@types", "./src/vendor-types"]
   },
   "include": ["./src/**/*"],
