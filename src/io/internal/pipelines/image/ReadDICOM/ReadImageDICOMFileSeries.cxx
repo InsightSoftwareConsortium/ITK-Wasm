@@ -30,6 +30,7 @@
 
 #include "itkPipeline.h"
 #include "itkOutputImage.h"
+#include "itkOutputTextStream.h"
 
 class CustomSerieHelper: public gdcm::SerieHelper
 {
@@ -194,6 +195,9 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
   OutputImageType outputImage;
   pipeline.add_option("-o,--output-image", outputImage, "Output image volume")->required();
 
+  itk::wasm::OutputTextStream outputFilenames;
+  auto outputFilenamesOption = pipeline.add_option("--output-filenames", outputFilenames, "Output sorted filenames.");
+
   ITK_WASM_PARSE(pipeline);
 
   typedef itk::QuickDICOMImageSeriesReader< ImageType > ReaderType;
@@ -201,7 +205,7 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
   reader->SetMetaDataDictionaryArrayUpdate(false);
 
   if (!singleSortedSeries)
-    {
+  {
     std::unique_ptr<CustomSerieHelper> serieHelper(new CustomSerieHelper());
     for (const std::string & fileName: inputFileNames)
     {
@@ -257,11 +261,21 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
     }
 
     reader->SetFileNames(fileNames);
-    }
+  }
   else
-    {
+  {
     reader->SetFileNames(inputFileNames);
+  }
+
+  // copy sorted filenames as additional output
+  if(!outputFilenamesOption->empty())
+  {
+    auto finalFileList = reader->GetFileNames();
+    for (auto f = finalFileList.begin(); f != finalFileList.end(); ++f)
+    {
+      outputFilenames.Get() << *f << '\0';
     }
+  }
 
   auto gdcmImageIO = itk::GDCMImageIO::New();
   reader->SetImageIO(gdcmImageIO);
@@ -279,16 +293,25 @@ int main (int argc, char * argv[])
   std::vector<std::string> inputFileNames;
   pipeline.add_option("-i,--input-images", inputFileNames, "File names in the series")->required()->check(CLI::ExistingFile)->expected(1,-1);
 
+  // We are interested in reading --input-images beforehand.
+  // We need to add and then remove other options in order to do ITK_WASM_PARSE twice (once here in main, and then again in runPipeline)
   bool singleSortedSeries = false;
   auto sortedOption = pipeline.add_flag("-s,--single-sorted-series", singleSortedSeries, "There is a single sorted series in the files");
 
+  // Type is not important here, its just a dummy placeholder to be added and then removed.
   std::string outputImage;
   auto outputImageOption = pipeline.add_option("-o,--output-image", outputImage, "Output image volume")->required();
 
+  // Type is not important here, its just a dummy placeholder to be added and then removed.
+  std::string outputFilenames;
+  auto outputFilenamesOption = pipeline.add_option("--output-filenames", outputFilenames, "Output sorted filenames");
+
   ITK_WASM_PARSE(pipeline);
 
+  // Remove added dummy options. runPipeline will add the real options later.
   pipeline.remove_option(sortedOption);
   pipeline.remove_option(outputImageOption);
+  pipeline.remove_option(outputFilenamesOption);
 
   auto gdcmImageIO = itk::GDCMImageIO::New();
 
