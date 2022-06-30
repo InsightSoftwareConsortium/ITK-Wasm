@@ -1,15 +1,12 @@
 name: Cypress Tests
 
-on: [push]
+on: [push,pull_request]
 
 jobs:
 
-  test-browser:
+  test-cypress:
     name: itk-wasm browser tests
     runs-on: ubuntu-20.04
-    container:
-      image: cypress/browsers:node16.14.0-chrome99-ff97
-      options: --user 1001
 
     steps:
       - name: Checkout
@@ -17,19 +14,38 @@ jobs:
 
       - name: Install
         run: |
-          npm install
+          npm ci
 
       - name: Build
         run: |
           npm run build
 
       - name: Test with Chrome
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           browser: chrome
-          start: npm start
+          command: npm run test:chrome
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
 
       - name: Test with Firefox
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           browser: firefox
+          command: npm run test:firefox
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
