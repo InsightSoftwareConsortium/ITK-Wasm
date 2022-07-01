@@ -12,8 +12,7 @@ const readImageDICOMFileSeries = async (
   })
   const fileContents: ArrayBuffer[] = await Promise.all(fetchFileContents)
 
-  const fileNames = Array.from(fileList, (file) => file.name)
-  return await readImageDICOMArrayBufferSeries(fileContents, singleSortedSeries, fileNames)
+  return await readImageDICOMArrayBufferSeries(fileContents, singleSortedSeries)
 }
 
 export default readImageDICOMFileSeries
