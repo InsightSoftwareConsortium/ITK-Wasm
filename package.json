@@ -43,7 +43,7 @@
     "start": "webpack-dev-server --mode development --env DEVSERVER",
     "start:production": "webpack-dev-server --mode production",
     "test:wasi": "npm run test:cliRun && npm run test:cliTest",
-    "test": "npm run test:lint && npm run test:node && npm run test:browser && npm run test:browser:cypress",
+    "test": "npm run test:lint && npm run test:node && npm run test:browser && npm run test:chrome && npm run test:firefox",
     "test:lint": "ts-standard --fix \"src/**/*.ts\" && standard --fix \"test/**/*.js\"",
     "test:node": "ava test/node/core/*.js test/node/io/image/*.js test/node/io/mesh/*.js test/node/pipeline/*.js",
     "test:cliRun": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/StdoutStderrPipeline run -r wasmtime StdoutStderrTest.wasi.wasm",
