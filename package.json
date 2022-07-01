@@ -87,6 +87,8 @@
     "@babel/plugin-transform-modules-commonjs": "^7.13.0",
     "@babel/plugin-transform-runtime": "^7.15.8",
     "@babel/preset-env": "^7.13.5",
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
     "@npmcli/promise-spawn": "^2.0.0",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^21.0.1",
@@ -165,5 +167,10 @@
       }
     ],
     "tagFormat": "itk-wasm-v${version}"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
