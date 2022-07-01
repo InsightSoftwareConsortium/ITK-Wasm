@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom itk-viewer Material UI Demo</title>
+  </head>
+  <body>
+    <div class="content" style="position: absolute; width: 100vw; height: 100vh; top: 0; left: 0; overflow: hidden; background: black; margin: 0; padding: 0;"></div>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/itk-vtk-viewer@11.12.4/dist/itkVtkViewer.js"></script>
+    <script>
+      const container = document.querySelector('.content')
+      const ipfsImage = new URL("https://data.kitware.com/api/v1/file/5b843d468d777f43cc8d4f6b/download/engine.nrrd")
+      const uiMachineOptions = { href: new URL("/src/materialUIMachineOptions.js", document.location.origin).href }
+      itkVtkViewer.createViewer(container,
+        {
+        image: ipfsImage,
+        rotate: false,
+        config: { uiMachineOptions },
+        })
+    </script>
+  </body>
+</html>
