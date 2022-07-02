@@ -20,6 +20,7 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkTestingMacros.h"
+#include "itkMetaDataObject.h"
 
 int
 itkWASMImageIOTest(int argc, char * argv[])
@@ -48,6 +49,12 @@ itkWASMImageIOTest(int argc, char * argv[])
 
   auto imageIO = itk::WASMImageIO::New();
 
+  const auto metaDataDict = inputImage->GetMetaDataDictionary();
+  using MetaDataStringType = itk::MetaDataObject<std::string>;
+  const std::string testEntryKey = "MetaTestEntry";
+  std::string testEntryValue = "ItsThere";
+  itk::EncapsulateMetaData<std::string>(inputImage->GetMetaDataDictionary(), testEntryKey, testEntryValue);
+
   using WriterType = itk::ImageFileWriter<ImageType>;
   auto wasmWriter = WriterType::New();
   //wasmWriter->SetImageIO( imageIO );
@@ -63,7 +70,17 @@ itkWASMImageIOTest(int argc, char * argv[])
 
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
 
-  ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(wasmReader->GetOutput(), convertedDirectoryFile));
+  ImagePointer writtenReadImage = wasmReader->GetOutput();
+
+  const auto writtenReadMetaDataDict = writtenReadImage->GetMetaDataDictionary();
+  ITK_TEST_EXPECT_TRUE(writtenReadMetaDataDict.HasKey(testEntryKey));
+
+  const auto entryValue = dynamic_cast<const MetaDataStringType *>(writtenReadMetaDataDict.Get(testEntryKey));
+  // "MetaImageIO"
+  const auto writtenReadEntryValue = entryValue->GetMetaDataObjectValue();
+  ITK_TEST_EXPECT_EQUAL(writtenReadEntryValue, testEntryValue);
+
+  ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(writtenReadImage, convertedDirectoryFile));
 
   wasmWriter->SetFileName( imageCBOR );
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmWriter->Update());
