@@ -3,7 +3,8 @@ title: Hello WASM World!
 
 This example, walks through how to compile a *hello world* executable written in C++ to [WebAssembly](https://webassembly.org/) and how execute it with standalone WebAssembly runtimes, the Node.js JavaScript runtime, and web browser runtimes!
 
-Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Docker](https://docs.docker.com/install/) are installed. On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). On Windows, make sure [Shared Drives are enabled in the Docker settings](https://docs.docker.com/docker-for-windows/troubleshoot/#volumes). On Windows, also install [Git Bash](https://git-scm.com/), and run shell commands in *Git Bash*.
+Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Docker](https://docs.docker.com/install/) are installed. On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). On Windows, we recommend [WSL 2 with Docker enabled](https://docs.docker.com/desktop/windows/wsl/).
+
 
 First, let's create a new directory to house our project.
 
