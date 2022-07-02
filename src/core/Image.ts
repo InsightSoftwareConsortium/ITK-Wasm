@@ -1,6 +1,7 @@
 import ImageType from './ImageType.js'
 import type TypedArray from './TypedArray.js'
 import setMatrixElement from './setMatrixElement.js'
+import Metadata from './Metadata.js'
 
 class Image {
   name: string = 'image'
@@ -13,7 +14,7 @@ class Image {
 
   size: number[]
 
-  metadata: Record<string, string | string[] | number | number[] | number[][]>
+  metadata: Metadata
 
   data: null | TypedArray
 
@@ -34,7 +35,7 @@ class Image {
     this.size = new Array(dimension)
     this.size.fill(0)
 
-    this.metadata = {}
+    this.metadata = new Map()
 
     this.data = null
   }

@@ -14,6 +14,7 @@ export { default as JsonObject } from './JsonObject.js'
 export { default as TypedArray } from './TypedArray.js'
 export { default as IntTypes } from './IntTypes.js'
 export { default as FloatTypes } from './FloatTypes.js'
+export { default as Metadata } from './Metadata.js'
 
 export { default as IOTypes } from './IOTypes.js'
 
