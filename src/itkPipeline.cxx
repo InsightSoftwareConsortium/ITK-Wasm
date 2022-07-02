@@ -50,6 +50,12 @@ Pipeline
       }
     }
    });
+
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
+#ifdef __wasi__
+  rang::setControlMode(rang::control::Force);
+#endif
+#endif
 }
 
 auto
