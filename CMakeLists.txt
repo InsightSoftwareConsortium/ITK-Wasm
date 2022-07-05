@@ -47,8 +47,7 @@ FetchContent_Declare(
 
 set(CLI11_GIT_REPOSITORY "https://github.com/CLIUtils/CLI11")
 set(CLI11_GIT_REPOSITORY "https://github.com/thewtex/CLI11")
-# v2.1.2 + WASI
-set(CLI11_GIT_TAG "6296311e5a7193254b035d4b85335fa3092f4a8e")
+set(CLI11_GIT_TAG "bdbf4f5432d3203adbf7284331dd4ee173b68768")
 FetchContent_Declare(
   cli11
   GIT_REPOSITORY ${CLI11_GIT_REPOSITORY}
