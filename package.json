@@ -93,6 +93,9 @@
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/estree": "0.0.51",
     "@types/mime-types": "^2.1.1",
     "assert": "^2.0.0",
@@ -166,7 +169,50 @@
         "prerelease": "b"
       }
     ],
-    "tagFormat": "itk-wasm-v${version}"
+    "tagFormat": "itk-wasm-v${version}",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/exec",
+        {
+          "prepareCmd": "node ./update-versions.cjs ${nextRelease.version}"
+        }
+      ],
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogTitle": "[itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization."
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "pkgRoot": "."
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "pkgRoot": "./dist/image-io"
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "pkgRoot": "./dist/mesh-io"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "CHANGELOG.md"
+          ]
+        }
+      ],
+      "@semantic-release/github"
+    ]
   },
   "commitlint": {
     "extends": [
