@@ -35,9 +35,9 @@
   "homepage": "https://github.com/InsightSoftwareConsortium/itk-wasm#readme",
   "dependencies": {
     "curry": "^1.2.0",
-    "itk-image-io": "^1.0.0-b.6",
-    "itk-mesh-io": "^1.0.0-b.6",
-    "itk-wasm": "^1.0.0-b.6"
+    "itk-image-io": "^1.0.0-b.18",
+    "itk-mesh-io": "^1.0.0-b.18",
+    "itk-wasm": "^1.0.0-b.18"
   },
   "devDependencies": {
     "@babel/core": "^7.13.1",
