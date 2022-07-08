@@ -22,3 +22,4 @@ class Image:
     origin: Sequence[float]
     spacing: Sequence[float]
     direction: ArrayLike
+    name: str
