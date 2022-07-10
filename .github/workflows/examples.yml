@@ -167,34 +167,26 @@ jobs:
         ./cypress/run-docker-firefox.sh
 
 
-  test-vite-example-firefox:
-    name: Vite, Firefox
+  test-vite-example:
+    name: Vite Example
     runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: ./examples/Vite
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v2
+    - name: Test Vite Example on Chrome
+      uses: cypress-io/github-action@v4
       with:
-        node-version: '16'
+        working-directory: ./examples/Vite
+        browser: chrome
+        start: npm start
 
-    - name: Install
-      run: |
-        npm install
-
-    - name: Build
-      run: |
-        npm run build
-
-    - name: Test Firefox
-      run: |
-        # Allow writing test output in the Docker image
-        sudo chmod -R 777 cypress
-        # To debug locally, run `./cypress/run-docker-firefox.sh -d`
-        ./cypress/run-docker-firefox.sh
+    - name: Test Vite Example on Firefox
+      uses: cypress-io/github-action@v4
+      with:
+        working-directory: ./examples/Vite
+        browser: firefox
+        start: npm start
 
   test-debugging-example:
     name: Debugging
