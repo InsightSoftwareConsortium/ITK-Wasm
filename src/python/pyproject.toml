@@ -37,7 +37,7 @@ Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
 
 [project.optional-dependencies]
 test = [
-    "itk>=5.3rc4",
+    "itk>=5.3rc4.post1",
     "pytest >=2.7.3",
 ]
 doc = ["sphinx"]
