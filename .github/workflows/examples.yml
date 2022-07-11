@@ -98,74 +98,26 @@ jobs:
         browser: chrome
         start: npm start
 
-  test-webpack-example-chrome-electron:
+  test-webpack-example:
     name: Webpack, Chrome, Electron
     runs-on: ubuntu-20.04
-    container: cypress/browsers:node16.13.2-chrome97-ff96
-    defaults:
-      run:
-        working-directory: ./examples/Webpack
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v2
+    - name: Test Webpack Example on Chrome
+      uses: cypress-io/github-action@v4
       with:
-        node-version: '16'
-
-    - name: Install
-      run: |
-        npm install
-
-    - name: Build
-      run: |
-        npm run build
-
-    - name: Test Electron
-      uses: cypress-io/github-action@v2
-      with:
-        working-directory: ./examples/Webpack
-        browser: electron
-        start: npm start
-        config: defaultCommandTimeout=8000
-
-    - name: Test Chrome
-      uses: cypress-io/github-action@v2
-      with:
-        working-directory: ./examples/Webpack
+        working-directory: ./examples/Vite
         browser: chrome
         start: npm start
-        config: defaultCommandTimeout=8000
 
-  test-webpack-example-firefox:
-    name: Webpack, Firefox
-    runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: ./examples/Webpack
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - uses: actions/setup-node@v2
+    - name: Test Webpack Example on Firefox
+      uses: cypress-io/github-action@v4
       with:
-        node-version: '16'
-
-    - name: Install
-      run: |
-        npm install
-
-    - name: Build
-      run: |
-        npm run build
-
-    - name: Test Firefox
-      run: |
-        # Allow writing test output in the Docker image
-        sudo chmod -R 777 cypress
-        # To debug locally, run `./cypress/run-docker-firefox.sh -d`
-        ./cypress/run-docker-firefox.sh
-
+        working-directory: ./examples/Vite
+        browser: firefox
+        start: npm start
 
   test-vite-example:
     name: Vite Example
