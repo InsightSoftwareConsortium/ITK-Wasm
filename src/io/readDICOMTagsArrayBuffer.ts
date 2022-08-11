@@ -7,7 +7,7 @@ import config from '../itkConfig.js'
 import ReadDICOMTagsResult from './ReadDICOMTagsResult.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 
-async function readDICOMTagsArrayBuffer (webWorker: Worker, arrayBuffer: ArrayBuffer, tags: string[] | null = null): Promise<ReadDICOMTagsResult> {
+async function readDICOMTagsArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, tags: string[] | null = null): Promise<ReadDICOMTagsResult> {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
     worker
