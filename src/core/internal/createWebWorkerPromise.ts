@@ -8,11 +8,24 @@ interface createWebWorkerPromiseResult {
   worker: Worker
 }
 
+interface itkWorker extends Worker {
+  workerPromise?: typeof WebworkerPromise
+}
+
 // Internal function to create a web worker promise
 async function createWebWorkerPromise (existingWorker: Worker | null): Promise<createWebWorkerPromiseResult> {
+  let workerPromise: typeof WebworkerPromise
   if (existingWorker != null) {
-    const webworkerPromise = new WebworkerPromise(existingWorker)
-    return await Promise.resolve({ webworkerPromise, worker: existingWorker })
+    // See if we have a worker promise attached the worker, if so reuse it. This ensures
+    // that we can safely reuse the worker without issues.
+    const itkWebWorker = existingWorker as itkWorker;
+    if (itkWebWorker.workerPromise !== undefined) {
+      workerPromise = itkWebWorker.workerPromise;
+    } else {
+      workerPromise = new WebworkerPromise(existingWorker);
+    }
+
+    return await Promise.resolve({ webworkerPromise: workerPromise, worker: existingWorker })
   }
 
   let worker = null
@@ -49,8 +62,13 @@ async function createWebWorkerPromise (existingWorker: Worker | null): Promise<c
     }
   }
 
-  const webworkerPromise = new WebworkerPromise(worker)
-  return { webworkerPromise, worker }
+  const webworkerPromise = new WebworkerPromise(worker);
+
+  // Attach the worker promise to the worker, so if the worker is reused we can
+  // also reuse the the worker promise.
+  const itkWebWorker = (worker as itkWorker);
+  itkWebWorker.workerPromise = webworkerPromise;
+  return { webworkerPromise, worker: itkWebWorker }
 }
 
 export default createWebWorkerPromise
