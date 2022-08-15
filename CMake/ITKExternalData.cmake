@@ -23,6 +23,7 @@ list(APPEND ExternalData_OBJECT_STORES
 
 set(ExternalData_BINARY_ROOT ${CMAKE_BINARY_DIR}/ExternalData)
 
+set(ITK_WASM_TESTING_DATA_RELEASED_CID bafybeict7vcnohr22jn4b6dtek5hmukhdykvcotrudmrpr4bfbg45b2dwq)
 set(ExternalData_URL_ALGO_CID_lower cid)
 set(ExternalData_URL_TEMPLATES "" CACHE STRING
   "Additional URL templates for the ExternalData CMake script to look for testing data. E.g.
@@ -33,17 +34,23 @@ if(NOT ITK_FORBID_DOWNLOADS)
     # Local IPFS gateway
     "http://127.0.0.1:8080/ipfs/%(hash)"
 
+    # Restricted gateway with released data
+    "https://itk.mypinata.cloud/ipfs/${ITK_WASM_TESTING_DATA_RELEASED_CID}/Objects/CID/%(hash)"
+
+    # Released data on web3.storage / estuary.tech
+    "https://${ITK_WASM_TESTING_DATA_RELEASED_CID}.ipfs.dweb.link/Objects/CID/%(hash)"
+
+    # Gateway for arbitrary new files, uploaded to web3.storage
+    "https://dweb.link/ipfs/%(hash)"
+
     # Protocol Labs gateway
     "https://ipfs.io/ipfs/%(hash)"
-
-    # Gateway for data pinned on pinata
-    "https://gateway.pinata.cloud/ipfs/%(hash)"
 
     # Cloudflare gateway
     "https://cloudflare-ipfs.com/ipfs/%(hash)"
 
-    # Additional gateway (modern but has redirect)
-    "https://dweb.link/ipfs/%(hash)"
+    # DataLad repository on gin.g-node.org
+    "https://gin.g-node.org/InsightSoftwareConsortium/itk-wasm-testing-data/raw/master/Objects/CID/%(hash)"
     )
 endif()
 
