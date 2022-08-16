@@ -1,5 +1,15 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.19](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.18...itk-wasm-v1.0.0-b.19) (2022-08-16)
+
+
+### Bug Fixes
+
+* **docs:** Fix typo ([dd9d18d](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/dd9d18dfd88f2f6711808c433493da3c6950bb65))
+* **Python:** add name entry to Python itkwasm Image ([cf08600](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/cf086002350a2c8b0837cf2f8fc63732bff6613e))
+* **readDICOMTags:** Allow webWorker to be null ([9e5b242](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9e5b242702f48f8468eba51fdff7d6b953ef80c4))
+* **worker:** Ensure worker promises are reused ([6075dd2](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/6075dd2993fe82b74bd47276aa0dc2644734c2f7))
+
 # [1.0.0-b.18](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.17...itk-wasm-v1.0.0-b.18) (2022-08-16)
 
 
