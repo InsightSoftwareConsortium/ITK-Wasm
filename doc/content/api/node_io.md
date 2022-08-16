@@ -61,4 +61,4 @@ Write a mesh to a file on the local filesystem with Node.js.
 *mesh*:           [Mesh](./Mesh.html) instance to write
 *filePath*:       path to the file on the local filesystem
 *useCompression*: compress the pixel data when possible
-*binaryFileType*: write in an binary as opposed to a ascii format, if possible
+*binaryFileType*: write in a binary as opposed to a ascii format, if possible
