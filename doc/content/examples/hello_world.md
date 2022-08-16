@@ -1,7 +1,7 @@
 title: Hello WASM World!
 ---
 
-This example, walks through how to compile a *hello world* executable written in C++ to [WebAssembly](https://webassembly.org/) and how execute it with standalone WebAssembly runtimes, the Node.js JavaScript runtime, and web browser runtimes!
+This example walks through how to compile a *hello world* executable written in C++ to [WebAssembly](https://webassembly.org/) and how execute it with standalone WebAssembly runtimes, the Node.js JavaScript runtime, and web browser runtimes!
 
 Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Docker](https://docs.docker.com/install/) are installed. On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). On Windows, we recommend [WSL 2 with Docker enabled](https://docs.docker.com/desktop/windows/wsl/).
 
@@ -9,8 +9,8 @@ Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and
 First, let's create a new directory to house our project.
 
 ```sh
-mkdir itk-wasm-hello-world
-cd itk-wasm-hello-world
+mkdir HelloWorld
+cd HelloWorld
 ```
 
 Let's write some code! Populate *hello.cxx* with our Hello World program:

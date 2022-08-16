@@ -84,6 +84,35 @@ jobs:
         browser: chrome
         start: npm start
 
+  build-hello-pipeline-example:
+    name: Hello Pipeline Build
+    runs-on: ubuntu-20.04
+
+    defaults:
+      run:
+        working-directory: ./examples/HelloPipeline
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install
+      run: |
+        npm install
+
+    - name: Build
+      run: |
+        npm run build
+
+    - name: Test
+      run: |
+        npm run test
+        npm run test:quiet
+        npm run test:help
+
   test-umd-example:
     name: UMD
     runs-on: ubuntu-20.04

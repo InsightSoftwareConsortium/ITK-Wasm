@@ -11,6 +11,7 @@ docs:
 examples:
   getting_started:
     hello_world: hello_world.html
+    hello_pipeline: hello_pipeline.html
     debugging: debugging.html
   recipes:
     vue: paraview_glance.html

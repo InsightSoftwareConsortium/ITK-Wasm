@@ -1,0 +1,224 @@
+title: Hello Pipeline World!
+---
+
+This example introduces the `itk::wasm::Pipeline`. An `itk::wasm::Pipeline` transforms elegant standalone C++ command line programs into powerful [WebAssembly](https://webassembly.org/) (WASM) modules with a simple, efficient interface for execution in the browser, other programming languages, and on the command line.
+
+First, let's create a new directory to house our project.
+
+```sh
+mkdir HelloPipeline
+cd HelloPipeline
+```
+
+Let's write some code! Populate *HelloPipeline.cxx* first with the headers we need:
+
+```c++
+#include "itkPipeline.h"
+#include "itkInputImage.h"
+#include "itkImage.h"
+```
+
+The *itkImage.h* header is [ITK](https://itk.org)'s standard n-dimensional image data structure.
+
+The *itkPipeline.h* and *itkInputImage.h* headers come from the itk-wasm *WebAssemblyInterface* [ITK module](https://www.kitware.com/advance-itk-with-modules/).
+
+Next, create a standard `main` C command line interface function and an `itk::wasm::Pipeline`:
+
+
+```c++
+int main(int argc, char * argv[]) {
+  // Create the pipeline for parsing arguments. Provide a description.
+  itk::wasm::Pipeline pipeline("A hello world itk::wasm::Pipeline", argc, argv);
+
+  return EXIT_SUCCESS;
+}
+```
+
+The `itk::wasm::Pipeline` extends the most-excellent [CLI11 modern C++ command line parser](https://github.com/CLIUtils/CLI11). In addition to all of CLI11's functionality, `itk::wasm::Pipeline`'s adds:
+
+- Support for execution in WASM modules along with command line execution
+- Support for spatial data structures such as `Image`'s, `Mesh`'s, `PolyData`, and `Transform`'s
+- Support for multiple dimensions and pixel types
+- Colored help output
+
+Add a standard CLI11 flag to the pipeline:
+
+```c++
+  itk::wasm::Pipeline pipeline("A hello world itk::wasm::Pipeline", argc, argv);
+
+
+  bool quiet = false;
+  pipeline.add_flag("-q,--quiet", quiet, "Do not print image information");
+}
+```
+
+Add an input image argument to the pipeline:
+
+```c++
+  pipeline.add_flag("-q,--quiet", quiet, "Do not print image information");
+
+
+  constexpr unsigned int Dimension = 2;
+  using PixelType = unsigned char;
+  using ImageType = itk::Image<PixelType, Dimension>;
+
+  // Add a input image argument.
+  using InputImageType = itk::wasm::InputImage<ImageType>;
+  InputImageType inputImage;
+  pipeline.add_option("InputImage", inputImage, "The input image")->required();
+```
+
+The `inputImage` variable is populated from the filesystem if built as a native executable. When running in the browser or in a wrapped language, `inputImage` is read from WebAssembly memory without file IO.
+
+Parse the command line arguments with the `ITK_WASM_PARSE` macro:
+
+```c++
+  pipeline.add_option("InputImage", inputImage, "The input image")->required();
+
+
+  ITK_WASM_PARSE(pipeline);
+```
+
+This parses the command line arguments. If `-q` or `--quiet` is set, the `quiet` variable will be set to `true`. Missing or invalid arguments will print an error and exit. The `-h` and `--help` flags are automatically generated from pipeline arguments to print usage information.
+
+Finally, run our pipeline: 
+```c++
+  std::cout << "Hello pipeline world!\n" << std::endl;
+
+  if (!quiet)
+  {
+    // Obtain the itk::Image * from the itk::wasm::InputImage with `.Get()`.
+    std::cout << "Input image: " << *inputImage.Get() << std::endl;
+  }
+
+  return EXIT_SUCCESS;
+```
+
+Next, provide a [CMake](https://cmake.org/) build configuration at *CMakeLists.txt*:
+
+```cmake
+cmake_minimum_required(VERSION 3.16)
+project(HelloPipeline)
+
+# Use C++17 or newer with itk-wasm
+set(CMAKE_CXX_STANDARD 17)
+
+# We always want to build against the WebAssemblyInterface module.
+set(itk_components
+  WebAssemblyInterface
+  )
+# WASI or native binaries
+if (NOT EMSCRIPTEN)
+  # WebAssemblyInterface supports the .iwi, .iwi.cbor itk-wasm format.
+  # We can list other ITK IO modules to build against to support other
+  # formats when building native executable or WASI WebAssembly.
+  # However, this will bloat the size of the WASI WebAssembly binary, so
+  # add them judiciously.
+  set(itk_components
+    WebAssemblyInterface
+    ITKIOPNG
+    # ITKImageIO # Adds support for all available image IO modules
+    )
+endif()
+find_package(ITK REQUIRED
+  COMPONENTS ${itk_components}
+  )
+include(${ITK_USE_FILE})
+
+add_executable(HelloPipeline HelloPipeline.cxx)
+target_link_libraries(HelloPipeline PUBLIC ${ITK_LIBRARIES})
+```
+
+[Build the WASI binary](../hello_world.html):
+
+```sh
+npx itk-wasm -i itkwasm/wasi build
+```
+
+Check the generated help output:
+
+```sh
+npx itk-wasm run HelloPipeline.wasi.wasm -- -- --help
+```
+
+![Hello pipeline help](./hello_pipeline.png)
+
+The two `--`'s are to separate arguments for the WASM module from arguments to the `itk-wasm` CLI and the WebAssembly interpreter.
+
+Try running on an [example image](https://bafybeihibtxtdmwuekb64wnv3ras54lz4ojuqv4gabmigpfdha4dsmcr5y.ipfs.w3s.link/ipfs/bafybeihibtxtdmwuekb64wnv3ras54lz4ojuqv4gabmigpfdha4dsmcr5y/cthead1.png).
+
+```
+> npx itk-wasm run HelloPipeline.wasi.wasm -- -- cthead1.png
+
+Hello pipeline world!
+
+Input image: Image (0x2b910)
+  RTTI typeinfo:   itk::Image<unsigned char, 2u>
+  Reference Count: 1
+  Modified Time: 54
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  Source: (none)
+  Source output name: (none)
+  Release Data: Off
+  Data Released: False
+  Global Release Data: Off
+  PipelineMTime: 22
+  UpdateMTime: 53
+  RealTimeStamp: 0 seconds 
+  LargestPossibleRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [256, 256]
+  BufferedRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [256, 256]
+  RequestedRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [256, 256]
+  Spacing: [1, 1]
+  Origin: [0, 0]
+  Direction: 
+1 0
+0 1
+
+  IndexToPointMatrix: 
+1 0
+0 1
+
+  PointToIndexMatrix: 
+1 0
+0 1
+
+  Inverse Direction: 
+1 0
+0 1
+
+  PixelContainer: 
+    ImportImageContainer (0x2ba60)
+      RTTI typeinfo:   itk::ImportImageContainer<unsigned long, unsigned char>
+      Reference Count: 1
+      Modified Time: 50
+      Debug: Off
+      Object Name: 
+      Observers: 
+        none
+      Pointer: 0x2c070
+      Container manages memory: true
+      Size: 65536
+      Capacity: 65536
+```
+
+And with the `--quiet` flag:
+
+```
+> npx itk-wasm run HelloPipeline.wasi.wasm -- -- --quiet cthead1.png
+
+Hello pipeline world!
+```
+
+Congratulations! You just executed a C++ pipeline capable of processsing a scientific image in WebAssembly. 🎉

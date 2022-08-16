@@ -44,6 +44,7 @@ sidebar:
     recipes: Recipes
     examples: Examples
     hello_world: Hello World!
+    hello_pipeline: Hello Pipeline!
     vue: Vue.js
 
   api:
