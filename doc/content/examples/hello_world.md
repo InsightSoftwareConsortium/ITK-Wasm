@@ -1,16 +1,21 @@
 title: Hello WASM World!
 ---
 
-This example, walks through how to compile a *hello world* executable written in C++ to [WebAssembly](https://webassembly.org/) and how execute it with standalone WebAssembly runtimes, the Node.js JavaScript runtime, and web browser runtimes!
+## Introduction
+
+This example walks through how to compile a *hello world* executable written in C++ to [WebAssembly](https://webassembly.org/) and how to execute it with standalone WebAssembly runtimes, the Node.js JavaScript runtime, and web browser runtimes!
 
 Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Docker](https://docs.docker.com/install/) are installed. On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). On Windows, we recommend [WSL 2 with Docker enabled](https://docs.docker.com/desktop/windows/wsl/).
 
+While we recommend following along step-by-step, the complete examples can also be found in the [`examples/` directory of the project repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples).
+
+## Write the code
 
 First, let's create a new directory to house our project.
 
 ```sh
-mkdir itk-wasm-hello-world
-cd itk-wasm-hello-world
+mkdir HelloWorld
+cd HelloWorld
 ```
 
 Let's write some code! Populate *hello.cxx* with our Hello World program:
@@ -32,6 +37,8 @@ project(HelloWorld)
 
 add_executable(hello hello.cxx)
 ```
+
+## Install itk-wasm
 
 We use the `add_executable` command to build executables with itk-wasm. The [Emscripten](https://kripken.github.io/emscripten-site/) and [WASI](https://github.com/WebAssembly/wasi-sdk) toolchains along with itk-wasm build and execution configurations are contained in the itk-wasm [dockcross](https://github.com/dockcross/dockcross) Docker images used by the itk-wasm command line interface (CLI).  Note that the same code can also be built and tested with native operating system toolchains. This is useful for development and debugging.
 

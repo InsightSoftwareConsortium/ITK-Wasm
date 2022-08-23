@@ -2,7 +2,7 @@
   "name": "itk-wasm-hello-world",
   "version": "2.0.4",
   "description": "An itk-wasm Hello World!",
-  "main": "index.js",
+  "main": "index.mjs",
   "type": "module",
   "scripts": {
     "build": "npm run build:wasi && npm run build:emscripten",
