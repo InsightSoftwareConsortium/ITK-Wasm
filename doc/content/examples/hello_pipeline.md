@@ -1,7 +1,13 @@
 title: Hello Pipeline World!
 ---
 
+## Introduction
+
 This example introduces the `itk::wasm::Pipeline`. An `itk::wasm::Pipeline` transforms elegant standalone C++ command line programs into powerful [WebAssembly](https://webassembly.org/) (WASM) modules with a simple, efficient interface for execution in the browser, other programming languages, and on the command line.
+
+Make sure to complete the [Hello World!](./hello_world.html) example before you start your Hello Pipeline adventure.
+
+## Write the code
 
 First, let's create a new directory to house our project.
 
@@ -49,7 +55,6 @@ Add a standard CLI11 flag to the pipeline:
 
   bool quiet = false;
   pipeline.add_flag("-q,--quiet", quiet, "Do not print image information");
-}
 ```
 
 Add an input image argument to the pipeline:
@@ -68,7 +73,7 @@ Add an input image argument to the pipeline:
   pipeline.add_option("InputImage", inputImage, "The input image")->required();
 ```
 
-The `inputImage` variable is populated from the filesystem if built as a native executable. When running in the browser or in a wrapped language, `inputImage` is read from WebAssembly memory without file IO.
+The `inputImage` variable is populated from the filesystem if built as a native executable or a WASI binary run from the command line. When running in the browser or in a wrapped language, `inputImage` is read from WebAssembly memory without file IO.
 
 Parse the command line arguments with the `ITK_WASM_PARSE` macro:
 
@@ -129,11 +134,15 @@ add_executable(HelloPipeline HelloPipeline.cxx)
 target_link_libraries(HelloPipeline PUBLIC ${ITK_LIBRARIES})
 ```
 
+## Create WebAssembly binary
+
 [Build the WASI binary](../hello_world.html):
 
 ```sh
 npx itk-wasm -i itkwasm/wasi build
 ```
+
+## Run WebAssembly binary
 
 Check the generated help output:
 
@@ -145,7 +154,7 @@ npx itk-wasm run HelloPipeline.wasi.wasm -- -- --help
 
 The two `--`'s are to separate arguments for the WASM module from arguments to the `itk-wasm` CLI and the WebAssembly interpreter.
 
-Try running on an [example image](https://bafybeihibtxtdmwuekb64wnv3ras54lz4ojuqv4gabmigpfdha4dsmcr5y.ipfs.w3s.link/ipfs/bafybeihibtxtdmwuekb64wnv3ras54lz4ojuqv4gabmigpfdha4dsmcr5y/cthead1.png).
+Try running on an [example image](https://data.kitware.com/api/v1/file/63041ac8f64de9b9501e5a22/download).
 
 ```
 > npx itk-wasm run HelloPipeline.wasi.wasm -- -- cthead1.png

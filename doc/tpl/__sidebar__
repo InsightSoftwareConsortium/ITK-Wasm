@@ -12,6 +12,7 @@ examples:
   getting_started:
     hello_world: hello_world.html
     hello_pipeline: hello_pipeline.html
+    inputs_outputs: inputs_outputs.html
     debugging: debugging.html
   recipes:
     vue: paraview_glance.html

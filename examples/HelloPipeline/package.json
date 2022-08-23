@@ -2,7 +2,6 @@
   "name": "itk-wasm-hello-pipeline",
   "version": "1.0.0",
   "description": "An itk-wasm Hello Pipeline World! example",
-  "main": "index.mjs",
   "type": "module",
   "scripts": {
     "build": "itk-wasm -b wasi-build -i itkwasm/wasi build",
