@@ -114,7 +114,7 @@ jobs:
         npm run test:help
 
   build-test-inputs-outputs-example:
-    name: Inputs Outputs Build test
+    name: Inputs Outputs
     runs-on: ubuntu-20.04
 
     defaults:
@@ -155,7 +155,7 @@ jobs:
         start: npm start
 
   test-webpack-example:
-    name: Webpack, Chrome, Electron
+    name: Webpack
     runs-on: ubuntu-20.04
 
     steps:
@@ -176,7 +176,7 @@ jobs:
         start: npm start
 
   test-vite-example:
-    name: Vite Example
+    name: Vite
     runs-on: ubuntu-20.04
 
     steps:
