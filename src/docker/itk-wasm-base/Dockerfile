@@ -7,14 +7,23 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 
 WORKDIR /
 
-# 2022-07-02 master branch
-ENV ITK_GIT_TAG 7e35b6443f7bec2aa74d439d066881971f5590db
-RUN git clone https://github.com/thewtex/ITK.git && \
+# 2022-07-02 branch: ITKWASM-2022-07-02-5e7aea9
+ENV ITK_GIT_TAG afd7a44bd42cb56edb8fcd67bd0f5ecaa2e0f3db
+RUN git clone https://github.com/KitwareMedical/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
   cd ../ && \
   sed -i -e '/^option(OPJ_USE_THREAD/c\option(OPJ_USE_THREAD "use threads" OFF)' \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
+
+# Modify CMake variable to use patched DCMTK library
+# GIT_TAG refers to DCMTK branch: 20220802_DCMTK_PATCHES_FOR_ITK-wasm
+RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/DCMTK.git")' \
+    /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
+
+RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "66fce6822afb16bcfd926ac8a5f4ed8d7cd10981")' \
+    /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
+
 ARG CMAKE_BUILD_TYPE=Release
 
 ARG LDFLAGS
@@ -43,6 +52,7 @@ RUN mkdir ITK-build && \
     -DModule_IOMeshSWC:BOOL=ON \
     -DModule_IOScanco:BOOL=ON \
     -DModule_IOFDF:BOOL=ON \
+    -DModule_ITKDCMTK:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
     -DModule_SmoothingRecursiveYvvGaussianFilter:BOOL=ON \
     -DModule_MorphologicalContourInterpolation:BOOL=ON \
@@ -52,6 +62,9 @@ RUN mkdir ITK-build && \
     -DModule_GenericLabelInterpolator:BOOL=ON \
     -DDO_NOT_BUILD_ITK_TEST_DRIVER:BOOL=ON \
     -DOPJ_USE_THREAD:BOOL=OFF \
+    -DDCMTK_WITH_THREADS:BOOL=OFF \
+    -DDCMTK_BUILD_APPS:BOOL=ON \
+    -DNO_FLOAT_EXCEPTIONS:BOOL=ON \
     ../ITK && \
   ninja && \
   find . -name '*.o' -delete && \
