@@ -104,7 +104,7 @@
     "babel-loader": "^8.2.3",
     "commitizen": "^4.2.4",
     "core-js": "^3.19.0",
-    "cypress": "^10.3.0",
+    "cypress": "^10.6.0",
     "cz-conventional-changelog": "2.1.0",
     "file-api": "^0.10.4",
     "glob": "^7.1.6",
