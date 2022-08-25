@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.20](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.19...itk-wasm-v1.0.0-b.20) (2022-08-25)
+
+
+### Features
+
+* **dcmtk:** add ITKDCMTK to image-io pipelines ([820bccc](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/820bccc1dd842230cf164e34b9699e1695495c91))
+
 # [1.0.0-b.19](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.18...itk-wasm-v1.0.0-b.19) (2022-08-16)
 
 
