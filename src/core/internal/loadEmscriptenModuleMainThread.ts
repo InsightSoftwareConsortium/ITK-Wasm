@@ -21,7 +21,7 @@ async function loadEmscriptenModuleMainThread (moduleRelativePathOrURL: string |
   const response = await axios.get(wasmBinaryPath, { responseType: 'arraybuffer' })
   const wasmBinary = response.data
   const fullModulePath = `${modulePrefix}.js`
-  const result = await import(/* webpackIgnore: true */ fullModulePath)
+  const result = await import(/* webpackIgnore: true */ /* @vite-ignore */ fullModulePath)
   const instantiated = result.default({ wasmBinary }) as EmscriptenModule
   return instantiated
 }
