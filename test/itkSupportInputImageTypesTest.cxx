@@ -48,7 +48,7 @@ public:
 int
 itkSupportInputImageTypesTest(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Test supporting multiple input image types", argc, argv);
+  itk::wasm::Pipeline pipeline("SupportInputImageTypesTest", "Test supporting multiple input image types", argc, argv);
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
    uint8_t,

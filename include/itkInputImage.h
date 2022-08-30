@@ -73,7 +73,7 @@ bool lexical_cast(const std::string &input, InputImage<TImage> &inputImage)
     return false;
   }
 
-  if (wasm::Pipeline::GetUseMemoryIO())
+  if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     using WASMImageToImageFilterType = WASMImageToImageFilter<TImage>;

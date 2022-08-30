@@ -86,7 +86,7 @@ int compressStringify(itk::wasm::Pipeline & pipeline, itk::wasm::InputBinaryStre
 
 int main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Given a binary, compress optionally base64 encode", argc, argv);
+  itk::wasm::Pipeline pipeline("CompressStringify", "Given a binary, compress optionally base64 encode", argc, argv);
 
   itk::wasm::InputBinaryStream inputBinaryStream;
   pipeline.add_option("InputBinary", inputBinaryStream, "Input binary");

@@ -78,7 +78,7 @@ int readMesh(const std::string & inputFileName, itk::wasm::OutputMeshIO & output
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Read an mesh file format and convert it to the itk-wasm file format", argc, argv);
+  itk::wasm::Pipeline pipeline("ReadMesh", "Read an mesh file format and convert it to the itk-wasm file format", argc, argv);
 
   std::string inputFileName;
   pipeline.add_option("InputMesh", inputFileName, "Input mesh")->required()->check(CLI::ExistingFile);

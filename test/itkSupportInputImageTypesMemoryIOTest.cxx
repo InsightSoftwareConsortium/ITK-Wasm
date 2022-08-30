@@ -73,7 +73,7 @@ itkSupportInputImageTypesMemoryIOTest(int argc, char * argv[])
 
   const char * mockArgv[] = {"itkSupportInputImageTypesMemoryIOTest", "--memory-io", "0", "0", NULL};
 
-  itk::wasm::Pipeline pipeline("Test supporting multiple input image types in memory", 4, const_cast< char ** >(mockArgv));
+  itk::wasm::Pipeline pipeline("SupportInputImageTypesMemoryIOTest", "Test supporting multiple input image types in memory", 4, const_cast< char ** >(mockArgv));
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
    uint8_t,

@@ -134,7 +134,7 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, const std::string & outpu
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Read an image file format and convert it to the itk-wasm file format", argc, argv);
+  itk::wasm::Pipeline pipeline("WriteImage", "Write an itk-wasm file format converted to an image file format", argc, argv);
 
   itk::wasm::InputImageIO inputImageIO;
   pipeline.add_option("InputImage", inputImageIO, "Input image")->required();

@@ -57,7 +57,7 @@ public:
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Convert an itk::Mesh to an itk::PolyData", argc, argv);
+  itk::wasm::Pipeline pipeline("MeshToPolyData", "Convert an itk::Mesh to an itk::PolyData", argc, argv);
 
   itk::WASMMeshIOFactory::RegisterOneFactory();
 

@@ -581,7 +581,7 @@ private:
 
 int main( int argc, char * argv[] )
 {
-  itk::wasm::Pipeline pipeline("Read the tags from a DICOM file", argc, argv);
+  itk::wasm::Pipeline pipeline("ReadDICOMTags", "Read the tags from a DICOM file", argc, argv);
 
   std::string dicomFile;
   pipeline.add_option("DICOMFile", dicomFile, "Input DICOM file.")->required()->check(CLI::ExistingFile);

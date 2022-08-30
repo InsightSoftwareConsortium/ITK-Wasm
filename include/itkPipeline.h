@@ -21,20 +21,26 @@
 #include <CLI/App.hpp>
 #include <CLI/Config.hpp>
 #include <CLI/Error.hpp>
+
 #include "itkMacro.h"
 
 // Short circuit help output without raising an exception (currently not
 // available in WASI)
 #define ITK_WASM_PARSE(pipeline) \
     try { \
-        const auto iwpArgc = (pipeline).GetArgc(); \
-        const auto iwpArgv = (pipeline).GetArgv(); \
+        const auto iwpArgc = (pipeline).get_argc(); \
+        const auto iwpArgv = (pipeline).get_argv(); \
         for (int ii = 0; ii < iwpArgc; ++ii) \
           { \
             const std::string arg(iwpArgv[ii]); \
             if (arg == "-h" || arg == "--help") \
             { \
               (pipeline).exit(CLI::CallForAllHelp()); \
+              std::exit(0); \
+            } \
+            if (arg == "--interface-json") \
+            { \
+              (pipeline).interface_json(); \
               std::exit(0); \
             } \
           } \
@@ -101,12 +107,8 @@ using CLI::Config;
 class Pipeline: public CLI::App
 {
 public:
-    /** Make a new Pipeline application. */
-    Pipeline(std::string description, int argc, char **argv);
-
-    /** Shortcut for the lazy. */
-    Pipeline(int argc, char **argv)
-        : Pipeline("", argc, argv) {}
+    /** Make a new Pipeline application. `name` should be CamelCase by convention. */
+    Pipeline(std::string name, std::string description, int argc, char **argv);
 
     /** Exit. */
     auto exit(const CLI::Error &e) -> int;
@@ -115,20 +117,22 @@ public:
         CLI::App::parse(m_argc, m_argv);
     }
 
-    static auto GetUseMemoryIO()
+    static auto get_use_memory_io()
     {
       return m_UseMemoryIO;
     }
 
-    int GetArgc() const
+    int get_argc() const
     {
       return m_argc;
     }
 
-    char ** GetArgv() const
+    char ** get_argv() const
     {
       return m_argv;
     }
+
+    void interface_json();
 
     ~Pipeline() override;
 private:

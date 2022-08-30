@@ -288,7 +288,7 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Read a DICOM image series and return the associated image volume", argc, argv);
+  itk::wasm::Pipeline pipeline("ReadImageDICOMFileSeries", "Read a DICOM image series and return the associated image volume", argc, argv);
 
   std::vector<std::string> inputFileNames;
   pipeline.add_option("-i,--input-images", inputFileNames, "File names in the series")->required()->check(CLI::ExistingFile)->expected(1,-1);

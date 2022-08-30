@@ -49,7 +49,7 @@ public:
 int
 itkSupportInputMeshTypesTest(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Test supporting multiple input mesh types", argc, argv);
+  itk::wasm::Pipeline pipeline("SupportInputMeshTypesTest", "Test supporting multiple input mesh types", argc, argv);
 
   itk::WASMMeshIOFactory::RegisterOneFactory();
 

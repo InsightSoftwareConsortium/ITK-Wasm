@@ -129,7 +129,7 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   std::memcpy(readWASMPolyDataPointer, readPolyDataJSON.data(), readPolyDataJSON.size());
 
   const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", NULL};
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 12, const_cast< char ** >(mockArgv));
+  itk::wasm::Pipeline pipeline("PipelineTest", "A test ITK WASM Pipeline", 12, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");

@@ -141,7 +141,7 @@ int writeMesh(itk::wasm::InputMeshIO & inputMeshIO, const std::string & outputFi
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Read an mesh file format and convert it to the itk-wasm file format", argc, argv);
+  itk::wasm::Pipeline pipeline("WriteMesh", "Write an mesh in the itk-wasm file format to another file format", argc, argv);
 
   itk::wasm::InputMeshIO inputMeshIO;
   pipeline.add_option("InputMesh", inputMeshIO, "Input mesh")->required();

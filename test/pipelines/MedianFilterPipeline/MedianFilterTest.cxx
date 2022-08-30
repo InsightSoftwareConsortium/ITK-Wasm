@@ -32,11 +32,11 @@ MedianFilter(itk::wasm::Pipeline & pipeline, const TImage * inputImage)
 {
   using ImageType = TImage;
 
-  pipeline.get_option("InputImage")->required();
+  pipeline.get_option("InputImage")->required()->type_name("INPUT_IMAGE");
 
   using OutputImageType = itk::wasm::OutputImage<ImageType>;
   OutputImageType outputImage;
-  pipeline.add_option("OutputImage", outputImage, "The output image")->required();
+  pipeline.add_option("OutputImage", outputImage, "The output image")->required()->type_name("OUTPUT_IMAGE");
 
   unsigned int radius = 1;
   pipeline.add_option("-r,--radius", radius, "Kernel radius in pixels");
@@ -136,7 +136,7 @@ public:
 
 int main( int argc, char * argv[] )
 {
-  itk::wasm::Pipeline pipeline("Apply a median filter to an image", argc, argv);
+  itk::wasm::Pipeline pipeline("MedianFilter", "Apply a median filter to an image", argc, argv);
 
   return itk::wasm::SupportInputImageTypesNoVectorImage<PipelineFunctor,
    uint8_t,

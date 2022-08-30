@@ -97,8 +97,8 @@ public:
   Dimensions(const std::string & inputImageOptionName, Pipeline & pipeline)
   {
     InterfaceImageTypeNoVectorImage imageType;
-    const auto iwpArgc = pipeline.GetArgc();
-    const auto iwpArgv = pipeline.GetArgv();
+    const auto iwpArgc = pipeline.get_argc();
+    const auto iwpArgv = pipeline.get_argv();
     bool passThrough = false;
     for (int ii = 0; ii < iwpArgc; ++ii)
       {

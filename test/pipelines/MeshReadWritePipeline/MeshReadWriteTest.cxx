@@ -22,7 +22,7 @@
 
 int main( int argc, char * argv[] )
 {
-  itk::wasm::Pipeline pipeline("A test for reading and writing meshes", argc, argv);
+  itk::wasm::Pipeline pipeline("MeshReadWriteTest", "A test for reading and writing meshes", argc, argv);
 
   using PixelType = float;
   constexpr unsigned int Dimension = 3;

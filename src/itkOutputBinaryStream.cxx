@@ -33,7 +33,7 @@ namespace wasm
 OutputBinaryStream
 ::~OutputBinaryStream()
 {
-  if(wasm::Pipeline::GetUseMemoryIO())
+  if(wasm::Pipeline::get_use_memory_io())
   {
     if (this->m_Identifier.empty())
       {
@@ -67,7 +67,7 @@ OutputBinaryStream
 
 bool lexical_cast(const std::string &output, OutputBinaryStream &outputStream)
 {
-  if (wasm::Pipeline::GetUseMemoryIO())
+  if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     outputStream.SetIdentifier(output);

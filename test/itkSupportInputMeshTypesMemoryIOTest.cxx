@@ -74,7 +74,7 @@ itkSupportInputMeshTypesMemoryIOTest(int argc, char * argv[])
 
   const char * mockArgv[] = {"itkSupportInputMeshTypesMemoryIOTest", "--memory-io", "0", "0", NULL};
 
-  itk::wasm::Pipeline pipeline("Test supporting multiple input mesh types in memory", 4, const_cast< char ** >(mockArgv));
+  itk::wasm::Pipeline pipeline("SupportInputMeshTypesMemoryIOTest", "Test supporting multiple input mesh types in memory", 4, const_cast< char ** >(mockArgv));
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
    uint8_t,

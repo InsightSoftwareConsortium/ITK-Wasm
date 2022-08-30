@@ -101,7 +101,7 @@ int readImage(const std::string & inputFileName, itk::wasm::OutputImageIO & outp
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Read an image file format and convert it to the itk-wasm file format", argc, argv);
+  itk::wasm::Pipeline pipeline("ReadImage", "Read an image file format and convert it to the itk-wasm file format", argc, argv);
 
   std::string inputFileName;
   pipeline.add_option("InputImage", inputFileName, "Input image")->required()->check(CLI::ExistingFile);
