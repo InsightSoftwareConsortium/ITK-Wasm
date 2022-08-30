@@ -153,10 +153,10 @@ if (options.copyBuildArtifacts) {
 } // options.copySources
 
 const testPipelines = [
-  path.join('test', 'pipelines', 'StdoutStderrPipeline'),
-  path.join('test', 'pipelines', 'MedianFilterPipeline'),
-  path.join('test', 'pipelines', 'InputOutputFilesPipeline'),
-  path.join('test', 'pipelines', 'MeshReadWritePipeline'),
+  path.join('test', 'pipelines', 'stdout-stderr-pipeline'),
+  path.join('test', 'pipelines', 'median-filter-pipeline'),
+  path.join('test', 'pipelines', 'input-output-files-pipeline'),
+  path.join('test', 'pipelines', 'mesh-read-write-pipeline'),
 ]
 
 if (options.buildTestPipelines) {

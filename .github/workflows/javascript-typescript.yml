@@ -56,7 +56,7 @@ jobs:
 
     - name: Test building a pipeline
       run: |
-        cd test/pipelines/MedianFilterPipeline
+        cd test/pipelines/median-filter-pipeline
 
         node ../../../src/itk-wasm-cli.js build -i itkwasm/emscripten:latest .
         rm -rf web-build

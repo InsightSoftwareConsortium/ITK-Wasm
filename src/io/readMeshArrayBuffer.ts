@@ -34,7 +34,7 @@ async function readMeshArrayBuffer (webWorker: Worker | null, arrayBuffer: Array
       config: config,
       mimeType,
       fileName,
-      pipelinePath: 'ReadMesh', // placeholder
+      pipelinePath: 'read-mesh', // placeholder
       args,
       outputs,
       inputs

@@ -65,7 +65,7 @@ public:
 
     using InputMeshType = itk::wasm::InputMesh<MeshType>;
     InputMeshType inputMesh;
-    pipeline.add_option("InputMesh", inputMesh, "The input mesh")->required();
+    pipeline.add_option("input-mesh", inputMesh, "The input mesh")->required();
 ```
 [...]
 
@@ -73,14 +73,14 @@ public:
 int
 main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Test supporting multiple input mesh types", argc, argv);
+  itk::wasm::Pipeline pipeline("support-multiple", "Test supporting multiple input mesh types", argc, argv);
 
   // Supports the pixels types uint8_t, float
   // Supports the mesh dimensions 2, 3
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
    uint8_t,
    float>
-  ::Dimensions<2U,3U>("InputMesh", pipeline);
+  ::Dimensions<2U,3U>("input-mesh", pipeline);
 }
 ```
  * It is assumed that the cell and point data will have the same pixel type.

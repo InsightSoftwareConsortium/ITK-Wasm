@@ -8,7 +8,7 @@ export default function () {
     const args = []
     const outputs = null
     const inputs = null
-    const stdoutStderrPath = 'StdoutStderrTest'
+    const stdoutStderrPath = 'stdout-stderr-test'
     return runPipeline(null, stdoutStderrPath, args, outputs, inputs)
       .then(function ({ returnValue, stdout, stderr, webWorker }) {
         webWorker.terminate()
@@ -29,7 +29,7 @@ Click. Perfect success.
     const args = []
     const outputs = null
     const inputs = null
-    const stdoutStderrPath = 'StdoutStderrTest'
+    const stdoutStderrPath = 'stdout-stderr-test'
     return runPipeline(null, stdoutStderrPath, args, outputs, inputs)
       .then(function ({ stdout, stderr, outputs, webWorker }) {
         return runPipeline(webWorker, stdoutStderrPath, args, outputs, inputs)
@@ -53,7 +53,7 @@ Click. Perfect success.
     const args = []
     const outputs = null
     const inputs = null
-    const absoluteURL = new URL('base/dist/pipeline/StdoutStderrTest', document.location)
+    const absoluteURL = new URL('base/dist/pipeline/stdout-stderr-test', document.location)
     return runPipeline(null, absoluteURL, args, outputs, inputs)
       .then(function ({ stdout, stderr, outputs, webWorker }) {
         webWorker.terminate()
@@ -73,7 +73,7 @@ Click. Perfect success.
     const args = []
     const outputs = null
     const inputs = null
-    const absoluteURL = new URL('base/dist/pipeline/StdoutStderrTest', document.location)
+    const absoluteURL = new URL('base/dist/pipeline/stdout-stderr-test', document.location)
     return runPipeline(false, absoluteURL, args, outputs, inputs)
       .then(function ({ stdout, stderr, outputs }) {
         t.is(stdout, `I’m writing my code,
@@ -89,7 +89,7 @@ Click. Perfect success.
   })
 
   test('runPipeline uses input and output files in the Emscripten filesystem', (t) => {
-    const pipelinePath = 'InputOutputFilesTest'
+    const pipelinePath = 'input-output-files-test'
     const args = ['--use-files',
       '--input-text-file', './input.txt',
       '--input-binary-file', './input.bin',
@@ -127,7 +127,7 @@ Click. Perfect success.
   })
 
   test('runPipelineNode uses input and output text and binary data via memory io', (t) => {
-    const pipelinePath = 'InputOutputFilesTest'
+    const pipelinePath = 'input-output-files-test'
     const args = ['--memory-io',
       '--input-text-stream', '0',
       '--input-binary-stream', '1',
@@ -161,7 +161,7 @@ Click. Perfect success.
   })
 
   test('runPipeline runs on the main thread when first argument is false', (t) => {
-    const pipelinePath = 'InputOutputFilesTest'
+    const pipelinePath = 'input-output-files-test'
     const args = ['--use-files',
       '--input-text-file', './input.txt',
       '--input-binary-file', './input.bin',
@@ -223,7 +223,7 @@ Click. Perfect success.
         return readImageFile(null, jsFile)
       }).then(function ({ image, webWorker }) {
         webWorker.terminate()
-        const pipelinePath = 'MedianFilterTest'
+        const pipelinePath = 'median-filter-test'
         const args = [
           '0',
           '0',
@@ -260,7 +260,7 @@ Click. Perfect success.
     const jsFile = await new window.File([response.data], fileName)
     const { mesh, webWorker } = await readMeshFile(null, jsFile)
     webWorker.terminate()
-    const pipelinePath = 'MeshReadWriteTest'
+    const pipelinePath = 'mesh-read-write-test'
     const args = ['0', '0', '--memory-io']
     const desiredOutputs = [
       { type: InterfaceTypes.Mesh }

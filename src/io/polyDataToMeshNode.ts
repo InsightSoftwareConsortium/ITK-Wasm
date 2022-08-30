@@ -20,7 +20,7 @@ async function polyDataToMeshNode (polyData: PolyData): Promise<Mesh> {
     { type: InterfaceTypes.PolyData, data: polyData }
   ] as PipelineInput[]
 
-  const modulePath = path.join(meshIOsPath, 'PolyDataToMesh.js')
+  const modulePath = path.join(meshIOsPath, 'polydata-to-mesh.js')
   const emModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
   const { outputs } = runPipelineEmscripten(emModule, args, desiredOutputs, inputs)
   return outputs[0].data as Mesh

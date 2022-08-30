@@ -29,19 +29,19 @@ examples/UMD/package-lock.json
 examples/Webpack/package-lock.json
 examples/Webpack/cypress/videos/
 
-test/MedianFilterPipeline/itk-wasm
-test/pipelines/MedianFilterPipeline/web-build
-test/pipelines/MedianFilterPipeline/wasi-build
-src/docker/itk-wasm/MedianFilterPipelineCopy/
+test/median-filter-pipeline/itk-wasm
+test/pipelines/median-filter-pipeline/web-build
+test/pipelines/median-filter-pipeline/wasi-build
+src/docker/itk-wasm/median-filter-pipelineCopy/
 
 src/docker/itk-wasm/ITKWebAssemblyInterfaceModuleCopy/
-test/StdoutStderrPipeline/itk-wasm
-test/pipelines/StdoutStderrPipeline/web-build/
-test/pipelines/InputOutputFilesPipeline/web-build/
-test/pipelines/MeshReadWritePipeline/web-build/
-test/pipelines/StdoutStderrPipeline/wasi-build/
-test/pipelines/InputOutputFilesPipeline/wasi-build/
-test/pipelines/MeshReadWritePipeline/wasi-build/
+test/stdout-stderr-pipeline/itk-wasm
+test/pipelines/stdout-stderr-pipeline/web-build/
+test/pipelines/input-output-files-pipeline/web-build/
+test/pipelines/mesh-read-write-pipeline/web-build/
+test/pipelines/stdout-stderr-pipeline/wasi-build/
+test/pipelines/input-output-files-pipeline/wasi-build/
+test/pipelines/mesh-read-write-pipeline/wasi-build/
 
 cypress/screenshots/
 cypress/videos/

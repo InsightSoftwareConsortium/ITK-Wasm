@@ -31,11 +31,11 @@ public:
 
     using InputImageType = itk::wasm::InputImage<ImageType>;
     InputImageType inputImage;
-    pipeline.add_option("InputImage", inputImage, "The input image")->required();
+    pipeline.add_option("input-image", inputImage, "The input image")->required();
 
     using OutputImageType = itk::wasm::OutputImage<ImageType>;
     OutputImageType outputImage;
-    pipeline.add_option("OutputImage", outputImage, "The output image")->required();
+    pipeline.add_option("output-image", outputImage, "The output image")->required();
 
     ITK_WASM_PARSE(pipeline);
 
@@ -48,10 +48,10 @@ public:
 int
 itkSupportInputImageTypesTest(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("SupportInputImageTypesTest", "Test supporting multiple input image types", argc, argv);
+  itk::wasm::Pipeline pipeline("support-input-image-types-test", "Test supporting multiple input image types", argc, argv);
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
    uint8_t,
    float>
-  ::Dimensions<2U,3U>("InputImage", pipeline);
+  ::Dimensions<2U,3U>("input-image", pipeline);
 }

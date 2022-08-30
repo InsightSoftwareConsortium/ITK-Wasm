@@ -28,7 +28,7 @@ describe('WebWorkerPool', () => {
 
         const taskArgsArray = []
         for (let index = 0; index < maxTotalSplits; index++) {
-          const pipelinePath = 'MedianFilterTest'
+          const pipelinePath = 'median-filter-test'
           const args = ['--memory-io', '0', '0', '--radius', '4', '-m', '' + maxTotalSplits, '-s', '' + index]
           const desiredOutputs = [
             { type: itk.InterfaceTypes.Image }

@@ -12,21 +12,21 @@ registerWebworker(async function (input: RunPipelineInput | IOInput) {
   if (input.operation === 'runPipeline') {
     pipelineModule = await loadPipelineModule(input.pipelinePath, input.config.pipelinesUrl)
   } else if (input.operation === 'readImage') {
-    pipelineModule = await loadImageIOPipelineModule(input as IOInput, 'ReadImage')
+    pipelineModule = await loadImageIOPipelineModule(input as IOInput, '-read-image')
   } else if (input.operation === 'writeImage') {
-    pipelineModule = await loadImageIOPipelineModule(input as IOInput, 'WriteImage')
+    pipelineModule = await loadImageIOPipelineModule(input as IOInput, '-write-image')
   } else if (input.operation === 'readMesh') {
-    pipelineModule = await loadMeshIOPipelineModule(input as IOInput, 'ReadMesh')
+    pipelineModule = await loadMeshIOPipelineModule(input as IOInput, '-read-mesh')
   } else if (input.operation === 'writeMesh') {
-    pipelineModule = await loadMeshIOPipelineModule(input as IOInput, 'WriteMesh')
+    pipelineModule = await loadMeshIOPipelineModule(input as IOInput, '-write-mesh')
   } else if (input.operation === 'meshToPolyData') {
-    pipelineModule = await loadPipelineModule('MeshToPolyData', input.config.meshIOUrl)
+    pipelineModule = await loadPipelineModule('mesh-to-polydata', input.config.meshIOUrl)
   } else if (input.operation === 'polyDataToMesh') {
-    pipelineModule = await loadPipelineModule('PolyDataToMesh', input.config.meshIOUrl)
+    pipelineModule = await loadPipelineModule('polydata-to-mesh', input.config.meshIOUrl)
   } else if (input.operation === 'readDICOMImageSeries') {
-    pipelineModule = await loadPipelineModule('ReadImageDICOMFileSeries', input.config.imageIOUrl)
+    pipelineModule = await loadPipelineModule('read-image-dicom-file-series', input.config.imageIOUrl)
   } else if (input.operation === 'readDICOMTags') {
-    pipelineModule = await loadPipelineModule('ReadDICOMTags', input.config.imageIOUrl)
+    pipelineModule = await loadPipelineModule('read-dicom-tags', input.config.imageIOUrl)
   } else {
     throw new Error('Unknown worker operation')
   }

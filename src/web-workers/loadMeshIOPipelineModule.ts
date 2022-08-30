@@ -9,7 +9,7 @@ import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js
 
 async function * availableIOModules (input: IOInput) {
   for (let idx = 0; idx < MeshIOIndex.length; idx++) {
-    const trialIO = MeshIOIndex[idx] + 'ReadMesh'
+    const trialIO = MeshIOIndex[idx] + '-read-mesh'
     const ioModule = await loadPipelineModule(trialIO, input.config.meshIOUrl) as PipelineEmscriptenModule
     yield ioModule
   }

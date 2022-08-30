@@ -39,7 +39,7 @@ async function readMeshLocalFile (filePath: string): Promise<Mesh> {
     io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
-      const modulePath = path.join(meshIOsPath, MeshIOIndex[idx] + 'ReadMesh.js')
+      const modulePath = path.join(meshIOsPath, MeshIOIndex[idx] + '-read-mesh.js')
       const readMeshModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
       const mountedFilePath = readMeshModule.mountContainingDir(absoluteFilePath)
       const { returnValue, outputs } = runPipelineEmscripten(readMeshModule, args, desiredOutputs, inputs)
@@ -53,7 +53,7 @@ async function readMeshLocalFile (filePath: string): Promise<Mesh> {
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(meshIOsPath, io as string + 'ReadMesh.js')
+  const modulePath = path.join(meshIOsPath, io as string + '-read-mesh.js')
   const readMeshModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
   const mountedFilePath = readMeshModule.mountContainingDir(absoluteFilePath)
   const { outputs } = runPipelineEmscripten(readMeshModule, args, desiredOutputs, inputs)

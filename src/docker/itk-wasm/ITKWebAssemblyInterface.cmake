@@ -5,6 +5,17 @@ set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 17)
 
 if(NOT _ITKWebAssemblyInterface_INCLUDED)
 
+function(kebab_to_camel kebab camel)
+  set(result "${kebab}")
+  while(result MATCHES "-([a-z])")
+    string(REGEX MATCH "-([a-z])" post_dash "${result}")
+    string(SUBSTRING "${post_dash}" 1 1 post_dash)
+    string(TOUPPER "${post_dash}" post_dash_upper)
+    string(REGEX REPLACE "(-${post_dash})" "${post_dash_upper}" result "${result}")
+  endwhile()
+  set(${camel} "${result}" PARENT_SCOPE)
+endfunction()
+
 set(_target_link_libraries target_link_libraries)
 function(target_link_libraries target)
   _target_link_libraries(${target} ${ARGN})
@@ -34,8 +45,9 @@ function(add_executable target)
     set(umd_target ${wasm_target}.umd)
     _add_executable(${umd_target} ${ARGN})
 
+    kebab_to_camel(${target} targetCamel)
     get_property(_link_flags TARGET ${target} PROPERTY LINK_FLAGS)
-    set(common_link_flags " -s FORCE_FILESYSTEM=1 -s EXPORTED_RUNTIME_METHODS='[\"callMain\",\"cwrap\",\"ccall\",\"writeArrayToMemory\",\"writeAsciiToMemory\",\"AsciiToString\"]' -flto -s ALLOW_MEMORY_GROWTH=1 -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=1 -s EXPORT_NAME=${target} -s MODULARIZE=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPipelinePre.js --post-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPost.js -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORTED_FUNCTIONS='[\"_main\"]' ${_link_flags}")
+    set(common_link_flags " -s FORCE_FILESYSTEM=1 -s EXPORTED_RUNTIME_METHODS='[\"callMain\",\"cwrap\",\"ccall\",\"writeArrayToMemory\",\"writeAsciiToMemory\",\"AsciiToString\"]' -flto -s ALLOW_MEMORY_GROWTH=1 -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=1 -s EXPORT_NAME=${targetCamel} -s MODULARIZE=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPipelinePre.js --post-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPost.js -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORTED_FUNCTIONS='[\"_main\"]' ${_link_flags}")
     set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS "${common_link_flags} -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0")
     set_property(TARGET ${umd_target} PROPERTY LINK_FLAGS "${common_link_flags}")
 

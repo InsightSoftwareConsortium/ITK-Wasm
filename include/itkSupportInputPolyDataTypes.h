@@ -72,11 +72,11 @@ public:
 int
 main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("TestPipeline", "Test supporting multiple input polydata types", argc, argv);
+  itk::wasm::Pipeline pipeline("support-multiple", "Test supporting multiple input polydata types", argc, argv);
 
   // Supports the pixels types uint8_t, float
   return itk::wasm::SupportInputPolyDataTypes<PipelineFunctor>
-  ::PixelTypes<uint8_t, float>("InputPolyData", pipeline);
+  ::PixelTypes<uint8_t, float>("input-polydata", pipeline);
 }
 ```
  * It is assumed that the cell and point data will have the same pixel type.

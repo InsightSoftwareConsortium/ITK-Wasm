@@ -2,6 +2,12 @@ import axios from 'axios'
 
 import ITKWASMEmscriptenModule from '../ITKWASMEmscriptenModule.js'
 
+function camelCase(kebobCase: string) {
+  return kebobCase.replace(/-([a-z])/g, (kk) => {
+    return kk[1].toUpperCase();
+  });
+}
+
 // Load the Emscripten module in the browser in a WebWorker.
 //
 // baseUrl is usually taken from '../itkConfig.js', but a different value
@@ -29,7 +35,7 @@ async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | U
   const wasmBinary = response.data
   const modulePath = `${modulePrefix}.umd.js`
   importScripts(modulePath)
-  const moduleBaseName: string = modulePrefix.replace(/.*\//, '')
+  const moduleBaseName: string = camelCase(modulePrefix.replace(/.*\//, ''))
   // @ts-ignore: error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'WorkerGlobalScope & typeof globalThis'.
   const wrapperModule = self[moduleBaseName] as (moduleParams: object) => object
   const emscriptenModule = wrapperModule({ wasmBinary }) as ITKWASMEmscriptenModule

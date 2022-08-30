@@ -24,7 +24,7 @@ The following [`itk::wasm::Pipeline`](https://github.com/InsightSoftwareConsorti
 
 int main(argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("TestPipeline", "A test ITK WASM Pipeline", argc, argv);
+  itk::wasm::Pipeline pipeline("test-pipeline", "A test ITK WASM Pipeline", argc, argv);
 
   itk::wasm::InputTextStream inputTextStream;
   pipeline.add_option("InputText", inputTextStream, "The input text")->required()->type_name("INPUT_TEXT");
