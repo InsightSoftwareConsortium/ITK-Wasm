@@ -283,7 +283,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
   pipelineModule.resetModuleStderr()
   let returnValue = 0
   try {
-    returnValue = pipelineModule.callMain(args)
+    returnValue = pipelineModule.callMain(args.slice())
   } catch (exception) {
     // Note: Module must be built with CMAKE_BUILD_TYPE set to Debug.
     // e.g.: itk-wasm build my/project -- -DCMAKE_BUILD_TYPE:STRING=Debug
