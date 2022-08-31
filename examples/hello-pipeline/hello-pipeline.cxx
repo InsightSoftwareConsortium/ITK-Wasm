@@ -21,7 +21,7 @@
 
 int main(int argc, char * argv[]) {
   // Create the pipeline for parsing arguments. Provide a description.
-  itk::wasm::Pipeline pipeline("A hello world itk::wasm::Pipeline", argc, argv);
+  itk::wasm::Pipeline pipeline("hello-pipeline", "A hello world itk::wasm::Pipeline", argc, argv);
 
   // Add a flag to the pipeline.
   bool quiet = false;
@@ -34,7 +34,7 @@ int main(int argc, char * argv[]) {
   // Add a input image argument.
   using InputImageType = itk::wasm::InputImage<ImageType>;
   InputImageType inputImage;
-  pipeline.add_option("InputImage", inputImage, "The input image")->required();
+  pipeline.add_option("input-image", inputImage, "The input image")->required()->type_name("INPUT_IMAGE");
 
   // Parse the arguments. If `-q` or `--quiet` is set, the `quiet` variable will be set to `true`.
   // The `inputImage` variable is populated from the filesystem if built as a native executable.

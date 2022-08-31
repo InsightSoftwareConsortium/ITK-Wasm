@@ -24,7 +24,7 @@
 
 int main(int argc, char * argv[]) {
   // Create the pipeline for parsing arguments. Provide a description.
-  itk::wasm::Pipeline pipeline("Smooth an image with a median filter", argc, argv);
+  itk::wasm::Pipeline pipeline("median-filter", "Smooth an image with a median filter", argc, argv);
 
   constexpr unsigned int Dimension = 2;
   using PixelType = unsigned char;
@@ -38,12 +38,12 @@ int main(int argc, char * argv[]) {
   // Add a input image argument.
   using InputImageType = itk::wasm::InputImage<ImageType>;
   InputImageType inputImage;
-  pipeline.add_option("InputImage", inputImage, "The input image")->required();
+  pipeline.add_option("input-image", inputImage, "The input image")->required()->type_name("INPUT_IMAGE");
 
   // Add an output image argument.
   using OutputImageType = itk::wasm::OutputImage<ImageType>;
   OutputImageType outputImage;
-  pipeline.add_option("OutputImage", outputImage, "The output image")->required();
+  pipeline.add_option("output-image", outputImage, "The output image")->required()->type_name("OUTPUT_IMAGE");
 
   // Parse the arguments. If `-r` or `--radius` is set, the `radius` variable will be set to its integer value.
   // The `inputImage` variable is populated from the filesystem if built as a native executable.

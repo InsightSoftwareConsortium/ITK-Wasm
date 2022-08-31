@@ -12,11 +12,11 @@ Make sure to complete the [Hello World!](./hello_world.html) example before you 
 First, let's create a new directory to house our project.
 
 ```sh
-mkdir HelloPipeline
-cd HelloPipeline
+mkdir hello-pipeline
+cd hello-pipeline
 ```
 
-Let's write some code! Populate *HelloPipeline.cxx* first with the headers we need:
+Let's write some code! Populate *hello-pipeline.cxx* first with the headers we need:
 
 ```c++
 #include "itkPipeline.h"
@@ -34,7 +34,7 @@ Next, create a standard `main` C command line interface function and an `itk::wa
 ```c++
 int main(int argc, char * argv[]) {
   // Create the pipeline for parsing arguments. Provide a description.
-  itk::wasm::Pipeline pipeline("A hello world itk::wasm::Pipeline", argc, argv);
+  itk::wasm::Pipeline pipeline("hello-pipeline", "A hello world itk::wasm::Pipeline", argc, argv);
 
   return EXIT_SUCCESS;
 }
@@ -50,7 +50,7 @@ The `itk::wasm::Pipeline` extends the most-excellent [CLI11 modern C++ command l
 Add a standard CLI11 flag to the pipeline:
 
 ```c++
-  itk::wasm::Pipeline pipeline("A hello world itk::wasm::Pipeline", argc, argv);
+  itk::wasm::Pipeline pipeline("hello-pipeline", "A hello world itk::wasm::Pipeline", argc, argv);
 
 
   bool quiet = false;
@@ -70,7 +70,7 @@ Add an input image argument to the pipeline:
   // Add a input image argument.
   using InputImageType = itk::wasm::InputImage<ImageType>;
   InputImageType inputImage;
-  pipeline.add_option("InputImage", inputImage, "The input image")->required();
+  pipeline.add_option("input-image", inputImage, "The input image")->required()->type_name("INPUT_IMAGE");
 ```
 
 The `inputImage` variable is populated from the filesystem if built as a native executable or a WASI binary run from the command line. When running in the browser or in a wrapped language, `inputImage` is read from WebAssembly memory without file IO.
@@ -78,7 +78,7 @@ The `inputImage` variable is populated from the filesystem if built as a native 
 Parse the command line arguments with the `ITK_WASM_PARSE` macro:
 
 ```c++
-  pipeline.add_option("InputImage", inputImage, "The input image")->required();
+  pipeline.add_option("InputImage", inputImage, "The input image")->required()->type_name("INPUT_IMAGE");
 
 
   ITK_WASM_PARSE(pipeline);
@@ -103,7 +103,7 @@ Next, provide a [CMake](https://cmake.org/) build configuration at *CMakeLists.t
 
 ```cmake
 cmake_minimum_required(VERSION 3.16)
-project(HelloPipeline)
+project(hello-pipeline)
 
 # Use C++17 or newer with itk-wasm
 set(CMAKE_CXX_STANDARD 17)
@@ -130,8 +130,8 @@ find_package(ITK REQUIRED
   )
 include(${ITK_USE_FILE})
 
-add_executable(HelloPipeline HelloPipeline.cxx)
-target_link_libraries(HelloPipeline PUBLIC ${ITK_LIBRARIES})
+add_executable(hello-pipeline hello-pipeline.cxx)
+target_link_libraries(hello-pipeline PUBLIC ${ITK_LIBRARIES})
 ```
 
 ## Create WebAssembly binary
@@ -147,7 +147,7 @@ npx itk-wasm -i itkwasm/wasi build
 Check the generated help output:
 
 ```sh
-npx itk-wasm run HelloPipeline.wasi.wasm -- -- --help
+npx itk-wasm run hello-pipeline.wasi.wasm -- -- --help
 ```
 
 ![Hello pipeline help](./hello_pipeline.png)
@@ -157,7 +157,7 @@ The two `--`'s are to separate arguments for the WASM module from arguments to t
 Try running on an [example image](https://data.kitware.com/api/v1/file/63041ac8f64de9b9501e5a22/download).
 
 ```
-> npx itk-wasm run HelloPipeline.wasi.wasm -- -- cthead1.png
+> npx itk-wasm run hello-pipeline.wasi.wasm -- -- cthead1.png
 
 Hello pipeline world!
 
@@ -225,7 +225,7 @@ Input image: Image (0x2b910)
 And with the `--quiet` flag:
 
 ```
-> npx itk-wasm run HelloPipeline.wasi.wasm -- -- --quiet cthead1.png
+> npx itk-wasm run hello-pipeline.wasi.wasm -- -- --quiet cthead1.png
 
 Hello pipeline world!
 ```

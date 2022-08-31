@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(HelloPipeline)
+project(hello-pipeline)
 
 # Use C++17 or newer with itk-wasm
 set(CMAKE_CXX_STANDARD 17)
@@ -26,5 +26,5 @@ find_package(ITK REQUIRED
   )
 include(${ITK_USE_FILE})
 
-add_executable(HelloPipeline HelloPipeline.cxx)
-target_link_libraries(HelloPipeline PUBLIC ${ITK_LIBRARIES})
+add_executable(hello-pipeline hello-pipeline.cxx)
+target_link_libraries(hello-pipeline PUBLIC ${ITK_LIBRARIES})

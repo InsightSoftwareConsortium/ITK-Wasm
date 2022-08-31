@@ -4,11 +4,11 @@ on: [push,pull_request]
 
 jobs:
   test-node-example:
-    name: Node.js
+    name: node-js
     runs-on: ubuntu-20.04
     defaults:
       run:
-        working-directory: ./examples/Node.js
+        working-directory: ./examples/node-js
 
     steps:
     - uses: actions/checkout@v2
@@ -26,12 +26,12 @@ jobs:
         npm run test
 
   build-hello-world-example:
-    name: Hello World Build
+    name: hello-world build
     runs-on: ubuntu-20.04
 
     defaults:
       run:
-        working-directory: ./examples/HelloWorld
+        working-directory: ./examples/hello-world
 
     steps:
     - uses: actions/checkout@v2
@@ -54,8 +54,8 @@ jobs:
         name: hello-world-build
         if-no-files-found: error
         path: |
-          examples/HelloWorld/web-build
-          examples/HelloWorld/wasi-build
+          examples/hello-world/web-build
+          examples/hello-world/wasi-build
 
 
   test-hello-world-example:
@@ -66,7 +66,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./examples/HelloWorld
+        working-directory: ./examples/hello-world
 
     steps:
     - uses: actions/checkout@v2
@@ -75,22 +75,22 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: hello-world-build
-        path: examples/HelloWorld
+        path: examples/hello-world
 
     - name: Test
       uses: cypress-io/github-action@v2
       with:
-        working-directory: ./examples/HelloWorld
+        working-directory: ./examples/hello-world
         browser: chrome
         start: npm start
 
   build-test-hello-pipeline-example:
-    name: Hello Pipeline Build Test
+    name: hello-pipeline build test
     runs-on: ubuntu-20.04
 
     defaults:
       run:
-        working-directory: ./examples/HelloPipeline
+        working-directory: ./examples/hello-pipeline
 
     steps:
     - uses: actions/checkout@v3
@@ -114,12 +114,12 @@ jobs:
         npm run test:help
 
   build-test-inputs-outputs-example:
-    name: Inputs Outputs
+    name: inputs-outputs
     runs-on: ubuntu-20.04
 
     defaults:
       run:
-        working-directory: ./examples/InputsOutputs
+        working-directory: ./examples/inputs-outputs
 
     steps:
     - uses: actions/checkout@v3
@@ -141,7 +141,7 @@ jobs:
         npm run test
 
   test-umd-example:
-    name: UMD
+    name: umd
     runs-on: ubuntu-20.04
 
     steps:
@@ -150,12 +150,12 @@ jobs:
     - name: Test
       uses: cypress-io/github-action@v4
       with:
-        working-directory: ./examples/UMD
+        working-directory: ./examples/umd
         browser: chrome
         start: npm start
 
   test-webpack-example:
-    name: Webpack
+    name: webpack
     runs-on: ubuntu-20.04
 
     steps:
@@ -164,19 +164,19 @@ jobs:
     - name: Test Webpack Example on Chrome
       uses: cypress-io/github-action@v4
       with:
-        working-directory: ./examples/Vite
+        working-directory: ./examples/webpack
         browser: chrome
         start: npm start
 
     - name: Test Webpack Example on Firefox
       uses: cypress-io/github-action@v4
       with:
-        working-directory: ./examples/Vite
+        working-directory: ./examples/webpack
         browser: firefox
         start: npm start
 
   test-vite-example:
-    name: Vite
+    name: vite
     runs-on: ubuntu-20.04
 
     steps:
@@ -185,23 +185,23 @@ jobs:
     - name: Test Vite Example on Chrome
       uses: cypress-io/github-action@v4
       with:
-        working-directory: ./examples/Vite
+        working-directory: ./examples/vite
         browser: chrome
         start: npm start
 
     - name: Test Vite Example on Firefox
       uses: cypress-io/github-action@v4
       with:
-        working-directory: ./examples/Vite
+        working-directory: ./examples/vite
         browser: firefox
         start: npm start
 
   test-debugging-example:
-    name: Debugging
+    name: debugging
     runs-on: ubuntu-20.04
     defaults:
       run:
-        working-directory: ./examples/Debugging
+        working-directory: ./examples/debugging
 
     steps:
     - uses: actions/checkout@v2

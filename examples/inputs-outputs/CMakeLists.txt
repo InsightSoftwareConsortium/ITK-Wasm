@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(InputsOutputs)
+project(inputs-outputs)
 
 # Use C++17 or newer with itk-wasm
 set(CMAKE_CXX_STANDARD 17)
@@ -27,5 +27,5 @@ find_package(ITK REQUIRED
   )
 include(${ITK_USE_FILE})
 
-add_executable(InputsOutputs InputsOutputs.cxx)
-target_link_libraries(InputsOutputs PUBLIC ${ITK_LIBRARIES})
+add_executable(inputs-outputs inputs-outputs.cxx)
+target_link_libraries(inputs-outputs PUBLIC ${ITK_LIBRARIES})
