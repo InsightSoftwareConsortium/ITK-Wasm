@@ -1,5 +1,18 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.22](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.21...itk-wasm-v1.0.0-b.22) (2022-08-31)
+
+
+### Bug Fixes
+
+* **runPipelineEmscripten:** Copy args before passing to callMain ([6f0a85f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/6f0a85f292014a1b4b9fad85dc37e26282257e01))
+
+
+### Features
+
+* **itk-wasm-cli:** Update default Docker image for kebab modules ([c6182e5](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/c6182e526a70c3bf30023e0d5e2a86fda106107c))
+* **Pipeline:** Add interface_json() ([24bbeb7](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/24bbeb774cff51fffd075fe88d96d4563e85954c))
+
 # [1.0.0-b.21](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.20...itk-wasm-v1.0.0-b.21) (2022-08-25)
 
 
