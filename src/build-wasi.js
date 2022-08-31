@@ -145,10 +145,23 @@ if (options.copyBuildArtifacts) {
     const result = asyncMod.map(meshIOFiles, copyMeshIOModules)
     callback(null, result)
   }
+  let dicomFiles = glob.sync(path.join(buildDir, 'wasi-dicom', '*.wasm'))
+  const copyDICOMModules = function (dicomFile, callback) {
+    const io = path.basename(dicomFile)
+    const output = path.join('dist', 'wasi-dicom', io)
+    fs.copySync(dicomFile, output)
+    callback(null, io)
+  }
+  const buildDICOMParallel = function (callback) {
+    console.log('Copying wasi-dicom modules...')
+    const result = asyncMod.map(dicomFiles, copyDICOMModules)
+    callback(null, result)
+  }
 
   asyncMod.parallel([
     buildImageIOsParallel,
     buildMeshIOsParallel,
+    buildDICOMParallel,
   ])
 } // options.copySources
 

@@ -10,7 +10,10 @@ src/build-emscripten.js
 src/build-wasi.js
 dist/image-io/
 dist/mesh-io/
+dist/dicom/
+dist/pipelines
 dist/wasi-image-io/
 dist/wasi-mesh-io/
+dist/wasi-dicom/
 examples/
 doc/

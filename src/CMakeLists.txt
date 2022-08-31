@@ -41,5 +41,6 @@ add_subdirectory(io/internal/pipelines/image/convert-image)
 add_subdirectory(io/internal/pipelines/image/read-dicom)
 add_subdirectory(io/internal/pipelines/mesh/convert-mesh)
 add_subdirectory(io/internal/pipelines/mesh/mesh-to-polydata)
+add_subdirectory(io/internal/pipelines/dicom)
 
 endif() # BUILD_ITK_WASM_IO_MODULES
