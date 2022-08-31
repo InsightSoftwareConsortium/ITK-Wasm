@@ -21,7 +21,7 @@ async function readImageLocalDICOMFileSeries (fileNames: string[], singleSortedS
     throw new Error('No fileNames provided')
   }
   const imageIOsPath = findLocalImageIOPath()
-  const seriesReader = 'ReadImageDICOMFileSeries'
+  const seriesReader = 'read-image-dicom-file-series'
   const seriesReaderPath = path.join(imageIOsPath, seriesReader + '.js')
   const seriesReaderModule = await loadEmscriptenModule(seriesReaderPath) as PipelineEmscriptenModule
   const mountedFilePath = seriesReaderModule.mountContainingDir(fileNames[0])

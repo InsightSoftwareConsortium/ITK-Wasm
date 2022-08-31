@@ -32,11 +32,11 @@ public:
 
     using InputMeshType = itk::wasm::InputMesh<MeshType>;
     InputMeshType inputMesh;
-    pipeline.add_option("InputMesh", inputMesh, "The input mesh")->required();
+    pipeline.add_option("input-mesh", inputMesh, "The input mesh")->required()->type_name("INPUT_MESH");
 
     using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
     OutputMeshType outputMesh;
-    pipeline.add_option("OutputMesh", outputMesh, "The output mesh")->required();
+    pipeline.add_option("output-mesh", outputMesh, "The output mesh")->required()->type_name("OUTPUT_MESH");
 
     ITK_WASM_PARSE(pipeline);
 
@@ -74,10 +74,10 @@ itkSupportInputMeshTypesMemoryIOTest(int argc, char * argv[])
 
   const char * mockArgv[] = {"itkSupportInputMeshTypesMemoryIOTest", "--memory-io", "0", "0", NULL};
 
-  itk::wasm::Pipeline pipeline("Test supporting multiple input mesh types in memory", 4, const_cast< char ** >(mockArgv));
+  itk::wasm::Pipeline pipeline("support-input-mesh-types-memory-io-test", "Test supporting multiple input mesh types in memory", 4, const_cast< char ** >(mockArgv));
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
    uint8_t,
    float>
-  ::Dimensions<2U,3U>("InputMesh", pipeline);
+  ::Dimensions<2U,3U>("input-mesh", pipeline);
 }

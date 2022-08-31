@@ -177,6 +177,12 @@ itk_add_test(NAME itkPipelineMemoryIOTest
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputPolyData.vtk
 )
 
+itk_add_test(NAME itkPipelineInterfaceJSONTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkPipelineTest
+      --interface-json
+)
+
 itk_add_test(NAME itkSupportInputImageTypesTest
     COMMAND WebAssemblyInterfaceTestDriver
     itkSupportInputImageTypesTest

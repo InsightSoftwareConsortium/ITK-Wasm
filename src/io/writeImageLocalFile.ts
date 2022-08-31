@@ -52,7 +52,7 @@ async function writeImageLocalFile (image: Image, filePath: string, useCompressi
     io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
-      const modulePath = path.join(imageIOsPath, ImageIOIndex[idx] + 'WriteImage.js')
+      const modulePath = path.join(imageIOsPath, ImageIOIndex[idx] + '-write-image.js')
       const writeImageModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
       const mountedFilePath = writeImageModule.mountContainingDir(absoluteFilePath)
       const { returnValue } = runPipelineEmscripten(writeImageModule, args, desiredOutputs, inputs)
@@ -66,7 +66,7 @@ async function writeImageLocalFile (image: Image, filePath: string, useCompressi
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(imageIOsPath, io as string + 'WriteImage.js')
+  const modulePath = path.join(imageIOsPath, io as string + '-write-image.js')
   const writeImageModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
   const mountedFilePath = writeImageModule.mountContainingDir(absoluteFilePath)
   runPipelineEmscripten(writeImageModule, args, desiredOutputs, inputs)

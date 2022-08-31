@@ -31,11 +31,11 @@ public:
 
     using InputImageType = itk::wasm::InputImage<ImageType>;
     InputImageType inputImage;
-    pipeline.add_option("InputImage", inputImage, "The input image")->required();
+    pipeline.add_option("input-image", inputImage, "The input image")->required()->type_name("INPUT_IMAGE");
 
     using OutputImageType = itk::wasm::OutputImage<ImageType>;
     OutputImageType outputImage;
-    pipeline.add_option("OutputImage", outputImage, "The output image")->required();
+    pipeline.add_option("output-image", outputImage, "The output image")->required()->type_name("OUTPUT_IMAGE");
 
     ITK_WASM_PARSE(pipeline);
 
@@ -73,10 +73,10 @@ itkSupportInputImageTypesMemoryIOTest(int argc, char * argv[])
 
   const char * mockArgv[] = {"itkSupportInputImageTypesMemoryIOTest", "--memory-io", "0", "0", NULL};
 
-  itk::wasm::Pipeline pipeline("Test supporting multiple input image types in memory", 4, const_cast< char ** >(mockArgv));
+  itk::wasm::Pipeline pipeline("support-input-image-type-memory-io-test", "Test supporting multiple input image types in memory", 4, const_cast< char ** >(mockArgv));
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
    uint8_t,
    float>
-  ::Dimensions<2U,3U>("InputImage", pipeline);
+  ::Dimensions<2U,3U>("input-image", pipeline);
 }

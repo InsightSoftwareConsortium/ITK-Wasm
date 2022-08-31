@@ -10,8 +10,8 @@ mkdir -p ITKWebAssemblyInterfaceModuleCopy
 rsync -a ../../../{include,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
 rsync -a ../../../src/{*.cxx,CMakeLists.txt} ./ITKWebAssemblyInterfaceModuleCopy/src/
 rsync -a ../../../src/emscripten-module ./ITKWebAssemblyInterfaceModuleCopy/src/
-mkdir -p MedianFilterPipelineCopy
-rsync -a ../../../test/pipelines/MedianFilterPipeline/{CMakeLists.txt,MedianFilterTest.cxx} ./MedianFilterPipelineCopy
+mkdir -p median-filter-pipelineCopy
+rsync -a ../../../test/pipelines/median-filter-pipeline/{CMakeLists.txt,median-filter-test.cxx} ./median-filter-pipelineCopy
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 VCS_REF=$(git rev-parse --short HEAD)
@@ -121,4 +121,4 @@ if $debug; then
 fi
 
 
-rm -rf ITKWebAssemblyInterfaceModuleCopy MedianFilterPipelineCopy
+rm -rf ITKWebAssemblyInterfaceModuleCopy median-filter-pipelineCopy

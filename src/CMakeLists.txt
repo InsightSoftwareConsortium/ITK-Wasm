@@ -35,11 +35,11 @@ if(EMSCRIPTEN)
   set(esm_link_flags " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0")
 endif()
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/pipelines/common/CompressStringify/BuildZstd.cmake)
-add_subdirectory(io/internal/pipelines/common/CompressStringify)
-add_subdirectory(io/internal/pipelines/image/ConvertImage)
-add_subdirectory(io/internal/pipelines/image/ReadDICOM)
-add_subdirectory(io/internal/pipelines/mesh/ConvertMesh)
-add_subdirectory(io/internal/pipelines/mesh/MeshToPolyData)
+include(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/pipelines/common/compress-stringify/BuildZstd.cmake)
+add_subdirectory(io/internal/pipelines/common/compress-stringify)
+add_subdirectory(io/internal/pipelines/image/convert-image)
+add_subdirectory(io/internal/pipelines/image/read-dicom)
+add_subdirectory(io/internal/pipelines/mesh/convert-mesh)
+add_subdirectory(io/internal/pipelines/mesh/mesh-to-polydata)
 
 endif() # BUILD_ITK_WASM_IO_MODULES

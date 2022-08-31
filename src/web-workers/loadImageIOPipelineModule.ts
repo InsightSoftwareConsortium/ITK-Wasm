@@ -9,7 +9,7 @@ import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js
 
 async function * availableIOModules (input: IOInput) {
   for (let idx = 0; idx < ImageIOIndex.length; idx++) {
-    const trialIO = ImageIOIndex[idx] + 'ReadImage'
+    const trialIO = ImageIOIndex[idx] + '-read-image'
     const ioModule = await loadPipelineModule(trialIO, input.config.imageIOUrl) as PipelineEmscriptenModule
     yield ioModule
   }

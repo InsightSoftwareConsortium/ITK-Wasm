@@ -12,11 +12,11 @@ Make sure to complete the [Hello Pipeline!](./hello_pipeline.html) example befor
 First, let's create a new directory to house our project.
 
 ```sh
-mkdir InputsOutputs
-cd InputsOutputs
+mkdir inputs-outputs
+cd inputs-outputs
 ```
 
-Let's write some code! Populate *InputsOutputs.cxx* with the headers we need:
+Let's write some code! Populate *inputs-outputs.cxx* with the headers we need:
 
 ```c++
 #include "itkPipeline.h"
@@ -36,7 +36,7 @@ Next, create a standard `main` C command line interface function and an `itk::wa
 ```c++
 int main(int argc, char * argv[]) {
   // Create the pipeline for parsing arguments. Provide a description.
-  itk::wasm::Pipeline pipeline("Smooth an image with a median filter", argc, argv);
+  itk::wasm::Pipeline pipeline("median-filter", "Smooth an image with a median filter", argc, argv);
 
   return EXIT_SUCCESS;
 }
@@ -44,7 +44,7 @@ int main(int argc, char * argv[]) {
 Add options to the pipeline that define our inputs, outputs, and processing parameters.
 
 ```c++
-  itk::wasm::Pipeline pipeline("Smooth an image with a median filter", argc, argv);
+  itk::wasm::Pipeline pipeline("median-filter", "Smooth an image with a median filter", argc, argv);
 
 
   constexpr unsigned int Dimension = 2;
@@ -59,12 +59,12 @@ Add options to the pipeline that define our inputs, outputs, and processing para
   // Add a input image argument.
   using InputImageType = itk::wasm::InputImage<ImageType>;
   InputImageType inputImage;
-  pipeline.add_option("InputImage", inputImage, "The input image")->required();
+  pipeline.add_option("input-image", inputImage, "The input image")->required()->type_name("INPUT_IMAGE");
 
   // Add an output image argument.
   using OutputImageType = itk::wasm::OutputImage<ImageType>;
   OutputImageType outputImage;
-  pipeline.add_option("OutputImage", outputImage, "The output image")->required();
+  pipeline.add_option("output-image", outputImage, "The output image")->required()->type_name("OUTPUT_IMAGE");
 ```
 
 The `inputImage` variable is populated from the filesystem if built as a native executable or a WASI binary run from the command line. When running in the browser or in a wrapped language, `inputImage` is read from WebAssembly memory without file IO.
@@ -74,7 +74,7 @@ When the program completes, `outputImage` is written to the filesystem if built 
 Parse the command line arguments with the `ITK_WASM_PARSE` macro:
 
 ```c++
-  pipeline.add_option("OutputImage", outputImage, "The output image")->required();
+  pipeline.add_option("output-image", outputImage, "The output image")->required()->type_name("OUTPUT_IMAGE");
 
 
   ITK_WASM_PARSE(pipeline);
@@ -82,7 +82,7 @@ Parse the command line arguments with the `ITK_WASM_PARSE` macro:
 
 The `-h` and `--help` flags are automatically generated from pipeline arguments to print usage information.
 
-![InputsOutputs help](./inputs_outputs_help.png)
+![inputs-outputs help](./inputs_outputs_help.png)
 
 Finally, process our data: 
 ```c++
@@ -105,7 +105,7 @@ Next, provide a [CMake](https://cmake.org/) build configuration at *CMakeLists.t
 
 ```cmake
 cmake_minimum_required(VERSION 3.16)
-project(InputsOutputs)
+project(inputs-outputs)
 
 # Use C++17 or newer with itk-wasm
 set(CMAKE_CXX_STANDARD 17)
@@ -133,8 +133,8 @@ find_package(ITK REQUIRED
   )
 include(${ITK_USE_FILE})
 
-add_executable(InputsOutputs InputsOutputs.cxx)
-target_link_libraries(InputsOutputs PUBLIC ${ITK_LIBRARIES})
+add_executable(inputs-outputs inputs-outputs.cxx)
+target_link_libraries(inputs-outputs PUBLIC ${ITK_LIBRARIES})
 ```
 
 ## Create WebAssembly binary
@@ -150,7 +150,7 @@ Try running on an [example image](https://data.kitware.com/api/v1/file/63041ac8f
 ## Run WebAssembly binary
 
 ```sh
-npx itk-wasm -b wasi-build run InputsOutputs.wasi.wasm -- -- --radius 2 cthead1.png smoothed.png
+npx itk-wasm -b wasi-build run inputs-outputs.wasi.wasm -- -- --radius 2 cthead1.png smoothed.png
 ```
 
 The input image:
@@ -220,7 +220,7 @@ Run the pipeline.
 
 ```javascript
 // Path to the Emscripten WebAssembly module without extensions
-const pipelinePath = path.resolve('web-build', 'InputsOutputs')
+const pipelinePath = path.resolve('web-build', 'inputs-outputs')
 const { stdout, stderr, outputs } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
 ```
 

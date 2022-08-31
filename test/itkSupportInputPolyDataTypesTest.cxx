@@ -32,11 +32,11 @@ public:
 
     using InputPolyDataType = itk::wasm::InputPolyData<PolyDataType>;
     InputPolyDataType inputPolyData;
-    pipeline.add_option("InputPolyData", inputPolyData, "The input mesh")->required();
+    pipeline.add_option("input-polydata", inputPolyData, "The input polydata")->required()->type_name("INPUT_POLYDATA");
 
     using OutputPolyDataType = itk::wasm::OutputPolyData<PolyDataType>;
     OutputPolyDataType outputPolyData;
-    pipeline.add_option("OutputPolyData", outputPolyData, "The output mesh")->required();
+    pipeline.add_option("output-polydata", outputPolyData, "The output polydata")->required()->type_name("OUTPUT_POLYDATA");
 
     ITK_WASM_PARSE(pipeline);
 
@@ -49,10 +49,10 @@ public:
 int
 itkSupportInputPolyDataTypesTest(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Test supporting multiple input mesh types", argc, argv);
+  itk::wasm::Pipeline pipeline("support-input-polydata-types-test", "Test supporting multiple input mesh types", argc, argv);
 
   itk::WASMMeshIOFactory::RegisterOneFactory();
 
   return itk::wasm::SupportInputPolyDataTypes<PipelineFunctor>
-  ::PixelTypes<uint8_t, float>("InputPolyData", pipeline);
+  ::PixelTypes<uint8_t, float>("input-polydata", pipeline);
 }

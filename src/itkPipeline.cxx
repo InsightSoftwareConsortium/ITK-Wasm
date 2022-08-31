@@ -20,6 +20,9 @@
 #include <rang.hpp>
 #endif
 #include "CLI/Formatter.hpp"
+#include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/ostreamwrapper.h"
 
 namespace itk
 {
@@ -27,8 +30,8 @@ namespace wasm
 {
 
 Pipeline
-::Pipeline(std::string description, int argc, char **argv):
-  App(description),
+::Pipeline(std::string name, std::string description, int argc, char **argv):
+  App(description, name),
   m_argc(argc),
   m_argv(argv)
 {
@@ -232,6 +235,102 @@ Pipeline
 ::~Pipeline()
 {
 
+}
+
+void
+Pipeline
+::interface_json()
+{
+  rapidjson::Document document;
+  document.SetObject();
+  rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+
+  rapidjson::Value description;
+  description.SetString(this->get_description().c_str(), allocator);
+  document.AddMember("description", description.Move(), allocator);
+
+  rapidjson::Value name;
+  name.SetString(this->get_name().c_str(), allocator);
+  document.AddMember("name", name.Move(), allocator);
+
+  rapidjson::Value inputs(rapidjson::kArrayType);
+  rapidjson::Value outputs(rapidjson::kArrayType);
+  rapidjson::Value parameters(rapidjson::kArrayType);
+  for(CLI::Option *opt : this->get_options({})) {
+    rapidjson::Value option;
+    option.SetObject();
+
+    rapidjson::Value optionDescription;
+    optionDescription.SetString(opt->get_description().c_str(), allocator);
+    option.AddMember("description", optionDescription.Move(), allocator);
+
+    auto singleName = opt->get_single_name();
+    if (singleName == "help")
+    {
+      continue;
+    }
+
+    rapidjson::Value optionName;
+    optionName.SetString(opt->get_single_name().c_str(), allocator);
+    option.AddMember("name", optionName.Move(), allocator);
+
+    rapidjson::Value itemsExpected;
+    itemsExpected.SetInt(opt->get_items_expected());
+    option.AddMember("itemsExpected", itemsExpected.Move(), allocator);
+
+    rapidjson::Value itemsExpectedMin;
+    itemsExpectedMin.SetInt(opt->get_items_expected_min());
+    option.AddMember("itemsExpectedMin", itemsExpectedMin.Move(), allocator);
+
+    rapidjson::Value itemsExpectedMax;
+    itemsExpectedMax.SetInt(opt->get_items_expected_max());
+    option.AddMember("itemsExpectedMax", itemsExpectedMax.Move(), allocator);
+
+    auto typeName = opt->get_type_name();
+    // flag
+    if (!opt->get_items_expected())
+    {
+      typeName = "BOOL";
+    }
+    rapidjson::Value optionTypeName;
+    optionTypeName.SetString(typeName.c_str(), allocator);
+    option.AddMember("type", optionTypeName.Move(), allocator);
+
+    if (opt->get_positional())
+    {
+      if (typeName.rfind("OUTPUT", 0) != std::string::npos)
+      {
+        outputs.PushBack(option, allocator);
+      }
+      else
+      {
+        inputs.PushBack(option, allocator);
+      }
+    }
+    else
+    {
+      opt->capture_default_str();
+      // flag
+      if (!opt->get_items_expected())
+      {
+        opt->default_str("false");
+      }
+      if (!opt->get_default_str().empty())
+      {
+        rapidjson::Value defaultStr;
+        defaultStr.SetString(opt->get_default_str().c_str(), allocator);
+        option.AddMember("default", defaultStr.Move(), allocator);
+      }
+      parameters.PushBack(option, allocator);
+    }
+  }
+  document.AddMember("inputs", inputs.Move(), allocator);
+  document.AddMember("outputs", outputs.Move(), allocator);
+  document.AddMember("parameters", parameters.Move(), allocator);
+
+  rapidjson::OStreamWrapper ostreamWrapper( std::cout );
+  rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
+  document.Accept( writer );
 }
 
 bool Pipeline::m_UseMemoryIO{false};

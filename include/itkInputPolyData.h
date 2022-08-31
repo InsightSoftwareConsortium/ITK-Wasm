@@ -75,7 +75,7 @@ bool lexical_cast(const std::string &input, InputPolyData<TPolyData> &inputPolyD
     return false;
   }
 
-  if (wasm::Pipeline::GetUseMemoryIO())
+  if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     using WASMPolyDataToPolyDataFilterType = WASMPolyDataToPolyDataFilter<TPolyData>;

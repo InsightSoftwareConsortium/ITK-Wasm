@@ -24,10 +24,10 @@ The following [`itk::wasm::Pipeline`](https://github.com/InsightSoftwareConsorti
 
 int main(argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", argc, argv);
+  itk::wasm::Pipeline pipeline("test-pipeline", "A test ITK WASM Pipeline", argc, argv);
 
   itk::wasm::InputTextStream inputTextStream;
-  pipeline.add_option("InputText", inputTextStream, "The input text")->required();
+  pipeline.add_option("InputText", inputTextStream, "The input text")->required()->type_name("INPUT_TEXT");
 
   itk::wasm::OutputTextStream outputTextStream;
   pipeline.add_option("OutputText", outputTextStream, "The output text")->required();
@@ -46,3 +46,20 @@ int main(argc, char * argv[])
 <dl>
   <dt><b>InputTextStream</b><dt><dd>A string. To reader this data type in C++, using the resulting  <a href="https://www.cplusplus.com/reference/istream/istream/">std::istream</a>.</dd>
 </dl>
+
+For binding generation, set the `type_name` an the options accordingly. The type names are:
+
+- `INPUT_TEXT_FILE`
+- `OUTPUT_TEXT_FILE`
+- `INPUT_BINARY_FILE`
+- `OUTPUT_BINARY_FILE`
+- `INPUT_TEXT_STREAM`
+- `OUTPUT_TEXT_STREAM`
+- `INPUT_BINARY_STREAM`
+- `OUTPUT_BINARY_STREAM`
+- `INPUT_IMAGE`
+- `OUTPUT_IMAGE`
+- `INPUT_MESH`
+- `OUTPUT_MESH`
+- `INPUT_POLYDATA`
+- `OUTPUT_POLYDATA`

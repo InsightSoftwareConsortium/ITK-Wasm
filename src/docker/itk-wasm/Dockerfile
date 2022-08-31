@@ -39,7 +39,7 @@ RUN cd / && \
 COPY web-build /usr/local/bin/
 
 # Trigger Emscripten to cache builds of required system libraries
-ADD MedianFilterPipelineCopy /MedianFilterPipelineCopy
+ADD median-filter-pipelineCopy /median-filter-pipelineCopy
 ADD populate-cache.sh /usr/local/bin/populate-cache.sh
 RUN /usr/local/bin/populate-cache.sh && rm /usr/local/bin/populate-cache.sh
 

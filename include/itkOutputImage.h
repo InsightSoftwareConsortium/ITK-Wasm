@@ -69,7 +69,7 @@ public:
 
   OutputImage() = default;
   ~OutputImage() {
-    if(wasm::Pipeline::GetUseMemoryIO())
+    if(wasm::Pipeline::get_use_memory_io())
     {
 #ifndef ITK_WASM_NO_MEMORY_IO
     if (!this->m_Image.IsNull() && !this->m_Identifier.empty())

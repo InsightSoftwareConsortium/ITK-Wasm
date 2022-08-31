@@ -16,7 +16,7 @@ import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
  */
 async function readDICOMTagsLocalFile (fileName: string, tags: string[] | null = null): Promise<Map<string, string>> {
   const imageIOsPath = findLocalImageIOPath()
-  const tagReader = 'ReadDICOMTags'
+  const tagReader = 'read-dicom-tags'
   const tagReaderPath = path.join(imageIOsPath, tagReader + '.js')
   const tagReaderModule = await loadEmscriptenModule(tagReaderPath) as PipelineEmscriptenModule
   const mountedFilePath = tagReaderModule.mountContainingDir(fileName)

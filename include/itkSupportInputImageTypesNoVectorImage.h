@@ -66,7 +66,7 @@ public:
 
     using InputImageType = itk::wasm::InputImage<ImageType>;
     InputImageType inputImage;
-    pipeline.add_option("InputImage", inputImage, "The input image")->required();
+    pipeline.add_option("input-image", inputImage, "The input image")->required();
 ```
 [...]
 
@@ -74,14 +74,14 @@ public:
 int
 main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("Test supporting multiple input image types", argc, argv);
+  itk::wasm::Pipeline pipeline("support-multiple", "Test supporting multiple input image types", argc, argv);
 
   // Supports the pixels types uint8_t, float
   // Supports the image dimensions 2, 3
   return itk::wasm::SupportInputImageTypesNoVectorImage<PipelineFunctor,
    uint8_t,
    float>
-  ::Dimensions<2U,3U>("InputImage", pipeline);
+  ::Dimensions<2U,3U>("input-image", pipeline);
 }
 ```
  *
@@ -97,8 +97,8 @@ public:
   Dimensions(const std::string & inputImageOptionName, Pipeline & pipeline)
   {
     InterfaceImageTypeNoVectorImage imageType;
-    const auto iwpArgc = pipeline.GetArgc();
-    const auto iwpArgv = pipeline.GetArgv();
+    const auto iwpArgc = pipeline.get_argc();
+    const auto iwpArgv = pipeline.get_argv();
     bool passThrough = false;
     for (int ii = 0; ii < iwpArgc; ++ii)
       {

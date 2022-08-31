@@ -39,7 +39,7 @@ async function readImageLocalFile (filePath: string): Promise<Image> {
     io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
-      const modulePath = path.join(imageIOsPath, ImageIOIndex[idx] + 'ReadImage.js')
+      const modulePath = path.join(imageIOsPath, ImageIOIndex[idx] + '-read-image.js')
       const readImageModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
       const mountedFilePath = readImageModule.mountContainingDir(absoluteFilePath)
       const { returnValue, outputs } = runPipelineEmscripten(readImageModule, args, desiredOutputs, inputs)
@@ -53,7 +53,7 @@ async function readImageLocalFile (filePath: string): Promise<Image> {
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(imageIOsPath, io as string + 'ReadImage.js')
+  const modulePath = path.join(imageIOsPath, io as string + '-read-image.js')
   const readImageModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
   const mountedFilePath = readImageModule.mountContainingDir(absoluteFilePath)
   const { outputs } = runPipelineEmscripten(readImageModule, args, desiredOutputs, inputs)

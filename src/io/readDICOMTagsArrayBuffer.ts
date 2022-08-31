@@ -40,7 +40,7 @@ async function readDICOMTagsArrayBuffer (webWorker: Worker | null, arrayBuffer: 
     {
       operation: 'readDICOMTags',
       config: config,
-      pipelinePath: 'ReadDICOMTags', // placeholder
+      pipelinePath: 'read-dicom-tags', // placeholder
       args,
       outputs,
       inputs

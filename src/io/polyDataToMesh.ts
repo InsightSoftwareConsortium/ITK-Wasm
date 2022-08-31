@@ -28,7 +28,7 @@ async function polyDataToMesh (webWorker: Worker | null, polyData: PolyData): Pr
     {
       operation: 'polyDataToMesh',
       config: config,
-      pipelinePath: 'PolyDataToMesh', // placeholder
+      pipelinePath: 'polydata-to-mesh', // placeholder
       args,
       outputs,
       inputs

@@ -1,0 +1,23 @@
+{
+  "name": "itk-wasm-inputs-outputs-example",
+  "version": "1.0.0",
+  "description": "An itk-wasm pipeline example for inputs/outputs",
+  "main": "index.mjs",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:wasi && npm run build:emscripten",
+    "build:wasi": "itk-wasm -b wasi-build -i itkwasm/wasi build",
+    "build:emscripten": "itk-wasm -i itkwasm/emscripten:latest-debug build -- -DCMAKE_BUILD_TYPE=Debug",
+    "test": "npm run test:wasi && npm run test:wasi:help && npm run test:emscripten",
+    "test:wasi": "itk-wasm -b wasi-build run inputs-outputs.wasi.wasm -- -- cthead1.png smoothed.png",
+    "test:wasi:help": "itk-wasm -b wasi-build run inputs-outputs.wasi.wasm -- -- --help",
+    "test:emscripten": "node ./index.mjs --radius 2 ./cthead1.png smoothed.png"
+  },
+  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fs-extra": "^10.0.0",
+    "itk-image-io": "^1.0.0-b.18",
+    "itk-wasm": "^1.0.0-b.18"
+  }
+}

@@ -33,7 +33,7 @@ async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: Arra
       config: config,
       mimeType,
       fileName,
-      pipelinePath: 'ReadImage', // placeholder
+      pipelinePath: 'read-image', // placeholder
       args,
       outputs,
       inputs

@@ -129,7 +129,7 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   std::memcpy(readWASMPolyDataPointer, readPolyDataJSON.data(), readPolyDataJSON.size());
 
   const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", NULL};
-  itk::wasm::Pipeline pipeline("A test ITK WASM Pipeline", 12, const_cast< char ** >(mockArgv));
+  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK WASM Pipeline", 12, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -148,39 +148,39 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   using InputImageType = itk::wasm::InputImage<ImageType>;
   InputImageType inputImage;
-  pipeline.add_option("inputImage", inputImage, "The inputImage")->required();
+  pipeline.add_option("input-image", inputImage, "The inputImage")->required()->type_name("INPUT_IMAGE");
 
   using OutputImageType = itk::wasm::OutputImage<ImageType>;
   OutputImageType outputImage;
-  pipeline.add_option("outputImage", outputImage, "The outputImage")->required();
+  pipeline.add_option("output-image", outputImage, "The outputImage")->required()->type_name("OUTPUT_IMAGE");
 
   itk::wasm::InputTextStream inputTextStream;
-  pipeline.add_option("InputText", inputTextStream, "The input text")->required();
+  pipeline.add_option("input-text", inputTextStream, "The input text")->required()->type_name("INPUT_TEXT_STREAM");
 
   itk::wasm::OutputTextStream outputTextStream;
-  pipeline.add_option("OutputText", outputTextStream, "The output text")->required();
+  pipeline.add_option("output-text", outputTextStream, "The output text")->required()->type_name("OUTPUT_TEXT_STREAM");
 
   itk::wasm::InputBinaryStream inputBinaryStream;
-  pipeline.add_option("InputBinary", inputBinaryStream, "The input text")->required();
+  pipeline.add_option("input-binary", inputBinaryStream, "The input text")->required()->type_name("OUTPUT_BINARY_STREAM");
 
   itk::wasm::OutputBinaryStream outputBinaryStream;
-  pipeline.add_option("OutputBinary", outputBinaryStream, "The output binary")->required();
+  pipeline.add_option("output-binary", outputBinaryStream, "The output binary")->required()->type_name("OUTPUT_BINARY");
 
   using InputMeshType = itk::wasm::InputMesh<MeshType>;
   InputMeshType inputMesh;
-  pipeline.add_option("InputMesh", inputMesh, "The input mesh")->required();
+  pipeline.add_option("input-mesh", inputMesh, "The input mesh")->required()->type_name("INPUT_MESH");
 
   using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
   OutputMeshType outputMesh;
-  pipeline.add_option("OutputMesh", outputMesh, "The output mesh")->required();
+  pipeline.add_option("output-mesh", outputMesh, "The output mesh")->required()->type_name("OUTPUT_MESH");
 
   using InputPolyDataType = itk::wasm::InputPolyData<PolyDataType>;
   InputPolyDataType inputPolyData;
-  pipeline.add_option("InputPolyData", inputPolyData, "The input polydata")->required();
+  pipeline.add_option("input-polydata", inputPolyData, "The input polydata")->required()->type_name("INPUT_POLYDATA");
 
   using OutputPolyDataType = itk::wasm::OutputPolyData<PolyDataType>;
   OutputPolyDataType outputPolyData;
-  pipeline.add_option("OutputPolyData", outputPolyData, "The output polydata")->required();
+  pipeline.add_option("output-polydata", outputPolyData, "The output polydata")->required()->type_name("OUTPUT_POLYDATA");
 
   ITK_WASM_PARSE(pipeline);
 

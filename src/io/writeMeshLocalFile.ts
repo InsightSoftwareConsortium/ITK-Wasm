@@ -57,7 +57,7 @@ async function writeMeshLocalFile (mesh: Mesh, filePath: string, options: WriteM
     io = extensionToIO.get(extension)
   } else {
     for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
-      const modulePath = path.join(meshIOsPath, MeshIOIndex[idx] + 'WriteMesh.js')
+      const modulePath = path.join(meshIOsPath, MeshIOIndex[idx] + '-write-mesh.js')
       const writeMeshModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
       const mountedFilePath = writeMeshModule.mountContainingDir(absoluteFilePath)
       const { returnValue } = runPipelineEmscripten(writeMeshModule, args, desiredOutputs, inputs)
@@ -71,7 +71,7 @@ async function writeMeshLocalFile (mesh: Mesh, filePath: string, options: WriteM
     throw Error('Could not find IO for: ' + absoluteFilePath)
   }
 
-  const modulePath = path.join(meshIOsPath, io as string + 'WriteMesh.js')
+  const modulePath = path.join(meshIOsPath, io as string + '-write-mesh.js')
   const writeMeshModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
   const mountedFilePath = writeMeshModule.mountContainingDir(absoluteFilePath)
   runPipelineEmscripten(writeMeshModule, args, desiredOutputs, inputs)

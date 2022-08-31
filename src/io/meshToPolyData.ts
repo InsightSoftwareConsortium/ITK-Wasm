@@ -28,7 +28,7 @@ async function meshToPolyData (webWorker: Worker | null, mesh: Mesh): Promise<{ 
     {
       operation: 'meshToPolyData',
       config: config,
-      pipelinePath: 'MeshToPolyData', // placeholder
+      pipelinePath: 'mesh-to-polydata', // placeholder
       args,
       outputs,
       inputs
