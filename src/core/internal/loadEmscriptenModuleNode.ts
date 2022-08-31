@@ -19,7 +19,7 @@ async function loadEmscriptenModuleNode (modulePath: string): Promise<Emscripten
   const wasmBinaryPath = `${modulePrefix}.wasm`
   const wasmBinary = fs.readFileSync(wasmBinaryPath)
   const fullModulePath = `${modulePrefix}.js`
-  const result = await import(/* webpackIgnore: true */ fullModulePath)
+  const result = await import(/* webpackIgnore: true */ /* @vite-ignore */ fullModulePath)
   const instantiated = result.default({ wasmBinary }) as EmscriptenModule
   return instantiated
 }
