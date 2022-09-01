@@ -331,6 +331,7 @@ Pipeline
   rapidjson::OStreamWrapper ostreamWrapper( std::cout );
   rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
   document.Accept( writer );
+  std::cout << std::endl;
 }
 
 bool Pipeline::m_UseMemoryIO{false};

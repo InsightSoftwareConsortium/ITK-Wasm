@@ -1,12 +1,7 @@
 import axios from 'axios'
 
 import ITKWASMEmscriptenModule from '../ITKWASMEmscriptenModule.js'
-
-function camelCase(kebobCase: string) {
-  return kebobCase.replace(/-([a-z])/g, (kk) => {
-    return kk[1].toUpperCase();
-  });
-}
+import camelCase from './camelCase.js'
 
 // Load the Emscripten module in the browser in a WebWorker.
 //

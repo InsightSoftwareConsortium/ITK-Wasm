@@ -16,7 +16,6 @@
  *
  *=========================================================================*/
 #include "itkPipeline.h"
-#include "itkInputBinaryStream.h"
 #include "itkOutputTextStream.h"
 
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
@@ -48,7 +47,7 @@ int main(int argc, char * argv[])
   pipeline.add_option("dicom-file", dicomFileName, "Input DICOM file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
 
   itk::wasm::OutputTextStream outputText;
-  pipeline.add_option("output-text", outputText, "Output text file")->required()->type_name("OUTPUT_TEXT_FILE");
+  pipeline.add_option("output-text", outputText, "Output text file")->required()->type_name("OUTPUT_TEXT_STREAM");
 
 
   size_t readFlags = 0;

@@ -129,7 +129,7 @@ if (options.copyBuildArtifacts) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'dicom', 'pipelines'), { recursive: true })
+    fs.mkdirSync(path.join('dist', 'dicom', 'public', 'pipelines'), { recursive: true })
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
@@ -171,7 +171,7 @@ if (options.copyBuildArtifacts) {
   dicomFiles = dicomFiles.filter((fn) => !fn.endsWith('.umd.wasm'))
   const copyDICOMModules = function (dicomFile, callback) {
     const io = path.basename(dicomFile)
-    const output = path.join('dist', 'dicom', 'pipelines', io)
+    const output = path.join('dist', 'dicom', 'public', 'pipelines', io)
     fs.copySync(dicomFile, output)
     callback(null, io)
   }

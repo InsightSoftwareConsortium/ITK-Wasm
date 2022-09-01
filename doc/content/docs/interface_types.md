@@ -27,10 +27,10 @@ int main(argc, char * argv[])
   itk::wasm::Pipeline pipeline("test-pipeline", "A test ITK WASM Pipeline", argc, argv);
 
   itk::wasm::InputTextStream inputTextStream;
-  pipeline.add_option("InputText", inputTextStream, "The input text")->required()->type_name("INPUT_TEXT");
+  pipeline.add_option("InputText", inputTextStream, "The input text")->required()->type_name("INPUT_TEXT_STREAM");
 
   itk::wasm::OutputTextStream outputTextStream;
-  pipeline.add_option("OutputText", outputTextStream, "The output text")->required();
+  pipeline.add_option("OutputText", outputTextStream, "The output text")->required()->type_name("OUTPUT_TEXT_STREAM");
 
 
   ITK_WASM_PARSE(pipeline);
