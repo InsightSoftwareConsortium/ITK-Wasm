@@ -210,7 +210,7 @@ Pipeline
         std::cout << line << std::endl;
         std::cout << rang::fg::reset << rang::style::reset; 
         options = true;
-      } else if(line.back() == ':') {
+      } else if(!line.empty() && line.back() == ':') {
         optionGroup = true;
         std::cout << rang::fg::yellow;
         std::cout << line << std::endl;
