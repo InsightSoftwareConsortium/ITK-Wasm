@@ -87,14 +87,14 @@ Pipeline
     // Just in case, for clang format:
     // clang-format off
     std::string splash = R"raw(
-  __/\\\\\\\\\\\__/\\\\\\\\\\\\\\\__/\\\________/\\\_        
-  _\/////\\\///__\///////\\\/////__\/\\\_____/\\\//__       
-  _____\/\\\___________\/\\\_______\/\\\__/\\\//_____      
-    _____\/\\\___________\/\\\_______\/\\\\\\//\\\_____     
-    _____\/\\\___________\/\\\_______\/\\\//_\//\\\____    
-      _____\/\\\___________\/\\\_______\/\\\____\//\\\___   
-      _____\/\\\___________\/\\\_______\/\\\_____\//\\\__  
-        __/\\\\\\\\\\\_______\/\\\_______\/\\\______\//\\\_ 
+  __/\\\\\\\\\\\__/\\\\\\\\\\\\\\\__/\\\________/\\\_
+  _\/////\\\///__\///////\\\/////__\/\\\_____/\\\//__
+  _____\/\\\___________\/\\\_______\/\\\__/\\\//_____
+    _____\/\\\___________\/\\\_______\/\\\\\\//\\\_____
+    _____\/\\\___________\/\\\_______\/\\\//_\//\\\____
+      _____\/\\\___________\/\\\_______\/\\\____\//\\\___
+      _____\/\\\___________\/\\\_______\/\\\_____\//\\\__
+        __/\\\\\\\\\\\_______\/\\\_______\/\\\______\//\\\_
         _\///////////________\///________\///________\///__
   )raw";
     // clang-format on
@@ -138,7 +138,7 @@ Pipeline
       } else if(usage) {
         std::cout << rang::fg::yellow;
         std::cout << line.substr(0, 6);
-        std::cout << rang::fg::reset; 
+        std::cout << rang::fg::reset;
         std::cout << rang::fg::magenta;
         size_t optionsLoc = line.find("[OPTIONS]");
         size_t stop = optionsLoc - 7;
@@ -149,7 +149,7 @@ Pipeline
           start = stop;
         }
         std::cout << line.substr(6, stop);
-        std::cout << rang::style::bold; 
+        std::cout << rang::style::bold;
         std::cout << rang::fg::cyan;
         std::cout << line.substr(start);
         if (optionsLoc != std::string::npos)
@@ -160,7 +160,7 @@ Pipeline
           std::cout << " [OPTIONS]";
         }
         std::cout << std::endl;
-        std::cout << rang::fg::reset << rang::style::reset; 
+        std::cout << rang::fg::reset << rang::style::reset;
         usage = false;
       } else if(positionals) {
         if (line == "") {
@@ -170,7 +170,7 @@ Pipeline
           const size_t loc = line.find(' ', 3);
           std::cout << rang::fg::cyan;
           std::cout << line.substr(0, loc);
-          std::cout << rang::fg::reset; 
+          std::cout << rang::fg::reset;
           std::cout << line.substr(loc) << std::endl;
         }
       } else if(options) {
@@ -181,7 +181,7 @@ Pipeline
           const size_t loc = line.find(' ', 3);
           std::cout << rang::fg::green;
           std::cout << line.substr(0, loc);
-          std::cout << rang::fg::reset; 
+          std::cout << rang::fg::reset;
           std::cout << line.substr(loc) << std::endl;
         }
       } else if(optionGroup) {
@@ -192,29 +192,29 @@ Pipeline
           const size_t loc = line.find(' ', 3);
           std::cout << rang::fg::green;
           std::cout << line.substr(0, loc);
-          std::cout << rang::fg::reset; 
+          std::cout << rang::fg::reset;
           std::cout << line.substr(loc) << std::endl;
         }
       } else if(line == "Positionals:") {
         std::cout << rang::fg::yellow;
         std::cout << line << std::endl;
-        std::cout << rang::fg::reset; 
+        std::cout << rang::fg::reset;
         positionals = true;
       } else if(line == "Options:") {
         std::cout << rang::fg::yellow;
         std::cout << line << std::endl;
-        std::cout << rang::fg::reset; 
+        std::cout << rang::fg::reset;
         options = true;
       } else if(line == "Enjoy ITK!") {
         std::cout << rang::fg::blue << rang::style::italic;
         std::cout << line << std::endl;
-        std::cout << rang::fg::reset << rang::style::reset; 
+        std::cout << rang::fg::reset << rang::style::reset;
         options = true;
-      } else if(line.back() == ':') {
+      } else if(!line.empty() && line.back() == ':') {
         optionGroup = true;
         std::cout << rang::fg::yellow;
         std::cout << line << std::endl;
-        std::cout << rang::fg::reset; 
+        std::cout << rang::fg::reset;
       } else {
         std::cout << line << std::endl;
       }
