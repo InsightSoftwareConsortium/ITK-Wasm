@@ -129,6 +129,11 @@ if (options.copyBuildArtifacts) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
+    fs.mkdirSync(path.join('dist', 'dicom', 'pipelines'), { recursive: true })
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err
+  }
+  try {
     fs.mkdirSync(path.join('dist', 'web-workers'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
@@ -161,10 +166,25 @@ if (options.copyBuildArtifacts) {
     const result = asyncMod.map(meshIOFiles, copyMeshIOModules)
     callback(null, result)
   }
+  let dicomFiles = glob.sync(path.join(buildDir, 'dicom', '*.js'))
+  dicomFiles = dicomFiles.concat(glob.sync(path.join(buildDir, 'dicom', '*.wasm')))
+  dicomFiles = dicomFiles.filter((fn) => !fn.endsWith('.umd.wasm'))
+  const copyDICOMModules = function (dicomFile, callback) {
+    const io = path.basename(dicomFile)
+    const output = path.join('dist', 'dicom', 'pipelines', io)
+    fs.copySync(dicomFile, output)
+    callback(null, io)
+  }
+  const buildDICOMParallel = function (callback) {
+    console.log('Copying dicom modules...')
+    const result = asyncMod.map(dicomFiles, copyDICOMModules)
+    callback(null, result)
+  }
 
   asyncMod.parallel([
     buildImageIOsParallel,
     buildMeshIOsParallel,
+    buildDICOMParallel,
   ])
 } // options.copySources
 
@@ -199,13 +219,13 @@ if (options.buildTestPipelines) {
     pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'web-build', '*.wasm')))
     pipelineFiles.forEach((file) => {
       const filename = path.basename(file)
-      const output = path.join('dist', 'pipeline', filename)
+      const output = path.join('dist', 'pipelines', filename)
       fs.copySync(file, output)
     })
   }
 
   try {
-    fs.mkdirSync(path.join('dist', 'pipeline'))
+    fs.mkdirSync(path.join('dist', 'pipelines'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }

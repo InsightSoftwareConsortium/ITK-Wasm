@@ -3,7 +3,7 @@ const itkConfig = {
   pipelineWorkerUrl: `/web-workers/bundles/pipeline.worker.js`,
   imageIOUrl: `/image-io`,
   meshIOUrl: `/mesh-io`,
-  pipelinesUrl: `/pipeline`
+  pipelinesUrl: `/pipelines`
 }
 
 export default itkConfig

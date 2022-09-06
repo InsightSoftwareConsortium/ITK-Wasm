@@ -67,8 +67,8 @@ const devServer = {
       directory: path.join(__dirname, 'dist', 'mesh-io'),
     },
     {
-      publicPath: '/pipeline',
-      directory: path.join(__dirname, 'dist', 'pipeline'),
+      publicPath: '/pipelines',
+      directory: path.join(__dirname, 'dist', 'pipelines'),
     },
     {
       publicPath: '/',

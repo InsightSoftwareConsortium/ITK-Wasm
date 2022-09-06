@@ -53,7 +53,7 @@ Click. Perfect success.
     const args = []
     const outputs = null
     const inputs = null
-    const absoluteURL = new URL('base/dist/pipeline/stdout-stderr-test', document.location)
+    const absoluteURL = new URL('base/dist/pipelines/stdout-stderr-test', document.location)
     return runPipeline(null, absoluteURL, args, outputs, inputs)
       .then(function ({ stdout, stderr, outputs, webWorker }) {
         webWorker.terminate()
@@ -73,7 +73,7 @@ Click. Perfect success.
     const args = []
     const outputs = null
     const inputs = null
-    const absoluteURL = new URL('base/dist/pipeline/stdout-stderr-test', document.location)
+    const absoluteURL = new URL('base/dist/pipelines/stdout-stderr-test', document.location)
     return runPipeline(false, absoluteURL, args, outputs, inputs)
       .then(function ({ stdout, stderr, outputs }) {
         t.is(stdout, `I’m writing my code,
