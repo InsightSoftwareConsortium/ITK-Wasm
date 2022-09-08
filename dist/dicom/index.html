@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>structured-report-to-text example</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <style>
+      html, body {
+        height: 90%;
+      }
+
+      textarea {
+        resize: none;
+        overflow-y: scroll;
+        position: absolute;
+        box-sizing: border-box;
+        width: 600px;
+        height: 600px;
+        bottom: 0px;
+        left: 0px;
+        top: 50px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/xstate@4.16.0/dist/xstate.min.js"></script>
+  </head>
+
+  <body>
+    <!-- Input selector -->
+    <div>
+      <label>Select dicom file:</label>
+      <input name="inputFile" type="file" />
+    </div>
+
+    <!-- File information -->
+    <div>
+      <textarea readonly name="outputTextArea">Output representation...</textarea>
+      <div name="outputDiv"></div>
+    </div>
+
+    <!-- Javascript -->
+    <script type="module" src="./dist/itk-dicom.js"></script>
+    <script type="module" src="./test/app.js"></script>
+  </body>
+</html>

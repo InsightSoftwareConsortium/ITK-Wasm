@@ -157,7 +157,10 @@ function run(wasmBinary, options) {
   if (hyphenIndex !== -1) {
     wasmBinaryArgs = program.rawArgs.slice(hyphenIndex + 1)
   }
-  const wasmBinaryRelativePath = `${buildDir}/${wasmBinary}`
+  let wasmBinaryRelativePath = `${buildDir}/${wasmBinary}`
+  if (!fs.existsSync(wasmBinaryRelativePath)) {
+    wasmBinaryRelativePath = wasmBinary
+  }
 
   let wasmRuntime = 'wasmtime'
   if (options.runtime) {
@@ -205,6 +208,293 @@ function run(wasmBinary, options) {
   }
 }
 
+
+function camelCase(kebobCase) {
+  return kebobCase.replace(/-([a-z])/g, (kk) => {
+    return kk[1].toUpperCase();
+  });
+}
+
+const interfaceJsonTypeToTypeScriptType = new Map([
+  ['INPUT_TEXT_FILE:FILE', 'string'],
+  ['OUTPUT_TEXT_FILE:FILE', 'string'],
+  ['INPUT_BINARY_FILE:FILE', 'Uint8Array'],
+  ['OUTPUT_BINARY_FILE:FILE', 'Uint8Array'],
+  ['INPUT_TEXT_STREAM', 'string'],
+  ['OUTPUT_TEXT_STREAM', 'string'],
+  ['INPUT_BINARY_STREAM', 'Uint8Array'],
+  ['OUTPUT_BINARY_STREAM', 'Uint8Array'],
+  ['INPUT_IMAGE', 'Image'],
+  ['OUTPUT_IMAGE', 'Image'],
+  ['INPUT_MESH', 'Mesh'],
+  ['OUTPUT_MESH', 'Mesh'],
+  ['INPUT_POLYDATA', 'PolyData'],
+  ['OUTPUT_POLYDATA', 'PolyData'],
+  ['BOOL', 'boolean'],
+])
+
+const interfaceJsonTypeToInterfaceType = new Map([
+  ['INPUT_TEXT_FILE:FILE', 'TextFile'],
+  ['OUTPUT_TEXT_FILE:FILE', 'TextFile'],
+  ['INPUT_BINARY_FILE:FILE', 'BinaryFile'],
+  ['OUTPUT_BINARY_FILE:FILE', 'BinaryFile'],
+  ['INPUT_TEXT_STREAM', 'TextStream'],
+  ['OUTPUT_TEXT_STREAM', 'TextStream'],
+  ['INPUT_BINARY_STREAM', 'BinaryStream'],
+  ['OUTPUT_BINARY_STREAM', 'BinaryStream'],
+  ['INPUT_IMAGE', 'Image'],
+  ['OUTPUT_IMAGE', 'Image'],
+  ['INPUT_MESH', 'Mesh'],
+  ['OUTPUT_MESH', 'Mesh'],
+  ['INPUT_POLYDATA', 'PolyData'],
+  ['OUTPUT_POLYDATA', 'PolyData'],
+])
+
+
+function bindings(outputDir, wasmBinaries, options) {
+  const { buildDir, dockcrossScript } = processCommonOptions()
+
+  try {
+    fs.mkdirSync(outputDir, { recursive: true })
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err
+  }
+
+  let srcOutputDir = outputDir
+  if (options.package) {
+    srcOutputDir = path.join(outputDir, 'src')
+    try {
+      fs.mkdirSync(srcOutputDir, { recursive: true })
+    } catch (err) {
+      if (err.code !== 'EEXIST') throw err
+    }
+  }
+
+  const language = options.language === undefined ? 'typescript' : options.language
+  switch (language) {
+    case 'typescript': {
+      // index module
+      let indexContent = ''
+
+      wasmBinaries.forEach((wasmBinaryName) => {
+        let wasmBinaryRelativePath = `${buildDir}/${wasmBinaryName}`
+        if (!fs.existsSync(wasmBinaryRelativePath)) {
+          wasmBinaryRelativePath = wasmBinaryName
+        }
+
+        const parsedPath = path.parse(path.resolve(wasmBinaryRelativePath))
+        const runPath = path.join(parsedPath.dir, parsedPath.name)
+        const runPipelineScriptPath = path.join(path.dirname(import.meta.url.substring(7)), 'interfaceJSONNode.js')
+        const runPipelineRun = spawnSync('node', [runPipelineScriptPath, runPath], {
+          env: process.env,
+          stdio: ['ignore', 'pipe', 'inherit']
+        })
+        if (runPipelineRun.status !== 0) {
+          console.error(runPipelineRun.error);
+          process.exit(runPipelineRun.status)
+        }
+        const interfaceJson = JSON.parse(runPipelineRun.stdout.toString())
+
+        const moduleKebabCase = parsedPath.name
+        const moduleCamelCase = camelCase(parsedPath.name)
+        const modulePascalCase = `${moduleCamelCase[0].toUpperCase()}${moduleCamelCase.substring(1)}`
+
+        // Result module
+        let resultContent = `interface ${modulePascalCase}Result {\n  /** WebWorker used for computation */\n  webWorker: Worker | null\n\n`
+        interfaceJson.outputs.forEach((output) => {
+          if (!interfaceJsonTypeToTypeScriptType.has(output.type)) {
+
+            console.error(`Unexpected output type: ${output.type}`)
+            process.exit(1)
+          }
+          resultContent += `  /** ${output.description} */\n`
+          const outputType = interfaceJsonTypeToTypeScriptType.get(output.type)
+          resultContent += `  ${camelCase(output.name)}: ${outputType}\n\n`
+        })
+        resultContent += `}\n\nexport default ${modulePascalCase}Result\n`
+        fs.writeFileSync(path.join(srcOutputDir, `${modulePascalCase}Result.ts`), resultContent)
+        indexContent += `\n\nimport ${modulePascalCase}Result from './${modulePascalCase}Result.js'\n`
+        indexContent += `export type { ${modulePascalCase}Result }\n\n`
+
+        // Options module
+        const haveParameters = !!interfaceJson.parameters.length
+        if (haveParameters) {
+          let optionsContent = `interface ${modulePascalCase}Options {\n`
+          interfaceJson.parameters.forEach((parameter) => {
+            if (parameter.name === 'memory-io') {
+              // Internal
+              return
+            }
+            if (!interfaceJsonTypeToTypeScriptType.has(parameter.type)) {
+
+              console.error(`Unexpected parameter type: ${parameter.type}`)
+              process.exit(1)
+            }
+            optionsContent += `  /** ${parameter.description} */\n`
+            const parameterType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
+            optionsContent += `  ${camelCase(parameter.name)}?: ${parameterType}\n\n`
+          })
+          optionsContent += `}\n\nexport default ${modulePascalCase}Options\n`
+          fs.writeFileSync(path.join(srcOutputDir, `${modulePascalCase}Options.ts`), optionsContent)
+
+          indexContent += `import ${modulePascalCase}Options from './${modulePascalCase}Options.js'\n`
+          indexContent += `export type { ${modulePascalCase}Options }\n\n`
+
+        }
+
+        // function module
+        let functionContent = 'import {\n'
+        const usedInterfaceTypes = new Set()
+        const pipelineComponents = ['inputs', 'outputs', 'parameters']
+        pipelineComponents.forEach((pipelineComponent) => {
+          interfaceJson[pipelineComponent].forEach((value) => {
+            if (interfaceJsonTypeToInterfaceType.has(value.type)) {
+              const interfaceType = interfaceJsonTypeToInterfaceType.get(value.type)
+              if (!interfaceType.includes('File')) {
+                usedInterfaceTypes.add(interfaceType)
+              }
+            }
+          })
+        })
+        usedInterfaceTypes.forEach((interfaceType) => {
+          functionContent += `  ${interfaceType},\n`
+        })
+        functionContent += `  InterfaceTypes,\n  runPipeline\n} from 'itk-wasm'\n\n`
+        if (haveParameters) {
+          functionContent += `import ${modulePascalCase}Options from './${modulePascalCase}Options.js'\n`
+        }
+        functionContent += `import ${modulePascalCase}Result from './${modulePascalCase}Result.js'\n\n`
+
+        functionContent += `/**\n * ${interfaceJson.description}\n`
+        interfaceJson.inputs.forEach((input) => {
+          if (!interfaceJsonTypeToTypeScriptType.has(input.type)) {
+
+            console.error(`Unexpected input type: ${input.type}`)
+            process.exit(1)
+          }
+          const typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
+          functionContent += ` * @param {${typescriptType}} ${camelCase(input.name)} - ${input.description}\n`
+        })
+        functionContent += ` * @returns {Promise<${modulePascalCase}Result>} - result object\n`
+        functionContent += ` */\n`
+
+        functionContent += `async function ${moduleCamelCase}(\n  webWorker: null | Worker,\n`
+        interfaceJson.inputs.forEach((input, index) => {
+          const typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
+          const end = index === interfaceJson.inputs.length - 1 && !haveParameters ? `\n` : `,\n`
+          functionContent += `  ${camelCase(input.name)}: ${typescriptType}${end}`
+        })
+        if (haveParameters) {
+          functionContent += `  options: ${modulePascalCase}Options = {})\n    : Promise<${modulePascalCase}Result> {\n\n`
+
+        } else {
+          functionContent += `)\n    : Promise<${modulePascalCase}Result> {\n\n`
+        }
+
+        functionContent += `  const desiredOutputs = [\n`
+        interfaceJson.outputs.forEach((output) => {
+          if (interfaceJsonTypeToInterfaceType.has(output.type)) {
+            const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
+            functionContent += `    { type: InterfaceTypes.${interfaceType} },\n`
+          }
+        })
+        functionContent += `  ]\n`
+        functionContent += `  const inputs = [\n`
+        interfaceJson.inputs.forEach((input, index) => {
+          if (interfaceJsonTypeToInterfaceType.has(input.type)) {
+            const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
+            const camel = camelCase(input.name)
+            const data = interfaceType.includes('File') ?  `{ data: ${camel}, path: "file${index.toString()}" } ` : camel
+            functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${data} },\n`
+          }
+        })
+        functionContent += `  ]\n\n`
+
+        let inputCount = 0
+        functionContent += "  const args = []\n"
+        functionContent += "  // Inputs\n"
+        interfaceJson.inputs.forEach((input) => {
+          if (interfaceJsonTypeToInterfaceType.has(input.type)) {
+            const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
+            const name = interfaceType.includes('File') ?  `file${inputCount.toString()}` : inputCount.toString()
+            functionContent += `  args.push('${name}')\n`
+            inputCount++
+          } else {
+            const camel = camelCase(input.name)
+            functionContent += `  args.push(${camel}.toString())\n`
+          }
+        })
+
+        let outputCount = 0
+        functionContent += "  // Outputs\n"
+        interfaceJson.outputs.forEach((output) => {
+          if (interfaceJsonTypeToInterfaceType.has(output.type)) {
+            const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
+            const name = interfaceType.includes('File') ?  `file${outputCount.toString()}` : outputCount.toString()
+            functionContent += `  args.push('${name}')\n`
+            outputCount++
+          } else {
+            const camel = camelCase(output.name)
+            functionContent += `  args.push(${camel}.toString())\n`
+          }
+        })
+
+        functionContent += "  // Options\n"
+        functionContent += "  args.push('--memory-io')\n"
+        interfaceJson.parameters.forEach((parameter) => {
+          if (parameter.name === 'memory-io') {
+            // Internal
+            return
+          }
+          const camel = camelCase(parameter.name)
+          functionContent += `  if (options.${camel}) {\n`
+          if (parameter.type === "BOOL") {
+            functionContent += `    args.push('--${parameter.name}')\n`
+          } else {
+            if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
+              const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
+              const name = interfaceType.includes('File') ?  `file${inputCount.toString()}` : inputCount.toString()
+              functionContent += `    args.push('--${parameter.name}', '${name}')\n`
+              inputCount++
+            } else {
+              functionContent += `    args.push('--${parameter.name}', options.${camel}.toString())\n`
+            }
+          }
+          functionContent += `  }\n`
+        })
+
+        functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`
+
+        functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs)\n`
+        functionContent += '  if (returnValue !== 0) {\n    throw new Error(stderr)\n  }\n\n'
+
+        functionContent += '  const result = {\n    webWorker: usedWebWorker as Worker,\n'
+        interfaceJson.outputs.forEach((output, index) => {
+          const camel = camelCase(output.name)
+          const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
+          if (interfaceType.includes('Text') || interfaceType.includes('Binary')) {
+            functionContent += `    ${camel}: (outputs[${index.toString()}].data as ${interfaceType}).data,\n`
+          } else {
+            functionContent += `    ${camel}: outputs[${index.toString()}].data as ${interfaceType},\n`
+          }
+        })
+        functionContent += '  }\n'
+        functionContent += '  return result\n'
+
+        functionContent += `}\n\nexport default ${moduleCamelCase}\n`
+        fs.writeFileSync(path.join(srcOutputDir, `${moduleCamelCase}.ts`), functionContent)
+        indexContent += `import ${moduleCamelCase} from './${moduleCamelCase}.js'\n`
+        indexContent += `export { ${moduleCamelCase} }\n`
+
+      })
+      fs.writeFileSync(path.join(srcOutputDir, 'index.ts'), indexContent)
+    }
+    break
+  }
+
+  process.exit(0)
+}
+
 program
   .option('-i, --image <image>', 'build environment Docker image, defaults to itkwasm/emscripten')
   .option('-s, --source-dir <source-directory>', 'path to build directory, defaults to "."')
@@ -222,10 +512,16 @@ program
 program
   .command('run <wasmBinary>')
   .addOption(new Option('-r, --runtime <wasm-runtime>', 'wasm runtime to use for execution, defaults to "wasmtime"').choices(['wasmtime', 'wasmer', 'wasm3', 'wavm']))
-  .option('-r, --runtime <wasm-runtime>', 'wasm runtime to use for execution, defaults to "wasmtime"')
-  .usage('[options] <wasmBinary> [-- <wasm binary arguments>]')
+  .usage('[options] <wasmBinary> [-- -- <wasm binary arguments>]')
   .description('run the wasm binary, whose path is specified relative to the build directory')
   .action(run)
+program
+  .command('bindings <outputDir> [wasmBinaries...]')
+  .option('-p, --package', 'Output a package configuration files')
+  .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript',]))
+  .usage('[options] <outputDir> [wasmBinaries...]')
+  .description('Generate WASM module bindings for a language')
+  .action(bindings)
 
 program
   .parse(process.argv)
