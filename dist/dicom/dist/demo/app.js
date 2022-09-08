@@ -1,4 +1,4 @@
-import { structuredReportToText } from '../dist/itk-dicom.js'
+import { structuredReportToText } from '../itk-dicom.js'
 
 // promise-file-reader
 function readAsArrayBuffer (file) {
