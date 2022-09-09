@@ -1,9 +1,10 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "itkwasm"
+description = "Python interface to itk-wasm WebAssembly (WASM) modules."
 authors = [{name = "Matt McCormick", email = "matt.mccormick@kitware.com"}]
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -24,7 +25,7 @@ keywords = [
     "imaging",
     "visualization",
 ]
-dynamic = ["version", "description"]
+dynamic = ["version"]
 
 requires-python = ">=3.7"
 dependencies = [
@@ -32,12 +33,16 @@ dependencies = [
 ]
 
 [project.urls]
-Home = "https://itkwasm.readthedocs.io/en/latest/"
+Home = "https://wasm.itk.org/"
 Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
+Issues = "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
 
 [project.optional-dependencies]
 test = [
-    "itk>=5.3rc4.post1",
+    "itk>=5.3rc4.post3",
     "pytest >=2.7.3",
 ]
 doc = ["sphinx"]
+
+[tool.hatch.version]
+path = "itkwasm/__init__.py"
