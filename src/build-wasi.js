@@ -193,13 +193,13 @@ if (options.buildTestPipelines) {
     const pipelineFiles = glob.sync(path.join(pipelinePath, 'wasi-build', '*.wasm'))
     pipelineFiles.forEach((file) => {
       const filename = path.basename(file)
-      const output = path.join('dist', 'pipeline', filename)
+      const output = path.join('dist', 'pipelines', filename)
       fs.copySync(file, output)
     })
   }
 
   try {
-    fs.mkdirSync(path.join('dist', 'pipeline'))
+    fs.mkdirSync(path.join('dist', 'pipelines'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
