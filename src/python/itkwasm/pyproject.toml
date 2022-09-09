@@ -30,6 +30,8 @@ dynamic = ["version"]
 requires-python = ">=3.7"
 dependencies = [
     "numpy",
+    "wasmer",
+    "wasmer_compiler_cranelift",
 ]
 
 [project.urls]
@@ -39,7 +41,7 @@ Issues = "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
 
 [project.optional-dependencies]
 test = [
-    "itk>=5.3rc4.post3",
+    "itk>=5.3rc4.post2",
     "pytest >=2.7.3",
 ]
 doc = ["sphinx"]
