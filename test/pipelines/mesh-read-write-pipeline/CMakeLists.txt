@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(io_components)
 if(NOT EMSCRIPTEN)
-  set(io_components ITKMeshIO)
+  set(io_components ITKIOMeshVTK)
 endif()
 find_package(ITK REQUIRED
   COMPONENTS
