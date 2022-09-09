@@ -1,24 +1,25 @@
 import {
   TextStream,
   InterfaceTypes,
-  runPipeline
+  runPipelineNode
 } from 'itk-wasm'
 
 import StructuredReportToTextOptions from './StructuredReportToTextOptions.js'
-import StructuredReportToTextResult from './StructuredReportToTextResult.js'
+import StructuredReportToTextNodeResult from './StructuredReportToTextNodeResult.js'
+
+
+import path from 'path'
 
 /**
  * Read a DICOM structured report file and generate a plain text representation
  *
  * @param {Uint8Array} dicomFile - Input DICOM file
  *
- * @returns {Promise<StructuredReportToTextResult>} - result object
+ * @returns {Promise<StructuredReportToTextNodeResult>} - result object
  */
-async function structuredReportToText(
-  webWorker: null | Worker,
-  dicomFile: Uint8Array,
+async function structuredReportToTextNode(  dicomFile: Uint8Array,
   options: StructuredReportToTextOptions = {})
-    : Promise<StructuredReportToTextResult> {
+    : Promise<StructuredReportToTextNodeResult> {
 
   const desiredOutputs = [
     { type: InterfaceTypes.TextStream },
@@ -86,23 +87,21 @@ async function structuredReportToText(
     args.push('--print-color')
   }
 
-  const pipelinePath = 'structured-report-to-text'
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'structured-report-to-text')
 
   const {
-    webWorker: usedWebWorker,
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs)
+  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
   if (returnValue !== 0) {
     throw new Error(stderr)
   }
 
   const result = {
-    webWorker: usedWebWorker as Worker,
     outputText: (outputs[0].data as TextStream).data,
   }
   return result
 }
 
-export default structuredReportToText
+export default structuredReportToTextNode

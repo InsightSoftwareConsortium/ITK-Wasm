@@ -3,25 +3,29 @@
   "version": "0.0.1",
   "description": "DICOM IO from itk-wasm",
   "type": "module",
-  "main": "./dist/itk-dicom.umd.cjs",
   "module": "./dist/itk-dicom.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/itk-dicom.js",
-      "require": "./dist/itk-dicom.umd.cjs"
+      "browser": "./dist/itk-dicom.js",
+      "node": "./dist/itk-dicom.node.js",
+      "umd": "./dist/itk-dicom.umd.js",
+      "default": "./dist/itk-dicom.js"
     }
   },
   "scripts": {
     "dev": "vite --port 8173",
-    "build": "tsc && vite build --sourcemap",
-    "build:watch": "tsc && vite build --minify false --mode development --watch",
+    "build": "npm run build:browser && npm run build:node",
+    "build:node": "rollup -c ./rollup.node.config.js",
+    "build:browser": "tsc && vite build --sourcemap",
+    "build:browser:watch": "tsc && vite build --minify false --mode development --watch",
     "cypress:open": "npx cypress open",
     "cypress:run": "npx cypress run",
     "cypress:runChrome": "npx cypress run --browser chrome",
     "cypress:runFirefox": "npx cypress run --browser firefox",
     "test:debug": "start-server-and-test dev http-get://localhost:8173 cypress:open",
-    "test": "start-server-and-test dev http-get://localhost:8173 cypress:run",
+    "test": "npm run test:node && start-server-and-test dev http-get://localhost:8173 cypress:run",
+    "test:node": "ava",
     "test:chrome": "start-server-and-test dev http-get://localhost:8173 cypress:runChrome",
     "test:firefox": "start-server-and-test dev http-get://localhost:8173 cypress:runFirefox"
   },
@@ -40,13 +44,20 @@
   },
   "homepage": "https://wasm.itk.org",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.21"
+    "itk-wasm": "^1.0.0-b.27"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^14.0.1",
+    "@rollup/plugin-typescript": "^8.5.0",
+    "ava": "^4.3.3",
     "cypress": "^10.7.0",
+    "rollup": "^2.79.0",
     "rollup-plugin-copy": "^3.4.0",
     "start-server-and-test": "^1.14.0",
     "typescript": "^4.7.4",
-    "vite": "^3.0.9"
+    "vite": "^3.0.9",
+    "xstate": "^4.33.5"
   }
 }

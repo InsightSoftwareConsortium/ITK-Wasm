@@ -1,4 +1,4 @@
-import { structuredReportToText } from '../dist/itk-dicom.js'
+import { structuredReportToText } from '../itk-dicom.js'
 
 // promise-file-reader
 function readAsArrayBuffer (file) {
@@ -59,6 +59,7 @@ const demoAppMachine = XState.createMachine({
         onError: {
           actions: [
             (c, event) => {
+              console.log(event)
               const message = `Could not process file: ${event.data.toString()}`
               console.error(message)
               alert(message)
