@@ -3,7 +3,7 @@ name: Python WASM
 on: [push,pull_request]
 
 jobs:
-  test:
+  test-itkwasm:
     runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 3
@@ -18,15 +18,15 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        working-directory: ./src/python
+        working-directory: ./src/python/itkwasm
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[test]"
       - name: Test with pytest
-        working-directory: ./src/python
+        working-directory: ./src/python/itkwasm
         run: |
           pytest --junitxml=junit/test-results.xml
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v2
         with:
-          report_paths: 'src/python/junit/test-results*.xml'
+          report_paths: 'src/python/itkwasm/junit/test-results*.xml'
