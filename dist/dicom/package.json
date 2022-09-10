@@ -44,7 +44,7 @@
   },
   "homepage": "https://wasm.itk.org",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.27"
+    "itk-wasm": "^1.0.0-b.30"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.2",
