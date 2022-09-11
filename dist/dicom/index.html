@@ -11,32 +11,37 @@
       textarea {
         resize: none;
         overflow-y: scroll;
-        position: absolute;
+        position: relative;
         box-sizing: border-box;
-        width: 600px;
-        height: 600px;
-        bottom: 0px;
-        left: 0px;
-        top: 50px;
+        width: 650px;
+        height: 500px;
+      }
+
+      section {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
       }
     </style>
     <script src="./dist/demo/xstate.js"></script>
   </head>
 
   <body>
-    <!-- Input selector -->
-    <div>
-      <label>Select dicom file:</label>
-      <input name="inputFile" type="file" />
-    </div>
+    <section>
+      <div style="flex: 150px;">
+        <label>Select dicom file:</label>
+        <input name="inputFile" type="file" />
+      </div>
 
-    <!-- File information -->
-    <div>
-      <textarea readonly name="outputTextArea">Output representation...</textarea>
-      <div name="outputDiv"></div>
-    </div>
+      <div id="options" style="flex: 20rem;">
+      </div>
 
-    <!-- Javascript -->
+      <div style="flex: 700px;">
+        <textarea readonly name="outputTextArea">Output representation...</textarea>
+        <div name="outputDiv"></div>
+      </div>
+    </section>
+
     <script type="module" src="./dist/itk-dicom.js"></script>
     <script type="module" src="./dist/demo/app.js"></script>
   </body>
