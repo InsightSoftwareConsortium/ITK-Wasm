@@ -1,5 +1,19 @@
 import { structuredReportToText } from '../itk-dicom.js'
 
+
+// promise-file-reader
+function readAsArrayBuffer (file) {
+  if (!(file instanceof Blob)) {
+    throw new TypeError('Must be a File or Blob')
+  }
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader()
+    reader.onload = function(e) { resolve(e.target.result) }
+    reader.onerror = function(e) { reject(new Error('Error reading' + file.name + ': ' + e.target.result)) }
+    reader['readAsArrayBuffer'](file)
+  })
+}
+
 const structuredReportToTextOptions = new Map([
   ["unknownRelationship", "Accept unknown relationship type"],
   ["invalidItemValue", "Accept invalid content item value"],
@@ -20,6 +34,7 @@ const structuredReportToTextOptions = new Map([
   ["printColor", "Use ANSI escape codes"],
 ])
 
+
 function createOptionsElements(context, event) {
   context.options = {}
   const optionsChildren = []
@@ -27,9 +42,10 @@ function createOptionsElements(context, event) {
   structuredReportToTextOptions.forEach((description, name) =>{
     context.options[name] = false
     const entryDiv = document.createElement("div")
-    entryDiv.innerHTML = `<input name=${name} id=${name} type="checkbox"><label for="${name}">${description}</label>`
-    entryDiv.addEventListener('click', () => {
-      context.options[name] = entryDiv.children[0].checked
+    entryDiv.innerHTML = `<sp-checkbox name=${name} id=${name} ><label for="${name}">${description}</label></sp-checkbox>`
+    entryDiv.addEventListener('click', (e) => {
+      context.options[name] = !entryDiv.children[0].checked
+      context.service.send({ type: 'PROCESS' })
     })
     optionsChildren.push(entryDiv)
   })
@@ -38,20 +54,6 @@ function createOptionsElements(context, event) {
   optionsDiv.replaceChildren(...optionsChildren)
 }
 
-// promise-file-reader
-function readAsArrayBuffer (file) {
-  if (!(file instanceof Blob)) {
-    throw new TypeError('Must be a File or Blob')
-  }
-  return new Promise(function(resolve, reject) {
-    var reader = new FileReader()
-    reader.onload = function(e) { resolve(e.target.result) }
-    reader.onerror = function(e) { reject(new Error('Error reading' + file.name + ': ' + e.target.result)) }
-    reader['readAsArrayBuffer'](file)
-  })
-}
-
-let appWebWorker = null
 
 async function loadData(context, event) {
   const arrayBuffer = await readAsArrayBuffer(event.data)
@@ -60,25 +62,30 @@ async function loadData(context, event) {
   return dicomData
 }
 
+
+let appWebWorker = null
 async function processData(context, event) {
   if (!context.dicomData) {
     return
   }
-  console.log(context.options)
-  const { webWorker, outputText } = await structuredReportToText(appWebWorker, context.dicomData, context.options)
+  const outputTextArea = document.getElementById('outputTextArea')
+  outputTextArea.innerText = "Processing..."
+  const { webWorker, outputText } = await structuredReportToText(appWebWorker, context.dicomData.slice(), context.options)
   appWebWorker = webWorker
   return outputText
 }
 
+
 function renderResults(context) {
-  const outputTextArea = document.querySelector('textarea')
+  const outputTextArea = document.getElementById('outputTextArea')
   if (context.processResult) {
-    outputTextArea.textContent = context.processResult
+    outputTextArea.innerText = context.processResult
   }
 }
 
+
 const context = {
-  options: new Map(),
+  options: {},
   dicomData: null,
   processResult: null,
 }
@@ -152,16 +159,21 @@ const demoAppMachine = XState.createMachine({
 })
 
 const demoAppService = XState.interpret(demoAppMachine)
-  .onTransition((state) => {
-    console.log(state)
-  })
 context.service = demoAppService
 demoAppService.start()
 
-const fileInput = document.querySelector('input')
+
+const fileInput = document.getElementById('inputFile')
 fileInput.addEventListener('change', (event) => {
   const dataTransfer = event.dataTransfer
   const files = event.target.files || dataTransfer.files
+
+  demoAppService.send({ type: 'UPLOAD_DATA', data: files[0] })
+})
+
+const dropzoneInput = document.getElementById('fileDropzone')
+dropzoneInput.addEventListener('drop', (event) => {
+  const files = event.dataTransfer.files
 
   demoAppService.send({ type: 'UPLOAD_DATA', data: files[0] })
 })
