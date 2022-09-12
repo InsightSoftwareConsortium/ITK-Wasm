@@ -1,5 +1,6 @@
 import { structuredReportToText } from '../itk-dicom.js'
 
+
 // promise-file-reader
 function readAsArrayBuffer (file) {
   if (!(file instanceof Blob)) {
@@ -13,53 +14,138 @@ function readAsArrayBuffer (file) {
   })
 }
 
-let appWebWorker = null
+const structuredReportToTextOptions = new Map([
+  ["unknownRelationship", "Accept unknown relationship type"],
+  ["invalidItemValue", "Accept invalid content item value"],
+  ["ignoreConstraints", "Ignore relationship constraints"],
+  ["ignoreItemErrors", "Ignore content item errors"],
+  ["skipInvalidItems", "Skip invalid content items"],
+  ["noDocumentHeader", "Print no document header"],
+  ["numberNestedItems", "Number nested items"],
+  ["shortenLongValues", "Shorten long item values"],
+  ["printInstanceUid", "Print SOP Instance UID"],
+  ["printSopclassShort", "Print short SOP class name"],
+  ["printSopclassLong", "Print SOP class name"],
+  ["printSopclassUid", "Print long SOP class name"],
+  ["printAllCodes", "Print all codes"],
+  ["printInvalidCodes", "Print invalid codes"],
+  ["printTemplateId", "Print template identification"],
+  ["indicateEnhanced", "Indicate enhanced encoding mode"],
+  ["printColor", "Use ANSI escape codes"],
+])
 
-async function processFile(context, event) {
+
+function createOptionsElements(context, event) {
+  context.options = {}
+  const optionsChildren = []
+
+  structuredReportToTextOptions.forEach((description, name) =>{
+    context.options[name] = false
+    const entryDiv = document.createElement("div")
+    entryDiv.innerHTML = `<sp-checkbox name=${name} id=${name} ><label for="${name}">${description}</label></sp-checkbox>`
+    entryDiv.addEventListener('click', (e) => {
+      context.options[name] = !entryDiv.children[0].checked
+      context.service.send({ type: 'PROCESS' })
+    })
+    optionsChildren.push(entryDiv)
+  })
+
+  const optionsDiv = document.getElementById("options")
+  optionsDiv.replaceChildren(...optionsChildren)
+}
+
+
+async function loadData(context, event) {
   const arrayBuffer = await readAsArrayBuffer(event.data)
   const dicomData = new Uint8Array(arrayBuffer)
 
-  const { webWorker, outputText } = await structuredReportToText(appWebWorker, dicomData)
+  return dicomData
+}
+
+
+let appWebWorker = null
+async function processData(context, event) {
+  if (!context.dicomData) {
+    return
+  }
+  const outputTextArea = document.getElementById('outputTextArea')
+  outputTextArea.innerText = "Processing..."
+  const { webWorker, outputText } = await structuredReportToText(appWebWorker, context.dicomData.slice(), context.options)
   appWebWorker = webWorker
   return outputText
 }
 
+
 function renderResults(context) {
-  const outputTextArea = document.querySelector('textarea')
+  const outputTextArea = document.getElementById('outputTextArea')
   if (context.processResult) {
-    outputTextArea.textContent = context.processResult
+    outputTextArea.innerText = context.processResult
   }
+}
+
+
+const context = {
+  options: {},
+  dicomData: null,
+  processResult: null,
 }
 
 const demoAppMachine = XState.createMachine({
   id: 'demoApp',
-  initial: 'idle',
-  context: {
-    processResult: null
-  },
+  initial: 'creatingOptions',
+  context,
   states: {
     idle: {
       on: {
-        UPLOAD_DATA: 'processing'
+        UPLOAD_DATA: 'loadingData',
+        PROCESS: 'processing',
       },
+    },
+    creatingOptions: {
+      entry: createOptionsElements,
+      always: { target: 'idle' }
+    },
+    loadingData: {
+      invoke: {
+        id: 'loadData',
+        src: loadData,
+        onDone: {
+          actions: [
+            XState.assign({
+              dicomData: (context, { data }) => { return data }
+            }),
+          ],
+          target: "processing",
+        },
+        onError: {
+          actions: [
+            (c, event) => {
+              const message = `Could not load data: ${event.data.toString()}`
+              console.error(message)
+              alert(message)
+            }
+          ],
+          target: 'idle',
+        }
+      }
     },
     processing: {
       invoke: {
-        id: 'processFile',
-        src: processFile,
+        id: 'processData',
+        src: processData,
         onDone: {
-          target: "#demoApp.idle",
           actions: [
             XState.assign({
               processResult: (context, { data }) => { return data }
             }),
             renderResults,
-          ]
+          ],
+          target: "idle",
         },
         onError: {
           actions: [
             (c, event) => {
-              console.log(event)
+              console.log(c, event)
               const message = `Could not process file: ${event.data.toString()}`
               console.error(message)
               alert(message)
@@ -73,15 +159,21 @@ const demoAppMachine = XState.createMachine({
 })
 
 const demoAppService = XState.interpret(demoAppMachine)
-  .onTransition((state) => {
-    console.log(state)
-  })
-  .start()
+context.service = demoAppService
+demoAppService.start()
 
-const fileInput = document.querySelector('input')
+
+const fileInput = document.getElementById('inputFile')
 fileInput.addEventListener('change', (event) => {
   const dataTransfer = event.dataTransfer
   const files = event.target.files || dataTransfer.files
+
+  demoAppService.send({ type: 'UPLOAD_DATA', data: files[0] })
+})
+
+const dropzoneInput = document.getElementById('fileDropzone')
+dropzoneInput.addEventListener('drop', (event) => {
+  const files = event.dataTransfer.files
 
   demoAppService.send({ type: 'UPLOAD_DATA', data: files[0] })
 })
