@@ -1,6 +1,12 @@
 title: Hacking itk-wasm
 ---
 
+Thank you for contributing a pull request!
+
+**Welcome to the ITK community!**
+
+We are glad you are here and appreciate your contribution. Please keep in mind our [community participation guidelines](https://github.com/InsightSoftwareConsortium/ITK/blob/master/CODE_OF_CONDUCT.md).
+
 ### Build dependencies
 
 - [Node.js / NPM](https://nodejs.org/en/download/)
@@ -37,9 +43,7 @@ npm run build:debug
 
 ### Contributing
 
-We use semantic-release for handling change log and version.
-Therefore we recommend using the following command line when
-creating a commit:
+We use [semantic-release](https://github.com/semantic-release/semantic-release) for handling the change log and version. Therefore, we recommend using the following command line when creating a commit:
 
 ```sh
 $ npm run commit
