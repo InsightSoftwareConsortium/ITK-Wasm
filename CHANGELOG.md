@@ -1,5 +1,13 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.31](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.30...itk-wasm-v1.0.0-b.31) (2022-09-13)
+
+
+### Bug Fixes
+
+* **bindings:** Pass pipeline path for generation ([e8cf50c](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/e8cf50cf314a3f0efba43bcc739ea3cdae7ca691))
+* **runPipelineEmscript:** Lower mesh cellData ([50185ca](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/50185ca59a8a974fc2d898dd9f3e853af93504cd))
+
 # [1.0.0-b.30](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.29...itk-wasm-v1.0.0-b.30) (2022-09-09)
 
 
