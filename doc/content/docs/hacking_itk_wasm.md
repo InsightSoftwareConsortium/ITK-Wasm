@@ -27,6 +27,14 @@ Build and serve the documentation:
 npm run doc:www
 ```
 
+Create a debug build (see also: [the debugging example](../example/debugging.html)):
+```bash
+git clean -fdx
+# pull the latest debug Docker images
+./src/docker/pull.sh
+npm run build:debug
+```
+
 ### Contributing
 
 We use semantic-release for handling change log and version.
