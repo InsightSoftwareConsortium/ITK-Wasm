@@ -134,7 +134,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           const pointsPtr = setPipelineModuleInputArray(pipelineModule, mesh.points, index, 0)
           const cellsPtr = setPipelineModuleInputArray(pipelineModule, mesh.cells, index, 1)
           const pointDataPtr = setPipelineModuleInputArray(pipelineModule, mesh.pointData, index, 2)
-          const cellDataPtr = setPipelineModuleInputArray(pipelineModule, mesh.pointData, index, 3)
+          const cellDataPtr = setPipelineModuleInputArray(pipelineModule, mesh.cellData, index, 3)
           const meshJSON = {
             meshType: mesh.meshType,
             name: mesh.name,
