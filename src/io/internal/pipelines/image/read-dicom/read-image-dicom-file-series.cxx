@@ -286,6 +286,40 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
   return EXIT_SUCCESS;
 }
 
+template <typename TComp>
+int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & inputFileNames, int numberOfComponents)
+{
+  using ComponentType = TComp;
+  static constexpr unsigned int ImageDimension = 3;
+  switch (numberOfComponents)
+    {
+    case 4:
+      {
+      typedef itk::Vector< ComponentType, 4> PixelType;
+      typedef itk::Image<PixelType, ImageDimension> ImageType;
+      return runPipeline<ImageType>(pipeline, inputFileNames);
+      }
+    case 3:
+      {
+      typedef itk::Vector< ComponentType, 3> PixelType;
+      typedef itk::Image<PixelType, ImageDimension> ImageType;
+      return runPipeline<ImageType>(pipeline, inputFileNames);
+      }
+    case 2:
+      {
+      typedef itk::Vector< ComponentType, 2> PixelType;
+      typedef itk::Image<PixelType, ImageDimension> ImageType;
+      return runPipeline<ImageType>(pipeline, inputFileNames);
+      }
+    case 1:
+    default:
+      {
+      typedef itk::Image<TComp, ImageDimension> ImageType;
+      return runPipeline<ImageType>(pipeline, inputFileNames);
+      }
+    }
+}
+
 int main (int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("read-image-dicom-file-series", "Read a DICOM image series and return the associated image volume", argc, argv);
@@ -321,78 +355,63 @@ int main (int argc, char * argv[])
   // Todo: work with the ioPixelType
   // const auto ioPixelType = gdcmImageIO->GetPixelType();
   const auto numberOfComponents = gdcmImageIO->GetNumberOfComponents();
-  if (numberOfComponents > 1)
-  {
-    std::cerr << "Only one pixel component is currently supported. Image pixel components: " << numberOfComponents << std::endl;
-    return EXIT_FAILURE;
-  }
   static constexpr unsigned int ImageDimension = 3;
 
   switch(ioComponentType)
     {
     case itk::CommonEnums::IOComponent::UCHAR:
       {
-      typedef itk::Image<unsigned char, ImageDimension> ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< unsigned char>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::CHAR:
       {
-      typedef itk::Image< signed char, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< char>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::USHORT:
       {
-      typedef itk::Image< unsigned short, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< unsigned short>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::SHORT:
       {
-      typedef itk::Image< short, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< short>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::UINT:
       {
-      typedef itk::Image< unsigned int, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< unsigned int>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::INT:
       {
-      typedef itk::Image< int, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< int>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::ULONG:
       {
-      typedef itk::Image< unsigned long, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< unsigned long>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::LONG:
       {
-      typedef itk::Image< long, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< long>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::ULONGLONG:
       {
-      typedef itk::Image< unsigned long long, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< unsigned long long>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::LONGLONG:
       {
-      typedef itk::Image< long long, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< long long>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::FLOAT:
       {
-      typedef itk::Image< float, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< float>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::DOUBLE:
       {
-      typedef itk::Image< double, ImageDimension > ImageType;
-      return runPipeline<ImageType>(pipeline, inputFileNames);
+      return runPipeline< double>(pipeline, inputFileNames, numberOfComponents);
       }
     case itk::CommonEnums::IOComponent::UNKNOWNCOMPONENTTYPE:
     default:
+      {
       std::cerr << "Unknown image pixel component type." << std::endl;
       return EXIT_FAILURE;
+      }
     }
 }
