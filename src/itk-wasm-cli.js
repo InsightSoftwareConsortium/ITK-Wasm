@@ -495,7 +495,7 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
 }
 
 
-function bindings(outputDir, wasmBinaries, options) {
+function bindgen(outputDir, wasmBinaries, options) {
   const { buildDir } = processCommonOptions()
 
   try {
@@ -547,12 +547,12 @@ program
   .description('run the wasm binary, whose path is specified relative to the build directory')
   .action(run)
 program
-  .command('bindings <outputDir> [wasmBinaries...]')
+  .command('bindgen <outputDir> [wasmBinaries...]')
   .option('-p, --package', 'Output a package configuration files')
   .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript',]))
   .usage('[options] <outputDir> [wasmBinaries...]')
   .description('Generate WASM module bindings for a language')
-  .action(bindings)
+  .action(bindgen)
 
 program
   .parse(process.argv)
