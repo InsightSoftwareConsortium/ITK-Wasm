@@ -33,7 +33,7 @@ Build and serve the documentation:
 npm run doc:www
 ```
 
-Create a debug build (see also: [the debugging example](../example/debugging.html)):
+Create a debug build (see also: [the debugging example](../examples/debugging.html)):
 ```bash
 git clean -fdx
 # pull the latest debug Docker images
