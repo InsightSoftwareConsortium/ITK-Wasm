@@ -36,3 +36,6 @@ export { default as WorkerPool } from './WorkerPool.js'
 export { default as WorkerPoolFunction } from './WorkerPoolFunction.js'
 export { default as WorkerPoolProgressCallback } from './WorkerPoolProgressCallback.js'
 export { default as WorkerPoolRunTasksResult } from './WorkerPoolRunTasksResult.js'
+
+const version = '1.0.0-b.18';
+export { version };
