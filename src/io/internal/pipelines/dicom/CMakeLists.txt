@@ -14,8 +14,11 @@ set(wasm_modules )
 
 # diquant.cc required for odd linker error
 add_executable(structured-report-to-text structured-report-to-text.cxx diquant.cc)
+add_executable(structured-report-to-html structured-report-to-html.cxx diquant.cc)
 target_link_libraries(structured-report-to-text PUBLIC ${ITK_LIBRARIES})
+target_link_libraries(structured-report-to-html PUBLIC ${ITK_LIBRARIES})
 list(APPEND wasm_modules "structured-report-to-text")
+list(APPEND wasm_modules "structured-report-to-html")
 
 
 if (WASI AND DEFINED WebAssemblyInterface_BINARY_DIR)
