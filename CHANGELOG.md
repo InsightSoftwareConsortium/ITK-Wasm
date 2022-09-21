@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.33](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.32...itk-wasm-v1.0.0-b.33) (2022-09-21)
+
+
+### Features
+
+* **itk-dicom:** Support loading multi-component dicom data with gdcm ([7db17a9](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/7db17a948c84bbadfcdb144cf06c95f8484d1679))
+
 # [1.0.0-b.32](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.31...itk-wasm-v1.0.0-b.32) (2022-09-20)
 
 
