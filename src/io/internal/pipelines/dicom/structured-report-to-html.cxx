@@ -1,3 +1,20 @@
+/*=========================================================================
+ *
+ *  Copyright NumFOCUS
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         https://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
 /*
  *
  *  Copyright (C) 2000-2016, OFFIS e.V.
@@ -19,7 +36,8 @@
  *    render the contents of a DICOM structured reporting file in HTML format
  *
  */
-
+#include "itkPipeline.h"
+#include "itkOutputTextStream.h"
 
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
 
@@ -167,325 +185,339 @@ static OFCondition renderFile(STD_NAMESPACE ostream &out,
 
 int main(int argc, char *argv[])
 {
-    size_t opt_readFlags = 0;
-    size_t opt_renderFlags = DSRTypes::HF_renderDcmtkFootnote;
-    const char *opt_cssName = NULL;
-    const char *opt_defaultCharset = NULL;
-    E_FileReadMode opt_readMode = ERM_autoDetect;
-    E_TransferSyntax opt_ixfer = EXS_Unknown;
-    OFBool opt_checkAllStrings = OFFalse;
-    OFBool opt_convertToUTF8 = OFFalse;
+  itk::wasm::Pipeline pipeline("structured-report-to-html", "Render DICOM SR file and data set to HTML/XHTML", argc, argv);
 
-    OFConsoleApplication app(OFFIS_CONSOLE_APPLICATION, "Render DICOM SR file and data set to HTML/XHTML", rcsid);
-    OFCommandLine cmd;
-    cmd.setOptionColumns(LONGCOL, SHORTCOL);
-    cmd.setParamColumn(LONGCOL + SHORTCOL + 4);
+  std::string dicomFileName;
+  pipeline.add_option("dicom-file", dicomFileName, "Input DICOM file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
 
-    cmd.addParam("dsrfile-in",   "DICOM SR input filename to be rendered", OFCmdParam::PM_Mandatory);
-    cmd.addParam("htmlfile-out", "HTML/XHTML output filename (default: stdout)", OFCmdParam::PM_Optional);
+  itk::wasm::OutputTextStream outputText;
+  pipeline.add_option("output-text", outputText, "Output text file")->required()->type_name("OUTPUT_TEXT_STREAM");
 
-    cmd.addGroup("general options:", LONGCOL, SHORTCOL + 2);
-      cmd.addOption("--help",                   "-h",     "print this help text and exit", OFCommandLine::AF_Exclusive);
-      cmd.addOption("--version",                          "print version information and exit", OFCommandLine::AF_Exclusive);
-      OFLog::addOptions(cmd);
+  // Group: "input options"
+  // SubGroup: "input file format"
+  bool readFileOnly{false};
+  pipeline.add_flag("--read-file-only", readFileOnly, "read file format only");
+  bool readDataset{false};
+  auto readDatasetCliOption = pipeline.add_flag("--read-dataset", readDataset, "read data set without file meta information");
 
-    cmd.addGroup("input options:");
-      cmd.addSubGroup("input file format:");
-        cmd.addOption("--read-file",            "+f",     "read file format or data set (default)");
-        cmd.addOption("--read-file-only",       "+fo",    "read file format only");
-        cmd.addOption("--read-dataset",         "-f",     "read data set without file meta information");
-      cmd.addSubGroup("input transfer syntax:");
-        cmd.addOption("--read-xfer-auto",       "-t=",    "use TS recognition (default)");
-        cmd.addOption("--read-xfer-detect",     "-td",    "ignore TS specified in the file meta header");
-        cmd.addOption("--read-xfer-little",     "-te",    "read with explicit VR little endian TS");
-        cmd.addOption("--read-xfer-big",        "-tb",    "read with explicit VR big endian TS");
-        cmd.addOption("--read-xfer-implicit",   "-ti",    "read with implicit VR little endian TS");
+  // SubGroup "input transfer syntax:"
+  bool readXferAuto{false};
+  pipeline.add_flag("--read-xfer-auto", readXferAuto, "use TS recognition (default)");
+  bool readXferDetect{false};
+  pipeline.add_flag("--read-xfer-detect", readXferDetect, "ignore TS specified in the file meta header");
+  bool readXferLittle{false};
+  auto readXferLittleCliOption = pipeline.add_flag("--read-xfer-little", readXferLittle, "read with explicit VR little endian TS");
+  readXferLittleCliOption->needs(readDatasetCliOption);
 
-    cmd.addGroup("processing options:");
-      cmd.addSubGroup("additional information:");
-        cmd.addOption("--processing-details",   "-Ip",    "show currently processed content item");
-      cmd.addSubGroup("error handling:");
-        cmd.addOption("--unknown-relationship", "-Er",    "accept unknown/missing relationship type");
-        cmd.addOption("--invalid-item-value",   "-Ev",    "accept invalid content item value\n(e.g. violation of VR or VM definition)");
-        cmd.addOption("--ignore-constraints",   "-Ec",    "ignore relationship content constraints");
-        cmd.addOption("--ignore-item-errors",   "-Ee",    "do not abort on content item errors, just warn\n(e.g. missing value type specific attributes)");
-        cmd.addOption("--skip-invalid-items",   "-Ei",    "skip invalid content items (incl. sub-tree)");
-        cmd.addOption("--disable-vr-checker",   "-Dv",    "disable check for VR-conformant string values");
-      cmd.addSubGroup("character set:");
-        cmd.addOption("--charset-require",      "+Cr",    "require declaration of ext. charset (default)");
-        cmd.addOption("--charset-assume",       "+Ca", 1, "[c]harset: string",
-                                                          "assume charset c if no extended charset declared");
-        cmd.addOption("--charset-check-all",              "check all data elements with string values\n(default: only PN, LO, LT, SH, ST, UC and UT)");
+  bool readXferBig{false};
+  auto readXferBigCliOption = pipeline.add_flag("--read-xfer-big", readXferBig, "read with explicit VR big endian TS");
+  readXferBigCliOption->needs(readDatasetCliOption);
+
+  bool readXferImplicit{false};
+  auto readXferImplicitCliOption = pipeline.add_flag("--read-xfer-implicit", readXferImplicit, "read with implicit VR little endian TS");
+  readXferImplicitCliOption->needs(readDatasetCliOption);
+
+  // Group("processing options:")
+  //   SubGroup("additional information:")
+  bool processingDetails{false};
+  pipeline.add_flag("--processing-details", processingDetails, "show currently processed content item");
+  //   SubGroup("error handling:")
+  bool unknownRelationship{false};
+  pipeline.add_flag("--unknown-relationship", unknownRelationship, "accept unknown/missing relationship type");
+  bool invalidItemValue{false};
+  pipeline.add_flag("--invalid-item-value", invalidItemValue, "accept invalid content item value\n(e.g. violation of VR or VM definition)");
+  bool ignoreConstraints{false};
+  pipeline.add_flag("--ignore-constraints", ignoreConstraints, "ignore relationship content constraints");
+  bool ignoreItemErrors{false};
+  pipeline.add_flag("--ignore-item-errors", ignoreItemErrors, "do not abort on content item errors, just warn\n(e.g. missing value type specific attributes)");
+  bool skipInvalidItems{false};
+  pipeline.add_flag("--skip-invalid-items", skipInvalidItems, "skip invalid content items (incl. sub-tree)");
+  bool disableVRChecker{false};
+  pipeline.add_flag("--disable-vr-checker", disableVRChecker, "disable check for VR-conformant string values");
+
+  // SubGroup("character set:")
+  bool charsetRequire{false};
+  pipeline.add_flag("--charset-require", charsetRequire,    "require declaration of ext. charset (default)");
+  std::string charsetAssumeValue;
+  pipeline.add_option("--charset-assume", charsetAssumeValue, "[c]harset: string, assume charset c if no extended charset declared");
+  bool charsetCheckAll{false};
+  pipeline.add_flag("--charset-check-all", charsetCheckAll, "check all data elements with string values\n(default: only PN, LO, LT, SH, ST, UC and UT)");
 #ifdef DCMTK_ENABLE_CHARSET_CONVERSION
-        cmd.addOption("--convert-to-utf8",      "+U8",    "convert all element values that are affected\nby Specific Character Set (0008,0005) to UTF-8");
+  bool convertToUTF8{false};
+  pipeline.add_flag("--convert-to-utf8", convertToUTF8, "convert all element values that are affected\nby Specific Character Set (0008,0005) to UTF-8");
 #endif
-    cmd.addGroup("output options:");
-      cmd.addSubGroup("HTML/XHTML compatibility:");
-        cmd.addOption("--html-3.2",             "+H3",    "use only HTML version 3.2 compatible features");
-        cmd.addOption("--html-4.0",             "+H4",    "allow all HTML version 4.01 features (default)");
-        cmd.addOption("--xhtml-1.1",            "+X1",    "comply with XHTML version 1.1 specification");
-        cmd.addOption("--add-document-type",    "+Hd",    "add reference to SGML document type definition");
-      cmd.addSubGroup("cascading style sheet (CSS), not with HTML 3.2:");
-        cmd.addOption("--css-reference",        "+Sr", 1, "URL: string",
-                                                          "add reference to specified CSS to document");
-        cmd.addOption("--css-file",             "+Sf", 1, "[f]ilename: string",
-                                                          "embed content of specified CSS into document");
-      cmd.addSubGroup("general rendering:");
-        cmd.addOption("--expand-inline",        "+Ri",    "expand short content items inline (default)");
-        cmd.addOption("--never-expand-inline",  "-Ri",    "never expand content items inline");
-        cmd.addOption("--always-expand-inline", "+Ra",    "always expand content items inline");
-        cmd.addOption("--render-full-data",     "+Rd",    "render full data of content items");
-        cmd.addOption("--section-title-inline", "+Rt",    "render section titles inline, not separately");
-      cmd.addSubGroup("document rendering:");
-        cmd.addOption("--document-type-title",  "+Dt",    "use document type as document title (default)");
-        cmd.addOption("--patient-info-title",   "+Dp",    "use patient information as document title");
-        cmd.addOption("--no-document-header",   "-Dh",    "do not render general document information");
-      cmd.addSubGroup("code rendering:");
-        cmd.addOption("--render-inline-codes",  "+Ci",    "render codes in continuous text blocks");
-        cmd.addOption("--concept-name-codes",   "+Cn",    "render code of concept names");
-        cmd.addOption("--numeric-unit-codes",   "+Cu",    "render code of numeric measurement units");
-        cmd.addOption("--code-value-unit",      "+Cv",    "use code value as measurement unit (default)");
-        cmd.addOption("--code-meaning-unit",    "+Cm",    "use code meaning as measurement unit");
-        cmd.addOption("--render-all-codes",     "+Cc",    "render all codes (implies +Ci, +Cn and +Cu)");
-        cmd.addOption("--code-details-tooltip", "+Ct",    "render code details as a tooltip (implies +Cc)");
+  // Group("output options:")
+  //   SubGroup("HTML/XHTML compatibility:")
+  bool html32{false}, html40{false}, xhtml11{false}, addDocumentType{false};
+  auto html32CliOption = pipeline.add_flag("--html-3.2", html32, "use only HTML version 3.2 compatible features");
+  pipeline.add_flag("--html-4.0", html40, "allow all HTML version 4.01 features (default)");
+  pipeline.add_flag("--xhtml-1.1", xhtml11, "comply with XHTML version 1.1 specification");
+  pipeline.add_flag("--add-document-type", addDocumentType, "add reference to SGML document type definition");
 
-    /* evaluate command line */
-    prepareCmdLineArgs(argc, argv, OFFIS_CONSOLE_APPLICATION);
-    if (app.parseCommandLine(cmd, argc, argv))
-    {
-        /* check exclusive options first */
-        if (cmd.hasExclusiveOption())
-        {
-            if (cmd.findOption("--version"))
-            {
-                app.printHeader(OFTrue /*print host identifier*/);
-                COUT << OFendl << "External libraries used:";
-#if !defined(WITH_ZLIB) && !defined(DCMTK_ENABLE_CHARSET_CONVERSION)
-                COUT << " none" << OFendl;
-#else
-                COUT << OFendl;
-#endif
-#ifdef WITH_ZLIB
-                COUT << "- ZLIB, Version " << zlibVersion() << OFendl;
-#endif
-#ifdef DCMTK_ENABLE_CHARSET_CONVERSION
-                COUT << "- " << OFCharacterEncoding::getLibraryVersionString() << OFendl;
-#endif
-                return 0;
-            }
-        }
+  //   SubGroup("cascading style sheet (CSS), not with HTML 3.2:")
+  std::string cssReferenceValue;
+  auto cssReferenceValueCliOption = pipeline.add_option("--css-reference", cssReferenceValue, "URL: string. Add reference to specified CSS to document");
+  cssReferenceValueCliOption->excludes(html32CliOption);
+  std::string cssFileValue;
+  auto cssFileValueCliOption = pipeline.add_option("--css-file", cssFileValue, "[f]ilename: string. Embed content of specified CSS into document");
+  cssFileValueCliOption->excludes(html32CliOption);
 
-        /* general options */
+  //   SubGroup("general rendering:");
+  bool expandInline{false};
+  pipeline.add_flag("--expand-inline", expandInline, "expand short content items inline (default)");
+  bool neverExpandInline{false};
+  pipeline.add_flag("--never-expand-inline", neverExpandInline, "never expand content items inline");
+  bool alwaysExpandInline{false};
+  pipeline.add_flag("--always-expand-inline", alwaysExpandInline, "always expand content items inline");
+  bool renderFullData{false};
+  pipeline.add_flag("--render-full-data", renderFullData, "render full data of content items");
+  bool sectionTitleInline{false};
+  pipeline.add_flag("--section-title-inline", sectionTitleInline, "render section titles inline, not separately");
 
-        OFLog::configureFromCommandLine(cmd, app);
+  //   SubGroup("document rendering:");
+  bool documentTypeTitle{false};
+  pipeline.add_flag("--document-type-title", documentTypeTitle, "use document type as document title (default)");
+  bool patientInfoTitle{false};
+  pipeline.add_flag("--patient-info-title", patientInfoTitle, "use patient information as document title");
+  bool noDocumentHeader{false};
+  pipeline.add_flag("--no-document-header", noDocumentHeader, "do not render general document information");
+  //   SubGroup("code rendering:");
+  bool renderInlineCodes{false};
+  pipeline.add_flag("--render-inline-codes", renderInlineCodes, "render codes in continuous text blocks");
+  bool conceptNameCodes{false};
+  pipeline.add_flag("--concept-name-codes", conceptNameCodes, "render code of concept names");
+  bool numericUnitCodes{false};
+  pipeline.add_flag("--numeric-unit-codes", numericUnitCodes, "render code of numeric measurement units");
+  bool codeValueUnit{false};
+  pipeline.add_flag("--code-value-unit", codeValueUnit, "use code value as measurement unit (default)");
+  bool codeMeaningUnit{false};
+  pipeline.add_flag("--code-meaning-unit", codeMeaningUnit, "use code meaning as measurement unit");
+  bool renderAllCodes{false};
+  pipeline.add_flag("--render-all-codes", renderAllCodes, "render all codes (implies +Ci, +Cn and +Cu)");
+  bool codeDetailsTooltip{false};
+  auto codeDetailsTooltipCliOption = pipeline.add_flag("--code-details-tooltip", codeDetailsTooltip, "render code details as a tooltip (implies +Cc)");
+  codeDetailsTooltipCliOption->excludes(html32CliOption);
+  ITK_WASM_PARSE(pipeline);
 
-        /* input options */
+  size_t opt_readFlags = 0;
+  size_t opt_renderFlags = DSRTypes::HF_renderDcmtkFootnote;
+  const char *opt_cssName = NULL;
+  const char *opt_defaultCharset = NULL;
+  E_FileReadMode opt_readMode = ERM_autoDetect;
+  E_TransferSyntax opt_ixfer = EXS_Unknown;
+  OFBool opt_checkAllStrings = OFFalse;
+  OFBool opt_convertToUTF8 = OFFalse;
+        
+  /* input options */
+  if(readFileOnly) {
+    opt_readMode = ERM_fileOnly;
+  }
+  else if(readDataset) {
+    opt_readMode = ERM_dataset;
+  }
+  else {
+    opt_readMode = ERM_autoDetect; // Default
+  }
 
-        cmd.beginOptionBlock();
-        if (cmd.findOption("--read-file")) opt_readMode = ERM_autoDetect;
-        if (cmd.findOption("--read-file-only")) opt_readMode = ERM_fileOnly;
-        if (cmd.findOption("--read-dataset")) opt_readMode = ERM_dataset;
-        cmd.endOptionBlock();
+  if (readXferAuto) {
+    opt_ixfer = EXS_Unknown;
+  }
+  if (readXferDetect) {
+    dcmAutoDetectDatasetXfer.set(OFTrue);
+  }
+  if (readXferLittle) {
+    opt_ixfer = EXS_LittleEndianExplicit;
+  }
+  if (readXferBig) {
+    opt_ixfer = EXS_BigEndianExplicit;
+  }
+  if (readXferImplicit) {
+    opt_ixfer = EXS_LittleEndianImplicit;
+  }
 
-        cmd.beginOptionBlock();
-        if (cmd.findOption("--read-xfer-auto"))
-            opt_ixfer = EXS_Unknown;
-        if (cmd.findOption("--read-xfer-detect"))
-            dcmAutoDetectDatasetXfer.set(OFTrue);
-        if (cmd.findOption("--read-xfer-little"))
-        {
-            app.checkDependence("--read-xfer-little", "--read-dataset", opt_readMode == ERM_dataset);
-            opt_ixfer = EXS_LittleEndianExplicit;
-        }
-        if (cmd.findOption("--read-xfer-big"))
-        {
-            app.checkDependence("--read-xfer-big", "--read-dataset", opt_readMode == ERM_dataset);
-            opt_ixfer = EXS_BigEndianExplicit;
-        }
-        if (cmd.findOption("--read-xfer-implicit"))
-        {
-            app.checkDependence("--read-xfer-implicit", "--read-dataset", opt_readMode == ERM_dataset);
-            opt_ixfer = EXS_LittleEndianImplicit;
-        }
-        cmd.endOptionBlock();
+  /* processing options */
 
-        /* processing options */
-
-        if (cmd.findOption("--processing-details"))
-        {
-            app.checkDependence("--processing-details", "verbose mode", dsr2htmlLogger.isEnabledFor(OFLogger::INFO_LOG_LEVEL));
-            opt_readFlags |= DSRTypes::RF_showCurrentlyProcessedItem;
-        }
-        if (cmd.findOption("--unknown-relationship"))
-            opt_readFlags |= DSRTypes::RF_acceptUnknownRelationshipType;
-        if (cmd.findOption("--invalid-item-value"))
-            opt_readFlags |= DSRTypes::RF_acceptInvalidContentItemValue;
-        if (cmd.findOption("--ignore-constraints"))
-            opt_readFlags |= DSRTypes::RF_ignoreRelationshipConstraints;
-        if (cmd.findOption("--ignore-item-errors"))
-            opt_readFlags |= DSRTypes::RF_ignoreContentItemErrors;
-        if (cmd.findOption("--skip-invalid-items"))
-            opt_readFlags |= DSRTypes::RF_skipInvalidContentItems;
-        if (cmd.findOption("--disable-vr-checker"))
-            dcmEnableVRCheckerForStringValues.set(OFFalse);
-
-        /* character set options */
-        cmd.beginOptionBlock();
-        if (cmd.findOption("--charset-require"))
-           opt_defaultCharset = NULL;
-        if (cmd.findOption("--charset-assume"))
-          app.checkValue(cmd.getValue(opt_defaultCharset));
-        cmd.endOptionBlock();
-        if (cmd.findOption("--charset-check-all"))
-            opt_checkAllStrings = OFTrue;
-#ifdef DCMTK_ENABLE_CHARSET_CONVERSION
-        if (cmd.findOption("--convert-to-utf8"))
-            opt_convertToUTF8 = OFTrue;
-#endif
-
-        /* output options */
-
-        /* HTML compatibility */
-        cmd.beginOptionBlock();
-        if (cmd.findOption("--html-3.2"))
-            opt_renderFlags = (opt_renderFlags & ~DSRTypes::HF_XHTML11Compatibility) | DSRTypes::HF_HTML32Compatibility;
-        if (cmd.findOption("--html-4.0"))
-            opt_renderFlags = (opt_renderFlags & ~(DSRTypes::HF_XHTML11Compatibility | DSRTypes::HF_HTML32Compatibility));
-        if (cmd.findOption("--xhtml-1.1"))
-            opt_renderFlags = (opt_renderFlags & ~DSRTypes::HF_HTML32Compatibility) | DSRTypes::HF_XHTML11Compatibility | DSRTypes::HF_addDocumentTypeReference;
-        cmd.endOptionBlock();
-
-        if (cmd.findOption("--add-document-type"))
-            opt_renderFlags |= DSRTypes::HF_addDocumentTypeReference;
-
-        /* cascading style sheet */
-        cmd.beginOptionBlock();
-        if (cmd.findOption("--css-reference"))
-        {
-            app.checkConflict("--css-reference", "--html-3.2", (opt_renderFlags & DSRTypes::HF_HTML32Compatibility) > 0);
-            opt_renderFlags &= ~DSRTypes::HF_copyStyleSheetContent;
-            app.checkValue(cmd.getValue(opt_cssName));
-        }
-        if (cmd.findOption("--css-file"))
-        {
-            app.checkConflict("--css-file", "--html-3.2", (opt_renderFlags & DSRTypes::HF_HTML32Compatibility) > 0);
-            opt_renderFlags |= DSRTypes::HF_copyStyleSheetContent;
-            app.checkValue(cmd.getValue(opt_cssName));
-        }
-        cmd.endOptionBlock();
-
-        /* general rendering */
-        cmd.beginOptionBlock();
-        if (cmd.findOption("--expand-inline"))
-        {
-            /* default */
-        }
-        if (cmd.findOption("--never-expand-inline"))
-            opt_renderFlags |= DSRTypes::HF_neverExpandChildrenInline;
-        if (cmd.findOption("--always-expand-inline"))
-            opt_renderFlags |= DSRTypes::HF_alwaysExpandChildrenInline;
-        cmd.endOptionBlock();
-
-        if (cmd.findOption("--render-full-data"))
-            opt_renderFlags |= DSRTypes::HF_renderFullData;
-
-        if (cmd.findOption("--section-title-inline"))
-            opt_renderFlags |= DSRTypes::HF_renderSectionTitlesInline;
-
-        /* document rendering */
-        cmd.beginOptionBlock();
-        if (cmd.findOption("--document-type-title"))
-        {
-            /* default */
-        }
-        if (cmd.findOption("--patient-info-title"))
-            opt_renderFlags |= DSRTypes::HF_renderPatientTitle;
-        cmd.endOptionBlock();
-
-        if (cmd.findOption("--no-document-header"))
-            opt_renderFlags |= DSRTypes::HF_renderNoDocumentHeader;
-
-        /* code rendering */
-        if (cmd.findOption("--render-inline-codes"))
-            opt_renderFlags |= DSRTypes::HF_renderInlineCodes;
-        if (cmd.findOption("--concept-name-codes"))
-            opt_renderFlags |= DSRTypes::HF_renderConceptNameCodes;
-        if (cmd.findOption("--numeric-unit-codes"))
-            opt_renderFlags |= DSRTypes::HF_renderNumericUnitCodes;
-        if (cmd.findOption("--code-value-unit"))
-            opt_renderFlags &= ~DSRTypes::HF_useCodeMeaningAsUnit;
-        if (cmd.findOption("--code-meaning-unit"))
-            opt_renderFlags |= DSRTypes::HF_useCodeMeaningAsUnit;
-        if (cmd.findOption("--render-all-codes"))
-            opt_renderFlags |= DSRTypes::HF_renderAllCodes;
-        if (cmd.findOption("--code-details-tooltip"))
-        {
-            app.checkConflict("--code-details-tooltip", "--html-3.2", (opt_renderFlags & DSRTypes::HF_HTML32Compatibility) > 0);
-            opt_renderFlags |= DSRTypes::HF_useCodeDetailsTooltip;
-        }
-    }
-
-    /* print resource identifier */
-    OFLOG_DEBUG(dsr2htmlLogger, rcsid << OFendl);
-
-    /* make sure data dictionary is loaded */
-    if (!dcmDataDict.isDictionaryLoaded())
-    {
-        OFLOG_WARN(dsr2htmlLogger, "no data dictionary loaded, check environment variable: "
-            << DCM_DICT_ENVIRONMENT_VARIABLE);
-    }
-
-    // map "old" charset names to DICOM defined terms
-    if (opt_defaultCharset != NULL)
-    {
-        OFString charset(opt_defaultCharset);
-        if (charset == "latin-1")
-            opt_defaultCharset = "ISO_IR 100";
-        else if (charset == "latin-2")
-            opt_defaultCharset = "ISO_IR 101";
-        else if (charset == "latin-3")
-            opt_defaultCharset = "ISO_IR 109";
-        else if (charset == "latin-4")
-            opt_defaultCharset = "ISO_IR 110";
-        else if (charset == "latin-5")
-            opt_defaultCharset = "ISO_IR 148";
-        else if (charset == "cyrillic")
-            opt_defaultCharset = "ISO_IR 144";
-        else if (charset == "arabic")
-            opt_defaultCharset = "ISO_IR 127";
-        else if (charset == "greek")
-            opt_defaultCharset = "ISO_IR 126";
-        else if (charset == "hebrew")
-            opt_defaultCharset = "ISO_IR 138";
-    }
-
-    int result = 0;
-    const char *ifname = NULL;
-    /* first parameter is treated as the input filename */
-    cmd.getParam(1, ifname);
-    if (cmd.getParamCount() == 2)
-    {
-        /* second parameter specifies the output filename */
-        const char *ofname = NULL;
-        cmd.getParam(2, ofname);
-        STD_NAMESPACE ofstream stream(ofname);
-        if (stream.good())
-        {
-            if (renderFile(stream, ifname, opt_cssName, opt_defaultCharset, opt_readMode, opt_ixfer, opt_readFlags,
-                opt_renderFlags, opt_checkAllStrings, opt_convertToUTF8).bad())
-            {
-                result = 2;
-            }
-        } else
-            result = 1;
+  if (processingDetails)
+  {
+    if(dsr2htmlLogger.isEnabledFor(OFLogger::INFO_LOG_LEVEL)) {
+      opt_readFlags |= DSRTypes::RF_showCurrentlyProcessedItem;
     } else {
-        /* use standard output */
-        if (renderFile(COUT, ifname, opt_cssName, opt_defaultCharset, opt_readMode, opt_ixfer, opt_readFlags,
-            opt_renderFlags, opt_checkAllStrings, opt_convertToUTF8).bad())
-        {
-            result = 3;
-        }
+      std::cerr << "--processing-details: Verbose mode should be enabled for this option." << std::endl;
     }
+  }
+  if (unknownRelationship) {
+    opt_readFlags |= DSRTypes::RF_acceptUnknownRelationshipType;
+  }
+  if (invalidItemValue) {
+    opt_readFlags |= DSRTypes::RF_acceptInvalidContentItemValue;
+  }
+  if (ignoreConstraints) {
+    opt_readFlags |= DSRTypes::RF_ignoreRelationshipConstraints;
+  }
+  if (ignoreItemErrors) {
+    opt_readFlags |= DSRTypes::RF_ignoreContentItemErrors;
+  }
+  if (skipInvalidItems) {
+    opt_readFlags |= DSRTypes::RF_skipInvalidContentItems;
+  }
+  if (disableVRChecker) {
+    dcmEnableVRCheckerForStringValues.set(OFFalse);
+  }
 
-    return result;
+  /* character set options */
+  if (charsetRequire) {
+    opt_defaultCharset = NULL;
+  }
+  if (!charsetAssumeValue.empty()) {
+    opt_defaultCharset = charsetAssumeValue.c_str();
+  }
+
+  if (charsetCheckAll) {
+    opt_checkAllStrings = OFTrue;
+  }
+#ifdef DCMTK_ENABLE_CHARSET_CONVERSION
+  if (convertToUTF8) {
+    opt_convertToUTF8 = OFTrue;
+  }
+#endif
+
+  /* output options */
+
+  /* HTML compatibility */
+  if (html32) {
+    opt_renderFlags = (opt_renderFlags & ~DSRTypes::HF_XHTML11Compatibility) | DSRTypes::HF_HTML32Compatibility;
+  }
+  if (html40) {
+    opt_renderFlags = (opt_renderFlags & ~(DSRTypes::HF_XHTML11Compatibility | DSRTypes::HF_HTML32Compatibility));
+  }
+  if (xhtml11) {
+    opt_renderFlags = (opt_renderFlags & ~DSRTypes::HF_HTML32Compatibility) | DSRTypes::HF_XHTML11Compatibility | DSRTypes::HF_addDocumentTypeReference;
+  }
+
+  if (addDocumentType) {
+    opt_renderFlags |= DSRTypes::HF_addDocumentTypeReference;
+  }
+
+  /* cascading style sheet */
+  if (!cssReferenceValue.empty())
+  {
+    if((opt_renderFlags & DSRTypes::HF_HTML32Compatibility) > 0) {
+      std::cerr << "--css-reference and --html-3.2 are conflicting options." << std::endl;
+    }
+    opt_renderFlags &= ~DSRTypes::HF_copyStyleSheetContent;
+    opt_cssName = cssReferenceValue.c_str();
+  }
+  if (!cssFileValue.empty())
+  {
+    if ((opt_renderFlags & DSRTypes::HF_HTML32Compatibility) > 0) {
+      std::cerr << "--css-file and --html-3.2 are conflicting options." << std::endl;
+    }
+    opt_renderFlags |= DSRTypes::HF_copyStyleSheetContent;
+    opt_cssName = cssFileValue.c_str();
+  }
+
+  /* general rendering */
+  if (expandInline)
+  {
+    /* default */
+  }
+  if (neverExpandInline) {
+    opt_renderFlags |= DSRTypes::HF_neverExpandChildrenInline;
+  }
+  if (alwaysExpandInline) {
+    opt_renderFlags |= DSRTypes::HF_alwaysExpandChildrenInline;
+  }
+
+  if (renderFullData) {
+    opt_renderFlags |= DSRTypes::HF_renderFullData;
+  }
+
+  if (sectionTitleInline) {
+    opt_renderFlags |= DSRTypes::HF_renderSectionTitlesInline;
+  }
+
+  /* document rendering */
+  if (documentTypeTitle)
+  {
+    /* default */
+  }
+  if (patientInfoTitle) {
+    opt_renderFlags |= DSRTypes::HF_renderPatientTitle;
+  }
+
+  if (noDocumentHeader) {
+    opt_renderFlags |= DSRTypes::HF_renderNoDocumentHeader;
+  }
+
+  /* code rendering */
+  if (renderInlineCodes) {
+    opt_renderFlags |= DSRTypes::HF_renderInlineCodes;
+  }
+  if (conceptNameCodes) {
+    opt_renderFlags |= DSRTypes::HF_renderConceptNameCodes;
+  }
+  if (numericUnitCodes) {
+    opt_renderFlags |= DSRTypes::HF_renderNumericUnitCodes;
+  }
+  if (codeValueUnit) {
+    opt_renderFlags &= ~DSRTypes::HF_useCodeMeaningAsUnit;
+  }
+  if (codeMeaningUnit) {
+    opt_renderFlags |= DSRTypes::HF_useCodeMeaningAsUnit;
+  }
+  if (renderAllCodes) {
+    opt_renderFlags |= DSRTypes::HF_renderAllCodes;
+  }
+  if (codeDetailsTooltip)
+  {
+    if ((opt_renderFlags & DSRTypes::HF_HTML32Compatibility) > 0) {
+      std::cerr << "--code-details-tooltip and --html-3.2 are conflicting options." << std::endl;
+    }
+    opt_renderFlags |= DSRTypes::HF_useCodeDetailsTooltip;
+  }
+
+  /* print resource identifier */
+  OFLOG_DEBUG(dsr2htmlLogger, rcsid << OFendl);
+
+  /* make sure data dictionary is loaded */
+  if (!dcmDataDict.isDictionaryLoaded())
+  {
+    OFLOG_WARN(dsr2htmlLogger, "no data dictionary loaded, check environment variable: "
+      << DCM_DICT_ENVIRONMENT_VARIABLE);
+  }
+
+  // map "old" charset names to DICOM defined terms
+  if (opt_defaultCharset != NULL)
+  {
+    OFString charset(opt_defaultCharset);
+    if (charset == "latin-1")
+      opt_defaultCharset = "ISO_IR 100";
+    else if (charset == "latin-2")
+      opt_defaultCharset = "ISO_IR 101";
+    else if (charset == "latin-3")
+      opt_defaultCharset = "ISO_IR 109";
+    else if (charset == "latin-4")
+      opt_defaultCharset = "ISO_IR 110";
+    else if (charset == "latin-5")
+      opt_defaultCharset = "ISO_IR 148";
+    else if (charset == "cyrillic")
+      opt_defaultCharset = "ISO_IR 144";
+    else if (charset == "arabic")
+      opt_defaultCharset = "ISO_IR 127";
+    else if (charset == "greek")
+      opt_defaultCharset = "ISO_IR 126";
+    else if (charset == "hebrew")
+      opt_defaultCharset = "ISO_IR 138";
+  }
+
+  int result = 0;
+  const char *ifname = dicomFileName.c_str();
+
+  if (renderFile(outputText.Get(), ifname, opt_cssName, opt_defaultCharset, opt_readMode, opt_ixfer, opt_readFlags,
+    opt_renderFlags, opt_checkAllStrings, opt_convertToUTF8).bad())
+  {
+    result = 3;
+  }
+
+  return result;
 }
