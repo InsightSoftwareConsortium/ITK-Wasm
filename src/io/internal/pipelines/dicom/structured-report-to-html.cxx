@@ -183,7 +183,7 @@ static OFCondition renderFile(STD_NAMESPACE ostream &out,
 #define LONGCOL 22
 
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("structured-report-to-html", "Render DICOM SR file and data set to HTML/XHTML", argc, argv);
 
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
   bool charsetRequire{false};
   pipeline.add_flag("--charset-require", charsetRequire,    "require declaration of ext. charset (default)");
   std::string charsetAssumeValue;
-  pipeline.add_option("--charset-assume", charsetAssumeValue, "[c]harset: string, assume charset c if no extended charset declared");
+  pipeline.add_option("--charset-assume", charsetAssumeValue, "[c]harset: string, assume charset c if no extended charset declared")->type_name("INPUT_TEXT_STREAM");
   bool charsetCheckAll{false};
   pipeline.add_flag("--charset-check-all", charsetCheckAll, "check all data elements with string values\n(default: only PN, LO, LT, SH, ST, UC and UT)");
 #ifdef DCMTK_ENABLE_CHARSET_CONVERSION
@@ -256,10 +256,10 @@ int main(int argc, char *argv[])
 
   //   SubGroup("cascading style sheet (CSS), not with HTML 3.2:")
   std::string cssReferenceValue;
-  auto cssReferenceValueCliOption = pipeline.add_option("--css-reference", cssReferenceValue, "URL: string. Add reference to specified CSS to document");
+  auto cssReferenceValueCliOption = pipeline.add_option("--css-reference", cssReferenceValue, "URL: string. Add reference to specified CSS to document")->type_name("INPUT_TEXT_STREAM");
   cssReferenceValueCliOption->excludes(html32CliOption);
   std::string cssFileValue;
-  auto cssFileValueCliOption = pipeline.add_option("--css-file", cssFileValue, "[f]ilename: string. Embed content of specified CSS into document");
+  auto cssFileValueCliOption = pipeline.add_option("--css-file", cssFileValue, "[f]ilename: string. Embed content of specified CSS into document")->type_name("INPUT_TEXT_STREAM");
   cssFileValueCliOption->excludes(html32CliOption);
 
   //   SubGroup("general rendering:");

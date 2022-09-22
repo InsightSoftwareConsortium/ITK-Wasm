@@ -14,7 +14,21 @@ build-wasi
 src/io/internal/ImageIOIndex.ts
 src/io/internal/MeshIOIndex.ts
 
-dist
+dist/*
+!dist/dicom
+
+dist/dicom/*
+!dist/dicom/cypress
+!dist/dicom/dist
+!dist/dicom/src
+!dist/dicom/test
+
+dist/dicom/dist/*
+!dist/dicom/dist/demo
+
+dist/dicom/dist/demo/*
+!dist/dicom/dist/demo/app.js
+
 node_modules
 .DS_Store
 yarn.lock
