@@ -1,5 +1,15 @@
 
 
+import ReadDicomEncapsulatedPdfNodeResult from './ReadDicomEncapsulatedPdfNodeResult.js'
+export type { ReadDicomEncapsulatedPdfNodeResult }
+
+import ReadDicomEncapsulatedPdfOptions from './ReadDicomEncapsulatedPdfOptions.js'
+export type { ReadDicomEncapsulatedPdfOptions }
+
+import readDicomEncapsulatedPdfNode from './readDicomEncapsulatedPdfNode.js'
+export { readDicomEncapsulatedPdfNode }
+
+
 import StructuredReportToHtmlNodeResult from './StructuredReportToHtmlNodeResult.js'
 export type { StructuredReportToHtmlNodeResult }
 
