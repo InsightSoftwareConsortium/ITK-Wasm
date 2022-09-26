@@ -1,3 +1,20 @@
+/*=========================================================================
+ *
+ *  Copyright NumFOCUS
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         https://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
 /*
  *
  *  Copyright (C) 2007-2021, OFFIS e.V.
@@ -18,6 +35,8 @@
  *  Purpose: Exctract PDF file from DICOM encapsulated PDF storage object
  *
  */
+#include "itkPipeline.h"
+#include "itkOutputBinaryStream.h"
 
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
 
@@ -33,6 +52,10 @@ BEGIN_EXTERN_C
 #endif
 END_EXTERN_C
 
+// Fix warning for redefinition of __STDC_FORMAT_MACROS in the header include tree for dctk.h
+#ifdef __STDC_FORMAT_MACROS
+  #undef __STDC_FORMAT_MACROS
+#endif
 #include "dcmtk/dcmdata/dctk.h"
 #include "dcmtk/dcmdata/cmdlnarg.h"
 #include "dcmtk/ofstd/ofconapp.h"
@@ -51,301 +74,174 @@ static OFLogger dcm2pdfLogger = OFLog::getLogger("dcmtk.apps." OFFIS_CONSOLE_APP
 static char rcsid[] = "$dcmtk: " OFFIS_CONSOLE_APPLICATION " v"
   OFFIS_DCMTK_VERSION " " OFFIS_DCMTK_RELEASEDATE " $";
 
-#define FILENAME_PLACEHOLDER "#f"
-
-static OFString replaceChars(const OFString &srcstr, const OFString &pattern, const OFString &substitute)
-    /*
-     * This function replaces all occurrences of pattern in srcstr with substitute and returns
-     * the result as a new OFString variable. Note that srcstr itself will not be changed.
-     *
-     * Parameters:
-     *   srcstr     - [in] The source string.
-     *   pattern    - [in] The pattern string which shall be substituted.
-     *   substitute - [in] The substitute for pattern in srcstr.
-     */
-{
-  OFString result = srcstr;
-  size_t pos = 0;
-
-  while (pos != OFString_npos)
-  {
-    pos = result.find(pattern, pos);
-
-    if (pos != OFString_npos)
-    {
-      result.replace(pos, pattern.size(), substitute);
-      pos += substitute.size();
-    }
-  }
-
-  return result;
-}
-
-
-#define SHORTCOL 3
-#define LONGCOL 20
-
 int main(int argc, char *argv[])
 {
+  itk::wasm::Pipeline pipeline("read-dicom-encapsulated-pdf", "Extract PDF file from DICOM encapsulated PDF.", argc, argv);
+
+  std::string dicomFileName;
+  pipeline.add_option("dicom-file", dicomFileName, "Input DICOM file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+
+  itk::wasm::OutputBinaryStream outputBinaryStream;
+  pipeline.add_option("pdf-binary-output", outputBinaryStream, "Output pdf file")->required()->type_name("OUTPUT_BINARY_STREAM");
+
+  // Group: "input options"
+  //  SubGroup "input file format"
+  bool readFileOnly{false};
+  pipeline.add_flag("--read-file-only", readFileOnly, "read file format only");
+  bool readDataset{false};
+  auto readDatasetCliOption = pipeline.add_flag("--read-dataset", readDataset, "read data set without file meta information");
+  // SubGroup "input transfer syntax"
+  bool readXferAuto{false};
+  pipeline.add_flag("--read-xfer-auto", readXferAuto, "use TS recognition (default)");
+  bool readXferDetect{false};
+  pipeline.add_flag("--read-xfer-detect", readXferDetect, "ignore TS specified in the file meta header");
+  bool readXferLittle{false};
+  auto readXferLittleCliOption = pipeline.add_flag("--read-xfer-little", readXferLittle, "read with explicit VR little endian TS");
+  readXferLittleCliOption->needs(readDatasetCliOption);
+
+  bool readXferBig{false};
+  auto readXferBigCliOption = pipeline.add_flag("--read-xfer-big", readXferBig, "read with explicit VR big endian TS");
+  readXferBigCliOption->needs(readDatasetCliOption);
+
+  bool readXferImplicit{false};
+  auto readXferImplicitCliOption = pipeline.add_flag("--read-xfer-implicit", readXferImplicit, "read with implicit VR little endian TS");
+  readXferImplicitCliOption->needs(readDatasetCliOption);
+
+  // SubGroup "parsing of odd-length attributes"
+  bool acceptOddLength{false};
+  pipeline.add_flag("--accept-odd-length", acceptOddLength, "accept odd length attributes (default)");
+  bool assumeEvenLength{false};
+  pipeline.add_flag("--assume-even-length", assumeEvenLength, "assume real length is one byte larger");
+
+  // SubGroup "handling of undefined length UN elements"
+  bool enableCP246{false};
+  pipeline.add_flag("--enable-cp246", enableCP246, "read undefined len UN as implicit VR (default)");
+  bool disableCP246{false};
+  pipeline.add_flag("--disable-cp246", disableCP246, "read undefined len UN as explicit VR");
+
+  // SubGroup "handling of defined length UN elements"
+  bool retainUN{false};
+  pipeline.add_flag("--retain-un", retainUN, "retain elements as UN (default)");
+  bool convertUN{false};
+  pipeline.add_flag("--convert-un", convertUN, "convert to real VR if known");
+  // SubGroup "automatic data correction"
+  bool enableCorrection{false};
+  pipeline.add_flag("--enable-correction", enableCorrection, "enable automatic data correction (default)");
+  bool disableCorrection{false};
+  pipeline.add_flag("--disable-correction", disableCorrection, "disable automatic data correction");
+#ifdef WITH_ZLIB
+  // SubGroup "bitstream format of deflated input"
+  bool bitstreamDeflated{false};
+  pipeline.add_flag("--bitstream-deflated", bitstreamDeflated, "expect deflated bitstream (default)");
+  bool bitstreamZlib{false};
+  pipeline.add_flag("--bitstream-zlib", bitstreamZlib, "expect deflated zlib bitstream");
+#endif
+
+  ITK_WASM_PARSE(pipeline);
+
   const char *opt_ifname = NULL;
   const char *opt_ofname = NULL;
-  const char    *opt_execString = NULL;
   E_FileReadMode opt_readMode = ERM_autoDetect;
   E_TransferSyntax opt_ixfer = EXS_Unknown;
 
-  OFConsoleApplication app(OFFIS_CONSOLE_APPLICATION, "Extract PDF file from DICOM encapsulated PDF", rcsid);
-  OFCommandLine cmd;
-  cmd.setOptionColumns(LONGCOL, SHORTCOL);
-  cmd.setParamColumn(LONGCOL + SHORTCOL + 4);
+  // OFLog::configureFromCommandLine(cmd, app);
+  if (readFileOnly) opt_readMode = ERM_fileOnly;
+  if (readDataset) opt_readMode = ERM_dataset;
+  if (readXferAuto) opt_ixfer = EXS_Unknown;
+  if (readXferDetect) dcmAutoDetectDatasetXfer.set(OFTrue);
+  if (readXferLittle) opt_ixfer = EXS_LittleEndianExplicit;
+  if (readXferBig) opt_ixfer = EXS_BigEndianExplicit;
+  if (readXferImplicit) opt_ixfer = EXS_LittleEndianImplicit;
 
-  cmd.addParam("dcmfile-in",  "DICOM input filename");
-  cmd.addParam("pdffile-out", "PDF output filename");
+  if (acceptOddLength) dcmAcceptOddAttributeLength.set(OFTrue);
+  if (assumeEvenLength) dcmAcceptOddAttributeLength.set(OFFalse);
 
-  cmd.addGroup("general options:", LONGCOL, SHORTCOL + 2);
-    cmd.addOption("--help",                 "-h",     "print this help text and exit", OFCommandLine::AF_Exclusive);
-    cmd.addOption("--version",                        "print version information and exit", OFCommandLine::AF_Exclusive);
-    OFLog::addOptions(cmd);
+  if (enableCP246) dcmEnableCP246Support.set(OFTrue);
+  if (disableCP246) dcmEnableCP246Support.set(OFFalse);
 
-  cmd.addGroup("input options:");
-    cmd.addSubGroup("input file format:");
-      cmd.addOption("--read-file",          "+f",     "read file format or data set (default)");
-      cmd.addOption("--read-file-only",     "+fo",    "read file format only");
-      cmd.addOption("--read-dataset",       "-f",     "read data set without file meta information");
-    cmd.addSubGroup("input transfer syntax:", LONGCOL, SHORTCOL);
-      cmd.addOption("--read-xfer-auto",     "-t=",    "use TS recognition (default)");
-      cmd.addOption("--read-xfer-detect",   "-td",    "ignore TS specified in the file meta header");
-      cmd.addOption("--read-xfer-little",   "-te",    "read with explicit VR little endian TS");
-      cmd.addOption("--read-xfer-big",      "-tb",    "read with explicit VR big endian TS");
-      cmd.addOption("--read-xfer-implicit", "-ti",    "read with implicit VR little endian TS");
-    cmd.addSubGroup("parsing of odd-length attributes:");
-      cmd.addOption("--accept-odd-length",  "+ao",    "accept odd length attributes (default)");
-      cmd.addOption("--assume-even-length", "+ae",    "assume real length is one byte larger");
-    cmd.addSubGroup("handling of undefined length UN elements:");
-      cmd.addOption("--enable-cp246",       "+ui",    "read undefined len UN as implicit VR (default)");
-      cmd.addOption("--disable-cp246",      "-ui",    "read undefined len UN as explicit VR");
-    cmd.addSubGroup("handling of defined length UN elements:");
-      cmd.addOption("--retain-un",          "-uc",    "retain elements as UN (default)");
-      cmd.addOption("--convert-un",         "+uc",    "convert to real VR if known");
-    cmd.addSubGroup("automatic data correction:");
-      cmd.addOption("--enable-correction",  "+dc",    "enable automatic data correction (default)");
-      cmd.addOption("--disable-correction", "-dc",    "disable automatic data correction");
-#ifdef WITH_ZLIB
-    cmd.addSubGroup("bitstream format of deflated input:");
-      cmd.addOption("--bitstream-deflated", "+bd",    "expect deflated bitstream (default)");
-      cmd.addOption("--bitstream-zlib",     "+bz",    "expect deflated zlib bitstream");
-#endif
+  if (retainUN) dcmEnableUnknownVRConversion.set(OFFalse);
+  if (convertUN) dcmEnableUnknownVRConversion.set(OFTrue);
 
-   cmd.addGroup("execution options:", LONGCOL, SHORTCOL + 2);
-     cmd.addOption("--exec",                "-x",  1, "[c]ommand: string",
-                                                      "execute command c after PDF extraction");
-    /* evaluate command line */
-    prepareCmdLineArgs(argc, argv, OFFIS_CONSOLE_APPLICATION);
-    if (app.parseCommandLine(cmd, argc, argv))
-    {
-      /* check exclusive options first */
-      if (cmd.hasExclusiveOption())
-      {
-          if (cmd.findOption("--version"))
-          {
-              app.printHeader(OFTrue /*print host identifier*/);
-              COUT << OFendl << "External libraries used:";
-#ifdef WITH_ZLIB
-              COUT << OFendl << "- ZLIB, Version " << zlibVersion() << OFendl;
-#else
-              COUT << " none" << OFendl;
-#endif
-              return 0;
-          }
-      }
-
-      /* command line parameters and options */
-      cmd.getParam(1, opt_ifname);
-      cmd.getParam(2, opt_ofname);
-
-      OFLog::configureFromCommandLine(cmd, app);
-
-      cmd.beginOptionBlock();
-      if (cmd.findOption("--read-file")) opt_readMode = ERM_autoDetect;
-      if (cmd.findOption("--read-file-only")) opt_readMode = ERM_fileOnly;
-      if (cmd.findOption("--read-dataset")) opt_readMode = ERM_dataset;
-      cmd.endOptionBlock();
-
-      cmd.beginOptionBlock();
-      if (cmd.findOption("--read-xfer-auto"))
-          opt_ixfer = EXS_Unknown;
-      if (cmd.findOption("--read-xfer-detect"))
-          dcmAutoDetectDatasetXfer.set(OFTrue);
-      if (cmd.findOption("--read-xfer-little"))
-      {
-          app.checkDependence("--read-xfer-little", "--read-dataset", opt_readMode == ERM_dataset);
-          opt_ixfer = EXS_LittleEndianExplicit;
-      }
-      if (cmd.findOption("--read-xfer-big"))
-      {
-          app.checkDependence("--read-xfer-big", "--read-dataset", opt_readMode == ERM_dataset);
-          opt_ixfer = EXS_BigEndianExplicit;
-      }
-      if (cmd.findOption("--read-xfer-implicit"))
-      {
-          app.checkDependence("--read-xfer-implicit", "--read-dataset", opt_readMode == ERM_dataset);
-          opt_ixfer = EXS_LittleEndianImplicit;
-      }
-      cmd.endOptionBlock();
-
-      cmd.beginOptionBlock();
-      if (cmd.findOption("--accept-odd-length"))
-      {
-          dcmAcceptOddAttributeLength.set(OFTrue);
-      }
-      if (cmd.findOption("--assume-even-length"))
-      {
-          dcmAcceptOddAttributeLength.set(OFFalse);
-      }
-      cmd.endOptionBlock();
-
-      cmd.beginOptionBlock();
-      if (cmd.findOption("--enable-cp246"))
-      {
-          dcmEnableCP246Support.set(OFTrue);
-      }
-      if (cmd.findOption("--disable-cp246"))
-      {
-          dcmEnableCP246Support.set(OFFalse);
-      }
-      cmd.endOptionBlock();
-
-      cmd.beginOptionBlock();
-      if (cmd.findOption("--retain-un"))
-      {
-          dcmEnableUnknownVRConversion.set(OFFalse);
-      }
-      if (cmd.findOption("--convert-un"))
-      {
-          dcmEnableUnknownVRConversion.set(OFTrue);
-      }
-      cmd.endOptionBlock();
-
-      cmd.beginOptionBlock();
-      if (cmd.findOption("--enable-correction"))
-      {
-          dcmEnableAutomaticInputDataCorrection.set(OFTrue);
-      }
-      if (cmd.findOption("--disable-correction"))
-      {
-          dcmEnableAutomaticInputDataCorrection.set(OFFalse);
-      }
-      cmd.endOptionBlock();
+  if (enableCorrection) dcmEnableAutomaticInputDataCorrection.set(OFTrue);
+  if (disableCorrection) dcmEnableAutomaticInputDataCorrection.set(OFFalse);
 
 #ifdef WITH_ZLIB
-      cmd.beginOptionBlock();
-      if (cmd.findOption("--bitstream-deflated"))
-      {
-          dcmZlibExpectRFC1950Encoding.set(OFFalse);
-      }
-      if (cmd.findOption("--bitstream-zlib"))
-      {
-          dcmZlibExpectRFC1950Encoding.set(OFTrue);
-      }
-      cmd.endOptionBlock();
+  if (bitstreamDeflated) dcmZlibExpectRFC1950Encoding.set(OFFalse);
+  if (bitstreamZlib) dcmZlibExpectRFC1950Encoding.set(OFTrue);
 #endif
 
-      if (cmd.findOption("--exec")) app.checkValue(cmd.getValue(opt_execString));
-    }
+  /* print resource identifier */
+  OFLOG_DEBUG(dcm2pdfLogger, rcsid << OFendl);
 
-    /* print resource identifier */
-    OFLOG_DEBUG(dcm2pdfLogger, rcsid << OFendl);
-
-    /* make sure data dictionary is loaded */
-    if (!dcmDataDict.isDictionaryLoaded())
-    {
-        OFLOG_WARN(dcm2pdfLogger, "no data dictionary loaded, check environment variable: "
-            << DCM_DICT_ENVIRONMENT_VARIABLE);
-    }
+  /* make sure data dictionary is loaded */
+  if (!dcmDataDict.isDictionaryLoaded())
+  {
+    OFLOG_WARN(dcm2pdfLogger, "no data dictionary loaded, check environment variable: "
+      << DCM_DICT_ENVIRONMENT_VARIABLE);
+  }
 
     // open inputfile
-    if ((opt_ifname == NULL) || (strlen(opt_ifname) == 0))
-    {
-        OFLOG_FATAL(dcm2pdfLogger, "invalid filename: <empty string>");
-        return 1;
-    }
+  opt_ifname = dicomFileName.c_str(); 
+  if ((opt_ifname == NULL) || (strlen(opt_ifname) == 0))
+  {
+    OFLOG_FATAL(dcm2pdfLogger, "invalid filename: <empty string>");
+    return 1;
+  }
 
-    DcmFileFormat fileformat;
-    DcmDataset * dataset = fileformat.getDataset();
+  DcmFileFormat fileformat;
+  DcmDataset * dataset = fileformat.getDataset();
 
-    OFLOG_INFO(dcm2pdfLogger, "open input file " << opt_ifname);
+  OFLOG_DEBUG(dcm2pdfLogger, "open input file " << opt_ifname);
 
-    OFCondition error = fileformat.loadFile(opt_ifname, opt_ixfer, EGL_noChange, DCM_MaxReadLength, opt_readMode);
+  OFCondition error = fileformat.loadFile(opt_ifname, opt_ixfer, EGL_noChange, DCM_MaxReadLength, opt_readMode);
 
-    if (error.bad())
-    {
-        OFLOG_FATAL(dcm2pdfLogger, error.text() << ": reading file: " << opt_ifname);
-        return 1;
-    }
+  if (error.bad())
+  {
+    OFLOG_FATAL(dcm2pdfLogger, error.text() << ": reading file: " << opt_ifname);
+    return 1;
+  }
 
-    OFString sopClass;
-    error = dataset->findAndGetOFString(DCM_SOPClassUID, sopClass);
-    if (error.bad() || sopClass != UID_EncapsulatedPDFStorage)
-    {
-        OFLOG_FATAL(dcm2pdfLogger, "not an Encapsulated PDF Storage object: " << opt_ifname);
-        return 1;
-    }
+  OFString sopClass;
+  error = dataset->findAndGetOFString(DCM_SOPClassUID, sopClass);
+  if (error.bad() || sopClass != UID_EncapsulatedPDFStorage)
+  {
+    OFLOG_FATAL(dcm2pdfLogger, "not an Encapsulated PDF Storage object: " << opt_ifname);
+    return 1;
+  }
 
-    DcmElement *delem = NULL;
-    error = dataset->findAndGetElement(DCM_EncapsulatedDocument, delem);
-    if (error.bad() || delem == NULL)
-    {
-        OFLOG_FATAL(dcm2pdfLogger, "attribute (0042,0011) Encapsulated Document missing.");
-        return 1;
-    }
+  DcmElement *delem = NULL;
+  error = dataset->findAndGetElement(DCM_EncapsulatedDocument, delem);
+  if (error.bad() || delem == NULL)
+  {
+    OFLOG_FATAL(dcm2pdfLogger, "attribute (0042,0011) Encapsulated Document missing.");
+    return 1;
+  }
 
-    Uint32 len = delem->getLength();
-    Uint8 *pdfDocument = NULL;
-    error = delem->getUint8Array(pdfDocument);
-    if (error.bad() || pdfDocument == NULL || len == 0)
-    {
-        OFLOG_FATAL(dcm2pdfLogger, "attribute (0042,0011) Encapsulated Document empty or wrong VR.");
-        return 1;
-    }
+  Uint32 len = delem->getLength();
+  Uint8 *pdfDocument = NULL;
+  error = delem->getUint8Array(pdfDocument);
+  if (error.bad() || pdfDocument == NULL || len == 0)
+  {
+    OFLOG_FATAL(dcm2pdfLogger, "attribute (0042,0011) Encapsulated Document empty or wrong VR.");
+    return 1;
+  }
 
-    /* strip pad byte at end of file, if there is one. The PDF format expects
-     * files to end with %%EOF followed by CR/LF (although in some cases the
-     * CR/LF may be missing or you might only find CR or LF).
-     * If the last character of the file is not a CR or LF, and not the
-     * letter 'F', we assume it is either trailing garbage or a pad byte, and remove it.
-     */
-    if (pdfDocument[len-1] != 10 && pdfDocument[len-1] != 13 && pdfDocument[len-1] != 'F')
-    {
-        --len;
-    }
+  /* strip pad byte at end of file, if there is one. The PDF format expects
+  * files to end with %%EOF followed by CR/LF (although in some cases the
+  * CR/LF may be missing or you might only find CR or LF).
+  * If the last character of the file is not a CR or LF, and not the
+  * letter 'F', we assume it is either trailing garbage or a pad byte, and remove it.
+  */
+  if (pdfDocument[len-1] != 10 && pdfDocument[len-1] != 13 && pdfDocument[len-1] != 'F')
+  {
+    --len;
+  }
 
-    FILE *pdffile = fopen(opt_ofname, "wb");
-    if (pdffile == NULL)
-    {
-        OFLOG_FATAL(dcm2pdfLogger, "unable to create file " << opt_ofname);
-        return 1;
-    }
+  std::ostream_iterator<unsigned char> oIt(outputBinaryStream.Get());
+  std::copy(pdfDocument, (pdfDocument + len), oIt);
 
-    if (len != fwrite(pdfDocument, 1, len, pdffile))
-    {
-        OFLOG_FATAL(dcm2pdfLogger, "write error in file " << opt_ofname);
-        fclose(pdffile);
-        return 1;
-    }
+  OFLOG_DEBUG(dcm2pdfLogger, "PDF document size in bytes: " << len);
+  OFLOG_DEBUG(dcm2pdfLogger, "conversion successful");
 
-    fclose(pdffile);
-
-    OFLOG_INFO(dcm2pdfLogger, "conversion successful");
-
-    if (opt_execString)
-    {
-        OFString cmdStr = opt_execString;
-        cmdStr = replaceChars(cmdStr, OFString(FILENAME_PLACEHOLDER), opt_ofname);
-
-        // Execute command and return result
-#ifndef __wasi__
-        return system(cmdStr.c_str());
-#endif
-    }
-
-    return 0;
+  return 0;
 }
