@@ -1,5 +1,19 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.34](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.33...itk-wasm-v1.0.0-b.34) (2022-09-27)
+
+
+### Bug Fixes
+
+* **itk-wasm-cli:** enforce alpha-numeric parameter names ([1be234a](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/1be234a4852e751f09df12f9c7c39b1957b9d738))
+
+
+### Features
+
+* **dsr2html:** add structured-report-to-html operation to itk-dicom ([4e35e07](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4e35e0765c5436ace775ff50103d09d54b00d279))
+* **dsr2html:** generate TS wrapper (bindgen) for structured-report-to-html ([f1fc133](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f1fc1338660136f139c201552c4d9c2690b1e1f6))
+* **dsr2html:** modify dsr2html app for itk-wasm ([ddec323](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/ddec323dce2dc1346718e42310272304f73ab101))
+
 # [1.0.0-b.33](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.32...itk-wasm-v1.0.0-b.33) (2022-09-21)
 
 
