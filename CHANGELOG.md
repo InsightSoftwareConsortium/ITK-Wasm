@@ -1,5 +1,14 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.35](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.34...itk-wasm-v1.0.0-b.35) (2022-09-28)
+
+
+### Features
+
+* **dcm2pdf:** add read-dicom-encapsulated-pdf operation to itk-dicom ([2a383c8](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2a383c811ea0a29ed41c15937ec705ba74be5073))
+* **dcm2pdf:** generate TS wrapper (bindgen) for read-dicom-encapsulated-pdf ([c2ef59f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/c2ef59f9310c218a280588f4613fd22fbd00923e))
+* **dcm2pdf:** modify dcm2pdf app for itk-wasm ([9cb3553](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9cb35538ac7bc5e47c4689395a51fd1e8375b808))
+
 # [1.0.0-b.34](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.33...itk-wasm-v1.0.0-b.34) (2022-09-27)
 
 
