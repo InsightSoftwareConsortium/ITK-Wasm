@@ -1,6 +1,6 @@
 {
   "name": "itk-dicom",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "DICOM IO from itk-wasm",
   "type": "module",
   "module": "./dist/itk-dicom.js",
