@@ -37,6 +37,7 @@
  *
  */
 #include "itkPipeline.h"
+#include "itkInputTextStream.h"
 #include "itkOutputTextStream.h"
 
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
@@ -79,7 +80,8 @@ static OFCondition renderFile(STD_NAMESPACE ostream &out,
                               const size_t readFlags,
                               const size_t renderFlags,
                               const OFBool checkAllStrings,
-                              const OFBool convertToUTF8)
+                              const OFBool convertToUTF8,
+                              const std::string& urlPrefixForReferencedObjects)
 {
     OFCondition result = EC_Normal;
 
@@ -169,8 +171,20 @@ static OFCondition renderFile(STD_NAMESPACE ostream &out,
                     }
                 }
                 if (result.good())
-                    result = dsrdoc->renderHTML(out, renderFlags, cssName);
-            } else {
+                {
+                    if (urlPrefixForReferencedObjects.empty())
+                    {
+                        // this allows to set the default argument value: HTML_HYPERLINK_PREFIX_FOR_CGI
+                        result = dsrdoc->renderHTML(out, renderFlags, cssName);
+                    }
+                    else
+                    {
+                        result = dsrdoc->renderHTML(out, renderFlags, cssName, urlPrefixForReferencedObjects);
+                    }
+                }
+            }
+            else
+            {
                 OFLOG_FATAL(dsr2htmlLogger, OFFIS_CONSOLE_APPLICATION << ": error (" << result.text()
                     << ") parsing file: " << ifname);
             }
@@ -251,6 +265,9 @@ int main(int argc, char * argv[])
   pipeline.add_flag("--convert-to-utf8", convertToUTF8, "convert all element values that are affected\nby Specific Character Set (0008,0005) to UTF-8");
 #endif
   // Group("output options:")
+  std::string urlPrefixValue;
+  pipeline.add_option("--url-prefix", urlPrefixValue, "URL: string. Append specificed URL prefix to hyperlinks of referenced composite objects in the document.");
+
   //   SubGroup("HTML/XHTML compatibility:")
   bool html32{false}, html40{false}, xhtml11{false}, addDocumentType{false};
   auto html32CliOption = pipeline.add_flag("--html-3.2", html32, "use only HTML version 3.2 compatible features");
@@ -259,12 +276,12 @@ int main(int argc, char * argv[])
   pipeline.add_flag("--add-document-type", addDocumentType, "add reference to SGML document type definition");
 
   //   SubGroup("cascading style sheet (CSS), not with HTML 3.2:")
-  std::string cssReferenceValue;
-  auto cssReferenceValueCliOption = pipeline.add_option("--css-reference", cssReferenceValue, "URL: string. Add reference to specified CSS to document")->type_name("INPUT_TEXT_STREAM");
-  cssReferenceValueCliOption->excludes(html32CliOption);
-  std::string cssFileValue;
-  auto cssFileValueCliOption = pipeline.add_option("--css-file", cssFileValue, "[f]ilename: string. Embed content of specified CSS into document")->type_name("INPUT_TEXT_STREAM");
-  cssFileValueCliOption->excludes(html32CliOption);
+  itk::wasm::InputTextStream cssReference;
+  auto cssReferenceCliOption = pipeline.add_option("--css-reference", cssReference, "URL: string. Add reference to specified CSS to document")->type_name("INPUT_TEXT_STREAM");
+  cssReferenceCliOption->excludes(html32CliOption);
+  std::string cssFile;
+  auto cssFileCliOption = pipeline.add_option("--css-file", cssFile, "[f]ilename: string. Embed content of specified CSS into document")->check(CLI::ExistingFile)->type_name("INPUT_TEXT_FILE");
+  cssFileCliOption->excludes(html32CliOption);
 
   //   SubGroup("general rendering:");
   bool expandInline{false};
@@ -311,6 +328,11 @@ int main(int argc, char * argv[])
   E_TransferSyntax opt_ixfer = EXS_Unknown;
   OFBool opt_checkAllStrings = OFFalse;
   OFBool opt_convertToUTF8 = OFFalse;
+
+  std::string cssReferenceContent;
+  if(cssReference.GetPointer() != nullptr) {
+    cssReferenceContent = std::string{ std::istreambuf_iterator<char>(cssReference.Get()), std::istreambuf_iterator<char>() };
+  }
         
   /* input options */
   if(readFileOnly) {
@@ -403,21 +425,21 @@ int main(int argc, char * argv[])
   }
 
   /* cascading style sheet */
-  if (!cssReferenceValue.empty())
+  if (!cssReferenceContent.empty())
   {
     if((opt_renderFlags & DSRTypes::HF_HTML32Compatibility) > 0) {
       std::cerr << "--css-reference and --html-3.2 are conflicting options." << std::endl;
     }
     opt_renderFlags &= ~DSRTypes::HF_copyStyleSheetContent;
-    opt_cssName = cssReferenceValue.c_str();
+    opt_cssName = cssReferenceContent.c_str();
   }
-  if (!cssFileValue.empty())
+  if (!cssFile.empty())
   {
     if ((opt_renderFlags & DSRTypes::HF_HTML32Compatibility) > 0) {
       std::cerr << "--css-file and --html-3.2 are conflicting options." << std::endl;
     }
     opt_renderFlags |= DSRTypes::HF_copyStyleSheetContent;
-    opt_cssName = cssFileValue.c_str();
+    opt_cssName = cssFile.c_str();
   }
 
   /* general rendering */
@@ -518,7 +540,7 @@ int main(int argc, char * argv[])
   const char *ifname = dicomFileName.c_str();
 
   if (renderFile(outputText.Get(), ifname, opt_cssName, opt_defaultCharset, opt_readMode, opt_ixfer, opt_readFlags,
-    opt_renderFlags, opt_checkAllStrings, opt_convertToUTF8).bad())
+    opt_renderFlags, opt_checkAllStrings, opt_convertToUTF8, urlPrefixValue).bad())
   {
     result = 3;
   }

@@ -21,7 +21,7 @@ RUN git clone https://github.com/KitwareMedical/ITK.git && \
 RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/DCMTK.git")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
-RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "66fce6822afb16bcfd926ac8a5f4ed8d7cd10981")' \
+RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "f9da0c6a79bac564cd5c102bb470c4524279d351")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
 ARG CMAKE_BUILD_TYPE=Release
