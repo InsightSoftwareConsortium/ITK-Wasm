@@ -50,8 +50,10 @@ ExternalData_Expand_Arguments(
   DATA{Input/PNGSeries/,REGEX:mri3D_.[0-9]+.png}
   DATA{Input/11706c2.CNG.swc}
   DATA{Input/88.33-comprehensive-SR.dcm}
+  DATA{Input/88.59-KeyObjectSelection-SR.dcm}
   DATA{Input/88.67-radiation-dose-SR.dcm}
   DATA{Input/104.1-SR-printed-to-pdf.dcm}
+  DATA{Input/test-style.css}
 
   DATA{Baseline/web_worker_pool.cy.png}
   )
