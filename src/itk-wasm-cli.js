@@ -240,6 +240,8 @@ const interfaceJsonTypeToTypeScriptType = new Map([
   ['INPUT_POLYDATA', 'PolyData'],
   ['OUTPUT_POLYDATA', 'PolyData'],
   ['BOOL', 'boolean'],
+  ['TEXT', 'string'],
+  ['INT', 'number'],
 ])
 
 const interfaceJsonTypeToInterfaceType = new Map([
@@ -351,6 +353,7 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
       functionContent += `  ${interfaceType},\n`
     })
     functionContent += `  InterfaceTypes,\n`
+    functionContent += `  PipelineInput,\n`
     if (forNode) {
       functionContent += `  runPipelineNode\n`
     } else {
@@ -404,7 +407,7 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
       }
     })
     functionContent += `  ]\n`
-    functionContent += `  const inputs = [\n`
+    functionContent += `  const inputs: [ PipelineInput ] = [\n`
     interfaceJson.inputs.forEach((input, index) => {
       if (interfaceJsonTypeToInterfaceType.has(input.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
@@ -458,9 +461,17 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
       } else {
         if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
           const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
-          const name = interfaceType.includes('File') ?  `file${inputCount.toString()}` : inputCount.toString()
-          functionContent += `    args.push('--${parameter.name}', '${name}')\n`
-          inputCount++
+          if (interfaceType.includes('File')) {
+            // for files
+            functionContent += `    const inputFile = 'file' + inputs.length.toString()\n`
+            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: options.${camel}, path: inputFile } })\n`
+            functionContent += `    args.push('--${parameter.name}', inputFile)\n`
+          } else {
+            // for streams
+            functionContent += `    const inputCountString = inputs.length.toString()\n`
+            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: options.${camel} } })\n`
+            functionContent += `    args.push('--${parameter.name}', inputCountString)\n`
+          }
         } else {
           functionContent += `    args.push('--${parameter.name}', options.${camel}.toString())\n`
         }

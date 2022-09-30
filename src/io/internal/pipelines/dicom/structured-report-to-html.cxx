@@ -243,7 +243,7 @@ int main(int argc, char * argv[])
   bool charsetRequire{false};
   pipeline.add_flag("--charset-require", charsetRequire,    "require declaration of ext. charset (default)");
   std::string charsetAssumeValue;
-  pipeline.add_option("--charset-assume", charsetAssumeValue, "[c]harset: string, assume charset c if no extended charset declared")->type_name("INPUT_TEXT_STREAM");
+  pipeline.add_option("--charset-assume", charsetAssumeValue, "[c]harset: string, assume charset c if no extended charset declared");
   bool charsetCheckAll{false};
   pipeline.add_flag("--charset-check-all", charsetCheckAll, "check all data elements with string values\n(default: only PN, LO, LT, SH, ST, UC and UT)");
 #ifdef DCMTK_ENABLE_CHARSET_CONVERSION
