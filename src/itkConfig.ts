@@ -1,4 +1,4 @@
-import { version } from './index.js'
+import { version } from './browser/index.js'
 
 const itkConfig = {
   webWorkersUrl: undefined,
