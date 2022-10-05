@@ -1,6 +1,7 @@
 import {
   BinaryStream,
   InterfaceTypes,
+  PipelineInput,
   runPipelineNode
 } from 'itk-wasm'
 
@@ -24,7 +25,7 @@ async function readDicomEncapsulatedPdfNode(  dicomFile: Uint8Array,
   const desiredOutputs = [
     { type: InterfaceTypes.BinaryStream },
   ]
-  const inputs = [
+  const inputs: [ PipelineInput ] = [
     { type: InterfaceTypes.BinaryFile, data: { data: dicomFile, path: "file0" }  },
   ]
 

@@ -1,6 +1,7 @@
 import {
   TextStream,
   InterfaceTypes,
+  PipelineInput,
   runPipelineNode
 } from 'itk-wasm'
 
@@ -24,7 +25,7 @@ async function structuredReportToHtmlNode(  dicomFile: Uint8Array,
   const desiredOutputs = [
     { type: InterfaceTypes.TextStream },
   ]
-  const inputs = [
+  const inputs: [ PipelineInput ] = [
     { type: InterfaceTypes.BinaryFile, data: { data: dicomFile, path: "file0" }  },
   ]
 
@@ -81,13 +82,16 @@ async function structuredReportToHtmlNode(  dicomFile: Uint8Array,
     args.push('--charset-require')
   }
   if (options.charsetAssume) {
-    args.push('--charset-assume', '1')
+    args.push('--charset-assume', options.charsetAssume.toString())
   }
   if (options.charsetCheckAll) {
     args.push('--charset-check-all')
   }
   if (options.convertToUtf8) {
     args.push('--convert-to-utf8')
+  }
+  if (options.urlPrefix) {
+    args.push('--url-prefix', options.urlPrefix.toString())
   }
   if (options.html32) {
     args.push('--html-3.2')
@@ -102,10 +106,14 @@ async function structuredReportToHtmlNode(  dicomFile: Uint8Array,
     args.push('--add-document-type')
   }
   if (options.cssReference) {
-    args.push('--css-reference', '2')
+    const inputCountString = inputs.length.toString()
+    inputs.push({ type: InterfaceTypes.TextStream, data: { data: options.cssReference } })
+    args.push('--css-reference', inputCountString)
   }
   if (options.cssFile) {
-    args.push('--css-file', '3')
+    const inputFile = 'file' + inputs.length.toString()
+    inputs.push({ type: InterfaceTypes.TextFile, data: { data: options.cssFile, path: inputFile } })
+    args.push('--css-file', inputFile)
   }
   if (options.expandInline) {
     args.push('--expand-inline')

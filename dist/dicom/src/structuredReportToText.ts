@@ -1,6 +1,7 @@
 import {
   TextStream,
   InterfaceTypes,
+  PipelineInput,
   runPipeline
 } from 'itk-wasm'
 
@@ -23,7 +24,7 @@ async function structuredReportToText(
   const desiredOutputs = [
     { type: InterfaceTypes.TextStream },
   ]
-  const inputs = [
+  const inputs: [ PipelineInput ] = [
     { type: InterfaceTypes.BinaryFile, data: { data: dicomFile, path: "file0" }  },
   ]
 

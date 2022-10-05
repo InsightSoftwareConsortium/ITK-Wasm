@@ -57,6 +57,9 @@ interface StructuredReportToHtmlOptions {
 by Specific Character Set (0008,0005) to UTF-8 */
   convertToUtf8?: boolean
 
+  /** URL: string. Append specificed URL prefix to hyperlinks of referenced composite objects in the document. */
+  urlPrefix?: string
+
   /** use only HTML version 3.2 compatible features */
   html32?: boolean
 
