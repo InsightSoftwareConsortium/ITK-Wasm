@@ -178,7 +178,7 @@
       [
         "@semantic-release/exec",
         {
-          "prepareCmd": "node ./update-versions.cjs ${nextRelease.version}"
+          "verifyReleaseCmd": "node ./update-versions.cjs ${nextRelease.version}"
         }
       ],
       [
