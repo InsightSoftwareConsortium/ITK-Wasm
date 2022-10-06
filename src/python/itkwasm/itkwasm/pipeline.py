@@ -33,5 +33,11 @@ class Pipeline:
 
         instance = Instance(self.module, import_object)
 
-        start = instance.exports._start
-        start()
+        _initialize = instance.exports._initialize
+        _initialize()
+
+        delayed_start = instance.exports.itk_wasm_delayed_start
+        return_code = delayed_start()
+
+        delayed_exit = instance.exports.itk_wasm_delayed_exit
+        delayed_exit(return_code)
