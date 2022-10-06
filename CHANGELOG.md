@@ -1,5 +1,14 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.38](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.37...itk-wasm-v1.0.0-b.38) (2022-10-06)
+
+
+### Features
+
+* **bindgen:** Add support for string and number arguments ([4220397](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/42203972bd582608e132a5abf3b62b4724c8cd04))
+* **KOS:** Key object selection (KOS) structured report (SR) ([564255c](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/564255c1e05455bd71f817e8cd63208bfa32ebd6))
+* **WASI:** Support itk_wasm_delayed_start ([a4609a6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/a4609a6e7259d536d4b489bd836ec922ba395710)), closes [/docs.rs/wasmtime/0.17.0/src/wasmtime/linker.rs.html#685](https://github.com//docs.rs/wasmtime/0.17.0/src/wasmtime/linker.rs.html/issues/685)
+
 # [1.0.0-b.37](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.36...itk-wasm-v1.0.0-b.37) (2022-09-30)
 
 
