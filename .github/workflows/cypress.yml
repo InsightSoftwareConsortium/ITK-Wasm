@@ -42,11 +42,11 @@ jobs:
           name: cypress-videos
           path: cypress/videos
 
-      - name: Test with Firefox
-        uses: cypress-io/github-action@v4
-        with:
-          browser: firefox
-          command: npm run test:firefox
+      #- name: Test with Firefox
+        #uses: cypress-io/github-action@v4
+        #with:
+          #browser: firefox
+          #command: npm run test:firefox
 
       - uses: actions/upload-artifact@v2
         if: failure()

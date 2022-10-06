@@ -168,12 +168,12 @@ jobs:
         browser: chrome
         start: npm start
 
-    - name: Test Webpack Example on Firefox
-      uses: cypress-io/github-action@v4
-      with:
-        working-directory: ./examples/webpack
-        browser: firefox
-        start: npm start
+    #- name: Test Webpack Example on Firefox
+      #uses: cypress-io/github-action@v4
+      #with:
+        #working-directory: ./examples/webpack
+        #browser: firefox
+        #start: npm start
 
   test-vite-example:
     name: vite
@@ -189,12 +189,12 @@ jobs:
         browser: chrome
         start: npm start
 
-    - name: Test Vite Example on Firefox
-      uses: cypress-io/github-action@v4
-      with:
-        working-directory: ./examples/vite
-        browser: firefox
-        start: npm start
+    #- name: Test Vite Example on Firefox
+      #uses: cypress-io/github-action@v4
+      #with:
+        #working-directory: ./examples/vite
+        #browser: firefox
+        #start: npm start
 
   test-debugging-example:
     name: debugging
