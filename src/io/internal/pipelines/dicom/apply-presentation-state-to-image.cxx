@@ -42,6 +42,8 @@
 
 #include "itkPipeline.h"
 #include "itkOutputTextStream.h"
+#include "itkOutputImage.h"
+#include "itkImportImageFilter.h"
 
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
 
@@ -56,6 +58,8 @@
 #include "dcmtk/ofstd/ofconapp.h"
 #include "dcmtk/dcmdata/dcuid.h"      /* for dcmtk version name */
 
+#include <cstring>
+
 #ifdef WITH_ZLIB
 #include "itk_zlib.h"     /* for zlibVersion() */
 #endif
@@ -68,7 +72,7 @@ static char rcsid[] = "$dcmtk: " OFFIS_CONSOLE_APPLICATION " v"
   OFFIS_DCMTK_VERSION " " OFFIS_DCMTK_RELEASEDATE " $";
 
 
-static void dumpPresentationState(DVPresentationState &ps)
+static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationState &ps)
 {
   size_t i, j, max;
   const char *c;
@@ -426,6 +430,7 @@ static void dumpPresentationState(DVPresentationState &ps)
   }
 
   oss << OFStringStream_ends;
+  out << oss.str();
   OFSTRINGSTREAM_GETSTR(oss, res)
   OFLOG_INFO(dcmp2pgmLogger, res);
   OFSTRINGSTREAM_FREESTR(res)
@@ -434,79 +439,66 @@ static void dumpPresentationState(DVPresentationState &ps)
 
 int main(int argc, char *argv[])
 {
-  OFBool opt_dump_pstate     = OFFalse;                 /* default: do not dump presentation state */
+  itk::wasm::Pipeline pipeline("apply-presentation-state-to-image", "Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.", argc, argv);
+  // Inputs
+  std::string imageIn;
+  pipeline.add_option("image-in", imageIn, "Input DICOM file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+
+  // Outputs
+  // Metadata output regarding overlays
+  itk::wasm::OutputTextStream pstateOutStream;
+  pipeline.add_option("presentation-state-out-stream", pstateOutStream, "Output overlay information")->type_name("OUTPUT_TEXT_STREAM");
+  // Processed output image
+  constexpr unsigned int Dimension = 2;
+  using PixelType = unsigned char;
+  using ImageType = itk::Image<PixelType, Dimension>;
+  using OutputImageType = itk::wasm::OutputImage<ImageType>;
+  OutputImageType outputImage;
+  pipeline.add_option("output-image", outputImage, "Output image")->type_name("OUTPUT_IMAGE");
+
+  // Parameters
+  // addGroup "processing options:"
+  std::string pstateFile;
+  pipeline.add_option("--presentation-state-file", pstateFile, "[f]ilename: string, process using presentation state file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+  std::string configFile;
+  pipeline.add_option("--config-file", configFile, "[f]ilename: string, process using settings from configuration file");
+  // process a specific frame within the input dicom:
+  int frame = 1;
+  pipeline.add_option("--frame", frame, "[f]rame: integer, process using image frame f (default: 1)");
+
+  // addGroup "output format:"
+  bool pstateOutput{true};
+  pipeline.add_flag("--presentation-state-output", pstateOutput, "get presentation state information in text stream (default: ON).");
+  bool bitmapOutput{true};
+  pipeline.add_flag("--bitmap-output", bitmapOutput, "get resulting image as bitmap output stream (default: ON).");
+
+  bool outputFormatPGM{true};
+  pipeline.add_flag("--pgm", outputFormatPGM, "save image as PGM (default)");
+  bool outputFormatDICOM{false};
+  pipeline.add_flag("--dicom", outputFormatDICOM, "save image as DICOM secondary capture");
+
+  /* evaluate command line */
+  ITK_WASM_PARSE(pipeline);
+
+  // OFBool opt_dump_pstate     = OFFalse;              /* default: do not dump presentation state */
   OFBool opt_dicom_mode      = OFFalse;                 /* default: create PGM, not DICOM SC */
-  OFCmdUnsignedInt opt_frame = 1;                       /* default: first frame */
+  OFCmdUnsignedInt opt_frame = frame;                   /* default: first frame */
   const char *opt_pstName    = NULL;                    /* pstate read file name */
-  const char *opt_imgName    = NULL;                    /* image read file name */
+  const char *opt_imgName    = imageIn.c_str();         /* image read file name */
   const char *opt_pgmName    = NULL;                    /* pgm save file name */
-  const char *opt_savName    = NULL;                    /* pstate save file name */
   const char *opt_cfgName    = NULL;                    /* config read file name */
 
-  OFConsoleApplication app(OFFIS_CONSOLE_APPLICATION, "Read DICOM image and presentation state and render bitmap", rcsid);
-  OFCommandLine cmd;
-  cmd.setOptionColumns(LONGCOL, SHORTCOL);
-  cmd.setParamColumn(LONGCOL + SHORTCOL + 2);
-
-  cmd.addParam("dcmfile-in", "input DICOM image");
-  cmd.addParam("bitmap-out", "output DICOM image or PGM bitmap", OFCmdParam::PM_Optional);
-
-  cmd.addGroup("general options:");
-  cmd.addOption("--help",        "-h",    "print this help text and exit", OFCommandLine::AF_Exclusive);
-  cmd.addOption("--version",              "print version information and exit", OFCommandLine::AF_Exclusive);
-  OFLog::addOptions(cmd);
-
-  cmd.addGroup("processing options:");
-  cmd.addOption("--pstate",      "-p", 1, "[f]ilename: string",
-                                           "process using presentation state file");
-  cmd.addOption("--config",      "-c", 1, "[f]ilename: string",
-  "process using settings from configuration file");
-  cmd.addOption("--frame",       "-f", 1, "[f]rame: integer",
-                                           "process using image frame f (default: 1)");
-
-  cmd.addGroup("output format:");
-  cmd.addOption("--pgm",         "-D",    "save image as PGM (default)");
-  cmd.addOption("--dicom",       "+D",    "save image as DICOM secondary capture");
-
-  cmd.addGroup("output options:");
-  cmd.addOption("--save-pstate", "+S", 1, "[f]ilename: string",
-                                           "save presentation state to file");
-  /* evaluate command line */
-  prepareCmdLineArgs(argc, argv, OFFIS_CONSOLE_APPLICATION);
-  if (app.parseCommandLine(cmd, argc, argv))
+  /* command line parameters and options */
+  if (!pstateOutput && !bitmapOutput)
   {
-    /* check exclusive options first */
-    if (cmd.hasExclusiveOption())
-    {
-      if (cmd.findOption("--version"))
-      {
-        app.printHeader(OFTrue /*print host identifier*/);
-        COUT << OFendl << "External libraries used:";
-#ifdef WITH_ZLIB
-        COUT << OFendl << "- ZLIB, Version " << zlibVersion() << OFendl;
-#else
-        COUT << " none" << OFendl;
-#endif
-        return 0;
-      }
-    }
-
-    /* command line parameters and options */
-    cmd.getParam(1, opt_imgName);
-    if (cmd.getParamCount() > 1)
-      cmd.getParam(2, opt_pgmName);
-
-    OFLog::configureFromCommandLine(cmd, app);
-
-    opt_dump_pstate = dcmp2pgmLogger.isEnabledFor(OFLogger::INFO_LOG_LEVEL);
-
-    if (cmd.findOption("--pstate"))      app.checkValue(cmd.getValue(opt_pstName));
-    if (cmd.findOption("--config"))      app.checkValue(cmd.getValue(opt_cfgName));
-    if (cmd.findOption("--frame"))       app.checkValue(cmd.getValueAndCheckMin(opt_frame, 1));
-    if (cmd.findOption("--pgm"))         opt_dicom_mode = OFFalse;
-    if (cmd.findOption("--dicom"))       opt_dicom_mode = OFTrue;
-    if (cmd.findOption("--save-pstate")) app.checkValue(cmd.getValue(opt_savName));
+    OFLOG_FATAL(dcmp2pgmLogger, "No output form requested. Specify either --presentation-state-output, --bitmap-output or both.");
   }
+
+  if(!pstateFile.empty()) opt_pstName = pstateFile.c_str();
+  if(!configFile.empty()) opt_cfgName = configFile.c_str();
+
+  if (outputFormatPGM)         opt_dicom_mode = OFFalse;
+  if (outputFormatDICOM)       opt_dicom_mode = OFTrue;
 
   /* print resource identifier */
   OFLOG_DEBUG(dcmp2pgmLogger, rcsid << OFendl);
@@ -528,15 +520,15 @@ int main(int argc, char *argv[])
     OFLOG_DEBUG(dcmp2pgmLogger, "reading DICOM image file: " << opt_imgName);
     status = dvi.loadImage(opt_imgName);
   } else {
-    OFLOG_DEBUG(dcmp2pgmLogger, "reading DICOM pstate file: " << opt_pstName);
+    OFLOG_DEBUG(dcmp2pgmLogger, "reading DICOM presentation-state file: " << opt_pstName);
     OFLOG_DEBUG(dcmp2pgmLogger, "reading DICOM image file: " << opt_imgName);
     status = dvi.loadPState(opt_pstName, opt_imgName);
   }
 
   if (status == EC_Normal)
   {
-    if (opt_dump_pstate) dumpPresentationState(dvi.getCurrentPState());
-    if (opt_pgmName != NULL)
+    if (pstateOutput) dumpPresentationState(pstateOutStream.Get(), dvi.getCurrentPState());
+    if (bitmapOutput)
     {
       const void *pixelData = NULL;
       unsigned long width = 0;
@@ -544,45 +536,54 @@ int main(int argc, char *argv[])
       OFLOG_DEBUG(dcmp2pgmLogger, "creating pixel data");
       if ((opt_frame > 0) && (dvi.getCurrentPState().selectImageFrameNumber(opt_frame) != EC_Normal))
         OFLOG_ERROR(dcmp2pgmLogger, "cannot select frame " << opt_frame);
+
+      std::array<double, 2> pixelSpacing{0.0, 0.0};
+      if (EC_Normal != dvi.getCurrentPState().getDisplayedAreaPresentationPixelSpacing(pixelSpacing[0], pixelSpacing[1]))
+        OFLOG_ERROR(dcmp2pgmLogger, "cannot read pixel spacing from presentation state.");
+
       if ((dvi.getCurrentPState().getPixelData(pixelData, width, height) == EC_Normal) && (pixelData != NULL))
       {
         if (opt_dicom_mode)
         {
-          double pixelAspectRatio = dvi.getCurrentPState().getPrintBitmapPixelAspectRatio(); // works for rotated images
-          OFLOG_DEBUG(dcmp2pgmLogger, "writing DICOM SC file: " << opt_pgmName);
-          if (EC_Normal != dvi.saveDICOMImage(opt_pgmName, pixelData, width, height, pixelAspectRatio))
-          {
-            OFLOG_ERROR(dcmp2pgmLogger, "error during creation of DICOM file");
-          }
-        } else {
-          FILE *outfile = fopen(opt_pgmName, "wb");
-          if (outfile)
-          {
-            OFLOG_DEBUG(dcmp2pgmLogger, "writing PGM file: " << opt_pgmName);
-            fprintf(outfile, "P5\n%ld %ld 255\n", width, height);
-            if (fwrite(pixelData, OFstatic_cast(size_t, width), OFstatic_cast(size_t, height), outfile) != OFstatic_cast(size_t, height))
-              OFLOG_FATAL(dcmp2pgmLogger, "Can't write output data to file.");
-            fclose(outfile);
-          } else {
-            OFLOG_FATAL(dcmp2pgmLogger, "Can't create output file.");
-            return 10;
-          }
+          OFLOG_ERROR(dcmp2pgmLogger, "DICOM output format is currently not supported.");
         }
-      } else {
+        else
+        {
+          using ImportFilterType = itk::ImportImageFilter<PixelType, Dimension>;
+          auto importFilter = ImportFilterType::New();
+          ImportFilterType::SizeType size;
+          size[0] = width;
+          size[1] = height;
+
+          ImportFilterType::IndexType start;
+          start.Fill(0);
+
+          ImportFilterType::RegionType region;
+          region.SetIndex(start);
+          region.SetSize(size);
+          importFilter->SetRegion(region);
+
+          const itk::SpacePrecisionType origin[Dimension] = { 0.0, 0.0 };
+          importFilter->SetOrigin(origin);
+          const itk::SpacePrecisionType spacing[Dimension] = { pixelSpacing[0], pixelSpacing[1] };
+          importFilter->SetSpacing(spacing);
+          const unsigned int numberOfPixels = size[0] * size[1];
+          importFilter->SetImportPointer((PixelType*)pixelData, numberOfPixels, false);
+          importFilter->Update();
+
+          // set as output image
+          outputImage.Set(importFilter->GetOutput());
+        }
+      }
+      else
+      {
         OFLOG_FATAL(dcmp2pgmLogger, "Can't create output data.");
         return 10;
       }
     }
-    if (opt_savName != NULL)
-    {
-      OFLOG_DEBUG(dcmp2pgmLogger, "writing pstate file: " << opt_savName);
-      if (dvi.savePState(opt_savName, OFFalse) != EC_Normal)
-      {
-        OFLOG_FATAL(dcmp2pgmLogger, "Can't write pstate file.");
-        return 10;
-      }
-    }
-  } else {
+  }
+  else
+  {
     OFLOG_FATAL(dcmp2pgmLogger, "Can't open input file(s).");
     return 10;
   }
