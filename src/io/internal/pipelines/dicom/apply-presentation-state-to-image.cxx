@@ -48,6 +48,10 @@
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
 
 #include "dcmtk/ofstd/ofstream.h"
+// Fix warning for redefinition of __STDC_FORMAT_MACROS in the header include tree for dviface.h
+#ifdef __STDC_FORMAT_MACROS
+  #undef __STDC_FORMAT_MACROS
+#endif
 #include "dcmtk/dcmpstat/dviface.h"
 #include "dcmtk/dcmpstat/dvpstx.h"    /* for DVPSTextObject */
 #include "dcmtk/dcmpstat/dvpsgr.h"    /* for DVPSGraphicObject */

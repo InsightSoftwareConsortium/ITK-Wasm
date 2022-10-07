@@ -21,6 +21,10 @@
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
 
 /* Required to avoid linking errors?? */
+// Fix warning for redefinition of __STDC_FORMAT_MACROS in the header include tree for diregist.h
+#ifdef __STDC_FORMAT_MACROS
+  #undef __STDC_FORMAT_MACROS
+#endif
 #include "dcmtk/dcmimage/diregist.h"
 
 #include "dcmtk/dcmsr/dsrdoc.h"       /* for main interface class DSRDocument */
