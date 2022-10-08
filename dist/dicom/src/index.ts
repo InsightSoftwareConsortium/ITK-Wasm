@@ -1,5 +1,15 @@
 
 
+import ApplyPresentationStateToImageResult from './ApplyPresentationStateToImageResult.js'
+export type { ApplyPresentationStateToImageResult }
+
+import ApplyPresentationStateToImageOptions from './ApplyPresentationStateToImageOptions.js'
+export type { ApplyPresentationStateToImageOptions }
+
+import applyPresentationStateToImage from './applyPresentationStateToImage.js'
+export { applyPresentationStateToImage }
+
+
 import ReadDicomEncapsulatedPdfResult from './ReadDicomEncapsulatedPdfResult.js'
 export type { ReadDicomEncapsulatedPdfResult }
 

@@ -10,6 +10,9 @@ const program = new Command()
 
 const defaultImageTag = '20220906-f5d801e2'
 
+// Array of types that will require an import from itk-wasm
+const typesRequireImport = ['Image']
+
 function processCommonOptions() {
   const options = program.opts()
 
@@ -294,6 +297,10 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
     if (!forNode) {
       resultContent += `  /** WebWorker used for computation */\n  webWorker: Worker | null\n\n`
     }
+
+    // track unique output types in this set
+    const importTypes = new Set()
+
     interfaceJson.outputs.forEach((output) => {
       if (!interfaceJsonTypeToTypeScriptType.has(output.type)) {
 
@@ -302,8 +309,16 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
       }
       resultContent += `  /** ${output.description} */\n`
       const outputType = interfaceJsonTypeToTypeScriptType.get(output.type)
+      if(typesRequireImport.includes(outputType)) {
+        importTypes.add(outputType)
+      }
       resultContent += `  ${camelCase(output.name)}: ${outputType}\n\n`
     })
+
+    // Insert the import statement in the beginning for the file.
+    if(importTypes.size !== 0)
+      resultContent = `import { ${Array.from(importTypes).join(',')} } from 'itk-wasm'\n\n` + resultContent;
+
     resultContent += `}\n\nexport default ${modulePascalCase}${nodeText}Result\n`
     fs.writeFileSync(path.join(srcOutputDir, `${modulePascalCase}${nodeText}Result.ts`), resultContent)
     indexContent += `\n\nimport ${modulePascalCase}${nodeText}Result from './${modulePascalCase}${nodeText}Result.js'\n`
