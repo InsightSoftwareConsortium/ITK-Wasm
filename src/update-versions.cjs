@@ -1,9 +1,10 @@
 const fs = require('fs')
 
-const version = process.argv[2]
+let version = process.argv[2]
 if (!version) {
-  console.error(`usage: ${__filename} VERSION`)
-  process.exit(1)
+  const packageString = fs.readFileSync('package.json', { encoding: 'utf-8' })
+  const packageData = JSON.parse(packageString)
+  version = packageData.version
 }
 
 function rewriteVersion(filename) {
