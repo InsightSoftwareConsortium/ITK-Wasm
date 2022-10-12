@@ -17,33 +17,66 @@
  *=========================================================================*/
 /*
  *
- *  Copyright (C) 1998-2018, OFFIS e.V.
- *  All rights reserved.  See COPYRIGHT file for details.
+ *  Copyright (C) 1994-2022, OFFIS e.V.
+ *  All rights reserved.
  *
  *  This software and supporting documentation were developed by
  *
  *    OFFIS e.V.
  *    R&D Division Health
  *    Escherweg 2
- *    D-26121 Oldenburg, Germany
+ *    26121 Oldenburg, Germany
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ *  - Neither the name of OFFIS nor the names of its contributors may be
+ *    used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *
  *  Module:  dcmpstat
  *
  *  Authors: Joerg Riesmeier, Marco Eichelberg
- *
- *  Purpose
- *    sample application that reads a DICOM image and (optionally)
- *    a presentation state and creates a PGM bitmap using the settings
- *    of the presentation state. Non-grayscale transformations are
- *    ignored. If no presentation state is loaded, a default is created.
- *
  */
 
-#include "itkPipeline.h"
-#include "itkOutputTextStream.h"
-#include "itkOutputImage.h"
+ /*
+ *  Description
+ *    This is a modified version of what was originally a DCMTK
+ *    application (dcm2pgm). It takes two inputs:
+ *    (1) a DICOM image, and
+ *    (2) a grayscale presentation state file (DCM).
+ *    It creates an output itkImage using the settings/attributes defined
+ *    in the presentation state. Other information of the presentation
+ *    state related to graphic overlays such as annotations, labels,
+ *    shutters, bitmap overlays, etc are returned as a second output in
+ *    the form of a JSON string.
+ */
+
 #include "itkImportImageFilter.h"
+#include "itkOutputImage.h"
+#include "itkOutputTextStream.h"
+#include "itkPipeline.h"
 
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
 
@@ -62,293 +95,322 @@
 #include "dcmtk/ofstd/ofconapp.h"
 #include "dcmtk/dcmdata/dcuid.h"      /* for dcmtk version name */
 
+#include "cpp-base64/base64.h"
+#include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
+using namespace rapidjson;
+
+#include <array>
 #include <cstring>
 
 #ifdef WITH_ZLIB
 #include "itk_zlib.h"     /* for zlibVersion() */
 #endif
 
-#define OFFIS_CONSOLE_APPLICATION "dcmp2pgm"
+#define OFFIS_CONSOLE_APPLICATION "apply-presentation-state-to-image"
 
-static OFLogger dcmp2pgmLogger = OFLog::getLogger("dcmtk.apps." OFFIS_CONSOLE_APPLICATION);
+static OFLogger appLogger = OFLog::getLogger("dcmtk.apps." OFFIS_CONSOLE_APPLICATION);
 
 static char rcsid[] = "$dcmtk: " OFFIS_CONSOLE_APPLICATION " v"
   OFFIS_DCMTK_VERSION " " OFFIS_DCMTK_RELEASEDATE " $";
 
-
 static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationState &ps)
 {
   size_t i, j, max;
-  const char *c;
 
-  OFOStringStream oss;
+  // START JSON structure
+  Document doc(kObjectType);
+  Document::AllocatorType& alloc = doc.GetAllocator();
 
-  oss << "DUMPING PRESENTATION STATE" << OFendl
-       << "--------------------------" << OFendl << OFendl;
+  doc.AddMember("PresentationLabel",
+    Value(StringRef(ps.getPresentationLabel())), alloc);
+  doc.AddMember("PresentationDescription",
+    Value(StringRef(ps.getPresentationDescription())), alloc);
+  doc.AddMember("PresentationCreatorsName",
+    Value(StringRef(ps.getPresentationCreatorsName())), alloc);
 
-  c = ps.getPresentationLabel();
-  oss << "Presentation Label: "; if (c) oss << c << OFendl; else oss << "none" << OFendl;
-  c = ps.getPresentationDescription();
-  oss << "Presentation Description: "; if (c) oss << c << OFendl; else oss << "none" << OFendl;
-  c = ps.getPresentationCreatorsName();
-  oss << "Presentation Creator's Name: "; if (c) oss << c << OFendl; else oss << "none" << OFendl;
-
-  oss << "VOI transformation: ";
   if (ps.haveActiveVOIWindow())
   {
     double width=0.0, center=0.0;
     ps.getCurrentWindowWidth(width);
     ps.getCurrentWindowCenter(center);
-    oss << "window center=" << center << " width=" << width << " description=\"";
-    c = ps.getCurrentVOIDescription();
-    if (c) oss << c << "\"" << OFendl; else oss << "(none)\"" << OFendl;
+    doc.AddMember("CurrentWindowCenter", Value(center), alloc);
+    doc.AddMember("CurrentWindowWidth", Value(width), alloc);
+    doc.AddMember("CurrentVOIDescription", Value(StringRef(ps.getCurrentVOIDescription())), alloc);
   }
   else if (ps.haveActiveVOILUT())
   {
-    oss << "lut description=\"";
-    c = ps.getCurrentVOIDescription();
-    if (c) oss << c << "\"" << OFendl; else oss << "(none)\"" << OFendl;
+    doc.AddMember("CurrentVOIDescription", Value(StringRef(ps.getCurrentVOIDescription())), alloc);
   }
-  else oss << "none" << OFendl;
 
-  oss << "Rotation: ";
+  doc.AddMember("Flip", Value(ps.getFlip()), alloc);
+  int rotation = 0;
   switch (ps.getRotation())
   {
     case DVPSR_0_deg:
-      oss << "none";
+      rotation = 0;
       break;
     case DVPSR_90_deg:
-      oss << "90 degrees";
+      rotation = 90;
       break;
     case DVPSR_180_deg:
-      oss << "180 degrees";
+      rotation = 180;
       break;
     case DVPSR_270_deg:
-      oss << "270 degrees";
+      rotation = 270;
       break;
   }
-  oss << OFendl;
-  oss << "Flip: ";
-  if (ps.getFlip()) oss << "yes" << OFendl; else oss << "no" << OFendl;
-
-  Sint32 tlhcX=0;
-  Sint32 tlhcY=0;
-  Sint32 brhcX=0;
-  Sint32 brhcY=0;
-  oss << "Displayed area:" << OFendl;
+  doc.AddMember("Rotation", Value(rotation), alloc);
 
   DVPSPresentationSizeMode sizemode = ps.getDisplayedAreaPresentationSizeMode();
   double factor=1.0;
+  std::string presentationSizeMode;
   switch (sizemode)
   {
     case DVPSD_scaleToFit:
-      oss << "  presentation size mode: SCALE TO FIT" << OFendl;
+      presentationSizeMode = "scaleToFit";
       break;
     case DVPSD_trueSize:
-      oss << "  presentation size mode: TRUE SIZE" << OFendl;
+      presentationSizeMode = "trueSize";
       break;
     case DVPSD_magnify:
+      presentationSizeMode = "magnify";
       ps.getDisplayedAreaPresentationPixelMagnificationRatio(factor);
-      oss << "  presentation size mode: MAGNIFY factor=" << factor << OFendl;
       break;
   }
-  ps.getStandardDisplayedArea(tlhcX, tlhcY, brhcX, brhcY);
-  oss << "  displayed area TLHC=" << tlhcX << "\\" << tlhcY << " BRHC=" << brhcX << "\\" << brhcY << OFendl;
+  doc.AddMember("PresentationSizeMode", Value(presentationSizeMode.c_str(), alloc), alloc);
+  doc.AddMember("DisplayedAreaPresentationPixelMagnificationRatio", Value(factor), alloc);
 
-  double x, y;
-  if (EC_Normal == ps.getDisplayedAreaPresentationPixelSpacing(x,y))
+  std::array<int, 4> displayArea{0, 0, 0, 0};
+  ps.getStandardDisplayedArea(displayArea[0], displayArea[1], displayArea[2], displayArea[3]);
+  auto dav = itk::wasm::getArrayJson(displayArea, alloc);
+  doc.AddMember("StandardDisplayedArea", dav, alloc);
+
+  std::array<double, 2> pixelSpacing{0.0, 0.0};
+  if (EC_Normal == ps.getDisplayedAreaPresentationPixelSpacing(pixelSpacing[0], pixelSpacing[1]))
   {
-    oss << "  presentation pixel spacing: X=" << x << "mm Y=" << y << " mm" << OFendl;
+    auto psv = itk::wasm::getArrayJson(pixelSpacing, alloc);
+    doc.AddMember("DisplayedAreaPresentationPixelSpacing", psv, alloc);
   } else {
-    oss << "  presentation pixel aspect ratio: " << ps.getDisplayedAreaPresentationPixelAspectRatio() << OFendl;
+    auto aspectRatio = ps.getDisplayedAreaPresentationPixelAspectRatio();
+    doc.AddMember("DisplayedAreaPresentationPixelAspectRatio", Value(aspectRatio), alloc);
   }
 
-  oss << "Rectangular shutter: ";
   if (ps.haveShutter(DVPSU_rectangular))
   {
-    oss << "LV=" << ps.getRectShutterLV()
-         << " RV=" << ps.getRectShutterRV()
-         << " UH=" << ps.getRectShutterUH()
-         << " LH=" << ps.getRectShutterLH() << OFendl;
+    Value rectShutter(kObjectType);
+    rectShutter.AddMember("RectShutterLV", Value(ps.getRectShutterLV()), alloc);
+    rectShutter.AddMember("RectShutterRV", Value(ps.getRectShutterRV()), alloc);
+    rectShutter.AddMember("RectShutterUH", Value(ps.getRectShutterUH()), alloc);
+    rectShutter.AddMember("RectShutterLH", Value(ps.getRectShutterLH()), alloc);
+    doc.AddMember("RectangularShutter", rectShutter, alloc);
+  }
 
-  } else oss << "none" << OFendl;
-  oss << "Circular shutter: ";
   if (ps.haveShutter(DVPSU_circular))
   {
-    oss << "center=" << ps.getCenterOfCircularShutter_x()
-         << "\\" << ps.getCenterOfCircularShutter_y()
-         << " radius=" << ps.getRadiusOfCircularShutter() << OFendl;
-  } else oss << "none" << OFendl;
-  oss << "Polygonal shutter: ";
+    Value circularShutter(kObjectType);
+    circularShutter.AddMember("CenterOfCircularShutter_x", Value(ps.getCenterOfCircularShutter_x()), alloc);
+    circularShutter.AddMember("CenterOfCircularShutter_y", Value(ps.getCenterOfCircularShutter_y()), alloc);
+    circularShutter.AddMember("RadiusOfCircularShutter", Value(ps.getRadiusOfCircularShutter()), alloc);
+    doc.AddMember("CircularShutter", circularShutter, alloc);
+  }
+
   if (ps.haveShutter(DVPSU_polygonal))
   {
-     oss << "points=" << ps.getNumberOfPolyShutterVertices() << " coordinates=";
-     j = ps.getNumberOfPolyShutterVertices();
-     Sint32 polyX, polyY;
-     for (i=0; i<j; i++)
-     {
-        if (EC_Normal == ps.getPolyShutterVertex(i, polyX, polyY))
-        {
-          oss << polyX << "\\" << polyY << ", ";
-        } else oss << "???\\???,";
-     }
-     oss << OFendl;
-  } else oss << "none" << OFendl;
-  oss << "Bitmap shutter: ";
+    j = ps.getNumberOfPolyShutterVertices();
+    Sint32 polyX, polyY;
+    std::vector<Sint32> vertices;
+    vertices.reserve(j*2);
+    for (i=0; i<j; i++)
+    {
+      if (EC_Normal == ps.getPolyShutterVertex(i, polyX, polyY))
+      {
+        vertices.push_back(polyX);
+        vertices.push_back(polyY);
+      }
+    }
+    auto coordinates = itk::wasm::getArrayJson(vertices, alloc);
+    Value polyShutter(kObjectType);
+
+    // rapidjson::Value doesn't have a default constructor for size_t (aka unsigned long).
+    // However, we can safely type-cast this value into a 32-bit unsigned integer (uint32_t)
+    // based on DICOM standards value representation "Integer String" (IS).
+    polyShutter.AddMember("NumberOfPolyShutterVertices", Value(static_cast<uint32_t>(ps.getNumberOfPolyShutterVertices())), alloc);
+
+    polyShutter.AddMember("Coordinates", coordinates, alloc);
+    doc.AddMember("PolygonalShutter", polyShutter, alloc);
+  }
+
+  // TODO: add support for Bitmap shutter (bitmap masking).
   if (ps.haveShutter(DVPSU_bitmap))
   {
-     oss << "present" << OFendl;
-  } else oss << "none" << OFendl;
-  oss << "Shutter presentation value: 0x" << STD_NAMESPACE hex << ps.getShutterPresentationValue() << STD_NAMESPACE dec << OFendl;
-  oss << OFendl;
+    OFLOG_ERROR(appLogger, "Bitmap shutter is currently not supported.");
+  }
+  doc.AddMember("ShutterPresentationValue", Value(ps.getShutterPresentationValue()), alloc);
 
   ps.sortGraphicLayers();  // to order of display
+  Value graphicsLayersJsonArray(kArrayType);
   for (size_t layer=0; layer<ps.getNumberOfGraphicLayers(); layer++)
   {
-    c = ps.getGraphicLayerName(layer);
-    oss << "Graphic Layer #" << layer+1 << " ["; if (c) oss << c; else oss << "(unnamed)";
-    oss << "]" << OFendl;
-    c = ps.getGraphicLayerDescription(layer);
-    oss << "  Description: "; if (c) oss << c << OFendl; else oss << "none" << OFendl;
-    oss << "  Recomm. display value: ";
+    Value layerJson(kObjectType);
+    layerJson.AddMember("Name", Value(StringRef(ps.getGraphicLayerName(layer))), alloc);
+    layerJson.AddMember("Description", Value(StringRef(ps.getGraphicLayerDescription(layer))), alloc);
     if (ps.haveGraphicLayerRecommendedDisplayValue(layer))
     {
       Uint16 r, g, b;
-      oss << "gray ";
       if (EC_Normal == ps.getGraphicLayerRecommendedDisplayValueGray(layer, g))
       {
-        oss << "0x" << STD_NAMESPACE hex << g << STD_NAMESPACE dec << OFendl;
-      } else oss << "error" << OFendl;
-      oss << "color ";
+        layerJson.AddMember("RecommendedDisplayValueGray", Value(g), alloc);
+      }
+
       if (EC_Normal == ps.getGraphicLayerRecommendedDisplayValueRGB(layer, r, g, b))
       {
-        oss << "0x" << STD_NAMESPACE hex << r << "\\0x" << g << "\\0x" << b << STD_NAMESPACE dec << OFendl;
-      } else oss << "error" << OFendl;
-    } else oss << "none" << OFendl;
+        const std::array<Uint16, 3> rgb{r, g, b};
+        layerJson.AddMember("RecommendedDisplayValueRGB", itk::wasm::getArrayJson(rgb, alloc), alloc);
+      }
+    }
 
     // text objects
     max = ps.getNumberOfTextObjects(layer);
-    oss << "  Number of text objects: " << max << OFendl;
     DVPSTextObject *ptext = NULL;
+
+    // TextObjects[]
+    Value textObjectsJsonArray(kArrayType);
+
     for (size_t textidx=0; textidx<max; textidx++)
     {
       ptext = ps.getTextObject(layer, textidx);
       if (ptext)
       {
+        Value textObjectJson(kObjectType);
         // display contents of text object
-        oss << "      text " << textidx+1 << ": \"" << ptext->getText() << "\"" << OFendl;
-        oss << "        anchor point: ";
+        textObjectJson.AddMember("Text", Value(StringRef(ptext->getText())), alloc);
         if (ptext->haveAnchorPoint())
         {
-          oss << ptext->getAnchorPoint_x() << "\\" << ptext->getAnchorPoint_y() << " units=";
-          if (ptext->getAnchorPointAnnotationUnits()==DVPSA_display) oss << "display"; else oss << "pixel";
-          oss << " visible=";
-          if (ptext->anchorPointIsVisible()) oss << "yes"; else oss << "no";
-          oss << OFendl;
-        } else oss << "none" << OFendl;
-        oss << "        bounding box: ";
+          const std::array<double, 2> anchorPoint{ptext->getAnchorPoint_x(), ptext->getAnchorPoint_y()};
+          auto apv = itk::wasm::getArrayJson(anchorPoint, alloc);
+          textObjectJson.AddMember("AnchorPoint", apv, alloc);
+          textObjectJson.AddMember("AnchorPointUnits", Value(StringRef((ptext->getAnchorPointAnnotationUnits()==DVPSA_display? "display" : "pixel"))), alloc);
+          textObjectJson.AddMember("AnchorPointVisible", Value(ptext->anchorPointIsVisible()), alloc);
+        }
+
         if (ptext->haveBoundingBox())
         {
-          oss << "TLHC=";
-          oss << ptext->getBoundingBoxTLHC_x() << "\\" << ptext->getBoundingBoxTLHC_y()
-               << " BRHC=" << ptext->getBoundingBoxBRHC_x() << "\\" << ptext->getBoundingBoxBRHC_y()
-               << " units=";
-          if (ptext->getBoundingBoxAnnotationUnits()==DVPSA_display) oss << "display"; else oss << "pixel";
+          const std::array<double, 4> box{ptext->getBoundingBoxTLHC_x(), ptext->getBoundingBoxTLHC_y(), ptext->getBoundingBoxBRHC_x(), ptext->getBoundingBoxBRHC_y()};
+          auto bv = itk::wasm::getArrayJson(box, alloc);
+          textObjectJson.AddMember("BoundingBox", itk::wasm::getArrayJson(box, alloc), alloc);
+          textObjectJson.AddMember("BoundingBoxUnits", Value(StringRef(ptext->getBoundingBoxAnnotationUnits()==DVPSA_display ? "display" : "pixel")), alloc);
 
           DVPSTextJustification justification = ptext->getBoundingBoxHorizontalJustification();
-          oss << " justification=";
+          std::string horizontalJustification;
           switch (justification)
           {
             case DVPSX_left:
-              oss << "left";
+              horizontalJustification = "left";
               break;
             case DVPSX_right:
-              oss << "right";
+              horizontalJustification = "right";
               break;
             case DVPSX_center:
-              oss << "center";
+              horizontalJustification = "center";
               break;
           }
-          oss << OFendl;
-        } else oss << "none" << OFendl;
+          textObjectJson.AddMember("BoundingBoxHorizontalJustification", Value(horizontalJustification.c_str(), alloc), alloc);
+        }
+        textObjectsJsonArray.PushBack(textObjectJson, alloc);
       }
     }
 
+    layerJson.AddMember("TextObjects", textObjectsJsonArray, alloc);
+
     // graphic objects
     max = ps.getNumberOfGraphicObjects(layer);
-    oss << "  Number of graphic objects: " << max << OFendl;
     DVPSGraphicObject *pgraphic = NULL;
+
+    // GraphicObjects[]
+    Value graphicObjectsJsonArray(kArrayType);
+
     for (size_t graphicidx=0; graphicidx<max; graphicidx++)
     {
       pgraphic = ps.getGraphicObject(layer, graphicidx);
       if (pgraphic)
       {
-        // display contents of graphic object
-        oss << "      graphic " << graphicidx+1 << ": points=" << pgraphic->getNumberOfPoints()
-             << " type=";
+        Value graphicJson(kObjectType);
+        std::string graphicType = "none";
         switch (pgraphic->getGraphicType())
         {
-          case DVPST_polyline: oss << "polyline filled="; break;
-          case DVPST_interpolated: oss << "interpolated filled="; break;
-          case DVPST_circle: oss << "circle filled="; break;
-          case DVPST_ellipse: oss << "ellipse filled="; break;
-          case DVPST_point: oss << "point filled="; break;
+          case DVPST_polyline: graphicType = "polyline"; break;
+          case DVPST_interpolated: graphicType = "interpolated"; break;
+          case DVPST_circle: graphicType = "circle"; break;
+          case DVPST_ellipse: graphicType = "ellipse"; break;
+          case DVPST_point: graphicType = "point"; break;
         }
-        if (pgraphic->isFilled()) oss << "yes units="; else oss << "no units=";
-        if (pgraphic->getAnnotationUnits()==DVPSA_display) oss << "display"; else oss << "pixel";
-        oss << OFendl << "        coordinates: ";
+        graphicJson.AddMember("GraphicType", Value(graphicType.c_str(), alloc), alloc);
+        graphicJson.AddMember("IsFilled", Value(pgraphic->isFilled()), alloc);
+        graphicJson.AddMember("Units", Value(StringRef(pgraphic->getAnnotationUnits()==DVPSA_display? "display" : "pixel")), alloc);
+
         j = pgraphic->getNumberOfPoints();
         Float32 fx=0.0, fy=0.0;
+        std::vector<float> points;
         for (i=0; i<j; i++)
         {
           if (EC_Normal==pgraphic->getPoint(i,fx,fy))
           {
-            oss << fx << "\\" << fy << ", ";
-          } else oss << "???\\???, ";
+            points.push_back(fx);
+            points.push_back(fy);
+          }
         }
-        oss << OFendl;
+        graphicJson.AddMember("Points", itk::wasm::getArrayJson(points, alloc), alloc);
+        graphicObjectsJsonArray.PushBack(graphicJson, alloc);
       }
     }
+    layerJson.AddMember("GraphicObjects", graphicObjectsJsonArray, alloc); // GraphicObjects[]
 
     // curve objects
     max = ps.getNumberOfCurves(layer);
-    oss << "  Number of activated curves: " << max << OFendl;
     DVPSCurve *pcurve = NULL;
+
+    // Curves[]
+    Value curvesJsonArray(kArrayType);
+
     for (size_t curveidx=0; curveidx<max; curveidx++)
     {
       pcurve = ps.getCurve(layer, curveidx);
       if (pcurve)
       {
-        // display contents of curve
-        oss << "      curve " << curveidx+1 << ": points=" << pcurve->getNumberOfPoints()
-            << " type=";
+        Value curveJson(kObjectType); // curve{}
+        std::string type;
         switch (pcurve->getTypeOfData())
         {
-          case DVPSL_roiCurve: oss << "roi units="; break;
-          case DVPSL_polylineCurve: oss << "poly units="; break;
+          case DVPSL_roiCurve: type = "roiCurve"; break;
+          case DVPSL_polylineCurve: type = "polylineCurve"; break;
         }
-        c = pcurve->getCurveAxisUnitsX();
-        if (c && (strlen(c)>0)) oss << c << "\\"; else oss << "(none)\\";
-        c = pcurve->getCurveAxisUnitsY();
-        if (c && (strlen(c)>0)) oss << c << OFendl; else oss << "(none)" << OFendl;
-        oss << "        label=";
-        c = pcurve->getCurveLabel();
-        if (c && (strlen(c)>0)) oss << c << " description="; else oss << "(none) description=";
-        c = pcurve->getCurveDescription();
-        if (c && (strlen(c)>0)) oss << c << OFendl; else oss << "(none)" << OFendl;
-        oss << "        coordinates: ";
+        curveJson.AddMember("Type", Value(type.c_str(), alloc), alloc);
+        curveJson.AddMember("AxisUnitsX", Value(pcurve->getCurveAxisUnitsX(), alloc), alloc);
+        curveJson.AddMember("AxisUnitsY", Value(pcurve->getCurveAxisUnitsY(), alloc), alloc);
+        curveJson.AddMember("Label", Value(StringRef(pcurve->getCurveLabel())), alloc);
+        curveJson.AddMember("Description", Value(StringRef(pcurve->getCurveDescription())), alloc);
+
         j = pcurve->getNumberOfPoints();
         double dx=0.0, dy=0.0;
+        std::vector<double> points;
+        points.reserve(j*2);
         for (i=0; i<j; i++)
         {
           if (EC_Normal==pcurve->getPoint(i,dx,dy))
           {
-            oss << dx << "\\" << dy << ", ";
-          } else oss << "???\\???, ";
+            points.push_back(dx);
+            points.push_back(dy);
+          }
         }
-        oss << OFendl;
-      } else oss << "      curve " << curveidx+1 << " not present in image." << OFendl;
+        curveJson.AddMember("Points", itk::wasm::getArrayJson(points, alloc), alloc);
+        curvesJsonArray.PushBack(curveJson, alloc);
+      }
     }
+
+    layerJson.AddMember("Curves", curvesJsonArray, alloc);
 
     // overlay objects
     const void *overlayData=NULL;
@@ -359,85 +421,51 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
     FILE *ofile=NULL;
 
     max = ps.getNumberOfActiveOverlays(layer);
-    oss << "  Number of activated overlays: " << max << OFendl;
+
+    // Overlays[]
+    Value overlaysJsonArray(kArrayType);
+
     for (size_t ovlidx=0; ovlidx<max; ovlidx++)
     {
-      oss << "      overlay " << ovlidx+1 << ": group=0x" << STD_NAMESPACE hex
-           << ps.getActiveOverlayGroup(layer, ovlidx) << STD_NAMESPACE dec << " label=\"";
-      c=ps.getActiveOverlayLabel(layer, ovlidx);
-      if (c) oss << c; else oss << "(none)";
-      oss << "\" description=\"";
-      c=ps.getActiveOverlayDescription(layer, ovlidx);
-      if (c) oss << c; else oss << "(none)";
-      oss << "\" type=";
-      if (ps.activeOverlayIsROI(layer, ovlidx)) oss << "ROI"; else oss << "graphic";
-      oss << OFendl;
+      Value overlayJson(kObjectType);
+      overlayJson.AddMember("Index", Value(static_cast<uint32_t>(ovlidx)), alloc);
+      std::stringstream value;
+      value << "0x" << STD_NAMESPACE hex << ps.getActiveOverlayGroup(layer, ovlidx) << STD_NAMESPACE dec;
+      overlayJson.AddMember("Group", Value(value.str().c_str(), alloc), alloc);
+      overlayJson.AddMember("Label", Value(StringRef(ps.getActiveOverlayLabel(layer, ovlidx))), alloc);
+      overlayJson.AddMember("Description", Value(StringRef(ps.getActiveOverlayDescription(layer, ovlidx))), alloc);
+      overlayJson.AddMember("Type", Value(StringRef(ps.activeOverlayIsROI(layer, ovlidx) ? "ROI" : "graphic")), alloc);
 
       /* get overlay data */
       if (EC_Normal == ps.getOverlayData(layer, ovlidx, overlayData, overlayWidth, overlayHeight,
           overlayLeft, overlayTop, overlayROI, overlayTransp))
       {
-        oss << "        columns=" << overlayWidth << " rows=" << overlayHeight << " left="
-            << overlayLeft << " top=" << overlayTop << OFendl;
-        sprintf(overlayfile, "ovl_%02d%02d.pgm", (int)layer+1, (int)ovlidx+1);
-        oss << "        filename=\"" << overlayfile << "\"";
+        overlayJson.AddMember("Width", Value(overlayWidth), alloc);
+        overlayJson.AddMember("Height", Value(overlayHeight), alloc);
+        overlayJson.AddMember("Left", Value(overlayLeft), alloc);
+        overlayJson.AddMember("Top", Value(overlayTop), alloc);
 
-        ofile = fopen(overlayfile, "wb");
-        if (ofile)
-        {
-          fprintf(ofile, "P5\n%d %d 255\n", overlayWidth, overlayHeight);
-          if (fwrite(overlayData, overlayWidth, overlayHeight, ofile) == overlayHeight)
-            oss << " - written." << OFendl;
-          else
-            oss << " -write error-" << OFendl;
-          fclose(ofile);
-        } else oss << " -write error-" << OFendl;
+        std::stringstream buff;
+        buff << "P5\n" << overlayWidth << " " << overlayHeight << " " << "255\n";
+        buff.write((const char*)overlayData, overlayWidth * overlayHeight);
+
+        constexpr bool urlFriendly = false;
+        overlayJson.AddMember("OverlayData", Value(base64_encode(buff.str(), urlFriendly).c_str(), alloc), alloc);
       } else {
-        oss << "        unable to access overlay data!" << OFendl;
+        OFLOG_ERROR(appLogger, "unable to access overlay data!");
       }
+      overlaysJsonArray.PushBack(overlayJson, alloc);
     }
+    layerJson.AddMember("Overlays", overlaysJsonArray, alloc); // Overlays[]
+    graphicsLayersJsonArray.PushBack(layerJson, alloc);
   }
+  doc.AddMember("GraphicsLayers", graphicsLayersJsonArray, alloc); // GraphicsLayers[]
 
-  oss << OFendl;
-
-  max = ps.getNumberOfVOILUTsInImage();
-  oss << "VOI LUTs available in attached image: " << max << OFendl;
-  for (size_t lutidx=0; lutidx<max; lutidx++)
-  {
-    oss << "  LUT #" << lutidx+1 << ": description=";
-    c=ps.getDescriptionOfVOILUTsInImage(lutidx);
-    if (c) oss << c << OFendl; else oss << "(none)" << OFendl;
-  }
-
-  max = ps.getNumberOfVOIWindowsInImage();
-  oss << "VOI windows available in attached image: " << max << OFendl;
-  for (size_t winidx=0; winidx<max; winidx++)
-  {
-    oss << "  Window #" << winidx+1 << ": description=";
-    c=ps.getDescriptionOfVOIWindowsInImage(winidx);
-    if (c) oss << c << OFendl; else oss << "(none)" << OFendl;
-  }
-
-  max = ps.getNumberOfOverlaysInImage();
-  oss << "Overlays available (non-shadowed) in attached image: " << max << OFendl;
-  for (size_t oidx=0; oidx<max; oidx++)
-  {
-    oss << "  Overlay #" << oidx+1 << ": group=0x" << STD_NAMESPACE hex << ps.getOverlayInImageGroup(oidx) << STD_NAMESPACE dec << " label=\"";
-    c=ps.getOverlayInImageLabel(oidx);
-    if (c) oss << c; else oss << "(none)";
-    oss << "\" description=\"";
-    c=ps.getOverlayInImageDescription(oidx);
-    if (c) oss << c; else oss << "(none)";
-    oss << "\" type=";
-    if (ps.overlayInImageIsROI(oidx)) oss << "ROI"; else oss << "graphic";
-    oss << OFendl;
-  }
-
-  oss << OFStringStream_ends;
-  out << oss.str();
-  OFSTRINGSTREAM_GETSTR(oss, res)
-  OFLOG_INFO(dcmp2pgmLogger, res);
-  OFSTRINGSTREAM_FREESTR(res)
+  // Pretty print the json into output stream.
+  StringBuffer buffer;
+  PrettyWriter<StringBuffer> writer(buffer);
+  doc.Accept(writer);
+  out << buffer.GetString();
 }
 
 
@@ -463,12 +491,12 @@ int main(int argc, char *argv[])
   // Parameters
   // addGroup "processing options:"
   std::string pstateFile;
-  pipeline.add_option("--presentation-state-file", pstateFile, "[f]ilename: string, process using presentation state file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+  pipeline.add_option("--presentation-state-file", pstateFile, "filename: string. Process using presentation state file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
   std::string configFile;
-  pipeline.add_option("--config-file", configFile, "[f]ilename: string, process using settings from configuration file");
+  pipeline.add_option("--config-file", configFile, "filename: string. Process using settings from configuration file");
   // process a specific frame within the input dicom:
   int frame = 1;
-  pipeline.add_option("--frame", frame, "[f]rame: integer, process using image frame f (default: 1)");
+  pipeline.add_option("--frame", frame, "frame: integer. Process using image frame f (default: 1)");
 
   // addGroup "output format:"
   bool pstateOutput{true};
@@ -495,7 +523,7 @@ int main(int argc, char *argv[])
   /* command line parameters and options */
   if (!pstateOutput && !bitmapOutput)
   {
-    OFLOG_FATAL(dcmp2pgmLogger, "No output form requested. Specify either --presentation-state-output, --bitmap-output or both.");
+    OFLOG_FATAL(appLogger, "No output form requested. Specify either --presentation-state-output, --bitmap-output or both.");
   }
 
   if(!pstateFile.empty()) opt_pstName = pstateFile.c_str();
@@ -505,14 +533,14 @@ int main(int argc, char *argv[])
   if (outputFormatDICOM)       opt_dicom_mode = OFTrue;
 
   /* print resource identifier */
-  OFLOG_DEBUG(dcmp2pgmLogger, rcsid << OFendl);
+  OFLOG_DEBUG(appLogger, rcsid << OFendl);
 
   if (opt_cfgName)
   {
     FILE *cfgfile = fopen(opt_cfgName, "rb");
     if (cfgfile) fclose(cfgfile); else
     {
-      OFLOG_FATAL(dcmp2pgmLogger, "can't open configuration file '" << opt_cfgName << "'");
+      OFLOG_FATAL(appLogger, "can't open configuration file '" << opt_cfgName << "'");
       return 10;
     }
   }
@@ -521,11 +549,11 @@ int main(int argc, char *argv[])
 
   if (opt_pstName == NULL)
   {
-    OFLOG_DEBUG(dcmp2pgmLogger, "reading DICOM image file: " << opt_imgName);
+    OFLOG_DEBUG(appLogger, "reading DICOM image file: " << opt_imgName);
     status = dvi.loadImage(opt_imgName);
   } else {
-    OFLOG_DEBUG(dcmp2pgmLogger, "reading DICOM presentation-state file: " << opt_pstName);
-    OFLOG_DEBUG(dcmp2pgmLogger, "reading DICOM image file: " << opt_imgName);
+    OFLOG_DEBUG(appLogger, "reading DICOM presentation-state file: " << opt_pstName);
+    OFLOG_DEBUG(appLogger, "reading DICOM image file: " << opt_imgName);
     status = dvi.loadPState(opt_pstName, opt_imgName);
   }
 
@@ -537,19 +565,19 @@ int main(int argc, char *argv[])
       const void *pixelData = NULL;
       unsigned long width = 0;
       unsigned long height = 0;
-      OFLOG_DEBUG(dcmp2pgmLogger, "creating pixel data");
+      OFLOG_DEBUG(appLogger, "creating pixel data");
       if ((opt_frame > 0) && (dvi.getCurrentPState().selectImageFrameNumber(opt_frame) != EC_Normal))
-        OFLOG_ERROR(dcmp2pgmLogger, "cannot select frame " << opt_frame);
+        OFLOG_ERROR(appLogger, "cannot select frame " << opt_frame);
 
       std::array<double, 2> pixelSpacing{0.0, 0.0};
       if (EC_Normal != dvi.getCurrentPState().getDisplayedAreaPresentationPixelSpacing(pixelSpacing[0], pixelSpacing[1]))
-        OFLOG_ERROR(dcmp2pgmLogger, "cannot read pixel spacing from presentation state.");
+        OFLOG_ERROR(appLogger, "cannot read pixel spacing from presentation state.");
 
       if ((dvi.getCurrentPState().getPixelData(pixelData, width, height) == EC_Normal) && (pixelData != NULL))
       {
         if (opt_dicom_mode)
         {
-          OFLOG_ERROR(dcmp2pgmLogger, "DICOM output format is currently not supported.");
+          OFLOG_ERROR(appLogger, "DICOM output format is currently not supported.");
         }
         else
         {
@@ -581,14 +609,14 @@ int main(int argc, char *argv[])
       }
       else
       {
-        OFLOG_FATAL(dcmp2pgmLogger, "Can't create output data.");
+        OFLOG_FATAL(appLogger, "Can't create output data.");
         return 10;
       }
     }
   }
   else
   {
-    OFLOG_FATAL(dcmp2pgmLogger, "Can't open input file(s).");
+    OFLOG_FATAL(appLogger, "Can't open input file(s).");
     return 10;
   }
 

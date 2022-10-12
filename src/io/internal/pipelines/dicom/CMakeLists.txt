@@ -20,7 +20,7 @@ add_executable(apply-presentation-state-to-image apply-presentation-state-to-ima
 target_link_libraries(structured-report-to-text PUBLIC ${ITK_LIBRARIES})
 target_link_libraries(structured-report-to-html PUBLIC ${ITK_LIBRARIES})
 target_link_libraries(read-dicom-encapsulated-pdf PUBLIC ${ITK_LIBRARIES})
-target_link_libraries(apply-presentation-state-to-image PUBLIC ${ITK_LIBRARIES})
+target_link_libraries(apply-presentation-state-to-image PUBLIC cpp-base64 ${ITK_LIBRARIES})
 list(APPEND wasm_modules "structured-report-to-text")
 list(APPEND wasm_modules "structured-report-to-html")
 list(APPEND wasm_modules "read-dicom-encapsulated-pdf")

@@ -77,8 +77,16 @@ set(WITH_TESTS OFF CACHE BOOL "Build libcbor tests")
 set(WITH_EXAMPLES OFF CACHE BOOL "Build libcbor examples")
 set(SANITIZE OFF CACHE BOOL "Enable sanitizers in Debug mode in libcbor")
 
+set(cpp_base64_GIT_REPOSITORY "https://github.com/thewtex/cpp-base64.git")
+set(cpp_base64_GIT_TAG 9144cd53be930b37235ae552a92b5d2aa51e9325)
+FetchContent_Declare(
+  cpp_base64
+  GIT_REPOSITORY ${cpp_base64_GIT_REPOSITORY}
+  GIT_TAG        ${cpp_base64_GIT_TAG}
+)
+
 list(APPEND CMAKE_MODULE_PATH ${libcbor_SOURCE_DIR}/CMakeModules)
-FetchContent_MakeAvailable(rapidjson_lib cli11 rang libcbor)
+FetchContent_MakeAvailable(rapidjson_lib cli11 rang libcbor cpp_base64)
 set(RapidJSON_INCLUDE_DIR "${rapidjson_lib_SOURCE_DIR}/include")
 set(cli11_INCLUDE_DIR "${cli11_SOURCE_DIR}/include")
 set(rang_INCLUDE_DIR "${rang_SOURCE_DIR}/include")
