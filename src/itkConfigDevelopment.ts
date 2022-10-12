@@ -1,4 +1,4 @@
-const version = '1.0.0-b.18'
+const version = '0.0.0-semantically-released'
 
 const itkConfig = {
   webWorkersUrl: undefined,
