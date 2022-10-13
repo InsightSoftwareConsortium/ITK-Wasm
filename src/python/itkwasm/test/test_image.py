@@ -15,3 +15,24 @@ def test_image():
     itk_image_roundtrip = itk.image_from_dict(itkwasm_image_dict)
     difference = np.sum(itk.comparison_image_filter(itk_image, itk_image_roundtrip))
     assert difference == 0.0
+
+def test_image_defaults():
+    image = Image()
+
+    assert image.imageType.dimension == 2
+    assert image.imageType.componentType == 'uint8'
+    assert image.imageType.pixelType == 'Scalar'
+    assert image.imageType.components == 1
+
+    assert image.name == "image"
+    assert image.origin[0] == 0.0
+    assert image.origin[1] == 0.0
+    assert image.spacing[0] == 1.0
+    assert image.spacing[1] == 1.0
+    assert np.array_equal(image.direction, np.eye(2).astype(np.float32).ravel())
+
+    assert image.size[0] == 1
+    assert image.size[1] == 1
+
+    assert isinstance(image.metadata, dict)
+    assert image.data == None
