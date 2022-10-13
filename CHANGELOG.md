@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.41](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.40...itk-wasm-v1.0.0-b.41) (2022-10-13)
+
+
+### Features
+
+* **Python:** Support pipeline stream inputs/outputs ([837876a](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/837876accecbb06e2a2693e159b2bdfa7e9d2d6b))
+
 # [1.0.0-b.40](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.39...itk-wasm-v1.0.0-b.40) (2022-10-12)
 
 
