@@ -119,7 +119,7 @@ public:
 
     using InputImageType = itk::wasm::InputImage<ImageType>;
     InputImageType inputImage;
-    pipeline.add_option("input-image", inputImage, "The input image");
+    pipeline.add_option("input-image", inputImage, "The input image")->type_name("INPUT_IMAGE");
 
     ITK_WASM_PRE_PARSE(pipeline);
 
@@ -134,7 +134,7 @@ public:
   }
 };
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("median-filter", "Apply a median filter to an image", argc, argv);
 
