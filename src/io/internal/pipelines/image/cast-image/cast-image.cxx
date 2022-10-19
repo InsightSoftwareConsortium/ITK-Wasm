@@ -326,37 +326,51 @@ private:
 int main (int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("cast-image", "Cast an image from one image type to another", argc, argv);
-// #define MULTICOMPONENT_PIXEL_TYPES 1
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
-#if !defined(MULTICOMPONENT_PIXEL_TYPES)
-    uint8_t,
-    int8_t,
-    uint16_t,
-    int16_t,
-    uint32_t,
-    int32_t,
-    uint64_t,
-    int64_t,
-    float,
+#if defined(UINT8_PIXEL_TYPES)
+    uint8_t
+#elif defined(INT8_PIXEL_TYPES)
+    int8_t
+#elif defined(UINT16_PIXEL_TYPES)
+    uint16_t
+#elif defined(INT16_PIXEL_TYPES)
+    int16_t
+#elif defined(UINT32_PIXEL_TYPES)
+    uint32_t
+#elif defined(INT32_PIXEL_TYPES)
+    int32_t
+#elif defined(UINT64_PIXEL_TYPES)
+    uint64_t
+#elif defined(INT64_PIXEL_TYPES)
+    int64_t
+#elif defined(FLOAT_PIXEL_TYPES)
+    float
+#elif defined(DOUBLE_PIXEL_TYPES)
     double
-#elif defined(VECTOR2_PIXEL_TYPES)
-    itk::Vector<uint8_t, 2>,
-    itk::Vector<int8_t, 2>,
-    itk::Vector<uint16_t, 2>,
-    itk::Vector<int16_t, 2>,
-    itk::Vector<uint16_t, 2>,
-    itk::Vector<int16_t, 2>,
-    itk::Vector<float, 2>,
+#elif defined(VECTOR_UINT8_2_PIXEL_TYPES)
+    itk::Vector<uint8_t, 2>
+#elif defined(VECTOR_INT8_2_PIXEL_TYPES)
+    itk::Vector<int8_t, 2>
+#elif defined(VECTOR_UINT16_2_PIXEL_TYPES)
+    itk::Vector<uint16_t, 2>
+#elif defined(VECTOR_INT16_2_PIXEL_TYPES)
+    itk::Vector<int16_t, 2>
+#elif defined(VECTOR_FLOAT_2_PIXEL_TYPES)
+    itk::Vector<float, 2>
+#elif defined(VECTOR_DOUBLE_2_PIXEL_TYPES)
     itk::Vector<double, 2>
-#elif defined(VECTOR3_PIXEL_TYPES)
-    itk::Vector<uint8_t, 3>,
-    itk::Vector<int8_t, 3>,
-    itk::Vector<uint16_t, 3>,
-    itk::Vector<int16_t, 3>,
-    itk::Vector<uint16_t, 3>,
-    itk::Vector<int16_t, 3>,
-    itk::Vector<float, 3>,
+#elif defined(VECTOR_UINT8_3_PIXEL_TYPES)
+    itk::Vector<uint8_t, 3>
+#elif defined(VECTOR_INT8_3_PIXEL_TYPES)
+    itk::Vector<int8_t, 3>
+#elif defined(VECTOR_UINT16_3_PIXEL_TYPES)
+    itk::Vector<uint16_t, 3>
+#elif defined(VECTOR_INT16_3_PIXEL_TYPES)
+    itk::Vector<int16_t, 3>
+#elif defined(VECTOR_FLOAT_3_PIXEL_TYPES)
+    itk::Vector<float, 3>
+#elif defined(VECTOR_DOUBLE_3_PIXEL_TYPES)
     itk::Vector<double, 3>
 #endif
   >::Dimensions<2U,3U>("input-image", pipeline);

@@ -11,19 +11,47 @@ find_package(ITK REQUIRED
 
 include(${ITK_USE_FILE})
 
-add_executable(cast-image-scalar cast-image.cxx)
-target_link_libraries(cast-image-scalar PUBLIC ${ITK_LIBRARIES})
+set(targets )
+foreach(pixel_types
+  uint8
+  int8
+  uint16
+  int16
+  uint32
+  int32
+  uint64
+  int64
+  float
+  double
+  )
+  set(target cast-image-${pixel_types}-input)
+  add_executable(${target} cast-image.cxx)
+  target_link_libraries(${target} PUBLIC ${ITK_LIBRARIES})
+  string(TOUPPER "${pixel_types}" pixel_types_upper)
+  target_compile_definitions(${target} PUBLIC ${pixel_types_upper}_PIXEL_TYPES)
+  list(APPEND targets ${target})
+endforeach()
 
-add_executable(cast-image-vector2 cast-image.cxx)
-target_link_libraries(cast-image-vector2 PUBLIC ${ITK_LIBRARIES})
-target_compile_definitions(cast-image-vector2 PUBLIC MULTICOMPONENT_PIXEL_TYPES VECTOR2_PIXEL_TYPES)
-
-add_executable(cast-image-vector3 cast-image.cxx)
-target_link_libraries(cast-image-vector3 PUBLIC ${ITK_LIBRARIES})
-target_compile_definitions(cast-image-vector3 PUBLIC MULTICOMPONENT_PIXEL_TYPES VECTOR3_PIXEL_TYPES)
+foreach(component_types
+  uint8
+  int8
+  uint16
+  int16
+  float
+  double
+  )
+  foreach(num_components 2 3)
+    set(target cast-image-vector-${component_types}-${num_components}-input)
+    add_executable(${target} cast-image.cxx)
+    target_link_libraries(${target} PUBLIC ${ITK_LIBRARIES})
+    string(TOUPPER "${component_types}" component_types_upper)
+    target_compile_definitions(${target} PUBLIC VECTOR_${component_types_upper}_${num_components}_PIXEL_TYPES)
+    list(APPEND targets ${target})
+  endforeach()
+endforeach()
 
 if (DEFINED WebAssemblyInterface_SOURCE_DIR AND EMSCRIPTEN)
-  foreach(target cast-image-scalar cast-image-scalar.umd)
+  foreach(target ${targets})
     itk_module_target_label(${target})
     itk_module_target_export(${target})
     itk_module_target_install(${target})
@@ -31,16 +59,23 @@ if (DEFINED WebAssemblyInterface_SOURCE_DIR AND EMSCRIPTEN)
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
       ${WebAssemblyInterface_BINARY_DIR}/image-io
       )
+    itk_module_target_label(${target}.umd)
+    itk_module_target_export(${target}.umd)
+    itk_module_target_install(${target}.umd)
+    set_property(TARGET ${target}.umd
+      PROPERTY RUNTIME_OUTPUT_DIRECTORY
+      ${WebAssemblyInterface_BINARY_DIR}/cast-image
+      )
   endforeach()
 endif()
 if (DEFINED WebAssemblyInterface_SOURCE_DIR AND WASI)
-  foreach(target cast-image-scalar cast-image-vector2 cast-image-vector3)
+  foreach(target ${targets})
     itk_module_target_label(${target})
     itk_module_target_export(${target})
     itk_module_target_install(${target})
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${WebAssemblyInterface_BINARY_DIR}/wasi-image-io
+      ${WebAssemblyInterface_BINARY_DIR}/wasi-cast-image
       )
   endforeach()
 endif()
