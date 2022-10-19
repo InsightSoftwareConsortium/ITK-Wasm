@@ -9,12 +9,28 @@ describe('runPipeline', () => {
   it('captures stdout and stderr', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
+      itk.itkConfig.pipelinesUrl = '/pipelines'
 
       const args = []
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
       const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs)
+    })
+  })
+
+
+  it('fetches WASM files from a custom config URL', () => {
+    cy.window().then(async (win) => {
+      const itk = win.itk
+      const configPropertyPipelinesBaseUrl = 'customPipelinesUrl' 
+      itk.itkConfig[configPropertyPipelinesBaseUrl] = '/pipelines'
+
+      const args = []
+      const outputs = null
+      const inputs = null
+      const stdoutStderrPath = 'stdout-stderr-test'
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, configPropertyPipelinesBaseUrl)
     })
   })
 
@@ -261,7 +277,7 @@ Click. Perfect success.
   })
 
 
-  it('runPipeline writes and reads an itk.Mesh via memory io', async () => {
+  it('runPipeline writes and reads an itk.Mesh via memory io', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
 

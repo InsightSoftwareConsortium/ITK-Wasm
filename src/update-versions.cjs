@@ -22,5 +22,6 @@ function rewriteVersion(filename) {
   fs.writeFileSync(filename, lines.join('\n'))
 }
 
-rewriteVersion('dist/core/index.js')
+rewriteVersion('src/core/version.ts')
+rewriteVersion('dist/core/version.js')
 rewriteVersion('dist/itkConfigDevelopment.js')

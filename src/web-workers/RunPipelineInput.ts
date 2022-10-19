@@ -4,6 +4,7 @@ import WebWorkerInput from './WebWorkerInput.js'
 
 interface RunPipelineInput extends WebWorkerInput {
   pipelinePath: string | object
+  configPropertyPipelineBaseUrl: string,
   args: string[]
   outputs: PipelineOutput[]
   inputs: PipelineInput[]
