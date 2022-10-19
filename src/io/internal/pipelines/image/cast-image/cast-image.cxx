@@ -326,8 +326,10 @@ private:
 int main (int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("cast-image", "Cast an image from one image type to another", argc, argv);
+// #define MULTICOMPONENT_PIXEL_TYPES 1
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
+#if !defined(MULTICOMPONENT_PIXEL_TYPES)
     uint8_t,
     int8_t,
     uint16_t,
@@ -337,7 +339,8 @@ int main (int argc, char * argv[])
     uint64_t,
     int64_t,
     float,
-    double,
+    double
+#elif defined(VECTOR2_PIXEL_TYPES)
     itk::Vector<uint8_t, 2>,
     itk::Vector<int8_t, 2>,
     itk::Vector<uint16_t, 2>,
@@ -345,7 +348,8 @@ int main (int argc, char * argv[])
     itk::Vector<uint16_t, 2>,
     itk::Vector<int16_t, 2>,
     itk::Vector<float, 2>,
-    itk::Vector<double, 2>,
+    itk::Vector<double, 2>
+#elif defined(VECTOR3_PIXEL_TYPES)
     itk::Vector<uint8_t, 3>,
     itk::Vector<int8_t, 3>,
     itk::Vector<uint16_t, 3>,
@@ -354,5 +358,6 @@ int main (int argc, char * argv[])
     itk::Vector<int16_t, 3>,
     itk::Vector<float, 3>,
     itk::Vector<double, 3>
+#endif
   >::Dimensions<2U,3U>("input-image", pipeline);
 }
