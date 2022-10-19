@@ -193,7 +193,18 @@ public:
       pixelType = itk::wasm::MapPixelType<typename InputImageType::PixelType>::PixelString;
     }
 
-    return IterateOutputPixelTypes<float>(pipeline, componentType, pixelType);
+    return IterateOutputPixelTypes<
+      uint8_t,
+      int8_t,
+      uint16_t,
+      int16_t,
+      uint32_t,
+      int32_t,
+      uint64_t,
+      int64_t,
+      double,
+      float
+    >(pipeline, componentType, pixelType);
   }
 
 private:
@@ -224,6 +235,94 @@ private:
   }
 };
 
+template<unsigned int VDimension, unsigned int VComponents, typename TComponent>
+class PipelineFunctor<itk::Image<itk::Vector<TComponent, VComponents>, VDimension>>
+{
+public:
+  int operator()(itk::wasm::Pipeline & pipeline)
+  {
+    using InputImageType = itk::Image<itk::Vector<TComponent, VComponents>, VDimension>;
+
+    std::string componentType("");
+    pipeline.add_option("-c,--component-type", componentType, "String component type, from itk-wasm IntTypes, FloatTypes, for the output pixel components. Defaults to the input component type.");
+
+    std::string pixelType("");
+    pipeline.add_option("-p,--pixel-type", pixelType, "String pixel type, from itk-wasm PixelTypes, for the output pixels. Defaults to the input pixel type.");
+
+    const auto iwpArgc = pipeline.get_argc();
+    const auto iwpArgv = pipeline.get_argv();
+    bool passThrough = false;
+    for (int ii = 0; ii < iwpArgc; ++ii)
+      {
+        const std::string arg(iwpArgv[ii]);
+        if (arg == "-h" || arg == "--help")
+        {
+          passThrough = true;
+        }
+      }
+    if (passThrough)
+    {
+      return IterateOutputPixelTypes<itk::Vector<float, VDimension>>(pipeline, componentType, pixelType, passThrough);
+    }
+
+    using InputWASMImageType = itk::wasm::InputImage<InputImageType>;
+    InputWASMImageType inputImage;
+    auto tempOption = pipeline.add_option("input-image", inputImage, "The input image");
+
+    ITK_WASM_PRE_PARSE(pipeline);
+
+    pipeline.remove_option(tempOption);
+
+    using InputConvertPixelTraits = itk::DefaultConvertPixelTraits<typename InputImageType::PixelType>;
+
+    if (componentType.empty())
+    {
+      componentType = itk::wasm::MapComponentType<typename InputConvertPixelTraits::ComponentType>::ComponentString;
+    }
+
+    if (pixelType.empty())
+    {
+      pixelType = itk::wasm::MapPixelType<typename InputImageType::PixelType>::PixelString;
+    }
+
+    return IterateOutputPixelTypes<
+      itk::Vector<uint8_t, VDimension>,
+      itk::Vector<int8_t, VDimension>,
+      itk::Vector<uint16_t, VDimension>,
+      itk::Vector<int16_t, VDimension>,
+      itk::Vector<float, VDimension>,
+      itk::Vector<double, VDimension>
+    >(pipeline, componentType, pixelType);
+  }
+
+private:
+  template<typename TPixel, typename ...TPixelsRest>
+  static int
+  IterateOutputPixelTypes(itk::wasm::Pipeline & pipeline, const std::string & componentType, const std::string & pixelType, bool passThrough=false)
+  {
+    using InputImageType = itk::Image<itk::Vector<TComponent, VDimension>, VDimension>;
+    constexpr unsigned int Dimension = InputImageType::ImageDimension;
+    using PixelType = TPixel;
+    using ConvertPixelTraits = itk::DefaultConvertPixelTraits<PixelType>;
+
+    if (passThrough || componentType == itk::wasm::MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString && pixelType == itk::wasm::MapPixelType<PixelType>::PixelString && Dimension == ConvertPixelTraits::GetNumberOfComponents())
+    {
+      using OutputImageType = itk::Image<PixelType, Dimension>;
+
+      return CastImage<InputImageType, OutputImageType>(pipeline);
+    }
+
+    if constexpr (sizeof...(TPixelsRest) > 0) {
+      return IterateOutputPixelTypes<TPixelsRest...>(pipeline, componentType, pixelType, passThrough);
+    }
+
+    std::ostringstream ostrm;
+    ostrm << "Unsupported pixel type: " << pixelType << " with component type: " << componentType << " and components: " << ConvertPixelTraits::GetNumberOfComponents();
+    CLI::Error err("Runtime error", ostrm.str(), 1);
+    return pipeline.exit(err);
+  }
+};
+
 int main (int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("cast-image", "Cast an image from one image type to another", argc, argv);
@@ -238,6 +337,22 @@ int main (int argc, char * argv[])
     uint64_t,
     int64_t,
     float,
-    double
+    double,
+    itk::Vector<uint8_t, 2>,
+    itk::Vector<int8_t, 2>,
+    itk::Vector<uint16_t, 2>,
+    itk::Vector<int16_t, 2>,
+    itk::Vector<uint16_t, 2>,
+    itk::Vector<int16_t, 2>,
+    itk::Vector<float, 2>,
+    itk::Vector<double, 2>,
+    itk::Vector<uint8_t, 3>,
+    itk::Vector<int8_t, 3>,
+    itk::Vector<uint16_t, 3>,
+    itk::Vector<int16_t, 3>,
+    itk::Vector<uint16_t, 3>,
+    itk::Vector<int16_t, 3>,
+    itk::Vector<float, 3>,
+    itk::Vector<double, 3>
   >::Dimensions<2U,3U>("input-image", pipeline);
 }
