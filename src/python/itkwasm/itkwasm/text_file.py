@@ -1,6 +1,6 @@
 from dataclasses import dataclass
+from pathlib import PurePosixPath
 
 @dataclass
 class TextFile:
-    data: str
-    path: str
+    path: PurePosixPath

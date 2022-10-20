@@ -1,11 +1,13 @@
 import json
 from pathlib import Path
-from typing import List, Union, Dict
+from typing import List, Union, Dict, Tuple
 from .interface_types import InterfaceTypes
 from .pipeline_input import PipelineInput
 from .pipeline_output import PipelineOutput
 from .text_stream import TextStream
 from .binary_stream import BinaryStream
+from .text_file import TextFile
+from .binary_file import BinaryFile
 
 from wasmer import engine, wasi, Store, Module, ImportObject, Instance
 from wasmer_compiler_cranelift import Compiler
@@ -26,8 +28,20 @@ class Pipeline:
         self.module = Module(self.store, wasm_bytes)
         self.wasi_version = wasi.get_version(self.module, strict=True)
 
-    def run(self, args: List[str], outputs: List[PipelineOutput]=[], inputs: List[PipelineInput]=[], preopen_directories=[], map_directories={}, environments={}) -> List[PipelineOutput]:
+    def run(self, args: List[str], outputs: List[PipelineOutput]=[], inputs: List[PipelineInput]=[]) -> Tuple[PipelineOutput]:
         """Run the itk-wasm pipeline."""
+
+        preopen_directories=set()
+        map_directories={}
+        # Todo: expose?
+        environments={}
+        for index, input_ in enumerate(inputs):
+            if input_.type == InterfaceTypes.TextFile or input_.type == InterfaceTypes.BinaryFile:
+                preopen_directories.add(str(input_.data.path.parent))
+        for index, output in enumerate(outputs):
+            if output.type == InterfaceTypes.TextFile or output.type == InterfaceTypes.BinaryFile:
+                preopen_directories.add(str(output.data.path.parent))
+        preopen_directories = list(preopen_directories)
 
         wasi_state = wasi.StateBuilder('itk-wasm-pipeline')
         wasi_state.arguments(args)
@@ -60,6 +74,10 @@ class Pipeline:
                 array_ptr = self._set_input_array(data_array, index, 0)
                 data_json = { "size": len(data_array), "data": f"data:application/vnd.itk.address,0:{array_ptr}" }
                 self._set_input_json(data_json, index)
+            elif input_.type == InterfaceTypes.TextFile:
+                pass
+            elif input_.type == InterfaceTypes.BinaryFile:
+                pass
             else:
                 raise ValueError(f'Unexpected/not yet supported input.type {input_.type}')
 
@@ -80,13 +98,17 @@ class Pipeline:
                     data_size = self.output_array_size(0, index, 0)
                     data_array = bytes(memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
                     output_data = PipelineOutput(InterfaceTypes.BinaryStream, BinaryStream(data_array))
+                elif output.type == InterfaceTypes.TextFile:
+                    output_data = PipelineOutput(InterfaceTypes.TextFile, TextFile(output.data.path))
+                elif output.type == InterfaceTypes.BinaryFile:
+                    output_data = PipelineOutput(InterfaceTypes.BinaryFile, BinaryFile(output.data.path))
                 populated_outputs.append(output_data)
 
         delayed_exit = instance.exports.itk_wasm_delayed_exit
         delayed_exit(return_code)
 
         # Should we be returning the return_code?
-        return populated_outputs
+        return tuple(populated_outputs)
 
     def _set_input_array(self, data_array: bytes, input_index: int, sub_index: int) -> int:
         data_ptr = 0
