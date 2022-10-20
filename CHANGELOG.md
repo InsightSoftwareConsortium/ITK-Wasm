@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.43](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.42...itk-wasm-v1.0.0-b.43) (2022-10-20)
+
+
+### Features
+
+* Python File interface types support ([b9509ba](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/b9509ba99c3d494c51d8a3e64569e5f2c8f64198))
+
 # [1.0.0-b.42](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.41...itk-wasm-v1.0.0-b.42) (2022-10-20)
 
 
