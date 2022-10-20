@@ -36,7 +36,7 @@ async function loadPipelineModule (pipelinePath: string | URL): Promise<Pipeline
   }
 }
 
-async function runPipeline (webWorker: Worker | null | boolean, pipelinePath: string | URL, args: string[], outputs: PipelineOutput[] | null, inputs: PipelineInput[] | null): Promise<RunPipelineResult> {
+async function runPipeline (webWorker: Worker | null | boolean, pipelinePath: string | URL, args: string[], outputs: PipelineOutput[] | null, inputs: PipelineInput[] | null, configPropertyPipelineBaseUrl: string | URL = 'pipelinesUrl'): Promise<RunPipelineResult> {
   if (webWorker === false) {
     const pipelineModule = await loadPipelineModule(pipelinePath.toString())
     const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
@@ -137,6 +137,7 @@ async function runPipeline (webWorker: Worker | null | boolean, pipelinePath: st
       operation: 'runPipeline',
       config: config,
       pipelinePath: pipelinePath.toString(),
+      configPropertyPipelineBaseUrl,
       args,
       outputs,
       inputs

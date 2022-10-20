@@ -1,5 +1,8 @@
 // Core API interfaces, data structures, and functions
 
+export { default as itkConfig } from '../itkConfig.js'
+export { default as version } from './version.js'
+
 export { default as InterfaceTypes } from './InterfaceTypes.js'
 
 export { default as TextStream } from './TextStream.js'
@@ -36,6 +39,3 @@ export { default as WorkerPool } from './WorkerPool.js'
 export { default as WorkerPoolFunction } from './WorkerPoolFunction.js'
 export { default as WorkerPoolProgressCallback } from './WorkerPoolProgressCallback.js'
 export { default as WorkerPoolRunTasksResult } from './WorkerPoolRunTasksResult.js'
-
-const version = '0.0.0-semantically-released'
-export { version }

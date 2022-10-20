@@ -29,6 +29,7 @@ async function createWebWorkerPromise (existingWorker: Worker | null): Promise<c
   }
 
   let worker = null
+  // @ts-expect-error: error TS2339: Property 'webWorkersUrl' does not exist on type '{ pipelineWorkerUrl: string; imageIOUrl: string; meshIOUrl: string; pipelinesUrl: string; }
   const webWorkersUrl = config.webWorkersUrl
   if (typeof webWorkersUrl !== 'undefined') {
     console.warn('itkConfig webWorkersUrl is deprecated. Please use pipelineWorkerUrl with the full path to the pipeline worker.')
