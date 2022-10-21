@@ -1,2 +1,4 @@
-web-build
-wasi-build
+web-build/
+wasi-build/
+dist/
+stats.html

@@ -1,3 +1,5 @@
+import { Image } from 'itk-wasm'
+
 interface CastImageResult {
   /** WebWorker used for computation */
   webWorker: Worker | null

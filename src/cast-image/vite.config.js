@@ -7,14 +7,23 @@ const itkConfig = path.resolve(__dirname, 'src', 'itkConfigDevelopment.js')
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'ItkDicom',
-      fileName: (format) => format === 'es' ? 'itk-dicom.js' : 'itk-dicom.umd.js',
+      // entry: path.resolve(__dirname, 'src/index.ts'),
+      entry: {
+        lib: path.resolve(__dirname, 'src/index.ts'),
+        app: path.resolve(__dirname, 'src/demo/app.js'),
+      },
+      name: 'ItkCastImage',
+      fileName: (format, entryName) => {
+        const extension = format === 'es' ? '.js' : '.umd.js'
+        const fn = entryName === 'lib' ? `itk-cast-image${extension}` : `demo-app${extension}`
+        return fn
+      }
     },
     rollupOptions: {
       external: [],
       input: {
-        app: './index.html'
+        app: path.resolve(__dirname, 'index.html'),
+        lib: path.resolve(__dirname, 'src', 'index.ts'),
       },
       output: {
         globals: {
