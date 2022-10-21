@@ -60,11 +60,11 @@ if (EMSCRIPTEN)
   foreach(target ${targets})
     set_property(TARGET ${target}
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${PROJECT_BINARY_DIR}/../dist/public/pipelines
+      ${PROJECT_BINARY_DIR}/../public/pipelines
       )
     set_property(TARGET ${target}.umd
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${PROJECT_BINARY_DIR}/../dist/public/pipelines
+      ${PROJECT_BINARY_DIR}/../public/pipelines
       )
   endforeach()
 endif()

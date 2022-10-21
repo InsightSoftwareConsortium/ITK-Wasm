@@ -46,7 +46,7 @@
   },
   "homepage": "https://wasm.itk.org",
   "dependencies": {
-    "itk-wasm": "1.0.0-b.43"
+    "itk-wasm": "1.0.0-b.44"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.2",
@@ -63,6 +63,7 @@
     "@spectrum-web-components/theme": "^0.14.1",
     "ava": "^4.3.3",
     "cypress": "^10.7.0",
+    "itk-image-io": "1.0.0-b.44",
     "rollup": "^2.79.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-styles": "^4.0.0",
