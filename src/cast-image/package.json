@@ -15,11 +15,10 @@
   },
   "scripts": {
     "dev": "vite --port 8173",
-    "build": "npm run build:emscripten && npm run build:wasi && npm run build:spectrum && npm run build:browser && npm run build:node",
+    "build": "npm run build:emscripten && npm run build:wasi && npm run build:browser && npm run build:node",
     "build:emscripten": "itk-wasm build .",
     "build:wasi": "itk-wasm -i itkwasm/wasi:latest -b wasi-build build .",
     "build:node": "rollup -c ./rollup.node.config.js",
-    "build:spectrum": "rollup -c ./rollup.spectrum.config.js",
     "build:browser": "tsc && vite build --sourcemap",
     "build:browser:watch": "tsc && vite build --minify false --mode development --watch",
     "cypress:open": "npx cypress open",

@@ -1,4 +1,5 @@
-// import { castImage } from '../index.ts'
+import { castImage } from '../index.ts'
+import { interpret, assign, createMachine } from 'xstate'
 
 
 // promise-file-reader
@@ -90,7 +91,7 @@ const context = {
   processResult: null,
 }
 
-const demoAppMachine = XState.createMachine({
+const demoAppMachine = createMachine({
   id: 'demoApp',
   initial: 'creatingOptions',
   context,
@@ -111,7 +112,7 @@ const demoAppMachine = XState.createMachine({
         src: loadData,
         onDone: {
           actions: [
-            XState.assign({
+            assign({
               dicomData: (context, { data }) => { return data }
             }),
           ],
@@ -135,7 +136,7 @@ const demoAppMachine = XState.createMachine({
         src: processData,
         onDone: {
           actions: [
-            XState.assign({
+            assign({
               processResult: (context, { data }) => { return data }
             }),
             renderResults,
@@ -158,7 +159,7 @@ const demoAppMachine = XState.createMachine({
   }
 })
 
-const demoAppService = XState.interpret(demoAppMachine)
+const demoAppService = interpret(demoAppMachine)
 context.service = demoAppService
 demoAppService.start()
 

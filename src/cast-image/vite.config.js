@@ -38,7 +38,6 @@ export default defineConfig({
       targets: [
         { src: 'node_modules/itk-wasm/dist/web-workers/bundles/pipeline.worker.js', dest: 'dist/pipelines/web-workers/' },
         { src: 'node_modules/itk-wasm/dist/web-workers/min-bundles/pipeline.worker.js', dest: 'dist/pipelines/web-workers/', rename: 'pipeline.min.worker.js' },
-        { src: 'node_modules/xstate/dist/xstate.js', dest: 'dist/demo/' },
       ],
       hook: 'writeBundle'
     }),
