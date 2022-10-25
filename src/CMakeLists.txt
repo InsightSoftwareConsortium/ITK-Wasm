@@ -20,7 +20,6 @@ set(WebAssemblyInterface_SRCS
   itkWASMComponentTypeFromIOComponentEnum.cxx
   itkWASMPixelTypeFromIOPixelEnum.cxx
   itkSupportInputImageTypes.cxx
-  itkSupportInputImageTypesNoVectorImage.cxx
   itkSupportInputMeshTypes.cxx
   itkSupportInputPolyDataTypes.cxx
   )
