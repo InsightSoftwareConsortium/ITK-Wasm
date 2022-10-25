@@ -1,5 +1,5 @@
 import {
-  TextStream,
+  JsonObject,
   Image,
   InterfaceTypes,
   PipelineInput,
@@ -23,7 +23,7 @@ async function applyPresentationStateToImage(
     : Promise<ApplyPresentationStateToImageResult> {
 
   const desiredOutputs = [
-    { type: InterfaceTypes.TextStream },
+    { type: InterfaceTypes.JsonObject },
     { type: InterfaceTypes.Image },
   ]
   const inputs: [ PipelineInput ] = [
@@ -76,7 +76,7 @@ async function applyPresentationStateToImage(
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    presentationStateOutStream: (outputs[0].data as TextStream).data,
+    presentationStateOutStream: (outputs[0].data as JsonObject).data,
     outputImage: outputs[1].data as Image,
   }
   return result

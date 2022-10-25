@@ -2,7 +2,7 @@ import { Image } from 'itk-wasm'
 
 interface ApplyPresentationStateToImageNodeResult {
   /** Output overlay information */
-  presentationStateOutStream: string
+  presentationStateOutStream: Object
 
   /** Output image */
   outputImage: Image

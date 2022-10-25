@@ -6,6 +6,7 @@ export { default as TextStream } from './TextStream.js'
 export { default as BinaryStream } from './BinaryStream.js'
 export { default as TextFile } from './TextFile.js'
 export { default as BinaryFile } from './BinaryFile.js'
+export { default as JsonObject } from './JsonObject.js'
 
 export { default as TypedArray } from './TypedArray.js'
 export { default as IntTypes } from './IntTypes.js'

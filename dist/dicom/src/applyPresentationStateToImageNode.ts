@@ -1,5 +1,5 @@
 import {
-  TextStream,
+  JsonObject,
   Image,
   InterfaceTypes,
   PipelineInput,
@@ -24,7 +24,7 @@ async function applyPresentationStateToImageNode(  imageIn: Uint8Array,
     : Promise<ApplyPresentationStateToImageNodeResult> {
 
   const desiredOutputs = [
-    { type: InterfaceTypes.TextStream },
+    { type: InterfaceTypes.JsonObject },
     { type: InterfaceTypes.Image },
   ]
   const inputs: [ PipelineInput ] = [
@@ -75,7 +75,7 @@ async function applyPresentationStateToImageNode(  imageIn: Uint8Array,
   }
 
   const result = {
-    presentationStateOutStream: (outputs[0].data as TextStream).data,
+    presentationStateOutStream: (outputs[0].data as JsonObject).data,
     outputImage: outputs[1].data as Image,
   }
   return result

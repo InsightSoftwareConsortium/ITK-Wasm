@@ -5,7 +5,7 @@ interface ApplyPresentationStateToImageResult {
   webWorker: Worker | null
 
   /** Output overlay information */
-  presentationStateOutStream: string
+  presentationStateOutStream: Object
 
   /** Output image */
   outputImage: Image

@@ -123,9 +123,9 @@ test('Apply presentation state to dicom image.', async t => {
   const pstateFileBuffer = fs.readFileSync(pstateFilePath)
   const inputPState = new Uint8Array(pstateFileBuffer)
 
-  const { presentationStateOutStream, outputImage } = await applyPresentationStateToImageNode(inputImage, {presentationStateFile: inputPState})
+  const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode(inputImage, {presentationStateFile: inputPState})
 
-  t.assert(presentationStateOutStream != null)
+  t.assert(pstateJsonOut != null)
   t.assert(outputImage != null)
 
   t.assert(outputImage.imageType.dimension === 2)
@@ -138,14 +138,15 @@ test('Apply presentation state to dicom image.', async t => {
   t.assert(arrayEquals(outputImage.direction, [1, 0, 0, 1]))
   t.assert(arrayEquals(outputImage.size, [512, 512]))
 
-  const baselineJson = 'gsps-pstate-baseline.json'
-  const baselineJsonFilePath = `../../build-emscripten/ExternalData/test/Input/${baselineJson}`
+  const baselineJsonFile = 'gsps-pstate-baseline.json'
+  const baselineJsonFilePath = `../../build-emscripten/ExternalData/test/Input/${baselineJsonFile}`
   const baselineJsonFileBuffer = fs.readFileSync(baselineJsonFilePath)
   // the slice operation removes the last EOF char from the baseline file.
   const baselineJsonString = baselineJsonFileBuffer.toString().slice(0, -1)
-
-  t.assert(baselineJsonString === presentationStateOutStream)
-  t.assert(baselineJsonString.length === presentationStateOutStream.length)
+  const baselineJsonObject = JSON.parse(baselineJsonString)
+  t.assert(baselineJsonObject.PresentationLabel === pstateJsonOut.PresentationLabel)
+  t.assert(baselineJsonObject.PresentationSizeMode === pstateJsonOut.PresentationSizeMode)
+  t.assert(baselineJsonObject.toString() === pstateJsonOut.toString())
 
   const baselineImage = 'gsps-pstate-image-baseline.pgm'
   const baselineImageFilePath = `../../build-emscripten/ExternalData/test/Input/${baselineImage}`

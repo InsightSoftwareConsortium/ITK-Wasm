@@ -479,7 +479,7 @@ int main(int argc, char *argv[])
   // Outputs
   // Metadata output regarding overlays
   itk::wasm::OutputTextStream pstateOutStream;
-  pipeline.add_option("presentation-state-out-stream", pstateOutStream, "Output overlay information")->type_name("OUTPUT_TEXT_STREAM");
+  pipeline.add_option("presentation-state-out-stream", pstateOutStream, "Output overlay information")->type_name("OUTPUT_JSON");
   // Processed output image
   constexpr unsigned int Dimension = 2;
   using PixelType = unsigned char;

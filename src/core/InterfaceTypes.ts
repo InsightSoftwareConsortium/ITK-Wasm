@@ -6,7 +6,8 @@ const InterfaceTypes = {
   BinaryStream: 'InterfaceBinaryStream',
   Image: 'InterfaceImage',
   Mesh: 'InterfaceMesh',
-  PolyData: 'InterfacePolyData'
+  PolyData: 'InterfacePolyData',
+  JsonObject: 'InterfaceJsonObject',
 } as const
 
 export default InterfaceTypes

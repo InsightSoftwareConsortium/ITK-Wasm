@@ -245,6 +245,7 @@ const interfaceJsonTypeToTypeScriptType = new Map([
   ['BOOL', 'boolean'],
   ['TEXT', 'string'],
   ['INT', 'number'],
+  ['OUTPUT_JSON', 'Object'],
 ])
 
 const interfaceJsonTypeToInterfaceType = new Map([
@@ -262,6 +263,7 @@ const interfaceJsonTypeToInterfaceType = new Map([
   ['OUTPUT_MESH', 'Mesh'],
   ['INPUT_POLYDATA', 'PolyData'],
   ['OUTPUT_POLYDATA', 'PolyData'],
+  ['OUTPUT_JSON', 'JsonObject'],
 ])
 
 function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false) {
@@ -511,7 +513,7 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
     interfaceJson.outputs.forEach((output, index) => {
       const camel = camelCase(output.name)
       const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-      if (interfaceType.includes('Text') || interfaceType.includes('Binary')) {
+      if (interfaceType.includes('Text') || interfaceType.includes('Binary') || interfaceType.includes('JsonObject')) {
         functionContent += `    ${camel}: (outputs[${index.toString()}].data as ${interfaceType}).data,\n`
       } else {
         functionContent += `    ${camel}: outputs[${index.toString()}].data as ${interfaceType},\n`
