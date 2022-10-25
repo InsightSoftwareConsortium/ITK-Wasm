@@ -3,8 +3,9 @@ import test from 'ava'
 import { structuredReportToTextNode } from '../dist/itk-dicom.node.js'
 import { structuredReportToHtmlNode } from '../dist/itk-dicom.node.js'
 import { readDicomEncapsulatedPdfNode } from '../dist/itk-dicom.node.js'
+import { castImageNode } from '../dist/cast-image.node.js'
 
-test('structuredReportToText', async t => {
+test('castImage scalar identity', async t => {
 
   const fileName = '88.33-comprehensive-SR.dcm'
   const testFilePath = `../../build-emscripten/ExternalData/test/Input/${fileName}`
