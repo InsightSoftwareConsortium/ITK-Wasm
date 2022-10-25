@@ -1,5 +1,6 @@
 import {
   Image,
+  PixelTypes,
   InterfaceTypes,
   PipelineInput,
   runPipelineNode
@@ -18,7 +19,7 @@ import path from 'path'
  *
  * @returns {Promise<CastImageNodeResult>} - result object
  */
-async function castImageNode(  inputImage: Image,
+async function castImageNode(inputImage: Image,
   options: CastImageOptions = {})
     : Promise<CastImageNodeResult> {
 
@@ -43,7 +44,27 @@ async function castImageNode(  inputImage: Image,
     args.push('--pixel-type', options.pixelType.toString())
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'cast-image')
+  const imageType = inputImage.imageType
+
+  const dimension = imageType.dimension
+  if (dimension !== 2 && dimension !== 3) {
+    throw new Error(`Currently unsupported dimension ${dimension}`)
+  }
+
+  let postfix = null
+  switch(imageType.pixelType) {
+    case PixelTypes.Scalar: 
+      postfix = `scalarvectorimage${imageType.componentType}-input`
+      break
+    case PixelTypes.VariableLengthVector: 
+      postfix = `scalarvectorimage${imageType.componentType}-input`
+      break
+    default:
+      throw new Error(`Currently unsupported pixel type ${imageType.pixelType}`)
+  }
+  // console.log(inputImage.imageType.)
+
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'public', 'pipelines', `cast-image-${postfix}`)
 
   const {
     returnValue,
