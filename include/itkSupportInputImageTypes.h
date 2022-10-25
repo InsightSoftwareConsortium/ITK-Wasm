@@ -76,7 +76,7 @@ main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("support-multiple", "Test supporting multiple input image types", argc, argv);
 
-  // Supports the pixels types uint8_t, float
+  // Supports the pixels types uint8_t, float for itk::Image, itk::VectorImage
   // Supports the image dimensions 2, 3
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
    uint8_t,
@@ -132,7 +132,7 @@ private:
     using PixelType = TPixel;
     using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
 
-    if (passThrough || imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString && imageType.pixelType == MapPixelType<PixelType>::PixelString)
+    if (passThrough || imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString && imageType.pixelType.rfind("Variable", 0) == 0 || imageType.pixelType == MapPixelType<PixelType>::PixelString)
     {
       if (imageType.pixelType == "VariableLengthVector" || imageType.pixelType == "VariableSizeMatrix" )
       {

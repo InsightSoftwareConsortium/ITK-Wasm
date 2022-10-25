@@ -130,7 +130,7 @@ private:
     using PixelType = TPixel;
     using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
 
-    if (passThrough || imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString && imageType.pixelType == MapPixelType<PixelType>::PixelString)
+    if (passThrough || imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString && imageType.pixelType.rfind("Variable", 0) == 0 || imageType.pixelType == MapPixelType<PixelType>::PixelString)
     {
       if (imageType.pixelType == "VariableLengthVector" || imageType.pixelType == "VariableSizeMatrix" )
       {
