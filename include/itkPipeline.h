@@ -23,6 +23,8 @@
 #include <CLI/Error.hpp>
 
 #include "itkMacro.h"
+#include "itkImage.h"
+#include "itkVectorImage.h"
 
 // Short circuit help output without raising an exception (currently not
 // available in WASI)

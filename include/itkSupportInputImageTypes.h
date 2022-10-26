@@ -28,6 +28,7 @@
 #include "itkVectorImage.h"
 #include "itkImageIOBase.h"
 #include "itkImageIOFactory.h"
+#include "itkSpecializedPipelineFunctor.h"
 
 namespace itk
 {
@@ -134,19 +135,9 @@ private:
 
     if (passThrough || imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString && imageType.pixelType.rfind("Variable", 0) == 0 || imageType.pixelType == MapPixelType<PixelType>::PixelString)
     {
-      if (imageType.pixelType == "VariableLengthVector" || imageType.pixelType == "VariableSizeMatrix" )
+      if (passThrough || imageType.pixelType == "VariableLengthVector" || imageType.pixelType == "VariableSizeMatrix" || imageType.components == ConvertPixelTraits::GetNumberOfComponents() )
       {
-        using ImageType = itk::VectorImage<typename ConvertPixelTraits::ComponentType, Dimension>;
-
-        using PipelineType = TPipelineFunctor<ImageType>;
-        return PipelineType()(pipeline);
-      }
-      else if(passThrough || imageType.components == ConvertPixelTraits::GetNumberOfComponents() )
-      {
-        using ImageType = Image<PixelType, Dimension>;
-
-        using PipelineType = TPipelineFunctor<ImageType>;
-        return PipelineType()(pipeline);
+        return SpecializedPipelineFunctor<TPipelineFunctor, Dimension, PixelType>()(pipeline);
       }
     }
 
