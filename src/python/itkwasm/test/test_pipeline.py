@@ -1,9 +1,14 @@
 from pathlib import Path, PurePosixPath
+import tempfile
+from dataclasses import asdict
 
-from itkwasm import InterfaceTypes, TextStream, BinaryStream, PipelineInput, PipelineOutput, Pipeline, TextFile, BinaryFile
+import itk
+import numpy as np
+
+from itkwasm import InterfaceTypes, TextStream, BinaryStream, PipelineInput, PipelineOutput, Pipeline, TextFile, BinaryFile, Image
 
 test_input_dir = Path(__file__).resolve().parent / 'input'
-import tempfile
+test_baseline_dir = Path(__file__).resolve().parent / 'baseline'
 
 
 def test_stdout_stderr():
@@ -88,3 +93,35 @@ def test_pipeline_input_output_files():
             assert content[1] == 173
             assert content[2] == 190
             assert content[3] == 239
+
+def test_pipeline_write_read_image():
+    pipeline = Pipeline(test_input_dir / 'median-filter-test.wasi.wasm')
+
+    data = test_input_dir / "cthead1.png"
+    itk_image = itk.imread(data, itk.UC)
+    itk_image_dict = itk.dict_from_image(itk_image)
+    itkwasm_image = Image(**itk_image_dict)
+
+    pipeline_inputs = [
+        PipelineInput(InterfaceTypes.Image, itkwasm_image),
+    ]
+
+    pipeline_outputs = [
+        PipelineOutput(InterfaceTypes.Image),
+    ]
+
+    args = [
+        '0',
+        '0',
+        '--radius', '2', '--memory-io',]
+
+    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
+
+    out_image = itk.image_from_dict(asdict(outputs[0].data))
+    # To be addresses in itk-5.3.1
+    out_image.SetRegions([256,256])
+
+    baseline = itk.imread(test_baseline_dir / "test_pipeline_write_read_image.png")
+
+    difference = np.sum(itk.comparison_image_filter(out_image, baseline))
+    assert difference == 0.0

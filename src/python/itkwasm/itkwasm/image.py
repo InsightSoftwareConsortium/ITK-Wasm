@@ -46,4 +46,3 @@ class Image:
 
         if len(self.size) == 0:
             self.size += [1,] * dimension
-        

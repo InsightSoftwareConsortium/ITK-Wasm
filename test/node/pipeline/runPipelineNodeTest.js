@@ -112,10 +112,10 @@ test('runPipelineNode writes and reads an itk.Image via memory io', (t) => {
   return readImageLocalFile(testInputFilePath)
     .then(function (image) {
       const pipelinePath = path.resolve('test', 'pipelines', 'median-filter-pipeline', 'emscripten-build', 'median-filter-test')
-      const args = ['--memory-io',
+      const args = [
         '0',
         '0',
-        '--radius', '4']
+        '--radius', '4', '--memory-io']
       const desiredOutputs = [
         { type: InterfaceTypes.Image }
       ]
