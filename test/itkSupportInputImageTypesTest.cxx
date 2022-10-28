@@ -52,6 +52,7 @@ itkSupportInputImageTypesTest(int argc, char * argv[])
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
    uint8_t,
-   float>
+   float,
+   itk::VariableLengthVector<uint8_t>>
   ::Dimensions<2U,3U>("input-image", pipeline);
 }
