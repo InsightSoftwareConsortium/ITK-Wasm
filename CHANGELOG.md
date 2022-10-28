@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.45](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.44...itk-wasm-v1.0.0-b.45) (2022-10-28)
+
+
+### Features
+
+* **SupportInputImageTypes:** Support VectorImage as template specialization ([0ec818e](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/0ec818e2d9ee4a4394a72b02a0e0d1e1628bae49))
+
 # [1.0.0-b.44](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.43...itk-wasm-v1.0.0-b.44) (2022-10-21)
 
 
