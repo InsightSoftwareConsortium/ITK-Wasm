@@ -34,6 +34,8 @@ export { default as bufferToTypedArray } from './bufferToTypedArray.js'
 export { default as copyImage } from './copyImage.js'
 export { default as stackImages } from './stackImages.js'
 export { default as imageSharedBufferOrCopy } from './imageSharedBufferOrCopy.js'
+export { default as CastImageOptions } from './CastImageOptions.js'
+export { default as castImage } from './castImage.js'
 
 export { default as WorkerPool } from './WorkerPool.js'
 export { default as WorkerPoolFunction } from './WorkerPoolFunction.js'
