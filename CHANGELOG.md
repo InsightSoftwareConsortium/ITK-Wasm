@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.46](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.45...itk-wasm-v1.0.0-b.46) (2022-10-29)
+
+
+### Features
+
+* **castImage:** Function to cast to pixelType, componentType ([52500fe](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/52500fefae7aec04327f4fc991c14e7c60cf1bf0))
+
 # [1.0.0-b.45](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.44...itk-wasm-v1.0.0-b.45) (2022-10-28)
 
 
