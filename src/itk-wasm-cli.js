@@ -8,7 +8,7 @@ import { Command, Option } from 'commander/esm.mjs'
 
 const program = new Command()
 
-const defaultImageTag = '20221006-7277a6da'
+const defaultImageTag = '20221101-a2f1bdfa'
 
 // Array of types that will require an import from itk-wasm
 const typesRequireImport = ['Image']
