@@ -54,6 +54,10 @@ ExternalData_Expand_Arguments(
   DATA{Input/88.67-radiation-dose-SR.dcm}
   DATA{Input/104.1-SR-printed-to-pdf.dcm}
   DATA{Input/test-style.css}
+  DATA{Input/gsps-pstate-test-input-image.dcm}
+  DATA{Input/gsps-pstate-test-input-pstate.dcm}
+  DATA{Input/gsps-pstate-baseline.json}
+  DATA{Input/gsps-pstate-image-baseline.pgm}
 
   DATA{Baseline/web_worker_pool.cy.png}
   )

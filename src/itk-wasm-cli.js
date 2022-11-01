@@ -10,6 +10,9 @@ const program = new Command()
 
 const defaultImageTag = '20221006-7277a6da'
 
+// Array of types that will require an import from itk-wasm
+const typesRequireImport = ['Image']
+
 function processCommonOptions() {
   const options = program.opts()
 
@@ -242,6 +245,7 @@ const interfaceJsonTypeToTypeScriptType = new Map([
   ['BOOL', 'boolean'],
   ['TEXT', 'string'],
   ['INT', 'number'],
+  ['OUTPUT_JSON', 'Object'],
 ])
 
 const interfaceJsonTypeToInterfaceType = new Map([
@@ -259,6 +263,7 @@ const interfaceJsonTypeToInterfaceType = new Map([
   ['OUTPUT_MESH', 'Mesh'],
   ['INPUT_POLYDATA', 'PolyData'],
   ['OUTPUT_POLYDATA', 'PolyData'],
+  ['OUTPUT_JSON', 'JsonObject'],
 ])
 
 function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false) {
@@ -294,6 +299,10 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
     if (!forNode) {
       resultContent += `  /** WebWorker used for computation */\n  webWorker: Worker | null\n\n`
     }
+
+    // track unique output types in this set
+    const importTypes = new Set()
+
     interfaceJson.outputs.forEach((output) => {
       if (!interfaceJsonTypeToTypeScriptType.has(output.type)) {
 
@@ -302,8 +311,16 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
       }
       resultContent += `  /** ${output.description} */\n`
       const outputType = interfaceJsonTypeToTypeScriptType.get(output.type)
+      if(typesRequireImport.includes(outputType)) {
+        importTypes.add(outputType)
+      }
       resultContent += `  ${camelCase(output.name)}: ${outputType}\n\n`
     })
+
+    // Insert the import statement in the beginning for the file.
+    if(importTypes.size !== 0)
+      resultContent = `import { ${Array.from(importTypes).join(',')} } from 'itk-wasm'\n\n` + resultContent;
+
     resultContent += `}\n\nexport default ${modulePascalCase}${nodeText}Result\n`
     fs.writeFileSync(path.join(srcOutputDir, `${modulePascalCase}${nodeText}Result.ts`), resultContent)
     indexContent += `\n\nimport ${modulePascalCase}${nodeText}Result from './${modulePascalCase}${nodeText}Result.js'\n`
@@ -496,7 +513,7 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
     interfaceJson.outputs.forEach((output, index) => {
       const camel = camelCase(output.name)
       const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-      if (interfaceType.includes('Text') || interfaceType.includes('Binary')) {
+      if (interfaceType.includes('Text') || interfaceType.includes('Binary') || interfaceType.includes('JsonObject')) {
         functionContent += `    ${camel}: (outputs[${index.toString()}].data as ${interfaceType}).data,\n`
       } else {
         functionContent += `    ${camel}: outputs[${index.toString()}].data as ${interfaceType},\n`

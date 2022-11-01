@@ -1,7 +1,7 @@
 title: Interface Types
 ---
 
-itk-wasm execution pipelines support the following [interface types](https://github.com/InsightSoftwareConsortum/itk-wasm/tree/master/src/core/InterfaceTypes.ts):
+itk-wasm execution pipelines support the following [interface types](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/src/core/InterfaceTypes.ts):
 
 - [TextFile](../api/TextFile.html)
 - [BinaryFile](../api/BinaryFile.html)
@@ -10,6 +10,7 @@ itk-wasm execution pipelines support the following [interface types](https://git
 - [Image](../api/Image.html)
 - [Mesh](../api/Mesh.html)
 - [PolyData](../api/PolyData.html)
+- [JsonObject](../api/JsonObject.html)
 
 These interfaces types are supported in the [Emscripten interface](../api/runPipeline.html), WASI embedding interfaces, and native or virtual [filesystem IO](./file_formats.html).
 

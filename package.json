@@ -25,6 +25,7 @@
     "doc": "kw-doc -c ./doc/config.cjs",
     "doc:www": "kw-doc -c ./doc/config.cjs -s",
     "commit": "git cz",
+    "bindgen": "node ./src/itk-wasm-cli.js bindgen ./dist/dicom/src ./dist/dicom/public/pipelines/*.wasm",
     "build": "npm run build:emscripten && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack && node ./src/io/internal/packages/package-json-gen.cjs",
     "build:debug": "npm run build:emscripten -- --debug && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack -- --mode development",
     "build:tsc": "tsc --pretty",

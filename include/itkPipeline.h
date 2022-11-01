@@ -26,6 +26,8 @@
 #include "itkImage.h"
 #include "itkVectorImage.h"
 
+#include "rapidjson/document.h"
+
 // Short circuit help output without raising an exception (currently not
 // available in WASI)
 #define ITK_WASM_PARSE(pipeline) \
@@ -106,6 +108,26 @@ using CLI::ParseError;
 using CLI::Success;
 using CLI::Config;
 
+/**
+ * @brief Create a rapidjson kArrayType value from an STL style container.
+ *
+ * @tparam Iteratorable Any container type that supports STL style iterator.
+ * @param container Container object.
+ * @param allocator Rapidjson allocator.
+ * @return rapidjson::Value rapidjson Value of kArrayType which contains all
+ *  the values from the input container.
+ */
+template<typename Iteratorable>
+rapidjson::Value getArrayJson(Iteratorable container, rapidjson::Document::AllocatorType& allocator)
+{
+  rapidjson::Value value(rapidjson::kArrayType);
+  for(auto iter = container.begin(); iter != container.end(); ++iter)
+  {
+    value.PushBack(rapidjson::Value(*iter), allocator);
+  }
+  return value;
+}
+
 class Pipeline: public CLI::App
 {
 public:
@@ -142,6 +164,7 @@ private:
     int m_argc;
     char **m_argv;
 };
+
 
 } // end namespace wasm
 } // end namespace itk
