@@ -1,5 +1,16 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.47](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.46...itk-wasm-v1.0.0-b.47) (2022-11-01)
+
+
+### Features
+
+* **JsonObject:** Add JSON_OUTPUT as output type ([ec4176f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/ec4176f9a589cdfebde573c0afbfcd1fa91942ce))
+* **pstate:** Add dcmp2pgm to itk-wasm as apply-presentation-state-to-image operation ([7b0712f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/7b0712f842ecf795b2ec4ce9e80d0d4478f48a97))
+* **pstate:** Convert presentation-state information to JSON ([fa1bdca](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/fa1bdcab9343c1dda2f50be744c94890a567ab8d))
+* **pstate:** Generate TS bindings for apply-presentation-state-to-image operation ([5211a78](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/5211a78c24de8d368be982a36e6cbd3722a98ace))
+* **pstate:** Integrate apply-presentation-state-to-image with itk::wasm::Pipeline ([1c49353](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/1c49353db2dde2f2becd2d264f0f2f9d7cff68a4))
+
 # [1.0.0-b.46](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.45...itk-wasm-v1.0.0-b.46) (2022-10-29)
 
 
