@@ -7,7 +7,7 @@ const InterfaceTypes = {
   Image: 'InterfaceImage',
   Mesh: 'InterfaceMesh',
   PolyData: 'InterfacePolyData',
-  JsonObject: 'InterfaceJsonObject',
+  JsonObject: 'InterfaceJsonObject'
 } as const
 
 export default InterfaceTypes

@@ -21,7 +21,7 @@
 #include "itkPipeline.h"
 #include "itkInputImage.h"
 #include "itkOutputImage.h"
-#include "itkSupportInputImageTypesNoVectorImage.h"
+#include "itkSupportInputImageTypes.h"
 #include "itkRGBPixel.h"
 #include "itkRGBToLuminanceImageFilter.h"
 #include "itkNumericTraits.h"
@@ -138,7 +138,7 @@ int main( int argc, char * argv[] )
 {
   itk::wasm::Pipeline pipeline("median-filter", "Apply a median filter to an image", argc, argv);
 
-  return itk::wasm::SupportInputImageTypesNoVectorImage<PipelineFunctor,
+  return itk::wasm::SupportInputImageTypes<PipelineFunctor,
    uint8_t,
    itk::RGBPixel< uint8_t >,
    float>
