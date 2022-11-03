@@ -2,7 +2,7 @@
 
 *Note: itk-wasm is currently in the beta development stage. The interface is relatively stable while functionality is currently being fleshed out. Updates for the rest of the documentation for changes from itk.js to itk-wasm is in progress. Last updated March 11th, 2022.*
 
-**itk-wasm** is a major upgrade with a focus on univeral, performant computing in WebAssembly. The itk.js to itk-wasm transition also brings improvements including modern, elegant programming interfaces, accelerated performance, and execution beyond JavaScript thanks to [WASI](https://wasi.dev).
+**itk-wasm** is a major upgrade with a focus on universal, performant computing in WebAssembly. The itk.js to itk-wasm transition also brings improvements, including modern, elegant programming interfaces, accelerated performance, and execution beyond JavaScript thanks to [WASI](https://wasi.dev).
 
 Most itk.js client code will simply need to update its import statements to leverage itk-wasm. However, there are also other more advanced changes. A description of the changes, their motivation, and example migration code can be found below.
 
