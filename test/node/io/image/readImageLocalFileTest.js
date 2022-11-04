@@ -5,7 +5,7 @@ import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile } from '../.
 
 const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cthead1.png')
 
-function verifyImage(t, image, componentType, pixelType) {
+function verifyImage (t, image, componentType, pixelType) {
   t.is(image.imageType.dimension, 2)
   t.is(image.imageType.componentType, componentType)
   t.is(image.imageType.pixelType, pixelType)

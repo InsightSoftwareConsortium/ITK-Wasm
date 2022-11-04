@@ -13,7 +13,7 @@ for (let ii = 0; ii < byteString.length; ++ii) {
 const cthead1SmallBlob = new window.Blob([intArray], { type: mimeString })
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
-function verifyImage(t, image, componentType, pixelType) {
+function verifyImage (t, image, componentType, pixelType) {
   t.is(image.imageType.dimension, 2, 'dimension')
   t.is(image.imageType.componentType, componentType)
   t.is(image.imageType.pixelType, pixelType)
@@ -86,7 +86,7 @@ export default function () {
   })
 
   test('readImageFile reads a File', async (t) => {
-    const { image, webWorker }  = await readImageFile(null, cthead1SmallFile)
+    const { image, webWorker } = await readImageFile(null, cthead1SmallFile)
     webWorker.terminate()
     const componentType = IntTypes.UInt8
     const pixelType = PixelTypes.Scalar
