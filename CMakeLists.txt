@@ -93,6 +93,7 @@ set(rang_INCLUDE_DIR "${rang_SOURCE_DIR}/include")
 set(libcbor_INCLUDE_DIR "${libcbor_SOURCE_DIR}/src")
 set(libcbor_EXPORT_DIR "${libcbor_BINARY_DIR}/src")
 set(libcbor_CONFIGURATION_DIR "${libcbor_BINARY_DIR}/")
+set(cpp_base64_INCLUDE_DIR "${cpp_base64_SOURCE_DIR}/include")
 
 set(BUILD_TESTING ${_itk_build_testing})
 set(BUILD_SHARED_LIBS ${_itk_build_shared})
@@ -107,8 +108,9 @@ set(WebAssemblyInterface_INCLUDE_DIRS
   ${libcbor_INCLUDE_DIR}
   ${libcbor_EXPORT_DIR}
   ${libcbor_CONFIGURATION_DIR}
+  ${cpp_base64_INCLUDE_DIR}
   )
-list(APPEND WebAssemblyInterface_LIBRARIES cbor)
+list(APPEND WebAssemblyInterface_LIBRARIES cbor cpp-base64)
 
 get_filename_component(_module_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(CMAKE_MODULE_PATH "${_module_dir}/CMake/" ${CMAKE_MODULE_PATH})
@@ -124,3 +126,6 @@ endif()
 itk_module_target_label(cbor)
 itk_module_target_export(cbor)
 itk_module_target_install(cbor)
+itk_module_target_label(cpp-base64)
+itk_module_target_export(cpp-base64)
+itk_module_target_install(cpp-base64)
