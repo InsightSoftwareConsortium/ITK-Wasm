@@ -10,16 +10,16 @@ import FloatTypes from './FloatTypes.js'
  * @param {Image} image - The input image
  * @param {CastImageOptions} options - specify the componentType and/or pixelType of the output
  */
-function castImage (inputImage: Image, options: CastImageOptions): Image {
+function castImage (inputImage: Image, options?: CastImageOptions): Image {
   const outputImageType = { ...inputImage.imageType }
 
-  if (typeof options.pixelType !== 'undefined') {
+  if (typeof options !== 'undefined' && typeof options.pixelType !== 'undefined') {
     outputImageType.pixelType = options.pixelType
     if (options.pixelType === PixelTypes.Scalar && outputImageType.components !== 1) {
       throw new Error('Cannot cast multi-component image to a scalar image')
     }
   }
-  if (typeof options.componentType !== 'undefined' && options.componentType !== inputImage.imageType.componentType) {
+  if (typeof options !== 'undefined' && typeof options.componentType !== 'undefined' && options.componentType !== inputImage.imageType.componentType) {
     outputImageType.componentType = options.componentType
   }
 
@@ -33,7 +33,7 @@ function castImage (inputImage: Image, options: CastImageOptions): Image {
   outputImage.metadata = { ...inputImage.metadata }
 
   if (inputImage.data !== null) {
-    if (typeof options.componentType !== 'undefined' && options.componentType !== inputImage.imageType.componentType) {
+    if (typeof options !== 'undefined' && typeof options.componentType !== 'undefined' && options.componentType !== inputImage.imageType.componentType) {
       switch (inputImage.imageType.componentType) {
         case IntTypes.UInt8:
         case IntTypes.Int8:
