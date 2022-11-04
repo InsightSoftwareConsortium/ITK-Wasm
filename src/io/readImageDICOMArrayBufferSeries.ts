@@ -84,7 +84,7 @@ const readImageDICOMArrayBufferSeries = async (
   fileNamesBackwardsCompatibility?: string[]
 ): Promise<ReadImageFileSeriesResult> => {
   let singleSortedSeries = false
-  let fileNames: undefined | string[] = undefined
+  let fileNames: undefined | string[]
   if (typeof options === 'boolean') {
     // Backwards compatibility
     singleSortedSeries = options
@@ -102,7 +102,7 @@ const readImageDICOMArrayBufferSeries = async (
   }
   const validFileNames = (typeof fileNames !== 'undefined') && fileNames.length === arrayBuffers.length
   const fileDescriptions = arrayBuffers.map((ab, index) => {
-    // @ts-ignore: TS2532: Object is possibly 'undefined'.
+    // @ts-expect-error: TS2532: Object is possibly 'undefined'.
     return { path: validFileNames ? fileNames[index] : `${index}.dcm`, data: new Uint8Array(ab) }
   })
   if (singleSortedSeries) {

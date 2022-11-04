@@ -29,7 +29,7 @@ async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: Arra
     stderr: string
     outputs: any[]
   }
-  let mimeType = undefined
+  let mimeType
   if (typeof options === 'undefined') {
   } else if (typeof options === 'string') {
     // backwards compatibility

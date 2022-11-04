@@ -6,7 +6,7 @@ import ReadImageArrayBufferOptions from './ReadImageArrayBufferOptions.js'
 
 async function readImageBlob (webWorker: Worker | null, blob: Blob, fileName: string, options?: ReadImageArrayBufferOptions | string): Promise<ReadImageResult> {
   const arrayBuffer = await readAsArrayBuffer(blob)
-  return readImageArrayBuffer(webWorker, arrayBuffer, fileName, options)
+  return await readImageArrayBuffer(webWorker, arrayBuffer, fileName, options)
 }
 
 export default readImageBlob
