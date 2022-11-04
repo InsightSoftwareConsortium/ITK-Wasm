@@ -2,12 +2,14 @@ import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import Image from '../core/Image.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
+import castImage from '../core/castImage.js'
 
 import config from '../itkConfig.js'
 
 import ReadImageResult from './ReadImageResult.js'
+import ReadImageArrayBufferOptions from './ReadImageArrayBufferOptions.js'
 
-async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadImageResult> {
+async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, options?: ReadImageArrayBufferOptions | string): Promise<ReadImageResult> {
   let worker = webWorker
   const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker)
   worker = usedWorker
@@ -27,6 +29,16 @@ async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: Arra
     stderr: string
     outputs: any[]
   }
+  let mimeType = undefined
+  if (typeof options === 'undefined') {
+  } else if (typeof options === 'string') {
+    // backwards compatibility
+    mimeType = options
+  } else if (typeof options === 'object') {
+    if (typeof options.mimeType === 'string') {
+      mimeType = options.mimeType
+    }
+  }
   const result: RunReadImagePipelineResult = await webworkerPromise.postMessage(
     {
       operation: 'readImage',
@@ -40,7 +52,12 @@ async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: Arra
     },
     transferables
   )
-  return { image: result.outputs[0].data as Image, webWorker: worker }
+  let image = result.outputs[0].data as Image
+  if (typeof options === 'object' && (typeof options.componentType !== 'undefined' || typeof options.pixelType !== 'undefined')) {
+    image = castImage(image, options)
+  }
+
+  return { image, webWorker: worker }
 }
 
 export default readImageArrayBuffer
