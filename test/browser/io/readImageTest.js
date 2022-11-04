@@ -55,7 +55,7 @@ export default function () {
   test('readImageArrayBuffer casts to the specified pixelType', async (t) => {
     const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
     const componentType = IntTypes.UInt16
-    const pixelType = PixelTypes.Scalar
+    const pixelType = PixelTypes.Vector
     const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png', { componentType, pixelType })
     webWorker.terminate()
     verifyImage(t, image, componentType, pixelType)
@@ -66,6 +66,22 @@ export default function () {
     webWorker.terminate()
     const componentType = IntTypes.UInt8
     const pixelType = PixelTypes.Scalar
+    verifyImage(t, image, componentType, pixelType)
+  })
+
+  test('readImageBlob casts to the specified componentType', async (t) => {
+    const componentType = IntTypes.UInt16
+    const { image, webWorker } = await readImageBlob(null, cthead1SmallBlob, 'cthead1Small.png', { componentType })
+    webWorker.terminate()
+    const pixelType = PixelTypes.Scalar
+    verifyImage(t, image, componentType, pixelType)
+  })
+
+  test('readImageBlob casts to the specified pixelType', async (t) => {
+    const componentType = IntTypes.UInt16
+    const pixelType = PixelTypes.Vector
+    const { image, webWorker } = await readImageBlob(null, cthead1SmallBlob, 'cthead1Small.png', { componentType, pixelType })
+    webWorker.terminate()
     verifyImage(t, image, componentType, pixelType)
   })
 
