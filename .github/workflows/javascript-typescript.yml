@@ -74,24 +74,3 @@ jobs:
         git config --global user.name "GitHub Actions"
         git config --global user.email "itk+community@discourse.itk.org"
         npx semantic-release
-
-    - name: Setup ipfs
-      uses: ibnesayeed/setup-ipfs@master
-      with:
-        ipfs_version: ^0.8
-
-    - name: Pin testing data
-      if: github.ref == 'refs/heads/master'
-      env:
-        PINATA_JWT: ${{ secrets.PINATA_JWT }}
-      run: |
-        mkdir itk-wasm-testing-data
-        rsync -v -r --exclude=Objects --exclude='*-hash-stamp' ./build-emscripten/ExternalData/ ./itk-wasm-testing-data/
-        new_cid=$(ipfs add -r -Q --cid-version 1 --raw-leaves itk-wasm-testing-data)
-
-        ipfs pin remote service add pinata https://api.pinata.cloud/psa "$PINATA_JWT"
-        if test $(ipfs pin remote ls --service=pinata --name=itk-wasm-testing-data --cid=$new_cid | wc -l) -lt 1; then
-          ipfs pin remote add --service=pinata --name=itk-wasm-testing-data $new_cid
-        else
-          echo "CID ${new_cid} already pinned on Pinata."
-        fi
