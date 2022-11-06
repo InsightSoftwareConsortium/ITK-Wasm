@@ -1,7 +1,7 @@
 title: Use the itk-wasm UMD module from a HTML script tag
 ---
 
-This example demonstrates how to use *itk-wasm* in a web browser application via its pre-built [UMD](https://github.com/umdjs/umd) module. This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk-wasm IO modules published on [jsdelivr.com](https://jsdelivr.com). Find the full example in the `itk-wasm/examples/UMD` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/UMD).
+This example demonstrates how to use *itk-wasm* in a web browser application via its pre-built [UMD](https://github.com/umdjs/umd) module. This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack.html). In this example, we re-use the itk-wasm IO modules published on [jsdelivr.com](https://jsdelivr.com). Find the full example in the `itk-wasm/examples/UMD` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/UMD).
 
 Inside the HTML `head`, load the itk-wasm UMD script:
 
@@ -20,7 +20,7 @@ Inside body JavaScript code, the `itk` object provides [itk-wasm API functions a
     webWorker.terminate();
 ```
 
-These JavaScript itk-wasm components are used by the HTML, CSS, and JavaScript of [the full example](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/examples/UMD/dist/index.html)
+These JavaScript itk-wasm components are used by the HTML, CSS, and JavaScript of [the full example](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/examples/UMD/dist/index.html)
 
 ## Simple HTTP server
 

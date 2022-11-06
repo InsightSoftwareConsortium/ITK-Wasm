@@ -60,7 +60,7 @@ The version of these packages follow the `itk-wasm` package version and should b
 1. `itk-image-io`
 2. `itk-mesh-io`
 
-An example that vendors these package's webassembly assets into an application for deployment can be found in the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack).
+An example that vendors these package's webassembly assets into an application for deployment can be found in the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Webpack).
 
 ## itkConfig.js content and usage
 
@@ -69,7 +69,7 @@ The `itkConfig.js` specifies where to look for the io webassembly modules and an
 The default `itkConfig.js` is configured to use the [JsDelivr](https://www.jsdelivr.com/) CDN, but you may want to override this
 default.
 
-In the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack) the io webassembly module assets are vendored into `/itk` directories, this module looks like:
+In the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Webpack) the io webassembly module assets are vendored into `/itk` directories, this module looks like:
 
 ```js
 const itkConfig = {
@@ -82,7 +82,7 @@ const itkConfig = {
 export default itkConfig
 ```
 
-And it can be injected into an application bundle by setting defining `alias`'s to the configuration module for `../itkConfig.js` and `../../itkConfig.js`. For other override configuration options, see the [Webpack](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Webpack) and Rollup (todo) examples.
+And it can be injected into an application bundle by setting defining `alias`'s to the configuration module for `../itkConfig.js` and `../../itkConfig.js`. For other override configuration options, see the [Webpack](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Webpack) and Rollup (todo) examples.
 
 ## CLI options
 

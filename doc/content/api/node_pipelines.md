@@ -7,7 +7,7 @@ Similar to the [web browser API](./browser_pipelines.html), most of these functi
 
 ---
 
-## runPipelineNode(pipelinePath: string, args: string[], outputs: [PipelineOutput](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/src/pipeline/PipelineInput.ts)[], inputs: [PipelineInput](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/src/pipeline/PipelineOutput.ts)[] | null): Promise<[RunPipelineResult](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/src/pipeline/RunPipelineResult.ts)>
+## runPipelineNode(pipelinePath: string, args: string[], outputs: [PipelineOutput](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/src/pipeline/PipelineInput.ts)[], inputs: [PipelineInput](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/src/pipeline/PipelineOutput.ts)[] | null): Promise<[RunPipelineResult](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/src/pipeline/RunPipelineResult.ts)>
 
 Run an itk-wasm Emscripten module with Node.js.
 
@@ -19,7 +19,7 @@ Run an itk-wasm Emscripten module with Node.js.
 
 `path` is the file path on the virtual filesystem to read after execution has completed.
 
-`type` is one of the [IOTypes](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/src/core/IOTypes.ts):
+`type` is one of the [IOTypes](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/src/core/IOTypes.ts):
 <dl>
   <dt><b>IOTypes.Text</b><dt><dd>A string. To write this data type in C++, write a plain text file with, e.g.  <a href="https://www.cplusplus.com/reference/fstream/ofstream">std::ofstream</a>.</dd>
   <dt><b>IOTypes.Binary</b><dt><dd>A binary <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a>. To write this data type in C++, read the binary file with, e.g.  <a href="https://www.cplusplus.com/reference/fstream/ofstream/">std::ofstream</a> with the `std::ofstream::binary` flag to <a href="https://www.cplusplus.com/reference/fstream/ofstream/open/">std::ofstream::open</a>.</dd>

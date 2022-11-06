@@ -49,7 +49,7 @@ Read an image from an [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web
 
 ## readImageHTTP(url: string): Promise<image: [Image](./Image.html)>
 
-Read a server-side generated image created with [`itk::WASMImageIO`](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/master/include/itkWASMImageIO.h). The `url` should point to a directory ending with `.iwi`. Inside the directory, an `index.json` file should be served, along with the pixel and direction buffer file at `${url}/data/data.raw` and `${url}/data/direction.raw`, respectively.
+Read a server-side generated image created with [`itk::WASMImageIO`](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/include/itkWASMImageIO.h). The `url` should point to a directory ending with `.iwi`. Inside the directory, an `index.json` file should be served, along with the pixel and direction buffer file at `${url}/data/data.raw` and `${url}/data/direction.raw`, respectively.
 
 ## readImageFileSeries(fileList: File[] | FileList, zSpacing: number = 1.0, zOrigin: number = 0.0, sortedSeries: boolean = false): Promise<{ image: [Image](./Image.html), webWorkerPool: WorkerPool }>
 

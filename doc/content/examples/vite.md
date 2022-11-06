@@ -1,7 +1,7 @@
 title: Using itk-wasm in a web browser application via Vite
 ---
 
-This example demonstrates how to use *itk-wasm* in a web browser application built with [Vite](https://vitejs.dev/). Find the code in [itk-wasm/examples/Vite](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Vite).
+This example demonstrates how to use *itk-wasm* in a web browser application built with [Vite](https://vitejs.dev/). Find the code in [itk-wasm/examples/Vite](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Vite).
 
 *itk-wasm* **asynchronously** downloads web worker JavaScript and WebAssembly Emscripten modules **on demand**.  For *itk-wasm* to work:
 
@@ -79,7 +79,7 @@ export default itkConfig
 
 ## Test the example
 
-In the example [directory](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/master/examples/Vite)
+In the example [directory](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Vite)
 
 ### Development 
 
