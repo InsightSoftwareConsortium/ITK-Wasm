@@ -3,8 +3,8 @@
 Verify the source tree.
 
 ```
-git checkout master
-git pull upstream master
+git checkout main
+git pull upstream main
 git clean -fdx
 npm ci
 

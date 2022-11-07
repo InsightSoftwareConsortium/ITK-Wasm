@@ -167,7 +167,7 @@
       "+([0-9])?(.{+([0-9]),x}).x",
       "release",
       {
-        "name": "master",
+        "name": "main",
         "channel": "beta",
         "prerelease": "b"
       }
