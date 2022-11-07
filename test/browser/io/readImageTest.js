@@ -93,6 +93,14 @@ export default function () {
     verifyImage(t, image, componentType, pixelType)
   })
 
+  test('readImageFile reads a File, given componentType, pixelType', async (t) => {
+    const componentType = IntTypes.UInt16
+    const pixelType = PixelTypes.Vector
+    const { image, webWorker } = await readImageFile(null, cthead1SmallFile, { componentType, pixelType })
+    webWorker.terminate()
+    verifyImage(t, image, componentType, pixelType)
+  })
+
   test('readImageFile re-uses a WebWorker', async (t) => {
     const { webWorker } = await readImageFile(null, cthead1SmallFile)
     const { image } = await readImageFile(webWorker, cthead1SmallFile)
