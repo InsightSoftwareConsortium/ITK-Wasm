@@ -7,12 +7,27 @@ import PipelineInput from '../pipeline/PipelineInput.js'
 import PipelineOutput from '../pipeline/PipelineOutput.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import getTransferable from '../core/getTransferable.js'
+import castImage from '../core/castImage.js'
 
+import WriteImageOptions from './WriteImageOptions.js'
 import WriteArrayBufferResult from './WriteArrayBufferResult.js'
 
-async function writeImageArrayBuffer (webWorker: Worker | null, image: Image, fileName: string, mimeType: string = '', useCompression: boolean = false): Promise<WriteArrayBufferResult> {
+async function writeImageArrayBuffer (webWorker: Worker | null, image: Image, fileName: string, options?: WriteImageOptions | string, useCompressionBackwardsCompatibility?: boolean
+): Promise<WriteArrayBufferResult> {
   if (typeof image === 'boolean') {
     throw new Error('useCompression is now at the last argument position in itk-wasm')
+  }
+
+  let mimeType = ''
+  if (typeof options === 'string') {
+    mimeType = options
+  }
+  let useCompression = false
+  if (typeof useCompressionBackwardsCompatibility === 'boolean') {
+    useCompression = useCompressionBackwardsCompatibility
+  }
+  if (typeof options === 'object' && typeof options.useCompression !== 'undefined') {
+    useCompression = options.useCompression
   }
 
   let worker = webWorker
@@ -27,8 +42,12 @@ async function writeImageArrayBuffer (webWorker: Worker | null, image: Image, fi
   const outputs = [
     { data: { path: filePath }, type: InterfaceTypes.BinaryFile }
   ] as PipelineOutput[]
+  let inputImage = image
+  if (typeof options === 'object' && (typeof options.componentType !== 'undefined' || typeof options.pixelType !== 'undefined')) {
+    inputImage = castImage(image, options)
+  }
   const inputs = [
-    { type: InterfaceTypes.Image, data: image }
+    { type: InterfaceTypes.Image, data: inputImage }
   ] as PipelineInput[]
 
   const transferables: ArrayBuffer[] = []

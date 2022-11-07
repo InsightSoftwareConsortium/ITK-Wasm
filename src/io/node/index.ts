@@ -12,7 +12,9 @@ export { default as readMeshLocalFile } from './../readMeshLocalFile.js'
 export { default as readDICOMTagsLocalFile } from './../readDICOMTagsLocalFile.js'
 export { default as readImageLocalDICOMFileSeries } from './../readImageLocalDICOMFileSeries.js'
 
+export { default as WriteImageOptions } from './../WriteImageOptions.js'
 export { default as writeImageLocalFile } from './../writeImageLocalFile.js'
+export { default as WriteMeshOptions } from './../WriteMeshOptions.js'
 export { default as writeMeshLocalFile } from './../writeMeshLocalFile.js'
 export { default as writeLocalFile } from './../writeLocalFile.js'
 

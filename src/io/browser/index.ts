@@ -29,7 +29,9 @@ export { default as readImageDICOMFileSeries } from './../readImageDICOMFileSeri
 export { default as ReadImageDICOMArrayBufferSeriesOptions } from './../ReadImageDICOMArrayBufferSeriesOptions.js'
 export { default as readImageDICOMArrayBufferSeries } from './../readImageDICOMArrayBufferSeries.js'
 
+export { default as WriteImageOptions } from './../WriteImageOptions.js'
 export { default as writeImageArrayBuffer } from './../writeImageArrayBuffer.js'
+export { default as WriteMeshOptions } from './../WriteMeshOptions.js'
 export { default as writeMeshArrayBuffer } from './../writeMeshArrayBuffer.js'
 export { default as writeArrayBuffer } from './../writeArrayBuffer.js'
 
