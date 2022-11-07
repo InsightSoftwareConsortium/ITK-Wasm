@@ -8,15 +8,19 @@ import Image from '../core/Image.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
+import ReadImageDICOMFileSeriesOptions from './ReadImageDICOMFileSeriesOptions.js'
+import castImage from '../core/castImage.js'
 
-/**
- * Read an image from a series of DICOM files on the local filesystem in Node.js.
- *
- * @param: filenames Array of filepaths containing a DICOM study / series on the local filesystem.
- * @param: singleSortedSeries: it is known that the files are from a single
- * sorted series.
- */
-async function readImageLocalDICOMFileSeries (fileNames: string[], singleSortedSeries: boolean = false): Promise<Image> {
+async function readImageLocalDICOMFileSeries (
+  fileNames: string[],
+  options?: ReadImageDICOMFileSeriesOptions | boolean
+): Promise<Image> {
+  let singleSortedSeries = false
+  if (typeof options === 'boolean') {
+    // Backwards compatibility
+    singleSortedSeries = options
+  }
+
   if (fileNames.length < 1) {
     throw new Error('No fileNames provided')
   }
@@ -44,7 +48,12 @@ async function readImageLocalDICOMFileSeries (fileNames: string[], singleSortedS
   ] as PipelineInput[]
   const { outputs } = runPipelineEmscripten(seriesReaderModule, args, desiredOutputs, inputs)
 
-  return outputs[0].data as Image
+  let image = outputs[0].data as Image
+  if (typeof options === 'object' && (typeof options.componentType !== 'undefined' || typeof options.pixelType !== 'undefined')) {
+    image = castImage(image, options)
+  }
+
+  return image
 }
 
 export default readImageLocalDICOMFileSeries

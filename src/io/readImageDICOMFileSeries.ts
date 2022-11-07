@@ -16,7 +16,7 @@ const readImageDICOMFileSeries = async (
 
   let optionsToPass: ReadImageDICOMArrayBufferSeriesOptions = {}
   if (typeof options === 'object') {
-    optionsToPass = options
+    optionsToPass = { ...options }
   }
   if (typeof options === 'boolean') {
     // Backwards compatibility
@@ -25,7 +25,7 @@ const readImageDICOMFileSeries = async (
 
   const fileNames = Array.from(fileList, (file) => file.name)
   optionsToPass.fileNames = fileNames
-  return readImageDICOMArrayBufferSeries(fileContents, optionsToPass)
+  return await readImageDICOMArrayBufferSeries(fileContents, optionsToPass)
 }
 
 export default readImageDICOMFileSeries
