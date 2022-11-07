@@ -34,17 +34,20 @@ if(NOT ITK_FORBID_DOWNLOADS)
     # Local IPFS gateway
     "http://127.0.0.1:8080/ipfs/%(hash)"
 
+    # Released data rsync'd to Kitware's Apache web server
+    "https://itk.org/files/ExternalData/%(algo)/%(hash)"
+
     # Restricted gateway with released data
     "https://itk.mypinata.cloud/ipfs/${ITK_WASM_TESTING_DATA_RELEASED_CID}/Objects/CID/%(hash)"
 
     # New data on web3.storage
     "https://w3s.link/ipfs/%(hash)"
 
-    # Released data on web3.storage
-    "https://${ITK_WASM_TESTING_DATA_RELEASED_CID}.ipfs.w3s.link/Objects/CID/%(hash)"
-
     # Released data on estuary.tech
     "https://${ITK_WASM_TESTING_DATA_RELEASED_CID}.ipfs.dweb.link/Objects/CID/%(hash)"
+
+    # Released data on web3.storage
+    "https://${ITK_WASM_TESTING_DATA_RELEASED_CID}.ipfs.w3s.link/Objects/CID/%(hash)"
 
     # Gateway for arbitrary new files, uploaded to web3.storage
     "https://dweb.link/ipfs/%(hash)"
