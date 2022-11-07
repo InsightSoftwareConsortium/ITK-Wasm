@@ -24,6 +24,7 @@ export { default as readImageHTTP } from './../readImageHTTP.js'
 
 export { default as readDICOMTags } from './../readDICOMTags.js'
 export { default as readDICOMTagsArrayBuffer } from './../readDICOMTagsArrayBuffer.js'
+export { default as ReadImageDICOMFileSeriesOptions } from './../ReadImageDICOMFileSeriesOptions.js'
 export { default as readImageDICOMFileSeries } from './../readImageDICOMFileSeries.js'
 export { default as ReadImageDICOMArrayBufferSeriesOptions } from './../ReadImageDICOMArrayBufferSeriesOptions.js'
 export { default as readImageDICOMArrayBufferSeries } from './../readImageDICOMArrayBufferSeries.js'
