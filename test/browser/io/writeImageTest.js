@@ -13,10 +13,18 @@ for (let ii = 0; ii < byteString.length; ++ii) {
 const cthead1SmallBlob = new window.Blob([intArray], { type: mimeString })
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
-const verifyImage = (t, image) => {
+const verifyImage = (t, image, expectedComponentType, expectedPixelType) => {
   t.is(image.imageType.dimension, 2, 'dimension')
-  t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
-  t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
+  let componentType = IntTypes.UInt8
+  if (expectedComponentType) {
+    componentType = expectedComponentType
+  }
+  let pixelType = PixelTypes.Scalar
+  if (expectedPixelType) {
+    pixelType = expectedPixelType
+  }
+  t.is(image.imageType.componentType, componentType, 'componentType')
+  t.is(image.imageType.pixelType, pixelType, 'pixelType')
   t.is(image.imageType.components, 1, 'components')
   t.is(image.origin[0], 0.0, 'origin[0]')
   t.is(image.origin[1], 0.0, 'origin[1]')
@@ -34,20 +42,25 @@ const verifyImage = (t, image) => {
 }
 
 export default function () {
-  test('writeImageArrayBuffer writes to an ArrayBuffer', (t) => {
-    return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
-      .then((arrayBuffer) => {
-        return readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png').then(function ({ image, webWorker }) {
-          webWorker.terminate()
-          const useCompression = false
-          return writeImageArrayBuffer(null, image, 'cthead1Small.png', useCompression)
-        })
-      })
-      .then(function ({ arrayBuffer: writtenArrayBuffer, webWorker }) {
-        webWorker.terminate()
-        return readImageArrayBuffer(null, writtenArrayBuffer, 'cthead1Small.png').then(function ({ image }) {
-          verifyImage(t, image)
-        })
-      })
+  test('writeImageArrayBuffer writes to an ArrayBuffer', async (t) => {
+    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
+    const useCompression = false
+    const { arrayBuffer: writtenArrayBuffer } = await writeImageArrayBuffer(null, image, 'cthead1Small.png', { useCompression })
+    webWorker.terminate()
+    const { image: imageSecondPass } = await readImageArrayBuffer(null, writtenArrayBuffer, 'cthead1Small.png')
+    verifyImage(t, imageSecondPass)
+  })
+
+  test('writeImageArrayBuffer writes to an ArrayBuffer, given componentType, pixelType', async (t) => {
+    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
+    const useCompression = false
+    const componentType = IntTypes.UInt16
+    const pixelType = PixelTypes.Vector
+    const { arrayBuffer: writtenArrayBuffer } = await writeImageArrayBuffer(null, image, 'cthead1Small.iwi.cbor', { useCompression, componentType, pixelType })
+    webWorker.terminate()
+    const { image: imageSecondPass } = await readImageArrayBuffer(null, writtenArrayBuffer, 'cthead1Small.iwi.cbor')
+    verifyImage(t, imageSecondPass, componentType, pixelType)
   })
 }

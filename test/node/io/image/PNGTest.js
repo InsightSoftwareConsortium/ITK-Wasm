@@ -24,10 +24,9 @@ const verifyImage = (t, image) => {
   t.is(image.data.length, 196608, 'data.length')
 }
 
-test('Test reading a PNG file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    verifyImage(t, image)
-  })
+test('Test reading a PNG file', async t => {
+  const image = await readImageLocalFile(testInputFilePath)
+  verifyImage(t, image)
 })
 
 test('Test writing a PNG file', t => {

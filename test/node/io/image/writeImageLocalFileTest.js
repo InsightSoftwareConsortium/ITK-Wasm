@@ -4,12 +4,20 @@ import path from 'path'
 import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
 
 const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cthead1.png')
-const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'writeImageLocalFileTest-cthead1.png')
+const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'writeImageLocalFileTest-cthead1.iwi.cbor')
 
-const verifyImage = (t, image) => {
+const verifyImage = (t, image, expectedComponentType, expectedPixelType) => {
   t.is(image.imageType.dimension, 2, 'dimension')
-  t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
-  t.is(image.imageType.pixelType, PixelTypes.RGB, 'pixelType')
+  let componentType = IntTypes.UInt8
+  if (expectedComponentType) {
+    componentType = expectedComponentType
+  }
+  let pixelType = PixelTypes.RGB
+  if (expectedPixelType) {
+    pixelType = expectedPixelType
+  }
+  t.is(image.imageType.componentType, componentType, 'componentType')
+  t.is(image.imageType.pixelType, pixelType, 'pixelType')
   t.is(image.imageType.components, 3, 'components')
   t.is(image.origin[0], 0.0, 'origin[0]')
   t.is(image.origin[1], 0.0, 'origin[1]')
@@ -24,14 +32,19 @@ const verifyImage = (t, image) => {
   t.is(image.data.length, 196608, 'data.length')
 }
 
-test('writeImageLocalFile writes a file path on the local filesystem', t => {
-  return readImageLocalFile(testInputFilePath)
-    .then(function (image) {
-      return writeImageLocalFile(image, testOutputFilePath)
-    })
-    .then(function () {
-      return readImageLocalFile(testOutputFilePath).then(function (image) {
-        verifyImage(t, image)
-      })
-    })
+test('writeImageLocalFile writes a file path on the local filesystem', async t => {
+  const image = await readImageLocalFile(testInputFilePath)
+  await writeImageLocalFile(image, testOutputFilePath)
+  const imageSecondPass = await readImageLocalFile(testOutputFilePath)
+  verifyImage(t, imageSecondPass)
+})
+
+test('writeImageLocalFile writes a file path on the local filesystem given componentType, pixelType', async t => {
+  const image = await readImageLocalFile(testInputFilePath)
+  const componentType = IntTypes.UInt16
+  const pixelType = PixelTypes.Vector
+  const outputFilePath = testOutputFilePath + 'componentTypePixelType.iwi.cbor'
+  await writeImageLocalFile(image, outputFilePath, { componentType, pixelType })
+  const imageSecondPass = await readImageLocalFile(outputFilePath)
+  verifyImage(t, imageSecondPass, componentType, pixelType)
 })

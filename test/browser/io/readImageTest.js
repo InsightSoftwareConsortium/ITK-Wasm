@@ -13,10 +13,10 @@ for (let ii = 0; ii < byteString.length; ++ii) {
 const cthead1SmallBlob = new window.Blob([intArray], { type: mimeString })
 const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
-const verifyImage = (t, image) => {
+function verifyImage (t, image, componentType, pixelType) {
   t.is(image.imageType.dimension, 2, 'dimension')
-  t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
-  t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
+  t.is(image.imageType.componentType, componentType)
+  t.is(image.imageType.pixelType, pixelType)
   t.is(image.imageType.components, 1, 'components')
   t.is(image.origin[0], 0.0, 'origin[0]')
   t.is(image.origin[1], 0.0, 'origin[1]')
@@ -34,42 +34,80 @@ const verifyImage = (t, image) => {
 }
 
 export default function () {
-  test('readImageArrayBuffer reads an ArrayBuffer', (t) => {
-    return PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
-      .then(arrayBuffer => {
-        return readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
-          .then(function ({ image, webWorker }) {
-            webWorker.terminate()
-            verifyImage(t, image)
-          })
-      })
+  test('readImageArrayBuffer reads an ArrayBuffer', async (t) => {
+    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
+    webWorker.terminate()
+    const componentType = IntTypes.UInt8
+    const pixelType = PixelTypes.Scalar
+    verifyImage(t, image, componentType, pixelType)
   })
 
-  test('readImageBlob reads a Blob', (t) => {
-    return readImageBlob(null, cthead1SmallBlob, 'cthead1Small.png')
-      .then(function ({ image, webWorker }) {
-        webWorker.terminate()
-        verifyImage(t, image)
-      })
+  test('readImageArrayBuffer casts to the specified componentType', async (t) => {
+    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    const componentType = IntTypes.UInt16
+    const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png', { componentType })
+    webWorker.terminate()
+    const pixelType = PixelTypes.Scalar
+    verifyImage(t, image, componentType, pixelType)
   })
 
-  test('readImageFile reads a File', (t) => {
-    return readImageFile(null, cthead1SmallFile)
-      .then(function ({ image, webWorker }) {
-        webWorker.terminate()
-        verifyImage(t, image)
-      })
+  test('readImageArrayBuffer casts to the specified pixelType', async (t) => {
+    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    const componentType = IntTypes.UInt16
+    const pixelType = PixelTypes.Vector
+    const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png', { componentType, pixelType })
+    webWorker.terminate()
+    verifyImage(t, image, componentType, pixelType)
   })
 
-  test('readImageFile re-uses a WebWorker', (t) => {
-    return readImageFile(null, cthead1SmallFile)
-      .then(function ({ image, webWorker }) {
-        return readImageFile(webWorker, cthead1SmallFile)
-          .then(function ({ image, webWorker }) {
-            webWorker.terminate()
-            verifyImage(t, image)
-          })
-      })
+  test('readImageBlob reads a Blob', async (t) => {
+    const { image, webWorker } = await readImageBlob(null, cthead1SmallBlob, 'cthead1Small.png')
+    webWorker.terminate()
+    const componentType = IntTypes.UInt8
+    const pixelType = PixelTypes.Scalar
+    verifyImage(t, image, componentType, pixelType)
+  })
+
+  test('readImageBlob casts to the specified componentType', async (t) => {
+    const componentType = IntTypes.UInt16
+    const { image, webWorker } = await readImageBlob(null, cthead1SmallBlob, 'cthead1Small.png', { componentType })
+    webWorker.terminate()
+    const pixelType = PixelTypes.Scalar
+    verifyImage(t, image, componentType, pixelType)
+  })
+
+  test('readImageBlob casts to the specified pixelType', async (t) => {
+    const componentType = IntTypes.UInt16
+    const pixelType = PixelTypes.Vector
+    const { image, webWorker } = await readImageBlob(null, cthead1SmallBlob, 'cthead1Small.png', { componentType, pixelType })
+    webWorker.terminate()
+    verifyImage(t, image, componentType, pixelType)
+  })
+
+  test('readImageFile reads a File', async (t) => {
+    const { image, webWorker } = await readImageFile(null, cthead1SmallFile)
+    webWorker.terminate()
+    const componentType = IntTypes.UInt8
+    const pixelType = PixelTypes.Scalar
+    verifyImage(t, image, componentType, pixelType)
+  })
+
+  test('readImageFile reads a File, given componentType, pixelType', async (t) => {
+    const componentType = IntTypes.UInt16
+    const pixelType = PixelTypes.Vector
+    const { image, webWorker } = await readImageFile(null, cthead1SmallFile, { componentType, pixelType })
+    webWorker.terminate()
+    verifyImage(t, image, componentType, pixelType)
+  })
+
+  test('readImageFile re-uses a WebWorker', async (t) => {
+    const { webWorker } = await readImageFile(null, cthead1SmallFile)
+    const { image } = await readImageFile(webWorker, cthead1SmallFile)
+    webWorker.terminate()
+    const componentType = IntTypes.UInt8
+    const pixelType = PixelTypes.Scalar
+    verifyImage(t, image, componentType, pixelType)
   })
 
   test('readImageFile throws a catchable error for an invalid file', (t) => {

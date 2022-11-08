@@ -4,10 +4,18 @@ import axios from 'axios'
 import { IntTypes, PixelTypes, getMatrixElement, readImageFileSeries } from 'browser/index.js'
 
 export default function () {
-  function verifyImage (t, image) {
+  function verifyImage (t, image, expectedComponentType, expectedPixelType) {
+    let componentType = IntTypes.UInt16
+    if (expectedComponentType) {
+      componentType = expectedComponentType
+    }
+    let pixelType = PixelTypes.Scalar
+    if (expectedPixelType) {
+      pixelType = expectedPixelType
+    }
     t.is(image.imageType.dimension, 3, 'dimension')
-    t.is(image.imageType.componentType, IntTypes.UInt16, 'componentType')
-    t.is(image.imageType.pixelType, PixelTypes.Scalar, 'pixelType')
+    t.is(image.imageType.componentType, componentType, 'componentType')
+    t.is(image.imageType.pixelType, pixelType, 'pixelType')
     t.is(image.imageType.components, 1, 'components')
     t.is(image.origin[0], 0.0, 'origin[0]')
     t.is(image.origin[1], 0.0, 'origin[1]')
@@ -45,34 +53,53 @@ export default function () {
     return fetchFiles
   }
 
-  test('Test reading sorted PNG file series', t => {
+  test('Test reading sorted PNG file series', async t => {
     const fileNames = ['mri3D_01.png', 'mri3D_02.png', 'mri3D_03.png']
     const fetchFiles = fetchTestFiles(fileNames)
     const sortedSeries = true
 
-    return Promise.all(fetchFiles)
-      .then(function (files) {
-        return readImageFileSeries(files, zSpacing, zOrigin, sortedSeries)
-      })
-      .then(function ({ image, webWorkerPool }) {
-        webWorkerPool.terminateWorkers()
-        verifyImage(t, image)
-        t.end()
-      })
+    const files = await Promise.all(fetchFiles)
+    const { image, webWorkerPool } = await readImageFileSeries(files, zSpacing, zOrigin, sortedSeries)
+    webWorkerPool.terminateWorkers()
+    verifyImage(t, image)
+    t.end()
   })
 
-  test('Test reading unsorted PNG file series', t => {
+  test('Test reading sorted PNG file series, specify componentType, pixelType', async t => {
+    const fileNames = ['mri3D_01.png', 'mri3D_02.png', 'mri3D_03.png']
+    const fetchFiles = fetchTestFiles(fileNames)
+    const sortedSeries = true
+
+    const files = await Promise.all(fetchFiles)
+    const componentType = IntTypes.Int32
+    const pixelType = PixelTypes.Vector
+    const { image, webWorkerPool } = await readImageFileSeries(files, { zSpacing, zOrigin, sortedSeries, componentType, pixelType })
+    webWorkerPool.terminateWorkers()
+    verifyImage(t, image, componentType, pixelType)
+    t.end()
+  })
+
+  test('Test reading unsorted PNG file series', async t => {
     const fileNames = ['mri3D_02.png', 'mri3D_01.png', 'mri3D_03.png']
     const fetchFiles = fetchTestFiles(fileNames)
 
-    return Promise.all(fetchFiles)
-      .then(function (files) {
-        return readImageFileSeries(files, zSpacing, zOrigin)
-      })
-      .then(function ({ image, webWorkerPool }) {
-        webWorkerPool.terminateWorkers()
-        verifyImage(t, image)
-        t.end()
-      })
+    const files = await Promise.all(fetchFiles)
+    const { image, webWorkerPool } = await readImageFileSeries(files, zSpacing, zOrigin)
+    webWorkerPool.terminateWorkers()
+    verifyImage(t, image)
+    t.end()
+  })
+
+  test('Test reading unsorted PNG file series, specify componentType, pixelType', async t => {
+    const fileNames = ['mri3D_02.png', 'mri3D_01.png', 'mri3D_03.png']
+    const fetchFiles = fetchTestFiles(fileNames)
+
+    const files = await Promise.all(fetchFiles)
+    const componentType = IntTypes.Int32
+    const pixelType = PixelTypes.Vector
+    const { image, webWorkerPool } = await readImageFileSeries(files, { zSpacing, zOrigin, componentType, pixelType })
+    webWorkerPool.terminateWorkers()
+    verifyImage(t, image, componentType, pixelType)
+    t.end()
   })
 }

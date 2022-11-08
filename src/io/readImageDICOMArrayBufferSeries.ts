@@ -4,11 +4,13 @@ import stackImages from '../core/stackImages.js'
 import BinaryFile from '../core/BinaryFile.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import Image from '../core/Image.js'
+import castImage from '../core/castImage.js'
 
 import config from '../itkConfig.js'
 
 import ReadImageResult from './ReadImageResult.js'
 import ReadImageFileSeriesResult from './ReadImageFileSeriesResult.js'
+import ReadImageDICOMArrayBufferSeriesOptions from './ReadImageDICOMArrayBufferSeriesOptions.js'
 
 const workerFunction = async (
   webWorker: Worker | null,
@@ -78,11 +80,29 @@ const seriesBlockSize = 8
 
 const readImageDICOMArrayBufferSeries = async (
   arrayBuffers: ArrayBuffer[],
-  singleSortedSeries = false,
-  fileNames?: string[]
+  options?: ReadImageDICOMArrayBufferSeriesOptions | boolean,
+  fileNamesBackwardsCompatibility?: string[]
 ): Promise<ReadImageFileSeriesResult> => {
-  const validFileNames = (fileNames != null) && fileNames.length === arrayBuffers.length
+  let singleSortedSeries = false
+  let fileNames: undefined | string[]
+  if (typeof options === 'boolean') {
+    // Backwards compatibility
+    singleSortedSeries = options
+  }
+  if (typeof fileNamesBackwardsCompatibility !== 'undefined') {
+    fileNames = fileNamesBackwardsCompatibility
+  }
+  if (typeof options === 'object') {
+    if (typeof options.singleSortedSeries !== 'undefined') {
+      singleSortedSeries = options.singleSortedSeries
+    }
+    if (typeof options.fileNames !== 'undefined') {
+      fileNames = options.fileNames
+    }
+  }
+  const validFileNames = (typeof fileNames !== 'undefined') && fileNames.length === arrayBuffers.length
   const fileDescriptions = arrayBuffers.map((ab, index) => {
+    // @ts-expect-error: TS2532: Object is possibly 'undefined'.
     return { path: validFileNames ? fileNames[index] : `${index}.dcm`, data: new Uint8Array(ab) }
   })
   if (singleSortedSeries) {
@@ -93,12 +113,19 @@ const readImageDICOMArrayBufferSeries = async (
     }
     const results = await workerPool.runTasks(taskArgsArray).promise
     const images = results.map((result) => result.image)
-    const stacked = stackImages(images)
+    let stacked = stackImages(images)
+    if (typeof options === 'object' && (typeof options.componentType !== 'undefined' || typeof options.pixelType !== 'undefined')) {
+      stacked = castImage(stacked, options)
+    }
     return { image: stacked, webWorkerPool: workerPool }
   } else {
     const taskArgsArray = [[fileDescriptions, singleSortedSeries]]
     const results = await workerPool.runTasks(taskArgsArray).promise
-    return { image: results[0].image, webWorkerPool: workerPool }
+    let image = results[0].image
+    if (typeof options === 'object' && (typeof options.componentType !== 'undefined' || typeof options.pixelType !== 'undefined')) {
+      image = castImage(image, options)
+    }
+    return { image, webWorkerPool: workerPool }
   }
 }
 

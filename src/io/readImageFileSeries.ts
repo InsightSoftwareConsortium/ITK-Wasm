@@ -1,20 +1,46 @@
 import stackImages from '../core/stackImages.js'
 import readImageArrayBuffer from './readImageArrayBuffer.js'
 import WorkerPool from '../core/WorkerPool.js'
+import castImage from '../core/castImage.js'
 
 import { readAsArrayBuffer } from 'promise-file-reader'
 
 import ReadImageFileSeriesResult from './ReadImageFileSeriesResult.js'
+import ReadImageFileSeriesOptions from './ReadImageFileSeriesOptions.js'
 
 const numberOfWorkers = typeof globalThis.navigator?.hardwareConcurrency === 'number' ? globalThis.navigator.hardwareConcurrency : 6
 const workerPool = new WorkerPool(numberOfWorkers, readImageArrayBuffer)
 
 async function readImageFileSeries (
   fileList: File[] | FileList,
-  zSpacing: number = 1.0,
-  zOrigin: number = 0.0,
-  sortedSeries: boolean = false
+  options?: ReadImageFileSeriesOptions | number,
+  zOriginBackwardsCompatibility?: number,
+  sortedSeriesBackwardsCompatibility?: boolean
 ): Promise<ReadImageFileSeriesResult> {
+  let zSpacing = 1.0
+  let zOrigin = 0.0
+  let sortedSeries = false
+  if (typeof options === 'number') {
+    // Backwards compatibility
+    zSpacing = options
+  }
+  if (typeof zOriginBackwardsCompatibility !== 'undefined') {
+    zOrigin = zOriginBackwardsCompatibility
+  }
+  if (typeof sortedSeriesBackwardsCompatibility !== 'undefined') {
+    sortedSeries = sortedSeriesBackwardsCompatibility
+  }
+  if (typeof options === 'object') {
+    if (typeof options.zSpacing !== 'undefined') {
+      zSpacing = options.zSpacing
+    }
+    if (typeof options.zOrigin !== 'undefined') {
+      zOrigin = options.zOrigin
+    }
+    if (typeof options.sortedSeries !== 'undefined') {
+      sortedSeries = options.sortedSeries
+    }
+  }
   const fetchFileDescriptions = Array.from(fileList, async function (file) {
     return await readAsArrayBuffer(file).then(function (
       arrayBuffer
@@ -58,7 +84,10 @@ async function readImageFileSeries (
     image.direction[8] = 1.0
     return image
   })
-  const stacked = stackImages(images)
+  let stacked = stackImages(images)
+  if (typeof options === 'object' && (typeof options.componentType !== 'undefined' || typeof options.pixelType !== 'undefined')) {
+    stacked = castImage(stacked, options)
+  }
   return { image: stacked, webWorkerPool: workerPool }
 }
 

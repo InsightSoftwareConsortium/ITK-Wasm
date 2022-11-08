@@ -13,21 +13,23 @@ import findLocalImageIOPath from './internal/findLocalImageIOPath.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import PipelineOutput from '../pipeline/PipelineOutput.js'
+import WriteImageOptions from './WriteImageOptions.js'
+import castImage from '../core/castImage.js'
 
 import Image from '../core/Image.js'
 
-/**
- * Write an image to a file on the local filesystem in Node.js.
- *
- * @param: image itk.Image instance to write
- * @param: filePath path to the file on the local filesystem.
- * @param: useCompression compression the pixel data when possible
- *
- * @return Promise<null>
- */
-async function writeImageLocalFile (image: Image, filePath: string, useCompression: boolean = false): Promise<null> {
+async function writeImageLocalFile (image: Image, filePath: string, options?: WriteImageOptions | boolean
+): Promise<null> {
   if (typeof image === 'boolean') {
     throw new Error('useCompression is now the last argument in itk-wasm')
+  }
+
+  let useCompression = false
+  if (typeof options === 'boolean') {
+    useCompression = options
+  }
+  if (typeof options === 'object' && typeof options.useCompression !== 'undefined') {
+    useCompression = options.useCompression
   }
 
   const imageIOsPath = findLocalImageIOPath()
@@ -41,8 +43,12 @@ async function writeImageLocalFile (image: Image, filePath: string, useCompressi
   }
   const desiredOutputs = [
   ] as PipelineOutput[]
+  let inputImage = image
+  if (typeof options === 'object' && (typeof options.componentType !== 'undefined' || typeof options.pixelType !== 'undefined')) {
+    inputImage = castImage(image, options)
+  }
   const inputs = [
-    { type: InterfaceTypes.Image, data: image }
+    { type: InterfaceTypes.Image, data: inputImage }
   ] as PipelineInput[]
 
   let io = null
