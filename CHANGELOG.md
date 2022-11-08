@@ -1,5 +1,21 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.49](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.48...itk-wasm-v1.0.0-b.49) (2022-11-08)
+
+
+### Features
+
+* **readImageArrayBuffer:** Support componentType, pixelType options ([6d1c20a](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/6d1c20ac50c29239c3c709927801584aa3152fc0))
+* **readImageBlob:** Add pixelType, componentType options ([9b8c32a](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9b8c32a2b029e5604ad00ebc96dd1b5b7a013853))
+* **readImageDICOMArrayBufferSeries:** Add componentType, pixelType ([54deca3](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/54deca39adb156b135a0f0bf5b715e3d9b2f86e0))
+* **readImageDICOMFileSeries:** Support componentType, pixelType options ([5e5d142](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/5e5d1423da8df4547fea0bcd4494adf0194d2a56))
+* **readImageFileSeries:** Support componentType, pixelType ([d42fbc1](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/d42fbc12ffb41cc9aeb63d01dba02af55adc4355))
+* **readImageFile:** Support componentType, pixelType ([9ac40b9](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9ac40b94f9644d68c9ea46a4d4e6e3f18619b0fb))
+* **readImageLocalDICOMFileSeries:** Support componentType, pixelType ([0a61e48](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/0a61e48ce53bac2398b250d43ca7742c05177308))
+* **readImageLocalFile:** Support casting options ([149721d](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/149721db0b6190551bfe40b3780190f69aaf6e05))
+* **writeImageArrayBuffer:** Support componentType, pixelType ([2b50d9c](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2b50d9c8ff717706718f7ad462b5a897b4b7a339))
+* **writeImageLocalFile:** Support componentType, pixelType ([23eca87](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/23eca8735279a5a1cee1e951cc69a3e91a489862))
+
 # [1.0.0-b.48](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.47...itk-wasm-v1.0.0-b.48) (2022-11-02)
 
 
