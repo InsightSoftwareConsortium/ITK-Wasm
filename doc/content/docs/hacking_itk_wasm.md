@@ -41,6 +41,14 @@ git clean -fdx
 npm run build:debug
 ```
 
+### Add test data
+
+To prevent Git repository bloat, we add testing data through [CMake content links](https://blog.kitware.com/cmake-externaldata-using-large-files-with-distributed-version-control/) of [Content Identifiers (CIDs)](https://proto.school/anatomy-of-a-cid). To add new test data,
+
+1. Upload the data and download its content link *.cid* file with the [CMake w3 ExternalData Upload Tool](https://cmake-w3-externaldata-upload.on.fleek.co/)
+2. Move the *.cid* file to *itk-wasm/test/Input/*
+3. Reference the content link with a `DATA{<path>}` call in *itk-wasm/test/CMakeLists.txt*.
+
 ### Contributing
 
 We use [semantic-release](https://github.com/semantic-release/semantic-release) for handling the change log and version. Therefore, we recommend using the following command line when creating a commit:
