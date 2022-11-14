@@ -1,5 +1,13 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.50](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.49...itk-wasm-v1.0.0-b.50) (2022-11-14)
+
+
+### Features
+
+* **Image:** support metadata serialization ([282db1b](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/282db1b8ed9ed65483dd4d881d6b772d6870296c))
+* **Image:** use Map for metadata member ([f9ac56e](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f9ac56ecafaa0168c0f6226cbe9857c562539212))
+
 # [1.0.0-b.49](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.48...itk-wasm-v1.0.0-b.49) (2022-11-08)
 
 
