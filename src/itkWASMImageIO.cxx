@@ -22,6 +22,7 @@
 #include "itkIOComponentEnumFromWASMComponentType.h"
 #include "itkWASMPixelTypeFromIOPixelEnum.h"
 #include "itkIOPixelEnumFromWASMPixelType.h"
+#include "itkMetaDataDictionaryJSON.h"
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
@@ -141,6 +142,14 @@ WASMImageIO
     this->SetDimensions( count, itr->GetInt() );
     ++count;
     }
+
+  if (document.HasMember("metadata"))
+  {
+    auto dictionary = this->GetMetaDataDictionary();
+    const rapidjson::Value & metadataJson = document["metadata"];
+    wasm::ConvertJSONToMetaDataDictionary(metadataJson, dictionary);
+    this->SetMetaDataDictionary(dictionary);
+  }
 }
 
 
@@ -527,7 +536,6 @@ WASMImageIO
     this->SetDirection( count, direction );
     ++count;
   }
-
 }
 
 
@@ -662,6 +670,11 @@ WASMImageIO
   rapidjson::Value dataFile;
   dataFile.SetString( dataFileString.c_str(), allocator );
   document.AddMember( "data", dataFile, allocator );
+
+  auto dictionary = this->GetMetaDataDictionary();
+  rapidjson::Value metadataJson(rapidjson::kArrayType);
+  wasm::ConvertMetaDataDictionaryToJSON(dictionary, metadataJson, allocator);
+  document.AddMember( "metadata", metadataJson.Move(), allocator );
 
   return document;
 }

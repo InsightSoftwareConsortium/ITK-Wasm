@@ -21,6 +21,7 @@
 #include "itkImageToWASMImageFilter.h"
 
 #include "itkDefaultConvertPixelTraits.h"
+#include "itkMetaDataDictionaryJSON.h"
 
 #include "itkWASMMapComponentType.h"
 #include "itkWASMMapPixelType.h"
@@ -202,6 +203,11 @@ ImageToWASMImageFilter<TImage>
   rapidjson::Value dataString;
   dataString.SetString( dataStream.str().c_str(), allocator );
   document.AddMember( "data", dataString.Move(), allocator );
+
+  auto dictionary = image->GetMetaDataDictionary();
+  rapidjson::Value metadataJson(rapidjson::kArrayType);
+  wasm::ConvertMetaDataDictionaryToJSON(dictionary, metadataJson, allocator);
+  document.AddMember( "metadata", metadataJson.Move(), allocator );
 
   rapidjson::StringBuffer stringBuffer;
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);

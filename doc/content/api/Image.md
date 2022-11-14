@@ -10,6 +10,7 @@ An `Image` is the N-dimensional image data structure for *itk-wasm*. `Image` is 
 **direction**: A *dimension* by *dimension* Float64Array in column-major order, that describes the orientation of the image at its *origin*.  The orientation of each axis are the orthonormal columns.
 **size**: An Array with length *dimension* that contains the number of pixels along dimension.
 **data**: A [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) containing the pixel buffer data.
+**metadata**: A [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) of string keys to values that could be strings, string arrays, numbers, number arrays, or arrays of number arrays providing additional metadata for the image.
 
 For more information, see [the description](https://itk.org/ITKSoftwareGuide/html/Book1/ITKSoftwareGuide-Book1ch4.html#x38-490004.1) of an `itk::Image` in the ITK Software Guide.
 

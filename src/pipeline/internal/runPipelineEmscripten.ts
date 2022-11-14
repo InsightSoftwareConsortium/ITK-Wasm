@@ -123,7 +123,8 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
             spacing: image.spacing,
             direction: `data:application/vnd.itk.address,0:${directionPtr}`,
             size: image.size,
-            data: `data:application/vnd.itk.address,0:${dataPtr}`
+            data: `data:application/vnd.itk.address,0:${dataPtr}`,
+            metadata: JSON.stringify(Array.from(image.metadata.entries()))
           }
           setPipelineModuleInputJSON(pipelineModule, imageJSON, index)
           break
@@ -353,6 +354,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           const image = getPipelineModuleOutputJSON(pipelineModule, index) as Image
           image.data = getPipelineModuleOutputArray(pipelineModule, index, 0, image.imageType.componentType)
           image.direction = getPipelineModuleOutputArray(pipelineModule, index, 1, FloatTypes.Float64) as Float64Array
+          image.metadata = new Map(image.metadata)
           outputData = image
           break
         }

@@ -30,7 +30,8 @@ function castImage (inputImage: Image, options?: CastImageOptions): Image {
   outputImage.spacing = Array.from(inputImage.spacing)
   outputImage.direction = inputImage.direction.slice()
   outputImage.size = Array.from(inputImage.size)
-  outputImage.metadata = { ...inputImage.metadata }
+  // Deep copy the map
+  outputImage.metadata = new Map(JSON.parse(JSON.stringify(Array.from(inputImage.metadata))))
 
   if (inputImage.data !== null) {
     if (typeof options !== 'undefined' && typeof options.componentType !== 'undefined' && options.componentType !== inputImage.imageType.componentType) {

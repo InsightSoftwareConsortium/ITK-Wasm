@@ -1,5 +1,6 @@
 import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
 import WorkerPool from '../core/WorkerPool.js'
+import Metadata from '../core/Metadata.js'
 import stackImages from '../core/stackImages.js'
 import BinaryFile from '../core/BinaryFile.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
@@ -63,12 +64,11 @@ const workerFunction = async (
   filenames?.pop()
 
   if (image.metadata === undefined) {
-    const metadata:
-    Record<string, string | string[] | number | number[] | number[][]> = {}
-    metadata.orderedFileNames = filenames
+    const metadata: Metadata = new Map()
+    metadata.set('OrderedFileNames', filenames)
     image.metadata = metadata
   } else {
-    image.metadata.orderedFileNames = filenames
+    image.metadata.set('OrderedFileNames', filenames)
   }
 
   return { image: result.outputs[0].data as Image, webWorker: worker }

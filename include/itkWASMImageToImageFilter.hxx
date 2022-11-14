@@ -20,11 +20,13 @@
 
 #include "itkWASMImageToImageFilter.h"
 
+#include "itkMetaDataDictionaryJSON.h"
 #include "itkImportVectorImageFilter.h"
 #include <exception>
 #include "itkWASMMapComponentType.h"
 #include "itkWASMMapPixelType.h"
 #include "itkDefaultConvertPixelTraits.h"
+#include "itkMetaDataObject.h"
 
 #include "rapidjson/document.h"
 
@@ -229,9 +231,16 @@ WASMImageToImageFilter<TImage>
     {
     filter->SetImportPointer( dataPtr, totalSize, letImageContainerManageMemory);
     }
-
   filter->Update();
   image->Graft(filter->GetOutput());
+
+  if (document.HasMember("metadata"))
+  {
+    auto dictionary = image->GetMetaDataDictionary();
+    const rapidjson::Value & metadataJson = document["metadata"];
+    wasm::ConvertJSONToMetaDataDictionary(metadataJson, dictionary);
+  }
+
 }
 
 template <typename TImage>
