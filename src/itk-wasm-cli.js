@@ -566,7 +566,7 @@ function bindgen(outputDir, wasmBinaries, options) {
 
 program
   .option('-i, --image <image>', 'build environment Docker image, defaults to itkwasm/emscripten')
-  .option('-s, --source-dir <source-directory>', 'path to build directory, defaults to "."')
+  .option('-s, --source-dir <source-directory>', 'path to source directory, defaults to "."')
   .option('-b, --build-dir <build-directory>', 'build directory whose path is relative to the source directory, defaults to "web-build"')
 program
   .command('build')
