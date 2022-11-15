@@ -3,10 +3,7 @@ project(compress-stringify)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include(FetchContent)
-if (NOT TARGET libzstd_static)
-  include(${CMAKE_CURRENT_SOURCE_DIR}/BuildZstd.cmake)
-endif()
+include(${CMAKE_CURRENT_SOURCE_DIR}/BuildZstd.cmake)
 
 find_package(ITK REQUIRED COMPONENTS WebAssemblyInterface)
 include(${ITK_USE_FILE})

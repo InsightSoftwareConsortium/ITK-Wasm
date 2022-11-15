@@ -37,7 +37,6 @@ if(EMSCRIPTEN)
 endif()
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/../CMake/BuildZstd.cmake)
-add_subdirectory(io/internal/pipelines/common/compress-stringify)
 add_subdirectory(io/internal/pipelines/image/convert-image)
 add_subdirectory(io/internal/pipelines/image/read-dicom)
 add_subdirectory(io/internal/pipelines/mesh/convert-mesh)
