@@ -552,11 +552,14 @@ function bindgen(outputDir, wasmBinaries, options) {
     }
   }
 
+  // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
+  let filteredWasmBinaries = wasmBinaries.filter(binary => !binary.endsWith('.umd.wasm'))
+
   const language = options.language === undefined ? 'typescript' : options.language
   switch (language) {
     case 'typescript': {
-      typescriptBindings(srcOutputDir, buildDir, wasmBinaries, false)
-      typescriptBindings(srcOutputDir, buildDir, wasmBinaries, true)
+      typescriptBindings(srcOutputDir, buildDir, filteredWasmBinaries, false)
+      typescriptBindings(srcOutputDir, buildDir, filteredWasmBinaries, true)
     }
     break
   }
