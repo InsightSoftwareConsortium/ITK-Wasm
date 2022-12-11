@@ -1,6 +1,6 @@
 package-lock.json
 build
-web-build-debug
-web-build-release
+emscripten-build-debug
+emscripten-build-release
 wasi-build-debug
 wasi-build-release

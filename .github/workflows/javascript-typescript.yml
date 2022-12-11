@@ -59,10 +59,10 @@ jobs:
         cd test/pipelines/median-filter-pipeline
 
         node ../../../src/itk-wasm-cli.js build -i itkwasm/emscripten:latest .
-        rm -rf web-build
+        rm -rf emscripten-build
 
         node ../../../src/itk-wasm-cli.js build -i itkwasm/wasi:latest .
-        rm -rf web-build
+        rm -rf emscripten-build
 
         cd -
 

@@ -29,7 +29,7 @@ function processCommonOptions() {
   }
   process.chdir(sourceDir)
 
-  let buildDir = 'web-build'
+  let buildDir = 'emscripten-build'
   if (options.buildDir) {
     buildDir = options.buildDir
   }
@@ -567,7 +567,7 @@ function bindgen(outputDir, wasmBinaries, options) {
 program
   .option('-i, --image <image>', 'build environment Docker image, defaults to itkwasm/emscripten')
   .option('-s, --source-dir <source-directory>', 'path to source directory, defaults to "."')
-  .option('-b, --build-dir <build-directory>', 'build directory whose path is relative to the source directory, defaults to "web-build"')
+  .option('-b, --build-dir <build-directory>', 'build directory whose path is relative to the source directory, defaults to "emscripten-build"')
 program
   .command('build')
   .usage('[-- <cmake arguments>]')

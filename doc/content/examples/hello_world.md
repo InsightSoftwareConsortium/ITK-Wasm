@@ -81,7 +81,7 @@ The binary can also be executed with other [WASI runtimes](https://github.com/mb
 
 ## Node.js
 
-For Node.js or the Browser, build the project with the default [Emscripten](https://emscripten.org/) toolchain.
+For Node.js or the Browser, build the project with the default [Emscripten](https://emscripten.org/) toolchain. The project is built in the `./emscripten-build` directory by default.
 
 ```sh
 ❯ npx itk-wasm -b ./emscripten-build build

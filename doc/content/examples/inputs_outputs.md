@@ -220,7 +220,7 @@ Run the pipeline.
 
 ```javascript
 // Path to the Emscripten WebAssembly module without extensions
-const pipelinePath = path.resolve('web-build', 'inputs-outputs')
+const pipelinePath = path.resolve('emscripten-build', 'inputs-outputs')
 const { stdout, stderr, outputs } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
 ```
 

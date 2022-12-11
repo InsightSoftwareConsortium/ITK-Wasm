@@ -215,8 +215,8 @@ if (options.buildTestPipelines) {
       console.error(buildPipelineCall.stderr)
       process.exit(buildPipelineCall.code)
     }
-    let pipelineFiles = glob.sync(path.join(pipelinePath, 'web-build', '*.js'))
-    pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'web-build', '*.wasm')))
+    let pipelineFiles = glob.sync(path.join(pipelinePath, 'emscripten-build', '*.js'))
+    pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'emscripten-build', '*.wasm')))
     pipelineFiles.forEach((file) => {
       const filename = path.basename(file)
       const output = path.join('dist', 'pipelines', filename)
