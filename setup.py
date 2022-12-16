@@ -12,7 +12,7 @@ except ImportError:
 
 setup(
     name='itk-webassemblyinterface',
-    version='1.0.0b2',
+    version='1.0b52',
     author='Insight Software Consortium',
     author_email='itk+community@discourse.itk.org',
     packages=['itk'],
@@ -43,6 +43,6 @@ setup(
     keywords='ITK InsightToolkit',
     url=r'https://itk.org/',
     install_requires=[
-        r'itk-io>=5.3rc3'
+        r'itk-io>=5.3.0'
     ]
     )
