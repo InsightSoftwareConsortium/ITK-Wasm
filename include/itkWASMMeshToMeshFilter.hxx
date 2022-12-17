@@ -208,19 +208,19 @@ WASMMeshToMeshFilter<TMesh>
   {
     if (pointComponentType == itk::wasm::MapComponentType<typename MeshType::CoordRepType>::ComponentString )
     {
-      const auto * pointsPtr = reinterpret_cast< PointType * >( std::atol(pointsString.substr(35).c_str()) );
+      const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       mesh->GetPoints()->assign(pointsPtr, pointsPtr + numberOfPoints);
     }
     else if (pointComponentType == itk::wasm::MapComponentType<float>::ComponentString)
     {
-      auto * pointsPtr = reinterpret_cast< float * >( std::atol(pointsString.substr(35).c_str()) );
+      auto * pointsPtr = reinterpret_cast< float * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       const size_t pointComponents = numberOfPoints * dimension;
       auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordRepType *>(&(mesh->GetPoints()->at(0)) );
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
     }
     else if (pointComponentType == itk::wasm::MapComponentType<double>::ComponentString)
     {
-      auto * pointsPtr = reinterpret_cast< double * >( std::atol(pointsString.substr(35).c_str()) );
+      auto * pointsPtr = reinterpret_cast< double * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       const size_t pointComponents = numberOfPoints * dimension;
       auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordRepType *>(&(mesh->GetPoints()->at(0)) );
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
@@ -250,7 +250,7 @@ WASMMeshToMeshFilter<TMesh>
   const rapidjson::Value & cellsJson = document["cells"];
   const std::string cellsString( cellsJson.GetString() );
   using CellBufferType = typename WASMMeshType::CellBufferContainerType::Element;
-  CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::atol(cellsString.substr(35).c_str())) );
+  CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
   SizeValueType        index = NumericTraits<SizeValueType>::ZeroValue();
   CellIdentifier id = NumericTraits<CellIdentifier>::ZeroValue();
   while (index < cellBufferSize)
@@ -449,14 +449,14 @@ WASMMeshToMeshFilter<TMesh>
   const rapidjson::Value & pointDataJson = document["pointData"];
   using PointPixelType = typename TMesh::PixelType;
   const std::string pointDataString( pointDataJson.GetString() );
-  auto pointDataPtr = reinterpret_cast< PointPixelType * >( std::atol(pointDataString.substr(35).c_str()) );
+  auto pointDataPtr = reinterpret_cast< PointPixelType * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
   mesh->GetPointData()->resize(numberOfPointPixels);
   mesh->GetPointData()->assign(pointDataPtr, pointDataPtr + numberOfPointPixels);
 
   const rapidjson::Value & cellDataJson = document["cellData"];
   using CellPixelType = typename TMesh::CellPixelType;
   const std::string cellDataString( cellDataJson.GetString() );
-  auto cellDataPtr = reinterpret_cast< CellPixelType * >( std::atol(cellDataString.substr(35).c_str()) );
+  auto cellDataPtr = reinterpret_cast< CellPixelType * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
   if (mesh->GetCellData() == nullptr)
   {
     mesh->SetCellData(MeshType::CellDataContainer::New());

@@ -197,7 +197,7 @@ WASMImageToImageFilter<TImage>
   using DirectionType = typename ImageType::DirectionType;
   const rapidjson::Value & directionJson = document["direction"];
   const std::string directionString( directionJson.GetString() );
-  const double * directionPtr = reinterpret_cast< double * >( std::atol(directionString.substr(35).c_str()) );
+  const double * directionPtr = reinterpret_cast< double * >( std::strtoull(directionString.substr(35).c_str(), nullptr, 10) );
   using VnlMatrixType = typename DirectionType::InternalMatrixType;
   const VnlMatrixType vnlMatrix(directionPtr);
   const DirectionType direction(vnlMatrix);
@@ -221,7 +221,7 @@ WASMImageToImageFilter<TImage>
 
   const rapidjson::Value & dataJson = document["data"];
   const std::string dataString( dataJson.GetString() );
-  PixelType * dataPtr = reinterpret_cast< PixelType * >( std::atol(dataString.substr(35).c_str()) );
+  PixelType * dataPtr = reinterpret_cast< PixelType * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
   const bool letImageContainerManageMemory = false;
   if (pixelType == "VariableLengthVector" || pixelType == "VariableSizeMatrix")
     {
