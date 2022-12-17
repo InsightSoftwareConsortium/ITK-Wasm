@@ -333,25 +333,25 @@ WASMImageIO
 
   cbor_item_t * imageTypeItem = cbor_new_definite_map(4);
   cbor_map_add(imageTypeItem,
-    (struct cbor_pair){
+    cbor_pair{
       .key = cbor_move(cbor_build_string("dimension")),
       .value = cbor_move(cbor_build_uint32(this->GetNumberOfDimensions()))});
   const std::string componentString = WASMComponentTypeFromIOComponentEnum( this->GetComponentType() );
   cbor_map_add(imageTypeItem,
-    (struct cbor_pair){
+    cbor_pair{
       .key = cbor_move(cbor_build_string("componentType")),
       .value = cbor_move(cbor_build_string(componentString.c_str()))});
   const std::string pixelString = WASMPixelTypeFromIOPixelEnum( this->GetPixelType() );
   cbor_map_add(imageTypeItem,
-    (struct cbor_pair){
+    cbor_pair{
       .key = cbor_move(cbor_build_string("pixelType")),
       .value = cbor_move(cbor_build_string(pixelString.c_str()))});
   cbor_map_add(imageTypeItem,
-    (struct cbor_pair){
+    cbor_pair{
       .key = cbor_move(cbor_build_string("components")),
       .value = cbor_move(cbor_build_uint32(this->GetNumberOfComponents()))});
   cbor_map_add(index,
-    (struct cbor_pair){
+    cbor_pair{
       .key = cbor_move(cbor_build_string("imageType")),
       .value = cbor_move(imageTypeItem)});
 
@@ -363,7 +363,7 @@ WASMImageIO
     cbor_array_set(originItem, ii, cbor_move(cbor_build_float8(this->GetOrigin(ii))));
   }
   cbor_map_add(index,
-    (struct cbor_pair){
+    cbor_pair{
       .key = cbor_move(cbor_build_string("origin")),
       .value = cbor_move(originItem)});
 
@@ -373,7 +373,7 @@ WASMImageIO
     cbor_array_set(spacingItem, ii, cbor_move(cbor_build_float8(this->GetSpacing(ii))));
   }
   cbor_map_add(index,
-    (struct cbor_pair){
+    cbor_pair{
       .key = cbor_move(cbor_build_string("spacing")),
       .value = cbor_move(spacingItem)});
 
@@ -390,7 +390,7 @@ WASMImageIO
   cbor_item_t * directionTag = cbor_new_tag(86);
   cbor_tag_set_item(directionTag, cbor_move(directionItem));
   cbor_map_add(index,
-    (struct cbor_pair){
+    cbor_pair{
       .key = cbor_move(cbor_build_string("direction")),
       .value = cbor_move(directionTag)});
 
@@ -400,13 +400,13 @@ WASMImageIO
     cbor_array_set(sizeItem, ii, cbor_move(cbor_build_uint64(this->GetDimensions(ii))));
   }
   cbor_map_add(index,
-    (struct cbor_pair){
+    cbor_pair{
       .key = cbor_move(cbor_build_string("size")),
       .value = cbor_move(sizeItem)});
 
   cbor_item_t * metaDataItem = cbor_new_definite_map(0);
   cbor_map_add(index,
-    (struct cbor_pair){
+    cbor_pair{
       .key = cbor_move(cbor_build_string("metadata")),
       .value = cbor_move(metaDataItem)});
 
@@ -461,7 +461,7 @@ WASMImageIO
     cbor_item_t * dataTag = cbor_new_tag(tag);
     cbor_tag_set_item(dataTag, cbor_move(dataItem));
     cbor_map_add(index,
-      (struct cbor_pair){
+      cbor_pair{
         .key = cbor_move(cbor_build_string("data")),
         .value = cbor_move(dataTag)});
   }
