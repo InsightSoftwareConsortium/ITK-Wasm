@@ -66,8 +66,8 @@ FetchContent_Declare(
 
 set(libcbor_GIT_REPOSITORY "https://github.com/PJK/libcbor")
 set(libcbor_GIT_REPOSITORY "https://github.com/thewtex/libcbor")
-# 2022-12-17 master + CMake + WASI + target_include_directory
-set(libcbor_GIT_TAG "086423d93c0fbf67537740440e1ad7007994aa72")
+# 2022-12-17 master + CMake + WASI + target_include_directory + GCC | operator warning
+set(libcbor_GIT_TAG "702568cd2d60f3b9fb2d491c274ab03b8c1b1bf9")
 FetchContent_Declare(
   libcbor
   GIT_REPOSITORY ${libcbor_GIT_REPOSITORY}
