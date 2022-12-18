@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(WebAssemblyInterface)
 
-set(CMAKE_CXX_STANDARD 20)
+if(WIN32)
+  set(CMAKE_CXX_STANDARD 20)
+else()
+  set(CMAKE_CXX_STANDARD 17)
+endif()
 
 set(WebAssemblyInterface_LIBRARIES WebAssemblyInterface)
 
