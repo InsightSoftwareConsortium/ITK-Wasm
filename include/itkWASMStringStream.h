@@ -22,6 +22,8 @@
 #include "rapidjson/document.h"
 #include <string_view>
 
+#include "WebAssemblyInterfaceExport.h"
+
 namespace itk
 {
 /**
@@ -40,7 +42,7 @@ namespace itk
  * 
  * \ingroup WebAssemblyInterface
  */
-class ITK_TEMPLATE_EXPORT WASMStringStream : public WASMDataObject
+class WebAssemblyInterface_EXPORT WASMStringStream : public WASMDataObject
 {
 public:
   ITK_DISALLOW_COPY_AND_MOVE(WASMStringStream);

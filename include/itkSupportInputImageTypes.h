@@ -29,6 +29,7 @@
 #include "itkImageIOBase.h"
 #include "itkImageIOFactory.h"
 #include "itkSpecializedImagePipelineFunctor.h"
+#include "WebAssemblyInterfaceExport.h"
 
 namespace itk
 {
@@ -44,7 +45,7 @@ struct InterfaceImageType
   unsigned int components{1};
 };
 
-bool lexical_cast(const std::string &input, InterfaceImageType & imageType);
+WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, InterfaceImageType & imageType);
 
 /** \class SupportInputImageTypes
  *

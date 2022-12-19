@@ -28,6 +28,9 @@
 
 #include "rapidjson/document.h"
 
+#include "WebAssemblyInterfaceExport.h"
+
+
 // Short circuit help output without raising an exception (currently not
 // available in WASI)
 #define ITK_WASM_PARSE(pipeline) \
@@ -128,7 +131,7 @@ rapidjson::Value getArrayJson(Iteratorable container, rapidjson::Document::Alloc
   return value;
 }
 
-class Pipeline: public CLI::App
+class WebAssemblyInterface_EXPORT Pipeline: public CLI::App
 {
 public:
     /** Make a new Pipeline application. `name` should be CamelCase by convention. */

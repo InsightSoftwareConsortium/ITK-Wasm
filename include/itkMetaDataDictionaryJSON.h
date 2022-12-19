@@ -26,15 +26,17 @@
 
 #include "rapidjson/document.h"
 
+#include "WebAssemblyInterfaceExport.h"
+
 namespace itk
 {
 
 namespace wasm
 {
 
-void ConvertMetaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, rapidjson::Value & metadataJson, rapidjson::Document::AllocatorType& allocator);
+WebAssemblyInterface_EXPORT void ConvertMetaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, rapidjson::Value & metadataJson, rapidjson::Document::AllocatorType& allocator);
 
-void ConvertJSONToMetaDataDictionary(const rapidjson::Value & metadataJson, itk::MetaDataDictionary & dictionary);
+WebAssemblyInterface_EXPORT void ConvertJSONToMetaDataDictionary(const rapidjson::Value & metadataJson, itk::MetaDataDictionary & dictionary);
 
 } // end namespace wasm
 } // end namespace itk

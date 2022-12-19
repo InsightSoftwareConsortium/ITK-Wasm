@@ -29,6 +29,8 @@
 #include <fstream>
 #endif
 
+#include "WebAssemblyInterfaceExport.h"
+
 namespace itk
 {
 namespace wasm
@@ -44,7 +46,7 @@ namespace wasm
  *
  * \ingroup WebAssemblyInterface
  */
-class InputBinaryStream
+class WebAssemblyInterface_EXPORT InputBinaryStream
 {
 public:
   std::istream & Get() {
@@ -90,7 +92,7 @@ protected:
 };
 
 
-bool lexical_cast(const std::string &input, InputBinaryStream &inputStream);
+WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, InputBinaryStream &inputStream);
 
 } // end namespace wasm
 } // end namespace itk

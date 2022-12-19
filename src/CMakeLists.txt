@@ -25,6 +25,7 @@ set(WebAssemblyInterface_SRCS
   itkSupportInputPolyDataTypes.cxx
   )
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
+target_link_libraries(WebAssemblyInterface LINK_PUBLIC cbor cpp-base64)
 
 if(BUILD_ITK_WASM_IO_MODULES)
 
