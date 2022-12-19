@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(WebAssemblyInterface)
 
-if(WIN32)
-  set(CMAKE_CXX_STANDARD 20)
-else()
-  set(CMAKE_CXX_STANDARD 17)
-endif()
+set(CMAKE_CXX_STANDARD 17)
 
 set(WebAssemblyInterface_LIBRARIES WebAssemblyInterface)
 
@@ -34,6 +30,7 @@ include(FetchContent)
 set(_itk_build_testing ${BUILD_TESTING})
 set(BUILD_TESTING OFF)
 set(_itk_build_shared ${BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS OFF)
 
 # Uses newer CMake
 set(RapidJSON_GIT_REPOSITORY "https://github.com/thewtex/rapidjson.git")

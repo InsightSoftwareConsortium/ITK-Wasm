@@ -334,26 +334,26 @@ WASMImageIO
   cbor_item_t * imageTypeItem = cbor_new_definite_map(4);
   cbor_map_add(imageTypeItem,
     cbor_pair{
-      .key = cbor_move(cbor_build_string("dimension")),
-      .value = cbor_move(cbor_build_uint32(this->GetNumberOfDimensions()))});
+      cbor_move(cbor_build_string("dimension")),
+      cbor_move(cbor_build_uint32(this->GetNumberOfDimensions()))});
   const std::string componentString = WASMComponentTypeFromIOComponentEnum( this->GetComponentType() );
   cbor_map_add(imageTypeItem,
     cbor_pair{
-      .key = cbor_move(cbor_build_string("componentType")),
-      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+      cbor_move(cbor_build_string("componentType")),
+      cbor_move(cbor_build_string(componentString.c_str()))});
   const std::string pixelString = WASMPixelTypeFromIOPixelEnum( this->GetPixelType() );
   cbor_map_add(imageTypeItem,
     cbor_pair{
-      .key = cbor_move(cbor_build_string("pixelType")),
-      .value = cbor_move(cbor_build_string(pixelString.c_str()))});
+      cbor_move(cbor_build_string("pixelType")),
+      cbor_move(cbor_build_string(pixelString.c_str()))});
   cbor_map_add(imageTypeItem,
     cbor_pair{
-      .key = cbor_move(cbor_build_string("components")),
-      .value = cbor_move(cbor_build_uint32(this->GetNumberOfComponents()))});
+      cbor_move(cbor_build_string("components")),
+      cbor_move(cbor_build_uint32(this->GetNumberOfComponents()))});
   cbor_map_add(index,
     cbor_pair{
-      .key = cbor_move(cbor_build_string("imageType")),
-      .value = cbor_move(imageTypeItem)});
+      cbor_move(cbor_build_string("imageType")),
+      cbor_move(imageTypeItem)});
 
   const unsigned int dimension = this->GetNumberOfDimensions();
 
@@ -364,8 +364,8 @@ WASMImageIO
   }
   cbor_map_add(index,
     cbor_pair{
-      .key = cbor_move(cbor_build_string("origin")),
-      .value = cbor_move(originItem)});
+      cbor_move(cbor_build_string("origin")),
+      cbor_move(originItem)});
 
   cbor_item_t * spacingItem = cbor_new_definite_array(dimension);
   for( unsigned int ii = 0; ii < dimension; ++ii )
@@ -374,8 +374,8 @@ WASMImageIO
   }
   cbor_map_add(index,
     cbor_pair{
-      .key = cbor_move(cbor_build_string("spacing")),
-      .value = cbor_move(spacingItem)});
+      cbor_move(cbor_build_string("spacing")),
+      cbor_move(spacingItem)});
 
   std::vector< double > direction( dimension * dimension );
   for( unsigned int ii = 0; ii < dimension; ++ii )
@@ -391,8 +391,8 @@ WASMImageIO
   cbor_tag_set_item(directionTag, cbor_move(directionItem));
   cbor_map_add(index,
     cbor_pair{
-      .key = cbor_move(cbor_build_string("direction")),
-      .value = cbor_move(directionTag)});
+      cbor_move(cbor_build_string("direction")),
+      cbor_move(directionTag)});
 
   cbor_item_t * sizeItem = cbor_new_definite_array(dimension);
   for( unsigned int ii = 0; ii < dimension; ++ii )
@@ -401,14 +401,14 @@ WASMImageIO
   }
   cbor_map_add(index,
     cbor_pair{
-      .key = cbor_move(cbor_build_string("size")),
-      .value = cbor_move(sizeItem)});
+      cbor_move(cbor_build_string("size")),
+      cbor_move(sizeItem)});
 
   cbor_item_t * metaDataItem = cbor_new_definite_map(0);
   cbor_map_add(index,
     cbor_pair{
-      .key = cbor_move(cbor_build_string("metadata")),
-      .value = cbor_move(metaDataItem)});
+      cbor_move(cbor_build_string("metadata")),
+      cbor_move(metaDataItem)});
 
   if( buffer != nullptr )
   {
@@ -462,8 +462,8 @@ WASMImageIO
     cbor_tag_set_item(dataTag, cbor_move(dataItem));
     cbor_map_add(index,
       cbor_pair{
-        .key = cbor_move(cbor_build_string("data")),
-        .value = cbor_move(dataTag)});
+        cbor_move(cbor_build_string("data")),
+        cbor_move(dataTag)});
   }
 
   size_t cborBufferSize;
