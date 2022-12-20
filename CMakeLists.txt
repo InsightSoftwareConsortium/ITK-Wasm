@@ -30,6 +30,7 @@ include(FetchContent)
 set(_itk_build_testing ${BUILD_TESTING})
 set(BUILD_TESTING OFF)
 set(_itk_build_shared ${BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS OFF)
 
 # Uses newer CMake
 set(RapidJSON_GIT_REPOSITORY "https://github.com/thewtex/rapidjson.git")
@@ -66,8 +67,8 @@ FetchContent_Declare(
 
 set(libcbor_GIT_REPOSITORY "https://github.com/PJK/libcbor")
 set(libcbor_GIT_REPOSITORY "https://github.com/thewtex/libcbor")
-# v0.9.0 + CMake + WASI + target_include_directory
-set(libcbor_GIT_TAG "e0b3f9284ea96a961db813514ae1d08f8dc2fa56")
+# 2022-12-17 master + CMake + WASI + target_include_directory + GCC | operator warning
+set(libcbor_GIT_TAG "702568cd2d60f3b9fb2d491c274ab03b8c1b1bf9")
 FetchContent_Declare(
   libcbor
   GIT_REPOSITORY ${libcbor_GIT_REPOSITORY}

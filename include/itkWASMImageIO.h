@@ -69,8 +69,10 @@ public:
   /** Reads the data from disk into the memory buffer provided. */
   void Read(void *buffer) override;
 
+#if !defined(ITK_WRAPPING_PARSER)
   /** Set the JSON representation of the image information. */
   void SetJSON(rapidjson::Document & json);
+#endif
 
   /** Determine the file type. Returns true if this ImageIO can write the
    * file specified. */
@@ -79,8 +81,10 @@ public:
   /** Set the spacing and dimension information for the set filename. */
   void WriteImageInformation() override;
 
+#if !defined(ITK_WRAPPING_PARSER)
   /** Get the JSON representation of the image information. */
   rapidjson::Document GetJSON();
+#endif
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. */

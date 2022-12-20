@@ -20,11 +20,12 @@
 
 #include "itkIOCommon.h"
 #include <string>
+#include "WebAssemblyInterfaceExport.h"
 
 namespace itk
 {
 
-IOComponentEnum
+WebAssemblyInterface_EXPORT IOComponentEnum
 IOComponentEnumFromWASMComponentType(const std::string & wasmComponentType);
 
 } // end namespace itk

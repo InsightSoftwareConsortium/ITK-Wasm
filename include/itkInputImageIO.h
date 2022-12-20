@@ -84,14 +84,14 @@ bool lexical_cast(const std::string &input, InputImageIO &inputImageIO)
     auto wasmImageIOBase = itk::WASMImageIOBase::New();
     const rapidjson::Value & directionJson = document["direction"];
     const std::string directionString( directionJson.GetString() );
-    const double * directionPtr = reinterpret_cast< double * >( std::atol(directionString.substr(35).c_str()) );
+    const double * directionPtr = reinterpret_cast< double * >( std::strtoull(directionString.substr(35).c_str(), nullptr, 10) );
     WASMImageIOBase::DirectionContainerType * directionContainer = wasmImageIOBase->GetDirectionContainer();
     directionContainer->resize(dimension*dimension);
     directionContainer->assign(directionPtr, directionPtr + dimension*dimension);
 
     const rapidjson::Value & dataJson = document["data"];
     const std::string dataString( dataJson.GetString() );
-    const char * dataPtr = reinterpret_cast< char * >( std::atol(dataString.substr(35).c_str()) );
+    const char * dataPtr = reinterpret_cast< char * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
     WASMImageIOBase::PixelDataContainerType * pixelDataContainer = wasmImageIOBase->GetPixelDataContainer();
     const size_t pixelDataBytes = wasmImageIO->GetImageSizeInBytes();
     pixelDataContainer->resize(pixelDataBytes);

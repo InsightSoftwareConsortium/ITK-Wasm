@@ -188,7 +188,7 @@ WASMPolyDataToPolyDataFilter<TPolyData>
     using PointType = typename PolyDataType::PointType;
     const rapidjson::Value & pointsJson = document["points"];
     const std::string pointsString( pointsJson.GetString() );
-    const auto * pointsPtr = reinterpret_cast< PointType * >( std::atol(pointsString.substr(35).c_str()) );
+    const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
     polyData->GetPoints()->resize(numberOfPoints);
     polyData->GetPoints()->assign(pointsPtr, pointsPtr + numberOfPoints);
   }
@@ -199,7 +199,7 @@ WASMPolyDataToPolyDataFilter<TPolyData>
   {
     const rapidjson::Value & verticesJson = document["vertices"];
     const std::string verticesString( verticesJson.GetString() );
-    auto verticesPtr = reinterpret_cast< uint32_t * >( std::atol(verticesString.substr(35).c_str()) );
+    auto verticesPtr = reinterpret_cast< uint32_t * >( std::strtoull(verticesString.substr(35).c_str(), nullptr, 10) );
     polyData->GetVertices()->resize(verticesBufferSize);
     polyData->GetVertices()->assign(verticesPtr, verticesPtr + verticesBufferSize);
   }
@@ -210,7 +210,7 @@ WASMPolyDataToPolyDataFilter<TPolyData>
   {
     const rapidjson::Value & linesJson = document["lines"];
     const std::string linesString( linesJson.GetString() );
-    auto linesPtr = reinterpret_cast< uint32_t * >( std::atol(linesString.substr(35).c_str()) );
+    auto linesPtr = reinterpret_cast< uint32_t * >( std::strtoull(linesString.substr(35).c_str(), nullptr, 10) );
     polyData->GetLines()->resize(linesBufferSize);
     polyData->GetLines()->assign(linesPtr, linesPtr + linesBufferSize);
   }
@@ -221,7 +221,7 @@ WASMPolyDataToPolyDataFilter<TPolyData>
   {
     const rapidjson::Value & polygonsJson = document["polygons"];
     const std::string polygonsString( polygonsJson.GetString() );
-    auto polygonsPtr = reinterpret_cast< uint32_t * >( std::atol(polygonsString.substr(35).c_str()) );
+    auto polygonsPtr = reinterpret_cast< uint32_t * >( std::strtoull(polygonsString.substr(35).c_str(), nullptr, 10) );
     polyData->GetPolygons()->resize(polygonsBufferSize);
     polyData->GetPolygons()->assign(polygonsPtr, polygonsPtr + polygonsBufferSize);
   }
@@ -232,7 +232,7 @@ WASMPolyDataToPolyDataFilter<TPolyData>
   {
     const rapidjson::Value & triangleStripsJson = document["triangleStrips"];
     const std::string triangleStripsString( triangleStripsJson.GetString() );
-    auto triangleStripsPtr = reinterpret_cast< uint32_t * >( std::atol(triangleStripsString.substr(35).c_str()) );
+    auto triangleStripsPtr = reinterpret_cast< uint32_t * >( std::strtoull(triangleStripsString.substr(35).c_str(), nullptr, 10) );
     polyData->GetTriangleStrips()->resize(triangleStripsBufferSize);
     polyData->GetTriangleStrips()->assign(triangleStripsPtr, triangleStripsPtr + triangleStripsBufferSize);
   }
@@ -247,7 +247,7 @@ WASMPolyDataToPolyDataFilter<TPolyData>
     using PointPixelType = typename TPolyData::PixelType;
     using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
     const std::string pointDataString( pointDataJson.GetString() );
-    auto pointDataPtr = reinterpret_cast< typename ConvertPointPixelTraits::ComponentType * >( std::atol(pointDataString.substr(35).c_str()) );
+    auto pointDataPtr = reinterpret_cast< typename ConvertPointPixelTraits::ComponentType * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
     polyData->GetPointData()->resize(numberOfPointPixels * pointPixelComponents);
     polyData->GetPointData()->assign(pointDataPtr, pointDataPtr + numberOfPointPixels * pointPixelComponents);
   }
@@ -262,7 +262,7 @@ WASMPolyDataToPolyDataFilter<TPolyData>
     using CellPixelType = typename TPolyData::CellPixelType;
     using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
     const std::string cellDataString( cellDataJson.GetString() );
-    auto cellDataPtr = reinterpret_cast< typename ConvertCellPixelTraits::ComponentType * >( std::atol(cellDataString.substr(35).c_str()) );
+    auto cellDataPtr = reinterpret_cast< typename ConvertCellPixelTraits::ComponentType * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
     if (polyData->GetCellData() == nullptr)
     {
       polyData->SetCellData(PolyDataType::CellDataContainer::New());

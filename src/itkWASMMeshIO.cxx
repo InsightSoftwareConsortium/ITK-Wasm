@@ -312,9 +312,9 @@ WASMMeshIO
   cbor_item_t * dataTag = cbor_new_tag(tag);
   cbor_tag_set_item(dataTag, cbor_move(dataItem));
   cbor_map_add(index,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string(dataName)),
-      .value = cbor_move(dataTag)});
+    cbor_pair{
+      cbor_move(cbor_build_string(dataName)),
+      cbor_move(dataTag)});
 }
 
 
@@ -681,92 +681,92 @@ WASMMeshIO
   cbor_item_t * index = this->m_CBORRoot;
   cbor_item_t * meshTypeItem = cbor_new_definite_map(9);
   cbor_map_add(meshTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("dimension")),
-      .value = cbor_move(cbor_build_uint32(this->GetPointDimension()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("dimension")),
+      cbor_move(cbor_build_uint32(this->GetPointDimension()))});
   std::string componentString = WASMComponentTypeFromIOComponentEnum( this->GetPointComponentType() );
   cbor_map_add(meshTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("pointComponentType")),
-      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("pointComponentType")),
+      cbor_move(cbor_build_string(componentString.c_str()))});
   std::string pixelString = WASMPixelTypeFromIOPixelEnum( this->GetPointPixelType() );
   cbor_map_add(meshTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("pointPixelType")),
-      .value = cbor_move(cbor_build_string(pixelString.c_str()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("pointPixelType")),
+      cbor_move(cbor_build_string(pixelString.c_str()))});
   componentString = WASMComponentTypeFromIOComponentEnum( this->GetPointPixelComponentType() );
   cbor_map_add(meshTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("pointPixelComponentType")),
-      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("pointPixelComponentType")),
+      cbor_move(cbor_build_string(componentString.c_str()))});
   cbor_map_add(meshTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("pointPixelComponents")),
-      .value = cbor_move(cbor_build_uint32(this->GetNumberOfPointPixelComponents()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("pointPixelComponents")),
+      cbor_move(cbor_build_uint32(this->GetNumberOfPointPixelComponents()))});
   componentString = WASMComponentTypeFromIOComponentEnum( this->GetCellComponentType() );
   cbor_map_add(meshTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("cellComponentType")),
-      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("cellComponentType")),
+      cbor_move(cbor_build_string(componentString.c_str()))});
   pixelString = WASMPixelTypeFromIOPixelEnum( this->GetCellPixelType() );
   cbor_map_add(meshTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("cellPixelType")),
-      .value = cbor_move(cbor_build_string(pixelString.c_str()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("cellPixelType")),
+      cbor_move(cbor_build_string(pixelString.c_str()))});
   componentString = WASMComponentTypeFromIOComponentEnum( this->GetCellPixelComponentType() );
   cbor_map_add(meshTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("cellPixelComponentType")),
-      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("cellPixelComponentType")),
+      cbor_move(cbor_build_string(componentString.c_str()))});
   cbor_map_add(meshTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("cellPixelComponents")),
-      .value = cbor_move(cbor_build_uint32(this->GetNumberOfCellPixelComponents()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("cellPixelComponents")),
+      cbor_move(cbor_build_uint32(this->GetNumberOfCellPixelComponents()))});
   cbor_map_add(index,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("meshType")),
-      .value = cbor_move(meshTypeItem)});
+    cbor_pair{
+      cbor_move(cbor_build_string("meshType")),
+      cbor_move(meshTypeItem)});
 
   cbor_map_add(index,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("numberOfPoints")),
-      .value = cbor_move(cbor_build_uint64(this->GetNumberOfPoints()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("numberOfPoints")),
+      cbor_move(cbor_build_uint64(this->GetNumberOfPoints()))});
   if ( this->GetNumberOfPoints() )
     {
     this->m_UpdatePoints = true;
     }
 
   cbor_map_add(index,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("numberOfPointPixels")),
-      .value = cbor_move(cbor_build_uint64(this->GetNumberOfPointPixels()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("numberOfPointPixels")),
+      cbor_move(cbor_build_uint64(this->GetNumberOfPointPixels()))});
   if ( this->GetNumberOfPointPixels() )
     {
     this->m_UpdatePointData = true;
     }
 
   cbor_map_add(index,
-      (struct cbor_pair){
-        .key = cbor_move(cbor_build_string("numberOfCells")),
-        .value = cbor_move(cbor_build_uint64(this->GetNumberOfCells()))});
+      cbor_pair{
+        cbor_move(cbor_build_string("numberOfCells")),
+        cbor_move(cbor_build_uint64(this->GetNumberOfCells()))});
   if ( this->GetNumberOfCells() )
     {
     this->m_UpdateCells = true;
     }
 
   cbor_map_add(index,
-      (struct cbor_pair){
-        .key = cbor_move(cbor_build_string("numberOfCellPixels")),
-        .value = cbor_move(cbor_build_uint64(this->GetNumberOfCellPixels()))});
+      cbor_pair{
+        cbor_move(cbor_build_string("numberOfCellPixels")),
+        cbor_move(cbor_build_uint64(this->GetNumberOfCellPixels()))});
   if ( this->GetNumberOfCellPixels() )
     {
     this->m_UpdateCellData = true;
     }
 
   cbor_map_add(index,
-      (struct cbor_pair){
-        .key = cbor_move(cbor_build_string("cellBufferSize")),
-        .value = cbor_move(cbor_build_uint64(this->GetCellBufferSize()))});
+      cbor_pair{
+        cbor_move(cbor_build_string("cellBufferSize")),
+        cbor_move(cbor_build_uint64(this->GetCellBufferSize()))});
 }
 
 void

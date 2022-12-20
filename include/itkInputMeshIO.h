@@ -85,7 +85,7 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
 
     const rapidjson::Value & pointsJson = document["points"];
     const std::string pointsString( pointsJson.GetString() );
-    const char * pointsPtr = reinterpret_cast< char * >( std::atol(pointsString.substr(35).c_str()) );
+    const char * pointsPtr = reinterpret_cast< char * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
     WASMMeshIOBase::DataContainerType * pointsContainer = wasmMeshIOBase->GetPointsContainer();
     SizeValueType numberOfBytes = wasmMeshIO->GetNumberOfPoints() * wasmMeshIO->GetPointDimension() * WASMMeshIO::ITKComponentSize( wasmMeshIO->GetPointComponentType() );
     pointsContainer->resize(numberOfBytes);
@@ -93,7 +93,7 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
 
     const rapidjson::Value & cellsJson = document["cells"];
     const std::string cellsString( cellsJson.GetString() );
-    const char * cellsPtr = reinterpret_cast< char * >( std::atol(cellsString.substr(35).c_str()) );
+    const char * cellsPtr = reinterpret_cast< char * >( std::strtoull(cellsString.substr(35).c_str(), nullptr, 10) );
     WASMMeshIOBase::DataContainerType * cellsContainer = wasmMeshIOBase->GetCellsContainer();
     numberOfBytes = static_cast< SizeValueType >( wasmMeshIO->GetCellBufferSize() * WASMMeshIO::ITKComponentSize( wasmMeshIO->GetCellComponentType() ));
     cellsContainer->resize(numberOfBytes);
@@ -101,7 +101,7 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
 
     const rapidjson::Value & pointDataJson = document["pointData"];
     const std::string pointDataString( pointDataJson.GetString() );
-    const char * pointDataPtr = reinterpret_cast< char * >( std::atol(pointDataString.substr(35).c_str()) );
+    const char * pointDataPtr = reinterpret_cast< char * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
     WASMMeshIOBase::DataContainerType * pointDataContainer = wasmMeshIOBase->GetPointDataContainer();
     numberOfBytes =
       static_cast< SizeValueType >(
@@ -112,7 +112,7 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
 
     const rapidjson::Value & cellDataJson = document["cellData"];
     const std::string cellDataString( cellDataJson.GetString() );
-    const char * cellDataPtr = reinterpret_cast< char * >( std::atol(cellDataString.substr(35).c_str()) );
+    const char * cellDataPtr = reinterpret_cast< char * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
     WASMMeshIOBase::DataContainerType * cellDataContainer = wasmMeshIOBase->GetCellDataContainer();
     numberOfBytes =
       static_cast< SizeValueType >(

@@ -27,6 +27,7 @@
 #include "itkPolyData.h"
 #include "itkMeshIOBase.h"
 #include "itkMeshIOFactory.h"
+#include "WebAssemblyInterfaceExport.h"
 
 namespace itk
 {
@@ -41,7 +42,7 @@ struct InterfacePolyDataType
   unsigned int components{1};
 };
 
-bool lexical_cast(const std::string &input, InterfacePolyDataType & polyDataType);
+WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, InterfacePolyDataType & polyDataType);
 
 /** \class SupportInputPolyDataTypes
  *

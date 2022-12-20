@@ -22,6 +22,8 @@
 #include "rapidjson/document.h"
 #include <string_view>
 
+#include "WebAssemblyInterfaceExport.h"
+
 namespace itk
 {
 /**
@@ -40,7 +42,7 @@ namespace itk
  * 
  * \ingroup WebAssemblyInterface
  */
-class ITK_TEMPLATE_EXPORT WASMStringStream : public WASMDataObject
+class WebAssemblyInterface_EXPORT WASMStringStream : public WASMDataObject
 {
 public:
   ITK_DISALLOW_COPY_AND_MOVE(WASMStringStream);
@@ -79,7 +81,7 @@ public:
       }
     const rapidjson::Value & dataJson = document["data"];
     const std::string dataString( dataJson.GetString() );
-    const char * dataPtr = reinterpret_cast< char * >( std::atol(dataString.substr(35).c_str()) );
+    const char * dataPtr = reinterpret_cast< char * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
     size_t size = document["size"].GetInt();
     const std::string_view string(dataPtr, size);
     m_StringStream.str(std::string{string});

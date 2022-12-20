@@ -20,11 +20,12 @@
 
 #include "itkIOCommon.h"
 #include <string>
+#include "WebAssemblyInterfaceExport.h"
 
 namespace itk
 {
 
-IOPixelEnum
+WebAssemblyInterface_EXPORT IOPixelEnum
 IOPixelEnumFromWASMPixelType( const std::string & wasmPixelType );
 
 } // end namespace itk

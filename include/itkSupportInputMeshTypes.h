@@ -27,6 +27,7 @@
 #include "itkMesh.h"
 #include "itkMeshIOBase.h"
 #include "itkMeshIOFactory.h"
+#include "WebAssemblyInterfaceExport.h"
 
 namespace itk
 {
@@ -42,7 +43,7 @@ struct InterfaceMeshType
   unsigned int components{1};
 };
 
-bool lexical_cast(const std::string &input, InterfaceMeshType & meshType);
+WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, InterfaceMeshType & meshType);
 
 /** \class SupportInputMeshTypes
  *

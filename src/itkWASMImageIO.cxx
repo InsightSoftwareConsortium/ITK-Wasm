@@ -333,27 +333,27 @@ WASMImageIO
 
   cbor_item_t * imageTypeItem = cbor_new_definite_map(4);
   cbor_map_add(imageTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("dimension")),
-      .value = cbor_move(cbor_build_uint32(this->GetNumberOfDimensions()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("dimension")),
+      cbor_move(cbor_build_uint32(this->GetNumberOfDimensions()))});
   const std::string componentString = WASMComponentTypeFromIOComponentEnum( this->GetComponentType() );
   cbor_map_add(imageTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("componentType")),
-      .value = cbor_move(cbor_build_string(componentString.c_str()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("componentType")),
+      cbor_move(cbor_build_string(componentString.c_str()))});
   const std::string pixelString = WASMPixelTypeFromIOPixelEnum( this->GetPixelType() );
   cbor_map_add(imageTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("pixelType")),
-      .value = cbor_move(cbor_build_string(pixelString.c_str()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("pixelType")),
+      cbor_move(cbor_build_string(pixelString.c_str()))});
   cbor_map_add(imageTypeItem,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("components")),
-      .value = cbor_move(cbor_build_uint32(this->GetNumberOfComponents()))});
+    cbor_pair{
+      cbor_move(cbor_build_string("components")),
+      cbor_move(cbor_build_uint32(this->GetNumberOfComponents()))});
   cbor_map_add(index,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("imageType")),
-      .value = cbor_move(imageTypeItem)});
+    cbor_pair{
+      cbor_move(cbor_build_string("imageType")),
+      cbor_move(imageTypeItem)});
 
   const unsigned int dimension = this->GetNumberOfDimensions();
 
@@ -363,9 +363,9 @@ WASMImageIO
     cbor_array_set(originItem, ii, cbor_move(cbor_build_float8(this->GetOrigin(ii))));
   }
   cbor_map_add(index,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("origin")),
-      .value = cbor_move(originItem)});
+    cbor_pair{
+      cbor_move(cbor_build_string("origin")),
+      cbor_move(originItem)});
 
   cbor_item_t * spacingItem = cbor_new_definite_array(dimension);
   for( unsigned int ii = 0; ii < dimension; ++ii )
@@ -373,9 +373,9 @@ WASMImageIO
     cbor_array_set(spacingItem, ii, cbor_move(cbor_build_float8(this->GetSpacing(ii))));
   }
   cbor_map_add(index,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("spacing")),
-      .value = cbor_move(spacingItem)});
+    cbor_pair{
+      cbor_move(cbor_build_string("spacing")),
+      cbor_move(spacingItem)});
 
   std::vector< double > direction( dimension * dimension );
   for( unsigned int ii = 0; ii < dimension; ++ii )
@@ -390,9 +390,9 @@ WASMImageIO
   cbor_item_t * directionTag = cbor_new_tag(86);
   cbor_tag_set_item(directionTag, cbor_move(directionItem));
   cbor_map_add(index,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("direction")),
-      .value = cbor_move(directionTag)});
+    cbor_pair{
+      cbor_move(cbor_build_string("direction")),
+      cbor_move(directionTag)});
 
   cbor_item_t * sizeItem = cbor_new_definite_array(dimension);
   for( unsigned int ii = 0; ii < dimension; ++ii )
@@ -400,15 +400,15 @@ WASMImageIO
     cbor_array_set(sizeItem, ii, cbor_move(cbor_build_uint64(this->GetDimensions(ii))));
   }
   cbor_map_add(index,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("size")),
-      .value = cbor_move(sizeItem)});
+    cbor_pair{
+      cbor_move(cbor_build_string("size")),
+      cbor_move(sizeItem)});
 
   cbor_item_t * metaDataItem = cbor_new_definite_map(0);
   cbor_map_add(index,
-    (struct cbor_pair){
-      .key = cbor_move(cbor_build_string("metadata")),
-      .value = cbor_move(metaDataItem)});
+    cbor_pair{
+      cbor_move(cbor_build_string("metadata")),
+      cbor_move(metaDataItem)});
 
   if( buffer != nullptr )
   {
@@ -461,9 +461,9 @@ WASMImageIO
     cbor_item_t * dataTag = cbor_new_tag(tag);
     cbor_tag_set_item(dataTag, cbor_move(dataItem));
     cbor_map_add(index,
-      (struct cbor_pair){
-        .key = cbor_move(cbor_build_string("data")),
-        .value = cbor_move(dataTag)});
+      cbor_pair{
+        cbor_move(cbor_build_string("data")),
+        cbor_move(dataTag)});
   }
 
   size_t cborBufferSize;
