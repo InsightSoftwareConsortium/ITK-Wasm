@@ -7,8 +7,8 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 
 WORKDIR /
 
-# tag commit date: 2022-10-06 branch: ITKWASM-2022-07-02-5e7aea9
-ENV ITK_GIT_TAG b8369ebab03ac2ab7c253a67bdd8ab35a404fc5d
+# tag commit date: 2022-12-21 branch: itkwasm-2022-12-21-1e25fbec87
+ENV ITK_GIT_TAG 3aee3aa19809d2aa4eff6e054de82ba452d9b5ee
 RUN git clone https://github.com/KitwareMedical/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
