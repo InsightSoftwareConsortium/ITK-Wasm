@@ -31,6 +31,9 @@ set(_itk_build_testing ${BUILD_TESTING})
 set(BUILD_TESTING OFF)
 set(_itk_build_shared ${BUILD_SHARED_LIBS})
 set(BUILD_SHARED_LIBS OFF)
+if(NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
 
 # Uses newer CMake
 set(RapidJSON_GIT_REPOSITORY "https://github.com/thewtex/rapidjson.git")

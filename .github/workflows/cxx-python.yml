@@ -15,7 +15,7 @@ jobs:
       ctest-options: '-E itkPipelineTest'
 
   python-build-workflow:
-    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@ad20b70296bc85f2666a34cc82cc4dcbf75b9eb3
+    uses: thewtex/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@1fee566287ad8da88141c760e3c3743b69ebbc63
     with:
       itk-module-deps: 'InsightSoftwareConsortium/ITKMeshToPolyData@v0.10.0'
     secrets:
