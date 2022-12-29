@@ -5,6 +5,7 @@ import path from 'path'
 import { spawnSync } from 'child_process'
 
 import { Command, Option } from 'commander/esm.mjs'
+import { REFUSED } from 'dns'
 
 const program = new Command()
 
@@ -271,10 +272,44 @@ const interfaceJsonTypeToInterfaceType = new Map([
   ['OUTPUT_JSON', 'JsonObject'],
 ])
 
-function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false) {
+function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=false) {
   // index module
   let indexContent = ''
   const nodeText = forNode ? 'Node' : ''
+
+  const srcOutputDir = path.join(outputDir, 'src')
+
+  if (options.packageName) {
+    try {
+      fs.mkdirSync(srcOutputDir, { recursive: true })
+    } catch (err) {
+      if (err.code !== 'EEXIST') throw err
+    }
+
+    const packageJsonPath = path.join(outputDir, 'package.json')
+    if (!fs.existsSync(packageJsonPath)) {
+      const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
+      packageJson.name = options.packageName
+      if (options.packageDescription) {
+        packageJson.description = options.packageDescription
+      }
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+
+      const readmePath = path.join(outputDir, 'README.md')
+      if (!fs.existsSync(readmePath)) {
+        let readme = `# ${options.packageName}\n`
+        if (options.packageDescription) {
+          readme += `\n${options.packageDescription}\n`
+        }
+        fs.writeFileSync(readmePath, readme)
+      }
+    }
+
+    const tsConfigPath = path.join(outputDir, 'tsconfig.json')
+    if (!fs.existsSync(tsConfigPath)) {
+      fs.copyFileSync(bindgenResource('tsconfig.json'), tsConfigPath)
+    }
+  }
 
   wasmBinaries.forEach((wasmBinaryName) => {
     let wasmBinaryRelativePath = `${buildDir}/${wasmBinaryName}`
@@ -550,38 +585,13 @@ function bindgen(wasmBinaries, options) {
     if (err.code !== 'EEXIST') throw err
   }
 
-  const srcOutputDir = path.join(outputDir, 'src')
-  if (options.packageName) {
-    try {
-      fs.mkdirSync(srcOutputDir, { recursive: true })
-    } catch (err) {
-      if (err.code !== 'EEXIST') throw err
-    }
-
-    const packageJsonPath = path.join(outputDir, 'package.json')
-    if (!fs.existsSync(packageJsonPath)) {
-      const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
-      packageJson.name = options.packageName
-      if (options.packageDescription) {
-        packageJson.description = options.packageDescription
-      }
-      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
-    }
-
-    const tsConfigPath = path.join(outputDir, 'tsconfig.json')
-    if (!fs.existsSync(tsConfigPath)) {
-      fs.copyFileSync(bindgenResource('tsconfig.json'), tsConfigPath)
-
-    }
-  }
-
   // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
   let filteredWasmBinaries = wasmBinaries.filter(binary => !binary.endsWith('.umd.wasm'))
 
   switch (language) {
     case 'typescript': {
-      typescriptBindings(srcOutputDir, buildDir, filteredWasmBinaries, false)
-      typescriptBindings(srcOutputDir, buildDir, filteredWasmBinaries, true)
+      typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, false)
+      typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, true)
     }
     break
   }
