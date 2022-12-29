@@ -14,6 +14,10 @@ const defaultImageTag = '20230116-9dfa2b8a'
 // Array of types that will require an import from itk-wasm
 const typesRequireImport = ['Image']
 
+function bindgenResource(filePath) {
+  return path.join(path.dirname(import.meta.url.substring(7)), 'bindgen', filePath)
+}
+
 function processCommonOptions() {
   const options = program.opts()
 
@@ -280,7 +284,7 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
 
     const parsedPath = path.parse(path.resolve(wasmBinaryRelativePath))
     const runPath = path.join(parsedPath.dir, parsedPath.name)
-    const runPipelineScriptPath = path.join(path.dirname(import.meta.url.substring(7)), 'interfaceJSONNode.js')
+    const runPipelineScriptPath = bindgenResource('interfaceJSONNode.js')
     const runPipelineRun = spawnSync('node', [runPipelineScriptPath, runPath], {
       env: process.env,
       stdio: ['ignore', 'pipe', 'inherit']
@@ -554,13 +558,21 @@ function bindgen(wasmBinaries, options) {
       if (err.code !== 'EEXIST') throw err
     }
 
-    const packageJson = JSON.parse(fs.readFileSync(path.join(path.dirname(import.meta.url.substring(7)), 'bindgen', 'template.package.json')))
-    packageJson.name = options.packageName
-    if (options.packageDescription) {
-      packageJson.description = options.packageDescription
+    const packageJsonPath = path.join(outputDir, 'package.json')
+    if (!fs.existsSync(packageJsonPath)) {
+      const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
+      packageJson.name = options.packageName
+      if (options.packageDescription) {
+        packageJson.description = options.packageDescription
+      }
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
     }
-    fs.writeFileSync(path.join(outputDir, 'package.json'), JSON.stringify(packageJson, null, 2))
-    fs.copyFileSync(path.join(path.dirname(import.meta.url.substring(7)), 'bindgen', 'tsconfig.json'), path.join(outputDir, 'tsconfig.json'))
+
+    const tsConfigPath = path.join(outputDir, 'tsconfig.json')
+    if (!fs.existsSync(tsConfigPath)) {
+      fs.copyFileSync(bindgenResource('tsconfig.json'), tsConfigPath)
+
+    }
   }
 
   // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
