@@ -305,12 +305,19 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       }
     }
 
-    const tsConfigPath = path.join(outputDir, 'tsconfig.json')
-    if (!fs.existsSync(tsConfigPath)) {
-      fs.copyFileSync(bindgenResource('tsconfig.json'), tsConfigPath)
+  }
+
+  if (forNode) {
+    const rollupConfigPath = path.join(outputDir, 'rollup.node.config.js')
+    if (!fs.existsSync(rollupConfigPath)) {
+      fs.copyFileSync(bindgenResource('rollup.node.config.js'), rollupConfigPath)
     }
   }
 
+  const tsConfigPath = path.join(outputDir, 'tsconfig.json')
+  if (!fs.existsSync(tsConfigPath)) {
+    fs.copyFileSync(bindgenResource('tsconfig.json'), tsConfigPath)
+  }
   wasmBinaries.forEach((wasmBinaryName) => {
     let wasmBinaryRelativePath = `${buildDir}/${wasmBinaryName}`
     if (!fs.existsSync(wasmBinaryRelativePath)) {
