@@ -285,18 +285,23 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
   }
 
   if (options.packageName) {
+    const packageName = options.packageName
     const packageJsonPath = path.join(outputDir, 'package.json')
     if (!fs.existsSync(packageJsonPath)) {
       const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
-      packageJson.name = options.packageName
+      packageJson.name = packageName
       if (options.packageDescription) {
         packageJson.description = options.packageDescription
       }
+      packageJson.module = `./dist/${packageName}.js`
+      packageJson.exports['.'].browser = `./dist/${packageName}.js`
+      packageJson.exports['.'].node = `./dist/${packageName}.node.js`
+      packageJson.exports['.'].default = `./dist/${packageName}.js`
       fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
 
       const readmePath = path.join(outputDir, 'README.md')
       if (!fs.existsSync(readmePath)) {
-        let readme = `# ${options.packageName}\n`
+        let readme = `# ${packageName}\n`
         if (options.packageDescription) {
           readme += `\n${options.packageDescription}\n`
         }
@@ -304,6 +309,43 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       }
     }
 
+    if (!forNode) {
+      try {
+        fs.mkdirSync(path.join(outputDir, 'dist', 'demo'), { recursive: true })
+      } catch (err) {
+        if (err.code !== 'EEXIST') throw err
+      }
+
+      const logoPath = path.join(outputDir, 'dist', 'demo', 'logo.svg')
+      if (!fs.existsSync(logoPath)) {
+        fs.copyFileSync(bindgenResource('logo.svg'), logoPath)
+      }
+
+      const demoStylePath = path.join(outputDir, 'dist', 'demo', 'style.css')
+      if (!fs.existsSync(demoStylePath)) {
+        fs.copyFileSync(bindgenResource('demo.css'), demoStylePath)
+      }
+
+      const indexPath = path.join(outputDir, 'dist', 'index.html')
+      if (!fs.existsSync(indexPath)) {
+        let indexContent = fs.readFileSync(bindgenResource('index.html'), { encoding: 'utf8', flag: 'r' })
+        indexContent = indexContent.replaceAll('<bindgenPackageName>', packageName)
+        fs.writeFileSync(indexPath, indexContent)
+      }
+
+      const demoPath = path.join(outputDir, 'dist', 'demo', 'app.js')
+      if (!fs.existsSync(demoPath)) {
+        let demoContent = fs.readFileSync(bindgenResource('demo.js'), { encoding: 'utf8', flag: 'r' })
+        demoContent = demoContent.replaceAll('<bindgenPackageName>', options.packageName)
+        demoContent = demoContent.replaceAll('<bindgenPackageNameCamelCase>', camelCase(packageName))
+        fs.writeFileSync(demoPath, demoContent)
+      }
+
+      const rollupConfigPath = path.join(outputDir, 'rollup.browser.config.js')
+      if (!fs.existsSync(rollupConfigPath)) {
+        fs.copyFileSync(bindgenResource('rollup.browser.config.js'), rollupConfigPath)
+      }
+    }
   }
 
   if (forNode) {
@@ -311,14 +353,13 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     if (!fs.existsSync(rollupConfigPath)) {
       fs.copyFileSync(bindgenResource('rollup.node.config.js'), rollupConfigPath)
     }
-  } else {
-
   }
 
   const tsConfigPath = path.join(outputDir, 'tsconfig.json')
   if (!fs.existsSync(tsConfigPath)) {
     fs.copyFileSync(bindgenResource('tsconfig.json'), tsConfigPath)
   }
+
   wasmBinaries.forEach((wasmBinaryName) => {
     let wasmBinaryRelativePath = `${buildDir}/${wasmBinaryName}`
     if (!fs.existsSync(wasmBinaryRelativePath)) {
