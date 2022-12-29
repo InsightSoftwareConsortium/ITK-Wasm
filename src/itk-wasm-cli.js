@@ -557,6 +557,7 @@ function bindgen(outputDir, wasmBinaries, options) {
       packageJson.description = options.packageDescription
     }
     fs.writeFileSync(path.join(outputDir, 'package.json'), JSON.stringify(packageJson, null, 2))
+    fs.copyFileSync(path.join(path.dirname(import.meta.url.substring(7)), 'bindgen', 'tsconfig.json'), path.join(outputDir, 'tsconfig.json'))
   }
 
   // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
