@@ -278,14 +278,13 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
   const nodeText = forNode ? 'Node' : ''
 
   const srcOutputDir = path.join(outputDir, 'src')
+  try {
+    fs.mkdirSync(srcOutputDir, { recursive: true })
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err
+  }
 
   if (options.packageName) {
-    try {
-      fs.mkdirSync(srcOutputDir, { recursive: true })
-    } catch (err) {
-      if (err.code !== 'EEXIST') throw err
-    }
-
     const packageJsonPath = path.join(outputDir, 'package.json')
     if (!fs.existsSync(packageJsonPath)) {
       const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
@@ -312,6 +311,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     if (!fs.existsSync(rollupConfigPath)) {
       fs.copyFileSync(bindgenResource('rollup.node.config.js'), rollupConfigPath)
     }
+  } else {
+
   }
 
   const tsConfigPath = path.join(outputDir, 'tsconfig.json')
@@ -582,9 +583,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 function bindgen(wasmBinaries, options) {
   const { buildDir } = processCommonOptions()
 
-  const language = options.language === undefined ? 'typescript' : options.language
-
-  const outputDir = options.outputDir ? options.outputDir : language
+  const language = options.language ?? 'typescript'
+  const outputDir = options.outputDir ?? language
 
   try {
     fs.mkdirSync(outputDir, { recursive: true })
