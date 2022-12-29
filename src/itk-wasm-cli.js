@@ -542,9 +542,8 @@ function bindgen(outputDir, wasmBinaries, options) {
     if (err.code !== 'EEXIST') throw err
   }
 
-  let srcOutputDir = outputDir
+  const srcOutputDir = path.join(outputDir, 'src')
   if (options.packageName) {
-    srcOutputDir = path.join(outputDir, 'src')
     try {
       fs.mkdirSync(srcOutputDir, { recursive: true })
     } catch (err) {
