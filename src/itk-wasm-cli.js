@@ -543,13 +543,20 @@ function bindgen(outputDir, wasmBinaries, options) {
   }
 
   let srcOutputDir = outputDir
-  if (options.package) {
+  if (options.packageName) {
     srcOutputDir = path.join(outputDir, 'src')
     try {
       fs.mkdirSync(srcOutputDir, { recursive: true })
     } catch (err) {
       if (err.code !== 'EEXIST') throw err
     }
+
+    const packageJson = JSON.parse(fs.readFileSync(path.join(path.dirname(import.meta.url.substring(7)), 'bindgen', 'template.package.json')))
+    packageJson.name = options.packageName
+    if (options.packageDescription) {
+      packageJson.description = options.packageDescription
+    }
+    fs.writeFileSync(path.join(outputDir, 'package.json'), JSON.stringify(packageJson, null, 2))
   }
 
   // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
@@ -589,7 +596,8 @@ program
   .action(run)
 program
   .command('bindgen <outputDir> [wasmBinaries...]')
-  .option('-p, --package', 'Output a package configuration files')
+  .option('-p, --package-name <package-name>', 'Output a package configuration files with the given packages name')
+  .option('-d, --package-description <package-description>', 'Description for package')
   .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript',]))
   .usage('[options] <outputDir> [wasmBinaries...]')
   .description('Generate WASM module bindings for a language')
