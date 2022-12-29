@@ -533,8 +533,12 @@ function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false)
 }
 
 
-function bindgen(outputDir, wasmBinaries, options) {
+function bindgen(wasmBinaries, options) {
   const { buildDir } = processCommonOptions()
+
+  const language = options.language === undefined ? 'typescript' : options.language
+
+  const outputDir = options.outputDir ? options.outputDir : language
 
   try {
     fs.mkdirSync(outputDir, { recursive: true })
@@ -562,7 +566,6 @@ function bindgen(outputDir, wasmBinaries, options) {
   // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
   let filteredWasmBinaries = wasmBinaries.filter(binary => !binary.endsWith('.umd.wasm'))
 
-  const language = options.language === undefined ? 'typescript' : options.language
   switch (language) {
     case 'typescript': {
       typescriptBindings(srcOutputDir, buildDir, filteredWasmBinaries, false)
@@ -595,11 +598,12 @@ program
   .description('run the wasm binary, whose path is specified relative to the build directory')
   .action(run)
 program
-  .command('bindgen <outputDir> [wasmBinaries...]')
+  .command('bindgen [wasmBinaries...]')
+  .option('-o, --output-dir <output-dir>', 'Output directory name. Defaults to the language option value.')
   .option('-p, --package-name <package-name>', 'Output a package configuration files with the given packages name')
   .option('-d, --package-description <package-description>', 'Description for package')
   .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript',]))
-  .usage('[options] <outputDir> [wasmBinaries...]')
+  .usage('[options] [wasmBinaries...]')
   .description('Generate WASM module bindings for a language')
   .action(bindgen)
 
