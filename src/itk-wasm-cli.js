@@ -302,6 +302,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       const readmePath = path.join(outputDir, 'README.md')
       if (!fs.existsSync(readmePath)) {
         let readme = `# ${packageName}\n`
+        readme += `\n[![npm version](https://badge.fury.io/js/${packageName}.svg)](https://www.npmjs.com/package/${packageName})\n`
         if (options.packageDescription) {
           readme += `\n${options.packageDescription}\n`
         }
