@@ -147,6 +147,7 @@
     "axios": "^0.23.0",
     "commander": "^9.4.0",
     "fs-extra": "^10.0.0",
+    "markdown-table": "^3.0.3",
     "mime-types": "^2.1.35",
     "promise-file-reader": "^1.0.3",
     "webworker-promise": "^0.4.2"

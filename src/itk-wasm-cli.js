@@ -3,9 +3,9 @@
 import fs from 'fs-extra'
 import path from 'path'
 import { spawnSync } from 'child_process'
+import { markdownTable } from 'markdown-table'
 
 import { Command, Option } from 'commander/esm.mjs'
-import { REFUSED } from 'dns'
 
 const program = new Command()
 
@@ -284,6 +284,9 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     if (err.code !== 'EEXIST') throw err
   }
 
+  let readmeInterface = ''
+  let readmePipelines = ''
+
   if (options.packageName) {
     const packageName = options.packageName
     const packageJsonPath = path.join(outputDir, 'package.json')
@@ -299,15 +302,6 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       packageJson.exports['.'].default = `./dist/${packageName}.js`
       fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
 
-      const readmePath = path.join(outputDir, 'README.md')
-      if (!fs.existsSync(readmePath)) {
-        let readme = `# ${packageName}\n`
-        readme += `\n[![npm version](https://badge.fury.io/js/${packageName}.svg)](https://www.npmjs.com/package/${packageName})\n`
-        if (options.packageDescription) {
-          readme += `\n${options.packageDescription}\n`
-        }
-        fs.writeFileSync(readmePath, readme)
-      }
     }
 
     if (!forNode) {
@@ -384,10 +378,18 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     const moduleCamelCase = camelCase(parsedPath.name)
     const modulePascalCase = `${moduleCamelCase[0].toUpperCase()}${moduleCamelCase.substring(1)}`
 
+    readmeInterface += `  ${moduleCamelCase}${nodeText},\n`
+    let readmeFunction = ''
+    let readmeResult = ''
+    let readmeOptions = ''
+
     // Result module
     let resultContent = `interface ${modulePascalCase}${nodeText}Result {\n`
+    const readmeResultTable = [ ['Property', 'Type', 'Description'], ]
+    readmeResult += `\n**\`${modulePascalCase}${nodeText}Result\` interface:**\n\n`
     if (!forNode) {
       resultContent += `  /** WebWorker used for computation */\n  webWorker: Worker | null\n\n`
+      readmeResultTable.push(['**webWorker**', '*Worker*', 'WebWorker used for computation'])
     }
 
     // track unique output types in this set
@@ -405,7 +407,9 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         importTypes.add(outputType)
       }
       resultContent += `  ${camelCase(output.name)}: ${outputType}\n\n`
+      readmeResultTable.push([`**${camelCase(output.name)}**`, `*${outputType}*`, output.description])
     })
+    readmeResult += markdownTable(readmeResultTable, { align: ['c', 'c', 'l'] }) + '\n'
 
     // Insert the import statement in the beginning for the file.
     if(importTypes.size !== 0)
@@ -419,6 +423,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     // Options module
     const haveParameters = !!interfaceJson.parameters.length
     if (haveParameters) {
+      readmeOptions += `\n**\`${modulePascalCase}${nodeText}Options\` interface:**\n\n`
+      const readmeOptionsTable = [ ['Property', 'Type', 'Description'], ]
       let optionsContent = `interface ${modulePascalCase}Options {\n`
       interfaceJson.parameters.forEach((parameter) => {
         if (parameter.name === 'memory-io') {
@@ -433,13 +439,14 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         optionsContent += `  /** ${parameter.description} */\n`
         const parameterType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
         optionsContent += `  ${camelCase(parameter.name)}?: ${parameterType}\n\n`
+        readmeOptionsTable.push([`**${camelCase(parameter.name)}**`, `*${parameterType}*`, parameter.description])
       })
       optionsContent += `}\n\nexport default ${modulePascalCase}Options\n`
       fs.writeFileSync(path.join(srcOutputDir, `${modulePascalCase}Options.ts`), optionsContent)
 
       indexContent += `import ${modulePascalCase}Options from './${modulePascalCase}Options.js'\n`
       indexContent += `export type { ${modulePascalCase}Options }\n\n`
-
+      readmeOptions += markdownTable(readmeOptionsTable, { align: ['c', 'c', 'l'] }) + '\n'
     }
 
     // function module
@@ -476,6 +483,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionContent += `\nimport path from 'path'\n\n`
     }
 
+    const readmeParametersTable = [['Parameter', 'Type', 'Description'],]
     functionContent += `/**\n * ${interfaceJson.description}\n *\n`
     interfaceJson.inputs.forEach((input) => {
       if (!interfaceJsonTypeToTypeScriptType.has(input.type)) {
@@ -485,26 +493,34 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       }
       const typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
       functionContent += ` * @param {${typescriptType}} ${camelCase(input.name)} - ${input.description}\n`
+      readmeParametersTable.push([`**${camelCase(input.name)}**`, `*${typescriptType}*`, input.description])
     })
     functionContent += ` *\n * @returns {Promise<${modulePascalCase}${nodeText}Result>} - result object\n`
     functionContent += ` */\n`
 
-    functionContent += `async function ${moduleCamelCase}${nodeText}(`
+    readmeFunction += `\n#### ${moduleCamelCase}${nodeText}\n\n`
+    let functionCall = ''
+    functionCall += `async function ${moduleCamelCase}${nodeText}(\n`
     if (!forNode) {
-      functionContent += '\n  webWorker: null | Worker,\n'
+      functionCall += '  webWorker: null | Worker,\n'
 
     }
     interfaceJson.inputs.forEach((input, index) => {
       const typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
       const end = index === interfaceJson.inputs.length - 1 && !haveParameters ? `\n` : `,\n`
-      functionContent += `  ${camelCase(input.name)}: ${typescriptType}${end}`
+      functionCall += `  ${camelCase(input.name)}: ${typescriptType}${end}`
     })
     if (haveParameters) {
-      functionContent += `  options: ${modulePascalCase}Options = {})\n    : Promise<${modulePascalCase}${nodeText}Result> {\n\n`
+      functionCall += `  options: ${modulePascalCase}Options = {})\n    : Promise<${modulePascalCase}${nodeText}Result>`
 
     } else {
-      functionContent += `)\n    : Promise<${modulePascalCase}${nodeText}Result> {\n\n`
+      functionCall += `)\n    : Promise<${modulePascalCase}${nodeText}Result>`
     }
+    readmeFunction += `*${interfaceJson.description}*\n\n`
+    readmeFunction += `\`\`\`typescript\n${functionCall}\n\`\`\`\n\n`
+    readmeFunction += markdownTable(readmeParametersTable, { align: ['c', 'c', 'l'] }) + '\n'
+    functionContent += functionCall
+    functionContent += ' {\n\n'
 
     functionContent += `  const desiredOutputs = [\n`
     interfaceJson.outputs.forEach((output) => {
@@ -617,8 +633,18 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     indexContent += `import ${moduleCamelCase}${nodeText} from './${moduleCamelCase}${nodeText}.js'\n`
     indexContent += `export { ${moduleCamelCase}${nodeText} }\n`
 
+    readmePipelines += readmeFunction
+    readmePipelines += readmeOptions
+    readmePipelines += readmeResult
   })
+
+  if (options.packageName) {
+    const packageName = options.packageName
+    readmeInterface += `} from "${packageName}"\n\`\`\`\n`
+    readmeInterface += readmePipelines
+  }
   fs.writeFileSync(path.join(srcOutputDir, `index${nodeText}.ts`), indexContent)
+  return readmeInterface
 }
 
 
@@ -639,8 +665,37 @@ function bindgen(wasmBinaries, options) {
 
   switch (language) {
     case 'typescript': {
-      typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, false)
-      typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, true)
+      let readme = ''
+      if (options.packageName) {
+        const packageName = options.packageName
+        readme += `# ${packageName}\n`
+        readme += `\n[![npm version](https://badge.fury.io/js/${packageName}.svg)](https://www.npmjs.com/package/${packageName})\n`
+        if (options.packageDescription) {
+          readme += `\n${options.packageDescription}\n`
+        }
+        readme += `\n## Installation\n
+\`\`\`sh
+npm install ${packageName}
+\`\`\`
+`
+      }
+
+      let readmeUsage = '\n## Usage\n'
+      let readmeBrowserInterface = '\n### Browser interface\n\nImport:\n\n```js\nimport {\n'
+      let readmeNodeInterface = '\n### Node interface\n\nImport:\n\n```js\nimport {\n'
+
+      readmeBrowserInterface += typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, false)
+      readmeNodeInterface += typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, true)
+      if (options.packageName) {
+        readme += readmeUsage
+        readme += readmeBrowserInterface
+        readme += readmeNodeInterface
+
+        const readmePath = path.join(outputDir, 'README.md')
+        if (!fs.existsSync(readmePath)) {
+          fs.writeFileSync(readmePath, readme)
+        }
+      }
     }
     break
   }

@@ -96,7 +96,7 @@ int decodeDecompress(itk::wasm::Pipeline & pipeline)
 
 int main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("parse-string-decompress", "Given a binary or string produced with CompressedStringify, decompress optionally base64 deencode", argc, argv);
+  itk::wasm::Pipeline pipeline("parse-string-decompress", "Given a binary or string produced with CompressedStringify, decompress and optionally base64 decode.", argc, argv);
 
   bool parseString = false;
   pipeline.add_flag("-s,--parse-string", parseString, "Parse the input string before decompression");
