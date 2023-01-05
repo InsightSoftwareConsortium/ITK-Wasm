@@ -311,6 +311,22 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         if (err.code !== 'EEXIST') throw err
       }
 
+      const npmIgnorePath = path.join(outputDir, '.npmignore')
+      if (!fs.existsSync(npmIgnorePath)) {
+        fs.copyFileSync(bindgenResource('.npmignore'), npmIgnorePath)
+      }
+
+      const docsIndexPath = path.join(outputDir, 'index.html')
+      if (!fs.existsSync(docsIndexPath)) {
+        let indexContent = fs.readFileSync(bindgenResource('index.html'), { encoding: 'utf8', flag: 'r' })
+        indexContent = indexContent.replaceAll('<bindgenPackageName>', packageName)
+        if (options.packageDescription) {
+          indexContent = indexContent.replaceAll('<bindgenPackageDescription>', options.packageDescription)
+        }
+        fs.writeFileSync(docsIndexPath, indexContent)
+        fs.copyFileSync(bindgenResource('.nojekyll'), path.join(outputDir, '.nojekll'))
+      }
+
       const logoPath = path.join(outputDir, 'dist', 'demo', 'logo.svg')
       if (!fs.existsSync(logoPath)) {
         fs.copyFileSync(bindgenResource('logo.svg'), logoPath)
@@ -323,7 +339,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
       const indexPath = path.join(outputDir, 'dist', 'index.html')
       if (!fs.existsSync(indexPath)) {
-        let indexContent = fs.readFileSync(bindgenResource('index.html'), { encoding: 'utf8', flag: 'r' })
+        let indexContent = fs.readFileSync(bindgenResource('dist-index.html'), { encoding: 'utf8', flag: 'r' })
         indexContent = indexContent.replaceAll('<bindgenPackageName>', packageName)
         fs.writeFileSync(indexPath, indexContent)
       }
@@ -407,7 +423,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         importTypes.add(outputType)
       }
       resultContent += `  ${camelCase(output.name)}: ${outputType}\n\n`
-      readmeResultTable.push([`**${camelCase(output.name)}**`, `*${outputType}*`, output.description])
+      readmeResultTable.push([`\`${camelCase(output.name)}\``, `*${outputType}*`, output.description])
     })
     readmeResult += markdownTable(readmeResultTable, { align: ['c', 'c', 'l'] }) + '\n'
 
@@ -439,7 +455,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         optionsContent += `  /** ${parameter.description} */\n`
         const parameterType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
         optionsContent += `  ${camelCase(parameter.name)}?: ${parameterType}\n\n`
-        readmeOptionsTable.push([`**${camelCase(parameter.name)}**`, `*${parameterType}*`, parameter.description])
+        readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}*`, parameter.description])
       })
       optionsContent += `}\n\nexport default ${modulePascalCase}Options\n`
       fs.writeFileSync(path.join(srcOutputDir, `${modulePascalCase}Options.ts`), optionsContent)
@@ -493,7 +509,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       }
       const typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
       functionContent += ` * @param {${typescriptType}} ${camelCase(input.name)} - ${input.description}\n`
-      readmeParametersTable.push([`**${camelCase(input.name)}**`, `*${typescriptType}*`, input.description])
+      readmeParametersTable.push([`\`${camelCase(input.name)}\``, `*${typescriptType}*`, input.description])
     })
     functionContent += ` *\n * @returns {Promise<${modulePascalCase}${nodeText}Result>} - result object\n`
     functionContent += ` */\n`
@@ -511,13 +527,13 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionCall += `  ${camelCase(input.name)}: ${typescriptType}${end}`
     })
     if (haveParameters) {
-      functionCall += `  options: ${modulePascalCase}Options = {})\n    : Promise<${modulePascalCase}${nodeText}Result>`
+      functionCall += `  options: ${modulePascalCase}Options = {}\n) : Promise<${modulePascalCase}${nodeText}Result>`
 
     } else {
-      functionCall += `)\n    : Promise<${modulePascalCase}${nodeText}Result>`
+      functionCall += `\n) : Promise<${modulePascalCase}${nodeText}Result>`
     }
     readmeFunction += `*${interfaceJson.description}*\n\n`
-    readmeFunction += `\`\`\`typescript\n${functionCall}\n\`\`\`\n\n`
+    readmeFunction += `\`\`\`ts\n${functionCall}\n\`\`\`\n\n`
     readmeFunction += markdownTable(readmeParametersTable, { align: ['c', 'c', 'l'] }) + '\n'
     functionContent += functionCall
     functionContent += ' {\n\n'

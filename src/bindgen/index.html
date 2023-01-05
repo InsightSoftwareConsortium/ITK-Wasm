@@ -1,30 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/demo/logo.svg" />
-    <link rel="stylesheet" href="/demo/style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><bindgenPackageName></title>
-  </head>
-  <body>
-    <div id="app">
-      <a href="https://wasm.itk.org/" target="_blank">
-        <img src="/demo/logo.svg" class="logo vanilla" alt="ITK Wasm logo" />
-      </a>
-      <h1><bindgenPackageName></h1>
-        package
-      <div class="card">
-        <h2>functions</h2>
-        <ul id="pipeline-functions-list">
-
-        </ul>
-      </div>
-      <p class="read-the-docs">
-        Click on the ITK Wasm logo to learn more
-      </p>
-    </div>
-
-    <script type="module" src="/demo/app.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title><bindgenPackageName></title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="<bindgenPackageDescription>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+   <link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
+</head>
+<body>
+  <div id="app">Loading...</div>
+  <script>
+    window.$docsify = {
+      logo: 'dist/demo/logo.svg',
+      name: '<bindgenPackageName>',
+      repo: ''
+    }
+  </script>
+  <!-- Docsify v4 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+</body>
 </html>
