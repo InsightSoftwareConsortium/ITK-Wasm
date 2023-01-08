@@ -1,0 +1,6 @@
+node_modules
+.DS_Store
+test
+cypress
+dist/index.html
+dist/demo
