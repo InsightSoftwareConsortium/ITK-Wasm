@@ -33,6 +33,7 @@ packages/compress-stringify/typescript/dist/pipelines/
 packages/compress-stringify/typescript/dist/*.d.ts
 packages/compress-stringify/typescript/dist/*.js
 packages/compress-stringify/typescript/dist/*.map
+packages/compress-stringify/typescript/cypress/videos/
 packages/compress-stringify/emscripten-build/
 
 node_modules

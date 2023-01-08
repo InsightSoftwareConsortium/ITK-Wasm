@@ -13,9 +13,16 @@
     }
   },
   "scripts": {
-    "start": "http-server ./dist/ -c-1",
-    "test": "npm run test:node",
+    "start": "http-server ./dist/ -c-1 -p 8083",
+    "test": "npm run test:node && npm run test:browser",
     "test:node": "ava test/*.js",
+    "test:browser": "npm run test:browser:chrome && npm run test:browser:firefox",
+    "test:browser:firefox": "start-server-and-test start http-get://localhost:8083 cypress:runFirefox",
+    "test:browser:chrome": "start-server-and-test start http-get://localhost:8083 cypress:runChrome",
+    "test:browser:debug": "start-server-and-test start http-get://localhost:8083 cypress:open",
+    "cypress:open": "npx cypress open",
+    "cypress:runChrome": "npx cypress run --browser chrome",
+    "cypress:runFirefox": "npx cypress run --browser firefox",
     "build": "npm run build:tsc && npm run build:node && npm run build:browser",
     "build:node": "rollup -c ./rollup.node.config.js",
     "build:browser": "rollup -c ./rollup.browser.config.js",
@@ -38,11 +45,13 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^10.0.1",
     "ava": "^5.1.0",
+    "cypress": "^12.3.0",
     "http-server": "^14.1.1",
     "rollup": "^3.9.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-ignore": "^1.0.10",
     "rollup-plugin-polyfill-node": "^0.11.0",
+    "start-server-and-test": "^1.15.2",
     "typescript": "^4.9.4"
   },
   "repository": {
