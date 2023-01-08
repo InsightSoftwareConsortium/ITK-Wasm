@@ -561,7 +561,12 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       if (interfaceJsonTypeToInterfaceType.has(input.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
         const camel = camelCase(input.name)
-        const data = interfaceType.includes('File') ?  `{ data: ${camel}, path: "file${index.toString()}" } ` : camel
+        let data = camel
+        if (interfaceType.includes('File')) {
+          data = `{ data: ${camel}, path: "file${index.toString()}" } `
+        } else if(interfaceType.includes('Stream')) {
+          data = `{ data: ${camel} } `
+        }
         functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${data} },\n`
       }
     })

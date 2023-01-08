@@ -30,6 +30,9 @@ dist/dicom/dist/demo/*
 !dist/dicom/dist/demo/app.js
 
 packages/compress-stringify/typescript/dist/pipelines/
+packages/compress-stringify/typescript/dist/*.d.ts
+packages/compress-stringify/typescript/dist/*.js
+packages/compress-stringify/typescript/dist/*.map
 packages/compress-stringify/emscripten-build/
 
 node_modules

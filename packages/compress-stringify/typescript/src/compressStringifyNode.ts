@@ -27,7 +27,7 @@ async function compressStringifyNode(
     { type: InterfaceTypes.BinaryStream },
   ]
   const inputs: [ PipelineInput ] = [
-    { type: InterfaceTypes.BinaryStream, data: input },
+    { type: InterfaceTypes.BinaryStream, data: { data: input }  },
   ]
 
   const args = []

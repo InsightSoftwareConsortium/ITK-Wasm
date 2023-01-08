@@ -14,7 +14,8 @@
   },
   "scripts": {
     "start": "http-server ./dist/ -c-1",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test:node",
+    "test:node": "ava test/*.js",
     "build": "npm run build:tsc && npm run build:node && npm run build:browser",
     "build:node": "rollup -c ./rollup.node.config.js",
     "build:browser": "rollup -c ./rollup.browser.config.js",
@@ -36,6 +37,7 @@
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^10.0.1",
+    "ava": "^5.1.0",
     "http-server": "^14.1.1",
     "rollup": "^3.9.0",
     "rollup-plugin-copy": "^3.4.0",
