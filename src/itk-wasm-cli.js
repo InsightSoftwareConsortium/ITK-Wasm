@@ -297,8 +297,10 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     packageJson.exports['.'].browser = `./dist/${packageName}.js`
     packageJson.exports['.'].node = `./dist/${packageName}.node.js`
     packageJson.exports['.'].default = `./dist/${packageName}.js`
+    if(options.repository) {
+      packageJson.repository = { 'type': 'git', 'url': options.repository }
+    }
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
-
   }
 
   if (!forNode) {
@@ -744,6 +746,7 @@ program
   .requiredOption('-p, --package-name <package-name>', 'Output a package configuration files with the given packages name')
   .requiredOption('-d, --package-description <package-description>', 'Description for package')
   .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript',]))
+  .option('-r, --repository <repository-url>', 'Source code repository URL')
   .usage('[options] [wasmBinaries...]')
   .description('Generate WASM module bindings for a language')
   .action(bindgen)
