@@ -371,6 +371,20 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       wasmBinaryRelativePath = wasmBinaryName
     }
 
+    const distPipelinesDir = path.join(outputDir, 'dist', 'pipelines')
+    try {
+      fs.mkdirSync(distPipelinesDir, { recursive: true })
+    } catch (err) {
+      if (err.code !== 'EEXIST') throw err
+    }
+    fs.copyFileSync(wasmBinaryRelativePath, path.join(distPipelinesDir, path.basename(wasmBinaryRelativePath)))
+    const wasmBinaryBasename = path.basename(wasmBinaryRelativePath, '.wasm')
+    const wasmBinaryDirname = path.dirname(wasmBinaryRelativePath)
+    if (fs.existsSync(path.join(wasmBinaryDirname, `${wasmBinaryBasename}.js`))) {
+      fs.copyFileSync(path.join(wasmBinaryDirname, `${wasmBinaryBasename}.js`), path.join(distPipelinesDir, `${wasmBinaryBasename}.js`))
+      fs.copyFileSync(path.join(wasmBinaryDirname, `${wasmBinaryBasename}.umd.js`), path.join(distPipelinesDir, `${wasmBinaryBasename}.umd.js`))
+    }
+
     const parsedPath = path.parse(path.resolve(wasmBinaryRelativePath))
     const runPath = path.join(parsedPath.dir, parsedPath.name)
     const runPipelineScriptPath = bindgenResource('interfaceJSONNode.js')
