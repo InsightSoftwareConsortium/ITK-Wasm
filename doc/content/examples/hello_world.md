@@ -115,7 +115,7 @@ its output in the HTML DOM:
   <head>
     <title>itk-wasm Browser Hello World!</title>
     <meta charset="UTF-8" />
-    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.6/dist/umd/itk-wasm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.53/dist/umd/itk-wasm.min.js"></script>
   </head>
 
   <body>

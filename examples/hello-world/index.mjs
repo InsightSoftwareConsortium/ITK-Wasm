@@ -1,5 +1,5 @@
 import path from 'path'
 import { runPipelineNode } from 'itk-wasm'
 
-const pipelinePath = path.resolve('web-build', 'hello')
-runPipelineNode(pipelinePath)
+const pipelinePath = path.resolve('emscripten-build', 'hello')
+await runPipelineNode(pipelinePath, [])
