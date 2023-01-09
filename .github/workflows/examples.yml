@@ -27,18 +27,18 @@ jobs:
 
   build-hello-world-example:
     name: hello-world build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     defaults:
       run:
         working-directory: ./examples/hello-world
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '18'
 
     - name: Install
       run: |
@@ -49,36 +49,36 @@ jobs:
         npm run build
 
     - name: Save wasm builds
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: hello-world-build
         if-no-files-found: error
         path: |
-          examples/hello-world/web-build
+          examples/hello-world/emscripten-build
           examples/hello-world/wasi-build
 
 
   test-hello-world-example:
-    name: Hello World Test
+    name: hello-world test
     needs: build-hello-world-example
-    runs-on: ubuntu-20.04
-    container: cypress/browsers:node16.13.2-chrome97-ff96
+    runs-on: ubuntu-22.04
+    container: cypress/browsers:node18.12.0-chrome107
 
     defaults:
       run:
         working-directory: ./examples/hello-world
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Load wasm builds
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: hello-world-build
         path: examples/hello-world
 
     - name: Test
-      uses: cypress-io/github-action@v2
+      uses: cypress-io/github-action@v5
       with:
         working-directory: ./examples/hello-world
         browser: chrome
