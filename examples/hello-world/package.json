@@ -13,8 +13,8 @@
     "test:node": "node ./index.mjs",
     "cypress:open": "npx cypress open",
     "cypress:run": "npx cypress run",
-    "start": "http-server",
-    "test:browser": "start-server-and-test start http://localhost:8080 cypress:run"
+    "start": "http-server -p 8083",
+    "test:browser": "start-server-and-test start http://localhost:8083 cypress:run"
   },
   "author": "Matt McCormick <matt.mccormick@kitware.com>",
   "license": "Apache-2.0",
