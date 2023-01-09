@@ -54,7 +54,7 @@ jobs:
         name: hello-world-build
         if-no-files-found: error
         path: |
-          examples/hello-world/web-build
+          examples/hello-world/emscripten-build
           examples/hello-world/wasi-build
 
 
