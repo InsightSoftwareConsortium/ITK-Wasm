@@ -113,8 +113,7 @@ Congratulations! You just executed a C++ program in JavaScript. 🎉
 
 The same Emscripten Wasm module can be executed in a web browser.
 
-Create an HTML file that will call the Wasm module through JavaScript and display
-its output in the HTML DOM:
+Create an HTML file named `index.html` that will call the Wasm module through JavaScript and display its output in the HTML DOM:
 
 ```html
 <!DOCTYPE html>
