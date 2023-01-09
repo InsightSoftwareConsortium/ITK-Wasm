@@ -1,4 +1,4 @@
-title: Hello WASM World!
+title: Hello Wasm World!
 ---
 
 ## Introduction
@@ -24,7 +24,7 @@ Let's write some code! Populate *hello.cxx* with our Hello World program:
 #include <iostream>
 
 int main() {
-  std::cout << "Hello WASM world!" << std::endl;
+  std::cout << "Hello Wasm world!" << std::endl;
   return 0;
 }
 ```
@@ -68,7 +68,7 @@ Execute the binary with the `run` `itk-wasm` subcommand.
 
 ```sh
 ❯ itk-wasm -b ./wasi-build/ run hello.wasi.wasm
-Hello WASM world!
+Hello Wasm world!
 ```
 
 Congratulations! You just executed a C++ program compiled to WebAssembly. 🎉
@@ -90,14 +90,15 @@ import path from 'path'
 import { runPipelineNode } from 'itk-wasm'
 
 const pipelinePath = path.resolve('web-build', 'hello')
-runPipelineNode(pipelinePath)
+const args = []
+await runPipelineNode(pipelinePath, args)
 ```
 
 And run it!
 
 ```sh
 ❯ npx node ./index.mjs
-Hello WASM world!
+Hello Wasm world!
 ```
 
 Congratulations! You just executed a C++ program in JavaScript. 🎉
@@ -148,6 +149,6 @@ http-server .
 
 And point your browser to `http://127.0.0.1:8080/`.
 
-![Hello WASM World!](./hello_wasm_world.png)
+![Hello Wasm World!](./hello_wasm_world.png)
 
 Congratulations! You just executed a C++ program in your web browser. 🎉
