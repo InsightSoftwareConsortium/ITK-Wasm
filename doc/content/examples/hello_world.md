@@ -7,7 +7,7 @@ This example walks through how to compile a *hello world* executable written in 
 
 Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Docker](https://docs.docker.com/install/) are installed. On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). On Windows, we recommend [WSL 2 with Docker enabled](https://docs.docker.com/desktop/windows/wsl/).
 
-While we recommend following along step-by-step, the complete example can also be found in the [`examples/` directory of the project repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples).
+While we recommend following along step-by-step, the complete example can also be found in the [`examples/` directory of the project repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/hello-world).
 
 Let's get started! 🚀
 
@@ -113,8 +113,7 @@ Congratulations! You just executed a C++ program in JavaScript. 🎉
 
 The same Emscripten Wasm module can be executed in a web browser.
 
-Create an HTML file that will call the Wasm module through JavaScript and display
-its output in the HTML DOM:
+Create an HTML file named `index.html` that will call the Wasm module through JavaScript and display its output in the HTML DOM:
 
 ```html
 <!DOCTYPE html>

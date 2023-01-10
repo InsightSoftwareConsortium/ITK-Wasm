@@ -2,15 +2,9 @@
 
 *Note: itk-wasm is currently in the beta development stage. The interface is relatively stable while functionality is currently being fleshed out. Updates for the rest of the documentation for changes from itk.js to itk-wasm is in progress. Last updated March 11th, 2022.*
 
-**itk-wasm** is a major upgrade with a focus on univeral, performant computing in
-WebAssembly. The itk.js to itk-wasm transition also brings improvements
-including modern, elegant programming interfaces, accelerated performance,
-and execution beyond JavaScript thanks to [WASI](https://wasi.dev).
+**itk-wasm** is a major upgrade with a focus on universal, performant computing in WebAssembly. The itk.js to itk-wasm transition also brings improvements, including modern, elegant programming interfaces, accelerated performance, and execution beyond JavaScript thanks to [WASI](https://wasi.dev).
 
-Most itk.js client code will simply need to update its import statements to
-leverage itk-wasm. However, there are also other more advanced changes. A
-description of the changes, their motivation, and example migration code can
-be found below.
+Most itk.js client code will simply need to update its import statements to leverage itk-wasm. However, there are also other more advanced changes. A description of the changes, their motivation, and example migration code can be found below.
 
 ## Module import statements
 
@@ -66,8 +60,7 @@ An example that vendors these package's webassembly assets into an application f
 
 The `itkConfig.js` specifies where to look for the io webassembly modules and an optional default base URL for pipeline modules.
 
-The default `itkConfig.js` is configured to use the [JsDelivr](https://www.jsdelivr.com/) CDN, but you may want to override this
-default.
+The default `itkConfig.js` is configured to use the [JsDelivr](https://www.jsdelivr.com/) CDN, but you may want to override this default.
 
 In the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Webpack) the io webassembly module assets are vendored into `/itk` directories, this module looks like:
 
