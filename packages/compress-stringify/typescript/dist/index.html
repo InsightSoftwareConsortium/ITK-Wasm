@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/demo/logo.svg" />
     <link rel="stylesheet" href="/demo/style.css" />
+    <link
+      rel="stylesheet"
+      media="(prefers-color-scheme:light)"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.88/dist/themes/light.css"
+    />
+    <link
+      rel="stylesheet"
+      media="(prefers-color-scheme:dark)"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.88/dist/themes/dark.css"
+      onload="document.documentElement.classList.add('sl-theme-dark');"
+    />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.88/dist/shoelace.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>itk-compress-stringify</title>
   </head>
@@ -17,12 +29,41 @@
       <div class="card">
         <h2>functions</h2>
         <ul id="pipeline-functions-list">
-
         </ul>
+        <sl-divider style="--width:2px;"></sl-divider>
+        <h3 id="compressStringify-function"><code>compressStringify</code></h3>
+        <i>Given a binary, compress and optionally base64 encode.</i>
+        <div id="compressStringifyInputs">
+          <h4>Inputs</h4>
+            <form>
+              <sl-input required name="input" type="text" label="input" disabled help-text="Input binary"></sl-input>
+              <label for="inputFile">
+                  <sl-button
+                      variant="primary"
+                      onclick="this.parentElement.nextElementSibling.click()"
+                  >
+                      Input binary file
+                  </sp-button>
+              </label>
+              <input type="file" name="inputFile" style="display: none" />
+              <br /> <br />
+              <sl-checkbox name="stringify">stringify - <i>Stringify the output</i></sl-checkbox>
+              <br /> <br />
+              <sl-input name="compressionLevel" placeholder="3" type="number" min="0" max="9" step="1" inputmode="decimal" label="compressionLevel" help-text="Compression level, typically 1-9"></sl-input>
+              <br />
+              <sl-input name="dataUrlPrefix" placeholder="data:base64," type="text" label="dataUrlPrefix" help-text="dataURL prefix"></sl-input>
+              <br />
+              <sl-button name="loadSample" variant="default">Load sample inputs</sl-button>
+              <sl-button type="submit" variant="success">Run</sl-button>
+            </form>
+          </div>
+        <div>
+          <h4>Outputs</h4>
+        </div>
+        <sl-skeleton effect="none"></sl-skeleton>
+        <sl-divider style="--width:2px;"></sl-divider>
+        <h3 id="parseStringDecompress-function"><code>parseStringDecompress</code></h3>
       </div>
-      <p class="read-the-docs">
-        Click on the ITK Wasm logo to learn more
-      </p>
     </div>
 
     <script type="module" src="/demo/app.js"></script>
