@@ -1,4 +1,4 @@
-import itkConfig from "../../../src/itkConfigDevServer"
+import { pipeline } from "stream"
 
 describe('runPipeline', () => {
   beforeEach(() => {
@@ -31,6 +31,19 @@ describe('runPipeline', () => {
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
       const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, configPropertyPipelinesBaseUrl)
+    })
+  })
+
+  it('fetches WASM files from a custom pipelineBaseUrl URL', () => {
+    cy.window().then(async (win) => {
+      const itk = win.itk
+      const pipelineBaseUrl = '/pipelines'
+
+      const args = []
+      const outputs = null
+      const inputs = null
+      const stdoutStderrPath = 'stdout-stderr-test'
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, pipelineBaseUrl)
     })
   })
 
