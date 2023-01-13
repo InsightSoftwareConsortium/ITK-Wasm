@@ -4,7 +4,7 @@ import typescript from '@rollup/plugin-typescript'
 import commonjs from '@rollup/plugin-commonjs'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import ignore from 'rollup-plugin-ignore'
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser'
 import packageJson from './package.json' assert { type: 'json' }
 import json from '@rollup/plugin-json'
 
