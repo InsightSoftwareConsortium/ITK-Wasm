@@ -10,10 +10,7 @@ import IOInput from './IOInput.js'
 registerWebworker(async function (input: RunPipelineInput | IOInput) {
   let pipelineModule = null
   if (input.operation === 'runPipeline') {
-    const pipelineBaseUrl = input.config[input.configPropertyPipelineBaseUrl]
-    if (typeof pipelineBaseUrl === 'undefined') {
-      throw new Error(`configPropertyPipelineBaseUrl: ${input.configPropertyPipelineBaseUrl} is undefined!`)
-    }
+    const pipelineBaseUrl = typeof input.config[input.pipelineBaseUrl] === 'undefined' ? input.pipelineBaseUrl : input.config[input.pipelineBaseUrl] as string
     pipelineModule = await loadPipelineModule(input.pipelinePath, pipelineBaseUrl)
   } else if (input.operation === 'readImage') {
     pipelineModule = await loadImageIOPipelineModule(input as IOInput, '-read-image')
