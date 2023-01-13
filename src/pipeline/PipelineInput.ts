@@ -11,8 +11,19 @@ import PolyData from '../core/PolyData.js'
 interface PipelineInput {
   // Backwards compatibility with IOTypes -- remove?
   path?: string
-  type: typeof IOTypes[keyof typeof IOTypes] | typeof InterfaceTypes[keyof typeof InterfaceTypes]
-  data: string | Uint8Array | TextStream | BinaryStream | TextFile | BinaryFile | Image | Mesh | PolyData
+  type:
+  | (typeof IOTypes)[keyof typeof IOTypes]
+  | (typeof InterfaceTypes)[keyof typeof InterfaceTypes]
+  data:
+  | string
+  | Uint8Array
+  | TextStream
+  | BinaryStream
+  | TextFile
+  | BinaryFile
+  | Image
+  | Mesh
+  | PolyData
 }
 
 export default PipelineInput
