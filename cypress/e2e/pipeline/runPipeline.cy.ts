@@ -1,5 +1,3 @@
-import { pipeline } from "stream"
-
 describe('runPipeline', () => {
   beforeEach(() => {
     cy.visit('/')
@@ -37,7 +35,7 @@ describe('runPipeline', () => {
   it('fetches WASM files from a custom pipelineBaseUrl URL', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
-      const pipelineBaseUrl = '/pipelines'
+      const pipelineBaseUrl = new URL('/pipelines', document.location.origin)
 
       const args = []
       const outputs = null
@@ -47,6 +45,18 @@ describe('runPipeline', () => {
     })
   })
 
+  it('fetches WASM files from a custom pipelineBaseUrl string', () => {
+    cy.window().then(async (win) => {
+      const itk = win.itk
+      const pipelineBaseUrl = '/pipelines'
+
+      const args = []
+      const outputs = null
+      const inputs = null
+      const stdoutStderrPath = 'stdout-stderr-test'
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, pipelineBaseUrl)
+    })
+  })
 
   it('re-uses a WebWorker', () => {
     cy.window().then(async (win) => {

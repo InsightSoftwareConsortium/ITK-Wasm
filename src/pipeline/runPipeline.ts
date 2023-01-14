@@ -132,12 +132,13 @@ async function runPipeline (webWorker: Worker | null | boolean, pipelinePath: st
     stderr: string
     outputs: PipelineOutput[]
   }
+  const pipelineBaseUrlString = typeof pipelineBaseUrl !== 'string' && typeof pipelineBaseUrl?.href !== 'undefined' ? pipelineBaseUrl.href : pipelineBaseUrl
   const result: RunPipelineWorkerResult = await webworkerPromise.postMessage(
     {
       operation: 'runPipeline',
       config: config,
       pipelinePath: pipelinePath.toString(),
-      pipelineBaseUrl,
+      pipelineBaseUrl: pipelineBaseUrlString,
       args,
       outputs,
       inputs
