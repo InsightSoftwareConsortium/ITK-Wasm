@@ -10,7 +10,7 @@ specifiers:
   ava: ^5.1.0
   cypress: ^12.3.0
   http-server: ^14.1.1
-  itk-wasm: ^1.0.0-b.54
+  itk-wasm: ^1.0.0-b.55
   rollup: ^3.9.0
   rollup-plugin-copy: ^3.4.0
   rollup-plugin-ignore: ^1.0.10
@@ -19,7 +19,7 @@ specifiers:
   typescript: ^4.9.4
 
 dependencies:
-  itk-wasm: 1.0.0-b.54
+  itk-wasm: 1.0.0-b.55
 
 devDependencies:
   '@rollup/plugin-commonjs': 24.0.0_rollup@3.9.1
@@ -1676,8 +1676,8 @@ packages:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
     dev: true
 
-  /itk-wasm/1.0.0-b.54:
-    resolution: {integrity: sha512-7aOzUaN6Vzdv9g9J4pWXh0rVq9l3CFQgtTT68MgADkEYEHOICzWQAoseICub0RxtPLNmE7CmZCpBnUzeOcQCFQ==}
+  /itk-wasm/1.0.0-b.55:
+    resolution: {integrity: sha512-rigy+kGOh7isrO/4G4lwQv+L7HnI+mxFKpZrr364uy698IU0p/BUfhzoX2YdUdcpzoTt+5GJohhqB+bXWZX+uw==}
     hasBin: true
     dependencies:
       '@babel/runtime': 7.20.7

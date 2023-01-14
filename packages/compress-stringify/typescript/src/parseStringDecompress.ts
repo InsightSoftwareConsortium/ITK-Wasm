@@ -7,6 +7,7 @@ import {
 
 import ParseStringDecompressOptions from './ParseStringDecompressOptions.js'
 import ParseStringDecompressResult from './ParseStringDecompressResult.js'
+import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 
 /**
  * Given a binary or string produced with CompressedStringify, decompress and optionally base64 decode.
@@ -46,7 +47,7 @@ async function parseStringDecompress(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs)
+  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl())
   if (returnValue !== 0) {
     throw new Error(stderr)
   }
