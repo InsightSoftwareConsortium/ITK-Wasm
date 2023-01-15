@@ -6,10 +6,10 @@ import terser from '@rollup/plugin-terser'
 import packageJson from './package.json' assert { type: 'json' }
 
 export default {
-  input: './src/indexNode.ts',
+  input: './src/index-node.ts',
   output: [
     {
-      file: `./dist/${packageJson.name}.node.js`,
+      file: `./dist/${packageJson.name}-node.js`,
       format: 'es',
       sourcemap: true,
       plugins: [terser(),],

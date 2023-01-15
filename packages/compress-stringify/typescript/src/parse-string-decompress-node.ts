@@ -2,25 +2,26 @@ import {
   BinaryStream,
   InterfaceTypes,
   PipelineInput,
-  runPipeline
+  runPipelineNode
 } from 'itk-wasm'
 
-import ParseStringDecompressOptions from './ParseStringDecompressOptions.js'
-import ParseStringDecompressResult from './ParseStringDecompressResult.js'
-import { getPipelinesBaseUrl } from './pipelines-base-url.js'
+import ParseStringDecompressOptions from './parse-string-decompress-options.js'
+import ParseStringDecompressNodeResult from './parse-string-decompress-node-result.js'
+
+
+import path from 'path'
 
 /**
  * Given a binary or string produced with CompressedStringify, decompress and optionally base64 decode.
  *
  * @param {Uint8Array} input - Compressed input
  *
- * @returns {Promise<ParseStringDecompressResult>} - result object
+ * @returns {Promise<ParseStringDecompressNodeResult>} - result object
  */
-async function parseStringDecompress(
-  webWorker: null | Worker,
+async function parseStringDecompressNode(
   input: Uint8Array,
   options: ParseStringDecompressOptions = {}
-) : Promise<ParseStringDecompressResult> {
+) : Promise<ParseStringDecompressNodeResult> {
 
   const desiredOutputs = [
     { type: InterfaceTypes.BinaryStream },
@@ -40,23 +41,21 @@ async function parseStringDecompress(
     args.push('--parse-string')
   }
 
-  const pipelinePath = 'parse-string-decompress'
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'parse-string-decompress')
 
   const {
-    webWorker: usedWebWorker,
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl())
+  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
   if (returnValue !== 0) {
     throw new Error(stderr)
   }
 
   const result = {
-    webWorker: usedWebWorker as Worker,
     output: (outputs[0].data as BinaryStream).data,
   }
   return result
 }
 
-export default parseStringDecompress
+export default parseStringDecompressNode

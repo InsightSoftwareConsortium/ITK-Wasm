@@ -8,7 +8,7 @@
   "exports": {
     ".": {
       "browser": "./dist/package-name.js",
-      "node": "./dist/package-name.node.js",
+      "node": "./dist/package-name-node.js",
       "default": "./dist/package-name.js"
     }
   },

@@ -2,26 +2,27 @@ import {
   BinaryStream,
   InterfaceTypes,
   PipelineInput,
-  runPipelineNode
+  runPipeline
 } from 'itk-wasm'
 
-import CompressStringifyOptions from './CompressStringifyOptions.js'
-import CompressStringifyNodeResult from './CompressStringifyNodeResult.js'
+import CompressStringifyOptions from './compress-stringify-options.js'
+import CompressStringifyResult from './compress-stringify-result.js'
 
 
-import path from 'path'
+import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 
 /**
  * Given a binary, compress and optionally base64 encode.
  *
  * @param {Uint8Array} input - Input binary
  *
- * @returns {Promise<CompressStringifyNodeResult>} - result object
+ * @returns {Promise<CompressStringifyResult>} - result object
  */
-async function compressStringifyNode(
+async function compressStringify(
+  webWorker: null | Worker,
   input: Uint8Array,
   options: CompressStringifyOptions = {}
-) : Promise<CompressStringifyNodeResult> {
+) : Promise<CompressStringifyResult> {
 
   const desiredOutputs = [
     { type: InterfaceTypes.BinaryStream },
@@ -47,21 +48,23 @@ async function compressStringifyNode(
     args.push('--data-url-prefix', options.dataUrlPrefix.toString())
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'compress-stringify')
+  const pipelinePath = 'compress-stringify'
 
   const {
+    webWorker: usedWebWorker,
     returnValue,
     stderr,
     outputs
-  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
+  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl())
   if (returnValue !== 0) {
     throw new Error(stderr)
   }
 
   const result = {
+    webWorker: usedWebWorker as Worker,
     output: (outputs[0].data as BinaryStream).data,
   }
   return result
 }
 
-export default compressStringifyNode
+export default compressStringify

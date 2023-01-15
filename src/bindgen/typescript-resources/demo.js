@@ -1,5 +1,5 @@
 import * as <bindgenPackageNameCamelCase> from '../<bindgenPackageName>.js'
-console.log('demo stuff')
+<bindgenPackageNameCamelCase>.setPipelinesBaseUrl('/pipelines')
 
 const packageFunctions = []
 for (const [key, val] of Object.entries(<bindgenPackageNameCamelCase>)) {

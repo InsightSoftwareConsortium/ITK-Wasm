@@ -5,22 +5,24 @@ import {
   runPipeline
 } from 'itk-wasm'
 
-import CompressStringifyOptions from './CompressStringifyOptions.js'
-import CompressStringifyResult from './CompressStringifyResult.js'
+import ParseStringDecompressOptions from './parse-string-decompress-options.js'
+import ParseStringDecompressResult from './parse-string-decompress-result.js'
+
+
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 
 /**
- * Given a binary, compress and optionally base64 encode.
+ * Given a binary or string produced with CompressedStringify, decompress and optionally base64 decode.
  *
- * @param {Uint8Array} input - Input binary
+ * @param {Uint8Array} input - Compressed input
  *
- * @returns {Promise<CompressStringifyResult>} - result object
+ * @returns {Promise<ParseStringDecompressResult>} - result object
  */
-async function compressStringify(
+async function parseStringDecompress(
   webWorker: null | Worker,
   input: Uint8Array,
-  options: CompressStringifyOptions = {}
-) : Promise<CompressStringifyResult> {
+  options: ParseStringDecompressOptions = {}
+) : Promise<ParseStringDecompressResult> {
 
   const desiredOutputs = [
     { type: InterfaceTypes.BinaryStream },
@@ -36,17 +38,11 @@ async function compressStringify(
   args.push('0')
   // Options
   args.push('--memory-io')
-  if (options.stringify) {
-    args.push('--stringify')
-  }
-  if (options.compressionLevel) {
-    args.push('--compression-level', options.compressionLevel.toString())
-  }
-  if (options.dataUrlPrefix) {
-    args.push('--data-url-prefix', options.dataUrlPrefix.toString())
+  if (options.parseString) {
+    args.push('--parse-string')
   }
 
-  const pipelinePath = 'compress-stringify'
+  const pipelinePath = 'parse-string-decompress'
 
   const {
     webWorker: usedWebWorker,
@@ -65,4 +61,4 @@ async function compressStringify(
   return result
 }
 
-export default compressStringify
+export default parseStringDecompress

@@ -63,13 +63,14 @@ function camelCase(param) {
 }
 
 function bindgenResource(filePath) {
-  return path.join(path.dirname(import.meta.url.substring(7)), 'bindgen', 'typescript-resources', filePath)
+  return path.join(path.dirname(import.meta.url.substring(7)), 'typescript-resources', filePath)
 }
 
 function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=false) {
   // index module
   let indexContent = ''
-  const nodeText = forNode ? 'Node' : ''
+  const nodeTextKebab = forNode ? '-node' : ''
+  const nodeTextCamel = forNode ? 'Node' : ''
 
   const srcOutputDir = path.join(outputDir, 'src')
   try {
@@ -98,6 +99,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
   }
 
   if (!forNode) {
+    indexContent += "export * from './pipelines-base-url.js'\n\n"
     try {
       fs.mkdirSync(path.join(outputDir, 'dist', 'demo'), { recursive: true })
     } catch (err) {
@@ -111,10 +113,10 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
     const docsIndexPath = path.join(outputDir, 'index.html')
     if (!fs.existsSync(docsIndexPath)) {
-      let indexContent = fs.readFileSync(bindgenResource('index.html'), { encoding: 'utf8', flag: 'r' })
-      indexContent = indexContent.replaceAll('<bindgenPackageName>', packageName)
-      indexContent = indexContent.replaceAll('<bindgenPackageDescription>', options.packageDescription)
-      fs.writeFileSync(docsIndexPath, indexContent)
+      let docsIndexContent = fs.readFileSync(bindgenResource('index.html'), { encoding: 'utf8', flag: 'r' })
+      docsIndexContent = docsIndexContent.replaceAll('<bindgenPackageName>', packageName)
+      docsIndexContent = docsIndexContent.replaceAll('<bindgenPackageDescription>', options.packageDescription)
+      fs.writeFileSync(docsIndexPath, docsIndexContent)
       fs.copyFileSync(bindgenResource('.nojekyll'), path.join(outputDir, '.nojekll'))
     }
 
@@ -130,9 +132,9 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
     const indexPath = path.join(outputDir, 'dist', 'index.html')
     if (!fs.existsSync(indexPath)) {
-      let indexContent = fs.readFileSync(bindgenResource('dist-index.html'), { encoding: 'utf8', flag: 'r' })
-      indexContent = indexContent.replaceAll('<bindgenPackageName>', packageName)
-      fs.writeFileSync(indexPath, indexContent)
+      let demoIndexContent = fs.readFileSync(bindgenResource('dist-index.html'), { encoding: 'utf8', flag: 'r' })
+      demoIndexContent = demoIndexContent.replaceAll('<bindgenPackageName>', packageName)
+      fs.writeFileSync(indexPath, demoIndexContent)
     }
 
     const demoPath = path.join(outputDir, 'dist', 'demo', 'app.js')
@@ -198,15 +200,15 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     const moduleCamelCase = camelCase(parsedPath.name)
     const modulePascalCase = `${moduleCamelCase[0].toUpperCase()}${moduleCamelCase.substring(1)}`
 
-    readmeInterface += `  ${moduleCamelCase}${nodeText},\n`
+    readmeInterface += `  ${moduleCamelCase}${nodeTextCamel},\n`
     let readmeFunction = ''
     let readmeResult = ''
     let readmeOptions = ''
 
     // Result module
-    let resultContent = `interface ${modulePascalCase}${nodeText}Result {\n`
+    let resultContent = `interface ${modulePascalCase}${nodeTextCamel}Result {\n`
     const readmeResultTable = [ ['Property', 'Type', 'Description'], ]
-    readmeResult += `\n**\`${modulePascalCase}${nodeText}Result\` interface:**\n\n`
+    readmeResult += `\n**\`${modulePascalCase}${nodeTextCamel}Result\` interface:**\n\n`
     if (!forNode) {
       resultContent += `  /** WebWorker used for computation */\n  webWorker: Worker | null\n\n`
       readmeResultTable.push(['**webWorker**', '*Worker*', 'WebWorker used for computation'])
@@ -235,15 +237,15 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     if(importTypes.size !== 0)
       resultContent = `import { ${Array.from(importTypes).join(',')} } from 'itk-wasm'\n\n` + resultContent;
 
-    resultContent += `}\n\nexport default ${modulePascalCase}${nodeText}Result\n`
-    fs.writeFileSync(path.join(srcOutputDir, `${modulePascalCase}${nodeText}Result.ts`), resultContent)
-    indexContent += `\n\nimport ${modulePascalCase}${nodeText}Result from './${modulePascalCase}${nodeText}Result.js'\n`
-    indexContent += `export type { ${modulePascalCase}${nodeText}Result }\n\n`
+    resultContent += `}\n\nexport default ${modulePascalCase}${nodeTextCamel}Result\n`
+    fs.writeFileSync(path.join(srcOutputDir, `${moduleKebabCase}${nodeTextKebab}-result.ts`), resultContent)
+    indexContent += `\n\nimport ${modulePascalCase}${nodeTextCamel}Result from './${moduleKebabCase}${nodeTextKebab}-result.js'\n`
+    indexContent += `export type { ${modulePascalCase}${nodeTextCamel}Result }\n\n`
 
     // Options module
     const haveParameters = !!interfaceJson.parameters.length
     if (haveParameters) {
-      readmeOptions += `\n**\`${modulePascalCase}${nodeText}Options\` interface:**\n\n`
+      readmeOptions += `\n**\`${modulePascalCase}${nodeTextCamel}Options\` interface:**\n\n`
       const readmeOptionsTable = [ ['Property', 'Type', 'Description'], ]
       let optionsContent = `interface ${modulePascalCase}Options {\n`
       interfaceJson.parameters.forEach((parameter) => {
@@ -262,9 +264,9 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}*`, parameter.description])
       })
       optionsContent += `}\n\nexport default ${modulePascalCase}Options\n`
-      fs.writeFileSync(path.join(srcOutputDir, `${modulePascalCase}Options.ts`), optionsContent)
+      fs.writeFileSync(path.join(srcOutputDir, `${moduleKebabCase}-options.ts`), optionsContent)
 
-      indexContent += `import ${modulePascalCase}Options from './${modulePascalCase}Options.js'\n`
+      indexContent += `import ${modulePascalCase}Options from './${moduleKebabCase}-options.js'\n`
       indexContent += `export type { ${modulePascalCase}Options }\n\n`
       readmeOptions += markdownTable(readmeOptionsTable, { align: ['c', 'c', 'l'] }) + '\n'
     }
@@ -296,11 +298,13 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     }
     functionContent += `} from 'itk-wasm'\n\n`
     if (haveParameters) {
-      functionContent += `import ${modulePascalCase}Options from './${modulePascalCase}Options.js'\n`
+      functionContent += `import ${modulePascalCase}Options from './${moduleKebabCase}-options.js'\n`
     }
-    functionContent += `import ${modulePascalCase}${nodeText}Result from './${modulePascalCase}${nodeText}Result.js'\n\n`
+    functionContent += `import ${modulePascalCase}${nodeTextCamel}Result from './${moduleKebabCase}${nodeTextKebab}-result.js'\n\n`
     if (forNode) {
-      functionContent += `\nimport path from 'path'\n\n`
+      functionContent += "\nimport path from 'path'\n\n"
+    } else {
+      functionContent += "\nimport { getPipelinesBaseUrl } from './pipelines-base-url.js'\n\n"
     }
 
     const readmeParametersTable = [['Parameter', 'Type', 'Description'],]
@@ -315,12 +319,12 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionContent += ` * @param {${typescriptType}} ${camelCase(input.name)} - ${input.description}\n`
       readmeParametersTable.push([`\`${camelCase(input.name)}\``, `*${typescriptType}*`, input.description])
     })
-    functionContent += ` *\n * @returns {Promise<${modulePascalCase}${nodeText}Result>} - result object\n`
+    functionContent += ` *\n * @returns {Promise<${modulePascalCase}${nodeTextCamel}Result>} - result object\n`
     functionContent += ` */\n`
 
-    readmeFunction += `\n#### ${moduleCamelCase}${nodeText}\n\n`
+    readmeFunction += `\n#### ${moduleCamelCase}${nodeTextCamel}\n\n`
     let functionCall = ''
-    functionCall += `async function ${moduleCamelCase}${nodeText}(\n`
+    functionCall += `async function ${moduleCamelCase}${nodeTextCamel}(\n`
     if (!forNode) {
       functionCall += '  webWorker: null | Worker,\n'
 
@@ -331,10 +335,10 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionCall += `  ${camelCase(input.name)}: ${typescriptType}${end}`
     })
     if (haveParameters) {
-      functionCall += `  options: ${modulePascalCase}Options = {}\n) : Promise<${modulePascalCase}${nodeText}Result>`
+      functionCall += `  options: ${modulePascalCase}Options = {}\n) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
 
     } else {
-      functionCall += `\n) : Promise<${modulePascalCase}${nodeText}Result>`
+      functionCall += `\n) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
     }
     readmeFunction += `*${interfaceJson.description}*\n\n`
     readmeFunction += `\`\`\`ts\n${functionCall}\n\`\`\`\n\n`
@@ -432,7 +436,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionContent += `  const {\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)\n`
     } else {
       functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`
-      functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs)\n`
+      functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl())\n`
     }
 
     functionContent += '  if (returnValue !== 0) {\n    throw new Error(stderr)\n  }\n\n'
@@ -453,10 +457,10 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     functionContent += '  }\n'
     functionContent += '  return result\n'
 
-    functionContent += `}\n\nexport default ${moduleCamelCase}${nodeText}\n`
-    fs.writeFileSync(path.join(srcOutputDir, `${moduleCamelCase}${nodeText}.ts`), functionContent)
-    indexContent += `import ${moduleCamelCase}${nodeText} from './${moduleCamelCase}${nodeText}.js'\n`
-    indexContent += `export { ${moduleCamelCase}${nodeText} }\n`
+    functionContent += `}\n\nexport default ${moduleCamelCase}${nodeTextCamel}\n`
+    fs.writeFileSync(path.join(srcOutputDir, `${moduleKebabCase}${nodeTextKebab}.ts`), functionContent)
+    indexContent += `import ${moduleCamelCase}${nodeTextCamel} from './${moduleKebabCase}${nodeTextKebab}.js'\n`
+    indexContent += `export { ${moduleCamelCase}${nodeTextCamel} }\n`
 
     readmePipelines += readmeFunction
     readmePipelines += readmeOptions
@@ -465,7 +469,14 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
   readmeInterface += `} from "${packageName}"\n\`\`\`\n`
   readmeInterface += readmePipelines
-  fs.writeFileSync(path.join(srcOutputDir, `index${nodeText}.ts`), indexContent)
+
+  const pipelinesBaseUrlPath = path.join(outputDir, 'src', 'pipelines-base-url.ts')
+  if (!fs.existsSync(pipelinesBaseUrlPath)) {
+    fs.copyFileSync(bindgenResource('pipelines-base-url.ts'), pipelinesBaseUrlPath)
+  }
+
+  fs.writeFileSync(path.join(srcOutputDir, `index${nodeTextKebab}.ts`), indexContent)
+
   return readmeInterface
 }
 
