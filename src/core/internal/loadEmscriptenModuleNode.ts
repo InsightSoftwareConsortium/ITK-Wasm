@@ -1,12 +1,5 @@
 import fs from 'fs'
-// Workaround for EXPORT_ES6
-// https://github.com/emscripten-core/emscripten/issues/11792
-import { dirname } from 'path'
-import { createRequire } from 'module'
-
 import EmscriptenModule from '../ITKWASMEmscriptenModule.js'
-globalThis.__dirname = dirname(import.meta.url)
-globalThis.require = createRequire(import.meta.url)
 
 async function loadEmscriptenModuleNode (modulePath: string): Promise<EmscriptenModule> {
   let modulePrefix = modulePath
