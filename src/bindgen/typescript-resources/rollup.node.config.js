@@ -3,13 +3,13 @@ import typescript from '@rollup/plugin-typescript'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import terser from '@rollup/plugin-terser'
-import packageJson from './package.json' assert { type: 'json' }
+import packageJson from '../package.json' assert { type: 'json' }
 
 export default {
-  input: './src/indexNode.ts',
+  input: './src/index-node.ts',
   output: [
     {
-      file: `./dist/${packageJson.name}.node.js`,
+      file: `./dist/bundles/${packageJson.name}-node.js`,
       format: 'es',
       sourcemap: true,
       plugins: [terser(),],

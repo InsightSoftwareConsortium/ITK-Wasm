@@ -1,4 +1,4 @@
-import * as itkCompressStringify from '../itk-compress-stringify.js'
+import * as itkCompressStringify from '../../dist/bundles/itk-compress-stringify.js'
 
 
 // promise-file-reader

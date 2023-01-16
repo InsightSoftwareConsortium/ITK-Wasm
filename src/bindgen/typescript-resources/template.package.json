@@ -3,22 +3,23 @@
   "version": "0.1.0",
   "description": "",
   "type": "module",
-  "module": "./dist/package-name.js",
+  "module": "./dist/bundles/package-name.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "browser": "./dist/package-name.js",
-      "node": "./dist/package-name-node.js",
-      "default": "./dist/package-name.js"
+      "browser": "./dist/bundles/package-name.js",
+      "node": "./dist/bundles/package-name-node.js",
+      "default": "./dist/bundles/package-name.js"
     }
   },
   "scripts": {
-    "start": "http-server ./dist/ -c-1",
+    "start": "vite -c build/vite.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:tsc && npm run build:node && npm run build:browser",
+    "build": "npm run build:tsc && npm run build:node && npm run build:browser && npm run build:demo",
     "build:node": "rollup -c ./rollup.node.config.js",
     "build:browser": "rollup -c ./rollup.browser.config.js",
-    "build:tsc": "tsc --pretty"
+    "build:tsc": "tsc --pretty",
+    "build:demo": "vite -c build/vite.config.js build"
   },
   "keywords": [
     "itk",
@@ -29,7 +30,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.53"
+    "itk-wasm": "^1.0.0-b.57"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
@@ -37,11 +38,12 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.3.0",
     "@rollup/plugin-typescript": "^10.0.1",
-    "http-server": "^14.1.1",
     "rollup": "^3.9.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-ignore": "^1.0.10",
     "rollup-plugin-polyfill-node": "^0.11.0",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "vite": "^4.0.4",
+    "vite-plugin-static-copy": "^0.13.0"
   }
 }

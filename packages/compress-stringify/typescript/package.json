@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
-  "module": "./dist/itk-compress-stringify.js",
+  "module": "./dist/bundles/itk-compress-stringify.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "browser": "./dist/itk-compress-stringify.js",
+      "browser": "./dist/bundles/itk-compress-stringify.js",
       "node": "./dist/itk-compress-stringify.node.js",
-      "default": "./dist/itk-compress-stringify.js"
+      "default": "./dist/bundles/itk-compress-stringify.js"
     }
   },
   "scripts": {
-    "start": "http-server ./dist/ -c-1 -p 8083",
+    "start": "vite -c build/vite.config.js",
     "test": "npm run test:node && npm run test:browser",
     "test:node": "ava test/*.js",
     "test:browser": "npm run test:browser:chrome && npm run test:browser:firefox",
@@ -23,10 +23,11 @@
     "cypress:open": "npx cypress open",
     "cypress:runChrome": "npx cypress run --browser chrome",
     "cypress:runFirefox": "npx cypress run --browser firefox",
-    "build": "npm run build:tsc && npm run build:node && npm run build:browser",
-    "build:node": "rollup -c ./rollup.node.config.js",
-    "build:browser": "rollup -c ./rollup.browser.config.js",
-    "build:tsc": "tsc --pretty"
+    "build": "npm run build:tsc && npm run build:node && npm run build:browser && npm run build:demo",
+    "build:node": "rollup -c ./build/rollup.node.config.js",
+    "build:browser": "rollup -c ./build/rollup.browser.config.js",
+    "build:tsc": "tsc --pretty",
+    "build:demo": "vite -c build/vite.config.js build"
   },
   "keywords": [
     "itk",
@@ -37,7 +38,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.55"
+    "itk-wasm": "^1.0.0-b.57"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
@@ -48,13 +49,14 @@
     "@types/node": "^18.11.18",
     "ava": "^5.1.0",
     "cypress": "^12.3.0",
-    "http-server": "^14.1.1",
     "rollup": "^3.9.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-ignore": "^1.0.10",
     "rollup-plugin-polyfill-node": "^0.11.0",
     "start-server-and-test": "^1.15.2",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "vite": "^4.0.0",
+    "vite-plugin-static-copy": "^0.13.0"
   },
   "repository": {
     "type": "git",

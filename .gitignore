@@ -35,6 +35,8 @@ packages/compress-stringify/typescript/dist/*.js
 packages/compress-stringify/typescript/dist/*.map
 packages/compress-stringify/typescript/cypress/videos/
 packages/compress-stringify/emscripten-build/
+packages/compress-stringify/typescript/demo/
+packages/compress-stringify/typescript/dist/
 
 node_modules
 .DS_Store

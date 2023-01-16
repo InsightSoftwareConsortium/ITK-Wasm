@@ -101,7 +101,12 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
   if (!forNode) {
     indexContent += "export * from './pipelines-base-url.js'\n\n"
     try {
-      fs.mkdirSync(path.join(outputDir, 'dist', 'demo'), { recursive: true })
+      fs.mkdirSync(path.join(outputDir, 'build'), { recursive: true })
+    } catch (err) {
+      if (err.code !== 'EEXIST') throw err
+    }
+    try {
+      fs.mkdirSync(path.join(outputDir, 'test', 'browser'), { recursive: true })
     } catch (err) {
       if (err.code !== 'EEXIST') throw err
     }
@@ -120,24 +125,24 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       fs.copyFileSync(bindgenResource('.nojekyll'), path.join(outputDir, '.nojekll'))
     }
 
-    const logoPath = path.join(outputDir, 'dist', 'demo', 'logo.svg')
+    const logoPath = path.join(outputDir, 'test', 'browser', 'logo.svg')
     if (!fs.existsSync(logoPath)) {
       fs.copyFileSync(bindgenResource('logo.svg'), logoPath)
     }
 
-    const demoStylePath = path.join(outputDir, 'dist', 'demo', 'style.css')
+    const demoStylePath = path.join(outputDir, 'test', 'browser', 'style.css')
     if (!fs.existsSync(demoStylePath)) {
       fs.copyFileSync(bindgenResource('demo.css'), demoStylePath)
     }
 
-    const indexPath = path.join(outputDir, 'dist', 'index.html')
+    const indexPath = path.join(outputDir, 'test', 'browser', 'index.html')
     if (!fs.existsSync(indexPath)) {
-      let demoIndexContent = fs.readFileSync(bindgenResource('dist-index.html'), { encoding: 'utf8', flag: 'r' })
+      let demoIndexContent = fs.readFileSync(bindgenResource('demo-index.html'), { encoding: 'utf8', flag: 'r' })
       demoIndexContent = demoIndexContent.replaceAll('<bindgenPackageName>', packageName)
       fs.writeFileSync(indexPath, demoIndexContent)
     }
 
-    const demoPath = path.join(outputDir, 'dist', 'demo', 'app.js')
+    const demoPath = path.join(outputDir, 'test', 'browser', 'app.ts')
     if (!fs.existsSync(demoPath)) {
       let demoContent = fs.readFileSync(bindgenResource('demo.js'), { encoding: 'utf8', flag: 'r' })
       demoContent = demoContent.replaceAll('<bindgenPackageName>', options.packageName)
@@ -145,14 +150,19 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       fs.writeFileSync(demoPath, demoContent)
     }
 
-    const rollupConfigPath = path.join(outputDir, 'rollup.browser.config.js')
+    const rollupConfigPath = path.join(outputDir, 'build', 'rollup.browser.config.js')
     if (!fs.existsSync(rollupConfigPath)) {
       fs.copyFileSync(bindgenResource('rollup.browser.config.js'), rollupConfigPath)
+    }
+
+    const viteConfigPath = path.join(outputDir, 'build', 'vite.config.js')
+    if (!fs.existsSync(viteConfigPath)) {
+      fs.copyFileSync(bindgenResource('vite.config.js'), viteConfigPath)
     }
   }
 
   if (forNode) {
-    const rollupConfigPath = path.join(outputDir, 'rollup.node.config.js')
+    const rollupConfigPath = path.join(outputDir, 'build', 'rollup.node.config.js')
     if (!fs.existsSync(rollupConfigPath)) {
       fs.copyFileSync(bindgenResource('rollup.node.config.js'), rollupConfigPath)
     }
@@ -473,6 +483,11 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
   const pipelinesBaseUrlPath = path.join(outputDir, 'src', 'pipelines-base-url.ts')
   if (!fs.existsSync(pipelinesBaseUrlPath)) {
     fs.copyFileSync(bindgenResource('pipelines-base-url.ts'), pipelinesBaseUrlPath)
+  }
+
+  const itkConfigPath = path.join(outputDir, 'src', 'itkConfig.js')
+  if (!fs.existsSync(itkConfigPath)) {
+    fs.copyFileSync(bindgenResource('itkConfig.js'), itkConfigPath)
   }
 
   fs.writeFileSync(path.join(srcOutputDir, `index${nodeTextKebab}.ts`), indexContent)
