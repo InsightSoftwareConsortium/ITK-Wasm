@@ -1,7 +1,7 @@
 import axios from 'axios'
 import WebworkerPromise from 'webworker-promise'
 
-import config from '../../itkConfig.js'
+import config from '../itkConfig.js'
 
 interface createWebWorkerPromiseResult {
   webworkerPromise: typeof WebworkerPromise
@@ -52,7 +52,7 @@ async function createWebWorkerPromise (existingWorker: Worker | null): Promise<c
     // importScripts / UMD is required over dynamic ESM import until Firefox
     // adds worker dynamic import support:
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
-    worker = new Worker(new URL('../../web-workers/pipeline.worker.js', import.meta.url))
+    worker = new Worker(new URL('../web-workers/pipeline.worker.js', import.meta.url))
   } else {
     const pipelineWorkerUrl = config.pipelineWorkerUrl
     if (pipelineWorkerUrl.startsWith('http')) {

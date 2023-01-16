@@ -1,4 +1,4 @@
-import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
+import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import TextStream from '../core/TextStream.js'
 

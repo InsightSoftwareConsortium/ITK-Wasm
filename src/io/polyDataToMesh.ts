@@ -1,4 +1,4 @@
-import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
+import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 import Mesh from '../core/Mesh.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import PolyData from '../core/PolyData.js'
