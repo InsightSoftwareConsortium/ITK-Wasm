@@ -1,4 +1,4 @@
-import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
+import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 import WorkerPool from '../core/WorkerPool.js'
 import Metadata from '../core/Metadata.js'
 import stackImages from '../core/stackImages.js'

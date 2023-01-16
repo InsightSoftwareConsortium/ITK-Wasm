@@ -1,4 +1,4 @@
-import createWebWorkerPromise from '../core/internal/createWebWorkerPromise.js'
+import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 
 import Image from '../core/Image.js'
 
