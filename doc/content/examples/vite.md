@@ -10,28 +10,28 @@ This example demonstrates how to use *itk-wasm* in a web browser application bui
 
 ## Copy *itk-wasm* Javascript and WebAssembly files to a public directory
 
-In the Vite example, `vite.config.js` uses `rollup-plugin-copy` to move prebuilt *itk-wasm* files to the `/dist` directory.
+In the Vite example, `vite.config.js` uses `vite-plugin-static-copy` to move prebuilt *itk-wasm* files to the `/dist` directory.
 
 ```js
-import copy from 'rollup-plugin-copy'
+import { defineConfig } from 'vite'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig({
   plugins: [
-    copy({
+    // put lazy loaded JavaScript and WASM bundles in dist directory
+    viteStaticCopy({
       targets: [
-        { src: 'node_modules/itk-wasm/dist/web-workers', dest: 'dist/itk' },
+        { src: 'node_modules/itk-wasm/dist/web-workers/*', dest: 'dist/itk/web-workers' },
         {
-          src: 'node_modules/itk-image-io',
-          dest: 'dist/itk',
-          rename: 'image-io'
+          src: 'node_modules/itk-image-io/*',
+          dest: 'dist/itk/image-io',
         },
         {
-          src: 'node_modules/itk-mesh-io',
-          dest: 'dist/itk',
+          src: 'node_modules/itk-mesh-io/*',
+          dest: 'dist/itk/mesh-io',
           rename: 'mesh-io'
         }
       ],
-      hook: 'writeBundle'
     })
   ],
   ...
@@ -40,7 +40,7 @@ export default defineConfig({
 
 The Vite config copies *web-workers* directory, which asynchronously perform IO or runs processing pipelines in a background thread.
 
-The config copies the complete *image-io* and *mesh-io* directories. You may want to copy a subset of *image-io* or *mesh-io* files, based on what features you use of *itk-wasm*. 
+The config copies the complete *image-io* and *mesh-io* directories. You may want to copy a subset of *image-io* or *mesh-io* files, based on what features you use of *itk-wasm*.
 
 ## Tell *itk-wasm* the location to download the Javascript and WebAssembly files
 
@@ -64,7 +64,7 @@ export default defineConfig({
 })
 ```
 
-The itkConfig.js file holds paths where *itk-wasm* fetches assets at runtime.  
+The itkConfig.js file holds paths where *itk-wasm* fetches assets at runtime.
 
 ```js
 const itkConfig = {
@@ -81,7 +81,7 @@ export default itkConfig
 
 In the example [directory](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Vite)
 
-### Development 
+### Development
 
 ```
 npm install
