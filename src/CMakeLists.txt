@@ -33,7 +33,7 @@ if(EMSCRIPTEN)
 # -s WASM_ASYNC_COMPILATION=0
 # -flto
   set(common_link_flags " -s ALLOW_MEMORY_GROWTH=1 -s FORCE_FILESYSTEM=1 -s MODULARIZE=1 -s WASM=1 -lnodefs.js -s EXIT_RUNTIME=0 -s INVOKE_RUN=1 --post-js ${CMAKE_CURRENT_SOURCE_DIR}/emscripten-module/itkJSPost.js")
-  set(esm_link_flags " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0")
+  set(esm_link_flags " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=1")
 endif()
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/io/internal/pipelines/common/compress-stringify/BuildZstd.cmake)

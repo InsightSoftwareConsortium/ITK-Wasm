@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=dockcross/web-wasm
-FROM $BASE_IMAGE:20220705-d45d925
+FROM $BASE_IMAGE:20230114-98aebd0
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
@@ -17,11 +17,11 @@ RUN git clone https://github.com/KitwareMedical/ITK.git && \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
 
 # Modify CMake variable to use patched DCMTK library
-# GIT_TAG refers to DCMTK branch: 20220802_DCMTK_PATCHES_FOR_ITK-wasm
+# GIT_TAG refers to DCMTK branch: 20230115_DCMTK_PATCHES_FOR_ITK-wasm
 RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/DCMTK.git")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
-RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "2136aff6b9c32ae1a5c0bf6bc458c70043bdcd6f")' \
+RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "8e088dfdfdcd6ba29ea9aa0f5f18f3728086ba55")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
 ARG CMAKE_BUILD_TYPE=Release
