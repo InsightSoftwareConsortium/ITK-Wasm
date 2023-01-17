@@ -442,7 +442,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     })
 
     if (forNode) {
-      functionContent += `\n  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', '${moduleKebabCase}')\n\n`
+      functionContent += `\n  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', '${moduleKebabCase}')\n\n`
       functionContent += `  const {\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)\n`
     } else {
       functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`

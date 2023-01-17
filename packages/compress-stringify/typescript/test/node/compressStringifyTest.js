@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { compressStringifyNode, parseStringDecompressNode } from '../../dist/itk-compress-stringify-node.js'
+import { compressStringifyNode, parseStringDecompressNode } from '../../dist/bundles/itk-compress-stringify-node.js'
 
 test('Decompress returns what was compressed', async t => {
   const data = new Uint8Array([222, 173, 190, 239])

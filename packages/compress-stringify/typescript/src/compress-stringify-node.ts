@@ -47,7 +47,7 @@ async function compressStringifyNode(
     args.push('--data-url-prefix', options.dataUrlPrefix.toString())
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'compress-stringify')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'compress-stringify')
 
   const {
     returnValue,
