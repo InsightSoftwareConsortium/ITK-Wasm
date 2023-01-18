@@ -60,12 +60,43 @@
         <div id="compressStringifyOutputs">
           <h4>Outputs</h4>
           <sl-textarea name="output" label="Output" help-text="Output compressed binary">
-            <sl-skeleton effect="none"></sl-skeleton>
           </sl-textarea>
+          <sl-button
+              variant="neutral"
+              name="downloadOutput"
+          >
+              Output binary file
+          </sp-button>
         </div>
         <sl-divider style="--width:2px;"></sl-divider>
         <h3 id="parseStringDecompress-function"><code>parseStringDecompress</code></h3>
-      </div>
+        <i>Given a binary or string produced with compressStringify, decompress and optionally base64 decode.</i>
+        <div id="parseStringDecompressInputs">
+          <h4>Inputs</h4>
+            <form>
+              <sl-input required name="input" type="text" label="input" help-text="Input text or binary"></sl-input>
+              <label for="inputFile">
+                  <sl-button
+                      variant="primary"
+                      onclick="this.parentElement.nextElementSibling.click()"
+                  >
+                      Input text or binary file
+                  </sp-button>
+              </label>
+              <input type="file" name="inputFile" style="display: none" />
+              <br /> <br />
+              <sl-checkbox name="parseString">parseString - <i>Parse the input string before decompression</i></sl-checkbox>
+              <br /> <br />
+              <sl-button name="loadSample" variant="default">Load sample inputs</sl-button>
+              <sl-button type="submit" variant="success">Run</sl-button>
+            </form>
+          </div>
+        <div id="parseStringDecompressOutputs">
+          <h4>Outputs</h4>
+          <sl-textarea name="output" label="Output" help-text="Output decompressed binary">
+            <sl-skeleton effect="none"></sl-skeleton>
+          </sl-textarea>
+        </div>
     </div>
 
     <script type="module" src="./app.ts"></script>
