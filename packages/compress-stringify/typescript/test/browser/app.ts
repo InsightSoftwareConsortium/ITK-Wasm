@@ -1,3 +1,4 @@
+import { worker } from 'cluster'
 import * as itkCompressStringify from '../../dist/bundles/itk-compress-stringify.js'
 
 
@@ -20,6 +21,7 @@ for (const [key, val] of Object.entries(itkCompressStringify)) {
     packageFunctions.push(key)
   }
 }
+packageFunctions.sort()
 
 const pipelineFunctionsList = document.getElementById('pipeline-functions-list')
 pipelineFunctionsList.innerHTML = packageFunctions.map((func => `<li><a href="#${func}-function">${func}</a></li>`)).join('\n')
@@ -78,12 +80,14 @@ function setupCompressStringify() {
   const form = document.querySelector('#compressStringifyInputs form')
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
-    console.log(context)
-    
+
     const { webWorker, output } = await itkCompressStringify.compressStringify(null, ...context.inputs, context.options)
-    console.log(webWorker)
-    console.log(output)
+    webWorker.terminate()
+
     context.outputs.output = output
+    const outputTextArea = document.querySelector('#compressStringifyOutputs sl-textarea[name=output]')
+    outputTextArea.value = output.toString()
+
   })
 }
 

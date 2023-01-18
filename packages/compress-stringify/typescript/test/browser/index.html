@@ -57,10 +57,12 @@
               <sl-button type="submit" variant="success">Run</sl-button>
             </form>
           </div>
-        <div>
+        <div id="compressStringifyOutputs">
           <h4>Outputs</h4>
+          <sl-textarea name="output" label="Output" help-text="Output compressed binary">
+            <sl-skeleton effect="none"></sl-skeleton>
+          </sl-textarea>
         </div>
-        <sl-skeleton effect="none"></sl-skeleton>
         <sl-divider style="--width:2px;"></sl-divider>
         <h3 id="parseStringDecompress-function"><code>parseStringDecompress</code></h3>
       </div>
