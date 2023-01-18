@@ -56,7 +56,7 @@ async function compressStringify(
 
 #### parseStringDecompress
 
-*Given a binary or string produced with CompressedStringify, decompress and optionally base64 decode.*
+*Given a binary or string produced with compressStringify, decompress and optionally base64 decode.*
 
 ```ts
 async function parseStringDecompress(
@@ -149,3 +149,21 @@ async function parseStringDecompressNode(
 | Property |     Type     | Description                |
 | :------: | :----------: | :------------------------- |
 | `output` | *Uint8Array* | Output decompressed binary |
+
+#### setPipelinesBaseUrl
+
+*Set base URL for WebAssembly assets when vendored.*
+
+```ts
+function setPipelinesBaseUrl(
+  baseUrl: string | URL
+) : void
+```
+
+#### getPipelinesBaseUrl
+
+*Get base URL for WebAssembly assets when vendored.*
+
+```ts
+function getPipelinesBaseUrl() : string | URL
+```
