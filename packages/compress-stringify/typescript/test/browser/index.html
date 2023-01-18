@@ -59,13 +59,13 @@
           </div>
         <div id="compressStringifyOutputs">
           <h4>Outputs</h4>
-          <sl-textarea name="output" label="Output" help-text="Output compressed binary">
+          <sl-textarea name="output" label="Output" help-text="Compressed output">
           </sl-textarea>
           <sl-button
               variant="neutral"
               name="downloadOutput"
           >
-              Output binary file
+              Output file
           </sp-button>
         </div>
         <sl-divider style="--width:2px;"></sl-divider>
@@ -96,6 +96,12 @@
           <sl-textarea name="output" label="Output" help-text="Output decompressed binary">
             <sl-skeleton effect="none"></sl-skeleton>
           </sl-textarea>
+          <sl-button
+              variant="neutral"
+              name="downloadOutput"
+          >
+              Output file
+          </sp-button>
         </div>
     </div>
 
