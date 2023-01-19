@@ -4,7 +4,9 @@
 
 Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.
 
-[**Example**](https://itk-compress-stringify-app.on.fleek.co/ ':include :type=iframe width=100% height=800px')
+[**<p align="center">Example</p>**](https://itk-compress-stringify-app.on.fleek.co/ ':include :type=iframe width=100% height=800px')
+
+[**<p align="center">Documentation</p>**](https://itk-compress-stringify-docs.on.fleek.co/)
 
 ## Installation
 
