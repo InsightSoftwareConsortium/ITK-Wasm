@@ -1,27 +1,25 @@
 import { defineConfig } from 'vite'
 import path from 'path'
-import copy from 'rollup-plugin-copy'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 const itkConfig = path.resolve(__dirname, 'src', 'itkConfig.js')
 
 export default defineConfig({
   plugins: [
     // put lazy loaded JavaScript and WASM bundles in dist directory
-    copy({
+    viteStaticCopy({
       targets: [
-        { src: 'node_modules/itk-wasm/dist/web-workers', dest: 'dist/itk' },
+        { src: 'node_modules/itk-wasm/dist/web-workers/*', dest: 'dist/itk/web-workers' },
         {
-          src: 'node_modules/itk-image-io',
-          dest: 'dist/itk',
-          rename: 'image-io'
+          src: 'node_modules/itk-image-io/*',
+          dest: 'dist/itk/image-io',
         },
         {
-          src: 'node_modules/itk-mesh-io',
-          dest: 'dist/itk',
+          src: 'node_modules/itk-mesh-io/*',
+          dest: 'dist/itk/mesh-io',
           rename: 'mesh-io'
         }
       ],
-      hook: 'writeBundle'
     })
   ],
   resolve: {
