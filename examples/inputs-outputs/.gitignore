@@ -1,4 +1,4 @@
 package-lock.json
 smoothed.png
-web-build/
+emscripten-build/
 wasi-build/

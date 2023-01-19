@@ -10,7 +10,7 @@ test('runPipelineNode captures stdout and stderr', (t) => {
   const args = []
   const outputs = null
   const inputs = null
-  const stdoutStderrPath = path.resolve('test', 'pipelines', 'stdout-stderr-pipeline', 'web-build', 'stdout-stderr-test')
+  const stdoutStderrPath = path.resolve('test', 'pipelines', 'stdout-stderr-pipeline', 'emscripten-build', 'stdout-stderr-test')
   return runPipelineNode(stdoutStderrPath, args, outputs, inputs)
     .then(function ({ returnValue, stdout, stderr }) {
       t.is(returnValue, 0)
@@ -26,7 +26,7 @@ Click. Perfect success.
 })
 
 test('runPipelineNode uses input and output files in the Emscripten filesystem', (t) => {
-  const pipelinePath = path.resolve('test', 'pipelines', 'input-output-files-pipeline', 'web-build', 'input-output-files-test')
+  const pipelinePath = path.resolve('test', 'pipelines', 'input-output-files-pipeline', 'emscripten-build', 'input-output-files-test')
   const args = ['--use-files',
     '--input-text-file', './input.txt',
     '--input-binary-file', './input.bin',
@@ -63,7 +63,7 @@ test('runPipelineNode uses input and output files in the Emscripten filesystem',
 })
 
 test('runPipelineNode uses input and output text and binary data via memory io', (t) => {
-  const pipelinePath = path.resolve('test', 'pipelines', 'input-output-files-pipeline', 'web-build', 'input-output-files-test')
+  const pipelinePath = path.resolve('test', 'pipelines', 'input-output-files-pipeline', 'emscripten-build', 'input-output-files-test')
   const args = ['--memory-io',
     '--input-text-stream', '0',
     '--input-binary-stream', '1',
@@ -111,7 +111,7 @@ test('runPipelineNode writes and reads an itk.Image via memory io', (t) => {
 
   return readImageLocalFile(testInputFilePath)
     .then(function (image) {
-      const pipelinePath = path.resolve('test', 'pipelines', 'median-filter-pipeline', 'web-build', 'median-filter-test')
+      const pipelinePath = path.resolve('test', 'pipelines', 'median-filter-pipeline', 'emscripten-build', 'median-filter-test')
       const args = ['--memory-io',
         '0',
         '0',
@@ -141,7 +141,7 @@ test('runPipelineNode writes and reads an itk.Mesh in the Emscripten filesystem'
 
   return readMeshLocalFile(testMeshInputFilePath)
     .then(function (mesh) {
-      const pipelinePath = path.resolve('test', 'pipelines', 'mesh-read-write-pipeline', 'web-build', 'mesh-read-write-test')
+      const pipelinePath = path.resolve('test', 'pipelines', 'mesh-read-write-pipeline', 'emscripten-build', 'mesh-read-write-test')
       const args = ['./cow.vtk.iwm', './cow.vtk.written.iwm']
       const desiredOutputs = [
         { path: args[1], type: IOTypes.Mesh }
@@ -168,7 +168,7 @@ test('runPipelineNode writes and reads an itk.Mesh via memory io', (t) => {
 
   return readMeshLocalFile(testMeshInputFilePath)
     .then(function (mesh) {
-      const pipelinePath = path.resolve('test', 'pipelines', 'mesh-read-write-pipeline', 'web-build', 'mesh-read-write-test')
+      const pipelinePath = path.resolve('test', 'pipelines', 'mesh-read-write-pipeline', 'emscripten-build', 'mesh-read-write-test')
       const args = ['0', '0', '--memory-io']
       const desiredOutputs = [
         { type: InterfaceTypes.Mesh }

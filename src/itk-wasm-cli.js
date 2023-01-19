@@ -6,6 +6,8 @@ import { spawnSync } from 'child_process'
 
 import { Command, Option } from 'commander/esm.mjs'
 
+import typescriptBindgen from './bindgen/typescript.js'
+
 const program = new Command()
 
 
@@ -29,7 +31,7 @@ function processCommonOptions() {
   }
   process.chdir(sourceDir)
 
-  let buildDir = 'web-build'
+  let buildDir = 'emscripten-build'
   if (options.buildDir) {
     buildDir = options.buildDir
   }
@@ -267,274 +269,11 @@ const interfaceJsonTypeToInterfaceType = new Map([
   ['OUTPUT_JSON', 'JsonObject'],
 ])
 
-function typescriptBindings(srcOutputDir, buildDir, wasmBinaries, forNode=false) {
-  // index module
-  let indexContent = ''
-  const nodeText = forNode ? 'Node' : ''
-
-  wasmBinaries.forEach((wasmBinaryName) => {
-    let wasmBinaryRelativePath = `${buildDir}/${wasmBinaryName}`
-    if (!fs.existsSync(wasmBinaryRelativePath)) {
-      wasmBinaryRelativePath = wasmBinaryName
-    }
-
-    const parsedPath = path.parse(path.resolve(wasmBinaryRelativePath))
-    const runPath = path.join(parsedPath.dir, parsedPath.name)
-    const runPipelineScriptPath = path.join(path.dirname(import.meta.url.substring(7)), 'interfaceJSONNode.js')
-    const runPipelineRun = spawnSync('node', [runPipelineScriptPath, runPath], {
-      env: process.env,
-      stdio: ['ignore', 'pipe', 'inherit']
-    })
-    if (runPipelineRun.status !== 0) {
-      console.error(runPipelineRun.error);
-      process.exit(runPipelineRun.status)
-    }
-    const interfaceJson = JSON.parse(runPipelineRun.stdout.toString())
-
-    const moduleKebabCase = parsedPath.name
-    const moduleCamelCase = camelCase(parsedPath.name)
-    const modulePascalCase = `${moduleCamelCase[0].toUpperCase()}${moduleCamelCase.substring(1)}`
-
-    // Result module
-    let resultContent = `interface ${modulePascalCase}${nodeText}Result {\n`
-    if (!forNode) {
-      resultContent += `  /** WebWorker used for computation */\n  webWorker: Worker | null\n\n`
-    }
-
-    // track unique output types in this set
-    const importTypes = new Set()
-
-    interfaceJson.outputs.forEach((output) => {
-      if (!interfaceJsonTypeToTypeScriptType.has(output.type)) {
-
-        console.error(`Unexpected output type: ${output.type}`)
-        process.exit(1)
-      }
-      resultContent += `  /** ${output.description} */\n`
-      const outputType = interfaceJsonTypeToTypeScriptType.get(output.type)
-      if(typesRequireImport.includes(outputType)) {
-        importTypes.add(outputType)
-      }
-      resultContent += `  ${camelCase(output.name)}: ${outputType}\n\n`
-    })
-
-    // Insert the import statement in the beginning for the file.
-    if(importTypes.size !== 0)
-      resultContent = `import { ${Array.from(importTypes).join(',')} } from 'itk-wasm'\n\n` + resultContent;
-
-    resultContent += `}\n\nexport default ${modulePascalCase}${nodeText}Result\n`
-    fs.writeFileSync(path.join(srcOutputDir, `${modulePascalCase}${nodeText}Result.ts`), resultContent)
-    indexContent += `\n\nimport ${modulePascalCase}${nodeText}Result from './${modulePascalCase}${nodeText}Result.js'\n`
-    indexContent += `export type { ${modulePascalCase}${nodeText}Result }\n\n`
-
-    // Options module
-    const haveParameters = !!interfaceJson.parameters.length
-    if (haveParameters) {
-      let optionsContent = `interface ${modulePascalCase}Options {\n`
-      interfaceJson.parameters.forEach((parameter) => {
-        if (parameter.name === 'memory-io') {
-          // Internal
-          return
-        }
-        if (!interfaceJsonTypeToTypeScriptType.has(parameter.type)) {
-
-          console.error(`Unexpected parameter type: ${parameter.type}`)
-          process.exit(1)
-        }
-        optionsContent += `  /** ${parameter.description} */\n`
-        const parameterType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
-        optionsContent += `  ${camelCase(parameter.name)}?: ${parameterType}\n\n`
-      })
-      optionsContent += `}\n\nexport default ${modulePascalCase}Options\n`
-      fs.writeFileSync(path.join(srcOutputDir, `${modulePascalCase}Options.ts`), optionsContent)
-
-      indexContent += `import ${modulePascalCase}Options from './${modulePascalCase}Options.js'\n`
-      indexContent += `export type { ${modulePascalCase}Options }\n\n`
-
-    }
-
-    // function module
-    let functionContent = 'import {\n'
-    const usedInterfaceTypes = new Set()
-    const pipelineComponents = ['inputs', 'outputs', 'parameters']
-    pipelineComponents.forEach((pipelineComponent) => {
-      interfaceJson[pipelineComponent].forEach((value) => {
-        if (interfaceJsonTypeToInterfaceType.has(value.type)) {
-          const interfaceType = interfaceJsonTypeToInterfaceType.get(value.type)
-          if (!interfaceType.includes('File')) {
-            usedInterfaceTypes.add(interfaceType)
-          }
-        }
-      })
-    })
-    usedInterfaceTypes.forEach((interfaceType) => {
-      functionContent += `  ${interfaceType},\n`
-    })
-    functionContent += `  InterfaceTypes,\n`
-    functionContent += `  PipelineInput,\n`
-    if (forNode) {
-      functionContent += `  runPipelineNode\n`
-    } else {
-      functionContent += `  runPipeline\n`
-
-    }
-    functionContent += `} from 'itk-wasm'\n\n`
-    if (haveParameters) {
-      functionContent += `import ${modulePascalCase}Options from './${modulePascalCase}Options.js'\n`
-    }
-    functionContent += `import ${modulePascalCase}${nodeText}Result from './${modulePascalCase}${nodeText}Result.js'\n\n`
-    if (forNode) {
-      functionContent += `\nimport path from 'path'\n\n`
-    }
-
-    functionContent += `/**\n * ${interfaceJson.description}\n *\n`
-    interfaceJson.inputs.forEach((input) => {
-      if (!interfaceJsonTypeToTypeScriptType.has(input.type)) {
-
-        console.error(`Unexpected input type: ${input.type}`)
-        process.exit(1)
-      }
-      const typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
-      functionContent += ` * @param {${typescriptType}} ${camelCase(input.name)} - ${input.description}\n`
-    })
-    functionContent += ` *\n * @returns {Promise<${modulePascalCase}${nodeText}Result>} - result object\n`
-    functionContent += ` */\n`
-
-    functionContent += `async function ${moduleCamelCase}${nodeText}(`
-    if (!forNode) {
-      functionContent += '\n  webWorker: null | Worker,\n'
-
-    }
-    interfaceJson.inputs.forEach((input, index) => {
-      const typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
-      const end = index === interfaceJson.inputs.length - 1 && !haveParameters ? `\n` : `,\n`
-      functionContent += `  ${camelCase(input.name)}: ${typescriptType}${end}`
-    })
-    if (haveParameters) {
-      functionContent += `  options: ${modulePascalCase}Options = {})\n    : Promise<${modulePascalCase}${nodeText}Result> {\n\n`
-
-    } else {
-      functionContent += `)\n    : Promise<${modulePascalCase}${nodeText}Result> {\n\n`
-    }
-
-    functionContent += `  const desiredOutputs = [\n`
-    interfaceJson.outputs.forEach((output) => {
-      if (interfaceJsonTypeToInterfaceType.has(output.type)) {
-        const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-        functionContent += `    { type: InterfaceTypes.${interfaceType} },\n`
-      }
-    })
-    functionContent += `  ]\n`
-    functionContent += `  const inputs: [ PipelineInput ] = [\n`
-    interfaceJson.inputs.forEach((input, index) => {
-      if (interfaceJsonTypeToInterfaceType.has(input.type)) {
-        const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
-        const camel = camelCase(input.name)
-        const data = interfaceType.includes('File') ?  `{ data: ${camel}, path: "file${index.toString()}" } ` : camel
-        functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${data} },\n`
-      }
-    })
-    functionContent += `  ]\n\n`
-
-    let inputCount = 0
-    functionContent += "  const args = []\n"
-    functionContent += "  // Inputs\n"
-    interfaceJson.inputs.forEach((input) => {
-      if (interfaceJsonTypeToInterfaceType.has(input.type)) {
-        const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
-        const name = interfaceType.includes('File') ?  `file${inputCount.toString()}` : inputCount.toString()
-        functionContent += `  args.push('${name}')\n`
-        inputCount++
-      } else {
-        const camel = camelCase(input.name)
-        functionContent += `  args.push(${camel}.toString())\n`
-      }
-    })
-
-    let outputCount = 0
-    functionContent += "  // Outputs\n"
-    interfaceJson.outputs.forEach((output) => {
-      if (interfaceJsonTypeToInterfaceType.has(output.type)) {
-        const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-        const name = interfaceType.includes('File') ?  `file${outputCount.toString()}` : outputCount.toString()
-        functionContent += `  args.push('${name}')\n`
-        outputCount++
-      } else {
-        const camel = camelCase(output.name)
-        functionContent += `  args.push(${camel}.toString())\n`
-      }
-    })
-
-    functionContent += "  // Options\n"
-    functionContent += "  args.push('--memory-io')\n"
-    interfaceJson.parameters.forEach((parameter) => {
-      if (parameter.name === 'memory-io') {
-        // Internal
-        return
-      }
-      const camel = camelCase(parameter.name)
-      functionContent += `  if (options.${camel}) {\n`
-      if (parameter.type === "BOOL") {
-        functionContent += `    args.push('--${parameter.name}')\n`
-      } else {
-        if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
-          const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
-          if (interfaceType.includes('File')) {
-            // for files
-            functionContent += `    const inputFile = 'file' + inputs.length.toString()\n`
-            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: options.${camel}, path: inputFile } })\n`
-            functionContent += `    args.push('--${parameter.name}', inputFile)\n`
-          } else {
-            // for streams
-            functionContent += `    const inputCountString = inputs.length.toString()\n`
-            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: options.${camel} } })\n`
-            functionContent += `    args.push('--${parameter.name}', inputCountString)\n`
-          }
-        } else {
-          functionContent += `    args.push('--${parameter.name}', options.${camel}.toString())\n`
-        }
-      }
-      functionContent += `  }\n`
-    })
-
-    if (forNode) {
-      functionContent += `\n  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', '${moduleKebabCase}')\n\n`
-      functionContent += `  const {\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)\n`
-    } else {
-      functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`
-      functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs)\n`
-    }
-
-    functionContent += '  if (returnValue !== 0) {\n    throw new Error(stderr)\n  }\n\n'
-
-    functionContent += '  const result = {\n'
-    if (!forNode) {
-      functionContent += '    webWorker: usedWebWorker as Worker,\n'
-    }
-    interfaceJson.outputs.forEach((output, index) => {
-      const camel = camelCase(output.name)
-      const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-      if (interfaceType.includes('Text') || interfaceType.includes('Binary') || interfaceType.includes('JsonObject')) {
-        functionContent += `    ${camel}: (outputs[${index.toString()}].data as ${interfaceType}).data,\n`
-      } else {
-        functionContent += `    ${camel}: outputs[${index.toString()}].data as ${interfaceType},\n`
-      }
-    })
-    functionContent += '  }\n'
-    functionContent += '  return result\n'
-
-    functionContent += `}\n\nexport default ${moduleCamelCase}${nodeText}\n`
-    fs.writeFileSync(path.join(srcOutputDir, `${moduleCamelCase}${nodeText}.ts`), functionContent)
-    indexContent += `import ${moduleCamelCase}${nodeText} from './${moduleCamelCase}${nodeText}.js'\n`
-    indexContent += `export { ${moduleCamelCase}${nodeText} }\n`
-
-  })
-  fs.writeFileSync(path.join(srcOutputDir, `index${nodeText}.ts`), indexContent)
-}
-
-
-function bindgen(outputDir, wasmBinaries, options) {
+function bindgen(wasmBinaries, options) {
   const { buildDir } = processCommonOptions()
+
+  const language = options.language ?? 'typescript'
+  const outputDir = options.outputDir ?? language
 
   try {
     fs.mkdirSync(outputDir, { recursive: true })
@@ -542,22 +281,12 @@ function bindgen(outputDir, wasmBinaries, options) {
     if (err.code !== 'EEXIST') throw err
   }
 
-  let srcOutputDir = outputDir
-  if (options.package) {
-    srcOutputDir = path.join(outputDir, 'src')
-    try {
-      fs.mkdirSync(srcOutputDir, { recursive: true })
-    } catch (err) {
-      if (err.code !== 'EEXIST') throw err
-    }
-  }
+  // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
+  let filteredWasmBinaries = wasmBinaries.filter(binary => !binary.endsWith('.umd.wasm'))
 
-  const language = options.language === undefined ? 'typescript' : options.language
   switch (language) {
-    case 'typescript': {
-      typescriptBindings(srcOutputDir, buildDir, wasmBinaries, false)
-      typescriptBindings(srcOutputDir, buildDir, wasmBinaries, true)
-    }
+    case 'typescript':
+      typescriptBindgen(outputDir, buildDir, filteredWasmBinaries, options)
     break
   }
 
@@ -566,8 +295,8 @@ function bindgen(outputDir, wasmBinaries, options) {
 
 program
   .option('-i, --image <image>', 'build environment Docker image, defaults to itkwasm/emscripten')
-  .option('-s, --source-dir <source-directory>', 'path to build directory, defaults to "."')
-  .option('-b, --build-dir <build-directory>', 'build directory whose path is relative to the source directory, defaults to "web-build"')
+  .option('-s, --source-dir <source-directory>', 'path to source directory, defaults to "."')
+  .option('-b, --build-dir <build-directory>', 'build directory whose path is relative to the source directory, defaults to "emscripten-build"')
 program
   .command('build')
   .usage('[-- <cmake arguments>]')
@@ -585,10 +314,13 @@ program
   .description('run the wasm binary, whose path is specified relative to the build directory')
   .action(run)
 program
-  .command('bindgen <outputDir> [wasmBinaries...]')
-  .option('-p, --package', 'Output a package configuration files')
+  .command('bindgen [wasmBinaries...]')
+  .option('-o, --output-dir <output-dir>', 'Output directory name. Defaults to the language option value.')
+  .requiredOption('-p, --package-name <package-name>', 'Output a package configuration files with the given packages name')
+  .requiredOption('-d, --package-description <package-description>', 'Description for package')
   .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript',]))
-  .usage('[options] <outputDir> [wasmBinaries...]')
+  .option('-r, --repository <repository-url>', 'Source code repository URL')
+  .usage('[options] [wasmBinaries...]')
   .description('Generate WASM module bindings for a language')
   .action(bindgen)
 

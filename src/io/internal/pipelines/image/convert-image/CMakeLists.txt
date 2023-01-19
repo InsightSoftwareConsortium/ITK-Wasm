@@ -4,7 +4,7 @@ project(convert-image)
 set(CMAKE_CXX_STANDARD 17)
 
 if (NOT TARGET libzstd_static)
-  include(${CMAKE_CURRENT_SOURCE_DIR}/../../common/compress-stringify/BuildZstd.cmake)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../CMake/BuildZstd.cmake)
 endif()
 
 if(WASI)

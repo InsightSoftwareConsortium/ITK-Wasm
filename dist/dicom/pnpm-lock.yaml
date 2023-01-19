@@ -15,7 +15,7 @@ specifiers:
   '@spectrum-web-components/theme': ^0.14.1
   ava: ^4.3.3
   cypress: ^10.7.0
-  itk-wasm: ^1.0.0-b.30
+  itk-wasm: ^1.0.0-b.53
   rollup: ^2.79.0
   rollup-plugin-copy: ^3.4.0
   rollup-plugin-styles: ^4.0.0
@@ -26,7 +26,7 @@ specifiers:
   xstate: ^4.33.5
 
 dependencies:
-  itk-wasm: 1.0.0-b.30
+  itk-wasm: 1.0.0-b.53
 
 devDependencies:
   '@rollup/plugin-commonjs': 22.0.2_rollup@2.79.0
@@ -2198,8 +2198,8 @@ packages:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
     dev: true
 
-  /itk-wasm/1.0.0-b.30:
-    resolution: {integrity: sha512-z7CTc0+d+D/eE6yT4J9Tnm04oSuJdnGjoPqoBI95CI8ykNUR3vZlH8ABX0YOUCLrjovBljRzyDMNgZO2VxpKaQ==}
+  /itk-wasm/1.0.0-b.53:
+    resolution: {integrity: sha512-YzGMuJitnh7OmJ7URW+rwASpdxk8M5g98rvO+Haz22P6nKvs2hDtQB88f1UCfXlWf2eJKMchV9tlOxDPcJHX7g==}
     hasBin: true
     dependencies:
       '@babel/runtime': 7.19.0

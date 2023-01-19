@@ -20,30 +20,44 @@ import RunPipelineResult from './RunPipelineResult.js'
 // To cache loaded pipeline modules
 const pipelineToModule: Map<string, PipelineEmscriptenModule> = new Map()
 
-async function loadPipelineModule (pipelinePath: string | URL): Promise<PipelineEmscriptenModule> {
+async function loadPipelineModule (
+  pipelinePath: string | URL
+): Promise<PipelineEmscriptenModule> {
   let moduleRelativePathOrURL: string | URL = pipelinePath as string
   let pipeline = pipelinePath as string
   if (typeof pipelinePath !== 'string') {
-    moduleRelativePathOrURL = new URL((pipelinePath).href)
+    moduleRelativePathOrURL = new URL(pipelinePath.href)
     pipeline = moduleRelativePathOrURL.href
   }
   if (pipelineToModule.has(pipeline)) {
     return pipelineToModule.get(pipeline) as PipelineEmscriptenModule
   } else {
-    const pipelineModule = await loadEmscriptenModuleMainThread(pipelinePath, config.pipelinesUrl) as PipelineEmscriptenModule
+    const pipelineModule = (await loadEmscriptenModuleMainThread(
+      pipelinePath,
+      config.pipelinesUrl
+    )) as PipelineEmscriptenModule
     pipelineToModule.set(pipeline, pipelineModule)
     return pipelineModule
   }
 }
 
-async function runPipeline (webWorker: Worker | null | boolean, pipelinePath: string | URL, args: string[], outputs: PipelineOutput[] | null, inputs: PipelineInput[] | null, pipelineBaseUrl: string | URL = 'pipelinesUrl'): Promise<RunPipelineResult> {
+async function runPipeline (
+  webWorker: Worker | null | boolean,
+  pipelinePath: string | URL,
+  args: string[],
+  outputs: PipelineOutput[] | null,
+  inputs: PipelineInput[] | null,
+  pipelineBaseUrl: string | URL = 'pipelinesUrl'
+): Promise<RunPipelineResult> {
   if (webWorker === false) {
     const pipelineModule = await loadPipelineModule(pipelinePath.toString())
     const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
     return result
   }
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker as Worker | null)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
+    worker as Worker | null
+  )
   worker = usedWorker
   const transferables: ArrayBuffer[] = []
   if (!(inputs == null) && inputs.length > 0) {
@@ -145,7 +159,13 @@ async function runPipeline (webWorker: Worker | null | boolean, pipelinePath: st
     },
     transferables
   )
-  return { returnValue: result.returnValue, stdout: result.stdout, stderr: result.stderr, outputs: result.outputs, webWorker: worker }
+  return {
+    returnValue: result.returnValue,
+    stdout: result.stdout,
+    stderr: result.stderr,
+    outputs: result.outputs,
+    webWorker: worker
+  }
 }
 
 export default runPipeline

@@ -86,7 +86,7 @@ int compressStringify(itk::wasm::Pipeline & pipeline, itk::wasm::InputBinaryStre
 
 int main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("compress-stringify", "Given a binary, compress optionally base64 encode", argc, argv);
+  itk::wasm::Pipeline pipeline("compress-stringify", "Given a binary, compress and optionally base64 encode.", argc, argv);
 
   itk::wasm::InputBinaryStream inputBinaryStream;
   pipeline.add_option("input", inputBinaryStream, "Input binary")->type_name("INPUT_BINARY_STREAM");
@@ -97,7 +97,7 @@ int main(int argc, char * argv[])
   int compressionLevel = 3;
   pipeline.add_option("-c,--compression-level", compressionLevel, "Compression level, typically 1-9");
 
-  std::string dataURLPrefix("data:application/iwi+cbor+zstd;base64,");
+  std::string dataURLPrefix("data:base64,");
   pipeline.add_option("-p,--data-url-prefix", dataURLPrefix, "dataURL prefix");
 
   ITK_WASM_PRE_PARSE(pipeline);
