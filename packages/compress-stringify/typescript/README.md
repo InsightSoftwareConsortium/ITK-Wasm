@@ -4,6 +4,8 @@
 
 Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.
 
+[**Example**](https://itk-compress-stringify-app.on.fleek.co/ ':include :type=iframe width=100% height=800px')
+
 ## Installation
 
 ```sh
@@ -20,8 +22,12 @@ Import:
 import {
   compressStringify,
   parseStringDecompress,
+  setPipelinesBaseUrl,
+  getPipelinesBaseUrl,
 } from "itk-compress-stringify"
 ```
+
+### Functions
 
 #### compressStringify
 
@@ -82,6 +88,24 @@ async function parseStringDecompress(
 | :-----------: | :----------: | :----------------------------- |
 | **webWorker** |   *Worker*   | WebWorker used for computation |
 |    `output`   | *Uint8Array* | Output decompressed binary     |
+
+#### setPipelinesBaseUrl
+
+*Set base URL for WebAssembly assets when vendored.*
+
+```ts
+function setPipelinesBaseUrl(
+  baseUrl: string | URL
+) : void
+```
+
+#### getPipelinesBaseUrl
+
+*Get base URL for WebAssembly assets when vendored.*
+
+```ts
+function getPipelinesBaseUrl() : string | URL
+```
 
 ### Node interface
 
@@ -149,21 +173,3 @@ async function parseStringDecompressNode(
 | Property |     Type     | Description                |
 | :------: | :----------: | :------------------------- |
 | `output` | *Uint8Array* | Output decompressed binary |
-
-#### setPipelinesBaseUrl
-
-*Set base URL for WebAssembly assets when vendored.*
-
-```ts
-function setPipelinesBaseUrl(
-  baseUrl: string | URL
-) : void
-```
-
-#### getPipelinesBaseUrl
-
-*Get base URL for WebAssembly assets when vendored.*
-
-```ts
-function getPipelinesBaseUrl() : string | URL
-```
