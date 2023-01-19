@@ -20,8 +20,12 @@ Import:
 import {
   compressStringify,
   parseStringDecompress,
+  setPipelinesBaseUrl,
+  getPipelinesBaseUrl,
 } from "itk-compress-stringify"
 ```
+
+### Functions
 
 #### compressStringify
 
