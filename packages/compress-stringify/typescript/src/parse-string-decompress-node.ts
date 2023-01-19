@@ -12,7 +12,7 @@ import ParseStringDecompressNodeResult from './parse-string-decompress-node-resu
 import path from 'path'
 
 /**
- * Given a binary or string produced with CompressedStringify, decompress and optionally base64 decode.
+ * Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.
  *
  * @param {Uint8Array} input - Compressed input
  *
