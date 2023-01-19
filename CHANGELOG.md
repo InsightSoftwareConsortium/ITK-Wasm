@@ -1,5 +1,31 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.59](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.58...itk-wasm-v1.0.0-b.59) (2023-01-19)
+
+
+### Bug Fixes
+
+* **cli:** Filter duplicate .umd.wasm when globbing ([a3190c2](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/a3190c204ae3f08448b0a1348e7a809c66aed513))
+
+
+### Features
+
+* **bindgen:** Add --repository flag ([ada116b](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/ada116b5e699f813507fd4442a7858ed1188ce17))
+* **bindgen:** Add itkConfig.js ([59cc9b4](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/59cc9b48646da45904b358a9deca0a15a9546943))
+* **bindgen:** Add npm badge to readme ([f41fefb](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f41fefb15dead55d0d05358a3bcde59f217efa9a))
+* **bindgen:** Add vite.config.js ([5928148](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/592814851127be0a361af9927439c408e9ee079b))
+* **bindgen:** Build demo with vite ([718866d](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/718866ddb89684da58652b7dc963000fd85b3405))
+* **bindgen:** Copy WASM modules to dist/pipelines/ ([84de1cd](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/84de1cda7ed6e16d112953bb3f94fd94fe8ed92c))
+* **bindgen:** Generate browser ESM bundle ([9c2a112](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9c2a112bccb5173d0296e3185cb8bae59e27f3bf))
+* **bindgen:** Generate docsify documentation ([41af4f2](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/41af4f23b612f45b10696f8fd4a74ccdafbc6e95))
+* **bindgen:** Generate Node build configuration ([61f7415](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/61f7415ffd763fc9129c87a4f7125091dcf22a1c))
+* **bindgen:** Output package.json with name, description ([531e7b6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/531e7b69e30560f93645cbed1d9014e2bd3bd6d7))
+* **bindgen:** Output readme ([2c52310](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2c5231099ff5386a1eccbe9bee44483571959d4c))
+* **bindgen:** readme pipeline function interfaces ([af6791e](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/af6791e89255e1c49245a498e2413eefef9d0a58))
+* **bindgen:** tsc build configuration ([d86d2a6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/d86d2a6aeaed82f89a4bcde6abffb0bd5b8e4520))
+* **compress-stringify:** Add pipelines-base-url.ts ([04bf847](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/04bf847d5d157025590fc4c06262f764de1b48a9))
+* **compress-stringify:** Initial bindgen output ([7cc069f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/7cc069f9c17f793d29a3b919f4fa0c026be33e64))
+
 # [1.0.0-b.58](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.57...itk-wasm-v1.0.0-b.58) (2023-01-17)
 
 
