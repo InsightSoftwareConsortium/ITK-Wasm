@@ -11,7 +11,7 @@ import typescriptBindgen from './bindgen/typescript.js'
 const program = new Command()
 
 
-const defaultImageTag = '20230116-9dfa2b8a'
+const defaultImageTag = '20230119-9a6082de'
 
 // Array of types that will require an import from itk-wasm
 const typesRequireImport = ['Image']
