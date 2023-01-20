@@ -58,6 +58,20 @@ describe('runPipeline', () => {
     })
   })
 
+  it('fetches WASM files from a custom pipelineWorkerUrl string', () => {
+    cy.window().then(async (win) => {
+      const itk = win.itk
+      const pipelineBaseUrl = '/pipelines'
+      const pipelineWorkerUrl = '/web-workers/bundles/pipeline.worker.js'
+
+      const args = []
+      const outputs = null
+      const inputs = null
+      const stdoutStderrPath = 'stdout-stderr-test'
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, pipelineBaseUrl, pipelineWorkerUrl)
+    })
+  })
+
   it('re-uses a WebWorker', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
