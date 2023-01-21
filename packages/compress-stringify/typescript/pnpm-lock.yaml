@@ -9,7 +9,7 @@ specifiers:
   '@types/node': ^18.11.18
   ava: ^5.1.0
   cypress: ^12.3.0
-  itk-wasm: ^1.0.0-b.60
+  itk-wasm: ^1.0.0-b.62
   rollup: ^3.9.0
   rollup-plugin-copy: ^3.4.0
   rollup-plugin-ignore: ^1.0.10
@@ -20,7 +20,7 @@ specifiers:
   vite-plugin-static-copy: ^0.13.0
 
 dependencies:
-  itk-wasm: 1.0.0-b.60
+  itk-wasm: 1.0.0-b.62
 
 devDependencies:
   '@rollup/plugin-commonjs': 24.0.0_rollup@3.9.1
@@ -1809,8 +1809,8 @@ packages:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
     dev: true
 
-  /itk-wasm/1.0.0-b.60:
-    resolution: {integrity: sha512-FWfT/h19Gep6xdT0ufBqnMHAqCmnOocv6tQ26N1Tkm0JjzQipQPz2NiTxs6xrFdbFjNGCb4Ar8MWaHeJlAMOHg==}
+  /itk-wasm/1.0.0-b.62:
+    resolution: {integrity: sha512-A5PEHEGtJ/ZPphaa1KNiRF+jSX5RLNjuaEwkRXtRzrRxo7TnDkSQR/vrSNtj9cYL0SQQtLAXjHbDn/UJUAD43A==}
     hasBin: true
     dependencies:
       '@babel/runtime': 7.20.7

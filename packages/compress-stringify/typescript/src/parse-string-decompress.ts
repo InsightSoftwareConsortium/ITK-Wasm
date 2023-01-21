@@ -11,6 +11,9 @@ import ParseStringDecompressResult from './parse-string-decompress-result.js'
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 
+
+import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
+
 /**
  * Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.
  *
@@ -49,7 +52,7 @@ async function parseStringDecompress(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl())
+  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl(), getPipelineWorkerUrl())
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

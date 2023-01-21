@@ -11,6 +11,9 @@ import CompressStringifyResult from './compress-stringify-result.js'
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 
+
+import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
+
 /**
  * Given a binary, compress and optionally base64 encode.
  *
@@ -55,7 +58,7 @@ async function compressStringify(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl())
+  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl(), getPipelineWorkerUrl())
   if (returnValue !== 0) {
     throw new Error(stderr)
   }
