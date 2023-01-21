@@ -13,7 +13,7 @@ interface itkWorker extends Worker {
 }
 
 // Internal function to create a web worker promise
-async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWorkerUrl?: string): Promise<createWebWorkerPromiseResult> {
+async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWorkerUrl?: string | null): Promise<createWebWorkerPromiseResult> {
   let workerPromise: typeof WebworkerPromise
   if (existingWorker != null) {
     // See if we have a worker promise attached the worker, if so reuse it. This ensures

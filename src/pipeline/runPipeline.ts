@@ -48,7 +48,7 @@ async function runPipeline (
   outputs: PipelineOutput[] | null,
   inputs: PipelineInput[] | null,
   pipelineBaseUrl: string | URL = 'pipelinesUrl',
-  pipelineWorkerUrl?: string | URL
+  pipelineWorkerUrl?: string | URL | null
 ): Promise<RunPipelineResult> {
   if (webWorker === false) {
     const pipelineModule = await loadPipelineModule(pipelinePath.toString())
@@ -58,7 +58,7 @@ async function runPipeline (
   let worker = webWorker
   const pipelineWorkerUrlString = typeof pipelineWorkerUrl !== 'string' && typeof pipelineWorkerUrl?.href !== 'undefined' ? pipelineWorkerUrl.href : pipelineWorkerUrl
   const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
-    worker as Worker | null, pipelineWorkerUrlString as string | undefined
+    worker as Worker | null, pipelineWorkerUrlString as string | undefined | null
   )
   worker = usedWorker
   const transferables: ArrayBuffer[] = []
