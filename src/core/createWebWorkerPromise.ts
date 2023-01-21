@@ -13,7 +13,7 @@ interface itkWorker extends Worker {
 }
 
 // Internal function to create a web worker promise
-async function createWebWorkerPromise (existingWorker: Worker | null): Promise<createWebWorkerPromiseResult> {
+async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWorkerUrl?: string): Promise<createWebWorkerPromiseResult> {
   let workerPromise: typeof WebworkerPromise
   if (existingWorker != null) {
     // See if we have a worker promise attached the worker, if so reuse it. This ensures
@@ -28,6 +28,7 @@ async function createWebWorkerPromise (existingWorker: Worker | null): Promise<c
     return await Promise.resolve({ webworkerPromise: workerPromise, worker: existingWorker })
   }
 
+  const workerUrl = typeof pipelineWorkerUrl === 'undefined' ? config.pipelineWorkerUrl : pipelineWorkerUrl
   let worker = null
   // @ts-expect-error: error TS2339: Property 'webWorkersUrl' does not exist on type '{ pipelineWorkerUrl: string; imageIOUrl: string; meshIOUrl: string; pipelinesUrl: string; }
   const webWorkersUrl = config.webWorkersUrl
@@ -44,7 +45,7 @@ async function createWebWorkerPromise (existingWorker: Worker | null): Promise<c
     } else {
       worker = new Worker(`${webWorkerString}/${min}bundles/pipeline.worker.js`)
     }
-  } else if (config.pipelineWorkerUrl === null) {
+  } else if (workerUrl === null) {
     // Use the version built with the bundler
     //
     // Bundlers, e.g. WebPack, see these paths at build time
@@ -54,12 +55,11 @@ async function createWebWorkerPromise (existingWorker: Worker | null): Promise<c
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
     worker = new Worker(new URL('../web-workers/pipeline.worker.js', import.meta.url))
   } else {
-    const pipelineWorkerUrl = config.pipelineWorkerUrl
-    if (pipelineWorkerUrl.startsWith('http')) {
-      const response = await axios.get(pipelineWorkerUrl, { responseType: 'blob' })
+    if (workerUrl.startsWith('http')) {
+      const response = await axios.get(workerUrl, { responseType: 'blob' })
       worker = new Worker(URL.createObjectURL(response.data as Blob))
     } else {
-      worker = new Worker(pipelineWorkerUrl)
+      worker = new Worker(workerUrl)
     }
   }
 
