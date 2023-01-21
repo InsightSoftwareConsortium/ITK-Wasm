@@ -110,7 +110,7 @@
     "cypress": "^10.10.0",
     "cz-conventional-changelog": "2.1.0",
     "file-api": "^0.10.4",
-    "glob": "^7.1.6",
+    "glob": "^8.1.0",
     "karma": "^6.3.2",
     "karma-chrome-launcher": "^3.1.0",
     "karma-tap": "^4.2.0",
