@@ -4,17 +4,16 @@ import fs from 'fs-extra'
 import path from 'path'
 import { spawnSync } from 'child_process'
 
+import glob from 'glob'
 import { Command, Option } from 'commander/esm.mjs'
 
 import typescriptBindgen from './bindgen/typescript.js'
 
 const program = new Command()
 
-
-const defaultImageTag = '20230122-5e3aea6c'
-
 // Array of types that will require an import from itk-wasm
 const typesRequireImport = ['Image']
+const defaultImageTag = '20221222-d37dad3f'
 
 function processCommonOptions() {
   const options = program.opts()
@@ -214,71 +213,18 @@ function run(wasmBinary, options) {
   }
 }
 
-function camelCase(param) {
-  // make any alphabets that follows '-' an uppercase character, and remove the corresponding hyphen
-  let cameledParam = param.replace(/-([a-z])/g, (kk) => {
-    return kk[1].toUpperCase();
-  });
-
-  // remove all non-alphanumeric characters
-  const outParam = cameledParam.replace(/([^0-9a-z])/ig, '')
-
-  // check if resulting string is empty
-  if(outParam === '') {
-    console.error(`Resulting string is empty.`)
-  }
-  return outParam
-}
-
-const interfaceJsonTypeToTypeScriptType = new Map([
-  ['INPUT_TEXT_FILE:FILE', 'string'],
-  ['OUTPUT_TEXT_FILE:FILE', 'string'],
-  ['INPUT_BINARY_FILE:FILE', 'Uint8Array'],
-  ['OUTPUT_BINARY_FILE:FILE', 'Uint8Array'],
-  ['INPUT_TEXT_STREAM', 'string'],
-  ['OUTPUT_TEXT_STREAM', 'string'],
-  ['INPUT_BINARY_STREAM', 'Uint8Array'],
-  ['OUTPUT_BINARY_STREAM', 'Uint8Array'],
-  ['INPUT_IMAGE', 'Image'],
-  ['OUTPUT_IMAGE', 'Image'],
-  ['INPUT_MESH', 'Mesh'],
-  ['OUTPUT_MESH', 'Mesh'],
-  ['INPUT_POLYDATA', 'PolyData'],
-  ['OUTPUT_POLYDATA', 'PolyData'],
-  ['BOOL', 'boolean'],
-  ['TEXT', 'string'],
-  ['INT', 'number'],
-  ['OUTPUT_JSON', 'Object'],
-])
-
-const interfaceJsonTypeToInterfaceType = new Map([
-  ['INPUT_TEXT_FILE:FILE', 'TextFile'],
-  ['OUTPUT_TEXT_FILE:FILE', 'TextFile'],
-  ['INPUT_BINARY_FILE:FILE', 'BinaryFile'],
-  ['OUTPUT_BINARY_FILE:FILE', 'BinaryFile'],
-  ['INPUT_TEXT_STREAM', 'TextStream'],
-  ['OUTPUT_TEXT_STREAM', 'TextStream'],
-  ['INPUT_BINARY_STREAM', 'BinaryStream'],
-  ['OUTPUT_BINARY_STREAM', 'BinaryStream'],
-  ['INPUT_IMAGE', 'Image'],
-  ['OUTPUT_IMAGE', 'Image'],
-  ['INPUT_MESH', 'Mesh'],
-  ['OUTPUT_MESH', 'Mesh'],
-  ['INPUT_POLYDATA', 'PolyData'],
-  ['OUTPUT_POLYDATA', 'PolyData'],
-  ['OUTPUT_JSON', 'JsonObject'],
-])
-
-function bindgen(wasmBinaries, options) {
+function bindgen(options) {
   const { buildDir } = processCommonOptions()
 
   const language = options.language ?? 'typescript'
   const outputDir = options.outputDir ?? language
 
+  const wasmBinaries = glob.sync(path.join(buildDir, '**/*.wasm'))
+
   try {
     fs.mkdirSync(outputDir, { recursive: true })
   } catch (err) {
-    if (err.code !== 'EEXIST') throw err
+    if (err.code !== 'EE XIST') throw err
   }
 
   // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
@@ -314,14 +260,14 @@ program
   .description('run the wasm binary, whose path is specified relative to the build directory')
   .action(run)
 program
-  .command('bindgen [wasmBinaries...]')
+  .command('bindgen')
   .option('-o, --output-dir <output-dir>', 'Output directory name. Defaults to the language option value.')
   .requiredOption('-p, --package-name <package-name>', 'Output a package configuration files with the given packages name')
   .requiredOption('-d, --package-description <package-description>', 'Description for package')
   .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript',]))
   .option('-r, --repository <repository-url>', 'Source code repository URL')
-  .usage('[options] [wasmBinaries...]')
-  .description('Generate Wasm module bindings for a language')
+  .usage('[options]')
+  .description('Generate language bindings for Wasm modules')
   .action(bindgen)
 
 program
