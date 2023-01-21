@@ -1,0 +1,2 @@
+itk_wrap_simple_class("itk::WasmImageIO" POINTER)
+itk_wrap_simple_class("itk::WasmImageIOFactory" POINTER)

@@ -19,10 +19,10 @@
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
+#include "itkWasmExports.h"
 #include <sstream>
 #include "rapidjson/document.h"
-#include "itkWASMStringStream.h"
+#include "itkWasmStringStream.h"
 #endif
 
 namespace itk
@@ -41,9 +41,9 @@ OutputBinaryStream
       }
 #ifndef ITK_WASM_NO_MEMORY_IO
     const auto index = std::stoi(this->m_Identifier);
-    setMemoryStoreOutputDataObject(0, index, this->m_WASMStringStream);
+    setMemoryStoreOutputDataObject(0, index, this->m_WasmStringStream);
 
-    const std::string & string = this->m_WASMStringStream->GetString();
+    const std::string & string = this->m_WasmStringStream->GetString();
     const auto dataAddress = reinterpret_cast< size_t >( string.data() );
     const auto dataSize = string.size();
     setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);

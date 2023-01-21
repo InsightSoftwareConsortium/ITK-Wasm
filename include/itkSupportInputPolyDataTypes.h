@@ -18,11 +18,11 @@
 #ifndef itkSupportInputPolyDataTypes_h
 #define itkSupportInputPolyDataTypes_h
 #include "itkPipeline.h"
-#include "itkWASMPixelTypeFromIOPixelEnum.h"
-#include "itkWASMComponentTypeFromIOComponentEnum.h"
+#include "itkWasmPixelTypeFromIOPixelEnum.h"
+#include "itkWasmComponentTypeFromIOComponentEnum.h"
 #include "itkMeshConvertPixelTraits.h"
-#include "itkWASMMapComponentType.h"
-#include "itkWASMMapPixelType.h"
+#include "itkWasmMapComponentType.h"
+#include "itkWasmMapPixelType.h"
 
 #include "itkPolyData.h"
 #include "itkMeshIOBase.h"

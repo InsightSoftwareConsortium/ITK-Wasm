@@ -1,4 +1,4 @@
-name: Python WASM
+name: Python Wasm
 
 on: [push,pull_request]
 

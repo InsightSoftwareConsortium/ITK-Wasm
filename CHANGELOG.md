@@ -22,7 +22,7 @@
 * **bindgen:** Add npm badge to readme ([f41fefb](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f41fefb15dead55d0d05358a3bcde59f217efa9a))
 * **bindgen:** Add vite.config.js ([5928148](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/592814851127be0a361af9927439c408e9ee079b))
 * **bindgen:** Build demo with vite ([718866d](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/718866ddb89684da58652b7dc963000fd85b3405))
-* **bindgen:** Copy WASM modules to dist/pipelines/ ([84de1cd](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/84de1cda7ed6e16d112953bb3f94fd94fe8ed92c))
+* **bindgen:** Copy Wasm modules to dist/pipelines/ ([84de1cd](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/84de1cda7ed6e16d112953bb3f94fd94fe8ed92c))
 * **bindgen:** Generate browser ESM bundle ([9c2a112](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9c2a112bccb5173d0296e3185cb8bae59e27f3bf))
 * **bindgen:** Generate docsify documentation ([41af4f2](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/41af4f23b612f45b10696f8fd4a74ccdafbc6e95))
 * **bindgen:** Generate Node build configuration ([61f7415](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/61f7415ffd763fc9129c87a4f7125091dcf22a1c))

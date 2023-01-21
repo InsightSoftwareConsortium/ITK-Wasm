@@ -1,13 +1,13 @@
 import axios from 'axios'
 
-import ITKWASMEmscriptenModule from '../ITKWASMEmscriptenModule.js'
+import ITKWasmEmscriptenModule from '../ITKWasmEmscriptenModule.js'
 import camelCase from './camelCase.js'
 
 // Load the Emscripten module in the browser in a WebWorker.
 //
 // baseUrl is usually taken from '../itkConfig.js', but a different value
 // could be passed.
-async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | URL, baseUrl: string): Promise<ITKWASMEmscriptenModule> {
+async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | URL, baseUrl: string): Promise<ITKWasmEmscriptenModule> {
   let modulePrefix = null
   if (typeof moduleRelativePathOrURL !== 'string') {
     modulePrefix = moduleRelativePathOrURL.href
@@ -33,7 +33,7 @@ async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | U
   const moduleBaseName: string = camelCase(modulePrefix.replace(/.*\//, ''))
   // @ts-ignore: error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'WorkerGlobalScope & typeof globalThis'.
   const wrapperModule = self[moduleBaseName] as (moduleParams: object) => object
-  const emscriptenModule = wrapperModule({ wasmBinary }) as ITKWASMEmscriptenModule
+  const emscriptenModule = wrapperModule({ wasmBinary }) as ITKWasmEmscriptenModule
   return emscriptenModule
 }
 

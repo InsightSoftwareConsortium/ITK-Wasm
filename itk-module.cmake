@@ -16,8 +16,8 @@ itk_module(WebAssemblyInterface
     ITKTestKernel
     ITKMesh
   FACTORY_NAMES
-    ImageIO::WASM
-    MeshIO::WASM
+    ImageIO::Wasm
+    MeshIO::Wasm
   EXCLUDE_FROM_DEFAULT
   DESCRIPTION
     "${DOCUMENTATION}"

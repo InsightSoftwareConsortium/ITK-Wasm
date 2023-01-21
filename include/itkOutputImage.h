@@ -21,9 +21,9 @@
 #include "itkPipeline.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
-#include "itkWASMImage.h"
-#include "itkImageToWASMImageFilter.h"
+#include "itkWasmExports.h"
+#include "itkWasmImage.h"
+#include "itkImageToWasmImageFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include "itkImageFileWriter.h"
@@ -74,11 +74,11 @@ public:
 #ifndef ITK_WASM_NO_MEMORY_IO
     if (!this->m_Image.IsNull() && !this->m_Identifier.empty())
       {
-        using ImageToWASMImageFilterType = ImageToWASMImageFilter<ImageType>;
-        auto imageToWASMImageFilter = ImageToWASMImageFilterType::New();
-        imageToWASMImageFilter->SetInput(this->m_Image);
-        imageToWASMImageFilter->Update();
-        auto wasmImage = imageToWASMImageFilter->GetOutput();
+        using ImageToWasmImageFilterType = ImageToWasmImageFilter<ImageType>;
+        auto imageToWasmImageFilter = ImageToWasmImageFilterType::New();
+        imageToWasmImageFilter->SetInput(this->m_Image);
+        imageToWasmImageFilter->Update();
+        auto wasmImage = imageToWasmImageFilter->GetOutput();
         const auto index = std::stoi(this->m_Identifier);
         setMemoryStoreOutputDataObject(0, index, wasmImage);
 

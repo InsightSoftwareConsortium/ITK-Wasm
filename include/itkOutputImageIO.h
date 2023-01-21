@@ -21,10 +21,10 @@
 #include "itkPipeline.h"
 
 #include "itkImageIOBase.h"
-#include "itkWASMImageIOBase.h"
-#include "itkWASMImageIO.h"
+#include "itkWasmImageIOBase.h"
+#include "itkWasmImageIO.h"
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
+#include "itkWasmExports.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #endif
@@ -72,7 +72,7 @@ public:
     if (!this->m_ImageIO.IsNull() && !this->m_Identifier.empty())
     {
     const auto index = std::stoi(this->m_Identifier);
-    auto wasmImageIOBase = itk::WASMImageIOBase::New();
+    auto wasmImageIOBase = itk::WasmImageIOBase::New();
     wasmImageIOBase->SetImageIO(this->m_ImageIO);
     setMemoryStoreOutputDataObject(0, index, wasmImageIOBase);
 
@@ -95,7 +95,7 @@ public:
     {
       this->m_ImageIO->ReadImageInformation();
 
-      auto wasmImageIO = itk::WASMImageIO::New();
+      auto wasmImageIO = itk::WasmImageIO::New();
 
       const unsigned int dimension = this->m_ImageIO->GetNumberOfDimensions();
       wasmImageIO->SetNumberOfDimensions(dimension);

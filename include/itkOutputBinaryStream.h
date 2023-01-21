@@ -19,7 +19,7 @@
 #define itkOutputBinaryStream_h
 
 #include "itkPipeline.h"
-#include "itkWASMStringStream.h"
+#include "itkWasmStringStream.h"
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
@@ -74,9 +74,9 @@ public:
       delete m_OStream;
     }
     m_DeleteOStream = false;
-    m_WASMStringStream = WASMStringStream::New();
+    m_WasmStringStream = WasmStringStream::New();
 
-    m_OStream = &(m_WASMStringStream->GetStringStream());
+    m_OStream = &(m_WasmStringStream->GetStringStream());
     this->m_Identifier = identifier;
   }
   const std::string & GetIdentifier() const
@@ -90,7 +90,7 @@ protected:
 
   std::string m_Identifier;
 
-  WASMStringStream::Pointer m_WASMStringStream;
+  WasmStringStream::Pointer m_WasmStringStream;
 };
 
 

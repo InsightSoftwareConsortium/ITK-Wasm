@@ -82,17 +82,17 @@ test('SWC maps to SWCMeshIO', t => {
   t.is(io, 'SWCMeshIO')
 })
 
-test('iwm maps to WASMMeshIO', t => {
+test('iwm maps to WasmMeshIO', t => {
   const io = ExtensionToIO.get('iwm')
-  t.is(io, 'WASMMeshIO')
+  t.is(io, 'WasmMeshIO')
 })
 
-test('iwm.cbor maps to WASMMeshIO', t => {
+test('iwm.cbor maps to WasmMeshIO', t => {
   const io = ExtensionToIO.get('iwm.cbor')
-  t.is(io, 'WASMMeshIO')
+  t.is(io, 'WasmMeshIO')
 })
 
-test('iwm.cbor.zstd maps to WASMMeshIO', t => {
+test('iwm.cbor.zstd maps to WasmMeshIO', t => {
   const io = ExtensionToIO.get('iwm.cbor.zstd')
-  t.is(io, 'WASMZstdMeshIO')
+  t.is(io, 'WasmZstdMeshIO')
 })

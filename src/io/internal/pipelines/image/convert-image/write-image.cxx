@@ -68,15 +68,15 @@
 #include "itkFDFImageIO.h"
 #elif IMAGE_IO_CLASS == 21
 #elif IMAGE_IO_CLASS == 22
-#include "itkWASMZstdImageIO.h"
+#include "itkWasmZstdImageIO.h"
 #else
 #error "Unsupported IMAGE_IO_CLASS"
 #endif
-#include "itkWASMImageIO.h"
+#include "itkWasmImageIO.h"
 
 #include "itkPipeline.h"
 #include "itkOutputImage.h"
-#include "itkWASMImageIOBase.h"
+#include "itkWasmImageIOBase.h"
 #include "itkImageIOBase.h"
 
 template <typename TImageIO>
@@ -98,8 +98,8 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, const std::string & outpu
   imageIO->SetFileName(outputFileName);
   imageIO->SetUseCompression(useCompression);
 
-  const itk::WASMImageIOBase * inputWASMImageIOBase = inputImageIO.Get();
-  const itk::ImageIOBase * inputImageIOBase = inputWASMImageIOBase->GetImageIO();
+  const itk::WasmImageIOBase * inputWasmImageIOBase = inputImageIO.Get();
+  const itk::ImageIOBase * inputImageIOBase = inputWasmImageIOBase->GetImageIO();
 
   const unsigned int dimension = inputImageIOBase->GetNumberOfDimensions();
   imageIO->SetNumberOfDimensions(dimension);
@@ -107,7 +107,7 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, const std::string & outpu
   imageIO->SetNumberOfComponents(inputImageIOBase->GetNumberOfComponents());
   imageIO->SetPixelType(inputImageIOBase->GetPixelType());
   std::vector<double> direction(dimension);
-  const auto directionContainer = inputWASMImageIOBase->GetDirectionContainer();
+  const auto directionContainer = inputWasmImageIOBase->GetDirectionContainer();
   for (unsigned int dim = 0; dim < dimension; ++dim)
   {
     for (unsigned int dd = 0; dd < dimension; ++dd)
@@ -127,7 +127,7 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, const std::string & outpu
   imageIO->SetIORegion( ioRegion );
 
   imageIO->WriteImageInformation();
-  imageIO->Write( reinterpret_cast< const void * >( &(inputWASMImageIOBase->GetPixelDataContainer()->at(0)) ));
+  imageIO->Write( reinterpret_cast< const void * >( &(inputWasmImageIOBase->GetPixelDataContainer()->at(0)) ));
 
   return EXIT_SUCCESS;
 }
@@ -193,9 +193,9 @@ int main (int argc, char * argv[])
 #elif IMAGE_IO_CLASS == 20
   return writeImage<itk::FDFImageIO>(inputImageIO, outputFileName, quiet, useCompression);
 #elif IMAGE_IO_CLASS == 21
-  return writeImage<itk::WASMImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::WasmImageIO>(inputImageIO, outputFileName, quiet, useCompression);
 #elif IMAGE_IO_CLASS == 22
-  return writeImage<itk::WASMZstdImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::WasmZstdImageIO>(inputImageIO, outputFileName, quiet, useCompression);
 #else
 #error "Unsupported IMAGE_IO_CLASS"
 #endif

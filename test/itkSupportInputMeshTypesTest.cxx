@@ -20,7 +20,7 @@
 #include "itkInputMesh.h"
 #include "itkOutputMesh.h"
 #include "itkSupportInputMeshTypes.h"
-#include "itkWASMMeshIOFactory.h"
+#include "itkWasmMeshIOFactory.h"
 
 template<typename TMesh>
 class PipelineFunctor
@@ -51,7 +51,7 @@ itkSupportInputMeshTypesTest(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("support-input-mesh-types-test", "Test supporting multiple input mesh types", argc, argv);
 
-  itk::WASMMeshIOFactory::RegisterOneFactory();
+  itk::WasmMeshIOFactory::RegisterOneFactory();
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
    uint8_t,

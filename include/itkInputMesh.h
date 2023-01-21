@@ -21,9 +21,9 @@
 #include "itkPipeline.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
-#include "itkWASMMesh.h"
-#include "itkWASMMeshToMeshFilter.h"
+#include "itkWasmExports.h"
+#include "itkWasmMesh.h"
+#include "itkWasmMeshToMeshFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include "itkMeshFileReader.h"
@@ -76,9 +76,9 @@ bool lexical_cast(const std::string &input, InputMesh<TMesh> &inputMesh)
   if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    using WASMMeshToMeshFilterType = WASMMeshToMeshFilter<TMesh>;
-    auto wasmMeshToMeshFilter = WASMMeshToMeshFilterType::New();
-    auto wasmMesh = WASMMeshToMeshFilterType::WASMMeshType::New();
+    using WasmMeshToMeshFilterType = WasmMeshToMeshFilter<TMesh>;
+    auto wasmMeshToMeshFilter = WasmMeshToMeshFilterType::New();
+    auto wasmMesh = WasmMeshToMeshFilterType::WasmMeshType::New();
     const unsigned int index = std::stoi(input);
     auto json = getMemoryStoreInputJSON(0, index);
     wasmMesh->SetJSON(json);

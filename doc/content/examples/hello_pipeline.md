@@ -3,7 +3,7 @@ title: Hello Pipeline World!
 
 ## Introduction
 
-This example introduces the `itk::wasm::Pipeline`. An `itk::wasm::Pipeline` transforms elegant standalone C++ command line programs into powerful [WebAssembly](https://webassembly.org/) (WASM) modules with a simple, efficient interface for execution in the browser, other programming languages, and on the command line.
+This example introduces the `itk::wasm::Pipeline`. An `itk::wasm::Pipeline` transforms elegant standalone C++ command line programs into powerful [WebAssembly](https://webassembly.org/) (Wasm) modules with a simple, efficient interface for execution in the browser, other programming languages, and on the command line.
 
 Make sure to complete the [Hello World!](./hello_world.html) example before you start your Hello Pipeline adventure.
 
@@ -42,7 +42,7 @@ int main(int argc, char * argv[]) {
 
 The `itk::wasm::Pipeline` extends the most-excellent [CLI11 modern C++ command line parser](https://github.com/CLIUtils/CLI11). In addition to all of CLI11's functionality, `itk::wasm::Pipeline`'s adds:
 
-- Support for execution in WASM modules along with command line execution
+- Support for execution in Wasm modules along with command line execution
 - Support for spatial data structures such as `Image`'s, `Mesh`'s, `PolyData`, and `Transform`'s
 - Support for multiple dimensions and pixel types
 - Colored help output
@@ -152,7 +152,7 @@ npx itk-wasm run hello-pipeline.wasi.wasm -- -- --help
 
 ![Hello pipeline help](./hello_pipeline.png)
 
-The two `--`'s are to separate arguments for the WASM module from arguments to the `itk-wasm` CLI and the WebAssembly interpreter.
+The two `--`'s are to separate arguments for the Wasm module from arguments to the `itk-wasm` CLI and the WebAssembly interpreter.
 
 Try running on an [example image](https://data.kitware.com/api/v1/file/63041ac8f64de9b9501e5a22/download).
 

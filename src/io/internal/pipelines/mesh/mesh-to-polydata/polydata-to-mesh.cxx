@@ -21,7 +21,7 @@
 #include "itkOutputMesh.h"
 #include "itkPipeline.h"
 #include "itkSupportInputPolyDataTypes.h"
-#include "itkWASMMeshIOFactory.h"
+#include "itkWasmMeshIOFactory.h"
 #include "itkPolyDataToMeshFilter.h"
 
 template<typename TPolyData>
@@ -58,7 +58,7 @@ int main (int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("polydata-to-mesh", "Convert an itk::PolyData to an itk::Mesh", argc, argv);
 
-  itk::WASMMeshIOFactory::RegisterOneFactory();
+  itk::WasmMeshIOFactory::RegisterOneFactory();
 
   return itk::wasm::SupportInputPolyDataTypes<PipelineFunctor>
   ::PixelTypes<uint8_t,int8_t,float,double>("input-polydata", pipeline);

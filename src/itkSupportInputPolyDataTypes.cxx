@@ -16,7 +16,7 @@
  *
  *=========================================================================*/
 #include "itkSupportInputPolyDataTypes.h"
-#include "itkWASMExports.h"
+#include "itkWasmExports.h"
 
 #include "rapidjson/document.h"
 
@@ -60,11 +60,11 @@ bool lexical_cast(const std::string &input, InterfacePolyDataType & polyDataType
 
     using IOComponentType = itk::IOComponentEnum;
     const IOComponentType ioComponentEnum = meshIO->GetPointPixelComponentType();
-    polyDataType.componentType = WASMComponentTypeFromIOComponentEnum( ioComponentEnum );
+    polyDataType.componentType = WasmComponentTypeFromIOComponentEnum( ioComponentEnum );
 
     using IOPixelType = itk::IOPixelEnum;
     const IOPixelType ioPixelEnum = meshIO->GetPointPixelType();
-    polyDataType.pixelType = WASMPixelTypeFromIOPixelEnum( ioPixelEnum );
+    polyDataType.pixelType = WasmPixelTypeFromIOPixelEnum( ioPixelEnum );
 
     polyDataType.components = meshIO->GetNumberOfPointPixelComponents();
     if (polyDataType.components == 0)

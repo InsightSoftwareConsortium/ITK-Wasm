@@ -65,7 +65,7 @@ First, build to WASI WebAssembly with debugging symbols available:
 
 ![WASI debug build](./debugging/wasi-build-debug.png)
 
-Then, the `itk-wasm` CLI can conveniently run the WASM binary with the included WASI runtime:
+Then, the `itk-wasm` CLI can conveniently run the Wasm binary with the included WASI runtime:
 
 ![Run WASI debug](./debugging/run-wasi-debug.png)
 
@@ -126,13 +126,13 @@ Next, enable it in DevTools.
 
   Open DevTools -> Click the *gear (⚙)* icon in the top right corner -> go to the *Experiments* panel -> and tick *WebAssembly Debugging: Enable DWARF support*.
 
-![Enable WASM Debugging](./debugging/enable-chrome-wasm-debugging.png)
+![Enable Wasm Debugging](./debugging/enable-chrome-wasm-debugging.png)
 
 After exitting Settings, you will be prompted to reload DevTools -- reload.
 
 Next, open the options for Chrome WebAssembly Debugging extension:
 
-![WASM Debugging Options](./debugging/devtools-options.png)
+![Wasm Debugging Options](./debugging/devtools-options.png)
 
 Since itk-wasm performs builds in a clean Docker environment, the debugging source paths in the Docker environment are different than the paths on the host system. The debugging extension has a path substitution system that can account for these differences. In the Docker image, the directory where `itk-wasm` is invoked is mounted as `/work`. Substitute `/work` with the directory where the `itk-wasm` CLI is invoked. For example, if `itk-wasm` was invoked at `/home/matt/src/itk-wasm/examples/Debugging`, then:
 

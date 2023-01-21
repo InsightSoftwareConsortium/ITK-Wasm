@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "itkwasm"
-description = "Python interface to itk-wasm WebAssembly (WASM) modules."
+description = "Python interface to itk-wasm WebAssembly (Wasm) modules."
 authors = [{name = "Matt McCormick", email = "matt.mccormick@kitware.com"}]
 readme = "README.md"
 license = {file = "LICENSE"}

@@ -15,9 +15,9 @@ const extensionToIO = new Map([
   ['STL', 'STLMeshIO'],
   ['swc', 'SWCMeshIO'],
   ['SWC', 'SWCMeshIO'],
-  ['iwm', 'WASMMeshIO'],
-  ['iwm.cbor', 'WASMMeshIO'],
-  ['iwm.cbor.zstd', 'WASMZstdMeshIO']
+  ['iwm', 'WasmMeshIO'],
+  ['iwm.cbor', 'WasmMeshIO'],
+  ['iwm.cbor.zstd', 'WasmZstdMeshIO']
 ])
 
 export default extensionToIO

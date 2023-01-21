@@ -18,11 +18,11 @@
 #ifndef itkSupportInputMeshTypes_h
 #define itkSupportInputMeshTypes_h
 #include "itkPipeline.h"
-#include "itkWASMPixelTypeFromIOPixelEnum.h"
-#include "itkWASMComponentTypeFromIOComponentEnum.h"
+#include "itkWasmPixelTypeFromIOPixelEnum.h"
+#include "itkWasmComponentTypeFromIOComponentEnum.h"
 #include "itkMeshConvertPixelTraits.h"
-#include "itkWASMMapComponentType.h"
-#include "itkWASMMapPixelType.h"
+#include "itkWasmMapComponentType.h"
+#include "itkWasmMapPixelType.h"
 
 #include "itkMesh.h"
 #include "itkMeshIOBase.h"

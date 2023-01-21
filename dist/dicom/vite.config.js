@@ -24,7 +24,7 @@ export default defineConfig({
     emptyOutDir: false,
   },
   plugins: [
-    // put lazy loaded JavaScript and WASM bundles in dist directory
+    // put lazy loaded JavaScript and Wasm bundles in dist directory
     copy({
       targets: [
         { src: 'node_modules/itk-wasm/dist/web-workers/bundles/pipeline.worker.js', dest: 'dist/pipelines/web-workers/' },

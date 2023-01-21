@@ -21,9 +21,9 @@
 #include "itkPipeline.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
-#include "itkWASMPolyData.h"
-#include "itkWASMPolyDataToPolyDataFilter.h"
+#include "itkWasmExports.h"
+#include "itkWasmPolyData.h"
+#include "itkWasmPolyDataToPolyDataFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include "itkMeshFileReader.h"
@@ -78,9 +78,9 @@ bool lexical_cast(const std::string &input, InputPolyData<TPolyData> &inputPolyD
   if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    using WASMPolyDataToPolyDataFilterType = WASMPolyDataToPolyDataFilter<TPolyData>;
-    auto wasmPolyDataToPolyDataFilter = WASMPolyDataToPolyDataFilterType::New();
-    auto wasmPolyData = WASMPolyDataToPolyDataFilterType::WASMPolyDataType::New();
+    using WasmPolyDataToPolyDataFilterType = WasmPolyDataToPolyDataFilter<TPolyData>;
+    auto wasmPolyDataToPolyDataFilter = WasmPolyDataToPolyDataFilterType::New();
+    auto wasmPolyData = WasmPolyDataToPolyDataFilterType::WasmPolyDataType::New();
     const unsigned int index = std::stoi(input);
     auto json = getMemoryStoreInputJSON(0, index);
     wasmPolyData->SetJSON(json);

@@ -21,9 +21,9 @@
 #include "itkPipeline.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
-#include "itkWASMImage.h"
-#include "itkWASMImageToImageFilter.h"
+#include "itkWasmExports.h"
+#include "itkWasmImage.h"
+#include "itkWasmImageToImageFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include "itkImageFileReader.h"
@@ -76,9 +76,9 @@ bool lexical_cast(const std::string &input, InputImage<TImage> &inputImage)
   if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    using WASMImageToImageFilterType = WASMImageToImageFilter<TImage>;
-    auto wasmImageToImageFilter = WASMImageToImageFilterType::New();
-    auto wasmImage = WASMImageToImageFilterType::WASMImageType::New();
+    using WasmImageToImageFilterType = WasmImageToImageFilter<TImage>;
+    auto wasmImageToImageFilter = WasmImageToImageFilterType::New();
+    auto wasmImage = WasmImageToImageFilterType::WasmImageType::New();
     const unsigned int index = std::stoi(input);
     auto json = getMemoryStoreInputJSON(0, index);
     wasmImage->SetJSON(json);

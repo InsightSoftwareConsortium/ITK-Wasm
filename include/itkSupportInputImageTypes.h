@@ -18,11 +18,11 @@
 #ifndef itkSupportInputImageTypes_h
 #define itkSupportInputImageTypes_h
 #include "itkPipeline.h"
-#include "itkWASMPixelTypeFromIOPixelEnum.h"
-#include "itkWASMComponentTypeFromIOComponentEnum.h"
+#include "itkWasmPixelTypeFromIOPixelEnum.h"
+#include "itkWasmComponentTypeFromIOComponentEnum.h"
 #include "itkDefaultConvertPixelTraits.h"
-#include "itkWASMMapComponentType.h"
-#include "itkWASMMapPixelType.h"
+#include "itkWasmMapComponentType.h"
+#include "itkWasmMapPixelType.h"
 
 #include "itkImage.h"
 #include "itkVectorImage.h"

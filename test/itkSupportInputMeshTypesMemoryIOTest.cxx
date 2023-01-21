@@ -19,8 +19,8 @@
 #include "itkInputMesh.h"
 #include "itkOutputMesh.h"
 #include "itkSupportInputMeshTypes.h"
-#include "itkMeshToWASMMeshFilter.h"
-#include "itkWASMMeshIOFactory.h"
+#include "itkMeshToWasmMeshFilter.h"
+#include "itkWasmMeshIOFactory.h"
 
 template<typename TMesh>
 class PipelineFunctor
@@ -49,7 +49,7 @@ public:
 int
 itkSupportInputMeshTypesMemoryIOTest(int argc, char * argv[])
 {
-  itk::WASMMeshIOFactory::RegisterOneFactory();
+  itk::WasmMeshIOFactory::RegisterOneFactory();
 
   // Create mesh in memory
   constexpr unsigned int Dimension = 3;
@@ -62,15 +62,15 @@ itkSupportInputMeshTypesMemoryIOTest(int argc, char * argv[])
   meshReader->SetFileName(inputMeshFile);
   meshReader->Update();
   auto readInputMesh = meshReader->GetOutput();
-  using MeshToWASMMeshFilterType = itk::MeshToWASMMeshFilter<MeshType>;
-  auto meshToWASMMeshFilter = MeshToWASMMeshFilterType::New();
-  meshToWASMMeshFilter->SetInput(readInputMesh);
-  meshToWASMMeshFilter->Update();
-  auto readWASMMesh = meshToWASMMeshFilter->GetOutput();
+  using MeshToWasmMeshFilterType = itk::MeshToWasmMeshFilter<MeshType>;
+  auto meshToWasmMeshFilter = MeshToWasmMeshFilterType::New();
+  meshToWasmMeshFilter->SetInput(readInputMesh);
+  meshToWasmMeshFilter->Update();
+  auto readWasmMesh = meshToWasmMeshFilter->GetOutput();
 
-  auto readMeshJSON = readWASMMesh->GetJSON();
-  void * readWASMMeshPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readMeshJSON.size()));
-  std::memcpy(readWASMMeshPointer, readMeshJSON.data(), readMeshJSON.size());
+  auto readMeshJSON = readWasmMesh->GetJSON();
+  void * readWasmMeshPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readMeshJSON.size()));
+  std::memcpy(readWasmMeshPointer, readMeshJSON.data(), readMeshJSON.size());
 
   const char * mockArgv[] = {"itkSupportInputMeshTypesMemoryIOTest", "--memory-io", "0", "0", NULL};
 

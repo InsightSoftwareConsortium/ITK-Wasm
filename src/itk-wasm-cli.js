@@ -175,7 +175,7 @@ function run(wasmBinary, options) {
   let wasmRuntimeArgs = []
   switch (wasmRuntime) {
   case 'wasmtime':
-    wasmRuntimeArgs = ['--args', '-e WASMTIME_BACKTRACE_DETAILS=1', '/wasi-runtimes/wasmtime/bin/wasmtime-pwd.sh',]
+    wasmRuntimeArgs = ['--args', '-e WasmTIME_BACKTRACE_DETAILS=1', '/wasi-runtimes/wasmtime/bin/wasmtime-pwd.sh',]
     break
   case 'wasmer':
     wasmRuntimeArgs = ['sudo', '/wasi-runtimes/wasmer/bin/wasmer-pwd.sh',]
@@ -321,7 +321,7 @@ program
   .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript',]))
   .option('-r, --repository <repository-url>', 'Source code repository URL')
   .usage('[options] [wasmBinaries...]')
-  .description('Generate WASM module bindings for a language')
+  .description('Generate Wasm module bindings for a language')
   .action(bindgen)
 
 program
