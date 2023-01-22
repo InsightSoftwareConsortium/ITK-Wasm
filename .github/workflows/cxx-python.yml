@@ -13,6 +13,7 @@ jobs:
     with:
       itk-module-deps: 'MeshToPolyData@v0.10.0'
       ctest-options: '-E itkPipelineTest'
+      warnings-to-ignore: "warning: 'sprintf' is deprecated"
 
   python-build-workflow:
     uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@e63df7ae8a13af6e1bf5b0bcffd45252e133faad
