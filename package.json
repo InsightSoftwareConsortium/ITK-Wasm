@@ -18,12 +18,10 @@
   "type": "module",
   "types": "./dist/index.d.ts",
   "directories": {
-    "doc": "doc",
+    "doc": "docs",
     "test": "test"
   },
   "scripts": {
-    "doc": "kw-doc -c ./doc/config.cjs",
-    "doc:www": "kw-doc -c ./doc/config.cjs -s",
     "commit": "git cz",
     "bindgen": "node ./src/itk-wasm-cli.js bindgen ./dist/dicom/src ./dist/dicom/public/pipelines/*.wasm",
     "build": "npm run build:emscripten && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack && node ./src/io/internal/packages/package-json-gen.cjs",
@@ -117,7 +115,6 @@
     "karma-tap": "^4.2.0",
     "karma-tap-pretty-reporter": "^4.2.0",
     "karma-webpack": "^5.0.0",
-    "kw-doc": "^3.1.2",
     "node-module-polyfill": "^1.0.1",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
