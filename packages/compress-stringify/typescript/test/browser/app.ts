@@ -107,7 +107,7 @@ function setupCompressStringify() {
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
 
-    const { webWorker, output } = await itkCompressStringify.compressStringify(null, ...context.inputs, context.options)
+    const { webWorker, output } = await itkCompressStringify.compressStringify(null, context.inputs[0].slice(), context.options)
     webWorker.terminate()
 
     context.outputs.output = output
@@ -161,7 +161,7 @@ function setupParseStringDecompress() {
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
 
-    const { webWorker, output } = await itkCompressStringify.parseStringDecompress(null, ...context.inputs, context.options)
+    const { webWorker, output } = await itkCompressStringify.parseStringDecompress(null, context.inputs[0].slice(), context.options)
     webWorker.terminate()
 
     context.outputs.output = output
