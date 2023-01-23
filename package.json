@@ -160,7 +160,7 @@
     "ignore": [
       "src/core/internal/loadEmscriptenModuleWebWorker.ts",
       "src/web-workers/*.ts",
-      "src/core/ITKWASMEmscriptenModule.ts",
+      "src/core/ITKWasmEmscriptenModule.ts",
       "src/pipeline/PipelineEmscriptenModule.ts"
     ]
   },

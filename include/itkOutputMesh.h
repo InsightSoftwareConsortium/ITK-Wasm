@@ -22,9 +22,9 @@
 #include "itkMeshConvertPixelTraits.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
-#include "itkWASMMesh.h"
-#include "itkMeshToWASMMeshFilter.h"
+#include "itkWasmExports.h"
+#include "itkWasmMesh.h"
+#include "itkMeshToWasmMeshFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include "itkMeshFileWriter.h"
@@ -75,11 +75,11 @@ public:
 #ifndef ITK_WASM_NO_MEMORY_IO
     if (!this->m_Mesh.IsNull() && !this->m_Identifier.empty())
       {
-        using MeshToWASMMeshFilterType = MeshToWASMMeshFilter<MeshType>;
-        auto meshToWASMMeshFilter = MeshToWASMMeshFilterType::New();
-        meshToWASMMeshFilter->SetInput(this->m_Mesh);
-        meshToWASMMeshFilter->Update();
-        auto wasmMesh = meshToWASMMeshFilter->GetOutput();
+        using MeshToWasmMeshFilterType = MeshToWasmMeshFilter<MeshType>;
+        auto meshToWasmMeshFilter = MeshToWasmMeshFilterType::New();
+        meshToWasmMeshFilter->SetInput(this->m_Mesh);
+        meshToWasmMeshFilter->Update();
+        auto wasmMesh = meshToWasmMeshFilter->GetOutput();
         const auto index = std::stoi(this->m_Identifier);
         setMemoryStoreOutputDataObject(0, index, wasmMesh);
 

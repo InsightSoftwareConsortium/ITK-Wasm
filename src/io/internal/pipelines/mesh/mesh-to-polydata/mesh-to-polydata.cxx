@@ -21,7 +21,7 @@
 #include "itkOutputPolyData.h"
 #include "itkPipeline.h"
 #include "itkSupportInputMeshTypes.h"
-#include "itkWASMMeshIOFactory.h"
+#include "itkWasmMeshIOFactory.h"
 #include "itkMeshToPolyDataFilter.h"
 #include "itkVector.h"
 
@@ -59,7 +59,7 @@ int main (int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("mesh-to-polydata", "Convert an itk::Mesh to an itk::PolyData", argc, argv);
 
-  itk::WASMMeshIOFactory::RegisterOneFactory();
+  itk::WasmMeshIOFactory::RegisterOneFactory();
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
    uint8_t,

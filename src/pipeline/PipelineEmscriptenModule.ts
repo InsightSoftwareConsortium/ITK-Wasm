@@ -1,6 +1,6 @@
 /// <reference types="emscripten" />
 // import { cwrap, ccall } from '@types/emscripten'
-import EmscriptenModule from "../core/ITKWASMEmscriptenModule.js";
+import EmscriptenModule from "../core/ITKWasmEmscriptenModule.js";
 
 interface PipelineEmscriptenModule extends EmscriptenModule {
   callMain: (args: string[]) => number;

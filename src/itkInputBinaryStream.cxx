@@ -19,7 +19,7 @@
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
+#include "itkWasmExports.h"
 #endif
 
 namespace itk

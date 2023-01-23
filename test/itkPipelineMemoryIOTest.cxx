@@ -24,18 +24,18 @@
 #include "itkOutputTextStream.h"
 #include "itkInputBinaryStream.h"
 #include "itkOutputBinaryStream.h"
-#include "itkWASMImage.h"
-#include "itkImageToWASMImageFilter.h"
-#include "itkWASMMesh.h"
-#include "itkMeshToWASMMeshFilter.h"
-#include "itkWASMExports.h"
+#include "itkWasmImage.h"
+#include "itkImageToWasmImageFilter.h"
+#include "itkWasmMesh.h"
+#include "itkMeshToWasmMeshFilter.h"
+#include "itkWasmExports.h"
 #include <cstring>
 #include "itkInputMesh.h"
 #include "itkOutputMesh.h"
 #include "itkMesh.h"
 #include "itkInputPolyData.h"
 #include "itkPolyData.h"
-#include "itkPolyDataToWASMPolyDataFilter.h"
+#include "itkPolyDataToWasmPolyDataFilter.h"
 #include "itkOutputPolyData.h"
 
 #include "itkImageFileReader.h"
@@ -52,27 +52,27 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   const char * inputImageFile = argv[2];
   auto readInputImage = itk::ReadImage<ImageType>(inputImageFile);
-  using ImageToWASMImageFilterType = itk::ImageToWASMImageFilter<ImageType>;
-  auto imageToWASMImageFilter = ImageToWASMImageFilterType::New();
-  imageToWASMImageFilter->SetInput(readInputImage);
-  imageToWASMImageFilter->Update();
-  auto readWASMImage = imageToWASMImageFilter->GetOutput();
+  using ImageToWasmImageFilterType = itk::ImageToWasmImageFilter<ImageType>;
+  auto imageToWasmImageFilter = ImageToWasmImageFilterType::New();
+  imageToWasmImageFilter->SetInput(readInputImage);
+  imageToWasmImageFilter->Update();
+  auto readWasmImage = imageToWasmImageFilter->GetOutput();
 
-  auto readWASMImageData = reinterpret_cast< const void * >(readWASMImage->GetImage()->GetBufferPointer());
-  const auto readWASMImageDataSize = readWASMImage->GetImage()->GetPixelContainer()->Size();
-  const size_t readWASMImageDataPointerAddress = itk_wasm_input_array_alloc(0, 0, 0, readWASMImageDataSize);
-  auto readWASMImageDataPointer = reinterpret_cast< void * >(readWASMImageDataPointerAddress);
-  std::memcpy(readWASMImageDataPointer, readWASMImageData, readWASMImageDataSize);
+  auto readWasmImageData = reinterpret_cast< const void * >(readWasmImage->GetImage()->GetBufferPointer());
+  const auto readWasmImageDataSize = readWasmImage->GetImage()->GetPixelContainer()->Size();
+  const size_t readWasmImageDataPointerAddress = itk_wasm_input_array_alloc(0, 0, 0, readWasmImageDataSize);
+  auto readWasmImageDataPointer = reinterpret_cast< void * >(readWasmImageDataPointerAddress);
+  std::memcpy(readWasmImageDataPointer, readWasmImageData, readWasmImageDataSize);
 
-  // auto direction = reinterpret_cast< const void * >( readWASMImage->GetImage()->GetDirection().GetVnlMatrix().begin() );
-  // const auto directionSize = readWASMImage->GetImage()->GetDirection().GetVnlMatrix().size() * sizeof(double);
-  // const size_t readWASMImageDirectionPointerAddress = itk_wasm_array_alloc(0, 0, 1, directionSize);
-  // auto readWASMImageDirectionPointer = reinterpret_cast< void * >(readWASMImageDirectionPointerAddress);
-  // std::memcpy(readWASMImageDirectionPointer, direction, directionSize);
+  // auto direction = reinterpret_cast< const void * >( readWasmImage->GetImage()->GetDirection().GetVnlMatrix().begin() );
+  // const auto directionSize = readWasmImage->GetImage()->GetDirection().GetVnlMatrix().size() * sizeof(double);
+  // const size_t readWasmImageDirectionPointerAddress = itk_wasm_array_alloc(0, 0, 1, directionSize);
+  // auto readWasmImageDirectionPointer = reinterpret_cast< void * >(readWasmImageDirectionPointerAddress);
+  // std::memcpy(readWasmImageDirectionPointer, direction, directionSize);
 
-  auto readImageJSON = readWASMImage->GetJSON();
-  void * readWASMImagePointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readImageJSON.size()));
-  std::memcpy(readWASMImagePointer, readImageJSON.data(), readImageJSON.size());
+  auto readImageJSON = readWasmImage->GetJSON();
+  void * readWasmImagePointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readImageJSON.size()));
+  std::memcpy(readWasmImagePointer, readImageJSON.data(), readImageJSON.size());
 
   std::ifstream mockTextFStream( argv[4] );
   const std::string mockTextStream{ std::istreambuf_iterator<char>(mockTextFStream),
@@ -104,32 +104,32 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   meshReader->SetFileName(inputMeshFile);
   meshReader->Update();
   auto readInputMesh = meshReader->GetOutput();
-  using MeshToWASMMeshFilterType = itk::MeshToWASMMeshFilter<MeshType>;
-  auto meshToWASMMeshFilter = MeshToWASMMeshFilterType::New();
-  meshToWASMMeshFilter->SetInput(readInputMesh);
-  meshToWASMMeshFilter->Update();
-  auto readWASMMesh = meshToWASMMeshFilter->GetOutput();
+  using MeshToWasmMeshFilterType = itk::MeshToWasmMeshFilter<MeshType>;
+  auto meshToWasmMeshFilter = MeshToWasmMeshFilterType::New();
+  meshToWasmMeshFilter->SetInput(readInputMesh);
+  meshToWasmMeshFilter->Update();
+  auto readWasmMesh = meshToWasmMeshFilter->GetOutput();
 
-  auto readMeshJSON = readWASMMesh->GetJSON();
-  void * readWASMMeshPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 3, readMeshJSON.size()));
-  std::memcpy(readWASMMeshPointer, readMeshJSON.data(), readMeshJSON.size());
+  auto readMeshJSON = readWasmMesh->GetJSON();
+  void * readWasmMeshPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 3, readMeshJSON.size()));
+  std::memcpy(readWasmMeshPointer, readMeshJSON.data(), readMeshJSON.size());
 
   using PolyDataType = itk::PolyData<float>;
   using MeshToPolyDataFilterType = itk::MeshToPolyDataFilter<MeshType>;
   auto meshToPolyData = MeshToPolyDataFilterType::New();
   meshToPolyData->SetInput(meshReader->GetOutput());
-  using PolyDataToWASMPolyDataFilterType = itk::PolyDataToWASMPolyDataFilter<PolyDataType>;
-  auto polyDataToWASMPolyDataFilter = PolyDataToWASMPolyDataFilterType::New();
-  polyDataToWASMPolyDataFilter->SetInput(meshToPolyData->GetOutput());
-  polyDataToWASMPolyDataFilter->Update();
-  auto readWASMPolyData = polyDataToWASMPolyDataFilter->GetOutput();
+  using PolyDataToWasmPolyDataFilterType = itk::PolyDataToWasmPolyDataFilter<PolyDataType>;
+  auto polyDataToWasmPolyDataFilter = PolyDataToWasmPolyDataFilterType::New();
+  polyDataToWasmPolyDataFilter->SetInput(meshToPolyData->GetOutput());
+  polyDataToWasmPolyDataFilter->Update();
+  auto readWasmPolyData = polyDataToWasmPolyDataFilter->GetOutput();
 
-  auto readPolyDataJSON = readWASMPolyData->GetJSON();
-  void * readWASMPolyDataPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 4, readPolyDataJSON.size()));
-  std::memcpy(readWASMPolyDataPointer, readPolyDataJSON.data(), readPolyDataJSON.size());
+  auto readPolyDataJSON = readWasmPolyData->GetJSON();
+  void * readWasmPolyDataPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 4, readPolyDataJSON.size()));
+  std::memcpy(readWasmPolyDataPointer, readPolyDataJSON.data(), readPolyDataJSON.size());
 
   const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", NULL};
-  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK WASM Pipeline", 12, const_cast< char ** >(mockArgv));
+  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", 12, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");

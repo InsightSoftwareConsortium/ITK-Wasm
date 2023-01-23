@@ -23,17 +23,17 @@ add_test(NAME mesh-read-write-test
   ${CMAKE_CURRENT_BINARY_DIR}/cow.written.vtk
   )
 
-add_test(NAME MeshReadWriteWASMTest
+add_test(NAME MeshReadWriteWasmTest
   COMMAND mesh-read-write-test ${CMAKE_CURRENT_SOURCE_DIR}/cow.vtk
   ${CMAKE_CURRENT_BINARY_DIR}/cow.iwm
   )
 
-add_test(NAME MeshReadWriteWASMCBORTest
+add_test(NAME MeshReadWriteWasmCBORTest
   COMMAND mesh-read-write-test ${CMAKE_CURRENT_SOURCE_DIR}/cow.vtk
   ${CMAKE_CURRENT_BINARY_DIR}/cow.iwm.cbor
   )
 
-add_test(NAME MeshReadWriteWASMInputTest
+add_test(NAME MeshReadWriteWasmInputTest
   COMMAND mesh-read-write-test ${CMAKE_CURRENT_BINARY_DIR}/cow.iwm
   ${CMAKE_CURRENT_BINARY_DIR}/cow.out.iwm
   )

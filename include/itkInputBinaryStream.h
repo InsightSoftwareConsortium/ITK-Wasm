@@ -19,7 +19,7 @@
 #define itkInputBinaryStream_h
 
 #include "itkPipeline.h"
-#include "itkWASMStringStream.h"
+#include "itkWasmStringStream.h"
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
@@ -60,10 +60,10 @@ public:
       delete m_IStream;
     }
     m_DeleteIStream = false;
-    m_WASMStringStream = WASMStringStream::New();
-    m_WASMStringStream->SetJSON(json.c_str());
+    m_WasmStringStream = WasmStringStream::New();
+    m_WasmStringStream->SetJSON(json.c_str());
 
-    m_IStream = &(m_WASMStringStream->GetStringStream());
+    m_IStream = &(m_WasmStringStream->GetStringStream());
   }
 
   void SetFileName(const std::string & fileName)
@@ -88,7 +88,7 @@ protected:
   std::istream * m_IStream{nullptr};
   bool m_DeleteIStream{false};
 
-  WASMStringStream::Pointer m_WASMStringStream;
+  WasmStringStream::Pointer m_WasmStringStream;
 };
 
 

@@ -16,7 +16,7 @@
  *
  *=========================================================================*/
 #include "itkSupportInputImageTypes.h"
-#include "itkWASMExports.h"
+#include "itkWasmExports.h"
 
 #include "rapidjson/document.h"
 
@@ -59,11 +59,11 @@ bool lexical_cast(const std::string &input, InterfaceImageType & imageType)
 
     using IOComponentType = itk::IOComponentEnum;
     const IOComponentType ioComponentEnum = imageIO->GetComponentType();
-    imageType.componentType = WASMComponentTypeFromIOComponentEnum( ioComponentEnum );
+    imageType.componentType = WasmComponentTypeFromIOComponentEnum( ioComponentEnum );
 
     using IOPixelType = itk::IOPixelEnum;
     const IOPixelType ioPixelEnum = imageIO->GetPixelType();
-    imageType.pixelType = WASMPixelTypeFromIOPixelEnum( ioPixelEnum );
+    imageType.pixelType = WasmPixelTypeFromIOPixelEnum( ioPixelEnum );
 
     imageType.components = imageIO->GetNumberOfComponents();
 #else

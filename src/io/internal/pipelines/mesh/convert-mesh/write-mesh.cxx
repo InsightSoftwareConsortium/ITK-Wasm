@@ -42,18 +42,18 @@
 #include "itkSWCMeshIO.h"
 #elif MESH_IO_CLASS == 8
 #elif MESH_IO_CLASS == 9
-#include "itkWASMZstdMeshIO.h"
+#include "itkWasmZstdMeshIO.h"
 #elif MESH_IO_CLASS == 21
 #elif MESH_IO_CLASS == 22
-#include "itkWASMZstdMeshIO.h"
+#include "itkWasmZstdMeshIO.h"
 #else
 #error "Unsupported MESH_IO_CLASS"
 #endif
-#include "itkWASMMeshIO.h"
+#include "itkWasmMeshIO.h"
 
 #include "itkPipeline.h"
 #include "itkOutputMesh.h"
-#include "itkWASMMeshIOBase.h"
+#include "itkWasmMeshIOBase.h"
 #include "itkMeshIOBase.h"
 
 template <typename TMeshIO>
@@ -80,8 +80,8 @@ int writeMesh(itk::wasm::InputMeshIO & inputMeshIO, const std::string & outputFi
 
   meshIO->SetFileName(outputFileName);
 
-  const itk::WASMMeshIOBase * inputWASMMeshIOBase = inputMeshIO.Get();
-  const itk::MeshIOBase * inputMeshIOBase = inputWASMMeshIOBase->GetMeshIO();
+  const itk::WasmMeshIOBase * inputWasmMeshIOBase = inputMeshIO.Get();
+  const itk::MeshIOBase * inputMeshIOBase = inputWasmMeshIOBase->GetMeshIO();
 
   const unsigned int dimension = inputMeshIOBase->GetPointDimension();
   meshIO->SetPointDimension(dimension);
@@ -119,19 +119,19 @@ int writeMesh(itk::wasm::InputMeshIO & inputMeshIO, const std::string & outputFi
 
   if (meshIO->GetNumberOfPoints())
   {
-    meshIO->WritePoints( reinterpret_cast< void * >( const_cast< char * >(&(inputWASMMeshIOBase->GetPointsContainer()->at(0))) ));
+    meshIO->WritePoints( reinterpret_cast< void * >( const_cast< char * >(&(inputWasmMeshIOBase->GetPointsContainer()->at(0))) ));
   }
   if (meshIO->GetNumberOfCells())
   {
-    meshIO->WriteCells( reinterpret_cast< void * >( const_cast< char * >(&(inputWASMMeshIOBase->GetCellsContainer()->at(0))) ));
+    meshIO->WriteCells( reinterpret_cast< void * >( const_cast< char * >(&(inputWasmMeshIOBase->GetCellsContainer()->at(0))) ));
   }
   if (meshIO->GetNumberOfPointPixels())
   {
-    meshIO->WritePointData( reinterpret_cast< void * >( const_cast< char * >(&(inputWASMMeshIOBase->GetPointDataContainer()->at(0))) ));
+    meshIO->WritePointData( reinterpret_cast< void * >( const_cast< char * >(&(inputWasmMeshIOBase->GetPointDataContainer()->at(0))) ));
   }
   if (meshIO->GetNumberOfCellPixels())
   {
-    meshIO->WriteCellData( reinterpret_cast< void * >( const_cast< char * >(&(inputWASMMeshIOBase->GetCellDataContainer()->at(0))) ));
+    meshIO->WriteCellData( reinterpret_cast< void * >( const_cast< char * >(&(inputWasmMeshIOBase->GetCellDataContainer()->at(0))) ));
   }
 
   meshIO->Write();
@@ -177,9 +177,9 @@ int main (int argc, char * argv[])
 #elif MESH_IO_CLASS == 7
   return writeMesh<itk::SWCMeshIO>(inputMeshIO, outputFileName, quiet, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 8
-  return writeMesh<itk::WASMMeshIO>(inputMeshIO, outputFileName, quiet, useCompression, binaryFileType);
+  return writeMesh<itk::WasmMeshIO>(inputMeshIO, outputFileName, quiet, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 9
-  return writeMesh<itk::WASMZstdMeshIO>(inputMeshIO, outputFileName, quiet, useCompression, binaryFileType);
+  return writeMesh<itk::WasmZstdMeshIO>(inputMeshIO, outputFileName, quiet, useCompression, binaryFileType);
 #else
 #error "Unsupported MESH_IO_CLASS"
 #endif

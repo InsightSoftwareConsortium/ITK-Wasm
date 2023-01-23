@@ -3,23 +3,23 @@ include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
 set(WebAssemblyInterface_SRCS
   itkPipeline.cxx
   itkMetaDataDictionaryJSON.cxx
-  itkWASMExports.cxx
-  itkWASMDataObject.cxx
-  itkWASMImageIOBase.cxx
-  itkWASMImageIOFactory.cxx
-  itkWASMImageIO.cxx
-  itkWASMMeshIOBase.cxx
-  itkWASMMeshIOFactory.cxx
-  itkWASMMeshIO.cxx
-  itkWASMStringStream.cxx
+  itkWasmExports.cxx
+  itkWasmDataObject.cxx
+  itkWasmImageIOBase.cxx
+  itkWasmImageIOFactory.cxx
+  itkWasmImageIO.cxx
+  itkWasmMeshIOBase.cxx
+  itkWasmMeshIOFactory.cxx
+  itkWasmMeshIO.cxx
+  itkWasmStringStream.cxx
   itkInputTextStream.cxx
   itkOutputTextStream.cxx
   itkInputBinaryStream.cxx
   itkOutputBinaryStream.cxx
-  itkIOComponentEnumFromWASMComponentType.cxx
-  itkIOPixelEnumFromWASMPixelType.cxx
-  itkWASMComponentTypeFromIOComponentEnum.cxx
-  itkWASMPixelTypeFromIOPixelEnum.cxx
+  itkIOComponentEnumFromWasmComponentType.cxx
+  itkIOPixelEnumFromWasmPixelType.cxx
+  itkWasmComponentTypeFromIOComponentEnum.cxx
+  itkWasmPixelTypeFromIOPixelEnum.cxx
   itkSupportInputImageTypes.cxx
   itkSupportInputMeshTypes.cxx
   itkSupportInputPolyDataTypes.cxx

@@ -42,14 +42,14 @@
 #include "itkSWCMeshIO.h"
 #elif MESH_IO_CLASS == 8
 #elif MESH_IO_CLASS == 9
-#include "itkWASMZstdMeshIO.h"
+#include "itkWasmZstdMeshIO.h"
 #elif MESH_IO_CLASS == 21
 #elif MESH_IO_CLASS == 22
-#include "itkWASMZstdMeshIO.h"
+#include "itkWasmZstdMeshIO.h"
 #else
 #error "Unsupported MESH_IO_CLASS"
 #endif
-#include "itkWASMMeshIO.h"
+#include "itkWasmMeshIO.h"
 
 #include "itkPipeline.h"
 #include "itkOutputMesh.h"
@@ -108,9 +108,9 @@ int main (int argc, char * argv[])
 #elif MESH_IO_CLASS == 7
   return readMesh<itk::SWCMeshIO>(inputFileName, outputMeshIO, quiet);
 #elif MESH_IO_CLASS == 8
-  return readMesh<itk::WASMMeshIO>(inputFileName, outputMeshIO, quiet);
+  return readMesh<itk::WasmMeshIO>(inputFileName, outputMeshIO, quiet);
 #elif MESH_IO_CLASS == 9
-  return readMesh<itk::WASMZstdMeshIO>(inputFileName, outputMeshIO, quiet);
+  return readMesh<itk::WasmZstdMeshIO>(inputFileName, outputMeshIO, quiet);
 #else
 #error "Unsupported MESH_IO_CLASS"
 #endif

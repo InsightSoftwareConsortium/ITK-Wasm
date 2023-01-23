@@ -22,9 +22,9 @@
 #include "itkMeshConvertPixelTraits.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
-#include "itkWASMPolyData.h"
-#include "itkPolyDataToWASMPolyDataFilter.h"
+#include "itkWasmExports.h"
+#include "itkWasmPolyData.h"
+#include "itkPolyDataToWasmPolyDataFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #include "itkMeshFileWriter.h"
@@ -76,11 +76,11 @@ public:
 #ifndef ITK_WASM_NO_MEMORY_IO
     if (!this->m_PolyData.IsNull() && !this->m_Identifier.empty())
       {
-        using PolyDataToWASMPolyDataFilterType = PolyDataToWASMPolyDataFilter<PolyDataType>;
-        auto polyDataToWASMPolyDataFilter = PolyDataToWASMPolyDataFilterType::New();
-        polyDataToWASMPolyDataFilter->SetInput(this->m_PolyData);
-        polyDataToWASMPolyDataFilter->Update();
-        auto wasmPolyData = polyDataToWASMPolyDataFilter->GetOutput();
+        using PolyDataToWasmPolyDataFilterType = PolyDataToWasmPolyDataFilter<PolyDataType>;
+        auto polyDataToWasmPolyDataFilter = PolyDataToWasmPolyDataFilterType::New();
+        polyDataToWasmPolyDataFilter->SetInput(this->m_PolyData);
+        polyDataToWasmPolyDataFilter->Update();
+        auto wasmPolyData = polyDataToWasmPolyDataFilter->GetOutput();
         const auto index = std::stoi(this->m_Identifier);
         setMemoryStoreOutputDataObject(0, index, wasmPolyData);
 

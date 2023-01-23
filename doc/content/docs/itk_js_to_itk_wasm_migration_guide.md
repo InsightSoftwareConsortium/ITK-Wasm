@@ -107,7 +107,7 @@ For compatibility with vtk.js `vtkImageData`, use vtk.js [vtkITKHelper](https://
 
 ## Image file format
 
-The JSON file format is replaced by a WASM file format with a different layout. A directory ending in `.iwi` or a `.iwi.cbor` file is supported for images and a directory ending in `.iwm` and `.iwm.cbor` is supported for meshes and geometry data structures.
+The JSON file format is replaced by a Wasm file format with a different layout. A directory ending in `.iwi` or a `.iwi.cbor` file is supported for images and a directory ending in `.iwm` and `.iwm.cbor` is supported for meshes and geometry data structures.
 
 ## Node Sync functions
 

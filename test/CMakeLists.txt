@@ -63,11 +63,11 @@ ExternalData_Expand_Arguments(
   )
 
 set(WebAssemblyInterfaceTests
-  itkWASMImageInterfaceTest.cxx
-  itkWASMMeshInterfaceTest.cxx
-  itkWASMPolyDataInterfaceTest.cxx
-  itkWASMImageIOTest.cxx
-  itkWASMMeshIOTest.cxx
+  itkWasmImageInterfaceTest.cxx
+  itkWasmMeshInterfaceTest.cxx
+  itkWasmPolyDataInterfaceTest.cxx
+  itkWasmImageIOTest.cxx
+  itkWasmMeshIOTest.cxx
   itkPipelineTest.cxx
   itkPipelineMemoryIOTest.cxx
   itkSupportInputImageTypesTest.cxx
@@ -85,74 +85,74 @@ endif()
 CreateTestDriver(WebAssemblyInterface "${WebAssemblyInterface-Test_LIBRARIES}"
   "${WebAssemblyInterfaceTests}" )
 
-itk_add_test(NAME itkWASMImageInterfaceTest
+itk_add_test(NAME itkWasmImageInterfaceTest
     COMMAND WebAssemblyInterfaceTestDriver
       --compare DATA{Input/brainweb165a10f17.mha}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageInterfaceTest.mha
-    itkWASMImageInterfaceTest
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageInterfaceTest.mha
+    itkWasmImageInterfaceTest
       DATA{Input/brainweb165a10f17.mha}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageInterfaceTest.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageInterfaceTest.mha
 )
 
-itk_add_test(NAME itkWASMMeshInterfaceTest
+itk_add_test(NAME itkWasmMeshInterfaceTest
     COMMAND WebAssemblyInterfaceTestDriver
-    itkWASMMeshInterfaceTest
+    itkWasmMeshInterfaceTest
       DATA{Input/cow.vtk}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshInterfaceTest.vtk
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmMeshInterfaceTest.vtk
 )
 
-itk_add_test(NAME itkWASMPolyDataInterfaceTest
+itk_add_test(NAME itkWasmPolyDataInterfaceTest
     COMMAND WebAssemblyInterfaceTestDriver
-    itkWASMPolyDataInterfaceTest
+    itkWasmPolyDataInterfaceTest
       DATA{Input/cow.vtk}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMPolyDataInterfaceTest.vtk
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmPolyDataInterfaceTest.vtk
 )
 
-itk_add_test(NAME itkWASMImageInterfaceNiftiTest
+itk_add_test(NAME itkWasmImageInterfaceNiftiTest
     COMMAND WebAssemblyInterfaceTestDriver
       --compare DATA{Input/r16slice.nii.gz}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageInterfaceNiftiTest.nii.gz
-    itkWASMImageInterfaceTest
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageInterfaceNiftiTest.nii.gz
+    itkWasmImageInterfaceTest
       DATA{Input/r16slice.nii.gz}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageInterfaceNiftiTest.nii.gz
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageInterfaceNiftiTest.nii.gz
 )
 
-itk_add_test(NAME itkWASMImageIOTest
+itk_add_test(NAME itkWasmImageIOTest
     COMMAND WebAssemblyInterfaceTestDriver
       --compare DATA{Input/brainweb165a10f17.mha}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIOTest.mha
       --compare DATA{Input/brainweb165a10f17.mha}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.cbor.mha
-    itkWASMImageIOTest
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIOTest.cbor.mha
+    itkWasmImageIOTest
       DATA{Input/brainweb165a10f17.mha}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.iwi
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.mha
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.iwi.cbor
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIOTest.cbor.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIOTest.iwi
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIOTest.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIOTest.iwi.cbor
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIOTest.cbor.mha
 )
 
-itk_add_test(NAME itkWASMImageIONiftiTest
+itk_add_test(NAME itkWasmImageIONiftiTest
     COMMAND WebAssemblyInterfaceTestDriver
       --compare DATA{Input/r16slice.nii.gz}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIONiftiTest.mha
       --compare DATA{Input/r16slice.nii.gz}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.cbor.mha
-    itkWASMImageIOTest
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIONiftiTest.cbor.mha
+    itkWasmImageIOTest
       DATA{Input/r16slice.nii.gz}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.iwi
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.mha
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.iwi.cbor
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMImageIONiftiTest.cbor.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIONiftiTest.iwi
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIONiftiTest.mha
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIONiftiTest.iwi.cbor
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmImageIONiftiTest.cbor.mha
 )
 
-itk_add_test(NAME itkWASMMeshIOTest
+itk_add_test(NAME itkWasmMeshIOTest
     COMMAND WebAssemblyInterfaceTestDriver
-    itkWASMMeshIOTest
+    itkWasmMeshIOTest
       DATA{Input/cow.vtk}
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.vtk
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.iwm.cbor
-      ${ITK_TEST_OUTPUT_DIR}/itkWASMMeshIOTest.cbor.vtk
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmMeshIOTest.iwm
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmMeshIOTest.vtk
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmMeshIOTest.iwm.cbor
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmMeshIOTest.cbor.vtk
 )
 
 itk_add_test(NAME itkPipelineTest

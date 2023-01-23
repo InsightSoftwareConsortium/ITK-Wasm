@@ -18,7 +18,7 @@ describe('runPipeline', () => {
   })
 
 
-  it('fetches WASM files from a custom config URL', () => {
+  it('fetches Wasm files from a custom config URL', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
       const configPropertyPipelinesBaseUrl = 'customPipelinesUrl' 
@@ -32,7 +32,7 @@ describe('runPipeline', () => {
     })
   })
 
-  it('fetches WASM files from a custom pipelineBaseUrl URL', () => {
+  it('fetches Wasm files from a custom pipelineBaseUrl URL', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
       const pipelineBaseUrl = new URL('/pipelines', document.location.origin)
@@ -45,7 +45,7 @@ describe('runPipeline', () => {
     })
   })
 
-  it('fetches WASM files from a custom pipelineBaseUrl string', () => {
+  it('fetches Wasm files from a custom pipelineBaseUrl string', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
       const pipelineBaseUrl = '/pipelines'
@@ -58,7 +58,7 @@ describe('runPipeline', () => {
     })
   })
 
-  it('fetches WASM files from a custom pipelineWorkerUrl string', () => {
+  it('fetches Wasm files from a custom pipelineWorkerUrl string', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
       const pipelineBaseUrl = '/pipelines'

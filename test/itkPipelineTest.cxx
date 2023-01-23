@@ -34,7 +34,7 @@
 int
 itkPipelineTest(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK WASM Pipeline", argc, argv);
+  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", argc, argv);
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");

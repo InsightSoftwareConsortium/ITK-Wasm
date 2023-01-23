@@ -14,8 +14,8 @@ set -- "${newparams[@]}"  # overwrites the original positional params
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 
-if test ! -z ${DOCKERHUB_ITKWASM_PASSWORD+x}; then
-  echo $DOCKERHUB_ITKWASM_PASSWORD | docker login --username "$DOCKERHUB_ITKWASM_USERNAME" --password-stdin
+if test ! -z ${DOCKERHUB_ITKWasm_PASSWORD+x}; then
+  echo $DOCKERHUB_ITKWasm_PASSWORD | docker login --username "$DOCKERHUB_ITKWasm_USERNAME" --password-stdin
 fi
 
 docker push itkwasm/wasi:${TAG}

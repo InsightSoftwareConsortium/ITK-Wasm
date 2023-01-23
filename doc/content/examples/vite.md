@@ -18,7 +18,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig({
   plugins: [
-    // put lazy loaded JavaScript and WASM bundles in dist directory
+    // put lazy loaded JavaScript and Wasm bundles in dist directory
     viteStaticCopy({
       targets: [
         { src: 'node_modules/itk-wasm/dist/web-workers/*', dest: 'dist/itk/web-workers' },

@@ -21,10 +21,10 @@
 #include "itkPipeline.h"
 
 #include "itkMeshIOBase.h"
-#include "itkWASMMeshIOBase.h"
-#include "itkWASMMeshIO.h"
+#include "itkWasmMeshIOBase.h"
+#include "itkWasmMeshIO.h"
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWASMExports.h"
+#include "itkWasmExports.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #endif
@@ -72,7 +72,7 @@ public:
     if (!this->m_MeshIO.IsNull() && !this->m_Identifier.empty())
     {
     const auto index = std::stoi(this->m_Identifier);
-    auto wasmMeshIOBase = itk::WASMMeshIOBase::New();
+    auto wasmMeshIOBase = itk::WasmMeshIOBase::New();
     wasmMeshIOBase->SetMeshIO(this->m_MeshIO);
     setMemoryStoreOutputDataObject(0, index, wasmMeshIOBase);
 
@@ -116,7 +116,7 @@ public:
     {
       this->m_MeshIO->ReadMeshInformation();
 
-      auto wasmMeshIO = itk::WASMMeshIO::New();
+      auto wasmMeshIO = itk::WasmMeshIO::New();
       wasmMeshIO->SetFileName(this->m_Identifier);
 
       const unsigned int dimension = this->m_MeshIO->GetPointDimension();
@@ -137,7 +137,7 @@ public:
 
       wasmMeshIO->WriteMeshInformation();
 
-      SizeValueType numberOfBytes = this->m_MeshIO->GetNumberOfPoints() * this->m_MeshIO->GetPointDimension() * WASMMeshIO::ITKComponentSize( this->m_MeshIO->GetPointComponentType() );
+      SizeValueType numberOfBytes = this->m_MeshIO->GetNumberOfPoints() * this->m_MeshIO->GetPointDimension() * WasmMeshIO::ITKComponentSize( this->m_MeshIO->GetPointComponentType() );
       std::vector<char> loadBuffer(numberOfBytes);
       if (numberOfBytes)
       {
@@ -145,7 +145,7 @@ public:
         wasmMeshIO->WritePoints(reinterpret_cast< void * >( &(loadBuffer.at(0)) ));
       }
 
-      numberOfBytes = static_cast< SizeValueType >( this->m_MeshIO->GetCellBufferSize() * WASMMeshIO::ITKComponentSize( this->m_MeshIO->GetCellComponentType() ));
+      numberOfBytes = static_cast< SizeValueType >( this->m_MeshIO->GetCellBufferSize() * WasmMeshIO::ITKComponentSize( this->m_MeshIO->GetCellComponentType() ));
       if (numberOfBytes)
       {
         loadBuffer.resize(numberOfBytes);
@@ -155,7 +155,7 @@ public:
 
       numberOfBytes =
         static_cast< SizeValueType >(
-           this->m_MeshIO->GetNumberOfPointPixels() * this->m_MeshIO->GetNumberOfPointPixelComponents() * WASMMeshIO::ITKComponentSize( this->m_MeshIO->GetPointPixelComponentType() )
+           this->m_MeshIO->GetNumberOfPointPixels() * this->m_MeshIO->GetNumberOfPointPixelComponents() * WasmMeshIO::ITKComponentSize( this->m_MeshIO->GetPointPixelComponentType() )
            );
       if (numberOfBytes)
       {
@@ -166,7 +166,7 @@ public:
 
       numberOfBytes =
         static_cast< SizeValueType >(
-           this->m_MeshIO->GetNumberOfCellPixels() * this->m_MeshIO->GetNumberOfCellPixelComponents() * WASMMeshIO::ITKComponentSize( this->m_MeshIO->GetCellPixelComponentType() )
+           this->m_MeshIO->GetNumberOfCellPixels() * this->m_MeshIO->GetNumberOfCellPixelComponents() * WasmMeshIO::ITKComponentSize( this->m_MeshIO->GetCellPixelComponentType() )
            );
       if (numberOfBytes)
       {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import EmscriptenModule from '../ITKWASMEmscriptenModule.js'
+import EmscriptenModule from '../ITKWasmEmscriptenModule.js'
 
 async function loadEmscriptenModuleMainThread (moduleRelativePathOrURL: string | URL, baseUrl: string): Promise<EmscriptenModule> {
   let modulePrefix: string = 'unknown'
