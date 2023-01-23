@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>itk-wasm</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <meta name="description" content="Universal spatial analysis and visualization">
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://wasm.itk.org/" />
+  <meta property="og:image" content="https://wasm.itk.org/assets/logo.png" /> 
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <link rel="icon" type="image/png" href="/assets/icon/favicon-196x196.png" size="196x196">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon-160x160.png" size="160x160">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon-96x96.png" size="96x96">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon-32x32.png" size="32x32">
+  <link rel="icon" type="image/png" href="/assets/icon/favicon-16x16.png" size="16x16">
+  <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+  <link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
+   <style>
+    :root {
+      --base-font-size: 16px;
+      --theme-color   : lightblue;
+      --code-theme-text : #afcf7f;
+      --code-font-weight : 750;
+      --code-inline-background: hsl(var(--mono-hue), var(--mono-saturation), 35%);
+      --mono-hue        : 213;
+      --mono-saturation : 0%;
+    }
+  </style>
+</head>
+<body>
+  <!-- todo: fix styles -->
+  <!-- <nav>
+    <a href="/docs/">Docs</a>
+    <a href="/api/">API</a>
+    <a href="/examples/">Examples</a>
+  </nav> -->
+  <div id="app">Loading...</div>
+  <script>
+    window.$docsify = {
+      logo: 'assets/logo-white.svg',
+      name: 'itk-wasm',
+      repo: 'InsightSoftwareConsortium/itk-wasm',
+      auto2top: true,
+      copyCode: {
+        buttonText: 'Copy',
+        errorText: 'Failed to copy',
+        successText: 'Copied'
+      },
+      coverpage: true,
+      loadSidebar: true,
+      loadNavbar: false,
+      maxLevel: 3,
+      subMaxLevel: 2,
+      pagination: {
+        previousText: 'Previous',
+        nextText: 'Next',
+        crossChapter: true,
+        crossChapterText: false
+      },
+      routerMode: 'history',
+    }
+  </script>
+  <!-- Docsify v4 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-pagination@2/dist/docsify-pagination.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-cmake.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/zoom-image.min.js"></script>
+</body>
+</html>
