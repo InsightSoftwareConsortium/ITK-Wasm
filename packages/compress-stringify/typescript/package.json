@@ -1,6 +1,6 @@
 {
   "name": "itk-compress-stringify",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
   "module": "./dist/bundles/itk-compress-stringify.js",
