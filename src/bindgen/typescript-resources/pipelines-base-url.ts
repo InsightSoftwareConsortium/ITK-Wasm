@@ -1,4 +1,5 @@
-let pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
+import packageJson from '../package.json'
+let pipelinesBaseUrl: string | URL = `https://cdn.jsdelivr.net/npm/<bindgenPackageName>@${packageJson.version}/dist/pipelines`
 
 export function setPipelinesBaseUrl (baseUrl: string | URL): void {
   pipelinesBaseUrl = baseUrl

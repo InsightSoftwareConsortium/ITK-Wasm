@@ -1,5 +1,11 @@
 import * as itkCompressStringify from '../../dist/bundles/itk-compress-stringify.js'
 
+// Use local, vendored WebAssembly module assets
+const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
+itkCompressStringify.setPipelinesBaseUrl(pipelinesBaseUrl)
+let pipelineWorkerUrl: string | URL | null = new URL('/web-workers/pipeline.worker.js', document.location.origin).href
+itkCompressStringify.setPipelineWorkerUrl(pipelineWorkerUrl)
+
 
 // promise-file-reader
 function readAsArrayBuffer (file) {
