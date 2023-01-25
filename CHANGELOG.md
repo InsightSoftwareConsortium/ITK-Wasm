@@ -1,5 +1,19 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.63](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.62...itk-wasm-v1.0.0-b.63) (2023-01-25)
+
+
+### Bug Fixes
+
+* **rollup.worker.config:** remove unused babel import ([65d129e](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/65d129e4ee9e5d1b217e64662a1815932342ff01))
+
+
+### Features
+
+* **bindgen:** Use vite or webpack shipped pipelineWorker ([0b7bb9f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/0b7bb9f25e32d842b01ed36567486e995697d046))
+* **compress-stringify:** Use assets hosted on jsDelivr by default ([3f86d7f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/3f86d7f063ccc8be6da697025007d6c98bc04876))
+* **core:** Add set/get PipelineWorkerUrl PipelinesBaseUrl ([97f4f76](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/97f4f76d7285dd0ced29411549a9e5ef67ae7ea5))
+
 # [1.0.0-b.62](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.61...itk-wasm-v1.0.0-b.62) (2023-01-23)
 
 
