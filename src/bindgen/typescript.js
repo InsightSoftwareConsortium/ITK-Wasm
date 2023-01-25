@@ -99,7 +99,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
   }
 
   if (!forNode) {
-    indexContent += "export * from './pipelines-base-url.js'\n\n"
+    indexContent += "export * from './pipelines-base-url.js'\n"
+    indexContent += "export * from './pipeline-worker-url.js'\n"
     try {
       fs.mkdirSync(path.join(outputDir, 'build'), { recursive: true })
     } catch (err) {
@@ -315,6 +316,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionContent += "\nimport path from 'path'\n\n"
     } else {
       functionContent += "\nimport { getPipelinesBaseUrl } from './pipelines-base-url.js'\n\n"
+      functionContent += "\nimport { getPipelineWorkerUrl } from './pipeline-worker-url.js'\n\n"
     }
 
     const readmeParametersTable = [['Parameter', 'Type', 'Description'],]
@@ -446,7 +448,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionContent += `  const {\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)\n`
     } else {
       functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`
-      functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl())\n`
+      functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl(), getPipelineWorkerUrl())\n`
     }
 
     functionContent += '  if (returnValue !== 0) {\n    throw new Error(stderr)\n  }\n\n'
@@ -483,6 +485,15 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
   const pipelinesBaseUrlPath = path.join(outputDir, 'src', 'pipelines-base-url.ts')
   if (!fs.existsSync(pipelinesBaseUrlPath)) {
     fs.copyFileSync(bindgenResource('pipelines-base-url.ts'), pipelinesBaseUrlPath)
+    let pipelinesBaseUrlPathContent = fs.readFileSync(bindgenResource('pipelines-base-url.ts'), { encoding: 'utf8', flag: 'r' })
+    pipelinesBaseUrlPathContent = pipelinesBaseUrlPathContent.replaceAll('<bindgenPackageName>', packageName)
+    fs.writeFileSync(pipelinesBaseUrlPath, pipelinesBaseUrlPathContent)
+  }
+  const pipelineWorkerUrlPath = path.join(outputDir, 'src', 'pipeline-worker-url.ts')
+  if (!fs.existsSync(pipelineWorkerUrlPath)) {
+    let pipelineWorkerUrlPathContent = fs.readFileSync(bindgenResource('pipeline-worker-url.ts'), { encoding: 'utf8', flag: 'r' })
+    pipelineWorkerUrlPathContent = pipelineWorkerUrlPathContent.replaceAll('<bindgenPackageName>', packageName)
+    fs.writeFileSync(pipelineWorkerUrlPath, pipelineWorkerUrlPathContent)
   }
 
   const itkConfigPath = path.join(outputDir, 'src', 'itkConfig.js')

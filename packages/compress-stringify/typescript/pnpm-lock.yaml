@@ -9,7 +9,7 @@ specifiers:
   '@types/node': ^18.11.18
   ava: ^5.1.0
   cypress: ^12.3.0
-  itk-wasm: ^1.0.0-b.57
+  itk-wasm: ^1.0.0-b.62
   rollup: ^3.9.0
   rollup-plugin-copy: ^3.4.0
   rollup-plugin-ignore: ^1.0.10
@@ -20,7 +20,7 @@ specifiers:
   vite-plugin-static-copy: ^0.13.0
 
 dependencies:
-  itk-wasm: 1.0.0-b.57
+  itk-wasm: 1.0.0-b.62
 
 devDependencies:
   '@rollup/plugin-commonjs': 24.0.0_rollup@3.9.1
@@ -1809,8 +1809,8 @@ packages:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
     dev: true
 
-  /itk-wasm/1.0.0-b.57:
-    resolution: {integrity: sha512-vmVveqWibN0IYrCSQJbQVA4DhBsoW/oyfXnq6J9gYyJEpGBrJb/BVTi0Jvyhb/VnDaJ3k4WYzbuUyLr2dLSAyg==}
+  /itk-wasm/1.0.0-b.62:
+    resolution: {integrity: sha512-A5PEHEGtJ/ZPphaa1KNiRF+jSX5RLNjuaEwkRXtRzrRxo7TnDkSQR/vrSNtj9cYL0SQQtLAXjHbDn/UJUAD43A==}
     hasBin: true
     dependencies:
       '@babel/runtime': 7.20.7
@@ -1818,6 +1818,7 @@ packages:
       axios: 0.23.0
       commander: 9.5.0
       fs-extra: 10.1.0
+      markdown-table: 3.0.3
       mime-types: 2.1.35
       promise-file-reader: 1.0.3
       webworker-promise: 0.4.4
@@ -1970,6 +1971,10 @@ packages:
   /map-stream/0.1.0:
     resolution: {integrity: sha512-CkYQrPYZfWnu/DAmVCpTSX/xHpKZ80eKh2lAkyA6AJTef6bW+6JpbQZN5rofum7da+SyN1bi5ctTm+lTfcCW3g==}
     dev: true
+
+  /markdown-table/3.0.3:
+    resolution: {integrity: sha512-Z1NL3Tb1M9wH4XESsCDEksWoKTdlUafKc4pt0GRwjUyXaCFZ+dc3g2erqB6zm3szA2IUSi7VnPI+o/9jnxh9hw==}
+    dev: false
 
   /matcher/5.0.0:
     resolution: {integrity: sha512-s2EMBOWtXFc8dgqvoAzKJXxNHibcdJMV0gwqKUaw9E2JBJuGUK7DrNKrA6g/i+v72TT16+6sVm5mS3thaMLQUw==}

@@ -4,9 +4,9 @@
 
 Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.
 
-[**<p align="center">Example</p>**](https://itk-compress-stringify-app.on.fleek.co/ ':include :type=iframe width=100% height=800px')
+[Example](https://itk-compress-stringify-app.on.fleek.co/ ':include :type=iframe width=100% height=800px')
 
-[**<p align="center">Documentation</p>**](https://itk-compress-stringify-docs.on.fleek.co/)
+[Documentation](https://itk-compress-stringify-docs.on.fleek.co/)
 
 ## Installation
 
@@ -26,6 +26,8 @@ import {
   parseStringDecompress,
   setPipelinesBaseUrl,
   getPipelinesBaseUrl,
+  setPipelineWorkerUrl,
+  getPipelineWorkerUrl,
 } from "itk-compress-stringify"
 ```
 
@@ -107,6 +109,24 @@ function setPipelinesBaseUrl(
 
 ```ts
 function getPipelinesBaseUrl() : string | URL
+```
+
+#### setPipelineWorkerUrl
+
+*Set base URL for the itk-wasm pipeline worker script when vendored.*
+
+```ts
+function setPipelineWorkerUrl(
+  baseUrl: string | URL
+) : void
+```
+
+#### getPipelineWorkerUrl
+
+*Get base URL for the itk-wasm pipeline worker script when vendored.*
+
+```ts
+function getPipelineWorkerUrl() : string | URL
 ```
 
 ### Node interface

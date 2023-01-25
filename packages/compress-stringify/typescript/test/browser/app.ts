@@ -1,5 +1,11 @@
 import * as itkCompressStringify from '../../dist/bundles/itk-compress-stringify.js'
 
+// Use local, vendored WebAssembly module assets
+const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
+itkCompressStringify.setPipelinesBaseUrl(pipelinesBaseUrl)
+let pipelineWorkerUrl: string | URL | null = new URL('/web-workers/pipeline.worker.js', document.location.origin).href
+itkCompressStringify.setPipelineWorkerUrl(pipelineWorkerUrl)
+
 
 // promise-file-reader
 function readAsArrayBuffer (file) {
@@ -107,7 +113,7 @@ function setupCompressStringify() {
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
 
-    const { webWorker, output } = await itkCompressStringify.compressStringify(null, ...context.inputs, context.options)
+    const { webWorker, output } = await itkCompressStringify.compressStringify(null, context.inputs[0].slice(), context.options)
     webWorker.terminate()
 
     context.outputs.output = output
@@ -161,7 +167,7 @@ function setupParseStringDecompress() {
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
 
-    const { webWorker, output } = await itkCompressStringify.parseStringDecompress(null, ...context.inputs, context.options)
+    const { webWorker, output } = await itkCompressStringify.parseStringDecompress(null, context.inputs[0].slice(), context.options)
     webWorker.terminate()
 
     context.outputs.output = output
