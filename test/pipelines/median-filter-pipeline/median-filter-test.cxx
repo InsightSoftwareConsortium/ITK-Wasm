@@ -77,12 +77,12 @@ MedianFilter(itk::wasm::Pipeline & pipeline, const TImage * inputImage)
     splitter->GetSplit( split, numberOfSplits, requestedRegion );
     roiFilter->SetInput( smoother->GetOutput() );
     roiFilter->SetExtractionRegion( requestedRegion );
-    roiFilter->Update();
+    roiFilter->UpdateLargestPossibleRegion();
     outputImage.Set( roiFilter->GetOutput() );
   }
   else
   {
-    smoother->Update();
+    smoother->UpdateLargestPossibleRegion();
     outputImage.Set( smoother->GetOutput() );
   }
 
@@ -103,7 +103,8 @@ public:
 
     ITK_WASM_PRE_PARSE(pipeline);
 
-    return MedianFilter<ImageType>(pipeline, inputImage.Get());
+    typename ImageType::ConstPointer image = inputImage.Get();
+    return MedianFilter<ImageType>(pipeline, image);
   }
 };
 

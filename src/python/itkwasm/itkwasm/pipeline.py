@@ -1,6 +1,10 @@
 import json
 from pathlib import Path
+from dataclasses import asdict
 from typing import List, Union, Dict, Tuple
+
+import numpy as np
+
 from .interface_types import InterfaceTypes
 from .pipeline_input import PipelineInput
 from .pipeline_output import PipelineOutput
@@ -8,9 +12,36 @@ from .text_stream import TextStream
 from .binary_stream import BinaryStream
 from .text_file import TextFile
 from .binary_file import BinaryFile
+from .image import Image, ImageType
+from .int_types import IntTypes
+from .float_types import FloatTypes
 
 from wasmer import engine, wasi, Store, Module, ImportObject, Instance
 from wasmer_compiler_cranelift import Compiler
+
+def _memoryview_to_numpy_array(component_type, buf):
+    if component_type == IntTypes.UInt8:
+        return np.frombuffer(buf, dtype=np.uint8)
+    elif component_type == IntTypes.Int8:
+        return np.frombuffer(buf, dtype=np.int8)
+    elif component_type == IntTypes.UInt16:
+        return np.frombuffer(buf, dtype=np.uint16)
+    elif component_type == IntTypes.Int16:
+        return np.frombuffer(buf, dtype=np.int16)
+    elif component_type == IntTypes.UInt32:
+        return np.frombuffer(buf, dtype=np.uint32)
+    elif component_type == IntTypes.Int32:
+        return np.frombuffer(buf, dtype=np.int32)
+    elif component_type == IntTypes.UInt64:
+        return np.frombuffer(buf, dtype=np.uint64)
+    elif component_type == IntTypes.Int64:
+        return np.frombuffer(buf, dtype=np.int64)
+    elif component_type == FloatTypes.Float32:
+        return np.frombuffer(buf, dtype=np.float32)
+    elif component_type == FloatTypes.Float64:
+        return np.frombuffer(buf, dtype=np.float64)
+    else:
+        raise ValueError('Unsupported component type')
 
 
 class Pipeline:
@@ -78,6 +109,23 @@ class Pipeline:
                 pass
             elif input_.type == InterfaceTypes.BinaryFile:
                 pass
+            elif input_.type == InterfaceTypes.Image:
+                image = input_.data
+                mv = bytes(image.data.data)
+                # self.memory.grow(15)
+                data_ptr = self._set_input_array(mv, index, 0)
+                dv = bytes(image.direction.data)
+                direction_ptr = self._set_input_array(dv, index, 1)
+                image_json = {
+                    "imageType": asdict(image.imageType),
+                    "name": image.name,
+                    "origin": image.origin,
+                    "spacing": image.spacing,
+                    "direction": f"data:application/vnd.itk.address,0:{direction_ptr}",
+                    "size": image.size,
+                    "data": f"data:application/vnd.itk.address,0:{data_ptr}"
+                }
+                self._set_input_json(image_json, index)
             else:
                 raise ValueError(f'Unexpected/not yet supported input.type {input_.type}')
 
@@ -102,6 +150,25 @@ class Pipeline:
                     output_data = PipelineOutput(InterfaceTypes.TextFile, TextFile(output.data.path))
                 elif output.type == InterfaceTypes.BinaryFile:
                     output_data = PipelineOutput(InterfaceTypes.BinaryFile, BinaryFile(output.data.path))
+                elif output.type == InterfaceTypes.Image:
+                    image_json = self._get_output_json(index)
+
+                    image = Image(**image_json)
+                    image.name = 'aoeu'
+
+                    data_ptr = self.output_array_address(0, index, 0)
+                    data_size = self.output_array_size(0, index, 0)
+                    data_array = _memoryview_to_numpy_array(image.imageType.componentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    image.data = data_array
+
+                    direction_ptr = self.output_array_address(0, index, 1)
+                    direction_size = self.output_array_size(0, index, 1)
+                    direction_array = _memoryview_to_numpy_array(FloatTypes.Float64, memoryview(self.memory.buffer)[direction_ptr:direction_ptr+direction_size])
+                    dimension = image.imageType.dimension
+                    direction_array.shape = (dimension, dimension)
+                    image.direction = direction_array
+
+                    output_data = PipelineOutput(InterfaceTypes.Image, image)
                 populated_outputs.append(output_data)
 
         delayed_exit = instance.exports.itk_wasm_delayed_exit
@@ -110,7 +177,7 @@ class Pipeline:
         # Should we be returning the return_code?
         return tuple(populated_outputs)
 
-    def _set_input_array(self, data_array: bytes, input_index: int, sub_index: int) -> int:
+    def _set_input_array(self, data_array: Union[bytes, bytearray], input_index: int, sub_index: int) -> int:
         data_ptr = 0
         if data_array != None:
             data_ptr = self.input_array_alloc(0, input_index, sub_index, len(data_array))
@@ -123,3 +190,10 @@ class Pipeline:
         json_ptr = self.input_json_alloc(0, input_index, len(data_json))
         buf = memoryview(self.memory.buffer)
         buf[json_ptr:json_ptr+len(data_json)] = data_json
+
+    def _get_output_json(self, output_index: int) -> Dict:
+        json_ptr = self.output_json_address(0, output_index)
+        json_len = self.output_json_size(0, output_index)
+        json_str = bytes(memoryview(self.memory.buffer)[json_ptr:json_ptr+json_len]).decode()
+        json_result = json.loads(json_str)
+        return json_result
