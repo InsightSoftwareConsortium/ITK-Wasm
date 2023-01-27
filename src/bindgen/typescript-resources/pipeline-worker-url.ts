@@ -1,4 +1,3 @@
-// @ts-ignore: TS2305: Module '"itk-wasm"' has no exported member 'getPipelineWorkerUrl'.
 import { getPipelineWorkerUrl as itkWasmGetPipelineWorkerUrl } from 'itk-wasm'
 import packageJson from '../package.json'
 
