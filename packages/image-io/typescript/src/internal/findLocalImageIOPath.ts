@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import { localPathRelativeToModule } from 'itk-wasm/internal'
+import localPathRelativeToModule from './localPathRelativeToModule'
 
 // TODO?????
 function findLocalImageIOPath (): string {
