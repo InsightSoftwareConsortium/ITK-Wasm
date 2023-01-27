@@ -1,4 +1,3 @@
-// @ts-expect-error error TS2732: Cannot find module '../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 import packageJson from '../package.json'
 let pipelineWorkerUrl: string | URL | null = `https://cdn.jsdelivr.net/npm/itk-dicom@${packageJson.version as string}/dist/web-workers/pipeline.worker.js`
 
