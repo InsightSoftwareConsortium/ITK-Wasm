@@ -4,7 +4,7 @@ project(convert-image)
 set(CMAKE_CXX_STANDARD 17)
 
 if (NOT TARGET libzstd_static)
-  include(${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../CMake/BuildZstd.cmake)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/BuildZstd.cmake)
 endif()
 
 if(WASI)
@@ -156,7 +156,7 @@ foreach(io_module ${WebAssemblyInterface_ImageIOModules} WebAssemblyInterface)
     add_executable(${write_binary} write-image.cxx ${extra_srcs})
     target_link_libraries(${write_binary} PUBLIC ${ITK_LIBRARIES})
     target_compile_definitions(${write_binary} PUBLIC -DIMAGE_IO_CLASS=${imageio_id_${imageio}})
-    if (EMSCRIPTEN AND DEFINED WebAssemblyInterface_BINARY_DIR)
+    if (EMSCRIPTEN)
       set(target_esm_read "${read_binary}")
       set(target_umd_read "${read_binary}.umd")
       set(target_esm_write "${write_binary}")
@@ -171,31 +171,25 @@ foreach(io_module ${WebAssemblyInterface_ImageIOModules} WebAssemblyInterface)
         set(imageio_common_link_flags " -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s SUPPORT_LONGJMP=1")
         get_property(link_flags TARGET ${target} PROPERTY LINK_FLAGS)
         set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${imageio_common_link_flags} ${link_flags}")
-        itk_module_target_label(${target})
-        itk_module_target_export(${target})
-        itk_module_target_install(${target})
         set_property(TARGET ${target}
           PROPERTY RUNTIME_OUTPUT_DIRECTORY
-          ${WebAssemblyInterface_BINARY_DIR}/image-io
+          ${CMAKE_CURRENT_SOURCE_DIR}/typescript/dist/image-io
           )
       endforeach()
-    elseif (WASI AND DEFINED WebAssemblyInterface_BINARY_DIR)
+    elseif (WASI)
       foreach(target ${read_binary} ${write_binary})
         set(exception_catching )
-        itk_module_target_label(${target})
-        itk_module_target_export(${target})
-        itk_module_target_install(${target})
         set_property(TARGET ${target}
           PROPERTY RUNTIME_OUTPUT_DIRECTORY
-          ${WebAssemblyInterface_BINARY_DIR}/wasi-image-io
+          ${CMAKE_CURRENT_SOURCE_DIR}/typescript/dist/wasi-image-io
           )
       endforeach()
     endif()
   endforeach()
 endforeach()
 if(EMSCRIPTEN)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts.in
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts @ONLY)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../ImageIOIndex.ts.in
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../dist/image-io/index.js @ONLY)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.ts.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.ts @ONLY)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ImageIOIndex.ts.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/dist/image-io/index.js @ONLY)
 endif()
