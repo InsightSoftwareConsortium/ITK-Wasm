@@ -160,7 +160,8 @@
       "src/core/internal/loadEmscriptenModuleWebWorker.ts",
       "src/web-workers/*.ts",
       "src/core/ITKWasmEmscriptenModule.ts",
-      "src/pipeline/PipelineEmscriptenModule.ts"
+      "src/pipeline/PipelineEmscriptenModule.ts",
+      "src/bindgen/typescript-resources/*"
     ]
   },
   "release": {
