@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.66](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.65...itk-wasm-v1.0.0-b.66) (2023-01-31)
+
+
+### Features
+
+* **bindgen:** Default to itk-wasm package asset configuration ([3341ca0](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/3341ca09f5f16f0508c1329ed0f73b34206d1525))
+
 # [1.0.0-b.65](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.64...itk-wasm-v1.0.0-b.65) (2023-01-26)
 
 
