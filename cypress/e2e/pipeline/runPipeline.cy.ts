@@ -3,7 +3,6 @@ describe('runPipeline', () => {
     cy.visit('/')
   })
 
-
   it('captures stdout and stderr', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
@@ -17,7 +16,6 @@ describe('runPipeline', () => {
     })
   })
 
-
   it('fetches Wasm files from a custom config URL', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
@@ -28,7 +26,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, configPropertyPipelinesBaseUrl)
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl: configPropertyPipelinesBaseUrl })
     })
   })
 
@@ -41,7 +39,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, pipelineBaseUrl)
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl })
     })
   })
 
@@ -54,7 +52,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, pipelineBaseUrl)
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl })
     })
   })
 
@@ -68,7 +66,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, pipelineBaseUrl, pipelineWorkerUrl)
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl, pipelineWorkerUrl })
     })
   })
 
