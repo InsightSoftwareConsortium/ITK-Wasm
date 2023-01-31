@@ -1,11 +1,20 @@
-// @ts-expect-error error TS2732: Cannot find module '../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
+import { getPipelinesBaseUrl as itkWasmGetPipelinesBaseUrl } from 'itk-wasm'
 import packageJson from '../package.json'
-let pipelinesBaseUrl: string | URL = `https://cdn.jsdelivr.net/npm/<bindgenPackageName>@${packageJson.version as string}/dist/pipelines`
+
+let pipelinesBaseUrl: string | URL | undefined
+let defaultPipelinesBaseUrl: string | URL = `https://cdn.jsdelivr.net/npm/itk-compress-stringify@${packageJson.version}/dist/pipelines`
 
 export function setPipelinesBaseUrl (baseUrl: string | URL): void {
   pipelinesBaseUrl = baseUrl
 }
 
 export function getPipelinesBaseUrl (): string | URL {
-  return pipelinesBaseUrl
+  if (typeof pipelinesBaseUrl !== 'undefined') {
+    return pipelinesBaseUrl
+  }
+  const itkWasmPipelinesBaseUrl = itkWasmGetPipelinesBaseUrl()
+  if (typeof itkWasmPipelinesBaseUrl !== 'undefined') {
+    return itkWasmPipelinesBaseUrl
+  }
+  return defaultPipelinesBaseUrl
 }
