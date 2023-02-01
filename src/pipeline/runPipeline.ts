@@ -16,6 +16,7 @@ import PipelineEmscriptenModule from './PipelineEmscriptenModule.js'
 import PipelineOutput from './PipelineOutput.js'
 import PipelineInput from './PipelineInput.js'
 import RunPipelineResult from './RunPipelineResult.js'
+import RunPipelineOptions from './RunPipelineOptions.js'
 
 // To cache loaded pipeline modules
 const pipelineToModule: Map<string, PipelineEmscriptenModule> = new Map()
@@ -47,8 +48,7 @@ async function runPipeline (
   args: string[],
   outputs: PipelineOutput[] | null,
   inputs: PipelineInput[] | null,
-  pipelineBaseUrl: string | URL = 'pipelinesUrl',
-  pipelineWorkerUrl?: string | URL | null
+  options?: RunPipelineOptions
 ): Promise<RunPipelineResult> {
   if (webWorker === false) {
     const pipelineModule = await loadPipelineModule(pipelinePath.toString())
@@ -56,6 +56,7 @@ async function runPipeline (
     return result
   }
   let worker = webWorker
+  const pipelineWorkerUrl = options?.pipelineWorkerUrl
   const pipelineWorkerUrlString = typeof pipelineWorkerUrl !== 'string' && typeof pipelineWorkerUrl?.href !== 'undefined' ? pipelineWorkerUrl.href : pipelineWorkerUrl
   const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
     worker as Worker | null, pipelineWorkerUrlString as string | undefined | null
@@ -148,6 +149,7 @@ async function runPipeline (
     stderr: string
     outputs: PipelineOutput[]
   }
+  const pipelineBaseUrl = options?.pipelineBaseUrl ?? 'pipelinesUrl'
   const pipelineBaseUrlString = typeof pipelineBaseUrl !== 'string' && typeof pipelineBaseUrl?.href !== 'undefined' ? pipelineBaseUrl.href : pipelineBaseUrl
   const result: RunPipelineWorkerResult = await webworkerPromise.postMessage(
     {

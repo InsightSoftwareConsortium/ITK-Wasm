@@ -18,5 +18,6 @@ export * from '../io/browser/index.js'
 export { default as PipelineInput } from '../pipeline/PipelineInput.js'
 export { default as PipelineOutput } from '../pipeline/PipelineOutput.js'
 export { default as RunPipelineResult } from '../pipeline/RunPipelineResult.js'
+export { default as RunPipelineOptions } from '../pipeline/RunPipelineOptions.js'
 
 export * from '../pipeline/browser/index.js'
