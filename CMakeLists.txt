@@ -50,7 +50,9 @@ FetchContent_Declare(
   )
 
 set(CLI11_GIT_REPOSITORY "https://github.com/CLIUtils/CLI11")
-set(CLI11_GIT_TAG "291c58789c031208f08f4f261a858b5b7083e8e2")
+# std::strtold patch
+set(CLI11_GIT_REPOSITORY "https://github.com/thewtex/CLI11")
+set(CLI11_GIT_TAG "82d4e022cdfcf18d1fc59684bdc6977ea34053f4")
 FetchContent_Declare(
   cli11
   GIT_REPOSITORY ${CLI11_GIT_REPOSITORY}
