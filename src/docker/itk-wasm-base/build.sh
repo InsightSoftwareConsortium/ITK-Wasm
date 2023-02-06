@@ -25,13 +25,13 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
-wasi_ld_flags="-flto -lwasi-emulated-process-clocks -lwasi-emulated-signal"
+wasi_ld_flags="-flto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-printscan-long-double"
 wasi_c_flags="-flto -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_SIGNAL"
 
 emscripten_debug_ld_flags="-fno-lto -s ALLOW_MEMORY_GROWTH=1"
 emscripten_debug_c_flags="-fno-lto -Wno-warn-absolute-paths"
 
-wasi_debug_ld_flags="-fno-lto -lwasi-emulated-process-clocks -lwasi-emulated-signal"
+wasi_debug_ld_flags="-fno-lto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-printscan-long-double"
 wasi_debug_c_flags="-fno-lto -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_SIGNAL"
 
 docker build -t itkwasm/emscripten-base:latest \
