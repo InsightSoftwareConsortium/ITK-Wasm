@@ -220,3 +220,29 @@ jobs:
         npm run emscripten-build-release
         npm run emscripten-build-debug
         npm run wasi-build-debug
+
+  test-different-input-types-example:
+    name: different-input-types
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: ./examples/different-input-types
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install
+      run: |
+        npm install
+
+    - name: Build
+      run: |
+        npm run build
+
+    - name: Test
+      run: |
+        npm run test
