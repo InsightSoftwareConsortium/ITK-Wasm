@@ -19,6 +19,7 @@ classifiers = [
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
 ]
 keywords = [
     "itk",
@@ -42,7 +43,7 @@ Issues = "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
 
 [project.optional-dependencies]
 test = [
-    "itk>=5.3rc4.post2",
+    "itk>=5.3.0",
     "pytest >=2.7.3",
 ]
 doc = ["sphinx"]

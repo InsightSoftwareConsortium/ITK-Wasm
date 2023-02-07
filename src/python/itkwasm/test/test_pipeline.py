@@ -5,7 +5,7 @@ from dataclasses import asdict
 import itk
 import numpy as np
 
-from itkwasm import InterfaceTypes, TextStream, BinaryStream, PipelineInput, PipelineOutput, Pipeline, TextFile, BinaryFile, Image
+from itkwasm import InterfaceTypes, TextStream, BinaryStream, PipelineInput, PipelineOutput, Pipeline, TextFile, BinaryFile, Image, Mesh
 
 test_input_dir = Path(__file__).resolve().parent / 'input'
 test_baseline_dir = Path(__file__).resolve().parent / 'baseline'
@@ -125,3 +125,35 @@ def test_pipeline_write_read_image():
 
     difference = np.sum(itk.comparison_image_filter(out_image, baseline))
     assert difference == 0.0
+
+def test_pipeline_write_read_mesh():
+    pipeline = Pipeline(test_input_dir / 'mesh-read-write-test.wasi.wasm')
+
+    data = test_input_dir / "cow.vtk"
+    itk_mesh = itk.meshread(data)
+    itk_mesh_dict = itk.dict_from_mesh(itk_mesh)
+    itkwasm_mesh = Mesh(**itk_mesh_dict)
+
+    pipeline_inputs = [
+        PipelineInput(InterfaceTypes.Mesh, itkwasm_mesh),
+    ]
+
+    pipeline_outputs = [
+        PipelineOutput(InterfaceTypes.Mesh),
+    ]
+
+    args = [
+        '0',
+        '0',
+        '--memory-io',]
+
+    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
+
+    out_mesh = itk.mesh_from_dict(asdict(outputs[0].data))
+    expect(mesh.meshType.dimension, 'dimension').to.equal(3)
+    expect(mesh.meshType.pointComponentType, 'pointComponentType').to.equal(itk.FloatTypes.Float32)
+    expect(mesh.meshType.cellComponentType, 'cellComponentType').to.equal(itk.IntTypes.UInt64)
+    expect(mesh.meshType.pointPixelType, 'pointPixelType').to.equal(itk.PixelTypes.Scalar)
+    expect(mesh.meshType.cellPixelType, 'cellPixelType').to.equal(itk.PixelTypes.Scalar)
+    expect(mesh.numberOfPoints, 'numberOfPoints').to.equal(2903)
+    expect(mesh.numberOfCells, 'numberOfCells').to.equal(3263)

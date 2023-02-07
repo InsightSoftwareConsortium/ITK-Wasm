@@ -112,7 +112,6 @@ class Pipeline:
             elif input_.type == InterfaceTypes.Image:
                 image = input_.data
                 mv = bytes(image.data.data)
-                # self.memory.grow(15)
                 data_ptr = self._set_input_array(mv, index, 0)
                 dv = bytes(image.direction.data)
                 direction_ptr = self._set_input_array(dv, index, 1)
@@ -126,6 +125,34 @@ class Pipeline:
                     "data": f"data:application/vnd.itk.address,0:{data_ptr}"
                 }
                 self._set_input_json(image_json, index)
+            elif input_.type == InterfaceTypes.Mesh:
+                mesh = input_.data
+                pv = bytes(mesh.points)
+                points_ptr = self._set_input_array(pv, index, 0)
+                cv = bytes(mesh.cells)
+                cells_ptr = self._set_input_array(cv, index, 1)
+                pdv = bytes(mesh.pointData)
+                point_data_ptr = self._set_input_array(pdv, index, 2)
+                cdv = bytes(mesh.cellData)
+                cell_data_ptr = self._set_input_array(cdv, index, 3)
+                mesh_json = {
+                    "meshType": asdict(mesh.meshType),
+                    "name": mesh.name,
+
+                    "numberOfPoints": mesh.numberOfPoints,
+                    "points": f"data:application/vnd.itk.address,0:{points_ptr}",
+
+                    "numberOfCells": mesh.numberOfCells,
+                    "cells": f"data:application/vnd.itk.address,0:{cells_ptr}",
+                    "cellBufferSize": mesh.cellBufferSize,
+
+                    "numberOfPointPixels": mesh.numberOfPointPixels,
+                    "pointData": f"data:application/vnd.itk.address,0:{point_data_ptr}",
+
+                    "numberOfCellPixels": mesh.numberOfCellPixels,
+                    "cellData": f"data:application/vnd.itk.address,0:{cell_data_ptr}",
+                }
+                self._set_input_json(mesh_json, index)
             else:
                 raise ValueError(f'Unexpected/not yet supported input.type {input_.type}')
 
@@ -154,7 +181,6 @@ class Pipeline:
                     image_json = self._get_output_json(index)
 
                     image = Image(**image_json)
-                    image.name = 'aoeu'
 
                     data_ptr = self.output_array_address(0, index, 0)
                     data_size = self.output_array_size(0, index, 0)
@@ -169,6 +195,40 @@ class Pipeline:
                     image.direction = direction_array
 
                     output_data = PipelineOutput(InterfaceTypes.Image, image)
+                elif output.type == InterfaceTypes.Mesh:
+                    mesh_json = self._get_output_json(index)
+
+                    mesh = Mesh(**mesh_json)
+
+                    if mesh.numberOfPoints > 0:
+                        data_ptr = self.output_array_address(0, index, 0)
+                        data_size = self.output_array_size(0, index, 0)
+                        mesh.points = _memoryview_to_numpy_array(mesh.meshType.pointComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        mesh.points =  _memoryview_to_numpy_array(mesh.meshType.pointComponentType, bytes([]))
+
+                    if mesh.numberOfCells > 0:
+                        data_ptr = self.output_array_address(0, index, 1)
+                        data_size = self.output_array_size(0, index, 1)
+                        mesh.cells = _memoryview_to_numpy_array(mesh.meshType.cellComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        mesh.cells =  _memoryview_to_numpy_array(mesh.meshType.cellComponentType, bytes([]))
+                    if mesh.numberOfPointPixels > 0:
+                        data_ptr = self.output_array_address(0, index, 2)
+                        data_size = self.output_array_size(0, index, 2)
+                        mesh.pointData = _memoryview_to_numpy_array(mesh.meshType.pointPixelComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        mesh.pointData =  _memoryview_to_numpy_array(mesh.meshType.pointPixelComponentType, bytes([]))
+
+                    if mesh.numberOfCellPixels > 0:
+                        data_ptr = self.output_array_address(0, index, 3)
+                        data_size = self.output_array_size(0, index, 3)
+                        mesh.cellData = _memoryview_to_numpy_array(mesh.meshType.cellPixelComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        mesh.cellData =  _memoryview_to_numpy_array(mesh.meshType.cellPixelComponentType, bytes([]))
+
+                    output_data = PipelineOutput(InterfaceTypes.Mesh, mesh)
+
                 populated_outputs.append(output_data)
 
         delayed_exit = instance.exports.itk_wasm_delayed_exit
