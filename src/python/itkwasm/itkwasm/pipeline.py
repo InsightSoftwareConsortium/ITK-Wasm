@@ -13,6 +13,7 @@ from .binary_stream import BinaryStream
 from .text_file import TextFile
 from .binary_file import BinaryFile
 from .image import Image, ImageType
+from .mesh import Mesh, MeshType
 from .int_types import IntTypes
 from .float_types import FloatTypes
 
@@ -127,13 +128,25 @@ class Pipeline:
                 self._set_input_json(image_json, index)
             elif input_.type == InterfaceTypes.Mesh:
                 mesh = input_.data
-                pv = bytes(mesh.points)
+                if mesh.numberOfPoints:
+                    pv = bytes(mesh.points)
+                else:
+                    pv = bytes([])
                 points_ptr = self._set_input_array(pv, index, 0)
-                cv = bytes(mesh.cells)
+                if mesh.numberOfCells:
+                    cv = bytes(mesh.cells)
+                else:
+                    cv = bytes([])
                 cells_ptr = self._set_input_array(cv, index, 1)
-                pdv = bytes(mesh.pointData)
+                if mesh.numberOfPointPixels:
+                    pdv = bytes(mesh.pointData)
+                else:
+                    pdv = bytes([])
                 point_data_ptr = self._set_input_array(pdv, index, 2)
-                cdv = bytes(mesh.cellData)
+                if mesh.numberOfCellPixels:
+                    cdv = bytes(mesh.cellData)
+                else:
+                    cdv = bytes([])
                 cell_data_ptr = self._set_input_array(cdv, index, 3)
                 mesh_json = {
                     "meshType": asdict(mesh.meshType),
@@ -197,7 +210,6 @@ class Pipeline:
                     output_data = PipelineOutput(InterfaceTypes.Image, image)
                 elif output.type == InterfaceTypes.Mesh:
                     mesh_json = self._get_output_json(index)
-
                     mesh = Mesh(**mesh_json)
 
                     if mesh.numberOfPoints > 0:
