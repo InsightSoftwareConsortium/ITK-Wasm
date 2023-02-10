@@ -64,6 +64,25 @@ function processCommonOptions() {
     dockerImage = options.image
   }
 
+  const dockerImageCheck = spawnSync('docker', ['images', '--quiet', dockerImage], {
+    env: process.env,
+    stdio: 'pipe',
+    encoding: 'utf-8',
+  })
+
+  if (dockerImageCheck.stdout === '') {
+    console.log(`Build environment image not found, pulling ${dockerImage}...`)
+    const dockerPull = spawnSync('docker', ['pull', dockerImage], {
+      env: process.env,
+      stdio: 'inherit',
+      encoding: 'utf-8',
+    })
+    if (dockerPull.status !== 0) {
+      console.error(`Could not pull docker image ${dockerImage}`)
+      process.exit(dockerPull.status)
+    }
+  }
+
   // Ensure we have the 'dockcross' Docker build environment driver script
   const dockcrossScript = path.join(buildDir, 'itk-wasm-build-env')
   try {
