@@ -86,7 +86,7 @@ public:
         if (this->m_Mesh->GetNumberOfPoints() > 0)
         {
           const auto pointsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetMesh()->GetPoints()->at(0)) );
-          const auto pointsSize = wasmMesh->GetMesh()->GetPoints()->Size() * sizeof(typename MeshType::CoordRepType);
+          const auto pointsSize = wasmMesh->GetMesh()->GetPoints()->Size() * sizeof(typename MeshType::CoordRepType) * MeshType::PointDimension;
           setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
         }
 
