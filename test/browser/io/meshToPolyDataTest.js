@@ -9,7 +9,7 @@ const testFilePath = 'base/build-emscripten/ExternalData/test/Input/' + fileName
 const verifyMesh = (t, mesh) => {
   t.is(mesh.meshType.dimension, 3)
   t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
-  t.is(mesh.meshType.cellComponentType, IntTypes.UInt64)
+  t.is(mesh.meshType.cellComponentType, IntTypes.UInt32)
   t.is(mesh.meshType.pointPixelType, PixelTypes.Scalar)
   t.is(mesh.meshType.cellPixelType, PixelTypes.Scalar)
   t.is(mesh.numberOfPoints, 2903)
@@ -29,7 +29,7 @@ export default function () {
     webWorker.terminate()
     t.is(meshRoundTrip.meshType.dimension, 3)
     t.is(meshRoundTrip.meshType.pointComponentType, FloatTypes.Float32)
-    t.is(meshRoundTrip.meshType.cellComponentType, IntTypes.UInt64)
+    t.is(meshRoundTrip.meshType.cellComponentType, IntTypes.UInt32)
     t.is(meshRoundTrip.meshType.pointPixelType, PixelTypes.Scalar)
     t.is(meshRoundTrip.meshType.cellPixelType, PixelTypes.Scalar)
     t.is(meshRoundTrip.numberOfPoints, 2903)

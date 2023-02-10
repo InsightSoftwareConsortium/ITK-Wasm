@@ -159,7 +159,7 @@ test('runPipelineNode writes and reads an itk.Mesh via memory io', (t) => {
   const verifyMesh = (mesh) => {
     t.is(mesh.meshType.dimension, 3)
     t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
-    t.is(mesh.meshType.cellComponentType, IntTypes.UInt64)
+    t.is(mesh.meshType.cellComponentType, IntTypes.UInt32)
     t.is(mesh.meshType.pointPixelType, PixelTypes.Scalar)
     t.is(mesh.meshType.cellPixelType, PixelTypes.Scalar)
     t.is(mesh.numberOfPoints, 2903)
