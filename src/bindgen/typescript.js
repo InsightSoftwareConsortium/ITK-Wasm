@@ -114,7 +114,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
     const npmIgnorePath = path.join(outputDir, '.npmignore')
     if (!fs.existsSync(npmIgnorePath)) {
-      fs.copyFileSync(bindgenResource('.npmignore'), npmIgnorePath)
+      fs.copyFileSync(bindgenResource('npmignore.bindgen'), npmIgnorePath)
     }
 
     const docsIndexPath = path.join(outputDir, 'index.html')
