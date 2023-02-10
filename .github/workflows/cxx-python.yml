@@ -18,5 +18,7 @@ jobs:
     uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@03626a23c22246e89e36c7e918a158c440f9b099
     with:
       itk-module-deps: 'InsightSoftwareConsortium/ITKMeshToPolyData@v0.10.0'
+      itk-python-package-org: 'tbirdso'
+      itk-python-package-tag: 'b8165cbd749a60f2c0faa6796498a16da60eb2e4'
     secrets:
       pypi_password: ${{ secrets.pypi_password }}
