@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.70](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.69...itk-wasm-v1.0.0-b.70) (2023-02-10)
+
+
+### Bug Fixes
+
+* **bindgen:** Add missing .nojekyll ([99d8e00](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/99d8e0039258719fb74e969bfa12b0d0a6c4903b))
+
 # [1.0.0-b.69](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.68...itk-wasm-v1.0.0-b.69) (2023-02-10)
 
 
