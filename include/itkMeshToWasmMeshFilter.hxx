@@ -163,7 +163,7 @@ MeshToWasmMeshFilter<TMesh>
   meshType.AddMember("pointPixelComponents", rapidjson::Value( ConvertPointPixelTraits::GetNumberOfComponents() ).Move(), allocator );
 
   rapidjson::Value cellComponentType;
-  cellComponentType.SetString( wasm::MapComponentType<typename MeshType::CellIdentifier>::ComponentString.data(),allocator );
+  cellComponentType.SetString( wasm::MapComponentType<typename MeshType::CellsVectorContainer::Element>::ComponentString.data(),allocator );
   meshType.AddMember("cellComponentType", cellComponentType.Move(), allocator );
 
   using CellPixelType = typename TMesh::CellPixelType;
