@@ -149,7 +149,11 @@ def test_pipeline_write_read_mesh():
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
-    out_mesh = itk.mesh_from_dict(asdict(outputs[0].data))
+    out_mesh_dict = asdict(outputs[0].data)
+    # Native ITK Python binaries require uint64
+    out_mesh_dict['cells'] = out_mesh_dict['cells'].astype(np.uint64)
+    out_mesh_dict['meshType']['cellComponentType'] = 'uint64'
+    out_mesh = itk.mesh_from_dict(out_mesh_dict)
 
     assert out_mesh.GetNumberOfPoints() == 2903
     assert out_mesh.GetNumberOfCells() == 3263
