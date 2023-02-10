@@ -19,13 +19,16 @@ class ImageType:
     pixelType: PixelTypes = PixelTypes.Scalar
     components: int = 1
 
+def _default_direction() -> ArrayLike:
+    return np.empty((0,), np.float32)
+
 @dataclass
 class Image:
-    imageType: Union[ImageType, Dict] = ImageType()
+    imageType: Union[ImageType, Dict] = field(default_factory=ImageType)
     name: str = 'image'
     origin: Sequence[float] = field(default_factory=list)
     spacing: Sequence[float] = field(default_factory=list)
-    direction: ArrayLike = np.empty((0,), np.float32)
+    direction: ArrayLike = field(default_factory=_default_direction)
     size: Sequence[int] = field(default_factory=list)
     metadata: Dict = field(default_factory=dict)
     data: Optional[ArrayLike] = None
