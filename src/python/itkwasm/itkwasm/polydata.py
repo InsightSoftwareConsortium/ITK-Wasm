@@ -21,13 +21,16 @@ class PolyDataType:
     cellPixelType: PixelTypes = PixelTypes.Scalar
     cellPixelComponents: int = 1
 
+def _default_points() -> ArrayLike:
+    return np.empty((0,), np.float32)
+
 @dataclass
 class PolyData:
     polyDataType: Union[PolyDataType, Dict] = field(default_factory=PolyDataType)
     name: str = 'polydata'
 
     numberOfPoints: int = 0
-    points: ArrayLike = np.empty((0,), np.float32)
+    points: ArrayLike = field(default_factory=_default_points)
 
     verticesBufferSize: int = 0
     vertices: Optional[ArrayLike] = None
