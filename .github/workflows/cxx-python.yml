@@ -19,7 +19,7 @@ jobs:
     with:
       itk-module-deps: 'InsightSoftwareConsortium/ITKMeshToPolyData@v0.10.0'
       itk-python-package-org: 'tbirdso'
-      itk-python-package-tag: '5be9a36b45c19633c54b6b87bd395cd51ac06fa7'
+      itk-python-package-tag: 'c81fd6891ff25a05df5d61459366ab6c5c6f9a65'
       manylinux-platforms: '[]'
     secrets:
       pypi_password: ${{ secrets.pypi_password }}
