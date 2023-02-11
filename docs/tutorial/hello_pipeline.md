@@ -23,9 +23,9 @@ Let's write some code! Populate *hello-pipeline.cxx* first with the headers we n
 #include "itkImage.h"
 ```
 
-The *itkImage.h* header is [ITK](https://itk.org)'s standard n-dimensional image data structure.
-
 The *itkPipeline.h* and *itkInputImage.h* headers come from the itk-wasm *WebAssemblyInterface* [ITK module](https://www.kitware.com/advance-itk-with-modules/).
+
+The *itkImage.h* header is [ITK](https://itk.org)'s standard n-dimensional image data structure.
 
 Next, create a standard `main` C command line interface function and an `itk::wasm::Pipeline`:
 
@@ -85,7 +85,7 @@ Parse the command line arguments with the `ITK_WASM_PARSE` macro:
   ITK_WASM_PARSE(pipeline);
 ```
 
-This parses the command line arguments. If `-q` or `--quiet` is set, the `quiet` variable will be set to `true`. Missing or invalid arguments will print an error and exit. The `-h` and `--help` flags are automatically generated from pipeline arguments to print usage information.
+If `-q` or `--quiet` is set, the `quiet` variable will be set to `true`. Missing or invalid arguments will print an error and exit. The `-h` and `--help` flags are automatically generated from pipeline arguments to print usage information.
 
 Finally, run our pipeline:
 ```cpp
@@ -100,7 +100,7 @@ Finally, run our pipeline:
   return EXIT_SUCCESS;
 ```
 
-Next, provide a [CMake](https://cmake.org/) build configuration at *CMakeLists.txt*:
+Next, provide a [CMake](https://cmake.org/) build configuration in *CMakeLists.txt*:
 
 ```cmake
 cmake_minimum_required(VERSION 3.16)
