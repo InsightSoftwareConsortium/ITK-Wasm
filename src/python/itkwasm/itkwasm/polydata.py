@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Union, Optional, Dict
 
 try:
@@ -7,9 +7,9 @@ except ImportError:
     from numpy import ndarray as ArrayLike
 import numpy as np
 
-from .float_types import FloatTypes 
+from .float_types import FloatTypes
 from .int_types import IntTypes
-from .pixel_types import PixelTypes 
+from .pixel_types import PixelTypes
 
 @dataclass
 class PolyDataType:
@@ -21,13 +21,16 @@ class PolyDataType:
     cellPixelType: PixelTypes = PixelTypes.Scalar
     cellPixelComponents: int = 1
 
+def _default_points() -> ArrayLike:
+    return np.empty((0,), np.float32)
+
 @dataclass
 class PolyData:
-    polyDataType: Union[PolyDataType, Dict] = PolyDataType()
+    polyDataType: Union[PolyDataType, Dict] = field(default_factory=PolyDataType)
     name: str = 'polydata'
 
     numberOfPoints: int = 0
-    points: ArrayLike = np.empty((0,), np.float32)
+    points: ArrayLike = field(default_factory=_default_points)
 
     verticesBufferSize: int = 0
     vertices: Optional[ArrayLike] = None

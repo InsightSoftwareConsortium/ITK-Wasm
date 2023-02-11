@@ -11,8 +11,6 @@ def test_mesh():
     itk_mesh = itk.meshread(data)
 
     itk_mesh_dict = itk.dict_from_mesh(itk_mesh)
-    # Bug, to be fixed by 5.3.0
-    itk_mesh_dict.pop('dimension', None)
     itkwasm_mesh = Mesh(**itk_mesh_dict)
     itkwasm_mesh_dict = asdict(itkwasm_mesh)
     itk_mesh_roundtrip = itk.mesh_from_dict(itkwasm_mesh_dict)

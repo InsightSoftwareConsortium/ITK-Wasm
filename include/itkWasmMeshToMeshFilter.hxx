@@ -38,6 +38,226 @@
 
 #include "rapidjson/document.h"
 
+namespace
+{
+
+template<typename TMesh, typename TCellBufferType>
+void
+populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType * cellsBufferPtr)
+{
+  using MeshType = TMesh;
+
+  using CellIdentifier = typename MeshType::CellIdentifier;
+  using PointIdentifier = typename MeshType::PointIdentifier;
+  using CellType = typename MeshType::CellType;
+  using VertexCellType = itk::VertexCell<CellType>;
+  using LineCellType = itk::LineCell<CellType>;
+  using TriangleCellType = itk::TriangleCell<CellType>;
+  using PolygonCellType = itk::PolygonCell<CellType>;
+  using TetrahedronCellType = itk::TetrahedronCell<CellType>;
+  using HexahedronCellType = itk::HexahedronCell<CellType>;
+  using QuadrilateralCellType = itk::QuadrilateralCell<CellType>;
+  using QuadraticEdgeCellType = itk::QuadraticEdgeCell<CellType>;
+  using QuadraticTriangleCellType = itk::QuadraticTriangleCell<CellType>;
+  using CellAutoPointer = typename MeshType::CellAutoPointer;
+  itk::SizeValueType index = itk::NumericTraits<itk::SizeValueType>::ZeroValue();
+  CellIdentifier id = itk::NumericTraits<CellIdentifier>::ZeroValue();
+  while (index < cellBufferSize)
+  {
+    auto type = static_cast<itk::CellGeometryEnum>(static_cast<int>(cellsBufferPtr[index++]));
+    switch (type)
+    {
+      case itk::CellGeometryEnum::VERTEX_CELL:
+      {
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != VertexCellType::NumberOfPoints)
+        {
+          throw std::runtime_error("Invalid Vertex Cell number of points");
+        }
+        CellAutoPointer cell;
+        auto *                vertexCell = new VertexCellType;
+        for (unsigned int jj = 0; jj < VertexCellType::NumberOfPoints; ++jj)
+        {
+          vertexCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
+        }
+
+        cell.TakeOwnership(vertexCell);
+        mesh->SetCell(id++, cell);
+        break;
+      }
+      case itk::CellGeometryEnum::LINE_CELL:
+      {
+        // for polylines will be loaded as individual edges.
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints < 2)
+        {
+          throw std::runtime_error("Invalid Line Cell number of points");
+        }
+        auto pointIDBuffer = static_cast<PointIdentifier>(cellsBufferPtr[index++]);
+        for (unsigned int jj = 1; jj < cellPoints; ++jj)
+        {
+          CellAutoPointer cell;
+          auto *                lineCell = new LineCellType;
+          lineCell->SetPointId(0, pointIDBuffer);
+          pointIDBuffer = static_cast<PointIdentifier>(cellsBufferPtr[index++]);
+          lineCell->SetPointId(1, pointIDBuffer);
+          cell.TakeOwnership(lineCell);
+          mesh->SetCell(id++, cell);
+        }
+        break;
+      }
+      case itk::CellGeometryEnum::TRIANGLE_CELL:
+      {
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != TriangleCellType::NumberOfPoints)
+        {
+          throw std::runtime_error("Invalid Triangle Cell number of points");
+        }
+
+        CellAutoPointer cell;
+        auto *                triangleCell = new TriangleCellType;
+        for (unsigned int jj = 0; jj < TriangleCellType::NumberOfPoints; ++jj)
+        {
+          triangleCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
+        }
+
+        cell.TakeOwnership(triangleCell);
+        mesh->SetCell(id++, cell);
+        break;
+      }
+      case itk::CellGeometryEnum::QUADRILATERAL_CELL:
+      {
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != QuadrilateralCellType::NumberOfPoints)
+        {
+          throw std::runtime_error("Invalid Quadrilateral Cell with number of points");
+        }
+
+        CellAutoPointer cell;
+        auto *                quadrilateralCell = new QuadrilateralCellType;
+        for (unsigned int jj = 0; jj < QuadrilateralCellType::NumberOfPoints; ++jj)
+        {
+          quadrilateralCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
+        }
+
+        cell.TakeOwnership(quadrilateralCell);
+        mesh->SetCell(id++, cell);
+        break;
+      }
+      case itk::CellGeometryEnum::POLYGON_CELL:
+      {
+        // For polyhedron, if the number of points is 3, then we treat it as
+        // triangle cell
+        CellAutoPointer cell;
+        auto                  cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints == TriangleCellType::NumberOfPoints)
+        {
+          auto * triangleCell = new TriangleCellType;
+          for (unsigned int jj = 0; jj < TriangleCellType::NumberOfPoints; ++jj)
+          {
+            triangleCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
+          }
+          cell.TakeOwnership(triangleCell);
+        }
+        else
+        {
+          auto * polygonCell = new PolygonCellType;
+          for (unsigned int jj = 0; jj < cellPoints; ++jj)
+          {
+            polygonCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
+          }
+          cell.TakeOwnership(polygonCell);
+        }
+
+        mesh->SetCell(id++, cell);
+        break;
+      }
+      case itk::CellGeometryEnum::TETRAHEDRON_CELL:
+      {
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != TetrahedronCellType::NumberOfPoints)
+        {
+          throw std::runtime_error("Invalid Tetrahedron Cell number of points");
+        }
+
+        CellAutoPointer cell;
+        auto *                tetrahedronCell = new TetrahedronCellType;
+        for (unsigned int jj = 0; jj < TetrahedronCellType::NumberOfPoints; ++jj)
+        {
+          tetrahedronCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
+        }
+
+        cell.TakeOwnership(tetrahedronCell);
+        mesh->SetCell(id++, cell);
+        break;
+      }
+      case itk::CellGeometryEnum::HEXAHEDRON_CELL:
+      {
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != HexahedronCellType::NumberOfPoints)
+        {
+          throw std::runtime_error("Invalid Hexahedron Cell number of points");
+        }
+
+        CellAutoPointer cell;
+        auto *                hexahedronCell = new HexahedronCellType;
+        for (unsigned int jj = 0; jj < HexahedronCellType::NumberOfPoints; ++jj)
+        {
+          hexahedronCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
+        }
+
+        cell.TakeOwnership(hexahedronCell);
+        mesh->SetCell(id++, cell);
+        break;
+      }
+      case itk::CellGeometryEnum::QUADRATIC_EDGE_CELL:
+      {
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != QuadraticEdgeCellType::NumberOfPoints)
+        {
+          throw std::runtime_error("Invalid Quadratic edge Cell number of points");
+        }
+
+        CellAutoPointer cell;
+        auto *                quadraticEdgeCell = new QuadraticEdgeCellType;
+        for (unsigned int jj = 0; jj < QuadraticEdgeCellType::NumberOfPoints; ++jj)
+        {
+          quadraticEdgeCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
+        }
+
+        cell.TakeOwnership(quadraticEdgeCell);
+        mesh->SetCell(id++, cell);
+        break;
+      }
+      case itk::CellGeometryEnum::QUADRATIC_TRIANGLE_CELL:
+      {
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints != QuadraticTriangleCellType::NumberOfPoints)
+        {
+          throw std::runtime_error("Invalid Quadratic triangle Cell number of points");
+        }
+
+        CellAutoPointer cell;
+        auto *                quadraticTriangleCell = new QuadraticTriangleCellType;
+        for (unsigned int jj = 0; jj < QuadraticTriangleCellType::NumberOfPoints; ++jj)
+        {
+          quadraticTriangleCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
+        }
+
+        cell.TakeOwnership(quadraticTriangleCell);
+        mesh->SetCell(id++, cell);
+        break;
+      }
+      default:
+      {
+        throw std::runtime_error("Unknown cell type");
+      }
+    }
+  }
+}
+
+} // end anonymous namespace
+
 namespace itk
 {
 
@@ -234,216 +454,24 @@ WasmMeshToMeshFilter<TMesh>
 
   const rapidjson::Value & cellBufferSizeJson = document["cellBufferSize"];
   const SizeValueType cellBufferSize = cellBufferSizeJson.GetInt();
-  using CellIdentifier = typename MeshType::CellIdentifier;
-  using PointIdentifier = typename MeshType::PointIdentifier;
-  using CellType = typename MeshType::CellType;
-  using VertexCellType = VertexCell<CellType>;
-  using LineCellType = LineCell<CellType>;
-  using TriangleCellType = TriangleCell<CellType>;
-  using PolygonCellType = PolygonCell<CellType>;
-  using TetrahedronCellType = TetrahedronCell<CellType>;
-  using HexahedronCellType = HexahedronCell<CellType>;
-  using QuadrilateralCellType = QuadrilateralCell<CellType>;
-  using QuadraticEdgeCellType = QuadraticEdgeCell<CellType>;
-  using QuadraticTriangleCellType = QuadraticTriangleCell<CellType>;
-  using CellAutoPointer = typename MeshType::CellAutoPointer;
   const rapidjson::Value & cellsJson = document["cells"];
   const std::string cellsString( cellsJson.GetString() );
   using CellBufferType = typename WasmMeshType::CellBufferContainerType::Element;
   CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
-  SizeValueType        index = NumericTraits<SizeValueType>::ZeroValue();
-  CellIdentifier id = NumericTraits<CellIdentifier>::ZeroValue();
-  while (index < cellBufferSize)
+  const std::string cellComponentType( meshType["cellComponentType"].GetString() );
+  if (cellComponentType == "uint32")
   {
-    auto type = static_cast<CellGeometryEnum>(static_cast<int>(cellsBufferPtr[index++]));
-    switch (type)
-    {
-      case CellGeometryEnum::VERTEX_CELL:
-      {
-        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (cellPoints != VertexCellType::NumberOfPoints)
-        {
-          itkExceptionMacro(<< "Invalid Vertex Cell with number of points = " << cellPoints);
-        }
-        CellAutoPointer cell;
-        auto *                vertexCell = new VertexCellType;
-        for (unsigned int jj = 0; jj < VertexCellType::NumberOfPoints; ++jj)
-        {
-          vertexCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
-        }
-
-        cell.TakeOwnership(vertexCell);
-        mesh->SetCell(id++, cell);
-        break;
-      }
-      case CellGeometryEnum::LINE_CELL:
-      {
-        // for polylines will be loaded as individual edges.
-        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (cellPoints < 2)
-        {
-          itkExceptionMacro(<< "Invalid Line Cell with number of points = " << cellPoints);
-        }
-        auto pointIDBuffer = static_cast<PointIdentifier>(cellsBufferPtr[index++]);
-        for (unsigned int jj = 1; jj < cellPoints; ++jj)
-        {
-          CellAutoPointer cell;
-          auto *                lineCell = new LineCellType;
-          lineCell->SetPointId(0, pointIDBuffer);
-          pointIDBuffer = static_cast<PointIdentifier>(cellsBufferPtr[index++]);
-          lineCell->SetPointId(1, pointIDBuffer);
-          cell.TakeOwnership(lineCell);
-          mesh->SetCell(id++, cell);
-        }
-        break;
-      }
-      case CellGeometryEnum::TRIANGLE_CELL:
-      {
-        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (cellPoints != TriangleCellType::NumberOfPoints)
-        {
-          itkExceptionMacro(<< "Invalid Triangle Cell with number of points = " << cellPoints);
-        }
-
-        CellAutoPointer cell;
-        auto *                triangleCell = new TriangleCellType;
-        for (unsigned int jj = 0; jj < TriangleCellType::NumberOfPoints; ++jj)
-        {
-          triangleCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
-        }
-
-        cell.TakeOwnership(triangleCell);
-        mesh->SetCell(id++, cell);
-        break;
-      }
-      case CellGeometryEnum::QUADRILATERAL_CELL:
-      {
-        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (cellPoints != QuadrilateralCellType::NumberOfPoints)
-        {
-          itkExceptionMacro(<< "Invalid Quadrilateral Cell with number of points = " << cellPoints);
-        }
-
-        CellAutoPointer cell;
-        auto *                quadrilateralCell = new QuadrilateralCellType;
-        for (unsigned int jj = 0; jj < QuadrilateralCellType::NumberOfPoints; ++jj)
-        {
-          quadrilateralCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
-        }
-
-        cell.TakeOwnership(quadrilateralCell);
-        mesh->SetCell(id++, cell);
-        break;
-      }
-      case CellGeometryEnum::POLYGON_CELL:
-      {
-        // For polyhedron, if the number of points is 3, then we treat it as
-        // triangle cell
-        CellAutoPointer cell;
-        auto                  cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (cellPoints == TriangleCellType::NumberOfPoints)
-        {
-          auto * triangleCell = new TriangleCellType;
-          for (unsigned int jj = 0; jj < TriangleCellType::NumberOfPoints; ++jj)
-          {
-            triangleCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
-          }
-          cell.TakeOwnership(triangleCell);
-        }
-        else
-        {
-          auto * polygonCell = new PolygonCellType;
-          for (unsigned int jj = 0; jj < cellPoints; ++jj)
-          {
-            polygonCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
-          }
-          cell.TakeOwnership(polygonCell);
-        }
-
-        mesh->SetCell(id++, cell);
-        break;
-      }
-      case CellGeometryEnum::TETRAHEDRON_CELL:
-      {
-        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (cellPoints != TetrahedronCellType::NumberOfPoints)
-        {
-          itkExceptionMacro(<< "Invalid Tetrahedron Cell with number of points = " << cellPoints);
-        }
-
-        CellAutoPointer cell;
-        auto *                tetrahedronCell = new TetrahedronCellType;
-        for (unsigned int jj = 0; jj < TetrahedronCellType::NumberOfPoints; ++jj)
-        {
-          tetrahedronCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
-        }
-
-        cell.TakeOwnership(tetrahedronCell);
-        mesh->SetCell(id++, cell);
-        break;
-      }
-      case CellGeometryEnum::HEXAHEDRON_CELL:
-      {
-        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (cellPoints != HexahedronCellType::NumberOfPoints)
-        {
-          itkExceptionMacro(<< "Invalid Hexahedron Cell with number of points = " << cellPoints);
-        }
-
-        CellAutoPointer cell;
-        auto *                hexahedronCell = new HexahedronCellType;
-        for (unsigned int jj = 0; jj < HexahedronCellType::NumberOfPoints; ++jj)
-        {
-          hexahedronCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
-        }
-
-        cell.TakeOwnership(hexahedronCell);
-        mesh->SetCell(id++, cell);
-        break;
-      }
-      case CellGeometryEnum::QUADRATIC_EDGE_CELL:
-      {
-        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (cellPoints != QuadraticEdgeCellType::NumberOfPoints)
-        {
-          itkExceptionMacro(<< "Invalid Quadratic edge Cell with number of points = " << cellPoints);
-        }
-
-        CellAutoPointer cell;
-        auto *                quadraticEdgeCell = new QuadraticEdgeCellType;
-        for (unsigned int jj = 0; jj < QuadraticEdgeCellType::NumberOfPoints; ++jj)
-        {
-          quadraticEdgeCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
-        }
-
-        cell.TakeOwnership(quadraticEdgeCell);
-        mesh->SetCell(id++, cell);
-        break;
-      }
-      case CellGeometryEnum::QUADRATIC_TRIANGLE_CELL:
-      {
-        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
-        if (cellPoints != QuadraticTriangleCellType::NumberOfPoints)
-        {
-          itkExceptionMacro(<< "Invalid Quadratic triangle Cell with number of points = " << cellPoints);
-        }
-
-        CellAutoPointer cell;
-        auto *                quadraticTriangleCell = new QuadraticTriangleCellType;
-        for (unsigned int jj = 0; jj < QuadraticTriangleCellType::NumberOfPoints; ++jj)
-        {
-          quadraticTriangleCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
-        }
-
-        cell.TakeOwnership(quadraticTriangleCell);
-        mesh->SetCell(id++, cell);
-        break;
-      }
-      default:
-      {
-        itkExceptionMacro(<< "Unknown cell type");
-      }
-    }
+    uint32_t * cellsBufferPtr = reinterpret_cast< uint32_t * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+    populateCells<MeshType, uint32_t>(mesh, cellBufferSize, cellsBufferPtr);
+  }
+  else if (cellComponentType == "uint64")
+  {
+    uint64_t * cellsBufferPtr = reinterpret_cast< uint64_t * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+    populateCells<MeshType, uint64_t>(mesh, cellBufferSize, cellsBufferPtr);
+  }
+  else
+  {
+    throw std::runtime_error("Unexpected cell component type");
   }
 
   const rapidjson::Value & pointDataJson = document["pointData"];

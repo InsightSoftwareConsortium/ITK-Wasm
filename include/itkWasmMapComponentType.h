@@ -19,6 +19,7 @@
 #define itkWasmMapComponentType_h
 
 #include <string_view>
+#include "itkIntTypes.h"
 
 namespace itk
 {
@@ -76,17 +77,33 @@ struct MapComponentType<unsigned int>
   static constexpr std::string_view ComponentString = "uint32";
 };
 
+#if ((LLONG_MAX != LONG_MAX))
+template <>
+struct MapComponentType<long>
+{
+  static constexpr std::string_view ComponentString = "int32";
+};
+#else
 template <>
 struct MapComponentType<long>
 {
   static constexpr std::string_view ComponentString = "int64";
 };
+#endif
 
+#if ((ULLONG_MAX != ULONG_MAX))
+template <>
+struct MapComponentType<unsigned long>
+{
+  static constexpr std::string_view ComponentString = "uint32";
+};
+#else
 template <>
 struct MapComponentType<unsigned long>
 {
   static constexpr std::string_view ComponentString = "uint64";
 };
+#endif
 
 template <>
 struct MapComponentType<long long>

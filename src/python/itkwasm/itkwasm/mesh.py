@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from typing import Optional, Union, Dict
 
@@ -28,7 +28,7 @@ class MeshType:
 
 @dataclass
 class Mesh:
-    meshType: Union[MeshType, Dict] = MeshType()
+    meshType: Union[MeshType, Dict] = field(default_factory=MeshType)
 
     name: str = 'mesh'
 

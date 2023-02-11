@@ -319,7 +319,7 @@ Click. Perfect success.
       const verifyMesh = (mesh) => {
         expect(mesh.meshType.dimension, 'dimension').to.equal(3)
         expect(mesh.meshType.pointComponentType, 'pointComponentType').to.equal(itk.FloatTypes.Float32)
-        expect(mesh.meshType.cellComponentType, 'cellComponentType').to.equal(itk.IntTypes.UInt64)
+        expect(mesh.meshType.cellComponentType, 'cellComponentType').to.equal(itk.IntTypes.UInt32)
         expect(mesh.meshType.pointPixelType, 'pointPixelType').to.equal(itk.PixelTypes.Scalar)
         expect(mesh.meshType.cellPixelType, 'cellPixelType').to.equal(itk.PixelTypes.Scalar)
         expect(mesh.numberOfPoints, 'numberOfPoints').to.equal(2903)
