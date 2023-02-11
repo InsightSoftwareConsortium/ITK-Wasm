@@ -1,5 +1,24 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.71](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.70...itk-wasm-v1.0.0-b.71) (2023-02-11)
+
+
+### Bug Fixes
+
+* **OutputMesh:** Point element count accounts for dimension ([498385b](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/498385b0cbe3b74cb42c134d6e41ee4f1f4c8faf))
+* **Python:** Use field for dataclass types ([cc035f8](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/cc035f88e517b62a24acae72d6b36259107afd2f))
+* **Python:** Use field for PolyData default points ([74fb1aa](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/74fb1aaec7da8b35ce2c5916db73c2760d07def8))
+* **WasmMapComponentType:** Support 32-bit long ([860c963](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/860c9638966d448fe7dafe46a5f2f32921c818f6))
+* **WasmMeshtoMeshFilter:** Correct points container resize ([5e6453c](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/5e6453c272018bfa285ce3e3e51814f2010d25b1))
+* **WasmMeshToMeshFilter:** Support uint64_t and uint32_t cell buffers ([3df2d57](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/3df2d57c38210679b2bda05647a209cf933c8f2d))
+* **WasmMesh:** Use GetCellArray for cell buffer ([4adffc1](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4adffc19c8e4cf85d7ad7aba2a029f437d59b00a))
+
+
+### Features
+
+* **itk-wasm-cli:** Update default Docker image for 20230210-05c7ef9a ([188d896](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/188d896586d71d1ec41446e42c733bdcfdf6d431))
+* **Python:** Add mesh pipeline support ([832565f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/832565fa081fa0d0335c38c7bb5c908aa09d9440))
+
 # [1.0.0-b.70](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.69...itk-wasm-v1.0.0-b.70) (2023-02-10)
 
 
