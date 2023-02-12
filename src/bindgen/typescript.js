@@ -44,7 +44,7 @@ const interfaceJsonTypeToInterfaceType = new Map([
 ])
 
 // Array of types that will require an import from itk-wasm
-const typesRequireImport = ['Image']
+const typesRequireImport = ['Image', 'Mesh', 'PolyData', 'TextFile', 'BinaryFile', 'TextFile', 'BinaryFile']
 
 function camelCase(param) {
   // make any alphabets that follows '-' an uppercase character, and remove the corresponding hyphen
@@ -216,6 +216,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     let readmeResult = ''
     let readmeOptions = ''
 
+    // -----------------------------------------------------------------
     // Result module
     let resultContent = `interface ${modulePascalCase}${nodeTextCamel}Result {\n`
     const readmeResultTable = [ ['Property', 'Type', 'Description'], ]
