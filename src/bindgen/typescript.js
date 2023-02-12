@@ -254,8 +254,10 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     indexContent += `\n\nimport ${modulePascalCase}${nodeTextCamel}Result from './${moduleKebabCase}${nodeTextKebab}-result.js'\n`
     indexContent += `export type { ${modulePascalCase}${nodeTextCamel}Result }\n\n`
 
+    // -----------------------------------------------------------------
     // Options module
-    const haveParameters = !!interfaceJson.parameters.length
+    const filteredParameters = interfaceJson.parameters.filter(p => { return p.name !== 'memory-io'})
+    const haveParameters = !!filteredParameters.length
     if (haveParameters) {
       readmeOptions += `\n**\`${modulePascalCase}${nodeTextCamel}Options\` interface:**\n\n`
       const readmeOptionsTable = [ ['Property', 'Type', 'Description'], ]
@@ -283,6 +285,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       readmeOptions += markdownTable(readmeOptionsTable, { align: ['c', 'c', 'l'] }) + '\n'
     }
 
+    // -----------------------------------------------------------------
     // function module
     let functionContent = 'import {\n'
     const usedInterfaceTypes = new Set()
