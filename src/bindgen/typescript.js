@@ -145,7 +145,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
     const demoPath = path.join(outputDir, 'test', 'browser', 'app.ts')
     if (!fs.existsSync(demoPath)) {
-      let demoContent = fs.readFileSync(bindgenResource('demo.js'), { encoding: 'utf8', flag: 'r' })
+      let demoContent = fs.readFileSync(bindgenResource('demo.ts'), { encoding: 'utf8', flag: 'r' })
       demoContent = demoContent.replaceAll('<bindgenPackageName>', options.packageName)
       demoContent = demoContent.replaceAll('<bindgenPackageNameCamelCase>', camelCase(packageName))
       fs.writeFileSync(demoPath, demoContent)

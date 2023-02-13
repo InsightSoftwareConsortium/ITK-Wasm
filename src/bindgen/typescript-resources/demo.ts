@@ -1,4 +1,4 @@
-import * as <bindgenPackageNameCamelCase> from '../<bindgenPackageName>.js'
+import * as <bindgenPackageNameCamelCase> from '../../dist/bundles/<bindgenPackageName>.js'
 <bindgenPackageNameCamelCase>.setPipelinesBaseUrl('/pipelines')
 
 const packageFunctions = []
