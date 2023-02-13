@@ -2,6 +2,9 @@
 
 export * from './core/index.js'
 
+export * from './core/pipeline-worker-url.js'
+export * from './core/pipelines-base-url.js'
+
 export { default as ReadImageResult } from './io/ReadImageResult.js'
 export { default as ReadMeshResult } from './io/ReadMeshResult.js'
 
