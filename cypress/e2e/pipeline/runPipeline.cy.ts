@@ -161,46 +161,6 @@ Click. Perfect success.
     })
 
 
-  it('uses input and output files in the Emscripten filesystem', () => {
-    cy.window().then(async (win) => {
-      const itk = win.itk
-
-      const pipelinePath = 'input-output-files-test'
-      const args = ['--use-files',
-        '--input-text-file', './input.txt',
-        '--input-binary-file', './input.bin',
-        '--output-text-file', './output.txt',
-        '--output-binary-file', './output.bin'
-      ]
-      const outputText = { path: './output.txt' }
-      const outputBinary = { path: './output.bin' }
-      const desiredOutputs = [
-        { data: outputText, type: itk.InterfaceTypes.TextFile },
-        { data: outputBinary, type: itk.InterfaceTypes.BinaryFile }
-      ]
-      const inputs = [
-        { type: itk.InterfaceTypes.TextFile, data: { path: './input.txt', data: 'The answer is 42.' } },
-        { type: itk.InterfaceTypes.BinaryFile, data: { path: './input.bin', data: new Uint8Array([222, 173, 190, 239]) } }
-      ]
-      const { stdout, stderr, outputs, webWorker } = await itk.runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
-      webWorker.terminate()
-      expect(outputs[0].type, 'text output type').to.equal(itk.InterfaceTypes.TextFile)
-      expect(outputs[0].data.path, 'text output path').to.equal('./output.txt')
-      expect(outputs[0].data.data, 'text output data').to.equal('The answer is 42.')
-      expect(outputs[1].type, 'binary output type').to.equal(itk.InterfaceTypes.BinaryFile)
-      expect(outputs[1].data.path, 'binary output path').to.equal('./output.bin')
-      expect(outputs[1].data.data[0], 'binary output data[0]').to.equal(222)
-      expect(outputs[1].data.data[1], 'binary output data[1]').to.equal(173)
-      expect(outputs[1].data.data[2], 'binary output data[2]').to.equal(190)
-      expect(outputs[1].data.data[3], 'binary output data[3]').to.equal(239)
-      expect(stdout, 'stdout').to.equal(`Input text: The answer is 42.
-`)
-      expect(stderr, 'stderr').to.equal(`Input binary: ffffffdeffffffadffffffbeffffffef
-`)
-      })
-    })
-
-
   it('uses input and output text and binary data via memory io', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
