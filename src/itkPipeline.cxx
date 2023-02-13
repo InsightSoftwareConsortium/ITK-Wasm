@@ -130,16 +130,24 @@ Pipeline
     bool optionGroup = false;
     while (std::getline(stream, line)) {
       if (description) {
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fgB::magenta << rang::style::bold;
+#endif
         std::cout << line << std::endl;
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::reset << rang::style::reset;
+#endif
         description = false;
         usage = true;
       } else if(usage) {
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::yellow;
+#endif
         std::cout << line.substr(0, 6);
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::reset;
         std::cout << rang::fg::magenta;
+#endif
         size_t optionsLoc = line.find("[OPTIONS]");
         size_t stop = optionsLoc - 7;
         size_t start = optionsLoc + 9;
@@ -149,18 +157,24 @@ Pipeline
           start = stop;
         }
         std::cout << line.substr(6, stop);
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::style::bold;
         std::cout << rang::fg::cyan;
+#endif
         std::cout << line.substr(start);
         if (optionsLoc != std::string::npos)
         {
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::green;
+#endif
           // Options should be passed after positions so the pipeline can be
           // specialized based on the type of the positionals
           std::cout << " [OPTIONS]";
         }
         std::cout << std::endl;
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::reset << rang::style::reset;
+#endif
         usage = false;
       } else if(positionals) {
         if (line == "") {
@@ -168,9 +182,13 @@ Pipeline
           positionals = false;
         } else {
           const size_t loc = line.find(' ', 3);
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::cyan;
+#endif
           std::cout << line.substr(0, loc);
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::reset;
+#endif
           std::cout << line.substr(loc) << std::endl;
         }
       } else if(options) {
@@ -179,9 +197,13 @@ Pipeline
           options = false;
         } else {
           const size_t loc = line.find(' ', 3);
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::green;
+#endif
           std::cout << line.substr(0, loc);
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::reset;
+#endif
           std::cout << line.substr(loc) << std::endl;
         }
       } else if(optionGroup) {
@@ -190,31 +212,51 @@ Pipeline
           optionGroup = false;
         } else {
           const size_t loc = line.find(' ', 3);
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::green;
+#endif
           std::cout << line.substr(0, loc);
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::reset;
+#endif
           std::cout << line.substr(loc) << std::endl;
         }
       } else if(line == "Positionals:") {
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::yellow;
+#endif
         std::cout << line << std::endl;
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::reset;
+#endif
         positionals = true;
       } else if(line == "Options:") {
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::yellow;
+#endif
         std::cout << line << std::endl;
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::reset;
+#endif
         options = true;
       } else if(line == "Enjoy ITK!") {
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::blue << rang::style::italic;
+#endif
         std::cout << line << std::endl;
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::reset << rang::style::reset;
+#endif
         options = true;
       } else if(!line.empty() && line.back() == ':') {
         optionGroup = true;
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::yellow;
+#endif
         std::cout << line << std::endl;
+#ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::reset;
+#endif
       } else {
         std::cout << line << std::endl;
       }
