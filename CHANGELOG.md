@@ -1,5 +1,20 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.72](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.71...itk-wasm-v1.0.0-b.72) (2023-02-13)
+
+
+### Bug Fixes
+
+* **bindgen:** And PolyData and friends to types requiring import ([4dd76d1](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4dd76d19bed368bbf1575267bb3d2c83ff2e64ca))
+* **bindgen:** Fix empty options detection ([0ca37a3](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/0ca37a36eed1e56322c229f179aa06bfd0117768))
+* **bindgen:** Typescript layout updates ([2238fb5](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2238fb5347205b78a74fde4c7db3e2467864548d))
+
+
+### Features
+
+* **Docker:** Bump ITK to 2023-01-15 master, add distance map wasi ([465afd1](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/465afd10b19231735f665abb1f85add0503c35bc))
+* **itk-wasm-cli:** Update default Docker image for 20230212-465afd10 ([f1d8979](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f1d897910e8a1ee508f8ef660006e78ea00789e6))
+
 # [1.0.0-b.71](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.70...itk-wasm-v1.0.0-b.71) (2023-02-11)
 
 
