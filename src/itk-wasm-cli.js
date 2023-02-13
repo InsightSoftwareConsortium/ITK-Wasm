@@ -13,7 +13,7 @@ const program = new Command()
 
 // Array of types that will require an import from itk-wasm
 const typesRequireImport = ['Image']
-const defaultImageTag = '20230210-05c7ef9a'
+const defaultImageTag = '20230212-465afd10'
 
 function processCommonOptions() {
   const options = program.opts()
