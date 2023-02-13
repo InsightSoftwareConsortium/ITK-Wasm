@@ -106,7 +106,8 @@ public:
 
     }
 #else
-    throw std::logic_error("Memory IO not supported");
+    std::cerr << "Memory IO not supported" << std::endl;
+    abort();
 #endif
     }
     else
@@ -178,7 +179,8 @@ public:
       wasmMeshIO->Write();
     }
 #else
-    throw std::logic_error("Filesystem IO not supported");
+    std::cerr << "Filesystem IO not supported" << std::endl;
+    abort();
 #endif
     }
   }

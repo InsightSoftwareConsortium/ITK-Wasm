@@ -92,7 +92,8 @@ public:
         setMemoryStoreOutputArray(0, index, 1, directionAddress, directionSize);
       }
 #else
-    throw std::logic_error("Memory IO not supported");
+    std::cerr << "Memory IO not supported" << std::endl;
+    abort();
 #endif
     }
     else
@@ -103,7 +104,8 @@ public:
       itk::WriteImage(this->m_Image, this->m_Identifier);
       }
 #else
-    throw std::logic_error("Filesystem IO not supported");
+    std::cerr << "Filesystem IO not supported" << std::endl;
+    abort();
 #endif
     }
   }
