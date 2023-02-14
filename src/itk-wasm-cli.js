@@ -17,31 +17,6 @@ const defaultImageTag = '20230213-bd821f33'
 function processCommonOptions() {
   const options = program.opts()
 
-  let sourceDir = '.'
-  if (options.sourceDir) {
-    sourceDir = options.sourceDir
-  }
-
-  // Check that the source directory exists and chdir to it.
-  if (!fs.existsSync(sourceDir)) {
-    console.error('The source directory: ' + sourceDir + ' does not exist!')
-    process.exit(1)
-  }
-  process.chdir(sourceDir)
-
-  let buildDir = 'emscripten-build'
-  if (options.buildDir) {
-    buildDir = options.buildDir
-  }
-
-  // Make the build directory to hold the dockcross script and the CMake
-  // build.
-  try {
-    fs.mkdirSync(buildDir)
-  } catch (err) {
-    if (err.code !== 'EEXIST') throw err
-  }
-
   // Check that we have docker and can run it.
   const dockerVersion = spawnSync('docker', ['--version'], {
     env: process.env,
@@ -80,6 +55,31 @@ function processCommonOptions() {
       console.error(`Could not pull docker image ${dockerImage}`)
       process.exit(dockerPull.status)
     }
+  }
+
+  let sourceDir = '.'
+  if (options.sourceDir) {
+    sourceDir = options.sourceDir
+  }
+
+  // Check that the source directory exists and chdir to it.
+  if (!fs.existsSync(sourceDir)) {
+    console.error('The source directory: ' + sourceDir + ' does not exist!')
+    process.exit(1)
+  }
+  process.chdir(sourceDir)
+
+  let buildDir = dockerImage.includes('wasi') ? 'wasi-build' : 'emscripten-build'
+  if (options.buildDir) {
+    buildDir = options.buildDir
+  }
+
+  // Make the build directory to hold the dockcross script and the CMake
+  // build.
+  try {
+    fs.mkdirSync(buildDir)
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err
   }
 
   // Ensure we have the 'dockcross' Docker build environment driver script
