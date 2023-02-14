@@ -85,7 +85,8 @@ public:
     setMemoryStoreOutputArray(0, index, 1, directionAddress, directionSize);
     }
 #else
-    throw std::logic_error("Memory IO not supported");
+    std::cerr << "Memory IO not supported" << std::endl;
+    abort();
 #endif
     }
     else
@@ -126,7 +127,8 @@ public:
       wasmImageIO->Write(reinterpret_cast< void * >( &(pixelData.at(0)) ));
     }
 #else
-    throw std::logic_error("Filesystem IO not supported");
+    std::cerr << "Filesystem IO not supported" << std::endl;
+    abort();
 #endif
     }
   }

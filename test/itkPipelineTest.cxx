@@ -28,6 +28,7 @@
 #include "itkInputMesh.h"
 #include "itkOutputMesh.h"
 #include "itkMesh.h"
+#include "itkPolyData.h"
 #include "itkInputPolyData.h"
 #include "itkOutputPolyData.h"
 

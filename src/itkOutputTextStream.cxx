@@ -48,7 +48,8 @@ OutputTextStream
     const auto dataSize = string.size();
     setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);
 #else
-    throw std::logic_error("Memory IO not supported");
+    std::cerr << "Memory IO not supported" << std::endl;
+    abort();
 #endif
   }
   else
@@ -56,7 +57,8 @@ OutputTextStream
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
     // ofstream will close when deleted
 # else
-    throw std::logic_error("Filesystem IO not supported");
+    std::cerr << "Filesystem IO not supported" << std::endl;
+    abort();
 #endif
   if (m_DeleteOStream && m_OStream != nullptr)
     {

@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, FloatTypes, PixelTypes, readImageLocalFile, readMeshLocalFile, runPipelineNode, IOTypes, InterfaceTypes } from '../../../dist/index.js'
+import { IntTypes, FloatTypes, PixelTypes, readImageLocalFile, readMeshLocalFile, runPipelineNode, InterfaceTypes } from '../../../dist/index.js'
 
 const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cthead1.png')
 const testMeshInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cow.vtk')
@@ -21,43 +21,6 @@ Hours have gone by.
       t.is(stderr, `The modem humming
 Code rapidly compiling.
 Click. Perfect success.
-`)
-    })
-})
-
-test('runPipelineNode uses input and output files in the Emscripten filesystem', (t) => {
-  const pipelinePath = path.resolve('test', 'pipelines', 'input-output-files-pipeline', 'emscripten-build', 'input-output-files-test')
-  const args = ['--use-files',
-    '--input-text-file', './input.txt',
-    '--input-binary-file', './input.bin',
-    '--output-text-file', './output.txt',
-    '--output-binary-file', './output.bin'
-  ]
-  const outputText = { path: './output.txt' }
-  const outputBinary = { path: './output.bin' }
-  const desiredOutputs = [
-    { data: outputText, type: InterfaceTypes.TextFile },
-    { data: outputBinary, type: InterfaceTypes.BinaryFile }
-  ]
-  const inputs = [
-    { type: InterfaceTypes.TextFile, data: { path: './input.txt', data: 'The answer is 42.' } },
-    { type: InterfaceTypes.BinaryFile, data: { path: './input.bin', data: new Uint8Array([222, 173, 190, 239]) } }
-  ]
-  return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
-    .then(function ({ returnValue, stdout, stderr, outputs }) {
-      t.is(returnValue, 0)
-      t.is(outputs[0].type, InterfaceTypes.TextFile)
-      t.is(outputs[0].data.path, './output.txt')
-      t.is(outputs[0].data.data, 'The answer is 42.')
-      t.is(outputs[1].type, InterfaceTypes.BinaryFile)
-      t.is(outputs[1].data.path, './output.bin')
-      t.is(outputs[1].data.data[0], 222)
-      t.is(outputs[1].data.data[1], 173)
-      t.is(outputs[1].data.data[2], 190)
-      t.is(outputs[1].data.data[3], 239)
-      t.is(stdout, `Input text: The answer is 42.
-`)
-      t.is(stderr, `Input binary: ffffffdeffffffadffffffbeffffffef
 `)
     })
 })
@@ -125,33 +88,6 @@ test('runPipelineNode writes and reads an itk.Image via memory io', (t) => {
       return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
     }).then(function ({ stdout, stderr, outputs }) {
       verifyImage(outputs[0].data)
-    })
-})
-
-test('runPipelineNode writes and reads an itk.Mesh in the Emscripten filesystem', (t) => {
-  const verifyMesh = (mesh) => {
-    t.is(mesh.meshType.dimension, 3)
-    t.is(mesh.meshType.pointComponentType, FloatTypes.Float32)
-    t.is(mesh.meshType.cellComponentType, IntTypes.UInt64)
-    t.is(mesh.meshType.pointPixelType, PixelTypes.Scalar)
-    t.is(mesh.meshType.cellPixelType, PixelTypes.Scalar)
-    t.is(mesh.numberOfPoints, 2903)
-    t.is(mesh.numberOfCells, 3263)
-  }
-
-  return readMeshLocalFile(testMeshInputFilePath)
-    .then(function (mesh) {
-      const pipelinePath = path.resolve('test', 'pipelines', 'mesh-read-write-pipeline', 'emscripten-build', 'mesh-read-write-test')
-      const args = ['./cow.vtk.iwm', './cow.vtk.written.iwm']
-      const desiredOutputs = [
-        { path: args[1], type: IOTypes.Mesh }
-      ]
-      const inputs = [
-        { path: args[0], type: IOTypes.Mesh, data: mesh }
-      ]
-      return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
-    }).then(function ({ stdout, stderr, outputs }) {
-      verifyMesh(outputs[0].data)
     })
 })
 

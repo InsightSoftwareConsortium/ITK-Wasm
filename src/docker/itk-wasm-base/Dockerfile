@@ -30,7 +30,7 @@ ARG LDFLAGS
 ARG CFLAGS
 ARG CXXFLAGS
 ENV LDFLAGS=${LDFLAGS:-"-flto -s ALLOW_MEMORY_GROWTH=1"}
-ENV CFLAGS=${CFLAGS:-"-flto -Wno-warn-absolute-paths"}
+ENV CFLAGS=${CFLAGS:-"-flto -Wno-warn-absolute-paths -DITK_WASM_NO_FILESYSTEM_IO"}
 ENV CXXFLAGS=${CXXFLAGS:-"${CFLAGS}"}
 
 RUN mkdir ITK-build && \
