@@ -48,7 +48,7 @@ Build the program with the itk-wasm CLI, `itk-wasm`. This is shipped with the `i
 ```sh
 # Initialize an empty project in the current directory
 npm init --yes
-npm install itk-wasm@1.0.0-b.53
+npm install itk-wasm@1.0.0-b.72
 ```
 
 ## WASI
