@@ -118,7 +118,7 @@ def test_pipeline_write_read_image():
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
     out_image = itk.image_from_dict(asdict(outputs[0].data))
-    # To be addresses in itk-5.3.1
+    # To be addressed in itk-5.3.1
     out_image.SetRegions([256,256])
 
     baseline = itk.imread(test_baseline_dir / "test_pipeline_write_read_image.png")
@@ -151,6 +151,56 @@ def test_pipeline_write_read_mesh():
 
     out_mesh_dict = asdict(outputs[0].data)
     # Native ITK Python binaries require uint64
+    out_mesh_dict['cells'] = out_mesh_dict['cells'].astype(np.uint64)
+    out_mesh_dict['meshType']['cellComponentType'] = 'uint64'
+    out_mesh = itk.mesh_from_dict(out_mesh_dict)
+
+    assert out_mesh.GetNumberOfPoints() == 2903
+    assert out_mesh.GetNumberOfCells() == 3263
+
+def test_pipeline_write_read_polydata():
+    pipeline = Pipeline(test_input_dir / 'mesh-to-poly-data.wasi.wasm')
+
+    data = test_input_dir / "cow.vtk"
+    itk_mesh = itk.meshread(data)
+    itk_mesh_dict = itk.dict_from_mesh(itk_mesh)
+    itkwasm_mesh = Mesh(**itk_mesh_dict)
+
+    pipeline_inputs = [
+        PipelineInput(InterfaceTypes.Mesh, itkwasm_mesh),
+    ]
+
+    pipeline_outputs = [
+        PipelineOutput(InterfaceTypes.PolyData),
+    ]
+
+    args = [
+        '0',
+        '0',
+        '--memory-io',]
+
+    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
+    polydata = outputs[0].data
+
+    pipeline = Pipeline(test_input_dir / 'poly-data-to-mesh.wasi.wasm')
+
+    pipeline_inputs = [
+        PipelineInput(InterfaceTypes.PolyData, polydata),
+    ]
+
+    pipeline_outputs = [
+        PipelineOutput(InterfaceTypes.Mesh),
+    ]
+
+    args = [
+        '0',
+        '0',
+        '--memory-io',]
+
+    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
+
+    out_mesh_dict = asdict(outputs[0].data)
+    # native itk python binaries require uint64
     out_mesh_dict['cells'] = out_mesh_dict['cells'].astype(np.uint64)
     out_mesh_dict['meshType']['cellComponentType'] = 'uint64'
     out_mesh = itk.mesh_from_dict(out_mesh_dict)
