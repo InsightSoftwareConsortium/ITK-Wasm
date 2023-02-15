@@ -108,7 +108,7 @@ public:
     for (int ii = 0; ii < iwpArgc; ++ii)
       {
         const std::string arg(iwpArgv[ii]);
-        if (arg == "-h" || arg == "--help")
+        if (arg == "-h" || arg == "--help" || arg == "--interface-json")
         {
           passThrough = true;
         }
