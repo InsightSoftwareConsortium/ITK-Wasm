@@ -56,6 +56,11 @@ bool lexical_cast(const std::string &input, InterfaceMeshType & meshType)
   {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
     MeshIOBase::Pointer meshIO = MeshIOFactory::CreateMeshIO(input.c_str(), CommonEnums::IOFileMode::ReadMode);
+    if (meshIO.IsNull())
+    {
+      std::cerr << "IO not available for: " << input << std::endl;
+      return false;
+    }
     meshIO->SetFileName(input);
     meshIO->ReadMeshInformation();
 
