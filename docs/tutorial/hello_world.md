@@ -56,7 +56,7 @@ npm install itk-wasm@1.0.0-b.72
 Build the project with the WASI `itkwasm/wasi` toolchain in the `./wasi-build/` directory:
 
 ```sh
-npx itk-wasm -i itkwasm/wasi -b ./wasi-build/ build
+npx itk-wasm -i itkwasm/wasi build
 ```
 
 A `hello.wasi.wasm` WebAssembly binary is built in the `./wasi-build/` directory.
@@ -70,7 +70,7 @@ cmake_install.cmake  hello.wasi.wasm
 Execute the binary with the `run` `itk-wasm` subcommand.
 
 ```sh
-❯ npx itk-wasm -b ./wasi-build/ run hello.wasi.wasm
+❯ npx itk-wasm run wasi-build/hello.wasi.wasm
 Hello Wasm world!
 ```
 
@@ -83,7 +83,7 @@ The binary can also be executed with other [WASI runtimes](https://github.com/mb
 For Node.js or the Browser, build the project with the default [Emscripten](https://emscripten.org/) toolchain. The project is built in the `./emscripten-build` directory by default.
 
 ```sh
-npx itk-wasm -b ./emscripten-build build
+npx itk-wasm build
 ```
 
 To execute the project, create an `index.mjs` JavaScript file to [invoke the module](../api/node_pipelines.html):
@@ -120,7 +120,7 @@ Create an HTML file named `index.html` that will call the Wasm module through Ja
   <head>
     <title>itk-wasm Browser Hello World!</title>
     <meta charset="UTF-8" />
-    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.53/dist/umd/itk-wasm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.73/dist/umd/itk-wasm.min.js"></script>
   </head>
 
   <body>
