@@ -1,5 +1,18 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.74](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.73...itk-wasm-v1.0.0-b.74) (2023-02-15)
+
+
+### Bug Fixes
+
+* **bindgen:** Add FLOAT to interfaceJsonTypeToTypescriptType ([4d22c05](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4d22c0503261b4166c667fe216c21b94f4ec050f))
+* **SupportInputs:** pass through with --interface-json ([47eb10f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/47eb10f8338aae664028f9fb69c363efc7ac8a77))
+
+
+### Features
+
+* **itk-wasm-cli:** Update default Docker image for 20230214-4d22c050 ([6e437a5](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/6e437a5b0816f90694e5bb2cee9cc6c3ee75ef52))
+
 # [1.0.0-b.73](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.72...itk-wasm-v1.0.0-b.73) (2023-02-14)
 
 
