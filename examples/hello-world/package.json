@@ -6,10 +6,10 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:wasi && npm run build:emscripten",
-    "build:wasi": "itk-wasm -b wasi-build -i itkwasm/wasi build",
-    "build:emscripten": "itk-wasm -b emscripten-build build",
+    "build:wasi": "itk-wasm -i itkwasm/wasi build",
+    "build:emscripten": "itk-wasm build",
     "test": "npm run test:wasi && npm run test:node && npm run test:browser",
-    "test:wasi": "npx itk-wasm -b wasi-build run hello.wasi.wasm",
+    "test:wasi": "npx itk-wasm run wasi-build/hello.wasi.wasm",
     "test:node": "node ./index.mjs",
     "cypress:open": "npx cypress open",
     "cypress:run": "npx cypress run",
@@ -20,7 +20,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "fs-extra": "^11.1.0",
-    "itk-wasm": "^1.0.0-b.53"
+    "itk-wasm": "^1.0.0-b.73"
   },
   "devDependencies": {
     "cypress": "^12.3.0",
