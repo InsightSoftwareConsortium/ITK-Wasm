@@ -23,25 +23,25 @@ from wasmer_compiler_cranelift import Compiler
 
 def _memoryview_to_numpy_array(component_type, buf):
     if component_type == IntTypes.UInt8:
-        return np.frombuffer(buf, dtype=np.uint8)
+        return np.frombuffer(buf, dtype=np.uint8).copy()
     elif component_type == IntTypes.Int8:
-        return np.frombuffer(buf, dtype=np.int8)
+        return np.frombuffer(buf, dtype=np.int8).copy()
     elif component_type == IntTypes.UInt16:
-        return np.frombuffer(buf, dtype=np.uint16)
+        return np.frombuffer(buf, dtype=np.uint16).copy()
     elif component_type == IntTypes.Int16:
-        return np.frombuffer(buf, dtype=np.int16)
+        return np.frombuffer(buf, dtype=np.int16).copy()
     elif component_type == IntTypes.UInt32:
-        return np.frombuffer(buf, dtype=np.uint32)
+        return np.frombuffer(buf, dtype=np.uint32).copy()
     elif component_type == IntTypes.Int32:
-        return np.frombuffer(buf, dtype=np.int32)
+        return np.frombuffer(buf, dtype=np.int32).copy()
     elif component_type == IntTypes.UInt64:
-        return np.frombuffer(buf, dtype=np.uint64)
+        return np.frombuffer(buf, dtype=np.uint64).copy()
     elif component_type == IntTypes.Int64:
-        return np.frombuffer(buf, dtype=np.int64)
+        return np.frombuffer(buf, dtype=np.int64).copy()
     elif component_type == FloatTypes.Float32:
-        return np.frombuffer(buf, dtype=np.float32)
+        return np.frombuffer(buf, dtype=np.float32).copy()
     elif component_type == FloatTypes.Float64:
-        return np.frombuffer(buf, dtype=np.float64)
+        return np.frombuffer(buf, dtype=np.float64).copy()
     else:
         raise ValueError('Unsupported component type')
 

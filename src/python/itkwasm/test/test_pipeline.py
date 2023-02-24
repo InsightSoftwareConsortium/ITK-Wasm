@@ -200,9 +200,11 @@ def test_pipeline_write_read_polydata():
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
     out_mesh_dict = asdict(outputs[0].data)
+
     # native itk python binaries require uint64
     out_mesh_dict['cells'] = out_mesh_dict['cells'].astype(np.uint64)
     out_mesh_dict['meshType']['cellComponentType'] = 'uint64'
+    assert np.isclose(out_mesh_dict['points'][0], 3.71636)
     out_mesh = itk.mesh_from_dict(out_mesh_dict)
 
     assert out_mesh.GetNumberOfPoints() == 2903
