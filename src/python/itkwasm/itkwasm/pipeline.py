@@ -12,8 +12,9 @@ from .text_stream import TextStream
 from .binary_stream import BinaryStream
 from .text_file import TextFile
 from .binary_file import BinaryFile
-from .image import Image, ImageType
-from .mesh import Mesh, MeshType
+from .image import Image
+from .mesh import Mesh
+from .polydata import PolyData
 from .int_types import IntTypes
 from .float_types import FloatTypes
 
@@ -22,25 +23,25 @@ from wasmer_compiler_cranelift import Compiler
 
 def _memoryview_to_numpy_array(component_type, buf):
     if component_type == IntTypes.UInt8:
-        return np.frombuffer(buf, dtype=np.uint8)
+        return np.frombuffer(buf, dtype=np.uint8).copy()
     elif component_type == IntTypes.Int8:
-        return np.frombuffer(buf, dtype=np.int8)
+        return np.frombuffer(buf, dtype=np.int8).copy()
     elif component_type == IntTypes.UInt16:
-        return np.frombuffer(buf, dtype=np.uint16)
+        return np.frombuffer(buf, dtype=np.uint16).copy()
     elif component_type == IntTypes.Int16:
-        return np.frombuffer(buf, dtype=np.int16)
+        return np.frombuffer(buf, dtype=np.int16).copy()
     elif component_type == IntTypes.UInt32:
-        return np.frombuffer(buf, dtype=np.uint32)
+        return np.frombuffer(buf, dtype=np.uint32).copy()
     elif component_type == IntTypes.Int32:
-        return np.frombuffer(buf, dtype=np.int32)
+        return np.frombuffer(buf, dtype=np.int32).copy()
     elif component_type == IntTypes.UInt64:
-        return np.frombuffer(buf, dtype=np.uint64)
+        return np.frombuffer(buf, dtype=np.uint64).copy()
     elif component_type == IntTypes.Int64:
-        return np.frombuffer(buf, dtype=np.int64)
+        return np.frombuffer(buf, dtype=np.int64).copy()
     elif component_type == FloatTypes.Float32:
-        return np.frombuffer(buf, dtype=np.float32)
+        return np.frombuffer(buf, dtype=np.float32).copy()
     elif component_type == FloatTypes.Float64:
-        return np.frombuffer(buf, dtype=np.float64)
+        return np.frombuffer(buf, dtype=np.float64).copy()
     else:
         raise ValueError('Unsupported component type')
 
@@ -166,6 +167,76 @@ class Pipeline:
                     "cellData": f"data:application/vnd.itk.address,0:{cell_data_ptr}",
                 }
                 self._set_input_json(mesh_json, index)
+            elif input_.type == InterfaceTypes.PolyData:
+                polydata = input_.data
+                if polydata.numberOfPoints:
+                    pv = bytes(polydata.points)
+                else:
+                    pv = bytes([])
+                points_ptr = self._set_input_array(pv, index, 0)
+
+                if polydata.verticesBufferSize:
+                    pv = bytes(polydata.vertices)
+                else:
+                    pv = bytes([])
+                vertices_ptr = self._set_input_array(pv, index, 1)
+
+                if polydata.linesBufferSize:
+                    pv = bytes(polydata.lines)
+                else:
+                    pv = bytes([])
+                lines_ptr = self._set_input_array(pv, index, 2)
+
+                if polydata.polygonsBufferSize:
+                    pv = bytes(polydata.polygons)
+                else:
+                    pv = bytes([])
+                polygons_ptr = self._set_input_array(pv, index, 3)
+
+                if polydata.triangleStripsBufferSize:
+                    pv = bytes(polydata.triangleStrips)
+                else:
+                    pv = bytes([])
+                triangleStrips_ptr = self._set_input_array(pv, index, 4)
+
+                if polydata.numberOfPointPixels:
+                    pv = bytes(polydata.pointData)
+                else:
+                    pv = bytes([])
+                pointData_ptr = self._set_input_array(pv, index, 5)
+
+                if polydata.numberOfCellPixels:
+                    pv = bytes(polydata.cellData)
+                else:
+                    pv = bytes([])
+                cellData_ptr = self._set_input_array(pv, index, 6)
+
+                polydata_json = {
+                    "polyDataType": asdict(polydata.polyDataType),
+                    "name": polydata.name,
+
+                    "numberOfPoints": polydata.numberOfPoints,
+                    "points": f"data:application/vnd.itk.address,0:{points_ptr}",
+
+                    "verticesBufferSize": polydata.verticesBufferSize,
+                    "vertices": f"data:application/vnd.itk.address,0:{vertices_ptr}",
+
+                    "linesBufferSize": polydata.linesBufferSize,
+                    "lines": f"data:application/vnd.itk.address,0:{lines_ptr}",
+
+                    "polygonsBufferSize": polydata.polygonsBufferSize,
+                    "polygons": f"data:application/vnd.itk.address,0:{polygons_ptr}",
+
+                    "triangleStripsBufferSize": polydata.triangleStripsBufferSize,
+                    "triangleStrips": f"data:application/vnd.itk.address,0:{triangleStrips_ptr}",
+
+                    "numberOfPointPixels": polydata.numberOfPointPixels,
+                    "pointData": f"data:application/vnd.itk.address,0:{pointData_ptr}",
+
+                    "numberOfCellPixels": polydata.numberOfCellPixels,
+                    "cellData": f"data:application/vnd.itk.address,0:{cellData_ptr}"
+                }
+                self._set_input_json(polydata_json, index)
             else:
                 raise ValueError(f'Unexpected/not yet supported input.type {input_.type}')
 
@@ -240,6 +311,60 @@ class Pipeline:
                         mesh.cellData =  _memoryview_to_numpy_array(mesh.meshType.cellPixelComponentType, bytes([]))
 
                     output_data = PipelineOutput(InterfaceTypes.Mesh, mesh)
+                elif output.type == InterfaceTypes.PolyData:
+                    polydata_json = self._get_output_json(index)
+                    polydata = PolyData(**polydata_json)
+
+                    if polydata.numberOfPoints > 0:
+                        data_ptr = self.output_array_address(0, index, 0)
+                        data_size = self.output_array_size(0, index, 0)
+                        polydata.points = _memoryview_to_numpy_array(FloatTypes.Float32, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        polydata.points =  _memoryview_to_numpy_array(FloatTypes.Float32, bytes([]))
+
+                    if polydata.verticesBufferSize > 0:
+                        data_ptr = self.output_array_address(0, index, 1)
+                        data_size = self.output_array_size(0, index, 1)
+                        polydata.vertices = _memoryview_to_numpy_array(IntTypes.UInt32, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        polydata.vertices =  _memoryview_to_numpy_array(IntTypes.UInt32, bytes([]))
+
+                    if polydata.linesBufferSize > 0:
+                        data_ptr = self.output_array_address(0, index, 2)
+                        data_size = self.output_array_size(0, index, 2)
+                        polydata.lines = _memoryview_to_numpy_array(IntTypes.UInt32, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        polydata.lines =  _memoryview_to_numpy_array(IntTypes.UInt32, bytes([]))
+
+                    if polydata.polygonsBufferSize > 0:
+                        data_ptr = self.output_array_address(0, index, 3)
+                        data_size = self.output_array_size(0, index, 3)
+                        polydata.polygons = _memoryview_to_numpy_array(IntTypes.UInt32, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        polydata.polygons =  _memoryview_to_numpy_array(IntTypes.UInt32, bytes([]))
+
+                    if polydata.triangleStripsBufferSize > 0:
+                        data_ptr = self.output_array_address(0, index, 4)
+                        data_size = self.output_array_size(0, index, 4)
+                        polydata.triangleStrips = _memoryview_to_numpy_array(IntTypes.UInt32, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        polydata.triangleStrips =  _memoryview_to_numpy_array(IntTypes.UInt32, bytes([]))
+
+                    if polydata.numberOfPointPixels > 0:
+                        data_ptr = self.output_array_address(0, index, 5)
+                        data_size = self.output_array_size(0, index, 5)
+                        polydata.pointData = _memoryview_to_numpy_array(polydata.polyDataType.pointPixelComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        polydata.triangleStrips =  _memoryview_to_numpy_array(polydata.polyDataType.pointPixelComponentType, bytes([]))
+
+                    if polydata.numberOfCellPixels > 0:
+                        data_ptr = self.output_array_address(0, index, 6)
+                        data_size = self.output_array_size(0, index, 6)
+                        polydata.cellData = _memoryview_to_numpy_array(polydata.polyDataType.cellPixelComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    else:
+                        polydata.triangleStrips =  _memoryview_to_numpy_array(polydata.polyDataType.cellPixelComponentType, bytes([]))
+
+                    output_data = PipelineOutput(InterfaceTypes.PolyData, polydata)
 
                 populated_outputs.append(output_data)
 
