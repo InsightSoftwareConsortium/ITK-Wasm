@@ -1,5 +1,19 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.76](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.75...itk-wasm-v1.0.0-b.76) (2023-02-24)
+
+
+### Bug Fixes
+
+* **pypipeline:** Create a copy of output memoryviews ([e2c8a22](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/e2c8a227ede746817c8350b38d554fea37b85162))
+
+
+### Features
+
+* **itk-wasm-cli:** Update default Docker image for 20230223-0da12a17 ([5c51e47](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/5c51e47bd146916e98a80774e91cc03437e9426a))
+* **itk-wasm-cli:** Update default Docker image for 20230224-5c51e47b ([29d18db](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/29d18dbec9e8675bfea6d2656f2d9f0d515f96e1))
+* **Python:** Add PolyData support ([8299724](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/8299724082e37286dc80f1672e0e4c8be78a2b05))
+
 # [1.0.0-b.75](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.74...itk-wasm-v1.0.0-b.75) (2023-02-15)
 
 
