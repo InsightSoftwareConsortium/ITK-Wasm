@@ -14,7 +14,7 @@ const program = new Command()
 // Array of types that will require an import from itk-wasm
 const defaultImageTag = '20230224-5c51e47b'
 
-function processCommonOptions() {
+function processCommonOptions(wasiDefault=false) {
   const options = program.opts()
 
   // Check that we have docker and can run it.
@@ -69,7 +69,7 @@ function processCommonOptions() {
   }
   process.chdir(sourceDir)
 
-  let buildDir = dockerImage.includes('wasi') ? 'wasi-build' : 'emscripten-build'
+  let buildDir = dockerImage.includes('wasi') || wasiDefault ? 'wasi-build' : 'emscripten-build'
   if (options.buildDir) {
     buildDir = options.buildDir
   }
@@ -140,7 +140,7 @@ function build(options) {
 }
 
 function test(options) {
-  const { buildDir, dockcrossScript } = processCommonOptions()
+  const { buildDir, dockcrossScript } = processCommonOptions(true)
 
   const hyphenIndex = program.rawArgs.findIndex((arg) => arg === '--')
   let ctestArgs = []
@@ -173,7 +173,7 @@ function test(options) {
 
 
 function run(wasmBinary, options) {
-  const { buildDir, dockcrossScript } = processCommonOptions()
+  const { buildDir, dockcrossScript } = processCommonOptions(true)
 
   const hyphenIndex = program.rawArgs.findIndex((arg) => arg === '--')
   let wasmBinaryArgs = []
