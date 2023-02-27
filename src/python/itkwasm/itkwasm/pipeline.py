@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from dataclasses import asdict
 from typing import List, Union, Dict, Tuple
+import ctypes
 
 import numpy as np
 
@@ -18,30 +19,29 @@ from .polydata import PolyData
 from .int_types import IntTypes
 from .float_types import FloatTypes
 
-from wasmer import engine, wasi, Store, Module, ImportObject, Instance
-from wasmer_compiler_cranelift import Compiler
+from wasmtime import Config, Store, Engine, Module, WasiConfig, Linker
 
-def _memoryview_to_numpy_array(component_type, buf):
+def _to_numpy_array(component_type, buf):
     if component_type == IntTypes.UInt8:
-        return np.frombuffer(buf, dtype=np.uint8).copy()
+        return np.frombuffer(buf, dtype=np.uint8)
     elif component_type == IntTypes.Int8:
-        return np.frombuffer(buf, dtype=np.int8).copy()
+        return np.frombuffer(buf, dtype=np.int8)
     elif component_type == IntTypes.UInt16:
-        return np.frombuffer(buf, dtype=np.uint16).copy()
+        return np.frombuffer(buf, dtype=np.uint16)
     elif component_type == IntTypes.Int16:
-        return np.frombuffer(buf, dtype=np.int16).copy()
+        return np.frombuffer(buf, dtype=np.int16)
     elif component_type == IntTypes.UInt32:
-        return np.frombuffer(buf, dtype=np.uint32).copy()
+        return np.frombuffer(buf, dtype=np.uint32)
     elif component_type == IntTypes.Int32:
-        return np.frombuffer(buf, dtype=np.int32).copy()
+        return np.frombuffer(buf, dtype=np.int32)
     elif component_type == IntTypes.UInt64:
-        return np.frombuffer(buf, dtype=np.uint64).copy()
+        return np.frombuffer(buf, dtype=np.uint64)
     elif component_type == IntTypes.Int64:
-        return np.frombuffer(buf, dtype=np.int64).copy()
+        return np.frombuffer(buf, dtype=np.int64)
     elif component_type == FloatTypes.Float32:
-        return np.frombuffer(buf, dtype=np.float32).copy()
+        return np.frombuffer(buf, dtype=np.float32)
     elif component_type == FloatTypes.Float64:
-        return np.frombuffer(buf, dtype=np.float64).copy()
+        return np.frombuffer(buf, dtype=np.float64)
     else:
         raise ValueError('Unsupported component type')
 
@@ -51,23 +51,31 @@ class Pipeline:
 
     def __init__(self, pipeline: Union[str, Path, bytes]):
         """Compile the pipeline."""
-        self.engine = engine.Universal(Compiler)
+        self.config = Config()
+        self.config.wasm_bulk_memory = True
+        self.engine = Engine(self.config)
         if isinstance(pipeline, bytes):
             wasm_bytes = pipeline
         else:
             with open(pipeline, 'rb') as fp:
                 wasm_bytes = fp.read()
         self.store = Store(self.engine)
-        self.module = Module(self.store, wasm_bytes)
-        self.wasi_version = wasi.get_version(self.module, strict=True)
+        self.linker = Linker(self.engine)
+        self.linker.allow_shadowing = True
+        self.module = Module(self.engine, wasm_bytes)
 
     def run(self, args: List[str], outputs: List[PipelineOutput]=[], inputs: List[PipelineInput]=[]) -> Tuple[PipelineOutput]:
         """Run the itk-wasm pipeline."""
+        store = self.store
+
+        wasi_config = WasiConfig()
+        wasi_config.inherit_env()
+        wasi_config.inherit_stderr()
+        wasi_config.inherit_stdin()
+        wasi_config.inherit_stdout()
+        wasi_config.argv = args
 
         preopen_directories=set()
-        map_directories={}
-        # Todo: expose?
-        environments={}
         for index, input_ in enumerate(inputs):
             if input_.type == InterfaceTypes.TextFile or input_.type == InterfaceTypes.BinaryFile:
                 preopen_directories.add(str(input_.data.path.parent))
@@ -75,26 +83,23 @@ class Pipeline:
             if output.type == InterfaceTypes.TextFile or output.type == InterfaceTypes.BinaryFile:
                 preopen_directories.add(str(output.data.path.parent))
         preopen_directories = list(preopen_directories)
+        for preopen in preopen_directories:
+            wasi_config.preopen_dir(preopen, preopen)
+        store.set_wasi(wasi_config)
 
-        wasi_state = wasi.StateBuilder('itk-wasm-pipeline')
-        wasi_state.arguments(args)
-        wasi_state.environments(environments)
-        wasi_state.map_directories(map_directories)
-        wasi_state.preopen_directories(preopen_directories)
-        wasi_env = wasi_state.finalize()
-        import_object = wasi_env.generate_import_object(self.store, self.wasi_version)
+        self.linker.define_wasi()
+        instance = self.linker.instantiate(store, self.module)
 
-        instance = Instance(self.module, import_object)
-        self.memory = instance.exports.memory
-        self.input_array_alloc = instance.exports.itk_wasm_input_array_alloc
-        self.input_json_alloc = instance.exports.itk_wasm_input_json_alloc
-        self.output_array_address = instance.exports.itk_wasm_output_array_address
-        self.output_array_size = instance.exports.itk_wasm_output_array_size
-        self.output_json_address = instance.exports.itk_wasm_output_json_address
-        self.output_json_size = instance.exports.itk_wasm_output_json_size
+        self.memory = instance.exports(store)["memory"]
+        self.input_array_alloc = instance.exports(store)["itk_wasm_input_array_alloc"]
+        self.input_json_alloc = instance.exports(store)["itk_wasm_input_json_alloc"]
+        self.output_array_address = instance.exports(store)["itk_wasm_output_array_address"]
+        self.output_array_size = instance.exports(store)["itk_wasm_output_array_size"]
+        self.output_json_address = instance.exports(store)["itk_wasm_output_json_address"]
+        self.output_json_size = instance.exports(store)["itk_wasm_output_json_size"]
 
-        _initialize = instance.exports._initialize
-        _initialize()
+        _initialize = instance.exports(store)["_initialize"]
+        _initialize(store)
 
         for index, input_ in enumerate(inputs):
             if input_.type == InterfaceTypes.TextStream:
@@ -240,22 +245,22 @@ class Pipeline:
             else:
                 raise ValueError(f'Unexpected/not yet supported input.type {input_.type}')
 
-        delayed_start = instance.exports.itk_wasm_delayed_start
-        return_code = delayed_start()
+        delayed_start = instance.exports(store)["itk_wasm_delayed_start"]
+        return_code = delayed_start(store)
 
         populated_outputs: List[PipelineOutput] = []
         if len(outputs) and return_code == 0:
             for index, output in enumerate(outputs):
                 output_data = None
                 if output.type == InterfaceTypes.TextStream:
-                    data_ptr = self.output_array_address(0, index, 0)
-                    data_size = self.output_array_size(0, index, 0)
-                    data_array_view = bytearray(memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
-                    output_data = PipelineOutput(InterfaceTypes.TextStream, TextStream(data_array_view.decode()))
+                    data_ptr = self.output_array_address(store, 0, index, 0)
+                    data_size = self.output_array_size(store, 0, index, 0)
+                    data_array = self._wasmtime_lift(data_ptr, data_size)
+                    output_data = PipelineOutput(InterfaceTypes.TextStream, TextStream(data_array.decode()))
                 elif output.type == InterfaceTypes.BinaryStream:
-                    data_ptr = self.output_array_address(0, index, 0)
-                    data_size = self.output_array_size(0, index, 0)
-                    data_array = bytes(memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    data_ptr = self.output_array_address(store, 0, index, 0)
+                    data_size = self.output_array_size(store, 0, index, 0)
+                    data_array = self._wasmtime_lift(data_ptr, data_size)
                     output_data = PipelineOutput(InterfaceTypes.BinaryStream, BinaryStream(data_array))
                 elif output.type == InterfaceTypes.TextFile:
                     output_data = PipelineOutput(InterfaceTypes.TextFile, TextFile(output.data.path))
@@ -266,14 +271,14 @@ class Pipeline:
 
                     image = Image(**image_json)
 
-                    data_ptr = self.output_array_address(0, index, 0)
-                    data_size = self.output_array_size(0, index, 0)
-                    data_array = _memoryview_to_numpy_array(image.imageType.componentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                    data_ptr = self.output_array_address(store, 0, index, 0)
+                    data_size = self.output_array_size(store, 0, index, 0)
+                    data_array = _to_numpy_array(image.imageType.componentType, self._wasmtime_lift(data_ptr, data_size))
                     image.data = data_array
 
-                    direction_ptr = self.output_array_address(0, index, 1)
-                    direction_size = self.output_array_size(0, index, 1)
-                    direction_array = _memoryview_to_numpy_array(FloatTypes.Float64, memoryview(self.memory.buffer)[direction_ptr:direction_ptr+direction_size])
+                    direction_ptr = self.output_array_address(store, 0, index, 1)
+                    direction_size = self.output_array_size(store, 0, index, 1)
+                    direction_array = _to_numpy_array(FloatTypes.Float64, self._wasmtime_lift(direction_ptr, direction_size))
                     dimension = image.imageType.dimension
                     direction_array.shape = (dimension, dimension)
                     image.direction = direction_array
@@ -284,31 +289,31 @@ class Pipeline:
                     mesh = Mesh(**mesh_json)
 
                     if mesh.numberOfPoints > 0:
-                        data_ptr = self.output_array_address(0, index, 0)
-                        data_size = self.output_array_size(0, index, 0)
-                        mesh.points = _memoryview_to_numpy_array(mesh.meshType.pointComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 0)
+                        data_size = self.output_array_size(store, 0, index, 0)
+                        mesh.points = _to_numpy_array(mesh.meshType.pointComponentType, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        mesh.points =  _memoryview_to_numpy_array(mesh.meshType.pointComponentType, bytes([]))
+                        mesh.points =  _to_numpy_array(mesh.meshType.pointComponentType, bytes([]))
 
                     if mesh.numberOfCells > 0:
-                        data_ptr = self.output_array_address(0, index, 1)
-                        data_size = self.output_array_size(0, index, 1)
-                        mesh.cells = _memoryview_to_numpy_array(mesh.meshType.cellComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 1)
+                        data_size = self.output_array_size(store, 0, index, 1)
+                        mesh.cells = _to_numpy_array(mesh.meshType.cellComponentType, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        mesh.cells =  _memoryview_to_numpy_array(mesh.meshType.cellComponentType, bytes([]))
+                        mesh.cells =  _to_numpy_array(mesh.meshType.cellComponentType, bytes([]))
                     if mesh.numberOfPointPixels > 0:
-                        data_ptr = self.output_array_address(0, index, 2)
-                        data_size = self.output_array_size(0, index, 2)
-                        mesh.pointData = _memoryview_to_numpy_array(mesh.meshType.pointPixelComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 2)
+                        data_size = self.output_array_size(store, 0, index, 2)
+                        mesh.pointData = _to_numpy_array(mesh.meshType.pointPixelComponentType, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        mesh.pointData =  _memoryview_to_numpy_array(mesh.meshType.pointPixelComponentType, bytes([]))
+                        mesh.pointData =  _to_numpy_array(mesh.meshType.pointPixelComponentType, bytes([]))
 
                     if mesh.numberOfCellPixels > 0:
-                        data_ptr = self.output_array_address(0, index, 3)
-                        data_size = self.output_array_size(0, index, 3)
-                        mesh.cellData = _memoryview_to_numpy_array(mesh.meshType.cellPixelComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 3)
+                        data_size = self.output_array_size(store, 0, index, 3)
+                        mesh.cellData = _to_numpy_array(mesh.meshType.cellPixelComponentType, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        mesh.cellData =  _memoryview_to_numpy_array(mesh.meshType.cellPixelComponentType, bytes([]))
+                        mesh.cellData =  _to_numpy_array(mesh.meshType.cellPixelComponentType, bytes([]))
 
                     output_data = PipelineOutput(InterfaceTypes.Mesh, mesh)
                 elif output.type == InterfaceTypes.PolyData:
@@ -316,81 +321,101 @@ class Pipeline:
                     polydata = PolyData(**polydata_json)
 
                     if polydata.numberOfPoints > 0:
-                        data_ptr = self.output_array_address(0, index, 0)
-                        data_size = self.output_array_size(0, index, 0)
-                        polydata.points = _memoryview_to_numpy_array(FloatTypes.Float32, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 0)
+                        data_size = self.output_array_size(store, 0, index, 0)
+                        polydata.points = _to_numpy_array(FloatTypes.Float32, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.points =  _memoryview_to_numpy_array(FloatTypes.Float32, bytes([]))
+                        polydata.points =  _to_numpy_array(FloatTypes.Float32, bytes([]))
 
                     if polydata.verticesBufferSize > 0:
-                        data_ptr = self.output_array_address(0, index, 1)
-                        data_size = self.output_array_size(0, index, 1)
-                        polydata.vertices = _memoryview_to_numpy_array(IntTypes.UInt32, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 1)
+                        data_size = self.output_array_size(store, 0, index, 1)
+                        polydata.vertices = _to_numpy_array(IntTypes.UInt32, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.vertices =  _memoryview_to_numpy_array(IntTypes.UInt32, bytes([]))
+                        polydata.vertices =  _to_numpy_array(IntTypes.UInt32, bytes([]))
 
                     if polydata.linesBufferSize > 0:
-                        data_ptr = self.output_array_address(0, index, 2)
-                        data_size = self.output_array_size(0, index, 2)
-                        polydata.lines = _memoryview_to_numpy_array(IntTypes.UInt32, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 2)
+                        data_size = self.output_array_size(store, 0, index, 2)
+                        polydata.lines = _to_numpy_array(IntTypes.UInt32, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.lines =  _memoryview_to_numpy_array(IntTypes.UInt32, bytes([]))
+                        polydata.lines =  _to_numpy_array(IntTypes.UInt32, bytes([]))
 
                     if polydata.polygonsBufferSize > 0:
-                        data_ptr = self.output_array_address(0, index, 3)
-                        data_size = self.output_array_size(0, index, 3)
-                        polydata.polygons = _memoryview_to_numpy_array(IntTypes.UInt32, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 3)
+                        data_size = self.output_array_size(store, 0, index, 3)
+                        polydata.polygons = _to_numpy_array(IntTypes.UInt32, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.polygons =  _memoryview_to_numpy_array(IntTypes.UInt32, bytes([]))
+                        polydata.polygons =  _to_numpy_array(IntTypes.UInt32, bytes([]))
 
                     if polydata.triangleStripsBufferSize > 0:
-                        data_ptr = self.output_array_address(0, index, 4)
-                        data_size = self.output_array_size(0, index, 4)
-                        polydata.triangleStrips = _memoryview_to_numpy_array(IntTypes.UInt32, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 4)
+                        data_size = self.output_array_size(store, 0, index, 4)
+                        polydata.triangleStrips = _to_numpy_array(IntTypes.UInt32, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.triangleStrips =  _memoryview_to_numpy_array(IntTypes.UInt32, bytes([]))
+                        polydata.triangleStrips =  _to_numpy_array(IntTypes.UInt32, bytes([]))
 
                     if polydata.numberOfPointPixels > 0:
-                        data_ptr = self.output_array_address(0, index, 5)
-                        data_size = self.output_array_size(0, index, 5)
-                        polydata.pointData = _memoryview_to_numpy_array(polydata.polyDataType.pointPixelComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 5)
+                        data_size = self.output_array_size(store, 0, index, 5)
+                        polydata.pointData = _to_numpy_array(polydata.polyDataType.pointPixelComponentType, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.triangleStrips =  _memoryview_to_numpy_array(polydata.polyDataType.pointPixelComponentType, bytes([]))
+                        polydata.triangleStrips =  _to_numpy_array(polydata.polyDataType.pointPixelComponentType, bytes([]))
 
                     if polydata.numberOfCellPixels > 0:
-                        data_ptr = self.output_array_address(0, index, 6)
-                        data_size = self.output_array_size(0, index, 6)
-                        polydata.cellData = _memoryview_to_numpy_array(polydata.polyDataType.cellPixelComponentType, memoryview(self.memory.buffer)[data_ptr:data_ptr+data_size])
+                        data_ptr = self.output_array_address(store, 0, index, 6)
+                        data_size = self.output_array_size(store, 0, index, 6)
+                        polydata.cellData = _to_numpy_array(polydata.polyDataType.cellPixelComponentType, self._wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.triangleStrips =  _memoryview_to_numpy_array(polydata.polyDataType.cellPixelComponentType, bytes([]))
+                        polydata.triangleStrips =  _to_numpy_array(polydata.polyDataType.cellPixelComponentType, bytes([]))
 
                     output_data = PipelineOutput(InterfaceTypes.PolyData, polydata)
 
                 populated_outputs.append(output_data)
 
-        delayed_exit = instance.exports.itk_wasm_delayed_exit
-        delayed_exit(return_code)
+        delayed_exit = instance.exports(store)["itk_wasm_delayed_exit"]
+        delayed_exit(store, return_code)
 
         # Should we be returning the return_code?
         return tuple(populated_outputs)
 
+    def _wasmtime_lift(self, ptr: int, size: int):
+        ptr = ptr & 0xffffffff
+        size = size & 0xffffffff
+        if ptr + size > self.memory.data_len(self.store):
+            raise IndexError('attempting to lift of bounds')
+        raw_base = self.memory.data_ptr(self.store)
+        base = ctypes.POINTER(ctypes.c_ubyte)(
+            ctypes.c_ubyte.from_address(ctypes.addressof(raw_base.contents) + ptr)
+        )
+        return ctypes.string_at(base, size)
+
+    def _wasmtime_lower(self, ptr: int, data: Union[bytes, bytearray]):
+        ptr = ptr & 0xffffffff
+        size = len(data)
+        if ptr + size > self.memory.data_len(self.store):
+            raise IndexError('attempting to lower out of bounds')
+        raw_base = self.memory.data_ptr(self.store)
+        base = ctypes.POINTER(ctypes.c_ubyte)(
+            ctypes.c_ubyte.from_address(ctypes.addressof(raw_base.contents) + ptr)
+        )
+        ctypes.memmove(base, data, size)
+
     def _set_input_array(self, data_array: Union[bytes, bytearray], input_index: int, sub_index: int) -> int:
         data_ptr = 0
         if data_array != None:
-            data_ptr = self.input_array_alloc(0, input_index, sub_index, len(data_array))
-            buf = memoryview(self.memory.buffer)
-            buf[data_ptr:data_ptr+len(data_array)] = data_array
+            data_ptr = self.input_array_alloc(self.store, 0, input_index, sub_index, len(data_array))
+            self._wasmtime_lower(data_ptr, data_array)
         return data_ptr
 
     def _set_input_json(self, data_object: Dict, input_index: int) -> None:
         data_json = json.dumps(data_object).encode()
-        json_ptr = self.input_json_alloc(0, input_index, len(data_json))
-        buf = memoryview(self.memory.buffer)
-        buf[json_ptr:json_ptr+len(data_json)] = data_json
+        json_ptr = self.input_json_alloc(self.store, 0, input_index, len(data_json))
+        self._wasmtime_lower(json_ptr, data_json)
 
     def _get_output_json(self, output_index: int) -> Dict:
-        json_ptr = self.output_json_address(0, output_index)
-        json_len = self.output_json_size(0, output_index)
-        json_str = bytes(memoryview(self.memory.buffer)[json_ptr:json_ptr+json_len]).decode()
+        json_ptr = self.output_json_address(self.store, 0, output_index)
+        json_len = self.output_json_size(self.store, 0, output_index)
+        json_str = self._wasmtime_lift(json_ptr, json_len).decode()
         json_result = json.loads(json_str)
         return json_result

@@ -73,11 +73,12 @@ def test_pipeline_input_output_files():
         ]
 
         args = [
+            '--memory-io',
             '--use-files',
             '--input-text-file', str(input_text_file),
             '--input-binary-file', str(input_binary_file),
             '--output-text-file', str(output_text_file),
-            '--output-binary-file', str(output_binary_file)
+            '--output-binary-file', str(output_binary_file),
         ]
 
         outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
@@ -111,9 +112,11 @@ def test_pipeline_write_read_image():
     ]
 
     args = [
+        '--memory-io',
         '0',
         '0',
-        '--radius', '2', '--memory-io',]
+        '--radius', '2',
+        ]
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
@@ -143,9 +146,10 @@ def test_pipeline_write_read_mesh():
     ]
 
     args = [
+        '--memory-io',
         '0',
         '0',
-        '--memory-io',]
+        ]
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
@@ -175,9 +179,10 @@ def test_pipeline_write_read_polydata():
     ]
 
     args = [
+        '--memory-io',
         '0',
         '0',
-        '--memory-io',]
+        ]
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
     polydata = outputs[0].data
@@ -193,9 +198,10 @@ def test_pipeline_write_read_polydata():
     ]
 
     args = [
+        '--memory-io',
         '0',
         '0',
-        '--memory-io',]
+        ]
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 

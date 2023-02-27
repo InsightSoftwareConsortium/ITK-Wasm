@@ -32,8 +32,7 @@ requires-python = ">=3.7"
 dependencies = [
     "numpy",
     "typing_extensions",
-    "wasmer; sys_platform != \"emscripten\"",
-    "wasmer_compiler_cranelift; sys_platform != \"emscripten\"",
+    "wasmtime; sys_platform != \"emscripten\"",
 ]
 
 [project.urls]
