@@ -95,6 +95,9 @@ def test_pipeline_input_output_files():
             assert content[2] == 190
             assert content[3] == 239
 
+        # Currently required per https://github.com/bytecodealliance/wasmtime-py/issues/132
+        del pipeline
+
 def test_pipeline_write_read_image():
     pipeline = Pipeline(test_input_dir / 'median-filter-test.wasi.wasm')
 
