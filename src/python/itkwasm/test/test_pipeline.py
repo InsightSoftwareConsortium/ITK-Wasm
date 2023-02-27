@@ -73,11 +73,12 @@ def test_pipeline_input_output_files():
         ]
 
         args = [
+            '--memory-io',
             '--use-files',
             '--input-text-file', str(input_text_file),
             '--input-binary-file', str(input_binary_file),
             '--output-text-file', str(output_text_file),
-            '--output-binary-file', str(output_binary_file)
+            '--output-binary-file', str(output_binary_file),
         ]
 
         outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
@@ -93,6 +94,9 @@ def test_pipeline_input_output_files():
             assert content[1] == 173
             assert content[2] == 190
             assert content[3] == 239
+
+        # Currently required per https://github.com/bytecodealliance/wasmtime-py/issues/132
+        del pipeline
 
 def test_pipeline_write_read_image():
     pipeline = Pipeline(test_input_dir / 'median-filter-test.wasi.wasm')
@@ -111,9 +115,11 @@ def test_pipeline_write_read_image():
     ]
 
     args = [
+        '--memory-io',
         '0',
         '0',
-        '--radius', '2', '--memory-io',]
+        '--radius', '2',
+        ]
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
@@ -143,9 +149,10 @@ def test_pipeline_write_read_mesh():
     ]
 
     args = [
+        '--memory-io',
         '0',
         '0',
-        '--memory-io',]
+        ]
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
@@ -175,9 +182,10 @@ def test_pipeline_write_read_polydata():
     ]
 
     args = [
+        '--memory-io',
         '0',
         '0',
-        '--memory-io',]
+        ]
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
     polydata = outputs[0].data
@@ -193,9 +201,10 @@ def test_pipeline_write_read_polydata():
     ]
 
     args = [
+        '--memory-io',
         '0',
         '0',
-        '--memory-io',]
+        ]
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
