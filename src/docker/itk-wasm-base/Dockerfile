@@ -7,8 +7,8 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 
 WORKDIR /
 
-# tag commit date: 2023-01-15 branch: itkwasm-2023-01-15-f42c10a20f
-ENV ITK_GIT_TAG ac81a832aa611aa82980e03158bc257611e4f73b
+# tag commit date: 2023-01-15 branch: itkwasm-2023-01-15-f42c10a20f-1
+ENV ITK_GIT_TAG 81c92fca86e0fbcffcd48cad03b805d0fd6667f2
 RUN git clone https://github.com/KitwareMedical/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
@@ -54,8 +54,9 @@ RUN mkdir ITK-build && \
     -DModule_IOFDF:BOOL=ON \
     -DModule_ITKDCMTK:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
-    -DModule_SmoothingRecursiveYvvGaussianFilter:BOOL=ON \
+    -DModule_MinimalPathExtraction:BOOL=ON \
     -DModule_MorphologicalContourInterpolation:BOOL=ON \
+    -DModule_SmoothingRecursiveYvvGaussianFilter:BOOL=ON \
     -DModule_Cuberille:BOOL=ON \
     -DModule_TotalVariation:BOOL=ON \
     -DModule_IOMeshSTL:BOOL=ON \
