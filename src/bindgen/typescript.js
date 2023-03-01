@@ -436,7 +436,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         return
       }
       const camel = camelCase(parameter.name)
-      functionContent += `  if (options.${camel}) {\n`
+      functionContent += `  if (typeof options.${camel} !== "undefined") {\n`
       if (parameter.type === "BOOL") {
         functionContent += `    args.push('--${parameter.name}')\n`
       } else {
