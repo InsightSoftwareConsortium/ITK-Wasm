@@ -1,5 +1,14 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.79](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.78...itk-wasm-v1.0.0-b.79) (2023-03-01)
+
+
+### Bug Fixes
+
+* **bindgen:** Add Option module interface types imports ([8495e23](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/8495e23ce806ded8375768e65ae310985529e13b))
+* **bindgen:** Only specify options if defined ([c7cefb2](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/c7cefb2e4e96056f4408cb7beeb2947e60aadf0e))
+* **bindgen:** Specify Image, Mesh, PolyData, JsonObject ([ce7aa7e](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/ce7aa7ed5102e9089d7fc596535e362e77cb59f6))
+
 # [1.0.0-b.78](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.77...itk-wasm-v1.0.0-b.78) (2023-02-28)
 
 
