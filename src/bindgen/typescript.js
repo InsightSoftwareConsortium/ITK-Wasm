@@ -228,7 +228,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     }
 
     // track unique output types in this set
-    const importTypes = new Set()
+    const resultsImportTypes = new Set()
 
     interfaceJson.outputs.forEach((output) => {
       if (!interfaceJsonTypeToTypeScriptType.has(output.type)) {
@@ -239,7 +239,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       resultContent += `  /** ${output.description} */\n`
       const outputType = interfaceJsonTypeToTypeScriptType.get(output.type)
       if(typesRequireImport.includes(outputType)) {
-        importTypes.add(outputType)
+        resultsImportTypes.add(outputType)
       }
       resultContent += `  ${camelCase(output.name)}: ${outputType}\n\n`
       readmeResultTable.push([`\`${camelCase(output.name)}\``, `*${outputType}*`, output.description])
@@ -247,8 +247,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     readmeResult += markdownTable(readmeResultTable, { align: ['c', 'c', 'l'] }) + '\n'
 
     // Insert the import statement in the beginning for the file.
-    if(importTypes.size !== 0)
-      resultContent = `import { ${Array.from(importTypes).join(',')} } from 'itk-wasm'\n\n` + resultContent;
+    if(resultsImportTypes.size !== 0)
+      resultContent = `import { ${Array.from(resultsImportTypes).join(',')} } from 'itk-wasm'\n\n` + resultContent;
 
     resultContent += `}\n\nexport default ${modulePascalCase}${nodeTextCamel}Result\n`
     fs.writeFileSync(path.join(srcOutputDir, `${moduleKebabCase}${nodeTextKebab}-result.ts`), resultContent)
@@ -259,10 +259,15 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     // Options module
     const filteredParameters = interfaceJson.parameters.filter(p => { return p.name !== 'memory-io'})
     const haveParameters = !!filteredParameters.length
+
+    // track unique output types in this set
+    const optionsImportTypes = new Set()
+
     if (haveParameters) {
       readmeOptions += `\n**\`${modulePascalCase}${nodeTextCamel}Options\` interface:**\n\n`
       const readmeOptionsTable = [ ['Property', 'Type', 'Description'], ]
-      let optionsContent = `interface ${modulePascalCase}Options {\n`
+      let optionsContent = ''
+      let optionsInterfaceContent = `interface ${modulePascalCase}Options {\n`
       interfaceJson.parameters.forEach((parameter) => {
         if (parameter.name === 'memory-io') {
           // Internal
@@ -273,11 +278,18 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
           console.error(`Unexpected parameter type: ${parameter.type}`)
           process.exit(1)
         }
-        optionsContent += `  /** ${parameter.description} */\n`
+        optionsInterfaceContent += `  /** ${parameter.description} */\n`
         const parameterType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
-        optionsContent += `  ${camelCase(parameter.name)}?: ${parameterType}\n\n`
+        if(typesRequireImport.includes(parameterType)) {
+          optionsImportTypes.add(parameterType)
+        }
+        optionsInterfaceContent += `  ${camelCase(parameter.name)}?: ${parameterType}\n\n`
         readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}*`, parameter.description])
       })
+      // Insert the import statement in the beginning for the file.
+      if(optionsImportTypes.size !== 0)
+        optionsContent += `import { ${Array.from(optionsImportTypes).join(',')} } from 'itk-wasm'\n\n`;
+      optionsContent += optionsInterfaceContent
       optionsContent += `}\n\nexport default ${modulePascalCase}Options\n`
       fs.writeFileSync(path.join(srcOutputDir, `${moduleKebabCase}-options.ts`), optionsContent)
 
