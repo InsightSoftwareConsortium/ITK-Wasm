@@ -1,5 +1,5 @@
 {
-  "name": "itk-compress-stringify",
+  "name": "@itk-wasm/compress-stringify",
   "version": "0.3.0",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
