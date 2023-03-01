@@ -447,10 +447,15 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
             functionContent += `    const inputFile = 'file' + inputs.length.toString()\n`
             functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: options.${camel}, path: inputFile } })\n`
             functionContent += `    args.push('--${parameter.name}', inputFile)\n`
-          } else {
+          } else if (interfaceType.includes('Stream')) {
             // for streams
             functionContent += `    const inputCountString = inputs.length.toString()\n`
             functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: options.${camel} } })\n`
+            functionContent += `    args.push('--${parameter.name}', inputCountString)\n`
+          } else {
+            // Image, Mesh, PolyData, JsonObject
+            functionContent += `    const inputCountString = inputs.length.toString()\n`
+            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: options.${camel} })\n`
             functionContent += `    args.push('--${parameter.name}', inputCountString)\n`
           }
         } else {
