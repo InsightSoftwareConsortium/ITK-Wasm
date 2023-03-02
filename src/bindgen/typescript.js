@@ -502,6 +502,11 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     readmePipelines += readmeResult
   })
 
+  readmeInterface += `  setPipelinesBaseUrl,
+  getPipelinesBaseUrl,
+  setPipelineWorkerUrl,
+  getPipelineWorkerUrl,
+`
   readmeInterface += `} from "${packageName}"\n\`\`\`\n`
   readmeInterface += readmePipelines
 
@@ -546,6 +551,43 @@ npm install ${packageName}
   let readmeNodeInterface = '\n### Node interface\n\nImport:\n\n```js\nimport {\n'
 
   readmeBrowserInterface += typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, false)
+  readmeBrowserInterface += `
+#### setPipelinesBaseUrl
+
+*Set base URL for WebAssembly assets when vendored.*
+
+\`\`\`ts
+function setPipelinesBaseUrl(
+  baseUrl: string | URL
+) : void
+\`\`\`
+
+#### getPipelinesBaseUrl
+
+*Get base URL for WebAssembly assets when vendored.*
+
+\`\`\`ts
+function getPipelinesBaseUrl() : string | URL
+\`\`\`
+
+#### setPipelineWorkerUrl
+
+*Set base URL for the itk-wasm pipeline worker script when vendored.*
+
+\`\`\`ts
+function setPipelineWorkerUrl(
+  baseUrl: string | URL
+) : void
+\`\`\`
+
+#### getPipelineWorkerUrl
+
+*Get base URL for the itk-wasm pipeline worker script when vendored.*
+
+\`\`\`ts
+function getPipelineWorkerUrl() : string | URL
+\`\`\`
+`
   readmeNodeInterface += typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, true)
   readme += readmeUsage
   readme += readmeBrowserInterface
