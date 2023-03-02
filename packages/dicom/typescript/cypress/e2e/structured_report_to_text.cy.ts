@@ -3,7 +3,7 @@ describe('structuredReportToText', () => {
     cy.visit('/')
 
     const fileName = '88.33-comprehensive-SR.dcm'
-    const testFilePath = `../../build-emscripten/ExternalData/test/Input/${fileName}`
+    const testFilePath = `../../../build-emscripten/ExternalData/test/Input/${fileName}`
     cy.readFile(testFilePath, null).as('inputData')
   })
 
