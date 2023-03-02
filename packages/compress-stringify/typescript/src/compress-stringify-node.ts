@@ -37,13 +37,13 @@ async function compressStringifyNode(
   args.push('0')
   // Options
   args.push('--memory-io')
-  if (options.stringify) {
+  if (typeof options.stringify !== "undefined") {
     args.push('--stringify')
   }
-  if (options.compressionLevel) {
+  if (typeof options.compressionLevel !== "undefined") {
     args.push('--compression-level', options.compressionLevel.toString())
   }
-  if (options.dataUrlPrefix) {
+  if (typeof options.dataUrlPrefix !== "undefined") {
     args.push('--data-url-prefix', options.dataUrlPrefix.toString())
   }
 

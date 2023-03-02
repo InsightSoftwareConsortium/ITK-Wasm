@@ -41,7 +41,7 @@ async function parseStringDecompress(
   args.push('0')
   // Options
   args.push('--memory-io')
-  if (options.parseString) {
+  if (typeof options.parseString !== "undefined") {
     args.push('--parse-string')
   }
 
@@ -52,7 +52,7 @@ async function parseStringDecompress(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl(), getPipelineWorkerUrl())
+  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

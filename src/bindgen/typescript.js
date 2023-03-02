@@ -84,15 +84,16 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
   let readmePipelines = ''
 
   const packageName = options.packageName
+  const bundleName = path.basename(packageName)
   const packageJsonPath = path.join(outputDir, 'package.json')
   if (!fs.existsSync(packageJsonPath)) {
     const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
     packageJson.name = packageName
     packageJson.description = options.packageDescription
-    packageJson.module = `./dist/${packageName}.js`
-    packageJson.exports['.'].browser = `./dist/${packageName}.js`
-    packageJson.exports['.'].node = `./dist/${packageName}.node.js`
-    packageJson.exports['.'].default = `./dist/${packageName}.js`
+    packageJson.module = `./dist/${bundleName}.js`
+    packageJson.exports['.'].browser = `./dist/${bundleName}.js`
+    packageJson.exports['.'].node = `./dist/${bundleName}.node.js`
+    packageJson.exports['.'].default = `./dist/${bundleName}.js`
     if(options.repository) {
       packageJson.repository = { 'type': 'git', 'url': options.repository }
     }
@@ -147,8 +148,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     const demoPath = path.join(outputDir, 'test', 'browser', 'app.ts')
     if (!fs.existsSync(demoPath)) {
       let demoContent = fs.readFileSync(bindgenResource('demo.ts'), { encoding: 'utf8', flag: 'r' })
-      demoContent = demoContent.replaceAll('<bindgenPackageName>', options.packageName)
-      demoContent = demoContent.replaceAll('<bindgenPackageNameCamelCase>', camelCase(packageName))
+      demoContent = demoContent.replaceAll('<bindgenBundleName>', bundleName)
+      demoContent = demoContent.replaceAll('<bindgenBundleNameCamelCase>', camelCase(bundleName))
       fs.writeFileSync(demoPath, demoContent)
     }
 

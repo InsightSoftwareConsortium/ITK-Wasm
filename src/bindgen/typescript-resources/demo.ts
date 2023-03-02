@@ -1,8 +1,8 @@
-import * as <bindgenPackageNameCamelCase> from '../../dist/bundles/<bindgenPackageName>.js'
-<bindgenPackageNameCamelCase>.setPipelinesBaseUrl('/pipelines')
+import * as <bindgenBundleNameCamelCase> from '../../dist/bundles/<bindgenBundleName>.js'
+<bindgenBundleNameCamelCase>.setPipelinesBaseUrl('/pipelines')
 
 const packageFunctions = []
-for (const [key, val] of Object.entries(<bindgenPackageNameCamelCase>)) {
+for (const [key, val] of Object.entries(<bindgenBundleNameCamelCase>)) {
   if (typeof val == 'function') {
     packageFunctions.push(key)
   }
@@ -15,4 +15,4 @@ pipelineFunctionsList.innerHTML = `
 </li>
 `
 console.log(packageFunctions)
-console.log(<bindgenPackageNameCamelCase>)
+console.log(<bindgenBundleNameCamelCase>)

@@ -9,7 +9,7 @@ specifiers:
   '@types/node': ^18.11.18
   ava: ^5.1.0
   cypress: ^12.3.0
-  itk-wasm: ^1.0.0-b.65
+  itk-wasm: ^1.0.0-b.79
   rollup: ^3.9.0
   rollup-plugin-copy: ^3.4.0
   rollup-plugin-ignore: ^1.0.10
@@ -20,7 +20,7 @@ specifiers:
   vite-plugin-static-copy: ^0.13.0
 
 dependencies:
-  itk-wasm: 1.0.0-b.65
+  itk-wasm: 1.0.0-b.79
 
 devDependencies:
   '@rollup/plugin-commonjs': 24.0.0_rollup@3.9.1
@@ -745,7 +745,7 @@ packages:
   /axios/0.25.0_debug@4.3.4:
     resolution: {integrity: sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g==}
     dependencies:
-      follow-redirects: 1.15.2
+      follow-redirects: 1.15.2_debug@4.3.4
     transitivePeerDependencies:
       - debug
     dev: true
@@ -1430,6 +1430,19 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dev: false
+
+  /follow-redirects/1.15.2_debug@4.3.4:
+    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dependencies:
+      debug: 4.3.4
+    dev: true
 
   /forever-agent/0.6.1:
     resolution: {integrity: sha512-j0KLYPhm6zeac4lz3oJ3o65qvgQCcPubiyotZrXqEaG4hNagNYO8qdlUrX5vwqv9ohqeT/Z3j6+yW067yWWdUw==}
@@ -1815,8 +1828,8 @@ packages:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
     dev: true
 
-  /itk-wasm/1.0.0-b.65:
-    resolution: {integrity: sha512-BXLq0cHzDyyerJ+dPOWx4qP8/ouoaM7A20fm2jkJZ8QLtXoJ1HfBzz8RBJ+pxdNYNNFIfswWxGBIZ5YqvjtdZg==}
+  /itk-wasm/1.0.0-b.79:
+    resolution: {integrity: sha512-qlYP7Elrg/vMy6JVif5GvPEP20/+geRhMRM8JvdcKWHJVKuATI6P25hI2b6Cq/PS/MzLFA3iUNnxM3k/qBLZHw==}
     hasBin: true
     dependencies:
       '@babel/runtime': 7.20.7

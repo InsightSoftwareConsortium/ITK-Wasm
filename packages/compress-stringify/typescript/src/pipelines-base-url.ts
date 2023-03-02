@@ -3,7 +3,7 @@ import { getPipelinesBaseUrl as itkWasmGetPipelinesBaseUrl } from 'itk-wasm'
 import packageJson from '../package.json'
 
 let pipelinesBaseUrl: string | URL | undefined
-const defaultPipelinesBaseUrl = `https://cdn.jsdelivr.net/npm/itk-compress-stringify@${packageJson.version}/dist/pipelines`
+const defaultPipelinesBaseUrl = `https://cdn.jsdelivr.net/npm/@itk-wasm/compress-stringify@${packageJson.version}/dist/pipelines`
 
 export function setPipelinesBaseUrl (baseUrl: string | URL): void {
   pipelinesBaseUrl = baseUrl

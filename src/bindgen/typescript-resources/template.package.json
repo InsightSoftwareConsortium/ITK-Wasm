@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "description": "",
   "type": "module",
-  "module": "./dist/bundles/package-name.js",
+  "module": "./dist/bundles/bundle-name.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "browser": "./dist/bundles/package-name.js",
-      "node": "./dist/bundles/package-name-node.js",
-      "default": "./dist/bundles/package-name.js"
+      "browser": "./dist/bundles/bundle-name.js",
+      "node": "./dist/bundles/bundle-name-node.js",
+      "default": "./dist/bundles/bundle-name.js"
     }
   },
   "scripts": {
