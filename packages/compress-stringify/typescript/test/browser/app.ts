@@ -1,5 +1,4 @@
 import * as itkCompressStringify from '../../dist/bundles/compress-stringify.js'
-import * as itkWasm from 'itk-wasm'
 
 // Use local, vendored WebAssembly module assets
 const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
