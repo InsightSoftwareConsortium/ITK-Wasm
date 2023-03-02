@@ -1,6 +1,6 @@
 # @itk-wasm/compress-stringify
 
-[![npm version](https://badge.fury.io/js/@itk-wasm/compress-stringify.svg)](https://www.npmjs.com/package/@itk-wasm/compress-stringify)
+[![npm version](https://badge.fury.io/js/@itk-wasm%2Fcompress-stringify.svg)](https://www.npmjs.com/package/@itk-wasm/compress-stringify)
 
 Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.
 
