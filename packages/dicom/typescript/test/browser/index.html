@@ -2,17 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/demo/logo.svg" />
-    <link rel="stylesheet" href="/demo/style.css" />
+    <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="stylesheet"
+      media="(prefers-color-scheme:light)"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.88/dist/themes/light.css"
+    />
+    <link
+      rel="stylesheet"
+      media="(prefers-color-scheme:dark)"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.88/dist/themes/dark.css"
+      onload="document.documentElement.classList.add('sl-theme-dark');"
+    />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.88/dist/shoelace.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>itk-dicom</title>
+    <title>@itk-wasm/dicom</title>
   </head>
   <body>
     <div id="app">
       <a href="https://wasm.itk.org/" target="_blank">
-        <img src="/demo/logo.svg" class="logo vanilla" alt="ITK Wasm logo" />
+        <img src="./logo.svg" class="logo vanilla" alt="ITK Wasm logo" />
       </a>
-      <h1>itk-dicom</h1>
+      <h1>@itk-wasm/dicom</h1>
         package
       <div class="card">
         <h2>functions</h2>

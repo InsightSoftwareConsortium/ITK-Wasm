@@ -1,13 +1,13 @@
-# itk-dicom
+# @itk-wasm/dicom
 
-[![npm version](https://badge.fury.io/js/itk-dicom.svg)](https://www.npmjs.com/package/itk-dicom)
+[![npm version](https://badge.fury.io/js/@itk-wasm%2Fdicom.svg)](https://www.npmjs.com/package/@itk-wasm/dicom)
 
-Read DICOM files related to presentation states and structured reports.
+Read files and images related to DICOM file format.
 
 ## Installation
 
 ```sh
-npm install itk-dicom
+npm install @itk-wasm/dicom
 ```
 
 ## Usage
@@ -22,7 +22,11 @@ import {
   readDicomEncapsulatedPdf,
   structuredReportToHtml,
   structuredReportToText,
-} from "itk-dicom"
+  setPipelinesBaseUrl,
+  getPipelinesBaseUrl,
+  setPipelineWorkerUrl,
+  getPipelineWorkerUrl,
+} from "@itk-wasm/dicom"
 ```
 
 #### applyPresentationStateToImage
@@ -221,6 +225,42 @@ async function structuredReportToText(
 | **webWorker** | *Worker* | WebWorker used for computation |
 |  `outputText` | *string* | Output text file               |
 
+#### setPipelinesBaseUrl
+
+*Set base URL for WebAssembly assets when vendored.*
+
+```ts
+function setPipelinesBaseUrl(
+  baseUrl: string | URL
+) : void
+```
+
+#### getPipelinesBaseUrl
+
+*Get base URL for WebAssembly assets when vendored.*
+
+```ts
+function getPipelinesBaseUrl() : string | URL
+```
+
+#### setPipelineWorkerUrl
+
+*Set base URL for the itk-wasm pipeline worker script when vendored.*
+
+```ts
+function setPipelineWorkerUrl(
+  baseUrl: string | URL
+) : void
+```
+
+#### getPipelineWorkerUrl
+
+*Get base URL for the itk-wasm pipeline worker script when vendored.*
+
+```ts
+function getPipelineWorkerUrl() : string | URL
+```
+
 ### Node interface
 
 Import:
@@ -231,7 +271,11 @@ import {
   readDicomEncapsulatedPdfNode,
   structuredReportToHtmlNode,
   structuredReportToTextNode,
-} from "itk-dicom"
+  setPipelinesBaseUrl,
+  getPipelinesBaseUrl,
+  setPipelineWorkerUrl,
+  getPipelineWorkerUrl,
+} from "@itk-wasm/dicom"
 ```
 
 #### applyPresentationStateToImageNode

@@ -1,6 +1,10 @@
-import { structuredReportToText } from '../../dist/bundles/itk-dicom.js'
-import { assign, createMachine, interpret } from 'xstate' 
+import * as dicomBundle from '../../dist/bundles/dicom.js'
 
+// Use local, vendored WebAssembly module assets
+const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
+dicomBundle.setPipelinesBaseUrl(pipelinesBaseUrl)
+let pipelineWorkerUrl: string | URL | null = new URL('/web-workers/pipeline.worker.js', document.location.origin).href
+dicomBundle.setPipelineWorkerUrl(pipelineWorkerUrl)
 
 // promise-file-reader
 function readAsArrayBuffer (file) {
@@ -14,6 +18,36 @@ function readAsArrayBuffer (file) {
     reader['readAsArrayBuffer'](file)
   })
 }
+
+function downloadFile(content, filename) {
+  const url = URL.createObjectURL(new Blob([content]))
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename || 'download'
+  document.body.appendChild(a)
+  function clickHandler(event) {
+    setTimeout(() => {
+      URL.revokeObjectURL(url)
+      a.removeEventListener('click', clickHandler)
+    }, 200)
+  };
+  a.addEventListener('click', clickHandler, false)
+  a.click()
+  return a
+}
+
+const packageFunctions = []
+for (const [key, val] of Object.entries(dicomBundle)) {
+  if (typeof val == 'function') {
+    packageFunctions.push(key)
+  }
+}
+packageFunctions.sort()
+
+const pipelineFunctionsList = document.getElementById('pipeline-functions-list')
+pipelineFunctionsList.innerHTML = packageFunctions.map((func => `<li><a href="#${func}-function">${func}</a></li>`)).join('\n')
+
+/*
 
 const structuredReportToTextOptions = new Map([
   ["unknownRelationship", "Accept unknown relationship type"],
@@ -178,3 +212,5 @@ dropzoneInput.addEventListener('drop', (event) => {
 
   demoAppService.send({ type: 'UPLOAD_DATA', data: files[0] })
 })
+
+*/

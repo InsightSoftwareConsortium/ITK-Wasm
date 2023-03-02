@@ -1,6 +1,6 @@
 const demoServer = 'http://localhost:5173'
 
-describe('itk-compress-stringify', () => {
+describe('@itk-wasm/compress-stringify', () => {
   it('compressStringify runs sample inputs and produces expected outputs', () => {
     cy.visit(demoServer)
 

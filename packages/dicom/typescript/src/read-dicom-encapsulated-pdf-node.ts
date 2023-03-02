@@ -37,49 +37,49 @@ async function readDicomEncapsulatedPdfNode(
   args.push('0')
   // Options
   args.push('--memory-io')
-  if (options.readFileOnly) {
+  if (typeof options.readFileOnly !== "undefined") {
     args.push('--read-file-only')
   }
-  if (options.readDataset) {
+  if (typeof options.readDataset !== "undefined") {
     args.push('--read-dataset')
   }
-  if (options.readXferAuto) {
+  if (typeof options.readXferAuto !== "undefined") {
     args.push('--read-xfer-auto')
   }
-  if (options.readXferDetect) {
+  if (typeof options.readXferDetect !== "undefined") {
     args.push('--read-xfer-detect')
   }
-  if (options.readXferLittle) {
+  if (typeof options.readXferLittle !== "undefined") {
     args.push('--read-xfer-little')
   }
-  if (options.readXferBig) {
+  if (typeof options.readXferBig !== "undefined") {
     args.push('--read-xfer-big')
   }
-  if (options.readXferImplicit) {
+  if (typeof options.readXferImplicit !== "undefined") {
     args.push('--read-xfer-implicit')
   }
-  if (options.acceptOddLength) {
+  if (typeof options.acceptOddLength !== "undefined") {
     args.push('--accept-odd-length')
   }
-  if (options.assumeEvenLength) {
+  if (typeof options.assumeEvenLength !== "undefined") {
     args.push('--assume-even-length')
   }
-  if (options.enableCp246) {
+  if (typeof options.enableCp246 !== "undefined") {
     args.push('--enable-cp246')
   }
-  if (options.disableCp246) {
+  if (typeof options.disableCp246 !== "undefined") {
     args.push('--disable-cp246')
   }
-  if (options.retainUn) {
+  if (typeof options.retainUn !== "undefined") {
     args.push('--retain-un')
   }
-  if (options.convertUn) {
+  if (typeof options.convertUn !== "undefined") {
     args.push('--convert-un')
   }
-  if (options.enableCorrection) {
+  if (typeof options.enableCorrection !== "undefined") {
     args.push('--enable-correction')
   }
-  if (options.disableCorrection) {
+  if (typeof options.disableCorrection !== "undefined") {
     args.push('--disable-correction')
   }
 

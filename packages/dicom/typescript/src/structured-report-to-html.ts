@@ -41,128 +41,128 @@ async function structuredReportToHtml(
   args.push('0')
   // Options
   args.push('--memory-io')
-  if (options.readFileOnly) {
+  if (typeof options.readFileOnly !== "undefined") {
     args.push('--read-file-only')
   }
-  if (options.readDataset) {
+  if (typeof options.readDataset !== "undefined") {
     args.push('--read-dataset')
   }
-  if (options.readXferAuto) {
+  if (typeof options.readXferAuto !== "undefined") {
     args.push('--read-xfer-auto')
   }
-  if (options.readXferDetect) {
+  if (typeof options.readXferDetect !== "undefined") {
     args.push('--read-xfer-detect')
   }
-  if (options.readXferLittle) {
+  if (typeof options.readXferLittle !== "undefined") {
     args.push('--read-xfer-little')
   }
-  if (options.readXferBig) {
+  if (typeof options.readXferBig !== "undefined") {
     args.push('--read-xfer-big')
   }
-  if (options.readXferImplicit) {
+  if (typeof options.readXferImplicit !== "undefined") {
     args.push('--read-xfer-implicit')
   }
-  if (options.processingDetails) {
+  if (typeof options.processingDetails !== "undefined") {
     args.push('--processing-details')
   }
-  if (options.unknownRelationship) {
+  if (typeof options.unknownRelationship !== "undefined") {
     args.push('--unknown-relationship')
   }
-  if (options.invalidItemValue) {
+  if (typeof options.invalidItemValue !== "undefined") {
     args.push('--invalid-item-value')
   }
-  if (options.ignoreConstraints) {
+  if (typeof options.ignoreConstraints !== "undefined") {
     args.push('--ignore-constraints')
   }
-  if (options.ignoreItemErrors) {
+  if (typeof options.ignoreItemErrors !== "undefined") {
     args.push('--ignore-item-errors')
   }
-  if (options.skipInvalidItems) {
+  if (typeof options.skipInvalidItems !== "undefined") {
     args.push('--skip-invalid-items')
   }
-  if (options.disableVrChecker) {
+  if (typeof options.disableVrChecker !== "undefined") {
     args.push('--disable-vr-checker')
   }
-  if (options.charsetRequire) {
+  if (typeof options.charsetRequire !== "undefined") {
     args.push('--charset-require')
   }
-  if (options.charsetAssume) {
+  if (typeof options.charsetAssume !== "undefined") {
     args.push('--charset-assume', options.charsetAssume.toString())
   }
-  if (options.charsetCheckAll) {
+  if (typeof options.charsetCheckAll !== "undefined") {
     args.push('--charset-check-all')
   }
-  if (options.convertToUtf8) {
+  if (typeof options.convertToUtf8 !== "undefined") {
     args.push('--convert-to-utf8')
   }
-  if (options.urlPrefix) {
+  if (typeof options.urlPrefix !== "undefined") {
     args.push('--url-prefix', options.urlPrefix.toString())
   }
-  if (options.html32) {
+  if (typeof options.html32 !== "undefined") {
     args.push('--html-3.2')
   }
-  if (options.html40) {
+  if (typeof options.html40 !== "undefined") {
     args.push('--html-4.0')
   }
-  if (options.xhtml11) {
+  if (typeof options.xhtml11 !== "undefined") {
     args.push('--xhtml-1.1')
   }
-  if (options.addDocumentType) {
+  if (typeof options.addDocumentType !== "undefined") {
     args.push('--add-document-type')
   }
-  if (options.cssReference) {
+  if (typeof options.cssReference !== "undefined") {
     const inputCountString = inputs.length.toString()
     inputs.push({ type: InterfaceTypes.TextStream, data: { data: options.cssReference } })
     args.push('--css-reference', inputCountString)
   }
-  if (options.cssFile) {
+  if (typeof options.cssFile !== "undefined") {
     const inputFile = 'file' + inputs.length.toString()
     inputs.push({ type: InterfaceTypes.TextFile, data: { data: options.cssFile, path: inputFile } })
     args.push('--css-file', inputFile)
   }
-  if (options.expandInline) {
+  if (typeof options.expandInline !== "undefined") {
     args.push('--expand-inline')
   }
-  if (options.neverExpandInline) {
+  if (typeof options.neverExpandInline !== "undefined") {
     args.push('--never-expand-inline')
   }
-  if (options.alwaysExpandInline) {
+  if (typeof options.alwaysExpandInline !== "undefined") {
     args.push('--always-expand-inline')
   }
-  if (options.renderFullData) {
+  if (typeof options.renderFullData !== "undefined") {
     args.push('--render-full-data')
   }
-  if (options.sectionTitleInline) {
+  if (typeof options.sectionTitleInline !== "undefined") {
     args.push('--section-title-inline')
   }
-  if (options.documentTypeTitle) {
+  if (typeof options.documentTypeTitle !== "undefined") {
     args.push('--document-type-title')
   }
-  if (options.patientInfoTitle) {
+  if (typeof options.patientInfoTitle !== "undefined") {
     args.push('--patient-info-title')
   }
-  if (options.noDocumentHeader) {
+  if (typeof options.noDocumentHeader !== "undefined") {
     args.push('--no-document-header')
   }
-  if (options.renderInlineCodes) {
+  if (typeof options.renderInlineCodes !== "undefined") {
     args.push('--render-inline-codes')
   }
-  if (options.conceptNameCodes) {
+  if (typeof options.conceptNameCodes !== "undefined") {
     args.push('--concept-name-codes')
   }
-  if (options.numericUnitCodes) {
+  if (typeof options.numericUnitCodes !== "undefined") {
     args.push('--numeric-unit-codes')
   }
-  if (options.codeValueUnit) {
+  if (typeof options.codeValueUnit !== "undefined") {
     args.push('--code-value-unit')
   }
-  if (options.codeMeaningUnit) {
+  if (typeof options.codeMeaningUnit !== "undefined") {
     args.push('--code-meaning-unit')
   }
-  if (options.renderAllCodes) {
+  if (typeof options.renderAllCodes !== "undefined") {
     args.push('--render-all-codes')
   }
-  if (options.codeDetailsTooltip) {
+  if (typeof options.codeDetailsTooltip !== "undefined") {
     args.push('--code-details-tooltip')
   }
 
@@ -173,7 +173,7 @@ async function structuredReportToHtml(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl(), getPipelineWorkerUrl())
+  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

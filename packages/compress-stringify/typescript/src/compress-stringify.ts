@@ -41,13 +41,13 @@ async function compressStringify(
   args.push('0')
   // Options
   args.push('--memory-io')
-  if (options.stringify) {
+  if (typeof options.stringify !== "undefined") {
     args.push('--stringify')
   }
-  if (options.compressionLevel) {
+  if (typeof options.compressionLevel !== "undefined") {
     args.push('--compression-level', options.compressionLevel.toString())
   }
-  if (options.dataUrlPrefix) {
+  if (typeof options.dataUrlPrefix !== "undefined") {
     args.push('--data-url-prefix', options.dataUrlPrefix.toString())
   }
 
@@ -58,7 +58,7 @@ async function compressStringify(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl(), getPipelineWorkerUrl())
+  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

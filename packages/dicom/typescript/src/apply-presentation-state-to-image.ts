@@ -44,27 +44,27 @@ async function applyPresentationStateToImage(
   args.push('1')
   // Options
   args.push('--memory-io')
-  if (options.presentationStateFile) {
+  if (typeof options.presentationStateFile !== "undefined") {
     const inputFile = 'file' + inputs.length.toString()
     inputs.push({ type: InterfaceTypes.BinaryFile, data: { data: options.presentationStateFile, path: inputFile } })
     args.push('--presentation-state-file', inputFile)
   }
-  if (options.configFile) {
+  if (typeof options.configFile !== "undefined") {
     args.push('--config-file', options.configFile.toString())
   }
-  if (options.frame) {
+  if (typeof options.frame !== "undefined") {
     args.push('--frame', options.frame.toString())
   }
-  if (options.presentationStateOutput) {
+  if (typeof options.presentationStateOutput !== "undefined") {
     args.push('--presentation-state-output')
   }
-  if (options.bitmapOutput) {
+  if (typeof options.bitmapOutput !== "undefined") {
     args.push('--bitmap-output')
   }
-  if (options.pgm) {
+  if (typeof options.pgm !== "undefined") {
     args.push('--pgm')
   }
-  if (options.dicom) {
+  if (typeof options.dicom !== "undefined") {
     args.push('--dicom')
   }
 
@@ -75,7 +75,7 @@ async function applyPresentationStateToImage(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl(), getPipelineWorkerUrl())
+  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

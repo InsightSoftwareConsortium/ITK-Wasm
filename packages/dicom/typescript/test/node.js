@@ -1,9 +1,11 @@
 import fs from 'fs'
 import test from 'ava'
-import { structuredReportToTextNode } from '../dist/bundles/itk-dicom-node.js'
-import { structuredReportToHtmlNode } from '../dist/bundles/itk-dicom-node.js'
-import { readDicomEncapsulatedPdfNode } from '../dist/bundles/itk-dicom-node.js'
-import { applyPresentationStateToImageNode } from '../dist/bundles/itk-dicom-node.js'
+import {
+  structuredReportToTextNode,
+  structuredReportToHtmlNode ,
+  readDicomEncapsulatedPdfNode,
+  applyPresentationStateToImageNode,
+} from '../dist/bundles/dicom-node.js'
 
   function arrayEquals(a, b) {
     return (a.length === b.length && a.every((val, idx) => val === b[idx]))

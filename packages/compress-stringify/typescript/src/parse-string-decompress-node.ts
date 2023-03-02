@@ -37,7 +37,7 @@ async function parseStringDecompressNode(
   args.push('0')
   // Options
   args.push('--memory-io')
-  if (options.parseString) {
+  if (typeof options.parseString !== "undefined") {
     args.push('--parse-string')
   }
 

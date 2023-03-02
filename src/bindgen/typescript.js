@@ -84,15 +84,16 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
   let readmePipelines = ''
 
   const packageName = options.packageName
+  const bundleName = path.basename(packageName)
   const packageJsonPath = path.join(outputDir, 'package.json')
   if (!fs.existsSync(packageJsonPath)) {
     const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
     packageJson.name = packageName
     packageJson.description = options.packageDescription
-    packageJson.module = `./dist/${packageName}.js`
-    packageJson.exports['.'].browser = `./dist/${packageName}.js`
-    packageJson.exports['.'].node = `./dist/${packageName}.node.js`
-    packageJson.exports['.'].default = `./dist/${packageName}.js`
+    packageJson.module = `./dist/bundles/${bundleName}.js`
+    packageJson.exports['.'].browser = `./dist/bundles/${bundleName}.js`
+    packageJson.exports['.'].node = `./dist/bundles/${bundleName}.node.js`
+    packageJson.exports['.'].default = `./dist/bundles/${bundleName}.js`
     if(options.repository) {
       packageJson.repository = { 'type': 'git', 'url': options.repository }
     }
@@ -147,8 +148,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     const demoPath = path.join(outputDir, 'test', 'browser', 'app.ts')
     if (!fs.existsSync(demoPath)) {
       let demoContent = fs.readFileSync(bindgenResource('demo.ts'), { encoding: 'utf8', flag: 'r' })
-      demoContent = demoContent.replaceAll('<bindgenPackageName>', options.packageName)
-      demoContent = demoContent.replaceAll('<bindgenPackageNameCamelCase>', camelCase(packageName))
+      demoContent = demoContent.replaceAll('<bindgenBundleName>', bundleName)
+      demoContent = demoContent.replaceAll('<bindgenBundleNameCamelCase>', camelCase(bundleName))
       fs.writeFileSync(demoPath, demoContent)
     }
 
@@ -501,6 +502,11 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     readmePipelines += readmeResult
   })
 
+  readmeInterface += `  setPipelinesBaseUrl,
+  getPipelinesBaseUrl,
+  setPipelineWorkerUrl,
+  getPipelineWorkerUrl,
+`
   readmeInterface += `} from "${packageName}"\n\`\`\`\n`
   readmeInterface += readmePipelines
 
@@ -532,7 +538,7 @@ function bindgen (outputDir, buildDir, filteredWasmBinaries, options) {
   let readme = ''
   const packageName = options.packageName
   readme += `# ${packageName}\n`
-  readme += `\n[![npm version](https://badge.fury.io/js/${packageName}.svg)](https://www.npmjs.com/package/${packageName})\n`
+  readme += `\n[![npm version](https://badge.fury.io/js/${packageName.replace('/', '%2F')}.svg)](https://www.npmjs.com/package/${packageName})\n`
   readme += `\n${options.packageDescription}\n`
   readme += `\n## Installation\n
 \`\`\`sh
@@ -545,6 +551,43 @@ npm install ${packageName}
   let readmeNodeInterface = '\n### Node interface\n\nImport:\n\n```js\nimport {\n'
 
   readmeBrowserInterface += typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, false)
+  readmeBrowserInterface += `
+#### setPipelinesBaseUrl
+
+*Set base URL for WebAssembly assets when vendored.*
+
+\`\`\`ts
+function setPipelinesBaseUrl(
+  baseUrl: string | URL
+) : void
+\`\`\`
+
+#### getPipelinesBaseUrl
+
+*Get base URL for WebAssembly assets when vendored.*
+
+\`\`\`ts
+function getPipelinesBaseUrl() : string | URL
+\`\`\`
+
+#### setPipelineWorkerUrl
+
+*Set base URL for the itk-wasm pipeline worker script when vendored.*
+
+\`\`\`ts
+function setPipelineWorkerUrl(
+  baseUrl: string | URL
+) : void
+\`\`\`
+
+#### getPipelineWorkerUrl
+
+*Get base URL for the itk-wasm pipeline worker script when vendored.*
+
+\`\`\`ts
+function getPipelineWorkerUrl() : string | URL
+\`\`\`
+`
   readmeNodeInterface += typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, true)
   readme += readmeUsage
   readme += readmeBrowserInterface

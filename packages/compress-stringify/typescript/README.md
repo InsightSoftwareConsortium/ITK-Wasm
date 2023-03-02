@@ -1,6 +1,6 @@
-# itk-compress-stringify
+# @itk-wasm/compress-stringify
 
-[![npm version](https://badge.fury.io/js/itk-compress-stringify.svg)](https://www.npmjs.com/package/itk-compress-stringify)
+[![npm version](https://badge.fury.io/js/@itk-wasm%2Fcompress-stringify.svg)](https://www.npmjs.com/package/@itk-wasm/compress-stringify)
 
 Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.
 
@@ -11,7 +11,7 @@ Zstandard compression and decompression and base64 encoding and decoding in WebA
 ## Installation
 
 ```sh
-npm install itk-compress-stringify
+npm install @itk-wasm/compress-stringify
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ import {
   getPipelinesBaseUrl,
   setPipelineWorkerUrl,
   getPipelineWorkerUrl,
-} from "itk-compress-stringify"
+} from "@itk-wasm/compress-stringify"
 ```
 
 ### Functions
@@ -137,7 +137,7 @@ Import:
 import {
   compressStringifyNode,
   parseStringDecompressNode,
-} from "itk-compress-stringify"
+} from "@itk-wasm/compress-stringify"
 ```
 
 #### compressStringifyNode

@@ -7,14 +7,16 @@ import ignore from 'rollup-plugin-ignore'
 import terser from '@rollup/plugin-terser'
 import packageJson from '../package.json' assert { type: 'json' }
 import json from '@rollup/plugin-json'
+import path from 'path'
 
 const itkConfig = './src/itkConfig.js'
+const bundleName = path.basename(packageJson.name)
 
 export default {
   input: './src/index.ts',
   output: [
     {
-      file: `./dist/bundles/${packageJson.name}.js`,
+      file: `./dist/bundles/${bundleName}.js`,
       format: 'es',
       sourcemap: true,
       // plugins: [terser(),],

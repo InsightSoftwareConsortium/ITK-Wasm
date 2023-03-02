@@ -41,55 +41,55 @@ async function structuredReportToText(
   args.push('0')
   // Options
   args.push('--memory-io')
-  if (options.unknownRelationship) {
+  if (typeof options.unknownRelationship !== "undefined") {
     args.push('--unknown-relationship')
   }
-  if (options.invalidItemValue) {
+  if (typeof options.invalidItemValue !== "undefined") {
     args.push('--invalid-item-value')
   }
-  if (options.ignoreConstraints) {
+  if (typeof options.ignoreConstraints !== "undefined") {
     args.push('--ignore-constraints')
   }
-  if (options.ignoreItemErrors) {
+  if (typeof options.ignoreItemErrors !== "undefined") {
     args.push('--ignore-item-errors')
   }
-  if (options.skipInvalidItems) {
+  if (typeof options.skipInvalidItems !== "undefined") {
     args.push('--skip-invalid-items')
   }
-  if (options.noDocumentHeader) {
+  if (typeof options.noDocumentHeader !== "undefined") {
     args.push('--no-document-header')
   }
-  if (options.numberNestedItems) {
+  if (typeof options.numberNestedItems !== "undefined") {
     args.push('--number-nested-items')
   }
-  if (options.shortenLongValues) {
+  if (typeof options.shortenLongValues !== "undefined") {
     args.push('--shorten-long-values')
   }
-  if (options.printInstanceUid) {
+  if (typeof options.printInstanceUid !== "undefined") {
     args.push('--print-instance-uid')
   }
-  if (options.printSopclassShort) {
+  if (typeof options.printSopclassShort !== "undefined") {
     args.push('--print-sopclass-short')
   }
-  if (options.printSopclassLong) {
+  if (typeof options.printSopclassLong !== "undefined") {
     args.push('--print-sopclass-long')
   }
-  if (options.printSopclassUid) {
+  if (typeof options.printSopclassUid !== "undefined") {
     args.push('--print-sopclass-uid')
   }
-  if (options.printAllCodes) {
+  if (typeof options.printAllCodes !== "undefined") {
     args.push('--print-all-codes')
   }
-  if (options.printInvalidCodes) {
+  if (typeof options.printInvalidCodes !== "undefined") {
     args.push('--print-invalid-codes')
   }
-  if (options.printTemplateId) {
+  if (typeof options.printTemplateId !== "undefined") {
     args.push('--print-template-id')
   }
-  if (options.indicateEnhanced) {
+  if (typeof options.indicateEnhanced !== "undefined") {
     args.push('--indicate-enhanced')
   }
-  if (options.printColor) {
+  if (typeof options.printColor !== "undefined") {
     args.push('--print-color')
   }
 
@@ -100,7 +100,7 @@ async function structuredReportToText(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, getPipelinesBaseUrl(), getPipelineWorkerUrl())
+  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
   if (returnValue !== 0) {
     throw new Error(stderr)
   }
