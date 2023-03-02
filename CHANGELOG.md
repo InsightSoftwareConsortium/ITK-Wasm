@@ -119,7 +119,7 @@
 
 ### Bug Fixes
 
-* **itk-dicom:** build issues for the new package ([46ef37f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/46ef37f412e7f74421bb8de799bba6d795cc2c1e))
+* **@itk-wasm/dicom@:** build issues for the new package ([46ef37f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/46ef37f412e7f74421bb8de799bba6d795cc2c1e))
 
 
 ### Features
@@ -401,7 +401,7 @@
 
 ### Features
 
-* **dcm2pdf:** add read-dicom-encapsulated-pdf operation to itk-dicom ([2a383c8](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2a383c811ea0a29ed41c15937ec705ba74be5073))
+* **dcm2pdf:** add read-dicom-encapsulated-pdf operation to @itk-wasm/dicom@ ([2a383c8](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2a383c811ea0a29ed41c15937ec705ba74be5073))
 * **dcm2pdf:** generate TS wrapper (bindgen) for read-dicom-encapsulated-pdf ([c2ef59f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/c2ef59f9310c218a280588f4613fd22fbd00923e))
 * **dcm2pdf:** modify dcm2pdf app for itk-wasm ([9cb3553](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9cb35538ac7bc5e47c4689395a51fd1e8375b808))
 
@@ -415,7 +415,7 @@
 
 ### Features
 
-* **dsr2html:** add structured-report-to-html operation to itk-dicom ([4e35e07](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4e35e0765c5436ace775ff50103d09d54b00d279))
+* **dsr2html:** add structured-report-to-html operation to @itk-wasm/dicom@ ([4e35e07](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4e35e0765c5436ace775ff50103d09d54b00d279))
 * **dsr2html:** generate TS wrapper (bindgen) for structured-report-to-html ([f1fc133](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f1fc1338660136f139c201552c4d9c2690b1e1f6))
 * **dsr2html:** modify dsr2html app for itk-wasm ([ddec323](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/ddec323dce2dc1346718e42310272304f73ab101))
 
@@ -424,7 +424,7 @@
 
 ### Features
 
-* **itk-dicom:** Support loading multi-component dicom data with gdcm ([7db17a9](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/7db17a948c84bbadfcdb144cf06c95f8484d1679))
+* **@itk-wasm/dicom@:** Support loading multi-component dicom data with gdcm ([7db17a9](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/7db17a948c84bbadfcdb144cf06c95f8484d1679))
 
 # [1.0.0-b.32](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.31...itk-wasm-v1.0.0-b.32) (2022-09-20)
 
@@ -458,7 +458,7 @@
 
 ### Features
 
-* **itk-dicom:** Node.js bundling and interface ([3e5feb1](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/3e5feb18a5511b1991a107b13e8a885ef23691ae))
+* **@itk-wasm/dicom@:** Node.js bundling and interface ([3e5feb1](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/3e5feb18a5511b1991a107b13e8a885ef23691ae))
 
 # [1.0.0-b.28](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.27...itk-wasm-v1.0.0-b.28) (2022-09-08)
 
@@ -473,7 +473,7 @@
 
 ### Features
 
-* **itk-dicom:** Browser package configuration ([6cc2574](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/6cc2574c6712fc26e0f00fdc278b5bc4acf06489))
+* **@itk-wasm/dicom@:** Browser package configuration ([6cc2574](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/6cc2574c6712fc26e0f00fdc278b5bc4acf06489))
 
 # [1.0.0-b.26](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.25...itk-wasm-v1.0.0-b.26) (2022-09-07)
 

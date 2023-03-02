@@ -1,4 +1,4 @@
-import { structuredReportToText } from '../../dist/bundles/itk-dicom.js'
+import { structuredReportToText } from '../../dist/bundles/@itk-wasm/dicom@.js'
 import { assign, createMachine, interpret } from 'xstate' 
 
 

@@ -90,10 +90,10 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
     packageJson.name = packageName
     packageJson.description = options.packageDescription
-    packageJson.module = `./dist/${bundleName}.js`
-    packageJson.exports['.'].browser = `./dist/${bundleName}.js`
-    packageJson.exports['.'].node = `./dist/${bundleName}.node.js`
-    packageJson.exports['.'].default = `./dist/${bundleName}.js`
+    packageJson.module = `./dist/bundles/${bundleName}.js`
+    packageJson.exports['.'].browser = `./dist/bundles/${bundleName}.js`
+    packageJson.exports['.'].node = `./dist/bundles/${bundleName}.node.js`
+    packageJson.exports['.'].default = `./dist/bundles/${bundleName}.js`
     if(options.repository) {
       packageJson.repository = { 'type': 'git', 'url': options.repository }
     }

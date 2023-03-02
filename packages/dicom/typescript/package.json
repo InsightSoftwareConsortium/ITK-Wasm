@@ -1,48 +1,42 @@
 {
-  "name": "itk-dicom",
-  "version": "0.3.0",
-  "description": "DICOM IO from itk-wasm",
+  "name": "@itk-wasm/dicom",
+  "version": "0.2.0",
+  "description": "Read files and images related to DICOM file format.",
   "type": "module",
-  "module": "./dist/bundles/itk-dicom.js",
+  "module": "./dist/bundles/dicom.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "browser": "./dist/bundles/itk-dicom.js",
-      "node": "./dist/itk-dicom.node.js",
-      "default": "./dist/bundles/itk-dicom.js"
+      "browser": "./dist/bundles/dicom.js",
+      "node": "./dist/bundles/dicom.node.js",
+      "default": "./dist/bundles/dicom.js"
     }
   },
   "scripts": {
-    "dev": "vite --port 8173",
+    "start": "vite -c build/vite.config.js",
+    "test": "npm run test:node && npm run test:browser",
+    "test:node": "ava test/node.js",
+    "test:browser": "npm run test:browser:chrome && npm run test:browser:firefox",
+    "test:browser:firefox": "start-server-and-test start http-get://localhost:5173 cypress:runFirefox",
+    "test:browser:chrome": "start-server-and-test start http-get://localhost:5173 cypress:runChrome",
+    "test:browser:debug": "start-server-and-test start http-get://localhost:5173 cypress:open",
+    "cypress:open": "npx cypress open",
+    "cypress:runChrome": "npx cypress run --browser chrome",
+    "cypress:runFirefox": "npx cypress run --browser firefox",
     "build": "npm run build:tsc && npm run build:node && npm run build:browser && npm run build:demo",
     "build:node": "rollup -c ./build/rollup.node.config.js",
     "build:browser": "rollup -c ./build/rollup.browser.config.js",
     "build:tsc": "tsc --pretty",
-    "build:demo": "vite -c build/vite.config.js build",
-    "cypress:open": "npx cypress open",
-    "cypress:run": "npx cypress run",
-    "cypress:runChrome": "npx cypress run --browser chrome",
-    "cypress:runFirefox": "npx cypress run --browser firefox",
-    "test:debug": "start-server-and-test dev http-get://localhost:8173 cypress:open",
-    "test": "npm run test:node && start-server-and-test dev http-get://localhost:8173 cypress:run",
-    "test:node": "ava",
-    "test:chrome": "start-server-and-test dev http-get://localhost:8173 cypress:runChrome",
-    "test:firefox": "start-server-and-test dev http-get://localhost:8173 cypress:runFirefox"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm.git"
+    "build:demo": "vite -c build/vite.config.js build"
   },
   "keywords": [
     "itk",
-    "dicom"
+    "wasm",
+    "webassembly",
+    "wasi"
   ],
-  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "author": "",
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
-  },
-  "homepage": "https://wasm.itk.org",
   "dependencies": {
     "itk-wasm": "^1.0.0-b.79"
   },
@@ -52,25 +46,23 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.3.0",
     "@rollup/plugin-typescript": "^10.0.1",
-    "@spectrum-web-components/checkbox": "^0.14.0",
-    "@spectrum-web-components/dropzone": "^0.10.0",
-    "@spectrum-web-components/field-group": "^0.7.0",
-    "@spectrum-web-components/field-label": "^0.8.0",
-    "@spectrum-web-components/illustrated-message": "^0.9.1",
-    "@spectrum-web-components/link": "^0.13.0",
-    "@spectrum-web-components/textfield": "^0.13.1",
-    "@spectrum-web-components/theme": "^0.14.1",
-    "ava": "^4.3.3",
-    "cypress": "^10.7.0",
+    "@types/node": "^18.13.0",
+    "ava": "^5.1.0",
+    "cypress": "^12.3.0",
+    "debug": "^4.3.4",
     "rollup": "^3.9.0",
     "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-visualizer": "^5.8.1",
     "rollup-plugin-ignore": "^1.0.10",
     "rollup-plugin-polyfill-node": "^0.11.0",
-    "start-server-and-test": "^1.14.0",
+    "supports-color": "^9.3.1",
+    "start-server-and-test": "^1.15.2",
+    "tslib": "^2.5.0",
     "typescript": "^4.9.4",
-    "vite": "^4.0.0",
-    "vite-plugin-static-copy": "^0.13.0",
-    "xstate": "^4.35.2"
+    "vite": "^4.0.4",
+    "vite-plugin-static-copy": "^0.13.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm"
   }
 }
