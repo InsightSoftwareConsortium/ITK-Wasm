@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.82](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.81...itk-wasm-v1.0.0-b.82) (2023-03-03)
+
+
+### Bug Fixes
+
+* **Python:** Do not import wasmtime with emscripten ([a96ac59](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/a96ac59a08c078b6f40625f50f2578702fca2ee5))
+
 # [1.0.0-b.81](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.80...itk-wasm-v1.0.0-b.81) (2023-03-02)
 
 
