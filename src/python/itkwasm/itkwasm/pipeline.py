@@ -3,6 +3,7 @@ from pathlib import Path
 from dataclasses import asdict
 from typing import List, Union, Dict, Tuple
 import ctypes
+import sys
 
 import numpy as np
 
@@ -19,7 +20,8 @@ from .polydata import PolyData
 from .int_types import IntTypes
 from .float_types import FloatTypes
 
-from wasmtime import Config, Store, Engine, Module, WasiConfig, Linker
+if sys.platform != "emscripten":
+    from wasmtime import Config, Store, Engine, Module, WasiConfig, Linker
 
 def _to_numpy_array(component_type, buf):
     if component_type == IntTypes.UInt8:
