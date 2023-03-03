@@ -318,6 +318,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionContent += `  ${interfaceType},\n`
     })
     functionContent += `  InterfaceTypes,\n`
+    functionContent += `  PipelineOutput,\n`
     functionContent += `  PipelineInput,\n`
     if (forNode) {
       functionContent += `  runPipelineNode\n`
@@ -376,7 +377,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     functionContent += functionCall
     functionContent += ' {\n\n'
 
-    functionContent += `  const desiredOutputs = [\n`
+    functionContent += `  const desiredOutputs: Array<PipelineOutput> = [\n`
     interfaceJson.outputs.forEach((output) => {
       if (interfaceJsonTypeToInterfaceType.has(output.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
@@ -384,7 +385,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       }
     })
     functionContent += `  ]\n`
-    functionContent += `  const inputs: [ PipelineInput ] = [\n`
+    functionContent += `  const inputs: Array<PipelineInput> = [\n`
     interfaceJson.inputs.forEach((input, index) => {
       if (interfaceJsonTypeToInterfaceType.has(input.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
@@ -456,7 +457,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
           } else {
             // Image, Mesh, PolyData, JsonObject
             functionContent += `    const inputCountString = inputs.length.toString()\n`
-            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: options.${camel} })\n`
+            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: options.${camel} as ${interfaceType}})\n`
             functionContent += `    args.push('--${parameter.name}', inputCountString)\n`
           }
         } else {
@@ -466,12 +467,13 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionContent += `  }\n`
     })
 
+    const outputsVar = interfaceJson.outputs.length ? '    outputs\n' : ''
     if (forNode) {
       functionContent += `\n  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', '${moduleKebabCase}')\n\n`
-      functionContent += `  const {\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)\n`
+      functionContent += `  const {\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)\n`
     } else {
       functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`
-      functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n    outputs\n  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })\n`
+      functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })\n`
     }
 
     functionContent += '  if (returnValue !== 0) {\n    throw new Error(stderr)\n  }\n\n'
