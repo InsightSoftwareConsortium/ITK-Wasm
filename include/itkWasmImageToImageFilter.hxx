@@ -136,7 +136,8 @@ WasmImageToImageFilter<TImage>
   const std::string json(imageJSON->GetJSON());
   ImageType * image = this->GetOutput();
 
-  using PixelType = typename TImage::IOPixelType;
+  using IOPixelType = typename TImage::IOPixelType;
+  using PixelType = typename TImage::PixelType;
   using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
   constexpr unsigned int Dimension = TImage::ImageDimension;
 
@@ -167,7 +168,8 @@ WasmImageToImageFilter<TImage>
   using FilterType = ImportVectorImageFilter< TImage >;
   auto filter = FilterType::New();
 
-  if ( imageType["components"].GetInt() != ConvertPixelTraits::GetNumberOfComponents() )
+  // Don't throw when PixelType is VariableLengthPixel where number of components is 0
+  if (ConvertPixelTraits::GetNumberOfComponents() != 0 && imageType["components"].GetInt() != ConvertPixelTraits::GetNumberOfComponents() )
   {
     throw std::runtime_error("Unexpected number of components");
   }
@@ -221,7 +223,7 @@ WasmImageToImageFilter<TImage>
 
   const rapidjson::Value & dataJson = document["data"];
   const std::string dataString( dataJson.GetString() );
-  PixelType * dataPtr = reinterpret_cast< PixelType * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
+  IOPixelType * dataPtr = reinterpret_cast< IOPixelType * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
   const bool letImageContainerManageMemory = false;
   if (pixelType == "VariableLengthVector" || pixelType == "VariableSizeMatrix")
     {
