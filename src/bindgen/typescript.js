@@ -1,8 +1,9 @@
 import fs from 'fs-extra'
 import path from 'path'
-import { spawnSync } from 'child_process'
 
 import { markdownTable } from 'markdown-table'
+import wasmBinaryInterfaceJson from './wasmBinaryInterfaceJson.js'
+import interfaceJsonTypeToInterfaceType from './interfaceJsonTypeToInterfaceType.js'
 
 const interfaceJsonTypeToTypeScriptType = new Map([
   ['INPUT_TEXT_FILE:FILE', 'string'],
@@ -24,24 +25,6 @@ const interfaceJsonTypeToTypeScriptType = new Map([
   ['INT', 'number'],
   ['FLOAT', 'number'],
   ['OUTPUT_JSON', 'Object'],
-])
-
-const interfaceJsonTypeToInterfaceType = new Map([
-  ['INPUT_TEXT_FILE:FILE', 'TextFile'],
-  ['OUTPUT_TEXT_FILE:FILE', 'TextFile'],
-  ['INPUT_BINARY_FILE:FILE', 'BinaryFile'],
-  ['OUTPUT_BINARY_FILE:FILE', 'BinaryFile'],
-  ['INPUT_TEXT_STREAM', 'TextStream'],
-  ['OUTPUT_TEXT_STREAM', 'TextStream'],
-  ['INPUT_BINARY_STREAM', 'BinaryStream'],
-  ['OUTPUT_BINARY_STREAM', 'BinaryStream'],
-  ['INPUT_IMAGE', 'Image'],
-  ['OUTPUT_IMAGE', 'Image'],
-  ['INPUT_MESH', 'Mesh'],
-  ['OUTPUT_MESH', 'Mesh'],
-  ['INPUT_POLYDATA', 'PolyData'],
-  ['OUTPUT_POLYDATA', 'PolyData'],
-  ['OUTPUT_JSON', 'JsonObject'],
 ])
 
 // Array of types that will require an import from itk-wasm
@@ -181,7 +164,6 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     if (!fs.existsSync(wasmBinaryRelativePath)) {
       wasmBinaryRelativePath = wasmBinaryName
     }
-
     const distPipelinesDir = path.join(outputDir, 'dist', 'pipelines')
     try {
       fs.mkdirSync(distPipelinesDir, { recursive: true })
@@ -189,25 +171,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       if (err.code !== 'EEXIST') throw err
     }
     fs.copyFileSync(wasmBinaryRelativePath, path.join(distPipelinesDir, path.basename(wasmBinaryRelativePath)))
-    const wasmBinaryBasename = path.basename(wasmBinaryRelativePath, '.wasm')
-    const wasmBinaryDirname = path.dirname(wasmBinaryRelativePath)
-    if (fs.existsSync(path.join(wasmBinaryDirname, `${wasmBinaryBasename}.js`))) {
-      fs.copyFileSync(path.join(wasmBinaryDirname, `${wasmBinaryBasename}.js`), path.join(distPipelinesDir, `${wasmBinaryBasename}.js`))
-      fs.copyFileSync(path.join(wasmBinaryDirname, `${wasmBinaryBasename}.umd.js`), path.join(distPipelinesDir, `${wasmBinaryBasename}.umd.js`))
-    }
 
-    const parsedPath = path.parse(path.resolve(wasmBinaryRelativePath))
-    const runPath = path.join(parsedPath.dir, parsedPath.name)
-    const runPipelineScriptPath = path.join(path.dirname(import.meta.url.substring(7)), 'interfaceJSONNode.js')
-    const runPipelineRun = spawnSync('node', [runPipelineScriptPath, runPath], {
-      env: process.env,
-      stdio: ['ignore', 'pipe', 'inherit']
-    })
-    if (runPipelineRun.status !== 0) {
-      console.error(runPipelineRun.error);
-      process.exit(runPipelineRun.status)
-    }
-    const interfaceJson = JSON.parse(runPipelineRun.stdout.toString())
+    const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
 
     const moduleKebabCase = parsedPath.name
     const moduleCamelCase = camelCase(parsedPath.name)
@@ -308,7 +273,9 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
     // -----------------------------------------------------------------
     // function module
-    let functionContent = 'import {\n'
+    let functionContent = `// Generated file. Do not edit.
+
+import {\n`
     const usedInterfaceTypes = new Set()
     const pipelineComponents = ['inputs', 'outputs', 'parameters']
     pipelineComponents.forEach((pipelineComponent) => {
@@ -376,7 +343,6 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     if (haveParameters) {
       let requiredOptions = ""
       interfaceJson.parameters.forEach((parameter) => {
-        console.log(parameter)
         if (parameter.required) {
           if (parameter.itemsExpectedMax > 1) {
             requiredOptions += ` ${camelCase(parameter.name)}: [`

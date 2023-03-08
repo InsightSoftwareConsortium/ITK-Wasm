@@ -8,6 +8,7 @@ import glob from 'glob'
 import { Command, Option } from 'commander/esm.mjs'
 
 import typescriptBindgen from './bindgen/typescript.js'
+import pythonBindgen from './bindgen/python.js'
 
 const program = new Command()
 
@@ -254,6 +255,8 @@ function bindgen(options) {
   switch (language) {
     case 'typescript':
       typescriptBindgen(outputDir, buildDir, filteredWasmBinaries, options)
+    case 'python':
+      pythonBindgen(outputDir, buildDir, filteredWasmBinaries, options)
     break
   }
 
@@ -286,7 +289,7 @@ program
   .option('-o, --output-dir <output-dir>', 'Output directory name. Defaults to the language option value.')
   .requiredOption('-p, --package-name <package-name>', 'Output a package configuration files with the given packages name')
   .requiredOption('-d, --package-description <package-description>', 'Description for package')
-  .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript',]))
+  .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript', 'python']))
   .option('-r, --repository <repository-url>', 'Source code repository URL')
   .usage('[options]')
   .description('Generate language bindings for Wasm modules')
