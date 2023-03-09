@@ -64,10 +64,6 @@ li {
   padding: 2em;
 }
 
-.read-the-docs {
-  color: #888;
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

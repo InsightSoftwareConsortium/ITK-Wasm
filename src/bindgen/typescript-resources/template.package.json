@@ -24,13 +24,12 @@
   "keywords": [
     "itk",
     "wasm",
-    "webassembly",
-    "wasi"
+    "webassembly"
   ],
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.79"
+    "itk-wasm": "^1.0.0-b.101"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
@@ -38,6 +37,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^10.0.1",
+    "@shoelace-style/shoelace": "^2.4.0",
     "@types/node": "^18.13.0",
     "debug": "^4.3.4",
     "rollup": "^3.9.0",
@@ -47,7 +47,7 @@
     "supports-color": "^9.3.1",
     "tslib": "^2.5.0",
     "typescript": "^4.9.4",
-    "vite": "^4.0.4",
-    "vite-plugin-static-copy": "^0.13.0"
+    "vite": "^4.3.3",
+    "vite-plugin-static-copy": "^0.14.0"
   }
 }

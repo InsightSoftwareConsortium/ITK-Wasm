@@ -1,11 +1,14 @@
-import * as itkCompressStringify from '../../dist/bundles/compress-stringify.js'
+import * as compressStringify from '../../dist/bundles/compress-stringify.js'
 
 // Use local, vendored WebAssembly module assets
 const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
-itkCompressStringify.setPipelinesBaseUrl(pipelinesBaseUrl)
-let pipelineWorkerUrl: string | URL | null = new URL('/web-workers/pipeline.worker.js', document.location.origin).href
-itkCompressStringify.setPipelineWorkerUrl(pipelineWorkerUrl)
+compressStringify.setPipelinesBaseUrl(pipelinesBaseUrl)
+const pipelineWorkerUrl: string | URL | null = new URL('/web-workers/pipeline.worker.js', document.location.origin).href
+compressStringify.setPipelineWorkerUrl(pipelineWorkerUrl)
 
+
+// ------------------------------------------------------------------------------------
+// Utilities
 
 // promise-file-reader
 function readAsArrayBuffer (file) {
@@ -37,152 +40,95 @@ function downloadFile(content, filename) {
   return a
 }
 
-const packageFunctions = []
-for (const [key, val] of Object.entries(itkCompressStringify)) {
-  if (typeof val == 'function') {
-    packageFunctions.push(key)
-  }
-}
-packageFunctions.sort()
 
-const pipelineFunctionsList = document.getElementById('pipeline-functions-list')
-pipelineFunctionsList.innerHTML = packageFunctions.map((func => `<li><a href="#${func}-function">${func}</a></li>`)).join('\n')
-
-function setupCompressStringify() {
+// ------------------------------------------------------------------------------------
+// compressStringify
+//
+function setupCompressStringify(loadSampleInputsDefined, loadSampleInputs)  {
+  // Data context
   const context = {
-    inputs: [],
-    options: {},
-    outputs: {},
+    inputs: new Map(),
+    options: new Map(),
+    outputs: new Map(),
   }
 
-  const fileInput = document.querySelector('#compressStringifyInputs input[type=file]')
-  fileInput.addEventListener('change', (event) => {
+  // Inputs
+  const inputInput = document.querySelector('#compressStringifyInputs input[name=input-file]')
+  inputInput.addEventListener('change', (event) => {
     const dataTransfer = event.dataTransfer
     const files = event.target.files || dataTransfer.files
 
     readAsArrayBuffer(files[0]).then((arrayBuffer) => {
-      context.inputs[0] = new Uint8Array(arrayBuffer)
+      context.inputs.set("input", new Uint8Array(arrayBuffer))
       const input = document.querySelector("#compressStringifyInputs [name=input]")
-      input.value = context.inputs[0].toString()
+      input.value = context.inputs.get("input").toString()
     })
   })
 
-  const stringify = document.querySelector("#compressStringifyInputs [name=stringify]")
-  stringify.addEventListener('sl-change', () => {
-    context.options.stringify = stringify.checked
+  // Options
+  const stringifyInput = document.querySelector('#compressStringifyInputs sl-checkbox[name=stringify]')
+  stringifyInput.addEventListener('sl-change', (event) => {
+    context.options.set("stringify", stringifyInput.checked)
   })
 
-  const compressionLevel = document.querySelector("#compressStringifyInputs [name=compressionLevel]")
-  compressionLevel.addEventListener('sl-change', () => {
-    context.options.compressionLevel = parseInt(compressionLevel.value)
+  const compressionLevelInput = document.querySelector('#compressStringifyInputs sl-input[name=compression-level]')
+  compressionLevelInput.addEventListener('sl-change', (event) => {
+    context.options.set("compression-level", parseInt(compressionLevelInput.value))
   })
 
-  const dataUrlPrefix = document.querySelector("#compressStringifyInputs [name=dataUrlPrefix]")
-  dataUrlPrefix.addEventListener('sl-change', () => {
-    context.options.dataUrlPrefix = dataUrlPrefix.value
+  const dataUrlPrefixInput = document.querySelector('#compressStringifyInputs sl-input[name=data-url-prefix]')
+  dataUrlPrefixInput.addEventListener('sl-change', (event) => {
+    context.options.set("data-url-prefix", dataUrlPrefixInput.value)
   })
 
-  const loadSample = document.querySelector('#compressStringifyInputs sl-button[name=loadSample]')
-  loadSample.addEventListener('click', () => {
-    const sampleInput = new Uint8Array([222, 173, 190, 239])
-    context.inputs[0] = sampleInput
-    const input = document.querySelector("#compressStringifyInputs [name=input]")
-    input.value = sampleInput.toString()
 
-    context.options.stringify = true
-    stringify.checked = true
+  if (loadSampleInputsDefined) {
+    const loadSampleInputsButton = document.querySelector("#compressStringifyInputs [name=loadSampleInputs]")
+    loadSampleInputsButton.setAttribute('style', 'visibility: visible;')
+    loadSampleInputsButton.addEventListener('click', (event) => {
+      loadSampleInputs(context)
+    })
+  }}
+import { compressStringifyLoadSampleInputs, compressStringifyLoadSampleInputsDefined } from "./compressStringifyLoadSampleInputs.js"
+setupCompressStringify(compressStringifyLoadSampleInputsDefined, compressStringifyLoadSampleInputs)
 
-    context.options.compressionLevel = 5
-    compressionLevel.value = 5
-
-    context.options.dataUrlPrefix = 'data:application/iwi+cbor+zstd;base64,'
-    dataUrlPrefix.value = context.options.dataUrlPrefix
-  })
-
-  const downloadOutput = document.querySelector('#compressStringifyOutputs sl-button[name=downloadOutput]')
-  downloadOutput.addEventListener('click', (event) => {
-    event.preventDefault()
-    event.stopPropagation()
-    if (context.outputs.output) {
-      const extension = context.options.stringify ? '.txt' : '.bin'
-      downloadFile(context.outputs.output, `compressStringifyOutput${extension}`)
-    }
-  })
-
-  const form = document.querySelector('#compressStringifyInputs form')
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault()
-
-    const { webWorker, output } = await itkCompressStringify.compressStringify(null, context.inputs[0].slice(), context.options)
-    webWorker.terminate()
-
-    context.outputs.output = output
-    const outputTextArea = document.querySelector('#compressStringifyOutputs sl-textarea[name=output]')
-    if (context.options.stringify) {
-      outputTextArea.value = new TextDecoder().decode(output)
-
-    } else {
-      outputTextArea.value = output.toString()
-    }
-  })
-}
-setupCompressStringify()
-
-function setupParseStringDecompress() {
+// ------------------------------------------------------------------------------------
+// parseStringDecompress
+//
+function setupParseStringDecompress(loadSampleInputsDefined, loadSampleInputs)  {
+  // Data context
   const context = {
-    inputs: [],
-    options: {},
-    outputs: {},
+    inputs: new Map(),
+    options: new Map(),
+    outputs: new Map(),
   }
 
-  const fileInput = document.querySelector('#parseStringDecompressInputs input[type=file]')
-  fileInput.addEventListener('change', (event) => {
+  // Inputs
+  const inputInput = document.querySelector('#parseStringDecompressInputs input[name=input-file]')
+  inputInput.addEventListener('change', (event) => {
     const dataTransfer = event.dataTransfer
     const files = event.target.files || dataTransfer.files
 
     readAsArrayBuffer(files[0]).then((arrayBuffer) => {
-      context.inputs[0] = new Uint8Array(arrayBuffer)
+      context.inputs.set("input", new Uint8Array(arrayBuffer))
       const input = document.querySelector("#parseStringDecompressInputs [name=input]")
-      input.value = context.inputs[0].toString()
+      input.value = context.inputs.get("input").toString()
     })
   })
 
-  const parseString = document.querySelector("#parseStringDecompressInputs [name=parseString]")
-  parseString.addEventListener('sl-change', () => {
-    context.options.parseString = parseString.checked
+  // Options
+  const parseStringInput = document.querySelector('#parseStringDecompressInputs sl-checkbox[name=parse-string]')
+  parseStringInput.addEventListener('sl-change', (event) => {
+    context.options.set("parse-string", parseStringInput.checked)
   })
 
-  const loadSample = document.querySelector('#parseStringDecompressInputs sl-button[name=loadSample]')
-  loadSample.addEventListener('click', () => {
-    const sampleInput = new TextEncoder().encode('data:application/iwi+cbor+zstd;base64,KLUv/SAEIQAA3q2+7w==')
-    context.inputs[0] = sampleInput
-    const input = document.querySelector("#parseStringDecompressInputs [name=input]")
-    input.value = sampleInput.toString()
 
-    context.options.parseString = true
-    parseString.checked = true
-  })
-
-  const form = document.querySelector('#parseStringDecompressInputs form')
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault()
-
-    const { webWorker, output } = await itkCompressStringify.parseStringDecompress(null, context.inputs[0].slice(), context.options)
-    webWorker.terminate()
-
-    context.outputs.output = output
-    const outputTextArea = document.querySelector('#parseStringDecompressOutputs sl-textarea[name=output]')
-    outputTextArea.value = output.toString()
-  })
-
-  const downloadOutput = document.querySelector('#parseStringDecompressOutputs sl-button[name=downloadOutput]')
-  downloadOutput.addEventListener('click', (event) => {
-    event.preventDefault()
-    event.stopPropagation()
-    if (context.outputs.output) {
-      downloadFile(context.outputs.output, 'parseStringDecompressOutput.bin')
-    }
-  })
-
-}
-setupParseStringDecompress()
+  if (loadSampleInputsDefined) {
+    const loadSampleInputsButton = document.querySelector("#parseStringDecompressInputs [name=loadSampleInputs]")
+    loadSampleInputsButton.setAttribute('style', 'visibility: visible;')
+    loadSampleInputsButton.addEventListener('click', (event) => {
+      loadSampleInputs(context)
+    })
+  }}
+import { parseStringDecompressLoadSampleInputs, parseStringDecompressLoadSampleInputsDefined } from "./parseStringDecompressLoadSampleInputs.js"
+setupParseStringDecompress(parseStringDecompressLoadSampleInputsDefined, parseStringDecompressLoadSampleInputs)

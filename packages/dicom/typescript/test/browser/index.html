@@ -7,15 +7,15 @@
     <link
       rel="stylesheet"
       media="(prefers-color-scheme:light)"
-      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.88/dist/themes/light.css"
+      href="/shoelace/themes/light.css"
     />
     <link
       rel="stylesheet"
       media="(prefers-color-scheme:dark)"
-      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.88/dist/themes/dark.css"
+      href="/shoelace/themes/dark.css"
       onload="document.documentElement.classList.add('sl-theme-dark');"
     />
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.88/dist/shoelace.js"></script>
+    <script type="module" src="/shoelace/shoelace.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@itk-wasm/dicom</title>
   </head>
@@ -24,17 +24,285 @@
       <a href="https://wasm.itk.org/" target="_blank">
         <img src="./logo.svg" class="logo vanilla" alt="ITK Wasm logo" />
       </a>
+
       <h1>@itk-wasm/dicom</h1>
         package
       <div class="card">
         <h2>functions</h2>
         <ul id="pipeline-functions-list">
-
         </ul>
-      </div>
-      <p class="read-the-docs">
-        Click on the ITK Wasm logo to learn more
-      </p>
+
+                <sl-divider style="--width:2px;"></sl-divider>
+        <h3 id="readDicomEncapsulatedPdf-function"><code>readDicomEncapsulatedPdf</code></h3>
+        <i>Extract PDF file from DICOM encapsulated PDF.</i>
+        <div id="readDicomEncapsulatedPdfInputs"><h4>Inputs</h4><form>
+          <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
+          <label for="dicom-file-file"><sl-button required variant="primary" onclick="this.parentElement.nextElementSibling.click()">Input binary file</sl-button></label><input type="file" name="dicom-file-file" style="display: none"/>
+<br /><br />
+          <sl-checkbox name="read-file-only">readFileOnly - <i>read file format only</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-dataset">readDataset - <i>read data set without file meta information</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-xfer-auto">readXferAuto - <i>use TS recognition (default)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-xfer-detect">readXferDetect - <i>ignore TS specified in the file meta header</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-xfer-little">readXferLittle - <i>read with explicit VR little endian TS</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-xfer-big">readXferBig - <i>read with explicit VR big endian TS</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-xfer-implicit">readXferImplicit - <i>read with implicit VR little endian TS</i></sl-checkbox>
+<br />
+          <sl-checkbox name="accept-odd-length">acceptOddLength - <i>accept odd length attributes (default)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="assume-even-length">assumeEvenLength - <i>assume real length is one byte larger</i></sl-checkbox>
+<br />
+          <sl-checkbox name="enable-cp246">enableCp246 - <i>read undefined len UN as implicit VR (default)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="disable-cp246">disableCp246 - <i>read undefined len UN as explicit VR</i></sl-checkbox>
+<br />
+          <sl-checkbox name="retain-un">retainUn - <i>retain elements as UN (default)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="convert-un">convertUn - <i>convert to real VR if known</i></sl-checkbox>
+<br />
+          <sl-checkbox name="enable-correction">enableCorrection - <i>enable automatic data correction (default)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="disable-correction">disableCorrection - <i>disable automatic data correction</i></sl-checkbox>
+<br />
+        </form></div>
+        <div id="readDicomEncapsulatedPdfInputs"><h4>Outputs</h4>
+          <sl-textarea name="pdf-binary-output" label="pdfBinaryOutput" help-text="Output pdf file"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+          <sl-button variant="neutral" name="pdf-binary-output-download">pdfBinaryOutput</sl-button>
+<br /><br />
+        </div>
+        <sl-divider style="--width:2px;"></sl-divider>
+        <h3 id="structuredReportToHtml-function"><code>structuredReportToHtml</code></h3>
+        <i>Render DICOM SR file and data set to HTML/XHTML</i>
+        <div id="structuredReportToHtmlInputs"><h4>Inputs</h4><form>
+          <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
+          <label for="dicom-file-file"><sl-button required variant="primary" onclick="this.parentElement.nextElementSibling.click()">Input binary file</sl-button></label><input type="file" name="dicom-file-file" style="display: none"/>
+<br /><br />
+          <sl-checkbox name="read-file-only">readFileOnly - <i>read file format only</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-dataset">readDataset - <i>read data set without file meta information</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-xfer-auto">readXferAuto - <i>use TS recognition (default)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-xfer-detect">readXferDetect - <i>ignore TS specified in the file meta header</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-xfer-little">readXferLittle - <i>read with explicit VR little endian TS</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-xfer-big">readXferBig - <i>read with explicit VR big endian TS</i></sl-checkbox>
+<br />
+          <sl-checkbox name="read-xfer-implicit">readXferImplicit - <i>read with implicit VR little endian TS</i></sl-checkbox>
+<br />
+          <sl-checkbox name="processing-details">processingDetails - <i>show currently processed content item</i></sl-checkbox>
+<br />
+          <sl-checkbox name="unknown-relationship">unknownRelationship - <i>accept unknown/missing relationship type</i></sl-checkbox>
+<br />
+          <sl-checkbox name="invalid-item-value">invalidItemValue - <i>accept invalid content item value
+(e.g. violation of VR or VM definition)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="ignore-constraints">ignoreConstraints - <i>ignore relationship content constraints</i></sl-checkbox>
+<br />
+          <sl-checkbox name="ignore-item-errors">ignoreItemErrors - <i>do not abort on content item errors, just warn
+(e.g. missing value type specific attributes)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="skip-invalid-items">skipInvalidItems - <i>skip invalid content items (incl. sub-tree)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="disable-vr-checker">disableVrChecker - <i>disable check for VR-conformant string values</i></sl-checkbox>
+<br />
+          <sl-checkbox name="charset-require">charsetRequire - <i>require declaration of ext. charset (default)</i></sl-checkbox>
+<br />
+          <sl-input name="charset-assume" type="text" label="charsetAssume" help-text="[c]harset: string, assume charset c if no extended charset declared"></sl-input>
+          <sl-checkbox name="charset-check-all">charsetCheckAll - <i>check all data elements with string values
+(default: only PN, LO, LT, SH, ST, UC and UT)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="convert-to-utf8">convertToUtf8 - <i>convert all element values that are affected
+by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
+<br />
+          <sl-input name="url-prefix" type="text" label="urlPrefix" help-text="URL: string. Append specificed URL prefix to hyperlinks of referenced composite objects in the document."></sl-input>
+          <sl-checkbox name="html-3.2">html32 - <i>use only HTML version 3.2 compatible features</i></sl-checkbox>
+<br />
+          <sl-checkbox name="html-4.0">html40 - <i>allow all HTML version 4.01 features (default)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="xhtml-1.1">xhtml11 - <i>comply with XHTML version 1.1 specification</i></sl-checkbox>
+<br />
+          <sl-checkbox name="add-document-type">addDocumentType - <i>add reference to SGML document type definition</i></sl-checkbox>
+<br />
+          <sl-input name="css-reference" type="text" label="cssReference" help-text="URL: string. Add reference to specified CSS to document"></sl-input>
+          <label for="css-reference-file"><sl-button variant="primary" onclick="this.parentElement.nextElementSibling.click()">Input text or binary file</sp-button></label><input type="file" name="css-reference-file" style="display: none"/>
+<br /><br />
+          <sl-input name="css-file" type="text" label="cssFile" help-text="[f]ilename: string. Embed content of specified CSS into document"></sl-input>
+          <label for="css-file-file"><sl-button variant="primary" onclick="this.parentElement.nextElementSibling.click()">Input text or binary file</sp-button></label><input type="file" name="css-file-file" style="display: none"/>
+<br /><br />
+          <sl-checkbox name="expand-inline">expandInline - <i>expand short content items inline (default)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="never-expand-inline">neverExpandInline - <i>never expand content items inline</i></sl-checkbox>
+<br />
+          <sl-checkbox name="always-expand-inline">alwaysExpandInline - <i>always expand content items inline</i></sl-checkbox>
+<br />
+          <sl-checkbox name="render-full-data">renderFullData - <i>render full data of content items</i></sl-checkbox>
+<br />
+          <sl-checkbox name="section-title-inline">sectionTitleInline - <i>render section titles inline, not separately</i></sl-checkbox>
+<br />
+          <sl-checkbox name="document-type-title">documentTypeTitle - <i>use document type as document title (default)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="patient-info-title">patientInfoTitle - <i>use patient information as document title</i></sl-checkbox>
+<br />
+          <sl-checkbox name="no-document-header">noDocumentHeader - <i>do not render general document information</i></sl-checkbox>
+<br />
+          <sl-checkbox name="render-inline-codes">renderInlineCodes - <i>render codes in continuous text blocks</i></sl-checkbox>
+<br />
+          <sl-checkbox name="concept-name-codes">conceptNameCodes - <i>render code of concept names</i></sl-checkbox>
+<br />
+          <sl-checkbox name="numeric-unit-codes">numericUnitCodes - <i>render code of numeric measurement units</i></sl-checkbox>
+<br />
+          <sl-checkbox name="code-value-unit">codeValueUnit - <i>use code value as measurement unit (default)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="code-meaning-unit">codeMeaningUnit - <i>use code meaning as measurement unit</i></sl-checkbox>
+<br />
+          <sl-checkbox name="render-all-codes">renderAllCodes - <i>render all codes (implies +Ci, +Cn and +Cu)</i></sl-checkbox>
+<br />
+          <sl-checkbox name="code-details-tooltip">codeDetailsTooltip - <i>render code details as a tooltip (implies +Cc)</i></sl-checkbox>
+<br />
+        </form></div>
+        <div id="structuredReportToHtmlInputs"><h4>Outputs</h4>
+          <sl-textarea disabled name="output-text" label="outputText" help-text="Output text file"></sl-textarea>
+          <sl-button variant="neutral" name="output-text-download">outputText</sl-button>
+<br /><br />
+        </div>
+        <sl-divider style="--width:2px;"></sl-divider>
+        <h3 id="structuredReportToText-function"><code>structuredReportToText</code></h3>
+        <i>Read a DICOM structured report file and generate a plain text representation</i>
+        <div id="structuredReportToTextInputs"><h4>Inputs</h4><form>
+          <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
+          <label for="dicom-file-file"><sl-button required variant="primary" onclick="this.parentElement.nextElementSibling.click()">Input binary file</sl-button></label><input type="file" name="dicom-file-file" style="display: none"/>
+<br /><br />
+          <sl-checkbox name="unknown-relationship">unknownRelationship - <i>Accept unknown relationship type</i></sl-checkbox>
+<br />
+          <sl-checkbox name="invalid-item-value">invalidItemValue - <i>Accept invalid content item value</i></sl-checkbox>
+<br />
+          <sl-checkbox name="ignore-constraints">ignoreConstraints - <i>Ignore relationship constraints</i></sl-checkbox>
+<br />
+          <sl-checkbox name="ignore-item-errors">ignoreItemErrors - <i>Ignore content item errors</i></sl-checkbox>
+<br />
+          <sl-checkbox name="skip-invalid-items">skipInvalidItems - <i>Skip invalid content items</i></sl-checkbox>
+<br />
+          <sl-checkbox name="no-document-header">noDocumentHeader - <i>Print no document header</i></sl-checkbox>
+<br />
+          <sl-checkbox name="number-nested-items">numberNestedItems - <i>Number nested items</i></sl-checkbox>
+<br />
+          <sl-checkbox name="shorten-long-values">shortenLongValues - <i>Shorten long item values</i></sl-checkbox>
+<br />
+          <sl-checkbox name="print-instance-uid">printInstanceUid - <i>Print SOP Instance UID</i></sl-checkbox>
+<br />
+          <sl-checkbox name="print-sopclass-short">printSopclassShort - <i>Print short SOP class name</i></sl-checkbox>
+<br />
+          <sl-checkbox name="print-sopclass-long">printSopclassLong - <i>Print SOP class name</i></sl-checkbox>
+<br />
+          <sl-checkbox name="print-sopclass-uid">printSopclassUid - <i>Print long SOP class name</i></sl-checkbox>
+<br />
+          <sl-checkbox name="print-all-codes">printAllCodes - <i>Print all codes</i></sl-checkbox>
+<br />
+          <sl-checkbox name="print-invalid-codes">printInvalidCodes - <i>Print invalid codes</i></sl-checkbox>
+<br />
+          <sl-checkbox name="print-template-id">printTemplateId - <i>Print template identification</i></sl-checkbox>
+<br />
+          <sl-checkbox name="indicate-enhanced">indicateEnhanced - <i>Indicate enhanced encoding mode</i></sl-checkbox>
+<br />
+          <sl-checkbox name="print-color">printColor - <i>Use ANSI escape codes</i></sl-checkbox>
+<br />
+        </form></div>
+        <div id="structuredReportToTextInputs"><h4>Outputs</h4>
+          <sl-textarea disabled name="output-text" label="outputText" help-text="Output text file"></sl-textarea>
+          <sl-button variant="neutral" name="output-text-download">outputText</sl-button>
+<br /><br />
+        </div>
+
+
+        <sl-divider style="--width:2px;"></sl-divider>
+        <h3 id="compressStringify-function"><code>compressStringify</code></h3>
+        <i>Given a binary, compress and optionally base64 encode.</i>
+        <div id="compressStringifyInputs">
+          <h4>Inputs</h4>
+            <form>
+              <sl-input required name="input" type="text" label="input" disabled help-text="Input binary"></sl-input>
+              <label for="inputFile">
+                  <sl-button
+                      variant="primary"
+                      onclick="this.parentElement.nextElementSibling.click()"
+                  >
+                      Input binary file
+                  </sp-button>
+              </label>
+              <input type="file" name="inputFile" style="display: none" />
+              <br /> <br />
+              <sl-checkbox name="stringify">stringify - <i>Stringify the output</i></sl-checkbox>
+              <br /> <br />
+              <sl-input name="compressionLevel" placeholder="3" type="number" min="0" max="9" step="1" inputmode="decimal" label="compressionLevel" help-text="Compression level, typically 1-9"></sl-input>
+              <br />
+              <sl-input name="dataUrlPrefix" placeholder="data:base64," type="text" label="dataUrlPrefix" help-text="dataURL prefix"></sl-input>
+              <br />
+              <sl-button name="loadSample" variant="default">Load sample inputs</sl-button>
+              <sl-button type="submit" name="run" variant="success">Run</sl-button>
+            </form>
+          </div>
+        <div id="compressStringifyOutputs">
+          <h4>Outputs</h4>
+          <sl-textarea name="output" label="Output" help-text="Compressed output">
+          </sl-textarea>
+          <sl-button
+              variant="neutral"
+              name="downloadOutput"
+          >
+              Output file
+          </sp-button>
+        </div>
+
+        <sl-divider style="--width:2px;"></sl-divider>
+        <h3 id="parseStringDecompress-function"><code>parseStringDecompress</code></h3>
+        <i>Given a binary or string produced with compressStringify, decompress and optionally base64 decode.</i>
+        <div id="parseStringDecompressInputs">
+          <h4>Inputs</h4>
+            <form>
+              <sl-input required name="input" type="text" label="input" help-text="Input text or binary"></sl-input>
+              <label for="inputFile">
+                  <sl-button
+                      variant="primary"
+                      onclick="this.parentElement.nextElementSibling.click()"
+                  >
+                      Input text or binary file
+                  </sp-button>
+              </label>
+              <input type="file" name="inputFile" style="display: none" />
+              <br /> <br />
+              <sl-checkbox name="parseString">parseString - <i>Parse the input string before decompression</i></sl-checkbox>
+              <br /> <br />
+              <sl-button name="loadSample" variant="default">Load sample inputs</sl-button>
+              <sl-button type="submit" variant="success">Run</sl-button>
+            </form>
+          </div>
+        <div id="parseStringDecompressOutputs">
+          <h4>Outputs</h4>
+          <sl-textarea name="output" label="Output" help-text="Output decompressed binary">
+            <sl-skeleton effect="none"></sl-skeleton>
+          </sl-textarea>
+          <sl-button
+              variant="neutral"
+              name="downloadOutput"
+          >
+              Output file
+          </sp-button>
+        </div>
+
+        <sl-divider style="--width:2px;"></sl-divider>
+        <h3 id="setPipelinesBaseUrl-function"><code>setPipelinesBaseUrl</code></h3>
+        <i>Set base URL for WebAssembly assets when vendored.</i>
+
+        <sl-divider style="--width:2px;"></sl-divider>
+        <h3 id="getPipelinesBaseUrl-function"><code>getPipelinesBaseUrl</code></h3>
+        <i>Get base URL for WebAssembly assets when vendored.</i>
     </div>
 
     <script type="module" src="./app.ts"></script>

@@ -37,11 +37,6 @@ h1 {
   line-height: 1.1;
 }
 
-h4 {
-  text-align: left;
-  padding: 0.90em;
-}
-
 li {
   text-align: left;
 }
@@ -67,10 +62,6 @@ li {
 
 .card {
   padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
 
 @media (prefers-color-scheme: light) {
