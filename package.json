@@ -62,7 +62,8 @@
     "test:chrome": "start-server-and-test start http-get://localhost:8083 cypress:runChrome",
     "test:firefox:ci": "start-server-and-test start http-get://localhost:8083 cypress:runFirefox:ci",
     "test:firefox": "start-server-and-test start http-get://localhost:8083 cypress:runFirefox",
-    "prepublishOnly": "npm run build:tsc && node ./src/update-versions.cjs && node ./src/io/internal/packages/package-json-gen.cjs && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack"
+    "prepublishOnly": "npm run build:tsc && node ./src/update-versions.cjs && node ./src/io/internal/packages/package-json-gen.cjs && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack",
+    "clean": "git clean -fdx"
   },
   "config": {
     "commitizen": {
