@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.84](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.83...itk-wasm-v1.0.0-b.84) (2023-03-09)
+
+
+### Bug Fixes
+
+* **itkWasmImageToImageFilter:** use PixelType instead of IOPixelType ([396b7d4](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/396b7d43311fb22ae39945cadc7bde8022c1c086))
+
 # [1.0.0-b.83](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.82...itk-wasm-v1.0.0-b.83) (2023-03-03)
 
 
