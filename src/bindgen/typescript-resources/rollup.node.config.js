@@ -15,7 +15,7 @@ export default {
       file: `./dist/bundles/${bundleName}-node.js`,
       format: 'es',
       sourcemap: true,
-      plugins: [terser(),],
+      // plugins: [terser(),],
     },
   ],
   plugins: [
