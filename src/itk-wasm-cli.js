@@ -12,7 +12,7 @@ import typescriptBindgen from './bindgen/typescript.js'
 const program = new Command()
 
 // Array of types that will require an import from itk-wasm
-const defaultImageTag = '20230228-69d0e594'
+const defaultImageTag = '20230310-691ddf0e'
 
 function processCommonOptions(wasiDefault=false) {
   const options = program.opts()
