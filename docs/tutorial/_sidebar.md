@@ -3,7 +3,8 @@
 
   - [Hello World!](/tutorial/hello_world)
   - [Hello Pipeline!](/tutorial/hello_pipeline)
-  - [Input/Output](/tutorial/inputs_outputs)
+  - [Pipeline Input/Output](/tutorial/pipeline_input_output)
+  - [Input/Output Types](/tutorial/input_output_types)
   - [Debugging](/tutorial/debugging)
 
 - [Examples](/examples/)

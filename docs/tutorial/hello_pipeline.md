@@ -2,7 +2,7 @@ Hello Pipeline World!
 
 ## Introduction
 
-This example introduces the `itk::wasm::Pipeline`. An `itk::wasm::Pipeline` transforms elegant standalone C++ command line programs into powerful [WebAssembly](https://webassembly.org/) (Wasm) modules with a simple, efficient interface for execution in the browser, other programming languages, and on the command line.
+This example introduces the `itk::wasm::Pipeline`. An `itk::wasm::Pipeline` transforms elegant standalone C++ command line programs into powerful [WebAssembly](https://webassembly.org/) (wasm) modules with a simple, efficient interface for execution in the browser, other programming languages, and on the command line.
 
 Make sure to complete the [Hello World!](/tutorial/hello_world) example before you start your Hello Pipeline adventure.
 
