@@ -142,6 +142,9 @@ function build(options) {
 function test(options) {
   const { buildDir, dockcrossScript } = processCommonOptions(true)
 
+  const testDir = options.testDir ?? '.'
+  const ctestTestDir = `${buildDir}/${testDir}`
+
   const hyphenIndex = program.rawArgs.findIndex((arg) => arg === '--')
   let ctestArgs = []
   if (hyphenIndex !== -1) {
@@ -149,7 +152,7 @@ function test(options) {
   }
   if(process.platform === "win32"){
     var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
-      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env ctest --test-dir ${buildDir} ` + ctestArgs + '"'], {
+      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env ctest --test-dir ${ctestTestDir} ` + ctestArgs + '"'], {
       env: process.env,
       stdio: 'inherit',
       shell: true
@@ -160,9 +163,9 @@ function test(options) {
     }
     process.exit(dockerBuild.status);
   } else {
-    const dockerBuild = spawnSync('bash', [dockcrossScript, 'ctest', '--test-dir', buildDir].concat(ctestArgs), {
+    const dockerBuild = spawnSync('bash', [dockcrossScript, 'ctest', '--test-dir', ctestTestDir].concat(ctestArgs), {
       env: process.env,
-      stdio: 'inherit'
+      stdio: 'inherit',
     })
     if (dockerBuild.status !== 0) {
       console.error(dockerBuild.error);
@@ -192,7 +195,7 @@ function run(wasmBinary, options) {
   let wasmRuntimeArgs = []
   switch (wasmRuntime) {
   case 'wasmtime':
-    wasmRuntimeArgs = ['--args', '-e WasmTIME_BACKTRACE_DETAILS=1', '/wasi-runtimes/wasmtime/bin/wasmtime-pwd.sh',]
+    wasmRuntimeArgs = ['--args', '-e WASMTIME_BACKTRACE_DETAILS=1', '/wasi-runtimes/wasmtime/bin/wasmtime-pwd.sh',]
     break
   case 'wasmer':
     wasmRuntimeArgs = ['sudo', '/wasi-runtimes/wasmer/bin/wasmer-pwd.sh',]
@@ -258,9 +261,9 @@ function bindgen(options) {
 }
 
 program
-  .option('-i, --image <image>', 'build environment Docker image, defaults to itkwasm/emscripten')
+  .option('-i, --image <image>', 'build environment Docker image, defaults to itkwasm/emscripten -- another common image is itkwasm/wasi')
   .option('-s, --source-dir <source-directory>', 'path to source directory, defaults to "."')
-  .option('-b, --build-dir <build-directory>', 'build directory whose path is relative to the source directory, defaults to "emscripten-build"')
+  .option('-b, --build-dir <build-directory>', 'build directory whose path is relative to the source directory, defaults to "wasi-build" for the "itkwasm/wasi" image and "emscripten-build"i otherwise')
 program
   .command('build')
   .usage('[-- <cmake arguments>]')
@@ -268,6 +271,7 @@ program
   .action(build)
 program
   .command('test')
+  .option('-t, --test-dir <test-dir>', 'Subdirectory to run ctest in relative to the build directory.')
   .usage('[-- <ctest arguments>]')
   .description('Run the tests for the CMake project found in the build directory')
   .action(test)
