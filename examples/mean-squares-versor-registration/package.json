@@ -6,9 +6,10 @@
   "scripts": {
     "build": "npm run build:wasi && npm run build:emscripten",
     "build:wasi": "itk-wasm -i itkwasm/wasi:latest build",
+    "build:wasi:debug": "itk-wasm -i itkwasm/wasi:latest-debug build -- -DCMAKE_BUILD_TYPE=Debug",
     "build:emscripten": "itk-wasm -i itkwasm/emscripten:latest build",
     "test": "npm run test:wasi && npm run test:wasi:help && npm run test:emscripten",
-    "test:wasi": "itk-wasm test",
+    "test:wasi": "itk-wasm test -- -- -V",
     "test:wasi:help": "itk-wasm run mean-squares-versor-registration.wasi.wasm -- -- --help"
   },
   "author": "Matt McCormick <matt.mccormick@kitware.com>",
