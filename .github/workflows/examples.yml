@@ -246,3 +246,25 @@ jobs:
     - name: Test
       run: |
         npm run test
+
+  test-mean-squares-versor-registration:
+    name: mean-squares-versor-registration
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: ./examples/mean-squares-versor-registration
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install
+      run: |
+        npm install
+
+    - name: Build
+      run: |
+        npm run build

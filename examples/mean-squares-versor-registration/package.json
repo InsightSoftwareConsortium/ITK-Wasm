@@ -1,0 +1,22 @@
+{
+  "name": "@itk-wasm/mean-squares-versor-registration",
+  "version": "1.0.0",
+  "description": "Illustrate the use of the VersorRigid3DTransform for 3D image registration.",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:wasi && npm run build:emscripten",
+    "build:wasi": "itk-wasm -i itkwasm/wasi:latest build",
+    "build:wasi:debug": "itk-wasm -i itkwasm/wasi:latest-debug build -- -DCMAKE_BUILD_TYPE=Debug",
+    "build:emscripten": "itk-wasm -i itkwasm/emscripten:latest build",
+    "test": "npm run test:wasi && npm run test:wasi:help && npm run test:emscripten",
+    "test:wasi": "itk-wasm test -- -- -V",
+    "test:wasi:help": "itk-wasm run mean-squares-versor-registration.wasi.wasm -- -- --help"
+  },
+  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fs-extra": "^10.0.0",
+    "itk-image-io": "^1.0.0-b.83",
+    "itk-wasm": "^1.0.0-b.83"
+  }
+}
