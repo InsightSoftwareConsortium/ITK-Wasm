@@ -117,7 +117,7 @@ function build(options) {
   }
   if(process.platform === "win32"){
     var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
-      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env web-build ${buildDir} ` + cmakeArgs + '"'], {
+      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env web-build ${buildDir} ` + cmakeArgs.join(' ') + '"'], {
       env: process.env,
       stdio: 'inherit',
       shell: true
