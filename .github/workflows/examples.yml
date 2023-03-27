@@ -268,3 +268,9 @@ jobs:
     - name: Build
       run: |
         npm run build
+
+    - name: Build TypeScript/JavaScript bindings
+      run: |
+        cd typescript
+        npm install
+        npm run build
