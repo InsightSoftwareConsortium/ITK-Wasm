@@ -285,10 +285,11 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         if(typesRequireImport.includes(parameterType)) {
           optionsImportTypes.add(parameterType)
         }
+        const isOptional = parameter.required ? '' : '?'
         if (parameter.itemsExpectedMax > 1) {
-          optionsInterfaceContent += `  ${camelCase(parameter.name)}: ${parameterType}[]\n\n`
+          optionsInterfaceContent += `  ${camelCase(parameter.name)}${isOptional}: ${parameterType}[]\n\n`
         } else {
-          optionsInterfaceContent += `  ${camelCase(parameter.name)}?: ${parameterType}\n\n`
+          optionsInterfaceContent += `  ${camelCase(parameter.name)}${isOptional}: ${parameterType}\n\n`
         }
         const readmeParameterArray = parameter.itemsExpectedMax > 1 ? "[]" : ""
         readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}${readmeParameterArray}*`, parameter.description])
@@ -373,7 +374,30 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionCall += `  ${camelCase(input.name)}: ${typescriptType}${end}`
     })
     if (haveParameters) {
-      functionCall += `  options: ${modulePascalCase}Options = {}\n) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
+      let requiredOptions = ""
+      interfaceJson.parameters.forEach((parameter) => {
+        console.log(parameter)
+        if (parameter.required) {
+          if (parameter.itemsExpectedMax > 1) {
+            requiredOptions += ` ${camelCase(parameter.name)}: [`
+            if (parameter.type === "FLOAT" || parameter.type === "INT") {
+              for(let ii = 0; ii < parameter.itemsExpectedMin; ii++) {
+                requiredOptions += `${parameter.default}, `
+              }
+            }
+            requiredOptions += `],`
+          } else {
+            if (parameter.type === "FLOAT" || parameter.type === "INT") {
+              requiredOptions += ` ${camelCase(parameter.name)}: ${parameter.default},`
+            }
+          }
+
+        }
+      })
+      if (requiredOptions.length > 0) {
+        requiredOptions += " "
+      }
+      functionCall += `  options: ${modulePascalCase}Options = {${requiredOptions}}\n) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
 
     } else {
       functionCall += `\n) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
@@ -448,6 +472,34 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionContent += `  if (typeof options.${camel} !== "undefined") {\n`
       if (parameter.type === "BOOL") {
         functionContent += `    args.push('--${parameter.name}')\n`
+      } else if (parameter.itemsExpectedMax > 1) {
+        functionContent += `    if(options.${camel}.length < ${parameter.itemsExpectedMin}) {\n`
+        functionContent += `      throw new Error('"${parameter.name}" option must have a length > ${parameter.itemsExpectedMin}')\n`
+        functionContent += `    }\n`
+        functionContent += `    args.push('--${parameter.name}')\n`
+        functionContent += `    options.${camel}.forEach((value) => {\n`
+        if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
+          const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
+          if (interfaceType.includes('File')) {
+            // for files
+            functionContent += `      const inputFile = 'file' + inputs.length.toString()\n`
+            functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: value, path: inputFile } })\n`
+            functionContent += `      args.push(inputFile)\n`
+          } else if (interfaceType.includes('Stream')) {
+            // for streams
+            functionContent += `      const inputCountString = inputs.length.toString()\n`
+            functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: value } })\n`
+            functionContent += `      args.push(inputCountString)\n`
+          } else {
+            // Image, Mesh, PolyData, JsonObject
+            functionContent += `      const inputCountString = inputs.length.toString()\n`
+            functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: value as ${interfaceType}})\n`
+            functionContent += `      args.push(inputCountString)\n`
+          }
+        } else {
+          functionContent += `      args.push(value.toString())\n`
+        }
+        functionContent += `    })\n`
       } else {
         if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
           const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
