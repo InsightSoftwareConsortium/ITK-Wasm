@@ -243,7 +243,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         resultsImportTypes.add(outputType)
       }
       resultContent += `  ${camelCase(output.name)}: ${outputType}\n\n`
-      readmeResultTable.push([`\`${camelCase(output.name)}\``, `*${outputType}*`, output.description])
+      const readmeOutputArray = output.itemsExpectedMax > 1 ? "[]" : ""
+      readmeResultTable.push([`\`${camelCase(output.name)}\``, `*${outputType}${readmeOutputArray}*`, output.description])
     })
     readmeResult += markdownTable(readmeResultTable, { align: ['c', 'c', 'l'] }) + '\n'
 
@@ -285,7 +286,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
           optionsImportTypes.add(parameterType)
         }
         optionsInterfaceContent += `  ${camelCase(parameter.name)}?: ${parameterType}\n\n`
-        readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}*`, parameter.description])
+        const readmeParameterArray = parameter.itemsExpectedMax > 1 ? "[]" : ""
+        readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}${readmeParameterArray}*`, parameter.description])
       })
       // Insert the import statement in the beginning for the file.
       if(optionsImportTypes.size !== 0)
@@ -348,7 +350,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       }
       const typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
       functionContent += ` * @param {${typescriptType}} ${camelCase(input.name)} - ${input.description}\n`
-      readmeParametersTable.push([`\`${camelCase(input.name)}\``, `*${typescriptType}*`, input.description])
+      const readmeParameterArray = input.itemsExpectedMax > 1 ? "[]" : ""
+      readmeParametersTable.push([`\`${camelCase(input.name)}\``, `*${typescriptType}${readmeParameterArray}*`, input.description])
     })
     functionContent += ` *\n * @returns {Promise<${modulePascalCase}${nodeTextCamel}Result>} - result object\n`
     functionContent += ` */\n`

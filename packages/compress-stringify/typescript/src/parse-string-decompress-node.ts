@@ -1,6 +1,7 @@
 import {
   BinaryStream,
   InterfaceTypes,
+  PipelineOutput,
   PipelineInput,
   runPipelineNode
 } from 'itk-wasm'
@@ -23,10 +24,10 @@ async function parseStringDecompressNode(
   options: ParseStringDecompressOptions = {}
 ) : Promise<ParseStringDecompressNodeResult> {
 
-  const desiredOutputs = [
+  const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
-  const inputs: [ PipelineInput ] = [
+  const inputs: Array<PipelineInput> = [
     { type: InterfaceTypes.BinaryStream, data: { data: input }  },
   ]
 

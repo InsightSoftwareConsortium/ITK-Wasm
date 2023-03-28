@@ -2,6 +2,7 @@ import {
   JsonObject,
   Image,
   InterfaceTypes,
+  PipelineOutput,
   PipelineInput,
   runPipeline
 } from 'itk-wasm'
@@ -28,11 +29,11 @@ async function applyPresentationStateToImage(
   options: ApplyPresentationStateToImageOptions = {}
 ) : Promise<ApplyPresentationStateToImageResult> {
 
-  const desiredOutputs = [
+  const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonObject },
     { type: InterfaceTypes.Image },
   ]
-  const inputs: [ PipelineInput ] = [
+  const inputs: Array<PipelineInput> = [
     { type: InterfaceTypes.BinaryFile, data: { data: imageIn, path: "file0" }  },
   ]
 
