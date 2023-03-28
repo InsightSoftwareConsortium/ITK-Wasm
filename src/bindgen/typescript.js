@@ -285,7 +285,11 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         if(typesRequireImport.includes(parameterType)) {
           optionsImportTypes.add(parameterType)
         }
-        optionsInterfaceContent += `  ${camelCase(parameter.name)}?: ${parameterType}\n\n`
+        if (parameter.itemsExpectedMax > 1) {
+          optionsInterfaceContent += `  ${camelCase(parameter.name)}: ${parameterType}[]\n\n`
+        } else {
+          optionsInterfaceContent += `  ${camelCase(parameter.name)}?: ${parameterType}\n\n`
+        }
         const readmeParameterArray = parameter.itemsExpectedMax > 1 ? "[]" : ""
         readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}${readmeParameterArray}*`, parameter.description])
       })
