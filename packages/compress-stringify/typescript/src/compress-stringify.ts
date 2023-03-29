@@ -1,6 +1,7 @@
 import {
   BinaryStream,
   InterfaceTypes,
+  PipelineOutput,
   PipelineInput,
   runPipeline
 } from 'itk-wasm'
@@ -27,10 +28,10 @@ async function compressStringify(
   options: CompressStringifyOptions = {}
 ) : Promise<CompressStringifyResult> {
 
-  const desiredOutputs = [
+  const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
-  const inputs: [ PipelineInput ] = [
+  const inputs: Array<PipelineInput> = [
     { type: InterfaceTypes.BinaryStream, data: { data: input }  },
   ]
 

@@ -1,6 +1,7 @@
 import {
   TextStream,
   InterfaceTypes,
+  PipelineOutput,
   PipelineInput,
   runPipeline
 } from 'itk-wasm'
@@ -27,10 +28,10 @@ async function structuredReportToHtml(
   options: StructuredReportToHtmlOptions = {}
 ) : Promise<StructuredReportToHtmlResult> {
 
-  const desiredOutputs = [
+  const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
-  const inputs: [ PipelineInput ] = [
+  const inputs: Array<PipelineInput> = [
     { type: InterfaceTypes.BinaryFile, data: { data: dicomFile, path: "file0" }  },
   ]
 

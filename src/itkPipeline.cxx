@@ -316,6 +316,10 @@ Pipeline
     optionName.SetString(opt->get_single_name().c_str(), allocator);
     option.AddMember("name", optionName.Move(), allocator);
 
+    rapidjson::Value required;
+    required.SetBool(opt->get_required());
+    option.AddMember("required", required.Move(), allocator);
+
     rapidjson::Value itemsExpected;
     itemsExpected.SetInt(opt->get_items_expected());
     option.AddMember("itemsExpected", itemsExpected.Move(), allocator);
