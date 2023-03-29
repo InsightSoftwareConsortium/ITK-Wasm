@@ -1,5 +1,20 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.90](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.89...itk-wasm-v1.0.0-b.90) (2023-03-29)
+
+
+### Bug Fixes
+
+* **bindgen:** Add array, required parameters to function options ([71e6501](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/71e6501ec3404e554e1c6d3153bcabea04fb522d))
+* **bindgen:** Identify array parameters in the README ([e264678](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/e264678e490e299ecf6c902e7f0cac62d3889938))
+* **bindgen:** Support array options ([d13c221](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/d13c221c6287d51a6cbd34a0168dbeace7f4537f))
+
+
+### Features
+
+* **interface_json:** Add "required" member ([4032436](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/40324364308652320ee92ec2e534062bbcf8a1f8))
+* **itk-wasm-cli:** Update default Docker image for 20230328-71e6501e ([e4ec4d6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/e4ec4d6c6f740fcda914b4d5145373f2ebb978db))
+
 # [1.0.0-b.89](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.88...itk-wasm-v1.0.0-b.89) (2023-03-24)
 
 
