@@ -376,7 +376,6 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     if (haveParameters) {
       let requiredOptions = ""
       interfaceJson.parameters.forEach((parameter) => {
-        console.log(parameter)
         if (parameter.required) {
           if (parameter.itemsExpectedMax > 1) {
             requiredOptions += ` ${camelCase(parameter.name)}: [`
