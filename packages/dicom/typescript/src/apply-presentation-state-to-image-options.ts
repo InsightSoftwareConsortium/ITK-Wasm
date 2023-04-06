@@ -1,6 +1,6 @@
 interface ApplyPresentationStateToImageOptions {
   /** filename: string. Process using presentation state file */
-  presentationStateFile?: Uint8Array
+  presentationStateFile: Uint8Array
 
   /** filename: string. Process using settings from configuration file */
   configFile?: string
