@@ -42,7 +42,42 @@ function snakeCase(kebabCase) {
   return kebabCase.replaceAll('-', '_')
 }
 
-function packageReadme(packageName, packageDescription, packageDir) {
+function wasiPackageReadme(packageName, packageDescription, packageDir) {
+  let readme = ''
+  readme += `# ${packageName}\n`
+  readme += `\n[![PyPI version](https://badge.fury.io/py/${packageName}.svg)](https://badge.fury.io/py/${packageName})\n`
+  readme += `\n${packageDescription}\n`
+  
+  const dispatchPackage = packageName.replace(/-wasi$/, '')
+  readme += `\nThis package provides the WASI WebAssembly implementation. It is usually not called directly. Please use the [\`${dispatchPackage}\`](https://pypi.org/project/${dispatchPackage}/) instead.\n\n`
+  readme += `\n## Installation\n
+\`\`\`sh
+pip install ${packageName}
+\`\`\`
+`
+  const readmePath = path.join(packageDir, 'README.md')
+  if (!fs.existsSync(readmePath)) {
+    fs.writeFileSync(readmePath, readme)
+  }
+}
+
+function emscriptenPackageReadme(packageName, packageDescription, packageDir) {
+  let readme = ''
+  readme += `# ${packageName}\n`
+  readme += `\n[![PyPI version](https://badge.fury.io/py/${packageName}.svg)](https://badge.fury.io/py/${packageName})\n`
+  readme += `\n${packageDescription}\n`
+  readme += `\n## Installation\n
+\`\`\`sh
+pip install ${packageName}
+\`\`\`
+`
+  const readmePath = path.join(packageDir, 'README.md')
+  if (!fs.existsSync(readmePath)) {
+    fs.writeFileSync(readmePath, readme)
+  }
+}
+
+function dispatchPackageReadme(packageName, packageDescription, packageDir) {
   let readme = ''
   readme += `# ${packageName}\n`
   readme += `\n[![PyPI version](https://badge.fury.io/py/${packageName}.svg)](https://badge.fury.io/py/${packageName})\n`
@@ -416,7 +451,7 @@ function wasiPackage(outputDir, buildDir, wasmBinaries, options) {
   const bindgenPyPackage = pypackage
   mkdirP(path.join(packageDir, pypackage))
 
-  packageReadme(packageName, packageDescription, packageDir)
+  wasiPackageReadme(packageName, packageDescription, packageDir)
   packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options)
   packageVersion(packageDir, pypackage)
   packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage)
@@ -443,7 +478,7 @@ function pythonBindings(outputDir, buildDir, wasmBinaries, options) {
   const bindgenPyPackage = pypackage
   mkdirP(path.join(packageDir, pypackage))
 
-  packageReadme(packageName, options.packageDescription, packageDir)
+  dispatchPackageReadme(packageName, options.packageDescription, packageDir)
   packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options)
   packageVersion(packageDir, pypackage)
   packageDunderInit(outputDir, buildDir, [], packageName, options.packageDescription, packageDir, pypackage)
