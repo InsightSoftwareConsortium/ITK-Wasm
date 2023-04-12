@@ -33,13 +33,22 @@ npm i -g docsify
 docsify serve ./docs/
 ```
 
-Create a debug build (see also: [the debugging example](/examples/debugging)):
+Create a debug build (see also: [the debugging example](/tutorial/debugging)):
+
 ```sh
-git clean -fdx
 # pull the latest debug Docker images
 ./src/docker/pull.sh
+git clean -fdx
+npm install
 npm run build:debug
 ```
+
+To step into itk-wasm source from a browser Wasm module: In the C/C++ DevTools browser
+extension, add a path substitution for `/ITKWebAssemblyInterface/` that points to the
+root directory of your itk-wasm repository. This is in addition to the `/work/`
+substitution for your Wasm module's source code.
+
+Example: `/ITKWebAssemblyInterface/` -> `/home/dingbat/src/itk-wasm/`
 
 ### Add test data
 
