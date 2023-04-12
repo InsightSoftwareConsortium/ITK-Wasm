@@ -17,7 +17,7 @@ from .pipeline_output import PipelineOutput
 from .float_types import FloatTypes
 from .int_types import IntTypes
 from .pixel_types import PixelTypes
-from .environment_dispatch import environment_dispatch
+from .environment_dispatch import environment_dispatch, function_factory
 
 __all__ = [
   "InterfaceTypes",
@@ -40,4 +40,5 @@ __all__ = [
   "IntTypes",
   "PixelTypes",
   "environment_dispatch",
+  "function_factory",
 ]

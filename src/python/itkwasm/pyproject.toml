@@ -33,6 +33,7 @@ dependencies = [
     "numpy",
     "typing_extensions",
     "wasmtime; sys_platform != \"emscripten\"",
+    "importlib_metadata; python_version < \"3.10\"",
 ]
 
 [project.urls]

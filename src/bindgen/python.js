@@ -96,7 +96,9 @@ pip install ${packageName}
 function packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options) {
   let pyProjectToml = fs.readFileSync(bindgenResource('template.pyproject.toml'), {encoding:'utf8', flag:'r'})
   pyProjectToml = pyProjectToml.replaceAll('@bindgenPackageName@', packageName)
-  let repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/itk-wasm'
+  const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/itk-wasm'
+  let bindgenDependencies = packageName.endsWith('wasi') || packageName.endsWith('emscripten') ? '\n    "importlib_resources",\n' : `\n    "${packageName}-wasi; sys_platform != \\"emscripten\\"",\n    "${packageName}-emscripten; sys_platform == \\"emscripten\\"",\n`
+  pyProjectToml = pyProjectToml.replaceAll('@bindgenDependencies@', bindgenDependencies)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenProjectRepository@', repository)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenPyPackage@', bindgenPyPackage)
   const pyProjectTomlPath = path.join(packageDir, 'pyproject.toml')

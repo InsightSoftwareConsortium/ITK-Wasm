@@ -33,8 +33,10 @@ keywords = [
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0b93",
-    "importlib_resources",
+    "itkwasm >= 1.0.b93",
+    "itkwasm-compress-stringify-wasi; sys_platform != \"emscripten\"",
+    "itkwasm-compress-stringify-emscripten; sys_platform == \"emscripten\"",
+
 ]
 
 [tool.hatch.version]
