@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "@bindgenPackageName@"
+name = "itkwasm-compress-stringify-wasi"
 readme = "README.md"
 license = "Apache-2.0"
 dynamic = ["version", "description"]
@@ -38,7 +38,7 @@ dependencies = [
 ]
 
 [tool.hatch.version]
-path = "@bindgenPyPackage@/_version.py"
+path = "itkwasm_compress_stringify_wasi/_version.py"
 
 [tool.hatch.envs.default]
 dependencies = [

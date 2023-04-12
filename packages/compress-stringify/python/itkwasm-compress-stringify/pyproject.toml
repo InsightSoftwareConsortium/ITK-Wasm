@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "compress-stringify-wasi"
+name = "itkwasm-compress-stringify"
 readme = "README.md"
 license = "Apache-2.0"
 dynamic = ["version", "description"]
@@ -33,12 +33,12 @@ keywords = [
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0b.82",
+    "itkwasm >= 1.0b93",
     "importlib_resources",
 ]
 
 [tool.hatch.version]
-path = "compress_stringify_wasi/_version.py"
+path = "itkwasm_compress_stringify/_version.py"
 
 [tool.hatch.envs.default]
 dependencies = [

@@ -1,4 +1,4 @@
-from compress_stringify_wasi import compress_stringify, parse_string_decompress
+from itkwasm_compress_stringify_wasi import compress_stringify, parse_string_decompress
 
 def test_decompress_returns_what_was_compressed():
     data = bytes([222, 173, 190, 239])

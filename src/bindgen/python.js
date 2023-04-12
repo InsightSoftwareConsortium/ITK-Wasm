@@ -47,7 +47,7 @@ function wasiPackageReadme(packageName, packageDescription, packageDir) {
   readme += `# ${packageName}\n`
   readme += `\n[![PyPI version](https://badge.fury.io/py/${packageName}.svg)](https://badge.fury.io/py/${packageName})\n`
   readme += `\n${packageDescription}\n`
-  
+
   const dispatchPackage = packageName.replace(/-wasi$/, '')
   readme += `\nThis package provides the WASI WebAssembly implementation. It is usually not called directly. Please use the [\`${dispatchPackage}\`](https://pypi.org/project/${dispatchPackage}/) instead.\n\n`
   readme += `\n## Installation\n
@@ -114,21 +114,8 @@ function packageVersion(packageDir, pypackage) {
   }
 }
 
-function functionModule(interfaceJson, pypackage, modulePath) {
-  const functionName = snakeCase(interfaceJson.name)
-  let moduleContent = `# Generated file. Do not edit.
-
-from pathlib import Path
-import os
-from typing import Dict, Tuple
-
-from importlib_resources import files as file_resources
-
-from itkwasm import (
-    InterfaceTypes,
-    PipelineOutput,
-    PipelineInput,
-    Pipeline,`
+function functionModuleImports(interfaceJson) {
+let moduleContent = ""
   const usedInterfaceTypes = new Set()
   const pipelineComponents = ['inputs', 'outputs', 'parameters']
   pipelineComponents.forEach((pipelineComponent) => {
@@ -147,6 +134,10 @@ from itkwasm import (
   })
   moduleContent += "\n\n"
 
+  return moduleContent
+}
+
+function functionModuleArgs(interfaceJson) {
   let functionArgs = ""
   interfaceJson['inputs'].forEach((value) => {
     const pythonType = interfaceJsonTypeToPythonType.get(value.type)
@@ -172,7 +163,10 @@ from itkwasm import (
       functionArgs += ` = ${value.default},\n`
     }
   })
+  return functionArgs
+}
 
+function functionModuleReturnType(interfaceJson) {
   let returnType = ""
   const jsonOutputs = interfaceJson['outputs']
   if (jsonOutputs.length > 1) {
@@ -187,6 +181,23 @@ from itkwasm import (
     returnType = interfaceJsonTypeToPythonType.get(jsonOutputs[0].type)
   }
 
+  if (jsonOutputs.length > 1) {
+    returnType += "Tuple["
+    jsonOutputs.forEach((value) => {
+      const pythonType = interfaceJsonTypeToPythonType.get(value.type)
+      returnType += `${pythonType}, `
+    })
+    returnType = returnType.substring(0, returnType.length - 2)
+    returnType += "]"
+    returnType += "    )\n"
+  } else {
+    returnType = interfaceJsonTypeToPythonType.get(jsonOutputs[0].type)
+  }
+
+  return returnType
+}
+
+function functionModuleDocstring(interfaceJson) {
   let docstring = `"""${interfaceJson.description}`
   docstring += `
 
@@ -212,24 +223,38 @@ from itkwasm import (
     -------
 
 `
+  const jsonOutputs = interfaceJson['outputs']
   jsonOutputs.forEach((value) => {
     const pythonType = interfaceJsonTypeToPythonType.get(value.type)
     docstring += `    ${pythonType}\n`
     docstring += `        ${value.description}\n\n`
   })
-  if (jsonOutputs.length > 1) {
-    returnType += "Tuple["
-    jsonOutputs.forEach((value) => {
-      const pythonType = interfaceJsonTypeToPythonType.get(value.type)
-      returnType += `${pythonType}, `
-    })
-    returnType = returnType.substring(0, returnType.length - 2)
-    returnType += "]"
-  } else {
-    returnType = interfaceJsonTypeToPythonType.get(jsonOutputs[0].type)
-  }
 
   docstring += '    """'
+
+  return docstring
+}
+
+function functionModule(interfaceJson, pypackage, modulePath) {
+  const functionName = snakeCase(interfaceJson.name)
+  let moduleContent = `# Generated file. Do not edit.
+
+from pathlib import Path
+import os
+from typing import Dict, Tuple
+
+from importlib_resources import files as file_resources
+
+from itkwasm import (
+    InterfaceTypes,
+    PipelineOutput,
+    PipelineInput,
+    Pipeline,`
+
+  moduleContent += functionModuleImports(interfaceJson)
+  const functionArgs = functionModuleArgs(interfaceJson)
+  const returnType = functionModuleReturnType(interfaceJson)
+  const docstring = functionModuleDocstring(interfaceJson)
 
   let pipelineOutputs = ''
   interfaceJson.outputs.forEach((output) => {
@@ -387,13 +412,13 @@ from itkwasm import (
         return `${value}.data`
     }
   }
+  const jsonOutputs = interfaceJson['outputs']
   if (jsonOutputs.length > 1) {
     postOutput += '    result = (\n'
     jsonOutputs.forEach((value, index) => {
       const outputValue = `outputs[${index}]`
       postOutput += `        ${toPythonType(value.type, outputValue)},\n`
     })
-    returnType += "    )\n"
   } else {
     const outputValue = "outputs[0]"
     postOutput = `    result = ${toPythonType(jsonOutputs[0].type, outputValue)}\n`
@@ -412,12 +437,46 @@ ${pipelineOutputs}    ]
 ${pipelineInputs}    ]
 
 ${args}
-
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
 ${postOutput}
 
     del pipeline
+`
+  fs.writeFileSync(modulePath, moduleContent)
+}
+
+function dispatchFunctionModule(interfaceJson, pypackage, modulePath) {
+  const functionName = snakeCase(interfaceJson.name)
+  let moduleContent = `# Generated file. Do not edit.
+
+from itkwasm import (
+    environment_dispatch,`
+
+  moduleContent += functionModuleImports(interfaceJson)
+
+  const functionArgs = functionModuleArgs(interfaceJson)
+  const returnType = functionModuleReturnType(interfaceJson)
+  const docstring = functionModuleDocstring(interfaceJson)
+
+  let functionArgsToPass = ""
+  interfaceJson['inputs'].forEach((value) => {
+    functionArgsToPass += `${snakeCase(value.name)}, `
+  })
+  interfaceJson['parameters'].forEach((value) => {
+    if (value.name === "memory-io") {
+      return
+    }
+    functionArgsToPass += `${snakeCase(value.name)}=${snakeCase(value.name)}, `
+  })
+  functionArgsToPass = functionArgsToPass.substring(0, functionArgsToPass.length - 2)
+
+  moduleContent += `def ${functionName}(
+${functionArgs}) -> ${returnType}:
+    ${docstring}
+    func = environment_dispatch("${pypackage}", "${functionName}")
+    output = func(${functionArgsToPass})
+    return output
 `
   fs.writeFileSync(modulePath, moduleContent)
 }
@@ -481,7 +540,13 @@ function pythonBindings(outputDir, buildDir, wasmBinaries, options) {
   dispatchPackageReadme(packageName, options.packageDescription, packageDir)
   packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options)
   packageVersion(packageDir, pypackage)
-  packageDunderInit(outputDir, buildDir, [], packageName, options.packageDescription, packageDir, pypackage)
+  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, options.packageDescription, packageDir, pypackage)
+
+  wasmBinaries.forEach((wasmBinaryName) => {
+    const { interfaceJson } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
+    const functionName = snakeCase(interfaceJson.name)
+    dispatchFunctionModule(interfaceJson, pypackage, path.join(packageDir, pypackage, `${functionName}.py`))
+  })
 }
 
 function bindgen (outputDir, buildDir, filteredWasmBinaries, options) {
