@@ -1,5 +1,14 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.93](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.92...itk-wasm-v1.0.0-b.93) (2023-04-13)
+
+
+### Features
+
+* **bindgen:** environment_dispatch supports the function_factory ([a8c47d4](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/a8c47d428d2a53e681c0daa657085ae5662aa0c2))
+* **bindgen:** Point from WASI README to dispatch package README ([97d4f77](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/97d4f77e697017e40662b0eafee437d9d065f4b5))
+* **bindgen:** Python interface package with environment dispatch ([e2b2c84](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/e2b2c848f14b1df196f57805119cf68b4537d1da))
+
 # [1.0.0-b.92](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.91...itk-wasm-v1.0.0-b.92) (2023-04-06)
 
 
