@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "test-accelerator"
+license = "Apache-2.0"
+version = "0.0.1"
+
+requires-python = ">=3.7"
+dependencies = [
+    "itkwasm >= 1.0b82",
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest"
+
+[project.entry-points."itkwasm_example_package.example_function"]
+"test_accelerator-faster.priority.10" = "test_accelerator.faster_mod:faster"
+"test_accelerator-fastest.priority.15" = "test_accelerator.fastest_mod:fastest"
+"test_accelerator-slower.priority.-1" = "test_accelerator.slower_mod:slower"

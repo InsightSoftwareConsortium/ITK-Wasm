@@ -21,6 +21,9 @@ jobs:
         working-directory: ./src/python/itkwasm
         run: |
           python -m pip install --upgrade pip
+          cd test/test-accelerator
+          python -m pip install -e "."
+          cd -
           python -m pip install -e ".[test]"
       - name: Test with pytest
         working-directory: ./src/python/itkwasm
@@ -48,8 +51,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install hatch
+          python -m pip install hatch pytest
       - name: Test compress-stringify wasi
-        working-directory: ./packages/compress-stringify/python/compress-stringify-wasi
+        working-directory: ./packages/compress-stringify/python/itkwasm-compress-stringify-wasi
         run: |
+          python -m pip install -e .
+          pytest
           hatch run test
+      - name: Test compress-stringify
+        working-directory: ./packages/compress-stringify/python/itkwasm-compress-stringify
+        run: |
+          python -m pip install -e .
+          pytest

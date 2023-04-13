@@ -42,3 +42,7 @@ jobs:
     - name: Test
       run: |
         npm run test:wasi
+
+    - name: Build WASI packages
+      run: |
+        npm run build:wasi:packages
