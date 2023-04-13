@@ -46,7 +46,15 @@ test = [
     "itk>=5.3.0",
     "pytest >=2.7.3",
 ]
-doc = ["sphinx"]
+
+[tool.hatch.envs.docs]
+dependencies = [
+  "sphinx",
+  "pydata-sphinx-theme",
+]
+
+[tool.hatch.envs.docs.scripts]
+html = "cd docs && make html"
 
 [tool.hatch.version]
 path = "itkwasm/__init__.py"
