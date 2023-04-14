@@ -131,10 +131,9 @@ let moduleContent = ""
     })
   })
   usedInterfaceTypes.forEach((interfaceType) => {
-    moduleContent += `\n    ${interfaceType},
-)`
+    moduleContent += `\n    ${interfaceType},`
   })
-  moduleContent += "\n\n"
+  moduleContent += "\n)\n\n"
 
   return moduleContent
 }
