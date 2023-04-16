@@ -33,7 +33,7 @@ keywords = [
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0.b93",
+    "itkwasm >= 1.0.b97",
     "importlib_resources",
 
 ]
@@ -46,8 +46,10 @@ dependencies = [
   "pytest",
 ]
 
+
 [tool.hatch.envs.default.scripts]
 test = "pytest"
+
 
 [tool.hatch.build]
 exclude = [

@@ -4,6 +4,7 @@ import path from 'path'
 import { markdownTable } from 'markdown-table'
 import wasmBinaryInterfaceJson from './wasmBinaryInterfaceJson.js'
 import interfaceJsonTypeToInterfaceType from './interfaceJsonTypeToInterfaceType.js'
+import camelCase from './camelCase.js'
 
 const interfaceJsonTypeToTypeScriptType = new Map([
   ['INPUT_TEXT_FILE:FILE', 'string'],
@@ -29,22 +30,6 @@ const interfaceJsonTypeToTypeScriptType = new Map([
 
 // Array of types that will require an import from itk-wasm
 const typesRequireImport = ['Image', 'Mesh', 'PolyData', 'TextFile', 'BinaryFile', 'TextFile', 'BinaryFile']
-
-function camelCase(param) {
-  // make any alphabets that follows '-' an uppercase character, and remove the corresponding hyphen
-  let cameledParam = param.replace(/-([a-z])/g, (kk) => {
-    return kk[1].toUpperCase();
-  });
-
-  // remove all non-alphanumeric characters
-  const outParam = cameledParam.replace(/([^0-9a-z])/ig, '')
-
-  // check if resulting string is empty
-  if(outParam === '') {
-    console.error(`Resulting string is empty.`)
-  }
-  return outParam
-}
 
 function bindgenResource(filePath) {
   return path.join(path.dirname(import.meta.url.substring(7)), 'typescript-resources', filePath)

@@ -289,3 +289,28 @@ async def test_list_conversion(selenium, package_wheel):
 
     for text_file in text_files_py:
         verify_text_file(text_file)
+
+@run_in_pyodide(packages=['micropip', 'numpy'])
+async def test_uint8array_conversion(selenium, package_wheel):
+    import micropip
+    await micropip.install(package_wheel)
+
+    from itkwasm.pyodide import to_js, to_py
+
+    data = bytes([222,173,190,239])
+
+    data_js = to_js(data)
+    data_py = to_py(data_js)
+
+    assert isinstance(data_py, bytes)
+
+    assert data_py[0], 222
+    assert data_py[1], 173
+    assert data_py[2], 190
+    assert data_py[3], 239
+
+    ivalue = 8
+    ivalue_js = to_js(ivalue)
+    ivalue_py = to_py(ivalue_js)
+
+    assert ivalue == ivalue_py

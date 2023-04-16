@@ -2,6 +2,9 @@ name: Python Wasm
 
 on: [push,pull_request]
 
+env:
+  pyodide-version: 0.23.1
+
 jobs:
   test-itkwasm:
     runs-on: ${{ matrix.os }}
@@ -41,7 +44,7 @@ jobs:
         shell: bash
         working-directory: ./packages/core/python/itkwasm
         run: |
-          curl -L https://github.com/pyodide/pyodide/releases/download/0.23.1/pyodide-0.23.1.tar.bz2 -o pyodide.tar.bz2
+          curl -L https://github.com/pyodide/pyodide/releases/download/${{ env.pyodide-version }}/pyodide-${{ env.pyodide-version }}.tar.bz2 -o pyodide.tar.bz2
           tar xjf pyodide.tar.bz2
           rm -rf dist
           mv pyodide dist
@@ -88,17 +91,47 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install hatch pytest
-      - name: Test compress-stringify wasi
+      - name: Install pytest-pyodide
+        if: ${{ matrix.python-minor-version > 9 }}
+        shell: bash
+        run: |
+          python -m pip install pytest-pyodide
+      - uses: pyodide/pyodide-actions/install-browser@main
+        if: ${{ matrix.python-minor-version > 9 }}
+        with:
+          runner: selenium
+          browser: chrome
+          browser-version: latest
+      - name: Test compress-stringify wasi native
+        if: ${{ matrix.python-minor-version < 10 }}
         working-directory: ./packages/compress-stringify/python/itkwasm-compress-stringify-wasi
         run: |
           python -m pip install -e .
           pytest
-          hatch run test
-      - name: Test compress-stringify
+      - name: Test compress-stringify native
+        if: ${{ matrix.python-minor-version < 10 }}
         working-directory: ./packages/compress-stringify/python/itkwasm-compress-stringify
         run: |
           python -m pip install -e .
           pytest
+      - name: Test compress-stringify wasi chrome
+        if: ${{ matrix.python-minor-version > 9 }}
+        working-directory: ./packages/compress-stringify/python/itkwasm-compress-stringify-wasi
+        shell: bash
+        run: |
+          hatch run download-pyodide
+          hatch build -t wheel
+          ls dist
+          pytest --dist-dir=./dist --rt=chrome
+      - name: Test compress-stringify chrome
+        if: ${{ matrix.python-minor-version > 9 }}
+        working-directory: ./packages/compress-stringify/python/itkwasm-compress-stringify
+        shell: bash
+        run: |
+          hatch run download-pyodide
+          hatch build -t wheel
+          ls dist
+          pytest --dist-dir=./dist --rt=chrome
 
   build-sphinx-docs:
     runs-on: ubuntu-22.04

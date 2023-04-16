@@ -33,7 +33,7 @@ keywords = [
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0.b93",@bindgenDependencies@
+    "itkwasm >= 1.0.b97",@bindgenDependencies@
 ]
 
 [tool.hatch.version]
@@ -41,11 +41,10 @@ path = "@bindgenPyPackage@/_version.py"
 
 [tool.hatch.envs.default]
 dependencies = [
-  "pytest",
+  "pytest",@bindgenHatchEnvDependencies@
 ]
 
-[tool.hatch.envs.default.scripts]
-test = "pytest"
+@bindgenHatchEnvScripts@
 
 [tool.hatch.build]
 exclude = [
