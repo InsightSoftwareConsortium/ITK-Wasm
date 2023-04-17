@@ -52,7 +52,7 @@
             } \
             if (arg == "--version") \
             { \
-              std::cout << "Version: " << (pipeline).get_version() << std::endl; \
+              std::cout << "Version: " << (pipeline).version() << std::endl; \
               std::exit(0); \
             } \
           } \
@@ -162,11 +162,6 @@ public:
     char ** get_argv() const
     {
       return m_argv;
-    }
-
-    const std::string& get_version() const
-    {
-      return m_Version;
     }
 
     void set_version(const char * version)
