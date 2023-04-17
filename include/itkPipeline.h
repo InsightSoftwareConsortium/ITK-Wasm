@@ -50,6 +50,11 @@
               (pipeline).interface_json(); \
               std::exit(0); \
             } \
+            if (arg == "--version") \
+            { \
+              std::cout << "Version: " << (pipeline).get_version() << std::endl; \
+              std::exit(0); \
+            } \
           } \
         (pipeline).parse(); \
     } catch(const CLI::ParseError &e) { \
@@ -159,6 +164,16 @@ public:
       return m_argv;
     }
 
+    const std::string& get_version() const
+    {
+      return m_Version;
+    }
+
+    void set_version(const char * version)
+    {
+      m_Version = version;
+    }
+
     void interface_json();
 
     ~Pipeline() override;
@@ -166,6 +181,7 @@ private:
     static bool m_UseMemoryIO;
     int m_argc;
     char **m_argv;
+    std::string m_Version;
 };
 
 
