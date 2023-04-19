@@ -20,7 +20,7 @@ class ImageType:
     components: int = 1
 
 def _default_direction() -> ArrayLike:
-    return np.empty((0,), np.float32)
+    return np.empty((0,), np.float64)
 
 @dataclass
 class Image:
@@ -45,7 +45,7 @@ class Image:
             self.spacing += [1.0,] * dimension
 
         if len(self.direction) == 0:
-            self.direction = np.eye(dimension).astype(np.float32).ravel()
+            self.direction = np.eye(dimension).astype(np.float64)
 
         if len(self.size) == 0:
             self.size += [1,] * dimension
