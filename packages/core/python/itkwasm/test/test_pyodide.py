@@ -1,5 +1,10 @@
-from pytest_pyodide import run_in_pyodide
 import pytest
+import sys
+
+if sys.version_info < (3,10):
+    pytest.skip("Skipping pyodide tests on older Python", allow_module_level=True)
+
+from pytest_pyodide import run_in_pyodide
 
 from itkwasm import __version__ as test_package_version
 

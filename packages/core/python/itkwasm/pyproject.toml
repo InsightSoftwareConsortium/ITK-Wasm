@@ -51,12 +51,11 @@ dependencies = [
 [tool.hatch.envs.default.scripts]
 test = [
     "hatch build -t wheel",
-    "pytest --dist-dir=./dist --runtime=chrome -s",
+    "pytest --dist-dir=./dist --rt=chrome -s",
 ]
 download-pyodide = [
-  "wget -q https://github.com/pyodide/pyodide/releases/download/0.23.1/pyodide-0.23.1.tar.bz2 -O pyodide.tar.bz2",
+  "curl -L https://github.com/pyodide/pyodide/releases/download/0.23.1/pyodide-0.23.1.tar.bz2 -o pyodide.tar.bz2",
   "tar xjf pyodide.tar.bz2",
-  "rm -rf dist",
   "mv pyodide dist",
 ]
 
