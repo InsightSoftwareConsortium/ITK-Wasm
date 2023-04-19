@@ -168,7 +168,6 @@ async def test_binary_stream_conversion(selenium, package_wheel):
 
     from itkwasm import BinaryStream
     from itkwasm.pyodide import to_js, to_py
-    import numpy as np
 
     data = bytes([222,173,190,239])
     binary_stream = BinaryStream(data)
@@ -188,7 +187,6 @@ async def test_text_stream_conversion(selenium, package_wheel):
 
     from itkwasm import TextStream
     from itkwasm.pyodide import to_js, to_py
-    import numpy as np
 
     data = "The answer is 42."
     text_stream = TextStream(data)
@@ -197,3 +195,30 @@ async def test_text_stream_conversion(selenium, package_wheel):
     text_stream_py = to_py(text_stream_js)
 
     assert text_stream_py.data == data
+
+@run_in_pyodide(packages=['micropip', 'numpy'])
+async def test_binary_file_conversion(selenium, package_wheel):
+    import micropip
+    await micropip.install(package_wheel)
+
+    from itkwasm import BinaryFile
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+    from pathlib import PurePosixPath
+
+    data = bytes([222,173,190,239])
+    path = PurePosixPath('file.bin')
+    with open(path, 'wb') as fp:
+        fp.write(data)
+    binary_file = BinaryFile(path)
+
+    binary_file_js = to_js(binary_file)
+    binary_file_py = to_py(binary_file_js)
+
+    with open(binary_file_py.path, 'rb') as fp:
+        data_py = fp.read()
+
+    assert data_py[0], 222
+    assert data_py[1], 173
+    assert data_py[2], 190
+    assert data_py[3], 239
