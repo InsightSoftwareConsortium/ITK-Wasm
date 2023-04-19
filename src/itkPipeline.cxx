@@ -41,7 +41,7 @@ Pipeline
   this->positionals_at_end(false);
 
   this->add_flag("--memory-io", m_UseMemoryIO, "Use itk-wasm memory IO")->group("");
-  this->add_flag("--version", m_Version, "Output pipeline version")->group("");
+  this->set_version_flag("--version", m_Version);
 
   // Set m_UseMemoryIO before it is used by other memory parsers
   this->preparse_callback([this](size_t arg)
@@ -299,7 +299,7 @@ Pipeline
   document.AddMember("name", name.Move(), allocator);
 
   rapidjson::Value version;
-  version.SetString(this->get_version().c_str(), allocator);
+  version.SetString(this->version().c_str(), allocator);
   document.AddMember("version", version.Move(), allocator);
 
   rapidjson::Value inputs(rapidjson::kArrayType);
