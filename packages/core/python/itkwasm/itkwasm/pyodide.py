@@ -122,6 +122,10 @@ def to_py(js_proxy):
         if polydata_dict['cellData'] is not None:
             polydata_dict['cellData'] = _to_numpy_array(cell_pixel_component_type, polydata_dict['cellData'])
         return PolyData(**polydata_dict)
+    elif hasattr(js_proxy, "path") and hasattr(js_proxy, "data") and isinstance(js_proxy.data, str):
+        with open(js_proxy.path, 'w') as fp:
+            fp.write(js_proxy.data)
+        return TextFile(path=js_proxy.path)
     elif hasattr(js_proxy, "path") and hasattr(js_proxy, "data"):
         with open(js_proxy.path, 'wb') as fp:
             js_proxy.data.to_file(fp)
@@ -192,5 +196,11 @@ def to_js(py):
             data = fp.read()
         binary_file_dict['data'] = data
         return pyodide.ffi.to_js(binary_file_dict, dict_converter=js.Object.fromEntries)
+    elif isinstance(py, TextFile):
+        text_file_dict = asdict(py)
+        with open(py.path, 'r') as fp:
+            data = fp.read()
+        text_file_dict['data'] = data
+        return pyodide.ffi.to_js(text_file_dict, dict_converter=js.Object.fromEntries)
 
     return pyodide.ffi.to_js(py)

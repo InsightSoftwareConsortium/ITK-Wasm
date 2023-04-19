@@ -222,3 +222,27 @@ async def test_binary_file_conversion(selenium, package_wheel):
     assert data_py[1], 173
     assert data_py[2], 190
     assert data_py[3], 239
+
+@run_in_pyodide(packages=['micropip', 'numpy'])
+async def test_text_file_conversion(selenium, package_wheel):
+    import micropip
+    await micropip.install(package_wheel)
+
+    from itkwasm import TextFile
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+    from pathlib import PurePosixPath
+
+    data = "The answer is 42."
+    path = PurePosixPath('file.txt')
+    with open(path, 'w') as fp:
+        fp.write(data)
+    text_file = TextFile(path)
+
+    text_file_js = to_js(text_file)
+    text_file_py = to_py(text_file_js)
+
+    with open(text_file_py.path, 'r') as fp:
+        data_py = fp.read()
+
+    assert data_py == data
