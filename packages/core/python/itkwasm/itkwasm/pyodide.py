@@ -64,12 +64,23 @@ def to_py(js_proxy):
     import pyodide
     if hasattr(js_proxy, "imageType"):
         image_dict = js_proxy.to_py()
-        image_type = image_dict['imageType']
-        dimension = image_type['dimension']
-        component_type = image_type['componentType']
+        image_type = ImageType(**image_dict['imageType'])
+        image_dict['imageType'] = image_type
+        dimension = image_type.dimension
+        component_type = image_type.componentType
         image_dict['direction'] = _to_numpy_array(str(FloatTypes.Float64), image_dict['direction']).reshape((dimension, dimension))
         image_dict['data'] = _to_numpy_array(component_type, image_dict['data']).reshape((dimension, dimension))
         return Image(**image_dict)
+    elif hasattr(js_proxy, "pointSetType"):
+        point_set_dict = js_proxy.to_py()
+        point_set_type = PointSetType(**point_set_dict['pointSetType'])
+        point_set_dict['pointSetType'] = point_set_type
+        dimension = point_set_type.dimension
+        point_component_type = point_set_type.pointComponentType
+        point_pixel_component_type = point_set_type.pointPixelComponentType
+        point_set_dict['points'] = _to_numpy_array(point_component_type, point_set_dict['points']).reshape((-1, dimension))
+        point_set_dict['pointData'] = _to_numpy_array(point_pixel_component_type, point_set_dict['pointData'])
+        return PointSet(**point_set_dict)
     return js_proxy.to_py()
 
 def to_js(py):
@@ -77,7 +88,14 @@ def to_js(py):
     import js
     if isinstance(py, Image):
         image_dict = asdict(py)
+        print('to_js image dict', image_dict['imageType'])
         image_dict['direction'] = image_dict['direction'].ravel()
         image_dict['data'] = image_dict['data'].ravel()
         return pyodide.ffi.to_js(image_dict, dict_converter=js.Object.fromEntries)
+    elif isinstance(py, PointSet):
+        point_set_dict = asdict(py)
+        point_set_dict['points'] = point_set_dict['points'].ravel()
+        point_set_dict['pointData'] = point_set_dict['pointData'].ravel()
+        return pyodide.ffi.to_js(point_set_dict, dict_converter=js.Object.fromEntries)
+
     return py
