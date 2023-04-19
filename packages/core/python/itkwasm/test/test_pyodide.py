@@ -160,3 +160,23 @@ async def test_polydata_conversion(selenium, package_wheel):
     assert np.array_equal(polydata.points, polydata_py.points)
     assert polydata.numberOfPointPixels == polydata_py.numberOfPointPixels
     assert np.array_equal(polydata.pointData, polydata_py.pointData)
+
+@run_in_pyodide(packages=['micropip', 'numpy'])
+async def test_binary_stream_conversion(selenium, package_wheel):
+    import micropip
+    await micropip.install(package_wheel)
+
+    from itkwasm import BinaryStream
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+
+    data = bytes([222,173,190,239])
+    binary_stream = BinaryStream(data)
+
+    binary_stream_js = to_js(binary_stream)
+    binary_stream_py = to_py(binary_stream_js)
+
+    assert binary_stream_py.data[0], 222
+    assert binary_stream_py.data[1], 173
+    assert binary_stream_py.data[2], 190
+    assert binary_stream_py.data[3], 239
