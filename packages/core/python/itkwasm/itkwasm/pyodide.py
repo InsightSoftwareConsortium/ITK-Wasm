@@ -122,6 +122,9 @@ def to_py(js_proxy):
         if polydata_dict['cellData'] is not None:
             polydata_dict['cellData'] = _to_numpy_array(cell_pixel_component_type, polydata_dict['cellData'])
         return PolyData(**polydata_dict)
+    elif hasattr(js_proxy, "data") and isinstance(js_proxy.data, str):
+        text_stream_dict = js_proxy.to_py()
+        return TextStream(**text_stream_dict)
     elif hasattr(js_proxy, "data"):
         binary_stream_dict = js_proxy.to_py()
         binary_stream_dict['data'] = bytes(binary_stream_dict['data'])
@@ -173,8 +176,11 @@ def to_js(py):
         if polydata_dict['cellData'] is not None:
             polydata_dict['cellData'] = polydata_dict['cellData'].ravel()
         return pyodide.ffi.to_js(polydata_dict, dict_converter=js.Object.fromEntries)
+    elif isinstance(py, TextStream):
+        text_stream_dict = asdict(py)
+        return pyodide.ffi.to_js(text_stream_dict, dict_converter=js.Object.fromEntries)
     elif isinstance(py, BinaryStream):
         binary_stream_dict = asdict(py)
         return pyodide.ffi.to_js(binary_stream_dict, dict_converter=js.Object.fromEntries)
 
-    return py
+    return pyodide.ffi.to_js(py)

@@ -180,3 +180,20 @@ async def test_binary_stream_conversion(selenium, package_wheel):
     assert binary_stream_py.data[1], 173
     assert binary_stream_py.data[2], 190
     assert binary_stream_py.data[3], 239
+
+@run_in_pyodide(packages=['micropip', 'numpy'])
+async def test_text_stream_conversion(selenium, package_wheel):
+    import micropip
+    await micropip.install(package_wheel)
+
+    from itkwasm import TextStream
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+
+    data = "The answer is 42."
+    text_stream = TextStream(data)
+
+    text_stream_js = to_js(text_stream)
+    text_stream_py = to_py(text_stream_js)
+
+    assert text_stream_py.data == data
