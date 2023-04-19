@@ -27,7 +27,7 @@ def _default_points() -> ArrayLike:
 @dataclass
 class PolyData:
     polyDataType: Union[PolyDataType, Dict] = field(default_factory=PolyDataType)
-    name: str = 'polydata'
+    name: str = 'PolyData'
 
     numberOfPoints: int = 0
     points: ArrayLike = field(default_factory=_default_points)

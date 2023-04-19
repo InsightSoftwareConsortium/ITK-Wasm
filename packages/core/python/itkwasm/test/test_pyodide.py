@@ -98,7 +98,7 @@ async def test_mesh_conversion(selenium, package_wheel):
     import micropip
     await micropip.install(package_wheel)
 
-    from itkwasm import Mesh, MeshType, FloatTypes
+    from itkwasm import Mesh, MeshType
     from itkwasm.pyodide import to_js, to_py
     import numpy as np
 
@@ -127,3 +127,36 @@ async def test_mesh_conversion(selenium, package_wheel):
     assert np.array_equal(mesh.points, mesh_py.points)
     assert mesh.numberOfPointPixels == mesh_py.numberOfPointPixels
     assert np.array_equal(mesh.pointData, mesh_py.pointData)
+
+@run_in_pyodide(packages=['micropip', 'numpy'])
+async def test_polydata_conversion(selenium, package_wheel):
+    import micropip
+    await micropip.install(package_wheel)
+
+    from itkwasm import PolyData, PolyDataType
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+
+    n_points = 5
+    dimension = 3
+
+    polydata_type = PolyDataType()
+
+    points = np.random.random((n_points, dimension)).astype(np.float32)
+    point_data = np.random.random((n_points,)).astype(np.float32)
+
+    polydata = PolyData(polydata_type, points=points, numberOfPoints=n_points, pointData=point_data, numberOfPointPixels=n_points)
+
+    polydata_js = to_js(polydata)
+    polydata_py = to_py(polydata_js)
+
+    polydata_type_py = polydata_py.polyDataType
+    assert polydata_type.pointPixelComponentType == polydata_type_py.pointPixelComponentType
+    assert polydata_type.pointPixelType == polydata_type_py.pointPixelType
+    assert polydata_type.pointPixelComponents == polydata_type_py.pointPixelComponents
+
+    assert polydata.name == polydata_py.name
+    assert polydata.numberOfPoints == polydata_py.numberOfPoints
+    assert np.array_equal(polydata.points, polydata_py.points)
+    assert polydata.numberOfPointPixels == polydata_py.numberOfPointPixels
+    assert np.array_equal(polydata.pointData, polydata_py.pointData)

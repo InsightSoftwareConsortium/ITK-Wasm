@@ -102,6 +102,27 @@ def to_py(js_proxy):
         if mesh_dict['cellData'] is not None:
             mesh_dict['cellData'] = _to_numpy_array(cell_pixel_component_type, mesh_dict['cellData'])
         return Mesh(**mesh_dict)
+    elif hasattr(js_proxy, "polyDataType"):
+        polydata_dict = js_proxy.to_py()
+        polydata_type = PolyDataType(**polydata_dict['polyDataType'])
+        polydata_dict['polyDataType'] = polydata_type
+        point_pixel_component_type = polydata_type.pointPixelComponentType
+        cell_pixel_component_type = polydata_type.cellPixelComponentType
+        if polydata_dict['points'] is not None:
+            polydata_dict['points'] = _to_numpy_array(str(FloatTypes.Float32), polydata_dict['points']).reshape((-1, 3))
+        if polydata_dict['vertices'] is not None:
+            polydata_dict['vertices'] = _to_numpy_array(str(IntTypes.UInt32), polydata_dict['vertices'])
+        if polydata_dict['lines'] is not None:
+            polydata_dict['lines'] = _to_numpy_array(str(IntTypes.UInt32), polydata_dict['lines'])
+        if polydata_dict['polygons'] is not None:
+            polydata_dict['polygons'] = _to_numpy_array(str(IntTypes.UInt32), polydata_dict['polygons'])
+        if polydata_dict['triangleStrips'] is not None:
+            polydata_dict['triangleStrips'] = _to_numpy_array(str(IntTypes.UInt32), polydata_dict['triangleStrips'])
+        if polydata_dict['pointData'] is not None:
+            polydata_dict['pointData'] = _to_numpy_array(point_pixel_component_type, polydata_dict['pointData'])
+        if polydata_dict['cellData'] is not None:
+            polydata_dict['cellData'] = _to_numpy_array(cell_pixel_component_type, polydata_dict['cellData'])
+        return PolyData(**polydata_dict)
     return js_proxy.to_py()
 
 def to_js(py):
@@ -132,5 +153,22 @@ def to_js(py):
         if mesh_dict['cellData'] is not None:
             mesh_dict['cellData'] = mesh_dict['cellData'].ravel()
         return pyodide.ffi.to_js(mesh_dict, dict_converter=js.Object.fromEntries)
+    elif isinstance(py, PolyData):
+        polydata_dict = asdict(py)
+        if polydata_dict['points'] is not None:
+            polydata_dict['points'] = polydata_dict['points'].ravel()
+        if polydata_dict['vertices'] is not None:
+            polydata_dict['vertices'] = polydata_dict['vertices'].ravel()
+        if polydata_dict['lines'] is not None:
+            polydata_dict['lines'] = polydata_dict['lines'].ravel()
+        if polydata_dict['polygons'] is not None:
+            polydata_dict['polygons'] = polydata_dict['polygons'].ravel()
+        if polydata_dict['triangleStrips'] is not None:
+            polydata_dict['triangleStrips'] = polydata_dict['triangleStrips'].ravel()
+        if polydata_dict['pointData'] is not None:
+            polydata_dict['pointData'] = polydata_dict['pointData'].ravel()
+        if polydata_dict['cellData'] is not None:
+            polydata_dict['cellData'] = polydata_dict['cellData'].ravel()
+        return pyodide.ffi.to_js(polydata_dict, dict_converter=js.Object.fromEntries)
 
     return py
