@@ -144,10 +144,11 @@ def to_js(py):
     import js
     if isinstance(py, Image):
         image_dict = asdict(py)
-        print('to_js image dict', image_dict['imageType'])
         image_dict['direction'] = image_dict['direction'].ravel()
         if image_dict['data'] is not None:
             image_dict['data'] = image_dict['data'].ravel()
+        if image_dict['metadata']:
+            image_dict['metadata'] = pyodide.ffi.to_js(image_dict['metadata'], dict_converter=js.Map.new)
         return pyodide.ffi.to_js(image_dict, dict_converter=js.Object.fromEntries)
     elif isinstance(py, PointSet):
         point_set_dict = asdict(py)

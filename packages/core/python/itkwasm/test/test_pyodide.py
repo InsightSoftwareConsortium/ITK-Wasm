@@ -35,6 +35,8 @@ async def test_image_conversion(selenium, package_wheel):
     image.size = [2, 2]
 
     assert isinstance(image.metadata, dict)
+    image.metadata['a_string'] = 'some text'
+    image.metadata['an int'] = 3
     assert image.data == None
     image.data = np.arange(4, dtype=np.uint8).reshape((2,2))
     image_js = to_js(image)
@@ -54,6 +56,9 @@ async def test_image_conversion(selenium, package_wheel):
 
     assert image_py.size[0] == 2
     assert image_py.size[1] == 2
+
+    assert image_py.metadata['a_string'] == 'some text'
+    assert image_py.metadata['an int'] == 3
 
     assert isinstance(image_py.metadata, dict)
     assert np.array_equal(image_py.data, np.arange(4, dtype=np.uint8).reshape((2,2)))
