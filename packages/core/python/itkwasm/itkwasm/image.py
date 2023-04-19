@@ -25,7 +25,7 @@ def _default_direction() -> ArrayLike:
 @dataclass
 class Image:
     imageType: Union[ImageType, Dict] = field(default_factory=ImageType)
-    name: str = 'image'
+    name: str = 'Image'
     origin: Sequence[float] = field(default_factory=list)
     spacing: Sequence[float] = field(default_factory=list)
     direction: ArrayLike = field(default_factory=_default_direction)

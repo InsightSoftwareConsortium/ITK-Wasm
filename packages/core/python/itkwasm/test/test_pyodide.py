@@ -23,7 +23,7 @@ async def test_image_conversion(selenium, package_wheel):
     assert image.imageType.pixelType == 'Scalar'
     assert image.imageType.components == 1
 
-    assert image.name == "image"
+    assert image.name == "Image"
     assert image.origin[0] == 0.0
     assert image.origin[1] == 0.0
     assert image.spacing[0] == 1.0
@@ -45,7 +45,7 @@ async def test_image_conversion(selenium, package_wheel):
     assert image_py.imageType.pixelType == 'Scalar'
     assert image_py.imageType.components == 1
 
-    assert image_py.name == "image"
+    assert image_py.name == "Image"
     assert image_py.origin[0] == 0.0
     assert image_py.origin[1] == 0.0
     assert image_py.spacing[0] == 1.0
@@ -92,3 +92,38 @@ async def test_point_set_conversion(selenium, package_wheel):
     assert np.array_equal(point_set.points, point_set_py.points)
     assert point_set.numberOfPointPixels == point_set_py.numberOfPointPixels
     assert np.array_equal(point_set.pointData, point_set_py.pointData)
+
+@run_in_pyodide(packages=['micropip', 'numpy'])
+async def test_mesh_conversion(selenium, package_wheel):
+    import micropip
+    await micropip.install(package_wheel)
+
+    from itkwasm import Mesh, MeshType, FloatTypes
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+
+    n_points = 5
+    dimension = 3
+
+    mesh_type = MeshType()
+
+    points = np.random.random((n_points, dimension)).astype(np.float32)
+    point_data = np.random.random((n_points,)).astype(np.float32)
+
+    mesh = Mesh(mesh_type, points=points, numberOfPoints=n_points, pointData=point_data, numberOfPointPixels=n_points)
+
+    mesh_js = to_js(mesh)
+    mesh_py = to_py(mesh_js)
+
+    mesh_type_py = mesh_py.meshType
+    assert mesh_type.dimension == mesh_type_py.dimension
+    assert mesh_type.pointComponentType == mesh_type_py.pointComponentType
+    assert mesh_type.pointPixelComponentType == mesh_type_py.pointPixelComponentType
+    assert mesh_type.pointPixelType == mesh_type_py.pointPixelType
+    assert mesh_type.pointPixelComponents == mesh_type_py.pointPixelComponents
+
+    assert mesh.name == mesh_py.name
+    assert mesh.numberOfPoints == mesh_py.numberOfPoints
+    assert np.array_equal(mesh.points, mesh_py.points)
+    assert mesh.numberOfPointPixels == mesh_py.numberOfPointPixels
+    assert np.array_equal(mesh.pointData, mesh_py.pointData)

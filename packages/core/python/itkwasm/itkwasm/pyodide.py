@@ -69,7 +69,8 @@ def to_py(js_proxy):
         dimension = image_type.dimension
         component_type = image_type.componentType
         image_dict['direction'] = _to_numpy_array(str(FloatTypes.Float64), image_dict['direction']).reshape((dimension, dimension))
-        image_dict['data'] = _to_numpy_array(component_type, image_dict['data']).reshape((dimension, dimension))
+        if image_dict['data'] is not None:
+            image_dict['data'] = _to_numpy_array(component_type, image_dict['data']).reshape((dimension, dimension))
         return Image(**image_dict)
     elif hasattr(js_proxy, "pointSetType"):
         point_set_dict = js_proxy.to_py()
@@ -78,9 +79,29 @@ def to_py(js_proxy):
         dimension = point_set_type.dimension
         point_component_type = point_set_type.pointComponentType
         point_pixel_component_type = point_set_type.pointPixelComponentType
-        point_set_dict['points'] = _to_numpy_array(point_component_type, point_set_dict['points']).reshape((-1, dimension))
-        point_set_dict['pointData'] = _to_numpy_array(point_pixel_component_type, point_set_dict['pointData'])
+        if point_set_dict['points'] is not None:
+            point_set_dict['points'] = _to_numpy_array(point_component_type, point_set_dict['points']).reshape((-1, dimension))
+        if point_set_dict['pointData'] is not None:
+            point_set_dict['pointData'] = _to_numpy_array(point_pixel_component_type, point_set_dict['pointData'])
         return PointSet(**point_set_dict)
+    elif hasattr(js_proxy, "meshType"):
+        mesh_dict = js_proxy.to_py()
+        mesh_type = MeshType(**mesh_dict['meshType'])
+        mesh_dict['meshType'] = mesh_type
+        dimension = mesh_type.dimension
+        point_component_type = mesh_type.pointComponentType
+        point_pixel_component_type = mesh_type.pointPixelComponentType
+        cell_component_type = mesh_type.cellComponentType
+        cell_pixel_component_type = mesh_type.cellPixelComponentType
+        if mesh_dict['points'] is not None:
+            mesh_dict['points'] = _to_numpy_array(point_component_type, mesh_dict['points']).reshape((-1, dimension))
+        if mesh_dict['pointData'] is not None:
+            mesh_dict['pointData'] = _to_numpy_array(point_pixel_component_type, mesh_dict['pointData'])
+        if mesh_dict['cells'] is not None:
+            mesh_dict['cells'] = _to_numpy_array(cell_component_type, mesh_dict['cells'])
+        if mesh_dict['cellData'] is not None:
+            mesh_dict['cellData'] = _to_numpy_array(cell_pixel_component_type, mesh_dict['cellData'])
+        return Mesh(**mesh_dict)
     return js_proxy.to_py()
 
 def to_js(py):
@@ -90,12 +111,26 @@ def to_js(py):
         image_dict = asdict(py)
         print('to_js image dict', image_dict['imageType'])
         image_dict['direction'] = image_dict['direction'].ravel()
-        image_dict['data'] = image_dict['data'].ravel()
+        if image_dict['data'] is not None:
+            image_dict['data'] = image_dict['data'].ravel()
         return pyodide.ffi.to_js(image_dict, dict_converter=js.Object.fromEntries)
     elif isinstance(py, PointSet):
         point_set_dict = asdict(py)
-        point_set_dict['points'] = point_set_dict['points'].ravel()
-        point_set_dict['pointData'] = point_set_dict['pointData'].ravel()
+        if point_set_dict['points'] is not None:
+            point_set_dict['points'] = point_set_dict['points'].ravel()
+        if point_set_dict['pointData'] is not None:
+            point_set_dict['pointData'] = point_set_dict['pointData'].ravel()
         return pyodide.ffi.to_js(point_set_dict, dict_converter=js.Object.fromEntries)
+    elif isinstance(py, Mesh):
+        mesh_dict = asdict(py)
+        if mesh_dict['points'] is not None:
+            mesh_dict['points'] = mesh_dict['points'].ravel()
+        if mesh_dict['pointData'] is not None:
+            mesh_dict['pointData'] = mesh_dict['pointData'].ravel()
+        if mesh_dict['cells'] is not None:
+            mesh_dict['cells'] = mesh_dict['cells'].ravel()
+        if mesh_dict['cellData'] is not None:
+            mesh_dict['cellData'] = mesh_dict['cellData'].ravel()
+        return pyodide.ffi.to_js(mesh_dict, dict_converter=js.Object.fromEntries)
 
     return py
