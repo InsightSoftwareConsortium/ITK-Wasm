@@ -1,30 +1,38 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from typing import Optional
+from typing import Optional, Union, Dict
 
 try:
     from numpy.typing import ArrayLike
 except ImportError:
     from numpy import ndarray as ArrayLike
 
+from .float_types import FloatTypes
+from .int_types import IntTypes
+from .pixel_types import PixelTypes
+
 @dataclass
 class PointSetType:
-    dimension: int
+    dimension: int = 3
 
-    pointComponentType: str
-    pointPixelComponentType: str
-    pointPixelType: str
-    pointPixelComponents: int
+    pointComponentType: Union[IntTypes, FloatTypes] = FloatTypes.Float32
+    pointPixelComponentType: Union[IntTypes, FloatTypes] = FloatTypes.Float32
+    pointPixelType: PixelTypes = PixelTypes.Scalar
+    pointPixelComponents: int = 1
 
 
 @dataclass
 class PointSet:
-    pointSetType: PointSetType
+    pointSetType: Union[PointSetType, Dict] = field(default_factory=PointSetType)
 
-    name: str
+    name: str = 'PointSet'
 
-    numberOfPoints: int
-    points: Optional[ArrayLike]
+    numberOfPoints: int = 0
+    points: Optional[ArrayLike] = None
 
-    numberOfPointPixels: int
-    pointData: Optional[ArrayLike]
+    numberOfPointPixels: int = 0
+    pointData: Optional[ArrayLike] = None
+
+    def __post_init__(self):
+        if isinstance(self.pointSetType, dict):
+            self.pointSetType = PointSetType(**self.pointSetType)

@@ -24,12 +24,12 @@ def test_image_defaults():
     assert image.imageType.pixelType == 'Scalar'
     assert image.imageType.components == 1
 
-    assert image.name == "image"
+    assert image.name == "Image"
     assert image.origin[0] == 0.0
     assert image.origin[1] == 0.0
     assert image.spacing[0] == 1.0
     assert image.spacing[1] == 1.0
-    assert np.array_equal(image.direction, np.eye(2).astype(np.float32).ravel())
+    assert np.array_equal(image.direction, np.eye(2).astype(np.float64))
 
     assert image.size[0] == 1
     assert image.size[1] == 1

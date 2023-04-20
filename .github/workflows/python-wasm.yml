@@ -5,34 +5,70 @@ on: [push,pull_request]
 jobs:
   test-itkwasm:
     runs-on: ${{ matrix.os }}
+    env:
+      python-version: ${{ format('{0}.{1}', matrix.python-major-version, matrix.python-minor-version) }}
     strategy:
       max-parallel: 3
       matrix:
         os: [ubuntu-22.04, windows-2022, macos-12]
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        python-major-version: [3]
+        python-minor-version: [7, 8, 9, 10, 11]
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python ${{ env.python-version }}
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ env.python-version }}
       - name: Install dependencies
         working-directory: ./packages/core/python/itkwasm
+        shell: bash
         run: |
           python -m pip install --upgrade pip
           cd test/test-accelerator
           python -m pip install -e "."
           cd -
-          python -m pip install -e ".[test]"
-      - name: Test with pytest
+          python -m pip install -e "."
+          python -m pip install hatch itk pytest
+      - name: Test on native
+        if: ${{ matrix.python-minor-version < 10 }}
         working-directory: ./packages/core/python/itkwasm
         run: |
-          pytest --junitxml=junit/test-results.xml
-      - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v2
+          hatch build -t wheel
+          pytest --junitxml=junit/test-results-${{ env.python-version }}.xml
+      - name: Download Pyodide
+        if: ${{ matrix.python-minor-version > 9 }}
+        shell: bash
+        working-directory: ./packages/core/python/itkwasm
+        run: |
+          curl -L https://github.com/pyodide/pyodide/releases/download/0.23.1/pyodide-0.23.1.tar.bz2 -o pyodide.tar.bz2
+          tar xjf pyodide.tar.bz2
+          rm -rf dist
+          mv pyodide dist
+      - name: Install pytest-pyodide
+        if: ${{ matrix.python-minor-version > 9 }}
+        shell: bash
+        run: |
+          python -m pip install pytest-pyodide
+      - uses: pyodide/pyodide-actions/install-browser@main
+        if: ${{ matrix.python-minor-version > 9 }}
         with:
-          report_paths: 'packages/core/python/itkwasm/junit/test-results*.xml'
+          runner: selenium
+          browser: chrome
+          browser-version: latest
+      - name: Test with chrome
+        if: ${{ matrix.python-minor-version > 9 }}
+        working-directory: ./packages/core/python/itkwasm
+        run: |
+          hatch build -t wheel
+          ls dist
+          pytest --junitxml=junit/test-results-${{ env.python-version }}.xml --dist-dir=./dist --rt=chrome
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: pytest-results-${{ env.python-version }}
+          path: 'packages/core/python/itkwasm/junit/test-results*.xml'
 
   test-pythonpackages:
     runs-on: ${{ matrix.os }}
@@ -77,8 +113,8 @@ jobs:
         working-directory: ./packages/core/python/itkwasm
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e ".[test]"
-          python -m pip install hatch
+          python -m pip install -e "."
+          python -m pip install hatch itk pytest
       - name: Build Sphinx documentation
         working-directory: ./packages/core/python/itkwasm
         run: |

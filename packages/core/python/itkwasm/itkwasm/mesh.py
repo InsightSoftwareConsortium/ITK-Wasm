@@ -13,7 +13,7 @@ from .pixel_types import PixelTypes
 
 @dataclass
 class MeshType:
-    dimension: int = 2
+    dimension: int = 3
 
     pointComponentType: Union[IntTypes, FloatTypes] = FloatTypes.Float32
     pointPixelComponentType: Union[IntTypes, FloatTypes] = FloatTypes.Float32
@@ -30,7 +30,7 @@ class MeshType:
 class Mesh:
     meshType: Union[MeshType, Dict] = field(default_factory=MeshType)
 
-    name: str = 'mesh'
+    name: str = 'Mesh'
 
     numberOfPoints: int = 0
     points: Optional[ArrayLike] = None

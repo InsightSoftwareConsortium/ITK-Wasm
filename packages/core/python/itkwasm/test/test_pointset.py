@@ -16,7 +16,7 @@ def test_pointset():
 
     point_data = np.random.random((n_points,)).astype(np.float32)
     pointset.SetPointData(itk.vector_container_from_array(point_data.ravel()))
-    
+
     itk_pointset_dict = itk.dict_from_pointset(pointset)
     # Bug, to be fixed by 5.3.0
     itk_pointset_dict.pop('dimension', None)
@@ -24,7 +24,7 @@ def test_pointset():
     itkwasm_pointset_dict = asdict(itkwasm_pointset)
     itk_pointset_roundtrip = itk.pointset_from_dict(itkwasm_pointset_dict)
     itk_pointset_roundtrip_dict = itk.dict_from_pointset(itk_pointset_roundtrip)
-    
+
     pointSetType = itk_pointset_dict["pointSetType"]
     pointSetType_roundtrip = itk_pointset_roundtrip_dict["pointSetType"]
     assert pointSetType["dimension"] == pointSetType_roundtrip["dimension"]

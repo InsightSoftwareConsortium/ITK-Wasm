@@ -41,16 +41,28 @@ Home = "https://wasm.itk.org/"
 Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
 Issues = "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
 
-[project.optional-dependencies]
-test = [
+[tool.hatch.envs.default]
+dependencies = [
     "itk>=5.3.0",
     "pytest >=2.7.3",
+    "pytest-pyodide",
+]
+
+[tool.hatch.envs.default.scripts]
+test = [
+    "hatch build -t wheel",
+    "pytest --dist-dir=./dist --rt=chrome -s",
+]
+download-pyodide = [
+  "curl -L https://github.com/pyodide/pyodide/releases/download/0.23.1/pyodide-0.23.1.tar.bz2 -o pyodide.tar.bz2",
+  "tar xjf pyodide.tar.bz2",
+  "mv pyodide dist",
 ]
 
 [tool.hatch.envs.docs]
 dependencies = [
-  "sphinx",
-  "pydata-sphinx-theme",
+    "sphinx",
+    "pydata-sphinx-theme",
 ]
 
 [tool.hatch.envs.docs.scripts]
