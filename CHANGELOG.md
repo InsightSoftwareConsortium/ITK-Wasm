@@ -1,5 +1,25 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.96](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.95...itk-wasm-v1.0.0-b.96) (2023-04-20)
+
+
+### Bug Fixes
+
+* **Python:** Support Pyodide Image metadata conversion as Map ([38a2fb3](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/38a2fb365b9a89ff1aad46342a200d1204a38240))
+
+
+### Features
+
+* **Python:** Add Pyodide BinaryStream support ([cbf4909](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/cbf490981697faa2e1442f04a10070585b064648))
+* **Python:** Add Pyodide Image support ([4247bbd](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4247bbd4d78ad87d194b5b9b8d82d97e346a0beb))
+* **Python:** Add Pyodide list support ([13e97d6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/13e97d6ba8f13671f819a9d5387a1a329d7cb1c4))
+* **Python:** Add Pyodide Mesh support ([fc9f404](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/fc9f4046a4d5846e7af38d650b40a9e05c537ffb))
+* **Python:** Add Pyodide PointSet support ([f8d0fa3](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f8d0fa38ffdbc82cf91db85641fd772128d844c8))
+* **Python:** Add Pyodide PolyData support ([c379d1e](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/c379d1e92e06ca2691881524553e804f56b7232a))
+* **Python:** Add Pyodide TextFile support ([f055478](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f0554781fd45062c0ce2d4cdca340ffc4dbc67fb))
+* **Python:** Add Pyodide TextStream support ([e95a3dc](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/e95a3dcfc392a58fb01700373a920c5e7f96c2d0))
+* **Python:** Pyodide BinaryFile support ([e067d2f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/e067d2f99d66a475ed0973fa547656e5e3c172f7))
+
 # [1.0.0-b.95](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.94...itk-wasm-v1.0.0-b.95) (2023-04-17)
 
 
