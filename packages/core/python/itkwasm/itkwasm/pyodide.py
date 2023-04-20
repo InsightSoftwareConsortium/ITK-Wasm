@@ -61,7 +61,9 @@ js_resources = JsResources()
 
 def to_py(js_proxy):
     import pyodide
-    if hasattr(js_proxy, "imageType"):
+    if isinstance(js_proxy, pyodide.ffi.JsArray):
+        return [to_py(value) for value in js_proxy]
+    elif hasattr(js_proxy, "imageType"):
         image_dict = js_proxy.to_py()
         image_type = ImageType(**image_dict['imageType'])
         image_dict['imageType'] = image_type
@@ -142,7 +144,12 @@ def to_py(js_proxy):
 def to_js(py):
     import pyodide
     import js
-    if isinstance(py, Image):
+    if isinstance(py, list):
+        js_array = pyodide.ffi.to_js([])
+        for value in py:
+            js_array.append(to_js(value))
+        return js_array
+    elif isinstance(py, Image):
         image_dict = asdict(py)
         image_dict['direction'] = image_dict['direction'].ravel()
         if image_dict['data'] is not None:

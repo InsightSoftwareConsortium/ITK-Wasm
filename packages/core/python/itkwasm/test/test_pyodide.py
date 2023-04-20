@@ -256,3 +256,36 @@ async def test_text_file_conversion(selenium, package_wheel):
         data_py = fp.read()
 
     assert data_py == data
+
+@run_in_pyodide(packages=['micropip', 'numpy'])
+async def test_list_conversion(selenium, package_wheel):
+    import micropip
+    await micropip.install(package_wheel)
+
+    from itkwasm import TextFile
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+    from pathlib import PurePosixPath
+
+    data = "The answer is 42."
+
+    def create_text_file(index):
+        path = PurePosixPath(f'file{index}.txt')
+        with open(path, 'w') as fp:
+            fp.write(data)
+        text_file = TextFile(path)
+        return text_file
+
+    text_files = [create_text_file(index) for index in range(4)]
+
+    text_files_js = to_js(text_files)
+    text_files_py = to_py(text_files_js)
+
+    def verify_text_file(text_file):
+        with open(text_file.path, 'r') as fp:
+            data_py = fp.read()
+
+        assert data_py == data
+
+    for text_file in text_files_py:
+        verify_text_file(text_file)
