@@ -255,6 +255,7 @@ function bindgen(options) {
   switch (language) {
     case 'typescript':
       typescriptBindgen(outputDir, buildDir, filteredWasmBinaries, options)
+    break
     case 'python':
       pythonBindgen(outputDir, buildDir, filteredWasmBinaries, options)
     break
