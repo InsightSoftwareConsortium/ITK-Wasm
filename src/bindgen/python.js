@@ -3,6 +3,8 @@ import path from 'path'
 
 import wasmBinaryInterfaceJson from './wasmBinaryInterfaceJson.js'
 import interfaceJsonTypeToInterfaceType from './interfaceJsonTypeToInterfaceType.js'
+import camelCase from './camelCase.js'
+import snakeCase from './snakeCase.js'
 
 const interfaceJsonTypeToPythonType = new Map([
   ['INPUT_TEXT_FILE:FILE', 'os.PathLike'],
@@ -38,10 +40,6 @@ function mkdirP(dir) {
   }
 }
 
-function snakeCase(kebabCase) {
-  return kebabCase.replaceAll('-', '_')
-}
-
 function wasiPackageReadme(packageName, packageDescription, packageDir) {
   let readme = ''
   readme += `# ${packageName}\n`
@@ -66,6 +64,9 @@ function emscriptenPackageReadme(packageName, packageDescription, packageDir) {
   readme += `# ${packageName}\n`
   readme += `\n[![PyPI version](https://badge.fury.io/py/${packageName}.svg)](https://badge.fury.io/py/${packageName})\n`
   readme += `\n${packageDescription}\n`
+
+  const dispatchPackage = packageName.replace(/-emscripten$/, '')
+  readme += `\nThis package provides the Emscripten WebAssembly implementation. It is usually not called directly. Please use the [\`${dispatchPackage}\`](https://pypi.org/project/${dispatchPackage}/) instead.\n\n`
   readme += `\n## Installation\n
 \`\`\`sh
 pip install ${packageName}
@@ -97,21 +98,60 @@ function packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options
   let pyProjectToml = fs.readFileSync(bindgenResource('template.pyproject.toml'), {encoding:'utf8', flag:'r'})
   pyProjectToml = pyProjectToml.replaceAll('@bindgenPackageName@', packageName)
   const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/itk-wasm'
-  let bindgenDependencies = packageName.endsWith('wasi') || packageName.endsWith('emscripten') ? '\n    "importlib_resources",\n' : `\n    "${packageName}-wasi; sys_platform != \\"emscripten\\"",\n    "${packageName}-emscripten; sys_platform == \\"emscripten\\"",\n`
+  let bindgenKeywords = ''
+  let bindgenDependencies = ''
+  let bindgenHatchEnvDependencies = ''
+  let bindgenHatchEnvScripts = `
+[tool.hatch.envs.default.scripts]
+test = "pytest"
+`
+  if (packageName.endsWith('wasi')) {
+    bindgenDependencies += '\n    "importlib_resources",\n'
+    bindgenKeywords = '\n  "wasi",'
+  } else if (packageName.endsWith('emscripten')) {
+    bindgenKeywords = '\n  "emscripten",'
+    bindgenHatchEnvDependencies = '\n  "pytest-pyodide",'
+    bindgenHatchEnvScripts = `
+[tool.hatch.envs.default.scripts]
+test = [
+  "hatch build -t wheel",
+  "pytest --dist-dir=./dist --rt=chrome",
+]
+download-pyodide = [
+  "curl -L https://github.com/pyodide/pyodide/releases/download/0.23.1/pyodide-0.23.1.tar.bz2 -o pyodide.tar.bz2",
+  "tar xjf pyodide.tar.bz2",
+  "rm -rf dist pyodide.tar.bz2",
+  "mv pyodide dist",
+]
+serve = [
+  "hatch build -t wheel",
+  'echo "\\nVisit http://localhost:8877/console.html\\n"',
+  "python -m http.server --directory=./dist 8877",
+]
+`
+
+  } else {
+    bindgenKeywords = '\n  "wasi",\n  "emscripten",'
+    bindgenDependencies += `\n    "${packageName}-wasi; sys_platform != \\"emscripten\\"",\n    "${packageName}-emscripten; sys_platform == \\"emscripten\\"",\n`
+  }
+  pyProjectToml = pyProjectToml.replaceAll('@bindgenKeywords@', bindgenKeywords)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenDependencies@', bindgenDependencies)
+  pyProjectToml = pyProjectToml.replaceAll('@bindgenHatchEnvDependencies@', bindgenHatchEnvDependencies)
+  pyProjectToml = pyProjectToml.replaceAll('@bindgenHatchEnvScripts@', bindgenHatchEnvScripts)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenProjectRepository@', repository)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenPyPackage@', bindgenPyPackage)
   const pyProjectTomlPath = path.join(packageDir, 'pyproject.toml')
-  if (!fs.existsSync(pyProjectToml)) {
+  if (!fs.existsSync(pyProjectTomlPath)) {
     fs.writeFileSync(pyProjectTomlPath, pyProjectToml)
   }
 }
 
-function packageVersion(packageDir, pypackage) {
-  const version = `__version__ = "0.1.0"
+function packageVersion(packageDir, pypackage, options) {
+  const versionString = options.packageVersion ?? '0.1.0'
+  const version = `__version__ = "${versionString}"
 `
   const versionPath = path.join(packageDir, pypackage, '_version.py')
-  if (!fs.existsSync(versionPath)) {
+  if (!fs.existsSync(versionPath) || typeof options.packageVersion !== 'undefined') {
     fs.writeFileSync(versionPath, version)
   }
 }
@@ -236,7 +276,7 @@ function functionModuleDocstring(interfaceJson) {
   return docstring
 }
 
-function functionModule(interfaceJson, pypackage, modulePath) {
+function wasiFunctionModule(interfaceJson, pypackage, modulePath) {
   const functionName = snakeCase(interfaceJson.name)
   let moduleContent = `# Generated file. Do not edit.
 
@@ -447,6 +487,107 @@ ${postOutput}
   fs.writeFileSync(modulePath, moduleContent)
 }
 
+function emscriptenTestModule(packageDir, pypackage) {
+  mkdirP(path.join(packageDir, 'test'))
+
+  let moduleContent = `import pytest
+import sys
+
+if sys.version_info < (3,10):
+    pytest.skip("Skipping pyodide tests on older Python", allow_module_level=True)
+
+from pytest_pyodide import run_in_pyodide
+
+from ${pypackage} import __version__ as test_package_version
+
+@pytest.fixture
+def package_wheel():
+    return f"${pypackage}-{test_package_version}-py3-none-any.whl"
+
+@run_in_pyodide(packages=['micropip'])
+async def test_example(selenium, package_wheel):
+    import micropip
+    await micropip.install(package_wheel)
+
+    # Write your test code here
+`
+
+  const modulePath = path.join(packageDir, 'test', 'test_pyodide.py')
+  if (!fs.existsSync(modulePath)) {
+    fs.writeFileSync(modulePath, moduleContent)
+  }
+}
+
+function emscriptenFunctionModule(interfaceJson, pypackage, modulePath) {
+  const functionName = snakeCase(interfaceJson.name)
+  let moduleContent = `# Generated file. Do not edit.
+
+from pathlib import Path
+import os
+from typing import Dict, Tuple
+
+from .pyodide import js_package
+
+from itkwasm.pyodide import (
+    to_js,
+    to_py,
+    js_resources
+)
+
+`
+
+  const functionArgs = functionModuleArgs(interfaceJson)
+  const returnType = functionModuleReturnType(interfaceJson)
+  const docstring = functionModuleDocstring(interfaceJson)
+
+  let args = ''
+  interfaceJson.inputs.forEach((input) => {
+    args += `to_js(${snakeCase(input.name)}), `
+  })
+
+  let options = ''
+  interfaceJson.parameters.forEach((parameter) => {
+    if (parameter.name === 'memory-io') {
+      // Internal
+      return
+    }
+    options += `${camelCase(parameter.name)}=to_js(${snakeCase(parameter.name)}), `
+  })
+
+  const jsFunction = camelCase(interfaceJson.name)
+
+  moduleContent += `async def ${functionName}_async(
+${functionArgs}) -> ${returnType}:
+    ${docstring}
+    js_module = await js_package.js_module
+    web_worker = js_resources.web_worker
+
+    outputs = await js_module.${jsFunction}(web_worker, ${args} ${options})
+
+    output_web_worker = None
+    output_list = []
+    print(dir(outputs))
+    outputs_object_map = outputs.as_object_map()
+    for output_name in outputs.object_keys():
+        if output_name == 'webWorker':
+            output_web_worker = outputs_object_map[output_name]
+        else:
+            print(output_name)
+            print(type(outputs_object_map[output_name]))
+            print(outputs_object_map[output_name].constructor.name)
+            print(outputs_object_map[output_name])
+            output_list.append(to_py(outputs_object_map[output_name]))
+
+    js_resources.web_worker = output_web_worker
+
+    if len(output_list) == 1:
+        return output_list[0]
+    return tuple(output_list)
+`
+  fs.writeFileSync(modulePath, moduleContent)
+}
+
+
 function dispatchFunctionModule(interfaceJson, pypackage, modulePath) {
   const functionName = snakeCase(interfaceJson.name)
   let moduleContent = `# Generated file. Do not edit.
@@ -472,21 +613,35 @@ from itkwasm import (
   })
   functionArgsToPass = functionArgsToPass.substring(0, functionArgsToPass.length - 2)
 
-  moduleContent += `def ${functionName}(
+  const syncModuleContent = `${moduleContent}def ${functionName}(
 ${functionArgs}) -> ${returnType}:
     ${docstring}
     func = environment_dispatch("${pypackage}", "${functionName}")
     output = func(${functionArgsToPass})
     return output
 `
-  fs.writeFileSync(modulePath, moduleContent)
+  fs.writeFileSync(modulePath, syncModuleContent)
+
+  const asyncModuleContent = `${moduleContent}async def ${functionName}_async(
+${functionArgs}) -> ${returnType}:
+    ${docstring}
+    func = environment_dispatch("${pypackage}", "${functionName}_async")
+    output = await func(${functionArgsToPass})
+    return output
+`
+  fs.writeFileSync(modulePath.replace('.py', '_async.py'), asyncModuleContent)
 }
 
-function packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage) {
+function packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async, sync) {
   const functionNames = []
   wasmBinaries.forEach((wasmBinaryName) => {
     const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
-    functionNames.push(snakeCase(interfaceJson.name))
+    if (async) {
+      functionNames.push(snakeCase(interfaceJson.name) + "_async")
+    }
+    if (sync) {
+      functionNames.push(snakeCase(interfaceJson.name))
+    }
   })
 
   const functionImports = functionNames.map(n => `from .${n} import ${n}`).join("\n")
@@ -513,8 +668,10 @@ function wasiPackage(outputDir, buildDir, wasmBinaries, options) {
 
   wasiPackageReadme(packageName, packageDescription, packageDir)
   packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options)
-  packageVersion(packageDir, pypackage)
-  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage)
+  packageVersion(packageDir, pypackage, options)
+  const async = false
+  const sync = true
+  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async, sync)
 
   const wasmModulesDir = path.join(packageDir, pypackage, 'wasm_modules')
   mkdirP(wasmModulesDir)
@@ -522,11 +679,56 @@ function wasiPackage(outputDir, buildDir, wasmBinaries, options) {
     const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
     fs.copyFileSync(path.join(parsedPath.dir, parsedPath.base), path.join(wasmModulesDir, parsedPath.base))
     const functionName = snakeCase(interfaceJson.name)
-    functionModule(interfaceJson, pypackage, path.join(packageDir, pypackage, `${functionName}.py`))
+    wasiFunctionModule(interfaceJson, pypackage, path.join(packageDir, pypackage, `${functionName}.py`))
   })
 }
 
+function emscriptenPyodideModule(packageDir, pypackage, options) {
+  const defaultJsPackageName = options.packageName.replace('itkwasm-', '@itk-wasm/')
+  const defaultJsModuleName = options.packageName.replace('itkwasm-', '')
+  const version = options.packageVersion ?? '0.1.0'
+
+  const moduleUrl = options.jsModuleUrl ?? `https://cdn.jsdelivr.net/npm/${defaultJsPackageName}@${version}/dist/bundles/${defaultJsModuleName}.js`
+
+  const moduleContent = `from itkwasm.pyodide import JsPackageConfig, JsPackage
+
+default_config = JsPackageConfig("${moduleUrl}")
+js_package = JsPackage(default_config)
+`
+
+  const modulePath = path.join(packageDir, pypackage, 'pyodide.py')
+
+  if (!fs.existsSync(modulePath)) {
+    fs.writeFileSync(modulePath, moduleContent)
+  }
+}
+
 function emscriptenPackage(outputDir, buildDir, wasmBinaries, options) {
+  const packageName = `${options.packageName}-emscripten`
+  const packageDir = path.join(outputDir, packageName)
+  const packageDescription = `${options.packageDescription} Emscripten implementation.`
+  mkdirP(packageDir)
+
+  const pypackage = snakeCase(packageName)
+  const bindgenPyPackage = pypackage
+  mkdirP(path.join(packageDir, pypackage))
+
+  emscriptenPackageReadme(packageName, packageDescription, packageDir)
+  packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options)
+  packageVersion(packageDir, pypackage, options)
+  const async = true
+  const sync = false
+  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async, sync)
+  emscriptenPyodideModule(packageDir, pypackage, options)
+  emscriptenTestModule(packageDir, pypackage)
+
+  const wasmModulesDir = path.join(packageDir, pypackage, 'wasm_modules')
+  mkdirP(wasmModulesDir)
+  wasmBinaries.forEach((wasmBinaryName) => {
+    const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
+    const functionName = snakeCase(interfaceJson.name) + '_async'
+    emscriptenFunctionModule(interfaceJson, pypackage, path.join(packageDir, pypackage, `${functionName}.py`))
+  })
 }
 
 function pythonBindings(outputDir, buildDir, wasmBinaries, options) {
@@ -540,8 +742,10 @@ function pythonBindings(outputDir, buildDir, wasmBinaries, options) {
 
   dispatchPackageReadme(packageName, options.packageDescription, packageDir)
   packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options)
-  packageVersion(packageDir, pypackage)
-  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, options.packageDescription, packageDir, pypackage)
+  packageVersion(packageDir, pypackage, options)
+  const async = true
+  const sync = true
+  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, options.packageDescription, packageDir, pypackage, async, sync)
 
   wasmBinaries.forEach((wasmBinaryName) => {
     const { interfaceJson } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
@@ -552,13 +756,8 @@ function pythonBindings(outputDir, buildDir, wasmBinaries, options) {
 
 function bindgen (outputDir, buildDir, filteredWasmBinaries, options) {
   pythonBindings(outputDir, buildDir, filteredWasmBinaries, options)
-  const isWasi = !!filteredWasmBinaries.filter(wb => wb.endsWith('.wasi.wasm')).length
-  if (isWasi) {
-    wasiPackage(outputDir, buildDir, filteredWasmBinaries, options)
-  } else {
-    emscriptenPackage(outputDir, buildDir, filteredWasmBinaries, options)
-  }
-
+  wasiPackage(outputDir, buildDir, filteredWasmBinaries, options)
+  emscriptenPackage(outputDir, buildDir, filteredWasmBinaries, options)
 }
 
 export default bindgen

@@ -69,8 +69,12 @@ def environment_dispatch(interface_package: str, func_name: str) -> Callable:
         return factory_func
 
     if sys.platform != "emscripten":
+        if func_name.endswith('_async'):
+            raise ValueError('async function are only implemented for emscripten')
         package = f"{interface_package}_wasi"
     else:
+        if not func_name.endswith('_async'):
+            raise ValueError('emscripten only implements the _async version of this function')
         package = f"{interface_package}_emscripten"
     mod = importlib.import_module(package)
     func = getattr(mod, func_name)

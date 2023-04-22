@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "@bindgenPackageName@"
+name = "itkwasm-compress-stringify-emscripten"
 readme = "README.md"
 license = "Apache-2.0"
 dynamic = ["version", "description"]
@@ -26,23 +26,42 @@ classifiers = [
 ]
 keywords = [
   "itkwasm",
-  "webassembly",@bindgenKeywords@
+  "webassembly",
+  "emscripten",
 ]
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0.b97",@bindgenDependencies@
+    "itkwasm >= 1.0.b97",
 ]
 
 [tool.hatch.version]
-path = "@bindgenPyPackage@/_version.py"
+path = "itkwasm_compress_stringify_emscripten/_version.py"
 
 [tool.hatch.envs.default]
 dependencies = [
-  "pytest",@bindgenHatchEnvDependencies@
+  "pytest",
+  "pytest-pyodide",
 ]
 
-@bindgenHatchEnvScripts@
+
+[tool.hatch.envs.default.scripts]
+test = [
+  "hatch build -t wheel",
+  "pytest --dist-dir=./dist --rt=chrome",
+]
+download-pyodide = [
+  "curl -L https://github.com/pyodide/pyodide/releases/download/0.23.1/pyodide-0.23.1.tar.bz2 -o pyodide.tar.bz2",
+  "tar xjf pyodide.tar.bz2",
+  "rm -rf dist pyodide.tar.bz2",
+  "mv pyodide dist",
+]
+serve = [
+  "hatch build -t wheel",
+  'echo "\nVisit http://localhost:8877/console.html\n"',
+  "python -m http.server --directory=./dist 8877",
+]
+
 
 [tool.hatch.build]
 exclude = [

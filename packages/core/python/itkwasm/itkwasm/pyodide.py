@@ -61,7 +61,9 @@ js_resources = JsResources()
 
 def to_py(js_proxy):
     import pyodide
-    if isinstance(js_proxy, pyodide.ffi.JsArray):
+    if hasattr(js_proxy, 'constructor') and js_proxy.constructor.name == "Uint8Array":
+        return js_proxy.to_bytes()
+    elif isinstance(js_proxy, pyodide.ffi.JsArray):
         return [to_py(value) for value in js_proxy]
     elif hasattr(js_proxy, "imageType"):
         image_dict = js_proxy.to_py()
@@ -139,7 +141,8 @@ def to_py(js_proxy):
         binary_stream_dict = js_proxy.to_py()
         binary_stream_dict['data'] = bytes(binary_stream_dict['data'])
         return BinaryStream(**binary_stream_dict)
-    return js_proxy.to_py()
+    # Is not a JsProxy, int, etc
+    return js_proxy
 
 def to_js(py):
     import pyodide
