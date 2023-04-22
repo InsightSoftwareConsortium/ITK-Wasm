@@ -141,7 +141,7 @@ serve = [
   pyProjectToml = pyProjectToml.replaceAll('@bindgenProjectRepository@', repository)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenPyPackage@', bindgenPyPackage)
   const pyProjectTomlPath = path.join(packageDir, 'pyproject.toml')
-  if (!fs.existsSync(pyProjectToml)) {
+  if (!fs.existsSync(pyProjectTomlPath)) {
     fs.writeFileSync(pyProjectTomlPath, pyProjectToml)
   }
 }
@@ -613,23 +613,33 @@ from itkwasm import (
   })
   functionArgsToPass = functionArgsToPass.substring(0, functionArgsToPass.length - 2)
 
-  moduleContent += `def ${functionName}(
+  const syncModuleContent = `${moduleContent}def ${functionName}(
 ${functionArgs}) -> ${returnType}:
     ${docstring}
     func = environment_dispatch("${pypackage}", "${functionName}")
     output = func(${functionArgsToPass})
     return output
 `
-  fs.writeFileSync(modulePath, moduleContent)
+  fs.writeFileSync(modulePath, syncModuleContent)
+
+  const asyncModuleContent = `${moduleContent}async def ${functionName}_async(
+${functionArgs}) -> ${returnType}:
+    ${docstring}
+    func = environment_dispatch("${pypackage}", "${functionName}_async")
+    output = await func(${functionArgsToPass})
+    return output
+`
+  fs.writeFileSync(modulePath.replace('.py', '_async.py'), asyncModuleContent)
 }
 
-function packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async) {
+function packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async, sync) {
   const functionNames = []
   wasmBinaries.forEach((wasmBinaryName) => {
     const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
     if (async) {
       functionNames.push(snakeCase(interfaceJson.name) + "_async")
-    } else {
+    }
+    if (sync) {
       functionNames.push(snakeCase(interfaceJson.name))
     }
   })
@@ -660,7 +670,8 @@ function wasiPackage(outputDir, buildDir, wasmBinaries, options) {
   packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options)
   packageVersion(packageDir, pypackage, options)
   const async = false
-  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async)
+  const sync = true
+  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async, sync)
 
   const wasmModulesDir = path.join(packageDir, pypackage, 'wasm_modules')
   mkdirP(wasmModulesDir)
@@ -706,7 +717,8 @@ function emscriptenPackage(outputDir, buildDir, wasmBinaries, options) {
   packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options)
   packageVersion(packageDir, pypackage, options)
   const async = true
-  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async)
+  const sync = false
+  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async, sync)
   emscriptenPyodideModule(packageDir, pypackage, options)
   emscriptenTestModule(packageDir, pypackage)
 
@@ -731,7 +743,9 @@ function pythonBindings(outputDir, buildDir, wasmBinaries, options) {
   dispatchPackageReadme(packageName, options.packageDescription, packageDir)
   packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options)
   packageVersion(packageDir, pypackage, options)
-  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, options.packageDescription, packageDir, pypackage)
+  const async = true
+  const sync = true
+  packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, options.packageDescription, packageDir, pypackage, async, sync)
 
   wasmBinaries.forEach((wasmBinaryName) => {
     const { interfaceJson } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
