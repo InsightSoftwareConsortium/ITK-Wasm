@@ -98,6 +98,7 @@ function packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options
   let pyProjectToml = fs.readFileSync(bindgenResource('template.pyproject.toml'), {encoding:'utf8', flag:'r'})
   pyProjectToml = pyProjectToml.replaceAll('@bindgenPackageName@', packageName)
   const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/itk-wasm'
+  let bindgenKeywords = ''
   let bindgenDependencies = ''
   let bindgenHatchEnvDependencies = ''
   let bindgenHatchEnvScripts = `
@@ -106,7 +107,9 @@ test = "pytest"
 `
   if (packageName.endsWith('wasi')) {
     bindgenDependencies += '\n    "importlib_resources",\n'
+    bindgenKeywords = '\n  "wasi",'
   } else if (packageName.endsWith('emscripten')) {
+    bindgenKeywords = '\n  "emscripten",'
     bindgenHatchEnvDependencies = '\n  "pytest-pyodide",'
     bindgenHatchEnvScripts = `
 [tool.hatch.envs.default.scripts]
@@ -128,8 +131,10 @@ serve = [
 `
 
   } else {
+    bindgenKeywords = '\n  "wasi",\n  "emscripten",'
     bindgenDependencies += `\n    "${packageName}-wasi; sys_platform != \\"emscripten\\"",\n    "${packageName}-emscripten; sys_platform == \\"emscripten\\"",\n`
   }
+  pyProjectToml = pyProjectToml.replaceAll('@bindgenKeywords@', bindgenKeywords)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenDependencies@', bindgenDependencies)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenHatchEnvDependencies@', bindgenHatchEnvDependencies)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenHatchEnvScripts@', bindgenHatchEnvScripts)
