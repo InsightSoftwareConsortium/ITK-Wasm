@@ -2,10 +2,8 @@
 
 > Universal spatial analysis and visualization.
 
-*itk-wasm* combines [ITK](https://www.itk.org/) and
-[WebAssembly](https://webassembly.org/) to enable high-performance spatial
-analysis in a web browser, Node.js, and reproducible execution across
-programming languages and hardware architectures.
+*itk-wasm* combines [ITK](https://www.itk.org/) and [WebAssembly](https://webassembly.org/) to enable high-performance spatial analysis in a web browser or system-level environments and reproducible execution across programming languages and hardware architectures.
+
 
 [![Examples](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/examples.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/examples.yml)
 [![Toolchains](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/toolchains.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/toolchains.yml)

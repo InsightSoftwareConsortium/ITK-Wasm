@@ -50,16 +50,11 @@ async def compress_stringify_async(
 
     output_web_worker = None
     output_list = []
-    print(dir(outputs))
     outputs_object_map = outputs.as_object_map()
     for output_name in outputs.object_keys():
         if output_name == 'webWorker':
             output_web_worker = outputs_object_map[output_name]
         else:
-            print(output_name)
-            print(type(outputs_object_map[output_name]))
-            print(outputs_object_map[output_name].constructor.name)
-            print(outputs_object_map[output_name])
             output_list.append(to_py(outputs_object_map[output_name]))
 
     js_resources.web_worker = output_web_worker
