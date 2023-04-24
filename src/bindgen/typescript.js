@@ -210,7 +210,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
     // -----------------------------------------------------------------
     // Options module
-    const filteredParameters = interfaceJson.parameters.filter(p => { return p.name !== 'memory-io'})
+    const filteredParameters = interfaceJson.parameters.filter(p => { return p.name !== 'memory-io' && p.name !== 'version'})
     const haveParameters = !!filteredParameters.length
 
     // track unique output types in this set
@@ -222,7 +222,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       let optionsContent = ''
       let optionsInterfaceContent = `interface ${modulePascalCase}Options {\n`
       interfaceJson.parameters.forEach((parameter) => {
-        if (parameter.name === 'memory-io') {
+        if (parameter.name === 'memory-io' || parameter.name === 'version') {
           // Internal
           return
         }
@@ -416,7 +416,7 @@ import {\n`
     functionContent += "  // Options\n"
     functionContent += "  args.push('--memory-io')\n"
     interfaceJson.parameters.forEach((parameter) => {
-      if (parameter.name === 'memory-io') {
+      if (parameter.name === 'memory-io' || parameter.name === 'version') {
         // Internal
         return
       }
