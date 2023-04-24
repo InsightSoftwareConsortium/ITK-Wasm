@@ -1,5 +1,15 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.98](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.97...itk-wasm-v1.0.0-b.98) (2023-04-24)
+
+
+### Bug Fixes
+
+* **itk-wasm-cli:** avoid always generating python bindgen ([aed9aed](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/aed9aed0a0e7d4c1c59f75c644d3fa465f8dce7d))
+* **pipelines-base-url:** use the package name in CDN URL ([1637e25](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/1637e25e50f442a8279ff4d0ec378f0f495bc4d7))
+* **python:** add UINT type mapped to int for bindgen ([aa4a482](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/aa4a4822cba9c78dc9a216953e150443d6f59c7f))
+* **typescript:** add UINT mapping to number for bindgen interface ([8eabe30](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/8eabe30da60afa8013ec690b9597534faa9b9cd5))
+
 # [1.0.0-b.97](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.96...itk-wasm-v1.0.0-b.97) (2023-04-22)
 
 
