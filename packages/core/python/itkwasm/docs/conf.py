@@ -6,34 +6,49 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+from datetime import date
+
 project = 'itkwasm'
-copyright = '2023, NumFOCUS'
+copyright = f'{date.today().year}, NumFOCUS'
 author = 'Matt McCormick'
 
-# -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+extensions = [
+    'sphinx.ext.napoleon',
+    'autodoc2',
+    'myst_parser',
+    'sphinx.ext.intersphinx',
+    'sphinx_copybutton',
+    'sphinxext.opengraph',
+    'sphinx_design',
+]
 
-extensions = ['sphinx.ext.napoleon', 'sphinx.ext.autodoc']
+myst_enable_extensions = ["colon_fence"]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+autodoc2_packages = [
+    {
+        "path": "../itkwasm",
+        "exclude_files": ["_to_numpy_array.py",],
+    },
+]
+autodoc2_render_plugin = "myst"
 
-
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
-html_theme = 'pydata_sphinx_theme'
-html_static_path = ['_static']
-
-html_theme_options = {
-    "use_edit_page_button": True,
-    "github_url": "https://github.com/InsightSoftwareConsortium/itk-wasm",
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3/", None),
 }
 
-html_context = {
-    "github_user": "InsightSoftwareConsortium",
-    "github_repo": "itk-wasm",
-    "github_version": "main",
-    "doc_path": "packages/core/python/itkwasm/docs",
+html_theme = 'furo'
+html_static_path = ['_static']
+html_logo = "_static/logo-white.svg"
+html_favicon = "_static/icon/favicon.png"
+html_title = f"{project} python documentation"
+
+# Furo options
+html_theme_options = {
+    "top_of_page_button": "edit",
+    "source_repository": "https://github.com/InsightSoftwareConsortium/itk-wasm/",
+    "source_branch": "main",
+    "source_directory": "packages/core/python/itkwasm/docs",
 }

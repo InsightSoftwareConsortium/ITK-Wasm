@@ -148,6 +148,7 @@ jobs:
           python -m pip install -e "."
           python -m pip install hatch itk pytest
       - name: Build Sphinx documentation
-        working-directory: ./packages/core/python/itkwasm
+        working-directory: ./packages/core/python/itkwasm/docs
         run: |
-          hatch run docs:html
+          python -m pip install -r requirements.txt
+          make html
