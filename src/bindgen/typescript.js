@@ -24,6 +24,7 @@ const interfaceJsonTypeToTypeScriptType = new Map([
   ['BOOL', 'boolean'],
   ['TEXT', 'string'],
   ['INT', 'number'],
+  ['UINT', 'number'],
   ['FLOAT', 'number'],
   ['OUTPUT_JSON', 'Object'],
 ])
