@@ -22,6 +22,7 @@ const interfaceJsonTypeToPythonType = new Map([
   ['BOOL', 'bool'],
   ['TEXT', 'str'],
   ['INT', 'int'],
+  ['UINT', 'int'],
   ['FLOAT', 'float'],
   ['OUTPUT_JSON', 'Dict'],
 ])
