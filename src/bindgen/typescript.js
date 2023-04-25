@@ -66,7 +66,18 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     if(options.repository) {
       packageJson.repository = { 'type': 'git', 'url': options.repository }
     }
+    if(options.packageVersion) {
+      packageJson.version = options.packageVersion
+    } else {
+      packageJson.version = "0.1.0"
+    }
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+  } else {
+    if (options.packageVersion) {
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath))
+      packageJson.version = options.packageVersion
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+    }
   }
 
   if (!forNode) {
