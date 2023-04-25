@@ -513,7 +513,7 @@ async def test_example(selenium, package_wheel):
     # Write your test code here
 `
 
-  const modulePath = path.join(packageDir, 'test', 'test_pyodide.py')
+  const modulePath = path.join(packageDir, 'test', `test_${pypackage.replace('_emscripten', '')}.py`)
   if (!fs.existsSync(modulePath)) {
     fs.writeFileSync(modulePath, moduleContent)
   }
