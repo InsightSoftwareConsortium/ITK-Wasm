@@ -13,28 +13,20 @@ def compress_stringify(
 ) -> bytes:
     """Given a binary, compress and optionally base64 encode.
 
-    Parameters
-    ----------
+    :param input: Input binary
+    :type  input: bytes
 
-    input: bytes
-        Input binary
+    :param stringify: Stringify the output
+    :type  stringify: bool
 
-    stringify: bool, optional
-        Stringify the output
+    :param compression_level: Compression level, typically 1-9
+    :type  compression_level: int
 
-    compression_level: int, optional
-        Compression level, typically 1-9
+    :param data_url_prefix: dataURL prefix
+    :type  data_url_prefix: str
 
-    data_url_prefix: str, optional
-        dataURL prefix
-
-
-    Returns
-    -------
-
-    bytes
-        Output compressed binary
-
+    :return: Output compressed binary
+    :rtype:  bytes
     """
     func = environment_dispatch("itkwasm_compress_stringify", "compress_stringify")
     output = func(input, stringify=stringify, compression_level=compression_level, data_url_prefix=data_url_prefix)

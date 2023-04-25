@@ -566,7 +566,7 @@ function bindgen (outputDir, buildDir, filteredWasmBinaries, options) {
   const packageName = options.packageName
   readme += `# ${packageName}\n`
   readme += `\n[![npm version](https://badge.fury.io/js/${packageName.replace('/', '%2F')}.svg)](https://www.npmjs.com/package/${packageName})\n`
-  readme += `\n${options.packageDescription}\n`
+  readme += `\n> ${options.packageDescription}\n`
   readme += `\n## Installation\n
 \`\`\`sh
 npm install ${packageName}

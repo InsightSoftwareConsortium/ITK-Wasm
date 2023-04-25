@@ -240,36 +240,26 @@ function functionModuleReturnType(interfaceJson) {
 }
 
 function functionModuleDocstring(interfaceJson) {
-  let docstring = `"""${interfaceJson.description}`
-  docstring += `
-
-    Parameters
-    ----------
-
+  let docstring = `"""${interfaceJson.description}
 `
   interfaceJson['inputs'].forEach((value) => {
     const pythonType = interfaceJsonTypeToPythonType.get(value.type)
-    docstring += `    ${snakeCase(value.name)}: ${pythonType}\n`
-    docstring += `        ${value.description}\n\n`
+    docstring += `\n    :param ${snakeCase(value.name)}: ${value.description}\n`
+    docstring += `    :type  ${snakeCase(value.name)}: ${pythonType}\n`
   })
   interfaceJson['parameters'].forEach((value) => {
     if (value.name === "memory-io" || value.name === "version") {
       return
     }
     const pythonType = interfaceJsonTypeToPythonType.get(value.type)
-    docstring += `    ${snakeCase(value.name)}: ${pythonType}, optional\n`
-    docstring += `        ${value.description}\n\n`
+    docstring += `\n    :param ${snakeCase(value.name)}: ${value.description}\n`
+    docstring += `    :type  ${snakeCase(value.name)}: ${pythonType}\n`
   })
-  docstring += `
-    Returns
-    -------
-
-`
   const jsonOutputs = interfaceJson['outputs']
   jsonOutputs.forEach((value) => {
     const pythonType = interfaceJsonTypeToPythonType.get(value.type)
-    docstring += `    ${pythonType}\n`
-    docstring += `        ${value.description}\n\n`
+    docstring += `\n    :return: ${value.description}\n`
+    docstring += `    :rtype:  ${pythonType}\n`
   })
 
   docstring += '    """'
@@ -729,7 +719,49 @@ function emscriptenPackage(outputDir, buildDir, wasmBinaries, options) {
   })
 }
 
-function pythonBindings(outputDir, buildDir, wasmBinaries, options) {
+function packageDocs(packageName, packageDir, pypackage, options) {
+  const docFiles = [
+    'requirements.txt',
+    'Makefile',
+    'make.bat',
+    path.join('_static', 'logo.svg'),
+    path.join('_static', 'favicon.png'),
+  ]
+
+  const docsDir = path.join(packageDir, 'docs')
+  mkdirP(docsDir)
+  mkdirP(path.join(docsDir, '_static'))
+  docFiles.forEach((filePath) => {
+    const outputPath = path.join(docsDir, filePath)
+    if (!fs.existsSync(outputPath)) {
+      const contents = fs.readFileSync(bindgenResource(path.join('docs', filePath)), {encoding:'utf8', flag:'r'})
+      fs.writeFileSync(outputPath, contents)
+    }
+  })
+
+  const confPyPath = path.join(docsDir, 'conf.py')
+  if (!fs.existsSync(confPyPath)) {
+    let confPyContent = fs.readFileSync(bindgenResource(path.join('docs', 'conf.py')), {encoding:'utf8', flag:'r'})
+    confPyContent = confPyContent.replaceAll('@bindgenProject@', packageName)
+    confPyContent = confPyContent.replaceAll('@bindgenPyPackage@', pypackage)
+    const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/itk-wasm'
+    confPyContent = confPyContent.replaceAll('@bindgenRepository@', repository)
+    fs.writeFileSync(confPyPath, confPyContent)
+  }
+
+  const indexPath = path.join(docsDir, 'index.md')
+  if (!fs.existsSync(indexPath)) {
+    let indexContent = fs.readFileSync(bindgenResource(path.join('docs', 'index.md')), {encoding:'utf8', flag:'r'})
+    indexContent = indexContent.replaceAll('@bindgenProject@', packageName)
+    indexContent = indexContent.replaceAll('@bindgenPyPackage@', pypackage)
+    indexContent = indexContent.replaceAll('@bindgenPackageDescription@', options.packageDescription)
+    const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/itk-wasm'
+    indexContent = indexContent.replaceAll('@bindgenRepository@', repository)
+    fs.writeFileSync(indexPath, indexContent)
+  }
+}
+
+function dispatchPackage(outputDir, buildDir, wasmBinaries, options) {
   const packageName = options.packageName
   const packageDir = path.join(outputDir, packageName)
   mkdirP(packageDir)
@@ -744,6 +776,7 @@ function pythonBindings(outputDir, buildDir, wasmBinaries, options) {
   const async = true
   const sync = true
   packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, options.packageDescription, packageDir, pypackage, async, sync)
+  packageDocs(packageName, packageDir, pypackage, options)
 
   wasmBinaries.forEach((wasmBinaryName) => {
     const { interfaceJson } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
@@ -753,7 +786,7 @@ function pythonBindings(outputDir, buildDir, wasmBinaries, options) {
 }
 
 function bindgen (outputDir, buildDir, filteredWasmBinaries, options) {
-  pythonBindings(outputDir, buildDir, filteredWasmBinaries, options)
+  dispatchPackage(outputDir, buildDir, filteredWasmBinaries, options)
   wasiPackage(outputDir, buildDir, filteredWasmBinaries, options)
   emscriptenPackage(outputDir, buildDir, filteredWasmBinaries, options)
 }

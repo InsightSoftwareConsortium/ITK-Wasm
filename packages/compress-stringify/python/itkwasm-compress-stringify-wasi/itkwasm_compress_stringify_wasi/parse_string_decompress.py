@@ -20,22 +20,14 @@ def parse_string_decompress(
 ) -> bytes:
     """Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.
 
-    Parameters
-    ----------
+    :param input: Compressed input
+    :type  input: bytes
 
-    input: bytes
-        Compressed input
+    :param parse_string: Parse the input string before decompression
+    :type  parse_string: bool
 
-    parse_string: bool, optional
-        Parse the input string before decompression
-
-
-    Returns
-    -------
-
-    bytes
-        Output decompressed binary
-
+    :return: Output decompressed binary
+    :rtype:  bytes
     """
     pipeline = Pipeline(file_resources('itkwasm_compress_stringify_wasi').joinpath(Path('wasm_modules') / Path('parse-string-decompress.wasi.wasm')))
 

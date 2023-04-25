@@ -18,22 +18,14 @@ async def parse_string_decompress_async(
 ) -> bytes:
     """Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.
 
-    Parameters
-    ----------
+    :param input: Compressed input
+    :type  input: bytes
 
-    input: bytes
-        Compressed input
+    :param parse_string: Parse the input string before decompression
+    :type  parse_string: bool
 
-    parse_string: bool, optional
-        Parse the input string before decompression
-
-
-    Returns
-    -------
-
-    bytes
-        Output decompressed binary
-
+    :return: Output decompressed binary
+    :rtype:  bytes
     """
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker
