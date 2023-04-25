@@ -513,7 +513,7 @@ async def test_example(selenium, package_wheel):
     # Write your test code here
 `
 
-  const modulePath = path.join(packageDir, 'test', 'test_pyodide.py')
+  const modulePath = path.join(packageDir, 'test', `test_${pypackage.replace('_emscripten', '')}.py`)
   if (!fs.existsSync(modulePath)) {
     fs.writeFileSync(modulePath, moduleContent)
   }
@@ -684,11 +684,13 @@ function emscriptenPyodideModule(packageDir, pypackage, options) {
   const defaultJsModuleName = options.packageName.replace('itkwasm-', '')
   const version = options.packageVersion ?? '0.1.0'
 
-  const moduleUrl = options.jsModuleUrl ?? `https://cdn.jsdelivr.net/npm/${defaultJsPackageName}@${version}/dist/bundles/${defaultJsModuleName}.js`
+  const moduleUrl = options.jsModuleUrl ?? `https://cdn.jsdelivr.net/npm/${defaultJsPackageName}@{__version__}/dist/bundles/${defaultJsModuleName}.js`
 
   const moduleContent = `from itkwasm.pyodide import JsPackageConfig, JsPackage
 
-default_config = JsPackageConfig("${moduleUrl}")
+from ._version import __version__
+
+default_config = JsPackageConfig(f"${moduleUrl}")
 js_package = JsPackage(default_config)
 `
 
