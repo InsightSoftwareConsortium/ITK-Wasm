@@ -32,6 +32,8 @@ This site provides the Python documentation. There is also [C++ and JavaScript/T
 ```{toctree}
 :hidden:
 introduction.md
+numpy.md
+itk_python.md
 ```
 
 ```{toctree}
