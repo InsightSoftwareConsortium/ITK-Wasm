@@ -186,7 +186,7 @@ function functionModuleArgs(interfaceJson) {
     functionArgs += `    ${snakeCase(value.name)}: ${pythonType},\n`
   })
   interfaceJson['parameters'].forEach((value) => {
-    if (value.name === "memory-io") {
+    if (value.name === "memory-io" || value.name === "version") {
       return
     }
     const pythonType = interfaceJsonTypeToPythonType.get(value.type)
@@ -253,7 +253,7 @@ function functionModuleDocstring(interfaceJson) {
     docstring += `        ${value.description}\n\n`
   })
   interfaceJson['parameters'].forEach((value) => {
-    if (value.name === "memory-io") {
+    if (value.name === "memory-io" || value.name === "version") {
       return
     }
     const pythonType = interfaceJsonTypeToPythonType.get(value.type)
@@ -364,7 +364,7 @@ from itkwasm import (
 
   args += "    # Options\n"
   interfaceJson.parameters.forEach((parameter) => {
-    if (parameter.name === 'memory-io') {
+    if (parameter.name === 'memory-io' || parameter.name === 'version') {
       // Internal
       return
     }
@@ -548,7 +548,7 @@ from itkwasm.pyodide import (
 
   let options = ''
   interfaceJson.parameters.forEach((parameter) => {
-    if (parameter.name === 'memory-io') {
+    if (parameter.name === 'memory-io' || parameter.name === 'version') {
       // Internal
       return
     }
@@ -602,7 +602,7 @@ from itkwasm import (
     functionArgsToPass += `${snakeCase(value.name)}, `
   })
   interfaceJson['parameters'].forEach((value) => {
-    if (value.name === "memory-io") {
+    if (value.name === "memory-io" || value.name === "version") {
       return
     }
     functionArgsToPass += `${snakeCase(value.name)}=${snakeCase(value.name)}, `

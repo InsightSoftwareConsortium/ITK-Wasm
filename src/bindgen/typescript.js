@@ -66,7 +66,18 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     if(options.repository) {
       packageJson.repository = { 'type': 'git', 'url': options.repository }
     }
+    if(options.packageVersion) {
+      packageJson.version = options.packageVersion
+    } else {
+      packageJson.version = "0.1.0"
+    }
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+  } else {
+    if (options.packageVersion) {
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath))
+      packageJson.version = options.packageVersion
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+    }
   }
 
   if (!forNode) {
@@ -157,6 +168,9 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       if (err.code !== 'EEXIST') throw err
     }
     fs.copyFileSync(wasmBinaryRelativePath, path.join(distPipelinesDir, path.basename(wasmBinaryRelativePath)))
+    const prefix = wasmBinaryRelativePath.substring(0, wasmBinaryRelativePath.length-5)
+    fs.copyFileSync(`${prefix}.js`, path.join(distPipelinesDir, `${path.basename(prefix)}.js`))
+    fs.copyFileSync(`${prefix}.umd.js`, path.join(distPipelinesDir, `${path.basename(prefix)}.umd.js`))
 
     const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
 
@@ -210,7 +224,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
     // -----------------------------------------------------------------
     // Options module
-    const filteredParameters = interfaceJson.parameters.filter(p => { return p.name !== 'memory-io'})
+    const filteredParameters = interfaceJson.parameters.filter(p => { return p.name !== 'memory-io' && p.name !== 'version'})
     const haveParameters = !!filteredParameters.length
 
     // track unique output types in this set
@@ -222,7 +236,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       let optionsContent = ''
       let optionsInterfaceContent = `interface ${modulePascalCase}Options {\n`
       interfaceJson.parameters.forEach((parameter) => {
-        if (parameter.name === 'memory-io') {
+        if (parameter.name === 'memory-io' || parameter.name === 'version') {
           // Internal
           return
         }
@@ -416,7 +430,7 @@ import {\n`
     functionContent += "  // Options\n"
     functionContent += "  args.push('--memory-io')\n"
     interfaceJson.parameters.forEach((parameter) => {
-      if (parameter.name === 'memory-io') {
+      if (parameter.name === 'memory-io' || parameter.name === 'version') {
         // Internal
         return
       }

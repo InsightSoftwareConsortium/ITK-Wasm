@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compress-stringify",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
   "module": "./dist/bundles/compress-stringify.js",
@@ -8,7 +8,7 @@
   "exports": {
     ".": {
       "browser": "./dist/bundles/compress-stringify.js",
-      "node": "./dist/compress-stringify.node.js",
+      "node": "./dist/bundles/compress-stringify.node.js",
       "default": "./dist/bundles/compress-stringify.js"
     }
   },
@@ -44,7 +44,7 @@
     "@rollup/plugin-commonjs": "^24.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "@rollup/plugin-terser": "^0.3.0",
+    "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^10.0.1",
     "@types/node": "^18.11.18",
     "ava": "^5.1.0",
@@ -55,7 +55,7 @@
     "rollup-plugin-polyfill-node": "^0.11.0",
     "start-server-and-test": "^1.15.2",
     "typescript": "^4.9.4",
-    "vite": "^4.0.0",
+    "vite": "^4.0.4",
     "vite-plugin-static-copy": "^0.13.0"
   },
   "repository": {
