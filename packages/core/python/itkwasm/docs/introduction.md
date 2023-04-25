@@ -63,7 +63,7 @@ compressed = compress_stringify(data)
 from itkwasm_compress_stringify import compress_stringify_async
 
 data = bytes([33,44,55])
-compressed = await compress_stringify(data)
+compressed = await compress_stringify_async(data)
 ```
 :::
 
