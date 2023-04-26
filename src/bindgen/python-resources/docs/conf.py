@@ -8,12 +8,12 @@
 
 from datetime import date
 
-project = 'itkwasm'
+project = '@bindgenProject@'
 copyright = f'{date.today().year}, NumFOCUS'
-author = 'Matt McCormick'
+author = 'Insight Software Consortium'
 
 extensions = [
-    'sphinx.ext.napoleon',
+    'sphinx.ext.autosummary',
     'autodoc2',
     'myst_parser',
     'sphinx.ext.intersphinx',
@@ -22,15 +22,15 @@ extensions = [
     'sphinx_design',
 ]
 
-myst_enable_extensions = ["colon_fence"]
+myst_enable_extensions = ["colon_fence", "fieldlist"]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 autodoc2_packages = [
     {
-        "path": "../itkwasm",
-        "exclude_files": ["_to_numpy_array.py",],
+        "path": "../@bindgenPyPackage@",
+        "exclude_files": ["_version.py"],
     },
 ]
 autodoc2_render_plugin = "myst"
@@ -38,18 +38,19 @@ autodoc2_render_plugin = "myst"
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "numpy": ("https://numpy.org/doc/stable", None),
+    "itkwasm": ("https://itkwasm.readthedocs.io/en/latest/", None),
 }
 
 html_theme = 'furo'
 html_static_path = ['_static']
-html_logo = "_static/logo-white.svg"
-html_favicon = "_static/icon/favicon.png"
-html_title = f"{project} python documentation"
+html_logo = "_static/logo.svg"
+html_favicon = "_static/favicon.png"
+html_title = f"{project}"
 
 # Furo options
 html_theme_options = {
     "top_of_page_button": "edit",
-    "source_repository": "https://github.com/InsightSoftwareConsortium/itk-wasm/",
+    "source_repository": "@bindgenRepository@",
     "source_branch": "main",
-    "source_directory": "packages/core/python/itkwasm/docs",
+    "source_directory": "docs",
 }
