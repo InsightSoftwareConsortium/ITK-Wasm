@@ -9,8 +9,10 @@ import camelCase from './camelCase.js'
 const interfaceJsonTypeToTypeScriptType = new Map([
   ['INPUT_TEXT_FILE:FILE', 'string'],
   ['OUTPUT_TEXT_FILE:FILE', 'string'],
-  ['INPUT_BINARY_FILE:FILE', 'Uint8Array'],
-  ['OUTPUT_BINARY_FILE:FILE', 'Uint8Array'],
+  ['INPUT_BINARY_FILE:FILE', 'string'],
+  ['INPUT_BINARY_FILE', 'string'],
+  ['OUTPUT_BINARY_FILE:FILE', 'string'],
+  ['OUTPUT_BINARY_FILE', 'string'],
   ['INPUT_TEXT_STREAM', 'string'],
   ['OUTPUT_TEXT_STREAM', 'string'],
   ['INPUT_BINARY_STREAM', 'Uint8Array'],

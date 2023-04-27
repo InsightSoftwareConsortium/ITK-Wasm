@@ -20,13 +20,13 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Read a DICOM structured report file and generate a plain text representation
  *
- * @param {Uint8Array} dicomFile - Input DICOM file
+ * @param {string} dicomFile - Input DICOM file
  *
  * @returns {Promise<StructuredReportToTextResult>} - result object
  */
 async function structuredReportToText(
   webWorker: null | Worker,
-  dicomFile: Uint8Array,
+  dicomFile: string,
   options: StructuredReportToTextOptions = {}
 ) : Promise<StructuredReportToTextResult> {
 

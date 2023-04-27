@@ -17,12 +17,12 @@ import path from 'path'
 /**
  * Render DICOM SR file and data set to HTML/XHTML
  *
- * @param {Uint8Array} dicomFile - Input DICOM file
+ * @param {string} dicomFile - Input DICOM file
  *
  * @returns {Promise<StructuredReportToHtmlNodeResult>} - result object
  */
 async function structuredReportToHtmlNode(
-  dicomFile: Uint8Array,
+  dicomFile: string,
   options: StructuredReportToHtmlOptions = {}
 ) : Promise<StructuredReportToHtmlNodeResult> {
 

@@ -20,13 +20,13 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Render DICOM SR file and data set to HTML/XHTML
  *
- * @param {Uint8Array} dicomFile - Input DICOM file
+ * @param {string} dicomFile - Input DICOM file
  *
  * @returns {Promise<StructuredReportToHtmlResult>} - result object
  */
 async function structuredReportToHtml(
   webWorker: null | Worker,
-  dicomFile: Uint8Array,
+  dicomFile: string,
   options: StructuredReportToHtmlOptions = {}
 ) : Promise<StructuredReportToHtmlResult> {
 

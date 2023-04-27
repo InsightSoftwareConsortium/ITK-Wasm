@@ -125,7 +125,8 @@ test('Apply presentation state to dicom image.', async t => {
   const pstateFileBuffer = fs.readFileSync(pstateFilePath)
   const inputPState = new Uint8Array(pstateFileBuffer)
 
-  const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode(inputImage, {presentationStateFile: inputPState})
+  const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode(inputImage, inputPState)
+  // const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode(inputFilePath, pstateFilePath)
 
   t.assert(pstateJsonOut != null)
   t.assert(outputImage != null)

@@ -10,6 +10,11 @@ For a log and guide when transitioning from itk.js to itk-wasm,
 please see [the migration
 guide](doc/content/docs/itk_js_to_itk_wasm_migration_guide.md).
 
+## From 1.0.0-b.101 to 1.0.0-b.102
+
+- apply-presentation-state-to-image presentation-state-file is an argument, as
+  opposed to an optional parameter, since it is required.
+
 ## From 1.0.0-b.72 to 1.0.0-b.73
 
 - Emscripten modules no longer support filesystem-based IO for binary size / performance.

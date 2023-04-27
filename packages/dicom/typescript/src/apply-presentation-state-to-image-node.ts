@@ -18,12 +18,14 @@ import path from 'path'
 /**
  * Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.
  *
- * @param {Uint8Array} imageIn - Input DICOM file
+ * @param {string} imageIn - Input DICOM file
+ * @param {string} presentationStateFile - Process using presentation state file
  *
  * @returns {Promise<ApplyPresentationStateToImageNodeResult>} - result object
  */
 async function applyPresentationStateToImageNode(
-  imageIn: Uint8Array,
+  imageIn: string,
+  presentationStateFile: string,
   options: ApplyPresentationStateToImageOptions = {}
 ) : Promise<ApplyPresentationStateToImageNodeResult> {
 
@@ -33,21 +35,18 @@ async function applyPresentationStateToImageNode(
   ]
   const inputs: Array<PipelineInput> = [
     { type: InterfaceTypes.BinaryFile, data: { data: imageIn, path: "file0" }  },
+    { type: InterfaceTypes.BinaryFile, data: { data: presentationStateFile, path: "file1" }  },
   ]
 
   const args = []
   // Inputs
   args.push('file0')
+  args.push('file1')
   // Outputs
   args.push('0')
   args.push('1')
   // Options
   args.push('--memory-io')
-  if (typeof options.presentationStateFile !== "undefined") {
-    const inputFile = 'file' + inputs.length.toString()
-    inputs.push({ type: InterfaceTypes.BinaryFile, data: { data: options.presentationStateFile, path: inputFile } })
-    args.push('--presentation-state-file', inputFile)
-  }
   if (typeof options.configFile !== "undefined") {
     args.push('--config-file', options.configFile.toString())
   }

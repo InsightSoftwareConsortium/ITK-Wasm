@@ -472,14 +472,19 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
 int main(int argc, char *argv[])
 {
   itk::wasm::Pipeline pipeline("apply-presentation-state-to-image", "Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.", argc, argv);
+
   // Inputs
   std::string imageIn;
   pipeline.add_option("image-in", imageIn, "Input DICOM file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+
+  std::string pstateFile;
+  pipeline.add_option("presentation-state-file", pstateFile, "Process using presentation state file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
 
   // Outputs
   // Metadata output regarding overlays
   itk::wasm::OutputTextStream pstateOutStream;
   pipeline.add_option("presentation-state-out-stream", pstateOutStream, "Output overlay information")->type_name("OUTPUT_JSON");
+
   // Processed output image
   constexpr unsigned int Dimension = 2;
   using PixelType = unsigned char;
@@ -489,9 +494,6 @@ int main(int argc, char *argv[])
   pipeline.add_option("output-image", outputImage, "Output image")->type_name("OUTPUT_IMAGE");
 
   // Parameters
-  // addGroup "processing options:"
-  std::string pstateFile;
-  pipeline.add_option("--presentation-state-file", pstateFile, "filename: string. Process using presentation state file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
   std::string configFile;
   pipeline.add_option("--config-file", configFile, "filename: string. Process using settings from configuration file");
   // process a specific frame within the input dicom:

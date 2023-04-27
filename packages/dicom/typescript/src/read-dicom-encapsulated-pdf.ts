@@ -20,13 +20,13 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Extract PDF file from DICOM encapsulated PDF.
  *
- * @param {Uint8Array} dicomFile - Input DICOM file
+ * @param {string} dicomFile - Input DICOM file
  *
  * @returns {Promise<ReadDicomEncapsulatedPdfResult>} - result object
  */
 async function readDicomEncapsulatedPdf(
   webWorker: null | Worker,
-  dicomFile: Uint8Array,
+  dicomFile: string,
   options: ReadDicomEncapsulatedPdfOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfResult> {
 

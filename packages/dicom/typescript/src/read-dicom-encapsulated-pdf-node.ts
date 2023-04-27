@@ -17,12 +17,12 @@ import path from 'path'
 /**
  * Extract PDF file from DICOM encapsulated PDF.
  *
- * @param {Uint8Array} dicomFile - Input DICOM file
+ * @param {string} dicomFile - Input DICOM file
  *
  * @returns {Promise<ReadDicomEncapsulatedPdfNodeResult>} - result object
  */
 async function readDicomEncapsulatedPdfNode(
-  dicomFile: Uint8Array,
+  dicomFile: string,
   options: ReadDicomEncapsulatedPdfOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfNodeResult> {
 

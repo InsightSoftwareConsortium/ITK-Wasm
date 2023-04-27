@@ -17,12 +17,12 @@ import path from 'path'
 /**
  * Read a DICOM structured report file and generate a plain text representation
  *
- * @param {Uint8Array} dicomFile - Input DICOM file
+ * @param {string} dicomFile - Input DICOM file
  *
  * @returns {Promise<StructuredReportToTextNodeResult>} - result object
  */
 async function structuredReportToTextNode(
-  dicomFile: Uint8Array,
+  dicomFile: string,
   options: StructuredReportToTextOptions = {}
 ) : Promise<StructuredReportToTextNodeResult> {
 
