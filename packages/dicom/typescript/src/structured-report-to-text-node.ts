@@ -1,6 +1,7 @@
 // Generated file. Do not edit.
 
 import {
+  BinaryFile,
   TextStream,
   InterfaceTypes,
   PipelineOutput,
@@ -17,12 +18,12 @@ import path from 'path'
 /**
  * Read a DICOM structured report file and generate a plain text representation
  *
- * @param {string} dicomFile - Input DICOM file
+ * @param {BinaryFile} dicomFile - Input DICOM file
  *
  * @returns {Promise<StructuredReportToTextNodeResult>} - result object
  */
 async function structuredReportToTextNode(
-  dicomFile: string,
+  dicomFile: BinaryFile,
   options: StructuredReportToTextOptions = {}
 ) : Promise<StructuredReportToTextNodeResult> {
 
@@ -30,12 +31,12 @@ async function structuredReportToTextNode(
     { type: InterfaceTypes.TextStream },
   ]
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: { data: dicomFile, path: "file0" }  },
+    { type: InterfaceTypes.BinaryFile, data: dicomFile },
   ]
 
   const args = []
   // Inputs
-  args.push('file0')
+  args.push(dicomFile.path)
   // Outputs
   args.push('0')
   // Options

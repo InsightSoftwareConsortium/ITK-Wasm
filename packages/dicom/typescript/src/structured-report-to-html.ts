@@ -1,7 +1,9 @@
 // Generated file. Do not edit.
 
 import {
+  BinaryFile,
   TextStream,
+  TextFile,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -20,13 +22,13 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Render DICOM SR file and data set to HTML/XHTML
  *
- * @param {string} dicomFile - Input DICOM file
+ * @param {BinaryFile} dicomFile - Input DICOM file
  *
  * @returns {Promise<StructuredReportToHtmlResult>} - result object
  */
 async function structuredReportToHtml(
   webWorker: null | Worker,
-  dicomFile: string,
+  dicomFile: BinaryFile,
   options: StructuredReportToHtmlOptions = {}
 ) : Promise<StructuredReportToHtmlResult> {
 
@@ -34,12 +36,12 @@ async function structuredReportToHtml(
     { type: InterfaceTypes.TextStream },
   ]
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: { data: dicomFile, path: "file0" }  },
+    { type: InterfaceTypes.BinaryFile, data: dicomFile },
   ]
 
   const args = []
   // Inputs
-  args.push('file0')
+  args.push(dicomFile.path)
   // Outputs
   args.push('0')
   // Options
@@ -119,9 +121,8 @@ async function structuredReportToHtml(
     args.push('--css-reference', inputCountString)
   }
   if (typeof options.cssFile !== "undefined") {
-    const inputFile = 'file' + inputs.length.toString()
-    inputs.push({ type: InterfaceTypes.TextFile, data: { data: options.cssFile, path: inputFile } })
-    args.push('--css-file', inputFile)
+    inputs.push({ type: InterfaceTypes.TextFile, data: options.cssFile as TextFile })
+    args.push('--css-file', options.cssFile.path)
   }
   if (typeof options.expandInline !== "undefined") {
     args.push('--expand-inline')

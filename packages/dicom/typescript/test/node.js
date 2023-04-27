@@ -19,11 +19,11 @@ test('structuredReportToText', async t => {
   const dicomFileBuffer = fs.readFileSync(testFilePath)
   const dicomFile = new Uint8Array(dicomFileBuffer)
 
-  const { outputText } = await structuredReportToTextNode(dicomFile)
+  const { outputText } = await structuredReportToTextNode({ data: dicomFile, path: fileName })
 
   t.assert(outputText.includes('Comprehensive SR Document'))
 
-  const { outputText: outputTextNoHeader } = await structuredReportToTextNode(dicomFile, { noDocumentHeader: true })
+  const { outputText: outputTextNoHeader } = await structuredReportToTextNode({ data: dicomFile, path: fileName }, { noDocumentHeader: true })
   t.assert(!outputTextNoHeader.includes('Comprehensive SR Document'))
   t.assert(outputTextNoHeader.includes('Breast Imaging Report'))
 })
@@ -35,19 +35,20 @@ test('structuredReportToHtml', async t => {
 
   const dicomFileBuffer = fs.readFileSync(testFilePath)
   const dicomFile = new Uint8Array(dicomFileBuffer)
+  const dicomBinaryFile = { data: dicomFile, path: fileName }
 
-  const { outputText } = await structuredReportToHtmlNode(dicomFile)
+  const { outputText } = await structuredReportToHtmlNode(dicomBinaryFile)
 
   t.assert(outputText.includes('Comprehensive SR Document'))
   t.assert(outputText.includes('Breast Diagnosis 010001 (female, #BreastDx-01-0001)'))
   t.assert(outputText.includes('PixelMed (XSLT from di3data csv extract)'))
 
-  const { outputText: outputTextNoHeader } = await structuredReportToHtmlNode(dicomFile, { noDocumentHeader: true })
+  const { outputText: outputTextNoHeader } = await structuredReportToHtmlNode(dicomBinaryFile, { noDocumentHeader: true })
 
   t.assert(!outputTextNoHeader.includes('Breast Diagnosis 010001 (female, #BreastDx-01-0001)'))
   t.assert(!outputTextNoHeader.includes('PixelMed (XSLT from di3data csv extract)'))
 
-  const { outputText: outputTextRenderAllCodes } = await structuredReportToHtmlNode(dicomFile, { renderAllCodes: true })
+  const { outputText: outputTextRenderAllCodes } = await structuredReportToHtmlNode(dicomBinaryFile, { renderAllCodes: true })
 
   t.assert(outputTextRenderAllCodes.includes('Overall Assessment (111413, DCM)'))
 
@@ -61,7 +62,7 @@ test('read Radiation Dose SR', async t => {
   const dicomFileBuffer = fs.readFileSync(testFilePath)
   const dicomFile = new Uint8Array(dicomFileBuffer)
 
-  const { outputText } = await structuredReportToHtmlNode(dicomFile)
+  const { outputText } = await structuredReportToHtmlNode({ data: dicomFile, path: fileName })
 
   t.assert(outputText.includes('<title>X-Ray Radiation Dose SR Document</title>'))
   t.assert(outputText.includes('<h2>CT Accumulated Dose Data</h2>'))
@@ -73,7 +74,7 @@ test('readDicomEncapsulatedPdfNode', async t => {
   const testFilePath = `../../../build-emscripten/ExternalData/test/Input/${fileName}`
   const dicomFileBuffer = fs.readFileSync(testFilePath)
   const dicomFile = new Uint8Array(dicomFileBuffer)
-  const { pdfBinaryOutput: outputBinaryStream } = await readDicomEncapsulatedPdfNode(dicomFile)
+  const { pdfBinaryOutput: outputBinaryStream } = await readDicomEncapsulatedPdfNode({ data: dicomFile, path: fileName })
   t.assert(outputBinaryStream != null)
   t.assert(outputBinaryStream.length === 91731)
 })
@@ -86,7 +87,7 @@ test('read Key Object Selection SR', async t => {
   const dicomFile = new Uint8Array(dicomFileBuffer)
 
   const { outputText } = await structuredReportToHtmlNode(
-    dicomFile, {
+    { data: dicomFile, path: fileName }, {
       urlPrefix: 'http://my-custom-dicom-server/dicom.cgi',
       cssReference: "https://css-host/dir/subdir/my-first-style.css",
     }
@@ -101,7 +102,7 @@ test('read Key Object Selection SR', async t => {
   const cssFileBuffer = fs.readFileSync(testCssFilePath)
 
   const { outputText: outputWithCSSFile } = await structuredReportToHtmlNode(
-    dicomFile, { cssFile: cssFileBuffer })
+    { data: dicomFile, path: fileName }, { cssFile: { data: cssFileBuffer, path: cssfileName }})
 
   t.assert(outputWithCSSFile.includes('<style type="text/css">'))
   t.assert(outputWithCSSFile.includes('background-color: lightblue;'))
@@ -125,8 +126,7 @@ test('Apply presentation state to dicom image.', async t => {
   const pstateFileBuffer = fs.readFileSync(pstateFilePath)
   const inputPState = new Uint8Array(pstateFileBuffer)
 
-  const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode(inputImage, inputPState)
-  // const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode(inputFilePath, pstateFilePath)
+  const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode({ data: inputImage, path: inputFile }, { data: inputPState, path: pstateFile })
 
   t.assert(pstateJsonOut != null)
   t.assert(outputImage != null)

@@ -1,6 +1,7 @@
 // Generated file. Do not edit.
 
 import {
+  BinaryFile,
   JsonObject,
   Image,
   InterfaceTypes,
@@ -18,14 +19,14 @@ import path from 'path'
 /**
  * Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.
  *
- * @param {string} imageIn - Input DICOM file
- * @param {string} presentationStateFile - Process using presentation state file
+ * @param {BinaryFile} imageIn - Input DICOM file
+ * @param {BinaryFile} presentationStateFile - Process using presentation state file
  *
  * @returns {Promise<ApplyPresentationStateToImageNodeResult>} - result object
  */
 async function applyPresentationStateToImageNode(
-  imageIn: string,
-  presentationStateFile: string,
+  imageIn: BinaryFile,
+  presentationStateFile: BinaryFile,
   options: ApplyPresentationStateToImageOptions = {}
 ) : Promise<ApplyPresentationStateToImageNodeResult> {
 
@@ -34,14 +35,14 @@ async function applyPresentationStateToImageNode(
     { type: InterfaceTypes.Image },
   ]
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: { data: imageIn, path: "file0" }  },
-    { type: InterfaceTypes.BinaryFile, data: { data: presentationStateFile, path: "file1" }  },
+    { type: InterfaceTypes.BinaryFile, data: imageIn },
+    { type: InterfaceTypes.BinaryFile, data: presentationStateFile },
   ]
 
   const args = []
   // Inputs
-  args.push('file0')
-  args.push('file1')
+  args.push(imageIn.path)
+  args.push(presentationStateFile.path)
   // Outputs
   args.push('0')
   args.push('1')

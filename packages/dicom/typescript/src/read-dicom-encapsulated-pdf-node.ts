@@ -1,6 +1,7 @@
 // Generated file. Do not edit.
 
 import {
+  BinaryFile,
   BinaryStream,
   InterfaceTypes,
   PipelineOutput,
@@ -17,12 +18,12 @@ import path from 'path'
 /**
  * Extract PDF file from DICOM encapsulated PDF.
  *
- * @param {string} dicomFile - Input DICOM file
+ * @param {BinaryFile} dicomFile - Input DICOM file
  *
  * @returns {Promise<ReadDicomEncapsulatedPdfNodeResult>} - result object
  */
 async function readDicomEncapsulatedPdfNode(
-  dicomFile: string,
+  dicomFile: BinaryFile,
   options: ReadDicomEncapsulatedPdfOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfNodeResult> {
 
@@ -30,12 +31,12 @@ async function readDicomEncapsulatedPdfNode(
     { type: InterfaceTypes.BinaryStream },
   ]
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: { data: dicomFile, path: "file0" }  },
+    { type: InterfaceTypes.BinaryFile, data: dicomFile },
   ]
 
   const args = []
   // Inputs
-  args.push('file0')
+  args.push(dicomFile.path)
   // Outputs
   args.push('0')
   // Options

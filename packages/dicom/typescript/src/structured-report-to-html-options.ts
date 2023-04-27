@@ -1,3 +1,5 @@
+import { TextFile } from 'itk-wasm'
+
 interface StructuredReportToHtmlOptions {
   /** read file format only */
   readFileOnly?: boolean
@@ -76,7 +78,7 @@ by Specific Character Set (0008,0005) to UTF-8 */
   cssReference?: string
 
   /** [f]ilename: string. Embed content of specified CSS into document */
-  cssFile?: string
+  cssFile?: TextFile
 
   /** expand short content items inline (default) */
   expandInline?: boolean
