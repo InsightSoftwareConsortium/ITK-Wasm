@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "vite -c build/vite.config.js",
-    "test": "npm run test:node && npm run test:browser",
+    "test": "npm run test:node",
     "test:node": "ava test/node.js",
     "test:browser": "npm run test:browser:chrome && npm run test:browser:firefox",
     "test:browser:firefox": "start-server-and-test start http-get://localhost:5173 cypress:runFirefox",
