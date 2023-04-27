@@ -36,7 +36,8 @@ function bindgenResource(filePath) {
   return path.join(path.dirname(import.meta.url.substring(7)), 'typescript-resources', filePath)
 }
 
-function inputParametersDemoHtml(prefix, indent, result, parameter, required) {
+function inputParametersDemoHtml(prefix, indent, parameter, required) {
+  let result = ''
   const requiredAttr = required ? 'required ' : ''
   switch(parameter.type) {
     case 'INPUT_TEXT_FILE:FILE':
@@ -74,7 +75,60 @@ function inputParametersDemoHtml(prefix, indent, result, parameter, required) {
   return result
 }
 
-function outputDemo(prefix, indent, result, parameter) {
+function outputDemoHtml(prefix, indent, parameter) {
+  let result = ''
+  switch(parameter.type) {
+    case 'OUTPUT_TEXT_FILE:FILE':
+    case 'OUTPUT_TEXT_STREAM':
+      result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
+      result += `${prefix}${indent}<sl-button variant="neutral" name="${parameter.name}-download">${camelCase(parameter.name)}</sl-button>\n`
+      result += `<br /><br />\n`
+      break
+    case 'OUTPUT_BINARY_FILE:FILE':
+    case 'OUTPUT_BINARY_STREAM':
+      result += `${prefix}${indent}<sl-textarea name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>\n`
+      result += `${prefix}${indent}<sl-button variant="neutral" name="${parameter.name}-download">${camelCase(parameter.name)}</sl-button>\n`
+      result += `<br /><br />\n`
+      break
+    case 'TEXT':
+      result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
+      break
+    case 'INT':
+    case 'UINT':
+      if (parameter.itemsExpected !== 1 || parameter.itemsExpectedMin !== 1 || parameter.itemsExpectedMax !== 1) {
+        // TODO
+        console.error(`INT items != 1 are currently not supported`)
+        process.exit(1)
+      }
+      result += `${prefix}${indent}<sl-input disabled name="${parameter.name}" type="number" value="${parameter.default}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-input>\n`
+      result += `<br />\n`
+      break
+    case 'BOOL':
+      result += `${prefix}${indent}<sl-checkbox disabled name="${parameter.name}">${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-checkbox>\n`
+      result += `<br />\n`
+      break
+    case 'OUTPUT_JSON':
+      result += `${prefix}${indent}<sl-tree ><sl-tree-item>${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-tree-item></sl-tree>\n`
+      result += `${prefix}${indent}<sl-button variant="neutral" name="${parameter.name}-download">${camelCase(parameter.name)}</sl-button>\n`
+      result += `<br /><br />\n`
+      break
+    default:
+      console.error(`Unexpected interface type: ${parameter.type}`)
+      process.exit(1)
+  }
+  return result
+}
+
+function outputDemoTypeScript(functionName, indent, parameter) {
+  console.log(parameter)
+  //   context.inputs[0].slice(), context.options)
+  //   webWorker.terminate()
+
+  //   context.outputs.output = output
+  //   const outputTextArea = document.querySelector('#parseStringDecompressOutputs sl-textarea[name=output]')
+  //   outputTextArea.value = output.toString()
+  // })
+  return result
   switch(parameter.type) {
     case 'OUTPUT_TEXT_FILE:FILE':
     case 'OUTPUT_TEXT_STREAM':
@@ -166,7 +220,7 @@ function interfaceFunctionsDemoHtml(interfaceJson) {
 
   result += `${prefix}<div id="${nameCamelCase}Inputs"><h4>Inputs</h4><form>\n`
   interfaceJson.inputs.forEach((input) => {
-    result = inputParametersDemoHtml(prefix, indent, result, input, true)
+    result += inputParametersDemoHtml(prefix, indent, input, true)
   })
 
   if (interfaceJson.parameters.length > 1) {
@@ -175,7 +229,7 @@ function interfaceFunctionsDemoHtml(interfaceJson) {
       if (parameter.name === "memory-io" || parameter.name === "version") {
         return
       }
-      result = inputParametersDemoHtml(prefix, indent, result, parameter, false)
+      result += inputParametersDemoHtml(prefix, indent, parameter, false)
     })
   }
 
@@ -185,7 +239,7 @@ function interfaceFunctionsDemoHtml(interfaceJson) {
 
   result += `${prefix}<div id="${nameCamelCase}Outputs"><h4>Outputs</h4>\n`
   interfaceJson.outputs.forEach((output) => {
-    result = outputDemo(prefix, indent, result, output)
+    result += outputDemoHtml(prefix, indent, output)
   })
   result += `${prefix}</div>\n` // id="${nameCamelCase}Outputs"
 
@@ -249,7 +303,7 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
   return result
 }
 
-function interfaceFunctionsDemoTypeScript(interfaceJson, outputPath) {
+function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath) {
   let indent = '  '
   let result = ''
 
@@ -286,35 +340,18 @@ function interfaceFunctionsDemoTypeScript(interfaceJson, outputPath) {
       result += inputParametersDemoTypeScript(functionName, indent, parameter, false)
     })
   }
-  // result += `\n${prefix}<sl-divider style="--width:2px;"></sl-divider>\n`
-  // const nameCamelCase = camelCase(interfaceJson.name)
-  // result += `${prefix}<h3 id="${nameCamelCase}-function"><code>${nameCamelCase}</code></h3>\n`
-  // result += `${prefix}<i>${interfaceJson.description}</i>\n`
 
-  // result += `${prefix}<div id="${nameCamelCase}Inputs"><h4>Inputs</h4><form>\n`
-  // interfaceJson.inputs.forEach((input) => {
-  //   result = inputParametersDemo(prefix, indent, result, input, true)
-  // })
+  result += '  // Outputs\n'
+  result += `const form = document.querySelector(\`#${functionName}Inputs form\`)
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
 
-  // if (interfaceJson.parameters.length > 1) {
-  //   interfaceJson.parameters.forEach((parameter) => {
-  //     // Internal
-  //     if (parameter.name === "memory-io") {
-  //       return
-  //     }
-  //     result = inputParametersDemo(prefix, indent, result, parameter, false)
-  //   })
-  // }
+    const { webWorker, output } = await ${packageName}.${functionName}(null,`
 
-  // result += `${prefix}  <!-- <sl-button name="loadSampleInputs" variant="default">Load sample inputs</sl-button> -->\n`
-  // result += `${prefix}  <sl-button type="submit" variant="success">Run</sl-button>\n`
-  // result += `${prefix}</form></div>\n` // id="${nameCamelCase}Inputs"
 
-  // result += `${prefix}<div id="${nameCamelCase}Outputs"><h4>Outputs</h4>\n`
-  // interfaceJson.outputs.forEach((output) => {
-  //   result = outputDemo(prefix, indent, result, output)
-  // })
-  // result += `${prefix}</div>\n` // id="${nameCamelCase}Outputs"
+  interfaceJson.outputs.forEach((output) => {
+    result += outputDemoTypeScript(functionName, indent, output)
+  })
   const loadSampleInputsModulePath = path.join(outputPath, `${functionName}LoadSampleInputs.ts`)
   if (!fs.existsSync(loadSampleInputsModulePath)) {
     const loadSampleInputsModuleContent = `// Define the ${functionName}LoadSampleInputs function and return \`true\` from
@@ -485,7 +522,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       demoFunctionsHtml += functionDemoHtml
       pipelinesFunctionsList += `        <li><a href="#${functionName}-function">${functionName}</a></li>`
       const demoTypeScriptOutputPath = path.join(outputDir, 'test', 'browser')
-      demoFunctionsTypeScript += interfaceFunctionsDemoTypeScript(interfaceJson, demoTypeScriptOutputPath)
+      demoFunctionsTypeScript += interfaceFunctionsDemoTypeScript(packageName, interfaceJson, demoTypeScriptOutputPath)
     } else {
       pipelinesFunctionsList += `<li>${functionName}</li>`
     }
