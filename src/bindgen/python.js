@@ -223,19 +223,6 @@ function functionModuleReturnType(interfaceJson) {
     returnType = interfaceJsonTypeToPythonType.get(jsonOutputs[0].type)
   }
 
-  if (jsonOutputs.length > 1) {
-    returnType += "Tuple["
-    jsonOutputs.forEach((value) => {
-      const pythonType = interfaceJsonTypeToPythonType.get(value.type)
-      returnType += `${pythonType}, `
-    })
-    returnType = returnType.substring(0, returnType.length - 2)
-    returnType += "]"
-    returnType += "    )\n"
-  } else {
-    returnType = interfaceJsonTypeToPythonType.get(jsonOutputs[0].type)
-  }
-
   return returnType
 }
 
@@ -329,8 +316,8 @@ from itkwasm import (
   interfaceJson.inputs.forEach((input) => {
     if (interfaceJsonTypeToInterfaceType.has(input.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
-      const name = interfaceType.includes('File') ? `str(${snakeCase(input.name)})` : inputCount.toString()
-      args += `    args.append('${name}')\n`
+      const name = interfaceType.includes('File') ? `str(${snakeCase(input.name)})` : `'${inputCount.toString()}'`
+      args += `    args.append(${name})\n`
       inputCount++
     } else {
       const snake = snakeCase(input.name)
@@ -451,6 +438,7 @@ from itkwasm import (
       const outputValue = `outputs[${index}]`
       postOutput += `        ${toPythonType(value.type, outputValue)},\n`
     })
+    postOutput += '    )\n'
   } else {
     const outputValue = "outputs[0]"
     postOutput = `    result = ${toPythonType(jsonOutputs[0].type, outputValue)}\n`
@@ -471,9 +459,9 @@ ${pipelineInputs}    ]
 ${args}
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
-${postOutput}
-
     del pipeline
+
+${postOutput}
 `
   fs.writeFileSync(modulePath, moduleContent)
 }
