@@ -11,6 +11,7 @@ from itkwasm import (
     PipelineOutput,
     PipelineInput,
     Pipeline,
+    BinaryFile,
     TextStream,
 )
 
@@ -109,55 +110,55 @@ def structured_report_to_text(
     # Outputs
     args.append('0')
     # Options
-    if unknown_relationship is not None:
+    if unknown_relationship:
         args.append('--unknown-relationship')
 
-    if invalid_item_value is not None:
+    if invalid_item_value:
         args.append('--invalid-item-value')
 
-    if ignore_constraints is not None:
+    if ignore_constraints:
         args.append('--ignore-constraints')
 
-    if ignore_item_errors is not None:
+    if ignore_item_errors:
         args.append('--ignore-item-errors')
 
-    if skip_invalid_items is not None:
+    if skip_invalid_items:
         args.append('--skip-invalid-items')
 
-    if no_document_header is not None:
+    if no_document_header:
         args.append('--no-document-header')
 
-    if number_nested_items is not None:
+    if number_nested_items:
         args.append('--number-nested-items')
 
-    if shorten_long_values is not None:
+    if shorten_long_values:
         args.append('--shorten-long-values')
 
-    if print_instance_uid is not None:
+    if print_instance_uid:
         args.append('--print-instance-uid')
 
-    if print_sopclass_short is not None:
+    if print_sopclass_short:
         args.append('--print-sopclass-short')
 
-    if print_sopclass_long is not None:
+    if print_sopclass_long:
         args.append('--print-sopclass-long')
 
-    if print_sopclass_uid is not None:
+    if print_sopclass_uid:
         args.append('--print-sopclass-uid')
 
-    if print_all_codes is not None:
+    if print_all_codes:
         args.append('--print-all-codes')
 
-    if print_invalid_codes is not None:
+    if print_invalid_codes:
         args.append('--print-invalid-codes')
 
-    if print_template_id is not None:
+    if print_template_id:
         args.append('--print-template-id')
 
-    if indicate_enhanced is not None:
+    if indicate_enhanced:
         args.append('--indicate-enhanced')
 
-    if print_color is not None:
+    if print_color:
         args.append('--print-color')
 
 

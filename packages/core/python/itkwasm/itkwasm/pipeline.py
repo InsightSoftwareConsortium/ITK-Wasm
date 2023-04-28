@@ -17,6 +17,7 @@ from .binary_file import BinaryFile
 from .image import Image
 from .mesh import Mesh
 from .polydata import PolyData
+from .json_object import JsonObject
 from .int_types import IntTypes
 from .float_types import FloatTypes
 from ._to_numpy_array import _to_numpy_array
@@ -56,10 +57,10 @@ class Pipeline:
         preopen_directories=set()
         for index, input_ in enumerate(inputs):
             if input_.type == InterfaceTypes.TextFile or input_.type == InterfaceTypes.BinaryFile:
-                preopen_directories.add(str(input_.data.path.parent))
+                preopen_directories.add(str(Path(input_.data.path).parent))
         for index, output in enumerate(outputs):
             if output.type == InterfaceTypes.TextFile or output.type == InterfaceTypes.BinaryFile:
-                preopen_directories.add(str(output.data.path.parent))
+                preopen_directories.add(str(Path(output.data.path).parent))
         preopen_directories = list(preopen_directories)
         for preopen in preopen_directories:
             wasi_config.preopen_dir(preopen, preopen)
@@ -220,6 +221,11 @@ class Pipeline:
                     "cellData": f"data:application/vnd.itk.address,0:{cellData_ptr}"
                 }
                 self._set_input_json(polydata_json, index)
+            elif input_.type == InterfaceTypes.JsonObject:
+                data_array = json.dumps(input_.data.data).encode()
+                array_ptr = self._set_input_array(data_array, index, 0)
+                data_json = { "size": len(data_array), "data": f"data:application/vnd.itk.address,0:{array_ptr}" }
+                self._set_input_json(data_json, index)
             else:
                 raise ValueError(f'Unexpected/not yet supported input.type {input_.type}')
 
@@ -348,6 +354,13 @@ class Pipeline:
                         polydata.triangleStrips =  _to_numpy_array(polydata.polyDataType.cellPixelComponentType, bytes([]))
 
                     output_data = PipelineOutput(InterfaceTypes.PolyData, polydata)
+                elif output.type == InterfaceTypes.JsonObject:
+                    data_ptr = self.output_array_address(store, 0, index, 0)
+                    data_size = self.output_array_size(store, 0, index, 0)
+                    data_array = self._wasmtime_lift(data_ptr, data_size)
+                    output_data = PipelineOutput(InterfaceTypes.JsonObject, JsonObject(json.loads(data_array.decode())))
+                else:
+                    raise ValueError(f'Unexpected/not yet supported output.type {output.type}')
 
                 populated_outputs.append(output_data)
 

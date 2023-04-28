@@ -11,14 +11,14 @@ from itkwasm import (
     PipelineOutput,
     PipelineInput,
     Pipeline,
-    JsonObject,
+    BinaryFile,
     Image,
 )
 
 def apply_presentation_state_to_image(
     image_in: os.PathLike,
     presentation_state_file: os.PathLike,
-    config_file: str = "undefined",
+    config_file: str = "",
     frame: int = 1,
     presentation_state_output: bool = False,
     bitmap_output: bool = False,
@@ -77,24 +77,24 @@ def apply_presentation_state_to_image(
     args.append('0')
     args.append('1')
     # Options
-    if config_file is not None:
+    if config_file:
         args.append('--config-file')
         args.append(str(config_file))
 
-    if frame is not None:
+    if frame:
         args.append('--frame')
         args.append(str(frame))
 
-    if presentation_state_output is not None:
+    if presentation_state_output:
         args.append('--presentation-state-output')
 
-    if bitmap_output is not None:
+    if bitmap_output:
         args.append('--bitmap-output')
 
-    if pgm is not None:
+    if pgm:
         args.append('--pgm')
 
-    if dicom is not None:
+    if dicom:
         args.append('--dicom')
 
 
@@ -103,7 +103,7 @@ def apply_presentation_state_to_image(
     del pipeline
 
     result = (
-        outputs[0].data,
+        outputs[0].data.data,
         outputs[1].data,
     )
     return result

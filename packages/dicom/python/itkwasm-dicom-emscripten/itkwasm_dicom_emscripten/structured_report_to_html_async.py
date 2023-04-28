@@ -29,16 +29,16 @@ async def structured_report_to_html_async(
     skip_invalid_items: bool = False,
     disable_vr_checker: bool = False,
     charset_require: bool = False,
-    charset_assume: str = "undefined",
+    charset_assume: str = "",
     charset_check_all: bool = False,
     convert_to_utf8: bool = False,
-    url_prefix: str = "undefined",
-    html_3.2: bool = False,
-    html_4.0: bool = False,
-    xhtml_1.1: bool = False,
+    url_prefix: str = "",
+    html_32: bool = False,
+    html_40: bool = False,
+    xhtml_11: bool = False,
     add_document_type: bool = False,
-    css_reference: str = "undefined",
-    css_file: os.PathLike = "undefined",
+    css_reference: str = "",
+    css_file: os.PathLike = "",
     expand_inline: bool = False,
     never_expand_inline: bool = False,
     always_expand_inline: bool = False,
@@ -121,14 +121,14 @@ by Specific Character Set (0008,0005) to UTF-8
     :param url_prefix: URL: string. Append specificed URL prefix to hyperlinks of referenced composite objects in the document.
     :type  url_prefix: str
 
-    :param html_3.2: use only HTML version 3.2 compatible features
-    :type  html_3.2: bool
+    :param html_32: use only HTML version 3.2 compatible features
+    :type  html_32: bool
 
-    :param html_4.0: allow all HTML version 4.01 features (default)
-    :type  html_4.0: bool
+    :param html_40: allow all HTML version 4.01 features (default)
+    :type  html_40: bool
 
-    :param xhtml_1.1: comply with XHTML version 1.1 specification
-    :type  xhtml_1.1: bool
+    :param xhtml_11: comply with XHTML version 1.1 specification
+    :type  xhtml_11: bool
 
     :param add_document_type: add reference to SGML document type definition
     :type  add_document_type: bool
@@ -190,7 +190,7 @@ by Specific Character Set (0008,0005) to UTF-8
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker
 
-    outputs = await js_module.structuredReportToHtml(web_worker, to_js(dicom_file),  readFileOnly=to_js(read_file_only), readDataset=to_js(read_dataset), readXferAuto=to_js(read_xfer_auto), readXferDetect=to_js(read_xfer_detect), readXferLittle=to_js(read_xfer_little), readXferBig=to_js(read_xfer_big), readXferImplicit=to_js(read_xfer_implicit), processingDetails=to_js(processing_details), unknownRelationship=to_js(unknown_relationship), invalidItemValue=to_js(invalid_item_value), ignoreConstraints=to_js(ignore_constraints), ignoreItemErrors=to_js(ignore_item_errors), skipInvalidItems=to_js(skip_invalid_items), disableVrChecker=to_js(disable_vr_checker), charsetRequire=to_js(charset_require), charsetAssume=to_js(charset_assume), charsetCheckAll=to_js(charset_check_all), convertToUtf8=to_js(convert_to_utf8), urlPrefix=to_js(url_prefix), html32=to_js(html_3.2), html40=to_js(html_4.0), xhtml11=to_js(xhtml_1.1), addDocumentType=to_js(add_document_type), cssReference=to_js(css_reference), cssFile=to_js(css_file), expandInline=to_js(expand_inline), neverExpandInline=to_js(never_expand_inline), alwaysExpandInline=to_js(always_expand_inline), renderFullData=to_js(render_full_data), sectionTitleInline=to_js(section_title_inline), documentTypeTitle=to_js(document_type_title), patientInfoTitle=to_js(patient_info_title), noDocumentHeader=to_js(no_document_header), renderInlineCodes=to_js(render_inline_codes), conceptNameCodes=to_js(concept_name_codes), numericUnitCodes=to_js(numeric_unit_codes), codeValueUnit=to_js(code_value_unit), codeMeaningUnit=to_js(code_meaning_unit), renderAllCodes=to_js(render_all_codes), codeDetailsTooltip=to_js(code_details_tooltip), )
+    outputs = await js_module.structuredReportToHtml(web_worker, to_js(dicom_file),  readFileOnly=to_js(read_file_only), readDataset=to_js(read_dataset), readXferAuto=to_js(read_xfer_auto), readXferDetect=to_js(read_xfer_detect), readXferLittle=to_js(read_xfer_little), readXferBig=to_js(read_xfer_big), readXferImplicit=to_js(read_xfer_implicit), processingDetails=to_js(processing_details), unknownRelationship=to_js(unknown_relationship), invalidItemValue=to_js(invalid_item_value), ignoreConstraints=to_js(ignore_constraints), ignoreItemErrors=to_js(ignore_item_errors), skipInvalidItems=to_js(skip_invalid_items), disableVrChecker=to_js(disable_vr_checker), charsetRequire=to_js(charset_require), charsetAssume=to_js(charset_assume), charsetCheckAll=to_js(charset_check_all), convertToUtf8=to_js(convert_to_utf8), urlPrefix=to_js(url_prefix), html32=to_js(html_32), html40=to_js(html_40), xhtml11=to_js(xhtml_11), addDocumentType=to_js(add_document_type), cssReference=to_js(css_reference), cssFile=to_js(css_file), expandInline=to_js(expand_inline), neverExpandInline=to_js(never_expand_inline), alwaysExpandInline=to_js(always_expand_inline), renderFullData=to_js(render_full_data), sectionTitleInline=to_js(section_title_inline), documentTypeTitle=to_js(document_type_title), patientInfoTitle=to_js(patient_info_title), noDocumentHeader=to_js(no_document_header), renderInlineCodes=to_js(render_inline_codes), conceptNameCodes=to_js(concept_name_codes), numericUnitCodes=to_js(numeric_unit_codes), codeValueUnit=to_js(code_value_unit), codeMeaningUnit=to_js(code_meaning_unit), renderAllCodes=to_js(render_all_codes), codeDetailsTooltip=to_js(code_details_tooltip), )
 
     output_web_worker = None
     output_list = []

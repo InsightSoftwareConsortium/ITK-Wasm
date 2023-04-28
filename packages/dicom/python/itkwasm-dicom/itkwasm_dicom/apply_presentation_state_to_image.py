@@ -2,14 +2,14 @@
 
 from itkwasm import (
     environment_dispatch,
-    JsonObject,
+    BinaryFile,
     Image,
 )
 
 def apply_presentation_state_to_image(
     image_in: os.PathLike,
     presentation_state_file: os.PathLike,
-    config_file: str = "undefined",
+    config_file: str = "",
     frame: int = 1,
     presentation_state_output: bool = False,
     bitmap_output: bool = False,

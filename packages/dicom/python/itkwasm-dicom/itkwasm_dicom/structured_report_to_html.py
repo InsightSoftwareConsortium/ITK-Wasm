@@ -2,7 +2,9 @@
 
 from itkwasm import (
     environment_dispatch,
+    BinaryFile,
     TextStream,
+    TextFile,
 )
 
 def structured_report_to_html(
@@ -22,16 +24,16 @@ def structured_report_to_html(
     skip_invalid_items: bool = False,
     disable_vr_checker: bool = False,
     charset_require: bool = False,
-    charset_assume: str = "undefined",
+    charset_assume: str = "",
     charset_check_all: bool = False,
     convert_to_utf8: bool = False,
-    url_prefix: str = "undefined",
-    html_3.2: bool = False,
-    html_4.0: bool = False,
-    xhtml_1.1: bool = False,
+    url_prefix: str = "",
+    html_32: bool = False,
+    html_40: bool = False,
+    xhtml_11: bool = False,
     add_document_type: bool = False,
-    css_reference: str = "undefined",
-    css_file: os.PathLike = "undefined",
+    css_reference: str = "",
+    css_file: os.PathLike = "",
     expand_inline: bool = False,
     never_expand_inline: bool = False,
     always_expand_inline: bool = False,
@@ -114,14 +116,14 @@ by Specific Character Set (0008,0005) to UTF-8
     :param url_prefix: URL: string. Append specificed URL prefix to hyperlinks of referenced composite objects in the document.
     :type  url_prefix: str
 
-    :param html_3.2: use only HTML version 3.2 compatible features
-    :type  html_3.2: bool
+    :param html_32: use only HTML version 3.2 compatible features
+    :type  html_32: bool
 
-    :param html_4.0: allow all HTML version 4.01 features (default)
-    :type  html_4.0: bool
+    :param html_40: allow all HTML version 4.01 features (default)
+    :type  html_40: bool
 
-    :param xhtml_1.1: comply with XHTML version 1.1 specification
-    :type  xhtml_1.1: bool
+    :param xhtml_11: comply with XHTML version 1.1 specification
+    :type  xhtml_11: bool
 
     :param add_document_type: add reference to SGML document type definition
     :type  add_document_type: bool
@@ -181,5 +183,5 @@ by Specific Character Set (0008,0005) to UTF-8
     :rtype:  str
     """
     func = environment_dispatch("itkwasm_dicom", "structured_report_to_html")
-    output = func(dicom_file, read_file_only=read_file_only, read_dataset=read_dataset, read_xfer_auto=read_xfer_auto, read_xfer_detect=read_xfer_detect, read_xfer_little=read_xfer_little, read_xfer_big=read_xfer_big, read_xfer_implicit=read_xfer_implicit, processing_details=processing_details, unknown_relationship=unknown_relationship, invalid_item_value=invalid_item_value, ignore_constraints=ignore_constraints, ignore_item_errors=ignore_item_errors, skip_invalid_items=skip_invalid_items, disable_vr_checker=disable_vr_checker, charset_require=charset_require, charset_assume=charset_assume, charset_check_all=charset_check_all, convert_to_utf8=convert_to_utf8, url_prefix=url_prefix, html_3.2=html_3.2, html_4.0=html_4.0, xhtml_1.1=xhtml_1.1, add_document_type=add_document_type, css_reference=css_reference, css_file=css_file, expand_inline=expand_inline, never_expand_inline=never_expand_inline, always_expand_inline=always_expand_inline, render_full_data=render_full_data, section_title_inline=section_title_inline, document_type_title=document_type_title, patient_info_title=patient_info_title, no_document_header=no_document_header, render_inline_codes=render_inline_codes, concept_name_codes=concept_name_codes, numeric_unit_codes=numeric_unit_codes, code_value_unit=code_value_unit, code_meaning_unit=code_meaning_unit, render_all_codes=render_all_codes, code_details_tooltip=code_details_tooltip)
+    output = func(dicom_file, read_file_only=read_file_only, read_dataset=read_dataset, read_xfer_auto=read_xfer_auto, read_xfer_detect=read_xfer_detect, read_xfer_little=read_xfer_little, read_xfer_big=read_xfer_big, read_xfer_implicit=read_xfer_implicit, processing_details=processing_details, unknown_relationship=unknown_relationship, invalid_item_value=invalid_item_value, ignore_constraints=ignore_constraints, ignore_item_errors=ignore_item_errors, skip_invalid_items=skip_invalid_items, disable_vr_checker=disable_vr_checker, charset_require=charset_require, charset_assume=charset_assume, charset_check_all=charset_check_all, convert_to_utf8=convert_to_utf8, url_prefix=url_prefix, html_32=html_32, html_40=html_40, xhtml_11=xhtml_11, add_document_type=add_document_type, css_reference=css_reference, css_file=css_file, expand_inline=expand_inline, never_expand_inline=never_expand_inline, always_expand_inline=always_expand_inline, render_full_data=render_full_data, section_title_inline=section_title_inline, document_type_title=document_type_title, patient_info_title=patient_info_title, no_document_header=no_document_header, render_inline_codes=render_inline_codes, concept_name_codes=concept_name_codes, numeric_unit_codes=numeric_unit_codes, code_value_unit=code_value_unit, code_meaning_unit=code_meaning_unit, render_all_codes=render_all_codes, code_details_tooltip=code_details_tooltip)
     return output

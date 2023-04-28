@@ -11,7 +11,9 @@ from itkwasm import (
     PipelineOutput,
     PipelineInput,
     Pipeline,
+    BinaryFile,
     TextStream,
+    TextFile,
 )
 
 def structured_report_to_html(
@@ -31,16 +33,16 @@ def structured_report_to_html(
     skip_invalid_items: bool = False,
     disable_vr_checker: bool = False,
     charset_require: bool = False,
-    charset_assume: str = "undefined",
+    charset_assume: str = "",
     charset_check_all: bool = False,
     convert_to_utf8: bool = False,
-    url_prefix: str = "undefined",
-    html_3.2: bool = False,
-    html_4.0: bool = False,
-    xhtml_1.1: bool = False,
+    url_prefix: str = "",
+    html_32: bool = False,
+    html_40: bool = False,
+    xhtml_11: bool = False,
     add_document_type: bool = False,
-    css_reference: str = "undefined",
-    css_file: os.PathLike = "undefined",
+    css_reference: str = "",
+    css_file: os.PathLike = "",
     expand_inline: bool = False,
     never_expand_inline: bool = False,
     always_expand_inline: bool = False,
@@ -123,14 +125,14 @@ by Specific Character Set (0008,0005) to UTF-8
     :param url_prefix: URL: string. Append specificed URL prefix to hyperlinks of referenced composite objects in the document.
     :type  url_prefix: str
 
-    :param html_3.2: use only HTML version 3.2 compatible features
-    :type  html_3.2: bool
+    :param html_32: use only HTML version 3.2 compatible features
+    :type  html_32: bool
 
-    :param html_4.0: allow all HTML version 4.01 features (default)
-    :type  html_4.0: bool
+    :param html_40: allow all HTML version 4.01 features (default)
+    :type  html_40: bool
 
-    :param xhtml_1.1: comply with XHTML version 1.1 specification
-    :type  xhtml_1.1: bool
+    :param xhtml_11: comply with XHTML version 1.1 specification
+    :type  xhtml_11: bool
 
     :param add_document_type: add reference to SGML document type definition
     :type  add_document_type: bool
@@ -207,132 +209,132 @@ by Specific Character Set (0008,0005) to UTF-8
     # Outputs
     args.append('0')
     # Options
-    if read_file_only is not None:
+    if read_file_only:
         args.append('--read-file-only')
 
-    if read_dataset is not None:
+    if read_dataset:
         args.append('--read-dataset')
 
-    if read_xfer_auto is not None:
+    if read_xfer_auto:
         args.append('--read-xfer-auto')
 
-    if read_xfer_detect is not None:
+    if read_xfer_detect:
         args.append('--read-xfer-detect')
 
-    if read_xfer_little is not None:
+    if read_xfer_little:
         args.append('--read-xfer-little')
 
-    if read_xfer_big is not None:
+    if read_xfer_big:
         args.append('--read-xfer-big')
 
-    if read_xfer_implicit is not None:
+    if read_xfer_implicit:
         args.append('--read-xfer-implicit')
 
-    if processing_details is not None:
+    if processing_details:
         args.append('--processing-details')
 
-    if unknown_relationship is not None:
+    if unknown_relationship:
         args.append('--unknown-relationship')
 
-    if invalid_item_value is not None:
+    if invalid_item_value:
         args.append('--invalid-item-value')
 
-    if ignore_constraints is not None:
+    if ignore_constraints:
         args.append('--ignore-constraints')
 
-    if ignore_item_errors is not None:
+    if ignore_item_errors:
         args.append('--ignore-item-errors')
 
-    if skip_invalid_items is not None:
+    if skip_invalid_items:
         args.append('--skip-invalid-items')
 
-    if disable_vr_checker is not None:
+    if disable_vr_checker:
         args.append('--disable-vr-checker')
 
-    if charset_require is not None:
+    if charset_require:
         args.append('--charset-require')
 
-    if charset_assume is not None:
+    if charset_assume:
         args.append('--charset-assume')
         args.append(str(charset_assume))
 
-    if charset_check_all is not None:
+    if charset_check_all:
         args.append('--charset-check-all')
 
-    if convert_to_utf8 is not None:
+    if convert_to_utf8:
         args.append('--convert-to-utf8')
 
-    if url_prefix is not None:
+    if url_prefix:
         args.append('--url-prefix')
         args.append(str(url_prefix))
 
-    if html_3.2 is not None:
-        args.append('--html-3.2')
+    if html_32:
+        args.append('--html-32')
 
-    if html_4.0 is not None:
-        args.append('--html-4.0')
+    if html_40:
+        args.append('--html-40')
 
-    if xhtml_1.1 is not None:
-        args.append('--xhtml-1.1')
+    if xhtml_11:
+        args.append('--xhtml-11')
 
-    if add_document_type is not None:
+    if add_document_type:
         args.append('--add-document-type')
 
-    if css_reference is not None:
-        input_count_string = str(len(inputs))
-        inputs.append(InterfaceTypes.TextStream(css_reference)
+    if css_reference:
+        input_count_string = str(len(pipeline_inputs))
+        pipeline_inputs.append(PipelineInput(InterfaceTypes.TextStream, TextStream(css_reference)))
         args.append('--css-reference')
         args.append(input_count_string)
 
-    if css_file is not None:
+    if css_file:
         input_file = str(css_file)
-        inputs.append(InterfaceTypes.TextFile(css_file)
+        pipeline_inputs.append(PipelineInput(InterfaceTypes.TextFile, TextFile(css_file)))
         args.append('--css-file')
         args.append(input_file)
 
-    if expand_inline is not None:
+    if expand_inline:
         args.append('--expand-inline')
 
-    if never_expand_inline is not None:
+    if never_expand_inline:
         args.append('--never-expand-inline')
 
-    if always_expand_inline is not None:
+    if always_expand_inline:
         args.append('--always-expand-inline')
 
-    if render_full_data is not None:
+    if render_full_data:
         args.append('--render-full-data')
 
-    if section_title_inline is not None:
+    if section_title_inline:
         args.append('--section-title-inline')
 
-    if document_type_title is not None:
+    if document_type_title:
         args.append('--document-type-title')
 
-    if patient_info_title is not None:
+    if patient_info_title:
         args.append('--patient-info-title')
 
-    if no_document_header is not None:
+    if no_document_header:
         args.append('--no-document-header')
 
-    if render_inline_codes is not None:
+    if render_inline_codes:
         args.append('--render-inline-codes')
 
-    if concept_name_codes is not None:
+    if concept_name_codes:
         args.append('--concept-name-codes')
 
-    if numeric_unit_codes is not None:
+    if numeric_unit_codes:
         args.append('--numeric-unit-codes')
 
-    if code_value_unit is not None:
+    if code_value_unit:
         args.append('--code-value-unit')
 
-    if code_meaning_unit is not None:
+    if code_meaning_unit:
         args.append('--code-meaning-unit')
 
-    if render_all_codes is not None:
+    if render_all_codes:
         args.append('--render-all-codes')
 
-    if code_details_tooltip is not None:
+    if code_details_tooltip:
         args.append('--code-details-tooltip')
 
 

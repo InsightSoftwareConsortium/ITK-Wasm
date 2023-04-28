@@ -15,6 +15,7 @@ guide](doc/content/docs/itk_js_to_itk_wasm_migration_guide.md).
 - apply-presentation-state-to-image presentation-state-file is an argument, as
   opposed to an optional parameter, since it is required.
 - dicom functions access { data: <Uint8Array>, path: <string> } arguments instead of just <Uint8Array>.
+- `.` removed from structured-report-to-html arguments for wrapping
 
 ## From 1.0.0-b.72 to 1.0.0-b.73
 

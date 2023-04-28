@@ -2,6 +2,7 @@
 
 from itkwasm import (
     environment_dispatch,
+    BinaryFile,
     TextStream,
 )
 

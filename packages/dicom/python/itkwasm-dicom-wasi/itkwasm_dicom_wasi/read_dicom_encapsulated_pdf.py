@@ -11,6 +11,7 @@ from itkwasm import (
     PipelineOutput,
     PipelineInput,
     Pipeline,
+    BinaryFile,
     BinaryStream,
 )
 
@@ -101,49 +102,49 @@ def read_dicom_encapsulated_pdf(
     # Outputs
     args.append('0')
     # Options
-    if read_file_only is not None:
+    if read_file_only:
         args.append('--read-file-only')
 
-    if read_dataset is not None:
+    if read_dataset:
         args.append('--read-dataset')
 
-    if read_xfer_auto is not None:
+    if read_xfer_auto:
         args.append('--read-xfer-auto')
 
-    if read_xfer_detect is not None:
+    if read_xfer_detect:
         args.append('--read-xfer-detect')
 
-    if read_xfer_little is not None:
+    if read_xfer_little:
         args.append('--read-xfer-little')
 
-    if read_xfer_big is not None:
+    if read_xfer_big:
         args.append('--read-xfer-big')
 
-    if read_xfer_implicit is not None:
+    if read_xfer_implicit:
         args.append('--read-xfer-implicit')
 
-    if accept_odd_length is not None:
+    if accept_odd_length:
         args.append('--accept-odd-length')
 
-    if assume_even_length is not None:
+    if assume_even_length:
         args.append('--assume-even-length')
 
-    if enable_cp246 is not None:
+    if enable_cp246:
         args.append('--enable-cp246')
 
-    if disable_cp246 is not None:
+    if disable_cp246:
         args.append('--disable-cp246')
 
-    if retain_un is not None:
+    if retain_un:
         args.append('--retain-un')
 
-    if convert_un is not None:
+    if convert_un:
         args.append('--convert-un')
 
-    if enable_correction is not None:
+    if enable_correction:
         args.append('--enable-correction')
 
-    if disable_correction is not None:
+    if disable_correction:
         args.append('--disable-correction')
 
 

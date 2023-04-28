@@ -8,7 +8,9 @@ import snakeCase from './snakeCase.js'
 
 const interfaceJsonTypeToPythonType = new Map([
   ['INPUT_TEXT_FILE:FILE', 'os.PathLike'],
+  ['INPUT_TEXT_FILE', 'os.PathLike'],
   ['OUTPUT_TEXT_FILE:FILE', 'os.PathLike'],
+  ['OUTPUT_TEXT_FILE', 'os.PathLike'],
   ['INPUT_BINARY_FILE:FILE', 'os.PathLike'],
   ['OUTPUT_BINARY_FILE:FILE', 'os.PathLike'],
   ['INPUT_TEXT_STREAM', 'str'],
@@ -158,14 +160,14 @@ function packageVersion(packageDir, pypackage, options) {
 }
 
 function functionModuleImports(interfaceJson) {
-let moduleContent = ""
+  let moduleContent = ""
   const usedInterfaceTypes = new Set()
   const pipelineComponents = ['inputs', 'outputs', 'parameters']
   pipelineComponents.forEach((pipelineComponent) => {
     interfaceJson[pipelineComponent].forEach((value) => {
       if (interfaceJsonTypeToInterfaceType.has(value.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(value.type)
-        if (!interfaceType.includes('File')) {
+        if (interfaceType !== 'JsonObject') {
           usedInterfaceTypes.add(interfaceType)
         }
       }
@@ -198,7 +200,11 @@ function functionModuleArgs(interfaceJson) {
         functionArgs += ` = False,\n`
       }
     } else if(value.type.includes("TEXT")) {
-      functionArgs += ` = "${value.default}",\n`
+      if (value.default) {
+        functionArgs += ` = "${value.default}",\n`
+      } else {
+        functionArgs += ` = "",\n`
+      }
     } else if(value.required && value.itemsExpectedMax > 1) {
       functionArgs += ` = [],\n`
     } else {
@@ -346,7 +352,7 @@ from itkwasm import (
       return
     }
     const snake = snakeCase(parameter.name)
-    args += `    if ${snake} is not None:\n`
+    args += `    if ${snake}:\n`
     if (parameter.type === "BOOL") {
       args += `        args.append('--${parameter.name}')\n`
     } else if (parameter.itemsExpectedMax > 1) {
@@ -360,17 +366,17 @@ from itkwasm import (
         if (interfaceType.includes('File')) {
           // for files
           args += `        input_file = str(${snakeCase(parameter.name)})\n`
-          args += `        inputs.append(InterfaceTypes.${interfaceType}(value))\n`
+          args += `        pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(value)))\n`
           args += `        args.append(input_file)\n`
         } else if (interfaceType.includes('Stream')) {
           // for streams
-          args += `        input_count_string = str(len(inputs))\n`
-          args += `        inputs.append(InterfaceTypes.${interfaceType}(value))\n`
+          args += `        input_count_string = str(len(pipeline_inputs))\n`
+          args += `        pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(value)))\n`
           args += `        args.append(input_count_spring)\n`
         } else {
           // Image, Mesh, PolyData, JsonObject
-          args += `        input_count_string = str(len(inputs))\n`
-          args += `        inputs.push(InterfaceTypes.${interfaceType}(value))\n`
+          args += `        input_count_string = str(len(pipeline_inputs))\n`
+          args += `        pipeline_inputs.push(PipelineInput(InterfaceTypes.${interfaceType}, value))\n`
           args += `        args.append(input_count_string)\n`
         }
       } else {
@@ -383,19 +389,19 @@ from itkwasm import (
         if (interfaceType.includes('File')) {
           // for files
           args += `        input_file = str(${snakeCase(parameter.name)})\n`
-          args += `        inputs.append(InterfaceTypes.${interfaceType}(${snake})\n`
+          args += `        pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(${snake})))\n`
           args += `        args.append('--${parameter.name}')\n`
           args += `        args.append(input_file)\n`
         } else if (interfaceType.includes('Stream')) {
           // for streams
-          args += `        input_count_string = str(len(inputs))\n`
-          args += `        inputs.append(InterfaceTypes.${interfaceType}(${snake})\n`
+          args += `        input_count_string = str(len(pipeline_inputs))\n`
+          args += `        pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(${snake})))\n`
           args += `        args.append('--${parameter.name}')\n`
           args += `        args.append(input_count_string)\n`
         } else {
           // Image, Mesh, PolyData, JsonObject
-          args += `        input_count_string = str(len(inputs))\n`
-          args += `        inputs.append(InterfaceTypes.${interfaceType}(${snake}))\n`
+          args += `        input_count_string = str(len(pipeline_inputs))\n`
+          args += `        pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${snake}))\n`
           args += `        args.append('--${parameter.name}')\n`
           args += `        args.append(input_count_string)\n`
         }
@@ -427,6 +433,8 @@ from itkwasm import (
         return `bool(${value})`
       case "float":
         return `float(${value})`
+      case "Dict":
+        return `${value}.data.data`
       default:
         return `${value}.data`
     }
