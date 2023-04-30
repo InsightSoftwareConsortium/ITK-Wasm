@@ -2,14 +2,19 @@
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
-from .pyodide import js_package
+from .js_package import js_package
 
 from itkwasm.pyodide import (
     to_js,
     to_py,
     js_resources
+)
+from itkwasm import (
+    InterfaceTypes,
+    BinaryFile,
+    Image,
 )
 
 async def apply_presentation_state_to_image_async(
@@ -17,10 +22,8 @@ async def apply_presentation_state_to_image_async(
     presentation_state_file: os.PathLike,
     config_file: str = "",
     frame: int = 1,
-    presentation_state_output: bool = False,
-    bitmap_output: bool = False,
-    pgm: bool = False,
-    dicom: bool = False,
+    no_presentation_state_output: bool = False,
+    no_bitmap_output: bool = False,
 ) -> Tuple[Dict, Image]:
     """Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.
 
@@ -36,17 +39,11 @@ async def apply_presentation_state_to_image_async(
     :param frame: frame: integer. Process using image frame f (default: 1)
     :type  frame: int
 
-    :param presentation_state_output: get presentation state information in text stream (default: ON).
-    :type  presentation_state_output: bool
+    :param no_presentation_state_output: Do not get presentation state information in text stream.
+    :type  no_presentation_state_output: bool
 
-    :param bitmap_output: get resulting image as bitmap output stream (default: ON).
-    :type  bitmap_output: bool
-
-    :param pgm: save image as PGM (default)
-    :type  pgm: bool
-
-    :param dicom: save image as DICOM secondary capture
-    :type  dicom: bool
+    :param no_bitmap_output: Do not get resulting image as bitmap output stream.
+    :type  no_bitmap_output: bool
 
     :return: Output overlay information
     :rtype:  Dict
@@ -57,7 +54,17 @@ async def apply_presentation_state_to_image_async(
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker
 
-    outputs = await js_module.applyPresentationStateToImage(web_worker, to_js(image_in), to_js(presentation_state_file),  configFile=to_js(config_file), frame=to_js(frame), presentationStateOutput=to_js(presentation_state_output), bitmapOutput=to_js(bitmap_output), pgm=to_js(pgm), dicom=to_js(dicom), )
+    kwargs = {}
+    if config_file:
+        kwargs["configFile"] = to_js(config_file)
+    if frame:
+        kwargs["frame"] = to_js(frame)
+    if no_presentation_state_output:
+        kwargs["noPresentationStateOutput"] = to_js(no_presentation_state_output)
+    if no_bitmap_output:
+        kwargs["noBitmapOutput"] = to_js(no_bitmap_output)
+
+    outputs = await js_module.applyPresentationStateToImage(web_worker, to_js(BinaryFile(image_in)), to_js(BinaryFile(presentation_state_file)), **kwargs)
 
     output_web_worker = None
     output_list = []

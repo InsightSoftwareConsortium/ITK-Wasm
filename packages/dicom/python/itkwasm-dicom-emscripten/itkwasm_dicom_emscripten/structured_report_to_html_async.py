@@ -2,14 +2,20 @@
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
-from .pyodide import js_package
+from .js_package import js_package
 
 from itkwasm.pyodide import (
     to_js,
     to_py,
     js_resources
+)
+from itkwasm import (
+    InterfaceTypes,
+    BinaryFile,
+    TextStream,
+    TextFile,
 )
 
 async def structured_report_to_html_async(
@@ -37,8 +43,8 @@ async def structured_report_to_html_async(
     html_40: bool = False,
     xhtml_11: bool = False,
     add_document_type: bool = False,
-    css_reference: str = "",
-    css_file: os.PathLike = "",
+    css_reference: Optional[str] = None,
+    css_file: Optional[os.PathLike] = None,
     expand_inline: bool = False,
     never_expand_inline: bool = False,
     always_expand_inline: bool = False,
@@ -190,7 +196,89 @@ by Specific Character Set (0008,0005) to UTF-8
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker
 
-    outputs = await js_module.structuredReportToHtml(web_worker, to_js(dicom_file),  readFileOnly=to_js(read_file_only), readDataset=to_js(read_dataset), readXferAuto=to_js(read_xfer_auto), readXferDetect=to_js(read_xfer_detect), readXferLittle=to_js(read_xfer_little), readXferBig=to_js(read_xfer_big), readXferImplicit=to_js(read_xfer_implicit), processingDetails=to_js(processing_details), unknownRelationship=to_js(unknown_relationship), invalidItemValue=to_js(invalid_item_value), ignoreConstraints=to_js(ignore_constraints), ignoreItemErrors=to_js(ignore_item_errors), skipInvalidItems=to_js(skip_invalid_items), disableVrChecker=to_js(disable_vr_checker), charsetRequire=to_js(charset_require), charsetAssume=to_js(charset_assume), charsetCheckAll=to_js(charset_check_all), convertToUtf8=to_js(convert_to_utf8), urlPrefix=to_js(url_prefix), html32=to_js(html_32), html40=to_js(html_40), xhtml11=to_js(xhtml_11), addDocumentType=to_js(add_document_type), cssReference=to_js(css_reference), cssFile=to_js(css_file), expandInline=to_js(expand_inline), neverExpandInline=to_js(never_expand_inline), alwaysExpandInline=to_js(always_expand_inline), renderFullData=to_js(render_full_data), sectionTitleInline=to_js(section_title_inline), documentTypeTitle=to_js(document_type_title), patientInfoTitle=to_js(patient_info_title), noDocumentHeader=to_js(no_document_header), renderInlineCodes=to_js(render_inline_codes), conceptNameCodes=to_js(concept_name_codes), numericUnitCodes=to_js(numeric_unit_codes), codeValueUnit=to_js(code_value_unit), codeMeaningUnit=to_js(code_meaning_unit), renderAllCodes=to_js(render_all_codes), codeDetailsTooltip=to_js(code_details_tooltip), )
+    kwargs = {}
+    if read_file_only:
+        kwargs["readFileOnly"] = to_js(read_file_only)
+    if read_dataset:
+        kwargs["readDataset"] = to_js(read_dataset)
+    if read_xfer_auto:
+        kwargs["readXferAuto"] = to_js(read_xfer_auto)
+    if read_xfer_detect:
+        kwargs["readXferDetect"] = to_js(read_xfer_detect)
+    if read_xfer_little:
+        kwargs["readXferLittle"] = to_js(read_xfer_little)
+    if read_xfer_big:
+        kwargs["readXferBig"] = to_js(read_xfer_big)
+    if read_xfer_implicit:
+        kwargs["readXferImplicit"] = to_js(read_xfer_implicit)
+    if processing_details:
+        kwargs["processingDetails"] = to_js(processing_details)
+    if unknown_relationship:
+        kwargs["unknownRelationship"] = to_js(unknown_relationship)
+    if invalid_item_value:
+        kwargs["invalidItemValue"] = to_js(invalid_item_value)
+    if ignore_constraints:
+        kwargs["ignoreConstraints"] = to_js(ignore_constraints)
+    if ignore_item_errors:
+        kwargs["ignoreItemErrors"] = to_js(ignore_item_errors)
+    if skip_invalid_items:
+        kwargs["skipInvalidItems"] = to_js(skip_invalid_items)
+    if disable_vr_checker:
+        kwargs["disableVrChecker"] = to_js(disable_vr_checker)
+    if charset_require:
+        kwargs["charsetRequire"] = to_js(charset_require)
+    if charset_assume:
+        kwargs["charsetAssume"] = to_js(charset_assume)
+    if charset_check_all:
+        kwargs["charsetCheckAll"] = to_js(charset_check_all)
+    if convert_to_utf8:
+        kwargs["convertToUtf8"] = to_js(convert_to_utf8)
+    if url_prefix:
+        kwargs["urlPrefix"] = to_js(url_prefix)
+    if html_32:
+        kwargs["html32"] = to_js(html_32)
+    if html_40:
+        kwargs["html40"] = to_js(html_40)
+    if xhtml_11:
+        kwargs["xhtml11"] = to_js(xhtml_11)
+    if add_document_type:
+        kwargs["addDocumentType"] = to_js(add_document_type)
+    if css_reference is not None:
+        kwargs["cssReference"] = to_js(css_reference)
+    if css_file is not None:
+        kwargs["cssFile"] = to_js(TextFile(css_file))
+    if expand_inline:
+        kwargs["expandInline"] = to_js(expand_inline)
+    if never_expand_inline:
+        kwargs["neverExpandInline"] = to_js(never_expand_inline)
+    if always_expand_inline:
+        kwargs["alwaysExpandInline"] = to_js(always_expand_inline)
+    if render_full_data:
+        kwargs["renderFullData"] = to_js(render_full_data)
+    if section_title_inline:
+        kwargs["sectionTitleInline"] = to_js(section_title_inline)
+    if document_type_title:
+        kwargs["documentTypeTitle"] = to_js(document_type_title)
+    if patient_info_title:
+        kwargs["patientInfoTitle"] = to_js(patient_info_title)
+    if no_document_header:
+        kwargs["noDocumentHeader"] = to_js(no_document_header)
+    if render_inline_codes:
+        kwargs["renderInlineCodes"] = to_js(render_inline_codes)
+    if concept_name_codes:
+        kwargs["conceptNameCodes"] = to_js(concept_name_codes)
+    if numeric_unit_codes:
+        kwargs["numericUnitCodes"] = to_js(numeric_unit_codes)
+    if code_value_unit:
+        kwargs["codeValueUnit"] = to_js(code_value_unit)
+    if code_meaning_unit:
+        kwargs["codeMeaningUnit"] = to_js(code_meaning_unit)
+    if render_all_codes:
+        kwargs["renderAllCodes"] = to_js(render_all_codes)
+    if code_details_tooltip:
+        kwargs["codeDetailsTooltip"] = to_js(code_details_tooltip)
+
+    outputs = await js_module.structuredReportToHtml(web_worker, to_js(BinaryFile(dicom_file)), **kwargs)
 
     output_web_worker = None
     output_list = []

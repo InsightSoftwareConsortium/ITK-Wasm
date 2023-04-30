@@ -5,17 +5,11 @@ interface ApplyPresentationStateToImageOptions {
   /** frame: integer. Process using image frame f (default: 1) */
   frame?: number
 
-  /** get presentation state information in text stream (default: ON). */
-  presentationStateOutput?: boolean
+  /** Do not get presentation state information in text stream. */
+  noPresentationStateOutput?: boolean
 
-  /** get resulting image as bitmap output stream (default: ON). */
-  bitmapOutput?: boolean
-
-  /** save image as PGM (default) */
-  pgm?: boolean
-
-  /** save image as DICOM secondary capture */
-  dicom?: boolean
+  /** Do not get resulting image as bitmap output stream. */
+  noBitmapOutput?: boolean
 
 }
 

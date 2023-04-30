@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
 from importlib_resources import files as file_resources
 
@@ -20,10 +20,8 @@ def apply_presentation_state_to_image(
     presentation_state_file: os.PathLike,
     config_file: str = "",
     frame: int = 1,
-    presentation_state_output: bool = False,
-    bitmap_output: bool = False,
-    pgm: bool = False,
-    dicom: bool = False,
+    no_presentation_state_output: bool = False,
+    no_bitmap_output: bool = False,
 ) -> Tuple[Dict, Image]:
     """Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.
 
@@ -39,17 +37,11 @@ def apply_presentation_state_to_image(
     :param frame: frame: integer. Process using image frame f (default: 1)
     :type  frame: int
 
-    :param presentation_state_output: get presentation state information in text stream (default: ON).
-    :type  presentation_state_output: bool
+    :param no_presentation_state_output: Do not get presentation state information in text stream.
+    :type  no_presentation_state_output: bool
 
-    :param bitmap_output: get resulting image as bitmap output stream (default: ON).
-    :type  bitmap_output: bool
-
-    :param pgm: save image as PGM (default)
-    :type  pgm: bool
-
-    :param dicom: save image as DICOM secondary capture
-    :type  dicom: bool
+    :param no_bitmap_output: Do not get resulting image as bitmap output stream.
+    :type  no_bitmap_output: bool
 
     :return: Output overlay information
     :rtype:  Dict
@@ -85,17 +77,11 @@ def apply_presentation_state_to_image(
         args.append('--frame')
         args.append(str(frame))
 
-    if presentation_state_output:
-        args.append('--presentation-state-output')
+    if no_presentation_state_output:
+        args.append('--no-presentation-state-output')
 
-    if bitmap_output:
-        args.append('--bitmap-output')
-
-    if pgm:
-        args.append('--pgm')
-
-    if dicom:
-        args.append('--dicom')
+    if no_bitmap_output:
+        args.append('--no-bitmap-output')
 
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)

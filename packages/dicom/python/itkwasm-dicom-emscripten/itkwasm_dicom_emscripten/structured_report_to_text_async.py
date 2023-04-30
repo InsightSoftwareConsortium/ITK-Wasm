@@ -2,14 +2,19 @@
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
-from .pyodide import js_package
+from .js_package import js_package
 
 from itkwasm.pyodide import (
     to_js,
     to_py,
     js_resources
+)
+from itkwasm import (
+    InterfaceTypes,
+    BinaryFile,
+    TextStream,
 )
 
 async def structured_report_to_text_async(
@@ -94,7 +99,43 @@ async def structured_report_to_text_async(
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker
 
-    outputs = await js_module.structuredReportToText(web_worker, to_js(dicom_file),  unknownRelationship=to_js(unknown_relationship), invalidItemValue=to_js(invalid_item_value), ignoreConstraints=to_js(ignore_constraints), ignoreItemErrors=to_js(ignore_item_errors), skipInvalidItems=to_js(skip_invalid_items), noDocumentHeader=to_js(no_document_header), numberNestedItems=to_js(number_nested_items), shortenLongValues=to_js(shorten_long_values), printInstanceUid=to_js(print_instance_uid), printSopclassShort=to_js(print_sopclass_short), printSopclassLong=to_js(print_sopclass_long), printSopclassUid=to_js(print_sopclass_uid), printAllCodes=to_js(print_all_codes), printInvalidCodes=to_js(print_invalid_codes), printTemplateId=to_js(print_template_id), indicateEnhanced=to_js(indicate_enhanced), printColor=to_js(print_color), )
+    kwargs = {}
+    if unknown_relationship:
+        kwargs["unknownRelationship"] = to_js(unknown_relationship)
+    if invalid_item_value:
+        kwargs["invalidItemValue"] = to_js(invalid_item_value)
+    if ignore_constraints:
+        kwargs["ignoreConstraints"] = to_js(ignore_constraints)
+    if ignore_item_errors:
+        kwargs["ignoreItemErrors"] = to_js(ignore_item_errors)
+    if skip_invalid_items:
+        kwargs["skipInvalidItems"] = to_js(skip_invalid_items)
+    if no_document_header:
+        kwargs["noDocumentHeader"] = to_js(no_document_header)
+    if number_nested_items:
+        kwargs["numberNestedItems"] = to_js(number_nested_items)
+    if shorten_long_values:
+        kwargs["shortenLongValues"] = to_js(shorten_long_values)
+    if print_instance_uid:
+        kwargs["printInstanceUid"] = to_js(print_instance_uid)
+    if print_sopclass_short:
+        kwargs["printSopclassShort"] = to_js(print_sopclass_short)
+    if print_sopclass_long:
+        kwargs["printSopclassLong"] = to_js(print_sopclass_long)
+    if print_sopclass_uid:
+        kwargs["printSopclassUid"] = to_js(print_sopclass_uid)
+    if print_all_codes:
+        kwargs["printAllCodes"] = to_js(print_all_codes)
+    if print_invalid_codes:
+        kwargs["printInvalidCodes"] = to_js(print_invalid_codes)
+    if print_template_id:
+        kwargs["printTemplateId"] = to_js(print_template_id)
+    if indicate_enhanced:
+        kwargs["indicateEnhanced"] = to_js(indicate_enhanced)
+    if print_color:
+        kwargs["printColor"] = to_js(print_color)
+
+    outputs = await js_module.structuredReportToText(web_worker, to_js(BinaryFile(dicom_file)), **kwargs)
 
     output_web_worker = None
     output_list = []

@@ -1,5 +1,7 @@
 # Generated file. Do not edit.
 
+from typing import Optional
+
 from itkwasm import (
     environment_dispatch,
     BinaryFile,
@@ -11,10 +13,8 @@ async def apply_presentation_state_to_image_async(
     presentation_state_file: os.PathLike,
     config_file: str = "",
     frame: int = 1,
-    presentation_state_output: bool = False,
-    bitmap_output: bool = False,
-    pgm: bool = False,
-    dicom: bool = False,
+    no_presentation_state_output: bool = False,
+    no_bitmap_output: bool = False,
 ) -> Tuple[Dict, Image]:
     """Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.
 
@@ -30,17 +30,11 @@ async def apply_presentation_state_to_image_async(
     :param frame: frame: integer. Process using image frame f (default: 1)
     :type  frame: int
 
-    :param presentation_state_output: get presentation state information in text stream (default: ON).
-    :type  presentation_state_output: bool
+    :param no_presentation_state_output: Do not get presentation state information in text stream.
+    :type  no_presentation_state_output: bool
 
-    :param bitmap_output: get resulting image as bitmap output stream (default: ON).
-    :type  bitmap_output: bool
-
-    :param pgm: save image as PGM (default)
-    :type  pgm: bool
-
-    :param dicom: save image as DICOM secondary capture
-    :type  dicom: bool
+    :param no_bitmap_output: Do not get resulting image as bitmap output stream.
+    :type  no_bitmap_output: bool
 
     :return: Output overlay information
     :rtype:  Dict
@@ -49,5 +43,5 @@ async def apply_presentation_state_to_image_async(
     :rtype:  Image
     """
     func = environment_dispatch("itkwasm_dicom", "apply_presentation_state_to_image_async")
-    output = await func(image_in, presentation_state_file, config_file=config_file, frame=frame, presentation_state_output=presentation_state_output, bitmap_output=bitmap_output, pgm=pgm, dicom=dicom)
+    output = await func(image_in, presentation_state_file, config_file=config_file, frame=frame, no_presentation_state_output=no_presentation_state_output, no_bitmap_output=no_bitmap_output)
     return output

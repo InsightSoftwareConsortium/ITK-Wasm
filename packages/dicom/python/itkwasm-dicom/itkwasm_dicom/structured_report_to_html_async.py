@@ -1,5 +1,7 @@
 # Generated file. Do not edit.
 
+from typing import Optional
+
 from itkwasm import (
     environment_dispatch,
     BinaryFile,
@@ -32,8 +34,8 @@ async def structured_report_to_html_async(
     html_40: bool = False,
     xhtml_11: bool = False,
     add_document_type: bool = False,
-    css_reference: str = "",
-    css_file: os.PathLike = "",
+    css_reference: Optional[str] = None,
+    css_file: Optional[os.PathLike] = None,
     expand_inline: bool = False,
     never_expand_inline: bool = False,
     always_expand_inline: bool = False,

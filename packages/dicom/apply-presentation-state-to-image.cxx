@@ -501,15 +501,16 @@ int main(int argc, char *argv[])
   pipeline.add_option("--frame", frame, "frame: integer. Process using image frame f (default: 1)");
 
   // addGroup "output format:"
-  bool pstateOutput{true};
-  pipeline.add_flag("--presentation-state-output", pstateOutput, "get presentation state information in text stream (default: ON).");
-  bool bitmapOutput{true};
-  pipeline.add_flag("--bitmap-output", bitmapOutput, "get resulting image as bitmap output stream (default: ON).");
+  bool noPstateOutput{false};
+  pipeline.add_flag("--no-presentation-state-output", noPstateOutput, "Do not get presentation state information in text stream.");
+  bool noBitmapOutput{false};
+  pipeline.add_flag("--no-bitmap-output", noBitmapOutput, "Do not get resulting image as bitmap output stream.");
 
-  bool outputFormatPGM{true};
-  pipeline.add_flag("--pgm", outputFormatPGM, "save image as PGM (default)");
-  bool outputFormatDICOM{false};
-  pipeline.add_flag("--dicom", outputFormatDICOM, "save image as DICOM secondary capture");
+  // DICOM output is currently not supported.
+  // bool outputFormatPGM{true};
+  // pipeline.add_flag("--pgm", outputFormatPGM, "save image as PGM (default)");
+  // bool outputFormatDICOM{false};
+  // pipeline.add_flag("--dicom", outputFormatDICOM, "save image as DICOM secondary capture");
 
   /* evaluate command line */
   ITK_WASM_PARSE(pipeline);
@@ -523,16 +524,17 @@ int main(int argc, char *argv[])
   const char *opt_cfgName    = NULL;                    /* config read file name */
 
   /* command line parameters and options */
-  if (!pstateOutput && !bitmapOutput)
+  if (noPstateOutput && noBitmapOutput)
   {
-    OFLOG_FATAL(appLogger, "No output form requested. Specify either --presentation-state-output, --bitmap-output or both.");
+    OFLOG_FATAL(appLogger, "No output form requested. Do not specify both --no-presentation-state-output and --no-bitmap-output.");
   }
 
   if(!pstateFile.empty()) opt_pstName = pstateFile.c_str();
   if(!configFile.empty()) opt_cfgName = configFile.c_str();
 
-  if (outputFormatPGM)         opt_dicom_mode = OFFalse;
-  if (outputFormatDICOM)       opt_dicom_mode = OFTrue;
+  // DICOM output is currently not supported
+  // if (outputFormatPGM)         opt_dicom_mode = OFFalse;
+  // if (outputFormatDICOM)       opt_dicom_mode = OFTrue;
 
   /* print resource identifier */
   OFLOG_DEBUG(appLogger, rcsid << OFendl);
@@ -561,8 +563,8 @@ int main(int argc, char *argv[])
 
   if (status == EC_Normal)
   {
-    if (pstateOutput) dumpPresentationState(pstateOutStream.Get(), dvi.getCurrentPState());
-    if (bitmapOutput)
+    if (!noPstateOutput) dumpPresentationState(pstateOutStream.Get(), dvi.getCurrentPState());
+    if (!noBitmapOutput)
     {
       const void *pixelData = NULL;
       unsigned long width = 0;

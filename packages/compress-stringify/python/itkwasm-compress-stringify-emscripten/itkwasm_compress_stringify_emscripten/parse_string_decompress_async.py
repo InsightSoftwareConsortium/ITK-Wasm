@@ -2,14 +2,18 @@
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
-from .pyodide import js_package
+from .js_package import js_package
 
 from itkwasm.pyodide import (
     to_js,
     to_py,
     js_resources
+)
+from itkwasm import (
+    InterfaceTypes,
+    BinaryStream,
 )
 
 async def parse_string_decompress_async(
@@ -30,7 +34,11 @@ async def parse_string_decompress_async(
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker
 
-    outputs = await js_module.parseStringDecompress(web_worker, to_js(input),  parseString=to_js(parse_string), )
+    kwargs = {}
+    if parse_string:
+        kwargs["parseString"] = to_js(parse_string)
+
+    outputs = await js_module.parseStringDecompress(web_worker, to_js(input), **kwargs)
 
     output_web_worker = None
     output_list = []

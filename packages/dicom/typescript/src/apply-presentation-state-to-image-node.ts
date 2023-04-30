@@ -54,17 +54,11 @@ async function applyPresentationStateToImageNode(
   if (typeof options.frame !== "undefined") {
     args.push('--frame', options.frame.toString())
   }
-  if (typeof options.presentationStateOutput !== "undefined") {
-    args.push('--presentation-state-output')
+  if (typeof options.noPresentationStateOutput !== "undefined") {
+    args.push('--no-presentation-state-output')
   }
-  if (typeof options.bitmapOutput !== "undefined") {
-    args.push('--bitmap-output')
-  }
-  if (typeof options.pgm !== "undefined") {
-    args.push('--pgm')
-  }
-  if (typeof options.dicom !== "undefined") {
-    args.push('--dicom')
+  if (typeof options.noBitmapOutput !== "undefined") {
+    args.push('--no-bitmap-output')
   }
 
   const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'apply-presentation-state-to-image')

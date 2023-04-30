@@ -2,14 +2,19 @@
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
-from .pyodide import js_package
+from .js_package import js_package
 
 from itkwasm.pyodide import (
     to_js,
     to_py,
     js_resources
+)
+from itkwasm import (
+    InterfaceTypes,
+    BinaryFile,
+    BinaryStream,
 )
 
 async def read_dicom_encapsulated_pdf_async(
@@ -86,7 +91,39 @@ async def read_dicom_encapsulated_pdf_async(
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker
 
-    outputs = await js_module.readDicomEncapsulatedPdf(web_worker, to_js(dicom_file),  readFileOnly=to_js(read_file_only), readDataset=to_js(read_dataset), readXferAuto=to_js(read_xfer_auto), readXferDetect=to_js(read_xfer_detect), readXferLittle=to_js(read_xfer_little), readXferBig=to_js(read_xfer_big), readXferImplicit=to_js(read_xfer_implicit), acceptOddLength=to_js(accept_odd_length), assumeEvenLength=to_js(assume_even_length), enableCp246=to_js(enable_cp246), disableCp246=to_js(disable_cp246), retainUn=to_js(retain_un), convertUn=to_js(convert_un), enableCorrection=to_js(enable_correction), disableCorrection=to_js(disable_correction), )
+    kwargs = {}
+    if read_file_only:
+        kwargs["readFileOnly"] = to_js(read_file_only)
+    if read_dataset:
+        kwargs["readDataset"] = to_js(read_dataset)
+    if read_xfer_auto:
+        kwargs["readXferAuto"] = to_js(read_xfer_auto)
+    if read_xfer_detect:
+        kwargs["readXferDetect"] = to_js(read_xfer_detect)
+    if read_xfer_little:
+        kwargs["readXferLittle"] = to_js(read_xfer_little)
+    if read_xfer_big:
+        kwargs["readXferBig"] = to_js(read_xfer_big)
+    if read_xfer_implicit:
+        kwargs["readXferImplicit"] = to_js(read_xfer_implicit)
+    if accept_odd_length:
+        kwargs["acceptOddLength"] = to_js(accept_odd_length)
+    if assume_even_length:
+        kwargs["assumeEvenLength"] = to_js(assume_even_length)
+    if enable_cp246:
+        kwargs["enableCp246"] = to_js(enable_cp246)
+    if disable_cp246:
+        kwargs["disableCp246"] = to_js(disable_cp246)
+    if retain_un:
+        kwargs["retainUn"] = to_js(retain_un)
+    if convert_un:
+        kwargs["convertUn"] = to_js(convert_un)
+    if enable_correction:
+        kwargs["enableCorrection"] = to_js(enable_correction)
+    if disable_correction:
+        kwargs["disableCorrection"] = to_js(disable_correction)
+
+    outputs = await js_module.readDicomEncapsulatedPdf(web_worker, to_js(BinaryFile(dicom_file)), **kwargs)
 
     output_web_worker = None
     output_list = []

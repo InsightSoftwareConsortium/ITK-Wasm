@@ -2,14 +2,18 @@
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
-from .pyodide import js_package
+from .js_package import js_package
 
 from itkwasm.pyodide import (
     to_js,
     to_py,
     js_resources
+)
+from itkwasm import (
+    InterfaceTypes,
+    BinaryStream,
 )
 
 async def compress_stringify_async(
@@ -38,7 +42,15 @@ async def compress_stringify_async(
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker
 
-    outputs = await js_module.compressStringify(web_worker, to_js(input),  stringify=to_js(stringify), compressionLevel=to_js(compression_level), dataUrlPrefix=to_js(data_url_prefix), )
+    kwargs = {}
+    if stringify:
+        kwargs["stringify"] = to_js(stringify)
+    if compression_level:
+        kwargs["compressionLevel"] = to_js(compression_level)
+    if data_url_prefix:
+        kwargs["dataUrlPrefix"] = to_js(data_url_prefix)
+
+    outputs = await js_module.compressStringify(web_worker, to_js(input), **kwargs)
 
     output_web_worker = None
     output_list = []

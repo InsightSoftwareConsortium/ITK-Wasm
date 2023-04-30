@@ -33,7 +33,7 @@ keywords = [
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0.b97",
+    "itkwasm >= 1.0.b103",
     "itkwasm-dicom-wasi; sys_platform != \"emscripten\"",
     "itkwasm-dicom-emscripten; sys_platform == \"emscripten\"",
 

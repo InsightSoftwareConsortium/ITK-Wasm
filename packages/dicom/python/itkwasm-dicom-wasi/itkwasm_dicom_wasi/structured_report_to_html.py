@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
 from importlib_resources import files as file_resources
 
@@ -41,8 +41,8 @@ def structured_report_to_html(
     html_40: bool = False,
     xhtml_11: bool = False,
     add_document_type: bool = False,
-    css_reference: str = "",
-    css_file: os.PathLike = "",
+    css_reference: Optional[str] = None,
+    css_file: Optional[os.PathLike] = None,
     expand_inline: bool = False,
     never_expand_inline: bool = False,
     always_expand_inline: bool = False,
@@ -199,8 +199,6 @@ by Specific Character Set (0008,0005) to UTF-8
 
     pipeline_inputs: List[PipelineInput] = [
         PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(dicom_file)),
-        PipelineInput(InterfaceTypes.TextStream, TextStream(css_reference)),
-        PipelineInput(InterfaceTypes.TextFile, TextFile(css_file)),
     ]
 
     args: List[str] = ['--memory-io',]
@@ -280,13 +278,13 @@ by Specific Character Set (0008,0005) to UTF-8
     if add_document_type:
         args.append('--add-document-type')
 
-    if css_reference:
+    if css_reference is not None:
         input_count_string = str(len(pipeline_inputs))
         pipeline_inputs.append(PipelineInput(InterfaceTypes.TextStream, TextStream(css_reference)))
         args.append('--css-reference')
         args.append(input_count_string)
 
-    if css_file:
+    if css_file is not None:
         input_file = str(css_file)
         pipeline_inputs.append(PipelineInput(InterfaceTypes.TextFile, TextFile(css_file)))
         args.append('--css-file')

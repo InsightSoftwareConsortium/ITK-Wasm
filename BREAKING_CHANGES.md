@@ -12,6 +12,10 @@ guide](doc/content/docs/itk_js_to_itk_wasm_migration_guide.md).
 
 ## From 1.0.0-b.101 to 1.0.0-b.102
 
+- apply-presentation-state-to-dicom-image does not take dicom image out flag: was not supported
+- apply-presentation-state-to-dicom-image pgm image out flag: always used
+- apply-presentation-state-to-dicom-image presentation-state-output flag is prefixed with `no` to disable as a flag
+- apply-presentation-state-to-dicom-image bitmap-output flag is prefixed with `no` to disable as a flag
 - apply-presentation-state-to-image presentation-state-file is an argument, as
   opposed to an optional parameter, since it is required.
 - dicom functions access { data: <Uint8Array>, path: <string> } arguments instead of just <Uint8Array>.

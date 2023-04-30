@@ -11,6 +11,7 @@ from .text_file import TextFile
 from .text_stream import TextStream
 from .float_types import FloatTypes
 from .int_types import IntTypes
+from .json_object import JsonObject
 from ._to_numpy_array import _to_numpy_array
 
 @dataclass
@@ -72,8 +73,11 @@ def to_py(js_proxy):
         dimension = image_type.dimension
         component_type = image_type.componentType
         image_dict['direction'] = _to_numpy_array(str(FloatTypes.Float64), image_dict['direction']).reshape((dimension, dimension))
+        shape = list(image_dict['size'])[::-1]
+        if image_type.components > 1:
+            shape.append(image_type.components)
         if image_dict['data'] is not None:
-            image_dict['data'] = _to_numpy_array(component_type, image_dict['data']).reshape((dimension, dimension))
+            image_dict['data'] = _to_numpy_array(component_type, image_dict['data']).reshape(tuple(shape))
         return Image(**image_dict)
     elif hasattr(js_proxy, "pointSetType"):
         point_set_dict = js_proxy.to_py()
@@ -141,7 +145,9 @@ def to_py(js_proxy):
         binary_stream_dict = js_proxy.to_py()
         binary_stream_dict['data'] = bytes(binary_stream_dict['data'])
         return BinaryStream(**binary_stream_dict)
-    # Is not a JsProxy, int, etc
+    elif isinstance(js_proxy, pyodide.ffi.JsProxy):
+        return js_proxy.to_py()
+    # int, etc
     return js_proxy
 
 def to_js(py):
@@ -213,5 +219,7 @@ def to_js(py):
             data = fp.read()
         text_file_dict['data'] = data
         return pyodide.ffi.to_js(text_file_dict, dict_converter=js.Object.fromEntries)
+    elif isinstance(py, JsonObject):
+        return pyodide.ffi.to_js(py.data)
 
     return pyodide.ffi.to_js(py)

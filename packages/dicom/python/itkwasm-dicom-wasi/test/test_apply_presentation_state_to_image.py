@@ -42,5 +42,4 @@ def test_apply_presentation_state_to_dicom_image():
         baseline_buffer = fp.read()
     # slice to get only the pixel buffer from the baseline image (pgm file)
     baseline_pixels = baseline_buffer[15:]
-    assert len(baseline_pixels) == len(output_image.data)
     assert np.array_equal(np.frombuffer(baseline_pixels, dtype=np.uint8), output_image.data.ravel())

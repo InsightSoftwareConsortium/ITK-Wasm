@@ -258,7 +258,10 @@ class Pipeline:
                     data_ptr = self.output_array_address(store, 0, index, 0)
                     data_size = self.output_array_size(store, 0, index, 0)
                     data_array = _to_numpy_array(image.imageType.componentType, self._wasmtime_lift(data_ptr, data_size))
-                    image.data = data_array
+                    shape = list(image.size)[::-1]
+                    if image.imageType.components > 1:
+                        shape.append(image.imageType.components)
+                    image.data = data_array.reshape(tuple(shape))
 
                     direction_ptr = self.output_array_address(store, 0, index, 1)
                     direction_size = self.output_array_size(store, 0, index, 1)

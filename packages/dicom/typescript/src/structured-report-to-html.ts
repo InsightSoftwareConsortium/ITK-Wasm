@@ -104,13 +104,13 @@ async function structuredReportToHtml(
     args.push('--url-prefix', options.urlPrefix.toString())
   }
   if (typeof options.html32 !== "undefined") {
-    args.push('--html-3.2')
+    args.push('--html-32')
   }
   if (typeof options.html40 !== "undefined") {
-    args.push('--html-4.0')
+    args.push('--html-40')
   }
   if (typeof options.xhtml11 !== "undefined") {
-    args.push('--xhtml-1.1')
+    args.push('--xhtml-11')
   }
   if (typeof options.addDocumentType !== "undefined") {
     args.push('--add-document-type')
