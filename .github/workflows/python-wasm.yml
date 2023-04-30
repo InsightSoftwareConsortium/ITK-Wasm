@@ -131,6 +131,30 @@ jobs:
           ls dist
           python -m pip install -e .
           pytest --dist-dir=./dist --rt=chrome
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.16'
+      - name: Download test data
+        shell: bash
+        run: |
+          npm ci
+          npm run build
+      - name: Test dicom wasi native
+        if: ${{ matrix.python-minor-version < 10 }}
+        working-directory: ./packages/dicom/python/itkwasm-dicom-wasi
+        run: |
+          python -m pip install -e .
+          pytest
+      - name: Test dicom-emscripten chrome
+        if: ${{ matrix.python-minor-version > 9 }}
+        working-directory: ./packages/dicom/python/itkwasm-dicom-emscripten
+        shell: bash
+        run: |
+          hatch run download-pyodide
+          hatch build -t wheel
+          ls dist
+          python -m pip install -e .
+          pytest --dist-dir=./dist --rt=chrome
 
   build-sphinx-docs:
     runs-on: ubuntu-22.04
