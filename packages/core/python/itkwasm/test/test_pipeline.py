@@ -1,6 +1,9 @@
 from pathlib import Path, PurePosixPath
 import tempfile
 from dataclasses import asdict
+import sys
+
+import pytest
 
 import itk
 import numpy as np
@@ -53,6 +56,7 @@ def test_pipeline_input_output_streams():
     assert outputs[1].data.data[2], 190
     assert outputs[1].data.data[3], 239
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Windows tempfile resource, https://github.com/bytecodealliance/wasmtime-py/issues/132")
 def test_pipeline_input_output_files():
     pipeline = Pipeline(test_input_dir / 'input-output-files-test.wasi.wasm')
     input_text_file = PurePosixPath(test_input_dir / 'input.txt')
@@ -94,9 +98,6 @@ def test_pipeline_input_output_files():
             assert content[1] == 173
             assert content[2] == 190
             assert content[3] == 239
-
-        # Currently required per https://github.com/bytecodealliance/wasmtime-py/issues/132
-        del pipeline
 
 def test_pipeline_write_read_image():
     pipeline = Pipeline(test_input_dir / 'median-filter-test.wasi.wasm')
