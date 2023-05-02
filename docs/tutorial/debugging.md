@@ -75,6 +75,7 @@ A full debugging session is also possible after [LLDB](https://lldb.llvm.org/) >
 
 ![LLDB WASI debug](./debugging/lldb-wasi-debug.png)
 
+**Note:** when calling `wasmtime` directly and passing local files into a pipeline, `--dir` arguments must be set. This gives `wasmtime` permission to access the directories containing the files. This is required due to WASI's [capability-based security](https://en.wikipedia.org/wiki/Capability-based_security) model. For example, if a file path starts with `./`, then add `--dir ./` arguments to the `wasmtime` invocation. `--dir` can be specified multiple times.
 
 ## Node.js
 
