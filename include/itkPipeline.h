@@ -169,6 +169,11 @@ public:
       m_Version = version;
     }
 
+    std::string version() const
+    {
+      return m_Version;
+    }
+
     void interface_json();
 
     ~Pipeline() override;
