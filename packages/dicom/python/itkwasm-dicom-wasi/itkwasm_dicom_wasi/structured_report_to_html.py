@@ -1,6 +1,6 @@
 # Generated file. Do not edit.
 
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional
 
@@ -198,12 +198,12 @@ by Specific Character Set (0008,0005) to UTF-8
     ]
 
     pipeline_inputs: List[PipelineInput] = [
-        PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(dicom_file)),
+        PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(PurePosixPath(dicom_file))),
     ]
 
     args: List[str] = ['--memory-io',]
     # Inputs
-    args.append(str(dicom_file))
+    args.append(str(PurePosixPath(dicom_file)))
     # Outputs
     args.append('0')
     # Options
@@ -285,7 +285,7 @@ by Specific Character Set (0008,0005) to UTF-8
         args.append(input_count_string)
 
     if css_file is not None:
-        input_file = str(css_file)
+        input_file = str(PurePosixPath(css_file))
         pipeline_inputs.append(PipelineInput(InterfaceTypes.TextFile, TextFile(css_file)))
         args.append('--css-file')
         args.append(input_file)

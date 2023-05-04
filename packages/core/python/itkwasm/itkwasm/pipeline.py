@@ -1,5 +1,5 @@
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from dataclasses import asdict
 from typing import List, Union, Dict, Tuple
 import ctypes
@@ -57,10 +57,10 @@ class Pipeline:
         preopen_directories=set()
         for index, input_ in enumerate(inputs):
             if input_.type == InterfaceTypes.TextFile or input_.type == InterfaceTypes.BinaryFile:
-                preopen_directories.add(str(Path(input_.data.path).parent))
+                preopen_directories.add(str(PurePosixPath(input_.data.path).parent))
         for index, output in enumerate(outputs):
             if output.type == InterfaceTypes.TextFile or output.type == InterfaceTypes.BinaryFile:
-                preopen_directories.add(str(Path(output.data.path).parent))
+                preopen_directories.add(str(PurePosixPath(output.data.path).parent))
         preopen_directories = list(preopen_directories)
         for preopen in preopen_directories:
             wasi_config.preopen_dir(preopen, preopen)

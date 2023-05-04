@@ -1,6 +1,6 @@
 # Generated file. Do not edit.
 
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional
 
@@ -93,12 +93,12 @@ def read_dicom_encapsulated_pdf(
     ]
 
     pipeline_inputs: List[PipelineInput] = [
-        PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(dicom_file)),
+        PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(PurePosixPath(dicom_file))),
     ]
 
     args: List[str] = ['--memory-io',]
     # Inputs
-    args.append(str(dicom_file))
+    args.append(str(PurePosixPath(dicom_file)))
     # Outputs
     args.append('0')
     # Options

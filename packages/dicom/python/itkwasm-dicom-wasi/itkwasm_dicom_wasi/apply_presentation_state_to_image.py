@@ -1,6 +1,6 @@
 # Generated file. Do not edit.
 
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional
 
@@ -57,14 +57,14 @@ def apply_presentation_state_to_image(
     ]
 
     pipeline_inputs: List[PipelineInput] = [
-        PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(image_in)),
-        PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(presentation_state_file)),
+        PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(PurePosixPath(image_in))),
+        PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(PurePosixPath(presentation_state_file))),
     ]
 
     args: List[str] = ['--memory-io',]
     # Inputs
-    args.append(str(image_in))
-    args.append(str(presentation_state_file))
+    args.append(str(PurePosixPath(image_in)))
+    args.append(str(PurePosixPath(presentation_state_file)))
     # Outputs
     args.append('0')
     args.append('1')

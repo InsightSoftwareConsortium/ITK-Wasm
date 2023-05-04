@@ -1,4 +1,4 @@
-from pathlib import Path
+from pathlib import Path 
 
 def test_read_dicom_encapsulated_pdf():
     from itkwasm_dicom_wasi import read_dicom_encapsulated_pdf
