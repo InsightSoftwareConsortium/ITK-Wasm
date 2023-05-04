@@ -3,7 +3,7 @@ from pathlib import Path
 def test_structured_report_to_html():
     from itkwasm_dicom_wasi import structured_report_to_html
     file_name = '88.33-comprehensive-SR.dcm'
-    test_file_path = Path('..', '..' , '..', '..', 'build-emscripten', 'ExternalData', 'test', 'Input', file_name)
+    test_file_path = Path('..', '..' , 'test', 'data', 'input', file_name)
 
     assert test_file_path.exists()
 
@@ -22,7 +22,7 @@ def test_structured_report_to_html():
 def test_read_radiation_dose_sr():
     from itkwasm_dicom_wasi import structured_report_to_html
     file_name = '88.67-radiation-dose-SR.dcm'
-    test_file_path = Path('..', '..' , '..', '..', 'build-emscripten', 'ExternalData', 'test', 'Input', file_name)
+    test_file_path = Path('..', '..' , 'test', 'data', 'input', file_name)
 
     assert test_file_path.exists()
 
@@ -33,7 +33,7 @@ def test_read_radiation_dose_sr():
 def test_read_key_object_selection_sr():
     from itkwasm_dicom_wasi import structured_report_to_html
     file_name = '88.59-KeyObjectSelection-SR.dcm'
-    test_file_path = Path('..', '..' , '..', '..', 'build-emscripten', 'ExternalData', 'test', 'Input', file_name)
+    test_file_path = Path('..', '..' , 'test', 'data', 'input', file_name)
 
     assert test_file_path.exists()
 
@@ -46,7 +46,7 @@ def test_read_key_object_selection_sr():
     assert output_text.find('<link rel="stylesheet" type="text/css" href="https://css-host/dir/subdir/my-first-style.css">') != -1
 
     css_file_name = 'test-style.css'
-    test_css_file_path = Path('..', '..', '..', '..', 'build-emscripten', 'ExternalData', 'test', 'Input', css_file_name)
+    test_css_file_path = Path('..', '..', 'test', 'data', 'input', css_file_name)
     output_text = structured_report_to_html(test_file_path, css_file=test_css_file_path)
 
     assert output_text.find('<style type="text/css">') != -1

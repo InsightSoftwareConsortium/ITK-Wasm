@@ -6,10 +6,10 @@ def test_apply_presentation_state_to_dicom_image():
     from itkwasm_dicom_wasi import apply_presentation_state_to_image
 
     input_file = 'gsps-pstate-test-input-image.dcm'
-    input_file_path = Path('..', '..', '..', '..', 'build-emscripten', 'ExternalData', 'test', 'Input', input_file)
+    input_file_path = Path('..', '..', 'test', 'data', 'input', input_file)
 
     p_state_file = 'gsps-pstate-test-input-pstate.dcm'
-    p_state_file_path = Path('..', '..', '..', '..', 'build-emscripten', 'ExternalData', 'test', 'Input', p_state_file)
+    p_state_file_path = Path('..', '..', 'test', 'data', 'input', p_state_file)
 
     p_state_json_out, output_image = apply_presentation_state_to_image(input_file_path, p_state_file_path)
 
@@ -27,7 +27,7 @@ def test_apply_presentation_state_to_dicom_image():
     assert np.array_equal(output_image.size, [512, 512])
 
     baseline_json_file = 'gsps-pstate-baseline.json'
-    baseline_json_file_path = Path('..', '..', '..', '..', 'build-emscripten', 'ExternalData', 'test', 'Input', baseline_json_file)
+    baseline_json_file_path = Path('..', '..', 'test', 'data', 'baseline', baseline_json_file)
     with open(baseline_json_file_path, 'r') as fp:
         # the slice operation removes the last EOF char from the baseline file.
         buffer = fp.read()[:-1]
@@ -37,7 +37,7 @@ def test_apply_presentation_state_to_dicom_image():
     assert str(baseline_json_object) == str(p_state_json_out)
 
     baseline_image = 'gsps-pstate-image-baseline.pgm'
-    baseline_image_file_path = Path('..', '..', '..', '..', 'build-emscripten','ExternalData', 'test', 'Input', baseline_image)
+    baseline_image_file_path = Path('..', '..', 'test', 'data', 'baseline', baseline_image)
     with open(baseline_image_file_path, 'rb') as fp:
         baseline_buffer = fp.read()
     # slice to get only the pixel buffer from the baseline image (pgm file)

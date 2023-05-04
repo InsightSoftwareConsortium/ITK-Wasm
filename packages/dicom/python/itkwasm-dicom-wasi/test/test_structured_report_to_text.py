@@ -3,7 +3,7 @@ from pathlib import Path
 def test_structured_report_to_text():
     from itkwasm_dicom_wasi import structured_report_to_text
     file_name = '88.33-comprehensive-SR.dcm'
-    test_file_path = Path('..', '..' , '..', '..', 'build-emscripten', 'ExternalData', 'test', 'Input', file_name)
+    test_file_path = Path('..', '..' , 'test', 'data', 'input', file_name)
 
     assert test_file_path.exists()
 
