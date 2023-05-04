@@ -2,6 +2,8 @@
 
 Python interface to [itk-wasm](https://wasm.itk.org) WebAssembly modules.
 
+For more information, see the [project documentation](https://itkwasm.readthedocs.io).
+
 ## Development
 
 Thank you for contributing a pull request!

@@ -1,5 +1,7 @@
 # Generated file. Do not edit.
 
+from typing import Optional
+
 from itkwasm import (
     environment_dispatch,
     BinaryStream,

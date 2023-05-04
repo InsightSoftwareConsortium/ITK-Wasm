@@ -1,6 +1,7 @@
 // Generated file. Do not edit.
 
 import {
+  BinaryFile,
   TextStream,
   InterfaceTypes,
   PipelineOutput,
@@ -20,13 +21,13 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Read a DICOM structured report file and generate a plain text representation
  *
- * @param {Uint8Array} dicomFile - Input DICOM file
+ * @param {BinaryFile} dicomFile - Input DICOM file
  *
  * @returns {Promise<StructuredReportToTextResult>} - result object
  */
 async function structuredReportToText(
   webWorker: null | Worker,
-  dicomFile: Uint8Array,
+  dicomFile: BinaryFile,
   options: StructuredReportToTextOptions = {}
 ) : Promise<StructuredReportToTextResult> {
 
@@ -34,12 +35,12 @@ async function structuredReportToText(
     { type: InterfaceTypes.TextStream },
   ]
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: { data: dicomFile, path: "file0" }  },
+    { type: InterfaceTypes.BinaryFile, data: dicomFile },
   ]
 
   const args = []
   // Inputs
-  args.push('file0')
+  args.push(dicomFile.path)
   // Outputs
   args.push('0')
   // Options

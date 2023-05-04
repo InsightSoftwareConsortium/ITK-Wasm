@@ -1,6 +1,7 @@
 // Generated file. Do not edit.
 
 import {
+  BinaryFile,
   JsonObject,
   Image,
   InterfaceTypes,
@@ -18,12 +19,14 @@ import path from 'path'
 /**
  * Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.
  *
- * @param {Uint8Array} imageIn - Input DICOM file
+ * @param {BinaryFile} imageIn - Input DICOM file
+ * @param {BinaryFile} presentationStateFile - Process using presentation state file
  *
  * @returns {Promise<ApplyPresentationStateToImageNodeResult>} - result object
  */
 async function applyPresentationStateToImageNode(
-  imageIn: Uint8Array,
+  imageIn: BinaryFile,
+  presentationStateFile: BinaryFile,
   options: ApplyPresentationStateToImageOptions = {}
 ) : Promise<ApplyPresentationStateToImageNodeResult> {
 
@@ -32,39 +35,30 @@ async function applyPresentationStateToImageNode(
     { type: InterfaceTypes.Image },
   ]
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: { data: imageIn, path: "file0" }  },
+    { type: InterfaceTypes.BinaryFile, data: imageIn },
+    { type: InterfaceTypes.BinaryFile, data: presentationStateFile },
   ]
 
   const args = []
   // Inputs
-  args.push('file0')
+  args.push(imageIn.path)
+  args.push(presentationStateFile.path)
   // Outputs
   args.push('0')
   args.push('1')
   // Options
   args.push('--memory-io')
-  if (typeof options.presentationStateFile !== "undefined") {
-    const inputFile = 'file' + inputs.length.toString()
-    inputs.push({ type: InterfaceTypes.BinaryFile, data: { data: options.presentationStateFile, path: inputFile } })
-    args.push('--presentation-state-file', inputFile)
-  }
   if (typeof options.configFile !== "undefined") {
     args.push('--config-file', options.configFile.toString())
   }
   if (typeof options.frame !== "undefined") {
     args.push('--frame', options.frame.toString())
   }
-  if (typeof options.presentationStateOutput !== "undefined") {
-    args.push('--presentation-state-output')
+  if (typeof options.noPresentationStateOutput !== "undefined") {
+    args.push('--no-presentation-state-output')
   }
-  if (typeof options.bitmapOutput !== "undefined") {
-    args.push('--bitmap-output')
-  }
-  if (typeof options.pgm !== "undefined") {
-    args.push('--pgm')
-  }
-  if (typeof options.dicom !== "undefined") {
-    args.push('--dicom')
+  if (typeof options.noBitmapOutput !== "undefined") {
+    args.push('--no-bitmap-output')
   }
 
   const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'apply-presentation-state-to-image')

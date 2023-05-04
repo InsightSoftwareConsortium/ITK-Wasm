@@ -7,10 +7,14 @@ import interfaceJsonTypeToInterfaceType from './interfaceJsonTypeToInterfaceType
 import camelCase from './camelCase.js'
 
 const interfaceJsonTypeToTypeScriptType = new Map([
-  ['INPUT_TEXT_FILE:FILE', 'string'],
-  ['OUTPUT_TEXT_FILE:FILE', 'string'],
-  ['INPUT_BINARY_FILE:FILE', 'Uint8Array'],
-  ['OUTPUT_BINARY_FILE:FILE', 'Uint8Array'],
+  ['INPUT_TEXT_FILE:FILE', 'TextFile'],
+  ['INPUT_TEXT_FILE', 'TextFile'],
+  ['OUTPUT_TEXT_FILE:FILE', 'TextFile'],
+  ['OUTPUT_TEXT_FILE', 'TextFile'],
+  ['INPUT_BINARY_FILE:FILE', 'BinaryFile'],
+  ['INPUT_BINARY_FILE', 'BinaryFile'],
+  ['OUTPUT_BINARY_FILE:FILE', 'BinaryFile'],
+  ['OUTPUT_BINARY_FILE', 'BinaryFile'],
   ['INPUT_TEXT_STREAM', 'string'],
   ['OUTPUT_TEXT_STREAM', 'string'],
   ['INPUT_BINARY_STREAM', 'Uint8Array'],
@@ -282,9 +286,7 @@ import {\n`
       interfaceJson[pipelineComponent].forEach((value) => {
         if (interfaceJsonTypeToInterfaceType.has(value.type)) {
           const interfaceType = interfaceJsonTypeToInterfaceType.get(value.type)
-          if (!interfaceType.includes('File')) {
-            usedInterfaceTypes.add(interfaceType)
-          }
+          usedInterfaceTypes.add(interfaceType)
         }
       })
     })
@@ -388,9 +390,7 @@ import {\n`
         const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
         const camel = camelCase(input.name)
         let data = camel
-        if (interfaceType.includes('File')) {
-          data = `{ data: ${camel}, path: "file${index.toString()}" } `
-        } else if(interfaceType.includes('Stream')) {
+        if(interfaceType.includes('Stream')) {
           data = `{ data: ${camel} } `
         }
         functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${data} },\n`
@@ -402,13 +402,13 @@ import {\n`
     functionContent += "  const args = []\n"
     functionContent += "  // Inputs\n"
     interfaceJson.inputs.forEach((input) => {
+      const camel = camelCase(input.name)
       if (interfaceJsonTypeToInterfaceType.has(input.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
-        const name = interfaceType.includes('File') ?  `file${inputCount.toString()}` : inputCount.toString()
-        functionContent += `  args.push('${name}')\n`
+        const name = interfaceType.includes('File') ?  `${camel}.path` : `'${inputCount.toString()}'`
+        functionContent += `  args.push(${name})\n`
         inputCount++
       } else {
-        const camel = camelCase(input.name)
         functionContent += `  args.push(${camel}.toString())\n`
       }
     })
@@ -416,13 +416,13 @@ import {\n`
     let outputCount = 0
     functionContent += "  // Outputs\n"
     interfaceJson.outputs.forEach((output) => {
+      const camel = camelCase(output.name)
       if (interfaceJsonTypeToInterfaceType.has(output.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-        const name = interfaceType.includes('File') ?  `file${outputCount.toString()}` : outputCount.toString()
-        functionContent += `  args.push('${name}')\n`
+        const name = interfaceType.includes('File') ?  `${camel}.path` : `'${outputCount.toString()}'`
+        functionContent += `  args.push(${name})\n`
         outputCount++
       } else {
-        const camel = camelCase(output.name)
         functionContent += `  args.push(${camel}.toString())\n`
       }
     })
@@ -448,9 +448,8 @@ import {\n`
           const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
           if (interfaceType.includes('File')) {
             // for files
-            functionContent += `      const inputFile = 'file' + inputs.length.toString()\n`
-            functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: value, path: inputFile } })\n`
-            functionContent += `      args.push(inputFile)\n`
+            functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: value as ${interfaceType}} })\n`
+            functionContent += `      args.push(value.path)\n`
           } else if (interfaceType.includes('Stream')) {
             // for streams
             functionContent += `      const inputCountString = inputs.length.toString()\n`
@@ -471,9 +470,8 @@ import {\n`
           const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
           if (interfaceType.includes('File')) {
             // for files
-            functionContent += `    const inputFile = 'file' + inputs.length.toString()\n`
-            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: options.${camel}, path: inputFile } })\n`
-            functionContent += `    args.push('--${parameter.name}', inputFile)\n`
+            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: options.${camel} as ${interfaceType} })\n`
+            functionContent += `    args.push('--${parameter.name}', options.${camel}.path)\n`
           } else if (interfaceType.includes('Stream')) {
             // for streams
             functionContent += `    const inputCountString = inputs.length.toString()\n`

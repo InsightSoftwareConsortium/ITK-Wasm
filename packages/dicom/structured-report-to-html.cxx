@@ -270,9 +270,9 @@ int main(int argc, char * argv[])
 
   //   SubGroup("HTML/XHTML compatibility:")
   bool html32{false}, html40{false}, xhtml11{false}, addDocumentType{false};
-  auto html32CliOption = pipeline.add_flag("--html-3.2", html32, "use only HTML version 3.2 compatible features");
-  pipeline.add_flag("--html-4.0", html40, "allow all HTML version 4.01 features (default)");
-  pipeline.add_flag("--xhtml-1.1", xhtml11, "comply with XHTML version 1.1 specification");
+  auto html32CliOption = pipeline.add_flag("--html-32", html32, "use only HTML version 3.2 compatible features");
+  pipeline.add_flag("--html-40", html40, "allow all HTML version 4.01 features (default)");
+  pipeline.add_flag("--xhtml-11", xhtml11, "comply with XHTML version 1.1 specification");
   pipeline.add_flag("--add-document-type", addDocumentType, "add reference to SGML document type definition");
 
   //   SubGroup("cascading style sheet (CSS), not with HTML 3.2:")
@@ -280,7 +280,7 @@ int main(int argc, char * argv[])
   auto cssReferenceCliOption = pipeline.add_option("--css-reference", cssReference, "URL: string. Add reference to specified CSS to document")->type_name("INPUT_TEXT_STREAM");
   cssReferenceCliOption->excludes(html32CliOption);
   std::string cssFile;
-  auto cssFileCliOption = pipeline.add_option("--css-file", cssFile, "[f]ilename: string. Embed content of specified CSS into document")->check(CLI::ExistingFile)->type_name("INPUT_TEXT_FILE");
+  auto cssFileCliOption = pipeline.add_option("--css-file", cssFile, "[f]ilename: string. Embed content of specified CSS into document")->type_name("INPUT_TEXT_FILE");
   cssFileCliOption->excludes(html32CliOption);
 
   //   SubGroup("general rendering:");

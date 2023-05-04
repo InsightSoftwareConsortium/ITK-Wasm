@@ -1,6 +1,6 @@
 """itkwasm: Python interface to itk-wasm WebAssembly modules."""
 
-__version__ = "1.0b97"
+__version__ = "1.0b104"
 
 from .interface_types import InterfaceTypes
 from .image import Image, ImageType
@@ -11,6 +11,7 @@ from .binary_file import BinaryFile
 from .binary_stream import BinaryStream
 from .text_file import TextFile
 from .text_stream import TextStream
+from .json_object import JsonObject
 from .pipeline import Pipeline
 from .pipeline_input import PipelineInput
 from .pipeline_output import PipelineOutput
@@ -36,6 +37,7 @@ __all__ = [
   "BinaryStream",
   "TextFile",
   "TextStream",
+  "JsonObject",
   "FloatTypes",
   "IntTypes",
   "PixelTypes",

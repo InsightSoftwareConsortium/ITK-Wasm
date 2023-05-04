@@ -37,13 +37,13 @@ async def test_image_conversion(selenium, package_wheel):
 
     assert image.size[0] == 1
     assert image.size[1] == 1
-    image.size = [2, 2]
+    image.size = [4, 4]
 
     assert isinstance(image.metadata, dict)
     image.metadata['a_string'] = 'some text'
     image.metadata['an int'] = 3
     assert image.data == None
-    image.data = np.arange(4, dtype=np.uint8).reshape((2,2))
+    image.data = np.arange(16, dtype=np.uint8).reshape((4,4))
     image_js = to_js(image)
 
     image_py = to_py(image_js)
@@ -59,14 +59,14 @@ async def test_image_conversion(selenium, package_wheel):
     assert image_py.spacing[1] == 1.0
     assert np.array_equal(image_py.direction, np.eye(2).astype(np.float64))
 
-    assert image_py.size[0] == 2
-    assert image_py.size[1] == 2
+    assert image_py.size[0] == 4
+    assert image_py.size[1] == 4
 
     assert image_py.metadata['a_string'] == 'some text'
     assert image_py.metadata['an int'] == 3
 
     assert isinstance(image_py.metadata, dict)
-    assert np.array_equal(image_py.data, np.arange(4, dtype=np.uint8).reshape((2,2)))
+    assert np.array_equal(image_py.data, np.arange(16, dtype=np.uint8).reshape((4,4)))
 
 @run_in_pyodide(packages=['micropip', 'numpy'])
 async def test_point_set_conversion(selenium, package_wheel):
@@ -314,3 +314,22 @@ async def test_uint8array_conversion(selenium, package_wheel):
     ivalue_py = to_py(ivalue_js)
 
     assert ivalue == ivalue_py
+
+@run_in_pyodide(packages=['micropip'])
+async def test_json_object_conversion(selenium, package_wheel):
+    import micropip
+    await micropip.install(package_wheel)
+
+    from itkwasm.pyodide import to_js, to_py
+    from itkwasm import JsonObject
+
+    data = { 'a': 1, 'b': True, 'c': { 'nested': True }}
+
+    data_js = to_js(JsonObject(data))
+    data_py = to_py(data_js)
+
+    assert isinstance(data_py, dict)
+
+    assert data_py['a'] == 1
+    assert data_py['b'] == True
+    assert data_py['c']['nested'] == True

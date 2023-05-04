@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/dicom",
-  "version": "0.2.0",
+  "version": "2.0.1",
   "description": "Read files and images related to DICOM file format.",
   "type": "module",
   "module": "./dist/bundles/dicom.js",
@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "vite -c build/vite.config.js",
-    "test": "npm run test:node && npm run test:browser",
+    "test": "npm run test:node",
     "test:node": "ava test/node.js",
     "test:browser": "npm run test:browser:chrome && npm run test:browser:firefox",
     "test:browser:firefox": "start-server-and-test start http-get://localhost:5173 cypress:runFirefox",
@@ -32,13 +32,12 @@
   "keywords": [
     "itk",
     "wasm",
-    "webassembly",
-    "wasi"
+    "webassembly"
   ],
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.79"
+    "itk-wasm": "^1.0.0-b.101"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",

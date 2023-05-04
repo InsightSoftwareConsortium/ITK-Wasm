@@ -8,3 +8,4 @@ class InterfaceTypes(Enum):
     Image = 'InterfaceImage'
     Mesh = 'InterfaceMesh'
     PolyData = 'InterfacePolyData'
+    JsonObject = 'InterfaceJsonObject'

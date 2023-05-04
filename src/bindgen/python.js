@@ -8,7 +8,9 @@ import snakeCase from './snakeCase.js'
 
 const interfaceJsonTypeToPythonType = new Map([
   ['INPUT_TEXT_FILE:FILE', 'os.PathLike'],
+  ['INPUT_TEXT_FILE', 'os.PathLike'],
   ['OUTPUT_TEXT_FILE:FILE', 'os.PathLike'],
+  ['OUTPUT_TEXT_FILE', 'os.PathLike'],
   ['INPUT_BINARY_FILE:FILE', 'os.PathLike'],
   ['OUTPUT_BINARY_FILE:FILE', 'os.PathLike'],
   ['INPUT_TEXT_STREAM', 'str'],
@@ -158,14 +160,14 @@ function packageVersion(packageDir, pypackage, options) {
 }
 
 function functionModuleImports(interfaceJson) {
-let moduleContent = ""
+  let moduleContent = ""
   const usedInterfaceTypes = new Set()
   const pipelineComponents = ['inputs', 'outputs', 'parameters']
   pipelineComponents.forEach((pipelineComponent) => {
     interfaceJson[pipelineComponent].forEach((value) => {
       if (interfaceJsonTypeToInterfaceType.has(value.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(value.type)
-        if (!interfaceType.includes('File')) {
+        if (interfaceType !== 'JsonObject') {
           usedInterfaceTypes.add(interfaceType)
         }
       }
@@ -190,19 +192,27 @@ function functionModuleArgs(interfaceJson) {
       return
     }
     const pythonType = interfaceJsonTypeToPythonType.get(value.type)
-    functionArgs += `    ${snakeCase(value.name)}: ${pythonType}`
-    if(value.type === "BOOL") {
-      if (value.default === "false") {
-        functionArgs += ` = False,\n`
+    if (interfaceJsonTypeToInterfaceType.has(value.type)) {
+      if(value.required && value.itemsExpectedMax > 1) {
+        functionArgs += ` = [],\n`
       } else {
-        functionArgs += ` = False,\n`
+        functionArgs += `    ${snakeCase(value.name)}: Optional[${pythonType}] = None,\n`
       }
-    } else if(value.type.includes("TEXT")) {
-      functionArgs += ` = "${value.default}",\n`
-    } else if(value.required && value.itemsExpectedMax > 1) {
-      functionArgs += ` = [],\n`
     } else {
-      functionArgs += ` = ${value.default},\n`
+      functionArgs += `    ${snakeCase(value.name)}: ${pythonType}`
+      if(value.type === "BOOL") {
+        functionArgs += ` = False,\n`
+      } else if(value.type === "TEXT") {
+        if (value.default) {
+          functionArgs += ` = "${value.default}",\n`
+        } else {
+          functionArgs += ` = "",\n`
+        }
+      } else if(value.required && value.itemsExpectedMax > 1) {
+        functionArgs += ` = [],\n`
+      } else {
+        functionArgs += ` = ${value.default},\n`
+      }
     }
   })
   return functionArgs
@@ -219,19 +229,6 @@ function functionModuleReturnType(interfaceJson) {
     })
     returnType = returnType.substring(0, returnType.length - 2)
     returnType += "]"
-  } else {
-    returnType = interfaceJsonTypeToPythonType.get(jsonOutputs[0].type)
-  }
-
-  if (jsonOutputs.length > 1) {
-    returnType += "Tuple["
-    jsonOutputs.forEach((value) => {
-      const pythonType = interfaceJsonTypeToPythonType.get(value.type)
-      returnType += `${pythonType}, `
-    })
-    returnType = returnType.substring(0, returnType.length - 2)
-    returnType += "]"
-    returnType += "    )\n"
   } else {
     returnType = interfaceJsonTypeToPythonType.get(jsonOutputs[0].type)
   }
@@ -271,9 +268,9 @@ function wasiFunctionModule(interfaceJson, pypackage, modulePath) {
   const functionName = snakeCase(interfaceJson.name)
   let moduleContent = `# Generated file. Do not edit.
 
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
 from importlib_resources import files as file_resources
 
@@ -295,7 +292,7 @@ from itkwasm import (
       switch (interfaceType) {
         case "TextFile":
         case "BinaryFile":
-          pipelineOutputs += `        PipelineOutput(InterfaceTypes.${interfaceType}, ${interfaceType}(${snakeCase(output.name)})),\n`
+          pipelineOutputs += `        PipelineOutput(InterfaceTypes.${interfaceType}, ${interfaceType}(PurePosixPath(${snakeCase(output.name)}))),\n`
           break
         default:
           pipelineOutputs += `        PipelineOutput(InterfaceTypes.${interfaceType}),\n`
@@ -304,23 +301,20 @@ from itkwasm import (
   })
 
   let pipelineInputs = ''
-  const inputPipelineComponents = ['inputs', 'parameters']
-  inputPipelineComponents.forEach((pipelineComponent) => {
-    interfaceJson[pipelineComponent].forEach((input) => {
-      if (interfaceJsonTypeToInterfaceType.has(input.type)) {
-        const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
-        switch (interfaceType) {
-          case "TextStream":
-          case "BinaryStream":
-          case "TextFile":
-          case "BinaryFile":
-            pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(${snakeCase(input.name)})),\n`
-            break
-          default:
-            pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${snakeCase(input.name)}),\n`
-        }
+  interfaceJson['inputs'].forEach((input) => {
+    if (interfaceJsonTypeToInterfaceType.has(input.type)) {
+      const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
+      switch (interfaceType) {
+        case "TextStream":
+        case "BinaryStream":
+        case "TextFile":
+        case "BinaryFile":
+          pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(PurePosixPath(${snakeCase(input.name)}))),\n`
+          break
+        default:
+          pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${snakeCase(input.name)}),\n`
       }
-    })
+    }
   })
 
   let args = `    args: List[str] = ['--memory-io',]\n`
@@ -329,8 +323,8 @@ from itkwasm import (
   interfaceJson.inputs.forEach((input) => {
     if (interfaceJsonTypeToInterfaceType.has(input.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
-      const name = interfaceType.includes('File') ? `str(${snakeCase(input.name)})` : inputCount.toString()
-      args += `    args.append('${name}')\n`
+      const name = interfaceType.includes('File') ? `str(PurePosixPath(${snakeCase(input.name)}))` : `'${inputCount.toString()}'`
+      args += `    args.append(${name})\n`
       inputCount++
     } else {
       const snake = snakeCase(input.name)
@@ -343,7 +337,7 @@ from itkwasm import (
   interfaceJson.outputs.forEach((output) => {
     if (interfaceJsonTypeToInterfaceType.has(output.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-      const name = interfaceType.includes('File') ?  `str(${snakeCase(output.name)}` : outputCount.toString()
+      const name = interfaceType.includes('File') ?  `str(PurePosixPath(${snakeCase(output.name)}))` : outputCount.toString()
       args += `    args.append('${name}')\n`
       outputCount++
     } else {
@@ -359,60 +353,62 @@ from itkwasm import (
       return
     }
     const snake = snakeCase(parameter.name)
-    args += `    if ${snake} is not None:\n`
     if (parameter.type === "BOOL") {
+      args += `    if ${snake}:\n`
       args += `        args.append('--${parameter.name}')\n`
     } else if (parameter.itemsExpectedMax > 1) {
-      args += `    if len(${snake}) < ${parameter.itemsExpectedMin}:\n`
-      args += `        raise new ValueError('"${parameter.name}" option must have a length > ${parameter.itemsExpectedMin}')\n`
-      args += `    \n`
-      args += `    args.append('--${parameter.name}')\n`
-      args += `    for value in ${snake}:\n`
+      args += `    if len(${snake}) > 1:\n`
+      args += `        if len(${snake}) < ${parameter.itemsExpectedMin}:\n`
+      args += `            raise new ValueError('"${parameter.name}" option must have a length > ${parameter.itemsExpectedMin}')\n`
+      args += `\n`
+      args += `        args.append('--${parameter.name}')\n`
+      args += `        for value in ${snake}:\n`
       if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
         if (interfaceType.includes('File')) {
           // for files
-          args += `        input_file = str(${snakeCase(parameter.name)})\n`
-          args += `        inputs.append(InterfaceTypes.${interfaceType}(value))\n`
-          args += `        args.append(input_file)\n`
+          args += `            input_file = str(PurePosixPath(${snakeCase(parameter.name)}))\n`
+          args += `            pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(value)))\n`
+          args += `            args.append(input_file)\n`
         } else if (interfaceType.includes('Stream')) {
           // for streams
-          args += `        input_count_string = str(len(inputs))\n`
-          args += `        inputs.append(InterfaceTypes.${interfaceType}(value))\n`
-          args += `        args.append(input_count_spring)\n`
+          args += `            input_count_string = str(len(pipeline_inputs))\n`
+          args += `            pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(value)))\n`
+          args += `            args.append(input_count_spring)\n`
         } else {
           // Image, Mesh, PolyData, JsonObject
-          args += `        input_count_string = str(len(inputs))\n`
-          args += `        inputs.push(InterfaceTypes.${interfaceType}(value))\n`
-          args += `        args.append(input_count_string)\n`
+          args += `            input_count_string = str(len(pipeline_inputs))\n`
+          args += `            pipeline_inputs.push(PipelineInput(InterfaceTypes.${interfaceType}, value))\n`
+          args += `            args.append(input_count_string)\n`
         }
       } else {
-        args += `        args.append(str(value))\n`
+        args += `            args.append(str(value))\n`
       }
-      args += `    })\n`
     } else {
       if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
+        args += `    if ${snake} is not None:\n`
         const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
         if (interfaceType.includes('File')) {
           // for files
-          args += `        input_file = str(${snakeCase(parameter.name)})\n`
-          args += `        inputs.append(InterfaceTypes.${interfaceType}(${snake})\n`
+          args += `        input_file = str(PurePosixPath(${snakeCase(parameter.name)}))\n`
+          args += `        pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(${snake})))\n`
           args += `        args.append('--${parameter.name}')\n`
           args += `        args.append(input_file)\n`
         } else if (interfaceType.includes('Stream')) {
           // for streams
-          args += `        input_count_string = str(len(inputs))\n`
-          args += `        inputs.append(InterfaceTypes.${interfaceType}(${snake})\n`
+          args += `        input_count_string = str(len(pipeline_inputs))\n`
+          args += `        pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(${snake})))\n`
           args += `        args.append('--${parameter.name}')\n`
           args += `        args.append(input_count_string)\n`
         } else {
           // Image, Mesh, PolyData, JsonObject
-          args += `        input_count_string = str(len(inputs))\n`
-          args += `        inputs.append(InterfaceTypes.${interfaceType}(${snake}))\n`
+          args += `        input_count_string = str(len(pipeline_inputs))\n`
+          args += `        pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${snake}))\n`
           args += `        args.append('--${parameter.name}')\n`
           args += `        args.append(input_count_string)\n`
         }
       } else {
+        args += `    if ${snake}:\n`
         args += `        args.append('--${parameter.name}')\n`
         args += `        args.append(str(${snake}))\n`
       }
@@ -440,6 +436,8 @@ from itkwasm import (
         return `bool(${value})`
       case "float":
         return `float(${value})`
+      case "Dict":
+        return `${value}.data.data`
       default:
         return `${value}.data`
     }
@@ -451,6 +449,7 @@ from itkwasm import (
       const outputValue = `outputs[${index}]`
       postOutput += `        ${toPythonType(value.type, outputValue)},\n`
     })
+    postOutput += '    )\n'
   } else {
     const outputValue = "outputs[0]"
     postOutput = `    result = ${toPythonType(jsonOutputs[0].type, outputValue)}\n`
@@ -471,9 +470,9 @@ ${pipelineInputs}    ]
 ${args}
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
-${postOutput}
-
     del pipeline
+
+${postOutput}
 `
   fs.writeFileSync(modulePath, moduleContent)
 }
@@ -515,34 +514,61 @@ function emscriptenFunctionModule(interfaceJson, pypackage, modulePath) {
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
-from .pyodide import js_package
+from .js_package import js_package
 
 from itkwasm.pyodide import (
     to_js,
     to_py,
     js_resources
 )
+from itkwasm import (
+    InterfaceTypes,`
 
-`
-
+  moduleContent += functionModuleImports(interfaceJson)
   const functionArgs = functionModuleArgs(interfaceJson)
   const returnType = functionModuleReturnType(interfaceJson)
   const docstring = functionModuleDocstring(interfaceJson)
 
   let args = ''
   interfaceJson.inputs.forEach((input) => {
-    args += `to_js(${snakeCase(input.name)}), `
+    if (interfaceJsonTypeToInterfaceType.has(input.type)) {
+      const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
+      switch (interfaceType) {
+        case "TextFile":
+        case "BinaryFile":
+          args += `to_js(${interfaceType}(${snakeCase(input.name)})), `
+          break
+        default:
+          args += `to_js(${snakeCase(input.name)}), `
+      }
+    } else {
+      args += `to_js(${snakeCase(input.name)}), `
+    }
   })
 
-  let options = ''
+  let addKwargs = ''
   interfaceJson.parameters.forEach((parameter) => {
     if (parameter.name === 'memory-io' || parameter.name === 'version') {
       // Internal
       return
     }
-    options += `${camelCase(parameter.name)}=to_js(${snakeCase(parameter.name)}), `
+    if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
+      addKwargs += `    if ${snakeCase(parameter.name)} is not None:\n`
+      const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
+      switch (interfaceType) {
+        case "TextFile":
+        case "BinaryFile":
+          addKwargs += `        kwargs["${camelCase(parameter.name)}"] = to_js(${interfaceType}(${snakeCase(parameter.name)}))\n`
+          break
+        default:
+          addKwargs += `        kwargs["${camelCase(parameter.name)}"] = to_js(${snakeCase(parameter.name)})\n`
+      }
+    } else {
+      addKwargs += `    if ${snakeCase(parameter.name)}:\n`
+      addKwargs += `        kwargs["${camelCase(parameter.name)}"] = to_js(${snakeCase(parameter.name)})\n`
+    }
   })
 
   const jsFunction = camelCase(interfaceJson.name)
@@ -553,7 +579,9 @@ ${functionArgs}) -> ${returnType}:
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker
 
-    outputs = await js_module.${jsFunction}(web_worker, ${args} ${options})
+    kwargs = {}
+${addKwargs}
+    outputs = await js_module.${jsFunction}(web_worker, ${args}**kwargs)
 
     output_web_worker = None
     output_list = []
@@ -577,6 +605,8 @@ ${functionArgs}) -> ${returnType}:
 function dispatchFunctionModule(interfaceJson, pypackage, modulePath) {
   const functionName = snakeCase(interfaceJson.name)
   let moduleContent = `# Generated file. Do not edit.
+
+from typing import Optional
 
 from itkwasm import (
     environment_dispatch,`
@@ -684,7 +714,7 @@ default_config = JsPackageConfig(f"${moduleUrl}")
 js_package = JsPackage(default_config)
 `
 
-  const modulePath = path.join(packageDir, pypackage, 'pyodide.py')
+  const modulePath = path.join(packageDir, pypackage, 'js_package.py')
 
   if (!fs.existsSync(modulePath)) {
     fs.writeFileSync(modulePath, moduleContent)
@@ -697,7 +727,7 @@ function emscriptenPackage(outputDir, buildDir, wasmBinaries, options) {
   const packageDescription = `${options.packageDescription} Emscripten implementation.`
   mkdirP(packageDir)
 
-  const pypackage = snakeCase(packageName)
+ const pypackage = snakeCase(packageName)
   const bindgenPyPackage = pypackage
   mkdirP(path.join(packageDir, pypackage))
 

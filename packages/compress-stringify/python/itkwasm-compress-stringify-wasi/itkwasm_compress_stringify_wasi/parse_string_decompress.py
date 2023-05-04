@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
 from importlib_resources import files as file_resources
 
@@ -45,14 +45,14 @@ def parse_string_decompress(
     # Outputs
     args.append('0')
     # Options
-    if parse_string is not None:
+    if parse_string:
         args.append('--parse-string')
 
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
+    del pipeline
+
     result = outputs[0].data.data
     return result
 
-
-    del pipeline

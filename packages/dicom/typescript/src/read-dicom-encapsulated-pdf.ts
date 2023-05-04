@@ -1,6 +1,7 @@
 // Generated file. Do not edit.
 
 import {
+  BinaryFile,
   BinaryStream,
   InterfaceTypes,
   PipelineOutput,
@@ -20,13 +21,13 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Extract PDF file from DICOM encapsulated PDF.
  *
- * @param {Uint8Array} dicomFile - Input DICOM file
+ * @param {BinaryFile} dicomFile - Input DICOM file
  *
  * @returns {Promise<ReadDicomEncapsulatedPdfResult>} - result object
  */
 async function readDicomEncapsulatedPdf(
   webWorker: null | Worker,
-  dicomFile: Uint8Array,
+  dicomFile: BinaryFile,
   options: ReadDicomEncapsulatedPdfOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfResult> {
 
@@ -34,12 +35,12 @@ async function readDicomEncapsulatedPdf(
     { type: InterfaceTypes.BinaryStream },
   ]
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: { data: dicomFile, path: "file0" }  },
+    { type: InterfaceTypes.BinaryFile, data: dicomFile },
   ]
 
   const args = []
   // Inputs
-  args.push('file0')
+  args.push(dicomFile.path)
   // Outputs
   args.push('0')
   // Options

@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
 from importlib_resources import files as file_resources
 
@@ -53,22 +53,22 @@ def compress_stringify(
     # Outputs
     args.append('0')
     # Options
-    if stringify is not None:
+    if stringify:
         args.append('--stringify')
 
-    if compression_level is not None:
+    if compression_level:
         args.append('--compression-level')
         args.append(str(compression_level))
 
-    if data_url_prefix is not None:
+    if data_url_prefix:
         args.append('--data-url-prefix')
         args.append(str(data_url_prefix))
 
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
+    del pipeline
+
     result = outputs[0].data.data
     return result
 
-
-    del pipeline
