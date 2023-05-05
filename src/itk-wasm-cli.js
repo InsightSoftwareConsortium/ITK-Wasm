@@ -153,7 +153,7 @@ function test(options) {
   }
   if(process.platform === "win32"){
     var dockerBuild = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
-      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env ctest --test-dir ${ctestTestDir} ` + ctestArgs + '"'], {
+      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env ctest --test-dir ${ctestTestDir} ` + ctestArgs.join(' ') + '"'], {
       env: process.env,
       stdio: 'inherit',
       shell: true
@@ -194,18 +194,19 @@ function run(wasmBinary, options) {
     wasmRuntime = options.runtime
   }
   let wasmRuntimeArgs = []
+  const quotes = process.platform === "win32" ? '\'' : ''
   switch (wasmRuntime) {
   case 'wasmtime':
-    wasmRuntimeArgs = ['--args', '-e WASMTIME_BACKTRACE_DETAILS=1', '/wasi-runtimes/wasmtime/bin/wasmtime-pwd.sh',]
+    wasmRuntimeArgs = ['--args', `${quotes}-e WASMTIME_BACKTRACE_DETAILS=1${quotes}`, 'wasmtime-pwd.sh',]
     break
   case 'wasmer':
-    wasmRuntimeArgs = ['sudo', '/wasi-runtimes/wasmer/bin/wasmer-pwd.sh',]
+    wasmRuntimeArgs = ['sudo', 'wasmer-pwd.sh',]
     break
   case 'wasm3':
-    wasmRuntimeArgs = ['/wasi-runtimes/wasm3/bin/wasm3',]
+    wasmRuntimeArgs = ['wasm3',]
     break
   case 'wavm':
-    wasmRuntimeArgs = ['/wasi-runtimes/wavm/bin/wavm', 'run']
+    wasmRuntimeArgs = ['wavm', 'run']
     break
   default:
     throw Error('unexpected wasm runtime')
@@ -213,7 +214,7 @@ function run(wasmBinary, options) {
 
   if(process.platform === "win32"){
     var dockerRun = spawnSync('"C:\\Program Files\\Git\\bin\\sh.exe"',
-      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env ` + wasmRuntimeArgs + wasmBinaryRelativePath + wasmBinaryArgs + '"'], {
+      ["--login", "-i", "-c", `"${buildDir}/itk-wasm-build-env ${wasmRuntimeArgs.join(' ')} ${wasmBinaryRelativePath} ${wasmBinaryArgs.join(' ')}"`], {
       env: process.env,
       stdio: 'inherit',
       shell: true
