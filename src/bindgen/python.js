@@ -194,7 +194,7 @@ function functionModuleArgs(interfaceJson) {
     const pythonType = interfaceJsonTypeToPythonType.get(value.type)
     if (interfaceJsonTypeToInterfaceType.has(value.type)) {
       if(value.required && value.itemsExpectedMax > 1) {
-        functionArgs += ` = [],\n`
+        functionArgs += `    ${snakeCase(value.name)}: List[${pythonType}] = [],\n`
       } else {
         functionArgs += `    ${snakeCase(value.name)}: Optional[${pythonType}] = None,\n`
       }
@@ -270,7 +270,7 @@ function wasiFunctionModule(interfaceJson, pypackage, modulePath) {
 
 from pathlib import Path, PurePosixPath
 import os
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, List
 
 from importlib_resources import files as file_resources
 
@@ -359,7 +359,7 @@ from itkwasm import (
     } else if (parameter.itemsExpectedMax > 1) {
       args += `    if len(${snake}) > 1:\n`
       args += `        if len(${snake}) < ${parameter.itemsExpectedMin}:\n`
-      args += `            raise new ValueError('"${parameter.name}" option must have a length > ${parameter.itemsExpectedMin}')\n`
+      args += `            raise ValueError('"${parameter.name}" option must have a length > ${parameter.itemsExpectedMin}')\n`
       args += `\n`
       args += `        args.append('--${parameter.name}')\n`
       args += `        for value in ${snake}:\n`
