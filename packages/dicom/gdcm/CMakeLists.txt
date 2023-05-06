@@ -1,8 +1,3 @@
-cmake_minimum_required(VERSION 3.16)
-project(read-dicom)
-
-set(CMAKE_CXX_STANDARD 17)
-
 find_package(ITK REQUIRED
   COMPONENTS ITKCommon
     ITKGDCM
@@ -15,14 +10,7 @@ include(${ITK_USE_FILE})
 add_executable(read-image-dicom-file-series read-image-dicom-file-series.cxx)
 target_link_libraries(read-image-dicom-file-series PUBLIC ${ITK_LIBRARIES})
 
-if (WASI AND DEFINED WebAssemblyInterface_BINARY_DIR)
-  itk_module_target_label(read-image-dicom-file-series)
-  itk_module_target_export(read-image-dicom-file-series)
-  itk_module_target_install(read-image-dicom-file-series)
-  set_property(TARGET read-image-dicom-file-series
-    PROPERTY RUNTIME_OUTPUT_DIRECTORY
-    ${WebAssemblyInterface_BINARY_DIR}/wasi-image-io
-    )
+if (WASI)
   return()
 endif()
 
@@ -75,7 +63,7 @@ add_dependencies(${Iconv} ${Iconv_LIBRARY})
 add_executable(read-dicom-tags read-dicom-tags.cxx)
 target_link_libraries(read-dicom-tags PUBLIC ${ITK_LIBRARIES} ${Iconv_LIBRARIES} ${Iconv})
 
-if (EMSCRIPTEN AND DEFINED WebAssemblyInterface_BINARY_DIR)
+if (EMSCRIPTEN)
   foreach(dicom_io_module
       read-image-dicom-file-series
       read-dicom-tags
@@ -84,13 +72,6 @@ if (EMSCRIPTEN AND DEFINED WebAssemblyInterface_BINARY_DIR)
     set(target_umd "${dicom_io_module}.umd")
     set(dicom_common_link_flags " ${common_link_flags} -s SUPPORT_LONGJMP=1 -s DISABLE_EXCEPTION_CATCHING=0")
     foreach(target ${target_esm} ${target_umd})
-      itk_module_target_label(${target})
-      itk_module_target_export(${target})
-      itk_module_target_install(${target})
-      set_property(TARGET ${target}
-        PROPERTY RUNTIME_OUTPUT_DIRECTORY
-        ${WebAssemblyInterface_BINARY_DIR}/image-io
-        )
       set_property(TARGET ${target} APPEND_STRING
         PROPERTY LINK_FLAGS " ${dicom_common_link_flags}"
         )
