@@ -32,6 +32,10 @@
 #include "itkOutputImage.h"
 #include "itkOutputTextStream.h"
 
+#include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/ostreamwrapper.h"
+
 class CustomSerieHelper: public gdcm::SerieHelper
 {
 public:
@@ -188,15 +192,15 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
 {
   using ImageType = TImage;
 
-  bool singleSortedSeries = false;
-  pipeline.add_flag("-s,--single-sorted-series", singleSortedSeries, "There is a single sorted series in the files");
-
   using OutputImageType = itk::wasm::OutputImage<ImageType>;
   OutputImageType outputImage;
-  pipeline.add_option("-o,--output-image", outputImage, "Output image volume")->required();
+  pipeline.add_option("-o,--output-image", outputImage, "Output image volume")->required()->type_name("OUTPUT_IMAGE");
 
   itk::wasm::OutputTextStream outputFilenames;
-  auto outputFilenamesOption = pipeline.add_option("--output-filenames", outputFilenames, "Output sorted filenames.");
+  auto outputFilenamesOption = pipeline.add_option("-f,--output-filenames", outputFilenames, "Output sorted filenames.")->required()->type_name("OUTPUT_JSON");
+
+  bool singleSortedSeries = false;
+  pipeline.add_flag("-s,--single-sorted-series", singleSortedSeries, "There is a single sorted series in the files");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -270,11 +274,18 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
   // copy sorted filenames as additional output
   if(!outputFilenamesOption->empty())
   {
+    rapidjson::Document document(rapidjson::kArrayType);
+    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
     auto finalFileList = reader->GetFileNames();
     for (auto f = finalFileList.begin(); f != finalFileList.end(); ++f)
     {
-      outputFilenames.Get() << *f << '\0';
+      rapidjson::Value value;
+      value.SetString((*f).c_str(), allocator);
+      document.PushBack(value, allocator);
     }
+    rapidjson::OStreamWrapper ostreamWrapper( outputFilenames.Get() );
+    rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
+    document.Accept( writer );
   }
 
   auto gdcmImageIO = itk::GDCMImageIO::New();
@@ -323,22 +334,23 @@ int runPipeline(itk::wasm::Pipeline & pipeline, std::vector<std::string> & input
 int main (int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("read-image-dicom-file-series", "Read a DICOM image series and return the associated image volume", argc, argv);
+  pipeline.set_version("2.0.0");
 
   std::vector<std::string> inputFileNames;
-  pipeline.add_option("-i,--input-images", inputFileNames, "File names in the series")->required()->check(CLI::ExistingFile)->expected(1,-1);
+  pipeline.add_option("-i,--input-images", inputFileNames, "File names in the series")->required()->check(CLI::ExistingFile)->expected(1,-1)->type_name("INPUT_TEXT_FILE");
+
+  // Type is not important here, its just a dummy placeholder to be added and then removed.
+  std::string outputImage;
+  auto outputImageOption = pipeline.add_option("-o,--output-image", outputImage, "Output image volume")->required()->type_name("OUTPUT_IMAGE");
+
+  // Type is not important here, its just a dummy placeholder to be added and then removed.
+  std::string outputFilenames;
+  auto outputFilenamesOption = pipeline.add_option("-f,--output-filenames", outputFilenames, "Output sorted filenames")->required()->type_name("OUTPUT_JSON");
 
   // We are interested in reading --input-images beforehand.
   // We need to add and then remove other options in order to do ITK_WASM_PARSE twice (once here in main, and then again in runPipeline)
   bool singleSortedSeries = false;
   auto sortedOption = pipeline.add_flag("-s,--single-sorted-series", singleSortedSeries, "There is a single sorted series in the files");
-
-  // Type is not important here, its just a dummy placeholder to be added and then removed.
-  std::string outputImage;
-  auto outputImageOption = pipeline.add_option("-o,--output-image", outputImage, "Output image volume")->required();
-
-  // Type is not important here, its just a dummy placeholder to be added and then removed.
-  std::string outputFilenames;
-  auto outputFilenamesOption = pipeline.add_option("--output-filenames", outputFilenames, "Output sorted filenames");
 
   ITK_WASM_PARSE(pipeline);
 
