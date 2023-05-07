@@ -48,7 +48,7 @@ Build the program with the itk-wasm CLI, `itk-wasm`. This is shipped with the `i
 ```sh
 # Initialize an empty project in the current directory
 npm init --yes
-npm install itk-wasm@1.0.0-b.83
+npm install itk-wasm@1.0.0-b.106
 ```
 
 ## WASI
@@ -120,7 +120,7 @@ Create an HTML file named `index.html` that will call the Wasm module through Ja
   <head>
     <title>itk-wasm Browser Hello World!</title>
     <meta charset="UTF-8" />
-    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.73/dist/umd/itk-wasm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.106/dist/umd/itk-wasm.min.js"></script>
   </head>
 
   <body>
