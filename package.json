@@ -8,6 +8,7 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "browser": "./dist/browser/index.js",
       "import": "./dist/node/index.js",
       "umd": "./dist/umd/itk-wasm.js",
