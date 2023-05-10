@@ -30,6 +30,7 @@ const interfaceJsonTypeToTypeScriptType = new Map([
   ['INT', 'number'],
   ['UINT', 'number'],
   ['FLOAT', 'number'],
+  ['INPUT_JSON', 'Object'],
   ['OUTPUT_JSON', 'Object'],
 ])
 
@@ -575,7 +576,16 @@ npm install ${packageName}
   let readmeBrowserInterface = '\n### Browser interface\n\nImport:\n\n```js\nimport {\n'
   let readmeNodeInterface = '\n### Node interface\n\nImport:\n\n```js\nimport {\n'
 
-  readmeBrowserInterface += typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, false)
+  // libiconv does not generate
+  const validEmscriptenWasmBinaries = filteredWasmBinaries.filter((wasmBinary) => {
+    const prefix = wasmBinary.substring(0, wasmBinary.length-5)
+    if (fs.existsSync(`${prefix}.js`)) {
+      return true
+    }
+    return false
+  })
+
+  readmeBrowserInterface += typescriptBindings(outputDir, buildDir, validEmscriptenWasmBinaries, options, false)
   readmeBrowserInterface += `
 #### setPipelinesBaseUrl
 
@@ -613,7 +623,7 @@ function setPipelineWorkerUrl(
 function getPipelineWorkerUrl() : string | URL
 \`\`\`
 `
-  readmeNodeInterface += typescriptBindings(outputDir, buildDir, filteredWasmBinaries, options, true)
+  readmeNodeInterface += typescriptBindings(outputDir, buildDir, validEmscriptenWasmBinaries, options, true)
   readme += readmeUsage
   readme += readmeBrowserInterface
   readme += readmeNodeInterface

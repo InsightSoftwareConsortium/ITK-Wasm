@@ -17,6 +17,7 @@ const interfaceJsonTypeToInterfaceType = new Map([
   ['OUTPUT_MESH', 'Mesh'],
   ['INPUT_POLYDATA', 'PolyData'],
   ['OUTPUT_POLYDATA', 'PolyData'],
+  ['INPUT_JSON', 'JsonObject'],
   ['OUTPUT_JSON', 'JsonObject'],
 ])
 
