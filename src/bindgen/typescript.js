@@ -447,11 +447,11 @@ import {\n`
         if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
           const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
           if (interfaceType.includes('File')) {
-            // for files
-            functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: value as ${interfaceType}} })\n`
+            // for Files
+            functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: value as ${interfaceType} })\n`
             functionContent += `      args.push(value.path)\n`
           } else if (interfaceType.includes('Stream')) {
-            // for streams
+            // for Streams
             functionContent += `      const inputCountString = inputs.length.toString()\n`
             functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: value } })\n`
             functionContent += `      args.push(inputCountString)\n`
@@ -469,18 +469,18 @@ import {\n`
         if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
           const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
           if (interfaceType.includes('File')) {
-            // for files
+            // for Files
             functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: options.${camel} as ${interfaceType} })\n`
             functionContent += `    args.push('--${parameter.name}', options.${camel}.path)\n`
           } else if (interfaceType.includes('Stream')) {
-            // for streams
+            // for Streams
             functionContent += `    const inputCountString = inputs.length.toString()\n`
             functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: options.${camel} } })\n`
             functionContent += `    args.push('--${parameter.name}', inputCountString)\n`
           } else {
             // Image, Mesh, PolyData, JsonObject
             functionContent += `    const inputCountString = inputs.length.toString()\n`
-            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: options.${camel} as ${interfaceType}})\n`
+            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: options.${camel} as ${interfaceType} })\n`
             functionContent += `    args.push('--${parameter.name}', inputCountString)\n`
           }
         } else {
