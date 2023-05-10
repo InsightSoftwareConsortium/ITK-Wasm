@@ -7,6 +7,7 @@ import BinaryStream from '../core/BinaryStream.js'
 import Image from '../core/Image.js'
 import Mesh from '../core/Mesh.js'
 import PolyData from '../core/PolyData.js'
+import JsonObject from '../core/JsonObject.js'
 
 interface PipelineInput {
   // Backwards compatibility with IOTypes -- remove?
@@ -17,6 +18,7 @@ interface PipelineInput {
   data:
   | string
   | Uint8Array
+  | JsonObject
   | TextStream
   | BinaryStream
   | TextFile
