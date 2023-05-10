@@ -15,7 +15,7 @@
   "scripts": {
     "start": "vite -c build/vite.config.js",
     "test": "npm run test:node",
-    "test:node": "ava test/node.js",
+    "test:node": "ava test/node/*.js",
     "test:browser": "npm run test:browser:chrome && npm run test:browser:firefox",
     "test:browser:firefox": "start-server-and-test start http-get://localhost:5173 cypress:runFirefox",
     "test:browser:chrome": "start-server-and-test start http-get://localhost:5173 cypress:runChrome",
@@ -37,7 +37,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.111"
+    "itk-wasm": "^1.0.0-b.117"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
@@ -49,12 +49,13 @@
     "ava": "^5.1.0",
     "cypress": "^12.3.0",
     "debug": "^4.3.4",
+    "itk-image-io": "^1.0.0-b.117",
     "rollup": "^3.9.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-ignore": "^1.0.10",
-    "rollup-plugin-polyfill-node": "^0.11.0",
+    "rollup-plugin-polyfill-node": "^0.12.0",
+    "start-server-and-test": "^2.0.0",
     "supports-color": "^9.3.1",
-    "start-server-and-test": "^1.15.2",
     "tslib": "^2.5.2",
     "typescript": "^5.0.4",
     "vite": "^4.0.4",

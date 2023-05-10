@@ -22,15 +22,16 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.
  *
- * @param {BinaryFile} imageIn - Input DICOM file
- * @param {BinaryFile} presentationStateFile - Process using presentation state file
+ * @param {File | BinaryFile} imageIn - Input DICOM file
+ * @param {File | BinaryFile} presentationStateFile - Process using presentation state file
+ * @param {ApplyPresentationStateToImageOptions} options - options object
  *
  * @returns {Promise<ApplyPresentationStateToImageResult>} - result object
  */
 async function applyPresentationStateToImage(
   webWorker: null | Worker,
-  imageIn: BinaryFile,
-  presentationStateFile: BinaryFile,
+  imageIn: File | BinaryFile,
+  presentationStateFile: File | BinaryFile,
   options: ApplyPresentationStateToImageOptions = {}
 ) : Promise<ApplyPresentationStateToImageResult> {
 
@@ -38,18 +39,32 @@ async function applyPresentationStateToImage(
     { type: InterfaceTypes.JsonObject },
     { type: InterfaceTypes.Image },
   ]
+  let imageInFile = imageIn
+  if (imageIn instanceof File) {
+    const imageInBuffer = await imageIn.arrayBuffer()
+    imageInFile = { path: imageIn.name, data: new Uint8Array(imageInBuffer) }
+  }
+  let presentationStateFileFile = presentationStateFile
+  if (presentationStateFile instanceof File) {
+    const presentationStateFileBuffer = await presentationStateFile.arrayBuffer()
+    presentationStateFileFile = { path: presentationStateFile.name, data: new Uint8Array(presentationStateFileBuffer) }
+  }
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: imageIn },
-    { type: InterfaceTypes.BinaryFile, data: presentationStateFile },
+    { type: InterfaceTypes.BinaryFile, data: imageInFile as BinaryFile },
+    { type: InterfaceTypes.BinaryFile, data: presentationStateFileFile as BinaryFile },
   ]
 
   const args = []
   // Inputs
-  args.push(imageIn.path)
-  args.push(presentationStateFile.path)
+  const imageInName = imageIn instanceof File ? imageIn.name : imageIn.path
+  args.push(imageInName as string)
+  const presentationStateFileName = presentationStateFile instanceof File ? presentationStateFile.name : presentationStateFile.path
+  args.push(presentationStateFileName as string)
   // Outputs
-  args.push('0')
-  args.push('1')
+  const presentationStateOutStreamName = '0'
+  args.push(presentationStateOutStreamName)
+  const outputImageName = '1'
+  args.push(outputImageName)
   // Options
   args.push('--memory-io')
   if (typeof options.colorOutput !== "undefined") {

@@ -1,9 +1,7 @@
 // Generated file. Do not edit.
 
 import {
-  BinaryFile,
   TextStream,
-  TextFile,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -19,27 +17,32 @@ import path from 'path'
 /**
  * Render DICOM SR file and data set to HTML/XHTML
  *
- * @param {BinaryFile} dicomFile - Input DICOM file
+ * @param {string} dicomFile - Input DICOM file
+ * @param {StructuredReportToHtmlOptions} options - options object
  *
  * @returns {Promise<StructuredReportToHtmlNodeResult>} - result object
  */
 async function structuredReportToHtmlNode(
-  dicomFile: BinaryFile,
+  dicomFile: string,
   options: StructuredReportToHtmlOptions = {}
 ) : Promise<StructuredReportToHtmlNodeResult> {
+
+  const mountDirs: Set<string> = new Set()
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
+  mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: dicomFile },
   ]
 
   const args = []
   // Inputs
-  args.push(dicomFile.path)
+  const dicomFileName = dicomFile
+  args.push(dicomFileName as string)
   // Outputs
-  args.push('0')
+  const outputTextName = '0'
+  args.push(outputTextName)
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {
@@ -117,8 +120,11 @@ async function structuredReportToHtmlNode(
     args.push('--css-reference', inputCountString)
   }
   if (typeof options.cssFile !== "undefined") {
-    inputs.push({ type: InterfaceTypes.TextFile, data: options.cssFile as TextFile })
-    args.push('--css-file', options.cssFile.path)
+    const cssFile = options.cssFile
+    mountDirs.add(path.dirname(cssFile as string))
+    args.push('--css-file')
+    const name = cssFile as string
+    args.push(name)
   }
   if (typeof options.expandInline !== "undefined") {
     args.push('--expand-inline')
@@ -172,7 +178,7 @@ async function structuredReportToHtmlNode(
     returnValue,
     stderr,
     outputs
-  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
+  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

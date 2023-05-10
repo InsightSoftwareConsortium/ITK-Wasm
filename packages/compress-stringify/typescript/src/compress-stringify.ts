@@ -21,6 +21,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * Given a binary, compress and optionally base64 encode.
  *
  * @param {Uint8Array} input - Input binary
+ * @param {CompressStringifyOptions} options - options object
  *
  * @returns {Promise<CompressStringifyResult>} - result object
  */
@@ -39,9 +40,11 @@ async function compressStringify(
 
   const args = []
   // Inputs
-  args.push('0')
+  const inputName = '0'
+  args.push(inputName as string)
   // Outputs
-  args.push('0')
+  const outputName = '0'
+  args.push(outputName)
   // Options
   args.push('--memory-io')
   if (typeof options.stringify !== "undefined") {

@@ -78,7 +78,7 @@ by Specific Character Set (0008,0005) to UTF-8 */
   cssReference?: string
 
   /** [f]ilename: string. Embed content of specified CSS into document */
-  cssFile?: TextFile
+  cssFile?: string | TextFile
 
   /** expand short content items inline (default) */
   expandInline?: boolean

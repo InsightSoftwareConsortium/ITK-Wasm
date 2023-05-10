@@ -587,10 +587,10 @@ int main( int argc, char * argv[] )
   pipeline.add_option("dicom-file", dicomFile, "Input DICOM file.")->required()->check(CLI::ExistingFile)->type_name("INPUT_TEXT_FILE");
 
   itk::wasm::InputTextStream tagsToReadStream;
-  pipeline.add_option("--tags-to-read", tagsToReadStream, "A JSON object with a \"tags\" array of the tags to read. If not provided, all tags are read. Example tag: \"0010|0020\".")->type_name("INPUT_JSON");
+  pipeline.add_option("--tags-to-read", tagsToReadStream, "A JSON object with a \"tags\" array of the tags to read. If not provided, all tags are read. Example tag: \"0008|103e\".")->type_name("INPUT_JSON");
 
   itk::wasm::OutputTextStream tagsStream;
-  pipeline.add_option("Tags", tagsStream, "Output tags in the file. JSON object with a \"tags\" array of arrays. Values are encoded as UTF-8 strings.")->required()->type_name("OUTPUT_JSON");
+  pipeline.add_option("tags", tagsStream, "Output tags in the file. JSON object an array of [tag, value] arrays. Values are encoded as UTF-8 strings.")->required()->type_name("OUTPUT_JSON");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -607,10 +607,9 @@ int main( int argc, char * argv[] )
   {
     const auto dicomTags = dicomTagReader.ReadAllTags();
 
-    rapidjson::Document document;
-    document.SetObject();
-    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-    rapidjson::Value tagsArray(rapidjson::kArrayType);
+    rapidjson::Document tagsArray;
+    tagsArray.SetArray();
+    rapidjson::Document::AllocatorType& allocator = tagsArray.GetAllocator();
     for (const auto& [tag, value] : dicomTags) {
       rapidjson::Value tagArray(rapidjson::kArrayType);
 
@@ -624,11 +623,10 @@ int main( int argc, char * argv[] )
 
       tagsArray.PushBack(tagArray.Move(), allocator);
     }
-    document.AddMember("tags", tagsArray.Move(), allocator);
 
     rapidjson::StringBuffer stringBuffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
-    document.Accept(writer);
+    tagsArray.Accept(writer);
 
     tagsStream.Get() << stringBuffer.GetString();
   }
@@ -648,10 +646,9 @@ int main( int argc, char * argv[] )
       return pipeline.exit(err);
       }
 
-    rapidjson::Document document;
-    document.SetObject();
-    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-    rapidjson::Value tagsArray(rapidjson::kArrayType);
+    rapidjson::Document tagsArray;
+    tagsArray.SetArray();
+    rapidjson::Document::AllocatorType& allocator = tagsArray.GetAllocator();
     const rapidjson::Value & inputTagsArray = inputTagsDocument["tags"];
 
     for( rapidjson::Value::ConstValueIterator itr = inputTagsArray.Begin(); itr != inputTagsArray.End(); ++itr )
@@ -671,11 +668,10 @@ int main( int argc, char * argv[] )
 
       tagsArray.PushBack(tagArray.Move(), allocator);
     }
-    document.AddMember("tags", tagsArray.Move(), allocator);
 
     rapidjson::StringBuffer stringBuffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
-    document.Accept(writer);
+    tagsArray.Accept(writer);
 
     tagsStream.Get() << stringBuffer.GetString();
   }

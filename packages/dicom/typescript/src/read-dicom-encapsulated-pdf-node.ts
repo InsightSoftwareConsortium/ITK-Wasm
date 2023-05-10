@@ -1,7 +1,6 @@
 // Generated file. Do not edit.
 
 import {
-  BinaryFile,
   BinaryStream,
   InterfaceTypes,
   PipelineOutput,
@@ -18,27 +17,32 @@ import path from 'path'
 /**
  * Extract PDF file from DICOM encapsulated PDF.
  *
- * @param {BinaryFile} dicomFile - Input DICOM file
+ * @param {string} dicomFile - Input DICOM file
+ * @param {ReadDicomEncapsulatedPdfOptions} options - options object
  *
  * @returns {Promise<ReadDicomEncapsulatedPdfNodeResult>} - result object
  */
 async function readDicomEncapsulatedPdfNode(
-  dicomFile: BinaryFile,
+  dicomFile: string,
   options: ReadDicomEncapsulatedPdfOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfNodeResult> {
+
+  const mountDirs: Set<string> = new Set()
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
+  mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: dicomFile },
   ]
 
   const args = []
   // Inputs
-  args.push(dicomFile.path)
+  const dicomFileName = dicomFile
+  args.push(dicomFileName as string)
   // Outputs
-  args.push('0')
+  const pdfBinaryOutputName = '0'
+  args.push(pdfBinaryOutputName)
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {
@@ -93,7 +97,7 @@ async function readDicomEncapsulatedPdfNode(
     returnValue,
     stderr,
     outputs
-  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
+  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

@@ -118,6 +118,16 @@ static OFLogger appLogger = OFLog::getLogger("dcmtk.apps." OFFIS_CONSOLE_APPLICA
 static char rcsid[] = "$dcmtk: " OFFIS_CONSOLE_APPLICATION " v"
   OFFIS_DCMTK_VERSION " " OFFIS_DCMTK_RELEASEDATE " $";
 
+/** Set rapidjson Value to c const char * string if not null. */
+void safeSetString(Value &v, const char *s, Document::AllocatorType& alloc)
+{
+  if (s) {
+    v.SetString(s, std::strlen(s), alloc);
+  } else {
+    v.SetString("", 0, alloc);
+  }
+}
+
 static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationState &ps)
 {
   size_t i, j, max;
@@ -127,15 +137,15 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   Document::AllocatorType& alloc = doc.GetAllocator();
 
   Value presentationLabel;
-  presentationLabel.SetString(ps.getPresentationLabel(), std::strlen(ps.getPresentationLabel()), alloc);
+  safeSetString(presentationLabel, ps.getPresentationLabel(), alloc);
   doc.AddMember("PresentationLabel",
     presentationLabel, alloc);
   Value presentationDescription;
-  presentationDescription.SetString(ps.getPresentationDescription(), std::strlen(ps.getPresentationDescription()), alloc);
+  safeSetString(presentationDescription, ps.getPresentationDescription(), alloc);
   doc.AddMember("PresentationDescription",
     presentationDescription, alloc);
   Value presentationCreatorsName;
-  presentationCreatorsName.SetString(ps.getPresentationCreatorsName(), std::strlen(ps.getPresentationCreatorsName()), alloc);
+  safeSetString(presentationCreatorsName, ps.getPresentationCreatorsName(), alloc);
   doc.AddMember("PresentationCreatorsName",
     presentationCreatorsName, alloc);
   if (ps.haveActiveVOIWindow())
@@ -146,13 +156,13 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
     doc.AddMember("CurrentWindowCenter", Value(center), alloc);
     doc.AddMember("CurrentWindowWidth", Value(width), alloc);
     Value currentVoiDescription;
-    currentVoiDescription.SetString(ps.getCurrentVOIDescription(), strlen(ps.getCurrentVOIDescription()), alloc);
+    safeSetString(currentVoiDescription, ps.getCurrentVOIDescription(), alloc);
     doc.AddMember("CurrentVOIDescription", currentVoiDescription, alloc);
   }
   else if (ps.haveActiveVOILUT())
   {
     Value currentVoiDescription;
-    currentVoiDescription.SetString(ps.getCurrentVOIDescription(), strlen(ps.getCurrentVOIDescription()), alloc);
+    safeSetString(currentVoiDescription, ps.getCurrentVOIDescription(), alloc);
     doc.AddMember("CurrentVOIDescription", currentVoiDescription, alloc);
   }
 
@@ -276,10 +286,10 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   {
     Value layerJson(kObjectType);
     Value graphicLayerName;
-    graphicLayerName.SetString(ps.getGraphicLayerName(layer), std::strlen(ps.getGraphicLayerName(layer)), alloc);
+    safeSetString(graphicLayerName, ps.getGraphicLayerName(layer), alloc);
     layerJson.AddMember("Name", graphicLayerName, alloc);
     Value graphicLayerDescription;
-    graphicLayerDescription.SetString(ps.getGraphicLayerDescription(layer), std::strlen(ps.getGraphicLayerDescription(layer)), alloc);
+    safeSetString(graphicLayerDescription, ps.getGraphicLayerDescription(layer), alloc);
     layerJson.AddMember("Description", graphicLayerDescription, alloc);
     if (ps.haveGraphicLayerRecommendedDisplayValue(layer))
     {
@@ -311,7 +321,7 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
         Value textObjectJson(kObjectType);
         // display contents of text object
         Value textObjectText;
-        textObjectText.SetString(ptext->getText(), std::strlen(ptext->getText()), alloc);
+        safeSetString(textObjectText, ptext->getText(), alloc);
         textObjectJson.AddMember("Text", textObjectText, alloc);
         if (ptext->haveAnchorPoint())
         {
@@ -429,10 +439,10 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
         curveJson.AddMember("AxisUnitsX", Value(pcurve->getCurveAxisUnitsX(), alloc), alloc);
         curveJson.AddMember("AxisUnitsY", Value(pcurve->getCurveAxisUnitsY(), alloc), alloc);
         Value label;
-        label.SetString(pcurve->getCurveLabel(), std::strlen(pcurve->getCurveLabel()), alloc);
+        safeSetString(label, pcurve->getCurveLabel(), alloc);
         curveJson.AddMember("Label", label, alloc);
         Value description;
-        description.SetString(pcurve->getCurveDescription(), std::strlen(pcurve->getCurveDescription()), alloc);
+        safeSetString(description, pcurve->getCurveDescription(), alloc);
         curveJson.AddMember("Description", description, alloc);
 
         j = pcurve->getNumberOfPoints();
@@ -475,10 +485,10 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
       value << "0x" << STD_NAMESPACE hex << ps.getActiveOverlayGroup(layer, ovlidx) << STD_NAMESPACE dec;
       overlayJson.AddMember("Group", Value(value.str().c_str(), alloc), alloc);
       Value label;
-      label.SetString(ps.getActiveOverlayLabel(layer, ovlidx), std::strlen(ps.getActiveOverlayLabel(layer, ovlidx)), alloc);
+      safeSetString(label, ps.getActiveOverlayLabel(layer, ovlidx), alloc);
       overlayJson.AddMember("Label", label, alloc);
       Value description;
-      description.SetString(ps.getActiveOverlayDescription(layer, ovlidx), std::strlen(ps.getActiveOverlayDescription(layer, ovlidx)), alloc);
+      safeSetString(description, ps.getActiveOverlayDescription(layer, ovlidx), alloc);
       overlayJson.AddMember("Description", description, alloc);
       Value type;
       std::string typeString(ps.activeOverlayIsROI(layer, ovlidx) ? "ROI" : "graphic");

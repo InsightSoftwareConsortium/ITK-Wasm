@@ -1,7 +1,6 @@
 // Generated file. Do not edit.
 
 import {
-  BinaryFile,
   TextStream,
   InterfaceTypes,
   PipelineOutput,
@@ -18,27 +17,32 @@ import path from 'path'
 /**
  * Read a DICOM structured report file and generate a plain text representation
  *
- * @param {BinaryFile} dicomFile - Input DICOM file
+ * @param {string} dicomFile - Input DICOM file
+ * @param {StructuredReportToTextOptions} options - options object
  *
  * @returns {Promise<StructuredReportToTextNodeResult>} - result object
  */
 async function structuredReportToTextNode(
-  dicomFile: BinaryFile,
+  dicomFile: string,
   options: StructuredReportToTextOptions = {}
 ) : Promise<StructuredReportToTextNodeResult> {
+
+  const mountDirs: Set<string> = new Set()
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
+  mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: dicomFile },
   ]
 
   const args = []
   // Inputs
-  args.push(dicomFile.path)
+  const dicomFileName = dicomFile
+  args.push(dicomFileName as string)
   // Outputs
-  args.push('0')
+  const outputTextName = '0'
+  args.push(outputTextName)
   // Options
   args.push('--memory-io')
   if (typeof options.unknownRelationship !== "undefined") {
@@ -99,7 +103,7 @@ async function structuredReportToTextNode(
     returnValue,
     stderr,
     outputs
-  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
+  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

@@ -1,3 +1,5 @@
+// Generated file. Do not edit.
+
 export * from './pipelines-base-url.js'
 export * from './pipeline-worker-url.js'
 

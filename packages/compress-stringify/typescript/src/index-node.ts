@@ -1,3 +1,5 @@
+// Generated file. Do not edit.
+
 
 
 import CompressStringifyNodeResult from './compress-stringify-node-result.js'

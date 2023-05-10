@@ -21,28 +21,36 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Extract PDF file from DICOM encapsulated PDF.
  *
- * @param {BinaryFile} dicomFile - Input DICOM file
+ * @param {File | BinaryFile} dicomFile - Input DICOM file
+ * @param {ReadDicomEncapsulatedPdfOptions} options - options object
  *
  * @returns {Promise<ReadDicomEncapsulatedPdfResult>} - result object
  */
 async function readDicomEncapsulatedPdf(
   webWorker: null | Worker,
-  dicomFile: BinaryFile,
+  dicomFile: File | BinaryFile,
   options: ReadDicomEncapsulatedPdfOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
+  let dicomFileFile = dicomFile
+  if (dicomFile instanceof File) {
+    const dicomFileBuffer = await dicomFile.arrayBuffer()
+    dicomFileFile = { path: dicomFile.name, data: new Uint8Array(dicomFileBuffer) }
+  }
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: dicomFile },
+    { type: InterfaceTypes.BinaryFile, data: dicomFileFile as BinaryFile },
   ]
 
   const args = []
   // Inputs
-  args.push(dicomFile.path)
+  const dicomFileName = dicomFile instanceof File ? dicomFile.name : dicomFile.path
+  args.push(dicomFileName as string)
   // Outputs
-  args.push('0')
+  const pdfBinaryOutputName = '0'
+  args.push(pdfBinaryOutputName)
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {

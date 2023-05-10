@@ -41,9 +41,22 @@ function bindgenResource(filePath) {
   return path.join(path.dirname(import.meta.url.substring(7)), 'typescript-resources', filePath)
 }
 
+function readFileIfNotInterfaceType(forNode, interfaceType, varName, indent) {
+  if (forNode) {
+    return `${indent}mountDirs.add(path.dirname(${varName} as string))\n`
+  } else {
+    if (interfaceType === 'TextFile') {
+
+      return `${indent}let ${varName}File = ${varName}\n${indent}if (${varName} instanceof File) {\n${indent}  const ${varName}Buffer = await ${varName}.arrayBuffer()\n${indent}  ${varName}File = { path: ${varName}.name, data: new TextDecoder().decode(${varName}Buffer) }\n${indent}}\n`
+    } else {
+      return `${indent}let ${varName}File = ${varName}\n${indent}if (${varName} instanceof File) {\n${indent}  const ${varName}Buffer = await ${varName}.arrayBuffer()\n${indent}  ${varName}File = { path: ${varName}.name, data: new Uint8Array(${varName}Buffer) }\n${indent}}\n`
+    }
+  }
+}
+
 function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=false) {
   // index module
-  let indexContent = ''
+  let indexContent = `// Generated file. Do not edit.\n\n`
   const nodeTextKebab = forNode ? '-node' : ''
   const nodeTextCamel = forNode ? 'Node' : ''
 
@@ -246,27 +259,29 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
           return
         }
         if (!interfaceJsonTypeToTypeScriptType.has(parameter.type)) {
-
           console.error(`Unexpected parameter type: ${parameter.type}`)
           process.exit(1)
         }
         optionsInterfaceContent += `  /** ${parameter.description} */\n`
-        const parameterType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
-        if(typesRequireImport.includes(parameterType)) {
+        let parameterType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
+        if (typesRequireImport.includes(parameterType)) {
           optionsImportTypes.add(parameterType)
         }
         const isOptional = parameter.required ? '' : '?'
-        if (parameter.itemsExpectedMax > 1) {
-          optionsInterfaceContent += `  ${camelCase(parameter.name)}${isOptional}: ${parameterType}[]\n\n`
+        const isArray = parameter.itemsExpectedMax > 1 ? "[]" : ""
+        const fileType = forNode ? 'string' : 'File'
+        if (parameterType === 'TextFile' || parameterType === 'BinaryFile') {
+          parameterType = `${fileType}${isArray} | ${parameterType}${isArray}`
         } else {
-          optionsInterfaceContent += `  ${camelCase(parameter.name)}${isOptional}: ${parameterType}\n\n`
+          parameterType = `${parameterType}${isArray}`
         }
-        const readmeParameterArray = parameter.itemsExpectedMax > 1 ? "[]" : ""
-        readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}${readmeParameterArray}*`, parameter.description])
+        optionsInterfaceContent += `  ${camelCase(parameter.name)}${isOptional}: ${parameterType}\n\n`
+        readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}*`, parameter.description])
       })
       // Insert the import statement in the beginning for the file.
-      if(optionsImportTypes.size !== 0)
+      if(optionsImportTypes.size !== 0) {
         optionsContent += `import { ${Array.from(optionsImportTypes).join(',')} } from 'itk-wasm'\n\n`;
+      }
       optionsContent += optionsInterfaceContent
       optionsContent += `}\n\nexport default ${modulePascalCase}Options\n`
       fs.writeFileSync(path.join(srcOutputDir, `${moduleKebabCase}-options.ts`), optionsContent)
@@ -292,6 +307,9 @@ import {\n`
       })
     })
     usedInterfaceTypes.forEach((interfaceType) => {
+      if (forNode && (interfaceType === 'BinaryFile' || interfaceType === 'TextFile')) {
+        return
+      }
       functionContent += `  ${interfaceType},\n`
     })
     functionContent += `  InterfaceTypes,\n`
@@ -323,11 +341,24 @@ import {\n`
         console.error(`Unexpected input type: ${input.type}`)
         process.exit(1)
       }
-      const typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
+      let typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
+      const isArray = input.itemsExpectedMax > 1 ? "[]" : ""
+      const fileType = forNode ? 'string' : 'File'
+      if (typescriptType === 'TextFile' || typescriptType === 'BinaryFile') {
+        if (forNode) {
+          typescriptType = `${fileType}${isArray}`
+        } else {
+          typescriptType = `${fileType}${isArray} | ${typescriptType}${isArray}`
+        }
+      } else {
+        typescriptType = `${typescriptType}${isArray}`
+      }
       functionContent += ` * @param {${typescriptType}} ${camelCase(input.name)} - ${input.description}\n`
-      const readmeParameterArray = input.itemsExpectedMax > 1 ? "[]" : ""
-      readmeParametersTable.push([`\`${camelCase(input.name)}\``, `*${typescriptType}${readmeParameterArray}*`, input.description])
+      readmeParametersTable.push([`\`${camelCase(input.name)}\``, `*${typescriptType}*`, input.description])
     })
+    if (haveParameters) {
+      functionContent += ` * @param {${modulePascalCase}Options} options - options object\n`
+    }
     functionContent += ` *\n * @returns {Promise<${modulePascalCase}${nodeTextCamel}Result>} - result object\n`
     functionContent += ` */\n`
 
@@ -339,8 +370,19 @@ import {\n`
 
     }
     interfaceJson.inputs.forEach((input, index) => {
-      const typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
+      let typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
       const end = index === interfaceJson.inputs.length - 1 && !haveParameters ? `\n` : `,\n`
+      const isArray = input.itemsExpectedMax > 1 ? "[]" : ""
+      const fileType = forNode ? 'string' : 'File'
+      if (typescriptType === 'TextFile' || typescriptType === 'BinaryFile') {
+        if (forNode) {
+          typescriptType = `${fileType}${isArray}`
+        } else {
+          typescriptType = `${fileType}${isArray} | ${typescriptType}${isArray}`
+        }
+      } else {
+        typescriptType = `${typescriptType}${isArray}`
+      }
       functionCall += `  ${camelCase(input.name)}: ${typescriptType}${end}`
     })
     if (haveParameters) {
@@ -348,13 +390,21 @@ import {\n`
       interfaceJson.parameters.forEach((parameter) => {
         if (parameter.required) {
           if (parameter.itemsExpectedMax > 1) {
-            requiredOptions += ` ${camelCase(parameter.name)}: [`
             if (parameter.type === "FLOAT" || parameter.type === "INT") {
+              requiredOptions += ` ${camelCase(parameter.name)}: [`
               for(let ii = 0; ii < parameter.itemsExpectedMin; ii++) {
                 requiredOptions += `${parameter.default}, `
               }
+              requiredOptions += `],`
+            } else {
+              const typescriptType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
+              let arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? `${typescriptType}[] | string[]` : `${typescriptType}[]`
+              if (forNode) {
+                arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? `string[]` : `${typescriptType}[]`
+
+              }
+              requiredOptions += ` ${camelCase(parameter.name)}: [] as ${arrayType},`
             }
-            requiredOptions += `],`
           } else {
             if (parameter.type === "FLOAT" || parameter.type === "INT") {
               requiredOptions += ` ${camelCase(parameter.name)}: ${parameter.default},`
@@ -377,6 +427,10 @@ import {\n`
     functionContent += functionCall
     functionContent += ' {\n\n'
 
+    if (forNode && (usedInterfaceTypes.has('BinaryFile') || usedInterfaceTypes.has('TextFile'))) {
+      functionContent += '  const mountDirs: Set<string> = new Set()\n\n'
+    }
+
     functionContent += `  const desiredOutputs: Array<PipelineOutput> = [\n`
     interfaceJson.outputs.forEach((output) => {
       if (interfaceJsonTypeToInterfaceType.has(output.type)) {
@@ -385,16 +439,32 @@ import {\n`
       }
     })
     functionContent += `  ]\n`
+    interfaceJson.inputs.forEach((input) => {
+      if (interfaceJsonTypeToInterfaceType.has(input.type)) {
+        const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
+        if (interfaceType.includes('File')) {
+          const camel = camelCase(input.name)
+          functionContent += readFileIfNotInterfaceType(forNode, interfaceType, camel, '  ')
+        }
+      }
+    })
     functionContent += `  const inputs: Array<PipelineInput> = [\n`
-    interfaceJson.inputs.forEach((input, index) => {
+    interfaceJson.inputs.forEach((input) => {
       if (interfaceJsonTypeToInterfaceType.has(input.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
         const camel = camelCase(input.name)
-        let data = camel
-        if(interfaceType.includes('Stream')) {
-          data = `{ data: ${camel} } `
+        if (interfaceType.includes('File')) {
+          if (!forNode) {
+            functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${camel}File as ${interfaceType} },\n`
+
+          }
+        } else {
+          let data = camel
+          if (interfaceType.includes('Stream')) {
+            data = `{ data: ${camel} } `
+          }
+          functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${data} },\n`
         }
-        functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${data} },\n`
       }
     })
     functionContent += `  ]\n\n`
@@ -406,8 +476,16 @@ import {\n`
       const camel = camelCase(input.name)
       if (interfaceJsonTypeToInterfaceType.has(input.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
-        const name = interfaceType.includes('File') ?  `${camel}.path` : `'${inputCount.toString()}'`
-        functionContent += `  args.push(${name})\n`
+        let name = `  const ${camel}Name = '${inputCount.toString()}'\n`
+        if (interfaceType.includes('File')) {
+          if (forNode) {
+            name = `  const ${camel}Name = ${camel}\n`
+          } else {
+            name = `  const ${camel}Name = ${camel} instanceof File ? ${camel}.name : ${camel}.path\n`
+          }
+        }
+        functionContent += name
+        functionContent += `  args.push(${camel}Name as string)\n`
         inputCount++
       } else {
         functionContent += `  args.push(${camel}.toString())\n`
@@ -420,8 +498,16 @@ import {\n`
       const camel = camelCase(output.name)
       if (interfaceJsonTypeToInterfaceType.has(output.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-        const name = interfaceType.includes('File') ?  `${camel}.path` : `'${outputCount.toString()}'`
-        functionContent += `  args.push(${name})\n`
+        let name = `  const ${camel}Name = '${outputCount.toString()}'\n`
+        if (interfaceType.includes('File')) {
+          if (forNode) {
+            name = `  const ${camel}Name = ${camel}\n`
+          } else {
+            name = `  const ${camel}Name = typeof ${camel}.path === 'undefined' ? ${camel}.name : ${camel}.path\n`
+          }
+        }
+        functionContent += name
+        functionContent += `  args.push(${camel}Name)\n`
         outputCount++
       } else {
         functionContent += `  args.push(${camel}.toString())\n`
@@ -444,13 +530,27 @@ import {\n`
         functionContent += `      throw new Error('"${parameter.name}" option must have a length > ${parameter.itemsExpectedMin}')\n`
         functionContent += `    }\n`
         functionContent += `    args.push('--${parameter.name}')\n`
-        functionContent += `    options.${camel}.forEach((value) => {\n`
+        if (forNode) {
+          functionContent += `    options.${camel}.forEach((value) => {\n`
+
+        } else {
+          functionContent += `    options.${camel}.forEach(async (value) => {\n`
+
+        }
         if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
           const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
           if (interfaceType.includes('File')) {
-            // for Files
-            functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: value as ${interfaceType} })\n`
-            functionContent += `      args.push(value.path)\n`
+            // for files
+            functionContent += readFileIfNotInterfaceType(forNode, interfaceType, 'value', '      ')
+            if (forNode) {
+              functionContent += '      mountDirs.add(path.dirname(value as string))\n'
+              functionContent += `      args.push(value as string)\n`
+            } else {
+              functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: valueFile })\n`
+              functionContent += `      const name = value instanceof File ? value.name : (value as ${interfaceType}).path\n`
+
+              functionContent += `      args.push(name)\n`
+            }
           } else if (interfaceType.includes('Stream')) {
             // for Streams
             functionContent += `      const inputCountString = inputs.length.toString()\n`
@@ -459,7 +559,7 @@ import {\n`
           } else {
             // Image, Mesh, PolyData, JsonObject
             functionContent += `      const inputCountString = inputs.length.toString()\n`
-            functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: value as ${interfaceType}})\n`
+            functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: value as ${interfaceType} })\n`
             functionContent += `      args.push(inputCountString)\n`
           }
         } else {
@@ -470,9 +570,17 @@ import {\n`
         if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
           const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
           if (interfaceType.includes('File')) {
-            // for Files
-            functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: options.${camel} as ${interfaceType} })\n`
-            functionContent += `    args.push('--${parameter.name}', options.${camel}.path)\n`
+            // for files
+            functionContent += `    const ${camel} = options.${camel}\n`
+            functionContent += readFileIfNotInterfaceType(forNode, interfaceType, camel, '    ')
+            functionContent += `    args.push('--${parameter.name}')\n`
+            let name = `    const name = ${camel} as string\n`
+            if (!forNode) {
+              name = `    const name = ${camel} instanceof File ? ${camel}.name : (${camel} as ${interfaceType}).path\n`
+              functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: ${camel}File as ${interfaceType} })\n`
+            }
+            functionContent += name
+            functionContent += `    args.push(name)\n`
           } else if (interfaceType.includes('Stream')) {
             // for Streams
             functionContent += `    const inputCountString = inputs.length.toString()\n`
@@ -494,7 +602,8 @@ import {\n`
     const outputsVar = interfaceJson.outputs.length ? '    outputs\n' : ''
     if (forNode) {
       functionContent += `\n  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', '${moduleKebabCase}')\n\n`
-      functionContent += `  const {\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)\n`
+      const mountDirsArg = usedInterfaceTypes.has('TextFile') || usedInterfaceTypes.has('BinaryFile') ? ', mountDirs' : ''
+      functionContent += `  const {\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs${mountDirsArg})\n`
     } else {
       functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`
       functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })\n`

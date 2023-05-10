@@ -1,6 +1,6 @@
 # itk.js to itk-wasm Migration Guide
 
-*Note: itk-wasm is currently in the beta development stage. The interface is relatively stable while functionality is currently being fleshed out. Updates for the rest of the documentation for changes from itk.js to itk-wasm is in progress. Last updated January 13th, 2023.*
+*Note: itk-wasm is currently in the beta development stage. The interface is relatively stable while functionality is currently being fleshed out. Updates for the rest of the documentation for changes from itk.js to itk-wasm is in progress. Last updated May 14th, 2023.*
 
 **itk-wasm** is a major upgrade with a focus on universal, performant computing in WebAssembly. The itk.js to itk-wasm transition also brings improvements, including modern, elegant programming interfaces, accelerated performance, and execution beyond JavaScript thanks to [WASI](https://wasi.dev).
 
@@ -53,8 +53,15 @@ The version of these packages follow the `itk-wasm` package version and should b
 
 1. `itk-image-io`
 2. `itk-mesh-io`
+3. `@itk-wasm/dicom`
 
 An example that vendors these package's webassembly assets into an application for deployment can be found in the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Webpack).
+
+### DICOM image IO functions
+
+The following DICOM image IO functions have been migrated to the `@itk-wasm/dicom` package. Their interface has changed in some cases.
+
+1. `readImageLocalDICOMFileSeries` -> `readImageDicomFileSeriesNode`
 
 ## itkConfig.js content and usage
 

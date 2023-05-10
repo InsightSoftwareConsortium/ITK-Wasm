@@ -22,28 +22,36 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Render DICOM SR file and data set to HTML/XHTML
  *
- * @param {BinaryFile} dicomFile - Input DICOM file
+ * @param {File | BinaryFile} dicomFile - Input DICOM file
+ * @param {StructuredReportToHtmlOptions} options - options object
  *
  * @returns {Promise<StructuredReportToHtmlResult>} - result object
  */
 async function structuredReportToHtml(
   webWorker: null | Worker,
-  dicomFile: BinaryFile,
+  dicomFile: File | BinaryFile,
   options: StructuredReportToHtmlOptions = {}
 ) : Promise<StructuredReportToHtmlResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
+  let dicomFileFile = dicomFile
+  if (dicomFile instanceof File) {
+    const dicomFileBuffer = await dicomFile.arrayBuffer()
+    dicomFileFile = { path: dicomFile.name, data: new Uint8Array(dicomFileBuffer) }
+  }
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: dicomFile },
+    { type: InterfaceTypes.BinaryFile, data: dicomFileFile as BinaryFile },
   ]
 
   const args = []
   // Inputs
-  args.push(dicomFile.path)
+  const dicomFileName = dicomFile instanceof File ? dicomFile.name : dicomFile.path
+  args.push(dicomFileName as string)
   // Outputs
-  args.push('0')
+  const outputTextName = '0'
+  args.push(outputTextName)
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {
@@ -121,8 +129,16 @@ async function structuredReportToHtml(
     args.push('--css-reference', inputCountString)
   }
   if (typeof options.cssFile !== "undefined") {
-    inputs.push({ type: InterfaceTypes.TextFile, data: options.cssFile as TextFile })
-    args.push('--css-file', options.cssFile.path)
+    const cssFile = options.cssFile
+    let cssFileFile = cssFile
+    if (cssFile instanceof File) {
+      const cssFileBuffer = await cssFile.arrayBuffer()
+      cssFileFile = { path: cssFile.name, data: new TextDecoder().decode(cssFileBuffer) }
+    }
+    args.push('--css-file')
+    inputs.push({ type: InterfaceTypes.TextFile, data: cssFileFile as TextFile })
+    const name = cssFile instanceof File ? cssFile.name : (cssFile as TextFile).path
+    args.push(name)
   }
   if (typeof options.expandInline !== "undefined") {
     args.push('--expand-inline')

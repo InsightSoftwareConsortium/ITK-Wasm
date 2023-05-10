@@ -21,28 +21,36 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Read a DICOM structured report file and generate a plain text representation
  *
- * @param {BinaryFile} dicomFile - Input DICOM file
+ * @param {File | BinaryFile} dicomFile - Input DICOM file
+ * @param {StructuredReportToTextOptions} options - options object
  *
  * @returns {Promise<StructuredReportToTextResult>} - result object
  */
 async function structuredReportToText(
   webWorker: null | Worker,
-  dicomFile: BinaryFile,
+  dicomFile: File | BinaryFile,
   options: StructuredReportToTextOptions = {}
 ) : Promise<StructuredReportToTextResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
+  let dicomFileFile = dicomFile
+  if (dicomFile instanceof File) {
+    const dicomFileBuffer = await dicomFile.arrayBuffer()
+    dicomFileFile = { path: dicomFile.name, data: new Uint8Array(dicomFileBuffer) }
+  }
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: dicomFile },
+    { type: InterfaceTypes.BinaryFile, data: dicomFileFile as BinaryFile },
   ]
 
   const args = []
   // Inputs
-  args.push(dicomFile.path)
+  const dicomFileName = dicomFile instanceof File ? dicomFile.name : dicomFile.path
+  args.push(dicomFileName as string)
   // Outputs
-  args.push('0')
+  const outputTextName = '0'
+  args.push(outputTextName)
   // Options
   args.push('--memory-io')
   if (typeof options.unknownRelationship !== "undefined") {

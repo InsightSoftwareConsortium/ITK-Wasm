@@ -1,7 +1,6 @@
 // Generated file. Do not edit.
 
 import {
-  BinaryFile,
   JsonObject,
   Image,
   InterfaceTypes,
@@ -19,33 +18,40 @@ import path from 'path'
 /**
  * Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.
  *
- * @param {BinaryFile} imageIn - Input DICOM file
- * @param {BinaryFile} presentationStateFile - Process using presentation state file
+ * @param {string} imageIn - Input DICOM file
+ * @param {string} presentationStateFile - Process using presentation state file
+ * @param {ApplyPresentationStateToImageOptions} options - options object
  *
  * @returns {Promise<ApplyPresentationStateToImageNodeResult>} - result object
  */
 async function applyPresentationStateToImageNode(
-  imageIn: BinaryFile,
-  presentationStateFile: BinaryFile,
+  imageIn: string,
+  presentationStateFile: string,
   options: ApplyPresentationStateToImageOptions = {}
 ) : Promise<ApplyPresentationStateToImageNodeResult> {
+
+  const mountDirs: Set<string> = new Set()
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonObject },
     { type: InterfaceTypes.Image },
   ]
+  mountDirs.add(path.dirname(imageIn as string))
+  mountDirs.add(path.dirname(presentationStateFile as string))
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: imageIn },
-    { type: InterfaceTypes.BinaryFile, data: presentationStateFile },
   ]
 
   const args = []
   // Inputs
-  args.push(imageIn.path)
-  args.push(presentationStateFile.path)
+  const imageInName = imageIn
+  args.push(imageInName as string)
+  const presentationStateFileName = presentationStateFile
+  args.push(presentationStateFileName as string)
   // Outputs
-  args.push('0')
-  args.push('1')
+  const presentationStateOutStreamName = '0'
+  args.push(presentationStateOutStreamName)
+  const outputImageName = '1'
+  args.push(outputImageName)
   // Options
   args.push('--memory-io')
   if (typeof options.colorOutput !== "undefined") {
@@ -70,7 +76,7 @@ async function applyPresentationStateToImageNode(
     returnValue,
     stderr,
     outputs
-  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
+  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
   if (returnValue !== 0) {
     throw new Error(stderr)
   }
