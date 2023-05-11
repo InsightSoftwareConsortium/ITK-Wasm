@@ -1,5 +1,18 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.107](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.106...itk-wasm-v1.0.0-b.107) (2023-05-11)
+
+
+### Bug Fixes
+
+* **bindgen:** Remove extra brace with multiple input files ([78b0445](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/78b044595558c38bf7404c6ef8bfef23e429992f))
+* **package:** add types entry to exports ([55ab443](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/55ab443e1945e2872f5ee04732f46db735a50889))
+
+
+### Features
+
+* **Pipeline:** Support JsonObject input/output types ([6d36ecd](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/6d36ecdda9604b3cb0e0809f51b2e12e54838b64))
+
 # [1.0.0-b.106](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.105...itk-wasm-v1.0.0-b.106) (2023-05-07)
 
 
