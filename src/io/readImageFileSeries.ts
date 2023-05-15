@@ -3,8 +3,6 @@ import readImageArrayBuffer from './readImageArrayBuffer.js'
 import WorkerPool from '../core/WorkerPool.js'
 import castImage from '../core/castImage.js'
 
-import { readAsArrayBuffer } from 'promise-file-reader'
-
 import ReadImageFileSeriesResult from './ReadImageFileSeriesResult.js'
 import ReadImageFileSeriesOptions from './ReadImageFileSeriesOptions.js'
 
@@ -42,7 +40,7 @@ async function readImageFileSeries (
     }
   }
   const fetchFileDescriptions = Array.from(fileList, async function (file) {
-    return await readAsArrayBuffer(file).then(function (
+    return await file.arrayBuffer().then(function (
       arrayBuffer
     ) {
       const fileDescription = {

@@ -1,10 +1,8 @@
-import { readAsArrayBuffer } from 'promise-file-reader'
-
 import ReadDICOMTagsResult from './ReadDICOMTagsResult.js'
 import readDICOMTagsArrayBuffer from './readDICOMTagsArrayBuffer.js'
 
 async function readDICOMTags (webWorker: Worker | null, file: File, tags: string[] | null = null): Promise<ReadDICOMTagsResult> {
-  const arrayBuffer = await readAsArrayBuffer(file)
+  const arrayBuffer = await file.arrayBuffer()
   return await readDICOMTagsArrayBuffer(webWorker, arrayBuffer, tags)
 }
 

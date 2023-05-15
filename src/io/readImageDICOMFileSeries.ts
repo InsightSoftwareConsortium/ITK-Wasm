@@ -1,5 +1,3 @@
-import { readAsArrayBuffer } from 'promise-file-reader'
-
 import ReadImageFileSeriesResult from './ReadImageFileSeriesResult.js'
 import readImageDICOMArrayBufferSeries from './readImageDICOMArrayBufferSeries.js'
 import ReadImageDICOMFileSeriesOptions from './ReadImageDICOMFileSeriesOptions.js'
@@ -10,7 +8,7 @@ const readImageDICOMFileSeries = async (
   options?: ReadImageDICOMFileSeriesOptions | boolean
 ): Promise<ReadImageFileSeriesResult> => {
   const fetchFileContents = Array.from(fileList, async function (file) {
-    return await readAsArrayBuffer(file)
+    return await file.arrayBuffer()
   })
   const fileContents: ArrayBuffer[] = await Promise.all(fetchFileContents)
 

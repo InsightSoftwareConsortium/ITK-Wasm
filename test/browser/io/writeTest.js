@@ -1,6 +1,5 @@
 import test from 'tape'
 import axios from 'axios'
-import PromiseFileReader from 'promise-file-reader'
 
 import { IntTypes, FloatTypes, PixelTypes, getMatrixElement, readImageArrayBuffer, readMeshArrayBuffer, writeArrayBuffer } from 'browser/index.js'
 
@@ -50,7 +49,7 @@ const verifyMesh = (t, mesh) => {
 
 export default function () {
   test('writeArrayBuffer writes an image to an ArrayBuffer', (t) => {
-    return PromiseFileReader.readAsArrayBuffer(cthead1SmallFileWriteTest)
+    return cthead1SmallFileWriteTest.arrayBuffer()
       .then((arrayBuffer) => {
         return readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png').then(function ({ image, webWorker }) {
           webWorker.terminate()
