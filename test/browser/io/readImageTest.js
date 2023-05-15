@@ -1,5 +1,4 @@
 import test from 'tape'
-import PromiseFileReader from 'promise-file-reader'
 
 import { IntTypes, PixelTypes, getMatrixElement, readImageArrayBuffer, readImageBlob, readImageFile, readImageHTTP } from 'browser/index.js'
 
@@ -35,7 +34,7 @@ function verifyImage (t, image, componentType, pixelType) {
 
 export default function () {
   test('readImageArrayBuffer reads an ArrayBuffer', async (t) => {
-    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    const arrayBuffer = await cthead1SmallFile.arrayBuffer()
     const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
     webWorker.terminate()
     const componentType = IntTypes.UInt8
@@ -44,7 +43,7 @@ export default function () {
   })
 
   test('readImageArrayBuffer casts to the specified componentType', async (t) => {
-    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    const arrayBuffer = await cthead1SmallFile.arrayBuffer()
     const componentType = IntTypes.UInt16
     const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png', { componentType })
     webWorker.terminate()
@@ -53,7 +52,7 @@ export default function () {
   })
 
   test('readImageArrayBuffer casts to the specified pixelType', async (t) => {
-    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    const arrayBuffer = await cthead1SmallFile.arrayBuffer()
     const componentType = IntTypes.UInt16
     const pixelType = PixelTypes.Vector
     const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png', { componentType, pixelType })

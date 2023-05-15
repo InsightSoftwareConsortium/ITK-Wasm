@@ -1,5 +1,4 @@
 import test from 'tape'
-import PromiseFileReader from 'promise-file-reader'
 
 import { IntTypes, PixelTypes, getMatrixElement, readImageArrayBuffer, writeImageArrayBuffer } from 'browser/index.js'
 
@@ -43,7 +42,7 @@ const verifyImage = (t, image, expectedComponentType, expectedPixelType) => {
 
 export default function () {
   test('writeImageArrayBuffer writes to an ArrayBuffer', async (t) => {
-    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    const arrayBuffer = await cthead1SmallFile.arrayBuffer()
     const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
     const useCompression = false
     const { arrayBuffer: writtenArrayBuffer } = await writeImageArrayBuffer(null, image, 'cthead1Small.png', { useCompression })
@@ -53,7 +52,7 @@ export default function () {
   })
 
   test('writeImageArrayBuffer writes to an ArrayBuffer, given componentType, pixelType', async (t) => {
-    const arrayBuffer = await PromiseFileReader.readAsArrayBuffer(cthead1SmallFile)
+    const arrayBuffer = await cthead1SmallFile.arrayBuffer()
     const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
     const useCompression = false
     const componentType = IntTypes.UInt16
