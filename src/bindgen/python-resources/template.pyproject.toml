@@ -42,6 +42,9 @@ dependencies = [
   "pytest",@bindgenHatchEnvDependencies@
 ]
 
+[project.urls]
+Home = "@bindgenProjectRepository@"
+Source = "@bindgenProjectRepository@"
 @bindgenHatchEnvScripts@
 
 [tool.hatch.build]
