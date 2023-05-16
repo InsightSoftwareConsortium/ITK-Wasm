@@ -35,6 +35,11 @@ dependencies = [
     "itkwasm >= 1.0.b97",
 ]
 
+[project.urls]
+Home = "https://itk-wasm-compress-stringify-python-docs.on.fleek.co"
+Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
+Issues = "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
+
 [tool.hatch.version]
 path = "itkwasm_compress_stringify_emscripten/_version.py"
 

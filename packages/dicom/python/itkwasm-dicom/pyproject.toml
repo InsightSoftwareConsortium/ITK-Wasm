@@ -39,6 +39,11 @@ dependencies = [
 
 ]
 
+[project.urls]
+Home = "https://itk-wasm-dicom-python-docs.on.fleek.co"
+Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
+Issues = "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
+
 [tool.hatch.version]
 path = "itkwasm_dicom/_version.py"
 

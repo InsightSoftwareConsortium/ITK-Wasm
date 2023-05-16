@@ -44,6 +44,10 @@ dependencies = [
   "pytest-pyodide",
 ]
 
+[project.urls]
+Home = "https://itk-wasm-dicom-python-docs.on.fleek.co"
+Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
+Issues = "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
 
 [tool.hatch.envs.default.scripts]
 test = [
