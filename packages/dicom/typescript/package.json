@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/dicom",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Read files and images related to DICOM file format.",
   "type": "module",
   "module": "./dist/bundles/dicom.js",
