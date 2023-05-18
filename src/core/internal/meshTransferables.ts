@@ -1,18 +1,31 @@
 import Mesh from '../Mesh.js'
+import getTransferable from '../getTransferable.js'
 
 function meshTransferables (mesh: Mesh): ArrayBuffer[] {
   const transferables: ArrayBuffer[] = []
   if (mesh.points != null) {
-    transferables.push(mesh.points.buffer)
+    let transferable = getTransferable(mesh.points)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
   if (mesh.pointData != null) {
-    transferables.push(mesh.pointData.buffer)
+    let transferable = getTransferable(mesh.pointData)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
   if (mesh.cells != null) {
-    transferables.push(mesh.cells.buffer)
+    let transferable = getTransferable(mesh.cells)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
   if (mesh.cellData != null) {
-    transferables.push(mesh.cellData.buffer)
+    let transferable = getTransferable(mesh.cellData)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
 
   return transferables

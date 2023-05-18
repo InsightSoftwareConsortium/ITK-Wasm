@@ -1,27 +1,49 @@
 import PolyData from '../PolyData.js'
+import getTransferable from '../getTransferable.js'
 
 function polyDataTransferables (polyData: PolyData): ArrayBuffer[] {
   const transferables: ArrayBuffer[] = []
   if (polyData.points != null) {
-    transferables.push(polyData.points.buffer)
+    let transferable = getTransferable(polyData.points)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
   if (polyData.vertices != null) {
-    transferables.push(polyData.vertices.buffer)
+    let transferable = getTransferable(polyData.vertices)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
   if (polyData.lines != null) {
-    transferables.push(polyData.lines.buffer)
+    let transferable = getTransferable(polyData.lines)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
   if (polyData.polygons != null) {
-    transferables.push(polyData.polygons.buffer)
+    let transferable = getTransferable(polyData.polygons)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
   if (polyData.triangleStrips != null) {
-    transferables.push(polyData.triangleStrips.buffer)
+    let transferable = getTransferable(polyData.triangleStrips)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
   if (polyData.pointData != null) {
-    transferables.push(polyData.pointData.buffer)
+    let transferable = getTransferable(polyData.pointData)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
   if (polyData.cellData != null) {
-    transferables.push(polyData.cellData.buffer)
+    let transferable = getTransferable(polyData.cellData)
+    if (transferable != null) {
+      transferables.push(transferable)
+    }
   }
 
   return transferables
