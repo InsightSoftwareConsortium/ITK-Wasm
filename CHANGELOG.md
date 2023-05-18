@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.109](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.108...itk-wasm-v1.0.0-b.109) (2023-05-18)
+
+
+### Bug Fixes
+
+* **PolyDataOutput and MeshOutput:** check SharedArrayBuffer ([40f5736](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/40f57368392ba667932d1dc4812569bcb163080f))
+
 # [1.0.0-b.108](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.107...itk-wasm-v1.0.0-b.108) (2023-05-16)
 
 
