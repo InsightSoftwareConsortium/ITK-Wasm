@@ -93,15 +93,13 @@ async def structured_report_to_html_async(
     :param unknown_relationship: accept unknown/missing relationship type
     :type  unknown_relationship: bool
 
-    :param invalid_item_value: accept invalid content item value
-(e.g. violation of VR or VM definition)
+    :param invalid_item_value: accept invalid content item value (e.g. violation of VR or VM definition)
     :type  invalid_item_value: bool
 
     :param ignore_constraints: ignore relationship content constraints
     :type  ignore_constraints: bool
 
-    :param ignore_item_errors: do not abort on content item errors, just warn
-(e.g. missing value type specific attributes)
+    :param ignore_item_errors: do not abort on content item errors, just warn (e.g. missing value type specific attributes)
     :type  ignore_item_errors: bool
 
     :param skip_invalid_items: skip invalid content items (incl. sub-tree)
@@ -116,12 +114,10 @@ async def structured_report_to_html_async(
     :param charset_assume: [c]harset: string, assume charset c if no extended charset declared
     :type  charset_assume: str
 
-    :param charset_check_all: check all data elements with string values
-(default: only PN, LO, LT, SH, ST, UC and UT)
+    :param charset_check_all: check all data elements with string values (default: only PN, LO, LT, SH, ST, UC and UT)
     :type  charset_check_all: bool
 
-    :param convert_to_utf8: convert all element values that are affected
-by Specific Character Set (0008,0005) to UTF-8
+    :param convert_to_utf8: convert all element values that are affected by Specific Character Set (0008,0005) to UTF-8
     :type  convert_to_utf8: bool
 
     :param url_prefix: URL: string. Append specificed URL prefix to hyperlinks of referenced composite objects in the document.

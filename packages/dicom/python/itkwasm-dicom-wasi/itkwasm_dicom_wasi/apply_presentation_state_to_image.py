@@ -2,7 +2,7 @@
 
 from pathlib import Path, PurePosixPath
 import os
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, List
 
 from importlib_resources import files as file_resources
 
