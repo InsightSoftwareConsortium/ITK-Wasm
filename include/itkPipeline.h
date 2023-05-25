@@ -63,6 +63,8 @@
 
 // Parse options while allowing extra flags, not exiting with help flags, and clearning parse state after finished.
 // Use this to parse some positionals or options before all options have been added.
+// WARNING: It is best to only add the pre-parse options and read them through ITK_WASM_PRE_PARSE before adding other options,
+// as you may face issues(EXCEPTIONS) generating bindings (bindgen), if you add "required" options/flags before the PRE_PARSE.
 #define ITK_WASM_PRE_PARSE(pipeline) \
     try { \
         (pipeline).set_help_flag(); \

@@ -20,7 +20,7 @@ import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 /**
- * Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.
+ * Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.
  *
  * @param {BinaryFile} imageIn - Input DICOM file
  * @param {BinaryFile} presentationStateFile - Process using presentation state file
@@ -52,6 +52,9 @@ async function applyPresentationStateToImage(
   args.push('1')
   // Options
   args.push('--memory-io')
+  if (typeof options.colorOutput !== "undefined") {
+    args.push('--color-output')
+  }
   if (typeof options.configFile !== "undefined") {
     args.push('--config-file', options.configFile.toString())
   }

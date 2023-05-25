@@ -1,4 +1,7 @@
 interface ApplyPresentationStateToImageOptions {
+  /** output image as RGB (default: false) */
+  colorOutput?: boolean
+
   /** filename: string. Process using settings from configuration file */
   configFile?: string
 

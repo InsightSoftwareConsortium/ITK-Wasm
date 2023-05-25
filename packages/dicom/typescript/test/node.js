@@ -11,10 +11,13 @@ import {
     return (a.length === b.length && a.every((val, idx) => val === b[idx]))
   }
 
+const testPathPrefix = '../test/data/input/';
+const baselinePathPrefix = '../test/data/baseline/';
+
 test('structuredReportToText', async t => {
 
   const fileName = '88.33-comprehensive-SR.dcm'
-  const testFilePath = `../test/data/input/${fileName}`
+  const testFilePath = testPathPrefix + fileName
 
   const dicomFileBuffer = fs.readFileSync(testFilePath)
   const dicomFile = new Uint8Array(dicomFileBuffer)
@@ -31,7 +34,7 @@ test('structuredReportToText', async t => {
 test('structuredReportToHtml', async t => {
 
   const fileName = '88.33-comprehensive-SR.dcm'
-  const testFilePath = `../test/data/input/${fileName}`
+  const testFilePath = testPathPrefix + fileName
 
   const dicomFileBuffer = fs.readFileSync(testFilePath)
   const dicomFile = new Uint8Array(dicomFileBuffer)
@@ -57,7 +60,7 @@ test('structuredReportToHtml', async t => {
 test('read Radiation Dose SR', async t => {
 
   const fileName = '88.67-radiation-dose-SR.dcm'
-  const testFilePath = `../test/data/input/${fileName}`
+  const testFilePath = testPathPrefix + fileName
 
   const dicomFileBuffer = fs.readFileSync(testFilePath)
   const dicomFile = new Uint8Array(dicomFileBuffer)
@@ -71,7 +74,7 @@ test('read Radiation Dose SR', async t => {
 test('readDicomEncapsulatedPdfNode', async t => {
 
   const fileName = '104.1-SR-printed-to-pdf.dcm'
-  const testFilePath = `../test/data/input/${fileName}`
+  const testFilePath = testPathPrefix + fileName
   const dicomFileBuffer = fs.readFileSync(testFilePath)
   const dicomFile = new Uint8Array(dicomFileBuffer)
   const { pdfBinaryOutput: outputBinaryStream } = await readDicomEncapsulatedPdfNode({ data: dicomFile, path: fileName })
@@ -82,7 +85,7 @@ test('readDicomEncapsulatedPdfNode', async t => {
 test('read Key Object Selection SR', async t => {
 
   const fileName = '88.59-KeyObjectSelection-SR.dcm'
-  const testFilePath = `../test/data/input/${fileName}`
+  const testFilePath = testPathPrefix + fileName
   const dicomFileBuffer = fs.readFileSync(testFilePath)
   const dicomFile = new Uint8Array(dicomFileBuffer)
 
@@ -98,7 +101,7 @@ test('read Key Object Selection SR', async t => {
   t.assert(outputText.includes(`<link rel="stylesheet" type="text/css" href="https://css-host/dir/subdir/my-first-style.css">`))
 
   const cssfileName = 'test-style.css'
-  const testCssFilePath = `../test/data/input/${cssfileName}`
+  const testCssFilePath = testPathPrefix + cssfileName
   const cssFileBuffer = fs.readFileSync(testCssFilePath)
 
   const { outputText: outputWithCSSFile } = await structuredReportToHtmlNode(
@@ -116,17 +119,21 @@ test('Apply presentation state to dicom image.', async t => {
 
   // Read the input image file
   const inputFile = 'gsps-pstate-test-input-image.dcm'
-  const inputFilePath = `../test/data/input/${inputFile}`
+  const inputFilePath = testPathPrefix + inputFile
   const dicomFileBuffer = fs.readFileSync(inputFilePath)
   const inputImage = new Uint8Array(dicomFileBuffer)
 
   // Read the presentation state file (that references the above image internally using its SOPInstanceUID).
   const pstateFile = 'gsps-pstate-test-input-pstate.dcm'
-  const pstateFilePath = `../test/data/input/${pstateFile}`
+  const pstateFilePath = testPathPrefix + pstateFile
   const pstateFileBuffer = fs.readFileSync(pstateFilePath)
   const inputPState = new Uint8Array(pstateFileBuffer)
 
-  const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode({ data: inputImage, path: inputFile }, { data: inputPState, path: pstateFile })
+  const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode(
+    { data: inputImage, path: inputFile },
+    { data: inputPState, path: pstateFile }
+  )
+
 
   t.assert(pstateJsonOut != null)
   t.assert(outputImage != null)
@@ -142,21 +149,73 @@ test('Apply presentation state to dicom image.', async t => {
   t.assert(arrayEquals(outputImage.size, [512, 512]))
 
   const baselineJsonFile = 'gsps-pstate-baseline.json'
-  const baselineJsonFilePath = `../test/data/baseline/${baselineJsonFile}`
+  const baselineJsonFilePath = baselinePathPrefix + baselineJsonFile
   const baselineJsonFileBuffer = fs.readFileSync(baselineJsonFilePath)
   // the slice operation removes the last EOF char from the baseline file.
   const baselineJsonString = baselineJsonFileBuffer.toString().slice(0, -1)
   const baselineJsonObject = JSON.parse(baselineJsonString)
+
   t.assert(baselineJsonObject.PresentationLabel === pstateJsonOut.PresentationLabel)
   t.assert(baselineJsonObject.PresentationSizeMode === pstateJsonOut.PresentationSizeMode)
   t.assert(baselineJsonObject.toString() === pstateJsonOut.toString())
 
   const baselineImage = 'gsps-pstate-image-baseline.pgm'
-  const baselineImageFilePath = `../test/data/baseline/${baselineImage}`
+  const baselineImageFilePath = baselinePathPrefix + baselineImage
   const baselineImageFileBuffer = fs.readFileSync(baselineImageFilePath)
   // slice to get only the pixel buffer from the baseline image (pgm file)
   const baselinePixels = baselineImageFileBuffer.slice(15)
   t.assert(baselinePixels.length === outputImage.data.length)
   t.assert(Buffer.compare(baselinePixels, outputImage.data) === 0)
 
+})
+
+test('Apply color presentation state (CSPS) to a color dicom image.', async t => {
+
+  // Read the input image file
+  const inputFile = 'csps-input-image.dcm'
+  const inputFilePath = testPathPrefix + inputFile
+  const dicomFileBuffer = fs.readFileSync(inputFilePath)
+  const inputImage = new Uint8Array(dicomFileBuffer)
+
+  // Read the presentation state file (that references the above image internally using its SOPInstanceUID).
+  const pstateFile = 'csps-input-pstate.dcm'
+  const pstateFilePath = testPathPrefix + pstateFile
+  const pstateFileBuffer = fs.readFileSync(pstateFilePath)
+  const inputPState = new Uint8Array(pstateFileBuffer)
+
+  const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode(
+    { data: inputImage, path: inputFile }, { data: inputPState, path: pstateFile },
+    { frame: 1, colorOutput: true }
+  )
+
+  t.assert(pstateJsonOut != null)
+  t.assert(outputImage != null)
+  t.assert(outputImage.imageType.dimension === 2)
+  t.assert(outputImage.imageType.componentType === 'uint8')
+  t.assert(outputImage.imageType.pixelType === 'RGB')
+  t.assert(outputImage.imageType.components === 3)
+
+  t.assert(arrayEquals(outputImage.origin, [0, 0]))
+  t.assert(arrayEquals(outputImage.spacing, [0.683, 0.683]))
+  t.assert(arrayEquals(outputImage.direction, [1, 0, 0, 1]))
+  t.assert(arrayEquals(outputImage.size, [768, 1024]))
+
+  const baselineJsonFile = 'csps-pstate-baseline.json'
+  const baselineJsonFilePath = baselinePathPrefix + baselineJsonFile
+  const baselineJsonFileBuffer = fs.readFileSync(baselineJsonFilePath)
+  // the slice operation removes the last EOF char from the baseline file.
+  const baselineJsonString = baselineJsonFileBuffer.toString().slice(0, -1)
+  const baselineJsonObject = JSON.parse(baselineJsonString)
+
+  t.assert(baselineJsonObject.PresentationLabel === pstateJsonOut.PresentationLabel)
+  t.assert(baselineJsonObject.PresentationSizeMode === pstateJsonOut.PresentationSizeMode)
+  t.assert(baselineJsonObject.toString() === pstateJsonOut.toString())
+
+  const baselineImage = 'csps-output-image-baseline.bmp'
+  const baselineImageFilePath = baselinePathPrefix + baselineImage
+  const baselineImageFileBuffer = fs.readFileSync(baselineImageFilePath)
+  // Slice to get only the pixel buffer from the baseline image (BMP file has 54 bytes of header data before pixel buffer begins).
+  const baselinePixels = baselineImageFileBuffer.slice(54)
+  t.assert(baselinePixels.length === outputImage.data.length)
+  t.assert(Buffer.compare(baselinePixels, outputImage.data) === 0)
 })
