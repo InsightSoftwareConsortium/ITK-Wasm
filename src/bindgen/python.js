@@ -309,11 +309,13 @@ from itkwasm import (
     if (interfaceJsonTypeToInterfaceType.has(input.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
       switch (interfaceType) {
-        case "TextStream":
-        case "BinaryStream":
         case "TextFile":
         case "BinaryFile":
           pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(PurePosixPath(${snakeCase(input.name)}))),\n`
+          break
+        case "TextStream":
+        case "BinaryStream":
+          pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(${snakeCase(input.name)})),\n`
           break
         default:
           pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${snakeCase(input.name)}),\n`

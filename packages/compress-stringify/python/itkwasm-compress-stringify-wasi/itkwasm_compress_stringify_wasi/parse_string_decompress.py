@@ -1,8 +1,8 @@
 # Generated file. Do not edit.
 
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import os
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, List
 
 from importlib_resources import files as file_resources
 
@@ -36,7 +36,7 @@ def parse_string_decompress(
     ]
 
     pipeline_inputs: List[PipelineInput] = [
-        PipelineInput(InterfaceTypes.BinaryStream, BinaryStream(input)),
+        PipelineInput(InterfaceTypes.BinaryStream, BinaryStream(PurePosixPath(input))),
     ]
 
     args: List[str] = ['--memory-io',]
