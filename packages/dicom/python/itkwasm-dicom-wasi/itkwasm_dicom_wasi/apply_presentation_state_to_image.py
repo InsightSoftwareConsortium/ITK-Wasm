@@ -63,7 +63,11 @@ def apply_presentation_state_to_image(
 
     args: List[str] = ['--memory-io',]
     # Inputs
+    if not Path(image_in).exists():
+        raise FileNotFoundError("image_in does not exist")
     args.append(str(PurePosixPath(image_in)))
+    if not Path(presentation_state_file).exists():
+        raise FileNotFoundError("presentation_state_file does not exist")
     args.append(str(PurePosixPath(presentation_state_file)))
     # Outputs
     args.append('0')

@@ -1,7 +1,7 @@
 # Generated file. Do not edit.
 
 import os
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, List
 
 from itkwasm import (
     environment_dispatch,
