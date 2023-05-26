@@ -20,18 +20,22 @@ from itkwasm import (
 async def apply_presentation_state_to_image_async(
     image_in: os.PathLike,
     presentation_state_file: os.PathLike,
+    color_output: bool = False,
     config_file: str = "",
     frame: int = 1,
     no_presentation_state_output: bool = False,
     no_bitmap_output: bool = False,
 ) -> Tuple[Dict, Image]:
-    """Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.
+    """Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.
 
     :param image_in: Input DICOM file
     :type  image_in: os.PathLike
 
     :param presentation_state_file: Process using presentation state file
     :type  presentation_state_file: os.PathLike
+
+    :param color_output: output image as RGB (default: false)
+    :type  color_output: bool
 
     :param config_file: filename: string. Process using settings from configuration file
     :type  config_file: str
@@ -55,6 +59,8 @@ async def apply_presentation_state_to_image_async(
     web_worker = js_resources.web_worker
 
     kwargs = {}
+    if color_output:
+        kwargs["colorOutput"] = to_js(color_output)
     if config_file:
         kwargs["configFile"] = to_js(config_file)
     if frame:
