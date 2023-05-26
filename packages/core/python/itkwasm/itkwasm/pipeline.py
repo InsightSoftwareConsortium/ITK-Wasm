@@ -32,6 +32,8 @@ class Pipeline:
         """Compile the pipeline."""
         self.config = Config()
         self.config.wasm_bulk_memory = True
+        self.config.wasm_simd = True
+        self.config.wasm_memory64 = True
         self.engine = Engine(self.config)
         if isinstance(pipeline, bytes):
             wasm_bytes = pipeline
