@@ -6,6 +6,8 @@ from typing import Dict, Tuple, Optional, List
 
 from importlib_resources import files as file_resources
 
+_pipeline = None
+
 from itkwasm import (
     InterfaceTypes,
     PipelineOutput,
@@ -29,7 +31,9 @@ def parse_string_decompress(
     :return: Output decompressed binary
     :rtype:  bytes
     """
-    pipeline = Pipeline(file_resources('itkwasm_compress_stringify_wasi').joinpath(Path('wasm_modules') / Path('parse-string-decompress.wasi.wasm')))
+    global _pipeline
+    if _pipeline is None:
+        _pipeline = Pipeline(file_resources('itkwasm_compress_stringify_wasi').joinpath(Path('wasm_modules') / Path('parse-string-decompress.wasi.wasm')))
 
     pipeline_outputs: List[PipelineOutput] = [
         PipelineOutput(InterfaceTypes.BinaryStream),
@@ -49,9 +53,7 @@ def parse_string_decompress(
         args.append('--parse-string')
 
 
-    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
-
-    del pipeline
+    outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
     result = outputs[0].data.data
     return result

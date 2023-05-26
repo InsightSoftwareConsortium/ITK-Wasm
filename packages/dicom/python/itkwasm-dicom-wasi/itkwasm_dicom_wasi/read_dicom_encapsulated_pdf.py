@@ -6,6 +6,8 @@ from typing import Dict, Tuple, Optional, List
 
 from importlib_resources import files as file_resources
 
+_pipeline = None
+
 from itkwasm import (
     InterfaceTypes,
     PipelineOutput,
@@ -86,7 +88,9 @@ def read_dicom_encapsulated_pdf(
     :return: Output pdf file
     :rtype:  bytes
     """
-    pipeline = Pipeline(file_resources('itkwasm_dicom_wasi').joinpath(Path('wasm_modules') / Path('read-dicom-encapsulated-pdf.wasi.wasm')))
+    global _pipeline
+    if _pipeline is None:
+        _pipeline = Pipeline(file_resources('itkwasm_dicom_wasi').joinpath(Path('wasm_modules') / Path('read-dicom-encapsulated-pdf.wasi.wasm')))
 
     pipeline_outputs: List[PipelineOutput] = [
         PipelineOutput(InterfaceTypes.BinaryStream),
@@ -148,9 +152,7 @@ def read_dicom_encapsulated_pdf(
         args.append('--disable-correction')
 
 
-    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
-
-    del pipeline
+    outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
     result = outputs[0].data.data
     return result

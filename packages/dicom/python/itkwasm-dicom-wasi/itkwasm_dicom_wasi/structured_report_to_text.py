@@ -6,6 +6,8 @@ from typing import Dict, Tuple, Optional, List
 
 from importlib_resources import files as file_resources
 
+_pipeline = None
+
 from itkwasm import (
     InterfaceTypes,
     PipelineOutput,
@@ -94,7 +96,9 @@ def structured_report_to_text(
     :return: Output text file
     :rtype:  str
     """
-    pipeline = Pipeline(file_resources('itkwasm_dicom_wasi').joinpath(Path('wasm_modules') / Path('structured-report-to-text.wasi.wasm')))
+    global _pipeline
+    if _pipeline is None:
+        _pipeline = Pipeline(file_resources('itkwasm_dicom_wasi').joinpath(Path('wasm_modules') / Path('structured-report-to-text.wasi.wasm')))
 
     pipeline_outputs: List[PipelineOutput] = [
         PipelineOutput(InterfaceTypes.TextStream),
@@ -162,9 +166,7 @@ def structured_report_to_text(
         args.append('--print-color')
 
 
-    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
-
-    del pipeline
+    outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
     result = outputs[0].data.data
     return result
