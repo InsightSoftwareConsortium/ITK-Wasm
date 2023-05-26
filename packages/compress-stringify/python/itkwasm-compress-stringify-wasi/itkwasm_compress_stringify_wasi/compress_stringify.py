@@ -1,10 +1,12 @@
 # Generated file. Do not edit.
 
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import os
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, List
 
 from importlib_resources import files as file_resources
+
+_pipeline = None
 
 from itkwasm import (
     InterfaceTypes,
@@ -37,7 +39,9 @@ def compress_stringify(
     :return: Output compressed binary
     :rtype:  bytes
     """
-    pipeline = Pipeline(file_resources('itkwasm_compress_stringify_wasi').joinpath(Path('wasm_modules') / Path('compress-stringify.wasi.wasm')))
+    global _pipeline
+    if _pipeline is None:
+        _pipeline = Pipeline(file_resources('itkwasm_compress_stringify_wasi').joinpath(Path('wasm_modules') / Path('compress-stringify.wasi.wasm')))
 
     pipeline_outputs: List[PipelineOutput] = [
         PipelineOutput(InterfaceTypes.BinaryStream),
@@ -65,9 +69,7 @@ def compress_stringify(
         args.append(str(data_url_prefix))
 
 
-    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
-
-    del pipeline
+    outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
     result = outputs[0].data.data
     return result

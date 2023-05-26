@@ -278,6 +278,8 @@ from typing import Dict, Tuple, Optional, List
 
 from importlib_resources import files as file_resources
 
+_pipeline = None
+
 from itkwasm import (
     InterfaceTypes,
     PipelineOutput,
@@ -309,11 +311,13 @@ from itkwasm import (
     if (interfaceJsonTypeToInterfaceType.has(input.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
       switch (interfaceType) {
-        case "TextStream":
-        case "BinaryStream":
         case "TextFile":
         case "BinaryFile":
           pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(PurePosixPath(${snakeCase(input.name)}))),\n`
+          break
+        case "TextStream":
+        case "BinaryStream":
+          pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(${snakeCase(input.name)})),\n`
           break
         default:
           pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${snakeCase(input.name)}),\n`
@@ -463,7 +467,9 @@ from itkwasm import (
   moduleContent += `def ${functionName}(
 ${functionArgs}) -> ${returnType}:
     ${docstring}
-    pipeline = Pipeline(file_resources('${pypackage}').joinpath(Path('wasm_modules') / Path('${interfaceJson.name}.wasi.wasm')))
+    global _pipeline
+    if _pipeline is None:
+        _pipeline = Pipeline(file_resources('${pypackage}').joinpath(Path('wasm_modules') / Path('${interfaceJson.name}.wasi.wasm')))
 
     pipeline_outputs: List[PipelineOutput] = [
 ${pipelineOutputs}    ]
@@ -472,9 +478,7 @@ ${pipelineOutputs}    ]
 ${pipelineInputs}    ]
 
 ${args}
-    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
-
-    del pipeline
+    outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
 ${postOutput}
 `
