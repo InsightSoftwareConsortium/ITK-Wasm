@@ -1,5 +1,27 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.111](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.110...itk-wasm-v1.0.0-b.111) (2023-05-26)
+
+
+### Bug Fixes
+
+* **bindgen:** Add List to dispatch function module imports ([7bea0b8](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/7bea0b89a9a99b6132645256be85468ea1f01d1d))
+* **bindgen:** Do not use PurePosixPath with Python Stream's ([fc3df4d](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/fc3df4d7c3329813e008caee06fb204c75246b99))
+
+
+### Features
+
+* **bindgen:** Check that input image files exists in Python/WASI ([866f7a7](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/866f7a766e7764d570201f2f4fb3b349152b5a55))
+* **itk-wasm-cli:** Update default Docker image for 20230526-8ae95dcd ([f4d391c](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f4d391c065316fd57a078f4ee4b57a6ace62f155))
+
+
+### Performance Improvements
+
+* **Python:** Enable wasm_simd, wasm_memory64 for WASI ([3fb6d25](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/3fb6d256eaed75b19f8bc65ef2746e3b059ac9fb))
+* **PythonPackages:** Add SIMD support ([43a937c](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/43a937c2a40c783e3544e0320ef4ef1cbf75232f))
+* **Python:** Re-use WASI pipelines ([8ae95dc](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/8ae95dcd35fd54e31056f758c9e45353e8091763))
+* **WASI:** Enable -msimd128 ([bfee36f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/bfee36f81702e674b8d64a015b1a1864fdfdf098))
+
 # [1.0.0-b.110](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.109...itk-wasm-v1.0.0-b.110) (2023-05-23)
 
 
