@@ -329,14 +329,18 @@ from itkwasm import (
   let inputCount = 0
   args += "    # Inputs\n"
   interfaceJson.inputs.forEach((input) => {
+    const snakeName = snakeCase(input.name)
     if (interfaceJsonTypeToInterfaceType.has(input.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
-      const name = interfaceType.includes('File') ? `str(PurePosixPath(${snakeCase(input.name)}))` : `'${inputCount.toString()}'`
+      if (interfaceType.includes('File')) {
+        args += `    if not Path(${snakeName}).exists():\n`
+        args += `        raise FileNotFoundError("${snakeName} does not exist")\n`
+      }
+      const name = interfaceType.includes('File') ? `str(PurePosixPath(${snakeName}))` : `'${inputCount.toString()}'`
       args += `    args.append(${name})\n`
       inputCount++
     } else {
-      const snake = snakeCase(input.name)
-      args += `    args.append(str(${snake}))\n`
+      args += `    args.append(str(${snakeName}))\n`
     }
   })
 
@@ -615,7 +619,7 @@ function dispatchFunctionModule(interfaceJson, pypackage, modulePath) {
   let moduleContent = `# Generated file. Do not edit.
 
 import os
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, List
 
 from itkwasm import (
     environment_dispatch,`

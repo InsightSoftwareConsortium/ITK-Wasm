@@ -1,4 +1,4 @@
-from pathlib import Path 
+from pathlib import Path
 import numpy as np
 import json
 
@@ -43,3 +43,18 @@ def test_apply_presentation_state_to_dicom_image():
     # slice to get only the pixel buffer from the baseline image (pgm file)
     baseline_pixels = baseline_buffer[15:]
     assert np.array_equal(np.frombuffer(baseline_pixels, dtype=np.uint8), output_image.data.ravel())
+
+def test_apply_presentation_state_to_dicom_image_input_does_not_exist():
+    from itkwasm_dicom_wasi import apply_presentation_state_to_image
+
+    input_file = 'gsps-pstate-test-input-image-does-not-exist.dcm'
+    input_file_path = Path('..', '..', 'test', 'data', 'input', input_file)
+
+    p_state_file = 'gsps-pstate-test-input-pstate.dcm'
+    p_state_file_path = Path('..', '..', 'test', 'data', 'input', p_state_file)
+
+    try:
+        p_state_json_out, output_image = apply_presentation_state_to_image(input_file_path, p_state_file_path)
+        assert False
+    except FileNotFoundError:
+        pass

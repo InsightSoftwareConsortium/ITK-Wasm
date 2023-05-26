@@ -110,6 +110,8 @@ def structured_report_to_text(
 
     args: List[str] = ['--memory-io',]
     # Inputs
+    if not Path(dicom_file).exists():
+        raise FileNotFoundError("dicom_file does not exist")
     args.append(str(PurePosixPath(dicom_file)))
     # Outputs
     args.append('0')
