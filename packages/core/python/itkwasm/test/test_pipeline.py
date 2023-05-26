@@ -18,6 +18,9 @@ def test_stdout_stderr():
     pipeline = Pipeline(test_input_dir / 'stdout-stderr-test.wasi.wasm')
     pipeline.run([])
 
+    # Test re-run
+    pipeline.run([])
+
 def test_pipeline_bytes():
     pipeline_path = test_input_dir / 'stdout-stderr-test.wasi.wasm'
     with open(pipeline_path, 'rb') as fp:
@@ -48,6 +51,9 @@ def test_pipeline_input_output_streams():
 
     outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
+    # Test re-run
+    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
+
     assert outputs[0].type == InterfaceTypes.TextStream
     assert outputs[0].data.data == 'The answer is 42.'
     assert outputs[1].type, InterfaceTypes.BinaryStream
@@ -55,6 +61,7 @@ def test_pipeline_input_output_streams():
     assert outputs[1].data.data[1], 173
     assert outputs[1].data.data[2], 190
     assert outputs[1].data.data[3], 239
+
 
 @pytest.mark.skipif(sys.platform == "win32", reason="Windows tempfile resource, https://github.com/bytecodealliance/wasmtime-py/issues/132")
 def test_pipeline_input_output_files():
@@ -85,6 +92,9 @@ def test_pipeline_input_output_files():
             '--output-binary-file', str(output_binary_file),
         ]
 
+        outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
+
+        # Test re-run
         outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
         assert outputs[0].type == InterfaceTypes.TextFile
