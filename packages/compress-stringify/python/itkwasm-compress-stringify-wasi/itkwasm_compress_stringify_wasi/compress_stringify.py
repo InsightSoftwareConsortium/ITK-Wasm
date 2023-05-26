@@ -44,7 +44,7 @@ def compress_stringify(
     ]
 
     pipeline_inputs: List[PipelineInput] = [
-        PipelineInput(InterfaceTypes.BinaryStream, BinaryStream(PurePosixPath(input))),
+        PipelineInput(InterfaceTypes.BinaryStream, BinaryStream(input)),
     ]
 
     args: List[str] = ['--memory-io',]
