@@ -17,8 +17,12 @@ def input_data():
     from pathlib import Path
     input_base_path = Path('..', '..', 'test', 'data')
     test_files = [
+        Path('input') / 'csps-input-image.dcm',
+        Path('input') / 'csps-input-pstate.dcm',
         Path('input') / 'gsps-pstate-test-input-image.dcm',
         Path('input') / 'gsps-pstate-test-input-pstate.dcm',
+        Path('baseline') / 'csps-pstate-baseline.json',
+        Path('baseline') / 'csps-output-image-baseline.bmp',
         Path('baseline') / 'gsps-pstate-baseline.json',
         Path('baseline') / 'gsps-pstate-image-baseline.pgm',
         Path('input') / '104.1-SR-printed-to-pdf.dcm',

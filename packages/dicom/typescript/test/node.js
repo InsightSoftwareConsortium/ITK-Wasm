@@ -6,6 +6,7 @@ import {
   readDicomEncapsulatedPdfNode,
   applyPresentationStateToImageNode,
 } from '../dist/bundles/dicom-node.js'
+import { readImageLocalFile } from '../../../../dist/index.js'
 
   function arrayEquals(a, b) {
     return (a.length === b.length && a.every((val, idx) => val === b[idx]))
@@ -157,7 +158,7 @@ test('Apply presentation state to dicom image.', async t => {
 
   t.assert(baselineJsonObject.PresentationLabel === pstateJsonOut.PresentationLabel)
   t.assert(baselineJsonObject.PresentationSizeMode === pstateJsonOut.PresentationSizeMode)
-  t.assert(baselineJsonObject.toString() === pstateJsonOut.toString())
+  t.assert(JSON.stringify(baselineJsonObject) === JSON.stringify(pstateJsonOut))
 
   const baselineImage = 'gsps-pstate-image-baseline.pgm'
   const baselineImageFilePath = baselinePathPrefix + baselineImage
@@ -209,13 +210,11 @@ test('Apply color presentation state (CSPS) to a color dicom image.', async t =>
 
   t.assert(baselineJsonObject.PresentationLabel === pstateJsonOut.PresentationLabel)
   t.assert(baselineJsonObject.PresentationSizeMode === pstateJsonOut.PresentationSizeMode)
-  t.assert(baselineJsonObject.toString() === pstateJsonOut.toString())
+  t.assert(JSON.stringify(baselineJsonObject) === JSON.stringify(pstateJsonOut))
 
   const baselineImage = 'csps-output-image-baseline.bmp'
   const baselineImageFilePath = baselinePathPrefix + baselineImage
-  const baselineImageFileBuffer = fs.readFileSync(baselineImageFilePath)
-  // Slice to get only the pixel buffer from the baseline image (BMP file has 54 bytes of header data before pixel buffer begins).
-  const baselinePixels = baselineImageFileBuffer.slice(54)
-  t.assert(baselinePixels.length === outputImage.data.length)
-  t.assert(Buffer.compare(baselinePixels, outputImage.data) === 0)
+  const baselinePixels = await readImageLocalFile(baselineImageFilePath)
+  t.assert(baselinePixels.data.length === outputImage.data.length)
+  t.assert(Buffer.compare(baselinePixels.data, outputImage.data) === 0)
 })

@@ -143,6 +143,7 @@ jobs:
         if: ${{ matrix.python-minor-version < 10 }}
         working-directory: ./packages/dicom/python/itkwasm-dicom-wasi
         run: |
+          python -m pip install pillow
           python -m pip install -e .
           pytest
       - name: Test dicom-emscripten chrome

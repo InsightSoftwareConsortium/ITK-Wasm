@@ -23,6 +23,7 @@ npm run build:testData
 cd -
 
 pip install pytest
+pip install pillow
 pip install -e .
 pytest
 # or
