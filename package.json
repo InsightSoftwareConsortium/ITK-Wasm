@@ -153,7 +153,7 @@
   "dependencies": {
     "@babel/runtime": "^7.15.4",
     "@types/emscripten": "^1.39.6",
-    "axios": "^0.23.0",
+    "axios": "^1.4.0",
     "commander": "^9.4.0",
     "fs-extra": "^10.0.0",
     "glob": "^8.1.0",
