@@ -10,5 +10,13 @@ This package provides the Emscripten WebAssembly implementation. It is usually n
 ## Installation
 
 ```sh
-pip install itkwasm-dicom-emscripten
+import micropip
+await micropip.install('itkwasm-dicom-emscripten')
+```
+
+## Development
+```sh
+pip install hatch
+hatch run download-pyodide
+hatch run test
 ```
