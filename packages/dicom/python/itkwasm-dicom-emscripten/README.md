@@ -15,7 +15,14 @@ await micropip.install('itkwasm-dicom-emscripten')
 ```
 
 ## Development
+
 ```sh
+# Download test data
+cd ../../../..
+npm ci
+npm run build:testData
+cd -
+
 pip install hatch
 hatch run download-pyodide
 hatch run test
