@@ -56,6 +56,18 @@ function wasiPackageReadme(packageName, packageDescription, packageDir) {
 \`\`\`sh
 pip install ${packageName}
 \`\`\`
+
+## Development
+
+\`\`\`sh
+pip install pytest
+pip install -e .
+pytest
+
+# or
+pip install hatch
+hatch run test
+\`\`\`
 `
   const readmePath = path.join(packageDir, 'README.md')
   if (!fs.existsSync(readmePath)) {
@@ -73,7 +85,16 @@ function emscriptenPackageReadme(packageName, packageDescription, packageDir) {
   readme += `\nThis package provides the Emscripten WebAssembly implementation. It is usually not called directly. Please use the [\`${dispatchPackage}\`](https://pypi.org/project/${dispatchPackage}/) instead.\n\n`
   readme += `\n## Installation\n
 \`\`\`sh
-pip install ${packageName}
+import micropip
+await micropip.install('${packageName}')
+\`\`\`
+
+## Development
+
+\`\`\`sh
+pip install hatch
+hatch run download-pyodide
+hatch run test
 \`\`\`
 `
   const readmePath = path.join(packageDir, 'README.md')

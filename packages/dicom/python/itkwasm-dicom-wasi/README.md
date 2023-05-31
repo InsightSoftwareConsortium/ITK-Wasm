@@ -12,3 +12,20 @@ This package provides the WASI WebAssembly implementation. It is usually not cal
 ```sh
 pip install itkwasm-dicom-wasi
 ```
+
+## Development
+
+```sh
+# Download test data
+cd ../../../..
+npm ci
+npm run build:testData
+cd -
+
+pip install pytest
+pip install -e .
+pytest
+# or
+pip install hatch
+hatch run test
+```
