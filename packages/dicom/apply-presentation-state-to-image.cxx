@@ -93,6 +93,7 @@
 #include "dcmtk/dcmdata/cmdlnarg.h"
 #include "dcmtk/ofstd/ofcmdln.h"
 #include "dcmtk/ofstd/ofconapp.h"
+#include "dcmtk/ofstd/ofvector.h"
 #include "dcmtk/dcmdata/dcuid.h"      /* for dcmtk version name */
 
 #include "cpp-base64/base64.h"
@@ -143,6 +144,15 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   else if (ps.haveActiveVOILUT())
   {
     doc.AddMember("CurrentVOIDescription", Value(StringRef(ps.getCurrentVOIDescription())), alloc);
+  }
+
+  // ICC color Profile
+  const OFVector<Uint8> iccProfile = ps.getICCProfile();
+  if (!iccProfile.empty())
+  {
+    // Encode the binary color profile data as a base64 string
+    std::string iccProfileAsString(iccProfile.begin(), iccProfile.end());
+    doc.AddMember("ICCProfile", Value(base64_encode(iccProfileAsString, false).c_str(), alloc), alloc);
   }
 
   doc.AddMember("Flip", Value(ps.getFlip()), alloc);
@@ -468,10 +478,59 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   out << buffer.GetString();
 }
 
+constexpr unsigned int Dimension = 2;
+using GrayPixelType = uint8_t;
+using GrayImageType = itk::Image<GrayPixelType, Dimension>;
+using OutputGrayImageType = itk::wasm::OutputImage<GrayImageType>;
+
+using ColorPixelType = itk::RGBPixel<uint8_t>;
+using ColorImageType = itk::Image<ColorPixelType, Dimension>;
+using OutputColorImageType = itk::wasm::OutputImage<ColorImageType>;
+
+template<typename OutputImageType, typename PixelType, unsigned int Dim>
+int GenerateOutputImage(OutputImageType& outputImage, const unsigned long width, const unsigned long height, const std::array<double, 2>& pixelSpacing, const void* pixelData)
+{
+  using ImportFilterType = itk::ImportImageFilter<PixelType, Dim>;
+  auto importFilter = itk::ImportImageFilter<PixelType, Dim>::New();
+  typename ImportFilterType::SizeType size;
+  size[0] = width;
+  size[1] = height;
+
+  typename itk::ImportImageFilter<PixelType, Dim>::IndexType start;
+  start.Fill(0);
+
+  typename itk::ImportImageFilter<PixelType, Dim>::RegionType region;
+  region.SetIndex(start);
+  region.SetSize(size);
+  importFilter->SetRegion(region);
+
+  const itk::SpacePrecisionType origin[Dim] = { 0.0, 0.0 };
+  importFilter->SetOrigin(origin);
+  const itk::SpacePrecisionType spacing[Dim] = { pixelSpacing[0], pixelSpacing[1] };
+  importFilter->SetSpacing(spacing);
+  const unsigned int numberOfPixels = size[0] * size[1];
+  // ColorImageType::Internal
+  importFilter->SetImportPointer((PixelType*)pixelData, numberOfPixels, false);
+  importFilter->Update();
+
+  // set as output image
+  outputImage.Set(importFilter->GetOutput());
+  return EXIT_SUCCESS;
+}
+
+template int GenerateOutputImage<OutputGrayImageType,  GrayPixelType,  2U>(OutputGrayImageType&,  const unsigned long, const unsigned long, const std::array<double, 2>&, const void*);
+template int GenerateOutputImage<OutputColorImageType, ColorPixelType, 2U>(OutputColorImageType&, const unsigned long, const unsigned long, const std::array<double, 2>&, const void*);
 
 int main(int argc, char *argv[])
 {
-  itk::wasm::Pipeline pipeline("apply-presentation-state-to-image", "Apply a presentation state to a given DICOM image and render output as pgm bitmap or dicom file.", argc, argv);
+  itk::wasm::Pipeline pipeline("apply-presentation-state-to-image", "Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.", argc, argv);
+
+  // Expecting color output
+  bool colorOutput{false};
+  pipeline.add_flag("--color-output", colorOutput, "output image as RGB (default: false)");
+
+  // pre-parse command line to determine if we need color or gray output image
+  ITK_WASM_PRE_PARSE(pipeline);
 
   // Inputs
   std::string imageIn;
@@ -485,14 +544,6 @@ int main(int argc, char *argv[])
   itk::wasm::OutputTextStream pstateOutStream;
   pipeline.add_option("presentation-state-out-stream", pstateOutStream, "Output overlay information")->type_name("OUTPUT_JSON");
 
-  // Processed output image
-  constexpr unsigned int Dimension = 2;
-  using PixelType = unsigned char;
-  using ImageType = itk::Image<PixelType, Dimension>;
-  using OutputImageType = itk::wasm::OutputImage<ImageType>;
-  OutputImageType outputImage;
-  pipeline.add_option("output-image", outputImage, "Output image")->type_name("OUTPUT_IMAGE");
-
   // Parameters
   std::string configFile;
   pipeline.add_option("--config-file", configFile, "filename: string. Process using settings from configuration file");
@@ -505,6 +556,18 @@ int main(int argc, char *argv[])
   pipeline.add_flag("--no-presentation-state-output", noPstateOutput, "Do not get presentation state information in text stream.");
   bool noBitmapOutput{false};
   pipeline.add_flag("--no-bitmap-output", noBitmapOutput, "Do not get resulting image as bitmap output stream.");
+
+  // Define output image and bind to CLI option
+  OutputGrayImageType outputGrayImage;
+  OutputColorImageType outputColorImage;
+  if (colorOutput)
+  {
+    pipeline.add_option("output-image", outputColorImage, "Output image")->type_name("OUTPUT_IMAGE");
+  }
+  else
+  {
+    pipeline.add_option("output-image", outputGrayImage, "Output image")->type_name("OUTPUT_IMAGE");
+  }
 
   // DICOM output is currently not supported.
   // bool outputFormatPGM{true};
@@ -585,30 +648,14 @@ int main(int argc, char *argv[])
         }
         else
         {
-          using ImportFilterType = itk::ImportImageFilter<PixelType, Dimension>;
-          auto importFilter = ImportFilterType::New();
-          ImportFilterType::SizeType size;
-          size[0] = width;
-          size[1] = height;
-
-          ImportFilterType::IndexType start;
-          start.Fill(0);
-
-          ImportFilterType::RegionType region;
-          region.SetIndex(start);
-          region.SetSize(size);
-          importFilter->SetRegion(region);
-
-          const itk::SpacePrecisionType origin[Dimension] = { 0.0, 0.0 };
-          importFilter->SetOrigin(origin);
-          const itk::SpacePrecisionType spacing[Dimension] = { pixelSpacing[0], pixelSpacing[1] };
-          importFilter->SetSpacing(spacing);
-          const unsigned int numberOfPixels = size[0] * size[1];
-          importFilter->SetImportPointer((PixelType*)pixelData, numberOfPixels, false);
-          importFilter->Update();
-
-          // set as output image
-          outputImage.Set(importFilter->GetOutput());
+          if (colorOutput)
+          {
+            return GenerateOutputImage<OutputColorImageType, ColorPixelType, 2U>(outputColorImage, width, height, pixelSpacing, pixelData);
+          }
+          else
+          {
+            return GenerateOutputImage<OutputGrayImageType, GrayPixelType, 2U>(outputGrayImage, width, height, pixelSpacing, pixelData);
+          }
         }
       }
       else

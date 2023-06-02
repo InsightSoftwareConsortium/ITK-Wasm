@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compress-stringify",
-  "version": "0.4.5",
+  "version": "0.5.0",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
   "module": "./dist/bundles/compress-stringify.js",
@@ -38,7 +38,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.79"
+    "itk-wasm": "^1.0.0-b.111"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",

@@ -7,8 +7,8 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 
 WORKDIR /
 
-# tag commit date: 2023-01-15 branch: itkwasm-2023-01-15-f42c10a20f-2
-ENV ITK_GIT_TAG 8d224d17b382d53324e35d4f4e698bc3bd10c277
+# tag commit date: 2023-05-19 branch: itkwasm-2023-01-15-f42c10a20f-2
+ENV ITK_GIT_TAG 8e80eb3eb6ba4408d7286be5f7e0d95c4cabb90c
 RUN git clone https://github.com/KitwareMedical/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
@@ -21,7 +21,7 @@ RUN git clone https://github.com/KitwareMedical/ITK.git && \
 RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/DCMTK.git")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
-RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "8e088dfdfdcd6ba29ea9aa0f5f18f3728086ba55")' \
+RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "d2c5251de48862ba37c4858266dbe47bda566f4e")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
 ARG CMAKE_BUILD_TYPE=Release
