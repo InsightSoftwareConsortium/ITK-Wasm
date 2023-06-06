@@ -58,8 +58,8 @@ async function readImageLocalFile (filePath: string, options?: CastImageOptions)
   }
 
   const modulePath = path.join(imageIOsPath, io as string + '-read-image.js')
-  const mountContainingDirs = new Set([absoluteFilePath])
-  const { outputs } = await runPipelineNode(modulePath, args, desiredOutputs, inputs, mountContainingDirs)
+  const mountDirs = new Set([path.dirname(absoluteFilePath)])
+  const { outputs } = await runPipelineNode(modulePath, args, desiredOutputs, inputs, mountDirs)
 
   let result = outputs[0].data as Image
 
