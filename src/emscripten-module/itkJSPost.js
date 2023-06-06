@@ -1,16 +1,15 @@
 /** Given an absolute path to a file, mount its containing directory in the
  * Emscripten virtual filesystem. Only relevant when within the Node.js
- * environment. If the containing directory already exists with the
- * Emscripten filesystem, it will not be mounted. */
+ * environment. */
 Module.mountContainingDir = function (filePath) {
   if (!ENVIRONMENT_IS_NODE) {
     return
   }
   var path = require('path')
   var containingDir = path.dirname(filePath)
-  // If the directory already exists, abort
-  if (FS.isDir(containingDir) || containingDir === '/') {
-    return
+  // If the root, abort
+  if (containingDir === '/') {
+    throw new Error('Cannot mount root directory')
   }
 
   var currentDir = '/'

@@ -12,7 +12,7 @@ These functions return the [`WebWorker`](https://developer.mozilla.org/en-US/doc
 ## `runPipeline`
 
 ```ts
-runPipelineNode(webWorker: Worker | null | boolean,
+runPipeline(webWorker: Worker | null | boolean,
   pipelinePath: string | URL,
   args: string[],
   outputs: PipelineOutput[] | null,
