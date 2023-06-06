@@ -12,6 +12,7 @@ import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
 import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
 import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
 import findLocalImageIOPath from './internal/findLocalImageIOPath.js'
+import runPipelineNode from '../pipeline/runPipelineNode.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import CastImageOptions from '../core/CastImageOptions.js'
@@ -57,10 +58,9 @@ async function readImageLocalFile (filePath: string, options?: CastImageOptions)
   }
 
   const modulePath = path.join(imageIOsPath, io as string + '-read-image.js')
-  const readImageModule = await loadEmscriptenModule(modulePath) as PipelineEmscriptenModule
-  const mountedFilePath = readImageModule.mountContainingDir(absoluteFilePath)
-  const { outputs } = runPipelineEmscripten(readImageModule, args, desiredOutputs, inputs)
-  readImageModule.unmountContainingDir(mountedFilePath)
+  const mountContainingDirs = new Set([absoluteFilePath])
+  const { outputs } = await runPipelineNode(modulePath, args, desiredOutputs, inputs, mountContainingDirs)
+
   let result = outputs[0].data as Image
 
   if (typeof options !== 'undefined') {

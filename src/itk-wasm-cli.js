@@ -13,7 +13,7 @@ import pythonBindgen from './bindgen/python.js'
 const program = new Command()
 
 // Array of types that will require an import from itk-wasm
-const defaultImageTag = '20230526-f226ba4e'
+const defaultImageTag = '20230605-8a333e7c'
 
 function processCommonOptions(wasiDefault=false) {
   const options = program.opts()

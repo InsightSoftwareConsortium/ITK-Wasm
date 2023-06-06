@@ -12,7 +12,8 @@ Similar to the [web browser API](./browser_pipelines.html), most of these functi
 runPipelineNode(pipelinePath: string,
   args: string[],
   outputs: PipelineOutput[],
-  inputs: PipelineInput[] | null):
+  inputs: PipelineInput[] | null,
+  mountContainingDirs?: Set<string>):
   Promise<{
     returnValue: number,
     stdout: string,
@@ -48,6 +49,10 @@ A JavaScript Array of [`PipelineInput`](https://github.com/InsightSoftwareConsor
 - `type` is one of the [`InterfaceTypes`](/api/interface_types).
 - `data` contains the corresponding data for the interface type.
 - `path` is the optional file path on the filesystem to read after execution has completed.
+
+### `mountContainingDirs`
+
+Filepaths on the local filesystem whose dirname will be mounted to provide the wasm module direct access to the file.
 
 ### Result
 

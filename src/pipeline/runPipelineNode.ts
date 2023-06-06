@@ -10,12 +10,24 @@ async function runPipelineNode (
   pipelinePath: string,
   args: string[],
   outputs: PipelineOutput[],
-  inputs: PipelineInput[] | null
+  inputs: PipelineInput[] | null,
+  mountContainingDirs?: Set<string>
 ): Promise<RunPipelineResult> {
   const Module = (await loadEmscriptenModuleNode(
     pipelinePath
   )) as PipelineEmscriptenModule
+  const mountedDirs: Set<string> = new Set()
+  if (typeof mountContainingDirs !== 'undefined') {
+    mountContainingDirs.forEach((filePath) => {
+      mountedDirs.add(Module.mountContainingDir(filePath))
+    })
+  }
   const result = runPipelineEmscripten(Module, args, outputs, inputs)
+  if (typeof mountContainingDirs !== 'undefined') {
+    mountedDirs.forEach((filePath) => {
+      Module.unmountContainingDir(filePath)
+    })
+  }
   return result
 }
 
