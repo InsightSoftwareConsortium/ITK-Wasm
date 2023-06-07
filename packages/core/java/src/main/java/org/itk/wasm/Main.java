@@ -20,10 +20,7 @@
 package org.itk.wasm;
 
 import io.github.kawamuray.wasmtime.Extern;
-import io.github.kawamuray.wasmtime.Func;
-import io.github.kawamuray.wasmtime.Instance;
 import io.github.kawamuray.wasmtime.Linker;
-import io.github.kawamuray.wasmtime.Memory;
 import io.github.kawamuray.wasmtime.Module;
 import io.github.kawamuray.wasmtime.Store;
 import io.github.kawamuray.wasmtime.WasmFunctions;
@@ -35,9 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
 
 public class Main {
   public static void main(String... args) throws IOException {
