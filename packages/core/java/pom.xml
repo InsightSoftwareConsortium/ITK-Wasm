@@ -64,6 +64,8 @@
   </ciManagement>
 
   <properties>
+    <main-class>org.itk.wasm.Main</main-class>
+
     <license.licenseName>apache_v2</license.licenseName>
     <license.copyrightOwners>ITK developers.</license.copyrightOwners>
     <license.projectName>Java bindings for itk-wasm.</license.projectName>
