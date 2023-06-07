@@ -19,22 +19,22 @@
  */
 package org.itk.wasm;
 public enum InterfaceTypes {
-    TextFile("InterfaceTextFile"),
-    BinaryFile("InterfaceBinaryFile"),
-    TextStream("InterfaceTextStream"),
-    BinaryStream("InterfaceBinaryStream"),
-    Image("InterfaceImage"),
-    Mesh("InterfaceMesh"),
-    PolyData("InterfacePolyData"),
-    JsonObject("InterfaceJsonObject");
+  TextFile("InterfaceTextFile"),
+  BinaryFile("InterfaceBinaryFile"),
+  TextStream("InterfaceTextStream"),
+  BinaryStream("InterfaceBinaryStream"),
+  Image("InterfaceImage"),
+  Mesh("InterfaceMesh"),
+  PolyData("InterfacePolyData"),
+  JsonObject("InterfaceJsonObject");
 
-    private String value;
+  private String value;
 
-    private InterfaceTypes(String value) {
-        this.value = value;
-    }
+  private InterfaceTypes(String value) {
+    this.value = value;
+  }
 
-    public String getValue() {
-        return value;
-    }
+  public String getValue() {
+    return value;
+  }
 }

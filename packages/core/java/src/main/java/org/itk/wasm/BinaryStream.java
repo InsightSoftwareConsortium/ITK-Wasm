@@ -20,9 +20,9 @@
 package org.itk.wasm;
 
 public class BinaryStream {
-    public byte[] data;
+  public byte[] data;
 
-    public BinaryStream(byte[] data) {
-        this.data = data;
-    }
+  public BinaryStream(byte[] data) {
+    this.data = data;
+  }
 }

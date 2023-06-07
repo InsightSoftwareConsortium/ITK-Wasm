@@ -88,34 +88,34 @@ public class Pipeline {
   }
 
   public List<PipelineOutput<?>> run(List<String> args, List<PipelineOutput<?>> outputs, List<PipelineInput<?>> inputs) {
-  	try (RunInstance ri = new RunInstance(args, outputs, inputs)) {
-  		int returnCode = ri.delayedStart();
+    try (RunInstance ri = new RunInstance(args, outputs, inputs)) {
+      int returnCode = ri.delayedStart();
 
-  		List<PipelineOutput<?>> populatedOutputs = new ArrayList<>();
-  		if (!outputs.isEmpty() && returnCode == 0) {
-  			for (int index = 0; index < outputs.size(); index++) {
-  				PipelineOutput<?> output = outputs.get(index);
-  				if (output.type == InterfaceTypes.TextStream) {
-  					int dataPtr = ri.outputArrayAddress(0, index, 0);
-  					int dataLen = ri.outputArraySize(0, index, 0);
-  					byte[] dataBytes = ri.wasmTimeLift(dataPtr, dataLen);
-  					String dataString = str(dataBytes);
-  					TextStream textStream = new TextStream(dataString);
-  					populatedOutputs.add(new PipelineOutput<>(InterfaceTypes.TextStream, textStream));
-  				} else if (output.type == InterfaceTypes.BinaryStream) {
-  					int dataPtr = ri.outputArrayAddress(0, index, 0);
-  					int dataLen = ri.outputArraySize(0, index, 0);
-  					byte[] dataBytes = ri.wasmTimeLift(dataPtr, dataLen);
-  					BinaryStream binaryStream = new BinaryStream(dataBytes);
-  					populatedOutputs.add(new PipelineOutput<>(InterfaceTypes.BinaryStream, binaryStream));
-  				} else {
-  					throw new IllegalArgumentException("Unexpected/not yet supported output.type " + output.type);
-  				}
-  			}
-  		}
+      List<PipelineOutput<?>> populatedOutputs = new ArrayList<>();
+      if (!outputs.isEmpty() && returnCode == 0) {
+        for (int index = 0; index < outputs.size(); index++) {
+          PipelineOutput<?> output = outputs.get(index);
+          if (output.type == InterfaceTypes.TextStream) {
+            int dataPtr = ri.outputArrayAddress(0, index, 0);
+            int dataLen = ri.outputArraySize(0, index, 0);
+            byte[] dataBytes = ri.wasmTimeLift(dataPtr, dataLen);
+            String dataString = str(dataBytes);
+            TextStream textStream = new TextStream(dataString);
+            populatedOutputs.add(new PipelineOutput<>(InterfaceTypes.TextStream, textStream));
+          } else if (output.type == InterfaceTypes.BinaryStream) {
+            int dataPtr = ri.outputArrayAddress(0, index, 0);
+            int dataLen = ri.outputArraySize(0, index, 0);
+            byte[] dataBytes = ri.wasmTimeLift(dataPtr, dataLen);
+            BinaryStream binaryStream = new BinaryStream(dataBytes);
+            populatedOutputs.add(new PipelineOutput<>(InterfaceTypes.BinaryStream, binaryStream));
+          } else {
+            throw new IllegalArgumentException("Unexpected/not yet supported output.type " + output.type);
+          }
+        }
+      }
 
-  		return populatedOutputs;
-  	}
+      return populatedOutputs;
+    }
   }
 
   private static String purePosixPath(Path p) {
@@ -252,10 +252,10 @@ public class Pipeline {
     public void freeAll() { freeAll.accept(); }
 
     public ByteBuffer memoryBuffer(int offset, int length) {
-    	ByteBuffer buffer = memory.buffer(store);
-    	buffer.position(offset);
-    	buffer.limit(length);
-    	return buffer.slice();
+      ByteBuffer buffer = memory.buffer(store);
+      buffer.position(offset);
+      buffer.limit(length);
+      return buffer.slice();
     }
     public int memorySize() { return memory.size(store); }
 

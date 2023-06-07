@@ -20,9 +20,9 @@
 package org.itk.wasm;
 
 public class TextStream {
-    public String data;
+  public String data;
 
-    public TextStream(String data) {
-        this.data = data;
-    }
+  public TextStream(String data) {
+    this.data = data;
+  }
 }
