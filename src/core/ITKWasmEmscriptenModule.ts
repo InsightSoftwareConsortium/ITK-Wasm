@@ -3,6 +3,8 @@
 interface ITKWasmEmscriptenModule extends EmscriptenModule {
   mountContainingDir: (filePath: string) => string
   unmountContainingDir: (filePath: string) => void
+  mountDir: (filePath: string) => string
+  unmountDir: (filePath: string) => void
 
   fs_mkdirs: (dirs: string) => void
   fs_readFile: (path: string, opts: { encoding?: string, flags?: string }) => string | Uint8Array

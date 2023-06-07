@@ -36,6 +36,41 @@ Module.unmountContainingDir = function (filePath) {
   FS.unmount(containingDir)
 }
 
+/** Mount a containing directory in the
+ * Emscripten virtual filesystem. Only relevant when within the Node.js
+ * environment. */
+Module.mountDir = function (dir) {
+  if (!ENVIRONMENT_IS_NODE) {
+    return
+  }
+  // If the root, abort
+  if (dir === '/') {
+    throw new Error('Cannot mount root directory')
+  }
+
+  var currentDir = '/'
+  var path = require('path')
+  var splitDir = dir.split(path.sep)
+  for (var ii = 1; ii < splitDir.length; ii++) {
+    currentDir += splitDir[ii]
+    if (!FS.analyzePath(currentDir).exists) {
+      FS.mkdir(currentDir)
+    }
+    currentDir += '/'
+  }
+  FS.mount(NODEFS, { root: dir }, currentDir)
+  return currentDir
+}
+
+/** Unmount its a directory in the
+ * Emscripten virtual filesystem. */
+Module.unmountDir = function (dir) {
+  if (!ENVIRONMENT_IS_NODE) {
+    return
+  }
+  FS.unmount(dir)
+}
+
 Module.fs_mkdirs = function (dirs) {
   var currentDir = '/'
   var splitDirs = dirs.split('/')

@@ -13,7 +13,7 @@ runPipelineNode(pipelinePath: string,
   args: string[],
   outputs: PipelineOutput[],
   inputs: PipelineInput[] | null,
-  mountContainingDirs?: Set<string>):
+  mountDirs?: Set<string>):
   Promise<{
     returnValue: number,
     stdout: string,
@@ -50,9 +50,9 @@ A JavaScript Array of [`PipelineInput`](https://github.com/InsightSoftwareConsor
 - `data` contains the corresponding data for the interface type.
 - `path` is the optional file path on the filesystem to read after execution has completed.
 
-### `mountContainingDirs`
+### `mountDirs`
 
-Filepaths on the local filesystem whose dirname will be mounted to provide the wasm module direct access to the file.
+Directories on the local filesystem whose to provide the wasm module direct access to the file.
 
 ### Result
 
