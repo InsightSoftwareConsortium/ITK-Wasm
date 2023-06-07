@@ -53,6 +53,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +86,10 @@ public class Pipeline {
     linker = new Linker(engine);
     //linker.allowShadowing(true);
     module = new Module(engine, wasmBytes);
+  }
+
+  public List<PipelineOutput<?>> run(List<String> args) {
+    return run(args, Collections.emptyList(), Collections.emptyList());
   }
 
   public List<PipelineOutput<?>> run(List<String> args, List<PipelineOutput<?>> outputs, List<PipelineInput<?>> inputs) {
