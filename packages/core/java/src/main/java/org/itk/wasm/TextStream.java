@@ -19,14 +19,10 @@
  */
 package org.itk.wasm;
 
-import java.nio.ByteBuffer;
-
 public class TextStream {
-    public ByteBuffer data;
+    public String data;
 
-    public TextStream(ByteBuffer data) {
+    public TextStream(String data) {
         this.data = data;
     }
-    
-    // TODO: implement toString to copy data into a String ?
 }
