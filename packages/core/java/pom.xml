@@ -2,6 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.scijava</groupId>
+    <artifactId>pom-scijava</artifactId>
+    <version>35.1.1</version>
+  </parent>
+
   <groupId>org.itk.wasm</groupId>
   <artifactId>itk-wasm</artifactId>
   <version>0.1.0</version>
@@ -36,13 +42,32 @@
     </contributor>
   </contributors>
 
+  <mailingLists>
+    <mailingList>
+      <name>ITK Forum</name>
+      <archive>https://discourse.itk.org/</archive>
+    </mailingList>
+  </mailingLists>
+
   <scm>
     <connection>scm:https://github.com/InsightSoftwareConsortium/itk-wasm</connection>
     <developerConnection>scm:git@github.com:InsightSoftwareConsortium/itk-wasm</developerConnection>
     <url>https://github.com/InsightSoftwareConsortium/itk-wasm</url>
   </scm>
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/InsightSoftwareConsortium/itk-wasm/issues</url>
+  </issueManagement>
+  <ciManagement>
+    <system>GitHub Actions</system>
+    <url>https://github.com/InsightSoftwareConsortium/itk-wasm/actions</url>
+  </ciManagement>
 
   <properties>
+    <license.licenseName>apache_v2</license.licenseName>
+    <license.copyrightOwners>ITK developers.</license.copyrightOwners>
+    <license.projectName>Java bindings for itk-wasm.</license.projectName>
+
     <wasmtime-java.version>0.14.0</wasmtime-java.version>
   </properties>
 
@@ -51,6 +76,10 @@
       <groupId>io.github.kawamuray.wasmtime</groupId>
       <artifactId>wasmtime-java</artifactId>
       <version>${wasmtime-java.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.imglib2</groupId>
+      <artifactId>imglib2</artifactId>
     </dependency>
   </dependencies>
 </project>
