@@ -19,10 +19,12 @@
  */
 package org.itk.wasm;
 
-public class BinaryStream {
-    public byte[] data;
+import java.nio.ByteBuffer;
 
-    public BinaryStream(byte[] data) {
+public class BinaryStream {
+    public ByteBuffer data;
+
+    public BinaryStream(ByteBuffer data) {
         this.data = data;
     }
 }
