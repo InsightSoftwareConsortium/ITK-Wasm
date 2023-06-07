@@ -49,6 +49,7 @@ Module.mountDir = function (dir) {
   }
 
   var currentDir = '/'
+  var path = require('path')
   var splitDir = dir.split(path.sep)
   for (var ii = 1; ii < splitDir.length; ii++) {
     currentDir += splitDir[ii]
