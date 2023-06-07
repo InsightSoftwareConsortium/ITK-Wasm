@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.itk.wasm</groupId>
+  <artifactId>itk-wasm</artifactId>
+  <version>0.1.0</version>
+
+  <name>itk-wasm for Java</name>
+  <description>Java interface to itk-wasm WebAssembly modules.</description>
+  <url>https://github.com/InsightSoftwareConsortium/itk-wasm</url>
+  <inceptionYear>2023</inceptionYear>
+  <organization>
+    <name>ITK</name>
+    <url>https://itk.org/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Matt McCormick</name>
+      <url>https://github.com/thewtex</url>
+      <id>thewtex</id>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <name>Curtis Rueden</name>
+      <url>https://github.com/ctrueden</url>
+      <properties><id>ctrueden</id></properties>
+    </contributor>
+  </contributors>
+
+  <scm>
+    <connection>scm:https://github.com/InsightSoftwareConsortium/itk-wasm</connection>
+    <developerConnection>scm:git@github.com:InsightSoftwareConsortium/itk-wasm</developerConnection>
+    <url>https://github.com/InsightSoftwareConsortium/itk-wasm</url>
+  </scm>
+
+  <properties>
+    <wasmtime-java.version>0.14.0</wasmtime-java.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.github.kawamuray.wasmtime</groupId>
+      <artifactId>wasmtime-java</artifactId>
+      <version>${wasmtime-java.version}</version>
+    </dependency>
+  </dependencies>
+</project>
