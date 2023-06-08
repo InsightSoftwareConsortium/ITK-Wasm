@@ -4,6 +4,7 @@
 
   - [IO formats](/docs/file_formats)
 
+    - [DICOM](/docs/dicom_formats)
     - [Images](/docs/image_formats)
     - [Meshs and Point Sets](/docs/mesh_formats)
 
