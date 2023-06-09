@@ -30,12 +30,14 @@ import org.junit.jupiter.api.condition.OS;
 
 public class TestPipeline {
 
-  private Path test_input_dir;
-  private Path test_baseline_dir;
+  private final Path test_data_dir;
+  private final Path test_input_dir;
+  private final Path test_baseline_dir;
 
   public TestPipeline() {
-    test_input_dir = Paths.get("").toAbsolutePath().resolve("input");
-    test_baseline_dir = Paths.get("").toAbsolutePath().resolve("baseline");
+    test_data_dir = Paths.get("..", "test", "data").toAbsolutePath();
+    test_input_dir = test_data_dir.resolve("input");
+    test_baseline_dir = test_data_dir.resolve("baseline");
   }
 
   @Test
