@@ -10,7 +10,7 @@
 
   <groupId>org.itk.wasm</groupId>
   <artifactId>itk-wasm</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.0-SNAPSHOT</version>
 
   <name>itk-wasm for Java</name>
   <description>Java interface to itk-wasm WebAssembly modules.</description>
