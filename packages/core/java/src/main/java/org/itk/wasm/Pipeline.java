@@ -61,6 +61,8 @@ import java.util.Set;
 
 public class Pipeline {
 
+	private static int instanceID = 0;
+
   private Config config;
   private Engine engine;
   private Linker linker;
@@ -86,6 +88,8 @@ public class Pipeline {
     linker = new Linker(engine);
     //linker.allowShadowing(true);
     module = new Module(engine, wasmBytes);
+
+		WasiCtx.addToLinker(linker);
   }
 
   public List<PipelineOutput<?>> run(List<String> args) {
@@ -148,34 +152,34 @@ public class Pipeline {
     }
   }
 
-  private Extern extern(Store<Engine> store, String name) {
+  private Extern extern(Store<?> store, String name) {
     return linker.get(store, moduleName, name).get();
   }
-  private Consumer0 consumer0(Store<Engine> store, String name) {
+  private Consumer0 consumer0(Store<?> store, String name) {
     return WasmFunctions.consumer(store, extern(store, name).func());
   }
-  private Consumer1<Integer> consumer1(Store<Engine> store, String name) {
+  private Consumer1<Integer> consumer1(Store<?> store, String name) {
     return WasmFunctions.consumer(store, extern(store, name).func(), I32);
   }
-  private Function0<Integer> func0(Store<Engine> store, String name) {
+  private Function0<Integer> func0(Store<?> store, String name) {
     return WasmFunctions.func(store, extern(store, name).func(), I32);
   }
-  private Function1<Integer, Integer> func1(Store<Engine> store, String name) {
+  private Function1<Integer, Integer> func1(Store<?> store, String name) {
     return WasmFunctions.func(store, extern(store, name).func(), I32, I32);
   }
-  private Function2<Integer, Integer, Integer> func2(Store<Engine> store, String name) {
+  private Function2<Integer, Integer, Integer> func2(Store<?> store, String name) {
     return WasmFunctions.func(store, extern(store, name).func(), I32, I32, I32);
   }
-  private Function3<Integer, Integer, Integer, Integer> func3(Store<Engine> store, String name) {
+  private Function3<Integer, Integer, Integer, Integer> func3(Store<?> store, String name) {
     return WasmFunctions.func(store, extern(store, name).func(), I32, I32, I32, I32);
   }
-  private Function4<Integer, Integer, Integer, Integer, Integer> func4(Store<Engine> store, String name) {
+  private Function4<Integer, Integer, Integer, Integer, Integer> func4(Store<?> store, String name) {
     return WasmFunctions.func(store, extern(store, name).func(), I32, I32, I32, I32, I32);
   }
 
   public class RunInstance implements AutoCloseable {
 
-    private Store<Engine> store;
+    private final Store<Void> store;
 
     private Consumer0 main;
     private Consumer0 initialize;
@@ -194,11 +198,13 @@ public class Pipeline {
       List<PipelineInput<?>> inputs)
     {
       WasiCtx wasiConfig = new WasiCtxBuilder()
-          .inheritEnv()
+          //.inheritEnv()
           .inheritStderr()
-          .inheritStdin()
+          //.inheritStdin()
           .inheritStdout()
-          .args(args).build();
+          //.args(args)
+          .build();
+
 
       Set<String> preopenDirectories = new HashSet<>();
       for (PipelineInput<?> input : inputs) {
@@ -227,12 +233,10 @@ public class Pipeline {
         wasiConfig.pushPreopenDir(p, preopen);
       }
 
-      store = new Store<>(engine, wasiConfig);
-
-      WasiCtx.addToLinker(linker);
+			store = new Store<>(null, engine, wasiConfig);
 
       // TODO: Decide how to name this more appropriately.
-      moduleName = "instance1";
+      moduleName = "instance" + instanceID++;
 
       linker.module(store, moduleName, module);
 

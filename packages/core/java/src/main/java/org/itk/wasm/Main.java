@@ -19,6 +19,8 @@
  */
 package org.itk.wasm;
 
+import io.github.kawamuray.wasmtime.Config;
+import io.github.kawamuray.wasmtime.Engine;
 import io.github.kawamuray.wasmtime.Extern;
 import io.github.kawamuray.wasmtime.Linker;
 import io.github.kawamuray.wasmtime.Module;
@@ -39,36 +41,37 @@ public class Main {
     // `Store` structure. Note that you can also tweak configuration settings
     // with a `Config` and an `Engine` if desired.
     System.err.println("Initializing...");
+    Config config = new Config();
     try (
-        WasiCtx wasi = new WasiCtxBuilder().inheritStdout().inheritStderr().build();
-        Store<Void> store = Store.withoutData(wasi);
-        Linker linker = new Linker(store.engine());
-        Module module = Module.fromBinary(store.engine(), readBytes("../test/data/input/stdout-stderr-test.wasi.wasm")))
+    		Engine engine = new Engine(config);
+        Linker linker = new Linker(engine);
+        Module module = Module.fromBinary(engine, readBytes("../test/data/input/stdout-stderr-test.wasi.wasm")))
     {
       // Here we handle the imports of the module, which in this case is our
       // `HelloCallback` type and its associated implementation of `Callback.
       System.err.println("Creating callback...");
 
-            WasiCtx.addToLinker(linker);
-            //linker.define("xyz", "poll_word", Extern.fromFunc(pollWordFn));
-            String moduleName = "instance1";
-            linker.module(store, moduleName, module);
-            Extern extern = linker.get(store, moduleName, "").get();
-            Consumer0 doWork = WasmFunctions.consumer(store, extern.func());
-            doWork.accept();
+      WasiCtx wasi = new WasiCtxBuilder().inheritStdout().inheritStderr().build();
+      Store<Void> store = new Store<>(null, engine, wasi);
+      WasiCtx.addToLinker(linker);
+      String moduleName = "this-can-be-anything";
+      linker.module(store, moduleName, module);
+      Extern extern = linker.get(store, moduleName, "").get();
+      Consumer0 doWork = WasmFunctions.consumer(store, extern.func());
+      doWork.accept();
     }
   }
 
   private static byte[] readBytes(String filename) throws IOException {
-     //try (InputStream is = Main.class.getResourceAsStream(filename)) {
-    try (InputStream is = new FileInputStream(filename)) {
-      ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-      int nRead;
-      byte[] buf = new byte[16384];
-      while ((nRead = is.read(buf, 0, buf.length)) != -1) {
-        buffer.write(buf, 0, nRead);
-      }
-      return buffer.toByteArray();
-    }
+  	//try (InputStream is = Main.class.getResourceAsStream(filename)) {
+  	try (InputStream is = new FileInputStream(filename)) {
+  		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+  		int nRead;
+  		byte[] buf = new byte[16384];
+  		while ((nRead = is.read(buf, 0, buf.length)) != -1) {
+  			buffer.write(buf, 0, nRead);
+  		}
+  		return buffer.toByteArray();
+  	}
   }
 }
