@@ -20,14 +20,14 @@
 package org.itk.wasm;
 
 public class PipelineOutput<T> {
-  public InterfaceTypes type;
+  public InterfaceType type;
   public T data;
   public String path;
 
-  public PipelineOutput(InterfaceTypes type) {
+  public PipelineOutput(InterfaceType type) {
     this.type = type;
   }
-  public PipelineOutput(InterfaceTypes type, T data) {
+  public PipelineOutput(InterfaceType type, T data) {
     this.type = type;
     this.data = data;
   }

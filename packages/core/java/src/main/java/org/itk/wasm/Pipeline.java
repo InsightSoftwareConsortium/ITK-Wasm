@@ -99,19 +99,19 @@ public class Pipeline {
       if (!outputs.isEmpty() && returnCode == 0) {
         for (int index = 0; index < outputs.size(); index++) {
           PipelineOutput<?> output = outputs.get(index);
-          if (output.type == InterfaceTypes.TextStream) {
+          if (output.type == InterfaceType.TextStream) {
             int dataPtr = ri.outputArrayAddress(0, index, 0);
             int dataLen = ri.outputArraySize(0, index, 0);
             byte[] dataBytes = ri.wasmTimeLift(dataPtr, dataLen);
             String dataString = str(dataBytes);
             TextStream textStream = new TextStream(dataString);
-            populatedOutputs.add(new PipelineOutput<>(InterfaceTypes.TextStream, textStream));
-          } else if (output.type == InterfaceTypes.BinaryStream) {
+            populatedOutputs.add(new PipelineOutput<>(InterfaceType.TextStream, textStream));
+          } else if (output.type == InterfaceType.BinaryStream) {
             int dataPtr = ri.outputArrayAddress(0, index, 0);
             int dataLen = ri.outputArraySize(0, index, 0);
             byte[] dataBytes = ri.wasmTimeLift(dataPtr, dataLen);
             BinaryStream binaryStream = new BinaryStream(dataBytes);
-            populatedOutputs.add(new PipelineOutput<>(InterfaceTypes.BinaryStream, binaryStream));
+            populatedOutputs.add(new PipelineOutput<>(InterfaceType.BinaryStream, binaryStream));
           } else {
             throw new IllegalArgumentException("Unexpected/not yet supported output.type " + output.type);
           }
@@ -161,21 +161,21 @@ public class Pipeline {
 
       Set<String> preopenDirectories = new HashSet<>();
       for (PipelineInput<?> input : inputs) {
-        if (input.type == InterfaceTypes.TextFile) {
+        if (input.type == InterfaceType.TextFile) {
           PurePosixPath path = ((TextFile) input.data).path;
           preopenDirectories.add(path.getParent().toString());
         }
-        if (input.type == InterfaceTypes.BinaryFile) {
+        if (input.type == InterfaceType.BinaryFile) {
           PurePosixPath path = ((BinaryFile) input.data).path;
           preopenDirectories.add(path.getParent().toString());
         }
       }
       for (PipelineOutput<?> output : outputs) {
-        if (output.type == InterfaceTypes.TextFile) {
+        if (output.type == InterfaceType.TextFile) {
           PurePosixPath path = ((TextFile) output.data).path;
           preopenDirectories.add(path.getParent().toString());
         }
-        if (output.type == InterfaceTypes.BinaryFile) {
+        if (output.type == InterfaceType.BinaryFile) {
           PurePosixPath path = ((BinaryFile) output.data).path;
           preopenDirectories.add(path.getParent().toString());
         }

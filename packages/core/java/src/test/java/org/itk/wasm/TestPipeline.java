@@ -57,12 +57,12 @@ public class TestPipeline {
   	Pipeline pipeline = new Pipeline(testInputDir.resolve("input-output-files-test.wasi.wasm").toString());
 
   	List<PipelineInput<?>> pipelineInputs = new ArrayList<>();
-  	pipelineInputs.add(new PipelineInput<>(InterfaceTypes.TextStream, new TextStream("The answer is 42.")));
-  	pipelineInputs.add(new PipelineInput<>(InterfaceTypes.BinaryStream, new BinaryStream(new byte[]{(byte) 222, (byte) 173, (byte) 190, (byte) 239})));
+  	pipelineInputs.add(new PipelineInput<>(InterfaceType.TextStream, new TextStream("The answer is 42.")));
+  	pipelineInputs.add(new PipelineInput<>(InterfaceType.BinaryStream, new BinaryStream(new byte[]{(byte) 222, (byte) 173, (byte) 190, (byte) 239})));
 
   	List<PipelineOutput<?>> pipelineOutputs = new ArrayList<>();
-  	pipelineOutputs.add(new PipelineOutput<>(InterfaceTypes.TextStream));
-  	pipelineOutputs.add(new PipelineOutput<>(InterfaceTypes.BinaryStream));
+  	pipelineOutputs.add(new PipelineOutput<>(InterfaceType.TextStream));
+  	pipelineOutputs.add(new PipelineOutput<>(InterfaceType.BinaryStream));
 
   	List<String> args = Arrays.asList(
   		"--memory-io",
@@ -77,7 +77,7 @@ public class TestPipeline {
   	// Test re-run
   	outputs = pipeline.run(args, pipelineOutputs, pipelineInputs);
 
-  	assert outputs.get(0).type == InterfaceTypes.TextStream;
+  	assert outputs.get(0).type == InterfaceType.TextStream;
   	assert ((TextStream) outputs.get(0).data).data.equals("The answer is 42.");
 
   	byte[] binaryData = ((BinaryStream) outputs.get(1).data).data;
@@ -98,12 +98,12 @@ public class TestPipeline {
   	File outputBinaryFile = File.createTempFile("output", ".bin");
 
   	List<PipelineInput<?>> pipelineInputs = new ArrayList<>();
-  	pipelineInputs.add(new PipelineInput<>(InterfaceTypes.TextFile, new TextFile(inputTextFile)));
-  	pipelineInputs.add(new PipelineInput<>(InterfaceTypes.BinaryFile, new BinaryFile(inputBinaryFile)));
+  	pipelineInputs.add(new PipelineInput<>(InterfaceType.TextFile, new TextFile(inputTextFile)));
+  	pipelineInputs.add(new PipelineInput<>(InterfaceType.BinaryFile, new BinaryFile(inputBinaryFile)));
 
   	List<PipelineOutput<?>> pipelineOutputs = new ArrayList<>();
-  	pipelineOutputs.add(new PipelineOutput<>(InterfaceTypes.TextFile, new TextFile(outputTextFile.toPath())));
-  	pipelineOutputs.add(new PipelineOutput<>(InterfaceTypes.BinaryFile, new BinaryFile(outputBinaryFile.toPath())));
+  	pipelineOutputs.add(new PipelineOutput<>(InterfaceType.TextFile, new TextFile(outputTextFile.toPath())));
+  	pipelineOutputs.add(new PipelineOutput<>(InterfaceType.BinaryFile, new BinaryFile(outputBinaryFile.toPath())));
 
   	List<String> args = Arrays.asList(
   		"--memory-io",
@@ -119,12 +119,12 @@ public class TestPipeline {
   	// Test re-run
   	outputs = pipeline.run(args, pipelineOutputs, pipelineInputs);
 
-  	assert outputs.get(0).type == InterfaceTypes.TextFile;
+  	assert outputs.get(0).type == InterfaceType.TextFile;
   	PurePosixPath outputPath1 = ((TextFile) outputs.get(0).data).path;
   	String content1 = IO.readString(outputPath1.toString());
   	assert content1.equals("The answer is 42.");
 
-  	assert outputs.get(1).type == InterfaceTypes.BinaryFile;
+  	assert outputs.get(1).type == InterfaceType.BinaryFile;
   	PurePosixPath outputPath2 = ((BinaryFile) outputs.get(1).data).path;
   	byte[] content2 = IO.readBytes(outputPath2.toString());
   	assert content2[0] == (byte) 222;
