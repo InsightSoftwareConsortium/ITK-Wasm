@@ -202,19 +202,23 @@ public class Pipeline {
 
       Set<String> preopenDirectories = new HashSet<>();
       for (PipelineInput<?> input : inputs) {
-        if (input.type == InterfaceTypes.TextFile || input.type == InterfaceTypes.BinaryFile) {
-          // TODO: enable once TextFile/BinaryFile exists
-          //Path path = ((TextFile) input.data).path;
-          Path path = null;
-          preopenDirectories.add(purePosixPath(path.getParent()));
+        if (input.type == InterfaceTypes.TextFile) {
+          PurePosixPath path = ((TextFile) input.data).path;
+          preopenDirectories.add(path.getParent().toString());
+        }
+        if (input.type == InterfaceTypes.BinaryFile) {
+          PurePosixPath path = ((BinaryFile) input.data).path;
+          preopenDirectories.add(path.getParent().toString());
         }
       }
       for (PipelineOutput<?> output : outputs) {
-        if (output.type == InterfaceTypes.TextFile || output.type == InterfaceTypes.BinaryFile) {
-          // TODO: enable once TextFile/BinaryFile exists
-          //Path path = ((TextFile) input.data).path;
-          Path path = null;
-          preopenDirectories.add(purePosixPath(path.getParent()));
+        if (output.type == InterfaceTypes.TextFile) {
+          PurePosixPath path = ((TextFile) output.data).path;
+          preopenDirectories.add(path.getParent().toString());
+        }
+        if (output.type == InterfaceTypes.BinaryFile) {
+          PurePosixPath path = ((BinaryFile) output.data).path;
+          preopenDirectories.add(path.getParent().toString());
         }
       }
 
