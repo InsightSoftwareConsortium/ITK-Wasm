@@ -24,6 +24,9 @@ public class PipelineOutput<T> {
   public T data;
   public String path;
 
+  public PipelineOutput(InterfaceTypes type) {
+    this.type = type;
+  }
   public PipelineOutput(InterfaceTypes type, T data) {
     this.type = type;
     this.data = data;

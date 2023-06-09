@@ -20,7 +20,12 @@
 package org.itk.wasm;
 
 public class PipelineInput<T> {
-  public InterfaceTypes type;
+	public InterfaceTypes type;
   public T data;
   public String path;
+
+  public PipelineInput(InterfaceTypes type, T data) {
+  	this.type = type;
+  	this.data = data;
+	}
 }

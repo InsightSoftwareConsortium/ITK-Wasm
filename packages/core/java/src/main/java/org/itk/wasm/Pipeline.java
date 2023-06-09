@@ -44,10 +44,7 @@ import io.github.kawamuray.wasmtime.WasmFunctions.Function4;
 import io.github.kawamuray.wasmtime.wasi.WasiCtx;
 import io.github.kawamuray.wasmtime.wasi.WasiCtxBuilder;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -60,22 +57,19 @@ import java.util.Map;
 import java.util.Set;
 
 public class Pipeline {
-
 	private static int instanceID = 0;
 
   private Config config;
   private Engine engine;
   private Linker linker;
   private Module module;
-  private String moduleName;
 
-  /** TEMP */
-  public Pipeline() throws IOException {
-    this("../python/itkwasm/test/input/stdout-stderr-test.wasi.wasm");
+  public Pipeline(Path path) throws IOException {
+  	this(path.toString());
   }
 
   public Pipeline(String path) throws IOException {
-    this(readBytes(path));
+    this(IO.readBytes(path));
   }
 
   public Pipeline(byte[] wasmBytes) {
@@ -99,6 +93,7 @@ public class Pipeline {
   public List<PipelineOutput<?>> run(List<String> args, List<PipelineOutput<?>> outputs, List<PipelineInput<?>> inputs) {
     try (RunInstance ri = new RunInstance(args, outputs, inputs)) {
       int returnCode = ri.delayedStart();
+      if (returnCode != 0) throw new RuntimeException("Non-zero return code: " + returnCode); //TEMP
 
       List<PipelineOutput<?>> populatedOutputs = new ArrayList<>();
       if (!outputs.isEmpty() && returnCode == 0) {
@@ -127,11 +122,6 @@ public class Pipeline {
     }
   }
 
-  private static String purePosixPath(Path p) {
-    // TODO -- ensure path is POSIX style, not Windows
-    return p.toString();
-  }
-
   private static String str(byte[] bytes) {
     return new String(bytes, StandardCharsets.UTF_8);
   }
@@ -139,60 +129,23 @@ public class Pipeline {
     return str.getBytes(StandardCharsets.UTF_8);
   }
 
-  private static byte[] readBytes(String filename) throws IOException {
-    //try (InputStream is = Main.class.getResourceAsStream(filename)) {
-    try (InputStream is = new FileInputStream(filename)) {
-      ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-      int nRead;
-      byte[] buf = new byte[16384];
-      while ((nRead = is.read(buf, 0, buf.length)) != -1) {
-        buffer.write(buf, 0, nRead);
-      }
-      return buffer.toByteArray();
-    }
-  }
-
-  private Extern extern(Store<?> store, String name) {
-    return linker.get(store, moduleName, name).get();
-  }
-  private Consumer0 consumer0(Store<?> store, String name) {
-    return WasmFunctions.consumer(store, extern(store, name).func());
-  }
-  private Consumer1<Integer> consumer1(Store<?> store, String name) {
-    return WasmFunctions.consumer(store, extern(store, name).func(), I32);
-  }
-  private Function0<Integer> func0(Store<?> store, String name) {
-    return WasmFunctions.func(store, extern(store, name).func(), I32);
-  }
-  private Function1<Integer, Integer> func1(Store<?> store, String name) {
-    return WasmFunctions.func(store, extern(store, name).func(), I32, I32);
-  }
-  private Function2<Integer, Integer, Integer> func2(Store<?> store, String name) {
-    return WasmFunctions.func(store, extern(store, name).func(), I32, I32, I32);
-  }
-  private Function3<Integer, Integer, Integer, Integer> func3(Store<?> store, String name) {
-    return WasmFunctions.func(store, extern(store, name).func(), I32, I32, I32, I32);
-  }
-  private Function4<Integer, Integer, Integer, Integer, Integer> func4(Store<?> store, String name) {
-    return WasmFunctions.func(store, extern(store, name).func(), I32, I32, I32, I32, I32);
-  }
-
-  public class RunInstance implements AutoCloseable {
+  private class RunInstance implements AutoCloseable {
 
     private final Store<Void> store;
+		private final String moduleName;
 
-    private Consumer0 main;
-    private Consumer0 initialize;
-    private Function0<Integer> delayedStart;
-    private Consumer1<Integer> delayedExit;
-    private Function4<Integer, Integer, Integer, Integer, Integer> inputArrayAlloc;
-    private Function3<Integer, Integer, Integer, Integer> inputJsonAlloc;
-    private Function2<Integer, Integer, Integer> outputJsonAddress;
-    private Function2<Integer, Integer, Integer> outputJsonSize;
-    private Function3<Integer, Integer, Integer, Integer> outputArrayAddress;
-    private Function3<Integer, Integer, Integer, Integer> outputArraySize;
-    private Consumer0 freeAll;
-    private Memory memory;
+    private final Consumer0 main;
+    private final Consumer0 initialize;
+    private final Function0<Integer> delayedStart;
+    private final Consumer1<Integer> delayedExit;
+    private final Function4<Integer, Integer, Integer, Integer, Integer> inputArrayAlloc;
+    private final Function3<Integer, Integer, Integer, Integer> inputJsonAlloc;
+    private final Function2<Integer, Integer, Integer> outputJsonAddress;
+    private final Function2<Integer, Integer, Integer> outputJsonSize;
+    private final Function3<Integer, Integer, Integer, Integer> outputArrayAddress;
+    private final Function3<Integer, Integer, Integer, Integer> outputArraySize;
+    private final Consumer0 freeAll;
+    private final Memory memory;
 
     public RunInstance(List<String> args, List<PipelineOutput<?>> outputs,
       List<PipelineInput<?>> inputs)
@@ -233,11 +186,9 @@ public class Pipeline {
         wasiConfig.pushPreopenDir(p, preopen);
       }
 
+			// Instantiate the module.
 			store = new Store<>(null, engine, wasiConfig);
-
-      // TODO: Decide how to name this more appropriately.
       moduleName = "instance" + instanceID++;
-
       linker.module(store, moduleName, module);
 
       main = consumer0(store, "");
@@ -321,5 +272,30 @@ public class Pipeline {
       Gson gson = new GsonBuilder().create();
       return gson.fromJson(jsonString, new TypeToken<Map<String, Object>>() {});
     }
+
+		private Extern extern(Store<?> store, String name) {
+			return linker.get(store, moduleName, name).get();
+		}
+		private Consumer0 consumer0(Store<?> store, String name) {
+			return WasmFunctions.consumer(store, extern(store, name).func());
+		}
+		private Consumer1<Integer> consumer1(Store<?> store, String name) {
+			return WasmFunctions.consumer(store, extern(store, name).func(), I32);
+		}
+		private Function0<Integer> func0(Store<?> store, String name) {
+			return WasmFunctions.func(store, extern(store, name).func(), I32);
+		}
+		private Function1<Integer, Integer> func1(Store<?> store, String name) {
+			return WasmFunctions.func(store, extern(store, name).func(), I32, I32);
+		}
+		private Function2<Integer, Integer, Integer> func2(Store<?> store, String name) {
+			return WasmFunctions.func(store, extern(store, name).func(), I32, I32, I32);
+		}
+		private Function3<Integer, Integer, Integer, Integer> func3(Store<?> store, String name) {
+			return WasmFunctions.func(store, extern(store, name).func(), I32, I32, I32, I32);
+		}
+		private Function4<Integer, Integer, Integer, Integer, Integer> func4(Store<?> store, String name) {
+			return WasmFunctions.func(store, extern(store, name).func(), I32, I32, I32, I32, I32);
+		}
   }
 }
