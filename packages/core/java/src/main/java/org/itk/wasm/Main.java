@@ -43,7 +43,7 @@ public class Main {
         WasiCtx wasi = new WasiCtxBuilder().inheritStdout().inheritStderr().build();
         Store<Void> store = Store.withoutData(wasi);
         Linker linker = new Linker(store.engine());
-        Module module = Module.fromBinary(store.engine(), readBytes("../python/itkwasm/test/input/stdout-stderr-test.wasi.wasm")))
+        Module module = Module.fromBinary(store.engine(), readBytes("../test/data/input/stdout-stderr-test.wasi.wasm")))
     {
       // Here we handle the imports of the module, which in this case is our
       // `HelloCallback` type and its associated implementation of `Callback.
