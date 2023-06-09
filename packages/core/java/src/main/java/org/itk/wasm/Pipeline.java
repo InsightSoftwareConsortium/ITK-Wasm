@@ -78,9 +78,9 @@ public class Pipeline {
 
   public Pipeline(byte[] wasmBytes) {
     config = new Config();
-    config.wasmBulkMemory(true);
-    config.wasmSimd(true);
-    //config.wasmMemory64(true);
+    //config.wasmBulkMemory(true); // <-- This method causes a mysterious ClassNotFoundException
+    //config.wasmSimd(true); // <-- This method causes a mysterious ClassNotFoundException
+    //config.wasmMemory64(true); // <-- This method does not exist
     engine = new Engine(config);
 
     linker = new Linker(engine);
