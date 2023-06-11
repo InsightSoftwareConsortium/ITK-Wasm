@@ -125,13 +125,18 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   Document doc(kObjectType);
   Document::AllocatorType& alloc = doc.GetAllocator();
 
+  Value presentationLabel;
+  presentationLabel.SetString(ps.getPresentationLabel(), std::strlen(ps.getPresentationLabel()));
   doc.AddMember("PresentationLabel",
-    Value(StringRef(ps.getPresentationLabel())), alloc);
+    presentationLabel, alloc);
+  Value presentationDescription;
+  presentationDescription.SetString(ps.getPresentationDescription(), std::strlen(ps.getPresentationDescription()));
   doc.AddMember("PresentationDescription",
-    Value(StringRef(ps.getPresentationDescription())), alloc);
+    presentationDescription, alloc);
+  Value presentationCreatorsName;
+  presentationCreatorsName.SetString(ps.getPresentationCreatorsName(), std::strlen(ps.getPresentationCreatorsName()));
   doc.AddMember("PresentationCreatorsName",
-    Value(StringRef(ps.getPresentationCreatorsName())), alloc);
-
+    presentationCreatorsName, alloc);
   if (ps.haveActiveVOIWindow())
   {
     double width=0.0, center=0.0;
@@ -139,11 +144,15 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
     ps.getCurrentWindowCenter(center);
     doc.AddMember("CurrentWindowCenter", Value(center), alloc);
     doc.AddMember("CurrentWindowWidth", Value(width), alloc);
-    doc.AddMember("CurrentVOIDescription", Value(StringRef(ps.getCurrentVOIDescription())), alloc);
+    Value currentVoiDescription;
+    currentVoiDescription.SetString(ps.getCurrentVOIDescription(), strlen(ps.getCurrentVOIDescription()));
+    doc.AddMember("CurrentVOIDescription", currentVoiDescription, alloc);
   }
   else if (ps.haveActiveVOILUT())
   {
-    doc.AddMember("CurrentVOIDescription", Value(StringRef(ps.getCurrentVOIDescription())), alloc);
+    Value currentVoiDescription;
+    currentVoiDescription.SetString(ps.getCurrentVOIDescription(), strlen(ps.getCurrentVOIDescription()));
+    doc.AddMember("CurrentVOIDescription", currentVoiDescription, alloc);
   }
 
   // ICC color Profile
@@ -265,8 +274,12 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   for (size_t layer=0; layer<ps.getNumberOfGraphicLayers(); layer++)
   {
     Value layerJson(kObjectType);
-    layerJson.AddMember("Name", Value(StringRef(ps.getGraphicLayerName(layer))), alloc);
-    layerJson.AddMember("Description", Value(StringRef(ps.getGraphicLayerDescription(layer))), alloc);
+    Value graphicLayerName;
+    graphicLayerName.SetString(ps.getGraphicLayerName(layer), std::strlen(ps.getGraphicLayerName(layer)));
+    layerJson.AddMember("Name", graphicLayerName, alloc);
+    Value graphicLayerDescription;
+    graphicLayerDescription.SetString(ps.getGraphicLayerDescription(layer), std::strlen(ps.getGraphicLayerDescription(layer)));
+    layerJson.AddMember("Description", graphicLayerDescription, alloc);
     if (ps.haveGraphicLayerRecommendedDisplayValue(layer))
     {
       Uint16 r, g, b;
@@ -296,13 +309,18 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
       {
         Value textObjectJson(kObjectType);
         // display contents of text object
-        textObjectJson.AddMember("Text", Value(StringRef(ptext->getText())), alloc);
+        Value textObjectText;
+        textObjectText.SetString(ptext->getText(), std::strlen(ptext->getText()));
+        textObjectJson.AddMember("Text", textObjectText, alloc);
         if (ptext->haveAnchorPoint())
         {
           const std::array<double, 2> anchorPoint{ptext->getAnchorPoint_x(), ptext->getAnchorPoint_y()};
           auto apv = itk::wasm::getArrayJson(anchorPoint, alloc);
           textObjectJson.AddMember("AnchorPoint", apv, alloc);
-          textObjectJson.AddMember("AnchorPointUnits", Value(StringRef((ptext->getAnchorPointAnnotationUnits()==DVPSA_display? "display" : "pixel"))), alloc);
+          Value anchorPointUnits;
+          std::string anchorPointUnitsString(ptext->getAnchorPointAnnotationUnits()==DVPSA_display? "display" : "pixel");
+          anchorPointUnits.SetString(anchorPointUnitsString.c_str(), anchorPointUnitsString.length());
+          textObjectJson.AddMember("AnchorPointUnits", anchorPointUnits, alloc);
           textObjectJson.AddMember("AnchorPointVisible", Value(ptext->anchorPointIsVisible()), alloc);
         }
 
@@ -311,7 +329,10 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
           const std::array<double, 4> box{ptext->getBoundingBoxTLHC_x(), ptext->getBoundingBoxTLHC_y(), ptext->getBoundingBoxBRHC_x(), ptext->getBoundingBoxBRHC_y()};
           auto bv = itk::wasm::getArrayJson(box, alloc);
           textObjectJson.AddMember("BoundingBox", itk::wasm::getArrayJson(box, alloc), alloc);
-          textObjectJson.AddMember("BoundingBoxUnits", Value(StringRef(ptext->getBoundingBoxAnnotationUnits()==DVPSA_display ? "display" : "pixel")), alloc);
+          Value boundingBoxUnits;
+          std::string boundingBoxUnitsString(ptext->getBoundingBoxAnnotationUnits()==DVPSA_display ? "display" : "pixel");
+          boundingBoxUnits.SetString(boundingBoxUnitsString.c_str(), boundingBoxUnitsString.length());
+          textObjectJson.AddMember("BoundingBoxUnits", boundingBoxUnits, alloc);
 
           DVPSTextJustification justification = ptext->getBoundingBoxHorizontalJustification();
           std::string horizontalJustification;
@@ -359,7 +380,10 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
         }
         graphicJson.AddMember("GraphicType", Value(graphicType.c_str(), alloc), alloc);
         graphicJson.AddMember("IsFilled", Value(pgraphic->isFilled()), alloc);
-        graphicJson.AddMember("Units", Value(StringRef(pgraphic->getAnnotationUnits()==DVPSA_display? "display" : "pixel")), alloc);
+        Value units;
+        std::string unitsString(pgraphic->getAnnotationUnits()==DVPSA_display? "display" : "pixel");
+        units.SetString(unitsString.c_str(), unitsString.length());
+        graphicJson.AddMember("Units", units, alloc);
 
         j = pgraphic->getNumberOfPoints();
         Float32 fx=0.0, fy=0.0;
@@ -400,8 +424,12 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
         curveJson.AddMember("Type", Value(type.c_str(), alloc), alloc);
         curveJson.AddMember("AxisUnitsX", Value(pcurve->getCurveAxisUnitsX(), alloc), alloc);
         curveJson.AddMember("AxisUnitsY", Value(pcurve->getCurveAxisUnitsY(), alloc), alloc);
-        curveJson.AddMember("Label", Value(StringRef(pcurve->getCurveLabel())), alloc);
-        curveJson.AddMember("Description", Value(StringRef(pcurve->getCurveDescription())), alloc);
+        Value label;
+        label.SetString(pcurve->getCurveLabel(), std::strlen(pcurve->getCurveLabel()));
+        curveJson.AddMember("Label", label, alloc);
+        Value description;
+        description.SetString(pcurve->getCurveDescription(), std::strlen(pcurve->getCurveDescription()));
+        curveJson.AddMember("Description", description, alloc);
 
         j = pcurve->getNumberOfPoints();
         double dx=0.0, dy=0.0;
@@ -442,9 +470,16 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
       std::stringstream value;
       value << "0x" << STD_NAMESPACE hex << ps.getActiveOverlayGroup(layer, ovlidx) << STD_NAMESPACE dec;
       overlayJson.AddMember("Group", Value(value.str().c_str(), alloc), alloc);
-      overlayJson.AddMember("Label", Value(StringRef(ps.getActiveOverlayLabel(layer, ovlidx))), alloc);
-      overlayJson.AddMember("Description", Value(StringRef(ps.getActiveOverlayDescription(layer, ovlidx))), alloc);
-      overlayJson.AddMember("Type", Value(StringRef(ps.activeOverlayIsROI(layer, ovlidx) ? "ROI" : "graphic")), alloc);
+      Value label;
+      label.SetString(ps.getActiveOverlayLabel(layer, ovlidx), std::strlen(ps.getActiveOverlayLabel(layer, ovlidx)));
+      overlayJson.AddMember("Label", label, alloc);
+      Value description;
+      description.SetString(ps.getActiveOverlayDescription(layer, ovlidx), std::strlen(ps.getActiveOverlayDescription(layer, ovlidx)));
+      overlayJson.AddMember("Description", description, alloc);
+      Value type;
+      std::string typeString(ps.activeOverlayIsROI(layer, ovlidx) ? "ROI" : "graphic");
+      type.SetString(typeString.c_str(), typeString.length());
+      overlayJson.AddMember("Type", type, alloc);
 
       /* get overlay data */
       if (EC_Normal == ps.getOverlayData(layer, ovlidx, overlayData, overlayWidth, overlayHeight,
@@ -626,6 +661,7 @@ int main(int argc, char *argv[])
 
   if (status == EC_Normal)
   {
+    // std::cout << "dvi getCurrentPState " << dvi.getCurrentPState() << std::endl;
     if (!noPstateOutput) dumpPresentationState(pstateOutStream.Get(), dvi.getCurrentPState());
     if (!noBitmapOutput)
     {
