@@ -549,12 +549,12 @@ int GenerateOutputImage(OutputImageType& outputImage, const unsigned long width,
   importFilter->Update();
 
   // set as output image
-  outputImage.Set(importFilter->GetOutput());
+  outputImage = importFilter->GetOutput();
   return EXIT_SUCCESS;
 }
 
-template int GenerateOutputImage<OutputGrayImageType,  GrayPixelType,  2U>(OutputGrayImageType&,  const unsigned long, const unsigned long, const std::array<double, 2>&, const void*);
-template int GenerateOutputImage<OutputColorImageType, ColorPixelType, 2U>(OutputColorImageType&, const unsigned long, const unsigned long, const std::array<double, 2>&, const void*);
+template int GenerateOutputImage<GrayImageType,  GrayPixelType,  2U>(OutputGrayImageType&,  const unsigned long, const unsigned long, const std::array<double, 2>&, const void*);
+template int GenerateOutputImage<ColorImageType, ColorPixelType, 2U>(OutputColorImageType&, const unsigned long, const unsigned long, const std::array<double, 2>&, const void*);
 
 int main(int argc, char *argv[])
 {
@@ -686,11 +686,17 @@ int main(int argc, char *argv[])
         {
           if (colorOutput)
           {
-            return GenerateOutputImage<OutputColorImageType, ColorPixelType, 2U>(outputColorImage, width, height, pixelSpacing, pixelData);
+            ColorImageType::Pointer colorImage;
+            auto result =  GenerateOutputImage<ColorImageType, ColorPixelType, 2U>(colorImage, width, height, pixelSpacing, pixelData);
+            outputColorImage.Set(colorImage);
+            return result;
           }
           else
           {
-            return GenerateOutputImage<OutputGrayImageType, GrayPixelType, 2U>(outputGrayImage, width, height, pixelSpacing, pixelData);
+            GrayImageType::Pointer grayImage;
+            auto result = GenerateOutputImage<GrayImageType, GrayPixelType, 2U>(grayImage, width, height, pixelSpacing, pixelData);
+            outputGrayImage.Set(grayImage);
+            return result;
           }
         }
       }
