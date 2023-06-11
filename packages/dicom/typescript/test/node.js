@@ -158,7 +158,7 @@ test('Apply presentation state to dicom image.', async t => {
 
   t.assert(baselineJsonObject.PresentationLabel === pstateJsonOut.PresentationLabel)
   t.assert(baselineJsonObject.PresentationSizeMode === pstateJsonOut.PresentationSizeMode)
-  t.assert(JSON.stringify(baselineJsonObject) === JSON.stringify(pstateJsonOut))
+  t.deepEqual(JSON.stringify(baselineJsonObject), JSON.stringify(pstateJsonOut), 'JSON not equal')
 
   const baselineImage = 'gsps-pstate-image-baseline.pgm'
   const baselineImageFilePath = baselinePathPrefix + baselineImage
