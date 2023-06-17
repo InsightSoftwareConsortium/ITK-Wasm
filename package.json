@@ -232,7 +232,7 @@
       "body-max-line-length": [
         2,
         "always",
-        200
+        300
       ],
       "subject-case": [
         2,
