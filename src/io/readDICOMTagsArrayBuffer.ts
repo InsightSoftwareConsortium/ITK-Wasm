@@ -1,3 +1,4 @@
+import getTransferables from '../core/getTransferables.js'
 import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import TextStream from '../core/TextStream.js'
@@ -30,6 +31,7 @@ async function readDICOMTagsArrayBuffer (webWorker: Worker | null, arrayBuffer: 
     { type: InterfaceTypes.TextStream }
   ]
 
+  const transferables: ArrayBuffer[] = [arrayBuffer]
   interface PipelineResult {
     stdout: string
     stderr: string
@@ -45,7 +47,7 @@ async function readDICOMTagsArrayBuffer (webWorker: Worker | null, arrayBuffer: 
       outputs,
       inputs
     },
-    [arrayBuffer]
+    getTransferables(transferables)
   )
   const tagsJSON = (result.outputs[0].data as TextStream).data
   const tagsResult = JSON.parse(tagsJSON)

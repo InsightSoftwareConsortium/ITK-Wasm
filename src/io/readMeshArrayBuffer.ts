@@ -1,3 +1,4 @@
+import getTransferables from '../core/getTransferables.js'
 import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 import Mesh from '../core/Mesh.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
@@ -39,7 +40,7 @@ async function readMeshArrayBuffer (webWorker: Worker | null, arrayBuffer: Array
       outputs,
       inputs
     },
-    transferables
+    getTransferables(transferables)
   )
   return { mesh: result.outputs[0].data as Mesh, webWorker: worker }
 }

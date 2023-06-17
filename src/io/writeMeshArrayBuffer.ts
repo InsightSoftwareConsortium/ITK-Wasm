@@ -9,6 +9,7 @@ import PipelineInput from '../pipeline/PipelineInput.js'
 import PipelineOutput from '../pipeline/PipelineOutput.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import meshTransferables from '../core/internal/meshTransferables.js'
+import getTransferables from '../core/getTransferables.js'
 
 async function writeMeshArrayBuffer (webWorker: Worker | null, mesh: Mesh, fileName: string, mimeType: string, options: WriteMeshOptions): Promise<WriteArrayBufferResult> {
   if ('useCompression' in (mesh as any) || 'binaryFileType' in (mesh as any)) {
@@ -52,7 +53,7 @@ async function writeMeshArrayBuffer (webWorker: Worker | null, mesh: Mesh, fileN
       outputs,
       inputs
     },
-    transferables
+    getTransferables(transferables)
   )
   return { arrayBuffer: result.outputs[0].data.data.buffer as ArrayBuffer, webWorker: worker }
 }

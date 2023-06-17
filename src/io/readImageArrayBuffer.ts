@@ -1,3 +1,4 @@
+import getTransferables from '../core/getTransferables.js'
 import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 import Image from '../core/Image.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
@@ -49,7 +50,7 @@ async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: Arra
       outputs,
       inputs
     },
-    transferables
+    getTransferables(transferables)
   )
   let image = result.outputs[0].data as Image
   if (typeof options === 'object' && (typeof options.componentType !== 'undefined' || typeof options.pixelType !== 'undefined')) {
