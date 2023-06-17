@@ -6,7 +6,7 @@ import config from '../itkConfig.js'
 import IOTypes from '../core/IOTypes.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import runPipelineEmscripten from './internal/runPipelineEmscripten.js'
-import getTransferable from '../core/getTransferable.js'
+import getTransferables from '../core/getTransferables.js'
 import BinaryStream from '../core/BinaryStream.js'
 import BinaryFile from '../core/BinaryFile.js'
 import Image from '../core/Image.js'
@@ -17,6 +17,9 @@ import PipelineOutput from './PipelineOutput.js'
 import PipelineInput from './PipelineInput.js'
 import RunPipelineResult from './RunPipelineResult.js'
 import RunPipelineOptions from './RunPipelineOptions.js'
+import meshTransferables from '../core/internal/meshTransferables.js'
+import TypedArray from '../core/TypedArray.js'
+import imageTransferables from '../core/internal/imageTransferables.js'
 
 // To cache loaded pipeline modules
 const pipelineToModule: Map<string, PipelineEmscriptenModule> = new Map()
@@ -62,84 +65,38 @@ async function runPipeline (
     worker as Worker | null, pipelineWorkerUrlString as string | undefined | null
   )
   worker = usedWorker
-  const transferables: ArrayBuffer[] = []
+  const transferables: (ArrayBuffer | TypedArray | null)[] = []
   if (!(inputs == null) && inputs.length > 0) {
     inputs.forEach(function (input) {
       if (input.type === InterfaceTypes.BinaryStream) {
         // Binary data
         const dataArray = (input.data as BinaryStream).data
-        const transferable = getTransferable(dataArray)
-        if (transferable != null) {
-          transferables.push(transferable)
-        }
+        transferables.push(dataArray)
       } else if (input.type === InterfaceTypes.BinaryFile) {
         // Binary data
         const dataArray = (input.data as BinaryFile).data
-        const transferable = getTransferable(dataArray)
-        if (transferable != null) {
-          transferables.push(transferable)
-        }
+        transferables.push(dataArray)
       } else if (input.type === InterfaceTypes.Image) {
         // Image data
         const image = input.data as Image
         if (image.data === null) {
           throw Error('image data cannot be null')
         }
-        let transferable = getTransferable(image.data)
-        if (transferable != null) {
-          transferables.push(transferable)
-        }
-        transferable = getTransferable(image.direction)
-        if (transferable != null) {
-          transferables.push(transferable)
-        }
+        transferables.push(...imageTransferables(image))
       } else if (input.type === IOTypes.Binary) {
         // Binary data
-        const transferable = getTransferable(input.data as Uint8Array)
-        if (transferable != null) {
-          transferables.push(transferable)
-        }
+        transferables.push(input.data as Uint8Array)
       } else if (input.type === IOTypes.Image) {
         // Image data
         const image = input.data as Image
         if (image.data === null) {
           throw Error('image data cannot be null')
         }
-        let transferable = getTransferable(image.data)
-        if (transferable != null) {
-          transferables.push(transferable)
-        }
-        transferable = getTransferable(image.direction)
-        if (transferable != null) {
-          transferables.push(transferable)
-        }
+        transferables.push(...imageTransferables(image))
       } else if (input.type === IOTypes.Mesh) {
         // Mesh data
         const mesh = input.data as Mesh
-        if (mesh.points != null) {
-          const transferable = getTransferable(mesh.points)
-          if (transferable != null) {
-            transferables.push(transferable)
-          }
-        }
-        if (mesh.pointData != null) {
-          const transferable = getTransferable(mesh.pointData)
-          if (transferable != null) {
-            transferables.push(transferable)
-          }
-        }
-        if (mesh.cells != null) {
-          const transferable = getTransferable(mesh.cells)
-          if (transferable != null) {
-            transferables.push(transferable)
-          }
-        }
-        if (mesh.cellData != null) {
-          const transferable = getTransferable(mesh.cellData)
-          if (transferable != null) {
-            transferables.push(transferable)
-          }
-        }
+        transferables.push(...meshTransferables(mesh))
       }
     })
   }
@@ -161,7 +118,7 @@ async function runPipeline (
       outputs,
       inputs
     },
-    transferables
+    getTransferables(transferables)
   )
   return {
     returnValue: result.returnValue,
