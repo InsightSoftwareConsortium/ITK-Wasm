@@ -8,7 +8,7 @@
   "exports": {
     ".": {
       "browser": "./dist/bundles/dicom.js",
-      "node": "./dist/bundles/dicom.node.js",
+      "node": "./dist/bundles/dicom-node.js",
       "default": "./dist/bundles/dicom.js"
     }
   },
