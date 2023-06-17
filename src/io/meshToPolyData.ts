@@ -5,6 +5,7 @@ import PolyData from '../core/PolyData.js'
 import meshTransferables from '../core/internal/meshTransferables.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import config from '../itkConfig.js'
+import getTransferables from '../core/getTransferables.js'
 
 async function meshToPolyData (webWorker: Worker | null, mesh: Mesh): Promise<{ polyData: PolyData, webWorker: Worker }> {
   let worker = webWorker
@@ -33,7 +34,7 @@ async function meshToPolyData (webWorker: Worker | null, mesh: Mesh): Promise<{ 
       outputs,
       inputs
     },
-    transferables
+    getTransferables(transferables)
   )
   return { polyData: result.outputs[0].data as PolyData, webWorker: worker }
 }

@@ -1,3 +1,4 @@
+import getTransferables from '../core/getTransferables.js'
 import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 import WorkerPool from '../core/WorkerPool.js'
 import Metadata from '../core/Metadata.js'
@@ -57,7 +58,10 @@ const workerFunction = async (
     outputs,
     inputs
   }
-  const result: PipelineResult = await webworkerPromise.postMessage(message, transferables)
+  const result: PipelineResult = await webworkerPromise.postMessage(
+    message,
+    getTransferables(transferables)
+  )
   const image: Image = result.outputs[0].data
   const filenames: string[] = result.outputs[1].data.data.split('\0')
   // remove the last element since we expect it to be empty

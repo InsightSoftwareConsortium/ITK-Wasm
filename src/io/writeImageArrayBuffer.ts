@@ -6,11 +6,12 @@ import config from '../itkConfig.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import PipelineOutput from '../pipeline/PipelineOutput.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
-import getTransferable from '../core/getTransferable.js'
+import getTransferables from '../core/getTransferables.js'
 import castImage from '../core/castImage.js'
 
 import WriteImageOptions from './WriteImageOptions.js'
 import WriteArrayBufferResult from './WriteArrayBufferResult.js'
+import imageTransferables from '../core/internal/imageTransferables.js'
 
 async function writeImageArrayBuffer (webWorker: Worker | null, image: Image, fileName: string, options?: WriteImageOptions | string, useCompressionBackwardsCompatibility?: boolean
 ): Promise<WriteArrayBufferResult> {
@@ -50,15 +51,7 @@ async function writeImageArrayBuffer (webWorker: Worker | null, image: Image, fi
     { type: InterfaceTypes.Image, data: inputImage }
   ] as PipelineInput[]
 
-  const transferables: ArrayBuffer[] = []
-  let transferable = getTransferable(image.data)
-  if (transferable != null) {
-    transferables.push(transferable)
-  }
-  transferable = getTransferable(image.direction)
-  if (transferable != null) {
-    transferables.push(transferable)
-  }
+  const transferables = imageTransferables(image)
 
   interface RunWriteImagePipelineResult {
     stdout: string
@@ -76,7 +69,7 @@ async function writeImageArrayBuffer (webWorker: Worker | null, image: Image, fi
       outputs,
       inputs
     },
-    transferables
+    getTransferables(transferables)
   )
   return { arrayBuffer: result.outputs[0].data.data.buffer as ArrayBuffer, webWorker: worker }
 }
