@@ -1,5 +1,16 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.116](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.115...itk-wasm-v1.0.0-b.116) (2023-06-17)
+
+
+### Bug Fixes
+
+* **apply-presentation-state-to-image:** Fix output image lifetime ([eef53d5](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/eef53d574172c9cab46504c948f6efaa2e3c0e56))
+* **apply-presentation-state-to-image:** pstate itkImage copy crash ([3a9d2f5](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/3a9d2f5f952c7ce076941d7bf70279724adb59ff))
+* **apply-presentation-state-to-json:** Avoid crash with empty description ([2d6f25f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2d6f25f0fae22c3f7e20c50516e9fc25995d3057))
+* **dicom-node:** export location ([b1bba35](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/b1bba35c6553490f93300ab18662880810d18e98))
+* **ReadImagePipelines:** Check for SharedArrayBuffer in read image pipelines ([2380b20](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2380b20e8f6cff61d8c14ae7eba2a1f7e2c008c9))
+
 # [1.0.0-b.115](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.114...itk-wasm-v1.0.0-b.115) (2023-06-07)
 
 
