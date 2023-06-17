@@ -1,13 +1,13 @@
 const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer !== 'undefined' // eslint-disable-line
 
 function getTransferables (data?: any[] | null): ArrayBuffer[] {
-  if (!data?.length) {
+  if (data === undefined || data === null) {
     return []
   }
-  const transferables: ArrayBuffer[] = [];
-  for (let i=0; i<data.length; i++) {
+  const transferables: ArrayBuffer[] = []
+  for (let i = 0; i < data.length; i++) {
     const transferable = getTransferable(data[i])
-    if (transferable) {
+    if (transferable !== null) {
       transferables.push(transferable)
     }
   }
@@ -15,7 +15,7 @@ function getTransferables (data?: any[] | null): ArrayBuffer[] {
 }
 
 function getTransferable (data?: any): ArrayBuffer | null {
-  if (!data) {
+  if (data === undefined || data === null) {
     return null
   }
   let result: null | ArrayBuffer = null

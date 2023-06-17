@@ -1,7 +1,7 @@
 import PolyData from '../PolyData.js'
 import TypedArray from '../TypedArray.js'
 
-function polyDataTransferables (polyData: PolyData): (ArrayBuffer | TypedArray | null)[] {
+function polyDataTransferables (polyData: PolyData): Array<ArrayBuffer | TypedArray | null> {
   return [
     polyData.points,
     polyData.vertices,
@@ -9,7 +9,7 @@ function polyDataTransferables (polyData: PolyData): (ArrayBuffer | TypedArray |
     polyData.polygons,
     polyData.triangleStrips,
     polyData.pointData,
-    polyData.cellData,
+    polyData.cellData
   ]
 }
 

@@ -65,7 +65,7 @@ async function runPipeline (
     worker as Worker | null, pipelineWorkerUrlString as string | undefined | null
   )
   worker = usedWorker
-  const transferables: (ArrayBuffer | TypedArray | null)[] = []
+  const transferables: Array<ArrayBuffer | TypedArray | null> = []
   if (!(inputs == null) && inputs.length > 0) {
     inputs.forEach(function (input) {
       if (input.type === InterfaceTypes.BinaryStream) {
