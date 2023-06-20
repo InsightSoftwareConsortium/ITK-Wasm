@@ -1,8 +1,8 @@
-# Pipeline Inputs and Outputs
+# Pipeline Input/Output
 
 ## Introduction
 
-This example dives deeper into `itk::wasm::Pipeline` image inputs and outputs and how they are handled. We will create a pipeline to smooth an image with a median filter, run the Wasm from the command line, in Node.js.
+This tutorial section dives deeper into `itk::wasm::Pipeline` image inputs and outputs and how they are handled. We will create a pipeline to smooth an image with a median filter, run the wasm from the command line, in Node.js.
 
 Make sure to complete the [Hello Pipeline!](/tutorial/hello_pipeline) example before you start your filtering journey.
 
