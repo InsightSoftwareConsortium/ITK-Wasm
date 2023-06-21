@@ -93,6 +93,14 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           setPipelineModuleInputJSON(pipelineModule, dataJSON, index)
           break
         }
+        case InterfaceTypes.JsonObject:
+        {
+          const dataArray = encoder.encode(JSON.stringify(input.data))
+          const arrayPtr = setPipelineModuleInputArray(pipelineModule, dataArray, index, 0)
+          const dataJSON = { size: dataArray.buffer.byteLength, data: `data:application/vnd.itk.address,0:${arrayPtr}` }
+          setPipelineModuleInputJSON(pipelineModule, dataJSON, index)
+          break
+        }
         case InterfaceTypes.BinaryStream:
         {
           const dataArray = (input.data as BinaryStream).data
@@ -310,10 +318,6 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
       switch (output.type) {
         case InterfaceTypes.TextStream:
         {
-          // const jsonPtr = pipelineModule.ccall('itk_wasm_output_json_address', 'number', ['number', 'number'], [0, index])
-          // const jsonSize = pipelineModule.ccall('itk_wasm_output_json_size', 'number', ['number', 'number'], [0, index])
-          // const jsonArray = pipelineModule.HEAPU8.slice(jsonPtr, jsonPtr + jsonSize)
-          // const dataJSON = JSON.parse(decoder.decode(jsonArray))
           const dataPtr = pipelineModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, index, 0])
           const dataSize = pipelineModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, index, 0])
           const dataArrayView = new Uint8Array(pipelineModule.HEAPU8.buffer, dataPtr, dataSize)
@@ -330,10 +334,6 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case InterfaceTypes.BinaryStream:
         {
-          // const jsonPtr = pipelineModule.ccall('itk_wasm_output_json_address', 'number', ['number', 'number'], [0, index])
-          // const jsonSize = pipelineModule.ccall('itk_wasm_output_json_size', 'number', ['number', 'number'], [0, index])
-          // const jsonArray = pipelineModule.HEAPU8.slice(jsonPtr, jsonPtr + jsonSize)
-          // const dataJSON = JSON.parse(decoder.decode(jsonArray))
           const dataPtr = pipelineModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, index, 0])
           const dataSize = pipelineModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, index, 0])
           outputData = { data: memoryUint8SharedArray(pipelineModule, dataPtr, dataSize) }

@@ -57,6 +57,26 @@ test('runPipelineNode uses input and output text and binary data via memory io',
     })
 })
 
+test('runPipelineNode uses input and output json data via memory io', (t) => {
+  const pipelinePath = path.resolve('test', 'pipelines', 'input-output-json-pipeline', 'emscripten-build', 'input-output-json-test')
+  const args = ['--memory-io',
+    '0',
+    '0'
+  ]
+  const desiredOutputs = [
+    { type: InterfaceTypes.JsonObject }
+  ]
+  const jsonObject = { key1: 'text', key2: 8 }
+  const inputs = [
+    { type: InterfaceTypes.JsonObject, data: jsonObject }
+  ]
+  return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
+    .then(function ({ outputs }) {
+      t.is(outputs[0].type, InterfaceTypes.JsonObject)
+      t.deepEqual(outputs[0].data.data, jsonObject)
+    })
+})
+
 test('runPipelineNode writes and reads an itk.Image via memory io', (t) => {
   const verifyImage = (image) => {
     t.is(image.imageType.dimension, 2, 'dimension')
