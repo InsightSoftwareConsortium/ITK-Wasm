@@ -66,6 +66,8 @@ test/pipelines/mesh-read-write-pipeline/emscripten-build/
 test/pipelines/stdout-stderr-pipeline/wasi-build/
 test/pipelines/input-output-files-pipeline/wasi-build/
 test/pipelines/mesh-read-write-pipeline/wasi-build/
+test/pipelines/input-output-json-pipeline/emscripten-build/
+test/pipelines/input-output-json-pipeline/wasi-build/
 
 cypress/screenshots/
 cypress/videos/
