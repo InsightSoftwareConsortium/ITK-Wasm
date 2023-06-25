@@ -1,5 +1,12 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.118](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.117...itk-wasm-v1.0.0-b.118) (2023-06-25)
+
+
+### Features
+
+* **itk-wasm-cli:** Update default Docker image for 20230625-7a927abe ([cf63ed6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/cf63ed67a54542a6893a4ac01c07ccf921a72199))
+
 # [1.0.0-b.117](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.116...itk-wasm-v1.0.0-b.117) (2023-06-21)
 
 
