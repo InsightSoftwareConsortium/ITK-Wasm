@@ -27,7 +27,37 @@ extern "C" {
 extern void __wasm_call_ctors(void);
 extern int __main_void(void);
 extern void __wasm_call_dtors(void);
-extern void _initialize(void);
+
+// No longer present with WASI SDK 19 -> 20 ?
+//extern void _initialize(void);
+// https://github.com/WebAssembly/wasi-libc/blob/bd950eb128bff337153de217b11270f948d04bb4/libc-bottom-half/crt/crt1-reactor.c#L8
+#if defined(_REENTRANT)
+#include <stdatomic.h>
+extern void __wasi_init_tp(void);
+#endif
+extern void __wasm_call_ctors(void);
+
+//__attribute__((export_name("_initialize")))
+void _initialize_local(void) {
+#if defined(_REENTRANT)
+    static volatile atomic_int initialized = 0;
+    int expected = 0;
+    if (!atomic_compare_exchange_strong(&initialized, &expected, 1)) {
+        __builtin_trap();
+    }
+
+    __wasi_init_tp();
+#else
+    static volatile int initialized = 0;
+    if (initialized != 0) {
+        __builtin_trap();
+    }
+    initialized = 1;
+#endif
+
+    // The linker synthesizes this to call constructors.
+    __wasm_call_ctors();
+}
 
 __attribute__((export_name("itk_wasm_delayed_exit")))
 void itk_wasm_delayed_exit(int returnCode)
@@ -56,7 +86,8 @@ int itk_wasm_delayed_start(void)
 __attribute__((export_name("")))
 void _start(void)
 {
-  _initialize();
+  //_initialize();
+  _initialize_local();
 
   const int returnCode = itk_wasm_delayed_start();
 

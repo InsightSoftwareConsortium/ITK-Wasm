@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=dockcross/web-wasm
-FROM $BASE_IMAGE:20230406-484f06a
+FROM $BASE_IMAGE:20230622-7312d8f
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
@@ -7,8 +7,8 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 
 WORKDIR /
 
-# tag commit date: 2023-05-19 branch: itkwasm-2023-01-15-f42c10a20f-2
-ENV ITK_GIT_TAG 8e80eb3eb6ba4408d7286be5f7e0d95c4cabb90c
+# tag commit date: 2023-06-23 branch: itkwasm-2023-01-15-f42c10a20f-3
+ENV ITK_GIT_TAG 8aace5fd2b7d6032a5ecf51d1fd37a0a9abe0a44
 RUN git clone https://github.com/KitwareMedical/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
