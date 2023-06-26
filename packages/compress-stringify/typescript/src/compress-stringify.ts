@@ -39,7 +39,9 @@ async function compressStringify(
   ]
 
   const args = []
+  // ----------------------------------------------
   // Inputs
+
   const inputName = '0'
   args.push(inputName as string)
   // Outputs
@@ -48,7 +50,7 @@ async function compressStringify(
   // Options
   args.push('--memory-io')
   if (typeof options.stringify !== "undefined") {
-    args.push('--stringify')
+    options.stringify && args.push('--stringify')
   }
   if (typeof options.compressionLevel !== "undefined") {
     args.push('--compression-level', options.compressionLevel.toString())

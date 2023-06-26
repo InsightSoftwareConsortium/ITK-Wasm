@@ -35,7 +35,9 @@ async function parseStringDecompressNode(
   ]
 
   const args = []
+  // ----------------------------------------------
   // Inputs
+
   const inputName = '0'
   args.push(inputName as string)
   // Outputs
@@ -44,7 +46,7 @@ async function parseStringDecompressNode(
   // Options
   args.push('--memory-io')
   if (typeof options.parseString !== "undefined") {
-    args.push('--parse-string')
+    options.parseString && args.push('--parse-string')
   }
 
   const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'parse-string-decompress')

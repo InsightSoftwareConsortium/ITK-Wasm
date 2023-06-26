@@ -28,7 +28,7 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 20px;
+  min-width: 320px;
   min-height: 100vh;
 }
 
@@ -37,25 +37,21 @@ h1 {
   line-height: 1.1;
 }
 
-h4 {
-  text-align: left;
-  padding: 0.90em;
-}
-
 li {
   text-align: left;
 }
 
 #app {
+  min-width: 640px;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+  text-align: left;
 }
 
 .logo {
-  height: 12em;
-  padding: 1.1em;
+  height: 10em;
+  padding: 0.1em;
   will-change: filter;
 }
 .logo:hover {
@@ -65,8 +61,32 @@ li {
   filter: drop-shadow(0 0 2em #3178c6aa);
 }
 
-.card {
-  padding: 2em;
+.github-corner {
+  border-bottom: 0;
+  position: fixed;
+  right: 0;
+  text-decoration: none;
+  top: 0;
+  z-index: 1;
+}
+
+.github-corner:hover .octo-arm {
+  animation:octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+  0%,100%{transform:rotate(0)}
+  20%,60%{transform:rotate(-25deg)}
+  40%,80%{transform:rotate(10deg)}
+}
+
+@media (max-width:500px) {
+  .github-corner:hover .octo-arm{
+    animation:none;
+  }
+  .github-corner .octo-arm{
+    animation:octocat-wave 560ms ease-in-out;
+  }
 }
 
 @media (prefers-color-scheme: light) {

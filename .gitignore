@@ -38,6 +38,8 @@ packages/compress-stringify/emscripten-build/
 packages/compress-stringify/wasi-build/
 packages/compress-stringify/typescript/demo/
 packages/compress-stringify/typescript/dist/
+packages/compress-stringify/typescript/test/browser/demo-app/public
+packages/compress-stringify/typescript/demo-app
 
 node_modules
 .DS_Store

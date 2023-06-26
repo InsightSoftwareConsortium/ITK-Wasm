@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css" />
+  <script type="module">
+    import '@shoelace-style/shoelace/dist/themes/light.css';
+    import '@shoelace-style/shoelace/dist/themes/dark.css';
+    import '@shoelace-style/shoelace/dist/components/button/button.js';
+    import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js';
+    import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js';
+    import '@shoelace-style/shoelace/dist/components/tab/tab.js';
+    import '@shoelace-style/shoelace/dist/components/input/input.js';
+    import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
+    import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
+    import '@shoelace-style/shoelace/dist/components/alert/alert.js';
+    import '@shoelace-style/shoelace/dist/components/icon/icon.js';
+    import '@shoelace-style/shoelace/dist/components/progress-bar/progress-bar.js';
+    import '@shoelace-style/shoelace/dist/components/divider/divider.js';
+
+    import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
+    setBasePath('/');
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // dark mode
+      document.documentElement.classList.add('sl-theme-dark');
+    }
+  </script>
+  <title>@bindgenPackageName@</title>
+</head>
+<body>
+
+<!-- Utilities -->
+<script>
+function downloadFile(content, filename) {
+  const url = URL.createObjectURL(new Blob([content]))
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename || 'download'
+  document.body.appendChild(a)
+  function clickHandler(event) {
+    setTimeout(() => {
+      URL.revokeObjectURL(url)
+      a.removeEventListener('click', clickHandler)
+    }, 200)
+  };
+  a.addEventListener('click', clickHandler, false)
+  a.click()
+  return a
+}
+
+function escapeHtml(html) {
+  const div = document.createElement('div');
+  div.textContent = html;
+  const escaped = div.innerHTML;
+  div.remove()
+  return escaped
+}
+
+function notify(title, message, variant = 'primary', icon = 'info-circle', duration = 3000) {
+  const alert = Object.assign(document.createElement('sl-alert'), {
+    variant,
+    closable: true,
+    duration: duration,
+    innerHTML: `
+      <sl-icon name="${icon}" slot="icon"></sl-icon>
+      <strong>${escapeHtml(title)}</strong><br />
+      ${escapeHtml(message)}
+    `
+  });
+
+  document.body.append(alert);
+  return alert.toast();
+}
+</script>
+
+@bindgenGitHubCorner@
+
+<div id="app">
+  <a href="https://wasm.itk.org/" target="_blank">
+    <img src="./logo.svg" class="logo vanilla" alt="ITK Wasm logo" />
+  </a>
+
+  <h2>@bindgenPackageName@</h2>
+  <i>@bindgenPackageDescription@</i>
+  <br /><br />
+
+  <sl-tab-group>
+@pipelinesFunctionsTabs@
+@bindgenFunctions@
+  </sl-tab-group>
+</div>
+
+<script type="module" src="./index.ts"></script>
+</body>
+</html>

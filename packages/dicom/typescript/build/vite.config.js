@@ -1,11 +1,12 @@
 import { defineConfig } from 'vite'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+import { fileURLToPath, URL } from 'url'
 import path from 'path'
 
 export default defineConfig({
-  root: path.join('test', 'browser'),
+  root: path.join('test', 'browser', 'demo-app'),
   build: {
-    outDir: '../../demo',
+    outDir: '../../demo-app',
     emptyOutDir: true,
   },
   plugins: [
@@ -17,4 +18,9 @@ export default defineConfig({
       ],
     })
   ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('../src', import.meta.url))
+    }
+  },
 })

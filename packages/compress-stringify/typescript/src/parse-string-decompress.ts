@@ -39,7 +39,9 @@ async function parseStringDecompress(
   ]
 
   const args = []
+  // ----------------------------------------------
   // Inputs
+
   const inputName = '0'
   args.push(inputName as string)
   // Outputs
@@ -48,7 +50,7 @@ async function parseStringDecompress(
   // Options
   args.push('--memory-io')
   if (typeof options.parseString !== "undefined") {
-    args.push('--parse-string')
+    options.parseString && args.push('--parse-string')
   }
 
   const pipelinePath = 'parse-string-decompress'

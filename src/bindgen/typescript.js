@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import path from 'path'
+import readline from 'readline'
 
 import { markdownTable } from 'markdown-table'
 import wasmBinaryInterfaceJson from './wasmBinaryInterfaceJson.js'
@@ -33,6 +34,457 @@ const interfaceJsonTypeToTypeScriptType = new Map([
   ['INPUT_JSON', 'Object'],
   ['OUTPUT_JSON', 'Object'],
 ])
+
+function packageToBundleName(packageName) {
+  return path.basename(packageName.replace('@', '-'))
+}
+
+function writeIfOverrideNotPresent(modulePath, content) {
+  const prefix = '// Generated file. To retain edits, remove this comment.\n\n'
+  if (!fs.existsSync(modulePath)) {
+    fs.writeFileSync(modulePath, prefix + content)
+    return
+  }
+  const firstLine = fs.readFileSync(modulePath, 'utf-8').split('\n')[0]
+  if (firstLine.includes('Generated file')) {
+    fs.writeFileSync(modulePath, prefix + content)
+  }
+}
+
+function inputParametersDemoHtml(prefix, indent, parameter, required) {
+  let result = ''
+  const requiredAttr = required ? 'required ' : ''
+  switch(parameter.type) {
+    case 'INPUT_TEXT_FILE:FILE':
+    case 'INPUT_TEXT_STREAM':
+      result += `${prefix}${indent}<sl-input ${requiredAttr}name="${parameter.name}" type="text" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-input>\n`
+      result += `${prefix}${indent}<label for="${parameter.name}-file"><sl-button variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="${parameter.name}-file" style="display: none"/>\n`
+      result += `<br /><br />\n`
+      break
+    case 'INPUT_BINARY_FILE:FILE':
+    case 'INPUT_BINARY_STREAM':
+      result += `${prefix}${indent}<sl-input ${requiredAttr}name="${parameter.name}" type="text" label="${camelCase(parameter.name)}" help-text="${parameter.description}" disabled></sl-input>\n`
+      result += `${prefix}${indent}<label for="${parameter.name}-file"><sl-button ${requiredAttr}variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="${parameter.name}-file" style="display: none"/>\n`
+      result += `<br /><br />\n`
+      break
+    case 'TEXT':
+      result += `${prefix}${indent}<sl-input ${requiredAttr}name="${parameter.name}" type="text" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-input>\n`
+      break
+    case 'INT':
+      if (parameter.itemsExpected !== 1 || parameter.itemsExpectedMin !== 1 || parameter.itemsExpectedMax !== 1) {
+        // TODO
+        console.error(`INT items != 1 are currently not supported`)
+        process.exit(1)
+      }
+      result += `${prefix}${indent}<sl-input ${requiredAttr}name="${parameter.name}" type="number" value="${parameter.default}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-input>\n`
+      result += `<br />\n`
+      break
+    case 'BOOL':
+      result += `${prefix}${indent}<sl-checkbox name="${parameter.name}">${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-checkbox>\n`
+      result += `<br /><br />\n`
+      break
+    default:
+      console.error(`Unexpected interface type: ${parameter.type}`)
+      process.exit(1)
+  }
+  return result
+}
+
+function outputDemoHtml(prefix, indent, parameter) {
+  let result = ''
+  switch(parameter.type) {
+    case 'OUTPUT_TEXT_FILE:FILE':
+    case 'OUTPUT_TEXT_STREAM':
+      result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
+      result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
+      result += `<br /><br />\n`
+      break
+    case 'OUTPUT_BINARY_FILE:FILE':
+    case 'OUTPUT_BINARY_STREAM':
+      result += `${prefix}${indent}<sl-textarea name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>\n`
+      result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
+      result += `<br /><br />\n`
+      break
+    case 'TEXT':
+      result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
+      break
+    case 'INT':
+    case 'UINT':
+      if (parameter.itemsExpected !== 1 || parameter.itemsExpectedMin !== 1 || parameter.itemsExpectedMax !== 1) {
+        // TODO
+        console.error(`INT items != 1 are currently not supported`)
+        process.exit(1)
+      }
+      result += `${prefix}${indent}<sl-input disabled name="${parameter.name}" type="number" value="${parameter.default}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-input>\n`
+      result += `<br />\n`
+      break
+    case 'BOOL':
+      result += `${prefix}${indent}<sl-checkbox disabled name="${parameter.name}">${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-checkbox>\n`
+      result += `<br /><br />\n`
+      break
+    case 'OUTPUT_JSON':
+      result += `${prefix}${indent}<sl-tree ><sl-tree-item>${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-tree-item></sl-tree>\n`
+      result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>${camelCase(parameter.name)}</sl-button>\n`
+      result += `<br /><br />\n`
+      break
+    default:
+      console.error(`Unexpected interface type: ${parameter.type}`)
+      process.exit(1)
+  }
+  return result
+}
+
+function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
+  const parameterName = camelCase(parameter.name)
+  let result = `\n${prefix}${indent}context.outputs.set("${parameterName}", ${parameterName})\n`
+
+  switch(parameter.type) {
+    // case 'OUTPUT_TEXT_FILE:FILE':
+    // case 'OUTPUT_TEXT_STREAM':
+      // result += `${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
+      // result += `${indent}<sl-button variant="neutral" name="${parameter.name}-download">${camelCase(parameter.name)}</sl-button>\n`
+      // result += `<br /><br />\n`
+      // break
+    case 'OUTPUT_BINARY_FILE:FILE':
+    case 'OUTPUT_BINARY_STREAM':
+      result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
+      result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
+      result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-textarea[name=${parameter.name}]')\n`
+      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}.toString().substring(0, 200) + ' ...'\n`
+      break
+    // case 'TEXT':
+    //   result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
+    //   break
+    // case 'INT':
+    // case 'UINT':
+    //   if (parameter.itemsExpected !== 1 || parameter.itemsExpectedMin !== 1 || parameter.itemsExpectedMax !== 1) {
+    //     // TODO
+    //     console.error(`INT items != 1 are currently not supported`)
+    //     process.exit(1)
+    //   }
+    //   result += `${prefix}${indent}<sl-input disabled name="${parameter.name}" type="number" value="${parameter.default}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-input>\n`
+    //   result += `<br />\n`
+    //   break
+    // case 'BOOL':
+    //   result += `${prefix}${indent}<sl-checkbox disabled name="${parameter.name}">${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-checkbox>\n`
+    //   result += `<br />\n`
+    //   break
+    // case 'OUTPUT_JSON':
+    //   result += `${prefix}${indent}<sl-tree ><sl-tree-item>${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-tree-item></sl-tree>\n`
+    //   result += `${prefix}${indent}<sl-button variant="neutral" name="${parameter.name}-download">${camelCase(parameter.name)}</sl-button>\n`
+    //   result += `<br /><br />\n`
+    //   break
+    default:
+      console.error(`Unexpected interface type: ${parameter.type}`)
+      process.exit(1)
+  }
+  return result
+}
+
+function outputDemoTypeScript(functionName, prefix, indent, parameter) {
+  const parameterName = camelCase(parameter.name)
+  let result = '\n'
+
+  switch(parameter.type) {
+    // case 'OUTPUT_TEXT_FILE:FILE':
+    // case 'OUTPUT_TEXT_STREAM':
+      // result += `${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
+      // result += `${indent}<sl-button variant="neutral" name="${parameter.name}-download">${camelCase(parameter.name)}</sl-button>\n`
+      // result += `<br /><br />\n`
+      // break
+    case 'OUTPUT_BINARY_FILE:FILE':
+    case 'OUTPUT_BINARY_STREAM':
+      result += `${prefix}${indent}const ${parameterName}OutputDownload = document.querySelector('#${functionName}Outputs sl-button[name=${parameter.name}-download]')\n`
+      result += `${prefix}${indent}${parameterName}OutputDownload.addEventListener('click', (event) => {\n`
+      result += `${prefix}${indent}${indent}event.preventDefault()\n`
+      result += `${prefix}${indent}${indent}event.stopPropagation()\n`
+      result += `${prefix}${indent}${indent}if (context.outputs.has("${parameterName}")) {\n`
+      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(context.outputs.get("${parameterName}"), "${parameterName}.bin")\n`
+      result += `${prefix}${indent}${indent}}\n`
+      result += `${prefix}${indent}})\n`
+      break
+    // case 'TEXT':
+    //   result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
+    //   break
+    // case 'INT':
+    // case 'UINT':
+    //   if (parameter.itemsExpected !== 1 || parameter.itemsExpectedMin !== 1 || parameter.itemsExpectedMax !== 1) {
+    //     // TODO
+    //     console.error(`INT items != 1 are currently not supported`)
+    //     process.exit(1)
+    //   }
+    //   result += `${prefix}${indent}<sl-input disabled name="${parameter.name}" type="number" value="${parameter.default}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-input>\n`
+    //   result += `<br />\n`
+    //   break
+    // case 'BOOL':
+    //   result += `${prefix}${indent}<sl-checkbox disabled name="${parameter.name}">${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-checkbox>\n`
+    //   result += `<br />\n`
+    //   break
+    // case 'OUTPUT_JSON':
+    //   result += `${prefix}${indent}<sl-tree ><sl-tree-item>${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-tree-item></sl-tree>\n`
+    //   result += `${prefix}${indent}<sl-button variant="neutral" name="${parameter.name}-download">${camelCase(parameter.name)}</sl-button>\n`
+    //   result += `<br /><br />\n`
+    //   break
+    default:
+      console.error(`Unexpected interface type: ${parameter.type}`)
+      process.exit(1)
+  }
+  return result
+}
+
+// Evenutally we will support them all
+const demoSupportedInputTypes = new Set([
+  'INPUT_TEXT_FILE:FILE',
+  'INPUT_TEXT_STREAM',
+  'INPUT_BINARY_FILE:FILE',
+  'INPUT_BINARY_STREAM',
+  'TEXT',
+  'INT',
+  'UINT',
+  'BOOL',
+])
+const demoSupportedOutputTypes = new Set([
+  'OUTPUT_TEXT_FILE:FILE',
+  'OUTPUT_TEXT_STREAM',
+  'OUTPUT_BINARY_FILE:FILE',
+  'OUTPUT_BINARY_STREAM',
+  'TEXT',
+  'INT',
+  'UINT',
+  'BOOL',
+  'OUTPUT_JSON',
+])
+
+function allDemoTypesSupported(interfaceJson) {
+  let allTypesSupported = true
+  allTypesSupported = allTypesSupported && interfaceJson.inputs.every((input) => demoSupportedInputTypes.has(input.type))
+  allTypesSupported = allTypesSupported && interfaceJson.parameters.every((parameter) => demoSupportedInputTypes.has(parameter.type))
+  allTypesSupported = allTypesSupported && interfaceJson.outputs.every((parameter) => demoSupportedOutputTypes.has(parameter.type))
+  return allTypesSupported
+}
+
+function interfaceFunctionsDemoHtml(interfaceJson) {
+  let prefix = '    '
+  let indent = '  '
+  let result = ''
+
+  const allTypesSupported = allDemoTypesSupported(interfaceJson)
+  if (!allTypesSupported) {
+    return result
+  }
+
+  const nameCamelCase = camelCase(interfaceJson.name)
+  result += `\n${prefix}<sl-tab-panel name="${nameCamelCase}-panel">\n`
+  result += `\n${prefix}<small><i>${interfaceJson.description}</i></small><br /><br />\n`
+
+  result += `\n${prefix}<div id="${nameCamelCase}Inputs"><form>\n`
+  interfaceJson.inputs.forEach((input) => {
+    result += inputParametersDemoHtml(prefix, indent, input, true)
+  })
+
+  if (interfaceJson.parameters.length > 1) {
+    interfaceJson.parameters.forEach((parameter) => {
+      // Internal
+      if (parameter.name === "memory-io" || parameter.name === "version") {
+        return
+      }
+      result += inputParametersDemoHtml(prefix, indent, parameter, false)
+    })
+  }
+
+  result += `${prefix}<sl-divider></sl-divider>\n`
+  result += `${prefix}  <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>\n`
+  result += `${prefix}  <sl-button type="submit" variant="success">Run</sl-button>\n`
+  result += `${prefix}  <br /><br /><sl-progress-bar value="0" style="visibility: hidden;"></sl-progress-bar>`
+  result += `${prefix}</form></div>\n` // id="${nameCamelCase}Inputs"
+  result += `${prefix}<sl-divider></sl-divider>\n`
+  result += `\n${prefix}<div id="${nameCamelCase}Outputs">\n`
+  interfaceJson.outputs.forEach((output) => {
+    result += outputDemoHtml(prefix, indent, output)
+  })
+  result += `${prefix}</div>\n` // id="${nameCamelCase}Outputs"
+  result += `\n${prefix}</sl-tab-panel>\n\n`
+
+  return result
+}
+
+function inputParametersDemoTypeScript(functionName, indent, parameter, required) {
+  let result = ''
+  const contextProperty = required ? 'inputs' : 'options'
+  const parameterName = camelCase(parameter.name)
+  const inputIdentifier = `${parameterName}Element`
+  switch(parameter.type) {
+    case 'INPUT_TEXT_FILE:FILE':
+    case 'INPUT_TEXT_STREAM':
+      result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
+      result += `${indent}${inputIdentifier}.addEventListener('change', (event) => {\n`
+      result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
+      result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
+      result += `${indent}${indent}files[0].arrayBuffer().then((arrayBuffer) => {\n`
+      result += `${indent}${indent}${indent}context.${contextProperty}.set("${parameterName}", new TextDecoder().decode(new Uint8Array(arrayBuffer)))\n`
+      result += `${indent}${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
+      result += `${indent}${indent}${indent}input.value = context.${contextProperty}.get("${parameterName}").substring(0, 50) + ' ...'\n`
+      result += `${indent}${indent}})\n`
+      result += `${indent}})\n\n`
+      break
+    case 'INPUT_BINARY_FILE:FILE':
+    case 'INPUT_BINARY_STREAM':
+      result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
+      result += `${indent}${inputIdentifier}.addEventListener('change', (event) => {\n`
+      result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
+      result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
+      result += `${indent}${indent}files[0].arrayBuffer().then((arrayBuffer) => {\n`
+      result += `${indent}${indent}${indent}context.${contextProperty}.set("${parameterName}", new Uint8Array(arrayBuffer))\n`
+      result += `${indent}${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
+      result += `${indent}${indent}${indent}input.value = context.${contextProperty}.get("${parameterName}").toString().substring(0, 50) + ' ...'\n`
+      result += `${indent}${indent}})\n`
+      result += `${indent}})\n\n`
+      break
+    case 'TEXT':
+      result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs sl-input[name=${parameter.name}]')\n`
+      result += `${indent}${inputIdentifier}.addEventListener('sl-change', (event) => {\n`
+      result += `${indent}${indent}context.${contextProperty}.set("${parameterName}", ${inputIdentifier}.value)\n`
+      result += `${indent}})\n\n`
+      break
+    case 'BOOL':
+      result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs sl-checkbox[name=${parameter.name}]')\n`
+      result += `${indent}${inputIdentifier}.addEventListener('sl-change', (event) => {\n`
+      result += `${indent}${indent}context.${contextProperty}.set("${parameterName}", ${inputIdentifier}.checked)\n`
+      result += `${indent}})\n\n`
+      break
+    case 'INT':
+    case 'UINT':
+      result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs sl-input[name=${parameter.name}]')\n`
+      result += `${indent}${inputIdentifier}.addEventListener('sl-change', (event) => {\n`
+      result += `${indent}${indent}context.${contextProperty}.set("${parameterName}", parseInt(${inputIdentifier}.value))\n`
+      result += `${indent}})\n\n`
+      break
+    default:
+      console.error(`Unexpected interface type: ${parameter.type}`)
+      process.exit(1)
+  }
+  return result
+}
+
+function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath) {
+  let indent = '  '
+  const bundleName = packageToBundleName(packageName)
+  const functionName = camelCase(interfaceJson.name)
+
+  let result = `import * as ${camelCase(bundleName)} from '../../../dist/bundles/${bundleName}.js'\n`
+  result += `import ${functionName}LoadSampleInputs from "./${interfaceJson.name}-load-sample-inputs.js"\n\n`
+
+  const setupFunctionName = camelCase(`setup-${interfaceJson.name}`)
+  result += `function ${setupFunctionName}(loadSampleInputs)  {
+  // Data context
+  const context = {
+    inputs: new Map(),
+    options: new Map(),
+    outputs: new Map(),
+  }
+
+
+  // ----------------------------------------------
+  // Inputs
+`
+
+  const loadSampleInputsModulePath = path.join(outputPath, `${interfaceJson.name}-load-sample-inputs.ts`)
+  const loadSampleInputsModuleContent = `export default null
+// export default function ${functionName}LoadSampleInputs (context) {
+
+  // Load sample inputs for the ${functionName} function.
+  //
+  // This function should load sample inputs:
+  //
+  //  1) In the provided context map.
+  //  2) Into the corresponding HTML input elements.
+  //
+  // Example for an input named \`exampleInput\`:
+
+  // const exampleInput = 5
+  // context.inputs.set("exampleInput", exampleInput)
+  // const exampleElement = document.querySelector("#${functionName}Inputs [name=example-input]")
+  // exampleElement.value = 5
+
+// }
+`
+  writeIfOverrideNotPresent(loadSampleInputsModulePath, loadSampleInputsModuleContent)
+
+  result += `\n  if (loadSampleInputs) {
+    const loadSampleInputsButton = document.querySelector("#${functionName}Inputs [name=loadSampleInputs]")
+    loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
+    loadSampleInputsButton.addEventListener('click', (event) => {
+      loadSampleInputs(context)
+    })
+  }\n\n`
+
+  interfaceJson.inputs.forEach((input) => {
+    result += inputParametersDemoTypeScript(functionName, indent, input, true)
+  })
+
+  if (interfaceJson.parameters.length > 1) {
+    result += '\n  // ----------------------------------------------\n  // Options\n\n'
+    interfaceJson.parameters.forEach((parameter) => {
+      // Internal
+      if (parameter.name === "memory-io" || parameter.name === "version") {
+        return
+      }
+      result += inputParametersDemoTypeScript(functionName, indent, parameter, false)
+    })
+  }
+
+  result += '\n  // ----------------------------------------------\n  // Outputs\n'
+  interfaceJson.outputs.forEach((output) => {
+    result += outputDemoTypeScript(functionName, '', indent, output)
+  })
+
+  result += `\n  const form = document.querySelector(\`#${functionName}Inputs form\`)
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()\n\n`
+
+  interfaceJson.inputs.forEach((input) => {
+    result += `    if(!context.inputs.has('${camelCase(input.name)}')) {\n      globalThis.notify("Required input not provided", "${camelCase(input.name)}", "danger", "exclamation-octagon")\n      return\n    }\n`
+  })
+
+    result += `\n    const progressBar = document.querySelector('#${functionName}Inputs > form > sl-progress-bar')
+    try {
+      progressBar.setAttribute('style', 'visibility: default;')
+      progressBar.indeterminate = true
+      const t0 = performance.now()
+      const { webWorker, output } = await ${camelCase(bundleName)}.${functionName}(null,\n`
+  interfaceJson.inputs.forEach((input) => {
+    if (input.type === 'INPUT_TEXT_STREAM' || input.type === 'INPUT_BINARY_STREAM') {
+      result += `        context.inputs.get('${camelCase(input.name)}').slice(),\n`
+    } else {
+      result += `        context.inputs.get('${camelCase(input.name)}'),\n`
+    }
+  })
+  result += '        Object.fromEntries(context.options.entries())\n'
+  result += '        )\n'
+  result += '      const t1 = performance.now()\n'
+  result += `      globalThis.notify("${functionName} successfully completed", \`in \${t1 - t0} milliseconds.\`, "success", "rocket-fill")\n`
+  result += '      webWorker.terminate()\n'
+
+  interfaceJson.outputs.forEach((output) => {
+    result += outputDemoRunTypeScript(functionName, '    ', indent, output)
+  })
+
+  result += '    } catch (error) {\n'
+  result += '      globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")\n'
+  result += '      throw error\n'
+  result += '    } finally {\n'
+  result += '      progressBar.indeterminate = false\n'
+  result += '      progressBar.setAttribute("style", "visibility: hidden;")\n'
+  result += '    }\n'
+  result += '\n  })\n'
+
+  result += '}\n'
+  result += `${setupFunctionName}(${functionName}LoadSampleInputs)\n`
+
+  const modulePath = path.join(outputPath, `${interfaceJson.name}.ts`)
+  writeIfOverrideNotPresent(modulePath, result)
+  return modulePath
+}
 
 // Array of types that will require an import from itk-wasm
 const typesRequireImport = ['Image', 'Mesh', 'PolyData', 'TextFile', 'BinaryFile', 'TextFile', 'BinaryFile']
@@ -69,9 +521,12 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
   let readmeInterface = ''
   let readmePipelines = ''
+  let demoFunctionsHtml = ''
+  let pipelinesFunctionsTabs = ''
+  let demoFunctionsTypeScript = ''
 
   const packageName = options.packageName
-  const bundleName = path.basename(packageName)
+  const bundleName = packageToBundleName(packageName)
   const packageJsonPath = path.join(outputDir, 'package.json')
   if (!fs.existsSync(packageJsonPath)) {
     const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
@@ -107,7 +562,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       if (err.code !== 'EEXIST') throw err
     }
     try {
-      fs.mkdirSync(path.join(outputDir, 'test', 'browser'), { recursive: true })
+      fs.mkdirSync(path.join(outputDir, 'test', 'browser', 'demo-app'), { recursive: true })
     } catch (err) {
       if (err.code !== 'EEXIST') throw err
     }
@@ -126,29 +581,14 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       fs.copyFileSync(bindgenResource('.nojekyll'), path.join(outputDir, '.nojekll'))
     }
 
-    const logoPath = path.join(outputDir, 'test', 'browser', 'logo.svg')
+    const logoPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'logo.svg')
     if (!fs.existsSync(logoPath)) {
-      fs.copyFileSync(bindgenResource('logo.svg'), logoPath)
+      fs.copyFileSync(bindgenResource(path.join('demo-app', 'logo.svg')), logoPath)
     }
 
-    const demoStylePath = path.join(outputDir, 'test', 'browser', 'style.css')
+    const demoStylePath = path.join(outputDir, 'test', 'browser', 'demo-app', 'style.css')
     if (!fs.existsSync(demoStylePath)) {
-      fs.copyFileSync(bindgenResource('demo.css'), demoStylePath)
-    }
-
-    const indexPath = path.join(outputDir, 'test', 'browser', 'index.html')
-    if (!fs.existsSync(indexPath)) {
-      let demoIndexContent = fs.readFileSync(bindgenResource('demo-index.html'), { encoding: 'utf8', flag: 'r' })
-      demoIndexContent = demoIndexContent.replaceAll('<bindgenPackageName>', packageName)
-      fs.writeFileSync(indexPath, demoIndexContent)
-    }
-
-    const demoPath = path.join(outputDir, 'test', 'browser', 'app.ts')
-    if (!fs.existsSync(demoPath)) {
-      let demoContent = fs.readFileSync(bindgenResource('demo.ts'), { encoding: 'utf8', flag: 'r' })
-      demoContent = demoContent.replaceAll('<bindgenBundleName>', bundleName)
-      demoContent = demoContent.replaceAll('<bindgenBundleNameCamelCase>', camelCase(bundleName))
-      fs.writeFileSync(demoPath, demoContent)
+      fs.copyFileSync(bindgenResource(path.join('demo-app', 'style.css')), demoStylePath)
     }
 
     const rollupConfigPath = path.join(outputDir, 'build', 'rollup.browser.config.js')
@@ -195,6 +635,18 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     const moduleKebabCase = parsedPath.name
     const moduleCamelCase = camelCase(parsedPath.name)
     const modulePascalCase = `${moduleCamelCase[0].toUpperCase()}${moduleCamelCase.substring(1)}`
+    const functionName = camelCase(interfaceJson.name)
+
+    const functionDemoHtml = interfaceFunctionsDemoHtml(interfaceJson)
+    if (functionDemoHtml) {
+      demoFunctionsHtml += functionDemoHtml
+      pipelinesFunctionsTabs += `    <sl-tab slot="nav" panel="${functionName}-panel">${functionName}</sl-tab>\n`
+      const demoTypeScriptOutputPath = path.join(outputDir, 'test', 'browser', 'demo-app')
+      interfaceFunctionsDemoTypeScript(packageName, interfaceJson, demoTypeScriptOutputPath)
+      demoFunctionsTypeScript += `import './${interfaceJson.name}.js'\n`
+    } else {
+      pipelinesFunctionsTabs += `    <sl-tab slot="nav" panel="${functionName}-panel" disabled>${functionName}</sl-tab>\n`
+    }
 
     readmeInterface += `  ${moduleCamelCase}${nodeTextCamel},\n`
     let readmeFunction = ''
@@ -471,7 +923,7 @@ import {\n`
 
     let inputCount = 0
     functionContent += "  const args = []\n"
-    functionContent += "  // Inputs\n"
+    functionContent += '  // ----------------------------------------------\n  // Inputs\n\n'
     interfaceJson.inputs.forEach((input) => {
       const camel = camelCase(input.name)
       if (interfaceJsonTypeToInterfaceType.has(input.type)) {
@@ -524,7 +976,7 @@ import {\n`
       const camel = camelCase(parameter.name)
       functionContent += `  if (typeof options.${camel} !== "undefined") {\n`
       if (parameter.type === "BOOL") {
-        functionContent += `    args.push('--${parameter.name}')\n`
+        functionContent += `    options.${camel} && args.push('--${parameter.name}')\n`
       } else if (parameter.itemsExpectedMax > 1) {
         functionContent += `    if(options.${camel}.length < ${parameter.itemsExpectedMin}) {\n`
         functionContent += `      throw new Error('"${parameter.name}" option must have a length > ${parameter.itemsExpectedMin}')\n`
@@ -665,6 +1117,30 @@ import {\n`
   }
 
   fs.writeFileSync(path.join(srcOutputDir, `index${nodeTextKebab}.ts`), indexContent)
+
+  if (!forNode) {
+    const demoIndexPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'index.html')
+    let bindgenGitHubCorner = ''
+    if (options.repository && options.repository.includes('github.com')) {
+      bindgenGitHubCorner = `<!-- https://tholman.com/github-corners/ -->
+<a href="${options.repository}" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>`
+    }
+    if (!fs.existsSync(demoIndexPath)) {
+      let demoIndexContent = fs.readFileSync(bindgenResource(path.join('demo-app', 'index.html')), { encoding: 'utf8', flag: 'r' })
+      demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageName@', packageName)
+      demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageDescription@', options.packageDescription)
+      demoIndexContent = demoIndexContent.replaceAll('@bindgenGitHubCorner@', bindgenGitHubCorner)
+      demoIndexContent = demoIndexContent.replaceAll('@bindgenFunctions@', demoFunctionsHtml)
+      demoIndexContent = demoIndexContent.replaceAll('@pipelinesFunctionsTabs@', pipelinesFunctionsTabs)
+      fs.writeFileSync(demoIndexPath, demoIndexContent)
+    }
+    const demoTypeScriptPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'index.ts')
+    let demoTypeScriptContent = fs.readFileSync(bindgenResource(path.join('demo-app', 'index.ts')), { encoding: 'utf8', flag: 'r' })
+    demoTypeScriptContent = demoTypeScriptContent.replaceAll('@bindgenBundleName@', bundleName)
+    demoTypeScriptContent = demoTypeScriptContent.replaceAll('@bindgenBundleNameCamelCase@', camelCase(bundleName))
+    demoTypeScriptContent = demoTypeScriptContent.replaceAll('@bindgenFunctionLogic@', demoFunctionsTypeScript)
+    writeIfOverrideNotPresent(demoTypeScriptPath, demoTypeScriptContent)
+  }
 
   return readmeInterface
 }
