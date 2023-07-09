@@ -12,7 +12,7 @@ import pythonBindgen from './bindgen/python.js'
 
 const program = new Command()
 
-const defaultImageTag = '20230621-3b2ef0b5'
+const defaultImageTag = '20230709-b133f6b9'
 
 function processCommonOptions(wasiDefault=false) {
   const options = program.opts()
