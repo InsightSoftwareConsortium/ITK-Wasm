@@ -58,7 +58,7 @@ function(add_executable target)
     # WASI
     set_property(TARGET ${wasm_target} PROPERTY SUFFIX ".wasi.wasm")
     if (NOT TARGET wasi-itk-extras AND DEFINED CMAKE_CXX_COMPILE_OBJECT)
-      add_library(wasi-itk-extras STATIC /ITKWebAssemblyInterface/src/exceptionShim.cxx /ITKWebAssemblyInterface/src/initialization.cxx)
+      add_library(wasi-itk-extras STATIC /ITKWebAssemblyInterface/src/exceptionShim.cxx /ITKWebAssemblyInterface/src/cxaThreadAtExitShim.cxx /ITKWebAssemblyInterface/src/initialization.cxx)
     endif()
     get_property(_is_imported TARGET ${wasm_target} PROPERTY IMPORTED)
     if (NOT ${_is_imported})
