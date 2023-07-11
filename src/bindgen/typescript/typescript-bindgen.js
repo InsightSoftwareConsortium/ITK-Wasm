@@ -2,9 +2,9 @@ import fs from 'fs-extra'
 import path from 'path'
 
 import { markdownTable } from 'markdown-table'
-import wasmBinaryInterfaceJson from './wasm-binary-interface-json.js'
-import interfaceJsonTypeToInterfaceType from './interface-json-type-to-interface-type.js'
-import camelCase from './camel-case.js'
+import wasmBinaryInterfaceJson from '../wasm-binary-interface-json.js'
+import interfaceJsonTypeToInterfaceType from '../interface-json-type-to-interface-type.js'
+import camelCase from '../camel-case.js'
 
 const interfaceJsonTypeToTypeScriptType = new Map([
   ['INPUT_TEXT_FILE:FILE', 'TextFile'],
@@ -489,7 +489,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
 const typesRequireImport = ['Image', 'Mesh', 'PolyData', 'TextFile', 'BinaryFile', 'TextFile', 'BinaryFile']
 
 function bindgenResource(filePath) {
-  return path.join(path.dirname(import.meta.url.substring(7)), 'typescript-resources', filePath)
+  return path.join(path.dirname(import.meta.url.substring(7)), 'resources', filePath)
 }
 
 function readFileIfNotInterfaceType(forNode, interfaceType, varName, indent) {

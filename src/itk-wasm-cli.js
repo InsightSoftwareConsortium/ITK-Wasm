@@ -7,7 +7,7 @@ import { spawnSync } from 'child_process'
 import glob from 'glob'
 import { Command, Option } from 'commander/esm.mjs'
 
-import typescriptBindgen from './bindgen/typescript.js'
+import typescriptBindgen from './bindgen/typescript/typescript-bindgen.js'
 import pythonBindgen from './bindgen/python.js'
 
 const program = new Command()

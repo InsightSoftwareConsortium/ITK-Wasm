@@ -171,7 +171,7 @@
       "src/web-workers/*.ts",
       "src/core/ITKWasmEmscriptenModule.ts",
       "src/pipeline/PipelineEmscriptenModule.ts",
-      "src/bindgen/typescript-resources/*"
+      "src/bindgen/resources/*"
     ]
   },
   "standard": {
