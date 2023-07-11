@@ -1,10 +1,10 @@
 import fs from 'fs-extra'
 import path from 'path'
 
-import wasmBinaryInterfaceJson from './wasmBinaryInterfaceJson.js'
-import interfaceJsonTypeToInterfaceType from './interfaceJsonTypeToInterfaceType.js'
-import camelCase from './camelCase.js'
-import snakeCase from './snakeCase.js'
+import wasmBinaryInterfaceJson from './wasm-binary-interface-json.js'
+import interfaceJsonTypeToInterfaceType from './interface-json-type-to-interface-type.js'
+import camelCase from './camel-case.js'
+import snakeCase from './snake-case.js'
 
 const interfaceJsonTypeToPythonType = new Map([
   ['INPUT_TEXT_FILE:FILE', 'os.PathLike'],

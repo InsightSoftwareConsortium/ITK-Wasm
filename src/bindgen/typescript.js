@@ -1,11 +1,10 @@
 import fs from 'fs-extra'
 import path from 'path'
-import readline from 'readline'
 
 import { markdownTable } from 'markdown-table'
-import wasmBinaryInterfaceJson from './wasmBinaryInterfaceJson.js'
-import interfaceJsonTypeToInterfaceType from './interfaceJsonTypeToInterfaceType.js'
-import camelCase from './camelCase.js'
+import wasmBinaryInterfaceJson from './wasm-binary-interface-json.js'
+import interfaceJsonTypeToInterfaceType from './interface-json-type-to-interface-type.js'
+import camelCase from './camel-case.js'
 
 const interfaceJsonTypeToTypeScriptType = new Map([
   ['INPUT_TEXT_FILE:FILE', 'TextFile'],
