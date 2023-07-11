@@ -5,38 +5,8 @@ import { markdownTable } from 'markdown-table'
 import wasmBinaryInterfaceJson from '../wasm-binary-interface-json.js'
 import interfaceJsonTypeToInterfaceType from '../interface-json-type-to-interface-type.js'
 import camelCase from '../camel-case.js'
-
-const interfaceJsonTypeToTypeScriptType = new Map([
-  ['INPUT_TEXT_FILE:FILE', 'TextFile'],
-  ['INPUT_TEXT_FILE', 'TextFile'],
-  ['OUTPUT_TEXT_FILE:FILE', 'TextFile'],
-  ['OUTPUT_TEXT_FILE', 'TextFile'],
-  ['INPUT_BINARY_FILE:FILE', 'BinaryFile'],
-  ['INPUT_BINARY_FILE', 'BinaryFile'],
-  ['OUTPUT_BINARY_FILE:FILE', 'BinaryFile'],
-  ['OUTPUT_BINARY_FILE', 'BinaryFile'],
-  ['INPUT_TEXT_STREAM', 'string'],
-  ['OUTPUT_TEXT_STREAM', 'string'],
-  ['INPUT_BINARY_STREAM', 'Uint8Array'],
-  ['OUTPUT_BINARY_STREAM', 'Uint8Array'],
-  ['INPUT_IMAGE', 'Image'],
-  ['OUTPUT_IMAGE', 'Image'],
-  ['INPUT_MESH', 'Mesh'],
-  ['OUTPUT_MESH', 'Mesh'],
-  ['INPUT_POLYDATA', 'PolyData'],
-  ['OUTPUT_POLYDATA', 'PolyData'],
-  ['BOOL', 'boolean'],
-  ['TEXT', 'string'],
-  ['INT', 'number'],
-  ['UINT', 'number'],
-  ['FLOAT', 'number'],
-  ['INPUT_JSON', 'Object'],
-  ['OUTPUT_JSON', 'Object'],
-])
-
-function packageToBundleName(packageName) {
-  return path.basename(packageName.replace('@', '-'))
-}
+import interfaceJsonTypeToTypeScriptType from './interface-json-type-to-typescript-type.js'
+import packageToBundleName from './package-to-bundle-name.js'
 
 function writeIfOverrideNotPresent(modulePath, content) {
   const prefix = '// Generated file. To retain edits, remove this comment.\n\n'
