@@ -8,7 +8,7 @@ import glob from 'glob'
 import { Command, Option } from 'commander/esm.mjs'
 
 import typescriptBindgen from './bindgen/typescript/typescript-bindgen.js'
-import pythonBindgen from './bindgen/python.js'
+import pythonBindgen from './bindgen/python/python-bindgen.js'
 
 const program = new Command()
 
