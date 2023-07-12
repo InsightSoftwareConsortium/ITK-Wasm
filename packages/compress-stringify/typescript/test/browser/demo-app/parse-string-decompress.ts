@@ -11,7 +11,6 @@ function setupParseStringDecompress(loadSampleInputs)  {
     outputs: new Map(),
   }
 
-
   // ----------------------------------------------
   // Inputs
 
@@ -35,7 +34,6 @@ function setupParseStringDecompress(loadSampleInputs)  {
     })
   })
 
-
   // ----------------------------------------------
   // Options
 
@@ -43,7 +41,6 @@ function setupParseStringDecompress(loadSampleInputs)  {
   parseStringElement.addEventListener('sl-change', (event) => {
     context.options.set("parseString", parseStringElement.checked)
   })
-
 
   // ----------------------------------------------
   // Outputs

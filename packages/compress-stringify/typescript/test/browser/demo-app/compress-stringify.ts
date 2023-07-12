@@ -11,7 +11,6 @@ function setupCompressStringify(loadSampleInputs)  {
     outputs: new Map(),
   }
 
-
   // ----------------------------------------------
   // Inputs
 
@@ -35,7 +34,6 @@ function setupCompressStringify(loadSampleInputs)  {
     })
   })
 
-
   // ----------------------------------------------
   // Options
 
@@ -53,7 +51,6 @@ function setupCompressStringify(loadSampleInputs)  {
   dataUrlPrefixElement.addEventListener('sl-change', (event) => {
     context.options.set("dataUrlPrefix", dataUrlPrefixElement.value)
   })
-
 
   // ----------------------------------------------
   // Outputs

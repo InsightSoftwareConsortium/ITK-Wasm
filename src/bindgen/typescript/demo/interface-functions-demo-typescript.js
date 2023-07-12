@@ -24,7 +24,6 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
     outputs: new Map(),
   }
 
-
   // ----------------------------------------------
   // Inputs
 `
@@ -64,7 +63,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   })
 
   if (interfaceJson.parameters.length > 1) {
-    result += '\n  // ----------------------------------------------\n  // Options\n\n'
+    result += '  // ----------------------------------------------\n  // Options\n\n'
     interfaceJson.parameters.forEach((parameter) => {
       // Internal
       if (parameter.name === "memory-io" || parameter.name === "version") {
@@ -74,7 +73,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
     })
   }
 
-  result += '\n  // ----------------------------------------------\n  // Outputs\n'
+  result += '  // ----------------------------------------------\n  // Outputs\n'
   interfaceJson.outputs.forEach((output) => {
     result += outputDemoTypeScript(functionName, '', indent, output)
   })
