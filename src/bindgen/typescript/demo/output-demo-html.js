@@ -1,4 +1,4 @@
-import camelCase from '../camel-case.js'
+import camelCase from '../../camel-case.js'
 
 function outputDemoHtml(prefix, indent, parameter) {
   let result = ''

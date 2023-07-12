@@ -1,8 +1,8 @@
-import camelCase from "../camel-case.js"
+import camelCase from "../../camel-case.js"
 
-function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
+function outputDemoTypeScript(functionName, prefix, indent, parameter) {
   const parameterName = camelCase(parameter.name)
-  let result = `\n${prefix}${indent}context.outputs.set("${parameterName}", ${parameterName})\n`
+  let result = '\n'
 
   switch(parameter.type) {
     // case 'OUTPUT_TEXT_FILE:FILE':
@@ -13,10 +13,14 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
       // break
     case 'OUTPUT_BINARY_FILE:FILE':
     case 'OUTPUT_BINARY_STREAM':
-      result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
-      result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
-      result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-textarea[name=${parameter.name}]')\n`
-      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}.toString().substring(0, 200) + ' ...'\n`
+      result += `${prefix}${indent}const ${parameterName}OutputDownload = document.querySelector('#${functionName}Outputs sl-button[name=${parameter.name}-download]')\n`
+      result += `${prefix}${indent}${parameterName}OutputDownload.addEventListener('click', (event) => {\n`
+      result += `${prefix}${indent}${indent}event.preventDefault()\n`
+      result += `${prefix}${indent}${indent}event.stopPropagation()\n`
+      result += `${prefix}${indent}${indent}if (context.outputs.has("${parameterName}")) {\n`
+      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(context.outputs.get("${parameterName}"), "${parameterName}.bin")\n`
+      result += `${prefix}${indent}${indent}}\n`
+      result += `${prefix}${indent}})\n`
       break
     // case 'TEXT':
     //   result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
@@ -47,4 +51,4 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
   return result
 }
 
-export default outputDemoRunTypeScript
+export default outputDemoTypeScript

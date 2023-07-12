@@ -8,43 +8,13 @@ import camelCase from '../camel-case.js'
 
 import interfaceJsonTypeToTypeScriptType from './interface-json-type-to-typescript-type.js'
 import packageToBundleName from './package-to-bundle-name.js'
-import inputParametersDemoHtml from './input-parameters-demo-html.js'
 import writeIfOverrideNotPresent from './write-if-override-not-present.js'
 
-import outputDemoHtml from './output-demo-html.js'
-import outputDemoRunTypeScript from './output-demo-run-typescript.js'
-import outputDemoTypeScript from './output-demo-typescript.js'
-
-// Evenutally we will support them all
-const demoSupportedInputTypes = new Set([
-  'INPUT_TEXT_FILE:FILE',
-  'INPUT_TEXT_STREAM',
-  'INPUT_BINARY_FILE:FILE',
-  'INPUT_BINARY_STREAM',
-  'TEXT',
-  'INT',
-  'UINT',
-  'BOOL',
-])
-const demoSupportedOutputTypes = new Set([
-  'OUTPUT_TEXT_FILE:FILE',
-  'OUTPUT_TEXT_STREAM',
-  'OUTPUT_BINARY_FILE:FILE',
-  'OUTPUT_BINARY_STREAM',
-  'TEXT',
-  'INT',
-  'UINT',
-  'BOOL',
-  'OUTPUT_JSON',
-])
-
-function allDemoTypesSupported(interfaceJson) {
-  let allTypesSupported = true
-  allTypesSupported = allTypesSupported && interfaceJson.inputs.every((input) => demoSupportedInputTypes.has(input.type))
-  allTypesSupported = allTypesSupported && interfaceJson.parameters.every((parameter) => demoSupportedInputTypes.has(parameter.type))
-  allTypesSupported = allTypesSupported && interfaceJson.outputs.every((parameter) => demoSupportedOutputTypes.has(parameter.type))
-  return allTypesSupported
-}
+import inputParametersDemoHtml from './demo/input-parameters-demo-html.js'
+import outputDemoHtml from './demo/output-demo-html.js'
+import outputDemoRunTypeScript from './demo/output-demo-run-typescript.js'
+import outputDemoTypeScript from './demo/output-demo-typescript.js'
+import allDemoTypesSupported from './demo/all-demo-types-supported.js'
 
 function interfaceFunctionsDemoHtml(interfaceJson) {
   let prefix = '    '
