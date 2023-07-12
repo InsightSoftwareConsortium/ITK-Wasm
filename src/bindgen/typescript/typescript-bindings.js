@@ -8,10 +8,11 @@ import camelCase from '../camel-case.js'
 
 import interfaceJsonTypeToTypeScriptType from './interface-json-type-to-typescript-type.js'
 import packageToBundleName from './package-to-bundle-name.js'
-import writeIfOverrideNotPresent from './write-if-override-not-present.js'
+import writeIfOverrideNotPresent from '../write-if-override-not-present.js'
 
 import interfaceFunctionsDemoHtml from './demo/interface-functions-demo-html.js'
 import interfaceFunctionsDemoTypeScript from './demo/interface-functions-demo-typescript.js'
+import githubCorner from './demo/github-corner.js'
 
 // Array of types that will require an import from itk-wasm
 const typesRequireImport = ['Image', 'Mesh', 'PolyData', 'TextFile', 'BinaryFile', 'TextFile', 'BinaryFile']
@@ -111,11 +112,20 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     const logoPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'logo.svg')
     if (!fs.existsSync(logoPath)) {
       fs.copyFileSync(bindgenResource(path.join('demo-app', 'logo.svg')), logoPath)
+      const jsLogoPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'javascript-logo.svg')
+      fs.copyFileSync(bindgenResource(path.join('demo-app', 'javascript-logo.svg')), jsLogoPath)
+      const tsLogoPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'typescript-logo.svg')
+      fs.copyFileSync(bindgenResource(path.join('demo-app', 'typescript-logo.svg')), tsLogoPath)
     }
 
     const demoStylePath = path.join(outputDir, 'test', 'browser', 'demo-app', 'style.css')
     if (!fs.existsSync(demoStylePath)) {
       fs.copyFileSync(bindgenResource(path.join('demo-app', 'style.css')), demoStylePath)
+    }
+
+    const demoJsUtilities = path.join(outputDir, 'test', 'browser', 'demo-app', 'utilities.js')
+    if (!fs.existsSync(demoJsUtilities)) {
+      fs.copyFileSync(bindgenResource(path.join('demo-app', 'utilities.js')), demoJsUtilities)
     }
 
     const rollupConfigPath = path.join(outputDir, 'build', 'rollup.browser.config.js')
@@ -164,7 +174,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     const modulePascalCase = `${moduleCamelCase[0].toUpperCase()}${moduleCamelCase.substring(1)}`
     const functionName = camelCase(interfaceJson.name)
 
-    const functionDemoHtml = interfaceFunctionsDemoHtml(interfaceJson)
+    const useCamelCase = true
+    const functionDemoHtml = interfaceFunctionsDemoHtml(interfaceJson, functionName, useCamelCase)
     if (functionDemoHtml) {
       demoFunctionsHtml += functionDemoHtml
       pipelinesFunctionsTabs += `    <sl-tab slot="nav" panel="${functionName}-panel">${functionName}</sl-tab>\n`
@@ -647,18 +658,44 @@ import {\n`
 
   if (!forNode) {
     const demoIndexPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'index.html')
-    let bindgenGitHubCorner = ''
-    if (options.repository && options.repository.includes('github.com')) {
-      bindgenGitHubCorner = `<!-- https://tholman.com/github-corners/ -->
-<a href="${options.repository}" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>`
-    }
     if (!fs.existsSync(demoIndexPath)) {
       let demoIndexContent = fs.readFileSync(bindgenResource(path.join('demo-app', 'index.html')), { encoding: 'utf8', flag: 'r' })
-      demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageName@', packageName)
+const shoelaceScript = `
+  <script type="module">
+    import '@shoelace-style/shoelace/dist/themes/light.css';
+    import '@shoelace-style/shoelace/dist/themes/dark.css';
+    import '@shoelace-style/shoelace/dist/components/button/button.js';
+    import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js';
+    import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js';
+    import '@shoelace-style/shoelace/dist/components/tab/tab.js';
+    import '@shoelace-style/shoelace/dist/components/input/input.js';
+    import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
+    import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
+    import '@shoelace-style/shoelace/dist/components/alert/alert.js';
+    import '@shoelace-style/shoelace/dist/components/icon/icon.js';
+    import '@shoelace-style/shoelace/dist/components/divider/divider.js';
+
+    import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
+    setBasePath('/');
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // dark mode
+      document.documentElement.classList.add('sl-theme-dark');
+    }
+  </script>
+`
+      demoIndexContent = demoIndexContent.replaceAll('@shoelaceScript@', shoelaceScript)
+      const packageNameLanguageLogos = `${packageName}<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/>`
+      demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageName@', packageNameLanguageLogos)
       demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageDescription@', options.packageDescription)
+      const bindgenGitHubCorner = githubCorner(options)
       demoIndexContent = demoIndexContent.replaceAll('@bindgenGitHubCorner@', bindgenGitHubCorner)
       demoIndexContent = demoIndexContent.replaceAll('@bindgenFunctions@', demoFunctionsHtml)
       demoIndexContent = demoIndexContent.replaceAll('@pipelinesFunctionsTabs@', pipelinesFunctionsTabs)
+const indexModule = `
+<script type="module" src="./index.ts"></script>
+`
+    demoIndexContent = demoIndexContent.replaceAll('@indexModule@', indexModule)
       fs.writeFileSync(demoIndexPath, demoIndexContent)
     }
     const demoTypeScriptPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'index.ts')

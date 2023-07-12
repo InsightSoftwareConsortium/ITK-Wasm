@@ -63,10 +63,9 @@ function setupParseStringDecompress(loadSampleInputs)  {
       return
     }
 
-    const progressBar = document.querySelector('#parseStringDecompressInputs > form > sl-progress-bar')
+    const runButton = document.querySelector('#parseStringDecompressInputs sl-button[name="run"]')
     try {
-      progressBar.setAttribute('style', 'visibility: default;')
-      progressBar.indeterminate = true
+      runButton.loading = true
       const t0 = performance.now()
       const { webWorker, output } = await compressStringify.parseStringDecompress(null,
         context.inputs.get('input').slice(),
@@ -85,8 +84,7 @@ function setupParseStringDecompress(loadSampleInputs)  {
       globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
       throw error
     } finally {
-      progressBar.indeterminate = false
-      progressBar.setAttribute("style", "visibility: hidden;")
+      runButton.loading = false
     }
 
   })

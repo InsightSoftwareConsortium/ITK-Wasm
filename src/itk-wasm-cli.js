@@ -9,6 +9,7 @@ import { Command, Option } from 'commander/esm.mjs'
 
 import typescriptBindgen from './bindgen/typescript/typescript-bindgen.js'
 import pythonBindgen from './bindgen/python/python-bindgen.js'
+import pythonWebDemoBindgen from './bindgen/python-web-demo/python-web-demo-bindgen.js'
 
 const program = new Command()
 
@@ -239,8 +240,8 @@ function run(wasmBinary, options) {
 function bindgen(options) {
   const { buildDir } = processCommonOptions()
 
-  const interface = options.language ?? 'typescript'
-  const outputDir = options.outputDir ?? interface
+  const iface = options.interface ?? 'typescript'
+  const outputDir = options.outputDir ?? iface
 
   const wasmBinaries = glob.sync(path.join(buildDir, '**/*.wasm'))
 
@@ -253,13 +254,19 @@ function bindgen(options) {
   // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
   let filteredWasmBinaries = wasmBinaries.filter(binary => !binary.endsWith('.umd.wasm'))
 
-  switch (interface) {
+  switch (iface) {
     case 'typescript':
       typescriptBindgen(outputDir, buildDir, filteredWasmBinaries, options)
-    break
+      break
     case 'python':
       pythonBindgen(outputDir, buildDir, filteredWasmBinaries, options)
-    break
+      break
+    case 'python-web-demo':
+      pythonWebDemoBindgen(outputDir, buildDir, filteredWasmBinaries, options)
+      break
+    default:
+      console.error(`Unexpected interface: ${iface}`)
+      process.exit(1)
   }
 
   process.exit(0)
@@ -292,7 +299,7 @@ program
   .requiredOption('-p, --package-name <package-name>', 'Output a package configuration files with the given packages name')
   .requiredOption('-d, --package-description <package-description>', 'Description for package')
   .option('-v, --package-version <package-version>', 'Package version, e.g. "1.0.0"')
-  .addOption(new Option('--interface <interface>', 'interface to generate bindings for, defaults to "typescript"').choices(['typescript', 'python']))
+  .addOption(new Option('--interface <interface>', 'interface to generate bindings for, defaults to "typescript"').choices(['typescript', 'python', 'python-web-demo']))
   .option('-r, --repository <repository-url>', 'Source code repository URL')
   .option('-j, --js-module-url <js-module-url>', 'URL for the default hosted itk-wasm bindgen JS ESM module bundle. A JsDeliver is assumed by default.')
   .usage('[options]')

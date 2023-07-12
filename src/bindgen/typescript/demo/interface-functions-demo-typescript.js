@@ -3,7 +3,7 @@ import path from 'path'
 import inputParametersDemoTypeScript from "./input-parameters-demo-typescript.js"
 import camelCase from "../../camel-case.js"
 import packageToBundleName from "../package-to-bundle-name.js"
-import writeIfOverrideNotPresent from "../write-if-override-not-present.js"
+import writeIfOverrideNotPresent from "../../write-if-override-not-present.js"
 import outputDemoRunTypeScript from './output-demo-run-typescript.js'
 import outputDemoTypeScript from './output-demo-typescript.js'
 
@@ -86,10 +86,9 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
     result += `    if(!context.inputs.has('${camelCase(input.name)}')) {\n      globalThis.notify("Required input not provided", "${camelCase(input.name)}", "danger", "exclamation-octagon")\n      return\n    }\n`
   })
 
-    result += `\n    const progressBar = document.querySelector('#${functionName}Inputs > form > sl-progress-bar')
+    result += `\n    const runButton = document.querySelector('#${functionName}Inputs sl-button[name="run"]')
     try {
-      progressBar.setAttribute('style', 'visibility: default;')
-      progressBar.indeterminate = true
+      runButton.loading = true
       const t0 = performance.now()
       const { webWorker, output } = await ${camelCase(bundleName)}.${functionName}(null,\n`
   interfaceJson.inputs.forEach((input) => {
@@ -113,8 +112,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   result += '      globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")\n'
   result += '      throw error\n'
   result += '    } finally {\n'
-  result += '      progressBar.indeterminate = false\n'
-  result += '      progressBar.setAttribute("style", "visibility: hidden;")\n'
+  result += '      runButton.loading = false\n'
   result += '    }\n'
   result += '\n  })\n'
 

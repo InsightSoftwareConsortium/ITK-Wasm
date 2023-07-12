@@ -6,30 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./style.css" />
 
-  <script type="module">
-    import '@shoelace-style/shoelace/dist/themes/light.css';
-    import '@shoelace-style/shoelace/dist/themes/dark.css';
-    import '@shoelace-style/shoelace/dist/components/button/button.js';
-    import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js';
-    import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js';
-    import '@shoelace-style/shoelace/dist/components/tab/tab.js';
-    import '@shoelace-style/shoelace/dist/components/input/input.js';
-    import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
-    import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
-    import '@shoelace-style/shoelace/dist/components/alert/alert.js';
-    import '@shoelace-style/shoelace/dist/components/icon/icon.js';
-    import '@shoelace-style/shoelace/dist/components/divider/divider.js';
+  <link
+    rel="stylesheet"
+    media="(prefers-color-scheme:light)"
+    href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/light.css"
+  />
+  <link
+    rel="stylesheet"
+    media="(prefers-color-scheme:dark)"
+    href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/dark.css"
+  onload="document.documentElement.classList.add('sl-theme-dark');"
+  />
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/shoelace-autoloader.js"></script>
 
-    import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
-    setBasePath('/');
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
 
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      // dark mode
-      document.documentElement.classList.add('sl-theme-dark');
-    }
-  </script>
-
-  <title>@itk-wasm/compress-stringify<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></title>
+  <title>itkwasm-compress-stringify<img src="./python-logo.svg" alt="Python logo" class="language-logo"/></title>
 </head>
 <body>
 
@@ -43,36 +35,36 @@
     <img src="./logo.svg" class="logo vanilla" alt="ITK Wasm logo" />
   </a>
 
-  <h2>@itk-wasm/compress-stringify<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></h2>
+  <h2>itkwasm-compress-stringify<img src="./python-logo.svg" alt="Python logo" class="language-logo"/></h2>
   <i>Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.</i>
   <br /><br />
 
   <sl-tab-group>
-    <sl-tab slot="nav" panel="compressStringify-panel">compressStringify</sl-tab>
-    <sl-tab slot="nav" panel="parseStringDecompress-panel">parseStringDecompress</sl-tab>
+    <sl-tab slot="nav" panel="compress_stringify-panel">compress_stringify</sl-tab>
+    <sl-tab slot="nav" panel="parse_string_decompress-panel">parse_string_decompress</sl-tab>
 
 
-    <sl-tab-panel name="compressStringify-panel">
+    <sl-tab-panel name="compress_stringify-panel">
 
     <small><i>Given a binary, compress and optionally base64 encode.</i></small><br /><br />
 
-    <div id="compressStringifyInputs"><form action="">
+    <div id="compress_stringify-inputs"><form action="">
       <sl-input required name="input" type="text" label="input" help-text="Input binary" disabled></sl-input>
       <label for="input-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="stringify">stringify - <i>Stringify the output</i></sl-checkbox>
 <br /><br />
-      <sl-input name="compression-level" type="number" value="3" label="compressionLevel" help-text="Compression level, typically 1-9"></sl-input>
+      <sl-input name="compression-level" type="number" value="3" label="compression_level" help-text="Compression level, typically 1-9"></sl-input>
 <br />
-      <sl-input name="data-url-prefix" type="text" label="dataUrlPrefix" help-text="dataURL prefix"></sl-input>
+      <sl-input name="data-url-prefix" type="text" label="data_url_prefix" help-text="dataURL prefix"></sl-input>
     <sl-divider></sl-divider>
-      <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>
-      <sl-button type="submit" variant="success" name="run">Run</sl-button><br /><br />
+      <br /><sl-button name="load-sample-inputs" variant="default" style="display: none;">Load sample inputs</sl-button>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
 
     </form></div>
     <sl-divider></sl-divider>
 
-    <div id="compressStringifyOutputs">
+    <div id="compress_stringify-outputs">
       <sl-textarea name="output" label="output" help-text="Output compressed binary"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
       <sl-button variant="neutral" outline name="output-download" disabled>Download</sl-button>
 <br /><br />
@@ -81,24 +73,24 @@
     </sl-tab-panel>
 
 
-    <sl-tab-panel name="parseStringDecompress-panel">
+    <sl-tab-panel name="parse_string_decompress-panel">
 
     <small><i>Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.</i></small><br /><br />
 
-    <div id="parseStringDecompressInputs"><form action="">
+    <div id="parse_string_decompress-inputs"><form action="">
       <sl-input required name="input" type="text" label="input" help-text="Compressed input" disabled></sl-input>
       <label for="input-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="input-file" style="display: none"/>
 <br /><br />
-      <sl-checkbox name="parse-string">parseString - <i>Parse the input string before decompression</i></sl-checkbox>
+      <sl-checkbox name="parse-string">parse_string - <i>Parse the input string before decompression</i></sl-checkbox>
 <br /><br />
     <sl-divider></sl-divider>
-      <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>
+      <br /><sl-button name="load-sample-inputs" variant="default" style="display: none;">Load sample inputs</sl-button>
       <sl-button type="submit" variant="success" name="run">Run</sl-button><br /><br />
 
     </form></div>
     <sl-divider></sl-divider>
 
-    <div id="parseStringDecompressOutputs">
+    <div id="parse_string_decompress-outputs">
       <sl-textarea name="output" label="output" help-text="Output decompressed binary"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
       <sl-button variant="neutral" outline name="output-download" disabled>Download</sl-button>
 <br /><br />
@@ -110,7 +102,7 @@
   </sl-tab-group>
 </div>
 
-<script type="module" src="./index.ts"></script>
+<script type="module" src="./index.js"></script>
 
 </body>
 </html>

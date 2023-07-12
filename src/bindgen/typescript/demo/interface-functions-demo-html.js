@@ -1,9 +1,8 @@
 import allDemoTypesSupported from './all-demo-types-supported.js'
 import outputDemoHtml from './output-demo-html.js'
 import inputParametersDemoHtml from './input-parameters-demo-html.js'
-import camelCase from '../../camel-case.js'
 
-function interfaceFunctionsDemoHtml(interfaceJson) {
+function interfaceFunctionsDemoHtml(interfaceJson, functionName, useCamelCase) {
   let prefix = '    '
   let indent = '  '
   let result = ''
@@ -13,13 +12,14 @@ function interfaceFunctionsDemoHtml(interfaceJson) {
     return result
   }
 
-  const nameCamelCase = camelCase(interfaceJson.name)
-  result += `\n${prefix}<sl-tab-panel name="${nameCamelCase}-panel">\n`
+  result += `\n${prefix}<sl-tab-panel name="${functionName}-panel">\n`
   result += `\n${prefix}<small><i>${interfaceJson.description}</i></small><br /><br />\n`
 
-  result += `\n${prefix}<div id="${nameCamelCase}Inputs"><form>\n`
+
+  const inputsId = useCamelCase ? `${functionName}Inputs` : `${functionName}-inputs`
+  result += `\n${prefix}<div id="${inputsId}"><form action="">\n`
   interfaceJson.inputs.forEach((input) => {
-    result += inputParametersDemoHtml(prefix, indent, input, true)
+    result += inputParametersDemoHtml(prefix, indent, input, true, useCamelCase)
   })
 
   if (interfaceJson.parameters.length > 1) {
@@ -28,21 +28,23 @@ function interfaceFunctionsDemoHtml(interfaceJson) {
       if (parameter.name === "memory-io" || parameter.name === "version") {
         return
       }
-      result += inputParametersDemoHtml(prefix, indent, parameter, false)
+      result += inputParametersDemoHtml(prefix, indent, parameter, false, useCamelCase)
     })
   }
 
   result += `${prefix}<sl-divider></sl-divider>\n`
-  result += `${prefix}  <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>\n`
-  result += `${prefix}  <sl-button type="submit" variant="success">Run</sl-button>\n`
-  result += `${prefix}  <br /><br /><sl-progress-bar value="0" style="visibility: hidden;"></sl-progress-bar>`
-  result += `${prefix}</form></div>\n` // id="${nameCamelCase}Inputs"
+  const loadSampleInputsId = useCamelCase ? 'loadSampleInputs' : 'load-sample-inputs'
+  result += `${prefix}  <br /><sl-button name="${loadSampleInputsId}" variant="default" style="display: none;">Load sample inputs</sl-button>\n`
+  result += `${prefix}  <sl-button type="submit" variant="success" name="run">Run</sl-button><br /><br />
+\n`
+  result += `${prefix}</form></div>\n` // id="${functionName}Inputs"
   result += `${prefix}<sl-divider></sl-divider>\n`
-  result += `\n${prefix}<div id="${nameCamelCase}Outputs">\n`
+  const outputsId = useCamelCase ? `${functionName}Outputs` : `${functionName}-outputs`
+  result += `\n${prefix}<div id="${outputsId}">\n`
   interfaceJson.outputs.forEach((output) => {
     result += outputDemoHtml(prefix, indent, output)
   })
-  result += `${prefix}</div>\n` // id="${nameCamelCase}Outputs"
+  result += `${prefix}</div>\n` // id="${functionName}Outputs"
   result += `\n${prefix}</sl-tab-panel>\n\n`
 
   return result

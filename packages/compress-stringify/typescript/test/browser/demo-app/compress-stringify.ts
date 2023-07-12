@@ -73,10 +73,9 @@ function setupCompressStringify(loadSampleInputs)  {
       return
     }
 
-    const progressBar = document.querySelector('#compressStringifyInputs > form > sl-progress-bar')
+    const runButton = document.querySelector('#compressStringifyInputs sl-button[name="run"]')
     try {
-      progressBar.setAttribute('style', 'visibility: default;')
-      progressBar.indeterminate = true
+      runButton.loading = true
       const t0 = performance.now()
       const { webWorker, output } = await compressStringify.compressStringify(null,
         context.inputs.get('input').slice(),
@@ -95,8 +94,7 @@ function setupCompressStringify(loadSampleInputs)  {
       globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
       throw error
     } finally {
-      progressBar.indeterminate = false
-      progressBar.setAttribute("style", "visibility: hidden;")
+      runButton.loading = false
     }
 
   })

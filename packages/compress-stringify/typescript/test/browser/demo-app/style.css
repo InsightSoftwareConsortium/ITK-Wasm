@@ -61,6 +61,11 @@ li {
   filter: drop-shadow(0 0 2em #3178c6aa);
 }
 
+.language-logo {
+  height: 1.0em;
+  padding-left: 0.6em;
+}
+
 .github-corner {
   border-bottom: 0;
   position: fixed;

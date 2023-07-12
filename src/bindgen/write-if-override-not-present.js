@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 
-function writeIfOverrideNotPresent(modulePath, content) {
-  const prefix = '// Generated file. To retain edits, remove this comment.\n\n'
+function writeIfOverrideNotPresent(modulePath, content, comment='//') {
+  const prefix = `${comment} Generated file. To retain edits, remove this comment.\n\n`
   if (!fs.existsSync(modulePath)) {
     fs.writeFileSync(modulePath, prefix + content)
     return
