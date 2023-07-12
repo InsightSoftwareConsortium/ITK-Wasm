@@ -239,8 +239,8 @@ function run(wasmBinary, options) {
 function bindgen(options) {
   const { buildDir } = processCommonOptions()
 
-  const language = options.language ?? 'typescript'
-  const outputDir = options.outputDir ?? language
+  const interface = options.language ?? 'typescript'
+  const outputDir = options.outputDir ?? interface
 
   const wasmBinaries = glob.sync(path.join(buildDir, '**/*.wasm'))
 
@@ -253,7 +253,7 @@ function bindgen(options) {
   // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
   let filteredWasmBinaries = wasmBinaries.filter(binary => !binary.endsWith('.umd.wasm'))
 
-  switch (language) {
+  switch (interface) {
     case 'typescript':
       typescriptBindgen(outputDir, buildDir, filteredWasmBinaries, options)
     break
@@ -288,15 +288,15 @@ program
   .action(run)
 program
   .command('bindgen')
-  .option('-o, --output-dir <output-dir>', 'Output directory name. Defaults to the language option value.')
+  .option('-o, --output-dir <output-dir>', 'Output directory name. Defaults to the interface option value.')
   .requiredOption('-p, --package-name <package-name>', 'Output a package configuration files with the given packages name')
   .requiredOption('-d, --package-description <package-description>', 'Description for package')
   .option('-v, --package-version <package-version>', 'Package version, e.g. "1.0.0"')
-  .addOption(new Option('-l, --language <language>', 'language to generate bindings for, defaults to "typescript"').choices(['typescript', 'python']))
+  .addOption(new Option('--interface <interface>', 'interface to generate bindings for, defaults to "typescript"').choices(['typescript', 'python']))
   .option('-r, --repository <repository-url>', 'Source code repository URL')
   .option('-j, --js-module-url <js-module-url>', 'URL for the default hosted itk-wasm bindgen JS ESM module bundle. A JsDeliver is assumed by default.')
   .usage('[options]')
-  .description('Generate language bindings for Wasm modules')
+  .description('Generate language bindings or other interfaces for Wasm modules')
   .action(bindgen)
 
 program
