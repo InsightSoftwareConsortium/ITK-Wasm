@@ -66,6 +66,36 @@ function webDemo (outputDir, buildDir, emscriptenWasmBinaries, options) {
     }
   })
 
+  const demoFunctionsIndexJsContent = `  function basename(path) {
+    return path.replace(/.*\\//, '');
+  }
+
+  async function savePythonScript(pyodide, scriptPath) {
+    await pyodide.runPythonAsync(\`
+      from pyodide.http import pyfetch
+      from pathlib import Path
+      response = await pyfetch("\${scriptPath}")
+      with open(Path("\${scriptPath}").name, "wb") as f:
+          f.write(await response.bytes())
+  \`)
+    pyodide.pyimport(basename(scriptPath).replace('.py', ''))
+  }
+
+  async function main(){
+  ${demoFunctionsIndexJsDisableInputs}
+    const pyodide = await loadPyodide()
+    await pyodide.loadPackage("numpy")
+    await pyodide.loadPackage("micropip")
+    const micropip = pyodide.pyimport("micropip")
+    await micropip.install("${packageName}")
+
+  ${demoFunctionsIndexJsLoadScripts}
+  ${demoFunctionsIndexJsEnableInputs}
+    globalThis.pyodide = pyodide
+    return pyodide
+  }
+  const pyodideReady = main()
+`
 
   const demoIndexPath = path.join(outputDir, 'index.html')
   if (!fs.existsSync(demoIndexPath)) {
@@ -94,46 +124,17 @@ const shoelaceScript = `
     demoIndexContent = demoIndexContent.replaceAll('@bindgenGitHubCorner@', bindgenGitHubCorner)
     demoIndexContent = demoIndexContent.replaceAll('@bindgenFunctions@', demoFunctionsHtml)
     demoIndexContent = demoIndexContent.replaceAll('@pipelinesFunctionsTabs@', pipelinesFunctionsTabs)
+
 const indexModule = `
-<script type="module" src="./index.js"></script>
+<script type="module">
+${demoFunctionsIndexJsContent}
+</script>
 `
     demoIndexContent = demoIndexContent.replaceAll('@indexModule@', indexModule)
     fs.writeFileSync(demoIndexPath, demoIndexContent)
   }
 
 
-  const demoFunctionsIndexJsContent = `function basename(path) {
-  return path.replace(/.*\\//, '');
-}
-
-async function savePythonScript(pyodide, scriptPath) {
-  await pyodide.runPythonAsync(\`
-    from pyodide.http import pyfetch
-    from pathlib import Path
-    response = await pyfetch("\${scriptPath}")
-    with open(Path("\${scriptPath}").name, "wb") as f:
-        f.write(await response.bytes())
-\`)
-  pyodide.pyimport(basename(scriptPath).replace('.py', ''))
-}
-
-async function main(){
-${demoFunctionsIndexJsDisableInputs}
-  const pyodide = await loadPyodide()
-  await pyodide.loadPackage("numpy")
-  await pyodide.loadPackage("micropip")
-  const micropip = pyodide.pyimport("micropip")
-  await micropip.install("${packageName}")
-
-${demoFunctionsIndexJsLoadScripts}
-${demoFunctionsIndexJsEnableInputs}
-  globalThis.pyodide = pyodide
-  return pyodide
-}
-const pyodideReady = main()
-`
-  const demoFunctionIndexJs = path.join(outputDir, 'index.js')
-  writeIfOverrideNotPresent(demoFunctionIndexJs, demoFunctionsIndexJsContent)
 }
 
 export default webDemo
