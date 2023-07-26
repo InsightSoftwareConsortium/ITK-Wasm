@@ -181,7 +181,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       pipelinesFunctionsTabs += `    <sl-tab slot="nav" panel="${functionName}-panel">${functionName}</sl-tab>\n`
       const demoTypeScriptOutputPath = path.join(outputDir, 'test', 'browser', 'demo-app')
       interfaceFunctionsDemoTypeScript(packageName, interfaceJson, demoTypeScriptOutputPath)
-      demoFunctionsTypeScript += `import './${interfaceJson.name}.js'\n`
+      demoFunctionsTypeScript += `import './${interfaceJson.name}-controller.js'\n`
     } else {
       pipelinesFunctionsTabs += `    <sl-tab slot="nav" panel="${functionName}-panel" disabled>${functionName}</sl-tab>\n`
     }

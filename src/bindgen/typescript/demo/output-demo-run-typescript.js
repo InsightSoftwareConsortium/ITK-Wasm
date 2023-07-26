@@ -2,7 +2,7 @@ import camelCase from "../../camel-case.js"
 
 function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
   const parameterName = camelCase(parameter.name)
-  let result = `\n${prefix}${indent}context.outputs.set("${parameterName}", ${parameterName})\n`
+  let result = `\n${prefix}${indent}model.outputs.set("${parameterName}", ${parameterName})\n`
 
   switch(parameter.type) {
     // case 'OUTPUT_TEXT_FILE:FILE':

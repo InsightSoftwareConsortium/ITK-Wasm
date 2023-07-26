@@ -8,5 +8,5 @@ compressStringify.setPipelinesBaseUrl(pipelinesBaseUrl)
 const pipelineWorkerUrl: string | URL | null = new URL('/web-workers/pipeline.worker.js', document.location.origin).href
 compressStringify.setPipelineWorkerUrl(pipelineWorkerUrl)
 
-import './compress-stringify.js'
-import './parse-string-decompress.js'
+import './compress-stringify-controller.js'
+import './parse-string-decompress-controller.js'

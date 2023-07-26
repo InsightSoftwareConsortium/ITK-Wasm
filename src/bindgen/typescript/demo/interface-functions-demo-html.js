@@ -35,7 +35,7 @@ function interfaceFunctionsDemoHtml(interfaceJson, functionName, useCamelCase) {
   result += `${prefix}<sl-divider></sl-divider>\n`
   const loadSampleInputsId = useCamelCase ? 'loadSampleInputs' : 'load-sample-inputs'
   result += `${prefix}  <br /><sl-button name="${loadSampleInputsId}" variant="default" style="display: none;">Load sample inputs</sl-button>\n`
-  result += `${prefix}  <sl-button type="submit" variant="success" name="run">Run</sl-button><br /><br />
+  result += `${prefix}  <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
 \n`
   result += `${prefix}</form></div>\n` // id="${functionName}Inputs"
   result += `${prefix}<sl-divider></sl-divider>\n`
