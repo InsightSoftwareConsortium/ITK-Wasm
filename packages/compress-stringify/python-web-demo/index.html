@@ -1,3 +1,5 @@
+<!-- Generated file. To retain edits, remove this comment. -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,20 +8,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./style.css" />
 
-  <link
-    rel="stylesheet"
-    media="(prefers-color-scheme:light)"
-    href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/light.css"
-  />
-  <link
-    rel="stylesheet"
-    media="(prefers-color-scheme:dark)"
-    href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/dark.css"
-  onload="document.documentElement.classList.add('sl-theme-dark');"
-  />
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/shoelace-autoloader.js"></script>
+<link
+  rel="stylesheet"
+  media="(prefers-color-scheme:light)"
+  href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/light.css"
+/>
+<link
+  rel="stylesheet"
+  media="(prefers-color-scheme:dark)"
+  href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/dark.css"
+onload="document.documentElement.classList.add('sl-theme-dark');"
+/>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/shoelace-autoloader.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
 
   <title>itkwasm-compress-stringify<img src="./python-logo.svg" alt="Python logo" class="language-logo"/></title>
 </head>
@@ -129,9 +131,9 @@
     await micropip.install("itkwasm-compress-stringify")
 
     await savePythonScript(pyodide, './compress_stringify_load_sample_inputs.py')
-  await pyodide.runPythonAsync(await (await fetch("./compress_stringify.py")).text())
+  await pyodide.runPythonAsync(await (await fetch("./compress_stringify_controller.py")).text())
   await savePythonScript(pyodide, './parse_string_decompress_load_sample_inputs.py')
-  await pyodide.runPythonAsync(await (await fetch("./parse_string_decompress.py")).text())
+  await pyodide.runPythonAsync(await (await fetch("./parse_string_decompress_controller.py")).text())
 
     globalThis.enableInputs('compress_stringify-inputs')
   globalThis.enableInputs('parse_string_decompress-inputs')

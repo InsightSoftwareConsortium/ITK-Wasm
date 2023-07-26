@@ -136,7 +136,7 @@ ${runOutput}
   result += methods
   result += `\n${functionName}_controller = ${functionNamePascalCase}Controller(load_sample_inputs)\n`
 
-  const scriptPath = path.join(outputPath, `${functionName}.py`)
+  const scriptPath = path.join(outputPath, `${functionName}_controller.py`)
   writeIfOverrideNotPresent(scriptPath, result, '#')
 
   const loadSampleInputsDefault = `load_sample_inputs = None

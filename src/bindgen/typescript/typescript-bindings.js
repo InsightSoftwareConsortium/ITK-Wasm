@@ -658,46 +658,45 @@ import {\n`
 
   if (!forNode) {
     const demoIndexPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'index.html')
-    if (!fs.existsSync(demoIndexPath)) {
-      let demoIndexContent = fs.readFileSync(bindgenResource(path.join('demo-app', 'index.html')), { encoding: 'utf8', flag: 'r' })
+    let demoIndexContent = fs.readFileSync(bindgenResource(path.join('demo-app', 'index.html')), { encoding: 'utf8', flag: 'r' })
 const shoelaceScript = `
-  <script type="module">
-    import '@shoelace-style/shoelace/dist/themes/light.css';
-    import '@shoelace-style/shoelace/dist/themes/dark.css';
-    import '@shoelace-style/shoelace/dist/components/button/button.js';
-    import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js';
-    import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js';
-    import '@shoelace-style/shoelace/dist/components/tab/tab.js';
-    import '@shoelace-style/shoelace/dist/components/input/input.js';
-    import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
-    import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
-    import '@shoelace-style/shoelace/dist/components/alert/alert.js';
-    import '@shoelace-style/shoelace/dist/components/icon/icon.js';
-    import '@shoelace-style/shoelace/dist/components/divider/divider.js';
+<script type="module">
+  import '@shoelace-style/shoelace/dist/themes/light.css';
+  import '@shoelace-style/shoelace/dist/themes/dark.css';
+  import '@shoelace-style/shoelace/dist/components/button/button.js';
+  import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js';
+  import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js';
+  import '@shoelace-style/shoelace/dist/components/tab/tab.js';
+  import '@shoelace-style/shoelace/dist/components/input/input.js';
+  import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
+  import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
+  import '@shoelace-style/shoelace/dist/components/alert/alert.js';
+  import '@shoelace-style/shoelace/dist/components/icon/icon.js';
+  import '@shoelace-style/shoelace/dist/components/divider/divider.js';
 
-    import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
-    setBasePath('/');
+  import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
+  setBasePath('/');
 
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      // dark mode
-      document.documentElement.classList.add('sl-theme-dark');
-    }
-  </script>
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    // dark mode
+    document.documentElement.classList.add('sl-theme-dark');
+  }
+</script>
 `
-      demoIndexContent = demoIndexContent.replaceAll('@shoelaceScript@', shoelaceScript)
-      const packageNameLanguageLogos = `${packageName}<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/>`
-      demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageName@', packageNameLanguageLogos)
-      demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageDescription@', options.packageDescription)
-      const bindgenGitHubCorner = githubCorner(options)
-      demoIndexContent = demoIndexContent.replaceAll('@bindgenGitHubCorner@', bindgenGitHubCorner)
-      demoIndexContent = demoIndexContent.replaceAll('@bindgenFunctions@', demoFunctionsHtml)
-      demoIndexContent = demoIndexContent.replaceAll('@pipelinesFunctionsTabs@', pipelinesFunctionsTabs)
+    demoIndexContent = demoIndexContent.replaceAll('@shoelaceScript@', shoelaceScript)
+    const packageNameLanguageLogos = `${packageName}<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/>`
+    demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageName@', packageNameLanguageLogos)
+    demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageDescription@', options.packageDescription)
+    const bindgenGitHubCorner = githubCorner(options)
+    demoIndexContent = demoIndexContent.replaceAll('@bindgenGitHubCorner@', bindgenGitHubCorner)
+    demoIndexContent = demoIndexContent.replaceAll('@bindgenFunctions@', demoFunctionsHtml)
+    demoIndexContent = demoIndexContent.replaceAll('@pipelinesFunctionsTabs@', pipelinesFunctionsTabs)
 const indexModule = `
 <script type="module" src="./index.ts"></script>
 `
     demoIndexContent = demoIndexContent.replaceAll('@indexModule@', indexModule)
-      fs.writeFileSync(demoIndexPath, demoIndexContent)
-    }
+    writeIfOverrideNotPresent(demoIndexPath, demoIndexContent, '<!--')
+
     const demoTypeScriptPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'index.ts')
     let demoTypeScriptContent = fs.readFileSync(bindgenResource(path.join('demo-app', 'index.ts')), { encoding: 'utf8', flag: 'r' })
     demoTypeScriptContent = demoTypeScriptContent.replaceAll('@bindgenBundleName@', bundleName)

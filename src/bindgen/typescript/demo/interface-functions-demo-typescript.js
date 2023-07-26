@@ -108,7 +108,7 @@ class ${functionNamePascalCase}Model {
     result += `${indent}  if(!model.inputs.has('${camelCase(input.name)}')) {\n        globalThis.notify("Required input not provided", "${camelCase(input.name)}", "danger", "exclamation-octagon")\n        return\n      }\n`
   })
 
-    result += `\n
+  result += `\n
       try {
         runButton.loading = true
         const t0 = performance.now()

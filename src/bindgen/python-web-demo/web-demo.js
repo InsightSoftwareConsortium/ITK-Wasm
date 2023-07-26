@@ -51,7 +51,7 @@ function webDemo (outputDir, buildDir, emscriptenWasmBinaries, options) {
 
     demoFunctionsIndexJsDisableInputs += `  globalThis.disableInputs('${functionName}-inputs')\n`
     demoFunctionsIndexJsLoadScripts += `  await savePythonScript(pyodide, './${functionName}_load_sample_inputs.py')\n`
-    demoFunctionsIndexJsLoadScripts += `  await pyodide.runPythonAsync(await (await fetch("./${functionName}.py")).text())\n`
+    demoFunctionsIndexJsLoadScripts += `  await pyodide.runPythonAsync(await (await fetch("./${functionName}_controller.py")).text())\n`
     demoFunctionsIndexJsEnableInputs += `  globalThis.enableInputs('${functionName}-inputs')\n`
 
     const useCamelCase = false
@@ -98,43 +98,39 @@ function webDemo (outputDir, buildDir, emscriptenWasmBinaries, options) {
 `
 
   const demoIndexPath = path.join(outputDir, 'index.html')
-  if (!fs.existsSync(demoIndexPath)) {
-    let demoIndexContent = fs.readFileSync(typescriptBindgenResource(path.join('demo-app', 'index.html')), { encoding: 'utf8', flag: 'r' })
+  let demoIndexContent = fs.readFileSync(typescriptBindgenResource(path.join('demo-app', 'index.html')), { encoding: 'utf8', flag: 'r' })
 const shoelaceScript = `
-  <link
-    rel="stylesheet"
-    media="(prefers-color-scheme:light)"
-    href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/light.css"
-  />
-  <link
-    rel="stylesheet"
-    media="(prefers-color-scheme:dark)"
-    href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/dark.css"
-  onload="document.documentElement.classList.add('sl-theme-dark');"
-  />
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/shoelace-autoloader.js"></script>
+<link
+  rel="stylesheet"
+  media="(prefers-color-scheme:light)"
+  href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/light.css"
+/>
+<link
+  rel="stylesheet"
+  media="(prefers-color-scheme:dark)"
+  href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/dark.css"
+onload="document.documentElement.classList.add('sl-theme-dark');"
+/>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/shoelace-autoloader.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
 `
-    demoIndexContent = demoIndexContent.replaceAll('@shoelaceScript@', shoelaceScript)
-    const packageNameLanguageLogos = `${packageName}<img src="./python-logo.svg" alt="Python logo" class="language-logo"/>`
-    demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageName@', packageNameLanguageLogos)
-    demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageDescription@', options.packageDescription)
-    const bindgenGitHubCorner = githubCorner(options)
-    demoIndexContent = demoIndexContent.replaceAll('@bindgenGitHubCorner@', bindgenGitHubCorner)
-    demoIndexContent = demoIndexContent.replaceAll('@bindgenFunctions@', demoFunctionsHtml)
-    demoIndexContent = demoIndexContent.replaceAll('@pipelinesFunctionsTabs@', pipelinesFunctionsTabs)
+  demoIndexContent = demoIndexContent.replaceAll('@shoelaceScript@', shoelaceScript)
+  const packageNameLanguageLogos = `${packageName}<img src="./python-logo.svg" alt="Python logo" class="language-logo"/>`
+  demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageName@', packageNameLanguageLogos)
+  demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageDescription@', options.packageDescription)
+  const bindgenGitHubCorner = githubCorner(options)
+  demoIndexContent = demoIndexContent.replaceAll('@bindgenGitHubCorner@', bindgenGitHubCorner)
+  demoIndexContent = demoIndexContent.replaceAll('@bindgenFunctions@', demoFunctionsHtml)
+  demoIndexContent = demoIndexContent.replaceAll('@pipelinesFunctionsTabs@', pipelinesFunctionsTabs)
 
 const indexModule = `
 <script type="module">
 ${demoFunctionsIndexJsContent}
 </script>
 `
-    demoIndexContent = demoIndexContent.replaceAll('@indexModule@', indexModule)
-    fs.writeFileSync(demoIndexPath, demoIndexContent)
-  }
-
-
+  demoIndexContent = demoIndexContent.replaceAll('@indexModule@', indexModule)
+  writeIfOverrideNotPresent(demoIndexPath, demoIndexContent, '<!--')
 }
 
 export default webDemo
