@@ -16,7 +16,7 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
       result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-textarea[name=${parameter.name}]')\n`
-      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}.toString().substring(0, 200) + ' ...'\n`
+      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}.subarray(0, 200).toString() + ' ...'\n`
       break
     // case 'TEXT':
     //   result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`

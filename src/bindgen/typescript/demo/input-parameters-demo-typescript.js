@@ -28,7 +28,7 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       result += `${indent}${indent}files[0].arrayBuffer().then((arrayBuffer) => {\n`
       result += `${indent}${indent}${indent}model.${modelProperty}.set("${parameterName}", new Uint8Array(arrayBuffer))\n`
       result += `${indent}${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
-      result += `${indent}${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").toString().substring(0, 50) + ' ...'\n`
+      result += `${indent}${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").subarray(0, 50).toString() + ' ...'\n`
       result += `${indent}${indent}})\n`
       result += `${indent}})\n\n`
       break

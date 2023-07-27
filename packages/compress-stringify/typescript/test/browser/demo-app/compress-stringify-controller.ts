@@ -45,7 +45,7 @@ class CompressStringifyController  {
         files[0].arrayBuffer().then((arrayBuffer) => {
             model.inputs.set("input", new Uint8Array(arrayBuffer))
             const input = document.querySelector("#compressStringifyInputs sl-input[name=input]")
-            input.value = model.inputs.get("input").toString().substring(0, 50) + ' ...'
+            input.value = model.inputs.get("input").subarray(0, 50).toString() + ' ...'
         })
     })
 
@@ -104,7 +104,7 @@ class CompressStringifyController  {
         outputOutputDownload.variant = "success"
         outputOutputDownload.disabled = false
         const outputOutput = document.querySelector('#compressStringifyOutputs sl-textarea[name=output]')
-        outputOutput.value = output.toString().substring(0, 200) + ' ...'
+        outputOutput.value = output.subarray(0, 200).toString() + ' ...'
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error
