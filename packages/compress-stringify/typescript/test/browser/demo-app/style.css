@@ -106,3 +106,8 @@ li {
     background-color: #f9f9f9;
   }
 }
+
+.sl-toast-stack {
+  left: 0;
+  right: auto;
+}
