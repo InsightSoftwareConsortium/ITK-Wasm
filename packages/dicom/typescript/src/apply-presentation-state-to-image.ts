@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   BinaryFile,
@@ -55,7 +55,9 @@ async function applyPresentationStateToImage(
   ]
 
   const args = []
+  // ----------------------------------------------
   // Inputs
+
   const imageInName = imageIn instanceof File ? imageIn.name : imageIn.path
   args.push(imageInName as string)
   const presentationStateFileName = presentationStateFile instanceof File ? presentationStateFile.name : presentationStateFile.path
@@ -68,7 +70,7 @@ async function applyPresentationStateToImage(
   // Options
   args.push('--memory-io')
   if (typeof options.colorOutput !== "undefined") {
-    args.push('--color-output')
+    options.colorOutput && args.push('--color-output')
   }
   if (typeof options.configFile !== "undefined") {
     args.push('--config-file', options.configFile.toString())
@@ -77,10 +79,10 @@ async function applyPresentationStateToImage(
     args.push('--frame', options.frame.toString())
   }
   if (typeof options.noPresentationStateOutput !== "undefined") {
-    args.push('--no-presentation-state-output')
+    options.noPresentationStateOutput && args.push('--no-presentation-state-output')
   }
   if (typeof options.noBitmapOutput !== "undefined") {
-    args.push('--no-bitmap-output')
+    options.noBitmapOutput && args.push('--no-bitmap-output')
   }
 
   const pipelinePath = 'apply-presentation-state-to-image'

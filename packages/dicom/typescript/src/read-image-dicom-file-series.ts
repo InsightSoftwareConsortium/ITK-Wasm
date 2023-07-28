@@ -1,9 +1,9 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   Image,
   JsonObject,
-  TextFile,
+  BinaryFile,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -28,7 +28,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  */
 async function readImageDicomFileSeries(
   webWorker: null | Worker,
-  options: ReadImageDicomFileSeriesOptions = { inputImages: [] as TextFile[] | string[], }
+  options: ReadImageDicomFileSeriesOptions = { inputImages: [] as BinaryFile[] | File[] | string[], }
 ) : Promise<ReadImageDicomFileSeriesResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
@@ -39,7 +39,9 @@ async function readImageDicomFileSeries(
   ]
 
   const args = []
+  // ----------------------------------------------
   // Inputs
+
   // Outputs
   const outputImageName = '0'
   args.push(outputImageName)
@@ -56,15 +58,15 @@ async function readImageDicomFileSeries(
       let valueFile = value
       if (value instanceof File) {
         const valueBuffer = await value.arrayBuffer()
-        valueFile = { path: value.name, data: new TextDecoder().decode(valueBuffer) }
+        valueFile = { path: value.name, data: new Uint8Array(valueBuffer) }
       }
-      inputs.push({ type: InterfaceTypes.TextFile, data: valueFile })
-      const name = value instanceof File ? value.name : (value as TextFile).path
+      inputs.push({ type: InterfaceTypes.BinaryFile, data: valueFile as BinaryFile })
+      const name = value instanceof File ? value.name : (valueFile as BinaryFile).path
       args.push(name)
     })
   }
   if (typeof options.singleSortedSeries !== "undefined") {
-    args.push('--single-sorted-series')
+    options.singleSortedSeries && args.push('--single-sorted-series')
   }
 
   const pipelinePath = 'read-image-dicom-file-series'

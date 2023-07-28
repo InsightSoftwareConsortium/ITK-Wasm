@@ -1,3 +1,5 @@
+// Generated file. To retain edits, remove this comment.
+
 interface StructuredReportToTextOptions {
   /** Accept unknown relationship type */
   unknownRelationship?: boolean

@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   JsonObject,
@@ -42,7 +42,9 @@ async function applyPresentationStateToImageNode(
   ]
 
   const args = []
+  // ----------------------------------------------
   // Inputs
+
   const imageInName = imageIn
   args.push(imageInName as string)
   const presentationStateFileName = presentationStateFile
@@ -55,7 +57,7 @@ async function applyPresentationStateToImageNode(
   // Options
   args.push('--memory-io')
   if (typeof options.colorOutput !== "undefined") {
-    args.push('--color-output')
+    options.colorOutput && args.push('--color-output')
   }
   if (typeof options.configFile !== "undefined") {
     args.push('--config-file', options.configFile.toString())
@@ -64,10 +66,10 @@ async function applyPresentationStateToImageNode(
     args.push('--frame', options.frame.toString())
   }
   if (typeof options.noPresentationStateOutput !== "undefined") {
-    args.push('--no-presentation-state-output')
+    options.noPresentationStateOutput && args.push('--no-presentation-state-output')
   }
   if (typeof options.noBitmapOutput !== "undefined") {
-    args.push('--no-bitmap-output')
+    options.noBitmapOutput && args.push('--no-bitmap-output')
   }
 
   const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'apply-presentation-state-to-image')

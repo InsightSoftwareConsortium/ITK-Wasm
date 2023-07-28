@@ -5,12 +5,13 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
   let result = `\n${prefix}${indent}model.outputs.set("${parameterName}", ${parameterName})\n`
 
   switch(parameter.type) {
-    // case 'OUTPUT_TEXT_FILE:FILE':
-    // case 'OUTPUT_TEXT_STREAM':
-      // result += `${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
-      // result += `${indent}<sl-button variant="neutral" name="${parameter.name}-download">${camelCase(parameter.name)}</sl-button>\n`
-      // result += `<br /><br />\n`
-      // break
+    case 'OUTPUT_TEXT_FILE:FILE':
+    case 'OUTPUT_TEXT_STREAM':
+      result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
+      result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
+      result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-textarea[name=${parameter.name}]')\n`
+      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}.substring(0, 200).toString() + ' ...'\n`
+      break
     case 'OUTPUT_BINARY_FILE:FILE':
     case 'OUTPUT_BINARY_STREAM':
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`

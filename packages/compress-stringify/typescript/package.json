@@ -34,7 +34,6 @@
     "itk",
     "wasm",
     "webassembly",
-    "wasi"
   ],
   "author": "",
   "license": "Apache-2.0",

@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   BinaryFile,
@@ -45,7 +45,9 @@ async function readDicomEncapsulatedPdf(
   ]
 
   const args = []
+  // ----------------------------------------------
   // Inputs
+
   const dicomFileName = dicomFile instanceof File ? dicomFile.name : dicomFile.path
   args.push(dicomFileName as string)
   // Outputs
@@ -54,49 +56,49 @@ async function readDicomEncapsulatedPdf(
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {
-    args.push('--read-file-only')
+    options.readFileOnly && args.push('--read-file-only')
   }
   if (typeof options.readDataset !== "undefined") {
-    args.push('--read-dataset')
+    options.readDataset && args.push('--read-dataset')
   }
   if (typeof options.readXferAuto !== "undefined") {
-    args.push('--read-xfer-auto')
+    options.readXferAuto && args.push('--read-xfer-auto')
   }
   if (typeof options.readXferDetect !== "undefined") {
-    args.push('--read-xfer-detect')
+    options.readXferDetect && args.push('--read-xfer-detect')
   }
   if (typeof options.readXferLittle !== "undefined") {
-    args.push('--read-xfer-little')
+    options.readXferLittle && args.push('--read-xfer-little')
   }
   if (typeof options.readXferBig !== "undefined") {
-    args.push('--read-xfer-big')
+    options.readXferBig && args.push('--read-xfer-big')
   }
   if (typeof options.readXferImplicit !== "undefined") {
-    args.push('--read-xfer-implicit')
+    options.readXferImplicit && args.push('--read-xfer-implicit')
   }
   if (typeof options.acceptOddLength !== "undefined") {
-    args.push('--accept-odd-length')
+    options.acceptOddLength && args.push('--accept-odd-length')
   }
   if (typeof options.assumeEvenLength !== "undefined") {
-    args.push('--assume-even-length')
+    options.assumeEvenLength && args.push('--assume-even-length')
   }
   if (typeof options.enableCp246 !== "undefined") {
-    args.push('--enable-cp246')
+    options.enableCp246 && args.push('--enable-cp246')
   }
   if (typeof options.disableCp246 !== "undefined") {
-    args.push('--disable-cp246')
+    options.disableCp246 && args.push('--disable-cp246')
   }
   if (typeof options.retainUn !== "undefined") {
-    args.push('--retain-un')
+    options.retainUn && args.push('--retain-un')
   }
   if (typeof options.convertUn !== "undefined") {
-    args.push('--convert-un')
+    options.convertUn && args.push('--convert-un')
   }
   if (typeof options.enableCorrection !== "undefined") {
-    args.push('--enable-correction')
+    options.enableCorrection && args.push('--enable-correction')
   }
   if (typeof options.disableCorrection !== "undefined") {
-    args.push('--disable-correction')
+    options.disableCorrection && args.push('--disable-correction')
   }
 
   const pipelinePath = 'read-dicom-encapsulated-pdf'

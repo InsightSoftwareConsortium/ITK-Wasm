@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   Image,
@@ -36,7 +36,9 @@ async function readImageDicomFileSeriesNode(
   ]
 
   const args = []
+  // ----------------------------------------------
   // Inputs
+
   // Outputs
   const outputImageName = '0'
   args.push(outputImageName)
@@ -56,7 +58,7 @@ async function readImageDicomFileSeriesNode(
     })
   }
   if (typeof options.singleSortedSeries !== "undefined") {
-    args.push('--single-sorted-series')
+    options.singleSortedSeries && args.push('--single-sorted-series')
   }
 
   const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'read-image-dicom-file-series')

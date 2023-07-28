@@ -1,3 +1,5 @@
+// Generated file. To retain edits, remove this comment.
+
 interface ApplyPresentationStateToImageOptions {
   /** output image as RGB (default: false) */
   colorOutput?: boolean

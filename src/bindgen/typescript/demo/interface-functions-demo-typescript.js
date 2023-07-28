@@ -1,5 +1,4 @@
 import path from 'path'
-import fs from 'fs-extra'
 
 import inputParametersDemoTypeScript from "./input-parameters-demo-typescript.js"
 import camelCase from "../../camel-case.js"

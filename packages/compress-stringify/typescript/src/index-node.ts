@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 
 

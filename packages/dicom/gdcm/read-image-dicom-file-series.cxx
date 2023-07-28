@@ -334,7 +334,7 @@ int main (int argc, char * argv[])
   pipeline.set_version("2.0.0");
 
   std::vector<std::string> inputFileNames;
-  pipeline.add_option("-i,--input-images", inputFileNames, "File names in the series")->required()->check(CLI::ExistingFile)->expected(1,-1)->type_name("INPUT_TEXT_FILE");
+  pipeline.add_option("-i,--input-images", inputFileNames, "File names in the series")->required()->check(CLI::ExistingFile)->expected(1,-1)->type_name("INPUT_BINARY_FILE");
 
   // Type is not important here, its just a dummy placeholder to be added and then removed.
   std::string outputImage;

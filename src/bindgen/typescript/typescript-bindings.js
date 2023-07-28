@@ -36,7 +36,7 @@ function readFileIfNotInterfaceType(forNode, interfaceType, varName, indent) {
 
 function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=false) {
   // index module
-  let indexContent = `// Generated file. Do not edit.\n\n`
+  let indexContent = ''
   const nodeTextKebab = forNode ? '-node' : ''
   const nodeTextCamel = forNode ? 'Node' : ''
 
@@ -93,6 +93,20 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       fs.mkdirSync(path.join(outputDir, 'test', 'browser', 'demo-app'), { recursive: true })
     } catch (err) {
       if (err.code !== 'EEXIST') throw err
+    }
+
+    const pipelinesBaseUrlPath = path.join(outputDir, 'src', 'pipelines-base-url.ts')
+    if (!fs.existsSync(pipelinesBaseUrlPath)) {
+      fs.copyFileSync(bindgenResource('pipelines-base-url.ts'), pipelinesBaseUrlPath)
+      let pipelinesBaseUrlPathContent = fs.readFileSync(bindgenResource('pipelines-base-url.ts'), { encoding: 'utf8', flag: 'r' })
+      pipelinesBaseUrlPathContent = pipelinesBaseUrlPathContent.replaceAll('<bindgenPackageName>', packageName)
+      fs.writeFileSync(pipelinesBaseUrlPath, pipelinesBaseUrlPathContent)
+    }
+    const pipelineWorkerUrlPath = path.join(outputDir, 'src', 'pipeline-worker-url.ts')
+    if (!fs.existsSync(pipelineWorkerUrlPath)) {
+      let pipelineWorkerUrlPathContent = fs.readFileSync(bindgenResource('pipeline-worker-url.ts'), { encoding: 'utf8', flag: 'r' })
+      pipelineWorkerUrlPathContent = pipelineWorkerUrlPathContent.replaceAll('<bindgenPackageName>', packageName)
+      fs.writeFileSync(pipelineWorkerUrlPath, pipelineWorkerUrlPathContent)
     }
 
     const npmIgnorePath = path.join(outputDir, '.npmignore')
@@ -226,7 +240,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       resultContent = `import { ${Array.from(resultsImportTypes).join(',')} } from 'itk-wasm'\n\n` + resultContent;
 
     resultContent += `}\n\nexport default ${modulePascalCase}${nodeTextCamel}Result\n`
-    fs.writeFileSync(path.join(srcOutputDir, `${moduleKebabCase}${nodeTextKebab}-result.ts`), resultContent)
+    writeIfOverrideNotPresent(path.join(srcOutputDir, `${moduleKebabCase}${nodeTextKebab}-result.ts`), resultContent)
     indexContent += `\n\nimport ${modulePascalCase}${nodeTextCamel}Result from './${moduleKebabCase}${nodeTextKebab}-result.js'\n`
     indexContent += `export type { ${modulePascalCase}${nodeTextCamel}Result }\n\n`
 
@@ -248,6 +262,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
           // Internal
           return
         }
+
         if (!interfaceJsonTypeToTypeScriptType.has(parameter.type)) {
           console.error(`Unexpected parameter type: ${parameter.type}`)
           process.exit(1)
@@ -259,9 +274,8 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         }
         const isOptional = parameter.required ? '' : '?'
         const isArray = parameter.itemsExpectedMax > 1 ? "[]" : ""
-        const fileType = forNode ? 'string' : 'File'
         if (parameterType === 'TextFile' || parameterType === 'BinaryFile') {
-          parameterType = `${fileType}${isArray} | ${parameterType}${isArray}`
+          parameterType = `string${isArray} | File${isArray} | ${parameterType}${isArray}`
         } else {
           parameterType = `${parameterType}${isArray}`
         }
@@ -274,7 +288,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       }
       optionsContent += optionsInterfaceContent
       optionsContent += `}\n\nexport default ${modulePascalCase}Options\n`
-      fs.writeFileSync(path.join(srcOutputDir, `${moduleKebabCase}-options.ts`), optionsContent)
+      writeIfOverrideNotPresent(path.join(srcOutputDir, `${moduleKebabCase}-options.ts`), optionsContent)
 
       indexContent += `import ${modulePascalCase}Options from './${moduleKebabCase}-options.js'\n`
       indexContent += `export type { ${modulePascalCase}Options }\n\n`
@@ -283,9 +297,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
     // -----------------------------------------------------------------
     // function module
-    let functionContent = `// Generated file. Do not edit.
-
-import {\n`
+    let functionContent = `import {\n`
     const usedInterfaceTypes = new Set()
     const pipelineComponents = ['inputs', 'outputs', 'parameters']
     pipelineComponents.forEach((pipelineComponent) => {
@@ -388,7 +400,7 @@ import {\n`
               requiredOptions += `],`
             } else {
               const typescriptType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
-              let arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? `${typescriptType}[] | string[]` : `${typescriptType}[]`
+              let arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? `${typescriptType}[] | File[] | string[]` : `${typescriptType}[]`
               if (forNode) {
                 arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? `string[]` : `${typescriptType}[]`
 
@@ -536,8 +548,8 @@ import {\n`
               functionContent += '      mountDirs.add(path.dirname(value as string))\n'
               functionContent += `      args.push(value as string)\n`
             } else {
-              functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: valueFile })\n`
-              functionContent += `      const name = value instanceof File ? value.name : (value as ${interfaceType}).path\n`
+              functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: valueFile as ${interfaceType} })\n`
+              functionContent += `      const name = value instanceof File ? value.name : (valueFile as ${interfaceType}).path\n`
 
               functionContent += `      args.push(name)\n`
             }
@@ -618,7 +630,7 @@ import {\n`
     functionContent += '  return result\n'
 
     functionContent += `}\n\nexport default ${moduleCamelCase}${nodeTextCamel}\n`
-    fs.writeFileSync(path.join(srcOutputDir, `${moduleKebabCase}${nodeTextKebab}.ts`), functionContent)
+    writeIfOverrideNotPresent(path.join(srcOutputDir, `${moduleKebabCase}${nodeTextKebab}.ts`), functionContent)
     indexContent += `import ${moduleCamelCase}${nodeTextCamel} from './${moduleKebabCase}${nodeTextKebab}.js'\n`
     indexContent += `export { ${moduleCamelCase}${nodeTextCamel} }\n`
 
@@ -635,26 +647,13 @@ import {\n`
   readmeInterface += `} from "${packageName}"\n\`\`\`\n`
   readmeInterface += readmePipelines
 
-  const pipelinesBaseUrlPath = path.join(outputDir, 'src', 'pipelines-base-url.ts')
-  if (!fs.existsSync(pipelinesBaseUrlPath)) {
-    fs.copyFileSync(bindgenResource('pipelines-base-url.ts'), pipelinesBaseUrlPath)
-    let pipelinesBaseUrlPathContent = fs.readFileSync(bindgenResource('pipelines-base-url.ts'), { encoding: 'utf8', flag: 'r' })
-    pipelinesBaseUrlPathContent = pipelinesBaseUrlPathContent.replaceAll('<bindgenPackageName>', packageName)
-    fs.writeFileSync(pipelinesBaseUrlPath, pipelinesBaseUrlPathContent)
-  }
-  const pipelineWorkerUrlPath = path.join(outputDir, 'src', 'pipeline-worker-url.ts')
-  if (!fs.existsSync(pipelineWorkerUrlPath)) {
-    let pipelineWorkerUrlPathContent = fs.readFileSync(bindgenResource('pipeline-worker-url.ts'), { encoding: 'utf8', flag: 'r' })
-    pipelineWorkerUrlPathContent = pipelineWorkerUrlPathContent.replaceAll('<bindgenPackageName>', packageName)
-    fs.writeFileSync(pipelineWorkerUrlPath, pipelineWorkerUrlPathContent)
-  }
-
   const itkConfigPath = path.join(outputDir, 'src', 'itkConfig.js')
   if (!fs.existsSync(itkConfigPath)) {
     fs.copyFileSync(bindgenResource('itkConfig.js'), itkConfigPath)
   }
 
-  fs.writeFileSync(path.join(srcOutputDir, `index${nodeTextKebab}.ts`), indexContent)
+  const indexPath = path.join(srcOutputDir, `index${nodeTextKebab}.ts`)
+  writeIfOverrideNotPresent(indexPath, indexContent)
 
   if (!forNode) {
     const demoIndexPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'index.html')

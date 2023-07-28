@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   JsonObject,
@@ -37,7 +37,9 @@ async function readDicomTagsNode(
   ]
 
   const args = []
+  // ----------------------------------------------
   // Inputs
+
   const dicomFileName = dicomFile
   args.push(dicomFileName as string)
   // Outputs

@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   TextFile,
@@ -45,7 +45,9 @@ async function readDicomTags(
   ]
 
   const args = []
+  // ----------------------------------------------
   // Inputs
+
   const dicomFileName = dicomFile instanceof File ? dicomFile.name : dicomFile.path
   args.push(dicomFileName as string)
   // Outputs

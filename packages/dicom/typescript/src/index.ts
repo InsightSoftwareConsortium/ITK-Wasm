@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 export * from './pipelines-base-url.js'
 export * from './pipeline-worker-url.js'
