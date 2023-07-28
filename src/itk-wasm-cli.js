@@ -13,8 +13,7 @@ import pythonWebDemoBindgen from './bindgen/python-web-demo/python-web-demo-bind
 
 const program = new Command()
 
-// Array of types that will require an import from itk-wasm
-const defaultImageTag = '20230608-10fae823'
+const defaultImageTag = '20230709-b133f6b9'
 
 function processCommonOptions(wasiDefault=false) {
   const options = program.opts()
