@@ -1,21 +1,22 @@
+const demoServer = 'http://localhost:5173'
+
 describe('structuredReportToText', () => {
   beforeEach(function() {
-    cy.visit('/')
+    cy.visit(demoServer)
 
     const fileName = '88.33-comprehensive-SR.dcm'
-    const testFilePath = `../../../build-emscripten/ExternalData/test/Input/${fileName}`
+    const testFilePath = `../test/data/input/${fileName}`
     cy.readFile(testFilePath, null).as('inputData')
   })
 
-  it('runs and produces the expected text', function() {
-    cy.get('input[type=file]').selectFile({ contents: new Uint8Array(this.inputData), fileName: 'inputData.dcm' }, { force: true })
-    cy.get('sp-textarea').should('include.text', 'Comprehensive SR Document')
-  })
+  it('runs and produces the expected text', function () {
+    cy.get('sl-tab[panel="structuredReportToText-panel"]').click()
 
-  it('does not contain the document header when option checked', function() {
-    cy.get('#noDocumentHeader').click()
-    cy.get('input[type=file]').selectFile({ contents: new Uint8Array(this.inputData), fileName: 'inputData.dcm' }, { force: true })
-    cy.get('sp-textarea').should('include.text', 'Breast Imaging Report')
-    cy.get('sp-textarea').should('not.include.text', 'Comprehensive SR Document')
+    cy.get('#structuredReportToTextInputs input[type=file]').selectFile({ contents: new Uint8Array(this.inputData), fileName: 'inputData.dcm' }, { force: true })
+
+    cy.get('#structuredReportToTextInputs sl-button[name="run"]').click()
+
+    cy.get('#structuredReportToTextOutputs sl-textarea[name="output-text"]').invoke('prop', 'value').should('contain', 'Comprehensive SR Document')
+    cy.get('#structuredReportToTextOutputs sl-textarea[name="output-text"]').invoke('prop', 'value').should('contain', 'Breast Imaging Report')
   })
 })

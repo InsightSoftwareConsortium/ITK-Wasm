@@ -14,8 +14,6 @@ import StructuredReportToTextResult from './structured-report-to-text-result.js'
 
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
-
-
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 /**

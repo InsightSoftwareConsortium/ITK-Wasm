@@ -14,8 +14,6 @@ import ReadDicomTagsResult from './read-dicom-tags-result.js'
 
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
-
-
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 /**

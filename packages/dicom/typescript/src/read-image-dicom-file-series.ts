@@ -15,8 +15,6 @@ import ReadImageDicomFileSeriesResult from './read-image-dicom-file-series-resul
 
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
-
-
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 /**

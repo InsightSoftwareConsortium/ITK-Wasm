@@ -45,7 +45,7 @@ class ParseStringDecompressController  {
         files[0].arrayBuffer().then((arrayBuffer) => {
             model.inputs.set("input", new Uint8Array(arrayBuffer))
             const input = document.querySelector("#parseStringDecompressInputs sl-input[name=input]")
-            input.value = model.inputs.get("input").subarray(0, 50).toString() + ' ...'
+            input.value = model.inputs.get("input").data.subarray(0, 50).toString() + ' ...'
         })
     })
 
@@ -81,7 +81,7 @@ class ParseStringDecompressController  {
         runButton.loading = true
         const t0 = performance.now()
 
-        const { webWorker, output } = await compressStringify.parseStringDecompress(this.webWorker,
+        const { webWorker, output, } = await compressStringify.parseStringDecompress(this.webWorker,
           model.inputs.get('input').slice(),
           Object.fromEntries(model.options.entries())
         )
@@ -95,6 +95,7 @@ class ParseStringDecompressController  {
         outputOutputDownload.disabled = false
         const outputOutput = document.querySelector('#parseStringDecompressOutputs sl-textarea[name=output]')
         outputOutput.value = output.subarray(0, 200).toString() + ' ...'
+        outputOutput.disabled = false
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

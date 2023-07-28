@@ -15,8 +15,6 @@ import ApplyPresentationStateToImageResult from './apply-presentation-state-to-i
 
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
-
-
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 /**

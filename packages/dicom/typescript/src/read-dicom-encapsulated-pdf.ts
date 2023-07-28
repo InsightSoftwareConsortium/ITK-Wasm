@@ -14,8 +14,6 @@ import ReadDicomEncapsulatedPdfResult from './read-dicom-encapsulated-pdf-result
 
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
-
-
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 /**

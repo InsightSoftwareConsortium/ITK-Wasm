@@ -112,10 +112,16 @@ class ${functionNamePascalCase}Model {
         runButton.loading = true
         const t0 = performance.now()
 
-        const { webWorker, output } = await ${camelCase(bundleName)}.${functionName}(this.webWorker,\n`
+        const { webWorker, `
+  interfaceJson.outputs.forEach((output) => {
+    result += `${camelCase(output.name)}, `
+  })
+  result += `} = await ${camelCase(bundleName)}.${functionName}(this.webWorker,\n`
   interfaceJson.inputs.forEach((input) => {
     if (input.type === 'INPUT_TEXT_STREAM' || input.type === 'INPUT_BINARY_STREAM') {
       result += `          model.inputs.get('${camelCase(input.name)}').slice(),\n`
+    } else if (input.type.startsWith('INPUT_BINARY_FILE') || input.type.startsWith('INPUT_TEXT_FILE')) {
+      result += `          { data: model.inputs.get('${camelCase(input.name)}').data.slice(), path: model.inputs.get('${camelCase(input.name)}').path },\n`
     } else {
       result += `          model.inputs.get('${camelCase(input.name)}'),\n`
     }

@@ -13,9 +13,10 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
       result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
       result += `${indent}${indent}files[0].arrayBuffer().then((arrayBuffer) => {\n`
-      result += `${indent}${indent}${indent}model.${modelProperty}.set("${parameterName}", new TextDecoder().decode(new Uint8Array(arrayBuffer)))\n`
+      const textValue = parameter.type === 'INPUT_TEXT_STREAM' ? 'new TextDecoder().decode(new Uint8Array(arrayBuffer))' : '{ data: new TextDecoder().decode(new Uint8Array(arrayBuffer)), path: files[0].name }'
+      result += `${indent}${indent}${indent}model.${modelProperty}.set("${parameterName}", ${textValue})\n`
       result += `${indent}${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
-      result += `${indent}${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").substring(0, 50) + ' ...'\n`
+      result += `${indent}${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").data.substring(0, 50) + ' ...'\n`
       result += `${indent}${indent}})\n`
       result += `${indent}})\n\n`
       break
@@ -26,9 +27,10 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
       result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
       result += `${indent}${indent}files[0].arrayBuffer().then((arrayBuffer) => {\n`
-      result += `${indent}${indent}${indent}model.${modelProperty}.set("${parameterName}", new Uint8Array(arrayBuffer))\n`
+      const binaryValue = parameter.type === 'INPUT_BINARY_STREAM' ? 'new Uint8Array(arrayBuffer)' : '{ data: new Uint8Array(arrayBuffer), path: files[0].name }'
+      result += `${indent}${indent}${indent}model.${modelProperty}.set("${parameterName}", ${binaryValue})\n`
       result += `${indent}${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
-      result += `${indent}${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").subarray(0, 50).toString() + ' ...'\n`
+      result += `${indent}${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").data.subarray(0, 50).toString() + ' ...'\n`
       result += `${indent}${indent}})\n`
       result += `${indent}})\n\n`
       break

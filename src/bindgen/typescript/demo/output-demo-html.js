@@ -5,18 +5,18 @@ function outputDemoHtml(prefix, indent, parameter) {
   switch(parameter.type) {
     case 'OUTPUT_TEXT_FILE:FILE':
     case 'OUTPUT_TEXT_STREAM':
-      result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>\n`
+      result += `${prefix}${indent}<sl-textarea resize="auto" filled disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>\n`
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
       result += `<br /><br />\n`
       break
     case 'OUTPUT_BINARY_FILE:FILE':
     case 'OUTPUT_BINARY_STREAM':
-      result += `${prefix}${indent}<sl-textarea name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>\n`
+      result += `${prefix}${indent}<sl-textarea resize="auto" filled disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>\n`
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
       result += `<br /><br />\n`
       break
     case 'TEXT':
-      result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
+      result += `${prefix}${indent}<sl-textarea resize="auto" filled disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
       break
     case 'INT':
     case 'UINT':
