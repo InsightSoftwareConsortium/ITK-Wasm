@@ -1,26 +1,20 @@
 import { defineConfig } from 'vite'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
-import { fileURLToPath, URL } from 'url'
 import path from 'path'
 
 export default defineConfig({
   root: path.join('test', 'browser', 'demo-app'),
   build: {
-    outDir: '../../demo-app',
+    outDir: '../../../demo-app',
     emptyOutDir: true,
   },
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory
     viteStaticCopy({
       targets: [
-        { src: '../../dist/pipelines/*', dest: 'pipelines' },
-        { src: '../../dist/web-workers/*', dest: 'web-workers' },
+        { src: '../../../dist/pipelines/*', dest: 'pipelines' },
+        { src: '../../../dist/web-workers/*', dest: 'web-workers' },
       ],
     })
   ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('../src', import.meta.url))
-    }
-  },
 })
