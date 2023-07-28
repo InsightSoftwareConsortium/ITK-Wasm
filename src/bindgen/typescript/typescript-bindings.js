@@ -220,13 +220,12 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
     interfaceJson.outputs.forEach((output) => {
       if (!interfaceJsonTypeToTypeScriptType.has(output.type)) {
-
         console.error(`Unexpected output type: ${output.type}`)
         process.exit(1)
       }
       resultContent += `  /** ${output.description} */\n`
       const outputType = interfaceJsonTypeToTypeScriptType.get(output.type)
-      if(typesRequireImport.includes(outputType)) {
+      if (typesRequireImport.includes(outputType)) {
         resultsImportTypes.add(outputType)
       }
       resultContent += `  ${camelCase(output.name)}: ${outputType}\n\n`
@@ -237,7 +236,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
 
     // Insert the import statement in the beginning for the file.
     if(resultsImportTypes.size !== 0)
-      resultContent = `import { ${Array.from(resultsImportTypes).join(',')} } from 'itk-wasm'\n\n` + resultContent;
+      resultContent = `import { ${Array.from(resultsImportTypes).join(',')} } from 'itk-wasm'\n\n` + resultContent
 
     resultContent += `}\n\nexport default ${modulePascalCase}${nodeTextCamel}Result\n`
     writeIfOverrideNotPresent(path.join(srcOutputDir, `${moduleKebabCase}${nodeTextKebab}-result.ts`), resultContent)
@@ -283,7 +282,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}*`, parameter.description])
       })
       // Insert the import statement in the beginning for the file.
-      if(optionsImportTypes.size !== 0) {
+      if (optionsImportTypes.size !== 0) {
         optionsContent += `import { ${Array.from(optionsImportTypes).join(',')} } from 'itk-wasm'\n\n`;
       }
       optionsContent += optionsInterfaceContent
@@ -321,7 +320,6 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
       functionContent += `  runPipelineNode\n`
     } else {
       functionContent += `  runPipeline\n`
-
     }
     functionContent += `} from 'itk-wasm'\n\n`
     if (haveParameters) {
@@ -331,7 +329,7 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     if (forNode) {
       functionContent += "\nimport path from 'path'\n\n"
     } else {
-      functionContent += "\nimport { getPipelinesBaseUrl } from './pipelines-base-url.js'\n\n"
+      functionContent += "\nimport { getPipelinesBaseUrl } from './pipelines-base-url.js'"
       functionContent += "\nimport { getPipelineWorkerUrl } from './pipeline-worker-url.js'\n\n"
     }
 
@@ -339,7 +337,6 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     functionContent += `/**\n * ${interfaceJson.description}\n *\n`
     interfaceJson.inputs.forEach((input) => {
       if (!interfaceJsonTypeToTypeScriptType.has(input.type)) {
-
         console.error(`Unexpected input type: ${input.type}`)
         process.exit(1)
       }
@@ -369,7 +366,6 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
     functionCall += `async function ${moduleCamelCase}${nodeTextCamel}(\n`
     if (!forNode) {
       functionCall += '  webWorker: null | Worker,\n'
-
     }
     interfaceJson.inputs.forEach((input, index) => {
       let typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
@@ -403,7 +399,6 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
               let arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? `${typescriptType}[] | File[] | string[]` : `${typescriptType}[]`
               if (forNode) {
                 arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? `string[]` : `${typescriptType}[]`
-
               }
               requiredOptions += ` ${camelCase(parameter.name)}: [] as ${arrayType},`
             }
@@ -412,14 +407,12 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
               requiredOptions += ` ${camelCase(parameter.name)}: ${parameter.default},`
             }
           }
-
         }
       })
       if (requiredOptions.length > 0) {
         requiredOptions += " "
       }
       functionCall += `  options: ${modulePascalCase}Options = {${requiredOptions}}\n) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
-
     } else {
       functionCall += `\n) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
     }
@@ -458,7 +451,6 @@ function typescriptBindings(outputDir, buildDir, wasmBinaries, options, forNode=
         if (interfaceType.includes('File')) {
           if (!forNode) {
             functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${camel}File as ${interfaceType} },\n`
-
           }
         } else {
           let data = camel

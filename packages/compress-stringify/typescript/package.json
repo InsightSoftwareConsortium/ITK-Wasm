@@ -33,7 +33,7 @@
   "keywords": [
     "itk",
     "wasm",
-    "webassembly",
+    "webassembly"
   ],
   "author": "",
   "license": "Apache-2.0",
