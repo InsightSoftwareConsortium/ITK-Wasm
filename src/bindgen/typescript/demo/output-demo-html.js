@@ -37,6 +37,18 @@ function outputDemoHtml(prefix, indent, parameter) {
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>${camelCase(parameter.name)}</sl-button>\n`
       result += `<br /><br />\n`
       break
+    case 'OUTPUT_MESH':
+      result += `${prefix}${indent}<sl-details disabled id="${parameter.name}-output" summary="${camelCase(parameter.name)}: ${parameter.description}"><sl-skeleton effect="none"></sl-skeleton></sl-details>\n`
+
+      result += `${prefix}${indent}<sl-select id="${parameter.name}-output-format" placeholder="Format">\n`
+      const formats = ['vtk', 'byu', 'fsa', 'fsb', 'obj', 'off', 'stl', 'swc'];
+      formats.forEach((format) => {
+        result += `${prefix}${indent}${indent}<sl-option value="${format}">${format}</sl-option>\n`
+      })
+      result += `${prefix}${indent}</sl-select>\n`
+      result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
+      result += `<br /><br />\n`
+      break
     default:
       console.error(`Unexpected interface type: ${parameter.type}`)
       process.exit(1)

@@ -15,6 +15,13 @@ function downloadFile(content, filename) {
   return a
 }
 
+function interfaceTypeJsonReplacer (key, value) {
+  if (!!value && value.byteLength !== undefined) {
+    return String(value.slice(0, 6)) + '...'
+  }
+  return value
+}
+
 function escapeHtml(html) {
   const div = document.createElement('div');
   div.textContent = html;

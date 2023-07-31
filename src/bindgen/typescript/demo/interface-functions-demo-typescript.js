@@ -7,14 +7,29 @@ import packageToBundleName from "../package-to-bundle-name.js"
 import writeIfOverrideNotPresent from "../../write-if-override-not-present.js"
 import outputDemoRunTypeScript from './output-demo-run-typescript.js'
 import outputDemoTypeScript from './output-demo-typescript.js'
+import interfaceJsonTypeToInterfaceType from '../../interface-json-type-to-interface-type.js'
 
 function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath) {
+  let result = ''
   let indent = '    '
   const bundleName = packageToBundleName(packageName)
   const functionName = camelCase(interfaceJson.name)
   const functionNamePascalCase = pascalCase(interfaceJson.name)
 
-  let result = `import * as ${camelCase(bundleName)} from '../../../dist/bundles/${bundleName}.js'\n`
+  let needReadMesh = false
+  const pipelineComponents = ['inputs', 'parameters']
+  pipelineComponents.forEach((pipelineComponent) => {
+    needReadMesh = needReadMesh || interfaceJson[pipelineComponent].filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Mesh').length > 0
+  })
+  if (needReadMesh) {
+    result += `import { readMeshFile } from 'itk-wasm'\n`
+  }
+  const needWriteMesh = interfaceJson.outputs.filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Mesh').length > 0
+  if (needReadMesh) {
+    result += `import { writeMeshArrayBuffer } from 'itk-wasm'\n`
+  }
+
+  result += `import * as ${camelCase(bundleName)} from '../../../dist/bundles/${bundleName}.js'\n`
 
   result += `import ${functionName}LoadSampleInputs from "./${interfaceJson.name}-load-sample-inputs.js"\n`
   const loadSampleInputsModulePath = path.join(outputPath, `${interfaceJson.name}-load-sample-inputs.ts`)

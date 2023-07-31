@@ -34,6 +34,11 @@ function inputParametersDemoHtml(prefix, indent, parameter, required, useCamelCa
       result += `${prefix}${indent}<sl-checkbox name="${parameter.name}">${label} - <i>${parameter.description}</i></sl-checkbox>\n`
       result += `<br /><br />\n`
       break
+    case 'INPUT_MESH':
+      result += `${prefix}${indent}<sl-details id="${parameter.name}-input" summary="${label}: ${parameter.description}" disabled></sl-details>\n`
+      result += `${prefix}${indent}<label for="${parameter.name}-file"><sl-button variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="${parameter.name}-file" style="display: none"/>\n`
+      result += `<br /><br />\n`
+      break
     default:
       console.error(`Unexpected interface type: ${parameter.type}`)
       process.exit(1)

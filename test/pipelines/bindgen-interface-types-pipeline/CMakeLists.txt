@@ -1,0 +1,24 @@
+cmake_minimum_required(VERSION 3.10)
+project(bindgen-interface-types-test)
+
+set(CMAKE_CXX_STANDARD 17)
+
+set(io_components)
+if(NOT EMSCRIPTEN)
+  set(io_components ITKIOMeshVTK)
+endif()
+find_package(ITK REQUIRED
+  COMPONENTS
+    ${io_components}
+    WebAssemblyInterface
+  )
+include(${ITK_USE_FILE})
+
+add_executable(bindgen-interface-types-test bindgen-interface-types-test.cxx)
+target_link_libraries(bindgen-interface-types-test PUBLIC ${ITK_LIBRARIES})
+
+enable_testing()
+add_test(NAME bindgen-interface-types-test
+  COMMAND bindgen-interface-types-test ${CMAKE_CURRENT_SOURCE_DIR}/cow.vtk
+  ${CMAKE_CURRENT_BINARY_DIR}/cow.written.vtk
+  )

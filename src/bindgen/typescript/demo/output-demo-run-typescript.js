@@ -43,6 +43,14 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
     //   result += `${prefix}${indent}<sl-button variant="neutral" name="${parameter.name}-download">${camelCase(parameter.name)}</sl-button>\n`
     //   result += `<br /><br />\n`
     //   break
+    case 'OUTPUT_MESH':
+      result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
+      result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
+      result += `${indent}${indent}const details = document.getElementById("${parameter.name}-output")\n`
+      result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(${parameterName}, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+      result += `${indent}${indent}details.disabled = false\n`
+      result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-details[name=${parameter.name}]')\n`
+      break
     default:
       console.error(`Unexpected interface type: ${parameter.type}`)
       process.exit(1)

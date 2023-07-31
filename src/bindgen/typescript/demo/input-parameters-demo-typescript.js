@@ -53,6 +53,19 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", parseInt(${inputIdentifier}.value))\n`
       result += `${indent}})\n\n`
       break
+    case 'INPUT_MESH':
+      result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
+      result += `${indent}${inputIdentifier}.addEventListener('change', async (event) => {\n`
+      result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
+      result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
+      result += `${indent}${indent}const { mesh, webWorker } = await readMeshFile(null, files[0])\n`
+      result += `${indent}${indent}webWorker.terminate()\n`
+      result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", mesh)\n`
+      result += `${indent}${indent}const details = document.getElementById("${parameter.name}-input")\n`
+      result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(mesh, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+      result += `${indent}${indent}details.disabled = false\n`
+      result += `${indent}})\n\n`
+      break
     default:
       console.error(`Unexpected interface type: ${parameter.type}`)
       process.exit(1)

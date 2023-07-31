@@ -8,6 +8,7 @@ const demoSupportedInputTypes = new Set([
   'INT',
   'UINT',
   'BOOL',
+  'INPUT_MESH',
 ])
 const demoSupportedOutputTypes = new Set([
   'OUTPUT_TEXT_FILE:FILE',
@@ -19,6 +20,7 @@ const demoSupportedOutputTypes = new Set([
   'UINT',
   'BOOL',
   'OUTPUT_JSON',
+  'OUTPUT_MESH',
 ])
 
 function allDemoTypesSupported(interfaceJson) {
