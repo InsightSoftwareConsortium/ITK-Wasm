@@ -6,12 +6,14 @@ function inputParametersDemoHtml(prefix, indent, parameter, required, useCamelCa
   const requiredAttr = required ? 'required ' : ''
   const label = useCamelCase ? camelCase(parameter.name) : snakeCase(parameter.name)
   switch(parameter.type) {
+    case 'INPUT_TEXT_FILE':
     case 'INPUT_TEXT_FILE:FILE':
     case 'INPUT_TEXT_STREAM':
       result += `${prefix}${indent}<sl-input ${requiredAttr}name="${parameter.name}" type="text" label="${label}" help-text="${parameter.description}"></sl-input>\n`
       result += `${prefix}${indent}<label for="${parameter.name}-file"><sl-button variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="${parameter.name}-file" style="display: none"/>\n`
       result += `<br /><br />\n`
       break
+    case 'INPUT_BINARY_FILE':
     case 'INPUT_BINARY_FILE:FILE':
     case 'INPUT_BINARY_STREAM':
       result += `${prefix}${indent}<sl-input ${requiredAttr}name="${parameter.name}" type="text" label="${label}" help-text="${parameter.description}" disabled></sl-input>\n`

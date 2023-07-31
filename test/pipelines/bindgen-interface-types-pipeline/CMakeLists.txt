@@ -19,6 +19,9 @@ target_link_libraries(bindgen-interface-types-test PUBLIC ${ITK_LIBRARIES})
 
 enable_testing()
 add_test(NAME bindgen-interface-types-test
-  COMMAND bindgen-interface-types-test ${CMAKE_CURRENT_SOURCE_DIR}/cow.vtk
-  ${CMAKE_CURRENT_BINARY_DIR}/cow.written.vtk
+  COMMAND bindgen-interface-types-test
+    ${CMAKE_CURRENT_SOURCE_DIR}/input.txt
+    ${CMAKE_CURRENT_BINARY_DIR}/output.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/cow.vtk
+    ${CMAKE_CURRENT_BINARY_DIR}/cow.written.vtk
   )

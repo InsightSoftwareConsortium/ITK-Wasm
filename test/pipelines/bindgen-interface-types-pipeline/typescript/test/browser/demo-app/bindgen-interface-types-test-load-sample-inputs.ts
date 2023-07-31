@@ -1,6 +1,12 @@
 import { readMeshArrayBuffer } from "itk-wasm"
 
 export default async function bindgenInterfaceTypesTestLoadSampleInputs (model) {
+  const inputTextFile = { path: 'input.txt', data: 'Hello bindgen World!' }
+  model.inputs.set("inputTextFile", inputTextFile)
+  const inputTextFileElement = document.querySelector("#bindgenInterfaceTypesTestInputs sl-input[name=input-text-file]")
+  inputTextFileElement.value = model.inputs.get("inputTextFile").data.substring(0, 50)
+  inputTextFileElement.disabled = false
+
   const url = 'https://w3s.link/ipfs/bafkreieodo3n2damvbcbpm5ir3bsxcorqvbaqzcz33y63nn3zp6jxemske'
   const response = await fetch(url)
   const arrayBuffer = await response.arrayBuffer()

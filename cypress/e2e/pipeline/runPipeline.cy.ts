@@ -232,7 +232,7 @@ Click. Perfect success.
     })
 
 
-  it('writes and reads itk.Image\'s in the Emscripten filesystem', () => {
+  it('writes and reads itk.Image\'s with Emscripten', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
 

@@ -15,10 +15,14 @@
  *  limitations under the License.
  *
  *=========================================================================*/
+#include "itkPipeline.h"
+#include "itkInputTextStream.h"
+#include "itkOutputTextStream.h"
+#include "itkInputBinaryStream.h"
+#include "itkOutputBinaryStream.h"
 #include "itkMesh.h"
 #include "itkInputMesh.h"
 #include "itkOutputMesh.h"
-#include "itkPipeline.h"
 
 int main( int argc, char * argv[] )
 {
@@ -26,19 +30,60 @@ int main( int argc, char * argv[] )
 
   using PixelType = float;
   constexpr unsigned int Dimension = 3;
+
+  std::string inputTextFile;
+  pipeline.add_option("input-text-file", inputTextFile, "The input text file")->required()->group("Files")->type_name("INPUT_TEXT_FILE");
+
+  // std::string inputBinaryFile;
+  // pipeline.add_option("input-binary-file", inputBinaryFile, "The input binary file")->required()->group("Files")->type_name("INPUT_BINARY_FILE");
+
+  // std::string outputBinaryFile;
+  // pipeline.add_option("output-binary-file", outputBinaryFile, "The output binary file")->required()->group("Files")->type_name("OUTPUT_BINARY_FILE");
+
   using MeshType = itk::Mesh< PixelType, Dimension >;
 
   using InputMeshType = itk::wasm::InputMesh<MeshType>;
   InputMeshType inputMesh;
-  pipeline.add_option("input-mesh", inputMesh, "The input mesh")->required()->type_name("INPUT_MESH");
+  pipeline.add_option("input-mesh", inputMesh, "The input mesh")->required()->group("Meshes")->type_name("INPUT_MESH");
+
+  std::string outputTextFile;
+  pipeline.add_option("output-text-file", outputTextFile, "The output text file")->required()->group("Files")->type_name("OUTPUT_TEXT_FILE");
 
   using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
   OutputMeshType outputMesh;
-  pipeline.add_option("output-mesh", outputMesh, "The output mesh")->required()->type_name("OUTPUT_MESH");
+  pipeline.add_option("output-mesh", outputMesh, "The output mesh")->required()->group("Meshes")->type_name("OUTPUT_MESH");
 
   ITK_WASM_PARSE(pipeline);
 
+  const size_t bufferLength = 2048;
+  char * buffer = new char[bufferLength];
+  size_t readLength = 0;
+
+  std::ifstream inputTxtFile( inputTextFile, std::ifstream::in );
+  if(!inputTxtFile.is_open())
+    {
+    std::cerr << "Could not open inputTextFile." << std::endl;
+    delete[] buffer;
+    return EXIT_FAILURE;
+    }
+  inputTxtFile.read( buffer, bufferLength );
+  readLength = inputTxtFile.gcount();
+  inputTxtFile.close();
+  buffer[readLength] = '\0';
+
+  std::ofstream outputFileTxt( outputTextFile, std::ofstream::out );
+  if( !outputFileTxt.is_open() )
+    {
+    std::cerr << "Could not open outputTxtFile." << std::endl;
+    delete[] buffer;
+    return EXIT_FAILURE;
+    }
+  outputFileTxt.write( buffer, readLength );
+  outputFileTxt.close();
+
   outputMesh.Set(inputMesh.Get());
+
+  delete[] buffer;
 
   return EXIT_SUCCESS;
 }

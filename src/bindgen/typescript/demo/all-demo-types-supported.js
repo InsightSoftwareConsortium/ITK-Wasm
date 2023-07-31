@@ -1,5 +1,6 @@
 // Evenutally we will support them all
 const demoSupportedInputTypes = new Set([
+  'INPUT_TEXT_FILE',
   'INPUT_TEXT_FILE:FILE',
   'INPUT_TEXT_STREAM',
   'INPUT_BINARY_FILE:FILE',
@@ -11,6 +12,7 @@ const demoSupportedInputTypes = new Set([
   'INPUT_MESH',
 ])
 const demoSupportedOutputTypes = new Set([
+  'OUTPUT_TEXT_FILE',
   'OUTPUT_TEXT_FILE:FILE',
   'OUTPUT_TEXT_STREAM',
   'OUTPUT_BINARY_FILE:FILE',

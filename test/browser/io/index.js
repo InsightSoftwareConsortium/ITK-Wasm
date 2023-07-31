@@ -11,7 +11,7 @@ import meshToPolyDataTest from './meshToPolyDataTest.js'
 
 export default function () {
   readImageTest()
-  JPEGTest()
+  jPEGTest()
   readImageFileSeriesTest()
 
   readMeshTest()

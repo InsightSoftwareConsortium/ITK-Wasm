@@ -6,6 +6,7 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
   const parameterName = camelCase(parameter.name)
   const inputIdentifier = `${parameterName}Element`
   switch(parameter.type) {
+    case 'INPUT_TEXT_FILE':
     case 'INPUT_TEXT_FILE:FILE':
     case 'INPUT_TEXT_STREAM':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
@@ -20,6 +21,7 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       result += `${indent}${indent}})\n`
       result += `${indent}})\n\n`
       break
+    case 'INPUT_BINARY_FILE':
     case 'INPUT_BINARY_FILE:FILE':
     case 'INPUT_BINARY_STREAM':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`

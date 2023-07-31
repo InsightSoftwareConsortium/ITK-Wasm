@@ -5,27 +5,35 @@ function outputDemoTypeScript(functionName, prefix, indent, parameter) {
   let result = '\n'
 
   switch(parameter.type) {
+    case 'OUTPUT_TEXT_FILE':
     case 'OUTPUT_TEXT_FILE:FILE':
-    case 'OUTPUT_TEXT_STREAM':
+    case 'OUTPUT_TEXT_STREAM': {
       result += `${prefix}${indent}const ${parameterName}OutputDownload = document.querySelector('#${functionName}Outputs sl-button[name=${parameter.name}-download]')\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.addEventListener('click', (event) => {\n`
       result += `${prefix}${indent}${indent}event.preventDefault()\n`
       result += `${prefix}${indent}${indent}event.stopPropagation()\n`
       result += `${prefix}${indent}${indent}if (model.outputs.has("${parameterName}")) {\n`
-      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(new TextEncoder().encode(model.outputs.get("${parameterName}")), "${parameterName}.txt")\n`
+      const textDataProp = parameter.type.includes('FILE') ? '.data' : ''
+      const downloadFileName = parameter.type.includes('FILE') ? `model.outputs.get("${parameterName}").path`: `"${parameterName}.txt"`
+      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(new TextEncoder().encode(model.outputs.get("${parameterName}")${textDataProp}), ${downloadFileName})\n`
       result += `${prefix}${indent}${indent}}\n`
       result += `${prefix}${indent}})\n`
+    }
       break
+    case 'OUTPUT_BINARY_FILE':
     case 'OUTPUT_BINARY_FILE:FILE':
-    case 'OUTPUT_BINARY_STREAM':
+    case 'OUTPUT_BINARY_STREAM': {
       result += `${prefix}${indent}const ${parameterName}OutputDownload = document.querySelector('#${functionName}Outputs sl-button[name=${parameter.name}-download]')\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.addEventListener('click', (event) => {\n`
       result += `${prefix}${indent}${indent}event.preventDefault()\n`
       result += `${prefix}${indent}${indent}event.stopPropagation()\n`
       result += `${prefix}${indent}${indent}if (model.outputs.has("${parameterName}")) {\n`
-      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(model.outputs.get("${parameterName}"), "${parameterName}.bin")\n`
+      const binaryDataProp = parameter.type.includes('FILE') ? '.data' : ''
+      const downloadFileName = parameter.type.includes('FILE') ? `model.outputs.get("${parameterName}").path`: `"${parameterName}.bin"`
+      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(model.outputs.get("${parameterName}")${binaryDataProp}, ${downloadFileName})\n`
       result += `${prefix}${indent}${indent}}\n`
       result += `${prefix}${indent}})\n`
+    }
       break
     // case 'TEXT':
     //   result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`

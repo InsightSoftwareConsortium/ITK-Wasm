@@ -5,21 +5,27 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
   let result = `\n${prefix}${indent}model.outputs.set("${parameterName}", ${parameterName})\n`
 
   switch(parameter.type) {
+    case 'OUTPUT_TEXT_FILE':
     case 'OUTPUT_TEXT_FILE:FILE':
-    case 'OUTPUT_TEXT_STREAM':
+    case 'OUTPUT_TEXT_STREAM': {
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
       result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-textarea[name=${parameter.name}]')\n`
-      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}.substring(0, 1024).toString() + ' ...'\n`
+      const textDataProp = parameter.type.includes('FILE') ? '.data' : ''
+      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}${textDataProp}.substring(0, 1024).toString() + ' ...'\n`
       result += `${prefix}${indent}${parameterName}Output.disabled = false\n`
+    }
       break
+    case 'OUTPUT_BINARY_FILE':
     case 'OUTPUT_BINARY_FILE:FILE':
-    case 'OUTPUT_BINARY_STREAM':
+    case 'OUTPUT_BINARY_STREAM': {
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
       result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-textarea[name=${parameter.name}]')\n`
-      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}.subarray(0, 1024).toString() + ' ...'\n`
+      const binaryDataProp = parameter.type.includes('FILE') ? '.data' : ''
+      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}${binaryDataProp}.subarray(0, 1024).toString() + ' ...'\n`
       result += `${prefix}${indent}${parameterName}Output.disabled = false\n`
+    }
       break
     // case 'TEXT':
     //   result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
