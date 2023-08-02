@@ -23,7 +23,7 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       break
     case 'INPUT_BINARY_FILE':
     case 'INPUT_BINARY_FILE:FILE':
-    case 'INPUT_BINARY_STREAM':
+    case 'INPUT_BINARY_STREAM': {
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('change', (event) => {\n`
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
@@ -32,9 +32,11 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       const binaryValue = parameter.type === 'INPUT_BINARY_STREAM' ? 'new Uint8Array(arrayBuffer)' : '{ data: new Uint8Array(arrayBuffer), path: files[0].name }'
       result += `${indent}${indent}${indent}model.${modelProperty}.set("${parameterName}", ${binaryValue})\n`
       result += `${indent}${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
-      result += `${indent}${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").data.subarray(0, 50).toString() + ' ...'\n`
+      const binaryDataProp = parameter.type.includes('FILE') ? '.data' : ''
+      result += `${indent}${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}")${binaryDataProp}.subarray(0, 50).toString() + ' ...'\n`
       result += `${indent}${indent}})\n`
       result += `${indent}})\n\n`
+    }
       break
     case 'TEXT':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs sl-input[name=${parameter.name}]')\n`

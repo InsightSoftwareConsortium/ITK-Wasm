@@ -23,9 +23,11 @@ add_test(NAME bindgen-interface-types-test
     ${CMAKE_CURRENT_SOURCE_DIR}/input.txt
     ${CMAKE_CURRENT_SOURCE_DIR}/input.bin
     ${CMAKE_CURRENT_SOURCE_DIR}/input.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/input.bin
     ${CMAKE_CURRENT_SOURCE_DIR}/cow.vtk
     ${CMAKE_CURRENT_BINARY_DIR}/output.txt
     ${CMAKE_CURRENT_BINARY_DIR}/output.bin
     ${CMAKE_CURRENT_BINARY_DIR}/output-stream.txt
+    ${CMAKE_CURRENT_BINARY_DIR}/output-stream.bin
     ${CMAKE_CURRENT_BINARY_DIR}/cow.output.vtk
   )

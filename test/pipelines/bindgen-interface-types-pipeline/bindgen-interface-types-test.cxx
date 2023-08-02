@@ -40,6 +40,9 @@ int main( int argc, char * argv[] )
   itk::wasm::InputTextStream inputTextStream;
   pipeline.add_option("input-text-stream", inputTextStream, "The input text stream")->group("Streams")->type_name("INPUT_TEXT_STREAM");
 
+  itk::wasm::InputBinaryStream inputBinaryStream;
+  pipeline.add_option("input-binary-stream", inputBinaryStream, "The input binary stream")->group("Streams")->type_name("INPUT_BINARY_STREAM");
+
   using MeshType = itk::Mesh< PixelType, Dimension >;
 
   using InputMeshType = itk::wasm::InputMesh<MeshType>;
@@ -54,6 +57,9 @@ int main( int argc, char * argv[] )
 
   itk::wasm::OutputTextStream outputTextStream;
   pipeline.add_option("output-text-stream", outputTextStream, "The output text stream")->group("Streams")->type_name("OUTPUT_TEXT_STREAM");
+
+  itk::wasm::OutputBinaryStream outputBinaryStream;
+  pipeline.add_option("output-binary-stream", outputBinaryStream, "The output binary stream")->group("Streams")->type_name("OUTPUT_BINARY_STREAM");
 
   using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
   OutputMeshType outputMesh;
@@ -114,6 +120,11 @@ int main( int argc, char * argv[] )
   buffer[readLength] = '\0';
 
   outputTextStream.Get().write( buffer, readLength );
+
+  inputBinaryStream.Get().read( buffer, bufferLength );
+  readLength = inputBinaryStream.Get().gcount();
+
+  outputBinaryStream.Get().write( buffer, readLength );
 
   outputMesh.Set(inputMesh.Get());
 
