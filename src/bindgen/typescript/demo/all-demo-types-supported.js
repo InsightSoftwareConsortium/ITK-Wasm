@@ -23,7 +23,7 @@ const demoSupportedOutputTypes = new Set([
   'OUTPUT_MESH',
 ])
 
-function allDemoTypesSupported(interfaceJson) {
+function allDemoTypesSupported (interfaceJson) {
   let allTypesSupported = true
   allTypesSupported = allTypesSupported && interfaceJson.inputs.every((input) => demoSupportedInputTypes.has(input.type))
   allTypesSupported = allTypesSupported && interfaceJson.parameters.every((parameter) => demoSupportedInputTypes.has(parameter.type))

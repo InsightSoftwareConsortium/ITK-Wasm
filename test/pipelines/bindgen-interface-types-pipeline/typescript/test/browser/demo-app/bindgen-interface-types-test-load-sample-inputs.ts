@@ -11,6 +11,11 @@ export default async function bindgenInterfaceTypesTestLoadSampleInputs (model) 
   const inputBinaryFileElement = document.querySelector("#bindgenInterfaceTypesTestInputs sl-input[name=input-binary-file]")
   inputBinaryFileElement.value = model.inputs.get("inputBinaryFile").data.subarray(0, 50).toString()
 
+  const inputTextStream = { data: 'Hola bindgen World!' }
+  model.inputs.set("inputTextStream", inputTextStream.data)
+  const inputTextStreamElement = document.querySelector("#bindgenInterfaceTypesTestInputs sl-input[name=input-text-stream]")
+  inputTextStreamElement.value = model.inputs.get("inputTextStream").substring(0, 50)
+
   const url = 'https://w3s.link/ipfs/bafkreieodo3n2damvbcbpm5ir3bsxcorqvbaqzcz33y63nn3zp6jxemske'
   const response = await fetch(url)
   const arrayBuffer = await response.arrayBuffer()
