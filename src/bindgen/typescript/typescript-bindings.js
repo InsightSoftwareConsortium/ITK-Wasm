@@ -14,6 +14,7 @@ import writeSupportFiles from './write-support-files.js'
 import resultsModule from './results-module.js'
 import optionsModule from './options-module.js'
 import functionModule from './function-module.js'
+import outputOptionsCheck from '../output-options-check.js'
 
 // Array of types that will require an import from itk-wasm
 function bindgenResource(filePath) {
@@ -92,6 +93,8 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
 
     const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
 
+    outputOptionsCheck(interfaceJson)
+
     const moduleKebabCase = parsedPath.name
     const moduleCamelCase = camelCase(parsedPath.name)
     const modulePascalCase = `${moduleCamelCase[0].toUpperCase()}${moduleCamelCase.substring(1)}`
@@ -117,7 +120,6 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     indexContent += `export type { ${modulePascalCase}${nodeTextCamel}Result }\n\n`
 
     const filteredParameters = interfaceJson.parameters.filter(p => { return p.name !== 'memory-io' && p.name !== 'version'})
-    console.log(interfaceJson.outputs)
     const haveOutputFile = interfaceJson.outputs.some(o => { return o.type.includes('FILE') })
     const haveOptions = !!filteredParameters.length || haveOutputFile
 
