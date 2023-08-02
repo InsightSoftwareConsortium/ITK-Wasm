@@ -34,11 +34,8 @@ int main( int argc, char * argv[] )
   std::string inputTextFile;
   pipeline.add_option("input-text-file", inputTextFile, "The input text file")->required()->group("Files")->type_name("INPUT_TEXT_FILE");
 
-  // std::string inputBinaryFile;
-  // pipeline.add_option("input-binary-file", inputBinaryFile, "The input binary file")->required()->group("Files")->type_name("INPUT_BINARY_FILE");
-
-  // std::string outputBinaryFile;
-  // pipeline.add_option("output-binary-file", outputBinaryFile, "The output binary file")->required()->group("Files")->type_name("OUTPUT_BINARY_FILE");
+  std::string inputBinaryFile;
+  pipeline.add_option("input-binary-file", inputBinaryFile, "The input binary file")->required()->group("Files")->type_name("INPUT_BINARY_FILE");
 
   using MeshType = itk::Mesh< PixelType, Dimension >;
 
@@ -48,6 +45,9 @@ int main( int argc, char * argv[] )
 
   std::string outputTextFile;
   pipeline.add_option("output-text-file", outputTextFile, "The output text file")->required()->group("Files")->type_name("OUTPUT_TEXT_FILE");
+
+  std::string outputBinaryFile;
+  pipeline.add_option("output-binary-file", outputBinaryFile, "The output binary file")->required()->group("Files")->type_name("OUTPUT_BINARY_FILE");
 
   using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
   OutputMeshType outputMesh;
@@ -80,6 +80,27 @@ int main( int argc, char * argv[] )
     }
   outputFileTxt.write( buffer, readLength );
   outputFileTxt.close();
+
+  std::ifstream inputBinFile( inputBinaryFile, std::ifstream::in | std::ifstream::binary );
+  if( !inputBinFile.is_open() )
+    {
+    std::cerr << "Could not open inputBinFile." << std::endl;
+    delete[] buffer;
+    return EXIT_FAILURE;
+    }
+  inputBinFile.read( buffer, bufferLength );
+  readLength = inputBinFile.gcount();
+  inputBinFile.close();
+
+  std::ofstream outputBinFile( outputBinaryFile, std::ofstream::out | std::ofstream::binary );
+  if( !outputBinFile.is_open() )
+    {
+    std::cerr << "Could not open outputBinFile." << std::endl;
+    delete[] buffer;
+    return EXIT_FAILURE;
+    }
+  outputBinFile.write( buffer, readLength );
+  outputBinFile.close();
 
   outputMesh.Set(inputMesh.Get());
 
