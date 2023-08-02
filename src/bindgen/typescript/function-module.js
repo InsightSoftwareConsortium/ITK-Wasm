@@ -202,6 +202,8 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         let data = camel
         if (interfaceType.includes('Stream')) {
           data = `{ data: ${camel} } `
+        } else if (interfaceType === 'JsonObject') {
+          data = `{ data: ${camel} as Object } `
         }
         functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${data} },\n`
       }

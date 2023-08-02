@@ -43,6 +43,9 @@ int main( int argc, char * argv[] )
   itk::wasm::InputBinaryStream inputBinaryStream;
   pipeline.add_option("input-binary-stream", inputBinaryStream, "The input binary stream")->group("Streams")->type_name("INPUT_BINARY_STREAM");
 
+  itk::wasm::InputTextStream inputJson;
+  pipeline.add_option("input-json", inputJson, "The input json")->type_name("INPUT_JSON");
+
   using MeshType = itk::Mesh< PixelType, Dimension >;
 
   using InputMeshType = itk::wasm::InputMesh<MeshType>;
@@ -60,6 +63,9 @@ int main( int argc, char * argv[] )
 
   itk::wasm::OutputBinaryStream outputBinaryStream;
   pipeline.add_option("output-binary-stream", outputBinaryStream, "The output binary stream")->group("Streams")->type_name("OUTPUT_BINARY_STREAM");
+
+  itk::wasm::OutputTextStream outputJson;
+  pipeline.add_option("output-json", outputJson, "The output json")->type_name("OUTPUT_JSON");
 
   using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
   OutputMeshType outputMesh;
@@ -125,6 +131,13 @@ int main( int argc, char * argv[] )
   readLength = inputBinaryStream.Get().gcount();
 
   outputBinaryStream.Get().write( buffer, readLength );
+
+  std::istream & inputTxtJson = inputJson.Get();
+  inputTxtJson.read( buffer, bufferLength );
+  readLength = inputTxtJson.gcount();
+  buffer[readLength] = '\0';
+
+  outputJson.Get().write( buffer, readLength );
 
   outputMesh.Set(inputMesh.Get());
 

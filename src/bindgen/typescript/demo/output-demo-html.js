@@ -35,8 +35,8 @@ function outputDemoHtml(prefix, indent, parameter) {
       result += `<br /><br />\n`
       break
     case 'OUTPUT_JSON':
-      result += `${prefix}${indent}<sl-tree ><sl-tree-item>${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-tree-item></sl-tree>\n`
-      result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>${camelCase(parameter.name)}</sl-button>\n`
+      result += `${prefix}${indent}<sl-details disabled id="${parameter.name}-output" summary="${camelCase(parameter.name)}: ${parameter.description}"><sl-skeleton effect="none"></sl-skeleton></sl-details>\n`
+      result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
       result += `<br /><br />\n`
       break
     case 'OUTPUT_MESH':

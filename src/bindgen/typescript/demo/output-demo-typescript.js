@@ -35,11 +35,17 @@ function outputDemoTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}})\n`
     }
       break
-    // case 'OUTPUT_JSON':
-    //   result += `${prefix}${indent}<sl-tree ><sl-tree-item>${camelCase(parameter.name)} - <i>${parameter.description}</i></sl-tree-item></sl-tree>\n`
-    //   result += `${prefix}${indent}<sl-button variant="neutral" name="${parameter.name}-download">${camelCase(parameter.name)}</sl-button>\n`
-    //   result += `<br /><br />\n`
-    //   break
+    case 'OUTPUT_JSON':
+      result += `${prefix}${indent}const ${parameterName}OutputDownload = document.querySelector('#${functionName}Outputs sl-button[name=${parameter.name}-download]')\n`
+      result += `${prefix}${indent}${parameterName}OutputDownload.addEventListener('click', async (event) => {\n`
+      result += `${prefix}${indent}${indent}event.preventDefault()\n`
+      result += `${prefix}${indent}${indent}event.stopPropagation()\n`
+      result += `${prefix}${indent}${indent}if (model.outputs.has("${parameterName}")) {\n`
+      result += `${prefix}${indent}${indent}${indent}const fileName = \`${parameterName}.json\`\n`
+      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(new TextEncoder().encode(JSON.stringify(model.outputs.get("${parameterName}"))), fileName)\n`
+      result += `${prefix}${indent}${indent}}\n`
+      result += `${prefix}${indent}})\n`
+      break
     case 'OUTPUT_MESH':
       result += `${prefix}${indent}const ${parameterName}OutputDownload = document.querySelector('#${functionName}Outputs sl-button[name=${parameter.name}-download]')\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.addEventListener('click', async (event) => {\n`

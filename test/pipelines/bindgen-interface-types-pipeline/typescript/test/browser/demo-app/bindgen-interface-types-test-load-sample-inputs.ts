@@ -21,6 +21,12 @@ export default async function bindgenInterfaceTypesTestLoadSampleInputs (model) 
   const inputBinaryStreamElement = document.querySelector("#bindgenInterfaceTypesTestInputs sl-input[name=input-binary-stream]")
   inputBinaryStreamElement.value = model.inputs.get("inputBinaryStream").subarray(0, 50).toString()
 
+  const inputJson = { key1: 'value1', key2: 2 }
+  model.inputs.set("inputJson", inputJson)
+  const inputJsonElement = document.getElementById('input-json-input')
+  inputJsonElement.innerHTML = `<pre>${JSON.stringify(inputJson, globalThis.interfaceTypeJsonReplacer, 2)}</pre>`
+  inputJsonElement.disabled = false
+
   const url = 'https://w3s.link/ipfs/bafkreieodo3n2damvbcbpm5ir3bsxcorqvbaqzcz33y63nn3zp6jxemske'
   const response = await fetch(url)
   const arrayBuffer = await response.arrayBuffer()

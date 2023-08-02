@@ -10,6 +10,7 @@ const demoSupportedInputTypes = new Set([
   'INT',
   'UINT',
   'BOOL',
+  'INPUT_JSON',
   'INPUT_MESH',
 ])
 const demoSupportedOutputTypes = new Set([
