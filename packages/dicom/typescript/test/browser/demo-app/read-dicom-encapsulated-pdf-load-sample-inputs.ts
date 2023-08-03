@@ -1,21 +1,13 @@
-// Generated file. To retain edits, remove this comment.
+export default async function readDicomEncapsulatedPdfLoadSampleInputs (model) {
+  const dicomButton = document.querySelector('#readDicomEncapsulatedPdfInputs sl-button[name=dicom-file-file-button]')
+  dicomButton.loading = true
+  const fileName = '104.1-SR-printed-to-pdf.dcm'
+  const dicomReponse = await fetch(`https://bafybeihmnqsufckyjxt2z3yunppqggtq2rle7fta27rbetmf7fgviytghi.ipfs.w3s.link/ipfs/bafybeihmnqsufckyjxt2z3yunppqggtq2rle7fta27rbetmf7fgviytghi/input/${fileName}`)
+  const dicomData = new Uint8Array(await dicomReponse.arrayBuffer())
+  model.inputs.set('dicomFile', { data: dicomData, path: fileName })
+  const dicomElement = document.querySelector('#readDicomEncapsulatedPdfInputs  sl-input[name=dicom-file]')
+  dicomElement.value = dicomData.subarray(0, 50).toString()
+  dicomButton.loading = false
 
-export default null
-// export default function readDicomEncapsulatedPdfLoadSampleInputs (model) {
-
-  // Load sample inputs for the readDicomEncapsulatedPdf function.
-  //
-  // This function should load sample inputs:
-  //
-  //  1) In the provided model map.
-  //  2) Into the corresponding HTML input elements.
-  //
-  // Example for an input named `exampleInput`:
-
-  // const exampleInput = 5
-  // model.inputs.set("exampleInput", exampleInput)
-  // const exampleElement = document.querySelector("#readDicomEncapsulatedPdfInputs [name=example-input]")
-  // exampleElement.value = 5
-
-  // return model
-// }
+  return model
+}
