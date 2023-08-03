@@ -179,6 +179,7 @@
   },
   "standard": {
     "ignore": [
+      "test/pipelines/bindgen-interface-types-pipeline/emscripten-build/*.js",
       "test/pipelines/input-output-json-pipeline/emscripten-build/*.js"
     ]
   },
