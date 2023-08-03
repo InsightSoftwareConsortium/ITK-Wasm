@@ -32,19 +32,20 @@ async function structuredReportToTextNode(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
+
   mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
   const dicomFileName = dicomFile
   args.push(dicomFileName as string)
+
   // Outputs
   const outputTextName = '0'
   args.push(outputTextName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.unknownRelationship !== "undefined") {

@@ -37,6 +37,7 @@ async function applyPresentationStateToImage(
     { type: InterfaceTypes.JsonObject },
     { type: InterfaceTypes.Image },
   ]
+
   let imageInFile = imageIn
   if (imageIn instanceof File) {
     const imageInBuffer = await imageIn.arrayBuffer()
@@ -53,18 +54,20 @@ async function applyPresentationStateToImage(
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
-  const imageInName = imageIn instanceof File ? imageIn.name : imageIn.path
+  const imageInName = (imageInFile as BinaryFile).path
   args.push(imageInName as string)
-  const presentationStateFileName = presentationStateFile instanceof File ? presentationStateFile.name : presentationStateFile.path
+
+  const presentationStateFileName = (presentationStateFileFile as BinaryFile).path
   args.push(presentationStateFileName as string)
+
   // Outputs
   const presentationStateOutStreamName = '0'
   args.push(presentationStateOutStreamName)
+
   const outputImageName = '1'
   args.push(outputImageName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.colorOutput !== "undefined") {
@@ -72,9 +75,11 @@ async function applyPresentationStateToImage(
   }
   if (typeof options.configFile !== "undefined") {
     args.push('--config-file', options.configFile.toString())
+
   }
   if (typeof options.frame !== "undefined") {
     args.push('--frame', options.frame.toString())
+
   }
   if (typeof options.noPresentationStateOutput !== "undefined") {
     options.noPresentationStateOutput && args.push('--no-presentation-state-output')

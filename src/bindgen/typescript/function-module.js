@@ -270,7 +270,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     const camel = camelCase(parameter.name)
     functionContent += `  if (typeof options.${camel} !== "undefined") {\n`
     if (parameter.type === 'BOOL') {
-      functionContent += `    options.${camel} && args.push('--${parameter.name}')\n\n`
+      functionContent += `    options.${camel} && args.push('--${parameter.name}')\n`
     } else if (parameter.itemsExpectedMax > 1) {
       functionContent += `    if(options.${camel}.length < ${parameter.itemsExpectedMin}) {\n`
       functionContent += `      throw new Error('"${parameter.name}" option must have a length > ${parameter.itemsExpectedMin}')\n`
@@ -346,7 +346,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   const outputsVar = interfaceJson.outputs.length ? '    outputs\n' : ''
   if (forNode) {
     functionContent += `\n  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', '${moduleKebabCase}')\n\n`
-    const mountDirsArg = usedInterfaceTypes.has('TextFile') || usedInterfaceTypes.has('BinaryFile') ? ', mountDirs' : ''
+    const mountDirsArg = needMountDirs ? ', mountDirs' : ''
     functionContent += `  const {\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs${mountDirsArg})\n`
   } else {
     functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`

@@ -33,6 +33,7 @@ async function readDicomEncapsulatedPdf(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
+
   let dicomFileFile = dicomFile
   if (dicomFile instanceof File) {
     const dicomFileBuffer = await dicomFile.arrayBuffer()
@@ -43,14 +44,14 @@ async function readDicomEncapsulatedPdf(
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
-  const dicomFileName = dicomFile instanceof File ? dicomFile.name : dicomFile.path
+  const dicomFileName = (dicomFileFile as BinaryFile).path
   args.push(dicomFileName as string)
+
   // Outputs
   const pdfBinaryOutputName = '0'
   args.push(pdfBinaryOutputName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {

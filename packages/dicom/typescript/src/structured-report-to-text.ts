@@ -33,6 +33,7 @@ async function structuredReportToText(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
+
   let dicomFileFile = dicomFile
   if (dicomFile instanceof File) {
     const dicomFileBuffer = await dicomFile.arrayBuffer()
@@ -43,14 +44,14 @@ async function structuredReportToText(
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
-  const dicomFileName = dicomFile instanceof File ? dicomFile.name : dicomFile.path
+  const dicomFileName = (dicomFileFile as BinaryFile).path
   args.push(dicomFileName as string)
+
   // Outputs
   const outputTextName = '0'
   args.push(outputTextName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.unknownRelationship !== "undefined") {

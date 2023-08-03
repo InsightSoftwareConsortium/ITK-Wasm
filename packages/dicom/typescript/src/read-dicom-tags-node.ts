@@ -32,25 +32,27 @@ async function readDicomTagsNode(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonObject },
   ]
+
   mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
   const dicomFileName = dicomFile
   args.push(dicomFileName as string)
+
   // Outputs
   const tagsName = '0'
   args.push(tagsName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.tagsToRead !== "undefined") {
     const inputCountString = inputs.length.toString()
     inputs.push({ type: InterfaceTypes.JsonObject, data: options.tagsToRead as JsonObject })
     args.push('--tags-to-read', inputCountString)
+
   }
 
   const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'read-dicom-tags')

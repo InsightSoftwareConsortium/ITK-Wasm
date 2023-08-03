@@ -32,19 +32,20 @@ async function readDicomEncapsulatedPdfNode(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
+
   mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
   const dicomFileName = dicomFile
   args.push(dicomFileName as string)
+
   // Outputs
   const pdfBinaryOutputName = '0'
   args.push(pdfBinaryOutputName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {

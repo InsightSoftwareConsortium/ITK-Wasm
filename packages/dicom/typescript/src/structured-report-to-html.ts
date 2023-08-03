@@ -34,6 +34,7 @@ async function structuredReportToHtml(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
+
   let dicomFileFile = dicomFile
   if (dicomFile instanceof File) {
     const dicomFileBuffer = await dicomFile.arrayBuffer()
@@ -44,14 +45,14 @@ async function structuredReportToHtml(
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
-  const dicomFileName = dicomFile instanceof File ? dicomFile.name : dicomFile.path
+  const dicomFileName = (dicomFileFile as BinaryFile).path
   args.push(dicomFileName as string)
+
   // Outputs
   const outputTextName = '0'
   args.push(outputTextName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {
@@ -101,6 +102,7 @@ async function structuredReportToHtml(
   }
   if (typeof options.charsetAssume !== "undefined") {
     args.push('--charset-assume', options.charsetAssume.toString())
+
   }
   if (typeof options.charsetCheckAll !== "undefined") {
     options.charsetCheckAll && args.push('--charset-check-all')
@@ -110,6 +112,7 @@ async function structuredReportToHtml(
   }
   if (typeof options.urlPrefix !== "undefined") {
     args.push('--url-prefix', options.urlPrefix.toString())
+
   }
   if (typeof options.html32 !== "undefined") {
     options.html32 && args.push('--html-32')
@@ -127,6 +130,7 @@ async function structuredReportToHtml(
     const inputCountString = inputs.length.toString()
     inputs.push({ type: InterfaceTypes.TextStream, data: { data: options.cssReference } })
     args.push('--css-reference', inputCountString)
+
   }
   if (typeof options.cssFile !== "undefined") {
     const cssFile = options.cssFile
@@ -136,9 +140,11 @@ async function structuredReportToHtml(
       cssFileFile = { path: cssFile.name, data: new TextDecoder().decode(cssFileBuffer) }
     }
     args.push('--css-file')
+
     inputs.push({ type: InterfaceTypes.TextFile, data: cssFileFile as TextFile })
     const name = cssFile instanceof File ? cssFile.name : (cssFile as TextFile).path
     args.push(name)
+
   }
   if (typeof options.expandInline !== "undefined") {
     options.expandInline && args.push('--expand-inline')

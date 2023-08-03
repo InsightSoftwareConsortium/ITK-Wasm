@@ -33,18 +33,19 @@ async function readImageDicomFileSeries(
     { type: InterfaceTypes.Image },
     { type: InterfaceTypes.JsonObject },
   ]
+
   const inputs: Array<PipelineInput> = [
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
   // Outputs
   const outputImageName = '0'
   args.push(outputImageName)
+
   const sortedFilenamesName = '1'
   args.push(sortedFilenamesName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.inputImages !== "undefined") {
@@ -52,6 +53,7 @@ async function readImageDicomFileSeries(
       throw new Error('"input-images" option must have a length > 1')
     }
     args.push('--input-images')
+
     options.inputImages.forEach(async (value) => {
       let valueFile = value
       if (value instanceof File) {
@@ -61,6 +63,7 @@ async function readImageDicomFileSeries(
       inputs.push({ type: InterfaceTypes.BinaryFile, data: valueFile as BinaryFile })
       const name = value instanceof File ? value.name : (valueFile as BinaryFile).path
       args.push(name)
+
     })
   }
   if (typeof options.singleSortedSeries !== "undefined") {

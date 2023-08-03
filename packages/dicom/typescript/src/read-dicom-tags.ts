@@ -33,6 +33,7 @@ async function readDicomTags(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonObject },
   ]
+
   let dicomFileFile = dicomFile
   if (dicomFile instanceof File) {
     const dicomFileBuffer = await dicomFile.arrayBuffer()
@@ -43,20 +44,21 @@ async function readDicomTags(
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
-  const dicomFileName = dicomFile instanceof File ? dicomFile.name : dicomFile.path
+  const dicomFileName = (dicomFileFile as TextFile).path
   args.push(dicomFileName as string)
+
   // Outputs
   const tagsName = '0'
   args.push(tagsName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.tagsToRead !== "undefined") {
     const inputCountString = inputs.length.toString()
     inputs.push({ type: InterfaceTypes.JsonObject, data: options.tagsToRead as JsonObject })
     args.push('--tags-to-read', inputCountString)
+
   }
 
   const pipelinePath = 'read-dicom-tags'

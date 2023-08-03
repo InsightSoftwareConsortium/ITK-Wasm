@@ -32,19 +32,20 @@ async function structuredReportToHtmlNode(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
+
   mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
   const dicomFileName = dicomFile
   args.push(dicomFileName as string)
+
   // Outputs
   const outputTextName = '0'
   args.push(outputTextName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {
@@ -94,6 +95,7 @@ async function structuredReportToHtmlNode(
   }
   if (typeof options.charsetAssume !== "undefined") {
     args.push('--charset-assume', options.charsetAssume.toString())
+
   }
   if (typeof options.charsetCheckAll !== "undefined") {
     options.charsetCheckAll && args.push('--charset-check-all')
@@ -103,6 +105,7 @@ async function structuredReportToHtmlNode(
   }
   if (typeof options.urlPrefix !== "undefined") {
     args.push('--url-prefix', options.urlPrefix.toString())
+
   }
   if (typeof options.html32 !== "undefined") {
     options.html32 && args.push('--html-32')
@@ -120,13 +123,16 @@ async function structuredReportToHtmlNode(
     const inputCountString = inputs.length.toString()
     inputs.push({ type: InterfaceTypes.TextStream, data: { data: options.cssReference } })
     args.push('--css-reference', inputCountString)
+
   }
   if (typeof options.cssFile !== "undefined") {
     const cssFile = options.cssFile
     mountDirs.add(path.dirname(cssFile as string))
     args.push('--css-file')
+
     const name = cssFile as string
     args.push(name)
+
   }
   if (typeof options.expandInline !== "undefined") {
     options.expandInline && args.push('--expand-inline')
