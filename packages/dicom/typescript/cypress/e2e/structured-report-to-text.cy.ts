@@ -1,4 +1,4 @@
-const demoServer = 'http://localhost:5173'
+import { demoServer } from './common.ts'
 
 describe('structuredReportToText', () => {
   beforeEach(function() {

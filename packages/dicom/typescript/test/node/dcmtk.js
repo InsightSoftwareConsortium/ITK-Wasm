@@ -102,7 +102,7 @@ test('read Key Object Selection SR', async t => {
   t.assert(outputWithCSSFile.includes('http://localhost/dicom.cgi'))
 })
 
-test('Apply presentation state to dicom image.', async t => {
+test('Apply presentation state to a dicom image.', async t => {
   // Read the input image file
   const inputFile = 'gsps-pstate-test-input-image.dcm'
   const inputFilePath = path.join(testPathPrefix, inputFile)

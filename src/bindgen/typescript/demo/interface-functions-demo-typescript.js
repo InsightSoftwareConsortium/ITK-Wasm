@@ -59,6 +59,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   // const exampleElement = document.querySelector("#${functionName}Inputs [name=example-input]")
   // exampleElement.value = 5
 
+  // return model
 // }
 `
   writeIfOverrideNotPresent(loadSampleInputsModulePath, loadSampleInputsModuleContent)

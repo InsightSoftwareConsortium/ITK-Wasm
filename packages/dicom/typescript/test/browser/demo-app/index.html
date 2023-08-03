@@ -70,10 +70,10 @@
 
     <div id="applyPresentationStateToImageInputs"><form action="">
       <sl-input required name="image-in" type="text" label="imageIn" help-text="Input DICOM file" disabled></sl-input>
-      <label for="image-in-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="image-in-file" style="display: none"/>
+      <label for="image-in-file"><sl-button name="image-in-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="image-in-file" style="display: none"/>
 <br /><br />
       <sl-input required name="presentation-state-file" type="text" label="presentationStateFile" help-text="Process using presentation state file" disabled></sl-input>
-      <label for="presentation-state-file-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="presentation-state-file-file" style="display: none"/>
+      <label for="presentation-state-file-file"><sl-button name="presentation-state-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="presentation-state-file-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="color-output">colorOutput - <i>output image as RGB (default: false)</i></sl-checkbox>
 <br /><br />
@@ -132,7 +132,7 @@
 
     <div id="readDicomEncapsulatedPdfInputs"><form action="">
       <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
-      <label for="dicom-file-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="dicom-file-file" style="display: none"/>
+      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="dicom-file-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="read-file-only">readFileOnly - <i>read file format only</i></sl-checkbox>
 <br /><br />
@@ -186,7 +186,7 @@
 
     <div id="structuredReportToHtmlInputs"><form action="">
       <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
-      <label for="dicom-file-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="dicom-file-file" style="display: none"/>
+      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="dicom-file-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="read-file-only">readFileOnly - <i>read file format only</i></sl-checkbox>
 <br /><br />
@@ -237,10 +237,10 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
       <sl-checkbox name="add-document-type">addDocumentType - <i>add reference to SGML document type definition</i></sl-checkbox>
 <br /><br />
       <sl-input name="css-reference" type="text" label="cssReference" help-text="URL: string. Add reference to specified CSS to document" disabled></sl-input>
-      <label for="css-reference-file"><sl-button variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="css-reference-file" style="display: none"/>
+      <label for="css-reference-file"><sl-button name="css-reference-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="css-reference-file" style="display: none"/>
 <br /><br />
       <sl-input name="css-file" type="text" label="cssFile" help-text="[f]ilename: string. Embed content of specified CSS into document" disabled></sl-input>
-      <label for="css-file-file"><sl-button variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="css-file-file" style="display: none"/>
+      <label for="css-file-file"><sl-button name="css-file-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="css-file-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="expand-inline">expandInline - <i>expand short content items inline (default)</i></sl-checkbox>
 <br /><br />
@@ -294,7 +294,7 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
 
     <div id="structuredReportToTextInputs"><form action="">
       <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
-      <label for="dicom-file-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="dicom-file-file" style="display: none"/>
+      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="dicom-file-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="unknown-relationship">unknownRelationship - <i>Accept unknown relationship type</i></sl-checkbox>
 <br /><br />
@@ -352,10 +352,10 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
 
     <div id="readDicomTagsInputs"><form action="">
       <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file." disabled></sl-input>
-      <label for="dicom-file-file"><sl-button variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="dicom-file-file" style="display: none"/>
+      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="dicom-file-file" style="display: none"/>
 <br /><br />
       <sl-details id="tags-to-read-input" summary="tagsToRead: A JSON object with a &quot;tags&quot; array of the tags to read. If not provided, all tags are read. Example tag: &quot;0008|103e&quot;." disabled></sl-details>
-      <label for="tags-to-read-file"><sl-button variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="tags-to-read-file" style="display: none"/>
+      <label for="tags-to-read-file"><sl-button name="tags-to-read-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="tags-to-read-file" style="display: none"/>
 <br /><br />
     <sl-divider></sl-divider>
       <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>
@@ -379,7 +379,7 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
 
     <div id="readImageDicomFileSeriesInputs"><form action="">
       <sl-input name="input-images" type="text" label="inputImages" help-text="File names in the series" disabled></sl-input>
-      <label for="input-images-file"><sl-button variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="input-images-file" style="display: none"/>
+      <label for="input-images-file"><sl-button name="input-images-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="input-images-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="single-sorted-series">singleSortedSeries - <i>The input files are a single sorted series</i></sl-checkbox>
 <br /><br />
