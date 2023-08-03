@@ -26,7 +26,7 @@
     "commit": "git cz",
     "bindgen": "node ./src/itk-wasm-cli.js bindgen ./dist/dicom/src ./dist/dicom/public/pipelines/*.wasm",
     "build": "npm run build:testData && npm run build:emscripten && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack && node ./src/io/internal/packages/package-json-gen.cjs && npm run build:emscripten:packages",
-    "build:testData": "dam download packages/dicom/test/data packages/dicom/test/data.tar.gz bafybeibbh6mhdv6xygvvsv2374vndy2dsdlf3e3jpu7bye4lhblekm7fye https://w3s.link/ipfs/bafybeigugypd5dxdfdtdepeereu67moiqoosyfv2hmxs7z5gyat5cx2cru/data.tar.gz",
+    "build:testData": "dam download packages/dicom/test/data packages/dicom/test/data.tar.gz bafybeicskxufnvuem6342pkfwgeo3siiozgzmfo5f34woge6aptuzuwzzu https://w3s.link/ipfs/bafybeiby67winzvozowf4moqthwunuxxscssitnb6wahxv4ugvfxhu2vki/data.tar.gz",
     "build:debug": "npm run build:emscripten -- --debug && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundles && npm run build:workerMinBundles && npm run build:webpack -- --mode development",
     "build:tsc": "tsc --pretty",
     "build:tscWorkersModuleLoader": "tsc --types --lib es2017,webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleWebWorker.ts",
