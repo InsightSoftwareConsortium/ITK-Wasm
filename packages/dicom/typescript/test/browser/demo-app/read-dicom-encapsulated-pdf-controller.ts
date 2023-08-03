@@ -135,12 +135,14 @@ class ReadDicomEncapsulatedPdfController  {
         }
     })
 
+    // Begin customization
     const pdfBinaryOutputs = document.getElementById('readDicomEncapsulatedPdfOutputs')
     const pdfBinaryDetails = document.createElement('sl-details')
     pdfBinaryDetails.summary = "Output pdf"
     pdfBinaryDetails.disabled = true
     pdfBinaryOutputs?.replaceChild(pdfBinaryDetails, pdfBinaryOutputs?.firstElementChild)
     pdfBinaryDetails.id = 'pdf-binary-output-details'
+    // End customization
 
     const runButton = document.querySelector('#readDicomEncapsulatedPdfInputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {
@@ -169,10 +171,12 @@ class ReadDicomEncapsulatedPdfController  {
         pdfBinaryOutputOutputDownload.variant = "success"
         pdfBinaryOutputOutputDownload.disabled = false
 
+        // Begin customization
         const pdfUrl = URL.createObjectURL(new Blob([pdfBinaryOutput], {type: "application/pdf"}))
         pdfBinaryDetails.innerHTML = `<object data="${pdfUrl}" type="application/pdf" width="100%" height="500px"></object>`
         pdfBinaryDetails.disabled = false
         pdfBinaryDetails.open = true
+        // End customization
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error
