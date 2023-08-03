@@ -35,6 +35,7 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
       result += `${indent}${indent}${parameterName}Details.disabled = false\n`
       result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-details[name=${parameter.name}]')\n`
       break
+    case 'OUTPUT_IMAGE':
     case 'OUTPUT_MESH':
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`

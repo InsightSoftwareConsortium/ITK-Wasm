@@ -11,6 +11,7 @@ const demoSupportedInputTypes = new Set([
   'UINT',
   'BOOL',
   'INPUT_JSON',
+  'INPUT_IMAGE',
   'INPUT_MESH',
 ])
 const demoSupportedOutputTypes = new Set([
@@ -21,6 +22,7 @@ const demoSupportedOutputTypes = new Set([
   'OUTPUT_BINARY_FILE:FILE',
   'OUTPUT_BINARY_STREAM',
   'OUTPUT_JSON',
+  'OUTPUT_IMAGE',
   'OUTPUT_MESH',
 ])
 

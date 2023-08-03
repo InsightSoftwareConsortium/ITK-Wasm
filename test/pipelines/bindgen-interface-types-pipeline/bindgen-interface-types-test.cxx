@@ -23,12 +23,14 @@
 #include "itkMesh.h"
 #include "itkInputMesh.h"
 #include "itkOutputMesh.h"
+#include "itkInputImage.h"
+#include "itkOutputImage.h"
 
 int main( int argc, char * argv[] )
 {
   itk::wasm::Pipeline pipeline("bindgen-interface-types-test", "A test to exercise interface types for bindgen", argc, argv);
 
-  using PixelType = float;
+  using PixelType = unsigned char;
   constexpr unsigned int Dimension = 3;
 
   std::string inputTextFile;
@@ -45,6 +47,12 @@ int main( int argc, char * argv[] )
 
   itk::wasm::InputTextStream inputJson;
   pipeline.add_option("input-json", inputJson, "The input json")->type_name("INPUT_JSON");
+
+  using ImageType = itk::Image< PixelType, 2 >;
+
+  using InputImageType = itk::wasm::InputImage<ImageType>;
+  InputImageType inputImage;
+  pipeline.add_option("input-image", inputImage, "The input image")->required()->group("Images")->type_name("INPUT_IMAGE");
 
   using MeshType = itk::Mesh< PixelType, Dimension >;
 
@@ -66,6 +74,10 @@ int main( int argc, char * argv[] )
 
   itk::wasm::OutputTextStream outputJson;
   pipeline.add_option("output-json", outputJson, "The output json")->type_name("OUTPUT_JSON");
+
+  using OutputImageType = itk::wasm::OutputImage<ImageType>;
+  OutputImageType outputImage;
+  pipeline.add_option("output-image", outputImage, "The output image")->required()->group("Images")->type_name("OUTPUT_IMAGE");
 
   using OutputMeshType = itk::wasm::OutputMesh<MeshType>;
   OutputMeshType outputMesh;
@@ -138,6 +150,8 @@ int main( int argc, char * argv[] )
   buffer[readLength] = '\0';
 
   outputJson.Get().write( buffer, readLength );
+
+  outputImage.Set(inputImage.Get());
 
   outputMesh.Set(inputMesh.Get());
 

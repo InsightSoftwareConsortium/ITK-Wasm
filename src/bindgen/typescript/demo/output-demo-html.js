@@ -39,7 +39,20 @@ function outputDemoHtml(prefix, indent, parameter) {
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
       result += `<br /><br />\n`
       break
-    case 'OUTPUT_MESH':
+    case 'OUTPUT_IMAGE': {
+      result += `${prefix}${indent}<sl-details disabled id="${parameter.name}-output" summary="${camelCase(parameter.name)}: ${parameter.description}"><sl-skeleton effect="none"></sl-skeleton></sl-details>\n`
+
+      result += `${prefix}${indent}<sl-select id="${parameter.name}-output-format" placeholder="Format">\n`
+      const formats = ['bmp', 'dcm', 'gipl', 'hdf5', 'jpg', 'lsm', 'mnc', 'mnc.gz', 'mgh', 'mha', 'mrc', 'nii', 'nii.gz', 'png', 'nrrd', 'png', 'pic', 'tif', 'isq', 'fdf', 'vtk']
+      formats.forEach((format) => {
+        result += `${prefix}${indent}${indent}<sl-option value="${format}">${format}</sl-option>\n`
+      })
+      result += `${prefix}${indent}</sl-select>\n`
+      result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
+      result += `<br /><br />\n`
+    }
+      break
+    case 'OUTPUT_MESH': {
       result += `${prefix}${indent}<sl-details disabled id="${parameter.name}-output" summary="${camelCase(parameter.name)}: ${parameter.description}"><sl-skeleton effect="none"></sl-skeleton></sl-details>\n`
 
       result += `${prefix}${indent}<sl-select id="${parameter.name}-output-format" placeholder="Format">\n`
@@ -50,6 +63,7 @@ function outputDemoHtml(prefix, indent, parameter) {
       result += `${prefix}${indent}</sl-select>\n`
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
       result += `<br /><br />\n`
+    }
       break
     default:
       console.error(`Unexpected interface type: ${parameter.type}`)

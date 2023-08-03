@@ -17,16 +17,25 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   const functionNamePascalCase = pascalCase(interfaceJson.name)
 
   let needReadMesh = false
+  let needReadImage = false
   const pipelineComponents = ['inputs', 'parameters']
   pipelineComponents.forEach((pipelineComponent) => {
     needReadMesh = needReadMesh || interfaceJson[pipelineComponent].filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Mesh').length > 0
+    needReadImage = needReadImage || interfaceJson[pipelineComponent].filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Image').length > 0
   })
   if (needReadMesh) {
     result += `import { readMeshFile } from 'itk-wasm'\n`
   }
+  if (needReadImage) {
+    result += `import { readImageFile } from 'itk-wasm'\n`
+  }
   const needWriteMesh = interfaceJson.outputs.filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Mesh').length > 0
-  if (needReadMesh) {
+  if (needWriteMesh) {
     result += `import { writeMeshArrayBuffer } from 'itk-wasm'\n`
+  }
+  const needWriteImage = interfaceJson.outputs.filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Image').length > 0
+  if (needWriteImage) {
+    result += `import { writeImageArrayBuffer } from 'itk-wasm'\n`
   }
 
   result += `import * as ${camelCase(bundleName)} from '../../../dist/bundles/${bundleName}.js'\n`

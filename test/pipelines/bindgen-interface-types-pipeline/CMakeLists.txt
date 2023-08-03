@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(io_components)
 if(NOT EMSCRIPTEN)
-  set(io_components ITKIOMeshVTK)
+  set(io_components ITKIOMeshVTK ITKIOPNG)
 endif()
 find_package(ITK REQUIRED
   COMPONENTS
@@ -25,11 +25,13 @@ add_test(NAME bindgen-interface-types-test
     ${CMAKE_CURRENT_SOURCE_DIR}/input.txt
     ${CMAKE_CURRENT_SOURCE_DIR}/input.bin
     ${CMAKE_CURRENT_SOURCE_DIR}/input-object.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/cthead1.png
     ${CMAKE_CURRENT_SOURCE_DIR}/cow.vtk
     ${CMAKE_CURRENT_BINARY_DIR}/output.txt
     ${CMAKE_CURRENT_BINARY_DIR}/output.bin
     ${CMAKE_CURRENT_BINARY_DIR}/output-stream.txt
     ${CMAKE_CURRENT_BINARY_DIR}/output-stream.bin
     ${CMAKE_CURRENT_BINARY_DIR}/output-object.json
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1.output.png
     ${CMAKE_CURRENT_BINARY_DIR}/cow.output.vtk
   )

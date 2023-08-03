@@ -1,4 +1,5 @@
-import { readMeshArrayBuffer } from "itk-wasm"
+import { readImageArrayBuffer, readMeshArrayBuffer } from "itk-wasm"
+import { web } from "webpack"
 
 export default async function bindgenInterfaceTypesTestLoadSampleInputs (model) {
   const inputTextFile = { path: 'input.txt', data: 'Hello bindgen World!' }
@@ -27,10 +28,19 @@ export default async function bindgenInterfaceTypesTestLoadSampleInputs (model) 
   inputJsonElement.innerHTML = `<pre>${JSON.stringify(inputJson, globalThis.interfaceTypeJsonReplacer, 2)}</pre>`
   inputJsonElement.disabled = false
 
-  const url = 'https://w3s.link/ipfs/bafkreieodo3n2damvbcbpm5ir3bsxcorqvbaqzcz33y63nn3zp6jxemske'
-  const response = await fetch(url)
-  const arrayBuffer = await response.arrayBuffer()
-  const { mesh, webWorker } = await readMeshArrayBuffer(null, arrayBuffer, 'cow.iwm.cbor')
+  const imageUrl = 'https://bafybeigja4wbultavomsvai433hln7uqabzl2mg24frxzqblx4y4cvd5am.ipfs.w3s.link/ipfs/bafybeigja4wbultavomsvai433hln7uqabzl2mg24frxzqblx4y4cvd5am/cthead1.png'
+  let response = await fetch(imageUrl)
+  let arrayBuffer = await response.arrayBuffer()
+  const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cow.iwm.cbor')
+  model.inputs.set("inputImage", image)
+  const inputImageDetails = document.getElementById('input-image-input')
+  inputImageDetails.innerHTML = `<pre>${JSON.stringify(image, globalThis.interfaceTypeJsonReplacer, 2)}</pre>`
+  inputImageDetails.disabled = false
+
+  const meshUrl = 'https://w3s.link/ipfs/bafkreieodo3n2damvbcbpm5ir3bsxcorqvbaqzcz33y63nn3zp6jxemske'
+  response = await fetch(meshUrl)
+  arrayBuffer = await response.arrayBuffer()
+  const { mesh } = await readMeshArrayBuffer(webWorker, arrayBuffer, 'cow.iwm.cbor')
   webWorker.terminate()
   model.inputs.set("inputMesh", mesh)
   const inputMeshDetails = document.getElementById('input-mesh-input')
