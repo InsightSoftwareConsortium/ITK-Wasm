@@ -32,19 +32,20 @@ async function parseStringDecompress(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
+
   const inputs: Array<PipelineInput> = [
     { type: InterfaceTypes.BinaryStream, data: { data: input }  },
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
   const inputName = '0'
   args.push(inputName as string)
+
   // Outputs
   const outputName = '0'
   args.push(outputName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.parseString !== "undefined") {

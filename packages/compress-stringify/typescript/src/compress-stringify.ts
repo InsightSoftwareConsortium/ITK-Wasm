@@ -32,19 +32,20 @@ async function compressStringify(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
+
   const inputs: Array<PipelineInput> = [
     { type: InterfaceTypes.BinaryStream, data: { data: input }  },
   ]
 
   const args = []
-  // ----------------------------------------------
   // Inputs
-
   const inputName = '0'
   args.push(inputName as string)
+
   // Outputs
   const outputName = '0'
   args.push(outputName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.stringify !== "undefined") {
@@ -52,9 +53,11 @@ async function compressStringify(
   }
   if (typeof options.compressionLevel !== "undefined") {
     args.push('--compression-level', options.compressionLevel.toString())
+
   }
   if (typeof options.dataUrlPrefix !== "undefined") {
     args.push('--data-url-prefix', options.dataUrlPrefix.toString())
+
   }
 
   const pipelinePath = 'compress-stringify'
