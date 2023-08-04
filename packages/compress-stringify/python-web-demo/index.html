@@ -52,7 +52,7 @@ onload="document.documentElement.classList.add('sl-theme-dark');"
 
     <div id="compress_stringify-inputs"><form action="">
       <sl-input required name="input" type="text" label="input" help-text="Input binary" disabled></sl-input>
-      <label for="input-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="input-file" style="display: none"/>
+      <label for="input-file"><sl-button name="input-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="stringify">stringify - <i>Stringify the output</i></sl-checkbox>
 <br /><br />
@@ -67,7 +67,7 @@ onload="document.documentElement.classList.add('sl-theme-dark');"
     <sl-divider></sl-divider>
 
     <div id="compress_stringify-outputs">
-      <sl-textarea name="output" label="output" help-text="Output compressed binary"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+      <sl-textarea resize="auto" filled disabled name="output" label="output" help-text="Output compressed binary"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
       <sl-button variant="neutral" outline name="output-download" disabled>Download</sl-button>
 <br /><br />
     </div>
@@ -81,7 +81,7 @@ onload="document.documentElement.classList.add('sl-theme-dark');"
 
     <div id="parse_string_decompress-inputs"><form action="">
       <sl-input required name="input" type="text" label="input" help-text="Compressed input" disabled></sl-input>
-      <label for="input-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="input-file" style="display: none"/>
+      <label for="input-file"><sl-button name="input-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="parse-string">parse_string - <i>Parse the input string before decompression</i></sl-checkbox>
 <br /><br />
@@ -93,7 +93,7 @@ onload="document.documentElement.classList.add('sl-theme-dark');"
     <sl-divider></sl-divider>
 
     <div id="parse_string_decompress-outputs">
-      <sl-textarea name="output" label="output" help-text="Output decompressed binary"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+      <sl-textarea resize="auto" filled disabled name="output" label="output" help-text="Output decompressed binary"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
       <sl-button variant="neutral" outline name="output-download" disabled>Download</sl-button>
 <br /><br />
     </div>
