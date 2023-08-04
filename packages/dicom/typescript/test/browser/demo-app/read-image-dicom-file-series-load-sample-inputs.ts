@@ -1,21 +1,21 @@
-// Generated file. To retain edits, remove this comment.
+export default async function readImageDicomFileSeriesLoadSampleInputs (model) {
+  const dicomButton = document.querySelector('#readImageDicomFileSeriesInputs sl-button[name=input-images-file-button]')
+  dicomButton.loading = true
 
-export default null
-// export default function readImageDicomFileSeriesLoadSampleInputs (model) {
+  const inputFiles = []
+  for(let i = 1; i < 4; i++) {
+    const fileName = `ImageOrientation.${i}.dcm`
+    const dicomReponse = await fetch(`https://bafybeihmnqsufckyjxt2z3yunppqggtq2rle7fta27rbetmf7fgviytghi.ipfs.w3s.link/ipfs/bafybeihmnqsufckyjxt2z3yunppqggtq2rle7fta27rbetmf7fgviytghi/input/DicomImageOrientationTest/${fileName}`)
+    const dicomData = new Uint8Array(await dicomReponse.arrayBuffer())
+    inputFiles.push({ data: dicomData, path: fileName })
+  }
 
-  // Load sample inputs for the readImageDicomFileSeries function.
-  //
-  // This function should load sample inputs:
-  //
-  //  1) In the provided model map.
-  //  2) Into the corresponding HTML input elements.
-  //
-  // Example for an input named `exampleInput`:
+  model.options.set('inputImages', inputFiles)
 
-  // const exampleInput = 5
-  // model.inputs.set("exampleInput", exampleInput)
-  // const exampleElement = document.querySelector("#readImageDicomFileSeriesInputs [name=example-input]")
-  // exampleElement.value = 5
+  const dicomElement = document.querySelector('#readImageDicomFileSeriesInputs  sl-input[name=input-images]')
+  dicomElement.value = inputFiles.map((file) => file.path).toString()
 
-  // return model
-// }
+  dicomButton.loading = false
+
+  return model
+}

@@ -1,40 +1,56 @@
 import camelCase from "../../camel-case.js"
 
-function inputParametersDemoTypeScript(functionName, indent, parameter, required) {
+function inputParametersDemoTypeScript(functionName, indent, parameter, required, modelProperty) {
   let result = ''
-  const modelProperty = required ? 'inputs' : 'options'
   const parameterName = camelCase(parameter.name)
   const inputIdentifier = `${parameterName}Element`
   switch(parameter.type) {
     case 'INPUT_TEXT_FILE':
     case 'INPUT_TEXT_FILE:FILE':
-    case 'INPUT_TEXT_STREAM':
+    case 'INPUT_TEXT_STREAM': {
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('change', (event) => {\n`
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
       result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
-      result += `${indent}${indent}files[0].arrayBuffer().then((arrayBuffer) => {\n`
-      const textValue = parameter.type === 'INPUT_TEXT_STREAM' ? 'new TextDecoder().decode(new Uint8Array(arrayBuffer))' : '{ data: new TextDecoder().decode(new Uint8Array(arrayBuffer)), path: files[0].name }'
-      result += `${indent}${indent}${indent}model.${modelProperty}.set("${parameterName}", ${textValue})\n`
-      result += `${indent}${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
-      result += `${indent}${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").data.substring(0, 50) + ' ...'\n`
-      result += `${indent}${indent}})\n`
+      if (parameter.itemsExpectedMax > 1) {
+        const textValue = parameter.type === 'INPUT_TEXT_STREAM' ? 'new TextDecoder().decode(new Uint8Array(arrayBuffer))' : '{ data: new TextDecoder().decode(new Uint8Array(arrayBuffer)), path: files[0].name }'
+        result += `${indent}${indent}const inputStrings = await Promise.all(Array.from(files).map(async (file) => { const arrayBuffer = await file.arrayBuffer(); return ${textValue} }))\n`
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", inputStrings)\n`
+        result += `${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
+        const textDataProp = parameter.type.includes('FILE') ? '.path' : '.substring(0,4)'
+        result += `${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").map((x) => x${textDataProp}).toString()\n`
+      } else {
+        result += `${indent}${indent}const arrayBuffer = await files[0].arrayBuffer()\n`
+        const textValue = parameter.type === 'INPUT_TEXT_STREAM' ? 'new TextDecoder().decode(new Uint8Array(arrayBuffer))' : '{ data: new TextDecoder().decode(new Uint8Array(arrayBuffer)), path: files[0].name }'
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", ${textValue})\n`
+        result += `${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
+        result += `${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").data.substring(0, 50) + ' ...'\n`
+      }
       result += `${indent}})\n\n`
+    }
       break
     case 'INPUT_BINARY_FILE':
     case 'INPUT_BINARY_FILE:FILE':
     case 'INPUT_BINARY_STREAM': {
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
-      result += `${indent}${inputIdentifier}.addEventListener('change', (event) => {\n`
+      result += `${indent}${inputIdentifier}.addEventListener('change', async (event) => {\n`
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
       result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
-      result += `${indent}${indent}files[0].arrayBuffer().then((arrayBuffer) => {\n`
-      const binaryValue = parameter.type === 'INPUT_BINARY_STREAM' ? 'new Uint8Array(arrayBuffer)' : '{ data: new Uint8Array(arrayBuffer), path: files[0].name }'
-      result += `${indent}${indent}${indent}model.${modelProperty}.set("${parameterName}", ${binaryValue})\n`
-      result += `${indent}${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
-      const binaryDataProp = parameter.type.includes('FILE') ? '.data' : ''
-      result += `${indent}${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}")${binaryDataProp}.subarray(0, 50).toString() + ' ...'\n`
-      result += `${indent}${indent}})\n`
+      if (parameter.itemsExpectedMax > 1) {
+        const binaryValue = parameter.type === 'INPUT_BINARY_STREAM' ? 'new Uint8Array(arrayBuffer)' : '{ data: new Uint8Array(arrayBuffer), path: file.name }'
+        result += `${indent}${indent}const inputBinaries = await Promise.all(Array.from(files).map(async (file) => { const arrayBuffer = await file.arrayBuffer(); return ${binaryValue} }))\n`
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", inputBinaries)\n`
+        result += `${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
+        const binaryDataProp = parameter.type.includes('FILE') ? '.path' : '.subarray(0,4)'
+        result += `${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}").map((x) => x${binaryDataProp}).toString()\n`
+      } else {
+        result += `${indent}${indent}const arrayBuffer = await files[0].arrayBuffer()\n`
+        const binaryValue = parameter.type === 'INPUT_BINARY_STREAM' ? 'new Uint8Array(arrayBuffer)' : '{ data: new Uint8Array(arrayBuffer), path: files[0].name }'
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", ${binaryValue})\n`
+        result += `${indent}${indent}const input = document.querySelector("#${functionName}Inputs sl-input[name=${parameter.name}]")\n`
+        const binaryDataProp = parameter.type.includes('FILE') ? '.data' : ''
+        result += `${indent}${indent}input.value = model.${modelProperty}.get("${parameterName}")${binaryDataProp}.subarray(0, 50).toString() + ' ...'\n`
+      }
       result += `${indent}})\n\n`
     }
       break

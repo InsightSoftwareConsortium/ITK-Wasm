@@ -105,7 +105,7 @@ class ${functionNamePascalCase}Model {
     // Inputs
 `
   interfaceJson.inputs.forEach((input) => {
-    result += inputParametersDemoTypeScript(functionName, indent, input, true)
+    result += inputParametersDemoTypeScript(functionName, indent, input, true, 'inputs')
   })
 
   if (interfaceJson.parameters.length > 1) {
@@ -115,7 +115,7 @@ class ${functionNamePascalCase}Model {
       if (parameter.name === "memory-io" || parameter.name === "version") {
         return
       }
-      result += inputParametersDemoTypeScript(functionName, indent, parameter, false)
+      result += inputParametersDemoTypeScript(functionName, indent, parameter, parameter.required, 'options')
     })
   }
 

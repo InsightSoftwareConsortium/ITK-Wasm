@@ -38,15 +38,14 @@ class StructuredReportToTextController  {
     // ----------------------------------------------
     // Inputs
     const dicomFileElement = document.querySelector('#structuredReportToTextInputs input[name=dicom-file-file]')
-    dicomFileElement.addEventListener('change', (event) => {
+    dicomFileElement.addEventListener('change', async (event) => {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        files[0].arrayBuffer().then((arrayBuffer) => {
-            model.inputs.set("dicomFile", { data: new Uint8Array(arrayBuffer), path: files[0].name })
-            const input = document.querySelector("#structuredReportToTextInputs sl-input[name=dicom-file]")
-            input.value = model.inputs.get("dicomFile").data.subarray(0, 50).toString() + ' ...'
-        })
+        const arrayBuffer = await files[0].arrayBuffer()
+        model.inputs.set("dicomFile", { data: new Uint8Array(arrayBuffer), path: files[0].name })
+        const input = document.querySelector("#structuredReportToTextInputs sl-input[name=dicom-file]")
+        input.value = model.inputs.get("dicomFile").data.subarray(0, 50).toString() + ' ...'
     })
 
     // ----------------------------------------------

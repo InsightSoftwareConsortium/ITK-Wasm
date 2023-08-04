@@ -41,15 +41,14 @@ class ReadImageDicomFileSeriesController  {
     // ----------------------------------------------
     // Options
     const inputImagesElement = document.querySelector('#readImageDicomFileSeriesInputs input[name=input-images-file]')
-    inputImagesElement.addEventListener('change', (event) => {
+    inputImagesElement.addEventListener('change', async (event) => {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        files[0].arrayBuffer().then((arrayBuffer) => {
-            model.options.set("inputImages", { data: new Uint8Array(arrayBuffer), path: files[0].name })
-            const input = document.querySelector("#readImageDicomFileSeriesInputs sl-input[name=input-images]")
-            input.value = model.options.get("inputImages").data.subarray(0, 50).toString() + ' ...'
-        })
+        const inputBinaries = await Promise.all(Array.from(files).map(async (file) => { const arrayBuffer = await file.arrayBuffer(); return { data: new Uint8Array(arrayBuffer), path: file.name } }))
+        model.options.set("inputImages", inputBinaries)
+        const input = document.querySelector("#readImageDicomFileSeriesInputs sl-input[name=input-images]")
+        input.value = model.options.get("inputImages").map((x) => x.path).toString()
     })
 
     const singleSortedSeriesElement = document.querySelector('#readImageDicomFileSeriesInputs sl-checkbox[name=single-sorted-series]')

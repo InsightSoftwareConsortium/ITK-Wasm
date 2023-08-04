@@ -39,27 +39,25 @@ class ApplyPresentationStateToImageController  {
     // ----------------------------------------------
     // Inputs
     const imageInElement = document.querySelector('#applyPresentationStateToImageInputs input[name=image-in-file]')
-    imageInElement.addEventListener('change', (event) => {
+    imageInElement.addEventListener('change', async (event) => {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        files[0].arrayBuffer().then((arrayBuffer) => {
-            model.inputs.set("imageIn", { data: new Uint8Array(arrayBuffer), path: files[0].name })
-            const input = document.querySelector("#applyPresentationStateToImageInputs sl-input[name=image-in]")
-            input.value = model.inputs.get("imageIn").data.subarray(0, 50).toString() + ' ...'
-        })
+        const arrayBuffer = await files[0].arrayBuffer()
+        model.inputs.set("imageIn", { data: new Uint8Array(arrayBuffer), path: files[0].name })
+        const input = document.querySelector("#applyPresentationStateToImageInputs sl-input[name=image-in]")
+        input.value = model.inputs.get("imageIn").data.subarray(0, 50).toString() + ' ...'
     })
 
     const presentationStateFileElement = document.querySelector('#applyPresentationStateToImageInputs input[name=presentation-state-file-file]')
-    presentationStateFileElement.addEventListener('change', (event) => {
+    presentationStateFileElement.addEventListener('change', async (event) => {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        files[0].arrayBuffer().then((arrayBuffer) => {
-            model.inputs.set("presentationStateFile", { data: new Uint8Array(arrayBuffer), path: files[0].name })
-            const input = document.querySelector("#applyPresentationStateToImageInputs sl-input[name=presentation-state-file]")
-            input.value = model.inputs.get("presentationStateFile").data.subarray(0, 50).toString() + ' ...'
-        })
+        const arrayBuffer = await files[0].arrayBuffer()
+        model.inputs.set("presentationStateFile", { data: new Uint8Array(arrayBuffer), path: files[0].name })
+        const input = document.querySelector("#applyPresentationStateToImageInputs sl-input[name=presentation-state-file]")
+        input.value = model.inputs.get("presentationStateFile").data.subarray(0, 50).toString() + ' ...'
     })
 
     // ----------------------------------------------
