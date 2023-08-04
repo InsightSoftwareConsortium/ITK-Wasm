@@ -1,7 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import {
-  TextFile,
+  BinaryFile,
   JsonObject,
   InterfaceTypes,
   PipelineOutput,
@@ -19,14 +19,14 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 /**
  * Read the tags from a DICOM file
  *
- * @param {File | TextFile} dicomFile - Input DICOM file.
+ * @param {File | BinaryFile} dicomFile - Input DICOM file.
  * @param {ReadDicomTagsOptions} options - options object
  *
  * @returns {Promise<ReadDicomTagsResult>} - result object
  */
 async function readDicomTags(
   webWorker: null | Worker,
-  dicomFile: File | TextFile,
+  dicomFile: File | BinaryFile,
   options: ReadDicomTagsOptions = {}
 ) : Promise<ReadDicomTagsResult> {
 
@@ -37,15 +37,15 @@ async function readDicomTags(
   let dicomFileFile = dicomFile
   if (dicomFile instanceof File) {
     const dicomFileBuffer = await dicomFile.arrayBuffer()
-    dicomFileFile = { path: dicomFile.name, data: new TextDecoder().decode(dicomFileBuffer) }
+    dicomFileFile = { path: dicomFile.name, data: new Uint8Array(dicomFileBuffer) }
   }
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.TextFile, data: dicomFileFile as TextFile },
+    { type: InterfaceTypes.BinaryFile, data: dicomFileFile as BinaryFile },
   ]
 
   const args = []
   // Inputs
-  const dicomFileName = (dicomFileFile as TextFile).path
+  const dicomFileName = (dicomFileFile as BinaryFile).path
   args.push(dicomFileName as string)
 
   // Outputs

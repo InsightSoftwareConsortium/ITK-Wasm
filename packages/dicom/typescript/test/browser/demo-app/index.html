@@ -352,7 +352,7 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
 
     <div id="readDicomTagsInputs"><form action="">
       <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file." disabled></sl-input>
-      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="dicom-file-file" style="display: none"/>
+      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="dicom-file-file" style="display: none"/>
 <br /><br />
       <sl-details id="tags-to-read-input" summary="tagsToRead: A JSON object with a &quot;tags&quot; array of the tags to read. If not provided, all tags are read. Example tag: &quot;0008|103e&quot;." disabled></sl-details>
       <label for="tags-to-read-file"><sl-button name="tags-to-read-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="tags-to-read-file" style="display: none"/>

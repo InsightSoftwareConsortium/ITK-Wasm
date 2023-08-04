@@ -43,9 +43,9 @@ class ReadDicomTagsController  {
         const files = event.target.files || dataTransfer.files
 
         files[0].arrayBuffer().then((arrayBuffer) => {
-            model.inputs.set("dicomFile", { data: new TextDecoder().decode(new Uint8Array(arrayBuffer)), path: files[0].name })
+            model.inputs.set("dicomFile", { data: new Uint8Array(arrayBuffer), path: files[0].name })
             const input = document.querySelector("#readDicomTagsInputs sl-input[name=dicom-file]")
-            input.value = model.inputs.get("dicomFile").data.substring(0, 50) + ' ...'
+            input.value = model.inputs.get("dicomFile").data.subarray(0, 50).toString() + ' ...'
         })
     })
 

@@ -1,21 +1,13 @@
-// Generated file. To retain edits, remove this comment.
+export default async function readDicomTagsLoadSampleInputs (model) {
+  const dicomButton = document.querySelector('#readDicomTagsInputs sl-button[name=dicom-file-file-button]')
+  dicomButton.loading = true
+  const fileName = 'multiframe-ultrasound.dcm'
+  const dicomReponse = await fetch(`https://bafybeihmnqsufckyjxt2z3yunppqggtq2rle7fta27rbetmf7fgviytghi.ipfs.w3s.link/ipfs/bafybeihmnqsufckyjxt2z3yunppqggtq2rle7fta27rbetmf7fgviytghi/input/dicom-images/${fileName}`)
+  const dicomData = new Uint8Array(await dicomReponse.arrayBuffer())
+  model.inputs.set('dicomFile', { data: dicomData, path: fileName })
+  const dicomElement = document.querySelector('#readDicomTagsInputs sl-input[name=dicom-file]')
+  dicomElement.value = dicomData.subarray(0, 50).toString()
+  dicomButton.loading = false
 
-export default null
-// export default function readDicomTagsLoadSampleInputs (model) {
-
-  // Load sample inputs for the readDicomTags function.
-  //
-  // This function should load sample inputs:
-  //
-  //  1) In the provided model map.
-  //  2) Into the corresponding HTML input elements.
-  //
-  // Example for an input named `exampleInput`:
-
-  // const exampleInput = 5
-  // model.inputs.set("exampleInput", exampleInput)
-  // const exampleElement = document.querySelector("#readDicomTagsInputs [name=example-input]")
-  // exampleElement.value = 5
-
-  // return model
-// }
+  return model
+}

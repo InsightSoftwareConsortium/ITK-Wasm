@@ -584,7 +584,7 @@ int main( int argc, char * argv[] )
   itk::wasm::Pipeline pipeline("read-dicom-tags", "Read the tags from a DICOM file", argc, argv);
 
   std::string dicomFile;
-  pipeline.add_option("dicom-file", dicomFile, "Input DICOM file.")->required()->check(CLI::ExistingFile)->type_name("INPUT_TEXT_FILE");
+  pipeline.add_option("dicom-file", dicomFile, "Input DICOM file.")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
 
   itk::wasm::InputTextStream tagsToReadStream;
   pipeline.add_option("--tags-to-read", tagsToReadStream, "A JSON object with a \"tags\" array of the tags to read. If not provided, all tags are read. Example tag: \"0008|103e\".")->type_name("INPUT_JSON");
