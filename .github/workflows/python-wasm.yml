@@ -53,7 +53,7 @@ jobs:
         shell: bash
         run: |
           python -m pip install pytest-pyodide
-      - uses: pyodide/pyodide-actions/install-browser@main
+      - uses: thewtex/pyodide-actions/install-browser@chrome-install
         if: ${{ matrix.python-minor-version > 9 }}
         with:
           runner: selenium
@@ -99,7 +99,7 @@ jobs:
         shell: bash
         run: |
           python -m pip install pytest-pyodide
-      - uses: pyodide/pyodide-actions/install-browser@main
+      - uses: thewtex/pyodide-actions/install-browser@chrome-install
         if: ${{ matrix.python-minor-version > 9 }}
         with:
           runner: selenium
