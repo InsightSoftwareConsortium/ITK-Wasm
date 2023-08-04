@@ -15,7 +15,7 @@ function emscriptenFunctionModule(interfaceJson, pypackage, modulePath) {
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, List
 
 from .js_package import js_package
 
