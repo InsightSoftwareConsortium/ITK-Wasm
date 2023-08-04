@@ -66,7 +66,7 @@
 
     <div id="compressStringifyInputs"><form action="">
       <sl-input required name="input" type="text" label="input" help-text="Input binary" disabled></sl-input>
-      <label for="input-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="input-file" style="display: none"/>
+      <label for="input-file"><sl-button name="input-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="stringify">stringify - <i>Stringify the output</i></sl-checkbox>
 <br /><br />
@@ -95,7 +95,7 @@
 
     <div id="parseStringDecompressInputs"><form action="">
       <sl-input required name="input" type="text" label="input" help-text="Compressed input" disabled></sl-input>
-      <label for="input-file"><sl-button required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" name="input-file" style="display: none"/>
+      <label for="input-file"><sl-button name="input-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="parse-string">parseString - <i>Parse the input string before decompression</i></sl-checkbox>
 <br /><br />

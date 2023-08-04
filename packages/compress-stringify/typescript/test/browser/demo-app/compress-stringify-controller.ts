@@ -38,15 +38,14 @@ class CompressStringifyController  {
     // ----------------------------------------------
     // Inputs
     const inputElement = document.querySelector('#compressStringifyInputs input[name=input-file]')
-    inputElement.addEventListener('change', (event) => {
+    inputElement.addEventListener('change', async (event) => {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        files[0].arrayBuffer().then((arrayBuffer) => {
-            model.inputs.set("input", new Uint8Array(arrayBuffer))
-            const input = document.querySelector("#compressStringifyInputs sl-input[name=input]")
-            input.value = model.inputs.get("input").subarray(0, 50).toString() + ' ...'
-        })
+        const arrayBuffer = await files[0].arrayBuffer()
+        model.inputs.set("input", new Uint8Array(arrayBuffer))
+        const input = document.querySelector("#compressStringifyInputs sl-input[name=input]")
+        input.value = model.inputs.get("input").subarray(0, 50).toString() + ' ...'
     })
 
     // ----------------------------------------------
