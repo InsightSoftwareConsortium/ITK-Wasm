@@ -35,7 +35,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   }
   const needWriteImage = interfaceJson.outputs.filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Image').length > 0
   if (needWriteImage) {
-    result += `import { writeImageArrayBuffer } from 'itk-wasm'\n`
+    result += `import { writeImageArrayBuffer, copyImage } from 'itk-wasm'\n`
   }
 
   result += `import * as ${camelCase(bundleName)} from '../../../dist/bundles/${bundleName}.js'\n`

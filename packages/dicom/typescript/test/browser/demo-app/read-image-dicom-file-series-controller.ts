@@ -1,6 +1,6 @@
 // Generated file. To retain edits, remove this comment.
 
-import { writeImageArrayBuffer } from 'itk-wasm'
+import { writeImageArrayBuffer, copyImage } from 'itk-wasm'
 import * as dicom from '../../../dist/bundles/dicom.js'
 import readImageDicomFileSeriesLoadSampleInputs from "./read-image-dicom-file-series-load-sample-inputs.js"
 
@@ -66,7 +66,7 @@ class ReadImageDicomFileSeriesController  {
             const outputImageDownloadFormat = document.getElementById('output-image-output-format')
             const downloadFormat = outputImageDownloadFormat.value || 'nrrd'
             const fileName = `outputImage.${downloadFormat}`
-            const { webWorker, arrayBuffer } = await writeImageArrayBuffer(null, model.outputs.get("outputImage"), fileName)
+            const { webWorker, arrayBuffer } = await writeImageArrayBuffer(null, copyImage(model.outputs.get("outputImage")), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(arrayBuffer, fileName)

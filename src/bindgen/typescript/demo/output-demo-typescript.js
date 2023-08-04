@@ -55,7 +55,7 @@ function outputDemoTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}${indent}${indent}const ${parameterName}DownloadFormat = document.getElementById('${parameter.name}-output-format')\n`
       result += `${prefix}${indent}${indent}${indent}const downloadFormat = ${parameterName}DownloadFormat.value || 'nrrd'\n`
       result += `${prefix}${indent}${indent}${indent}const fileName = \`${parameterName}.\${downloadFormat}\`\n`
-      result += `${prefix}${indent}${indent}${indent}const { webWorker, arrayBuffer } = await writeImageArrayBuffer(null, model.outputs.get("${parameterName}"), fileName)\n\n`
+      result += `${prefix}${indent}${indent}${indent}const { webWorker, arrayBuffer } = await writeImageArrayBuffer(null, copyImage(model.outputs.get("${parameterName}")), fileName)\n\n`
       result += `${prefix}${indent}${indent}${indent}webWorker.terminate()\n`
       result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(arrayBuffer, fileName)\n`
       result += `${prefix}${indent}${indent}}\n`
