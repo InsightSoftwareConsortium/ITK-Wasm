@@ -40,6 +40,9 @@ packages/compress-stringify/typescript/demo/
 packages/compress-stringify/typescript/dist/
 packages/compress-stringify/typescript/test/browser/demo-app/public
 packages/compress-stringify/typescript/demo-app
+packages/dicom/wasi-build/
+packages/dicom/typescript/package-lock.json
+packages/dicom/python/itkwasm-dicom-emscripten/test/test_itkwasm_dicom.py
 
 node_modules
 .DS_Store
