@@ -1,10 +1,8 @@
-// Generated file. To retain edits, remove this comment.
-
-import { Image } from 'itk-wasm'
+import { Image, WorkerPool } from 'itk-wasm'
 
 interface ReadImageDicomFileSeriesResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
+  /** WebWorkerPool used for computation */
+  webWorkerPool: WorkerPool | null
 
   /** Output image volume */
   outputImage: Image

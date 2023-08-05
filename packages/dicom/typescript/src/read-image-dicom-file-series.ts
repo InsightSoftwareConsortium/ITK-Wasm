@@ -1,21 +1,15 @@
-// Generated file. To retain edits, remove this comment.
-
 import {
-  Image,
-  JsonObject,
   BinaryFile,
-  InterfaceTypes,
-  PipelineOutput,
-  PipelineInput,
-  runPipeline
+  stackImages,
+  WorkerPool,
 } from 'itk-wasm'
 
 import ReadImageDicomFileSeriesOptions from './read-image-dicom-file-series-options.js'
 import ReadImageDicomFileSeriesResult from './read-image-dicom-file-series-result.js'
+import readImageDicomFileSeriesWorkerFunction from './read-image-dicom-file-series-worker-function.js'
 
-
-import { getPipelinesBaseUrl } from './pipelines-base-url.js'
-import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
+const numberOfWorkers = typeof globalThis.navigator?.hardwareConcurrency === 'number' ? globalThis.navigator.hardwareConcurrency : 4
+const seriesBlockSize = 8
 
 /**
  * Read a DICOM image series and return the associated image volume
@@ -25,69 +19,47 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<ReadImageDicomFileSeriesResult>} - result object
  */
 async function readImageDicomFileSeries(
-  webWorker: null | Worker,
+  webWorkerPool: null | WorkerPool,
   options: ReadImageDicomFileSeriesOptions = { inputImages: [] as BinaryFile[] | File[] | string[], }
 ) : Promise<ReadImageDicomFileSeriesResult> {
 
-  const desiredOutputs: Array<PipelineOutput> = [
-    { type: InterfaceTypes.Image },
-    { type: InterfaceTypes.JsonObject },
+  let workerPool = webWorkerPool
+  if (workerPool === null) {
+    workerPool = new WorkerPool(numberOfWorkers, readImageDicomFileSeriesWorkerFunction)
+  }
+
+  const inputs: Array<BinaryFile> = [
   ]
+  if(options.inputImages.length < 1) {
+    throw new Error('"input-images" option must have a length > 1')
+  }
 
-  const inputs: Array<PipelineInput> = [
-  ]
-
-  const args = []
-  // Inputs
-  // Outputs
-  const outputImageName = '0'
-  args.push(outputImageName)
-
-  const sortedFilenamesName = '1'
-  args.push(sortedFilenamesName)
-
-  // Options
-  args.push('--memory-io')
-  if (typeof options.inputImages !== "undefined") {
-    if(options.inputImages.length < 1) {
-      throw new Error('"input-images" option must have a length > 1')
+  options.inputImages.forEach(async (value) => {
+    let valueFile = value
+    if (value instanceof File) {
+      const valueBuffer = await value.arrayBuffer()
+      valueFile = { path: value.name, data: new Uint8Array(valueBuffer) }
     }
-    args.push('--input-images')
+    inputs.push(valueFile as BinaryFile)
+  })
 
-    options.inputImages.forEach(async (value) => {
-      let valueFile = value
-      if (value instanceof File) {
-        const valueBuffer = await value.arrayBuffer()
-        valueFile = { path: value.name, data: new Uint8Array(valueBuffer) }
-      }
-      inputs.push({ type: InterfaceTypes.BinaryFile, data: valueFile as BinaryFile })
-      const name = value instanceof File ? value.name : (valueFile as BinaryFile).path
-      args.push(name)
-
-    })
+  if (options.singleSortedSeries) {
+    const taskArgsArray = []
+    for (let index = 0; index < inputs.length; index += seriesBlockSize) {
+      const block = inputs.slice(index, index + seriesBlockSize)
+      taskArgsArray.push([block, options.singleSortedSeries])
+    }
+    const results = await workerPool.runTasks(taskArgsArray).promise
+    const images = results.map((result) => result.outputImage)
+    const sortedFilenames = results.reduce((a, v) => a.concat(v.sortedFilenames), [])
+    let stacked = stackImages(images)
+    return { outputImage: stacked, webWorkerPool: workerPool, sortedFilenames }
+  } else {
+    const taskArgsArray = [[inputs, options.singleSortedSeries]]
+    const results = await workerPool.runTasks(taskArgsArray).promise
+    let image = results[0].outputImage
+    return { outputImage: image, webWorkerPool: workerPool, sortedFilenames: results[0].sortedFilenames }
   }
-  if (typeof options.singleSortedSeries !== "undefined") {
-    options.singleSortedSeries && args.push('--single-sorted-series')
-  }
-
-  const pipelinePath = 'read-image-dicom-file-series'
-
-  const {
-    webWorker: usedWebWorker,
-    returnValue,
-    stderr,
-    outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
-  if (returnValue !== 0) {
-    throw new Error(stderr)
-  }
-
-  const result = {
-    webWorker: usedWebWorker as Worker,
-    outputImage: outputs[0].data as Image,
-    sortedFilenames: (outputs[1].data as JsonObject).data,
-  }
-  return result
 }
 
 export default readImageDicomFileSeries
