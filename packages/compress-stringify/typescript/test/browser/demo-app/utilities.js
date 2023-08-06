@@ -14,6 +14,15 @@ function downloadFile(content, filename) {
   a.click()
   return a
 }
+globalThis.downloadFile = downloadFile
+
+function interfaceTypeJsonReplacer (key, value) {
+  if (!!value && value.byteLength !== undefined) {
+    return String(value.slice(0, 6)) + '...'
+  }
+  return value
+}
+globalThis.interfaceTypeJsonReplacer = interfaceTypeJsonReplacer
 
 function escapeHtml(html) {
   const div = document.createElement('div');
@@ -22,6 +31,7 @@ function escapeHtml(html) {
   div.remove()
   return escaped
 }
+globalThis.escapeHtml = escapeHtml
 
 function notify(title, message, variant = 'primary', icon = 'info-circle', duration = 3000) {
   const slAlert = Object.assign(document.createElement('sl-alert'), {
@@ -38,6 +48,7 @@ function notify(title, message, variant = 'primary', icon = 'info-circle', durat
   document.body.append(slAlert);
   setTimeout(() => slAlert.toast(), 300)
 }
+globalThis.notify = notify
 
 function disableInputs(inputId) {
   document.querySelectorAll(`#${inputId} sl-button`).forEach(button => {
@@ -51,6 +62,7 @@ function disableInputs(inputId) {
     input.disabled = true
   })
 }
+globalThis.disableInputs = disableInputs
 
 function enableInputs(inputId) {
   document.querySelectorAll(`#${inputId} sl-button`).forEach(button => {
@@ -64,3 +76,4 @@ function enableInputs(inputId) {
     input.disabled = false
   })
 }
+globalThis.enableInputs = enableInputs
