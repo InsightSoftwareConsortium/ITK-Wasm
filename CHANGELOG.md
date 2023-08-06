@@ -1,5 +1,29 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.120](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.119...itk-wasm-v1.0.0-b.120) (2023-08-06)
+
+
+### Bug Fixes
+
+* **bindgen:** Add missing List import for python emscripten ([aa5f73d](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/aa5f73dd0f7414fe1a9f5a000f92fff225ee3803))
+* **bindgen:** copy image for repeated downloads in demo ([de7b098](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/de7b09864e7118ea6b6c9204765c1c9f37ac6cff))
+
+
+### Features
+
+* **bindgen:** Add output-options-check.js ([d7832d4](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/d7832d44a160cfabe84bcd19e952ce62a357d1dc))
+* **bindgen:** Add python-web-demo interface ([1d48471](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/1d48471c925a038588837adc3246338255b862eb))
+* **bindgen:** Generate typescript demo app ([0aca9cb](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/0aca9cb8b639cee741f93b43f02b98532bfcca33))
+* **bindgen:** support typescript BinaryFile interface type ([f6f988f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f6f988fd0aa11999aaf69a4ea870bd43604c2d65))
+* **bindgen:** support typescript mesh interface type ([085c8d6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/085c8d6275b2b55eefa5e0089406eee11c30f6a1))
+* **compress-stringify:** add python-web-demo controllers ([25d832d](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/25d832dc26af50478526fa9afb1ae61442deef5e))
+* **read-image-dicom-file-series:** Add type names to arguments ([4617831](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/46178315fe541a3fc0af2cbab169d5690658d5e8))
+
+
+### Performance Improvements
+
+* **readImageDicomFileSeries:** Add parallel sorted series parallel processing ([f6745b8](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f6745b80710ec1336ee750d0cc64b3a1dcd56a84))
+
 # [1.0.0-b.119](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.118...itk-wasm-v1.0.0-b.119) (2023-07-10)
 
 
