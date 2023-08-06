@@ -13,6 +13,20 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
+
     - uses: actions/setup-node@v2
       with:
         node-version: '16'
@@ -35,6 +49,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
 
     - uses: actions/setup-node@v3
       with:
@@ -95,9 +123,23 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v2
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
+
+    - uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '18'
 
     - name: Install
       run: |
@@ -124,6 +166,20 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
+
     - uses: actions/setup-node@v2
       with:
         node-version: '16'
@@ -147,6 +203,20 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
+
     - name: Test
       uses: cypress-io/github-action@v4
       with:
@@ -160,6 +230,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
 
     - name: Test Webpack Example on Chrome
       uses: cypress-io/github-action@v4
@@ -182,6 +266,20 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
+
     - name: Test Vite Example on Chrome
       uses: cypress-io/github-action@v4
       with:
@@ -198,17 +296,31 @@ jobs:
 
   test-debugging-example:
     name: debugging
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: ./examples/debugging
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v2
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
+
+    - uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '18'
 
     - name: Install
       run: |
@@ -230,6 +342,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
 
     - uses: actions/setup-node@v3
       with:
@@ -256,6 +382,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: 'Free up disk space'
+      run: |
+        # Workaround for https://github.com/actions/virtual-environments/issues/709
+        df -h
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
 
     - uses: actions/setup-node@v3
       with:
