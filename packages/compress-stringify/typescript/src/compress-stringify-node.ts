@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   BinaryStream,
@@ -18,6 +18,7 @@ import path from 'path'
  * Given a binary, compress and optionally base64 encode.
  *
  * @param {Uint8Array} input - Input binary
+ * @param {CompressStringifyOptions} options - options object
  *
  * @returns {Promise<CompressStringifyNodeResult>} - result object
  */
@@ -29,25 +30,32 @@ async function compressStringifyNode(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
+
   const inputs: Array<PipelineInput> = [
     { type: InterfaceTypes.BinaryStream, data: { data: input }  },
   ]
 
   const args = []
   // Inputs
-  args.push('0')
+  const inputName = '0'
+  args.push(inputName as string)
+
   // Outputs
-  args.push('0')
+  const outputName = '0'
+  args.push(outputName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.stringify !== "undefined") {
-    args.push('--stringify')
+    options.stringify && args.push('--stringify')
   }
   if (typeof options.compressionLevel !== "undefined") {
     args.push('--compression-level', options.compressionLevel.toString())
+
   }
   if (typeof options.dataUrlPrefix !== "undefined") {
     args.push('--data-url-prefix', options.dataUrlPrefix.toString())
+
   }
 
   const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'compress-stringify')

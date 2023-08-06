@@ -8,5 +8,7 @@ from .structured_report_to_html_async import structured_report_to_html_async
 from .structured_report_to_html import structured_report_to_html
 from .structured_report_to_text_async import structured_report_to_text_async
 from .structured_report_to_text import structured_report_to_text
+from .read_image_dicom_file_series_async import read_image_dicom_file_series_async
+from .read_image_dicom_file_series import read_image_dicom_file_series
 
 from ._version import __version__

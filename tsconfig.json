@@ -14,5 +14,5 @@
     "typeRoots": ["./node_modules/@types", "./src/vendor-types"]
   },
   "include": ["./src/**/*"],
-  "exclude": ["./src/core/internal/loadEmscriptenModuleWebWorker.ts", "./src/web-workers/*", "src/bindgen/typescript-resources/*"]
+  "exclude": ["./src/core/internal/loadEmscriptenModuleWebWorker.ts", "./src/web-workers/*", "src/bindgen/typescript/resources/**"]
 }

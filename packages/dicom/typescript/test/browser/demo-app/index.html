@@ -1,0 +1,434 @@
+<!-- Generated file. To retain edits, remove this comment. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css" />
+
+<script type="module">
+  import '@shoelace-style/shoelace/dist/themes/light.css';
+  import '@shoelace-style/shoelace/dist/themes/dark.css';
+  import '@shoelace-style/shoelace/dist/components/button/button.js';
+  import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js';
+  import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js';
+  import '@shoelace-style/shoelace/dist/components/tab/tab.js';
+  import '@shoelace-style/shoelace/dist/components/input/input.js';
+  import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
+  import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
+  import '@shoelace-style/shoelace/dist/components/alert/alert.js';
+  import '@shoelace-style/shoelace/dist/components/icon/icon.js';
+  import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js';
+  import '@shoelace-style/shoelace/dist/components/divider/divider.js';
+  import '@shoelace-style/shoelace/dist/components/details/details.js';
+  import '@shoelace-style/shoelace/dist/components/popup/popup.js';
+  import '@shoelace-style/shoelace/dist/components/tag/tag.js';
+  import '@shoelace-style/shoelace/dist/components/select/select.js';
+  import '@shoelace-style/shoelace/dist/components/option/option.js';
+
+  import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
+  setBasePath('/');
+
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    // dark mode
+    document.documentElement.classList.add('sl-theme-dark');
+  }
+</script>
+
+  <title>@itk-wasm/dicom<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></title>
+</head>
+<body>
+
+<script src="./utilities.js"></script>
+
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<div id="app">
+  <a href="https://wasm.itk.org/" target="_blank">
+    <img src="./logo.svg" class="logo vanilla" alt="ITK Wasm logo" />
+  </a>
+
+  <h2>@itk-wasm/dicom<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></h2>
+  <i>Read files and images related to DICOM file format.</i>
+  <br /><br />
+
+  <sl-tab-group>
+    <sl-tab slot="nav" panel="applyPresentationStateToImage-panel">applyPresentationStateToImage</sl-tab>
+    <sl-tab slot="nav" panel="readDicomEncapsulatedPdf-panel">readDicomEncapsulatedPdf</sl-tab>
+    <sl-tab slot="nav" panel="structuredReportToHtml-panel">structuredReportToHtml</sl-tab>
+    <sl-tab slot="nav" panel="structuredReportToText-panel">structuredReportToText</sl-tab>
+    <sl-tab slot="nav" panel="readDicomTags-panel">readDicomTags</sl-tab>
+    <sl-tab slot="nav" panel="readImageDicomFileSeries-panel">readImageDicomFileSeries</sl-tab>
+
+
+    <sl-tab-panel name="applyPresentationStateToImage-panel">
+
+    <small><i>Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.</i></small><br /><br />
+
+    <div id="applyPresentationStateToImageInputs"><form action="">
+      <sl-input required name="image-in" type="text" label="imageIn" help-text="Input DICOM file" disabled></sl-input>
+      <label for="image-in-file"><sl-button name="image-in-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="image-in-file" style="display: none"/>
+<br /><br />
+      <sl-input required name="presentation-state-file" type="text" label="presentationStateFile" help-text="Process using presentation state file" disabled></sl-input>
+      <label for="presentation-state-file-file"><sl-button name="presentation-state-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="presentation-state-file-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="color-output">colorOutput - <i>output image as RGB (default: false)</i></sl-checkbox>
+<br /><br />
+      <sl-input name="config-file" type="text" label="configFile" help-text="filename: string. Process using settings from configuration file"></sl-input>
+      <sl-input name="frame" type="number" value="1" label="frame" help-text="frame: integer. Process using image frame f (default: 1)"></sl-input>
+<br />
+      <sl-checkbox name="no-presentation-state-output">noPresentationStateOutput - <i>Do not get presentation state information in text stream.</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="no-bitmap-output">noBitmapOutput - <i>Do not get resulting image as bitmap output stream.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="applyPresentationStateToImageOutputs">
+      <sl-details disabled id="presentation-state-out-stream-output" summary="presentationStateOutStream: Output overlay information"><sl-skeleton effect="none"></sl-skeleton></sl-details>
+      <sl-button variant="neutral" outline name="presentation-state-out-stream-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="output-image-output" summary="outputImage: Output image"><sl-skeleton effect="none"></sl-skeleton></sl-details>
+      <sl-select id="output-image-output-format" placeholder="Format">
+        <sl-option value="bmp">bmp</sl-option>
+        <sl-option value="dcm">dcm</sl-option>
+        <sl-option value="gipl">gipl</sl-option>
+        <sl-option value="hdf5">hdf5</sl-option>
+        <sl-option value="jpg">jpg</sl-option>
+        <sl-option value="lsm">lsm</sl-option>
+        <sl-option value="mnc">mnc</sl-option>
+        <sl-option value="mnc.gz">mnc.gz</sl-option>
+        <sl-option value="mgh">mgh</sl-option>
+        <sl-option value="mha">mha</sl-option>
+        <sl-option value="mrc">mrc</sl-option>
+        <sl-option value="nii">nii</sl-option>
+        <sl-option value="nii.gz">nii.gz</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="nrrd">nrrd</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="pic">pic</sl-option>
+        <sl-option value="tif">tif</sl-option>
+        <sl-option value="isq">isq</sl-option>
+        <sl-option value="fdf">fdf</sl-option>
+        <sl-option value="vtk">vtk</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="output-image-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="readDicomEncapsulatedPdf-panel">
+
+    <small><i>Extract PDF file from DICOM encapsulated PDF.</i></small><br /><br />
+
+    <div id="readDicomEncapsulatedPdfInputs"><form action="">
+      <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
+      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="dicom-file-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="read-file-only">readFileOnly - <i>read file format only</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-dataset">readDataset - <i>read data set without file meta information</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-xfer-auto">readXferAuto - <i>use TS recognition (default)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-xfer-detect">readXferDetect - <i>ignore TS specified in the file meta header</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-xfer-little">readXferLittle - <i>read with explicit VR little endian TS</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-xfer-big">readXferBig - <i>read with explicit VR big endian TS</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-xfer-implicit">readXferImplicit - <i>read with implicit VR little endian TS</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="accept-odd-length">acceptOddLength - <i>accept odd length attributes (default)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="assume-even-length">assumeEvenLength - <i>assume real length is one byte larger</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="enable-cp246">enableCp246 - <i>read undefined len UN as implicit VR (default)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="disable-cp246">disableCp246 - <i>read undefined len UN as explicit VR</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="retain-un">retainUn - <i>retain elements as UN (default)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="convert-un">convertUn - <i>convert to real VR if known</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="enable-correction">enableCorrection - <i>enable automatic data correction (default)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="disable-correction">disableCorrection - <i>disable automatic data correction</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="readDicomEncapsulatedPdfOutputs">
+      <sl-textarea resize="auto" filled disabled name="pdf-binary-output" label="pdfBinaryOutput" help-text="Output pdf file"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+      <sl-button variant="neutral" outline name="pdf-binary-output-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="structuredReportToHtml-panel">
+
+    <small><i>Render DICOM SR file and data set to HTML/XHTML</i></small><br /><br />
+
+    <div id="structuredReportToHtmlInputs"><form action="">
+      <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
+      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="dicom-file-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="read-file-only">readFileOnly - <i>read file format only</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-dataset">readDataset - <i>read data set without file meta information</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-xfer-auto">readXferAuto - <i>use TS recognition (default)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-xfer-detect">readXferDetect - <i>ignore TS specified in the file meta header</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-xfer-little">readXferLittle - <i>read with explicit VR little endian TS</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-xfer-big">readXferBig - <i>read with explicit VR big endian TS</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="read-xfer-implicit">readXferImplicit - <i>read with implicit VR little endian TS</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="processing-details">processingDetails - <i>show currently processed content item</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="unknown-relationship">unknownRelationship - <i>accept unknown/missing relationship type</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="invalid-item-value">invalidItemValue - <i>accept invalid content item value
+(e.g. violation of VR or VM definition)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="ignore-constraints">ignoreConstraints - <i>ignore relationship content constraints</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="ignore-item-errors">ignoreItemErrors - <i>do not abort on content item errors, just warn
+(e.g. missing value type specific attributes)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="skip-invalid-items">skipInvalidItems - <i>skip invalid content items (incl. sub-tree)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="disable-vr-checker">disableVrChecker - <i>disable check for VR-conformant string values</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="charset-require">charsetRequire - <i>require declaration of ext. charset (default)</i></sl-checkbox>
+<br /><br />
+      <sl-input name="charset-assume" type="text" label="charsetAssume" help-text="[c]harset: string, assume charset c if no extended charset declared"></sl-input>
+      <sl-checkbox name="charset-check-all">charsetCheckAll - <i>check all data elements with string values
+(default: only PN, LO, LT, SH, ST, UC and UT)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="convert-to-utf8">convertToUtf8 - <i>convert all element values that are affected
+by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
+<br /><br />
+      <sl-input name="url-prefix" type="text" label="urlPrefix" help-text="URL: string. Append specificed URL prefix to hyperlinks of referenced composite objects in the document."></sl-input>
+      <sl-checkbox name="html-32">html32 - <i>use only HTML version 3.2 compatible features</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="html-40">html40 - <i>allow all HTML version 4.01 features (default)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="xhtml-11">xhtml11 - <i>comply with XHTML version 1.1 specification</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="add-document-type">addDocumentType - <i>add reference to SGML document type definition</i></sl-checkbox>
+<br /><br />
+      <sl-input name="css-reference" type="text" label="cssReference" help-text="URL: string. Add reference to specified CSS to document" disabled></sl-input>
+      <label for="css-reference-file"><sl-button name="css-reference-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file"  name="css-reference-file" style="display: none"/>
+<br /><br />
+      <sl-input name="css-file" type="text" label="cssFile" help-text="[f]ilename: string. Embed content of specified CSS into document" disabled></sl-input>
+      <label for="css-file-file"><sl-button name="css-file-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file"  name="css-file-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="expand-inline">expandInline - <i>expand short content items inline (default)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="never-expand-inline">neverExpandInline - <i>never expand content items inline</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="always-expand-inline">alwaysExpandInline - <i>always expand content items inline</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="render-full-data">renderFullData - <i>render full data of content items</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="section-title-inline">sectionTitleInline - <i>render section titles inline, not separately</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="document-type-title">documentTypeTitle - <i>use document type as document title (default)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="patient-info-title">patientInfoTitle - <i>use patient information as document title</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="no-document-header">noDocumentHeader - <i>do not render general document information</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="render-inline-codes">renderInlineCodes - <i>render codes in continuous text blocks</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="concept-name-codes">conceptNameCodes - <i>render code of concept names</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="numeric-unit-codes">numericUnitCodes - <i>render code of numeric measurement units</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="code-value-unit">codeValueUnit - <i>use code value as measurement unit (default)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="code-meaning-unit">codeMeaningUnit - <i>use code meaning as measurement unit</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="render-all-codes">renderAllCodes - <i>render all codes (implies +Ci, +Cn and +Cu)</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="code-details-tooltip">codeDetailsTooltip - <i>render code details as a tooltip (implies +Cc)</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="structuredReportToHtmlOutputs">
+      <sl-textarea resize="auto" filled disabled name="output-text" label="outputText" help-text="Output text file"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+      <sl-button variant="neutral" outline name="output-text-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="structuredReportToText-panel">
+
+    <small><i>Read a DICOM structured report file and generate a plain text representation</i></small><br /><br />
+
+    <div id="structuredReportToTextInputs"><form action="">
+      <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
+      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="dicom-file-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="unknown-relationship">unknownRelationship - <i>Accept unknown relationship type</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="invalid-item-value">invalidItemValue - <i>Accept invalid content item value</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="ignore-constraints">ignoreConstraints - <i>Ignore relationship constraints</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="ignore-item-errors">ignoreItemErrors - <i>Ignore content item errors</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="skip-invalid-items">skipInvalidItems - <i>Skip invalid content items</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="no-document-header">noDocumentHeader - <i>Print no document header</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="number-nested-items">numberNestedItems - <i>Number nested items</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="shorten-long-values">shortenLongValues - <i>Shorten long item values</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="print-instance-uid">printInstanceUid - <i>Print SOP Instance UID</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="print-sopclass-short">printSopclassShort - <i>Print short SOP class name</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="print-sopclass-long">printSopclassLong - <i>Print SOP class name</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="print-sopclass-uid">printSopclassUid - <i>Print long SOP class name</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="print-all-codes">printAllCodes - <i>Print all codes</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="print-invalid-codes">printInvalidCodes - <i>Print invalid codes</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="print-template-id">printTemplateId - <i>Print template identification</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="indicate-enhanced">indicateEnhanced - <i>Indicate enhanced encoding mode</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="print-color">printColor - <i>Use ANSI escape codes</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="structuredReportToTextOutputs">
+      <sl-textarea resize="auto" filled disabled name="output-text" label="outputText" help-text="Output text file"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+      <sl-button variant="neutral" outline name="output-text-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="readDicomTags-panel">
+
+    <small><i>Read the tags from a DICOM file</i></small><br /><br />
+
+    <div id="readDicomTagsInputs"><form action="">
+      <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file." disabled></sl-input>
+      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="dicom-file-file" style="display: none"/>
+<br /><br />
+      <sl-details id="tags-to-read-input" summary="tagsToRead: A JSON object with a &quot;tags&quot; array of the tags to read. If not provided, all tags are read. Example tag: &quot;0008|103e&quot;." disabled></sl-details>
+      <label for="tags-to-read-file"><sl-button name="tags-to-read-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="tags-to-read-file" style="display: none"/>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="readDicomTagsOutputs">
+      <sl-details disabled id="tags-output" summary="tags: Output tags in the file. JSON object an array of [tag, value] arrays. Values are encoded as UTF-8 strings."><sl-skeleton effect="none"></sl-skeleton></sl-details>
+      <sl-button variant="neutral" outline name="tags-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="readImageDicomFileSeries-panel">
+
+    <small><i>Read a DICOM image series and return the associated image volume</i></small><br /><br />
+
+    <div id="readImageDicomFileSeriesInputs"><form action="">
+      <sl-input name="input-images" type="text" label="inputImages" help-text="File names in the series" disabled></sl-input>
+      <label for="input-images-file"><sl-button name="input-images-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" multiple  name="input-images-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="single-sorted-series">singleSortedSeries - <i>The input files are a single sorted series</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="readImageDicomFileSeriesOutputs">
+      <sl-details disabled id="output-image-output" summary="outputImage: Output image volume"><sl-skeleton effect="none"></sl-skeleton></sl-details>
+      <sl-select id="output-image-output-format" placeholder="Format">
+        <sl-option value="bmp">bmp</sl-option>
+        <sl-option value="dcm">dcm</sl-option>
+        <sl-option value="gipl">gipl</sl-option>
+        <sl-option value="hdf5">hdf5</sl-option>
+        <sl-option value="jpg">jpg</sl-option>
+        <sl-option value="lsm">lsm</sl-option>
+        <sl-option value="mnc">mnc</sl-option>
+        <sl-option value="mnc.gz">mnc.gz</sl-option>
+        <sl-option value="mgh">mgh</sl-option>
+        <sl-option value="mha">mha</sl-option>
+        <sl-option value="mrc">mrc</sl-option>
+        <sl-option value="nii">nii</sl-option>
+        <sl-option value="nii.gz">nii.gz</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="nrrd">nrrd</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="pic">pic</sl-option>
+        <sl-option value="tif">tif</sl-option>
+        <sl-option value="isq">isq</sl-option>
+        <sl-option value="fdf">fdf</sl-option>
+        <sl-option value="vtk">vtk</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="output-image-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="sorted-filenames-output" summary="sortedFilenames: Output sorted filenames"><sl-skeleton effect="none"></sl-skeleton></sl-details>
+      <sl-button variant="neutral" outline name="sorted-filenames-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+  </sl-tab-group>
+</div>
+
+<script type="module" src="./index.ts"></script>
+
+</body>
+</html>

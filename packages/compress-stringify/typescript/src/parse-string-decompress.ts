@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   BinaryStream,
@@ -13,14 +13,13 @@ import ParseStringDecompressResult from './parse-string-decompress-result.js'
 
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
-
-
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 /**
  * Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.
  *
  * @param {Uint8Array} input - Compressed input
+ * @param {ParseStringDecompressOptions} options - options object
  *
  * @returns {Promise<ParseStringDecompressResult>} - result object
  */
@@ -33,19 +32,24 @@ async function parseStringDecompress(
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
+
   const inputs: Array<PipelineInput> = [
     { type: InterfaceTypes.BinaryStream, data: { data: input }  },
   ]
 
   const args = []
   // Inputs
-  args.push('0')
+  const inputName = '0'
+  args.push(inputName as string)
+
   // Outputs
-  args.push('0')
+  const outputName = '0'
+  args.push(outputName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.parseString !== "undefined") {
-    args.push('--parse-string')
+    options.parseString && args.push('--parse-string')
   }
 
   const pipelinePath = 'parse-string-decompress'

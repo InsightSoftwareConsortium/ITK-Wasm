@@ -1,9 +1,7 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
-  BinaryFile,
   TextStream,
-  TextFile,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -19,151 +17,167 @@ import path from 'path'
 /**
  * Render DICOM SR file and data set to HTML/XHTML
  *
- * @param {BinaryFile} dicomFile - Input DICOM file
+ * @param {string} dicomFile - Input DICOM file
+ * @param {StructuredReportToHtmlOptions} options - options object
  *
  * @returns {Promise<StructuredReportToHtmlNodeResult>} - result object
  */
 async function structuredReportToHtmlNode(
-  dicomFile: BinaryFile,
+  dicomFile: string,
   options: StructuredReportToHtmlOptions = {}
 ) : Promise<StructuredReportToHtmlNodeResult> {
+
+  const mountDirs: Set<string> = new Set()
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
+
+  mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: dicomFile },
   ]
 
   const args = []
   // Inputs
-  args.push(dicomFile.path)
+  const dicomFileName = dicomFile
+  args.push(dicomFileName as string)
+
   // Outputs
-  args.push('0')
+  const outputTextName = '0'
+  args.push(outputTextName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {
-    args.push('--read-file-only')
+    options.readFileOnly && args.push('--read-file-only')
   }
   if (typeof options.readDataset !== "undefined") {
-    args.push('--read-dataset')
+    options.readDataset && args.push('--read-dataset')
   }
   if (typeof options.readXferAuto !== "undefined") {
-    args.push('--read-xfer-auto')
+    options.readXferAuto && args.push('--read-xfer-auto')
   }
   if (typeof options.readXferDetect !== "undefined") {
-    args.push('--read-xfer-detect')
+    options.readXferDetect && args.push('--read-xfer-detect')
   }
   if (typeof options.readXferLittle !== "undefined") {
-    args.push('--read-xfer-little')
+    options.readXferLittle && args.push('--read-xfer-little')
   }
   if (typeof options.readXferBig !== "undefined") {
-    args.push('--read-xfer-big')
+    options.readXferBig && args.push('--read-xfer-big')
   }
   if (typeof options.readXferImplicit !== "undefined") {
-    args.push('--read-xfer-implicit')
+    options.readXferImplicit && args.push('--read-xfer-implicit')
   }
   if (typeof options.processingDetails !== "undefined") {
-    args.push('--processing-details')
+    options.processingDetails && args.push('--processing-details')
   }
   if (typeof options.unknownRelationship !== "undefined") {
-    args.push('--unknown-relationship')
+    options.unknownRelationship && args.push('--unknown-relationship')
   }
   if (typeof options.invalidItemValue !== "undefined") {
-    args.push('--invalid-item-value')
+    options.invalidItemValue && args.push('--invalid-item-value')
   }
   if (typeof options.ignoreConstraints !== "undefined") {
-    args.push('--ignore-constraints')
+    options.ignoreConstraints && args.push('--ignore-constraints')
   }
   if (typeof options.ignoreItemErrors !== "undefined") {
-    args.push('--ignore-item-errors')
+    options.ignoreItemErrors && args.push('--ignore-item-errors')
   }
   if (typeof options.skipInvalidItems !== "undefined") {
-    args.push('--skip-invalid-items')
+    options.skipInvalidItems && args.push('--skip-invalid-items')
   }
   if (typeof options.disableVrChecker !== "undefined") {
-    args.push('--disable-vr-checker')
+    options.disableVrChecker && args.push('--disable-vr-checker')
   }
   if (typeof options.charsetRequire !== "undefined") {
-    args.push('--charset-require')
+    options.charsetRequire && args.push('--charset-require')
   }
   if (typeof options.charsetAssume !== "undefined") {
     args.push('--charset-assume', options.charsetAssume.toString())
+
   }
   if (typeof options.charsetCheckAll !== "undefined") {
-    args.push('--charset-check-all')
+    options.charsetCheckAll && args.push('--charset-check-all')
   }
   if (typeof options.convertToUtf8 !== "undefined") {
-    args.push('--convert-to-utf8')
+    options.convertToUtf8 && args.push('--convert-to-utf8')
   }
   if (typeof options.urlPrefix !== "undefined") {
     args.push('--url-prefix', options.urlPrefix.toString())
+
   }
   if (typeof options.html32 !== "undefined") {
-    args.push('--html-32')
+    options.html32 && args.push('--html-32')
   }
   if (typeof options.html40 !== "undefined") {
-    args.push('--html-40')
+    options.html40 && args.push('--html-40')
   }
   if (typeof options.xhtml11 !== "undefined") {
-    args.push('--xhtml-11')
+    options.xhtml11 && args.push('--xhtml-11')
   }
   if (typeof options.addDocumentType !== "undefined") {
-    args.push('--add-document-type')
+    options.addDocumentType && args.push('--add-document-type')
   }
   if (typeof options.cssReference !== "undefined") {
     const inputCountString = inputs.length.toString()
     inputs.push({ type: InterfaceTypes.TextStream, data: { data: options.cssReference } })
     args.push('--css-reference', inputCountString)
+
   }
   if (typeof options.cssFile !== "undefined") {
-    inputs.push({ type: InterfaceTypes.TextFile, data: options.cssFile as TextFile })
-    args.push('--css-file', options.cssFile.path)
+    const cssFile = options.cssFile
+    mountDirs.add(path.dirname(cssFile as string))
+    args.push('--css-file')
+
+    const name = cssFile as string
+    args.push(name)
+
   }
   if (typeof options.expandInline !== "undefined") {
-    args.push('--expand-inline')
+    options.expandInline && args.push('--expand-inline')
   }
   if (typeof options.neverExpandInline !== "undefined") {
-    args.push('--never-expand-inline')
+    options.neverExpandInline && args.push('--never-expand-inline')
   }
   if (typeof options.alwaysExpandInline !== "undefined") {
-    args.push('--always-expand-inline')
+    options.alwaysExpandInline && args.push('--always-expand-inline')
   }
   if (typeof options.renderFullData !== "undefined") {
-    args.push('--render-full-data')
+    options.renderFullData && args.push('--render-full-data')
   }
   if (typeof options.sectionTitleInline !== "undefined") {
-    args.push('--section-title-inline')
+    options.sectionTitleInline && args.push('--section-title-inline')
   }
   if (typeof options.documentTypeTitle !== "undefined") {
-    args.push('--document-type-title')
+    options.documentTypeTitle && args.push('--document-type-title')
   }
   if (typeof options.patientInfoTitle !== "undefined") {
-    args.push('--patient-info-title')
+    options.patientInfoTitle && args.push('--patient-info-title')
   }
   if (typeof options.noDocumentHeader !== "undefined") {
-    args.push('--no-document-header')
+    options.noDocumentHeader && args.push('--no-document-header')
   }
   if (typeof options.renderInlineCodes !== "undefined") {
-    args.push('--render-inline-codes')
+    options.renderInlineCodes && args.push('--render-inline-codes')
   }
   if (typeof options.conceptNameCodes !== "undefined") {
-    args.push('--concept-name-codes')
+    options.conceptNameCodes && args.push('--concept-name-codes')
   }
   if (typeof options.numericUnitCodes !== "undefined") {
-    args.push('--numeric-unit-codes')
+    options.numericUnitCodes && args.push('--numeric-unit-codes')
   }
   if (typeof options.codeValueUnit !== "undefined") {
-    args.push('--code-value-unit')
+    options.codeValueUnit && args.push('--code-value-unit')
   }
   if (typeof options.codeMeaningUnit !== "undefined") {
-    args.push('--code-meaning-unit')
+    options.codeMeaningUnit && args.push('--code-meaning-unit')
   }
   if (typeof options.renderAllCodes !== "undefined") {
-    args.push('--render-all-codes')
+    options.renderAllCodes && args.push('--render-all-codes')
   }
   if (typeof options.codeDetailsTooltip !== "undefined") {
-    args.push('--code-details-tooltip')
+    options.codeDetailsTooltip && args.push('--code-details-tooltip')
   }
 
   const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'structured-report-to-html')
@@ -172,7 +186,7 @@ async function structuredReportToHtmlNode(
     returnValue,
     stderr,
     outputs
-  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
+  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

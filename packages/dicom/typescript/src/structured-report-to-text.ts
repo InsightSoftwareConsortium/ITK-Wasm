@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   BinaryFile,
@@ -14,87 +14,96 @@ import StructuredReportToTextResult from './structured-report-to-text-result.js'
 
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
-
-
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 /**
  * Read a DICOM structured report file and generate a plain text representation
  *
- * @param {BinaryFile} dicomFile - Input DICOM file
+ * @param {File | BinaryFile} dicomFile - Input DICOM file
+ * @param {StructuredReportToTextOptions} options - options object
  *
  * @returns {Promise<StructuredReportToTextResult>} - result object
  */
 async function structuredReportToText(
   webWorker: null | Worker,
-  dicomFile: BinaryFile,
+  dicomFile: File | BinaryFile,
   options: StructuredReportToTextOptions = {}
 ) : Promise<StructuredReportToTextResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.TextStream },
   ]
+
+  let dicomFileFile = dicomFile
+  if (dicomFile instanceof File) {
+    const dicomFileBuffer = await dicomFile.arrayBuffer()
+    dicomFileFile = { path: dicomFile.name, data: new Uint8Array(dicomFileBuffer) }
+  }
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: dicomFile },
+    { type: InterfaceTypes.BinaryFile, data: dicomFileFile as BinaryFile },
   ]
 
   const args = []
   // Inputs
-  args.push(dicomFile.path)
+  const dicomFileName = (dicomFileFile as BinaryFile).path
+  args.push(dicomFileName as string)
+
   // Outputs
-  args.push('0')
+  const outputTextName = '0'
+  args.push(outputTextName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.unknownRelationship !== "undefined") {
-    args.push('--unknown-relationship')
+    options.unknownRelationship && args.push('--unknown-relationship')
   }
   if (typeof options.invalidItemValue !== "undefined") {
-    args.push('--invalid-item-value')
+    options.invalidItemValue && args.push('--invalid-item-value')
   }
   if (typeof options.ignoreConstraints !== "undefined") {
-    args.push('--ignore-constraints')
+    options.ignoreConstraints && args.push('--ignore-constraints')
   }
   if (typeof options.ignoreItemErrors !== "undefined") {
-    args.push('--ignore-item-errors')
+    options.ignoreItemErrors && args.push('--ignore-item-errors')
   }
   if (typeof options.skipInvalidItems !== "undefined") {
-    args.push('--skip-invalid-items')
+    options.skipInvalidItems && args.push('--skip-invalid-items')
   }
   if (typeof options.noDocumentHeader !== "undefined") {
-    args.push('--no-document-header')
+    options.noDocumentHeader && args.push('--no-document-header')
   }
   if (typeof options.numberNestedItems !== "undefined") {
-    args.push('--number-nested-items')
+    options.numberNestedItems && args.push('--number-nested-items')
   }
   if (typeof options.shortenLongValues !== "undefined") {
-    args.push('--shorten-long-values')
+    options.shortenLongValues && args.push('--shorten-long-values')
   }
   if (typeof options.printInstanceUid !== "undefined") {
-    args.push('--print-instance-uid')
+    options.printInstanceUid && args.push('--print-instance-uid')
   }
   if (typeof options.printSopclassShort !== "undefined") {
-    args.push('--print-sopclass-short')
+    options.printSopclassShort && args.push('--print-sopclass-short')
   }
   if (typeof options.printSopclassLong !== "undefined") {
-    args.push('--print-sopclass-long')
+    options.printSopclassLong && args.push('--print-sopclass-long')
   }
   if (typeof options.printSopclassUid !== "undefined") {
-    args.push('--print-sopclass-uid')
+    options.printSopclassUid && args.push('--print-sopclass-uid')
   }
   if (typeof options.printAllCodes !== "undefined") {
-    args.push('--print-all-codes')
+    options.printAllCodes && args.push('--print-all-codes')
   }
   if (typeof options.printInvalidCodes !== "undefined") {
-    args.push('--print-invalid-codes')
+    options.printInvalidCodes && args.push('--print-invalid-codes')
   }
   if (typeof options.printTemplateId !== "undefined") {
-    args.push('--print-template-id')
+    options.printTemplateId && args.push('--print-template-id')
   }
   if (typeof options.indicateEnhanced !== "undefined") {
-    args.push('--indicate-enhanced')
+    options.indicateEnhanced && args.push('--indicate-enhanced')
   }
   if (typeof options.printColor !== "undefined") {
-    args.push('--print-color')
+    options.printColor && args.push('--print-color')
   }
 
   const pipelinePath = 'structured-report-to-text'

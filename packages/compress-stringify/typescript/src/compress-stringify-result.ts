@@ -1,3 +1,5 @@
+// Generated file. To retain edits, remove this comment.
+
 interface CompressStringifyResult {
   /** WebWorker used for computation */
   webWorker: Worker | null

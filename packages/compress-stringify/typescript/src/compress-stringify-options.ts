@@ -1,3 +1,5 @@
+// Generated file. To retain edits, remove this comment.
+
 interface CompressStringifyOptions {
   /** Stringify the output */
   stringify?: boolean

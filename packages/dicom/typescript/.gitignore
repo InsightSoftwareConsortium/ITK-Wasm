@@ -1,4 +1,5 @@
 cypress/screenshots/
 cypress/videos/
 
-demo/
+demo-app/
+test/browser/demo-app/public/

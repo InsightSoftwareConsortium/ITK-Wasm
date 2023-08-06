@@ -22,12 +22,12 @@ export { default as readFile } from './../readFile.js'
 
 export { default as readImageHTTP } from './../readImageHTTP.js'
 
-export { default as readDICOMTags } from './../readDICOMTags.js'
-export { default as readDICOMTagsArrayBuffer } from './../readDICOMTagsArrayBuffer.js'
-export { default as ReadImageDICOMFileSeriesOptions } from './../ReadImageDICOMFileSeriesOptions.js'
-export { default as readImageDICOMFileSeries } from './../readImageDICOMFileSeries.js'
-export { default as ReadImageDICOMArrayBufferSeriesOptions } from './../ReadImageDICOMArrayBufferSeriesOptions.js'
-export { default as readImageDICOMArrayBufferSeries } from './../readImageDICOMArrayBufferSeries.js'
+export { default as readDICOMTags } from './../deprecated/readDICOMTags.js'
+export { default as readDICOMTagsArrayBuffer } from './../deprecated/readDICOMTagsArrayBuffer.js'
+export { default as ReadImageDICOMFileSeriesOptions } from './../deprecated/ReadImageDICOMFileSeriesOptions.js'
+export { default as readImageDICOMFileSeries } from './../deprecated/readImageDICOMFileSeries.js'
+export { default as ReadImageDICOMArrayBufferSeriesOptions } from './../deprecated/ReadImageDICOMArrayBufferSeriesOptions.js'
+export { default as readImageDICOMArrayBufferSeries } from './../deprecated/readImageDICOMArrayBufferSeries.js'
 
 export { default as WriteImageOptions } from './../WriteImageOptions.js'
 export { default as writeImageArrayBuffer } from './../writeImageArrayBuffer.js'

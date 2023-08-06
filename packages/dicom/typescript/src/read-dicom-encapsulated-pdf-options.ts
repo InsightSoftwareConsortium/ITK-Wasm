@@ -1,3 +1,5 @@
+// Generated file. To retain edits, remove this comment.
+
 interface ReadDicomEncapsulatedPdfOptions {
   /** read file format only */
   readFileOnly?: boolean

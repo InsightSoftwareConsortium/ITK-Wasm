@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css" />
+@shoelaceScript@
+  <title>@bindgenPackageName@</title>
+</head>
+<body>
+
+<script src="./utilities.js"></script>
+
+@bindgenGitHubCorner@
+
+<div id="app">
+  <a href="https://wasm.itk.org/" target="_blank">
+    <img src="./logo.svg" class="logo vanilla" alt="ITK Wasm logo" />
+  </a>
+
+  <h2>@bindgenPackageName@</h2>
+  <i>@bindgenPackageDescription@</i>
+  <br /><br />
+
+  <sl-tab-group>
+@pipelinesFunctionsTabs@
+@bindgenFunctions@
+  </sl-tab-group>
+</div>
+@indexModule@
+</body>
+</html>

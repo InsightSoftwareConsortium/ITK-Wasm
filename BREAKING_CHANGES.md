@@ -20,6 +20,12 @@ guide](doc/content/docs/itk_js_to_itk_wasm_migration_guide.md).
   opposed to an optional parameter, since it is required.
 - dicom functions access { data: <Uint8Array>, path: <string> } arguments instead of just <Uint8Array>.
 - `.` removed from structured-report-to-html arguments for wrapping
+- readDICOMTags moved to the @itk-wasm/dicom package as readDicomTags, api changed
+- readDICOMTagsArrayBuffer removed (use readDicomTags)
+- readImageDICOMFileSeries moved to @itk-wasm/dicom package as readImageDicomFileSeries, api changed
+- readImageDicomFileSeries does not take casting options -- use castImage
+- readImageDICOMFileSeriesArrayBuffer removed (use readImageDicomFileSeries)
+- @itk-wasm/dicom node functions that take file arguments use the file path string directly
 
 ## From 1.0.0-b.72 to 1.0.0-b.73
 

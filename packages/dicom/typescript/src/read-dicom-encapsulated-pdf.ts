@@ -1,4 +1,4 @@
-// Generated file. Do not edit.
+// Generated file. To retain edits, remove this comment.
 
 import {
   BinaryFile,
@@ -14,81 +14,90 @@ import ReadDicomEncapsulatedPdfResult from './read-dicom-encapsulated-pdf-result
 
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
-
-
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 /**
  * Extract PDF file from DICOM encapsulated PDF.
  *
- * @param {BinaryFile} dicomFile - Input DICOM file
+ * @param {File | BinaryFile} dicomFile - Input DICOM file
+ * @param {ReadDicomEncapsulatedPdfOptions} options - options object
  *
  * @returns {Promise<ReadDicomEncapsulatedPdfResult>} - result object
  */
 async function readDicomEncapsulatedPdf(
   webWorker: null | Worker,
-  dicomFile: BinaryFile,
+  dicomFile: File | BinaryFile,
   options: ReadDicomEncapsulatedPdfOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.BinaryStream },
   ]
+
+  let dicomFileFile = dicomFile
+  if (dicomFile instanceof File) {
+    const dicomFileBuffer = await dicomFile.arrayBuffer()
+    dicomFileFile = { path: dicomFile.name, data: new Uint8Array(dicomFileBuffer) }
+  }
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.BinaryFile, data: dicomFile },
+    { type: InterfaceTypes.BinaryFile, data: dicomFileFile as BinaryFile },
   ]
 
   const args = []
   // Inputs
-  args.push(dicomFile.path)
+  const dicomFileName = (dicomFileFile as BinaryFile).path
+  args.push(dicomFileName as string)
+
   // Outputs
-  args.push('0')
+  const pdfBinaryOutputName = '0'
+  args.push(pdfBinaryOutputName)
+
   // Options
   args.push('--memory-io')
   if (typeof options.readFileOnly !== "undefined") {
-    args.push('--read-file-only')
+    options.readFileOnly && args.push('--read-file-only')
   }
   if (typeof options.readDataset !== "undefined") {
-    args.push('--read-dataset')
+    options.readDataset && args.push('--read-dataset')
   }
   if (typeof options.readXferAuto !== "undefined") {
-    args.push('--read-xfer-auto')
+    options.readXferAuto && args.push('--read-xfer-auto')
   }
   if (typeof options.readXferDetect !== "undefined") {
-    args.push('--read-xfer-detect')
+    options.readXferDetect && args.push('--read-xfer-detect')
   }
   if (typeof options.readXferLittle !== "undefined") {
-    args.push('--read-xfer-little')
+    options.readXferLittle && args.push('--read-xfer-little')
   }
   if (typeof options.readXferBig !== "undefined") {
-    args.push('--read-xfer-big')
+    options.readXferBig && args.push('--read-xfer-big')
   }
   if (typeof options.readXferImplicit !== "undefined") {
-    args.push('--read-xfer-implicit')
+    options.readXferImplicit && args.push('--read-xfer-implicit')
   }
   if (typeof options.acceptOddLength !== "undefined") {
-    args.push('--accept-odd-length')
+    options.acceptOddLength && args.push('--accept-odd-length')
   }
   if (typeof options.assumeEvenLength !== "undefined") {
-    args.push('--assume-even-length')
+    options.assumeEvenLength && args.push('--assume-even-length')
   }
   if (typeof options.enableCp246 !== "undefined") {
-    args.push('--enable-cp246')
+    options.enableCp246 && args.push('--enable-cp246')
   }
   if (typeof options.disableCp246 !== "undefined") {
-    args.push('--disable-cp246')
+    options.disableCp246 && args.push('--disable-cp246')
   }
   if (typeof options.retainUn !== "undefined") {
-    args.push('--retain-un')
+    options.retainUn && args.push('--retain-un')
   }
   if (typeof options.convertUn !== "undefined") {
-    args.push('--convert-un')
+    options.convertUn && args.push('--convert-un')
   }
   if (typeof options.enableCorrection !== "undefined") {
-    args.push('--enable-correction')
+    options.enableCorrection && args.push('--enable-correction')
   }
   if (typeof options.disableCorrection !== "undefined") {
-    args.push('--disable-correction')
+    options.disableCorrection && args.push('--disable-correction')
   }
 
   const pipelinePath = 'read-dicom-encapsulated-pdf'
