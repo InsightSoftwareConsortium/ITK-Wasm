@@ -4,9 +4,9 @@ Example packages built with itk-wasm can be found below. If you created a
 package, please [open a pull
 request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add it to the table!
 
-| <img width=100/> Package | <img width=250/> Description | <img width=200/> Links |
-|--------------------------|------------------------------|:----------------------:|
-| [@itk-wasm/compress-stringify][compress-stringify-repo] | *Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.* | ![js][js-logo] ![ts][ts-logo] <br/>[:computer:][compress-stringify-demo-js] &nbsp;[:book:][compress-stringify-docs-js] &nbsp;[:package:][compress-stringify-package-js] <br/> <br/> ![py][py-logo] <br/>[:computer:][compress-stringify-demo-py] &nbsp;[:book:][compress-stringify-docs-py] &nbsp;[:package:][compress-stringify-package-py] |
+| <img width=100/> Repository | <img width=250/> Description | <img width=200/> Links |
+|-----------------------------|------------------------------|:----------------------:|
+| [@itk-wasm/compress-stringify][compress-stringify-repo] | *Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.* | ![js][js-logo] ![ts][ts-logo] <br/>[💻][compress-stringify-demo-js] &nbsp;[🕮][compress-stringify-docs-js] &nbsp;[📦][compress-stringify-package-js] <br/> <br/> ![py][py-logo] <br/>[💻][compress-stringify-demo-py] &nbsp;[🕮][compress-stringify-docs-py] &nbsp;[📦][compress-stringify-package-py] |
 
 [js-logo]: ../assets/javascript-logo.svg
 [ts-logo]: ../assets/typescript-logo.svg
