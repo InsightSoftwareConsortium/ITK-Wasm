@@ -1,9 +1,10 @@
 import ReadDICOMTagsResult from './ReadDICOMTagsResult.js'
-import readDICOMTagsArrayBuffer from './readDICOMTagsArrayBuffer.js'
 
+/**
+ * @deprecated Use readDicomTags from @itk-wasm/dicom instead
+ */
 async function readDICOMTags (webWorker: Worker | null, file: File, tags: string[] | null = null): Promise<ReadDICOMTagsResult> {
-  const arrayBuffer = await file.arrayBuffer()
-  return await readDICOMTagsArrayBuffer(webWorker, arrayBuffer, tags)
+  throw new Error('readDICOMTags is deprecated. Use readDicomTags from @itk-wasm/dicom instead.')
 }
 
 export default readDICOMTags

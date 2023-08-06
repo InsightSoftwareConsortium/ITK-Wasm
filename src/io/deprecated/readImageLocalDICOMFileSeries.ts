@@ -1,6 +1,9 @@
-import Image from '../core/Image.js'
 import ReadImageDICOMFileSeriesOptions from './ReadImageDICOMFileSeriesOptions.js'
+import Image from '../../core/Image.js'
 
+/**
+ * @deprecated Use readImageDicomFileSeriesNode from @itk-wasm/dicom instead
+ */
 async function readImageLocalDICOMFileSeries (
   fileNames: string[],
   options?: ReadImageDICOMFileSeriesOptions | boolean

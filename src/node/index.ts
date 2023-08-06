@@ -5,7 +5,7 @@ export * from '../core/index.js'
 export { default as ReadImageResult } from '../io/ReadImageResult.js'
 export { default as ReadMeshResult } from '../io/ReadMeshResult.js'
 
-export { default as ReadDICOMTagsResult } from '../io/ReadDICOMTagsResult.js'
+export { default as ReadDICOMTagsResult } from '../io/deprecated/ReadDICOMTagsResult.js'
 
 export { default as WriteArrayBufferResult } from '../io/WriteArrayBufferResult.js'
 export { default as WriteMeshOptions } from '../io/WriteMeshOptions.js'
