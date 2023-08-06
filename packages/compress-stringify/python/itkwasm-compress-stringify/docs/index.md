@@ -5,6 +5,8 @@ itkwasm-compress-stringify
 
 [![itkwasm-compress-stringify version](https://badge.fury.io/py/itkwasm_compress_stringify.svg)](https://pypi.org/project/itkwasm_compress_stringify/)
 
+[**Example**](https://itk-compress-stringify-py-app.on.fleek.co/)
+
 ## Installation
 
 ::::{tab-set}
