@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/@itk-wasm%2Fcompress-stringify.svg)](https://www.npmjs.com/package/@itk-wasm/compress-stringify)
 
-Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.
+> Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.
 
 [Example](https://itk-compress-stringify-app.on.fleek.co/ ':include :type=iframe width=100% height=800px')
 
