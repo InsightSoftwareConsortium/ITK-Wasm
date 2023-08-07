@@ -2,6 +2,8 @@
 
   - [Installation](/docs/installation)
 
+  - [Packages](/docs/packages)
+
   - [IO formats](/docs/file_formats)
 
     - [DICOM](/docs/dicom_formats)
