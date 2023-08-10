@@ -1,6 +1,7 @@
 import fs from 'fs-extra'
 
 import snakeCase from '../../snake-case.js'
+import canonicalType from '../../canonical-type.js'
 
 import functionModuleImports from '../function-module-imports.js'
 import functionModuleReturnType from '../function-module-return-type.js'
@@ -171,7 +172,8 @@ from itkwasm import (
 
   let postOutput = ''
   function toPythonType(type, value) {
-    const pythonType = interfaceJsonTypeToPythonType.get(type)
+    const canonical = canonicalType(type)
+    const pythonType = interfaceJsonTypeToPythonType.get(canonical)
     switch (pythonType) {
       case "os.PathLike":
         return `Path(${value}.data.path)`

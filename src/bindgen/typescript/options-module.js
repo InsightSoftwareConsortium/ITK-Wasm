@@ -5,6 +5,7 @@ import { markdownTable } from 'markdown-table'
 import interfaceJsonTypeToTypeScriptType from './interface-json-type-to-typescript-type.js'
 import typesRequireImport from './types-require-import.js'
 import camelCase from '../camel-case.js'
+import canonicalType from '../canonical-type.js'
 import writeIfOverrideNotPresent from '../write-if-override-not-present.js'
 
 function optionsModule (srcOutputDir, interfaceJson, modulePascalCase, nodeTextCamel, moduleKebabCase, haveOptions) {
@@ -27,13 +28,13 @@ function optionsModule (srcOutputDir, interfaceJson, modulePascalCase, nodeTextC
       return
     }
 
-    const canonicalType = parameter.type.split(' ')[0]
-    if (!interfaceJsonTypeToTypeScriptType.has(canonicalType)) {
-      console.error(`Unexpected parameter type: ${canonicalType}`)
+    const canonical = canonicalType(parameter.type)
+    if (!interfaceJsonTypeToTypeScriptType.has(canonical)) {
+      console.error(`Unexpected parameter type: ${canonical}`)
       process.exit(1)
     }
     optionsInterfaceContent += `  /** ${parameter.description} */\n`
-    let parameterType = interfaceJsonTypeToTypeScriptType.get(canonicalType)
+    let parameterType = interfaceJsonTypeToTypeScriptType.get(canonical)
     if (typesRequireImport.includes(parameterType)) {
       optionsImportTypes.add(parameterType)
     }
