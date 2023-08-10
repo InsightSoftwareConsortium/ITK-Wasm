@@ -27,12 +27,13 @@ function optionsModule (srcOutputDir, interfaceJson, modulePascalCase, nodeTextC
       return
     }
 
-    if (!interfaceJsonTypeToTypeScriptType.has(parameter.type)) {
-      console.error(`Unexpected parameter type: ${parameter.type}`)
+    const canonicalType = parameter.type.split(' ')[0]
+    if (!interfaceJsonTypeToTypeScriptType.has(canonicalType)) {
+      console.error(`Unexpected parameter type: ${canonicalType}`)
       process.exit(1)
     }
     optionsInterfaceContent += `  /** ${parameter.description} */\n`
-    let parameterType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
+    let parameterType = interfaceJsonTypeToTypeScriptType.get(canonicalType)
     if (typesRequireImport.includes(parameterType)) {
       optionsImportTypes.add(parameterType)
     }
