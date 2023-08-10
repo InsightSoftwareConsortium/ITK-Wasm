@@ -1,6 +1,8 @@
 import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 import loadEmscriptenModuleMainThread from '../core/internal/loadEmscriptenModuleMainThread.js'
 
+import { simd } from 'wasm-feature-detect'
+
 import config from '../itkConfig.js'
 
 import IOTypes from '../core/IOTypes.js'
@@ -53,6 +55,12 @@ async function runPipeline (
   inputs: PipelineInput[] | null,
   options?: RunPipelineOptions
 ): Promise<RunPipelineResult> {
+  if (!await simd()) {
+    const simdErrorMessage = 'WebAssembly SIMD support is required -- please update your browser.'
+    alert(simdErrorMessage)
+    throw new Error(simdErrorMessage)
+  }
+
   if (webWorker === false) {
     const pipelineModule = await loadPipelineModule(pipelinePath.toString())
     const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)

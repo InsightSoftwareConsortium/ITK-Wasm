@@ -161,6 +161,7 @@
     "glob": "^8.1.0",
     "markdown-table": "^3.0.3",
     "mime-types": "^2.1.35",
+    "wasm-feature-detect": "^1.5.1",
     "webworker-promise": "^0.4.2"
   },
   "bin": {

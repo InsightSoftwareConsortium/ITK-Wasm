@@ -7,6 +7,17 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 
 WORKDIR /
 
+# Note: on entry, emsdk will prepend to the path with its own node, so add to an earlier path
+ENV NODE_TAG v18.17.1
+RUN curl -LO https://nodejs.org/dist/${NODE_TAG}/node-${NODE_TAG}-linux-x64.tar.xz && \
+  tar xvJf node-${NODE_TAG}-linux-x64.tar.xz && \
+  rm node-${NODE_TAG}-linux-x64.tar.xz && \
+  mkdir -p /emsdk/upstream/emscripten/ && \
+  ln -s /node-${NODE_TAG}-linux-x64/bin/node /emsdk/upstream/emscripten && \
+  ln -s /node-${NODE_TAG}-linux-x64/bin/npm /emsdk/upstream/emscripten && \
+  ln -s /node-${NODE_TAG}-linux-x64/bin/npx /emsdk/upstream/emscripten
+ENV PATH /emsdk/upstream/emscripten:${PATH}
+
 # tag commit date: 2023-06-23 branch: itkwasm-2023-01-15-f42c10a20f-3
 ENV ITK_GIT_TAG 8aace5fd2b7d6032a5ecf51d1fd37a0a9abe0a44
 RUN git clone https://github.com/KitwareMedical/ITK.git && \
@@ -30,7 +41,7 @@ ARG LDFLAGS
 ARG CFLAGS
 ARG CXXFLAGS
 ENV LDFLAGS=${LDFLAGS:-"-flto -s ALLOW_MEMORY_GROWTH=1"}
-ENV CFLAGS=${CFLAGS:-"-flto -Wno-warn-absolute-paths -DITK_WASM_NO_FILESYSTEM_IO"}
+ENV CFLAGS=${CFLAGS:-"-msimd128 -flto -Wno-warn-absolute-paths -DITK_WASM_NO_FILESYSTEM_IO"}
 ENV CXXFLAGS=${CXXFLAGS:-"${CFLAGS}"}
 
 RUN mkdir ITK-build && \
