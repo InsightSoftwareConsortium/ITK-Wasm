@@ -171,6 +171,7 @@ const testPipelines = [
   path.join('test', 'pipelines', 'input-output-files-pipeline'),
   path.join('test', 'pipelines', 'input-output-json-pipeline'),
   path.join('test', 'pipelines', 'mesh-read-write-pipeline'),
+  path.join('test', 'pipelines', 'bindgen-interface-types-pipeline'),
 ]
 
 if (options.buildTestPipelines) {

@@ -91,8 +91,8 @@ from itkwasm import (
   interfaceJson.outputs.forEach((output) => {
     if (interfaceJsonTypeToInterfaceType.has(output.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-      const name = interfaceType.includes('File') ?  `str(PurePosixPath(${snakeCase(output.name)}))` : outputCount.toString()
-      args += `    args.append('${name}')\n`
+      const name = interfaceType.includes('File') ?  `str(PurePosixPath(${snakeCase(output.name)}))` : `'${outputCount.toString()}'`
+      args += `    args.append(${name})\n`
       outputCount++
     } else {
       const snake = snakeCase(output.name)
