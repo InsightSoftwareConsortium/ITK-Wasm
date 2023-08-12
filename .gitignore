@@ -73,6 +73,8 @@ test/pipelines/input-output-files-pipeline/wasi-build/
 test/pipelines/mesh-read-write-pipeline/wasi-build/
 test/pipelines/input-output-json-pipeline/emscripten-build/
 test/pipelines/input-output-json-pipeline/wasi-build/
+test/pipelines/bindgen-interface-types-pipeline/python/
+test/pipelines/bindgen-interface-types-pipeline/wasi-build/
 
 cypress/screenshots/
 cypress/videos/

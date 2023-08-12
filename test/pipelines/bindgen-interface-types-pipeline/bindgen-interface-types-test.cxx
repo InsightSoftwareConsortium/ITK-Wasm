@@ -60,6 +60,24 @@ int main( int argc, char * argv[] )
   InputMeshType inputMesh;
   pipeline.add_option("input-mesh", inputMesh, "The input mesh")->required()->group("Meshes")->type_name("INPUT_MESH");
 
+  int integerType = 3;
+  pipeline.add_option("-i,--integer-type", integerType, "An integer type.");
+
+  double floatingType = 2.0;
+  pipeline.add_option("-f,--floating-type", floatingType, "A floating type.");
+
+  double floatingRange = 2.0;
+  pipeline.add_option("--floating-range", floatingRange, "A floating type with a range check.")->check(CLI::Range(1.0, 3.0));
+
+  std::vector<double> floatingVector = { 7.0 };
+  pipeline.add_option("--floating-vector", floatingVector, "A floating vector.");
+
+  std::vector<double> floatingTypeSize = { 7.0, 8.0 };
+  pipeline.add_option("--floating-type-size", floatingTypeSize, "A floating vector with a type size constraint.")->type_size(2);
+
+  std::vector<double> floatingTypeSizeRange = { 7.0, 8.0, 9.0 };
+  pipeline.add_option("--floating-type-size-range", floatingTypeSizeRange, "A floating vector with a type size range constraint.")->type_size(2, 3);
+
   std::string outputTextFile;
   pipeline.add_option("output-text-file", outputTextFile, "The output text file")->required()->group("Files")->type_name("OUTPUT_TEXT_FILE");
 

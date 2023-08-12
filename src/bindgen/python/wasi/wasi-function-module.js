@@ -1,6 +1,7 @@
 import fs from 'fs-extra'
 
 import snakeCase from '../../snake-case.js'
+import canonicalType from '../../canonical-type.js'
 
 import functionModuleImports from '../function-module-imports.js'
 import functionModuleReturnType from '../function-module-return-type.js'
@@ -90,8 +91,8 @@ from itkwasm import (
   interfaceJson.outputs.forEach((output) => {
     if (interfaceJsonTypeToInterfaceType.has(output.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-      const name = interfaceType.includes('File') ?  `str(PurePosixPath(${snakeCase(output.name)}))` : outputCount.toString()
-      args += `    args.append('${name}')\n`
+      const name = interfaceType.includes('File') ?  `str(PurePosixPath(${snakeCase(output.name)}))` : `'${outputCount.toString()}'`
+      args += `    args.append(${name})\n`
       outputCount++
     } else {
       const snake = snakeCase(output.name)
@@ -171,7 +172,8 @@ from itkwasm import (
 
   let postOutput = ''
   function toPythonType(type, value) {
-    const pythonType = interfaceJsonTypeToPythonType.get(type)
+    const canonical = canonicalType(type)
+    const pythonType = interfaceJsonTypeToPythonType.get(canonical)
     switch (pythonType) {
       case "os.PathLike":
         return `Path(${value}.data.path)`
