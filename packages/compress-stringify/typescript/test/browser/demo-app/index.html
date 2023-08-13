@@ -65,7 +65,7 @@
     <small><i>Given a binary, compress and optionally base64 encode.</i></small><br /><br />
 
     <div id="compressStringifyInputs"><form action="">
-      <sl-input required name="input" type="text" label="input" help-text="Input binary" disabled></sl-input>
+      <sl-details id="compressStringify-input-details" summary="input: Input binary" disabled></sl-details>
       <label for="input-file"><sl-button name="input-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="stringify">stringify - <i>Stringify the output</i></sl-checkbox>
@@ -81,7 +81,7 @@
     <sl-divider></sl-divider>
 
     <div id="compressStringifyOutputs">
-      <sl-textarea resize="auto" filled disabled name="output" label="output" help-text="Output compressed binary"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+      <sl-details disabled id="compressStringify-output-details" summary="output: Output compressed binary"></sl-details>
       <sl-button variant="neutral" outline name="output-download" disabled>Download</sl-button>
 <br /><br />
     </div>
@@ -94,7 +94,7 @@
     <small><i>Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.</i></small><br /><br />
 
     <div id="parseStringDecompressInputs"><form action="">
-      <sl-input required name="input" type="text" label="input" help-text="Compressed input" disabled></sl-input>
+      <sl-details id="parseStringDecompress-input-details" summary="input: Compressed input" disabled></sl-details>
       <label for="input-file"><sl-button name="input-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="parse-string">parseString - <i>Parse the input string before decompression</i></sl-checkbox>
@@ -107,7 +107,7 @@
     <sl-divider></sl-divider>
 
     <div id="parseStringDecompressOutputs">
-      <sl-textarea resize="auto" filled disabled name="output" label="output" help-text="Output decompressed binary"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+      <sl-details disabled id="parseStringDecompress-output-details" summary="output: Output decompressed binary"></sl-details>
       <sl-button variant="neutral" outline name="output-download" disabled>Download</sl-button>
 <br /><br />
     </div>

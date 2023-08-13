@@ -1,3 +1,5 @@
+// Generated file. To retain edits, remove this comment.
+
 function downloadFile(content, filename) {
   const url = URL.createObjectURL(new Blob([content]))
   const a = document.createElement('a')

@@ -1,3 +1,5 @@
+<!-- Generated file. To retain edits, remove this comment. -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,20 +8,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./style.css" />
 
-  <link
-    rel="stylesheet"
-    media="(prefers-color-scheme:light)"
-    href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/light.css"
-  />
-  <link
-    rel="stylesheet"
-    media="(prefers-color-scheme:dark)"
-    href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/dark.css"
-  onload="document.documentElement.classList.add('sl-theme-dark');"
-  />
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/shoelace-autoloader.js"></script>
-    <title>@itk-wasm/dicom<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></title>
-  </head>
+<script type="module">
+  import '@shoelace-style/shoelace/dist/themes/light.css';
+  import '@shoelace-style/shoelace/dist/themes/dark.css';
+  import '@shoelace-style/shoelace/dist/components/button/button.js';
+  import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js';
+  import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js';
+  import '@shoelace-style/shoelace/dist/components/tab/tab.js';
+  import '@shoelace-style/shoelace/dist/components/input/input.js';
+  import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
+  import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
+  import '@shoelace-style/shoelace/dist/components/alert/alert.js';
+  import '@shoelace-style/shoelace/dist/components/icon/icon.js';
+  import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js';
+  import '@shoelace-style/shoelace/dist/components/divider/divider.js';
+  import '@shoelace-style/shoelace/dist/components/details/details.js';
+  import '@shoelace-style/shoelace/dist/components/popup/popup.js';
+  import '@shoelace-style/shoelace/dist/components/tag/tag.js';
+  import '@shoelace-style/shoelace/dist/components/select/select.js';
+  import '@shoelace-style/shoelace/dist/components/option/option.js';
+
+  import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
+  setBasePath('/');
+
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    // dark mode
+    document.documentElement.classList.add('sl-theme-dark');
+  }
+</script>
+
+  <title>@itk-wasm/dicom<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></title>
+</head>
 <body>
 
 <script type="module" src="/utilities.js"></script>
@@ -50,10 +69,10 @@
     <small><i>Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.</i></small><br /><br />
 
     <div id="applyPresentationStateToImageInputs"><form action="">
-      <sl-input required name="image-in" type="text" label="imageIn" help-text="Input DICOM file" disabled></sl-input>
+      <sl-details id="applyPresentationStateToImage-image-in-details" summary="imageIn: Input DICOM file" disabled></sl-details>
       <label for="image-in-file"><sl-button name="image-in-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="image-in-file" style="display: none"/>
 <br /><br />
-      <sl-input required name="presentation-state-file" type="text" label="presentationStateFile" help-text="Process using presentation state file" disabled></sl-input>
+      <sl-details id="applyPresentationStateToImage-presentation-state-file-details" summary="presentationStateFile: Process using presentation state file" disabled></sl-details>
       <label for="presentation-state-file-file"><sl-button name="presentation-state-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="presentation-state-file-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="color-output">colorOutput - <i>output image as RGB (default: false)</i></sl-checkbox>
@@ -73,10 +92,10 @@
     <sl-divider></sl-divider>
 
     <div id="applyPresentationStateToImageOutputs">
-      <sl-details disabled id="presentation-state-out-stream-output" summary="presentationStateOutStream: Output overlay information"><sl-skeleton effect="none"></sl-skeleton></sl-details>
+      <sl-details disabled id="applyPresentationStateToImage-presentation-state-out-stream-details" summary="presentationStateOutStream: Output overlay information"></sl-details>
       <sl-button variant="neutral" outline name="presentation-state-out-stream-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="output-image-output" summary="outputImage: Output image"><sl-skeleton effect="none"></sl-skeleton></sl-details>
+      <sl-details disabled id="applyPresentationStateToImage-output-image-details" summary="outputImage: Output image"></sl-details>
       <sl-select id="output-image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -112,7 +131,7 @@
     <small><i>Extract PDF file from DICOM encapsulated PDF.</i></small><br /><br />
 
     <div id="readDicomEncapsulatedPdfInputs"><form action="">
-      <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
+      <sl-details id="readDicomEncapsulatedPdf-dicom-file-details" summary="dicomFile: Input DICOM file" disabled></sl-details>
       <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="dicom-file-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="read-file-only">readFileOnly - <i>read file format only</i></sl-checkbox>
@@ -153,7 +172,7 @@
     <sl-divider></sl-divider>
 
     <div id="readDicomEncapsulatedPdfOutputs">
-      <sl-textarea resize="auto" filled disabled name="pdf-binary-output" label="pdfBinaryOutput" help-text="Output pdf file"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+      <sl-details disabled id="readDicomEncapsulatedPdf-pdf-binary-output-details" summary="pdfBinaryOutput: Output pdf file"></sl-details>
       <sl-button variant="neutral" outline name="pdf-binary-output-download" disabled>Download</sl-button>
 <br /><br />
     </div>
@@ -166,7 +185,7 @@
     <small><i>Render DICOM SR file and data set to HTML/XHTML</i></small><br /><br />
 
     <div id="structuredReportToHtmlInputs"><form action="">
-      <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
+      <sl-details id="structuredReportToHtml-dicom-file-details" summary="dicomFile: Input DICOM file" disabled></sl-details>
       <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="dicom-file-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="read-file-only">readFileOnly - <i>read file format only</i></sl-checkbox>
@@ -217,10 +236,10 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
 <br /><br />
       <sl-checkbox name="add-document-type">addDocumentType - <i>add reference to SGML document type definition</i></sl-checkbox>
 <br /><br />
-      <sl-input name="css-reference" type="text" label="cssReference" help-text="URL: string. Add reference to specified CSS to document" disabled></sl-input>
+      <sl-details id="structuredReportToHtml-css-reference-details"  summary="cssReference: URL: string. Add reference to specified CSS to document" disabled></sl-details>
       <label for="css-reference-file"><sl-button name="css-reference-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file"  name="css-reference-file" style="display: none"/>
 <br /><br />
-      <sl-input name="css-file" type="text" label="cssFile" help-text="[f]ilename: string. Embed content of specified CSS into document" disabled></sl-input>
+      <sl-details id="structuredReportToHtml-css-file-details"  summary="cssFile: [f]ilename: string. Embed content of specified CSS into document" disabled></sl-details>
       <label for="css-file-file"><sl-button name="css-file-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file"  name="css-file-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="expand-inline">expandInline - <i>expand short content items inline (default)</i></sl-checkbox>
@@ -261,7 +280,7 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
     <sl-divider></sl-divider>
 
     <div id="structuredReportToHtmlOutputs">
-      <sl-textarea resize="auto" filled disabled name="output-text" label="outputText" help-text="Output text file"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+      <sl-details disabled id="structuredReportToHtml-output-text-details" summary="outputText: Output text file"></sl-details>
       <sl-button variant="neutral" outline name="output-text-download" disabled>Download</sl-button>
 <br /><br />
     </div>
@@ -274,7 +293,7 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
     <small><i>Read a DICOM structured report file and generate a plain text representation</i></small><br /><br />
 
     <div id="structuredReportToTextInputs"><form action="">
-      <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file" disabled></sl-input>
+      <sl-details id="structuredReportToText-dicom-file-details" summary="dicomFile: Input DICOM file" disabled></sl-details>
       <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="dicom-file-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="unknown-relationship">unknownRelationship - <i>Accept unknown relationship type</i></sl-checkbox>
@@ -319,7 +338,7 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
     <sl-divider></sl-divider>
 
     <div id="structuredReportToTextOutputs">
-      <sl-textarea resize="auto" filled disabled name="output-text" label="outputText" help-text="Output text file"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>
+      <sl-details disabled id="structuredReportToText-output-text-details" summary="outputText: Output text file"></sl-details>
       <sl-button variant="neutral" outline name="output-text-download" disabled>Download</sl-button>
 <br /><br />
     </div>
@@ -332,10 +351,10 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
     <small><i>Read the tags from a DICOM file</i></small><br /><br />
 
     <div id="readDicomTagsInputs"><form action="">
-      <sl-input required name="dicom-file" type="text" label="dicomFile" help-text="Input DICOM file." disabled></sl-input>
+      <sl-details id="readDicomTags-dicom-file-details" summary="dicomFile: Input DICOM file." disabled></sl-details>
       <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="dicom-file-file" style="display: none"/>
 <br /><br />
-      <sl-details id="tags-to-read-input" summary="tagsToRead: A JSON object with a &quot;tags&quot; array of the tags to read. If not provided, all tags are read. Example tag: &quot;0008|103e&quot;." disabled></sl-details>
+      <sl-details id="readDicomTags-tags-to-read-details" summary="tagsToRead: A JSON object with a &quot;tags&quot; array of the tags to read. If not provided, all tags are read. Example tag: &quot;0008|103e&quot;." disabled></sl-details>
       <label for="tags-to-read-file"><sl-button name="tags-to-read-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="tags-to-read-file" style="display: none"/>
 <br /><br />
     <sl-divider></sl-divider>
@@ -346,7 +365,7 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
     <sl-divider></sl-divider>
 
     <div id="readDicomTagsOutputs">
-      <sl-details disabled id="tags-output" summary="tags: Output tags in the file. JSON object an array of [tag, value] arrays. Values are encoded as UTF-8 strings."><sl-skeleton effect="none"></sl-skeleton></sl-details>
+      <sl-details disabled id="readDicomTags-tags-details" summary="tags: Output tags in the file. JSON object an array of [tag, value] arrays. Values are encoded as UTF-8 strings."></sl-details>
       <sl-button variant="neutral" outline name="tags-download" disabled>Download</sl-button>
 <br /><br />
     </div>
@@ -359,7 +378,7 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
     <small><i>Read a DICOM image series and return the associated image volume</i></small><br /><br />
 
     <div id="readImageDicomFileSeriesInputs"><form action="">
-      <sl-input name="input-images" type="text" label="inputImages" help-text="File names in the series" disabled></sl-input>
+      <sl-details id="readImageDicomFileSeries-input-images-details" summary="inputImages: File names in the series" disabled></sl-details>
       <label for="input-images-file"><sl-button name="input-images-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" multiple  name="input-images-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="single-sorted-series">singleSortedSeries - <i>The input files are a single sorted series</i></sl-checkbox>
@@ -372,7 +391,7 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
     <sl-divider></sl-divider>
 
     <div id="readImageDicomFileSeriesOutputs">
-      <sl-details disabled id="output-image-output" summary="outputImage: Output image volume"><sl-skeleton effect="none"></sl-skeleton></sl-details>
+      <sl-details disabled id="readImageDicomFileSeries-output-image-details" summary="outputImage: Output image volume"></sl-details>
       <sl-select id="output-image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -398,7 +417,7 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
       </sl-select>
       <sl-button variant="neutral" outline name="output-image-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="sorted-filenames-output" summary="sortedFilenames: Output sorted filenames"><sl-skeleton effect="none"></sl-skeleton></sl-details>
+      <sl-details disabled id="readImageDicomFileSeries-sorted-filenames-details" summary="sortedFilenames: Output sorted filenames"></sl-details>
       <sl-button variant="neutral" outline name="sorted-filenames-download" disabled>Download</sl-button>
 <br /><br />
     </div>

@@ -1,20 +1,20 @@
 import camelCase from '../../camel-case.js'
 
-function outputDemoHtml(prefix, indent, parameter) {
+function outputDemoHtml (functionName, prefix, indent, parameter) {
   let result = ''
   const description = parameter.description.replaceAll('"', '&quot;')
   switch(parameter.type) {
     case 'OUTPUT_TEXT_FILE':
     case 'OUTPUT_TEXT_FILE:FILE':
     case 'OUTPUT_TEXT_STREAM':
-      result += `${prefix}${indent}<sl-textarea resize="auto" filled disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${description}"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>\n`
+      result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
       result += `<br /><br />\n`
       break
     case 'OUTPUT_BINARY_FILE':
     case 'OUTPUT_BINARY_FILE:FILE':
     case 'OUTPUT_BINARY_STREAM':
-      result += `${prefix}${indent}<sl-textarea resize="auto" filled disabled name="${parameter.name}" label="${camelCase(parameter.name)}" help-text="${description}"><sl-skeleton effect="none"></sl-skeleton></sl-textarea>\n`
+      result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
       result += `<br /><br />\n`
       break
@@ -36,12 +36,12 @@ function outputDemoHtml(prefix, indent, parameter) {
       result += `<br /><br />\n`
       break
     case 'OUTPUT_JSON':
-      result += `${prefix}${indent}<sl-details disabled id="${parameter.name}-output" summary="${camelCase(parameter.name)}: ${description}"><sl-skeleton effect="none"></sl-skeleton></sl-details>\n`
+      result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
       result += `<br /><br />\n`
       break
     case 'OUTPUT_IMAGE': {
-      result += `${prefix}${indent}<sl-details disabled id="${parameter.name}-output" summary="${camelCase(parameter.name)}: ${description}"><sl-skeleton effect="none"></sl-skeleton></sl-details>\n`
+      result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
 
       result += `${prefix}${indent}<sl-select id="${parameter.name}-output-format" placeholder="Format">\n`
       const formats = ['bmp', 'dcm', 'gipl', 'hdf5', 'jpg', 'lsm', 'mnc', 'mnc.gz', 'mgh', 'mha', 'mrc', 'nii', 'nii.gz', 'png', 'nrrd', 'png', 'pic', 'tif', 'isq', 'fdf', 'vtk']
@@ -54,7 +54,7 @@ function outputDemoHtml(prefix, indent, parameter) {
     }
       break
     case 'OUTPUT_MESH': {
-      result += `${prefix}${indent}<sl-details disabled id="${parameter.name}-output" summary="${camelCase(parameter.name)}: ${description}"><sl-skeleton effect="none"></sl-skeleton></sl-details>\n`
+      result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
 
       result += `${prefix}${indent}<sl-select id="${parameter.name}-output-format" placeholder="Format">\n`
       const formats = ['vtk', 'byu', 'fsa', 'fsb', 'obj', 'off', 'stl', 'swc'];

@@ -30,8 +30,10 @@ class StructuredReportToTextController  {
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#structuredReportToTextInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
-      loadSampleInputsButton.addEventListener('click', (event) => {
-        loadSampleInputs(model)
+      loadSampleInputsButton.addEventListener('click', async (event) => {
+        loadSampleInputsButton.loading = true
+        await loadSampleInputs(model)
+        loadSampleInputsButton.loading = false
       })
     }
 
@@ -44,8 +46,9 @@ class StructuredReportToTextController  {
 
         const arrayBuffer = await files[0].arrayBuffer()
         model.inputs.set("dicomFile", { data: new Uint8Array(arrayBuffer), path: files[0].name })
-        const input = document.querySelector("#structuredReportToTextInputs sl-input[name=dicom-file]")
-        input.value = model.inputs.get("dicomFile").data.subarray(0, 50).toString() + ' ...'
+        const details = document.getElementById("structuredReportToText-dicom-file-details")
+        details.innerHTML = `<pre>${globalThis.escapeHtml(model.inputs.get("dicomFile").data.subarray(0, 50).toString() + ' ...')}</pre>`
+        details.disabled = false
     })
 
     // ----------------------------------------------
@@ -172,8 +175,8 @@ class StructuredReportToTextController  {
         model.outputs.set("outputText", outputText)
         outputTextOutputDownload.variant = "success"
         outputTextOutputDownload.disabled = false
-        const outputTextOutput = document.querySelector('#structuredReportToTextOutputs sl-textarea[name=output-text]')
-        outputTextOutput.value = outputText.substring(0, 1024).toString() + ' ...'
+        const outputTextOutput = document.getElementById("structuredReportToText-output-text-details")
+        outputTextOutput.innerHTML = `<pre>${globalThis.escapeHtml(outputText.substring(0, 1024).toString() + ' ...')}</pre>`
         outputTextOutput.disabled = false
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")

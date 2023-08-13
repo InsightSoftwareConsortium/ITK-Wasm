@@ -26,8 +26,9 @@ function outputPython(functionName, prefix, indent, parameter) {
       runResult += `${indent}        self.model.outputs["${parameterName}"] = ${parameterName}\n`
       runResult += `${indent}        self.${parameterName}_download_element.variant = "success"\n`
       runResult += `${indent}        self.${parameterName}_download_element.disabled = False\n`
-      runResult += `${indent}        ${parameterName}_element = js.document.querySelector('#${functionName}-outputs sl-textarea[name=${parameter.name}]')\n`
-      runResult += `${indent}        ${parameterName}_element.value = str(np.frombuffer(${parameterName}[:200], dtype=np.uint8)) + ' ...'\n`
+      runResult += `${indent}        ${parameterName}_element = js.document.getElementById('${functionName}-${parameter.name}-details')\n`
+      runResult += `${indent}        ${parameterName}_element.innerHTML = f"<pre>{str(np.frombuffer(${parameterName}[:200], dtype=np.uint8)) + ' ...'}</pre>"\n`
+      runResult += `${indent}        ${parameterName}_element.disabled = False\n`
       break
     // case 'TEXT':
     //   result += `${prefix}${indent}<sl-textarea disabled name="${parameter.name}" label="${snakeCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`

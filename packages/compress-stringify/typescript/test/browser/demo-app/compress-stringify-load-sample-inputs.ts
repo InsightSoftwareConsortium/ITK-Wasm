@@ -1,8 +1,9 @@
-export default function compressStringifyLoadSampleInputs (model) {
+export default async function compressStringifyLoadSampleInputs (model) {
   const sampleInput = new Uint8Array([222, 173, 190, 239])
   model.inputs.set("input", sampleInput)
-  const inputElement = document.querySelector("#compressStringifyInputs [name=input]")
-  inputElement.value = sampleInput.toString()
+  const inputElement = document.getElementById("compressStringify-input-details")
+  inputElement.innerHTML = `<pre>${globalThis.escapeHtml(sampleInput.toString())}</pre>`
+  inputElement.disabled = false
 
   const stringify = true
   model.options.set("stringify", stringify)

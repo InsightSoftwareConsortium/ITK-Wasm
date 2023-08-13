@@ -24,9 +24,7 @@ function webDemo (outputDir, buildDir, emscriptenWasmBinaries, options) {
   }
 
   const demoJsUtilities = path.join(outputDir, 'utilities.js')
-  if (!fs.existsSync(demoJsUtilities)) {
-    fs.copyFileSync(typescriptBindgenResource(path.join('demo-app', 'utilities.js')), demoJsUtilities)
-  }
+  writeIfOverrideNotPresent(demoJsUtilities, fs.readFileSync(typescriptBindgenResource(path.join('demo-app', 'utilities.js')), 'utf8'))
 
 
   const logoPath = path.join(outputDir, 'logo.svg')

@@ -31,8 +31,10 @@ class ReadImageDicomFileSeriesController  {
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#readImageDicomFileSeriesInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
-      loadSampleInputsButton.addEventListener('click', (event) => {
-        loadSampleInputs(model)
+      loadSampleInputsButton.addEventListener('click', async (event) => {
+        loadSampleInputsButton.loading = true
+        await loadSampleInputs(model)
+        loadSampleInputsButton.loading = false
       })
     }
 
@@ -47,8 +49,8 @@ class ReadImageDicomFileSeriesController  {
 
         const inputBinaries = await Promise.all(Array.from(files).map(async (file) => { const arrayBuffer = await file.arrayBuffer(); return { data: new Uint8Array(arrayBuffer), path: file.name } }))
         model.options.set("inputImages", inputBinaries)
-        const input = document.querySelector("#readImageDicomFileSeriesInputs sl-input[name=input-images]")
-        input.value = model.options.get("inputImages").map((x) => x.path).toString()
+        const details = document.getElementById("readImageDicomFileSeries-input-images-details")
+        details.innerHTML = `<pre>${globalThis.escapeHtml(model.options.get("inputImages").map((x) => x.path).toString())}</pre>`
     })
 
     const singleSortedSeriesElement = document.querySelector('#readImageDicomFileSeriesInputs sl-checkbox[name=single-sorted-series]')
@@ -104,18 +106,18 @@ class ReadImageDicomFileSeriesController  {
         model.outputs.set("outputImage", outputImage)
         outputImageOutputDownload.variant = "success"
         outputImageOutputDownload.disabled = false
-        const outputImageDetails = document.getElementById("output-image-output")
+        const outputImageDetails = document.getElementById("readImageDicomFileSeries-output-image-details")
         outputImageDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(outputImage, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         outputImageDetails.disabled = false
-        const outputImageOutput = document.querySelector('#readImageDicomFileSeriesOutputs sl-details[name=output-image]')
+        const outputImageOutput = document.getElementById('readImageDicomFileSeries-output-image-details')
 
         model.outputs.set("sortedFilenames", sortedFilenames)
         sortedFilenamesOutputDownload.variant = "success"
         sortedFilenamesOutputDownload.disabled = false
-        const sortedFilenamesDetails = document.getElementById("sorted-filenames-output")
+        const sortedFilenamesDetails = document.getElementById("readImageDicomFileSeries-sorted-filenames-details")
         sortedFilenamesDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(sortedFilenames, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         sortedFilenamesDetails.disabled = false
-        const sortedFilenamesOutput = document.querySelector('#readImageDicomFileSeriesOutputs sl-details[name=sorted-filenames]')
+        const sortedFilenamesOutput = document.getElementById("readImageDicomFileSeries-sorted-filenames-details")
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

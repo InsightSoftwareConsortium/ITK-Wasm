@@ -30,8 +30,10 @@ class ParseStringDecompressController  {
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#parseStringDecompressInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
-      loadSampleInputsButton.addEventListener('click', (event) => {
-        loadSampleInputs(model)
+      loadSampleInputsButton.addEventListener('click', async (event) => {
+        loadSampleInputsButton.loading = true
+        await loadSampleInputs(model)
+        loadSampleInputsButton.loading = false
       })
     }
 
@@ -45,7 +47,8 @@ class ParseStringDecompressController  {
         const arrayBuffer = await files[0].arrayBuffer()
         model.inputs.set("input", new Uint8Array(arrayBuffer))
         const input = document.querySelector("#parseStringDecompressInputs sl-input[name=input]")
-        input.value = model.inputs.get("input").subarray(0, 50).toString() + ' ...'
+        details.innerHTML = `<pre>${globalThis.escapeHtml(model.inputs.get("input").subarray(0, 50).toString() + ' ...')}</pre>`
+        details.disabled = false
     })
 
     // ----------------------------------------------
@@ -92,8 +95,8 @@ class ParseStringDecompressController  {
         model.outputs.set("output", output)
         outputOutputDownload.variant = "success"
         outputOutputDownload.disabled = false
-        const outputOutput = document.querySelector('#parseStringDecompressOutputs sl-textarea[name=output]')
-        outputOutput.value = output.subarray(0, 1024).toString() + ' ...'
+        const outputOutput = document.getElementById("parseStringDecompress-output-details")
+        outputOutput.innerHTML = `<pre>${globalThis.escapeHtml(output.subarray(0, 1024).toString() + ' ...')}</pre>`
         outputOutput.disabled = false
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")

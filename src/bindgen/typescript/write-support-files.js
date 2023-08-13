@@ -1,6 +1,8 @@
 import fs from 'fs-extra'
 import path from 'path'
 
+import writeIfOverrideNotPresent from '../write-if-override-not-present.js'
+
 function writeSupportFiles(outputDir, forNode, bindgenResource, packageName, packageDescription) {
   if (!forNode) {
     try {
@@ -57,9 +59,7 @@ function writeSupportFiles(outputDir, forNode, bindgenResource, packageName, pac
     }
 
     const demoJsUtilities = path.join(outputDir, 'test', 'browser', 'demo-app', 'utilities.js')
-    if (!fs.existsSync(demoJsUtilities)) {
-      fs.copyFileSync(bindgenResource(path.join('demo-app', 'utilities.js')), demoJsUtilities)
-    }
+    writeIfOverrideNotPresent(demoJsUtilities, fs.readFileSync(bindgenResource(path.join('demo-app', 'utilities.js')), { encoding: 'utf8', flag: 'r' }))
 
     const rollupConfigPath = path.join(outputDir, 'build', 'rollup.browser.config.js')
     if (!fs.existsSync(rollupConfigPath)) {

@@ -48,16 +48,19 @@ class ParseStringDecompressController:
         self.run_button = run_button
         add_event_listener(run_button, 'click', self.on_run)
 
-    def on_load_sample_inputs_click(self, event):
-        self.model = self.load_sample_inputs(self.model)
+    async def on_load_sample_inputs_click(self, event):
+        load_sample_inputs_button = js.document.querySelector("#parse_string_decompress-inputs [name=load-sample-inputs]")
+        load_sample_inputs_button.loading = True
+        self.model = await self.load_sample_inputs(self.model)
+        load_sample_inputs_button.loading = False
 
     async def on_input_change(self, event):
         files = event.target.files
         array_buffer = await files.item(0).arrayBuffer()
         input_bytes = array_buffer.to_bytes()
         self.model.inputs['input'] = input_bytes
-        input_element = js.document.querySelector("#parse_string_decompress-inputs sl-input[name=input]")
-        input_element.value = str(np.frombuffer(input_bytes[:50], dtype=np.uint8)) + ' ...'
+        input_element = js.document.getElementById("#parse_string_decompress-input-details")
+        input_element.innerHTML = f"<pre>{str(np.frombuffer(input_bytes[:50], dtype=np.uint8)) + ' ...'}</pre>"
 
     def on_parse_string_change(self, event):
         self.model.options['parse_string'] = self.parse_string_element.checked
@@ -86,8 +89,9 @@ class ParseStringDecompressController:
             self.model.outputs["output"] = output
             self.output_download_element.variant = "success"
             self.output_download_element.disabled = False
-            output_element = js.document.querySelector('#parse_string_decompress-outputs sl-textarea[name=output]')
-            output_element.value = str(np.frombuffer(output[:200], dtype=np.uint8)) + ' ...'
+            output_element = js.document.getElementById('parse_string_decompress-output-details')
+            output_element.innerHTML = f"<pre>{str(np.frombuffer(output[:200], dtype=np.uint8)) + ' ...'}</pre>"
+            output_element.disabled = False
 
         except Exception as error:
             js.globalThis.notify("Error while running pipeline", str(error), "danger", "exclamation-octagon")

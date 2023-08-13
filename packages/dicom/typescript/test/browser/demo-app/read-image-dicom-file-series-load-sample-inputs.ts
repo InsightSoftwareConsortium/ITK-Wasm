@@ -12,8 +12,9 @@ export default async function readImageDicomFileSeriesLoadSampleInputs (model) {
 
   model.options.set('inputImages', inputFiles)
 
-  const dicomElement = document.querySelector('#readImageDicomFileSeriesInputs  sl-input[name=input-images]')
-  dicomElement.value = inputFiles.map((file) => file.path).toString()
+  const dicomElement = document.getElementById('readImageDicomFileSeries-input-images-details')
+  dicomElement.innerHTML = `<pre>${globalThis.escapeHtml(inputFiles.map((file) => file.path).toString())}</pre>`
+  dicomElement.disabled = false
 
   dicomButton.loading = false
 

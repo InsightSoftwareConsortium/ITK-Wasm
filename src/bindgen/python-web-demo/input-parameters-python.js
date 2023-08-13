@@ -6,7 +6,7 @@ function inputParametersPython(functionName, indent, parameter, required) {
   const modelProperty = required ? 'inputs' : 'options'
   const parameterName = snakeCase(parameter.name)
   const inputIdentifier = `${parameterName}_element`
-  switch(parameter.type) {
+  switch (parameter.type) {
     case 'INPUT_TEXT_FILE:FILE':
     case 'INPUT_TEXT_STREAM':
       initResult += `${indent}    ${inputIdentifier} = js.document.querySelector('#${functionName}-inputs input[name=${parameter.name}-file]')\n`
@@ -16,8 +16,8 @@ function inputParametersPython(functionName, indent, parameter, required) {
       methodResult += `${indent}    array_buffer = await files.item(0).arrayBuffer()\n`
       methodResult += `${indent}    ${parameterName}_str = array_buffer.to_string()\n`
       methodResult += `${indent}    self.model.${modelProperty}['${parameterName}'] = ${parameterName}_str\n`
-      methodResult += `${indent}    ${parameterName}_element = js.document.querySelector("#${functionName}-inputs sl-input[name=${parameterName}]")\n`
-      methodResult += `${indent}    ${parameterName}_element.value = ${parameterName}_str[:50] + ' ...'\n\n`
+      methodResult += `${indent}    ${parameterName}_element = js.document.getElementById("${functionName}-${parameterName}-details")\n`
+      methodResult += `${indent}    ${parameterName}_element.innerHTML = f"<pre>{${parameterName}_str[:50] + ' ...'}</pre>"\n\n`
       break
     case 'INPUT_BINARY_FILE:FILE':
     case 'INPUT_BINARY_STREAM':
@@ -28,8 +28,8 @@ function inputParametersPython(functionName, indent, parameter, required) {
       methodResult += `${indent}    array_buffer = await files.item(0).arrayBuffer()\n`
       methodResult += `${indent}    ${parameterName}_bytes = array_buffer.to_bytes()\n`
       methodResult += `${indent}    self.model.${modelProperty}['${parameterName}'] = ${parameterName}_bytes\n`
-      methodResult += `${indent}    ${parameterName}_element = js.document.querySelector("#${functionName}-inputs sl-input[name=${parameterName}]")\n`
-      methodResult += `${indent}    ${parameterName}_element.value = str(np.frombuffer(${parameterName}_bytes[:50], dtype=np.uint8)) + ' ...'\n\n`
+      methodResult += `${indent}    ${parameterName}_element = js.document.getElementById("#${functionName}-${parameterName}-details")\n`
+      methodResult += `${indent}    ${parameterName}_element.innerHTML = f"<pre>{str(np.frombuffer(${parameterName}_bytes[:50], dtype=np.uint8)) + ' ...'}</pre>"\n\n`
       break
     case 'TEXT':
       initResult += `${indent}    ${inputIdentifier} = js.document.querySelector('#${functionName}-inputs sl-input[name=${parameter.name}]')\n`
