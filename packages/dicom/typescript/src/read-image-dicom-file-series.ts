@@ -34,14 +34,14 @@ async function readImageDicomFileSeries(
     throw new Error('"input-images" option must have a length > 1')
   }
 
-  options.inputImages.forEach(async (value) => {
+  await Promise.all(options.inputImages.map(async (value) => {
     let valueFile = value
     if (value instanceof File) {
       const valueBuffer = await value.arrayBuffer()
       valueFile = { path: value.name, data: new Uint8Array(valueBuffer) }
     }
     inputs.push(valueFile as BinaryFile)
-  })
+  }))
 
   if (options.singleSortedSeries) {
     const taskArgsArray = []

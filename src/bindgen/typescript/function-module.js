@@ -279,7 +279,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       if (forNode) {
         functionContent += `    options.${camel}.forEach((value) => {\n`
       } else {
-        functionContent += `    options.${camel}.forEach(async (value) => {\n`
+        functionContent += `    await Promise.all(options.${camel}.map(async (value) => {\n`
       }
       if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
@@ -309,7 +309,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       } else {
         functionContent += '      args.push(value.toString())\n\n'
       }
-      functionContent += '    })\n'
+      functionContent += forNode ? '    })\n' : '    }))\n';
     } else {
       if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
