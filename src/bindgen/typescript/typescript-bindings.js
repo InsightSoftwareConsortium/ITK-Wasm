@@ -178,6 +178,7 @@ const shoelaceScript = `
   import '@shoelace-style/shoelace/dist/components/tag/tag.js';
   import '@shoelace-style/shoelace/dist/components/select/select.js';
   import '@shoelace-style/shoelace/dist/components/option/option.js';
+  import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
 
   import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
   setBasePath('/');

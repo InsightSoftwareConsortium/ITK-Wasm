@@ -51,7 +51,7 @@ onload="document.documentElement.classList.add('sl-theme-dark');"
     <small><i>Given a binary, compress and optionally base64 encode.</i></small><br /><br />
 
     <div id="compress_stringify-inputs"><form action="">
-      <sl-details id="compress_stringify-input-details" summary="input: Input binary" disabled></sl-details>
+      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="compress_stringify-input-details" summary="input: Input binary" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="stringify">stringify - <i>Stringify the output</i></sl-checkbox>
@@ -80,7 +80,7 @@ onload="document.documentElement.classList.add('sl-theme-dark');"
     <small><i>Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.</i></small><br /><br />
 
     <div id="parse_string_decompress-inputs"><form action="">
-      <sl-details id="parse_string_decompress-input-details" summary="input: Compressed input" disabled></sl-details>
+      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="parse_string_decompress-input-details" summary="input: Compressed input" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="parse-string">parse_string - <i>Parse the input string before decompression</i></sl-checkbox>
