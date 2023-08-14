@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "module": "./dist/bundles/bundle-name.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
       "browser": "./dist/bundles/bundle-name.js",
