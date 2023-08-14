@@ -27,6 +27,7 @@
   import '@shoelace-style/shoelace/dist/components/tag/tag.js';
   import '@shoelace-style/shoelace/dist/components/select/select.js';
   import '@shoelace-style/shoelace/dist/components/option/option.js';
+  import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
 
   import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
   setBasePath('/');
@@ -65,7 +66,7 @@
     <small><i>Given a binary, compress and optionally base64 encode.</i></small><br /><br />
 
     <div id="compressStringifyInputs"><form action="">
-      <sl-details id="compressStringify-input-details" summary="input: Input binary" disabled></sl-details>
+      <sl-tooltip content="Use the Upload button below to provide the input"><sl-details id="compressStringify-input-details" summary="input: Input binary" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="stringify">stringify - <i>Stringify the output</i></sl-checkbox>
@@ -94,7 +95,7 @@
     <small><i>Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.</i></small><br /><br />
 
     <div id="parseStringDecompressInputs"><form action="">
-      <sl-details id="parseStringDecompress-input-details" summary="input: Compressed input" disabled></sl-details>
+      <sl-tooltip content="Use the Upload button below to provide the input"><sl-details id="parseStringDecompress-input-details" summary="input: Compressed input" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="input-file" style="display: none"/>
 <br /><br />
       <sl-checkbox name="parse-string">parseString - <i>Parse the input string before decompression</i></sl-checkbox>

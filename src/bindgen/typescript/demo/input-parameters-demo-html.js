@@ -6,11 +6,12 @@ function inputParametersDemoHtml (functionName, prefix, indent, parameter, requi
   const description = parameter.description.replaceAll('"', '&quot;')
   const requiredAttr = required ? 'required ' : ''
   const label = useCamelCase ? camelCase(parameter.name) : snakeCase(parameter.name)
-  switch(parameter.type) {
+  const tooltipContent = `content="Use the Upload button to provide the ${label}"`
+  switch (parameter.type) {
     case 'INPUT_TEXT_FILE':
     case 'INPUT_TEXT_FILE:FILE':
     case 'INPUT_TEXT_STREAM': {
-      result += `${prefix}${indent}<sl-details id="${functionName}-${parameter.name}-details"  summary="${label}: ${description}" disabled></sl-details>\n`
+      result += `${prefix}${indent}<sl-tooltip ${tooltipContent}><sl-details id="${functionName}-${parameter.name}-details"  summary="${label}: ${description}" disabled></sl-details></sl-tooltip>\n`
       const multiple = parameter.itemsExpectedMax > 1 ? 'multiple ' : ''
       result += `${prefix}${indent}<label for="${parameter.name}-file"><sl-button name="${parameter.name}-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" ${multiple} name="${parameter.name}-file" style="display: none"/>\n`
       result += `<br /><br />\n`
@@ -19,7 +20,7 @@ function inputParametersDemoHtml (functionName, prefix, indent, parameter, requi
     case 'INPUT_BINARY_FILE':
     case 'INPUT_BINARY_FILE:FILE':
     case 'INPUT_BINARY_STREAM': {
-      result += `${prefix}${indent}<sl-details id="${functionName}-${parameter.name}-details" summary="${label}: ${description}" disabled></sl-details>\n`
+      result += `${prefix}${indent}<sl-tooltip ${tooltipContent}><sl-details id="${functionName}-${parameter.name}-details" summary="${label}: ${description}" disabled></sl-details></sl-tooltip>\n`
       const multiple = parameter.itemsExpectedMax > 1 ? 'multiple ' : ''
       result += `${prefix}${indent}<label for="${parameter.name}-file"><sl-button name="${parameter.name}-file-button" ${requiredAttr}variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" ${multiple} name="${parameter.name}-file" style="display: none"/>\n`
       result += `<br /><br />\n`
@@ -44,7 +45,7 @@ function inputParametersDemoHtml (functionName, prefix, indent, parameter, requi
     case 'INPUT_JSON':
     case 'INPUT_IMAGE':
     case 'INPUT_MESH':
-      result += `${prefix}${indent}<sl-details id="${functionName}-${parameter.name}-details" summary="${label}: ${description}" disabled></sl-details>\n`
+      result += `${prefix}${indent}<sl-tooltip ${tooltipContent}><sl-details id="${functionName}-${parameter.name}-details" summary="${label}: ${description}" disabled></sl-details></sl-tooltip>\n`
       result += `${prefix}${indent}<label for="${parameter.name}-file"><sl-button name="${parameter.name}-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="${parameter.name}-file" style="display: none"/>\n`
       result += `<br /><br />\n`
       break

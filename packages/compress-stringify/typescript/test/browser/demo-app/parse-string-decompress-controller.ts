@@ -46,7 +46,7 @@ class ParseStringDecompressController  {
 
         const arrayBuffer = await files[0].arrayBuffer()
         model.inputs.set("input", new Uint8Array(arrayBuffer))
-        const input = document.querySelector("#parseStringDecompressInputs sl-input[name=input]")
+        const details = document.getElementById("parseStringDecompress-input-details")
         details.innerHTML = `<pre>${globalThis.escapeHtml(model.inputs.get("input").subarray(0, 50).toString() + ' ...')}</pre>`
         details.disabled = false
     })
