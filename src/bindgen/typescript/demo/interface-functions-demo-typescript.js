@@ -43,7 +43,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   result += `import ${functionName}LoadSampleInputs from "./${interfaceJson.name}-load-sample-inputs.js"\n`
   const loadSampleInputsModulePath = path.join(outputPath, `${interfaceJson.name}-load-sample-inputs.ts`)
   const loadSampleInputsModuleContent = `export default null
-// export default function ${functionName}LoadSampleInputs (model) {
+// export default async function ${functionName}LoadSampleInputs (model) {
 
   // Load sample inputs for the ${functionName} function.
   //
@@ -96,8 +96,10 @@ class ${functionNamePascalCase}Model {
   result += `\n    if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#${functionName}Inputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
-      loadSampleInputsButton.addEventListener('click', (event) => {
-        loadSampleInputs(model)
+      loadSampleInputsButton.addEventListener('click', async (event) => {
+        loadSampleInputsButton.loading = true
+        await loadSampleInputs(model)
+        loadSampleInputsButton.loading = false
       })
     }
 

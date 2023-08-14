@@ -19,7 +19,7 @@ function interfaceFunctionsDemoHtml(interfaceJson, functionName, useCamelCase) {
   const inputsId = useCamelCase ? `${functionName}Inputs` : `${functionName}-inputs`
   result += `\n${prefix}<div id="${inputsId}"><form action="">\n`
   interfaceJson.inputs.forEach((input) => {
-    result += inputParametersDemoHtml(prefix, indent, input, true, useCamelCase)
+    result += inputParametersDemoHtml(functionName, prefix, indent, input, true, useCamelCase)
   })
 
   if (interfaceJson.parameters.length > 1) {
@@ -28,7 +28,7 @@ function interfaceFunctionsDemoHtml(interfaceJson, functionName, useCamelCase) {
       if (parameter.name === "memory-io" || parameter.name === "version") {
         return
       }
-      result += inputParametersDemoHtml(prefix, indent, parameter, false, useCamelCase)
+      result += inputParametersDemoHtml(functionName, prefix, indent, parameter, false, useCamelCase)
     })
   }
 
@@ -42,7 +42,7 @@ function interfaceFunctionsDemoHtml(interfaceJson, functionName, useCamelCase) {
   const outputsId = useCamelCase ? `${functionName}Outputs` : `${functionName}-outputs`
   result += `\n${prefix}<div id="${outputsId}">\n`
   interfaceJson.outputs.forEach((output) => {
-    result += outputDemoHtml(prefix, indent, output)
+    result += outputDemoHtml(functionName, prefix, indent, output)
   })
   result += `${prefix}</div>\n` // id="${functionName}Outputs"
   result += `\n${prefix}</sl-tab-panel>\n\n`

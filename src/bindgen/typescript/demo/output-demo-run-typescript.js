@@ -10,9 +10,9 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
     case 'OUTPUT_TEXT_STREAM': {
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
-      result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-textarea[name=${parameter.name}]')\n`
+      result += `${prefix}${indent}const ${parameterName}Output = document.getElementById("${functionName}-${parameter.name}-details")\n`
       const textDataProp = parameter.type.includes('FILE') ? '.data' : ''
-      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}${textDataProp}.substring(0, 1024).toString() + ' ...'\n`
+      result += `${prefix}${indent}${parameterName}Output.innerHTML = \`<pre>$\{globalThis.escapeHtml(${parameterName}${textDataProp}.substring(0, 1024).toString() + ' ...')}</pre>\`\n`
       result += `${prefix}${indent}${parameterName}Output.disabled = false\n`
     }
       break
@@ -21,28 +21,28 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
     case 'OUTPUT_BINARY_STREAM': {
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
-      result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-textarea[name=${parameter.name}]')\n`
+      result += `${prefix}${indent}const ${parameterName}Output = document.getElementById("${functionName}-${parameter.name}-details")\n`
       const binaryDataProp = parameter.type.includes('FILE') ? '.data' : ''
-      result += `${prefix}${indent}${parameterName}Output.value = ${parameterName}${binaryDataProp}.subarray(0, 1024).toString() + ' ...'\n`
+      result += `${prefix}${indent}${parameterName}Output.innerHTML = \`<pre>$\{globalThis.escapeHtml(${parameterName}${binaryDataProp}.subarray(0, 1024).toString() + ' ...')}</pre>\`\n`
       result += `${prefix}${indent}${parameterName}Output.disabled = false\n`
     }
       break
     case 'OUTPUT_JSON':
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
-      result += `${indent}${indent}const ${parameterName}Details = document.getElementById("${parameter.name}-output")\n`
+      result += `${indent}${indent}const ${parameterName}Details = document.getElementById("${functionName}-${parameter.name}-details")\n`
       result += `${indent}${indent}${parameterName}Details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(${parameterName}, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
       result += `${indent}${indent}${parameterName}Details.disabled = false\n`
-      result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-details[name=${parameter.name}]')\n`
+      result += `${prefix}${indent}const ${parameterName}Output = document.getElementById("${functionName}-${parameter.name}-details")\n`
       break
     case 'OUTPUT_IMAGE':
     case 'OUTPUT_MESH':
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
-      result += `${indent}${indent}const ${parameterName}Details = document.getElementById("${parameter.name}-output")\n`
+      result += `${indent}${indent}const ${parameterName}Details = document.getElementById("${functionName}-${parameter.name}-details")\n`
       result += `${indent}${indent}${parameterName}Details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(${parameterName}, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
       result += `${indent}${indent}${parameterName}Details.disabled = false\n`
-      result += `${prefix}${indent}const ${parameterName}Output = document.querySelector('#${functionName}Outputs sl-details[name=${parameter.name}]')\n`
+      result += `${prefix}${indent}const ${parameterName}Output = document.getElementById('${functionName}-${parameter.name}-details')\n`
       break
     default:
       console.error(`Unexpected interface type: ${parameter.type}`)

@@ -18,6 +18,6 @@ describe('readDicomTags', () => {
 
     cy.get('#readDicomTagsInputs sl-button[name="run"]').click()
 
-    cy.get('#tags-output').should('contain', '0008|0005')
+    cy.get('#readDicomTags-tags-details').should('contain', '0008|0005')
   })
 })

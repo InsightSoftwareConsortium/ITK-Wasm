@@ -49,8 +49,11 @@ class ${functionNamePascalCase}Controller:
         # Inputs
 `
 
-  let methods = `    def on_load_sample_inputs_click(self, event):
-        self.model = self.load_sample_inputs(self.model)
+  let methods = `    async def on_load_sample_inputs_click(self, event):
+        load_sample_inputs_button = js.document.querySelector("#${functionName}-inputs [name=load-sample-inputs]")
+        load_sample_inputs_button.loading = True
+        self.model = await self.load_sample_inputs(self.model)
+        load_sample_inputs_button.loading = False
 
 `
   indent = '    '
@@ -141,7 +144,7 @@ ${runOutput}
 
   const loadSampleInputsDefault = `load_sample_inputs = None
 
-# def load_sample_inputs(model):
+# async def load_sample_inputs(model):
     # Load sample inputs for the ${functionName} function.
     #
     # This function should load sample inputs:

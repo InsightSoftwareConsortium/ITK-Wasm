@@ -16,6 +16,6 @@ describe('structuredReportToHtml', () => {
 
     cy.get('#structuredReportToHtmlInputs sl-button[name="run"]').click()
 
-    cy.get('#html-output-details iframe').should('exist')
+    cy.get('#structuredReportToHtml-html-output-details iframe').should('exist')
   })
 })

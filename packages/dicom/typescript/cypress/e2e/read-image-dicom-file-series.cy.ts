@@ -24,6 +24,6 @@ describe('readImageDicomFileSeries', () => {
 
     cy.get('#readImageDicomFileSeriesInputs sl-button[name="run"]').click()
 
-    cy.get('#sorted-filenames-output').should('contain', 'ImageOrientation.1.dcm')
+    cy.get('#readImageDicomFileSeries-sorted-filenames-details').should('contain', 'ImageOrientation.1.dcm')
   })
 })

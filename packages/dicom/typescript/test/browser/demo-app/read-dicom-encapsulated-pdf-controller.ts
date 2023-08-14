@@ -28,23 +28,25 @@ class ReadDicomEncapsulatedPdfController  {
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#readDicomEncapsulatedPdfInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
-      loadSampleInputsButton.addEventListener('click', (event) => {
-        loadSampleInputs(model)
+      loadSampleInputsButton.addEventListener('click', async (event) => {
+        loadSampleInputsButton.loading = true
+        await loadSampleInputs(model)
+        loadSampleInputsButton.loading = false
       })
     }
 
     // ----------------------------------------------
     // Inputs
     const dicomFileElement = document.querySelector('#readDicomEncapsulatedPdfInputs input[name=dicom-file-file]')
-    dicomFileElement.addEventListener('change', (event) => {
+    dicomFileElement.addEventListener('change', async (event) => {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        files[0].arrayBuffer().then((arrayBuffer) => {
-            model.inputs.set("dicomFile", { data: new Uint8Array(arrayBuffer), path: files[0].name })
-            const input = document.querySelector("#readDicomEncapsulatedPdfInputs sl-input[name=dicom-file]")
-            input.value = model.inputs.get("dicomFile").data.subarray(0, 50).toString() + ' ...'
-        })
+        const arrayBuffer = await files[0].arrayBuffer()
+        model.inputs.set("dicomFile", { data: new Uint8Array(arrayBuffer), path: files[0].name })
+        const details = document.getElementById("readDicomEncapsulatedPdf-dicom-file-details")
+        details.innerHTML = `<pre>${globalThis.escapeHtml(model.inputs.get("dicomFile").data.subarray(0, 50).toString() + ' ...')}</pre>`
+        details.disabled = false
     })
 
     // ----------------------------------------------
@@ -141,7 +143,7 @@ class ReadDicomEncapsulatedPdfController  {
     pdfBinaryDetails.summary = "Output pdf"
     pdfBinaryDetails.disabled = true
     pdfBinaryOutputs?.replaceChild(pdfBinaryDetails, pdfBinaryOutputs?.firstElementChild)
-    pdfBinaryDetails.id = 'pdf-binary-output-details'
+    pdfBinaryDetails.id = 'readDicomEncapsulatedPdf-pdf-binary-output-details'
     // End customization
 
     const runButton = document.querySelector('#readDicomEncapsulatedPdfInputs sl-button[name="run"]')

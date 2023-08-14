@@ -19,6 +19,6 @@ describe('readDicomEncapsulatedPdf', () => {
 
     cy.get('#readDicomEncapsulatedPdfInputs sl-button[name="run"]').click()
 
-    cy.get('#pdf-binary-output-details object[type="application/pdf"]').should('exist')
+    cy.get('#readDicomEncapsulatedPdf-pdf-binary-output-details object[type="application/pdf"]').should('exist')
   })
 })

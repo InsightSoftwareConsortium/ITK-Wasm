@@ -17,6 +17,7 @@ jobs:
       run: |
         # Workaround for https://github.com/actions/virtual-environments/issues/709
         df -h
+        sudo apt-get update
         sudo apt-get remove -y '^dotnet-.*'
         sudo apt-get remove -y '^llvm-.*'
         sudo apt-get remove -y 'php.*'
@@ -54,6 +55,7 @@ jobs:
       run: |
         # Workaround for https://github.com/actions/virtual-environments/issues/709
         df -h
+        sudo apt-get update
         sudo apt-get remove -y '^dotnet-.*'
         sudo apt-get remove -y '^llvm-.*'
         sudo apt-get remove -y 'php.*'
@@ -127,6 +129,7 @@ jobs:
       run: |
         # Workaround for https://github.com/actions/virtual-environments/issues/709
         df -h
+        sudo apt-get update
         sudo apt-get remove -y '^dotnet-.*'
         sudo apt-get remove -y '^llvm-.*'
         sudo apt-get remove -y 'php.*'
@@ -207,6 +210,7 @@ jobs:
       run: |
         # Workaround for https://github.com/actions/virtual-environments/issues/709
         df -h
+        sudo apt-get update
         sudo apt-get remove -y '^dotnet-.*'
         sudo apt-get remove -y '^llvm-.*'
         sudo apt-get remove -y 'php.*'
@@ -235,6 +239,7 @@ jobs:
       run: |
         # Workaround for https://github.com/actions/virtual-environments/issues/709
         df -h
+        sudo apt-get update
         sudo apt-get remove -y '^dotnet-.*'
         sudo apt-get remove -y '^llvm-.*'
         sudo apt-get remove -y 'php.*'
@@ -270,6 +275,7 @@ jobs:
       run: |
         # Workaround for https://github.com/actions/virtual-environments/issues/709
         df -h
+        sudo apt-get update
         sudo apt-get remove -y '^dotnet-.*'
         sudo apt-get remove -y '^llvm-.*'
         sudo apt-get remove -y 'php.*'
@@ -308,6 +314,7 @@ jobs:
       run: |
         # Workaround for https://github.com/actions/virtual-environments/issues/709
         df -h
+        sudo apt-get update
         sudo apt-get remove -y '^dotnet-.*'
         sudo apt-get remove -y '^llvm-.*'
         sudo apt-get remove -y 'php.*'
@@ -347,6 +354,7 @@ jobs:
       run: |
         # Workaround for https://github.com/actions/virtual-environments/issues/709
         df -h
+        sudo apt-get update
         sudo apt-get remove -y '^dotnet-.*'
         sudo apt-get remove -y '^llvm-.*'
         sudo apt-get remove -y 'php.*'
@@ -387,6 +395,7 @@ jobs:
       run: |
         # Workaround for https://github.com/actions/virtual-environments/issues/709
         df -h
+        sudo apt-get update
         sudo apt-get remove -y '^dotnet-.*'
         sudo apt-get remove -y '^llvm-.*'
         sudo apt-get remove -y 'php.*'

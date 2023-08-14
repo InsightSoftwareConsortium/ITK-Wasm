@@ -16,7 +16,7 @@ describe('structuredReportToText', () => {
 
     cy.get('#structuredReportToTextInputs sl-button[name="run"]').click()
 
-    cy.get('#structuredReportToTextOutputs sl-textarea[name="output-text"]').invoke('prop', 'value').should('contain', 'Comprehensive SR Document')
-    cy.get('#structuredReportToTextOutputs sl-textarea[name="output-text"]').invoke('prop', 'value').should('contain', 'Breast Imaging Report')
+    cy.get('#structuredReportToText-output-text-details').should('contain', 'Comprehensive SR Document')
+    cy.get('#structuredReportToText-output-text-details').should('contain', 'Breast Imaging Report')
   })
 })

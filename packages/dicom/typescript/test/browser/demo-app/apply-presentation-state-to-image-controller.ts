@@ -31,8 +31,10 @@ class ApplyPresentationStateToImageController  {
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#applyPresentationStateToImageInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
-      loadSampleInputsButton.addEventListener('click', (event) => {
-        loadSampleInputs(model)
+      loadSampleInputsButton.addEventListener('click', async (event) => {
+        loadSampleInputsButton.loading = true
+        await loadSampleInputs(model)
+        loadSampleInputsButton.loading = false
       })
     }
 
@@ -45,8 +47,9 @@ class ApplyPresentationStateToImageController  {
 
         const arrayBuffer = await files[0].arrayBuffer()
         model.inputs.set("imageIn", { data: new Uint8Array(arrayBuffer), path: files[0].name })
-        const input = document.querySelector("#applyPresentationStateToImageInputs sl-input[name=image-in]")
-        input.value = model.inputs.get("imageIn").data.subarray(0, 50).toString() + ' ...'
+        const details = document.getElementById("applyPresentationStateToImage-image-in-details")
+        details.innerHTML = `<pre>${globalThis.escapeHtml(model.inputs.get("imageIn").data.subarray(0, 50).toString() + ' ...')}</pre>`
+        details.disabled = false
     })
 
     const presentationStateFileElement = document.querySelector('#applyPresentationStateToImageInputs input[name=presentation-state-file-file]')
@@ -56,8 +59,9 @@ class ApplyPresentationStateToImageController  {
 
         const arrayBuffer = await files[0].arrayBuffer()
         model.inputs.set("presentationStateFile", { data: new Uint8Array(arrayBuffer), path: files[0].name })
-        const input = document.querySelector("#applyPresentationStateToImageInputs sl-input[name=presentation-state-file]")
-        input.value = model.inputs.get("presentationStateFile").data.subarray(0, 50).toString() + ' ...'
+        const details = document.getElementById("applyPresentationStateToImage-presentation-state-file-details")
+        details.innerHTML = `<pre>${globalThis.escapeHtml(model.inputs.get("presentationStateFile").data.subarray(0, 50).toString() + ' ...')}</pre>`
+        details.disabled = false
     })
 
     // ----------------------------------------------
@@ -145,18 +149,18 @@ class ApplyPresentationStateToImageController  {
         model.outputs.set("presentationStateOutStream", presentationStateOutStream)
         presentationStateOutStreamOutputDownload.variant = "success"
         presentationStateOutStreamOutputDownload.disabled = false
-        const presentationStateOutStreamDetails = document.getElementById("presentation-state-out-stream-output")
+        const presentationStateOutStreamDetails = document.getElementById("applyPresentationStateToImage-presentation-state-out-stream-details")
         presentationStateOutStreamDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(presentationStateOutStream, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         presentationStateOutStreamDetails.disabled = false
-        const presentationStateOutStreamOutput = document.querySelector('#applyPresentationStateToImageOutputs sl-details[name=presentation-state-out-stream]')
+        const presentationStateOutStreamOutput = document.getElementById("applyPresentationStateToImage-presentation-state-out-stream-details")
 
         model.outputs.set("outputImage", outputImage)
         outputImageOutputDownload.variant = "success"
         outputImageOutputDownload.disabled = false
-        const outputImageDetails = document.getElementById("output-image-output")
+        const outputImageDetails = document.getElementById("applyPresentationStateToImage-output-image-details")
         outputImageDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(outputImage, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         outputImageDetails.disabled = false
-        const outputImageOutput = document.querySelector('#applyPresentationStateToImageOutputs sl-details[name=output-image]')
+        const outputImageOutput = document.getElementById('applyPresentationStateToImage-output-image-details')
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

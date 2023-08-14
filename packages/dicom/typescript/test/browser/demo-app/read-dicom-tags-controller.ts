@@ -30,8 +30,10 @@ class ReadDicomTagsController  {
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#readDicomTagsInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
-      loadSampleInputsButton.addEventListener('click', (event) => {
-        loadSampleInputs(model)
+      loadSampleInputsButton.addEventListener('click', async (event) => {
+        loadSampleInputsButton.loading = true
+        await loadSampleInputs(model)
+        loadSampleInputsButton.loading = false
       })
     }
 
@@ -44,8 +46,9 @@ class ReadDicomTagsController  {
 
         const arrayBuffer = await files[0].arrayBuffer()
         model.inputs.set("dicomFile", { data: new Uint8Array(arrayBuffer), path: files[0].name })
-        const input = document.querySelector("#readDicomTagsInputs sl-input[name=dicom-file]")
-        input.value = model.inputs.get("dicomFile").data.subarray(0, 50).toString() + ' ...'
+        const details = document.getElementById("readDicomTags-dicom-file-details")
+        details.innerHTML = `<pre>${globalThis.escapeHtml(model.inputs.get("dicomFile").data.subarray(0, 50).toString() + ' ...')}</pre>`
+        details.disabled = false
     })
 
     // ----------------------------------------------
@@ -57,7 +60,7 @@ class ReadDicomTagsController  {
 
         const arrayBuffer = await files[0].arrayBuffer()
         model.options.set("tagsToRead", JSON.parse(new TextDecoder().decode(new Uint8Array(arrayBuffer))))
-        const details = document.getElementById("tags-to-read-input")
+        const details = document.getElementById("readDicomTags-tags-to-read-details")
         details.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(model.options.get("tagsToRead"), globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         details.disabled = false
     })
@@ -100,10 +103,10 @@ class ReadDicomTagsController  {
         model.outputs.set("tags", tags)
         tagsOutputDownload.variant = "success"
         tagsOutputDownload.disabled = false
-        const tagsDetails = document.getElementById("tags-output")
+        const tagsDetails = document.getElementById("readDicomTags-tags-details")
         tagsDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(tags, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         tagsDetails.disabled = false
-        const tagsOutput = document.querySelector('#readDicomTagsOutputs sl-details[name=tags]')
+        const tagsOutput = document.getElementById("readDicomTags-tags-details")
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

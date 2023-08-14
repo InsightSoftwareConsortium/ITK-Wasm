@@ -1,12 +1,11 @@
 import js
 
-# load_sample_inputs = None
-
-def load_sample_inputs(model):
+async def load_sample_inputs(model):
     sample_input = bytes([222, 173, 190, 239])
     model.inputs['input'] = sample_input
-    input_element = js.document.querySelector('#compress_stringify-inputs sl-input[name=input]')
-    input_element.value = str(sample_input)
+    input_element = js.document.getElementById('compress_stringify-input-details')
+    input_element.innerHTML = f"<pre>{str(sample_input)}</pre>"
+    input_element.disabled = False
 
     stringify = True
     model.options['stringify'] = stringify

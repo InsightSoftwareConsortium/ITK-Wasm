@@ -24,6 +24,6 @@ describe('applyPresentationStateToImage', () => {
 
     cy.get('#applyPresentationStateToImageInputs sl-button[name="run"]').click()
 
-    cy.get('#presentation-state-out-stream-output').should('contain', 'PresentationLabel')
+    cy.get('#applyPresentationStateToImage-presentation-state-out-stream-details').should('contain', 'PresentationLabel')
   })
 })
