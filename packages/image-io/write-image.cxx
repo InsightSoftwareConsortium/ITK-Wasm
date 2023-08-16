@@ -74,6 +74,8 @@
 #endif
 #include "itkWasmImageIO.h"
 
+#define PIPELINE_NAME (#IMAGE_IO_KEBAB_NAME "write-image")
+
 #include "itkPipeline.h"
 #include "itkOutputImage.h"
 #include "itkWasmImageIOBase.h"
@@ -134,20 +136,20 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, const std::string & outpu
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("write-image", "Write an itk-wasm file format converted to an image file format", argc, argv);
+  itk::wasm::Pipeline pipeline("PIPELINE_NAME", "Write an itk-wasm file format converted to an image file format", argc, argv);
 
   itk::wasm::InputImageIO inputImageIO;
-  pipeline.add_option("input-image", inputImageIO, "Input image")->required();
+  pipeline.add_option("input-image", inputImageIO, "Input image")->required()->type_name("INPUT_IMAGE");
 
   std::string outputFileName;
-  pipeline.add_option("output-image", outputFileName, "Output image")->required();
+  pipeline.add_option("output-image", outputFileName, "Output image")->required()->type_name("OUTPUT_BINARY_FILE");
 
   bool quiet = false;
   pipeline.add_flag("-q,--quiet", quiet, "Less verbose output");
-  
+
   bool useCompression = false;
   pipeline.add_flag("-c,--use-compression", quiet, "Use compression in the written file");
-  
+
   ITK_WASM_PARSE(pipeline);
 
 #if IMAGE_IO_CLASS == 0

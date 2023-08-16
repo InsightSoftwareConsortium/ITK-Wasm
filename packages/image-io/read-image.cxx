@@ -74,6 +74,8 @@
 #endif
 #include "itkWasmImageIO.h"
 
+#define PIPELINE_NAME (#IMAGE_IO_KEBAB_NAME "read-image")
+
 #include "itkPipeline.h"
 #include "itkOutputImage.h"
 
@@ -101,17 +103,17 @@ int readImage(const std::string & inputFileName, itk::wasm::OutputImageIO & outp
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("read-image", "Read an image file format and convert it to the itk-wasm file format", argc, argv);
+  itk::wasm::Pipeline pipeline("PIPELINE_NAME", "Read an image file format and convert it to the itk-wasm file format", argc, argv);
 
   std::string inputFileName;
-  pipeline.add_option("input-image", inputFileName, "Input image")->required()->check(CLI::ExistingFile);
+  pipeline.add_option("input-image", inputFileName, "Input image")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
 
   itk::wasm::OutputImageIO outputImageIO;
-  pipeline.add_option("OutputImage", outputImageIO, "Output image")->required();
+  pipeline.add_option("output-image", outputImageIO, "Output image")->required()->type_name("OUTPUT_IMAGE");
 
   bool quiet = false;
   pipeline.add_flag("-q,--quiet", quiet, "Less verbose output");
-  
+
   ITK_WASM_PARSE(pipeline);
 
 #if IMAGE_IO_CLASS == 0
