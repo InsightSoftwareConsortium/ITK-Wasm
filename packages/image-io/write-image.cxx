@@ -19,6 +19,7 @@
 #include "itkImageIOBase.h"
 #include "itkImage.h"
 #include "itkInputImageIO.h"
+#include "itkOutputTextStream.h"
 
 #ifndef IMAGE_IO_CLASS
 #error "IMAGE_IO_CLASS definition must be provided"
@@ -74,7 +75,8 @@
 #endif
 #include "itkWasmImageIO.h"
 
-#define PIPELINE_NAME (#IMAGE_IO_KEBAB_NAME "write-image")
+#define VALUE(string) #string
+#define TO_LITERAL(string) VALUE(string)
 
 #include "itkPipeline.h"
 #include "itkOutputImage.h"
@@ -82,18 +84,19 @@
 #include "itkImageIOBase.h"
 
 template <typename TImageIO>
-int writeImage(itk::wasm::InputImageIO & inputImageIO, const std::string & outputFileName, bool quiet, bool useCompression)
+int writeImage(itk::wasm::InputImageIO & inputImageIO, itk::wasm::OutputTextStream & couldWrite, const std::string & outputFileName, bool informationOnly, bool useCompression)
 {
   using ImageIOType = TImageIO;
 
   auto imageIO = ImageIOType::New();
 
-  if(!imageIO->CanWriteFile(outputFileName.c_str()))
+  if (imageIO->CanWriteFile(outputFileName.c_str()))
   {
-    if(!quiet)
-    {
-      std::cerr << "Could not write file: " << outputFileName << std::endl;
-    }
+    couldWrite.Get() << "true\n";
+  }
+  else
+  {
+    couldWrite.Get() << "false\n";
     return EXIT_FAILURE;
   }
 
@@ -129,75 +132,83 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, const std::string & outpu
   imageIO->SetIORegion( ioRegion );
 
   imageIO->WriteImageInformation();
-  imageIO->Write( reinterpret_cast< const void * >( &(inputWasmImageIOBase->GetPixelDataContainer()->at(0)) ));
+  if (!informationOnly)
+  {
+    imageIO->Write( reinterpret_cast< const void * >( &(inputWasmImageIOBase->GetPixelDataContainer()->at(0)) ));
+  }
 
   return EXIT_SUCCESS;
 }
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("PIPELINE_NAME", "Write an itk-wasm file format converted to an image file format", argc, argv);
+  const char * pipelineName = TO_LITERAL(IMAGE_IO_KEBAB_NAME) "-write-image";
+  itk::wasm::Pipeline pipeline(pipelineName, "Write an itk-wasm file format converted to an image file format", argc, argv);
 
   itk::wasm::InputImageIO inputImageIO;
-  pipeline.add_option("input-image", inputImageIO, "Input image")->required()->type_name("INPUT_IMAGE");
+  pipeline.add_option("image", inputImageIO, "Input image")->required()->type_name("INPUT_IMAGE");
+
+  itk::wasm::OutputTextStream couldWrite;
+  pipeline.add_option("could-write", couldWrite, "Whether the input could be written. If false, the output image is not valid.")->type_name("OUTPUT_JSON");
+
 
   std::string outputFileName;
-  pipeline.add_option("output-image", outputFileName, "Output image")->required()->type_name("OUTPUT_BINARY_FILE");
+  pipeline.add_option("serialized-image", outputFileName, "Output image serialized in the file format.")->required()->type_name("OUTPUT_BINARY_FILE");
 
-  bool quiet = false;
-  pipeline.add_flag("-q,--quiet", quiet, "Less verbose output");
+  bool informationOnly = false;
+  pipeline.add_flag("-i,--information-only", informationOnly, "Only read image metadata -- do not read pixel data.");
 
   bool useCompression = false;
-  pipeline.add_flag("-c,--use-compression", quiet, "Use compression in the written file");
+  pipeline.add_flag("-c,--use-compression", informationOnly, "Use compression in the written file");
 
   ITK_WASM_PARSE(pipeline);
 
 #if IMAGE_IO_CLASS == 0
-  return writeImage<itk::PNGImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::PNGImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 1
-  return writeImage<itk::MetaImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::MetaImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 2
-  return writeImage<itk::TIFFImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::TIFFImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 3
-  return writeImage<itk::NiftiImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::NiftiImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 4
-  return writeImage<itk::JPEGImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::JPEGImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 5
-  return writeImage<itk::NrrdImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::NrrdImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 6
-  return writeImage<itk::VTKImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::VTKImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 7
-  return writeImage<itk::BMPImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::BMPImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 8
-  return writeImage<itk::HDF5ImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::HDF5ImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 9
-  return writeImage<itk::MINCImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::MINCImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 10
-  return writeImage<itk::MRCImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::MRCImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 11
-  return writeImage<itk::LSMImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::LSMImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 12
-  return writeImage<itk::MGHImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::MGHImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 13
-  return writeImage<itk::BioRadImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::BioRadImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 14
-  return writeImage<itk::GiplImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::GiplImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 15
-  return writeImage<itk::GE4ImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::GE4ImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 16
-  return writeImage<itk::GE5ImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::GE5ImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 17
-  return writeImage<itk::GEAdwImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::GEAdwImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 18
-  return writeImage<itk::GDCMImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::GDCMImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 19
-  return writeImage<itk::ScancoImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::ScancoImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 20
-  return writeImage<itk::FDFImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::FDFImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 21
-  return writeImage<itk::WasmImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::WasmImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #elif IMAGE_IO_CLASS == 22
-  return writeImage<itk::WasmZstdImageIO>(inputImageIO, outputFileName, quiet, useCompression);
+  return writeImage<itk::WasmZstdImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #else
 #error "Unsupported IMAGE_IO_CLASS"
 #endif

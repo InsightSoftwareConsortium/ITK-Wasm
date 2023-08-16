@@ -19,6 +19,7 @@
 #include "itkImageIOBase.h"
 #include "itkImage.h"
 #include "itkOutputImageIO.h"
+#include "itkOutputTextStream.h"
 
 #ifndef IMAGE_IO_CLASS
 #error "IMAGE_IO_CLASS definition must be provided"
@@ -74,24 +75,28 @@
 #endif
 #include "itkWasmImageIO.h"
 
-#define PIPELINE_NAME (#IMAGE_IO_KEBAB_NAME "read-image")
+#define VALUE(string) #string
+#define TO_LITERAL(string) VALUE(string)
 
 #include "itkPipeline.h"
 #include "itkOutputImage.h"
 
 template <typename TImageIO>
-int readImage(const std::string & inputFileName, itk::wasm::OutputImageIO & outputImageIO, bool quiet)
+int readImage(const std::string & inputFileName, itk::wasm::OutputTextStream & couldRead, itk::wasm::OutputImageIO & outputImageIO, bool informationOnly)
 {
   using ImageIOType = TImageIO;
 
   auto imageIO = ImageIOType::New();
 
-  if(!imageIO->CanReadFile(inputFileName.c_str()))
+  outputImageIO.SetInformationOnly(informationOnly);
+
+  if (imageIO->CanReadFile(inputFileName.c_str()))
   {
-    if(!quiet)
-    {
-      std::cerr << "Could not read file: " << inputFileName << std::endl;
-    }
+    couldRead.Get() << "true\n";
+  }
+  else
+  {
+    couldRead.Get() << "false\n";
     return EXIT_FAILURE;
   }
 
@@ -103,65 +108,69 @@ int readImage(const std::string & inputFileName, itk::wasm::OutputImageIO & outp
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("PIPELINE_NAME", "Read an image file format and convert it to the itk-wasm file format", argc, argv);
+  const char * pipelineName = TO_LITERAL(IMAGE_IO_KEBAB_NAME) "-read-image";
+  itk::wasm::Pipeline pipeline(pipelineName, "Read an image file format and convert it to the itk-wasm file format", argc, argv);
 
   std::string inputFileName;
-  pipeline.add_option("input-image", inputFileName, "Input image")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+  pipeline.add_option("serialized-image", inputFileName, "Input image serialized in the file format")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+
+  itk::wasm::OutputTextStream couldRead;
+  pipeline.add_option("could-read", couldRead, "Whether the input could be read. If false, the output image is not valid.")->type_name("OUTPUT_JSON");
 
   itk::wasm::OutputImageIO outputImageIO;
-  pipeline.add_option("output-image", outputImageIO, "Output image")->required()->type_name("OUTPUT_IMAGE");
+  pipeline.add_option("image", outputImageIO, "Output image")->required()->type_name("OUTPUT_IMAGE");
 
-  bool quiet = false;
-  pipeline.add_flag("-q,--quiet", quiet, "Less verbose output");
+  bool informationOnly = false;
+  pipeline.add_flag("-i,--information-only", informationOnly, "Only read image metadata -- do not read pixel data.");
 
   ITK_WASM_PARSE(pipeline);
 
 #if IMAGE_IO_CLASS == 0
-  return readImage<itk::PNGImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::PNGImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 1
-  return readImage<itk::MetaImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::MetaImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 2
-  return readImage<itk::TIFFImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::TIFFImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 3
-  return readImage<itk::NiftiImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::NiftiImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 4
-  return readImage<itk::JPEGImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::JPEGImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 5
-  return readImage<itk::NrrdImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::NrrdImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 6
-  return readImage<itk::VTKImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::VTKImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 7
-  return readImage<itk::BMPImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::BMPImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 8
-  return readImage<itk::HDF5ImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::HDF5ImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 9
-  return readImage<itk::MINCImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::MINCImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 10
-  return readImage<itk::MRCImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::MRCImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 11
-  return readImage<itk::LSMImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::LSMImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 12
-  return readImage<itk::MGHImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::MGHImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 13
-  return readImage<itk::BioRadImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::BioRadImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 14
-  return readImage<itk::GiplImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::GiplImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 15
-  return readImage<itk::GE4ImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::GE4ImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 16
-  return readImage<itk::GE5ImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::GE5ImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 17
-  return readImage<itk::GEAdwImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::GEAdwImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 18
-  return readImage<itk::GDCMImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::GDCMImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 19
-  return readImage<itk::ScancoImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::ScancoImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 20
-  return readImage<itk::FDFImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::FDFImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 21
-  return readImage<itk::WasmImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::WasmImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #elif IMAGE_IO_CLASS == 22
-  return readImage<itk::WasmZstdImageIO>(inputFileName, outputImageIO, quiet);
+  return readImage<itk::WasmZstdImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #else
 #error "Unsupported IMAGE_IO_CLASS"
 #endif

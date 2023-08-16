@@ -46,6 +46,12 @@ namespace wasm
 class OutputImageIO
 {
 public:
+
+  /** Set whether to only read image metadata. Do not read the pixel data. */
+  void SetInformationOnly(bool informationOnly) {
+    this->m_InformationOnly = informationOnly;
+  }
+
   void Set(ImageIOBase * imageIO) {
     this->m_ImageIO = imageIO;
   }
@@ -76,13 +82,19 @@ public:
     wasmImageIOBase->SetImageIO(this->m_ImageIO);
     setMemoryStoreOutputDataObject(0, index, wasmImageIOBase);
 
+    const auto directionAddress = reinterpret_cast< size_t >( &(wasmImageIOBase->GetDirectionContainer()->at(0)) );
+    const auto directionSize = wasmImageIOBase->GetDirectionContainer()->size() * sizeof(double);
+    setMemoryStoreOutputArray(0, index, 1, directionAddress, directionSize);
+
+    if (this->m_InformationOnly)
+    {
+      return;
+    }
+
     const auto dataAddress = reinterpret_cast< size_t >( &(wasmImageIOBase->GetPixelDataContainer()->at(0)) );
     const auto dataSize = wasmImageIOBase->GetPixelDataContainer()->size();
     setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);
 
-    const auto directionAddress = reinterpret_cast< size_t >( &(wasmImageIOBase->GetDirectionContainer()->at(0)) );
-    const auto directionSize = wasmImageIOBase->GetDirectionContainer()->size() * sizeof(double);
-    setMemoryStoreOutputArray(0, index, 1, directionAddress, directionSize);
     }
 #else
     std::cerr << "Memory IO not supported" << std::endl;
@@ -117,12 +129,19 @@ public:
         {
         ioRegion.SetSize(dim, this->m_ImageIO->GetDimensions( dim ));
         }
+
       this->m_ImageIO->SetIORegion( ioRegion );
       this->m_ImageIO->SetUseStreamedReading(false);
-      this->m_ImageIO->Read(reinterpret_cast< void * >( &(pixelData.at(0)) ));
 
       wasmImageIO->SetFileName(this->m_Identifier);
       wasmImageIO->WriteImageInformation();
+
+      if (this->m_InformationOnly)
+      {
+        return;
+      }
+
+      this->m_ImageIO->Read(reinterpret_cast< void * >( &(pixelData.at(0)) ));
       wasmImageIO->SetIORegion( ioRegion );
       wasmImageIO->Write(reinterpret_cast< void * >( &(pixelData.at(0)) ));
     }
@@ -136,6 +155,8 @@ protected:
   typename ImageIOBase::Pointer m_ImageIO;
 
   std::string m_Identifier;
+
+  bool m_InformationOnly{ false };
 };
 
 bool lexical_cast(const std::string &input, OutputImageIO &outputImageIO)
