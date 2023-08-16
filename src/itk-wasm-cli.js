@@ -13,7 +13,7 @@ import pythonWebDemoBindgen from './bindgen/python-web-demo/python-web-demo-bind
 
 const program = new Command()
 
-const defaultImageTag = '20230809-f5d68877'
+const defaultImageTag = '20230815-369e670d'
 
 function processCommonOptions(wasiDefault=false) {
   const options = program.opts()
