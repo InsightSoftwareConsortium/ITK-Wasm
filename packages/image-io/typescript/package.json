@@ -1,6 +1,6 @@
 {
   "name": "itk-image-io",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
   "module": "./dist/bundles/itk-image-io.js",
