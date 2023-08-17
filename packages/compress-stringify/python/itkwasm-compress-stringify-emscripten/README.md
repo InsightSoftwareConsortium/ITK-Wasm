@@ -4,7 +4,7 @@
 
 Zstandard compression and decompression and base64 encoding and decoding in WebAssembly. Emscripten implementation.
 
-This package provides the Emscripten WebAssembly implementation. It is usually not called directly. Please use the [`itkwasm-compress-stringify`](https://pypi.org/project/itkwasm-compress-stringify/) instead.
+This package provides the Emscripten WebAssembly implementation. It is usually not called directly. Please use [`itkwasm-compress-stringify`](https://pypi.org/project/itkwasm-compress-stringify/) instead.
 
 
 ## Installation

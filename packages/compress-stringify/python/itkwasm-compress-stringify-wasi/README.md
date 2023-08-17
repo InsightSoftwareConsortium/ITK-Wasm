@@ -4,7 +4,7 @@
 
 Zstandard compression and decompression and base64 encoding and decoding in WebAssembly. WASI implementation.
 
-This package provides the WASI WebAssembly implementation. It is usually not called directly. Please use the [`itkwasm-compress-stringify`](https://pypi.org/project/itkwasm-compress-stringify/) instead.
+This package provides the WASI WebAssembly implementation. It is usually not called directly. Please use [`itkwasm-compress-stringify`](https://pypi.org/project/itkwasm-compress-stringify/) instead.
 
 
 ## Installation

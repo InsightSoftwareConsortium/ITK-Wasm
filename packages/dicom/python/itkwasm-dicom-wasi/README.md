@@ -4,7 +4,7 @@
 
 Read files and images related to DICOM file format. WASI implementation.
 
-This package provides the WASI WebAssembly implementation. It is usually not called directly. Please use the [`itkwasm-dicom`](https://pypi.org/project/itkwasm-dicom/) instead.
+This package provides the WASI WebAssembly implementation. It is usually not called directly. Please use [`itkwasm-dicom`](https://pypi.org/project/itkwasm-dicom/) instead.
 
 
 ## Installation

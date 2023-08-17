@@ -4,9 +4,9 @@
 
 Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.
 
-[**Example**](https://itk-compress-stringify-py-app.on.fleek.co/)
+[💻 **Live API Demo** ✨](https://itk-compress-stringify-py-app.on.fleek.co/)
 
-[**Documentation**](https://itk-wasm-compress-stringify-python-docs.on.fleek.co/)
+[🕮 **Documentation** 📚](https://itk-wasm-compress-stringify-python-docs.on.fleek.co/)
 
 ## Installation
 
