@@ -8,7 +8,7 @@ function wasiPackageReadme(packageName, packageDescription, packageDir) {
   readme += `\n${packageDescription}\n`
 
   const dispatchPackage = packageName.replace(/-wasi$/, '')
-  readme += `\nThis package provides the WASI WebAssembly implementation. It is usually not called directly. Please use the [\`${dispatchPackage}\`](https://pypi.org/project/${dispatchPackage}/) instead.\n\n`
+  readme += `\nThis package provides the WASI WebAssembly implementation. It is usually not called directly. Please use [\`${dispatchPackage}\`](https://pypi.org/project/${dispatchPackage}/) instead.\n\n`
   readme += `\n## Installation\n
 \`\`\`sh
 pip install ${packageName}
