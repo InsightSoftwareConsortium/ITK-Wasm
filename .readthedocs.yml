@@ -13,8 +13,8 @@ build:
     - fonts-roboto
 
 sphinx:
-  configuration: packages/core/python/itkwasm/docs/conf.py
+  configuration: docs/conf.py
 
 python:
    install:
-   - requirements: packages/core/python/itkwasm/docs/requirements.txt
+   - requirements: docs/requirements.txt
