@@ -156,24 +156,3 @@ jobs:
           ls dist
           python -m pip install -e .
           pytest --dist-dir=./dist --rt=chrome
-
-  build-sphinx-docs:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Install dependencies
-        working-directory: ./packages/core/python/itkwasm
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e "."
-          python -m pip install hatch itk pytest
-      - name: Build Sphinx documentation
-        working-directory: ./packages/core/python/itkwasm/docs
-        run: |
-          python -m pip install -r requirements.txt
-          make html
