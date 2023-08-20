@@ -1,6 +1,5 @@
-// Generated file. To retain edits, remove this comment.
-
-
+import CompareImagesMetric from './compare-images-metric.js'
+export type { CompareImagesMetric }
 
 import CompareDoubleImagesNodeResult from './compare-double-images-node-result.js'
 export type { CompareDoubleImagesNodeResult }

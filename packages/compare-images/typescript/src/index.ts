@@ -1,8 +1,8 @@
-// Generated file. To retain edits, remove this comment.
-
 export * from './pipelines-base-url.js'
 export * from './pipeline-worker-url.js'
 
+import CompareImagesMetric from './compare-images-metric.js'
+export type { CompareImagesMetric }
 
 import CompareDoubleImagesResult from './compare-double-images-result.js'
 export type { CompareDoubleImagesResult }

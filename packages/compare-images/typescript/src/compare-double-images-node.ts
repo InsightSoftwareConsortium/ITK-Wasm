@@ -1,5 +1,3 @@
-// Generated file. To retain edits, remove this comment.
-
 import {
   Image,
   JsonObject,
@@ -11,7 +9,7 @@ import {
 
 import CompareDoubleImagesOptions from './compare-double-images-options.js'
 import CompareDoubleImagesNodeResult from './compare-double-images-node-result.js'
-
+import CompareImagesMetric from './compare-images-metric.js'
 
 import path from 'path'
 
@@ -96,7 +94,7 @@ async function compareDoubleImagesNode(
   }
 
   const result = {
-    metrics: (outputs[0].data as JsonObject).data,
+    metrics: (outputs[0].data as JsonObject).data as CompareImagesMetric,
     differenceImage: outputs[1].data as Image,
     differenceUchar2dImage: outputs[2].data as Image,
   }

@@ -1,10 +1,10 @@
-// Generated file. To retain edits, remove this comment.
+import CompareImagesMetric from './compare-images-metric.js'
 
 import { Image } from 'itk-wasm'
 
 interface CompareDoubleImagesNodeResult {
   /** Metrics for the baseline with the fewest number of pixels outside the tolerances. */
-  metrics: any
+  metrics: CompareImagesMetric
 
   /** Absolute difference image */
   differenceImage: Image
