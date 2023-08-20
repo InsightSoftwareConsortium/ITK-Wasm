@@ -63,6 +63,7 @@
     "test:cliTest": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/stdout-stderr-pipeline test",
     "test:cliBindgen:typescript": "node src/itk-wasm-cli.js -b emscripten-build -s ./test/pipelines/bindgen-interface-types-pipeline bindgen --package-version 1.0.0 --package-name @itk-wasm/bindgen-interface-types-test --package-description \"Exercise interface types for bindgen\"",
     "test:cliBindgen:python": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/bindgen-interface-types-pipeline bindgen --interface python --package-version 1.0.0 --package-name itkwasm-bindgen-interface-types-test --package-description \"Exercise interface types for bindgen\"",
+    "test:cliBindgen:python-web-demo": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/bindgen-interface-types-pipeline bindgen --interface python-web-demo --package-version 1.0.0 --package-name itkwasm-bindgen-interface-types-test --package-description \"Exercise interface types for bindgen\"",
     "test:browser": "karma start ./karma.conf.cjs",
     "test:browser:debug": "karma start ./karma.conf.cjs --no-single-run",
     "test:browser:debug:cypress": "start-server-and-test start http-get://localhost:8083 cypress:open",
