@@ -16,6 +16,7 @@ function interfaceFunctionPython(packageName, interfaceJson, outputPath) {
 
   let result = `from dataclasses import dataclass
 from typing import Any, Dict
+import json
 
 import numpy as np
 
