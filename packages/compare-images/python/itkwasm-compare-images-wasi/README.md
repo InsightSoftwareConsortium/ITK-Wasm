@@ -16,7 +16,7 @@ pip install itkwasm-compare-images-wasi
 ## Development
 
 ```sh
-pip install pytest
+pip install pytest itk-webassemblyinterface>=1.0b127
 pip install -e .
 pytest
 

@@ -1,5 +1,3 @@
-# Generated file. Do not edit.
-
 from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional, List, Any
@@ -75,14 +73,14 @@ def compare_double_images(
     args.append('1')
     args.append('2')
     # Options
-    if len(baseline_images) > 1:
-        if len(baseline_images) < 1:
-            raise ValueError('"baseline-images" option must have a length > 1')
+    if len(baseline_images) < 1:
+       raise ValueError('"baseline-images" kwarg must have a length > 1')
+    if len(baseline_images) > 0:
 
         args.append('--baseline-images')
         for value in baseline_images:
             input_count_string = str(len(pipeline_inputs))
-            pipeline_inputs.push(PipelineInput(InterfaceTypes.Image, value))
+            pipeline_inputs.append(PipelineInput(InterfaceTypes.Image, value))
             args.append(input_count_string)
 
     if difference_threshold:
@@ -104,7 +102,7 @@ def compare_double_images(
     outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
     result = (
-        outputs[0].data,
+        outputs[0].data.data,
         outputs[1].data,
         outputs[2].data,
     )
