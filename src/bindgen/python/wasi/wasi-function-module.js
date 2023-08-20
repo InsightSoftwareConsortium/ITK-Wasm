@@ -16,7 +16,7 @@ function wasiFunctionModule(interfaceJson, pypackage, modulePath) {
 
 from pathlib import Path, PurePosixPath
 import os
-from typing import Dict, Tuple, Optional, List
+from typing import Dict, Tuple, Optional, List, Any
 
 from importlib_resources import files as file_resources
 
