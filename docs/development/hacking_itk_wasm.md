@@ -33,7 +33,7 @@ npm i -g docsify
 docsify serve ./docs/
 ```
 
-Create a debug build (see also: [the debugging example](../cxx/tutorial/debugging.html)):
+Create a debug build (see also: [the debugging example](/cxx/tutorial/debugging)):
 
 ```sh
 # pull the latest debug Docker images
