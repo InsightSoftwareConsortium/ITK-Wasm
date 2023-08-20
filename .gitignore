@@ -43,6 +43,8 @@ packages/compress-stringify/typescript/demo-app
 packages/dicom/wasi-build/
 packages/dicom/typescript/package-lock.json
 packages/dicom/python/itkwasm-dicom-emscripten/test/test_itkwasm_dicom.py
+packages/compare-images/emscripten-build/
+packages/compare-images/wasi-build/
 
 node_modules
 .DS_Store
