@@ -6,7 +6,7 @@ Thank you for contributing a pull request!
 
 We are glad you are here and appreciate your contribution. Please keep in mind our [community participation guidelines](https://github.com/InsightSoftwareConsortium/ITK/blob/main/CODE_OF_CONDUCT.md).
 
-### Build dependencies
+## Build dependencies
 
 - [Node.js / NPM](https://nodejs.org/en/download/)
 - [Docker](https://docs.docker.com/install/)
@@ -14,7 +14,7 @@ We are glad you are here and appreciate your contribution. Please keep in mind o
   * On Windows, we recommend [WSL 2 with Docker enabled](https://docs.docker.com/desktop/windows/wsl/).
 - Bash
 
-### Building
+## Building
 
 To build itk-wasm itself:
 ```sh
@@ -33,7 +33,7 @@ npm i -g docsify
 docsify serve ./docs/
 ```
 
-Create a debug build (see also: [the debugging example](/cxx/tutorial/debugging.html)):
+Create a debug build (see also: [the debugging example](/cxx/tutorial/debugging)):
 
 ```sh
 # pull the latest debug Docker images
@@ -50,7 +50,7 @@ substitution for your Wasm module's source code.
 
 Example: `/ITKWebAssemblyInterface/` -> `/home/dingbat/src/itk-wasm/`
 
-### Add test data
+## Add test data
 
 To prevent Git repository bloat, we add testing data through [CMake content links](https://blog.kitware.com/cmake-externaldata-using-large-files-with-distributed-version-control/) of [Content Identifiers (CIDs)](https://proto.school/anatomy-of-a-cid). To add new test data,
 
@@ -58,7 +58,7 @@ To prevent Git repository bloat, we add testing data through [CMake content link
 2. Move the *.cid* file to *itk-wasm/test/Input/*
 3. Reference the content link with a `DATA{<path>}` call in *itk-wasm/test/CMakeLists.txt*.
 
-### Contributing
+## Contributing
 
 We use [semantic-release](https://github.com/semantic-release/semantic-release) for handling the change log and version. Therefore, we recommend using the following command line when creating a commit:
 

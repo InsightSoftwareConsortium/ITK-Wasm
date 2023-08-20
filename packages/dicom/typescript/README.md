@@ -4,9 +4,9 @@
 
 > Read files and images related to DICOM file format.
 
-[Example](https://itk-wasm-dicom-app.on.fleek.co/ ':include :type=iframe width=100% height=800px')
+[💻 **Live API Demo** ✨](https://itk-wasm-dicom-app.on.fleek.co/ ':include :type=iframe width=100% height=800px')
 
-[Documentation](https://itk-wasm-dicom-docs.on.fleek.co/)
+[🕮 **Documentation** 📚](https://itk-wasm-dicom-docs.on.fleek.co/)
 
 ## Installation
 

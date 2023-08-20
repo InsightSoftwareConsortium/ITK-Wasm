@@ -29,7 +29,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 autodoc2_packages = [
     {
-        "path": "../itkwasm",
+        "path": "../packages/core/python/itkwasm/itkwasm",
         "exclude_files": ["_to_numpy_array.py",],
     },
 ]
