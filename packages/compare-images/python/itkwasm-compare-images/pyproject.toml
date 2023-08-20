@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "itkwasm-compare-images"
+readme = "README.md"
+license = "Apache-2.0"
+dynamic = ["version", "description"]
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python",
+  "Programming Language :: C++",
+  "Environment :: WebAssembly",
+  "Environment :: WebAssembly :: Emscripten",
+  "Environment :: WebAssembly :: WASI",
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+]
+keywords = [
+  "itkwasm",
+  "webassembly",
+  "wasi",
+  "emscripten",
+]
+
+requires-python = ">=3.7"
+dependencies = [
+    "itkwasm >= 1.0.b105",
+    "itkwasm-compare-images-wasi; sys_platform != \"emscripten\"",
+    "itkwasm-compare-images-emscripten; sys_platform == \"emscripten\"",
+
+]
+
+[tool.hatch.version]
+path = "itkwasm_compare_images/_version.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+]
+
+[project.urls]
+Home = "https://github.com/InsightSoftwareConsortium/itk-wasm"
+Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
+
+[tool.hatch.envs.default.scripts]
+test = "pytest"
+
+
+[tool.hatch.build]
+exclude = [
+  "/examples",
+]
