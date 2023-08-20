@@ -12,7 +12,6 @@ function readFileIfNotInterfaceType(forNode, interfaceType, varName, indent) {
     return `${indent}mountDirs.add(path.dirname(${varName} as string))\n`
   } else {
     if (interfaceType === 'TextFile') {
-
       return `${indent}let ${varName}File = ${varName}\n${indent}if (${varName} instanceof File) {\n${indent}  const ${varName}Buffer = await ${varName}.arrayBuffer()\n${indent}  ${varName}File = { path: ${varName}.name, data: new TextDecoder().decode(${varName}Buffer) }\n${indent}}\n`
     } else {
       return `${indent}let ${varName}File = ${varName}\n${indent}if (${varName} instanceof File) {\n${indent}  const ${varName}Buffer = await ${varName}.arrayBuffer()\n${indent}  ${varName}File = { path: ${varName}.name, data: new Uint8Array(${varName}Buffer) }\n${indent}}\n`
@@ -203,7 +202,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         if (interfaceType.includes('Stream')) {
           data = `{ data: ${camel} } `
         } else if (interfaceType === 'JsonObject') {
-          data = `{ data: ${camel} as Object } `
+          data = `{ data: ${camel} as any } `
         }
         functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${data} },\n`
       }

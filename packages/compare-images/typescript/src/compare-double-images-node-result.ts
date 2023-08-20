@@ -4,7 +4,7 @@ import { Image } from 'itk-wasm'
 
 interface CompareDoubleImagesNodeResult {
   /** Metrics for the baseline with the fewest number of pixels outside the tolerances. */
-  metrics: Object
+  metrics: any
 
   /** Absolute difference image */
   differenceImage: Image
