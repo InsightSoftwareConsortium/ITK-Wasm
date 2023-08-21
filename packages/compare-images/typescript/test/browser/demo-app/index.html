@@ -58,8 +58,95 @@
   <br /><br />
 
   <sl-tab-group>
-    <sl-tab slot="nav" panel="compareDoubleImages-panel" disabled>compareDoubleImages</sl-tab>
+    <sl-tab slot="nav" panel="compareDoubleImages-panel">compareDoubleImages</sl-tab>
     <sl-tab slot="nav" panel="vectorMagnitude-panel">vectorMagnitude</sl-tab>
+
+
+    <sl-tab-panel name="compareDoubleImages-panel">
+
+    <small><i>Compare double pixel type images with a tolerance for regression testing.</i></small><br /><br />
+
+    <div id="compareDoubleImagesInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the testImage"><sl-details id="compareDoubleImages-test-image-details" summary="testImage: The input test image" disabled></sl-details></sl-tooltip>
+      <label for="test-image-file"><sl-button name="test-image-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="test-image-file" style="display: none"/>
+<br /><br />
+      <sl-tooltip content="Use the Upload button to provide the baselineImages"><sl-details id="compareDoubleImages-baseline-images-details" summary="baselineImages: Baseline images compare against" disabled></sl-details></sl-tooltip>
+      <label for="baseline-images-file"><sl-button name="baseline-images-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="baseline-images-file" style="display: none"/>
+<br /><br />
+      <sl-input name="difference-threshold" type="number" value="0" step="any" label="differenceThreshold" help-text="Intensity difference for pixels to be considered different."></sl-input>
+<br />
+      <sl-input name="radius-tolerance" type="number" value="0" min="0" step="1" label="radiusTolerance" help-text="Radius of the neighborhood around a pixel to search for similar intensity values."></sl-input>
+<br />
+      <sl-input name="number-of-pixels-tolerance" type="number" value="0" min="0" step="1" label="numberOfPixelsTolerance" help-text="Number of pixels that can be different before the test fails."></sl-input>
+<br />
+      <sl-checkbox name="ignore-boundary-pixels">ignoreBoundaryPixels - <i>Ignore boundary pixels. Useful when resampling may have introduced difference pixel values along the image edge.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="compareDoubleImagesOutputs">
+      <sl-details disabled id="compareDoubleImages-metrics-details" summary="metrics: Metrics for the baseline with the fewest number of pixels outside the tolerances."></sl-details>
+      <sl-button variant="neutral" outline name="metrics-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="compareDoubleImages-difference-image-details" summary="differenceImage: Absolute difference image"></sl-details>
+      <sl-select id="difference-image-output-format" placeholder="Format">
+        <sl-option value="bmp">bmp</sl-option>
+        <sl-option value="dcm">dcm</sl-option>
+        <sl-option value="gipl">gipl</sl-option>
+        <sl-option value="hdf5">hdf5</sl-option>
+        <sl-option value="jpg">jpg</sl-option>
+        <sl-option value="lsm">lsm</sl-option>
+        <sl-option value="mnc">mnc</sl-option>
+        <sl-option value="mnc.gz">mnc.gz</sl-option>
+        <sl-option value="mgh">mgh</sl-option>
+        <sl-option value="mha">mha</sl-option>
+        <sl-option value="mrc">mrc</sl-option>
+        <sl-option value="nii">nii</sl-option>
+        <sl-option value="nii.gz">nii.gz</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="nrrd">nrrd</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="pic">pic</sl-option>
+        <sl-option value="tif">tif</sl-option>
+        <sl-option value="isq">isq</sl-option>
+        <sl-option value="fdf">fdf</sl-option>
+        <sl-option value="vtk">vtk</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="difference-image-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="compareDoubleImages-difference-uchar-2d-image-details" summary="differenceUchar2dImage: Unsigned char, 2D difference image for rendering"></sl-details>
+      <sl-select id="difference-uchar-2d-image-output-format" placeholder="Format">
+        <sl-option value="bmp">bmp</sl-option>
+        <sl-option value="dcm">dcm</sl-option>
+        <sl-option value="gipl">gipl</sl-option>
+        <sl-option value="hdf5">hdf5</sl-option>
+        <sl-option value="jpg">jpg</sl-option>
+        <sl-option value="lsm">lsm</sl-option>
+        <sl-option value="mnc">mnc</sl-option>
+        <sl-option value="mnc.gz">mnc.gz</sl-option>
+        <sl-option value="mgh">mgh</sl-option>
+        <sl-option value="mha">mha</sl-option>
+        <sl-option value="mrc">mrc</sl-option>
+        <sl-option value="nii">nii</sl-option>
+        <sl-option value="nii.gz">nii.gz</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="nrrd">nrrd</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="pic">pic</sl-option>
+        <sl-option value="tif">tif</sl-option>
+        <sl-option value="isq">isq</sl-option>
+        <sl-option value="fdf">fdf</sl-option>
+        <sl-option value="vtk">vtk</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="difference-uchar-2d-image-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
 
 
     <sl-tab-panel name="vectorMagnitude-panel">
