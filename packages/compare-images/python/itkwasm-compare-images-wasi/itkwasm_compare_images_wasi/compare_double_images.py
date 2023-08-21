@@ -76,7 +76,6 @@ def compare_double_images(
     if len(baseline_images) < 1:
        raise ValueError('"baseline-images" kwarg must have a length > 1')
     if len(baseline_images) > 0:
-
         args.append('--baseline-images')
         for value in baseline_images:
             input_count_string = str(len(pipeline_inputs))

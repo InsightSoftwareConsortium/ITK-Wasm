@@ -1,5 +1,6 @@
 from typing import Dict, Tuple, Optional, List, Any
 from .compare_double_images import compare_double_images
+from .vector_magnitude import vector_magnitude
 
 from itkwasm import (
     Image,
@@ -20,6 +21,9 @@ def _to_scalar_double(image: Image) -> Image:
         if image.imageType.pixelType != PixelTypes.Scalar and image.imageType.pixelType != PixelTypes.VariableLengthVector:
             pixel_type = PixelTypes.VariableLengthVector
             scalar_double = cast_image(image, pixel_type=pixel_type)
+
+    if scalar_double.imageType.pixelType == PixelTypes.VariableLengthVector:
+        scalar_double = vector_magnitude(scalar_double)
 
     return scalar_double
 
