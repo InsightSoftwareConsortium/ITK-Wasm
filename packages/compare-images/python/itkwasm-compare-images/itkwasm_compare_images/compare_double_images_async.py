@@ -1,3 +1,5 @@
+# Generated file. Do not edit.
+
 import os
 from typing import Dict, Tuple, Optional, List, Any
 
@@ -13,7 +15,7 @@ async def compare_double_images_async(
     radius_tolerance: int = 0,
     number_of_pixels_tolerance: int = 0,
     ignore_boundary_pixels: bool = False,
-) -> Tuple[Dict, Image, Image]:
+) -> Tuple[Any, Image, Image]:
     """Compare double pixel type images with a tolerance for regression testing.
 
     :param test_image: The input test image
@@ -35,7 +37,7 @@ async def compare_double_images_async(
     :type  ignore_boundary_pixels: bool
 
     :return: Metrics for the baseline with the fewest number of pixels outside the tolerances.
-    :rtype:  Dict
+    :rtype:  Any
 
     :return: Absolute difference image
     :rtype:  Image

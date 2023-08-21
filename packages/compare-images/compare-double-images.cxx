@@ -22,12 +22,12 @@
 #include "itkInputImage.h"
 #include "itkOutputImage.h"
 #include "itkOutputTextStream.h"
+#include "itkSupportInputImageTypes.h"
 
 #include "itkImage.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "itkTestingComparisonImageFilter.h"
-#include "itkSupportInputImageTypes.h"
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
@@ -219,6 +219,7 @@ int main(int argc, char * argv[])
   itk::wasm::Pipeline pipeline("compare-double-images", "Compare double pixel type images with a tolerance for regression testing.", argc, argv);
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
+
    double>
   ::Dimensions<2U,3U,4U,5U,6U>("test-image", pipeline);
 }

@@ -28,6 +28,9 @@ include(${ITK_USE_FILE})
 add_executable(compare-double-images compare-double-images.cxx)
 target_link_libraries(compare-double-images PUBLIC ${ITK_LIBRARIES})
 
+add_executable(vector-magnitude vector-magnitude.cxx)
+target_link_libraries(vector-magnitude PUBLIC ${ITK_LIBRARIES})
+
 enable_testing()
 add_test(NAME compare-double-images
   COMMAND compare-double-images
@@ -36,4 +39,10 @@ add_test(NAME compare-double-images
     ${CMAKE_CURRENT_BINARY_DIR}/cake_diff_double.iwi.cbor
     ${CMAKE_CURRENT_BINARY_DIR}/cake_diff.png
     --baseline-images ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cake_hard.iwi.cbor
+    )
+
+add_test(NAME vector-magnitude
+  COMMAND vector-magnitude
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/apple.iwi.cbor
+    ${CMAKE_CURRENT_BINARY_DIR}/apply_magnitude.iwi.cbor
     )
