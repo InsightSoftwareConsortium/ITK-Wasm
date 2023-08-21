@@ -9,6 +9,7 @@ const demoSupportedInputTypes = new Set([
   'TEXT',
   'INT',
   'UINT',
+  'FLOAT',
   'BOOL',
   'INPUT_JSON',
   'INPUT_IMAGE',

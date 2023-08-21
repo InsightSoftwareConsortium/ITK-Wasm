@@ -70,9 +70,14 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       break
     case 'INT':
     case 'UINT':
+    case 'FLOAT':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs sl-input[name=${parameter.name}]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('sl-change', (event) => {\n`
-      result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", parseInt(${inputIdentifier}.value))\n`
+      if (parameter.type === 'FLOAT') {
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", parseFloat(${inputIdentifier}.value))\n`
+      } else {
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", parseInt(${inputIdentifier}.value))\n`
+      }
       result += `${indent}})\n\n`
       break
     case 'INPUT_JSON':
