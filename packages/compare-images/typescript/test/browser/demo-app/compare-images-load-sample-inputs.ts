@@ -1,21 +1,29 @@
-// Generated file. To retain edits, remove this comment.
-
 export default null
+
 // export default async function compareDoubleImagesLoadSampleInputs (model) {
 
-  // Load sample inputs for the compareDoubleImages function.
-  //
-  // This function should load sample inputs:
-  //
-  //  1) In the provided model map.
-  //  2) Into the corresponding HTML input elements.
-  //
-  // Example for an input named `exampleInput`:
+//   const testImageButton = document.querySelector('#compareImagesInputs sl-button[name=test-image-file-button]')
+//   testImageButton.loading = true
 
-  // const exampleInput = 5
-  // model.inputs.set("exampleInput", exampleInput)
-  // const exampleElement = document.querySelector("#compareDoubleImagesInputs [name=example-input]")
-  // exampleElement.value = 5
+//   const fileName = 'cake_easy.png'
+//   const dataUrl = 'https://bafybeiffac7x3l25hbvne37tiq5sb76oyi6pogg3tm4hztwwoj2d7dlf7q.ipfs.w3s.link/ipfs/bafybeiffac7x3l25hbvne37tiq5sb76oyi6pogg3tm4hztwwoj2d7dlf7q/data/input'
+//   const testImageReponse = await fetch(`${dataUrl}/${fileName}`)
+//   // todo read Image with @itk-wasm/image-io
+//   const dicomData = new Uint8Array(await dicomReponse.arrayBuffer())
+//   inputFiles.push({ data: dicomData, path: fileName })
+//   model.options.set('inputImages', inputFiles)
 
-  // return model
+//   const dicomElement = document.getElementById('readImageDicomFileSeries-input-images-details')
+//   dicomElement.innerHTML = `<pre>${globalThis.escapeHtml(inputFiles.map((file) => file.path).toString())}</pre>`
+//   dicomElement.disabled = false
+
+//   dicomButton.loading = false
+
+
+//   // const baselineImagesButton = document.querySelector('#compareImagesInputs sl-button[name=baseline-images-file-button]')
+//   // baselineImagesButton.loading = true
+
+//   // todo
+
+//   return model
 // }
