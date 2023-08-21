@@ -1,4 +1,4 @@
-"""itkwasm-compare-images-wasi: Read files and images related to compare-images file format. WASI implementation."""
+"""itkwasm-compare-images-wasi: Compare images with a tolerance for regression testing. WASI implementation."""
 
 from .compare_images import compare_images
 from .compare_double_images import compare_double_images

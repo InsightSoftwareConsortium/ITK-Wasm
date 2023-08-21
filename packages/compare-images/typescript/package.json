@@ -1,7 +1,7 @@
 {
   "name": "@itk-wasm/compare-images",
   "version": "1.0.0",
-  "description": "Read files and images related to compare-images file format.",
+  "description": "Compare images with a tolerance for regression testing.",
   "type": "module",
   "module": "./dist/bundles/compare-images.js",
   "types": "./dist/src/index.d.ts",

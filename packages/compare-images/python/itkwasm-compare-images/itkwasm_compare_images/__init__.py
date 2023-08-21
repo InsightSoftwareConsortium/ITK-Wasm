@@ -1,4 +1,4 @@
-"""itkwasm-compare-images: Read files and images related to compare-images file format."""
+"""itkwasm-compare-images: Compare images with a tolerance for regression testing."""
 
 from .compare_double_images_async import compare_double_images_async
 from .compare_double_images import compare_double_images

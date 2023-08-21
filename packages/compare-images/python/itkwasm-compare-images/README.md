@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/itkwasm-compare-images.svg)](https://badge.fury.io/py/itkwasm-compare-images)
 
-Read files and images related to compare-images file format.
+Compare images with a tolerance for regression testing.
 
 ## Installation
 

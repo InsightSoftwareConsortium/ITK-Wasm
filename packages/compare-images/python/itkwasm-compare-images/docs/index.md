@@ -1,7 +1,7 @@
 itkwasm-compare-images
 =======
 
-> Read files and images related to compare-images file format.
+> Compare images with a tolerance for regression testing.
 
 [![itkwasm-compare-images version](https://badge.fury.io/py/itkwasm_compare_images.svg)](https://pypi.org/project/itkwasm_compare_images/)
 

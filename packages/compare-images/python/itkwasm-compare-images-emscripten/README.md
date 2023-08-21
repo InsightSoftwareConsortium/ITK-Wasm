@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/itkwasm-compare-images-emscripten.svg)](https://badge.fury.io/py/itkwasm-compare-images-emscripten)
 
-Read files and images related to compare-images file format. Emscripten implementation.
+Compare images with a tolerance for regression testing. Emscripten implementation.
 
 This package provides the Emscripten WebAssembly implementation. It is usually not called directly. Please use the [`itkwasm-compare-images`](https://pypi.org/project/itkwasm-compare-images/) instead.
 

@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/@itk-wasm%2Fcompare-images.svg)](https://www.npmjs.com/package/@itk-wasm/compare-images)
 
-> Read files and images related to compare-images file format.
+> Compare images with a tolerance for regression testing.
 
 ## Installation
 

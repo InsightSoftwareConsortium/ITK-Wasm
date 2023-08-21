@@ -1,4 +1,4 @@
-"""itkwasm-compare-images-emscripten: Read files and images related to compare-images file format. Emscripten implementation."""
+"""itkwasm-compare-images-emscripten: Compare images with a tolerance for regression testing. Emscripten implementation."""
 
 from .compare_double_images_async import compare_double_images_async
 from .vector_magnitude_async import vector_magnitude_async

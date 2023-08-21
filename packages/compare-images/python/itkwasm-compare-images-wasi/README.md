@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/itkwasm-compare-images-wasi.svg)](https://badge.fury.io/py/itkwasm-compare-images-wasi)
 
-Read files and images related to compare-images file format. WASI implementation.
+Compare images with a tolerance for regression testing. WASI implementation.
 
 This package provides the WASI WebAssembly implementation. It is usually not called directly. Please use [`itkwasm-compare-images`](https://pypi.org/project/itkwasm-compare-images/) instead.
 
