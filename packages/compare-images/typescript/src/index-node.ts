@@ -9,3 +9,6 @@ export type { CompareDoubleImagesOptions }
 
 import compareDoubleImagesNode from './compare-double-images-node.js'
 export { compareDoubleImagesNode }
+
+import compareImagesNode from './compare-images-node.js'
+export { compareImagesNode }

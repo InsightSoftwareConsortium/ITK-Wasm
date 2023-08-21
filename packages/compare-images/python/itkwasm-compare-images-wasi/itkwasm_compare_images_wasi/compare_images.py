@@ -37,6 +37,9 @@ def compare_images(
 ) -> Tuple[Dict, Image, Image]:
     """Compare double pixel type images with a tolerance for regression testing.
 
+    For multi-component images, the intensity difference threshold
+    is based on the pixel vector magnitude.
+
     :param test_image: The input test image
     :type  test_image: Image
 
@@ -68,5 +71,3 @@ def compare_images(
     baseline_images_double = [_to_scalar_double(baseline_image) for baseline_image in baseline_images]
 
     return compare_double_images(test_image_double, baseline_images=baseline_images_double, difference_threshold=difference_threshold, radius_tolerance=radius_tolerance, number_of_pixels_tolerance=number_of_pixels_tolerance, ignore_boundary_pixels=ignore_boundary_pixels) 
-
-
