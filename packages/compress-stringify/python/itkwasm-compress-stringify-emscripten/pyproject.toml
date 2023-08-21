@@ -32,7 +32,7 @@ keywords = [
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0.b105",
+    "itkwasm >= 1.0.b129",
 ]
 
 [project.urls]
