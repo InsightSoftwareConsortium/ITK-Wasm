@@ -18,7 +18,6 @@ def test_compare_double_images():
     baseline_image = Image(**baseline_dict)
 
     metrics, difference_image, difference_image_rendering = compare_double_images(test_image, baseline_images=[baseline_image])
-    print(metrics)
 
     assert metrics['almostEqual'] == False
     assert metrics['numberOfPixelsWithDifferences'] == 9915
