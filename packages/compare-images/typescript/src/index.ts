@@ -12,3 +12,6 @@ export type { CompareDoubleImagesOptions }
 
 import compareDoubleImages from './compare-double-images.js'
 export { compareDoubleImages }
+
+import compareImages from './compare-images.js'
+export { compareImages }
