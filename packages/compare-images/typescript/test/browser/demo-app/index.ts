@@ -8,3 +8,4 @@ compareImages.setPipelinesBaseUrl(pipelinesBaseUrl)
 const pipelineWorkerUrl: string | URL | null = new URL('/web-workers/pipeline.worker.js', document.location.origin).href
 compareImages.setPipelineWorkerUrl(pipelineWorkerUrl)
 
+import './vector-magnitude-controller.js'

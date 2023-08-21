@@ -1,0 +1,4 @@
+typescript/demo-app/
+dist/
+package-lock.json
+typescript/test/browser/demo-app/public
