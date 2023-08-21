@@ -9,6 +9,7 @@ import functionModuleDocstring from '../function-module-docstring.js'
 import functionModuleArgs from '../function-module-args.js'
 import interfaceJsonTypeToInterfaceType from '../../interface-json-type-to-interface-type.js'
 import interfaceJsonTypeToPythonType from '../interface-json-type-to-python-type.js'
+import writeIfOverrideNotPresent from '../../write-if-override-not-present.js'
 
 function wasiFunctionModule(interfaceJson, pypackage, modulePath) {
   const functionName = snakeCase(interfaceJson.name)
@@ -228,7 +229,7 @@ ${args}
 
 ${postOutput}
 `
-  fs.writeFileSync(modulePath, moduleContent)
+  writeIfOverrideNotPresent(modulePath, moduleContent, '#')
 }
 
 export default wasiFunctionModule
