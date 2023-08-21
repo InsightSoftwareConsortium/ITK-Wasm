@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 from dataclasses import asdict
 import copy
 
@@ -11,7 +11,7 @@ from .float_types import FloatTypes
 
 def cast_image(input_image: Image,
                pixel_type: Optional[PixelTypes]=None,
-               component_type: Optional[IntTypes | FloatTypes]=None) -> Image:
+               component_type: Optional[Union[IntTypes, FloatTypes]]=None) -> Image:
     """Cast an image to another pixel type and / or component type."""
     output_image_type = ImageType(**asdict(input_image.imageType))
 
