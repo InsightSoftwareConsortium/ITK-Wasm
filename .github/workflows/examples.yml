@@ -108,7 +108,7 @@ jobs:
         path: examples/hello-world
 
     - name: Test
-      uses: cypress-io/github-action@v5
+      uses: cypress-io/github-action@v6
       with:
         working-directory: ./examples/hello-world
         browser: chrome
@@ -222,7 +222,7 @@ jobs:
         df -h
 
     - name: Test
-      uses: cypress-io/github-action@v4
+      uses: cypress-io/github-action@v6
       with:
         working-directory: ./examples/umd
         browser: chrome
@@ -251,14 +251,14 @@ jobs:
         df -h
 
     - name: Test Webpack Example on Chrome
-      uses: cypress-io/github-action@v4
+      uses: cypress-io/github-action@v6
       with:
         working-directory: ./examples/webpack
         browser: chrome
         start: npm start
 
     #- name: Test Webpack Example on Firefox
-      #uses: cypress-io/github-action@v4
+      #uses: cypress-io/github-action@v6
       #with:
         #working-directory: ./examples/webpack
         #browser: firefox
@@ -287,14 +287,14 @@ jobs:
         df -h
 
     - name: Test Vite Example on Chrome
-      uses: cypress-io/github-action@v4
+      uses: cypress-io/github-action@v6
       with:
         working-directory: ./examples/vite
         browser: chrome
         start: npm start
 
     #- name: Test Vite Example on Firefox
-      #uses: cypress-io/github-action@v4
+      #uses: cypress-io/github-action@v6
       #with:
         #working-directory: ./examples/vite
         #browser: firefox

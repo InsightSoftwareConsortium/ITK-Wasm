@@ -25,7 +25,7 @@ jobs:
           npm run build
 
       - name: Test with Chrome
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v6
         with:
           browser: chrome
           command: npm run test:chrome
@@ -43,7 +43,7 @@ jobs:
           path: cypress/videos
 
       #- name: Test with Firefox
-        #uses: cypress-io/github-action@v4
+        #uses: cypress-io/github-action@v6
         #with:
           #browser: firefox
           #command: npm run test:firefox
