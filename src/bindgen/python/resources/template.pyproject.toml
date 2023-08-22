@@ -31,7 +31,7 @@ keywords = [
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0.b129",@bindgenDependencies@
+    "itkwasm >= 1.0.b130",@bindgenDependencies@
 ]
 
 [tool.hatch.version]
