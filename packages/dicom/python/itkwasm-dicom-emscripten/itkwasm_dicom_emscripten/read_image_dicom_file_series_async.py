@@ -1,5 +1,3 @@
-# Generated file. Do not edit.
-
 from pathlib import Path
 import os
 from typing import Dict, Tuple, Optional, List
@@ -20,7 +18,7 @@ from itkwasm import (
 async def read_image_dicom_file_series_async(
     input_images: List[os.PathLike] = [],
     single_sorted_series: bool = False,
-) -> Tuple[Image, Dict]:
+) -> Tuple[Image, List[str]]:
     """Read a DICOM image series and return the associated image volume
 
     :param input_images: File names in the series
@@ -33,7 +31,7 @@ async def read_image_dicom_file_series_async(
     :rtype:  Image
 
     :return: Output sorted filenames
-    :rtype:  Dict
+    :rtype:  List[str]
     """
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker

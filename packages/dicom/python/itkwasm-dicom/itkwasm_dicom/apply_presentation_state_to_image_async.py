@@ -1,7 +1,7 @@
 # Generated file. Do not edit.
 
 import os
-from typing import Dict, Tuple, Optional, List
+from typing import Dict, Tuple, Optional, List, Any
 
 from itkwasm import (
     environment_dispatch,
@@ -17,7 +17,7 @@ async def apply_presentation_state_to_image_async(
     frame: int = 1,
     no_presentation_state_output: bool = False,
     no_bitmap_output: bool = False,
-) -> Tuple[Dict, Image]:
+) -> Tuple[Any, Image]:
     """Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.
 
     :param image_in: Input DICOM file
@@ -42,7 +42,7 @@ async def apply_presentation_state_to_image_async(
     :type  no_bitmap_output: bool
 
     :return: Output overlay information
-    :rtype:  Dict
+    :rtype:  Any
 
     :return: Output image
     :rtype:  Image

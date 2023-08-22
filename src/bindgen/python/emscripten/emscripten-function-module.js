@@ -8,6 +8,7 @@ import functionModuleArgs from '../function-module-args.js'
 import functionModuleReturnType from '../function-module-return-type.js'
 import functionModuleDocstring from '../function-module-docstring.js'
 import interfaceJsonTypeToInterfaceType from '../../interface-json-type-to-interface-type.js'
+import writeIfOverrideNotPresent from '../../write-if-override-not-present.js'
 
 function emscriptenFunctionModule(interfaceJson, pypackage, modulePath) {
   const functionName = snakeCase(interfaceJson.name)
@@ -15,7 +16,7 @@ function emscriptenFunctionModule(interfaceJson, pypackage, modulePath) {
 
 from pathlib import Path
 import os
-from typing import Dict, Tuple, Optional, List
+from typing import Dict, Tuple, Optional, List, Any
 
 from .js_package import js_package
 
@@ -99,7 +100,7 @@ ${addKwargs}
         return output_list[0]
     return tuple(output_list)
 `
-  fs.writeFileSync(modulePath, moduleContent)
+  writeIfOverrideNotPresent(modulePath, moduleContent, '#')
 }
 
 export default emscriptenFunctionModule

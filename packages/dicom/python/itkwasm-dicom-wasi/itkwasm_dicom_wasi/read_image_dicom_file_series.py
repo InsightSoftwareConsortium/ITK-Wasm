@@ -1,5 +1,3 @@
-# Generated file. Do not edit.
-
 from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional, List
@@ -20,7 +18,7 @@ from itkwasm import (
 def read_image_dicom_file_series(
     input_images: List[os.PathLike] = [],
     single_sorted_series: bool = False,
-) -> Tuple[Image, Dict]:
+) -> Tuple[Image, List[str]]:
     """Read a DICOM image series and return the associated image volume
 
     :param input_images: File names in the series
@@ -33,7 +31,7 @@ def read_image_dicom_file_series(
     :rtype:  Image
 
     :return: Output sorted filenames
-    :rtype:  Dict
+    :rtype:  List[str]
     """
     global _pipeline
     if _pipeline is None:
@@ -53,10 +51,9 @@ def read_image_dicom_file_series(
     args.append('0')
     args.append('1')
     # Options
-    if len(input_images) > 1:
-        if len(input_images) < 1:
-            raise ValueError('"input-images" option must have a length > 1')
-
+    if len(input_images) < 1:
+       raise ValueError('"input-images" kwarg must have a length > 1')
+    if len(input_images) > 0:
         args.append('--input-images')
         for value in input_images:
             input_file = str(PurePosixPath(input_images))

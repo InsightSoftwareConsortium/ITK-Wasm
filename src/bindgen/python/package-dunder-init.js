@@ -1,9 +1,9 @@
-import fs from 'fs-extra'
 import path from 'path'
 
 import snakeCase from "../snake-case.js"
 
 import wasmBinaryInterfaceJson from "../wasm-binary-interface-json.js"
+import writeIfOverrideNotPresent from '../write-if-override-not-present.js'
 
 function packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async, sync) {
   const functionNames = []
@@ -26,7 +26,7 @@ ${functionImports}
 from ._version import __version__
 `
   const dunderInitPath = path.join(packageDir, pypackage, '__init__.py')
-  fs.writeFileSync(dunderInitPath, dunderInit)
+  writeIfOverrideNotPresent(dunderInitPath, dunderInit, "#")
 }
 
 export default packageDunderInit

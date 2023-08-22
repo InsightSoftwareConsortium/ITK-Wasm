@@ -5,7 +5,7 @@ import IntTypes from './IntTypes.js'
 import FloatTypes from './FloatTypes.js'
 
 /**
- * Cast an image to another PixelType or ComponentType
+ * Cast an image to another PixelType and/or ComponentType
  *
  * @param {Image} image - The input image
  * @param {CastImageOptions} options - specify the componentType and/or pixelType of the output

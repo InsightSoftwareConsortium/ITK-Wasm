@@ -1,6 +1,6 @@
 """itkwasm: Python interface to itk-wasm WebAssembly modules."""
 
-__version__ = "1.0b105"
+__version__ = "1.0b130"
 
 from .interface_types import InterfaceTypes
 from .image import Image, ImageType
@@ -19,6 +19,7 @@ from .float_types import FloatTypes
 from .int_types import IntTypes
 from .pixel_types import PixelTypes
 from .environment_dispatch import environment_dispatch, function_factory
+from .cast_image import cast_image
 
 __all__ = [
   "InterfaceTypes",
@@ -43,4 +44,5 @@ __all__ = [
   "PixelTypes",
   "environment_dispatch",
   "function_factory",
+  "cast_image",
   ]

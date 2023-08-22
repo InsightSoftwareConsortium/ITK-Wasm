@@ -7,7 +7,7 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
   switch (parameter.type) {
     case 'INPUT_TEXT_FILE':
     case 'INPUT_TEXT_FILE:FILE':
-    case 'INPUT_TEXT_STREAM': {
+    case 'INPUT_TEXT_STREAM':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('change', async (event) => {\n`
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
@@ -28,11 +28,10 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
         result += `${indent}${indent}details.disabled = false\n`
       }
       result += `${indent}})\n\n`
-    }
       break
     case 'INPUT_BINARY_FILE':
     case 'INPUT_BINARY_FILE:FILE':
-    case 'INPUT_BINARY_STREAM': {
+    case 'INPUT_BINARY_STREAM':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('change', async (event) => {\n`
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
@@ -54,7 +53,6 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
         result += `${indent}${indent}details.disabled = false\n`
       }
       result += `${indent}})\n\n`
-    }
       break
     case 'TEXT':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs sl-input[name=${parameter.name}]')\n`
@@ -70,46 +68,63 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       break
     case 'INT':
     case 'UINT':
+    case 'FLOAT':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs sl-input[name=${parameter.name}]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('sl-change', (event) => {\n`
-      result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", parseInt(${inputIdentifier}.value))\n`
+      if (parameter.type === 'FLOAT') {
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", parseFloat(${inputIdentifier}.value))\n`
+      } else {
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", parseInt(${inputIdentifier}.value))\n`
+      }
       result += `${indent}})\n\n`
       break
     case 'INPUT_JSON':
-      result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
-      result += `${indent}${inputIdentifier}.addEventListener('change', async (event) => {\n`
-      result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
-      result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
-      result += `${indent}${indent}const arrayBuffer = await files[0].arrayBuffer()\n`
-      result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", JSON.parse(new TextDecoder().decode(new Uint8Array(arrayBuffer))))\n`
-      result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
-      result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(model.${modelProperty}.get("${parameterName}"), globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
-      result += `${indent}${indent}details.disabled = false\n`
-      result += `${indent}})\n\n`
-      break
     case 'INPUT_IMAGE':
-      result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
-      result += `${indent}${inputIdentifier}.addEventListener('change', async (event) => {\n`
-      result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
-      result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
-      result += `${indent}${indent}const { image, webWorker } = await readImageFile(null, files[0])\n`
-      result += `${indent}${indent}webWorker.terminate()\n`
-      result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", image)\n`
-      result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
-      result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(image, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
-      result += `${indent}${indent}details.disabled = false\n`
-      result += `${indent}})\n\n`
-      break
     case 'INPUT_MESH':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('change', async (event) => {\n`
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
       result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
-      result += `${indent}${indent}const { mesh, webWorker } = await readMeshFile(null, files[0])\n`
-      result += `${indent}${indent}webWorker.terminate()\n`
-      result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", mesh)\n`
-      result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
-      result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(mesh, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+      if (parameter.type === 'INPUT_JSON') {
+        if (parameter.itemsExpectedMax > 1) {
+          console.error('items > 1 are currently not supported')
+          process.exit(1)
+        }
+        result += `${indent}${indent}const arrayBuffer = await files[0].arrayBuffer()\n`
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", JSON.parse(new TextDecoder().decode(new Uint8Array(arrayBuffer))))\n`
+        result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
+        result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(model.${modelProperty}.get("${parameterName}"), globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+      } else if (parameter.type === 'INPUT_IMAGE') {
+        if (parameter.itemsExpectedMax > 1) {
+          result += `${indent}${indent}const readImages = await Promise.all(Array.from(files).map(async (file) => readImageFile(null, file)))\n`
+          result += `${indent}${indent}readImages.forEach(img => img.webWorker.terminate())\n`
+          result += `${indent}${indent}const inputImages = readImages.map(img => img.image)\n`
+          result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", inputImages)\n`
+          result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
+          result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(inputImages, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+        } else {
+          result += `${indent}${indent}const { image, webWorker } = await readImageFile(null, files[0])\n`
+          result += `${indent}${indent}webWorker.terminate()\n`
+          result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", image)\n`
+          result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
+          result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(image, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+        }
+      } else if (parameter.type === 'INPUT_MESH') {
+        if (parameter.itemsExpectedMax > 1) {
+          result += `${indent}${indent}const readMeshes = await Promise.all(Array.from(files).map(async (file) => readMeshFile(null, file)))\n`
+          result += `${indent}${indent}readMeshes.forEach(msh => msh.webWorker.terminate())\n`
+          result += `${indent}${indent}const inputMeshes = readMeshes.map(msh => msh.mesh)\n`
+          result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", inputMeshes)\n`
+          result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
+          result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(inputMeshes, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+        } else {
+          result += `${indent}${indent}const { mesh, webWorker } = await readMeshFile(null, files[0])\n`
+          result += `${indent}${indent}webWorker.terminate()\n`
+          result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", mesh)\n`
+          result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
+          result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(mesh, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+        }
+      }
       result += `${indent}${indent}details.disabled = false\n`
       result += `${indent}})\n\n`
       break

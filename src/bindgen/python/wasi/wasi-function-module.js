@@ -9,6 +9,7 @@ import functionModuleDocstring from '../function-module-docstring.js'
 import functionModuleArgs from '../function-module-args.js'
 import interfaceJsonTypeToInterfaceType from '../../interface-json-type-to-interface-type.js'
 import interfaceJsonTypeToPythonType from '../interface-json-type-to-python-type.js'
+import writeIfOverrideNotPresent from '../../write-if-override-not-present.js'
 
 function wasiFunctionModule(interfaceJson, pypackage, modulePath) {
   const functionName = snakeCase(interfaceJson.name)
@@ -16,7 +17,7 @@ function wasiFunctionModule(interfaceJson, pypackage, modulePath) {
 
 from pathlib import Path, PurePosixPath
 import os
-from typing import Dict, Tuple, Optional, List
+from typing import Dict, Tuple, Optional, List, Any
 
 from importlib_resources import files as file_resources
 
@@ -111,10 +112,9 @@ from itkwasm import (
       args += `    if ${snake}:\n`
       args += `        args.append('--${parameter.name}')\n`
     } else if (parameter.itemsExpectedMax > 1) {
-      args += `    if len(${snake}) > 1:\n`
-      args += `        if len(${snake}) < ${parameter.itemsExpectedMin}:\n`
-      args += `            raise ValueError('"${parameter.name}" option must have a length > ${parameter.itemsExpectedMin}')\n`
-      args += `\n`
+      args += `    if len(${snake}) < ${parameter.itemsExpectedMin}:\n`
+      args += `       raise ValueError('"${parameter.name}" kwarg must have a length > ${parameter.itemsExpectedMin}')\n`
+      args += `    if len(${snake}) > 0:\n`
       args += `        args.append('--${parameter.name}')\n`
       args += `        for value in ${snake}:\n`
       if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
@@ -132,7 +132,7 @@ from itkwasm import (
         } else {
           // Image, Mesh, PolyData, JsonObject
           args += `            input_count_string = str(len(pipeline_inputs))\n`
-          args += `            pipeline_inputs.push(PipelineInput(InterfaceTypes.${interfaceType}, value))\n`
+          args += `            pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, value))\n`
           args += `            args.append(input_count_string)\n`
         }
       } else {
@@ -191,7 +191,7 @@ from itkwasm import (
         return `bool(${value})`
       case "float":
         return `float(${value})`
-      case "Dict":
+      case "Any":
         return `${value}.data.data`
       default:
         return `${value}.data`
@@ -229,7 +229,7 @@ ${args}
 
 ${postOutput}
 `
-  fs.writeFileSync(modulePath, moduleContent)
+  writeIfOverrideNotPresent(modulePath, moduleContent, '#')
 }
 
 export default wasiFunctionModule

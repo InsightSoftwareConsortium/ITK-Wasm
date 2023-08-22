@@ -43,6 +43,8 @@ packages/compress-stringify/typescript/demo-app
 packages/dicom/wasi-build/
 packages/dicom/typescript/package-lock.json
 packages/dicom/python/itkwasm-dicom-emscripten/test/test_itkwasm_dicom.py
+packages/compare-images/emscripten-build/
+packages/compare-images/wasi-build/
 
 node_modules
 .DS_Store
@@ -75,7 +77,7 @@ test/pipelines/input-output-json-pipeline/emscripten-build/
 test/pipelines/input-output-json-pipeline/wasi-build/
 test/pipelines/bindgen-interface-types-pipeline/python/
 test/pipelines/bindgen-interface-types-pipeline/wasi-build/
-test/pipelines/bindgen-interface-types-pipeline/python-web-demo
+test/pipelines/bindgen-interface-types-pipeline/python-web-demo/
 
 cypress/screenshots/
 cypress/videos/
