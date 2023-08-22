@@ -1,5 +1,42 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.128](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.127...itk-wasm-v1.0.0-b.128) (2023-08-22)
+
+
+### Bug Fixes
+
+* **bindgen:** use Any for JsonObject type ([953e040](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/953e0401ed042a0b283eb29755e3c1b475ba75df))
+* **bindgen:** use writeIfOverrideNotPresent for python function modules ([f7fcf55](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f7fcf55db6969e9c3b5ed048c2d345265e19a061))
+* **bindgen:** wasi processing of image vector options ([e1f3cee](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/e1f3ceee133e18e95dda45b17f40b68f48c67414))
+* **bingen:** use any for JsonObject typescript type ([08ed5bc](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/08ed5bc1ca794b81be2f17c80cee14bb6a5616e6))
+* **dicom:** Python Json types corrections, wasi dicom series handling ([c9abf86](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/c9abf8615bf77cba476066a7567eae2e3dee6037))
+* **Python:** support empty image metadata ([9d220ba](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9d220baba93e6c5aaa93c12c32128cd974fe4691))
+* **python:** use Union over | for cast_image ([6cabf37](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/6cabf378ec988c132019c0cb86d33942b8732dcc))
+* **runPipelineEmscripten:** robust behavior when image.metadata is not a Map ([1219a1a](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/1219a1adbcfb5e8aa3a243e8794b6219e561a80e))
+
+
+### Features
+
+* **bindgen:** support FLOAT for demo html, typescript ([cd29c91](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/cd29c919ad07f5060121514e6e9a53c9c247238a))
+* **bindgen:** support input image, mesh vector inputs for demo ([86291ef](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/86291ef9c3291fbd8e951cdc2a0326e44b2b23d5))
+* **compare-images:** add compare_images function ([05e5366](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/05e536674e646938279bee0631fbfa7a1f11e888))
+* **compare-images:** Add compare_images_async ([9b20e09](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9b20e09eeb8ede6ea4ac66ae49c6403e6bea6d77))
+* **compare-images:** add compare_images.py, compare_images_async.py to dispatch ([827e10c](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/827e10c83dedcc35bb1ffa4bc72204c7b390bc8d))
+* **compare-images:** add compare-images-node.ts ([dab81de](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/dab81de9cff9714bc57a4d96d57d00a3fad7cfbb))
+* **compare-images:** add compare-images.ts ([9fdf36b](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9fdf36bcf36feaa66611ec5ee7e568ef97204e96))
+* **compare-images:** add python bindings ([0d8c87d](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/0d8c87d1128104b5fe29a3652f8899afd7275aaa))
+* **compare-images:** add typescript binding output ([adbc0c6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/adbc0c69c171d5471ec0846be30dad2daf16f7c7))
+* **compare-images:** add vector-magnitude computation ([8541e8b](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/8541e8b58eb415fd707d17a4f335af8ab7711937))
+* **compare-images:** add vector-magnitude pipeline ([3478c4a](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/3478c4a88f8306f7cca14a7d74900e12353d24a7))
+* **compare-images:** add vector-magnitude typescript bindings ([800778c](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/800778cd6f6e2ba693919b2a31aedd47abe7bfb8))
+* **compare-images:** build native pipeline ([195dddf](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/195dddf25b4879cd94a6adf3b81ac526433d3197))
+* **compare-images:** define CompareImagesMetric ([5accc83](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/5accc836a58ca54bd19ea8443e6a870cd6e3e09b))
+* **compare-images:** Implement compare-double-images ([8f12f49](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/8f12f4938d13c782c04ec0357dc201c6e2bac512))
+* **compare-images:** typescript demo focuses on the compareImages ([3fcb0f7](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/3fcb0f7dcc174d6072c192a524ba8d7deeaaf04e))
+* **compare-images:** updated demo output with support for all inputs types ([96dcfa6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/96dcfa61607d7f7b33a2670705df788632bfc720))
+* **python:** add cast_image function to itkwasm package ([5e0c127](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/5e0c127e627df7e868ce1527b7ed8e51e39f8162))
+* **TypeScript:** add JsonCompatible type ([4959c42](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4959c421997eb2725308b11c8f91cdcfac6681e7))
+
 # [1.0.0-b.127](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.126...itk-wasm-v1.0.0-b.127) (2023-08-16)
 
 
