@@ -18,7 +18,7 @@ Import:
 
 ```js
 import {
-  compareDoubleImages,
+  compareImages,
   setPipelinesBaseUrl,
   getPipelinesBaseUrl,
   setPipelineWorkerUrl,
@@ -26,23 +26,23 @@ import {
 } from "@itk-wasm/compare-images"
 ```
 
-#### compareDoubleImages
+#### compareImages
 
-*Compare double pixel type images with a tolerance for regression testing.*
+*Compare images with a tolerance for regression testing.*
 
 ```ts
-async function compareDoubleImages(
+async function compareImages(
   webWorker: null | Worker,
   testImage: Image,
-  options: CompareDoubleImagesOptions = { baselineImages: [] as Image[], }
-) : Promise<CompareDoubleImagesResult>
+  options: CompareImagesOptions = { baselineImages: [] as Image[], }
+) : Promise<CompareImagesResult>
 ```
 
 |  Parameter  |   Type  | Description          |
 | :---------: | :-----: | :------------------- |
 | `testImage` | *Image* | The input test image |
 
-**`CompareDoubleImagesOptions` interface:**
+**`CompareImagesOptions` interface:**
 
 |          Property         |    Type   | Description                                                                                                      |
 | :-----------------------: | :-------: | :--------------------------------------------------------------------------------------------------------------- |
@@ -52,7 +52,7 @@ async function compareDoubleImages(
 | `numberOfPixelsTolerance` |  *number* | Number of pixels that can be different before the test fails.                                                    |
 |   `ignoreBoundaryPixels`  | *boolean* | Ignore boundary pixels. Useful when resampling may have introduced difference pixel values along the image edge. |
 
-**`CompareDoubleImagesResult` interface:**
+**`CompareImagesResult` interface:**
 
 |         Property         |   Type   | Description                                                                       |
 | :----------------------: | :------: | :-------------------------------------------------------------------------------- |
@@ -103,7 +103,7 @@ Import:
 
 ```js
 import {
-  compareDoubleImagesNode,
+  compareImagesNode,
   setPipelinesBaseUrl,
   getPipelinesBaseUrl,
   setPipelineWorkerUrl,
@@ -111,22 +111,22 @@ import {
 } from "@itk-wasm/compare-images"
 ```
 
-#### compareDoubleImagesNode
+#### compareImagesNode
 
-*Compare double pixel type images with a tolerance for regression testing.*
+*Compare images with a tolerance for regression testing.*
 
 ```ts
-async function compareDoubleImagesNode(
+async function compareImagesNode(
   testImage: Image,
-  options: CompareDoubleImagesOptions = { baselineImages: [] as Image[], }
-) : Promise<CompareDoubleImagesNodeResult>
+  options: CompareImagesOptions = { baselineImages: [] as Image[], }
+) : Promise<CompareImagesNodeResult>
 ```
 
 |  Parameter  |   Type  | Description          |
 | :---------: | :-----: | :------------------- |
 | `testImage` | *Image* | The input test image |
 
-**`CompareDoubleImagesNodeOptions` interface:**
+**`CompareImagesNodeOptions` interface:**
 
 |          Property         |    Type   | Description                                                                                                      |
 | :-----------------------: | :-------: | :--------------------------------------------------------------------------------------------------------------- |
@@ -136,7 +136,7 @@ async function compareDoubleImagesNode(
 | `numberOfPixelsTolerance` |  *number* | Number of pixels that can be different before the test fails.                                                    |
 |   `ignoreBoundaryPixels`  | *boolean* | Ignore boundary pixels. Useful when resampling may have introduced difference pixel values along the image edge. |
 
-**`CompareDoubleImagesNodeResult` interface:**
+**`CompareImagesNodeResult` interface:**
 
 |         Property         |   Type   | Description                                                                       |
 | :----------------------: | :------: | :-------------------------------------------------------------------------------- |
