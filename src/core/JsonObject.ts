@@ -1,5 +1,7 @@
+import JsonCompatible from './JsonCompatible.js'
+
 interface JsonObject {
-  data: Object
+  data: JsonCompatible
 }
 
 export default JsonObject
