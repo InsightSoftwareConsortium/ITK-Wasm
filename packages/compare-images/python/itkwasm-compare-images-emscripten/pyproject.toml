@@ -32,7 +32,7 @@ keywords = [
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0.b129",
+    "itkwasm >= 1.0.b130",
 ]
 
 [tool.hatch.version]
@@ -42,6 +42,8 @@ path = "itkwasm_compare_images_emscripten/_version.py"
 dependencies = [
   "pytest",
   "pytest-pyodide",
+  "itk-webassemblyinterface >= 1.0.b127",
+  "itkwasm >= 1.0.b130",
 ]
 
 [project.urls]
@@ -51,7 +53,7 @@ Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
 [tool.hatch.envs.default.scripts]
 test = [
   "hatch build -t wheel",
-  "pytest --dist-dir=./dist --rt=chrome",
+  "pytest -s --dist-dir=./dist --rt=chrome",
 ]
 download-pyodide = [
   "curl -L https://github.com/pyodide/pyodide/releases/download/0.23.1/pyodide-0.23.1.tar.bz2 -o pyodide.tar.bz2",

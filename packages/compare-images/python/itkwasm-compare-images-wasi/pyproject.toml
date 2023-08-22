@@ -32,7 +32,7 @@ keywords = [
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0.b129",
+    "itkwasm >= 1.0.b130",
     "importlib_resources",
 
 ]
@@ -43,7 +43,7 @@ path = "itkwasm_compare_images_wasi/_version.py"
 [tool.hatch.envs.default]
 dependencies = [
   "pytest",
-  "itk-webassemblyinterface >= 1.0b127"
+  "itk-webassemblyinterface >= 1.0.b127"
 ]
 
 [project.urls]
