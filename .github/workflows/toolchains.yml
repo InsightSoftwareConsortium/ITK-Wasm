@@ -28,7 +28,7 @@ jobs:
       run: |
         ./src/docker/pull.sh
 
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3
       continue-on-error: true
       with:
         name: docker-cache
@@ -49,7 +49,7 @@ jobs:
         docker save itkwasm/wasi-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-wasi-base.tar.xz
 
     - name: Cache docker results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: docker-cache
         path: ./docker-cache
@@ -81,7 +81,7 @@ jobs:
       run: |
         ./src/docker/pull.sh
 
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3
       continue-on-error: true
       with:
         name: docker-cache
@@ -104,7 +104,7 @@ jobs:
         docker save itkwasm/wasi:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-wasi.tar.xz
 
     - name: Cache docker results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: docker-cache
         path: ./docker-cache
