@@ -32,7 +32,7 @@ keywords = [
 
 requires-python = ">=3.7"
 dependencies = [
-    "itkwasm >= 1.0.b130",
+    "itkwasm >= 1.0.b131",
 ]
 
 [tool.hatch.version]
@@ -43,7 +43,7 @@ dependencies = [
   "pytest",
   "pytest-pyodide",
   "itk-webassemblyinterface >= 1.0.b127",
-  "itkwasm >= 1.0.b130",
+  "itkwasm >= 1.0.b131",
 ]
 
 [project.urls]

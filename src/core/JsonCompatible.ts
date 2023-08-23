@@ -1,8 +1,9 @@
 type JsonCompatible =
+    | null
     | string
     | number
     | boolean
-    | { [x: string]: JsonCompatible }
+    | { [key: string]: JsonCompatible }
     | JsonCompatible[]
 
 export default JsonCompatible

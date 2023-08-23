@@ -93,9 +93,9 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           setPipelineModuleInputJSON(pipelineModule, dataJSON, index)
           break
         }
-        case InterfaceTypes.JsonObject:
+        case InterfaceTypes.JsonCompatible:
         {
-          const dataArray = encoder.encode(JSON.stringify(input.data))
+          const dataArray = encoder.encode(JSON.stringify(input))
           const arrayPtr = setPipelineModuleInputArray(pipelineModule, dataArray, index, 0)
           const dataJSON = { size: dataArray.buffer.byteLength, data: `data:application/vnd.itk.address,0:${arrayPtr}` }
           setPipelineModuleInputJSON(pipelineModule, dataJSON, index)
@@ -325,12 +325,12 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
           outputData = { data: decoder.decode(dataArrayView) }
           break
         }
-        case InterfaceTypes.JsonObject:
+        case InterfaceTypes.JsonCompatible:
         {
           const dataPtr = pipelineModule.ccall('itk_wasm_output_array_address', 'number', ['number', 'number', 'number'], [0, index, 0])
           const dataSize = pipelineModule.ccall('itk_wasm_output_array_size', 'number', ['number', 'number', 'number'], [0, index, 0])
           const dataArrayView = new Uint8Array(pipelineModule.HEAPU8.buffer, dataPtr, dataSize)
-          outputData = { data: JSON.parse(decoder.decode(dataArrayView)) }
+          outputData = JSON.parse(decoder.decode(dataArrayView))
           break
         }
         case InterfaceTypes.BinaryStream:

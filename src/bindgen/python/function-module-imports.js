@@ -8,7 +8,7 @@ function functionModuleImports(interfaceJson) {
     interfaceJson[pipelineComponent].forEach((value) => {
       if (interfaceJsonTypeToInterfaceType.has(value.type)) {
         const interfaceType = interfaceJsonTypeToInterfaceType.get(value.type)
-        if (interfaceType !== 'JsonObject') {
+        if (interfaceType !== 'JsonCompatible') {
           usedInterfaceTypes.add(interfaceType)
         }
       }

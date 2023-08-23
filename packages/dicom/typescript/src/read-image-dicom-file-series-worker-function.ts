@@ -5,7 +5,6 @@ import {
   PipelineInput,
   InterfaceTypes,
   Image,
-  JsonObject,
 } from 'itk-wasm'
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
@@ -25,7 +24,7 @@ async function readImageDicomFileSeriesWorkerFunction(
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.Image },
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
   ]
 
   const inputs: Array<PipelineInput> = [
@@ -66,7 +65,7 @@ async function readImageDicomFileSeriesWorkerFunction(
   const result = {
     webWorker: usedWebWorker as Worker,
     outputImage: outputs[0].data as Image,
-    sortedFilenames: ((outputs[1].data as JsonObject).data as string[]),
+    sortedFilenames: outputs[1].data as string[],
   }
   return result
 }

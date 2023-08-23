@@ -2,7 +2,7 @@
 
 import {
   BinaryFile,
-  JsonObject,
+  JsonCompatible,
   Image,
   InterfaceTypes,
   PipelineOutput,
@@ -34,7 +34,7 @@ async function applyPresentationStateToImage(
 ) : Promise<ApplyPresentationStateToImageResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
     { type: InterfaceTypes.Image },
   ]
 
@@ -102,7 +102,7 @@ async function applyPresentationStateToImage(
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    presentationStateOutStream: (outputs[0].data as JsonObject).data,
+    presentationStateOutStream: outputs[0].data as JsonCompatible,
     outputImage: outputs[1].data as Image,
   }
   return result

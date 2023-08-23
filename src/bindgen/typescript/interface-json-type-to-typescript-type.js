@@ -25,8 +25,8 @@ const interfaceJsonTypeToTypeScriptType = new Map([
   ['UINT:UINT', 'number'],
   ['FLOAT', 'number'],
   ['FLOAT:FLOAT', 'number'],
-  ['INPUT_JSON', 'any'],
-  ['OUTPUT_JSON', 'any'],
+  ['INPUT_JSON', 'JsonCompatible'],
+  ['OUTPUT_JSON', 'JsonCompatible'],
 ])
 
 export default interfaceJsonTypeToTypeScriptType

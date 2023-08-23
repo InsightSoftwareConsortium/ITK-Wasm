@@ -1,6 +1,5 @@
 import {
   Image,
-  JsonObject,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -27,7 +26,7 @@ async function compareDoubleImagesNode(
 ) : Promise<CompareDoubleImagesNodeResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
     { type: InterfaceTypes.Image },
     { type: InterfaceTypes.Image },
   ]
@@ -94,7 +93,7 @@ async function compareDoubleImagesNode(
   }
 
   const result = {
-    metrics: (outputs[0].data as JsonObject).data as CompareImagesMetric,
+    metrics: outputs[0].data as CompareImagesMetric,
     differenceImage: outputs[1].data as Image,
     differenceUchar2dImage: outputs[2].data as Image,
   }

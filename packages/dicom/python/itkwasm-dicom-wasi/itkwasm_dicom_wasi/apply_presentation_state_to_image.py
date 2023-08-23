@@ -58,7 +58,7 @@ def apply_presentation_state_to_image(
         _pipeline = Pipeline(file_resources('itkwasm_dicom_wasi').joinpath(Path('wasm_modules') / Path('apply-presentation-state-to-image.wasi.wasm')))
 
     pipeline_outputs: List[PipelineOutput] = [
-        PipelineOutput(InterfaceTypes.JsonObject),
+        PipelineOutput(InterfaceTypes.JsonCompatible),
         PipelineOutput(InterfaceTypes.Image),
     ]
 
@@ -100,7 +100,7 @@ def apply_presentation_state_to_image(
     outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
     result = (
-        outputs[0].data.data,
+        outputs[0].data,
         outputs[1].data,
     )
     return result

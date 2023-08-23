@@ -1,7 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import {
-  JsonObject,
+  JsonCompatible,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -30,7 +30,7 @@ async function readDicomTagsNode(
   const mountDirs: Set<string> = new Set()
 
   const desiredOutputs: Array<PipelineOutput> = [
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
   ]
 
   mountDirs.add(path.dirname(dicomFile as string))
@@ -50,7 +50,7 @@ async function readDicomTagsNode(
   args.push('--memory-io')
   if (typeof options.tagsToRead !== "undefined") {
     const inputCountString = inputs.length.toString()
-    inputs.push({ type: InterfaceTypes.JsonObject, data: options.tagsToRead as JsonObject })
+    inputs.push({ type: InterfaceTypes.JsonCompatible, data: options.tagsToRead as JsonCompatible })
     args.push('--tags-to-read', inputCountString)
 
   }
@@ -67,7 +67,7 @@ async function readDicomTagsNode(
   }
 
   const result = {
-    tags: (outputs[0].data as JsonObject).data,
+    tags: outputs[0].data as JsonCompatible,
   }
   return result
 }

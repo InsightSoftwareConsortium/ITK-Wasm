@@ -56,7 +56,7 @@ def compare_double_images(
         _pipeline = Pipeline(file_resources('itkwasm_compare_images_wasi').joinpath(Path('wasm_modules') / Path('compare-double-images.wasi.wasm')))
 
     pipeline_outputs: List[PipelineOutput] = [
-        PipelineOutput(InterfaceTypes.JsonObject),
+        PipelineOutput(InterfaceTypes.JsonCompatible),
         PipelineOutput(InterfaceTypes.Image),
         PipelineOutput(InterfaceTypes.Image),
     ]
@@ -101,7 +101,7 @@ def compare_double_images(
     outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
     result = (
-        outputs[0].data.data,
+        outputs[0].data,
         outputs[1].data,
         outputs[2].data,
     )

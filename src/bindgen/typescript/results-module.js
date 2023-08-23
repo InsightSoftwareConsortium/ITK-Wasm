@@ -28,6 +28,9 @@ function resultsModule (srcOutputDir, interfaceJson, forNode, modulePascalCase, 
     }
     resultContent += `  /** ${output.description} */\n`
     const outputType = interfaceJsonTypeToTypeScriptType.get(output.type)
+    if (outputType === 'JsonCompatible') {
+      resultsImportTypes.add('JsonCompatible')
+    }
     if (forNode && outputType.includes('File')) {
       resultContent += `  ${camelCase(output.name)}: string\n\n`
     } else {

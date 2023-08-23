@@ -1,8 +1,5 @@
-// Generated file. To retain edits, remove this comment.
-
 import {
   BinaryFile,
-  JsonObject,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -31,7 +28,7 @@ async function readDicomTags(
 ) : Promise<ReadDicomTagsResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
   ]
 
   let dicomFileFile = dicomFile
@@ -56,7 +53,7 @@ async function readDicomTags(
   args.push('--memory-io')
   if (typeof options.tagsToRead !== "undefined") {
     const inputCountString = inputs.length.toString()
-    inputs.push({ type: InterfaceTypes.JsonObject, data: options.tagsToRead as JsonObject })
+    inputs.push({ type: InterfaceTypes.JsonCompatible, data: options.tagsToRead })
     args.push('--tags-to-read', inputCountString)
 
   }
@@ -75,7 +72,7 @@ async function readDicomTags(
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    tags: (outputs[0].data as JsonObject).data,
+    tags: outputs[0].data as [string, string][],
   }
   return result
 }

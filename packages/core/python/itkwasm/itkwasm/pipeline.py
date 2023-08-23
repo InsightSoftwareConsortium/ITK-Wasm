@@ -17,7 +17,7 @@ from .binary_file import BinaryFile
 from .image import Image
 from .mesh import Mesh
 from .polydata import PolyData
-from .json_object import JsonObject
+from .json_compatible import JsonCompatible
 from .int_types import IntTypes
 from .float_types import FloatTypes
 from ._to_numpy_array import _to_numpy_array
@@ -289,8 +289,8 @@ class Pipeline:
                     "cellData": f"data:application/vnd.itk.address,0:{cellData_ptr}"
                 }
                 ri.set_input_json(polydata_json, index)
-            elif input_.type == InterfaceTypes.JsonObject:
-                data_array = json.dumps(input_.data.data).encode()
+            elif input_.type == InterfaceTypes.JsonCompatible:
+                data_array = json.dumps(input_.data).encode()
                 array_ptr = ri.set_input_array(data_array, index, 0)
                 data_json = { "size": len(data_array), "data": f"data:application/vnd.itk.address,0:{array_ptr}" }
                 ri.set_input_json(data_json, index)
@@ -424,11 +424,11 @@ class Pipeline:
                         polydata.triangleStrips =  _to_numpy_array(polydata.polyDataType.cellPixelComponentType, bytes([]))
 
                     output_data = PipelineOutput(InterfaceTypes.PolyData, polydata)
-                elif output.type == InterfaceTypes.JsonObject:
+                elif output.type == InterfaceTypes.JsonCompatible:
                     data_ptr = ri.get_output_array_address(0, index, 0)
                     data_size = ri.get_output_array_size(0, index, 0)
                     data_array = ri.wasmtime_lift(data_ptr, data_size)
-                    output_data = PipelineOutput(InterfaceTypes.JsonObject, JsonObject(json.loads(data_array.decode())))
+                    output_data = PipelineOutput(InterfaceTypes.JsonCompatible, json.loads(data_array.decode()))
                 else:
                     raise ValueError(f'Unexpected/not yet supported output.type {output.type}')
 

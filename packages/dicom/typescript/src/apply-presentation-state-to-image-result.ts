@@ -1,13 +1,13 @@
 // Generated file. To retain edits, remove this comment.
 
-import { Image } from 'itk-wasm'
+import { JsonCompatible, Image } from 'itk-wasm'
 
 interface ApplyPresentationStateToImageResult {
   /** WebWorker used for computation */
   webWorker: Worker | null
 
   /** Output overlay information */
-  presentationStateOutStream: Object
+  presentationStateOutStream: JsonCompatible
 
   /** Output image */
   outputImage: Image

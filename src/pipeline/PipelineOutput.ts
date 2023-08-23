@@ -7,7 +7,7 @@ import BinaryStream from '../core/BinaryStream.js'
 import Image from '../core/Image.js'
 import Mesh from '../core/Mesh.js'
 import PolyData from '../core/PolyData.js'
-import JsonObject from '../core/JsonObject.js'
+import JsonCompatible from '../core/JsonCompatible.js'
 
 interface PipelineOutput {
   path?: string
@@ -17,7 +17,7 @@ interface PipelineOutput {
   data?:
   | string
   | Uint8Array
-  | JsonObject
+  | JsonCompatible
   | TextStream
   | BinaryStream
   | TextFile
