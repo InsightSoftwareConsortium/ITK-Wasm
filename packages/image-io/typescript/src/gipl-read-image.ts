@@ -2,7 +2,7 @@
 
 import {
   BinaryFile,
-  JsonObject,
+  JsonCompatible,
   Image,
   InterfaceTypes,
   PipelineOutput,
@@ -32,7 +32,7 @@ async function giplReadImage(
 ) : Promise<GiplReadImageResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
     { type: InterfaceTypes.Image },
   ]
 
@@ -77,7 +77,7 @@ async function giplReadImage(
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    couldRead: (outputs[0].data as JsonObject).data as boolean,
+    couldRead: outputs[0].data as JsonCompatible,
     image: outputs[1].data as Image,
   }
   return result

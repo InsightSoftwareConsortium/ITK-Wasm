@@ -2,7 +2,7 @@
 
 import {
   Image,
-  JsonObject,
+  JsonCompatible,
   BinaryFile,
   InterfaceTypes,
   PipelineOutput,
@@ -33,7 +33,7 @@ async function ge4WriteImage(
 
   const serializedImagePath = typeof options.serializedImagePath === 'undefined' ? 'serializedImage' : options.serializedImagePath
   const desiredOutputs: Array<PipelineOutput> = [
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
     { type: InterfaceTypes.BinaryFile, data: { path: serializedImagePath, data: new Uint8Array() }},
   ]
 
@@ -76,7 +76,7 @@ async function ge4WriteImage(
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    couldWrite: (outputs[0].data as JsonObject).data as boolean,
+    couldWrite: outputs[0].data as JsonCompatible,
     serializedImage: outputs[1].data as BinaryFile,
   }
   return result

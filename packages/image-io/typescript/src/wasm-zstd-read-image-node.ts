@@ -1,7 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import {
-  JsonObject,
+  JsonCompatible,
   Image,
   InterfaceTypes,
   PipelineOutput,
@@ -31,7 +31,7 @@ async function wasmZstdReadImageNode(
   const mountDirs: Set<string> = new Set()
 
   const desiredOutputs: Array<PipelineOutput> = [
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
     { type: InterfaceTypes.Image },
   ]
 
@@ -69,7 +69,7 @@ async function wasmZstdReadImageNode(
   }
 
   const result = {
-    couldRead: (outputs[0].data as JsonObject).data as boolean,
+    couldRead: outputs[0].data as JsonCompatible,
     image: outputs[1].data as Image,
   }
   return result

@@ -1,6 +1,10 @@
+// Generated file. To retain edits, remove this comment.
+
+import { JsonCompatible } from 'itk-wasm'
+
 interface BioRadWriteImageNodeResult {
   /** Whether the input could be written. If false, the output image is not valid. */
-  couldWrite: boolean
+  couldWrite: JsonCompatible
 
   /** Output image serialized in the file format. */
   serializedImage: string

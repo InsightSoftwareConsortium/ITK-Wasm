@@ -2,7 +2,7 @@
 
 import {
   Image,
-  JsonObject,
+  JsonCompatible,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -31,7 +31,7 @@ async function pngWriteImageNode(
   const mountDirs: Set<string> = new Set()
 
   const desiredOutputs: Array<PipelineOutput> = [
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
     { type: InterfaceTypes.BinaryFile },
   ]
 
@@ -73,7 +73,7 @@ async function pngWriteImageNode(
   }
 
   const result = {
-    couldWrite: (outputs[0].data as JsonObject).data as boolean,
+    couldWrite: outputs[0].data as JsonCompatible,
     serializedImage: outputs[1].data as string,
   }
   return result
