@@ -11,7 +11,7 @@ from .text_file import TextFile
 from .text_stream import TextStream
 from .float_types import FloatTypes
 from .int_types import IntTypes
-from .json_object import JsonObject
+from .json_compatible import JsonCompatible
 from ._to_numpy_array import _to_numpy_array
 
 @dataclass
@@ -221,7 +221,5 @@ def to_js(py):
             data = fp.read()
         text_file_dict['data'] = data
         return pyodide.ffi.to_js(text_file_dict, dict_converter=js.Object.fromEntries)
-    elif isinstance(py, JsonObject):
-        return pyodide.ffi.to_js(py.data)
 
     return pyodide.ffi.to_js(py)

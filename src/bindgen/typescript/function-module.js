@@ -25,6 +25,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   let functionContent = `import {\n`
   const usedInterfaceTypes = new Set()
   let needMountDirs = false
+  let needJsonCompatible = false
   const pipelineComponents = ['inputs', 'outputs', 'parameters']
   pipelineComponents.forEach((pipelineComponent) => {
     interfaceJson[pipelineComponent].forEach((value) => {
@@ -32,6 +33,10 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         const interfaceType = interfaceJsonTypeToInterfaceType.get(value.type)
         if (interfaceType.includes('File') && forNode) {
           needMountDirs = true
+          return
+        }
+        if (interfaceType === 'JsonCompatible' && pipelineComponent === 'inputs') {
+          needJsonCompatible = true
           return
         }
         usedInterfaceTypes.add(interfaceType)
@@ -44,6 +49,9 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   functionContent += '  InterfaceTypes,\n'
   functionContent += '  PipelineOutput,\n'
   functionContent += '  PipelineInput,\n'
+  if (needJsonCompatible) {
+    functionContent += '  JsonCompatible,\n'
+  }
   if (forNode) {
     functionContent += '  runPipelineNode\n'
   } else {
@@ -201,8 +209,8 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         let data = camel
         if (interfaceType.includes('Stream')) {
           data = `{ data: ${camel} } `
-        } else if (interfaceType === 'JsonObject') {
-          data = `{ data: ${camel} as any } `
+        } else if (interfaceType === 'JsonCompatible') {
+          data = `${camel} as JsonCompatible `
         }
         functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${data} },\n`
       }
@@ -300,7 +308,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
           functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: value } })\n`
           functionContent += '      args.push(inputCountString)\n\n'
         } else {
-          // Image, Mesh, PolyData, JsonObject
+          // Image, Mesh, PolyData, JsonCompatible
           functionContent += '      const inputCountString = inputs.length.toString()\n'
           functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: value as ${interfaceType} })\n`
           functionContent += '      args.push(inputCountString)\n\n'
@@ -330,7 +338,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
           functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: options.${camel} } })\n`
           functionContent += `    args.push('--${parameter.name}', inputCountString)\n\n`
         } else {
-          // Image, Mesh, PolyData, JsonObject
+          // Image, Mesh, PolyData, JsonCompatible
           functionContent += '    const inputCountString = inputs.length.toString()\n'
           functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: options.${camel} as ${interfaceType} })\n`
           functionContent += `    args.push('--${parameter.name}', inputCountString)\n\n`
@@ -361,7 +369,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   interfaceJson.outputs.forEach((output, index) => {
     const camel = camelCase(output.name)
     const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-    if (interfaceType.includes('TextStream') || interfaceType.includes('BinaryStream') || interfaceType.includes('JsonObject')) {
+    if (interfaceType.includes('TextStream') || interfaceType.includes('BinaryStream')) {
       functionContent += `    ${camel}: (outputs[${index.toString()}].data as ${interfaceType}).data,\n`
     } else if (forNode && interfaceType.includes('File')) {
       functionContent += `    ${camel}: outputs[${index.toString()}].data as string,\n`

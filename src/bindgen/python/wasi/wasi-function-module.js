@@ -130,7 +130,7 @@ from itkwasm import (
           args += `            pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(value)))\n`
           args += `            args.append(input_count_spring)\n`
         } else {
-          // Image, Mesh, PolyData, JsonObject
+          // Image, Mesh, PolyData, JsonCompatible
           args += `            input_count_string = str(len(pipeline_inputs))\n`
           args += `            pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, value))\n`
           args += `            args.append(input_count_string)\n`
@@ -155,7 +155,7 @@ from itkwasm import (
           args += `        args.append('--${parameter.name}')\n`
           args += `        args.append(input_count_string)\n`
         } else {
-          // Image, Mesh, PolyData, JsonObject
+          // Image, Mesh, PolyData, JsonCompatible
           args += `        input_count_string = str(len(pipeline_inputs))\n`
           args += `        pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${snake}))\n`
           args += `        args.append('--${parameter.name}')\n`

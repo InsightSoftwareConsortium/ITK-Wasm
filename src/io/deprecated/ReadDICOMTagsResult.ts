@@ -1,7 +1,7 @@
 interface ReadDICOMTagsResult {
   webWorker: Worker
 
-  tags: Map<string, string>
+  tags: Array<[string, string]>
 }
 
 export default ReadDICOMTagsResult

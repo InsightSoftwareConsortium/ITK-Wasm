@@ -1,7 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import {
-  JsonObject,
+  JsonCompatible,
   Image,
   InterfaceTypes,
   PipelineOutput,
@@ -33,7 +33,7 @@ async function applyPresentationStateToImageNode(
   const mountDirs: Set<string> = new Set()
 
   const desiredOutputs: Array<PipelineOutput> = [
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
     { type: InterfaceTypes.Image },
   ]
 
@@ -89,7 +89,7 @@ async function applyPresentationStateToImageNode(
   }
 
   const result = {
-    presentationStateOutStream: (outputs[0].data as JsonObject).data,
+    presentationStateOutStream: outputs[0].data as JsonCompatible,
     outputImage: outputs[1].data as Image,
   }
   return result

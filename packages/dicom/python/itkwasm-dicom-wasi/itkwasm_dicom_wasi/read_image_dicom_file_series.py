@@ -39,7 +39,7 @@ def read_image_dicom_file_series(
 
     pipeline_outputs: List[PipelineOutput] = [
         PipelineOutput(InterfaceTypes.Image),
-        PipelineOutput(InterfaceTypes.JsonObject),
+        PipelineOutput(InterfaceTypes.JsonCompatible),
     ]
 
     pipeline_inputs: List[PipelineInput] = [
@@ -68,7 +68,7 @@ def read_image_dicom_file_series(
 
     result = (
         outputs[0].data,
-        outputs[1].data.data,
+        outputs[1].data,
     )
     return result
 

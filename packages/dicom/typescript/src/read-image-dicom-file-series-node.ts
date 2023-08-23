@@ -2,7 +2,7 @@
 
 import {
   Image,
-  JsonObject,
+  JsonCompatible,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -30,7 +30,7 @@ async function readImageDicomFileSeriesNode(
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.Image },
-    { type: InterfaceTypes.JsonObject },
+    { type: InterfaceTypes.JsonCompatible },
   ]
 
   const inputs: Array<PipelineInput> = [
@@ -77,7 +77,7 @@ async function readImageDicomFileSeriesNode(
 
   const result = {
     outputImage: outputs[0].data as Image,
-    sortedFilenames: (outputs[1].data as JsonObject).data,
+    sortedFilenames: outputs[1].data as JsonCompatible,
   }
   return result
 }

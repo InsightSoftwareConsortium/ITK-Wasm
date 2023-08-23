@@ -11,7 +11,7 @@ from .binary_file import BinaryFile
 from .binary_stream import BinaryStream
 from .text_file import TextFile
 from .text_stream import TextStream
-from .json_object import JsonObject
+from .json_compatible import JsonCompatible
 from .pipeline import Pipeline
 from .pipeline_input import PipelineInput
 from .pipeline_output import PipelineOutput
@@ -38,7 +38,7 @@ __all__ = [
   "BinaryStream",
   "TextFile",
   "TextStream",
-  "JsonObject",
+  "JsonCompatible",
   "FloatTypes",
   "IntTypes",
   "PixelTypes",

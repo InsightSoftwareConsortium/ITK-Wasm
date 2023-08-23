@@ -321,11 +321,10 @@ async def test_json_object_conversion(selenium, package_wheel):
     await micropip.install(package_wheel)
 
     from itkwasm.pyodide import to_js, to_py
-    from itkwasm import JsonObject
 
     data = { 'a': 1, 'b': True, 'c': { 'nested': True }}
 
-    data_js = to_js(JsonObject(data))
+    data_js = to_js(data)
     data_py = to_py(data_js)
 
     assert isinstance(data_py, dict)

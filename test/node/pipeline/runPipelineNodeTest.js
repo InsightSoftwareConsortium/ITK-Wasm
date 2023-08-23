@@ -64,15 +64,15 @@ test('runPipelineNode uses input and output json data via memory io', (t) => {
     '0'
   ]
   const desiredOutputs = [
-    { type: InterfaceTypes.JsonObject }
+    { type: InterfaceTypes.JsonCompatible }
   ]
   const jsonObject = { key1: 'text', key2: 8 }
   const inputs = [
-    { type: InterfaceTypes.JsonObject, data: jsonObject }
+    { type: InterfaceTypes.JsonCompatible, data: jsonObject }
   ]
   return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
     .then(function ({ outputs }) {
-      t.is(outputs[0].type, InterfaceTypes.JsonObject)
+      t.is(outputs[0].type, InterfaceTypes.JsonCompatible)
       t.deepEqual(outputs[0].data.data, jsonObject)
     })
 })

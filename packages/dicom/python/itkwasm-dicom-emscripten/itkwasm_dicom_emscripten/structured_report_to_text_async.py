@@ -1,3 +1,5 @@
+# Generated file. To retain edits, remove this comment.
+
 # Generated file. Do not edit.
 
 from pathlib import Path
