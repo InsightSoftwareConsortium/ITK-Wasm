@@ -27,7 +27,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
     result += `import { readMeshFile } from 'itk-wasm'\n`
   }
   if (needReadImage) {
-    result += `import { readImageFile } from 'itk-wasm'\n`
+    result += `import { readImageFile, copyImage } from 'itk-wasm'\n`
   }
   const needWriteMesh = interfaceJson.outputs.filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Mesh').length > 0
   if (needWriteMesh) {
@@ -149,6 +149,8 @@ class ${functionNamePascalCase}Model {
       result += `          model.inputs.get('${camelCase(input.name)}').slice(),\n`
     } else if (input.type.startsWith('INPUT_BINARY_FILE') || input.type.startsWith('INPUT_TEXT_FILE')) {
       result += `          { data: model.inputs.get('${camelCase(input.name)}').data.slice(), path: model.inputs.get('${camelCase(input.name)}').path },\n`
+    } else if (input.type === 'INPUT_IMAGE') {
+      result += `          copyImage(model.inputs.get('${camelCase(input.name)}')),\n`
     } else {
       result += `          model.inputs.get('${camelCase(input.name)}'),\n`
     }

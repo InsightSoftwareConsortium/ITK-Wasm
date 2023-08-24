@@ -7,9 +7,9 @@ function inputParametersDemoHtml (functionName, prefix, indent, parameter, requi
   const requiredAttr = required ? 'required ' : ''
   const label = useCamelCase ? camelCase(parameter.name) : snakeCase(parameter.name)
   const tooltipContent = `content="Use the Upload button to provide the ${label}"`
-  switch (parameter.type) {
+  const parameterType = parameter.type.split(' ')[0].split(':')[0]
+  switch (parameterType) {
     case 'INPUT_TEXT_FILE':
-    case 'INPUT_TEXT_FILE:FILE':
     case 'INPUT_TEXT_STREAM': {
       result += `${prefix}${indent}<sl-tooltip ${tooltipContent}><sl-details id="${functionName}-${parameter.name}-details"  summary="${label}: ${description}" disabled></sl-details></sl-tooltip>\n`
       const multiple = parameter.itemsExpectedMax > 1 ? 'multiple ' : ''
@@ -18,7 +18,6 @@ function inputParametersDemoHtml (functionName, prefix, indent, parameter, requi
     }
       break
     case 'INPUT_BINARY_FILE':
-    case 'INPUT_BINARY_FILE:FILE':
     case 'INPUT_BINARY_STREAM': {
       result += `${prefix}${indent}<sl-tooltip ${tooltipContent}><sl-details id="${functionName}-${parameter.name}-details" summary="${label}: ${description}" disabled></sl-details></sl-tooltip>\n`
       const multiple = parameter.itemsExpectedMax > 1 ? 'multiple ' : ''
@@ -32,20 +31,18 @@ function inputParametersDemoHtml (functionName, prefix, indent, parameter, requi
     case 'INT':
     case 'UINT':
     case 'FLOAT': {
-      if (parameter.itemsExpected !== 1 || parameter.itemsExpectedMin !== 1 || parameter.itemsExpectedMax !== 1) {
-        // TODO
-        console.error('items != 1 are currently not supported')
-        process.exit(1)
-      }
+      const typeName = parameter.itemsExpected !== 1 ? "text" : "number"
       let constraints = ''
-      if (parameter.type === 'INT') {
-        constraints = 'step="1"'
-      } else if (parameter.type === 'UINT') {
-        constraints = 'min="0" step="1"'
-      } else if (parameter.type === 'FLOAT') {
-        constraints = 'step="any"'
+      if (parameter.itemsExpected !== 1) {
+        constraints = ''
+      } else if (parameterType === 'INT') {
+        constraints = 'step="1" '
+      } else if (parameterType === 'UINT') {
+        constraints = 'min="0" step="1" '
+      } else if (parameterType === 'FLOAT') {
+        constraints = 'step="any" '
       }
-      result += `${prefix}${indent}<sl-input ${requiredAttr}name="${parameter.name}" type="number" value="${parameter.default}" ${constraints} label="${label}" help-text="${description}"></sl-input>\n`
+      result += `${prefix}${indent}<sl-input ${requiredAttr}name="${parameter.name}" type="${typeName}" value="${parameter.default}" ${constraints}label="${label}" help-text="${description}"></sl-input>\n`
       result += '<br />\n'
     }
       break
@@ -61,7 +58,7 @@ function inputParametersDemoHtml (functionName, prefix, indent, parameter, requi
       result += '<br /><br />\n'
       break
     default:
-      console.error(`Unexpected interface type: ${parameter.type}`)
+      console.error(`Unexpected interface type: ${parameterType}`)
       process.exit(1)
   }
   return result
