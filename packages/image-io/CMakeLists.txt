@@ -206,3 +206,21 @@ if(EMSCRIPTEN)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/image-io-index.ts.in
     ${CMAKE_CURRENT_SOURCE_DIR}/typescript/src/image-io-index.ts @ONLY)
 endif()
+
+enable_testing()
+
+set(input_dir ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input)
+set(baseline_dir ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline)
+set(output_dir ${CMAKE_CURRENT_BINARY_DIR})
+
+add_test(NAME bio-rad-read-image-test
+  COMMAND bio-rad-read-image
+  ${input_dir}/biorad.pic
+  ${output_dir}/bio-rad-read-image-test.could-read.json
+  ${output_dir}/bio-rad-read-image-test.iwi.cbor)
+
+add_test(NAME bio-rad-write-image-test
+  COMMAND bio-rad-write-image
+  ${baseline_dir}/bio-rad-read-image-test.iwi.cbor
+  ${output_dir}/bio-rad-write-image-test.could-write.json
+  ${output_dir}/bio-rad-write-image-test.pic)

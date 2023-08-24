@@ -1,3 +1,6 @@
 ImageIOIndex.ts.in
 dist
-emscripten-build
+emscripten-build/
+wasi-build/
+package-lock.json
+test/data/
