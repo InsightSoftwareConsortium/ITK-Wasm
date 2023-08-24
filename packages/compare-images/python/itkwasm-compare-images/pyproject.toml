@@ -34,8 +34,8 @@ keywords = [
 requires-python = ">=3.7"
 dependencies = [
     "itkwasm >= 1.0.b131",
-    "itkwasm-compare-images-wasi; sys_platform != \"emscripten\"",
-    "itkwasm-compare-images-emscripten; sys_platform == \"emscripten\"",
+    "itkwasm-compare-images-wasi >= 1.0.1; sys_platform != \"emscripten\"",
+    "itkwasm-compare-images-emscripten >= 1.0.1; sys_platform == \"emscripten\"",
 
 ]
 
