@@ -1,6 +1,6 @@
 // Generated file. To retain edits, remove this comment.
 
-import { readImageFile } from 'itk-wasm'
+import { readImageFile, copyImage } from 'itk-wasm'
 import { writeImageArrayBuffer, copyImage } from 'itk-wasm'
 import * as compareImages from '../../../dist/bundles/compare-images.js'
 import compareDoubleImagesLoadSampleInputs from "./compare-double-images-load-sample-inputs.js"
@@ -147,7 +147,7 @@ class CompareDoubleImagesController  {
         const t0 = performance.now()
 
         const { webWorker, metrics, differenceImage, differenceUchar2dImage, } = await compareImages.compareDoubleImages(this.webWorker,
-          model.inputs.get('testImage'),
+          copyImage(model.inputs.get('testImage')),
           Object.fromEntries(model.options.entries())
         )
 
