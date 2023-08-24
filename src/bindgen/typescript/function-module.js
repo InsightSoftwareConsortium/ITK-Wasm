@@ -39,7 +39,9 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
           needJsonCompatible = true
           return
         }
-        usedInterfaceTypes.add(interfaceType)
+        if (!(pipelineComponent === 'inputs' && interfaceType === 'BinaryStream')) {
+          usedInterfaceTypes.add(interfaceType)
+        }
       }
     })
   })

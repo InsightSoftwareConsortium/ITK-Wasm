@@ -3,16 +3,15 @@ import camelCase from '../../camel-case.js'
 function outputDemoHtml (functionName, prefix, indent, parameter) {
   let result = ''
   const description = parameter.description.replaceAll('"', '&quot;')
-  switch(parameter.type) {
+  const parameterType = parameter.type.split(' ')[0].split(':')[0]
+  switch(parameterType) {
     case 'OUTPUT_TEXT_FILE':
-    case 'OUTPUT_TEXT_FILE:FILE':
     case 'OUTPUT_TEXT_STREAM':
       result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
       result += `<br /><br />\n`
       break
     case 'OUTPUT_BINARY_FILE':
-    case 'OUTPUT_BINARY_FILE:FILE':
     case 'OUTPUT_BINARY_STREAM':
       result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
@@ -67,7 +66,7 @@ function outputDemoHtml (functionName, prefix, indent, parameter) {
     }
       break
     default:
-      console.error(`Unexpected interface type: ${parameter.type}`)
+      console.error(`Unexpected interface type: ${parameterType}`)
       process.exit(1)
   }
   return result
