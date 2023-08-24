@@ -93,7 +93,7 @@ async function compareDoubleImagesNode(
   }
 
   const result = {
-    metrics: outputs[0].data as CompareImagesMetric,
+    metrics: outputs[0].data as unknown as CompareImagesMetric,
     differenceImage: outputs[1].data as Image,
     differenceUchar2dImage: outputs[2].data as Image,
   }
