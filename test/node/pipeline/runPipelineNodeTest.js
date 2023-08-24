@@ -73,7 +73,7 @@ test('runPipelineNode uses input and output json data via memory io', (t) => {
   return runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
     .then(function ({ outputs }) {
       t.is(outputs[0].type, InterfaceTypes.JsonCompatible)
-      t.deepEqual(outputs[0].data.data, jsonObject)
+      t.deepEqual(outputs[0].data, jsonObject)
     })
 })
 
