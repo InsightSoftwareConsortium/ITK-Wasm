@@ -8,6 +8,7 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 |-----------------------------|:---------------------------------------------:|:----------------------:|
 | [@itk-wasm/compress-stringify][compress-stringify-repo] | [<img src="../_static/packages/compress-stringify.png" width="128" />][compress-stringify-demo-js]<br />  *Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][compress-stringify-demo-js] <br/>[🕮 Docs][compress-stringify-docs-js] <br/>[📦 Package][compress-stringify-package-js] <br/> <br/> ![py][py-logo] <br/>[👨‍💻 Demo][compress-stringify-demo-py] <br/>[🕮 Docs][compress-stringify-docs-py] <br/>[📦 Package][compress-stringify-package-py] |
 | [@itk-wasm/dicom][dicom-repo] | [<img src="../_static/packages/dicom.png" width="128" />][dicom-demo-js] <br /> *Read files and images related to DICOM file format.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][dicom-demo-js] <br/>[🕮 Docs][dicom-docs-js] <br/>[📦 Package][dicom-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][dicom-docs-py] <br/>[📦 Package][dicom-package-py] |
+| [@itk-wasm/htj2k][htj2k-repo] | [<img src="../_static/packages/htj2k.png" width="128" />][htj2k-demo-js] <br /> *Wasm-SIMD accelerated decoding and encoding High-throughput JPEG2000 (HTJ2K) images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][htj2k-demo-js] <br/>[🕮 Docs][htj2k-docs-js] <br/>[📦 Package][htj2k-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][htj2k-docs-py] <br/>[📦 Package][htj2k-package-py] |
 
 [js-logo]: /_static/javascript-logo.svg
 [ts-logo]: /_static/typescript-logo.svg
@@ -27,3 +28,10 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 [dicom-package-js]: https://www.npmjs.com/package/@itk-wasm/dicom
 [dicom-docs-py]: https://itk-wasm-dicom-python-docs.on.fleek.co/
 [dicom-package-py]: https://pypi.org/project/itkwasm-dicom/
+
+[htj2k-repo]: https://github.com/InsightSoftwareConsortium/ITKIOOpenJPH/tree/main/src/wasm
+[htj2k-demo-js]: https://itk-wasm-htj2k-app.on.fleek.co/
+[htj2k-docs-js]: https://itk-wasm-htj2k-docs.on.fleek.co/
+[htj2k-package-js]: https://www.npmjs.com/package/@itk-wasm/htj2k
+[htj2k-docs-py]: https://itk-wasm-htj2k-python-docs.on.fleek.co/
+[htj2k-package-py]: https://pypi.org/project/itkwasm-htj2k/
