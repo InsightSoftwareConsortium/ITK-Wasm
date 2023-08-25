@@ -7,6 +7,7 @@
   "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/src/index.d.ts",
       "browser": "./dist/bundles/compare-images.js",
       "node": "./dist/bundles/compare-images.node.js",
       "default": "./dist/bundles/compare-images.js"

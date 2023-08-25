@@ -7,6 +7,7 @@
   "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/src/index.d.ts",
       "browser": "./dist/bundles/bundle-name.js",
       "node": "./dist/bundles/bundle-name-node.js",
       "default": "./dist/bundles/bundle-name.js"
