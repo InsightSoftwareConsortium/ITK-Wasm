@@ -95,7 +95,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
         }
         case InterfaceTypes.JsonCompatible:
         {
-          const dataArray = encoder.encode(JSON.stringify(input))
+          const dataArray = encoder.encode(JSON.stringify(input.data))
           const arrayPtr = setPipelineModuleInputArray(pipelineModule, dataArray, index, 0)
           const dataJSON = { size: dataArray.buffer.byteLength, data: `data:application/vnd.itk.address,0:${arrayPtr}` }
           setPipelineModuleInputJSON(pipelineModule, dataJSON, index)
