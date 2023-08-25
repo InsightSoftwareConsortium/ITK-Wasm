@@ -4,6 +4,10 @@
 
 > Compare images with a tolerance for regression testing.
 
+[👨‍💻 **Live API Demo** ✨](https://itk-wasm-compare-images-app.on.fleek.co/ ':include :type=iframe width=100% height=800px')
+
+[🕮 **Documentation** 📚](https://itk-wasm-compare-images-docs.on.fleek.co/)
+
 ## Installation
 
 ```sh
