@@ -1,5 +1,3 @@
-// Generated file. To retain edits, remove this comment.
-
 import {
   JsonCompatible,
   InterfaceTypes,
@@ -67,7 +65,7 @@ async function readDicomTagsNode(
   }
 
   const result = {
-    tags: outputs[0].data as JsonCompatible,
+    tags: outputs[0].data as [string, string][],
   }
   return result
 }

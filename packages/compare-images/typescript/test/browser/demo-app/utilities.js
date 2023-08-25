@@ -79,3 +79,14 @@ function enableInputs(inputId) {
   })
 }
 globalThis.enableInputs = enableInputs
+
+function applyInputParsedJson(inputElement, modelMap, parameterName) {
+  try {
+    const parsedJson = JSON.parse(inputElement.value)
+    modelMap.set(parameterName, parsedJson)
+    inputElement.setCustomValidity('')
+  } catch (error) {
+    inputElement.setCustomValidity(error.message)
+  }
+}
+globalThis.applyInputParsedJson = applyInputParsedJson

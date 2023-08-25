@@ -31,7 +31,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.119"
+    "itk-wasm": "^1.0.0-b.130"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",

@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compare-images",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Compare images with a tolerance for regression testing.",
   "type": "module",
   "module": "./dist/bundles/compare-images.js",
@@ -39,7 +39,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.127"
+    "itk-wasm": "^1.0.0-b.130"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
@@ -52,7 +52,7 @@
     "ava": "^5.3.1",
     "cypress": "^12.17.2",
     "debug": "^4.3.4",
-    "itk-image-io": "^1.0.0-b.127",
+    "itk-image-io": "^1.0.0-b.130",
     "rollup": "^3.9.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-ignore": "^1.0.10",
