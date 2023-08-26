@@ -18,8 +18,8 @@ RUN curl -LO https://nodejs.org/dist/${NODE_TAG}/node-${NODE_TAG}-linux-x64.tar.
   ln -s /node-${NODE_TAG}-linux-x64/bin/npx /emsdk/upstream/emscripten
 ENV PATH /emsdk/upstream/emscripten:${PATH}
 
-# tag commit date: 2023-06-23 branch: itkwasm-2023-01-15-f42c10a20f-3
-ENV ITK_GIT_TAG 8aace5fd2b7d6032a5ecf51d1fd37a0a9abe0a44
+# tag commit date: 2023-06-23 branch: itkwasm-2023-01-15-f42c10a20f-4
+ENV ITK_GIT_TAG d6e6fd9535130ba677cb018c512ed72a466ee997
 RUN git clone https://github.com/KitwareMedical/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
