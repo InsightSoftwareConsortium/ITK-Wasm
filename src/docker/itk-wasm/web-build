@@ -18,7 +18,8 @@ cmake \
    -H. \
    -DCMAKE_BUILD_TYPE:STRING=Release \
    -DITK_DIR:PATH=/ITK-build \
-   -DSlicerExecutionModel_DIR:PATH=/SlicerExecutionModel-build \
    -GNinja \
      "$@" && \
-ninja -C$build_dir
+
+cores=$(nproc)
+ninja -C$build_dir -j$cores -l$cores
