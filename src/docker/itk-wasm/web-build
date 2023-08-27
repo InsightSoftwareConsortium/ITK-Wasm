@@ -20,4 +20,6 @@ cmake \
    -DITK_DIR:PATH=/ITK-build \
    -GNinja \
      "$@" && \
-ninja -C$build_dir
+
+cores=$(nproc)
+ninja -C$build_dir -j$cores -l$cores
