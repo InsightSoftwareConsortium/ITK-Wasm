@@ -51,6 +51,9 @@ function(add_executable target)
     set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS "${common_link_flags} -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=1")
     set_property(TARGET ${umd_target} PROPERTY LINK_FLAGS "${common_link_flags}")
 
+    get_property(_include_dirs TARGET ${target} PROPERTY INCLUDE_DIRECTORIES)
+    set_property(TARGET ${umd_target} PROPERTY INCLUDE_DIRECTORIES "${_include_dirs}")
+
     get_property(_link_flags_debug TARGET ${target} PROPERTY LINK_FLAGS_DEBUG)
     set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS_DEBUG " -s EXPORT_EXCEPTION_HANDLING_HELPERS=1 -fno-lto -s SAFE_HEAP=1 -s DISABLE_EXCEPTION_CATCHING=0 -lembind ${_link_flags_debug}")
     set_property(TARGET ${umd_target} PROPERTY LINK_FLAGS_DEBUG " -s EXPORT_EXCEPTION_HANDLING_HELPERS=1 -fno-lto -s SAFE_HEAP=1 -s DISABLE_EXCEPTION_CATCHING=0 -lembind ${_link_flags_debug}")
