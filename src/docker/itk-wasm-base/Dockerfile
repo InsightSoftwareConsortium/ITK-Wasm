@@ -102,16 +102,6 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
-ENV IPFS_TAG v0.10.0
-RUN curl -LO https://github.com/ipfs/go-ipfs/releases/download/${IPFS_TAG}/go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
-  tar xvzf go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
-  cp go-ipfs/ipfs /usr/local/bin/ && \
-  rm -rf go-ipfs
-ENV IPFS_PATH /home/ipfs/.ipfs
-RUN mkdir -p $IPFS_PATH && \
- ipfs init && \
- chmod -R 777 $IPFS_PATH
-
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG IMAGE=itkwasm/base
