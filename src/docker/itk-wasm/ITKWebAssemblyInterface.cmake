@@ -57,6 +57,14 @@ function(add_executable target)
     get_property(_link_flags_debug TARGET ${target} PROPERTY LINK_FLAGS_DEBUG)
     set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS_DEBUG " -s EXPORT_EXCEPTION_HANDLING_HELPERS=1 -fno-lto -s SAFE_HEAP=1 -s DISABLE_EXCEPTION_CATCHING=0 -lembind ${_link_flags_debug}")
     set_property(TARGET ${umd_target} PROPERTY LINK_FLAGS_DEBUG " -s EXPORT_EXCEPTION_HANDLING_HELPERS=1 -fno-lto -s SAFE_HEAP=1 -s DISABLE_EXCEPTION_CATCHING=0 -lembind ${_link_flags_debug}")
+
+    get_property(_is_imported TARGET ${target} PROPERTY IMPORTED)
+    if (NOT ${_is_imported})
+      add_custom_command(TARGET ${target}
+        POST_BUILD
+        COMMAND /usr/bin/zstd -f "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm" -o "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm.zstd"
+        )
+    endif()
   else()
     # WASI
     set_property(TARGET ${wasm_target} PROPERTY SUFFIX ".wasi.wasm")
