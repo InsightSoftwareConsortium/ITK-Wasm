@@ -18,6 +18,25 @@ RUN curl -LO https://nodejs.org/dist/${NODE_TAG}/node-${NODE_TAG}-linux-x64.tar.
   ln -s /node-${NODE_TAG}-linux-x64/bin/npx /emsdk/upstream/emscripten
 ENV PATH /emsdk/upstream/emscripten:${PATH}
 
+ENV zstd_GIT_TAG v1.5.5
+RUN git clone https://github.com/facebook/zstd.git && \
+  cd zstd && \
+  git checkout ${zstd_GIT_TAG} && \
+  cd / && \
+  mkdir zstd-build && \
+  cd zstd-build && \
+  cmake \
+    -G Ninja \
+    -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++ \
+    -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/cc \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+    -DZSTD_BUILD_SHARED:BOOL=OFF \
+    ../zstd/build/cmake/ && \
+  ninja && \
+  ninja install && \
+  cd .. && \
+  rm -rf zstd-build zstd
+
 # tag commit date: 2023-06-23 branch: itkwasm-2023-01-15-f42c10a20f-4
 ENV ITK_GIT_TAG d6e6fd9535130ba677cb018c512ed72a466ee997
 RUN git clone https://github.com/KitwareMedical/ITK.git && \
