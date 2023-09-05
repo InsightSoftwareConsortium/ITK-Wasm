@@ -9,7 +9,7 @@
     ".": {
       "types": "./dist/src/index.d.ts",
       "browser": "./dist/bundles/compress-stringify.js",
-      "node": "./dist/bundles/compress-stringify.node.js",
+      "node": "./dist/bundles/compress-stringify-node.js",
       "default": "./dist/bundles/compress-stringify.js"
     }
   },
