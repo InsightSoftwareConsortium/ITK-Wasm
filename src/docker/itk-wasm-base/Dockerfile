@@ -25,12 +25,11 @@ RUN git clone https://github.com/facebook/zstd.git && \
   cd / && \
   mkdir zstd-build && \
   cd zstd-build && \
-  cmake \
+  CC=cc CXX=c++ /usr/bin/cmake \
     -G Ninja \
-    -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++ \
-    -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/cc \
     -DCMAKE_INSTALL_PREFIX:PATH=/usr \
     -DZSTD_BUILD_SHARED:BOOL=OFF \
+    -DCMAKE_TOOLCHAIN_FILE="" \
     ../zstd/build/cmake/ && \
   ninja && \
   ninja install && \
