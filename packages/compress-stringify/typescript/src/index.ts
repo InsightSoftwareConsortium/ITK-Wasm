@@ -22,3 +22,5 @@ export type { ParseStringDecompressOptions }
 
 import parseStringDecompress from './parse-string-decompress.js'
 export { parseStringDecompress }
+
+export type { BinaryStream } from 'itk-wasm'

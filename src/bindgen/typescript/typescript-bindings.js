@@ -39,6 +39,7 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
   let demoFunctionsHtml = ''
   let pipelinesFunctionsTabs = ''
   let demoFunctionsTypeScript = ''
+  const allUsedInterfaceTypes = new Set()
 
   const packageName = options.packageName
   const bundleName = packageToBundleName(packageName)
@@ -129,7 +130,8 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
       indexContent += `export type { ${modulePascalCase}Options }\n\n`
     }
 
-    const { readmeFunction } = functionModule(srcOutputDir, forNode, interfaceJson, modulePascalCase, moduleKebabCase, moduleCamelCase, nodeTextCamel, nodeTextKebab, haveOptions)
+    const { readmeFunction, usedInterfaceTypes } = functionModule(srcOutputDir, forNode, interfaceJson, modulePascalCase, moduleKebabCase, moduleCamelCase, nodeTextCamel, nodeTextKebab, haveOptions)
+    usedInterfaceTypes.forEach(iType => allUsedInterfaceTypes.add(iType))
 
     indexContent += `import ${moduleCamelCase}${nodeTextCamel} from './${moduleKebabCase}${nodeTextKebab}.js'\n`
     indexContent += `export { ${moduleCamelCase}${nodeTextCamel} }\n`
@@ -138,6 +140,11 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     readmePipelines += readmeOptions
     readmePipelines += readmeResult
   })
+
+  if (allUsedInterfaceTypes.size > 0) {
+    indexContent += '\n'
+    allUsedInterfaceTypes.forEach(iType => indexContent += `export type { ${iType} } from 'itk-wasm'\n`)
+  }
 
   readmeInterface += `  setPipelinesBaseUrl,
   getPipelinesBaseUrl,

@@ -385,7 +385,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   functionContent += `}\n\nexport default ${moduleCamelCase}${nodeTextCamel}\n`
   writeIfOverrideNotPresent(path.join(srcOutputDir, `${moduleKebabCase}${nodeTextKebab}.ts`), functionContent)
 
-  return { readmeFunction }
+  return { readmeFunction, usedInterfaceTypes }
 }
 
 export default functionModule

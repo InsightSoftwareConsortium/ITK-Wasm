@@ -12,3 +12,6 @@ export { compareDoubleImagesNode }
 
 import compareImagesNode from './compare-images-node.js'
 export { compareImagesNode }
+
+export type { Image } from 'itk-wasm'
+export type { JsonCompatible } from 'itk-wasm'
