@@ -167,7 +167,8 @@
     "markdown-table": "^3.0.3",
     "mime-types": "^2.1.35",
     "wasm-feature-detect": "^1.5.1",
-    "webworker-promise": "^0.4.2"
+    "webworker-promise": "^0.4.2",
+    "@thewtex/zstddec": "^0.1.1"
   },
   "bin": {
     "itk-wasm": "./src/itk-wasm-cli.js"

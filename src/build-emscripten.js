@@ -140,7 +140,9 @@ if (options.copyBuildArtifacts) {
   }
   let imageIOFiles = glob.sync(path.join(buildDir, 'image-io', '*.js'))
   imageIOFiles = imageIOFiles.concat(glob.sync(path.join(buildDir, 'image-io', '*.wasm')))
+  imageIOFiles = imageIOFiles.concat(glob.sync(path.join(buildDir, 'image-io', '*.wasm.zstd')))
   imageIOFiles = imageIOFiles.filter((fn) => !fn.endsWith('.umd.wasm'))
+  imageIOFiles = imageIOFiles.filter((fn) => !fn.endsWith('.umd.wasm.zstd'))
   const copyImageIOModules = function (imageIOFile, callback) {
     const io = path.basename(imageIOFile)
     const output = path.join('dist', 'image-io', io)
@@ -154,7 +156,9 @@ if (options.copyBuildArtifacts) {
   }
   let meshIOFiles = glob.sync(path.join(buildDir, 'mesh-io', '*.js'))
   meshIOFiles = meshIOFiles.concat(glob.sync(path.join(buildDir, 'mesh-io', '*.wasm')))
+  meshIOFiles = meshIOFiles.concat(glob.sync(path.join(buildDir, 'mesh-io', '*.wasm.zstd')))
   meshIOFiles = meshIOFiles.filter((fn) => !fn.endsWith('.umd.wasm'))
+  meshIOFiles = meshIOFiles.filter((fn) => !fn.endsWith('.umd.wasm.zstd'))
   const copyMeshIOModules = function (meshIOFile, callback) {
     const io = path.basename(meshIOFile)
     const output = path.join('dist', 'mesh-io', io)
@@ -168,7 +172,9 @@ if (options.copyBuildArtifacts) {
   }
   let dicomFiles = glob.sync(path.join(buildDir, 'dicom', '*.js'))
   dicomFiles = dicomFiles.concat(glob.sync(path.join(buildDir, 'dicom', '*.wasm')))
+  dicomFiles = dicomFiles.concat(glob.sync(path.join(buildDir, 'dicom', '*.wasm.zstd')))
   dicomFiles = dicomFiles.filter((fn) => !fn.endsWith('.umd.wasm'))
+  dicomFiles = dicomFiles.filter((fn) => !fn.endsWith('.umd.wasm.zstd'))
   const copyDICOMModules = function (dicomFile, callback) {
     const io = path.basename(dicomFile)
     const output = path.join('dist', 'dicom', 'public', 'pipelines', io)
@@ -219,6 +225,7 @@ if (options.buildTestPipelines) {
     }
     let pipelineFiles = glob.sync(path.join(pipelinePath, 'emscripten-build', '*.js'))
     pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'emscripten-build', '*.wasm')))
+    pipelineFiles = pipelineFiles.concat(glob.sync(path.join(pipelinePath, 'emscripten-build', '*.wasm.zstd')))
     pipelineFiles.forEach((file) => {
       const filename = path.basename(file)
       const output = path.join('dist', 'pipelines', filename)
