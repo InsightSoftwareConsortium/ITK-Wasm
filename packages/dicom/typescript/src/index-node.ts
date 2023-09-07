@@ -60,3 +60,8 @@ export type { ReadImageDicomFileSeriesOptions }
 
 import readImageDicomFileSeriesNode from './read-image-dicom-file-series-node.js'
 export { readImageDicomFileSeriesNode }
+
+export type { JsonCompatible } from 'itk-wasm'
+export type { Image } from 'itk-wasm'
+export type { BinaryStream } from 'itk-wasm'
+export type { TextStream } from 'itk-wasm'
