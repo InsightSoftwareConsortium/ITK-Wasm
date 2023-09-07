@@ -62,7 +62,7 @@ function(add_executable target)
     if (NOT ${_is_imported})
       add_custom_command(TARGET ${target}
         POST_BUILD
-        COMMAND /usr/bin/zstd -f "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm" -o "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm.zstd"
+        COMMAND /usr/bin/zstd -f "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm" -o "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm.zst"
         )
     endif()
   else()

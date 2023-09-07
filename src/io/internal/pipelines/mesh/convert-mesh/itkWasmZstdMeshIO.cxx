@@ -25,8 +25,8 @@ namespace itk
 WasmZstdMeshIO
 ::WasmZstdMeshIO()
 {
-  this->AddSupportedWriteExtension(".iwm.cbor.zstd");
-  this->AddSupportedReadExtension(".iwm.cbor.zstd");
+  this->AddSupportedWriteExtension(".iwm.cbor.zst");
+  this->AddSupportedReadExtension(".iwm.cbor.zst");
 }
 
 
@@ -68,9 +68,9 @@ WasmZstdMeshIO
 
   const std::string path = this->GetFileName();
 
-  std::string::size_type zstdPos = path.rfind(".zstd");
+  std::string::size_type zstdPos = path.rfind(".zst");
   if ( ( zstdPos != std::string::npos )
-       && ( zstdPos == path.length() - 5 ) )
+       && ( zstdPos == path.length() - 4 ) )
   {
     std::ifstream dataStream;
     this->OpenFileForReading( dataStream, this->GetFileName() );
@@ -127,9 +127,9 @@ WasmZstdMeshIO
 {
   const std::string path(this->GetFileName());
 
-  std::string::size_type cborPos = path.rfind(".zstd");
+  std::string::size_type cborPos = path.rfind(".zst");
   if ( ( cborPos != std::string::npos )
-       && ( cborPos == path.length() - 5 ) )
+       && ( cborPos == path.length() - 4 ) )
   {
     unsigned char* cborBuffer;
     size_t cborBufferSize;

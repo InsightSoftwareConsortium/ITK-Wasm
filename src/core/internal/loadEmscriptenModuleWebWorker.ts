@@ -30,7 +30,7 @@ async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | U
   // adds worker dynamic import support:
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
   const wasmBinaryPath = `${modulePrefix}.wasm`
-  const response = await axios.get(`${wasmBinaryPath}.zstd`, { responseType: 'arraybuffer' })
+  const response = await axios.get(`${wasmBinaryPath}.zst`, { responseType: 'arraybuffer' })
   if (!decoderInitialized) {
     await decoder.init()
     decoderInitialized = true

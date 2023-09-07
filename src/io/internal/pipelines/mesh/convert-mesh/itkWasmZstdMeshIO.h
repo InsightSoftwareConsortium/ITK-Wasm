@@ -33,7 +33,7 @@ namespace itk
  * 
  * This class extends WasmMeshIO by adding support for zstandard compression.
  *
- * The file extensions used are .iwm, .iwm.cbor, and .iwm.cbor.zstd.
+ * The file extensions used are .iwm, .iwm.cbor, and .iwm.cbor.zst.
  * 
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface

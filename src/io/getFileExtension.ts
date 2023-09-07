@@ -6,7 +6,7 @@ function getFileExtension (filePath: string): string {
   } else if (extension.toLowerCase() === 'cbor') {
     const index = filePath.slice(0, -5).lastIndexOf('.')
     extension = filePath.slice((index - 1 >>> 0) + 2)
-  } else if (extension.toLowerCase() === 'zstd') {
+  } else if (extension.toLowerCase() === 'zst') {
     // .iwi.cbor.zstd
     const index = filePath.slice(0, -10).lastIndexOf('.')
     extension = filePath.slice((index - 1 >>> 0) + 2)

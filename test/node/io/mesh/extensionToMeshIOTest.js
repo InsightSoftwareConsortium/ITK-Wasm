@@ -92,7 +92,7 @@ test('iwm.cbor maps to WasmMeshIO', t => {
   t.is(io, 'WasmMeshIO')
 })
 
-test('iwm.cbor.zstd maps to WasmMeshIO', t => {
-  const io = ExtensionToIO.get('iwm.cbor.zstd')
+test('iwm.cbor.zst maps to WasmMeshIO', t => {
+  const io = ExtensionToIO.get('iwm.cbor.zst')
   t.is(io, 'WasmZstdMeshIO')
 })

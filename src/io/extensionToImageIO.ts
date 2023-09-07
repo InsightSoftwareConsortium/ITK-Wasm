@@ -17,7 +17,7 @@ const extensionToIO = new Map([
 
   ['iwi', 'WasmImageIO'],
   ['iwi.cbor', 'WasmImageIO'],
-  ['iwi.cbor.zstd', 'WasmZstdImageIO'],
+  ['iwi.cbor.zst', 'WasmZstdImageIO'],
 
   ['lsm', 'LSMImageIO'],
 

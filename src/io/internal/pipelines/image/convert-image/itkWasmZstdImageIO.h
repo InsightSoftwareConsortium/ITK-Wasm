@@ -33,7 +33,7 @@ namespace itk
  * 
  * This class extends WasmImageIO by adding support for zstandard compression.
  *
- * The file extensions used are .iwi, .iwi.cbor, and .iwi.cbor.zstd.
+ * The file extensions used are .iwi, .iwi.cbor, and .iwi.cbor.zst.
  * 
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
