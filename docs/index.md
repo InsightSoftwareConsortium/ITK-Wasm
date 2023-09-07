@@ -1,5 +1,5 @@
-itkwasm
-=======
+ITK-wasm
+========
 
 > Universal spatial analysis and visualization.
 
@@ -17,7 +17,7 @@ itkwasm
 ![License](https://img.shields.io/github/license/InsightSoftwareConsortium/itk-wasm) ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/InsightSoftwareConsortium/itk-wasm)
 </div>
 
-*itk-wasm* combines [ITK](https://www.itk.org/) and [WebAssembly](https://webassembly.org/) to enable high-performance spatial analysis in a web browser or system-level environments and reproducible execution across programming languages and hardware architectures.
+*ITK-wasm* combines [ITK](https://www.itk.org/) and [WebAssembly](https://webassembly.org/) to enable high-performance spatial analysis in a web browser or system-level environments and reproducible execution across programming languages and hardware architectures.
 
 The project provides tools to
 
@@ -26,7 +26,7 @@ The project provides tools to
 - transfer data efficiently in and out of the WebAssembly runtime.
 - perform asynchronous, parallel execution of processing pipelines in a worker pool.
 
-*itk-wasm* can be used to execute [ITK](https://www.itk.org/) or arbitrary C++ codes in the browser, on the command line, and in languages like Python via [WASI](https://wasi.dev/) and [Emscripten](https://emscripten.org) runtimes.
+*ITK-wasm* can be used to execute [ITK](https://www.itk.org/) or arbitrary C++ codes in the browser, on the command line, and in languages like Python via [WASI](https://wasi.dev/) and [Emscripten](https://emscripten.org) runtimes.
 
 ```{toctree}
 :hidden:
