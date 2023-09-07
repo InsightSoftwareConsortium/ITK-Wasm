@@ -1,5 +1,9 @@
 import axios from 'axios'
 
+import { ZSTDDecoder } from '@thewtex/zstddec'
+const decoder = new ZSTDDecoder()
+let decoderInitialized = false
+
 import ITKWasmEmscriptenModule from '../ITKWasmEmscriptenModule.js'
 import camelCase from './camelCase.js'
 
@@ -26,8 +30,13 @@ async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | U
   // adds worker dynamic import support:
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
   const wasmBinaryPath = `${modulePrefix}.wasm`
-  const response = await axios.get(wasmBinaryPath, { responseType: 'arraybuffer' })
-  const wasmBinary = response.data
+  const response = await axios.get(`${wasmBinaryPath}.zst`, { responseType: 'arraybuffer' })
+  if (!decoderInitialized) {
+    await decoder.init()
+    decoderInitialized = true
+  }
+  const decompressedArray = decoder.decode(new Uint8Array(response.data))
+  const wasmBinary = decompressedArray.buffer
   const modulePath = `${modulePrefix}.umd.js`
   importScripts(modulePath)
   const moduleBaseName: string = camelCase(modulePrefix.replace(/.*\//, ''))

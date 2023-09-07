@@ -18,6 +18,24 @@ RUN curl -LO https://nodejs.org/dist/${NODE_TAG}/node-${NODE_TAG}-linux-x64.tar.
   ln -s /node-${NODE_TAG}-linux-x64/bin/npx /emsdk/upstream/emscripten
 ENV PATH /emsdk/upstream/emscripten:${PATH}
 
+ENV zstd_GIT_TAG v1.5.5
+RUN git clone https://github.com/facebook/zstd.git && \
+  cd zstd && \
+  git checkout ${zstd_GIT_TAG} && \
+  cd / && \
+  mkdir zstd-build && \
+  cd zstd-build && \
+  CC=cc CXX=c++ /usr/bin/cmake \
+    -G Ninja \
+    -DCMAKE_INSTALL_PREFIX:PATH=/usr \
+    -DZSTD_BUILD_SHARED:BOOL=OFF \
+    -DCMAKE_TOOLCHAIN_FILE="" \
+    ../zstd/build/cmake/ && \
+  ninja && \
+  ninja install && \
+  cd .. && \
+  rm -rf zstd-build zstd
+
 # tag commit date: 2023-06-23 branch: itkwasm-2023-01-15-f42c10a20f-4
 ENV ITK_GIT_TAG d6e6fd9535130ba677cb018c512ed72a466ee997
 RUN git clone https://github.com/KitwareMedical/ITK.git && \
@@ -101,16 +119,6 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git
   ninja && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
-
-ENV IPFS_TAG v0.10.0
-RUN curl -LO https://github.com/ipfs/go-ipfs/releases/download/${IPFS_TAG}/go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
-  tar xvzf go-ipfs_${IPFS_TAG}_linux-amd64.tar.gz && \
-  cp go-ipfs/ipfs /usr/local/bin/ && \
-  rm -rf go-ipfs
-ENV IPFS_PATH /home/ipfs/.ipfs
-RUN mkdir -p $IPFS_PATH && \
- ipfs init && \
- chmod -R 777 $IPFS_PATH
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE

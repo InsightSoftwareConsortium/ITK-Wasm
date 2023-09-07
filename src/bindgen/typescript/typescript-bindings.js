@@ -88,6 +88,7 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
       if (err.code !== 'EEXIST') throw err
     }
     fs.copyFileSync(wasmBinaryRelativePath, path.join(distPipelinesDir, path.basename(wasmBinaryRelativePath)))
+    fs.copyFileSync(`${wasmBinaryRelativePath}.zst`, path.join(distPipelinesDir, `${path.basename(wasmBinaryRelativePath)}.zst`))
     const prefix = wasmBinaryRelativePath.substring(0, wasmBinaryRelativePath.length-5)
     fs.copyFileSync(`${prefix}.js`, path.join(distPipelinesDir, `${path.basename(prefix)}.js`))
     fs.copyFileSync(`${prefix}.umd.js`, path.join(distPipelinesDir, `${path.basename(prefix)}.umd.js`))

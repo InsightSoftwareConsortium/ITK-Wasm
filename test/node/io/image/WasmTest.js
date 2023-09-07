@@ -5,7 +5,7 @@ import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageL
 
 const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cthead1.png')
 const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'TestWasm-cthead1.iwi.cbor')
-const testZstdOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'TestWasm-cthead1.iwi.cbor.zstd')
+const testZstdOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'TestWasm-cthead1.iwi.cbor.zst')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')

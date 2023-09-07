@@ -90,7 +90,7 @@ WasmImageIO
     return false;
     }
 
-  std::string::size_type zstdPos = fname.rfind(".zstd");
+  std::string::size_type zstdPos = fname.rfind(".zst");
   // WasmZstdImageIO is required
   if ( zstdPos != std::string::npos )
     {
@@ -602,7 +602,7 @@ WasmImageIO
     return false;
     }
 
-  std::string::size_type zstdPos = filename.rfind(".zstd");
+  std::string::size_type zstdPos = filename.rfind(".zst");
   // WasmZstdImageIO is required
   if ( zstdPos != std::string::npos )
     {
