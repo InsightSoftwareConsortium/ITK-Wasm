@@ -40,7 +40,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
 
   result += `import * as ${camelCase(bundleName)} from '../../../dist/bundles/${bundleName}.js'\n`
 
-  result += `import ${functionName}LoadSampleInputs from "./${interfaceJson.name}-load-sample-inputs.js"\n`
+  result += `import ${functionName}LoadSampleInputs, { usePreRun } from "./${interfaceJson.name}-load-sample-inputs.js"\n`
   const loadSampleInputsModulePath = path.join(outputPath, `${interfaceJson.name}-load-sample-inputs.ts`)
   const loadSampleInputsModuleContent = `export default null
 // export default async function ${functionName}LoadSampleInputs (model) {
@@ -50,17 +50,24 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   // This function should load sample inputs:
   //
   //  1) In the provided model map.
-  //  2) Into the corresponding HTML input elements.
+  //  2) Into the corresponding HTML input elements if preRun is not true.
   //
   // Example for an input named \`exampleInput\`:
 
   // const exampleInput = 5
   // model.inputs.set("exampleInput", exampleInput)
-  // const exampleElement = document.querySelector("#${functionName}Inputs [name=example-input]")
-  // exampleElement.value = 5
+  // if (!preRun) {
+  //   const exampleElement = document.querySelector("#${functionName}Inputs [name=example-input]")
+  //   exampleElement.value = 5
+  // }
 
   // return model
 // }
+
+// Use this function to run the pipeline when this tab group is select.
+// This will load the web worker if it is not already loaded, download the wasm module, and allocate memory in the wasm model.
+// Set this to \`false\` if sample inputs are very large or sample pipeline computation is long.
+export usePreRun = true
 `
   writeIfOverrideNotPresent(loadSampleInputsModulePath, loadSampleInputsModuleContent)
 
@@ -126,7 +133,24 @@ class ${functionNamePascalCase}Model {
     result += outputDemoTypeScript(functionName, '', indent, output)
   })
 
-  result += `\n${indent}const runButton = document.querySelector('#${functionName}Inputs sl-button[name="run"]')
+  result += `\n${indent}const tabGroup = document.querySelector('sl-tab-group')
+    tabGroup.addEventListener('sl-tab-show', async (event) => {
+      if (event.detail.name === '${functionName}-panel') {
+        const params = new URLSearchParams(window.location.search)
+        if (!params.has('functionName') || params.get('functionName') !== '${functionName}') {
+          params.set('functionName', '${functionName}')
+          const url = new URL(document.location)
+          url.search = params
+          window.history.replaceState({ functionName: '${functionName}' }, '', url)
+        }
+        if (!this.webWorker && loadSampleInputs && usePreRun) {
+          await loadSampleInputs(model, true)
+          await this.run()
+        }
+      }
+    })
+
+    const runButton = document.querySelector('#${functionName}Inputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {
       event.preventDefault()\n\n`
 
@@ -137,29 +161,15 @@ class ${functionNamePascalCase}Model {
   result += `\n
       try {
         runButton.loading = true
-        const t0 = performance.now()
 
-        const { webWorker, `
+        const t0 = performance.now()
+        const { `
   interfaceJson.outputs.forEach((output) => {
     result += `${camelCase(output.name)}, `
   })
-  result += `} = await ${camelCase(bundleName)}.${functionName}(this.webWorker,\n`
-  interfaceJson.inputs.forEach((input) => {
-    if (input.type === 'INPUT_TEXT_STREAM' || input.type === 'INPUT_BINARY_STREAM') {
-      result += `          model.inputs.get('${camelCase(input.name)}').slice(),\n`
-    } else if (input.type.startsWith('INPUT_BINARY_FILE') || input.type.startsWith('INPUT_TEXT_FILE')) {
-      result += `          { data: model.inputs.get('${camelCase(input.name)}').data.slice(), path: model.inputs.get('${camelCase(input.name)}').path },\n`
-    } else if (input.type === 'INPUT_IMAGE') {
-      result += `          copyImage(model.inputs.get('${camelCase(input.name)}')),\n`
-    } else {
-      result += `          model.inputs.get('${camelCase(input.name)}'),\n`
-    }
-  })
-  result += '          Object.fromEntries(model.options.entries())\n'
-  result += '        )\n\n'
+  result += `} = await this.run()\n`
   result += '        const t1 = performance.now()\n'
   result += `        globalThis.notify("${functionName} successfully completed", \`in \${t1 - t0} milliseconds.\`, "success", "rocket-fill")\n`
-  result += '        this.webWorker = webWorker\n'
 
   interfaceJson.outputs.forEach((output) => {
     result += outputDemoRunTypeScript(functionName, '    ', indent, output)
@@ -174,6 +184,34 @@ class ${functionNamePascalCase}Model {
   result += '    })\n'
 
   result += '  }\n'
+
+  result += `\n  async run() {
+    const { webWorker, `
+  interfaceJson.outputs.forEach((output) => {
+    result += `${camelCase(output.name)}, `
+  })
+  result += `} = await ${camelCase(bundleName)}.${functionName}(this.webWorker,\n`
+  interfaceJson.inputs.forEach((input) => {
+    if (input.type === 'INPUT_TEXT_STREAM' || input.type === 'INPUT_BINARY_STREAM') {
+      result += `      this.model.inputs.get('${camelCase(input.name)}').slice(),\n`
+    } else if (input.type.startsWith('INPUT_BINARY_FILE') || input.type.startsWith('INPUT_TEXT_FILE')) {
+      result += `      { data: this.model.inputs.get('${camelCase(input.name)}').data.slice(), path: this.model.inputs.get('${camelCase(input.name)}').path },\n`
+    } else if (input.type === 'INPUT_IMAGE') {
+      result += `      copyImage(this.model.inputs.get('${camelCase(input.name)}')),\n`
+    } else {
+      result += `      this.model.inputs.get('${camelCase(input.name)}'),\n`
+    }
+  })
+  result += '      Object.fromEntries(this.model.options.entries())\n'
+  result += '    )\n'
+  result += '    this.webWorker = webWorker\n'
+  result += `
+    return { `
+  interfaceJson.outputs.forEach((output) => {
+    result += `${camelCase(output.name)}, `
+  })
+  result += '}\n  }\n'
+
   result += '}\n'
 
   result += `\nconst ${functionName}Controller = new ${controllerClassName}(${functionName}LoadSampleInputs)\n`

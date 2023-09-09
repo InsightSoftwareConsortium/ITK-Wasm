@@ -1,7 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import * as dicom from '../../../dist/bundles/dicom.js'
-import readDicomTagsLoadSampleInputs from "./read-dicom-tags-load-sample-inputs.js"
+import readDicomTagsLoadSampleInputs, { usePreRun } from "./read-dicom-tags-load-sample-inputs.js"
 
 class ReadDicomTagsModel {
 
@@ -77,6 +77,23 @@ class ReadDicomTagsController  {
         }
     })
 
+    const tabGroup = document.querySelector('sl-tab-group')
+    tabGroup.addEventListener('sl-tab-show', async (event) => {
+      if (event.detail.name === 'readDicomTags-panel') {
+        const params = new URLSearchParams(window.location.search)
+        if (!params.has('functionName') || params.get('functionName') !== 'readDicomTags') {
+          params.set('functionName', 'readDicomTags')
+          const url = new URL(document.location)
+          url.search = params
+          window.history.replaceState({ functionName: 'readDicomTags' }, '', url)
+        }
+        if (!this.webWorker && loadSampleInputs && usePreRun) {
+          await loadSampleInputs(model, true)
+          await this.run()
+        }
+      }
+    })
+
     const runButton = document.querySelector('#readDicomTagsInputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {
       event.preventDefault()
@@ -89,16 +106,11 @@ class ReadDicomTagsController  {
 
       try {
         runButton.loading = true
+
         const t0 = performance.now()
-
-        const { webWorker, tags, } = await dicom.readDicomTags(this.webWorker,
-          { data: model.inputs.get('dicomFile').data.slice(), path: model.inputs.get('dicomFile').path },
-          Object.fromEntries(model.options.entries())
-        )
-
+        const { tags, } = await this.run()
         const t1 = performance.now()
         globalThis.notify("readDicomTags successfully completed", `in ${t1 - t0} milliseconds.`, "success", "rocket-fill")
-        this.webWorker = webWorker
 
         model.outputs.set("tags", tags)
         tagsOutputDownload.variant = "success"
@@ -114,6 +126,16 @@ class ReadDicomTagsController  {
         runButton.loading = false
       }
     })
+  }
+
+  async run() {
+    const { webWorker, tags, } = await dicom.readDicomTags(this.webWorker,
+      { data: this.model.inputs.get('dicomFile').data.slice(), path: this.model.inputs.get('dicomFile').path },
+      Object.fromEntries(this.model.options.entries())
+    )
+    this.webWorker = webWorker
+
+    return { tags, }
   }
 }
 

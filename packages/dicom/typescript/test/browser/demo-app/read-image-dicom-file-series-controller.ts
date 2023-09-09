@@ -1,8 +1,6 @@
-// Generated file. To retain edits, remove this comment.
-
 import { writeImageArrayBuffer, copyImage } from 'itk-wasm'
 import * as dicom from '../../../dist/bundles/dicom.js'
-import readImageDicomFileSeriesLoadSampleInputs from "./read-image-dicom-file-series-load-sample-inputs.js"
+import readImageDicomFileSeriesLoadSampleInputs, { usePreRun } from "./read-image-dicom-file-series-load-sample-inputs.js"
 
 class ReadImageDicomFileSeriesModel {
 
@@ -26,7 +24,7 @@ class ReadImageDicomFileSeriesController  {
     this.model = new ReadImageDicomFileSeriesModel()
     const model = this.model
 
-    this.webWorker = null
+    this.webWorkerPool = null
 
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#readImageDicomFileSeriesInputs [name=loadSampleInputs]")
@@ -85,6 +83,23 @@ class ReadImageDicomFileSeriesController  {
         }
     })
 
+    const tabGroup = document.querySelector('sl-tab-group')
+    tabGroup.addEventListener('sl-tab-show', async (event) => {
+      if (event.detail.name === 'readImageDicomFileSeries-panel') {
+        const params = new URLSearchParams(window.location.search)
+        if (!params.has('functionName') || params.get('functionName') !== 'readImageDicomFileSeries') {
+          params.set('functionName', 'readImageDicomFileSeries')
+          const url = new URL(document.location)
+          url.search = params
+          window.history.replaceState({ functionName: 'readImageDicomFileSeries' }, '', url)
+        }
+        if (!this.webWorkerPool && loadSampleInputs && usePreRun) {
+          await loadSampleInputs(model, true)
+          await this.run()
+        }
+      }
+    })
+
     const runButton = document.querySelector('#readImageDicomFileSeriesInputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {
       event.preventDefault()
@@ -93,15 +108,11 @@ class ReadImageDicomFileSeriesController  {
 
       try {
         runButton.loading = true
+
         const t0 = performance.now()
-
-        const { webWorker, outputImage, sortedFilenames, } = await dicom.readImageDicomFileSeries(this.webWorker,
-          Object.fromEntries(model.options.entries())
-        )
-
+        const { outputImage, sortedFilenames, } = await this.run()
         const t1 = performance.now()
         globalThis.notify("readImageDicomFileSeries successfully completed", `in ${t1 - t0} milliseconds.`, "success", "rocket-fill")
-        this.webWorker = webWorker
 
         model.outputs.set("outputImage", outputImage)
         outputImageOutputDownload.variant = "success"
@@ -125,6 +136,15 @@ class ReadImageDicomFileSeriesController  {
         runButton.loading = false
       }
     })
+  }
+
+  async run() {
+    const { webWorkerPool, outputImage, sortedFilenames, } = await dicom.readImageDicomFileSeries(this.webWorkerPool,
+      Object.fromEntries(this.model.options.entries())
+    )
+    this.webWorkerPool = webWorkerPool
+
+    return { outputImage, sortedFilenames, }
   }
 }
 

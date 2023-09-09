@@ -1,5 +1,5 @@
 import * as dicom from '../../../dist/bundles/dicom.js'
-import structuredReportToHtmlLoadSampleInputs from "./structured-report-to-html-load-sample-inputs.js"
+import structuredReportToHtmlLoadSampleInputs, { usePreRun }  from "./structured-report-to-html-load-sample-inputs.js"
 
 class StructuredReportToHtmlModel {
 
@@ -285,6 +285,23 @@ class StructuredReportToHtmlController  {
     htmlOutputDetails.id = 'structuredReportToHtml-html-output-details'
     // End customization
 
+    const tabGroup = document.querySelector('sl-tab-group')
+    tabGroup.addEventListener('sl-tab-show', async (event) => {
+      if (event.detail.name === 'structuredReportToHtml-panel') {
+        const params = new URLSearchParams(window.location.search)
+        if (!params.has('functionName') || params.get('functionName') !== 'structuredReportToHtml') {
+          params.set('functionName', 'structuredReportToHtml')
+          const url = new URL(document.location)
+          url.search = params
+          window.history.replaceState({ functionName: 'structuredReportToHtml' }, '', url)
+        }
+        if (!this.webWorker && loadSampleInputs && usePreRun) {
+          await loadSampleInputs(model, true)
+          await this.run()
+        }
+      }
+    })
+
     const runButton = document.querySelector('#structuredReportToHtmlInputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {
       event.preventDefault()
@@ -298,15 +315,9 @@ class StructuredReportToHtmlController  {
       try {
         runButton.loading = true
         const t0 = performance.now()
-
-        const { webWorker, outputText, } = await dicom.structuredReportToHtml(this.webWorker,
-          { data: model.inputs.get('dicomFile').data.slice(), path: model.inputs.get('dicomFile').path },
-          Object.fromEntries(model.options.entries())
-        )
-
+        const { outputText, } = await this.run()
         const t1 = performance.now()
         globalThis.notify("structuredReportToHtml successfully completed", `in ${t1 - t0} milliseconds.`, "success", "rocket-fill")
-        this.webWorker = webWorker
 
         model.outputs.set("outputText", outputText)
         outputTextOutputDownload.variant = "success"
@@ -329,6 +340,16 @@ class StructuredReportToHtmlController  {
         runButton.loading = false
       }
     })
+  }
+
+  async run() {
+    const { webWorker, outputText, } = await dicom.structuredReportToHtml(this.webWorker,
+        { data: this.model.inputs.get('dicomFile').data.slice(), path: this.model.inputs.get('dicomFile').path },
+        Object.fromEntries(this.model.options.entries())
+    )
+    this.webWorker = webWorker
+
+    return { outputText, }
   }
 }
 

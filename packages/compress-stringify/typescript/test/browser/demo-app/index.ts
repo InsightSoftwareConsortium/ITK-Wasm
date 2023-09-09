@@ -10,3 +10,12 @@ compressStringify.setPipelineWorkerUrl(pipelineWorkerUrl)
 
 import './compress-stringify-controller.js'
 import './parse-string-decompress-controller.js'
+
+const tabGroup = document.querySelector('sl-tab-group')
+const params = new URLSearchParams(window.location.search)
+if (params.has('functionName')) {
+  const functionName = params.get('functionName')
+  tabGroup.show(functionName + '-panel')
+} else {
+  tabGroup.show('compressStringify-panel')
+}

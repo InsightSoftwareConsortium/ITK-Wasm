@@ -14,3 +14,12 @@ import './structured-report-to-html-controller.js'
 import './structured-report-to-text-controller.js'
 import './read-dicom-tags-controller.js'
 import './read-image-dicom-file-series-controller.js'
+
+const tabGroup = document.querySelector('sl-tab-group')
+const params = new URLSearchParams(window.location.search)
+if (params.has('functionName')) {
+  const functionName = params.get('functionName')
+  tabGroup.show(functionName + '-panel')
+} else {
+  tabGroup.show('applyPresentationStateToImage-panel')
+}
