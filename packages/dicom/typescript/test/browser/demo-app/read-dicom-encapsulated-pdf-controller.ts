@@ -1,5 +1,5 @@
 import * as dicom from '../../../dist/bundles/dicom.js'
-import readDicomEncapsulatedPdfLoadSampleInputs from "./read-dicom-encapsulated-pdf-load-sample-inputs.js"
+import readDicomEncapsulatedPdfLoadSampleInputs, { usePreRun }  from "./read-dicom-encapsulated-pdf-load-sample-inputs.js"
 
 class ReadDicomEncapsulatedPdfModel {
 
@@ -146,6 +146,23 @@ class ReadDicomEncapsulatedPdfController  {
     pdfBinaryDetails.id = 'readDicomEncapsulatedPdf-pdf-binary-output-details'
     // End customization
 
+    const tabGroup = document.querySelector('sl-tab-group')
+    tabGroup.addEventListener('sl-tab-show', async (event) => {
+      if (event.detail.name === 'readDicomEncapsulatedPdf-panel') {
+        const params = new URLSearchParams(window.location.search)
+        if (!params.has('functionName') || params.get('functionName') !== 'readDicomEncapsulatedPdf') {
+          params.set('functionName', 'readDicomEncapsulatedPdf')
+          const url = new URL(document.location)
+          url.search = params
+          window.history.replaceState({ functionName: 'readDicomEncapsulatedPdf' }, '', url)
+        }
+        if (!this.webWorker && loadSampleInputs && usePreRun) {
+          await loadSampleInputs(model, true)
+          await this.run()
+        }
+      }
+    })
+
     const runButton = document.querySelector('#readDicomEncapsulatedPdfInputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {
       event.preventDefault()
@@ -158,16 +175,11 @@ class ReadDicomEncapsulatedPdfController  {
 
       try {
         runButton.loading = true
+
         const t0 = performance.now()
-
-        const { webWorker, pdfBinaryOutput, } = await dicom.readDicomEncapsulatedPdf(this.webWorker,
-          { data: model.inputs.get('dicomFile').data.slice(), path: model.inputs.get('dicomFile').path },
-          Object.fromEntries(model.options.entries())
-        )
-
+        const { webWorker, pdfBinaryOutput, } = await this.run()
         const t1 = performance.now()
         globalThis.notify("readDicomEncapsulatedPdf successfully completed", `in ${t1 - t0} milliseconds.`, "success", "rocket-fill")
-        this.webWorker = webWorker
 
         model.outputs.set("pdfBinaryOutput", pdfBinaryOutput)
         pdfBinaryOutputOutputDownload.variant = "success"
@@ -186,6 +198,16 @@ class ReadDicomEncapsulatedPdfController  {
         runButton.loading = false
       }
     })
+  }
+
+  async run() {
+    const { webWorker, pdfBinaryOutput, } = await dicom.readDicomEncapsulatedPdf(this.webWorker,
+      { data: this.model.inputs.get('dicomFile').data.slice(), path: this.model.inputs.get('dicomFile').path },
+      Object.fromEntries(this.model.options.entries())
+    )
+    this.webWorker = webWorker
+
+    return { pdfBinaryOutput, }
   }
 }
 

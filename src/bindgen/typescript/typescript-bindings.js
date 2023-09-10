@@ -76,6 +76,7 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
 
   writeSupportFiles(outputDir, forNode, bindgenResource, packageName, options.packageDescription)
 
+  let firstFunctionName = null
   wasmBinaries.forEach((wasmBinaryName) => {
     let wasmBinaryRelativePath = `${buildDir}/${wasmBinaryName}`
     if (!fs.existsSync(wasmBinaryRelativePath)) {
@@ -101,6 +102,7 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     const moduleCamelCase = camelCase(parsedPath.name)
     const modulePascalCase = `${moduleCamelCase[0].toUpperCase()}${moduleCamelCase.substring(1)}`
     const functionName = camelCase(interfaceJson.name)
+    firstFunctionName = firstFunctionName || functionName
 
     const useCamelCase = true
     const functionDemoHtml = interfaceFunctionsDemoHtml(interfaceJson, functionName, useCamelCase)
@@ -141,6 +143,16 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     readmePipelines += readmeOptions
     readmePipelines += readmeResult
   })
+
+  demoFunctionsTypeScript += `\nconst tabGroup = document.querySelector('sl-tab-group')
+const params = new URLSearchParams(window.location.search)
+if (params.has('functionName')) {
+  const functionName = params.get('functionName')
+  tabGroup.show(functionName + '-panel')
+} else {
+  tabGroup.show('${firstFunctionName}-panel')
+}
+`
 
   if (allUsedInterfaceTypes.size > 0) {
     indexContent += '\n'

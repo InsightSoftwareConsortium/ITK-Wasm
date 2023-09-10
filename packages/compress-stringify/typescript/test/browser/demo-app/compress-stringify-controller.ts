@@ -1,7 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import * as compressStringify from '../../../dist/bundles/compress-stringify.js'
-import compressStringifyLoadSampleInputs from "./compress-stringify-load-sample-inputs.js"
+import compressStringifyLoadSampleInputs, { usePreRun } from "./compress-stringify-load-sample-inputs.js"
 
 class CompressStringifyModel {
 
@@ -79,6 +79,23 @@ class CompressStringifyController  {
         }
     })
 
+    const tabGroup = document.querySelector('sl-tab-group')
+    tabGroup.addEventListener('sl-tab-show', async (event) => {
+      if (event.detail.name === 'compressStringify-panel') {
+        const params = new URLSearchParams(window.location.search)
+        if (!params.has('functionName') || params.get('functionName') !== 'compressStringify') {
+          params.set('functionName', 'compressStringify')
+          const url = new URL(document.location)
+          url.search = params
+          window.history.replaceState({ functionName: 'compressStringify' }, '', url)
+        }
+        if (!this.webWorker && loadSampleInputs && usePreRun) {
+          await loadSampleInputs(model, true)
+          await this.run()
+        }
+      }
+    })
+
     const runButton = document.querySelector('#compressStringifyInputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {
       event.preventDefault()
@@ -91,16 +108,11 @@ class CompressStringifyController  {
 
       try {
         runButton.loading = true
+
         const t0 = performance.now()
-
-        const { webWorker, output, } = await compressStringify.compressStringify(this.webWorker,
-          model.inputs.get('input').slice(),
-          Object.fromEntries(model.options.entries())
-        )
-
+        const { output, } = await this.run()
         const t1 = performance.now()
         globalThis.notify("compressStringify successfully completed", `in ${t1 - t0} milliseconds.`, "success", "rocket-fill")
-        this.webWorker = webWorker
 
         model.outputs.set("output", output)
         outputOutputDownload.variant = "success"
@@ -115,6 +127,16 @@ class CompressStringifyController  {
         runButton.loading = false
       }
     })
+  }
+
+  async run() {
+    const { webWorker, output, } = await compressStringify.compressStringify(this.webWorker,
+      this.model.inputs.get('input').slice(),
+      Object.fromEntries(this.model.options.entries())
+    )
+    this.webWorker = webWorker
+
+    return { output, }
   }
 }
 
