@@ -8,14 +8,21 @@ export default null
   // This function should load sample inputs:
   //
   //  1) In the provided model map.
-  //  2) Into the corresponding HTML input elements.
+  //  2) Into the corresponding HTML input elements if preRun is not true.
   //
   // Example for an input named `exampleInput`:
 
   // const exampleInput = 5
   // model.inputs.set("exampleInput", exampleInput)
-  // const exampleElement = document.querySelector("#vectorMagnitudeInputs [name=example-input]")
-  // exampleElement.value = 5
+  // if (!preRun) {
+  //   const exampleElement = document.querySelector("#vectorMagnitudeInputs [name=example-input]")
+  //   exampleElement.value = 5
+  // }
 
   // return model
 // }
+
+// Use this function to run the pipeline when this tab group is select.
+// This will load the web worker if it is not already loaded, download the wasm module, and allocate memory in the wasm model.
+// Set this to `false` if sample inputs are very large or sample pipeline computation is long.
+export usePreRun = true

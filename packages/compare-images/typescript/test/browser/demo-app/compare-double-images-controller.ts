@@ -3,7 +3,7 @@
 import { readImageFile, copyImage } from 'itk-wasm'
 import { writeImageArrayBuffer, copyImage } from 'itk-wasm'
 import * as compareImages from '../../../dist/bundles/compare-images.js'
-import compareDoubleImagesLoadSampleInputs from "./compare-double-images-load-sample-inputs.js"
+import compareDoubleImagesLoadSampleInputs, { usePreRun } from "./compare-double-images-load-sample-inputs.js"
 
 class CompareDoubleImagesModel {
 
@@ -132,6 +132,23 @@ class CompareDoubleImagesController  {
         }
     })
 
+    const tabGroup = document.querySelector('sl-tab-group')
+    tabGroup.addEventListener('sl-tab-show', async (event) => {
+      if (event.detail.name === 'compareDoubleImages-panel') {
+        const params = new URLSearchParams(window.location.search)
+        if (!params.has('functionName') || params.get('functionName') !== 'compareDoubleImages') {
+          params.set('functionName', 'compareDoubleImages')
+          const url = new URL(document.location)
+          url.search = params
+          window.history.replaceState({ functionName: 'compareDoubleImages' }, '', url)
+        }
+        if (!this.webWorker && loadSampleInputs && usePreRun) {
+          await loadSampleInputs(model, true)
+          await this.run()
+        }
+      }
+    })
+
     const runButton = document.querySelector('#compareDoubleImagesInputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {
       event.preventDefault()
@@ -144,16 +161,11 @@ class CompareDoubleImagesController  {
 
       try {
         runButton.loading = true
+
         const t0 = performance.now()
-
-        const { webWorker, metrics, differenceImage, differenceUchar2dImage, } = await compareImages.compareDoubleImages(this.webWorker,
-          copyImage(model.inputs.get('testImage')),
-          Object.fromEntries(model.options.entries())
-        )
-
+        const { metrics, differenceImage, differenceUchar2dImage, } = await this.run()
         const t1 = performance.now()
         globalThis.notify("compareDoubleImages successfully completed", `in ${t1 - t0} milliseconds.`, "success", "rocket-fill")
-        this.webWorker = webWorker
 
         model.outputs.set("metrics", metrics)
         metricsOutputDownload.variant = "success"
@@ -185,6 +197,16 @@ class CompareDoubleImagesController  {
         runButton.loading = false
       }
     })
+  }
+
+  async run() {
+    const { webWorker, metrics, differenceImage, differenceUchar2dImage, } = await compareImages.compareDoubleImages(this.webWorker,
+      copyImage(this.model.inputs.get('testImage')),
+      Object.fromEntries(this.model.options.entries())
+    )
+    this.webWorker = webWorker
+
+    return { metrics, differenceImage, differenceUchar2dImage, }
   }
 }
 

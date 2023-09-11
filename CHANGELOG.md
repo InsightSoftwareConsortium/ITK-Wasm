@@ -10,12 +10,13 @@
 # [1.0.0-b.137](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.136...itk-wasm-v1.0.0-b.137) (2023-09-10)
 
 
+
 ### Performance Improvements
 
-* bump packages to itk-wasm 1.0.0-b.136 ([d45eb61](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/d45eb618505cdbf00821f60984d71abdbb7e67a4))
+* bump packages to itk-wasm 1.0.0-b.137 ([d45eb61](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/d45eb618505cdbf00821f60984d71abdbb7e67a4))
 * support demo pre-runs ([9ad1dfa](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9ad1dfac140db6cff925df3b6b13b7f18e9fe44f))
 
-# [1.0.0-b.136](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.135...itk-wasm-v1.0.0-b.136) (2023-09-07)
+# [1.0.0-b.137](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.135...itk-wasm-v1.0.0-b.137) (2023-09-07)
 
 
 ### Features
