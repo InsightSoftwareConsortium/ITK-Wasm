@@ -37,7 +37,7 @@ RUN git clone https://github.com/facebook/zstd.git && \
   rm -rf zstd-build zstd
 
 # tag commit date: 2023-09-13 branch: itkwasm-2023-01-15-f42c10a20f-5
-ENV ITK_GIT_TAG f37f9db5c444e68145fcc937d071c09bd4e7354f
+ENV ITK_GIT_TAG 301cc961003a0d5f16eac067e421897002af12d7
 RUN git clone https://github.com/KitwareMedical/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
