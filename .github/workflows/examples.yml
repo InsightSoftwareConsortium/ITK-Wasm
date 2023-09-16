@@ -5,7 +5,7 @@ on: [push,pull_request]
 jobs:
   test-node-example:
     name: node-js
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: ./examples/node-js
@@ -116,7 +116,7 @@ jobs:
 
   build-test-hello-pipeline-example:
     name: hello-pipeline build test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     defaults:
       run:
@@ -160,7 +160,7 @@ jobs:
 
   build-test-inputs-outputs-example:
     name: inputs-outputs
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     defaults:
       run:
@@ -201,7 +201,7 @@ jobs:
 
   test-umd-example:
     name: umd
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
@@ -230,7 +230,7 @@ jobs:
 
   test-webpack-example:
     name: webpack
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
@@ -266,7 +266,7 @@ jobs:
 
   test-vite-example:
     name: vite
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
