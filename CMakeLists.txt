@@ -3,6 +3,12 @@ project(WebAssemblyInterface)
 
 set(CMAKE_CXX_STANDARD 17)
 
+if(${CMAKE_VERSION} VERSION_LESS 3.24)
+  set(download_extract_timestamp_flag)
+else()
+  set(download_extract_timestamp_flag DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+endif()
+
 set(WebAssemblyInterface_LIBRARIES WebAssemblyInterface)
 
 option(BUILD_ITK_WASM_IO_MODULES "Build the itk-wasm ImageIO's and MeshIO's" OFF)
