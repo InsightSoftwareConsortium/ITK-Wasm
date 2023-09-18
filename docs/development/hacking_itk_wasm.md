@@ -4,7 +4,7 @@ Thank you for contributing a pull request!
 
 **Welcome to the ITK community!**
 
-We are glad you are here and appreciate your contribution. Please keep in mind our [community participation guidelines](https://github.com/InsightSoftwareConsortium/ITK/blob/main/CODE_OF_CONDUCT.md).
+We are glad you are here and appreciate your contribution. Please keep in mind our [community participation guidelines](https://github.com/InsightSoftwareConsortium/ITK/blob/master/CODE_OF_CONDUCT.md).
 
 ## Build dependencies
 
