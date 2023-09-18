@@ -3,10 +3,8 @@ project(WebAssemblyInterface)
 
 set(CMAKE_CXX_STANDARD 17)
 
-if(${CMAKE_VERSION} VERSION_LESS 3.24)
-  set(download_extract_timestamp_flag)
-else()
-  set(download_extract_timestamp_flag DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+if(POLICY CMP0135)
+  cmake_policy(SET CMP0135 NEW)
 endif()
 
 set(WebAssemblyInterface_LIBRARIES WebAssemblyInterface)
