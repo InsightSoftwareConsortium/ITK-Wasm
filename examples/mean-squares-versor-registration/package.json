@@ -1,13 +1,13 @@
 {
   "name": "@itk-wasm/mean-squares-versor-registration",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Illustrate the use of the VersorRigid3DTransform for 3D image registration.",
   "type": "module",
   "scripts": {
     "build": "npm run build:wasi && npm run build:emscripten && npm run build:bindgen:typescript",
-    "build:wasi": "itk-wasm -i itkwasm/wasi:latest build",
-    "build:wasi:debug": "itk-wasm -i itkwasm/wasi:latest-debug build -- -DCMAKE_BUILD_TYPE=Debug",
-    "build:emscripten": "itk-wasm -i itkwasm/emscripten:latest build",
+    "build:wasi": "itk-wasm build",
+    "build:wasi:debug": "itk-wasm build -- -DCMAKE_BUILD_TYPE=Debug",
+    "build:emscripten": "itk-wasm build",
     "build:bindgen:typescript": "itk-wasm bindgen --package-name @itk-wasm/mean-squares-versor-registration --package-description \"Example 3D versor transform registration with a mean-squares similarity metric\"",
     "test": "npm run test:wasi && npm run test:wasi:help && npm run test:emscripten",
     "test:wasi": "itk-wasm test -- -- -V",
@@ -17,7 +17,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "fs-extra": "^10.0.0",
-    "itk-image-io": "^1.0.0-b.114",
-    "itk-wasm": "^1.0.0-b.114"
+    "itk-image-io": "^1.0.0-b.140",
+    "itk-wasm": "^1.0.0-b.140"
   }
 }
