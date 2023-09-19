@@ -67,7 +67,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
 // Use this function to run the pipeline when this tab group is select.
 // This will load the web worker if it is not already loaded, download the wasm module, and allocate memory in the wasm model.
 // Set this to \`false\` if sample inputs are very large or sample pipeline computation is long.
-export usePreRun = true
+export const usePreRun = true
 `
   writeIfOverrideNotPresent(loadSampleInputsModulePath, loadSampleInputsModuleContent)
 
