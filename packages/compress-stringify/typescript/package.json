@@ -50,7 +50,7 @@
     "@shoelace-style/shoelace": "^2.5.2",
     "@types/node": "^20.2.5",
     "ava": "^5.1.0",
-    "cypress": "^12.16.0",
+    "cypress": "^13.2.0",
     "rollup": "^3.9.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-ignore": "^1.0.10",
