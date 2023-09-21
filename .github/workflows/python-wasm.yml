@@ -15,7 +15,7 @@ jobs:
       matrix:
         os: [ubuntu-22.04, windows-2022, macos-12]
         python-major-version: [3]
-        python-minor-version: [7, 8, 9, 10, 11]
+        python-minor-version: [8, 9, 10, 11]
 
     steps:
       - uses: actions/checkout@v3
@@ -82,7 +82,7 @@ jobs:
       matrix:
         os: [ubuntu-22.04, windows-2022, macos-12]
         python-major-version: [3]
-        python-minor-version: [7, 8, 9, 10, 11]
+        python-minor-version: [8, 9, 10, 11]
 
     steps:
       - uses: actions/checkout@v3
