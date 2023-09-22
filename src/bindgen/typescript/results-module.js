@@ -32,7 +32,7 @@ function resultsModule (srcOutputDir, interfaceJson, forNode, modulePascalCase, 
       resultsImportTypes.add('JsonCompatible')
     }
     if (forNode && outputType.includes('File')) {
-      resultContent += `  ${camelCase(output.name)}: string\n\n`
+      // Written to disk
     } else {
       if (typesRequireImport.includes(outputType)) {
         resultsImportTypes.add(outputType)

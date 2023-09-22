@@ -4,7 +4,7 @@ on: [push,pull_request]
 
 env:
   itk-git-tag: "v5.4rc01"
-  itk-wheel-tag: "v5.3.0"
+  itk-wheel-tag: "v5.4rc01"
   ITKMeshToPolyData-git-tag: "v0.11rc01"
 
 jobs:

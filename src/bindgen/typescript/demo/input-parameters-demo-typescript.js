@@ -25,8 +25,8 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
         result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", ${textValue})\n`
         result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
         result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(model.${modelProperty}.get("${parameterName}").data.substring(0, 50) + ' ...')}</pre>\`\n`
-        result += `${indent}${indent}details.disabled = false\n`
       }
+      result += `${indent}${indent}details.disabled = false\n`
       result += `${indent}})\n\n`
       break
     case 'INPUT_BINARY_FILE':
@@ -49,8 +49,8 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
         result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
         const binaryDataProp = parameterType.includes('FILE') ? '.data' : ''
         result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(model.${modelProperty}.get("${parameterName}")${binaryDataProp}.subarray(0, 50).toString() + ' ...')}</pre>\`\n`
-        result += `${indent}${indent}details.disabled = false\n`
       }
+      result += `${indent}${indent}details.disabled = false\n`
       result += `${indent}})\n\n`
       break
     case 'TEXT':

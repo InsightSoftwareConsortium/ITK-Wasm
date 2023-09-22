@@ -43,7 +43,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   result += `import ${functionName}LoadSampleInputs, { usePreRun } from "./${interfaceJson.name}-load-sample-inputs.js"\n`
   const loadSampleInputsModulePath = path.join(outputPath, `${interfaceJson.name}-load-sample-inputs.ts`)
   const loadSampleInputsModuleContent = `export default null
-// export default async function ${functionName}LoadSampleInputs (model) {
+// export default async function ${functionName}LoadSampleInputs (model, preRun=false) {
 
   // Load sample inputs for the ${functionName} function.
   //

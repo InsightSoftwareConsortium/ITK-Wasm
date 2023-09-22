@@ -15,7 +15,6 @@ classifiers = [
     'Intended Audience :: Developers',
     'Intended Audience :: Science/Research',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
@@ -28,11 +27,11 @@ keywords = [
 ]
 dynamic = ["version"]
 
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = [
     "numpy",
     "typing_extensions",
-    "wasmtime; sys_platform != \"emscripten\"",
+    "wasmtime < 13.0.0; sys_platform != \"emscripten\"",
     "importlib_metadata; python_version < \"3.10\"",
 ]
 
