@@ -5,19 +5,19 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --progress --color --mode production",
-    "start": "webpack-dev-server --mode development --static ./dist/",
-    "start:production": "webpack-dev-server --mode production --static ./dist/",
+    "start": "webpack-dev-server --port 8686 --mode development --static ./dist/",
+    "start:production": "webpack-dev-server --port 8686 --mode production --static ./dist/",
     "cypress:open": "npx cypress open",
     "cypress:run": "npx cypress run --config defaultCommandTimeout=8000",
     "cypress:install": "npx cypress install",
     "cypress:runChrome": "npx cypress run --config defaultCommandTimeout=8000 --browser chrome",
     "cypress:runFirefox": "npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
     "cypress:runFirefox:ci": "npm run cypress:install && npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
-    "test:debug": "start-server-and-test start http-get://localhost:8080 cypress:open",
-    "test": "start-server-and-test start:production http-get://localhost:8080 cypress:run",
-    "test:chrome": "start-server-and-test start:production http-get://localhost:8080 cypress:runChrome",
-    "test:firefox:ci": "start-server-and-test start:production http-get://localhost:8080 cypress:runFirefox:ci",
-    "test:firefox": "start-server-and-test start:production http-get://localhost:8080 cypress:runFirefox"
+    "test:debug": "start-server-and-test start http-get://localhost:8686 cypress:open",
+    "test": "start-server-and-test start:production http-get://localhost:8686 cypress:run",
+    "test:chrome": "start-server-and-test start:production http-get://localhost:8686 cypress:runChrome",
+    "test:firefox:ci": "start-server-and-test start:production http-get://localhost:8686 cypress:runFirefox:ci",
+    "test:firefox": "start-server-and-test start:production http-get://localhost:8686 cypress:runFirefox"
   },
   "repository": {
     "type": "git",
