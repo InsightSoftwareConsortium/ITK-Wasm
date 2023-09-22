@@ -1,5 +1,13 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.141](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.140...itk-wasm-v1.0.0-b.141) (2023-09-22)
+
+
+### Bug Fixes
+
+* **bindgen:** add preRun argument to sample LoadSampleInputs function ([f661729](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f661729bd81338c48b81e1ba0d1b01a9a0dc847e))
+* **bindgen:** Address issues with multiple input and output files with an option ([eeb8833](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/eeb8833c7cee626903224af8b5c85ef61b86299a))
+
 # [1.0.0-b.140](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.139...itk-wasm-v1.0.0-b.140) (2023-09-19)
 
 
