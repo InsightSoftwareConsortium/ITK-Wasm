@@ -118,8 +118,14 @@ class ApplyPresentationStateToImageController  {
         }
     })
 
-    const tabGroup = document.querySelector('sl-tab-group')
-    tabGroup.addEventListener('sl-tab-show', async (event) => {
+    const preRun = async () => {
+      if (!this.webWorker && loadSampleInputs && usePreRun) {
+        await loadSampleInputs(model, true)
+        await this.run()
+      }
+    }
+
+    const onSelectTab = async (event) => {
       if (event.detail.name === 'applyPresentationStateToImage-panel') {
         const params = new URLSearchParams(window.location.search)
         if (!params.has('functionName') || params.get('functionName') !== 'applyPresentationStateToImage') {
@@ -128,10 +134,16 @@ class ApplyPresentationStateToImageController  {
           url.search = params
           window.history.replaceState({ functionName: 'applyPresentationStateToImage' }, '', url)
         }
-        if (!this.webWorker && loadSampleInputs && usePreRun) {
-          await loadSampleInputs(model, true)
-          await this.run()
-        }
+        await preRun()
+      }
+    }
+
+    const tabGroup = document.querySelector('sl-tab-group')
+    tabGroup.addEventListener('sl-tab-show', onSelectTab)
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search)
+      if (params.has('functionName') && params.get('functionName') === 'applyPresentationStateToImage') {
+        preRun()
       }
     })
 

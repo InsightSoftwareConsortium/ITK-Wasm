@@ -15,11 +15,10 @@ import './structured-report-to-text-controller.js'
 import './read-dicom-tags-controller.js'
 import './read-image-dicom-file-series-controller.js'
 
-const tabGroup = document.querySelector('sl-tab-group')
 const params = new URLSearchParams(window.location.search)
-if (params.has('functionName')) {
-  const functionName = params.get('functionName')
-  tabGroup.show(functionName + '-panel')
-} else {
-  tabGroup.show('applyPresentationStateToImage-panel')
+if (!params.has('functionName')) {
+  params.set('functionName', 'applyPresentationStateToImage')
+  const url = new URL(document.location)
+  url.search = params
+  window.history.replaceState({ functionName: 'applyPresentationStateToImage' }, '', url)
 }

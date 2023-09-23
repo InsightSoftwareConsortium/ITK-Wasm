@@ -55,9 +55,7 @@ async function readImageDicomFileSeriesNode(
 
     options.inputImages.forEach((value) => {
       mountDirs.add(path.dirname(value as string))
-      mountDirs.add(path.dirname(value as string))
       args.push(value as string)
-
     })
   }
   if (typeof options.singleSortedSeries !== "undefined") {
