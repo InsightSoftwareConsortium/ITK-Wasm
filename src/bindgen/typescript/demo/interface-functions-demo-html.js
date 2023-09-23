@@ -31,6 +31,11 @@ function interfaceFunctionsDemoHtml(interfaceJson, functionName, useCamelCase) {
       result += inputParametersDemoHtml(functionName, prefix, indent, parameter, false, useCamelCase)
     })
   }
+  interfaceJson.outputs.forEach((output) => {
+    if (output.type.includes('FILE')) {
+      result += inputParametersDemoHtml(functionName, prefix, indent, output, true, useCamelCase)
+    }
+  })
 
   result += `${prefix}<sl-divider></sl-divider>\n`
   const loadSampleInputsId = useCamelCase ? 'loadSampleInputs' : 'load-sample-inputs'

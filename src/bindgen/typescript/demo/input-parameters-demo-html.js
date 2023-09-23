@@ -26,6 +26,8 @@ function inputParametersDemoHtml (functionName, prefix, indent, parameter, requi
     }
       break
     case 'TEXT':
+    case 'OUTPUT_TEXT_FILE':
+    case 'OUTPUT_BINARY_FILE':
       result += `${prefix}${indent}<sl-input ${requiredAttr}name="${parameter.name}" type="text" label="${label}" help-text="${description}"></sl-input>\n`
       break
     case 'INT':

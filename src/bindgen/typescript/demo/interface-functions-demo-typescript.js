@@ -128,6 +128,12 @@ class ${functionNamePascalCase}Model {
     })
   }
 
+  interfaceJson.outputs.forEach((output) => {
+    if (output.type.includes('FILE')) {
+      result += inputParametersDemoTypeScript(functionName, indent, output, true, 'options')
+    }
+  })
+
   result += `${indent}// ----------------------------------------------\n${indent}// Outputs`
   interfaceJson.outputs.forEach((output) => {
     result += outputDemoTypeScript(functionName, '', indent, output)
