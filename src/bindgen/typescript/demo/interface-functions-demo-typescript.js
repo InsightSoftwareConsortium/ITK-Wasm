@@ -139,8 +139,14 @@ class ${functionNamePascalCase}Model {
     result += outputDemoTypeScript(functionName, '', indent, output)
   })
 
-  result += `\n${indent}const tabGroup = document.querySelector('sl-tab-group')
-    tabGroup.addEventListener('sl-tab-show', async (event) => {
+  result += `\n${indent}const preRun = async () => {
+      if (!this.webWorker && loadSampleInputs && usePreRun) {
+        await loadSampleInputs(model, true)
+        await this.run()
+      }
+    }
+
+    const onSelectTab = async (event) => {
       if (event.detail.name === '${functionName}-panel') {
         const params = new URLSearchParams(window.location.search)
         if (!params.has('functionName') || params.get('functionName') !== '${functionName}') {
@@ -149,10 +155,16 @@ class ${functionNamePascalCase}Model {
           url.search = params
           window.history.replaceState({ functionName: '${functionName}' }, '', url)
         }
-        if (!this.webWorker && loadSampleInputs && usePreRun) {
-          await loadSampleInputs(model, true)
-          await this.run()
-        }
+        await preRun()
+      }
+    }
+
+    const tabGroup = document.querySelector('sl-tab-group')
+    tabGroup.addEventListener('sl-tab-show', onSelectTab)
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search)
+      if (params.has('functionName') && params.get('functionName') === '${functionName}') {
+        preRun()
       }
     })
 

@@ -144,13 +144,12 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     readmePipelines += readmeResult
   })
 
-  demoFunctionsTypeScript += `\nconst tabGroup = document.querySelector('sl-tab-group')
-const params = new URLSearchParams(window.location.search)
-if (params.has('functionName')) {
-  const functionName = params.get('functionName')
-  tabGroup.show(functionName + '-panel')
-} else {
-  tabGroup.show('${firstFunctionName}-panel')
+  demoFunctionsTypeScript += `\nconst params = new URLSearchParams(window.location.search)
+if (!params.has('functionName')) {
+  params.set('functionName', '${firstFunctionName}')
+  const url = new URL(document.location)
+  url.search = params
+  window.history.replaceState({ functionName: '${firstFunctionName}' }, '', url)
 }
 `
 
