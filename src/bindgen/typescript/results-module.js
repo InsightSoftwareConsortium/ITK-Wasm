@@ -31,16 +31,16 @@ function resultsModule (srcOutputDir, interfaceJson, forNode, modulePascalCase, 
     if (outputType === 'JsonCompatible') {
       resultsImportTypes.add('JsonCompatible')
     }
+    const outputArray = output.itemsExpectedMax > 1 ? '[]' : ''
     if (forNode && outputType.includes('File')) {
       // Written to disk
     } else {
       if (typesRequireImport.includes(outputType)) {
         resultsImportTypes.add(outputType)
       }
-      resultContent += `  ${camelCase(output.name)}: ${outputType}\n\n`
+      resultContent += `  ${camelCase(output.name)}: ${outputType}${outputArray}\n\n`
     }
-    const readmeOutputArray = output.itemsExpectedMax > 1 ? '[]' : ''
-    readmeResultTable.push([`\`${camelCase(output.name)}\``, `*${outputType}${readmeOutputArray}*`, output.description])
+    readmeResultTable.push([`\`${camelCase(output.name)}\``, `*${outputType}${outputArray}*`, output.description])
   })
   readmeResult += markdownTable(readmeResultTable, { align: ['c', 'c', 'l'] }) + '\n'
 

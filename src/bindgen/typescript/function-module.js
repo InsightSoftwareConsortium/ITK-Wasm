@@ -195,6 +195,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       }
     })
   }
+  let haveArray = false
   functionContent += '  const desiredOutputs: Array<PipelineOutput> = [\n'
   interfaceJson.outputs.forEach((output) => {
     if (interfaceJsonTypeToInterfaceType.has(output.type)) {
@@ -204,6 +205,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         const defaultData = interfaceType === 'BinaryFile' ? 'new Uint8Array()' : "''"
         const isArray = output.itemsExpectedMax > 1
         if (isArray) {
+          haveArray = true
           functionContent += `    ...${camel}PipelineOutputs,\n`
         } else {
           functionContent += `    { type: InterfaceTypes.${interfaceType}, data: { path: ${camel}Path, data: ${defaultData} }},\n`
@@ -214,6 +216,30 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     }
   })
   functionContent += '  ]\n\n'
+  if (haveArray) {
+    functionContent += `  let outputIndex = 0\n`
+    interfaceJson.outputs.forEach((output) => {
+      if (interfaceJsonTypeToInterfaceType.has(output.type)) {
+        const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
+        if (!forNode && interfaceType.includes('File')) {
+          const camel = camelCase(output.name)
+          const isArray = output.itemsExpectedMax > 1
+          if (isArray) {
+            functionContent += `  const ${camel}Start = outputIndex\n`
+            functionContent += `  outputIndex += options.${camel}Path ? options.${camel}Path.length : 0\n`
+            functionContent += `  const ${camel}End = outputIndex\n`
+          } else {
+            functionContent += `  const ${camel}Index = outputIndex\n`
+            functionContent += `  ++outputIndex\n`
+          }
+        } else if (!interfaceType.includes('File')) {
+          functionContent += `  const ${camel}Index = outputIndex\n`
+          functionContent += `  ++outputIndex\n`
+        }
+      }
+    })
+    functionContent += '\n'
+  }
   interfaceJson.inputs.forEach((input) => {
     if (interfaceJsonTypeToInterfaceType.has(input.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
@@ -295,13 +321,12 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       functionContent += name
       if (isArray) {
         functionContent += `  options.${camel}Path?.forEach((p) => args.push(p))\n`
+        if (forNode && interfaceType.includes('File')) {
+          functionContent += `  options.${camel}Path?.forEach((p) => mountDirs.add(path.dirname(p)))\n`
+        }
       } else {
         functionContent += `  args.push(${camel}Name)\n`
-      }
-      if (forNode && interfaceType.includes('File')) {
-        if (isArray) {
-          functionContent += `  options.${camel}Path?.forEach((p) => mountDirs.add(path.dirname(p)))\n`
-        } else {
+        if (forNode && interfaceType.includes('File')) {
           functionContent += `  mountDirs.add(path.dirname(${camel}Name))\n`
         }
       }
@@ -414,12 +439,31 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   interfaceJson.outputs.forEach((output, index) => {
     const camel = camelCase(output.name)
     const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
+    const outputIndex = haveArray ? `${camel}Index` : index.toString()
     if (interfaceType.includes('TextStream') || interfaceType.includes('BinaryStream')) {
-      functionContent += `    ${camel}: (outputs[${index.toString()}].data as ${interfaceType}).data,\n`
+      if (haveArray) {
+        const isArray = output.itemsExpectedMax > 1
+        if (isArray) {
+          functionContent += `    ${camel}: (outputs.slice(${camel}Start, ${camel}End).map(o => (o.data as ${interfaceType}).data)),\n`
+        } else {
+          functionContent += `    ${camel}: (outputs[${camel}Index].data as ${interfaceType}).data),\n`
+        }
+      } else {
+        functionContent += `    ${camel}: (outputs[${outputIndex}].data as ${interfaceType}).data,\n`
+      }
     } else if (forNode && interfaceType.includes('File')) {
       // Written to disk
     } else {
-      functionContent += `    ${camel}: outputs[${index.toString()}].data as ${interfaceType},\n`
+      if (haveArray) {
+        const isArray = output.itemsExpectedMax > 1
+        if (isArray) {
+          functionContent += `    ${camel}: outputs.slice(${camel}Start, ${camel}End).map(o => (o.data as ${interfaceType})),\n`
+        } else {
+          functionContent += `    ${camel}: outputs[${camel}Index].data as ${interfaceType},\n`
+        }
+      } else {
+        functionContent += `    ${camel}: outputs[${outputIndex}].data as ${interfaceType},\n`
+      }
     }
   })
   functionContent += '  }\n'
