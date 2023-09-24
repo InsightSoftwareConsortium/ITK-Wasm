@@ -37,8 +37,8 @@ async function applyPresentationStateToImageNode(
     { type: InterfaceTypes.Image },
   ]
 
-  mountDirs.add(path.dirname(imageIn as string))
-  mountDirs.add(path.dirname(presentationStateFile as string))
+  mountDirs.add(path.dirname(value as string))
+  mountDirs.add(path.dirname(value as string))
   const inputs: Array<PipelineInput> = [
   ]
 

@@ -54,9 +54,16 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       result += `${indent}})\n\n`
       break
     case 'TEXT':
+    case 'OUTPUT_TEXT_FILE':
+    case 'OUTPUT_BINARY_FILE':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs sl-input[name=${parameter.name}]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('sl-change', (event) => {\n`
-      result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", ${inputIdentifier}.value)\n`
+      if (parameter.itemsExpectedMax > 1) {
+        result += `${indent}${indent}const values = ${inputIdentifier}.value.split(',').map(s => s.trim())\n`
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", values)\n`
+      } else {
+        result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", ${inputIdentifier}.value)\n`
+      }
       result += `${indent}})\n\n`
       break
     case 'BOOL':

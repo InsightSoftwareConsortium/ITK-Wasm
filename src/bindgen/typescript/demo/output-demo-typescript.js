@@ -14,8 +14,13 @@ function outputDemoTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}${indent}event.stopPropagation()\n`
       result += `${prefix}${indent}${indent}if (model.outputs.has("${parameterName}")) {\n`
       const textDataProp = parameter.type.includes('FILE') ? '.data' : ''
-      const downloadFileName = parameter.type.includes('FILE') ? `model.outputs.get("${parameterName}").path`: `"${parameterName}.txt"`
-      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(new TextEncoder().encode(model.outputs.get("${parameterName}")${textDataProp}), ${downloadFileName})\n`
+      if (parameter.itemsExpectedMax > 1) {
+        const downloadFileName = parameter.type.includes('FILE') ? `o.path`: `"${parameterName}.txt"`
+        result += `${prefix}${indent}${indent}${indent}model.outputs.get("${parameterName}").forEach((o) => globalThis.downloadFile(new TextEncoder().encode(o${textDataProp}), ${downloadFileName}))\n`
+      } else {
+        const downloadFileName = parameter.type.includes('FILE') ? `model.outputs.get("${parameterName}").path`: `"${parameterName}.txt"`
+        result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(new TextEncoder().encode(model.outputs.get("${parameterName}")${textDataProp}), ${downloadFileName})\n`
+      }
       result += `${prefix}${indent}${indent}}\n`
       result += `${prefix}${indent}})\n`
     }
@@ -29,8 +34,13 @@ function outputDemoTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}${indent}event.stopPropagation()\n`
       result += `${prefix}${indent}${indent}if (model.outputs.has("${parameterName}")) {\n`
       const binaryDataProp = parameter.type.includes('FILE') ? '.data' : ''
-      const downloadFileName = parameter.type.includes('FILE') ? `model.outputs.get("${parameterName}").path`: `"${parameterName}.bin"`
-      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(model.outputs.get("${parameterName}")${binaryDataProp}, ${downloadFileName})\n`
+      if (parameter.itemsExpectedMax > 1) {
+        const downloadFileName = parameter.type.includes('FILE') ? `o.path`: `"${parameterName}.bin"`
+        result += `${prefix}${indent}${indent}${indent}model.outputs.get("${parameterName}").forEach((o) => globalThis.downloadFile(o${binaryDataProp}, ${downloadFileName}))\n`
+      } else {
+        const downloadFileName = parameter.type.includes('FILE') ? `model.outputs.get("${parameterName}").path`: `"${parameterName}.bin"`
+        result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(model.outputs.get("${parameterName}")${binaryDataProp}, ${downloadFileName})\n`
+      }
       result += `${prefix}${indent}${indent}}\n`
       result += `${prefix}${indent}})\n`
     }

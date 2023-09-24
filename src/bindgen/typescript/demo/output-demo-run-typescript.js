@@ -12,7 +12,11 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
       result += `${prefix}${indent}const ${parameterName}Output = document.getElementById("${functionName}-${parameter.name}-details")\n`
       const textDataProp = parameter.type.includes('FILE') ? '.data' : ''
-      result += `${prefix}${indent}${parameterName}Output.innerHTML = \`<pre>$\{globalThis.escapeHtml(${parameterName}${textDataProp}.substring(0, 1024).toString() + ' ...')}</pre>\`\n`
+      if (parameter.itemsExpectedMax > 1) {
+        result += `${prefix}${indent}${parameterName}Output.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(${parameterName}))}</pre>\`\n`
+      } else {
+        result += `${prefix}${indent}${parameterName}Output.innerHTML = \`<pre>$\{globalThis.escapeHtml(${parameterName}${textDataProp}.substring(0, 1024).toString() + ' ...')}</pre>\`\n`
+      }
       result += `${prefix}${indent}${parameterName}Output.disabled = false\n`
     }
       break
@@ -23,7 +27,11 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
       result += `${prefix}${indent}const ${parameterName}Output = document.getElementById("${functionName}-${parameter.name}-details")\n`
       const binaryDataProp = parameter.type.includes('FILE') ? '.data' : ''
-      result += `${prefix}${indent}${parameterName}Output.innerHTML = \`<pre>$\{globalThis.escapeHtml(${parameterName}${binaryDataProp}.subarray(0, 1024).toString() + ' ...')}</pre>\`\n`
+      if (parameter.itemsExpectedMax > 1) {
+        result += `${prefix}${indent}${parameterName}Output.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(${parameterName})}</pre>\`\n`
+      } else {
+        result += `${prefix}${indent}${parameterName}Output.innerHTML = \`<pre>$\{globalThis.escapeHtml(${parameterName}${binaryDataProp}.subarray(0, 1024).toString() + ' ...')}</pre>\`\n`
+      }
       result += `${prefix}${indent}${parameterName}Output.disabled = false\n`
     }
       break
