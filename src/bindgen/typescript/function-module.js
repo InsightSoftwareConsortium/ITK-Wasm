@@ -12,7 +12,7 @@ function readFileIfNotInterfaceType(forNode, interfaceType, varName, indent, isA
     if (isArray) {
       return `${indent}value.forEach((p) => mountDirs.add(path.dirname(p) as string))\n`
     } else {
-      return `${indent}mountDirs.add(path.dirname(value as string))\n`
+      return `${indent}mountDirs.add(path.dirname(${varName} as string))\n`
     }
 
   } else {
@@ -363,7 +363,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         if (interfaceType.includes('File')) {
           // for files
           if (forNode) {
-            functionContent += '      mountDirs.add(path.dirname(value as string))\n'
+            functionContent += `      mountDirs.add(path.dirname(value as string))\n`
             functionContent += '      args.push(value as string)\n'
           } else {
             functionContent += readFileIfNotInterfaceType(forNode, interfaceType, 'value', '      ', false)

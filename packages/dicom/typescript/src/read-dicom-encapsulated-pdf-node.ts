@@ -33,7 +33,7 @@ async function readDicomEncapsulatedPdfNode(
     { type: InterfaceTypes.BinaryStream },
   ]
 
-  mountDirs.add(path.dirname(value as string))
+  mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
   ]
 

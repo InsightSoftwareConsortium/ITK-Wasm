@@ -33,7 +33,7 @@ async function structuredReportToTextNode(
     { type: InterfaceTypes.TextStream },
   ]
 
-  mountDirs.add(path.dirname(value as string))
+  mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
   ]
 
