@@ -1,4 +1,4 @@
-sphinx>=7.2.2
+sphinx>=7.2.6
 furo
 sphinx-autodoc2
 myst-parser
