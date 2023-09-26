@@ -323,7 +323,9 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         }
       }
       functionContent += '\n'
-      outputCount++
+      if (!interfaceType.includes('File')) {
+        outputCount++
+      }
     } else {
       functionContent += `  args.push(${camel}.toString())\n\n`
     }
@@ -428,10 +430,11 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   if (!forNode) {
     functionContent += '    webWorker: usedWebWorker as Worker,\n'
   }
-  interfaceJson.outputs.forEach((output, index) => {
+  outputCount = 0
+  interfaceJson.outputs.forEach((output) => {
     const camel = camelCase(output.name)
     const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-    const outputIndex = haveArray ? `${camel}Index` : index.toString()
+    const outputIndex = haveArray ? `${camel}Index` : outputCount.toString()
     if (interfaceType.includes('TextStream') || interfaceType.includes('BinaryStream')) {
       if (haveArray) {
         const isArray = output.itemsExpectedMax > 1
@@ -456,6 +459,9 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       } else {
         functionContent += `    ${camel}: outputs[${outputIndex}].data as ${interfaceType},\n`
       }
+    }
+    if (!interfaceType.includes('File')) {
+      outputCount++
     }
   })
   functionContent += '  }\n'
