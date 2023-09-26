@@ -323,7 +323,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         }
       }
       functionContent += '\n'
-      if (!interfaceType.includes('File')) {
+      if (!(forNode && interfaceType.includes('File'))) {
         outputCount++
       }
     } else {
@@ -460,7 +460,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         functionContent += `    ${camel}: outputs[${outputIndex}].data as ${interfaceType},\n`
       }
     }
-    if (!interfaceType.includes('File')) {
+    if (!(forNode && interfaceType.includes('File'))) {
       outputCount++
     }
   })
