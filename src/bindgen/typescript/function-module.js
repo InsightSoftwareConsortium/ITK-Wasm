@@ -39,7 +39,6 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   let functionContent = `import {\n`
   const usedInterfaceTypes = new Set()
   let needMountDirs = false
-  let needJsonCompatible = false
   const pipelineComponents = ['inputs', 'outputs', 'parameters']
   pipelineComponents.forEach((pipelineComponent) => {
     interfaceJson[pipelineComponent].forEach((value) => {
@@ -47,10 +46,6 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         const interfaceType = interfaceJsonTypeToInterfaceType.get(value.type)
         if (interfaceType.includes('File') && forNode) {
           needMountDirs = true
-          return
-        }
-        if (interfaceType === 'JsonCompatible' && pipelineComponent === 'inputs') {
-          needJsonCompatible = true
           return
         }
         if (!(pipelineComponent === 'inputs' && interfaceType === 'BinaryStream')) {
@@ -65,9 +60,6 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   functionContent += '  InterfaceTypes,\n'
   functionContent += '  PipelineOutput,\n'
   functionContent += '  PipelineInput,\n'
-  if (needJsonCompatible) {
-    functionContent += '  JsonCompatible,\n'
-  }
   if (forNode) {
     functionContent += '  runPipelineNode\n'
   } else {
@@ -331,7 +323,9 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         }
       }
       functionContent += '\n'
-      outputCount++
+      if (!interfaceType.includes('File')) {
+        outputCount++
+      }
     } else {
       functionContent += `  args.push(${camel}.toString())\n\n`
     }
@@ -436,10 +430,11 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   if (!forNode) {
     functionContent += '    webWorker: usedWebWorker as Worker,\n'
   }
-  interfaceJson.outputs.forEach((output, index) => {
+  outputCount = 0
+  interfaceJson.outputs.forEach((output) => {
     const camel = camelCase(output.name)
     const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
-    const outputIndex = haveArray ? `${camel}Index` : index.toString()
+    const outputIndex = haveArray ? `${camel}Index` : outputCount.toString()
     if (interfaceType.includes('TextStream') || interfaceType.includes('BinaryStream')) {
       if (haveArray) {
         const isArray = output.itemsExpectedMax > 1
@@ -464,6 +459,9 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       } else {
         functionContent += `    ${camel}: outputs[${outputIndex}].data as ${interfaceType},\n`
       }
+    }
+    if (!interfaceType.includes('File')) {
+      outputCount++
     }
   })
   functionContent += '  }\n'
