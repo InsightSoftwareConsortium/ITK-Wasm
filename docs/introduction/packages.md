@@ -38,8 +38,8 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 [dicom-package-py]: https://pypi.org/project/itkwasm-dicom/
 
 [htj2k-repo]: https://github.com/InsightSoftwareConsortium/ITKIOOpenJPH/tree/main/src/wasm
-[htj2k-demo-js]: https://itk-wasm-htj2k-app.on.fleek.co/
-[htj2k-docs-js]: https://itk-wasm-htj2k-docs.on.fleek.co/
+[htj2k-demo-js]: https://js.app.htj2k.wasm.itk.eth.limo/
+[htj2k-docs-js]: https://js.docs.htj2k.wasm.itk.eth.limo/
 [htj2k-package-js]: https://www.npmjs.com/package/@itk-wasm/htj2k
-[htj2k-docs-py]: https://itk-wasm-htj2k-python-docs.on.fleek.co/
+[htj2k-docs-py]: https://py.docs.htj2k.wasm.itk.eth.limo/
 [htj2k-package-py]: https://pypi.org/project/itkwasm-htj2k/
