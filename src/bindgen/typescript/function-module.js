@@ -39,7 +39,6 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   let functionContent = `import {\n`
   const usedInterfaceTypes = new Set()
   let needMountDirs = false
-  let needJsonCompatible = false
   const pipelineComponents = ['inputs', 'outputs', 'parameters']
   pipelineComponents.forEach((pipelineComponent) => {
     interfaceJson[pipelineComponent].forEach((value) => {
@@ -47,10 +46,6 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         const interfaceType = interfaceJsonTypeToInterfaceType.get(value.type)
         if (interfaceType.includes('File') && forNode) {
           needMountDirs = true
-          return
-        }
-        if (interfaceType === 'JsonCompatible' && pipelineComponent === 'inputs') {
-          needJsonCompatible = true
           return
         }
         if (!(pipelineComponent === 'inputs' && interfaceType === 'BinaryStream')) {
@@ -65,9 +60,6 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   functionContent += '  InterfaceTypes,\n'
   functionContent += '  PipelineOutput,\n'
   functionContent += '  PipelineInput,\n'
-  if (needJsonCompatible) {
-    functionContent += '  JsonCompatible,\n'
-  }
   if (forNode) {
     functionContent += '  runPipelineNode\n'
   } else {
