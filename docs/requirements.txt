@@ -1,4 +1,5 @@
 sphinx>=7.2.6
+astroid<3
 furo
 sphinx-autodoc2
 myst-parser
