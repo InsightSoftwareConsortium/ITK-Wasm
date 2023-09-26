@@ -23,7 +23,7 @@
     "itk-wasm": "^1.0.0-b.106"
   },
   "devDependencies": {
-    "cypress": "^12.3.0",
+    "cypress": "^13.2.0",
     "http-server": "^14.1.1",
     "start-server-and-test": "^1.15.2"
   }
