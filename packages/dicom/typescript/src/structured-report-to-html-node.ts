@@ -33,7 +33,7 @@ async function structuredReportToHtmlNode(
     { type: InterfaceTypes.TextStream },
   ]
 
-  mountDirs.add(path.dirname(value as string))
+  mountDirs.add(path.dirname(dicomFile as string))
   const inputs: Array<PipelineInput> = [
   ]
 
@@ -127,7 +127,7 @@ async function structuredReportToHtmlNode(
   }
   if (typeof options.cssFile !== "undefined") {
     const cssFile = options.cssFile
-    mountDirs.add(path.dirname(value as string))
+    mountDirs.add(path.dirname(cssFile as string))
     args.push('--css-file')
 
     const name = cssFile as string
