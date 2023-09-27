@@ -1,6 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
-import { writeImageArrayBuffer, copyImage } from 'itk-wasm'
+import { writeImageArrayBuffer } from 'itk-wasm'
+import { copyImage } from 'itk-wasm'
 import * as dicom from '../../../dist/bundles/dicom.js'
 import applyPresentationStateToImageLoadSampleInputs, { usePreRun } from "./apply-presentation-state-to-image-load-sample-inputs.js"
 

@@ -1,7 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-import { readImageFile, copyImage } from 'itk-wasm'
-import { writeImageArrayBuffer, copyImage } from 'itk-wasm'
+import { readImageFile } from 'itk-wasm'
+import { writeImageArrayBuffer } from 'itk-wasm'
+import { copyImage } from 'itk-wasm'
 import * as compareImages from '../../../dist/bundles/compare-images.js'
 import vectorMagnitudeLoadSampleInputs, { usePreRun } from "./vector-magnitude-load-sample-inputs.js"
 

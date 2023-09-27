@@ -135,8 +135,7 @@ if (!params.has('functionName')) {
     indexContent += `export type { ${modulePascalCase}${nodeTextCamel}Result }\n\n`
 
     const filteredParameters = interfaceJson.parameters.filter(p => { return p.name !== 'memory-io' && p.name !== 'version'})
-    const haveOutputFile = interfaceJson.outputs.some(o => { return o.type.includes('FILE') })
-    const haveOptions = !!filteredParameters.length || haveOutputFile
+    const haveOptions = !!filteredParameters.length
 
     const { readmeOptions } = optionsModule(srcOutputDir, interfaceJson, modulePascalCase, nodeTextCamel, moduleKebabCase, haveOptions)
     if (haveOptions) {

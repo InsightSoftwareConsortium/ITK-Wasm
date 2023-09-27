@@ -49,17 +49,6 @@ function optionsModule (srcOutputDir, interfaceJson, modulePascalCase, nodeTextC
     readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}*`, parameter.description])
   })
 
-  const outputFiles = interfaceJson.outputs.filter(o => { return o.type.includes('FILE') })
-  outputFiles.forEach((output) => {
-    const outputDescription = `${output.description} path`
-    optionsInterfaceContent += `  /** ${outputDescription} */\n`
-    const isArray = output.itemsExpectedMax > 1 ? '[]' : ''
-    const parameterType = `string${isArray}`
-    const optionName = `${output.name}-path`
-    optionsInterfaceContent += `  ${camelCase(optionName)}?: ${parameterType}\n\n`
-    readmeOptionsTable.push([`\`${camelCase(optionName)}\``, `*${parameterType}*`, outputDescription])
-  })
-
   // Insert the import statement in the beginning for the file.
   if (optionsImportTypes.size !== 0) {
     optionsContent += `import { ${Array.from(optionsImportTypes).join(',')} } from 'itk-wasm'\n\n`

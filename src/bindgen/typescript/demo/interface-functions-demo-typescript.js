@@ -27,7 +27,7 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
     result += `import { readMeshFile } from 'itk-wasm'\n`
   }
   if (needReadImage) {
-    result += `import { readImageFile, copyImage } from 'itk-wasm'\n`
+    result += `import { readImageFile } from 'itk-wasm'\n`
   }
   const needWriteMesh = interfaceJson.outputs.filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Mesh').length > 0
   if (needWriteMesh) {
@@ -35,7 +35,10 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   }
   const needWriteImage = interfaceJson.outputs.filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Image').length > 0
   if (needWriteImage) {
-    result += `import { writeImageArrayBuffer, copyImage } from 'itk-wasm'\n`
+    result += `import { writeImageArrayBuffer } from 'itk-wasm'\n`
+  }
+  if (needReadImage || needWriteImage) {
+    result += `import { copyImage } from 'itk-wasm'\n`
   }
 
   result += `import * as ${camelCase(bundleName)} from '../../../dist/bundles/${bundleName}.js'\n`
@@ -117,6 +120,12 @@ class ${functionNamePascalCase}Model {
     result += inputParametersDemoTypeScript(functionName, indent, input, true, 'inputs')
   })
 
+  interfaceJson.outputs.forEach((output) => {
+    if (output.type.includes('FILE')) {
+      result += inputParametersDemoTypeScript(functionName, indent, output, true, 'inputs')
+    }
+  })
+
   if (interfaceJson.parameters.length > 1) {
     result += `${indent}// ----------------------------------------------\n${indent}// Options\n`
     interfaceJson.parameters.forEach((parameter) => {
@@ -127,12 +136,6 @@ class ${functionNamePascalCase}Model {
       result += inputParametersDemoTypeScript(functionName, indent, parameter, parameter.required, 'options')
     })
   }
-
-  interfaceJson.outputs.forEach((output) => {
-    if (output.type.includes('FILE')) {
-      result += inputParametersDemoTypeScript(functionName, indent, output, true, 'options')
-    }
-  })
 
   result += `${indent}// ----------------------------------------------\n${indent}// Outputs`
   interfaceJson.outputs.forEach((output) => {
@@ -220,6 +223,12 @@ class ${functionNamePascalCase}Model {
       result += `      copyImage(this.model.inputs.get('${camelCase(input.name)}')),\n`
     } else {
       result += `      this.model.inputs.get('${camelCase(input.name)}'),\n`
+    }
+  })
+  interfaceJson.outputs.forEach((output) => {
+    const defaultData = output.type.includes('BINARY') ? 'new Uint8Array()' : "''"
+    if (output.type.startsWith('OUTPUT_BINARY_FILE') || output.type.startsWith('OUTPUT_TEXT_FILE')) {
+      result += `      this.model.inputs.get('${camelCase(output.name)}'),\n`
     }
   })
   result += '      Object.fromEntries(this.model.options.entries())\n'

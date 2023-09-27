@@ -11,6 +11,16 @@ function functionModuleArgs(interfaceJson) {
     const pythonType = interfaceJsonTypeToPythonType.get(canonical)
     functionArgs += `    ${snakeCase(value.name)}: ${pythonType},\n`
   })
+  const outputFiles = interfaceJson.outputs.filter(o => { return o.type.includes('FILE') })
+  outputFiles.forEach((output) => {
+    const isArray = output.itemsExpectedMax > 1
+    const optionName = `${output.name}`
+    if (isArray) {
+      functionArgs += `    ${snakeCase(optionName)}: List[str],\n`
+    } else {
+      functionArgs += `    ${snakeCase(optionName)}: str,\n`
+    }
+  })
   interfaceJson['parameters'].forEach((value) => {
     if (value.name === "memory-io" || value.name === "version") {
       return
@@ -45,6 +55,7 @@ function functionModuleArgs(interfaceJson) {
       }
     }
   })
+
   return functionArgs
 }
 

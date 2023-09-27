@@ -99,6 +99,14 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     functionContent += ` * @param {${typescriptType}} ${camelCase(input.name)} - ${input.description}\n`
     readmeParametersTable.push([`\`${camelCase(input.name)}\``, `*${typescriptType}*`, input.description])
   })
+  const outputFiles = interfaceJson.outputs.filter(o => { return o.type.includes('FILE') })
+  outputFiles.forEach((output) => {
+    const isArray = output.itemsExpectedMax > 1 ? '[]' : ''
+    const typescriptType = `string${isArray}`
+    functionContent += ` * @param {${typescriptType}} ${camelCase(output.name)} - ${output.description}\n`
+    readmeParametersTable.push([`\`${camelCase(output.name)}\``, `*${typescriptType}*`, output.description])
+  })
+
   if (haveOptions) {
     functionContent += ` * @param {${modulePascalCase}Options} options - options object\n`
   }
@@ -113,7 +121,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   }
   interfaceJson.inputs.forEach((input, index) => {
     let typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
-    const end = index === interfaceJson.inputs.length - 1 && !haveOptions ? '\n' : ',\n'
+    const end = index === interfaceJson.inputs.length - 1 && !haveOptions && !outputFiles.length ? '\n' : ',\n'
     const isArray = input.itemsExpectedMax > 1 ? '[]' : ''
     const fileType = forNode ? 'string' : 'File'
     if (typescriptType === 'TextFile' || typescriptType === 'BinaryFile') {
@@ -126,6 +134,12 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       typescriptType = `${typescriptType}${isArray}`
     }
     functionCall += `  ${camelCase(input.name)}: ${typescriptType}${end}`
+  })
+  outputFiles.forEach((output, index) => {
+    const end = index === interfaceJson.outputs.length - 1 && !haveOptions ? '\n' : ',\n'
+    const isArray = output.itemsExpectedMax > 1 ? '[]' : ''
+    const typescriptType = `string${isArray}`
+    functionCall += `  ${camelCase(output.name)}: ${typescriptType}${end}`
   })
   if (haveOptions) {
     let requiredOptions = ''
@@ -179,9 +193,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
           const camel = camelCase(output.name)
           if (isArray) {
             const defaultData = interfaceType === 'BinaryFile' ? 'new Uint8Array()' : "''"
-            functionContent += `  const ${camel}PipelineOutputs = typeof options.${camel}Path !== 'undefined' ? options.${camel}Path.map((p) => { return { type: InterfaceTypes.${interfaceType}, data: { path: p, data: ${defaultData} }}}) : []\n`
-          } else {
-            functionContent += `  const ${camel}Path = options.${camel}Path ?? '${camel}'\n`
+            functionContent += `  const ${camel}PipelineOutputs = ${camel}.map((p) => { return { type: InterfaceTypes.${interfaceType}, data: { path: p, data: ${defaultData} }}})\n`
           }
         }
       }
@@ -200,7 +212,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
           haveArray = true
           functionContent += `    ...${camel}PipelineOutputs,\n`
         } else {
-          functionContent += `    { type: InterfaceTypes.${interfaceType}, data: { path: ${camel}Path, data: ${defaultData} }},\n`
+          functionContent += `    { type: InterfaceTypes.${interfaceType}, data: { path: ${camel}, data: ${defaultData} }},\n`
         }
       } else if (!interfaceType.includes('File')) {
         functionContent += `    { type: InterfaceTypes.${interfaceType} },\n`
@@ -218,7 +230,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
           const isArray = output.itemsExpectedMax > 1
           if (isArray) {
             functionContent += `  const ${camel}Start = outputIndex\n`
-            functionContent += `  outputIndex += options.${camel}Path ? options.${camel}Path.length : 0\n`
+            functionContent += `  outputIndex += ${camel}.length\n`
             functionContent += `  const ${camel}End = outputIndex\n`
           } else {
             functionContent += `  const ${camel}Index = outputIndex\n`
@@ -296,25 +308,17 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       let name = `  const ${camel}Name = '${outputCount.toString()}'\n`
       const isArray = output.itemsExpectedMax > 1 ? '[]' : ''
       if (interfaceType.includes('File')) {
-        if (forNode) {
-          if (isArray) {
-            name = ''
-          } else {
-            name = `  const ${camel}Name = options.${camel}Path ?? '${camel}'\n`
-          }
+        if (isArray) {
+          name = ''
         } else {
-          if (isArray) {
-            name = ''
-          } else {
-            name = `  const ${camel}Name = ${camel}Path\n`
-          }
+          name = `  const ${camel}Name = ${camel}?? '${camel}'\n`
         }
       }
       functionContent += name
       if (isArray) {
-        functionContent += `  options.${camel}Path?.forEach((p) => args.push(p))\n`
+        functionContent += `  ${camel}.forEach((p) => args.push(p))\n`
         if (forNode && interfaceType.includes('File')) {
-          functionContent += `  options.${camel}Path?.forEach((p) => mountDirs.add(path.dirname(p)))\n`
+          functionContent += `  ${camel}.forEach((p) => mountDirs.add(path.dirname(p)))\n`
         }
       } else {
         functionContent += `  args.push(${camel}Name)\n`
