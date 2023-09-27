@@ -8,8 +8,6 @@ compressStringify.setPipelinesBaseUrl(pipelinesBaseUrl)
 const pipelineWorkerUrl: string | URL | null = new URL('/web-workers/pipeline.worker.js', document.location.origin).href
 compressStringify.setPipelineWorkerUrl(pipelineWorkerUrl)
 
-import './compress-stringify-controller.js'
-import './parse-string-decompress-controller.js'
 
 const params = new URLSearchParams(window.location.search)
 if (!params.has('functionName')) {
@@ -18,3 +16,5 @@ if (!params.has('functionName')) {
   url.search = params
   window.history.replaceState({ functionName: 'compressStringify' }, '', url)
 }
+import './compress-stringify-controller.js'
+import './parse-string-decompress-controller.js'

@@ -154,19 +154,21 @@ class ${functionNamePascalCase}Model {
           const url = new URL(document.location)
           url.search = params
           window.history.replaceState({ functionName: '${functionName}' }, '', url)
+          await preRun()
         }
-        await preRun()
       }
     }
 
     const tabGroup = document.querySelector('sl-tab-group')
     tabGroup.addEventListener('sl-tab-show', onSelectTab)
-    document.addEventListener('DOMContentLoaded', () => {
+    function onInit() {
       const params = new URLSearchParams(window.location.search)
       if (params.has('functionName') && params.get('functionName') === '${functionName}') {
+        tabGroup.show('${functionName}-panel')
         preRun()
       }
-    })
+    }
+    onInit()
 
     const runButton = document.querySelector('#${functionName}Inputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {

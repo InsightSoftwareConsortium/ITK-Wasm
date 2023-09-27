@@ -39,6 +39,7 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
   let demoFunctionsHtml = ''
   let pipelinesFunctionsTabs = ''
   let demoFunctionsTypeScript = ''
+
   const allUsedInterfaceTypes = new Set()
 
   const packageName = options.packageName
@@ -102,7 +103,17 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     const moduleCamelCase = camelCase(parsedPath.name)
     const modulePascalCase = `${moduleCamelCase[0].toUpperCase()}${moduleCamelCase.substring(1)}`
     const functionName = camelCase(interfaceJson.name)
-    firstFunctionName = firstFunctionName || functionName
+    if (!firstFunctionName) {
+      firstFunctionName = functionName
+      demoFunctionsTypeScript += `\nconst params = new URLSearchParams(window.location.search)
+if (!params.has('functionName')) {
+  params.set('functionName', '${firstFunctionName}')
+  const url = new URL(document.location)
+  url.search = params
+  window.history.replaceState({ functionName: '${firstFunctionName}' }, '', url)
+}
+`
+    }
 
     const useCamelCase = true
     const functionDemoHtml = interfaceFunctionsDemoHtml(interfaceJson, functionName, useCamelCase)
@@ -143,15 +154,6 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     readmePipelines += readmeOptions
     readmePipelines += readmeResult
   })
-
-  demoFunctionsTypeScript += `\nconst params = new URLSearchParams(window.location.search)
-if (!params.has('functionName')) {
-  params.set('functionName', '${firstFunctionName}')
-  const url = new URL(document.location)
-  url.search = params
-  window.history.replaceState({ functionName: '${firstFunctionName}' }, '', url)
-}
-`
 
   if (allUsedInterfaceTypes.size > 0) {
     indexContent += '\n'
