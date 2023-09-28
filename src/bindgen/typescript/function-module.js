@@ -306,12 +306,12 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     if (interfaceJsonTypeToInterfaceType.has(output.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
       let name = `  const ${camel}Name = '${outputCount.toString()}'\n`
-      const isArray = output.itemsExpectedMax > 1 ? '[]' : ''
+      const isArray = output.itemsExpectedMax > 1
       if (interfaceType.includes('File')) {
         if (isArray) {
           name = ''
         } else {
-          name = `  const ${camel}Name = ${camel}?? '${camel}'\n`
+          name = `  const ${camel}Name = ${camel}\n`
         }
       }
       functionContent += name

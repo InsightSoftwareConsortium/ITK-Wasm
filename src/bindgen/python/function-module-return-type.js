@@ -9,7 +9,14 @@ function functionModuleReturnType(interfaceJson) {
     jsonOutputs.forEach((value) => {
       const canonical = canonicalType(value.type)
       const pythonType = interfaceJsonTypeToPythonType.get(canonical)
-      returnType += `${pythonType}, `
+      if (value.type.includes('FILE')) {
+        return
+      }
+      if (value.itemsExpectedMax > 1) {
+        returnType += `List[${pythonType}], `
+      } else {
+        returnType += `${pythonType}, `
+      }
     })
     returnType = returnType.substring(0, returnType.length - 2)
     returnType += "]"
