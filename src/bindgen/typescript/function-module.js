@@ -10,7 +10,7 @@ import writeIfOverrideNotPresent from '../write-if-override-not-present.js'
 function readFileIfNotInterfaceType(forNode, interfaceType, varName, indent, isArray) {
   if (forNode) {
     if (isArray) {
-      return `${indent}value.forEach((p) => mountDirs.add(path.dirname(p) as string))\n`
+      return `${indent}${varName}.forEach((p) => mountDirs.add(path.dirname(p) as string))\n`
     } else {
       return `${indent}mountDirs.add(path.dirname(${varName} as string))\n`
     }
@@ -18,13 +18,13 @@ function readFileIfNotInterfaceType(forNode, interfaceType, varName, indent, isA
   } else {
     if (interfaceType === 'TextFile') {
       if (isArray) {
-        return `${indent}${varName}.map((v) => {\n${indent}${indent}let vFile = v\n${indent}${indent}if (v instanceof File) {\n${indent}${indent}  const vBuffer = await v.arrayBuffer()\n${indent}${indent}  vFile = { path: v.name, data: new TextDecoder().decode(vBuffer) }\n${indent}${indent}}\n${indent}})\n`
+        return `${indent}const ${varName}File = await Promise.all(${varName}.map(async (v) => {\n${indent}${indent}let vFile = v\n${indent}${indent}if (v instanceof File) {\n${indent}${indent}  const vBuffer = await v.arrayBuffer()\n${indent}${indent}  vFile = { path: v.name, data: new TextDecoder().decode(vBuffer) }\n${indent}${indent}}\n${indent}${indent}return vFile\n${indent}}))\n`
       } else {
         return `${indent}let ${varName}File = ${varName}\n${indent}if (${varName} instanceof File) {\n${indent}  const ${varName}Buffer = await ${varName}.arrayBuffer()\n${indent}  ${varName}File = { path: ${varName}.name, data: new TextDecoder().decode(${varName}Buffer) }\n${indent}}\n`
       }
     } else {
       if (isArray) {
-        return `${indent}${varName}.map((v) => {\n${indent}let vFile = v\n${indent}${indent}if (v instanceof File) {\n${indent}${indent}  const vBuffer = await v.arrayBuffer()\n${indent}${indent}  vFile = { path: v.name, data: new Uint8Array(vBuffer) }\n${indent}${indent}}\n${indent}})\n`
+        return `${indent}const ${varName}File = await Promise.all(${varName}.map(async (v) => {\n${indent}let vFile = v\n${indent}${indent}if (v instanceof File) {\n${indent}${indent}  const vBuffer = await v.arrayBuffer()\n${indent}${indent}  vFile = { path: v.name, data: new Uint8Array(vBuffer) }\n${indent}${indent}}${indent}${indent}\nreturn vFile\n${indent}}))\n`
       } else {
         return `${indent}let ${varName}File = ${varName}\n${indent}if (${varName} instanceof File) {\n${indent}  const ${varName}Buffer = await ${varName}.arrayBuffer()\n${indent}  ${varName}File = { path: ${varName}.name, data: new Uint8Array(${varName}Buffer) }\n${indent}}\n`
 
@@ -251,6 +251,9 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
         const camel = camelCase(input.name)
         const isArray = input.itemsExpectedMax > 1
         functionContent += readFileIfNotInterfaceType(forNode, interfaceType, camel, '  ', isArray)
+        if (!forNode && isArray) {
+          functionContent += `  const ${camel}PipelineInputs = ${camel}File.map(i => { return { type: InterfaceTypes.${interfaceType}, data: i as ${interfaceType} }})\n`
+        }
       }
     }
   })
@@ -259,9 +262,14 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     if (interfaceJsonTypeToInterfaceType.has(input.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
       const camel = camelCase(input.name)
+      const isArray = input.itemsExpectedMax > 1
       if (interfaceType.includes('File')) {
         if (!forNode) {
-          functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${camel}File as ${interfaceType} },\n`
+          if (isArray) {
+            functionContent += `    ...${camel}PipelineInputs,\n`
+          } else {
+            functionContent += `    { type: InterfaceTypes.${interfaceType}, data: ${camel}File as ${interfaceType} },\n`
+          }
         }
       } else {
         let data = camel
@@ -283,16 +291,36 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     const camel = camelCase(input.name)
     if (interfaceJsonTypeToInterfaceType.has(input.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
+      const isArray = input.itemsExpectedMax > 1
       let name = `  const ${camel}Name = '${inputCount.toString()}'\n`
       if (interfaceType.includes('File')) {
-        if (forNode) {
-          name = `  const ${camel}Name = ${camel}\n`
+        if (isArray) {
+          name = ''
         } else {
-          name = `  const ${camel}Name = (${camel}File as ${interfaceType}).path\n`
+          if (forNode) {
+            name = `  const ${camel}Name = ${camel}\n`
+          } else {
+            name = `  const ${camel}Name = (${camel}File as ${interfaceType}).path\n`
+          }
         }
       }
       functionContent += name
-      functionContent += `  args.push(${camel}Name as string)\n\n`
+      if (isArray) {
+        if (forNode) {
+          functionContent += `  ${camel}.forEach((p) => args.push(p))\n`
+        } else {
+          functionContent += `  ${camel}File.forEach((p) => args.push((p as ${interfaceType}).path))\n`
+        }
+        if (forNode && interfaceType.includes('File')) {
+          functionContent += `  ${camel}.forEach((p) => mountDirs.add(path.dirname(p)))\n`
+        }
+      } else {
+        functionContent += `  args.push(${camel}Name)\n`
+        if (forNode && interfaceType.includes('File')) {
+          functionContent += `  mountDirs.add(path.dirname(${camel}Name))\n`
+        }
+      }
+      functionContent += '\n'
       inputCount++
     } else {
       functionContent += `  args.push(${camel}.toString())\n\n`

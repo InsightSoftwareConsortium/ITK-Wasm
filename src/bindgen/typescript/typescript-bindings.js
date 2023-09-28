@@ -15,6 +15,7 @@ import resultsModule from './results-module.js'
 import optionsModule from './options-module.js'
 import functionModule from './function-module.js'
 import outputOptionsCheck from '../output-options-check.js'
+import inputArrayCheck from '../input-array-check.js'
 
 // Array of types that will require an import from itk-wasm
 function bindgenResource(filePath) {
@@ -98,6 +99,7 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
 
     outputOptionsCheck(interfaceJson)
+    inputArrayCheck(interfaceJson)
 
     const moduleKebabCase = parsedPath.name
     const moduleCamelCase = camelCase(parsedPath.name)
