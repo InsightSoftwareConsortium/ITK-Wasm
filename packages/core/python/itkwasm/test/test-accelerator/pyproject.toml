@@ -7,7 +7,7 @@ name = "test-accelerator"
 license = "Apache-2.0"
 version = "0.0.1"
 
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = [
     "itkwasm >= 1.0b82",
 ]
