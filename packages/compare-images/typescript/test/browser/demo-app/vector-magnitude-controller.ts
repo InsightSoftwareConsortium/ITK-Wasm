@@ -1,7 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-import { readImageFile, copyImage } from 'itk-wasm'
-import { writeImageArrayBuffer, copyImage } from 'itk-wasm'
+import { readImageFile } from 'itk-wasm'
+import { writeImageArrayBuffer } from 'itk-wasm'
+import { copyImage } from 'itk-wasm'
 import * as compareImages from '../../../dist/bundles/compare-images.js'
 import vectorMagnitudeLoadSampleInputs, { usePreRun } from "./vector-magnitude-load-sample-inputs.js"
 
@@ -88,19 +89,21 @@ class VectorMagnitudeController  {
           const url = new URL(document.location)
           url.search = params
           window.history.replaceState({ functionName: 'vectorMagnitude' }, '', url)
+          await preRun()
         }
-        await preRun()
       }
     }
 
     const tabGroup = document.querySelector('sl-tab-group')
     tabGroup.addEventListener('sl-tab-show', onSelectTab)
-    document.addEventListener('DOMContentLoaded', () => {
+    function onInit() {
       const params = new URLSearchParams(window.location.search)
       if (params.has('functionName') && params.get('functionName') === 'vectorMagnitude') {
+        tabGroup.show('vectorMagnitude-panel')
         preRun()
       }
-    })
+    }
+    onInit()
 
     const runButton = document.querySelector('#vectorMagnitudeInputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {

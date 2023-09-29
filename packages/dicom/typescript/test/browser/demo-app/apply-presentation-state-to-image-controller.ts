@@ -1,6 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
-import { writeImageArrayBuffer, copyImage } from 'itk-wasm'
+import { writeImageArrayBuffer } from 'itk-wasm'
+import { copyImage } from 'itk-wasm'
 import * as dicom from '../../../dist/bundles/dicom.js'
 import applyPresentationStateToImageLoadSampleInputs, { usePreRun } from "./apply-presentation-state-to-image-load-sample-inputs.js"
 
@@ -133,19 +134,21 @@ class ApplyPresentationStateToImageController  {
           const url = new URL(document.location)
           url.search = params
           window.history.replaceState({ functionName: 'applyPresentationStateToImage' }, '', url)
+          await preRun()
         }
-        await preRun()
       }
     }
 
     const tabGroup = document.querySelector('sl-tab-group')
     tabGroup.addEventListener('sl-tab-show', onSelectTab)
-    document.addEventListener('DOMContentLoaded', () => {
+    function onInit() {
       const params = new URLSearchParams(window.location.search)
       if (params.has('functionName') && params.get('functionName') === 'applyPresentationStateToImage') {
+        tabGroup.show('applyPresentationStateToImage-panel')
         preRun()
       }
-    })
+    }
+    onInit()
 
     const runButton = document.querySelector('#applyPresentationStateToImageInputs sl-button[name="run"]')
     runButton.addEventListener('click', async (event) => {

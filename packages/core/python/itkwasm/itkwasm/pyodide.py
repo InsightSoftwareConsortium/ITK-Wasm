@@ -150,7 +150,7 @@ def to_py(js_proxy):
     # int, etc
     return js_proxy
 
-def to_js(py):
+def to_js(py, **kwargs):
     import pyodide
     import js
     if isinstance(py, list):
@@ -222,4 +222,4 @@ def to_js(py):
         text_file_dict['data'] = data
         return pyodide.ffi.to_js(text_file_dict, dict_converter=js.Object.fromEntries)
 
-    return pyodide.ffi.to_js(py)
+    return pyodide.ffi.to_js(py, **kwargs)
