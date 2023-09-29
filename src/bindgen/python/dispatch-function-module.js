@@ -6,6 +6,7 @@ import functionModuleImports from './function-module-imports.js'
 import functionModuleArgs from './function-module-args.js'
 import functionModuleDocstring from './function-module-docstring.js'
 import functionModuleReturnType from './function-module-return-type.js'
+import interfaceJsonTypeToInterfaceType from '../interface-json-type-to-interface-type.js'
 
 function dispatchFunctionModule(interfaceJson, pypackage, modulePath) {
   const functionName = snakeCase(interfaceJson.name)
@@ -24,8 +25,21 @@ from itkwasm import (
   const docstring = functionModuleDocstring(interfaceJson)
 
   let functionArgsToPass = ""
-  interfaceJson['inputs'].forEach((value) => {
+  interfaceJson.inputs.forEach((value) => {
     functionArgsToPass += `${snakeCase(value.name)}, `
+  })
+  interfaceJson.outputs.forEach((output) => {
+    if (interfaceJsonTypeToInterfaceType.has(output.type)) {
+      const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
+      switch (interfaceType) {
+        case "TextFile":
+        case "BinaryFile":
+          functionArgsToPass += `${snakeCase(output.name)}, `
+          break
+        default:
+          //
+      }
+    }
   })
   interfaceJson['parameters'].forEach((value) => {
     if (value.name === "memory-io" || value.name === "version") {
