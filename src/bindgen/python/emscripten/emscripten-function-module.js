@@ -12,9 +12,7 @@ import writeIfOverrideNotPresent from '../../write-if-override-not-present.js'
 
 function emscriptenFunctionModule(interfaceJson, pypackage, modulePath) {
   const functionName = snakeCase(interfaceJson.name)
-  let moduleContent = `# Generated file. Do not edit.
-
-from pathlib import Path
+  let moduleContent = `from pathlib import Path
 import os
 from typing import Dict, Tuple, Optional, List, Any
 
@@ -47,6 +45,19 @@ from itkwasm import (
       }
     } else {
       args += `to_js(${snakeCase(input.name)}), `
+    }
+  })
+  interfaceJson.outputs.forEach((output) => {
+    if (interfaceJsonTypeToInterfaceType.has(output.type)) {
+      const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
+      switch (interfaceType) {
+        case "TextFile":
+        case "BinaryFile":
+          args += `to_js(${snakeCase(output.name)}), `
+          break
+        default:
+          //
+      }
     }
   })
 
