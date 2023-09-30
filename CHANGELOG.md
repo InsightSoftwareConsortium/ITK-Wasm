@@ -1,5 +1,20 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.146](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.145...itk-wasm-v1.0.0-b.146) (2023-09-30)
+
+
+### Bug Fixes
+
+* **bindgen:** run functionName preRun on init ([7386b74](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/7386b746c4f1d31a0beeb3c08048554040b1a4b4))
+
+
+### Features
+
+* **bindgen:** Check for positional input of an array of files ([4b07cda](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4b07cda335b164b24a04dcc27028cbaa3398cc45))
+* **bindgen:** python dispatch function output file support ([e171721](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/e171721d9fbc34e1a66532f203c77106045f899f))
+* **bindgen:** python emescripten function output file support ([ce05163](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/ce051631569741a0264598fbd789d653ebba609f))
+* **bindgen:** Python output file support ([2cf3c7e](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2cf3c7eb68e8a6bea710467a2f1783ba9833beaa))
+
 # [1.0.0-b.145](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.144...itk-wasm-v1.0.0-b.145) (2023-09-27)
 
 
