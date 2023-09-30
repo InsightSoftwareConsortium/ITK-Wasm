@@ -4,24 +4,13 @@ on: [push,pull_request]
 
 jobs:
   build-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
 
     - name: Pull latest Docker images
       run: |

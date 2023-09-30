@@ -3,7 +3,7 @@ on: pull_request
 
 jobs:
   pr-checks:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Check and lint PR
     steps:
       - uses: actions/checkout@v3

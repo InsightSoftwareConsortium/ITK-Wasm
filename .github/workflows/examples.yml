@@ -5,7 +5,7 @@ on: [push,pull_request]
 jobs:
   test-node-example:
     name: node-js
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: ./examples/node-js
@@ -13,20 +13,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get update
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        large-packages: false
 
     - uses: actions/setup-node@v3
       with:
@@ -51,20 +41,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get update
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        large-packages: false
 
     - uses: actions/setup-node@v3
       with:
@@ -116,7 +96,7 @@ jobs:
 
   build-test-hello-pipeline-example:
     name: hello-pipeline build test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     defaults:
       run:
@@ -125,20 +105,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get update
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        large-packages: false
 
     - uses: actions/setup-node@v3
       with:
@@ -160,7 +130,7 @@ jobs:
 
   build-test-inputs-outputs-example:
     name: inputs-outputs
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     defaults:
       run:
@@ -169,19 +139,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        large-packages: false
 
     - uses: actions/setup-node@v3
       with:
@@ -201,25 +162,15 @@ jobs:
 
   test-umd-example:
     name: umd
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get update
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        large-packages: false
 
     - name: Test
       uses: cypress-io/github-action@v6
@@ -230,25 +181,15 @@ jobs:
 
   test-webpack-example:
     name: webpack
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get update
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        large-packages: false
 
     - name: Test Webpack Example on Chrome
       uses: cypress-io/github-action@v6
@@ -266,25 +207,15 @@ jobs:
 
   test-vite-example:
     name: vite
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get update
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        large-packages: false
 
     - name: Test Vite Example on Chrome
       uses: cypress-io/github-action@v6
@@ -310,20 +241,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get update
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        large-packages: false
 
     - uses: actions/setup-node@v3
       with:
@@ -350,20 +271,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get update
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        large-packages: false
 
     - uses: actions/setup-node@v3
       with:
@@ -391,20 +302,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: 'Free up disk space'
-      run: |
-        # Workaround for https://github.com/actions/virtual-environments/issues/709
-        df -h
-        sudo apt-get update
-        sudo apt-get remove -y '^dotnet-.*'
-        sudo apt-get remove -y '^llvm-.*'
-        sudo apt-get remove -y 'php.*'
-        sudo apt-get autoremove -y
-        sudo apt-get clean
-        sudo rm -rf "/usr/local/share/boost"
-        sudo rm -rf /usr/share/dotnet/
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        df -h
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        large-packages: false
 
     - uses: actions/setup-node@v3
       with:
