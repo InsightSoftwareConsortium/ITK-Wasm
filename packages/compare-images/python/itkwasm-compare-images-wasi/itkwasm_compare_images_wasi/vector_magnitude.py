@@ -1,7 +1,5 @@
 # Generated file. To retain edits, remove this comment.
 
-# Generated file. Do not edit.
-
 from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional, List, Any
@@ -45,8 +43,11 @@ def vector_magnitude(
     # Inputs
     args.append('0')
     # Outputs
-    args.append('0')
+    magnitude_image_name = '0'
+    args.append(magnitude_image_name)
+
     # Options
+    input_count = len(pipeline_inputs)
 
     outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
