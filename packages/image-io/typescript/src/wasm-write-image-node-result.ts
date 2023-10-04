@@ -7,8 +7,6 @@ interface WasmWriteImageNodeResult {
   couldWrite: JsonCompatible
 
   /** Output image serialized in the file format. */
-  serializedImage: string
-
 }
 
 export default WasmWriteImageNodeResult

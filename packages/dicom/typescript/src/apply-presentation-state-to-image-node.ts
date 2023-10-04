@@ -45,10 +45,12 @@ async function applyPresentationStateToImageNode(
   const args = []
   // Inputs
   const imageInName = imageIn
-  args.push(imageInName as string)
+  args.push(imageInName)
+  mountDirs.add(path.dirname(imageInName))
 
   const presentationStateFileName = presentationStateFile
-  args.push(presentationStateFileName as string)
+  args.push(presentationStateFileName)
+  mountDirs.add(path.dirname(presentationStateFileName))
 
   // Outputs
   const presentationStateOutStreamName = '0'

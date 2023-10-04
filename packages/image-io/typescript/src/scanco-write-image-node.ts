@@ -19,12 +19,14 @@ import path from 'path'
  * Write an itk-wasm file format converted to an image file format
  *
  * @param {Image} image - Input image
+ * @param {string} serializedImage - Output image serialized in the file format.
  * @param {ScancoWriteImageOptions} options - options object
  *
  * @returns {Promise<ScancoWriteImageNodeResult>} - result object
  */
 async function scancoWriteImageNode(
   image: Image,
+  serializedImage: string,
   options: ScancoWriteImageOptions = {}
 ) : Promise<ScancoWriteImageNodeResult> {
 
@@ -32,7 +34,6 @@ async function scancoWriteImageNode(
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonCompatible },
-    { type: InterfaceTypes.BinaryFile },
   ]
 
   const inputs: Array<PipelineInput> = [
@@ -42,13 +43,13 @@ async function scancoWriteImageNode(
   const args = []
   // Inputs
   const imageName = '0'
-  args.push(imageName as string)
+  args.push(imageName)
 
   // Outputs
   const couldWriteName = '0'
   args.push(couldWriteName)
 
-  const serializedImageName = typeof options.serializedImagePath === 'undefined' ? 'serializedImage' : options.serializedImagePath
+  const serializedImageName = serializedImage
   args.push(serializedImageName)
   mountDirs.add(path.dirname(serializedImageName))
 
@@ -74,7 +75,6 @@ async function scancoWriteImageNode(
 
   const result = {
     couldWrite: outputs[0].data as JsonCompatible,
-    serializedImage: outputs[1].data as string,
   }
   return result
 }

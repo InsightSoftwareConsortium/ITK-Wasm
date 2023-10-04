@@ -19,12 +19,14 @@ import path from 'path'
  * Write an itk-wasm file format converted to an image file format
  *
  * @param {Image} image - Input image
+ * @param {string} serializedImage - Output image serialized in the file format.
  * @param {Hdf5WriteImageOptions} options - options object
  *
  * @returns {Promise<Hdf5WriteImageNodeResult>} - result object
  */
 async function hdf5WriteImageNode(
   image: Image,
+  serializedImage: string,
   options: Hdf5WriteImageOptions = {}
 ) : Promise<Hdf5WriteImageNodeResult> {
 
@@ -32,7 +34,6 @@ async function hdf5WriteImageNode(
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonCompatible },
-    { type: InterfaceTypes.BinaryFile },
   ]
 
   const inputs: Array<PipelineInput> = [
@@ -42,13 +43,13 @@ async function hdf5WriteImageNode(
   const args = []
   // Inputs
   const imageName = '0'
-  args.push(imageName as string)
+  args.push(imageName)
 
   // Outputs
   const couldWriteName = '0'
   args.push(couldWriteName)
 
-  const serializedImageName = typeof options.serializedImagePath === 'undefined' ? 'serializedImage' : options.serializedImagePath
+  const serializedImageName = serializedImage
   args.push(serializedImageName)
   mountDirs.add(path.dirname(serializedImageName))
 
@@ -74,7 +75,6 @@ async function hdf5WriteImageNode(
 
   const result = {
     couldWrite: outputs[0].data as JsonCompatible,
-    serializedImage: outputs[1].data as string,
   }
   return result
 }

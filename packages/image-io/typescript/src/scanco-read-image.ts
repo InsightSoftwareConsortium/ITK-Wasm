@@ -48,7 +48,7 @@ async function scancoReadImage(
   const args = []
   // Inputs
   const serializedImageName = (serializedImageFile as BinaryFile).path
-  args.push(serializedImageName as string)
+  args.push(serializedImageName)
 
   // Outputs
   const couldReadName = '0'

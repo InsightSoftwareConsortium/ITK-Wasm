@@ -21,6 +21,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * Write an itk-wasm file format converted to an image file format
  *
  * @param {Image} image - Input image
+ * @param {string} serializedImage - Output image serialized in the file format.
  * @param {Ge5WriteImageOptions} options - options object
  *
  * @returns {Promise<Ge5WriteImageResult>} - result object
@@ -28,13 +29,13 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 async function ge5WriteImage(
   webWorker: null | Worker,
   image: Image,
+  serializedImage: string,
   options: Ge5WriteImageOptions = {}
 ) : Promise<Ge5WriteImageResult> {
 
-  const serializedImagePath = typeof options.serializedImagePath === 'undefined' ? 'serializedImage' : options.serializedImagePath
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonCompatible },
-    { type: InterfaceTypes.BinaryFile, data: { path: serializedImagePath, data: new Uint8Array() }},
+    { type: InterfaceTypes.BinaryFile, data: { path: serializedImage, data: new Uint8Array() }},
   ]
 
   const inputs: Array<PipelineInput> = [
@@ -44,13 +45,13 @@ async function ge5WriteImage(
   const args = []
   // Inputs
   const imageName = '0'
-  args.push(imageName as string)
+  args.push(imageName)
 
   // Outputs
   const couldWriteName = '0'
   args.push(couldWriteName)
 
-  const serializedImageName = serializedImagePath
+  const serializedImageName = serializedImage
   args.push(serializedImageName)
 
   // Options

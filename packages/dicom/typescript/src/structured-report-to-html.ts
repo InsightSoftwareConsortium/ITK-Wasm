@@ -47,7 +47,7 @@ async function structuredReportToHtml(
   const args = []
   // Inputs
   const dicomFileName = (dicomFileFile as BinaryFile).path
-  args.push(dicomFileName as string)
+  args.push(dicomFileName)
 
   // Outputs
   const outputTextName = '0'

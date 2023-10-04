@@ -56,10 +56,10 @@ async function applyPresentationStateToImage(
   const args = []
   // Inputs
   const imageInName = (imageInFile as BinaryFile).path
-  args.push(imageInName as string)
+  args.push(imageInName)
 
   const presentationStateFileName = (presentationStateFileFile as BinaryFile).path
-  args.push(presentationStateFileName as string)
+  args.push(presentationStateFileName)
 
   // Outputs
   const presentationStateOutStreamName = '0'

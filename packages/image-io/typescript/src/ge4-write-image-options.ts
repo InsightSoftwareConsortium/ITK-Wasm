@@ -7,9 +7,6 @@ interface Ge4WriteImageOptions {
   /** Use compression in the written file */
   useCompression?: boolean
 
-  /** Output image serialized in the file format. path */
-  serializedImagePath?: string
-
 }
 
 export default Ge4WriteImageOptions

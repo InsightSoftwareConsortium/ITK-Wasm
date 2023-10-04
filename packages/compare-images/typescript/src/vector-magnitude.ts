@@ -38,7 +38,7 @@ async function vectorMagnitude(
   const args = []
   // Inputs
   const vectorImageName = '0'
-  args.push(vectorImageName as string)
+  args.push(vectorImageName)
 
   // Outputs
   const magnitudeImageName = '0'

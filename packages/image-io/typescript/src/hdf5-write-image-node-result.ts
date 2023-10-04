@@ -7,8 +7,6 @@ interface Hdf5WriteImageNodeResult {
   couldWrite: JsonCompatible
 
   /** Output image serialized in the file format. */
-  serializedImage: string
-
 }
 
 export default Hdf5WriteImageNodeResult

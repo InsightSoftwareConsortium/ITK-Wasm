@@ -460,3 +460,6 @@ export type { WasmZstdWriteImageOptions }
 
 import wasmZstdWriteImageNode from './wasm-zstd-write-image-node.js'
 export { wasmZstdWriteImageNode }
+
+export type { JsonCompatible } from 'itk-wasm'
+export type { Image } from 'itk-wasm'

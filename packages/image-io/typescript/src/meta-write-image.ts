@@ -21,6 +21,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * Write an itk-wasm file format converted to an image file format
  *
  * @param {Image} image - Input image
+ * @param {string} serializedImage - Output image serialized in the file format.
  * @param {MetaWriteImageOptions} options - options object
  *
  * @returns {Promise<MetaWriteImageResult>} - result object
@@ -28,13 +29,13 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 async function metaWriteImage(
   webWorker: null | Worker,
   image: Image,
+  serializedImage: string,
   options: MetaWriteImageOptions = {}
 ) : Promise<MetaWriteImageResult> {
 
-  const serializedImagePath = typeof options.serializedImagePath === 'undefined' ? 'serializedImage' : options.serializedImagePath
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonCompatible },
-    { type: InterfaceTypes.BinaryFile, data: { path: serializedImagePath, data: new Uint8Array() }},
+    { type: InterfaceTypes.BinaryFile, data: { path: serializedImage, data: new Uint8Array() }},
   ]
 
   const inputs: Array<PipelineInput> = [
@@ -44,13 +45,13 @@ async function metaWriteImage(
   const args = []
   // Inputs
   const imageName = '0'
-  args.push(imageName as string)
+  args.push(imageName)
 
   // Outputs
   const couldWriteName = '0'
   args.push(couldWriteName)
 
-  const serializedImageName = serializedImagePath
+  const serializedImageName = serializedImage
   args.push(serializedImageName)
 
   // Options

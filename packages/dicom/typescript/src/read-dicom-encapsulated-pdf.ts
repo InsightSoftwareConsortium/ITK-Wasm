@@ -46,7 +46,7 @@ async function readDicomEncapsulatedPdf(
   const args = []
   // Inputs
   const dicomFileName = (dicomFileFile as BinaryFile).path
-  args.push(dicomFileName as string)
+  args.push(dicomFileName)
 
   // Outputs
   const pdfBinaryOutputName = '0'

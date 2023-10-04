@@ -40,7 +40,8 @@ async function readDicomEncapsulatedPdfNode(
   const args = []
   // Inputs
   const dicomFileName = dicomFile
-  args.push(dicomFileName as string)
+  args.push(dicomFileName)
+  mountDirs.add(path.dirname(dicomFileName))
 
   // Outputs
   const pdfBinaryOutputName = '0'

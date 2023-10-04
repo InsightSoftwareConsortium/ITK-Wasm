@@ -8,6 +8,14 @@ imageIo.setPipelinesBaseUrl(pipelinesBaseUrl)
 const pipelineWorkerUrl: string | URL | null = new URL('/web-workers/pipeline.worker.js', document.location.origin).href
 imageIo.setPipelineWorkerUrl(pipelineWorkerUrl)
 
+
+const params = new URLSearchParams(window.location.search)
+if (!params.has('functionName')) {
+  params.set('functionName', 'bioRadReadImage')
+  const url = new URL(document.location)
+  url.search = params
+  window.history.replaceState({ functionName: 'bioRadReadImage' }, '', url)
+}
 import './bio-rad-read-image-controller.js'
 import './bio-rad-write-image-controller.js'
 import './bmp-read-image-controller.js'

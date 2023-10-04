@@ -38,7 +38,7 @@ async function parseStringDecompressNode(
   const args = []
   // Inputs
   const inputName = '0'
-  args.push(inputName as string)
+  args.push(inputName)
 
   // Outputs
   const outputName = '0'

@@ -42,7 +42,8 @@ async function ge5ReadImageNode(
   const args = []
   // Inputs
   const serializedImageName = serializedImage
-  args.push(serializedImageName as string)
+  args.push(serializedImageName)
+  mountDirs.add(path.dirname(serializedImageName))
 
   // Outputs
   const couldReadName = '0'

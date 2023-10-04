@@ -7,8 +7,6 @@ interface VtkWriteImageNodeResult {
   couldWrite: JsonCompatible
 
   /** Output image serialized in the file format. */
-  serializedImage: string
-
 }
 
 export default VtkWriteImageNodeResult

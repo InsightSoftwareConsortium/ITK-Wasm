@@ -462,3 +462,7 @@ export type { WasmZstdWriteImageOptions }
 
 import wasmZstdWriteImage from './wasm-zstd-write-image.js'
 export { wasmZstdWriteImage }
+
+export type { BinaryFile } from 'itk-wasm'
+export type { JsonCompatible } from 'itk-wasm'
+export type { Image } from 'itk-wasm'
