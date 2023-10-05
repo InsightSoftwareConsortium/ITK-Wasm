@@ -115,7 +115,7 @@ int main (int argc, char * argv[])
   pipeline.add_option("serialized-image", inputFileName, "Input image serialized in the file format")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
 
   itk::wasm::OutputTextStream couldRead;
-  pipeline.add_option("could-read", couldRead, "Whether the input could be read. If false, the output image is not valid.")->type_name("OUTPUT_JSON");
+  pipeline.add_option("could-read", couldRead, "Whether the input could be read. If false, the output image is not valid.")->required()->type_name("OUTPUT_JSON");
 
   itk::wasm::OutputImageIO outputImageIO;
   pipeline.add_option("image", outputImageIO, "Output image")->required()->type_name("OUTPUT_IMAGE");
