@@ -2,19 +2,12 @@ import test from 'ava'
 import path from 'path'
 import fs from 'fs'
 
-function mkdirP(dir) {
-  try {
-    fs.mkdirSync(dir, { recursive: true })
-  } catch (err) {
-    if (err.code !== 'EEXIST') throw err
-  }
-}
-
 import { bioRadReadImageNode, bioRadWriteImageNode } from '../../dist/bundles/image-io-node.js'
 import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
 const testInputFilePath = path.resolve('..', 'test', 'data', 'input', 'biorad.pic')
 const testOutputPath = path.resolve('..', 'test', 'output', 'typescript')
+fs.mkdirSync(testOutputPath, { recursive: true })
 const testOutputFilePath = path.join(testOutputPath, 'biorad.pic')
 
 const verifyImage = (t, image) => {
@@ -37,6 +30,7 @@ const verifyImage = (t, image) => {
 }
 
 test('Test reading a BioRad file', async t => {
+  console.log(testInputFilePath)
   const { couldRead, image } = await bioRadReadImageNode(testInputFilePath)
   t.true(couldRead)
   verifyImage(t, image)
@@ -46,17 +40,10 @@ test('Test writing a BioRad file', async t => {
   const { couldRead, image } = await bioRadReadImageNode(testInputFilePath)
   t.true(couldRead)
   const useCompression = false
-  const { couldWrite, serializedImage } = await bioRadWriteImageNode(image,  { useCompression })
-  console.log(couldWrite, serializedImage)
+  const { couldWrite } = await bioRadWriteImageNode(image, testOutputFilePath, { useCompression })
+  t.true(couldWrite)
 
-  // verifyImage(t, image)
-  // return readImageLocalFile(testInputFilePath).then(function (image) {
-  //   const useCompression = false
-  //   return writeImageLocalFile(image, testOutputFilePath, useCompression)
-  // })
-  //   .then(function () {
-  //     return readImageLocalFile(testOutputFilePath).then(function (image) {
-  //       verifyImage(t, image)
-  //     })
-    // })
+  const { couldRead: couldReadBack, image: imageBack } = await bioRadReadImageNode(testOutputFilePath)
+  t.true(couldReadBack)
+  verifyImage(t, imageBack)
 })

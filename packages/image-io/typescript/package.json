@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/image-io",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Input and output for scientific and medical image file formats.",
   "type": "module",
   "module": "./dist/bundles/image-io.js",
