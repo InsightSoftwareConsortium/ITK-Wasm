@@ -4,7 +4,7 @@ import path from 'path'
 import { bmpReadImageNode } from '../../dist/bundles/image-io-node.js'
 import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
-import { testInputPath, testOutputPath } from './common.js'
+import { testInputPath } from './common.js'
 
 const testInputFilePath = path.join(testInputPath, 'image_color.bmp')
 
