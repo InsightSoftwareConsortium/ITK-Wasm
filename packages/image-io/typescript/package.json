@@ -15,7 +15,7 @@
   "scripts": {
     "start": "npm run copyShoelaceAssets && vite -c build/vite.config.js",
     "test": "npm run test:node && npm run test:browser",
-    "test:node": "ava test/node/*.js",
+    "test:node": "ava",
     "test:browser": "npm run test:browser:chrome && npm run test:browser:firefox",
     "test:browser:firefox": "start-server-and-test start http-get://localhost:5173 cypress:runFirefox",
     "test:browser:chrome": "start-server-and-test start http-get://localhost:5173 cypress:runChrome",
@@ -66,5 +66,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+  },
+  "ava": {
+    "files": [
+      "test/node/**/*",
+      "!test/node/common.js"
+    ]
   }
 }
