@@ -1,10 +1,13 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
+import { vtkReadImageNode, vtkWriteImageNode } from '../../dist/bundles/image-io-node.js'
+import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
-const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'ironProt.vtk')
-const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'VTKTest-ironProt.vtk')
+import { testInputPath, testOutputPath } from './common.js'
+
+const testInputFilePath = path.join(testInputPath, 'ironProt.vtk')
+const testOutputFilePath = path.join(testOutputPath, 'vtk-test-ironProt.vtk')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 3, 'dimension')
@@ -33,20 +36,20 @@ const verifyImage = (t, image) => {
   t.is(image.data[1000], 0, 'data[1000]')
 }
 
-test('Test reading a VTK legacy file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    verifyImage(t, image)
-  })
+test('Test reading a VTK file', async t => {
+  const { couldRead, image } = await vtkReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  verifyImage(t, image)
 })
 
-test('Test writing a BioRad file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    const useCompression = false
-    return writeImageLocalFile(image, testOutputFilePath, useCompression)
-  })
-    .then(function () {
-      return readImageLocalFile(testOutputFilePath).then(function (image) {
-        verifyImage(t, image)
-      })
-    })
+test('Test writing a VTK file', async t => {
+  const { couldRead, image } = await vtkReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  const useCompression = false
+  const { couldWrite } = await vtkWriteImageNode(image, testOutputFilePath, { useCompression })
+  t.true(couldWrite)
+
+  const { couldRead: couldReadBack, image: imageBack } = await vtkReadImageNode(testOutputFilePath)
+  t.true(couldReadBack)
+  verifyImage(t, imageBack)
 })
