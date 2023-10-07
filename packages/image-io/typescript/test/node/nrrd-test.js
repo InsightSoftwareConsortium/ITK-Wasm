@@ -1,10 +1,13 @@
 import test from 'ava'
 import path from 'path'
 
-import { FloatTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
+import { nrrdReadImageNode, nrrdWriteImageNode } from '../../dist/bundles/image-io-node.js'
+import { FloatTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
-const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'vol-raw-little.nrrd')
-const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'NRRDTest-vol-raw-little.nrrd')
+import { testInputPath, testOutputPath } from './common.js'
+
+const testInputFilePath = path.join(testInputPath, 'vol-raw-little.nrrd')
+const testOutputFilePath = path.join(testOutputPath, 'nrrd-test-vol-raw-little.nrrd')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 3, 'dimension')
@@ -33,19 +36,20 @@ const verifyImage = (t, image) => {
   t.is(image.data[2], 5.0, 'data[2]')
 }
 
-test('Test reading a NRRD file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    verifyImage(t, image)
-  })
+test('Test reading a NRRD file', async t => {
+  const { couldRead, image } = await nrrdReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  verifyImage(t, image)
 })
 
-test('Test writing a NRRD file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    return writeImageLocalFile(image, testOutputFilePath)
-  })
-    .then(function () {
-      return readImageLocalFile(testOutputFilePath).then(function (image) {
-        verifyImage(t, image)
-      })
-    })
+test('Test writing a NRRD file', async t => {
+  const { couldRead, image } = await nrrdReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  const useCompression = false
+  const { couldWrite } = await nrrdWriteImageNode(image, testOutputFilePath, { useCompression })
+  t.true(couldWrite)
+
+  const { couldRead: couldReadBack, image: imageBack } = await nrrdReadImageNode(testOutputFilePath)
+  t.true(couldReadBack)
+  verifyImage(t, imageBack)
 })
