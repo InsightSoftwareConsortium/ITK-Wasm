@@ -1,12 +1,15 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
+import { metaReadImageNode, metaWriteImageNode } from '../../dist/bundles/image-io-node.js'
+import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
-const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'brainweb165a10f17.mha')
-const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'MetaImageTest-brainweb165a10f17.mha')
-const testSmallInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', '3x2.mha')
-const testSmallOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', '3x2.mha')
+import { testInputPath, testOutputPath } from './common.js'
+
+const testInputFilePath = path.join(testInputPath, 'brainweb165a10f17.mha')
+const testOutputFilePath = path.join(testOutputPath, 'meta-image-test-brainweb165a10f17.mha')
+const testSmallInputFilePath = path.join(testInputPath, '3x2.mha')
+const testSmallOutputFilePath = path.join(testOutputPath, 'meta-image-test-3x2.mha')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 3, 'dimension')
@@ -38,21 +41,20 @@ const verifyImage = (t, image) => {
   t.is(image.data[1000], 17, 'data[1000]')
 }
 
-test('Test reading a MetaImage file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    verifyImage(t, image)
-  })
+test('Test reading a MetaImage file', async t => {
+  const { couldRead, image } = await metaReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  verifyImage(t, image)
 })
 
-test('Test writing a MetaImage file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    return writeImageLocalFile(image, testOutputFilePath)
-  })
-    .then(function () {
-      return readImageLocalFile(testOutputFilePath).then(function (image) {
-        verifyImage(t, image)
-      })
-    })
+test('Test writing a MetaImage file', async t => {
+  const { couldRead, image } = await metaReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  const { couldWrite } = await metaWriteImageNode(image, testOutputFilePath)
+  t.true(couldWrite)
+  const { couldRead: couldReadBack, image: imageBack } = await metaReadImageNode(testOutputFilePath)
+  t.true(couldReadBack)
+  verifyImage(t, imageBack)
 })
 
 const verifySmallImage = (t, image) => {
@@ -80,14 +82,17 @@ const verifySmallImage = (t, image) => {
 }
 
 test('Test reading a small MetaImage file', async t => {
-  const image = await readImageLocalFile(testSmallInputFilePath)
+  const { couldRead, image } = await metaReadImageNode(testSmallInputFilePath)
+  t.true(couldRead)
   verifySmallImage(t, image)
 })
 
 test('Test writing a small MetaImage file', async t => {
-  let image = await readImageLocalFile(testSmallInputFilePath)
-  verifySmallImage(t, image)
-  await writeImageLocalFile(image, testSmallOutputFilePath)
-  image = await readImageLocalFile(testSmallOutputFilePath)
-  verifySmallImage(t, image)
+  const { couldRead, image } = await metaReadImageNode(testSmallInputFilePath)
+  t.true(couldRead)
+  const { couldWrite } = await metaWriteImageNode(image, testSmallOutputFilePath)
+  t.true(couldWrite)
+  const { couldRead: couldReadBack, image: imageBack } = await metaReadImageNode(testSmallOutputFilePath)
+  t.true(couldReadBack)
+  verifySmallImage(t, imageBack)
 })
