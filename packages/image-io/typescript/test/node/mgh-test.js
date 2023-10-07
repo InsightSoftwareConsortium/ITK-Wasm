@@ -1,10 +1,13 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
+import { mghReadImageNode, mghWriteImageNode } from '../../dist/bundles/image-io-node.js'
+import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
-const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'T1.mgz')
-const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'MGHTest-T1.mgz')
+import { testInputPath, testOutputPath } from './common.js'
+
+const testInputFilePath = path.join(testInputPath, 'T1.mgz')
+const testOutputFilePath = path.join(testOutputPath, 'mgh-test-T1.mgz')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 3, 'dimension')
@@ -33,20 +36,18 @@ const verifyImage = (t, image) => {
   t.is(image.data[1000], 0, 'data[1000]')
 }
 
-test('Test reading a MGH file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    verifyImage(t, image)
-  })
+test('Test reading a MGH file', async t => {
+  const { couldRead, image } = await mghReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  verifyImage(t, image)
 })
 
-test('Test writing a MGH file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    const useCompression = false
-    return writeImageLocalFile(image, testOutputFilePath, useCompression)
-  })
-    .then(function () {
-      return readImageLocalFile(testOutputFilePath).then(function (image) {
-        verifyImage(t, image)
-      })
-    })
+test('Test writing a MGH file', async t => {
+  const { couldRead, image } = await mghReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  const { couldWrite } = await mghWriteImageNode(image, testOutputFilePath)
+  t.true(couldWrite)
+  const { couldRead: couldReadBack, image: imageBack } = await mghReadImageNode(testOutputFilePath)
+  t.true(couldReadBack)
+  verifyImage(t, imageBack)
 })
