@@ -1,5 +1,4 @@
 import readImageTest from './readImageTest.js'
-import JPEGTest from './JPEGTest.js'
 import readImageFileSeriesTest from './readImageFileSeriesTest.js'
 
 import readMeshTest from './readMeshTest.js'
@@ -11,7 +10,6 @@ import meshToPolyDataTest from './meshToPolyDataTest.js'
 
 export default function () {
   readImageTest()
-  JPEGTest()
   readImageFileSeriesTest()
 
   readMeshTest()

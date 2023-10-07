@@ -1,12 +1,16 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
+import { jpegReadImageNode } from '../../dist/bundles/image-io-node.js'
+import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
-const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'apple.jpg')
-const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'JPEGTest-apple.jpg')
+import { testInputPath } from './common.js'
 
-const verifyImage = (t, image) => {
+const testInputFilePath = path.join(testInputPath, 'apple.jpg')
+
+test('Test reading a JPEG file', async t => {
+  const { couldRead, image } = await jpegReadImageNode(testInputFilePath)
+  t.true(couldRead)
   t.is(image.imageType.dimension, 2, 'dimension')
   t.is(image.imageType.componentType, IntTypes.UInt8, 'componentType')
   t.is(image.imageType.pixelType, PixelTypes.RGB, 'pixelType')
@@ -23,21 +27,4 @@ const verifyImage = (t, image) => {
   t.is(image.size[1], 179, 'size[1]')
   t.is(image.data.length, 85920, 'data.length')
   t.is(image.data[1000], 255, 'data[1000]')
-}
-
-test('Test reading a JPEG file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    verifyImage(t, image)
-  })
-})
-
-test('Test writing a JPEG file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    return writeImageLocalFile(image, testOutputFilePath)
-  })
-    .then(function () {
-      return readImageLocalFile(testOutputFilePath).then(function (image) {
-        verifyImage(t, image)
-      })
-    })
 })
