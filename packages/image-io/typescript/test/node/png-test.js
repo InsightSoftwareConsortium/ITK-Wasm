@@ -1,10 +1,13 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
+import { pngReadImageNode, pngWriteImageNode } from '../../dist/bundles/image-io-node.js'
+import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
-const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cthead1.png')
-const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'TestPNG-cthead1.png')
+import { testInputPath, testOutputPath } from './common.js'
+
+const testInputFilePath = path.join(testInputPath, 'cthead1.png')
+const testOutputFilePath = path.join(testOutputPath, 'png-test-cthead1.png')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 2, 'dimension')
@@ -25,18 +28,19 @@ const verifyImage = (t, image) => {
 }
 
 test('Test reading a PNG file', async t => {
-  const image = await readImageLocalFile(testInputFilePath)
+  const { couldRead, image } = await pngReadImageNode(testInputFilePath)
+  t.true(couldRead)
   verifyImage(t, image)
 })
 
-test('Test writing a PNG file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    const useCompression = false
-    return writeImageLocalFile(image, testOutputFilePath, useCompression)
-  })
-    .then(function () {
-      return readImageLocalFile(testOutputFilePath).then(function (image) {
-        verifyImage(t, image)
-      })
-    })
+test('Test writing a PNG file', async t => {
+  const { couldRead, image } = await pngReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  const useCompression = false
+  const { couldWrite } = await pngWriteImageNode(image, testOutputFilePath, { useCompression })
+  t.true(couldWrite)
+
+  const { couldRead: couldReadBack, image: imageBack } = await pngReadImageNode(testOutputFilePath)
+  t.true(couldReadBack)
+  verifyImage(t, imageBack)
 })
