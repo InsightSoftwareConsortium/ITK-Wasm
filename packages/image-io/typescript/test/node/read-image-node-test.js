@@ -1,9 +1,12 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile } from '../../../../dist/index.js'
+import { readImageNode } from '../../dist/bundles/image-io-node.js'
+import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
-const testFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cthead1.png')
+import { testInputPath, testOutputPath } from './common.js'
+
+const testInputFilePath = path.join(testInputPath, 'cthead1.png')
 
 function verifyImage (t, image, componentType, pixelType) {
   t.is(image.imageType.dimension, 2)
@@ -23,23 +26,23 @@ function verifyImage (t, image, componentType, pixelType) {
   t.is(image.data.length, 196608)
 }
 
-test('readImageLocalFile reads a file path given on the local filesystem', async t => {
-  const image = await readImageLocalFile(testFilePath)
+test('Test reading a PNG with readImageNode file', async t => {
+  const image = await readImageNode(testInputFilePath)
   const componentType = IntTypes.UInt8
   const pixelType = PixelTypes.RGB
   verifyImage(t, image, componentType, pixelType)
 })
 
-test('readImageLocalFile casts to the specified componentType', async t => {
+test('Test reading a PNG with readImageNode file cast to the specified componentType', async t => {
   const componentType = IntTypes.UInt16
-  const image = await readImageLocalFile(testFilePath, { componentType })
+  const image = await readImageNode(testInputFilePath, { componentType })
   const pixelType = PixelTypes.RGB
   verifyImage(t, image, componentType, pixelType)
 })
 
-test('readImageLocalFile casts to the specified pixelType', async t => {
+test('Test reading a PNG with readImageNode file cast to the specified pixelType', async t => {
   const pixelType = PixelTypes.Vector
-  const image = await readImageLocalFile(testFilePath, { pixelType })
+  const image = await readImageNode(testInputFilePath, { pixelType })
   const componentType = IntTypes.UInt8
   verifyImage(t, image, componentType, pixelType)
 })

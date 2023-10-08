@@ -1,6 +1,9 @@
-// Generated file. To retain edits, remove this comment.
 
+import ReadImageOptions from './read-image-options.js'
+export type { ReadImageOptions }
 
+import readImageNode from './read-image-node.js'
+export { readImageNode }
 
 import BioRadReadImageNodeResult from './bio-rad-read-image-node-result.js'
 export type { BioRadReadImageNodeResult }
