@@ -1,10 +1,14 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
+import { readImageNode, writeImageNode } from '../../dist/bundles/image-io-node.js'
+import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
-const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'cthead1.png')
-const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'writeImageLocalFileTest-cthead1.iwi.cbor')
+import { testInputPath, testOutputPath } from './common.js'
+
+const testInputFilePath = path.join(testInputPath, 'cthead1.png')
+const testOutputFilePath = path.join(testOutputPath, 'write-image-node-test-cthead1.png')
+const testOutputCastFilePath = path.join(testOutputPath, 'write-image-node-test-cast-cthead1.iwi.cbor')
 
 const verifyImage = (t, image, expectedComponentType, expectedPixelType) => {
   t.is(image.imageType.dimension, 2, 'dimension')
@@ -32,19 +36,21 @@ const verifyImage = (t, image, expectedComponentType, expectedPixelType) => {
   t.is(image.data.length, 196608, 'data.length')
 }
 
-test('writeImageLocalFile writes a file path on the local filesystem', async t => {
-  const image = await readImageLocalFile(testInputFilePath)
-  await writeImageLocalFile(image, testOutputFilePath)
-  const imageSecondPass = await readImageLocalFile(testOutputFilePath)
-  verifyImage(t, imageSecondPass)
+
+test('Test writing a PNG with readImageNode', async t => {
+  const image = await readImageNode(testInputFilePath)
+  await writeImageNode(image, testOutputFilePath)
+  const imageBack = await readImageNode(testOutputFilePath)
+  const componentType = IntTypes.UInt8
+  const pixelType = PixelTypes.RGB
+  verifyImage(t, imageBack, componentType, pixelType)
 })
 
-test('writeImageLocalFile writes a file path on the local filesystem given componentType, pixelType', async t => {
-  const image = await readImageLocalFile(testInputFilePath)
+test('Test writing a PNG with writeImageNode, cast to the specified componentType and pixelType', async t => {
+  const image = await readImageNode(testInputFilePath)
   const componentType = IntTypes.UInt16
   const pixelType = PixelTypes.Vector
-  const outputFilePath = testOutputFilePath + 'componentTypePixelType.iwi.cbor'
-  await writeImageLocalFile(image, outputFilePath, { componentType, pixelType })
-  const imageSecondPass = await readImageLocalFile(outputFilePath)
-  verifyImage(t, imageSecondPass, componentType, pixelType)
+  await writeImageNode(image, testOutputCastFilePath, { componentType, pixelType})
+  const imageBack = await readImageNode(testOutputCastFilePath)
+  verifyImage(t, imageBack, componentType, pixelType)
 })

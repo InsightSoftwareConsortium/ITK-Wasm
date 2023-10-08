@@ -5,6 +5,12 @@ export type { ReadImageOptions }
 import readImageNode from './read-image-node.js'
 export { readImageNode }
 
+import WriteImageOptions from './write-image-options.js'
+export type { WriteImageOptions }
+
+import writeImageNode from './write-image-node.js'
+export { writeImageNode }
+
 import BioRadReadImageNodeResult from './bio-rad-read-image-node-result.js'
 export type { BioRadReadImageNodeResult }
 
