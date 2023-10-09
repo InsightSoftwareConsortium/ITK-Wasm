@@ -210,10 +210,6 @@ foreach(io_module ${WebAssemblyInterface_ImageIOModules} WebAssemblyInterface)
     endif()
   endforeach()
 endforeach()
-if(EMSCRIPTEN)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/image-io-index.ts.in
-    ${CMAKE_CURRENT_SOURCE_DIR}/typescript/src/image-io-index.ts @ONLY)
-endif()
 
 enable_testing()
 

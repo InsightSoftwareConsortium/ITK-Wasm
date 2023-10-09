@@ -1,5 +1,3 @@
-<!-- Generated file. To retain edits, remove this comment. -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,6 +56,10 @@
   <br /><br />
 
   <sl-tab-group>
+    <!-- Begin added content -->
+    <sl-tab slot="nav" panel="readImage-panel">readImage</sl-tab>
+    <!-- End added content -->
+
     <sl-tab slot="nav" panel="bioRadReadImage-panel">bioRadReadImage</sl-tab>
     <sl-tab slot="nav" panel="bioRadWriteImage-panel">bioRadWriteImage</sl-tab>
     <sl-tab slot="nav" panel="bmpReadImage-panel">bmpReadImage</sl-tab>
@@ -104,6 +106,57 @@
     <sl-tab slot="nav" panel="wasmWriteImage-panel">wasmWriteImage</sl-tab>
     <sl-tab slot="nav" panel="wasmZstdReadImage-panel">wasmZstdReadImage</sl-tab>
     <sl-tab slot="nav" panel="wasmZstdWriteImage-panel">wasmZstdWriteImage</sl-tab>
+
+
+    <!-- Begin added content -->
+    <sl-tab-panel name="readImage-panel">
+
+    <small><i>Read an image file.</i></small><br /><br />
+
+    <div id="readImageInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the serializedImage"><sl-details id="readImage-serialized-image-details" summary="serializedImage: Input image serialized in the file format" disabled></sl-details></sl-tooltip>
+      <label for="serialized-image-file"><sl-button name="serialized-image-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="serialized-image-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="information-only">informationOnly - <i>Only read image metadata -- do not read pixel data.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="readImageOutputs">
+      <sl-details disabled id="readImage-image-details" summary="image: Output image"></sl-details>
+      <sl-select id="image-output-format" placeholder="Format">
+        <sl-option value="bmp">bmp</sl-option>
+        <sl-option value="dcm">dcm</sl-option>
+        <sl-option value="gipl">gipl</sl-option>
+        <sl-option value="hdf5">hdf5</sl-option>
+        <sl-option value="jpg">jpg</sl-option>
+        <sl-option value="lsm">lsm</sl-option>
+        <sl-option value="mnc">mnc</sl-option>
+        <sl-option value="mnc.gz">mnc.gz</sl-option>
+        <sl-option value="mgh">mgh</sl-option>
+        <sl-option value="mha">mha</sl-option>
+        <sl-option value="mrc">mrc</sl-option>
+        <sl-option value="nii">nii</sl-option>
+        <sl-option value="nii.gz">nii.gz</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="nrrd">nrrd</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="pic">pic</sl-option>
+        <sl-option value="tif">tif</sl-option>
+        <sl-option value="isq">isq</sl-option>
+        <sl-option value="fdf">fdf</sl-option>
+        <sl-option value="vtk">vtk</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="image-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+    <!-- End added content -->
 
 
     <sl-tab-panel name="bioRadReadImage-panel">

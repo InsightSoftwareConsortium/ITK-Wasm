@@ -188,12 +188,12 @@ async function structuredReportToHtmlNode(
     stderr,
     outputs
   } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
-    outputText: (outputs[0].data as TextStream).data,
+    outputText: (outputs[0]?.data as TextStream).data,
   }
   return result
 }

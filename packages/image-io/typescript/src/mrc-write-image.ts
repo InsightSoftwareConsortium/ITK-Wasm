@@ -71,14 +71,14 @@ async function mrcWriteImage(
     stderr,
     outputs
   } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    couldWrite: outputs[0].data as JsonCompatible,
-    serializedImage: outputs[1].data as BinaryFile,
+    couldWrite: outputs[0]?.data as JsonCompatible,
+    serializedImage: outputs[1]?.data as BinaryFile,
   }
   return result
 }

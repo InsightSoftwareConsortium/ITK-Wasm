@@ -96,14 +96,14 @@ async function applyPresentationStateToImage(
     stderr,
     outputs
   } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    presentationStateOutStream: outputs[0].data as JsonCompatible,
-    outputImage: outputs[1].data as Image,
+    presentationStateOutStream: outputs[0]?.data as JsonCompatible,
+    outputImage: outputs[1]?.data as Image,
   }
   return result
 }

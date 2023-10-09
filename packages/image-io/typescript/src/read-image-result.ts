@@ -1,17 +1,8 @@
-// Generated file. To retain edits, remove this comment.
+import { Image } from 'itk-wasm'
 
-import { JsonCompatible, Image } from 'itk-wasm'
-
-interface MetaReadImageResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
-
-  /** Whether the input could be read. If false, the output image is not valid. */
-  couldRead: JsonCompatible
-
-  /** Output image */
+interface ReadImageResult {
   image: Image
-
+  webWorker: Worker
 }
 
-export default MetaReadImageResult
+export default ReadImageResult

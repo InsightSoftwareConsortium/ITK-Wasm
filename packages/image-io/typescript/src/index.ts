@@ -1,8 +1,15 @@
-// Generated file. To retain edits, remove this comment.
 
 export * from './pipelines-base-url.js'
 export * from './pipeline-worker-url.js'
 
+import ReadImageOptions from './read-image-options.js'
+export type { ReadImageOptions }
+
+import ReadImageResult from './read-image-result.js'
+export type { ReadImageResult }
+
+import readImage from './read-image.js'
+export { readImage }
 
 import BioRadReadImageResult from './bio-rad-read-image-result.js'
 export type { BioRadReadImageResult }

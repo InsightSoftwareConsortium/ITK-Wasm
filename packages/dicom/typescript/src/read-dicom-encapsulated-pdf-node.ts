@@ -102,12 +102,12 @@ async function readDicomEncapsulatedPdfNode(
     stderr,
     outputs
   } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
-    pdfBinaryOutput: (outputs[0].data as BinaryStream).data,
+    pdfBinaryOutput: (outputs[0]?.data as BinaryStream).data,
   }
   return result
 }

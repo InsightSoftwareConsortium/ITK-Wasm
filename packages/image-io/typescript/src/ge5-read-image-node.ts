@@ -65,13 +65,13 @@ async function ge5ReadImageNode(
     stderr,
     outputs
   } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
-    couldRead: outputs[0].data as JsonCompatible,
-    image: outputs[1].data as Image,
+    couldRead: outputs[0]?.data as JsonCompatible,
+    image: outputs[1]?.data as Image,
   }
   return result
 }

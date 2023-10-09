@@ -86,13 +86,13 @@ async function applyPresentationStateToImageNode(
     stderr,
     outputs
   } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
-    presentationStateOutStream: outputs[0].data as JsonCompatible,
-    outputImage: outputs[1].data as Image,
+    presentationStateOutStream: outputs[0]?.data as JsonCompatible,
+    outputImage: outputs[1]?.data as Image,
   }
   return result
 }

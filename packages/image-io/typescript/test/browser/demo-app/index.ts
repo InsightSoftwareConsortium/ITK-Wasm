@@ -1,5 +1,3 @@
-// Generated file. To retain edits, remove this comment.
-
 import * as imageIo from '../../../dist/bundles/image-io.js'
 
 // Use local, vendored WebAssembly module assets
@@ -11,11 +9,15 @@ imageIo.setPipelineWorkerUrl(pipelineWorkerUrl)
 
 const params = new URLSearchParams(window.location.search)
 if (!params.has('functionName')) {
-  params.set('functionName', 'bioRadReadImage')
+// Begin added content
+  params.set('functionName', 'readImage')
   const url = new URL(document.location)
   url.search = params
-  window.history.replaceState({ functionName: 'bioRadReadImage' }, '', url)
+  window.history.replaceState({ functionName: 'readImage' }, '', url)
 }
+
+import './read-image-controller.js'
+// End added content
 import './bio-rad-read-image-controller.js'
 import './bio-rad-write-image-controller.js'
 import './bmp-read-image-controller.js'

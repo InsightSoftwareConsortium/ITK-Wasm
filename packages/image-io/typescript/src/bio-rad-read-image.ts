@@ -71,14 +71,14 @@ async function bioRadReadImage(
     stderr,
     outputs
   } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    couldRead: outputs[0].data as JsonCompatible,
-    image: outputs[1].data as Image,
+    couldRead: outputs[0]?.data as JsonCompatible,
+    image: outputs[1]?.data as Image,
   }
   return result
 }

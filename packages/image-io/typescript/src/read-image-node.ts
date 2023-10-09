@@ -17,14 +17,18 @@ interface ReaderResult {
   couldRead: boolean,
   image: Image
 }
-type Reader = (serializedImage: string) => Promise<ReaderResult>
+interface ReaderOptions {
+  /** Only read image metadata -- do not read pixel data. */
+  informationOnly?: boolean
+}
+type Reader = (serializedImage: string, options: ReaderOptions) => Promise<ReaderResult>
 
 
 /**
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Path to input image serialized in the file format
- * @param {ReadImageOptions} options - options to cast resulting image type
+ * @param {ReadImageOptions} options - options to cast resulting image type or to only read image metadata
  *
  * @returns {Promise<Image>} - Image result
  */
@@ -38,14 +42,14 @@ async function readImageNode(
   const extension = getFileExtension(absoluteFilePath)
 
   let io = null
-  if (mimeType !== false && mimeToImageIo.has(mimeType)) {
+  if (mimeType && mimeToImageIo.has(mimeType)) {
     io = mimeToImageIo.get(mimeType)
   } else if (extensionToImageIo.has(extension)) {
     io = extensionToImageIo.get(extension)
   } else {
     for (const readerWriter of imageIoIndexNode.values()) {
       if (readerWriter[0] !== null) {
-        let { couldRead, image } = await (readerWriter[0] as Reader)(absoluteFilePath)
+        let { couldRead, image } = await (readerWriter[0] as Reader)(absoluteFilePath, { informationOnly: options.informationOnly })
         if (couldRead) {
           if (typeof options !== 'undefined') {
             image = castImage(image, options)
@@ -61,7 +65,7 @@ async function readImageNode(
   const readerWriter = imageIoIndexNode.get(io as string)
 
   const reader = (readerWriter as Array<Reader>)[0]
-  let { couldRead, image } = await reader(absoluteFilePath)
+  let { couldRead, image } = await reader(absoluteFilePath, { informationOnly: options.informationOnly })
   if (!couldRead) {
     throw Error('Could not read: ' + absoluteFilePath)
   }

@@ -6,6 +6,9 @@ interface ReadImageOptions {
 
   /** Pixel type, from itk-wasm PixelTypes, for the output pixels. Defaults to the input pixel type. */
   pixelType?: typeof PixelTypes[keyof typeof PixelTypes]
+
+  /** Only read image metadata -- do not read pixel data. */
+  informationOnly?: boolean
 }
 
 export default ReadImageOptions

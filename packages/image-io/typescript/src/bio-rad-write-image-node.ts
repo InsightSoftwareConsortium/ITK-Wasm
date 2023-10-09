@@ -69,12 +69,12 @@ async function bioRadWriteImageNode(
     stderr,
     outputs
   } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
-    couldWrite: outputs[0].data as JsonCompatible,
+    couldWrite: outputs[0]?.data as JsonCompatible,
   }
   return result
 }
