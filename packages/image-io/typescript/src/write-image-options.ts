@@ -11,7 +11,10 @@ interface WriteImageOptions {
   useCompression?: boolean
 
   /** Mime type of the output image file. */
-  mimeType?: boolean
+  mimeType?: string
+
+  /** Only write the image information, not the pixel data. */
+  informationOnly?: boolean
 }
 
 export default WriteImageOptions

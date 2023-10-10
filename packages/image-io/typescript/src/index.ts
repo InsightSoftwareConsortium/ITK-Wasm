@@ -11,6 +11,15 @@ export type { ReadImageResult }
 import readImage from './read-image.js'
 export { readImage }
 
+import WriteImageOptions from './write-image-options.js'
+export type { WriteImageOptions }
+
+import WriteImageResult from './write-image-result.js'
+export type { WriteImageResult }
+
+import writeImage from './write-image.js'
+export { writeImage }
+
 import BioRadReadImageResult from './bio-rad-read-image-result.js'
 export type { BioRadReadImageResult }
 

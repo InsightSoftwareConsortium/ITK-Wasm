@@ -7,7 +7,6 @@ import * as compareImages from '../../../dist/bundles/compare-images.js'
 import vectorMagnitudeLoadSampleInputs, { usePreRun } from "./vector-magnitude-load-sample-inputs.js"
 
 class VectorMagnitudeModel {
-
   inputs: Map<string, any>
   options: Map<string, any>
   outputs: Map<string, any>
@@ -17,10 +16,10 @@ class VectorMagnitudeModel {
     this.options = new Map()
     this.outputs = new Map()
     }
-  }
+}
 
 
-class VectorMagnitudeController  {
+class VectorMagnitudeController {
 
   constructor(loadSampleInputs) {
     this.loadSampleInputs = loadSampleInputs

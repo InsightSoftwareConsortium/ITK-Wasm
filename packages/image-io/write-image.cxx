@@ -156,10 +156,10 @@ int main (int argc, char * argv[])
   pipeline.add_option("serialized-image", outputFileName, "Output image serialized in the file format.")->required()->type_name("OUTPUT_BINARY_FILE");
 
   bool informationOnly = false;
-  pipeline.add_flag("-i,--information-only", informationOnly, "Only read image metadata -- do not read pixel data.");
+  pipeline.add_flag("-i,--information-only", informationOnly, "Only write image metadata -- do not write pixel data.");
 
   bool useCompression = false;
-  pipeline.add_flag("-c,--use-compression", informationOnly, "Use compression in the written file");
+  pipeline.add_flag("-c,--use-compression", useCompression, "Use compression in the written file");
 
   ITK_WASM_PARSE(pipeline);
 

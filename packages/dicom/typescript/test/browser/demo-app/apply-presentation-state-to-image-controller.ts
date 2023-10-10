@@ -6,7 +6,6 @@ import * as dicom from '../../../dist/bundles/dicom.js'
 import applyPresentationStateToImageLoadSampleInputs, { usePreRun } from "./apply-presentation-state-to-image-load-sample-inputs.js"
 
 class ApplyPresentationStateToImageModel {
-
   inputs: Map<string, any>
   options: Map<string, any>
   outputs: Map<string, any>
@@ -16,10 +15,10 @@ class ApplyPresentationStateToImageModel {
     this.options = new Map()
     this.outputs = new Map()
     }
-  }
+}
 
 
-class ApplyPresentationStateToImageController  {
+class ApplyPresentationStateToImageController {
 
   constructor(loadSampleInputs) {
     this.loadSampleInputs = loadSampleInputs

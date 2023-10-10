@@ -1,5 +1,4 @@
 import path from 'path'
-import mime from 'mime-types'
 
 import {
   Image,
@@ -15,7 +14,6 @@ import WriteImageOptions from './write-image-options.js'
 
 interface WriterOptions {
   useCompression?: boolean
-  mimeType?: boolean
 }
 interface WriterResult {
   couldWrite: boolean
@@ -38,7 +36,7 @@ async function writeImageNode(
   options: WriteImageOptions = {}
 ) : Promise<void> {
   const absoluteFilePath = path.resolve(serializedImage)
-  const mimeType = mime.lookup(absoluteFilePath)
+  const mimeType = options.mimeType
   const extension = getFileExtension(absoluteFilePath)
 
   let inputImage = image
@@ -47,7 +45,7 @@ async function writeImageNode(
   }
 
   let io = null
-  if (mimeType !== false && mimeToImageIo.has(mimeType)) {
+  if (typeof mimeType !== 'undefined' && mimeToImageIo.has(mimeType)) {
     io = mimeToImageIo.get(mimeType)
   } else if (extensionToImageIo.has(extension)) {
     io = extensionToImageIo.get(extension)

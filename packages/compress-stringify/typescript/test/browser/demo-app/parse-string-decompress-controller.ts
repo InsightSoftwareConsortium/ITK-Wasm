@@ -4,7 +4,6 @@ import * as compressStringify from '../../../dist/bundles/compress-stringify.js'
 import parseStringDecompressLoadSampleInputs, { usePreRun } from "./parse-string-decompress-load-sample-inputs.js"
 
 class ParseStringDecompressModel {
-
   inputs: Map<string, any>
   options: Map<string, any>
   outputs: Map<string, any>
@@ -14,10 +13,10 @@ class ParseStringDecompressModel {
     this.options = new Map()
     this.outputs = new Map()
     }
-  }
+}
 
 
-class ParseStringDecompressController  {
+class ParseStringDecompressController {
 
   constructor(loadSampleInputs) {
     this.loadSampleInputs = loadSampleInputs

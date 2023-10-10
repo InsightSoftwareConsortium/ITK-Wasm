@@ -19,6 +19,7 @@ if (!params.has('functionName')) {
 }
 
 import './read-image-controller.js'
+import './write-image-controller.js'
 // End added content
 import './bio-rad-read-image-controller.js'
 import './bio-rad-write-image-controller.js'

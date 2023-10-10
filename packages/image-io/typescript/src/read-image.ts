@@ -40,7 +40,7 @@ async function readImage(
 
   const mimeType = (serializedImage as File).type ?? ''
   const fileName = (serializedImage as File).name ?? (serializedImage as BinaryFile).path ?? 'fileName'
-  const extension = getFileExtension(fileName)
+  const extension = getFileExtension(fileName).toLowerCase()
   let usedWebWorker = webWorker
 
   let serializedImageFile = serializedImage as BinaryFile
@@ -52,7 +52,7 @@ async function readImage(
   let io = null
   if (mimeType && mimeToImageIo.has(mimeType)) {
     io = mimeToImageIo.get(mimeType)
-  } else if (!extensionToImageIo.has(extension)) {
+  } else if (extensionToImageIo.has(extension)) {
     io = extensionToImageIo.get(extension)
   } else {
     for (const readerWriter of imageIoIndex.values()) {

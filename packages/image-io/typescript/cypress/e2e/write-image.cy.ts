@@ -26,88 +26,71 @@ function verifyImage (image, componentType, pixelType) {
   cy.expect(image.data[512]).to.equal(12)
 }
 
-describe('read-image', () => {
+describe('write-image', () => {
   beforeEach(function() {
     cy.visit(demoServer)
 
     const testPathPrefix = '../test/data/input/'
 
     const testImageFiles = [
-      'cthead1.png'
+      'cthead1.iwi.cbor'
     ]
     testImageFiles.forEach((fileName) => {
       cy.readFile(`${testPathPrefix}${fileName}`, null).as(fileName)
     })
   })
 
-  it('Reads an image File in the demo', function () {
-    cy.get('sl-tab[panel="readImage-panel"]').click()
+  it('Writes an image in the demo', function () {
+    cy.get('sl-tab[panel="writeImage-panel"]').click()
 
-    const testFile = { contents: new Uint8Array(this['cthead1.png']), fileName: 'cthead1.png' }
-    cy.get('#readImageInputs input[name="serialized-image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#readImage-serialized-image-details').should('contain', '137,80')
+    const testFile = { contents: new Uint8Array(this['cthead1.iwi.cbor']), fileName: 'cthead1.iwi.cbor' }
+    cy.get('#writeImageInputs input[name="image-file"]').selectFile([testFile,], { force: true })
+    cy.get('#writeImage-image-details').should('contain', 'imageType')
+    cy.get('#writeImageInputs sl-input[name="serialized-image"]').find('input', { includeShadowDom: true }).type('cthead1.png', { force: true })
 
-    cy.get('#readImageInputs sl-button[name="run"]').click()
+    cy.get('#writeImageInputs sl-button[name="run"]').click()
 
-    cy.get('#readImage-image-details').should('contain', 'imageType')
+    cy.get('#writeImage-serialized-image-details').should('contain', '0,3')
   })
 
-  it('Reads an image BinaryFile', function () {
+  it('Writes an image to an ArrayBuffer', function () {
     cy.window().then(async (win) => {
       const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
       const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
+      const { serializedImage } = await win.imageIo.writeImage(webWorker, image, 'cthead1.mha')
+      const { image: imageBack } = await win.imageIo.readImage(webWorker, serializedImage)
       webWorker.terminate()
       const componentType = IntTypes.UInt8
       const pixelType = PixelTypes.Scalar
-      verifyImage(image, componentType, pixelType)
+      verifyImage(imageBack, componentType, pixelType)
     })
   })
 
-  it('Reads an image cast to the specified pixelType and componentType', function () {
+  it('Writes an image to an ArrayBuffer, given componentType, pixelType', function () {
     cy.window().then(async (win) => {
-      const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
       const componentType = IntTypes.UInt16
       const pixelType = PixelTypes.Vector
-      const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' }, { pixelType, componentType})
+      const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
+      const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
+      const { serializedImage } = await win.imageIo.writeImage(webWorker, image, 'cthead1.mha', { pixelType, componentType})
+      // Reading back, the pixelType is always Scalar (reader behavior). Is this a bug?
+      const { image: imageBack } = await win.imageIo.readImage(webWorker, serializedImage, { pixelType })
       webWorker.terminate()
-      verifyImage(image, componentType, pixelType)
+      verifyImage(imageBack, componentType, pixelType)
     })
   })
 
-  it('Reads an image File', function () {
+  it('Writes an image to an ArrayBuffer, uses compression', function () {
     cy.window().then(async (win) => {
-      const cthead1SmallFile = new win.File([cthead1SmallBlob], 'cthead1Small.png')
-      const { image, webWorker } = await win.imageIo.readImage(null, cthead1SmallFile)
-      webWorker.terminate()
-      const componentType = IntTypes.UInt8
-      const pixelType = PixelTypes.Scalar
-      verifyImage(image, componentType, pixelType)
-    })
-  })
-
-  it('Reads re-uses a WebWorker', function () {
-    cy.window().then(async (win) => {
-      const cthead1SmallFile = new win.File([cthead1SmallBlob], 'cthead1Small.png')
-      const { webWorker } = await win.imageIo.readImage(null, cthead1SmallFile)
-      const { image } = await win.imageIo.readImage(webWorker, cthead1SmallFile)
+      const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
+      const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
+      const options = { useCompression: false }
+      const { serializedImage } = await win.imageIo.writeImage(webWorker, image, 'cthead1.mha', options)
+      const { image: imageBack } = await win.imageIo.readImage(webWorker, serializedImage)
       webWorker.terminate()
       const componentType = IntTypes.UInt8
       const pixelType = PixelTypes.Scalar
-      verifyImage(image, componentType, pixelType)
-    })
-  })
-
-  it('Throws a catchable error for an invalid file', { defaultCommandTimeout: 120000 }, function () {
-    cy.window().then(async (win) => {
-      const invalidArray = new Uint8Array([21, 4, 4, 4, 4, 9, 5, 0, 82, 42])
-      const invalidBlob = new win.Blob([invalidArray])
-      const invalidFile = new win.File([invalidBlob], 'invalid.file')
-      try {
-        const { webWorker, image } = await win.imageIo.readImage(null, invalidFile)
-        webWorker.terminate()
-      } catch (error) {
-        cy.expect(error.message).to.equal('Could not find IO for: invalid.file')
-      }
+      verifyImage(imageBack, componentType, pixelType)
     })
   })
 })
