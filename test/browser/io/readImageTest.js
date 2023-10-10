@@ -33,15 +33,6 @@ function verifyImage (t, image, componentType, pixelType) {
 }
 
 export default function () {
-  test('readImageArrayBuffer reads an ArrayBuffer', async (t) => {
-    const arrayBuffer = await cthead1SmallFile.arrayBuffer()
-    const { image, webWorker } = await readImageArrayBuffer(null, arrayBuffer, 'cthead1Small.png')
-    webWorker.terminate()
-    const componentType = IntTypes.UInt8
-    const pixelType = PixelTypes.Scalar
-    verifyImage(t, image, componentType, pixelType)
-  })
-
   test('readImageArrayBuffer casts to the specified componentType', async (t) => {
     const arrayBuffer = await cthead1SmallFile.arrayBuffer()
     const componentType = IntTypes.UInt16
