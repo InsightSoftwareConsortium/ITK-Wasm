@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   itk-wasm:
-    specifier: ^1.0.0-b.119
-    version: 1.0.0-b.119
+    specifier: ^1.0.0-b.138
+    version: 1.0.0-b.146
 
 devDependencies:
   '@rollup/plugin-commonjs':
@@ -38,8 +38,8 @@ devDependencies:
     specifier: ^12.17.2
     version: 12.17.3
   itk-image-io:
-    specifier: ^1.0.0-b.117
-    version: 1.0.0-b.119
+    specifier: ^1.0.0-b.130
+    version: 1.0.0-b.146
   rollup:
     specifier: ^3.9.0
     version: 3.18.0
@@ -65,7 +65,7 @@ devDependencies:
     specifier: ^2.5.2
     version: 2.6.1
   typescript:
-    specifier: ^5.0.4
+    specifier: ^5.1.6
     version: 5.1.6
   vite:
     specifier: ^4.1.5
@@ -573,6 +573,9 @@ packages:
   /@sideway/pinpoint@2.0.0:
     resolution: {integrity: sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==}
     dev: true
+
+  /@thewtex/zstddec@0.1.2:
+    resolution: {integrity: sha512-Bv50pouFqlmIZDcAA2Nrpk9tjJpAPlqHHeD5h0noK+oNXMimrZ/hMbJK2N09Svr6TI/S6nT63dzkWoim4ZzTuw==}
 
   /@types/emscripten@1.39.6:
     resolution: {integrity: sha512-H90aoynNhhkQP6DRweEjJp5vfUVdIj7tdPLsu7pq89vODD/lcugKfZOsfgwpvM6XUewEp2N5dCg1Uf3Qe55Dcg==}
@@ -1940,19 +1943,20 @@ packages:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
     dev: true
 
-  /itk-image-io@1.0.0-b.119:
-    resolution: {integrity: sha512-srDmhOmwftascqLXmH6mS81ZZQu42xMaQXShPYhpgcH62hUR2YRj8m+mm0UvLYzyY6LpwxLK50td6RUrusunew==}
+  /itk-image-io@1.0.0-b.146:
+    resolution: {integrity: sha512-OBf1QDYcaq9Xzyc7O8jfeohjsz85+5Xj8ygTQhP4lNnuP9ndG6pgf50YFUPqFWoK3Rw0iINbnsqtIL29UhI4xA==}
     dependencies:
-      itk-wasm: 1.0.0-b.119
+      itk-wasm: 1.0.0-b.146
     transitivePeerDependencies:
       - debug
     dev: true
 
-  /itk-wasm@1.0.0-b.119:
-    resolution: {integrity: sha512-J4zibU8UAgEsCIWCDs7mAYCpm1dOVJoDFzamodlaoaMhBP4JE3VEKCNvorDpQJrxeIM7S5KWMRPPE4565slWrQ==}
+  /itk-wasm@1.0.0-b.146:
+    resolution: {integrity: sha512-1opxFHG1Xspu/gFVbmYfhEy6H1/PDs+AsaZ95ZdU7DL9Xul9tsstFcXwsblB8JXNEXqcPG2h61gAq7BYF4UhdQ==}
     hasBin: true
     dependencies:
       '@babel/runtime': 7.19.0
+      '@thewtex/zstddec': 0.1.2
       '@types/emscripten': 1.39.6
       axios: 1.4.0
       commander: 9.4.0
@@ -1960,6 +1964,7 @@ packages:
       glob: 8.1.0
       markdown-table: 3.0.3
       mime-types: 2.1.35
+      wasm-feature-detect: 1.5.1
       webworker-promise: 0.4.4
     transitivePeerDependencies:
       - debug
@@ -2217,8 +2222,8 @@ packages:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
     dev: true
 
-  /nanoid@3.3.4:
-    resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
+  /nanoid@3.3.6:
+    resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
     dev: true
@@ -2377,11 +2382,11 @@ packages:
       irregular-plurals: 3.3.0
     dev: true
 
-  /postcss@8.4.21:
-    resolution: {integrity: sha512-tP7u/Sn/dVxK2NnruI4H9BG+x+Wxz6oeZ1cJ8P6G/PZY0IKk4k/63TDsQf2kQq3+qoJeLm2kIBUNlZe3zgb4Zg==}
+  /postcss@8.4.31:
+    resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
-      nanoid: 3.3.4
+      nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true
@@ -3001,7 +3006,7 @@ packages:
     dependencies:
       '@types/node': 20.4.8
       esbuild: 0.16.17
-      postcss: 8.4.21
+      postcss: 8.4.31
       resolve: 1.22.1
       rollup: 3.18.0
     optionalDependencies:
@@ -3021,6 +3026,9 @@ packages:
     transitivePeerDependencies:
       - debug
     dev: true
+
+  /wasm-feature-detect@1.5.1:
+    resolution: {integrity: sha512-GHr23qmuehNXHY4902/hJ6EV5sUANIJC3R/yMfQ7hWDg3nfhlcJfnIL96R2ohpIwa62araN6aN4bLzzzq5GXkg==}
 
   /webworker-promise@0.4.4:
     resolution: {integrity: sha512-NfdSlaWqd+0iSrQudB0N0MELfJ9TVTlynhXMpi06piuZhyc9Yy7Hz6BFu2HUkvIb9lCS0pFW42ptd/JnXVnptg==}
