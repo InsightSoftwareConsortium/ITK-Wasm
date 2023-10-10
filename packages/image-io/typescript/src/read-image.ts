@@ -39,12 +39,12 @@ async function readImage(
 ) : Promise<ReadImageResult> {
 
   const mimeType = (serializedImage as File).type ?? ''
-  const fileName = (serializedImage as File).name ?? (serializedImage as BinaryFile).path
+  const fileName = (serializedImage as File).name ?? (serializedImage as BinaryFile).path ?? 'fileName'
   const extension = getFileExtension(fileName)
   let usedWebWorker = webWorker
 
   let serializedImageFile = serializedImage as BinaryFile
-  if (serializedImage instanceof File) {
+  if (serializedImage instanceof Blob) {
     const serializedImageBuffer = await serializedImage.arrayBuffer()
     serializedImageFile = { path: serializedImage.name, data: new Uint8Array(serializedImageBuffer) }
   }
@@ -68,7 +68,7 @@ async function readImage(
       }
     }
   }
-  if (io === null ) {
+  if (!io) {
     throw Error('Could not find IO for: ' + fileName)
   }
   const readerWriter = imageIoIndex.get(io as string)

@@ -9,9 +9,7 @@ const intArray = new Uint8Array(byteString.length)
 for (let ii = 0; ii < byteString.length; ++ii) {
   intArray[ii] = byteString.charCodeAt(ii)
 }
-
 const cthead1SmallBlob = new window.Blob([intArray], { type: mimeString })
-const cthead1SmallFile = new window.File([cthead1SmallBlob], 'cthead1Small.png')
 
 function verifyImage (image, componentType, pixelType) {
   cy.expect(image.imageType.dimension).to.equal(2)
@@ -42,7 +40,7 @@ describe('read-image', () => {
     })
   })
 
-  it('Reads an image File', function () {
+  it('Reads an image File in the dem', function () {
     cy.get('sl-tab[panel="readImage-panel"]').click()
 
     const testFile = { contents: new Uint8Array(this['cthead1.png']), fileName: 'cthead1.png' }
@@ -56,12 +54,60 @@ describe('read-image', () => {
 
   it('Reads an image BinaryFile', function () {
     cy.window().then(async (win) => {
-      const arrayBuffer = await cthead1SmallFile.arrayBuffer()
+      const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
       const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
       webWorker.terminate()
       const componentType = IntTypes.UInt8
       const pixelType = PixelTypes.Scalar
       verifyImage(image, componentType, pixelType)
+    })
+  })
+
+  it('Reads an image cast to the specified pixelType and componentType', function () {
+    cy.window().then(async (win) => {
+      const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
+      const componentType = IntTypes.UInt16
+      const pixelType = PixelTypes.Vector
+      const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' }, { pixelType, componentType})
+      webWorker.terminate()
+      verifyImage(image, componentType, pixelType)
+    })
+  })
+
+  it('Reads an image File', function () {
+    cy.window().then(async (win) => {
+      const cthead1SmallFile = new win.File([cthead1SmallBlob], 'cthead1Small.png')
+      const { image, webWorker } = await win.imageIo.readImage(null, cthead1SmallFile)
+      webWorker.terminate()
+      const componentType = IntTypes.UInt8
+      const pixelType = PixelTypes.Scalar
+      verifyImage(image, componentType, pixelType)
+    })
+  })
+
+  it('Reads re-uses a WebWorker', function () {
+    cy.window().then(async (win) => {
+      const cthead1SmallFile = new win.File([cthead1SmallBlob], 'cthead1Small.png')
+      const { webWorker } = await win.imageIo.readImage(null, cthead1SmallFile)
+      const { image } = await win.imageIo.readImage(webWorker, cthead1SmallFile)
+      webWorker.terminate()
+      const componentType = IntTypes.UInt8
+      const pixelType = PixelTypes.Scalar
+      verifyImage(image, componentType, pixelType)
+    })
+  })
+
+  it('Throws a catchable error for an invalid file', function () {
+    cy.window().then(async (win) => {
+      const invalidArray = new Uint8Array([21, 4, 4, 4, 4, 9, 5, 0, 82, 42])
+      const invalidBlob = new window.Blob([invalidArray])
+      const invalidFile = new window.File([invalidBlob], 'invalid.file')
+      try {
+        const { webWorker, image } = await win.imageIo.readImage(null, invalidFile)
+        webWorker.terminate()
+      } catch (error) {
+        cy.expect(error.message).to.equal('Could not find IO for: invalid.file')
+      }
     })
   })
 })
