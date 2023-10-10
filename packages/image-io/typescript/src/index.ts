@@ -11,6 +11,15 @@ export type { ReadImageResult }
 import readImage from './read-image.js'
 export { readImage }
 
+import ReadImageFileSeriesOptions from './read-image-file-series-options.js'
+export type { ReadImageFileSeriesOptions }
+
+import ReadImageFileSeriesResult from './read-image-file-series-result.js'
+export type { ReadImageFileSeriesResult }
+
+import readImageFileSeries from './read-image-file-series.js'
+export { readImageFileSeries }
+
 import WriteImageOptions from './write-image-options.js'
 export type { WriteImageOptions }
 
