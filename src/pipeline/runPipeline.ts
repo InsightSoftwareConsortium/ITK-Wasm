@@ -67,7 +67,7 @@ async function runPipeline (
     return result
   }
   let worker = webWorker
-  const pipelineWorkerUrl = options?.pipelineWorkerUrl
+  const pipelineWorkerUrl = options?.pipelineWorkerUrl ?? null
   const pipelineWorkerUrlString = typeof pipelineWorkerUrl !== 'string' && typeof pipelineWorkerUrl?.href !== 'undefined' ? pipelineWorkerUrl.href : pipelineWorkerUrl
   const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
     worker as Worker | null, pipelineWorkerUrlString as string | undefined | null

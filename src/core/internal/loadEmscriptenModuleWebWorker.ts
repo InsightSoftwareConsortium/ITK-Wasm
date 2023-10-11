@@ -26,9 +26,6 @@ async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | U
   if (modulePrefix.endsWith('.wasm')) {
     modulePrefix = modulePrefix.substring(0, modulePrefix.length - 5)
   }
-  // importScripts / UMD is required over dynamic ESM import until Firefox
-  // adds worker dynamic import support:
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
   const wasmBinaryPath = `${modulePrefix}.wasm`
   const response = await axios.get(`${wasmBinaryPath}.zst`, { responseType: 'arraybuffer' })
   if (!decoderInitialized) {
@@ -37,12 +34,9 @@ async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | U
   }
   const decompressedArray = decoder.decode(new Uint8Array(response.data))
   const wasmBinary = decompressedArray.buffer
-  const modulePath = `${modulePrefix}.umd.js`
-  importScripts(modulePath)
-  const moduleBaseName: string = camelCase(modulePrefix.replace(/.*\//, ''))
-  // @ts-ignore: error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'WorkerGlobalScope & typeof globalThis'.
-  const wrapperModule = self[moduleBaseName] as (moduleParams: object) => object
-  const emscriptenModule = wrapperModule({ wasmBinary }) as ITKWasmEmscriptenModule
+  const modulePath = `${modulePrefix}.js`
+  const result = await import(/* webpackIgnore: true */ /* @vite-ignore */ modulePath)
+  const emscriptenModule = result.default({ wasmBinary }) as ITKWasmEmscriptenModule
   return emscriptenModule
 }
 

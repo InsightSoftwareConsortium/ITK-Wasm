@@ -12,7 +12,7 @@ import ReadImageArrayBufferOptions from './ReadImageArrayBufferOptions.js'
 
 async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, options?: ReadImageArrayBufferOptions | string): Promise<ReadImageResult> {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker, null)
   worker = usedWorker
 
   const filePath = `./${fileName}`

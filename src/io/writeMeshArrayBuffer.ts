@@ -17,7 +17,7 @@ async function writeMeshArrayBuffer (webWorker: Worker | null, mesh: Mesh, fileN
   }
 
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker, null)
   worker = usedWorker
 
   const filePath = `./${fileName}`

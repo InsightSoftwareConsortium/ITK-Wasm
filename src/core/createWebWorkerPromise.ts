@@ -48,11 +48,7 @@ async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWo
   } else if (workerUrl === null) {
     // Use the version built with the bundler
     //
-    // Bundlers, e.g. WebPack, see these paths at build time
-    //
-    // importScripts / UMD is required over dynamic ESM import until Firefox
-    // adds worker dynamic import support:
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=1540913
+    // Bundlers, e.g. WebPack, Vite, Rollup, see these paths at build time
     worker = new Worker(new URL('../web-workers/pipeline.worker.js', import.meta.url))
   } else {
     if (workerUrl.startsWith('http')) {

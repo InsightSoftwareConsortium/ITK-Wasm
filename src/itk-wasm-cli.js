@@ -250,9 +250,8 @@ function bindgen(options) {
     if (err.code !== 'EE XIST') throw err
   }
 
-  // Building for emscripten can generate duplicate .umd.wasm and .wasm binaries
-  // Also filter libraries.
-  let filteredWasmBinaries = wasmBinaries.filter(binary => !binary.endsWith('.umd.wasm') && !path.basename(binary).startsWith('lib'))
+  // Filter libraries.
+  let filteredWasmBinaries = wasmBinaries.filter((binary) => !path.basename(binary).startsWith('lib'))
 
   switch (iface) {
     case 'typescript':

@@ -32,7 +32,7 @@ async function writeImageArrayBuffer (webWorker: Worker | null, image: Image, fi
   }
 
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker, null)
   worker = usedWorker
 
   const filePath = `./${fileName}`

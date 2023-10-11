@@ -10,7 +10,7 @@ import ReadMeshResult from './ReadMeshResult.js'
 
 async function readMeshArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType: string): Promise<ReadMeshResult> {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker, null)
   worker = usedWorker
 
   const filePath = `./${fileName}`

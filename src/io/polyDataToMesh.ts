@@ -9,7 +9,7 @@ import getTransferables from '../core/getTransferables.js'
 
 async function polyDataToMesh (webWorker: Worker | null, polyData: PolyData): Promise<{ mesh: Mesh, webWorker: Worker }> {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker)
+  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker, null)
   worker = usedWorker
 
   const args = ['0', '0', '--memory-io']

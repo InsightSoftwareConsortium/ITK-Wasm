@@ -44,13 +44,6 @@ if (EMSCRIPTEN AND DEFINED WebAssemblyInterface_BINARY_DIR)
       PROPERTY RUNTIME_OUTPUT_DIRECTORY
       ${WebAssemblyInterface_BINARY_DIR}/dicom
       )
-    itk_module_target_label(${target}.umd)
-    itk_module_target_export(${target}.umd)
-    itk_module_target_install(${target}.umd)
-    set_property(TARGET ${target}.umd
-      PROPERTY RUNTIME_OUTPUT_DIRECTORY
-      ${WebAssemblyInterface_BINARY_DIR}/dicom
-      )
   endforeach()
   return()
 endif()

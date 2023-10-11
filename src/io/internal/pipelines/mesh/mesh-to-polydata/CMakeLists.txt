@@ -17,7 +17,7 @@ add_executable(polydata-to-mesh polydata-to-mesh.cxx)
 target_link_libraries(polydata-to-mesh PUBLIC ${ITK_LIBRARIES})
 
 if (EMSCRIPTEN AND DEFINED WebAssemblyInterface_BINARY_DIR)
-  foreach(target mesh-to-polydata mesh-to-polydata.umd polydata-to-mesh polydata-to-mesh.umd)
+  foreach(target mesh-to-polydata polydata-to-mesh)
     itk_module_target_label(${target})
     itk_module_target_export(${target})
     itk_module_target_install(${target})
