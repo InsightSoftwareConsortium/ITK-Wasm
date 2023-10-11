@@ -4,7 +4,6 @@ import * as compressStringify from '../../../dist/bundles/compress-stringify.js'
 import compressStringifyLoadSampleInputs, { usePreRun } from "./compress-stringify-load-sample-inputs.js"
 
 class CompressStringifyModel {
-
   inputs: Map<string, any>
   options: Map<string, any>
   outputs: Map<string, any>
@@ -14,10 +13,10 @@ class CompressStringifyModel {
     this.options = new Map()
     this.outputs = new Map()
     }
-  }
+}
 
 
-class CompressStringifyController  {
+class CompressStringifyController {
 
   constructor(loadSampleInputs) {
     this.loadSampleInputs = loadSampleInputs

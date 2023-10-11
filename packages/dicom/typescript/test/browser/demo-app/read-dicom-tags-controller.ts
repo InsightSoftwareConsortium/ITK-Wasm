@@ -4,7 +4,6 @@ import * as dicom from '../../../dist/bundles/dicom.js'
 import readDicomTagsLoadSampleInputs, { usePreRun } from "./read-dicom-tags-load-sample-inputs.js"
 
 class ReadDicomTagsModel {
-
   inputs: Map<string, any>
   options: Map<string, any>
   outputs: Map<string, any>
@@ -14,10 +13,10 @@ class ReadDicomTagsModel {
     this.options = new Map()
     this.outputs = new Map()
     }
-  }
+}
 
 
-class ReadDicomTagsController  {
+class ReadDicomTagsController {
 
   constructor(loadSampleInputs) {
     this.loadSampleInputs = loadSampleInputs

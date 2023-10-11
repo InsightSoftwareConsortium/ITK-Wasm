@@ -1,7 +1,5 @@
 # Generated file. To retain edits, remove this comment.
 
-# Generated file. Do not edit.
-
 from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional, List, Any
@@ -209,8 +207,11 @@ def structured_report_to_html(
         raise FileNotFoundError("dicom_file does not exist")
     args.append(str(PurePosixPath(dicom_file)))
     # Outputs
-    args.append('0')
+    output_text_name = '0'
+    args.append(output_text_name)
+
     # Options
+    input_count = len(pipeline_inputs)
     if read_file_only:
         args.append('--read-file-only')
 
@@ -283,10 +284,10 @@ def structured_report_to_html(
         args.append('--add-document-type')
 
     if css_reference is not None:
-        input_count_string = str(len(pipeline_inputs))
         pipeline_inputs.append(PipelineInput(InterfaceTypes.TextStream, TextStream(css_reference)))
         args.append('--css-reference')
-        args.append(input_count_string)
+        args.append(str(input_count))
+        input_count += 1
 
     if css_file is not None:
         input_file = str(PurePosixPath(css_file))

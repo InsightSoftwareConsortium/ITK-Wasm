@@ -4,7 +4,6 @@ import * as dicom from '../../../dist/bundles/dicom.js'
 import structuredReportToTextLoadSampleInputs, { usePreRun } from "./structured-report-to-text-load-sample-inputs.js"
 
 class StructuredReportToTextModel {
-
   inputs: Map<string, any>
   options: Map<string, any>
   outputs: Map<string, any>
@@ -14,10 +13,10 @@ class StructuredReportToTextModel {
     this.options = new Map()
     this.outputs = new Map()
     }
-  }
+}
 
 
-class StructuredReportToTextController  {
+class StructuredReportToTextController {
 
   constructor(loadSampleInputs) {
     this.loadSampleInputs = loadSampleInputs

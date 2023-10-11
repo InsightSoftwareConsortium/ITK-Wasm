@@ -14,7 +14,6 @@ function readFileIfNotInterfaceType(forNode, interfaceType, varName, indent, isA
     } else {
       return `${indent}mountDirs.add(path.dirname(${varName} as string))\n`
     }
-
   } else {
     if (interfaceType === 'TextFile') {
       if (isArray) {
@@ -456,7 +455,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })\n`
   }
 
-  functionContent += '  if (returnValue !== 0) {\n    throw new Error(stderr)\n  }\n\n'
+  functionContent += '  if (returnValue !== 0 && stderr !== "") {\n    throw new Error(stderr)\n  }\n\n'
 
   functionContent += '  const result = {\n'
   if (!forNode) {
@@ -471,12 +470,12 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       if (haveArray) {
         const isArray = output.itemsExpectedMax > 1
         if (isArray) {
-          functionContent += `    ${camel}: (outputs.slice(${camel}Start, ${camel}End).map(o => (o.data as ${interfaceType}).data)),\n`
+          functionContent += `    ${camel}: (outputs.slice(${camel}Start, ${camel}End).map(o => (o?.data as ${interfaceType})?.data)),\n`
         } else {
-          functionContent += `    ${camel}: (outputs[${camel}Index].data as ${interfaceType}).data),\n`
+          functionContent += `    ${camel}: (outputs[${camel}Index]?.data as ${interfaceType}).data),\n`
         }
       } else {
-        functionContent += `    ${camel}: (outputs[${outputIndex}].data as ${interfaceType}).data,\n`
+        functionContent += `    ${camel}: (outputs[${outputIndex}]?.data as ${interfaceType}).data,\n`
       }
     } else if (forNode && interfaceType.includes('File')) {
       // Written to disk
@@ -484,12 +483,12 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       if (haveArray) {
         const isArray = output.itemsExpectedMax > 1
         if (isArray) {
-          functionContent += `    ${camel}: outputs.slice(${camel}Start, ${camel}End).map(o => (o.data as ${interfaceType})),\n`
+          functionContent += `    ${camel}: outputs.slice(${camel}Start, ${camel}End).map(o => (o?.data as ${interfaceType})),\n`
         } else {
-          functionContent += `    ${camel}: outputs[${camel}Index].data as ${interfaceType},\n`
+          functionContent += `    ${camel}: outputs[${camel}Index]?.data as ${interfaceType},\n`
         }
       } else {
-        functionContent += `    ${camel}: outputs[${outputIndex}].data as ${interfaceType},\n`
+        functionContent += `    ${camel}: outputs[${outputIndex}]?.data as ${interfaceType},\n`
       }
     }
     if (!(forNode && interfaceType.includes('File'))) {

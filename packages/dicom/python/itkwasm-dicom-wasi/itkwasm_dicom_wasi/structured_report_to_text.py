@@ -1,7 +1,5 @@
 # Generated file. To retain edits, remove this comment.
 
-# Generated file. Do not edit.
-
 from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional, List, Any
@@ -116,8 +114,11 @@ def structured_report_to_text(
         raise FileNotFoundError("dicom_file does not exist")
     args.append(str(PurePosixPath(dicom_file)))
     # Outputs
-    args.append('0')
+    output_text_name = '0'
+    args.append(output_text_name)
+
     # Options
+    input_count = len(pipeline_inputs)
     if unknown_relationship:
         args.append('--unknown-relationship')
 

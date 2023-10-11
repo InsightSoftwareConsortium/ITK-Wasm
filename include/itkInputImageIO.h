@@ -92,10 +92,13 @@ bool lexical_cast(const std::string &input, InputImageIO &inputImageIO)
     const rapidjson::Value & dataJson = document["data"];
     const std::string dataString( dataJson.GetString() );
     const char * dataPtr = reinterpret_cast< char * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
-    WasmImageIOBase::PixelDataContainerType * pixelDataContainer = wasmImageIOBase->GetPixelDataContainer();
-    const size_t pixelDataBytes = wasmImageIO->GetImageSizeInBytes();
-    pixelDataContainer->resize(pixelDataBytes);
-    pixelDataContainer->assign(dataPtr, dataPtr + pixelDataBytes);
+    if (dataPtr != nullptr)
+    {
+      WasmImageIOBase::PixelDataContainerType * pixelDataContainer = wasmImageIOBase->GetPixelDataContainer();
+      const size_t pixelDataBytes = wasmImageIO->GetImageSizeInBytes();
+      pixelDataContainer->resize(pixelDataBytes);
+      pixelDataContainer->assign(dataPtr, dataPtr + pixelDataBytes);
+    }
     wasmImageIOBase->SetImageIO(wasmImageIO, false);
     wasmImageIOBase->SetJSON(json);
 

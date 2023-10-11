@@ -7,7 +7,6 @@ import * as compareImages from '../../../dist/bundles/compare-images.js'
 import compareDoubleImagesLoadSampleInputs, { usePreRun } from "./compare-double-images-load-sample-inputs.js"
 
 class CompareDoubleImagesModel {
-
   inputs: Map<string, any>
   options: Map<string, any>
   outputs: Map<string, any>
@@ -17,10 +16,10 @@ class CompareDoubleImagesModel {
     this.options = new Map()
     this.outputs = new Map()
     }
-  }
+}
 
 
-class CompareDoubleImagesController  {
+class CompareDoubleImagesController {
 
   constructor(loadSampleInputs) {
     this.loadSampleInputs = loadSampleInputs

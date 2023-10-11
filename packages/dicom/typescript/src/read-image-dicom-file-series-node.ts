@@ -69,13 +69,13 @@ async function readImageDicomFileSeriesNode(
     stderr,
     outputs
   } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
-    outputImage: outputs[0].data as Image,
-    sortedFilenames: outputs[1].data as JsonCompatible,
+    outputImage: outputs[0]?.data as Image,
+    sortedFilenames: outputs[1]?.data as JsonCompatible,
   }
   return result
 }

@@ -1,7 +1,5 @@
 # Generated file. To retain edits, remove this comment.
 
-# Generated file. Do not edit.
-
 from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional, List, Any
@@ -108,8 +106,11 @@ def read_dicom_encapsulated_pdf(
         raise FileNotFoundError("dicom_file does not exist")
     args.append(str(PurePosixPath(dicom_file)))
     # Outputs
-    args.append('0')
+    pdf_binary_output_name = '0'
+    args.append(pdf_binary_output_name)
+
     # Options
+    input_count = len(pipeline_inputs)
     if read_file_only:
         args.append('--read-file-only')
 

@@ -1,7 +1,5 @@
 # Generated file. To retain edits, remove this comment.
 
-# Generated file. Do not edit.
-
 from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional, List, Any
@@ -49,8 +47,11 @@ def parse_string_decompress(
     # Inputs
     args.append('0')
     # Outputs
-    args.append('0')
+    output_name = '0'
+    args.append(output_name)
+
     # Options
+    input_count = len(pipeline_inputs)
     if parse_string:
         args.append('--parse-string')
 

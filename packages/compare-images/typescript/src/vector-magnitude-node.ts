@@ -36,7 +36,7 @@ async function vectorMagnitudeNode(
   const args = []
   // Inputs
   const vectorImageName = '0'
-  args.push(vectorImageName as string)
+  args.push(vectorImageName)
 
   // Outputs
   const magnitudeImageName = '0'
@@ -52,12 +52,12 @@ async function vectorMagnitudeNode(
     stderr,
     outputs
   } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
-    magnitudeImage: outputs[0].data as Image,
+    magnitudeImage: outputs[0]?.data as Image,
   }
   return result
 }

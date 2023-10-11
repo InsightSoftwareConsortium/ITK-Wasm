@@ -40,7 +40,7 @@ async function parseStringDecompress(
   const args = []
   // Inputs
   const inputName = '0'
-  args.push(inputName as string)
+  args.push(inputName)
 
   // Outputs
   const outputName = '0'
@@ -60,13 +60,13 @@ async function parseStringDecompress(
     stderr,
     outputs
   } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    output: (outputs[0].data as BinaryStream).data,
+    output: (outputs[0]?.data as BinaryStream).data,
   }
   return result
 }

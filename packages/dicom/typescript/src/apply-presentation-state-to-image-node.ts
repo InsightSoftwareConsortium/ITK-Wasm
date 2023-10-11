@@ -45,10 +45,12 @@ async function applyPresentationStateToImageNode(
   const args = []
   // Inputs
   const imageInName = imageIn
-  args.push(imageInName as string)
+  args.push(imageInName)
+  mountDirs.add(path.dirname(imageInName))
 
   const presentationStateFileName = presentationStateFile
-  args.push(presentationStateFileName as string)
+  args.push(presentationStateFileName)
+  mountDirs.add(path.dirname(presentationStateFileName))
 
   // Outputs
   const presentationStateOutStreamName = '0'
@@ -84,13 +86,13 @@ async function applyPresentationStateToImageNode(
     stderr,
     outputs
   } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
-    presentationStateOutStream: outputs[0].data as JsonCompatible,
-    outputImage: outputs[1].data as Image,
+    presentationStateOutStream: outputs[0]?.data as JsonCompatible,
+    outputImage: outputs[1]?.data as Image,
   }
   return result
 }

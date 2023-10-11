@@ -76,7 +76,6 @@ export const usePreRun = true
 
   result += `
 class ${functionNamePascalCase}Model {
-
   inputs: Map<string, any>
   options: Map<string, any>
   outputs: Map<string, any>
@@ -86,13 +85,13 @@ class ${functionNamePascalCase}Model {
     this.options = new Map()
     this.outputs = new Map()
     }
-  }
+}
 
 
 `
 
   const controllerClassName = camelCase(`${functionNamePascalCase}Controller`)
-  result += `class ${controllerClassName}  {
+  result += `class ${controllerClassName} {
 
   constructor(loadSampleInputs) {
     this.loadSampleInputs = loadSampleInputs

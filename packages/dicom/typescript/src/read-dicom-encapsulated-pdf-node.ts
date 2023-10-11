@@ -40,7 +40,8 @@ async function readDicomEncapsulatedPdfNode(
   const args = []
   // Inputs
   const dicomFileName = dicomFile
-  args.push(dicomFileName as string)
+  args.push(dicomFileName)
+  mountDirs.add(path.dirname(dicomFileName))
 
   // Outputs
   const pdfBinaryOutputName = '0'
@@ -101,12 +102,12 @@ async function readDicomEncapsulatedPdfNode(
     stderr,
     outputs
   } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
-    pdfBinaryOutput: (outputs[0].data as BinaryStream).data,
+    pdfBinaryOutput: (outputs[0]?.data as BinaryStream).data,
   }
   return result
 }

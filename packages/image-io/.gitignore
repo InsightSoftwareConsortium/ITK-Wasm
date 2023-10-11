@@ -1,0 +1,6 @@
+ImageIOIndex.ts.in
+dist
+emscripten-build/
+wasi-build/
+package-lock.json
+test/data/

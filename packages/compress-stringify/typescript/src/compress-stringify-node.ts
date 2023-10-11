@@ -38,7 +38,7 @@ async function compressStringifyNode(
   const args = []
   // Inputs
   const inputName = '0'
-  args.push(inputName as string)
+  args.push(inputName)
 
   // Outputs
   const outputName = '0'
@@ -65,12 +65,12 @@ async function compressStringifyNode(
     stderr,
     outputs
   } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs)
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
-    output: (outputs[0].data as BinaryStream).data,
+    output: (outputs[0]?.data as BinaryStream).data,
   }
   return result
 }

@@ -46,7 +46,7 @@ async function readDicomEncapsulatedPdf(
   const args = []
   // Inputs
   const dicomFileName = (dicomFileFile as BinaryFile).path
-  args.push(dicomFileName as string)
+  args.push(dicomFileName)
 
   // Outputs
   const pdfBinaryOutputName = '0'
@@ -108,13 +108,13 @@ async function readDicomEncapsulatedPdf(
     stderr,
     outputs
   } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
-  if (returnValue !== 0) {
+  if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    pdfBinaryOutput: (outputs[0].data as BinaryStream).data,
+    pdfBinaryOutput: (outputs[0]?.data as BinaryStream).data,
   }
   return result
 }
