@@ -3,7 +3,7 @@ name: Python Wasm
 on: [push,pull_request]
 
 env:
-  pyodide-version: 0.23.1
+  pyodide-version: 0.24.1
 
 jobs:
   test-itkwasm:

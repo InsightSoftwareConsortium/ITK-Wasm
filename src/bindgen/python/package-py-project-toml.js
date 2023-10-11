@@ -27,7 +27,7 @@ test = [
   "pytest --dist-dir=./dist --rt=chrome",
 ]
 download-pyodide = [
-  "curl -L https://github.com/pyodide/pyodide/releases/download/0.23.1/pyodide-0.23.1.tar.bz2 -o pyodide.tar.bz2",
+  "curl -L https://github.com/pyodide/pyodide/releases/download/0.24.1/pyodide-0.24.1.tar.bz2 -o pyodide.tar.bz2",
   "tar xjf pyodide.tar.bz2",
   "rm -rf dist pyodide.tar.bz2",
   "mv pyodide dist",
