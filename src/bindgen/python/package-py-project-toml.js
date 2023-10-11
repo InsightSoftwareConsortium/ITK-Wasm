@@ -7,6 +7,7 @@ function packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options
   let pyProjectToml = fs.readFileSync(bindgenResource('template.pyproject.toml'), {encoding:'utf8', flag:'r'})
   pyProjectToml = pyProjectToml.replaceAll('@bindgenPackageName@', packageName)
   const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/itk-wasm'
+  const bindgenPackageDescription = options.packageDescription
   let bindgenKeywords = ''
   let bindgenDependencies = ''
   let bindgenHatchEnvDependencies = ''
@@ -49,6 +50,7 @@ serve = [
   pyProjectToml = pyProjectToml.replaceAll('@bindgenHatchEnvScripts@', bindgenHatchEnvScripts)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenProjectRepository@', repository)
   pyProjectToml = pyProjectToml.replaceAll('@bindgenPyPackage@', bindgenPyPackage)
+  pyProjectToml = pyProjectToml.replaceAll('@bindgenPackageDescription@', bindgenPackageDescription)
   const pyProjectTomlPath = path.join(packageDir, 'pyproject.toml')
   if (!fs.existsSync(pyProjectTomlPath)) {
     fs.writeFileSync(pyProjectTomlPath, pyProjectToml)

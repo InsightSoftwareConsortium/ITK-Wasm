@@ -6,7 +6,8 @@ build-backend = "hatchling.build"
 name = "itkwasm-compress-stringify"
 readme = "README.md"
 license = "Apache-2.0"
-dynamic = ["version", "description"]
+dynamic = ["version"]
+description = "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly."
 classifiers = [
   "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python",
