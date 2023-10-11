@@ -291,6 +291,7 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
 
   pipelineModule.resetModuleStdout()
   pipelineModule.resetModuleStderr()
+  const stackPtr = pipelineModule.stackSave()
   let returnValue = 0
   try {
     returnValue = pipelineModule.callMain(args.slice())
@@ -308,6 +309,8 @@ function runPipelineEmscripten (pipelineModule: PipelineEmscriptenModule, args: 
       }
     }
     throw exception
+  } finally {
+    pipelineModule.stackRestore(stackPtr)
   }
   const stdout = pipelineModule.getModuleStdout()
   const stderr = pipelineModule.getModuleStderr()
