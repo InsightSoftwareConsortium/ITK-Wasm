@@ -47,7 +47,8 @@ function(add_executable target)
 
     kebab_to_camel(${target} targetCamel)
     get_property(_link_flags TARGET ${target} PROPERTY LINK_FLAGS)
-    set(common_link_flags " -s FORCE_FILESYSTEM=1 -s EXPORTED_RUNTIME_METHODS='[\"callMain\",\"cwrap\",\"ccall\",\"writeArrayToMemory\",\"writeAsciiToMemory\",\"AsciiToString\"]' -flto -s  ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=1 -s EXPORT_NAME=${targetCamel} -s MODULARIZE=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPipelinePre.js --post-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPost.js -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORTED_FUNCTIONS='[\"_main\"]' ${_link_flags}")
+    set(common_link_flags " -s FORCE_FILESYSTEM=1 -s
+    EXPORTED_RUNTIME_METHODS='[\"callMain\",\"cwrap\",\"ccall\",\"writeArrayToMemory\",\"writeAsciiToMemory\",\"AsciiToString\", \"stackSave\", \"stackRestore\"]' -flto -s  ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=1 -s EXPORT_NAME=${targetCamel} -s MODULARIZE=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPipelinePre.js --post-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPost.js -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORTED_FUNCTIONS='[\"_main\"]' ${_link_flags}")
     set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS "${common_link_flags} -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=1")
     set_property(TARGET ${umd_target} PROPERTY LINK_FLAGS "${common_link_flags}")
 
