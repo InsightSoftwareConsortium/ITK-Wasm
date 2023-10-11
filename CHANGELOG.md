@@ -1,5 +1,27 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.147](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.146...itk-wasm-v1.0.0-b.147) (2023-10-11)
+
+
+### Bug Fixes
+
+* add image-io cxx sources ([f4ff5eb](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f4ff5eb6b42eceecdbe749cbc2ae2ae59fae59c8))
+* **image-io:** import localPathRelativeToModule ([3dcd325](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/3dcd325571b6bff77f7664133c0ed2535ede5450))
+
+
+### Features
+
+* **image-io:** Add --information-only flag ([564e678](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/564e67881fe948d12d56c57e5e43c4722a7c30f9))
+* **image-io:** add readImage ([b80fd47](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/b80fd47593f1ed8da76d7d97233579e5b27117c7))
+* **image-io:** Add readImageNode to package ([d52c46f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/d52c46f1398878dc6df87d78fa9b6726c9b75d40))
+* **image-io:** add writeImage function ([8b8de3e](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/8b8de3e17d5cc1fe757a45aa1ba9ee24e027f8b5))
+* **image-io:** add writeImageNode to the package ([cfbfd13](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/cfbfd136fb46918ad36c92be44d6396fe8ada956))
+* **image-io:** bindgen updates for output files ([fa0ce80](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/fa0ce80a22ff850be094e6ff4ec7b14d5c8eaec9))
+* **image-io:** initial image-io pkg sources ([376e70f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/376e70f94367eda244bc699a54e63f9f2d7ec5a6))
+* **image-io:** Mark typescript couldRead and couldWrite as booleans ([5b4c63a](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/5b4c63abb6f7ba6471d508e98d1e842bf89d3293))
+* **image-io:** Update package for bindgen generation ([da20f7e](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/da20f7eca51683b24f4f52531acc547a7f320450))
+* **itk-wasm-cli:** Update default Docker image for 20231002- ([138f178](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/138f17855b28dff091c28b8970945dedac508b81))
+
 # [1.0.0-b.146](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.145...itk-wasm-v1.0.0-b.146) (2023-09-30)
 
 
