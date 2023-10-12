@@ -12,6 +12,8 @@ interface PipelineEmscriptenModule extends EmscriptenModule {
   writeArrayToMemory: typeof writeArrayToMemory;
   writeAsciiToMemory: typeof writeAsciiToMemory;
   AsciiToString: (ptr: number) => string;
+  stackSave: () => number;
+  stackRestore: (ptr: number) => void;
 
   resetModuleStdout: () => void;
   resetModuleStderr: () => void;
