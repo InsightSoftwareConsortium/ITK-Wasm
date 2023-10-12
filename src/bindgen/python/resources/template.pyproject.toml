@@ -6,7 +6,8 @@ build-backend = "hatchling.build"
 name = "@bindgenPackageName@"
 readme = "README.md"
 license = "Apache-2.0"
-dynamic = ["version", "description"]
+dynamic = ["version"]
+description = "@bindgenPackageDescription@"
 classifiers = [
   "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python",
