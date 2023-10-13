@@ -7,7 +7,7 @@ import packageToBundleName from "../package-to-bundle-name.js"
 import writeIfOverrideNotPresent from "../../write-if-override-not-present.js"
 import outputDemoRunTypeScript from './output-demo-run-typescript.js'
 import outputDemoTypeScript from './output-demo-typescript.js'
-import interfaceJsonTypeToInterfaceType from '../../interface-json-type-to-interface-type.js'
+import ioPackagesNeeded from './io-packages-needed.js'
 
 function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath) {
   let result = ''
@@ -16,32 +16,24 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   const functionName = camelCase(interfaceJson.name)
   const functionNamePascalCase = pascalCase(interfaceJson.name)
 
-  let needReadMesh = false
-  let needReadImage = false
-  const pipelineComponents = ['inputs', 'parameters']
-  pipelineComponents.forEach((pipelineComponent) => {
-    needReadMesh = needReadMesh || interfaceJson[pipelineComponent].filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Mesh').length > 0
-    needReadImage = needReadImage || interfaceJson[pipelineComponent].filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Image').length > 0
-  })
+  const { needReadImage, needReadMesh, needWriteImage, needWriteMesh } = ioPackagesNeeded(interfaceJson)
   if (needReadMesh) {
     result += `import { readMeshFile } from 'itk-wasm'\n`
   }
   if (needReadImage) {
-    result += `import { readImageFile } from 'itk-wasm'\n`
+    result += `import { readImage } from '@itk-wasm/image-io'\n`
   }
-  const needWriteMesh = interfaceJson.outputs.filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Mesh').length > 0
   if (needWriteMesh) {
     result += `import { writeMeshArrayBuffer } from 'itk-wasm'\n`
   }
-  const needWriteImage = interfaceJson.outputs.filter((value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Image').length > 0
   if (needWriteImage) {
-    result += `import { writeImageArrayBuffer } from 'itk-wasm'\n`
+    result += `import { writeImage } from '@itk-wasm/image-io'\n`
   }
   if (needReadImage || needWriteImage) {
     result += `import { copyImage } from 'itk-wasm'\n`
   }
 
-  result += `import * as ${camelCase(bundleName)} from '../../../dist/bundles/${bundleName}.js'\n`
+  result += `import * as ${camelCase(bundleName)} from '../../../dist/index.js'\n`
 
   result += `import ${functionName}LoadSampleInputs, { usePreRun } from "./${interfaceJson.name}-load-sample-inputs.js"\n`
   const loadSampleInputsModulePath = path.join(outputPath, `${interfaceJson.name}-load-sample-inputs.ts`)

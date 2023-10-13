@@ -12,7 +12,6 @@ import {
 import FdfWriteImageOptions from './fdf-write-image-options.js'
 import FdfWriteImageNodeResult from './fdf-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function fdfWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'fdf-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'fdf-write-image')
 
   const {
     returnValue,

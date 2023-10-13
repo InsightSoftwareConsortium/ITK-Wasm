@@ -1,6 +1,5 @@
-import { readImageFile } from 'itk-wasm'
 import { copyImage } from 'itk-wasm'
-import * as imageIo from '../../../dist/bundles/image-io.js'
+import * as imageIo from '../../../dist/index.js'
 import writeImageLoadSampleInputs, { usePreRun } from "./write-image-load-sample-inputs.js"
 
 class WriteImageModel {
@@ -43,7 +42,7 @@ class WriteImageController {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const { image, webWorker } = await readImageFile(null, files[0])
+        const { image, webWorker } = await imageIo.readImage(null, files[0])
         webWorker.terminate()
         model.inputs.set("image", image)
         const details = document.getElementById("writeImage-image-details")

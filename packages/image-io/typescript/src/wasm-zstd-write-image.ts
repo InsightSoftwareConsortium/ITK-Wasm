@@ -13,7 +13,6 @@ import {
 import WasmZstdWriteImageOptions from './wasm-zstd-write-image-options.js'
 import WasmZstdWriteImageResult from './wasm-zstd-write-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<WasmZstdWriteImageResult>} - result object
  */
 async function wasmZstdWriteImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: WasmZstdWriteImageOptions = {}

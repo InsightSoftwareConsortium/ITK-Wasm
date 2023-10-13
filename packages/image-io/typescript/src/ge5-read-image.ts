@@ -13,7 +13,6 @@ import {
 import Ge5ReadImageOptions from './ge5-read-image-options.js'
 import Ge5ReadImageResult from './ge5-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<Ge5ReadImageResult>} - result object
  */
 async function ge5ReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: Ge5ReadImageOptions = {}
 ) : Promise<Ge5ReadImageResult> {

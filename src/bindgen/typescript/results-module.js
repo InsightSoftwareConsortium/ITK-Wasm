@@ -15,7 +15,7 @@ function resultsModule (srcOutputDir, interfaceJson, forNode, modulePascalCase, 
   readmeResult += `\n**\`${modulePascalCase}${nodeTextCamel}Result\` interface:**\n\n`
   if (!forNode) {
     resultContent += '  /** WebWorker used for computation */\n  webWorker: Worker | null\n\n'
-    readmeResultTable.push(['**webWorker**', '*Worker*', 'WebWorker used for computation'])
+    readmeResultTable.push(['`webWorker`', '*Worker*', 'WebWorker used for computation.'])
   }
 
   // track unique output types in this set

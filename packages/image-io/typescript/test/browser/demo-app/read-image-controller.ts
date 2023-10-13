@@ -1,6 +1,5 @@
-import { writeImageArrayBuffer } from 'itk-wasm'
 import { copyImage } from 'itk-wasm'
-import * as imageIo from '../../../dist/bundles/image-io.js'
+import * as imageIo from '../../../dist/index.js'
 import readImageLoadSampleInputs, { usePreRun } from "./read-image-load-sample-inputs.js"
 
 class ReadImageModel {
@@ -68,10 +67,10 @@ class ReadImageController  {
             const imageDownloadFormat = document.getElementById('image-output-format')
             const downloadFormat = imageDownloadFormat.value || 'nrrd'
             const fileName = `image.${downloadFormat}`
-            const { webWorker, arrayBuffer } = await writeImageArrayBuffer(null, copyImage(model.outputs.get("image")), fileName)
+            const { webWorker, serializedImage } = await imageIo.writeImage(null, copyImage(model.outputs.get("image")), fileName)
 
             webWorker.terminate()
-            globalThis.downloadFile(arrayBuffer, fileName)
+            globalThis.downloadFile(serializedImage, fileName)
         }
     })
 

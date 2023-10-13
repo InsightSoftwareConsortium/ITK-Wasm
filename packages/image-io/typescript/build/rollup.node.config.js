@@ -12,12 +12,16 @@ export default {
   input: './src/index-node.ts',
   output: [
     {
-      file: `./dist/bundles/${bundleName}-node.js`,
+      dir: './dist',
       format: 'es',
       sourcemap: true,
       // plugins: [terser(),],
     },
   ],
+  onwarn: function onwarn(warning, warn) {
+    if (warning.code === 'THIS_IS_UNDEFINED') return;
+    warn(warning);
+  },
   plugins: [
     commonjs({
       transformMixedEsModules: true

@@ -12,7 +12,6 @@ import {
 import TiffReadImageOptions from './tiff-read-image-options.js'
 import TiffReadImageNodeResult from './tiff-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function tiffReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'tiff-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'tiff-read-image')
 
   const {
     returnValue,

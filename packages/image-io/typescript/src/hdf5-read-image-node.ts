@@ -12,7 +12,6 @@ import {
 import Hdf5ReadImageOptions from './hdf5-read-image-options.js'
 import Hdf5ReadImageNodeResult from './hdf5-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function hdf5ReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'hdf5-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'hdf5-read-image')
 
   const {
     returnValue,

@@ -12,7 +12,6 @@ import {
 import ApplyPresentationStateToImageOptions from './apply-presentation-state-to-image-options.js'
 import ApplyPresentationStateToImageNodeResult from './apply-presentation-state-to-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -79,7 +78,7 @@ async function applyPresentationStateToImageNode(
     options.noBitmapOutput && args.push('--no-bitmap-output')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'apply-presentation-state-to-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'apply-presentation-state-to-image')
 
   const {
     returnValue,

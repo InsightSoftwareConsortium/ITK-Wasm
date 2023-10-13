@@ -6,7 +6,7 @@ function emscriptenPyodideModule(packageDir, pypackage, options) {
   const defaultJsModuleName = options.packageName.replace('itkwasm-', '')
   const version = options.packageVersion ?? '0.1.0'
 
-  const moduleUrl = options.jsModuleUrl ?? `https://cdn.jsdelivr.net/npm/${defaultJsPackageName}@{__version__}/dist/bundles/${defaultJsModuleName}.js`
+  const moduleUrl = options.jsModuleUrl ?? `https://cdn.jsdelivr.net/npm/${defaultJsPackageName}@{__version__}/dist/index.js`
 
   const moduleContent = `from itkwasm.pyodide import JsPackageConfig, JsPackage
 

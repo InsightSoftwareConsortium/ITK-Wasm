@@ -1,16 +1,16 @@
 {
   "name": "@itk-wasm/compare-images",
-  "version": "1.0.1",
+  "version": "3.0.1",
   "description": "Compare images with a tolerance for regression testing.",
   "type": "module",
-  "module": "./dist/bundles/compare-images.js",
+  "module": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/src/index.d.ts",
-      "browser": "./dist/bundles/compare-images.js",
-      "node": "./dist/bundles/compare-images-node.js",
-      "default": "./dist/bundles/compare-images.js"
+      "browser": "./dist/index.js",
+      "node": "./dist/index-node.js",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
@@ -40,30 +40,30 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.138"
+    "itk-wasm": "^1.0.0-b.149"
   },
   "devDependencies": {
+    "@itk-wasm/image-io": "^0.3.0",
     "@rollup/plugin-commonjs": "^24.0.0",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^11.1.1",
     "@shoelace-style/shoelace": "^2.5.2",
+    "@surma/rollup-plugin-off-main-thread": "^2.2.3",
     "@types/node": "^20.2.5",
     "ava": "^5.3.1",
     "cypress": "^12.17.2",
     "debug": "^4.3.4",
-    "itk-image-io": "^1.0.0-b.130",
     "rollup": "^3.9.0",
-    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-ignore": "^1.0.10",
     "rollup-plugin-polyfill-node": "^0.12.0",
     "shx": "^0.3.4",
     "supports-color": "^9.3.1",
     "tslib": "^2.5.2",
     "typescript": "^5.0.4",
-    "vite": "^4.3.3",
-    "vite-plugin-static-copy": "^0.14.0"
+    "vite": "^4.4.11",
+    "vite-plugin-static-copy": "^0.17.0"
   },
   "repository": {
     "type": "git",

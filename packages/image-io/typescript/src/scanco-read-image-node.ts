@@ -12,7 +12,6 @@ import {
 import ScancoReadImageOptions from './scanco-read-image-options.js'
 import ScancoReadImageNodeResult from './scanco-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function scancoReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'scanco-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'scanco-read-image')
 
   const {
     returnValue,

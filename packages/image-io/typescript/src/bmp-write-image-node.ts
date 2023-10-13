@@ -12,7 +12,6 @@ import {
 import BmpWriteImageOptions from './bmp-write-image-options.js'
 import BmpWriteImageNodeResult from './bmp-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function bmpWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'bmp-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'bmp-write-image')
 
   const {
     returnValue,

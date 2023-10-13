@@ -11,7 +11,6 @@ import {
 import ParseStringDecompressOptions from './parse-string-decompress-options.js'
 import ParseStringDecompressResult from './parse-string-decompress-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -24,7 +23,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<ParseStringDecompressResult>} - result object
  */
 async function parseStringDecompress(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   input: Uint8Array,
   options: ParseStringDecompressOptions = {}
 ) : Promise<ParseStringDecompressResult> {

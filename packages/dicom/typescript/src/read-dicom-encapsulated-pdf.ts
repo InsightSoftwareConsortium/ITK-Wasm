@@ -12,7 +12,6 @@ import {
 import ReadDicomEncapsulatedPdfOptions from './read-dicom-encapsulated-pdf-options.js'
 import ReadDicomEncapsulatedPdfResult from './read-dicom-encapsulated-pdf-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -25,7 +24,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<ReadDicomEncapsulatedPdfResult>} - result object
  */
 async function readDicomEncapsulatedPdf(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   dicomFile: File | BinaryFile,
   options: ReadDicomEncapsulatedPdfOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfResult> {

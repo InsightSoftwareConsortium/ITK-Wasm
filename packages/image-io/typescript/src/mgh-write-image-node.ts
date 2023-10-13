@@ -12,7 +12,6 @@ import {
 import MghWriteImageOptions from './mgh-write-image-options.js'
 import MghWriteImageNodeResult from './mgh-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function mghWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'mgh-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'mgh-write-image')
 
   const {
     returnValue,

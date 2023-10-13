@@ -13,7 +13,6 @@ import {
 import MghWriteImageOptions from './mgh-write-image-options.js'
 import MghWriteImageResult from './mgh-write-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<MghWriteImageResult>} - result object
  */
 async function mghWriteImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: MghWriteImageOptions = {}

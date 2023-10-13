@@ -1,19 +1,19 @@
 import test from 'ava'
 import path from 'path'
 
-import { compareDoubleImagesNode } from '../../dist/bundles/compare-images-node.js'
-import { readImageLocalFile } from 'itk-wasm'
+import { compareDoubleImagesNode } from '../../dist/index-node.js'
+import { readImageNode } from '@itk-wasm/image-io'
 
-const inputPathPrefix = '../test/data/input/';
+const inputPathPrefix = '../test/data/input/'
 
 test('compareDoubleImagesNode produces the expected metrics and difference images', async t => {
   const testImageFile = 'cake_easy.iwi.cbor'
   const testImagePath = path.join(inputPathPrefix, testImageFile)
-  const testImage = await readImageLocalFile(testImagePath)
+  const testImage = await readImageNode(testImagePath)
 
   const baselineImageFile = 'cake_hard.iwi.cbor'
   const baselineImagePath = path.join(inputPathPrefix, baselineImageFile)
-  const baselineImage = await readImageLocalFile(baselineImagePath)
+  const baselineImage = await readImageNode(baselineImagePath)
 
   const { metrics, differenceImage, differenceUchar2dImage } = await compareDoubleImagesNode(testImage, { baselineImages: [baselineImage,] })
 

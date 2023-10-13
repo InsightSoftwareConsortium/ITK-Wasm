@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/dicom",
-  "version": "3.3.0",
+  "version": "4.0.0",
   "description": "Read files and images related to DICOM file format.",
   "type": "module",
   "module": "./dist/bundles/dicom.js",
@@ -39,7 +39,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.138"
+    "itk-wasm": "^1.0.0-b.149"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
@@ -51,7 +51,7 @@
     "@types/node": "^20.2.5",
     "ava": "^5.1.0",
     "cypress": "^12.17.2",
-    "itk-image-io": "^1.0.0-b.130",
+    "itk-image-io": "^1.0.0-b.149",
     "rollup": "^3.9.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-ignore": "^1.0.10",

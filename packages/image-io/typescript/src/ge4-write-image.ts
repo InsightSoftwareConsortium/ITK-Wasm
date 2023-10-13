@@ -13,7 +13,6 @@ import {
 import Ge4WriteImageOptions from './ge4-write-image-options.js'
 import Ge4WriteImageResult from './ge4-write-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<Ge4WriteImageResult>} - result object
  */
 async function ge4WriteImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: Ge4WriteImageOptions = {}

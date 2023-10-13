@@ -12,7 +12,6 @@ import {
 import GeAdwReadImageOptions from './ge-adw-read-image-options.js'
 import GeAdwReadImageNodeResult from './ge-adw-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function geAdwReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'ge-adw-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'ge-adw-read-image')
 
   const {
     returnValue,

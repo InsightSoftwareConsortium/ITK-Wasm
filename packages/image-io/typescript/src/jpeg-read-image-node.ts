@@ -12,7 +12,6 @@ import {
 import JpegReadImageOptions from './jpeg-read-image-options.js'
 import JpegReadImageNodeResult from './jpeg-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function jpegReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'jpeg-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'jpeg-read-image')
 
   const {
     returnValue,

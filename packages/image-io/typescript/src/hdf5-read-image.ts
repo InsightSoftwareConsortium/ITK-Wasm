@@ -13,7 +13,6 @@ import {
 import Hdf5ReadImageOptions from './hdf5-read-image-options.js'
 import Hdf5ReadImageResult from './hdf5-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<Hdf5ReadImageResult>} - result object
  */
 async function hdf5ReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: Hdf5ReadImageOptions = {}
 ) : Promise<Hdf5ReadImageResult> {

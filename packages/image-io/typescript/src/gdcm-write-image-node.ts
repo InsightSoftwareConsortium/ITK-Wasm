@@ -12,7 +12,6 @@ import {
 import GdcmWriteImageOptions from './gdcm-write-image-options.js'
 import GdcmWriteImageNodeResult from './gdcm-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function gdcmWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'gdcm-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'gdcm-write-image')
 
   const {
     returnValue,

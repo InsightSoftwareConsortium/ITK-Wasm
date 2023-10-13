@@ -81,7 +81,7 @@ async function compareDoubleImagesNode(
     options.ignoreBoundaryPixels && args.push('--ignore-boundary-pixels')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'compare-double-images')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'compare-double-images')
 
   const {
     returnValue,

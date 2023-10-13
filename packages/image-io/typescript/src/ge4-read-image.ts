@@ -13,7 +13,6 @@ import {
 import Ge4ReadImageOptions from './ge4-read-image-options.js'
 import Ge4ReadImageResult from './ge4-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<Ge4ReadImageResult>} - result object
  */
 async function ge4ReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: Ge4ReadImageOptions = {}
 ) : Promise<Ge4ReadImageResult> {

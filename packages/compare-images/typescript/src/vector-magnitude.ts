@@ -10,7 +10,6 @@ import {
 
 import VectorMagnitudeResult from './vector-magnitude-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -22,7 +21,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<VectorMagnitudeResult>} - result object
  */
 async function vectorMagnitude(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   vectorImage: Image
 
 ) : Promise<VectorMagnitudeResult> {

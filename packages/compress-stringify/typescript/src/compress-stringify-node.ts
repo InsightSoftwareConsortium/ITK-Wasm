@@ -11,7 +11,6 @@ import {
 import CompressStringifyOptions from './compress-stringify-options.js'
 import CompressStringifyNodeResult from './compress-stringify-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function compressStringifyNode(
 
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'compress-stringify')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'compress-stringify')
 
   const {
     returnValue,

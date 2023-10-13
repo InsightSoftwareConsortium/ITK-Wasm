@@ -12,7 +12,6 @@ import {
 import BmpReadImageOptions from './bmp-read-image-options.js'
 import BmpReadImageNodeResult from './bmp-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function bmpReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'bmp-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'bmp-read-image')
 
   const {
     returnValue,

@@ -3,3 +3,4 @@ node_modules
 test
 cypress
 demo-app
+demo-app-rollup

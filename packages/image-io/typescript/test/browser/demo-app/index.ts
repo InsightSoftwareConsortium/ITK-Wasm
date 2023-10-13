@@ -1,13 +1,10 @@
-import * as imageIo from '../../../dist/bundles/image-io.js'
+import * as imageIo from '../../../dist/index.js'
 
 globalThis.imageIo = imageIo
 
 // Use local, vendored WebAssembly module assets
 const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
 imageIo.setPipelinesBaseUrl(pipelinesBaseUrl)
-const pipelineWorkerUrl: string | URL | null = new URL('/web-workers/pipeline.worker.js', document.location.origin).href
-imageIo.setPipelineWorkerUrl(pipelineWorkerUrl)
-
 
 const params = new URLSearchParams(window.location.search)
 if (!params.has('functionName')) {

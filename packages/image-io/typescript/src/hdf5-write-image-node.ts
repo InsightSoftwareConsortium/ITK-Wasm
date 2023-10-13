@@ -12,7 +12,6 @@ import {
 import Hdf5WriteImageOptions from './hdf5-write-image-options.js'
 import Hdf5WriteImageNodeResult from './hdf5-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function hdf5WriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'hdf5-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'hdf5-write-image')
 
   const {
     returnValue,

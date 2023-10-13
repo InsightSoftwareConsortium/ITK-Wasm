@@ -1,12 +1,10 @@
 // Generated file. To retain edits, remove this comment.
 
-import * as compressStringify from '../../../dist/bundles/compress-stringify.js'
+import * as compressStringify from '../../../dist/index.js'
 
 // Use local, vendored WebAssembly module assets
 const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
 compressStringify.setPipelinesBaseUrl(pipelinesBaseUrl)
-const pipelineWorkerUrl: string | URL | null = new URL('/web-workers/itk-wasm-pipeline.worker.js', document.location.origin).href
-compressStringify.setPipelineWorkerUrl(pipelineWorkerUrl)
 
 
 const params = new URLSearchParams(window.location.search)
@@ -18,3 +16,4 @@ if (!params.has('functionName')) {
 }
 import './compress-stringify-controller.js'
 import './parse-string-decompress-controller.js'
+

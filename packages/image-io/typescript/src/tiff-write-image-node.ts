@@ -12,7 +12,6 @@ import {
 import TiffWriteImageOptions from './tiff-write-image-options.js'
 import TiffWriteImageNodeResult from './tiff-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function tiffWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'tiff-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'tiff-write-image')
 
   const {
     returnValue,

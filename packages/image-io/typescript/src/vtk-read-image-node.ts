@@ -12,7 +12,6 @@ import {
 import VtkReadImageOptions from './vtk-read-image-options.js'
 import VtkReadImageNodeResult from './vtk-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function vtkReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'vtk-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'vtk-read-image')
 
   const {
     returnValue,

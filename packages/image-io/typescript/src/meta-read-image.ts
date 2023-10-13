@@ -13,7 +13,6 @@ import {
 import MetaReadImageOptions from './meta-read-image-options.js'
 import MetaReadImageResult from './meta-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<MetaReadImageResult>} - result object
  */
 async function metaReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: MetaReadImageOptions = {}
 ) : Promise<MetaReadImageResult> {

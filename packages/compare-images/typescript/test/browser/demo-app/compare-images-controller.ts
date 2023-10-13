@@ -1,8 +1,6 @@
-// Generated file. To retain edits, remove this comment.
-
-import { readImageFile } from 'itk-wasm'
-import { writeImageArrayBuffer, copyImage } from 'itk-wasm'
-import * as compareImages from '../../../dist/bundles/compare-images.js'
+import { readImage } from '@itk-wasm/image-io'
+import { writeImage } from '@itk-wasm/image-io'
+import * as compareImages from '../../../dist/index.js'
 import compareImagesLoadSampleInputs from "./compare-images-load-sample-inputs.js"
 
 class CompareImagesModel {
@@ -46,7 +44,7 @@ class CompareImagesController  {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const { image, webWorker } = await readImageFile(null, files[0])
+        const { image, webWorker } = await readImage(null, files[0])
         webWorker.terminate()
         model.inputs.set("testImage", image)
         const details = document.getElementById("compareImages-test-image-details")
@@ -61,7 +59,7 @@ class CompareImagesController  {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const readImages = await Promise.all(Array.from(files).map(async (file) => readImageFile(null, file)))
+        const readImages = await Promise.all(Array.from(files).map(async (file) => readImage(null, file)))
         readImages.forEach(img => img.webWorker.terminate())
         const inputImages = readImages.map(img => img.image)
         model.options.set("baselineImages", inputImages)
@@ -110,10 +108,10 @@ class CompareImagesController  {
             const differenceImageDownloadFormat = document.getElementById('difference-image-output-format')
             const downloadFormat = differenceImageDownloadFormat.value || 'nrrd'
             const fileName = `differenceImage.${downloadFormat}`
-            const { webWorker, arrayBuffer } = await writeImageArrayBuffer(null, copyImage(model.outputs.get("differenceImage")), fileName)
+            const { webWorker, serializedImage } = await writeImage(null, copyImage(model.outputs.get("differenceImage")), fileName)
 
             webWorker.terminate()
-            globalThis.downloadFile(arrayBuffer, fileName)
+            globalThis.downloadFile(serializedImage, fileName)
         }
     })
 

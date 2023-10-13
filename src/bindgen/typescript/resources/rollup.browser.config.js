@@ -1,5 +1,4 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve'
-import copy from 'rollup-plugin-copy'
 import typescript from '@rollup/plugin-typescript'
 import commonjs from '@rollup/plugin-commonjs'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
@@ -9,7 +8,6 @@ import packageJson from '../package.json' assert { type: 'json' }
 import json from '@rollup/plugin-json'
 import path from 'path'
 
-const itkConfig = './src/itkConfig.js'
 const bundleName = path.basename(packageJson.name)
 
 export default {
@@ -41,11 +39,4 @@ export default {
     typescript(),
     json(),
   ],
-  resolve: {
-    // where itk-wasm code has 'import ../itkConfig.js` point to the path of itkConfig
-    alias: {
-      '../itkConfig.js': itkConfig,
-      '../../itkConfig.js': itkConfig
-    }
-  }
 }

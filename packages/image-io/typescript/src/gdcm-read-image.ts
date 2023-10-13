@@ -13,7 +13,6 @@ import {
 import GdcmReadImageOptions from './gdcm-read-image-options.js'
 import GdcmReadImageResult from './gdcm-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<GdcmReadImageResult>} - result object
  */
 async function gdcmReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: GdcmReadImageOptions = {}
 ) : Promise<GdcmReadImageResult> {

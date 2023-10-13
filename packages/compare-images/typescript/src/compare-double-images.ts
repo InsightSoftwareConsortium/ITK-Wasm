@@ -10,9 +10,7 @@ import CompareDoubleImagesOptions from './compare-double-images-options.js'
 import CompareDoubleImagesResult from './compare-double-images-result.js'
 import CompareImagesMetric from './compare-images-metric.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
-import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 /**
  * Compare double pixel type images with a tolerance for regression testing.
@@ -91,7 +89,7 @@ async function compareDoubleImages(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), })
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

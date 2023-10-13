@@ -12,7 +12,6 @@ import {
 import ReadImageDicomFileSeriesOptions from './read-image-dicom-file-series-options.js'
 import ReadImageDicomFileSeriesNodeResult from './read-image-dicom-file-series-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function readImageDicomFileSeriesNode(
     options.singleSortedSeries && args.push('--single-sorted-series')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'read-image-dicom-file-series')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'read-image-dicom-file-series')
 
   const {
     returnValue,

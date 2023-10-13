@@ -12,7 +12,6 @@ import {
 import GdcmReadImageOptions from './gdcm-read-image-options.js'
 import GdcmReadImageNodeResult from './gdcm-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function gdcmReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'gdcm-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'gdcm-read-image')
 
   const {
     returnValue,

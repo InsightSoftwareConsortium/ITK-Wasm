@@ -11,7 +11,6 @@ import {
 import ParseStringDecompressOptions from './parse-string-decompress-options.js'
 import ParseStringDecompressNodeResult from './parse-string-decompress-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -50,7 +49,7 @@ async function parseStringDecompressNode(
     options.parseString && args.push('--parse-string')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'parse-string-decompress')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'parse-string-decompress')
 
   const {
     returnValue,

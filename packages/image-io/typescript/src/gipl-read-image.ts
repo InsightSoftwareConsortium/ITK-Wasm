@@ -13,7 +13,6 @@ import {
 import GiplReadImageOptions from './gipl-read-image-options.js'
 import GiplReadImageResult from './gipl-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<GiplReadImageResult>} - result object
  */
 async function giplReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: GiplReadImageOptions = {}
 ) : Promise<GiplReadImageResult> {

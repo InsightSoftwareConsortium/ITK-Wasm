@@ -12,7 +12,6 @@ import {
 import GeAdwWriteImageOptions from './ge-adw-write-image-options.js'
 import GeAdwWriteImageNodeResult from './ge-adw-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function geAdwWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'ge-adw-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'ge-adw-write-image')
 
   const {
     returnValue,

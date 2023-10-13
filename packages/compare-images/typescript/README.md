@@ -4,10 +4,6 @@
 
 > Compare images with a tolerance for regression testing.
 
-[👨‍💻 **Live API Demo** ✨](https://itk-wasm-compare-images-app.on.fleek.co/ ':include :type=iframe width=100% height=800px')
-
-[🕮 **Documentation** 📚](https://itk-wasm-compare-images-docs.on.fleek.co/)
-
 ## Installation
 
 ```sh
@@ -25,8 +21,6 @@ import {
   compareImages,
   setPipelinesBaseUrl,
   getPipelinesBaseUrl,
-  setPipelineWorkerUrl,
-  getPipelineWorkerUrl,
 } from "@itk-wasm/compare-images"
 ```
 
@@ -36,15 +30,16 @@ import {
 
 ```ts
 async function compareImages(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   testImage: Image,
   options: CompareImagesOptions = { baselineImages: [] as Image[], }
 ) : Promise<CompareImagesResult>
 ```
 
-|  Parameter  |   Type  | Description          |
-| :---------: | :-----: | :------------------- |
-| `testImage` | *Image* | The input test image |
+|  Parameter  |             Type            | Description                                                                                                                                                  |
+| :---------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `webWorker` | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+| `testImage` |           *Image*           | The input test image                                                                                                                                         |
 
 **`CompareImagesOptions` interface:**
 
@@ -58,12 +53,13 @@ async function compareImages(
 
 **`CompareImagesResult` interface:**
 
-|         Property         |   Type   | Description                                                                       |
-| :----------------------: | :------: | :-------------------------------------------------------------------------------- |
-|       **webWorker**      | *Worker* | WebWorker used for computation                                                    |
-|         `metrics`        | *Object* | Metrics for the baseline with the fewest number of pixels outside the tolerances. |
-|     `differenceImage`    |  *Image* | Absolute difference image                                                         |
-| `differenceUchar2dImage` |  *Image* | Unsigned char, 2D difference image for rendering                                  |
+|         Property         |       Type       | Description                                                                       |
+| :----------------------: | :--------------: | :-------------------------------------------------------------------------------- |
+|        `webWorker`       |     *Worker*     | WebWorker used for computation.                                                   |
+|         `metrics`        | *JsonCompatible* | Metrics for the baseline with the fewest number of pixels outside the tolerances. |
+|     `differenceImage`    |      *Image*     | Absolute difference image                                                         |
+| `differenceUchar2dImage` |      *Image*     | Unsigned char, 2D difference image for rendering                                  |
+
 
 #### setPipelinesBaseUrl
 
@@ -83,23 +79,6 @@ function setPipelinesBaseUrl(
 function getPipelinesBaseUrl() : string | URL
 ```
 
-#### setPipelineWorkerUrl
-
-*Set base URL for the itk-wasm pipeline worker script when vendored.*
-
-```ts
-function setPipelineWorkerUrl(
-  baseUrl: string | URL
-) : void
-```
-
-#### getPipelineWorkerUrl
-
-*Get base URL for the itk-wasm pipeline worker script when vendored.*
-
-```ts
-function getPipelineWorkerUrl() : string | URL
-```
 
 ### Node interface
 
@@ -108,10 +87,6 @@ Import:
 ```js
 import {
   compareImagesNode,
-  setPipelinesBaseUrl,
-  getPipelinesBaseUrl,
-  setPipelineWorkerUrl,
-  getPipelineWorkerUrl,
 } from "@itk-wasm/compare-images"
 ```
 
@@ -142,8 +117,10 @@ async function compareImagesNode(
 
 **`CompareImagesNodeResult` interface:**
 
-|         Property         |   Type   | Description                                                                       |
-| :----------------------: | :------: | :-------------------------------------------------------------------------------- |
-|         `metrics`        | *Object* | Metrics for the baseline with the fewest number of pixels outside the tolerances. |
-|     `differenceImage`    |  *Image* | Absolute difference image                                                         |
-| `differenceUchar2dImage` |  *Image* | Unsigned char, 2D difference image for rendering                                  |
+|         Property         |       Type       | Description                                                                       |
+| :----------------------: | :--------------: | :-------------------------------------------------------------------------------- |
+|         `metrics`        | *JsonCompatible* | Metrics for the baseline with the fewest number of pixels outside the tolerances. |
+|     `differenceImage`    |      *Image*     | Absolute difference image                                                         |
+| `differenceUchar2dImage` |      *Image*     | Unsigned char, 2D difference image for rendering                                  |
+
+

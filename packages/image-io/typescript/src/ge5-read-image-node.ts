@@ -12,7 +12,6 @@ import {
 import Ge5ReadImageOptions from './ge5-read-image-options.js'
 import Ge5ReadImageNodeResult from './ge5-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function ge5ReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'ge5-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'ge5-read-image')
 
   const {
     returnValue,

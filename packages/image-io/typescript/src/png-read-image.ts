@@ -13,7 +13,6 @@ import {
 import PngReadImageOptions from './png-read-image-options.js'
 import PngReadImageResult from './png-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<PngReadImageResult>} - result object
  */
 async function pngReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: PngReadImageOptions = {}
 ) : Promise<PngReadImageResult> {

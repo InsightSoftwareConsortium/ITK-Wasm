@@ -13,7 +13,6 @@ import {
 import ScancoReadImageOptions from './scanco-read-image-options.js'
 import ScancoReadImageResult from './scanco-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<ScancoReadImageResult>} - result object
  */
 async function scancoReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: ScancoReadImageOptions = {}
 ) : Promise<ScancoReadImageResult> {

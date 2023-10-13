@@ -12,7 +12,6 @@ import {
 import Ge5WriteImageOptions from './ge5-write-image-options.js'
 import Ge5WriteImageNodeResult from './ge5-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function ge5WriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'ge5-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'ge5-write-image')
 
   const {
     returnValue,

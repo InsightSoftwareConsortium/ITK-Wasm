@@ -13,7 +13,6 @@ import {
 import NiftiWriteImageOptions from './nifti-write-image-options.js'
 import NiftiWriteImageResult from './nifti-write-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<NiftiWriteImageResult>} - result object
  */
 async function niftiWriteImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: NiftiWriteImageOptions = {}

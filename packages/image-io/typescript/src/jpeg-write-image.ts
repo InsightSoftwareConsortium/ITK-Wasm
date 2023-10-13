@@ -13,7 +13,6 @@ import {
 import JpegWriteImageOptions from './jpeg-write-image-options.js'
 import JpegWriteImageResult from './jpeg-write-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<JpegWriteImageResult>} - result object
  */
 async function jpegWriteImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: JpegWriteImageOptions = {}

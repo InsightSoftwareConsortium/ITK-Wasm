@@ -13,7 +13,6 @@ import {
 import WasmReadImageOptions from './wasm-read-image-options.js'
 import WasmReadImageResult from './wasm-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<WasmReadImageResult>} - result object
  */
 async function wasmReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: WasmReadImageOptions = {}
 ) : Promise<WasmReadImageResult> {
