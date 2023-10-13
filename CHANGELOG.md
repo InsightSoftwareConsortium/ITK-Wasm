@@ -1,5 +1,21 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.148](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.147...itk-wasm-v1.0.0-b.148) (2023-10-13)
+
+
+### Bug Fixes
+
+* **emscripten:** save and restore the stack with a run ([e99c3e4](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/e99c3e4453980026a4a4efe97f5931bf812ee100)), closes [#760](https://github.com/InsightSoftwareConsortium/itk-wasm/issues/760)
+
+
+### Features
+
+* **bindgen:** add pyproject.toml short description for wheel summary ([5c1a3a5](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/5c1a3a5cf8f6750b048c588c6302e75c7ffef553)), closes [#949](https://github.com/InsightSoftwareConsortium/itk-wasm/issues/949)
+* **itk-wasm-cli:** Update default Docker image for 20231011-0ed0113b ([24f8230](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/24f82305c9b21042304206677ec1558bee903a48))
+* **itk-wasm-cli:** Update default Docker image for 20231011-b6214540 ([13150e6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/13150e62fe91669284c94f9c535d4ebb19fbc09d))
+* **itk-wasm-cli:** Update default Docker image for 20231012-93cb7447 ([9d5cd0d](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9d5cd0d4266775958caf2d8d357ecb796d34f7f9))
+* support dynamic emscripten module import in web workers ([93cb744](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/93cb7447358c2fceed60f2da7fddc5a7e6e8ae20))
+
 # [1.0.0-b.147](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.146...itk-wasm-v1.0.0-b.147) (2023-10-11)
 
 
