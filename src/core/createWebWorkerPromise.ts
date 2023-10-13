@@ -49,7 +49,7 @@ async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWo
     // Use the version built with the bundler
     //
     // Bundlers, e.g. WebPack, Vite, Rollup, see these paths at build time
-    worker = new Worker(new URL('../web-workers/pipeline.worker.js', import.meta.url))
+    worker = new Worker(new URL('../web-workers/pipeline.worker.js', import.meta.url), { type: 'module' })
   } else {
     if (workerUrl.startsWith('http')) {
       const response = await axios.get(workerUrl, { responseType: 'blob' })
