@@ -222,7 +222,4 @@ if(EMSCRIPTEN)
   set_property(TARGET WebAssemblyInterfaceTestDriver APPEND_STRING
     PROPERTY LINK_FLAGS " -s ERROR_ON_UNDEFINED_SYMBOLS=0"
   )
-  set_property(TARGET WebAssemblyInterfaceTestDriver.umd APPEND_STRING
-    PROPERTY LINK_FLAGS " -s ERROR_ON_UNDEFINED_SYMBOLS=0"
-  )
 endif()

@@ -69,12 +69,9 @@ if (EMSCRIPTEN)
       read-dicom-tags
   )
     set(target_esm "${dicom_io_module}")
-    set(target_umd "${dicom_io_module}.umd")
     set(dicom_common_link_flags " ${common_link_flags} -s SUPPORT_LONGJMP=1 -s DISABLE_EXCEPTION_CATCHING=0")
-    foreach(target ${target_esm} ${target_umd})
       set_property(TARGET ${target} APPEND_STRING
         PROPERTY LINK_FLAGS " ${dicom_common_link_flags}"
         )
-    endforeach()
   endforeach()
 endif()
