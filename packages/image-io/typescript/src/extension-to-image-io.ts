@@ -48,6 +48,7 @@ const extensionToImageIo = new Map([
   ['vtk', 'vtk'],
 
   ['isq', 'scanco'],
+  ['aim', 'scanco'],
 
   ['fdf', 'fdf'],
 ])

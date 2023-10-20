@@ -1,6 +1,6 @@
-# Generated file. To retain edits, remove this comment.
-
 """itkwasm-image-io-wasi: Input and output for scientific and medical image file formats. WASI implementation."""
+
+from .read_image import read_image, imread
 
 from .bio_rad_read_image import bio_rad_read_image
 from .bio_rad_write_image import bio_rad_write_image

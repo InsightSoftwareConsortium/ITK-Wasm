@@ -12,7 +12,21 @@ from .float_types import FloatTypes
 def cast_image(input_image: Image,
                pixel_type: Optional[PixelTypes]=None,
                component_type: Optional[Union[IntTypes, FloatTypes]]=None) -> Image:
-    """Cast an image to another pixel type and / or component type."""
+    """Cast an image to another pixel type and / or component type.
+
+    :param input_image: Image to be cast.
+    :type  input_image: Image
+
+    :param pixel_type: Pixel type to cast to.
+    :type  pixel_Type: Optional[PixelTypes]
+
+    :param component_type: Component type to cast to.
+    :type  component_type: Optional[Union[IntTypes, FloatTypes]]
+
+    :return: Cast image. Event if pixel_type or component_type are not specified, a copy is made.
+    :rtype:  Image
+
+    """
     output_image_type = ImageType(**asdict(input_image.imageType))
 
     if pixel_type is not None:
