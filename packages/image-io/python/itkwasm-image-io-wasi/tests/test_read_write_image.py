@@ -2,7 +2,7 @@ from pathlib import Path
 
 from itkwasm import PixelTypes, IntTypes
 
-from itkwasm_image_io_wasi import read_image, imread
+from itkwasm_image_io_wasi import read_image, imread, write_image, imwrite
 
 from .common import test_input_path, test_output_path
 
@@ -44,15 +44,19 @@ def test_imread():
     verify_image(image)
 
 def test_write_image():
-    pass
-    return
-    could_read, image = png_read_image(test_input_file_path)
-    assert could_read
+    image = read_image(test_input_file_path)
 
     use_compression = False
-    could_write = png_write_image(image, test_output_file_path, use_compression)
-    assert could_write
+    write_image(image, test_output_file_path, use_compression=use_compression)
 
-    could_read, image = png_read_image(test_output_file_path)
-    assert could_read
+    image = read_image(test_output_file_path)
+    verify_image(image)
+
+def test_imwrite():
+    image = imread(test_input_file_path)
+
+    use_compression = False
+    imwrite(image, test_output_file_path, use_compression=use_compression)
+
+    image = imread(test_output_file_path)
     verify_image(image)

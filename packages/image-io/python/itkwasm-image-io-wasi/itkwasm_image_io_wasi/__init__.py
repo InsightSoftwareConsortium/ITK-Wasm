@@ -1,6 +1,7 @@
 """itkwasm-image-io-wasi: Input and output for scientific and medical image file formats. WASI implementation."""
 
 from .read_image import read_image, imread
+from .write_image import write_image, imwrite
 
 from .bio_rad_read_image import bio_rad_read_image
 from .bio_rad_write_image import bio_rad_write_image
