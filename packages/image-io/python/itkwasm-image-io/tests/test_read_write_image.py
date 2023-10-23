@@ -1,6 +1,8 @@
+from pathlib import Path
+
 from itkwasm import PixelTypes, IntTypes
 
-from itkwasm_image_io_wasi import read_image, imread, write_image, imwrite
+from itkwasm_image_io import read_image, imread, write_image, imwrite
 
 from .common import test_input_path, test_output_path
 
