@@ -32,6 +32,10 @@ async def test_example(selenium, package_wheel):
   if (!fs.existsSync(modulePath)) {
     fs.writeFileSync(modulePath, moduleContent)
   }
+  const initPath = path.join(packageDir, 'test', '__init__.py')
+  if (!fs.existsSync(initPath)) {
+    fs.writeFileSync(initPath, '')
+  }
 }
 
 export default emscriptenTestModule
