@@ -34,16 +34,16 @@ async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWo
   const webWorkersUrl = config.webWorkersUrl
   if (typeof webWorkersUrl !== 'undefined') {
     console.warn('itkConfig webWorkersUrl is deprecated. Please use pipelineWorkerUrl with the full path to the pipeline worker.')
-    const min = 'min-'
+    const min = 'min.'
     // debug
     // const min = ''
 
     const webWorkerString = webWorkersUrl as string
     if (webWorkerString.startsWith('http')) {
-      const response = await axios.get(`${webWorkerString}/${min}bundles/pipeline.worker.js`, { responseType: 'blob' })
+      const response = await axios.get(`${webWorkerString}/bundles/pipeline.${min}worker.js`, { responseType: 'blob' })
       worker = new Worker(URL.createObjectURL(response.data as Blob))
     } else {
-      worker = new Worker(`${webWorkerString}/${min}bundles/pipeline.worker.js`)
+      worker = new Worker(`${webWorkerString}/bundles/pipeline.${min}worker.js`)
     }
   } else if (workerUrl === null) {
     // Use the version built with the bundler
