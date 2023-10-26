@@ -1,4 +1,4 @@
-import RunPipelineInput from "./RunPipelineInput.js"
+import RunPipelineInput from "./run-pipeline-input.js"
 
 interface IOInput extends RunPipelineInput {
   fileName: string

@@ -1,4 +1,4 @@
-import ITKConfig from './ITKConfig.js'
+import ITKConfig from './itk-config.js'
 
 interface WebWorkerInput {
   operation: 'runPipeline' | 'runPolyDataIOPipeline' | 'readImage' | 'writeImage' | 'readMesh' | 'writeMesh' | 'meshToPolyData' |  'polyDataToMesh' | 'readDICOMImageSeries' | 'readDICOMTags'

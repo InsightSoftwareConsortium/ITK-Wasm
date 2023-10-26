@@ -25,7 +25,7 @@ export default {
   plugins: [
     copy({
       targets: [
-        { src: 'node_modules/itk-wasm/dist/core/web-workers/bundles/pipeline.worker.js', dest: 'dist/web-workers/' },
+        { src: 'node_modules/itk-wasm/dist/core/web-workers/bundles/itk-wasm-pipeline.worker.js', dest: 'dist/web-workers/' },
       ],
       hook: 'writeBundle'
     }),

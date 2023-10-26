@@ -1,35 +1,35 @@
-import loadPipelineModule from './loadPipelineModule.js'
-import IOInput from './IOInput.js'
+import loadPipelineModule from './load-pipeline-module.js'
+import IOInput from './io-input.js'
 import PipelineEmscriptenModule from '../../pipeline/PipelineEmscriptenModule.js'
-import mimeToIO from '../../io/internal/MimeToMeshIO.js'
-import extensionToIO from '../../io/extensionToMeshIO.js'
+import mimeToIO from '../../io/internal/MimeToImageIO.js'
+import extensionToIO from '../../io/extensionToImageIO.js'
 import getFileExtension from '../../io/getFileExtension.js'
-import MeshIOIndex from '../../io/internal/MeshIOIndex.js'
+import ImageIOIndex from '../../io/internal/ImageIOIndex.js'
 import runPipelineEmscripten from '../../pipeline/internal/runPipelineEmscripten.js'
 
 async function * availableIOModules (input: IOInput) {
-  for (let idx = 0; idx < MeshIOIndex.length; idx++) {
-    const trialIO = MeshIOIndex[idx] + '-read-mesh'
-    const ioModule = await loadPipelineModule(trialIO, input.config.meshIOUrl) as PipelineEmscriptenModule
+  for (let idx = 0; idx < ImageIOIndex.length; idx++) {
+    const trialIO = ImageIOIndex[idx] + '-read-image'
+    const ioModule = await loadPipelineModule(trialIO, input.config.imageIOUrl) as PipelineEmscriptenModule
     yield ioModule
   }
 }
 
-async function loadMeshIOPipelineModule(input: IOInput, postfix: string): Promise<PipelineEmscriptenModule> {
+async function loadImageIOPipelineModule(input: IOInput, postfix: string): Promise<PipelineEmscriptenModule> {
   if (input.mimeType && mimeToIO.has(input.mimeType)) {
     const io = mimeToIO.get(input.mimeType) + postfix
-    const ioModule = await loadPipelineModule(io, input.config.meshIOUrl)
+    const ioModule = await loadPipelineModule(io, input.config.imageIOUrl)
     return ioModule
   }
 
   const extension = getFileExtension(input.fileName)
   if (extensionToIO.has(extension)) {
     const io = extensionToIO.get(extension) + postfix
-    const ioModule = await loadPipelineModule(io, input.config.meshIOUrl)
+    const ioModule = await loadPipelineModule(io, input.config.imageIOUrl)
     return ioModule
   }
 
-  for (let idx = 0; idx < MeshIOIndex.length; ++idx) {
+  for (let idx = 0; idx < ImageIOIndex.length; ++idx) {
     let idx = 0
     for await (const pipelineModule of availableIOModules(input)) {
       try {
@@ -47,4 +47,4 @@ async function loadMeshIOPipelineModule(input: IOInput, postfix: string): Promis
   throw Error(`Could not find IO for: ${input.fileName}`)
 }
 
-export default loadMeshIOPipelineModule
+export default loadImageIOPipelineModule
