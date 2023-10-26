@@ -42,10 +42,10 @@ async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWo
     if (webWorkerString.startsWith('http')) {
       const response = await axios.get(`${webWorkerString}/bundles/pipeline.${min}worker.js`, { responseType: 'blob' })
       const workerObjectUrl = URL.createObjectURL(response.data as Blob)
-      worker = new Worker(workerObjectUrl)
+      worker = new Worker(workerObjectUrl, { type: 'module' })
       URL.revokeObjectURL(workerObjectUrl)
     } else {
-      worker = new Worker(`${webWorkerString}/bundles/pipeline.${min}worker.js`)
+      worker = new Worker(`${webWorkerString}/bundles/pipeline.${min}worker.js`, { type: 'module' })
     }
   } else if (workerUrl === null) {
     // Use the version built with the bundler
@@ -56,10 +56,10 @@ async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWo
     if (workerUrl.startsWith('http')) {
       const response = await axios.get(workerUrl, { responseType: 'blob' })
       const workerObjectUrl = URL.createObjectURL(response.data as Blob)
-      worker = new Worker(workerObjectUrl)
+      worker = new Worker(workerObjectUrl, { type: 'module' })
       URL.revokeObjectURL(workerObjectUrl)
     } else {
-      worker = new Worker(workerUrl)
+      worker = new Worker(workerUrl, { type: 'module' })
     }
   }
 
