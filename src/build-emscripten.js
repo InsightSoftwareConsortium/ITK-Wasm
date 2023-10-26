@@ -134,7 +134,7 @@ if (options.copyBuildArtifacts) {
     if (err.code !== 'EEXIST') throw err
   }
   try {
-    fs.mkdirSync(path.join('dist', 'web-workers'))
+    fs.mkdirSync(path.join('dist', 'core', 'web-workers'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }

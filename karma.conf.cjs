@@ -37,7 +37,7 @@ module.exports = function init (config) {
     files: [
       { pattern: './dist/image-io/**', watched: true, served: true, included: false },
       { pattern: './dist/mesh-io/**', watched: true, served: true, included: false },
-      { pattern: './dist/web-workers/**', watched: true, served: true, included: false },
+      { pattern: './dist/core/web-workers/**', watched: true, served: true, included: false },
       { pattern: './dist/pipelines/**', watched: true, served: true, included: false },
       { pattern: './build-emscripten/ExternalData/test/**', watched: true, served: true, included: false },
       { pattern: `${output.path}/**/*`, watched: false, included: false, },

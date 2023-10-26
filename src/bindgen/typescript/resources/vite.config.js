@@ -13,7 +13,7 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         { src: '../../../dist/pipelines/*', dest: 'pipelines' },
-        { src: '../../../dist/web-workers/*', dest: 'web-workers' },
+        { src: '../../../dist/core/web-workers/*', dest: 'web-workers' },
       ],
     })
   ],
