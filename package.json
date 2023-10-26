@@ -160,7 +160,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.15.4",
-    "@thewtex/zstddec": "^0.1.2",
+    "@thewtex/zstddec": "^0.2.0",
     "@types/emscripten": "^1.39.6",
     "axios": "^1.4.0",
     "commander": "^9.4.0",
