@@ -1,5 +1,5 @@
-import MeshType from './MeshType.js'
-import type TypedArray from './TypedArray.js'
+import MeshType from './mesh-type.js'
+import type TypedArray from '../TypedArray.js'
 
 class Mesh {
   meshType: MeshType

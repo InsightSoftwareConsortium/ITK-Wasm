@@ -1,6 +1,6 @@
 import getTransferables from '../core/getTransferables.js'
 import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
-import Image from '../core/Image.js'
+import Image from '../core/interface-types/image.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import castImage from '../core/castImage.js'

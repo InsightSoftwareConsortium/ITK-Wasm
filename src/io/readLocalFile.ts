@@ -6,8 +6,8 @@ import extensionToMeshIO from './extensionToMeshIO.js'
 import readImageLocalFile from './readImageLocalFile.js'
 import readMeshLocalFile from './readMeshLocalFile.js'
 
-import Image from '../core/Image.js'
-import Mesh from '../core/Mesh.js'
+import Image from '../core/interface-types/image.js'
+import Mesh from '../core/interface-types/mesh.js'
 
 /**
  * Read an image or mesh from a file on the local filesystem in Node.js.

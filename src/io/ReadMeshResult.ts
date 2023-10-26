@@ -1,4 +1,4 @@
-import Mesh from '../core/Mesh.js'
+import Mesh from '../core/interface-types/mesh.js'
 
 interface ReadMeshResult {
   mesh: Mesh

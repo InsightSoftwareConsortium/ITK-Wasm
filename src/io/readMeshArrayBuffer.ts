@@ -1,6 +1,6 @@
 import getTransferables from '../core/getTransferables.js'
 import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
-import Mesh from '../core/Mesh.js'
+import Mesh from '../core/interface-types/mesh.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 

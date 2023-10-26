@@ -1,7 +1,7 @@
-import ImageType from './ImageType.js'
-import type TypedArray from './TypedArray.js'
-import setMatrixElement from './setMatrixElement.js'
-import Metadata from './Metadata.js'
+import ImageType from './image-type.js'
+import type TypedArray from '../TypedArray.js'
+import setMatrixElement from '../setMatrixElement.js'
+import Metadata from './metadata.js'
 
 class Image {
   name: string = 'image'

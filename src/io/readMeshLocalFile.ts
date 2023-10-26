@@ -6,7 +6,7 @@ import getFileExtension from './getFileExtension.js'
 import extensionToIO from './extensionToMeshIO.js'
 import MeshIOIndex from './internal/MeshIOIndex.js'
 
-import Mesh from '../core/Mesh.js'
+import Mesh from '../core/interface-types/mesh.js'
 
 import loadEmscriptenModule from './../core/internal/loadEmscriptenModuleNode.js'
 import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'

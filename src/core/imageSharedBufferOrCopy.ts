@@ -1,5 +1,5 @@
 import copyImage from './copyImage.js'
-import Image from './Image.js'
+import Image from './interface-types/image.js'
 
 const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
 

@@ -1,7 +1,7 @@
 import path from 'path'
 
-import Mesh from '../core/Mesh.js'
-import PolyData from '../core/PolyData.js'
+import Mesh from '../core/interface-types/mesh.js'
+import PolyData from '../core/interface-types/poly-data.js'
 import findLocalMeshIOPath from './internal/findLocalMeshIOPath.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import PipelineInput from '../pipeline/PipelineInput.js'

@@ -14,7 +14,7 @@ import WriteMeshOptions from './WriteMeshOptions.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import PipelineOutput from '../pipeline/PipelineOutput.js'
-import Mesh from '../core/Mesh.js'
+import Mesh from '../core/interface-types/mesh.js'
 
 /**
  * Write a mesh to a file on the local filesystem in Node.js.

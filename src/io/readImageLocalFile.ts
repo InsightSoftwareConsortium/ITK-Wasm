@@ -6,7 +6,7 @@ import getFileExtension from './getFileExtension.js'
 import extensionToIO from './extensionToImageIO.js'
 import ImageIOIndex from './internal/ImageIOIndex.js'
 
-import Image from '../core/Image.js'
+import Image from '../core/interface-types/image.js'
 
 import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleNode.js'
 import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
