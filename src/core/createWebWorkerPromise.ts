@@ -41,7 +41,9 @@ async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWo
     const webWorkerString = webWorkersUrl as string
     if (webWorkerString.startsWith('http')) {
       const response = await axios.get(`${webWorkerString}/bundles/pipeline.${min}worker.js`, { responseType: 'blob' })
-      worker = new Worker(URL.createObjectURL(response.data as Blob))
+      const workerObjectUrl = URL.createObjectURL(response.data as Blob)
+      worker = new Worker(workerObjectUrl)
+      URL.revokeObjectURL(workerObjectUrl)
     } else {
       worker = new Worker(`${webWorkerString}/bundles/pipeline.${min}worker.js`)
     }
@@ -53,7 +55,9 @@ async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWo
   } else {
     if (workerUrl.startsWith('http')) {
       const response = await axios.get(workerUrl, { responseType: 'blob' })
-      worker = new Worker(URL.createObjectURL(response.data as Blob))
+      const workerObjectUrl = URL.createObjectURL(response.data as Blob)
+      worker = new Worker(workerObjectUrl)
+      URL.revokeObjectURL(workerObjectUrl)
     } else {
       worker = new Worker(workerUrl)
     }
