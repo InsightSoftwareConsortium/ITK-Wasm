@@ -1,4 +1,4 @@
-import Image from './Image.js'
+import Image from './interface-types/image.js'
 
 function copyImage (image: Image): Image {
   const copy = new Image(image.imageType)

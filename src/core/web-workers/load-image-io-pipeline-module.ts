@@ -1,11 +1,11 @@
-import loadPipelineModule from './loadPipelineModule.js'
-import IOInput from './IOInput.js'
-import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
-import mimeToIO from '../io/internal/MimeToImageIO.js'
-import extensionToIO from '../io/extensionToImageIO.js'
-import getFileExtension from '../io/getFileExtension.js'
-import ImageIOIndex from '../io/internal/ImageIOIndex.js'
-import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
+import loadPipelineModule from './load-pipeline-module.js'
+import IOInput from './io-input.js'
+import PipelineEmscriptenModule from '../../pipeline/PipelineEmscriptenModule.js'
+import mimeToIO from '../../io/internal/MimeToImageIO.js'
+import extensionToIO from '../../io/extensionToImageIO.js'
+import getFileExtension from '../../io/getFileExtension.js'
+import ImageIOIndex from '../../io/internal/ImageIOIndex.js'
+import runPipelineEmscripten from '../../pipeline/internal/runPipelineEmscripten.js'
 
 async function * availableIOModules (input: IOInput) {
   for (let idx = 0; idx < ImageIOIndex.length; idx++) {

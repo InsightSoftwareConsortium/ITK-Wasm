@@ -1,21 +1,21 @@
 import registerWebworker from 'webworker-promise/lib/register.js'
 
-import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
-import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
-import IOTypes from '../core/IOTypes.js'
-import getTransferables from '../core/getTransferables.js'
+import PipelineEmscriptenModule from '../../pipeline/PipelineEmscriptenModule.js'
+import runPipelineEmscripten from '../../pipeline/internal/runPipelineEmscripten.js'
+import IOTypes from '../IOTypes.js'
+import getTransferables from '../getTransferables.js'
 
-import PipelineInput from '../pipeline/PipelineInput.js'
-import PipelineOutput from '../pipeline/PipelineOutput.js'
+import PipelineInput from '../../pipeline/PipelineInput.js'
+import PipelineOutput from '../../pipeline/PipelineOutput.js'
 
-import InterfaceTypes from '../core/InterfaceTypes.js'
-import Image from '../core/Image.js'
-import Mesh from '../core/Mesh.js'
-import PolyData from '../core/PolyData.js'
-import TypedArray from '../core/TypedArray.js'
-import imageTransferables from '../core/internal/imageTransferables.js'
-import meshTransferables from '../core/internal/meshTransferables.js'
-import polyDataTransferables from '../core/internal/polyDataTransferables.js'
+import InterfaceTypes from '../InterfaceTypes.js'
+import Image from '../interface-types/image.js'
+import Mesh from '../interface-types/mesh.js'
+import PolyData from '../interface-types/poly-data.js'
+import TypedArray from '../TypedArray.js'
+import imageTransferables from '../internal/imageTransferables.js'
+import meshTransferables from '../internal/meshTransferables.js'
+import polyDataTransferables from '../internal/polyDataTransferables.js'
 
 async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
   const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)

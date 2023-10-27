@@ -1,4 +1,4 @@
-import PolyData from '../PolyData.js'
+import PolyData from '../interface-types/poly-data.js'
 import TypedArray from '../TypedArray.js'
 
 function polyDataTransferables (polyData: PolyData): Array<ArrayBuffer | TypedArray | null> {

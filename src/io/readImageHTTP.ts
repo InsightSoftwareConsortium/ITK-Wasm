@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 import bufferToTypedArray from '../core/bufferToTypedArray.js'
-import Image from '../core/Image.js'
-import FloatTypes from '../core/FloatTypes.js'
+import Image from '../core/interface-types/image.js'
+import FloatTypes from '../core/interface-types/float-types.js'
 import type TypedArray from '../core/TypedArray.js'
 
 async function readImageHTTP (url: string): Promise<Image> {

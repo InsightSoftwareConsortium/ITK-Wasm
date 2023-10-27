@@ -34,28 +34,32 @@ async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWo
   const webWorkersUrl = config.webWorkersUrl
   if (typeof webWorkersUrl !== 'undefined') {
     console.warn('itkConfig webWorkersUrl is deprecated. Please use pipelineWorkerUrl with the full path to the pipeline worker.')
-    const min = 'min-'
+    const min = 'min.'
     // debug
     // const min = ''
 
     const webWorkerString = webWorkersUrl as string
     if (webWorkerString.startsWith('http')) {
-      const response = await axios.get(`${webWorkerString}/${min}bundles/pipeline.worker.js`, { responseType: 'blob' })
-      worker = new Worker(URL.createObjectURL(response.data as Blob))
+      const response = await axios.get(`${webWorkerString}/bundles/pipeline.${min}worker.js`, { responseType: 'blob' })
+      const workerObjectUrl = URL.createObjectURL(response.data as Blob)
+      worker = new Worker(workerObjectUrl, { type: 'module' })
+      URL.revokeObjectURL(workerObjectUrl)
     } else {
-      worker = new Worker(`${webWorkerString}/${min}bundles/pipeline.worker.js`)
+      worker = new Worker(`${webWorkerString}/bundles/pipeline.${min}worker.js`, { type: 'module' })
     }
   } else if (workerUrl === null) {
     // Use the version built with the bundler
     //
     // Bundlers, e.g. WebPack, Vite, Rollup, see these paths at build time
-    worker = new Worker(new URL('../web-workers/pipeline.worker.js', import.meta.url), { type: 'module' })
+    worker = new Worker(new URL('./web-workers/itk-wasm-pipeline.worker.js', import.meta.url), { type: 'module' })
   } else {
     if (workerUrl.startsWith('http')) {
       const response = await axios.get(workerUrl, { responseType: 'blob' })
-      worker = new Worker(URL.createObjectURL(response.data as Blob))
+      const workerObjectUrl = URL.createObjectURL(response.data as Blob)
+      worker = new Worker(workerObjectUrl, { type: 'module' })
+      URL.revokeObjectURL(workerObjectUrl)
     } else {
-      worker = new Worker(workerUrl)
+      worker = new Worker(workerUrl, { type: 'module' })
     }
   }
 

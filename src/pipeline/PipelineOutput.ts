@@ -1,13 +1,13 @@
 import IOTypes from '../core/IOTypes.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
-import TextFile from '../core/TextFile.js'
-import BinaryFile from '../core/BinaryFile.js'
-import TextStream from '../core/TextStream.js'
-import BinaryStream from '../core/BinaryStream.js'
-import Image from '../core/Image.js'
-import Mesh from '../core/Mesh.js'
-import PolyData from '../core/PolyData.js'
-import JsonCompatible from '../core/JsonCompatible.js'
+import TextFile from '../core/interface-types/text-file.js'
+import BinaryFile from '../core/interface-types/binary-file.js'
+import TextStream from '../core/interface-types/text-stream.js'
+import BinaryStream from '../core/interface-types/binary-stream.js'
+import Image from '../core/interface-types/image.js'
+import Mesh from '../core/interface-types/mesh.js'
+import PolyData from '../core/interface-types/poly-data.js'
+import JsonCompatible from '../core/interface-types/json-compatible.js'
 
 interface PipelineOutput {
   path?: string

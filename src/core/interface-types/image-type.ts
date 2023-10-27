@@ -1,6 +1,6 @@
-import IntTypes from './IntTypes.js'
-import FloatTypes from './FloatTypes.js'
-import PixelTypes from './PixelTypes.js'
+import IntTypes from './int-types.js'
+import FloatTypes from './float-types.js'
+import PixelTypes from './pixel-types.js'
 
 class ImageType {
   constructor (

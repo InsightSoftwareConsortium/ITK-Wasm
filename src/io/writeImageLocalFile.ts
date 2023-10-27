@@ -16,7 +16,7 @@ import PipelineOutput from '../pipeline/PipelineOutput.js'
 import WriteImageOptions from './WriteImageOptions.js'
 import castImage from '../core/castImage.js'
 
-import Image from '../core/Image.js'
+import Image from '../core/interface-types/image.js'
 
 async function writeImageLocalFile (image: Image, filePath: string, options?: WriteImageOptions | boolean
 ): Promise<null> {

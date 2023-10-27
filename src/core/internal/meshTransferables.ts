@@ -1,4 +1,4 @@
-import Mesh from '../Mesh.js'
+import Mesh from '../interface-types/mesh.js'
 import TypedArray from '../TypedArray.js'
 
 function meshTransferables (mesh: Mesh): Array<TypedArray | null> {

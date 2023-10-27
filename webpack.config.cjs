@@ -56,7 +56,7 @@ const devServer = {
     },
     {
       publicPath: '/web-workers',
-      directory: path.join(__dirname, 'dist', 'web-workers'),
+      directory: path.join(__dirname, 'dist', 'core', 'web-workers'),
     },
     {
       publicPath: '/image-io',

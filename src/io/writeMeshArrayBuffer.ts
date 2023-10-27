@@ -1,6 +1,6 @@
 import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 
-import Mesh from '../core/Mesh.js'
+import Mesh from '../core/interface-types/mesh.js'
 
 import config from '../itkConfig.js'
 import WriteArrayBufferResult from './WriteArrayBufferResult.js'

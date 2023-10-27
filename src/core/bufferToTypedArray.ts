@@ -1,5 +1,5 @@
-import IntTypes from './IntTypes.js'
-import FloatTypes from './FloatTypes.js'
+import IntTypes from './interface-types/int-types.js'
+import FloatTypes from './interface-types/float-types.js'
 import type TypedArray from './TypedArray.js'
 
 function bufferToTypedArray (wasmType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] | 'null' | null, buffer: ArrayBuffer): null | TypedArray {

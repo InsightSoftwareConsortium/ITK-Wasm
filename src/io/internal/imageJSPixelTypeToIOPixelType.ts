@@ -1,4 +1,4 @@
-import PixelTypes from '../../core/PixelTypes.js'
+import PixelTypes from '../../core/interface-types/pixel-types.js'
 
 import IOPixel from './IOPixel.js'
 import IOEmscriptenModule from './IOEmscriptenModule.js'

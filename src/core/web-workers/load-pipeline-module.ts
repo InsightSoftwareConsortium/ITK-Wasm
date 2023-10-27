@@ -1,5 +1,5 @@
-import loadEmscriptenModule from '../core/internal/loadEmscriptenModuleWebWorker.js'
-import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
+import loadEmscriptenModule from '../internal/loadEmscriptenModuleWebWorker.js'
+import PipelineEmscriptenModule from '../../pipeline/PipelineEmscriptenModule.js'
 
 // To cache loaded pipeline modules
 const pipelineToModule: Map<string,PipelineEmscriptenModule> = new Map()

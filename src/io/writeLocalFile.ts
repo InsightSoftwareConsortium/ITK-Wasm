@@ -6,8 +6,8 @@ import extensionToMeshIO from './extensionToMeshIO.js'
 import writeImageLocalFile from './writeImageLocalFile.js'
 import writeMeshLocalFile from './writeMeshLocalFile.js'
 
-import Mesh from '../core/Mesh.js'
-import Image from '../core/Image.js'
+import Mesh from '../core/interface-types/mesh.js'
+import Image from '../core/interface-types/image.js'
 
 /**
  * Write an image or mesh to a file on the local filesystem in Node.js.

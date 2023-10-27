@@ -60,7 +60,7 @@ describe('runPipeline', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
       const pipelineBaseUrl = '/pipelines'
-      const pipelineWorkerUrl = '/web-workers/bundles/pipeline.worker.js'
+      const pipelineWorkerUrl = '/web-workers/bundles/itk-wasm-pipeline.worker.js'
 
       const args = []
       const outputs = null

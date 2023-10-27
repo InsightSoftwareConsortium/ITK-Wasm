@@ -5,8 +5,8 @@ import getFileExtension from './getFileExtension.js'
 import extensionToMeshIO from './extensionToMeshIO.js'
 import mimeToMeshIO from './internal/MimeToMeshIO.js'
 
-import Image from '../core/Image.js'
-import Mesh from '../core/Mesh.js'
+import Image from '../core/interface-types/image.js'
+import Mesh from '../core/interface-types/mesh.js'
 
 import WriteArrayBufferResult from './WriteArrayBufferResult.js'
 

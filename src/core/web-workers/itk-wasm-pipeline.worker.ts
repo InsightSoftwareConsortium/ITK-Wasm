@@ -1,11 +1,11 @@
 import registerWebworker from 'webworker-promise/lib/register.js'
 
-import loadPipelineModule from './loadPipelineModule.js'
-import loadImageIOPipelineModule from './loadImageIOPipelineModule.js'
-import loadMeshIOPipelineModule from './loadMeshIOPipelineModule.js'
-import runPipeline from './runPipeline.js'
-import RunPipelineInput from './RunPipelineInput.js'
-import IOInput from './IOInput.js'
+import loadPipelineModule from './load-pipeline-module.js'
+import loadImageIOPipelineModule from './load-image-io-pipeline-module.js'
+import loadMeshIOPipelineModule from './load-mesh-io-pipeline-module.js'
+import runPipeline from './run-pipeline.js'
+import RunPipelineInput from './run-pipeline-input.js'
+import IOInput from './io-input.js'
 
 registerWebworker(async function (input: RunPipelineInput | IOInput) {
   let pipelineModule = null

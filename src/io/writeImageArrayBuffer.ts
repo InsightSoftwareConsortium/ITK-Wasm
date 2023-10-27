@@ -1,6 +1,6 @@
 import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
 
-import Image from '../core/Image.js'
+import Image from '../core/interface-types/image.js'
 
 import config from '../itkConfig.js'
 import PipelineInput from '../pipeline/PipelineInput.js'

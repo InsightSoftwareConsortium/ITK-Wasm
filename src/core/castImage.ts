@@ -1,8 +1,8 @@
-import Image from './Image.js'
+import Image from './interface-types/image.js'
 import CastImageOptions from './CastImageOptions.js'
-import PixelTypes from './PixelTypes.js'
-import IntTypes from './IntTypes.js'
-import FloatTypes from './FloatTypes.js'
+import PixelTypes from './interface-types/pixel-types.js'
+import IntTypes from './interface-types/int-types.js'
+import FloatTypes from './interface-types/float-types.js'
 
 /**
  * Cast an image to another PixelType and/or ComponentType
