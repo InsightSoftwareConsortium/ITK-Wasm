@@ -36,9 +36,16 @@ namespace itk
 namespace wasm
 {
 
+// dataset index, array index
+using InputArrayStoreKeyType = std::pair<uint32_t, uint32_t>;
+using InputArrayStoreValueType = std::vector<uint8_t>;
+using InputArrayStoreType = std::map<InputArrayStoreKeyType, InputArrayStoreValueType>;
+
 // Function for the Pipeline Input's and Output's to set / get from the memory store
 
 WebAssemblyInterface_EXPORT const std::string & getMemoryStoreInputJSON(uint32_t memoryIndex, uint32_t index);
+
+WebAssemblyInterface_EXPORT const InputArrayStoreType & getMemoryInputArrayStore();
 
 WebAssemblyInterface_EXPORT void setMemoryStoreOutputDataObject(uint32_t memoryIndex, uint32_t index, const WasmDataObject * dataObject);
 

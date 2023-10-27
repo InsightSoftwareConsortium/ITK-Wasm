@@ -29,9 +29,6 @@ namespace itk
 namespace wasm
 {
 
-// dataset index, array index
-using InputArrayStoreKeyType = std::pair<uint32_t, uint32_t>;
-using InputArrayStoreType = std::map<InputArrayStoreKeyType, std::vector<char>>;
 static InputArrayStoreType inputArrayStore;
 
 // index
@@ -41,6 +38,11 @@ static InputJSONStoreType inputJSONStore;
 const std::string & getMemoryStoreInputJSON(uint32_t memoryIndex, uint32_t index)
 {
   return inputJSONStore[index];
+}
+
+const InputArrayStoreType & getMemoryInputArrayStore()
+{
+  return inputArrayStore;
 }
 
 using OutputWasmDataObjectStoreType = std::map<uint32_t, WasmDataObject::ConstPointer>;
@@ -75,7 +77,7 @@ size_t itk_wasm_input_array_alloc(uint32_t memoryIndex, uint32_t index, uint32_t
   const auto key = std::make_pair(index, subIndex);
   if (inputArrayStore.count(key))
   {
-    inputArrayStore[key] = std::vector<char>(size);
+    inputArrayStore[key] = InputArrayStoreValueType(size);
   }
   else
   {
