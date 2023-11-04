@@ -31,7 +31,7 @@ import {
 
 ```ts
 async function readImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: ReadImageOptions = {}
 ) : Promise<ReadImageResult>
@@ -39,7 +39,7 @@ async function readImage(
 
 |     Parameter     |         Type        | Description                               |
 | :---------------: | :-----------------: | :---------------------------------------- |
-| `webWorker` | *null or Worker* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. |
+| `webWorker` | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
 | `serializedImage` | *File or BinaryFile* | Input image serialized in the file format. |
 
 **`ReadImageOptions` interface:**

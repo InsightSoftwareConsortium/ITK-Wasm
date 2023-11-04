@@ -31,7 +31,6 @@ def read_image(
     :return: Output image
     :rtype:  Image
     """
-    file_name = Path(serialized_image).name
     extension = ''.join(Path(serialized_image).suffixes)
 
     io = None
