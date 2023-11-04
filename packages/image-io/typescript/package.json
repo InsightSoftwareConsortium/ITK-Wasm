@@ -23,9 +23,10 @@
     "cypress:open": "npx cypress open",
     "cypress:runChrome": "npx cypress run --browser chrome",
     "cypress:runFirefox": "npx cypress run --browser firefox",
-    "build": "npm run build:tsc && npm run build:node && npm run build:browser && npm run build:demo",
+    "build": "npm run build:tsc && npm run build:node && npm run build:browser && npm run build:browser:workerEmbedded && npm run build:demo",
     "build:node": "esbuild --bundle --format=esm --banner:js=\"import { createRequire } from 'module';const require = createRequire(import.meta.url);\" --platform=node --outfile=./dist/index-node.js ./src/index-node.ts",
     "build:browser": "shx mkdir -p dist/web-workers && shx cp node_modules/itk-wasm/dist/core/web-workers/bundles/* ./dist/web-workers/ && esbuild --bundle --format=esm --outfile=./dist/index.js ./src/index.ts",
+    "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/index-worker-embedded.js ./src/index-worker-embedded.ts",
     "build:tsc": "tsc --pretty",
     "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
     "build:demo": "npm run copyShoelaceAssets && vite -c build/vite.config.js build"

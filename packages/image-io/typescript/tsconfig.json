@@ -19,5 +19,6 @@
     "emitDeclarationOnly": true,
     "declarationDir": "dist/"
   },
-  "include": ["src/*.ts"]
+  "include": ["src/*.ts"],
+  "exclude": ["src/index-worker-embedded.ts"]
 }
