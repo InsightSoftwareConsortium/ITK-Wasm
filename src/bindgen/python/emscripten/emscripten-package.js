@@ -28,7 +28,7 @@ function emscriptenPackage(outputDir, buildDir, wasmBinaries, options) {
   const async = true
   const sync = false
   packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async, sync)
-  emscriptenPyodideModule(packageDir, pypackage, options)
+  emscriptenPyodideModule(outputDir, packageDir, pypackage, options)
   emscriptenTestModule(packageDir, pypackage)
 
   const wasmModulesDir = path.join(packageDir, pypackage, 'wasm_modules')

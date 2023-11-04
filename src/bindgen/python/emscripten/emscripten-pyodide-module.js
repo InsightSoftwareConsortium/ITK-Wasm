@@ -1,26 +1,29 @@
 import fs from 'fs-extra'
 import path from 'path'
 
-function emscriptenPyodideModule(packageDir, pypackage, options) {
-  const defaultJsPackageName = options.packageName.replace('itkwasm-', '@itk-wasm/')
-  const defaultJsModuleName = options.packageName.replace('itkwasm-', '')
-  const version = options.packageVersion ?? '0.1.0'
+import writeIfOverrideNotPresent from '../../write-if-override-not-present.js'
 
-  const moduleUrl = options.jsModuleUrl ?? `https://cdn.jsdelivr.net/npm/${defaultJsPackageName}@{__version__}/dist/index.js`
+function emscriptenPyodideModule(outputDir, packageDir, pypackage, options) {
+  const defaultJsModuleName = options.packageName.replace('itkwasm-', '')
+  const defaultJsModulePath = path.join(outputDir, '..', 'typescript', 'dist', `${defaultJsModuleName}-worker-embedded.js`)
+  const moduleUrl = options.jsModulePath ?? defaultJsModulePath
+  if (!fs.existsSync(moduleUrl)) {
+    console.error(`Could not find ${moduleUrl}`)
+    process.exit(1)
+  }
+  const jsModuleContent = fs.readFileSync(moduleUrl, { encoding: 'utf8', flag: 'r' })
 
   const moduleContent = `from itkwasm.pyodide import JsPackageConfig, JsPackage
 
 from ._version import __version__
-
-default_config = JsPackageConfig(f"${moduleUrl}")
+default_js_module = """data:text/javascript;charset=utf-8,${jsModuleContent}"""
+default_config = JsPackageConfig(default_js_module)
 js_package = JsPackage(default_config)
 `
 
   const modulePath = path.join(packageDir, pypackage, 'js_package.py')
 
-  if (!fs.existsSync(modulePath)) {
-    fs.writeFileSync(modulePath, moduleContent)
-  }
+  writeIfOverrideNotPresent(modulePath, moduleContent, '#')
 }
 
 export default emscriptenPyodideModule
