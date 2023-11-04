@@ -61,19 +61,9 @@ function writeSupportFiles(outputDir, forNode, bindgenResource, packageName, pac
     const demoJsUtilities = path.join(outputDir, 'test', 'browser', 'demo-app', 'utilities.js')
     writeIfOverrideNotPresent(demoJsUtilities, fs.readFileSync(bindgenResource(path.join('demo-app', 'utilities.js')), { encoding: 'utf8', flag: 'r' }))
 
-    const rollupConfigPath = path.join(outputDir, 'build', 'rollup.browser.config.js')
-    if (!fs.existsSync(rollupConfigPath)) {
-      fs.copyFileSync(bindgenResource('rollup.browser.config.js'), rollupConfigPath)
-    }
-
     const viteConfigPath = path.join(outputDir, 'build', 'vite.config.js')
     if (!fs.existsSync(viteConfigPath)) {
       fs.copyFileSync(bindgenResource('vite.config.js'), viteConfigPath)
-    }
-  } else {
-    const rollupConfigPath = path.join(outputDir, 'build', 'rollup.node.config.js')
-    if (!fs.existsSync(rollupConfigPath)) {
-      fs.copyFileSync(bindgenResource('rollup.node.config.js'), rollupConfigPath)
     }
   }
 
