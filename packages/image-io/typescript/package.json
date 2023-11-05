@@ -24,13 +24,13 @@
     "cypress:open": "npx cypress open",
     "cypress:runChrome": "npx cypress run --browser chrome",
     "cypress:runFirefox": "npx cypress run --browser firefox",
-    "build": "npm run build:tsc && npm run build:browser:webWorkers && npm run build:browser:workerEmbedded && npm run build:demo",
-    "build:browser:webWorkers": "shx mkdir -p dist/web-workers && shx cp node_modules/itk-wasm/dist/core/web-workers/bundles/* ./dist/web-workers/",
-    "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/image-io-worker-embedded.js ./src/index-worker-embedded.ts",
+    "build": "npm run build:tsc && npm run build:browser:workerEmbedded && npm run build:browser:workerEmbeddedMin && npm run build:demo",
+    "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
+    "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
     "build:tsc": "tsc --pretty",
     "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
     "build:demo": "npm run copyShoelaceAssets && vite -c build/vite.config.js build",
-    "rollup:start": "npm run copyShoelaceAssets && concurrently npm:rollup:dev npm:rollup:preview",
+    "rollup:start": "npm run copyShoelaceAssets && npm run build:demo && concurrently npm:rollup:dev npm:rollup:preview",
     "rollup:dev": "vite build --config build/vite-rollup-watch.config.ts",
     "rollup:preview": "vite preview --config build/vite-rollup-watch.config.ts"
   },
@@ -43,7 +43,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.152"
+    "itk-wasm": "^1.0.0-b.154"
   },
   "devDependencies": {
     "@shoelace-style/shoelace": "^2.5.2",
@@ -55,7 +55,7 @@
     "shx": "^0.3.4",
     "start-server-and-test": "^2.0.1",
     "typescript": "^5.0.4",
-    "vite": "^4.4.11",
+    "vite": "^4.5.0",
     "vite-plugin-static-copy": "^0.17.0"
   },
   "repository": {

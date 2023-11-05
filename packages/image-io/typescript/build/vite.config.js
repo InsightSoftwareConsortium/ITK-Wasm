@@ -15,6 +15,9 @@ export function generateConfig() {
     worker: {
       format: 'es'
     },
+    optimizeDeps: {
+      exclude: ['itk-wasm']
+    },
     plugins: [
       // put lazy loaded JavaScript and Wasm bundles in dist directory
       viteStaticCopy({

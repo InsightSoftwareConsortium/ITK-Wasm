@@ -26,8 +26,6 @@ import {
   parseStringDecompress,
   setPipelinesBaseUrl,
   getPipelinesBaseUrl,
-  setPipelineWorkerUrl,
-  getPipelineWorkerUrl,
 } from "@itk-wasm/compress-stringify"
 ```
 
@@ -109,24 +107,6 @@ function setPipelinesBaseUrl(
 
 ```ts
 function getPipelinesBaseUrl() : string | URL
-```
-
-#### setPipelineWorkerUrl
-
-*Set base URL for the itk-wasm pipeline worker script when vendored.*
-
-```ts
-function setPipelineWorkerUrl(
-  baseUrl: string | URL
-) : void
-```
-
-#### getPipelineWorkerUrl
-
-*Get base URL for the itk-wasm pipeline worker script when vendored.*
-
-```ts
-function getPipelineWorkerUrl() : string | URL
 ```
 
 ### Node interface

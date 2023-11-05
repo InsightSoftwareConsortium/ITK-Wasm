@@ -3,23 +3,22 @@
   "version": "0.1.0",
   "description": "",
   "type": "module",
-  "module": "./dist/bundles/bundle-name.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "browser": "./dist/bundle-name.js",
-      "node": "./dist/bundle-name-node.js",
-      "default": "./dist/bundles/bundle-name.js"
+      "browser": "./dist/index.js",
+      "node": "./dist/index-node.js",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
     "start": "npm run copyShoelaceAssets && vite -c build/vite.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:tsc && npm run build:node && npm run build:browser && npm run build:demo",
-    "build:node": "esbuild --bundle --format=esm --banner:js=\"import { createRequire } from 'module';const require = createRequire(import.meta.url);\" --platform=node --outfile=./dist/index-node.js ./src/index-node.ts",
-    "build:browser": "shx mkdir -p dist/web-workers && shx cp node_modules/itk-wasm/dist/core/web-workers/bundles/* ./dist/web-workers/ && esbuild --bundle --format=esm --outfile=./dist/index.js ./src/index.ts",
-    "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/index-worker-embedded.js ./src/index-worker-embedded.ts",
+    "build": "npm run build:tsc && npm run build:browser:workerEmbedded && npm run build:browser:workerEmbeddedMin && npm run build:demo",
+    "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
+    "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
     "build:tsc": "tsc --pretty",
     "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
     "build:demo": "npm run copyShoelaceAssets && vite -c build/vite.config.js build"
@@ -33,7 +32,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.152"
+    "itk-wasm": "^1.0.0-b.154"
   },
   "devDependencies": {
     "@itk-wasm/image-io": "^0.2.0",
@@ -42,7 +41,7 @@
     "esbuild": "^0.19.5",
     "shx": "^0.3.4",
     "typescript": "^5.0.4",
-    "vite": "^4.4.11",
+    "vite": "^4.5.0",
     "vite-plugin-static-copy": "^0.17.0"
   }
 }

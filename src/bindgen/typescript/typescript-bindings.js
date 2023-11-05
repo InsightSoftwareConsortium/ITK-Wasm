@@ -73,6 +73,7 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
 
   if (!forNode) {
     indexContent += "export * from './pipelines-base-url.js'\n"
+    indexContent += "export * from './pipeline-worker-url.js'\n"
   }
 
   writeSupportFiles(outputDir, forNode, bindgenResource, packageName, options.packageDescription)

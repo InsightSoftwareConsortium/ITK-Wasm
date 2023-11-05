@@ -12,14 +12,14 @@ image_io_index = [
   'mrc',
   'lsm',
   'mgh',
-  'bio_rad',
+  'bioRad',
   'gipl',
-  'ge_adw',
+  'geAdw',
   'ge4',
   'ge5',
   'gdcm',
   'scanco',
   'wasm',
-  'wasm_zstd',
+  'wasmZstd',
 ]
 

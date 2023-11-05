@@ -30,6 +30,18 @@ function writeSupportFiles(outputDir, forNode, bindgenResource, packageName, pac
       fs.writeFileSync(pipelineWorkerUrlPath, pipelineWorkerUrlPathContent)
     }
 
+    const indexWorkerEmbeddedPath = path.join(outputDir, 'src', 'index-worker-embedded.ts')
+    const indexWorkerEmbeddedContent = fs.readFileSync(bindgenResource('index-worker-embedded.ts'), { encoding: 'utf8', flag: 'r' })
+    writeIfOverrideNotPresent(indexWorkerEmbeddedPath, indexWorkerEmbeddedContent)
+    const indexWorkerEmbeddedMinPath = path.join(outputDir, 'src', 'index-worker-embedded.min.ts')
+    const indexWorkerEmbeddedMinContent = fs.readFileSync(bindgenResource('index-worker-embedded.min.ts'), { encoding: 'utf8', flag: 'r' })
+    writeIfOverrideNotPresent(indexWorkerEmbeddedMinPath, indexWorkerEmbeddedMinContent)
+
+    const packageJsonSymlinkPath = path.join(outputDir, 'src', 'package.json')
+    if (!fs.existsSync(packageJsonSymlinkPath)) {
+      fs.symlinkSync('../package.json', packageJsonSymlinkPath)
+    }
+
     const npmIgnorePath = path.join(outputDir, '.npmignore')
     if (!fs.existsSync(npmIgnorePath)) {
       fs.copyFileSync(bindgenResource('npmignore.bindgen'), npmIgnorePath)
