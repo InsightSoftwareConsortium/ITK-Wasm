@@ -163,13 +163,13 @@
     "@thewtex/zstddec": "^0.2.0",
     "@types/emscripten": "^1.39.6",
     "axios": "^1.4.0",
+    "comlink": "^4.4.1",
     "commander": "^9.4.0",
     "fs-extra": "^10.0.0",
     "glob": "^8.1.0",
     "markdown-table": "^3.0.3",
     "mime-types": "^2.1.35",
-    "wasm-feature-detect": "^1.5.1",
-    "webworker-promise": "^0.5.1"
+    "wasm-feature-detect": "^1.5.1"
   },
   "bin": {
     "itk-wasm": "./src/itk-wasm-cli.js"

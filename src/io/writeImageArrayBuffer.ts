@@ -1,4 +1,6 @@
-import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
+import * as Comlink from 'comlink'
+
+import createWorkerProxy from '../core/create-worker-proxy.js'
 
 import Image from '../core/interface-types/image.js'
 
@@ -6,8 +8,9 @@ import config from '../itkConfig.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
 import PipelineOutput from '../pipeline/PipelineOutput.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
-import getTransferables from '../core/getTransferables.js'
+import getTransferables from '../core/get-transferables.js'
 import castImage from '../core/castImage.js'
+import WriteImagePipelineResult from '../core/web-workers/write-image-pipeline-result.js'
 
 import WriteImageOptions from './WriteImageOptions.js'
 import WriteArrayBufferResult from './WriteArrayBufferResult.js'
@@ -32,7 +35,7 @@ async function writeImageArrayBuffer (webWorker: Worker | null, image: Image, fi
   }
 
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker, null)
+  const { workerProxy, worker: usedWorker } = await createWorkerProxy(worker, null)
   worker = usedWorker
 
   const filePath = `./${fileName}`
@@ -53,23 +56,13 @@ async function writeImageArrayBuffer (webWorker: Worker | null, image: Image, fi
 
   const transferables = imageTransferables(image)
 
-  interface RunWriteImagePipelineResult {
-    stdout: string
-    stderr: string
-    outputs: any[]
-  }
-  const result: RunWriteImagePipelineResult = await webworkerPromise.postMessage(
-    {
-      operation: 'writeImage',
-      config: config,
-      mimeType,
-      fileName,
-      pipelinePath: 'WriteImage', // placeholder
-      args,
-      outputs,
-      inputs
-    },
-    getTransferables(transferables)
+  const result: WriteImagePipelineResult = await workerProxy.writeImage(
+    config,
+    mimeType,
+    fileName,
+    args,
+    outputs,
+    Comlink.transfer(inputs, getTransferables(transferables))
   )
   return { arrayBuffer: result.outputs[0].data.data.buffer as ArrayBuffer, webWorker: worker }
 }

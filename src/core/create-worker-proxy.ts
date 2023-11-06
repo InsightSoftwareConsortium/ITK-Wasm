@@ -1,31 +1,44 @@
 import axios from 'axios'
-import WebworkerPromise from 'webworker-promise'
+import * as Comlink from 'comlink'
 
+import WorkerProxy from './web-workers/worker-proxy.js'
 import config from '../itkConfig.js'
 
-interface createWebWorkerPromiseResult {
-  webworkerPromise: typeof WebworkerPromise
-  worker: Worker
+interface ItkWorker extends Worker {
+  workerProxy: WorkerProxy
+  originalTerminate: () => void
 }
 
-interface itkWorker extends Worker {
-  workerPromise?: typeof WebworkerPromise
+interface createWorkerProxyResult {
+  workerProxy: WorkerProxy
+  worker: ItkWorker
+}
+
+function workerToWorkerProxy (worker: Worker): createWorkerProxyResult {
+  const workerProxy = Comlink.wrap(worker) as WorkerProxy
+  const itkWebWorker = worker as ItkWorker
+  itkWebWorker.workerProxy = workerProxy
+  itkWebWorker.originalTerminate = itkWebWorker.terminate
+  itkWebWorker.terminate = () => {
+    itkWebWorker.workerProxy[Comlink.releaseProxy]()
+    itkWebWorker.originalTerminate()
+  }
+  return { workerProxy, worker: itkWebWorker }
 }
 
 // Internal function to create a web worker promise
-async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWorkerUrl?: string | null): Promise<createWebWorkerPromiseResult> {
-  let workerPromise: typeof WebworkerPromise
+async function createWorkerProxy (existingWorker: Worker | null, pipelineWorkerUrl?: string | null): Promise<createWorkerProxyResult> {
+  let workerProxy: WorkerProxy
   if (existingWorker != null) {
     // See if we have a worker promise attached the worker, if so reuse it. This ensures
     // that we can safely reuse the worker without issues.
-    const itkWebWorker = existingWorker as itkWorker
-    if (itkWebWorker.workerPromise !== undefined) {
-      workerPromise = itkWebWorker.workerPromise
+    const itkWebWorker = existingWorker as ItkWorker
+    if (itkWebWorker.workerProxy !== undefined) {
+      workerProxy = itkWebWorker.workerProxy
+      return { workerProxy, worker: itkWebWorker }
     } else {
-      workerPromise = new WebworkerPromise(existingWorker)
+      return workerToWorkerProxy(existingWorker)
     }
-
-    return await Promise.resolve({ webworkerPromise: workerPromise, worker: existingWorker })
   }
 
   const workerUrl = typeof pipelineWorkerUrl === 'undefined' ? config.pipelineWorkerUrl : pipelineWorkerUrl
@@ -61,13 +74,7 @@ async function createWebWorkerPromise (existingWorker: Worker | null, pipelineWo
     }
   }
 
-  const webworkerPromise = new WebworkerPromise(worker)
-
-  // Attach the worker promise to the worker, so if the worker is reused we can
-  // also reuse the the worker promise.
-  const itkWebWorker = (worker as itkWorker)
-  itkWebWorker.workerPromise = webworkerPromise
-  return { webworkerPromise, worker: itkWebWorker }
+  return workerToWorkerProxy(worker)
 }
 
-export default createWebWorkerPromise
+export default createWorkerProxy
