@@ -1,9 +1,9 @@
-import registerWebworker from 'webworker-promise/lib/register.js'
+import * as Comlink from 'comlink'
 
 import PipelineEmscriptenModule from '../../pipeline/PipelineEmscriptenModule.js'
 import runPipelineEmscripten from '../../pipeline/internal/runPipelineEmscripten.js'
 import IOTypes from '../IOTypes.js'
-import getTransferables from '../getTransferables.js'
+import getTransferables from '../get-transferables.js'
 
 import PipelineInput from '../../pipeline/PipelineInput.js'
 import PipelineOutput from '../../pipeline/PipelineOutput.js'
@@ -17,7 +17,7 @@ import imageTransferables from '../internal/imageTransferables.js'
 import meshTransferables from '../internal/meshTransferables.js'
 import polyDataTransferables from '../internal/polyDataTransferables.js'
 
-async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[], inputs: PipelineInput[]) {
+async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: string[], outputs: PipelineOutput[] | null, inputs: PipelineInput[] | null) {
   const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
 
   const transferables: (ArrayBuffer | TypedArray | null)[] = []
@@ -53,10 +53,7 @@ async function runPipeline(pipelineModule: PipelineEmscriptenModule, args: strin
     })
   }
 
-  return new registerWebworker.TransferableResponse(
-    result,
-    getTransferables(transferables)
-  )
+  return Comlink.transfer(result, getTransferables(transferables))
 }
 
 export default runPipeline
