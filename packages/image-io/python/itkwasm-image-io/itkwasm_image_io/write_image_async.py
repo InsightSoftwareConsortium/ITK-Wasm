@@ -6,7 +6,7 @@ from itkwasm import (
     Image,
 )
 
-def write_image(
+async def write_image_async(
     image: Image,
     serialized_image: str,
     information_only: bool = False,
@@ -26,18 +26,18 @@ def write_image(
     :param use_compression: Use compression in the written file
     :type  use_compression: bool
     """
-    func = environment_dispatch("itkwasm_image_io", "write_image")
-    func(image, serialized_image, information_only=information_only, use_compression=use_compression)
+    func = environment_dispatch("itkwasm_image_io", "write_image_async")
+    await func(image, serialized_image, information_only=information_only, use_compression=use_compression)
     return
 
-def imwrite(
+async def imwrite_async(
     image: Image,
     serialized_image: os.PathLike,
     information_only: bool = False,
     use_compression: bool = False,
 ) -> None:
-    return write_image(image, serialized_image, information_only=information_only, use_compression=use_compression)
+    return await write_image_async(image, serialized_image, information_only=information_only, use_compression=use_compression)
 
-imwrite.__doc__ = f"""{write_image.__doc__}
+imwrite_async.__doc__ = f"""{write_image_async.__doc__}
     Alias for write_image.
     """

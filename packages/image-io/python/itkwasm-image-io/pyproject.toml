@@ -33,7 +33,7 @@ keywords = [
 
 requires-python = ">=3.8"
 dependencies = [
-    "itkwasm >= 1.0.b131",
+    "itkwasm >= 1.0.b145",
     "itkwasm-image-io-wasi; sys_platform != \"emscripten\"",
     "itkwasm-image-io-emscripten; sys_platform == \"emscripten\"",
 
@@ -45,6 +45,7 @@ path = "itkwasm_image_io/_version.py"
 [tool.hatch.envs.default]
 dependencies = [
   "pytest",
+  "pytest-pyodide",
 ]
 
 [project.urls]
@@ -52,8 +53,21 @@ Home = "https://github.com/InsightSoftwareConsortium/itk-wasm"
 Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
 
 [tool.hatch.envs.default.scripts]
-test = "pytest"
-
+test = [
+  "hatch build -t wheel",
+  "pytest --dist-dir=./dist --rt=chrome",
+]
+download-pyodide = [
+  "curl -L https://github.com/pyodide/pyodide/releases/download/0.24.1/pyodide-0.24.1.tar.bz2 -o pyodide.tar.bz2",
+  "tar xjf pyodide.tar.bz2",
+  "rm -rf dist pyodide.tar.bz2",
+  "mv pyodide dist",
+]
+serve = [
+  "hatch build -t wheel",
+  'echo "\nVisit http://localhost:8877/console.html\n"',
+  "python -m http.server --directory=./dist 8877",
+]
 
 [tool.hatch.build]
 exclude = [

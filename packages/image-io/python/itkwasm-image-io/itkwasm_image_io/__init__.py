@@ -2,6 +2,8 @@
 
 from .read_image import read_image, imread
 from .write_image import write_image, imwrite
+from .read_image_async import read_image_async, imread_async
+from .write_image_async import write_image_async, imwrite_async
 
 from .bio_rad_read_image_async import bio_rad_read_image_async
 from .bio_rad_read_image import bio_rad_read_image
