@@ -12,7 +12,7 @@ export default defineConfig({
     format: 'es'
   },
   optimizeDeps: {
-    exclude: ['@itk-wasm/image-io']
+    exclude: ['itk-wasm', '@itk-wasm/image-io']
   },
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory
