@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   itk-wasm:
-    specifier: ^1.0.0-b.152
-    version: 1.0.0-b.152
+    specifier: ^1.0.0-b.154
+    version: 1.0.0-b.154
 
 devDependencies:
   '@shoelace-style/shoelace':
@@ -1083,6 +1083,10 @@ packages:
     dependencies:
       delayed-stream: 1.0.0
 
+  /comlink@4.4.1:
+    resolution: {integrity: sha512-+1dlx0aY5Jo1vHy/tSsIGpSkN4tS9rZSW8FIhG0JH/crs9wwweswIo/POr451r7bZww3hFbPAKnTpimzL/mm4Q==}
+    dev: false
+
   /commander@6.2.1:
     resolution: {integrity: sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==}
     engines: {node: '>= 6'}
@@ -1904,21 +1908,21 @@ packages:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
     dev: true
 
-  /itk-wasm@1.0.0-b.152:
-    resolution: {integrity: sha512-AtOy2iLY/lK9s4rzyeB4l9awJKZSFcQjlyfRcl+33DHcuvRDnpvGR2cgD/KEfiXa/7bZh7rg7+NPca4NgYpZ3g==}
+  /itk-wasm@1.0.0-b.154:
+    resolution: {integrity: sha512-bzwOpA4kaNNC2SUTk2wWfHdg+4G6kW8KdMcp3kChhKWzR3T76bV9yybDsuoYq/6aWFQtIgEJLMFcTUpwk0PodA==}
     hasBin: true
     dependencies:
       '@babel/runtime': 7.23.2
       '@thewtex/zstddec': 0.2.0
       '@types/emscripten': 1.39.9
       axios: 1.6.0
+      comlink: 4.4.1
       commander: 9.5.0
       fs-extra: 10.1.0
       glob: 8.1.0
       markdown-table: 3.0.3
       mime-types: 2.1.35
       wasm-feature-detect: 1.6.1
-      webworker-promise: 0.4.4
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2914,10 +2918,6 @@ packages:
 
   /wasm-feature-detect@1.6.1:
     resolution: {integrity: sha512-R1i9ED8UlLu/foILNB1ck9XS63vdtqU/tP1MCugVekETp/ySCrBZRk5I/zI67cI1wlQYeSonNm1PLjDHZDNg6g==}
-    dev: false
-
-  /webworker-promise@0.4.4:
-    resolution: {integrity: sha512-NfdSlaWqd+0iSrQudB0N0MELfJ9TVTlynhXMpi06piuZhyc9Yy7Hz6BFu2HUkvIb9lCS0pFW42ptd/JnXVnptg==}
     dev: false
 
   /well-known-symbols@2.0.0:

@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compress-stringify",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
   "module": "./dist/index.js",
@@ -25,9 +25,9 @@
     "cypress:open": "npx cypress open",
     "cypress:runChrome": "npx cypress run --browser chrome",
     "cypress:runFirefox": "npx cypress run --browser firefox",
-    "build": "npm run build:tsc && npm run build:browser:webWorkers && npm run build:browser:workerEmbedded && npm run build:demo",
-    "build:browser:webWorkers": "shx mkdir -p dist/web-workers && shx cp node_modules/itk-wasm/dist/core/web-workers/bundles/* ./dist/web-workers/",
-    "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/compress-stringify-worker-embedded.js ./src/index-worker-embedded.ts",
+    "build": "npm run build:tsc && npm run build:browser:workerEmbedded && npm run build:browser:workerEmbeddedMin && npm run build:demo",
+    "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
+    "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
     "build:tsc": "tsc --pretty",
     "build:demo": "npm run copyShoelaceAssets && vite -c build/vite.config.js build"
   },
@@ -39,7 +39,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.152"
+    "itk-wasm": "^1.0.0-b.154"
   },
   "devDependencies": {
     "@shoelace-style/shoelace": "^2.5.2",
