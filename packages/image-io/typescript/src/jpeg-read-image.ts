@@ -13,7 +13,6 @@ import {
 import JpegReadImageOptions from './jpeg-read-image-options.js'
 import JpegReadImageResult from './jpeg-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<JpegReadImageResult>} - result object
  */
 async function jpegReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: JpegReadImageOptions = {}
 ) : Promise<JpegReadImageResult> {

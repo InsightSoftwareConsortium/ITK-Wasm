@@ -1,6 +1,6 @@
 // Generated file. To retain edits, remove this comment.
 
-import * as dicom from '../../../dist/bundles/dicom.js'
+import * as dicom from '../../../dist/index.js'
 import structuredReportToTextLoadSampleInputs, { usePreRun } from "./structured-report-to-text-load-sample-inputs.js"
 
 class StructuredReportToTextModel {

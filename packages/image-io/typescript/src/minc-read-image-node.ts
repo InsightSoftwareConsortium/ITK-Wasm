@@ -12,7 +12,6 @@ import {
 import MincReadImageOptions from './minc-read-image-options.js'
 import MincReadImageNodeResult from './minc-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function mincReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'minc-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'minc-read-image')
 
   const {
     returnValue,

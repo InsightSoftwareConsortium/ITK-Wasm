@@ -12,7 +12,6 @@ import {
 import MetaWriteImageOptions from './meta-write-image-options.js'
 import MetaWriteImageNodeResult from './meta-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function metaWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'meta-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'meta-write-image')
 
   const {
     returnValue,

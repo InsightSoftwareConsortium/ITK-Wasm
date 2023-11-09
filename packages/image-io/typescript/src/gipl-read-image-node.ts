@@ -12,7 +12,6 @@ import {
 import GiplReadImageOptions from './gipl-read-image-options.js'
 import GiplReadImageNodeResult from './gipl-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function giplReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'gipl-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'gipl-read-image')
 
   const {
     returnValue,

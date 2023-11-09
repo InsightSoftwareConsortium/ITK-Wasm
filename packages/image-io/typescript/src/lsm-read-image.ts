@@ -13,7 +13,6 @@ import {
 import LsmReadImageOptions from './lsm-read-image-options.js'
 import LsmReadImageResult from './lsm-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<LsmReadImageResult>} - result object
  */
 async function lsmReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: LsmReadImageOptions = {}
 ) : Promise<LsmReadImageResult> {

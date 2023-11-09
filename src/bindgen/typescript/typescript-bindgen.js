@@ -42,23 +42,6 @@ function setPipelinesBaseUrl(
 function getPipelinesBaseUrl() : string | URL
 \`\`\`
 
-#### setPipelineWorkerUrl
-
-*Set base URL for the itk-wasm pipeline worker script when vendored.*
-
-\`\`\`ts
-function setPipelineWorkerUrl(
-  baseUrl: string | URL
-) : void
-\`\`\`
-
-#### getPipelineWorkerUrl
-
-*Get base URL for the itk-wasm pipeline worker script when vendored.*
-
-\`\`\`ts
-function getPipelineWorkerUrl() : string | URL
-\`\`\`
 `
   readmeNodeInterface += typescriptBindings(outputDir, buildDir, emscriptenWasmBinaries, options, true)
   readme += readmeUsage

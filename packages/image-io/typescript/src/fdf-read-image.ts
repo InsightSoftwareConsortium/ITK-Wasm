@@ -13,7 +13,6 @@ import {
 import FdfReadImageOptions from './fdf-read-image-options.js'
 import FdfReadImageResult from './fdf-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<FdfReadImageResult>} - result object
  */
 async function fdfReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: FdfReadImageOptions = {}
 ) : Promise<FdfReadImageResult> {

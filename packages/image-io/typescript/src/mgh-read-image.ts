@@ -13,7 +13,6 @@ import {
 import MghReadImageOptions from './mgh-read-image-options.js'
 import MghReadImageResult from './mgh-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<MghReadImageResult>} - result object
  */
 async function mghReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: MghReadImageOptions = {}
 ) : Promise<MghReadImageResult> {

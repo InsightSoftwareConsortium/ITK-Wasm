@@ -13,7 +13,6 @@ import {
 import MetaWriteImageOptions from './meta-write-image-options.js'
 import MetaWriteImageResult from './meta-write-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<MetaWriteImageResult>} - result object
  */
 async function metaWriteImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: MetaWriteImageOptions = {}

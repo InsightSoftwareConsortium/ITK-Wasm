@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { hdf5ReadImageNode } from '../../dist/bundles/image-io-node.js'
+import { hdf5ReadImageNode } from '../../dist/index-node.js'
 import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
 import { testInputPath } from './common.js'

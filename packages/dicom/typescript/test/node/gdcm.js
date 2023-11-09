@@ -4,7 +4,7 @@ import glob from 'glob'
 import fs from 'fs-extra'
 
 import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
-import { readImageDicomFileSeriesNode, readDicomTagsNode } from '../../dist/bundles/dicom-node.js'
+import { readImageDicomFileSeriesNode, readDicomTagsNode } from '../../dist/index-node.js'
 
 const testDataInputDirectory = path.resolve('..', 'test', 'data', 'input')
 const testSeriesDirectory = path.resolve(testDataInputDirectory, 'DicomImageOrientationTest')

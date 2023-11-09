@@ -12,7 +12,6 @@ import {
 import JpegWriteImageOptions from './jpeg-write-image-options.js'
 import JpegWriteImageNodeResult from './jpeg-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function jpegWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'jpeg-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'jpeg-write-image')
 
   const {
     returnValue,

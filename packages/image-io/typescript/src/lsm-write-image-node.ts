@@ -12,7 +12,6 @@ import {
 import LsmWriteImageOptions from './lsm-write-image-options.js'
 import LsmWriteImageNodeResult from './lsm-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function lsmWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'lsm-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'lsm-write-image')
 
   const {
     returnValue,

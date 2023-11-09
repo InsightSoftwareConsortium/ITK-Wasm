@@ -13,7 +13,6 @@ import {
 import WasmZstdReadImageOptions from './wasm-zstd-read-image-options.js'
 import WasmZstdReadImageResult from './wasm-zstd-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<WasmZstdReadImageResult>} - result object
  */
 async function wasmZstdReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: WasmZstdReadImageOptions = {}
 ) : Promise<WasmZstdReadImageResult> {

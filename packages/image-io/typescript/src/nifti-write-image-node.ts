@@ -12,7 +12,6 @@ import {
 import NiftiWriteImageOptions from './nifti-write-image-options.js'
 import NiftiWriteImageNodeResult from './nifti-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function niftiWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'nifti-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'nifti-write-image')
 
   const {
     returnValue,

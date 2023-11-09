@@ -13,7 +13,6 @@ import {
 import StructuredReportToHtmlOptions from './structured-report-to-html-options.js'
 import StructuredReportToHtmlResult from './structured-report-to-html-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<StructuredReportToHtmlResult>} - result object
  */
 async function structuredReportToHtml(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   dicomFile: File | BinaryFile,
   options: StructuredReportToHtmlOptions = {}
 ) : Promise<StructuredReportToHtmlResult> {

@@ -11,7 +11,6 @@ import {
 import CompressStringifyOptions from './compress-stringify-options.js'
 import CompressStringifyResult from './compress-stringify-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -24,7 +23,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<CompressStringifyResult>} - result object
  */
 async function compressStringify(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   input: Uint8Array,
   options: CompressStringifyOptions = {}
 ) : Promise<CompressStringifyResult> {

@@ -12,7 +12,6 @@ import {
 import VtkWriteImageOptions from './vtk-write-image-options.js'
 import VtkWriteImageNodeResult from './vtk-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function vtkWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'vtk-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'vtk-write-image')
 
   const {
     returnValue,

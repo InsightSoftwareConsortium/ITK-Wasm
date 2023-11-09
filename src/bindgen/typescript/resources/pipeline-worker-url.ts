@@ -1,8 +1,8 @@
 import { getPipelineWorkerUrl as itkWasmGetPipelineWorkerUrl } from 'itk-wasm'
-import packageJson from '../package.json'
 
 let pipelineWorkerUrl: string | URL | null | undefined
-const defaultPipelineWorkerUrl = `https://cdn.jsdelivr.net/npm/<bindgenPackageName>@${packageJson.version}/dist/web-workers/itk-wasm-pipeline.worker.js`
+// Use the version shipped with an app's bundler
+const defaultPipelineWorkerUrl = null
 
 export function setPipelineWorkerUrl (workerUrl: string | URL | null): void {
   pipelineWorkerUrl = workerUrl

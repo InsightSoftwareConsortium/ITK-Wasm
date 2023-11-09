@@ -13,7 +13,6 @@ import {
 import ApplyPresentationStateToImageOptions from './apply-presentation-state-to-image-options.js'
 import ApplyPresentationStateToImageResult from './apply-presentation-state-to-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<ApplyPresentationStateToImageResult>} - result object
  */
 async function applyPresentationStateToImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   imageIn: File | BinaryFile,
   presentationStateFile: File | BinaryFile,
   options: ApplyPresentationStateToImageOptions = {}

@@ -12,7 +12,6 @@ import {
 import WasmReadImageOptions from './wasm-read-image-options.js'
 import WasmReadImageNodeResult from './wasm-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function wasmReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'wasm-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'wasm-read-image')
 
   const {
     returnValue,

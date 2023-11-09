@@ -12,7 +12,6 @@ import {
 import BioRadWriteImageOptions from './bio-rad-write-image-options.js'
 import BioRadWriteImageNodeResult from './bio-rad-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function bioRadWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'bio-rad-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'bio-rad-write-image')
 
   const {
     returnValue,

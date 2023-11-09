@@ -8,12 +8,18 @@ export default defineConfig({
     outDir: '../../../demo-app',
     emptyOutDir: true,
   },
+  worker: {
+    format: 'es'
+  },
+  optimizeDeps: {
+    exclude: ['itk-wasm', '@itk-wasm/image-io']
+  },
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory
     viteStaticCopy({
       targets: [
         { src: '../../../dist/pipelines/*', dest: 'pipelines' },
-        { src: '../../../dist/web-workers/*', dest: 'web-workers' },
+        { src: '../../../node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
       ],
     })
   ],

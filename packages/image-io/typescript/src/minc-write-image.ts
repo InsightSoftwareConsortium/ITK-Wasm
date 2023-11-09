@@ -13,7 +13,6 @@ import {
 import MincWriteImageOptions from './minc-write-image-options.js'
 import MincWriteImageResult from './minc-write-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<MincWriteImageResult>} - result object
  */
 async function mincWriteImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: MincWriteImageOptions = {}

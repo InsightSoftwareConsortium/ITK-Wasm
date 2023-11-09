@@ -13,7 +13,6 @@ import {
 import GeAdwReadImageOptions from './ge-adw-read-image-options.js'
 import GeAdwReadImageResult from './ge-adw-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<GeAdwReadImageResult>} - result object
  */
 async function geAdwReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: GeAdwReadImageOptions = {}
 ) : Promise<GeAdwReadImageResult> {

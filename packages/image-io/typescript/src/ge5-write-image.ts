@@ -13,7 +13,6 @@ import {
 import Ge5WriteImageOptions from './ge5-write-image-options.js'
 import Ge5WriteImageResult from './ge5-write-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<Ge5WriteImageResult>} - result object
  */
 async function ge5WriteImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: Ge5WriteImageOptions = {}

@@ -12,7 +12,6 @@ import {
 import NrrdReadImageOptions from './nrrd-read-image-options.js'
 import NrrdReadImageNodeResult from './nrrd-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function nrrdReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'nrrd-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'nrrd-read-image')
 
   const {
     returnValue,

@@ -70,14 +70,17 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   }
   functionContent += `import ${modulePascalCase}${nodeTextCamel}Result from './${moduleKebabCase}${nodeTextKebab}-result.js'\n\n`
   if (forNode) {
-    functionContent += "\nimport path from 'path'\n\n"
+    functionContent += "import path from 'path'\n\n"
   } else {
-    functionContent += "\nimport { getPipelinesBaseUrl } from './pipelines-base-url.js'"
-    functionContent += "\nimport { getPipelineWorkerUrl } from './pipeline-worker-url.js'\n\n"
+    functionContent += "import { getPipelinesBaseUrl } from './pipelines-base-url.js'\n"
+    functionContent += "import { getPipelineWorkerUrl } from './pipeline-worker-url.js'\n\n"
   }
 
   const readmeParametersTable = [['Parameter', 'Type', 'Description'],]
   functionContent += `/**\n * ${interfaceJson.description}\n *\n`
+  if (!forNode) {
+    readmeParametersTable.push(['`webWorker`', '*null or Worker or boolean*', 'WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker.'])
+  }
   interfaceJson.inputs.forEach((input) => {
     if (!interfaceJsonTypeToTypeScriptType.has(input.type)) {
       console.error(`Unexpected input type: ${input.type}`)
@@ -103,7 +106,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     const isArray = output.itemsExpectedMax > 1 ? '[]' : ''
     const typescriptType = `string${isArray}`
     functionContent += ` * @param {${typescriptType}} ${camelCase(output.name)} - ${output.description}\n`
-    readmeParametersTable.push([`\`${camelCase(output.name)}\``, `*${typescriptType}*`, output.description])
+    readmeParametersTable.push([`\`${camelCase(output.name)}\``, `*${typescriptType.replaceAll('|', 'or')}*`, output.description])
   })
 
   if (haveOptions) {
@@ -116,7 +119,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   let functionCall = ''
   functionCall += `async function ${moduleCamelCase}${nodeTextCamel}(\n`
   if (!forNode) {
-    functionCall += '  webWorker: null | Worker,\n'
+    functionCall += '  webWorker: null | Worker | boolean,\n'
   }
   interfaceJson.inputs.forEach((input, index) => {
     let typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
@@ -447,7 +450,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
 
   const outputsVar = interfaceJson.outputs.filter(o => !o.type.includes('FILE') || !forNode).length ? '    outputs\n' : ''
   if (forNode) {
-    functionContent += `\n  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', '${moduleKebabCase}')\n\n`
+    functionContent += `\n  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', '${moduleKebabCase}')\n\n`
     const mountDirsArg = needMountDirs ? ', mountDirs' : ''
     functionContent += `  const {\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs${mountDirsArg})\n`
   } else {

@@ -1,4 +1,4 @@
-import * as dicom from '../../../dist/bundles/dicom.js'
+import * as dicom from '../../../dist/index.js'
 import structuredReportToHtmlLoadSampleInputs, { usePreRun }  from "./structured-report-to-html-load-sample-inputs.js"
 
 class StructuredReportToHtmlModel {

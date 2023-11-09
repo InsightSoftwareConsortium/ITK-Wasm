@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { mrcReadImageNode } from '../../dist/bundles/image-io-node.js'
+import { mrcReadImageNode } from '../../dist/index-node.js'
 import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
 import { testInputPath } from './common.js'

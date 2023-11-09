@@ -106,14 +106,14 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
         result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(model.${modelProperty}.get("${parameterName}"), globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
       } else if (parameterType === 'INPUT_IMAGE') {
         if (parameter.itemsExpectedMax > 1) {
-          result += `${indent}${indent}const readImages = await Promise.all(Array.from(files).map(async (file) => readImageFile(null, file)))\n`
+          result += `${indent}${indent}const readImages = await Promise.all(Array.from(files).map(async (file) => readImage(null, file)))\n`
           result += `${indent}${indent}readImages.forEach(img => img.webWorker.terminate())\n`
           result += `${indent}${indent}const inputImages = readImages.map(img => img.image)\n`
           result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", inputImages)\n`
           result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
           result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(inputImages, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
         } else {
-          result += `${indent}${indent}const { image, webWorker } = await readImageFile(null, files[0])\n`
+          result += `${indent}${indent}const { image, webWorker } = await readImage(null, files[0])\n`
           result += `${indent}${indent}webWorker.terminate()\n`
           result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", image)\n`
           result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`

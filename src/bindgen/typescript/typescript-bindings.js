@@ -50,10 +50,10 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
     packageJson.name = packageName
     packageJson.description = options.packageDescription
-    packageJson.module = `./dist/bundles/${bundleName}.js`
-    packageJson.exports['.'].browser = `./dist/bundles/${bundleName}.js`
-    packageJson.exports['.'].node = `./dist/bundles/${bundleName}-node.js`
-    packageJson.exports['.'].default = `./dist/bundles/${bundleName}.js`
+    packageJson.module = `./dist/index.js`
+    packageJson.exports['.'].browser = `./dist/index.js`
+    packageJson.exports['.'].node = `./dist/index-node.js`
+    packageJson.exports['.'].default = `./dist/index.js`
     if (options.repository) {
       packageJson.repository = { 'type': 'git', 'url': options.repository }
     }
@@ -160,18 +160,13 @@ if (!params.has('functionName')) {
     allUsedInterfaceTypes.forEach(iType => indexContent += `export type { ${iType} } from 'itk-wasm'\n`)
   }
 
-  readmeInterface += `  setPipelinesBaseUrl,
+  if (!forNode) {
+    readmeInterface += `  setPipelinesBaseUrl,
   getPipelinesBaseUrl,
-  setPipelineWorkerUrl,
-  getPipelineWorkerUrl,
 `
+  }
   readmeInterface += `} from "${packageName}"\n\`\`\`\n`
   readmeInterface += readmePipelines
-
-  const itkConfigPath = path.join(outputDir, 'src', 'itkConfig.js')
-  if (!fs.existsSync(itkConfigPath)) {
-    fs.copyFileSync(bindgenResource('itkConfig.js'), itkConfigPath)
-  }
 
   const indexPath = path.join(srcOutputDir, `index${nodeTextKebab}.ts`)
   writeIfOverrideNotPresent(indexPath, indexContent)

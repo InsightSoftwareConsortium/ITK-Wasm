@@ -12,7 +12,6 @@ import {
 import MghReadImageOptions from './mgh-read-image-options.js'
 import MghReadImageNodeResult from './mgh-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function mghReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'mgh-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'mgh-read-image')
 
   const {
     returnValue,

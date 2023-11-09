@@ -25,7 +25,6 @@ def input_data():
     ]
     data = {}
     for f in test_files:
-        path = str(input_base_path / f) + '.pickle'
-        with open(path, 'rb') as fp:
-            data[str(f.name)] = pickle.load(fp)
+        with open(input_base_path / f, 'rb') as fp:
+            data[str(f.name)] = fp.read()
     return data

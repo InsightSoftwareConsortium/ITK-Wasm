@@ -12,7 +12,6 @@ import {
 import NrrdWriteImageOptions from './nrrd-write-image-options.js'
 import NrrdWriteImageNodeResult from './nrrd-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function nrrdWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'nrrd-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'nrrd-write-image')
 
   const {
     returnValue,

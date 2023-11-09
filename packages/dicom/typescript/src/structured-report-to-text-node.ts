@@ -11,7 +11,6 @@ import {
 import StructuredReportToTextOptions from './structured-report-to-text-options.js'
 import StructuredReportToTextNodeResult from './structured-report-to-text-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -101,7 +100,7 @@ async function structuredReportToTextNode(
     options.printColor && args.push('--print-color')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'structured-report-to-text')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'structured-report-to-text')
 
   const {
     returnValue,

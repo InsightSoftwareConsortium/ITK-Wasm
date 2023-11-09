@@ -12,7 +12,6 @@ import {
 import NiftiReadImageOptions from './nifti-read-image-options.js'
 import NiftiReadImageNodeResult from './nifti-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function niftiReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'nifti-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'nifti-read-image')
 
   const {
     returnValue,

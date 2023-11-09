@@ -12,7 +12,6 @@ import {
 import LsmReadImageOptions from './lsm-read-image-options.js'
 import LsmReadImageNodeResult from './lsm-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function lsmReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'lsm-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'lsm-read-image')
 
   const {
     returnValue,

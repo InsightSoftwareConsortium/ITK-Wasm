@@ -12,7 +12,6 @@ import {
 import FdfReadImageOptions from './fdf-read-image-options.js'
 import FdfReadImageNodeResult from './fdf-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function fdfReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'fdf-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'fdf-read-image')
 
   const {
     returnValue,

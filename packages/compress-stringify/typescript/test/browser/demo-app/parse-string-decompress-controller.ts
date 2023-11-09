@@ -1,6 +1,6 @@
 // Generated file. To retain edits, remove this comment.
 
-import * as compressStringify from '../../../dist/bundles/compress-stringify.js'
+import * as compressStringify from '../../../dist/index.js'
 import parseStringDecompressLoadSampleInputs, { usePreRun } from "./parse-string-decompress-load-sample-inputs.js"
 
 class ParseStringDecompressModel {

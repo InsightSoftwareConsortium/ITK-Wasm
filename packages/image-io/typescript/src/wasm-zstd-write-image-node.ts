@@ -12,7 +12,6 @@ import {
 import WasmZstdWriteImageOptions from './wasm-zstd-write-image-options.js'
 import WasmZstdWriteImageNodeResult from './wasm-zstd-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function wasmZstdWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'wasm-zstd-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'wasm-zstd-write-image')
 
   const {
     returnValue,

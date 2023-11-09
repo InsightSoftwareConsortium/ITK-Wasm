@@ -12,7 +12,6 @@ import {
 import MrcReadImageOptions from './mrc-read-image-options.js'
 import MrcReadImageNodeResult from './mrc-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function mrcReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'mrc-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'mrc-read-image')
 
   const {
     returnValue,

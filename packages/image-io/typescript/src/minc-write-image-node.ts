@@ -12,7 +12,6 @@ import {
 import MincWriteImageOptions from './minc-write-image-options.js'
 import MincWriteImageNodeResult from './minc-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function mincWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'minc-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'minc-write-image')
 
   const {
     returnValue,

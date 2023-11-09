@@ -12,7 +12,6 @@ import {
 import GiplWriteImageOptions from './gipl-write-image-options.js'
 import GiplWriteImageNodeResult from './gipl-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function giplWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'gipl-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'gipl-write-image')
 
   const {
     returnValue,

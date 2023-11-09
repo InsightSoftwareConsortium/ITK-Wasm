@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { pngReadImageNode, pngWriteImageNode } from '../../dist/bundles/image-io-node.js'
+import { pngReadImageNode, pngWriteImageNode } from '../../dist/index-node.js'
 import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
 import { testInputPath, testOutputPath } from './common.js'

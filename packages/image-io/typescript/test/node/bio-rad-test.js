@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { bioRadReadImageNode, bioRadWriteImageNode } from '../../dist/bundles/image-io-node.js'
+import { bioRadReadImageNode, bioRadWriteImageNode } from '../../dist/index-node.js'
 import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
 import { testInputPath, testOutputPath } from './common.js'

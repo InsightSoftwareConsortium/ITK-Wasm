@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { nrrdReadImageNode, nrrdWriteImageNode } from '../../dist/bundles/image-io-node.js'
+import { nrrdReadImageNode, nrrdWriteImageNode } from '../../dist/index-node.js'
 import { FloatTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
 import { testInputPath, testOutputPath } from './common.js'

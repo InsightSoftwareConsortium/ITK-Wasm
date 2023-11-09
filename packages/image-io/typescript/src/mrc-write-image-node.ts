@@ -12,7 +12,6 @@ import {
 import MrcWriteImageOptions from './mrc-write-image-options.js'
 import MrcWriteImageNodeResult from './mrc-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function mrcWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'mrc-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'mrc-write-image')
 
   const {
     returnValue,

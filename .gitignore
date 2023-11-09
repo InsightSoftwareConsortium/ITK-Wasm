@@ -80,6 +80,8 @@ test/pipelines/bindgen-interface-types-pipeline/wasi-build/
 test/pipelines/bindgen-interface-types-pipeline/python-web-demo/
 
 packages/image-io/test/
+packages/image-io/typescript/demo-app-rollup/
+packages/image-io/python/itkwasm-image-io-wasi/itkwasm_image_io_wasi/wasm_modules/
 
 cypress/screenshots/
 cypress/videos/

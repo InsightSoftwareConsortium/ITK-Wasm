@@ -13,7 +13,6 @@ import {
 import LsmWriteImageOptions from './lsm-write-image-options.js'
 import LsmWriteImageResult from './lsm-write-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<LsmWriteImageResult>} - result object
  */
 async function lsmWriteImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: LsmWriteImageOptions = {}

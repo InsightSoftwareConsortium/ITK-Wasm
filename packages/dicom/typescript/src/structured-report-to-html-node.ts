@@ -11,7 +11,6 @@ import {
 import StructuredReportToHtmlOptions from './structured-report-to-html-options.js'
 import StructuredReportToHtmlNodeResult from './structured-report-to-html-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -181,7 +180,7 @@ async function structuredReportToHtmlNode(
     options.codeDetailsTooltip && args.push('--code-details-tooltip')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'structured-report-to-html')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'structured-report-to-html')
 
   const {
     returnValue,

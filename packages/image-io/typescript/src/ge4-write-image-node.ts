@@ -12,7 +12,6 @@ import {
 import Ge4WriteImageOptions from './ge4-write-image-options.js'
 import Ge4WriteImageNodeResult from './ge4-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function ge4WriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'ge4-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'ge4-write-image')
 
   const {
     returnValue,

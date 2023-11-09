@@ -13,7 +13,6 @@ import {
 import NiftiReadImageOptions from './nifti-read-image-options.js'
 import NiftiReadImageResult from './nifti-read-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -26,7 +25,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<NiftiReadImageResult>} - result object
  */
 async function niftiReadImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: NiftiReadImageOptions = {}
 ) : Promise<NiftiReadImageResult> {

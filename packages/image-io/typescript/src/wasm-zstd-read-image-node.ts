@@ -12,7 +12,6 @@ import {
 import WasmZstdReadImageOptions from './wasm-zstd-read-image-options.js'
 import WasmZstdReadImageNodeResult from './wasm-zstd-read-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -58,7 +57,7 @@ async function wasmZstdReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'wasm-zstd-read-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'wasm-zstd-read-image')
 
   const {
     returnValue,

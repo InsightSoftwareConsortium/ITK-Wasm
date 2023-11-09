@@ -5,11 +5,10 @@ const decoder = new ZSTDDecoder()
 let decoderInitialized = false
 
 import ITKWasmEmscriptenModule from '../ITKWasmEmscriptenModule.js'
-import camelCase from './camelCase.js'
 
 // Load the Emscripten module in the browser in a WebWorker.
 //
-// baseUrl is usually taken from '../itkConfig.js', but a different value
+// baseUrl is usually taken from 'getPipelinesBaseUrl()', but a different value
 // could be passed.
 async function loadEmscriptenModuleWebWorker(moduleRelativePathOrURL: string | URL, baseUrl: string): Promise<ITKWasmEmscriptenModule> {
   let modulePrefix = null

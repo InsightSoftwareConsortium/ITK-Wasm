@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { niftiReadImageNode, niftiWriteImageNode } from '../../dist/bundles/image-io-node.js'
+import { niftiReadImageNode, niftiWriteImageNode } from '../../dist/index-node.js'
 import { FloatTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
 import { testInputPath, testOutputPath } from './common.js'

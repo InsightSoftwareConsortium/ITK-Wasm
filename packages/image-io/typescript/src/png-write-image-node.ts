@@ -12,7 +12,6 @@ import {
 import PngWriteImageOptions from './png-write-image-options.js'
 import PngWriteImageNodeResult from './png-write-image-node-result.js'
 
-
 import path from 'path'
 
 /**
@@ -62,7 +61,7 @@ async function pngWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'png-write-image')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'png-write-image')
 
   const {
     returnValue,

@@ -1,28 +1,29 @@
-// Generated file. To retain edits, remove this comment.
+import * as imageIo from '../../../dist/index.js'
 
-export default null
-// export default async function bioRadWriteImageLoadSampleInputs (model, preRun=false) {
+export default async function writeImageLoadSampleInputs (model, preRun=false) {
 
-  // Load sample inputs for the bioRadWriteImage function.
-  //
-  // This function should load sample inputs:
-  //
-  //  1) In the provided model map.
-  //  2) Into the corresponding HTML input elements if preRun is not true.
-  //
-  // Example for an input named `exampleInput`:
+  const inputButton = document.querySelector('#writeImageInputs sl-button[name=image-file-button]')
+  if (!preRun) {
+    inputButton.loading = true
+  }
+  const fileName = 'cthead1.iwi.cbor'
+  const inputResponse = await fetch(`https://bafybeigrnfohpfr2kqooyjsozsva6jh2663riwrxsum5x3ltow42r6j2o4.ipfs.w3s.link/ipfs/bafybeigrnfohpfr2kqooyjsozsva6jh2663riwrxsum5x3ltow42r6j2o4/data/input/${fileName}`)
+  const inputData = new Uint8Array(await inputResponse.arrayBuffer())
+  const { image: inputImage, webWorker } = await imageIo.readImage(null, { data: inputData, path: fileName })
+  webWorker.terminate()
+  model.inputs.set('image', inputImage)
+  const serializedImage = 'cthead1.png'
+  model.inputs.set('serializedImage', serializedImage)
+  if (!preRun) {
+    const detailsElement = document.querySelector('#writeImage-image-details')
+    detailsElement.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(inputImage, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
+    detailsElement.disabled = false
+    const inputElement = document.querySelector('#writeImageInputs sl-input[name="serialized-image"]')
+    inputElement.value = serializedImage
+    inputButton.loading = false
+  }
 
-  // const exampleInput = 5
-  // model.inputs.set("exampleInput", exampleInput)
-  // if (!preRun) {
-  //   const exampleElement = document.querySelector("#bioRadWriteImageInputs [name=example-input]")
-  //   exampleElement.value = 5
-  // }
+  return model
+}
 
-  // return model
-// }
-
-// Use this function to run the pipeline when this tab group is select.
-// This will load the web worker if it is not already loaded, download the wasm module, and allocate memory in the wasm model.
-// Set this to `false` if sample inputs are very large or sample pipeline computation is long.
 export const usePreRun = true

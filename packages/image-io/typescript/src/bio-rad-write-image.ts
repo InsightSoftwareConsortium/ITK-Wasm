@@ -13,7 +13,6 @@ import {
 import BioRadWriteImageOptions from './bio-rad-write-image-options.js'
 import BioRadWriteImageResult from './bio-rad-write-image-result.js'
 
-
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
@@ -27,7 +26,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<BioRadWriteImageResult>} - result object
  */
 async function bioRadWriteImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: BioRadWriteImageOptions = {}

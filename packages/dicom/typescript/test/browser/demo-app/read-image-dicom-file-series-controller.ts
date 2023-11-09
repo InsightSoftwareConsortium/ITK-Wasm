@@ -1,5 +1,5 @@
 import { writeImageArrayBuffer, copyImage } from 'itk-wasm'
-import * as dicom from '../../../dist/bundles/dicom.js'
+import * as dicom from '../../../dist/index.js'
 import readImageDicomFileSeriesLoadSampleInputs, { usePreRun } from "./read-image-dicom-file-series-load-sample-inputs.js"
 
 class ReadImageDicomFileSeriesModel {
