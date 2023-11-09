@@ -42,6 +42,7 @@ path = "itkwasm_image_io_emscripten/_version.py"
 dependencies = [
   "pytest",
   "pytest-pyodide",
+  "itkwasm-image-io-emscripten",
 ]
 
 [project.urls]

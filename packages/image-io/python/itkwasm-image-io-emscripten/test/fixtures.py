@@ -24,6 +24,5 @@ def input_data():
     data = {}
     for f in test_files:
         with open(input_base_path / f, 'rb') as fp:
-            print(str(f.name))
             data[str(f.name)] = fp.read()
     return data
