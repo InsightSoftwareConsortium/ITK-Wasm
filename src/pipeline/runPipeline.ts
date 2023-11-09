@@ -1,4 +1,6 @@
-import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
+import * as Comlink from 'comlink'
+
+import createWorkerProxy from '../core/create-worker-proxy.js'
 import loadEmscriptenModuleMainThread from '../core/internal/loadEmscriptenModuleMainThread.js'
 
 import { simd } from 'wasm-feature-detect'
@@ -8,7 +10,7 @@ import config from '../itkConfig.js'
 import IOTypes from '../core/IOTypes.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import runPipelineEmscripten from './internal/runPipelineEmscripten.js'
-import getTransferables from '../core/getTransferables.js'
+import getTransferables from '../core/get-transferables.js'
 import BinaryStream from '../core/interface-types/binary-stream.js'
 import BinaryFile from '../core/interface-types/binary-file.js'
 import Image from '../core/interface-types/image.js'
@@ -22,6 +24,7 @@ import RunPipelineOptions from './RunPipelineOptions.js'
 import meshTransferables from '../core/internal/meshTransferables.js'
 import TypedArray from '../core/TypedArray.js'
 import imageTransferables from '../core/internal/imageTransferables.js'
+import RunPipelineWorkerResult from '../core/web-workers/run-pipeline-worker-result.js'
 
 // To cache loaded pipeline modules
 const pipelineToModule: Map<string, PipelineEmscriptenModule> = new Map()
@@ -69,7 +72,7 @@ async function runPipeline (
   let worker = webWorker
   const pipelineWorkerUrl = options?.pipelineWorkerUrl ?? null
   const pipelineWorkerUrlString = typeof pipelineWorkerUrl !== 'string' && typeof pipelineWorkerUrl?.href !== 'undefined' ? pipelineWorkerUrl.href : pipelineWorkerUrl
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(
+  const { workerProxy, worker: usedWorker } = await createWorkerProxy(
     worker as Worker | null, pipelineWorkerUrlString as string | undefined | null
   )
   worker = usedWorker
@@ -108,25 +111,16 @@ async function runPipeline (
       }
     })
   }
-  interface RunPipelineWorkerResult {
-    returnValue: number
-    stdout: string
-    stderr: string
-    outputs: PipelineOutput[]
-  }
   const pipelineBaseUrl = options?.pipelineBaseUrl ?? 'pipelinesUrl'
   const pipelineBaseUrlString = typeof pipelineBaseUrl !== 'string' && typeof pipelineBaseUrl?.href !== 'undefined' ? pipelineBaseUrl.href : pipelineBaseUrl
-  const result: RunPipelineWorkerResult = await webworkerPromise.postMessage(
-    {
-      operation: 'runPipeline',
-      config: config,
-      pipelinePath: pipelinePath.toString(),
-      pipelineBaseUrl: pipelineBaseUrlString,
-      args,
-      outputs,
-      inputs
-    },
-    getTransferables(transferables)
+  const transferedInputs = (inputs != null) ? Comlink.transfer(inputs, getTransferables(transferables)) : null
+  const result: RunPipelineWorkerResult = await workerProxy.runPipeline(
+    config,
+    pipelinePath.toString(),
+    pipelineBaseUrlString as string,
+    args,
+    outputs,
+    transferedInputs
   )
   return {
     returnValue: result.returnValue,

@@ -1,5 +1,8 @@
-import getTransferables from '../core/getTransferables.js'
-import createWebWorkerPromise from '../core/createWebWorkerPromise.js'
+import * as Comlink from 'comlink'
+
+import createWorkerProxy from '../core/create-worker-proxy.js'
+import getTransferables from '../core/get-transferables.js'
+import ReadImagePipelineResult from '../core/web-workers/read-image-pipeline-result.js'
 import Image from '../core/interface-types/image.js'
 import InterfaceTypes from '../core/InterfaceTypes.js'
 import PipelineInput from '../pipeline/PipelineInput.js'
@@ -12,7 +15,7 @@ import ReadImageArrayBufferOptions from './ReadImageArrayBufferOptions.js'
 
 async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, options?: ReadImageArrayBufferOptions | string): Promise<ReadImageResult> {
   let worker = webWorker
-  const { webworkerPromise, worker: usedWorker } = await createWebWorkerPromise(worker, null)
+  const { workerProxy, worker: usedWorker } = await createWorkerProxy(worker, null)
   worker = usedWorker
 
   const filePath = `./${fileName}`
@@ -25,11 +28,6 @@ async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: Arra
   ] as PipelineInput[]
 
   const transferables: ArrayBuffer[] = [arrayBuffer]
-  interface RunReadImagePipelineResult {
-    stdout: string
-    stderr: string
-    outputs: any[]
-  }
   let mimeType
   if (typeof options === 'string') {
     // backwards compatibility
@@ -39,18 +37,14 @@ async function readImageArrayBuffer (webWorker: Worker | null, arrayBuffer: Arra
       mimeType = options.mimeType
     }
   }
-  const result: RunReadImagePipelineResult = await webworkerPromise.postMessage(
-    {
-      operation: 'readImage',
-      config: config,
-      mimeType,
-      fileName,
-      pipelinePath: 'read-image', // placeholder
-      args,
-      outputs,
-      inputs
-    },
-    getTransferables(transferables)
+  const mimeTypeString = mimeType?.toString() ?? ''
+  const result: ReadImagePipelineResult = await workerProxy.readImage(
+    config,
+    mimeTypeString,
+    fileName,
+    args,
+    outputs,
+    Comlink.transfer(inputs, getTransferables(transferables))
   )
   let image = result.outputs[0].data as Image
   if (typeof options === 'object' && (typeof options.componentType !== 'undefined' || typeof options.pixelType !== 'undefined')) {
