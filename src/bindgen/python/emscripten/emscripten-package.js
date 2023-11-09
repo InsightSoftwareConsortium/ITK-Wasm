@@ -1,3 +1,4 @@
+import fs from 'fs-extra'
 import path from 'path'
 
 import mkdirP from '../../mkdir-p.js'
@@ -13,6 +14,14 @@ import emscriptenFunctionModule from './emscripten-function-module.js'
 import wasmBinaryInterfaceJson from '../../wasm-binary-interface-json.js'
 
 function emscriptenPackage(outputDir, buildDir, wasmBinaries, options) {
+  const defaultJsModulePath = path.join(outputDir, '..', 'typescript', 'dist', 'bundle', 'index-worker-embedded.min.js')
+  const moduleUrl = options.jsModulePath ?? defaultJsModulePath
+  if (!fs.existsSync(moduleUrl)) {
+    console.warn(`Could not find ${moduleUrl}: skipping python emscripten package`)
+    return
+  }
+  const jsModuleContent = btoa(fs.readFileSync(moduleUrl, { encoding: 'utf8', flag: 'r' }))
+
   const packageName = `${options.packageName}-emscripten`
   const packageDir = path.join(outputDir, packageName)
   const packageDescription = `${options.packageDescription} Emscripten implementation.`
@@ -28,7 +37,7 @@ function emscriptenPackage(outputDir, buildDir, wasmBinaries, options) {
   const async = true
   const sync = false
   packageDunderInit(outputDir, buildDir, wasmBinaries, packageName, packageDescription, packageDir, pypackage, async, sync)
-  emscriptenPyodideModule(outputDir, packageDir, pypackage, options)
+  emscriptenPyodideModule(jsModuleContent, packageDir, pypackage)
   emscriptenTestModule(packageDir, pypackage)
 
   const wasmModulesDir = path.join(packageDir, pypackage, 'wasm_modules')
