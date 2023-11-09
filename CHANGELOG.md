@@ -1,5 +1,23 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.155](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.154...itk-wasm-v1.0.0-b.155) (2023-11-09)
+
+
+### Bug Fixes
+
+* **bindgen:** create __init__.py for emscripten package test fix import ([1b0a814](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/1b0a814371cd871d5c0b062a4645f6c494bdc5b3))
+* **bindgen:** remove rollup configurations ([84e78df](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/84e78df94d31986e42f9f16162eef2370153fbe2))
+
+
+### Features
+
+* **bindgen:** embed js module bundle in the python package ([f46df27](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/f46df272e5a24516e129d5b59e6a8a8f1f1edf99))
+* **image-io:** add itkwasm-image-io-emscripten package ([8f73d22](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/8f73d22bfb7aa191b957e351becfb8fdaea6f257))
+* **itkwasm-image-io-wasi:** add bindgen output ([7fe693b](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/7fe693bb574857008e8fdec8a3f1521b96952bac))
+* **itkwasm-image-io-wasi:** add read_image, imread ([020ac77](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/020ac77129935874e433893145fddb66feca779f))
+* **itkwasm-image-io-wasi:** add write_image ([2d88004](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2d88004880e200c77792ae9983b108a52af30e80))
+* **itkwasm-image-io:** initial addition ([815d901](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/815d90197479533ea0045a58a5cc4867f9af380c))
+
 # [1.0.0-b.154](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.153...itk-wasm-v1.0.0-b.154) (2023-11-06)
 
 
