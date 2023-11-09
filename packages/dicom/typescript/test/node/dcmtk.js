@@ -6,8 +6,8 @@ import {
   structuredReportToHtmlNode ,
   readDicomEncapsulatedPdfNode,
   applyPresentationStateToImageNode,
-} from '../../dist/bundles/dicom-node.js'
-import { readImageLocalFile } from 'itk-wasm'
+} from '../../dist/index-node.js'
+import { readImageNode } from '@itk-wasm/image-io'
 
 function arrayEquals(a, b) {
   return (a.length === b.length && a.every((val, idx) => val === b[idx]))
@@ -189,7 +189,7 @@ test('Apply color presentation state (CSPS) to a color dicom image.', async t =>
 
   const baselineImage = 'csps-output-image-baseline.bmp'
   const baselineImageFilePath = baselinePathPrefix + baselineImage
-  const baselinePixels = await readImageLocalFile(baselineImageFilePath)
+  const baselinePixels = await readImageNode(baselineImageFilePath)
   t.assert(baselinePixels.data.length === outputImage.data.length)
   t.assert(Buffer.compare(baselinePixels.data, outputImage.data) === 0)
 })

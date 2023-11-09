@@ -53,7 +53,7 @@ async function readDicomTagsNode(
 
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), '..', 'pipelines', 'read-dicom-tags')
+  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'read-dicom-tags')
 
   const {
     returnValue,

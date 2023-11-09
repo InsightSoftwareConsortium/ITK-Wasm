@@ -1,5 +1,5 @@
 import { getPipelinesBaseUrl as itkWasmGetPipelinesBaseUrl } from 'itk-wasm'
-import packageJson from '../package.json'
+import packageJson from './package.json' assert { type: 'json' }
 
 let pipelinesBaseUrl: string | URL | undefined
 let defaultPipelinesBaseUrl: string | URL = `https://cdn.jsdelivr.net/npm/@itk-wasm/dicom@${packageJson.version}/dist/pipelines`

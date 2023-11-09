@@ -1,4 +1,4 @@
-import * as dicom from '../../../dist/bundles/dicom.js'
+import * as dicom from '../../../dist/index.js'
 import readDicomEncapsulatedPdfLoadSampleInputs, { usePreRun }  from "./read-dicom-encapsulated-pdf-load-sample-inputs.js"
 
 class ReadDicomEncapsulatedPdfModel {
