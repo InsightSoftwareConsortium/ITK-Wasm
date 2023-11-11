@@ -8,7 +8,7 @@ Read and write to and from [`Image`](/typescript/interface_types/Image.html) is 
 - [DICOM Series](https://dicom.nema.org/)
 - [ITK HDF5](https://support.hdfgroup.org/HDF5/)
 - [JPEG](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format)
-- [Gipl (Guys Image Processing Lab)](https://www.ncbi.nlm.nih.gov/pubmed/12956259)
+- [GIPL (Guys Image Processing Lab)](https://www.ncbi.nlm.nih.gov/pubmed/12956259)
 - [LSM](https://www.openwetware.org/wiki/Dissecting_LSM_files)
 - [MetaImage](https://itk.org/Wiki/ITK/MetaIO/Documentation)
 - [MINC 2.0](https://en.wikibooks.org/wiki/MINC/SoftwareDevelopment/MINC2.0_File_Format_Reference)
