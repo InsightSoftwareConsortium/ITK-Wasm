@@ -2,6 +2,7 @@
 
 Read and write to and from [`Image`](/typescript/interface_types/Image.html) is supported. For visualization with [vtk.js](https://kitware.github.io/vtk-js/index.html), use [`convertItkToVtkImage`](https://kitware.github.io/vtk-js/api/Common_DataModel_ITKHelper.html).
 
+- [AIM,ISQ](https://www.scanco.ch/en/support/customer-login/faq-customers/faq-customers-import-export.html)
 - [BioRad](https://www.bio-rad.com/)
 - [BMP](https://en.wikipedia.org/wiki/BMP_file_format)
 - [DICOM](https://dicom.nema.org/)
@@ -16,9 +17,6 @@ Read and write to and from [`Image`](/typescript/interface_types/Image.html) is 
 - [MRC](http://www.ccpem.ac.uk/mrc_format/mrc_format.php)
 - [NIfTI](https://nifti.nimh.nih.gov/nifti-1)
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)
-- [Portable Network Graphics (PNG)](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
-- [Scanco microCT volume file format](https://www.scanco.ch/en/support/customer-login/faq-customers/faq-customers-import-export.html)
-- [Tagged Image File Format (TIFF)](https://en.wikipedia.org/wiki/TIFF)
 - [VTK legacy file format for images](https://www.vtk.org/VTK/img/file-formats.pdf)
 - [Varian FDF](https://github.com/InsightSoftwareConsortium/ITKIOFDF)
 
