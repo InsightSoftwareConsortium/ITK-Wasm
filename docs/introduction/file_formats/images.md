@@ -14,7 +14,7 @@ Read and write to and from [`Image`](/typescript/interface_types/Image.html) is 
 - [MINC 2.0](https://en.wikibooks.org/wiki/MINC/SoftwareDevelopment/MINC2.0_File_Format_Reference)
 - [MGH](https://surfer.nmr.mgh.harvard.edu/fswiki/FsTutorial/MghFormat)
 - [MRC](http://www.ccpem.ac.uk/mrc_format/mrc_format.php)
-- [NifTi](https://nifti.nimh.nih.gov/nifti-1)
+- [NIfTI](https://nifti.nimh.nih.gov/nifti-1)
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)
 - [Portable Network Graphics (PNG)](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
 - [Tagged Image File Format (TIFF)](https://en.wikipedia.org/wiki/TIFF)
