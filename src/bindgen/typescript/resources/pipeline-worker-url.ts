@@ -1,3 +1,5 @@
+// Generated file. To retain edits, remove this comment.
+
 import { getPipelineWorkerUrl as itkWasmGetPipelineWorkerUrl } from 'itk-wasm'
 
 let pipelineWorkerUrl: string | URL | null | undefined
