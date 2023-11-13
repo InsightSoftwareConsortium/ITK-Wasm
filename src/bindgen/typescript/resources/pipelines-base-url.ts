@@ -1,5 +1,7 @@
+// Generated file. To retain edits, remove this comment.
+
 import { getPipelinesBaseUrl as itkWasmGetPipelinesBaseUrl } from 'itk-wasm'
-import packageJson from '../package.json'
+import packageJson from './package.json'
 
 let pipelinesBaseUrl: string | URL | undefined
 let defaultPipelinesBaseUrl: string | URL = `https://cdn.jsdelivr.net/npm/<bindgenPackageName>@${packageJson.version}/dist/pipelines`

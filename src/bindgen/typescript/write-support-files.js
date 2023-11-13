@@ -21,13 +21,13 @@ function writeSupportFiles(outputDir, forNode, bindgenResource, packageName, pac
       fs.copyFileSync(bindgenResource('pipelines-base-url.ts'), pipelinesBaseUrlPath)
       let pipelinesBaseUrlPathContent = fs.readFileSync(bindgenResource('pipelines-base-url.ts'), { encoding: 'utf8', flag: 'r' })
       pipelinesBaseUrlPathContent = pipelinesBaseUrlPathContent.replaceAll('<bindgenPackageName>', packageName)
-      fs.writeFileSync(pipelinesBaseUrlPath, pipelinesBaseUrlPathContent)
+      writeIfOverrideNotPresent(pipelinesBaseUrlPath, pipelinesBaseUrlPathContent)
     }
     const pipelineWorkerUrlPath = path.join(outputDir, 'src', 'pipeline-worker-url.ts')
     if (!fs.existsSync(pipelineWorkerUrlPath)) {
       let pipelineWorkerUrlPathContent = fs.readFileSync(bindgenResource('pipeline-worker-url.ts'), { encoding: 'utf8', flag: 'r' })
       pipelineWorkerUrlPathContent = pipelineWorkerUrlPathContent.replaceAll('<bindgenPackageName>', packageName)
-      fs.writeFileSync(pipelineWorkerUrlPath, pipelineWorkerUrlPathContent)
+      writeIfOverrideNotPresent(pipelineWorkerUrlPath, pipelineWorkerUrlPathContent)
     }
 
     const indexWorkerEmbeddedPath = path.join(outputDir, 'src', 'index-worker-embedded.ts')
