@@ -25,6 +25,8 @@
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkResampleImageFilter.h"
 
+#include "downsampleSigma.h"
+
 template<typename TImage>
 class PipelineFunctor
 {
@@ -39,10 +41,7 @@ public:
     pipeline.add_option("input", inputImage, "Input image")->required()->type_name("INPUT_IMAGE");
 
     std::vector<unsigned int> shrinkFactors;
-    pipeline.add_option("-f,--shrink-factors", shrinkFactors, "Shrink factors")->required()->type_size(ImageDimension);
-
-    std::vector<double> sigmaValues;
-    pipeline.add_option("-s,--sigma-values", sigmaValues, "Gaussian smoothing factors in pixel units.")->required()->type_size(ImageDimension);
+    pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->type_size(ImageDimension);
 
     std::vector<unsigned int> cropRadius;
     pipeline.add_option("-r,--crop-radius", cropRadius, "Optional crop radius in pixel units.")->type_size(ImageDimension);
@@ -52,6 +51,8 @@ public:
     pipeline.add_option("downsampled", downsampledImage, "Output downsampled image")->required()->type_name("OUTPUT_IMAGE");
 
     ITK_WASM_PARSE(pipeline);
+
+    auto sigmaValues = downsampleSigma(shrinkFactors);
 
     using GaussianFilterType = itk::DiscreteGaussianImageFilter<ImageType, ImageType>;
     auto gaussianFilter = GaussianFilterType::New();
