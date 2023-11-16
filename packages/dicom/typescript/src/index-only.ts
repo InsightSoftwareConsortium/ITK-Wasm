@@ -68,7 +68,6 @@ import readImageDicomFileSeriesWorkerFunction from './read-image-dicom-file-seri
 export { readImageDicomFileSeriesWorkerFunction }
 
 
-
 import ReadSegmentationResult from './read-segmentation-result.js'
 export type { ReadSegmentationResult }
 
@@ -118,3 +117,13 @@ export type { WriteMultiSegmentationOptions }
 
 import writeMultiSegmentation from './write-multi-segmentation.js'
 export { writeMultiSegmentation }
+
+
+import ImageSetsNormalizationResult from './image-sets-normalization-result.js'
+export type { ImageSetsNormalizationResult }
+
+import ImageSetsNormalizationOptions from './image-sets-normalization-options.js'
+export type { ImageSetsNormalizationOptions }
+
+import imageSetsNormalization from './image-sets-normalization.js'
+export { imageSetsNormalization }

@@ -36,3 +36,5 @@ import "./structured-report-to-text-controller.js";
 import "./write-multi-segmentation-controller.js";
 import "./write-overlapping-segmentation-controller.js";
 import "./write-segmentation-controller.js";
+import './image-sets-normalization-controller.js'
+import './read-dicom-tags-controller.js'
