@@ -1660,6 +1660,8 @@ Import:
 
 ```js
 import {
+  readImageNode,
+  writeImageNode,
   bioRadReadImageNode,
   bioRadWriteImageNode,
   bmpReadImageNode,
@@ -1708,6 +1710,48 @@ import {
   wasmZstdWriteImageNode,
 } from "@itk-wasm/image-io"
 ```
+
+#### readImageNode
+
+
+*Read an image file format and convert it to an itk-wasm Image.*
+
+```ts
+async function readImageNode(
+  serializedImage: string,
+  options: ReadImageOptions = {}
+) : Promise<Image>
+```
+
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` |       *string*      | Input image serialized in the file format. |
+
+**`ReadImageOptions` interface:**
+
+|      Property     |    Type   | Description                                         |
+| :---------------: | :-------: | :-------------------------------------------------- |
+| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+| `componentType` | *typeof IntTypes or typeof FloatTypes* | Component type, from itk-wasm IntTypes, FloatTypes, for the output pixel components. Defaults to the input component type. |
+| `pixelType` | *typeof PixelTypes* | Pixel type, from itk-wasm PixelTypes, for the output pixels. Defaults to the input pixel type. |
+
+#### writeImageNode
+
+*Write an itk-wasm Image converted to an image file format*
+
+```ts
+async function writeImageNode(
+  image: Image,
+  serializedImage: string,
+  options: WriteImageOptions = {}
+) : void
+```
+
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
+
 
 #### bioRadReadImageNode
 
