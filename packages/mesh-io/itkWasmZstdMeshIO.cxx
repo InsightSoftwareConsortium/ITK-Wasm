@@ -16,34 +16,34 @@
  *
  *=========================================================================*/
 
-#include "itkWasmZstdImageIO.h"
+#include "itkWasmZstdMeshIO.h"
 #include "zstd.h"
 
 namespace itk
 {
 
-WasmZstdImageIO
-::WasmZstdImageIO()
+WasmZstdMeshIO
+::WasmZstdMeshIO()
 {
-  this->AddSupportedWriteExtension(".iwi.cbor.zst");
-  this->AddSupportedReadExtension(".iwi.cbor.zst");
+  this->AddSupportedWriteExtension(".iwm.cbor.zst");
+  this->AddSupportedReadExtension(".iwm.cbor.zst");
 }
 
 
-WasmZstdImageIO
-::~WasmZstdImageIO()
+WasmZstdMeshIO
+::~WasmZstdMeshIO()
 {
 }
 
 
 bool
-WasmZstdImageIO
+WasmZstdMeshIO
 ::CanReadFile(const char *filename)
 {
   std::string fname = filename;
 
   bool extensionFound = false;
-  std::string::size_type extensionPos = fname.rfind(".iwi");
+  std::string::size_type extensionPos = fname.rfind(".iwm");
   if ( extensionPos != std::string::npos )
     {
     extensionFound = true;
@@ -61,8 +61,8 @@ WasmZstdImageIO
 
 
 void
-WasmZstdImageIO
-::ReadImageInformation()
+WasmZstdMeshIO
+::ReadMeshInformation()
 {
   this->SetByteOrderToLittleEndian();
 
@@ -89,43 +89,12 @@ WasmZstdImageIO
     return;
   }
 
-  Superclass::ReadImageInformation();
-}
-
-
-void
-WasmZstdImageIO
-::Read( void *buffer )
-{
-  const std::string path = this->GetFileName();
-  std::string::size_type zstdPos = path.rfind(".zst");
-  if ( ( zstdPos != std::string::npos )
-       && ( zstdPos == path.length() - 4 ) )
-  {
-    std::ifstream dataStream;
-    this->OpenFileForReading( dataStream, this->GetFileName() );
-
-    std::ostringstream ostrm;
-    ostrm << dataStream.rdbuf();
-    auto inputBinary = ostrm.str();
-
-
-    const size_t decompressedBufferSize = ZSTD_getFrameContentSize(inputBinary.data(), inputBinary.size());
-    std::vector<char> decompressedBinary(decompressedBufferSize);
-
-    const size_t decompressedSize = ZSTD_decompress(decompressedBinary.data(), decompressedBufferSize, inputBinary.data(), inputBinary.size());
-    decompressedBinary.resize(decompressedSize);
-
-    this->ReadCBOR(buffer, reinterpret_cast< unsigned char *>(&(decompressedBinary.at(0))), decompressedSize);
-    return;
-  }
-
-  Superclass::Read(buffer);
+  Superclass::ReadMeshInformation();
 }
 
 
 bool
-WasmZstdImageIO
+WasmZstdMeshIO
 ::CanWriteFile(const char *name)
 {
   std::string filename = name;
@@ -136,7 +105,7 @@ WasmZstdImageIO
     }
 
   bool extensionFound = false;
-  std::string::size_type iwiPos = filename.rfind(".iwi");
+  std::string::size_type iwiPos = filename.rfind(".iwm");
   if ( iwiPos != std::string::npos )
     {
     extensionFound = true;
@@ -153,16 +122,8 @@ WasmZstdImageIO
 
 
 void
-WasmZstdImageIO
-::WriteImageInformation()
-{
-  Superclass::WriteImageInformation();
-}
-
-
-void
-WasmZstdImageIO
-::Write( const void *buffer )
+WasmZstdMeshIO
+::Write()
 {
   const std::string path(this->GetFileName());
 
@@ -170,15 +131,18 @@ WasmZstdImageIO
   if ( ( cborPos != std::string::npos )
        && ( cborPos == path.length() - 4 ) )
   {
-    unsigned char * inputBinary;
-    const size_t inputBinarySize = this->WriteCBOR(buffer, &inputBinary, true);
+    unsigned char* cborBuffer;
+    size_t cborBufferSize;
+    size_t length = cbor_serialize_alloc(this->m_CBORRoot, &cborBuffer, &cborBufferSize);
 
-    const size_t compressedBufferSize = ZSTD_compressBound(inputBinarySize);
+    const size_t compressedBufferSize = ZSTD_compressBound(cborBufferSize);
     std::vector<char> compressedBinary(compressedBufferSize);
 
     constexpr int compressionLevel = 3;
-    const size_t compressedSize = ZSTD_compress(compressedBinary.data(), compressedBufferSize, inputBinary, inputBinarySize, compressionLevel);
-    free(inputBinary);
+    const size_t compressedSize = ZSTD_compress(compressedBinary.data(), compressedBufferSize, cborBuffer, cborBufferSize, compressionLevel);
+    free(cborBuffer);
+    cbor_decref(&(this->m_CBORRoot));
+
     compressedBinary.resize(compressedSize);
 
     std::ofstream outputStream;
@@ -188,7 +152,7 @@ WasmZstdImageIO
     return;
   }
 
-  Superclass::Write( buffer );
+  Superclass::Write();
 }
 
 } // end namespace itk

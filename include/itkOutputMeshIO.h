@@ -46,6 +46,11 @@ namespace wasm
 class OutputMeshIO
 {
 public:
+  /** Set whether to only read mesh metadata. Do not read the points, points data. */
+  void SetInformationOnly(bool informationOnly) {
+    this->m_InformationOnly = informationOnly;
+  }
+
   void Set(MeshIOBase * imageIO) {
     this->m_MeshIO = imageIO;
   }
@@ -75,6 +80,11 @@ public:
     auto wasmMeshIOBase = itk::WasmMeshIOBase::New();
     wasmMeshIOBase->SetMeshIO(this->m_MeshIO);
     setMemoryStoreOutputDataObject(0, index, wasmMeshIOBase);
+
+    if (this->m_InformationOnly)
+    {
+      return;
+    }
 
     const auto pointsSize = wasmMeshIOBase->GetPointsContainer()->size();
     if (pointsSize)
@@ -138,6 +148,11 @@ public:
 
       wasmMeshIO->WriteMeshInformation();
 
+      if (this->m_InformationOnly)
+      {
+        return;
+      }
+
       SizeValueType numberOfBytes = this->m_MeshIO->GetNumberOfPoints() * this->m_MeshIO->GetPointDimension() * WasmMeshIO::ITKComponentSize( this->m_MeshIO->GetPointComponentType() );
       std::vector<char> loadBuffer(numberOfBytes);
       if (numberOfBytes)
@@ -188,6 +203,8 @@ protected:
   typename MeshIOBase::Pointer m_MeshIO;
 
   std::string m_Identifier;
+
+  bool m_InformationOnly{ false };
 };
 
 bool lexical_cast(const std::string &input, OutputMeshIO &outputMeshIO)
