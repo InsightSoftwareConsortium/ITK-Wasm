@@ -19,13 +19,13 @@ const verifyMesh = (t, mesh) => {
   t.is(mesh.numberOfCells, 6)
 }
 
-test('readMeshLocalFile reads a BYU file path given on the local filesystem', async (t) => {
+test('byuReadMeshNode reads a BYU file path given on the local filesystem', async (t) => {
   const { couldRead, mesh } = await byuReadMeshNode(testInputFilePath)
   t.true(couldRead)
   verifyMesh(t, mesh)
 })
 
-test('writeMeshLocalFile writes a BYU file path on the local filesystem', async (t) => {
+test('byuWriteMeshNode writes a BYU file path on the local filesystem', async (t) => {
   const { couldRead, mesh } = await byuReadMeshNode(testInputFilePath)
   t.true(couldRead)
 
