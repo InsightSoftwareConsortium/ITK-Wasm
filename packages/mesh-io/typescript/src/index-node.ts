@@ -5,6 +5,11 @@ export type { ReadMeshOptions }
 import readMeshNode from './read-mesh-node.js'
 export { readMeshNode }
 
+import WriteMeshOptions from './write-mesh-options.js'
+export type { WriteMeshOptions }
+
+import writeMeshNode from './write-mesh-node.js'
+export { writeMeshNode }
 
 
 import ByuReadMeshNodeResult from './byu-read-mesh-node-result.js'
