@@ -1,4 +1,9 @@
-// Generated file. To retain edits, remove this comment.
+
+import ReadMeshOptions from './read-mesh-options.js'
+export type { ReadMeshOptions }
+
+import readMeshNode from './read-mesh-node.js'
+export { readMeshNode }
 
 
 
@@ -182,24 +187,24 @@ import wasmWriteMeshNode from './wasm-write-mesh-node.js'
 export { wasmWriteMeshNode }
 
 
-import WasmZtdReadMeshNodeResult from './wasm-ztd-read-mesh-node-result.js'
-export type { WasmZtdReadMeshNodeResult }
+import WasmZstdReadMeshNodeResult from './wasm-zstd-read-mesh-node-result.js'
+export type { WasmZstdReadMeshNodeResult }
 
-import WasmZtdReadMeshOptions from './wasm-ztd-read-mesh-options.js'
-export type { WasmZtdReadMeshOptions }
+import WasmZstdReadMeshOptions from './wasm-zstd-read-mesh-options.js'
+export type { WasmZstdReadMeshOptions }
 
-import wasmZtdReadMeshNode from './wasm-ztd-read-mesh-node.js'
-export { wasmZtdReadMeshNode }
+import wasmZstdReadMeshNode from './wasm-zstd-read-mesh-node.js'
+export { wasmZstdReadMeshNode }
 
 
-import WasmZtdWriteMeshNodeResult from './wasm-ztd-write-mesh-node-result.js'
-export type { WasmZtdWriteMeshNodeResult }
+import WasmZstdWriteMeshNodeResult from './wasm-zstd-write-mesh-node-result.js'
+export type { WasmZstdWriteMeshNodeResult }
 
-import WasmZtdWriteMeshOptions from './wasm-ztd-write-mesh-options.js'
-export type { WasmZtdWriteMeshOptions }
+import WasmZstdWriteMeshOptions from './wasm-zstd-write-mesh-options.js'
+export type { WasmZstdWriteMeshOptions }
 
-import wasmZtdWriteMeshNode from './wasm-ztd-write-mesh-node.js'
-export { wasmZtdWriteMeshNode }
+import wasmZstdWriteMeshNode from './wasm-zstd-write-mesh-node.js'
+export { wasmZstdWriteMeshNode }
 
 export type { JsonCompatible } from 'itk-wasm'
 export type { Mesh } from 'itk-wasm'

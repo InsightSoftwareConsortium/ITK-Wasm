@@ -38,6 +38,7 @@
   "devDependencies": {
     "@itk-wasm/image-io": "^0.2.0",
     "@shoelace-style/shoelace": "^2.5.2",
+    "@types/mime-types": "^2.1.4",
     "@types/node": "^20.2.5",
     "ava": "^5.3.1",
     "esbuild": "^0.19.5",

@@ -54,7 +54,7 @@ set(meshios_WebAssemblyInterface itkWasmMeshIO itkWasmZstdMeshIO)
 set(meshio_id_itkWasmMeshIO 8)
 set(meshio_kebab_itkWasmMeshIO "wasm")
 set(meshio_id_itkWasmZstdMeshIO 9)
-set(meshio_kebab_itkWasmZstdMeshIO "wasm-ztd")
+set(meshio_kebab_itkWasmZstdMeshIO "wasm-zstd")
 
 set(ITK_NO_MESHIO_FACTORY_REGISTER_MANAGER 1)
 set(MeshIOIndex_ARRAY "")

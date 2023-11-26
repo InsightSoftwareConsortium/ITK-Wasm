@@ -32,6 +32,8 @@ import './vtk-poly-data-read-mesh-controller.js'
 import './vtk-poly-data-write-mesh-controller.js'
 import './wasm-read-mesh-controller.js'
 import './wasm-write-mesh-controller.js'
+import './wasm-zstd-read-mesh-controller.js'
+import './wasm-zstd-write-mesh-controller.js'
 import './wasm-ztd-read-mesh-controller.js'
 import './wasm-ztd-write-mesh-controller.js'
 

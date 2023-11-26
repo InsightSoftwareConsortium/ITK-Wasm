@@ -184,6 +184,26 @@ import wasmWriteMesh from './wasm-write-mesh.js'
 export { wasmWriteMesh }
 
 
+import WasmZstdReadMeshResult from './wasm-zstd-read-mesh-result.js'
+export type { WasmZstdReadMeshResult }
+
+import WasmZstdReadMeshOptions from './wasm-zstd-read-mesh-options.js'
+export type { WasmZstdReadMeshOptions }
+
+import wasmZstdReadMesh from './wasm-zstd-read-mesh.js'
+export { wasmZstdReadMesh }
+
+
+import WasmZstdWriteMeshResult from './wasm-zstd-write-mesh-result.js'
+export type { WasmZstdWriteMeshResult }
+
+import WasmZstdWriteMeshOptions from './wasm-zstd-write-mesh-options.js'
+export type { WasmZstdWriteMeshOptions }
+
+import wasmZstdWriteMesh from './wasm-zstd-write-mesh.js'
+export { wasmZstdWriteMesh }
+
+
 import WasmZtdReadMeshResult from './wasm-ztd-read-mesh-result.js'
 export type { WasmZtdReadMeshResult }
 
