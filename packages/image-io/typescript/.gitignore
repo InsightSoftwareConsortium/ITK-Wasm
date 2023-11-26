@@ -1,2 +1,3 @@
 test/browser/demo-app/public
 demo-app/
+vite.config.js

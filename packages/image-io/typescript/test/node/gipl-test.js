@@ -1,10 +1,13 @@
 import test from 'ava'
 import path from 'path'
 
-import { IntTypes, PixelTypes, getMatrixElement, readImageLocalFile, writeImageLocalFile } from '../../../../dist/index.js'
+import { giplReadImageNode, giplWriteImageNode } from '../../dist/index-node.js'
+import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
-const testInputFilePath = path.resolve('build-emscripten', 'ExternalData', 'test', 'Input', 'ramp.gipl')
-const testOutputFilePath = path.resolve('build-emscripten', 'Testing', 'Temporary', 'GIPLTest-ramp.gipl')
+import { testInputPath, testOutputPath } from './common.js'
+
+const testInputFilePath = path.resolve(testInputPath, 'ramp.gipl')
+const testOutputFilePath = path.resolve(testOutputPath, 'gipl-test-ramp.gipl')
 
 const verifyImage = (t, image) => {
   t.is(image.imageType.dimension, 3, 'dimension')
@@ -33,19 +36,20 @@ const verifyImage = (t, image) => {
   t.is(image.data[2], 2, 'data[2]')
 }
 
-test('Test reading a GIPL file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    verifyImage(t, image)
-  })
+test('Test reading a GIPL file', async t => {
+  const { couldRead, image } = await giplReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  verifyImage(t, image)
 })
 
-test('Test writing a GIPL file', t => {
-  return readImageLocalFile(testInputFilePath).then(function (image) {
-    return writeImageLocalFile(image, testOutputFilePath)
-  })
-    .then(function () {
-      return readImageLocalFile(testOutputFilePath).then(function (image) {
-        verifyImage(t, image)
-      })
-    })
+test('Test writing a GIPL file', async t => {
+  const { couldRead, image } = await giplReadImageNode(testInputFilePath)
+  t.true(couldRead)
+  const useCompression = false
+  const { couldWrite } = await giplWriteImageNode(image, testOutputFilePath, { useCompression })
+  t.true(couldWrite)
+
+  const { couldRead: couldReadBack, image: imageBack } = await giplReadImageNode(testOutputFilePath)
+  t.true(couldReadBack)
+  verifyImage(t, imageBack)
 })
