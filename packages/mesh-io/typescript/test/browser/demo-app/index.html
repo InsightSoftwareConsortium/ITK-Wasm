@@ -1,5 +1,3 @@
-<!-- Generated file. To retain edits, remove this comment. -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,6 +56,11 @@
   <br /><br />
 
   <sl-tab-group>
+    <!-- Begin added content -->
+    <sl-tab slot="nav" panel="readMesh-panel">readMesh</sl-tab>
+    <sl-tab slot="nav" panel="writeMesh-panel">writeMesh</sl-tab>
+    <!-- End added content -->
+
     <sl-tab slot="nav" panel="byuReadMesh-panel">byuReadMesh</sl-tab>
     <sl-tab slot="nav" panel="byuWriteMesh-panel">byuWriteMesh</sl-tab>
     <sl-tab slot="nav" panel="freeSurferAsciiReadMesh-panel">freeSurferAsciiReadMesh</sl-tab>
@@ -80,6 +83,83 @@
     <sl-tab slot="nav" panel="wasmZstdWriteMesh-panel">wasmZstdWriteMesh</sl-tab>
     <sl-tab slot="nav" panel="wasmZtdReadMesh-panel">wasmZtdReadMesh</sl-tab>
     <sl-tab slot="nav" panel="wasmZtdWriteMesh-panel">wasmZtdWriteMesh</sl-tab>
+
+
+    <!-- Begin added content -->
+    <sl-tab-panel name="readMesh-panel">
+
+    <small><i>Read a mesh file</i></small><br /><br />
+
+    <div id="readMeshInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the serializedMesh"><sl-details id="readMesh-serialized-mesh-details" summary="serializedMesh: Input mesh serialized in the file format" disabled></sl-details></sl-tooltip>
+      <label for="serialized-mesh-file"><sl-button name="serialized-mesh-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="serialized-mesh-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="information-only">informationOnly - <i>Only read mesh metadata -- do not read points and point and cell data.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="readMeshOutputs">
+      <sl-details disabled id="readMesh-could-read-details" summary="couldRead: Whether the input could be read. If false, the output mesh is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="readMesh-mesh-details" summary="mesh: Output mesh"></sl-details>
+      <sl-select id="mesh-output-format" placeholder="Format">
+        <sl-option value="vtk">vtk</sl-option>
+        <sl-option value="byu">byu</sl-option>
+        <sl-option value="fsa">fsa</sl-option>
+        <sl-option value="fsb">fsb</sl-option>
+        <sl-option value="obj">obj</sl-option>
+        <sl-option value="off">off</sl-option>
+        <sl-option value="stl">stl</sl-option>
+        <sl-option value="swc">swc</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="mesh-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="writeMesh-panel">
+
+    <small><i>Write an itk-wasm file format converted to an mesh file format</i></small><br /><br />
+
+    <div id="writeMeshInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the mesh"><sl-details id="writeMesh-mesh-details" summary="mesh: Input mesh" disabled></sl-details></sl-tooltip>
+      <label for="mesh-file"><sl-button name="mesh-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="mesh-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="information-only">informationOnly - <i>Only write image metadata -- do not write pixel data.</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="use-compression">useCompression - <i>Use compression in the written file, if supported</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="binary-file-type">binaryFileType - <i>Use a binary file type in the written file, if supported</i></sl-checkbox>
+<br /><br />
+      <sl-input required name="serialized-mesh" type="text" label="serializedMesh" help-text="Output mesh"></sl-input>
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="writeMeshOutputs">
+      <sl-details disabled id="writeMesh-could-write-details" summary="couldWrite: Whether the input could be written. If false, the output mesh is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-write-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="writeMesh-serialized-mesh-details" summary="serializedMesh: Output mesh"></sl-details>
+      <sl-button variant="neutral" outline name="serialized-mesh-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <!-- End added content -->
 
 
     <sl-tab-panel name="byuReadMesh-panel">

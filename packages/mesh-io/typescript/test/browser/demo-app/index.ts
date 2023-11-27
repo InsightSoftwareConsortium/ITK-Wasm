@@ -1,6 +1,6 @@
-// Generated file. To retain edits, remove this comment.
-
 import * as meshIo from '../../../dist/index.js'
+
+globalThis.meshIo = meshIo
 
 // Use local, vendored WebAssembly module assets
 const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
@@ -9,11 +9,16 @@ meshIo.setPipelinesBaseUrl(pipelinesBaseUrl)
 
 const params = new URLSearchParams(window.location.search)
 if (!params.has('functionName')) {
-  params.set('functionName', 'byuReadMesh')
+// Begin added content
+  params.set('functionName', 'readMesh')
   const url = new URL(document.location)
   url.search = params
-  window.history.replaceState({ functionName: 'byuReadMesh' }, '', url)
+  window.history.replaceState({ functionName: 'readMesh' }, '', url)
 }
+
+import './read-mesh-controller.js'
+import './write-mesh-controller.js'
+// End added content
 import './byu-read-mesh-controller.js'
 import './byu-write-mesh-controller.js'
 import './free-surfer-ascii-read-mesh-controller.js'

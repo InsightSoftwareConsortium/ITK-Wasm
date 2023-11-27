@@ -18,6 +18,8 @@ Import:
 
 ```js
 import {
+  readMesh,
+  writeMesh,
   byuReadMesh,
   byuWriteMesh,
   freeSurferAsciiReadMesh,
@@ -42,6 +44,70 @@ import {
   getPipelinesBaseUrl,
 } from "@itk-wasm/mesh-io"
 ```
+
+#### readMesh
+
+*Read a mesh file format and convert it to the itk-wasm file format*
+
+```ts
+async function readMesh(
+  webWorker: null | Worker | boolean,
+  serializedMesh: File | BinaryFile,
+  options: ReadMeshOptions = {}
+) : Promise<ReadMeshResult>
+```
+
+|     Parameter    |             Type            | Description                                                                                                                                                  |
+| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+
+**`ReadMeshOptions` interface:**
+
+|      Property     |    Type   | Description                                         |
+| :---------------: | :-------: | :-------------------------------------------------- |
+| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+
+**`ReadMeshResult` interface:**
+
+|   Property  |       Type       | Description                                                              |
+| :---------: | :--------------: | :----------------------------------------------------------------------- |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
+|    `mesh`   |      *Mesh*      | Output mesh                                                              |
+
+#### writeMesh
+
+*Write an itk-wasm file format converted to an mesh file format*
+
+```ts
+async function writeMesh(
+  webWorker: null | Worker | boolean,
+  mesh: Mesh,
+  serializedMesh: string,
+  options: WriteMeshOptions = {}
+) : Promise<WriteMeshResult>
+```
+
+|     Parameter    |             Type            | Description                                                                                                                                                  |
+| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
+| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+
+**`WriteMeshOptions` interface:**
+
+|      Property     |    Type   | Description                                              |
+| :---------------: | :-------: | :------------------------------------------------------- |
+| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
+|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
+|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+
+**`WriteMeshResult` interface:**
+
+|     Property     |       Type       | Description                                                                 |
+| :--------------: | :--------------: | :-------------------------------------------------------------------------- |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
+| `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
 
 #### byuReadMesh
 

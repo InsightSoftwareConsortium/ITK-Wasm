@@ -21,7 +21,7 @@ interface WriterResult {
   couldWrite: boolean
   serializedImage: BinaryFile
 }
-type Writer = (webWorker: Worker | null, image: Image, serializedImage: string, options: WriterOptions) => Promise<WriterResult>
+type Writer = (webWorker: Worker | null | boolean, image: Image, serializedImage: string, options: WriterOptions) => Promise<WriterResult>
 
 /**
  * Write an itk-wasm Image converted to an serialized image file format
@@ -33,7 +33,7 @@ type Writer = (webWorker: Worker | null, image: Image, serializedImage: string, 
  * @returns {Promise<WriteImageResult>} - result object
  */
 async function writeImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: WriteImageOptions = {}
