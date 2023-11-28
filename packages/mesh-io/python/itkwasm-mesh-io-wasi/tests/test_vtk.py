@@ -15,8 +15,9 @@ def verify_mesh(mesh):
     assert mesh.meshType.pointComponentType == FloatTypes.Float32
     assert mesh.meshType.pointPixelComponentType == IntTypes.Int8
     assert mesh.numberOfPoints == 2903
-    assert np.allclose(mesh.points[0],3.71636)
-    assert np.allclose(mesh.points[1],2.34339)
+    assert np.allclose(mesh.points.ravel()[0], 3.71636)
+    assert np.allclose(mesh.points.ravel()[1], 2.34339)
+    print(mesh.points.shape)
     assert mesh.numberOfCells == 3263
     assert mesh.cellBufferSize == 18856
     assert mesh.cells[0] == 4

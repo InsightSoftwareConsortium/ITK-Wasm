@@ -6,20 +6,18 @@ if sys.version_info < (3,10):
 
 from pytest_pyodide import run_in_pyodide
 
-from itkwasm_image_io_emscripten import __version__ as test_package_version
+from itkwasm_mesh_io_emscripten import __version__ as test_package_version
 
 @pytest.fixture
 def package_wheel():
-    return f"itkwasm_image_io_emscripten-{test_package_version}-py3-none-any.whl"
+    return f"itkwasm_mesh_io_emscripten-{test_package_version}-py3-none-any.whl"
 
 @pytest.fixture
 def input_data():
     from pathlib import Path
     input_base_path = Path('..', '..', 'test', 'data')
     test_files = [
-        Path('input') / 'cthead1.png',
-        Path('input') / 'biorad.pic',
-        Path('input') / 'brainweb165a10f17.mha',
+        Path('input') / 'cow.vtk',
     ]
     data = {}
     for f in test_files:
