@@ -2,6 +2,9 @@
 
 """itkwasm-mesh-io-emscripten: Input and output for scientific and medical image file formats. Emscripten implementation."""
 
+from .read_mesh_async import read_mesh_async
+from .write_mesh_async import write_mesh_async
+
 from .byu_read_mesh_async import byu_read_mesh_async
 from .byu_write_mesh_async import byu_write_mesh_async
 from .free_surfer_ascii_read_mesh_async import free_surfer_ascii_read_mesh_async
