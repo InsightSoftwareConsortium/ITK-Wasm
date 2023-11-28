@@ -14,7 +14,7 @@
     }
   },
   "scripts": {
-    "start": "npm run copyShoelaceAssets && vite -c build/vite.config.js",
+    "start": "npm run copyShoelaceAssets && vite",
     "test": "npm run test:node && npm run test:browser",
     "test:node": "ava test/node/*.js",
     "test:browser": "npm run test:browser:chrome && npm run test:browser:firefox",
@@ -29,7 +29,7 @@
     "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
     "build:tsc": "tsc --pretty",
     "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
-    "build:demo": "npm run copyShoelaceAssets && vite -c build/vite.config.js build"
+    "build:demo": "npm run copyShoelaceAssets && vite build"
   },
   "keywords": [
     "itk",
