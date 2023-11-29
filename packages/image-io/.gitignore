@@ -1,4 +1,3 @@
-ImageIOIndex.ts.in
 dist
 emscripten-build/
 wasi-build/

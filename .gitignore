@@ -83,5 +83,8 @@ packages/image-io/test/
 packages/image-io/typescript/demo-app-rollup/
 packages/image-io/python/itkwasm-image-io-wasi/itkwasm_image_io_wasi/wasm_modules/
 
+packages/mesh-io/test/
+packages/mesh-io/python/itkwasm-mesh-io-wasi/itkwasm_mesh_io_wasi/wasm_modules/
+
 cypress/screenshots/
 cypress/videos/

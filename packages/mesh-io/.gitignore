@@ -1,0 +1,6 @@
+dist
+emscripten-build/
+wasi-build/
+package-lock.json
+test/data/
+test/data.tar.gz

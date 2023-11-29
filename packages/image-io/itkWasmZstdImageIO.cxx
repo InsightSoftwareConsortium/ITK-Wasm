@@ -25,8 +25,8 @@ namespace itk
 WasmZstdImageIO
 ::WasmZstdImageIO()
 {
-  this->AddSupportedWriteExtension(".iwi.cbor.zstd");
-  this->AddSupportedReadExtension(".iwi.cbor.zstd");
+  this->AddSupportedWriteExtension(".iwi.cbor.zst");
+  this->AddSupportedReadExtension(".iwi.cbor.zst");
 }
 
 
@@ -68,9 +68,9 @@ WasmZstdImageIO
 
   const std::string path = this->GetFileName();
 
-  std::string::size_type zstdPos = path.rfind(".zstd");
+  std::string::size_type zstdPos = path.rfind(".zst");
   if ( ( zstdPos != std::string::npos )
-       && ( zstdPos == path.length() - 5 ) )
+       && ( zstdPos == path.length() - 4 ) )
   {
     std::ifstream dataStream;
     this->OpenFileForReading( dataStream, this->GetFileName() );
@@ -98,9 +98,9 @@ WasmZstdImageIO
 ::Read( void *buffer )
 {
   const std::string path = this->GetFileName();
-  std::string::size_type zstdPos = path.rfind(".zstd");
+  std::string::size_type zstdPos = path.rfind(".zst");
   if ( ( zstdPos != std::string::npos )
-       && ( zstdPos == path.length() - 5 ) )
+       && ( zstdPos == path.length() - 4 ) )
   {
     std::ifstream dataStream;
     this->OpenFileForReading( dataStream, this->GetFileName() );
@@ -166,9 +166,9 @@ WasmZstdImageIO
 {
   const std::string path(this->GetFileName());
 
-  std::string::size_type cborPos = path.rfind(".zstd");
+  std::string::size_type cborPos = path.rfind(".zst");
   if ( ( cborPos != std::string::npos )
-       && ( cborPos == path.length() - 5 ) )
+       && ( cborPos == path.length() - 4 ) )
   {
     unsigned char * inputBinary;
     const size_t inputBinarySize = this->WriteCBOR(buffer, &inputBinary, true);

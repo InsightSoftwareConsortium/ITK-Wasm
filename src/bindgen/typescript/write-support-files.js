@@ -73,7 +73,7 @@ function writeSupportFiles(outputDir, forNode, bindgenResource, packageName, pac
     const demoJsUtilities = path.join(outputDir, 'test', 'browser', 'demo-app', 'utilities.js')
     writeIfOverrideNotPresent(demoJsUtilities, fs.readFileSync(bindgenResource(path.join('demo-app', 'utilities.js')), { encoding: 'utf8', flag: 'r' }))
 
-    const viteConfigPath = path.join(outputDir, 'build', 'vite.config.js')
+    const viteConfigPath = path.join(outputDir, 'vite.config.js')
     if (!fs.existsSync(viteConfigPath)) {
       fs.copyFileSync(bindgenResource('vite.config.js'), viteConfigPath)
     }

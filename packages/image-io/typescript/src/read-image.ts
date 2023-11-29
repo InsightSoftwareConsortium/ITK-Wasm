@@ -21,7 +21,7 @@ interface ReaderOptions {
   /** Only read image metadata -- do not read pixel data. */
   informationOnly?: boolean
 }
-type Reader = (webWorker: null | Worker, serializedImage: File | BinaryFile, options: ReaderOptions) => Promise<ReaderResult>
+type Reader = (webWorker: null | Worker | boolean, serializedImage: File | BinaryFile, options: ReaderOptions) => Promise<ReaderResult>
 
 /**
  * Read an image file format and convert it to the itk-wasm file format
@@ -33,7 +33,7 @@ type Reader = (webWorker: null | Worker, serializedImage: File | BinaryFile, opt
  * @returns {Promise<ReadImageResult>} - result object with the image and the web worker used
  */
 async function readImage(
-  webWorker: null | Worker,
+  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: ReadImageOptions = {}
 ) : Promise<ReadImageResult> {
