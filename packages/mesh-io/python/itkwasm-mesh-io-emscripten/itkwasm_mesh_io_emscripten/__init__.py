@@ -1,5 +1,3 @@
-# Generated file. To retain edits, remove this comment.
-
 """itkwasm-mesh-io-emscripten: Input and output for scientific and medical image file formats. Emscripten implementation."""
 
 from .read_mesh_async import read_mesh_async

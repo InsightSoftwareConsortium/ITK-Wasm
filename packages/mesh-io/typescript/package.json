@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/mesh-io",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Input and output for scientific and medical image file formats.",
   "type": "module",
   "module": "./dist/index.js",
