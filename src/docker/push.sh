@@ -36,3 +36,7 @@ push_image itkwasm/wasi ${TAG} ${debug}
 push_image itkwasm/wasi-base ${TAG} ${debug}
 push_image itkwasm/emscripten ${TAG} ${debug}
 push_image itkwasm/emscripten-base ${TAG} ${debug}
+push_image itkwasm/wasi latest ${debug}
+push_image itkwasm/wasi-base latest ${debug}
+push_image itkwasm/emscripten latest ${debug}
+push_image itkwasm/emscripten-base latest ${debug}
