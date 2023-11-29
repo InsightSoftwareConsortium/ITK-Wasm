@@ -1,5 +1,27 @@
 [itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization.
 
+# [1.0.0-b.157](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.156...itk-wasm-v1.0.0-b.157) (2023-11-29)
+
+
+### Features
+
+* **bindgen:** do not place vite.config.js in build/ ([b977840](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/b9778409912e453a19e8c42bf3638838a166aa09))
+* **itk-wasm-cli:** Update default Docker image for 20231125-c58da03c ([2f60bb7](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/2f60bb7a933ab70d20fb76380fda24d5d5b98a63))
+* **itk-wasm-cli:** Update default Docker image for 20231129-1565c734 ([83dd536](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/83dd536a44abbd2b49e12bc74b99651a826a4b2d))
+* **mesh-io-emscripten:** add read_image_async, write_image_async ([5d181f7](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/5d181f7c34175313e7769b9d890d546c1ae0d792))
+* **mesh-io:** add extension-to-mesh-io ([51106bd](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/51106bd186bc036636fe1bc95714632ea5ab7893))
+* **mesh-io:** add mesh-io-emscripten bindgen output ([53c1488](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/53c14883c67d491b10ca263693ca9485605193f6))
+* **mesh-io:** add mime-to-mesh-io ([9d0947f](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9d0947f8a53b85004ebb4ef6d082dc343f7dec45))
+* **mesh-io:** add python package bindgen output ([4b96715](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4b967152cda34280a7a1d94d1a246e26d299b6f7))
+* **mesh-io:** add read_mesh, read_mesh_async, write_mesh, write_mesh_async ([acc4271](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/acc4271e8647c974582f3e87ff2097b9cbbb7e1b))
+* **mesh-io:** add read-mesh-node ([1b514a6](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/1b514a65977e268cdb1a9e233c43ad024a6df234))
+* **mesh-io:** add typescript bindgen output ([4266390](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4266390ba11b85e797ed9d33109064820a7a2289))
+* **mesh-io:** add wasi read_mesh, write_mesh ([b3575a2](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/b3575a224a45fcfd0525f49e566855b56b035ea6))
+* **mesh-io:** add write-mesh-node ([9393607](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/93936078f8b25680996b886331e401ca221652ad))
+* **mesh-io:** bindgen wasi output ([9fce9fb](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/9fce9fbd014dbc6b6d7c5aed349b12b2770466d5))
+* **mesh-io:** read-mesh and write-mesh ([4289117](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/4289117343e91c58ea986fc433a2c4cf4c1962e2))
+* migrate mesh-io to its own package ([c58da03](https://github.com/InsightSoftwareConsortium/itk-wasm/commit/c58da03c7f450434a3251be09b43c964016c204f))
+
 # [1.0.0-b.156](https://github.com/InsightSoftwareConsortium/itk-wasm/compare/itk-wasm-v1.0.0-b.155...itk-wasm-v1.0.0-b.156) (2023-11-13)
 
 
