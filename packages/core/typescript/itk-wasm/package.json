@@ -1,0 +1,132 @@
+{
+  "name": "itk-wasm",
+  "version": "1.0.0-b.159",
+  "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/index.js",
+      "node": "./dist/index-node.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "pnpm build:tsc",
+    "build:tsc": "tsc --pretty",
+    "build:tscWorkersModuleLoader": "tsc --types --lib es2017,webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleWebWorker.ts",
+    "build:tscWebWorkers": "tsc -p ./tsconfigWebWorkers.json",
+    "build:workerBundle": "esbuild --bundle --format=esm --outfile=./dist/core/web-workers/bundles/itk-wasm-pipeline.worker.js ./dist/core/web-workers/itk-wasm-pipeline.worker.js",
+    "build:workerMinBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/core/web-workers/bundles/itk-wasm-pipeline.min.worker.js ./dist/core/web-workers/itk-wasm-pipeline.worker.js",
+    "build:webpack": "webpack --mode production --progress --color && webpack --mode development --progress --color",
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npx cypress run --config defaultCommandTimeout=8000",
+    "cypress:install": "npx cypress install",
+    "cypress:runChrome": "npx cypress run --config defaultCommandTimeout=8000 --browser chrome",
+    "cypress:runFirefox": "npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
+    "cypress:runFirefox:ci": "npm run cypress:install && npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
+    "start": "webpack-dev-server --mode development --env DEVSERVER",
+    "start:production": "webpack-dev-server --mode production",
+    "test:wasi": "npm run test:cliRun && npm run test:cliTest && npm run test:cliBindgen:python",
+    "test": "npm run test:lint && npm run test:node && npm run test:browser && npm run test:chrome && npm run test:firefox && npm run test:cliBindgen:typescript",
+    "test:lint": "ts-standard --fix \"src/**/*.ts\" && standard --fix \"test/node/**/*.js\"",
+    "test:node": "ava test/node/core/*.js test/node/io/image/*.js test/node/io/mesh/*.js test/node/pipeline/*.js",
+    "test:cliRun": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/stdout-stderr-pipeline run -r wasmtime stdout-stderr-test.wasi.wasm",
+    "test:cliTest": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/stdout-stderr-pipeline test",
+    "test:cliBindgen:typescript": "node src/itk-wasm-cli.js -b emscripten-build -s ./test/pipelines/bindgen-interface-types-pipeline bindgen --package-version 1.0.0 --package-name @itk-wasm/bindgen-interface-types-test --package-description \"Exercise interface types for bindgen\"",
+    "test:cliBindgen:python": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/bindgen-interface-types-pipeline bindgen --interface python --package-version 1.0.0 --package-name itkwasm-bindgen-interface-types-test --package-description \"Exercise interface types for bindgen\"",
+    "test:browser:debug": "start-server-and-test start http-get://localhost:8083 cypress:open",
+    "test:cypress": "start-server-and-test start http-get://localhost:8083 cypress:run",
+    "test:chrome": "start-server-and-test start http-get://localhost:8083 cypress:runChrome",
+    "test:firefox:ci": "start-server-and-test start http-get://localhost:8083 cypress:runFirefox:ci",
+    "test:firefox": "start-server-and-test start http-get://localhost:8083 cypress:runFirefox",
+    "prepublishOnly": "npm run build:tsc && node ./src/update-versions.cjs && node ./src/io/internal/packages/package-json-gen.cjs && npm run build:workerBundle && npm run build:workerMinBundle && npm run build:webpack",
+    "clean": "git clean -fdx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm.git"
+  },
+  "keywords": [
+    "itk",
+    "imaging",
+    "wasm",
+    "webassembly",
+    "wasi",
+    "io",
+    "medical",
+    "scientific"
+  ],
+  "author": "Insight Software Consortium",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
+  },
+  "homepage": "https://wasm.itk.org/",
+  "devDependencies": {
+    "@itk-wasm/dam": "^1.0.1",
+    "ava": "^4.3.3",
+    "cypress": "^13.6.0",
+    "esbuild": "^0.19.5",
+    "node-module-polyfill": "^1.0.1",
+    "readable-stream": "^3.6.0",
+    "resolve-typescript-plugin": "^1.2.0",
+    "standard": "^16.0.4",
+    "start-server-and-test": "^2.0.3",
+    "ts-standard": "^12.0.2",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@thewtex/zstddec": "^0.2.0",
+    "@types/emscripten": "^1.39.6",
+    "axios": "^1.4.0",
+    "comlink": "^4.4.1",
+    "commander": "^9.4.0",
+    "fs-extra": "^10.0.0",
+    "glob": "^8.1.0",
+    "markdown-table": "^3.0.3",
+    "mime-types": "^2.1.35",
+    "wasm-feature-detect": "^1.5.1"
+  },
+  "bin": {
+    "itk-wasm": "./src/itk-wasm-cli.js"
+  },
+  "sideEffects": false,
+  "ts-standard": {
+    "ignore": [
+      "src/core/internal/loadEmscriptenModuleWebWorker.ts",
+      "src/core/web-workers/*.ts",
+      "src/core/ITKWasmEmscriptenModule.ts",
+      "src/pipeline/PipelineEmscriptenModule.ts",
+      "src/bindgen/typescript/resources/*",
+      "src/bindgen/typescript/resources/demo-app/*"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "body-max-line-length": [
+        2,
+        "always",
+        300
+      ],
+      "subject-case": [
+        2,
+        "never",
+        [
+          "start-case",
+          "pascal-case",
+          "upper-case"
+        ]
+      ]
+    }
+  }
+}
