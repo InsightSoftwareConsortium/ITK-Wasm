@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { Mesh, MeshType } from '../../../dist/index.js'
+import { Mesh, MeshType } from '../../../dist/index-node.js'
 
 test('meshType should have the same meshType passed to the constructor', t => {
   const mesh = new Mesh()
