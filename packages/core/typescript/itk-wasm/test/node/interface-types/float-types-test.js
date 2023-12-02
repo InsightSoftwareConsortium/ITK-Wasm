@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { FloatTypes } from '../../dist/index-node.js'
+import { FloatTypes } from '../../../dist/index-node.js'
 
 test('Float32 should be defined', t => {
   const type = FloatTypes.Float32

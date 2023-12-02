@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { IntTypes } from '../../../dist/index.js'
+import { IntTypes } from '../../../dist/index-node.js'
 
 test('Int8 should be defined', t => {
   const type = IntTypes.Int8
