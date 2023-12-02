@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { getMatrixElement, setMatrixElement } from '../../../dist/index.js'
+import { getMatrixElement, setMatrixElement } from '../../dist/index-node.js'
 
 test('setMatrixElement() should set elements of the matrix', t => {
   const columns = 2
