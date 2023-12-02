@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { MeshType, FloatTypes, IntTypes, PixelTypes } from '../../../dist/index.js'
+import { MeshType, FloatTypes, IntTypes, PixelTypes } from '../../../dist/index-node.js'
 
 test('dimension should have a default value of 2', t => {
   const meshType = new MeshType()
