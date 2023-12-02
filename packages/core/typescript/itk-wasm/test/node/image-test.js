@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { Image, ImageType, IntTypes } from '../../../dist/index.js'
+import { Image, ImageType, IntTypes } from '../../dist/index-node.js'
 
 test('imageType should have the same imageType passed to the constructor', t => {
   const image = new Image()
