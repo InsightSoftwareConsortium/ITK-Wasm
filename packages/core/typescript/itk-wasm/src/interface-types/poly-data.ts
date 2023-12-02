@@ -1,5 +1,5 @@
 import PolyDataType from './poly-data-type.js'
-import TypedArray from '../TypedArray.js'
+import TypedArray from '../typed-array.js'
 
 class PolyData {
   name: string = 'PolyData'
