@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { PolyData } from '../../../dist/index.js'
+import { PolyData } from '../../../dist/index-node.js'
 
 test('name should have the default value of "PolyData"', t => {
   const polyData = new PolyData()
