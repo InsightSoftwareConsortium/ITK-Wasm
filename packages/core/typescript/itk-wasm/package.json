@@ -36,7 +36,7 @@
     "test:wasi": "npm run test:cliRun && npm run test:cliTest && npm run test:cliBindgen:python",
     "test": "npm run test:lint && npm run test:node && npm run test:browser && npm run test:chrome && npm run test:firefox && npm run test:cliBindgen:typescript",
     "test:lint": "ts-standard --fix \"src/**/*.ts\" && standard --fix \"test/node/**/*.js\"",
-    "test:node": "ava test/node/core/*.js test/node/io/image/*.js test/node/io/mesh/*.js test/node/pipeline/*.js",
+    "test:node": "ava test/node/**/*.js",
     "test:cliRun": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/stdout-stderr-pipeline run -r wasmtime stdout-stderr-test.wasi.wasm",
     "test:cliTest": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/stdout-stderr-pipeline test",
     "test:cliBindgen:typescript": "node src/itk-wasm-cli.js -b emscripten-build -s ./test/pipelines/bindgen-interface-types-pipeline bindgen --package-version 1.0.0 --package-name @itk-wasm/bindgen-interface-types-test --package-description \"Exercise interface types for bindgen\"",
