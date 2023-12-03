@@ -9,7 +9,7 @@ dependencies:
     specifier: ^0.2.0
     version: 0.2.0
   '@types/emscripten':
-    specifier: ^1.39.6
+    specifier: ^1.39.10
     version: 1.39.10
   axios:
     specifier: ^1.4.0
