@@ -19,3 +19,5 @@ export { default as MeshType } from './mesh-type.js'
 
 export { default as PolyData } from './poly-data.js'
 export { default as PolyDataType } from './poly-data-type.js'
+
+export { default as InterfaceTypes } from './interface-types.js'
