@@ -20,6 +20,8 @@ function functionModuleReturnType(interfaceJson) {
     })
     returnType = returnType.substring(0, returnType.length - 2)
     returnType += "]"
+  } else if (jsonOutputs.length === 0) {
+    return "None"
   } else {
     returnType = interfaceJsonTypeToPythonType.get(jsonOutputs[0].type)
   }
