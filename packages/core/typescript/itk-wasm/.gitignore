@@ -2,3 +2,5 @@ test/pipelines/emscripten-build
 test/pipelines/wasi-build
 test/pipelines/typescript
 test/pipelines/python
+
+cypress/screenshots

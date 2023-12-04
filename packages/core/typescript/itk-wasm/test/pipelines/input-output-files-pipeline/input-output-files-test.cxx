@@ -36,26 +36,26 @@ int main( int argc, char * argv[] )
   pipeline.add_option("--input-text-stream", inputTextStream, "The input text stream")->group("Streams")->type_name("INPUT_TEXT_STREAM");
 
   itk::wasm::OutputTextStream outputTextStream;
-  pipeline.add_option("--output-text-stream", outputTextStream, "The output text stream")->group("Streams")->type_name("OUTPUT_TEXT_STREAM");
+  pipeline.add_option("output-text-stream", outputTextStream, "The output text stream")->group("Streams")->type_name("OUTPUT_TEXT_STREAM");
 
   itk::wasm::InputBinaryStream inputBinaryStream;
   pipeline.add_option("--input-binary-stream", inputBinaryStream, "The input binary stream")->group("Streams")->type_name("INPUT_BINARY_STREAM");
 
   itk::wasm::OutputBinaryStream outputBinaryStream;
-  pipeline.add_option("--output-binary-stream", outputBinaryStream, "The output binary stream")->group("Streams")->type_name("OUTPUT_BINARY_STREAM");
+  pipeline.add_option("output-binary-stream", outputBinaryStream, "The output binary stream")->group("Streams")->type_name("OUTPUT_BINARY_STREAM");
 
 
   std::string inputTextFile;
   pipeline.add_option("--input-text-file", inputTextFile, "The input text file")->group("Files")->type_name("INPUT_TEXT_FILE");
 
   std::string outputTextFile;
-  pipeline.add_option("--output-text-file", outputTextFile, "The output text file")->group("Files")->type_name("OUTPUT_TEXT_FILE");
+  pipeline.add_option("output-text-file", outputTextFile, "The output text file")->group("Files")->type_name("OUTPUT_TEXT_FILE");
 
   std::string inputBinaryFile;
   pipeline.add_option("--input-binary-file", inputBinaryFile, "The input binary file")->group("Files")->type_name("INPUT_BINARY_FILE");
 
   std::string outputBinaryFile;
-  pipeline.add_option("--output-binary-file", outputBinaryFile, "The output binary file")->group("Files")->type_name("OUTPUT_BINARY_FILE");
+  pipeline.add_option("output-binary-file", outputBinaryFile, "The output binary file")->group("Files")->type_name("OUTPUT_BINARY_FILE");
 
 
   ITK_WASM_PARSE(pipeline);

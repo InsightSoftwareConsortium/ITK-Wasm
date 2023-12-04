@@ -2,7 +2,7 @@ import test from 'ava'
 import path from 'path'
 import fs from 'fs'
 
-import loadModule from '../../../dist/pipeline/load-emscripten-module-node.js'
+import loadModule from '../../../dist/pipeline/internal/load-emscripten-module-node.js'
 
 test('load a module', async t => {
   const testPipelineDir = path.resolve('test', 'pipelines', 'emscripten-build', 'stdout-stderr-pipeline')

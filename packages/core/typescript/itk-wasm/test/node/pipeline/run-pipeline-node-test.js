@@ -55,8 +55,8 @@ test('runPipelineNode uses input and output text and binary data via memory io',
   const args = ['--memory-io',
     '--input-text-stream', '0',
     '--input-binary-stream', '1',
-    '--output-text-stream', '0',
-    '--output-binary-stream', '1'
+    '0',
+    '1'
   ]
   const desiredOutputs = [
     { type: InterfaceTypes.TextStream },

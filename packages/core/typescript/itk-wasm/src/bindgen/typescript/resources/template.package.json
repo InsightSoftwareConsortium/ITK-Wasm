@@ -32,15 +32,16 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.154"
+    "itk-wasm": "^1.0.0-b.157"
   },
   "devDependencies": {
-    "@itk-wasm/image-io": "^0.2.0",
+    "@itk-wasm/image-io": "^0.5.0",
+    "@itk-wasm/mesh-io": "^0.2.0",
     "@shoelace-style/shoelace": "^2.5.2",
     "@types/node": "^20.2.5",
-    "esbuild": "^0.19.5",
+    "esbuild": "^0.19.8",
     "shx": "^0.3.4",
-    "typescript": "^5.0.4",
+    "typescript": "^5.3.2",
     "vite": "^4.5.0",
     "vite-plugin-static-copy": "^0.17.0"
   }

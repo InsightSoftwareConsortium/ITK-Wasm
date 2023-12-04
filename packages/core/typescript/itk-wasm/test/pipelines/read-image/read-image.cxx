@@ -18,31 +18,29 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkRGBPixel.h"
+#include "itkInputImage.h"
+#include "itkOutputImage.h"
+#include "itkPipeline.h"
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 3 )
-    {
-    std::cerr << "Usage: " << argv[0] << " <inputImage> <outputImage>" << std::endl;
-    return EXIT_FAILURE;
-    }
-  const char * inputImageFile = argv[1];
-  const char * outputImageFile = argv[2];
-
   using PixelType = itk::RGBPixel<unsigned char>;
   constexpr unsigned int Dimension = 2;
   using ImageType = itk::Image< PixelType, Dimension >;
 
-  try
-  {
-    const auto image = itk::ReadImage<ImageType>(inputImageFile);
-    itk::WriteImage(image, outputImageFile);
-  }
-  catch( std::exception & error )
-  {
-    std::cerr << "Error: " << error.what() << std::endl;
-    return EXIT_FAILURE;
-  }
+  itk::wasm::Pipeline pipeline("read-image", "Read and write an image", argc, argv);
+
+  using InputImageType = itk::wasm::InputImage<ImageType>;
+  InputImageType inputImage;
+  pipeline.add_option("input-image", inputImage, "The input image")->required()->type_name("INPUT_IMAGE");
+
+  using OutputImageType = itk::wasm::OutputImage<ImageType>;
+  OutputImageType outputImage;
+  pipeline.add_option("output-image", outputImage, "The output image")->required()->type_name("OUTPUT_IMAGE");
+
+  ITK_WASM_PARSE(pipeline);
+
+  outputImage.Set( inputImage.Get() );
 
   return EXIT_SUCCESS;
 }

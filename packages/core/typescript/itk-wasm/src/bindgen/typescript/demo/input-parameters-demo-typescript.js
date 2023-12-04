@@ -121,14 +121,14 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
         }
       } else if (parameterType === 'INPUT_MESH') {
         if (parameter.itemsExpectedMax > 1) {
-          result += `${indent}${indent}const readMeshes = await Promise.all(Array.from(files).map(async (file) => readMeshFile(null, file)))\n`
+          result += `${indent}${indent}const readMeshes = await Promise.all(Array.from(files).map(async (file) => readMesh(null, file)))\n`
           result += `${indent}${indent}readMeshes.forEach(msh => msh.webWorker.terminate())\n`
           result += `${indent}${indent}const inputMeshes = readMeshes.map(msh => msh.mesh)\n`
           result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", inputMeshes)\n`
           result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
           result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(inputMeshes, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
         } else {
-          result += `${indent}${indent}const { mesh, webWorker } = await readMeshFile(null, files[0])\n`
+          result += `${indent}${indent}const { mesh, webWorker } = await readMesh(null, files[0])\n`
           result += `${indent}${indent}webWorker.terminate()\n`
           result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", mesh)\n`
           result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`

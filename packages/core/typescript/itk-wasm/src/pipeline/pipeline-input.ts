@@ -9,8 +9,6 @@ import PolyData from '../interface-types/poly-data.js'
 import JsonCompatible from '../interface-types/json-compatible.js'
 
 interface PipelineInput {
-  // Backwards compatibility with IOTypes -- remove?
-  path?: string
   type:
   | (typeof InterfaceTypes)[keyof typeof InterfaceTypes]
   data:

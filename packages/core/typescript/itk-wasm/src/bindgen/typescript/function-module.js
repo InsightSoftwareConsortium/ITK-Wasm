@@ -56,7 +56,9 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   usedInterfaceTypes.forEach((interfaceType) => {
     functionContent += `  ${interfaceType},\n`
   })
-  functionContent += '  InterfaceTypes,\n'
+  if (usedInterfaceTypes.size) {
+    functionContent += '  InterfaceTypes,\n'
+  }
   functionContent += '  PipelineOutput,\n'
   functionContent += '  PipelineInput,\n'
   if (forNode) {

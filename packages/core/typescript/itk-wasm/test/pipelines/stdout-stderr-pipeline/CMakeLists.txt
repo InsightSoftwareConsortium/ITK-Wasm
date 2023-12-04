@@ -3,6 +3,7 @@ project(stdout-stderr-test)
 
 find_package(ITK REQUIRED
   COMPONENTS WebAssemblyInterface)
+include(${ITK_USE_FILE})
 add_executable(stdout-stderr-test stdout-stderr-test.cxx)
 target_link_libraries(stdout-stderr-test PUBLIC WebAssemblyInterface)
 

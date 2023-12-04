@@ -18,13 +18,13 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
 
   const { needReadImage, needReadMesh, needWriteImage, needWriteMesh } = ioPackagesNeeded(interfaceJson)
   if (needReadMesh) {
-    result += `import { readMeshFile } from 'itk-wasm'\n`
+    result += `import { readMesh } from '@itk-wasm/mesh-io'\n`
   }
   if (needReadImage) {
     result += `import { readImage } from '@itk-wasm/image-io'\n`
   }
   if (needWriteMesh) {
-    result += `import { writeMeshArrayBuffer } from 'itk-wasm'\n`
+    result += `import { writeMesh } from '@itk-wasm/mesh-io'\n`
   }
   if (needWriteImage) {
     result += `import { writeImage } from '@itk-wasm/image-io'\n`

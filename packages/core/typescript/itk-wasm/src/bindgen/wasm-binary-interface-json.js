@@ -33,7 +33,9 @@ function wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName) {
       console.error(runPipelineRun.error);
       process.exit(runPipelineRun.status)
     }
-    interfaceJson = JSON.parse(runPipelineRun.stdout.toString())
+    let interfaceString = new TextDecoder().decode(runPipelineRun.stdout)
+    interfaceString = interfaceString.substring(interfaceString.indexOf('{'), interfaceString.lastIndexOf('}') + 1)
+    interfaceJson = JSON.parse(interfaceString)
   }
 
   return { interfaceJson, parsedPath }
