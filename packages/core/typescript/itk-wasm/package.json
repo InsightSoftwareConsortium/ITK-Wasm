@@ -18,8 +18,10 @@
     "test": "test"
   },
   "scripts": {
-    "build": "pnpm build:tsc && pnpm build:workerBundle && pnpm build:workerMinBundle && pnpm test:buildTestPipelines:emscripten && pnpm test:bindgenTestPipelines:typescript",
+    "build": "pnpm build:tsc && pnpm build:bundle && pnpm build:minBundle && pnpm build:workerBundle && pnpm build:workerMinBundle && pnpm test:buildTestPipelines:emscripten && pnpm test:bindgenTestPipelines:typescript",
     "build:tsc": "tsc --pretty",
+    "build:bundle": "esbuild --bundle --format=esm --outfile=./dist/bundles/itk-wasm.js ./dist/index.js",
+    "build:minBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/bundles/itk-wasm.min.js ./dist/index.js",
     "build:workerBundle": "esbuild --bundle --format=esm --outfile=./dist/pipeline/web-workers/bundles/itk-wasm-pipeline.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js",
     "build:workerBundleForTesting": "esbuild --bundle --format=esm --outfile=./test/pipelines/typescript/test/browser/demo-app/public/itk-wasm-pipeline.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js && shx cp -r ./test/data/ ./test/pipelines/typescript/test/browser/demo-app/public/",
     "build:workerMinBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/pipeline/web-workers/bundles/itk-wasm-pipeline.min.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js",
@@ -47,7 +49,7 @@
     "test:chrome": "start-server-and-test start http-get://localhost:5173 cypress:runChrome",
     "test:firefox:ci": "start-server-and-test start http-get://localhost:5173 cypress:runFirefox:ci",
     "test:firefox": "start-server-and-test start http-get://localhost:5173 cypress:runFirefox",
-    "prepublishOnly": "pnpm build:tsc && node ./src/update-versions.cjs && npm run build:workerBundle && npm run build:workerMinBundle && npm run build:webpack",
+    "prepublishOnly": "pnpm build:tsc && node ./src/update-versions.cjs && pnpm build:bundle && pnpm build:minBundle && pnpm build:workerBundle && pnpm build:workerMinBundle",
     "clean": "git clean -fdx"
   },
   "repository": {
