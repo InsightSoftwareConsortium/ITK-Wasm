@@ -1,5 +1,6 @@
 // Core API interfaces, data structures, and functions
 
+export { default as version } from './version.js'
 export { default as bufferToTypedArray } from './buffer-to-typed-array.js'
 export { default as imageSharedBufferOrCopy } from './image-shared-buffer-or-copy.js'
 export { default as copyImage } from './copy-image.js'
