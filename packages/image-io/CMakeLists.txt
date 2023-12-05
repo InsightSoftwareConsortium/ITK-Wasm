@@ -221,6 +221,6 @@ add_test(NAME bio-rad-read-image-test
 
 add_test(NAME bio-rad-write-image-test
   COMMAND bio-rad-write-image
-  ${baseline_dir}/bio-rad-read-image-test.iwi.cbor
+  ${input_dir}/biorad.iwi.cbor
   ${output_dir}/bio-rad-write-image-test.could-write.json
   ${output_dir}/bio-rad-write-image-test.pic)

@@ -160,25 +160,6 @@ jobs:
       run: |
         npm run test
 
-  test-umd-example:
-    name: umd
-    runs-on: ubuntu-22.04
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
-      with:
-        large-packages: false
-
-    - name: Test
-      uses: cypress-io/github-action@v6
-      with:
-        working-directory: ./examples/umd
-        browser: chrome
-        start: npm start
-
   test-webpack-example:
     name: webpack
     runs-on: ubuntu-22.04

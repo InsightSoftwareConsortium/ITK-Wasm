@@ -1,4 +1,4 @@
-export const demoServer = 'http://localhost:5173'
+export const demoServer = 'http://localhost:5178'
 
 import { IntTypes, FloatTypes, PixelTypes } from 'itk-wasm'
 

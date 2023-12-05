@@ -30,12 +30,12 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 // To cache loaded pipeline modules
 const pipelineToModule: Map<string, PipelineEmscriptenModule> = new Map()
 
-function defaultPipelineWorkerUrl (): string {
+function defaultPipelineWorkerUrl (): string | URL | null {
   let result = getPipelineWorkerUrl()
   if (typeof result === 'undefined') {
-    result = new URL('/itk-wasm-pipeline.worker.min.js', document.location.origin).href
+    result = null
   }
-  return result as string
+  return result
 }
 
 function defaultPipelinesBaseUrl (): string {

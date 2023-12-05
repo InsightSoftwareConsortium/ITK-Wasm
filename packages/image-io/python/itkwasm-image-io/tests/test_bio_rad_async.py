@@ -3,9 +3,11 @@ import sys
 if sys.version_info < (3,10):
     pytest.skip("Skipping pyodide tests on older Python", allow_module_level=True)
 
+import pytest
 from pytest_pyodide import run_in_pyodide
 from .fixtures import package_wheel, input_data
 
+@pytest.mark.driver_timeout(30)
 @run_in_pyodide(packages=['micropip'])
 async def test_bio_rad_async(selenium, package_wheel, input_data):
     import micropip

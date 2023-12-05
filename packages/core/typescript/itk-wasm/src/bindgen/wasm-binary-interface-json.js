@@ -15,13 +15,17 @@ function wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName) {
     const runPipelineScriptPath = path.join(path.dirname(import.meta.url.substring(7)), 'interface-json-node-wasi.js')
     const runPipelineRun = spawnSync('node', ['--experimental-wasi-unstable-preview1', '--no-warnings', runPipelineScriptPath, runPath], {
       env: process.env,
-      stdio: ['ignore', 'pipe', 'inherit']
+      stdio: ['pipe', 'pipe', 'pipe']
     })
-    if (runPipelineRun.status !== 0) {
-      console.error(runPipelineRun.error);
-      process.exit(runPipelineRun.status)
+    try {
+      interfaceJson = JSON.parse(runPipelineRun.stdout.toString())
+    } catch (error) {
+      if (runPipelineRun.status !== 0) {
+        console.error(runPipelineRun.stderr.toString());
+        console.error(runPipelineRun.error);
+        process.exit(runPipelineRun.status)
+      }
     }
-    interfaceJson = JSON.parse(runPipelineRun.stdout.toString())
   } else {
     const runPath = path.join(parsedPath.dir, parsedPath.name)
     const runPipelineScriptPath = path.join(path.dirname(import.meta.url.substring(7)), 'interface-json-node.js')

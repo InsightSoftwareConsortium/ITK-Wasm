@@ -1,0 +1,31 @@
+{
+  "name": "@itk-wasm/compare-images-build",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@8.11.0",
+  "description": "scripts to generate @itk-wasm/compare-stringify itk-wasm artifacts.",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm build:gen:typescript && pnpm build:gen:python",
+    "build:emscripten": "itk-wasm -i itkwasm/emscripten:latest build",
+    "build:emscripten:debug": "itk-wasm -i itkwasm/emscripten:latest-debug build -- -DCMAKE_BUILD_TYPE:STRING=Debug",
+    "build:wasi": "itk-wasm -i itkwasm/wasi:latest build",
+    "build:wasi:debug": "itk-wasm -i itkwasm/wasi:latest-debug build -- -DCMAKE_BUILD_TYPE:STRING=Debug",
+    "build:python:wasi": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --environment-file environment.yml --log-level info --run-command \"run --cwd ./python/itkwasm-compare-images-wasi python -m pip install -e .\"",
+    "bindgen:typescript": "itk-wasm -b emscripten-build bindgen --package-name @itk-wasm/compare-images --package-description \"Compare images with a tolerance for regression testing.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
+    "bindgen:python": "itk-wasm -b wasi-build bindgen --package-version 4.0.0 --interface python --package-name itkwasm-compare-images --package-description \"Compare images with a tolerance for regression testing.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
+    "build:gen:typescript": "pnpm build:emscripten && pnpm bindgen:typescript",
+    "build:gen:python": "pnpm build:wasi && pnpm bindgen:python && pnpm build:micromamba && pnpm build:python:wasi",
+    "build:micromamba": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --init-shell none --create-environment true --environment-file environment.yml --log-level debug --run-command \"clean -fya\"",
+    "test": "pnpm test:data:download",
+    "test:data:download": "dam download test/data test/data.tar.gz bafybeigcvvf3ol3phmpevbin6ufumqfx65uxxthchqacxftxqpn67uxlxa https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.157/data.tar.gz https://bafybeiefbfd6kxcmwq6osnwu72gv6srzsnv6ys5omoodjlmaazx47mdhsq.ipfs.w3s.link/ipfs/bafybeiefbfd6kxcmwq6osnwu72gv6srzsnv6ys5omoodjlmaazx47mdhsq/data.tar.gz",
+    "test:data:pack": "dam pack test/data test/data.tar.gz"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@itk-wasm/dam": "^1.1.0",
+    "@thewtex/setup-micromamba": "^1.9.7",
+    "itk-wasm": "workspace:^",
+    "@itk-wasm/image-io-build": "workspace:^"
+  }
+}

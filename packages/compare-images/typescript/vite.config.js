@@ -4,6 +4,9 @@ import path from 'path'
 
 export default defineConfig({
   root: path.join('test', 'browser', 'demo-app'),
+  server: {
+    port: 5175
+  },
   build: {
     outDir: '../../../demo-app',
     emptyOutDir: true,
@@ -12,7 +15,7 @@ export default defineConfig({
     format: 'es'
   },
   optimizeDeps: {
-    exclude: ['itk-wasm', '@itk-wasm/image-io']
+    exclude: ['itk-wasm', '@itk-wasm/image-io', '@thewtex/zstddec']
   },
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory

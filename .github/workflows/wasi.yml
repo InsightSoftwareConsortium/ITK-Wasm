@@ -2,12 +2,16 @@ name: WASI
 
 on: [push,pull_request]
 
+defaults:
+  run:
+    shell: bash -leo pipefail {0} {0}
+
 jobs:
   build-test:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -16,22 +20,20 @@ jobs:
       run: |
         ./src/docker/pull.sh
 
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
 
-    - name: Install packages
-      run: |
-        npm ci
+    - name: Install
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        run_install: true
 
     - name: Build
       run: |
-        npm run build:wasi
+        pnpm run --aggregate-output build:wasi:debug
 
     - name: Test
       run: |
-        npm run test:wasi
-
-    - name: Build WASI packages
-      run: |
-        npm run build:wasi:packages
+        pnpm run --aggregate-output test:wasi

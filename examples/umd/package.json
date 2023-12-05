@@ -4,8 +4,8 @@
   "description": "This example demonstrates how to use the itk-wasm UMD module from an HTML script tag.",
   "scripts": {
     "start": "http-server ./dist/",
-    "cypress:open": "npx cypress open",
-    "cypress:run": "npx cypress run",
+    "cypress:open": "pnpx cypress open",
+    "cypress:run": "pnpx cypress run",
     "test:debug": "start-server-and-test start http://localhost:8080 cypress:open",
     "test": "start-server-and-test start http://localhost:8080 cypress:run"
   },

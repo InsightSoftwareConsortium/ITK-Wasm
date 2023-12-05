@@ -11,7 +11,7 @@ rsync -a ../../../{include,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInte
 rsync -a ../../../src/{*.cxx,CMakeLists.txt} ./ITKWebAssemblyInterfaceModuleCopy/src/
 rsync -a ../../../src/emscripten-module ./ITKWebAssemblyInterfaceModuleCopy/src/
 mkdir -p median-filter-pipelineCopy
-rsync -a ../../../test/pipelines/median-filter-pipeline/{CMakeLists.txt,median-filter-test.cxx} ./median-filter-pipelineCopy
+rsync -a ../../../packages/core/typescript/itk-wasm/test/pipelines/median-filter-pipeline/{CMakeLists.txt,median-filter-test.cxx} ./median-filter-pipelineCopy
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 VCS_REF=$(git rev-parse --short HEAD)

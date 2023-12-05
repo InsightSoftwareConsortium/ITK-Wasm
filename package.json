@@ -1,98 +1,35 @@
 {
-  "name": "itk-wasm",
-  "version": "1.0.0-b.159",
+  "name": "itk-wasm-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@8.11.0",
   "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
-  "main": "./dist/index.js",
-  "browser": {
-    "./index.js": "./dist/browser/index.js"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "browser": "./dist/browser/index.js",
-      "import": "./dist/node/index.js",
-      "package.json": "./package.json",
-      "default": "./dist/index.js"
-    }
-  },
   "type": "module",
-  "types": "./dist/index.d.ts",
   "directories": {
-    "doc": "docs",
-    "test": "test"
+    "doc": "docs"
   },
   "scripts": {
-    "build": "pnpm build:tsc",
-    "build:tsc": "tsc --pretty",
-    "build:tscWorkersModuleLoader": "tsc --types --lib es2017,webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleWebWorker.ts",
-    "build:tscWebWorkers": "tsc -p ./tsconfigWebWorkers.json",
-    "build:workerBundle": "esbuild --bundle --format=esm --outfile=./dist/core/web-workers/bundles/itk-wasm-pipeline.worker.js ./dist/core/web-workers/itk-wasm-pipeline.worker.js",
-    "build:workerMinBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/core/web-workers/bundles/itk-wasm-pipeline.min.worker.js ./dist/core/web-workers/itk-wasm-pipeline.worker.js",
-    "build:webpack": "webpack --mode production --progress --color && webpack --mode development --progress --color",
-    "start": "webpack-dev-server --mode development --env DEVSERVER",
-    "start:production": "webpack-dev-server --mode production",
-    "test:wasi": "npm run test:cliRun && npm run test:cliTest && npm run test:cliBindgen:python",
-    "test": "npm run test:lint && npm run test:node && npm run test:browser && npm run test:chrome && npm run test:firefox && npm run test:cliBindgen:typescript",
-    "test:lint": "ts-standard --fix \"src/**/*.ts\" && standard --fix \"test/node/**/*.js\"",
-    "test:cliBindgen:typescript": "node src/itk-wasm-cli.js -b emscripten-build -s ./test/pipelines/bindgen-interface-types-pipeline bindgen --package-version 1.0.0 --package-name @itk-wasm/bindgen-interface-types-test --package-description \"Exercise interface types for bindgen\"",
-    "test:cliBindgen:python": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/bindgen-interface-types-pipeline bindgen --interface python --package-version 1.0.0 --package-name itkwasm-bindgen-interface-types-test --package-description \"Exercise interface types for bindgen\"",
-    "test:browser:debug": "start-server-and-test start http-get://localhost:8083 cypress:open",
-    "prepublishOnly": "npm run build:tsc && node ./src/update-versions.cjs && node ./src/io/internal/packages/package-json-gen.cjs && npm run build:workerBundle && npm run build:workerMinBundle && npm run build:webpack",
-    "clean": "git clean -fdx"
+    "build": "pnpm -r build",
+    "build:emscripten": "pnpm -r build:emscripten",
+    "build:emscripten:debug": "pnpm -r build:emscripten:debug",
+    "build:wasi": "pnpm -r build:wasi",
+    "build:wasi:debug": "pnpm -r build:wasi:debug",
+    "build:gen:typescript": "pnpm -r build:gen:typescript",
+    "build:gen:python": "pnpm -r build:gen:python",
+    "test:wasi": "pnpm -r test:wasi",
+    "test:lint": "pnpm -r test:lint",
+    "test:node": "pnpm -r test:node",
+    "test:browser:chrome": "pnpm -r test:browser:chrome",
+    "test:browser:firefox": "pnpm -r test:browser:firefox",
+    "test:python:wasi": "pnpm -r test:python:wasi",
+    "test:python:emscripten": "pnpm -r test:python:emscripten",
+    "test:python": "pnpm -r test:python",
+    "test": "pnpm -r test",
+    "clean": "git clean -fdx",
+    "ci:publish": "pnpm publish -r"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm.git"
-  },
-  "keywords": [
-    "itk",
-    "imaging",
-    "wasm",
-    "webassembly",
-    "wasi",
-    "io",
-    "medical",
-    "scientific"
-  ],
-  "author": "Insight Software Consortium",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
-  },
-  "homepage": "https://wasm.itk.org/",
   "devDependencies": {
-    "@itk-wasm/dam": "^1.0.1",
-    "core-js": "^3.19.0",
-    "cypress": "^13.1.0",
-    "esbuild": "^0.19.5",
-    "node-module-polyfill": "^1.0.1",
-    "readable-stream": "^3.6.0",
-    "resolve-typescript-plugin": "^1.2.0",
-    "standard": "^16.0.4",
-    "start-server-and-test": "^1.14.0",
-    "ts-loader": "^9.3.1",
-    "ts-standard": "^11.0.0",
-    "typescript": "^4.7.4"
-  },
-  "dependencies": {
-    "axios": "^1.4.0",
-    "comlink": "^4.4.1",
-    "fs-extra": "^10.0.0",
-    "glob": "^8.1.0",
-    "markdown-table": "^3.0.3",
-    "mime-types": "^2.1.35",
-    "wasm-feature-detect": "^1.5.1"
-  },
-  "sideEffects": false,
-  "ts-standard": {
-    "ignore": [
-      "src/core/internal/loadEmscriptenModuleWebWorker.ts",
-      "src/core/web-workers/*.ts",
-      "src/core/ITKWasmEmscriptenModule.ts",
-      "src/pipeline/PipelineEmscriptenModule.ts",
-      "src/bindgen/typescript/resources/*",
-      "src/bindgen/typescript/resources/demo-app/*"
-    ]
+    "@commitlint/config-conventional": "^18.4.3"
   },
   "commitlint": {
     "extends": [

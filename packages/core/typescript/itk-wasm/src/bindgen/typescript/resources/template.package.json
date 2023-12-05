@@ -1,6 +1,7 @@
 {
   "name": "package-name",
   "version": "0.1.0",
+  "packageManager": "pnpm@8.11.0",
   "description": "",
   "type": "module",
   "module": "./dist/index.js",
@@ -14,14 +15,14 @@
     }
   },
   "scripts": {
-    "start": "npm run copyShoelaceAssets && vite",
+    "start": "pnpm copyShoelaceAssets && vite",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:tsc && npm run build:browser:workerEmbedded && npm run build:browser:workerEmbeddedMin && npm run build:demo",
+    "build": "pnpm build:tsc && pnpm build:browser:workerEmbedded && pnpm build:browser:workerEmbeddedMin && pnpm build:demo",
     "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
     "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
     "build:tsc": "tsc --pretty",
     "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
-    "build:demo": "npm run copyShoelaceAssets && vite build"
+    "build:demo": "pnpm copyShoelaceAssets && vite build"
   },
   "keywords": [
     "itk",
@@ -32,7 +33,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.157"
+    "itk-wasm": "1.0.0-b.157"
   },
   "devDependencies": {
     "@itk-wasm/image-io": "^0.5.0",

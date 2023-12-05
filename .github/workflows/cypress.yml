@@ -1,60 +1,98 @@
-name: Cypress Tests
+name: Browser Tests
 
 on: [push,pull_request]
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0} {0}
 
 jobs:
 
   test-cypress:
     name: itk-wasm browser tests
     runs-on: ubuntu-22.04
+    strategy:
+      max-parallel: 3
+      matrix:
+        package: [compress-stringify, compare-images, dicom, mesh-io, image-io]
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
           large-packages: false
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18.16'
+          node-version: '20'
 
       - name: Install
-        run: |
-          npm ci
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: true
 
-      - name: Build
+      - name: Build itk-wasm
         run: |
-          npm run build
+          pnpm run --aggregate-output --filter itk-wasm build
+
+      - name: Build build:gen:typescript
+        run: |
+          pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build..." build:gen:typescript
+
+      - name: Build typescript
+        run: |
+          pnpm install
+          # Build the generated TypeScript package
+          pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}..." build:tsc
+          pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}" build
+
+      - name: Download test data
+        run: |
+          pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:data:download
 
       - name: Test with Chrome
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
-          command: npm run test:chrome
+          working-directory: packages/${{ matrix.package }}/typescript
+          install: false
+          start: pnpm start
+          config: video=true
 
-      - uses: actions/upload-artifact@v3
-        if: failure()
+      - name: Test itk-wasm with Chrome
+        uses: cypress-io/github-action@v6
         with:
-          name: cypress-screenshots
-          path: cypress/screenshots
+          browser: chrome
+          working-directory: packages/core/typescript/itk-wasm
+          install: false
+          start: pnpm start
+          config: video=true
+          wait-on: 'http://localhost:5173'
+          wait-on-timeout: 360
 
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: cypress-videos
-          path: cypress/videos
+          path: packages/${{ matrix.package }}/typescript/cypress/videos
+          if-no-files-found: ignore
 
-      #- name: Test with Firefox
-        #uses: cypress-io/github-action@v6
-        #with:
-          #browser: firefox
-          #command: npm run test:firefox
+      - name: Test with Firefox
+        if: ${{ matrix.package != 'dicom' }}
+        uses: cypress-io/github-action@v6
+        with:
+          browser: firefox
+          working-directory: packages/${{ matrix.package }}/typescript
+          install: false
+          start: pnpm start
 
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-screenshots
-          path: cypress/screenshots
+          path: packages/${{ matrix.package }}/typescript/cypress/screenshots
+          if-no-files-found: ignore

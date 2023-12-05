@@ -12,7 +12,7 @@ export default defineConfig({
     format: 'es'
   },
   optimizeDeps: {
-    exclude: ['itk-wasm', '@itk-wasm/image-io', '@itk-wasm/mesh-io']
+    exclude: ['itk-wasm', '@itk-wasm/image-io', '@itk-wasm/mesh-io', '@thewtex/zstddec']
   },
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory

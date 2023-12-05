@@ -12,11 +12,14 @@ export function generateConfig() {
       emptyOutDir: true,
       chunkSizeWarningLimit: 800e6,
     },
+    server: {
+      port: 5004,
+    },
     worker: {
       format: 'es'
     },
     optimizeDeps: {
-      exclude: ['itk-wasm']
+      exclude: ['itk-wasm', '@thewtex/zstddec']
     },
     plugins: [
       // put lazy loaded JavaScript and Wasm bundles in dist directory

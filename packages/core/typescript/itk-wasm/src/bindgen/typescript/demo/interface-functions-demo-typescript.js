@@ -18,16 +18,32 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
 
   const { needReadImage, needReadMesh, needWriteImage, needWriteMesh } = ioPackagesNeeded(interfaceJson)
   if (needReadMesh) {
-    result += `import { readMesh } from '@itk-wasm/mesh-io'\n`
+    if (packageName === '@itk-wasm/mesh-io') {
+      result += `import { readMesh } from '../../../dist/index.js'\n`
+    } else {
+      result += `import { readMesh } from '@itk-wasm/mesh-io'\n`
+    }
   }
   if (needReadImage) {
-    result += `import { readImage } from '@itk-wasm/image-io'\n`
+    if (packageName === '@itk-wasm/image-io') {
+      result += `import { readImage } from '../../../dist/index.js'\n`
+    } else {
+      result += `import { readImage } from '@itk-wasm/image-io'\n`
+    }
   }
   if (needWriteMesh) {
-    result += `import { writeMesh } from '@itk-wasm/mesh-io'\n`
+    if (packageName === '@itk-wasm/mesh-io') {
+      result += `import { writeMesh } from '../../../dist/index.js'\n`
+    } else {
+      result += `import { writeMesh } from '@itk-wasm/mesh-io'\n`
+    }
   }
   if (needWriteImage) {
-    result += `import { writeImage } from '@itk-wasm/image-io'\n`
+    if (packageName === '@itk-wasm/image-io') {
+      result += `import { writeImage } from '../../../dist/index.js'\n`
+    } else {
+      result += `import { writeImage } from '@itk-wasm/image-io'\n`
+    }
   }
   if (needReadImage || needWriteImage) {
     result += `import { copyImage } from 'itk-wasm'\n`
