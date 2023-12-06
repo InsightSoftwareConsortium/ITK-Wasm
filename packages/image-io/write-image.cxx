@@ -117,7 +117,7 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, itk::wasm::OutputTextStre
   {
     for (unsigned int dd = 0; dd < dimension; ++dd)
     {
-      direction[dd] = directionContainer->GetElement(dim*dimension + dd);
+      direction[dd] = directionContainer->GetElement(dim + dimension*dd);
     }
     imageIO->SetDirection(dim, direction);
     imageIO->SetOrigin(dim, inputImageIOBase->GetOrigin(dim));
