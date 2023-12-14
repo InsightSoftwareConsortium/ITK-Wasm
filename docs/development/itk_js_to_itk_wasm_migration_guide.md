@@ -18,7 +18,7 @@ to:
 
 
 ```js
-import { IntTypes } from 'ITK-Wasm'
+import { IntTypes } from 'itk-wasm'
 ```
 
 Node module import migration:
@@ -32,7 +32,7 @@ const IntTypes = require('itk/IntTypes.js')
 to:
 
 ```js
-import { IntTypes } from 'ITK-Wasm'
+import { IntTypes } from 'itk-wasm'
 ```
 
 ## TypeScript support
@@ -74,7 +74,7 @@ On an individual ITK-Wasm package scope or bundle scope via the `itk-wasm` packa
 
 ## IO modules are available in separate packages.
 
-IO modules are now installed in separate npm packages to limit the `ITK-Wasm` package size. You can install only the packages that you need.
+IO modules are now installed in separate npm packages to limit the `itk-wasm` package size. You can install only the packages that you need.
 
 The io packages are:
 
@@ -86,7 +86,7 @@ An example that vendors these package's webassembly assets into an application f
 
 ### DICOM image IO functions
 
-The following DICOM image IO functions have been migrated to the `@ITK-Wasm/dicom` package. Their interface changed in some cases.
+The following DICOM image IO functions have been migrated to the `@itk-wasm/dicom` package. Their interface changed in some cases.
 
 1. `readImageLocalDICOMFileSeries` -> `readImageDicomFileSeriesNode`
 1. `readImageDICOMFileSeries` -> `readImageDicomFileSeries`
