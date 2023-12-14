@@ -3,7 +3,7 @@ export default async function readDicomTagsLoadSampleInputs (model, preRun=false
   if (!preRun) {
     dicomButton.loading = true
   }
-  const fileName = 'multiframe-ultrasound.dcm'
+  const fileName = 'ultrasound.dcm'
   const dicomReponse = await fetch(`https://bafybeihmnqsufckyjxt2z3yunppqggtq2rle7fta27rbetmf7fgviytghi.ipfs.w3s.link/ipfs/bafybeihmnqsufckyjxt2z3yunppqggtq2rle7fta27rbetmf7fgviytghi/input/dicom-images/${fileName}`)
   const dicomData = new Uint8Array(await dicomReponse.arrayBuffer())
   model.inputs.set('dicomFile', { data: dicomData, path: fileName })
@@ -17,4 +17,4 @@ export default async function readDicomTagsLoadSampleInputs (model, preRun=false
   return model
 }
 
-export const usePreRun = true
+export const usePreRun = false

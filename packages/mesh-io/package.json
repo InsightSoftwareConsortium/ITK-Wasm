@@ -1,0 +1,37 @@
+{
+  "name": "@itk-wasm/mesh-io-build",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@8.11.0",
+  "description": "scripts to generate @itk-wasm/compare-stringify itk-wasm artifacts.",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm build:gen:typescript && pnpm build:gen:python",
+    "build:emscripten": "itk-wasm -i itkwasm/emscripten:latest build",
+    "build:emscripten:debug": "itk-wasm -i itkwasm/emscripten:latest-debug build -- -DCMAKE_BUILD_TYPE:STRING=Debug",
+    "build:wasi": "itk-wasm -i itkwasm/wasi:latest build",
+    "build:wasi:debug": "itk-wasm -i itkwasm/wasi:latest-debug build -- -DCMAKE_BUILD_TYPE:STRING=Debug",
+    "build:python:wasi": "pnpm test:data:download && setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --environment-file environment.yml --log-level info --run-command \"run --cwd ./python/itkwasm-mesh-io-wasi python -m pip install -e .\"",
+    "bindgen:typescript": "itk-wasm -b emscripten-build bindgen --package-name @itk-wasm/mesh-io --package-description \"Compare meshs with a tolerance for regression testing.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
+    "bindgen:python": "itk-wasm -b wasi-build bindgen --package-version 0.2.0 --interface python --package-name itkwasm-mesh-io --package-description \"Compare meshs with a tolerance for regression testing.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
+    "build:gen:typescript": "pnpm build:emscripten && pnpm bindgen:typescript",
+    "build:gen:python": "pnpm build:wasi && pnpm bindgen:python && pnpm setup-micromamba && pnpm build:python:wasi",
+    "build:micromamba": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --init-shell none --create-environment true --environment-file environment.yml --log-level debug --run-command \"clean -fya\"",
+    "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreidvr5jnut7us3umgdm4gqrcqygvpd456z2duaiuiimby7mhvsniii https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.155/mesh-io-test-data.tar.gz",
+    "test:data:pack": "dam pack test/data test/data.tar.gz",
+    "test:python:wasi": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --environment-file environment.yml --log-level info --run-command \"run --cwd ./python/itkwasm-mesh-io-wasi pytest -s\"",
+    "test:pyodide:download:emscripten": "dam download ./python/itkwasm-mesh-io-emscripten/dist test/pyodide-emscripten.tar.bz2 bafybeienencwyms2wzlzx6itqe4tw7rptocwaxihqf2sj6jej2hhoy7jxa https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.158/pyodide-0.24.1-itkwasm-1.0b145-test-dist.tar.bz2",
+    "test:python:emscripten": "pnpm test:pyodide:download:emscripten && setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --environment-file environment.yml --log-level info --run-command \"run --cwd ./python/itkwasm-mesh-io-emscripten hatch run test\"",
+    "test:pyodide:download:dispatch": "dam download ./python/itkwasm-mesh-io/dist test/pyodide-dispatch.tar.bz2 bafybeienencwyms2wzlzx6itqe4tw7rptocwaxihqf2sj6jej2hhoy7jxa https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.158/pyodide-0.24.1-itkwasm-1.0b145-test-dist.tar.bz2",
+    "test:python:dispatch": "pnpm test:pyodide:download:dispatch && setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --environment-file environment.yml --log-level info --run-command \"run --cwd ./python/itkwasm-mesh-io hatch run test\"",
+    "test:python": "pnpm test:python:wasi && pnpm test:python:emscripten && pnpm test:python:dispatch",
+    "test:wasi": "pnpm test:data:download && itk-wasm test -- --output-on-failure"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@itk-wasm/dam": "^1.1.0",
+    "@thewtex/setup-micromamba": "^1.9.7",
+    "itk-wasm": "workspace:^"
+  }
+}

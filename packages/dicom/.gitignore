@@ -1,4 +1,4 @@
 dist
 emscripten-build
-test/data
-test/data.tar.gz
+test/
+micromamba/

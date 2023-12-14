@@ -173,8 +173,8 @@ Then, specify npm scripts to develop and debug the tests and run them in an auto
 ```js
   "scripts": {
     "start": "webpack-dev-server --mode development --static ./dist/",
-    "cypress:open": "npx cypress open",
-    "cypress:run": "npx cypress run",
+    "cypress:open": "pnpx cypress open",
+    "cypress:run": "pnpx cypress run",
     "test:debug": "start-server-and-test start http-get://localhost:8080 cypress:open",
     "test": "start-server-and-test start http-get://localhost:8080 cypress:run"
   },

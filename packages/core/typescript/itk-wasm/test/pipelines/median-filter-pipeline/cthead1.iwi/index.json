@@ -1,0 +1,23 @@
+{
+    "imageType": {
+        "dimension": 2,
+        "componentType": "uint8",
+        "pixelType": "RGB",
+        "components": 3
+    },
+    "origin": [
+        0.0,
+        0.0
+    ],
+    "spacing": [
+        1.0,
+        1.0
+    ],
+    "direction": "data:application/vnd.itk.path,data/direction.raw",
+    "size": [
+        256,
+        256
+    ],
+    "data": "data:application/vnd.itk.path,data/data.raw",
+    "metadata": []
+}

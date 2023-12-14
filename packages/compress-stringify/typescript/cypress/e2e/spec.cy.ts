@@ -1,4 +1,4 @@
-const demoServer = 'http://localhost:5173'
+const demoServer = 'http://localhost:5176'
 
 describe('@itk-wasm/compress-stringify', () => {
   it('compressStringify runs sample inputs and produces expected outputs', () => {

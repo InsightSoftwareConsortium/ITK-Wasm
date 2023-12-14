@@ -1,0 +1,6 @@
+packages:
+  - 'packages/**'
+  - '!packages/core/typescript/itk-wasm/test/pipelines/typescript'
+  - '!**/src'
+  - '!**/dist'
+  - '!**/pyodide'

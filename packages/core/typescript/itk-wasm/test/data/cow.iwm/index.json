@@ -1,0 +1,22 @@
+{
+    "meshType": {
+        "dimension": 3,
+        "pointComponentType": "float32",
+        "pointPixelComponentType": "int8",
+        "pointPixelType": "Scalar",
+        "pointPixelComponents": 0,
+        "cellComponentType": "uint32",
+        "cellPixelComponentType": "int8",
+        "cellPixelType": "Scalar",
+        "cellPixelComponents": 0
+    },
+    "numberOfPoints": 2903,
+    "numberOfPointPixels": 0,
+    "numberOfCells": 3263,
+    "numberOfCellPixels": 0,
+    "cellBufferSize": 18856,
+    "points": "data:application/vnd.itk.path,data/points.raw",
+    "cells": "data:application/vnd.itk.path,data/cells.raw",
+    "pointData": "data:application/vnd.itk.path,data/pointData.raw",
+    "cellData": "data:application/vnd.itk.path,data/cellData.raw"
+}

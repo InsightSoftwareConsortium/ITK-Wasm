@@ -1,6 +1,6 @@
 // Generated file. To retain edits, remove this comment.
 
-import { writeMeshArrayBuffer } from 'itk-wasm'
+import { writeMesh } from '../../../dist/index.js'
 import * as meshIo from '../../../dist/index.js'
 import wasmReadMeshLoadSampleInputs, { usePreRun } from "./wasm-read-mesh-load-sample-inputs.js"
 
@@ -78,7 +78,7 @@ class WasmReadMeshController {
             const meshDownloadFormat = document.getElementById('mesh-output-format')
             const downloadFormat = meshDownloadFormat.value || 'vtk'
             const fileName = `mesh.${downloadFormat}`
-            const { webWorker, arrayBuffer } = await writeMeshArrayBuffer(null, model.outputs.get("mesh"), fileName)
+            const { webWorker, arrayBuffer } = await writeMesh(null, model.outputs.get("mesh"), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(arrayBuffer, fileName)

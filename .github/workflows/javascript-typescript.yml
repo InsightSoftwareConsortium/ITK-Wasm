@@ -1,10 +1,18 @@
-name: JavaScript,TypeScript
+name: Node.js Tests
 
 on: [push,pull_request]
 
+defaults:
+  run:
+    shell: bash -leo pipefail {0} {0}
+
 jobs:
-  build-test-deploy:
+  itkwasm-node-js:
     runs-on: ubuntu-22.04
+    strategy:
+      max-parallel: 3
+      matrix:
+        package: [compress-stringify, compare-images, dicom, mesh-io, image-io]
 
     steps:
     - uses: actions/checkout@v3
@@ -16,44 +24,46 @@ jobs:
       run: |
         ./src/docker/pull.sh
 
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
-        node-version: '18.16'
+        node-version: '20'
 
-    - name: Install packages
-      run: |
-        npm ci
+    - name: Install
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        run_install: true
 
-    - name: Build
+    - name: Build itk-wasm
       run: |
-        npm run build
+        pnpm run --aggregate-output --filter itk-wasm build
+
+    - name: Build build:gen:typescript
+      run: |
+        pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build..." build:gen:typescript
+
+    - name: Build typescript
+      run: |
+        pnpm install
+        # Build the generated TypeScript package
+        pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}..." build:tsc
+        pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}" build
+
+    - name: Download test data
+      run: |
+        pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:data:download
 
     - name: Lint tests
       run: |
-        npm run test:lint
+        pnpm run test:lint
 
     - name: Node tests
       run: |
-        npm run test:node
+        pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}" test:node
 
-    - name: Browser tests
+    - name: itk-wasm Node tests
       run: |
-        # Allow writing test/output.html
-        sudo chmod 777 test
-        # To debug locally, run `./test/run.sh -d`
-        ./test/run.sh
-
-    - name: Test building a pipeline
-      run: |
-        cd test/pipelines/median-filter-pipeline
-
-        node ../../../src/itk-wasm-cli.js build -i itkwasm/emscripten:latest .
-        rm -rf emscripten-build
-
-        node ../../../src/itk-wasm-cli.js build -i itkwasm/wasi:latest .
-        rm -rf emscripten-build
-
-        cd -
+        pnpm run --aggregate-output --filter "itk-wasm" test:node
 
     - name: Publish task
       env:
@@ -62,4 +72,4 @@ jobs:
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "itk+community@discourse.itk.org"
-        npx semantic-release
+        # todo: use changeset / pnpm publish

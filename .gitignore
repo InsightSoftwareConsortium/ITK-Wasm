@@ -88,3 +88,5 @@ packages/mesh-io/python/itkwasm-mesh-io-wasi/itkwasm_mesh_io_wasi/wasm_modules/
 
 cypress/screenshots/
 cypress/videos/
+
+packages/core/typescript/itk-wasm/dist

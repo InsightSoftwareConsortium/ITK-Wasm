@@ -1,6 +1,7 @@
 {
   "name": "@itk-wasm/mesh-io",
   "version": "0.2.0",
+  "packageManager": "pnpm@8.11.0",
   "description": "Input and output for scientific and medical image file formats.",
   "type": "module",
   "module": "./dist/index.js",
@@ -14,22 +15,22 @@
     }
   },
   "scripts": {
-    "start": "npm run copyShoelaceAssets && vite",
-    "test": "npm run test:node && npm run test:browser",
+    "start": "pnpm copyShoelaceAssets && vite",
+    "test": "pnpm test:node && pnpm test:browser",
     "test:node": "ava",
-    "test:browser": "npm run test:browser:chrome && npm run test:browser:firefox",
-    "test:browser:firefox": "start-server-and-test start http-get://localhost:5173 cypress:runFirefox",
-    "test:browser:chrome": "start-server-and-test start http-get://localhost:5173 cypress:runChrome",
-    "test:browser:debug": "start-server-and-test start http-get://localhost:5173 cypress:open",
-    "cypress:open": "npx cypress open",
-    "cypress:runChrome": "npx cypress run --browser chrome",
-    "cypress:runFirefox": "npx cypress run --browser firefox",
-    "build": "npm run build:tsc && npm run build:browser:workerEmbedded && npm run build:browser:workerEmbeddedMin && npm run build:demo",
+    "test:browser": "pnpm test:browser:chrome && pnpm test:browser:firefox",
+    "test:browser:firefox": "start-server-and-test start http-get://localhost:5178 cypress:runFirefox",
+    "test:browser:chrome": "start-server-and-test start http-get://localhost:5178 cypress:runChrome",
+    "test:browser:debug": "start-server-and-test start http-get://localhost:5178 cypress:open",
+    "cypress:open": "pnpx cypress open",
+    "cypress:runChrome": "pnpx cypress run --browser chrome",
+    "cypress:runFirefox": "pnpx cypress run --browser firefox",
+    "build": "pnpm build:tsc && pnpm build:browser:workerEmbedded && pnpm build:browser:workerEmbeddedMin && pnpm build:demo",
     "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
     "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
     "build:tsc": "tsc --pretty",
     "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
-    "build:demo": "npm run copyShoelaceAssets && vite build"
+    "build:demo": "pnpm copyShoelaceAssets && vite build"
   },
   "keywords": [
     "itk",
@@ -40,10 +41,12 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.154"
+    "itk-wasm": "workspace:^",
+    "mime-types": "^2.1.35"
   },
   "devDependencies": {
-    "@itk-wasm/image-io": "^0.2.0",
+    "@itk-wasm/image-io": "workspace:^",
+    "@itk-wasm/mesh-io-build": "workspace:*",
     "@shoelace-style/shoelace": "^2.5.2",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.2.5",

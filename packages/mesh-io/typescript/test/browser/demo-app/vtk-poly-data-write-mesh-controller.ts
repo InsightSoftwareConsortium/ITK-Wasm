@@ -1,6 +1,6 @@
 // Generated file. To retain edits, remove this comment.
 
-import { readMeshFile } from 'itk-wasm'
+import { readMesh } from '../../../dist/index.js'
 import * as meshIo from '../../../dist/index.js'
 import vtkPolyDataWriteMeshLoadSampleInputs, { usePreRun } from "./vtk-poly-data-write-mesh-load-sample-inputs.js"
 
@@ -44,7 +44,7 @@ class VtkPolyDataWriteMeshController {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const { mesh, webWorker } = await readMeshFile(null, files[0])
+        const { mesh, webWorker } = await readMesh(null, files[0])
         webWorker.terminate()
         model.inputs.set("mesh", mesh)
         const details = document.getElementById("vtkPolyDataWriteMesh-mesh-details")

@@ -1,0 +1,111 @@
+{
+  "name": "itk-wasm",
+  "version": "1.0.0",
+  "packageManager": "pnpm@8.11.0",
+  "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index-all.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index-all.d.ts",
+      "browser": "./dist/index.js",
+      "node": "./dist/index-node.js",
+      "default": "./dist/index-all.js"
+    }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "pnpm build:tsc && pnpm build:bundle && pnpm build:minBundle && pnpm build:workerBundle && pnpm build:workerMinBundle && pnpm test:buildTestPipelines:emscripten && pnpm test:bindgenTestPipelines:typescript",
+    "build:tsc": "tsc --pretty",
+    "build:bundle": "esbuild --bundle --format=esm --outfile=./dist/bundles/itk-wasm.js ./dist/index.js",
+    "build:minBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/bundles/itk-wasm.min.js ./dist/index.js",
+    "build:workerBundle": "esbuild --bundle --format=esm --outfile=./dist/pipeline/web-workers/bundles/itk-wasm-pipeline.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js",
+    "build:workerBundleForTesting": "esbuild --bundle --format=esm --outfile=./test/pipelines/typescript/test/browser/demo-app/public/itk-wasm-pipeline.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js && shx cp -r ./test/data/ ./test/pipelines/typescript/test/browser/demo-app/public/",
+    "build:workerMinBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/pipeline/web-workers/bundles/itk-wasm-pipeline.min.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js",
+    "cypress:open": "pnpx cypress open",
+    "cypress:run": "pnpx cypress run --config defaultCommandTimeout=8000",
+    "cypress:install": "pnpx cypress install",
+    "cypress:runChrome": "pnpx cypress run --config defaultCommandTimeout=8000 --browser chrome",
+    "cypress:runFirefox": "pnpx cypress run --config defaultCommandTimeout=8000 --browser firefox",
+    "cypress:runFirefox:ci": "npm run cypress:install && pnpx cypress run --config defaultCommandTimeout=8000 --browser firefox",
+    "start": "pnpm build:workerBundleForTesting && cd test/pipelines/typescript && npm i && npm link ../../.. && npm run build && npm run start",
+    "test:wasi": "pnpm test:buildTestPipelines:wasi && pnpm test:runTestPipelines && pnpm test:bindgenTestPipelines:python",
+    "test": "pnpm test:lint && pnpm test:testPipelines && pnpm test:node && pnpm test:bindgenTestPipelines:python && pnpm test:browser:chrome && pnpm test:browser:firefox",
+    "test:lint": "ts-standard --fix \"src/**/*.ts\" && standard --fix \"test/node/**/*.js\"",
+    "test:node": "ava test/node/**/*.js",
+    "test:browser": "pnpm run test:browser:chrome && pnpm run test:browser:firefox",
+    "test:testPipelines": "pnpm test:buildTestPipelines:emscripten && pnpm test:buildTestPipelines:wasi && pnpm test:runTestPipelines",
+    "test:buildTestPipelines:emscripten:debug": "node src/itk-wasm-cli.js -i itkwasm/emscripten:latest-debug -b emscripten-build -s ./test/pipelines build -- -DCMAKE_BUILD_TYPE=Debug",
+    "test:buildTestPipelines:emscripten": "node src/itk-wasm-cli.js -i itkwasm/emscripten:latest -b emscripten-build -s ./test/pipelines build",
+    "test:buildTestPipelines:wasi": "node src/itk-wasm-cli.js -i itkwasm/wasi:latest -b wasi-build -s ./test/pipelines build",
+    "test:buildTestPipelines:wasi:debug": "node src/itk-wasm-cli.js -i itkwasm/wasi:latest-debug -b wasi-build -s ./test/pipelines build -- -DCMAKE_BUILD_TYPE=Debug",
+    "test:runTestPipelines": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines run -r wasmtime stdout-stderr-pipeline/stdout-stderr-test.wasi.wasm",
+    "test:bindgenTestPipelines:typescript": "node src/itk-wasm-cli.js -b emscripten-build -s ./test/pipelines/ bindgen --package-version 1.0.0 --package-name test-pipelines --package-description \"Exercise interface types for bindgen\"",
+    "test:bindgenTestPipelines:python": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/ bindgen --interface python --package-version 1.0.0 --package-name test-pipelines --package-description \"Exercise interface types for bindgen\"",
+    "test:browser:debug": "start-server-and-test start http-get://localhost:5173 cypress:open",
+    "test:cypress": "start-server-and-test start http-get://localhost:5173 cypress:run",
+    "test:browser:chrome": "start-server-and-test start http-get://localhost:5173 cypress:runChrome",
+    "test:browser:firefox:ci": "start-server-and-test start http-get://localhost:5173 cypress:runFirefox:ci",
+    "test:browser:firefox": "start-server-and-test start http-get://localhost:5173 cypress:runFirefox",
+    "prepublishOnly": "pnpm build:tsc && node ./src/update-versions.cjs && pnpm build:bundle && pnpm build:minBundle && pnpm build:workerBundle && pnpm build:workerMinBundle",
+    "clean": "git clean -fdx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm.git"
+  },
+  "keywords": [
+    "itk",
+    "imaging",
+    "wasm",
+    "webassembly",
+    "wasi",
+    "io",
+    "medical",
+    "scientific"
+  ],
+  "author": "Insight Software Consortium",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
+  },
+  "homepage": "https://wasm.itk.org/",
+  "devDependencies": {
+    "@itk-wasm/dam": "^1.0.1",
+    "@types/node": "^20.10.3",
+    "ava": "^5.3.1",
+    "cypress": "^13.6.0",
+    "esbuild": "^0.19.8",
+    "shx": "^0.3.4",
+    "standard": "^17.1.0",
+    "start-server-and-test": "^2.0.3",
+    "ts-standard": "^12.0.2",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "@thewtex/zstddec": "^0.2.0",
+    "@types/emscripten": "^1.39.10",
+    "axios": "^1.6.2",
+    "comlink": "^4.4.1",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.2.0",
+    "glob": "^8.1.0",
+    "markdown-table": "^3.0.3",
+    "mime-types": "^2.1.35",
+    "wasm-feature-detect": "^1.6.1"
+  },
+  "bin": {
+    "itk-wasm": "./src/itk-wasm-cli.js"
+  },
+  "sideEffects": false,
+  "ts-standard": {
+    "ignore": [
+      "src/bindgen/typescript/resources/*",
+      "src/bindgen/typescript/resources/demo-app/*"
+    ]
+  }
+}

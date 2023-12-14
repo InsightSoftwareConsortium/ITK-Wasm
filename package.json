@@ -1,244 +1,35 @@
 {
-  "name": "itk-wasm",
-  "version": "0.0.0-semantically-released",
+  "name": "itk-wasm-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@8.11.0",
   "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
-  "main": "./dist/index.js",
-  "browser": {
-    "./index.js": "./dist/browser/index.js"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "browser": "./dist/browser/index.js",
-      "import": "./dist/node/index.js",
-      "umd": "./dist/umd/itk-wasm.js",
-      "package.json": "./package.json",
-      "default": "./dist/index.js"
-    }
-  },
   "type": "module",
-  "types": "./dist/index.d.ts",
   "directories": {
-    "doc": "docs",
-    "test": "test"
+    "doc": "docs"
   },
   "scripts": {
-    "commit": "git cz",
-    "bindgen": "node ./src/itk-wasm-cli.js bindgen ./dist/dicom/src ./dist/dicom/public/pipelines/*.wasm",
-    "build": "npm run build:testData && npm run build:emscripten && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundle && npm run build:workerMinBundle && npm run build:webpack && node ./src/io/internal/packages/package-json-gen.cjs && npm run build:emscripten:packages",
-    "build:testData": "npm run build:testData:dicom && npm run build:testData:image-io",
-    "build:testData:dicom": "dam download packages/dicom/test/data packages/dicom/test/data.tar.gz bafybeicskxufnvuem6342pkfwgeo3siiozgzmfo5f34woge6aptuzuwzzu https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.119/dicom-test-data.tar.gz https://w3s.link/ipfs/bafybeiby67winzvozowf4moqthwunuxxscssitnb6wahxv4ugvfxhu2vki/data.tar.gz",
-    "build:testData:image-io": "dam download packages/image-io/test/data packages/image-io/test/data.tar.gz bafybeibyjhkcrinl2lotw5g2vngjs23aaenv3tjzxssm35jxaci5ylsqia https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.155/image-io-test-data.tar.gz https://w3s.link/ipfs/bafybeiewe4rankwwe7nw7qm2g3qclflhci2e53wthn3gukdlhbff64pua4/data.tar.gz",
-    "build:testData:mesh-io": "dam download packages/mesh-io/test/data packages/mesh-io/test/data.tar.gz bafkreidvr5jnut7us3umgdm4gqrcqygvpd456z2duaiuiimby7mhvsniii https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.155/mesh-io-test-data.tar.gz",
-    "build:debug": "npm run build:emscripten -- --debug && npm run build:tsc && npm run build:tscWorkersModuleLoader && npm run build:tscWebWorkers && npm run build:workerBundle && npm run build:workerMinBundle && npm run build:webpack -- --mode development",
-    "build:tsc": "tsc --pretty",
-    "build:tscWorkersModuleLoader": "tsc --types --lib es2017,webworker --rootDir ./src/ --outDir ./dist/ --moduleResolution node --target es2017 --module es2020 --strict --forceConsistentCasingInFileNames --declaration ./src/core/internal/loadEmscriptenModuleWebWorker.ts",
-    "build:tscWebWorkers": "tsc -p ./tsconfigWebWorkers.json",
-    "build:workerBundle": "esbuild --bundle --format=esm --outfile=./dist/core/web-workers/bundles/itk-wasm-pipeline.worker.js ./dist/core/web-workers/itk-wasm-pipeline.worker.js",
-    "build:workerMinBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/core/web-workers/bundles/itk-wasm-pipeline.min.worker.js ./dist/core/web-workers/itk-wasm-pipeline.worker.js",
-    "build:webpack": "webpack --mode production --progress --color && webpack --mode development --progress --color",
-    "build:emscripten": "node ./src/build-emscripten.js",
-    "build:emscripten:compress-stringify": "node ./src/itk-wasm-cli.js -s packages/compress-stringify -b emscripten-build build ",
-    "build:bindgen:typescript:compress-stringify": "./src/itk-wasm-cli.js -s packages/compress-stringify -b emscripten-build bindgen --package-version 2.0.1 --package-name @itk-wasm/compress-stringify --package-description \"Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:bindgen:python:compress-stringify": "./src/itk-wasm-cli.js -s packages/compress-stringify -b wasi-build bindgen --interface python --package-name itkwasm-compress-stringify --package-description \"Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.\" --package-version 2.0.1 --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:bindgen:python-web-demo:compress-stringify": "./src/itk-wasm-cli.js -s packages/compress-stringify -b emscripten-build bindgen --interface python-web-demo --package-name itkwasm-compress-stringify --package-description \"Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.\" --package-version 2.0.1 --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:emscripten:dicom": "node ./src/itk-wasm-cli.js -s packages/dicom -b emscripten-build build",
-    "build:bindgen:typescript:dicom": "./src/itk-wasm-cli.js -s packages/dicom -b emscripten-build bindgen --package-version 5.0.0 --package-name @itk-wasm/dicom --package-description \"Read files and images related to DICOM file format.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:bindgen:python:dicom": "./src/itk-wasm-cli.js -s packages/dicom -b wasi-build bindgen --package-version 5.0.0 --interface python --package-name itkwasm-dicom --package-description \"Read files and images related to DICOM file format.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:emscripten:compare-images": "node ./src/itk-wasm-cli.js -s packages/compare-images -b emscripten-build build",
-    "build:bindgen:typescript:compare-images": "./src/itk-wasm-cli.js -s packages/compare-images -b emscripten-build bindgen --package-version 4.0.0 --package-name @itk-wasm/compare-images --package-description \"Compare images with a tolerance for regression testing.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:bindgen:python:compare-images": "./src/itk-wasm-cli.js -s packages/compare-images -b wasi-build bindgen --package-version 4.0.0 --interface python --package-name itkwasm-compare-images --package-description \"Compare images with a tolerance for regression testing.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:emscripten:image-io": "node ./src/itk-wasm-cli.js -s packages/image-io -b emscripten-build build",
-    "build:bindgen:typescript:image-io": "./src/itk-wasm-cli.js -s packages/image-io -b emscripten-build bindgen --package-version 0.5.0 --package-name @itk-wasm/image-io --package-description \"Input and output for scientific and medical image file formats.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:bindgen:python:image-io": "./src/itk-wasm-cli.js -s packages/image-io -b wasi-build bindgen --interface python --package-name itkwasm-image-io --package-description \"Input and output for scientific and medical image file formats.\" --package-version 0.5.0 --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:emscripten:mesh-io": "node ./src/itk-wasm-cli.js -s packages/mesh-io -b emscripten-build build",
-    "build:bindgen:typescript:mesh-io": "./src/itk-wasm-cli.js -s packages/mesh-io -b emscripten-build bindgen --package-version 0.2.0 --package-name @itk-wasm/mesh-io --package-description \"Input and output for scientific and medical image file formats.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:bindgen:python:mesh-io": "./src/itk-wasm-cli.js -s packages/mesh-io -b wasi-build bindgen --interface python --package-name itkwasm-mesh-io --package-description \"Input and output for scientific and medical image file formats.\" --package-version 0.2.0 --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "build:emscripten:packages": "npm run build:emscripten:compress-stringify && npm run build:bindgen:typescript:compress-stringify && npm run build:emscripten:dicom && npm run build:bindgen:typescript:dicom && npm run build:emscripten:compare-images && npm run build:bindgen:typescript:compare-images && npm run build:emscripten:image-io && npm run build:bindgen:typescript:image-io && npm run build:emscripten:mesh-io && npm run build:bindgen:typescript:mesh-io",
-    "build:wasi": "node ./src/build-wasi.js && npm run build:wasi:packages",
-    "build:wasi:compress-stringify": "node ./src/itk-wasm-cli.js -i itkwasm/wasi:latest -s packages/compress-stringify -b wasi-build build",
-    "build:wasi:dicom": "node ./src/itk-wasm-cli.js -i itkwasm/wasi:latest -s packages/dicom -b wasi-build build",
-    "build:wasi:compare-images": "node ./src/itk-wasm-cli.js -i itkwasm/wasi:latest -s packages/compare-images -b wasi-build build",
-    "build:wasi:image-io": "node ./src/itk-wasm-cli.js -i itkwasm/wasi:latest -s packages/image-io -b wasi-build build",
-    "build:wasi:mesh-io": "node ./src/itk-wasm-cli.js -i itkwasm/wasi:latest -s packages/mesh-io -b wasi-build build",
-    "build:wasi:packages": "npm run build:wasi:compress-stringify && npm run build:bindgen:python:compress-stringify && npm run build:wasi:compare-images && npm run build:bindgen:python:compare-images && npm run build:wasi:dicom && npm run build:bindgen:python:dicom && npm run build:wasi:image-io && npm run build:bindgen:python:image-io && npm run build:wasi:mesh-io && npm run build:bindgen:python:mesh-io",
-    "cypress:open": "npx cypress open",
-    "cypress:run": "npx cypress run --config defaultCommandTimeout=8000",
-    "cypress:install": "npx cypress install",
-    "cypress:runChrome": "npx cypress run --config defaultCommandTimeout=8000 --browser chrome",
-    "cypress:runFirefox": "npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
-    "cypress:runFirefox:ci": "npm run cypress:install && npx cypress run --config defaultCommandTimeout=8000 --browser firefox",
-    "start": "webpack-dev-server --mode development --env DEVSERVER",
-    "start:production": "webpack-dev-server --mode production",
-    "test:wasi": "npm run test:cliRun && npm run test:cliTest && npm run test:cliBindgen:python",
-    "test": "npm run test:lint && npm run test:node && npm run test:browser && npm run test:chrome && npm run test:firefox && npm run test:cliBindgen:typescript",
-    "test:lint": "ts-standard --fix \"src/**/*.ts\" && standard --fix \"test/node/**/*.js\"",
-    "test:node": "ava test/node/core/*.js test/node/io/image/*.js test/node/io/mesh/*.js test/node/pipeline/*.js",
-    "test:cliRun": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/stdout-stderr-pipeline run -r wasmtime stdout-stderr-test.wasi.wasm",
-    "test:cliTest": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/stdout-stderr-pipeline test",
-    "test:cliBindgen:typescript": "node src/itk-wasm-cli.js -b emscripten-build -s ./test/pipelines/bindgen-interface-types-pipeline bindgen --package-version 1.0.0 --package-name @itk-wasm/bindgen-interface-types-test --package-description \"Exercise interface types for bindgen\"",
-    "test:cliBindgen:python": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/bindgen-interface-types-pipeline bindgen --interface python --package-version 1.0.0 --package-name itkwasm-bindgen-interface-types-test --package-description \"Exercise interface types for bindgen\"",
-    "test:browser": "karma start ./karma.conf.cjs",
-    "test:browser:debug": "karma start ./karma.conf.cjs --no-single-run",
-    "test:browser:debug:cypress": "start-server-and-test start http-get://localhost:8083 cypress:open",
-    "test:cypress": "start-server-and-test start http-get://localhost:8083 cypress:run",
-    "test:chrome": "start-server-and-test start http-get://localhost:8083 cypress:runChrome",
-    "test:firefox:ci": "start-server-and-test start http-get://localhost:8083 cypress:runFirefox:ci",
-    "test:firefox": "start-server-and-test start http-get://localhost:8083 cypress:runFirefox",
-    "prepublishOnly": "npm run build:tsc && node ./src/update-versions.cjs && node ./src/io/internal/packages/package-json-gen.cjs && npm run build:workerBundle && npm run build:workerMinBundle && npm run build:webpack",
-    "clean": "git clean -fdx"
+    "build": "pnpm -r build",
+    "build:emscripten": "pnpm -r build:emscripten",
+    "build:emscripten:debug": "pnpm -r build:emscripten:debug",
+    "build:wasi": "pnpm -r build:wasi",
+    "build:wasi:debug": "pnpm -r build:wasi:debug",
+    "build:gen:typescript": "pnpm -r build:gen:typescript",
+    "build:gen:python": "pnpm -r build:gen:python",
+    "test:wasi": "pnpm -r test:wasi",
+    "test:lint": "pnpm -r test:lint",
+    "test:node": "pnpm -r test:node",
+    "test:browser:chrome": "pnpm -r test:browser:chrome",
+    "test:browser:firefox": "pnpm -r test:browser:firefox",
+    "test:python:wasi": "pnpm -r test:python:wasi",
+    "test:python:emscripten": "pnpm -r test:python:emscripten",
+    "test:python": "pnpm -r test:python",
+    "test": "pnpm -r test",
+    "clean": "git clean -fdx",
+    "ci:publish": "pnpm publish -r"
   },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm.git"
-  },
-  "keywords": [
-    "itk",
-    "imaging",
-    "wasm",
-    "webassembly",
-    "wasi",
-    "io",
-    "medical",
-    "scientific"
-  ],
-  "author": "Insight Software Consortium",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
-  },
-  "homepage": "https://wasm.itk.org/",
   "devDependencies": {
-    "@babel/core": "^7.13.1",
-    "@babel/plugin-transform-modules-commonjs": "^7.13.0",
-    "@babel/plugin-transform-runtime": "^7.15.8",
-    "@babel/preset-env": "^7.13.5",
-    "@commitlint/cli": "^17.6.3",
-    "@commitlint/config-conventional": "^17.6.3",
-    "@itk-wasm/dam": "^1.0.1",
-    "@npmcli/promise-spawn": "^2.0.0",
-    "@semantic-release/changelog": "^6.0.2",
-    "@semantic-release/exec": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^8.0.7",
-    "@types/estree": "0.0.51",
-    "@types/mime-types": "^2.1.1",
-    "assert": "^2.0.0",
-    "async": "^3.2.1",
-    "ava": "^4.3.3",
-    "babel-loader": "^8.2.3",
-    "commitizen": "^4.2.4",
-    "core-js": "^3.19.0",
-    "cypress": "^13.1.0",
-    "cz-conventional-changelog": "2.1.0",
-    "esbuild": "^0.19.5",
-    "file-api": "^0.10.4",
-    "karma": "^6.3.2",
-    "karma-chrome-launcher": "^3.1.0",
-    "karma-tap": "^4.2.0",
-    "karma-tap-pretty-reporter": "^4.2.0",
-    "karma-webpack": "^5.0.0",
-    "node-module-polyfill": "^1.0.1",
-    "path-browserify": "^1.0.1",
-    "process": "^0.11.10",
-    "puppeteer": "^18.2.1",
-    "readable-stream": "^3.6.0",
-    "resolve-typescript-plugin": "^1.2.0",
-    "semantic-release": "^21.1.1",
-    "standard": "^16.0.4",
-    "start-server-and-test": "^1.14.0",
-    "stream-browserify": "^3.0.0",
-    "tap-spec": "^2.2.2",
-    "tape": "^4.13.0",
-    "ts-loader": "^9.3.1",
-    "ts-standard": "^11.0.0",
-    "typescript": "^4.7.4",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1",
-    "webpackbar": "^5.0.2"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.15.4",
-    "@thewtex/zstddec": "^0.2.0",
-    "@types/emscripten": "^1.39.6",
-    "axios": "^1.4.0",
-    "comlink": "^4.4.1",
-    "commander": "^9.4.0",
-    "fs-extra": "^10.0.0",
-    "glob": "^8.1.0",
-    "markdown-table": "^3.0.3",
-    "mime-types": "^2.1.35",
-    "wasm-feature-detect": "^1.5.1"
-  },
-  "bin": {
-    "itk-wasm": "./src/itk-wasm-cli.js"
-  },
-  "sideEffects": false,
-  "ts-standard": {
-    "ignore": [
-      "src/core/internal/loadEmscriptenModuleWebWorker.ts",
-      "src/core/web-workers/*.ts",
-      "src/core/ITKWasmEmscriptenModule.ts",
-      "src/pipeline/PipelineEmscriptenModule.ts",
-      "src/bindgen/typescript/resources/*",
-      "src/bindgen/typescript/resources/demo-app/*"
-    ]
-  },
-  "release": {
-    "repositoryUrl": "git@github.com:InsightSoftwareConsortium/itk-wasm.git",
-    "branches": [
-      "+([0-9])?(.{+([0-9]),x}).x",
-      "release",
-      {
-        "name": "main",
-        "channel": "beta",
-        "prerelease": "b"
-      }
-    ],
-    "tagFormat": "itk-wasm-v${version}",
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      [
-        "@semantic-release/changelog",
-        {
-          "changelogTitle": "[itk-wasm](https://wasm.itk.org) combines [ITK](https://itk.org) and [WebAssembly](https://webassembly.org/) to enable high-performance, multi-dimensional spatial analysis and visualization."
-        }
-      ],
-      [
-        "@semantic-release/npm",
-        {
-          "pkgRoot": "."
-        }
-      ],
-      [
-        "@semantic-release/npm",
-        {
-          "pkgRoot": "./dist/image-io"
-        }
-      ],
-      [
-        "@semantic-release/npm",
-        {
-          "pkgRoot": "./dist/mesh-io"
-        }
-      ],
-      [
-        "@semantic-release/git",
-        {
-          "assets": [
-            "CHANGELOG.md"
-          ]
-        }
-      ],
-      "@semantic-release/github"
-    ]
+    "@commitlint/config-conventional": "^18.4.3"
   },
   "commitlint": {
     "extends": [
