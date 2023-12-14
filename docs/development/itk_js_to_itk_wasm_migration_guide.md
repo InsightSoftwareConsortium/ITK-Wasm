@@ -1,10 +1,10 @@
-# Migration Guide: From itk.js to itk-wasm
+# Migration Guide: From itk.js to ITK-Wasm
 
-*Note: itk-wasm is currently in the beta development stage. The interface is relatively stable while functionality is currently being fleshed out. Updates for the rest of the documentation for changes from itk.js to itk-wasm is in progress. Last updated August 5th, 2023.*
+*Note: ITK-Wasm is currently in the beta development stage. The interface is relatively stable while functionality is currently being fleshed out. Updates for the rest of the documentation for changes from itk.js to ITK-Wasm is in progress. Last updated December 14th, 2023.*
 
-**itk-wasm** is a major upgrade with a focus on universal, performant computing in WebAssembly. The itk.js to itk-wasm transition also brings improvements, including modern, elegant programming interfaces, accelerated performance, and execution beyond JavaScript thanks to [WASI](https://wasi.dev).
+**ITK-Wasm** is a major upgrade with a focus on universal, performant computing in WebAssembly. The itk.js to ITK-Wasm transition also brings improvements, including modern, elegant programming interfaces, accelerated performance, and execution beyond JavaScript thanks to [WASI](https://wasi.dev).
 
-Most itk.js client code will simply need to update its import statements to leverage itk-wasm. However, there are also other more advanced changes. A description of the changes, their motivation, and example migration code can be found below.
+Most itk.js client code will simply need to update its import statements to leverage ITK-Wasm. However, there are also other more advanced changes. A description of the changes, their motivation, and example migration code can be found below.
 
 ## Module import statements
 
@@ -18,7 +18,7 @@ to:
 
 
 ```js
-import { IntTypes } from 'itk-wasm'
+import { IntTypes } from 'ITK-Wasm'
 ```
 
 Node module import migration:
@@ -32,34 +32,61 @@ const IntTypes = require('itk/IntTypes.js')
 to:
 
 ```js
-import { IntTypes } from 'itk-wasm'
+import { IntTypes } from 'ITK-Wasm'
 ```
 
 ## TypeScript support
 
-Typescript support was added, but, of course, you can still just use JavaScript if you wish. In itk-wasm, adoption of modern JavaScript constructs was extended, e.g. classes.
+Typescript support was added, but, of course, you can still just use JavaScript if you wish. In ITK-Wasm, adoption of modern JavaScript constructs was extended, e.g. classes.
 
 ## Bundlers
 
-ECMAScript Module (ESM) support was improved.
+ECMAScript Module (ESM) support is now standard.
 
 There is now an improved approach for web workers for bundlers, CORS constraints.
 
+## itkConfig.js removed
+
+The `itkConfig.js` module in itk-js and initial versions of ITK-Wasm specified where to look for the io webassembly modules and an optional default base URL for pipeline modules.
+
+This build-time approach has been replaced by a run-time configuration approach, which is much easier to specify and works transparently in a nested dependency situation.
+
+There are now only two configuration settings.
+
+1. The location of the web worker module.
+2. The location of wasm module assets.
+
+### Specification of the web worker module location
+
+By default, the web worker module will be picked up by modern bundlers like Vite or WebPack without additional configuration, and the bundler will manage the location of and deployment of the bundle in a application build.
+
+ITK-Wasm packages also contain module bundle that embed the web workers.
+
+Finally, on an individual ITK-Wasm package scope or bundle scope via the `itk-wasm` package, the web worker can be vendored and its location at specified at runtime via `setPipelineWorkerUrl`.
+
+### Specification of the wasm asset location
+
+Previously, separate wasm asset locations were configured for io modules and general pipelines. Now, there is a single wasm asset configuration. It can be set on a per-package level or a common configuration for a bundle can be set.
+
+By default, the wasm asset location is configured to use the [JsDelivr](https://www.jsdelivr.com/) CDN for a package.
+
+On an individual ITK-Wasm package scope or bundle scope via the `itk-wasm` package, wasm assets can be vendored and their location specified at runtime via `setPipelinesBaseUrl`.
+
 ## IO modules are available in separate packages.
 
-IO modules are now installed in separate npm packages to limit the `itk-wasm` package size. You can install only the packages that you need.
+IO modules are now installed in separate npm packages to limit the `ITK-Wasm` package size. You can install only the packages that you need.
 
-The version of these packages follow the `itk-wasm` package version and should be kept in sync. The io packages are:
+The io packages are:
 
-1. `itk-image-io`
-2. `itk-mesh-io`
+1. `@itk-wasm/image-io`
+2. `@itk-wasm/mesh-io`
 3. `@itk-wasm/dicom`
 
-An example that vendors these package's webassembly assets into an application for deployment can be found in the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Webpack).
+An example that vendors these package's webassembly assets into an application for deployment can be found in the [Vite-based test applcation configuration](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/packages/mesh-io/typescript/vite.config.js).
 
 ### DICOM image IO functions
 
-The following DICOM image IO functions have been migrated to the `@itk-wasm/dicom` package. Their interface changed in some cases.
+The following DICOM image IO functions have been migrated to the `@ITK-Wasm/dicom` package. Their interface changed in some cases.
 
 1. `readImageLocalDICOMFileSeries` -> `readImageDicomFileSeriesNode`
 1. `readImageDICOMFileSeries` -> `readImageDicomFileSeries`
@@ -68,39 +95,18 @@ The following DICOM image IO functions have been migrated to the `@itk-wasm/dico
 1. `readDICOMTagsArrayBuffer` -> `readDicomTags`
 1. `readDICOMTagsLocalFile` -> `readDicomTagsNode`
 
-## itkConfig.js content and usage
-
-The `itkConfig.js` specifies where to look for the io webassembly modules and an optional default base URL for pipeline modules.
-
-The default `itkConfig.js` is configured to use the [JsDelivr](https://www.jsdelivr.com/) CDN, but you may want to override this default.
-
-In the [Webpack Example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Webpack) the io webassembly module assets are vendored into `/itk` directories, this module looks like:
-
-```js
-const itkConfig = {
-  pipelineWorkerUrl: '/itk/web-workers/bundles/pipeline-worker.js',
-  imageIOUrl: '/itk/image-io',
-  meshIOUrl: '/itk/mesh-io',
-  pipelinesUrl: '/itk/pipelines',
-}
-
-export default itkConfig
-```
-
-And it can be injected into an application bundle by setting defining `alias`'s to the configuration module for `../itkConfig.js` and `../../itkConfig.js`. For other override configuration options, see the [Webpack](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/Webpack) and Rollup (todo) examples.
-
 ## CLI options
 
 The `--image, -i` command line option for the `build` subcommand is now a global option for all subcommands. For examples
 
 ```
-itk-wasm build --image itkwasm/emscripten src/dir
+ITK-Wasm build --image itkwasm/emscripten src/dir
 ```
 
 is now:
 
 ```
-itk-wasm --image itkwasm/emscripten --source-dir src/dir  build
+ITK-Wasm --image itkwasm/emscripten --source-dir src/dir  build
 ```
 
 ## Image data structure
