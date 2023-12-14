@@ -89,11 +89,20 @@ An example that vendors these package's webassembly assets into an application f
 The following DICOM image IO functions have been migrated to the `@itk-wasm/dicom` package. Their interface changed in some cases.
 
 1. `readImageLocalDICOMFileSeries` -> `readImageDicomFileSeriesNode`
-1. `readImageDICOMFileSeries` -> `readImageDicomFileSeries`
-1. `readImageDICOMArrayBufferSeries` -> `readImageDicomFileSeries`
-1. `readDICOMTags` -> `readDicomTags`
-1. `readDICOMTagsArrayBuffer` -> `readDicomTags`
-1. `readDICOMTagsLocalFile` -> `readDicomTagsNode`
+2. `readImageDICOMFileSeries` -> `readImageDicomFileSeries`
+3. `readImageDICOMArrayBufferSeries` -> `readImageDicomFileSeries`
+4. `readDICOMTags` -> `readDicomTags`
+5. `readDICOMTagsArrayBuffer` -> `readDicomTags`
+6. `readDICOMTagsLocalFile` -> `readDicomTagsNode`
+
+### MeshToPolyData
+
+The following mesh to polydata conversion functions have been migrated to the `@itk-wasm/mesh-to-poly-data` package.
+
+1. `meshToPolyData`
+2. `meshToPolyDataNode`
+3. `polyDataToMesh`
+4. `polyDataToMeshNode`
 
 ## CLI options
 

@@ -1,14 +1,12 @@
-import path from 'path'
+// @ts-nocheck
 
-import Mesh from '../core/interface-types/mesh.js'
-import PolyData from '../core/interface-types/poly-data.js'
-import findLocalMeshIOPath from './internal/findLocalMeshIOPath.js'
-import InterfaceTypes from '../core/InterfaceTypes.js'
-import PipelineInput from '../pipeline/PipelineInput.js'
-import loadEmscriptenModule from './../core/internal/loadEmscriptenModuleNode.js'
-import runPipelineEmscripten from '../pipeline/internal/runPipelineEmscripten.js'
-import PipelineEmscriptenModule from '../pipeline/PipelineEmscriptenModule.js'
+import Mesh from '../interface-types/mesh.js'
+import PolyData from '../interface-types/poly-data.js'
 
+
+/**
+ * @deprecated Use polyDataToMeshNode from @itk-wasm/mesh-to-poly-data instead
+ */
 async function polyDataToMeshNode (polyData: PolyData): Promise<Mesh> {
   const meshIOsPath = findLocalMeshIOPath()
 
