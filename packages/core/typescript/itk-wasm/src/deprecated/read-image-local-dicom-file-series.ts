@@ -1,5 +1,7 @@
-import ReadImageDICOMFileSeriesOptions from './ReadImageDICOMFileSeriesOptions.js'
-import Image from '../../core/interface-types/image.js'
+// @ts-nocheck
+
+import ReadImageDICOMFileSeriesOptions from './read-image-dicom-file-series-options.js'
+import Image from '../interface-types/image.js'
 
 /**
  * @deprecated Use readImageDicomFileSeriesNode from @itk-wasm/dicom instead

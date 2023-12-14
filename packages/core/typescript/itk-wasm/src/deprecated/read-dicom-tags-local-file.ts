@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /**
  *
  * @deprecated Use readDicomTagsNode from @itk-wasm/dicom instead

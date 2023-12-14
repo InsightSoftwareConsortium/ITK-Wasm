@@ -10,6 +10,16 @@ For a log and guide when transitioning from itk.js to itk-wasm,
 please see [the migration
 guide](doc/content/docs/itk_js_to_itk_wasm_migration_guide.md).
 
+## From 1.0.0-b.158 to 1.0.0-b.159
+
+- itkConfig.js as been replaced by run-time configuration via setPipelineWorkerUrl, setPipelinesBaseUrl
+- readDICOMTags has been migrated to @itk-wasm/dicom and as readDicomTags
+- readDICOMTagsArrayBuffer has been migrated to @itk-wasm/dicom and as readDicomTags
+- readDICOMTagsLocalFile has been migrated to @itk-wasm/dicom and as readDicomTagsNode
+- readImageDICOMFileSeries has been migrated to @itk-wasm/dicom as readImageDicomFileSeries
+- readImageDICOMArrayBufferSeries has been migrated to @itk-wasm/dicom as readImageDicomFileSeries
+- readImageLocalDICOMFileSeries has been migrated to @itk-wasm/dicom as readImageDicomFileSeriesNode
+
 ## From 1.0.0-b.101 to 1.0.0-b.102
 
 - apply-presentation-state-to-dicom-image does not take dicom image out flag: was not supported

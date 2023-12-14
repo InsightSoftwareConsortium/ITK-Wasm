@@ -1,5 +1,7 @@
-import ReadImageFileSeriesResult from '../ReadImageFileSeriesResult.js'
-import ReadImageDICOMFileSeriesOptions from './ReadImageDICOMFileSeriesOptions.js'
+// @ts-nocheck
+
+import ReadImageFileSeriesResult from './read-image-dicom-file-series-result.js'
+import ReadImageDICOMFileSeriesOptions from './read-image-dicom-file-series-options.js'
 
 /**
  * @deprecated Use readImageDicomFileSeries from @itk-wasm/dicom instead

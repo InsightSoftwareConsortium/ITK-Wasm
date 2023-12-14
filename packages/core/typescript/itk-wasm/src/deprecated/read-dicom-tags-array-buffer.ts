@@ -1,4 +1,6 @@
-import ReadDICOMTagsResult from './ReadDICOMTagsResult.js'
+// @ts-nocheck
+
+import ReadDICOMTagsResult from './read-dicom-tags-result.js'
 
 /**
  *

@@ -1,5 +1,7 @@
-import ReadImageFileSeriesResult from '../ReadImageFileSeriesResult.js'
-import ReadImageDICOMArrayBufferSeriesOptions from './ReadImageDICOMArrayBufferSeriesOptions.js'
+// @ts-nocheck
+
+import ReadImageFileSeriesResult from '../read-image-file-series-result.js'
+import ReadImageDICOMArrayBufferSeriesOptions from './read-image-dicom-file-series-options.js'
 
 /**
  *
