@@ -104,6 +104,20 @@ The following mesh to polydata conversion functions have been migrated to the `@
 3. `polyDataToMesh`
 4. `polyDataToMeshNode`
 
+### Removed high level IO functions
+
+The high level IO functions, that dealt with both images and meshes have been removed.
+
+These are:
+
+1. readArrayBuffer
+2. readBlob
+3. readFile
+4. readLocalFile
+5. writeArrayBuffer
+5. writeLocalFile
+
+
 ## CLI options
 
 The `--image, -i` command line option for the `build` subcommand is now a global option for all subcommands. For examples

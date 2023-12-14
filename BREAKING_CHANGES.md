@@ -20,6 +20,7 @@ guide](doc/content/docs/itk_js_to_itk_wasm_migration_guide.md).
 - readImageDICOMArrayBufferSeries has been migrated to @itk-wasm/dicom as readImageDicomFileSeries
 - readImageLocalDICOMFileSeries has been migrated to @itk-wasm/dicom as readImageDicomFileSeriesNode
 - meshToPolyData, meshToPolyDataNode, polyDataToMesh, polyDataToMeshNode have been migrated to @itk-wasm/mesh-to-poly-data
+- High level IO function have been removed: readArrayBuffer, readBlob, readFile, readLocalFile, writeLocalFile
 
 ## From 1.0.0-b.101 to 1.0.0-b.102
 
