@@ -1,9 +1,6 @@
 import axios from 'axios'
 
-import bufferToTypedArray from '../core/bufferToTypedArray.js'
-import Image from '../core/interface-types/image.js'
-import FloatTypes from '../core/interface-types/float-types.js'
-import type TypedArray from '../core/TypedArray.js'
+import { bufferToTypedArray, Image, FloatTypes, TypedArray } from 'itk-wasm'
 
 async function readImageHTTP (url: string): Promise<Image> {
   const imageResponse = await axios.get(`${url}/index.json`, { responseType: 'json' })

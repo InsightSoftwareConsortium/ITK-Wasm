@@ -1,5 +1,5 @@
-import Image from '../core/interface-types/image.js'
-import WorkerPool from '../core/WorkerPool.js'
+import Image from '../interface-types/image.js'
+import WorkerPool from '../worker-pool.js'
 
 interface ReadImageFileSeriesResult {
   image: Image

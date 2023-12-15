@@ -1,4 +1,4 @@
-import Image from '../core/interface-types/image.js'
+import Image from '../interface-types/image.js'
 
 interface ReadImageResult {
   image: Image

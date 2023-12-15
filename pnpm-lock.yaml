@@ -264,6 +264,9 @@ importers:
 
   packages/image-io/typescript:
     dependencies:
+      axios:
+        specifier: ^1.6.2
+        version: 1.6.2(debug@4.3.4)
       itk-wasm:
         specifier: workspace:^
         version: link:../../core/typescript/itk-wasm

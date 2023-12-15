@@ -1,4 +1,4 @@
-import CastImageOptions from '../core/CastImageOptions.js'
+import CastImageOptions from '../cast-image-options.js'
 
 interface WriteImageOptions extends CastImageOptions {
   useCompression?: boolean

@@ -95,6 +95,24 @@ The following DICOM image IO functions have been migrated to the `@itk-wasm/dico
 5. `readDICOMTagsArrayBuffer` -> `readDicomTags`
 6. `readDICOMTagsLocalFile` -> `readDicomTagsNode`
 
+### Migrated image-io and mesh-io functions
+
+The following image and mesh IO functions have been migrated to the `@itk-wasm/image-io`
+and `@itk-wasm/mesh-io` package. Their interface changed in some cases.
+
+1. `readImageArrayBuffer` -> `readImageFile`
+2. `readImageBlob` -> `readImageFile`
+3. `readImageFileSeries` -> `readImageFileSeries`
+4. `readImageHTTP` -> `readImageHttp`
+5. `readImageLocalFile` -> `readImageNode`
+6. `readMeshArrayBuffer` -> `readMeshFile`
+7. `readMeshBlob` -> `readMeshFile`
+8. `readMeshLocalFile` -> `readMeshNode`
+9. `writeImageArrayBuffer` -> `writeImageFile`
+10. `writeImageLocalFile` -> `writeImageFileNode`
+11. `writeMeshArrayBuffer` -> `writeMeshFile`
+12. `writeMeshLocalFile` -> `writeMeshNode`
+
 ### MeshToPolyData
 
 The following mesh to polydata conversion functions have been migrated to the `@itk-wasm/mesh-to-poly-data` package.
@@ -117,19 +135,18 @@ These are:
 5. writeArrayBuffer
 5. writeLocalFile
 
-
 ## CLI options
 
 The `--image, -i` command line option for the `build` subcommand is now a global option for all subcommands. For examples
 
 ```
-ITK-Wasm build --image itkwasm/emscripten src/dir
+itk-wasm build --image itkwasm/emscripten src/dir
 ```
 
 is now:
 
 ```
-ITK-Wasm --image itkwasm/emscripten --source-dir src/dir  build
+itk-wasm --image itkwasm/emscripten --source-dir src/dir  build
 ```
 
 ## Image data structure
@@ -164,7 +181,7 @@ Support for the legacy GE image file formats, i.e. GE4, GE5, GEAdw, is no longer
 
 ## IOTypes
 
-The use of `IOTypes` in pipelines is deprecated and not expected to work in the future. These have been replaced by `InterfaceTypes`.
+The use of `IOTypes` in pipelines is deprecated has been removed. These have been replaced by `InterfaceTypes`.
 
 ## Argument order when writing image, mesh binaries
 

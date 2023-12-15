@@ -1,6 +1,9 @@
 export * from './pipelines-base-url.js'
 export * from './pipeline-worker-url.js'
 
+import readImageHttp from './read-image-http.js'
+export { readImageHttp }
+
 import ReadImageOptions from './read-image-options.js'
 export type { ReadImageOptions }
 
