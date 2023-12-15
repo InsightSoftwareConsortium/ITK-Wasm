@@ -20,3 +20,4 @@ export type { default as WorkerPoolProgressCallback } from './worker-pool-progre
 
 export * from './interface-types/index-common.js'
 export * from './pipeline/index-common.js'
+// export * from './deprecated/index-common.js'

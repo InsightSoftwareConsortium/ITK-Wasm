@@ -3,3 +3,5 @@
 export * from './index-common.js'
 
 export * from './pipeline/index.js'
+
+export * from './deprecated/index.js'
