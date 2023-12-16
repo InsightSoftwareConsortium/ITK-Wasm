@@ -1,4 +1,4 @@
-import { stackImages, WorkerPool, castImage } from 'itk-wasm'
+import { stackImages, WorkerPool, castImage, BinaryFile } from 'itk-wasm'
 
 import readImage from './read-image.js'
 
@@ -9,7 +9,7 @@ const numberOfWorkers = typeof globalThis.navigator?.hardwareConcurrency === 'nu
 const workerPool = new WorkerPool(numberOfWorkers, readImage)
 
 async function readImageFileSeries (
-  fileList: File[] | FileList,
+  fileList: File[] | FileList | BinaryFile[],
   options?: ReadImageFileSeriesOptions,
 ): Promise<ReadImageFileSeriesResult> {
   let zSpacing = 1.0
@@ -26,26 +26,25 @@ async function readImageFileSeries (
       sortedSeries = options.sortedSeries
     }
   }
+  // @ts-ignore  error TS2769: No overload matches this call.
   const fetchFileDescriptions = Array.from(fileList, async function (file) {
-    return await file.arrayBuffer().then(function (
-      arrayBuffer
-    ) {
-      const fileDescription = {
-        name: file.name,
-        type: file.type,
-        data: arrayBuffer
+    if (file instanceof File) {
+      const arrayBuffer = await file.arrayBuffer()
+      return {
+        path: file.name,
+        data: new Uint8Array(arrayBuffer)
       }
-      return fileDescription
-    })
+    }
+    return file as BinaryFile
   })
 
-  const fileDescriptions = await Promise.all(fetchFileDescriptions)
+  const fileDescriptions = await Promise.all(fetchFileDescriptions) as BinaryFile[]
   if (!sortedSeries) {
     fileDescriptions.sort((a, b) => {
-      if (a.name < b.name) {
+      if (a.path < b.path) {
         return -1
       }
-      if (a.name > b.name) {
+      if (a.path > b.path) {
         return 1
       }
       return 0
@@ -53,7 +52,7 @@ async function readImageFileSeries (
   }
   const taskArgsArray = []
   for (let index = 0; index < fileDescriptions.length; index++) {
-    taskArgsArray.push([fileDescriptions[index].data, fileDescriptions[index].name])
+    taskArgsArray.push([fileDescriptions[index],])
   }
   const results = await workerPool.runTasks(taskArgsArray).promise
   const images = results.map((result) => {

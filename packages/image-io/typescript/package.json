@@ -60,7 +60,7 @@
     "esbuild": "^0.19.8",
     "shx": "^0.3.4",
     "start-server-and-test": "^2.0.1",
-    "typescript": "^5.0.4",
+    "typescript": "^5.3.3",
     "vite": "^4.5.0",
     "vite-plugin-static-copy": "^0.17.0"
   },
