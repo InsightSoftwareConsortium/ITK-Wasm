@@ -1,7 +1,7 @@
 // @ts-nocheck
 
-import ReadImageResult from "./read-image-result.js"
-import ReadImageArrayBufferOptions from "./read-image-array-buffer-options.js"
+import ReadImageResult from './read-image-result.js'
+import ReadImageArrayBufferOptions from './read-image-array-buffer-options.js'
 
 /**
  * @deprecated Use readImageArrayBuffer from @itk-wasm/image-io instead
