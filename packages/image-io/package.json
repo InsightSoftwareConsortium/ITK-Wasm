@@ -13,7 +13,7 @@
     "build:wasi:debug": "itk-wasm -i itkwasm/wasi:latest-debug build -- -DCMAKE_BUILD_TYPE:STRING=Debug",
     "build:python:wasi": "pnpm test:data:download && setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --environment-file environment.yml --log-level info --run-command \"run --cwd ./python/itkwasm-image-io-wasi python -m pip install -e .\"",
     "bindgen:typescript": "itk-wasm -b emscripten-build bindgen --package-name @itk-wasm/image-io --package-description \"Compare images with a tolerance for regression testing.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
-    "bindgen:python": "itk-wasm -b wasi-build bindgen --package-version 0.5.0 --interface python --package-name itkwasm-image-io --package-description \"Compare images with a tolerance for regression testing.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
+    "bindgen:python": "itk-wasm -b wasi-build bindgen --interface python --package-name itkwasm-image-io --package-description \"Compare images with a tolerance for regression testing.\" --repository 'https://github.com/InsightSoftwareConsortium/itk-wasm'",
     "build:gen:typescript": "pnpm build:emscripten && pnpm bindgen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python && pnpm setup-micromamba && pnpm build:python:wasi",
     "build:micromamba": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --init-shell none --create-environment true --environment-file environment.yml --log-level info --run-command \"clean -fya\"",

@@ -387,24 +387,24 @@ function publish(options) {
 
   switch (iface) {
     case 'python':
-      let packagePath = path.join(outputDir, packageName)
+      let packagePath = path.join(outputDir, `${packageName}-wasi`)
       runHatch(packagePath, ['build'])
       let currentVersion = runHatch(packagePath, ['version']).trim()
-      console.log(`Publishing ${packageName} version ${currentVersion}`)
-      let artifacts = glob.sync(path.join(path.resolve(packagePath), 'dist', `*${currentVersion}*`))
-      runHatch(packagePath, ['publish'].concat(artifacts))
-
-      packagePath = path.join(outputDir, `${packageName}-wasi`)
-      runHatch(packagePath, ['build'])
-      currentVersion = runHatch(packagePath, ['version']).trim()
       console.log(`Publishing ${packageName}-wasi version ${currentVersion}`)
-      artifacts = glob.sync(path.join(path.resolve(packagePath), 'dist', `*${currentVersion}*`))
+      let artifacts = glob.sync(path.join(path.resolve(packagePath), 'dist', `*${currentVersion}*`))
       runHatch(packagePath, ['publish'].concat(artifacts))
 
       packagePath = path.join(outputDir, `${packageName}-emscripten`)
       runHatch(packagePath, ['build'])
       currentVersion = runHatch(packagePath, ['version']).trim()
       console.log(`Publishing ${packageName}-emscripten version ${currentVersion}`)
+      artifacts = glob.sync(path.join(path.resolve(packagePath), 'dist', `*${currentVersion}*`))
+      runHatch(packagePath, ['publish'].concat(artifacts))
+
+      packagePath = path.join(outputDir, packageName)
+      runHatch(packagePath, ['build'])
+      currentVersion = runHatch(packagePath, ['version']).trim()
+      console.log(`Publishing ${packageName} version ${currentVersion}`)
       artifacts = glob.sync(path.join(path.resolve(packagePath), 'dist', `*${currentVersion}*`))
       runHatch(packagePath, ['publish'].concat(artifacts))
       break
