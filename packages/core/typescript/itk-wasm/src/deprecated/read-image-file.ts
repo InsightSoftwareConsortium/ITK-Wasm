@@ -1,8 +1,8 @@
 // @ts-nocheck
 
-import ReadImageResult from "./read-image-result.js"
+import ReadImageResult from './read-image-result.js'
 
-import CastImageOptions from "../cast-image-options.js"
+import CastImageOptions from '../cast-image-options.js'
 
 /**
  * @deprecated Use readImageFile from @itk-wasm/image-io instead

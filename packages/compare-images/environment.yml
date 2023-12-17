@@ -6,5 +6,6 @@ dependencies:
   - python=3.11
   - pip
   - pip:
+    - hatch
     - itkwasm
     - itk-webassemblyinterface>=1.0.b127
