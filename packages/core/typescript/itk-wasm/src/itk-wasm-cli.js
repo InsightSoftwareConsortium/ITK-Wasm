@@ -272,16 +272,14 @@ function bindgen(options) {
 }
 
 function versionSync(options) {
-  const { buildDir } = processCommonOptions()
-
   const iface = options.interface ?? 'python'
   const outputDir = options.outputDir ?? iface
   if (!fs.existsSync(outputDir)) {
     console.error(`Could not find output bindings directory: ${outputDir}`)
     process.exit(1)
   }
-  const typescriptDir = options.typescriptDir ?? path.join(outputDir, '..', 'typescript')
 
+  const typescriptDir = options.typescriptDir ?? path.join(outputDir, '..', 'typescript')
   if (!fs.existsSync(typescriptDir)) {
     console.error(`Could not find typescript bindings directory: ${typescriptDir}`)
     process.exit(1)
@@ -349,6 +347,75 @@ function versionSync(options) {
   process.exit(0)
 }
 
+function publish(options) {
+  const iface = options.interface ?? 'python'
+  const outputDir = options.outputDir ?? iface
+  if (!fs.existsSync(outputDir)) {
+    console.error(`Could not find output bindings directory: ${outputDir}`)
+    process.exit(1)
+  }
+
+  const micromambaBinaryPath = options.micromambaBinaryPath ?? path.join(outputDir, '..', 'micromamba', 'micromamba')
+  if (!fs.existsSync(micromambaBinaryPath)) {
+    console.error(`Could not find micromamba binary: ${micromambaBinaryPath}`)
+    process.exit(1)
+  }
+
+  const micromambaRootPath = options.micromambaRootPath ?? path.join(outputDir, '..', 'micromamba')
+  if (!fs.existsSync(micromambaRootPath)) {
+    console.error(`Could not find micromamba root: ${micromambaRootPath}`)
+    process.exit(1)
+  }
+
+  const micromambaName = options.micromambaName ?? path.basename(path.resolve(path.join(outputDir, '..')))
+
+  const packageName = options.packageName
+
+  function runHatch(cwd, hatchArgs) {
+    let versionProcess = spawnSync(micromambaBinaryPath, ['-r', micromambaRootPath, 'run', '-n', micromambaName, '--cwd', cwd, 'hatch'].concat(hatchArgs), {
+      env: process.env,
+      stdio: 'pipe',
+      encoding: 'utf-8',
+    })
+    if (versionProcess.status !== 0) {
+      console.error(versionProcess.stderr.toString())
+      console.error(`Could not sync version for ${packageName}`)
+      process.exit(versionProcess.status)
+    }
+    return versionProcess.stdout.toString()
+  }
+
+  switch (iface) {
+    case 'python':
+      let packagePath = path.join(outputDir, packageName)
+      runHatch(packagePath, ['build'])
+      let currentVersion = runHatch(packagePath, ['version']).trim()
+      console.log(`Publishing ${packageName} version ${currentVersion}`)
+      let artifacts = glob.sync(path.join(path.resolve(packagePath), 'dist', `*${currentVersion}*`))
+      runHatch(packagePath, ['publish'].concat(artifacts))
+
+      packagePath = path.join(outputDir, `${packageName}-wasi`)
+      runHatch(packagePath, ['build'])
+      currentVersion = runHatch(packagePath, ['version']).trim()
+      console.log(`Publishing ${packageName}-wasi version ${currentVersion}`)
+      artifacts = glob.sync(path.join(path.resolve(packagePath), 'dist', `*${currentVersion}*`))
+      runHatch(packagePath, ['publish'].concat(artifacts))
+
+      packagePath = path.join(outputDir, `${packageName}-emscripten`)
+      runHatch(packagePath, ['build'])
+      currentVersion = runHatch(packagePath, ['version']).trim()
+      console.log(`Publishing ${packageName}-emscripten version ${currentVersion}`)
+      artifacts = glob.sync(path.join(path.resolve(packagePath), 'dist', `*${currentVersion}*`))
+      runHatch(packagePath, ['publish'].concat(artifacts))
+      break
+    default:
+      console.error(`Unexpected interface: ${iface}`)
+      process.exit(1)
+  }
+
+  process.exit(0)
+}
+
 program
   .option('-i, --image <image>', 'build environment Docker image, defaults to itkwasm/emscripten -- another common image is itkwasm/wasi')
   .option('-s, --source-dir <source-directory>', 'path to source directory, defaults to "."')
@@ -384,7 +451,7 @@ program
   .action(bindgen)
 program
   .command('version-sync')
-  .requiredOption('-p, --package-name <package-name>', 'Output a package configuration files with the given packages name')
+  .requiredOption('-p, --package-name <package-name>', 'Assume bindgen package configuration files with the given packages name')
   .option('-o, --output-dir <output-dir>', 'Output directory name. Defaults to the interface option value.')
   .addOption(new Option('--interface <interface>', 'interface to sync version to, defaults to "python".').choices(['python']))
   .option('-t, --typescript-dir <typescript-dir>', 'Path to the typescript binding dir. Defaults to <output-dir>/../typescript.')
@@ -394,6 +461,17 @@ program
   .usage('[options]')
   .description('Synchronize the version in other language\'s bindings to the typescript binding version.')
   .action(versionSync)
+program
+  .command('publish')
+  .requiredOption('-p, --package-name <package-name>', 'Assume bindgen package configuration files with the given packages name')
+  .option('-o, --output-dir <output-dir>', 'Output directory name. Defaults to the interface option value.')
+  .addOption(new Option('--interface <interface>', 'interface to sync version to, defaults to "python".').choices(['python']))
+  .option('-m, --micromamba-binary-path <micromamba-binary-path>', 'Path to the micromamba binary. Defaults to <output-dir>/../micromamba/micromamba.')
+  .option('-r, --micromamba-root-path <micromamba-root-path>', 'Path to the micromamba root. Defaults to <output-dir>/../micromamba.')
+  .option('-n, --micromamba-name <micromamba-name>', 'Micromamba environnment name. Defaults to <output-dir>/../ basename.')
+  .usage('[options]')
+  .description('Build and publish language\'s bindings packages.')
+  .action(publish)
 
 program
   .parse(process.argv)
