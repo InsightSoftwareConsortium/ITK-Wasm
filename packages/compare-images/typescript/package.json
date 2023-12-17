@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compare-images",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "packageManager": "pnpm@8.11.0",
   "description": "Compare images with a tolerance for regression testing.",
   "type": "module",
@@ -46,16 +46,16 @@
   "devDependencies": {
     "@itk-wasm/compare-images-build": "workspace:^",
     "@itk-wasm/image-io": "workspace:^",
-    "@shoelace-style/shoelace": "^2.5.2",
-    "@types/node": "^20.2.5",
+    "@shoelace-style/shoelace": "^2.12.0",
+    "@types/node": "^20.10.4",
     "ava": "^5.3.1",
-    "cypress": "^12.17.2",
-    "esbuild": "^0.19.8",
+    "cypress": "^13.6.1",
+    "esbuild": "^0.19.9",
     "shx": "^0.3.4",
-    "start-server-and-test": "^2.0.2",
-    "typescript": "^5.0.4",
-    "vite": "^4.4.11",
-    "vite-plugin-static-copy": "^0.17.0"
+    "start-server-and-test": "^2.0.3",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "vite-plugin-static-copy": "^1.0.0"
   },
   "repository": {
     "type": "git",
