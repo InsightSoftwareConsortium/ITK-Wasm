@@ -18,7 +18,7 @@
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python && pnpm build:micromamba && pnpm build:python:wasi",
     "build:micromamba": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --init-shell none --create-environment true --environment-file environment.yml --log-level info --run-command \"clean -fya\"",
     "build:python:versionSync": "pnpm build:micromamba && itk-wasm version-sync --package-name itkwasm-dicom",
-    "build:python:publish": "pnpm build:micromamba && itk-wasm publish --package-name itkwasm-dicom",
+    "publish:python": "pnpm build:micromamba && itk-wasm publish --package-name itkwasm-dicom",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
     "test:data:download": "dam download test/data test/data.tar.gz bafybeicskxufnvuem6342pkfwgeo3siiozgzmfo5f34woge6aptuzuwzzu https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.119/dicom-test-data.tar.gz https://w3s.link/ipfs/bafybeiby67winzvozowf4moqthwunuxxscssitnb6wahxv4ugvfxhu2vki/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",

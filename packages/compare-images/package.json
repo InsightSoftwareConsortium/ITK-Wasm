@@ -18,7 +18,7 @@
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python && pnpm build:micromamba && pnpm build:python:wasi",
     "build:micromamba": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path micromamba --init-shell none --create-environment true --environment-file environment.yml --log-level info --run-command \"clean -fya\"",
     "build:python:versionSync": "pnpm build:micromamba && itk-wasm version-sync --package-name itkwasm-compare-images",
-    "build:python:publish": "pnpm build:micromamba && itk-wasm publish --package-name itkwasm-compare-images",
+    "publish:python": "pnpm build:micromamba && itk-wasm publish --package-name itkwasm-compare-images",
     "test": "pnpm test:data:download",
     "test:data:download": "dam download test/data test/data.tar.gz bafybeigcvvf3ol3phmpevbin6ufumqfx65uxxthchqacxftxqpn67uxlxa https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.157/data.tar.gz https://bafybeiefbfd6kxcmwq6osnwu72gv6srzsnv6ys5omoodjlmaazx47mdhsq.ipfs.w3s.link/ipfs/bafybeiefbfd6kxcmwq6osnwu72gv6srzsnv6ys5omoodjlmaazx47mdhsq/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz"
