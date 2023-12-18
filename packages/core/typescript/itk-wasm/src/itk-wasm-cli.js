@@ -11,9 +11,9 @@ import typescriptBindgen from './bindgen/typescript/typescript-bindgen.js'
 import pythonBindgen from './bindgen/python/python-bindgen.js'
 import pythonWebDemoBindgen from './bindgen/python-web-demo/python-web-demo-bindgen.js'
 
-const program = new Command()
+import defaultImageTag from './default-image-tag.js'
 
-const defaultImageTag = '20231129-1565c734'
+const program = new Command()
 
 function processCommonOptions(wasiDefault=false) {
   const options = program.opts()

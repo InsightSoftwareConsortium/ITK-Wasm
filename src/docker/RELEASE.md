@@ -9,7 +9,7 @@ git clean -fdx
 git checkout -b docker-bump
 npm ci
 
-# Update the `defaultImageTag` in src/itk-wasm-cli.js
+# Update the `defaultImageTag` in packages/core/typescript/itk-wasm/src/default-image-tag.js
 # Based on:
 #
 #   echo $(date '+%Y%m%d')-$(git rev-parse --short HEAD)
