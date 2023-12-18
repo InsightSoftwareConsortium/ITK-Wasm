@@ -7,7 +7,7 @@ git checkout main
 git pull upstream main
 git clean -fdx
 git checkout -b docker-bump
-npm ci
+pnpm i
 
 # Update the `defaultImageTag` in packages/core/typescript/itk-wasm/src/default-image-tag.js
 # Based on:
