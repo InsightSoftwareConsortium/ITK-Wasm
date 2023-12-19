@@ -25,6 +25,7 @@ function bindgenResource(filePath) {
 function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode=false) {
   // index module
   let indexContent = ''
+  let indexCommonContent = ''
   const nodeTextKebab = forNode ? '-node' : ''
   const nodeTextCamel = forNode ? 'Node' : ''
 
@@ -53,7 +54,7 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     packageJson.module = `./dist/index.js`
     packageJson.exports['.'].browser = `./dist/index.js`
     packageJson.exports['.'].node = `./dist/index-node.js`
-    packageJson.exports['.'].default = `./dist/index.js`
+    packageJson.exports['.'].default = `./dist/index-all.js`
     if (options.repository) {
       packageJson.repository = { 'type': 'git', 'url': options.repository }
     }
@@ -140,8 +141,8 @@ if (!params.has('functionName')) {
 
     const { readmeOptions } = optionsModule(srcOutputDir, interfaceJson, modulePascalCase, nodeTextCamel, moduleKebabCase, haveOptions)
     if (haveOptions) {
-      indexContent += `import ${modulePascalCase}Options from './${moduleKebabCase}-options.js'\n`
-      indexContent += `export type { ${modulePascalCase}Options }\n\n`
+      indexCommonContent += `import ${modulePascalCase}Options from './${moduleKebabCase}-options.js'\n`
+      indexCommonContent += `export type { ${modulePascalCase}Options }\n\n`
     }
 
     const { readmeFunction, usedInterfaceTypes } = functionModule(srcOutputDir, forNode, interfaceJson, modulePascalCase, moduleKebabCase, moduleCamelCase, nodeTextCamel, nodeTextKebab, haveOptions)
@@ -156,8 +157,8 @@ if (!params.has('functionName')) {
   })
 
   if (allUsedInterfaceTypes.size > 0) {
-    indexContent += '\n'
-    allUsedInterfaceTypes.forEach(iType => indexContent += `export type { ${iType} } from 'itk-wasm'\n`)
+    indexCommonContent += '\n'
+    allUsedInterfaceTypes.forEach(iType => indexCommonContent += `export type { ${iType} } from 'itk-wasm'\n`)
   }
 
   if (!forNode) {
@@ -168,8 +169,24 @@ if (!params.has('functionName')) {
   readmeInterface += `} from "${packageName}"\n\`\`\`\n`
   readmeInterface += readmePipelines
 
-  const indexPath = path.join(srcOutputDir, `index${nodeTextKebab}.ts`)
+  const indexPath = path.join(srcOutputDir, `index${nodeTextKebab}-only.ts`)
   writeIfOverrideNotPresent(indexPath, indexContent)
+
+  const indexCommonPath = path.join(srcOutputDir, `index-common.ts`)
+  writeIfOverrideNotPresent(indexCommonPath, indexCommonContent)
+
+  const indexEnvContent = `export * from './index-common.js'
+export * from './index${nodeTextKebab}-only.js'
+`
+  const indexEnvPath = path.join(srcOutputDir, `index${nodeTextKebab}.ts`)
+  writeIfOverrideNotPresent(indexEnvPath, indexEnvContent)
+
+  const indexAllContent = `export * from './index-common.js'
+export * from './index-only.js'
+export * from './index-node-only.js'
+`
+  const indexAllPath = path.join(srcOutputDir, `index-all.ts`)
+  writeIfOverrideNotPresent(indexAllPath, indexAllContent)
 
   if (!forNode) {
     const demoIndexPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'index.html')

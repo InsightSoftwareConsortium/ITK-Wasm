@@ -5,13 +5,13 @@
   "description": "",
   "type": "module",
   "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index-all.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index-all.d.ts",
       "browser": "./dist/index.js",
       "node": "./dist/index-node.js",
-      "default": "./dist/index.js"
+      "default": "./dist/index-all.js"
     }
   },
   "scripts": {
