@@ -1,17 +1,17 @@
 {
   "name": "@itk-wasm/compress-stringify",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "packageManager": "pnpm@8.11.0",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
   "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index-all.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index-all.d.ts",
       "browser": "./dist/index.js",
       "node": "./dist/index-node.js",
-      "default": "./dist/index.js"
+      "default": "./dist/index-all.js"
     }
   },
   "scripts": {
