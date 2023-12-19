@@ -16,7 +16,7 @@
     "build:wasi:debug": "pnpm -r build:wasi:debug",
     "build:gen:typescript": "pnpm -r build:gen:typescript",
     "build:gen:python": "pnpm -r build:gen:python",
-    "build:python:versionSync": "pnpm -r build:python:versionSync",
+    "build:python:versionSync": "pnpm -r --sequential build:python:versionSync",
     "publish:python": "pnpm -r publish:python",
     "test:wasi": "pnpm -r test:wasi",
     "test:lint": "pnpm -r test:lint",
