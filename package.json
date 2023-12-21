@@ -31,6 +31,7 @@
     "ci:publish": "pnpm publish -r"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@commitlint/config-conventional": "^18.4.3"
   },
   "commitlint": {
