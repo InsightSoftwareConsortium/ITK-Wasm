@@ -12,6 +12,8 @@ import pythonWebDemoBindgen from '../bindgen/python-web-demo/python-web-demo-bin
 import program from './program.js'
 
 function bindgen(options) {
+  options.packageDescription = options.packageDescription.join(' ')
+
   const { buildDir } = processCommonOptions(program)
 
   const iface = options.interface ?? 'typescript'

@@ -26,6 +26,9 @@ function processCommonOptions(program, wasiDefault=false) {
   let dockerImage = `itkwasm/emscripten:${defaultImageTag}`
   if (options.image) {
     dockerImage = options.image
+    if (dockerImage === 'itkwasm/wasi') {
+      dockerImage = `itkwasm/wasi:${defaultImageTag}`
+    }
   }
 
   const dockerImageCheck = spawnSync('docker', ['images', '--quiet', dockerImage], {

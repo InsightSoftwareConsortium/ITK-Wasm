@@ -1,4 +1,5 @@
 import fs from 'fs-extra'
+import path from 'path'
 
 import runHatch from './run-hatch.js'
 
@@ -38,19 +39,19 @@ function versionSync(options) {
   switch (iface) {
     case 'python':
       let packagePath = path.join(outputDir, packageName)
-      let currentVersion = runHatch(packagePath, ['version']).trim()
+      let currentVersion = runHatch(micromambaBinaryPath, micromambaRootPath, micromambaName, packagePath, ['version']).trim()
       if (currentVersion !== typescriptVersion) {
         console.log(`Syncing ${packagePath} version`)
         runHatch(micromambaBinaryPath, micromambaRootPath, micromambaName, packagePath, ['version', typescriptVersion])
       }
       packagePath = path.join(outputDir, `${packageName}-emscripten`)
-      currentVersion = runHatch(packagePath, ['version']).trim()
+      currentVersion = runHatch(micromambaBinaryPath, micromambaRootPath, micromambaName, packagePath, ['version']).trim()
       if (currentVersion !== typescriptVersion) {
         console.log(`Syncing ${packagePath} version`)
         runHatch(micromambaBinaryPath, micromambaRootPath, micromambaName, packagePath, ['version', typescriptVersion])
       }
       packagePath = path.join(outputDir, `${packageName}-wasi`)
-      currentVersion = runHatch(packagePath, ['version']).trim()
+      currentVersion = runHatch(micromambaBinaryPath, micromambaRootPath, micromambaName, packagePath, ['version']).trim()
       if (currentVersion !== typescriptVersion) {
         console.log(`Syncing ${packagePath} version`)
         runHatch(micromambaBinaryPath, micromambaRootPath, micromambaName, packagePath, ['version', typescriptVersion])

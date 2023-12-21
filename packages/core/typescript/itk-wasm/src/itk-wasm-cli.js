@@ -8,6 +8,7 @@ import run from './cli/run.js'
 import bindgen from './cli/bindgen.js'
 import versionSync from './cli/version-sync.js'
 import publish from './cli/publish.js'
+import pnpmScript from './cli/pnpm-script.js'
 
 import program from './cli/program.js'
 
@@ -40,7 +41,7 @@ program
   .command('bindgen')
   .option('-o, --output-dir <output-dir>', 'Output directory name. Defaults to the interface option value.')
   .requiredOption('-p, --package-name <package-name>', 'Output a package configuration files with the given packages name')
-  .requiredOption('-d, --package-description <package-description>', 'Description for package')
+  .requiredOption('-d, --package-description <package-description...>', 'Description for package')
   .option('-v, --package-version <package-version>', 'Package version, e.g. "1.0.0"')
   .addOption(new Option('--interface <interface>', 'interface to generate bindings for, defaults to "typescript". "python-web-demo" support is in progress.').choices(['typescript', 'python', 'python-web-demo']))
   .option('-r, --repository <repository-url>', 'Source code repository URL')
@@ -73,6 +74,11 @@ program
   .usage('[options]')
   .description('Build and publish language\'s bindings packages.')
   .action(publish)
+
+program
+  .command('pnpm-script <name> [extra-args...]')
+  .description('Run an itk-wasm pnpm build script command.')
+  .action(pnpmScript)
 
 program
   .parse(process.argv)
