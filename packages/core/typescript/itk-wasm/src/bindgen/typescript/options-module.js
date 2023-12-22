@@ -8,7 +8,7 @@ import camelCase from '../camel-case.js'
 import canonicalType from '../canonical-type.js'
 import writeIfOverrideNotPresent from '../write-if-override-not-present.js'
 
-function optionsModule (srcOutputDir, interfaceJson, modulePascalCase, nodeTextCamel, moduleKebabCase, haveOptions) {
+function optionsModule (srcOutputDir, interfaceJson, modulePascalCase, nodeTextCamel, haveOptions, forNode, optionsModuleFileName) {
   let readmeOptions = ''
   if (!haveOptions) {
     return { readmeOptions }
@@ -21,7 +21,8 @@ function optionsModule (srcOutputDir, interfaceJson, modulePascalCase, nodeTextC
   const readmeOptionsTable = [['Property', 'Type', 'Description'],]
 
   let optionsContent = ''
-  let optionsInterfaceContent = `interface ${modulePascalCase}Options {\n`
+  const optionsExtends = forNode ? '' : ' extends WorkerPoolFunctionOption'
+  let optionsInterfaceContent = `interface ${modulePascalCase}${nodeTextCamel}Options${optionsExtends} {\n`
   interfaceJson.parameters.forEach((parameter) => {
     if (parameter.name === 'memory-io' || parameter.name === 'version') {
       // Internal
@@ -49,13 +50,20 @@ function optionsModule (srcOutputDir, interfaceJson, modulePascalCase, nodeTextC
     readmeOptionsTable.push([`\`${camelCase(parameter.name)}\``, `*${parameterType}*`, parameter.description])
   })
 
+  if (!forNode) {
+    readmeOptionsTable.push(['`webWorker`', '*null or Worker or boolean*', 'WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker.'])
+  }
+
   // Insert the import statement in the beginning for the file.
+  const workerPoolImport = forNode ? '' : ', WorkerPoolFunctionOption'
   if (optionsImportTypes.size !== 0) {
-    optionsContent += `import { ${Array.from(optionsImportTypes).join(',')} } from 'itk-wasm'\n\n`
+    optionsContent += `import { ${Array.from(optionsImportTypes).join(',')}${workerPoolImport} } from 'itk-wasm'\n\n`
+  } else if(!forNode) {
+    optionsContent += `import { WorkerPoolFunctionOption } from 'itk-wasm'\n\n`
   }
   optionsContent += optionsInterfaceContent
-  optionsContent += `}\n\nexport default ${modulePascalCase}Options\n`
-  writeIfOverrideNotPresent(path.join(srcOutputDir, `${moduleKebabCase}-options.ts`), optionsContent)
+  optionsContent += `}\n\nexport default ${modulePascalCase}${nodeTextCamel}Options\n`
+  writeIfOverrideNotPresent(path.join(srcOutputDir, `${optionsModuleFileName}.ts`), optionsContent)
 
   readmeOptions += markdownTable(readmeOptionsTable, { align: ['c', 'c', 'l'] }) + '\n'
 

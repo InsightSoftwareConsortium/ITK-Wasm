@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface FreeSurferAsciiWriteMeshOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface FreeSurferAsciiWriteMeshOptions extends WorkerPoolFunctionOption {
   /** Only write image metadata -- do not write pixel data. */
   informationOnly?: boolean
 

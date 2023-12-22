@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface StructuredReportToTextOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface StructuredReportToTextOptions extends WorkerPoolFunctionOption {
   /** Accept unknown relationship type */
   unknownRelationship?: boolean
 

@@ -8,7 +8,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import StructuredReportToTextOptions from './structured-report-to-text-options.js'
+import StructuredReportToTextNodeOptions from './structured-report-to-text-node-options.js'
 import StructuredReportToTextNodeResult from './structured-report-to-text-node-result.js'
 
 import path from 'path'
@@ -17,13 +17,13 @@ import path from 'path'
  * Read a DICOM structured report file and generate a plain text representation
  *
  * @param {string} dicomFile - Input DICOM file
- * @param {StructuredReportToTextOptions} options - options object
+ * @param {StructuredReportToTextNodeOptions} options - options object
  *
  * @returns {Promise<StructuredReportToTextNodeResult>} - result object
  */
 async function structuredReportToTextNode(
   dicomFile: string,
-  options: StructuredReportToTextOptions = {}
+  options: StructuredReportToTextNodeOptions = {}
 ) : Promise<StructuredReportToTextNodeResult> {
 
   const mountDirs: Set<string> = new Set()

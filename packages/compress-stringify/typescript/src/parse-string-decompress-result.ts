@@ -1,9 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface ParseStringDecompressResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
+import { WorkerPoolFunctionResult } from 'itk-wasm'
 
+interface ParseStringDecompressResult extends WorkerPoolFunctionResult {
   /** Output decompressed binary */
   output: Uint8Array
 

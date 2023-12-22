@@ -343,9 +343,11 @@ class StructuredReportToHtmlController  {
   }
 
   async run() {
-    const { webWorker, outputText, } = await dicom.structuredReportToHtml(this.webWorker,
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, outputText, } = await dicom.structuredReportToHtml(
         { data: this.model.inputs.get('dicomFile').data.slice(), path: this.model.inputs.get('dicomFile').path },
-        Object.fromEntries(this.model.options.entries())
+        options
     )
     this.webWorker = webWorker
 

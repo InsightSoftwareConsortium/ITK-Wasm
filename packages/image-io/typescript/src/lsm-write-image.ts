@@ -26,7 +26,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<LsmWriteImageResult>} - result object
  */
 async function lsmWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: LsmWriteImageOptions = {}
@@ -69,7 +68,7 @@ async function lsmWriteImage(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

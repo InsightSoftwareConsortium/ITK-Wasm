@@ -4,6 +4,9 @@ export type { CompareImagesMetric }
 import CompareDoubleImagesNodeResult from './compare-double-images-node-result.js'
 export type { CompareDoubleImagesNodeResult }
 
+import CompareDoubleImagesNodeOptions from './compare-double-images-node-options.js'
+export type { CompareDoubleImagesNodeOptions }
+
 import compareDoubleImagesNode from './compare-double-images-node.js'
 export { compareDoubleImagesNode }
 

@@ -1,9 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface CompressStringifyResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
+import { WorkerPoolFunctionResult } from 'itk-wasm'
 
+interface CompressStringifyResult extends WorkerPoolFunctionResult {
   /** Output compressed binary */
   output: Uint8Array
 

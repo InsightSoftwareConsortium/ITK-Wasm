@@ -1,5 +1,6 @@
 import { readImage } from '@itk-wasm/image-io'
 import { writeImage } from '@itk-wasm/image-io'
+import { copyImage } from 'itk-wasm'
 import * as compareImages from '../../../dist/index.js'
 import compareImagesLoadSampleInputs from "./compare-images-load-sample-inputs.js"
 
@@ -44,7 +45,7 @@ class CompareImagesController  {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const { image, webWorker } = await readImage(null, files[0])
+        const { image, webWorker } = await readImage(files[0])
         webWorker.terminate()
         model.inputs.set("testImage", image)
         const details = document.getElementById("compareImages-test-image-details")
@@ -59,7 +60,7 @@ class CompareImagesController  {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const readImages = await Promise.all(Array.from(files).map(async (file) => readImage(null, file)))
+        const readImages = await Promise.all(Array.from(files).map(async (file) => readImage(file)))
         readImages.forEach(img => img.webWorker.terminate())
         const inputImages = readImages.map(img => img.image)
         model.options.set("baselineImages", inputImages)
@@ -108,7 +109,7 @@ class CompareImagesController  {
             const differenceImageDownloadFormat = document.getElementById('difference-image-output-format')
             const downloadFormat = differenceImageDownloadFormat.value || 'nrrd'
             const fileName = `differenceImage.${downloadFormat}`
-            const { webWorker, serializedImage } = await writeImage(null, copyImage(model.outputs.get("differenceImage")), fileName)
+            const { webWorker, serializedImage } = await writeImage(copyImage(model.outputs.get("differenceImage")), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(serializedImage, fileName)
@@ -123,10 +124,10 @@ class CompareImagesController  {
             const differenceUchar2dImageDownloadFormat = document.getElementById('difference-uchar-2d-image-output-format')
             const downloadFormat = differenceUchar2dImageDownloadFormat.value || 'nrrd'
             const fileName = `differenceUchar2dImage.${downloadFormat}`
-            const { webWorker, arrayBuffer } = await writeImageArrayBuffer(null, copyImage(model.outputs.get("differenceUchar2dImage")), fileName)
+            const { webWorker, serializedImage } = await writeImage(copyImage(model.outputs.get("differenceUchar2dImage")), fileName)
 
             webWorker.terminate()
-            globalThis.downloadFile(arrayBuffer, fileName)
+            globalThis.downloadFile(serializedImage, fileName)
         }
     })
 
@@ -144,9 +145,11 @@ class CompareImagesController  {
         runButton.loading = true
         const t0 = performance.now()
 
-        const { webWorker, metrics, differenceImage, differenceUchar2dImage, } = await compareImages.compareImages(this.webWorker,
+        const options = Object.fromEntries(this.model.options.entries())
+        options.webWorker = this.webWorker
+        const { webWorker, metrics, differenceImage, differenceUchar2dImage, } = await compareImages.compareImages(
           model.inputs.get('testImage'),
-          Object.fromEntries(model.options.entries())
+          options
         )
 
         const t1 = performance.now()

@@ -25,7 +25,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<Ge4ReadImageResult>} - result object
  */
 async function ge4ReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: Ge4ReadImageOptions = {}
 ) : Promise<Ge4ReadImageResult> {
@@ -69,7 +68,7 @@ async function ge4ReadImage(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

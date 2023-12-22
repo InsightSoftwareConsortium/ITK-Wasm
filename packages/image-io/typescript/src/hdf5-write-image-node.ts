@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import Hdf5WriteImageOptions from './hdf5-write-image-options.js'
+import Hdf5WriteImageNodeOptions from './hdf5-write-image-node-options.js'
 import Hdf5WriteImageNodeResult from './hdf5-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {Hdf5WriteImageOptions} options - options object
+ * @param {Hdf5WriteImageNodeOptions} options - options object
  *
  * @returns {Promise<Hdf5WriteImageNodeResult>} - result object
  */
 async function hdf5WriteImageNode(
   image: Image,
   serializedImage: string,
-  options: Hdf5WriteImageOptions = {}
+  options: Hdf5WriteImageNodeOptions = {}
 ) : Promise<Hdf5WriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

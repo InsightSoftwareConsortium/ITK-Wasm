@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface MghReadImageOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface MghReadImageOptions extends WorkerPoolFunctionOption {
   /** Only read image metadata -- do not read pixel data. */
   informationOnly?: boolean
 

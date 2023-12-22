@@ -1,9 +1,14 @@
 import readImageNode from './read-image-node.js'
 export { readImageNode }
 
+import ReadImageNodeOptions from './read-image-node-options.js'
+export type { ReadImageNodeOptions }
+
 import writeImageNode from './write-image-node.js'
 export { writeImageNode }
 
+import WriteImageNodeOptions from './write-image-node-options.js'
+export type { WriteImageNodeOptions }
 
 
 import BioRadReadImageNodeResult from './bio-rad-read-image-node-result.js'

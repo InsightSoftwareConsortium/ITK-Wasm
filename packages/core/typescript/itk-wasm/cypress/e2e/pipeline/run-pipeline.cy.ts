@@ -18,7 +18,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs)
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs)
     })
   })
 
@@ -30,7 +30,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl, pipelineWorkerUrl })
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl, pipelineWorkerUrl })
     })
   })
 
@@ -43,7 +43,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl })
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl })
     })
   })
 
@@ -56,7 +56,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineWorkerUrl })
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { pipelineWorkerUrl })
     })
   })
 
@@ -70,7 +70,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { returnValue, stdout, stderr } = await itk.runPipeline(webWorker, stdoutStderrPath, args, outputs, inputs)
+      const { returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { webWorker })
     })
   })
 
@@ -82,8 +82,8 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs)
-      const { returnValue, stdout, stderr } = await itk.runPipeline(webWorker, stdoutStderrPath, args, outputs, inputs)
+      const { webWorker } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs)
+      const { returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { webWorker })
       webWorker.terminate()
       expect(returnValue, 'returnValue').to.equal(0)
       expect(stdout, 'stdout').to.equal(`I’m writing my code,
@@ -106,7 +106,7 @@ Click. Perfect success.
       const outputs = null
       const inputs = null
       const absoluteURL = new URL('/pipelines/stdout-stderr-test', document.location)
-      const { returnValue, stdout, stderr } = await itk.runPipeline(false, absoluteURL, args, outputs, inputs)
+      const { returnValue, stdout, stderr } = await itk.runPipeline(absoluteURL, args, outputs, inputs, { webWorker: false })
       expect(returnValue, 'returnValue').to.equal(0)
       expect(stdout, 'stdout').to.equal(`I’m writing my code,
 But I do not realize,
@@ -138,7 +138,7 @@ Click. Perfect success.
         { type: itk.InterfaceTypes.TextStream, data: { data: 'The answer is 42.' } },
         { type: itk.InterfaceTypes.BinaryStream, data: { data: new Uint8Array([222, 173, 190, 239]) } }
       ]
-      const { stdout, stderr, outputs, webWorker } = await itk.runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
+      const { stdout, stderr, outputs, webWorker } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs)
       webWorker.terminate()
       expect(outputs[0].type, 'text output type').to.equal(itk.InterfaceTypes.TextStream)
       expect(outputs[0].data.data, 'text output data').to.equal('The answer is 42.')
@@ -155,7 +155,7 @@ Click. Perfect success.
     })
 
 
-  it('runs on the main thread when first argument is false', () => {
+  it('runs on the main thread when webWorker option is false', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
 
@@ -174,7 +174,7 @@ Click. Perfect success.
         { type: itk.InterfaceTypes.TextStream, data: { data: 'The answer is 42.' } },
         { type: itk.InterfaceTypes.BinaryStream, data: { data: new Uint8Array([222, 173, 190, 239]) } }
       ]
-      const { stdout, stderr, outputs } = await itk.runPipeline(false, pipelinePath, args, desiredOutputs, inputs)
+      const { stdout, stderr, outputs } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs, { webWorker: false })
       expect(outputs[0].type, 'text output type').to.equal(itk.InterfaceTypes.TextStream)
       expect(outputs[0].data.data, 'text output data').to.equal('The answer is 42.')
       expect(outputs[1].type, 'binary output type').to.equal(itk.InterfaceTypes.BinaryStream)
@@ -219,7 +219,7 @@ Click. Perfect success.
       const inputs = [
         { type: itk.InterfaceTypes.Image, data: image }
       ]
-      const { webWorker, outputs } = await itk.runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
+      const { webWorker, outputs } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs)
       webWorker.terminate()
       verifyImage(outputs[0].data)
     })
@@ -250,7 +250,7 @@ Click. Perfect success.
       const inputs = [
         { type: itk.InterfaceTypes.Mesh, data: mesh }
       ]
-      const { webWorker, outputs } = await itk.runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
+      const { webWorker, outputs } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs)
       webWorker.terminate()
       verifyMesh(outputs[0].data)
     })

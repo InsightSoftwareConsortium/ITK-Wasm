@@ -13,13 +13,15 @@ import WriteMeshResult from './write-mesh-result.js'
 interface WriterOptions {
   informationOnly?: boolean
   useCompression?: boolean
+  /** WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. */
+  webWorker?: Worker | null | boolean
 }
 interface WriterResult {
   webWorker: Worker
   couldWrite: boolean
   serializedMesh: BinaryFile
 }
-type Writer = (webWorker: Worker | null | boolean, mesh: Mesh, serializedMesh: string, options: WriterOptions) => Promise<WriterResult>
+type Writer = (mesh: Mesh, serializedMesh: string, options: WriterOptions) => Promise<WriterResult>
 
 /**
  * Write an itk-wasm Mesh converted to an serialized mesh file format
@@ -31,7 +33,6 @@ type Writer = (webWorker: Worker | null | boolean, mesh: Mesh, serializedMesh: s
  * @returns {Promise<WriteMeshResult>} - result object
  */
 async function writeMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: WriteMeshOptions = {}
@@ -41,7 +42,7 @@ async function writeMesh(
 
   const mimeType = options.mimeType
   const extension = getFileExtension(serializedMesh).toLowerCase()
-  let usedWebWorker = webWorker
+  let usedWebWorker = options.webWorker
 
   let io = null
   if (typeof mimeType !== 'undefined' && mimeToMeshIo.has(mimeType)) {
@@ -51,7 +52,7 @@ async function writeMesh(
   } else {
     for (const readerWriter of meshIoIndex.values()) {
       if (readerWriter[1] !== null) {
-        let { webWorker: testWebWorker, couldWrite, serializedMesh: serializedMeshBuffer } = await (readerWriter[1] as unknown as Writer)(usedWebWorker, inputMesh, serializedMesh, options)
+        let { webWorker: testWebWorker, couldWrite, serializedMesh: serializedMeshBuffer } = await (readerWriter[1] as unknown as Writer)(inputMesh, serializedMesh, options)
         usedWebWorker = testWebWorker
         if (couldWrite) {
           return { webWorker: usedWebWorker as Worker, serializedMesh: serializedMeshBuffer }
@@ -65,7 +66,7 @@ async function writeMesh(
   const readerWriter = meshIoIndex.get(io as string)
 
   const writer = (readerWriter as Array<Writer>)[1]
-  let { webWorker: testWebWorker, couldWrite, serializedMesh: serializedMeshBuffer } = await writer(usedWebWorker, inputMesh, serializedMesh, options)
+  let { webWorker: testWebWorker, couldWrite, serializedMesh: serializedMeshBuffer } = await writer(inputMesh, serializedMesh, options)
   usedWebWorker = testWebWorker
   if (!couldWrite) {
     throw Error('Could not write: ' + serializedMesh)

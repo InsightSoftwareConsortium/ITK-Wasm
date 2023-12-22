@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface ApplyPresentationStateToImageOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface ApplyPresentationStateToImageOptions extends WorkerPoolFunctionOption {
   /** output image as RGB (default: false) */
   colorOutput?: boolean
 

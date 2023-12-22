@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import MrcWriteImageOptions from './mrc-write-image-options.js'
+import MrcWriteImageNodeOptions from './mrc-write-image-node-options.js'
 import MrcWriteImageNodeResult from './mrc-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {MrcWriteImageOptions} options - options object
+ * @param {MrcWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<MrcWriteImageNodeResult>} - result object
  */
 async function mrcWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: MrcWriteImageOptions = {}
+  options: MrcWriteImageNodeOptions = {}
 ) : Promise<MrcWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

@@ -49,7 +49,7 @@ async def tiff_write_image_async(
     if use_compression:
         kwargs["useCompression"] = to_js(use_compression)
 
-    outputs = await js_module.tiffWriteImage(web_worker, to_js(image), to_js(serialized_image), **kwargs)
+    outputs = await js_module.tiffWriteImage(to_js(image), to_js(serialized_image), webWorker=web_worker, **kwargs)
 
     output_web_worker = None
     output_list = []

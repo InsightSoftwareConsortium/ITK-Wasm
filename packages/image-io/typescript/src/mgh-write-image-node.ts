@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import MghWriteImageOptions from './mgh-write-image-options.js'
+import MghWriteImageNodeOptions from './mgh-write-image-node-options.js'
 import MghWriteImageNodeResult from './mgh-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {MghWriteImageOptions} options - options object
+ * @param {MghWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<MghWriteImageNodeResult>} - result object
  */
 async function mghWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: MghWriteImageOptions = {}
+  options: MghWriteImageNodeOptions = {}
 ) : Promise<MghWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

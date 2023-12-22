@@ -1,8 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-import { Image } from 'itk-wasm'
+import { Image, WorkerPoolFunctionOption } from 'itk-wasm'
 
-interface CompareDoubleImagesOptions {
+interface CompareDoubleImagesOptions extends WorkerPoolFunctionOption {
   /** Baseline images compare against */
   baselineImages: Image[]
 

@@ -42,7 +42,7 @@ async def byu_read_mesh_async(
     if information_only:
         kwargs["informationOnly"] = to_js(information_only)
 
-    outputs = await js_module.byuReadMesh(web_worker, to_js(BinaryFile(serialized_mesh)), **kwargs)
+    outputs = await js_module.byuReadMesh(to_js(BinaryFile(serialized_mesh)), webWorker=web_worker, **kwargs)
 
     output_web_worker = None
     output_list = []

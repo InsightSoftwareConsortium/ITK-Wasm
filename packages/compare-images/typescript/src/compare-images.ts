@@ -21,13 +21,12 @@ import vectorMagnitude from './vector-magnitude.js'
  * @returns {Promise<CompareDoubleImagesResult>} - result object
  */
 async function compareImages(
-  webWorker: null | Worker,
   testImage: Image,
   options: CompareDoubleImagesOptions = { baselineImages: [] as Image[], }
 ) : Promise<CompareDoubleImagesResult> {
 
   async function vectorMagnitudeWorker(image: Image) {
-    const { webWorker: usedWebWorker, magnitudeImage } = await vectorMagnitude(null, image)
+    const { webWorker: usedWebWorker, magnitudeImage } = await vectorMagnitude(image)
     usedWebWorker?.terminate()
     return { magnitudeImage }
   }
@@ -40,7 +39,7 @@ async function compareImages(
   const otherOptions = { ...options }
   otherOptions.baselineImages = baselineImagesDouble
 
-  return compareDoubleImages(webWorker, testImageDouble, otherOptions)
+  return compareDoubleImages(testImageDouble, otherOptions)
 }
 
 export default compareImages

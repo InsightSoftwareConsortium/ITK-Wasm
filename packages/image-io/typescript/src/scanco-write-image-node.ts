@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import ScancoWriteImageOptions from './scanco-write-image-options.js'
+import ScancoWriteImageNodeOptions from './scanco-write-image-node-options.js'
 import ScancoWriteImageNodeResult from './scanco-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {ScancoWriteImageOptions} options - options object
+ * @param {ScancoWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<ScancoWriteImageNodeResult>} - result object
  */
 async function scancoWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: ScancoWriteImageOptions = {}
+  options: ScancoWriteImageNodeOptions = {}
 ) : Promise<ScancoWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

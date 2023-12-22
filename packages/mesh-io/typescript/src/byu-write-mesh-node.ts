@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import ByuWriteMeshOptions from './byu-write-mesh-options.js'
+import ByuWriteMeshNodeOptions from './byu-write-mesh-node-options.js'
 import ByuWriteMeshNodeResult from './byu-write-mesh-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Mesh} mesh - Input mesh
  * @param {string} serializedMesh - Output mesh
- * @param {ByuWriteMeshOptions} options - options object
+ * @param {ByuWriteMeshNodeOptions} options - options object
  *
  * @returns {Promise<ByuWriteMeshNodeResult>} - result object
  */
 async function byuWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: ByuWriteMeshOptions = {}
+  options: ByuWriteMeshNodeOptions = {}
 ) : Promise<ByuWriteMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

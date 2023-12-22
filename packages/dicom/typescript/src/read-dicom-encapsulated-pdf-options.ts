@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface ReadDicomEncapsulatedPdfOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface ReadDicomEncapsulatedPdfOptions extends WorkerPoolFunctionOption {
   /** read file format only */
   readFileOnly?: boolean
 

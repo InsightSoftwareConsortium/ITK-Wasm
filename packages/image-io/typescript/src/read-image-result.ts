@@ -1,8 +1,7 @@
-import { Image } from 'itk-wasm'
+import { Image, WorkerPoolFunctionResult } from 'itk-wasm'
 
-interface ReadImageResult {
+interface ReadImageResult extends WorkerPoolFunctionResult {
   image: Image
-  webWorker: Worker
 }
 
 export default ReadImageResult

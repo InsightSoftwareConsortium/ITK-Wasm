@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import FdfWriteImageOptions from './fdf-write-image-options.js'
+import FdfWriteImageNodeOptions from './fdf-write-image-node-options.js'
 import FdfWriteImageNodeResult from './fdf-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {FdfWriteImageOptions} options - options object
+ * @param {FdfWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<FdfWriteImageNodeResult>} - result object
  */
 async function fdfWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: FdfWriteImageOptions = {}
+  options: FdfWriteImageNodeOptions = {}
 ) : Promise<FdfWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

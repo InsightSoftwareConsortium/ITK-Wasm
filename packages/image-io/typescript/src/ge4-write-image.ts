@@ -26,7 +26,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<Ge4WriteImageResult>} - result object
  */
 async function ge4WriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: Ge4WriteImageOptions = {}
@@ -69,7 +68,7 @@ async function ge4WriteImage(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

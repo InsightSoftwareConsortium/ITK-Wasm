@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import OffWriteMeshOptions from './off-write-mesh-options.js'
+import OffWriteMeshNodeOptions from './off-write-mesh-node-options.js'
 import OffWriteMeshNodeResult from './off-write-mesh-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Mesh} mesh - Input mesh
  * @param {string} serializedMesh - Output mesh
- * @param {OffWriteMeshOptions} options - options object
+ * @param {OffWriteMeshNodeOptions} options - options object
  *
  * @returns {Promise<OffWriteMeshNodeResult>} - result object
  */
 async function offWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: OffWriteMeshOptions = {}
+  options: OffWriteMeshNodeOptions = {}
 ) : Promise<OffWriteMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

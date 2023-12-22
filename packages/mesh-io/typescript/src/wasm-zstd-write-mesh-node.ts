@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import WasmZstdWriteMeshOptions from './wasm-zstd-write-mesh-options.js'
+import WasmZstdWriteMeshNodeOptions from './wasm-zstd-write-mesh-node-options.js'
 import WasmZstdWriteMeshNodeResult from './wasm-zstd-write-mesh-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Mesh} mesh - Input mesh
  * @param {string} serializedMesh - Output mesh
- * @param {WasmZstdWriteMeshOptions} options - options object
+ * @param {WasmZstdWriteMeshNodeOptions} options - options object
  *
  * @returns {Promise<WasmZstdWriteMeshNodeResult>} - result object
  */
 async function wasmZstdWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: WasmZstdWriteMeshOptions = {}
+  options: WasmZstdWriteMeshNodeOptions = {}
 ) : Promise<WasmZstdWriteMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

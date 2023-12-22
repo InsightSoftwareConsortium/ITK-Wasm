@@ -25,7 +25,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<SwcReadMeshResult>} - result object
  */
 async function swcReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: SwcReadMeshOptions = {}
 ) : Promise<SwcReadMeshResult> {
@@ -69,7 +68,7 @@ async function swcReadMesh(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

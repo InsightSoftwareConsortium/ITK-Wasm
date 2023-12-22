@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import MghReadImageOptions from './mgh-read-image-options.js'
+import MghReadImageNodeOptions from './mgh-read-image-node-options.js'
 import MghReadImageNodeResult from './mgh-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {MghReadImageOptions} options - options object
+ * @param {MghReadImageNodeOptions} options - options object
  *
  * @returns {Promise<MghReadImageNodeResult>} - result object
  */
 async function mghReadImageNode(
   serializedImage: string,
-  options: MghReadImageOptions = {}
+  options: MghReadImageNodeOptions = {}
 ) : Promise<MghReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import WasmReadMeshOptions from './wasm-read-mesh-options.js'
+import WasmReadMeshNodeOptions from './wasm-read-mesh-node-options.js'
 import WasmReadMeshNodeResult from './wasm-read-mesh-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read a mesh file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedMesh - Input mesh serialized in the file format
- * @param {WasmReadMeshOptions} options - options object
+ * @param {WasmReadMeshNodeOptions} options - options object
  *
  * @returns {Promise<WasmReadMeshNodeResult>} - result object
  */
 async function wasmReadMeshNode(
   serializedMesh: string,
-  options: WasmReadMeshOptions = {}
+  options: WasmReadMeshNodeOptions = {}
 ) : Promise<WasmReadMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

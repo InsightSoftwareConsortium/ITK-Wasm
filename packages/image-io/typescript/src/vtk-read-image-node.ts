@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import VtkReadImageOptions from './vtk-read-image-options.js'
+import VtkReadImageNodeOptions from './vtk-read-image-node-options.js'
 import VtkReadImageNodeResult from './vtk-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {VtkReadImageOptions} options - options object
+ * @param {VtkReadImageNodeOptions} options - options object
  *
  * @returns {Promise<VtkReadImageNodeResult>} - result object
  */
 async function vtkReadImageNode(
   serializedImage: string,
-  options: VtkReadImageOptions = {}
+  options: VtkReadImageNodeOptions = {}
 ) : Promise<VtkReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

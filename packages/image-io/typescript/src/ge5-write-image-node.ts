@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import Ge5WriteImageOptions from './ge5-write-image-options.js'
+import Ge5WriteImageNodeOptions from './ge5-write-image-node-options.js'
 import Ge5WriteImageNodeResult from './ge5-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {Ge5WriteImageOptions} options - options object
+ * @param {Ge5WriteImageNodeOptions} options - options object
  *
  * @returns {Promise<Ge5WriteImageNodeResult>} - result object
  */
 async function ge5WriteImageNode(
   image: Image,
   serializedImage: string,
-  options: Ge5WriteImageOptions = {}
+  options: Ge5WriteImageNodeOptions = {}
 ) : Promise<Ge5WriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

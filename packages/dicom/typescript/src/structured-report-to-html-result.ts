@@ -1,9 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface StructuredReportToHtmlResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
+import { WorkerPoolFunctionResult } from 'itk-wasm'
 
+interface StructuredReportToHtmlResult extends WorkerPoolFunctionResult {
   /** Output text file */
   outputText: string
 

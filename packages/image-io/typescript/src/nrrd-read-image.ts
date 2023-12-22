@@ -25,7 +25,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<NrrdReadImageResult>} - result object
  */
 async function nrrdReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: NrrdReadImageOptions = {}
 ) : Promise<NrrdReadImageResult> {
@@ -69,7 +68,7 @@ async function nrrdReadImage(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

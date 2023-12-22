@@ -15,13 +15,15 @@ import WriteImageResult from './write-image-result.js'
 interface WriterOptions {
   informationOnly?: boolean
   useCompression?: boolean
+  /** WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. */
+  webWorker?: Worker | null | boolean
 }
 interface WriterResult {
   webWorker: Worker
   couldWrite: boolean
   serializedImage: BinaryFile
 }
-type Writer = (webWorker: Worker | null | boolean, image: Image, serializedImage: string, options: WriterOptions) => Promise<WriterResult>
+type Writer = (image: Image, serializedImage: string, options: WriterOptions) => Promise<WriterResult>
 
 /**
  * Write an itk-wasm Image converted to an serialized image file format
@@ -33,7 +35,6 @@ type Writer = (webWorker: Worker | null | boolean, image: Image, serializedImage
  * @returns {Promise<WriteImageResult>} - result object
  */
 async function writeImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: WriteImageOptions = {}
@@ -46,7 +47,7 @@ async function writeImage(
 
   const mimeType = options.mimeType
   const extension = getFileExtension(serializedImage).toLowerCase()
-  let usedWebWorker = webWorker
+  let usedWebWorker = options.webWorker
 
   let io = null
   if (typeof mimeType !== 'undefined' && mimeToImageIo.has(mimeType)) {
@@ -56,7 +57,7 @@ async function writeImage(
   } else {
     for (const readerWriter of imageIoIndex.values()) {
       if (readerWriter[1] !== null) {
-        let { webWorker: testWebWorker, couldWrite, serializedImage: serializedImageBuffer } = await (readerWriter[1] as unknown as Writer)(usedWebWorker, copyImage(inputImage), serializedImage, options)
+        let { webWorker: testWebWorker, couldWrite, serializedImage: serializedImageBuffer } = await (readerWriter[1] as unknown as Writer)(copyImage(inputImage), serializedImage, options)
         usedWebWorker = testWebWorker
         if (couldWrite) {
           return { webWorker: usedWebWorker as Worker, serializedImage: serializedImageBuffer }
@@ -70,7 +71,7 @@ async function writeImage(
   const readerWriter = imageIoIndex.get(io as string)
 
   const writer = (readerWriter as Array<Writer>)[1]
-  let { webWorker: testWebWorker, couldWrite, serializedImage: serializedImageBuffer } = await writer(usedWebWorker, inputImage, serializedImage, options)
+  let { webWorker: testWebWorker, couldWrite, serializedImage: serializedImageBuffer } = await writer(inputImage, serializedImage, options)
   usedWebWorker = testWebWorker
   if (!couldWrite) {
     throw Error('Could not write: ' + serializedImage)

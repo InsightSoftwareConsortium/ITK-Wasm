@@ -8,7 +8,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import StructuredReportToHtmlOptions from './structured-report-to-html-options.js'
+import StructuredReportToHtmlNodeOptions from './structured-report-to-html-node-options.js'
 import StructuredReportToHtmlNodeResult from './structured-report-to-html-node-result.js'
 
 import path from 'path'
@@ -17,13 +17,13 @@ import path from 'path'
  * Render DICOM SR file and data set to HTML/XHTML
  *
  * @param {string} dicomFile - Input DICOM file
- * @param {StructuredReportToHtmlOptions} options - options object
+ * @param {StructuredReportToHtmlNodeOptions} options - options object
  *
  * @returns {Promise<StructuredReportToHtmlNodeResult>} - result object
  */
 async function structuredReportToHtmlNode(
   dicomFile: string,
-  options: StructuredReportToHtmlOptions = {}
+  options: StructuredReportToHtmlNodeOptions = {}
 ) : Promise<StructuredReportToHtmlNodeResult> {
 
   const mountDirs: Set<string> = new Set()

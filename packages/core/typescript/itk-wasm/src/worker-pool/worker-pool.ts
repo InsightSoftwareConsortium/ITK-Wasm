@@ -1,8 +1,8 @@
 /* eslint-disable  @typescript-eslint/no-non-null-assertion */
 
-import WorkerPoolFunction from './worker-pool-function.js'
 import WorkerPoolProgressCallback from './worker-pool-progress-callback.js'
 import WorkerPoolRunTasksResult from './worker-pool-run-tasks-result.js'
+import WorkerPoolFunctionOption from './worker-pool-function-option.js'
 
 interface RunInfo {
   taskQueue: any[]
@@ -19,20 +19,23 @@ interface RunInfo {
 }
 
 class WorkerPool {
-  fcn: WorkerPoolFunction
+  fcn: Function
 
   workerQueue: Array<Worker | null>
 
   runInfo: RunInfo[]
 
-  /* poolSize is the maximum number of web workers to create in the pool.
+  /*
+   * poolSize is the maximum number of web workers to create in the pool.
    *
-   * The function, fcn, should accept null or an existing worker as its first argument.
-   * It most also return and object with the used worker on the `webWorker`
-   * property.  * Example: runPipeline.
+   * The function, `fcn,` must accept in its last argument an options object with a
+   * `webWorker` property that is a web worker to use for computation. The
+   * function must also return a promise that resolves to an object with the
+   * with the results of the computation and the used worker in the `webWorker`
+   * property.
    *
    **/
-  constructor (poolSize: number, fcn: WorkerPoolFunction) {
+  constructor (poolSize: number, fcn: Function) {
     this.fcn = fcn
 
     this.workerQueue = new Array(poolSize)
@@ -102,7 +105,7 @@ class WorkerPool {
     }
   }
 
-  private addTask (infoIndex: number, resultIndex: number, taskArgs: []): void {
+  private addTask<T extends any[]>(infoIndex: number, resultIndex: number, taskArgs: [...T, options: WorkerPoolFunctionOption]): void {
     const info = this.runInfo[infoIndex]
 
     if (info?.canceled === true) {
@@ -114,7 +117,9 @@ class WorkerPool {
     if (this.workerQueue.length > 0) {
       const worker = this.workerQueue.pop() as Worker | null
       info.runningWorkers++
-      this.fcn(worker, ...taskArgs).then(({ webWorker, ...result }) => {
+      taskArgs[taskArgs.length - 1].webWorker = worker as Worker
+      // @ts-expect-error: TS7031: Binding element 'webWorker' implicitly has an 'any' type.
+      this.fcn(...taskArgs).then(({ webWorker, ...result }) => {
         this.workerQueue.push(webWorker)
         // Check if this task was canceled while it was getting done
         if (this.runInfo[infoIndex] !== null) {
@@ -134,6 +139,7 @@ class WorkerPool {
             this.clearTask(info.index)
           }
         }
+      // @ts-expect-error: TS7006: Parameter 'error' implicitly has an 'any' type.
       }).catch((error) => {
         info.reject!(error)
         this.clearTask(info.index)

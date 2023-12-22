@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import BmpWriteImageOptions from './bmp-write-image-options.js'
+import BmpWriteImageNodeOptions from './bmp-write-image-node-options.js'
 import BmpWriteImageNodeResult from './bmp-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {BmpWriteImageOptions} options - options object
+ * @param {BmpWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<BmpWriteImageNodeResult>} - result object
  */
 async function bmpWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: BmpWriteImageOptions = {}
+  options: BmpWriteImageNodeOptions = {}
 ) : Promise<BmpWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

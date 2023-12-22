@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import ApplyPresentationStateToImageOptions from './apply-presentation-state-to-image-options.js'
+import ApplyPresentationStateToImageNodeOptions from './apply-presentation-state-to-image-node-options.js'
 import ApplyPresentationStateToImageNodeResult from './apply-presentation-state-to-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {string} imageIn - Input DICOM file
  * @param {string} presentationStateFile - Process using presentation state file
- * @param {ApplyPresentationStateToImageOptions} options - options object
+ * @param {ApplyPresentationStateToImageNodeOptions} options - options object
  *
  * @returns {Promise<ApplyPresentationStateToImageNodeResult>} - result object
  */
 async function applyPresentationStateToImageNode(
   imageIn: string,
   presentationStateFile: string,
-  options: ApplyPresentationStateToImageOptions = {}
+  options: ApplyPresentationStateToImageNodeOptions = {}
 ) : Promise<ApplyPresentationStateToImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

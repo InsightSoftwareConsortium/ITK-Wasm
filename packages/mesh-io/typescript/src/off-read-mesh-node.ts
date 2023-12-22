@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import OffReadMeshOptions from './off-read-mesh-options.js'
+import OffReadMeshNodeOptions from './off-read-mesh-node-options.js'
 import OffReadMeshNodeResult from './off-read-mesh-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read a mesh file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedMesh - Input mesh serialized in the file format
- * @param {OffReadMeshOptions} options - options object
+ * @param {OffReadMeshNodeOptions} options - options object
  *
  * @returns {Promise<OffReadMeshNodeResult>} - result object
  */
 async function offReadMeshNode(
   serializedMesh: string,
-  options: OffReadMeshOptions = {}
+  options: OffReadMeshNodeOptions = {}
 ) : Promise<OffReadMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import GeAdwWriteImageOptions from './ge-adw-write-image-options.js'
+import GeAdwWriteImageNodeOptions from './ge-adw-write-image-node-options.js'
 import GeAdwWriteImageNodeResult from './ge-adw-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {GeAdwWriteImageOptions} options - options object
+ * @param {GeAdwWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<GeAdwWriteImageNodeResult>} - result object
  */
 async function geAdwWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: GeAdwWriteImageOptions = {}
+  options: GeAdwWriteImageNodeOptions = {}
 ) : Promise<GeAdwWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

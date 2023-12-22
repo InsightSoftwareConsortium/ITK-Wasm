@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import BmpReadImageOptions from './bmp-read-image-options.js'
+import BmpReadImageNodeOptions from './bmp-read-image-node-options.js'
 import BmpReadImageNodeResult from './bmp-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {BmpReadImageOptions} options - options object
+ * @param {BmpReadImageNodeOptions} options - options object
  *
  * @returns {Promise<BmpReadImageNodeResult>} - result object
  */
 async function bmpReadImageNode(
   serializedImage: string,
-  options: BmpReadImageOptions = {}
+  options: BmpReadImageNodeOptions = {}
 ) : Promise<BmpReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

@@ -1,9 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface ReadDicomEncapsulatedPdfResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
+import { WorkerPoolFunctionResult } from 'itk-wasm'
 
+interface ReadDicomEncapsulatedPdfResult extends WorkerPoolFunctionResult {
   /** Output pdf file */
   pdfBinaryOutput: Uint8Array
 

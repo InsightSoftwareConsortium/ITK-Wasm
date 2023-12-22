@@ -1,11 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-import { JsonCompatible, Mesh } from 'itk-wasm'
+import { JsonCompatible, Mesh, WorkerPoolFunctionResult } from 'itk-wasm'
 
-interface OffReadMeshResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
-
+interface OffReadMeshResult extends WorkerPoolFunctionResult {
   /** Whether the input could be read. If false, the output mesh is not valid. */
   couldRead: JsonCompatible
 

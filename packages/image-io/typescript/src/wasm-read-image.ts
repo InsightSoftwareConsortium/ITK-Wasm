@@ -25,7 +25,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<WasmReadImageResult>} - result object
  */
 async function wasmReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: WasmReadImageOptions = {}
 ) : Promise<WasmReadImageResult> {
@@ -69,7 +68,7 @@ async function wasmReadImage(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

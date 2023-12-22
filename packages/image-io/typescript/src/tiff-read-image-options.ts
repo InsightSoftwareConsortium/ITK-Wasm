@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface TiffReadImageOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface TiffReadImageOptions extends WorkerPoolFunctionOption {
   /** Only read image metadata -- do not read pixel data. */
   informationOnly?: boolean
 

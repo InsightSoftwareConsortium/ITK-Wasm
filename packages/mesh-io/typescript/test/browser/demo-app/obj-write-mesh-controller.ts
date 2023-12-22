@@ -44,7 +44,7 @@ class ObjWriteMeshController {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const { mesh, webWorker } = await readMesh(null, files[0])
+        const { mesh, webWorker } = await readMesh(files[0])
         webWorker.terminate()
         model.inputs.set("mesh", mesh)
         const details = document.getElementById("objWriteMesh-mesh-details")
@@ -168,8 +168,9 @@ class ObjWriteMeshController {
   }
 
   async run() {
-    const { webWorker, couldWrite, serializedMesh, } = await meshIo.objWriteMesh(this.webWorker,
-      this.model.inputs.get('mesh'),
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, couldWrite, serializedMesh, } = await meshIo.objWriteMesh(      this.model.inputs.get('mesh'),
       this.model.inputs.get('serializedMesh'),
       Object.fromEntries(this.model.options.entries())
     )

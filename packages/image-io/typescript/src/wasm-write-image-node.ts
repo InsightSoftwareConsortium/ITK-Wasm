@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import WasmWriteImageOptions from './wasm-write-image-options.js'
+import WasmWriteImageNodeOptions from './wasm-write-image-node-options.js'
 import WasmWriteImageNodeResult from './wasm-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {WasmWriteImageOptions} options - options object
+ * @param {WasmWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<WasmWriteImageNodeResult>} - result object
  */
 async function wasmWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: WasmWriteImageOptions = {}
+  options: WasmWriteImageNodeOptions = {}
 ) : Promise<WasmWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

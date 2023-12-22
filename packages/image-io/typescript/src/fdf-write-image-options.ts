@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface FdfWriteImageOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface FdfWriteImageOptions extends WorkerPoolFunctionOption {
   /** Only write image metadata -- do not write pixel data. */
   informationOnly?: boolean
 

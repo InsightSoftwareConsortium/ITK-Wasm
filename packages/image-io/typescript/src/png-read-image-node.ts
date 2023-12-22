@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import PngReadImageOptions from './png-read-image-options.js'
+import PngReadImageNodeOptions from './png-read-image-node-options.js'
 import PngReadImageNodeResult from './png-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {PngReadImageOptions} options - options object
+ * @param {PngReadImageNodeOptions} options - options object
  *
  * @returns {Promise<PngReadImageNodeResult>} - result object
  */
 async function pngReadImageNode(
   serializedImage: string,
-  options: PngReadImageOptions = {}
+  options: PngReadImageNodeOptions = {}
 ) : Promise<PngReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

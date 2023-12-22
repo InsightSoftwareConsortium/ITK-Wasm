@@ -8,7 +8,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import ParseStringDecompressOptions from './parse-string-decompress-options.js'
+import ParseStringDecompressNodeOptions from './parse-string-decompress-node-options.js'
 import ParseStringDecompressNodeResult from './parse-string-decompress-node-result.js'
 
 import path from 'path'
@@ -17,13 +17,13 @@ import path from 'path'
  * Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.
  *
  * @param {Uint8Array} input - Compressed input
- * @param {ParseStringDecompressOptions} options - options object
+ * @param {ParseStringDecompressNodeOptions} options - options object
  *
  * @returns {Promise<ParseStringDecompressNodeResult>} - result object
  */
 async function parseStringDecompressNode(
   input: Uint8Array,
-  options: ParseStringDecompressOptions = {}
+  options: ParseStringDecompressNodeOptions = {}
 ) : Promise<ParseStringDecompressNodeResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [

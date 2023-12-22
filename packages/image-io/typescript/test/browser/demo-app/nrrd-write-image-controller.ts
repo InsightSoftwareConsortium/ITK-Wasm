@@ -43,7 +43,7 @@ class NrrdWriteImageController {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const { image, webWorker } = await imageIo.readImage(null, files[0])
+        const { image, webWorker } = await imageIo.readImage(files[0])
         webWorker.terminate()
         model.inputs.set("image", image)
         const details = document.getElementById("nrrdWriteImage-image-details")
@@ -162,10 +162,12 @@ class NrrdWriteImageController {
   }
 
   async run() {
-    const { webWorker, couldWrite, serializedImage, } = await imageIo.nrrdWriteImage(this.webWorker,
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, couldWrite, serializedImage, } = await imageIo.nrrdWriteImage(
       copyImage(this.model.inputs.get('image')),
       this.model.inputs.get('serializedImage'),
-      Object.fromEntries(this.model.options.entries())
+      options
     )
     this.webWorker = webWorker
 

@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import NiftiWriteImageOptions from './nifti-write-image-options.js'
+import NiftiWriteImageNodeOptions from './nifti-write-image-node-options.js'
 import NiftiWriteImageNodeResult from './nifti-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {NiftiWriteImageOptions} options - options object
+ * @param {NiftiWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<NiftiWriteImageNodeResult>} - result object
  */
 async function niftiWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: NiftiWriteImageOptions = {}
+  options: NiftiWriteImageNodeOptions = {}
 ) : Promise<NiftiWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

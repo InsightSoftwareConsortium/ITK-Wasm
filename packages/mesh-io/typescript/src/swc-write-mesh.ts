@@ -26,7 +26,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<SwcWriteMeshResult>} - result object
  */
 async function swcWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: SwcWriteMeshOptions = {}
@@ -72,7 +71,7 @@ async function swcWriteMesh(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

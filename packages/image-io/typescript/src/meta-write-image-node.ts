@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import MetaWriteImageOptions from './meta-write-image-options.js'
+import MetaWriteImageNodeOptions from './meta-write-image-node-options.js'
 import MetaWriteImageNodeResult from './meta-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {MetaWriteImageOptions} options - options object
+ * @param {MetaWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<MetaWriteImageNodeResult>} - result object
  */
 async function metaWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: MetaWriteImageOptions = {}
+  options: MetaWriteImageNodeOptions = {}
 ) : Promise<MetaWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

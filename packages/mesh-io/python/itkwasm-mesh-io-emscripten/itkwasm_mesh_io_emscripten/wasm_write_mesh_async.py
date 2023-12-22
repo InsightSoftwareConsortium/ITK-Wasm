@@ -55,7 +55,7 @@ async def wasm_write_mesh_async(
     if binary_file_type:
         kwargs["binaryFileType"] = to_js(binary_file_type)
 
-    outputs = await js_module.wasmWriteMesh(web_worker, to_js(mesh), to_js(serialized_mesh), **kwargs)
+    outputs = await js_module.wasmWriteMesh(to_js(mesh), to_js(serialized_mesh), webWorker=web_worker, **kwargs)
 
     output_web_worker = None
     output_list = []

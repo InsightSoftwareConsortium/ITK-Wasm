@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import NrrdWriteImageOptions from './nrrd-write-image-options.js'
+import NrrdWriteImageNodeOptions from './nrrd-write-image-node-options.js'
 import NrrdWriteImageNodeResult from './nrrd-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {NrrdWriteImageOptions} options - options object
+ * @param {NrrdWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<NrrdWriteImageNodeResult>} - result object
  */
 async function nrrdWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: NrrdWriteImageOptions = {}
+  options: NrrdWriteImageNodeOptions = {}
 ) : Promise<NrrdWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

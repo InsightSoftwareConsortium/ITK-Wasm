@@ -216,11 +216,13 @@ class ${functionNamePascalCase}Model {
   result += '  }\n'
 
   result += `\n  async run() {
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
     const { webWorker, `
   interfaceJson.outputs.forEach((output) => {
     result += `${camelCase(output.name)}, `
   })
-  result += `} = await ${camelCase(bundleName)}.${functionName}(this.webWorker,\n`
+  result += `} = await ${camelCase(bundleName)}.${functionName}(`
   interfaceJson.inputs.forEach((input) => {
     if (input.type === 'INPUT_TEXT_STREAM' || input.type === 'INPUT_BINARY_STREAM') {
       result += `      this.model.inputs.get('${camelCase(input.name)}').slice(),\n`

@@ -69,7 +69,6 @@ async function loadPipelineModule (
 }
 
 async function runPipeline (
-  webWorker: Worker | null | boolean,
   pipelinePath: string | URL,
   args: string[],
   outputs: PipelineOutput[] | null,
@@ -81,6 +80,7 @@ async function runPipeline (
     alert(simdErrorMessage)
     throw new Error(simdErrorMessage)
   }
+  const webWorker = options?.webWorker ?? null
 
   if (webWorker === false) {
     const pipelineModule = await loadPipelineModule(pipelinePath.toString(), options?.pipelineBaseUrl)

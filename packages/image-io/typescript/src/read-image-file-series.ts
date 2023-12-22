@@ -10,7 +10,7 @@ const workerPool = new WorkerPool(numberOfWorkers, readImage)
 
 async function readImageFileSeries (
   fileList: File[] | FileList | BinaryFile[],
-  options?: ReadImageFileSeriesOptions,
+  options: ReadImageFileSeriesOptions = {},
 ): Promise<ReadImageFileSeriesResult> {
   let zSpacing = 1.0
   let zOrigin = 0.0

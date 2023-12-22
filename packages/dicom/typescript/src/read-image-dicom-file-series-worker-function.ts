@@ -5,6 +5,7 @@ import {
   PipelineInput,
   InterfaceTypes,
   Image,
+  WorkerPoolFunctionOption
 } from 'itk-wasm'
 
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
@@ -17,9 +18,9 @@ interface WorkerFunctionResult {
 }
 
 async function readImageDicomFileSeriesWorkerFunction(
-  webWorker: Worker | null,
   inputImages: BinaryFile[],
-  singleSortedSeries: boolean = false
+  singleSortedSeries: boolean = false,
+  options: WorkerPoolFunctionOption = {}
 ): Promise<WorkerFunctionResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [
@@ -57,7 +58,7 @@ async function readImageDicomFileSeriesWorkerFunction(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

@@ -29,7 +29,7 @@ describe('read-mesh', () => {
   it('Reads an mesh BinaryFile', function () {
     cy.window().then(async (win) => {
       const arrayBuffer = new Uint8Array(this['cow.vtk']).buffer
-      const { mesh, webWorker } = await win.meshIo.readMesh(null, { data: new Uint8Array(arrayBuffer), path: 'cow.vtk' })
+      const { mesh, webWorker } = await win.meshIo.readMesh({ data: new Uint8Array(arrayBuffer), path: 'cow.vtk' })
       webWorker.terminate()
       verifyMesh(mesh)
     })
@@ -39,7 +39,7 @@ describe('read-mesh', () => {
     cy.window().then(async (win) => {
       const arrayBuffer = new Uint8Array(this['cow.vtk']).buffer
       const cowFile = new win.File([arrayBuffer], 'cow.vtk')
-      const { mesh, webWorker } = await win.meshIo.readMesh(null, cowFile)
+      const { mesh, webWorker } = await win.meshIo.readMesh(cowFile)
       webWorker.terminate()
       verifyMesh(mesh)
     })
@@ -49,8 +49,8 @@ describe('read-mesh', () => {
     cy.window().then(async (win) => {
       const arrayBuffer = new Uint8Array(this['cow.vtk']).buffer
       const cowFile = new win.File([arrayBuffer], 'cow.vtk')
-      const { webWorker } = await win.meshIo.readMesh(null, cowFile)
-      const { mesh } = await win.meshIo.readMesh(webWorker, cowFile)
+      const { webWorker } = await win.meshIo.readMesh(cowFile)
+      const { mesh } = await win.meshIo.readMesh(cowFile, { webWorker })
       webWorker.terminate()
       verifyMesh(mesh)
     })
@@ -62,7 +62,7 @@ describe('read-mesh', () => {
       const invalidBlob = new win.Blob([invalidArray])
       const invalidFile = new win.File([invalidBlob], 'invalid.file')
       try {
-        const { webWorker, mesh } = await win.meshIo.readMesh(null, invalidFile)
+        const { webWorker, mesh } = await win.meshIo.readMesh(invalidFile)
         webWorker.terminate()
       } catch (error) {
         cy.expect(error.message).to.equal('Could not find IO for: invalid.file')

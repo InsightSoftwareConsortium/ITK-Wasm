@@ -25,7 +25,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<Hdf5ReadImageResult>} - result object
  */
 async function hdf5ReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: Hdf5ReadImageOptions = {}
 ) : Promise<Hdf5ReadImageResult> {
@@ -69,7 +68,7 @@ async function hdf5ReadImage(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

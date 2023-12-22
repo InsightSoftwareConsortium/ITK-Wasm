@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import MincReadImageOptions from './minc-read-image-options.js'
+import MincReadImageNodeOptions from './minc-read-image-node-options.js'
 import MincReadImageNodeResult from './minc-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {MincReadImageOptions} options - options object
+ * @param {MincReadImageNodeOptions} options - options object
  *
  * @returns {Promise<MincReadImageNodeResult>} - result object
  */
 async function mincReadImageNode(
   serializedImage: string,
-  options: MincReadImageOptions = {}
+  options: MincReadImageNodeOptions = {}
 ) : Promise<MincReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

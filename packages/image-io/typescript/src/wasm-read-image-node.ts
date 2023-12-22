@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import WasmReadImageOptions from './wasm-read-image-options.js'
+import WasmReadImageNodeOptions from './wasm-read-image-node-options.js'
 import WasmReadImageNodeResult from './wasm-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {WasmReadImageOptions} options - options object
+ * @param {WasmReadImageNodeOptions} options - options object
  *
  * @returns {Promise<WasmReadImageNodeResult>} - result object
  */
 async function wasmReadImageNode(
   serializedImage: string,
-  options: WasmReadImageOptions = {}
+  options: WasmReadImageNodeOptions = {}
 ) : Promise<WasmReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

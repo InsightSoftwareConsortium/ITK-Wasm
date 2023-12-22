@@ -50,7 +50,7 @@ async def compress_stringify_async(
     if data_url_prefix:
         kwargs["dataUrlPrefix"] = to_js(data_url_prefix)
 
-    outputs = await js_module.compressStringify(web_worker, to_js(input), **kwargs)
+    outputs = await js_module.compressStringify(to_js(input), webWorker=web_worker, **kwargs)
 
     output_web_worker = None
     output_list = []

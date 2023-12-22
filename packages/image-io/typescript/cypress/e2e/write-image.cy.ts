@@ -56,9 +56,9 @@ describe('write-image', () => {
   it('Writes an image to an ArrayBuffer', function () {
     cy.window().then(async (win) => {
       const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
-      const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
-      const { serializedImage } = await win.imageIo.writeImage(webWorker, image, 'cthead1.mha')
-      const { image: imageBack } = await win.imageIo.readImage(webWorker, serializedImage)
+      const { image, webWorker } = await win.imageIo.readImage({ data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
+      const { serializedImage } = await win.imageIo.writeImage(image, 'cthead1.mha', { webWorker })
+      const { image: imageBack } = await win.imageIo.readImage(serializedImage, { webWorker })
       webWorker.terminate()
       const componentType = IntTypes.UInt8
       const pixelType = PixelTypes.Scalar
@@ -71,10 +71,10 @@ describe('write-image', () => {
       const componentType = IntTypes.UInt16
       const pixelType = PixelTypes.Vector
       const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
-      const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
-      const { serializedImage } = await win.imageIo.writeImage(webWorker, image, 'cthead1.mha', { pixelType, componentType})
+      const { image, webWorker } = await win.imageIo.readImage({ data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
+      const { serializedImage } = await win.imageIo.writeImage(image, 'cthead1.mha', { pixelType, componentType, webWorker })
       // Reading back, the pixelType is always Scalar (reader behavior). Is this a bug?
-      const { image: imageBack } = await win.imageIo.readImage(webWorker, serializedImage, { pixelType })
+      const { image: imageBack } = await win.imageIo.readImage(serializedImage, { pixelType, webWorker })
       webWorker.terminate()
       verifyImage(imageBack, componentType, pixelType)
     })
@@ -83,10 +83,10 @@ describe('write-image', () => {
   it('Writes an image to an ArrayBuffer, uses compression', function () {
     cy.window().then(async (win) => {
       const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
-      const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
-      const options = { useCompression: false }
-      const { serializedImage } = await win.imageIo.writeImage(webWorker, image, 'cthead1.mha', options)
-      const { image: imageBack } = await win.imageIo.readImage(webWorker, serializedImage)
+      const { image, webWorker } = await win.imageIo.readImage({ data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
+      const options = { useCompression: false, webWorker }
+      const { serializedImage } = await win.imageIo.writeImage(image, 'cthead1.mha', options)
+      const { image: imageBack } = await win.imageIo.readImage(serializedImage, { webWorker })
       webWorker.terminate()
       const componentType = IntTypes.UInt8
       const pixelType = PixelTypes.Scalar

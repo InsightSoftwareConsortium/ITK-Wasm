@@ -66,7 +66,7 @@ class ReadMeshController  {
             const meshDownloadFormat = document.getElementById('mesh-output-format')
             const downloadFormat = meshDownloadFormat.value || 'nrrd'
             const fileName = `mesh.${downloadFormat}`
-            const { webWorker, serializedMesh } = await meshIo.writeMesh(null, model.outputs.get("mesh"), fileName)
+            const { webWorker, serializedMesh } = await meshIo.writeMesh(model.outputs.get("mesh"), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(serializedMesh, fileName)
@@ -139,9 +139,11 @@ class ReadMeshController  {
   }
 
   async run() {
-    const { webWorker, mesh, } = await meshIo.readMesh(this.webWorker,
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, mesh, } = await meshIo.readMesh(
       { data: this.model.inputs.get('serializedMesh').data.slice(), path: this.model.inputs.get('serializedMesh').path },
-      Object.fromEntries(this.model.options.entries())
+      options
     )
     this.webWorker = webWorker
 

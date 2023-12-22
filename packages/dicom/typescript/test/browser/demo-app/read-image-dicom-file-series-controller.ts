@@ -140,8 +140,10 @@ class ReadImageDicomFileSeriesController  {
   }
 
   async run() {
-    const { webWorkerPool, outputImage, sortedFilenames, } = await dicom.readImageDicomFileSeries(this.webWorkerPool,
-      Object.fromEntries(this.model.options.entries())
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorkerPool = this.webWorkerPool
+    const { webWorkerPool, outputImage, sortedFilenames, } = await dicom.readImageDicomFileSeries(
+      options
     )
     this.webWorkerPool = webWorkerPool
 

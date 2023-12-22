@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface LsmWriteImageOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface LsmWriteImageOptions extends WorkerPoolFunctionOption {
   /** Only write image metadata -- do not write pixel data. */
   informationOnly?: boolean
 

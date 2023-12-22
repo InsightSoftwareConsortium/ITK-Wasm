@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import MrcReadImageOptions from './mrc-read-image-options.js'
+import MrcReadImageNodeOptions from './mrc-read-image-node-options.js'
 import MrcReadImageNodeResult from './mrc-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {MrcReadImageOptions} options - options object
+ * @param {MrcReadImageNodeOptions} options - options object
  *
  * @returns {Promise<MrcReadImageNodeResult>} - result object
  */
 async function mrcReadImageNode(
   serializedImage: string,
-  options: MrcReadImageOptions = {}
+  options: MrcReadImageNodeOptions = {}
 ) : Promise<MrcReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()
