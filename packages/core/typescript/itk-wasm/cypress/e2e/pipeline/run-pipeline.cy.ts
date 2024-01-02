@@ -47,7 +47,7 @@ describe('runPipeline', () => {
     })
   })
 
-  it('fetches Wasm files from a custom pipelineWorkerUrl string', () => {
+  it('fetches the pipeline web worker from a custom pipelineWorkerUrl string', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
       const pipelineWorkerUrl = new URL('/itk-wasm-pipeline.worker.js', demoServer).href
@@ -57,6 +57,20 @@ describe('runPipeline', () => {
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
       const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineWorkerUrl })
+    })
+  })
+
+  it('uses a web worker created explicitly beforehand', () => {
+    cy.window().then(async (win) => {
+      const itk = win.itk
+      const pipelineWorkerUrl = new URL('/itk-wasm-pipeline.worker.js', demoServer).href
+      const webWorker = await itk.createWebWorker(pipelineWorkerUrl)
+
+      const args = []
+      const outputs = null
+      const inputs = null
+      const stdoutStderrPath = 'stdout-stderr-test'
+      const { returnValue, stdout, stderr } = await itk.runPipeline(webWorker, stdoutStderrPath, args, outputs, inputs)
     })
   })
 
