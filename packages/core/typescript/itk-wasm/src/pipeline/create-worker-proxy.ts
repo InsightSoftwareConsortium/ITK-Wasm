@@ -4,6 +4,7 @@ import WorkerProxy from './web-workers/worker-proxy.js'
 import createWebWorker from './create-web-worker.js'
 
 interface ItkWorker extends Worker {
+  terminated: boolean
   workerProxy: WorkerProxy
   originalTerminate: () => void
 }
@@ -16,9 +17,11 @@ interface createWorkerProxyResult {
 function workerToWorkerProxy (worker: Worker): createWorkerProxyResult {
   const workerProxy = Comlink.wrap(worker) as WorkerProxy
   const itkWebWorker = worker as ItkWorker
+  itkWebWorker.terminated = false
   itkWebWorker.workerProxy = workerProxy
   itkWebWorker.originalTerminate = itkWebWorker.terminate
   itkWebWorker.terminate = () => {
+    itkWebWorker.terminated = true
     itkWebWorker.workerProxy[Comlink.releaseProxy]()
     itkWebWorker.originalTerminate()
   }

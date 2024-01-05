@@ -84,7 +84,10 @@ describe('runPipeline', () => {
       const stdoutStderrPath = 'stdout-stderr-test'
       const { webWorker } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs)
       const { returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { webWorker })
+      expect(typeof webWorker.terminated).to.equal('boolean')
+      expect(webWorker.terminated).to.equal(false)
       webWorker.terminate()
+      expect(webWorker.terminated).to.equal(true)
       expect(returnValue, 'returnValue').to.equal(0)
       expect(stdout, 'stdout').to.equal(`I’m writing my code,
 But I do not realize,
