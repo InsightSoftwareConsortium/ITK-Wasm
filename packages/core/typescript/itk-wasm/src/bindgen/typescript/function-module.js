@@ -76,6 +76,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   } else {
     functionContent += "import { getPipelinesBaseUrl } from './pipelines-base-url.js'\n"
     functionContent += "import { getPipelineWorkerUrl } from './pipeline-worker-url.js'\n\n"
+    functionContent += "import { getDefaultWebWorker } from './default-web-worker.js'\n\n"
   }
 
   const readmeParametersTable = [['Parameter', 'Type', 'Description'],]
@@ -451,7 +452,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     functionContent += `  const {\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs${mountDirsArg})\n`
   } else {
     functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`
-    functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })\n`
+    functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? await getDefaultWebWorker() })\n`
   }
 
   functionContent += '  if (returnValue !== 0 && stderr !== "") {\n    throw new Error(stderr)\n  }\n\n'

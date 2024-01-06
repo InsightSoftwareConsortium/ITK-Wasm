@@ -1,6 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import * as compressStringify from '../../../dist/index.js'
+globalThis.compressStringify = compressStringify
 
 // Use local, vendored WebAssembly module assets
 const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href

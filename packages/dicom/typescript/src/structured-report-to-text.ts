@@ -15,6 +15,8 @@ import StructuredReportToTextResult from './structured-report-to-text-result.js'
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
+import { getDefaultWebWorker } from './default-web-worker.js'
+
 /**
  * Read a DICOM structured report file and generate a plain text representation
  *
@@ -111,7 +113,7 @@ async function structuredReportToText(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? await getDefaultWebWorker() })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

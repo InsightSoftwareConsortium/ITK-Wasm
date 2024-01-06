@@ -16,6 +16,8 @@ import FreeSurferAsciiReadMeshResult from './free-surfer-ascii-read-mesh-result.
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
+import { getDefaultWebWorker } from './default-web-worker.js'
+
 /**
  * Read a mesh file format and convert it to the itk-wasm file format
  *
@@ -68,7 +70,7 @@ async function freeSurferAsciiReadMesh(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? await getDefaultWebWorker() })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

@@ -2,6 +2,7 @@
 
 export * from './pipelines-base-url.js'
 export * from './pipeline-worker-url.js'
+export * from './default-web-worker.js'
 
 
 import CompressStringifyResult from './compress-stringify-result.js'

@@ -1,5 +1,6 @@
 export * from './pipelines-base-url.js'
 export * from './pipeline-worker-url.js'
+export * from './default-web-worker.js'
 
 import CompareImagesMetric from './compare-images-metric.js'
 export type { CompareImagesMetric }

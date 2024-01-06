@@ -2,12 +2,7 @@ import * as Comlink from 'comlink'
 
 import WorkerProxy from './web-workers/worker-proxy.js'
 import createWebWorker from './create-web-worker.js'
-
-interface ItkWorker extends Worker {
-  terminated: boolean
-  workerProxy: WorkerProxy
-  originalTerminate: () => void
-}
+import ItkWorker from './itk-worker.js'
 
 interface createWorkerProxyResult {
   workerProxy: WorkerProxy
