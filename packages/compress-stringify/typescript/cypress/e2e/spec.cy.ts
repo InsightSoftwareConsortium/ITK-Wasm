@@ -49,6 +49,18 @@ describe('@itk-wasm/compress-stringify', () => {
     })
   })
 
+  it('compresses inputs twice without explicit copy', function () {
+    cy.window().then(async (win) => {
+      const { output, webWorker } = await win.compressStringify.compressStringify(expectedDecompressedOutput, compressionOptions)
+
+      cy.expect(output).to.deep.equal(expectedCompressedOutput)
+      webWorker.terminate()
+
+      const { output: outputNew } = await win.compressStringify.compressStringify(expectedDecompressedOutput, compressionOptions)
+      cy.expect(outputNew).to.deep.equal(expectedCompressedOutput)
+    })
+  })
+
   it('compresses with a null webWorker option', function () {
     cy.window().then(async (win) => {
       const options = { ...compressionOptions, webWorker: null }

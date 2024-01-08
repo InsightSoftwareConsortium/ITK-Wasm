@@ -45,9 +45,6 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
       result += `import { writeImage } from '@itk-wasm/image-io'\n`
     }
   }
-  if (needReadImage || needWriteImage) {
-    result += `import { copyImage } from 'itk-wasm'\n`
-  }
 
   result += `import * as ${camelCase(bundleName)} from '../../../dist/index.js'\n`
 
@@ -229,7 +226,7 @@ class ${functionNamePascalCase}Model {
     } else if (input.type.startsWith('INPUT_BINARY_FILE') || input.type.startsWith('INPUT_TEXT_FILE')) {
       result += `      { data: this.model.inputs.get('${camelCase(input.name)}').data.slice(), path: this.model.inputs.get('${camelCase(input.name)}').path },\n`
     } else if (input.type === 'INPUT_IMAGE') {
-      result += `      copyImage(this.model.inputs.get('${camelCase(input.name)}')),\n`
+      result += `      this.model.inputs.get('${camelCase(input.name)}'),\n`
     } else {
       result += `      this.model.inputs.get('${camelCase(input.name)}'),\n`
     }

@@ -2,7 +2,6 @@
 
 import { readImage } from '@itk-wasm/image-io'
 import { writeImage } from '@itk-wasm/image-io'
-import { copyImage } from 'itk-wasm'
 import * as compareImages from '../../../dist/index.js'
 import compareDoubleImagesLoadSampleInputs, { usePreRun } from "./compare-double-images-load-sample-inputs.js"
 
@@ -110,7 +109,7 @@ class CompareDoubleImagesController {
             const differenceImageDownloadFormat = document.getElementById('difference-image-output-format')
             const downloadFormat = differenceImageDownloadFormat.value || 'nrrd'
             const fileName = `differenceImage.${downloadFormat}`
-            const { webWorker, serializedImage } = await writeImage(copyImage(model.outputs.get("differenceImage")), fileName)
+            const { webWorker, serializedImage } = await writeImage(model.outputs.get("differenceImage"), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(serializedImage, fileName)
@@ -125,7 +124,7 @@ class CompareDoubleImagesController {
             const differenceUchar2dImageDownloadFormat = document.getElementById('difference-uchar-2d-image-output-format')
             const downloadFormat = differenceUchar2dImageDownloadFormat.value || 'nrrd'
             const fileName = `differenceUchar2dImage.${downloadFormat}`
-            const { webWorker, serializedImage } = await writeImage(copyImage(model.outputs.get("differenceUchar2dImage")), fileName)
+            const { webWorker, serializedImage } = await writeImage(model.outputs.get("differenceUchar2dImage"), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(serializedImage, fileName)
@@ -216,7 +215,7 @@ class CompareDoubleImagesController {
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
     options.webWorker = this.webWorker
-    const { webWorker, metrics, differenceImage, differenceUchar2dImage, } = await compareImages.compareDoubleImages(      copyImage(this.model.inputs.get('testImage')),
+    const { webWorker, metrics, differenceImage, differenceUchar2dImage, } = await compareImages.compareDoubleImages(      this.model.inputs.get('testImage'),
       Object.fromEntries(this.model.options.entries())
     )
     this.webWorker = webWorker

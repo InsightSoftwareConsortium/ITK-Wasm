@@ -52,6 +52,7 @@ function optionsModule (srcOutputDir, interfaceJson, modulePascalCase, nodeTextC
 
   if (!forNode) {
     readmeOptionsTable.push(['`webWorker`', '*null or Worker or boolean*', 'WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker.'])
+    readmeOptionsTable.push(['`noCopy`', '*boolean*', 'When SharedArrayBuffer\'s are not available, do not copy inputs.'])
   }
 
   // Insert the import statement in the beginning for the file.

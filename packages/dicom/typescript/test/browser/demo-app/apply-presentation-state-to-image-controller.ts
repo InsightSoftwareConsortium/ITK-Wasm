@@ -1,7 +1,6 @@
 // Generated file. To retain edits, remove this comment.
 
 import { writeImage } from '@itk-wasm/image-io'
-import { copyImage } from 'itk-wasm'
 import * as dicom from '../../../dist/index.js'
 import applyPresentationStateToImageLoadSampleInputs, { usePreRun } from "./apply-presentation-state-to-image-load-sample-inputs.js"
 
@@ -111,7 +110,7 @@ class ApplyPresentationStateToImageController {
             const outputImageDownloadFormat = document.getElementById('output-image-output-format')
             const downloadFormat = outputImageDownloadFormat.value || 'nrrd'
             const fileName = `outputImage.${downloadFormat}`
-            const { webWorker, serializedImage } = await writeImage(copyImage(model.outputs.get("outputImage")), fileName)
+            const { webWorker, serializedImage } = await writeImage(model.outputs.get("outputImage"), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(serializedImage, fileName)
