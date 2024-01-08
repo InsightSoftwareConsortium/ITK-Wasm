@@ -56,7 +56,7 @@ async function readImage(
   } else {
     for (const readerWriter of imageIoIndex.values()) {
       if (readerWriter[0] !== null) {
-        let { webWorker: testWebWorker, couldRead, image } = await (readerWriter[0] as unknown as Reader)({ path: serializedImageFile.path, data: serializedImageFile.data.slice() }, { webWorker: usedWebWorker, informationOnly: options?.informationOnly })
+        let { webWorker: testWebWorker, couldRead, image } = await (readerWriter[0] as unknown as Reader)({ path: serializedImageFile.path, data: serializedImageFile.data.slice() }, { webWorker: usedWebWorker, informationOnly: options?.informationOnly, noCopy: options?.noCopy })
         usedWebWorker = testWebWorker
         if (couldRead) {
           if (typeof options !== 'undefined') {
@@ -73,7 +73,7 @@ async function readImage(
   const readerWriter = imageIoIndex.get(io as string)
 
   const reader = (readerWriter as Array<Reader>)[0]
-  let { webWorker: testWebWorker, couldRead, image } = await reader(serializedImageFile, { webWorker: usedWebWorker, informationOnly: options?.informationOnly })
+  let { webWorker: testWebWorker, couldRead, image } = await reader(serializedImageFile, { webWorker: usedWebWorker, informationOnly: options?.informationOnly, noCopy: options?.noCopy })
   usedWebWorker = testWebWorker
   if (!couldRead) {
     throw Error('Could not read: ' + fileName)
