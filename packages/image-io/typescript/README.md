@@ -78,7 +78,6 @@ import {
 
 ```ts
 async function readImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: ReadImageOptions = {}
 ) : Promise<ReadImageResult>
@@ -111,7 +110,6 @@ async function readImage(
 
 ```ts
 async function writeImage(
-  webWorker: null | Worker,
   image: Image,
   serializedImage: string,
   options: WriteImageOptions = {}
