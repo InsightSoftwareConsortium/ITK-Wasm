@@ -10,6 +10,10 @@ For a log and guide when transitioning from itk.js to itk-wasm,
 please see [the migration
 guide](doc/content/docs/itk_js_to_itk_wasm_migration_guide.md).
 
+## From 1.0.0-b.160 to 1.0.0-b.161
+
+- runPipeline and bindgen functions now accept the webWorker as an optional property on the last argument
+
 ## From 1.0.0-b.158 to 1.0.0-b.159
 
 - itkConfig.js as been replaced by run-time configuration via setPipelineWorkerUrl, setPipelinesBaseUrl
