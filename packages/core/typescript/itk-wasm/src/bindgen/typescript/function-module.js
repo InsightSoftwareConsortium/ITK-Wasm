@@ -452,7 +452,8 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     functionContent += `  const {\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs${mountDirsArg})\n`
   } else {
     functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`
-    functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? await getDefaultWebWorker(), noCopy: options?.noCopy })\n`
+    functionContent += `  let workerToUse = options?.webWorker\n  if (workerToUse === undefined) {\n    workerToUse = await getDefaultWebWorker()\n  }\n`
+    functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: workerToUse, noCopy: options?.noCopy })\n`
   }
 
   functionContent += '  if (returnValue !== 0 && stderr !== "") {\n    throw new Error(stderr)\n  }\n\n'

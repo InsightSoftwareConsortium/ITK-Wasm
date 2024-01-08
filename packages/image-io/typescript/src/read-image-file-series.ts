@@ -52,7 +52,7 @@ async function readImageFileSeries (
   }
   const taskArgsArray = []
   for (let index = 0; index < fileDescriptions.length; index++) {
-    taskArgsArray.push([fileDescriptions[index],])
+    taskArgsArray.push([fileDescriptions[index], {}])
   }
   const results = await workerPool.runTasks(taskArgsArray).promise
   const images = results.map((result) => {
