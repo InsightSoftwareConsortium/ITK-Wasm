@@ -39,7 +39,7 @@ async function runPipeline (pipelineModule: PipelineEmscriptenModule, args: stri
     }
   })
 
-  return Comlink.transfer(result, getTransferables(transferables))
+  return Comlink.transfer(result, getTransferables(transferables, true))
 }
 
 export default runPipeline

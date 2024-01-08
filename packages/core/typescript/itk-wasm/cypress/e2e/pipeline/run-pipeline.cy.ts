@@ -228,6 +228,47 @@ Click. Perfect success.
     })
   })
 
+  it('runs twice without a detached buffer', () => {
+    cy.window().then(async (win) => {
+      const itk = win.itk
+
+      const verifyImage = (image) => {
+        expect(image.imageType.dimension, 'dimension').to.equal(2)
+        expect(image.imageType.componentType, 'componentType').to.equal(itk.IntTypes.UInt8)
+        expect(image.imageType.pixelType, 'pixelType').to.equal(itk.PixelTypes.Scalar)
+        expect(image.imageType.components, 'components').to.equal(1)
+        expect(image.origin, 'origin').to.deep.equal([0.0, 0.0])
+        expect(image.spacing, 'spacing').to.deep.equal([1.0, 1.0])
+        expect(image.size, 'size').to.deep.equal([256, 256])
+        expect(image.data.byteLength, 'data.byteLength').to.equal(65536)
+      }
+
+      const cthead1BaseUrl = new URL('/data/cthead1.iwi/', demoServer).href
+      const image = await readIwi(cthead1BaseUrl)
+
+      const pipelinePath = 'median-filter-test'
+      const args = [
+        '0',
+        '0',
+        '--radius', '4',
+        '--memory-io']
+      const desiredOutputs = [
+        { type: itk.InterfaceTypes.Image }
+      ]
+      const inputs = [
+        { type: itk.InterfaceTypes.Image, data: image }
+      ]
+      // const options = { noCopy: true } // failure expected
+      const options = { noCopy: false }
+      const { webWorker } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs, options)
+      options.webWorker = webWorker
+      const { outputs } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs, options)
+      webWorker.terminate()
+
+      verifyImage(outputs[0].data)
+    })
+  })
+
   it('runPipeline writes and reads an itk.Mesh via memory io', () => {
     cy.window().then(async (win) => {
       const itk = win.itk

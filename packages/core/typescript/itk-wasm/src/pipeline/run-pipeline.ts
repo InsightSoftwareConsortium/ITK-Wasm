@@ -124,7 +124,7 @@ async function runPipeline (
   }
   const pipelineBaseUrl = options?.pipelineBaseUrl ?? defaultPipelinesBaseUrl()
   const pipelineBaseUrlString = typeof pipelineBaseUrl !== 'string' && typeof pipelineBaseUrl?.href !== 'undefined' ? pipelineBaseUrl.href : pipelineBaseUrl
-  const transferedInputs = (inputs != null) ? Comlink.transfer(inputs, getTransferables(transferables)) : null
+  const transferedInputs = (inputs != null) ? Comlink.transfer(inputs, getTransferables(transferables, options?.noCopy)) : null
   const result: RunPipelineWorkerResult = await workerProxy.runPipeline(
     pipelinePath.toString(),
     pipelineBaseUrlString as string,

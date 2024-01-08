@@ -7,6 +7,9 @@ interface RunPipelineOptions {
 
   /** Url where the pipeline web worker is hosted. */
   pipelineWorkerUrl?: string | URL | null
+
+  /** When SharedArrayBuffer's are not available, do not copy inputs. */
+  noCopy?: boolean
 }
 
 export default RunPipelineOptions
