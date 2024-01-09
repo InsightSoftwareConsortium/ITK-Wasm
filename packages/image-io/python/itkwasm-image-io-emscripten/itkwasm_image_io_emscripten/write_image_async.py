@@ -58,7 +58,7 @@ async def write_image_async(
         for ioname in image_io_index:
             func = f"{ioname}WriteImage"
             io = getattr(js_module, func)
-            outputs = await io(web_worker, to_js(image), to_js(serialized_image), **kwargs)
+            outputs = await io(to_js(image), to_js(serialized_image), webWorker=web_worker, **kwargs)
             outputs_object_map = outputs.as_object_map()
             web_worker = outputs_object_map['webWorker']
             js_resources.web_worker = web_worker
@@ -70,8 +70,7 @@ async def write_image_async(
     if io is None:
         raise RuntimeError(f"Could not find an image writer for {extension}")
 
-    io = getattr(js_module, func)
-    outputs = await io(web_worker, to_js(image), to_js(serialized_image), **kwargs)
+    outputs = await io(to_js(image), to_js(serialized_image), webWorker=web_worker, **kwargs)
     outputs_object_map = outputs.as_object_map()
     web_worker = outputs_object_map['webWorker']
     js_resources.web_worker = web_worker

@@ -50,7 +50,7 @@ async def read_mesh_async(
         for ioname in mesh_io_index:
             func = f"{ioname}ReadMesh"
             io = getattr(js_module, func)
-            outputs = await io(web_worker, to_js(BinaryFile(serialized_mesh)), **kwargs)
+            outputs = await io(to_js(BinaryFile(serialized_mesh)), webWorker=web_worker, **kwargs)
             outputs_object_map = outputs.as_object_map()
             web_worker = outputs_object_map['webWorker']
             js_resources.web_worker = web_worker
@@ -62,8 +62,7 @@ async def read_mesh_async(
     if io is None:
         raise RuntimeError(f"Could not find an mesh reader for {extension}")
 
-    outputs = await js_module.readMesh(web_worker, to_js(BinaryFile(serialized_mesh)), **kwargs)
-    outputs = await io(web_worker, to_js(BinaryFile(serialized_mesh)), **kwargs)
+    outputs = await io(to_js(BinaryFile(serialized_mesh)), webWorker=web_worker, **kwargs)
     outputs_object_map = outputs.as_object_map()
     web_worker = outputs_object_map['webWorker']
     could_read = to_py(outputs_object_map['couldRead'])
