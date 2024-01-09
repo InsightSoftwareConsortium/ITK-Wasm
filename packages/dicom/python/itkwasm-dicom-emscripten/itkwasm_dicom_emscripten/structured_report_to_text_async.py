@@ -135,7 +135,7 @@ async def structured_report_to_text_async(
     if print_color:
         kwargs["printColor"] = to_js(print_color)
 
-    outputs = await js_module.structuredReportToText(to_js(BinaryFile(dicom_file)), webWorker=web_worker, **kwargs)
+    outputs = await js_module.structuredReportToText(to_js(BinaryFile(dicom_file)), webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

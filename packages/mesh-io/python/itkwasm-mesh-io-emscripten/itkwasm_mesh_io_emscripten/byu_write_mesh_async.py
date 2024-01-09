@@ -55,7 +55,7 @@ async def byu_write_mesh_async(
     if binary_file_type:
         kwargs["binaryFileType"] = to_js(binary_file_type)
 
-    outputs = await js_module.byuWriteMesh(to_js(mesh), to_js(serialized_mesh), webWorker=web_worker, **kwargs)
+    outputs = await js_module.byuWriteMesh(to_js(mesh), to_js(serialized_mesh), webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

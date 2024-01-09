@@ -62,7 +62,7 @@ async def read_image_async(
         for ioname in image_io_index:
             func = f"{ioname}ReadImage"
             io = getattr(js_module, func)
-            outputs = await io(to_js(BinaryFile(serialized_image)), webWorker=web_worker, **kwargs)
+            outputs = await io(to_js(BinaryFile(serialized_image)), webWorker=web_worker, noCopy=True, **kwargs)
             outputs_object_map = outputs.as_object_map()
             web_worker = outputs_object_map['webWorker']
             js_resources.web_worker = web_worker
@@ -76,7 +76,7 @@ async def read_image_async(
     if io is None:
         raise RuntimeError(f"Could not find an image reader for {extension}")
 
-    outputs = await io(to_js(BinaryFile(serialized_image)), webWorker=web_worker, **kwargs)
+    outputs = await io(to_js(BinaryFile(serialized_image)), webWorker=web_worker, noCopy=True, **kwargs)
     outputs_object_map = outputs.as_object_map()
     web_worker = outputs_object_map['webWorker']
     could_read = to_py(outputs_object_map['couldRead'])

@@ -38,7 +38,7 @@ async def parse_string_decompress_async(
     if parse_string:
         kwargs["parseString"] = to_js(parse_string)
 
-    outputs = await js_module.parseStringDecompress(to_js(input), webWorker=web_worker, **kwargs)
+    outputs = await js_module.parseStringDecompress(to_js(input), webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []
