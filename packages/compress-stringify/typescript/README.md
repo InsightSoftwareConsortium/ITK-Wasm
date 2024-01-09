@@ -37,7 +37,6 @@ import {
 
 ```ts
 async function compressStringify(
-  webWorker: null | Worker,
   input: Uint8Array,
   options: CompressStringifyOptions = {}
 ) : Promise<CompressStringifyResult>
@@ -49,26 +48,27 @@ async function compressStringify(
 
 **`CompressStringifyOptions` interface:**
 
-|      Property      |    Type   | Description                      |
-| :----------------: | :-------: | :------------------------------- |
-|     `stringify`    | *boolean* | Stringify the output             |
-| `compressionLevel` |  *number* | Compression level, typically 1-9 |
-|   `dataUrlPrefix`  |  *string* | dataURL prefix                   |
+|      Property      |             Type            | Description                                                                                                                                           |
+| :----------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `stringify`    |          *boolean*          | Stringify the output                                                                                                                                  |
+| `compressionLevel` |           *number*          | Compression level, typically 1-9                                                                                                                      |
+|   `dataUrlPrefix`  |           *string*          | dataURL prefix                                                                                                                                        |
+|     `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`      |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`CompressStringifyResult` interface:**
 
-|    Property   |     Type     | Description                    |
-| :-----------: | :----------: | :----------------------------- |
-| **webWorker** |   *Worker*   | WebWorker used for computation |
-|    `output`   | *Uint8Array* | Output compressed binary       |
+|   Property  |     Type     | Description                     |
+| :---------: | :----------: | :------------------------------ |
+|   `output`  | *Uint8Array* | Output compressed binary        |
+| `webWorker` |   *Worker*   | WebWorker used for computation. |
 
 #### parseStringDecompress
 
-*Given a binary or string produced with compressStringify, decompress and optionally base64 decode.*
+*Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.*
 
 ```ts
 async function parseStringDecompress(
-  webWorker: null | Worker,
   input: Uint8Array,
   options: ParseStringDecompressOptions = {}
 ) : Promise<ParseStringDecompressResult>
@@ -80,16 +80,18 @@ async function parseStringDecompress(
 
 **`ParseStringDecompressOptions` interface:**
 
-|    Property   |    Type   | Description                                 |
-| :-----------: | :-------: | :------------------------------------------ |
-| `parseString` | *boolean* | Parse the input string before decompression |
+|    Property   |             Type            | Description                                                                                                                                           |
+| :-----------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parseString` |          *boolean*          | Parse the input string before decompression                                                                                                           |
+|  `webWorker`  | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|    `noCopy`   |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ParseStringDecompressResult` interface:**
 
-|    Property   |     Type     | Description                    |
-| :-----------: | :----------: | :----------------------------- |
-| **webWorker** |   *Worker*   | WebWorker used for computation |
-|    `output`   | *Uint8Array* | Output decompressed binary     |
+|   Property  |     Type     | Description                     |
+| :---------: | :----------: | :------------------------------ |
+|   `output`  | *Uint8Array* | Output decompressed binary      |
+| `webWorker` |   *Worker*   | WebWorker used for computation. |
 
 #### setPipelinesBaseUrl
 
@@ -109,6 +111,7 @@ function setPipelinesBaseUrl(
 function getPipelinesBaseUrl() : string | URL
 ```
 
+
 ### Node interface
 
 Import:
@@ -127,7 +130,7 @@ import {
 ```ts
 async function compressStringifyNode(
   input: Uint8Array,
-  options: CompressStringifyOptions = {}
+  options: CompressStringifyNodeOptions = {}
 ) : Promise<CompressStringifyNodeResult>
 ```
 
@@ -151,12 +154,12 @@ async function compressStringifyNode(
 
 #### parseStringDecompressNode
 
-*Given a binary or string produced with CompressedStringify, decompress and optionally base64 decode.*
+*Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.*
 
 ```ts
 async function parseStringDecompressNode(
   input: Uint8Array,
-  options: ParseStringDecompressOptions = {}
+  options: ParseStringDecompressNodeOptions = {}
 ) : Promise<ParseStringDecompressNodeResult>
 ```
 
