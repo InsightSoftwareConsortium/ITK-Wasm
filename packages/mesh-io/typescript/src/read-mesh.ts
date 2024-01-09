@@ -56,7 +56,7 @@ async function readMesh(
   } else {
     for (const readerWriter of meshIoIndex.values()) {
       if (readerWriter[0] !== null) {
-        let { webWorker: testWebWorker, couldRead, mesh } = await (readerWriter[0] as unknown as Reader)({ path: serializedMeshFile.path, data: serializedMeshFile.data.slice() }, { informationOnly: options.informationOnly, webWorker: usedWebWorker })
+        let { webWorker: testWebWorker, couldRead, mesh } = await (readerWriter[0] as unknown as Reader)({ path: serializedMeshFile.path, data: serializedMeshFile.data.slice() }, { informationOnly: options.informationOnly, webWorker: usedWebWorker, noCopy: options?.noCopy })
         usedWebWorker = testWebWorker
         if (couldRead) {
           return { webWorker: usedWebWorker, mesh }
@@ -70,7 +70,7 @@ async function readMesh(
   const readerWriter = meshIoIndex.get(io as string)
 
   const reader = (readerWriter as Array<Reader>)[0]
-  let { webWorker: testWebWorker, couldRead, mesh } = await reader(serializedMeshFile, { informationOnly: options.informationOnly, webWorker: usedWebWorker })
+  let { webWorker: testWebWorker, couldRead, mesh } = await reader(serializedMeshFile, { informationOnly: options.informationOnly, webWorker: usedWebWorker, noCopy: options?.noCopy })
   usedWebWorker = testWebWorker
   if (!couldRead) {
     throw Error('Could not read: ' + fileName)
