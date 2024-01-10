@@ -4,7 +4,9 @@ import { Command } from 'commander/esm.mjs'
 
 const program = new Command()
 
-import { readLocalFile, writeLocalFile } from 'itk-wasm'
+import { readImageNode, writeImageNode } from '@itk-wasm/image-io'
+import { readMeshNode, writeMeshNode, extensionToMeshIo } from '@itk-wasm/mesh-io'
+import { getFileExtension } from 'itk-wasm'
 
 program
   .description('Convert images or meshes files from one format to another.')
@@ -19,10 +21,17 @@ if (program.args.length < 2) {
 const inputFile = program.args[0]
 const outputFile = program.args[1]
 
+const extension = getFileExtension(inputFile).toLowerCase()
+const isMesh = extensionToMeshIo.has(extension)
+
 try {
-  const object = await readLocalFile(inputFile)
-  const useCompression = true
-  await writeLocalFile(object, outputFile, useCompression)
+  if (isMesh) {
+    const mesh = await readMeshNode(inputFile)
+    await writeMeshNode(mesh, outputFile)
+  } else {
+    const image = await readImageNode(inputFile)
+    await writeImageNode(image, outputFile)
+  }
 } catch (error) {
   console.error('Error during conversion:\n')
   console.error(error)

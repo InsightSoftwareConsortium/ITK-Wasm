@@ -6,9 +6,6 @@ jobs:
   test-node-example:
     name: node-js
     runs-on: ubuntu-22.04
-    defaults:
-      run:
-        working-directory: ./examples/node-js
 
     steps:
     - uses: actions/checkout@v3
@@ -20,15 +17,23 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '20'
 
     - name: Install
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        run_install: true
+
+    - name: Build dependencies
       run: |
-        npm install
+        pnpm run --filter '@itk-wasm/image-io...' build
+        pnpm run --filter '@itk-wasm/mesh-io...' build
 
     - name: Test
+      working-directory: ./examples/node-js
       run: |
-        npm run test
+        pnpm test
 
   build-hello-world-example:
     name: hello-world build

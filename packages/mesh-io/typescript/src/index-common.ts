@@ -4,6 +4,8 @@ export type { ReadMeshOptions }
 import WriteMeshOptions from './write-mesh-options.js'
 export type { WriteMeshOptions }
 
+import extensionToMeshIo from './extension-to-mesh-io.js'
+export { extensionToMeshIo }
 
 
 import ByuReadMeshOptions from './byu-read-mesh-options.js'
