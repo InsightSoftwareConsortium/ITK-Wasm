@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import StlWriteMeshOptions from './stl-write-mesh-options.js'
+import StlWriteMeshNodeOptions from './stl-write-mesh-node-options.js'
 import StlWriteMeshNodeResult from './stl-write-mesh-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Mesh} mesh - Input mesh
  * @param {string} serializedMesh - Output mesh
- * @param {StlWriteMeshOptions} options - options object
+ * @param {StlWriteMeshNodeOptions} options - options object
  *
  * @returns {Promise<StlWriteMeshNodeResult>} - result object
  */
 async function stlWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: StlWriteMeshOptions = {}
+  options: StlWriteMeshNodeOptions = {}
 ) : Promise<StlWriteMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

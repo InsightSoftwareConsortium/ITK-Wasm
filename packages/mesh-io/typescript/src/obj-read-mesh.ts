@@ -16,6 +16,8 @@ import ObjReadMeshResult from './obj-read-mesh-result.js'
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
+import { getDefaultWebWorker } from './default-web-worker.js'
+
 /**
  * Read a mesh file format and convert it to the itk-wasm file format
  *
@@ -25,7 +27,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<ObjReadMeshResult>} - result object
  */
 async function objReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: ObjReadMeshOptions = {}
 ) : Promise<ObjReadMeshResult> {
@@ -64,12 +65,16 @@ async function objReadMesh(
 
   const pipelinePath = 'obj-read-mesh'
 
+  let workerToUse = options?.webWorker
+  if (workerToUse === undefined) {
+    workerToUse = await getDefaultWebWorker()
+  }
   const {
     webWorker: usedWebWorker,
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: workerToUse, noCopy: options?.noCopy })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

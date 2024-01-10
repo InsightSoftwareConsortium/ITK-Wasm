@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import ScancoReadImageOptions from './scanco-read-image-options.js'
+import ScancoReadImageNodeOptions from './scanco-read-image-node-options.js'
 import ScancoReadImageNodeResult from './scanco-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {ScancoReadImageOptions} options - options object
+ * @param {ScancoReadImageNodeOptions} options - options object
  *
  * @returns {Promise<ScancoReadImageNodeResult>} - result object
  */
 async function scancoReadImageNode(
   serializedImage: string,
-  options: ScancoReadImageOptions = {}
+  options: ScancoReadImageNodeOptions = {}
 ) : Promise<ScancoReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

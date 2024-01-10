@@ -8,7 +8,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import ReadDicomEncapsulatedPdfOptions from './read-dicom-encapsulated-pdf-options.js'
+import ReadDicomEncapsulatedPdfNodeOptions from './read-dicom-encapsulated-pdf-node-options.js'
 import ReadDicomEncapsulatedPdfNodeResult from './read-dicom-encapsulated-pdf-node-result.js'
 
 import path from 'path'
@@ -17,13 +17,13 @@ import path from 'path'
  * Extract PDF file from DICOM encapsulated PDF.
  *
  * @param {string} dicomFile - Input DICOM file
- * @param {ReadDicomEncapsulatedPdfOptions} options - options object
+ * @param {ReadDicomEncapsulatedPdfNodeOptions} options - options object
  *
  * @returns {Promise<ReadDicomEncapsulatedPdfNodeResult>} - result object
  */
 async function readDicomEncapsulatedPdfNode(
   dicomFile: string,
-  options: ReadDicomEncapsulatedPdfOptions = {}
+  options: ReadDicomEncapsulatedPdfNodeOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfNodeResult> {
 
   const mountDirs: Set<string> = new Set()

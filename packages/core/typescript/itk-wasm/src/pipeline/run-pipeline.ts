@@ -69,7 +69,6 @@ async function loadPipelineModule (
 }
 
 async function runPipeline (
-  webWorker: Worker | null | boolean,
   pipelinePath: string | URL,
   args: string[],
   outputs: PipelineOutput[] | null,
@@ -81,6 +80,7 @@ async function runPipeline (
     alert(simdErrorMessage)
     throw new Error(simdErrorMessage)
   }
+  const webWorker = options?.webWorker ?? null
 
   if (webWorker === false) {
     const pipelineModule = await loadPipelineModule(pipelinePath.toString(), options?.pipelineBaseUrl)
@@ -124,7 +124,7 @@ async function runPipeline (
   }
   const pipelineBaseUrl = options?.pipelineBaseUrl ?? defaultPipelinesBaseUrl()
   const pipelineBaseUrlString = typeof pipelineBaseUrl !== 'string' && typeof pipelineBaseUrl?.href !== 'undefined' ? pipelineBaseUrl.href : pipelineBaseUrl
-  const transferedInputs = (inputs != null) ? Comlink.transfer(inputs, getTransferables(transferables)) : null
+  const transferedInputs = (inputs != null) ? Comlink.transfer(inputs, getTransferables(transferables, options?.noCopy)) : null
   const result: RunPipelineWorkerResult = await workerProxy.runPipeline(
     pipelinePath.toString(),
     pipelineBaseUrlString as string,

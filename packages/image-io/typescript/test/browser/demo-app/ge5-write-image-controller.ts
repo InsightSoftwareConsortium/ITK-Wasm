@@ -43,7 +43,7 @@ class Ge5WriteImageController {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const { image, webWorker } = await imageIo.readImage(null, files[0])
+        const { image, webWorker } = await imageIo.readImage(files[0])
         webWorker.terminate()
         model.inputs.set("image", image)
         const details = document.getElementById("ge5WriteImage-image-details")
@@ -162,10 +162,12 @@ class Ge5WriteImageController {
   }
 
   async run() {
-    const { webWorker, couldWrite, serializedImage, } = await imageIo.ge5WriteImage(this.webWorker,
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, couldWrite, serializedImage, } = await imageIo.ge5WriteImage(
       copyImage(this.model.inputs.get('image')),
       this.model.inputs.get('serializedImage'),
-      Object.fromEntries(this.model.options.entries())
+      options
     )
     this.webWorker = webWorker
 

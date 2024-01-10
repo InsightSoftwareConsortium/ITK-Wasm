@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import GdcmWriteImageOptions from './gdcm-write-image-options.js'
+import GdcmWriteImageNodeOptions from './gdcm-write-image-node-options.js'
 import GdcmWriteImageNodeResult from './gdcm-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {GdcmWriteImageOptions} options - options object
+ * @param {GdcmWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<GdcmWriteImageNodeResult>} - result object
  */
 async function gdcmWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: GdcmWriteImageOptions = {}
+  options: GdcmWriteImageNodeOptions = {}
 ) : Promise<GdcmWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

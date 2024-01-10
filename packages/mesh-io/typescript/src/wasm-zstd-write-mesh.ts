@@ -16,6 +16,8 @@ import WasmZstdWriteMeshResult from './wasm-zstd-write-mesh-result.js'
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
+import { getDefaultWebWorker } from './default-web-worker.js'
+
 /**
  * Write an itk-wasm file format converted to an mesh file format
  *
@@ -26,7 +28,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<WasmZstdWriteMeshResult>} - result object
  */
 async function wasmZstdWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: WasmZstdWriteMeshOptions = {}
@@ -67,12 +68,16 @@ async function wasmZstdWriteMesh(
 
   const pipelinePath = 'wasm-zstd-write-mesh'
 
+  let workerToUse = options?.webWorker
+  if (workerToUse === undefined) {
+    workerToUse = await getDefaultWebWorker()
+  }
   const {
     webWorker: usedWebWorker,
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: workerToUse, noCopy: options?.noCopy })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

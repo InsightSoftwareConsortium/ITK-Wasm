@@ -10,7 +10,7 @@ const workerPool = new WorkerPool(numberOfWorkers, readImage)
 
 async function readImageFileSeries (
   fileList: File[] | FileList | BinaryFile[],
-  options?: ReadImageFileSeriesOptions,
+  options: ReadImageFileSeriesOptions = {},
 ): Promise<ReadImageFileSeriesResult> {
   let zSpacing = 1.0
   let zOrigin = 0.0
@@ -52,7 +52,7 @@ async function readImageFileSeries (
   }
   const taskArgsArray = []
   for (let index = 0; index < fileDescriptions.length; index++) {
-    taskArgsArray.push([fileDescriptions[index],])
+    taskArgsArray.push([fileDescriptions[index], {}])
   }
   const results = await workerPool.runTasks(taskArgsArray).promise
   const images = results.map((result) => {

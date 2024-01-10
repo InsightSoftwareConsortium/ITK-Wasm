@@ -16,6 +16,8 @@ import ApplyPresentationStateToImageResult from './apply-presentation-state-to-i
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
+import { getDefaultWebWorker } from './default-web-worker.js'
+
 /**
  * Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.
  *
@@ -26,7 +28,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<ApplyPresentationStateToImageResult>} - result object
  */
 async function applyPresentationStateToImage(
-  webWorker: null | Worker | boolean,
   imageIn: File | BinaryFile,
   presentationStateFile: File | BinaryFile,
   options: ApplyPresentationStateToImageOptions = {}
@@ -89,12 +90,16 @@ async function applyPresentationStateToImage(
 
   const pipelinePath = 'apply-presentation-state-to-image'
 
+  let workerToUse = options?.webWorker
+  if (workerToUse === undefined) {
+    workerToUse = await getDefaultWebWorker()
+  }
   const {
     webWorker: usedWebWorker,
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: workerToUse, noCopy: options?.noCopy })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

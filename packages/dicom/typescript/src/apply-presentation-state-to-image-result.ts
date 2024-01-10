@@ -1,11 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-import { JsonCompatible, Image } from 'itk-wasm'
+import { JsonCompatible, Image, WorkerPoolFunctionResult } from 'itk-wasm'
 
-interface ApplyPresentationStateToImageResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
-
+interface ApplyPresentationStateToImageResult extends WorkerPoolFunctionResult {
   /** Output overlay information */
   presentationStateOutStream: JsonCompatible
 

@@ -11,7 +11,7 @@ import mimeToImageIo from './mime-to-image-io.js'
 import extensionToImageIo from './extension-to-image-io.js'
 import imageIoIndexNode from './image-io-index-node.js'
 
-import ReadImageOptions from './read-image-options.js'
+import ReadImageNodeOptions from './read-image-node-options.js'
 
 interface ReaderResult {
   couldRead: boolean,
@@ -28,13 +28,13 @@ type Reader = (serializedImage: string, options: ReaderOptions) => Promise<Reade
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Path to input image serialized in the file format
- * @param {ReadImageOptions} options - options to cast resulting image type or to only read image metadata
+ * @param {ReadImageNodeOptions} options - options to cast resulting image type or to only read image metadata
  *
  * @returns {Promise<Image>} - Image result
  */
 async function readImageNode(
   serializedImage: string,
-  options: ReadImageOptions = {}
+  options: ReadImageNodeOptions = {}
 ) : Promise<Image> {
 
   const absoluteFilePath = path.resolve(serializedImage)

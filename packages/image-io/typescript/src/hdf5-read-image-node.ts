@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import Hdf5ReadImageOptions from './hdf5-read-image-options.js'
+import Hdf5ReadImageNodeOptions from './hdf5-read-image-node-options.js'
 import Hdf5ReadImageNodeResult from './hdf5-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {Hdf5ReadImageOptions} options - options object
+ * @param {Hdf5ReadImageNodeOptions} options - options object
  *
  * @returns {Promise<Hdf5ReadImageNodeResult>} - result object
  */
 async function hdf5ReadImageNode(
   serializedImage: string,
-  options: Hdf5ReadImageOptions = {}
+  options: Hdf5ReadImageNodeOptions = {}
 ) : Promise<Hdf5ReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

@@ -274,7 +274,7 @@ async def structured_report_to_html_async(
     if code_details_tooltip:
         kwargs["codeDetailsTooltip"] = to_js(code_details_tooltip)
 
-    outputs = await js_module.structuredReportToHtml(web_worker, to_js(BinaryFile(dicom_file)), **kwargs)
+    outputs = await js_module.structuredReportToHtml(to_js(BinaryFile(dicom_file)), webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

@@ -68,7 +68,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   }
   functionContent += "} from 'itk-wasm'\n\n"
   if (haveOptions) {
-    functionContent += `import ${modulePascalCase}Options from './${moduleKebabCase}-options.js'\n`
+    functionContent += `import ${modulePascalCase}${nodeTextCamel}Options from './${moduleKebabCase}${nodeTextKebab}-options.js'\n`
   }
   functionContent += `import ${modulePascalCase}${nodeTextCamel}Result from './${moduleKebabCase}${nodeTextKebab}-result.js'\n\n`
   if (forNode) {
@@ -76,13 +76,11 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   } else {
     functionContent += "import { getPipelinesBaseUrl } from './pipelines-base-url.js'\n"
     functionContent += "import { getPipelineWorkerUrl } from './pipeline-worker-url.js'\n\n"
+    functionContent += "import { getDefaultWebWorker } from './default-web-worker.js'\n\n"
   }
 
   const readmeParametersTable = [['Parameter', 'Type', 'Description'],]
   functionContent += `/**\n * ${interfaceJson.description}\n *\n`
-  if (!forNode) {
-    readmeParametersTable.push(['`webWorker`', '*null or Worker or boolean*', 'WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker.'])
-  }
   interfaceJson.inputs.forEach((input) => {
     if (!interfaceJsonTypeToTypeScriptType.has(input.type)) {
       console.error(`Unexpected input type: ${input.type}`)
@@ -112,7 +110,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   })
 
   if (haveOptions) {
-    functionContent += ` * @param {${modulePascalCase}Options} options - options object\n`
+    functionContent += ` * @param {${modulePascalCase}${nodeTextCamel}Options} options - options object\n`
   }
   functionContent += ` *\n * @returns {Promise<${modulePascalCase}${nodeTextCamel}Result>} - result object\n`
   functionContent += ` */\n`
@@ -120,9 +118,6 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
   readmeFunction += `\n#### ${moduleCamelCase}${nodeTextCamel}\n\n`
   let functionCall = ''
   functionCall += `async function ${moduleCamelCase}${nodeTextCamel}(\n`
-  if (!forNode) {
-    functionCall += '  webWorker: null | Worker | boolean,\n'
-  }
   interfaceJson.inputs.forEach((input, index) => {
     let typescriptType = interfaceJsonTypeToTypeScriptType.get(input.type)
     const end = index === interfaceJson.inputs.length - 1 && !haveOptions && !outputFiles.length ? '\n' : ',\n'
@@ -174,9 +169,9 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     if (requiredOptions.length > 0) {
       requiredOptions += ' '
     }
-    functionCall += `  options: ${modulePascalCase}Options = {${requiredOptions}}\n) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
+    functionCall += `  options: ${modulePascalCase}${nodeTextCamel}Options = {${requiredOptions}}\n) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
   } else {
-    functionCall += `\n) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
+    functionCall += `) : Promise<${modulePascalCase}${nodeTextCamel}Result>`
   }
   readmeFunction += `*${interfaceJson.description}*\n\n`
   readmeFunction += `\`\`\`ts\n${functionCall}\n\`\`\`\n\n`
@@ -457,7 +452,8 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     functionContent += `  const {\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs${mountDirsArg})\n`
   } else {
     functionContent += `\n  const pipelinePath = '${moduleKebabCase}'\n\n`
-    functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })\n`
+    functionContent += `  let workerToUse = options?.webWorker\n  if (workerToUse === undefined) {\n    workerToUse = await getDefaultWebWorker()\n  }\n`
+    functionContent += `  const {\n    webWorker: usedWebWorker,\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: workerToUse, noCopy: options?.noCopy })\n`
   }
 
   functionContent += '  if (returnValue !== 0 && stderr !== "") {\n    throw new Error(stderr)\n  }\n\n'

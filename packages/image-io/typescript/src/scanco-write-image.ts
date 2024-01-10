@@ -16,6 +16,8 @@ import ScancoWriteImageResult from './scanco-write-image-result.js'
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
+import { getDefaultWebWorker } from './default-web-worker.js'
+
 /**
  * Write an itk-wasm file format converted to an image file format
  *
@@ -26,7 +28,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<ScancoWriteImageResult>} - result object
  */
 async function scancoWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: ScancoWriteImageOptions = {}
@@ -64,12 +65,16 @@ async function scancoWriteImage(
 
   const pipelinePath = 'scanco-write-image'
 
+  let workerToUse = options?.webWorker
+  if (workerToUse === undefined) {
+    workerToUse = await getDefaultWebWorker()
+  }
   const {
     webWorker: usedWebWorker,
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: workerToUse, noCopy: options?.noCopy })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

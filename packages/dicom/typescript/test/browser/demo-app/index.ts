@@ -1,6 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import * as dicom from '../../../dist/index.js'
+globalThis.dicom = dicom
 
 // Use local, vendored WebAssembly module assets
 const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href

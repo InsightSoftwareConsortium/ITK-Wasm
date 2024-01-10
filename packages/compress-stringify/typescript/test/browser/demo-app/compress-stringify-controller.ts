@@ -143,8 +143,9 @@ class CompressStringifyController {
   }
 
   async run() {
-    const { webWorker, output, } = await compressStringify.compressStringify(this.webWorker,
-      this.model.inputs.get('input').slice(),
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, output, } = await compressStringify.compressStringify(      this.model.inputs.get('input').slice(),
       Object.fromEntries(this.model.options.entries())
     )
     this.webWorker = webWorker

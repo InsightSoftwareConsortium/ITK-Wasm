@@ -42,7 +42,7 @@ async def swc_read_mesh_async(
     if information_only:
         kwargs["informationOnly"] = to_js(information_only)
 
-    outputs = await js_module.swcReadMesh(web_worker, to_js(BinaryFile(serialized_mesh)), **kwargs)
+    outputs = await js_module.swcReadMesh(to_js(BinaryFile(serialized_mesh)), webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

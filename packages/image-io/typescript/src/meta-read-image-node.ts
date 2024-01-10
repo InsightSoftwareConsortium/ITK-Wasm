@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import MetaReadImageOptions from './meta-read-image-options.js'
+import MetaReadImageNodeOptions from './meta-read-image-node-options.js'
 import MetaReadImageNodeResult from './meta-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {MetaReadImageOptions} options - options object
+ * @param {MetaReadImageNodeOptions} options - options object
  *
  * @returns {Promise<MetaReadImageNodeResult>} - result object
  */
 async function metaReadImageNode(
   serializedImage: string,
-  options: MetaReadImageOptions = {}
+  options: MetaReadImageNodeOptions = {}
 ) : Promise<MetaReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

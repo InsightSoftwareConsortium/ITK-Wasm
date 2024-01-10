@@ -1,9 +1,6 @@
-import { BinaryFile } from 'itk-wasm'
+import { BinaryFile, WorkerPoolFunctionResult } from 'itk-wasm'
 
-interface WriteImageResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
-
+interface WriteImageResult extends WorkerPoolFunctionResult {
   /** Output image serialized in the file format. */
   serializedImage: BinaryFile
 }

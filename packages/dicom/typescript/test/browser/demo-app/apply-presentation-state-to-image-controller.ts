@@ -1,7 +1,6 @@
 // Generated file. To retain edits, remove this comment.
 
 import { writeImage } from '@itk-wasm/image-io'
-import { copyImage } from 'itk-wasm'
 import * as dicom from '../../../dist/index.js'
 import applyPresentationStateToImageLoadSampleInputs, { usePreRun } from "./apply-presentation-state-to-image-load-sample-inputs.js"
 
@@ -111,7 +110,7 @@ class ApplyPresentationStateToImageController {
             const outputImageDownloadFormat = document.getElementById('output-image-output-format')
             const downloadFormat = outputImageDownloadFormat.value || 'nrrd'
             const fileName = `outputImage.${downloadFormat}`
-            const { webWorker, serializedImage } = await writeImage(null, copyImage(model.outputs.get("outputImage")), fileName)
+            const { webWorker, serializedImage } = await writeImage(model.outputs.get("outputImage"), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(serializedImage, fileName)
@@ -196,8 +195,9 @@ class ApplyPresentationStateToImageController {
   }
 
   async run() {
-    const { webWorker, presentationStateOutStream, outputImage, } = await dicom.applyPresentationStateToImage(this.webWorker,
-      { data: this.model.inputs.get('imageIn').data.slice(), path: this.model.inputs.get('imageIn').path },
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, presentationStateOutStream, outputImage, } = await dicom.applyPresentationStateToImage(      { data: this.model.inputs.get('imageIn').data.slice(), path: this.model.inputs.get('imageIn').path },
       { data: this.model.inputs.get('presentationStateFile').data.slice(), path: this.model.inputs.get('presentationStateFile').path },
       Object.fromEntries(this.model.options.entries())
     )

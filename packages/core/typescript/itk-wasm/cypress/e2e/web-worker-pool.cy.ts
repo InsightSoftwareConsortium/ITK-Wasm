@@ -39,7 +39,7 @@ describe('WebWorkerPool', () => {
         const inputs = [
           { type: itk.InterfaceTypes.Image, data }
         ]
-        taskArgsArray.push([pipelinePath, args, desiredOutputs, inputs])
+        taskArgsArray.push([pipelinePath, args, desiredOutputs, inputs, {}])
       }
 
       const results = await workerPool.runTasks(taskArgsArray, progressLogger).promise

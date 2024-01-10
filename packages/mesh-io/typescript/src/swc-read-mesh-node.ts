@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import SwcReadMeshOptions from './swc-read-mesh-options.js'
+import SwcReadMeshNodeOptions from './swc-read-mesh-node-options.js'
 import SwcReadMeshNodeResult from './swc-read-mesh-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read a mesh file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedMesh - Input mesh serialized in the file format
- * @param {SwcReadMeshOptions} options - options object
+ * @param {SwcReadMeshNodeOptions} options - options object
  *
  * @returns {Promise<SwcReadMeshNodeResult>} - result object
  */
 async function swcReadMeshNode(
   serializedMesh: string,
-  options: SwcReadMeshOptions = {}
+  options: SwcReadMeshNodeOptions = {}
 ) : Promise<SwcReadMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

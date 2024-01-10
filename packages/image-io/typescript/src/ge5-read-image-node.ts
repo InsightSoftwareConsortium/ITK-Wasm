@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import Ge5ReadImageOptions from './ge5-read-image-options.js'
+import Ge5ReadImageNodeOptions from './ge5-read-image-node-options.js'
 import Ge5ReadImageNodeResult from './ge5-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {Ge5ReadImageOptions} options - options object
+ * @param {Ge5ReadImageNodeOptions} options - options object
  *
  * @returns {Promise<Ge5ReadImageNodeResult>} - result object
  */
 async function ge5ReadImageNode(
   serializedImage: string,
-  options: Ge5ReadImageOptions = {}
+  options: Ge5ReadImageNodeOptions = {}
 ) : Promise<Ge5ReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

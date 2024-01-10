@@ -42,7 +42,7 @@ async def read_image_dicom_file_series_async(
     if single_sorted_series:
         kwargs["singleSortedSeries"] = to_js(single_sorted_series)
 
-    outputs = await js_module.readImageDicomFileSeries(web_worker, **kwargs)
+    outputs = await js_module.readImageDicomFileSeries(webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

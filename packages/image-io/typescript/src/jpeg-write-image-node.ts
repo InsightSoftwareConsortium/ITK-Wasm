@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import JpegWriteImageOptions from './jpeg-write-image-options.js'
+import JpegWriteImageNodeOptions from './jpeg-write-image-node-options.js'
 import JpegWriteImageNodeResult from './jpeg-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {JpegWriteImageOptions} options - options object
+ * @param {JpegWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<JpegWriteImageNodeResult>} - result object
  */
 async function jpegWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: JpegWriteImageOptions = {}
+  options: JpegWriteImageNodeOptions = {}
 ) : Promise<JpegWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

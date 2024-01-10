@@ -55,7 +55,7 @@ describe('read-image', () => {
   it('Reads an image BinaryFile', function () {
     cy.window().then(async (win) => {
       const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
-      const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
+      const { image, webWorker } = await win.imageIo.readImage({ data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' })
       webWorker.terminate()
       const componentType = IntTypes.UInt8
       const pixelType = PixelTypes.Scalar
@@ -68,7 +68,7 @@ describe('read-image', () => {
       const arrayBuffer = await cthead1SmallBlob.arrayBuffer()
       const componentType = IntTypes.UInt16
       const pixelType = PixelTypes.Vector
-      const { image, webWorker } = await win.imageIo.readImage(null, { data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' }, { pixelType, componentType})
+      const { image, webWorker } = await win.imageIo.readImage({ data: new Uint8Array(arrayBuffer), path: 'cthead1Small.png' }, { pixelType, componentType})
       webWorker.terminate()
       verifyImage(image, componentType, pixelType)
     })
@@ -77,7 +77,7 @@ describe('read-image', () => {
   it('Reads an image File', function () {
     cy.window().then(async (win) => {
       const cthead1SmallFile = new win.File([cthead1SmallBlob], 'cthead1Small.png')
-      const { image, webWorker } = await win.imageIo.readImage(null, cthead1SmallFile)
+      const { image, webWorker } = await win.imageIo.readImage(cthead1SmallFile)
       webWorker.terminate()
       const componentType = IntTypes.UInt8
       const pixelType = PixelTypes.Scalar
@@ -88,8 +88,8 @@ describe('read-image', () => {
   it('Reads re-uses a WebWorker', function () {
     cy.window().then(async (win) => {
       const cthead1SmallFile = new win.File([cthead1SmallBlob], 'cthead1Small.png')
-      const { webWorker } = await win.imageIo.readImage(null, cthead1SmallFile)
-      const { image } = await win.imageIo.readImage(webWorker, cthead1SmallFile)
+      const { webWorker } = await win.imageIo.readImage(cthead1SmallFile)
+      const { image } = await win.imageIo.readImage(cthead1SmallFile, { webWorker })
       webWorker.terminate()
       const componentType = IntTypes.UInt8
       const pixelType = PixelTypes.Scalar
@@ -103,7 +103,7 @@ describe('read-image', () => {
       const invalidBlob = new win.Blob([invalidArray])
       const invalidFile = new win.File([invalidBlob], 'invalid.file')
       try {
-        const { webWorker, image } = await win.imageIo.readImage(null, invalidFile)
+        const { webWorker, image } = await win.imageIo.readImage(invalidFile)
         webWorker.terminate()
       } catch (error) {
         cy.expect(error.message).to.equal('Could not find IO for: invalid.file')

@@ -1,4 +1,6 @@
-interface WriteMeshOptions {
+import { WorkerPoolFunctionOption } from "itk-wasm"
+
+interface WriteMeshOptions extends WorkerPoolFunctionOption {
   /** Use compression when writing the mesh if the IO formt supports it. */
   useCompression?: boolean
 

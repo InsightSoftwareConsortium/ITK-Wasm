@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/mesh-io",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "packageManager": "pnpm@8.11.0",
   "description": "Input and output for scientific and medical image file formats.",
   "type": "module",

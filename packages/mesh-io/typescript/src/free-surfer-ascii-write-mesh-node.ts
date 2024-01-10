@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import FreeSurferAsciiWriteMeshOptions from './free-surfer-ascii-write-mesh-options.js'
+import FreeSurferAsciiWriteMeshNodeOptions from './free-surfer-ascii-write-mesh-node-options.js'
 import FreeSurferAsciiWriteMeshNodeResult from './free-surfer-ascii-write-mesh-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Mesh} mesh - Input mesh
  * @param {string} serializedMesh - Output mesh
- * @param {FreeSurferAsciiWriteMeshOptions} options - options object
+ * @param {FreeSurferAsciiWriteMeshNodeOptions} options - options object
  *
  * @returns {Promise<FreeSurferAsciiWriteMeshNodeResult>} - result object
  */
 async function freeSurferAsciiWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: FreeSurferAsciiWriteMeshOptions = {}
+  options: FreeSurferAsciiWriteMeshNodeOptions = {}
 ) : Promise<FreeSurferAsciiWriteMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

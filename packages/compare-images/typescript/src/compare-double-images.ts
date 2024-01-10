@@ -22,7 +22,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<CompareDoubleImagesResult>} - result object
  */
 async function compareDoubleImages(
-  webWorker: null | Worker,
   testImage: Image,
   options: CompareDoubleImagesOptions = { baselineImages: [] as Image[], }
 ) : Promise<CompareDoubleImagesResult> {
@@ -90,7 +89,7 @@ async function compareDoubleImages(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null })
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

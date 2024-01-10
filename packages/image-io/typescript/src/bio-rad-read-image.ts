@@ -16,6 +16,8 @@ import BioRadReadImageResult from './bio-rad-read-image-result.js'
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
+import { getDefaultWebWorker } from './default-web-worker.js'
+
 /**
  * Read an image file format and convert it to the itk-wasm file format
  *
@@ -25,7 +27,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<BioRadReadImageResult>} - result object
  */
 async function bioRadReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: BioRadReadImageOptions = {}
 ) : Promise<BioRadReadImageResult> {
@@ -64,12 +65,16 @@ async function bioRadReadImage(
 
   const pipelinePath = 'bio-rad-read-image'
 
+  let workerToUse = options?.webWorker
+  if (workerToUse === undefined) {
+    workerToUse = await getDefaultWebWorker()
+  }
   const {
     webWorker: usedWebWorker,
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: workerToUse, noCopy: options?.noCopy })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

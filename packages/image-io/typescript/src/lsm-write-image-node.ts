@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import LsmWriteImageOptions from './lsm-write-image-options.js'
+import LsmWriteImageNodeOptions from './lsm-write-image-node-options.js'
 import LsmWriteImageNodeResult from './lsm-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {LsmWriteImageOptions} options - options object
+ * @param {LsmWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<LsmWriteImageNodeResult>} - result object
  */
 async function lsmWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: LsmWriteImageOptions = {}
+  options: LsmWriteImageNodeOptions = {}
 ) : Promise<LsmWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

@@ -44,7 +44,7 @@ class FreeSurferAsciiWriteMeshController {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const { mesh, webWorker } = await readMesh(null, files[0])
+        const { mesh, webWorker } = await readMesh(files[0])
         webWorker.terminate()
         model.inputs.set("mesh", mesh)
         const details = document.getElementById("freeSurferAsciiWriteMesh-mesh-details")
@@ -168,8 +168,9 @@ class FreeSurferAsciiWriteMeshController {
   }
 
   async run() {
-    const { webWorker, couldWrite, serializedMesh, } = await meshIo.freeSurferAsciiWriteMesh(this.webWorker,
-      this.model.inputs.get('mesh'),
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, couldWrite, serializedMesh, } = await meshIo.freeSurferAsciiWriteMesh(      this.model.inputs.get('mesh'),
       this.model.inputs.get('serializedMesh'),
       Object.fromEntries(this.model.options.entries())
     )

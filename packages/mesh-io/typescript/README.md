@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/@itk-wasm%2Fmesh-io.svg)](https://www.npmjs.com/package/@itk-wasm/mesh-io)
 
-> Input and output for scientific and medical image file formats.
+> Input and output for mesh file formats.
 
 ## Installation
 
@@ -38,8 +38,8 @@ import {
   vtkPolyDataWriteMesh,
   wasmReadMesh,
   wasmWriteMesh,
-  wasmZtdReadMesh,
-  wasmZtdWriteMesh,
+  wasmZstdReadMesh,
+  wasmZstdWriteMesh,
   setPipelinesBaseUrl,
   getPipelinesBaseUrl,
 } from "@itk-wasm/mesh-io"
@@ -51,7 +51,6 @@ import {
 
 ```ts
 async function readMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: ReadMeshOptions = {}
 ) : Promise<ReadMeshResult>
@@ -59,7 +58,6 @@ async function readMesh(
 
 |     Parameter    |             Type            | Description                                                                                                                                                  |
 | :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
 | `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
 
 **`ReadMeshOptions` interface:**
@@ -67,6 +65,8 @@ async function readMesh(
 |      Property     |    Type   | Description                                         |
 | :---------------: | :-------: | :-------------------------------------------------- |
 | `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.  
 
 **`ReadMeshResult` interface:**
 
@@ -81,7 +81,6 @@ async function readMesh(
 
 ```ts
 async function writeMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: WriteMeshOptions = {}
@@ -90,7 +89,6 @@ async function writeMesh(
 
 |     Parameter    |             Type            | Description                                                                                                                                                  |
 | :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
 |      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
 | `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
 
@@ -101,6 +99,8 @@ async function writeMesh(
 | `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
 |  `useCompression` | *boolean* | Use compression in the written file, if supported        |
 |  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.  
 
 **`WriteMeshResult` interface:**
 
@@ -115,30 +115,30 @@ async function writeMesh(
 
 ```ts
 async function byuReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: ByuReadMeshOptions = {}
 ) : Promise<ByuReadMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
 
 **`ByuReadMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ByuReadMeshResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 
 #### byuWriteMesh
 
@@ -146,34 +146,34 @@ async function byuReadMesh(
 
 ```ts
 async function byuWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: ByuWriteMeshOptions = {}
 ) : Promise<ByuWriteMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
-| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
 
 **`ByuWriteMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                              |
-| :---------------: | :-------: | :------------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
-|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
-|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ByuWriteMeshResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
-|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 
 #### freeSurferAsciiReadMesh
 
@@ -181,30 +181,30 @@ async function byuWriteMesh(
 
 ```ts
 async function freeSurferAsciiReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: FreeSurferAsciiReadMeshOptions = {}
 ) : Promise<FreeSurferAsciiReadMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
 
 **`FreeSurferAsciiReadMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`FreeSurferAsciiReadMeshResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 
 #### freeSurferAsciiWriteMesh
 
@@ -212,34 +212,34 @@ async function freeSurferAsciiReadMesh(
 
 ```ts
 async function freeSurferAsciiWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: FreeSurferAsciiWriteMeshOptions = {}
 ) : Promise<FreeSurferAsciiWriteMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
-| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
 
 **`FreeSurferAsciiWriteMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                              |
-| :---------------: | :-------: | :------------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
-|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
-|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`FreeSurferAsciiWriteMeshResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
-|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 
 #### freeSurferBinaryReadMesh
 
@@ -247,30 +247,30 @@ async function freeSurferAsciiWriteMesh(
 
 ```ts
 async function freeSurferBinaryReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: FreeSurferBinaryReadMeshOptions = {}
 ) : Promise<FreeSurferBinaryReadMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
 
 **`FreeSurferBinaryReadMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`FreeSurferBinaryReadMeshResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 
 #### freeSurferBinaryWriteMesh
 
@@ -278,34 +278,34 @@ async function freeSurferBinaryReadMesh(
 
 ```ts
 async function freeSurferBinaryWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: FreeSurferBinaryWriteMeshOptions = {}
 ) : Promise<FreeSurferBinaryWriteMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
-| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
 
 **`FreeSurferBinaryWriteMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                              |
-| :---------------: | :-------: | :------------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
-|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
-|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`FreeSurferBinaryWriteMeshResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
-|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 
 #### objReadMesh
 
@@ -313,30 +313,30 @@ async function freeSurferBinaryWriteMesh(
 
 ```ts
 async function objReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: ObjReadMeshOptions = {}
 ) : Promise<ObjReadMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
 
 **`ObjReadMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ObjReadMeshResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 
 #### objWriteMesh
 
@@ -344,34 +344,34 @@ async function objReadMesh(
 
 ```ts
 async function objWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: ObjWriteMeshOptions = {}
 ) : Promise<ObjWriteMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
-| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
 
 **`ObjWriteMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                              |
-| :---------------: | :-------: | :------------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
-|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
-|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ObjWriteMeshResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
-|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 
 #### offReadMesh
 
@@ -379,30 +379,30 @@ async function objWriteMesh(
 
 ```ts
 async function offReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: OffReadMeshOptions = {}
 ) : Promise<OffReadMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
 
 **`OffReadMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`OffReadMeshResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 
 #### offWriteMesh
 
@@ -410,34 +410,34 @@ async function offReadMesh(
 
 ```ts
 async function offWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: OffWriteMeshOptions = {}
 ) : Promise<OffWriteMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
-| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
 
 **`OffWriteMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                              |
-| :---------------: | :-------: | :------------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
-|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
-|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`OffWriteMeshResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
-|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 
 #### stlReadMesh
 
@@ -445,30 +445,30 @@ async function offWriteMesh(
 
 ```ts
 async function stlReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: StlReadMeshOptions = {}
 ) : Promise<StlReadMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
 
 **`StlReadMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`StlReadMeshResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 
 #### stlWriteMesh
 
@@ -476,34 +476,34 @@ async function stlReadMesh(
 
 ```ts
 async function stlWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: StlWriteMeshOptions = {}
 ) : Promise<StlWriteMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
-| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
 
 **`StlWriteMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                              |
-| :---------------: | :-------: | :------------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
-|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
-|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`StlWriteMeshResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
-|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 
 #### swcReadMesh
 
@@ -511,30 +511,30 @@ async function stlWriteMesh(
 
 ```ts
 async function swcReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: SwcReadMeshOptions = {}
 ) : Promise<SwcReadMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
 
 **`SwcReadMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`SwcReadMeshResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 
 #### swcWriteMesh
 
@@ -542,34 +542,34 @@ async function swcReadMesh(
 
 ```ts
 async function swcWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: SwcWriteMeshOptions = {}
 ) : Promise<SwcWriteMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
-| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
 
 **`SwcWriteMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                              |
-| :---------------: | :-------: | :------------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
-|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
-|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`SwcWriteMeshResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
-|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 
 #### vtkPolyDataReadMesh
 
@@ -577,30 +577,30 @@ async function swcWriteMesh(
 
 ```ts
 async function vtkPolyDataReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: VtkPolyDataReadMeshOptions = {}
 ) : Promise<VtkPolyDataReadMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
 
 **`VtkPolyDataReadMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`VtkPolyDataReadMeshResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 
 #### vtkPolyDataWriteMesh
 
@@ -608,34 +608,34 @@ async function vtkPolyDataReadMesh(
 
 ```ts
 async function vtkPolyDataWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: VtkPolyDataWriteMeshOptions = {}
 ) : Promise<VtkPolyDataWriteMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
-| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
 
 **`VtkPolyDataWriteMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                              |
-| :---------------: | :-------: | :------------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
-|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
-|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`VtkPolyDataWriteMeshResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
-|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 
 #### wasmReadMesh
 
@@ -643,30 +643,30 @@ async function vtkPolyDataWriteMesh(
 
 ```ts
 async function wasmReadMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: WasmReadMeshOptions = {}
 ) : Promise<WasmReadMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
 
 **`WasmReadMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`WasmReadMeshResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 
 #### wasmWriteMesh
 
@@ -674,100 +674,100 @@ async function wasmReadMesh(
 
 ```ts
 async function wasmWriteMesh(
-  webWorker: null | Worker | boolean,
   mesh: Mesh,
   serializedMesh: string,
   options: WasmWriteMeshOptions = {}
 ) : Promise<WasmWriteMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
-| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
 
 **`WasmWriteMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                              |
-| :---------------: | :-------: | :------------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
-|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
-|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`WasmWriteMeshResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
-|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 
-#### wasmZtdReadMesh
+#### wasmZstdReadMesh
 
 *Read a mesh file format and convert it to the itk-wasm file format*
 
 ```ts
-async function wasmZtdReadMesh(
-  webWorker: null | Worker | boolean,
+async function wasmZstdReadMesh(
   serializedMesh: File | BinaryFile,
-  options: WasmZtdReadMeshOptions = {}
-) : Promise<WasmZtdReadMeshResult>
+  options: WasmZstdReadMeshOptions = {}
+) : Promise<WasmZstdReadMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedMesh` |     *File | BinaryFile*     | Input mesh serialized in the file format                                                                                                                     |
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
 
-**`WasmZtdReadMeshOptions` interface:**
+**`WasmZstdReadMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
-**`WasmZtdReadMeshResult` interface:**
+**`WasmZstdReadMeshResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
 
-#### wasmZtdWriteMesh
+#### wasmZstdWriteMesh
 
 *Write an itk-wasm file format converted to an mesh file format*
 
 ```ts
-async function wasmZtdWriteMesh(
-  webWorker: null | Worker | boolean,
+async function wasmZstdWriteMesh(
   mesh: Mesh,
   serializedMesh: string,
-  options: WasmZtdWriteMeshOptions = {}
-) : Promise<WasmZtdWriteMeshResult>
+  options: WasmZstdWriteMeshOptions = {}
+) : Promise<WasmZstdWriteMeshResult>
 ```
 
-|     Parameter    |             Type            | Description                                                                                                                                                  |
-| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`   | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `mesh`      |            *Mesh*           | Input mesh                                                                                                                                                   |
-| `serializedMesh` |           *string*          | Output mesh                                                                                                                                                  |
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
 
-**`WasmZtdWriteMeshOptions` interface:**
+**`WasmZstdWriteMeshOptions` interface:**
 
-|      Property     |    Type   | Description                                              |
-| :---------------: | :-------: | :------------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
-|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
-|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
-**`WasmZtdWriteMeshResult` interface:**
+**`WasmZstdWriteMeshResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
-|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 
 #### setPipelinesBaseUrl
 
@@ -812,8 +812,8 @@ import {
   vtkPolyDataWriteMeshNode,
   wasmReadMeshNode,
   wasmWriteMeshNode,
-  wasmZtdReadMeshNode,
-  wasmZtdWriteMeshNode,
+  wasmZstdReadMeshNode,
+  wasmZstdWriteMeshNode,
 } from "@itk-wasm/mesh-io"
 ```
 
@@ -824,7 +824,7 @@ import {
 ```ts
 async function byuReadMeshNode(
   serializedMesh: string,
-  options: ByuReadMeshOptions = {}
+  options: ByuReadMeshNodeOptions = {}
 ) : Promise<ByuReadMeshNodeResult>
 ```
 
@@ -853,7 +853,7 @@ async function byuReadMeshNode(
 async function byuWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: ByuWriteMeshOptions = {}
+  options: ByuWriteMeshNodeOptions = {}
 ) : Promise<ByuWriteMeshNodeResult>
 ```
 
@@ -884,7 +884,7 @@ async function byuWriteMeshNode(
 ```ts
 async function freeSurferAsciiReadMeshNode(
   serializedMesh: string,
-  options: FreeSurferAsciiReadMeshOptions = {}
+  options: FreeSurferAsciiReadMeshNodeOptions = {}
 ) : Promise<FreeSurferAsciiReadMeshNodeResult>
 ```
 
@@ -913,7 +913,7 @@ async function freeSurferAsciiReadMeshNode(
 async function freeSurferAsciiWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: FreeSurferAsciiWriteMeshOptions = {}
+  options: FreeSurferAsciiWriteMeshNodeOptions = {}
 ) : Promise<FreeSurferAsciiWriteMeshNodeResult>
 ```
 
@@ -944,7 +944,7 @@ async function freeSurferAsciiWriteMeshNode(
 ```ts
 async function freeSurferBinaryReadMeshNode(
   serializedMesh: string,
-  options: FreeSurferBinaryReadMeshOptions = {}
+  options: FreeSurferBinaryReadMeshNodeOptions = {}
 ) : Promise<FreeSurferBinaryReadMeshNodeResult>
 ```
 
@@ -973,7 +973,7 @@ async function freeSurferBinaryReadMeshNode(
 async function freeSurferBinaryWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: FreeSurferBinaryWriteMeshOptions = {}
+  options: FreeSurferBinaryWriteMeshNodeOptions = {}
 ) : Promise<FreeSurferBinaryWriteMeshNodeResult>
 ```
 
@@ -1004,7 +1004,7 @@ async function freeSurferBinaryWriteMeshNode(
 ```ts
 async function objReadMeshNode(
   serializedMesh: string,
-  options: ObjReadMeshOptions = {}
+  options: ObjReadMeshNodeOptions = {}
 ) : Promise<ObjReadMeshNodeResult>
 ```
 
@@ -1033,7 +1033,7 @@ async function objReadMeshNode(
 async function objWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: ObjWriteMeshOptions = {}
+  options: ObjWriteMeshNodeOptions = {}
 ) : Promise<ObjWriteMeshNodeResult>
 ```
 
@@ -1064,7 +1064,7 @@ async function objWriteMeshNode(
 ```ts
 async function offReadMeshNode(
   serializedMesh: string,
-  options: OffReadMeshOptions = {}
+  options: OffReadMeshNodeOptions = {}
 ) : Promise<OffReadMeshNodeResult>
 ```
 
@@ -1093,7 +1093,7 @@ async function offReadMeshNode(
 async function offWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: OffWriteMeshOptions = {}
+  options: OffWriteMeshNodeOptions = {}
 ) : Promise<OffWriteMeshNodeResult>
 ```
 
@@ -1124,7 +1124,7 @@ async function offWriteMeshNode(
 ```ts
 async function stlReadMeshNode(
   serializedMesh: string,
-  options: StlReadMeshOptions = {}
+  options: StlReadMeshNodeOptions = {}
 ) : Promise<StlReadMeshNodeResult>
 ```
 
@@ -1153,7 +1153,7 @@ async function stlReadMeshNode(
 async function stlWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: StlWriteMeshOptions = {}
+  options: StlWriteMeshNodeOptions = {}
 ) : Promise<StlWriteMeshNodeResult>
 ```
 
@@ -1184,7 +1184,7 @@ async function stlWriteMeshNode(
 ```ts
 async function swcReadMeshNode(
   serializedMesh: string,
-  options: SwcReadMeshOptions = {}
+  options: SwcReadMeshNodeOptions = {}
 ) : Promise<SwcReadMeshNodeResult>
 ```
 
@@ -1213,7 +1213,7 @@ async function swcReadMeshNode(
 async function swcWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: SwcWriteMeshOptions = {}
+  options: SwcWriteMeshNodeOptions = {}
 ) : Promise<SwcWriteMeshNodeResult>
 ```
 
@@ -1244,7 +1244,7 @@ async function swcWriteMeshNode(
 ```ts
 async function vtkPolyDataReadMeshNode(
   serializedMesh: string,
-  options: VtkPolyDataReadMeshOptions = {}
+  options: VtkPolyDataReadMeshNodeOptions = {}
 ) : Promise<VtkPolyDataReadMeshNodeResult>
 ```
 
@@ -1273,7 +1273,7 @@ async function vtkPolyDataReadMeshNode(
 async function vtkPolyDataWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: VtkPolyDataWriteMeshOptions = {}
+  options: VtkPolyDataWriteMeshNodeOptions = {}
 ) : Promise<VtkPolyDataWriteMeshNodeResult>
 ```
 
@@ -1304,7 +1304,7 @@ async function vtkPolyDataWriteMeshNode(
 ```ts
 async function wasmReadMeshNode(
   serializedMesh: string,
-  options: WasmReadMeshOptions = {}
+  options: WasmReadMeshNodeOptions = {}
 ) : Promise<WasmReadMeshNodeResult>
 ```
 
@@ -1333,7 +1333,7 @@ async function wasmReadMeshNode(
 async function wasmWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: WasmWriteMeshOptions = {}
+  options: WasmWriteMeshNodeOptions = {}
 ) : Promise<WasmWriteMeshNodeResult>
 ```
 
@@ -1357,44 +1357,44 @@ async function wasmWriteMeshNode(
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
 
-#### wasmZtdReadMeshNode
+#### wasmZstdReadMeshNode
 
 *Read a mesh file format and convert it to the itk-wasm file format*
 
 ```ts
-async function wasmZtdReadMeshNode(
+async function wasmZstdReadMeshNode(
   serializedMesh: string,
-  options: WasmZtdReadMeshOptions = {}
-) : Promise<WasmZtdReadMeshNodeResult>
+  options: WasmZstdReadMeshNodeOptions = {}
+) : Promise<WasmZstdReadMeshNodeResult>
 ```
 
 |     Parameter    |   Type   | Description                              |
 | :--------------: | :------: | :--------------------------------------- |
 | `serializedMesh` | *string* | Input mesh serialized in the file format |
 
-**`WasmZtdReadMeshNodeOptions` interface:**
+**`WasmZstdReadMeshNodeOptions` interface:**
 
 |      Property     |    Type   | Description                                         |
 | :---------------: | :-------: | :-------------------------------------------------- |
 | `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
 
-**`WasmZtdReadMeshNodeResult` interface:**
+**`WasmZstdReadMeshNodeResult` interface:**
 
 |   Property  |       Type       | Description                                                              |
 | :---------: | :--------------: | :----------------------------------------------------------------------- |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
 |    `mesh`   |      *Mesh*      | Output mesh                                                              |
 
-#### wasmZtdWriteMeshNode
+#### wasmZstdWriteMeshNode
 
 *Write an itk-wasm file format converted to an mesh file format*
 
 ```ts
-async function wasmZtdWriteMeshNode(
+async function wasmZstdWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: WasmZtdWriteMeshOptions = {}
-) : Promise<WasmZtdWriteMeshNodeResult>
+  options: WasmZstdWriteMeshNodeOptions = {}
+) : Promise<WasmZstdWriteMeshNodeResult>
 ```
 
 |     Parameter    |   Type   | Description |
@@ -1402,7 +1402,7 @@ async function wasmZtdWriteMeshNode(
 |      `mesh`      |  *Mesh*  | Input mesh  |
 | `serializedMesh` | *string* | Output mesh |
 
-**`WasmZtdWriteMeshNodeOptions` interface:**
+**`WasmZstdWriteMeshNodeOptions` interface:**
 
 |      Property     |    Type   | Description                                              |
 | :---------------: | :-------: | :------------------------------------------------------- |
@@ -1410,7 +1410,7 @@ async function wasmZtdWriteMeshNode(
 |  `useCompression` | *boolean* | Use compression in the written file, if supported        |
 |  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
 
-**`WasmZtdWriteMeshNodeResult` interface:**
+**`WasmZstdWriteMeshNodeResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |

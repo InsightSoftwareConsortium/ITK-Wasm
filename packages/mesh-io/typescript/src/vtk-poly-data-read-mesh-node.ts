@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import VtkPolyDataReadMeshOptions from './vtk-poly-data-read-mesh-options.js'
+import VtkPolyDataReadMeshNodeOptions from './vtk-poly-data-read-mesh-node-options.js'
 import VtkPolyDataReadMeshNodeResult from './vtk-poly-data-read-mesh-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read a mesh file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedMesh - Input mesh serialized in the file format
- * @param {VtkPolyDataReadMeshOptions} options - options object
+ * @param {VtkPolyDataReadMeshNodeOptions} options - options object
  *
  * @returns {Promise<VtkPolyDataReadMeshNodeResult>} - result object
  */
 async function vtkPolyDataReadMeshNode(
   serializedMesh: string,
-  options: VtkPolyDataReadMeshOptions = {}
+  options: VtkPolyDataReadMeshNodeOptions = {}
 ) : Promise<VtkPolyDataReadMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

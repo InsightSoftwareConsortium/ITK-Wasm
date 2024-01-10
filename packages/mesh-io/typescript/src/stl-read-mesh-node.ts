@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import StlReadMeshOptions from './stl-read-mesh-options.js'
+import StlReadMeshNodeOptions from './stl-read-mesh-node-options.js'
 import StlReadMeshNodeResult from './stl-read-mesh-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read a mesh file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedMesh - Input mesh serialized in the file format
- * @param {StlReadMeshOptions} options - options object
+ * @param {StlReadMeshNodeOptions} options - options object
  *
  * @returns {Promise<StlReadMeshNodeResult>} - result object
  */
 async function stlReadMeshNode(
   serializedMesh: string,
-  options: StlReadMeshOptions = {}
+  options: StlReadMeshNodeOptions = {}
 ) : Promise<StlReadMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

@@ -75,6 +75,7 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
   if (!forNode) {
     indexContent += "export * from './pipelines-base-url.js'\n"
     indexContent += "export * from './pipeline-worker-url.js'\n"
+    indexContent += "export * from './default-web-worker.js'\n"
   }
 
   writeSupportFiles(outputDir, forNode, bindgenResource, packageName, options.packageDescription)
@@ -137,12 +138,13 @@ if (!params.has('functionName')) {
     indexContent += `export type { ${modulePascalCase}${nodeTextCamel}Result }\n\n`
 
     const filteredParameters = interfaceJson.parameters.filter(p => { return p.name !== 'memory-io' && p.name !== 'version'})
-    const haveOptions = !!filteredParameters.length
+    const haveOptions = !!filteredParameters.length || !forNode
 
-    const { readmeOptions } = optionsModule(srcOutputDir, interfaceJson, modulePascalCase, nodeTextCamel, moduleKebabCase, haveOptions)
+    const optionsModuleFileName = `${moduleKebabCase}${nodeTextKebab}-options`
+    const { readmeOptions } = optionsModule(srcOutputDir, interfaceJson, modulePascalCase, nodeTextCamel, haveOptions, forNode, optionsModuleFileName)
     if (haveOptions) {
-      indexCommonContent += `import ${modulePascalCase}Options from './${moduleKebabCase}-options.js'\n`
-      indexCommonContent += `export type { ${modulePascalCase}Options }\n\n`
+      indexContent += `import ${modulePascalCase}${nodeTextCamel}Options from './${optionsModuleFileName}.js'\n`
+      indexContent += `export type { ${modulePascalCase}${nodeTextCamel}Options }\n\n`
     }
 
     const { readmeFunction, usedInterfaceTypes } = functionModule(srcOutputDir, forNode, interfaceJson, modulePascalCase, moduleKebabCase, moduleCamelCase, nodeTextCamel, nodeTextKebab, haveOptions)

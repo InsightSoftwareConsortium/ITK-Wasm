@@ -78,7 +78,6 @@ import {
 
 ```ts
 async function readImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: ReadImageOptions = {}
 ) : Promise<ReadImageResult>
@@ -86,7 +85,6 @@ async function readImage(
 
 |     Parameter     |         Type        | Description                               |
 | :---------------: | :-----------------: | :---------------------------------------- |
-| `webWorker` | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
 | `serializedImage` | *File or BinaryFile* | Input image serialized in the file format. |
 
 **`ReadImageOptions` interface:**
@@ -96,6 +94,8 @@ async function readImage(
 | `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
 | `componentType` | *typeof IntTypes or typeof FloatTypes* | Component type, from itk-wasm IntTypes, FloatTypes, for the output pixel components. Defaults to the input component type. |
 | `pixelType` | *typeof PixelTypes* | Pixel type, from itk-wasm PixelTypes, for the output pixels. Defaults to the input pixel type. |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ReadImageResult` interface:**
 
@@ -110,7 +110,6 @@ async function readImage(
 
 ```ts
 async function writeImage(
-  webWorker: null | Worker,
   image: Image,
   serializedImage: string,
   options: WriteImageOptions = {}
@@ -119,7 +118,6 @@ async function writeImage(
 
 |     Parameter     |   Type   | Description                                 |
 | :---------------: | :------: | :------------------------------------------ |
-| `webWorker` | *null or Worker* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. |
 |      `image`      |  *Image* | Input image                                 |
 | `serializedImage` | *string* | Output image serialized in the file format. |
 
@@ -132,6 +130,8 @@ async function writeImage(
 | `mimeType` | *string* | Mime type of the output image file. |
 | `componentType` | *typeof IntTypes or typeof FloatTypes* | Component type, from itk-wasm IntTypes, FloatTypes, for the output pixel components. Defaults to the input component type. |
 | `pixelType` | *typeof PixelTypes* | Pixel type, from itk-wasm PixelTypes, for the output pixels. Defaults to the input pixel type. |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`WriteImageResult` interface:**
 
@@ -146,30 +146,30 @@ async function writeImage(
 
 ```ts
 async function bioRadReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: BioRadReadImageOptions = {}
 ) : Promise<BioRadReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`BioRadReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`BioRadReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### bioRadWriteImage
 
@@ -177,33 +177,33 @@ async function bioRadReadImage(
 
 ```ts
 async function bioRadWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: BioRadWriteImageOptions = {}
 ) : Promise<BioRadWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`BioRadWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`BioRadWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### bmpReadImage
 
@@ -211,30 +211,30 @@ async function bioRadWriteImage(
 
 ```ts
 async function bmpReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: BmpReadImageOptions = {}
 ) : Promise<BmpReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`BmpReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`BmpReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### bmpWriteImage
 
@@ -242,33 +242,33 @@ async function bmpReadImage(
 
 ```ts
 async function bmpWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: BmpWriteImageOptions = {}
 ) : Promise<BmpWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`BmpWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`BmpWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### fdfReadImage
 
@@ -276,30 +276,30 @@ async function bmpWriteImage(
 
 ```ts
 async function fdfReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: FdfReadImageOptions = {}
 ) : Promise<FdfReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`FdfReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`FdfReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### fdfWriteImage
 
@@ -307,33 +307,33 @@ async function fdfReadImage(
 
 ```ts
 async function fdfWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: FdfWriteImageOptions = {}
 ) : Promise<FdfWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`FdfWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`FdfWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### gdcmReadImage
 
@@ -341,30 +341,30 @@ async function fdfWriteImage(
 
 ```ts
 async function gdcmReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: GdcmReadImageOptions = {}
 ) : Promise<GdcmReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`GdcmReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`GdcmReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### gdcmWriteImage
 
@@ -372,33 +372,33 @@ async function gdcmReadImage(
 
 ```ts
 async function gdcmWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: GdcmWriteImageOptions = {}
 ) : Promise<GdcmWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`GdcmWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`GdcmWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### geAdwReadImage
 
@@ -406,30 +406,30 @@ async function gdcmWriteImage(
 
 ```ts
 async function geAdwReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: GeAdwReadImageOptions = {}
 ) : Promise<GeAdwReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`GeAdwReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`GeAdwReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### geAdwWriteImage
 
@@ -437,33 +437,33 @@ async function geAdwReadImage(
 
 ```ts
 async function geAdwWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: GeAdwWriteImageOptions = {}
 ) : Promise<GeAdwWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`GeAdwWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`GeAdwWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### ge4ReadImage
 
@@ -471,30 +471,30 @@ async function geAdwWriteImage(
 
 ```ts
 async function ge4ReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: Ge4ReadImageOptions = {}
 ) : Promise<Ge4ReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`Ge4ReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`Ge4ReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### ge4WriteImage
 
@@ -502,33 +502,33 @@ async function ge4ReadImage(
 
 ```ts
 async function ge4WriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: Ge4WriteImageOptions = {}
 ) : Promise<Ge4WriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`Ge4WriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`Ge4WriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### ge5ReadImage
 
@@ -536,30 +536,30 @@ async function ge4WriteImage(
 
 ```ts
 async function ge5ReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: Ge5ReadImageOptions = {}
 ) : Promise<Ge5ReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`Ge5ReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`Ge5ReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### ge5WriteImage
 
@@ -567,33 +567,33 @@ async function ge5ReadImage(
 
 ```ts
 async function ge5WriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: Ge5WriteImageOptions = {}
 ) : Promise<Ge5WriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`Ge5WriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`Ge5WriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### giplReadImage
 
@@ -601,30 +601,30 @@ async function ge5WriteImage(
 
 ```ts
 async function giplReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: GiplReadImageOptions = {}
 ) : Promise<GiplReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`GiplReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`GiplReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### giplWriteImage
 
@@ -632,33 +632,33 @@ async function giplReadImage(
 
 ```ts
 async function giplWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: GiplWriteImageOptions = {}
 ) : Promise<GiplWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`GiplWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`GiplWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### hdf5ReadImage
 
@@ -666,30 +666,30 @@ async function giplWriteImage(
 
 ```ts
 async function hdf5ReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: Hdf5ReadImageOptions = {}
 ) : Promise<Hdf5ReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`Hdf5ReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`Hdf5ReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### hdf5WriteImage
 
@@ -697,33 +697,33 @@ async function hdf5ReadImage(
 
 ```ts
 async function hdf5WriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: Hdf5WriteImageOptions = {}
 ) : Promise<Hdf5WriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`Hdf5WriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`Hdf5WriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### jpegReadImage
 
@@ -731,30 +731,30 @@ async function hdf5WriteImage(
 
 ```ts
 async function jpegReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: JpegReadImageOptions = {}
 ) : Promise<JpegReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`JpegReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`JpegReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### jpegWriteImage
 
@@ -762,33 +762,33 @@ async function jpegReadImage(
 
 ```ts
 async function jpegWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: JpegWriteImageOptions = {}
 ) : Promise<JpegWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`JpegWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`JpegWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### lsmReadImage
 
@@ -796,30 +796,30 @@ async function jpegWriteImage(
 
 ```ts
 async function lsmReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: LsmReadImageOptions = {}
 ) : Promise<LsmReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`LsmReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`LsmReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### lsmWriteImage
 
@@ -827,33 +827,33 @@ async function lsmReadImage(
 
 ```ts
 async function lsmWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: LsmWriteImageOptions = {}
 ) : Promise<LsmWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`LsmWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`LsmWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### metaReadImage
 
@@ -861,30 +861,30 @@ async function lsmWriteImage(
 
 ```ts
 async function metaReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: MetaReadImageOptions = {}
 ) : Promise<MetaReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`MetaReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`MetaReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### metaWriteImage
 
@@ -892,33 +892,33 @@ async function metaReadImage(
 
 ```ts
 async function metaWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: MetaWriteImageOptions = {}
 ) : Promise<MetaWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`MetaWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`MetaWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### mghReadImage
 
@@ -926,30 +926,30 @@ async function metaWriteImage(
 
 ```ts
 async function mghReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: MghReadImageOptions = {}
 ) : Promise<MghReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`MghReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`MghReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### mghWriteImage
 
@@ -957,33 +957,33 @@ async function mghReadImage(
 
 ```ts
 async function mghWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: MghWriteImageOptions = {}
 ) : Promise<MghWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`MghWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`MghWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### mincReadImage
 
@@ -991,30 +991,30 @@ async function mghWriteImage(
 
 ```ts
 async function mincReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: MincReadImageOptions = {}
 ) : Promise<MincReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`MincReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`MincReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### mincWriteImage
 
@@ -1022,33 +1022,33 @@ async function mincReadImage(
 
 ```ts
 async function mincWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: MincWriteImageOptions = {}
 ) : Promise<MincWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`MincWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`MincWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### mrcReadImage
 
@@ -1056,30 +1056,30 @@ async function mincWriteImage(
 
 ```ts
 async function mrcReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: MrcReadImageOptions = {}
 ) : Promise<MrcReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`MrcReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`MrcReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### mrcWriteImage
 
@@ -1087,33 +1087,33 @@ async function mrcReadImage(
 
 ```ts
 async function mrcWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: MrcWriteImageOptions = {}
 ) : Promise<MrcWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`MrcWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`MrcWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### niftiReadImage
 
@@ -1121,30 +1121,30 @@ async function mrcWriteImage(
 
 ```ts
 async function niftiReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: NiftiReadImageOptions = {}
 ) : Promise<NiftiReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`NiftiReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`NiftiReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### niftiWriteImage
 
@@ -1152,33 +1152,33 @@ async function niftiReadImage(
 
 ```ts
 async function niftiWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: NiftiWriteImageOptions = {}
 ) : Promise<NiftiWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`NiftiWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`NiftiWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### nrrdReadImage
 
@@ -1186,30 +1186,30 @@ async function niftiWriteImage(
 
 ```ts
 async function nrrdReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: NrrdReadImageOptions = {}
 ) : Promise<NrrdReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`NrrdReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`NrrdReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### nrrdWriteImage
 
@@ -1217,33 +1217,33 @@ async function nrrdReadImage(
 
 ```ts
 async function nrrdWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: NrrdWriteImageOptions = {}
 ) : Promise<NrrdWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`NrrdWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`NrrdWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### pngReadImage
 
@@ -1251,30 +1251,30 @@ async function nrrdWriteImage(
 
 ```ts
 async function pngReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: PngReadImageOptions = {}
 ) : Promise<PngReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`PngReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`PngReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### pngWriteImage
 
@@ -1282,33 +1282,33 @@ async function pngReadImage(
 
 ```ts
 async function pngWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: PngWriteImageOptions = {}
 ) : Promise<PngWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`PngWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`PngWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### scancoReadImage
 
@@ -1316,30 +1316,30 @@ async function pngWriteImage(
 
 ```ts
 async function scancoReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: ScancoReadImageOptions = {}
 ) : Promise<ScancoReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`ScancoReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ScancoReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### scancoWriteImage
 
@@ -1347,33 +1347,33 @@ async function scancoReadImage(
 
 ```ts
 async function scancoWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: ScancoWriteImageOptions = {}
 ) : Promise<ScancoWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`ScancoWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ScancoWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### tiffReadImage
 
@@ -1381,30 +1381,30 @@ async function scancoWriteImage(
 
 ```ts
 async function tiffReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: TiffReadImageOptions = {}
 ) : Promise<TiffReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`TiffReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`TiffReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### tiffWriteImage
 
@@ -1412,33 +1412,33 @@ async function tiffReadImage(
 
 ```ts
 async function tiffWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: TiffWriteImageOptions = {}
 ) : Promise<TiffWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`TiffWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`TiffWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### vtkReadImage
 
@@ -1446,30 +1446,30 @@ async function tiffWriteImage(
 
 ```ts
 async function vtkReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: VtkReadImageOptions = {}
 ) : Promise<VtkReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`VtkReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`VtkReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### vtkWriteImage
 
@@ -1477,33 +1477,33 @@ async function vtkReadImage(
 
 ```ts
 async function vtkWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: VtkWriteImageOptions = {}
 ) : Promise<VtkWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`VtkWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`VtkWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### wasmReadImage
 
@@ -1511,30 +1511,30 @@ async function vtkWriteImage(
 
 ```ts
 async function wasmReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: WasmReadImageOptions = {}
 ) : Promise<WasmReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`WasmReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`WasmReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### wasmWriteImage
 
@@ -1542,33 +1542,33 @@ async function wasmReadImage(
 
 ```ts
 async function wasmWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: WasmWriteImageOptions = {}
 ) : Promise<WasmWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`WasmWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`WasmWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### wasmZstdReadImage
 
@@ -1576,30 +1576,30 @@ async function wasmWriteImage(
 
 ```ts
 async function wasmZstdReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: WasmZstdReadImageOptions = {}
 ) : Promise<WasmZstdReadImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `serializedImage` |     *File | BinaryFile*     | Input image serialized in the file format                                                                                                                    |
+|     Parameter     |         Type        | Description                               |
+| :---------------: | :-----------------: | :---------------------------------------- |
+| `serializedImage` | *File | BinaryFile* | Input image serialized in the file format |
 
 **`WasmZstdReadImageOptions` interface:**
 
-|      Property     |    Type   | Description                                         |
-| :---------------: | :-------: | :-------------------------------------------------- |
-| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`WasmZstdReadImageResult` interface:**
 
 |   Property  |       Type       | Description                                                               |
 | :---------: | :--------------: | :------------------------------------------------------------------------ |
-| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 | `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output image is not valid. |
 |   `image`   |      *Image*     | Output image                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                           |
 
 #### wasmZstdWriteImage
 
@@ -1607,33 +1607,33 @@ async function wasmZstdReadImage(
 
 ```ts
 async function wasmZstdWriteImage(
-  webWorker: null | Worker | boolean,
   image: Image,
   serializedImage: string,
   options: WasmZstdWriteImageOptions = {}
 ) : Promise<WasmZstdWriteImageResult>
 ```
 
-|     Parameter     |             Type            | Description                                                                                                                                                  |
-| :---------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    `webWorker`    | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-|      `image`      |           *Image*           | Input image                                                                                                                                                  |
-| `serializedImage` |           *string*          | Output image serialized in the file format.                                                                                                                  |
+|     Parameter     |   Type   | Description                                 |
+| :---------------: | :------: | :------------------------------------------ |
+|      `image`      |  *Image* | Input image                                 |
+| `serializedImage` | *string* | Output image serialized in the file format. |
 
 **`WasmZstdWriteImageOptions` interface:**
 
-|      Property     |    Type   | Description                                           |
-| :---------------: | :-------: | :---------------------------------------------------- |
-| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data. |
-|  `useCompression` | *boolean* | Use compression in the written file                   |
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file                                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`WasmZstdWriteImageResult` interface:**
 
 |      Property     |       Type       | Description                                                                  |
 | :---------------: | :--------------: | :--------------------------------------------------------------------------- |
-|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 |    `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output image is not valid. |
 | `serializedImage` |   *BinaryFile*   | Output image serialized in the file format.                                  |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation.                                              |
 
 #### setPipelinesBaseUrl
 
@@ -1760,7 +1760,7 @@ async function writeImageNode(
 ```ts
 async function bioRadReadImageNode(
   serializedImage: string,
-  options: BioRadReadImageOptions = {}
+  options: BioRadReadImageNodeOptions = {}
 ) : Promise<BioRadReadImageNodeResult>
 ```
 
@@ -1789,7 +1789,7 @@ async function bioRadReadImageNode(
 async function bioRadWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: BioRadWriteImageOptions = {}
+  options: BioRadWriteImageNodeOptions = {}
 ) : Promise<BioRadWriteImageNodeResult>
 ```
 
@@ -1819,7 +1819,7 @@ async function bioRadWriteImageNode(
 ```ts
 async function bmpReadImageNode(
   serializedImage: string,
-  options: BmpReadImageOptions = {}
+  options: BmpReadImageNodeOptions = {}
 ) : Promise<BmpReadImageNodeResult>
 ```
 
@@ -1848,7 +1848,7 @@ async function bmpReadImageNode(
 async function bmpWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: BmpWriteImageOptions = {}
+  options: BmpWriteImageNodeOptions = {}
 ) : Promise<BmpWriteImageNodeResult>
 ```
 
@@ -1878,7 +1878,7 @@ async function bmpWriteImageNode(
 ```ts
 async function fdfReadImageNode(
   serializedImage: string,
-  options: FdfReadImageOptions = {}
+  options: FdfReadImageNodeOptions = {}
 ) : Promise<FdfReadImageNodeResult>
 ```
 
@@ -1907,7 +1907,7 @@ async function fdfReadImageNode(
 async function fdfWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: FdfWriteImageOptions = {}
+  options: FdfWriteImageNodeOptions = {}
 ) : Promise<FdfWriteImageNodeResult>
 ```
 
@@ -1937,7 +1937,7 @@ async function fdfWriteImageNode(
 ```ts
 async function gdcmReadImageNode(
   serializedImage: string,
-  options: GdcmReadImageOptions = {}
+  options: GdcmReadImageNodeOptions = {}
 ) : Promise<GdcmReadImageNodeResult>
 ```
 
@@ -1966,7 +1966,7 @@ async function gdcmReadImageNode(
 async function gdcmWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: GdcmWriteImageOptions = {}
+  options: GdcmWriteImageNodeOptions = {}
 ) : Promise<GdcmWriteImageNodeResult>
 ```
 
@@ -1996,7 +1996,7 @@ async function gdcmWriteImageNode(
 ```ts
 async function geAdwReadImageNode(
   serializedImage: string,
-  options: GeAdwReadImageOptions = {}
+  options: GeAdwReadImageNodeOptions = {}
 ) : Promise<GeAdwReadImageNodeResult>
 ```
 
@@ -2025,7 +2025,7 @@ async function geAdwReadImageNode(
 async function geAdwWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: GeAdwWriteImageOptions = {}
+  options: GeAdwWriteImageNodeOptions = {}
 ) : Promise<GeAdwWriteImageNodeResult>
 ```
 
@@ -2055,7 +2055,7 @@ async function geAdwWriteImageNode(
 ```ts
 async function ge4ReadImageNode(
   serializedImage: string,
-  options: Ge4ReadImageOptions = {}
+  options: Ge4ReadImageNodeOptions = {}
 ) : Promise<Ge4ReadImageNodeResult>
 ```
 
@@ -2084,7 +2084,7 @@ async function ge4ReadImageNode(
 async function ge4WriteImageNode(
   image: Image,
   serializedImage: string,
-  options: Ge4WriteImageOptions = {}
+  options: Ge4WriteImageNodeOptions = {}
 ) : Promise<Ge4WriteImageNodeResult>
 ```
 
@@ -2114,7 +2114,7 @@ async function ge4WriteImageNode(
 ```ts
 async function ge5ReadImageNode(
   serializedImage: string,
-  options: Ge5ReadImageOptions = {}
+  options: Ge5ReadImageNodeOptions = {}
 ) : Promise<Ge5ReadImageNodeResult>
 ```
 
@@ -2143,7 +2143,7 @@ async function ge5ReadImageNode(
 async function ge5WriteImageNode(
   image: Image,
   serializedImage: string,
-  options: Ge5WriteImageOptions = {}
+  options: Ge5WriteImageNodeOptions = {}
 ) : Promise<Ge5WriteImageNodeResult>
 ```
 
@@ -2173,7 +2173,7 @@ async function ge5WriteImageNode(
 ```ts
 async function giplReadImageNode(
   serializedImage: string,
-  options: GiplReadImageOptions = {}
+  options: GiplReadImageNodeOptions = {}
 ) : Promise<GiplReadImageNodeResult>
 ```
 
@@ -2202,7 +2202,7 @@ async function giplReadImageNode(
 async function giplWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: GiplWriteImageOptions = {}
+  options: GiplWriteImageNodeOptions = {}
 ) : Promise<GiplWriteImageNodeResult>
 ```
 
@@ -2232,7 +2232,7 @@ async function giplWriteImageNode(
 ```ts
 async function hdf5ReadImageNode(
   serializedImage: string,
-  options: Hdf5ReadImageOptions = {}
+  options: Hdf5ReadImageNodeOptions = {}
 ) : Promise<Hdf5ReadImageNodeResult>
 ```
 
@@ -2261,7 +2261,7 @@ async function hdf5ReadImageNode(
 async function hdf5WriteImageNode(
   image: Image,
   serializedImage: string,
-  options: Hdf5WriteImageOptions = {}
+  options: Hdf5WriteImageNodeOptions = {}
 ) : Promise<Hdf5WriteImageNodeResult>
 ```
 
@@ -2291,7 +2291,7 @@ async function hdf5WriteImageNode(
 ```ts
 async function jpegReadImageNode(
   serializedImage: string,
-  options: JpegReadImageOptions = {}
+  options: JpegReadImageNodeOptions = {}
 ) : Promise<JpegReadImageNodeResult>
 ```
 
@@ -2320,7 +2320,7 @@ async function jpegReadImageNode(
 async function jpegWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: JpegWriteImageOptions = {}
+  options: JpegWriteImageNodeOptions = {}
 ) : Promise<JpegWriteImageNodeResult>
 ```
 
@@ -2350,7 +2350,7 @@ async function jpegWriteImageNode(
 ```ts
 async function lsmReadImageNode(
   serializedImage: string,
-  options: LsmReadImageOptions = {}
+  options: LsmReadImageNodeOptions = {}
 ) : Promise<LsmReadImageNodeResult>
 ```
 
@@ -2379,7 +2379,7 @@ async function lsmReadImageNode(
 async function lsmWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: LsmWriteImageOptions = {}
+  options: LsmWriteImageNodeOptions = {}
 ) : Promise<LsmWriteImageNodeResult>
 ```
 
@@ -2409,7 +2409,7 @@ async function lsmWriteImageNode(
 ```ts
 async function metaReadImageNode(
   serializedImage: string,
-  options: MetaReadImageOptions = {}
+  options: MetaReadImageNodeOptions = {}
 ) : Promise<MetaReadImageNodeResult>
 ```
 
@@ -2438,7 +2438,7 @@ async function metaReadImageNode(
 async function metaWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: MetaWriteImageOptions = {}
+  options: MetaWriteImageNodeOptions = {}
 ) : Promise<MetaWriteImageNodeResult>
 ```
 
@@ -2468,7 +2468,7 @@ async function metaWriteImageNode(
 ```ts
 async function mghReadImageNode(
   serializedImage: string,
-  options: MghReadImageOptions = {}
+  options: MghReadImageNodeOptions = {}
 ) : Promise<MghReadImageNodeResult>
 ```
 
@@ -2497,7 +2497,7 @@ async function mghReadImageNode(
 async function mghWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: MghWriteImageOptions = {}
+  options: MghWriteImageNodeOptions = {}
 ) : Promise<MghWriteImageNodeResult>
 ```
 
@@ -2527,7 +2527,7 @@ async function mghWriteImageNode(
 ```ts
 async function mincReadImageNode(
   serializedImage: string,
-  options: MincReadImageOptions = {}
+  options: MincReadImageNodeOptions = {}
 ) : Promise<MincReadImageNodeResult>
 ```
 
@@ -2556,7 +2556,7 @@ async function mincReadImageNode(
 async function mincWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: MincWriteImageOptions = {}
+  options: MincWriteImageNodeOptions = {}
 ) : Promise<MincWriteImageNodeResult>
 ```
 
@@ -2586,7 +2586,7 @@ async function mincWriteImageNode(
 ```ts
 async function mrcReadImageNode(
   serializedImage: string,
-  options: MrcReadImageOptions = {}
+  options: MrcReadImageNodeOptions = {}
 ) : Promise<MrcReadImageNodeResult>
 ```
 
@@ -2615,7 +2615,7 @@ async function mrcReadImageNode(
 async function mrcWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: MrcWriteImageOptions = {}
+  options: MrcWriteImageNodeOptions = {}
 ) : Promise<MrcWriteImageNodeResult>
 ```
 
@@ -2645,7 +2645,7 @@ async function mrcWriteImageNode(
 ```ts
 async function niftiReadImageNode(
   serializedImage: string,
-  options: NiftiReadImageOptions = {}
+  options: NiftiReadImageNodeOptions = {}
 ) : Promise<NiftiReadImageNodeResult>
 ```
 
@@ -2674,7 +2674,7 @@ async function niftiReadImageNode(
 async function niftiWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: NiftiWriteImageOptions = {}
+  options: NiftiWriteImageNodeOptions = {}
 ) : Promise<NiftiWriteImageNodeResult>
 ```
 
@@ -2704,7 +2704,7 @@ async function niftiWriteImageNode(
 ```ts
 async function nrrdReadImageNode(
   serializedImage: string,
-  options: NrrdReadImageOptions = {}
+  options: NrrdReadImageNodeOptions = {}
 ) : Promise<NrrdReadImageNodeResult>
 ```
 
@@ -2733,7 +2733,7 @@ async function nrrdReadImageNode(
 async function nrrdWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: NrrdWriteImageOptions = {}
+  options: NrrdWriteImageNodeOptions = {}
 ) : Promise<NrrdWriteImageNodeResult>
 ```
 
@@ -2763,7 +2763,7 @@ async function nrrdWriteImageNode(
 ```ts
 async function pngReadImageNode(
   serializedImage: string,
-  options: PngReadImageOptions = {}
+  options: PngReadImageNodeOptions = {}
 ) : Promise<PngReadImageNodeResult>
 ```
 
@@ -2792,7 +2792,7 @@ async function pngReadImageNode(
 async function pngWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: PngWriteImageOptions = {}
+  options: PngWriteImageNodeOptions = {}
 ) : Promise<PngWriteImageNodeResult>
 ```
 
@@ -2822,7 +2822,7 @@ async function pngWriteImageNode(
 ```ts
 async function scancoReadImageNode(
   serializedImage: string,
-  options: ScancoReadImageOptions = {}
+  options: ScancoReadImageNodeOptions = {}
 ) : Promise<ScancoReadImageNodeResult>
 ```
 
@@ -2851,7 +2851,7 @@ async function scancoReadImageNode(
 async function scancoWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: ScancoWriteImageOptions = {}
+  options: ScancoWriteImageNodeOptions = {}
 ) : Promise<ScancoWriteImageNodeResult>
 ```
 
@@ -2881,7 +2881,7 @@ async function scancoWriteImageNode(
 ```ts
 async function tiffReadImageNode(
   serializedImage: string,
-  options: TiffReadImageOptions = {}
+  options: TiffReadImageNodeOptions = {}
 ) : Promise<TiffReadImageNodeResult>
 ```
 
@@ -2910,7 +2910,7 @@ async function tiffReadImageNode(
 async function tiffWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: TiffWriteImageOptions = {}
+  options: TiffWriteImageNodeOptions = {}
 ) : Promise<TiffWriteImageNodeResult>
 ```
 
@@ -2940,7 +2940,7 @@ async function tiffWriteImageNode(
 ```ts
 async function vtkReadImageNode(
   serializedImage: string,
-  options: VtkReadImageOptions = {}
+  options: VtkReadImageNodeOptions = {}
 ) : Promise<VtkReadImageNodeResult>
 ```
 
@@ -2969,7 +2969,7 @@ async function vtkReadImageNode(
 async function vtkWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: VtkWriteImageOptions = {}
+  options: VtkWriteImageNodeOptions = {}
 ) : Promise<VtkWriteImageNodeResult>
 ```
 
@@ -2999,7 +2999,7 @@ async function vtkWriteImageNode(
 ```ts
 async function wasmReadImageNode(
   serializedImage: string,
-  options: WasmReadImageOptions = {}
+  options: WasmReadImageNodeOptions = {}
 ) : Promise<WasmReadImageNodeResult>
 ```
 
@@ -3028,7 +3028,7 @@ async function wasmReadImageNode(
 async function wasmWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: WasmWriteImageOptions = {}
+  options: WasmWriteImageNodeOptions = {}
 ) : Promise<WasmWriteImageNodeResult>
 ```
 
@@ -3058,7 +3058,7 @@ async function wasmWriteImageNode(
 ```ts
 async function wasmZstdReadImageNode(
   serializedImage: string,
-  options: WasmZstdReadImageOptions = {}
+  options: WasmZstdReadImageNodeOptions = {}
 ) : Promise<WasmZstdReadImageNodeResult>
 ```
 
@@ -3087,7 +3087,7 @@ async function wasmZstdReadImageNode(
 async function wasmZstdWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: WasmZstdWriteImageOptions = {}
+  options: WasmZstdWriteImageNodeOptions = {}
 ) : Promise<WasmZstdWriteImageNodeResult>
 ```
 

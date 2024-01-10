@@ -16,6 +16,8 @@ import FdfReadImageResult from './fdf-read-image-result.js'
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
+import { getDefaultWebWorker } from './default-web-worker.js'
+
 /**
  * Read an image file format and convert it to the itk-wasm file format
  *
@@ -25,7 +27,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<FdfReadImageResult>} - result object
  */
 async function fdfReadImage(
-  webWorker: null | Worker | boolean,
   serializedImage: File | BinaryFile,
   options: FdfReadImageOptions = {}
 ) : Promise<FdfReadImageResult> {
@@ -64,12 +65,16 @@ async function fdfReadImage(
 
   const pipelinePath = 'fdf-read-image'
 
+  let workerToUse = options?.webWorker
+  if (workerToUse === undefined) {
+    workerToUse = await getDefaultWebWorker()
+  }
   const {
     webWorker: usedWebWorker,
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: workerToUse, noCopy: options?.noCopy })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

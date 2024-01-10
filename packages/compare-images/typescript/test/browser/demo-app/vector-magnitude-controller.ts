@@ -2,7 +2,6 @@
 
 import { readImage } from '@itk-wasm/image-io'
 import { writeImage } from '@itk-wasm/image-io'
-import { copyImage } from 'itk-wasm'
 import * as compareImages from '../../../dist/index.js'
 import vectorMagnitudeLoadSampleInputs, { usePreRun } from "./vector-magnitude-load-sample-inputs.js"
 
@@ -46,7 +45,7 @@ class VectorMagnitudeController {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const { image, webWorker } = await readImage(null, files[0])
+        const { image, webWorker } = await readImage(files[0])
         webWorker.terminate()
         model.inputs.set("vectorImage", image)
         const details = document.getElementById("vectorMagnitude-vector-image-details")
@@ -66,7 +65,7 @@ class VectorMagnitudeController {
             const magnitudeImageDownloadFormat = document.getElementById('magnitude-image-output-format')
             const downloadFormat = magnitudeImageDownloadFormat.value || 'nrrd'
             const fileName = `magnitudeImage.${downloadFormat}`
-            const { webWorker, serializedImage } = await writeImage(null, copyImage(model.outputs.get("magnitudeImage")), fileName)
+            const { webWorker, serializedImage } = await writeImage(model.outputs.get("magnitudeImage"), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(serializedImage, fileName)
@@ -139,8 +138,9 @@ class VectorMagnitudeController {
   }
 
   async run() {
-    const { webWorker, magnitudeImage, } = await compareImages.vectorMagnitude(this.webWorker,
-      copyImage(this.model.inputs.get('vectorImage')),
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, magnitudeImage, } = await compareImages.vectorMagnitude(      this.model.inputs.get('vectorImage'),
       Object.fromEntries(this.model.options.entries())
     )
     this.webWorker = webWorker

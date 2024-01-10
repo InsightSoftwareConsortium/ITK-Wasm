@@ -21,7 +21,6 @@ import path from 'path'
  */
 async function vectorMagnitudeNode(
   vectorImage: Image
-
 ) : Promise<VectorMagnitudeNodeResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [

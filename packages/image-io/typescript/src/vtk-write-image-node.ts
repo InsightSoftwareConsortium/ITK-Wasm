@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import VtkWriteImageOptions from './vtk-write-image-options.js'
+import VtkWriteImageNodeOptions from './vtk-write-image-node-options.js'
 import VtkWriteImageNodeResult from './vtk-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {VtkWriteImageOptions} options - options object
+ * @param {VtkWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<VtkWriteImageNodeResult>} - result object
  */
 async function vtkWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: VtkWriteImageOptions = {}
+  options: VtkWriteImageNodeOptions = {}
 ) : Promise<VtkWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

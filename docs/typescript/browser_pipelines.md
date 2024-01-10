@@ -1,10 +1,8 @@
 # Web Browser Processing Pipelines
 
-These processing pipeline execution functions can be used from within a web browser.
+These processing pipeline execution functions can be used from within a web browser. Processing pipeline TypeScript interfaces internally use the `runPipeline` function, documented below.
 
-Most of these functions return a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
-
-These functions return the [`WebWorker`](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) used for computation. They also optionally accept a web worker from a previous execution as their first argument -- pass the worker generated from execution or `null` if one is not available.
+The processing pipeline functions generated with `itk-wasm bindgen` return a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves an object.  The object there functions return includes a a `webWorker` property with the [`WebWorker`](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) used for computation. They also optionally accept a web worker from a previous execution as a `webWorker` property on their last argument. A per-package default web worker is reused throughout the session if no option is set. Alternatively, a web worker   can be manually created with `createWebWorker` and passed. Or, if `null` is passed, the worker will be created internally. If the worker is created explicitly, either through `createWebWorker` or passing `null`, it must `terminate()`'d manually once it is no longer needed to avoid resource leaks. Passing the value `false` for `webWorker` will run the computation in the current thread.
 
 ---
 

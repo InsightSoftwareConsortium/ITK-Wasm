@@ -49,7 +49,7 @@ async def ge5_write_image_async(
     if use_compression:
         kwargs["useCompression"] = to_js(use_compression)
 
-    outputs = await js_module.ge5WriteImage(web_worker, to_js(image), to_js(serialized_image), **kwargs)
+    outputs = await js_module.ge5WriteImage(to_js(image), to_js(serialized_image), webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

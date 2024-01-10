@@ -9,7 +9,7 @@ export default async function writeImageLoadSampleInputs (model, preRun=false) {
   const fileName = 'cthead1.iwi.cbor'
   const inputResponse = await fetch(`https://bafybeigrnfohpfr2kqooyjsozsva6jh2663riwrxsum5x3ltow42r6j2o4.ipfs.w3s.link/ipfs/bafybeigrnfohpfr2kqooyjsozsva6jh2663riwrxsum5x3ltow42r6j2o4/data/input/${fileName}`)
   const inputData = new Uint8Array(await inputResponse.arrayBuffer())
-  const { image: inputImage, webWorker } = await imageIo.readImage(null, { data: inputData, path: fileName })
+  const { image: inputImage, webWorker } = await imageIo.readImage({ data: inputData, path: fileName })
   webWorker.terminate()
   model.inputs.set('image', inputImage)
   const serializedImage = 'cthead1.png'

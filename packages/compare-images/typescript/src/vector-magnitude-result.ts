@@ -1,11 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-import { Image } from 'itk-wasm'
+import { Image, WorkerPoolFunctionResult } from 'itk-wasm'
 
-interface VectorMagnitudeResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
-
+interface VectorMagnitudeResult extends WorkerPoolFunctionResult {
   /** Output magnitude image */
   magnitudeImage: Image
 

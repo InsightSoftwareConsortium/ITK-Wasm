@@ -201,9 +201,11 @@ class ReadDicomEncapsulatedPdfController  {
   }
 
   async run() {
-    const { webWorker, pdfBinaryOutput, } = await dicom.readDicomEncapsulatedPdf(this.webWorker,
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, pdfBinaryOutput, } = await dicom.readDicomEncapsulatedPdf(
       { data: this.model.inputs.get('dicomFile').data.slice(), path: this.model.inputs.get('dicomFile').path },
-      Object.fromEntries(this.model.options.entries())
+      options
     )
     this.webWorker = webWorker
 

@@ -1,8 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-import { TextFile } from 'itk-wasm'
+import { TextFile, WorkerPoolFunctionOption } from 'itk-wasm'
 
-interface StructuredReportToHtmlOptions {
+interface StructuredReportToHtmlOptions extends WorkerPoolFunctionOption {
   /** read file format only */
   readFileOnly?: boolean
 

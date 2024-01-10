@@ -94,7 +94,7 @@ ${functionArgs}) -> ${returnType}:
 
     kwargs = {}
 ${addKwargs}
-    outputs = await js_module.${jsFunction}(web_worker, ${args}**kwargs)
+    outputs = await js_module.${jsFunction}(${args}webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

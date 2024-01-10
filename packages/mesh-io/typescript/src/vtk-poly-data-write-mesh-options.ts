@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface VtkPolyDataWriteMeshOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface VtkPolyDataWriteMeshOptions extends WorkerPoolFunctionOption {
   /** Only write image metadata -- do not write pixel data. */
   informationOnly?: boolean
 

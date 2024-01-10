@@ -1,5 +1,5 @@
 import Image from '../interface-types/image.js'
-import WorkerPool from '../worker-pool.js'
+import WorkerPool from '../worker-pool/worker-pool.js'
 
 interface ReadImageDicomFileSeriesResult {
   /** WebWorkerPool used for computation */

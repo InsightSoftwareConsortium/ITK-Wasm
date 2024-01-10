@@ -18,7 +18,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs)
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs)
     })
   })
 
@@ -30,7 +30,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl, pipelineWorkerUrl })
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl, pipelineWorkerUrl })
     })
   })
 
@@ -43,7 +43,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl })
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl })
     })
   })
 
@@ -56,7 +56,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs, { pipelineWorkerUrl })
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { pipelineWorkerUrl })
     })
   })
 
@@ -70,7 +70,7 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { returnValue, stdout, stderr } = await itk.runPipeline(webWorker, stdoutStderrPath, args, outputs, inputs)
+      const { returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { webWorker })
     })
   })
 
@@ -82,9 +82,12 @@ describe('runPipeline', () => {
       const outputs = null
       const inputs = null
       const stdoutStderrPath = 'stdout-stderr-test'
-      const { webWorker } = await itk.runPipeline(null, stdoutStderrPath, args, outputs, inputs)
-      const { returnValue, stdout, stderr } = await itk.runPipeline(webWorker, stdoutStderrPath, args, outputs, inputs)
+      const { webWorker } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs)
+      const { returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { webWorker })
+      expect(typeof webWorker.terminated).to.equal('boolean')
+      expect(webWorker.terminated).to.equal(false)
       webWorker.terminate()
+      expect(webWorker.terminated).to.equal(true)
       expect(returnValue, 'returnValue').to.equal(0)
       expect(stdout, 'stdout').to.equal(`I’m writing my code,
 But I do not realize,
@@ -106,7 +109,7 @@ Click. Perfect success.
       const outputs = null
       const inputs = null
       const absoluteURL = new URL('/pipelines/stdout-stderr-test', document.location)
-      const { returnValue, stdout, stderr } = await itk.runPipeline(false, absoluteURL, args, outputs, inputs)
+      const { returnValue, stdout, stderr } = await itk.runPipeline(absoluteURL, args, outputs, inputs, { webWorker: false })
       expect(returnValue, 'returnValue').to.equal(0)
       expect(stdout, 'stdout').to.equal(`I’m writing my code,
 But I do not realize,
@@ -138,7 +141,7 @@ Click. Perfect success.
         { type: itk.InterfaceTypes.TextStream, data: { data: 'The answer is 42.' } },
         { type: itk.InterfaceTypes.BinaryStream, data: { data: new Uint8Array([222, 173, 190, 239]) } }
       ]
-      const { stdout, stderr, outputs, webWorker } = await itk.runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
+      const { stdout, stderr, outputs, webWorker } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs)
       webWorker.terminate()
       expect(outputs[0].type, 'text output type').to.equal(itk.InterfaceTypes.TextStream)
       expect(outputs[0].data.data, 'text output data').to.equal('The answer is 42.')
@@ -155,7 +158,7 @@ Click. Perfect success.
     })
 
 
-  it('runs on the main thread when first argument is false', () => {
+  it('runs on the main thread when webWorker option is false', () => {
     cy.window().then(async (win) => {
       const itk = win.itk
 
@@ -174,7 +177,7 @@ Click. Perfect success.
         { type: itk.InterfaceTypes.TextStream, data: { data: 'The answer is 42.' } },
         { type: itk.InterfaceTypes.BinaryStream, data: { data: new Uint8Array([222, 173, 190, 239]) } }
       ]
-      const { stdout, stderr, outputs } = await itk.runPipeline(false, pipelinePath, args, desiredOutputs, inputs)
+      const { stdout, stderr, outputs } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs, { webWorker: false })
       expect(outputs[0].type, 'text output type').to.equal(itk.InterfaceTypes.TextStream)
       expect(outputs[0].data.data, 'text output data').to.equal('The answer is 42.')
       expect(outputs[1].type, 'binary output type').to.equal(itk.InterfaceTypes.BinaryStream)
@@ -219,8 +222,49 @@ Click. Perfect success.
       const inputs = [
         { type: itk.InterfaceTypes.Image, data: image }
       ]
-      const { webWorker, outputs } = await itk.runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
+      const { webWorker, outputs } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs)
       webWorker.terminate()
+      verifyImage(outputs[0].data)
+    })
+  })
+
+  it('runs twice without a detached buffer', () => {
+    cy.window().then(async (win) => {
+      const itk = win.itk
+
+      const verifyImage = (image) => {
+        expect(image.imageType.dimension, 'dimension').to.equal(2)
+        expect(image.imageType.componentType, 'componentType').to.equal(itk.IntTypes.UInt8)
+        expect(image.imageType.pixelType, 'pixelType').to.equal(itk.PixelTypes.Scalar)
+        expect(image.imageType.components, 'components').to.equal(1)
+        expect(image.origin, 'origin').to.deep.equal([0.0, 0.0])
+        expect(image.spacing, 'spacing').to.deep.equal([1.0, 1.0])
+        expect(image.size, 'size').to.deep.equal([256, 256])
+        expect(image.data.byteLength, 'data.byteLength').to.equal(65536)
+      }
+
+      const cthead1BaseUrl = new URL('/data/cthead1.iwi/', demoServer).href
+      const image = await readIwi(cthead1BaseUrl)
+
+      const pipelinePath = 'median-filter-test'
+      const args = [
+        '0',
+        '0',
+        '--radius', '4',
+        '--memory-io']
+      const desiredOutputs = [
+        { type: itk.InterfaceTypes.Image }
+      ]
+      const inputs = [
+        { type: itk.InterfaceTypes.Image, data: image }
+      ]
+      // const options = { noCopy: true } // failure expected
+      const options = { noCopy: false }
+      const { webWorker } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs, options)
+      options.webWorker = webWorker
+      const { outputs } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs, options)
+      webWorker.terminate()
+
       verifyImage(outputs[0].data)
     })
   })
@@ -250,7 +294,7 @@ Click. Perfect success.
       const inputs = [
         { type: itk.InterfaceTypes.Mesh, data: mesh }
       ]
-      const { webWorker, outputs } = await itk.runPipeline(null, pipelinePath, args, desiredOutputs, inputs)
+      const { webWorker, outputs } = await itk.runPipeline(pipelinePath, args, desiredOutputs, inputs)
       webWorker.terminate()
       verifyMesh(outputs[0].data)
     })

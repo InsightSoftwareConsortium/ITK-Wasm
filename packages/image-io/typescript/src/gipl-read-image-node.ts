@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import GiplReadImageOptions from './gipl-read-image-options.js'
+import GiplReadImageNodeOptions from './gipl-read-image-node-options.js'
 import GiplReadImageNodeResult from './gipl-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {GiplReadImageOptions} options - options object
+ * @param {GiplReadImageNodeOptions} options - options object
  *
  * @returns {Promise<GiplReadImageNodeResult>} - result object
  */
 async function giplReadImageNode(
   serializedImage: string,
-  options: GiplReadImageOptions = {}
+  options: GiplReadImageNodeOptions = {}
 ) : Promise<GiplReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface ParseStringDecompressOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface ParseStringDecompressOptions extends WorkerPoolFunctionOption {
   /** Parse the input string before decompression */
   parseString?: boolean
 

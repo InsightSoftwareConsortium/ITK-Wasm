@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import TiffWriteImageOptions from './tiff-write-image-options.js'
+import TiffWriteImageNodeOptions from './tiff-write-image-node-options.js'
 import TiffWriteImageNodeResult from './tiff-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {TiffWriteImageOptions} options - options object
+ * @param {TiffWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<TiffWriteImageNodeResult>} - result object
  */
 async function tiffWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: TiffWriteImageOptions = {}
+  options: TiffWriteImageNodeOptions = {}
 ) : Promise<TiffWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import NrrdReadImageOptions from './nrrd-read-image-options.js'
+import NrrdReadImageNodeOptions from './nrrd-read-image-node-options.js'
 import NrrdReadImageNodeResult from './nrrd-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {NrrdReadImageOptions} options - options object
+ * @param {NrrdReadImageNodeOptions} options - options object
  *
  * @returns {Promise<NrrdReadImageNodeResult>} - result object
  */
 async function nrrdReadImageNode(
   serializedImage: string,
-  options: NrrdReadImageOptions = {}
+  options: NrrdReadImageNodeOptions = {}
 ) : Promise<NrrdReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

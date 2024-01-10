@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import TiffReadImageOptions from './tiff-read-image-options.js'
+import TiffReadImageNodeOptions from './tiff-read-image-node-options.js'
 import TiffReadImageNodeResult from './tiff-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {TiffReadImageOptions} options - options object
+ * @param {TiffReadImageNodeOptions} options - options object
  *
  * @returns {Promise<TiffReadImageNodeResult>} - result object
  */
 async function tiffReadImageNode(
   serializedImage: string,
-  options: TiffReadImageOptions = {}
+  options: TiffReadImageNodeOptions = {}
 ) : Promise<TiffReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

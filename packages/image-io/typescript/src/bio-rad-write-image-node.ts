@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import BioRadWriteImageOptions from './bio-rad-write-image-options.js'
+import BioRadWriteImageNodeOptions from './bio-rad-write-image-node-options.js'
 import BioRadWriteImageNodeResult from './bio-rad-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {BioRadWriteImageOptions} options - options object
+ * @param {BioRadWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<BioRadWriteImageNodeResult>} - result object
  */
 async function bioRadWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: BioRadWriteImageOptions = {}
+  options: BioRadWriteImageNodeOptions = {}
 ) : Promise<BioRadWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

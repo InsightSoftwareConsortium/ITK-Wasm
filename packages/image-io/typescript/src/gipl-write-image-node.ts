@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import GiplWriteImageOptions from './gipl-write-image-options.js'
+import GiplWriteImageNodeOptions from './gipl-write-image-node-options.js'
 import GiplWriteImageNodeResult from './gipl-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {GiplWriteImageOptions} options - options object
+ * @param {GiplWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<GiplWriteImageNodeResult>} - result object
  */
 async function giplWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: GiplWriteImageOptions = {}
+  options: GiplWriteImageNodeOptions = {}
 ) : Promise<GiplWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

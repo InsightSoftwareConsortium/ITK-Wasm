@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import FreeSurferAsciiReadMeshOptions from './free-surfer-ascii-read-mesh-options.js'
+import FreeSurferAsciiReadMeshNodeOptions from './free-surfer-ascii-read-mesh-node-options.js'
 import FreeSurferAsciiReadMeshNodeResult from './free-surfer-ascii-read-mesh-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read a mesh file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedMesh - Input mesh serialized in the file format
- * @param {FreeSurferAsciiReadMeshOptions} options - options object
+ * @param {FreeSurferAsciiReadMeshNodeOptions} options - options object
  *
  * @returns {Promise<FreeSurferAsciiReadMeshNodeResult>} - result object
  */
 async function freeSurferAsciiReadMeshNode(
   serializedMesh: string,
-  options: FreeSurferAsciiReadMeshOptions = {}
+  options: FreeSurferAsciiReadMeshNodeOptions = {}
 ) : Promise<FreeSurferAsciiReadMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

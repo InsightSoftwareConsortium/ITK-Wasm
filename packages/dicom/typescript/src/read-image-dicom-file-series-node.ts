@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import ReadImageDicomFileSeriesOptions from './read-image-dicom-file-series-options.js'
+import ReadImageDicomFileSeriesNodeOptions from './read-image-dicom-file-series-node-options.js'
 import ReadImageDicomFileSeriesNodeResult from './read-image-dicom-file-series-node-result.js'
 
 import path from 'path'
@@ -17,12 +17,12 @@ import path from 'path'
 /**
  * Read a DICOM image series and return the associated image volume
  *
- * @param {ReadImageDicomFileSeriesOptions} options - options object
+ * @param {ReadImageDicomFileSeriesNodeOptions} options - options object
  *
  * @returns {Promise<ReadImageDicomFileSeriesNodeResult>} - result object
  */
 async function readImageDicomFileSeriesNode(
-  options: ReadImageDicomFileSeriesOptions = { inputImages: [] as string[], }
+  options: ReadImageDicomFileSeriesNodeOptions = { inputImages: [] as string[], }
 ) : Promise<ReadImageDicomFileSeriesNodeResult> {
 
   const mountDirs: Set<string> = new Set()

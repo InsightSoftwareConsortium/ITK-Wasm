@@ -19,11 +19,10 @@ const seriesBlockSize = 8
  * @returns {Promise<ReadImageDicomFileSeriesResult>} - result object
  */
 async function readImageDicomFileSeries(
-  webWorkerPool: null | WorkerPool,
   options: ReadImageDicomFileSeriesOptions = { inputImages: [] as BinaryFile[] | File[] | string[], }
 ) : Promise<ReadImageDicomFileSeriesResult> {
 
-  let workerPool = webWorkerPool
+  let workerPool = options.webWorkerPool ?? null
   if (workerPool === null) {
     workerPool = new WorkerPool(numberOfWorkers, readImageDicomFileSeriesWorkerFunction)
   }
@@ -47,7 +46,7 @@ async function readImageDicomFileSeries(
     const taskArgsArray = []
     for (let index = 0; index < inputs.length; index += seriesBlockSize) {
       const block = inputs.slice(index, index + seriesBlockSize)
-      taskArgsArray.push([block, options.singleSortedSeries])
+      taskArgsArray.push([block, options.singleSortedSeries, {}])
     }
     const results = await workerPool.runTasks(taskArgsArray).promise
     const images = results.map((result) => result.outputImage)
@@ -55,7 +54,7 @@ async function readImageDicomFileSeries(
     let stacked = stackImages(images)
     return { outputImage: stacked, webWorkerPool: workerPool, sortedFilenames }
   } else {
-    const taskArgsArray = [[inputs, options.singleSortedSeries]]
+    const taskArgsArray = [[inputs, options.singleSortedSeries, {}]]
     const results = await workerPool.runTasks(taskArgsArray).promise
     let image = results[0].outputImage
     return { outputImage: image, webWorkerPool: workerPool, sortedFilenames: results[0].sortedFilenames }

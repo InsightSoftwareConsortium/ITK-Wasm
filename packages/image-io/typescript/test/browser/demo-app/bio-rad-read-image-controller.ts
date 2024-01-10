@@ -76,7 +76,7 @@ class BioRadReadImageController {
             const imageDownloadFormat = document.getElementById('image-output-format')
             const downloadFormat = imageDownloadFormat.value || 'nrrd'
             const fileName = `image.${downloadFormat}`
-            const { webWorker, serializedImage } = await imageIo.writeImage(null, copyImage(model.outputs.get("image")), fileName)
+            const { webWorker, serializedImage } = await imageIo.writeImage(copyImage(model.outputs.get("image")), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(serializedImage, fileName)
@@ -157,9 +157,11 @@ class BioRadReadImageController {
   }
 
   async run() {
-    const { webWorker, couldRead, image, } = await imageIo.bioRadReadImage(this.webWorker,
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, couldRead, image, } = await imageIo.bioRadReadImage(
       { data: this.model.inputs.get('serializedImage').data.slice(), path: this.model.inputs.get('serializedImage').path },
-      Object.fromEntries(this.model.options.entries())
+      options
     )
     this.webWorker = webWorker
 

@@ -8,7 +8,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import CompressStringifyOptions from './compress-stringify-options.js'
+import CompressStringifyNodeOptions from './compress-stringify-node-options.js'
 import CompressStringifyNodeResult from './compress-stringify-node-result.js'
 
 import path from 'path'
@@ -17,13 +17,13 @@ import path from 'path'
  * Given a binary, compress and optionally base64 encode.
  *
  * @param {Uint8Array} input - Input binary
- * @param {CompressStringifyOptions} options - options object
+ * @param {CompressStringifyNodeOptions} options - options object
  *
  * @returns {Promise<CompressStringifyNodeResult>} - result object
  */
 async function compressStringifyNode(
   input: Uint8Array,
-  options: CompressStringifyOptions = {}
+  options: CompressStringifyNodeOptions = {}
 ) : Promise<CompressStringifyNodeResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [

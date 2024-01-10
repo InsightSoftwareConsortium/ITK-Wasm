@@ -30,9 +30,9 @@ describe('write-mesh', () => {
   it('Writes an mesh to an ArrayBuffer', function () {
     cy.window().then(async (win) => {
       const arrayBuffer = new Uint8Array(this['cow.iwm.cbor']).buffer
-      const { mesh, webWorker } = await win.meshIo.readMesh(null, { data: new Uint8Array(arrayBuffer), path: 'cow.iwm.cbor' })
-      const { serializedMesh } = await win.meshIo.writeMesh(webWorker, mesh, 'cow.vtk')
-      const { mesh: meshBack } = await win.meshIo.readMesh(webWorker, serializedMesh)
+      const { mesh, webWorker } = await win.meshIo.readMesh({ data: new Uint8Array(arrayBuffer), path: 'cow.iwm.cbor' })
+      const { serializedMesh } = await win.meshIo.writeMesh(mesh, 'cow.vtk', { webWorker })
+      const { mesh: meshBack } = await win.meshIo.readMesh(serializedMesh, { webWorker })
       webWorker.terminate()
       verifyMesh(meshBack)
     })

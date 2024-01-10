@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import LsmReadImageOptions from './lsm-read-image-options.js'
+import LsmReadImageNodeOptions from './lsm-read-image-node-options.js'
 import LsmReadImageNodeResult from './lsm-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {LsmReadImageOptions} options - options object
+ * @param {LsmReadImageNodeOptions} options - options object
  *
  * @returns {Promise<LsmReadImageNodeResult>} - result object
  */
 async function lsmReadImageNode(
   serializedImage: string,
-  options: LsmReadImageOptions = {}
+  options: LsmReadImageNodeOptions = {}
 ) : Promise<LsmReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

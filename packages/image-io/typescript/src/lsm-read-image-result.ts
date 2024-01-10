@@ -1,11 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-import { JsonCompatible, Image } from 'itk-wasm'
+import { JsonCompatible, Image, WorkerPoolFunctionResult } from 'itk-wasm'
 
-interface LsmReadImageResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
-
+interface LsmReadImageResult extends WorkerPoolFunctionResult {
   /** Whether the input could be read. If false, the output image is not valid. */
   couldRead: JsonCompatible
 

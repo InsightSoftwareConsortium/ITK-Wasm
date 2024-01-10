@@ -58,7 +58,7 @@ async def write_mesh_async(
         for ioname in mesh_io_index:
             func = f"{ioname}WriteMesh"
             io = getattr(js_module, func)
-            outputs = await io(web_worker, to_js(mesh), to_js(serialized_mesh), **kwargs)
+            outputs = await io(to_js(mesh), to_js(serialized_mesh), webWorker=web_worker, noCopy=True, **kwargs)
             outputs_object_map = outputs.as_object_map()
             web_worker = outputs_object_map['webWorker']
             js_resources.web_worker = web_worker
@@ -70,8 +70,7 @@ async def write_mesh_async(
     if io is None:
         raise RuntimeError(f"Could not find an mesh writer for {extension}")
 
-    io = getattr(js_module, func)
-    outputs = await io(web_worker, to_js(mesh), to_js(serialized_mesh), **kwargs)
+    outputs = await io(to_js(mesh), to_js(serialized_mesh), webWorker=web_worker, noCopy=True, **kwargs)
     outputs_object_map = outputs.as_object_map()
     web_worker = outputs_object_map['webWorker']
     js_resources.web_worker = web_worker

@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import ByuReadMeshOptions from './byu-read-mesh-options.js'
+import ByuReadMeshNodeOptions from './byu-read-mesh-node-options.js'
 import ByuReadMeshNodeResult from './byu-read-mesh-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read a mesh file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedMesh - Input mesh serialized in the file format
- * @param {ByuReadMeshOptions} options - options object
+ * @param {ByuReadMeshNodeOptions} options - options object
  *
  * @returns {Promise<ByuReadMeshNodeResult>} - result object
  */
 async function byuReadMeshNode(
   serializedMesh: string,
-  options: ByuReadMeshOptions = {}
+  options: ByuReadMeshNodeOptions = {}
 ) : Promise<ByuReadMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

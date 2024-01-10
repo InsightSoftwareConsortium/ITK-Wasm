@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface BioRadWriteImageOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface BioRadWriteImageOptions extends WorkerPoolFunctionOption {
   /** Only write image metadata -- do not write pixel data. */
   informationOnly?: boolean
 

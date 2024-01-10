@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface ScancoReadImageOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface ScancoReadImageOptions extends WorkerPoolFunctionOption {
   /** Only read image metadata -- do not read pixel data. */
   informationOnly?: boolean
 

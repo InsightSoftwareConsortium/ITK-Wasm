@@ -32,7 +32,7 @@ async def vector_magnitude_async(
 
     kwargs = {}
 
-    outputs = await js_module.vectorMagnitude(web_worker, to_js(vector_image), **kwargs)
+    outputs = await js_module.vectorMagnitude(to_js(vector_image), webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

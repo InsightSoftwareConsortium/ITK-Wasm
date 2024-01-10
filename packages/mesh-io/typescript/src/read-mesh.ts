@@ -2,6 +2,8 @@ import {
   BinaryFile,
   Mesh,
   getFileExtension,
+  WorkerPoolFunctionResult,
+  WorkerPoolFunctionOption
 } from 'itk-wasm'
 
 import mimeToMeshIo from './mime-to-mesh-io.js'
@@ -11,16 +13,15 @@ import meshIoIndex from './mesh-io-index.js'
 import ReadMeshOptions from './read-mesh-options.js'
 import ReadMeshResult from './read-mesh-result.js'
 
-interface ReaderResult {
-  webWorker: Worker,
+interface ReaderResult extends WorkerPoolFunctionResult {
   couldRead: boolean,
   mesh: Mesh
 }
-interface ReaderOptions {
+interface ReaderOptions extends WorkerPoolFunctionOption {
   /** Only read mesh metadata -- do not read pixel data. */
   informationOnly?: boolean
 }
-type Reader = (webWorker: null | Worker | boolean, serializedMesh: File | BinaryFile, options: ReaderOptions) => Promise<ReaderResult>
+type Reader = (serializedMesh: File | BinaryFile, options: ReaderOptions) => Promise<ReaderResult>
 
 /**
  * Read a mesh file format and convert it to the itk-wasm file format
@@ -32,7 +33,6 @@ type Reader = (webWorker: null | Worker | boolean, serializedMesh: File | Binary
  * @returns {Promise<ReadMeshResult>} - result object with the mesh and the web worker used
  */
 async function readMesh(
-  webWorker: null | Worker | boolean,
   serializedMesh: File | BinaryFile,
   options: ReadMeshOptions = {}
 ) : Promise<ReadMeshResult> {
@@ -40,7 +40,7 @@ async function readMesh(
   const mimeType = (serializedMesh as File).type ?? ''
   const fileName = (serializedMesh as File).name ?? (serializedMesh as BinaryFile).path ?? 'fileName'
   const extension = getFileExtension(fileName).toLowerCase()
-  let usedWebWorker = webWorker
+  let usedWebWorker = options?.webWorker
 
   let serializedMeshFile = serializedMesh as BinaryFile
   if (serializedMesh instanceof Blob) {
@@ -56,7 +56,7 @@ async function readMesh(
   } else {
     for (const readerWriter of meshIoIndex.values()) {
       if (readerWriter[0] !== null) {
-        let { webWorker: testWebWorker, couldRead, mesh } = await (readerWriter[0] as unknown as Reader)(usedWebWorker, { path: serializedMeshFile.path, data: serializedMeshFile.data.slice() }, { informationOnly: options.informationOnly })
+        let { webWorker: testWebWorker, couldRead, mesh } = await (readerWriter[0] as unknown as Reader)({ path: serializedMeshFile.path, data: serializedMeshFile.data.slice() }, { informationOnly: options.informationOnly, webWorker: usedWebWorker, noCopy: options?.noCopy })
         usedWebWorker = testWebWorker
         if (couldRead) {
           return { webWorker: usedWebWorker, mesh }
@@ -70,7 +70,7 @@ async function readMesh(
   const readerWriter = meshIoIndex.get(io as string)
 
   const reader = (readerWriter as Array<Reader>)[0]
-  let { webWorker: testWebWorker, couldRead, mesh } = await reader(usedWebWorker, serializedMeshFile, { informationOnly: options.informationOnly })
+  let { webWorker: testWebWorker, couldRead, mesh } = await reader(serializedMeshFile, { informationOnly: options.informationOnly, webWorker: usedWebWorker, noCopy: options?.noCopy })
   usedWebWorker = testWebWorker
   if (!couldRead) {
     throw Error('Could not read: ' + fileName)

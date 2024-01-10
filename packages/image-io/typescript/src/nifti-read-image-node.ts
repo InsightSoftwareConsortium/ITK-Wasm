@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import NiftiReadImageOptions from './nifti-read-image-options.js'
+import NiftiReadImageNodeOptions from './nifti-read-image-node-options.js'
 import NiftiReadImageNodeResult from './nifti-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {NiftiReadImageOptions} options - options object
+ * @param {NiftiReadImageNodeOptions} options - options object
  *
  * @returns {Promise<NiftiReadImageNodeResult>} - result object
  */
 async function niftiReadImageNode(
   serializedImage: string,
-  options: NiftiReadImageOptions = {}
+  options: NiftiReadImageNodeOptions = {}
 ) : Promise<NiftiReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

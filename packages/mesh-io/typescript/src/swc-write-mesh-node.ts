@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import SwcWriteMeshOptions from './swc-write-mesh-options.js'
+import SwcWriteMeshNodeOptions from './swc-write-mesh-node-options.js'
 import SwcWriteMeshNodeResult from './swc-write-mesh-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Mesh} mesh - Input mesh
  * @param {string} serializedMesh - Output mesh
- * @param {SwcWriteMeshOptions} options - options object
+ * @param {SwcWriteMeshNodeOptions} options - options object
  *
  * @returns {Promise<SwcWriteMeshNodeResult>} - result object
  */
 async function swcWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: SwcWriteMeshOptions = {}
+  options: SwcWriteMeshNodeOptions = {}
 ) : Promise<SwcWriteMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

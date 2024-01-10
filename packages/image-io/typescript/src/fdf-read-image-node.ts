@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import FdfReadImageOptions from './fdf-read-image-options.js'
+import FdfReadImageNodeOptions from './fdf-read-image-node-options.js'
 import FdfReadImageNodeResult from './fdf-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {FdfReadImageOptions} options - options object
+ * @param {FdfReadImageNodeOptions} options - options object
  *
  * @returns {Promise<FdfReadImageNodeResult>} - result object
  */
 async function fdfReadImageNode(
   serializedImage: string,
-  options: FdfReadImageOptions = {}
+  options: FdfReadImageNodeOptions = {}
 ) : Promise<FdfReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

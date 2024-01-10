@@ -14,6 +14,8 @@ import ParseStringDecompressResult from './parse-string-decompress-result.js'
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
+import { getDefaultWebWorker } from './default-web-worker.js'
+
 /**
  * Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.
  *
@@ -23,7 +25,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<ParseStringDecompressResult>} - result object
  */
 async function parseStringDecompress(
-  webWorker: null | Worker | boolean,
   input: Uint8Array,
   options: ParseStringDecompressOptions = {}
 ) : Promise<ParseStringDecompressResult> {
@@ -53,12 +54,16 @@ async function parseStringDecompress(
 
   const pipelinePath = 'parse-string-decompress'
 
+  let workerToUse = options?.webWorker
+  if (workerToUse === undefined) {
+    workerToUse = await getDefaultWebWorker()
+  }
   const {
     webWorker: usedWebWorker,
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: workerToUse, noCopy: options?.noCopy })
   if (returnValue !== 0 && stderr !== "") {
     throw new Error(stderr)
   }

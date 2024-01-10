@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import VtkPolyDataWriteMeshOptions from './vtk-poly-data-write-mesh-options.js'
+import VtkPolyDataWriteMeshNodeOptions from './vtk-poly-data-write-mesh-node-options.js'
 import VtkPolyDataWriteMeshNodeResult from './vtk-poly-data-write-mesh-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Mesh} mesh - Input mesh
  * @param {string} serializedMesh - Output mesh
- * @param {VtkPolyDataWriteMeshOptions} options - options object
+ * @param {VtkPolyDataWriteMeshNodeOptions} options - options object
  *
  * @returns {Promise<VtkPolyDataWriteMeshNodeResult>} - result object
  */
 async function vtkPolyDataWriteMeshNode(
   mesh: Mesh,
   serializedMesh: string,
-  options: VtkPolyDataWriteMeshOptions = {}
+  options: VtkPolyDataWriteMeshNodeOptions = {}
 ) : Promise<VtkPolyDataWriteMeshNodeResult> {
 
   const mountDirs: Set<string> = new Set()

@@ -22,7 +22,6 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
  * @returns {Promise<ReadDicomTagsResult>} - result object
  */
 async function readDicomTags(
-  webWorker: null | Worker,
   dicomFile: File | BinaryFile,
   options: ReadDicomTagsOptions = {}
 ) : Promise<ReadDicomTagsResult> {
@@ -65,7 +64,7 @@ async function readDicomTags(
     returnValue,
     stderr,
     outputs
-  } = await runPipeline(webWorker, pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl() })
+  } = await runPipeline(pipelinePath, args, desiredOutputs, inputs, { pipelineBaseUrl: getPipelinesBaseUrl(), pipelineWorkerUrl: getPipelineWorkerUrl(), webWorker: options?.webWorker ?? null})
   if (returnValue !== 0) {
     throw new Error(stderr)
   }

@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface PngReadImageOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface PngReadImageOptions extends WorkerPoolFunctionOption {
   /** Only read image metadata -- do not read pixel data. */
   informationOnly?: boolean
 

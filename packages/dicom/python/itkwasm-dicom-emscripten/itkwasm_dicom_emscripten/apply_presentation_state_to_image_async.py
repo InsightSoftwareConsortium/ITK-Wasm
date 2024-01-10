@@ -68,7 +68,7 @@ async def apply_presentation_state_to_image_async(
     if no_bitmap_output:
         kwargs["noBitmapOutput"] = to_js(no_bitmap_output)
 
-    outputs = await js_module.applyPresentationStateToImage(web_worker, to_js(BinaryFile(image_in)), to_js(BinaryFile(presentation_state_file)), **kwargs)
+    outputs = await js_module.applyPresentationStateToImage(to_js(BinaryFile(image_in)), to_js(BinaryFile(presentation_state_file)), webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

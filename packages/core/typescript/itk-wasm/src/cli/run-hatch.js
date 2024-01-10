@@ -7,8 +7,7 @@ function runHatch(micromambaBinaryPath, micromambaRootPath, micromambaName, cwd,
     encoding: 'utf-8',
   })
   if (versionProcess.status !== 0) {
-    console.error(versionProcess.stderr.toString())
-    console.error(`Could not sync version for ${packageName}`)
+    console.error(`Could not run hatch at ${cwd} version with args ${hatchArgs}`)
     process.exit(versionProcess.status)
   }
   return versionProcess.stdout.toString()

@@ -30,36 +30,35 @@ import {
 
 ```ts
 async function compareImages(
-  webWorker: null | Worker | boolean,
   testImage: Image,
   options: CompareImagesOptions = { baselineImages: [] as Image[], }
 ) : Promise<CompareImagesResult>
 ```
 
-|  Parameter  |             Type            | Description                                                                                                                                                  |
-| :---------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `webWorker` | *null or Worker or boolean* | WebWorker to use for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
-| `testImage` |           *Image*           | The input test image                                                                                                                                         |
+|  Parameter  |   Type  | Description          |
+| :---------: | :-----: | :------------------- |
+| `testImage` | *Image* | The input test image |
 
 **`CompareImagesOptions` interface:**
 
-|          Property         |    Type   | Description                                                                                                      |
-| :-----------------------: | :-------: | :--------------------------------------------------------------------------------------------------------------- |
-|      `baselineImages`     | *Image[]* | Baseline images compare against                                                                                  |
-|   `differenceThreshold`   |  *number* | Intensity difference for pixels to be considered different.                                                      |
-|     `radiusTolerance`     |  *number* | Radius of the neighborhood around a pixel to search for similar intensity values.                                |
-| `numberOfPixelsTolerance` |  *number* | Number of pixels that can be different before the test fails.                                                    |
-|   `ignoreBoundaryPixels`  | *boolean* | Ignore boundary pixels. Useful when resampling may have introduced difference pixel values along the image edge. |
+|          Property         |             Type            | Description                                                                                                                                           |
+| :-----------------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      `baselineImages`     |          *Image[]*          | Baseline images compare against                                                                                                                       |
+|   `differenceThreshold`   |           *number*          | Intensity difference for pixels to be considered different.                                                                                           |
+|     `radiusTolerance`     |           *number*          | Radius of the neighborhood around a pixel to search for similar intensity values.                                                                     |
+| `numberOfPixelsTolerance` |           *number*          | Number of pixels that can be different before the test fails.                                                                                         |
+|   `ignoreBoundaryPixels`  |          *boolean*          | Ignore boundary pixels. Useful when resampling may have introduced difference pixel values along the image edge.                                      |
+|        `webWorker`        | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|          `noCopy`         |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`CompareImagesResult` interface:**
 
 |         Property         |       Type       | Description                                                                       |
 | :----------------------: | :--------------: | :-------------------------------------------------------------------------------- |
-|        `webWorker`       |     *Worker*     | WebWorker used for computation.                                                   |
 |         `metrics`        | *JsonCompatible* | Metrics for the baseline with the fewest number of pixels outside the tolerances. |
 |     `differenceImage`    |      *Image*     | Absolute difference image                                                         |
 | `differenceUchar2dImage` |      *Image*     | Unsigned char, 2D difference image for rendering                                  |
-
+|        `webWorker`       |     *Worker*     | WebWorker used for computation.                                                   |
 
 #### setPipelinesBaseUrl
 

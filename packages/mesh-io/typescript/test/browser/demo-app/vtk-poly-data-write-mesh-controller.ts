@@ -44,7 +44,7 @@ class VtkPolyDataWriteMeshController {
         const dataTransfer = event.dataTransfer
         const files = event.target.files || dataTransfer.files
 
-        const { mesh, webWorker } = await readMesh(null, files[0])
+        const { mesh, webWorker } = await readMesh(files[0])
         webWorker.terminate()
         model.inputs.set("mesh", mesh)
         const details = document.getElementById("vtkPolyDataWriteMesh-mesh-details")
@@ -168,8 +168,9 @@ class VtkPolyDataWriteMeshController {
   }
 
   async run() {
-    const { webWorker, couldWrite, serializedMesh, } = await meshIo.vtkPolyDataWriteMesh(this.webWorker,
-      this.model.inputs.get('mesh'),
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, couldWrite, serializedMesh, } = await meshIo.vtkPolyDataWriteMesh(      this.model.inputs.get('mesh'),
       this.model.inputs.get('serializedMesh'),
       Object.fromEntries(this.model.options.entries())
     )

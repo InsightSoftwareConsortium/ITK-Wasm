@@ -29,6 +29,11 @@ function writeSupportFiles(outputDir, forNode, bindgenResource, packageName, pac
       pipelineWorkerUrlPathContent = pipelineWorkerUrlPathContent.replaceAll('<bindgenPackageName>', packageName)
       writeIfOverrideNotPresent(pipelineWorkerUrlPath, pipelineWorkerUrlPathContent)
     }
+    const defaultWebWorkerPath = path.join(outputDir, 'src', 'default-web-worker.ts')
+    if (!fs.existsSync(defaultWebWorkerPath)) {
+      let defaultWebWorkerContent = fs.readFileSync(bindgenResource('default-web-worker.ts'), { encoding: 'utf8', flag: 'r' })
+      writeIfOverrideNotPresent(defaultWebWorkerPath, defaultWebWorkerContent)
+    }
 
     const indexWorkerEmbeddedPath = path.join(outputDir, 'src', 'index-worker-embedded.ts')
     const indexWorkerEmbeddedContent = fs.readFileSync(bindgenResource('index-worker-embedded.ts'), { encoding: 'utf8', flag: 'r' })

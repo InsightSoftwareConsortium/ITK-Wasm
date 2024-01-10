@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import BioRadReadImageOptions from './bio-rad-read-image-options.js'
+import BioRadReadImageNodeOptions from './bio-rad-read-image-node-options.js'
 import BioRadReadImageNodeResult from './bio-rad-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {BioRadReadImageOptions} options - options object
+ * @param {BioRadReadImageNodeOptions} options - options object
  *
  * @returns {Promise<BioRadReadImageNodeResult>} - result object
  */
 async function bioRadReadImageNode(
   serializedImage: string,
-  options: BioRadReadImageOptions = {}
+  options: BioRadReadImageNodeOptions = {}
 ) : Promise<BioRadReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

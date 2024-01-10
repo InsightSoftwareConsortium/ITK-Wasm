@@ -1,6 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-interface CompressStringifyOptions {
+import { WorkerPoolFunctionOption } from 'itk-wasm'
+
+interface CompressStringifyOptions extends WorkerPoolFunctionOption {
   /** Stringify the output */
   stringify?: boolean
 

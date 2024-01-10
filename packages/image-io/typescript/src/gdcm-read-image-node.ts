@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import GdcmReadImageOptions from './gdcm-read-image-options.js'
+import GdcmReadImageNodeOptions from './gdcm-read-image-node-options.js'
 import GdcmReadImageNodeResult from './gdcm-read-image-node-result.js'
 
 import path from 'path'
@@ -18,13 +18,13 @@ import path from 'path'
  * Read an image file format and convert it to the itk-wasm file format
  *
  * @param {string} serializedImage - Input image serialized in the file format
- * @param {GdcmReadImageOptions} options - options object
+ * @param {GdcmReadImageNodeOptions} options - options object
  *
  * @returns {Promise<GdcmReadImageNodeResult>} - result object
  */
 async function gdcmReadImageNode(
   serializedImage: string,
-  options: GdcmReadImageOptions = {}
+  options: GdcmReadImageNodeOptions = {}
 ) : Promise<GdcmReadImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

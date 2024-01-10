@@ -1,11 +1,8 @@
 // Generated file. To retain edits, remove this comment.
 
-import { JsonCompatible, BinaryFile } from 'itk-wasm'
+import { JsonCompatible, BinaryFile, WorkerPoolFunctionResult } from 'itk-wasm'
 
-interface GdcmWriteImageResult {
-  /** WebWorker used for computation */
-  webWorker: Worker | null
-
+interface GdcmWriteImageResult extends WorkerPoolFunctionResult {
   /** Whether the input could be written. If false, the output image is not valid. */
   couldWrite: JsonCompatible
 

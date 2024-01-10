@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import Ge4WriteImageOptions from './ge4-write-image-options.js'
+import Ge4WriteImageNodeOptions from './ge4-write-image-node-options.js'
 import Ge4WriteImageNodeResult from './ge4-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {Ge4WriteImageOptions} options - options object
+ * @param {Ge4WriteImageNodeOptions} options - options object
  *
  * @returns {Promise<Ge4WriteImageNodeResult>} - result object
  */
 async function ge4WriteImageNode(
   image: Image,
   serializedImage: string,
-  options: Ge4WriteImageOptions = {}
+  options: Ge4WriteImageNodeOptions = {}
 ) : Promise<Ge4WriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

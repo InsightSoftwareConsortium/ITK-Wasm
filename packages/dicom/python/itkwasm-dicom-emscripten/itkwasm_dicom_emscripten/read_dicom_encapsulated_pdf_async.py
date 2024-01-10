@@ -123,7 +123,7 @@ async def read_dicom_encapsulated_pdf_async(
     if disable_correction:
         kwargs["disableCorrection"] = to_js(disable_correction)
 
-    outputs = await js_module.readDicomEncapsulatedPdf(web_worker, to_js(BinaryFile(dicom_file)), **kwargs)
+    outputs = await js_module.readDicomEncapsulatedPdf(to_js(BinaryFile(dicom_file)), webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

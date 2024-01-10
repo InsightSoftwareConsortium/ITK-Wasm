@@ -78,7 +78,7 @@ class ObjReadMeshController {
             const meshDownloadFormat = document.getElementById('mesh-output-format')
             const downloadFormat = meshDownloadFormat.value || 'vtk'
             const fileName = `mesh.${downloadFormat}`
-            const { webWorker, arrayBuffer } = await writeMesh(null, model.outputs.get("mesh"), fileName)
+            const { webWorker, arrayBuffer } = await writeMesh(model.outputs.get("mesh"), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(arrayBuffer, fileName)
@@ -159,8 +159,9 @@ class ObjReadMeshController {
   }
 
   async run() {
-    const { webWorker, couldRead, mesh, } = await meshIo.objReadMesh(this.webWorker,
-      { data: this.model.inputs.get('serializedMesh').data.slice(), path: this.model.inputs.get('serializedMesh').path },
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, couldRead, mesh, } = await meshIo.objReadMesh(      { data: this.model.inputs.get('serializedMesh').data.slice(), path: this.model.inputs.get('serializedMesh').path },
       Object.fromEntries(this.model.options.entries())
     )
     this.webWorker = webWorker

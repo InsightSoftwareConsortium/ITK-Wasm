@@ -30,8 +30,6 @@ import {
   readImageDicomFileSeries,
   setPipelinesBaseUrl,
   getPipelinesBaseUrl,
-  setPipelineWorkerUrl,
-  getPipelineWorkerUrl,
 } from "@itk-wasm/dicom"
 ```
 
@@ -41,7 +39,6 @@ import {
 
 ```ts
 async function applyPresentationStateToImage(
-  webWorker: null | Worker,
   imageIn: File | BinaryFile,
   presentationStateFile: File | BinaryFile,
   options: ApplyPresentationStateToImageOptions = {}
@@ -55,21 +52,23 @@ async function applyPresentationStateToImage(
 
 **`ApplyPresentationStateToImageOptions` interface:**
 
-|           Property          |    Type   | Description                                                      |
-| :-------------------------: | :-------: | :--------------------------------------------------------------- |
-|        `colorOutput`        | *boolean* | output image as RGB (default: false)                             |
-|         `configFile`        |  *string* | filename: string. Process using settings from configuration file |
-|           `frame`           |  *number* | frame: integer. Process using image frame f (default: 1)         |
-| `noPresentationStateOutput` | *boolean* | Do not get presentation state information in text stream.        |
-|       `noBitmapOutput`      | *boolean* | Do not get resulting image as bitmap output stream.              |
+|           Property          |             Type            | Description                                                                                                                                           |
+| :-------------------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|        `colorOutput`        |          *boolean*          | output image as RGB (default: false)                                                                                                                  |
+|         `configFile`        |           *string*          | filename: string. Process using settings from configuration file                                                                                      |
+|           `frame`           |           *number*          | frame: integer. Process using image frame f (default: 1)                                                                                              |
+| `noPresentationStateOutput` |          *boolean*          | Do not get presentation state information in text stream.                                                                                             |
+|       `noBitmapOutput`      |          *boolean*          | Do not get resulting image as bitmap output stream.                                                                                                   |
+|         `webWorker`         | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|           `noCopy`          |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ApplyPresentationStateToImageResult` interface:**
 
-|           Property           |   Type   | Description                    |
-| :--------------------------: | :------: | :----------------------------- |
-|         **webWorker**        | *Worker* | WebWorker used for computation |
-| `presentationStateOutStream` | *Object* | Output overlay information     |
-|         `outputImage`        |  *Image* | Output image                   |
+|           Property           |       Type       | Description                     |
+| :--------------------------: | :--------------: | :------------------------------ |
+| `presentationStateOutStream` | *JsonCompatible* | Output overlay information      |
+|         `outputImage`        |      *Image*     | Output image                    |
+|          `webWorker`         |     *Worker*     | WebWorker used for computation. |
 
 #### readDicomEncapsulatedPdf
 
@@ -77,7 +76,6 @@ async function applyPresentationStateToImage(
 
 ```ts
 async function readDicomEncapsulatedPdf(
-  webWorker: null | Worker,
   dicomFile: File | BinaryFile,
   options: ReadDicomEncapsulatedPdfOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfResult>
@@ -89,30 +87,32 @@ async function readDicomEncapsulatedPdf(
 
 **`ReadDicomEncapsulatedPdfOptions` interface:**
 
-|       Property      |    Type   | Description                                    |
-| :-----------------: | :-------: | :--------------------------------------------- |
-|    `readFileOnly`   | *boolean* | read file format only                          |
-|    `readDataset`    | *boolean* | read data set without file meta information    |
-|    `readXferAuto`   | *boolean* | use TS recognition (default)                   |
-|   `readXferDetect`  | *boolean* | ignore TS specified in the file meta header    |
-|   `readXferLittle`  | *boolean* | read with explicit VR little endian TS         |
-|    `readXferBig`    | *boolean* | read with explicit VR big endian TS            |
-|  `readXferImplicit` | *boolean* | read with implicit VR little endian TS         |
-|  `acceptOddLength`  | *boolean* | accept odd length attributes (default)         |
-|  `assumeEvenLength` | *boolean* | assume real length is one byte larger          |
-|    `enableCp246`    | *boolean* | read undefined len UN as implicit VR (default) |
-|    `disableCp246`   | *boolean* | read undefined len UN as explicit VR           |
-|      `retainUn`     | *boolean* | retain elements as UN (default)                |
-|     `convertUn`     | *boolean* | convert to real VR if known                    |
-|  `enableCorrection` | *boolean* | enable automatic data correction (default)     |
-| `disableCorrection` | *boolean* | disable automatic data correction              |
+|       Property      |             Type            | Description                                                                                                                                           |
+| :-----------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    `readFileOnly`   |          *boolean*          | read file format only                                                                                                                                 |
+|    `readDataset`    |          *boolean*          | read data set without file meta information                                                                                                           |
+|    `readXferAuto`   |          *boolean*          | use TS recognition (default)                                                                                                                          |
+|   `readXferDetect`  |          *boolean*          | ignore TS specified in the file meta header                                                                                                           |
+|   `readXferLittle`  |          *boolean*          | read with explicit VR little endian TS                                                                                                                |
+|    `readXferBig`    |          *boolean*          | read with explicit VR big endian TS                                                                                                                   |
+|  `readXferImplicit` |          *boolean*          | read with implicit VR little endian TS                                                                                                                |
+|  `acceptOddLength`  |          *boolean*          | accept odd length attributes (default)                                                                                                                |
+|  `assumeEvenLength` |          *boolean*          | assume real length is one byte larger                                                                                                                 |
+|    `enableCp246`    |          *boolean*          | read undefined len UN as implicit VR (default)                                                                                                        |
+|    `disableCp246`   |          *boolean*          | read undefined len UN as explicit VR                                                                                                                  |
+|      `retainUn`     |          *boolean*          | retain elements as UN (default)                                                                                                                       |
+|     `convertUn`     |          *boolean*          | convert to real VR if known                                                                                                                           |
+|  `enableCorrection` |          *boolean*          | enable automatic data correction (default)                                                                                                            |
+| `disableCorrection` |          *boolean*          | disable automatic data correction                                                                                                                     |
+|     `webWorker`     | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|       `noCopy`      |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ReadDicomEncapsulatedPdfResult` interface:**
 
-|      Property     |     Type     | Description                    |
-| :---------------: | :----------: | :----------------------------- |
-|   **webWorker**   |   *Worker*   | WebWorker used for computation |
-| `pdfBinaryOutput` | *Uint8Array* | Output pdf file                |
+|      Property     |     Type     | Description                     |
+| :---------------: | :----------: | :------------------------------ |
+| `pdfBinaryOutput` | *Uint8Array* | Output pdf file                 |
+|    `webWorker`    |   *Worker*   | WebWorker used for computation. |
 
 #### structuredReportToHtml
 
@@ -120,7 +120,6 @@ async function readDicomEncapsulatedPdf(
 
 ```ts
 async function structuredReportToHtml(
-  webWorker: null | Worker,
   dicomFile: File | BinaryFile,
   options: StructuredReportToHtmlOptions = {}
 ) : Promise<StructuredReportToHtmlResult>
@@ -132,59 +131,61 @@ async function structuredReportToHtml(
 
 **`StructuredReportToHtmlOptions` interface:**
 
-|        Property       |            Type            | Description                                                                                              |
-| :-------------------: | :------------------------: | :------------------------------------------------------------------------------------------------------- |
-|     `readFileOnly`    |          *boolean*         | read file format only                                                                                    |
-|     `readDataset`     |          *boolean*         | read data set without file meta information                                                              |
-|     `readXferAuto`    |          *boolean*         | use TS recognition (default)                                                                             |
-|    `readXferDetect`   |          *boolean*         | ignore TS specified in the file meta header                                                              |
-|    `readXferLittle`   |          *boolean*         | read with explicit VR little endian TS                                                                   |
-|     `readXferBig`     |          *boolean*         | read with explicit VR big endian TS                                                                      |
-|   `readXferImplicit`  |          *boolean*         | read with implicit VR little endian TS                                                                   |
-|  `processingDetails`  |          *boolean*         | show currently processed content item                                                                    |
-| `unknownRelationship` |          *boolean*         | accept unknown/missing relationship type                                                                 |
-|   `invalidItemValue`  |          *boolean*         | accept invalid content item value
-(e.g. violation of VR or VM definition)                                |
-|  `ignoreConstraints`  |          *boolean*         | ignore relationship content constraints                                                                  |
-|   `ignoreItemErrors`  |          *boolean*         | do not abort on content item errors, just warn
-(e.g. missing value type specific attributes)             |
-|   `skipInvalidItems`  |          *boolean*         | skip invalid content items (incl. sub-tree)                                                              |
-|   `disableVrChecker`  |          *boolean*         | disable check for VR-conformant string values                                                            |
-|    `charsetRequire`   |          *boolean*         | require declaration of ext. charset (default)                                                            |
-|    `charsetAssume`    |          *string*          | [c]harset: string, assume charset c if no extended charset declared                                      |
-|   `charsetCheckAll`   |          *boolean*         | check all data elements with string values
-(default: only PN, LO, LT, SH, ST, UC and UT)                 |
-|    `convertToUtf8`    |          *boolean*         | convert all element values that are affected
-by Specific Character Set (0008,0005) to UTF-8              |
-|      `urlPrefix`      |          *string*          | URL: string. Append specificed URL prefix to hyperlinks of referenced composite objects in the document. |
-|        `html32`       |          *boolean*         | use only HTML version 3.2 compatible features                                                            |
-|        `html40`       |          *boolean*         | allow all HTML version 4.01 features (default)                                                           |
-|       `xhtml11`       |          *boolean*         | comply with XHTML version 1.1 specification                                                              |
-|   `addDocumentType`   |          *boolean*         | add reference to SGML document type definition                                                           |
-|     `cssReference`    |          *string*          | URL: string. Add reference to specified CSS to document                                                  |
-|       `cssFile`       | *string | File | TextFile* | [f]ilename: string. Embed content of specified CSS into document                                         |
-|     `expandInline`    |          *boolean*         | expand short content items inline (default)                                                              |
-|  `neverExpandInline`  |          *boolean*         | never expand content items inline                                                                        |
-|  `alwaysExpandInline` |          *boolean*         | always expand content items inline                                                                       |
-|    `renderFullData`   |          *boolean*         | render full data of content items                                                                        |
-|  `sectionTitleInline` |          *boolean*         | render section titles inline, not separately                                                             |
-|  `documentTypeTitle`  |          *boolean*         | use document type as document title (default)                                                            |
-|   `patientInfoTitle`  |          *boolean*         | use patient information as document title                                                                |
-|   `noDocumentHeader`  |          *boolean*         | do not render general document information                                                               |
-|  `renderInlineCodes`  |          *boolean*         | render codes in continuous text blocks                                                                   |
-|   `conceptNameCodes`  |          *boolean*         | render code of concept names                                                                             |
-|   `numericUnitCodes`  |          *boolean*         | render code of numeric measurement units                                                                 |
-|    `codeValueUnit`    |          *boolean*         | use code value as measurement unit (default)                                                             |
-|   `codeMeaningUnit`   |          *boolean*         | use code meaning as measurement unit                                                                     |
-|    `renderAllCodes`   |          *boolean*         | render all codes (implies +Ci, +Cn and +Cu)                                                              |
-|  `codeDetailsTooltip` |          *boolean*         | render code details as a tooltip (implies +Cc)                                                           |
+|        Property       |             Type            | Description                                                                                                                                           |
+| :-------------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `readFileOnly`    |          *boolean*          | read file format only                                                                                                                                 |
+|     `readDataset`     |          *boolean*          | read data set without file meta information                                                                                                           |
+|     `readXferAuto`    |          *boolean*          | use TS recognition (default)                                                                                                                          |
+|    `readXferDetect`   |          *boolean*          | ignore TS specified in the file meta header                                                                                                           |
+|    `readXferLittle`   |          *boolean*          | read with explicit VR little endian TS                                                                                                                |
+|     `readXferBig`     |          *boolean*          | read with explicit VR big endian TS                                                                                                                   |
+|   `readXferImplicit`  |          *boolean*          | read with implicit VR little endian TS                                                                                                                |
+|  `processingDetails`  |          *boolean*          | show currently processed content item                                                                                                                 |
+| `unknownRelationship` |          *boolean*          | accept unknown/missing relationship type                                                                                                              |
+|   `invalidItemValue`  |          *boolean*          | accept invalid content item value
+(e.g. violation of VR or VM definition)                                                                             |
+|  `ignoreConstraints`  |          *boolean*          | ignore relationship content constraints                                                                                                               |
+|   `ignoreItemErrors`  |          *boolean*          | do not abort on content item errors, just warn
+(e.g. missing value type specific attributes)                                                          |
+|   `skipInvalidItems`  |          *boolean*          | skip invalid content items (incl. sub-tree)                                                                                                           |
+|   `disableVrChecker`  |          *boolean*          | disable check for VR-conformant string values                                                                                                         |
+|    `charsetRequire`   |          *boolean*          | require declaration of ext. charset (default)                                                                                                         |
+|    `charsetAssume`    |           *string*          | [c]harset: string, assume charset c if no extended charset declared                                                                                   |
+|   `charsetCheckAll`   |          *boolean*          | check all data elements with string values
+(default: only PN, LO, LT, SH, ST, UC and UT)                                                              |
+|    `convertToUtf8`    |          *boolean*          | convert all element values that are affected
+by Specific Character Set (0008,0005) to UTF-8                                                           |
+|      `urlPrefix`      |           *string*          | URL: string. Append specificed URL prefix to hyperlinks of referenced composite objects in the document.                                              |
+|        `html32`       |          *boolean*          | use only HTML version 3.2 compatible features                                                                                                         |
+|        `html40`       |          *boolean*          | allow all HTML version 4.01 features (default)                                                                                                        |
+|       `xhtml11`       |          *boolean*          | comply with XHTML version 1.1 specification                                                                                                           |
+|   `addDocumentType`   |          *boolean*          | add reference to SGML document type definition                                                                                                        |
+|     `cssReference`    |           *string*          | URL: string. Add reference to specified CSS to document                                                                                               |
+|       `cssFile`       |  *string | File | TextFile* | [f]ilename: string. Embed content of specified CSS into document                                                                                      |
+|     `expandInline`    |          *boolean*          | expand short content items inline (default)                                                                                                           |
+|  `neverExpandInline`  |          *boolean*          | never expand content items inline                                                                                                                     |
+|  `alwaysExpandInline` |          *boolean*          | always expand content items inline                                                                                                                    |
+|    `renderFullData`   |          *boolean*          | render full data of content items                                                                                                                     |
+|  `sectionTitleInline` |          *boolean*          | render section titles inline, not separately                                                                                                          |
+|  `documentTypeTitle`  |          *boolean*          | use document type as document title (default)                                                                                                         |
+|   `patientInfoTitle`  |          *boolean*          | use patient information as document title                                                                                                             |
+|   `noDocumentHeader`  |          *boolean*          | do not render general document information                                                                                                            |
+|  `renderInlineCodes`  |          *boolean*          | render codes in continuous text blocks                                                                                                                |
+|   `conceptNameCodes`  |          *boolean*          | render code of concept names                                                                                                                          |
+|   `numericUnitCodes`  |          *boolean*          | render code of numeric measurement units                                                                                                              |
+|    `codeValueUnit`    |          *boolean*          | use code value as measurement unit (default)                                                                                                          |
+|   `codeMeaningUnit`   |          *boolean*          | use code meaning as measurement unit                                                                                                                  |
+|    `renderAllCodes`   |          *boolean*          | render all codes (implies +Ci, +Cn and +Cu)                                                                                                           |
+|  `codeDetailsTooltip` |          *boolean*          | render code details as a tooltip (implies +Cc)                                                                                                        |
+|      `webWorker`      | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|        `noCopy`       |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`StructuredReportToHtmlResult` interface:**
 
-|    Property   |   Type   | Description                    |
-| :-----------: | :------: | :----------------------------- |
-| **webWorker** | *Worker* | WebWorker used for computation |
-|  `outputText` | *string* | Output text file               |
+|   Property   |   Type   | Description                     |
+| :----------: | :------: | :------------------------------ |
+| `outputText` | *string* | Output text file                |
+|  `webWorker` | *Worker* | WebWorker used for computation. |
 
 #### structuredReportToText
 
@@ -192,7 +193,6 @@ by Specific Character Set (0008,0005) to UTF-8              |
 
 ```ts
 async function structuredReportToText(
-  webWorker: null | Worker,
   dicomFile: File | BinaryFile,
   options: StructuredReportToTextOptions = {}
 ) : Promise<StructuredReportToTextResult>
@@ -204,32 +204,34 @@ async function structuredReportToText(
 
 **`StructuredReportToTextOptions` interface:**
 
-|        Property       |    Type   | Description                       |
-| :-------------------: | :-------: | :-------------------------------- |
-| `unknownRelationship` | *boolean* | Accept unknown relationship type  |
-|   `invalidItemValue`  | *boolean* | Accept invalid content item value |
-|  `ignoreConstraints`  | *boolean* | Ignore relationship constraints   |
-|   `ignoreItemErrors`  | *boolean* | Ignore content item errors        |
-|   `skipInvalidItems`  | *boolean* | Skip invalid content items        |
-|   `noDocumentHeader`  | *boolean* | Print no document header          |
-|  `numberNestedItems`  | *boolean* | Number nested items               |
-|  `shortenLongValues`  | *boolean* | Shorten long item values          |
-|   `printInstanceUid`  | *boolean* | Print SOP Instance UID            |
-|  `printSopclassShort` | *boolean* | Print short SOP class name        |
-|  `printSopclassLong`  | *boolean* | Print SOP class name              |
-|   `printSopclassUid`  | *boolean* | Print long SOP class name         |
-|    `printAllCodes`    | *boolean* | Print all codes                   |
-|  `printInvalidCodes`  | *boolean* | Print invalid codes               |
-|   `printTemplateId`   | *boolean* | Print template identification     |
-|   `indicateEnhanced`  | *boolean* | Indicate enhanced encoding mode   |
-|      `printColor`     | *boolean* | Use ANSI escape codes             |
+|        Property       |             Type            | Description                                                                                                                                           |
+| :-------------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `unknownRelationship` |          *boolean*          | Accept unknown relationship type                                                                                                                      |
+|   `invalidItemValue`  |          *boolean*          | Accept invalid content item value                                                                                                                     |
+|  `ignoreConstraints`  |          *boolean*          | Ignore relationship constraints                                                                                                                       |
+|   `ignoreItemErrors`  |          *boolean*          | Ignore content item errors                                                                                                                            |
+|   `skipInvalidItems`  |          *boolean*          | Skip invalid content items                                                                                                                            |
+|   `noDocumentHeader`  |          *boolean*          | Print no document header                                                                                                                              |
+|  `numberNestedItems`  |          *boolean*          | Number nested items                                                                                                                                   |
+|  `shortenLongValues`  |          *boolean*          | Shorten long item values                                                                                                                              |
+|   `printInstanceUid`  |          *boolean*          | Print SOP Instance UID                                                                                                                                |
+|  `printSopclassShort` |          *boolean*          | Print short SOP class name                                                                                                                            |
+|  `printSopclassLong`  |          *boolean*          | Print SOP class name                                                                                                                                  |
+|   `printSopclassUid`  |          *boolean*          | Print long SOP class name                                                                                                                             |
+|    `printAllCodes`    |          *boolean*          | Print all codes                                                                                                                                       |
+|  `printInvalidCodes`  |          *boolean*          | Print invalid codes                                                                                                                                   |
+|   `printTemplateId`   |          *boolean*          | Print template identification                                                                                                                         |
+|   `indicateEnhanced`  |          *boolean*          | Indicate enhanced encoding mode                                                                                                                       |
+|      `printColor`     |          *boolean*          | Use ANSI escape codes                                                                                                                                 |
+|      `webWorker`      | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|        `noCopy`       |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`StructuredReportToTextResult` interface:**
 
-|    Property   |   Type   | Description                    |
-| :-----------: | :------: | :----------------------------- |
-| **webWorker** | *Worker* | WebWorker used for computation |
-|  `outputText` | *string* | Output text file               |
+|   Property   |   Type   | Description                     |
+| :----------: | :------: | :------------------------------ |
+| `outputText` | *string* | Output text file                |
+|  `webWorker` | *Worker* | WebWorker used for computation. |
 
 #### readDicomTags
 
@@ -237,7 +239,6 @@ async function structuredReportToText(
 
 ```ts
 async function readDicomTags(
-  webWorker: null | Worker,
   dicomFile: File | BinaryFile,
   options: ReadDicomTagsOptions = {}
 ) : Promise<ReadDicomTagsResult>
@@ -249,16 +250,18 @@ async function readDicomTags(
 
 **`ReadDicomTagsOptions` interface:**
 
-|   Property   |   Type   | Description                                                                                                          |
-| :----------: | :------: | :------------------------------------------------------------------------------------------------------------------- |
-| `tagsToRead` | *Object* | A JSON object with a "tags" array of the tags to read. If not provided, all tags are read. Example tag: "0008|103e". |
+|   Property   |             Type            | Description                                                                                                                                           |
+| :----------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tagsToRead` |       *JsonCompatible*      | A JSON object with a "tags" array of the tags to read. If not provided, all tags are read. Example tag: "0008|103e".                                  |
+|  `webWorker` | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|   `noCopy`   |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ReadDicomTagsResult` interface:**
 
-|    Property   |   Type   | Description                                                                                                |
-| :-----------: | :------: | :--------------------------------------------------------------------------------------------------------- |
-| **webWorker** | *Worker* | WebWorker used for computation                                                                             |
-|     `tags`    | *Object* | Output tags in the file. JSON object an array of [tag, value] arrays. Values are encoded as UTF-8 strings. |
+|   Property  |       Type       | Description                                                                                                |
+| :---------: | :--------------: | :--------------------------------------------------------------------------------------------------------- |
+|    `tags`   | *JsonCompatible* | Output tags in the file. JSON object an array of [tag, value] arrays. Values are encoded as UTF-8 strings. |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                                                            |
 
 #### readImageDicomFileSeries
 
@@ -266,7 +269,6 @@ async function readDicomTags(
 
 ```ts
 async function readImageDicomFileSeries(
-  webWorkerPool: null | WorkerPool,
   options: ReadImageDicomFileSeriesOptions = { inputImages: [] as BinaryFile[] | File[] | string[], }
 ) : Promise<ReadImageDicomFileSeriesResult>
 ```
@@ -276,18 +278,20 @@ async function readImageDicomFileSeries(
 
 **`ReadImageDicomFileSeriesOptions` interface:**
 
-|       Property       |                Type                | Description                                |
-| :------------------: | :--------------------------------: | :----------------------------------------- |
-|     `inputImages`    | *string[] | File[] | BinaryFile[]* | File names in the series                   |
-| `singleSortedSeries` |              *boolean*             | The input files are a single sorted series |
+|       Property       |                Type                | Description                                                                                                                                           |
+| :------------------: | :--------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `inputImages`    | *string[] | File[] | BinaryFile[]* | File names in the series                                                                                                                              |
+| `singleSortedSeries` |              *boolean*             | The input files are a single sorted series                                                                                                            |
+|      `webWorker`     |     *null or Worker or boolean*    | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|       `noCopy`       |              *boolean*             | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
 
 **`ReadImageDicomFileSeriesResult` interface:**
 
-|      Property     |   Type   | Description                    |
-| :---------------: | :------: | :----------------------------- |
-|   **webWorkerPool**   | *WorkerPool* | WebWorker pool used for computation |
-|   `outputImage`   |  *Image* | Output image volume            |
-| `sortedFilenames` | *Object* | Output sorted filenames        |
+|      Property     |       Type       | Description                     |
+| :---------------: | :--------------: | :------------------------------ |
+|   `outputImage`   |      *Image*     | Output image volume             |
+| `sortedFilenames` | *JsonCompatible* | Output sorted filenames         |
+|    `webWorker`    |     *Worker*     | WebWorker used for computation. |
 
 #### setPipelinesBaseUrl
 
@@ -307,23 +311,6 @@ function setPipelinesBaseUrl(
 function getPipelinesBaseUrl() : string | URL
 ```
 
-#### setPipelineWorkerUrl
-
-*Set base URL for the itk-wasm pipeline worker script when vendored.*
-
-```ts
-function setPipelineWorkerUrl(
-  baseUrl: string | URL
-) : void
-```
-
-#### getPipelineWorkerUrl
-
-*Get base URL for the itk-wasm pipeline worker script when vendored.*
-
-```ts
-function getPipelineWorkerUrl() : string | URL
-```
 
 ### Node interface
 
@@ -337,10 +324,6 @@ import {
   structuredReportToTextNode,
   readDicomTagsNode,
   readImageDicomFileSeriesNode,
-  setPipelinesBaseUrl,
-  getPipelinesBaseUrl,
-  setPipelineWorkerUrl,
-  getPipelineWorkerUrl,
 } from "@itk-wasm/dicom"
 ```
 
@@ -352,7 +335,7 @@ import {
 async function applyPresentationStateToImageNode(
   imageIn: string,
   presentationStateFile: string,
-  options: ApplyPresentationStateToImageOptions = {}
+  options: ApplyPresentationStateToImageNodeOptions = {}
 ) : Promise<ApplyPresentationStateToImageNodeResult>
 ```
 
@@ -373,10 +356,10 @@ async function applyPresentationStateToImageNode(
 
 **`ApplyPresentationStateToImageNodeResult` interface:**
 
-|           Property           |   Type   | Description                |
-| :--------------------------: | :------: | :------------------------- |
-| `presentationStateOutStream` | *Object* | Output overlay information |
-|         `outputImage`        |  *Image* | Output image               |
+|           Property           |       Type       | Description                |
+| :--------------------------: | :--------------: | :------------------------- |
+| `presentationStateOutStream` | *JsonCompatible* | Output overlay information |
+|         `outputImage`        |      *Image*     | Output image               |
 
 #### readDicomEncapsulatedPdfNode
 
@@ -385,7 +368,7 @@ async function applyPresentationStateToImageNode(
 ```ts
 async function readDicomEncapsulatedPdfNode(
   dicomFile: string,
-  options: ReadDicomEncapsulatedPdfOptions = {}
+  options: ReadDicomEncapsulatedPdfNodeOptions = {}
 ) : Promise<ReadDicomEncapsulatedPdfNodeResult>
 ```
 
@@ -426,7 +409,7 @@ async function readDicomEncapsulatedPdfNode(
 ```ts
 async function structuredReportToHtmlNode(
   dicomFile: string,
-  options: StructuredReportToHtmlOptions = {}
+  options: StructuredReportToHtmlNodeOptions = {}
 ) : Promise<StructuredReportToHtmlNodeResult>
 ```
 
@@ -496,7 +479,7 @@ by Specific Character Set (0008,0005) to UTF-8              |
 ```ts
 async function structuredReportToTextNode(
   dicomFile: string,
-  options: StructuredReportToTextOptions = {}
+  options: StructuredReportToTextNodeOptions = {}
 ) : Promise<StructuredReportToTextNodeResult>
 ```
 
@@ -539,7 +522,7 @@ async function structuredReportToTextNode(
 ```ts
 async function readDicomTagsNode(
   dicomFile: string,
-  options: ReadDicomTagsOptions = {}
+  options: ReadDicomTagsNodeOptions = {}
 ) : Promise<ReadDicomTagsNodeResult>
 ```
 
@@ -549,15 +532,15 @@ async function readDicomTagsNode(
 
 **`ReadDicomTagsNodeOptions` interface:**
 
-|   Property   |   Type   | Description                                                                                                          |
-| :----------: | :------: | :------------------------------------------------------------------------------------------------------------------- |
-| `tagsToRead` | *Object* | A JSON object with a "tags" array of the tags to read. If not provided, all tags are read. Example tag: "0008|103e". |
+|   Property   |       Type       | Description                                                                                                          |
+| :----------: | :--------------: | :------------------------------------------------------------------------------------------------------------------- |
+| `tagsToRead` | *JsonCompatible* | A JSON object with a "tags" array of the tags to read. If not provided, all tags are read. Example tag: "0008|103e". |
 
 **`ReadDicomTagsNodeResult` interface:**
 
-| Property |   Type   | Description                                                                                                |
-| :------: | :------: | :--------------------------------------------------------------------------------------------------------- |
-|  `tags`  | *Object* | Output tags in the file. JSON object an array of [tag, value] arrays. Values are encoded as UTF-8 strings. |
+| Property |       Type       | Description                                                                                                |
+| :------: | :--------------: | :--------------------------------------------------------------------------------------------------------- |
+|  `tags`  | *JsonCompatible* | Output tags in the file. JSON object an array of [tag, value] arrays. Values are encoded as UTF-8 strings. |
 
 #### readImageDicomFileSeriesNode
 
@@ -565,7 +548,7 @@ async function readDicomTagsNode(
 
 ```ts
 async function readImageDicomFileSeriesNode(
-  options: ReadImageDicomFileSeriesOptions = { inputImages: [] as string[], }
+  options: ReadImageDicomFileSeriesNodeOptions = { inputImages: [] as string[], }
 ) : Promise<ReadImageDicomFileSeriesNodeResult>
 ```
 
@@ -581,7 +564,7 @@ async function readImageDicomFileSeriesNode(
 
 **`ReadImageDicomFileSeriesNodeResult` interface:**
 
-|      Property     |   Type   | Description             |
-| :---------------: | :------: | :---------------------- |
-|   `outputImage`   |  *Image* | Output image volume     |
-| `sortedFilenames` | *Object* | Output sorted filenames |
+|      Property     |       Type       | Description             |
+| :---------------: | :--------------: | :---------------------- |
+|   `outputImage`   |      *Image*     | Output image volume     |
+| `sortedFilenames` | *JsonCompatible* | Output sorted filenames |

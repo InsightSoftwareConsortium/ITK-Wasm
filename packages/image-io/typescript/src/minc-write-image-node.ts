@@ -9,7 +9,7 @@ import {
   runPipelineNode
 } from 'itk-wasm'
 
-import MincWriteImageOptions from './minc-write-image-options.js'
+import MincWriteImageNodeOptions from './minc-write-image-node-options.js'
 import MincWriteImageNodeResult from './minc-write-image-node-result.js'
 
 import path from 'path'
@@ -19,14 +19,14 @@ import path from 'path'
  *
  * @param {Image} image - Input image
  * @param {string} serializedImage - Output image serialized in the file format.
- * @param {MincWriteImageOptions} options - options object
+ * @param {MincWriteImageNodeOptions} options - options object
  *
  * @returns {Promise<MincWriteImageNodeResult>} - result object
  */
 async function mincWriteImageNode(
   image: Image,
   serializedImage: string,
-  options: MincWriteImageOptions = {}
+  options: MincWriteImageNodeOptions = {}
 ) : Promise<MincWriteImageNodeResult> {
 
   const mountDirs: Set<string> = new Set()

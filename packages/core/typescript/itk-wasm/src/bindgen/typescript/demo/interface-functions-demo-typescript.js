@@ -45,9 +45,6 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
       result += `import { writeImage } from '@itk-wasm/image-io'\n`
     }
   }
-  if (needReadImage || needWriteImage) {
-    result += `import { copyImage } from 'itk-wasm'\n`
-  }
 
   result += `import * as ${camelCase(bundleName)} from '../../../dist/index.js'\n`
 
@@ -216,18 +213,20 @@ class ${functionNamePascalCase}Model {
   result += '  }\n'
 
   result += `\n  async run() {
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
     const { webWorker, `
   interfaceJson.outputs.forEach((output) => {
     result += `${camelCase(output.name)}, `
   })
-  result += `} = await ${camelCase(bundleName)}.${functionName}(this.webWorker,\n`
+  result += `} = await ${camelCase(bundleName)}.${functionName}(`
   interfaceJson.inputs.forEach((input) => {
     if (input.type === 'INPUT_TEXT_STREAM' || input.type === 'INPUT_BINARY_STREAM') {
       result += `      this.model.inputs.get('${camelCase(input.name)}').slice(),\n`
     } else if (input.type.startsWith('INPUT_BINARY_FILE') || input.type.startsWith('INPUT_TEXT_FILE')) {
       result += `      { data: this.model.inputs.get('${camelCase(input.name)}').data.slice(), path: this.model.inputs.get('${camelCase(input.name)}').path },\n`
     } else if (input.type === 'INPUT_IMAGE') {
-      result += `      copyImage(this.model.inputs.get('${camelCase(input.name)}')),\n`
+      result += `      this.model.inputs.get('${camelCase(input.name)}'),\n`
     } else {
       result += `      this.model.inputs.get('${camelCase(input.name)}'),\n`
     }

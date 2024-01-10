@@ -1,5 +1,4 @@
 
-import { writeImageArrayBuffer } from 'itk-wasm'
 import { copyImage } from 'itk-wasm'
 import * as imageIo from '../../../dist/index.js'
 import bmpReadImageLoadSampleInputs, { usePreRun } from "./bmp-read-image-load-sample-inputs.js"
@@ -78,7 +77,7 @@ class BmpReadImageController {
             const imageDownloadFormat = document.getElementById('image-output-format')
             const downloadFormat = imageDownloadFormat.value || 'nrrd'
             const fileName = `image.${downloadFormat}`
-            const { webWorker, serializedImage } = await imageIo.writeImage(null, copyImage(model.outputs.get("image")), fileName)
+            const { webWorker, serializedImage } = await imageIo.writeImage(copyImage(model.outputs.get("image")), fileName)
 
             webWorker.terminate()
             globalThis.downloadFile(serializedImage, fileName)
@@ -159,9 +158,11 @@ class BmpReadImageController {
   }
 
   async run() {
-    const { webWorker, couldRead, image, } = await imageIo.bmpReadImage(this.webWorker,
+    const options = Object.fromEntries(this.model.options.entries())
+    options.webWorker = this.webWorker
+    const { webWorker, couldRead, image, } = await imageIo.bmpReadImage(
       { data: this.model.inputs.get('serializedImage').data.slice(), path: this.model.inputs.get('serializedImage').path },
-      Object.fromEntries(this.model.options.entries())
+      options
     )
     this.webWorker = webWorker
 
