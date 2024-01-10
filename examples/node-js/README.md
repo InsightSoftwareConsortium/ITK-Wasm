@@ -22,8 +22,11 @@ itk-convert <inputFile> <outputFile>
 ## Development
 
 ```
-npm install
-npm test
+cd ../..
+pnpm install
+pnpm build
+cd examples/node-js
+pnpm test
 ```
 
 ## More Information

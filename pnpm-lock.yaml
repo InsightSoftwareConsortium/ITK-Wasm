@@ -15,6 +15,21 @@ importers:
         specifier: ^18.4.3
         version: 18.4.3
 
+  examples/node-js:
+    dependencies:
+      '@itk-wasm/image-io':
+        specifier: workspace:^
+        version: link:../../packages/image-io/typescript
+      '@itk-wasm/mesh-io':
+        specifier: workspace:^
+        version: link:../../packages/mesh-io/typescript
+      commander:
+        specifier: ^11.1.0
+        version: 11.1.0
+      itk-wasm:
+        specifier: workspace:^
+        version: link:../../packages/core/typescript/itk-wasm
+
   packages/compare-images:
     devDependencies:
       '@itk-wasm/dam':
@@ -188,12 +203,6 @@ importers:
       typescript:
         specifier: ^5.3.2
         version: 5.3.2
-
-  packages/core/typescript/itk-wasm/test/pipelines/typescript:
-    dependencies:
-      itk-wasm:
-        specifier: 1.0.0-b.159
-        version: link:../../..
 
   packages/dicom:
     devDependencies:
