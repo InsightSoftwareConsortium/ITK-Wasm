@@ -151,19 +151,37 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '20'
 
     - name: Install
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        run_install: true
+
+    - name: Build dependencies
       run: |
-        npm install
+        pnpm run --filter '@itk-wasm/image-io...' build
 
     - name: Build
+      working-directory: ./examples/inputs-outputs
       run: |
-        npm run build
+        pnpm build
 
-    - name: Test
+    - name: Test WASI
+      working-directory: ./examples/inputs-outputs
       run: |
-        npm run test
+        pnpm test
+
+    - name: Build TypeScript
+      working-directory: ./examples/inputs-outputs/typescript
+      run: |
+        pnpm build
+
+    - name: Test TypeScript
+      working-directory: ./examples/inputs-outputs/typescript
+      run: |
+        pnpm test
 
   test-webpack-example:
     name: webpack

@@ -1,6 +1,8 @@
 packages:
   - 'packages/**'
   - 'examples/node-js'
+  - 'examples/inputs-outputs'
+  - 'examples/inputs-outputs/typescript'
   - '!packages/core/typescript/itk-wasm/test/pipelines/typescript'
   - '!**/src'
   - '!**/dist'

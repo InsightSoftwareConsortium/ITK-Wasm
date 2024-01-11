@@ -24,7 +24,7 @@
 
 int main(int argc, char * argv[]) {
   // Create the pipeline for parsing arguments. Provide a description.
-  itk::wasm::Pipeline pipeline("median-filter", "Smooth an image with a median filter", argc, argv);
+  itk::wasm::Pipeline pipeline("inputs-outputs", "An example with non-trivial inputs and outputs", argc, argv);
 
   constexpr unsigned int Dimension = 2;
   using PixelType = unsigned char;

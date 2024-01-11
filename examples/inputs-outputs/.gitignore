@@ -2,3 +2,6 @@ package-lock.json
 smoothed.png
 emscripten-build/
 wasi-build/
+micromamba/
+typescript/
+python/
