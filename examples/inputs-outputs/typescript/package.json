@@ -1,9 +1,10 @@
 {
-  "name": "package-name",
+  "name": "inputs-outputs-example",
   "version": "0.1.0",
   "packageManager": "pnpm@8.11.0",
-  "description": "",
+  "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
+  "bin": "src/cli.mjs",
   "module": "./dist/index.js",
   "types": "./dist/index-all.d.ts",
   "exports": {
@@ -16,7 +17,8 @@
   },
   "scripts": {
     "start": "pnpm copyShoelaceAssets && vite",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "pnpm test:node",
+    "test:node": "node ./src/cli.mjs --radius 2 ../cthead1.png smoothed.png",
     "build": "pnpm build:tsc && pnpm build:browser:workerEmbedded && pnpm build:browser:workerEmbeddedMin && pnpm build:demo",
     "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
     "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
@@ -33,11 +35,11 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "1.0.0-b.162"
+    "itk-wasm": "workspace:^"
   },
   "devDependencies": {
-    "@itk-wasm/image-io": "^1.1.0",
-    "@itk-wasm/mesh-io": "^1.1.0",
+    "@itk-wasm/image-io": "workspace:^",
+    "@itk-wasm/mesh-io": "workspace:^",
     "@shoelace-style/shoelace": "^2.5.2",
     "@types/node": "^20.2.5",
     "esbuild": "^0.19.8",
@@ -45,5 +47,9 @@
     "typescript": "^5.3.2",
     "vite": "^4.5.0",
     "vite-plugin-static-copy": "^0.17.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm"
   }
 }
