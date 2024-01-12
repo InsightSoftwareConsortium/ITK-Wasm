@@ -1,0 +1,5 @@
+emscripten-build/
+wasi-build/
+micromamba/
+python/
+typescript/

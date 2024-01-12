@@ -1,5 +1,5 @@
 {
-  "name": "itk-wasm-inputs-outputs-example",
+  "name": "inputs-outputs-example-build",
   "version": "2.0.0",
   "private": true,
   "packageManager": "pnpm@8.11.0",
