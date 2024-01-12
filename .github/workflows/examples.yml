@@ -299,9 +299,6 @@ jobs:
   test-mean-squares-versor-registration:
     name: mean-squares-versor-registration
     runs-on: ubuntu-22.04
-    defaults:
-      run:
-        working-directory: ./examples/mean-squares-versor-registration
 
     steps:
     - uses: actions/checkout@v3
@@ -313,18 +310,29 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '20'
 
     - name: Install
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        run_install: true
+
+    - name: Build dependencies
       run: |
-        npm install
+        pnpm run --filter '@itk-wasm/image-io...' build
 
     - name: Build
+      working-directory: ./examples/mean-squares-versor-registration
       run: |
-        npm run build
+        pnpm build
 
-    - name: Build TypeScript/JavaScript bindings
+    - name: Test WASI
+      working-directory: ./examples/mean-squares-versor-registration
       run: |
-        cd typescript
-        npm install
-        npm run build
+        pnpm test
+
+    - name: Build TypeScript
+      working-directory: ./examples/mean-squares-versor-registration/typescript
+      run: |
+        pnpm build
