@@ -34,6 +34,7 @@ The project provides tools to
 :caption: 👋 Introduction
 
 introduction/packages.md
+introduction/parts.md
 introduction/file_formats/index.md
 ```
 
