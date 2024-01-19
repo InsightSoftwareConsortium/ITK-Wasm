@@ -15,6 +15,7 @@ Towards that end, ITK-Wasm provides powerful, joyful tooling for scientific comp
 
 This section provides a high level overview of these constituent parts.
 
+(cxx-core)=
 ## C++ core
 
 ITK-Wasm's C++ core tooling provides:
@@ -42,18 +43,20 @@ Wasm module C++ processing pipelines are written with [CLI11]'s simple and intui
 
 The ability to read and write to files, providing a bridge to [Web3] and traditional desktop computing, is built on [libcbor], which is another tiny footprint library.
 
+(docker)=
 ## Build environment Docker images
 
 Build environment Docker images encapsulate
 
 1. The ITK-Wasm C++ core
-2. An[Emscripten] or [WASI] toolchains
+2. An [Emscripten] or [WASI] toolchain
 3. Additional wasm tools and configurations
 
 These [`itkwasm/emscripten`] and  [`itkwasm/wasi`] Docker images are [dockcross] images -- Docker images with pre-configured C++ cross-compiling toolchains that enable easy-application, reproducible builds, and a clean separation of the build environment, source tree, and build artifacts.
 
 These images include not only the CMake pre-configured toolchains, but pre-built versions of the ITK-Wasm C++ core. Moreover, wasm tools for optimization, debugging, emulation and system execution, testing, are bundled. A number of build and system configurations are included to make optimized and debuggable builds for scientific codebases a breeze.
 
+(cli)=
 ## Command line interface (CLI)
 
 An `itk-wasm` *command line interface (CLI)* drives
@@ -69,12 +72,14 @@ The CLI can be installed via
 npm install -g itk-wasm
 ```
 
+(language-libraries)=
 ## Language-specific libraries
 
 Small, language-specific libraries are used by generated bindings to provide simple, clean, performant, and idiomatic interfaces in the host languages.
 
 In TypeScript / JavaScript, this is the NPM [itk-wasm](https://www.npmjs.com/search?q=itk-wasm) package and in Python this is the PyPI [itkwasm](https://pypi.org/project/itkwasm/) package.
 
+(packages)=
 ## Example packages
 
 While most ITK-Wasm packages are not developed in the `InsightSoftwareConsortium/itk-wasm` repository -- a package built with ITK-Wasm can be developed by anyone and maintained in any repository -- there are a number of packages developed in the `itk-wasm` repository. These packages
@@ -85,6 +90,7 @@ While most ITK-Wasm packages are not developed in the `InsightSoftwareConsortium
 
 Descriptions of these packages can be found in the [package listing page](./packages.md).
 
+(file-format)=
 ## File format support
 
 Assistance for handling data serialized in file formats plays a crucial role in enabling comprehensive analysis using a variety of software tools.
