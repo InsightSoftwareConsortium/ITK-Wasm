@@ -40,7 +40,7 @@ public:
     pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->type_size(ImageDimension);
 
     bool informationOnly = false;
-    pipeline.add_flag("-i,--information-only", informationOnly, "Generate output image information only. Do not process pixels.")
+    pipeline.add_flag("-i,--information-only", informationOnly, "Generate output image information only. Do not process pixels.");
 
     using OutputImageType = itk::wasm::OutputImage<ImageType>;
     OutputImageType downsampledImage;
