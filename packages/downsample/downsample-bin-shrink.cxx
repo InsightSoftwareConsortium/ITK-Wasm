@@ -39,6 +39,9 @@ public:
     std::vector<unsigned int> shrinkFactors;
     pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->type_size(ImageDimension);
 
+    bool informationOnly = false;
+    pipeline.add_flag("-i,--information-only", informationOnly, "Generate output image information only. Do not process pixels.")
+
     using OutputImageType = itk::wasm::OutputImage<ImageType>;
     OutputImageType downsampledImage;
     pipeline.add_option("downsampled", downsampledImage, "Output downsampled image")->required()->type_name("OUTPUT_IMAGE");
@@ -53,7 +56,14 @@ public:
       filter->SetShrinkFactor(i, shrinkFactors[i]);
     }
 
-    ITK_WASM_CATCH_EXCEPTION(pipeline, filter->UpdateLargestPossibleRegion());
+    if (informationOnly)
+    {
+      ITK_WASM_CATCH_EXCEPTION(pipeline, filter->UpdateOutputInformation());
+    }
+    else
+    {
+      ITK_WASM_CATCH_EXCEPTION(pipeline, filter->UpdateLargestPossibleRegion());
+    }
 
     typename ImageType::ConstPointer result = filter->GetOutput();
     downsampledImage.Set(result);
