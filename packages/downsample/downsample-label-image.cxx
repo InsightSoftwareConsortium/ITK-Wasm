@@ -95,7 +95,10 @@ int main(int argc, char * argv[])
   itk::wasm::Pipeline pipeline("downsample", "Apply a smoothing anti-alias filter and subsample the input image.", argc, argv);
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
-    uint8_t
+    uint8_t,
+    uint16_t,
+    uint32_t,
+    uint64_t
     >
-  ::Dimensions<2U>("input", pipeline);
+  ::Dimensions<2U, 3U, 4U>("input", pipeline);
 }
