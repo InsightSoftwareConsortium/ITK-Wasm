@@ -25,17 +25,12 @@ find_package(ITK REQUIRED
  )
 include(${ITK_USE_FILE})
 
-add_executable(downsample downsample.cxx)
-target_link_libraries(downsample PUBLIC ${ITK_LIBRARIES})
-target_include_directories(downsample PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-add_executable(downsample-sigma downsample-sigma.cxx)
-target_link_libraries(downsample-sigma PUBLIC ${ITK_LIBRARIES})
-target_include_directories(downsample-sigma PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-add_executable(gaussian-kernel-radius gaussian-kernel-radius.cxx)
-target_link_libraries(gaussian-kernel-radius PUBLIC ${ITK_LIBRARIES})
-target_include_directories(gaussian-kernel-radius PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+# foreach(pipeline downsample downsample-sigma gaussian-kernel-radius downsample-bin-shrink downsample-label-image shrink-information)
+foreach(pipeline downsample downsample-sigma gaussian-kernel-radius downsample-bin-shrink) # downsample-label-image shrink-information)
+  add_executable(${pipeline} ${pipeline}.cxx)
+  target_link_libraries(${pipeline} PUBLIC ${ITK_LIBRARIES})
+  target_include_directories(${pipeline} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+endforeach()
 
 enable_testing()
 add_test(NAME downsample
@@ -56,4 +51,11 @@ add_test(NAME gaussian-kernel-radius
     --size 64 64 32
     --sigma 2.0 4.0 2.0
     ${CMAKE_CURRENT_BINARY_DIR}/gaussian-kernel-radius.json
+    )
+
+add_test(NAME downsample-bin-shrink
+  COMMAND downsample-bin-shrink
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_downsampled_bin_shrink.png
+    --shrink-factors 2 2
     )
