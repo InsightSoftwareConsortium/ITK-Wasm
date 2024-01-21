@@ -1,7 +1,4 @@
-// Generated file. To retain edits, remove this comment.
-
 import {
-  JsonCompatible,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -91,7 +88,7 @@ async function gaussianKernelRadius(
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    radius: outputs[0]?.data as JsonCompatible,
+    radius: outputs[0]?.data as number[],
   }
   return result
 }

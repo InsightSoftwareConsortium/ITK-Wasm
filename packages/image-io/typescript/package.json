@@ -70,7 +70,7 @@
   },
   "ava": {
     "files": [
-      "test/node/**/*",
+      "test/node/**/*.js",
       "!test/node/common.js"
     ]
   }

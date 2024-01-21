@@ -1,7 +1,4 @@
-// Generated file. To retain edits, remove this comment.
-
 import {
-  JsonCompatible,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -72,7 +69,7 @@ async function downsampleSigma(
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    sigma: outputs[0]?.data as JsonCompatible,
+    sigma: outputs[0]?.data as number[],
   }
   return result
 }

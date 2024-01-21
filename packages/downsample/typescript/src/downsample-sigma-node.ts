@@ -1,7 +1,4 @@
-// Generated file. To retain edits, remove this comment.
-
 import {
-  JsonCompatible,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -63,7 +60,7 @@ async function downsampleSigmaNode(
   }
 
   const result = {
-    sigma: outputs[0]?.data as JsonCompatible,
+    sigma: outputs[0]?.data as number[],
   }
   return result
 }
