@@ -372,6 +372,40 @@ importers:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
 
+  packages/downsample/typescript:
+    dependencies:
+      itk-wasm:
+        specifier: workspace:^
+        version: link:../../core/typescript/itk-wasm
+    devDependencies:
+      '@itk-wasm/image-io':
+        specifier: workspace:^
+        version: link:../../image-io/typescript
+      '@itk-wasm/mesh-io':
+        specifier: workspace:^
+        version: link:../../mesh-io/typescript
+      '@shoelace-style/shoelace':
+        specifier: ^2.5.2
+        version: 2.12.0(@types/react@18.2.42)
+      '@types/node':
+        specifier: ^20.2.5
+        version: 20.10.4
+      esbuild:
+        specifier: ^0.19.8
+        version: 0.19.9
+      shx:
+        specifier: ^0.3.4
+        version: 0.3.4
+      typescript:
+        specifier: ^5.3.2
+        version: 5.3.3
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.1(@types/node@20.10.4)
+      vite-plugin-static-copy:
+        specifier: ^0.17.0
+        version: 0.17.1(vite@4.5.1)
+
   packages/image-io:
     devDependencies:
       '@itk-wasm/dam':

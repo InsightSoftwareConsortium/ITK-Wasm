@@ -33,11 +33,11 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "1.0.0-b.162"
+    "itk-wasm": "workspace:^"
   },
   "devDependencies": {
-    "@itk-wasm/image-io": "^1.1.0",
-    "@itk-wasm/mesh-io": "^1.1.0",
+    "@itk-wasm/image-io": "workspace:^",
+    "@itk-wasm/mesh-io": "workspace:^",
     "@shoelace-style/shoelace": "^2.5.2",
     "@types/node": "^20.2.5",
     "esbuild": "^0.19.8",
