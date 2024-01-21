@@ -69,7 +69,7 @@ int main(int argc, char * argv[])
     const double variance = sigma[i] * sigma[i];
     gaussianOperator.SetVariance(variance);
     gaussianOperator.CreateDirectional();
-    radiusArray.PushBack(gaussianOperator.GetRadius(0), allocator);
+    radiusArray.PushBack(rapidjson::Value().SetInt(gaussianOperator.GetRadius(0)), allocator);
   }
 
   rapidjson::StringBuffer stringBuffer;
