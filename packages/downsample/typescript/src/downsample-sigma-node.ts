@@ -21,7 +21,7 @@ import path from 'path'
  * @returns {Promise<DownsampleSigmaNodeResult>} - result object
  */
 async function downsampleSigmaNode(
-  options: DownsampleSigmaNodeOptions = { shrinkFactors: [] as number[], }
+  options: DownsampleSigmaNodeOptions = { shrinkFactors: [2,2], }
 ) : Promise<DownsampleSigmaNodeResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [

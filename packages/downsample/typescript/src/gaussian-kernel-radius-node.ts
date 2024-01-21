@@ -21,7 +21,7 @@ import path from 'path'
  * @returns {Promise<GaussianKernelRadiusNodeResult>} - result object
  */
 async function gaussianKernelRadiusNode(
-  options: GaussianKernelRadiusNodeOptions = { size: [] as number[], sigma: [{}, ], }
+  options: GaussianKernelRadiusNodeOptions = { size: [1,1], sigma: [1,1], }
 ) : Promise<GaussianKernelRadiusNodeResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [

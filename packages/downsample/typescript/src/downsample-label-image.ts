@@ -26,7 +26,7 @@ import { getDefaultWebWorker } from './default-web-worker.js'
  */
 async function downsampleLabelImage(
   input: Image,
-  options: DownsampleLabelImageOptions = { shrinkFactors: [] as number[], }
+  options: DownsampleLabelImageOptions = { shrinkFactors: [2,2], }
 ) : Promise<DownsampleLabelImageResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [

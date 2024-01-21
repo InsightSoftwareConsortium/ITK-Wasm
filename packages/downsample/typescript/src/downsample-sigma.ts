@@ -24,7 +24,7 @@ import { getDefaultWebWorker } from './default-web-worker.js'
  * @returns {Promise<DownsampleSigmaResult>} - result object
  */
 async function downsampleSigma(
-  options: DownsampleSigmaOptions = { shrinkFactors: [] as number[], }
+  options: DownsampleSigmaOptions = { shrinkFactors: [2,2], }
 ) : Promise<DownsampleSigmaResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [

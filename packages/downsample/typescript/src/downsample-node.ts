@@ -23,7 +23,7 @@ import path from 'path'
  */
 async function downsampleNode(
   input: Image,
-  options: DownsampleNodeOptions = { shrinkFactors: [] as number[], }
+  options: DownsampleNodeOptions = { shrinkFactors: [2,2], }
 ) : Promise<DownsampleNodeResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [

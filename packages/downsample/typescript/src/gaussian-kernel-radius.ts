@@ -24,7 +24,7 @@ import { getDefaultWebWorker } from './default-web-worker.js'
  * @returns {Promise<GaussianKernelRadiusResult>} - result object
  */
 async function gaussianKernelRadius(
-  options: GaussianKernelRadiusOptions = { size: [] as number[], sigma: [{}, ], }
+  options: GaussianKernelRadiusOptions = { size: [1,1], sigma: [1,1], }
 ) : Promise<GaussianKernelRadiusResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [

@@ -2,7 +2,6 @@ micromamba/
 emscripten-build/
 wasi-build/
 python/itkwasm-downsample-wasi/itkwasm_downsample_wasi/wasm_modules/
-typescript/dist/pipelines/
+typescript/dist/
 test/pyodide-dispatch.tar.bz2
 test/pyodide-emscripten.tar.bz2
-.hypothesis

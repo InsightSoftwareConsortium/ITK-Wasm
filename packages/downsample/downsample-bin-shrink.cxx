@@ -36,7 +36,7 @@ public:
     InputImageType inputImage;
     pipeline.add_option("input", inputImage, "Input image")->required()->type_name("INPUT_IMAGE");
 
-    std::vector<unsigned int> shrinkFactors;
+    std::vector<unsigned int> shrinkFactors { 2, 2 };
     pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->type_size(ImageDimension);
 
     bool informationOnly = false;

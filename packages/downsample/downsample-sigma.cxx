@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("downsample", "Compute gaussian kernel sigma values in pixel units for downsampling.", argc, argv);
 
-  std::vector<unsigned int> shrinkFactors;
+  std::vector<unsigned int> shrinkFactors { 2, 2 };
   pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required();
 
   itk::wasm::OutputTextStream sigmaStream;

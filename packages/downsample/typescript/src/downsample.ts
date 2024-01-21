@@ -26,7 +26,7 @@ import { getDefaultWebWorker } from './default-web-worker.js'
  */
 async function downsample(
   input: Image,
-  options: DownsampleOptions = { shrinkFactors: [] as number[], }
+  options: DownsampleOptions = { shrinkFactors: [2,2], }
 ) : Promise<DownsampleResult> {
 
   const desiredOutputs: Array<PipelineOutput> = [

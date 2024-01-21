@@ -73,7 +73,7 @@
       <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsampleBinStrink-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
 <br /><br />
-      <sl-input name="shrink-factors" type="text" value="{}" label="shrinkFactors" help-text="Shrink factors"></sl-input>
+      <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
       <sl-checkbox name="information-only">informationOnly - <i>Generate output image information only. Do not process pixels.</i></sl-checkbox>
 <br /><br />
@@ -124,7 +124,7 @@
       <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsample-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
 <br /><br />
-      <sl-input name="shrink-factors" type="text" value="{}" label="shrinkFactors" help-text="Shrink factors"></sl-input>
+      <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
       <sl-input name="crop-radius" type="text" value="{}" label="cropRadius" help-text="Optional crop radius in pixel units."></sl-input>
 <br />
@@ -172,7 +172,7 @@
     <small><i>Compute gaussian kernel sigma values in pixel units for downsampling.</i></small><br /><br />
 
     <div id="downsampleInputs"><form action="">
-      <sl-input name="shrink-factors" type="number" value="{}" min="0" step="1" label="shrinkFactors" help-text="Shrink factors"></sl-input>
+      <sl-input name="shrink-factors" type="number" value="[2,2]" min="0" step="1" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
     <sl-divider></sl-divider>
       <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
@@ -198,7 +198,7 @@
       <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsample-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
 <br /><br />
-      <sl-input name="shrink-factors" type="text" value="{}" label="shrinkFactors" help-text="Shrink factors"></sl-input>
+      <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
       <sl-input name="crop-radius" type="text" value="{}" label="cropRadius" help-text="Optional crop radius in pixel units."></sl-input>
 <br />
@@ -246,9 +246,9 @@
     <small><i>Radius in pixels required for effective discrete gaussian filtering.</i></small><br /><br />
 
     <div id="gaussianKernelRadiusInputs"><form action="">
-      <sl-input name="size" type="number" value="{}" min="0" step="1" label="size" help-text="Size in pixels"></sl-input>
+      <sl-input name="size" type="number" value="[1,1]" min="0" step="1" label="size" help-text="Size in pixels"></sl-input>
 <br />
-      <sl-input name="sigma" type="number" value="{}" step="any" label="sigma" help-text="Sigma in pixel units"></sl-input>
+      <sl-input name="sigma" type="number" value="[1,1]" step="any" label="sigma" help-text="Sigma in pixel units"></sl-input>
 <br />
       <sl-input name="max-kernel-width" type="number" value="32" min="0" step="1" label="maxKernelWidth" help-text="Maximum kernel width in pixels."></sl-input>
 <br />
