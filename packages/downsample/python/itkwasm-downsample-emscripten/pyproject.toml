@@ -43,6 +43,8 @@ path = "itkwasm_downsample_emscripten/_version.py"
 dependencies = [
   "pytest",
   "pytest-pyodide",
+  "itkwasm-image-io",
+  "itkwasm-compare-images",
 ]
 
 [project.urls]
@@ -63,9 +65,7 @@ download-pyodide = [
 ]
 serve = [
   "hatch build -t wheel ./dist/pyodide/",
-  'echo "
-Visit http://localhost:8877/console.html
-"',
+  'echo "Visit http://localhost:8877/console.html"',
   "python -m http.server --directory=./dist/pyodide 8877",
 ]
 
