@@ -103,8 +103,6 @@ class ${functionNamePascalCase}Model {
 
     this.model = new ${functionNamePascalCase}Model()
     const model = this.model
-
-    this.webWorker = null
 `
 
   result += `\n    if (loadSampleInputs) {
@@ -147,7 +145,7 @@ class ${functionNamePascalCase}Model {
   })
 
   result += `\n${indent}const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -214,8 +212,7 @@ class ${functionNamePascalCase}Model {
 
   result += `\n  async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, `
+    const { `
   interfaceJson.outputs.forEach((output) => {
     result += `${camelCase(output.name)}, `
   })
@@ -239,7 +236,6 @@ class ${functionNamePascalCase}Model {
   })
   result += '      Object.fromEntries(this.model.options.entries())\n'
   result += '    )\n'
-  result += '    this.webWorker = webWorker\n'
   result += `
     return { `
   interfaceJson.outputs.forEach((output) => {

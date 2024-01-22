@@ -24,8 +24,6 @@ class GaussianKernelRadiusController {
     this.model = new GaussianKernelRadiusModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#gaussianKernelRadiusInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -42,12 +40,12 @@ class GaussianKernelRadiusController {
     // Options
     const sizeElement = document.querySelector('#gaussianKernelRadiusInputs sl-input[name=size]')
     sizeElement.addEventListener('sl-change', (event) => {
-        model.options.set("size", parseInt(sizeElement.value))
+        globalThis.applyInputParsedJson(sizeElement, model.options, "size")
     })
 
     const sigmaElement = document.querySelector('#gaussianKernelRadiusInputs sl-input[name=sigma]')
     sigmaElement.addEventListener('sl-change', (event) => {
-        model.options.set("sigma", parseFloat(sigmaElement.value))
+        globalThis.applyInputParsedJson(sigmaElement, model.options, "sigma")
     })
 
     const maxKernelWidthElement = document.querySelector('#gaussianKernelRadiusInputs sl-input[name=max-kernel-width]')
@@ -73,7 +71,7 @@ class GaussianKernelRadiusController {
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -135,10 +133,8 @@ class GaussianKernelRadiusController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, radius, } = await downsample.gaussianKernelRadius(      Object.fromEntries(this.model.options.entries())
+    const { radius, } = await downsample.gaussianKernelRadius(      Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { radius, }
   }

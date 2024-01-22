@@ -33,7 +33,7 @@ function inputParametersDemoHtml (functionName, prefix, indent, parameter, requi
     case 'INT':
     case 'UINT':
     case 'FLOAT': {
-      const typeName = parameter.itemsExpected !== 1 ? "text" : "number"
+      const typeName = parameter.itemsExpectedMax > 1 ? "text" : "number"
       let constraints = ''
       if (parameter.itemsExpected !== 1) {
         constraints = ''

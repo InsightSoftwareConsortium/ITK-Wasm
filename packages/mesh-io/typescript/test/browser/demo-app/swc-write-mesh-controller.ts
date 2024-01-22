@@ -25,8 +25,6 @@ class SwcWriteMeshController {
     this.model = new SwcWriteMeshModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#swcWriteMeshInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -96,7 +94,7 @@ class SwcWriteMeshController {
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -169,12 +167,10 @@ class SwcWriteMeshController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, couldWrite, serializedMesh, } = await meshIo.swcWriteMesh(      this.model.inputs.get('mesh'),
+    const { couldWrite, serializedMesh, } = await meshIo.swcWriteMesh(      this.model.inputs.get('mesh'),
       this.model.inputs.get('serializedMesh'),
       Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { couldWrite, serializedMesh, }
   }

@@ -92,7 +92,7 @@ public:
 
 int main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("downsample", "Apply a smoothing anti-alias filter and subsample the input image.", argc, argv);
+  itk::wasm::Pipeline pipeline("downsample-label-image", "Subsample the input label image a according to weighted voting of local labels.", argc, argv);
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
     uint8_t,

@@ -4,6 +4,9 @@ import path from 'path'
 
 export default defineConfig({
   root: path.join('test', 'browser', 'demo-app'),
+  server: {
+    port: 5179
+  },
   build: {
     outDir: '../../../demo-app',
     emptyOutDir: true,

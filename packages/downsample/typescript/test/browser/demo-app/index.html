@@ -58,19 +58,19 @@
   <br /><br />
 
   <sl-tab-group>
-    <sl-tab slot="nav" panel="downsampleBinStrink-panel">downsampleBinStrink</sl-tab>
-    <sl-tab slot="nav" panel="downsample-panel">downsample</sl-tab>
-    <sl-tab slot="nav" panel="downsample-panel">downsample</sl-tab>
+    <sl-tab slot="nav" panel="downsampleBinShrink-panel">downsampleBinShrink</sl-tab>
+    <sl-tab slot="nav" panel="downsampleLabelImage-panel">downsampleLabelImage</sl-tab>
+    <sl-tab slot="nav" panel="downsampleSigma-panel">downsampleSigma</sl-tab>
     <sl-tab slot="nav" panel="downsample-panel">downsample</sl-tab>
     <sl-tab slot="nav" panel="gaussianKernelRadius-panel">gaussianKernelRadius</sl-tab>
 
 
-    <sl-tab-panel name="downsampleBinStrink-panel">
+    <sl-tab-panel name="downsampleBinShrink-panel">
 
     <small><i>Apply local averaging and subsample the input image.</i></small><br /><br />
 
-    <div id="downsampleBinStrinkInputs"><form action="">
-      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsampleBinStrink-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
+    <div id="downsampleBinShrinkInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsampleBinShrink-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
 <br /><br />
       <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
@@ -84,9 +84,9 @@
     </form></div>
     <sl-divider></sl-divider>
 
-    <div id="downsampleBinStrinkOutputs">
-      <sl-details disabled id="downsampleBinStrink-downsampled-details" summary="downsampled: Output downsampled image"></sl-details>
-      <sl-select id="downsampled-output-format" placeholder="Format">
+    <div id="downsampleBinShrinkOutputs">
+      <sl-details disabled id="downsampleBinShrink-downsampled-details" summary="downsampled: Output downsampled image"></sl-details>
+      <sl-select id="downsampleBinShrink-downsampled-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
         <sl-option value="gipl">gipl</sl-option>
@@ -116,12 +116,12 @@
     </sl-tab-panel>
 
 
-    <sl-tab-panel name="downsample-panel">
+    <sl-tab-panel name="downsampleLabelImage-panel">
 
-    <small><i>Apply a smoothing anti-alias filter and subsample the input image.</i></small><br /><br />
+    <small><i>Subsample the input label image a according to weighted voting of local labels.</i></small><br /><br />
 
-    <div id="downsampleInputs"><form action="">
-      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsample-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
+    <div id="downsampleLabelImageInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsampleLabelImage-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
 <br /><br />
       <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
@@ -135,9 +135,9 @@
     </form></div>
     <sl-divider></sl-divider>
 
-    <div id="downsampleOutputs">
-      <sl-details disabled id="downsample-downsampled-details" summary="downsampled: Output downsampled image"></sl-details>
-      <sl-select id="downsampled-output-format" placeholder="Format">
+    <div id="downsampleLabelImageOutputs">
+      <sl-details disabled id="downsampleLabelImage-downsampled-details" summary="downsampled: Output downsampled image"></sl-details>
+      <sl-select id="downsampleLabelImage-downsampled-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
         <sl-option value="gipl">gipl</sl-option>
@@ -167,12 +167,12 @@
     </sl-tab-panel>
 
 
-    <sl-tab-panel name="downsample-panel">
+    <sl-tab-panel name="downsampleSigma-panel">
 
     <small><i>Compute gaussian kernel sigma values in pixel units for downsampling.</i></small><br /><br />
 
-    <div id="downsampleInputs"><form action="">
-      <sl-input name="shrink-factors" type="number" value="[2,2]" min="0" step="1" label="shrinkFactors" help-text="Shrink factors"></sl-input>
+    <div id="downsampleSigmaInputs"><form action="">
+      <sl-input name="shrink-factors" type="text" value="[2,2]" min="0" step="1" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
     <sl-divider></sl-divider>
       <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
@@ -181,8 +181,8 @@
     </form></div>
     <sl-divider></sl-divider>
 
-    <div id="downsampleOutputs">
-      <sl-details disabled id="downsample-sigma-details" summary="sigma: Output sigmas in pixel units."></sl-details>
+    <div id="downsampleSigmaOutputs">
+      <sl-details disabled id="downsampleSigma-sigma-details" summary="sigma: Output sigmas in pixel units."></sl-details>
       <sl-button variant="neutral" outline name="sigma-download" disabled>Download</sl-button>
 <br /><br />
     </div>
@@ -211,7 +211,7 @@
 
     <div id="downsampleOutputs">
       <sl-details disabled id="downsample-downsampled-details" summary="downsampled: Output downsampled image"></sl-details>
-      <sl-select id="downsampled-output-format" placeholder="Format">
+      <sl-select id="downsample-downsampled-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
         <sl-option value="gipl">gipl</sl-option>
@@ -246,9 +246,9 @@
     <small><i>Radius in pixels required for effective discrete gaussian filtering.</i></small><br /><br />
 
     <div id="gaussianKernelRadiusInputs"><form action="">
-      <sl-input name="size" type="number" value="[1,1]" min="0" step="1" label="size" help-text="Size in pixels"></sl-input>
+      <sl-input name="size" type="text" value="[1,1]" min="0" step="1" label="size" help-text="Size in pixels"></sl-input>
 <br />
-      <sl-input name="sigma" type="number" value="[1,1]" step="any" label="sigma" help-text="Sigma in pixel units"></sl-input>
+      <sl-input name="sigma" type="text" value="[1,1]" step="any" label="sigma" help-text="Sigma in pixel units"></sl-input>
 <br />
       <sl-input name="max-kernel-width" type="number" value="32" min="0" step="1" label="maxKernelWidth" help-text="Maximum kernel width in pixels."></sl-input>
 <br />

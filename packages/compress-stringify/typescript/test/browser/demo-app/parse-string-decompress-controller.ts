@@ -24,8 +24,6 @@ class ParseStringDecompressController {
     this.model = new ParseStringDecompressModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#parseStringDecompressInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -69,7 +67,7 @@ class ParseStringDecompressController {
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -134,11 +132,9 @@ class ParseStringDecompressController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, output, } = await compressStringify.parseStringDecompress(      this.model.inputs.get('input').slice(),
+    const { output, } = await compressStringify.parseStringDecompress(      this.model.inputs.get('input').slice(),
       Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { output, }
   }

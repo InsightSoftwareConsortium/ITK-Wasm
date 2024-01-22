@@ -24,8 +24,6 @@ class StructuredReportToTextController {
     this.model = new StructuredReportToTextModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#structuredReportToTextInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -149,7 +147,7 @@ class StructuredReportToTextController {
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -214,11 +212,9 @@ class StructuredReportToTextController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, outputText, } = await dicom.structuredReportToText(      { data: this.model.inputs.get('dicomFile').data.slice(), path: this.model.inputs.get('dicomFile').path },
+    const { outputText, } = await dicom.structuredReportToText(      { data: this.model.inputs.get('dicomFile').data.slice(), path: this.model.inputs.get('dicomFile').path },
       Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { outputText, }
   }

@@ -1,26 +1,17 @@
-// Generated file. To retain edits, remove this comment.
+export default async function gaussianKernelRadiusLoadSampleInputs (model, preRun=false) {
 
-export default null
-// export default async function gaussianKernelRadiusLoadSampleInputs (model, preRun=false) {
+  model.options.set('size', [64, 64])
+  model.options.set('sigma', [2, 2])
 
-  // Load sample inputs for the gaussianKernelRadius function.
-  //
-  // This function should load sample inputs:
-  //
-  //  1) In the provided model map.
-  //  2) Into the corresponding HTML input elements if preRun is not true.
-  //
-  // Example for an input named `exampleInput`:
+  if (!preRun) {
+    const sizeElement = document.querySelector('#gaussianKernelRadiusInputs sl-input[name=size]')
+    sizeElement.value = JSON.stringify(model.options.get('size'))
+    const sigmaElement = document.querySelector('#gaussianKernelRadiusInputs sl-input[name=sigma]')
+    sigmaElement.value = JSON.stringify(model.options.get('sigma'))
+  }
 
-  // const exampleInput = 5
-  // model.inputs.set("exampleInput", exampleInput)
-  // if (!preRun) {
-  //   const exampleElement = document.querySelector("#gaussianKernelRadiusInputs [name=example-input]")
-  //   exampleElement.value = 5
-  // }
-
-  // return model
-// }
+  return model
+}
 
 // Use this function to run the pipeline when this tab group is select.
 // This will load the web worker if it is not already loaded, download the wasm module, and allocate memory in the wasm model.

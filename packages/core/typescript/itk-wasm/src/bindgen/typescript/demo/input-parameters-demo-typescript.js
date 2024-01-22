@@ -77,7 +77,7 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
     case 'FLOAT':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs sl-input[name=${parameter.name}]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('sl-change', (event) => {\n`
-      if (parameter.itemsExpected !== 1) {
+      if (parameter.itemsExpectedMax > 1) {
         result += `${indent}${indent}globalThis.applyInputParsedJson(${inputIdentifier}, model.${modelProperty}, "${parameterName}")\n`
       } else {
         if (parameterType === 'FLOAT') {

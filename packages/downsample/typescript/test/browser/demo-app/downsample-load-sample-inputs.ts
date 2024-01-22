@@ -1,26 +1,31 @@
-// Generated file. To retain edits, remove this comment.
+export default async function downsampleLoadSampleInputs (model, preRun=false) {
+  const downsampleButton = document.querySelector('#downsampleInputs sl-button[name=input-file-button]')
+  if (!preRun) {
+    downsampleButton.loading = true
+  }
 
-export default null
-// export default async function downsampleLoadSampleInputs (model, preRun=false) {
+  const fileName = "cthead1.png"
+  const response = await fetch(`https://bafybeih4fck4ndvsvgo6774xy5w7ip3bzcvh7x7e527m4yvazgrxdzayua.ipfs.w3s.link/ipfs/bafybeih4fck4ndvsvgo6774xy5w7ip3bzcvh7x7e527m4yvazgrxdzayua/input/${fileName}`)
+  const data = new Uint8Array(await response.arrayBuffer())
+  const inputFile = { data, path: fileName }
+  const { image } = await globalThis.readImage(inputFile)
 
-  // Load sample inputs for the downsample function.
-  //
-  // This function should load sample inputs:
-  //
-  //  1) In the provided model map.
-  //  2) Into the corresponding HTML input elements if preRun is not true.
-  //
-  // Example for an input named `exampleInput`:
+  model.inputs.set('input', image)
+  model.options.set('shrinkFactors', [2, 2])
 
-  // const exampleInput = 5
-  // model.inputs.set("exampleInput", exampleInput)
-  // if (!preRun) {
-  //   const exampleElement = document.querySelector("#downsampleInputs [name=example-input]")
-  //   exampleElement.value = 5
-  // }
+  if (!preRun) {
+    const downsampleElement = document.getElementById('downsample-input-details')
+    downsampleElement.innerHTML = `<pre>${globalThis.escapeHtml(inputFile.path)}</pre>`
+    downsampleElement.disabled = false
 
-  // return model
-// }
+    const shrinkFactorsElement = document.querySelector('#downsampleInputs sl-input[name=shrink-factors]')
+    shrinkFactorsElement.value = JSON.stringify(model.options.get('shrinkFactors'))
+
+    downsampleButton.loading = false
+  }
+
+  return model
+}
 
 // Use this function to run the pipeline when this tab group is select.
 // This will load the web worker if it is not already loaded, download the wasm module, and allocate memory in the wasm model.

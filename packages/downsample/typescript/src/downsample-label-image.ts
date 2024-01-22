@@ -17,7 +17,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 import { getDefaultWebWorker } from './default-web-worker.js'
 
 /**
- * Apply a smoothing anti-alias filter and subsample the input image.
+ * Subsample the input label image a according to weighted voting of local labels.
  *
  * @param {Image} input - Input image
  * @param {DownsampleLabelImageOptions} options - options object

@@ -62,12 +62,12 @@ function outputDemoTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}${indent}event.preventDefault()\n`
       result += `${prefix}${indent}${indent}event.stopPropagation()\n`
       result += `${prefix}${indent}${indent}if (model.outputs.has("${parameterName}")) {\n`
-      result += `${prefix}${indent}${indent}${indent}const ${parameterName}DownloadFormat = document.getElementById('${parameter.name}-output-format')\n`
+      result += `${prefix}${indent}${indent}${indent}const ${parameterName}DownloadFormat = document.getElementById('${functionName}-${parameter.name}-output-format')\n`
       result += `${prefix}${indent}${indent}${indent}const downloadFormat = ${parameterName}DownloadFormat.value || 'nrrd'\n`
       result += `${prefix}${indent}${indent}${indent}const fileName = \`${parameterName}.\${downloadFormat}\`\n`
       result += `${prefix}${indent}${indent}${indent}const { webWorker, serializedImage } = await writeImage(model.outputs.get("${parameterName}"), fileName)\n\n`
       result += `${prefix}${indent}${indent}${indent}webWorker.terminate()\n`
-      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(serializedImage, fileName)\n`
+      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(serializedImage.data, fileName)\n`
       result += `${prefix}${indent}${indent}}\n`
       result += `${prefix}${indent}})\n`
       break
@@ -77,12 +77,12 @@ function outputDemoTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}${indent}event.preventDefault()\n`
       result += `${prefix}${indent}${indent}event.stopPropagation()\n`
       result += `${prefix}${indent}${indent}if (model.outputs.has("${parameterName}")) {\n`
-      result += `${prefix}${indent}${indent}${indent}const ${parameterName}DownloadFormat = document.getElementById('${parameter.name}-output-format')\n`
+      result += `${prefix}${indent}${indent}${indent}const ${parameterName}DownloadFormat = document.getElementById('${functionName}-${parameter.name}-output-format')\n`
       result += `${prefix}${indent}${indent}${indent}const downloadFormat = ${parameterName}DownloadFormat.value || 'vtk'\n`
       result += `${prefix}${indent}${indent}${indent}const fileName = \`${parameterName}.\${downloadFormat}\`\n`
-      result += `${prefix}${indent}${indent}${indent}const { webWorker, arrayBuffer } = await writeMesh(model.outputs.get("${parameterName}"), fileName)\n\n`
+      result += `${prefix}${indent}${indent}${indent}const { webWorker, serializedMesh } = await writeMesh(model.outputs.get("${parameterName}"), fileName)\n\n`
       result += `${prefix}${indent}${indent}${indent}webWorker.terminate()\n`
-      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(arrayBuffer, fileName)\n`
+      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(serializedMesh.data, fileName)\n`
       result += `${prefix}${indent}${indent}}\n`
       result += `${prefix}${indent}})\n`
       break

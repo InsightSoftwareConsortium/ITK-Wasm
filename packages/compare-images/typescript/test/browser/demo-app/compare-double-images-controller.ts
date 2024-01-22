@@ -26,8 +26,6 @@ class CompareDoubleImagesController {
     this.model = new CompareDoubleImagesModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#compareDoubleImagesInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -106,13 +104,13 @@ class CompareDoubleImagesController {
         event.preventDefault()
         event.stopPropagation()
         if (model.outputs.has("differenceImage")) {
-            const differenceImageDownloadFormat = document.getElementById('difference-image-output-format')
+            const differenceImageDownloadFormat = document.getElementById('compareDoubleImages-difference-image-output-format')
             const downloadFormat = differenceImageDownloadFormat.value || 'nrrd'
             const fileName = `differenceImage.${downloadFormat}`
             const { webWorker, serializedImage } = await writeImage(model.outputs.get("differenceImage"), fileName)
 
             webWorker.terminate()
-            globalThis.downloadFile(serializedImage, fileName)
+            globalThis.downloadFile(serializedImage.data, fileName)
         }
     })
 
@@ -121,18 +119,18 @@ class CompareDoubleImagesController {
         event.preventDefault()
         event.stopPropagation()
         if (model.outputs.has("differenceUchar2dImage")) {
-            const differenceUchar2dImageDownloadFormat = document.getElementById('difference-uchar-2d-image-output-format')
+            const differenceUchar2dImageDownloadFormat = document.getElementById('compareDoubleImages-difference-uchar-2d-image-output-format')
             const downloadFormat = differenceUchar2dImageDownloadFormat.value || 'nrrd'
             const fileName = `differenceUchar2dImage.${downloadFormat}`
             const { webWorker, serializedImage } = await writeImage(model.outputs.get("differenceUchar2dImage"), fileName)
 
             webWorker.terminate()
-            globalThis.downloadFile(serializedImage, fileName)
+            globalThis.downloadFile(serializedImage.data, fileName)
         }
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -214,11 +212,9 @@ class CompareDoubleImagesController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, metrics, differenceImage, differenceUchar2dImage, } = await compareImages.compareDoubleImages(      this.model.inputs.get('testImage'),
+    const { metrics, differenceImage, differenceUchar2dImage, } = await compareImages.compareDoubleImages(      this.model.inputs.get('testImage'),
       Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { metrics, differenceImage, differenceUchar2dImage, }
   }

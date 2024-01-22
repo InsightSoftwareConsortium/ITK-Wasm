@@ -8,12 +8,12 @@ from itkwasm import (
     Image,
 )
 
-def downsample_bin_strink(
+async def downsample_label_image_async(
     input: Image,
     shrink_factors: List[int] = [],
-    information_only: bool = False,
+    crop_radius: List[int] = {},
 ) -> Image:
-    """Apply local averaging and subsample the input image.
+    """Subsample the input label image a according to weighted voting of local labels.
 
     :param input: Input image
     :type  input: Image
@@ -21,12 +21,12 @@ def downsample_bin_strink(
     :param shrink_factors: Shrink factors
     :type  shrink_factors: int
 
-    :param information_only: Generate output image information only. Do not process pixels.
-    :type  information_only: bool
+    :param crop_radius: Optional crop radius in pixel units.
+    :type  crop_radius: int
 
     :return: Output downsampled image
     :rtype:  Image
     """
-    func = environment_dispatch("itkwasm_downsample", "downsample_bin_strink")
-    output = func(input, shrink_factors=shrink_factors, information_only=information_only)
+    func = environment_dispatch("itkwasm_downsample", "downsample_label_image_async")
+    output = await func(input, shrink_factors=shrink_factors, crop_radius=crop_radius)
     return output

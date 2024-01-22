@@ -14,7 +14,7 @@ import DownsampleLabelImageNodeResult from './downsample-label-image-node-result
 import path from 'path'
 
 /**
- * Apply a smoothing anti-alias filter and subsample the input image.
+ * Subsample the input label image a according to weighted voting of local labels.
  *
  * @param {Image} input - Input image
  * @param {DownsampleLabelImageNodeOptions} options - options object

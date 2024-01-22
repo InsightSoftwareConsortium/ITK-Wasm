@@ -26,8 +26,6 @@ class VectorMagnitudeController {
     this.model = new VectorMagnitudeModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#vectorMagnitudeInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -62,18 +60,18 @@ class VectorMagnitudeController {
         event.preventDefault()
         event.stopPropagation()
         if (model.outputs.has("magnitudeImage")) {
-            const magnitudeImageDownloadFormat = document.getElementById('magnitude-image-output-format')
+            const magnitudeImageDownloadFormat = document.getElementById('vectorMagnitude-magnitude-image-output-format')
             const downloadFormat = magnitudeImageDownloadFormat.value || 'nrrd'
             const fileName = `magnitudeImage.${downloadFormat}`
             const { webWorker, serializedImage } = await writeImage(model.outputs.get("magnitudeImage"), fileName)
 
             webWorker.terminate()
-            globalThis.downloadFile(serializedImage, fileName)
+            globalThis.downloadFile(serializedImage.data, fileName)
         }
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -139,11 +137,9 @@ class VectorMagnitudeController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, magnitudeImage, } = await compareImages.vectorMagnitude(      this.model.inputs.get('vectorImage'),
+    const { magnitudeImage, } = await compareImages.vectorMagnitude(      this.model.inputs.get('vectorImage'),
       Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { magnitudeImage, }
   }

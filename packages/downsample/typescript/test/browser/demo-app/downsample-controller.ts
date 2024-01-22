@@ -26,8 +26,6 @@ class DownsampleController {
     this.model = new DownsampleModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#downsampleInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -72,18 +70,18 @@ class DownsampleController {
         event.preventDefault()
         event.stopPropagation()
         if (model.outputs.has("downsampled")) {
-            const downsampledDownloadFormat = document.getElementById('downsampled-output-format')
+            const downsampledDownloadFormat = document.getElementById('downsample-downsampled-output-format')
             const downloadFormat = downsampledDownloadFormat.value || 'nrrd'
             const fileName = `downsampled.${downloadFormat}`
             const { webWorker, serializedImage } = await writeImage(model.outputs.get("downsampled"), fileName)
 
             webWorker.terminate()
-            globalThis.downloadFile(serializedImage, fileName)
+            globalThis.downloadFile(serializedImage.data, fileName)
         }
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -149,11 +147,9 @@ class DownsampleController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, downsampled, } = await downsample.downsample(      this.model.inputs.get('input'),
+    const { downsampled, } = await downsample.downsample(      this.model.inputs.get('input'),
       Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { downsampled, }
   }

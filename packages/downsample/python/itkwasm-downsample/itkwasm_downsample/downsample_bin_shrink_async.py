@@ -8,7 +8,7 @@ from itkwasm import (
     Image,
 )
 
-async def downsample_bin_strink_async(
+async def downsample_bin_shrink_async(
     input: Image,
     shrink_factors: List[int] = [],
     information_only: bool = False,
@@ -27,6 +27,6 @@ async def downsample_bin_strink_async(
     :return: Output downsampled image
     :rtype:  Image
     """
-    func = environment_dispatch("itkwasm_downsample", "downsample_bin_strink_async")
+    func = environment_dispatch("itkwasm_downsample", "downsample_bin_shrink_async")
     output = await func(input, shrink_factors=shrink_factors, information_only=information_only)
     return output

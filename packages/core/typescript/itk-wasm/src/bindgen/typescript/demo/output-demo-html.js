@@ -42,7 +42,7 @@ function outputDemoHtml (functionName, prefix, indent, parameter) {
     case 'OUTPUT_IMAGE': {
       result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
 
-      result += `${prefix}${indent}<sl-select id="${parameter.name}-output-format" placeholder="Format">\n`
+      result += `${prefix}${indent}<sl-select id="${functionName}-${parameter.name}-output-format" placeholder="Format">\n`
       const formats = ['bmp', 'dcm', 'gipl', 'hdf5', 'jpg', 'lsm', 'mnc', 'mnc.gz', 'mgh', 'mha', 'mrc', 'nii', 'nii.gz', 'png', 'nrrd', 'png', 'pic', 'tif', 'isq', 'fdf', 'vtk']
       formats.forEach((format) => {
         result += `${prefix}${indent}${indent}<sl-option value="${format}">${format}</sl-option>\n`
@@ -55,7 +55,7 @@ function outputDemoHtml (functionName, prefix, indent, parameter) {
     case 'OUTPUT_MESH': {
       result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
 
-      result += `${prefix}${indent}<sl-select id="${parameter.name}-output-format" placeholder="Format">\n`
+      result += `${prefix}${indent}<sl-select id="${functionName}-${parameter.name}-output-format" placeholder="Format">\n`
       const formats = ['vtk', 'byu', 'fsa', 'fsb', 'obj', 'off', 'stl', 'swc'];
       formats.forEach((format) => {
         result += `${prefix}${indent}${indent}<sl-option value="${format}">${format}</sl-option>\n`

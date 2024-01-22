@@ -16,12 +16,12 @@ from itkwasm import (
     Image,
 )
 
-def downsample_bin_strink(
+def downsample_label_image(
     input: Image,
     shrink_factors: List[int] = [],
-    information_only: bool = False,
+    crop_radius: List[int] = {},
 ) -> Image:
-    """Apply local averaging and subsample the input image.
+    """Subsample the input label image a according to weighted voting of local labels.
 
     :param input: Input image
     :type  input: Image
@@ -29,15 +29,15 @@ def downsample_bin_strink(
     :param shrink_factors: Shrink factors
     :type  shrink_factors: int
 
-    :param information_only: Generate output image information only. Do not process pixels.
-    :type  information_only: bool
+    :param crop_radius: Optional crop radius in pixel units.
+    :type  crop_radius: int
 
     :return: Output downsampled image
     :rtype:  Image
     """
     global _pipeline
     if _pipeline is None:
-        _pipeline = Pipeline(file_resources('itkwasm_downsample_wasi').joinpath(Path('wasm_modules') / Path('downsample-bin-strink.wasi.wasm')))
+        _pipeline = Pipeline(file_resources('itkwasm_downsample_wasi').joinpath(Path('wasm_modules') / Path('downsample-label-image.wasi.wasm')))
 
     pipeline_outputs: List[PipelineOutput] = [
         PipelineOutput(InterfaceTypes.Image),
@@ -63,8 +63,12 @@ def downsample_bin_strink(
         for value in shrink_factors:
             args.append(str(value))
 
-    if information_only:
-        args.append('--information-only')
+    if len(crop_radius) < 2:
+       raise ValueError('"crop-radius" kwarg must have a length > 2')
+    if len(crop_radius) > 0:
+        args.append('--crop-radius')
+        for value in crop_radius:
+            args.append(str(value))
 
 
     outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)

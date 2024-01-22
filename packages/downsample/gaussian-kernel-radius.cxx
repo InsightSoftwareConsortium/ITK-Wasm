@@ -31,10 +31,10 @@ int main(int argc, char * argv[])
   itk::wasm::Pipeline pipeline("gaussian-kernel-radius", "Radius in pixels required for effective discrete gaussian filtering.", argc, argv);
 
   std::vector<uint64_t> size { 1, 1 };
-  pipeline.add_option("--size", size, "Size in pixels")->required();
+  pipeline.add_option("--size", size, "Size in pixels")->required()->expected(1, -1);
 
   std::vector<double> sigma { 1.0, 1.0 };
-  pipeline.add_option("--sigma", sigma, "Sigma in pixel units")->required();
+  pipeline.add_option("--sigma", sigma, "Sigma in pixel units")->required()->expected(1, -1);
 
   uint64_t maxKernelWidth = 32;
   pipeline.add_option("--max-kernel-width", maxKernelWidth, "Maximum kernel width in pixels.");

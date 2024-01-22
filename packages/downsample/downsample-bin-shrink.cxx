@@ -74,7 +74,7 @@ public:
 
 int main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("downsample-bin-strink", "Apply local averaging and subsample the input image.", argc, argv);
+  itk::wasm::Pipeline pipeline("downsample-bin-shrink", "Apply local averaging and subsample the input image.", argc, argv);
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
     uint8_t,
