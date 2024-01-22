@@ -19,7 +19,7 @@ from itkwasm import (
 async def downsample_label_image_async(
     input: Image,
     shrink_factors: List[int] = [],
-    crop_radius: List[int] = {},
+    crop_radius: Optional[List[int]] = None,
 ) -> Image:
     """Subsample the input label image a according to weighted voting of local labels.
 

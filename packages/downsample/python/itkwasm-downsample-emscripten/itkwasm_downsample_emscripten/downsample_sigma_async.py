@@ -16,7 +16,7 @@ from itkwasm import (
 )
 
 async def downsample_sigma_async(
-    shrink_factors: int = [],
+    shrink_factors: List[int] = [],
 ) -> Any:
     """Compute gaussian kernel sigma values in pixel units for downsampling.
 

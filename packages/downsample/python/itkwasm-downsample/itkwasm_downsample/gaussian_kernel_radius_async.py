@@ -8,8 +8,8 @@ from itkwasm import (
 )
 
 async def gaussian_kernel_radius_async(
-    size: int = [],
-    sigma: float = [],
+    size: List[int] = [],
+    sigma: List[float] = [],
     max_kernel_width: int = 32,
     max_kernel_error: float = 0.01,
 ) -> Any:

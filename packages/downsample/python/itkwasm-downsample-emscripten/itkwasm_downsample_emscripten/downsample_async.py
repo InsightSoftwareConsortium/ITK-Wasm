@@ -19,7 +19,7 @@ from itkwasm import (
 async def downsample_async(
     input: Image,
     shrink_factors: List[int] = [],
-    crop_radius: List[int] = {},
+    crop_radius: Optional[List[int]] = None,
 ) -> Image:
     """Apply a smoothing anti-alias filter and subsample the input image.
 

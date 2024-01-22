@@ -1,5 +1,3 @@
-# Generated file. To retain edits, remove this comment.
-
 from pathlib import Path, PurePosixPath
 import os
 from typing import Dict, Tuple, Optional, List, Any
@@ -16,15 +14,15 @@ from itkwasm import (
 )
 
 def downsample_sigma(
-    shrink_factors: int = [],
-) -> Any:
+    shrink_factors: List[int] = [],
+) -> List[float]:
     """Compute gaussian kernel sigma values in pixel units for downsampling.
 
     :param shrink_factors: Shrink factors
     :type  shrink_factors: int
 
     :return: Output sigmas in pixel units.
-    :rtype:  Any
+    :rtype:  List[float]
     """
     global _pipeline
     if _pipeline is None:

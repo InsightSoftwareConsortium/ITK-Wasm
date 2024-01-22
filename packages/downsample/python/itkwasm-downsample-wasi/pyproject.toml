@@ -44,6 +44,8 @@ path = "itkwasm_downsample_wasi/_version.py"
 [tool.hatch.envs.default]
 dependencies = [
   "pytest",
+  "itkwasm-image-io",
+  "itkwasm-compare-images",
 ]
 
 [project.urls]

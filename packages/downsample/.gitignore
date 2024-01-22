@@ -8,3 +8,5 @@ typescript/demo-app/
 test/pyodide-dispatch.tar.bz2
 test/pyodide-emscripten.tar.bz2
 test/data.tar.gz
+test/data/baseline/
+test/data/python/

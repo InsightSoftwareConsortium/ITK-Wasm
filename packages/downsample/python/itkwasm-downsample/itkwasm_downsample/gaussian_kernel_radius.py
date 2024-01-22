@@ -1,5 +1,3 @@
-# Generated file. Do not edit.
-
 import os
 from typing import Dict, Tuple, Optional, List, Any
 
@@ -8,11 +6,11 @@ from itkwasm import (
 )
 
 def gaussian_kernel_radius(
-    size: int = [],
-    sigma: float = [],
+    size: List[int] = [],
+    sigma: List[float] = [],
     max_kernel_width: int = 32,
     max_kernel_error: float = 0.01,
-) -> Any:
+) -> List[int]:
     """Radius in pixels required for effective discrete gaussian filtering.
 
     :param size: Size in pixels
@@ -28,7 +26,7 @@ def gaussian_kernel_radius(
     :type  max_kernel_error: float
 
     :return: Output kernel radius.
-    :rtype:  Any
+    :rtype:  List[int]
     """
     func = environment_dispatch("itkwasm_downsample", "gaussian_kernel_radius")
     output = func(size=size, sigma=sigma, max_kernel_width=max_kernel_width, max_kernel_error=max_kernel_error)

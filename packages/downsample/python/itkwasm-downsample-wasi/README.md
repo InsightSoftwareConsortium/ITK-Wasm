@@ -16,7 +16,7 @@ pip install itkwasm-downsample-wasi
 ## Development
 
 ```sh
-pip install pytest
+pip install pytest itkwasm-image-io itkwasm-compare-images
 pip install -e .
 pytest
 

@@ -19,7 +19,7 @@ from itkwasm import (
 def downsample(
     input: Image,
     shrink_factors: List[int] = [],
-    crop_radius: List[int] = {},
+    crop_radius: Optional[List[int]] = None,
 ) -> Image:
     """Apply a smoothing anti-alias filter and subsample the input image.
 
@@ -63,9 +63,9 @@ def downsample(
         for value in shrink_factors:
             args.append(str(value))
 
-    if len(crop_radius) < 2:
+    if crop_radius is not None and len(crop_radius) < 2:
        raise ValueError('"crop-radius" kwarg must have a length > 2')
-    if len(crop_radius) > 0:
+    if crop_radius is not None and len(crop_radius) > 0:
         args.append('--crop-radius')
         for value in crop_radius:
             args.append(str(value))
