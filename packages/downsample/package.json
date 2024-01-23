@@ -28,7 +28,7 @@
     "test:pyodide:download:dispatch": "itk-wasm pnpm-script test:pyodide:download:dispatch -- ./python/itkwasm-downsample/dist",
     "test:python:dispatch": "itk-wasm pnpm-script test:python:emscripten -- ./python/itkwasm-downsample",
     "test:python": "itk-wasm pnpm-script test:python",
-    "test:wasi": "itk-wasm pnpm-script test:wasi"
+    "test:wasi": "itk-wasm pnpm-script test:wasi -- -V"
   },
   "license": "Apache-2.0",
   "devDependencies": {

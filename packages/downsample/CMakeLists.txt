@@ -42,15 +42,15 @@ add_test(NAME downsample
 
 add_test(NAME downsample-sigma
   COMMAND downsample-sigma
-    --shrink-factors 2 4
     ${CMAKE_CURRENT_BINARY_DIR}/downsample-sigma.json
+    --shrink-factors 2 4
     )
 
 add_test(NAME gaussian-kernel-radius
   COMMAND gaussian-kernel-radius
+    ${CMAKE_CURRENT_BINARY_DIR}/gaussian-kernel-radius.json
     --size 64 64 32
     --sigma 2.0 4.0 2.0
-    ${CMAKE_CURRENT_BINARY_DIR}/gaussian-kernel-radius.json
     )
 
 add_test(NAME downsample-bin-shrink
