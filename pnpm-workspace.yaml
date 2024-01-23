@@ -4,7 +4,7 @@ packages:
   - 'examples/inputs-outputs'
   - 'examples/inputs-outputs/typescript'
   - 'examples/mean-squares-versor-registration'
-  - '!examples/mean-squares-versor-registration/typescript'
+  - 'examples/mean-squares-versor-registration/typescript'
   - '!packages/core/typescript/itk-wasm/test/pipelines/typescript'
   - '!**/src'
   - '!**/dist'
