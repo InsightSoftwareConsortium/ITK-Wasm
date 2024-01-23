@@ -48,49 +48,49 @@ async function readDicomEncapsulatedPdfNode(
 
   // Options
   args.push('--memory-io')
-  if (typeof options.readFileOnly !== "undefined") {
+  if (options.readFileOnly) {
     options.readFileOnly && args.push('--read-file-only')
   }
-  if (typeof options.readDataset !== "undefined") {
+  if (options.readDataset) {
     options.readDataset && args.push('--read-dataset')
   }
-  if (typeof options.readXferAuto !== "undefined") {
+  if (options.readXferAuto) {
     options.readXferAuto && args.push('--read-xfer-auto')
   }
-  if (typeof options.readXferDetect !== "undefined") {
+  if (options.readXferDetect) {
     options.readXferDetect && args.push('--read-xfer-detect')
   }
-  if (typeof options.readXferLittle !== "undefined") {
+  if (options.readXferLittle) {
     options.readXferLittle && args.push('--read-xfer-little')
   }
-  if (typeof options.readXferBig !== "undefined") {
+  if (options.readXferBig) {
     options.readXferBig && args.push('--read-xfer-big')
   }
-  if (typeof options.readXferImplicit !== "undefined") {
+  if (options.readXferImplicit) {
     options.readXferImplicit && args.push('--read-xfer-implicit')
   }
-  if (typeof options.acceptOddLength !== "undefined") {
+  if (options.acceptOddLength) {
     options.acceptOddLength && args.push('--accept-odd-length')
   }
-  if (typeof options.assumeEvenLength !== "undefined") {
+  if (options.assumeEvenLength) {
     options.assumeEvenLength && args.push('--assume-even-length')
   }
-  if (typeof options.enableCp246 !== "undefined") {
+  if (options.enableCp246) {
     options.enableCp246 && args.push('--enable-cp246')
   }
-  if (typeof options.disableCp246 !== "undefined") {
+  if (options.disableCp246) {
     options.disableCp246 && args.push('--disable-cp246')
   }
-  if (typeof options.retainUn !== "undefined") {
+  if (options.retainUn) {
     options.retainUn && args.push('--retain-un')
   }
-  if (typeof options.convertUn !== "undefined") {
+  if (options.convertUn) {
     options.convertUn && args.push('--convert-un')
   }
-  if (typeof options.enableCorrection !== "undefined") {
+  if (options.enableCorrection) {
     options.enableCorrection && args.push('--enable-correction')
   }
-  if (typeof options.disableCorrection !== "undefined") {
+  if (options.disableCorrection) {
     options.disableCorrection && args.push('--disable-correction')
   }
 

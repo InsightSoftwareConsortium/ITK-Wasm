@@ -54,13 +54,13 @@ async function offWriteMeshNode(
 
   // Options
   args.push('--memory-io')
-  if (typeof options.informationOnly !== "undefined") {
+  if (options.informationOnly) {
     options.informationOnly && args.push('--information-only')
   }
-  if (typeof options.useCompression !== "undefined") {
+  if (options.useCompression) {
     options.useCompression && args.push('--use-compression')
   }
-  if (typeof options.binaryFileType !== "undefined") {
+  if (options.binaryFileType) {
     options.binaryFileType && args.push('--binary-file-type')
   }
 

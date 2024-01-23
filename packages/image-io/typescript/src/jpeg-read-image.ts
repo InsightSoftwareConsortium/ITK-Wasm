@@ -59,7 +59,7 @@ async function jpegReadImage(
 
   // Options
   args.push('--memory-io')
-  if (typeof options.informationOnly !== "undefined") {
+  if (options.informationOnly) {
     options.informationOnly && args.push('--information-only')
   }
 
