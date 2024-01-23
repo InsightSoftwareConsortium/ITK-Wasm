@@ -38,6 +38,12 @@ jobs:
       run: |
         pnpm run --aggregate-output --filter itk-wasm build
 
+    - name: Build build:gen:typescript for @itk-wasm/image-io, @itk-wasm/compare-images
+      if: ${{  matrix.package == 'downsample' }}
+      run: |
+        pnpm run --aggregate-output --filter "@itk-wasm/image-io-build..." build:gen:typescript
+        pnpm run --aggregate-output --filter "@itk-wasm/compare-images-build..." build:gen:typescript
+
     - name: Build build:gen:typescript
       run: |
         pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build..." build:gen:typescript
