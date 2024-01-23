@@ -12,7 +12,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        package: [compress-stringify, compare-images, dicom, mesh-io, image-io]
+        package: [compress-stringify, compare-images, dicom, mesh-io, image-io, downsample]
 
     steps:
     - uses: actions/checkout@v3

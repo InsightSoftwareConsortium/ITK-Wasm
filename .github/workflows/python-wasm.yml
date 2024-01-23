@@ -19,7 +19,7 @@ jobs:
       matrix:
         os: [ubuntu-22.04, windows-2022, macos-12]
         python-minor-version: [8, 9, 10, 11]
-        package: [compress-stringify, compare-images, dicom, mesh-io, image-io]
+        package: [compress-stringify, compare-images, dicom, mesh-io, image-io, downsample]
 
     steps:
       - name: Checkout
@@ -59,12 +59,12 @@ jobs:
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" build:micromamba
 
       - name: Build build:python:wasi
-        if: ${{ matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io') }}
+        if: ${{ matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' ) }}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" build:python:wasi
 
       - name: Test python on system
-        if: ${{ matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io') }}
+        if: ${{ matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' ) }}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:python:wasi
 
