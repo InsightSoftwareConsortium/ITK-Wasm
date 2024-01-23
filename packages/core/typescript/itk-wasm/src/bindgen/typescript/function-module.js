@@ -362,7 +362,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       return
     }
     const camel = camelCase(parameter.name)
-    functionContent += `  if (typeof options.${camel} !== "undefined") {\n`
+    functionContent += `  if (options.${camel}) {\n`
     if (parameter.type === 'BOOL') {
       functionContent += `    options.${camel} && args.push('--${parameter.name}')\n`
     } else if (parameter.itemsExpectedMax > 1) {

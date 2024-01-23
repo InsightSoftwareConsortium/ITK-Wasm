@@ -48,7 +48,7 @@ async function downsampleLabelImage(
 
   // Options
   args.push('--memory-io')
-  if (typeof options.shrinkFactors !== "undefined") {
+  if (options.shrinkFactors) {
     if(options.shrinkFactors.length < 2) {
       throw new Error('"shrink-factors" option must have a length > 2')
     }
@@ -59,7 +59,7 @@ async function downsampleLabelImage(
 
     }))
   }
-  if (typeof options.cropRadius !== "undefined") {
+  if (options.cropRadius) {
     if(options.cropRadius.length < 2) {
       throw new Error('"crop-radius" option must have a length > 2')
     }
