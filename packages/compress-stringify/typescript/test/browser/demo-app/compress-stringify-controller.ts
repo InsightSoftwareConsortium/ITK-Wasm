@@ -24,8 +24,6 @@ class CompressStringifyController {
     this.model = new CompressStringifyModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#compressStringifyInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -79,7 +77,7 @@ class CompressStringifyController {
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -144,11 +142,9 @@ class CompressStringifyController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, output, } = await compressStringify.compressStringify(      this.model.inputs.get('input').slice(),
+    const { output, } = await compressStringify.compressStringify(      this.model.inputs.get('input').slice(),
       Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { output, }
   }

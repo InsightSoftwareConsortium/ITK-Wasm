@@ -25,8 +25,6 @@ class FreeSurferAsciiReadMeshController {
     this.model = new FreeSurferAsciiReadMeshModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#freeSurferAsciiReadMeshInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -75,18 +73,18 @@ class FreeSurferAsciiReadMeshController {
         event.preventDefault()
         event.stopPropagation()
         if (model.outputs.has("mesh")) {
-            const meshDownloadFormat = document.getElementById('mesh-output-format')
+            const meshDownloadFormat = document.getElementById('freeSurferAsciiReadMesh-mesh-output-format')
             const downloadFormat = meshDownloadFormat.value || 'vtk'
             const fileName = `mesh.${downloadFormat}`
-            const { webWorker, arrayBuffer } = await writeMesh(model.outputs.get("mesh"), fileName)
+            const { webWorker, serializedMesh } = await writeMesh(model.outputs.get("mesh"), fileName)
 
             webWorker.terminate()
-            globalThis.downloadFile(arrayBuffer, fileName)
+            globalThis.downloadFile(serializedMesh.data, fileName)
         }
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -160,11 +158,9 @@ class FreeSurferAsciiReadMeshController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, couldRead, mesh, } = await meshIo.freeSurferAsciiReadMesh(      { data: this.model.inputs.get('serializedMesh').data.slice(), path: this.model.inputs.get('serializedMesh').path },
+    const { couldRead, mesh, } = await meshIo.freeSurferAsciiReadMesh(      { data: this.model.inputs.get('serializedMesh').data.slice(), path: this.model.inputs.get('serializedMesh').path },
       Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { couldRead, mesh, }
   }

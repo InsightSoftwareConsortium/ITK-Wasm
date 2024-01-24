@@ -1,0 +1,15 @@
+micromamba/
+emscripten-build/
+wasi-build/
+python/itkwasm-downsample-wasi/itkwasm_downsample_wasi/wasm_modules/
+typescript/dist/
+typescript/test/browser/demo-app/public/
+typescript/demo-app/
+test/pyodide-dispatch.tar.bz2
+test/pyodide-emscripten.tar.bz2
+test/data.tar.gz
+test/data/baseline/
+test/data/python/
+python/itkwasm-downsample-emscripten/dist/
+python/itkwasm-downsample-wasi/dist/
+python/itkwasm-downsample/dist/

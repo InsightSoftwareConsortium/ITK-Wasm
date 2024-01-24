@@ -144,23 +144,15 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
     let requiredOptions = ''
     interfaceJson.parameters.forEach((parameter) => {
       if (parameter.required) {
-        if (parameter.itemsExpectedMax > 1) {
-          if (parameter.type === 'FLOAT' || parameter.type === 'INT') {
-            requiredOptions += ` ${camelCase(parameter.name)}: [`
-            for(let ii = 0; ii < parameter.itemsExpectedMin; ii++) {
-              requiredOptions += `${parameter.default}, `
-            }
-            requiredOptions += '],'
-          } else {
-            const typescriptType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
-            let arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? `${typescriptType}[] | File[] | string[]` : `${typescriptType}[]`
-            if (forNode) {
-              arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? 'string[]' : `${typescriptType}[]`
-            }
-            requiredOptions += ` ${camelCase(parameter.name)}: [] as ${arrayType},`
+        if (parameter.itemsExpectedMax > 1 && parameter.type !== 'FLOAT' && parameter.type !== 'INT' && parameter.type !== 'UINT') {
+          const typescriptType = interfaceJsonTypeToTypeScriptType.get(parameter.type)
+          let arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? `${typescriptType}[] | File[] | string[]` : `${typescriptType}[]`
+          if (forNode) {
+            arrayType = typescriptType === 'TextFile' || typescriptType === 'BinaryFile' ? 'string[]' : `${typescriptType}[]`
           }
+          requiredOptions += ` ${camelCase(parameter.name)}: [] as ${arrayType},`
         } else {
-          if (parameter.type === "FLOAT" || parameter.type === "INT") {
+          if (parameter.type === "FLOAT" || parameter.type === "INT" || parameter.type === "UINT") {
             requiredOptions += ` ${camelCase(parameter.name)}: ${parameter.default},`
           }
         }
@@ -370,7 +362,7 @@ function functionModule (srcOutputDir, forNode, interfaceJson, modulePascalCase,
       return
     }
     const camel = camelCase(parameter.name)
-    functionContent += `  if (typeof options.${camel} !== "undefined") {\n`
+    functionContent += `  if (options.${camel}) {\n`
     if (parameter.type === 'BOOL') {
       functionContent += `    options.${camel} && args.push('--${parameter.name}')\n`
     } else if (parameter.itemsExpectedMax > 1) {

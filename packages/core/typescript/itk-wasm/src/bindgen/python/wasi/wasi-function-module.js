@@ -170,9 +170,10 @@ from itkwasm import (
       args += `    if ${snake}:\n`
       args += `        args.append('--${parameter.name}')\n`
     } else if (parameter.itemsExpectedMax > 1) {
-      args += `    if len(${snake}) < ${parameter.itemsExpectedMin}:\n`
+      const notNone = parameter.required ? '' : `${snake} is not None and `
+      args += `    if ${notNone}len(${snake}) < ${parameter.itemsExpectedMin}:\n`
       args += `       raise ValueError('"${parameter.name}" kwarg must have a length > ${parameter.itemsExpectedMin}')\n`
-      args += `    if len(${snake}) > 0:\n`
+      args += `    if ${notNone}len(${snake}) > 0:\n`
       args += `        args.append('--${parameter.name}')\n`
       args += `        for value in ${snake}:\n`
       if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {

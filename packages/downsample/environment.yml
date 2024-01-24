@@ -1,0 +1,11 @@
+name: downsample
+channels:
+  - conda-forge
+dependencies:
+  - pytest
+  - python=3.11
+  - pip
+  - pip:
+    - hatch
+    - itkwasm-compare-images
+    - itkwasm-image-io

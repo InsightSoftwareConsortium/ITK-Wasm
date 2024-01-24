@@ -25,8 +25,6 @@ class ApplyPresentationStateToImageController {
     this.model = new ApplyPresentationStateToImageModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#applyPresentationStateToImageInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -107,18 +105,18 @@ class ApplyPresentationStateToImageController {
         event.preventDefault()
         event.stopPropagation()
         if (model.outputs.has("outputImage")) {
-            const outputImageDownloadFormat = document.getElementById('output-image-output-format')
+            const outputImageDownloadFormat = document.getElementById('applyPresentationStateToImage-output-image-output-format')
             const downloadFormat = outputImageDownloadFormat.value || 'nrrd'
             const fileName = `outputImage.${downloadFormat}`
             const { webWorker, serializedImage } = await writeImage(model.outputs.get("outputImage"), fileName)
 
             webWorker.terminate()
-            globalThis.downloadFile(serializedImage, fileName)
+            globalThis.downloadFile(serializedImage.data, fileName)
         }
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -196,12 +194,10 @@ class ApplyPresentationStateToImageController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, presentationStateOutStream, outputImage, } = await dicom.applyPresentationStateToImage(      { data: this.model.inputs.get('imageIn').data.slice(), path: this.model.inputs.get('imageIn').path },
+    const { presentationStateOutStream, outputImage, } = await dicom.applyPresentationStateToImage(      { data: this.model.inputs.get('imageIn').data.slice(), path: this.model.inputs.get('imageIn').path },
       { data: this.model.inputs.get('presentationStateFile').data.slice(), path: this.model.inputs.get('presentationStateFile').path },
       Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { presentationStateOutStream, outputImage, }
   }

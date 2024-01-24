@@ -24,8 +24,6 @@ class ReadDicomTagsController {
     this.model = new ReadDicomTagsModel()
     const model = this.model
 
-    this.webWorker = null
-
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector("#readDicomTagsInputs [name=loadSampleInputs]")
       loadSampleInputsButton.setAttribute('style', 'display: block-inline;')
@@ -77,7 +75,7 @@ class ReadDicomTagsController {
     })
 
     const preRun = async () => {
-      if (!this.webWorker && loadSampleInputs && usePreRun) {
+      if (loadSampleInputs && usePreRun) {
         await loadSampleInputs(model, true)
         await this.run()
       }
@@ -143,11 +141,9 @@ class ReadDicomTagsController {
 
   async run() {
     const options = Object.fromEntries(this.model.options.entries())
-    options.webWorker = this.webWorker
-    const { webWorker, tags, } = await dicom.readDicomTags(      { data: this.model.inputs.get('dicomFile').data.slice(), path: this.model.inputs.get('dicomFile').path },
+    const { tags, } = await dicom.readDicomTags(      { data: this.model.inputs.get('dicomFile').data.slice(), path: this.model.inputs.get('dicomFile').path },
       Object.fromEntries(this.model.options.entries())
     )
-    this.webWorker = webWorker
 
     return { tags, }
   }

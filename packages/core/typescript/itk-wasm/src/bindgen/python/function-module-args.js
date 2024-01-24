@@ -34,8 +34,12 @@ function functionModuleArgs(interfaceJson) {
         functionArgs += `    ${snakeCase(value.name)}: Optional[${pythonType}] = None,\n`
       }
     } else {
-      if(value.itemsExpected > 1) {
-        functionArgs += `    ${snakeCase(value.name)}: List[${pythonType}]`
+      if(value.itemsExpectedMax > 1) {
+        if (value.required) {
+          functionArgs += `    ${snakeCase(value.name)}: List[${pythonType}]`
+        } else {
+          functionArgs += `    ${snakeCase(value.name)}: Optional[List[${pythonType}]]`
+        }
       } else {
         functionArgs += `    ${snakeCase(value.name)}: ${pythonType}`
 
@@ -51,7 +55,11 @@ function functionModuleArgs(interfaceJson) {
       } else if(value.required && value.itemsExpectedMax > 1) {
         functionArgs += ` = [],\n`
       } else {
-        functionArgs += ` = ${value.default},\n`
+        if (value.itemsExpectedMax > 1) {
+          functionArgs += ` = None,\n`
+        } else {
+          functionArgs += ` = ${value.default},\n`
+        }
       }
     }
   })

@@ -66,7 +66,7 @@ async def compare_images_async(
     if ignore_boundary_pixels:
         kwargs["ignoreBoundaryPixels"] = to_js(ignore_boundary_pixels)
 
-    outputs = await js_module.compareImages(web_worker, to_js(test_image), **kwargs)
+    outputs = await js_module.compareImages(to_js(test_image), webWorker=web_worker, noCopy=True, **kwargs)
 
     output_web_worker = None
     output_list = []

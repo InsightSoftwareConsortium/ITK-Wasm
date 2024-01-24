@@ -12,7 +12,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        package: [compress-stringify, compare-images, dicom, mesh-io, image-io]
+        package: [compress-stringify, compare-images, dicom, mesh-io, image-io, downsample]
 
     steps:
     - uses: actions/checkout@v3
@@ -37,6 +37,12 @@ jobs:
     - name: Build itk-wasm
       run: |
         pnpm run --aggregate-output --filter itk-wasm build
+
+    - name: Build build:gen:typescript for @itk-wasm/image-io, @itk-wasm/compare-images
+      if: ${{  matrix.package == 'downsample' }}
+      run: |
+        pnpm run --aggregate-output --filter "@itk-wasm/image-io-build..." build:gen:typescript
+        pnpm run --aggregate-output --filter "@itk-wasm/compare-images-build..." build:gen:typescript
 
     - name: Build build:gen:typescript
       run: |

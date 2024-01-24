@@ -36,7 +36,7 @@ download-pyodide = [
 ]
 serve = [
   "hatch build -t wheel ./dist/pyodide/",
-  'echo "\nVisit http://localhost:8877/console.html\n"',
+  'echo "Visit http://localhost:8877/console.html"',
   "python -m http.server --directory=./dist/pyodide 8877",
 ]
 `
