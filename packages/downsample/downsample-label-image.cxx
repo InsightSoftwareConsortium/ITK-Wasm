@@ -100,5 +100,5 @@ int main(int argc, char * argv[])
     uint32_t,
     uint64_t
     >
-  ::Dimensions<2U, 3U, 4U>("input", pipeline);
+  ::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
 }

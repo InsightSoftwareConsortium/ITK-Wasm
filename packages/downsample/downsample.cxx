@@ -119,5 +119,5 @@ int main(int argc, char * argv[])
     float,
     double
     >
-  ::Dimensions<2U, 3U, 4U>("input", pipeline);
+  ::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
 }
