@@ -45,6 +45,7 @@ dependencies = [
     "itk>=5.3.0",
     "pytest >=2.7.3",
     "pytest-pyodide",
+    "dask[array]",
 ]
 
 [tool.hatch.envs.default.scripts]

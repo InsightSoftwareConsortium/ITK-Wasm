@@ -6,6 +6,10 @@ import ctypes
 import sys
 
 import numpy as np
+try:
+    from numpy.typing import ArrayLike
+except ImportError:
+    from numpy import ndarray as ArrayLike
 
 from .interface_types import InterfaceTypes
 from .pipeline_input import PipelineInput
@@ -24,6 +28,12 @@ from ._to_numpy_array import _to_numpy_array
 
 if sys.platform != "emscripten":
     from wasmtime import Config, Store, Engine, Module, WasiConfig, Linker
+
+def _array_to_bytes(arr: ArrayLike) -> bytes:
+    """Convert a numpy array-like to bytes."""
+    if hasattr(arr, 'tobytes'):
+        return arr.tobytes()
+    return np.asarray(arr).tobytes()
 
 class RunInstance:
     """Helper for working with the wasm module instance created when a Pipeline is run."""
@@ -165,9 +175,9 @@ class Pipeline:
                 pass
             elif input_.type == InterfaceTypes.Image:
                 image = input_.data
-                mv = bytes(image.data.data)
+                mv = _array_to_bytes(image.data)
                 data_ptr = ri.set_input_array(mv, index, 0)
-                dv = bytes(image.direction.data)
+                dv = _array_to_bytes(image.direction)
                 direction_ptr = ri.set_input_array(dv, index, 1)
                 image_json = {
                     "imageType": asdict(image.imageType),
@@ -182,22 +192,22 @@ class Pipeline:
             elif input_.type == InterfaceTypes.Mesh:
                 mesh = input_.data
                 if mesh.numberOfPoints:
-                    pv = bytes(mesh.points)
+                    pv = _array_to_bytes(mesh.points)
                 else:
                     pv = bytes([])
                 points_ptr = ri.set_input_array(pv, index, 0)
                 if mesh.numberOfCells:
-                    cv = bytes(mesh.cells)
+                    cv = _array_to_bytes(mesh.cells)
                 else:
                     cv = bytes([])
                 cells_ptr = ri.set_input_array(cv, index, 1)
                 if mesh.numberOfPointPixels:
-                    pdv = bytes(mesh.pointData)
+                    pdv = _array_to_bytes(mesh.pointData)
                 else:
                     pdv = bytes([])
                 point_data_ptr = ri.set_input_array(pdv, index, 2)
                 if mesh.numberOfCellPixels:
-                    cdv = bytes(mesh.cellData)
+                    cdv = _array_to_bytes(mesh.cellData)
                 else:
                     cdv = bytes([])
                 cell_data_ptr = ri.set_input_array(cdv, index, 3)
@@ -222,43 +232,43 @@ class Pipeline:
             elif input_.type == InterfaceTypes.PolyData:
                 polydata = input_.data
                 if polydata.numberOfPoints:
-                    pv = bytes(polydata.points)
+                    pv = _array_to_bytes(polydata.points)
                 else:
                     pv = bytes([])
                 points_ptr = ri.set_input_array(pv, index, 0)
 
                 if polydata.verticesBufferSize:
-                    pv = bytes(polydata.vertices)
+                    pv = _array_to_bytes(polydata.vertices)
                 else:
                     pv = bytes([])
                 vertices_ptr = ri.set_input_array(pv, index, 1)
 
                 if polydata.linesBufferSize:
-                    pv = bytes(polydata.lines)
+                    pv = _array_to_bytes(polydata.lines)
                 else:
                     pv = bytes([])
                 lines_ptr = ri.set_input_array(pv, index, 2)
 
                 if polydata.polygonsBufferSize:
-                    pv = bytes(polydata.polygons)
+                    pv = _array_to_bytes(polydata.polygons)
                 else:
                     pv = bytes([])
                 polygons_ptr = ri.set_input_array(pv, index, 3)
 
                 if polydata.triangleStripsBufferSize:
-                    pv = bytes(polydata.triangleStrips)
+                    pv = _array_to_bytes(polydata.triangleStrips)
                 else:
                     pv = bytes([])
                 triangleStrips_ptr = ri.set_input_array(pv, index, 4)
 
                 if polydata.numberOfPointPixels:
-                    pv = bytes(polydata.pointData)
+                    pv = _array_to_bytes(polydata.pointData)
                 else:
                     pv = bytes([])
                 pointData_ptr = ri.set_input_array(pv, index, 5)
 
                 if polydata.numberOfCellPixels:
-                    pv = bytes(polydata.cellData)
+                    pv = _array_to_bytes(polydata.cellData)
                 else:
                     pv = bytes([])
                 cellData_ptr = ri.set_input_array(pv, index, 6)
