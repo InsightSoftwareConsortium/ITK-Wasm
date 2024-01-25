@@ -31,6 +31,7 @@ requires-python = ">=3.8"
 dependencies = [
     "numpy",
     "typing_extensions",
+    "platformdirs; sys_platform != \"emscripten\"",
     "wasmtime >= 13.0.2; sys_platform != \"emscripten\"",
     "importlib_metadata; python_version < \"3.10\"",
 ]

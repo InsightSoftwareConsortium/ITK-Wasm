@@ -27,7 +27,13 @@ from .float_types import FloatTypes
 from ._to_numpy_array import _to_numpy_array
 
 if sys.platform != "emscripten":
-    from wasmtime import Config, Store, Engine, Module, WasiConfig, Linker
+    import zlib
+    from platformdirs import user_cache_dir
+
+    from wasmtime import Config, Store, Engine, Module, WasiConfig, Linker, WasmtimeError
+
+    _module_store_dir = Path(user_cache_dir("itkwasm"))
+    _module_store_dir.mkdir(parents=True, exist_ok=True)
 
 def _array_to_bytes(arr: ArrayLike) -> bytes:
     """Convert a numpy array-like to bytes."""
@@ -142,7 +148,19 @@ class Pipeline:
         self.linker = Linker(self.engine)
         self.linker.define_wasi()
         self.linker.allow_shadowing = True
-        self.module = Module(self.engine, wasm_bytes)
+        checksum = zlib.adler32(wasm_bytes)
+        module_cache = _module_store_dir / Path(f'module-{checksum}')
+        if module_cache.exists():
+            try:
+                self.module = Module.deserialize_file(self.engine, str(module_cache))
+            except WasmtimeError:
+                self.module = Module(self.engine, wasm_bytes)
+                with module_cache.open('wb') as fp:
+                    fp.write(self.module.serialize())
+        else:
+            self.module = Module(self.engine, wasm_bytes)
+            with module_cache.open('wb') as fp:
+                fp.write(self.module.serialize())
 
     def run(self, args: List[str], outputs: List[PipelineOutput]=[], inputs: List[PipelineInput]=[]) -> Tuple[PipelineOutput]:
         """Run the itk-wasm pipeline."""
