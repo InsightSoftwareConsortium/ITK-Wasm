@@ -38,7 +38,7 @@ def image_from_array(arr, is_vector: bool = False, image_type: Optional[ImageTyp
         )
 
     image = Image(imageType=image_type)
-    image.size = arr.shape[:dimension]
+    image.size = arr.shape[:dimension][::-1]
     image.data = arr
 
     return image
