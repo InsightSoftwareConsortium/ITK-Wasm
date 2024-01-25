@@ -143,6 +143,43 @@ def test_pipeline_write_read_image():
     difference = np.sum(itk.comparison_image_filter(out_image, baseline))
     assert difference == 0.0
 
+def test_pipeline_dask_array_input():
+    pipeline = Pipeline(test_input_dir / 'median-filter-test.wasi.wasm')
+
+    data = test_input_dir / "cthead1.png"
+    itk_image = itk.imread(data, itk.UC)
+    itk_image_dict = itk.dict_from_image(itk_image)
+    itkwasm_image = Image(**itk_image_dict)
+
+    from dask.array import from_array
+    itkwasm_image.data = from_array(itkwasm_image.data)
+
+    pipeline_inputs = [
+        PipelineInput(InterfaceTypes.Image, itkwasm_image),
+    ]
+
+    pipeline_outputs = [
+        PipelineOutput(InterfaceTypes.Image),
+    ]
+
+    args = [
+        '--memory-io',
+        '0',
+        '0',
+        '--radius', '2',
+        ]
+
+    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
+
+    out_image = itk.image_from_dict(asdict(outputs[0].data))
+    # To be addressed in itk-5.3.1
+    out_image.SetRegions([256,256])
+
+    baseline = itk.imread(test_baseline_dir / "test_pipeline_write_read_image.png")
+
+    difference = np.sum(itk.comparison_image_filter(out_image, baseline))
+    assert difference == 0.0
+
 def test_pipeline_write_read_mesh():
     pipeline = Pipeline(test_input_dir / 'mesh-read-write-test.wasi.wasm')
 
