@@ -11,6 +11,17 @@ def test_image_from_array():
     assert image.imageType.pixelType == PixelTypes.Scalar
     assert image.imageType.components == 1
 
+def test_image_from_array_anisotropic():
+    arr = np.random.rand(10, 5)
+    image = image_from_array(arr)
+    assert np.array_equal(arr, image.data)
+    assert image.imageType.dimension == 2
+    assert image.imageType.componentType == FloatTypes.Float64
+    assert image.imageType.pixelType == PixelTypes.Scalar
+    assert image.imageType.components == 1
+    assert image.size[0] == 5
+    assert image.size[1] == 10
+
 def test_image_from_array_vector():
     arr = np.random.rand(10, 10, 3)
     image = image_from_array(arr, is_vector=True)

@@ -47,6 +47,7 @@ dependencies = [
     "pytest >=2.7.3",
     "pytest-pyodide",
     "dask[array]",
+    "test_accelerator @ {root:uri}/test/test-accelerator",
 ]
 
 [tool.hatch.envs.default.scripts]
