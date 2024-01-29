@@ -3,7 +3,8 @@ import * as imageIo from '../../../dist/index.js'
 globalThis.imageIo = imageIo
 
 // Use local, vendored WebAssembly module assets
-const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
+const viteBaseUrl = import.meta.env.BASE_URL
+const pipelinesBaseUrl: string | URL = new URL(`${viteBaseUrl}pipelines`, document.location.origin).href
 imageIo.setPipelinesBaseUrl(pipelinesBaseUrl)
 
 const params = new URLSearchParams(window.location.search)

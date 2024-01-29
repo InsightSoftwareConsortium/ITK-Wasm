@@ -5,7 +5,8 @@ import { readImage } from '@itk-wasm/image-io'
 globalThis.readImage = readImage
 
 // Use local, vendored WebAssembly module assets
-const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
+const viteBaseUrl = import.meta.env.BASE_URL
+const pipelinesBaseUrl: string | URL = new URL(`${viteBaseUrl}pipelines`, document.location.origin).href
 downsample.setPipelinesBaseUrl(pipelinesBaseUrl)
 
 

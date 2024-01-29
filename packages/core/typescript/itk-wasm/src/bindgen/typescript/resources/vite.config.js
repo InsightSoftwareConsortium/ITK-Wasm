@@ -2,8 +2,11 @@ import { defineConfig } from 'vite'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import path from 'path'
 
+const base = process.env.VITE_BASE_URL || '/'
+
 export default defineConfig({
   root: path.join('test', 'browser', 'demo-app'),
+  base,
   build: {
     outDir: '../../../demo-app',
     emptyOutDir: true,

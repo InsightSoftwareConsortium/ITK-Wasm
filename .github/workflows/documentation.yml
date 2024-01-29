@@ -69,6 +69,31 @@ jobs:
       run: |
         pnpm build
 
+    - name: Build package typescript documentation
+      run: |
+        for package in compare-images compress-stringify dicom dowsample image-io mesh-io; do
+          mkdir -p docs/$package/{ts,py}/docs
+          mkdir -p docs/$package/{ts,py}/app
+
+          sed "s%      basePath:.*%      basePath: '/$package/ts/docs',%" packages/$package/typescript/index.html > docs/$package/ts/docs/index.html
+          cp packages/$package/typescript/README.md docs/$package/ts/docs/
+          mkdir -p docs/$package/ts/docs/test/browser/demo-app
+          cp packages/$package/typescript/test/browser/demo-app/logo.svg docs/$package/ts/docs/test/browser/demo-app/
+
+          pushd packages/$package/typescript
+          rm -rf demo-app node_modules/.vite
+          export VITE_BASE_URL="/$package/ts/app/"
+          pnpm build
+          popd
+          rsync -a packages/$package/typescript/demo-app/ docs/$package/ts/app/
+        done
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: package-documentation
+        path: docs
+
   consolidate-documentation:
     needs: [build-main-documentation, build-package-documentation]
     runs-on: ubuntu-22.04
@@ -78,6 +103,12 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: main-documentation
+        path: docs
+
+    - name: Download package documentation
+      uses: actions/download-artifact@v4
+      with:
+        name: package-documentation
         path: docs
 
     - name: Upload Pages artifact
