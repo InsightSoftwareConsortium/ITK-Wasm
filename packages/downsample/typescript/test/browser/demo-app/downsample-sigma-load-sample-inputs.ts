@@ -1,4 +1,4 @@
-export default async function downsampleLoadSampleInputs (model, preRun=false) {
+export default async function downsampleSigmaLoadSampleInputs (model, preRun=false) {
 
   model.options.set('shrinkFactors', [2, 2])
 

@@ -4,7 +4,8 @@ import * as dicom from '../../../dist/index.js'
 globalThis.dicom = dicom
 
 // Use local, vendored WebAssembly module assets
-const pipelinesBaseUrl: string | URL = new URL('/pipelines', document.location.origin).href
+const viteBaseUrl = import.meta.env.BASE_URL
+const pipelinesBaseUrl: string | URL = new URL(`${viteBaseUrl}pipelines`, document.location.origin).href
 dicom.setPipelinesBaseUrl(pipelinesBaseUrl)
 
 
