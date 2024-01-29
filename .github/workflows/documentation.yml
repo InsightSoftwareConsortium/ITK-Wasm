@@ -136,6 +136,7 @@ jobs:
       uses: actions/upload-pages-artifact@v3
       with:
         path: docs
+        retention-days: 7
 
   deploy-gh-pages:
     needs: consolidate-documentation
