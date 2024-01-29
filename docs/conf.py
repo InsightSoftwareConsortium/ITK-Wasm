@@ -7,6 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 from datetime import date
+import os
 
 project = 'ITK-Wasm'
 copyright = f'{date.today().year}, NumFOCUS'
@@ -45,6 +46,7 @@ html_static_path = ['_static']
 html_logo = "_static/logo-white.svg"
 html_favicon = "_static/icon/favicon.png"
 html_title = f"{project} documentation"
+html_baseurl = os.environ.get("SPHINX_BASE_URL", "")
 
 # Furo options
 html_theme_options = {
