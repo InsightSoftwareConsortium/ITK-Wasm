@@ -2,7 +2,8 @@ name: Documentation
 
 on:
   push:
-  pull_request:
+    branches:
+      - main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -71,9 +72,9 @@ jobs:
 
     - name: Build package typescript documentation
       run: |
-        for package in compare-images compress-stringify dicom dowsample image-io mesh-io; do
-          mkdir -p docs/$package/{ts,py}/docs
-          mkdir -p docs/$package/{ts,py}/app
+        for package in compare-images compress-stringify dicom downsample image-io mesh-io; do
+          mkdir -p docs/$package/ts/docs
+          mkdir -p docs/$package/ts/app
 
           sed "s%      basePath:.*%      basePath: '/$package/ts/docs',%" packages/$package/typescript/index.html > docs/$package/ts/docs/index.html
           cp packages/$package/typescript/README.md docs/$package/ts/docs/
@@ -86,6 +87,25 @@ jobs:
           pnpm build
           popd
           rsync -a packages/$package/typescript/demo-app/ docs/$package/ts/app/
+        done
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Build package python documentation
+      run: |
+        for package in compare-images compress-stringify dicom downsample image-io mesh-io; do
+          mkdir -p docs/$package/py/docs
+          mkdir -p docs/$package/py/app
+
+          export SPHINX_BASE_URL="/$package/py/docs/"
+          pushd packages/$package/python/*$package/docs
+          pip install -r requirements.txt
+          make html
+          popd
+          rsync -a packages/$package/python/*$package/docs/_build/html/ docs/$package/py/docs/
         done
 
     - name: Upload artifact

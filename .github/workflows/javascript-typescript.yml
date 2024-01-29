@@ -15,7 +15,7 @@ jobs:
         package: [compress-stringify, compare-images, dicom, mesh-io, image-io, downsample]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
