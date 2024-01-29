@@ -77,7 +77,7 @@ jobs:
           mkdir -p docs/$package/ts/docs
           mkdir -p docs/$package/ts/app
 
-          sed "s%      basePath:.*%      basePath: '/$package/ts/docs',%" packages/$package/typescript/index.html > docs/$package/ts/docs/index.html
+          sed "s%      basePath:.*%      basePath: '/itk-wasm/$package/ts/docs',%" packages/$package/typescript/index.html > docs/$package/ts/docs/index.html
           cp packages/$package/typescript/README.md docs/$package/ts/docs/
           mkdir -p docs/$package/ts/docs/test/browser/demo-app
           cp packages/$package/typescript/test/browser/demo-app/logo.svg docs/$package/ts/docs/test/browser/demo-app/
