@@ -25,7 +25,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
@@ -34,6 +34,7 @@ jobs:
 
     - name: Build documentation
       run: |
+        export SPHINX_BASE_URL="/itk-wasm/"
         cd docs/
         make html
 
@@ -83,7 +84,7 @@ jobs:
 
           pushd packages/$package/typescript
           rm -rf demo-app node_modules/.vite
-          export VITE_BASE_URL="/$package/ts/app/"
+          export VITE_BASE_URL="/itk-wasm/$package/ts/app/"
           pnpm build
           popd
           rsync -a packages/$package/typescript/demo-app/ docs/$package/ts/app/
@@ -100,7 +101,7 @@ jobs:
           mkdir -p docs/$package/py/docs
           mkdir -p docs/$package/py/app
 
-          export SPHINX_BASE_URL="/$package/py/docs/"
+          export SPHINX_BASE_URL="/itk-wasm/$package/py/docs/"
           pushd packages/$package/python/*$package/docs
           pip install -r requirements.txt
           make html
