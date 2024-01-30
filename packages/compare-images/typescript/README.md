@@ -4,6 +4,11 @@
 
 > Compare images with a tolerance for regression testing.
 
+[👨‍💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/itk-wasm/compare-images/ts/app/ ':include :type=iframe width=100% height=800px')
+
+[🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/itk-wasm/compare-images/ts/docs/)
+
+
 ## Installation
 
 ```sh

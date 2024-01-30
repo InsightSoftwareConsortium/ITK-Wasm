@@ -54,5 +54,5 @@ html_theme_options = {
     "top_of_page_button": "edit",
     "source_repository": "https://github.com/InsightSoftwareConsortium/itk-wasm",
     "source_branch": "main",
-    "source_directory": "docs",
+    "source_directory": "packages/compare-images/python/itkwasm-compare-images/docs",
 }
