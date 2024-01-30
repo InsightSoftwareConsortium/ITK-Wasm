@@ -12,6 +12,7 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 | [@itk-wasm/downsample][downsample-repo] | [<img src="../_static/packages/downsample.png" width="128" />][downsample-demo-js] <br /> *Pipelines for downsampling images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][downsample-demo-js] <br/>[🕮 Docs][downsample-docs-js] <br/>[📦 Package][downsample-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][downsample-docs-py] <br/>[📦 Package][downsample-package-py] |
 | [@itk-wasm/elastix][elastix-repo] | [<img src="../_static/packages/elastix.png" width="128" />][elastix-demo-js] <br /> *A toolbox for rigid and nonrigid registration of images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][elastix-demo-js] <br/>[🕮 Docs][elastix-docs-js] <br/>[📦 Package][elastix-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][elastix-docs-py] <br/>[📦 Package][elastix-package-py] |
 | [@itk-wasm/htj2k][htj2k-repo] | [<img src="../_static/packages/htj2k.png" width="128" />][htj2k-demo-js] <br /> *Wasm-SIMD accelerated decoding and encoding High-throughput JPEG2000 (HTJ2K) images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][htj2k-demo-js] <br/>[🕮 Docs][htj2k-docs-js] <br/>[📦 Package][htj2k-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][htj2k-docs-py] <br/>[📦 Package][htj2k-package-py] |
+| [@itk-wasm/image-io][image-io-repo] | [<img src="../_static/packages/image-io.png" width="128" />][image-io-demo-js] <br /> *Input and output for scientific and medical image file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][image-io-demo-js] <br/>[🕮 Docs][image-io-docs-js] <br/>[📦 Package][image-io-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][image-io-docs-py] <br/>[📦 Package][image-io-package-py] |
 
 [js-logo]: /_static/javascript-logo.svg
 [ts-logo]: /_static/typescript-logo.svg
@@ -59,3 +60,10 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 [downsample-package-js]: https://www.npmjs.com/package/@itk-wasm/downsample
 [downsample-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/downsample/py/docs/
 [downsample-package-py]: https://pypi.org/project/itkwasm-downsample/
+
+[image-io-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/image-io
+[image-io-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/image-io/ts/app/
+[image-io-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/image-io/ts/docs/
+[image-io-package-js]: https://www.npmjs.com/package/@itk-wasm/image-io
+[image-io-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/image-io/py/docs/
+[image-io-package-py]: https://pypi.org/project/itkwasm-image-io/
