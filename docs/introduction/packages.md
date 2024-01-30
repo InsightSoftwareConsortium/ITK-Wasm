@@ -13,6 +13,7 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 | [@itk-wasm/elastix][elastix-repo] | [<img src="../_static/packages/elastix.png" width="128" />][elastix-demo-js] <br /> *A toolbox for rigid and nonrigid registration of images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][elastix-demo-js] <br/>[🕮 Docs][elastix-docs-js] <br/>[📦 Package][elastix-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][elastix-docs-py] <br/>[📦 Package][elastix-package-py] |
 | [@itk-wasm/htj2k][htj2k-repo] | [<img src="../_static/packages/htj2k.png" width="128" />][htj2k-demo-js] <br /> *Wasm-SIMD accelerated decoding and encoding High-throughput JPEG2000 (HTJ2K) images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][htj2k-demo-js] <br/>[🕮 Docs][htj2k-docs-js] <br/>[📦 Package][htj2k-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][htj2k-docs-py] <br/>[📦 Package][htj2k-package-py] |
 | [@itk-wasm/image-io][image-io-repo] | [<img src="../_static/packages/image-io.png" width="128" />][image-io-demo-js] <br /> *Input and output for scientific and medical image file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][image-io-demo-js] <br/>[🕮 Docs][image-io-docs-js] <br/>[📦 Package][image-io-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][image-io-docs-py] <br/>[📦 Package][image-io-package-py] |
+| [@itk-wasm/mesh-io][mesh-io-repo] | [<img src="../_static/packages/mesh-io.png" width="128" />][mesh-io-demo-js] <br /> *Input and output for scientific and medical mesh file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][mesh-io-demo-js] <br/>[🕮 Docs][mesh-io-docs-js] <br/>[📦 Package][mesh-io-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][mesh-io-docs-py] <br/>[📦 Package][mesh-io-package-py] |
 
 [js-logo]: /_static/javascript-logo.svg
 [ts-logo]: /_static/typescript-logo.svg
@@ -67,3 +68,10 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 [image-io-package-js]: https://www.npmjs.com/package/@itk-wasm/image-io
 [image-io-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/image-io/py/docs/
 [image-io-package-py]: https://pypi.org/project/itkwasm-image-io/
+
+[mesh-io-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/mesh-io
+[mesh-io-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/mesh-io/ts/app/
+[mesh-io-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/mesh-io/ts/docs/
+[mesh-io-package-js]: https://www.npmjs.com/package/@itk-wasm/mesh-io
+[mesh-io-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/mesh-io/py/docs/
+[mesh-io-package-py]: https://pypi.org/project/itkwasm-mesh-io/
