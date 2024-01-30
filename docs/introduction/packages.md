@@ -17,18 +17,18 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 [py-logo]: /_static/python.svg
 
 [compare-images-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/compare-images
-[compare-images-demo-js]: https://itk-wasm-compare-images-app.on.fleek.co/
-[compare-images-docs-js]: https://itk-wasm-compare-images-docs.on.fleek.co/
+[compare-images-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/compare-images/ts/app/
+[compare-images-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/compare-images/ts/docs/
 [compare-images-package-js]: https://www.npmjs.com/package/@itk-wasm/compare-images
-[compare-images-docs-py]: https://itk-wasm-compare-images-python-docs.on.fleek.co/
+[compare-images-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/compare-images/py/docs/
 [compare-images-package-py]: https://pypi.org/project/itkwasm-compare-images/
 
 [compress-stringify-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/compress-stringify
-[compress-stringify-demo-js]: https://itk-compress-stringify-app.on.fleek.co/
-[compress-stringify-docs-js]: https://itk-compress-stringify-docs.on.fleek.co/
+[compress-stringify-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/compress-stringify/ts/app/
+[compress-stringify-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/compress-stringify/ts/docs/
 [compress-stringify-package-js]: https://www.npmjs.com/package/@itk-wasm/compress-stringify
 [compress-stringify-demo-py]: https://itk-compress-stringify-py-app.on.fleek.co/
-[compress-stringify-docs-py]: https://itk-wasm-compress-stringify-python-docs.on.fleek.co/
+[compress-stringify-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/compress-stringify/py/docs/
 [compress-stringify-package-py]: https://pypi.org/project/itkwasm-compress-stringify/
 
 [elastix-repo]: https://github.com/InsightSoftwareConsortium/ITKElastix
@@ -39,10 +39,10 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 [elastix-package-py]: https://pypi.org/project/itkwasm-elastix/
 
 [dicom-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/dicom
-[dicom-demo-js]: https://itk-wasm-dicom-app.on.fleek.co/
-[dicom-docs-js]: https://itk-wasm-dicom-docs.on.fleek.co/
+[dicom-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/dicom/ts/app/
+[dicom-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/dicom/ts/docs/
 [dicom-package-js]: https://www.npmjs.com/package/@itk-wasm/dicom
-[dicom-docs-py]: https://itk-wasm-dicom-python-docs.on.fleek.co/
+[dicom-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/dicom/ts/docs/
 [dicom-package-py]: https://pypi.org/project/itkwasm-dicom/
 
 [htj2k-repo]: https://github.com/InsightSoftwareConsortium/ITKIOOpenJPH/tree/main/src/wasm
