@@ -31,7 +31,7 @@
     "cypress:install": "pnpx cypress install",
     "cypress:runChrome": "pnpx cypress run --config defaultCommandTimeout=8000 --browser chrome",
     "cypress:runFirefox": "pnpx cypress run --config defaultCommandTimeout=8000 --browser firefox",
-    "cypress:runFirefox:ci": "npm run cypress:install && pnpx cypress run --config defaultCommandTimeout=8000 --browser firefox",
+    "cypress:runFirefox:ci": "pnpm cypress:install && pnpx cypress run --config defaultCommandTimeout=8000 --browser firefox",
     "start": "pnpm build:workerBundleForTesting && cd test/pipelines/typescript && npm i && npm link ../../.. && npm run build && npm run start",
     "test:wasi": "pnpm test:buildTestPipelines:wasi && pnpm test:runTestPipelines && pnpm test:bindgenTestPipelines:python",
     "test": "pnpm test:lint && pnpm test:testPipelines && pnpm test:node && pnpm test:bindgenTestPipelines:python && pnpm test:browser:chrome && pnpm test:browser:firefox",
