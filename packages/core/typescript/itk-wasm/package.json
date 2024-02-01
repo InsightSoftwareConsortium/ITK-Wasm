@@ -1,6 +1,6 @@
 {
   "name": "itk-wasm",
-  "version": "1.0.0-b.163",
+  "version": "1.0.0-b.164",
   "packageManager": "pnpm@8.11.0",
   "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
   "type": "module",
@@ -31,7 +31,7 @@
     "cypress:install": "pnpx cypress install",
     "cypress:runChrome": "pnpx cypress run --config defaultCommandTimeout=8000 --browser chrome",
     "cypress:runFirefox": "pnpx cypress run --config defaultCommandTimeout=8000 --browser firefox",
-    "cypress:runFirefox:ci": "npm run cypress:install && pnpx cypress run --config defaultCommandTimeout=8000 --browser firefox",
+    "cypress:runFirefox:ci": "pnpm cypress:install && pnpx cypress run --config defaultCommandTimeout=8000 --browser firefox",
     "start": "pnpm build:workerBundleForTesting && cd test/pipelines/typescript && npm i && npm link ../../.. && npm run build && npm run start",
     "test:wasi": "pnpm test:buildTestPipelines:wasi && pnpm test:runTestPipelines && pnpm test:bindgenTestPipelines:python",
     "test": "pnpm test:lint && pnpm test:testPipelines && pnpm test:node && pnpm test:bindgenTestPipelines:python && pnpm test:browser:chrome && pnpm test:browser:firefox",

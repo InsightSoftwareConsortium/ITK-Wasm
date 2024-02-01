@@ -77,7 +77,15 @@ program
 
 program
   .command('pnpm-script <name> [extra-args...]')
-  .description('Run an itk-wasm pnpm build script command.')
+  .description('Run an itk-wasm pnpm build script command. The extra-args are passed to delegated script calls.')
+  .option('--wasi-docker-image <wasi-docker-image>', 'ITK-Wasm WASI Docker image name:tag.')
+  .option('--emscripten-docker-image <emscripten-docker-image>', 'ITK-Wasm Emscripten Docker image name:tag.')
+  .option('--typescript-output-dir <typescript-output-dir>', 'Typescript bindings directory name. Defaults to typescript.')
+  .option('--python-output-dir <python-output-dir>', 'Python bindings directory name. Defaults to python.')
+  .option('--typescript-package-name <typescript-package-name>', 'Typescript bindings package name.')
+  .option('--python-package-name <python-package-name>', 'Python bindings dispatch package name.')
+  .option('--package-description <package-description>', 'Package description.')
+  .option('--repository <repository>', 'Source code repository URL.')
   .action(pnpmScript)
 
 program
