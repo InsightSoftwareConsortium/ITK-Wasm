@@ -7,6 +7,7 @@ itk-wasm
 [![Python Wasm](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/python-wasm.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/python-wasm.yml)
 [![C++,Native Python](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/cxx-python.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/cxx-python.yml)
 [![WASI](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/wasi.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/wasi.yml)
+[![Documentation](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/documentation.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/itk-wasm/actions/workflows/documentation.yml)
 
 [![npm version](https://badge.fury.io/js/itk-wasm.svg)](https://www.npmjs.com/package/itk-wasm)
 [![npm version](https://badge.fury.io/py/itkwasm.svg)](https://pypi.org/project/itkwasm/)
