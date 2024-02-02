@@ -16,7 +16,7 @@ ITK-Wasm file formats are available in ITK-Wasm IO functions but also in C++ via
 
 <dl>
   <dt><b>ITK-Wasm Image (.iwi, .iwi.cbor, .iwi.cbor.zst)</b><dt><dd>Serialization of an <a href="../../typescript/interface_types/Image.html"><code>Image</code></a>.</dd>
-  <dt><b>ITK-Wasm Mesh (.iwm, .iwm.cbor, .iwi.cbor.zst)</b><dt><dd>Serialization of a <a href="../../typescript/interface_types/Mesh.html"><code>Mesh</code></a>, or <a href="../../typescript/interface_types/PolyData.html"><code>PolyData</code></a>.</dd>
+  <dt><b>ITK-Wasm Mesh (.iwm, .iwm.cbor, .iwm.cbor.zst)</b><dt><dd>Serialization of a <a href="../../typescript/interface_types/Mesh.html"><code>Mesh</code></a>, or <a href="../../typescript/interface_types/PolyData.html"><code>PolyData</code></a>.</dd>
 </dl>
 
 
