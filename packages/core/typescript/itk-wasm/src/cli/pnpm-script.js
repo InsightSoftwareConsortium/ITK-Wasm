@@ -6,6 +6,8 @@ import path from 'path'
 import program from './program.js'
 import defaultImageTag from './default-image-tag.js'
 
+import { download as damDownload } from '@itk-wasm/dam'
+
 function configValue(name, options, packageJson, defaultValue, required=false) {
   const nameCamelCase = name.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
   if (options[nameCamelCase]) {
@@ -25,7 +27,15 @@ function configValue(name, options, packageJson, defaultValue, required=false) {
   return defaultValue
 }
 
-function pnpmScript(name, extraArgs, options) {
+async function downloadPyodide(unpackPath, pkg) {
+  const pyodideDamCid = 'bafybeienencwyms2wzlzx6itqe4tw7rptocwaxihqf2sj6jej2hhoy7jxa'
+  const pyodideDamUrls = [
+    'https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.158/pyodide-0.24.1-itkwasm-1.0b145-test-dist.tar.bz2',
+  ]
+  await damDownload(unpackPath, `test/pyodide-${pkg}.tar.bz2`, pyodideDamCid, pyodideDamUrls)
+}
+
+async function pnpmScript(name, extraArgs, options) {
   let pnpmCommand = ['-c', 'exec']
 
   const micromambaExe = process.platform === 'win32' ? 'micromamba.exe' : 'micromamba'
@@ -141,22 +151,17 @@ function pnpmScript(name, extraArgs, options) {
     pnpmCommand = pnpmCommand.concat(['pnpm', 'test:data:download', '&&', micromambaBinaryPath, '-r', micromambaRootPath, '-n',  environmentName, 'run', '--cwd', pythonPackagePath, 'pytest', '-s'])
     }
     break
-  case 'test:pyodide:download:emscripten':
-  case 'test:pyodide:download:dispatch': {
-    const pythonOutputDir = configValue('python-output-dir', options, packageJson, defaultPythonOutputDir)
-    const pythonPackageName = configValue('python-package-name', options, packageJson, undefined, true)
-    const unpackPath = name === 'test:pyodide:download:emscripten' ? path.join(pythonOutputDir, `${pythonPackageName}-emscripten`, 'dist') : path.join(pythonOutputDir, `${pythonPackageName}`, 'dist')
-    const pkg = name.split(':').pop()
-    pnpmCommand = pnpmCommand.concat(['dam', 'download', unpackPath, `test/pyodide-${pkg}.tar.bz2`, 'bafybeienencwyms2wzlzx6itqe4tw7rptocwaxihqf2sj6jej2hhoy7jxa', 'https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.158/pyodide-0.24.1-itkwasm-1.0b145-test-dist.tar.bz2'])
-    }
-    break
   case 'test:python:emscripten':
   case 'test:python:dispatch': {
     const pythonOutputDir = configValue('python-output-dir', options, packageJson, defaultPythonOutputDir)
     const pythonPackageName = configValue('python-package-name', options, packageJson, undefined, true)
     const pythonPackagePath = name === 'test:python:emscripten' ? path.join(pythonOutputDir, `${pythonPackageName}-emscripten`) : path.join(pythonOutputDir, pythonPackageName)
-    const downloadScript = name.replace(':python', ':pyodide:download')
-    pnpmCommand = pnpmCommand.concat(['pnpm', 'test:data:download', '&&', 'pnpm', downloadScript, '&&', micromambaBinaryPath, '-r', micromambaRootPath, '-n',  environmentName, 'run', '--cwd', pythonPackagePath, 'hatch', 'run', 'test'])
+
+    const pyodideUnpackPath = path.join(pythonPackagePath, 'dist')
+    const pkg = name.split(':').pop()
+    await downloadPyodide(pyodideUnpackPath, pkg)
+
+    pnpmCommand = pnpmCommand.concat(['pnpm', 'test:data:download', '&&', micromambaBinaryPath, '-r', micromambaRootPath, '-n',  environmentName, 'run', '--cwd', pythonPackagePath, 'hatch', 'run', 'test'])
     }
     break
   case 'test:python':

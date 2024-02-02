@@ -33,7 +33,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "1.0.0-b.162"
+    "itk-wasm": "1.0.0-b.165"
   },
   "devDependencies": {
     "@itk-wasm/image-io": "^1.1.0",
