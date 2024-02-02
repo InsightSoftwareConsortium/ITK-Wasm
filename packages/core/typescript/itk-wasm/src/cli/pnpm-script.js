@@ -170,6 +170,7 @@ function pnpmScript(name, extraArgs, options) {
   }
 
   pnpmCommand = pnpmCommand.concat(extraArgs)
+  console.log(`>> pnpm ${pnpmCommand.join(' ')}`)
 
   const pnpmProcess = spawnSync('pnpm', pnpmCommand, {
     env: process.env,
