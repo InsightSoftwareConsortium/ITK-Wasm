@@ -4,6 +4,7 @@ import { spawnSync } from 'child_process'
 import path from 'path'
 
 import program from './program.js'
+import defaultImageTag from './default-image-tag.js'
 
 function configValue(name, options, packageJson, defaultValue, required=false) {
   const nameCamelCase = name.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
@@ -53,15 +54,13 @@ function pnpmScript(name, extraArgs, options) {
   switch (name) {
   case 'build:emscripten': {
     pnpmCommand = pnpmCommand.concat(['itk-wasm', 'build'])
-    const emscriptenDockerImage = configValue('emscripten-docker-image', options, packageJson, undefined)
-    if (emscriptenDockerImage) {
-      pnpmCommand = pnpmCommand.concat(['-i', emscriptenDockerImage])
-    }
+    const emscriptenDockerImage = configValue('emscripten-docker-image', options, packageJson, undefined) ?? `itk-wasm/emscripten:${defaultImageTag}`
+    pnpmCommand = pnpmCommand.concat(['-i', emscriptenDockerImage])
     }
     break
   case 'build:emscripten:debug': {
     pnpmCommand = pnpmCommand.concat(['itk-wasm', 'build'])
-    const emscriptenDockerImage = configValue('emscripten-docker-image', options, packageJson, undefined) ?? 'itk-wasm/emscripten:latest'
+    const emscriptenDockerImage = configValue('emscripten-docker-image', options, packageJson, undefined) ?? `itk-wasm/emscripten:${defaultImageTag}`
     // Currently, we expect the debug docker image to be tagged with -debug
     pnpmCommand = pnpmCommand.concat(['-i', `${emscriptenDockerImage}-debug`])
     pnpmCommand = pnpmCommand.concat(['--', '-DCMAKE_BUILD_TYPE:STRING=Debug'])
@@ -69,15 +68,13 @@ function pnpmScript(name, extraArgs, options) {
     break
   case 'build:wasi': {
     pnpmCommand = pnpmCommand.concat(['itk-wasm', 'build'])
-    const wasiDockerImage = configValue('wasi-docker-image', options, packageJson, undefined) ?? 'itk-wasm/wasi'
-    if (wasiDockerImage) {
-      pnpmCommand = pnpmCommand.concat(['-i', wasiDockerImage])
-    }
+    const wasiDockerImage = configValue('wasi-docker-image', options, packageJson, undefined) ?? `itk-wasm/wasi:${defaultImageTag}`
+    pnpmCommand = pnpmCommand.concat(['-i', wasiDockerImage])
     }
     break
   case 'build:wasi:debug': {
     pnpmCommand = pnpmCommand.concat(['itk-wasm', 'build'])
-    const wasiDockerImage = configValue('wasi-docker-image', options, packageJson, undefined) ?? 'itk-wasm/wasi:latest'
+    const wasiDockerImage = configValue('wasi-docker-image', options, packageJson, undefined) ?? `itk-wasm/wasi:${defaultImageTag}`
     // Currently, we expect the debug docker image to be tagged with -debug
     pnpmCommand = pnpmCommand.concat(['-i', `${wasiDockerImage}-debug`])
     pnpmCommand = pnpmCommand.concat(['--', '-DCMAKE_BUILD_TYPE:STRING=Debug'])
