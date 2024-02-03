@@ -1,6 +1,6 @@
 {
   "name": "itk-wasm",
-  "version": "1.0.0-b.164",
+  "version": "1.0.0-b.165",
   "packageManager": "pnpm@8.11.0",
   "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
   "type": "module",
@@ -75,7 +75,6 @@
   },
   "homepage": "https://wasm.itk.org/",
   "devDependencies": {
-    "@itk-wasm/dam": "^1.0.1",
     "@types/node": "^20.10.3",
     "ava": "^5.3.1",
     "cypress": "^13.6.0",
@@ -87,6 +86,7 @@
     "typescript": "^5.3.2"
   },
   "dependencies": {
+    "@itk-wasm/dam": "^1.1.1",
     "@thewtex/zstddec": "^0.2.0",
     "@types/emscripten": "^1.39.10",
     "axios": "^1.6.2",
