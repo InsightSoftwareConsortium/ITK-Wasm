@@ -4,7 +4,7 @@
 
 > Read files and images related to DICOM file format.
 
-[💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/itk-wasm/dicom/ts/docs/
+[💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/itk-wasm/dicom/ts/app/
  ':include :type=iframe width=100% height=800px')
 
 [🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/itk-wasm/dicom/ts/docs/)
