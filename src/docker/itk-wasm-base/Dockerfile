@@ -33,19 +33,19 @@ RUN curl -L https://api.github.com/repos/facebook/zstd/tarball/${zstd_GIT_TAG} |
   cd .. && \
   rm -rf zstd-build zstd
 
-# tag commit date: 2024-08-01
-ENV ITK_GIT_TAG 31b51f299ac12f9e4d56a18e6020127f359cb426
-ENV ITK_GIT_BRANCH itkwasm-2024-05-20-5db055d7ad3b-1
-RUN git clone --branch $ITK_GIT_BRANCH --single-branch --depth 1 https://github.com/KitwareMedical/ITK.git && \
+# tag commit date: 2024-08-13
+ENV ITK_GIT_TAG 75cc495bc86c404c57ed44b4cb3858cdde120425
+ENV ITK_GIT_BRANCH itkwasm-2024-06-06
+RUN git clone --branch $ITK_GIT_BRANCH --single-branch --depth 1 https://github.com/jadh4v/ITK.git && \
   sed -i -e '/^option(OPJ_USE_THREAD/c\option(OPJ_USE_THREAD "use threads" OFF)' \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
 
 # Modify CMake variable to use patched DCMTK library
 # GIT_TAG refers to DCMTK branch: 20240311_DCMTK_PATCHES_FOR_ITK-wasm
-RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/DCMTK.git")' \
+RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://github.com/jadh4v/DCMTK.git")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
-RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "fe7cff5de40b67ae0490d476ddf17689c06bcaf4")' \
+RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "e356f2929f84567603e39a3191d2ad5159adb703")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
 RUN if test -e $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; fi
