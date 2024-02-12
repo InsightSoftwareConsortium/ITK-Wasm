@@ -1,6 +1,6 @@
 # ITK Python interop
 
-`itkwasm` can be used with native [`itk` Python bindings](https://itkpythonpackage.readthedocs.io/en/master/Quick_start_guide.html).
+`itkwasm` can be used with native [`itk` Python bindings](https://docs.itk.org/en/latest/learn/python_quick_start.html).
 
 Both packages support common Python dictionary representations of the data structures used on interfaces. The non-dictionary types are more convenient to work with directly and provide strong typing for function calls.
 
