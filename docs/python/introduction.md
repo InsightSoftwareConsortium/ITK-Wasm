@@ -4,7 +4,7 @@
 
 `itkwasm` Python packages run on *all modern web browsers and at a system level across all major operating systems and hardware architectures* {octicon}`browser` {octicon}`codespaces`.
 
-All versions of Python 3.7+ are supported {octicon}`globe`.
+All versions of Python 3.8+ are supported {octicon}`globe`.
 
 Additionally, non-wasm packages accelerate performance via GPUs when available {octicon}`rocket`.
 
