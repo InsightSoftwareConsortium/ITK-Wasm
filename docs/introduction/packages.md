@@ -14,6 +14,7 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 | [@itk-wasm/htj2k][htj2k-repo] | [<img src="../_static/packages/htj2k.png" width="128" />][htj2k-demo-js] <br /> *Wasm-SIMD accelerated decoding and encoding High-throughput JPEG2000 (HTJ2K) images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][htj2k-demo-js] <br/>[🕮 Docs][htj2k-docs-js] <br/>[📦 Package][htj2k-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][htj2k-docs-py] <br/>[📦 Package][htj2k-package-py] |
 | [@itk-wasm/image-io][image-io-repo] | [<img src="../_static/packages/image-io.png" width="128" />][image-io-demo-js] <br /> *Input and output for scientific and medical image file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][image-io-demo-js] <br/>[🕮 Docs][image-io-docs-js] <br/>[📦 Package][image-io-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][image-io-docs-py] <br/>[📦 Package][image-io-package-py] |
 | [@itk-wasm/mesh-io][mesh-io-repo] | [<img src="../_static/packages/mesh-io.png" width="128" />][mesh-io-demo-js] <br /> *Input and output for scientific and medical mesh file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][mesh-io-demo-js] <br/>[🕮 Docs][mesh-io-docs-js] <br/>[📦 Package][mesh-io-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][mesh-io-docs-py] <br/>[📦 Package][mesh-io-package-py] |
+| [@itk-wasm/morphological-contour-interpolation][morphological-contour-interpolation-repo] | [<img src="../_static/packages/morphological-contour-interpolation.png" width="128" />][morphological-contour-interpolation-demo-js] <br /> *Input and output for scientific and medical mesh file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][morphological-contour-interpolation-demo-js] <br/>[🕮 Docs][morphological-contour-interpolation-docs-js] <br/>[📦 Package][morphological-contour-interpolation-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][morphological-contour-interpolation-docs-py] <br/>[📦 Package][morphological-contour-interpolation-package-py] |
 
 [js-logo]: /_static/javascript-logo.svg
 [ts-logo]: /_static/typescript-logo.svg
@@ -75,3 +76,10 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 [mesh-io-package-js]: https://www.npmjs.com/package/@itk-wasm/mesh-io
 [mesh-io-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/mesh-io/py/docs/
 [mesh-io-package-py]: https://pypi.org/project/itkwasm-mesh-io/
+
+[morphological-contour-interpolation-repo]: https://github.com/KitwareMedical/ITKMorphologicalContourInterpolation/
+[morphological-contour-interpolation-demo-js]: https://kitwaremedical.github.io/ITKMorphologicalContourInterpolation/ts/app/
+[morphological-contour-interpolation-docs-js]: https://kitwaremedical.github.io/ITKMorphologicalContourInterpolation/ts/docs/
+[morphological-contour-interpolation-package-js]: https://www.npmjs.com/package/@itk-wasm/morphological-contour-interpolation
+[morphological-contour-interpolation-docs-py]: https://kitwaremedical.github.io/ITKMorphologicalContourInterpolation/py/docs/
+[morphological-contour-interpolation-package-py]: https://pypi.org/project/itkwasm-morphological-contour-interpolation/
