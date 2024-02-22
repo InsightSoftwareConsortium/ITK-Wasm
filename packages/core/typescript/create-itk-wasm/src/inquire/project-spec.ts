@@ -22,6 +22,9 @@ async function inquireProjectSpec(
       default: project.name,
       askAnswered,
       validate: (input: string) => {
+        if (input === 'itk-wasm') {
+          return 'Project name cannot be "itk-wasm".'
+        }
         if (isValidPackageName(input)) {
           return true
         }

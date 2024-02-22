@@ -23,6 +23,10 @@ async function main() {
 
   project = readFilesystemDefaults(project)
 
+  if (project.name === 'itk-wasm') {
+    die('Project name cannot be "itk-wasm".')
+  }
+
   if (project.name && !project.typescriptPackageName) {
     project.typescriptPackageName = project.name
   }
