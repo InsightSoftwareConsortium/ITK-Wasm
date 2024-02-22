@@ -46,7 +46,7 @@ async function inquirePipelineSpec(
     {
       type: 'list',
       name: 'dispatch',
-      message: 'Dispatch:',
+      message: 'Primary input type for dispatch:',
       choices: Object.values(Dispatch),
       askAnswered,
       default: pipeline.dispatch || Dispatch.None
