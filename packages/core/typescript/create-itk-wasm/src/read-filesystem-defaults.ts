@@ -12,7 +12,11 @@ function readFilesystemDefaults(project: ProjectSpec): ProjectSpec {
   }
 
   if (!project.directory) {
-    project.directory = path.join(process.cwd(), project.name)
+    if (path.basename(process.cwd()) === project.name) {
+      project.directory = process.cwd()
+    } else {
+      project.directory = path.join(process.cwd(), project.name)
+    }
   }
 
   const packageJsonPath = path.join(project.directory, 'package.json')
