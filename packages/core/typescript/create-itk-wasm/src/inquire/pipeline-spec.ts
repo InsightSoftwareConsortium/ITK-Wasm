@@ -53,6 +53,10 @@ async function inquirePipelineSpec(
     }
   ]
   const answers = await inquirer.prompt(questions, pipeline)
+  pipeline.name = answers.name
+  pipeline.description = answers.description
+  pipeline.dispatch = answers.dispatch
+
   if (answers.dispatch !== Dispatch.None) {
     const followupQuestions = [
       {
@@ -76,10 +80,19 @@ async function inquirePipelineSpec(
       }
     ]
     const followupAnswers = await inquirer.prompt(followupQuestions, pipeline)
-    answers.dispatchPixels = followupAnswers.dispatchPixels
-    answers.dispatchDimensions = followupAnswers.dispatchDimensions
+    pipeline.dispatchPixels = followupAnswers.dispatchPixels
+    pipeline.dispatchDimensions = followupAnswers.dispatchDimensions
   }
-  return answers
+  if (!pipeline.inputs) {
+    pipeline.inputs = []
+  }
+  if (!pipeline.parameters) {
+    pipeline.parameters = []
+  }
+  if (!pipeline.outputs) {
+    pipeline.outputs = []
+  }
+  return pipeline
 }
 
 export default inquirePipelineSpec
