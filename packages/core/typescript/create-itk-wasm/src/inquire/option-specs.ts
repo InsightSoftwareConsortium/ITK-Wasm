@@ -64,33 +64,43 @@ async function editIndexOptionSpecs(
       prefix,
       askAnswered,
       default: option.defaultValue
-    },
-    {
-      type: 'confirm',
-      name: 'required',
-      message: 'Required:',
-      prefix,
-      askAnswered,
-      default: option.required || false
-    },
-    {
-      type: 'number',
-      name: 'itemsExpectedMin',
-      message: 'Items expected min:',
-      prefix,
-      askAnswered,
-      default: option.itemsExpectedMin || 1
-    },
-    {
-      type: 'number',
-      name: 'itemsExpectedMax',
-      message: 'Items expected max:',
-      prefix,
-      askAnswered,
-      default: option.itemsExpectedMax || 1
     }
   ]
+  if (optionName === 'parameters') {
+    questions.push(
+      {
+        type: 'confirm',
+        name: 'required',
+        message: 'Required:',
+        prefix,
+        askAnswered,
+        // @ts-ignore
+        default: option.required || false
+      },
+      {
+        type: 'number',
+        name: 'itemsExpectedMin',
+        message: 'Items expected min:',
+        prefix,
+        askAnswered,
+        default: option.itemsExpectedMin || 1
+      },
+      {
+        type: 'number',
+        name: 'itemsExpectedMax',
+        message: 'Items expected max:',
+        prefix,
+        askAnswered,
+        default: option.itemsExpectedMax || 1
+      }
+    )
+  }
   const answers = await inquirer.prompt(questions, option)
+  if (optionName !== 'parameters') {
+    answers.required = true
+    answers.itemsExpectedMin = 1
+    answers.itemsExpectedMax = 1
+  }
 
   options[index] = answers
   return inquireOptionSpecs(optionName, options)
