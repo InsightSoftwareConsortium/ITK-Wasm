@@ -206,7 +206,11 @@ function functionModule(
             parameter.type === 'INT' ||
             parameter.type === 'UINT'
           ) {
-            requiredOptions += ` ${camelCase(parameter.name)}: ${parameter.default},`
+            if (!parameter.default || parameter.default === '{}') {
+              requiredOptions += ` ${camelCase(parameter.name)}: [] as number[],`
+            } else {
+              requiredOptions += ` ${camelCase(parameter.name)}: ${parameter.default},`
+            }
           }
         }
       }
