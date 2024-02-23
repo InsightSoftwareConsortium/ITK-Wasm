@@ -19,6 +19,19 @@ async function editIndexOptionSpecs(
     )
   }
   const prefix = `    ${chalk.green('?')}`
+  const typeChoices =
+    optionName === 'outputs'
+      ? [
+          'Image',
+          'Mesh',
+          'PolyData',
+          'JsonCompatible',
+          'BinaryStream',
+          'TextStream',
+          'BinaryFile',
+          'TextFile'
+        ]
+      : Object.values(OptionType)
   const questions = [
     {
       type: 'input',
@@ -52,7 +65,7 @@ async function editIndexOptionSpecs(
       type: 'list',
       name: 'type',
       message: 'Type',
-      choices: Object.values(OptionType),
+      choices: typeChoices,
       prefix,
       askAnswered,
       default: option.type || 'string'
