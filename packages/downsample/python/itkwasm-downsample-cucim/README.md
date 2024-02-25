@@ -6,8 +6,9 @@ Pipelines for downsampling images. [cucim](https://pypi.org/project/cucim/) impl
 
 This package provides the NVIDIA RAPIDS cuCIM CUDA-accelerated implementation. It is usually not called directly. Please use [`itkwasm-downsample`](https://pypi.org/project/itkwasm-downsample/) instead.
 
-
 ## Installation
+
+[Install cuCIM](https://github.com/rapidsai/cucim?tab=readme-ov-file#install-cucim), then
 
 ```sh
 pip install itkwasm-downsample-cucim
