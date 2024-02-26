@@ -1,6 +1,6 @@
 {
   "name": "itk-wasm",
-  "version": "1.0.0-b.165",
+  "version": "1.0.0-b.168",
   "packageManager": "pnpm@8.11.0",
   "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
   "type": "module",
@@ -79,6 +79,8 @@
     "ava": "^5.3.1",
     "cypress": "^13.6.0",
     "esbuild": "^0.19.8",
+    "prettier": "^3.2.5",
+    "prettier-config-standard": "^7.0.0",
     "shx": "^0.3.4",
     "standard": "^17.1.0",
     "start-server-and-test": "^2.0.3",
@@ -107,5 +109,6 @@
       "src/bindgen/typescript/resources/*",
       "src/bindgen/typescript/resources/demo-app/*"
     ]
-  }
+  },
+  "prettier": "prettier-config-standard"
 }
