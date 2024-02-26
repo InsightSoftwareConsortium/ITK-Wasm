@@ -33,7 +33,6 @@ keywords = [
 
 requires-python = ">=3.8"
 dependencies = [
-    "cucim",
     "itkwasm >= 1.0.b167",
     "itkwasm-downsample-wasi",
 ]
