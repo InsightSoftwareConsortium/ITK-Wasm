@@ -5,7 +5,7 @@ except ImportError:
     from numpy import ndarray as ArrayLike
 
 from .image import Image, ImageType
-from ._to_numpy_array import _dtype_to_component_type
+from .to_numpy_array import _dtype_to_component_type
 
 from .pixel_types import PixelTypes
 

@@ -1,9 +1,62 @@
+from typing import Union
+import sys
+if sys.version_info < (3, 10):
+    from importlib_metadata import distribution
+else:
+    from importlib.metadata import distribution
+
 import numpy as np
+from numpy.typing import ArrayLike
 
 from .int_types import IntTypes
 from .float_types import FloatTypes
 
-def _to_numpy_array(component_type, buf):
+try:
+    distribution('cupy')
+    _CUPY_AVAILABLE = True
+except:
+    _CUPY_AVAILABLE = False
+
+try:
+    distribution('dask')
+    _DASK_AVAILABLE = True
+except:
+    _DASK_AVAILABLE = False
+
+def is_cupy_array(arr: ArrayLike) -> bool:
+    """Check if the input is a CuPy array.
+
+    :param arr: Input array
+    :type  arr: ArrayLike
+
+    :return: True if the input is a CuPy array
+    :rtype:  bool
+    """
+    if not _CUPY_AVAILABLE:
+        return False
+    import cupy as cp
+    return isinstance(arr, cp.ndarray)
+
+def array_like_to_numpy_array(arr: ArrayLike) -> np.ndarray:
+    """Convert a numpy array-like to a numpy ndarray.
+
+    :param arr: numpy ndarray like
+    :type  arr: ArrayLike
+
+    :return: Numpy array
+    :rtype:  np.ndarray
+    """
+    if isinstance(arr, np.ndarray):
+        return arr
+    if _DASK_AVAILABLE:
+        import dask.array as da
+        if isinstance(arr, da.Array):
+            arr = arr.compute()
+    if is_cupy_array(arr):
+        return arr.get()
+    return np.array(arr)
+
+def _buffer_to_numpy_array(component_type: Union[IntTypes, FloatTypes], buf):
     if component_type == IntTypes.UInt8:
         return np.frombuffer(buf, dtype=np.uint8)
     elif component_type == IntTypes.Int8:

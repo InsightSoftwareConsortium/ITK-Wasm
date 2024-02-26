@@ -24,7 +24,7 @@ from .polydata import PolyData
 from .json_compatible import JsonCompatible
 from .int_types import IntTypes
 from .float_types import FloatTypes
-from ._to_numpy_array import _to_numpy_array
+from .to_numpy_array import _buffer_to_numpy_array, array_like_to_numpy_array
 
 if sys.platform != "emscripten":
     import zlib
@@ -39,7 +39,7 @@ def _array_to_bytes(arr: ArrayLike) -> bytes:
     """Convert a numpy array-like to bytes."""
     if hasattr(arr, 'tobytes'):
         return arr.tobytes()
-    return np.asarray(arr).tobytes()
+    return array_like_to_numpy_array(arr).tobytes()
 
 class RunInstance:
     """Helper for working with the wasm module instance created when a Pipeline is run."""
@@ -352,7 +352,7 @@ class Pipeline:
 
                     data_ptr = ri.get_output_array_address(0, index, 0)
                     data_size = ri.get_output_array_size(0, index, 0)
-                    data_array = _to_numpy_array(image.imageType.componentType, ri.wasmtime_lift(data_ptr, data_size))
+                    data_array = _buffer_to_numpy_array(image.imageType.componentType, ri.wasmtime_lift(data_ptr, data_size))
                     shape = list(image.size)[::-1]
                     if image.imageType.components > 1:
                         shape.append(image.imageType.components)
@@ -360,7 +360,7 @@ class Pipeline:
 
                     direction_ptr = ri.get_output_array_address(0, index, 1)
                     direction_size = ri.get_output_array_size(0, index, 1)
-                    direction_array = _to_numpy_array(FloatTypes.Float64, ri.wasmtime_lift(direction_ptr, direction_size))
+                    direction_array = _buffer_to_numpy_array(FloatTypes.Float64, ri.wasmtime_lift(direction_ptr, direction_size))
                     dimension = image.imageType.dimension
                     direction_array.shape = (dimension, dimension)
                     image.direction = direction_array
@@ -373,29 +373,29 @@ class Pipeline:
                     if mesh.numberOfPoints > 0:
                         data_ptr = ri.get_output_array_address(0, index, 0)
                         data_size = ri.get_output_array_size(0, index, 0)
-                        mesh.points = _to_numpy_array(mesh.meshType.pointComponentType, ri.wasmtime_lift(data_ptr, data_size))
+                        mesh.points = _buffer_to_numpy_array(mesh.meshType.pointComponentType, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        mesh.points =  _to_numpy_array(mesh.meshType.pointComponentType, bytes([]))
+                        mesh.points =  _buffer_to_numpy_array(mesh.meshType.pointComponentType, bytes([]))
 
                     if mesh.numberOfCells > 0:
                         data_ptr = ri.get_output_array_address(0, index, 1)
                         data_size = ri.get_output_array_size(0, index, 1)
-                        mesh.cells = _to_numpy_array(mesh.meshType.cellComponentType, ri.wasmtime_lift(data_ptr, data_size))
+                        mesh.cells = _buffer_to_numpy_array(mesh.meshType.cellComponentType, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        mesh.cells =  _to_numpy_array(mesh.meshType.cellComponentType, bytes([]))
+                        mesh.cells =  _buffer_to_numpy_array(mesh.meshType.cellComponentType, bytes([]))
                     if mesh.numberOfPointPixels > 0:
                         data_ptr = ri.get_output_array_address(0, index, 2)
                         data_size = ri.get_output_array_size(0, index, 2)
-                        mesh.pointData = _to_numpy_array(mesh.meshType.pointPixelComponentType, ri.wasmtime_lift(data_ptr, data_size))
+                        mesh.pointData = _buffer_to_numpy_array(mesh.meshType.pointPixelComponentType, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        mesh.pointData =  _to_numpy_array(mesh.meshType.pointPixelComponentType, bytes([]))
+                        mesh.pointData =  _buffer_to_numpy_array(mesh.meshType.pointPixelComponentType, bytes([]))
 
                     if mesh.numberOfCellPixels > 0:
                         data_ptr = ri.get_output_array_address(0, index, 3)
                         data_size = ri.get_output_array_size(0, index, 3)
-                        mesh.cellData = _to_numpy_array(mesh.meshType.cellPixelComponentType, ri.wasmtime_lift(data_ptr, data_size))
+                        mesh.cellData = _buffer_to_numpy_array(mesh.meshType.cellPixelComponentType, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        mesh.cellData =  _to_numpy_array(mesh.meshType.cellPixelComponentType, bytes([]))
+                        mesh.cellData =  _buffer_to_numpy_array(mesh.meshType.cellPixelComponentType, bytes([]))
 
                     output_data = PipelineOutput(InterfaceTypes.Mesh, mesh)
                 elif output.type == InterfaceTypes.PolyData:
@@ -405,51 +405,51 @@ class Pipeline:
                     if polydata.numberOfPoints > 0:
                         data_ptr = ri.get_output_array_address(0, index, 0)
                         data_size = ri.get_output_array_size(0, index, 0)
-                        polydata.points = _to_numpy_array(FloatTypes.Float32, ri.wasmtime_lift(data_ptr, data_size))
+                        polydata.points = _buffer_to_numpy_array(FloatTypes.Float32, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.points =  _to_numpy_array(FloatTypes.Float32, bytes([]))
+                        polydata.points =  _buffer_to_numpy_array(FloatTypes.Float32, bytes([]))
 
                     if polydata.verticesBufferSize > 0:
                         data_ptr = ri.get_output_array_address(0, index, 1)
                         data_size = ri.get_output_array_size(0, index, 1)
-                        polydata.vertices = _to_numpy_array(IntTypes.UInt32, ri.wasmtime_lift(data_ptr, data_size))
+                        polydata.vertices = _buffer_to_numpy_array(IntTypes.UInt32, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.vertices =  _to_numpy_array(IntTypes.UInt32, bytes([]))
+                        polydata.vertices =  _buffer_to_numpy_array(IntTypes.UInt32, bytes([]))
 
                     if polydata.linesBufferSize > 0:
                         data_ptr = ri.get_output_array_address(0, index, 2)
                         data_size = ri.get_output_array_size(0, index, 2)
-                        polydata.lines = _to_numpy_array(IntTypes.UInt32, ri.wasmtime_lift(data_ptr, data_size))
+                        polydata.lines = _buffer_to_numpy_array(IntTypes.UInt32, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.lines =  _to_numpy_array(IntTypes.UInt32, bytes([]))
+                        polydata.lines =  _buffer_to_numpy_array(IntTypes.UInt32, bytes([]))
 
                     if polydata.polygonsBufferSize > 0:
                         data_ptr = ri.get_output_array_address(0, index, 3)
                         data_size = ri.get_output_array_size(0, index, 3)
-                        polydata.polygons = _to_numpy_array(IntTypes.UInt32, ri.wasmtime_lift(data_ptr, data_size))
+                        polydata.polygons = _buffer_to_numpy_array(IntTypes.UInt32, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.polygons =  _to_numpy_array(IntTypes.UInt32, bytes([]))
+                        polydata.polygons =  _buffer_to_numpy_array(IntTypes.UInt32, bytes([]))
 
                     if polydata.triangleStripsBufferSize > 0:
                         data_ptr = ri.get_output_array_address(0, index, 4)
                         data_size = ri.get_output_array_size(0, index, 4)
-                        polydata.triangleStrips = _to_numpy_array(IntTypes.UInt32, ri.wasmtime_lift(data_ptr, data_size))
+                        polydata.triangleStrips = _buffer_to_numpy_array(IntTypes.UInt32, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.triangleStrips =  _to_numpy_array(IntTypes.UInt32, bytes([]))
+                        polydata.triangleStrips =  _buffer_to_numpy_array(IntTypes.UInt32, bytes([]))
 
                     if polydata.numberOfPointPixels > 0:
                         data_ptr = ri.get_output_array_address(0, index, 5)
                         data_size = ri.get_output_array_size(0, index, 5)
-                        polydata.pointData = _to_numpy_array(polydata.polyDataType.pointPixelComponentType, ri.wasmtime_lift(data_ptr, data_size))
+                        polydata.pointData = _buffer_to_numpy_array(polydata.polyDataType.pointPixelComponentType, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.triangleStrips =  _to_numpy_array(polydata.polyDataType.pointPixelComponentType, bytes([]))
+                        polydata.triangleStrips =  _buffer_to_numpy_array(polydata.polyDataType.pointPixelComponentType, bytes([]))
 
                     if polydata.numberOfCellPixels > 0:
                         data_ptr = ri.get_output_array_address(0, index, 6)
                         data_size = ri.get_output_array_size(0, index, 6)
-                        polydata.cellData = _to_numpy_array(polydata.polyDataType.cellPixelComponentType, ri.wasmtime_lift(data_ptr, data_size))
+                        polydata.cellData = _buffer_to_numpy_array(polydata.polyDataType.cellPixelComponentType, ri.wasmtime_lift(data_ptr, data_size))
                     else:
-                        polydata.triangleStrips =  _to_numpy_array(polydata.polyDataType.cellPixelComponentType, bytes([]))
+                        polydata.triangleStrips =  _buffer_to_numpy_array(polydata.polyDataType.cellPixelComponentType, bytes([]))
 
                     output_data = PipelineOutput(InterfaceTypes.PolyData, polydata)
                 elif output.type == InterfaceTypes.JsonCompatible:
