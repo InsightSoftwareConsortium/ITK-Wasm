@@ -1,6 +1,8 @@
 from typing import List
+import copy
 
-from itkwasm import Image
+from itkwasm import Image, array_like_to_cupy_array
+import numpy as np
 import cupy as cp
 from cucim.skimage.transform import downscale_local_mean
 
@@ -26,11 +28,13 @@ def downsample_bin_shrink(
     :rtype:  Image
     """
 
-    result = downsample_bin_shrink_wasi(input, shrink_factors, information_only=True)
+    wasi_input = copy.copy(input)
+    wasi_input.data = np.empty_like(input.data)
+    result = downsample_bin_shrink_wasi(wasi_input, shrink_factors, information_only=True)
     if information_only:
         return result
 
-    cu_input_array = cp.array(input.data)
+    cu_input_array = array_like_to_cupy_array(input.data)
 
     shrink_factors = tuple(reversed(shrink_factors))
     expected_shape = tuple(

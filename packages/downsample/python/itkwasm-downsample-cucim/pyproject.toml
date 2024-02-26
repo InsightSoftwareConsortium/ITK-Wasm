@@ -33,7 +33,7 @@ keywords = [
 
 requires-python = ">=3.8"
 dependencies = [
-    "itkwasm >= 1.0.b167",
+    "itkwasm >= 1.0.b168",
     "itkwasm-downsample-wasi",
 ]
 

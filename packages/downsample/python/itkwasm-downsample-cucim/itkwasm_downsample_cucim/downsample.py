@@ -1,6 +1,8 @@
 from typing import Optional, List
+import copy
 
-from itkwasm import Image
+from itkwasm import Image, array_like_to_cupy_array
+import numpy as np
 import cupy as cp
 from cupyx.scipy.ndimage import affine_transform
 
@@ -32,9 +34,11 @@ def downsample(
     """
 
     sigma = downsample_sigma(shrink_factors)
-    result = downsample_bin_shrink_wasi(input, shrink_factors, information_only=True)
+    wasi_input = copy.copy(input)
+    wasi_input.data = np.empty_like(input.data)
+    result = downsample_bin_shrink_wasi(wasi_input, shrink_factors, information_only=True)
 
-    cu_input_array = cp.array(input.data)
+    cu_input_array = array_like_to_cupy_array(input.data)
 
     maximum_error = 0.01
     maximum_kernel_width = 32
