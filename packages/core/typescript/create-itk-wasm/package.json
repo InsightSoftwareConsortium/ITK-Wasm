@@ -1,6 +1,6 @@
 {
   "name": "create-itk-wasm",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CLI to create a new ITK-Wasm project or add a pipeline to an existing project.",
   "type": "module",
   "exports": {
