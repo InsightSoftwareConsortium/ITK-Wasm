@@ -10,32 +10,13 @@ from numpy.typing import ArrayLike
 
 from .int_types import IntTypes
 from .float_types import FloatTypes
-
-try:
-    distribution('cupy')
-    _CUPY_AVAILABLE = True
-except:
-    _CUPY_AVAILABLE = False
+from .to_cupy_array import is_cupy_array
 
 try:
     distribution('dask')
     _DASK_AVAILABLE = True
 except:
     _DASK_AVAILABLE = False
-
-def is_cupy_array(arr: ArrayLike) -> bool:
-    """Check if the input is a CuPy array.
-
-    :param arr: Input array
-    :type  arr: ArrayLike
-
-    :return: True if the input is a CuPy array
-    :rtype:  bool
-    """
-    if not _CUPY_AVAILABLE:
-        return False
-    import cupy as cp
-    return isinstance(arr, cp.ndarray)
 
 def array_like_to_numpy_array(arr: ArrayLike) -> np.ndarray:
     """Convert a numpy array-like to a numpy ndarray.

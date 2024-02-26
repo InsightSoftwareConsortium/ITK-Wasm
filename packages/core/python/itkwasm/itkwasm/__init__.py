@@ -22,6 +22,7 @@ from .environment_dispatch import environment_dispatch, function_factory
 from .cast_image import cast_image
 from .image_from_array import image_from_array
 from .to_numpy_array import array_like_to_numpy_array
+from .to_cupy_array import array_like_to_cupy_array
 
 __all__ = [
   "InterfaceTypes",
@@ -49,4 +50,5 @@ __all__ = [
   "cast_image",
   "image_from_array",
   "array_like_to_numpy_array",
+  "array_like_to_cupy_array",
   ]
