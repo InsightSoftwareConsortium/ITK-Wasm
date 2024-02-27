@@ -3,9 +3,9 @@ import { spawnSync } from 'child_process'
 
 import path from 'path'
 
-import program from './program.js'
 import defaultImageTag from './default-image-tag.js'
 
+import die from './die.js'
 import { download as damDownload } from '@itk-wasm/dam'
 
 function configValue(
@@ -28,10 +28,9 @@ function configValue(
   }
 
   if (required) {
-    console.error(
+    die(
       `Required option\n\n  --${name}\n\n or package.json entry for\n\n  ["itk-wasm"]["${name}"]\n\n not provided`
     )
-    process.exit(1)
   }
 
   return defaultValue
@@ -74,8 +73,7 @@ async function pnpmScript(name, extraArgs, options) {
     shell: true
   })
   if (pnpmRootProcess.status !== 0) {
-    console.error(pnpmRootProcess.error)
-    process.exit(pnpmRootProcess.status)
+    die(pnpmRootProcess.error)
   }
   const nodeModulesDir = pnpmRootProcess.stdout.toString().trim()
   const packageJsonPath = path.join(nodeModulesDir, '..', 'package.json')
@@ -523,7 +521,7 @@ async function pnpmScript(name, extraArgs, options) {
     shell: true
   })
   if (pnpmProcess.status !== 0) {
-    console.error(pnpmProcess.error)
+    die(pnpmProcess.error)
   }
   process.exit(pnpmProcess.status)
 }
