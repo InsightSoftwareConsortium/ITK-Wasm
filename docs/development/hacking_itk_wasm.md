@@ -2,7 +2,7 @@
 
 ## TLDR
 
-Install Docker, and
+Install Podman, and
 
 ```sh
 npm i -g pnpm
@@ -67,10 +67,10 @@ To prevent Git repository bloat, we add testing data through [CMake content link
 
 ## Build environment Docker images
 
-Builds of the [wasm build environment Docker images](../introduction/parts.md#docker) or WebAssembly modules require [Docker](https://docs.docker.com/install/).
+Builds of the [wasm build environment Docker images](../introduction/parts.md#docker) or WebAssembly modules require [Podman (recommended)](https://podman.io/docs/installation) or [Docker](https://docs.docker.com/install/).
 
-* On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo).
-* On Windows, we recommend [WSL 2 with Docker enabled](https://docs.docker.com/desktop/windows/wsl/). Note that this also avoids licensing issues related to Docker Desktop.
+* On Linux, make sure you can run [`podman` or `docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo).
+* On Windows, we highly recommend [Podman](https://podman.io/docs/installation).
 
 To pull the `latest` the build environment Docker images,
 
