@@ -3,25 +3,12 @@ import path from 'path'
 import { spawnSync } from 'child_process'
 
 import defaultImageTag from './default-image-tag.js'
+import findOciExe from './find-oci-exe.js'
 
 function processCommonOptions(program, wasiDefault = false) {
   const options = program.opts()
 
-  // Check that we have docker and can run it.
-  const dockerVersion = spawnSync('docker', ['--version'], {
-    env: process.env,
-    stdio: ['ignore', 'ignore', 'ignore']
-  })
-  if (dockerVersion.status !== 0) {
-    console.error("Could not run the 'docker' command.")
-    console.error('This tool requires Docker.')
-    console.error('')
-    console.error('Please find installation instructions at:')
-    console.error('')
-    console.error('  https://docs.docker.com/install/')
-    console.error('')
-    process.exit(dockerVersion.status)
-  }
+  const ociExePath = findOciExe()
 
   let dockerImage = `itkwasm/emscripten:${defaultImageTag}`
   if (options.image) {
@@ -32,7 +19,7 @@ function processCommonOptions(program, wasiDefault = false) {
   }
 
   const dockerImageCheck = spawnSync(
-    'docker',
+    ociExePath,
     ['images', '--quiet', dockerImage],
     {
       env: process.env,
@@ -43,7 +30,7 @@ function processCommonOptions(program, wasiDefault = false) {
 
   if (dockerImageCheck.stdout === '') {
     console.log(`Build environment image not found, pulling ${dockerImage}...`)
-    const dockerPull = spawnSync('docker', ['pull', dockerImage], {
+    const dockerPull = spawnSync(ociExePath, ['pull', dockerImage], {
       env: process.env,
       stdio: 'inherit',
       encoding: 'utf-8'
@@ -87,7 +74,7 @@ function processCommonOptions(program, wasiDefault = false) {
   } catch (err) {
     if (err.code === 'ENOENT') {
       const output = fs.openSync(dockcrossScript, 'w')
-      const dockerCall = spawnSync('docker', ['run', '--rm', dockerImage], {
+      const dockerCall = spawnSync(ociExePath, ['run', '--rm', dockerImage], {
         env: process.env,
         stdio: ['ignore', output, null]
       })
