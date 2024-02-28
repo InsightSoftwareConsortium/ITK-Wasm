@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 import wasmBinaryInterfaceJson from '../wasm-binary-interface-json.js'
 import camelCase from '../camel-case.js'
@@ -19,10 +20,22 @@ import inputArrayCheck from '../input-array-check.js'
 
 // Array of types that will require an import from itk-wasm
 function bindgenResource(filePath) {
-  return path.join(path.dirname(import.meta.url.substring(7)), 'resources', filePath)
+  const currentScriptPath = path.dirname(fileURLToPath(import.meta.url))
+  const resourcesDir = path.join(currentScriptPath, 'resources')
+  const resourceFilePath = path.join(
+    resourcesDir,
+    filePath.split('/').join(path.sep)
+  )
+  return resourceFilePath
 }
 
-function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode=false) {
+function typescriptBindings(
+  outputDir,
+  buildDir,
+  wasmBinaries,
+  options,
+  forNode = false
+) {
   // index module
   let indexContent = ''
   let indexCommonContent = ''
@@ -48,7 +61,9 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
   const bundleName = packageToBundleName(packageName)
   const packageJsonPath = path.join(outputDir, 'package.json')
   if (!fs.existsSync(packageJsonPath)) {
-    const packageJson = JSON.parse(fs.readFileSync(bindgenResource('template.package.json')))
+    const packageJson = JSON.parse(
+      fs.readFileSync(bindgenResource('template.package.json'))
+    )
     packageJson.name = packageName
     packageJson.description = options.packageDescription
     packageJson.module = `./dist/index.js`
@@ -56,12 +71,12 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     packageJson.exports['.'].node = `./dist/index-node.js`
     packageJson.exports['.'].default = `./dist/index-all.js`
     if (options.repository) {
-      packageJson.repository = { 'type': 'git', 'url': options.repository }
+      packageJson.repository = { type: 'git', url: options.repository }
     }
     if (options.packageVersion) {
       packageJson.version = options.packageVersion
     } else {
-      packageJson.version = "0.1.0"
+      packageJson.version = '0.1.0'
     }
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
   } else {
@@ -78,7 +93,13 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     indexContent += "export * from './default-web-worker.js'\n"
   }
 
-  writeSupportFiles(outputDir, forNode, bindgenResource, packageName, options.packageDescription)
+  writeSupportFiles(
+    outputDir,
+    forNode,
+    bindgenResource,
+    packageName,
+    options.packageDescription
+  )
 
   let firstFunctionName = null
   wasmBinaries.forEach((wasmBinaryName) => {
@@ -92,12 +113,31 @@ function typescriptBindings (outputDir, buildDir, wasmBinaries, options, forNode
     } catch (err) {
       if (err.code !== 'EEXIST') throw err
     }
-    fs.copyFileSync(wasmBinaryRelativePath, path.join(distPipelinesDir, path.basename(wasmBinaryRelativePath)))
-    fs.copyFileSync(`${wasmBinaryRelativePath}.zst`, path.join(distPipelinesDir, `${path.basename(wasmBinaryRelativePath)}.zst`))
-    const prefix = wasmBinaryRelativePath.substring(0, wasmBinaryRelativePath.length-5)
-    fs.copyFileSync(`${prefix}.js`, path.join(distPipelinesDir, `${path.basename(prefix)}.js`))
+    fs.copyFileSync(
+      wasmBinaryRelativePath,
+      path.join(distPipelinesDir, path.basename(wasmBinaryRelativePath))
+    )
+    fs.copyFileSync(
+      `${wasmBinaryRelativePath}.zst`,
+      path.join(
+        distPipelinesDir,
+        `${path.basename(wasmBinaryRelativePath)}.zst`
+      )
+    )
+    const prefix = wasmBinaryRelativePath.substring(
+      0,
+      wasmBinaryRelativePath.length - 5
+    )
+    fs.copyFileSync(
+      `${prefix}.js`,
+      path.join(distPipelinesDir, `${path.basename(prefix)}.js`)
+    )
 
-    const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(outputDir, buildDir, wasmBinaryName)
+    const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(
+      outputDir,
+      buildDir,
+      wasmBinaryName
+    )
 
     outputOptionsCheck(interfaceJson)
     inputArrayCheck(interfaceJson)
@@ -119,12 +159,25 @@ if (!params.has('functionName')) {
     }
 
     const useCamelCase = true
-    const functionDemoHtml = interfaceFunctionsDemoHtml(interfaceJson, functionName, useCamelCase)
+    const functionDemoHtml = interfaceFunctionsDemoHtml(
+      interfaceJson,
+      functionName,
+      useCamelCase
+    )
     if (functionDemoHtml) {
       demoFunctionsHtml += functionDemoHtml
       pipelinesFunctionsTabs += `    <sl-tab slot="nav" panel="${functionName}-panel">${functionName}</sl-tab>\n`
-      const demoTypeScriptOutputPath = path.join(outputDir, 'test', 'browser', 'demo-app')
-      interfaceFunctionsDemoTypeScript(packageName, interfaceJson, demoTypeScriptOutputPath)
+      const demoTypeScriptOutputPath = path.join(
+        outputDir,
+        'test',
+        'browser',
+        'demo-app'
+      )
+      interfaceFunctionsDemoTypeScript(
+        packageName,
+        interfaceJson,
+        demoTypeScriptOutputPath
+      )
       demoFunctionsTypeScript += `import './${interfaceJson.name}-controller.js'\n`
     } else {
       pipelinesFunctionsTabs += `    <sl-tab slot="nav" panel="${functionName}-panel" disabled>${functionName}</sl-tab>\n`
@@ -133,22 +186,49 @@ if (!params.has('functionName')) {
     readmeInterface += `  ${moduleCamelCase}${nodeTextCamel},\n`
 
     const resultsModuleFileName = `${moduleKebabCase}${nodeTextKebab}-result`
-    const { readmeResult } = resultsModule(srcOutputDir, interfaceJson, forNode, modulePascalCase, nodeTextCamel, resultsModuleFileName)
+    const { readmeResult } = resultsModule(
+      srcOutputDir,
+      interfaceJson,
+      forNode,
+      modulePascalCase,
+      nodeTextCamel,
+      resultsModuleFileName
+    )
     indexContent += `\n\nimport ${modulePascalCase}${nodeTextCamel}Result from './${resultsModuleFileName}.js'\n`
     indexContent += `export type { ${modulePascalCase}${nodeTextCamel}Result }\n\n`
 
-    const filteredParameters = interfaceJson.parameters.filter(p => { return p.name !== 'memory-io' && p.name !== 'version'})
+    const filteredParameters = interfaceJson.parameters.filter((p) => {
+      return p.name !== 'memory-io' && p.name !== 'version'
+    })
     const haveOptions = !!filteredParameters.length || !forNode
 
     const optionsModuleFileName = `${moduleKebabCase}${nodeTextKebab}-options`
-    const { readmeOptions } = optionsModule(srcOutputDir, interfaceJson, modulePascalCase, nodeTextCamel, haveOptions, forNode, optionsModuleFileName)
+    const { readmeOptions } = optionsModule(
+      srcOutputDir,
+      interfaceJson,
+      modulePascalCase,
+      nodeTextCamel,
+      haveOptions,
+      forNode,
+      optionsModuleFileName
+    )
     if (haveOptions) {
       indexContent += `import ${modulePascalCase}${nodeTextCamel}Options from './${optionsModuleFileName}.js'\n`
       indexContent += `export type { ${modulePascalCase}${nodeTextCamel}Options }\n\n`
     }
 
-    const { readmeFunction, usedInterfaceTypes } = functionModule(srcOutputDir, forNode, interfaceJson, modulePascalCase, moduleKebabCase, moduleCamelCase, nodeTextCamel, nodeTextKebab, haveOptions)
-    usedInterfaceTypes.forEach(iType => allUsedInterfaceTypes.add(iType))
+    const { readmeFunction, usedInterfaceTypes } = functionModule(
+      srcOutputDir,
+      forNode,
+      interfaceJson,
+      modulePascalCase,
+      moduleKebabCase,
+      moduleCamelCase,
+      nodeTextCamel,
+      nodeTextKebab,
+      haveOptions
+    )
+    usedInterfaceTypes.forEach((iType) => allUsedInterfaceTypes.add(iType))
 
     indexContent += `import ${moduleCamelCase}${nodeTextCamel} from './${moduleKebabCase}${nodeTextKebab}.js'\n`
     indexContent += `export { ${moduleCamelCase}${nodeTextCamel} }\n`
@@ -160,7 +240,10 @@ if (!params.has('functionName')) {
 
   if (allUsedInterfaceTypes.size > 0) {
     indexCommonContent += '\n'
-    allUsedInterfaceTypes.forEach(iType => indexCommonContent += `export type { ${iType} } from 'itk-wasm'\n`)
+    allUsedInterfaceTypes.forEach(
+      (iType) =>
+        (indexCommonContent += `export type { ${iType} } from 'itk-wasm'\n`)
+    )
   }
 
   if (!forNode) {
@@ -191,9 +274,18 @@ export * from './index-node-only.js'
   writeIfOverrideNotPresent(indexAllPath, indexAllContent)
 
   if (!forNode) {
-    const demoIndexPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'index.html')
-    let demoIndexContent = fs.readFileSync(bindgenResource(path.join('demo-app', 'index.html')), { encoding: 'utf8', flag: 'r' })
-const shoelaceScript = `
+    const demoIndexPath = path.join(
+      outputDir,
+      'test',
+      'browser',
+      'demo-app',
+      'index.html'
+    )
+    let demoIndexContent = fs.readFileSync(
+      bindgenResource(path.join('demo-app', 'index.html')),
+      { encoding: 'utf8', flag: 'r' }
+    )
+    const shoelaceScript = `
 <script type="module">
   import '@shoelace-style/shoelace/dist/themes/light.css';
   import '@shoelace-style/shoelace/dist/themes/dark.css';
@@ -224,25 +316,61 @@ const shoelaceScript = `
   }
 </script>
 `
-    demoIndexContent = demoIndexContent.replaceAll('@shoelaceScript@', shoelaceScript)
+    demoIndexContent = demoIndexContent.replaceAll(
+      '@shoelaceScript@',
+      shoelaceScript
+    )
     const packageNameLanguageLogos = `${packageName}<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/>`
-    demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageName@', packageNameLanguageLogos)
-    demoIndexContent = demoIndexContent.replaceAll('@bindgenPackageDescription@', options.packageDescription)
+    demoIndexContent = demoIndexContent.replaceAll(
+      '@bindgenPackageName@',
+      packageNameLanguageLogos
+    )
+    demoIndexContent = demoIndexContent.replaceAll(
+      '@bindgenPackageDescription@',
+      options.packageDescription
+    )
     const bindgenGitHubCorner = githubCorner(options)
-    demoIndexContent = demoIndexContent.replaceAll('@bindgenGitHubCorner@', bindgenGitHubCorner)
-    demoIndexContent = demoIndexContent.replaceAll('@bindgenFunctions@', demoFunctionsHtml)
-    demoIndexContent = demoIndexContent.replaceAll('@pipelinesFunctionsTabs@', pipelinesFunctionsTabs)
-const indexModule = `
+    demoIndexContent = demoIndexContent.replaceAll(
+      '@bindgenGitHubCorner@',
+      bindgenGitHubCorner
+    )
+    demoIndexContent = demoIndexContent.replaceAll(
+      '@bindgenFunctions@',
+      demoFunctionsHtml
+    )
+    demoIndexContent = demoIndexContent.replaceAll(
+      '@pipelinesFunctionsTabs@',
+      pipelinesFunctionsTabs
+    )
+    const indexModule = `
 <script type="module" src="./index.ts"></script>
 `
     demoIndexContent = demoIndexContent.replaceAll('@indexModule@', indexModule)
     writeIfOverrideNotPresent(demoIndexPath, demoIndexContent, '<!--')
 
-    const demoTypeScriptPath = path.join(outputDir, 'test', 'browser', 'demo-app', 'index.ts')
-    let demoTypeScriptContent = fs.readFileSync(bindgenResource(path.join('demo-app', 'index.ts')), { encoding: 'utf8', flag: 'r' })
-    demoTypeScriptContent = demoTypeScriptContent.replaceAll('@bindgenBundleName@', bundleName)
-    demoTypeScriptContent = demoTypeScriptContent.replaceAll('@bindgenBundleNameCamelCase@', camelCase(bundleName))
-    demoTypeScriptContent = demoTypeScriptContent.replaceAll('@bindgenFunctionLogic@', demoFunctionsTypeScript)
+    const demoTypeScriptPath = path.join(
+      outputDir,
+      'test',
+      'browser',
+      'demo-app',
+      'index.ts'
+    )
+    let demoTypeScriptContent = fs.readFileSync(
+      bindgenResource(path.join('demo-app', 'index.ts')),
+      { encoding: 'utf8', flag: 'r' }
+    )
+    demoTypeScriptContent = demoTypeScriptContent.replaceAll(
+      '@bindgenBundleName@',
+      bundleName
+    )
+    demoTypeScriptContent = demoTypeScriptContent.replaceAll(
+      '@bindgenBundleNameCamelCase@',
+      camelCase(bundleName)
+    )
+    demoTypeScriptContent = demoTypeScriptContent.replaceAll(
+      '@bindgenFunctionLogic@',
+      demoFunctionsTypeScript
+    )
     writeIfOverrideNotPresent(demoTypeScriptPath, demoTypeScriptContent)
   }
 
