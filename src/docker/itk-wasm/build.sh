@@ -3,15 +3,18 @@
 set -exo pipefail
 
 script_dir="`cd $(dirname $0); pwd`"
+source "$script_dir/../oci_exe.sh"
+exe=$(ociExe)
 
 cd $script_dir
 
 mkdir -p ITKWebAssemblyInterfaceModuleCopy
-rsync -a ../../../{include,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
-rsync -a ../../../src/{*.cxx,CMakeLists.txt} ./ITKWebAssemblyInterfaceModuleCopy/src/
-rsync -a ../../../src/emscripten-module ./ITKWebAssemblyInterfaceModuleCopy/src/
+cp_exe=$(which rsync 2>/dev/null || which cp)
+$cp_exe -a ../../../{include,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
+$cp_exe -a ../../../src/{*.cxx,CMakeLists.txt} ./ITKWebAssemblyInterfaceModuleCopy/src/
+$cp_exe -a ../../../src/emscripten-module ./ITKWebAssemblyInterfaceModuleCopy/src/
 mkdir -p median-filter-pipelineCopy
-rsync -a ../../../packages/core/typescript/itk-wasm/test/pipelines/median-filter-pipeline/{CMakeLists.txt,median-filter-test.cxx} ./median-filter-pipelineCopy
+$cp_exe -a ../../../packages/core/typescript/itk-wasm/test/pipelines/median-filter-pipeline/{CMakeLists.txt,median-filter-test.cxx} ./median-filter-pipelineCopy
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 VCS_REF=$(git rev-parse --short HEAD)
@@ -34,7 +37,7 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
-docker build -t itkwasm/emscripten:latest \
+$exe build -t itkwasm/emscripten:latest \
         --build-arg IMAGE=itkwasm/emscripten \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VCS_REF=${VCS_REF} \
@@ -42,7 +45,7 @@ docker build -t itkwasm/emscripten:latest \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
 if $version_tag; then
-        docker build -t itkwasm/emscripten:${TAG} \
+        $exe build -t itkwasm/emscripten:${TAG} \
                 --build-arg IMAGE=itkwasm/emscripten \
                 --build-arg CMAKE_BUILD_TYPE=Release \
                 --build-arg VERSION=${TAG} \
@@ -53,7 +56,7 @@ if $version_tag; then
 fi
 
 if $wasi; then
-  docker build -t itkwasm/wasi:latest  \
+  $exe build -t itkwasm/wasi:latest  \
           --build-arg IMAGE=itkwasm/wasi \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg BASE_IMAGE=itkwasm/wasi-base \
@@ -62,7 +65,7 @@ if $wasi; then
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $version_tag; then
-        docker build -t itkwasm/wasi:${TAG} \
+        $exe build -t itkwasm/wasi:${TAG} \
                 --build-arg IMAGE=itkwasm/wasi \
                 --build-arg CMAKE_BUILD_TYPE=Release \
                 --build-arg VERSION=${TAG} \
@@ -76,7 +79,7 @@ if $wasi; then
 fi
 
 if $debug; then
-  docker build -t itkwasm/emscripten:latest-debug \
+  $exe build -t itkwasm/emscripten:latest-debug \
           --build-arg IMAGE=itkwasm/emscripten \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg BASE_TAG=${TAG}-debug \
@@ -85,7 +88,7 @@ if $debug; then
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $version_tag; then
-        docker build -t itkwasm/emscripten:${TAG}-debug \
+        $exe build -t itkwasm/emscripten:${TAG}-debug \
                 --build-arg IMAGE=itkwasm/emscripten \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG}-debug \
@@ -96,7 +99,7 @@ if $debug; then
                 $script_dir $@
   fi
   if $wasi; then
-    docker build -t itkwasm/wasi:latest-debug  \
+    $exe build -t itkwasm/wasi:latest-debug  \
             --build-arg IMAGE=itkwasm/wasi \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg BASE_IMAGE=itkwasm/wasi-base \
@@ -106,7 +109,7 @@ if $debug; then
             --build-arg BUILD_DATE=${BUILD_DATE} \
             $script_dir $@
     if $version_tag; then
-        docker build -t itkwasm/wasi:${TAG}-debug \
+        $exe build -t itkwasm/wasi:${TAG}-debug \
                 --build-arg IMAGE=itkwasm/wasi \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG} \

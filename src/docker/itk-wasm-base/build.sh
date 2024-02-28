@@ -3,6 +3,8 @@
 set -exo pipefail
 
 script_dir="`cd $(dirname $0); pwd`"
+source "$script_dir/../oci_exe.sh"
+exe=$(ociExe)
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 VCS_REF=$(git rev-parse --short HEAD)
@@ -34,7 +36,7 @@ emscripten_debug_c_flags="-fno-lto -Wno-warn-absolute-paths"
 wasi_debug_ld_flags="-fno-lto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-printscan-long-double"
 wasi_debug_c_flags="-fno-lto -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_SIGNAL"
 
-docker build -t itkwasm/emscripten-base:latest \
+$exe build -t itkwasm/emscripten-base:latest \
         --build-arg IMAGE=itkwasm/emscripten-base \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VCS_REF=${VCS_REF} \
@@ -42,7 +44,7 @@ docker build -t itkwasm/emscripten-base:latest \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
 if $version_tag; then
-        docker build -t itkwasm/emscripten-base:${TAG} \
+        $exe build -t itkwasm/emscripten-base:${TAG} \
                 --build-arg IMAGE=itkwasm/emscripten-base \
                 --build-arg CMAKE_BUILD_TYPE=Release \
                 --build-arg VERSION=${TAG} \
@@ -53,7 +55,7 @@ if $version_tag; then
 fi
 
 if $wasi; then
-  docker build -t itkwasm/wasi-base:latest \
+  $exe build -t itkwasm/wasi-base:latest \
           --build-arg IMAGE=itkwasm/wasi-base \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg VCS_REF=${VCS_REF} \
@@ -64,7 +66,7 @@ if $wasi; then
           --build-arg CFLAGS="${wasi_c_flags}" \
           $script_dir $@
         if $version_tag; then
-                docker build -t itkwasm/wasi-base:${TAG} \
+                $exe build -t itkwasm/wasi-base:${TAG} \
                         --build-arg IMAGE=itkwasm/wasi-base \
                         --build-arg CMAKE_BUILD_TYPE=Release \
                         --build-arg VERSION=${TAG} \
@@ -80,7 +82,7 @@ fi
 
 
 if $debug; then
-  docker build -t itkwasm/emscripten-base:latest-debug \
+  $exe build -t itkwasm/emscripten-base:latest-debug \
           --build-arg IMAGE=itkwasm/emscripten-base \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg USE_DCMTK=OFF \
@@ -91,7 +93,7 @@ if $debug; then
           --build-arg CFLAGS="${emscripten_debug_c_flags}" \
           $script_dir $@
   if $version_tag; then
-        docker build -t itkwasm/emscripten-base:${TAG}-debug \
+        $exe build -t itkwasm/emscripten-base:${TAG}-debug \
                 --build-arg IMAGE=itkwasm/emscripten-base \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg USE_DCMTK=OFF \
@@ -104,7 +106,7 @@ if $debug; then
                 $script_dir $@
   fi
   if $wasi; then
-    docker build -t itkwasm/wasi-base:latest-debug \
+    $exe build -t itkwasm/wasi-base:latest-debug \
             --build-arg IMAGE=itkwasm/wasi-base \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg VCS_REF=${VCS_REF} \
@@ -115,7 +117,7 @@ if $debug; then
             --build-arg CFLAGS="${wasi_debug_c_flags}" \
             $script_dir $@
     if $version_tag; then
-        docker build -t itkwasm/wasi-base:${TAG}-debug \
+        $exe build -t itkwasm/wasi-base:${TAG}-debug \
                 --build-arg IMAGE=itkwasm/wasi-base \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG} \

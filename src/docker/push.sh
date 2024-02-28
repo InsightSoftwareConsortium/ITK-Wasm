@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+script_dir="`cd $(dirname $0); pwd`"
+source "$script_dir/oci_exe.sh"
+exe=$(ociExe)
+
 set -eo pipefail
 
 debug=true
@@ -15,20 +19,20 @@ set -- "${newparams[@]}"  # overwrites the original positional params
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 
 if test ! -z ${DOCKERHUB_ITKWasm_PASSWORD+x}; then
-  echo $DOCKERHUB_ITKWasm_PASSWORD | docker login --username "$DOCKERHUB_ITKWasm_USERNAME" --password-stdin
+  echo $DOCKERHUB_ITKWasm_PASSWORD | $exe login --username "$DOCKERHUB_ITKWasm_USERNAME" --password-stdin
 fi
 
 function push_image() {
   local image=$1
   local tag=$2
   local debug=$3
-  docker push ${image}:${tag}
-  docker tag ${image}:${tag} quay.io/${image}:${tag}
-  docker push quay.io/${image}:${tag}
+  $exe push ${image}:${tag}
+  $exe tag ${image}:${tag} quay.io/${image}:${tag}
+  $exe push quay.io/${image}:${tag}
   if $debug; then
-    docker push ${image}:${tag}-debug
-    docker tag ${image}:${tag}-debug quay.io/${image}:${tag}-debug
-    docker push quay.io/${image}:${tag}-debug
+    $exe push ${image}:${tag}-debug
+    $exe tag ${image}:${tag}-debug quay.io/${image}:${tag}-debug
+    $exe push quay.io/${image}:${tag}-debug
   fi
 }
 
