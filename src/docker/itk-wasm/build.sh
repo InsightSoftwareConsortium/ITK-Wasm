@@ -8,7 +8,7 @@ exe=$(ociExe)
 
 cd $script_dir
 
-mkdir -p ITKWebAssemblyInterfaceModuleCopy
+mkdir -p ITKWebAssemblyInterfaceModuleCopy/src
 cp_exe=$(which rsync 2>/dev/null || which cp)
 $cp_exe -a ../../../{include,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
 $cp_exe -a ../../../src/{*.cxx,CMakeLists.txt} ./ITKWebAssemblyInterfaceModuleCopy/src/
