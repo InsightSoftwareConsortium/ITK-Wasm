@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -17,7 +17,7 @@ jobs:
       run: |
         ./src/docker/pull.sh
 
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       continue-on-error: true
       with:
         name: docker-cache
@@ -38,7 +38,7 @@ jobs:
         docker save itkwasm/wasi-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-wasi-base.tar.xz
 
     - name: Cache docker results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: docker-cache
         path: ./docker-cache
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -59,7 +59,7 @@ jobs:
       run: |
         ./src/docker/pull.sh
 
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       continue-on-error: true
       with:
         name: docker-cache
@@ -82,7 +82,7 @@ jobs:
         docker save itkwasm/wasi:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-wasi.tar.xz
 
     - name: Cache docker results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: docker-cache
         path: ./docker-cache
