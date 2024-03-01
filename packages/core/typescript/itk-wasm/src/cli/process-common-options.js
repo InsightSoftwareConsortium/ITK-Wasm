@@ -4,6 +4,7 @@ import { spawnSync } from 'child_process'
 
 import defaultImageTag from './default-image-tag.js'
 import findOciExe from './find-oci-exe.js'
+import die from './die.js'
 
 function processCommonOptions(program, wasiDefault = false) {
   const options = program.opts()
