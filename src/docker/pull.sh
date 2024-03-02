@@ -6,8 +6,8 @@ exe=$(ociExe)
 
 set -eo pipefail
 
-$exe pull itkwasm/emscripten:latest
-$exe pull itkwasm/emscripten:latest-debug
+$exe pull quay.io/itkwasm/emscripten:latest
+$exe pull quay.io/itkwasm/emscripten:latest-debug
 
-$exe pull itkwasm/wasi:latest
-$exe pull itkwasm/wasi:latest-debug
+$exe pull quay.io/itkwasm/wasi:latest
+$exe pull quay.io/itkwasm/wasi:latest-debug
