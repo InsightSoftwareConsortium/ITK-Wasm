@@ -15,6 +15,7 @@ itk_module(WebAssemblyInterface
   TEST_DEPENDS
     ITKTestKernel
     ITKMesh
+    ITKImageGrid
   FACTORY_NAMES
     ImageIO::Wasm
     MeshIO::Wasm
