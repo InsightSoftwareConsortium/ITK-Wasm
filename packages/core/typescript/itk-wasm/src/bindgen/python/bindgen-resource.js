@@ -1,7 +1,14 @@
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 function bindgenResource(filePath) {
-  return path.join(path.dirname(import.meta.url.substring(7)), 'resources', filePath)
+  const currentScriptPath = path.dirname(fileURLToPath(import.meta.url))
+  const resourcesDir = path.join(currentScriptPath, 'resources')
+  const resourceFilePath = path.join(
+    resourcesDir,
+    filePath.split('/').join(path.sep)
+  )
+  return resourceFilePath
 }
 
 export default bindgenResource

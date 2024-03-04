@@ -8,6 +8,7 @@ export { default as copyImage } from './copy-image.js'
 export { default as stackImages } from './stack-images.js'
 export { default as getFileExtension } from './get-file-extension.js'
 export { default as getMatrixElement } from './get-matrix-element.js'
+export { default as setMatrixElement } from './set-matrix-element.js'
 export { default as castImage } from './cast-image.js'
 
 export type { default as TypedArray } from './typed-array.js'
