@@ -31,7 +31,6 @@ ExternalData_Expand_Arguments(
   DATA{Input/sphere.fsb}
   DATA{Input/box.obj}
   DATA{Input/negative_idx_base.mha}
-  DATA{Input/negative_idx_padded.mha}
   DATA{Input/octa.off}
   DATA{Input/sphere.stl}
   DATA{Input/cthead1.iwi.cbor}
@@ -52,7 +51,8 @@ ExternalData_Expand_Arguments(
   DATA{Input/PNGSeries/,REGEX:mri3D_.[0-9]+.png}
   DATA{Input/11706c2.CNG.swc}
   DATA{Baseline/web_worker_pool.cy.png}
-  )
+  DATA{Baseline/negative_idx_padded.mha}
+)
 
 set(WebAssemblyInterfaceTests
   itkWasmImageInterfaceTest.cxx
@@ -89,7 +89,7 @@ itk_add_test(NAME itkWasmImageInterfaceTest
 
 itk_add_test(NAME itkWasmImageInterfaceWithNegativeIndexTest
         COMMAND WebAssemblyInterfaceTestDriver
-        --compare DATA{Input/negative_idx_padded.mha}
+        --compare DATA{Baseline/negative_idx_padded.mha}
         ${ITK_TEST_OUTPUT_DIR}/itkWasmImageInterfaceWithNegativeIndexTest.mha
         itkWasmImageInterfaceWithNegativeIndexTest
         DATA{Input/negative_idx_base.mha}
