@@ -20,4 +20,4 @@ jobs:
           pnpm i
 
       - name: Lint commits
-        run: pnpx commitlint --from=${{ github.event.pull_request.base.sha }}
+        run: npx commitlint --from=${{ github.event.pull_request.base.sha }}
