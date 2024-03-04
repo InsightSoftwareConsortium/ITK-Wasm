@@ -7,7 +7,7 @@ else:
 from numpy.typing import ArrayLike
 
 try:
-    distribution('cupy')
+    import cupy
     _CUPY_AVAILABLE = True
 except:
     _CUPY_AVAILABLE = False
