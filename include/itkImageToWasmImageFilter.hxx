@@ -137,6 +137,7 @@ ImageToWasmImageFilter<TImage>
 
   imageJSON->SetImage(image);
 
+  using PointType = typename TImage::PointType;
   using PixelType = typename TImage::IOPixelType;
   using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
   using ComponentType = typename ConvertPixelTraits::ComponentType;
@@ -164,7 +165,10 @@ ImageToWasmImageFilter<TImage>
   document.AddMember( "imageType", imageType.Move(), allocator );
 
   rapidjson::Value origin(rapidjson::kArrayType);
-  const auto imageOrigin = image->GetOrigin();
+
+  const auto largestRegion = image->GetLargestPossibleRegion();
+  PointType imageOrigin;
+  image->TransformIndexToPhysicalPoint(largestRegion.GetIndex(), imageOrigin);
   for( unsigned int ii = 0; ii < dimension; ++ii )
     {
     origin.PushBack(rapidjson::Value().SetDouble(imageOrigin[ii]), allocator);
