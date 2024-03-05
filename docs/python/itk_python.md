@@ -20,7 +20,7 @@ itk_image = itk.image_from_dict(image_dict)
 
 ## Convert from `itk` to `itkwasm`
 
-To convert from a native `itk` Python type to an `itkwasm` dataclass interface type, first convert the `itkwasm` type to a dictionary the `itk.<type>_from_dict`, then pass the dictionary as keyword arguments to `itkwasm` constructor with the `**` operator. Example:
+To convert from a native `itk` Python type to an `itkwasm` dataclass interface type, first convert the `itkwasm` type to a dictionary the `itk.dict_from_<type>`, then pass the dictionary as keyword arguments to `itkwasm` constructor with the `**` operator. Example:
 
 
 ```python
