@@ -18,7 +18,7 @@ jobs:
 
     - name: Pull latest Docker images
       run: |
-        ./src/docker/pull.sh
+        ./src/docker/pull.sh --no-debug
 
     - uses: actions/setup-node@v4
       with:

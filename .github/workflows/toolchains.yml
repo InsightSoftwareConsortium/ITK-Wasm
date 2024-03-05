@@ -15,7 +15,7 @@ jobs:
 
     - name: Pull latest Docker images
       run: |
-        ./src/docker/pull.sh
+        ./src/docker/pull.sh --no-debug
 
     - uses: actions/download-artifact@v4
       continue-on-error: true
@@ -57,7 +57,7 @@ jobs:
 
     - name: Pull latest Docker images
       run: |
-        ./src/docker/pull.sh
+        ./src/docker/pull.sh --no-debug
 
     - uses: actions/download-artifact@v4
       continue-on-error: true

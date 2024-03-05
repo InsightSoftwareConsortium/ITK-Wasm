@@ -67,10 +67,8 @@ To prevent Git repository bloat, we add testing data through [CMake content link
 
 ## Build environment Docker images
 
-Builds of the [wasm build environment Docker images](../introduction/parts.md#docker) or WebAssembly modules require [Podman (recommended)](https://podman.io/docs/installation) or [Docker](https://docs.docker.com/install/).
-
-* On Linux, make sure you can run [`podman` or `docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo).
-* On Windows, we highly recommend [Podman](https://podman.io/docs/installation).
+Builds of the [wasm build environment Docker images](../introduction/parts.md#docker) or WebAssembly modules require [Podman](https://podman.io/docs/installation).
+*Note*: on Linux, ensure the [`vfs` podman storage driver is not used for best performance](https://github.com/containers/podman/issues/13226#issuecomment-1555872420).
 
 To pull the `latest` the build environment Docker images,
 

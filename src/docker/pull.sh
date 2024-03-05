@@ -6,8 +6,22 @@ exe=$(ociExe)
 
 set -eo pipefail
 
-$exe pull itkwasm/emscripten:latest
-$exe pull itkwasm/emscripten:latest-debug
+debug=true
+for param; do
+  if [[ $param == '--no-debug' ]]; then
+    debug=false
+  else
+    newparams+=("$param")
+  fi
+done
+set -- "${newparams[@]}"  # overwrites the original positional params
 
-$exe pull itkwasm/wasi:latest
-$exe pull itkwasm/wasi:latest-debug
+$exe pull quay.io/itkwasm/emscripten:latest
+if $debug; then
+  $exe pull quay.io/itkwasm/emscripten:latest-debug
+fi
+
+$exe pull quay.io/itkwasm/wasi:latest
+if $debug; then
+  $exe pull quay.io/itkwasm/wasi:latest-debug
+fi
