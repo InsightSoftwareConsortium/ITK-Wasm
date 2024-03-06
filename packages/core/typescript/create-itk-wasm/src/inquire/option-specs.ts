@@ -64,7 +64,7 @@ async function editIndexOptionSpecs(
     {
       type: 'list',
       name: 'type',
-      message: 'Type',
+      message: 'Type:',
       choices: typeChoices,
       prefix,
       askAnswered,
