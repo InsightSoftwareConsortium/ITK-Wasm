@@ -19,7 +19,12 @@ function bindgen(options) {
   const iface = options.interface ?? 'typescript'
   const outputDir = options.outputDir ?? iface
 
-  const wasmBinaries = glob.sync(path.join(buildDir, '**/*.wasm'))
+  const buildDirPosix = buildDir.replaceAll('\\', '/')
+  const wasmBinaries = glob.sync(`${buildDirPosix}/**/*.wasm`, {
+    // CMake FetchContent
+    // Symlinks can cause problems with glob on Windows.
+    ignore: `${buildDirPosix}/_deps/**`
+  })
 
   try {
     fs.mkdirSync(outputDir, { recursive: true })
@@ -28,7 +33,9 @@ function bindgen(options) {
   }
 
   // Filter libraries.
-  let filteredWasmBinaries = wasmBinaries.filter((binary) => !path.basename(binary).startsWith('lib'))
+  let filteredWasmBinaries = wasmBinaries.filter(
+    (binary) => !path.basename(binary).startsWith('lib')
+  )
 
   switch (iface) {
     case 'typescript':
