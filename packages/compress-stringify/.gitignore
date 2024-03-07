@@ -1,3 +1,4 @@
+typescript/src/version.ts
 micromamba/
 test/pyodide-dispatch.tar.bz2
 test/pyodide-emscripten.tar.bz2
