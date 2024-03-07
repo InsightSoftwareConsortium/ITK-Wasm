@@ -10,6 +10,9 @@ This tutorial will walk you through the process of *creating WebAssembly scienti
 6. Handle non-trivial data types a the wasm pipeline interface.
 7. Debug a wasm pipeline.
 
+This [Jupyter notebook
+tutorial](https://github.com/InsightSoftwareConsortium/ScientificImageAnalysisVisualizationAndArtificialIntelligenceCourse/blob/master/10_Create_Scientific_WebAssembly_Pipelines.ipynb) also provides an interactive walkthrough.
+
 ```{toctree}
 :maxdepth: 2
 :caption: 📖 Tutorial Steps
