@@ -57,13 +57,13 @@ function optionSpecParser(
   }
 
   if (spec.length > 5) {
-    result.itemsExpectedMin = parseInt(spec[6])
+    result.itemsExpectedMin = parseInt(spec[5])
   } else {
     result.itemsExpectedMin = 1
   }
 
   if (spec.length > 6) {
-    result.itemsExpectedMax = parseInt(spec[7])
+    result.itemsExpectedMax = parseInt(spec[6])
   } else {
     result.itemsExpectedMax = 1
   }
