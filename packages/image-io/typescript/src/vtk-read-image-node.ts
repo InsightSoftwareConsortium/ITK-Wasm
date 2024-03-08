@@ -13,6 +13,7 @@ import VtkReadImageNodeOptions from './vtk-read-image-node-options.js'
 import VtkReadImageNodeResult from './vtk-read-image-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Read an image file format and convert it to the itk-wasm file format
@@ -57,7 +58,7 @@ async function vtkReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'vtk-read-image')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'vtk-read-image')
 
   const {
     returnValue,

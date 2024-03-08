@@ -13,6 +13,7 @@ import Hdf5ReadImageNodeOptions from './hdf5-read-image-node-options.js'
 import Hdf5ReadImageNodeResult from './hdf5-read-image-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Read an image file format and convert it to the itk-wasm file format
@@ -57,7 +58,7 @@ async function hdf5ReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'hdf5-read-image')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'hdf5-read-image')
 
   const {
     returnValue,

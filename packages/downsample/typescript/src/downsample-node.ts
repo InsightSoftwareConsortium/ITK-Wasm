@@ -12,6 +12,7 @@ import DownsampleNodeOptions from './downsample-node-options.js'
 import DownsampleNodeResult from './downsample-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Apply a smoothing anti-alias filter and subsample the input image.
@@ -68,7 +69,7 @@ async function downsampleNode(
     })
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'downsample')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'downsample')
 
   const {
     returnValue,

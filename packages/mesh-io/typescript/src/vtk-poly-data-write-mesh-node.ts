@@ -13,6 +13,7 @@ import VtkPolyDataWriteMeshNodeOptions from './vtk-poly-data-write-mesh-node-opt
 import VtkPolyDataWriteMeshNodeResult from './vtk-poly-data-write-mesh-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Write an itk-wasm file format converted to an mesh file format
@@ -64,7 +65,7 @@ async function vtkPolyDataWriteMeshNode(
     options.binaryFileType && args.push('--binary-file-type')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'vtk-poly-data-write-mesh')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'vtk-poly-data-write-mesh')
 
   const {
     returnValue,

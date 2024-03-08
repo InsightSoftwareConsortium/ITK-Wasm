@@ -13,6 +13,7 @@ import WasmZstdWriteMeshNodeOptions from './wasm-zstd-write-mesh-node-options.js
 import WasmZstdWriteMeshNodeResult from './wasm-zstd-write-mesh-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Write an itk-wasm file format converted to an mesh file format
@@ -64,7 +65,7 @@ async function wasmZstdWriteMeshNode(
     options.binaryFileType && args.push('--binary-file-type')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'wasm-zstd-write-mesh')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'wasm-zstd-write-mesh')
 
   const {
     returnValue,

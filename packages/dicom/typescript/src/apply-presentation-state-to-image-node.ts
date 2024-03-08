@@ -13,6 +13,7 @@ import ApplyPresentationStateToImageNodeOptions from './apply-presentation-state
 import ApplyPresentationStateToImageNodeResult from './apply-presentation-state-to-image-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.
@@ -78,7 +79,7 @@ async function applyPresentationStateToImageNode(
     options.noBitmapOutput && args.push('--no-bitmap-output')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'apply-presentation-state-to-image')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'apply-presentation-state-to-image')
 
   const {
     returnValue,

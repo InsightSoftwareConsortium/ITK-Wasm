@@ -11,6 +11,7 @@ import {
 import VectorMagnitudeNodeResult from './vector-magnitude-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Generate a scalar magnitude image based on the input vector's norm.
@@ -43,7 +44,7 @@ async function vectorMagnitudeNode(
   // Options
   args.push('--memory-io')
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'vector-magnitude')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'vector-magnitude')
 
   const {
     returnValue,
