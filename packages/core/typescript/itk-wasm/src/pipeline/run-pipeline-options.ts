@@ -5,6 +5,9 @@ interface RunPipelineOptions {
   /** Url where WebAssembly pipelines are hosted. */
   pipelineBaseUrl?: string | URL
 
+  /** Query params to use when requesting for WebAssembly pipelines */
+  pipelineQueryParams?: Record<string, string>
+
   /** Url where the pipeline web worker is hosted. */
   pipelineWorkerUrl?: string | URL | null
 
