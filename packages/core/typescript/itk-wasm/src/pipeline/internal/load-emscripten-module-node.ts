@@ -2,7 +2,7 @@ import fs from 'fs'
 import EmscriptenModule from '../itk-wasm-emscripten-module.js'
 import { pathToFileURL } from 'url'
 
-async function loadEmscriptenModuleNode(
+async function loadEmscriptenModuleNode (
   modulePath: string
 ): Promise<EmscriptenModule> {
   let modulePrefix = modulePath
