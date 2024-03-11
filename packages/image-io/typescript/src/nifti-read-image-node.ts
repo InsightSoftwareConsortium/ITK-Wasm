@@ -13,6 +13,7 @@ import NiftiReadImageNodeOptions from './nifti-read-image-node-options.js'
 import NiftiReadImageNodeResult from './nifti-read-image-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Read an image file format and convert it to the itk-wasm file format
@@ -57,7 +58,7 @@ async function niftiReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'nifti-read-image')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'nifti-read-image')
 
   const {
     returnValue,

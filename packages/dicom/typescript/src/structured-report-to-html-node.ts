@@ -12,6 +12,7 @@ import StructuredReportToHtmlNodeOptions from './structured-report-to-html-node-
 import StructuredReportToHtmlNodeResult from './structured-report-to-html-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Render DICOM SR file and data set to HTML/XHTML
@@ -180,7 +181,7 @@ async function structuredReportToHtmlNode(
     options.codeDetailsTooltip && args.push('--code-details-tooltip')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'structured-report-to-html')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'structured-report-to-html')
 
   const {
     returnValue,

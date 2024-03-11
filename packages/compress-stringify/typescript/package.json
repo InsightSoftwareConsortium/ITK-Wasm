@@ -27,9 +27,10 @@
     "cypress:runChrome": "pnpm exec cypress run --browser chrome",
     "cypress:runFirefox": "pnpm exec cypress run --browser firefox",
     "build": "pnpm build:tsc && pnpm build:browser:workerEmbedded && pnpm build:browser:workerEmbeddedMin && pnpm build:demo",
+    "build:version": "node -p \"'const version = ' + JSON.stringify(require('./package.json').version) + '\\nexport default version\\n'\" > src/version.ts",
     "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
     "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
-    "build:tsc": "tsc --pretty",
+    "build:tsc": "pnpm build:version && tsc --pretty",
     "build:demo": "pnpm copyShoelaceAssets && vite build"
   },
   "keywords": [

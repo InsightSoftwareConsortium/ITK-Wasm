@@ -89,7 +89,8 @@ function functionModule(
   }
   functionContent += `import ${modulePascalCase}${nodeTextCamel}Result from './${moduleKebabCase}${nodeTextKebab}-result.js'\n\n`
   if (forNode) {
-    functionContent += "import path from 'path'\n\n"
+    functionContent += "import path from 'path'\n"
+    functionContent += "import { fileURLToPath } from 'url'\n\n"
   } else {
     functionContent +=
       "import { getPipelinesBaseUrl } from './pipelines-base-url.js'\n"
@@ -529,7 +530,7 @@ function functionModule(
     ? '    outputs\n'
     : ''
   if (forNode) {
-    functionContent += `\n  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', '${moduleKebabCase}')\n\n`
+    functionContent += `\n  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', '${moduleKebabCase}')\n\n`
     const mountDirsArg = needMountDirs ? ', mountDirs' : ''
     functionContent += `  const {\n    returnValue,\n    stderr,\n${outputsVar}  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs${mountDirsArg})\n`
   } else {

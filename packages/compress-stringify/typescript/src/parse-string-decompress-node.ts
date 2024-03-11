@@ -12,6 +12,7 @@ import ParseStringDecompressNodeOptions from './parse-string-decompress-node-opt
 import ParseStringDecompressNodeResult from './parse-string-decompress-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.
@@ -49,7 +50,7 @@ async function parseStringDecompressNode(
     options.parseString && args.push('--parse-string')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'parse-string-decompress')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'parse-string-decompress')
 
   const {
     returnValue,

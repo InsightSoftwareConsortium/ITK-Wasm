@@ -12,6 +12,7 @@ import DownsampleLabelImageNodeOptions from './downsample-label-image-node-optio
 import DownsampleLabelImageNodeResult from './downsample-label-image-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Subsample the input label image a according to weighted voting of local labels.
@@ -68,7 +69,7 @@ async function downsampleLabelImageNode(
     })
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'downsample-label-image')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'downsample-label-image')
 
   const {
     returnValue,

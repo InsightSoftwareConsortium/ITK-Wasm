@@ -13,6 +13,7 @@ import ByuReadMeshNodeOptions from './byu-read-mesh-node-options.js'
 import ByuReadMeshNodeResult from './byu-read-mesh-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Read a mesh file format and convert it to the itk-wasm file format
@@ -57,7 +58,7 @@ async function byuReadMeshNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'byu-read-mesh')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'byu-read-mesh')
 
   const {
     returnValue,

@@ -13,6 +13,7 @@ import NrrdWriteImageNodeOptions from './nrrd-write-image-node-options.js'
 import NrrdWriteImageNodeResult from './nrrd-write-image-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Write an itk-wasm file format converted to an image file format
@@ -61,7 +62,7 @@ async function nrrdWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'nrrd-write-image')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'nrrd-write-image')
 
   const {
     returnValue,

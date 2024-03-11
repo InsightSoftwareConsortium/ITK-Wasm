@@ -13,6 +13,7 @@ import VtkPolyDataReadMeshNodeOptions from './vtk-poly-data-read-mesh-node-optio
 import VtkPolyDataReadMeshNodeResult from './vtk-poly-data-read-mesh-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Read a mesh file format and convert it to the itk-wasm file format
@@ -57,7 +58,7 @@ async function vtkPolyDataReadMeshNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'vtk-poly-data-read-mesh')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'vtk-poly-data-read-mesh')
 
   const {
     returnValue,

@@ -13,6 +13,7 @@ import GdcmReadImageNodeOptions from './gdcm-read-image-node-options.js'
 import GdcmReadImageNodeResult from './gdcm-read-image-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Read an image file format and convert it to the itk-wasm file format
@@ -57,7 +58,7 @@ async function gdcmReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'gdcm-read-image')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'gdcm-read-image')
 
   const {
     returnValue,

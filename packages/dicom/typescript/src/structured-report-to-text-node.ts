@@ -12,6 +12,7 @@ import StructuredReportToTextNodeOptions from './structured-report-to-text-node-
 import StructuredReportToTextNodeResult from './structured-report-to-text-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Read a DICOM structured report file and generate a plain text representation
@@ -100,7 +101,7 @@ async function structuredReportToTextNode(
     options.printColor && args.push('--print-color')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'structured-report-to-text')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'structured-report-to-text')
 
   const {
     returnValue,
