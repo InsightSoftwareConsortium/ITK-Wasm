@@ -13,6 +13,7 @@ import ScancoReadImageNodeOptions from './scanco-read-image-node-options.js'
 import ScancoReadImageNodeResult from './scanco-read-image-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Read an image file format and convert it to the itk-wasm file format
@@ -57,7 +58,7 @@ async function scancoReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'scanco-read-image')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'scanco-read-image')
 
   const {
     returnValue,

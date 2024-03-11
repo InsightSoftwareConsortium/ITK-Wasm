@@ -1,24 +1,23 @@
 // Generated file. To retain edits, remove this comment.
 
-// Generated file. To retain edits, remove this comment.
+import { getPipelinesBaseUrl as itkWasmGetPipelinesBaseUrl } from "itk-wasm";
+import version from "./version.js";
 
-import { getPipelinesBaseUrl as itkWasmGetPipelinesBaseUrl } from 'itk-wasm'
-import packageJson from './package.json'
+let pipelinesBaseUrl: string | URL | undefined;
+let defaultPipelinesBaseUrl: string | URL =
+  `https://cdn.jsdelivr.net/npm/@itk-wasm/mesh-io@${version}/dist/pipelines`;
 
-let pipelinesBaseUrl: string | URL | undefined
-let defaultPipelinesBaseUrl: string | URL = `https://cdn.jsdelivr.net/npm/@itk-wasm/mesh-io@${packageJson.version}/dist/pipelines`
-
-export function setPipelinesBaseUrl (baseUrl: string | URL): void {
-  pipelinesBaseUrl = baseUrl
+export function setPipelinesBaseUrl(baseUrl: string | URL): void {
+  pipelinesBaseUrl = baseUrl;
 }
 
-export function getPipelinesBaseUrl (): string | URL {
-  if (typeof pipelinesBaseUrl !== 'undefined') {
-    return pipelinesBaseUrl
+export function getPipelinesBaseUrl(): string | URL {
+  if (typeof pipelinesBaseUrl !== "undefined") {
+    return pipelinesBaseUrl;
   }
-  const itkWasmPipelinesBaseUrl = itkWasmGetPipelinesBaseUrl()
-  if (typeof itkWasmPipelinesBaseUrl !== 'undefined') {
-    return itkWasmPipelinesBaseUrl
+  const itkWasmPipelinesBaseUrl = itkWasmGetPipelinesBaseUrl();
+  if (typeof itkWasmPipelinesBaseUrl !== "undefined") {
+    return itkWasmPipelinesBaseUrl;
   }
-  return defaultPipelinesBaseUrl
+  return defaultPipelinesBaseUrl;
 }

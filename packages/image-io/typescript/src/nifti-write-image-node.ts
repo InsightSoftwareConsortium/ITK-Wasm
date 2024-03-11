@@ -13,6 +13,7 @@ import NiftiWriteImageNodeOptions from './nifti-write-image-node-options.js'
 import NiftiWriteImageNodeResult from './nifti-write-image-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Write an itk-wasm file format converted to an image file format
@@ -61,7 +62,7 @@ async function niftiWriteImageNode(
     options.useCompression && args.push('--use-compression')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'nifti-write-image')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'nifti-write-image')
 
   const {
     returnValue,

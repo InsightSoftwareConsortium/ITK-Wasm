@@ -13,6 +13,7 @@ import FreeSurferAsciiWriteMeshNodeOptions from './free-surfer-ascii-write-mesh-
 import FreeSurferAsciiWriteMeshNodeResult from './free-surfer-ascii-write-mesh-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Write an itk-wasm file format converted to an mesh file format
@@ -64,7 +65,7 @@ async function freeSurferAsciiWriteMeshNode(
     options.binaryFileType && args.push('--binary-file-type')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'free-surfer-ascii-write-mesh')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'free-surfer-ascii-write-mesh')
 
   const {
     returnValue,

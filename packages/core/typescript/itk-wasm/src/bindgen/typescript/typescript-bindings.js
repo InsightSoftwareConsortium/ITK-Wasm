@@ -38,7 +38,7 @@ function typescriptBindings(
 ) {
   // index module
   let indexContent = ''
-  let indexCommonContent = ''
+  let indexCommonContent = "export { default as version } from './version.js'\n"
   const nodeTextKebab = forNode ? '-node' : ''
   const nodeTextCamel = forNode ? 'Node' : ''
 

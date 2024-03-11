@@ -4,7 +4,7 @@ import path from 'path'
 import typescriptBindings from './typescript-bindings.js'
 import validEmscriptenWasmBinaries from '../valid-emscripten-wasm-binaries.js'
 
-function bindgen (outputDir, buildDir, filteredWasmBinaries, options) {
+function bindgen(outputDir, buildDir, filteredWasmBinaries, options) {
   let readme = ''
   const packageName = options.packageName
   readme += `# ${packageName}\n`
@@ -17,12 +17,21 @@ npm install ${packageName}
 `
 
   let readmeUsage = '\n## Usage\n'
-  let readmeBrowserInterface = '\n### Browser interface\n\nImport:\n\n```js\nimport {\n'
-  let readmeNodeInterface = '\n### Node interface\n\nImport:\n\n```js\nimport {\n'
+  let readmeBrowserInterface =
+    '\n### Browser interface\n\nImport:\n\n```js\nimport {\n'
+  let readmeNodeInterface =
+    '\n### Node interface\n\nImport:\n\n```js\nimport {\n'
 
-  const emscriptenWasmBinaries = validEmscriptenWasmBinaries(filteredWasmBinaries)
+  const emscriptenWasmBinaries =
+    validEmscriptenWasmBinaries(filteredWasmBinaries)
 
-  readmeBrowserInterface += typescriptBindings(outputDir, buildDir, emscriptenWasmBinaries, options, false)
+  readmeBrowserInterface += typescriptBindings(
+    outputDir,
+    buildDir,
+    emscriptenWasmBinaries,
+    options,
+    false
+  )
   readmeBrowserInterface += `
 #### setPipelinesBaseUrl
 
@@ -43,7 +52,13 @@ function getPipelinesBaseUrl() : string | URL
 \`\`\`
 
 `
-  readmeNodeInterface += typescriptBindings(outputDir, buildDir, emscriptenWasmBinaries, options, true)
+  readmeNodeInterface += typescriptBindings(
+    outputDir,
+    buildDir,
+    emscriptenWasmBinaries,
+    options,
+    true
+  )
   readme += readmeUsage
   readme += readmeBrowserInterface
   readme += readmeNodeInterface

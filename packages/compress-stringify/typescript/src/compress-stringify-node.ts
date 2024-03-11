@@ -12,6 +12,7 @@ import CompressStringifyNodeOptions from './compress-stringify-node-options.js'
 import CompressStringifyNodeResult from './compress-stringify-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Given a binary, compress and optionally base64 encode.
@@ -57,7 +58,7 @@ async function compressStringifyNode(
 
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'compress-stringify')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'compress-stringify')
 
   const {
     returnValue,

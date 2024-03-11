@@ -5,6 +5,7 @@ python/itkwasm-downsample-wasi/itkwasm_downsample_wasi/wasm_modules/
 typescript/dist/
 typescript/test/browser/demo-app/public/
 typescript/demo-app/
+typescript/src/version.ts
 test/pyodide-dispatch.tar.bz2
 test/pyodide-emscripten.tar.bz2
 test/data.tar.gz

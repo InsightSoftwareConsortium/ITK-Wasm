@@ -240,6 +240,10 @@ function cxxType(optionKind: string, optionType: string): string {
           return 'itk::wasm::InputBinaryStream'
         case 'TextStream':
           return 'itk::wasm::InputTextStream'
+        case 'BinaryFile':
+          return 'std::string'
+        case 'TextFile':
+          return 'std::string'
         case 'JsonCompatible':
           return 'itk::wasm::InputTextStream'
         case 'string':
@@ -274,6 +278,10 @@ function cxxType(optionKind: string, optionType: string): string {
           return 'itk::wasm::OutputBinaryStream'
         case 'TextStream':
           return 'itk::wasm::OutputTextStream'
+        case 'BinaryFile':
+          return 'std::string'
+        case 'TextFile':
+          return 'std::string'
         case 'JsonCompatible':
           return 'itk::wasm::OutputTextStream'
         case 'string':
@@ -334,6 +342,12 @@ function optionTypeSizeName(
       break
     case 'TextStream':
       result += `->type_name("${typeNamePrefix}TEXT_STREAM")`
+      break
+    case 'BinaryStream':
+      result += `->type_name("${typeNamePrefix}BINARY_FILE")`
+      break
+    case 'TextStream':
+      result += `->type_name("${typeNamePrefix}TEXT_FILE")`
       break
     case 'JsonCompatible':
       result += `->type_name("${typeNamePrefix}JSON")`

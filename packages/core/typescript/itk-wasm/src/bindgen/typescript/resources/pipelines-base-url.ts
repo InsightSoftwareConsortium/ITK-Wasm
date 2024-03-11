@@ -1,16 +1,17 @@
 // Generated file. To retain edits, remove this comment.
 
 import { getPipelinesBaseUrl as itkWasmGetPipelinesBaseUrl } from 'itk-wasm'
-import packageJson from './package.json'
+import version from './version.js'
 
 let pipelinesBaseUrl: string | URL | undefined
-let defaultPipelinesBaseUrl: string | URL = `https://cdn.jsdelivr.net/npm/<bindgenPackageName>@${packageJson.version}/dist/pipelines`
+let defaultPipelinesBaseUrl: string | URL =
+  `https://cdn.jsdelivr.net/npm/<bindgenPackageName>@${version}/dist/pipelines`
 
-export function setPipelinesBaseUrl (baseUrl: string | URL): void {
+export function setPipelinesBaseUrl(baseUrl: string | URL): void {
   pipelinesBaseUrl = baseUrl
 }
 
-export function getPipelinesBaseUrl (): string | URL {
+export function getPipelinesBaseUrl(): string | URL {
   if (typeof pipelinesBaseUrl !== 'undefined') {
     return pipelinesBaseUrl
   }

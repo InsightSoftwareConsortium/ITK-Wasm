@@ -13,6 +13,7 @@ import ReadImageDicomFileSeriesNodeOptions from './read-image-dicom-file-series-
 import ReadImageDicomFileSeriesNodeResult from './read-image-dicom-file-series-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Read a DICOM image series and return the associated image volume
@@ -61,7 +62,7 @@ async function readImageDicomFileSeriesNode(
     options.singleSortedSeries && args.push('--single-sorted-series')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'read-image-dicom-file-series')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'read-image-dicom-file-series')
 
   const {
     returnValue,

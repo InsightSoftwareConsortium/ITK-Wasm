@@ -13,6 +13,7 @@ import StlWriteMeshNodeOptions from './stl-write-mesh-node-options.js'
 import StlWriteMeshNodeResult from './stl-write-mesh-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Write an itk-wasm file format converted to an mesh file format
@@ -64,7 +65,7 @@ async function stlWriteMeshNode(
     options.binaryFileType && args.push('--binary-file-type')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'stl-write-mesh')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'stl-write-mesh')
 
   const {
     returnValue,

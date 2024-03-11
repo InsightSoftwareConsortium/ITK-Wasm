@@ -12,6 +12,7 @@ import ReadDicomEncapsulatedPdfNodeOptions from './read-dicom-encapsulated-pdf-n
 import ReadDicomEncapsulatedPdfNodeResult from './read-dicom-encapsulated-pdf-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Extract PDF file from DICOM encapsulated PDF.
@@ -94,7 +95,7 @@ async function readDicomEncapsulatedPdfNode(
     options.disableCorrection && args.push('--disable-correction')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'read-dicom-encapsulated-pdf')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'read-dicom-encapsulated-pdf')
 
   const {
     returnValue,

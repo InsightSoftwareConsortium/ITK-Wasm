@@ -12,6 +12,7 @@ import DownsampleBinShrinkNodeOptions from './downsample-bin-shrink-node-options
 import DownsampleBinShrinkNodeResult from './downsample-bin-shrink-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Apply local averaging and subsample the input image.
@@ -60,7 +61,7 @@ async function downsampleBinShrinkNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'downsample-bin-shrink')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'downsample-bin-shrink')
 
   const {
     returnValue,

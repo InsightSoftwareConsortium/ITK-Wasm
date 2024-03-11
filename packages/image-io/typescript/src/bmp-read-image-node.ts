@@ -13,6 +13,7 @@ import BmpReadImageNodeOptions from './bmp-read-image-node-options.js'
 import BmpReadImageNodeResult from './bmp-read-image-node-result.js'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Read an image file format and convert it to the itk-wasm file format
@@ -57,7 +58,7 @@ async function bmpReadImageNode(
     options.informationOnly && args.push('--information-only')
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'bmp-read-image')
+  const pipelinePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'pipelines', 'bmp-read-image')
 
   const {
     returnValue,
