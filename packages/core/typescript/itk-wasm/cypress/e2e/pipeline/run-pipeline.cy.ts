@@ -34,6 +34,18 @@ describe('runPipeline', () => {
     })
   })
 
+  it('fetches Wasm files from a custom URL and query params', () => {
+    cy.window().then(async (win) => {
+      const itk = win.itk
+
+      const args = []
+      const outputs = null
+      const inputs = null
+      const stdoutStderrPath = 'stdout-stderr-test'
+      const { webWorker, returnValue, stdout, stderr } = await itk.runPipeline(stdoutStderrPath, args, outputs, inputs, { pipelineBaseUrl, pipelineWorkerUrl, pipelineQueryParams: {key: 'value'} })
+    })
+  })
+
   it('fetches Wasm files from a custom pipelineBaseUrl string', () => {
     cy.window().then(async (win) => {
       const itk = win.itk

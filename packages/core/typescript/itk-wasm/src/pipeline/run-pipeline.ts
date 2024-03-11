@@ -25,6 +25,7 @@ import polyDataTransferables from './internal/poly-data-transferables.js'
 import TypedArray from '../typed-array.js'
 import RunPipelineWorkerResult from './web-workers/run-pipeline-worker-result.js'
 import { getPipelinesBaseUrl } from './pipelines-base-url.js'
+import { getPipelinesQueryParams } from './pipelines-query-params.js'
 import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 
 // To cache loaded pipeline modules
@@ -46,9 +47,18 @@ function defaultPipelinesBaseUrl (): string {
   return result as string
 }
 
+function defaultPipelinesQueryParams (): RunPipelineOptions['pipelineQueryParams'] {
+  let result = getPipelinesQueryParams()
+  if (typeof result === 'undefined') {
+    result = {}
+  }
+  return result
+}
+
 async function loadPipelineModule (
   pipelinePath: string | URL,
-  pipelineBaseUrl?: string | URL
+  pipelineBaseUrl?: string | URL,
+  pipelineQueryParams?: RunPipelineOptions['pipelineQueryParams']
 ): Promise<PipelineEmscriptenModule> {
   let moduleRelativePathOrURL: string | URL = pipelinePath as string
   let pipeline = pipelinePath as string
@@ -61,7 +71,8 @@ async function loadPipelineModule (
   } else {
     const pipelineModule = (await loadEmscriptenModuleMainThread(
       pipelinePath,
-      pipelineBaseUrl?.toString() ?? defaultPipelinesBaseUrl()
+      pipelineBaseUrl?.toString() ?? defaultPipelinesBaseUrl(),
+      pipelineQueryParams ?? defaultPipelinesQueryParams()
     )) as PipelineEmscriptenModule
     pipelineToModule.set(pipeline, pipelineModule)
     return pipelineModule
@@ -83,7 +94,11 @@ async function runPipeline (
   const webWorker = options?.webWorker ?? null
 
   if (webWorker === false) {
-    const pipelineModule = await loadPipelineModule(pipelinePath.toString(), options?.pipelineBaseUrl)
+    const pipelineModule = await loadPipelineModule(
+      pipelinePath.toString(),
+      options?.pipelineBaseUrl,
+      options?.pipelineQueryParams ?? defaultPipelinesQueryParams(),
+    )
     const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
     return result
   }
@@ -91,7 +106,9 @@ async function runPipeline (
   const pipelineWorkerUrl = options?.pipelineWorkerUrl ?? defaultPipelineWorkerUrl()
   const pipelineWorkerUrlString = typeof pipelineWorkerUrl !== 'string' && typeof pipelineWorkerUrl?.href !== 'undefined' ? pipelineWorkerUrl.href : pipelineWorkerUrl
   const { workerProxy, worker: usedWorker } = await createWorkerProxy(
-    worker as Worker | null, pipelineWorkerUrlString as string | undefined | null
+    worker as Worker | null,
+    pipelineWorkerUrlString as string | undefined | null,
+    options?.pipelineQueryParams ?? defaultPipelinesQueryParams(),
   )
   worker = usedWorker
   const transferables: Array<ArrayBuffer | TypedArray | null> = []
@@ -130,7 +147,8 @@ async function runPipeline (
     pipelineBaseUrlString as string,
     args,
     outputs,
-    transferedInputs
+    transferedInputs,
+    options?.pipelineQueryParams ?? defaultPipelinesQueryParams()
   )
   return {
     returnValue: result.returnValue,

@@ -3,6 +3,7 @@ import * as Comlink from 'comlink'
 import WorkerProxy from './web-workers/worker-proxy.js'
 import createWebWorker from './create-web-worker.js'
 import ItkWorker from './itk-worker.js'
+import RunPipelineOptions from './run-pipeline-options.js'
 
 interface createWorkerProxyResult {
   workerProxy: WorkerProxy
@@ -24,7 +25,7 @@ function workerToWorkerProxy (worker: Worker): createWorkerProxyResult {
 }
 
 // Internal function to create a web worker proxy
-async function createWorkerProxy (existingWorker: Worker | null, pipelineWorkerUrl?: string | null): Promise<createWorkerProxyResult> {
+async function createWorkerProxy (existingWorker: Worker | null, pipelineWorkerUrl?: string | null, queryParams?: RunPipelineOptions['pipelineQueryParams']): Promise<createWorkerProxyResult> {
   let workerProxy: WorkerProxy
   if (existingWorker != null) {
     // See if we have a worker promise attached the worker, if so reuse it. This ensures
@@ -38,7 +39,7 @@ async function createWorkerProxy (existingWorker: Worker | null, pipelineWorkerU
     }
   }
 
-  const worker = await createWebWorker(pipelineWorkerUrl)
+  const worker = await createWebWorker(pipelineWorkerUrl, queryParams)
 
   return workerToWorkerProxy(worker)
 }

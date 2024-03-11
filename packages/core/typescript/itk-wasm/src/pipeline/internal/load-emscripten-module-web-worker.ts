@@ -3,6 +3,8 @@ import axios from 'axios'
 import { ZSTDDecoder } from '@thewtex/zstddec'
 
 import ITKWasmEmscriptenModule from '../itk-wasm-emscripten-module.js'
+import RunPipelineOptions from '../run-pipeline-options.js'
+
 const decoder = new ZSTDDecoder()
 let decoderInitialized = false
 
@@ -10,7 +12,7 @@ let decoderInitialized = false
 //
 // baseUrl is usually taken from 'getPipelinesBaseUrl()', but a different value
 // could be passed.
-async function loadEmscriptenModuleWebWorker (moduleRelativePathOrURL: string | URL, baseUrl: string): Promise<ITKWasmEmscriptenModule> {
+async function loadEmscriptenModuleWebWorker (moduleRelativePathOrURL: string | URL, baseUrl: string, queryParams?: RunPipelineOptions['pipelineQueryParams']): Promise<ITKWasmEmscriptenModule> {
   let modulePrefix = null
   if (typeof moduleRelativePathOrURL !== 'string') {
     modulePrefix = moduleRelativePathOrURL.href
@@ -26,7 +28,7 @@ async function loadEmscriptenModuleWebWorker (moduleRelativePathOrURL: string | 
     modulePrefix = modulePrefix.substring(0, modulePrefix.length - 5)
   }
   const wasmBinaryPath = `${modulePrefix}.wasm`
-  const response = await axios.get(`${wasmBinaryPath}.zst`, { responseType: 'arraybuffer' })
+  const response = await axios.get(`${wasmBinaryPath}.zst`, { responseType: 'arraybuffer', params: queryParams })
   if (!decoderInitialized) {
     await decoder.init()
     decoderInitialized = true
