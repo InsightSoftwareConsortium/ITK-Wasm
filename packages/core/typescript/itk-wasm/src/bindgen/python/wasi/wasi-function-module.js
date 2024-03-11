@@ -180,7 +180,7 @@ from itkwasm import (
         const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
         if (interfaceType.includes('File')) {
           // for files
-          args += `            input_file = str(PurePosixPath(${snakeCase(parameter.name)}))\n`
+          args += `            input_file = str(PurePosixPath(value))\n`
           args += `            pipeline_inputs.append(PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(value)))\n`
           args += `            args.append(input_file)\n`
         } else if (interfaceType.includes('Stream')) {
