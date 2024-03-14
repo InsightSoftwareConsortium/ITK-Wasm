@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "pnpm copyShoelaceAssets && vite",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"No test specified\"",
     "build": "pnpm build:tsc && pnpm build:browser:workerEmbedded && pnpm build:browser:workerEmbeddedMin && pnpm build:demo",
     "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
     "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
