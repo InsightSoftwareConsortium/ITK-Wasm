@@ -5,7 +5,6 @@ packages:
   - 'examples/inputs-outputs/typescript'
   - 'examples/mean-squares-versor-registration'
   - 'examples/mean-squares-versor-registration/typescript'
-  - '!packages/core/typescript/itk-wasm/test/pipelines/typescript'
   - '!packages/core/typescript/create-itk-wasm/test/**'
   - '!**/src'
   - '!**/dist'

@@ -38,9 +38,9 @@ function configValue(
 
 async function downloadPyodide(unpackPath, pkg) {
   const pyodideDamCid =
-    'bafybeienencwyms2wzlzx6itqe4tw7rptocwaxihqf2sj6jej2hhoy7jxa'
+    'bafybeieoibjer4bhhfls53m34rjpyfyp54oxyqimceyaia2k7syosw4jtq'
   const pyodideDamUrls = [
-    'https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.158/pyodide-0.24.1-itkwasm-1.0b145-test-dist.tar.bz2'
+    'https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.171/pyodide-0.25.0-itkwasm-1.0b169-test-dist.tar.bz2'
   ]
   await damDownload(
     unpackPath,
