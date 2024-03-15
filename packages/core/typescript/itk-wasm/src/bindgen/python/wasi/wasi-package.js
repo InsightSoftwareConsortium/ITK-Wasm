@@ -47,7 +47,6 @@ function wasiPackage(outputDir, buildDir, wasmBinaries, options) {
   fs.writeFileSync(testInit, '')
   const commonSourcePath = bindgenResource(path.join('tests', 'common.py'))
   const commonModulePath = path.join(testDir, 'common.py')
-  console.log(commonSourcePath, commonModulePath)
   if (!fs.existsSync(commonModulePath)) {
     fs.copyFileSync(commonSourcePath, commonModulePath)
   }
@@ -72,7 +71,6 @@ function wasiPackage(outputDir, buildDir, wasmBinaries, options) {
     )
 
     const testPath = path.join(testDir, `test_${functionName}.py`)
-    console.log(testPath)
     const testContent = `from ${pypackage} import ${functionName}\n\nfrom .common import test_input_path, test_output_path\n\ndef test_${functionName}():\n    pass\n`
     writeIfOverrideNotPresent(testPath, testContent, '#')
   })
