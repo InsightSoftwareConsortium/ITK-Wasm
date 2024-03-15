@@ -1,0 +1,88 @@
+id: https://w3id.org/itk/wasm
+name: itk-wasm
+version: 0.1.0
+description: >-
+  The itk-wasm model provides FAIR definitions of the interface types that enable high-performance, portable, sustainable, and reproducible spatial analysis.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+prefixes:
+  itk: https://w3id.org/itk/
+  wasm: https://w3id.org/itk/wasm
+  linkml: https://w3id.org/linkml/
+imports:
+  - linkml:types
+default_range: string
+default_prefix: wasm
+
+classes:
+  InterfaceType:
+    tree_root: true
+    abstract: true
+    description: >-
+      An interface type is a higher-level type that represents the structure of data that can be passed between WebAssembly modules and the host environment.
+
+      The higher level abstract types that are defined in this model have an idiomatic and efficient representation in WebAssembly and programming languages that compile to or embed WebAssembly modules.
+
+      There are idiomatic representations and one-to-one mappings between:
+
+      - The WebAssembly Component Model Interface Types (WIT) (future)
+      - JSON encoding (future)
+      - C++ `itk::wasm` namespaced types in the ITK WebAssemblyInterface module
+      - Python `itkwasm` package types
+      - JavaScript `itk-wasm` package types
+      - Java package types (future)
+      - C# package types (future)
+    class_uri: wasm:InterfaceType
+
+  BinaryData:
+    abstract: true
+    description: >-
+      Represents a contiguous array of bytes.
+
+      The data in representations are encoded as:
+
+      - WIT: `list<u8>`
+      - JSON: Data URI `string` with base64 encoding, possible itk-wasm type and compression
+      - C++: C array on the heap
+      - Python: `numpy.ndarray`
+      - JavaScript: TypedArray
+    class_uri: wasm:BinaryData
+
+
+  TextFile:
+    abstract: true
+    is_a: InterfaceType
+    description: >-
+      Representation of a text file on a filesystem. For performance reasons, use TextStream when possible, instead of TextFile.
+    class_uri: wasm:TextFile
+    slots:
+      - path
+    attributes:
+      data:
+        description: >-
+          The content of the text file.
+        range: string
+        required: true
+
+  BinaryFile:
+    abstract: true
+    is_a: InterfaceType
+    description: >-
+      Representation of a binary file on a filesystem. For performance reasons, use BinaryStream when possible, instead of BinaryFile.
+    class_uri: wasm:BinaryFile
+    slots:
+      - path
+    attributes:
+      data:
+        description: >-
+          The content of the binary file.
+        range: BinaryData
+        required: true
+
+slots:
+  path:
+    description: >-
+      The filename.
+    range: string
+    required: true
+
+enums:
