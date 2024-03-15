@@ -9,7 +9,7 @@ defaults:
 jobs:
 
   test-cypress:
-    name: itk-wasm browser tests
+    name: itk-wasm reference packages browser tests
     runs-on: ubuntu-22.04
     strategy:
       max-parallel: 3
@@ -63,17 +63,6 @@ jobs:
           start: pnpm start
           config: video=true
 
-      - name: Test itk-wasm with Chrome
-        uses: cypress-io/github-action@v6
-        with:
-          browser: chrome
-          working-directory: packages/core/typescript/itk-wasm
-          install: false
-          start: pnpm start
-          config: video=true
-          wait-on: 'http://localhost:5173'
-          wait-on-timeout: 360
-
       - uses: actions/upload-artifact@v3
         if: always()
         with:
@@ -95,4 +84,71 @@ jobs:
         with:
           name: cypress-screenshots
           path: packages/${{ matrix.package }}/typescript/cypress/screenshots
+          if-no-files-found: ignore
+
+  test-itk-wasm-cypress:
+    name: itk-wasm browser tests
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          large-packages: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: true
+
+      - name: Build itk-wasm
+        run: |
+          pnpm run --aggregate-output --filter itk-wasm build
+          # Test deps
+          pnpm run --aggregate-output --filter "@itk-wasm/mesh-io" build
+          pnpm run --aggregate-output --filter "@itk-wasm/image-io" build
+
+      - name: Test itk-wasm with Chrome
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          working-directory: packages/core/typescript/itk-wasm
+          install: false
+          start: pnpm start
+          config: video=true
+          wait-on: 'http://localhost:5173'
+          wait-on-timeout: 360
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-videos
+          path: packages/core/typescript/itk-wasm/cypress/videos
+          if-no-files-found: ignore
+
+      - name: Test with Firefox
+        if: ${{ matrix.package != 'dicom' }}
+        uses: cypress-io/github-action@v6
+        with:
+          browser: firefox
+          working-directory: packages/core/typescript/itk-wasm
+          install: false
+          config: video=true
+          start: pnpm start
+          wait-on: 'http://localhost:5173'
+          wait-on-timeout: 360
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: packages/core/typescript/itk-wasm/cypress/videos
           if-no-files-found: ignore
