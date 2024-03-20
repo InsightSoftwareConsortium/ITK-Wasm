@@ -41,7 +41,7 @@ classes:
       The data in representations are encoded as:
 
       - WIT: `list<u8>`
-      - JSON: Data URI `string` with base64 encoding, possible itk-wasm type and compression
+      - JSON: Data URI `string` with base64 encoding, zstd compression, 'data:application/zstd;base64,[...]'
       - C++: C array on the heap
       - Python: `numpy.ndarray`
       - JavaScript: TypedArray
@@ -104,6 +104,174 @@ classes:
         range: BinaryData
         required: true
 
+  StringList:
+    description: >-
+      Representatijkjon of a sequence of strings.
+    class_uri: wasm:StringList
+    attributes:
+      values:
+        description: >-
+          The content of the string sequence.
+        range: string
+        multivalued: true
+        required: true
+        inlined_as_list: true
+
+  IntegerList:
+    description: >-
+      Representation of a sequence of integers.
+    class_uri: wasm:IntegerList
+    attributes:
+      values:
+        description: >-
+          The content of the integer sequence.
+        range: integer
+        multivalued: true
+        required: true
+        inlined_as_list: true
+
+  FloatList:
+    description: >-
+      Representation of a sequence of floats.
+    class_uri: wasm:FloatList
+    attributes:
+      values:
+        description: >-
+          The content of the float sequence.
+        range: float
+        multivalued: true
+        required: true
+        inlined_as_list: true
+
+  DoubleList:
+    description: >-
+      Representation of a sequence of doubles.
+    class_uri: wasm:DoubleList
+    attributes:
+      values:
+        description: >-
+          The content of the double sequence.
+        range: double
+        multivalued: true
+        required: true
+        inlined_as_list: true
+
+  MetadataEntry:
+    description: >-
+      Representation of a metadata entry.
+    class_uri: wasm:MetadataEntry
+    attributes:
+      key:
+        description: >-
+          The key of the metadata entry.
+        range: string
+        key: true
+        required: true
+      value:
+        description: >-
+          The value of the metadata entry.
+        any_of:
+          - range: string
+          - range: integer
+          - range: float
+          - range: double
+          - range: boolean
+          - range: StringList
+          - range: IntegerList
+          - range: FloatList
+          - range: DoubleList
+          # TODO: And Lists of Lists, seems to not be available in LinkML yet per https://github.com/linkml/linkml-arrays/issues/7 and others.
+          # See itkMetaDataDictionaryJSON.cxx
+        required: true
+
+  Metadata:
+    description: >-
+      Representation of metadata.
+    class_uri: wasm:Metadata
+    attributes:
+      entries:
+        description: >-
+          The content of the metadata.
+        range: MetadataEntry
+        multivalued: true
+        required: true
+        inlined: true
+        inlined_as_list: true
+
+  ImageType:
+    description: >-
+      Representation of an N-dimensional scientific image type.
+    class_uri: wasm:ImageType
+    slots:
+      - dimension
+      - componentType
+      - pixelType
+      - components
+
+  Image:
+    is_a: InterfaceType
+    description: >-
+      Representation of an N-dimensional scientific image.
+    class_uri: wasm:Image
+    attributes:
+      imageType:
+        description: >-
+          The type of the image.
+        range: ImageType
+        required: true
+      name:
+        description: >-
+          The name of the image.
+        range: string
+        required: true
+      origin:
+        description: >-
+          Location of the center of the first pixel in physical space.
+
+          x, y, z, ... order.
+        range: double
+        multivalued: true
+        required: true
+      spacing:
+        description: >-
+          Size of a pixel in physical space.
+
+          x, y, z, ... order.
+        range: double
+        multivalued: true
+        required: true
+      direction:
+        description: >-
+          Orientation of the pixel grid in physical space.
+
+          Encoded as float64 binary data in column-major order of length NxN where N is the spatial dimension of the image.
+          x, y, z, ... order.
+        range: BinaryData
+        implements:
+          - linkml:ColumnOrderedArray
+        required: true
+      size:
+        description: >-
+          The number of image pixels in each dimension.
+
+          x, y, z, ... order.
+        range: integer
+        multivalued: true
+        required: true
+      metadata:
+        description: >-
+          Metadata for the image.
+        range: string
+        required: true
+      data:
+        description: >-
+          Content of the image pixels.
+
+          Encoded in column-major order, i.e. contiguous x. Multi-component pixels are interleaved.
+        range: BinaryData
+        implements:
+          - linkml:ColumnOrderedArray
+
 slots:
   path:
     description: >-
@@ -111,4 +279,72 @@ slots:
     range: string
     required: true
 
+  dimension:
+    description: >-
+      The number of spatial dimensions.
+    range: integer
+    required: true
+    ifabsent: int(2)
+
+  componentType:
+    description: >-
+      The type of binary data components in a pixel.
+    any_of:
+      - range: IntTypes
+      - range: FloatTypes
+    required: true
+
+  pixelType:
+    description: >-
+      The type of the pixel or attribute.
+    range: PixelTypes
+    required: true
+
+  components:
+    description: >-
+      The wumber of components in a pixels.
+    range: integer
+    required: true
+    ifabsent: int(1)
+
 enums:
+  IntTypes:
+    description: >-
+      The integer types.
+    permissible_values:
+      int8:
+      uint8:
+      int16:
+      uint16:
+      int32:
+      uint32:
+      int64:
+      uint64:
+
+  FloatTypes:
+    description: >-
+      The float types.
+    permissible_values:
+      float32:
+      float64:
+
+  PixelTypes:
+    description: >-
+      The pixel or attribute types.
+    permissible_values:
+      Unknown:
+      Scalar:
+      RGB:
+      RGBA:
+      Offset:
+      Vector:
+      Point:
+      CovariantVector:
+      SymmetricSecondRankTensor:
+      DiffusionTensor3D:
+      Complex:
+      FixedArray:
+      Array:
+      Matrix:
+      VariableLengthVector:
+      VariableSizeMatrix:
