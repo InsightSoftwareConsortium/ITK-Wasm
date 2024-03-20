@@ -78,6 +78,32 @@ classes:
         range: BinaryData
         required: true
 
+  TextStream:
+    abstract: true
+    is_a: InterfaceType
+    description: >-
+      Representation of a text stream. For performance reasons, use TextStream when possible, instead of TextFile.
+    class_uri: wasm:TextStream
+    attributes:
+      data:
+        description: >-
+          The content of the text stream.
+        range: string
+        required: true
+
+  BinaryStream:
+    abstract: true
+    is_a: InterfaceType
+    description: >-
+      Representation of a binary stream. For performance reasons, use BinaryStream when possible, instead of BinaryFile.
+    class_uri: wasm:BinaryStream
+    attributes:
+      data:
+        description: >-
+          The content of the binary stream.
+        range: BinaryData
+        required: true
+
 slots:
   path:
     description: >-
