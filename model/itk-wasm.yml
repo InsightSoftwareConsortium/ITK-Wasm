@@ -40,11 +40,11 @@ classes:
 
       The data in representations are encoded as:
 
-      - WIT: `list<u8>`
-      - JSON: Data URI `string` with base64 encoding, zstd compression, 'data:application/zstd;base64,[...]'
-      - C++: C array on the heap
-      - Python: `numpy.ndarray`
-      - JavaScript: TypedArray
+        - WIT: `list<u8>`
+        - JSON: Data URI `string` with base64 encoding, zstd compression, 'data:application/zstd;base64,[...]'
+        - C++: C array on the heap
+        - Python: `numpy.ndarray`
+        - JavaScript: TypedArray
     class_uri: wasm:BinaryData
 
 
@@ -216,12 +216,12 @@ classes:
     attributes:
       imageType:
         description: >-
-          The type of the image.
+          Type of the image.
         range: ImageType
         required: true
       name:
         description: >-
-          The name of the image.
+          Name of the image.
         range: string
         required: true
       origin:
@@ -252,7 +252,7 @@ classes:
         required: true
       size:
         description: >-
-          The number of image pixels in each dimension.
+          Number of image pixels in each dimension.
 
           x, y, z, ... order.
         range: integer
@@ -303,49 +303,49 @@ classes:
         required: true
       name:
         description: >-
-          The name of the mesh.
+          Name of the mesh.
         range: string
         required: true
       numberOfPoints:
         description: >-
-          The number of points in the mesh.
+          Number of points in the mesh.
         range: integer
         required: true
       points:
         description: >-
-          The spatial coordinates of the points.
+          Spatial coordinates of the points.
         range: BinaryData
       numberOfPointPixels:
         description: >-
-          The number of point data attributes.
+          Number of point data attributes.
         range: integer
         required: true
       pointData:
         description: >-
-          The point data attributes.
+          Point data attributes.
         range: BinaryData
       numberOfCells:
         description: >-
-          The number of cells in the mesh.
+          Number of cells in the mesh.
         range: integer
         required: true
       cells:
         description: >-
-          The connectivity of the cells.
+          Connectivity of the cells.
         range: BinaryData
       cellBufferSize:
         description: >-
-          The size of the cell buffer.
+          Size of the cell buffer.
         range: integer
         required: true
       numberOfCellPixels:
         description: >-
-          The number of cell data attributes.
+          Number of cell data attributes.
         range: integer
         required: true
       cellData:
         description: >-
-          The cell data attributes.
+          Cell data attributes.
         range: BinaryData
 
   PolyData:
@@ -356,53 +356,53 @@ classes:
     attributes:
       name:
         description: >-
-          The name of the polydata.
+          Name of the polydata.
         range: string
         required: true
       numberOfPoints:
         description: >-
-          The number of points in the polydata.
+          Number of points in the polydata.
         range: integer
         required: true
       points:
         description: >-
-          The spatial coordinates of the points. Binary data with float32 components.
+          Spatial coordinates of the points. Binary data with float32 components.
         range: BinaryData
       linesBufferSize:
         description: >-
-          The size of the lines buffer.
+          Size of the lines buffer.
         range: integer
         required: true
       lines:
         description: >-
-          The connectivity of the lines. Binary data with int32 components.
+          Connectivity of the lines. Binary data with int32 components.
         range: BinaryData
       polygonsBufferSize:
         description: >-
-          The size of the polygons buffer.
+          Size of the polygons buffer.
         range: integer
         required: true
       polygons:
         description: >-
-          The connectivity of the polygons. Binary data with int32 components.
+          Connectivity of the polygons. Binary data with int32 components.
         range: BinaryData
       numberOfPointPixels:
         description: >-
-          The number of point data attributes.
+          Number of point data attributes.
         range: integer
         required: true
       pointData:
         description: >-
-          The point data attributes.
+          Point data attributes.
         range: BinaryData
       numberOfCellPixels:
         description: >-
-          The number of cell data attributes.
+          Number of cell data attributes.
         range: integer
         required: true
       cellData:
         description: >-
-          The cell data attributes.
+          Cell data attributes.
         range: BinaryData
 
   JsonCompatible:
@@ -414,20 +414,20 @@ classes:
 slots:
   path:
     description: >-
-      The filename.
+      The filename or path.
     range: string
     required: true
 
   dimension:
     description: >-
-      The number of spatial dimensions.
+      Number of spatial dimensions.
     range: integer
     required: true
     ifabsent: int(2)
 
   componentType:
     description: >-
-      The type of binary data components in a pixel.
+      Type of binary data components in a pixel.
     any_of:
       - range: IntTypes
       - range: FloatTypes
@@ -435,26 +435,26 @@ slots:
 
   pixelType:
     description: >-
-      The type of the pixel or attribute.
+      Type of the pixel or attribute.
     range: PixelTypes
     required: true
 
   components:
     description: >-
-      The wumber of components in a pixels.
+      Number of components in a pixels.
     range: integer
     required: true
     ifabsent: int(1)
 
   pointComponentType:
     description: >-
-      The type of binary data components in a point. Typically float32.
+      Type of binary data components in a point. Typically float32.
     range: FloatTypes
     required: true
 
   pointPixelComponentType:
     description: >-
-      The type of binary data components associated with a point data attribute.
+      Type of binary data components associated with a point data attribute.
     any_of:
       - range: IntTypes
       - range: FloatTypes
@@ -462,26 +462,26 @@ slots:
 
   pointPixelType:
     description: >-
-      The type of the point data attribute.
+      Type of the point data attribute.
     range: PixelTypes
     required: true
 
   pointPixelComponents:
     description: >-
-      The number of components in a point data attribute.
+      Number of components in a point data attribute.
     range: integer
     required: true
     ifabsent: int(1)
 
   cellComponentType:
     description: >-
-      The type of binary data components used to represent a cell. Typically int32.
+      Type of binary data components used to represent a cell. Typically int32.
     range: IntTypes
     required: true
 
   cellPixelComponentType:
     description: >-
-      The type of binary data components associated with a cell data attribute.
+      Type of binary data components associated with a cell data attribute.
     any_of:
       - range: IntTypes
       - range: FloatTypes
@@ -489,13 +489,13 @@ slots:
 
   cellPixelType:
     description: >-
-      The type of the cell data attribute.
+      Type of the cell data attribute.
     range: PixelTypes
     required: true
 
   cellPixelComponents:
     description: >-
-      The number of components in a cell data attribute.
+      Number of components in a cell data attribute.
     range: integer
     required: true
     ifabsent: int(1)
@@ -503,7 +503,7 @@ slots:
 enums:
   IntTypes:
     description: >-
-      The integer types.
+      Integer types.
     permissible_values:
       int8:
       uint8:
@@ -516,14 +516,14 @@ enums:
 
   FloatTypes:
     description: >-
-      The float types.
+      Float types.
     permissible_values:
       float32:
       float64:
 
   PixelTypes:
     description: >-
-      The pixel or attribute types.
+      Pixel or attribute types.
     permissible_values:
       Unknown:
       Scalar:
