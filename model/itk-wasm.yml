@@ -347,6 +347,62 @@ classes:
           The cell data attributes.
         range: BinaryData
 
+  PolyData:
+    description: >-
+      Representation of a polydata, 3D geometric data for rendering that represents a collection of points, lines, polygons, and/or triangle strips.
+    class_uri: wasm:PolyData
+    attributes:
+      name:
+        description: >-
+          The name of the polydata.
+        range: string
+        required: true
+      numberOfPoints:
+        description: >-
+          The number of points in the polydata.
+        range: integer
+        required: true
+      points:
+        description: >-
+          The spatial coordinates of the points. Binary data with float32 components.
+        range: BinaryData
+      linesBufferSize:
+        description: >-
+          The size of the lines buffer.
+        range: integer
+        required: true
+      lines:
+        description: >-
+          The connectivity of the lines. Binary data with int32 components.
+        range: BinaryData
+      polygonsBufferSize:
+        description: >-
+          The size of the polygons buffer.
+        range: integer
+        required: true
+      polygons:
+        description: >-
+          The connectivity of the polygons. Binary data with int32 components.
+        range: BinaryData
+      numberOfPointPixels:
+        description: >-
+          The number of point data attributes.
+        range: integer
+        required: true
+      pointData:
+        description: >-
+          The point data attributes.
+        range: BinaryData
+      numberOfCellPixels:
+        description: >-
+          The number of cell data attributes.
+        range: integer
+        required: true
+      cellData:
+        description: >-
+          The cell data attributes.
+        range: BinaryData
+
 slots:
   path:
     description: >-
