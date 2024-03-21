@@ -106,7 +106,7 @@ classes:
 
   StringList:
     description: >-
-      Representatijkjon of a sequence of strings.
+      Representation of a sequence of strings.
     class_uri: wasm:StringList
     attributes:
       values:
@@ -272,6 +272,81 @@ classes:
         implements:
           - linkml:ColumnOrderedArray
 
+  MeshType:
+    description: >-
+      Representation of a mesh type. Here "Pixel" refers to the data attributes associated with the mesh.
+    class_uri: wasm:MeshType
+    slots:
+      - dimension
+      - pointComponentType
+      - pointPixelComponentType
+      - pointPixelType
+      - pointPixelComponents
+      - cellComponentType
+      - cellPixelComponentType
+      - cellPixelType
+      - cellPixelComponents
+      - cellPixelComponentType
+      - cellPixelType
+      - cellPixelComponents
+
+  Mesh:
+    description: >-
+      Representation of an N-dimensional mesh.
+    class_uri: wasm:Mesh
+    attributes:
+      meshType:
+        description: >-
+          The type of the mesh.
+        range: MeshType
+        required: true
+      name:
+        description: >-
+          The name of the mesh.
+        range: string
+        required: true
+      numberOfPoints:
+        description: >-
+          The number of points in the mesh.
+        range: integer
+        required: true
+      points:
+        description: >-
+          The spatial coordinates of the points.
+        range: BinaryData
+      numberOfPointPixels:
+        description: >-
+          The number of point data attributes.
+        range: integer
+        required: true
+      pointData:
+        description: >-
+          The point data attributes.
+        range: BinaryData
+      numberOfCells:
+        description: >-
+          The number of cells in the mesh.
+        range: integer
+        required: true
+      cells:
+        description: >-
+          The connectivity of the cells.
+        range: BinaryData
+      cellBufferSize:
+        description: >-
+          The size of the cell buffer.
+        range: integer
+        required: true
+      numberOfCellPixels:
+        description: >-
+          The number of cell data attributes.
+        range: integer
+        required: true
+      cellData:
+        description: >-
+          The cell data attributes.
+        range: BinaryData
+
 slots:
   path:
     description: >-
@@ -303,6 +378,60 @@ slots:
   components:
     description: >-
       The wumber of components in a pixels.
+    range: integer
+    required: true
+    ifabsent: int(1)
+
+  pointComponentType:
+    description: >-
+      The type of binary data components in a point. Typically float32.
+    range: FloatTypes
+    required: true
+
+  pointPixelComponentType:
+    description: >-
+      The type of binary data components associated with a point data attribute.
+    any_of:
+      - range: IntTypes
+      - range: FloatTypes
+    required: true
+
+  pointPixelType:
+    description: >-
+      The type of the point data attribute.
+    range: PixelTypes
+    required: true
+
+  pointPixelComponents:
+    description: >-
+      The number of components in a point data attribute.
+    range: integer
+    required: true
+    ifabsent: int(1)
+
+  cellComponentType:
+    description: >-
+      The type of binary data components used to represent a cell. Typically int32.
+    range: IntTypes
+    required: true
+
+  cellPixelComponentType:
+    description: >-
+      The type of binary data components associated with a cell data attribute.
+    any_of:
+      - range: IntTypes
+      - range: FloatTypes
+    required: true
+
+  cellPixelType:
+    description: >-
+      The type of the cell data attribute.
+    range: PixelTypes
+    required: true
+
+  cellPixelComponents:
+    description: >-
+      The number of components in a cell data attribute.
     range: integer
     required: true
     ifabsent: int(1)
