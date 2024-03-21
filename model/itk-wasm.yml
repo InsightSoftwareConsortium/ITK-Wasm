@@ -293,6 +293,7 @@ classes:
   Mesh:
     description: >-
       Representation of an N-dimensional mesh.
+    is_a: InterfaceType
     class_uri: wasm:Mesh
     attributes:
       meshType:
@@ -350,6 +351,7 @@ classes:
   PolyData:
     description: >-
       Representation of a polydata, 3D geometric data for rendering that represents a collection of points, lines, polygons, and/or triangle strips.
+    is_a: InterfaceType
     class_uri: wasm:PolyData
     attributes:
       name:
@@ -402,6 +404,12 @@ classes:
         description: >-
           The cell data attributes.
         range: BinaryData
+
+  JsonCompatible:
+    is_a: InterfaceType
+    description: >-
+      A type that can be represented in JSON.
+    class_uri: wasm:JsonCompatible
 
 slots:
   path:
