@@ -3,38 +3,52 @@ from itkwasm_dicom_wasi import image_sets_normalization
 from .common import test_input_path, test_output_path
 
 
+orientation_series = [
+    test_input_path / "DicomImageOrientationTest" / "ImageOrientation.1.dcm",
+    test_input_path / "DicomImageOrientationTest" / "ImageOrientation.2.dcm",
+    test_input_path / "DicomImageOrientationTest" / "ImageOrientation.3.dcm",
+]
+
+mr_series = [
+    test_input_path / "dicom-images" / "MR" / "1-001.dcm",
+    test_input_path / "dicom-images" / "MR" / "1-002.dcm",
+    test_input_path / "dicom-images" / "MR" / "1-003.dcm",
+    test_input_path / "dicom-images" / "MR" / "1-004.dcm",
+    test_input_path / "dicom-images" / "MR" / "1-005.dcm",
+]
+
+
 def test_one_series():
+    assert orientation_series[0].exists()
+    out_of_order = [
+        orientation_series[1],
+        orientation_series[2],
+        orientation_series[0],
+    ]
+    image_sets = image_sets_normalization(out_of_order)
+    assert image_sets
+    instances = list(image_sets[0]["Study"]["Series"].values())[0]["Instances"].values()
+    sorted_files = [instance["FileName"] for instance in instances]
+    assert all(
+        file == str(path) for file, path in zip(sorted_files, orientation_series)
+    )
+
+
+def test_two_series():
     files = [
-        test_input_path / "DicomImageOrientationTest" / "ImageOrientation.3.dcm",
-        test_input_path / "DicomImageOrientationTest" / "ImageOrientation.1.dcm",
-        test_input_path / "DicomImageOrientationTest" / "ImageOrientation.2.dcm",
+        orientation_series[1],
+        orientation_series[2],
+        orientation_series[0],
+        mr_series[3],
+        mr_series[0],
+        mr_series[4],
+        mr_series[2],
+        mr_series[1],
     ]
     assert files[0].exists()
     image_sets = image_sets_normalization(files)
-    print(image_sets)
-    assert image_sets
-    sorted_files = list(image_sets.values())[0]
-    assert sorted_files == [
-        str(files[1]),
-        str(files[2]),
-        str(files[0]),
-    ]
+    assert len(image_sets) == 2
 
-# def test_two_series():
-#     files = [
-#         test_input_path / "DicomImageOrientationTest" / "ImageOrientation.3.dcm",
-#         test_input_path / "DicomImageOrientationTest" / "ImageOrientation.1.dcm",
-#         test_input_path / "DicomImageOrientationTest" / "ImageOrientation.2.dcm",
-#         test_input_path / "dicom-images" / "MR" / "1-001.dcm",
-#         test_input_path / "dicom-images" / "MR" / "1-002.dcm",
-#         test_input_path / "dicom-images" / "MR" / "1-003.dcm",
-#         test_input_path / "dicom-images" / "MR" / "1-004.dcm",
-#         test_input_path / "dicom-images" / "MR" / "1-005.dcm",
-#     ]
-#     assert files[0].exists()
-#     image_sets = image_sets_normalization(files)
-#     assert image_sets
-#     assert len(image_sets.keys()) == 2
 
 # def test_strange_ct():
 #     files = [
