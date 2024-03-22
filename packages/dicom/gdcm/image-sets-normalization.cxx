@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
       instance.AddMember("DICOM", instanceTagsJson, allocator);
       rapidjson::Value fileNameValue;
       fileNameValue.SetString(fileName.c_str(), fileName.size(), allocator);
-      instance.AddMember("fileName", fileNameValue, allocator);
+      instance.AddMember("FileName", fileNameValue, allocator);
 
       // instance by UID under instances
       itk::DICOMTagReader::TagMapType::iterator it = dicomTags.find("0008|0018");
@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
     rapidjson::Value series(rapidjson::kObjectType);
     series.AddMember("DICOM", seriesTags, allocator);
     series.AddMember("Instances", instances, allocator);
-    // series by ID under study
+    // series by ID object
     itk::DICOMTagReader::TagMapType::iterator it = dicomTags.find("0020|000e");
     if (it == dicomTags.end())
     {

@@ -84,7 +84,6 @@ namespace gdcm
 
         void ProcessAIOP(Scanner const &, Directory::FilenamesType const &subset, const char *iopval)
         {
-            std::cout << "IOP: " << iopval << std::endl;
             IPPSorter ipp;
             ipp.SetComputeZSpacing(true);
             ipp.SetZSpacingTolerance(1e-3); // ??
@@ -103,7 +102,6 @@ namespace gdcm
                 UnsortedFiles.push_back(subset);
                 return;
             }
-            ipp.Print(std::cout);
             SortedFiles.push_back(ipp.GetFilenames());
         }
 
@@ -120,7 +118,6 @@ namespace gdcm
                 Directory::FilenamesType::const_iterator file = files.begin();
                 file != files.end(); ++file)
             {
-                // std::cout << *file << std::endl;
                 const char *value = s.GetValue(file->c_str(), gdcm::t4);
                 assert(value);
                 iopset.insert(value);
@@ -132,7 +129,6 @@ namespace gdcm
                 return;
             }
 
-            std::cout << "Frame of Ref: " << frameuid << std::endl;
             if (n == 1)
             {
                 ProcessAIOP(s, files, iopset.begin()->c_str());
@@ -183,7 +179,6 @@ namespace gdcm
 
         void ProcessASeries(Scanner const &s, const char *seriesuid)
         {
-            std::cout << "Series: " << seriesuid << std::endl;
             // let's find all files belonging to this series:
             Directory::FilenamesType seriesfiles = GetAllFilenamesFromTagToValue(
                 s, s.GetFilenames(), t2, seriesuid);
@@ -198,7 +193,6 @@ namespace gdcm
 
         void ProcessAStudy(Scanner const &s, const char *studyuid)
         {
-            std::cout << "Study: " << studyuid << std::endl;
             gdcm::Scanner::ValuesType vt2 = s.GetValues(t2);
             for (
                 gdcm::Scanner::ValuesType::const_iterator it = vt2.begin(); it != vt2.end(); ++it)
