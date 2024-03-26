@@ -503,7 +503,7 @@ namespace itk
     {
     public:
         using MetaDictType = itk::MetaDataDictionary;
-        using TagMapType = std::map<std::string, std::string>;
+        using TagMapType = std::unordered_map<std::string, std::string>;
 
         DICOMTagReader()
             : m_dirtyCache(true)
