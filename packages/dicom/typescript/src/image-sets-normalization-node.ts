@@ -37,8 +37,8 @@ async function imageSetsNormalizationNode(
   const args = []
   // Inputs
   // Outputs
-  const imageSetsMetadataName = '0'
-  args.push(imageSetsMetadataName)
+  const imageSetsName = '0'
+  args.push(imageSetsName)
 
   // Options
   args.push('--memory-io')
@@ -66,7 +66,7 @@ async function imageSetsNormalizationNode(
   }
 
   const result = {
-    imageSetsMetadata: outputs[0]?.data as JsonCompatible,
+    imageSets: outputs[0]?.data as JsonCompatible,
   }
   return result
 }

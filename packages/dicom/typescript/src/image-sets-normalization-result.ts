@@ -4,7 +4,7 @@ import { JsonCompatible, WorkerPoolFunctionResult } from 'itk-wasm'
 
 interface ImageSetsNormalizationResult extends WorkerPoolFunctionResult {
   /** Image sets JSON */
-  imageSetsMetadata: JsonCompatible
+  imageSets: JsonCompatible
 
 }
 
