@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=dockcross/web-wasm
-FROM $BASE_IMAGE:20230622-7312d8f
+FROM $BASE_IMAGE:20240326-00e7558
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
@@ -93,7 +93,7 @@ RUN mkdir ITK-build && \
     -DDO_NOT_BUILD_ITK_TEST_DRIVER:BOOL=ON \
     -DOPJ_USE_THREAD:BOOL=OFF \
     -DDCMTK_WITH_THREADS:BOOL=OFF \
-    -DDCMTK_BUILD_APPS:BOOL=ON \
+    -DDCMTK_BUILD_APPS:BOOL=OFF \
     -DNO_FLOAT_EXCEPTIONS:BOOL=ON \
     ../ITK && \
   ninja && \

@@ -14,7 +14,7 @@ pnpm i
 #
 #   echo $(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 #
-./src/docker/build.sh --with-debug
+./src/docker/build.sh --with-debug --multiarch
 # DockerHub credential environmental variables must be set
 ./src/docker/push.sh
 git add -- packages/core/typescript/itk-wasm/src/cli/default-image-tag.js
