@@ -18,55 +18,24 @@
 #include "itkPipeline.h"
 #include "itkOutputTextStream.h"
 
+#include "gdcmDiscriminateVolume.h"
+#include "DICOMTagReader.h"
+#include "Tags.h"
+
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
-#include "gdcmDiscriminateVolume.h"
-#include "DICOMTagReader.h"
+#include <unordered_set>
 
-const std::set<std::string> PATIENT_TAGS = {
-    "0010|0010", // Patient's Name
-    "0010|0020", // Patient ID
-    "0010|0030", // Patient's Birth Date
-    "0010|0040", // Patient's Sex
-    "0010|1010", // Patient's Age
-    "0010|1030", // Patient's Weight
-    "0010|21b0", // Additional Patient's History
-};
+const std::string STUDY_INSTANCE_UID = "0020|000D";
+const std::string SERIES_INSTANCE_UID = "0020|000e";
 
-const std::set<std::string> STUDY_TAGS = {
-    "0008|0020", // Study Date
-    "0008|0030", // Study Time
-    "0008|1030", // Study Description
-    "0008|0050", // Accession Number
-};
+using File = std::string;
+using TagValues = itk::DICOMTagReader::TagMapType;
+using FileToTags = std::unordered_map<File, TagValues>;
 
-const std::set<std::string> SERIES_TAGS = {
-    "0020|000e", // Series Instance UID
-    "0008|103e", // Series Description
-    "0008|0060", // Modality
-};
-
-const std::set<std::string> NON_INSTANCE_TAGS = {
-    "0010|0010", // Patient's Name
-    "0010|0020", // Patient ID
-    "0010|0030", // Patient's Birth Date
-    "0010|0040", // Patient's Sex
-    "0010|1010", // Patient's Age
-    "0010|1030", // Patient's Weight
-    "0010|21b0", // Additional Patient's History
-    "0008|0020", // Study Date
-    "0008|0030", // Study Time
-    "0008|1030", // Study Description
-    "0008|0050", // Accession Number
-    "0020|000e", // Series Instance UID
-    "0008|103e", // Series Description
-    "0008|0060", // Modality
-};
-
-
-rapidjson::Value mapToJsonObj(const itk::DICOMTagReader::TagMapType &tags,  rapidjson::Document::AllocatorType &allocator)
+rapidjson::Value mapToJsonObj(const TagValues &tags, rapidjson::Document::AllocatorType &allocator)
 {
   rapidjson::Value json(rapidjson::kObjectType);
   for (const auto &[tag, value] : tags)
@@ -80,9 +49,9 @@ rapidjson::Value mapToJsonObj(const itk::DICOMTagReader::TagMapType &tags,  rapi
   return json;
 }
 
-itk::DICOMTagReader::TagMapType filterTags(const itk::DICOMTagReader::TagMapType &tags, const std::set<std::string> &keeperTagKeys)
+TagValues filterTags(const TagValues &tags, const Tags &keeperTagKeys)
 {
-  itk::DICOMTagReader::TagMapType filteredTags;
+  TagValues filteredTags;
   for (const auto &tagName : keeperTagKeys)
   {
     const auto it = tags.find(tagName);
@@ -94,10 +63,199 @@ itk::DICOMTagReader::TagMapType filterTags(const itk::DICOMTagReader::TagMapType
   return filteredTags;
 }
 
-rapidjson::Value jsonFromTags(const itk::DICOMTagReader::TagMapType &tags, const std::set<std::string> &tagKeys, rapidjson::Document::AllocatorType &allocator)
+rapidjson::Value jsonFromTags(const TagValues &tags, const Tags &tagKeys, rapidjson::Document::AllocatorType &allocator)
 {
-  const itk::DICOMTagReader::TagMapType filteredTags = filterTags(tags, tagKeys);
+  const TagValues filteredTags = filterTags(tags, tagKeys);
   return mapToJsonObj(filteredTags, allocator);
+}
+
+using DicomFile = std::pair<const File, const TagValues>;
+struct dicomFileHash
+{
+  std::size_t operator()(const DicomFile &dFile) const
+  {
+    return std::hash<File>{}(dFile.first);
+  }
+};
+using DicomFiles = std::unordered_set<DicomFile, dicomFileHash>;
+
+DicomFiles readTags(const std::vector<File> &files)
+{
+  DicomFiles dicomFiles;
+  itk::DICOMTagReader tagReader;
+  for (const File &fileName : files)
+  {
+    if (!tagReader.CanReadFile(fileName))
+    {
+      throw std::runtime_error("Could not read the input DICOM file: " + fileName);
+    }
+    tagReader.SetFileName(fileName);
+    const TagValues dicomTags = tagReader.ReadAllTags();
+    dicomFiles.insert(std::make_pair(fileName, dicomTags));
+  }
+  return dicomFiles;
+}
+
+using Volume = std::vector<DicomFile>;
+using Volumes = std::vector<Volume>; // aka ImageSet
+using ImageSets = std::vector<Volumes>;
+
+bool compareTags(const TagValues &tags1, const TagValues &tags2, const Tags &tagKeys)
+{
+  for (const auto &tagKey : tagKeys)
+  {
+    const auto it1 = tags1.find(tagKey);
+    const auto it2 = tags2.find(tagKey);
+    if (it1 == tags1.end() || it2 == tags2.end())
+    {
+      return false;
+    }
+    if (it1->second != it2->second)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+Volumes groupByVolume(const DicomFiles &dicomFiles)
+{
+  Volumes volumes;
+  for (const DicomFile &dicomFile : dicomFiles)
+  {
+    const auto &[file, tags] = dicomFile;
+    Volume *matchingVolume = nullptr;
+    for (Volume &volume : volumes)
+    {
+      const DicomFile fileInVolume = *volume.begin();
+      const TagValues volumeTags = fileInVolume.second;
+      if (compareTags(volumeTags, tags, {SERIES_INSTANCE_UID}))
+      {
+        matchingVolume = &volume;
+        break;
+      }
+    }
+    if (matchingVolume)
+    {
+      matchingVolume->push_back(dicomFile);
+    }
+    else
+    {
+      Volume newVolume({dicomFile});
+      volumes.push_back(newVolume);
+    }
+  }
+  return volumes;
+}
+
+ImageSets groupByImageSet(const Volumes &volumes)
+{
+  ImageSets imageSets;
+  for (const Volume &volume : volumes)
+  {
+    const auto volumeTags = volume.begin()->second;
+    Volumes *matchingImageSet = nullptr;
+    for (Volumes &volumes : imageSets)
+    {
+      const TagValues imageSetTags = volumes.begin()->begin()->second;
+      if (compareTags(imageSetTags, volumeTags, {STUDY_INSTANCE_UID}))
+      {
+        matchingImageSet = &volumes;
+        break;
+      }
+    }
+    if (matchingImageSet)
+    {
+      matchingImageSet->push_back(volume);
+    }
+    else
+    {
+      Volumes newImageSet({volume});
+      imageSets.push_back(newImageSet);
+    }
+  }
+  return imageSets;
+}
+
+rapidjson::Document toJson(const ImageSets &imageSets)
+{
+  rapidjson::Document imageSetsJson(rapidjson::kArrayType);
+  rapidjson::Document::AllocatorType &allocator = imageSetsJson.GetAllocator();
+  TagValues dicomTags;
+  for (const Volumes &volumes : imageSets)
+  {
+    rapidjson::Value seriesById(rapidjson::kObjectType);
+    for (const Volume &volume : volumes)
+    {
+      rapidjson::Value instances(rapidjson::kObjectType);
+      for (const auto &dicomFile : volume)
+      {
+        File file = dicomFile.first;
+        dicomTags = dicomFile.second;
+        // filter out patient, study, series tags
+        TagValues instanceTags;
+        for (const auto &[tag, value] : dicomTags)
+        {
+          if (NON_INSTANCE_TAGS.find(tag) == NON_INSTANCE_TAGS.end())
+          {
+            instanceTags[tag] = value;
+          }
+        }
+        rapidjson::Value instanceTagsJson = mapToJsonObj(instanceTags, allocator);
+        rapidjson::Value instance(rapidjson::kObjectType);
+        instance.AddMember("DICOM", instanceTagsJson, allocator);
+
+        rapidjson::Value fileNameValue;
+        fileNameValue.SetString(file.c_str(), file.size(), allocator);
+        rapidjson::Value imageFrame(rapidjson::kObjectType);
+        imageFrame.AddMember("ID", fileNameValue, allocator);
+        rapidjson::Value imageFrames(rapidjson::kArrayType);
+        imageFrames.PushBack(imageFrame, allocator);
+        instance.AddMember("ImageFrames", imageFrames, allocator);
+
+        // instance by UID under instances
+        TagValues::iterator it = dicomTags.find("0008|0018");
+        if (it == dicomTags.end())
+        {
+          throw std::runtime_error("Instance UID not found in dicomTags");
+        }
+        const auto tag = it->second;
+        rapidjson::Value instanceId;
+        instanceId.SetString(tag.c_str(), tag.size(), allocator);
+        instances.AddMember(instanceId, instance, allocator);
+      }
+
+      // Series
+      rapidjson::Value seriesTags = jsonFromTags(dicomTags, SERIES_TAGS, allocator);
+      rapidjson::Value series(rapidjson::kObjectType);
+      series.AddMember("DICOM", seriesTags, allocator);
+      series.AddMember("Instances", instances, allocator);
+
+      int volumeIndex = std::distance(volumes.begin(), std::find(volumes.begin(), volumes.end(), volume));
+      const std::string seriesId = dicomTags.at(SERIES_INSTANCE_UID) + '.' + std::to_string(volumeIndex);
+      rapidjson::Value seriesIdJson;
+      seriesIdJson.SetString(seriesId.c_str(), seriesId.size(), allocator);
+      seriesById.AddMember(seriesIdJson, series, allocator);
+    }
+
+    rapidjson::Value imageSet(rapidjson::kObjectType);
+
+    // Patient
+    rapidjson::Value patient(rapidjson::kObjectType);
+    rapidjson::Value patientTags = jsonFromTags(dicomTags, PATIENT_TAGS, allocator);
+    patient.AddMember("DICOM", patientTags, allocator);
+    imageSet.AddMember("Patient", patient, allocator);
+
+    // Study
+    rapidjson::Value study(rapidjson::kObjectType);
+    rapidjson::Value studyTagsJson = jsonFromTags(dicomTags, STUDY_TAGS, allocator);
+    study.AddMember("DICOM", studyTagsJson, allocator);
+    study.AddMember("Series", seriesById, allocator);
+    imageSet.AddMember("Study", study, allocator);
+
+    imageSetsJson.PushBack(imageSet, allocator);
+  }
+  return imageSetsJson;
 }
 
 int main(int argc, char *argv[])
@@ -107,132 +265,21 @@ int main(int argc, char *argv[])
   std::vector<std::string> files;
   pipeline.add_option("--files", files, "DICOM files")->required()->check(CLI::ExistingFile)->type_size(1, -1)->type_name("INPUT_BINARY_FILE");
 
-  itk::wasm::OutputTextStream imageSets;
-  pipeline.add_option("image-sets", imageSets, "Image sets JSON")->required()->type_name("OUTPUT_JSON");
+  itk::wasm::OutputTextStream imageSetsOutput;
+  pipeline.add_option("image-sets", imageSetsOutput, "Image sets JSON")->required()->type_name("OUTPUT_JSON");
 
   ITK_WASM_PARSE(pipeline);
 
-  std::vector<gdcm::Directory::FilenamesType> volumes;
-  gdcm::Scanner s;
+  const DicomFiles dicomFiles = readTags(files);
+  const Volumes volumes = groupByVolume(dicomFiles);
+  const ImageSets imageSets = groupByImageSet(volumes);
 
-  const gdcm::Tag t1(0x0020, 0x000d); // Study Instance UID
-  const gdcm::Tag t2(0x0020, 0x000e); // Series Instance UID
-  const gdcm::Tag t3(0x0020, 0x0052); // Frame of Reference UID
-  const gdcm::Tag t4(0x0020, 0x0037); // Image Orientation (Patient)
-
-  s.AddTag(t1);
-  s.AddTag(t2);
-  s.AddTag(t3);
-  s.AddTag(t4);
-
-  bool b = s.Scan(files);
-  if (!b)
-  {
-    std::cerr << "Scanner failed" << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  gdcm::DiscriminateVolume dv;
-  dv.ProcessIntoVolume(s);
-
-  std::vector<gdcm::Directory::FilenamesType> sorted = dv.GetSortedFiles();
-  for (gdcm::Directory::FilenamesType &volume : sorted)
-  {
-    volumes.push_back(volume);
-  }
-
-  std::vector<gdcm::Directory::FilenamesType> unsorted = dv.GetUnsortedFiles();
-  for (gdcm::Directory::FilenamesType fileGroups : unsorted)
-  {
-    volumes.push_back(fileGroups);
-  }
-
-  rapidjson::Document imageSetsJson(rapidjson::kArrayType);
-  rapidjson::Document::AllocatorType &allocator = imageSetsJson.GetAllocator();
-
-  itk::DICOMTagReader tagReader;
-
-  // read all tags for file
-  for (const auto &fileNames : volumes)
-  {
-    itk::DICOMTagReader::TagMapType dicomTags; // series/study/patent tags are pulled from last file
-    rapidjson::Value instances(rapidjson::kObjectType);
-    for (const auto &fileName : fileNames)
-    {
-      if (!tagReader.CanReadFile(fileName))
-      {
-        std::cerr << "Could not read the input DICOM file: " << fileName << std::endl;
-        return EXIT_FAILURE;
-      }
-      tagReader.SetFileName(fileName);
-      dicomTags = tagReader.ReadAllTags();
-
-      // filter out patient, study, series tags
-      itk::DICOMTagReader::TagMapType instanceTags;
-      for (const auto &[tag, value] : dicomTags)
-      {
-        if (NON_INSTANCE_TAGS.find(tag) == NON_INSTANCE_TAGS.end())
-        {
-          instanceTags[tag] = value;
-        }
-      }
-      rapidjson::Value instanceTagsJson =  mapToJsonObj(instanceTags, allocator);
-      rapidjson::Value instance(rapidjson::kObjectType);
-      instance.AddMember("DICOM", instanceTagsJson, allocator);
-      rapidjson::Value fileNameValue;
-      fileNameValue.SetString(fileName.c_str(), fileName.size(), allocator);
-      instance.AddMember("FileName", fileNameValue, allocator);
-
-      // instance by UID under instances
-      itk::DICOMTagReader::TagMapType::iterator it = dicomTags.find("0008|0018");
-      if (it == dicomTags.end())
-      {
-        std::cerr << "Instance UID not found in dicomTags" << std::endl;
-        return EXIT_FAILURE;
-      }
-      const auto tag = it->second;
-      rapidjson::Value instanceId;
-      instanceId.SetString(tag.c_str(), tag.size(), allocator);
-      instances.AddMember(instanceId, instance, allocator);
-    }
-
-    rapidjson::Value seriesTags = jsonFromTags(dicomTags, SERIES_TAGS, allocator);
-    rapidjson::Value series(rapidjson::kObjectType);
-    series.AddMember("DICOM", seriesTags, allocator);
-    series.AddMember("Instances", instances, allocator);
-    // series by ID object
-    itk::DICOMTagReader::TagMapType::iterator it = dicomTags.find("0020|000e");
-    if (it == dicomTags.end())
-    {
-      std::cerr << "Series UID not found in dicomTags" << std::endl;
-      return EXIT_FAILURE;
-    }
-    const auto tag = it->second;
-    rapidjson::Value seriesId;
-    seriesId.SetString(tag.c_str(), tag.size(), allocator);
-    rapidjson::Value seriesById(rapidjson::kObjectType);
-    seriesById.AddMember(seriesId, series, allocator);
-
-    rapidjson::Value imageSet(rapidjson::kObjectType);
-
-    rapidjson::Value patient(rapidjson::kObjectType);
-    rapidjson::Value patientTags = jsonFromTags(dicomTags, PATIENT_TAGS, allocator);
-    patient.AddMember("DICOM", patientTags, allocator);
-    imageSet.AddMember("Patient", patient, allocator);
-
-    rapidjson::Value study(rapidjson::kObjectType);
-    rapidjson::Value studyTagsJson = jsonFromTags(dicomTags, STUDY_TAGS, allocator);
-    study.AddMember("DICOM", studyTagsJson, allocator);
-    study.AddMember("Series", seriesById, allocator);
-    imageSet.AddMember("Study", study, allocator);
-
-    imageSetsJson.PushBack(imageSet, allocator);
-  }
+  rapidjson::Document imageSetsJson = toJson(imageSets);
 
   rapidjson::StringBuffer stringBuffer;
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
   imageSetsJson.Accept(writer);
-  imageSets.Get() << stringBuffer.GetString();
+  imageSetsOutput.Get() << stringBuffer.GetString();
 
   return EXIT_SUCCESS;
 }
