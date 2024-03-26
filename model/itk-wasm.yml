@@ -1,0 +1,543 @@
+id: https://w3id.org/itk/wasm
+name: itk-wasm
+version: 0.1.0
+description: >-
+  The itk-wasm model provides FAIR definitions of the interface types that enable high-performance, portable, sustainable, and reproducible spatial analysis.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+prefixes:
+  itk: https://w3id.org/itk/
+  wasm: https://w3id.org/itk/wasm
+  linkml: https://w3id.org/linkml/
+imports:
+  - linkml:types
+default_range: string
+default_prefix: wasm
+
+classes:
+  InterfaceType:
+    tree_root: true
+    abstract: true
+    description: >-
+      An interface type is a higher-level type that represents the structure of data that can be passed between WebAssembly modules and the host environment.
+
+      The higher level abstract types that are defined in this model have an idiomatic and efficient representation in WebAssembly and programming languages that compile to or embed WebAssembly modules.
+
+      There are idiomatic representations and one-to-one mappings between:
+
+      - The WebAssembly Component Model Interface Types (WIT) (future)
+      - JSON encoding (future)
+      - C++ `itk::wasm` namespaced types in the ITK WebAssemblyInterface module
+      - Python `itkwasm` package types
+      - JavaScript `itk-wasm` package types
+      - Java package types (future)
+      - C# package types (future)
+    class_uri: wasm:InterfaceType
+
+  BinaryData:
+    abstract: true
+    description: >-
+      Represents a contiguous array of bytes.
+
+      The data in representations are encoded as:
+
+        - WIT: `list<u8>`
+        - JSON: Data URI `string` with base64 encoding, zstd compression, 'data:application/zstd;base64,[...]'
+        - C++: C array on the heap
+        - Python: `numpy.ndarray`
+        - JavaScript: TypedArray
+    class_uri: wasm:BinaryData
+
+
+  TextFile:
+    abstract: true
+    is_a: InterfaceType
+    description: >-
+      Representation of a text file on a filesystem. For performance reasons, use TextStream when possible, instead of TextFile.
+    class_uri: wasm:TextFile
+    slots:
+      - path
+    attributes:
+      data:
+        description: >-
+          The content of the text file.
+        range: string
+        required: true
+
+  BinaryFile:
+    abstract: true
+    is_a: InterfaceType
+    description: >-
+      Representation of a binary file on a filesystem. For performance reasons, use BinaryStream when possible, instead of BinaryFile.
+    class_uri: wasm:BinaryFile
+    slots:
+      - path
+    attributes:
+      data:
+        description: >-
+          The content of the binary file.
+        range: BinaryData
+        required: true
+
+  TextStream:
+    abstract: true
+    is_a: InterfaceType
+    description: >-
+      Representation of a text stream. For performance reasons, use TextStream when possible, instead of TextFile.
+    class_uri: wasm:TextStream
+    attributes:
+      data:
+        description: >-
+          The content of the text stream.
+        range: string
+        required: true
+
+  BinaryStream:
+    abstract: true
+    is_a: InterfaceType
+    description: >-
+      Representation of a binary stream. For performance reasons, use BinaryStream when possible, instead of BinaryFile.
+    class_uri: wasm:BinaryStream
+    attributes:
+      data:
+        description: >-
+          The content of the binary stream.
+        range: BinaryData
+        required: true
+
+  StringList:
+    description: >-
+      Representation of a sequence of strings.
+    class_uri: wasm:StringList
+    attributes:
+      values:
+        description: >-
+          The content of the string sequence.
+        range: string
+        multivalued: true
+        required: true
+        inlined_as_list: true
+
+  IntegerList:
+    description: >-
+      Representation of a sequence of integers.
+    class_uri: wasm:IntegerList
+    attributes:
+      values:
+        description: >-
+          The content of the integer sequence.
+        range: integer
+        multivalued: true
+        required: true
+        inlined_as_list: true
+
+  FloatList:
+    description: >-
+      Representation of a sequence of floats.
+    class_uri: wasm:FloatList
+    attributes:
+      values:
+        description: >-
+          The content of the float sequence.
+        range: float
+        multivalued: true
+        required: true
+        inlined_as_list: true
+
+  DoubleList:
+    description: >-
+      Representation of a sequence of doubles.
+    class_uri: wasm:DoubleList
+    attributes:
+      values:
+        description: >-
+          The content of the double sequence.
+        range: double
+        multivalued: true
+        required: true
+        inlined_as_list: true
+
+  MetadataEntry:
+    description: >-
+      Representation of a metadata entry.
+    class_uri: wasm:MetadataEntry
+    attributes:
+      key:
+        description: >-
+          The key of the metadata entry.
+        range: string
+        key: true
+        required: true
+      value:
+        description: >-
+          The value of the metadata entry.
+        any_of:
+          - range: string
+          - range: integer
+          - range: float
+          - range: double
+          - range: boolean
+          - range: StringList
+          - range: IntegerList
+          - range: FloatList
+          - range: DoubleList
+          # TODO: And Lists of Lists, seems to not be available in LinkML yet per https://github.com/linkml/linkml-arrays/issues/7 and others.
+          # See itkMetaDataDictionaryJSON.cxx
+        required: true
+
+  Metadata:
+    description: >-
+      Representation of metadata.
+    class_uri: wasm:Metadata
+    attributes:
+      entries:
+        description: >-
+          The content of the metadata.
+        range: MetadataEntry
+        multivalued: true
+        required: true
+        inlined: true
+        inlined_as_list: true
+
+  ImageType:
+    description: >-
+      Representation of an N-dimensional scientific image type.
+    class_uri: wasm:ImageType
+    slots:
+      - dimension
+      - componentType
+      - pixelType
+      - components
+
+  Image:
+    is_a: InterfaceType
+    description: >-
+      Representation of an N-dimensional scientific image.
+    class_uri: wasm:Image
+    attributes:
+      imageType:
+        description: >-
+          Type of the image.
+        range: ImageType
+        required: true
+      name:
+        description: >-
+          Name of the image.
+        range: string
+        required: true
+      origin:
+        description: >-
+          Location of the center of the first pixel in physical space.
+
+          x, y, z, ... order.
+        range: double
+        multivalued: true
+        required: true
+      spacing:
+        description: >-
+          Size of a pixel in physical space.
+
+          x, y, z, ... order.
+        range: double
+        multivalued: true
+        required: true
+      direction:
+        description: >-
+          Orientation of the pixel grid in physical space.
+
+          Encoded as float64 binary data in column-major order of length NxN where N is the spatial dimension of the image.
+          x, y, z, ... order.
+        range: BinaryData
+        implements:
+          - linkml:ColumnOrderedArray
+        required: true
+      size:
+        description: >-
+          Number of image pixels in each dimension.
+
+          x, y, z, ... order.
+        range: integer
+        multivalued: true
+        required: true
+      metadata:
+        description: >-
+          Metadata for the image.
+        range: string
+        required: true
+      data:
+        description: >-
+          Content of the image pixels.
+
+          Encoded in column-major order, i.e. contiguous x. Multi-component pixels are interleaved.
+        range: BinaryData
+        implements:
+          - linkml:ColumnOrderedArray
+
+  MeshType:
+    description: >-
+      Representation of a mesh type. Here "Pixel" refers to the data attributes associated with the mesh.
+    class_uri: wasm:MeshType
+    slots:
+      - dimension
+      - pointComponentType
+      - pointPixelComponentType
+      - pointPixelType
+      - pointPixelComponents
+      - cellComponentType
+      - cellPixelComponentType
+      - cellPixelType
+      - cellPixelComponents
+      - cellPixelComponentType
+      - cellPixelType
+      - cellPixelComponents
+
+  Mesh:
+    description: >-
+      Representation of an N-dimensional mesh.
+    is_a: InterfaceType
+    class_uri: wasm:Mesh
+    attributes:
+      meshType:
+        description: >-
+          The type of the mesh.
+        range: MeshType
+        required: true
+      name:
+        description: >-
+          Name of the mesh.
+        range: string
+        required: true
+      numberOfPoints:
+        description: >-
+          Number of points in the mesh.
+        range: integer
+        required: true
+      points:
+        description: >-
+          Spatial coordinates of the points.
+        range: BinaryData
+      numberOfPointPixels:
+        description: >-
+          Number of point data attributes.
+        range: integer
+        required: true
+      pointData:
+        description: >-
+          Point data attributes.
+        range: BinaryData
+      numberOfCells:
+        description: >-
+          Number of cells in the mesh.
+        range: integer
+        required: true
+      cells:
+        description: >-
+          Connectivity of the cells.
+        range: BinaryData
+      cellBufferSize:
+        description: >-
+          Size of the cell buffer.
+        range: integer
+        required: true
+      numberOfCellPixels:
+        description: >-
+          Number of cell data attributes.
+        range: integer
+        required: true
+      cellData:
+        description: >-
+          Cell data attributes.
+        range: BinaryData
+
+  PolyData:
+    description: >-
+      Representation of a polydata, 3D geometric data for rendering that represents a collection of points, lines, polygons, and/or triangle strips.
+    is_a: InterfaceType
+    class_uri: wasm:PolyData
+    attributes:
+      name:
+        description: >-
+          Name of the polydata.
+        range: string
+        required: true
+      numberOfPoints:
+        description: >-
+          Number of points in the polydata.
+        range: integer
+        required: true
+      points:
+        description: >-
+          Spatial coordinates of the points. Binary data with float32 components.
+        range: BinaryData
+      linesBufferSize:
+        description: >-
+          Size of the lines buffer.
+        range: integer
+        required: true
+      lines:
+        description: >-
+          Connectivity of the lines. Binary data with int32 components.
+        range: BinaryData
+      polygonsBufferSize:
+        description: >-
+          Size of the polygons buffer.
+        range: integer
+        required: true
+      polygons:
+        description: >-
+          Connectivity of the polygons. Binary data with int32 components.
+        range: BinaryData
+      numberOfPointPixels:
+        description: >-
+          Number of point data attributes.
+        range: integer
+        required: true
+      pointData:
+        description: >-
+          Point data attributes.
+        range: BinaryData
+      numberOfCellPixels:
+        description: >-
+          Number of cell data attributes.
+        range: integer
+        required: true
+      cellData:
+        description: >-
+          Cell data attributes.
+        range: BinaryData
+
+  JsonCompatible:
+    is_a: InterfaceType
+    description: >-
+      A type that can be represented in JSON.
+    class_uri: wasm:JsonCompatible
+
+slots:
+  path:
+    description: >-
+      The filename or path.
+    range: string
+    required: true
+
+  dimension:
+    description: >-
+      Number of spatial dimensions.
+    range: integer
+    required: true
+    ifabsent: int(2)
+
+  componentType:
+    description: >-
+      Type of binary data components in a pixel.
+    any_of:
+      - range: IntTypes
+      - range: FloatTypes
+    required: true
+
+  pixelType:
+    description: >-
+      Type of the pixel or attribute.
+    range: PixelTypes
+    required: true
+
+  components:
+    description: >-
+      Number of components in a pixels.
+    range: integer
+    required: true
+    ifabsent: int(1)
+
+  pointComponentType:
+    description: >-
+      Type of binary data components in a point. Typically float32.
+    range: FloatTypes
+    required: true
+
+  pointPixelComponentType:
+    description: >-
+      Type of binary data components associated with a point data attribute.
+    any_of:
+      - range: IntTypes
+      - range: FloatTypes
+    required: true
+
+  pointPixelType:
+    description: >-
+      Type of the point data attribute.
+    range: PixelTypes
+    required: true
+
+  pointPixelComponents:
+    description: >-
+      Number of components in a point data attribute.
+    range: integer
+    required: true
+    ifabsent: int(1)
+
+  cellComponentType:
+    description: >-
+      Type of binary data components used to represent a cell. Typically int32.
+    range: IntTypes
+    required: true
+
+  cellPixelComponentType:
+    description: >-
+      Type of binary data components associated with a cell data attribute.
+    any_of:
+      - range: IntTypes
+      - range: FloatTypes
+    required: true
+
+  cellPixelType:
+    description: >-
+      Type of the cell data attribute.
+    range: PixelTypes
+    required: true
+
+  cellPixelComponents:
+    description: >-
+      Number of components in a cell data attribute.
+    range: integer
+    required: true
+    ifabsent: int(1)
+
+enums:
+  IntTypes:
+    description: >-
+      Integer types.
+    permissible_values:
+      int8:
+      uint8:
+      int16:
+      uint16:
+      int32:
+      uint32:
+      int64:
+      uint64:
+
+  FloatTypes:
+    description: >-
+      Float types.
+    permissible_values:
+      float32:
+      float64:
+
+  PixelTypes:
+    description: >-
+      Pixel or attribute types.
+    permissible_values:
+      Unknown:
+      Scalar:
+      RGB:
+      RGBA:
+      Offset:
+      Vector:
+      Point:
+      CovariantVector:
+      SymmetricSecondRankTensor:
+      DiffusionTensor3D:
+      Complex:
+      FixedArray:
+      Array:
+      Matrix:
+      VariableLengthVector:
+      VariableSizeMatrix:
