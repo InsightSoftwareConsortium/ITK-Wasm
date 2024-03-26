@@ -41,8 +41,8 @@ def image_sets_normalization(
     args: List[str] = ['--memory-io',]
     # Inputs
     # Outputs
-    image_sets_metadata_name = '0'
-    args.append(image_sets_metadata_name)
+    image_sets_name = '0'
+    args.append(image_sets_name)
 
     # Options
     input_count = len(pipeline_inputs)

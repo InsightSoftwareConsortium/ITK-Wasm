@@ -107,8 +107,8 @@ int main(int argc, char *argv[])
   std::vector<std::string> files;
   pipeline.add_option("--files", files, "DICOM files")->required()->check(CLI::ExistingFile)->type_size(1, -1)->type_name("INPUT_BINARY_FILE");
 
-  itk::wasm::OutputTextStream imageSetsMetadata;
-  pipeline.add_option("image-sets-metadata", imageSetsMetadata, "Image sets JSON")->required()->type_name("OUTPUT_JSON");
+  itk::wasm::OutputTextStream imageSets;
+  pipeline.add_option("image-sets", imageSets, "Image sets JSON")->required()->type_name("OUTPUT_JSON");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
   rapidjson::StringBuffer stringBuffer;
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
   imageSetsJson.Accept(writer);
-  imageSetsMetadata.Get() << stringBuffer.GetString();
+  imageSets.Get() << stringBuffer.GetString();
 
   return EXIT_SUCCESS;
 }

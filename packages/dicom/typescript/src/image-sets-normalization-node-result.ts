@@ -4,7 +4,7 @@ import { JsonCompatible } from 'itk-wasm'
 
 interface ImageSetsNormalizationNodeResult {
   /** Image sets JSON */
-  imageSetsMetadata: JsonCompatible
+  imageSets: JsonCompatible
 
 }
 
