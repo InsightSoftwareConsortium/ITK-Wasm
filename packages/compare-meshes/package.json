@@ -9,8 +9,8 @@
     "emscripten-docker-image": "itkwasm/emscripten:latest",
     "wasi-docker-image": "itkwasm/wasi:latest",
     "package-description": "Compare meshes and polydata for regression testing.",
-    "typescript-package-name": "compare-meshes",
-    "python-package-name": "compare-meshes",
+    "typescript-package-name": "@itk-wasm/compare-meshes",
+    "python-package-name": "itkwasm-compare-meshes",
     "repository": "https://github.com/InsightSoftwareConsortium/itk-wasm"
   },
   "license": "Apache-2.0",
@@ -29,7 +29,7 @@
     "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
     "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafkreigpkk3pqcoqzjzcauogw6dml52yig3ksmcrobau5pkoictymizzri https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.163/create-itk-wasm-test-data.tar.gz https://bafybeiczuxeuma5cjuli5mtapqnjqypeaum5ikd45zcmfhtt2emp365tca.ipfs.w3s.link/ipfs/bafybeiczuxeuma5cjuli5mtapqnjqypeaum5ikd45zcmfhtt2emp365tca/create-itk-wasm-test-data.tar.gz https://ipfs.filebase.io/ipfs/QmcxyvUKnaoTTwUqEPXwp1sdcbrFh3XnnwckLKVRpctJx9",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreidioh62iouwzrrpavx7g72fdjxze7gp4cqpf36t4pdafcpcmx4zye https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.171/itkwasm-compare-meshes-test-data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "itk-wasm pnpm-script test:python:wasi",
     "test:python:emscripten": "itk-wasm pnpm-script test:python:emscripten",
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@itk-wasm/dam": "^1.1.1",
     "@thewtex/setup-micromamba": "^1.9.7",
-    "itk-wasm": "1.0.0-b.171"
+    "itk-wasm": "workspace:^"
   },
   "author": "Matt McCormick",
   "repository": {

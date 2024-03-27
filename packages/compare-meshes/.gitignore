@@ -1,3 +1,7 @@
 emscripten-build
 micromamba
 wasi-build
+
+python
+test
+typescript

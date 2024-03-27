@@ -195,20 +195,17 @@ importers:
         specifier: ^1.9.7
         version: 1.9.7
       itk-wasm:
-        specifier: 1.0.0-b.171
+        specifier: workspace:^
         version: link:../core/typescript/itk-wasm
 
   packages/compare-meshes/typescript:
     dependencies:
       itk-wasm:
-        specifier: 1.0.0-b.170
-        version: 1.0.0-b.170
+        specifier: workspace:^
+        version: link:../../core/typescript/itk-wasm
     devDependencies:
-      '@itk-wasm/image-io':
-        specifier: ^1.1.1
-        version: link:../../image-io/typescript
       '@itk-wasm/mesh-io':
-        specifier: ^1.1.1
+        specifier: workspace:^
         version: link:../../mesh-io/typescript
       '@shoelace-style/shoelace':
         specifier: ^2.12.0
@@ -5296,26 +5293,6 @@ packages:
       reflect.getprototypeof: 1.0.4
       set-function-name: 2.0.1
     dev: true
-
-  /itk-wasm@1.0.0-b.170:
-    resolution: {integrity: sha512-FoU9Ccr2EKhMIlYlZs6k+4f8TmnjxTfG9KLSZBJdRakFoAAI4lx6/C0cw9C9ht7cOChg1OYZJdpZvkZKUPUSQg==}
-    hasBin: true
-    dependencies:
-      '@itk-wasm/dam': 1.1.1
-      '@thewtex/zstddec': 0.2.0
-      '@types/emscripten': 1.39.10
-      axios: 1.6.2(debug@4.3.4)
-      chalk: 5.3.0
-      comlink: 4.4.1
-      commander: 11.1.0
-      fs-extra: 11.2.0
-      glob: 8.1.0
-      markdown-table: 3.0.3
-      mime-types: 2.1.35
-      wasm-feature-detect: 1.6.1
-    transitivePeerDependencies:
-      - debug
-    dev: false
 
   /joi@17.11.0:
     resolution: {integrity: sha512-NgB+lZLNoqISVy1rZocE9PZI36bL/77ie924Ri43yEvi9GUUMPeyVIr8KdFTMUlby1p0PBYMk9spIxEUQYqrJQ==}
