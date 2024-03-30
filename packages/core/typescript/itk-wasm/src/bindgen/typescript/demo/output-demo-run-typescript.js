@@ -48,10 +48,11 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
       result += `${indent}${indent}const ${parameterName}Details = document.getElementById("${functionName}-${parameter.name}-details")\n`
-      result += `${indent}${indent}${parameterName}Details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(${parameterName}, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
       result += `${indent}${indent}${parameterName}Details.disabled = false\n`
       if(parameter.type === 'OUTPUT_IMAGE' && parameter.itemsExpectedMax === 1) {
-        result += `${indent}${indent}loadImage(${parameterName}, ${parameterName}Details)\n`
+        result += `${indent}${indent}${parameterName}Details.setImage(${parameterName})\n`
+      } else {
+        result += `${indent}${indent}${parameterName}Details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(${parameterName}, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
       }
       break
     default:

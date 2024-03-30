@@ -47,7 +47,7 @@ class CompareDoubleImagesController {
         webWorker.terminate()
         model.inputs.set("testImage", image)
         const details = document.getElementById("compareDoubleImages-test-image-details")
-        loadImage(image, details)
+        details.setImage(image)
         details.disabled = false
     })
 
@@ -190,17 +190,15 @@ class CompareDoubleImagesController {
         differenceImageOutputDownload.variant = "success"
         differenceImageOutputDownload.disabled = false
         const differenceImageDetails = document.getElementById("compareDoubleImages-difference-image-details")
-        differenceImageDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(differenceImage, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         differenceImageDetails.disabled = false
-        loadImage(differenceImage, differenceImageDetails)
+        differenceImageDetails.setImage(differenceImage)
 
         model.outputs.set("differenceUchar2dImage", differenceUchar2dImage)
         differenceUchar2dImageOutputDownload.variant = "success"
         differenceUchar2dImageOutputDownload.disabled = false
         const differenceUchar2dImageDetails = document.getElementById("compareDoubleImages-difference-uchar-2d-image-details")
-        differenceUchar2dImageDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(differenceUchar2dImage, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         differenceUchar2dImageDetails.disabled = false
-        loadImage(differenceUchar2dImage, differenceUchar2dImageDetails)
+        differenceUchar2dImageDetails.setImage(differenceUchar2dImage)
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

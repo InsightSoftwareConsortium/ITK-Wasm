@@ -1,6 +1,3 @@
-import { ItkWasmMultiscaleSpatialImage } from "@itk-viewer/io/ItkWasmMultiscaleSpatialImage.js";
-import "@itk-viewer/element/itk-viewer-2d.js";
-
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import "@shoelace-style/shoelace/dist/themes/dark.css";
 import "@shoelace-style/shoelace/dist/components/button/button.js";
@@ -24,6 +21,8 @@ import "@shoelace-style/shoelace/dist/components/range/range.js";
 import "@shoelace-style/shoelace/dist/components/card/card.js";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path";
 
+import "./itk-image-details.js";
+
 setBasePath("/");
 
 if (
@@ -34,41 +33,3 @@ if (
   document.documentElement.classList.add("sl-theme-dark");
 }
 
-function showImage(image, details) {
-  details.innerHTML = "";
-
-  const viewer = document.createElement("itk-viewer-2d");
-  viewer.style.width = "100%";
-  viewer.style.height = "26rem";
-  const multiImage = new ItkWasmMultiscaleSpatialImage(image);
-  // need to wait a tick due to bad setup flow in @itk-viewer/element
-  setTimeout(() => {
-    const viewerActor = viewer.getActor();
-    viewerActor.send({ type: "setImage", image: multiImage });
-  }, 0);
-
-  const imageInfo = document.createElement("pre");
-  imageInfo.innerHTML = escapeHtml(
-    JSON.stringify(image, interfaceTypeJsonReplacer, 2),
-  );
-
-  details.appendChild(viewer);
-  details.appendChild(imageInfo);
-}
-
-function loadImage(image, details) {
-  if (!details.summary.startsWith("️🔎")) {
-    details.summary = "️🔎 " + details.summary;
-  }
-  if (details.open) {
-    showImage(image, details);
-  }
-  if (details.showImageListener) {
-    details.removeEventListener("sl-show", details.showImageListener);
-  }
-  details.showImageListener = () => {
-    showImage(image, details);
-  };
-  details.addEventListener("sl-show", details.showImageListener);
-}
-globalThis.loadImage = loadImage;

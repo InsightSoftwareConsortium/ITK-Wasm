@@ -64,13 +64,13 @@ class ReadImageDicomFileSeriesController  {
         event.preventDefault()
         event.stopPropagation()
         if (model.outputs.has("outputImage")) {
-            const outputImageDownloadFormat = document.getElementById('output-image-output-format')
+            const outputImageDownloadFormat = document.getElementById('readImageDicomFileSeries-output-image-output-format')
             const downloadFormat = outputImageDownloadFormat.value || 'nrrd'
             const fileName = `outputImage.${downloadFormat}`
-            const { webWorker, arrayBuffer } = await writeImage(null, copyImage(model.outputs.get("outputImage")), fileName)
+            const {webWorker, serializedImage} = await writeImage(copyImage(model.outputs.get("outputImage")), fileName)
 
             webWorker.terminate()
-            globalThis.downloadFile(arrayBuffer, fileName)
+            globalThis.downloadFile(serializedImage.data, fileName)
         }
     })
 
@@ -119,9 +119,8 @@ class ReadImageDicomFileSeriesController  {
         outputImageOutputDownload.variant = "success"
         outputImageOutputDownload.disabled = false
         const outputImageDetails = document.getElementById("readImageDicomFileSeries-output-image-details")
-        outputImageDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(outputImage, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         outputImageDetails.disabled = false
-        const outputImageOutput = document.getElementById('readImageDicomFileSeries-output-image-details')
+        outputImageDetails.setImage(outputImage)
 
         model.outputs.set("sortedFilenames", sortedFilenames)
         sortedFilenamesOutputDownload.variant = "success"
@@ -130,6 +129,8 @@ class ReadImageDicomFileSeriesController  {
         sortedFilenamesDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(sortedFilenames, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         sortedFilenamesDetails.disabled = false
         const sortedFilenamesOutput = document.getElementById("readImageDicomFileSeries-sorted-filenames-details")
+        // loadImage(outputImage, outputImageDetails)
+
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

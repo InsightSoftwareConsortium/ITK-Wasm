@@ -144,8 +144,8 @@ class SwcReadMeshController {
         meshOutputDownload.variant = "success"
         meshOutputDownload.disabled = false
         const meshDetails = document.getElementById("swcReadMesh-mesh-details")
-        meshDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(mesh, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         meshDetails.disabled = false
+        meshDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(mesh, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

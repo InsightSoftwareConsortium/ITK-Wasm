@@ -47,7 +47,7 @@ class DownsampleLabelImageController {
         webWorker.terminate()
         model.inputs.set("input", image)
         const details = document.getElementById("downsampleLabelImage-input-details")
-        loadImage(image, details)
+        details.setImage(image)
         details.disabled = false
     })
 
@@ -133,9 +133,8 @@ class DownsampleLabelImageController {
         downsampledOutputDownload.variant = "success"
         downsampledOutputDownload.disabled = false
         const downsampledDetails = document.getElementById("downsampleLabelImage-downsampled-details")
-        downsampledDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(downsampled, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         downsampledDetails.disabled = false
-        loadImage(downsampled, downsampledDetails)
+        downsampledDetails.setImage(downsampled)
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

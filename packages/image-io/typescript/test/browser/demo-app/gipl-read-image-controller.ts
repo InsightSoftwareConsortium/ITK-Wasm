@@ -146,9 +146,9 @@ class GiplReadImageController {
         imageOutputDownload.variant = "success"
         imageOutputDownload.disabled = false
         const imageDetails = document.getElementById("giplReadImage-image-details")
-        imageDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(image, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
+        imageDetails.setImage(image)
         imageDetails.disabled = false
-        const imageOutput = document.getElementById('giplReadImage-image-details')
+        
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error
