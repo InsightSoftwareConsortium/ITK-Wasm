@@ -30,7 +30,7 @@
     "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
     "build:version": "node -p \"'const version = ' + JSON.stringify(require('./package.json').version) + '\\nexport default version\\n'\" > src/version.ts",
     "build:tsc": "pnpm build:version && tsc --pretty",
-    "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
+    "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@itk-wasm/demo-app/node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
     "build:demo": "pnpm copyShoelaceAssets && vite -c build/vite.config.js build",
     "vite:start": "pnpm copyShoelaceAssets && vite -c build/vite.config.js",
     "rollup:start": "pnpm copyShoelaceAssets && pnpm build:demo && concurrently npm:rollup:preview npm:rollup:dev",
@@ -51,10 +51,8 @@
     "mime-types": "^2.1.35"
   },
   "devDependencies": {
-    "@itk-viewer/element": "^0.2.12",
-    "@itk-viewer/io": "^0.1.8",
     "@itk-wasm/image-io-build": "workspace:*",
-    "@shoelace-style/shoelace": "^2.12.0",
+    "@itk-wasm/demo-app": "workspace:*",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.10.4",
     "ava": "^5.3.1",

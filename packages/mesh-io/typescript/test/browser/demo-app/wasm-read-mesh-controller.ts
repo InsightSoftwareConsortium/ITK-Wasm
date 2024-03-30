@@ -146,7 +146,6 @@ class WasmReadMeshController {
         const meshDetails = document.getElementById("wasmReadMesh-mesh-details")
         meshDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(mesh, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         meshDetails.disabled = false
-        const meshOutput = document.getElementById('wasmReadMesh-mesh-details')
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

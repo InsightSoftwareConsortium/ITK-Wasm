@@ -9,33 +9,7 @@
   <link rel="stylesheet" href="./style.css" />
 
 <script type="module">
-  import '@shoelace-style/shoelace/dist/themes/light.css';
-  import '@shoelace-style/shoelace/dist/themes/dark.css';
-  import '@shoelace-style/shoelace/dist/components/button/button.js';
-  import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js';
-  import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js';
-  import '@shoelace-style/shoelace/dist/components/tab/tab.js';
-  import '@shoelace-style/shoelace/dist/components/input/input.js';
-  import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
-  import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
-  import '@shoelace-style/shoelace/dist/components/alert/alert.js';
-  import '@shoelace-style/shoelace/dist/components/icon/icon.js';
-  import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js';
-  import '@shoelace-style/shoelace/dist/components/divider/divider.js';
-  import '@shoelace-style/shoelace/dist/components/details/details.js';
-  import '@shoelace-style/shoelace/dist/components/popup/popup.js';
-  import '@shoelace-style/shoelace/dist/components/tag/tag.js';
-  import '@shoelace-style/shoelace/dist/components/select/select.js';
-  import '@shoelace-style/shoelace/dist/components/option/option.js';
-  import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
-
-  import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
-  setBasePath('/');
-
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    // dark mode
-    document.documentElement.classList.add('sl-theme-dark');
-  }
+  import '@itk-wasm/demo-app/demo-app.js'
 </script>
 
   <title>@itk-wasm/dicom<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></title>
@@ -356,8 +330,8 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
       <sl-tooltip content="Use the Upload button to provide the dicomFile"><sl-details id="readDicomTags-dicom-file-details" summary="dicomFile: Input DICOM file." disabled></sl-details></sl-tooltip>
       <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="dicom-file-file" style="display: none"/>
 <br /><br />
-      <sl-tooltip content="Use the Upload button to provide the tagsToRead"><sl-details id="readDicomTags-tags-to-read-details" summary="tagsToRead: A JSON object with a &quot;tags&quot; array of the tags to read. If not provided, all tags are read. Example tag: &quot;0008|103e&quot;." disabled></sl-details></sl-tooltip>
       <label for="tags-to-read-file"><sl-button name="tags-to-read-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="tags-to-read-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the tagsToRead"><sl-details id="readDicomTags-tags-to-read-details" summary="tagsToRead: A JSON object with a &quot;tags&quot; array of the tags to read. If not provided, all tags are read. Example tag: &quot;0008|103e&quot;." disabled></sl-details></sl-tooltip>
 <br /><br />
     <sl-divider></sl-divider>
       <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>

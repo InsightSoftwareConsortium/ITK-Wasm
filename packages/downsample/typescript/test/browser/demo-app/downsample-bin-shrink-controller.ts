@@ -47,7 +47,7 @@ class DownsampleBinShrinkController {
         webWorker.terminate()
         model.inputs.set("input", image)
         const details = document.getElementById("downsampleBinShrink-input-details")
-        details.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(image, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
+        loadImage(image, details)
         details.disabled = false
     })
 
@@ -135,7 +135,7 @@ class DownsampleBinShrinkController {
         const downsampledDetails = document.getElementById("downsampleBinShrink-downsampled-details")
         downsampledDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(downsampled, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         downsampledDetails.disabled = false
-        const downsampledOutput = document.getElementById('downsampleBinShrink-downsampled-details')
+        loadImage(downsampled, downsampledDetails)
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

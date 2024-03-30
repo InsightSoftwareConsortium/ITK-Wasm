@@ -22,7 +22,7 @@
     "test:browser:firefox": "start-server-and-test start http-get://localhost:5177 cypress:runFirefox",
     "test:browser:chrome": "start-server-and-test start http-get://localhost:5177 cypress:runChrome",
     "test:browser:debug": "start-server-and-test start http-get://localhost:5177 cypress:open",
-    "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public/shoelace && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
+    "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public/shoelace && shx cp -r node_modules/@itk-wasm/demo-app/node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
     "cypress:open": "pnpm exec cypress open",
     "cypress:runChrome": "pnpm exec cypress run --browser chrome",
     "cypress:runFirefox": "pnpm exec cypress run --browser firefox",
@@ -44,11 +44,9 @@
     "itk-wasm": "workspace:^"
   },
   "devDependencies": {
-    "@itk-viewer/element": "^0.2.12",
-    "@itk-viewer/io": "^0.1.8",
     "@itk-wasm/dicom-build": "workspace:*",
     "@itk-wasm/image-io": "workspace:*",
-    "@shoelace-style/shoelace": "^2.12.0",
+    "@itk-wasm/demo-app": "workspace:*",
     "@types/node": "^20.2.5",
     "ava": "^5.1.0",
     "cypress": "^13.6.1",

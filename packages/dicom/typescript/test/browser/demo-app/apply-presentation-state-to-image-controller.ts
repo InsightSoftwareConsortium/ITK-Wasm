@@ -182,7 +182,7 @@ class ApplyPresentationStateToImageController {
         const outputImageDetails = document.getElementById("applyPresentationStateToImage-output-image-details")
         outputImageDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(outputImage, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         outputImageDetails.disabled = false
-        const outputImageOutput = document.getElementById('applyPresentationStateToImage-output-image-details')
+        loadImage(outputImage, outputImageDetails)
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error

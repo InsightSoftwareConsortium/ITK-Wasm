@@ -9,33 +9,7 @@
   <link rel="stylesheet" href="./style.css" />
 
 <script type="module">
-  import '@shoelace-style/shoelace/dist/themes/light.css';
-  import '@shoelace-style/shoelace/dist/themes/dark.css';
-  import '@shoelace-style/shoelace/dist/components/button/button.js';
-  import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js';
-  import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js';
-  import '@shoelace-style/shoelace/dist/components/tab/tab.js';
-  import '@shoelace-style/shoelace/dist/components/input/input.js';
-  import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
-  import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
-  import '@shoelace-style/shoelace/dist/components/alert/alert.js';
-  import '@shoelace-style/shoelace/dist/components/icon/icon.js';
-  import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js';
-  import '@shoelace-style/shoelace/dist/components/divider/divider.js';
-  import '@shoelace-style/shoelace/dist/components/details/details.js';
-  import '@shoelace-style/shoelace/dist/components/popup/popup.js';
-  import '@shoelace-style/shoelace/dist/components/tag/tag.js';
-  import '@shoelace-style/shoelace/dist/components/select/select.js';
-  import '@shoelace-style/shoelace/dist/components/option/option.js';
-  import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
-
-  import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
-  setBasePath('/');
-
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    // dark mode
-    document.documentElement.classList.add('sl-theme-dark');
-  }
+  import '@itk-wasm/demo-app/demo-app.js'
 </script>
 
   <title>@itk-wasm/downsample<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></title>
@@ -70,8 +44,8 @@
     <small><i>Apply local averaging and subsample the input image.</i></small><br /><br />
 
     <div id="downsampleBinShrinkInputs"><form action="">
-      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsampleBinShrink-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsampleBinShrink-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
 <br /><br />
       <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
@@ -121,8 +95,8 @@
     <small><i>Subsample the input label image a according to weighted voting of local labels.</i></small><br /><br />
 
     <div id="downsampleLabelImageInputs"><form action="">
-      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsampleLabelImage-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsampleLabelImage-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
 <br /><br />
       <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
@@ -195,8 +169,8 @@
     <small><i>Apply a smoothing anti-alias filter and subsample the input image.</i></small><br /><br />
 
     <div id="downsampleInputs"><form action="">
-      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsample-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the input"><sl-details id="downsample-input-details" summary="input: Input image" disabled></sl-details></sl-tooltip>
 <br /><br />
       <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
