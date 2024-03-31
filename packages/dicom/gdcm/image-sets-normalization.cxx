@@ -30,8 +30,8 @@
 
 const std::string STUDY_INSTANCE_UID = "0020|000D";
 const std::string SERIES_INSTANCE_UID = "0020|000e";
-
-using File = std::string;
+const std::string FRAME_OF_REFERENCE_UID = "0020|0052";
+const std::string IMAGE_ORIENTATION_PATIENT = "0020|0037";
 
 rapidjson::Value mapToJsonObj(const TagMap &tags, rapidjson::Document::AllocatorType &allocator)
 {
@@ -73,29 +73,48 @@ rapidjson::Value jsonFromTags(const TagMap &tags, const TagNames &tagNames, rapi
   return mapToJsonObj(filteredTags, allocator);
 }
 
-using DicomFile = std::pair<const File, const TagMap>;
-struct dicomFileHash
-{
-  std::size_t operator()(const DicomFile &dFile) const
-  {
-    return std::hash<File>{}(dFile.first);
-  }
-};
-using DicomFiles = std::unordered_set<DicomFile, dicomFileHash>;
+using FileName = std::string;
 
-DicomFiles readTags(const std::vector<File> &files)
+struct DicomFile
 {
-  DicomFiles dicomFiles;
-  itk::DICOMTagReader tagReader;
-  for (const File &fileName : files)
+  FileName fileName;
+  TagMap tags;
+  gdcm::DataSet dataSet;
+
+  DicomFile(const FileName &fileName)
+      : fileName(fileName)
   {
+    itk::DICOMTagReader tagReader;
     if (!tagReader.CanReadFile(fileName))
     {
       throw std::runtime_error("Could not read the input DICOM file: " + fileName);
     }
     tagReader.SetFileName(fileName);
-    const TagMap dicomTags = tagReader.ReadAllTags();
-    dicomFiles.insert(std::make_pair(fileName, dicomTags));
+    tags = tagReader.ReadAllTags();
+  }
+
+  bool operator==(const DicomFile &other) const
+  {
+    return fileName == other.fileName;
+  }
+};
+
+struct dicomFileHash
+{
+  std::size_t operator()(const DicomFile &dicomFile) const
+  {
+    return std::hash<FileName>{}(dicomFile.fileName);
+  }
+};
+using DicomFiles = std::unordered_set<DicomFile, dicomFileHash>;
+
+DicomFiles loadFiles(const std::vector<FileName> &files)
+{
+  DicomFiles dicomFiles;
+  itk::DICOMTagReader tagReader;
+  for (const FileName &fileName : files)
+  {
+    dicomFiles.insert(DicomFile(fileName));
   }
   return dicomFiles;
 }
@@ -108,13 +127,13 @@ bool compareTags(const TagMap &tags1, const TagMap &tags2, const TagKeys &tagKey
 {
   for (const auto &tagKey : tagKeys)
   {
-    const auto it1 = tags1.find(tagKey);
-    const auto it2 = tags2.find(tagKey);
-    if (it1 == tags1.end() || it2 == tags2.end())
+    const auto tagA = tags1.find(tagKey);
+    const auto tagB = tags2.find(tagKey);
+    if (tagA == tags1.end() || tagB == tags2.end())
     {
       return false;
     }
-    if (it1->second != it2->second)
+    if (tagA->second != tagB->second)
     {
       return false;
     }
@@ -122,10 +141,9 @@ bool compareTags(const TagMap &tags1, const TagMap &tags2, const TagKeys &tagKey
   return true;
 }
 
-bool isSameVolume(const TagMap &tags1, const TagMap &tags2)
+bool isSameVolume(const TagMap &tagsA, const TagMap &tagsB)
 {
-  // TODO check cosines  
-  return compareTags(tags1, tags2, {SERIES_INSTANCE_UID});
+  return compareTags(tagsA, tagsB, {SERIES_INSTANCE_UID, FRAME_OF_REFERENCE_UID, IMAGE_ORIENTATION_PATIENT});
 }
 
 Volumes groupByVolume(const DicomFiles &dicomFiles)
@@ -133,10 +151,9 @@ Volumes groupByVolume(const DicomFiles &dicomFiles)
   Volumes volumes;
   for (const DicomFile &dicomFile : dicomFiles)
   {
-    const auto tags = dicomFile.second;
+    const auto tags = dicomFile.tags;
     auto matchingVolume = std::find_if(volumes.begin(), volumes.end(), [&tags](const Volume &volume)
-                                       {
-      return isSameVolume(volume.begin()->second, tags); });
+                                       { return isSameVolume(volume.begin()->tags, tags); });
 
     if (matchingVolume != volumes.end())
     {
@@ -156,10 +173,10 @@ ImageSets groupByImageSet(const Volumes &volumes)
   ImageSets imageSets;
   for (const Volume &volume : volumes)
   {
-    const auto volumeTags = volume.begin()->second;
+    const auto volumeTags = volume.begin()->tags;
     auto matchingImageSet = std::find_if(imageSets.begin(), imageSets.end(), [&volumeTags](const Volumes &volumes)
                                          {
-      const TagMap imageSetTags = volumes.begin()->begin()->second;
+      const TagMap imageSetTags = volumes.begin()->begin()->tags;
       return compareTags(imageSetTags, volumeTags, {STUDY_INSTANCE_UID}); });
     if (matchingImageSet != imageSets.end())
     {
@@ -179,18 +196,18 @@ Volumes sortSpatially(Volumes &volumes)
   Volumes sortedVolumes;
   for (Volume &volume : volumes)
   {
-    std::vector<std::string> unsortedSerieFileNames;
+    std::vector<std::string> unsortedSeriesFileNames;
     for (const DicomFile &dicomFile : volume)
     {
-      unsortedSerieFileNames.push_back(dicomFile.first);
+      unsortedSeriesFileNames.push_back(dicomFile.fileName);
     }
-    std::vector<std::string> sortedFileNames = sortSpatially(unsortedSerieFileNames);
+    std::vector<std::string> sortedFileNames = sortSpatially(unsortedSeriesFileNames);
 
     Volume sorted;
     for (const auto &fileName : sortedFileNames)
     {
       const auto matchingDicomFile = std::find_if(volume.begin(), volume.end(), [&fileName](const DicomFile &dicomFile)
-                                                  { return dicomFile.first == fileName; });
+                                                  { return dicomFile.fileName == fileName; });
       if (matchingDicomFile != volume.end())
       {
         sorted.push_back(*matchingDicomFile);
@@ -214,8 +231,8 @@ rapidjson::Document toJson(const ImageSets &imageSets)
       rapidjson::Value instances(rapidjson::kObjectType);
       for (const auto &dicomFile : volume)
       {
-        File file = dicomFile.first;
-        dicomTags = dicomFile.second;
+        FileName file = dicomFile.fileName;
+        dicomTags = dicomFile.tags;
         // filter out patient, study, series tags
         TagMap instanceTags = remove(dicomTags, PATIENT_TAG_NAMES);
         instanceTags = remove(instanceTags, STUDY_TAG_NAMES);
@@ -290,7 +307,7 @@ int main(int argc, char *argv[])
 
   ITK_WASM_PARSE(pipeline);
 
-  const DicomFiles dicomFiles = readTags(files);
+  const DicomFiles dicomFiles = loadFiles(files);
   Volumes volumes = groupByVolume(dicomFiles);
   volumes = sortSpatially(volumes);
   const ImageSets imageSets = groupByImageSet(volumes);
