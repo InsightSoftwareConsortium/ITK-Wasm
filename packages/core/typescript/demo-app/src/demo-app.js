@@ -22,6 +22,7 @@ import "@shoelace-style/shoelace/dist/components/card/card.js";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path";
 
 import "./itk-image-details.js";
+import "./utilities.js"
 
 setBasePath("/");
 
