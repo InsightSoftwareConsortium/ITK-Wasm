@@ -33,7 +33,7 @@ keywords = [
 
 requires-python = ">=3.8"
 dependencies = [
-    "itkwasm >= 1.0.b131",
+    "itkwasm >= 1.0.b171",
     "itkwasm-compare-images-wasi >= 1.0.1; sys_platform != \"emscripten\"",
     "itkwasm-compare-images-emscripten >= 1.0.1; sys_platform == \"emscripten\"",
 
@@ -47,7 +47,7 @@ dependencies = [
   "pytest",
   "pytest-pyodide",
   "itk-webassemblyinterface >= 1.0.b127",
-  "itkwasm >= 1.0.b131",
+  "itkwasm >= 1.0.b171",
 ]
 
 [project.urls]
