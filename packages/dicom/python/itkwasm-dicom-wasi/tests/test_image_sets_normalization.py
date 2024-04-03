@@ -46,11 +46,25 @@ def test_one_series():
     assert_equal(sorted_files, orientation_series)
 
 
-def test_strange_ct():
+def test_ct():
     image_sets = image_sets_normalization(ct_series)
     assert len(image_sets) == 1
     sorted_files = pick_files(image_sets[0])
     assert_equal(sorted_files, ct_series)
+
+def test_mr():
+    assert mr_series[0].exists()
+    out_of_order = [
+        mr_series[1],
+        mr_series[2],
+        mr_series[0],
+        mr_series[3],
+        mr_series[4],
+    ]
+    image_sets = image_sets_normalization(out_of_order)
+    assert image_sets
+    sorted_files = pick_files(image_sets[0])
+    assert_equal(sorted_files, mr_series)
 
 
 def test_two_series():
