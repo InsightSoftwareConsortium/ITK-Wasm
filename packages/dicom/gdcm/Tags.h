@@ -19,7 +19,7 @@
 #define TAGS_H
 
 #include <string>
-#include <unordered_set>
+#include <set>
 #include "itkGDCMImageIO.h"
 
 using Tag = gdcm::Tag;
@@ -29,8 +29,13 @@ const Tag STUDY_UID(0x0020, 0x000d);    // "Study Instance UID"
 const Tag SERIES_UID(0x0020, 0x000e);   // "Series Instance UID"
 const Tag INSTANCE_UID(0x0008, 0x0018); // "Instance UID"
 
-const Tag FRAME_OF_REFERENCE_UID(0x0020, 0x0052);    
-const Tag IMAGE_ORIENTATION_PATIENT(0x0020, 0x0037); 
+const Tag FRAME_OF_REFERENCE_UID(0x0020, 0x0052);
+const Tag IMAGE_ORIENTATION_PATIENT(0x0020, 0x0037);
+
+const Tag SPECIFIC_CHARACTER_SET(0x0008, 0x0005);
+const Tag PIXEL_DATA_TAG(0x7fe0, 0x0010);
+
+const Tags EMPTY_TAGS = {};
 
 // Tag names from https://docs.aws.amazon.com/healthimaging/latest/devguide/reference-dicom-support.html
 const Tags PATIENT_TAGS = {
@@ -192,5 +197,18 @@ const Tags SERIES_TAGS = {
     Tag(0x0020, 0x0052), // "Frame of Reference UID"
     Tag(0x0020, 0x1040), // "Position Reference Indicator"
 };
+
+std::pair<const char *, size_t> getTagBuffer(const gdcm::DataSet &ds, const gdcm::Tag &tag)
+{
+  if (!ds.FindDataElement(tag) || ds.GetDataElement(tag).IsEmpty())
+  {
+    return std::make_pair(nullptr, 0);
+  }
+  const gdcm::DataElement de = ds.GetDataElement(tag);
+  const gdcm::ByteValue *bv = de.GetByteValue();
+  const char *tagValue = bv->GetPointer();
+  size_t len = bv->GetLength();
+  return std::make_pair(tagValue, len);
+}
 
 #endif // TAGS_H
