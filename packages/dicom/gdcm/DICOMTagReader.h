@@ -361,14 +361,14 @@ public:
     }
 
     std::string
-    convertCharStringToUTF8(const std::string &str)
+    convertCharStringToUTF8(const std::string &str) const
     {
         size_t len = str.size();
         return this->convertCharStringToUTF8(str.c_str(), len);
     }
 
     std::string
-    convertCharStringToUTF8(const char *str, size_t len)
+    convertCharStringToUTF8(const char *str, size_t len) const
     {
         // m_charsets must always have at least 1 element prior to calling
         const char *initialCharset = definedTermToIconvCharset(m_charsets[0]);

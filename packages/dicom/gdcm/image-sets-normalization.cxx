@@ -108,7 +108,7 @@ namespace gdcm
     return false;
   }
 
-  void dataElementToJSONArray(const VR::VRType vr, const DataElement &de, rapidjson::Value &jsonArray, rapidjson::Document::AllocatorType &allocator)
+  void dataElementToJSONArray(const VR::VRType vr, const DataElement &de, rapidjson::Value &jsonArray, const CharStringToUTF8Converter toUtf8, rapidjson::Document::AllocatorType &allocator)
   {
     jsonArray.SetArray();
     if (de.IsEmpty())
@@ -169,7 +169,7 @@ namespace gdcm
           assert(str2 && (size_t)(str2 - component.c_str()) <= len2);
           const char *sep2 = strchr(str2, '=');
           const size_t llen2 = (sep2 != NULL) ? (sep2 - str2) : (component.c_str() + len2 - str2);
-          const std::string group(str2, llen2);
+          const std::string group = toUtf8.convertCharStringToUTF8(str2, llen2);
           // const char *thekey = Keys[idx++];
 
           // rapidjson::Value nameType(thekey, allocator);
@@ -235,9 +235,9 @@ namespace gdcm
         assert(str1 && (size_t)(str1 - value) <= len);
         const char *sep = strchr(str1, '\\');
         const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
-        // json_object_array_add(my_array, json_object_new_string_len(str1, llen));
+        const std::string valueUtf8 = toUtf8.convertCharStringToUTF8(str1, llen);
         rapidjson::Value valueString;
-        valueString.SetString(str1, llen, allocator);
+        valueString.SetString(valueUtf8.c_str(), valueUtf8.size(), allocator);
         jsonArray.PushBack(valueString, allocator);
         if (sep == NULL)
           break;
@@ -246,14 +246,14 @@ namespace gdcm
     }
     else // default
     {
+      const std::string valueUtf8 = toUtf8.convertCharStringToUTF8(value, len);
       rapidjson::Value valueString;
-      valueString.SetString(value, len, allocator);
+      valueString.SetString(valueUtf8.c_str(), valueUtf8.size(), allocator);
       jsonArray.PushBack(valueString, allocator);
     }
   }
 
-  const gdcm::Tag PIXEL_DATA_TAG = gdcm::Tag(0x7fe0, 0x0010);
-  rapidjson::Value *toJson(const gdcm::DataSet &dataSet, const Tags pickTags, const Tags skipTags, rapidjson::Value &dicomTagsObject, rapidjson::Document::AllocatorType &allocator)
+  rapidjson::Value *toJson(const gdcm::DataSet &dataSet, const Tags &pickTags, const Tags &skipTags, const CharStringToUTF8Converter &toUtf8, rapidjson::Value &dicomTagsObject, rapidjson::Document::AllocatorType &allocator)
   {
     for (gdcm::DataSet::ConstIterator it = dataSet.Begin(); it != dataSet.End(); ++it)
     {
@@ -293,7 +293,7 @@ namespace gdcm
             const DataSet &nested = item.GetNestedDataSet();
             rapidjson::Value sequenceObject(rapidjson::kObjectType);
             // grab all nested tags, empty pick and skip tag sets
-            toJson(nested, {}, {}, sequenceObject, allocator);
+            toJson(nested, EMPTY_TAGS, EMPTY_TAGS, toUtf8, sequenceObject, allocator);
             tagValue.PushBack(sequenceObject, allocator);
           }
         }
@@ -312,7 +312,7 @@ namespace gdcm
       }
       else if (VR::IsASCII(vr))
       {
-        dataElementToJSONArray(vr, de, tagValue, allocator);
+        dataElementToJSONArray(vr, de, tagValue, toUtf8, allocator);
       }
       else
       {
@@ -466,6 +466,14 @@ namespace gdcm
   }
 }
 
+rapidjson::Value *toJson(const gdcm::DataSet &dataSet, const Tags &pickTags, const Tags &skipTags, rapidjson::Value &dicomTagsObject, rapidjson::Document::AllocatorType &allocator)
+{
+  const auto specificCharacterSet = getTagBuffer(dataSet, SPECIFIC_CHARACTER_SET);
+  const std::string charSet = specificCharacterSet.first == nullptr ? "" : std::string(specificCharacterSet.first, specificCharacterSet.second);
+  const CharStringToUTF8Converter decoder = CharStringToUTF8Converter(charSet);
+  return toJson(dataSet, pickTags, skipTags, decoder, dicomTagsObject, allocator);
+}
+
 using FileName = std::string;
 
 struct DicomFile
@@ -476,13 +484,6 @@ struct DicomFile
   DicomFile(const FileName &fileName)
       : fileName(fileName)
   {
-    itk::DICOMTagReader tagReader;
-    if (!tagReader.CanReadFile(fileName))
-    {
-      throw std::runtime_error("Can not read the input DICOM file: " + fileName);
-    }
-    tagReader.SetFileName(fileName);
-
     gdcm::ImageReader reader;
     reader.SetFileName(fileName.c_str());
     if (!reader.Read())
@@ -520,21 +521,8 @@ DicomFiles loadFiles(const std::vector<FileName> &fileNames)
 }
 
 using Volume = std::vector<DicomFile>;
-using Volumes = std::vector<Volume>; // aka ImageSet
+using Volumes = std::vector<Volume>; // Aka ImageSet.  A set of volumes/series that share Study and Patient.
 using ImageSets = std::vector<Volumes>;
-
-std::pair<const char *, size_t> getTagBuffer(const gdcm::DataSet &ds, const gdcm::Tag &tag)
-{
-  if (!ds.FindDataElement(tag) || ds.GetDataElement(tag).IsEmpty())
-  {
-    return std::make_pair(nullptr, 0);
-  }
-  const gdcm::DataElement de = ds.GetDataElement(tag);
-  const gdcm::ByteValue *bv = de.GetByteValue();
-  const char *tagValue = bv->GetPointer();
-  size_t len = bv->GetLength();
-  return std::make_pair(tagValue, len);
-}
 
 bool compareTags(const gdcm::DataSet &tagsA, const gdcm::DataSet &tagsB, const Tags &tagKeys)
 {
@@ -649,13 +637,13 @@ rapidjson::Document toJson(const ImageSets &imageSets)
 {
   rapidjson::Document imageSetsJson(rapidjson::kArrayType);
   rapidjson::Document::AllocatorType &allocator = imageSetsJson.GetAllocator();
-  gdcm::DataSet dataSet;
   Tags instanceSkipTags; // filter out patient, study, series tags from instance object
   instanceSkipTags.insert(PATIENT_TAGS.begin(), PATIENT_TAGS.end());
   instanceSkipTags.insert(STUDY_TAGS.begin(), STUDY_TAGS.end());
   instanceSkipTags.insert(SERIES_TAGS.begin(), SERIES_TAGS.end());
   for (const Volumes &volumes : imageSets)
   {
+    gdcm::DataSet dataSet;
     rapidjson::Value seriesById(rapidjson::kObjectType);
     for (const Volume &volume : volumes)
     {
@@ -665,7 +653,8 @@ rapidjson::Document toJson(const ImageSets &imageSets)
         FileName file = dicomFile.fileName;
         dataSet = dicomFile.dataSet;
         rapidjson::Value instanceTagsJson(rapidjson::kObjectType);
-        toJson(dataSet, {}, instanceSkipTags, instanceTagsJson, allocator);
+
+        toJson(dataSet, EMPTY_TAGS, instanceSkipTags, instanceTagsJson, allocator);
         rapidjson::Value instance(rapidjson::kObjectType);
         instance.AddMember("DICOM", instanceTagsJson, allocator);
 
@@ -686,7 +675,7 @@ rapidjson::Document toJson(const ImageSets &imageSets)
 
       // Series
       rapidjson::Value seriesTags(rapidjson::kObjectType);
-      toJson(dataSet, SERIES_TAGS, {}, seriesTags, allocator);
+      toJson(dataSet, SERIES_TAGS, EMPTY_TAGS, seriesTags, allocator);
       rapidjson::Value series(rapidjson::kObjectType);
       series.AddMember("DICOM", seriesTags, allocator);
       series.AddMember("Instances", instances, allocator);
@@ -703,14 +692,14 @@ rapidjson::Document toJson(const ImageSets &imageSets)
 
     // Patient
     rapidjson::Value patientTags(rapidjson::kObjectType);
-    toJson(dataSet, PATIENT_TAGS, {}, patientTags, allocator);
+    toJson(dataSet, PATIENT_TAGS, EMPTY_TAGS, patientTags, allocator);
     rapidjson::Value patient(rapidjson::kObjectType);
     patient.AddMember("DICOM", patientTags, allocator);
     imageSet.AddMember("Patient", patient, allocator);
 
     // Study
     rapidjson::Value studyTags(rapidjson::kObjectType);
-    toJson(dataSet, STUDY_TAGS, {}, studyTags, allocator);
+    toJson(dataSet, STUDY_TAGS, EMPTY_TAGS, studyTags, allocator);
     rapidjson::Value study(rapidjson::kObjectType);
     study.AddMember("DICOM", studyTags, allocator);
     study.AddMember("Series", seriesById, allocator);
@@ -739,7 +728,6 @@ int main(int argc, char *argv[])
   const ImageSets imageSets = groupByImageSet(volumes);
 
   rapidjson::Document imageSetsJson = toJson(imageSets);
-
   rapidjson::StringBuffer stringBuffer;
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
   imageSetsJson.Accept(writer);
