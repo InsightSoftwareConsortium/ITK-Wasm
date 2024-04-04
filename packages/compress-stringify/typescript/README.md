@@ -118,10 +118,48 @@ Import:
 
 ```js
 import {
+  imageToJsonNode,
+  jsonToImageNode,
   compressStringifyNode,
   parseStringDecompressNode,
 } from "@itk-wasm/compress-stringify"
 ```
+
+#### imageToJsonNode
+
+*Compress and encode an itk-wasm Image into a JSON string.*
+
+```ts
+async function imageToJsonNode(image: Image): Promise<ImageToJsonNodeResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `image`  |   *Image*    | Input image |
+
+**`ImageToJsonNodeResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `encoded` | *string* | Output encoded image JSON string |
+
+#### jsonToImageNode
+
+*Decode and decompress an itk-wasm Image JSON string.*
+
+```ts
+async function jsonToImageNode(encoded: string): Promise<JsonToImageNodeResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `encoded` |   *string*  | Input encoded image |
+
+**`JsonToImageNodeResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `decoded` | *Image*     |   Output decoded image   |
 
 #### compressStringifyNode
 

@@ -17,7 +17,7 @@
   "scripts": {
     "start": "pnpm copyShoelaceAssets && vite",
     "test": "pnpm test:node && pnpm test:browser",
-    "test:node": "ava test/node/*.js",
+    "test:node": "ava",
     "test:browser": "pnpm test:browser:chrome && pnpm test:browser:firefox",
     "test:browser:firefox": "start-server-and-test start http-get://localhost:5176 cypress:runFirefox",
     "test:browser:chrome": "start-server-and-test start http-get://localhost:5176 cypress:runChrome",
@@ -45,6 +45,9 @@
   },
   "devDependencies": {
     "@itk-wasm/compress-stringify-build": "workspace:*",
+    "@itk-wasm/compare-images": "workspace:*",
+    "@itk-wasm/image-io": "workspace:*",
+    "@itk-wasm/mesh-io": "workspace:*",
     "@shoelace-style/shoelace": "^2.5.2",
     "@types/node": "^20.2.5",
     "ava": "^5.1.0",
@@ -59,5 +62,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+  },
+  "ava": {
+    "files": [
+      "test/node/**/*.js",
+      "!test/node/common.js"
+    ]
   }
 }

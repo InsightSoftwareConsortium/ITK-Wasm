@@ -188,9 +188,15 @@ importers:
 
   packages/compare-meshes:
     devDependencies:
+      '@itk-wasm/compare-meshes-build':
+        specifier: workspace:^
+        version: 'link:'
       '@itk-wasm/dam':
         specifier: ^1.1.1
         version: 1.1.1
+      '@itk-wasm/mesh-io-build':
+        specifier: workspace:^
+        version: link:../mesh-io
       '@thewtex/setup-micromamba':
         specifier: ^1.9.7
         version: 1.9.7
@@ -234,6 +240,12 @@ importers:
       '@itk-wasm/dam':
         specifier: ^1.1.0
         version: 1.1.0
+      '@itk-wasm/image-io-build':
+        specifier: workspace:^
+        version: link:../image-io
+      '@itk-wasm/mesh-io-build':
+        specifier: workspace:^
+        version: link:../mesh-io
       '@thewtex/setup-micromamba':
         specifier: ^1.9.7
         version: 1.9.7
@@ -247,9 +259,18 @@ importers:
         specifier: workspace:^
         version: link:../../core/typescript/itk-wasm
     devDependencies:
+      '@itk-wasm/compare-images':
+        specifier: workspace:*
+        version: link:../../compare-images/typescript
       '@itk-wasm/compress-stringify-build':
         specifier: workspace:*
         version: link:..
+      '@itk-wasm/image-io':
+        specifier: workspace:*
+        version: link:../../image-io/typescript
+      '@itk-wasm/mesh-io':
+        specifier: workspace:*
+        version: link:../../mesh-io/typescript
       '@shoelace-style/shoelace':
         specifier: ^2.12.0
         version: 2.12.0(@types/react@18.2.42)
@@ -531,6 +552,9 @@ importers:
       '@itk-wasm/compare-images':
         specifier: workspace:^
         version: link:../../compare-images/typescript
+      '@itk-wasm/downsample-build':
+        specifier: workspace:^
+        version: link:..
       '@itk-wasm/image-io':
         specifier: workspace:^
         version: link:../../image-io/typescript
