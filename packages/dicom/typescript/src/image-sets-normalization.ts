@@ -60,6 +60,18 @@ async function imageSetsNormalization(
       args.push(name)
     }))
   }
+  if (options.seriesGroupBy) {
+    const inputCountString = inputs.length.toString()
+    inputs.push({ type: InterfaceTypes.JsonCompatible, data: options.seriesGroupBy as JsonCompatible })
+    args.push('--series-group-by', inputCountString)
+
+  }
+  if (options.imageSetGroupBy) {
+    const inputCountString = inputs.length.toString()
+    inputs.push({ type: InterfaceTypes.JsonCompatible, data: options.imageSetGroupBy as JsonCompatible })
+    args.push('--image-set-group-by', inputCountString)
+
+  }
 
   const pipelinePath = 'image-sets-normalization'
 
