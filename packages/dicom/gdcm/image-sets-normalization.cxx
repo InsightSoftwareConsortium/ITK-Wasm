@@ -202,15 +202,13 @@ namespace gdcm
         assert(str1 && (size_t)(str1 - value) <= len);
         const char *sep = strchr(str1, '\\');
         const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
-        rapidjson::Value elementValue;
         // This is complex, IS/DS should not be stored as string anymore
         switch (vr)
         {
         case VR::IS:
           ss.str(std::string(str1, llen));
           ss >> vris;
-          elementValue.SetInt(vris);
-          jsonArray.PushBack(elementValue, allocator);
+          jsonArray.PushBack(rapidjson::Value(vris), allocator);
           break;
         case VR::DS:
           ss.str(std::string(str1, llen));
@@ -235,7 +233,12 @@ namespace gdcm
         assert(str1 && (size_t)(str1 - value) <= len);
         const char *sep = strchr(str1, '\\');
         const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
-        const std::string valueUtf8 = toUtf8.convertCharStringToUTF8(str1, llen);
+        std::string valueUtf8 = toUtf8.convertCharStringToUTF8(str1, llen);
+        // Trim trailing space if exists
+        if (!valueUtf8.empty() && valueUtf8.back() == ' ')
+        {
+          valueUtf8.pop_back();
+        }
         rapidjson::Value valueString;
         valueString.SetString(valueUtf8.c_str(), valueUtf8.size(), allocator);
         jsonArray.PushBack(valueString, allocator);
@@ -246,7 +249,12 @@ namespace gdcm
     }
     else // default
     {
-      const std::string valueUtf8 = toUtf8.convertCharStringToUTF8(value, len);
+      std::string valueUtf8 = toUtf8.convertCharStringToUTF8(value, len);
+      // Trim trailing space if exists
+      if (!valueUtf8.empty() && valueUtf8.back() == ' ')
+      {
+        valueUtf8.pop_back();
+      }
       rapidjson::Value valueString;
       valueString.SetString(valueUtf8.c_str(), valueUtf8.size(), allocator);
       jsonArray.PushBack(valueString, allocator);
@@ -637,10 +645,6 @@ rapidjson::Document toJson(const ImageSets &imageSets)
 {
   rapidjson::Document imageSetsJson(rapidjson::kArrayType);
   rapidjson::Document::AllocatorType &allocator = imageSetsJson.GetAllocator();
-  Tags instanceSkipTags; // filter out patient, study, series tags from instance object
-  instanceSkipTags.insert(PATIENT_TAGS.begin(), PATIENT_TAGS.end());
-  instanceSkipTags.insert(STUDY_TAGS.begin(), STUDY_TAGS.end());
-  instanceSkipTags.insert(SERIES_TAGS.begin(), SERIES_TAGS.end());
   for (const Volumes &volumes : imageSets)
   {
     gdcm::DataSet dataSet;
@@ -654,7 +658,7 @@ rapidjson::Document toJson(const ImageSets &imageSets)
         dataSet = dicomFile.dataSet;
         rapidjson::Value instanceTagsJson(rapidjson::kObjectType);
 
-        toJson(dataSet, EMPTY_TAGS, instanceSkipTags, instanceTagsJson, allocator);
+        toJson(dataSet, EMPTY_TAGS, NON_INSTANCE, instanceTagsJson, allocator);
         rapidjson::Value instance(rapidjson::kObjectType);
         instance.AddMember("DICOM", instanceTagsJson, allocator);
 
