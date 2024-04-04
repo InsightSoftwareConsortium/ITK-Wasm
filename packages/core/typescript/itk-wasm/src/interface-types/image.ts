@@ -4,6 +4,8 @@ import setMatrixElement from '../set-matrix-element.js'
 import Metadata from './metadata.js'
 
 class Image {
+  imageType: ImageType
+
   name: string = 'image'
 
   origin: number[]
@@ -18,8 +20,9 @@ class Image {
 
   data: null | TypedArray
 
-  constructor (public readonly imageType = new ImageType()) {
-    const dimension = imageType.dimension
+  constructor (public readonly it = new ImageType()) {
+    this.imageType = it
+    const dimension = it.dimension
     this.origin = new Array(dimension)
     this.origin.fill(0.0)
 
