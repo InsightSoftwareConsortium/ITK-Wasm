@@ -84,6 +84,11 @@ comparePoints(
     }
   }
 
+  if (pointsMinimumDifference == itk::NumericTraits<double>::max())
+  {
+    pointsMinimumDifference = 0.0;
+  }
+
   return {sameNumberOfPoints, numberOfPointsWithDifferences, pointsMinimumDifference, pointsMaximumDifference, pointsMeanDifference};
 }
 
@@ -136,6 +141,11 @@ comparePointData(
     {
       pointDataMinimumDifference = 0.0;
     }
+  }
+
+  if (pointDataMinimumDifference == itk::NumericTraits<double>::max())
+  {
+    pointDataMinimumDifference = 0.0;
   }
 
   return {numberOfPointDataWithDifferences, pointDataMinimumDifference, pointDataMaximumDifference, pointDataMeanDifference};
@@ -241,6 +251,11 @@ compareCellData(
     {
       cellDataMinimumDifference = 0.0;
     }
+  }
+
+  if (cellDataMinimumDifference == itk::NumericTraits<double>::max())
+  {
+    cellDataMinimumDifference = 0.0;
   }
 
   return {numberOfCellDataWithDifferences, cellDataMinimumDifference, cellDataMaximumDifference, cellDataMeanDifference};
@@ -421,6 +436,27 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
     }
   }
 
+  if (numberOfPointsWithDifferences == itk::NumericTraits<uint64_t>::max())
+  {
+    numberOfPointsWithDifferences = 0;
+  }
+  if (numberOfPointDataWithDifferences == itk::NumericTraits<uint64_t>::max())
+  {
+    numberOfPointDataWithDifferences = 0;
+  }
+  if (numberOfDifferentCellsTypes == itk::NumericTraits<uint64_t>::max())
+  {
+    numberOfDifferentCellsTypes = 0;
+  }
+  if (numberOfDifferentCellPoints == itk::NumericTraits<uint64_t>::max())
+  {
+    numberOfDifferentCellPoints = 0;
+  }
+  if (numberOfCellDataWithDifferences == itk::NumericTraits<uint64_t>::max())
+  {
+    numberOfCellDataWithDifferences = 0;
+  }
+
   pointsDifferenceMesh.Set(pointsDifferenceMeshPointer);
   pointDataDifferenceMesh.Set(pointDataDifferenceMeshPointer);
   cellDataDifferenceMesh.Set(cellDataDifferenceMeshPointer);
@@ -457,7 +493,7 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
   pointsMeanDifferenceValue.SetDouble(pointsMeanDifference);
   pointObject.AddMember("meanDifference", pointsMeanDifferenceValue, allocator);
 
-  metricsJson.AddMember("points", pointObject, allocator);
+  metricsJson.AddMember("points", pointObject.Move(), allocator);
 
   rapidjson::Value cellsObject(rapidjson::kObjectType);
 
@@ -477,7 +513,7 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
   numberOfDifferentCellPointsValue.SetUint64(numberOfDifferentCellPoints);
   cellsObject.AddMember("numberOfDifferentPoints", numberOfDifferentCellPointsValue, allocator);
 
-  metricsJson.AddMember("cells", cellsObject, allocator);
+  metricsJson.AddMember("cells", cellsObject.Move(), allocator);
 
   rapidjson::Value pointDataObject(rapidjson::kObjectType);
 
@@ -493,11 +529,11 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
   pointDataMaximumDifferenceValue.SetDouble(pointDataMaximumDifference);
   pointDataObject.AddMember("maximumDifference", pointDataMaximumDifferenceValue, allocator);
 
-  rapidjson::Value pointDataMeanDifferenceValue;
-  pointDataMeanDifferenceValue.SetDouble(pointDataMeanDifference);
-  pointDataObject.AddMember("meanDifference", pointDataMeanDifferenceValue, allocator);
+  // rapidjson::Value pointDataMeanDifferenceValue;
+  // pointDataMeanDifferenceValue.SetFloat(pointDataMeanDifference);
+  // pointDataObject.AddMember("meanDifference", pointDataMeanDifferenceValue, allocator);
 
-  metricsJson.AddMember("pointData", pointDataObject, allocator);
+  metricsJson.AddMember("pointData", pointDataObject.Move(), allocator);
 
   rapidjson::Value cellDataObject(rapidjson::kObjectType);
 
@@ -513,15 +549,19 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
   cellDataMaximumDifferenceValue.SetDouble(cellDataMaximumDifference);
   cellDataObject.AddMember("maximumDifference", cellDataMaximumDifferenceValue, allocator);
 
-  rapidjson::Value cellDataMeanDifferenceValue;
-  cellDataMeanDifferenceValue.SetDouble(cellDataMeanDifference);
-  cellDataObject.AddMember("meanDifference", cellDataMeanDifferenceValue, allocator);
+  // Buggy in WASI?
+  // rapidjson::Value cellDataMeanDifferenceValue;
+  // cellDataMeanDifferenceValue.SetDouble(cellDataMeanDifference);
+  // cellDataObject.AddMember("meanDifference", cellDataMeanDifferenceValue, allocator);
+
+  metricsJson.AddMember("cellData", cellDataObject.Move(), allocator);
 
   rapidjson::StringBuffer stringBuffer;
+  stringBuffer.Reserve(1024); // Reserve 1kB for the JSON string (default is 256B
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
   metricsJson.Accept(writer);
 
-  metrics.Get() << stringBuffer.GetString();
+  metrics.Get() << std::string(stringBuffer.GetString(), stringBuffer.GetLength());
 
   return EXIT_SUCCESS;
 }
@@ -550,13 +590,13 @@ int main(int argc, char *argv[])
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
                                           uint8_t,
-                                          int8_t,
-                                          uint16_t,
-                                          int16_t,
-                                          uint32_t,
-                                          int32_t,
+                                          // int8_t,
+                                          // uint16_t,
+                                          // int16_t,
+                                          // uint32_t,
+                                          // int32_t,
                                           float,
                                           double>::Dimensions<
-      2U,
+      // 2U,
       3U>("test-mesh", pipeline);
 }
