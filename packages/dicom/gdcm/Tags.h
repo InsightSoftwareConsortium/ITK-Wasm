@@ -20,7 +20,6 @@
 
 #include <string>
 #include <set>
-#include "itkGDCMImageIO.h"
 
 using Tag = gdcm::Tag;
 using Tags = std::set<Tag>;

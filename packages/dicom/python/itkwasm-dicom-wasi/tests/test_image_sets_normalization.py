@@ -52,6 +52,7 @@ def test_ct():
     sorted_files = pick_files(image_sets[0])
     assert_equal(sorted_files, ct_series)
 
+
 def test_mr():
     assert mr_series[0].exists()
     out_of_order = [
@@ -65,6 +66,13 @@ def test_mr():
     assert image_sets
     sorted_files = pick_files(image_sets[0])
     assert_equal(sorted_files, mr_series)
+
+
+def test_series_group_by_option():
+    assert mr_series[0].exists()
+    group_by_tags = {"tags": ["0008|0018"]} # SOP Instance UID
+    image_sets = image_sets_normalization(mr_series, series_group_by=group_by_tags)
+    assert len(image_sets) == len(mr_series)
 
 
 def test_two_series():

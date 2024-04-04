@@ -18,11 +18,19 @@ from itkwasm import (
 
 def image_sets_normalization(
     files: List[os.PathLike] = [],
+    series_group_by: Optional[Any] = None,
+    image_set_group_by: Optional[Any] = None,
 ) -> Any:
     """Group DICOM files into image sets
 
     :param files: DICOM files
     :type  files: os.PathLike
+
+    :param series_group_by: Create series so that all instances in a series share these tags. Option is a JSON object with a "tags" array. Example tag: "0008|103e". If not provided, defaults to Series UID and Frame Of Reference UID tags.
+    :type  series_group_by: Any
+
+    :param image_set_group_by: Create image sets so that all series in a set share these tags. Option is a JSON object with a "tags" array. Example tag: "0008|103e". If not provided, defaults to Study UID tag.
+    :type  image_set_group_by: Any
 
     :return: Image sets JSON
     :rtype:  Any
@@ -54,6 +62,18 @@ def image_sets_normalization(
             input_file = str(PurePosixPath(value))
             pipeline_inputs.append(PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(value)))
             args.append(input_file)
+
+    if series_group_by is not None:
+        pipeline_inputs.append(PipelineInput(InterfaceTypes.JsonCompatible, series_group_by))
+        args.append('--series-group-by')
+        args.append(str(input_count))
+        input_count += 1
+
+    if image_set_group_by is not None:
+        pipeline_inputs.append(PipelineInput(InterfaceTypes.JsonCompatible, image_set_group_by))
+        args.append('--image-set-group-by')
+        args.append(str(input_count))
+        input_count += 1
 
 
     outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
