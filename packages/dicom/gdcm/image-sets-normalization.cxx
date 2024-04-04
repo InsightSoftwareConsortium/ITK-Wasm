@@ -51,6 +51,9 @@
 
 std::string getLabelFromTag(const gdcm::Tag &tag, const gdcm::DataSet &dataSet)
 {
+  if (tag.IsPrivateCreator()) {
+    return tag.PrintAsContinuousUpperCaseString();
+  }
   std::string strowner;
   const char *owner = 0;
   if (tag.IsPrivate() && !tag.IsPrivateCreator())
@@ -61,7 +64,13 @@ std::string getLabelFromTag(const gdcm::Tag &tag, const gdcm::DataSet &dataSet)
   const gdcm::Global &g = gdcm::Global::GetInstance();
   const gdcm::Dicts &dicts = g.GetDicts();
   const gdcm::DictEntry &entry = dicts.GetDictEntry(tag, owner);
-  return entry.GetKeyword();
+  const std::string keyword = entry.GetKeyword();
+  if (keyword.empty())
+  {
+    // There are empty keywords in test/data/input/dicom-images/MR files
+    return tag.PrintAsContinuousUpperCaseString();
+  }
+  return keyword;
 }
 
 namespace gdcm
