@@ -76,7 +76,7 @@ def mesh_to_json(mesh: Mesh) -> str:
     return json_str
 
 def json_to_mesh(mesh_json: str) -> Mesh:
-    """Convert a JSON string to an mesh
+    """Convert a JSON string to a mesh
 
     :param mesh_json: Input JSON string
     :type  mesh_json: str
@@ -85,7 +85,6 @@ def json_to_mesh(mesh_json: str) -> Mesh:
     :rtype:  itkwasm.Mesh
     """
     mesh_dict = json.loads(mesh_json)
-    mesh_type = mesh_dict["meshType"]
 
     for key in ["points", "pointData", "cells", "cellData"]:
         if mesh_dict[key] is not None:
@@ -93,3 +92,40 @@ def json_to_mesh(mesh_json: str) -> Mesh:
 
     mesh = Mesh(**mesh_dict)
     return mesh
+
+def poly_data_to_json(poly_data: PolyData) -> str:
+    """Convert an poly_data to a JSON string
+
+    :param poly_data: Input poly_data
+    :type  poly_data: itkwasm.PolyData
+
+    :return: JSON string
+    :rtype:  str
+    """
+    poly_data_dict = asdict(poly_data)
+    level = 5
+
+    for key in ["points", "vertices", "lines", "polygons", "triangleStrips", "pointData", "cellData"]:
+        if poly_data_dict[key] is not None:
+            poly_data_dict[key] = compress_stringify(array_like_to_bytes(poly_data_dict[key]), compression_level=level, stringify=True).decode()
+
+    json_str = json.dumps(poly_data_dict)
+    return json_str
+
+def json_to_poly_data(poly_data_json: str) -> PolyData:
+    """Convert a JSON string to an poly_data
+
+    :param poly_data_json: Input JSON string
+    :type  poly_data_json: str
+
+    :return: Output poly_data
+    :rtype:  itkwasm.PolyData
+    """
+    poly_data_dict = json.loads(poly_data_json)
+
+    for key in ["points", "vertices", "lines", "polygons", "triangleStrips", "pointData", "cellData"]:
+        if poly_data_dict[key] is not None:
+            poly_data_dict[key] = parse_string_decompress(poly_data_dict[key].encode(), parse_string=True)
+
+    poly_data = PolyData(**poly_data_dict)
+    return poly_data

@@ -55,6 +55,7 @@ dependencies = [
   "itkwasm-image-io",
   "itkwasm-compare-meshes",
   "itkwasm-mesh-io",
+  "itkwasm-mesh-to-poly-data",
 ]
 
 
