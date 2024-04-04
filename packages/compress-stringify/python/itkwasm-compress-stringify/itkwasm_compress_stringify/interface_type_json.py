@@ -26,7 +26,6 @@ def image_to_json(image: Image) -> str:
         image_dict["data"] = compress_stringify(data_bytes, compression_level=level, stringify=True).decode()
 
     json_str = json.dumps(image_dict)
-
     return json_str
 
 def json_to_image(image_json: str) -> Image:
@@ -56,3 +55,41 @@ def json_to_image(image_json: str) -> Image:
     image = Image(**image_dict)
 
     return image
+
+def mesh_to_json(mesh: Mesh) -> str:
+    """Convert an mesh to a JSON string
+
+    :param mesh: Input mesh
+    :type  mesh: itkwasm.Mesh
+
+    :return: JSON string
+    :rtype:  str
+    """
+    mesh_dict = asdict(mesh)
+    level = 5
+
+    for key in ["points", "pointData", "cells", "cellData"]:
+        if mesh_dict[key] is not None:
+            mesh_dict[key] = compress_stringify(array_like_to_bytes(mesh_dict[key]), compression_level=level, stringify=True).decode()
+
+    json_str = json.dumps(mesh_dict)
+    return json_str
+
+def json_to_mesh(mesh_json: str) -> Mesh:
+    """Convert a JSON string to an mesh
+
+    :param mesh_json: Input JSON string
+    :type  mesh_json: str
+
+    :return: Output mesh
+    :rtype:  itkwasm.Mesh
+    """
+    mesh_dict = json.loads(mesh_json)
+    mesh_type = mesh_dict["meshType"]
+
+    for key in ["points", "pointData", "cells", "cellData"]:
+        if mesh_dict[key] is not None:
+            mesh_dict[key] = parse_string_decompress(mesh_dict[key].encode(), parse_string=True)
+
+    mesh = Mesh(**mesh_dict)
+    return mesh

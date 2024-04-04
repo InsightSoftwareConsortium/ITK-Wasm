@@ -7,4 +7,4 @@ from .parse_string_decompress import parse_string_decompress
 
 from ._version import __version__
 
-from .interface_type_json import image_to_json, json_to_image
+from .interface_type_json import image_to_json, json_to_image, mesh_to_json, json_to_mesh
