@@ -43,15 +43,22 @@
 #include "itkMakeUniqueForOverwrite.h"
 
 #include "itkPipeline.h"
+#include "itkInputTextStream.h"
 #include "itkOutputTextStream.h"
 
-#include "DICOMTagReader.h"
+#include "CharStringToUTF8Converter.h"
 #include "Tags.h"
+#include "TagsOptionParser.h"
 #include "SortSpatially.h"
+
+const Tags SERIES_GROUP_BY_DEFAULT = Tags{SERIES_UID, FRAME_OF_REFERENCE_UID};
+const Tags IMAGE_SET_GROUP_BY_DEFAULT = Tags{STUDY_UID};
+
 
 std::string getLabelFromTag(const gdcm::Tag &tag, const gdcm::DataSet &dataSet)
 {
-  if (tag.IsPrivateCreator()) {
+  if (tag.IsPrivateCreator())
+  {
     return tag.PrintAsContinuousUpperCaseString();
   }
   std::string strowner;
@@ -529,7 +536,6 @@ using DicomFiles = std::unordered_set<DicomFile, dicomFileHash>;
 DicomFiles loadFiles(const std::vector<FileName> &fileNames)
 {
   DicomFiles dicomFiles;
-  itk::DICOMTagReader tagReader;
   for (const FileName &fileName : fileNames)
   {
     dicomFiles.insert(DicomFile(fileName));
@@ -559,20 +565,19 @@ bool compareTags(const gdcm::DataSet &tagsA, const gdcm::DataSet &tagsB, const T
   return true;
 }
 
-bool isSameVolume(const gdcm::DataSet &tagsA, const gdcm::DataSet &tagsB)
+bool isSameVolume(const gdcm::DataSet &tagsA, const gdcm::DataSet &tagsB, const Tags &criteria)
 {
-  const Tags criteria = {SERIES_UID, FRAME_OF_REFERENCE_UID};
   return compareTags(tagsA, tagsB, criteria);
 }
 
-Volumes groupByVolume(const DicomFiles &dicomFiles)
+Volumes groupByVolume(const DicomFiles &dicomFiles, const Tags &criteria = {SERIES_UID, FRAME_OF_REFERENCE_UID})
 {
   Volumes volumes;
   for (const DicomFile &dicomFile : dicomFiles)
   {
     const auto candidate = dicomFile.dataSet;
-    auto matchingVolume = std::find_if(volumes.begin(), volumes.end(), [&candidate](const Volume &volume)
-                                       { return isSameVolume(volume.begin()->dataSet, candidate); });
+    auto matchingVolume = std::find_if(volumes.begin(), volumes.end(), [&candidate, &criteria](const Volume &volume)
+                                       { return isSameVolume(volume.begin()->dataSet, candidate, criteria); });
 
     if (matchingVolume != volumes.end())
     {
@@ -587,16 +592,16 @@ Volumes groupByVolume(const DicomFiles &dicomFiles)
   return volumes;
 }
 
-ImageSets groupByImageSet(const Volumes &volumes)
+ImageSets groupByImageSet(const Volumes &volumes, const Tags &imageSetCriteria = {STUDY_UID})
 {
   ImageSets imageSets;
   for (const Volume &volume : volumes)
   {
     const gdcm::DataSet volumeDataSet = volume.begin()->dataSet;
-    auto matchingImageSet = std::find_if(imageSets.begin(), imageSets.end(), [&volumeDataSet](const Volumes &volumes)
+    auto matchingImageSet = std::find_if(imageSets.begin(), imageSets.end(), [&volumeDataSet, &imageSetCriteria](const Volumes &volumes)
                                          {
       const gdcm::DataSet imageSetDataSet = volumes.begin()->begin()->dataSet;
-      return compareTags(volumeDataSet, imageSetDataSet, {STUDY_UID}); });
+      return compareTags(volumeDataSet, imageSetDataSet, imageSetCriteria); });
     if (matchingImageSet != imageSets.end())
     {
       matchingImageSet->push_back(volume);
@@ -730,15 +735,25 @@ int main(int argc, char *argv[])
   std::vector<std::string> files;
   pipeline.add_option("--files", files, "DICOM files")->required()->check(CLI::ExistingFile)->type_size(1, -1)->type_name("INPUT_BINARY_FILE");
 
+  itk::wasm::InputTextStream seriesGroupByOption;
+  pipeline.add_option("--series-group-by", seriesGroupByOption, "Create series so that all instances in a series share these tags. Option is a JSON object with a \"tags\" array. Example tag: \"0008|103e\". If not provided, defaults to Series UID and Frame Of Reference UID tags.")->type_name("INPUT_JSON");
+  itk::wasm::InputTextStream imageSetGroupByOption;
+  pipeline.add_option("--image-set-group-by", imageSetGroupByOption, "Create image sets so that all series in a set share these tags. Option is a JSON object with a \"tags\" array. Example tag: \"0008|103e\". If not provided, defaults to Study UID tag.")->type_name("INPUT_JSON");
+
   itk::wasm::OutputTextStream imageSetsOutput;
   pipeline.add_option("image-sets", imageSetsOutput, "Image sets JSON")->required()->type_name("OUTPUT_JSON");
 
   ITK_WASM_PARSE(pipeline);
 
+  const std::optional<Tags> seriesGroupByParse = parseTags(seriesGroupByOption, pipeline);
+  const Tags seriesGroupBy = seriesGroupByParse.value_or(SERIES_GROUP_BY_DEFAULT);
+  const std::optional<Tags> imageSetGroupByParse = parseTags(imageSetGroupByOption, pipeline);
+  const Tags imageSetGroupBy = imageSetGroupByParse.value_or(IMAGE_SET_GROUP_BY_DEFAULT);
+
   const DicomFiles dicomFiles = loadFiles(files);
-  Volumes volumes = groupByVolume(dicomFiles);
+  Volumes volumes = groupByVolume(dicomFiles, seriesGroupBy);
   volumes = sortSpatially(volumes);
-  const ImageSets imageSets = groupByImageSet(volumes);
+  const ImageSets imageSets = groupByImageSet(volumes, imageSetGroupBy);
 
   rapidjson::Document imageSetsJson = toJson(imageSets);
   rapidjson::StringBuffer stringBuffer;
