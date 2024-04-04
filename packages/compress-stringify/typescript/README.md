@@ -22,6 +22,8 @@ Import:
 
 ```js
 import {
+  imageToJson,
+  jsonToImage,
   compressStringify,
   parseStringDecompress,
   setPipelinesBaseUrl,
@@ -30,6 +32,64 @@ import {
 ```
 
 ### Functions
+
+#### imageToJson
+
+*Compress and encode an itk-wasm Image into a JSON string.*
+
+```ts
+async function imageToJson(
+  image: Image,
+  options: ImageToJsonOptions = {}
+): Promise<ImageToJsonResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `image`  |   *Image*    | Input image |
+
+**`ImageToJsonOptions` interface:**
+
+|      Property      |             Type            | Description                                                                                                                                           |
+| :----------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`      |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
+
+**`ImageToJsonResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `encoded` | *string* | Output encoded image JSON string |
+| `webWorker` |   *Worker*   | WebWorker used for computation. |
+
+#### jsonToImage
+
+*Decode and decompress an itk-wasm Image JSON string.*
+
+```ts
+async function jsonToImage(
+  encoded: string,
+  options: JsonToImageOptions = {}
+): Promise<JsonToImageResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `encoded` |   *string*  | Input encoded image |
+
+**`JsonToImageOptions` interface:**
+
+|      Property      |             Type            | Description                                                                                                                                           |
+| :----------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`      |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
+
+**`JsonToImageResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `decoded` | *Image*     |   Output decoded image   |
+| `webWorker` |   *Worker*   | WebWorker used for computation. |
 
 #### compressStringify
 

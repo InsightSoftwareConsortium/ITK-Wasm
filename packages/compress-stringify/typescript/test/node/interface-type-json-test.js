@@ -8,7 +8,7 @@ import { testInputPath } from "./common.js";
 
 import { imageToJsonNode, jsonToImageNode } from "../../dist/index-node.js";
 
-test("imageToJsonNode roundtrip", async (t) => {
+test("imageToJsonNode, jsonToImageNode roundtrips", async (t) => {
   const testInputFilePath = path.join(testInputPath, "cthead1.png");
   const image = await readImageNode(testInputFilePath);
 
