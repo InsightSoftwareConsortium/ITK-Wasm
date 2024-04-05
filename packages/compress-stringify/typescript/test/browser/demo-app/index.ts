@@ -7,6 +7,8 @@ import * as meshIo from "@itk-wasm/mesh-io";
 globalThis.meshIo = meshIo;
 import * as compareImages from "@itk-wasm/compare-images";
 globalThis.compareImages = compareImages;
+import * as compareMeshes from "@itk-wasm/compare-meshes";
+globalThis.compareMeshes = compareMeshes;
 
 // Use local, vendored WebAssembly module assets
 const viteBaseUrl = import.meta.env.BASE_URL;
@@ -15,6 +17,10 @@ const pipelinesBaseUrl: string | URL = new URL(
   document.location.origin,
 ).href;
 compressStringify.setPipelinesBaseUrl(pipelinesBaseUrl);
+imageIo.setPipelinesBaseUrl(pipelinesBaseUrl);
+meshIo.setPipelinesBaseUrl(pipelinesBaseUrl);
+compareImages.setPipelinesBaseUrl(pipelinesBaseUrl);
+compareMeshes.setPipelinesBaseUrl(pipelinesBaseUrl);
 
 const params = new URLSearchParams(window.location.search);
 if (!params.has("functionName")) {

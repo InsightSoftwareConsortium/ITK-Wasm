@@ -3,9 +3,18 @@ import {
   ImageToJsonNodeResult,
   jsonToImageNode,
   JsonToImageNodeResult,
+  meshToJsonNode,
+  MeshToJsonNodeResult,
+  jsonToMeshNode,
+  JsonToMeshNodeResult,
 } from "./interface-type-json-node.js";
-export { imageToJsonNode, jsonToImageNode };
-export type { ImageToJsonNodeResult, JsonToImageNodeResult };
+export { imageToJsonNode, jsonToImageNode, meshToJsonNode, jsonToMeshNode };
+export type {
+  ImageToJsonNodeResult,
+  JsonToImageNodeResult,
+  MeshToJsonNodeResult,
+  JsonToMeshNodeResult,
+};
 
 import CompressStringifyNodeResult from "./compress-stringify-node-result.js";
 export type { CompressStringifyNodeResult };

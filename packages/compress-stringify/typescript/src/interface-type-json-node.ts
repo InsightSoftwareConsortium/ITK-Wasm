@@ -1,7 +1,7 @@
 import {
   bufferToTypedArray,
   Image,
-  //    Mesh,
+  Mesh,
   //    PolyData,
 } from "itk-wasm";
 
@@ -83,6 +83,87 @@ export async function jsonToImageNode(
       // @ts-ignore
       decoded.data.output.buffer,
     );
+  }
+
+  return { decoded };
+}
+
+export interface MeshToJsonNodeResult {
+  encoded: string;
+}
+
+export async function meshToJsonNode(
+  mesh: Mesh,
+): Promise<MeshToJsonNodeResult> {
+  const level = 5;
+
+  const encoded = new Mesh(mesh.meshType);
+  encoded.name = mesh.name;
+  encoded.numberOfPoints = mesh.numberOfPoints;
+  encoded.numberOfCells = mesh.numberOfCells;
+  encoded.numberOfPointPixels = mesh.numberOfPointPixels;
+  encoded.numberOfCellPixels = mesh.numberOfCellPixels;
+  encoded.cellBufferSize = mesh.cellBufferSize;
+
+  const decoder = new TextDecoder("utf-8");
+  for (const prop of ["points", "pointData", "cells", "cellData"]) {
+    // @ts-ignore: TS7053
+    if (mesh[prop] === null) {
+      // @ts-ignore: TS7053
+      encoded[prop] = null;
+    } else {
+      // @ts-ignore: TS7053
+      const dataBytes = new Uint8Array(mesh[prop].buffer);
+      // @ts-ignore
+      const encodedProp = await compressStringifyNode(dataBytes, {
+        compressionLevel: level,
+        stringify: true,
+      });
+      // @ts-ignore
+      encoded[prop] = decoder.decode(encodedProp.output.buffer);
+    }
+  }
+
+  const encodedJson = JSON.stringify(encoded);
+  return { encoded: encodedJson };
+}
+
+export interface JsonToMeshNodeResult {
+  decoded: Mesh;
+}
+
+export async function jsonToMeshNode(
+  encoded: string,
+): Promise<JsonToMeshNodeResult> {
+  const decoded = JSON.parse(encoded) as Mesh;
+
+  const componentTypeMap = new Map([
+    ["points", "pointComponentType"],
+    ["pointData", "pointPixelComponentType"],
+    ["cells", "cellComponentType"],
+    ["cellData", "cellPixelComponentType"],
+  ]);
+
+  const encoder = new TextEncoder();
+  for (const prop of ["points", "pointData", "cells", "cellData"]) {
+    // @ts-ignore: TS7053
+    if (decoded[prop] === null) {
+      // @ts-ignore: TS7053
+      decoded[prop] = null;
+    } else {
+      // @ts-ignore: TS7053
+      const dataBytes = new Uint8Array(encoder.encode(decoded[prop]));
+      // @ts-ignore
+      const decodedProp = await parseStringDecompressNode(dataBytes, {
+        parseString: true,
+      });
+      // @ts-ignore
+      decoded[prop] = bufferToTypedArray(
+        // @ts-ignore: TS7053
+        decoded.meshType[componentTypeMap.get(prop)],
+        decodedProp.output.buffer,
+      );
+    }
   }
 
   return { decoded };

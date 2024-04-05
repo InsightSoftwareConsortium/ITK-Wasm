@@ -46,6 +46,7 @@
   "devDependencies": {
     "@itk-wasm/compress-stringify-build": "workspace:*",
     "@itk-wasm/compare-images": "workspace:*",
+    "@itk-wasm/compare-meshes": "workspace:*",
     "@itk-wasm/image-io": "workspace:*",
     "@itk-wasm/mesh-io": "workspace:*",
     "@shoelace-style/shoelace": "^2.5.2",

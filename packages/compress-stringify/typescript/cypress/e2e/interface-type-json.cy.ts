@@ -33,4 +33,26 @@ describe("interface type to json functions", () => {
       cy.expect(metrics.almostEqual).to.be.true;
     });
   });
+
+  it("meshToJson, jsonToMesh roundtrips", function () {
+    cy.window().then(async (win) => {
+      const path = "cow.vtk";
+      const meshArrayBuffer = new Uint8Array(this[path]).buffer;
+      const { mesh, webWorker } = await win.meshIo.readMesh({
+        path,
+        data: new Uint8Array(meshArrayBuffer),
+      });
+      const { encoded } = await win.compressStringify.meshToJson(mesh, {
+        webWorker,
+      });
+      const jsonMesh = await win.compressStringify.jsonToMesh(encoded, {
+        webWorker,
+      });
+
+      const { metrics } = await win.compareMeshes.compareMeshes(mesh, {
+        baselineMeshes: [jsonMesh.decoded],
+      });
+      cy.expect(metrics.almostEqual).to.be.true;
+    });
+  });
 });

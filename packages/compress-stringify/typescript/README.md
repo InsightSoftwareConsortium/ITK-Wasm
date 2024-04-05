@@ -24,6 +24,8 @@ Import:
 import {
   imageToJson,
   jsonToImage,
+  meshToJson,
+  jsonToMesh,
   compressStringify,
   parseStringDecompress,
   setPipelinesBaseUrl,
@@ -89,6 +91,64 @@ async function jsonToImage(
 | Property |     Type     | Description              |
 | :------: | :----------: | :----------------------- |
 | `decoded` | *Image*     |   Output decoded image   |
+| `webWorker` |   *Worker*   | WebWorker used for computation. |
+
+#### meshToJson
+
+*Compress and encode an itk-wasm Mesh into a JSON string.*
+
+```ts
+async function meshToJson(
+  mesh: Mesh,
+  options: MeshToJsonOptions = {}
+): Promise<MeshToJsonResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `mesh`  |   *Mesh*    | Input mesh |
+
+**`MeshToJsonOptions` interface:**
+
+|      Property      |             Type            | Description                                                                                                                                           |
+| :----------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`      |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
+
+**`MeshToJsonResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `encoded` | *string* | Output encoded mesh JSON string |
+| `webWorker` |   *Worker*   | WebWorker used for computation. |
+
+#### jsonToMesh
+
+*Decode and decompress an itk-wasm Mesh JSON string.*
+
+```ts
+async function jsonToMesh(
+  encoded: string,
+  options: JsonToMeshOptions = {}
+): Promise<JsonToMeshResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `encoded` |   *string*  | Input encoded mesh |
+
+**`JsonToMeshOptions` interface:**
+
+|      Property      |             Type            | Description                                                                                                                                           |
+| :----------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`      |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
+
+**`JsonToMeshResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `decoded` | *Mesh*     |   Output decoded mesh   |
 | `webWorker` |   *Worker*   | WebWorker used for computation. |
 
 #### compressStringify
@@ -180,6 +240,8 @@ Import:
 import {
   imageToJsonNode,
   jsonToImageNode,
+  meshToJsonNode,
+  jsonToMeshNode,
   compressStringifyNode,
   parseStringDecompressNode,
 } from "@itk-wasm/compress-stringify"
@@ -220,6 +282,42 @@ async function jsonToImageNode(encoded: string): Promise<JsonToImageNodeResult>
 | Property |     Type     | Description              |
 | :------: | :----------: | :----------------------- |
 | `decoded` | *Image*     |   Output decoded image   |
+
+#### meshToJsonNode
+
+*Compress and encode an itk-wasm Mesh into a JSON string.*
+
+```ts
+async function meshToJsonNode(mesh: Mesh): Promise<MeshToJsonNodeResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `mesh`   |   *Mesh*     | Input mesh |
+
+**`MeshToJsonNodeResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `encoded` | *string* | Output encoded mesh JSON string |
+
+#### jsonToMeshNode
+
+*Decode and decompress an itk-wasm Mesh JSON string.*
+
+```ts
+async function jsonToMeshNode(encoded: string): Promise<JsonToMeshNodeResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `encoded` |   *string*  | Input encoded mesh |
+
+**`JsonToMeshNodeResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `decoded` | *Mesh*     |   Output decoded mesh   |
 
 #### compressStringifyNode
 

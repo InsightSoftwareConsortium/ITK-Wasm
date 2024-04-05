@@ -5,13 +5,23 @@ import {
   jsonToImage,
   JsonToImageOptions,
   JsonToImageResult,
+  meshToJson,
+  MeshToJsonOptions,
+  MeshToJsonResult,
+  jsonToMesh,
+  JsonToMeshOptions,
+  JsonToMeshResult,
 } from "./interface-type-json.js";
-export { imageToJson, jsonToImage };
+export { imageToJson, jsonToImage, meshToJson, jsonToMesh };
 export type {
   ImageToJsonResult,
   ImageToJsonOptions,
   JsonToImageResult,
   JsonToImageOptions,
+  MeshToJsonOptions,
+  MeshToJsonResult,
+  JsonToMeshOptions,
+  JsonToMeshResult,
 };
 
 export * from "./pipelines-base-url.js";
