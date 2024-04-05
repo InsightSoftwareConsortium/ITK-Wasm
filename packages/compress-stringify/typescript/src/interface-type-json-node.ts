@@ -3,8 +3,14 @@ import { bufferToTypedArray, Image, Mesh, PolyData } from "itk-wasm";
 import compressStringifyNode from "./compress-stringify-node.js";
 import parseStringDecompressNode from "./parse-string-decompress-node.js";
 
+import {
+  ImageJson,
+  MeshJson,
+  PolyDataJson,
+} from "./interface-type-json-common.js";
+
 export interface ImageToJsonNodeResult {
-  encoded: string;
+  encoded: ImageJson;
 }
 
 export async function imageToJsonNode(
@@ -12,7 +18,7 @@ export async function imageToJsonNode(
 ): Promise<ImageToJsonNodeResult> {
   const level = 5;
 
-  const encoded = new Image(image.imageType);
+  const encoded = new Image(image.imageType) as unknown as ImageJson;
   encoded.origin = image.origin;
   encoded.spacing = image.spacing;
   encoded.size = image.size;
@@ -20,29 +26,24 @@ export async function imageToJsonNode(
 
   const decoder = new TextDecoder("utf-8");
   const directionBytes = new Uint8Array(image.direction.buffer);
-  // @ts-ignore
-  encoded.direction = await compressStringifyNode(directionBytes, {
+  const direction = await compressStringifyNode(directionBytes, {
     compressionLevel: level,
     stringify: true,
   });
-  // @ts-ignore
-  encoded.direction = decoder.decode(encoded.direction.output.buffer);
+  encoded.direction = decoder.decode(direction.output.buffer);
 
   if (image.data === null) {
     encoded.data = null;
   } else {
     const dataBytes = new Uint8Array(image.data.buffer);
-    // @ts-ignore
-    encoded.data = await compressStringifyNode(dataBytes, {
+    const encodedData = await compressStringifyNode(dataBytes, {
       compressionLevel: level,
       stringify: true,
     });
-    // @ts-ignore
-    encoded.data = decoder.decode(encoded.data.output.buffer);
+    encoded.data = decoder.decode(encodedData.output.buffer);
   }
 
-  const encodedJson = JSON.stringify(encoded);
-  return { encoded: encodedJson };
+  return { encoded };
 }
 
 export interface JsonToImageNodeResult {
@@ -50,33 +51,27 @@ export interface JsonToImageNodeResult {
 }
 
 export async function jsonToImageNode(
-  encoded: string,
+  encoded: ImageJson,
 ): Promise<JsonToImageNodeResult> {
-  const decoded = JSON.parse(encoded) as Image;
+  const decoded = encoded as unknown as Image;
 
   const encoder = new TextEncoder();
-  // @ts-ignore
-  const directionBytes = new Uint8Array(encoder.encode(decoded.direction));
-  // @ts-ignore
-  decoded.direction = await parseStringDecompressNode(directionBytes, {
+  const directionBytes = new Uint8Array(encoder.encode(encoded.direction));
+  const direction = await parseStringDecompressNode(directionBytes, {
     parseString: true,
   });
-  // @ts-ignore
-  decoded.direction = new Float64Array(decoded.direction.output.buffer);
+  decoded.direction = new Float64Array(direction.output.buffer);
 
-  if (decoded.data === null) {
+  if (!decoded.data) {
     decoded.data = null;
   } else {
-    // @ts-ignore
-    const dataBytes = new Uint8Array(encoder.encode(decoded.data));
-    // @ts-ignore
-    decoded.data = await parseStringDecompressNode(dataBytes, {
+    const dataBytes = new Uint8Array(encoder.encode(encoded.data as string));
+    const decodedData = await parseStringDecompressNode(dataBytes, {
       parseString: true,
     });
     decoded.data = bufferToTypedArray(
       decoded.imageType.componentType,
-      // @ts-ignore
-      decoded.data.output.buffer,
+      decodedData.output.buffer,
     );
   }
 
@@ -84,7 +79,7 @@ export async function jsonToImageNode(
 }
 
 export interface MeshToJsonNodeResult {
-  encoded: string;
+  encoded: MeshJson;
 }
 
 export async function meshToJsonNode(
@@ -92,7 +87,7 @@ export async function meshToJsonNode(
 ): Promise<MeshToJsonNodeResult> {
   const level = 5;
 
-  const encoded = new Mesh(mesh.meshType);
+  const encoded = new Mesh(mesh.meshType) as unknown as MeshJson;
   encoded.name = mesh.name;
   encoded.numberOfPoints = mesh.numberOfPoints;
   encoded.numberOfCells = mesh.numberOfCells;
@@ -119,8 +114,7 @@ export async function meshToJsonNode(
     }
   }
 
-  const encodedJson = JSON.stringify(encoded);
-  return { encoded: encodedJson };
+  return { encoded };
 }
 
 export interface JsonToMeshNodeResult {
@@ -128,9 +122,9 @@ export interface JsonToMeshNodeResult {
 }
 
 export async function jsonToMeshNode(
-  encoded: string,
+  encoded: MeshJson,
 ): Promise<JsonToMeshNodeResult> {
-  const decoded = JSON.parse(encoded) as Mesh;
+  const decoded = encoded as unknown as Mesh;
 
   const componentTypeMap = new Map([
     ["points", "pointComponentType"],
@@ -165,7 +159,7 @@ export async function jsonToMeshNode(
 }
 
 export interface PolyDataToJsonNodeResult {
-  encoded: string;
+  encoded: PolyDataJson;
 }
 
 export async function polyDataToJsonNode(
@@ -173,7 +167,9 @@ export async function polyDataToJsonNode(
 ): Promise<PolyDataToJsonNodeResult> {
   const level = 5;
 
-  const encoded = new PolyData(polyData.polyDataType);
+  const encoded = new PolyData(
+    polyData.polyDataType,
+  ) as unknown as PolyDataJson;
   encoded.name = polyData.name;
   encoded.numberOfPoints = polyData.numberOfPoints;
   encoded.verticesBufferSize = polyData.verticesBufferSize;
@@ -210,8 +206,7 @@ export async function polyDataToJsonNode(
     }
   }
 
-  const encodedJson = JSON.stringify(encoded);
-  return { encoded: encodedJson };
+  return { encoded };
 }
 
 export interface JsonToPolyDataNodeResult {
@@ -219,9 +214,9 @@ export interface JsonToPolyDataNodeResult {
 }
 
 export async function jsonToPolyDataNode(
-  encoded: string,
+  encoded: PolyDataJson,
 ): Promise<JsonToPolyDataNodeResult> {
-  const decoded = JSON.parse(encoded) as PolyData;
+  const decoded = encoded as unknown as PolyData;
 
   const componentTypeMap = new Map([
     ["points", "float32"],

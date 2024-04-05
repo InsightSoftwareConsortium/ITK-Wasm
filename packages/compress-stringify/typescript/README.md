@@ -26,6 +26,8 @@ import {
   jsonToImage,
   meshToJson,
   jsonToMesh,
+  polyDataToJson,
+  jsonToPolyData,
   compressStringify,
   parseStringDecompress,
   setPipelinesBaseUrl,
@@ -37,7 +39,7 @@ import {
 
 #### imageToJson
 
-*Compress and encode an itk-wasm Image into a JSON string.*
+*Compress and encode an itk-wasm Image into a JSON compatible object.*
 
 ```ts
 async function imageToJson(
@@ -61,23 +63,23 @@ async function imageToJson(
 
 | Property |     Type     | Description              |
 | :------: | :----------: | :----------------------- |
-| `encoded` | *string* | Output encoded image JSON string |
+| `encoded` | *ImageJson* | Output encoded image JSON, binary data is a compressed string |
 | `webWorker` |   *Worker*   | WebWorker used for computation. |
 
 #### jsonToImage
 
-*Decode and decompress an itk-wasm Image JSON string.*
+*Decode and decompress an itk-wasm Image JSON, binary data compressed and converted to a string.*
 
 ```ts
 async function jsonToImage(
-  encoded: string,
+  encoded: ImageJson,
   options: JsonToImageOptions = {}
 ): Promise<JsonToImageResult>
 ```
 
 | Parameter |     Type     | Description  |
 | :-------: | :----------: | :----------- |
-|  `encoded` |   *string*  | Input encoded image |
+|  `encoded` |   *ImageJson*  | Input encoded image |
 
 **`JsonToImageOptions` interface:**
 
@@ -95,7 +97,7 @@ async function jsonToImage(
 
 #### meshToJson
 
-*Compress and encode an itk-wasm Mesh into a JSON string.*
+*Compress and encode an itk-wasm Mesh into a JSON compatible object.*
 
 ```ts
 async function meshToJson(
@@ -119,23 +121,23 @@ async function meshToJson(
 
 | Property |     Type     | Description              |
 | :------: | :----------: | :----------------------- |
-| `encoded` | *string* | Output encoded mesh JSON string |
+| `encoded` | *MeshJson* | Output encoded mesh JSON, binary data is a compressed string |
 | `webWorker` |   *Worker*   | WebWorker used for computation. |
 
 #### jsonToMesh
 
-*Decode and decompress an itk-wasm Mesh JSON string.*
+*Decode and decompress an itk-wasm Mesh JSON, binary data compressed and converted to a string.*
 
 ```ts
 async function jsonToMesh(
-  encoded: string,
+  encoded: MeshJson,
   options: JsonToMeshOptions = {}
 ): Promise<JsonToMeshResult>
 ```
 
 | Parameter |     Type     | Description  |
 | :-------: | :----------: | :----------- |
-|  `encoded` |   *string*  | Input encoded mesh |
+|  `encoded` |   *MeshJson*  | Input encoded mesh |
 
 **`JsonToMeshOptions` interface:**
 
@@ -149,6 +151,64 @@ async function jsonToMesh(
 | Property |     Type     | Description              |
 | :------: | :----------: | :----------------------- |
 | `decoded` | *Mesh*     |   Output decoded mesh   |
+| `webWorker` |   *Worker*   | WebWorker used for computation. |
+
+#### polyDataToJson
+
+*Compress and encode an itk-wasm PolyData into a JSON compatible object.*
+
+```ts
+async function polyDataToJson(
+  polyData: PolyData,
+  options: PolyDataToJsonOptions = {}
+): Promise<PolyDataToJsonResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `polyData`  |   *PolyData*    | Input polyData |
+
+**`PolyDataToJsonOptions` interface:**
+
+|      Property      |             Type            | Description                                                                                                                                           |
+| :----------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`      |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
+
+**`PolyDataToJsonResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `encoded` | *PolyDataJson* | Output encoded polyData JSON, binary data is a compressed string |
+| `webWorker` |   *Worker*   | WebWorker used for computation. |
+
+#### jsonToPolyData
+
+*Decode and decompress an itk-wasm PolyData JSON compatible object.*
+
+```ts
+async function jsonToPolyData(
+  encoded: PolyDataJson,
+  options: JsonToPolyDataOptions = {}
+): Promise<JsonToPolyDataResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `encoded` |   *PolyDataJson*  | Input encoded polyData |
+
+**`JsonToPolyDataOptions` interface:**
+
+|      Property      |             Type            | Description                                                                                                                                           |
+| :----------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`      |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
+
+**`JsonToPolyDataResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `decoded` | *PolyData*     |   Output decoded polyData   |
 | `webWorker` |   *Worker*   | WebWorker used for computation. |
 
 #### compressStringify
@@ -251,7 +311,7 @@ import {
 
 #### imageToJsonNode
 
-*Compress and encode an itk-wasm Image into a JSON string.*
+*Compress and encode an itk-wasm Image into a JSON compatible object.*
 
 ```ts
 async function imageToJsonNode(image: Image): Promise<ImageToJsonNodeResult>
@@ -265,14 +325,14 @@ async function imageToJsonNode(image: Image): Promise<ImageToJsonNodeResult>
 
 | Property |     Type     | Description              |
 | :------: | :----------: | :----------------------- |
-| `encoded` | *string* | Output encoded image JSON string |
+| `encoded` | *ImageJson* | Output encoded image JSON, binary data converted to a compressed string |
 
 #### jsonToImageNode
 
-*Decode and decompress an itk-wasm Image JSON string.*
+*Decode and decompress an itk-wasm Image JSON compatible object.*
 
 ```ts
-async function jsonToImageNode(encoded: string): Promise<JsonToImageNodeResult>
+async function jsonToImageNode(encoded: ImageJson): Promise<JsonToImageNodeResult>
 ```
 
 | Parameter |     Type     | Description  |
@@ -287,7 +347,7 @@ async function jsonToImageNode(encoded: string): Promise<JsonToImageNodeResult>
 
 #### meshToJsonNode
 
-*Compress and encode an itk-wasm Mesh into a JSON string.*
+*Compress and encode an itk-wasm Mesh into a JSON compatible object.*
 
 ```ts
 async function meshToJsonNode(mesh: Mesh): Promise<MeshToJsonNodeResult>
@@ -301,19 +361,19 @@ async function meshToJsonNode(mesh: Mesh): Promise<MeshToJsonNodeResult>
 
 | Property |     Type     | Description              |
 | :------: | :----------: | :----------------------- |
-| `encoded` | *string* | Output encoded mesh JSON string |
+| `encoded` | *MeshJson* | Output encoded mesh JSON, binary data compressed and converted to a string |
 
 #### jsonToMeshNode
 
-*Decode and decompress an itk-wasm Mesh JSON string.*
+*Decode and decompress an itk-wasm Mesh JSON compatible object.*
 
 ```ts
-async function jsonToMeshNode(encoded: string): Promise<JsonToMeshNodeResult>
+async function jsonToMeshNode(encoded: MeshJson): Promise<JsonToMeshNodeResult>
 ```
 
 | Parameter |     Type     | Description  |
 | :-------: | :----------: | :----------- |
-|  `encoded` |   *string*  | Input encoded mesh |
+|  `encoded` |   *MeshJson*  | Input encoded mesh |
 
 **`JsonToMeshNodeResult` interface:**
 
@@ -323,7 +383,7 @@ async function jsonToMeshNode(encoded: string): Promise<JsonToMeshNodeResult>
 
 #### polyDataToJsonNode
 
-*Compress and encode an itk-wasm PolyData into a JSON string.*
+*Compress and encode an itk-wasm PolyData into a JSON compatible object.*
 
 ```ts
 async function polyDataToJsonNode(polyData: PolyData): Promise<PolyDataToJsonNodeResult>
@@ -337,19 +397,19 @@ async function polyDataToJsonNode(polyData: PolyData): Promise<PolyDataToJsonNod
 
 | Property |     Type     | Description              |
 | :------: | :----------: | :----------------------- |
-| `encoded` | *string* | Output encoded polyData JSON string |
+| `encoded` | *PolyDataJson* | Output encoded polyData JSON, binary data compressed and converted to a string |
 
 #### jsonToPolyDataNode
 
 *Decode and decompress an itk-wasm PolyData JSON string.*
 
 ```ts
-async function jsonToPolyDataNode(encoded: string): Promise<JsonToPolyDataNodeResult>
+async function jsonToPolyDataNode(encoded: PolyDataJson): Promise<JsonToPolyDataNodeResult>
 ```
 
 | Parameter |     Type     | Description  |
 | :-------: | :----------: | :----------- |
-|  `encoded` |   *string*  | Input encoded polyData |
+|  `encoded` |   *PolyDataJson*  | Input encoded polyData |
 
 **`JsonToPolyDataNodeResult` interface:**
 

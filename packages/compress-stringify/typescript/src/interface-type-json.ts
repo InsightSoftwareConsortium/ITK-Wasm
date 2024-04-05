@@ -5,14 +5,19 @@ import {
   Image,
   Mesh,
   PolyData,
-  //    PolyData,
 } from "itk-wasm";
 
 import compressStringify from "./compress-stringify.js";
 import parseStringDecompress from "./parse-string-decompress.js";
 
+import {
+  ImageJson,
+  MeshJson,
+  PolyDataJson,
+} from "./interface-type-json-common.js";
+
 export interface ImageToJsonResult extends WorkerPoolFunctionResult {
-  encoded: string;
+  encoded: ImageJson;
 }
 
 export interface ImageToJsonOptions extends WorkerPoolFunctionOption {}
@@ -23,7 +28,7 @@ export async function imageToJson(
 ): Promise<ImageToJsonResult> {
   const level = 5;
 
-  const encoded = new Image(image.imageType);
+  const encoded = new Image(image.imageType) as unknown as ImageJson;
   encoded.origin = image.origin;
   encoded.spacing = image.spacing;
   encoded.size = image.size;
@@ -31,7 +36,6 @@ export async function imageToJson(
 
   const decoder = new TextDecoder("utf-8");
   const directionBytes = new Uint8Array(image.direction.buffer);
-  // @ts-ignore
   const direction = await compressStringify(directionBytes, {
     compressionLevel: level,
     stringify: true,
@@ -39,26 +43,22 @@ export async function imageToJson(
     noCopy: options.noCopy,
   });
   const usedWebWorker = direction.webWorker;
-  // @ts-ignore
   encoded.direction = decoder.decode(direction.output.buffer);
 
   if (image.data === null) {
     encoded.data = null;
   } else {
     const dataBytes = new Uint8Array(image.data.buffer);
-    // @ts-ignore
-    encoded.data = await compressStringify(dataBytes, {
+    const encodedData = await compressStringify(dataBytes, {
       compressionLevel: level,
       stringify: true,
       webWorker: usedWebWorker,
       noCopy: options.noCopy,
     });
-    // @ts-ignore
-    encoded.data = decoder.decode(encoded.data.output.buffer);
+    encoded.data = decoder.decode(encodedData.output.buffer);
   }
 
-  const encodedJson = JSON.stringify(encoded);
-  return { encoded: encodedJson, webWorker: usedWebWorker };
+  return { encoded, webWorker: usedWebWorker };
 }
 
 export interface JsonToImageResult extends WorkerPoolFunctionResult {
@@ -68,39 +68,33 @@ export interface JsonToImageResult extends WorkerPoolFunctionResult {
 export interface JsonToImageOptions extends WorkerPoolFunctionOption {}
 
 export async function jsonToImage(
-  encoded: string,
+  encoded: ImageJson,
   options: JsonToImageOptions = {},
 ): Promise<JsonToImageResult> {
-  const decoded = JSON.parse(encoded) as Image;
+  const decoded = encoded as unknown as Image;
 
   const encoder = new TextEncoder();
-  // @ts-ignore
-  const directionBytes = new Uint8Array(encoder.encode(decoded.direction));
-  // @ts-ignore
+  const directionBytes = new Uint8Array(encoder.encode(encoded.direction));
   const direction = await parseStringDecompress(directionBytes, {
     parseString: true,
     webWorker: options.webWorker,
     noCopy: true,
   });
   const usedWebWorker = direction.webWorker;
-  // @ts-ignore
   decoded.direction = new Float64Array(direction.output.buffer);
 
-  if (decoded.data === null) {
+  if (!decoded.data) {
     decoded.data = null;
   } else {
-    // @ts-ignore
-    const dataBytes = new Uint8Array(encoder.encode(decoded.data));
-    // @ts-ignore
-    decoded.data = await parseStringDecompress(dataBytes, {
+    const dataBytes = new Uint8Array(encoder.encode(encoded.data as string));
+    const decodedData = await parseStringDecompress(dataBytes, {
       parseString: true,
       webWorker: usedWebWorker,
       noCopy: true,
     });
     decoded.data = bufferToTypedArray(
       decoded.imageType.componentType,
-      // @ts-ignore
-      decoded.data.output.buffer,
+      decodedData.output.buffer,
     );
   }
 
@@ -108,7 +102,7 @@ export async function jsonToImage(
 }
 
 export interface MeshToJsonResult extends WorkerPoolFunctionResult {
-  encoded: string;
+  encoded: MeshJson;
 }
 
 export interface MeshToJsonOptions extends WorkerPoolFunctionOption {}
@@ -119,7 +113,7 @@ export async function meshToJson(
 ): Promise<MeshToJsonResult> {
   const level = 5;
 
-  const encoded = new Mesh(mesh.meshType);
+  const encoded = new Mesh(mesh.meshType) as unknown as MeshJson;
   encoded.name = mesh.name;
   encoded.numberOfPoints = mesh.numberOfPoints;
   encoded.numberOfCells = mesh.numberOfCells;
@@ -137,7 +131,6 @@ export async function meshToJson(
     } else {
       // @ts-ignore: TS7053
       const dataBytes = new Uint8Array(mesh[prop].buffer);
-      // @ts-ignore
       const encodedProp = await compressStringify(dataBytes, {
         compressionLevel: level,
         stringify: true,
@@ -150,8 +143,7 @@ export async function meshToJson(
     }
   }
 
-  const encodedJson = JSON.stringify(encoded);
-  return { encoded: encodedJson, webWorker: usedWebWorker as Worker };
+  return { encoded, webWorker: usedWebWorker as Worker };
 }
 
 export interface JsonToMeshResult extends WorkerPoolFunctionResult {
@@ -161,10 +153,11 @@ export interface JsonToMeshResult extends WorkerPoolFunctionResult {
 export interface JsonToMeshOptions extends WorkerPoolFunctionOption {}
 
 export async function jsonToMesh(
-  encoded: string,
+  encoded: MeshJson,
   options: JsonToMeshOptions = {},
 ): Promise<JsonToMeshResult> {
-  const decoded = JSON.parse(encoded) as Mesh;
+  // @ts-ignore: TS7053
+  const decoded = encoded as Mesh;
 
   const componentTypeMap = new Map([
     ["points", "pointComponentType"],
@@ -183,7 +176,6 @@ export async function jsonToMesh(
     } else {
       // @ts-ignore: TS7053
       const dataBytes = new Uint8Array(encoder.encode(decoded[prop]));
-      // @ts-ignore
       const decodedProp = await parseStringDecompress(dataBytes, {
         parseString: true,
         webWorker: usedWebWorker,
@@ -203,7 +195,7 @@ export async function jsonToMesh(
 }
 
 export interface PolyDataToJsonResult extends WorkerPoolFunctionResult {
-  encoded: string;
+  encoded: PolyDataJson;
 }
 
 export interface PolyDataToJsonOptions extends WorkerPoolFunctionOption {}
@@ -214,7 +206,9 @@ export async function polyDataToJson(
 ): Promise<PolyDataToJsonResult> {
   const level = 5;
 
-  const encoded = new PolyData(polyData.polyDataType);
+  const encoded = new PolyData(
+    polyData.polyDataType,
+  ) as unknown as PolyDataJson;
   encoded.name = polyData.name;
   encoded.numberOfPoints = polyData.numberOfPoints;
   encoded.verticesBufferSize = polyData.verticesBufferSize;
@@ -255,8 +249,7 @@ export async function polyDataToJson(
     }
   }
 
-  const encodedJson = JSON.stringify(encoded);
-  return { encoded: encodedJson, webWorker: usedWebWorker as Worker };
+  return { encoded, webWorker: usedWebWorker as Worker };
 }
 
 export interface JsonToPolyDataResult extends WorkerPoolFunctionResult {
@@ -266,10 +259,11 @@ export interface JsonToPolyDataResult extends WorkerPoolFunctionResult {
 export interface JsonToPolyDataOptions extends WorkerPoolFunctionOption {}
 
 export async function jsonToPolyData(
-  encoded: string,
+  encoded: PolyDataJson,
   options: JsonToPolyDataOptions = {},
 ): Promise<JsonToPolyDataResult> {
-  const decoded = JSON.parse(encoded) as PolyData;
+  // @ts-ignore: TS7053
+  const decoded = encoded as PolyData;
 
   const componentTypeMap = new Map([
     ["points", "float32"],

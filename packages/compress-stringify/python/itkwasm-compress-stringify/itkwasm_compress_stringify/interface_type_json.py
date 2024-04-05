@@ -1,19 +1,19 @@
 from dataclasses import asdict
 import json
 
-from itkwasm import Image, FloatTypes, Mesh, PolyData, array_like_to_bytes, buffer_to_numpy_array
+from itkwasm import Image, FloatTypes, Mesh, PolyData, array_like_to_bytes, buffer_to_numpy_array, JsonCompatible
 
 from .compress_stringify import compress_stringify
 from .parse_string_decompress import parse_string_decompress
 
-def image_to_json(image: Image) -> str:
-    """Convert an image to a JSON string
+def image_to_json(image: Image) -> JsonCompatible:
+    """Convert an image to a JSON compatible dict
 
     :param image: Input image
     :type  image: itkwasm.Image
 
-    :return: JSON string
-    :rtype:  str
+    :return: Image dict with binary data compressed and converted to a string
+    :rtype:  JsonCompatible
     """
     image_dict = asdict(image)
     level = 5
@@ -25,19 +25,18 @@ def image_to_json(image: Image) -> str:
         data_bytes = array_like_to_bytes(image_dict["data"])
         image_dict["data"] = compress_stringify(data_bytes, compression_level=level, stringify=True).decode()
 
-    json_str = json.dumps(image_dict)
-    return json_str
+    return image_dict
 
-def json_to_image(image_json: str) -> Image:
-    """Convert a JSON string to an image
+def json_to_image(image_json: JsonCompatible) -> Image:
+    """Convert a JSON compatible image dict to an image
 
-    :param image_json: Input JSON string
-    :type  image_json: str
+    :param image_json: Input image dict with binary data compressed and converted to a string
+    :type  image_json: JsonCompatible
 
     :return: Output image
     :rtype:  itkwasm.Image
     """
-    image_dict = json.loads(image_json)
+    image_dict = image_json
     image_type = image_dict["imageType"]
     dimension = image_type["dimension"]
 
@@ -56,14 +55,14 @@ def json_to_image(image_json: str) -> Image:
 
     return image
 
-def mesh_to_json(mesh: Mesh) -> str:
-    """Convert an mesh to a JSON string
+def mesh_to_json(mesh: Mesh) -> JsonCompatible:
+    """Convert an mesh to a JSON compatible dict
 
     :param mesh: Input mesh
     :type  mesh: itkwasm.Mesh
 
-    :return: JSON string
-    :rtype:  str
+    :return: Mesh dict with binary data compressed and converted to a string
+    :rtype:  JsonCompatible
     """
     mesh_dict = asdict(mesh)
     level = 5
@@ -72,19 +71,18 @@ def mesh_to_json(mesh: Mesh) -> str:
         if mesh_dict[key] is not None:
             mesh_dict[key] = compress_stringify(array_like_to_bytes(mesh_dict[key]), compression_level=level, stringify=True).decode()
 
-    json_str = json.dumps(mesh_dict)
-    return json_str
+    return mesh_dict
 
-def json_to_mesh(mesh_json: str) -> Mesh:
-    """Convert a JSON string to a mesh
+def json_to_mesh(mesh_json: JsonCompatible) -> Mesh:
+    """Convert a JSON compatible mesh dict to an mesh
 
-    :param mesh_json: Input JSON string
-    :type  mesh_json: str
+    :param mesh_json: Input mesh dict with binary data compressed and converted to a string
+    :type  mesh_json: JsonCompatible
 
     :return: Output mesh
     :rtype:  itkwasm.Mesh
     """
-    mesh_dict = json.loads(mesh_json)
+    mesh_dict = mesh_json
 
     for key in ["points", "pointData", "cells", "cellData"]:
         if mesh_dict[key] is not None:
@@ -93,14 +91,14 @@ def json_to_mesh(mesh_json: str) -> Mesh:
     mesh = Mesh(**mesh_dict)
     return mesh
 
-def poly_data_to_json(poly_data: PolyData) -> str:
-    """Convert an poly_data to a JSON string
+def poly_data_to_json(poly_data: PolyData) -> JsonCompatible:
+    """Convert an PolyData to a JSON compatible dict
 
-    :param poly_data: Input poly_data
+    :param poly_data: Input PolyData
     :type  poly_data: itkwasm.PolyData
 
-    :return: JSON string
-    :rtype:  str
+    :return: PolyData dict with binary data compressed and converted to a string
+    :rtype:  JsonCompatible
     """
     poly_data_dict = asdict(poly_data)
     level = 5
@@ -109,19 +107,18 @@ def poly_data_to_json(poly_data: PolyData) -> str:
         if poly_data_dict[key] is not None:
             poly_data_dict[key] = compress_stringify(array_like_to_bytes(poly_data_dict[key]), compression_level=level, stringify=True).decode()
 
-    json_str = json.dumps(poly_data_dict)
-    return json_str
+    return poly_data_dict
 
 def json_to_poly_data(poly_data_json: str) -> PolyData:
-    """Convert a JSON string to an poly_data
+    """Convert a JSON compatible PolyData dict to a PolyData
 
-    :param poly_data_json: Input JSON string
-    :type  poly_data_json: str
+    :param poly_data_json: Input PolyData dict with binary data compressed and converted to a string
+    :type  poly_data_json: JsonCompatible
 
     :return: Output poly_data
     :rtype:  itkwasm.PolyData
     """
-    poly_data_dict = json.loads(poly_data_json)
+    poly_data_dict = poly_data_json
 
     for key in ["points", "vertices", "lines", "polygons", "triangleStrips", "pointData", "cellData"]:
         if poly_data_dict[key] is not None:
