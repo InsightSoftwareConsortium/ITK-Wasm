@@ -4,4 +4,6 @@ wasi-build
 
 python
 test
-typescript
+typescript/version.ts
+typescript/dist
+typescript/demo-app
