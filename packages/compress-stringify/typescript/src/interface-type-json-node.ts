@@ -1,9 +1,4 @@
-import {
-  bufferToTypedArray,
-  Image,
-  Mesh,
-  //    PolyData,
-} from "itk-wasm";
+import { bufferToTypedArray, Image, Mesh, PolyData } from "itk-wasm";
 
 import compressStringifyNode from "./compress-stringify-node.js";
 import parseStringDecompressNode from "./parse-string-decompress-node.js";
@@ -161,6 +156,108 @@ export async function jsonToMeshNode(
       decoded[prop] = bufferToTypedArray(
         // @ts-ignore: TS7053
         decoded.meshType[componentTypeMap.get(prop)],
+        decodedProp.output.buffer,
+      );
+    }
+  }
+
+  return { decoded };
+}
+
+export interface PolyDataToJsonNodeResult {
+  encoded: string;
+}
+
+export async function polyDataToJsonNode(
+  polyData: PolyData,
+): Promise<PolyDataToJsonNodeResult> {
+  const level = 5;
+
+  const encoded = new PolyData(polyData.polyDataType);
+  encoded.name = polyData.name;
+  encoded.numberOfPoints = polyData.numberOfPoints;
+  encoded.verticesBufferSize = polyData.verticesBufferSize;
+  encoded.linesBufferSize = polyData.linesBufferSize;
+  encoded.polygonsBufferSize = polyData.polygonsBufferSize;
+  encoded.triangleStripsBufferSize = polyData.triangleStripsBufferSize;
+  encoded.numberOfPointPixels = polyData.numberOfPointPixels;
+  encoded.numberOfCellPixels = polyData.numberOfCellPixels;
+
+  const decoder = new TextDecoder("utf-8");
+  for (const prop of [
+    "points",
+    "vertices",
+    "lines",
+    "polygons",
+    "triangleStrips",
+    "pointData",
+    "cellData",
+  ]) {
+    // @ts-ignore: TS7053
+    if (polyData[prop] === null) {
+      // @ts-ignore: TS7053
+      encoded[prop] = null;
+    } else {
+      // @ts-ignore: TS7053
+      const dataBytes = new Uint8Array(polyData[prop].buffer);
+      // @ts-ignore
+      const encodedProp = await compressStringifyNode(dataBytes, {
+        compressionLevel: level,
+        stringify: true,
+      });
+      // @ts-ignore
+      encoded[prop] = decoder.decode(encodedProp.output.buffer);
+    }
+  }
+
+  const encodedJson = JSON.stringify(encoded);
+  return { encoded: encodedJson };
+}
+
+export interface JsonToPolyDataNodeResult {
+  decoded: PolyData;
+}
+
+export async function jsonToPolyDataNode(
+  encoded: string,
+): Promise<JsonToPolyDataNodeResult> {
+  const decoded = JSON.parse(encoded) as PolyData;
+
+  const componentTypeMap = new Map([
+    ["points", "float32"],
+    ["vertices", "uint32"],
+    ["lines", "uint32"],
+    ["polygons", "uint32"],
+    ["triangleStrips", "uint32"],
+    ["pointData", decoded.polyDataType.pointPixelComponentType],
+    ["cellData", decoded.polyDataType.cellPixelComponentType],
+  ]);
+
+  const encoder = new TextEncoder();
+  for (const prop of [
+    "points",
+    "vertices",
+    "lines",
+    "polygons",
+    "triangleStrips",
+    "pointData",
+    "cellData",
+  ]) {
+    // @ts-ignore: TS7053
+    if (decoded[prop] === null) {
+      // @ts-ignore: TS7053
+      decoded[prop] = null;
+    } else {
+      // @ts-ignore: TS7053
+      const dataBytes = new Uint8Array(encoder.encode(decoded[prop]));
+      // @ts-ignore
+      const decodedProp = await parseStringDecompressNode(dataBytes, {
+        parseString: true,
+      });
+      // @ts-ignore
+      decoded[prop] = bufferToTypedArray(
+        // @ts-ignore: TS7053
+        componentTypeMap.get(prop),
         decodedProp.output.buffer,
       );
     }

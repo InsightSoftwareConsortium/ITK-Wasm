@@ -44,11 +44,12 @@
     "itk-wasm": "workspace:^"
   },
   "devDependencies": {
-    "@itk-wasm/compress-stringify-build": "workspace:*",
     "@itk-wasm/compare-images": "workspace:*",
     "@itk-wasm/compare-meshes": "workspace:*",
+    "@itk-wasm/compress-stringify-build": "workspace:*",
     "@itk-wasm/image-io": "workspace:*",
     "@itk-wasm/mesh-io": "workspace:*",
+    "@itk-wasm/mesh-to-poly-data": "^1.0.0",
     "@shoelace-style/shoelace": "^2.5.2",
     "@types/node": "^20.2.5",
     "ava": "^5.1.0",

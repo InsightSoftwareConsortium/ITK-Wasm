@@ -242,6 +242,8 @@ import {
   jsonToImageNode,
   meshToJsonNode,
   jsonToMeshNode,
+  polyDataToJsonNode,
+  jsonToPolyDataNode,
   compressStringifyNode,
   parseStringDecompressNode,
 } from "@itk-wasm/compress-stringify"
@@ -318,6 +320,42 @@ async function jsonToMeshNode(encoded: string): Promise<JsonToMeshNodeResult>
 | Property |     Type     | Description              |
 | :------: | :----------: | :----------------------- |
 | `decoded` | *Mesh*     |   Output decoded mesh   |
+
+#### polyDataToJsonNode
+
+*Compress and encode an itk-wasm PolyData into a JSON string.*
+
+```ts
+async function polyDataToJsonNode(polyData: PolyData): Promise<PolyDataToJsonNodeResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `polyData`   |   *PolyData*     | Input polyData |
+
+**`PolyDataToJsonNodeResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `encoded` | *string* | Output encoded polyData JSON string |
+
+#### jsonToPolyDataNode
+
+*Decode and decompress an itk-wasm PolyData JSON string.*
+
+```ts
+async function jsonToPolyDataNode(encoded: string): Promise<JsonToPolyDataNodeResult>
+```
+
+| Parameter |     Type     | Description  |
+| :-------: | :----------: | :----------- |
+|  `encoded` |   *string*  | Input encoded polyData |
+
+**`JsonToPolyDataNodeResult` interface:**
+
+| Property |     Type     | Description              |
+| :------: | :----------: | :----------------------- |
+| `decoded` | *PolyData*     |   Output decoded polyData   |
 
 #### compressStringifyNode
 
