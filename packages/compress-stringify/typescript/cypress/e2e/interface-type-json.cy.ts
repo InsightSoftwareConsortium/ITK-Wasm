@@ -31,6 +31,7 @@ describe("interface type to json functions", () => {
         baselineImages: [jsonImage.decoded],
       });
       cy.expect(metrics.almostEqual).to.be.true;
+      webWorker.terminate();
     });
   });
 
@@ -53,6 +54,45 @@ describe("interface type to json functions", () => {
         baselineMeshes: [jsonMesh.decoded],
       });
       cy.expect(metrics.almostEqual).to.be.true;
+      webWorker.terminate();
+    });
+  });
+
+  it("polyDataToJson, jsonToPolyData roundtrips", function () {
+    cy.window().then(async (win) => {
+      const path = "cow.vtk";
+      const meshArrayBuffer = new Uint8Array(this[path]).buffer;
+      const { mesh, webWorker } = await win.meshIo.readMesh({
+        path,
+        data: new Uint8Array(meshArrayBuffer),
+      });
+      const { polyData } = await win.meshToPolyData.meshToPolyData(mesh, {
+        webWorker,
+      });
+      const { mesh: polyDataMesh } = await win.meshToPolyData.polyDataToMesh(
+        polyData,
+        { webWorker },
+      );
+      const { encoded } = await win.compressStringify.polyDataToJson(polyData, {
+        webWorker,
+      });
+      const jsonPolyData = await win.compressStringify.jsonToPolyData(encoded, {
+        webWorker,
+      });
+
+      const { mesh: jsonPolyDataMesh } =
+        await win.meshToPolyData.polyDataToMesh(jsonPolyData.decoded, {
+          webWorker,
+        });
+
+      const { metrics } = await win.compareMeshes.compareMeshes(
+        jsonPolyDataMesh,
+        {
+          baselineMeshes: [polyDataMesh],
+        },
+      );
+      cy.expect(metrics.almostEqual).to.be.true;
+      webWorker.terminate();
     });
   });
 });

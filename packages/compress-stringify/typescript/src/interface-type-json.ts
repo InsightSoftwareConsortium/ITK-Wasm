@@ -4,6 +4,7 @@ import {
   WorkerPoolFunctionResult,
   Image,
   Mesh,
+  PolyData,
   //    PolyData,
 } from "itk-wasm";
 
@@ -193,6 +194,122 @@ export async function jsonToMesh(
       decoded[prop] = bufferToTypedArray(
         // @ts-ignore: TS7053
         decoded.meshType[componentTypeMap.get(prop)],
+        decodedProp.output.buffer,
+      );
+    }
+  }
+
+  return { decoded, webWorker: usedWebWorker as Worker };
+}
+
+export interface PolyDataToJsonResult extends WorkerPoolFunctionResult {
+  encoded: string;
+}
+
+export interface PolyDataToJsonOptions extends WorkerPoolFunctionOption {}
+
+export async function polyDataToJson(
+  polyData: PolyData,
+  options: PolyDataToJsonOptions = {},
+): Promise<PolyDataToJsonResult> {
+  const level = 5;
+
+  const encoded = new PolyData(polyData.polyDataType);
+  encoded.name = polyData.name;
+  encoded.numberOfPoints = polyData.numberOfPoints;
+  encoded.verticesBufferSize = polyData.verticesBufferSize;
+  encoded.linesBufferSize = polyData.linesBufferSize;
+  encoded.polygonsBufferSize = polyData.polygonsBufferSize;
+  encoded.triangleStripsBufferSize = polyData.triangleStripsBufferSize;
+  encoded.numberOfPointPixels = polyData.numberOfPointPixels;
+  encoded.numberOfCellPixels = polyData.numberOfCellPixels;
+
+  let usedWebWorker = options.webWorker;
+  const decoder = new TextDecoder("utf-8");
+  for (const prop of [
+    "points",
+    "vertices",
+    "lines",
+    "polygons",
+    "triangleStrips",
+    "pointData",
+    "cellData",
+  ]) {
+    // @ts-ignore: TS7053
+    if (polyData[prop] === null) {
+      // @ts-ignore: TS7053
+      encoded[prop] = null;
+    } else {
+      // @ts-ignore: TS7053
+      const dataBytes = new Uint8Array(polyData[prop].buffer);
+      // @ts-ignore
+      const encodedProp = await compressStringify(dataBytes, {
+        compressionLevel: level,
+        stringify: true,
+        webWorker: usedWebWorker,
+        noCopy: options.noCopy,
+      });
+      usedWebWorker = encodedProp.webWorker;
+      // @ts-ignore
+      encoded[prop] = decoder.decode(encodedProp.output.buffer);
+    }
+  }
+
+  const encodedJson = JSON.stringify(encoded);
+  return { encoded: encodedJson, webWorker: usedWebWorker as Worker };
+}
+
+export interface JsonToPolyDataResult extends WorkerPoolFunctionResult {
+  decoded: PolyData;
+}
+
+export interface JsonToPolyDataOptions extends WorkerPoolFunctionOption {}
+
+export async function jsonToPolyData(
+  encoded: string,
+  options: JsonToPolyDataOptions = {},
+): Promise<JsonToPolyDataResult> {
+  const decoded = JSON.parse(encoded) as PolyData;
+
+  const componentTypeMap = new Map([
+    ["points", "float32"],
+    ["vertices", "uint32"],
+    ["lines", "uint32"],
+    ["polygons", "uint32"],
+    ["triangleStrips", "uint32"],
+    ["pointData", decoded.polyDataType.pointPixelComponentType],
+    ["cellData", decoded.polyDataType.cellPixelComponentType],
+  ]);
+
+  const encoder = new TextEncoder();
+  let usedWebWorker = options.webWorker;
+  for (const prop of [
+    "points",
+    "vertices",
+    "lines",
+    "polygons",
+    "triangleStrips",
+    "pointData",
+    "cellData",
+  ]) {
+    // @ts-ignore: TS7053
+    if (decoded[prop] === null) {
+      // @ts-ignore: TS7053
+      decoded[prop] = null;
+    } else {
+      // @ts-ignore: TS7053
+      const dataBytes = new Uint8Array(encoder.encode(decoded[prop]));
+      // @ts-ignore
+      const decodedProp = await parseStringDecompress(dataBytes, {
+        parseString: true,
+        webWorker: usedWebWorker,
+        noCopy: true,
+      });
+      usedWebWorker = decodedProp.webWorker;
+      // @ts-ignore
+      decoded[prop] = bufferToTypedArray(
+        // @ts-ignore: TS7053
+        componentTypeMap.get(prop),
         decodedProp.output.buffer,
       );
     }

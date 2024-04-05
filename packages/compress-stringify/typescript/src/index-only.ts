@@ -11,8 +11,21 @@ import {
   jsonToMesh,
   JsonToMeshOptions,
   JsonToMeshResult,
+  polyDataToJson,
+  PolyDataToJsonOptions,
+  PolyDataToJsonResult,
+  jsonToPolyData,
+  JsonToPolyDataOptions,
+  JsonToPolyDataResult,
 } from "./interface-type-json.js";
-export { imageToJson, jsonToImage, meshToJson, jsonToMesh };
+export {
+  imageToJson,
+  jsonToImage,
+  meshToJson,
+  jsonToMesh,
+  polyDataToJson,
+  jsonToPolyData,
+};
 export type {
   ImageToJsonResult,
   ImageToJsonOptions,
@@ -22,6 +35,10 @@ export type {
   MeshToJsonResult,
   JsonToMeshOptions,
   JsonToMeshResult,
+  PolyDataToJsonOptions,
+  PolyDataToJsonResult,
+  JsonToPolyDataOptions,
+  JsonToPolyDataResult,
 };
 
 export * from "./pipelines-base-url.js";

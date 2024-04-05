@@ -9,6 +9,8 @@ import * as compareImages from "@itk-wasm/compare-images";
 globalThis.compareImages = compareImages;
 import * as compareMeshes from "@itk-wasm/compare-meshes";
 globalThis.compareMeshes = compareMeshes;
+import * as meshToPolyData from "@itk-wasm/mesh-to-poly-data";
+globalThis.meshToPolyData = meshToPolyData;
 
 // Use local, vendored WebAssembly module assets
 const viteBaseUrl = import.meta.env.BASE_URL;
@@ -21,6 +23,7 @@ imageIo.setPipelinesBaseUrl(pipelinesBaseUrl);
 meshIo.setPipelinesBaseUrl(pipelinesBaseUrl);
 compareImages.setPipelinesBaseUrl(pipelinesBaseUrl);
 compareMeshes.setPipelinesBaseUrl(pipelinesBaseUrl);
+meshToPolyData.setPipelinesBaseUrl(pipelinesBaseUrl);
 
 const params = new URLSearchParams(window.location.search);
 if (!params.has("functionName")) {
