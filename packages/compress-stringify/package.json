@@ -42,6 +42,8 @@
     "@thewtex/setup-micromamba": "^1.9.7",
     "itk-wasm": "workspace:^",
     "@itk-wasm/mesh-io-build": "workspace:^",
-    "@itk-wasm/image-io-build": "workspace:^"
+    "@itk-wasm/image-io-build": "workspace:^",
+    "@itk-wasm/compare-images-build": "workspace:^",
+    "@itk-wasm/compare-meshes-build": "workspace:^"
   }
 }
