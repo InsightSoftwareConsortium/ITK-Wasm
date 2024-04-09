@@ -2,6 +2,9 @@ name: Toolchains
 
 on: [push,pull_request]
 
+env:
+  OCI_EXE: docker
+
 jobs:
   build-itk-wasm-base:
     name: "Build itk-wasm-base"

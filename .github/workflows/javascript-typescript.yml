@@ -6,6 +6,9 @@ defaults:
   run:
     shell: bash -leo pipefail {0} {0}
 
+env:
+  OCI_EXE: docker
+
 jobs:
   itkwasm-node-js:
     runs-on: ubuntu-22.04
