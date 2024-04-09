@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=dockcross/web-wasm
+ARG BASE_IMAGE=docker.io/dockcross/web-wasm
 FROM $BASE_IMAGE:20240326-00e7558
 ARG BASE_IMAGE
 
