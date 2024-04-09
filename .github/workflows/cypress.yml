@@ -9,7 +9,7 @@ defaults:
 jobs:
 
   test-cypress:
-    name: itk-wasm reference packages browser tests
+    name: browser tests
     runs-on: ubuntu-22.04
     strategy:
       max-parallel: 3
@@ -108,6 +108,10 @@ jobs:
         with:
           version: 8
           run_install: true
+
+      - name: Build build:gen:typescript
+        run: |
+          pnpm run --aggregate-output build:gen:typescript
 
       - name: Build itk-wasm
         run: |
