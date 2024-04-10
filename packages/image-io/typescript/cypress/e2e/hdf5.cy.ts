@@ -24,6 +24,6 @@ describe('hdf5', () => {
     cy.get('#hdf5ReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#hdf5ReadImage-could-read-details').should('contain', 'true')
-    cy.get('#hdf5ReadImage-image-details').should('contain', 'imageType')
+    cy.get('#hdf5ReadImage-image-details').contains('imageType')
   })
 })

@@ -6,5 +6,6 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+    includeShadowDom: true, // to query into itk-image-detail
   },
 });

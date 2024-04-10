@@ -36,7 +36,7 @@
     <small><i>Compare images with a tolerance for regression testing.</i></small><br /><br />
 
     <div id="compareImagesInputs"><form action="">
-      <sl-tooltip content="Use the Upload button to provide the testImage"><itk-image-details id="compareImages-test-image-details" summary="testImage: The input test image" disabled></itk-image-details></sl-tooltip>
+      <sl-tooltip content="Use the Upload button to provide the testImage"><itk-image-details id="compareImages-test-image-details" summary="testImage: The input test image"></itk-image-details></sl-tooltip>
       <label for="test-image-file"><sl-button name="test-image-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="test-image-file" style="display: none"/>
 <br /><br />
       <sl-tooltip content="Use the Upload button to provide the baselineImages"><sl-details id="compareImages-baseline-images-details" summary="baselineImages: Baseline images compare against" disabled></sl-details></sl-tooltip>
@@ -61,7 +61,7 @@
       <sl-details disabled id="compareImages-metrics-details" summary="metrics: Metrics for the baseline with the fewest number of pixels outside the tolerances."></sl-details>
       <sl-button variant="neutral" outline name="metrics-download" disabled>Download</sl-button>
 <br /><br />
-      <itk-image-details disabled id="compareImages-difference-image-details" summary="differenceImage: Absolute difference image"></itk-image-details>
+      <itk-image-details id="compareImages-difference-image-details" summary="differenceImage: Absolute difference image"></itk-image-details>
       <sl-select id="difference-image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -87,7 +87,7 @@
       </sl-select>
       <sl-button variant="neutral" outline name="difference-image-download" disabled>Download</sl-button>
 <br /><br />
-      <itk-image-details disabled id="compareImages-difference-uchar-2d-image-details" summary="differenceUchar2dImage: Unsigned char, 2D difference image for rendering"></itk-image-details>
+      <itk-image-details id="compareImages-difference-uchar-2d-image-details" summary="differenceUchar2dImage: Unsigned char, 2D difference image for rendering"></itk-image-details>
       <sl-select id="difference-uchar-2d-image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>

@@ -24,6 +24,6 @@ describe('jpeg', () => {
     cy.get('#jpegReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#jpegReadImage-could-read-details').should('contain', 'true')
-    cy.get('#jpegReadImage-image-details').should('contain', 'imageType')
+    cy.get('#jpegReadImage-image-details').contains('imageType')
   })
 })

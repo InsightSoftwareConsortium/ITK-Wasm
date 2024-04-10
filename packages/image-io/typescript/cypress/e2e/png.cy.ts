@@ -25,7 +25,7 @@ describe('png', () => {
     cy.get('#pngReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#pngReadImage-could-read-details').should('contain', 'true')
-    cy.get('#pngReadImage-image-details').should('contain', 'imageType')
+    cy.get('#pngReadImage-image-details').contains('imageType')
   })
 
   it('Writes a PNG image', function () {
@@ -33,7 +33,7 @@ describe('png', () => {
 
     const testFile = { contents: new Uint8Array(this['cthead1.iwi.cbor']), fileName: 'cthead1.iwi.cbor' }
     cy.get('#pngWriteImageInputs input[name="image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#pngWriteImage-image-details').should('contain', 'imageType')
+    cy.get('#pngWriteImage-image-details').contains('imageType')
     cy.get('#pngWriteImageInputs sl-input[name="serialized-image"]').find('input', { includeShadowDom: true }).type('cthead1.png', { force: true })
 
     cy.get('#pngWriteImageInputs sl-button[name="run"]').click()

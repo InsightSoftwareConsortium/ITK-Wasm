@@ -24,6 +24,6 @@ describe('fdf', () => {
     cy.get('#fdfReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#fdfReadImage-could-read-details').should('contain', 'true')
-    cy.get('#fdfReadImage-image-details').should('contain', 'imageType')
+    cy.get('#fdfReadImage-image-details').contains('imageType')
   })
 })

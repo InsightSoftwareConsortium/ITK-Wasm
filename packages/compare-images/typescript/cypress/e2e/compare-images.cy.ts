@@ -24,11 +24,11 @@ describe('compareImages', () => {
 
     const testFile = { contents: new Uint8Array(this['cake_easy.iwi.cbor']), fileName: 'cake_easy.iwi.cbor' }
     cy.get('#compareImagesInputs input[name="test-image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#compareImages-test-image-details').should('contain', 'imageType')
+    cy.get('#compareImages-test-image-details').contains('imageType')
 
     const baselineFile = { contents: new Uint8Array(this['cake_hard.iwi.cbor']), fileName: 'cake_hard.iwi.cbor' }
     cy.get('#compareImagesInputs input[name="baseline-images-file"]').selectFile([baselineFile,], { force: true })
-    cy.get('#compareImages-baseline-images-details').should('contain', 'imageType')
+    cy.get('#compareImages-baseline-images-details').contains('imageType')
 
     cy.get('#compareImagesInputs sl-button[name="run"]').click()
 
@@ -40,11 +40,11 @@ describe('compareImages', () => {
 
     const testFile = { contents: new Uint8Array(this['cake_easy.png']), fileName: 'cake_easy.png' }
     cy.get('#compareImagesInputs input[name="test-image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#compareImages-test-image-details').should('contain', 'imageType')
+    cy.get('#compareImages-test-image-details').contains('imageType')
 
     const baselineFile = { contents: new Uint8Array(this['cake_hard.png']), fileName: 'cake_hard.png' }
     cy.get('#compareImagesInputs input[name="baseline-images-file"]').selectFile([baselineFile,], { force: true })
-    cy.get('#compareImages-baseline-images-details').should('contain', 'imageType')
+    cy.get('#compareImages-baseline-images-details').contains('imageType')
 
     cy.get('#compareImagesInputs sl-button[name="run"]').click()
 
@@ -56,11 +56,11 @@ describe('compareImages', () => {
 
     const testFile = { contents: new Uint8Array(this['apple.jpg']), fileName: 'apple.jpg' }
     cy.get('#compareImagesInputs input[name="test-image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#compareImages-test-image-details').should('contain', 'imageType')
+    cy.get('#compareImages-test-image-details').contains('imageType')
 
     const baselineFile = { contents: new Uint8Array(this['orange.jpg']), fileName: 'orange.jpg' }
     cy.get('#compareImagesInputs input[name="baseline-images-file"]').selectFile([baselineFile,], { force: true })
-    cy.get('#compareImages-baseline-images-details').should('contain', 'imageType')
+    cy.get('#compareImages-baseline-images-details').contains('imageType')
 
     cy.get('#compareImagesInputs sl-button[name="run"]').click()
 

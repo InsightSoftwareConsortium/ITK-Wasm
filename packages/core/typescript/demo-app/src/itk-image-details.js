@@ -5,7 +5,7 @@ import "@itk-viewer/element/itk-viewer-2d.js";
 
 export class ItkImageDetails extends LitElement {
   static properties = {
-    disabled: { type: Boolean },
+    disabled: { type: Boolean, reflect: true},
     summary: { type: String },
     image: { state: true },
   };
@@ -15,7 +15,7 @@ export class ItkImageDetails extends LitElement {
 
   constructor() {
     super();
-    this.disabled = false;
+    this.disabled = true;
     this.summary = "";
     this.image = undefined;
   }
@@ -31,6 +31,7 @@ export class ItkImageDetails extends LitElement {
 
   setImage(image) {
     this.image = image;
+    this.disabled = !image;
     if (this.details.value.open) {
       this.loadImage();
     }
@@ -47,7 +48,7 @@ export class ItkImageDetails extends LitElement {
   }
 
   render() {
-    const disabled = this.image === undefined ? true : nothing;
+    const disabled = this.disabled ? true : nothing;
     const summary =
       this.image === undefined ? this.summary : "️🔎 " + this.summary;
 

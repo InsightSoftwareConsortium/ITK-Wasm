@@ -25,7 +25,7 @@ describe('vtk', () => {
     cy.get('#vtkReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#vtkReadImage-could-read-details').should('contain', 'true')
-    cy.get('#vtkReadImage-image-details').should('contain', 'imageType')
+    cy.get('#vtkReadImage-image-details').contains('imageType')
   })
 
   it('Writes a VTK image', function () {
@@ -33,7 +33,7 @@ describe('vtk', () => {
 
     const testFile = { contents: new Uint8Array(this['ironProt.iwi.cbor']), fileName: 'image_color.iwi.cbor' }
     cy.get('#vtkWriteImageInputs input[name="image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#vtkWriteImage-image-details').should('contain', 'imageType')
+    cy.get('#vtkWriteImage-image-details').contains('imageType')
     cy.get('#vtkWriteImageInputs sl-input[name="serialized-image"]').find('input', { includeShadowDom: true }).type('ironProt.vtk', { force: true })
 
     cy.get('#vtkWriteImageInputs sl-button[name="run"]').click()

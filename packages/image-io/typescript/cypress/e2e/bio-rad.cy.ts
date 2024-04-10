@@ -25,7 +25,7 @@ describe('bio-rad', () => {
     cy.get('#bioRadReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#bioRadReadImage-could-read-details').should('contain', 'true')
-    cy.get('#bioRadReadImage-image-details').should('contain', 'imageType')
+    cy.get('#bioRadReadImage-image-details').contains('imageType')
   })
 
   it('Writes a BioRad image', function () {
@@ -33,7 +33,7 @@ describe('bio-rad', () => {
 
     const testFile = { contents: new Uint8Array(this['biorad.iwi.cbor']), fileName: 'biorad.iwi.cbor' }
     cy.get('#bioRadWriteImageInputs input[name="image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#bioRadWriteImage-image-details').should('contain', 'imageType')
+    cy.get('#bioRadWriteImage-image-details').contains('imageType')
     cy.get('#bioRadWriteImageInputs sl-input[name="serialized-image"]').find('input', { includeShadowDom: true }).type('biorad.pic', { force: true })
 
     cy.get('#bioRadWriteImageInputs sl-button[name="run"]').click()

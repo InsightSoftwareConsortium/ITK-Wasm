@@ -24,6 +24,6 @@ describe('mgh', () => {
     cy.get('#mghReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#mghReadImage-could-read-details').should('contain', 'true')
-    cy.get('#mghReadImage-image-details').should('contain', 'imageType')
+    cy.get('#mghReadImage-image-details').contains('imageType')
   })
 })
