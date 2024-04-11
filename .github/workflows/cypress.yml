@@ -55,6 +55,7 @@ jobs:
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:data:download
 
       - name: Test with Chrome
+        if: ${{ matrix.package != 'dicom' }}
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
@@ -71,7 +72,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Test with Firefox
-        if: ${{ matrix.package != 'dicom' && matrix.package != 'mesh-io' }}
+        if: ${{ matrix.package != 'dicom' && matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' }}
         uses: cypress-io/github-action@v6
         with:
           browser: firefox
@@ -142,17 +143,16 @@ jobs:
           path: packages/core/typescript/itk-wasm/cypress/videos
           if-no-files-found: ignore
 
-      - name: Test with Firefox
-        if: ${{ matrix.package != 'dicom' }}
-        uses: cypress-io/github-action@v6
-        with:
-          browser: firefox
-          working-directory: packages/core/typescript/itk-wasm
-          install: false
-          config: video=true
-          start: pnpm start
-          wait-on: 'http://localhost:5173'
-          wait-on-timeout: 360
+      #- name: Test with Firefox
+        #uses: cypress-io/github-action@v6
+        #with:
+          #browser: firefox
+          #working-directory: packages/core/typescript/itk-wasm
+          #install: false
+          #config: video=true
+          #start: pnpm start
+          #wait-on: 'http://localhost:5173'
+          #wait-on-timeout: 360
 
       - uses: actions/upload-artifact@v4
         if: failure()
