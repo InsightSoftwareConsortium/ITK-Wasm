@@ -66,7 +66,6 @@ $exe $build_cmd --pull=false $tag_flag itkwasm/emscripten:latest \
         --build-arg IMAGE=itkwasm/emscripten \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg BASE_IMAGE=itkwasm/emscripten-base \
-        --build-arg BASE_TAG=${TAG} \
         --build-arg VCS_REF=${VCS_REF} \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
@@ -111,7 +110,6 @@ if $debug; then
   $exe $build_cmd --pull=false $tag_flag itkwasm/emscripten:latest-debug \
           --build-arg IMAGE=itkwasm/emscripten \
           --build-arg CMAKE_BUILD_TYPE=Debug \
-          --build-arg BASE_TAG=${TAG}-debug \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
@@ -132,7 +130,6 @@ if $debug; then
             --build-arg IMAGE=itkwasm/wasi \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg BASE_IMAGE=itkwasm/wasi-base \
-            --build-arg BASE_TAG=${TAG}-debug \
             --build-arg VCS_REF=${VCS_REF} \
             --build-arg VCS_URL=${VCS_URL} \
             --build-arg BUILD_DATE=${BUILD_DATE} \
