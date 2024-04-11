@@ -1,6 +1,6 @@
 function ociExe() {
     # Check for OCI_EXE environmental variable
-    if [[ -n "$OCI_EXE" && -x "$OCI_EXE" ]]; then
+    if [[ -n "$OCI_EXE" ]]; then
         echo "$OCI_EXE"
         return
     fi

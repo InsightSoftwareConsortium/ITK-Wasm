@@ -24,11 +24,20 @@ BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 debug=false
 wasi=false
 version_tag=false
+build_cmd="build"
+tag_flag="--tag"
+create_manifest=false
 for param; do
   if [[ $param == '--with-debug' ]]; then
     debug=true
   elif [[ $param == '--with-wasi' ]]; then
     wasi=true
+  elif [[ $param == '--multiarch' ]]; then
+    # Newer buildah (1.28.2) required for multiarch
+    exe=buildah
+    build_cmd="build --platform linux/amd64,linux/arm64"
+    tag_flag="--manifest"
+    create_manifest=true
   elif [[ $param == '--version-tag' ]]; then
     version_tag=true
   else
@@ -37,17 +46,36 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
-$exe build -t itkwasm/emscripten:latest \
+if $create_manifest; then
+  for list in itk-wasm/emscripten:latest \
+      itk-wasm/emscripten:${TAG} \
+      itk-wasm/emscripten:latest-debug \
+      itk-wasm/emscripten:${TAG}-debug \
+      itk-wasm/wasi:latest \
+      itk-wasm/wasi:${TAG} \
+      itk-wasm/wasi:latest-debug \
+      itk-wasm/wasi:${TAG}-debug; do
+    if $(buildah manifest exists $list); then
+      buildah manifest rm $list
+    fi
+    buildah manifest create $list
+  done
+fi
+
+$exe $build_cmd --pull=false $tag_flag itkwasm/emscripten:latest \
         --build-arg IMAGE=itkwasm/emscripten \
         --build-arg CMAKE_BUILD_TYPE=Release \
+        --build-arg BASE_IMAGE=itkwasm/emscripten-base \
         --build-arg VCS_REF=${VCS_REF} \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
 if $version_tag; then
-        $exe build -t itkwasm/emscripten:${TAG} \
+        $exe $build_cmd --pull=false $tag_flag itkwasm/emscripten:${TAG} \
                 --build-arg IMAGE=itkwasm/emscripten \
                 --build-arg CMAKE_BUILD_TYPE=Release \
+                --build-arg BASE_IMAGE=itkwasm/emscripten-base \
+                --build-arg BASE_TAG=${TAG} \
                 --build-arg VERSION=${TAG} \
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
@@ -56,7 +84,7 @@ if $version_tag; then
 fi
 
 if $wasi; then
-  $exe build -t itkwasm/wasi:latest  \
+  $exe $build_cmd --pull=false $tag_flag itkwasm/wasi:latest  \
           --build-arg IMAGE=itkwasm/wasi \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg BASE_IMAGE=itkwasm/wasi-base \
@@ -65,7 +93,7 @@ if $wasi; then
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $version_tag; then
-        $exe build -t itkwasm/wasi:${TAG} \
+        $exe $build_cmd --pull=false $tag_flag itkwasm/wasi:${TAG} \
                 --build-arg IMAGE=itkwasm/wasi \
                 --build-arg CMAKE_BUILD_TYPE=Release \
                 --build-arg VERSION=${TAG} \
@@ -79,16 +107,15 @@ if $wasi; then
 fi
 
 if $debug; then
-  $exe build -t itkwasm/emscripten:latest-debug \
+  $exe $build_cmd --pull=false $tag_flag itkwasm/emscripten:latest-debug \
           --build-arg IMAGE=itkwasm/emscripten \
           --build-arg CMAKE_BUILD_TYPE=Debug \
-          --build-arg BASE_TAG=${TAG}-debug \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $version_tag; then
-        $exe build -t itkwasm/emscripten:${TAG}-debug \
+        $exe $build_cmd --pull=false $tag_flag itkwasm/emscripten:${TAG}-debug \
                 --build-arg IMAGE=itkwasm/emscripten \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG}-debug \
@@ -99,17 +126,16 @@ if $debug; then
                 $script_dir $@
   fi
   if $wasi; then
-    $exe build -t itkwasm/wasi:latest-debug  \
+    $exe $build_cmd --pull=false $tag_flag itkwasm/wasi:latest-debug  \
             --build-arg IMAGE=itkwasm/wasi \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg BASE_IMAGE=itkwasm/wasi-base \
-            --build-arg BASE_TAG=${TAG}-debug \
             --build-arg VCS_REF=${VCS_REF} \
             --build-arg VCS_URL=${VCS_URL} \
             --build-arg BUILD_DATE=${BUILD_DATE} \
             $script_dir $@
     if $version_tag; then
-        $exe build -t itkwasm/wasi:${TAG}-debug \
+        $exe $build_cmd --pull=false $tag_flag itkwasm/wasi:${TAG}-debug \
                 --build-arg IMAGE=itkwasm/wasi \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG} \
