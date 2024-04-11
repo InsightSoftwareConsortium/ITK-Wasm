@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=itkwasm/emscripten-base
 ARG BASE_TAG=latest
 
-FROM localhost/$BASE_IMAGE:$BASE_TAG
+FROM $BASE_IMAGE:$BASE_TAG
 MAINTAINER Insight Software Consortium <community@itk.org>
 ARG BASE_IMAGE
 ARG CMAKE_BUILD_TYPE=Release
