@@ -109,6 +109,10 @@ jobs:
           version: 8
           run_install: true
 
+      - name: Build itk-wasm
+        run: |
+          pnpm run --aggregate-output --filter itk-wasm build
+
       - name: Build build:gen:typescript
         run: |
           pnpm run --aggregate-output build:gen:typescript
