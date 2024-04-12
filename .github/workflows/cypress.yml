@@ -72,7 +72,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Test with Firefox
-        if: ${{ matrix.package != 'dicom' && matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' }}
+        if: ${{ matrix.package != 'compress-stringify' && matrix.package != 'dicom' && matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' }}
         uses: cypress-io/github-action@v6
         with:
           browser: firefox
