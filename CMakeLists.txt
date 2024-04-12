@@ -74,8 +74,8 @@ FetchContent_Declare(
 
 set(libcbor_GIT_REPOSITORY "https://github.com/PJK/libcbor")
 set(libcbor_GIT_REPOSITORY "https://github.com/thewtex/libcbor")
-# 2022-12-17 master + CMake + WASI + target_include_directory + GCC | operator warning
-set(libcbor_GIT_TAG "702568cd2d60f3b9fb2d491c274ab03b8c1b1bf9")
+# 2024-04-12 master + CMake + WASI + target_include_directory + GCC | operator warning + GCC Return type warning
+set(libcbor_GIT_TAG "3e292f7f9c08bc93c376b9a076fb45c110f0e8fe")
 FetchContent_Declare(
   libcbor
   GIT_REPOSITORY ${libcbor_GIT_REPOSITORY}
