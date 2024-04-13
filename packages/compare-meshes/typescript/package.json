@@ -1,0 +1,53 @@
+{
+  "name": "@itk-wasm/compare-meshes",
+  "version": "0.2.0",
+  "packageManager": "pnpm@8.11.0",
+  "description": "Compare meshes and polydata for regression testing.",
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index-all.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index-all.d.ts",
+      "browser": "./dist/index.js",
+      "node": "./dist/index-node.js",
+      "default": "./dist/index-all.js"
+    }
+  },
+  "scripts": {
+    "start": "pnpm copyShoelaceAssets && vite",
+    "test": "echo \"No test specified\"",
+    "build": "pnpm build:tsc && pnpm build:browser:workerEmbedded && pnpm build:browser:workerEmbeddedMin && pnpm build:demo",
+    "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
+    "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
+    "build:version": "node -p \"'const version = ' + JSON.stringify(require('./package.json').version) + '\\nexport default version\\n'\" > src/version.ts",
+    "build:tsc": "pnpm build:version && tsc --pretty",
+    "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
+    "build:demo": "pnpm copyShoelaceAssets && vite build"
+  },
+  "keywords": [
+    "itk",
+    "wasm",
+    "webassembly",
+    "wasi"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "itk-wasm": "workspace:^"
+  },
+  "devDependencies": {
+    "@itk-wasm/mesh-io": "workspace:^",
+    "@shoelace-style/shoelace": "^2.12.0",
+    "@types/node": "^20.2.5",
+    "esbuild": "^0.19.8",
+    "shx": "^0.3.4",
+    "typescript": "^5.3.2",
+    "vite": "^4.5.0",
+    "vite-plugin-static-copy": "^0.17.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+  }
+}

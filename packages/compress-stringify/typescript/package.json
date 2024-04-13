@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compress-stringify",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "packageManager": "pnpm@8.11.0",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
@@ -17,7 +17,7 @@
   "scripts": {
     "start": "pnpm copyShoelaceAssets && vite",
     "test": "pnpm test:node && pnpm test:browser",
-    "test:node": "ava test/node/*.js",
+    "test:node": "ava",
     "test:browser": "pnpm test:browser:chrome && pnpm test:browser:firefox",
     "test:browser:firefox": "start-server-and-test start http-get://localhost:5176 cypress:runFirefox",
     "test:browser:chrome": "start-server-and-test start http-get://localhost:5176 cypress:runChrome",
@@ -44,7 +44,12 @@
     "itk-wasm": "workspace:^"
   },
   "devDependencies": {
+    "@itk-wasm/compare-images": "workspace:*",
+    "@itk-wasm/compare-meshes": "workspace:*",
     "@itk-wasm/compress-stringify-build": "workspace:*",
+    "@itk-wasm/image-io": "workspace:*",
+    "@itk-wasm/mesh-io": "workspace:*",
+    "@itk-wasm/mesh-to-poly-data": "^1.0.0",
     "@shoelace-style/shoelace": "^2.5.2",
     "@types/node": "^20.2.5",
     "ava": "^5.1.0",
@@ -52,12 +57,18 @@
     "esbuild": "^0.19.5",
     "shx": "^0.3.4",
     "start-server-and-test": "^2.0.0",
-    "typescript": "^5.0.4",
+    "typescript": "^5.4.3",
     "vite": "^4.4.11",
     "vite-plugin-static-copy": "^0.17.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+  },
+  "ava": {
+    "files": [
+      "test/node/**/*.js",
+      "!test/node/common.js"
+    ]
   }
 }

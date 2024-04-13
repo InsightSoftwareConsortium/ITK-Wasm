@@ -45,6 +45,7 @@
     "itk-wasm": "workspace:^"
   },
   "devDependencies": {
+    "@itk-wasm/downsample-build": "workspace:^",
     "@itk-wasm/compare-images": "workspace:^",
     "@itk-wasm/image-io": "workspace:^",
     "@itk-wasm/mesh-io": "workspace:^",

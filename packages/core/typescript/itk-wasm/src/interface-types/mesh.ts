@@ -2,8 +2,6 @@ import MeshType from './mesh-type.js'
 import type TypedArray from '../typed-array.js'
 
 class Mesh {
-  meshType: MeshType
-
   name: string = 'mesh'
 
   numberOfPoints: number
@@ -19,9 +17,7 @@ class Mesh {
   numberOfCellPixels: number
   cellData: null | TypedArray
 
-  constructor (public readonly mt = new MeshType()) {
-    this.meshType = mt
-
+  constructor(public readonly meshType = new MeshType()) {
     this.name = 'mesh'
 
     this.numberOfPoints = 0

@@ -34,7 +34,7 @@ keywords = [
 
 requires-python = ">=3.8"
 dependencies = [
-    "itkwasm >= 1.0.b145",
+    "itkwasm >= 1.0.b171",
     "itkwasm-compress-stringify-wasi; sys_platform != \"emscripten\"",
     "itkwasm-compress-stringify-emscripten; sys_platform == \"emscripten\"",
 ]
@@ -51,6 +51,11 @@ path = "itkwasm_compress_stringify/_version.py"
 dependencies = [
   "pytest",
   "pytest-pyodide",
+  "itkwasm-compare-images",
+  "itkwasm-image-io",
+  "itkwasm-compare-meshes",
+  "itkwasm-mesh-io",
+  "itkwasm-mesh-to-poly-data",
 ]
 
 
@@ -60,7 +65,8 @@ test = [
   "pytest --dist-dir=./dist/pyodide --rt=chrome",
 ]
 download-pyodide = [
-  "curl -L https://github.com/pyodide/pyodide/releases/download/0.24.1/pyodide-0.24.1.tar.bz2 -o pyodide.tar.bz2",
+  "curl -L https://github.com/pyodide/pyodide/releases/download/0.25.0/pyodide-0.25.0.tar.bz2 -o pyodide.tar.bz2",
+  "tar xjf pyodide.tar.bz2",
   "rm -rf dist/pyodide pyodide.tar.bz2",
   "mkdir -p dist",
   "mv pyodide dist",
