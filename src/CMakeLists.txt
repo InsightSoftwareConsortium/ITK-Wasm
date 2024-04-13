@@ -26,7 +26,7 @@ set(WebAssemblyInterface_SRCS
   )
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 target_link_libraries(WebAssemblyInterface LINK_PUBLIC cbor cpp-base64)
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   target_compile_options(WebAssemblyInterface PRIVATE "-Wno-unused-result")
 endif()
 
