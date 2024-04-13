@@ -41,7 +41,7 @@ endif()
 
 # Uses newer CMake
 set(RapidJSON_GIT_REPOSITORY "https://github.com/thewtex/rapidjson.git")
-set(RapidJSON_GIT_TAG        "0f4a1318287791446652209ab94edeef5a8b68b9")
+set(RapidJSON_GIT_TAG        "3c70d501767f5cb37bf0ccaff0f784ddd0961752")
 set(RAPIDJSON_BUILD_CXX17 ON)
 set(RAPIDJSON_BUILD_DOC OFF)
 set(RAPIDJSON_BUILD_EXAMPLES OFF)
@@ -74,8 +74,9 @@ FetchContent_Declare(
 
 set(libcbor_GIT_REPOSITORY "https://github.com/PJK/libcbor")
 set(libcbor_GIT_REPOSITORY "https://github.com/thewtex/libcbor")
-# 2022-12-17 master + CMake + WASI + target_include_directory + GCC | operator warning
-set(libcbor_GIT_TAG "702568cd2d60f3b9fb2d491c274ab03b8c1b1bf9")
+# 2024-04-12 master + CMake + WASI + target_include_directory + GCC | operator
+# warning + GCC|Clang|MSVC Return type warning
+set(libcbor_GIT_TAG "00003e202293544d00e2b2484b781cb974898d8b")
 FetchContent_Declare(
   libcbor
   GIT_REPOSITORY ${libcbor_GIT_REPOSITORY}
