@@ -41,7 +41,7 @@ endif()
 
 # Uses newer CMake
 set(RapidJSON_GIT_REPOSITORY "https://github.com/thewtex/rapidjson.git")
-set(RapidJSON_GIT_TAG        "0f4a1318287791446652209ab94edeef5a8b68b9")
+set(RapidJSON_GIT_TAG        "3c70d501767f5cb37bf0ccaff0f784ddd0961752")
 set(RAPIDJSON_BUILD_CXX17 ON)
 set(RAPIDJSON_BUILD_DOC OFF)
 set(RAPIDJSON_BUILD_EXAMPLES OFF)
