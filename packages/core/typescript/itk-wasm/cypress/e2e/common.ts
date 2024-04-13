@@ -1,4 +1,4 @@
-export const demoServer = 'http://localhost:5173'
+export const demoServer = 'http://localhost:5180'
 
 export const pipelineBaseUrl = new URL('/pipelines', demoServer)
 export const pipelineWorkerUrl = new URL('/itk-wasm-pipeline.worker.js', demoServer)

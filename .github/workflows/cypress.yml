@@ -133,7 +133,7 @@ jobs:
           install: false
           start: pnpm start
           config: video=true
-          wait-on: 'http://localhost:5173'
+          wait-on: 'http://localhost:5180'
           wait-on-timeout: 360
 
       - uses: actions/upload-artifact@v4
@@ -151,7 +151,7 @@ jobs:
           #install: false
           #config: video=true
           #start: pnpm start
-          #wait-on: 'http://localhost:5173'
+          #wait-on: 'http://localhost:5180'
           #wait-on-timeout: 360
 
       - uses: actions/upload-artifact@v4
