@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "itk-webassemblyinterface"
-version = "1.0b171"
+version = "1.0b173"
 description = "IO with the itk-wasm file formats"
 readme = "docs/itk-webassemblyinterface-description.md"
 license = {file = "LICENSE"}
