@@ -8,7 +8,7 @@ overrides:
   '@shoelace-style/shoelace': ^2.12.0
   start-server-and-test: ^2.0.3
   ava: ^6.1.0
-  cypress: ^13.6.3
+  cypress: ^13.7.3
 
 importers:
 
@@ -165,8 +165,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0
       cypress:
-        specifier: ^13.6.3
-        version: 13.6.3
+        specifier: ^13.7.3
+        version: 13.7.3
       esbuild:
         specifier: ^0.19.9
         version: 0.19.9
@@ -293,8 +293,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0
       cypress:
-        specifier: ^13.6.3
-        version: 13.6.3
+        specifier: ^13.7.3
+        version: 13.7.3
       esbuild:
         specifier: ^0.19.5
         version: 0.19.8
@@ -418,8 +418,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0
       cypress:
-        specifier: ^13.6.3
-        version: 13.6.3
+        specifier: ^13.7.3
+        version: 13.7.3
       esbuild:
         specifier: ^0.19.8
         version: 0.19.8
@@ -516,8 +516,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0
       cypress:
-        specifier: ^13.6.3
-        version: 13.6.3
+        specifier: ^13.7.3
+        version: 13.7.3
       esbuild:
         specifier: ^0.19.8
         version: 0.19.8
@@ -583,8 +583,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0
       cypress:
-        specifier: ^13.6.3
-        version: 13.6.3
+        specifier: ^13.7.3
+        version: 13.7.3
       esbuild:
         specifier: ^0.19.8
         version: 0.19.9
@@ -647,8 +647,8 @@ importers:
         specifier: ^8.2.2
         version: 8.2.2
       cypress:
-        specifier: ^13.6.3
-        version: 13.6.3
+        specifier: ^13.7.3
+        version: 13.7.3
       esbuild:
         specifier: ^0.19.9
         version: 0.19.9
@@ -708,8 +708,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0
       cypress:
-        specifier: ^13.6.3
-        version: 13.6.3
+        specifier: ^13.7.3
+        version: 13.7.3
       esbuild:
         specifier: ^0.19.5
         version: 0.19.8
@@ -3393,8 +3393,8 @@ packages:
       array-find-index: 1.0.2
     dev: true
 
-  /cypress@13.6.3:
-    resolution: {integrity: sha512-d/pZvgwjAyZsoyJ3FOsJT5lDsqnxQ/clMqnNc++rkHjbkkiF2h9s0JsZSyyH4QXhVFW3zPFg82jD25roFLOdZA==}
+  /cypress@13.7.3:
+    resolution: {integrity: sha512-uoecY6FTCAuIEqLUYkTrxamDBjMHTYak/1O7jtgwboHiTnS1NaMOoR08KcTrbRZFCBvYOiS4tEkQRmsV+xcrag==}
     engines: {node: ^16.0.0 || ^18.0.0 || >=20.0.0}
     hasBin: true
     requiresBuild: true
