@@ -77,7 +77,7 @@
   "devDependencies": {
     "@types/node": "^20.10.3",
     "ava": "^5.3.1",
-    "cypress": "^13.6.0",
+    "cypress": "^13.7.3",
     "esbuild": "^0.19.8",
     "prettier": "^3.2.5",
     "prettier-config-standard": "^7.0.0",
