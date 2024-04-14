@@ -411,6 +411,78 @@ classes:
       A type that can be represented in JSON.
     class_uri: wasm:JsonCompatible
 
+  Transform:
+    description: >-
+      Representation of a spatial transformation.
+    class_uri: wasm:Transform
+    slots:
+      - parametersValueType
+    attributes:
+      name:
+        description: >-
+          Name of the transform.
+        range: string
+        required: true
+      inputDimension:
+        description: >-
+          Dimension of the input space.
+        range: integer
+        required: true
+      outputDimension:
+        description: >-
+          Dimension of the output space.
+        range: integer
+        required: true
+      transformType:
+        description: >-
+          Type of the transform.
+        range: TransformTypes
+        required: true
+      inputSpaceName:
+        description: >-
+          Name of the input space.
+        range: string
+        required: true
+      outputSpaceName:
+        description: >-
+          Name of the output space.
+        range: string
+        required: true
+      fixedParameters:
+        description: >-
+          Fixed parameters of the transform.
+        range: BinaryData
+        required: true
+      parameters:
+        description: >-
+          Parameters of the transform.
+        range: BinaryData
+        required: true
+      numberOfParameters:
+        description: >-
+          Number of parameters in the transform.
+        range: integer
+        required: true
+      numberOfFixedParameters:
+        description: >-
+          Number of fixed parameters in the transform.
+        range: integer
+        required: true
+
+  TransformList:
+    is_a: InterfaceType
+    description: >-
+      Representation of a sequence of transforms.
+    class_uri: wasm:TransformList
+    attributes:
+      values:
+        description: >-
+          The content of the transform sequence.
+        range: Transform
+        multivalued: true
+        required: true
+        inlined_as_list: true
+
 slots:
   path:
     description: >-
@@ -430,6 +502,13 @@ slots:
       Type of binary data components in a pixel.
     any_of:
       - range: IntTypes
+      - range: FloatTypes
+    required: true
+
+  parametersValueType:
+    description: >-
+      Type of binary data components in a transform.
+    any_of:
       - range: FloatTypes
     required: true
 
@@ -541,3 +620,34 @@ enums:
       Matrix:
       VariableLengthVector:
       VariableSizeMatrix:
+
+  TransformTypes:
+    description: >-
+      Transform types.
+    permissible_values:
+      IdentityTransform:
+      AffineTransform:
+      TranslationTransform:
+      AzimuthElevationToCartesianTransform:
+      BSplineTransform:
+      Euler2DTransform:
+      Euler3DTransform:
+      QuaternionRigidTransform:
+      Rigid2DTransform:
+      Rigid3DPerspectiveTransform:
+      ScalableAffineTransform:
+      ScaleLogarithmicTransform:
+      ScaleSkewVersor3DTransform:
+      ScaleTransform:
+      Similarity2DTransform:
+      Similarity3DTransform:
+      VersorRigid3DTransform:
+      VersorTransform:
+      BSplineSmoothingOnUpdateDisplacementFieldTransform:
+      ConstantVelocityFieldTransform:
+      DisplacementFieldTransform:
+      GaussianExponentialDiffeomorphicTransform:
+      GaussianSmoothingOnUpdateDisplacementFieldTransform:
+      GaussianSmoothingOnUpdateTimeVaryingVelocityFieldTransform:
+      TimeVaryingVelocityFieldTransform:
+      VelocityFieldTransform:
