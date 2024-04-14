@@ -43,7 +43,7 @@ path = "itkwasm_compare_images_wasi/_version.py"
 [tool.hatch.envs.default]
 dependencies = [
   "pytest",
-  "itk-webassemblyinterface >= 1.0.b171"
+  "itk-webassemblyinterface >= 1.0.b173"
 ]
 
 [project.urls]

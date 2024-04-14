@@ -8,4 +8,4 @@ dependencies:
   - pip:
     - hatch
     - itkwasm
-    - itk-webassemblyinterface>=1.0.b127
+    - itk-webassemblyinterface>=1.0.b173

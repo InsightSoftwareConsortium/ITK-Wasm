@@ -46,7 +46,7 @@ path = "itkwasm_compare_images/_version.py"
 dependencies = [
   "pytest",
   "pytest-pyodide",
-  "itk-webassemblyinterface >= 1.0.b127",
+  "itk-webassemblyinterface >= 1.0.b173",
   "itkwasm >= 1.0.b171",
 ]
 
