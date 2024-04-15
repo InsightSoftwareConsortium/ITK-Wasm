@@ -9,6 +9,7 @@ itk_module(WebAssemblyInterface
     ITKCommon
     ITKIOImageBase
     ITKIOMeshBase
+    ITKIOTransformBase
   COMPILE_DEPENDS
     MeshToPolyData
     ITKImageFunction
@@ -19,6 +20,7 @@ itk_module(WebAssemblyInterface
   FACTORY_NAMES
     ImageIO::Wasm
     MeshIO::Wasm
+    TransformIO::Wasm
   EXCLUDE_FROM_DEFAULT
   DESCRIPTION
     "${DOCUMENTATION}"

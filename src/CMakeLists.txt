@@ -11,6 +11,7 @@ set(WebAssemblyInterface_SRCS
   itkWasmMeshIOBase.cxx
   itkWasmMeshIOFactory.cxx
   itkWasmMeshIO.cxx
+  itkWasmTransformIOFactory.cxx
   itkWasmStringStream.cxx
   itkInputTextStream.cxx
   itkOutputTextStream.cxx
