@@ -33,8 +33,7 @@
     "test:python:wasi": "itk-wasm pnpm-script test:python:wasi",
     "test:python:emscripten": "itk-wasm pnpm-script test:python:emscripten",
     "test:python:dispatch": "itk-wasm pnpm-script test:python:emscripten",
-    "test:python": "itk-wasm pnpm-script test:python",
-    "test:wasi": "itk-wasm pnpm-script test:wasi -- -V"
+    "test:python": "itk-wasm pnpm-script test:python"
   },
   "license": "Apache-2.0",
   "devDependencies": {
