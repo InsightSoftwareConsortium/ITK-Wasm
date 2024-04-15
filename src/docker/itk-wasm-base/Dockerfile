@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 WORKDIR /
 
 # Note: on entry, emsdk will prepend to the path with its own node, so add to an earlier path
-ENV NODE_TAG v18.17.1
+ENV NODE_TAG v20.12.2
 RUN curl -LO https://nodejs.org/dist/${NODE_TAG}/node-${NODE_TAG}-linux-x64.tar.xz && \
   tar xvJf node-${NODE_TAG}-linux-x64.tar.xz && \
   rm node-${NODE_TAG}-linux-x64.tar.xz && \
