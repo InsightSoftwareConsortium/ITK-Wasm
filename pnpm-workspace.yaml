@@ -1,5 +1,6 @@
 packages:
   - 'packages/**'
+  - 'examples/debugging'
   - 'examples/node-js'
   - 'examples/inputs-outputs'
   - 'examples/inputs-outputs/typescript'
