@@ -9,27 +9,6 @@ endif()
 
 set(WebAssemblyInterface_LIBRARIES WebAssemblyInterface)
 
-option(BUILD_ITK_WASM_IO_MODULES "Build the itk-wasm ImageIO's and MeshIO's" OFF)
-if(BUILD_ITK_WASM_IO_MODULES)
-  set(WebAssemblyInterface_MeshIOModules
-    "ITKIOMeshBYU"
-    "ITKIOMeshFreeSurfer"
-    "ITKIOMeshOBJ"
-    "ITKIOMeshOFF"
-    "IOMeshSTL"
-    "IOMeshSWC"
-    "ITKIOMeshVTK"
-    CACHE STRING
-    "String delimited list of ITK mesh IO modules to support.")
-  set(meshios_ITKIOMeshBYU itkBYUMeshIO)
-  set(meshios_ITKIOMeshFreeSurfer itkFreeSurferAsciiMeshIO itkFreeSurferBinaryMeshIO)
-  set(meshios_ITKIOMeshVTK itkVTKPolyDataMeshIO)
-  set(meshios_ITKIOMeshOBJ itkOBJMeshIO)
-  set(meshios_ITKIOMeshOFF itkOFFMeshIO)
-  set(meshios_IOMeshSTL itkSTLMeshIO)
-  set(meshios_IOMeshSWC itkSWCMeshIO)
-endif()
-
 include(FetchContent)
 set(_itk_build_testing ${BUILD_TESTING})
 set(BUILD_TESTING OFF)
