@@ -14,6 +14,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
@@ -50,6 +51,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
@@ -114,6 +116,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
@@ -148,6 +151,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
@@ -194,6 +198,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - name: Test Webpack Example on Chrome
       uses: cypress-io/github-action@v6
@@ -220,6 +225,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - name: Test Vite Example on Chrome
       uses: cypress-io/github-action@v6
@@ -249,6 +255,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - name: Install
       uses: pnpm/action-setup@v2
@@ -289,6 +296,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
@@ -317,6 +325,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
