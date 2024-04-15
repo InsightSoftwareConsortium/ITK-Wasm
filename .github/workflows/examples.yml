@@ -14,6 +14,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
@@ -50,6 +51,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
@@ -114,6 +116,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
@@ -148,6 +151,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
@@ -194,6 +198,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - name: Test Webpack Example on Chrome
       uses: cypress-io/github-action@v6
@@ -220,6 +225,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - name: Test Vite Example on Chrome
       uses: cypress-io/github-action@v6
@@ -243,27 +249,38 @@ jobs:
         working-directory: ./examples/debugging
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
-    - uses: actions/setup-node@v3
+    - name: Install
+      uses: pnpm/action-setup@v2
       with:
-        node-version: '18'
+        version: 8
+        run_install: true
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Build dependencies
+      run: |
+        pnpm run --filter 'itk-wasm' build
 
     - name: Install
       run: |
-        npm install
+        pnpm install
 
     - name: Build
       run: |
-        npm run native-build
-        npm run emscripten-build-release
-        npm run emscripten-build-debug
-        npm run wasi-build-debug
+        pnpm native-build
+        pnpm emscripten-build-release
+        pnpm emscripten-build-debug
+        pnpm wasi-build-debug
 
   test-different-input-types-example:
     name: different-input-types
@@ -279,6 +296,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:
@@ -307,6 +325,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
       with:
         large-packages: false
+        tool-cache: true
 
     - uses: actions/setup-node@v3
       with:

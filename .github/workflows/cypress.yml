@@ -24,6 +24,7 @@ jobs:
         uses: jlumbroso/free-disk-space@main
         with:
           large-packages: false
+          tool-cache: true
 
       - uses: actions/setup-node@v4
         with:
@@ -99,6 +100,7 @@ jobs:
         uses: jlumbroso/free-disk-space@main
         with:
           large-packages: false
+          tool-cache: true
 
       - uses: actions/setup-node@v4
         with:
