@@ -33,10 +33,10 @@ namespace itk
  *
  * This format is intended to facilitate data exchange in itk-wasm.
  * It reads and writes an itk-wasm Mesh object where TypedArrays are
- * replaced by binary files on the filesystem or in a ZIP file.
+ * replaced by binary files on the filesystem or in a CBOR file.
  *
- * The format is experimental and subject to change. We mean it.
- *
+ * The file extensions used are .iwm and .iwm.cbor.
+ * 
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */
@@ -95,51 +95,10 @@ public:
   rapidjson::Document GetJSON();
 #endif
 
-  static size_t ITKComponentSize( const CommonEnums::IOComponent );
-
 protected:
   WasmMeshIO();
   ~WasmMeshIO() override;
   void PrintSelf(std::ostream & os, Indent indent) const override;
-
-  /** \brief Opens a file for reading and random access
-   *
-   * \param[out] inputStream is an istream presumed to be opened for reading
-   * \param[in] filename is the name of the file
-   * \param[in] ascii optional (default is false);
-   *                  if true than the file will be opened in ASCII mode,
-   *                  which generally only applies to Windows
-   *
-   * The stream is closed if it's already opened. If an error is
-   * encountered than an exception will be thrown.
-   */
-  void OpenFileForReading(std::ifstream & inputStream, const std::string & filename,
-                                  bool ascii = false);
-
-  /** \brief Opens a file for writing and random access
-   *
-   * \param[out] outputStream is an ostream presumed to be opened for writing
-   * \param[in] filename is the name of the file
-   * \param[in] truncate optional (default is true);
-   *                     if true than the file's existing content is truncated,
-   *                     if false than the file is opened for reading and
-   *                     writing with existing content intact
-   * \param[in] ascii optional (default is false);
-   *                  if true than the file will be opened in ASCII mode,
-   *                  which generally only applies to Windows
-   *
-   * The stream is closed if it's already opened. If an error is
-   * encountered than an exception will be thrown.
-   */
-  void OpenFileForWriting(std::ofstream & outputStream, const std::string & filename,
-                                  bool truncate = true, bool ascii = false);
-
-  /** Convenient method to read a buffer as binary. Return true on success. */
-  bool ReadBufferAsBinary(std::istream & os, void *buffer, SizeValueType numberOfBytesToBeRead);
-
-  bool FileNameIsCBOR();
-  void ReadCBORBuffer(const char * dataName, void * buffer, SizeValueType numberOfBytesToBeRead);
-  void WriteCBORBuffer(const char * dataName, void * buffer, SizeValueType numberOfBytesToWrite, IOComponentEnum ioComponent);
 
   /** Reads in the mesh information and populates the related buffers. */
   void ReadCBOR(void * buffer = nullptr, unsigned char * cborBuffer = nullptr, size_t cborBufferLength = 0);

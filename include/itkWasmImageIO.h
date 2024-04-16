@@ -30,9 +30,9 @@ namespace itk
  * \brief Read and write an itk::Image in a web-friendly format.
  *
  * This format is intended to facilitate data exchange in itk-wasm.
- * It reads and writes an itk-wasm Image object in a CbOR file on the
+ * It reads and writes an itk-wasm Image object in a CBOR file on the
  * filesystem with JSON files and binary files for TypedArrays.
- * 
+ *
  * The file extensions used are .iwi and .iwi.cbor.
  *
  * \ingroup IOFilters

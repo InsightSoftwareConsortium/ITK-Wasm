@@ -92,3 +92,5 @@ cypress/screenshots/
 cypress/videos/
 
 packages/core/typescript/itk-wasm/dist
+
+CMakePresets.json

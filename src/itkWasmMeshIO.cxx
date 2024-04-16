@@ -22,6 +22,7 @@
 #include "itkIOComponentEnumFromWasmComponentType.h"
 #include "itkWasmPixelTypeFromIOPixelEnum.h"
 #include "itkIOPixelEnumFromWasmPixelType.h"
+#include "itkWasmIOCommon.h"
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
@@ -59,262 +60,6 @@ WasmMeshIO
 ::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-}
-
-
-void
-WasmMeshIO
-::OpenFileForReading(std::ifstream & inputStream, const std::string & filename, bool ascii)
-{
-  // Make sure that we have a file to
-  if ( filename.empty() )
-    {
-    itkExceptionMacro( << "A FileName must be specified." );
-    }
-
-  // Close file from any previous image
-  if ( inputStream.is_open() )
-    {
-    inputStream.close();
-    }
-
-  // Open the new file for reading
-  itkDebugMacro( << "Opening file for reading: " << filename );
-
-  std::ios::openmode mode = std::ios::in;
-  if ( !ascii )
-    {
-    mode |= std::ios::binary;
-    }
-
-  inputStream.open( filename.c_str(), mode );
-
-  if ( !inputStream.is_open() || inputStream.fail() )
-    {
-    itkExceptionMacro( << "Could not open file: "
-                       << filename << " for reading."
-                       << std::endl
-                       << "Reason: "
-                       << itksys::SystemTools::GetLastSystemError() );
-    }
-}
-
-
-void
-WasmMeshIO
-::OpenFileForWriting(std::ofstream & outputStream, const std::string & filename, bool truncate, bool ascii)
-{
-  // Make sure that we have a file to
-  if ( filename.empty() )
-    {
-    itkExceptionMacro( << "A FileName must be specified." );
-    }
-
-  // Close file from any previous image
-  if ( outputStream.is_open() )
-    {
-    outputStream.close();
-    }
-
-  // Open the new file for writing
-  itkDebugMacro( << "Opening file for writing: " << filename );
-
-  std::ios::openmode mode = std::ios::out;
-  if ( truncate )
-    {
-    // typically, ios::out also implies ios::trunc, but being explicit is safer
-    mode |= std::ios::trunc;
-    }
-  else
-    {
-    mode |= std::ios::in;
-    // opening a nonexistent file for reading + writing is not allowed on some platforms
-    if ( !itksys::SystemTools::FileExists( filename.c_str() ) )
-      {
-      itksys::SystemTools::Touch( filename.c_str(), true );
-      // don't worry about failure here, errors should be detected later when the file
-      // is "actually" opened, unless there is a race condition
-      }
-    }
-  if ( !ascii )
-    {
-    mode |= std::ios::binary;
-    }
-
-  outputStream.open( filename.c_str(), mode );
-
-  if ( !outputStream.is_open() || outputStream.fail() )
-    {
-    itkExceptionMacro( << "Could not open file: "
-                       << filename << " for writing."
-                       << std::endl
-                       << "Reason: "
-                       << itksys::SystemTools::GetLastSystemError() );
-    }
-}
-
-
-bool
-WasmMeshIO
-::ReadBufferAsBinary(std::istream & is, void *buffer, SizeValueType num)
-{
-  const auto numberOfBytesToBeRead = Math::CastWithRangeCheck< std::streamsize >(num);
-
-  is.read(static_cast< char * >( buffer ), numberOfBytesToBeRead);
-
-  const std::streamsize numberOfBytesRead = is.gcount();
-
-  if ( ( numberOfBytesRead != numberOfBytesToBeRead )  || is.fail() )
-    {
-    return false; // read failed
-    }
-
-  return true;
-}
-
-
-size_t
-WasmMeshIO
-::ITKComponentSize(const CommonEnums::IOComponent itkComponentType)
-{
-  switch ( itkComponentType )
-    {
-    case CommonEnums::IOComponent::CHAR:
-      return sizeof( uint8_t );
-
-    case CommonEnums::IOComponent::UCHAR:
-      return sizeof( uint8_t );
-
-    case CommonEnums::IOComponent::SHORT:
-      return sizeof( int16_t );
-
-    case CommonEnums::IOComponent::USHORT:
-      return sizeof( uint16_t );
-
-    case CommonEnums::IOComponent::INT:
-      return sizeof( int32_t );
-
-    case CommonEnums::IOComponent::UINT:
-      return sizeof( uint32_t );
-
-    case CommonEnums::IOComponent::LONG:
-      return sizeof( int64_t );
-
-    case CommonEnums::IOComponent::ULONG:
-      return sizeof( uint64_t );
-
-    case CommonEnums::IOComponent::LONGLONG:
-      return sizeof( int64_t );
-
-    case CommonEnums::IOComponent::ULONGLONG:
-      return sizeof( uint64_t );
-
-    case CommonEnums::IOComponent::FLOAT:
-      return sizeof( float );
-
-    case CommonEnums::IOComponent::DOUBLE:
-      return sizeof( double );
-
-    default:
-      return sizeof( int8_t );
-    }
-}
-
-bool
-WasmMeshIO
-::FileNameIsCBOR()
-{
-  const std::string path(this->GetFileName());
-  std::string::size_type cborPos = path.rfind(".cbor");
-  if ( cborPos != std::string::npos )
-  {
-    return true;
-  }
-  return false;
-}
-
-
-void
-WasmMeshIO
-::ReadCBORBuffer(const char * dataName, void * buffer, SizeValueType numberOfBytesToBeRead)
-{
-  cbor_item_t * index = this->m_CBORRoot;
-  if (index == nullptr) {
-    itkExceptionMacro("Call ReadMeshInformation before reading the data buffer");
-  }
-  const size_t indexCount = cbor_map_size(index);
-  const struct cbor_pair * indexHandle = cbor_map_handle(index);
-  for (size_t ii = 0; ii < indexCount; ++ii)
-  {
-    const std::string_view key(reinterpret_cast<char *>(cbor_string_handle(indexHandle[ii].key)), cbor_string_length(indexHandle[ii].key));
-    if (key == dataName)
-    {
-      const cbor_item_t * dataItem = cbor_tag_item(indexHandle[ii].value);
-      const char * dataHandle = reinterpret_cast< char * >( cbor_bytestring_handle(dataItem) );
-      std::memcpy(buffer, dataHandle, numberOfBytesToBeRead);
-    }
-  }
-}
-
-
-void
-WasmMeshIO
-::WriteCBORBuffer(const char * dataName, void * buffer, SizeValueType numberOfBytesToWrite, IOComponentEnum ioComponent)
-{
-  cbor_item_t * index = this->m_CBORRoot;
-  if (index == nullptr) {
-    itkExceptionMacro("Call WriteMeshInformation before writing the data buffer");
-  }
-  cbor_item_t * dataItem = cbor_build_bytestring(reinterpret_cast< const unsigned char *>(buffer), numberOfBytesToWrite);
-  uint64_t tag = 0;
-  // Todo: support endianness
-  // https://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml
-  switch (ioComponent) {
-    case IOComponentEnum::CHAR:
-      tag = 64;
-      break;
-    case IOComponentEnum::UCHAR:
-      tag = 64;
-      break;
-    case IOComponentEnum::SHORT:
-      tag = 73;
-      break;
-    case IOComponentEnum::USHORT:
-      tag = 69;
-      break;
-    case IOComponentEnum::INT:
-      tag = 74;
-      break;
-    case IOComponentEnum::UINT:
-      tag = 70;
-      break;
-    case IOComponentEnum::LONG:
-      tag = 75;
-      break;
-    case IOComponentEnum::ULONG:
-      tag = 71;
-      break;
-    case IOComponentEnum::LONGLONG:
-      tag = 75;
-      break;
-    case IOComponentEnum::ULONGLONG:
-      tag = 71;
-      break;
-    case IOComponentEnum::FLOAT:
-      tag = 85;
-      break;
-    case IOComponentEnum::DOUBLE:
-      tag = 86;
-      break;
-    default:
-      itkExceptionMacro("Unexpected component type");
-  }
-  cbor_item_t * dataTag = cbor_new_tag(tag);
-  cbor_tag_set_item(dataTag, cbor_move(dataItem));
-  cbor_map_add(index,
-    cbor_pair{
-      cbor_move(cbor_build_string(dataName)),
-      cbor_move(dataTag)});
 }
 
 
@@ -602,12 +347,12 @@ WasmMeshIO
   cellsDataFile.SetString( cellsDataFileString.c_str(), allocator );
   document.AddMember( "cells", cellsDataFile, allocator );
 
-  std::string pointDataDataFileString( "data:application/vnd.itk.path,data/pointData.raw" );
+  std::string pointDataDataFileString( "data:application/vnd.itk.path,data/point-data.raw" );
   rapidjson::Value pointDataDataFile;
   pointDataDataFile.SetString( pointDataDataFileString.c_str(), allocator );
   document.AddMember( "pointData", pointDataDataFile, allocator );
 
-  std::string cellDataDataFileString( "data:application/vnd.itk.path,data/cellData.raw" );
+  std::string cellDataDataFileString( "data:application/vnd.itk.path,data/cell-data.raw" );
   rapidjson::Value cellDataDataFile;
   cellDataDataFile.SetString( cellDataDataFileString.c_str(), allocator );
   document.AddMember( "cellData", cellDataDataFile, allocator );
@@ -775,7 +520,7 @@ WasmMeshIO
 {
   this->SetByteOrderToLittleEndian();
 
-  if ( this->FileNameIsCBOR() )
+  if ( fileNameIsCBOR(this->GetFileName()) )
   {
     this->ReadCBOR();
     return;
@@ -787,7 +532,7 @@ WasmMeshIO
   const auto dataPath = path + "/data";
 
   std::ifstream inputStream;
-  this->OpenFileForReading( inputStream, indexPath.c_str(), true );
+  openFileForReading( inputStream, indexPath.c_str(), true );
   std::string str((std::istreambuf_iterator<char>(inputStream)),
                     std::istreambuf_iterator<char>());
   if (document.Parse(str.c_str()).HasParseError())
@@ -827,18 +572,18 @@ WasmMeshIO
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetNumberOfPoints() * this->GetPointDimension() * ITKComponentSize( this->GetPointComponentType() ) );
 
-  if ( this->FileNameIsCBOR() )
+  if ( fileNameIsCBOR(this->GetFileName()) )
   {
-    this->ReadCBORBuffer("points", buffer, numberOfBytesToBeRead);
+    readCBORBuffer(this->m_CBORRoot, "points", buffer, numberOfBytesToBeRead);
     return;
   }
 
   std::ifstream dataStream;
   const std::string path(this->GetFileName());
   const std::string dataFile = path + "/data/points.raw";
-  this->OpenFileForReading( dataStream, dataFile.c_str() );
+  openFileForReading( dataStream, dataFile.c_str() );
 
-  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+  if ( !readBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
     {
     itkExceptionMacro(<< "Read failed: Wanted "
                       << numberOfBytesToBeRead
@@ -855,9 +600,9 @@ WasmMeshIO
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetCellBufferSize() * ITKComponentSize( this->GetCellComponentType() ));
 
-  if ( this->FileNameIsCBOR() )
+  if ( fileNameIsCBOR(this->GetFileName()) )
   {
-    this->ReadCBORBuffer("cells", buffer, numberOfBytesToBeRead);
+    readCBORBuffer(this->m_CBORRoot, "cells", buffer, numberOfBytesToBeRead);
     return;
   }
 
@@ -865,9 +610,9 @@ WasmMeshIO
   const std::string dataPath = "data/cells.raw";
   std::ifstream dataStream;
   const std::string dataFile = path + "/" + dataPath;
-  this->OpenFileForReading( dataStream, dataFile.c_str() );
+  openFileForReading( dataStream, dataFile.c_str() );
 
-  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+  if ( !readBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
     {
     itkExceptionMacro(<< "Read failed: Wanted "
                       << numberOfBytesToBeRead
@@ -884,19 +629,19 @@ WasmMeshIO
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetPointPixelComponentType() ));
 
-  if ( this->FileNameIsCBOR() )
+  if ( fileNameIsCBOR(this->GetFileName()) )
   {
-    this->ReadCBORBuffer("pointData", buffer, numberOfBytesToBeRead);
+    readCBORBuffer(this->m_CBORRoot, "pointData", buffer, numberOfBytesToBeRead);
     return;
   }
 
   const std::string path(this->GetFileName());
-  const std::string dataPath = "data/pointData.raw";
+  const std::string dataPath = "data/point-data.raw";
   std::ifstream dataStream;
   const std::string dataFile = path + "/" + dataPath;
-  this->OpenFileForReading( dataStream, dataFile.c_str() );
+  openFileForReading( dataStream, dataFile.c_str() );
 
-  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+  if ( !readBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
     {
     itkExceptionMacro(<< "Read failed: Wanted "
                       << numberOfBytesToBeRead
@@ -913,19 +658,19 @@ WasmMeshIO
   const SizeValueType numberOfBytesToBeRead =
     static_cast< SizeValueType >( this->GetNumberOfCellPixels() * this->GetNumberOfCellPixelComponents() * ITKComponentSize( this->GetCellPixelComponentType() ));
 
-  if ( this->FileNameIsCBOR() )
+  if ( fileNameIsCBOR(this->GetFileName()) )
   {
-    this->ReadCBORBuffer("cellData", buffer, numberOfBytesToBeRead);
+    readCBORBuffer(this->m_CBORRoot, "cellData", buffer, numberOfBytesToBeRead);
     return;
   }
 
   const std::string path(this->GetFileName());
-  const std::string dataPath = "data/cellData.raw";
+  const std::string dataPath = "data/cell-data.raw";
   std::ifstream dataStream;
   const std::string dataFile = path + "/" + dataPath;
-  this->OpenFileForReading( dataStream, dataFile.c_str() );
+  openFileForReading( dataStream, dataFile.c_str() );
 
-  if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+  if ( !readBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
     {
     itkExceptionMacro(<< "Read failed: Wanted "
                       << numberOfBytesToBeRead
@@ -967,7 +712,7 @@ void
 WasmMeshIO
 ::WriteMeshInformation()
 {
-  if ( this->FileNameIsCBOR() )
+  if ( fileNameIsCBOR(this->GetFileName()) )
   {
     this->WriteCBOR();
     return;
@@ -1008,7 +753,7 @@ WasmMeshIO
     }
 
   std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );
+  openFileForWriting( outputStream, indexPath.c_str(), true, true );
   rapidjson::OStreamWrapper ostreamWrapper( outputStream );
   rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
   document.Accept( writer );
@@ -1022,9 +767,9 @@ WasmMeshIO
 {
   const SizeValueType numberOfBytes = this->GetNumberOfPoints() * this->GetPointDimension() * ITKComponentSize( this->GetPointComponentType() );
 
-  if (this->FileNameIsCBOR())
+  if (fileNameIsCBOR(this->GetFileName()))
   {
-    this->WriteCBORBuffer( "points", buffer, numberOfBytes, this->GetPointComponentType() );
+    writeCBORBuffer(this->m_CBORRoot, "points", buffer, numberOfBytes, this->GetPointComponentType() );
     return;
   }
 
@@ -1032,7 +777,7 @@ WasmMeshIO
   const std::string filePath = "data/points.raw";
   const std::string fileName = path + "/" + filePath;
   std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, fileName, true, false );
+  openFileForWriting( outputStream, fileName, true, false );
   outputStream.write(static_cast< const char * >( buffer ), numberOfBytes);
   if (outputStream.tellp() != numberOfBytes )
     {
@@ -1050,9 +795,9 @@ WasmMeshIO
 {
   const SizeValueType numberOfBytes = this->GetCellBufferSize() * ITKComponentSize( this->GetCellComponentType() );
 
-  if (this->FileNameIsCBOR())
+  if (fileNameIsCBOR(this->GetFileName()))
   {
-    this->WriteCBORBuffer( "cells", buffer, numberOfBytes, this->GetCellComponentType() );
+    writeCBORBuffer(this->m_CBORRoot, "cells", buffer, numberOfBytes, this->GetCellComponentType() );
     return;
   }
 
@@ -1060,7 +805,7 @@ WasmMeshIO
   const std::string filePath = "data/cells.raw";
   const std::string fileName = path + "/" + filePath;
   std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, fileName, true, false );
+  openFileForWriting( outputStream, fileName, true, false );
   outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
   if (outputStream.tellp() != numberOfBytes )
     {
@@ -1078,17 +823,17 @@ WasmMeshIO
 {
   const SizeValueType numberOfBytes = this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetPointPixelComponentType() );
 
-  if (this->FileNameIsCBOR())
+  if (fileNameIsCBOR(this->GetFileName()))
   {
-    this->WriteCBORBuffer( "pointData", buffer, numberOfBytes, this->GetPointPixelComponentType() );
+    writeCBORBuffer(this->m_CBORRoot, "pointData", buffer, numberOfBytes, this->GetPointPixelComponentType() );
     return;
   }
 
   const std::string path(this->GetFileName());
-  const std::string filePath = "data/pointData.raw";
+  const std::string filePath = "data/point-data.raw";
   const std::string fileName = path + "/" + filePath;
   std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, fileName, true, false );
+  openFileForWriting( outputStream, fileName, true, false );
   outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
   if (outputStream.tellp() != numberOfBytes )
     {
@@ -1106,17 +851,17 @@ WasmMeshIO
 {
   const SizeValueType numberOfBytes = this->GetNumberOfPointPixels() * this->GetNumberOfPointPixelComponents() * ITKComponentSize( this->GetCellPixelComponentType() );
 
-  if (this->FileNameIsCBOR())
+  if (fileNameIsCBOR(this->GetFileName()))
   {
-    this->WriteCBORBuffer( "cellData", buffer, numberOfBytes, this->GetCellPixelComponentType() );
+    writeCBORBuffer(this->m_CBORRoot, "cellData", buffer, numberOfBytes, this->GetCellPixelComponentType() );
     return;
   }
 
   const std::string path(this->GetFileName());
-  const std::string filePath = "data/cellData.raw";
+  const std::string filePath = "data/cell-data.raw";
   const std::string fileName = path + "/" + filePath;
   std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, fileName, true, false );
+  openFileForWriting( outputStream, fileName, true, false );
   outputStream.write(static_cast< const char * >( buffer ), numberOfBytes); \
   if (outputStream.tellp() != numberOfBytes )
     {
@@ -1131,7 +876,7 @@ void
 WasmMeshIO
 ::Write()
 {
-  if (this->FileNameIsCBOR())
+  if (fileNameIsCBOR(this->GetFileName()))
     {
     unsigned char* cborBuffer;
     size_t cborBufferSize;

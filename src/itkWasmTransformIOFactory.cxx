@@ -25,11 +25,17 @@ namespace itk
 WasmTransformIOFactory
 ::WasmTransformIOFactory()
 {
-  this->RegisterOverride( "itkTransformIOBase",
-                          "itkWasmTransformIO",
-                          "Wasm Transform IO",
-                          1,
-                          CreateObjectFunction< WasmTransformIO >::New() );
+  this->RegisterOverride("itkTransformIOBaseTemplate",
+                         "itkWasmTransformIOTemplate",
+                         "Wasm Transform float IO",
+                         true,
+                         CreateObjectFunction<WasmTransformIOTemplate<float>>::New());
+
+  this->RegisterOverride("itkTransformIOBaseTemplate",
+                         "itkWasmTransformIOTemplate",
+                         "Wasm Transform double IO",
+                         true,
+                         CreateObjectFunction<WasmTransformIOTemplate<double>>::New());
 }
 
 
@@ -50,7 +56,7 @@ const char *
 WasmTransformIOFactory
 ::GetDescription() const
 {
-  return "Wasm TransformIO Factory, allows the loading of Wasm images into Insight";
+  return "Wasm TransformIO Factory, allows the loading of Wasm transforms into Insight";
 }
 
 

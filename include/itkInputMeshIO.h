@@ -21,6 +21,7 @@
 #include "itkPipeline.h"
 #include "itkWasmMeshIOBase.h"
 #include "itkWasmMeshIO.h"
+#include "itkWasmIOCommon.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
 #include "itkWasmExports.h"
@@ -87,7 +88,7 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
     const std::string pointsString( pointsJson.GetString() );
     const char * pointsPtr = reinterpret_cast< char * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
     WasmMeshIOBase::DataContainerType * pointsContainer = wasmMeshIOBase->GetPointsContainer();
-    SizeValueType numberOfBytes = wasmMeshIO->GetNumberOfPoints() * wasmMeshIO->GetPointDimension() * WasmMeshIO::ITKComponentSize( wasmMeshIO->GetPointComponentType() );
+    SizeValueType numberOfBytes = wasmMeshIO->GetNumberOfPoints() * wasmMeshIO->GetPointDimension() * ITKComponentSize( wasmMeshIO->GetPointComponentType() );
     pointsContainer->resize(numberOfBytes);
     pointsContainer->assign(pointsPtr, pointsPtr + numberOfBytes);
 
@@ -95,7 +96,7 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
     const std::string cellsString( cellsJson.GetString() );
     const char * cellsPtr = reinterpret_cast< char * >( std::strtoull(cellsString.substr(35).c_str(), nullptr, 10) );
     WasmMeshIOBase::DataContainerType * cellsContainer = wasmMeshIOBase->GetCellsContainer();
-    numberOfBytes = static_cast< SizeValueType >( wasmMeshIO->GetCellBufferSize() * WasmMeshIO::ITKComponentSize( wasmMeshIO->GetCellComponentType() ));
+    numberOfBytes = static_cast< SizeValueType >( wasmMeshIO->GetCellBufferSize() * ITKComponentSize( wasmMeshIO->GetCellComponentType() ));
     cellsContainer->resize(numberOfBytes);
     cellsContainer->assign(cellsPtr, cellsPtr + numberOfBytes);
 
@@ -105,7 +106,7 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
     WasmMeshIOBase::DataContainerType * pointDataContainer = wasmMeshIOBase->GetPointDataContainer();
     numberOfBytes =
       static_cast< SizeValueType >(
-          wasmMeshIO->GetNumberOfPointPixels() * wasmMeshIO->GetNumberOfPointPixelComponents() * WasmMeshIO::ITKComponentSize( wasmMeshIO->GetPointPixelComponentType() )
+          wasmMeshIO->GetNumberOfPointPixels() * wasmMeshIO->GetNumberOfPointPixelComponents() * ITKComponentSize( wasmMeshIO->GetPointPixelComponentType() )
           );
     pointDataContainer->resize(numberOfBytes);
     pointDataContainer->assign(pointDataPtr, pointDataPtr + numberOfBytes);
@@ -116,7 +117,7 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
     WasmMeshIOBase::DataContainerType * cellDataContainer = wasmMeshIOBase->GetCellDataContainer();
     numberOfBytes =
       static_cast< SizeValueType >(
-          wasmMeshIO->GetNumberOfPointPixels() * wasmMeshIO->GetNumberOfPointPixelComponents() * WasmMeshIO::ITKComponentSize( wasmMeshIO->GetPointPixelComponentType() )
+          wasmMeshIO->GetNumberOfPointPixels() * wasmMeshIO->GetNumberOfPointPixelComponents() * ITKComponentSize( wasmMeshIO->GetPointPixelComponentType() )
           );
     cellDataContainer->resize(numberOfBytes);
     cellDataContainer->assign(cellDataPtr, cellDataPtr + numberOfBytes);

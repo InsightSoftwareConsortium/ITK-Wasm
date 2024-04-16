@@ -17,6 +17,7 @@ itk_module(WebAssemblyInterface
     ITKTestKernel
     ITKMesh
     ITKImageGrid
+    ITKIOTransformHDF5
   FACTORY_NAMES
     ImageIO::Wasm
     MeshIO::Wasm

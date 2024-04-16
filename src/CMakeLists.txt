@@ -4,6 +4,7 @@ set(WebAssemblyInterface_SRCS
   itkPipeline.cxx
   itkMetaDataDictionaryJSON.cxx
   itkWasmExports.cxx
+  itkWasmIOCommon.cxx
   itkWasmDataObject.cxx
   itkWasmImageIOBase.cxx
   itkWasmImageIOFactory.cxx
@@ -12,6 +13,7 @@ set(WebAssemblyInterface_SRCS
   itkWasmMeshIOFactory.cxx
   itkWasmMeshIO.cxx
   itkWasmTransformIOFactory.cxx
+  itkWasmTransformIO.cxx
   itkWasmStringStream.cxx
   itkInputTextStream.cxx
   itkOutputTextStream.cxx

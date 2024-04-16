@@ -411,18 +411,13 @@ classes:
       A type that can be represented in JSON.
     class_uri: wasm:JsonCompatible
 
-  Transform:
+  TransformType:
     description: >-
-      Representation of a spatial transformation.
-    class_uri: wasm:Transform
+      Representation of an N-dimensional scientific spatial transformation.
+    class_uri: wasm:TransformType
     slots:
       - parametersValueType
     attributes:
-      name:
-        description: >-
-          Name of the transform.
-        range: string
-        required: true
       inputDimension:
         description: >-
           Dimension of the input space.
@@ -433,10 +428,36 @@ classes:
           Dimension of the output space.
         range: integer
         required: true
+      transformParameterization:
+        description: >-
+          How the transform is parameterized.
+        range: TransformParameterizations
+        required: true
+
+  Transform:
+    description: >-
+      Representation of a spatial transformation.
+    class_uri: wasm:Transform
+    attributes:
       transformType:
         description: >-
           Type of the transform.
-        range: TransformTypes
+        range: TransformType
+        required: true
+      numberOfFixedParameters:
+        description: >-
+          Number of fixed parameters in the transform.
+        range: integer
+        required: true
+      numberOfParameters:
+        description: >-
+          Number of parameters in the transform.
+        range: integer
+        required: true
+      name:
+        description: >-
+          Name of the transform.
+        range: string
         required: true
       inputSpaceName:
         description: >-
@@ -450,23 +471,13 @@ classes:
         required: true
       fixedParameters:
         description: >-
-          Fixed parameters of the transform.
+          Fixed parameters of the transform. These are always double / float64.
         range: BinaryData
         required: true
       parameters:
         description: >-
           Parameters of the transform.
         range: BinaryData
-        required: true
-      numberOfParameters:
-        description: >-
-          Number of parameters in the transform.
-        range: integer
-        required: true
-      numberOfFixedParameters:
-        description: >-
-          Number of fixed parameters in the transform.
-        range: integer
         required: true
 
   TransformList:
@@ -621,33 +632,35 @@ enums:
       VariableLengthVector:
       VariableSizeMatrix:
 
-  TransformTypes:
+  TransformParameterizations:
     description: >-
-      Transform types.
+      How a transform is parameterized, defining how its parameters should be interpreted.
+
+      A detailed description of each transform type can be found in the ITK Software Guide: https://itk.org/ITKSoftwareGuide/html/Book1/ITKSoftwareGuide-Book1ch4.html
     permissible_values:
-      IdentityTransform:
-      AffineTransform:
-      TranslationTransform:
-      AzimuthElevationToCartesianTransform:
-      BSplineTransform:
-      Euler2DTransform:
-      Euler3DTransform:
-      QuaternionRigidTransform:
-      Rigid2DTransform:
-      Rigid3DPerspectiveTransform:
-      ScalableAffineTransform:
-      ScaleLogarithmicTransform:
-      ScaleSkewVersor3DTransform:
-      ScaleTransform:
-      Similarity2DTransform:
-      Similarity3DTransform:
-      VersorRigid3DTransform:
-      VersorTransform:
-      BSplineSmoothingOnUpdateDisplacementFieldTransform:
-      ConstantVelocityFieldTransform:
-      DisplacementFieldTransform:
-      GaussianExponentialDiffeomorphicTransform:
-      GaussianSmoothingOnUpdateDisplacementFieldTransform:
-      GaussianSmoothingOnUpdateTimeVaryingVelocityFieldTransform:
-      TimeVaryingVelocityFieldTransform:
-      VelocityFieldTransform:
+      Identity:
+      Translation:
+      Euler2D:
+      Euler3D:
+      Rigid2D:
+      Rigid3DPerspective:
+      VersorRigid3D:
+      Versor:
+      ScaleLogarithmic:
+      ScaleSkewVersor3D:
+      Scale:
+      Similarity2D:
+      Similarity3D:
+      QuaternionRigid:
+      Affine:
+      ScalableAffine:
+      AzimuthElevationToCartesian:
+      BSpline:
+      BSplineSmoothingOnUpdateDisplacementField:
+      ConstantVelocityField:
+      DisplacementField:
+      GaussianExponentialDiffeomorphic:
+      GaussianSmoothingOnUpdateDisplacementField:
+      GaussianSmoothingOnUpdateTimeVaryingVelocityField:
+      TimeVaryingVelocityField:
+      VelocityField:

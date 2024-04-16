@@ -17,6 +17,6 @@
     "cellBufferSize": 18856,
     "points": "data:application/vnd.itk.path,data/points.raw",
     "cells": "data:application/vnd.itk.path,data/cells.raw",
-    "pointData": "data:application/vnd.itk.path,data/pointData.raw",
-    "cellData": "data:application/vnd.itk.path,data/cellData.raw"
+    "pointData": "data:application/vnd.itk.path,data/point-data.raw",
+    "cellData": "data:application/vnd.itk.path,data/cell-data.raw"
 }

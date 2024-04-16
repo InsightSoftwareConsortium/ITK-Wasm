@@ -18,6 +18,7 @@
 #include "itkWasmMeshIOBase.h"
 
 #include "itkWasmMeshIO.h"
+#include "itkWasmIOCommon.h"
 
 #include <sstream>
 #include "rapidjson/prettywriter.h"
@@ -65,7 +66,7 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
 
   size_t pointsAddress = 0;
-  SizeValueType numberOfBytes = meshIO->GetNumberOfPoints() * meshIO->GetPointDimension() * WasmMeshIO::ITKComponentSize( meshIO->GetPointComponentType() );
+  SizeValueType numberOfBytes = meshIO->GetNumberOfPoints() * meshIO->GetPointDimension() * ITKComponentSize( meshIO->GetPointComponentType() );
   if (numberOfBytes)
   {
     this->m_PointsContainer->resize( numberOfBytes );
@@ -81,7 +82,7 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   document.RemoveMember( "points" );
   document.AddMember( "points", pointsString.Move(), allocator );
 
-  numberOfBytes = static_cast< SizeValueType >( meshIO->GetCellBufferSize() * WasmMeshIO::ITKComponentSize( meshIO->GetCellComponentType() ));
+  numberOfBytes = static_cast< SizeValueType >( meshIO->GetCellBufferSize() * ITKComponentSize( meshIO->GetCellComponentType() ));
 
   size_t cellsAddress = 0;
   if (numberOfBytes)
@@ -100,7 +101,7 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   document.AddMember( "cells", cellsString.Move(), allocator );
 
   numberOfBytes =
-    static_cast< SizeValueType >( meshIO->GetNumberOfPointPixels() * meshIO->GetNumberOfPointPixelComponents() * WasmMeshIO::ITKComponentSize( meshIO->GetPointPixelComponentType() ));
+    static_cast< SizeValueType >( meshIO->GetNumberOfPointPixels() * meshIO->GetNumberOfPointPixelComponents() * ITKComponentSize( meshIO->GetPointPixelComponentType() ));
 
   size_t pointDataAddress = 0;
   if (numberOfBytes)
@@ -119,7 +120,7 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   document.AddMember( "pointData", pointDataString.Move(), allocator );
 
   numberOfBytes =
-    static_cast< SizeValueType >( meshIO->GetNumberOfCellPixels() * meshIO->GetNumberOfCellPixelComponents() * WasmMeshIO::ITKComponentSize( meshIO->GetCellPixelComponentType() ));
+    static_cast< SizeValueType >( meshIO->GetNumberOfCellPixels() * meshIO->GetNumberOfCellPixelComponents() * ITKComponentSize( meshIO->GetCellPixelComponentType() ));
 
   size_t cellDataAddress = 0;
   if (numberOfBytes)

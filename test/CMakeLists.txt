@@ -62,6 +62,7 @@ set(WebAssemblyInterfaceTests
   itkWasmPolyDataInterfaceTest.cxx
   itkWasmImageIOTest.cxx
   itkWasmMeshIOTest.cxx
+  itkWasmTransformIOTest.cxx
   itkPipelineTest.cxx
   itkPipelineMemoryIOTest.cxx
   itkSupportInputImageTypesTest.cxx
@@ -69,6 +70,7 @@ set(WebAssemblyInterfaceTests
   itkSupportInputMeshTypesTest.cxx
   itkSupportInputMeshTypesMemoryIOTest.cxx
   itkSupportInputPolyDataTypesTest.cxx
+  itkTransformJSONTest.cxx
 )
 
 if (EMSCRIPTEN)
@@ -167,6 +169,16 @@ itk_add_test(NAME itkWasmMeshIOTest
       ${ITK_TEST_OUTPUT_DIR}/itkWasmMeshIOTest.cbor.vtk
 )
 
+itk_add_test(NAME itkWasmTransformIOTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkWasmTransformIOTest
+      DATA{Input/LinearTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOTest.iwt
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOTest.h5
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOTest.iwt.cbor
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOTest.cbor.h5
+)
+
 itk_add_test(NAME itkPipelineTest
     COMMAND WebAssemblyInterfaceTestDriver
     itkPipelineTest
@@ -237,6 +249,11 @@ itk_add_test(NAME itkSupportInputPolyDataTypesTest
     itkSupportInputPolyDataTypesTest
       DATA{Input/cow.iwm.cbor}
       ${ITK_TEST_OUTPUT_DIR}/itkSupportInputPolyDataTypesTest.iwm
+)
+
+itk_add_test(NAME itkTransformJSONTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkTransformJSONTest
 )
 
 if(EMSCRIPTEN)

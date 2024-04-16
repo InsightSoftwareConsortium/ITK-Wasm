@@ -30,19 +30,21 @@ namespace itk
  *
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT WasmTransformIOFactory: public ObjectFactoryBase
+class WebAssemblyInterface_EXPORT WasmTransformIOFactory : public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef WasmTransformIOFactory          Self;
-  typedef ObjectFactoryBase          Superclass;
-  typedef SmartPointer< Self >       Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  typedef WasmTransformIOFactory   Self;
+  typedef ObjectFactoryBase        Superclass;
+  typedef SmartPointer<Self>       Pointer;
+  typedef SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  const char * GetITKSourceVersion() const override;
+  const char *
+  GetITKSourceVersion() const override;
 
-  const char * GetDescription() const override;
+  const char *
+  GetDescription() const override;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -51,7 +53,8 @@ public:
   itkTypeMacro(WasmTransformIOFactory, ObjectFactoryBase);
 
   /** Register one factory of this type  */
-  static void RegisterOneFactory()
+  static void
+  RegisterOneFactory()
   {
     WasmTransformIOFactory::Pointer wasmFactory = WasmTransformIOFactory::New();
 

@@ -20,60 +20,126 @@
 #include "itkTransformFileReader.h"
 #include "itkTransformFileWriter.h"
 #include "itkTestingMacros.h"
+#include "itkTransform.h"
+#include "itkHDF5TransformIOFactory.h"
 
-int
-itkWasmTransformIOTest(int argc, char * argv[])
+int itkWasmTransformIOTest(int argc, char *argv[])
 {
   if (argc < 6)
   {
     std::cerr << "Missing parameters" << std::endl;
-    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " InputTransform TransformDirectory ConvertedDirectory TransformCBOR ConvertedCBOR" << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " InputTransform TransformDirectory ConvertedDirectory TransformZip ConvertedZip" << std::endl;
     return EXIT_FAILURE;
   }
-  const char * inputTransformFile = argv[1];
-  const char * imageDirectory = argv[2];
-  const char * convertedDirectoryFile = argv[3];
-  const char * imageCBOR = argv[4];
-  const char * convertedCBORFile = argv[5];
+  const char *inputTransformFile = argv[1];
+  const char *transformDirectory = argv[2];
+  const char *convertedDirectoryFile = argv[3];
+  const char *transformCbor = argv[4];
+  const char *convertedCbor = argv[5];
 
   itk::WasmTransformIOFactory::RegisterOneFactory();
+  itk::HDF5TransformIOFactory::RegisterOneFactory();
 
   constexpr unsigned int Dimension = 3;
-  using PixelType = unsigned char;
-  using TransformType = itk::Transform<PixelType, Dimension>;
+  using ParametersValueType = double;
+  using TransformType = itk::Transform<ParametersValueType, Dimension>;
   using TransformPointer = TransformType::Pointer;
 
-  TransformPointer inputTransform = nullptr;
-  ITK_TRY_EXPECT_NO_EXCEPTION(inputTransform = itk::ReadTransform<TransformType>(inputTransformFile));
+  using ReaderType = itk::TransformFileReaderTemplate<ParametersValueType>;
+  auto transformReader = ReaderType::New();
+  // LinearTransform.h5
+  transformReader->SetFileName(inputTransformFile);
+  ITK_TRY_EXPECT_NO_EXCEPTION(transformReader->Update());
+  auto inputTransforms = transformReader->GetTransformList();
 
-  auto imageIO = itk::WasmTransformIO::New();
+  using WasmTransformIOType = itk::WasmTransformIOTemplate<ParametersValueType>;
+  auto transformIO = WasmTransformIOType::New();
 
-  using WriterType = itk::TransformFileWriter<TransformType>;
+  using WriterType = itk::TransformFileWriterTemplate<ParametersValueType>;
   auto wasmWriter = WriterType::New();
-  //wasmWriter->SetTransformIO( imageIO );
-  wasmWriter->SetFileName( imageDirectory );
-  wasmWriter->SetInput( inputTransform );
+  // wasmWriter->SetTransformIO( transformIO );
+  // itkWasmTransformIOTest.iwt
+  wasmWriter->SetFileName(transformDirectory);
+  for (auto transform : *inputTransforms)
+  {
+    std::cout << "Input back transform:" << std::endl;
+    transform->Print(std::cout);
+    wasmWriter->AddTransform(transform);
+  }
 
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmWriter->Update());
 
-  using ReaderType = itk::TransformFileReader<TransformType>;
   auto wasmReader = ReaderType::New();
-  //wasmReader->SetTransformIO( imageIO );
-  wasmReader->SetFileName( imageDirectory );
-
+  // wasmReader->SetTransformIO( transformIO );
+  // itkWasmTransformIOTest.iwt
+  wasmReader->SetFileName(transformDirectory);
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
+  auto inputTransformsBack = wasmReader->GetTransformList();
 
-  TransformPointer writtenReadTransform = wasmReader->GetOutput();
+  auto transformWriter = WriterType::New();
+  for (auto [transformIt, inputTransformIt] = std::tuple{ inputTransformsBack->begin(), inputTransforms->begin() };
+       transformIt != inputTransformsBack->end();
+       ++transformIt, ++inputTransformIt)
+  {
+    std::cout << "Read back transform:" << std::endl;
+    (*transformIt)->Print(std::cout);
 
-  ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteTransform(writtenReadTransform, convertedDirectoryFile));
+    const auto numFixedParams = (*transformIt)->GetFixedParameters().Size();
+    const auto numParams = (*transformIt)->GetParameters().Size();
+    const auto numFixedParamsInput = (*inputTransformIt)->GetFixedParameters().Size();
+    const auto numParamsInput = (*inputTransformIt)->GetParameters().Size();
+    ITK_TEST_EXPECT_EQUAL(numFixedParams, numFixedParamsInput);
+    ITK_TEST_EXPECT_EQUAL(numParams, numParamsInput);
+    for (unsigned int i = 0; i < numFixedParams; ++i)
+    {
+      ITK_TEST_EXPECT_EQUAL((*transformIt)->GetFixedParameters()[i], (*inputTransformIt)->GetFixedParameters()[i]);
+    }
+    for (unsigned int i = 0; i < numParams; ++i)
+    {
+      ITK_TEST_EXPECT_EQUAL((*transformIt)->GetParameters()[i], (*inputTransformIt)->GetParameters()[i]);
+    }
 
-  wasmWriter->SetFileName( imageCBOR );
+    transformWriter->AddTransform(*transformIt);
+  }
+  // itkWasmTransformIOTest.h5
+  transformWriter->SetFileName(convertedDirectoryFile);
+  ITK_TRY_EXPECT_NO_EXCEPTION(transformWriter->Update());
+
+  wasmWriter->SetFileName(transformCbor);
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmWriter->Update());
 
-  wasmReader->SetFileName( imageCBOR );
+  wasmReader->SetFileName(transformCbor);
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
 
-  ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteTransform(wasmReader->GetOutput(), convertedCBORFile));
+  auto inputTransformsBackCbor = wasmReader->GetTransformList();
+  auto transformWriterBack = WriterType::New();
+  for (auto [transformIt, inputTransformIt] = std::tuple{ inputTransformsBackCbor->begin(), inputTransforms->begin() };
+       transformIt != inputTransformsBackCbor->end();
+       ++transformIt, ++inputTransformIt)
+  {
+    std::cout << "Read back cbor transform:" << std::endl;
+    (*transformIt)->Print(std::cout);
+
+    const auto numFixedParams = (*transformIt)->GetFixedParameters().Size();
+    const auto numParams = (*transformIt)->GetParameters().Size();
+    const auto numFixedParamsInput = (*inputTransformIt)->GetFixedParameters().Size();
+    const auto numParamsInput = (*inputTransformIt)->GetParameters().Size();
+    ITK_TEST_EXPECT_EQUAL(numFixedParams, numFixedParamsInput);
+    ITK_TEST_EXPECT_EQUAL(numParams, numParamsInput);
+    for (unsigned int i = 0; i < numFixedParams; ++i)
+    {
+      ITK_TEST_EXPECT_EQUAL((*transformIt)->GetFixedParameters()[i], (*inputTransformIt)->GetFixedParameters()[i]);
+    }
+    for (unsigned int i = 0; i < numParams; ++i)
+    {
+      ITK_TEST_EXPECT_EQUAL((*transformIt)->GetParameters()[i], (*inputTransformIt)->GetParameters()[i]);
+    }
+
+    transformWriterBack->AddTransform(*transformIt);
+  }
+
+  transformWriterBack->SetFileName(convertedCbor);
+  ITK_TRY_EXPECT_NO_EXCEPTION(transformWriterBack->Update());
 
   return EXIT_SUCCESS;
 }
