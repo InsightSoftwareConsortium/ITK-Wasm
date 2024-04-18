@@ -95,10 +95,15 @@ int main(int argc, char * argv[])
   itk::wasm::Pipeline pipeline("downsample-label-image", "Subsample the input label image a according to weighted voting of local labels.", argc, argv);
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
+    int8_t,
     uint8_t,
+    int16_t,
     uint16_t,
+    int32_t,
     uint32_t,
-    uint64_t
+    int64_t,
+    uint64_t,
+    float
     >
   ::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
 }

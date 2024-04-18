@@ -28,7 +28,7 @@ function runHatch(
     }
   )
   if (versionProcess.status !== 0) {
-    die(`Could not run hatch at ${cwd} version with args ${hatchArgs}`)
+    die(`Could not run hatch at ${cwd} version with args: hatch ${hatchArgs.join(' ')}`)
   }
   return versionProcess.stdout.toString()
 }
