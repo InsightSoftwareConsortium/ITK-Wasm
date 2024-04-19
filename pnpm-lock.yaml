@@ -387,8 +387,8 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       '@thewtex/zstddec':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^0.2.1
+        version: 0.2.1
       '@types/emscripten':
         specifier: ^1.39.10
         version: 1.39.10
@@ -2275,8 +2275,8 @@ packages:
       - encoding
     dev: true
 
-  /@thewtex/zstddec@0.2.0:
-    resolution: {integrity: sha512-lIS+smrfa48WGlDVQSQSm0jBnwVp5XmfGJWU9q0J0fRFY9ohzK4s27Zg2SFMb1NWMp9RiANAdK+/q86EBGWR1Q==}
+  /@thewtex/zstddec@0.2.1:
+    resolution: {integrity: sha512-1yTu7m/qU1nsJy4mCZAB3GAhczsClhw+WIXK0oe598eHcvefH16WLOYN4Uko7K2/Ttz9KEBvvT7WFrZD41ShgA==}
 
   /@types/emscripten@1.39.10:
     resolution: {integrity: sha512-TB/6hBkYQJxsZHSqyeuO1Jt0AB/bW6G7rHt9g7lML7SOF6lbgcHvw/Lr+69iqN0qxgXLhWKScAon73JNnptuDw==}
@@ -5422,7 +5422,7 @@ packages:
     hasBin: true
     dependencies:
       '@itk-wasm/dam': 1.1.1
-      '@thewtex/zstddec': 0.2.0
+      '@thewtex/zstddec': 0.2.1
       '@types/emscripten': 1.39.10
       axios: 1.6.2(debug@4.3.4)
       chalk: 5.3.0

@@ -89,7 +89,7 @@
   },
   "dependencies": {
     "@itk-wasm/dam": "^1.1.1",
-    "@thewtex/zstddec": "^0.2.0",
+    "@thewtex/zstddec": "^0.2.1",
     "@types/emscripten": "^1.39.10",
     "axios": "^1.6.2",
     "chalk": "^5.3.0",
