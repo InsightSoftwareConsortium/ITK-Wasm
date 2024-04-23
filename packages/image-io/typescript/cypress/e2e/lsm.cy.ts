@@ -24,6 +24,6 @@ describe('lsm', () => {
     cy.get('#lsmReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#lsmReadImage-could-read-details').should('contain', 'true')
-    cy.get('#lsmReadImage-image-details').should('contain', 'imageType')
+    cy.get('#lsmReadImage-image-details').contains('imageType')
   })
 })

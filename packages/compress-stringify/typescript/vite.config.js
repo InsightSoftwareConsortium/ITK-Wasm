@@ -18,7 +18,7 @@ export default defineConfig({
     format: 'es'
   },
   optimizeDeps: {
-    exclude: ['itk-wasm', '@itk-wasm/image-io', '@thewtex/zstddec', '@itk-wasm/mesh-io', '@itk-wasm/compare-images', '@itk-wasm/compare-meshes']
+    exclude: ['itk-wasm', '@itk-wasm/image-io', '@thewtex/zstddec', '@itk-wasm/mesh-io', '@itk-wasm/compare-images', '@itk-wasm/compare-meshes', '@itk-viewer/io']
   },
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory

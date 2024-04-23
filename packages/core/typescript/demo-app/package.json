@@ -1,0 +1,29 @@
+{
+  "name": "@itk-wasm/demo-app",
+  "version": "0.1.0",
+  "packageManager": "pnpm@8.11.0",
+  "description": "Try itk-wasm pipelines in a browser",
+  "type": "module",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "keywords": [
+    "itk",
+    "wasm",
+    "webassembly",
+    "wasi"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@itk-viewer/element": "^0.2.13",
+    "@itk-viewer/io": "^0.1.8",
+    "@shoelace-style/shoelace": "^2.12.0",
+    "itk-wasm": "workspace:^",
+    "lit": "^3.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+  }
+}

@@ -24,6 +24,6 @@ describe('mrc', () => {
     cy.get('#mrcReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#mrcReadImage-could-read-details').should('contain', 'true')
-    cy.get('#mrcReadImage-image-details').should('contain', 'imageType')
+    cy.get('#mrcReadImage-image-details').contains('imageType')
   })
 })

@@ -25,7 +25,7 @@ describe('tiff', () => {
     cy.get('#tiffReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#tiffReadImage-could-read-details').should('contain', 'true')
-    cy.get('#tiffReadImage-image-details').should('contain', 'imageType')
+    cy.get('#tiffReadImage-image-details').contains('imageType')
   })
 
   it('Writes a TIFF image', function () {
@@ -33,7 +33,7 @@ describe('tiff', () => {
 
     const testFile = { contents: new Uint8Array(this['ShortTestImage.iwi.cbor']), fileName: 'ShortTestImage.iwi.cbor' }
     cy.get('#tiffWriteImageInputs input[name="image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#tiffWriteImage-image-details').should('contain', 'imageType')
+    cy.get('#tiffWriteImage-image-details').contains('imageType')
     cy.get('#tiffWriteImageInputs sl-input[name="serialized-image"]').find('input', { includeShadowDom: true }).type('ShortTestImage.tiff', { force: true })
 
     cy.get('#tiffWriteImageInputs sl-button[name="run"]').click()

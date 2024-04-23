@@ -5,5 +5,6 @@ export default defineConfig({
     defaultCommandTimeout: 40000,
     setupNodeEvents(on, config) {
     },
+    includeShadowDom: true, // to query into itk-image-details
   },
 });

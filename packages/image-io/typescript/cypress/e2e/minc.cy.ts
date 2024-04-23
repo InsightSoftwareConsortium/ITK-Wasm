@@ -24,6 +24,6 @@ describe('minc', () => {
     cy.get('#mincReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#mincReadImage-could-read-details').should('contain', 'true')
-    cy.get('#mincReadImage-image-details').should('contain', 'imageType')
+    cy.get('#mincReadImage-image-details').contains('imageType')
   })
 })

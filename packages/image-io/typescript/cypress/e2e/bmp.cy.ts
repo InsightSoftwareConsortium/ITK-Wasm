@@ -25,7 +25,7 @@ describe('bmp', () => {
     cy.get('#bmpReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#bmpReadImage-could-read-details').should('contain', 'true')
-    cy.get('#bmpReadImage-image-details').should('contain', 'imageType')
+    cy.get('#bmpReadImage-image-details').contains('imageType')
   })
 
   it('Writes a BioRad image', function () {
@@ -33,7 +33,7 @@ describe('bmp', () => {
 
     const testFile = { contents: new Uint8Array(this['image_color.iwi.cbor']), fileName: 'image_color.iwi.cbor' }
     cy.get('#bmpWriteImageInputs input[name="image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#bmpWriteImage-image-details').should('contain', 'imageType')
+    cy.get('#bmpWriteImage-image-details').contains('imageType')
     cy.get('#bmpWriteImageInputs sl-input[name="serialized-image"]').find('input', { includeShadowDom: true }).type('image_color.bmp', { force: true })
 
     cy.get('#bmpWriteImageInputs sl-button[name="run"]').click()

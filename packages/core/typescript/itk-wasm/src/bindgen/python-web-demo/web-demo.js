@@ -22,9 +22,11 @@ function webDemo (outputDir, buildDir, emscriptenWasmBinaries, options) {
   if (!fs.existsSync(demoStylePath)) {
     fs.copyFileSync(typescriptBindgenResource(path.join('demo-app', 'style.css')), demoStylePath)
   }
-
+  
+  const demoAppPackage = path.join(path.dirname(import.meta.url.substring(7)), '..', '..', '..', '..', 'demo-app')
+  const utilitiesHome =  path.joing(demoAppPackage, 'src', 'utilities.js')
   const demoJsUtilities = path.join(outputDir, 'utilities.js')
-  writeIfOverrideNotPresent(demoJsUtilities, fs.readFileSync(typescriptBindgenResource(path.join('demo-app', 'utilities.js')), 'utf8'))
+  writeIfOverrideNotPresent(demoJsUtilities, fs.readFileSync(utilitiesHome), 'utf8')
 
 
   const logoPath = path.join(outputDir, 'logo.svg')

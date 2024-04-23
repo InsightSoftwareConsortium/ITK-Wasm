@@ -45,7 +45,7 @@ describe('write-image', () => {
 
     const testFile = { contents: new Uint8Array(this['cthead1.iwi.cbor']), fileName: 'cthead1.iwi.cbor' }
     cy.get('#writeImageInputs input[name="image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#writeImage-image-details').should('contain', 'imageType')
+    cy.get('#writeImage-image-details').contains('imageType')
     cy.get('#writeImageInputs sl-input[name="serialized-image"]').find('input', { includeShadowDom: true }).type('cthead1.png', { force: true })
 
     cy.get('#writeImageInputs sl-button[name="run"]').click()

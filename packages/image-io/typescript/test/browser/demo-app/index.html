@@ -7,40 +7,12 @@
   <link rel="stylesheet" href="./style.css" />
 
 <script type="module">
-  import '@shoelace-style/shoelace/dist/themes/light.css';
-  import '@shoelace-style/shoelace/dist/themes/dark.css';
-  import '@shoelace-style/shoelace/dist/components/button/button.js';
-  import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js';
-  import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js';
-  import '@shoelace-style/shoelace/dist/components/tab/tab.js';
-  import '@shoelace-style/shoelace/dist/components/input/input.js';
-  import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
-  import '@shoelace-style/shoelace/dist/components/textarea/textarea.js';
-  import '@shoelace-style/shoelace/dist/components/alert/alert.js';
-  import '@shoelace-style/shoelace/dist/components/icon/icon.js';
-  import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js';
-  import '@shoelace-style/shoelace/dist/components/divider/divider.js';
-  import '@shoelace-style/shoelace/dist/components/details/details.js';
-  import '@shoelace-style/shoelace/dist/components/popup/popup.js';
-  import '@shoelace-style/shoelace/dist/components/tag/tag.js';
-  import '@shoelace-style/shoelace/dist/components/select/select.js';
-  import '@shoelace-style/shoelace/dist/components/option/option.js';
-  import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
-
-  import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
-  setBasePath('/');
-
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    // dark mode
-    document.documentElement.classList.add('sl-theme-dark');
-  }
+      import '@itk-wasm/demo-app/demo-app.js'
 </script>
 
   <title>@itk-wasm/image-io<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></title>
 </head>
 <body>
-
-<script type="module" src="/utilities.js"></script>
 
 <!-- https://tholman.com/github-corners/ -->
 <a href="https://github.com/InsightSoftwareConsortium/itk-wasm" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
@@ -128,7 +100,7 @@
     <sl-divider></sl-divider>
 
     <div id="readImageOutputs">
-      <sl-details disabled id="readImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="readImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -212,7 +184,7 @@
       <sl-details disabled id="bioRadReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="bioRadReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="bioRadReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -296,7 +268,7 @@
       <sl-details disabled id="bmpReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="bmpReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="bmpReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -380,7 +352,7 @@
       <sl-details disabled id="fdfReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="fdfReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="fdfReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -464,7 +436,7 @@
       <sl-details disabled id="gdcmReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="gdcmReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="gdcmReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -548,7 +520,7 @@
       <sl-details disabled id="geAdwReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="geAdwReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="geAdwReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -632,7 +604,7 @@
       <sl-details disabled id="ge4ReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="ge4ReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="ge4ReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -716,7 +688,7 @@
       <sl-details disabled id="ge5ReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="ge5ReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="ge5ReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -800,7 +772,7 @@
       <sl-details disabled id="giplReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="giplReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="giplReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -884,7 +856,7 @@
       <sl-details disabled id="hdf5ReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="hdf5ReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="hdf5ReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -968,7 +940,7 @@
       <sl-details disabled id="jpegReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="jpegReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="jpegReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1052,7 +1024,7 @@
       <sl-details disabled id="lsmReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="lsmReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="lsmReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1136,7 +1108,7 @@
       <sl-details disabled id="metaReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="metaReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="metaReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1220,7 +1192,7 @@
       <sl-details disabled id="mghReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="mghReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="mghReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1304,7 +1276,7 @@
       <sl-details disabled id="mincReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="mincReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="mincReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1388,7 +1360,7 @@
       <sl-details disabled id="mrcReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="mrcReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="mrcReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1472,7 +1444,7 @@
       <sl-details disabled id="niftiReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="niftiReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="niftiReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1556,7 +1528,7 @@
       <sl-details disabled id="nrrdReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="nrrdReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="nrrdReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1640,7 +1612,7 @@
       <sl-details disabled id="pngReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="pngReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="pngReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1724,7 +1696,7 @@
       <sl-details disabled id="scancoReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="scancoReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="scancoReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1808,7 +1780,7 @@
       <sl-details disabled id="tiffReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="tiffReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="tiffReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1892,7 +1864,7 @@
       <sl-details disabled id="vtkReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="vtkReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="vtkReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -1976,7 +1948,7 @@
       <sl-details disabled id="wasmReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="wasmReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="wasmReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -2060,7 +2032,7 @@
       <sl-details disabled id="wasmZstdReadImage-could-read-details" summary="couldRead: Whether the input could be read. If false, the output image is not valid."></sl-details>
       <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
 <br /><br />
-      <sl-details disabled id="wasmZstdReadImage-image-details" summary="image: Output image"></sl-details>
+      <itk-image-details id="wasmZstdReadImage-image-details" summary="image: Output image"></itk-image-details>
       <sl-select id="image-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>

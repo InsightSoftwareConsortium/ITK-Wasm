@@ -25,7 +25,7 @@ describe('nifti', () => {
     cy.get('#niftiReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#niftiReadImage-could-read-details').should('contain', 'true')
-    cy.get('#niftiReadImage-image-details').should('contain', 'imageType')
+    cy.get('#niftiReadImage-image-details').contains('imageType')
   })
 
   it('Writes a Nifti image', function () {
@@ -33,7 +33,7 @@ describe('nifti', () => {
 
     const testFile = { contents: new Uint8Array(this['r16slice.iwi.cbor']), fileName: 'image_color.iwi.cbor' }
     cy.get('#niftiWriteImageInputs input[name="image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#niftiWriteImage-image-details').should('contain', 'imageType')
+    cy.get('#niftiWriteImage-image-details').contains('imageType')
     cy.get('#niftiWriteImageInputs sl-input[name="serialized-image"]').find('input', { includeShadowDom: true }).type('r16slice.nii.gz', { force: true })
 
     cy.get('#niftiWriteImageInputs sl-button[name="run"]').click()

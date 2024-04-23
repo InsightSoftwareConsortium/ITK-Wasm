@@ -24,7 +24,7 @@ describe('wasm', () => {
     cy.get('#wasmReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#wasmReadImage-could-read-details').should('contain', 'true')
-    cy.get('#wasmReadImage-image-details').should('contain', 'imageType')
+    cy.get('#wasmReadImage-image-details').contains('imageType')
   })
 
   it('Writes an ITK Wasm image', function () {
@@ -32,7 +32,7 @@ describe('wasm', () => {
 
     const testFile = { contents: new Uint8Array(this['cthead1.iwi.cbor']), fileName: 'cthead1.iwi.cbor' }
     cy.get('#wasmWriteImageInputs input[name="image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#wasmWriteImage-image-details').should('contain', 'imageType')
+    cy.get('#wasmWriteImage-image-details').contains('imageType')
     cy.get('#wasmWriteImageInputs sl-input[name="serialized-image"]').find('input', { includeShadowDom: true }).type('cthead1-new.iwi.cbor', { force: true })
 
     cy.get('#wasmWriteImageInputs sl-button[name="run"]').click()

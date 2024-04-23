@@ -40,8 +40,7 @@ function outputDemoHtml (functionName, prefix, indent, parameter) {
       result += `<br /><br />\n`
       break
     case 'OUTPUT_IMAGE': {
-      result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
-
+      result += `${prefix}${indent}<itk-image-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></itk-image-details>\n`
       result += `${prefix}${indent}<sl-select id="${functionName}-${parameter.name}-output-format" placeholder="Format">\n`
       const formats = ['bmp', 'dcm', 'gipl', 'hdf5', 'jpg', 'lsm', 'mnc', 'mnc.gz', 'mgh', 'mha', 'mrc', 'nii', 'nii.gz', 'png', 'nrrd', 'png', 'pic', 'tif', 'isq', 'fdf', 'vtk']
       formats.forEach((format) => {

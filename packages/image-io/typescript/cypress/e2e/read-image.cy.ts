@@ -49,7 +49,7 @@ describe('read-image', () => {
 
     cy.get('#readImageInputs sl-button[name="run"]').click()
 
-    cy.get('#readImage-image-details').should('contain', 'imageType')
+    cy.get('#readImage-image-details').contains('imageType')
   })
 
   it('Reads an image BinaryFile', function () {

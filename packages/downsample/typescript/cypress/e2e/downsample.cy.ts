@@ -19,11 +19,11 @@ describe('downsample', () => {
 
     const testFile = { contents: new Uint8Array(this['cthead1.png']), fileName: 'cthead1.png' }
     cy.get('#downsampleInputs input[name="input-file"]').selectFile([testFile,], { force: true })
-    cy.get('#downsample-input-details').should('contain', 'imageType')
+    cy.get('#downsample-input-details').contains('imageType')
     cy.get('#downsampleInputs sl-input[name="shrink-factors"]').find('input', { includeShadowDom: true }).clear().type('[2, 2]', { force: true })
 
     cy.get('#downsampleInputs sl-button[name="run"]').click()
 
-    cy.get('#downsample-downsampled-details').should('contain', 'imageType')
+    cy.get('#downsample-downsampled-details').contains('imageType')
   })
 })

@@ -25,7 +25,7 @@ describe('meta-image', () => {
     cy.get('#metaReadImageInputs sl-button[name="run"]').click()
 
     cy.get('#metaReadImage-could-read-details').should('contain', 'true')
-    cy.get('#metaReadImage-image-details').should('contain', 'imageType')
+    cy.get('#metaReadImage-image-details').contains('imageType')
   })
 
   it('Writes a MetaImage image', function () {
@@ -33,7 +33,7 @@ describe('meta-image', () => {
 
     const testFile = { contents: new Uint8Array(this['brainweb165a10f17.iwi.cbor']), fileName: 'brainweb165a10f17.iwi.cbor' }
     cy.get('#metaWriteImageInputs input[name="image-file"]').selectFile([testFile,], { force: true })
-    cy.get('#metaWriteImage-image-details').should('contain', 'imageType')
+    cy.get('#metaWriteImage-image-details').contains('imageType')
     cy.get('#metaWriteImageInputs sl-input[name="serialized-image"]').find('input', { includeShadowDom: true }).type('brainweb165a10f17.mha', { force: true })
 
     cy.get('#metaWriteImageInputs sl-button[name="run"]').click()

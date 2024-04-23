@@ -47,7 +47,7 @@ class VectorMagnitudeController {
         webWorker.terminate()
         model.inputs.set("vectorImage", image)
         const details = document.getElementById("vectorMagnitude-vector-image-details")
-        details.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(image, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
+        details.setImage(image)
         details.disabled = false
     })
 
@@ -123,9 +123,8 @@ class VectorMagnitudeController {
         magnitudeImageOutputDownload.variant = "success"
         magnitudeImageOutputDownload.disabled = false
         const magnitudeImageDetails = document.getElementById("vectorMagnitude-magnitude-image-details")
-        magnitudeImageDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(magnitudeImage, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`
         magnitudeImageDetails.disabled = false
-        const magnitudeImageOutput = document.getElementById('vectorMagnitude-magnitude-image-details')
+        magnitudeImageDetails.setImage(magnitudeImage)
       } catch (error) {
         globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")
         throw error
