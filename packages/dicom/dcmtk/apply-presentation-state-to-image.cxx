@@ -94,8 +94,9 @@
 #include "dcmtk/dcmdata/cmdlnarg.h"
 #include "dcmtk/ofstd/ofcmdln.h"
 #include "dcmtk/ofstd/ofconapp.h"
-#include "dcmtk/ofstd/ofvector.h"
 #include "dcmtk/dcmdata/dcuid.h"      /* for dcmtk version name */
+
+#include "dcmtk/ofstd/ofvector.h"
 
 #include "cpp-base64/base64.h"
 #include "rapidjson/document.h"
@@ -128,7 +129,7 @@ void safeSetString(Value &v, const char *s, Document::AllocatorType& alloc)
   }
 }
 
-static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationState &ps)
+static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationState &ps, const char *pstName = NULL)
 {
   size_t i, j, max;
 
@@ -167,14 +168,19 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   }
 
   // ICC color Profile
-  const OFVector<Uint8> iccProfile = ps.getICCProfile();
-  if (!iccProfile.empty())
+  DcmFileFormat imageFF;
+  OFCondition cond = imageFF.loadFile(pstName);
+  if (cond.good())
   {
-    // Encode the binary color profile data as a base64 string
-    std::string iccProfileAsString(iccProfile.begin(), iccProfile.end());
-    doc.AddMember("ICCProfile", Value(base64_encode(iccProfileAsString, false).c_str(), alloc), alloc);
+    const Uint8* iccProfile;
+    unsigned long iccProfileSize = 0;
+    cond = imageFF.getDataset()->findAndGetUint8Array(DCM_ICCProfile, iccProfile, &iccProfileSize);
+    if (cond.good() && iccProfileSize > 0)
+    {
+      // Encode the binary color profile data as a base64 string
+      doc.AddMember("ICCProfile", Value(base64_encode(iccProfile, iccProfileSize, false).c_str(), alloc), alloc);
+    }
   }
-
   doc.AddMember("Flip", Value(ps.getFlip()), alloc);
   int rotation = 0;
   switch (ps.getRotation())
@@ -676,7 +682,7 @@ int main(int argc, char *argv[])
 
   if (status == EC_Normal)
   {
-    if (!noPstateOutput) dumpPresentationState(pstateOutStream.Get(), dvi.getCurrentPState());
+    if (!noPstateOutput) dumpPresentationState(pstateOutStream.Get(), dvi.getCurrentPState(), opt_pstName);
     if (!noBitmapOutput)
     {
       unsigned long width = 0;
