@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=docker.io/dockcross/web-wasm
-FROM $BASE_IMAGE:20240326-00e7558
+FROM $BASE_IMAGE:20240418-88c04a4
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
@@ -36,8 +36,8 @@ RUN git clone https://github.com/facebook/zstd.git && \
   cd .. && \
   rm -rf zstd-build zstd
 
-# tag commit date: 2023-09-17 branch: itkwasm-2023-01-15-f42c10a20f-5
-ENV ITK_GIT_TAG fb5b2f0a691dbe107f44ea332a6113aab8810900
+# tag commit date: 2024-04-22 branch: itkwasm-2023-01-15-f42c10a20f-6
+ENV ITK_GIT_TAG 1e00c489625240086e0ce31caa920839319f6b7d
 RUN git clone https://github.com/KitwareMedical/ITK.git && \
   cd ITK && \
   git checkout ${ITK_GIT_TAG} && \
@@ -46,11 +46,11 @@ RUN git clone https://github.com/KitwareMedical/ITK.git && \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
 
 # Modify CMake variable to use patched DCMTK library
-# GIT_TAG refers to DCMTK branch: 20230115_DCMTK_PATCHES_FOR_ITK-wasm
+# GIT_TAG refers to DCMTK branch: 20240311_DCMTK_PATCHES_FOR_ITK-wasm
 RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/DCMTK.git")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
-RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "d2c5251de48862ba37c4858266dbe47bda566f4e")' \
+RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "fe7cff5de40b67ae0490d476ddf17689c06bcaf4")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
 ARG CMAKE_BUILD_TYPE=Release
