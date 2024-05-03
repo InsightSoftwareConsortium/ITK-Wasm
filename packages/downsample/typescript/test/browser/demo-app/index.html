@@ -43,7 +43,7 @@
 
     <div id="downsampleBinShrinkInputs"><form action="">
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
-      <sl-tooltip content="Use the Upload button to provide the input"><itk-image-details id="downsampleBinShrink-input-details" summary="input: Input image"></itk-image-details></sl-tooltip>
+      <sl-tooltip content="Use the Upload button to provide the input"><itk-image-details id="downsampleBinShrink-input-details" summary="input: Input image" disabled></itk-image-details></sl-tooltip>
 <br /><br />
       <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
@@ -57,7 +57,7 @@
     <sl-divider></sl-divider>
 
     <div id="downsampleBinShrinkOutputs">
-      <itk-image-details id="downsampleBinShrink-downsampled-details" summary="downsampled: Output downsampled image"></itk-image-details>
+      <itk-image-details disabled id="downsampleBinShrink-downsampled-details" summary="downsampled: Output downsampled image"></itk-image-details>
       <sl-select id="downsampleBinShrink-downsampled-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -94,7 +94,7 @@
 
     <div id="downsampleLabelImageInputs"><form action="">
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
-      <sl-tooltip content="Use the Upload button to provide the input"><itk-image-details id="downsampleLabelImage-input-details" summary="input: Input image"></itk-image-details></sl-tooltip>
+      <sl-tooltip content="Use the Upload button to provide the input"><itk-image-details id="downsampleLabelImage-input-details" summary="input: Input image" disabled></itk-image-details></sl-tooltip>
 <br /><br />
       <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
@@ -108,7 +108,7 @@
     <sl-divider></sl-divider>
 
     <div id="downsampleLabelImageOutputs">
-      <itk-image-details id="downsampleLabelImage-downsampled-details" summary="downsampled: Output downsampled image"></itk-image-details>
+      <itk-image-details disabled id="downsampleLabelImage-downsampled-details" summary="downsampled: Output downsampled image"></itk-image-details>
       <sl-select id="downsampleLabelImage-downsampled-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
@@ -168,7 +168,7 @@
 
     <div id="downsampleInputs"><form action="">
       <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
-      <sl-tooltip content="Use the Upload button to provide the input"><itk-image-details id="downsample-input-details" summary="input: Input image"></itk-image-details></sl-tooltip>
+      <sl-tooltip content="Use the Upload button to provide the input"><itk-image-details id="downsample-input-details" summary="input: Input image" disabled></itk-image-details></sl-tooltip>
 <br /><br />
       <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
 <br />
@@ -182,7 +182,7 @@
     <sl-divider></sl-divider>
 
     <div id="downsampleOutputs">
-      <itk-image-details id="downsample-downsampled-details" summary="downsampled: Output downsampled image"></itk-image-details>
+      <itk-image-details disabled id="downsample-downsampled-details" summary="downsampled: Output downsampled image"></itk-image-details>
       <sl-select id="downsample-downsampled-output-format" placeholder="Format">
         <sl-option value="bmp">bmp</sl-option>
         <sl-option value="dcm">dcm</sl-option>
