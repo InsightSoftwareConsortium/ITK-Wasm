@@ -23,7 +23,7 @@ jobs:
     - name: Install
       uses: pnpm/action-setup@v2
       with:
-        version: 8
+        version:9
         run_install: true
 
     - name: Build dependencies
@@ -160,7 +160,7 @@ jobs:
     - name: Install
       uses: pnpm/action-setup@v2
       with:
-        version: 8
+        version:9
         run_install: true
 
     - name: Build dependencies
@@ -260,7 +260,7 @@ jobs:
     - name: Install
       uses: pnpm/action-setup@v2
       with:
-        version: 8
+        version:9
         run_install: true
 
     - uses: actions/setup-node@v4
@@ -334,7 +334,7 @@ jobs:
     - name: Install
       uses: pnpm/action-setup@v2
       with:
-        version: 8
+        version:9
         run_install: true
 
     - name: Build dependencies
