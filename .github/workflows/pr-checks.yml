@@ -20,4 +20,4 @@ jobs:
           run_install: true
 
       - name: Lint commits
-        run: npx commitlint --from=${{ github.event.pull_request.base.sha }}
+        run: pnpm test:commitlint --from=${{ github.event.pull_request.base.sha }}
