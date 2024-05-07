@@ -53,6 +53,9 @@ RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://gi
 RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "fe7cff5de40b67ae0490d476ddf17689c06bcaf4")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
+RUN if [[ -e $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake ]]; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; fi
+RUN if [[ -e $WASI_SDK_PATH/share/cmake/wasi-sdk-threads.cmake ]]; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk-threads.cmake; fi
+
 ARG CMAKE_BUILD_TYPE=Release
 
 ARG LDFLAGS
