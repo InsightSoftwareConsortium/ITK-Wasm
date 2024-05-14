@@ -19,10 +19,7 @@ RUN curl -LO https://nodejs.org/dist/${NODE_TAG}/node-${NODE_TAG}-linux-x64.tar.
 ENV PATH /emsdk/upstream/emscripten:${PATH}
 
 ENV zstd_GIT_TAG v1.5.5
-RUN git clone https://github.com/facebook/zstd.git && \
-  cd zstd && \
-  git checkout ${zstd_GIT_TAG} && \
-  cd / && \
+RUN curl -L https://api.github.com/repos/facebook/zstd/tarball/${zstd_GIT_TAG} | tar xz --strip=1 --one-top-level=zstd && \
   mkdir zstd-build && \
   cd zstd-build && \
   CC=cc CXX=c++ /usr/bin/cmake \
@@ -37,11 +34,9 @@ RUN git clone https://github.com/facebook/zstd.git && \
   rm -rf zstd-build zstd
 
 # tag commit date: 2024-05-05 branch: itkwasm-2024-05-03-e5a84a08a30
-ENV ITK_GIT_TAG 0f306658360391c66922deecc19b40b6e7fcdfef
-RUN git clone https://github.com/KitwareMedical/ITK.git && \
-  cd ITK && \
-  git checkout ${ITK_GIT_TAG} && \
-  cd ../ && \
+ENV ITK_GIT_TAG 2282cb5b41d1333fd68ba14af4cbc5a1c0d0f965
+ENV ITK_GIT_BRANCH itkwasm-2024-05-03-e5a84a08a30
+RUN git clone --branch $ITK_GIT_BRANCH --single-branch --depth 1 https://github.com/KitwareMedical/ITK.git && \
   sed -i -e '/^option(OPJ_USE_THREAD/c\option(OPJ_USE_THREAD "use threads" OFF)' \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
 
@@ -53,8 +48,8 @@ RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://gi
 RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "fe7cff5de40b67ae0490d476ddf17689c06bcaf4")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
-RUN if [[ -e $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake ]]; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; fi
-RUN if [[ -e $WASI_SDK_PATH/share/cmake/wasi-sdk-threads.cmake ]]; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk-threads.cmake; fi
+RUN if test -e $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; fi
+RUN if test -e $WASI_SDK_PATH/share/cmake/wasi-sdk-threads.cmake; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk-threads.cmake; fi
 
 ARG CMAKE_BUILD_TYPE=Release
 
