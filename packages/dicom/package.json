@@ -2,7 +2,7 @@
   "name": "@itk-wasm/dicom-build",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@9.1.0",
+  "packageManager": "pnpm@9.1.1",
   "description": "scripts to generate @itk-wasm/dicom itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {

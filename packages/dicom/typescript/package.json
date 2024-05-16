@@ -1,7 +1,7 @@
 {
   "name": "@itk-wasm/dicom",
   "version": "7.0.0",
-  "packageManager": "pnpm@9.1.0",
+  "packageManager": "pnpm@9.1.1",
   "description": "Read files and images related to DICOM file format.",
   "type": "module",
   "module": "./dist/index.js",
