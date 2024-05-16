@@ -17,9 +17,8 @@ pip install itkwasm-dicom-wasi
 
 ```sh
 # Download test data
-cd ../../../..
-npm ci
-npm run build:testData
+cd ../..
+pnpm test:data:download
 cd -
 
 pip install pytest
