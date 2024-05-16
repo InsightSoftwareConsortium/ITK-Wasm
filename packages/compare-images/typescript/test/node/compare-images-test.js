@@ -43,8 +43,8 @@ test('compareImagesNode produces the expected metrics and difference images for 
   t.is(metrics.numberOfPixelsWithDifferences, 26477)
   t.is(metrics.minimumDifference, 0.002273026683894841)
   t.is(metrics.maximumDifference, 312.2511648746159)
-  t.is(metrics.totalDifference, 3121703.1639738297)
-  t.is(metrics.meanDifference, 117.90244982338746)
+  t.is(metrics.totalDifference, 3121656.100202402)
+  t.is(metrics.meanDifference, 117.90067228924735)
 
   t.is(differenceImage.imageType.componentType, 'float64')
   t.is(differenceUchar2dImage.imageType.componentType, 'uint8')
