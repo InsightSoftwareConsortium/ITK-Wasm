@@ -61,8 +61,9 @@ function setPipelineModuleInputArray (emscriptenModule: PipelineEmscriptenModule
 
 function setPipelineModuleInputJSON (emscriptenModule: PipelineEmscriptenModule, dataObject: object, inputIndex: number): void {
   const dataJSON = JSON.stringify(dataObject)
-  const jsonPtr = emscriptenModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, inputIndex, dataJSON.length])
-  emscriptenModule.writeAsciiToMemory(dataJSON, jsonPtr, false)
+  const length = emscriptenModule.lengthBytesUTF8(dataJSON) + 1
+  const jsonPtr = emscriptenModule.ccall('itk_wasm_input_json_alloc', 'number', ['number', 'number', 'number'], [0, inputIndex, length])
+  emscriptenModule.stringToUTF8(dataJSON, jsonPtr, length)
 }
 
 function getPipelineModuleOutputArray (emscriptenModule: PipelineEmscriptenModule, outputIndex: number, subIndex: number, componentType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes]): TypedArray | Float32Array | Uint32Array | null {
@@ -75,7 +76,7 @@ function getPipelineModuleOutputArray (emscriptenModule: PipelineEmscriptenModul
 
 function getPipelineModuleOutputJSON (emscriptenModule: PipelineEmscriptenModule, outputIndex: number): object {
   const jsonPtr = emscriptenModule.ccall('itk_wasm_output_json_address', 'number', ['number', 'number'], [0, outputIndex])
-  const dataJSON = emscriptenModule.AsciiToString(jsonPtr)
+  const dataJSON = emscriptenModule.UTF8ToString(jsonPtr)
   const dataObject = JSON.parse(dataJSON)
   return dataObject
 }
