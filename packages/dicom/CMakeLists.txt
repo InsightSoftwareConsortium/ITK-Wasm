@@ -3,5 +3,7 @@ project(itkwasm-dicom)
 
 set(CMAKE_CXX_STANDARD 17)
 
+enable_testing()
+
 add_subdirectory(gdcm)
 add_subdirectory(dcmtk)

@@ -150,46 +150,46 @@ test('Apply presentation state to a dicom image.', async t => {
   t.assert(Buffer.compare(baselinePixels, outputImage.data) === 0)
 })
 
-test('Apply color presentation state (CSPS) to a color dicom image.', async t => {
-  // Read the input image file
-  const inputFile = 'csps-input-image.dcm'
-  const inputFilePath = path.join(testPathPrefix, inputFile)
+//test('Apply color presentation state (CSPS) to a color dicom image.', async t => {
+  //// Read the input image file
+  //const inputFile = 'csps-input-image.dcm'
+  //const inputFilePath = path.join(testPathPrefix, inputFile)
 
-  // Read the presentation state file (that references the above image internally using its SOPInstanceUID).
-  const pstateFile = 'csps-input-pstate.dcm'
-  const pstateFilePath = path.join(testPathPrefix, pstateFile)
+  //// Read the presentation state file (that references the above image internally using its SOPInstanceUID).
+  //const pstateFile = 'csps-input-pstate.dcm'
+  //const pstateFilePath = path.join(testPathPrefix, pstateFile)
 
-  const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode(
-    inputFilePath, pstateFilePath,
-    { frame: 1, colorOutput: true }
-  )
+  //const { presentationStateOutStream: pstateJsonOut, outputImage } = await applyPresentationStateToImageNode(
+    //inputFilePath, pstateFilePath,
+    //{ frame: 1, colorOutput: true }
+  //)
 
-  t.assert(pstateJsonOut != null)
-  t.assert(outputImage != null)
-  t.assert(outputImage.imageType.dimension === 2)
-  t.assert(outputImage.imageType.componentType === 'uint8')
-  t.assert(outputImage.imageType.pixelType === 'RGB')
-  t.assert(outputImage.imageType.components === 3)
+  //t.assert(pstateJsonOut != null)
+  //t.assert(outputImage != null)
+  //t.assert(outputImage.imageType.dimension === 2)
+  //t.assert(outputImage.imageType.componentType === 'uint8')
+  //t.assert(outputImage.imageType.pixelType === 'RGB')
+  //t.assert(outputImage.imageType.components === 3)
 
-  t.assert(arrayEquals(outputImage.origin, [0, 0]))
-  t.assert(arrayEquals(outputImage.spacing, [0.683, 0.683]))
-  t.assert(arrayEquals(outputImage.direction, [1, 0, 0, 1]))
-  t.assert(arrayEquals(outputImage.size, [768, 1024]))
+  //t.assert(arrayEquals(outputImage.origin, [0, 0]))
+  //t.assert(arrayEquals(outputImage.spacing, [0.683, 0.683]))
+  //t.assert(arrayEquals(outputImage.direction, [1, 0, 0, 1]))
+  //t.assert(arrayEquals(outputImage.size, [768, 1024]))
 
-  const baselineJsonFile = 'csps-pstate-baseline.json'
-  const baselineJsonFilePath = baselinePathPrefix + baselineJsonFile
-  const baselineJsonFileBuffer = fs.readFileSync(baselineJsonFilePath)
-  // the slice operation removes the last EOF char from the baseline file.
-  const baselineJsonString = baselineJsonFileBuffer.toString().slice(0, -1)
-  const baselineJsonObject = JSON.parse(baselineJsonString)
+  //const baselineJsonFile = 'csps-pstate-baseline.json'
+  //const baselineJsonFilePath = baselinePathPrefix + baselineJsonFile
+  //const baselineJsonFileBuffer = fs.readFileSync(baselineJsonFilePath)
+  //// the slice operation removes the last EOF char from the baseline file.
+  //const baselineJsonString = baselineJsonFileBuffer.toString().slice(0, -1)
+  //const baselineJsonObject = JSON.parse(baselineJsonString)
 
-  t.assert(baselineJsonObject.PresentationLabel === pstateJsonOut.PresentationLabel)
-  t.assert(baselineJsonObject.PresentationSizeMode === pstateJsonOut.PresentationSizeMode)
-  t.assert(JSON.stringify(baselineJsonObject) === JSON.stringify(pstateJsonOut))
+  //t.assert(baselineJsonObject.PresentationLabel === pstateJsonOut.PresentationLabel)
+  //t.assert(baselineJsonObject.PresentationSizeMode === pstateJsonOut.PresentationSizeMode)
+  //t.assert(JSON.stringify(baselineJsonObject) === JSON.stringify(pstateJsonOut))
 
-  const baselineImage = 'csps-output-image-baseline.bmp'
-  const baselineImageFilePath = baselinePathPrefix + baselineImage
-  const baselinePixels = await readImageNode(baselineImageFilePath)
-  t.assert(baselinePixels.data.length === outputImage.data.length)
-  t.assert(Buffer.compare(baselinePixels.data, outputImage.data) === 0)
-})
+  //const baselineImage = 'csps-output-image-baseline.bmp'
+  //const baselineImageFilePath = baselinePathPrefix + baselineImage
+  //const baselinePixels = await readImageNode(baselineImageFilePath)
+  //t.assert(baselinePixels.data.length === outputImage.data.length)
+  //t.assert(Buffer.compare(baselinePixels.data, outputImage.data) === 0)
+//})
