@@ -1,7 +1,6 @@
 {
   "name": "package-name",
   "version": "0.1.0",
-  "packageManager": "pnpm@9.1.0",
   "description": "",
   "type": "module",
   "module": "./dist/index.js",
