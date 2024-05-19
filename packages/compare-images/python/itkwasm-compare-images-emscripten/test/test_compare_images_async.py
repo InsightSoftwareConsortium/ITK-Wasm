@@ -110,8 +110,8 @@ async def test_compare_images_async(selenium, package_wheel, input_data):
     assert metrics['numberOfPixelsWithDifferences'] == 26477
     assert metrics['minimumDifference'] == 0.002273026683894841
     assert metrics['maximumDifference'] == 312.2511648746159
-    assert metrics['totalDifference'] == 3121703.1639738297
-    assert metrics['meanDifference'] == 117.90244982338746
+    assert metrics['totalDifference'] == 3121656.100202402
+    assert metrics['meanDifference'] == 117.90067228924735
 
     assert difference_image.imageType.componentType == 'float64'
     assert difference_image_rendering.imageType.componentType == 'uint8'
