@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "start": "pnpm copyShoelaceAssets && vite",
+    "start": "pnpm copyDemoAppAssets && vite",
     "test": "pnpm test:node",
     "test:node": "node ./src/cli.mjs --radius 2 ../cthead1.png smoothed.png",
     "build": "pnpm build:tsc && pnpm build:browser:workerEmbedded && pnpm build:browser:workerEmbeddedMin && pnpm build:demo",
@@ -24,8 +24,8 @@
     "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
     "build:version": "node -p \"'const version = ' + JSON.stringify(require('./package.json').version) + '\\nexport default version\\n'\" > src/version.ts",
     "build:tsc": "pnpm build:version && tsc --pretty",
-    "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@itk-wasm/demo-app/node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
-    "build:demo": "pnpm copyShoelaceAssets && vite build"
+    "copyDemoAppAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@itk-wasm/demo-app/dist/assets test/browser/demo-app/public/",
+    "build:demo": "pnpm copyDemoAppAssets && vite build"
   },
   "keywords": [
     "itk",

@@ -14,6 +14,8 @@ build-wasi
 src/io/internal/ImageIOIndex.ts
 src/io/internal/MeshIOIndex.ts
 
+packages/core/typescript/demo-app/dist/
+
 dist/*
 !dist/dicom
 
