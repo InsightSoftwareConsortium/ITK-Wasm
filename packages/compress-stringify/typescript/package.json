@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compress-stringify",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "packageManager": "pnpm@9.1.0",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
@@ -49,7 +49,7 @@
     "@itk-wasm/compress-stringify-build": "workspace:*",
     "@itk-wasm/image-io": "workspace:*",
     "@itk-wasm/mesh-io": "workspace:*",
-    "@itk-wasm/mesh-to-poly-data": "^1.0.0",
+    "@itk-wasm/mesh-to-poly-data": "^1.1.0",
     "@itk-wasm/demo-app": "workspace:*",
     "@types/node": "^20.2.5",
     "ava": "^5.1.0",
