@@ -1,7 +1,7 @@
 {
   "name": "@itk-wasm/demo-app",
   "version": "0.2.0",
-  "packageManager": "pnpm@9.1.0",
+  "packageManager": "pnpm@9.1.1",
   "description": "Try itk-wasm pipelines in a browser",
   "type": "module",
   "exports": {
