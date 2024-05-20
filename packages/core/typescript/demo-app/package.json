@@ -1,11 +1,15 @@
 {
   "name": "@itk-wasm/demo-app",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "packageManager": "pnpm@9.1.0",
   "description": "Try itk-wasm pipelines in a browser",
   "type": "module",
   "exports": {
     "./*": "./src/*"
+  },
+  "scripts": {
+    "build": "shx mkdir -p dist && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets dist/",
+    "build:tsc": "pnpm build"
   },
   "keywords": [
     "itk",
@@ -25,5 +29,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+  },
+  "devDependencies": {
+    "shx": "^0.3.4"
   }
 }

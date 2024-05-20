@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/mesh-io",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "packageManager": "pnpm@9.1.0",
   "description": "Input and output for scientific and medical image file formats.",
   "type": "module",
@@ -15,7 +15,7 @@
     }
   },
   "scripts": {
-    "start": "pnpm copyShoelaceAssets && vite",
+    "start": "pnpm copyDemoAppAssets && vite",
     "test": "pnpm test:node && pnpm test:browser",
     "test:node": "ava",
     "test:browser": "pnpm test:browser:chrome && pnpm test:browser:firefox",
@@ -30,8 +30,8 @@
     "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
     "build:version": "node -p \"'const version = ' + JSON.stringify(require('./package.json').version) + '\\nexport default version\\n'\" > src/version.ts",
     "build:tsc": "pnpm build:version && tsc --pretty",
-    "copyShoelaceAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@itk-wasm/demo-app/node_modules/@shoelace-style/shoelace/dist/assets test/browser/demo-app/public/",
-    "build:demo": "pnpm copyShoelaceAssets && vite build"
+    "copyDemoAppAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@itk-wasm/demo-app/dist/assets test/browser/demo-app/public/",
+    "build:demo": "pnpm copyDemoAppAssets && vite build"
   },
   "keywords": [
     "itk",
