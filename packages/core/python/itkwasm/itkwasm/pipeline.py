@@ -4,6 +4,7 @@ from dataclasses import asdict
 from typing import List, Union, Dict, Tuple, Set
 import ctypes
 import sys
+import os
 
 import numpy as np
 try:
@@ -32,7 +33,10 @@ if sys.platform != "emscripten":
 
     from wasmtime import Config, Store, Engine, Module, WasiConfig, Linker, WasmtimeError
 
-    _module_store_dir = Path(user_cache_dir("itkwasm"))
+    # Get the value of the ITKWASM_CACHE_DIR environment variable
+    # If it is not set, use the default cache directory
+    _module_store_dir = os.environ.get("ITKWASM_CACHE_DIR", user_cache_dir("itkwasm"))
+    _module_store_dir = Path(_module_store_dir)
     _module_store_dir.mkdir(parents=True, exist_ok=True)
 
 def array_like_to_bytes(arr: ArrayLike) -> bytes:
