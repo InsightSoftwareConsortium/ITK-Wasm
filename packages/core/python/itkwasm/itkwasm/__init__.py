@@ -3,7 +3,7 @@
 __version__ = "1.0b171"
 
 from .interface_types import InterfaceTypes
-from .image import Image, ImageType
+from .image import Image, ImageType, ImageRegion
 from .pointset import PointSet, PointSetType
 from .mesh import Mesh, MeshType
 from .polydata import PolyData, PolyDataType
@@ -31,6 +31,7 @@ __all__ = [
   "PipelineOutput",
   "Image",
   "ImageType",
+  "ImageRegion",
   "PointSet",
   "PointSetType",
   "Mesh",

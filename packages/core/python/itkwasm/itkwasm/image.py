@@ -23,6 +23,11 @@ def _default_direction() -> ArrayLike:
     return np.empty((0,), np.float64)
 
 @dataclass
+class ImageRegion:
+    index: Sequence[int] = field(default_factory=list)
+    size: Sequence[int] = field(default_factory=list)
+
+@dataclass
 class Image:
     imageType: Union[ImageType, Dict] = field(default_factory=ImageType)
     name: str = 'Image'
@@ -32,6 +37,7 @@ class Image:
     size: Sequence[int] = field(default_factory=list)
     metadata: Dict = field(default_factory=dict)
     data: Optional[ArrayLike] = None
+    bufferedRegion: Optional[ImageRegion] = None
 
     def __post_init__(self):
         if isinstance(self.imageType, dict):
@@ -49,3 +55,6 @@ class Image:
 
         if len(self.size) == 0:
             self.size += [1,] * dimension
+
+        if self.bufferedRegion is None:
+            self.bufferedRegion = ImageRegion(index=[0,]*dimension, size=self.size)
