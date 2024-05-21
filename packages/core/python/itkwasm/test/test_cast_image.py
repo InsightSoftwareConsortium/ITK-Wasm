@@ -8,6 +8,7 @@ import numpy as np
 
 from itkwasm import cast_image
 
+
 def test_cast_image_component():
     data = Path(__file__).absolute().parent / "input" / "cthead1.png"
     itk_image = itk.imread(data, itk.UC)
@@ -17,6 +18,7 @@ def test_cast_image_component():
     itkwasm_image_double = cast_image(itkwasm_image, component_type=FloatTypes.Float64)
     assert itkwasm_image_double.imageType.componentType == FloatTypes.Float64
     assert np.array_equal(itkwasm_image.data, itkwasm_image_double.data)
+
 
 def test_cast_image_pixel_type():
     data = Path(__file__).absolute().parent / "input" / "cthead1.png"

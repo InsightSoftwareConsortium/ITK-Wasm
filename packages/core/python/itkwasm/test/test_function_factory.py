@@ -1,9 +1,11 @@
 import pytest
 
+
 def test_function_factory():
     test_accelerator = pytest.importorskip("test_accelerator")
 
     from itkwasm import function_factory
+
     interface_package = "itkwasm_example_package"
     func_name = "example_function"
     registered = function_factory.lookup(interface_package, func_name)
@@ -23,16 +25,20 @@ def test_function_factory():
     highest = function_factory.highest_priority(interface_package, func_name)
     assert highest == None
 
+
 def test_environment_dispatch():
     test_accelerator = pytest.importorskip("test_accelerator")
 
     from itkwasm import function_factory, environment_dispatch
+
     interface_package = "itkwasm_example_package"
     func_name = "example_function"
 
     from test_accelerator import fastest
+
     function_factory.register(interface_package, func_name, fastest, 1)
 
     func = environment_dispatch(interface_package, func_name)
     from test_accelerator import fastest
+
     assert func == fastest

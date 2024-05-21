@@ -1,5 +1,6 @@
 from typing import Union
 import sys
+
 if sys.version_info < (3, 10):
     from importlib_metadata import distribution
 else:
@@ -13,10 +14,11 @@ from .float_types import FloatTypes
 from .to_cupy_array import is_cupy_array
 
 try:
-    distribution('dask')
+    distribution("dask")
     _DASK_AVAILABLE = True
 except:
     _DASK_AVAILABLE = False
+
 
 def array_like_to_numpy_array(arr: ArrayLike) -> np.ndarray:
     """Convert a numpy array-like to a numpy ndarray.
@@ -31,17 +33,20 @@ def array_like_to_numpy_array(arr: ArrayLike) -> np.ndarray:
         return arr
     if _DASK_AVAILABLE:
         import dask.array as da
+
         if isinstance(arr, da.Array):
             arr = arr.compute()
     if is_cupy_array(arr):
         return arr.get()
     return np.array(arr)
 
+
 def array_like_to_bytes(arr: ArrayLike) -> bytes:
     """Convert a numpy array-like to bytes."""
-    if hasattr(arr, 'tobytes'):
+    if hasattr(arr, "tobytes"):
         return arr.tobytes()
     return array_like_to_numpy_array(arr).tobytes()
+
 
 def buffer_to_numpy_array(component_type: Union[IntTypes, FloatTypes], buf):
     if component_type == IntTypes.UInt8:
@@ -65,7 +70,8 @@ def buffer_to_numpy_array(component_type: Union[IntTypes, FloatTypes], buf):
     elif component_type == FloatTypes.Float64:
         return np.frombuffer(buf, dtype=np.float64)
     else:
-        raise ValueError('Unsupported component type')
+        raise ValueError("Unsupported component type")
+
 
 def _dtype_to_component_type(dtype):
     if dtype == np.uint8:
@@ -89,4 +95,4 @@ def _dtype_to_component_type(dtype):
     elif dtype == np.float64:
         return FloatTypes.Float64
     else:
-        raise ValueError('Unsupported dtype')
+        raise ValueError("Unsupported dtype")

@@ -5,6 +5,8 @@ import pytest
 from itkwasm import array_like_to_cupy_array
 
 pytest.importorskip("cupy")
+
+
 def test_array_like_to_numpy_array():
     import cupy as cp
 

@@ -10,8 +10,21 @@ from .image import Image
 from .mesh import Mesh
 from .polydata import PolyData
 
+
 @dataclass
 class PipelineOutput:
     type: InterfaceTypes
-    data: Optional[Union[str, bytes, TextStream, BinaryStream, TextFile, BinaryFile, Image, Mesh, PolyData]] = None
+    data: Optional[
+        Union[
+            str,
+            bytes,
+            TextStream,
+            BinaryStream,
+            TextFile,
+            BinaryFile,
+            Image,
+            Mesh,
+            PolyData,
+        ]
+    ] = None
     path: Optional[str] = None

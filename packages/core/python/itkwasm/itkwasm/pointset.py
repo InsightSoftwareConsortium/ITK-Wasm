@@ -11,6 +11,7 @@ from .float_types import FloatTypes
 from .int_types import IntTypes
 from .pixel_types import PixelTypes
 
+
 @dataclass
 class PointSetType:
     dimension: int = 3
@@ -25,7 +26,7 @@ class PointSetType:
 class PointSet:
     pointSetType: Union[PointSetType, Dict] = field(default_factory=PointSetType)
 
-    name: str = 'PointSet'
+    name: str = "PointSet"
 
     numberOfPoints: int = 0
     points: Optional[ArrayLike] = None

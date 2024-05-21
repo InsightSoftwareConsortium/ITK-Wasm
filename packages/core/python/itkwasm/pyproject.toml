@@ -19,6 +19,7 @@ classifiers = [
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
 ]
 keywords = [
     "itk",
@@ -43,7 +44,7 @@ Issues = "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
 
 [tool.hatch.envs.default]
 dependencies = [
-    "itk>=5.3.0",
+    "itk>=5.4.0",
     "pytest >=2.7.3",
     "pytest-pyodide",
     "dask[array]",
@@ -64,3 +65,6 @@ download-pyodide = [
 
 [tool.hatch.version]
 path = "itkwasm/__init__.py"
+
+[tool.black]
+line-length = 120

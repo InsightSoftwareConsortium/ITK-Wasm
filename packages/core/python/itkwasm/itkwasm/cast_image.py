@@ -9,9 +9,12 @@ from .pixel_types import PixelTypes
 from .int_types import IntTypes
 from .float_types import FloatTypes
 
-def cast_image(input_image: Image,
-               pixel_type: Optional[PixelTypes]=None,
-               component_type: Optional[Union[IntTypes, FloatTypes]]=None) -> Image:
+
+def cast_image(
+    input_image: Image,
+    pixel_type: Optional[PixelTypes] = None,
+    component_type: Optional[Union[IntTypes, FloatTypes]] = None,
+) -> Image:
     """Cast an image to another pixel type and / or component type.
 
     :param input_image: Image to be cast.
@@ -72,6 +75,6 @@ def cast_image(input_image: Image,
             elif component_type == FloatTypes.Float64:
                 output_image.data = input_image.data.astype(np.float64)
             else:
-                raise ValueError('Unsupported component type')
+                raise ValueError("Unsupported component type")
 
     return output_image
