@@ -1,4 +1,5 @@
 from typing import Optional
+
 try:
     from numpy.typing import ArrayLike
 except ImportError:
@@ -8,6 +9,7 @@ from .image import Image, ImageType
 from .to_numpy_array import _dtype_to_component_type
 
 from .pixel_types import PixelTypes
+
 
 def image_from_array(arr, is_vector: bool = False, image_type: Optional[ImageType] = None) -> Image:
     """Convert a numpy array-like to an itkwasm Image.
@@ -33,7 +35,7 @@ def image_from_array(arr, is_vector: bool = False, image_type: Optional[ImageTyp
         image_type = ImageType(
             dimension=dimension,
             componentType=_dtype_to_component_type(arr.dtype),
-            pixelType=PixelTypes.Scalar if not is_vector else PixelTypes.VariableLengthVector,
+            pixelType=(PixelTypes.Scalar if not is_vector else PixelTypes.VariableLengthVector),
             components=arr.shape[-1] if is_vector else 1,
         )
 

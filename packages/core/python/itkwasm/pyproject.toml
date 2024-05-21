@@ -65,3 +65,6 @@ download-pyodide = [
 
 [tool.hatch.version]
 path = "itkwasm/__init__.py"
+
+[tool.black]
+line-length = 120

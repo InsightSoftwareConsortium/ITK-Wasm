@@ -6,6 +6,7 @@ from itkwasm import Mesh
 from dataclasses import asdict
 import numpy as np
 
+
 def test_mesh():
     data = Path(__file__).absolute().parent / "input" / "cow.vtk"
     itk_mesh = itk.meshread(data)

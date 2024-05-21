@@ -11,6 +11,7 @@ from .float_types import FloatTypes
 from .int_types import IntTypes
 from .pixel_types import PixelTypes
 
+
 @dataclass
 class PolyDataType:
     pointPixelComponentType: Union[IntTypes, FloatTypes] = FloatTypes.Float32
@@ -21,13 +22,15 @@ class PolyDataType:
     cellPixelType: PixelTypes = PixelTypes.Scalar
     cellPixelComponents: int = 1
 
+
 def _default_points() -> ArrayLike:
     return np.empty((0,), np.float32)
+
 
 @dataclass
 class PolyData:
     polyDataType: Union[PolyDataType, Dict] = field(default_factory=PolyDataType)
-    name: str = 'PolyData'
+    name: str = "PolyData"
 
     numberOfPoints: int = 0
     points: ArrayLike = field(default_factory=_default_points)

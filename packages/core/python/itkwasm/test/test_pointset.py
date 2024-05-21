@@ -4,6 +4,7 @@ from itkwasm import PointSet
 from dataclasses import asdict
 import numpy as np
 
+
 def test_pointset():
     n_points = 5
     dimension = 3
@@ -19,7 +20,7 @@ def test_pointset():
 
     itk_pointset_dict = itk.dict_from_pointset(pointset)
     # Bug, to be fixed by 5.3.0
-    itk_pointset_dict.pop('dimension', None)
+    itk_pointset_dict.pop("dimension", None)
     itkwasm_pointset = PointSet(**itk_pointset_dict)
     itkwasm_pointset_dict = asdict(itkwasm_pointset)
     itk_pointset_roundtrip = itk.pointset_from_dict(itkwasm_pointset_dict)

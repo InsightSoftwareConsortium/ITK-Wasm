@@ -1,9 +1,10 @@
 from enum import Enum
 
+
 class FloatTypes(str, Enum):
-    Float32 = 'float32'
-    Float64 = 'float64'
-    SpacePrecisionType = 'float64'
+    Float32 = "float32"
+    Float64 = "float64"
+    SpacePrecisionType = "float64"
 
     def __str__(self):
         return str(self.value)

@@ -6,6 +6,7 @@ from itkwasm import Image
 from dataclasses import asdict
 import numpy as np
 
+
 def test_image():
     data = Path(__file__).absolute().parent / "input" / "cthead1.png"
     itk_image = itk.imread(data, itk.UC)
@@ -16,12 +17,13 @@ def test_image():
     difference = np.sum(itk.comparison_image_filter(itk_image, itk_image_roundtrip))
     assert difference == 0.0
 
+
 def test_image_defaults():
     image = Image()
 
     assert image.imageType.dimension == 2
-    assert image.imageType.componentType == 'uint8'
-    assert image.imageType.pixelType == 'Scalar'
+    assert image.imageType.componentType == "uint8"
+    assert image.imageType.pixelType == "Scalar"
     assert image.imageType.components == 1
 
     assert image.name == "Image"

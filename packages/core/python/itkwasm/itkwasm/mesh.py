@@ -11,6 +11,7 @@ from .float_types import FloatTypes
 from .int_types import IntTypes
 from .pixel_types import PixelTypes
 
+
 @dataclass
 class MeshType:
     dimension: int = 3
@@ -30,7 +31,7 @@ class MeshType:
 class Mesh:
     meshType: Union[MeshType, Dict] = field(default_factory=MeshType)
 
-    name: str = 'Mesh'
+    name: str = "Mesh"
 
     numberOfPoints: int = 0
     points: Optional[ArrayLike] = None
