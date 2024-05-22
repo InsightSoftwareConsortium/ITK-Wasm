@@ -48,9 +48,15 @@ async function inquireProjectSpec(
     {
       type: 'input',
       name: 'packageDescription',
-      message: 'Description:',
+      message: 'Package Description:',
       askAnswered,
-      default: project.packageDescription
+      default: project.packageDescription,
+      validate: (input: string) => {
+        if (input.length > 0) {
+          return true
+        }
+        return 'Description cannot be empty.'
+      }
     },
     {
       type: 'input',

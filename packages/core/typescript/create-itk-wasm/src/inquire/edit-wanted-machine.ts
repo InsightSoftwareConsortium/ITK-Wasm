@@ -171,7 +171,7 @@ const inquireEditWantedMachine = setup({
           return { spec: context.spec, specName: context.specName }
         },
         onDone: {
-          target: 'obtainedReponse',
+          target: 'obtainedResponse',
           actions: [
             assign({ response: ({ event }) => event.output as boolean }),
             'sendResponse'
@@ -179,7 +179,7 @@ const inquireEditWantedMachine = setup({
         }
       }
     },
-    obtainedReponse: {
+    obtainedResponse: {
       type: 'final'
     }
   }

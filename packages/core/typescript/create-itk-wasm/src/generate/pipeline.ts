@@ -11,10 +11,31 @@ import Dispatch from '../dispatch.js'
 import die from '../die.js'
 import camelCase from '../camel-case.js'
 
-function findDispatchInput(pipeline: PipelineSpec): OptionSpec {
-  return pipeline.inputs.find(
+interface DispatchInput {
+  kind: string
+  spec: OptionSpec
+}
+
+function findDispatchInput(pipeline: PipelineSpec): DispatchInput {
+  const foundInput = pipeline.inputs.find(
     (input) => (input.type as unknown as Dispatch) === pipeline.dispatch
   )
+  if (typeof foundInput !== 'undefined') {
+    return { kind: 'input', spec: foundInput }
+  }
+
+  const foundParameter = pipeline.parameters.find(
+    (param) => (param.type as unknown as Dispatch) === pipeline.dispatch
+  )
+  if (typeof foundParameter !== 'undefined') {
+    return { kind: 'parameter', spec: foundParameter }
+  }
+
+  die(
+    `Pipeline ${pipeline.name} dispatch ${pipeline.dispatch} not found in inputs or parameters.`
+  )
+  // tslint:disable-next-line: no-unreachable
+  throw new Error('unreachable')
 }
 
 function pipelineFunction(
@@ -25,7 +46,7 @@ function pipelineFunction(
     return ''
   }
   const dispatch = pipeline.dispatch
-  const dispatchInput = findDispatchInput(pipeline)
+  const { kind, spec: dispatchInput } = findDispatchInput(pipeline)
   const camelDispatchInput = camelCase(dispatchInput.name)
 
   let dimensionTrait = 'Dimension'
@@ -52,19 +73,21 @@ function pipelineFunction(
 
   const firstTypeSizeName = optionTypeSizeName(
     dispatchInput.type,
-    'input',
+    kind,
     dispatchInput.itemsExpectedMin,
     dispatchInput.itemsExpectedMax
   )
+  const argt = dispatchInput.itemsExpectedMax === 1 ? `T${dispatch} * ` : `std::vector<itk::wasm::Input${dispatch}<T${dispatch}>> & `
+  const flag = kind === 'parameter' ? '--' : ''
   let result = ''
   result += `template <typename T${dispatch}>
-int ${camelCase(pipeline.name)}(itk::wasm::Pipeline &pipeline, const T${dispatch} *${camelDispatchInput})
+int ${camelCase(pipeline.name)}(itk::wasm::Pipeline &pipeline, const ${argt}${camelDispatchInput})
 {
   using ${dispatch}Type = T${dispatch};
   constexpr unsigned int Dimension = ${dispatch}Type::${dimensionTrait};
   using PixelType = typename ${dispatch}Type::${pixelTypeTrait};${defaultImageType}${defaultMeshType}${defaultPolyDataType}
 
-  pipeline.get_option("${dispatchInput.name}")->required()${firstTypeSizeName};
+  pipeline.get_option("${flag}${dispatchInput.name}")->required()${firstTypeSizeName};
 
 `
 
@@ -75,6 +98,9 @@ int ${camelCase(pipeline.name)}(itk::wasm::Pipeline &pipeline, const T${dispatch
     result += optionCxx(indent, 'input', input, false)
   })
   pipeline.parameters.forEach((parameter) => {
+    if (parameter === dispatchInput) {
+      return
+    }
     result += optionCxx(indent, 'parameter', parameter, false)
   })
   pipeline.outputs.forEach((output) => {
@@ -98,7 +124,7 @@ function pipelineFunctor(pipeline: PipelineSpec): string {
     return ''
   }
   const dispatch = pipeline.dispatch
-  const dispatchInput = findDispatchInput(pipeline)
+  const { kind, spec: dispatchInput } = findDispatchInput(pipeline)
   const camelDispatchInput = camelCase(dispatchInput.name)
 
   let result = `template <typename T${dispatch}>
@@ -111,16 +137,27 @@ public:
 
 `
 
-  result += optionCxx('    ', 'input', dispatchInput, true)
+  result += optionCxx('    ', kind, dispatchInput, true)
 
   result += `    ITK_WASM_PRE_PARSE(pipeline);
+`
 
+  if (dispatchInput.itemsExpectedMax === 1) {
+    result += `
     typename ${dispatch}Type::ConstPointer ${camelDispatchInput}Ref = ${camelDispatchInput}.Get();
     return ${camelCase(pipeline.name)}<${dispatch}Type>(pipeline, ${camelDispatchInput}Ref);
   }
 };
 
 `
+  } else {
+    result += `
+    return ${camelCase(pipeline.name)}<${dispatch}Type>(pipeline, ${camelDispatchInput});
+  }
+};
+
+`
+  }
   return result
 }
 
@@ -185,7 +222,7 @@ function pipelineMain(
 }
   `
   } else {
-    const dispatchInput = findDispatchInput(pipeline)
+    const { kind, spec: dispatchInput } = findDispatchInput(pipeline)
     const dimensionString = pipeline.dispatchDimensions
       .map((dimension) => {
         return `${dimension}U`
@@ -195,8 +232,9 @@ function pipelineMain(
       pipeline.dispatch === 'PolyData'
         ? `>::PixelTypes<${pipeline.dispatchPixels.join(', ')}>`
         : `,\n    ${pipeline.dispatchPixels.join(', ')}>\n    ::Dimensions<${dimensionString}>`
+    const flags = kind === 'parameter' ? '--' : ''
     result += `
-  return itk::wasm::SupportInput${pipeline.dispatch}Types<PipelineFunctor${dispatchArgs}("${dispatchInput.name}", pipeline);
+  return itk::wasm::SupportInput${pipeline.dispatch}Types<PipelineFunctor${dispatchArgs}("${flags}${dispatchInput.name}", pipeline);
 }
 `
   }
