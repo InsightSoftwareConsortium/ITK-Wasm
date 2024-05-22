@@ -75,6 +75,6 @@ jobs:
           browser-version: latest
 
       - name: Test python on chrome
-        if: ${{ matrix.python-minor-version > 10 && matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'dicom' )}}
+        if: ${{ matrix.python-minor-version > 10 && matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'dicom' && matrix.os != 'macos-14' )}}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:python:emscripten

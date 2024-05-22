@@ -1,7 +1,7 @@
 {
   "name": "@itk-wasm/inputs-outputs-example",
   "version": "0.1.0",
-  "packageManager": "pnpm@9.1.1",
+  "packageManager": "pnpm@9.1.2",
   "description": "An example that has non-trivial inputs and outputs.",
   "type": "module",
   "bin": "src/cli.mjs",

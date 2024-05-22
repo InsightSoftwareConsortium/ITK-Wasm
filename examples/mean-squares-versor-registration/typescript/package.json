@@ -1,7 +1,7 @@
 {
   "name": "mean-squares-versor-registration",
   "version": "0.1.0",
-  "packageManager": "pnpm@9.1.1",
+  "packageManager": "pnpm@9.1.2",
   "description": "Example 3D versor transform registration with a mean-squares similarity metric",
   "type": "module",
   "module": "./dist/index.js",
