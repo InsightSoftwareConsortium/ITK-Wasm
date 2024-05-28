@@ -54,7 +54,7 @@ const imageIoIndex = new Map([
   ['vtk', [vtkReadImage, vtkWriteImage]],
   ['bmp', [bmpReadImage, bmpWriteImage]],
   ['hdf5', [hdf5ReadImage, hdf5WriteImage]],
-  ['minc', [mincReadImage, mincWriteImage]],
+  ['mnc', [mincReadImage, mincWriteImage]],
   ['mrc', [mrcReadImage, mrcWriteImage]],
   ['lsm', [lsmReadImage, lsmWriteImage]],
   ['mgh', [mghReadImage, mghWriteImage]],
