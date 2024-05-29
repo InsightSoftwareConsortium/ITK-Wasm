@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "itk-webassemblyinterface"
-version = "1.0b173"
+version = "1.0b175"
 description = "IO with the itk-wasm file formats"
 readme = "docs/itk-webassemblyinterface-description.md"
 license = {file = "LICENSE"}
@@ -35,8 +35,8 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-    "itk>=5.4rc3",
-    "itk-meshtopolydata>=0.11rc3",
+    "itk == 5.4.*",
+    "itk-meshtopolydata == 0.11.*",
 ]
 
 [project.urls]
