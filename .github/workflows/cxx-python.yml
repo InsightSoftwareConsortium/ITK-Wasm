@@ -3,18 +3,18 @@ name: C++,Native Python
 on: [push,pull_request]
 
 env:
-  ITKMeshToPolyData-git-tag: "v0.11rc02"
+  ITKMeshToPolyData-git-tag: "v0.11.0"
 
 jobs:
   cxx-build-workflow:
     uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@v5.4.0
     with:
-      itk-module-deps: 'MeshToPolyData@v0.11rc03'
+      itk-module-deps: 'MeshToPolyData@v0.11.0'
       ctest-options: '-E itkPipelineTest'
 
   python-build-workflow:
     uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@v5.4.0
     with:
-      itk-module-deps: 'InsightSoftwareConsortium/ITKMeshToPolyData@v0.11rc03'
+      itk-module-deps: 'InsightSoftwareConsortium/ITKMeshToPolyData@v0.11.0'
     secrets:
       pypi_password: ${{ secrets.pypi_password }}
