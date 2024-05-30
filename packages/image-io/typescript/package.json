@@ -1,7 +1,7 @@
 {
   "name": "@itk-wasm/image-io",
   "version": "1.2.0",
-  "packageManager": "pnpm@9.1.2",
+  "packageManager": "pnpm@9.1.4",
   "description": "Input and output for scientific and medical image file formats.",
   "type": "module",
   "module": "./dist/index.js",
