@@ -35,6 +35,7 @@ The project provides tools to
 
 introduction/packages.md
 introduction/parts.md
+model/index.md
 introduction/file_formats/index.md
 ```
 
