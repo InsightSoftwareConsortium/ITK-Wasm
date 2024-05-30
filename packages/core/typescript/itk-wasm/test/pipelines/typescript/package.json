@@ -1,7 +1,7 @@
 {
   "name": "test-pipelines",
   "version": "1.0.0",
-  "packageManager": "pnpm@9.1.2",
+  "packageManager": "pnpm@9.1.4",
   "description": "Exercise interface types for bindgen",
   "type": "module",
   "module": "./dist/index.js",
