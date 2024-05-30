@@ -2,7 +2,7 @@ id: https://w3id.org/itk/wasm
 name: itk-wasm
 version: 0.1.0
 description: >-
-  The itk-wasm model provides FAIR definitions of the interface types that enable high-performance, portable, sustainable, and reproducible spatial analysis.
+  The ITK-Wasm LinkML model provides FAIR definitions of the interface types that enable high-performance, portable, sustainable, and reproducible spatial analysis.
 license: https://creativecommons.org/publicdomain/zero/1.0/
 prefixes:
   itk: https://w3id.org/itk/
@@ -28,7 +28,7 @@ classes:
       - JSON encoding (future)
       - C++ `itk::wasm` namespaced types in the ITK WebAssemblyInterface module
       - Python `itkwasm` package types
-      - JavaScript `itk-wasm` package types
+      - JavaScript `ITK-Wasm` package types
       - Java package types (future)
       - C# package types (future)
     class_uri: wasm:InterfaceType
@@ -158,7 +158,7 @@ classes:
 
   MetadataEntry:
     description: >-
-      Representation of a metadata entry.
+      Representation of a generic key-value metadata entry.
     class_uri: wasm:MetadataEntry
     attributes:
       key:
@@ -185,8 +185,8 @@ classes:
         required: true
 
   Metadata:
-    description: >-
-      Representation of metadata.
+    description: >
+      Representation of generic key-value metadata.
     class_uri: wasm:Metadata
     attributes:
       entries:
