@@ -18,7 +18,7 @@ jobs:
       max-parallel: 5
       matrix:
         os: [ubuntu-22.04, windows-2022, macos-14]
-        python-minor-version: [11]
+        python-minor-version: [11, 12]
         package: [compress-stringify, compare-images, dicom, mesh-io, image-io, downsample]
 
     steps:
