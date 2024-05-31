@@ -1,6 +1,6 @@
 # Interface Types
 
-itk-wasm execution pipelines support the following [interface types](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/src/core/InterfaceTypes.ts):
+itk-wasm execution pipelines support the following [interface types](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/core/typescript/itk-wasm/src/interface-types/interface-types.ts):
 
 ```{toctree}
 :maxdepth: 3
