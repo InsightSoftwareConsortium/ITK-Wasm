@@ -1,3 +1,5 @@
+import path from 'path'
+
 import loadEmscriptenModuleNode from './internal/load-emscripten-module-node.js'
 import runPipelineEmscripten from './internal/run-pipeline-emscripten.js'
 
@@ -6,7 +8,38 @@ import PipelineOutput from './pipeline-output.js'
 import PipelineInput from './pipeline-input.js'
 import RunPipelineResult from './run-pipeline-result.js'
 
-async function runPipelineNode (
+function windowsToEmscriptenPath(filePath: string): string {
+  // Following mount logic in itkJSPost.js
+  const fileBasename = path.basename(filePath)
+  const containingDir = path.dirname(filePath)
+  let mountedPath = '/'
+  const splitPath = containingDir.split(path.sep)
+  for (let ii = 1; ii < splitPath.length; ii++) {
+    mountedPath += splitPath[ii]
+    mountedPath += '/'
+  }
+  mountedPath += fileBasename
+  return mountedPath
+}
+
+function replaceArgumentsWithEmscriptenPaths(
+  args: string[],
+  mountDirs: Set<string>
+): string[] {
+  if (typeof process === 'undefined' || process.platform !== 'win32') {
+    return args
+  }
+  return args.map((arg) => {
+    for (const mountDir of mountDirs) {
+      if (arg.startsWith(mountDir)) {
+        return windowsToEmscriptenPath(arg)
+      }
+    }
+    return arg
+  })
+}
+
+async function runPipelineNode(
   pipelinePath: string,
   args: string[],
   outputs: PipelineOutput[],
@@ -21,6 +54,9 @@ async function runPipelineNode (
     mountDirs.forEach((dir) => {
       mountedDirs.add(Module.mountDir(dir))
     })
+  }
+  if (typeof mountDirs !== 'undefined') {
+    args = replaceArgumentsWithEmscriptenPaths(args, mountDirs)
   }
   const result = runPipelineEmscripten(Module, args, outputs, inputs)
   if (typeof mountDirs !== 'undefined') {
