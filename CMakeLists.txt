@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25.1)
+cmake_minimum_required(VERSION 3.24.2)
 project(WebAssemblyInterface)
 
 set(CMAKE_CXX_STANDARD 20)
