@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(inputs-outputs)
 
 # Use C++17 or newer with itk-wasm
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # We always want to build against the WebAssemblyInterface module.
 set(itk_components

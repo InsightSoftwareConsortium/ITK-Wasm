@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.16.3)
+cmake_minimum_required(VERSION 3.24.2)
 project(WebAssemblyInterface)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 if(POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
@@ -51,6 +51,7 @@ FetchContent_Declare(
   rapidjson_lib
   GIT_REPOSITORY ${RapidJSON_GIT_REPOSITORY}
   GIT_TAG ${RapidJSON_GIT_TAG}
+  GIT_SHALLOW TRUE
   )
 
 set(CLI11_GIT_REPOSITORY "https://github.com/CLIUtils/CLI11")
@@ -60,6 +61,7 @@ FetchContent_Declare(
   cli11
   GIT_REPOSITORY ${CLI11_GIT_REPOSITORY}
   GIT_TAG        ${CLI11_GIT_TAG}
+  GIT_SHALLOW TRUE
 )
 
 set(rang_GIT_REPOSITORY "https://github.com/agauniyal/rang.git")
@@ -70,6 +72,7 @@ FetchContent_Declare(
   rang
   GIT_REPOSITORY ${rang_GIT_REPOSITORY}
   GIT_TAG        ${rang_GIT_TAG}
+  GIT_SHALLOW TRUE
 )
 
 set(libcbor_GIT_REPOSITORY "https://github.com/PJK/libcbor")
@@ -81,6 +84,7 @@ FetchContent_Declare(
   libcbor
   GIT_REPOSITORY ${libcbor_GIT_REPOSITORY}
   GIT_TAG        ${libcbor_GIT_TAG}
+  GIT_SHALLOW TRUE
 )
 set(WITH_TESTS OFF CACHE BOOL "Build libcbor tests")
 set(WITH_EXAMPLES OFF CACHE BOOL "Build libcbor examples")
@@ -92,6 +96,17 @@ FetchContent_Declare(
   cpp_base64
   GIT_REPOSITORY ${cpp_base64_GIT_REPOSITORY}
   GIT_TAG        ${cpp_base64_GIT_TAG}
+  GIT_SHALLOW TRUE
+)
+
+set(glaze_GIT_REPOSITORY "https://github.com/stephenberry/glaze")
+# glaze v2.6.9
+set(glaze_GIT_TAG 6bcc20ce7eb59df60b94488a4f6be723731db00e)
+FetchContent_Declare(
+  glaze
+  GIT_REPOSITORY ${glaze_GIT_REPOSITORY}
+  GIT_TAG        ${glaze_GIT_TAG}
+  GIT_SHALLOW TRUE
 )
 
 list(APPEND CMAKE_MODULE_PATH ${libcbor_SOURCE_DIR}/CMakeModules)
@@ -103,6 +118,7 @@ set(libcbor_INCLUDE_DIR "${libcbor_SOURCE_DIR}/src")
 set(libcbor_EXPORT_DIR "${libcbor_BINARY_DIR}/src")
 set(libcbor_CONFIGURATION_DIR "${libcbor_BINARY_DIR}/")
 set(cpp_base64_INCLUDE_DIR "${cpp_base64_SOURCE_DIR}/include")
+set(glaze_INCLUDE_DIR "${glaze_SOURCE_DIR}/include")
 
 set(BUILD_TESTING ${_itk_build_testing})
 set(BUILD_SHARED_LIBS ${_itk_build_shared})
@@ -118,6 +134,7 @@ set(WebAssemblyInterface_INCLUDE_DIRS
   ${libcbor_EXPORT_DIR}
   ${libcbor_CONFIGURATION_DIR}
   ${cpp_base64_INCLUDE_DIR}
+  ${glaze_INCLUDE_DIR}
   )
 list(APPEND WebAssemblyInterface_LIBRARIES cbor cpp-base64)
 
