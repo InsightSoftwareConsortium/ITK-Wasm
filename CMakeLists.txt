@@ -110,7 +110,7 @@ FetchContent_Declare(
 )
 
 list(APPEND CMAKE_MODULE_PATH ${libcbor_SOURCE_DIR}/CMakeModules)
-FetchContent_MakeAvailable(rapidjson_lib cli11 rang libcbor cpp_base64)
+FetchContent_MakeAvailable(rapidjson_lib cli11 rang libcbor cpp_base64 glaze)
 set(RapidJSON_INCLUDE_DIR "${rapidjson_lib_SOURCE_DIR}/include")
 set(cli11_INCLUDE_DIR "${cli11_SOURCE_DIR}/include")
 set(rang_INCLUDE_DIR "${rang_SOURCE_DIR}/include")
