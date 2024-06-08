@@ -2,7 +2,7 @@
   "name": "@itk-wasm/compare-meshes-build",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@9.1.4",
+  "packageManager": "pnpm@9.2.0",
   "description": "Scripts to generate compare-meshes itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {
