@@ -50,6 +50,10 @@ else()
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
  endif()
 
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.23.0")
+	cmake_policy(SET CMP0135 NEW)
+endif()
+
 ExternalProject_Add(${Iconv_LIBRARY}
   PREFIX ${Iconv_DIR}
   URL "https://bafybeid2yl6aeunciy5rynjmaoxkhhau3jgjpv7x25pylby7hq6n23c57i.ipfs.dweb.link/libiconv-1.16.tar.gz"
