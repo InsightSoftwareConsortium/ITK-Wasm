@@ -45,7 +45,7 @@ cmake -BITK-build -SITK -DBUILD_TESTING=OFF -DModule_MeshToPolyData=ON
 cmake --build ITK-build
 
 # Build the WebAssemblyInterface module from this module against ITK
-git clone https://github.com/InsightSoftwareConsortium/itk-wasm
+git clone https://github.com/InsightSoftwareConsortium/ITK-Wasm
 cmake -Bitk-wasm-build -Sitk-wasm -DBUILD_TESTING=ON -DITK_DIR=$PWD/ITK-build
 cmake --build itk-wasm-build
 
@@ -108,7 +108,7 @@ Development requires:
 To build and test the CLI,
 
 ```sh
-git clone https://github.com/InsightSoftwareConsortium/itk-wasm
+git clone https://github.com/InsightSoftwareConsortium/ITK-Wasm
 cd itk-wasm/packages/core/typescript/itk-wasm
 pnpm install
 pnpm build
@@ -128,7 +128,7 @@ The development of `itk-wasm` is described above in the Command line interface s
 To develop the `itkwasm` Python package, which configured with [hatch](https://hatch.pypa.io/latest/):
 
 ```sh
-git clone https://github.com/InsightSoftwareConsortium/itk-wasm
+git clone https://github.com/InsightSoftwareConsortium/ITK-Wasm
 cd itk-wasm/packages/core/python/itkwasm
 
 pip install hatch
@@ -236,7 +236,7 @@ and rebuild whenever the documentation changes.
 [C++ compiler toolchain]: https://docs.itk.org/en/latest/supported_compilers.html
 [CMake]: https://cmake.org
 [conventional commit]: https://www.conventionalcommits.org/en/v1.0.0/#summary
-[current repository and branch]: https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/src/docker/itk-wasm-base/Dockerfile#L39-L41
+[current repository and branch]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/src/docker/itk-wasm-base/Dockerfile#L39-L41
 [data.kitware.com]: https://data.kitware.com/
 [FileBase]: https://filebase.com/
 [hatch]: https://hatch.pypa.io/latest/

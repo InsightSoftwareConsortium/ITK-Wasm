@@ -51,8 +51,8 @@ dependencies = [
 ]
 
 [project.urls]
-Home = "https://github.com/InsightSoftwareConsortium/itk-wasm"
-Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
+Home = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+Source = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 
 [tool.hatch.envs.default.scripts]
 test = [

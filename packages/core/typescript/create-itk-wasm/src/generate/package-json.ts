@@ -48,7 +48,7 @@ function generatePackageJson(project: ProjectSpec) {
       'publish:python': 'itk-wasm pnpm-script publish:python',
       test: 'pnpm test:data:download && pnpm build:gen:python && pnpm test:python',
       'test:data:download':
-        'dam download test/data test/data.tar.gz bafkreigpkk3pqcoqzjzcauogw6dml52yig3ksmcrobau5pkoictymizzri https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.163/create-itk-wasm-test-data.tar.gz https://bafybeiczuxeuma5cjuli5mtapqnjqypeaum5ikd45zcmfhtt2emp365tca.ipfs.w3s.link/ipfs/bafybeiczuxeuma5cjuli5mtapqnjqypeaum5ikd45zcmfhtt2emp365tca/create-itk-wasm-test-data.tar.gz https://ipfs.filebase.io/ipfs/QmcxyvUKnaoTTwUqEPXwp1sdcbrFh3XnnwckLKVRpctJx9',
+        'dam download test/data test/data.tar.gz bafkreigpkk3pqcoqzjzcauogw6dml52yig3ksmcrobau5pkoictymizzri https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.163/create-itk-wasm-test-data.tar.gz https://bafybeiczuxeuma5cjuli5mtapqnjqypeaum5ikd45zcmfhtt2emp365tca.ipfs.w3s.link/ipfs/bafybeiczuxeuma5cjuli5mtapqnjqypeaum5ikd45zcmfhtt2emp365tca/create-itk-wasm-test-data.tar.gz https://ipfs.filebase.io/ipfs/QmcxyvUKnaoTTwUqEPXwp1sdcbrFh3XnnwckLKVRpctJx9',
       'test:data:pack': 'dam pack test/data test/data.tar.gz',
       'test:python:wasi': 'itk-wasm pnpm-script test:python:wasi',
       'test:python:emscripten': 'itk-wasm pnpm-script test:python:emscripten',

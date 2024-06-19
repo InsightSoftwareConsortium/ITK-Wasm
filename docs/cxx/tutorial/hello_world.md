@@ -6,7 +6,7 @@ This example walks through how to compile a *hello world* executable written in 
 
 Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Podman (recommended)](https://podman.io/docs/installation) or [Docker](https://docs.docker.com/install/) are installed. On Linux, make sure you can run [`podman` or `docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). On Windows, we highly recommend [Podman](https://podman.io/docs/installation).
 
-While we recommend following along step-by-step, the complete example can also be found in the [`examples/` directory of the project repository](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/hello-world).
+While we recommend following along step-by-step, the complete example can also be found in the [`examples/` directory of the project repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/hello-world).
 
 Let's get started! 🚀
 

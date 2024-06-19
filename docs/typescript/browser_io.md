@@ -93,7 +93,7 @@ readImageHTTP(url: string):
   Promise<image: Image>
 ```
 
-*Read a server-side generated image created with [`itk::WasmImageIO`](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/include/itkWasmImageIO.h). The `url` should point to a directory ending with `.iwi`. Inside the directory, an `index.json` file should be served, along with the pixel and direction buffer file at `${url}/data/data.raw` and `${url}/data/direction.raw`, respectively.*
+*Read a server-side generated image created with [`itk::WasmImageIO`](https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/include/itkWasmImageIO.h). The `url` should point to a directory ending with `.iwi`. Inside the directory, an `index.json` file should be served, along with the pixel and direction buffer file at `${url}/data/data.raw` and `${url}/data/direction.raw`, respectively.*
 
 ## `readImageFileSeries`
 

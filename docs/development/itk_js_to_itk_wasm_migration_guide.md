@@ -82,7 +82,7 @@ The io packages are:
 2. `@itk-wasm/mesh-io`
 3. `@itk-wasm/dicom`
 
-An example that vendors these package's webassembly assets into an application for deployment can be found in the [Vite-based test applcation configuration](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/packages/mesh-io/typescript/vite.config.js).
+An example that vendors these package's webassembly assets into an application for deployment can be found in the [Vite-based test applcation configuration](https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/packages/mesh-io/typescript/vite.config.js).
 
 ### DICOM image IO functions
 

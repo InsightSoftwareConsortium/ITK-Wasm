@@ -41,8 +41,8 @@ dependencies = [
 
 [project.urls]
 Home = "https://itk-wasm-compress-stringify-python-docs.on.fleek.co"
-Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
-Issues = "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
+Source = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+Issues = "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
 
 [tool.hatch.version]
 path = "itkwasm_compress_stringify/_version.py"

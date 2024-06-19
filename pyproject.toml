@@ -40,8 +40,8 @@ dependencies = [
 ]
 
 [project.urls]
-Download = "https://github.com/InsightSoftwareConsortium/itk-wasm"
-Homepage = "https://github.com/InsightSoftwareConsortium/itk-wasm"
+Download = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+Homepage = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 
 [tool.scikit-build]
 # The versions of CMake to allow. If CMake is not present on the system or does

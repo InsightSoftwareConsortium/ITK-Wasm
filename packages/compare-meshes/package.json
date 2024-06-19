@@ -11,7 +11,7 @@
     "package-description": "Compare meshes and polydata for regression testing.",
     "typescript-package-name": "@itk-wasm/compare-meshes",
     "python-package-name": "itkwasm-compare-meshes",
-    "repository": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
   },
   "license": "Apache-2.0",
   "scripts": {
@@ -29,7 +29,7 @@
     "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
     "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafkreidioh62iouwzrrpavx7g72fdjxze7gp4cqpf36t4pdafcpcmx4zye https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.171/itkwasm-compare-meshes-test-data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreidioh62iouwzrrpavx7g72fdjxze7gp4cqpf36t4pdafcpcmx4zye https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.171/itkwasm-compare-meshes-test-data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "itk-wasm pnpm-script test:python:wasi",
     "test:python:emscripten": "itk-wasm pnpm-script test:python:emscripten",
@@ -47,6 +47,6 @@
   "author": "Matt McCormick",
   "repository": {
     "type": "git",
-    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+    "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
   }
 }

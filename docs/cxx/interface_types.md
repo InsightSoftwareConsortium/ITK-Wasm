@@ -1,6 +1,6 @@
 # Interface Types
 
-itk-wasm execution pipelines support the following [interface types](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/src/core/InterfaceTypes.ts):
+itk-wasm execution pipelines support the following [interface types](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/src/core/InterfaceTypes.ts):
 
 - [TextFile](../typescript/interface_types/TextFile)
 - [BinaryFile](../typescript/interface_types/BinaryFile)
@@ -15,7 +15,7 @@ These interfaces types are supported in the [Emscripten interface](../typescript
 
 ---
 
-The following [CLI11](https://github.com/CLIUtils/CLI11) [`itk::wasm::Pipeline`](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/include/itkPipeline.h) components can be included in a C++ to ingest and produce these interface types. For `Input` types, use `Get()` to get the corresponding C++ object value after `ITK_WASM_PARSE_ARGS` is called. For `Output` types, use `Set(value)` to output the value before `main` exits. For example,
+The following [CLI11](https://github.com/CLIUtils/CLI11) [`itk::wasm::Pipeline`](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/include/itkPipeline.h) components can be included in a C++ to ingest and produce these interface types. For `Input` types, use `Get()` to get the corresponding C++ object value after `ITK_WASM_PARSE_ARGS` is called. For `Output` types, use `Set(value)` to output the value before `main` exits. For example,
 
 ```cpp
 #include "itkPipeline.h"

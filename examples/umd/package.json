@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm.git"
+    "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm.git"
   },
   "keywords": [
     "itk",
@@ -20,9 +20,9 @@
   "author": "Matt McCormick <matt.mccormick@kitware.com>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
+    "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
   },
-  "homepage": "https://github.com/InsightSoftwareConsortium/itk-wasm#readme",
+  "homepage": "https://github.com/InsightSoftwareConsortium/ITK-Wasm#readme",
   "devDependencies": {
     "cypress": "^13.2.0",
     "http-server": "^14.1.0",

@@ -2,7 +2,7 @@
 
 Example packages built with itk-wasm can be found below. If you created a
 package, please [open a pull
-request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add it to the table!
+request](https://github.com/InsightSoftwareConsortium/ITK-Wasm/compare) to add it to the table!
 
 | <img width=100/> Repository | <img width=125/> Description <img width=125/> | <img width=200/> Links |
 |-----------------------------|:---------------------------------------------:|:----------------------:|
@@ -20,14 +20,14 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 [ts-logo]: /_static/typescript-logo.svg
 [py-logo]: /_static/python.svg
 
-[compare-images-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/compare-images
+[compare-images-repo]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/packages/compare-images
 [compare-images-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/compare-images/ts/app/
 [compare-images-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/compare-images/ts/docs/
 [compare-images-package-js]: https://www.npmjs.com/package/@itk-wasm/compare-images
 [compare-images-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/compare-images/py/docs/
 [compare-images-package-py]: https://pypi.org/project/itkwasm-compare-images/
 
-[compress-stringify-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/compress-stringify
+[compress-stringify-repo]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/packages/compress-stringify
 [compress-stringify-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/compress-stringify/ts/app/
 [compress-stringify-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/compress-stringify/ts/docs/
 [compress-stringify-package-js]: https://www.npmjs.com/package/@itk-wasm/compress-stringify
@@ -42,7 +42,7 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 [elastix-docs-py]: https://py.docs.elastix.wasm.itk.eth.limo/
 [elastix-package-py]: https://pypi.org/project/itkwasm-elastix/
 
-[dicom-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/dicom
+[dicom-repo]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/packages/dicom
 [dicom-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/dicom/ts/app/
 [dicom-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/dicom/ts/docs/
 [dicom-package-js]: https://www.npmjs.com/package/@itk-wasm/dicom
@@ -56,21 +56,21 @@ request](https://github.com/InsightSoftwareConsortium/itk-wasm/compare) to add i
 [htj2k-docs-py]: https://py.docs.htj2k.wasm.itk.eth.limo/
 [htj2k-package-py]: https://pypi.org/project/itkwasm-htj2k/
 
-[downsample-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/downsample
+[downsample-repo]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/packages/downsample
 [downsample-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/downsample/ts/app/
 [downsample-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/downsample/ts/docs/
 [downsample-package-js]: https://www.npmjs.com/package/@itk-wasm/downsample
 [downsample-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/downsample/py/docs/
 [downsample-package-py]: https://pypi.org/project/itkwasm-downsample/
 
-[image-io-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/image-io
+[image-io-repo]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/packages/image-io
 [image-io-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/image-io/ts/app/
 [image-io-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/image-io/ts/docs/
 [image-io-package-js]: https://www.npmjs.com/package/@itk-wasm/image-io
 [image-io-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/image-io/py/docs/
 [image-io-package-py]: https://pypi.org/project/itkwasm-image-io/
 
-[mesh-io-repo]: https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/packages/mesh-io
+[mesh-io-repo]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/packages/mesh-io
 [mesh-io-demo-js]: https://insightsoftwareconsortium.github.io/itk-wasm/mesh-io/ts/app/
 [mesh-io-docs-js]: https://insightsoftwareconsortium.github.io/itk-wasm/mesh-io/ts/docs/
 [mesh-io-package-js]: https://www.npmjs.com/package/@itk-wasm/mesh-io

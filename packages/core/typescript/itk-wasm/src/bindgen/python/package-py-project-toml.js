@@ -6,7 +6,7 @@ import bindgenResource from './bindgen-resource.js'
 function packagePyProjectToml(packageName, packageDir, bindgenPyPackage, options) {
   let pyProjectToml = fs.readFileSync(bindgenResource('template.pyproject.toml'), {encoding:'utf8', flag:'r'})
   pyProjectToml = pyProjectToml.replaceAll('@bindgenPackageName@', packageName)
-  const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/itk-wasm'
+  const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/ITK-Wasm'
   const bindgenPackageDescription = options.packageDescription
   let bindgenKeywords = ''
   let bindgenDependencies = ''

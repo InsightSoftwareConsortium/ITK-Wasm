@@ -82,7 +82,7 @@ In TypeScript / JavaScript, this is the NPM [itk-wasm](https://www.npmjs.com/sea
 (packages)=
 ## Example packages
 
-While most ITK-Wasm packages are not developed in the `InsightSoftwareConsortium/itk-wasm` repository -- a package built with ITK-Wasm can be developed by anyone and maintained in any repository -- there are a number of packages developed in the `itk-wasm` repository. These packages
+While most ITK-Wasm packages are not developed in the `InsightSoftwareConsortium/ITK-Wasm` repository -- a package built with ITK-Wasm can be developed by anyone and maintained in any repository -- there are a number of packages developed in the `itk-wasm` repository. These packages
 
 - provide common functionality for other packages, such as testing and IO functionality,
 - demonstrate capabilities,

@@ -52,7 +52,7 @@ html_baseurl = os.environ.get("SPHINX_BASE_URL", "")
 # Furo options
 html_theme_options = {
     "top_of_page_button": "edit",
-    "source_repository": "https://github.com/InsightSoftwareConsortium/itk-wasm",
+    "source_repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm",
     "source_branch": "main",
     "source_directory": "packages/dicom/python/itkwasm-dicom/docs",
 }

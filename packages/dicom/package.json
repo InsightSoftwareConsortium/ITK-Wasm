@@ -11,7 +11,7 @@
     "typescript-package-name": "@itk-wasm/dicom",
     "python-package-name": "itkwasm-dicom",
     "package-description": "Read and write files and images related to DICOM file format.",
-    "repository": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
   },
   "scripts": {
     "build": "pnpm build:gen:typescript && pnpm build:gen:python",
@@ -28,7 +28,7 @@
     "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
     "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafybeicskxufnvuem6342pkfwgeo3siiozgzmfo5f34woge6aptuzuwzzu https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.119/dicom-test-data.tar.gz https://w3s.link/ipfs/bafybeiby67winzvozowf4moqthwunuxxscssitnb6wahxv4ugvfxhu2vki/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafybeicskxufnvuem6342pkfwgeo3siiozgzmfo5f34woge6aptuzuwzzu https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.119/dicom-test-data.tar.gz https://w3s.link/ipfs/bafybeiby67winzvozowf4moqthwunuxxscssitnb6wahxv4ugvfxhu2vki/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "itk-wasm pnpm-script test:python:wasi",
     "test:python:emscripten": "itk-wasm pnpm-script test:python:emscripten",

@@ -59,7 +59,7 @@ if(NOT ITK_FORBID_DOWNLOADS)
     "https://cloudflare-ipfs.com/ipfs/%(hash)"
 
     # DataLad repository on gin.g-node.org
-    "https://gin.g-node.org/InsightSoftwareConsortium/itk-wasm-testing-data/raw/main/Objects/CID/%(hash)"
+    "https://gin.g-node.org/InsightSoftwareConsortium/ITK-Wasm-testing-data/raw/main/Objects/CID/%(hash)"
     )
 endif()
 

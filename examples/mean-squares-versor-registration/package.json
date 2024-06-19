@@ -11,7 +11,7 @@
     "typescript-package-name": "@itk-wasm/mean-squares-versor-registration-example",
     "python-package-name": "itkwasm-mean-squares-versor-registration-example",
     "package-description": "Example 3D versor transform registration with a mean-squares similarity metric",
-    "repository": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
   },
   "scripts": {
     "build": "pnpm build:gen:typescript && pnpm build:gen:python",
