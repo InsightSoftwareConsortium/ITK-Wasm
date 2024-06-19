@@ -2,7 +2,7 @@
   "name": "@itk-wasm/downsample-build",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@9.2.0",
+  "packageManager": "pnpm@9.4.0",
   "description": "scripts to generate @itk-wasm/downsample itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {
