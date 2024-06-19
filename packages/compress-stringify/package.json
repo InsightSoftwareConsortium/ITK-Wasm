@@ -11,7 +11,7 @@
     "typescript-package-name": "@itk-wasm/compress-stringify",
     "python-package-name": "itkwasm-compress-stringify",
     "package-description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
-    "repository": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
   },
   "scripts": {
     "build": "pnpm build:gen:typescript && pnpm build:gen:python",

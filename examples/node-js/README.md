@@ -5,7 +5,7 @@ Convert an image or mesh from one file format to another.
 
 This package provides a command line executable, `itk-convert` to convert
 image file formats with
-[itk-wasm](https://github.com/InsightSoftwareConsortium/itk-wasm.git).
+[itk-wasm](https://github.com/InsightSoftwareConsortium/ITK-Wasm.git).
 
 ## Installation
 

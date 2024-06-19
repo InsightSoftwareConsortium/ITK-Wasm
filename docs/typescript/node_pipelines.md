@@ -36,14 +36,14 @@ A JavaScript Array of strings to pass to the execution of the `main` function, i
 
 ### `outputs`
 
-A JavaScript Array of desired [`PipelineOutput`](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/src/pipeline/PipelineOutput.ts)'s that provide an interface `type` and an optional `path` when required by an interface type.
+A JavaScript Array of desired [`PipelineOutput`](https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/src/pipeline/PipelineOutput.ts)'s that provide an interface `type` and an optional `path` when required by an interface type.
 
 - `type` is one of the [`InterfaceTypes`](/typescript/interface_types/index).
 - `path` is the optional file path on the filesystem to write after execution has completed.
 
 ### `inputs`
 
-A JavaScript Array of [`PipelineInput`](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/src/pipeline/PipelineInput.ts)'s or `null` that provide an interface `type`, an optional `path` when required by an interface type, and the input `data`.
+A JavaScript Array of [`PipelineInput`](https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/src/pipeline/PipelineInput.ts)'s or `null` that provide an interface `type`, an optional `path` when required by an interface type, and the input `data`.
 
 
 - `type` is one of the [`InterfaceTypes`](/typescript/interface_types/index).
@@ -61,4 +61,4 @@ Promise resolving a JavaScript object with the properties:
 - `returnValue`: Integer return code from the pipeline.
 - `stdout`: Text sent to stdout
 - `stderr`: Text sent to stderr
--  `outputs`: An Array of [`PipelineOutput`](https://github.com/InsightSoftwareConsortium/itk-wasm/blob/main/src/pipeline/PipelineOutput.ts)'s with the `data` property populated.
+-  `outputs`: An Array of [`PipelineOutput`](https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/src/pipeline/PipelineOutput.ts)'s with the `data` property populated.

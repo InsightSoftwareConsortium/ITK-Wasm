@@ -29,7 +29,7 @@ function packageDocs(packageName, packageDir, pypackage, options) {
     let confPyContent = fs.readFileSync(bindgenResource(path.join('docs', 'conf.py')), {encoding:'utf8', flag:'r'})
     confPyContent = confPyContent.replaceAll('@bindgenProject@', packageName)
     confPyContent = confPyContent.replaceAll('@bindgenPyPackage@', pypackage)
-    const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/itk-wasm'
+    const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/ITK-Wasm'
     confPyContent = confPyContent.replaceAll('@bindgenRepository@', repository)
     fs.writeFileSync(confPyPath, confPyContent)
   }
@@ -40,7 +40,7 @@ function packageDocs(packageName, packageDir, pypackage, options) {
     indexContent = indexContent.replaceAll('@bindgenProject@', packageName)
     indexContent = indexContent.replaceAll('@bindgenPyPackage@', pypackage)
     indexContent = indexContent.replaceAll('@bindgenPackageDescription@', options.packageDescription)
-    const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/itk-wasm'
+    const repository = options.repository ?? 'https://github.com/InsightSoftwareConsortium/ITK-Wasm'
     indexContent = indexContent.replaceAll('@bindgenRepository@', repository)
     fs.writeFileSync(indexPath, indexContent)
   }

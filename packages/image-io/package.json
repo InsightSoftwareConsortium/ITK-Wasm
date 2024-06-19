@@ -11,7 +11,7 @@
     "typescript-package-name": "@itk-wasm/image-io",
     "python-package-name": "itkwasm-image-io",
     "package-description": "Input and output for scientific and medical image file formats.",
-    "repository": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
   },
   "scripts": {
     "build": "pnpm build:gen:typescript && pnpm build:gen:python",
@@ -28,7 +28,7 @@
     "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
     "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafybeibyjhkcrinl2lotw5g2vngjs23aaenv3tjzxssm35jxaci5ylsqia https://github.com/InsightSoftwareConsortium/itk-wasm/releases/download/itk-wasm-v1.0.0-b.155/image-io-test-data.tar.gz https://w3s.link/ipfs/bafybeiewe4rankwwe7nw7qm2g3qclflhci2e53wthn3gukdlhbff64pua4/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafybeibyjhkcrinl2lotw5g2vngjs23aaenv3tjzxssm35jxaci5ylsqia https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.155/image-io-test-data.tar.gz https://w3s.link/ipfs/bafybeiewe4rankwwe7nw7qm2g3qclflhci2e53wthn3gukdlhbff64pua4/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "itk-wasm pnpm-script test:python:wasi",
     "test:python:emscripten": "itk-wasm pnpm-script test:python:emscripten",

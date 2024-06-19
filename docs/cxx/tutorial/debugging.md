@@ -24,7 +24,7 @@ int main() {
 }
 ```
 
-[The example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/debugging) provides npm scripts as a convenient way to execute debugging commands that you may also invoke directly in a command line shell.
+[The example](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/debugging) provides npm scripts as a convenient way to execute debugging commands that you may also invoke directly in a command line shell.
 
 To run these examples, first [install and test](./hello_world) Podman or Docker and Node/NPM. Then, install the package dependencies and run the example commands.
 

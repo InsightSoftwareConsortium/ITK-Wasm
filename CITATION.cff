@@ -29,7 +29,7 @@ keywords:
   - scientific-computing
   - visualization
 repository-code: >-
-  https://github.com/InsightSoftwareConsortium/itk-wasm
+  https://github.com/InsightSoftwareConsortium/ITK-Wasm
 url: 'https://wasm.itk.org'
 repository-artifact: 'https://www.npmjs.com/package/itk-wasm'
 license: Apache-2.0

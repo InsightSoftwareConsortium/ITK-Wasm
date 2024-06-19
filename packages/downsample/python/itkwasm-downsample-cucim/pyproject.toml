@@ -48,8 +48,8 @@ dependencies = [
 ]
 
 [project.urls]
-Home = "https://github.com/InsightSoftwareConsortium/itk-wasm"
-Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
+Home = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+Source = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 
 [project.entry-points."itkwasm_downsample.downsample_bin_shrink"]
 "itkwasm_downsample-downsample_bin_shrink.priority.10" = "itkwasm_downsample_cucim.downsample_bin_shrink:downsample_bin_shrink"

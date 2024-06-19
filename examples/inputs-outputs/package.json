@@ -11,7 +11,7 @@
     "typescript-package-name": "@itk-wasm/inputs-outputs-example",
     "python-package-name": "itkwasm-inputs-outputs-example",
     "package-description": "An example that has non-trivial inputs and outputs.",
-    "repository": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
   },
   "scripts": {
     "build": "pnpm build:gen:typescript && pnpm build:gen:python",

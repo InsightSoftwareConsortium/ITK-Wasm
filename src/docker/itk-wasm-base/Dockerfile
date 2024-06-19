@@ -3,7 +3,7 @@ FROM $BASE_IMAGE:20240418-88c04a4
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
-LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/itk-wasm"
+LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 
 WORKDIR /
 

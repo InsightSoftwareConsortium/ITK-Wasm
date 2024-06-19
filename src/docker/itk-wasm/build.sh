@@ -18,7 +18,7 @@ $cp_exe -a ../../../packages/core/typescript/itk-wasm/test/pipelines/median-filt
 
 TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
 VCS_REF=$(git rev-parse --short HEAD)
-VCS_URL="https://github.com/InsightSoftwareConsortium/itk-wasm"
+VCS_URL="https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 debug=false

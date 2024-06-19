@@ -61,6 +61,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/InsightSoftwareConsortium/itk-wasm"
+    "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
   }
 }

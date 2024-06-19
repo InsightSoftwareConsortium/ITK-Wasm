@@ -39,8 +39,8 @@ dependencies = [
 
 [project.urls]
 Home = "https://itkwasm.readthedocs.io"
-Source = "https://github.com/InsightSoftwareConsortium/itk-wasm"
-Issues = "https://github.com/InsightSoftwareConsortium/itk-wasm/issues"
+Source = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+Issues = "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
 
 [tool.hatch.envs.default]
 dependencies = [
