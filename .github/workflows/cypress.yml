@@ -73,7 +73,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: cypress-videos
+          name: cypress-videos-${{ matrix.package }}
           path: packages/${{ matrix.package }}/typescript/cypress/videos
           if-no-files-found: ignore
 
@@ -89,7 +89,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-${{ matrix.package }}
           path: packages/${{ matrix.package }}/typescript/cypress/screenshots
           if-no-files-found: ignore
 
