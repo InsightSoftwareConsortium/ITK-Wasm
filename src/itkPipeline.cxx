@@ -204,7 +204,7 @@ Pipeline
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::reset;
 #endif
-          if (loc == std::string::npos) {
+          if (loc != std::string::npos) {
             std::cout << line.substr(loc) << std::endl;
           }
         }

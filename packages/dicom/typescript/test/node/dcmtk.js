@@ -6,16 +6,50 @@ import {
   structuredReportToHtmlNode ,
   readDicomEncapsulatedPdfNode,
   applyPresentationStateToImageNode,
+  readOverlappingSegmentationNode,
+  readSegmentationNode,
+  writeOverlappingSegmentationNode,
+  writeSegmentationNode,
 } from '../../dist/index-node.js'
-import { readImageNode } from '@itk-wasm/image-io'
+import { readImageNode, writeImageNode } from '@itk-wasm/image-io'
+// import { compareImageToBaseline } from 'cypress/support/compareImageToBaseline.js'
+// /home/jadhav/code/itk-wasm/packages/dicom/typescript/cypress/support/compareImageToBaseline.ts
 
 function arrayEquals(a, b) {
   return (a.length === b.length && a.every((val, idx) => val === b[idx]))
 }
 
+function floatCompare(a, b, places = 2) {
+  function roundToDecimal(n) {
+    const p = Math.pow(10, places)
+    return Math.round(n * p) / p;
+  }
+  return (a.length === b.length && a.every((val, idx) => roundToDecimal(val) === roundToDecimal(b[idx])))
+}
+
+function compareImageToBaseline(t, testImage, baselineImage) {
+  t.deepEqual(testImage.imageType, baselineImage.imageType)
+  t.assert(floatCompare(testImage.origin, baselineImage.origin))
+  t.assert(floatCompare([1.10, 1.20], [1.10, 1.21]))
+  /*
+  t.deepEqual(testImage.spacing, baselineImage.spacing)
+  t.deepEqual(testImage.size, baselineImage.size)
+  t.deepEqual(testImage.data, baselineImage.data)
+
+  t.expect(testImage.imageType, 'imageType').to.deep.equal(baselineImage.imageType)
+  t.expect(testImage.origin, 'origin').to.deep.equal(baselineImage.origin)
+  t.expect(testImage.spacing, 'spacing').to.deep.equal(baselineImage.spacing)
+  t.expect(testImage.size, 'size').to.deep.equal(baselineImage.size)
+  t.expect(testImage.data, 'data').to.deep.equal(baselineImage.data)
+  */
+}
+
+
 const testPathPrefix = '../test/data/input/';
+const outputPathPrefix = '../test/data/output/';
 const baselinePathPrefix = '../test/data/baseline/';
 
+/*
 test('structuredReportToText', async t => {
   const fileName = '88.33-comprehensive-SR.dcm'
   const testFilePath = path.join(testPathPrefix, fileName)
@@ -193,3 +227,162 @@ test('Apply presentation state to a dicom image.', async t => {
   //t.assert(baselinePixels.data.length === outputImage.data.length)
   //t.assert(Buffer.compare(baselinePixels.data, outputImage.data) === 0)
 //})
+
+test('DCMQI read DICOM segmentation object: scalar image', async t => {
+  const fileName = 'dicom-images/SEG/ReMIND-001/tumor_seg_MR_ref_3DSAGT2SPACE/1-1.dcm'
+  const testFilePath = path.join(testPathPrefix, fileName)
+  const output = await readSegmentationNode(testFilePath)
+  //console.log(output)
+
+  t.assert(output.segImage != null)
+  t.assert(output.segImage.data != null)
+  t.assert(output.segImage.imageType.dimension === 3)
+
+  t.deepEqual(output.segImage.imageType, {
+    dimension: 3,
+    componentType: 'int16',
+    pixelType: 'Scalar',
+    components: 1
+  })
+
+  const baselineJsonFile = '/dicom-images/SEG/MR_ref_3DSAGT2SPACE_tumor_seg.json'
+  const baselineJsonFilePath = path.join(baselinePathPrefix, baselineJsonFile)
+  const baselineJsonFileBuffer = fs.readFileSync(baselineJsonFilePath)
+  const baselineJsonObject = JSON.parse(baselineJsonFileBuffer)
+  t.assert(JSON.stringify(baselineJsonObject) === JSON.stringify(output.metaInfo))
+})
+
+test('DCMQI read DICOM segmentation object (read-overlapping-segmentation)', async t => {
+  const fileName = 'dicom-images/SEG/ABDLYMPH001-abdominal-lymph-seg.dcm'
+  const testFilePath = path.join(testPathPrefix, fileName)
+  const output = await readOverlappingSegmentationNode(testFilePath)
+  //console.log(output)
+
+  t.assert(output.segImage != null)
+  t.assert(output.segImage.data != null)
+  t.assert(output.segImage.imageType.dimension === 3)
+  t.deepEqual(output.segImage.origin, [ -195.5, -72.5, -373.599976 ])
+  t.deepEqual(output.segImage.spacing, [ 0.7480469, 0.7480469, 1 ])
+  t.assert(arrayEquals(output.segImage.direction, [ 1, 0, 0, 0, 1, 0, 0, 0, 1 ]))
+  t.deepEqual(output.segImage.size, [ 512, 512, 69 ])
+  t.deepEqual(output.segImage.data.length, 72351744)
+  t.deepEqual(output.segImage.imageType, {
+    dimension: 3,
+    componentType: 'int16',
+    pixelType: 'VariableLengthVector',
+    components: 4
+  })
+
+  const baselineJsonFile = '/dicom-images/SEG/ABDLYMPH001_abdominal_lymph_seg.json'
+  const baselineJsonFilePath = path.join(baselinePathPrefix, baselineJsonFile)
+  const baselineJsonFileBuffer = fs.readFileSync(baselineJsonFilePath)
+  const baselineJsonObject = JSON.parse(baselineJsonFileBuffer)
+  t.assert(JSON.stringify(baselineJsonObject) === JSON.stringify(output.metaInfo))
+  //await writeImageNode(output.segImage, outputPathPrefix + 'segVectorImage.nrrd');
+})
+
+test('DCMQI write DICOM segmentation object: non-overlapping labels', async t => {
+
+  const inputSegImageFile = path.join(testPathPrefix, 'dicom-images/SEG/ReMIND-001/tumor_seg_MR_ref_3DSAGT2SPACE.nrrd')
+  const inputSegImage = await readImageNode(inputSegImageFile)
+  //console.log('inputSegImage: ', inputSegImage)
+
+  const metaInfoFile = path.join(baselinePathPrefix, 'dicom-images/SEG/MR_ref_3DSAGT2SPACE_tumor_seg.json')
+  const jsonFileBuffer = fs.readFileSync(metaInfoFile)
+  const jsonObject = JSON.parse(jsonFileBuffer)
+  //console.log('metaInfoJSON: ', jsonObject)
+
+  const inputRefDicomSeriesPath = path.join(testPathPrefix, 'dicom-images/SEG/ReMIND-001/3DSAGT2SPACE')
+  const refDicomSeries = fs.readdirSync(inputRefDicomSeriesPath).map(x => path.join(testPathPrefix, 'dicom-images/SEG/ReMIND-001/3DSAGT2SPACE', x))
+  //console.log('refDicomSeries: ', refDicomSeries)
+
+  const outputDicomFile = path.join(outputPathPrefix, 'writeSegmentationNode-output-seg.dcm')
+  //console.log('outputDicomFile :', outputDicomFile)
+
+  try {
+    const output = await writeSegmentationNode(inputSegImage, jsonObject, outputDicomFile, {refDicomSeries})
+    t.assert(output != null)
+  }
+  catch (error) {
+    console.log('Exception while calling  writeSegmentationNode: ', error) 
+  }
+})
+
+test('DCMQI write DICOM segmentation object: overlapping labels', async t => {
+
+  const testFilePath = path.join(testPathPrefix, 'dicom-images/SEG/ABDLYMPH001-abdominal-lymph-seg.dcm')
+  const output = await readOverlappingSegmentationNode(testFilePath)
+  const inputSegImage = output.segImage;
+  t.assert(inputSegImage)
+
+  const metaInfoFile = path.join(baselinePathPrefix, 'dicom-images/SEG/ABDLYMPH001_abdominal_lymph_seg.json')
+  const jsonFileBuffer = fs.readFileSync(metaInfoFile)
+  const jsonObject = JSON.parse(jsonFileBuffer)
+
+  const inputRefDicomSeriesPath = path.join(testPathPrefix, 'dicom-images/SEG/abdominallymphnodes')
+  const refDicom = fs.readdirSync(inputRefDicomSeriesPath).map(x => path.join(testPathPrefix, 'dicom-images/SEG/abdominallymphnodes', x))
+  const dcmSeries = [refDicom[0], refDicom[1]];
+
+  const outputDicomFile = path.join(outputPathPrefix, 'writeOverlappingSegmentationNode-output-seg.dcm')
+
+  try {
+    const output = await writeOverlappingSegmentationNode(inputSegImage, jsonObject, outputDicomFile, {refDicomSeries: dcmSeries})
+    t.assert(output != null)
+  }
+  catch (error) {
+    console.log('Exception while calling  writeOverlappingSegmentationNode: ', error) 
+  }
+})
+*/
+
+// dcmqi native tests migrated to TypeScript:
+const dcmqi_lib_SOURCE_DIR = '../emscripten-build/_deps/dcmqi_lib-src'
+const BASELINE = path.join(dcmqi_lib_SOURCE_DIR, '/data/segmentations')
+const JSON_DIR = path.join(dcmqi_lib_SOURCE_DIR, '/doc/examples')
+
+test('write-segmentation_makeSEG', async t => {
+  const inputSegImageFile = path.join(BASELINE,'/liver_seg.nrrd')
+  const inputSegImage = await readImageNode(inputSegImageFile)
+  t.assert(inputSegImage)
+
+  const metaInfoFile = path.join(JSON_DIR, '/seg-example.json')
+  const jsonFileBuffer = fs.readFileSync(metaInfoFile)
+  const jsonObject = JSON.parse(jsonFileBuffer)
+  const outputDicomFile = path.join(outputPathPrefix,'liver-seg.dcm')
+  const dcmSeries = [
+    path.join(dcmqi_lib_SOURCE_DIR, '/data/segmentations/ct-3slice/01.dcm'),
+    path.join(dcmqi_lib_SOURCE_DIR, '/data/segmentations/ct-3slice/02.dcm'),
+    path.join(dcmqi_lib_SOURCE_DIR, '/data/segmentations/ct-3slice/03.dcm'),
+  ]
+  try {
+    const output = await writeSegmentationNode(inputSegImage, jsonObject, outputDicomFile, {refDicomSeries: dcmSeries})
+    t.assert(output != null)
+  }
+  catch (error) {
+    console.log('Exception while calling  writeSegmentationNode: ', error) 
+  }
+
+  // Now read back the liver-seg.dcm file and compare with original nrrd.
+  const output = await readSegmentationNode(outputDicomFile)
+  t.assert(output.segImage)
+  t.assert(output.metaInfo)
+  compareImageToBaseline(t, output.segImage, inputSegImage)
+
+  /*
+  dcmqi_add_test(
+    NAME ${dcm2itk}_makeNRRD
+    MODULE_NAME ${MODULE_NAME}
+    COMMAND $<TARGET_FILE:${dcm2itk}Test>
+      --compare ${BASELINE}/liver_seg.nrrd
+      ${MODULE_TEMP_DIR}/makeNRRD-1.nrrd
+      ${dcm2itk}Test
+      --inputDICOM ${MODULE_TEMP_DIR}/liver.dcm
+      --outputDirectory ${MODULE_TEMP_DIR}
+      --outputType nrrd
+      --prefix makeNRRD
+    TEST_DEPENDS
+      ${itk2dcm}_makeSEG
+    )
+   */
+
+})
