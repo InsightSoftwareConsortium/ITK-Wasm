@@ -1,6 +1,12 @@
 name: Python Wasm
 
-on: [push,pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 env:
   pyodide-version: 0.24.1
