@@ -20,7 +20,7 @@ from itkwasm import (
 def read_segmentation(
     dicom_file: os.PathLike,
     merge_segments: bool = False,
-) -> Image:
+) -> Tuple[Image, Any]:
     """Read DICOM segmentation objects
 
     :param dicom_file: Input DICOM file
@@ -31,6 +31,9 @@ def read_segmentation(
 
     :return: dicom segmentation object as an image
     :rtype:  Image
+
+    :return: Output overlay information
+    :rtype:  Any
     """
     global _pipeline
     if _pipeline is None:
@@ -38,6 +41,7 @@ def read_segmentation(
 
     pipeline_outputs: List[PipelineOutput] = [
         PipelineOutput(InterfaceTypes.Image),
+        PipelineOutput(InterfaceTypes.JsonCompatible),
     ]
 
     pipeline_inputs: List[PipelineInput] = [
@@ -50,8 +54,11 @@ def read_segmentation(
         raise FileNotFoundError("dicom_file does not exist")
     args.append(str(PurePosixPath(dicom_file)))
     # Outputs
-    outputImage_name = '0'
-    args.append(outputImage_name)
+    seg_image_name = '0'
+    args.append(seg_image_name)
+
+    meta_info_name = '1'
+    args.append(meta_info_name)
 
     # Options
     input_count = len(pipeline_inputs)
@@ -61,6 +68,9 @@ def read_segmentation(
 
     outputs = _pipeline.run(args, pipeline_outputs, pipeline_inputs)
 
-    result = outputs[0].data
+    result = (
+        outputs[0].data,
+        outputs[1].data,
+    )
     return result
 

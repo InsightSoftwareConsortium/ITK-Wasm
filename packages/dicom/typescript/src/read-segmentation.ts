@@ -3,6 +3,7 @@
 import {
   BinaryFile,
   Image,
+  JsonCompatible,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -32,6 +33,7 @@ async function readSegmentation(
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.Image },
+    { type: InterfaceTypes.JsonCompatible },
   ]
 
   let dicomFileFile = dicomFile
@@ -49,8 +51,11 @@ async function readSegmentation(
   args.push(dicomFileName)
 
   // Outputs
-  const outputImageName = '0'
-  args.push(outputImageName)
+  const segImageName = '0'
+  args.push(segImageName)
+
+  const metaInfoName = '1'
+  args.push(metaInfoName)
 
   // Options
   args.push('--memory-io')
@@ -76,7 +81,8 @@ async function readSegmentation(
 
   const result = {
     webWorker: usedWebWorker as Worker,
-    outputImage: outputs[0]?.data as Image,
+    segImage: outputs[0]?.data as Image,
+    metaInfo: outputs[1]?.data as JsonCompatible,
   }
   return result
 }

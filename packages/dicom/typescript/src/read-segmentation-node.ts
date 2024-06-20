@@ -2,6 +2,7 @@
 
 import {
   Image,
+  JsonCompatible,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -31,6 +32,7 @@ async function readSegmentationNode(
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.Image },
+    { type: InterfaceTypes.JsonCompatible },
   ]
 
   mountDirs.add(path.dirname(dicomFile as string))
@@ -44,8 +46,11 @@ async function readSegmentationNode(
   mountDirs.add(path.dirname(dicomFileName))
 
   // Outputs
-  const outputImageName = '0'
-  args.push(outputImageName)
+  const segImageName = '0'
+  args.push(segImageName)
+
+  const metaInfoName = '1'
+  args.push(metaInfoName)
 
   // Options
   args.push('--memory-io')
@@ -65,7 +70,8 @@ async function readSegmentationNode(
   }
 
   const result = {
-    outputImage: outputs[0]?.data as Image,
+    segImage: outputs[0]?.data as Image,
+    metaInfo: outputs[1]?.data as JsonCompatible,
   }
   return result
 }

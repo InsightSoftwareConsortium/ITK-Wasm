@@ -12,7 +12,7 @@ from itkwasm import (
 def read_segmentation(
     dicom_file: os.PathLike,
     merge_segments: bool = False,
-) -> Image:
+) -> Tuple[Image, Any]:
     """Read DICOM segmentation objects
 
     :param dicom_file: Input DICOM file
@@ -23,6 +23,9 @@ def read_segmentation(
 
     :return: dicom segmentation object as an image
     :rtype:  Image
+
+    :return: Output overlay information
+    :rtype:  Any
     """
     func = environment_dispatch("itkwasm_dicom", "read_segmentation")
     output = func(dicom_file, merge_segments=merge_segments)
