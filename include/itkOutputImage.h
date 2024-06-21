@@ -84,7 +84,7 @@ public:
 
         const auto dataAddress = reinterpret_cast< size_t >( wasmImage->GetImage()->GetBufferPointer() );
         using ConvertPixelTraits = DefaultConvertPixelTraits<typename ImageType::PixelType>;
-        const auto dataSize = wasmImage->GetImage()->GetPixelContainer()->Size() * sizeof(typename ConvertPixelTraits::ComponentType) * ConvertPixelTraits::GetNumberOfComponents();
+        const auto dataSize = wasmImage->GetImage()->GetPixelContainer()->Size() * sizeof(typename ConvertPixelTraits::ComponentType);
         setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);
 
         const auto directionAddress = reinterpret_cast< size_t >( wasmImage->GetImage()->GetDirection().GetVnlMatrix().begin() );

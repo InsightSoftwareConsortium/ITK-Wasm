@@ -56,6 +56,7 @@ ExternalData_Expand_Arguments(
 
 set(WebAssemblyInterfaceTests
   itkWasmImageInterfaceTest.cxx
+  itkWasmVectorImageInterfaceTest.cxx
   itkWasmImageInterfaceWithNegativeIndexTest.cxx
   itkWasmMeshInterfaceTest.cxx
   itkWasmPolyDataInterfaceTest.cxx
@@ -85,6 +86,15 @@ itk_add_test(NAME itkWasmImageInterfaceTest
     itkWasmImageInterfaceTest
       DATA{Input/brainweb165a10f17.mha}
       ${ITK_TEST_OUTPUT_DIR}/itkWasmImageInterfaceTest.mha
+)
+
+itk_add_test(NAME itkWasmVectorImageInterfaceTest
+    COMMAND WebAssemblyInterfaceTestDriver
+      --compare DATA{Input/apple.jpg}
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmVectorImageInterfaceTest.mha
+    itkWasmVectorImageInterfaceTest
+      DATA{Input/apple.jpg}
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmVectorImageInterfaceTest.mha
 )
 
 itk_add_test(NAME itkWasmImageInterfaceWithNegativeIndexTest

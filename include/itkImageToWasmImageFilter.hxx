@@ -138,8 +138,9 @@ ImageToWasmImageFilter<TImage>
   imageJSON->SetImage(image);
 
   using PointType = typename TImage::PointType;
-  using PixelType = typename TImage::IOPixelType;
-  using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
+  using PixelType = typename TImage::PixelType;
+  using IOPixelType = typename TImage::IOPixelType;
+  using ConvertPixelTraits = DefaultConvertPixelTraits<IOPixelType>;
   using ComponentType = typename ConvertPixelTraits::ComponentType;
 
   rapidjson::Document document;
@@ -160,7 +161,7 @@ ImageToWasmImageFilter<TImage>
   pixelType.SetString( wasm::MapPixelType<PixelType>::PixelString.data(), allocator );
   imageType.AddMember("pixelType", pixelType.Move(), allocator );
 
-  imageType.AddMember("components", rapidjson::Value( ConvertPixelTraits::GetNumberOfComponents() ).Move(), allocator );
+  imageType.AddMember("components", rapidjson::Value( image->GetNumberOfComponentsPerPixel() ).Move(), allocator );
 
   document.AddMember( "imageType", imageType.Move(), allocator );
 
