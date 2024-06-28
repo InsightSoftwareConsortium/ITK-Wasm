@@ -62,7 +62,7 @@ int itkWasmTransformIOTest(int argc, char *argv[])
   wasmWriter->SetFileName(transformDirectory);
   for (auto transform : *inputTransforms)
   {
-    std::cout << "Input back transform:" << std::endl;
+    std::cout << "Input transform:" << std::endl;
     transform->Print(std::cout);
     wasmWriter->AddTransform(transform);
   }

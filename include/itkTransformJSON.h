@@ -29,6 +29,7 @@ namespace itk
   enum class JSONTransformParameterizationEnum
   {
     Identity,
+    Composite,
     Translation,
     Euler2D,
     Euler3D,
@@ -101,6 +102,7 @@ template <>
 struct glz::meta<itk::JSONTransformParameterizationEnum> {
   using enum itk::JSONTransformParameterizationEnum;
   static constexpr auto value = glz::enumerate(Identity,
+  Composite,
   Translation,
   Euler2D,
   Euler3D,

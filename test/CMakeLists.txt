@@ -179,6 +179,26 @@ itk_add_test(NAME itkWasmTransformIOTest
       ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOTest.cbor.h5
 )
 
+itk_add_test(NAME itkWasmTransformIOSequenceTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkWasmTransformIOTest
+      DATA{Input/TransformSequence.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOSequenceTest.iwt
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOSequenceTest.h5
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOSequenceTest.iwt.cbor
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOSequenceTest.cbor.h5
+)
+
+itk_add_test(NAME itkWasmTransformIOCompositeTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkWasmTransformIOTest
+      DATA{Input/CompositeTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOCompositeTest.iwt
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOCompositeTest.h5
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOCompositeTest.iwt.cbor
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformIOCompositeTest.cbor.h5
+)
+
 itk_add_test(NAME itkPipelineTest
     COMMAND WebAssemblyInterfaceTestDriver
     itkPipelineTest

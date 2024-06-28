@@ -639,6 +639,7 @@ enums:
       A detailed description of each transform type can be found in the ITK Software Guide: https://itk.org/ITKSoftwareGuide/html/Book1/ITKSoftwareGuide-Book1ch4.html
     permissible_values:
       Identity:
+      Composite:
       Translation:
       Euler2D:
       Euler3D:
