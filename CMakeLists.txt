@@ -87,6 +87,15 @@ FetchContent_Declare(
   GIT_TAG        ${glaze_GIT_TAG}
   GIT_SHALLOW TRUE
 )
+if (MSVC)
+  string(REGEX MATCH "\/cl(.exe)?$" matched_cl ${CMAKE_CXX_COMPILER})
+  if (matched_cl)
+    # for a C++ standards compliant preprocessor, not needed for clang-cl
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:preprocessor /permissive- /Zc:lambda")
+  endif()
+  # avoid warnings
+  set(CMAKE_CXX_STANDARD 23)
+endif()
 
 list(APPEND CMAKE_MODULE_PATH ${libcbor_SOURCE_DIR}/CMakeModules)
 FetchContent_MakeAvailable(rapidjson_lib cli11 rang libcbor cpp_base64 glaze)
