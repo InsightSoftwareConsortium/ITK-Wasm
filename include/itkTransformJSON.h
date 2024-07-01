@@ -65,10 +65,10 @@ namespace itk
    */
   struct TransformTypeJSON
   {
-    JSONTransformParameterizationEnum transformParameterization;
-    JSONFloatTypesEnum parametersValueType;
-    unsigned int inputDimension;
-    unsigned int outputDimension;
+    JSONTransformParameterizationEnum transformParameterization{ JSONTransformParameterizationEnum::Identity };
+    JSONFloatTypesEnum parametersValueType { JSONFloatTypesEnum::float64 };
+    unsigned int inputDimension { 3 };
+    unsigned int outputDimension { 3 };
   };
 
   /** \class TransformJSON
@@ -80,8 +80,8 @@ namespace itk
   struct TransformJSON
   {
     TransformTypeJSON transformType;
-    uint64_t numberOfFixedParameters;
-    uint64_t numberOfParameters;
+    uint64_t numberOfFixedParameters{ 0 };
+    uint64_t numberOfParameters{ 0 };
     std::string name;
     std::string inputSpaceName;
     std::string outputSpaceName;
