@@ -24,5 +24,6 @@ jobs:
     uses: thewtex/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@6868c9879405def5d7532e0437b57e78cbe0b6ea
     with:
       itk-module-deps: 'InsightSoftwareConsortium/ITKMeshToPolyData@v0.11.0'
+      manylinux-platforms: '["_2_28-x64","_2_28-aarch64"]'
     secrets:
       pypi_password: ${{ secrets.pypi_password }}
