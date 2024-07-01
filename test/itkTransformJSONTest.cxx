@@ -34,7 +34,12 @@ itkTransformJSONTest(int argc, char * argv[])
   itk::TransformListJSON transformList{ transform };
 
   std::string serialized{};
-  glz::write<glz::opts{.prettify = true}>(transformList, serialized);
+  auto ec = glz::write<glz::opts{.prettify = true}>(transformList, serialized);
+  if (ec)
+  {
+    std::cerr << "Failed to serialize TransformListJSON" << std::endl;
+    return EXIT_FAILURE;
+  }
   std::cout << serialized << std::endl;
 
   auto deserializedAttempt = glz::read_json<itk::TransformListJSON>(serialized);

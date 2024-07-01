@@ -79,8 +79,8 @@ FetchContent_Declare(
 )
 
 set(glaze_GIT_REPOSITORY "https://github.com/stephenberry/glaze")
-# glaze v2.6.9
-set(glaze_GIT_TAG 6bcc20ce7eb59df60b94488a4f6be723731db00e)
+# glaze v2.9.3
+set(glaze_GIT_TAG fe49c8e1a057d11484e0bd88ffcbe60277e356fd)
 FetchContent_Declare(
   glaze
   GIT_REPOSITORY ${glaze_GIT_REPOSITORY}
