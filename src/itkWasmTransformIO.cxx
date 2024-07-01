@@ -1138,7 +1138,11 @@ WasmTransformIOTemplate<TParametersValueType>::WriteTransformInformation()
   auto transformListJSON = this->GetJSON();
 
   std::string serialized{};
-  glz::write<glz::opts{ .prettify = true }>(transformListJSON, serialized);
+  auto ec = glz::write<glz::opts{ .prettify = true }>(transformListJSON, serialized);
+  if (ec)
+  {
+    itkExceptionMacro("Failed to serialize TransformListJSON");
+  }
   std::ofstream outputStream;
   openFileForWriting(outputStream, indexPath.c_str(), true, true);
   outputStream << serialized;
