@@ -27,9 +27,9 @@ itkTransformJSONTest(int argc, char * argv[])
   itk::JSONTransformParameterizationEnum parameterization = itk::JSONTransformParameterizationEnum::Affine;
   itk::JSONFloatTypesEnum floatType = itk::JSONFloatTypesEnum::float64;
 
-  itk::TransformTypeJSON transformType(parameterization, floatType, 3, 3);
+  itk::TransformTypeJSON transformType{parameterization, floatType, 3, 3};
 
-  itk::TransformJSON transform(transformType, 3, 12);
+  itk::TransformJSON transform{transformType, 3, 12};
 
   itk::TransformListJSON transformList{ transform };
 
