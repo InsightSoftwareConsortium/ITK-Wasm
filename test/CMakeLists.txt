@@ -71,6 +71,8 @@ set(WebAssemblyInterfaceTests
   itkSupportInputMeshTypesMemoryIOTest.cxx
   itkSupportInputPolyDataTypesTest.cxx
   itkTransformJSONTest.cxx
+  itkWasmTransformInterfaceTest.cxx
+  itkWasmTransformInterfaceCompositeTest.cxx
 )
 
 if (EMSCRIPTEN)
@@ -274,6 +276,20 @@ itk_add_test(NAME itkSupportInputPolyDataTypesTest
 itk_add_test(NAME itkTransformJSONTest
     COMMAND WebAssemblyInterfaceTestDriver
     itkTransformJSONTest
+)
+
+itk_add_test(NAME itkWasmTransformInterfaceTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkWasmTransformInterfaceTest
+      DATA{Input/LinearTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformInterfaceTest.h5
+)
+
+itk_add_test(NAME itkWasmTransformInterfaceCompositeTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkWasmTransformInterfaceCompositeTest
+      DATA{Input/CompositeTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformInterfaceCompositeTest.h5
 )
 
 if(EMSCRIPTEN)
