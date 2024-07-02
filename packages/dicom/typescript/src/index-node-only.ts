@@ -22,6 +22,16 @@ import readDicomEncapsulatedPdfNode from './read-dicom-encapsulated-pdf-node.js'
 export { readDicomEncapsulatedPdfNode }
 
 
+import ReadSegmentationNodeResult from './read-segmentation-node-result.js'
+export type { ReadSegmentationNodeResult }
+
+import ReadSegmentationNodeOptions from './read-segmentation-node-options.js'
+export type { ReadSegmentationNodeOptions }
+
+import readSegmentationNode from './read-segmentation-node.js'
+export { readSegmentationNode }
+
+
 import StructuredReportToHtmlNodeResult from './structured-report-to-html-node-result.js'
 export type { StructuredReportToHtmlNodeResult }
 
@@ -40,6 +50,13 @@ export type { StructuredReportToTextNodeOptions }
 
 import structuredReportToTextNode from './structured-report-to-text-node.js'
 export { structuredReportToTextNode }
+
+
+import WriteSegmentationNodeResult from './write-segmentation-node-result.js'
+export type { WriteSegmentationNodeResult }
+
+import writeSegmentationNode from './write-segmentation-node.js'
+export { writeSegmentationNode }
 
 
 import ReadDicomTagsNodeResult from './read-dicom-tags-node-result.js'

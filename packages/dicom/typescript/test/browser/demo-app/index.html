@@ -32,8 +32,10 @@
   <sl-tab-group>
     <sl-tab slot="nav" panel="applyPresentationStateToImage-panel">applyPresentationStateToImage</sl-tab>
     <sl-tab slot="nav" panel="readDicomEncapsulatedPdf-panel">readDicomEncapsulatedPdf</sl-tab>
+    <sl-tab slot="nav" panel="readSegmentation-panel">readSegmentation</sl-tab>
     <sl-tab slot="nav" panel="structuredReportToHtml-panel">structuredReportToHtml</sl-tab>
     <sl-tab slot="nav" panel="structuredReportToText-panel">structuredReportToText</sl-tab>
+    <sl-tab slot="nav" panel="writeSegmentation-panel">writeSegmentation</sl-tab>
     <sl-tab slot="nav" panel="readDicomTags-panel">readDicomTags</sl-tab>
     <sl-tab slot="nav" panel="readImageDicomFileSeries-panel">readImageDicomFileSeries</sl-tab>
 
@@ -148,6 +150,58 @@
     <div id="readDicomEncapsulatedPdfOutputs">
       <sl-details disabled id="readDicomEncapsulatedPdf-pdf-binary-output-details" summary="pdfBinaryOutput: Output pdf file"></sl-details>
       <sl-button variant="neutral" outline name="pdf-binary-output-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="readSegmentation-panel">
+
+    <small><i>Read DICOM segmentation objects</i></small><br /><br />
+
+    <div id="readSegmentationInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the dicomFile"><sl-details id="readSegmentation-dicom-file-details" summary="dicomFile: Input DICOM file" disabled></sl-details></sl-tooltip>
+      <label for="dicom-file-file"><sl-button name="dicom-file-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="dicom-file-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="merge-segments">mergeSegments - <i>Merge segments into a single image</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="readSegmentationOutputs">
+      <itk-image-details disabled id="readSegmentation-seg-image-details" summary="segImage: dicom segmentation object as an image"></itk-image-details>
+      <sl-select id="readSegmentation-seg-image-output-format" placeholder="Format">
+        <sl-option value="bmp">bmp</sl-option>
+        <sl-option value="dcm">dcm</sl-option>
+        <sl-option value="gipl">gipl</sl-option>
+        <sl-option value="hdf5">hdf5</sl-option>
+        <sl-option value="jpg">jpg</sl-option>
+        <sl-option value="lsm">lsm</sl-option>
+        <sl-option value="mnc">mnc</sl-option>
+        <sl-option value="mnc.gz">mnc.gz</sl-option>
+        <sl-option value="mgh">mgh</sl-option>
+        <sl-option value="mha">mha</sl-option>
+        <sl-option value="mrc">mrc</sl-option>
+        <sl-option value="nii">nii</sl-option>
+        <sl-option value="nii.gz">nii.gz</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="nrrd">nrrd</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="pic">pic</sl-option>
+        <sl-option value="tif">tif</sl-option>
+        <sl-option value="isq">isq</sl-option>
+        <sl-option value="fdf">fdf</sl-option>
+        <sl-option value="vtk">vtk</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="seg-image-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="readSegmentation-meta-info-details" summary="metaInfo: Output overlay information"></sl-details>
+      <sl-button variant="neutral" outline name="meta-info-download" disabled>Download</sl-button>
 <br /><br />
     </div>
 
@@ -314,6 +368,32 @@ by Specific Character Set (0008,0005) to UTF-8</i></sl-checkbox>
     <div id="structuredReportToTextOutputs">
       <sl-details disabled id="structuredReportToText-output-text-details" summary="outputText: Output text file"></sl-details>
       <sl-button variant="neutral" outline name="output-text-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="writeSegmentation-panel">
+
+    <small><i>Write DICOM segmentation object</i></small><br /><br />
+
+    <div id="writeSegmentationInputs"><form action="">
+      <label for="input-image-file"><sl-button name="input-image-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-image-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the inputImage"><itk-image-details id="writeSegmentation-input-image-details" summary="inputImage: input segmentation image to write" disabled></itk-image-details></sl-tooltip>
+<br /><br />
+      <sl-input required name="input-ref-dicom-series" type="text" label="inputRefDicomSeries" help-text="input reference dicom series over which the segmentation was created"></sl-input>
+      <sl-input required name="output-dicom-file" type="text" label="outputDicomFile" help-text="written dicom segfile"></sl-input>
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="writeSegmentationOutputs">
+      <sl-details disabled id="writeSegmentation-output-dicom-file-details" summary="outputDicomFile: written dicom segfile"></sl-details>
+      <sl-button variant="neutral" outline name="output-dicom-file-download" disabled>Download</sl-button>
 <br /><br />
     </div>
 

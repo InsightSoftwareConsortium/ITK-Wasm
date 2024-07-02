@@ -1,9 +1,38 @@
 find_package(ITK REQUIRED
   COMPONENTS
     ITKDCMTK
+    ITKLabelMap
+    ITKThresholding
     WebAssemblyInterface
   )
 include(${ITK_USE_FILE})
+
+if(POLICY CMP0077)
+  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+endif()
+
+include(FetchContent)
+# DCMQI
+set(DCMQI_GIT_REPOSITORY "https://github.com/jadh4v/dcmqi.git")
+set(DCMQI_GIT_TAG        "0938c3341b7b259657aff4485e9178b95385afb7")
+set(DCMQI_SUPERBUILD OFF)
+set(DCMQI_BUILD_SLICER_EXTENSION OFF)
+set(DCMQI_BUILD_APPS OFF)
+set(DCMQI_BUILD_DOC OFF)
+set(BUILD_TESTING OFF)
+set(DCMTK_DIR ${ITK_DIR}/Modules/ThirdParty/DCMTK/ITKDCMTK_ExtProject-build)
+FetchContent_Declare(
+  dcmqi_lib
+  GIT_REPOSITORY ${DCMQI_GIT_REPOSITORY}
+  GIT_TAG ${DCMQI_GIT_TAG}
+)
+
+FetchContent_MakeAvailable(dcmqi_lib)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+
+list(APPEND DCMQI_INCLUDE_DIRS "${dcmqi_lib_SOURCE_DIR}/include" "${dcmqi_lib_SOURCE_DIR}/jsoncpp" "${dcmqi_lib_BINARY_DIR}/include")
+include_directories(${DCMQI_INCLUDE_DIRS})
 
 add_executable(structured-report-to-text structured-report-to-text.cxx)
 target_link_libraries(structured-report-to-text PUBLIC ${ITK_LIBRARIES})
@@ -23,3 +52,15 @@ target_link_libraries(structured-report-to-html PUBLIC ${ITK_LIBRARIES})
 
 add_executable(read-dicom-encapsulated-pdf read-dicom-encapsulated-pdf.cxx)
 target_link_libraries(read-dicom-encapsulated-pdf PUBLIC ${ITK_LIBRARIES})
+
+add_executable(read-segmentation read-segmentation.cxx)
+target_link_libraries(read-segmentation PUBLIC ${ITK_LIBRARIES} dcmqi)
+
+add_executable(read-overlapping-segmentation read-overlapping-segmentation.cxx)
+target_link_libraries(read-overlapping-segmentation PUBLIC ${ITK_LIBRARIES} dcmqi)
+
+add_executable(write-segmentation write-segmentation.cxx)
+target_link_libraries(write-segmentation PUBLIC ${ITK_LIBRARIES} dcmqi)
+
+add_executable(write-overlapping-segmentation write-overlapping-segmentation.cxx)
+target_link_libraries(write-overlapping-segmentation PUBLIC ${ITK_LIBRARIES} dcmqi)
