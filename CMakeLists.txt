@@ -9,27 +9,6 @@ endif()
 
 set(WebAssemblyInterface_LIBRARIES WebAssemblyInterface)
 
-option(BUILD_ITK_WASM_IO_MODULES "Build the itk-wasm ImageIO's and MeshIO's" OFF)
-if(BUILD_ITK_WASM_IO_MODULES)
-  set(WebAssemblyInterface_MeshIOModules
-    "ITKIOMeshBYU"
-    "ITKIOMeshFreeSurfer"
-    "ITKIOMeshOBJ"
-    "ITKIOMeshOFF"
-    "IOMeshSTL"
-    "IOMeshSWC"
-    "ITKIOMeshVTK"
-    CACHE STRING
-    "String delimited list of ITK mesh IO modules to support.")
-  set(meshios_ITKIOMeshBYU itkBYUMeshIO)
-  set(meshios_ITKIOMeshFreeSurfer itkFreeSurferAsciiMeshIO itkFreeSurferBinaryMeshIO)
-  set(meshios_ITKIOMeshVTK itkVTKPolyDataMeshIO)
-  set(meshios_ITKIOMeshOBJ itkOBJMeshIO)
-  set(meshios_ITKIOMeshOFF itkOFFMeshIO)
-  set(meshios_IOMeshSTL itkSTLMeshIO)
-  set(meshios_IOMeshSWC itkSWCMeshIO)
-endif()
-
 include(FetchContent)
 set(_itk_build_testing ${BUILD_TESTING})
 set(BUILD_TESTING OFF)
@@ -100,14 +79,23 @@ FetchContent_Declare(
 )
 
 set(glaze_GIT_REPOSITORY "https://github.com/stephenberry/glaze")
-# glaze v2.6.9
-set(glaze_GIT_TAG 6bcc20ce7eb59df60b94488a4f6be723731db00e)
+# glaze v2.9.3
+set(glaze_GIT_TAG fe49c8e1a057d11484e0bd88ffcbe60277e356fd)
 FetchContent_Declare(
   glaze
   GIT_REPOSITORY ${glaze_GIT_REPOSITORY}
   GIT_TAG        ${glaze_GIT_TAG}
   GIT_SHALLOW TRUE
 )
+if (MSVC)
+  string(REGEX MATCH "\/cl(.exe)?$" matched_cl ${CMAKE_CXX_COMPILER})
+  if (matched_cl)
+    # for a C++ standards compliant preprocessor, not needed for clang-cl
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:preprocessor /permissive- /Zc:lambda")
+  endif()
+  # avoid warnings
+  set(CMAKE_CXX_STANDARD 23)
+endif()
 
 list(APPEND CMAKE_MODULE_PATH ${libcbor_SOURCE_DIR}/CMakeModules)
 FetchContent_MakeAvailable(rapidjson_lib cli11 rang libcbor cpp_base64 glaze)

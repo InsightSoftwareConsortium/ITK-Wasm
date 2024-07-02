@@ -50,7 +50,7 @@ const char *
 WasmMeshIOFactory
 ::GetDescription() const
 {
-  return "Wasm MeshIO Factory, allows the loading of Wasm images into Insight";
+  return "Wasm MeshIO Factory, allows the loading of Wasm meshes into Insight";
 }
 
 

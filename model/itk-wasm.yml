@@ -411,6 +411,89 @@ classes:
       A type that can be represented in JSON.
     class_uri: wasm:JsonCompatible
 
+  TransformType:
+    description: >-
+      Representation of an N-dimensional scientific spatial transformation.
+    class_uri: wasm:TransformType
+    slots:
+      - parametersValueType
+    attributes:
+      inputDimension:
+        description: >-
+          Dimension of the input space.
+        range: integer
+        required: true
+      outputDimension:
+        description: >-
+          Dimension of the output space.
+        range: integer
+        required: true
+      transformParameterization:
+        description: >-
+          How the transform is parameterized.
+        range: TransformParameterizations
+        required: true
+
+  Transform:
+    description: >-
+      Representation of a spatial transformation.
+    class_uri: wasm:Transform
+    attributes:
+      transformType:
+        description: >-
+          Type of the transform.
+        range: TransformType
+        required: true
+      numberOfFixedParameters:
+        description: >-
+          Number of fixed parameters in the transform.
+        range: integer
+        required: true
+      numberOfParameters:
+        description: >-
+          Number of parameters in the transform.
+        range: integer
+        required: true
+      name:
+        description: >-
+          Name of the transform.
+        range: string
+        required: true
+      inputSpaceName:
+        description: >-
+          Name of the input space.
+        range: string
+        required: true
+      outputSpaceName:
+        description: >-
+          Name of the output space.
+        range: string
+        required: true
+      fixedParameters:
+        description: >-
+          Fixed parameters of the transform. These are always double / float64.
+        range: BinaryData
+        required: true
+      parameters:
+        description: >-
+          Parameters of the transform.
+        range: BinaryData
+        required: true
+
+  TransformList:
+    is_a: InterfaceType
+    description: >-
+      Representation of a sequence of transforms.
+    class_uri: wasm:TransformList
+    attributes:
+      values:
+        description: >-
+          The content of the transform sequence.
+        range: Transform
+        multivalued: true
+        required: true
+        inlined_as_list: true
+
 slots:
   path:
     description: >-
@@ -430,6 +513,13 @@ slots:
       Type of binary data components in a pixel.
     any_of:
       - range: IntTypes
+      - range: FloatTypes
+    required: true
+
+  parametersValueType:
+    description: >-
+      Type of binary data components in a transform.
+    any_of:
       - range: FloatTypes
     required: true
 
@@ -541,3 +631,37 @@ enums:
       Matrix:
       VariableLengthVector:
       VariableSizeMatrix:
+
+  TransformParameterizations:
+    description: >-
+      How a transform is parameterized, defining how its parameters should be interpreted.
+
+      A detailed description of each transform type can be found in the ITK Software Guide: https://itk.org/ITKSoftwareGuide/html/Book1/ITKSoftwareGuide-Book1ch4.html
+    permissible_values:
+      Identity:
+      Composite:
+      Translation:
+      Euler2D:
+      Euler3D:
+      Rigid2D:
+      Rigid3DPerspective:
+      VersorRigid3D:
+      Versor:
+      ScaleLogarithmic:
+      ScaleSkewVersor3D:
+      Scale:
+      Similarity2D:
+      Similarity3D:
+      QuaternionRigid:
+      Affine:
+      ScalableAffine:
+      AzimuthElevationToCartesian:
+      BSpline:
+      BSplineSmoothingOnUpdateDisplacementField:
+      ConstantVelocityField:
+      DisplacementField:
+      GaussianExponentialDiffeomorphic:
+      GaussianSmoothingOnUpdateDisplacementField:
+      GaussianSmoothingOnUpdateTimeVaryingVelocityField:
+      TimeVaryingVelocityField:
+      VelocityField:

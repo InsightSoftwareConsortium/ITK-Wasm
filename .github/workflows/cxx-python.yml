@@ -13,14 +13,17 @@ env:
 
 jobs:
   cxx-build-workflow:
-    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@v5.4.0
+    # itk-wasm branch
+    uses: thewtex/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@6868c9879405def5d7532e0437b57e78cbe0b6ea
     with:
       itk-module-deps: 'MeshToPolyData@v0.11.0'
       ctest-options: '-E itkPipelineTest'
 
-  python-build-workflow:
-    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@v5.4.0
-    with:
-      itk-module-deps: 'InsightSoftwareConsortium/ITKMeshToPolyData@v0.11.0'
-    secrets:
-      pypi_password: ${{ secrets.pypi_password }}
+  #python-build-workflow:
+    ## itk-wasm branch
+    #uses: thewtex/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@6868c9879405def5d7532e0437b57e78cbe0b6ea
+    #with:
+      #itk-module-deps: 'InsightSoftwareConsortium/ITKMeshToPolyData@v0.11.0'
+      #manylinux-platforms: '["_2_28-x64","_2_28-aarch64"]'
+    #secrets:
+      #pypi_password: ${{ secrets.pypi_password }}

@@ -23,6 +23,7 @@
 #include "itkWasmPixelTypeFromIOPixelEnum.h"
 #include "itkIOPixelEnumFromWasmPixelType.h"
 #include "itkMetaDataDictionaryJSON.h"
+#include "itkWasmIOCommon.h"
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
@@ -567,7 +568,7 @@ WasmImageIO
     this->OpenFileForReading( dataStream, dataFile.c_str() );
     const SizeValueType numberOfBytesToBeRead =
       static_cast< SizeValueType >( this->GetImageSizeInBytes() );
-    if ( !this->ReadBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
+    if ( !readBufferAsBinary( dataStream, buffer, numberOfBytesToBeRead ) )
       {
       itkExceptionMacro(<< "Read failed: Wanted "
                         << numberOfBytesToBeRead
