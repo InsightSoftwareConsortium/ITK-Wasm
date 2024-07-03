@@ -25,11 +25,8 @@
 #include "itkMakeUniqueForOverwrite.h"
 #include <sstream>
 
-#include "itkWasmComponentTypeFromIOComponentEnum.h"
-#include "itkIOComponentEnumFromWasmComponentType.h"
-#include "itkWasmPixelTypeFromIOPixelEnum.h"
-#include "itkIOPixelEnumFromWasmPixelType.h"
 #include "itkWasmIOCommon.h"
+#include "itktransformParameterizationString.h"
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
@@ -173,13 +170,13 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
             const std::string transformParameterization(
               reinterpret_cast<char *>(cbor_string_handle(transformTypeHandle[kk].value)),
               cbor_string_length(transformTypeHandle[kk].value));
-            if (transformParameterization == "Identity")
-            {
-              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Identity;
-            }
-            else if (transformParameterization == "Composite")
+            if (transformParameterization == "Composite")
             {
               transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Composite;
+            }
+            else if (transformParameterization == "Identity")
+            {
+              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Identity;
             }
             else if (transformParameterization == "Translation")
             {
@@ -441,338 +438,11 @@ template <typename TParametersValueType>
 auto
 WasmTransformIOTemplate<TParametersValueType>::GetJSON() -> TransformListJSON
 {
-  TransformListJSON transformListJSON;
-
   ConstTransformListType & transformList = this->GetWriteTransformList();
-  std::string              compositeTransformType = transformList.front()->GetTransformTypeAsString();
-  CompositeTransformIOHelperTemplate<TParametersValueType> helper;
 
-  //
-  // if the first transform in the list is a
-  // composite transform, use its internal list
-  // instead of the IO
-  if (compositeTransformType.find("CompositeTransform") != std::string::npos)
-  {
-    transformList = helper.GetTransformList(transformList.front().GetPointer());
-  }
-
-  typename ConstTransformListType::const_iterator end = transformList.end();
-  for (typename ConstTransformListType::const_iterator it = transformList.begin(); it != end; ++it)
-  {
-    TransformJSON            transformJSON;
-    const TransformType *    currentTransform = it->GetPointer();
-    const std::string        transformType = currentTransform->GetTransformTypeAsString();
-    const std::string        delim = "_";
-    std::vector<std::string> tokens;
-    size_t                   start = 0;
-    size_t                   end = 0;
-    while ((end = transformType.find(delim, start)) != std::string::npos)
-    {
-      tokens.push_back(transformType.substr(start, end - start));
-      start = end + delim.length();
-    }
-    tokens.push_back(transformType.substr(start));
-    const std::string pString = tokens[0];
-    if (pString == "IdentityTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Identity;
-    }
-    else if (pString == "CompositeTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Composite;
-    }
-    else if (pString == "TranslationTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Translation;
-    }
-    else if (pString == "Euler2DTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Euler2D;
-    }
-    else if (pString == "Euler3DTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Euler3D;
-    }
-    else if (pString == "Rigid2DTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Rigid2D;
-    }
-    else if (pString == "Rigid3DPerspectiveTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Rigid3DPerspective;
-    }
-    else if (pString == "VersorRigid3DTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::VersorRigid3D;
-    }
-    else if (pString == "Versor")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Versor;
-    }
-    else if (pString == "ScaleLogarithmicTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::ScaleLogarithmic;
-    }
-    else if (pString == "ScaleSkewVersor3DTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::ScaleSkewVersor3D;
-    }
-    else if (pString == "ScaleTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Scale;
-    }
-    else if (pString == "Similarity2DTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Similarity2D;
-    }
-    else if (pString == "Similarity3DTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Similarity3D;
-    }
-    else if (pString == "QuaternionRigidTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::QuaternionRigid;
-    }
-    else if (pString == "AffineTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Affine;
-    }
-    else if (pString == "ScalableAffineTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::ScalableAffine;
-    }
-    else if (pString == "AzimuthElevationToCartesianTransform")
-    {
-      transformJSON.transformType.transformParameterization =
-        JSONTransformParameterizationEnum::AzimuthElevationToCartesian;
-    }
-    else if (pString == "BSplineTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::BSpline;
-    }
-    else if (pString == "BSplineSmoothingOnUpdateDisplacementFieldTransform")
-    {
-      transformJSON.transformType.transformParameterization =
-        JSONTransformParameterizationEnum::BSplineSmoothingOnUpdateDisplacementField;
-    }
-    else if (pString == "ConstantVelocityFieldTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::ConstantVelocityField;
-    }
-    else if (pString == "DisplacementFieldTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::DisplacementField;
-    }
-    else if (pString == "GaussianExponentialDiffeomorphicTransform")
-    {
-      transformJSON.transformType.transformParameterization =
-        JSONTransformParameterizationEnum::GaussianExponentialDiffeomorphic;
-    }
-    else if (pString == "GaussianSmoothingOnUpdateDisplacementFieldTransform")
-    {
-      transformJSON.transformType.transformParameterization =
-        JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateDisplacementField;
-    }
-    else if (pString == "GaussianSmoothingOnUpdateTimeVaryingVelocityFieldTransform")
-    {
-      transformJSON.transformType.transformParameterization =
-        JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateTimeVaryingVelocityField;
-    }
-    else if (pString == "TimeVaryingVelocityFieldTransform")
-    {
-      transformJSON.transformType.transformParameterization =
-        JSONTransformParameterizationEnum::TimeVaryingVelocityField;
-    }
-    else if (pString == "VelocityFieldTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::VelocityField;
-    }
-    else
-    {
-      itkExceptionMacro("Unknown transform type: " << pString);
-    }
-
-    const std::string typeName = this->GetTypeNameString();
-    if (typeName == "float")
-    {
-      transformJSON.transformType.parametersValueType = JSONFloatTypesEnum::float32;
-    }
-    else if (typeName == "double")
-    {
-      transformJSON.transformType.parametersValueType = JSONFloatTypesEnum::float64;
-    }
-    else
-    {
-      itkExceptionMacro("Unknown parameters value type: " << typeName);
-    }
-
-    transformJSON.transformType.inputDimension = currentTransform->GetInputSpaceDimension();
-    transformJSON.transformType.outputDimension = currentTransform->GetOutputSpaceDimension();
-
-    transformJSON.numberOfFixedParameters = currentTransform->GetFixedParameters().Size();
-    transformJSON.numberOfParameters = currentTransform->GetParameters().Size();
-    transformJSON.name = currentTransform->GetObjectName();
-    // Todo: needs to be pushed from itk::Transform to itk::TransformBase
-    // Available in ITK 5.4.1 and later
-    // https://github.com/InsightSoftwareConsortium/ITK/pull/4734
-    // transformJSON.inputSpaceName = currentTransform->GetInputSpaceName();
-    // transformJSON.inputSpaceName = currentTransform->GetOutputSpaceName();
-
-    transformListJSON.push_back(transformJSON);
-  }
-
+  constexpr bool inMemory = false;
+  TransformListJSON transformListJSON = transformListToTransformListJSON<TransformType>(transformList, inMemory);
   return transformListJSON;
-}
-
-template <typename TParametersValueType>
-std::string
-WasmTransformIOTemplate<TParametersValueType>::TransformParameterizationString(const TransformTypeJSON & json)
-{
-  std::string transformParameterization;
-  switch (json.transformParameterization)
-  {
-    case JSONTransformParameterizationEnum::Identity:
-    {
-      transformParameterization = "Identity";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Composite:
-    {
-      transformParameterization = "Composite";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Translation:
-    {
-      transformParameterization = "Translation";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Euler2D:
-    {
-      transformParameterization = "Euler2D";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Euler3D:
-    {
-      transformParameterization = "Euler3D";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Rigid2D:
-    {
-      transformParameterization = "Rigid2D";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Rigid3DPerspective:
-    {
-      transformParameterization = "Rigid3DPerspective";
-      break;
-    }
-    case JSONTransformParameterizationEnum::VersorRigid3D:
-    {
-      transformParameterization = "VersorRigid3D";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Versor:
-    {
-      transformParameterization = "Versor";
-      break;
-    }
-    case JSONTransformParameterizationEnum::ScaleLogarithmic:
-    {
-      transformParameterization = "ScaleLogarithmic";
-      break;
-    }
-    case JSONTransformParameterizationEnum::ScaleSkewVersor3D:
-    {
-      transformParameterization = "ScaleSkewVersor3D";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Scale:
-    {
-      transformParameterization = "Scale";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Similarity2D:
-    {
-      transformParameterization = "Similarity2D";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Similarity3D:
-    {
-      transformParameterization = "Similarity3D";
-      break;
-    }
-    case JSONTransformParameterizationEnum::QuaternionRigid:
-    {
-      transformParameterization = "QuaternionRigid";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Affine:
-    {
-      transformParameterization = "Affine";
-      break;
-    }
-    case JSONTransformParameterizationEnum::ScalableAffine:
-    {
-      transformParameterization = "ScalableAffine";
-      break;
-    }
-    case JSONTransformParameterizationEnum::AzimuthElevationToCartesian:
-    {
-      transformParameterization = "AzimuthElevationToCartesian";
-      break;
-    }
-    case JSONTransformParameterizationEnum::BSpline:
-    {
-      transformParameterization = "BSpline";
-      break;
-    }
-    case JSONTransformParameterizationEnum::BSplineSmoothingOnUpdateDisplacementField:
-    {
-      transformParameterization = "BSplineSmoothingOnUpdateDisplacementField";
-      break;
-    }
-    case JSONTransformParameterizationEnum::ConstantVelocityField:
-    {
-      transformParameterization = "ConstantVelocityField";
-      break;
-    }
-    case JSONTransformParameterizationEnum::DisplacementField:
-    {
-      transformParameterization = "DisplacementField";
-      break;
-    }
-    case JSONTransformParameterizationEnum::GaussianExponentialDiffeomorphic:
-    {
-      transformParameterization = "GaussianExponentialDiffeomorphic";
-      break;
-    }
-    case JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateDisplacementField:
-    {
-      transformParameterization = "GaussianSmoothingOnUpdateDisplacementField";
-      break;
-    }
-    case JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateTimeVaryingVelocityField:
-    {
-      transformParameterization = "GaussianSmoothingOnUpdateTimeVaryingVelocityField";
-      break;
-    }
-    case JSONTransformParameterizationEnum::TimeVaryingVelocityField:
-    {
-      transformParameterization = "TimeVaryingVelocityField";
-      break;
-    }
-    case JSONTransformParameterizationEnum::VelocityField:
-    {
-      transformParameterization = "VelocityField";
-      break;
-    }
-    default:
-    {
-      throw std::invalid_argument("Unknown transform parameterization");
-    }
-  }
-
-  return transformParameterization;
 }
 
 template <typename TParametersValueType>
@@ -801,7 +471,7 @@ WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON &
         itkExceptionMacro("Unknown parameters value type");
       }
     }
-    const std::string transformParameterization = TransformParameterizationString(transformJSON.transformType);
+    const std::string transformParameterization = transformParameterizationString(transformJSON.transformType);
     // itk::Transform<TParametersValueType, VInputDimension, VOutputDimension>::GetTransformTypeAsString() returns the
     // transform type string Note: non-cubic B-Splines not supported
     std::string transformType = transformParameterization + "Transform_" + transformPrecision + "_" +
@@ -813,6 +483,9 @@ WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON &
     TransformPointer transform;
     this->CreateTransform(transform, transformType);
     transform->SetObjectName(transformJSON.name);
+    // todo: ITK 5.4.1
+    // transform->SetInputSpaceName(transformJSON.inputSpaceName);
+    // transform->SetOutputSpaceName(transformJSON.outputSpaceName);
     this->GetReadTransformList().push_back(transform);
   }
 }
@@ -834,7 +507,7 @@ WasmTransformIOTemplate<TParametersValueType>::WriteCBOR()
   cbor_item_t * index = this->m_CBORRoot;
   // write the transformListJSON into the cbor array
   ConstTransformListType & writeTransformList = this->GetWriteTransformList();
-  std::string              compositeTransformType = writeTransformList.front()->GetTransformTypeAsString();
+  const std::string    compositeTransformType = writeTransformList.front()->GetTransformTypeAsString();
   CompositeTransformIOHelperTemplate<TParametersValueType> helper;
 
   //
@@ -854,7 +527,7 @@ WasmTransformIOTemplate<TParametersValueType>::WriteCBOR()
     cbor_item_t * transformItem = cbor_new_definite_map(8);
     cbor_item_t * transformTypeItem = cbor_new_definite_map(4);
 
-    const std::string transformParameterization = TransformParameterizationString(transformJSON.transformType);
+    const std::string transformParameterization = transformParameterizationString(transformJSON.transformType);
     cbor_map_add(transformTypeItem,
                  cbor_pair{ cbor_move(cbor_build_string("transformParameterization")),
                             cbor_move(cbor_build_string(transformParameterization.c_str())) });

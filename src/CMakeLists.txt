@@ -26,6 +26,7 @@ set(WebAssemblyInterface_SRCS
   itkSupportInputImageTypes.cxx
   itkSupportInputMeshTypes.cxx
   itkSupportInputPolyDataTypes.cxx
+  itktransformParameterizationString.cxx
   )
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 target_link_libraries(WebAssemblyInterface LINK_PUBLIC cbor cpp-base64)

@@ -116,9 +116,6 @@ protected:
   void
   WriteCBOR();
 
-  static std::string
-  TransformParameterizationString(const TransformTypeJSON & transform);
-
   cbor_item_t * m_CBORRoot{ nullptr };
 
 private:

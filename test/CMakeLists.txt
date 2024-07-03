@@ -71,6 +71,8 @@ set(WebAssemblyInterfaceTests
   itkSupportInputMeshTypesMemoryIOTest.cxx
   itkSupportInputPolyDataTypesTest.cxx
   itkTransformJSONTest.cxx
+  itkWasmTransformInterfaceTest.cxx
+  itkWasmTransformInterfaceCompositeTest.cxx
 )
 
 if (EMSCRIPTEN)
@@ -212,6 +214,10 @@ itk_add_test(NAME itkPipelineTest
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputMesh.vtk
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputPolyData.vtk
+      DATA{Input/LinearTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputTransform.h5
+      DATA{Input/CompositeTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputCompositeTransform.h5
 )
 
 itk_add_test(NAME itkPipelineMemoryIOTest
@@ -228,6 +234,10 @@ itk_add_test(NAME itkPipelineMemoryIOTest
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputMesh.vtk
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputPolyData.vtk
+      DATA{Input/LinearTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputTransform.h5
+      DATA{Input/CompositeTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputCompositeTransform.h5
 )
 
 itk_add_test(NAME itkPipelineInterfaceJSONTest
@@ -274,6 +284,20 @@ itk_add_test(NAME itkSupportInputPolyDataTypesTest
 itk_add_test(NAME itkTransformJSONTest
     COMMAND WebAssemblyInterfaceTestDriver
     itkTransformJSONTest
+)
+
+itk_add_test(NAME itkWasmTransformInterfaceTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkWasmTransformInterfaceTest
+      DATA{Input/LinearTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformInterfaceTest.h5
+)
+
+itk_add_test(NAME itkWasmTransformInterfaceCompositeTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkWasmTransformInterfaceCompositeTest
+      DATA{Input/CompositeTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformInterfaceCompositeTest.h5
 )
 
 if(EMSCRIPTEN)

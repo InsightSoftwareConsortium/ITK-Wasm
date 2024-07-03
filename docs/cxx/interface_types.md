@@ -67,3 +67,5 @@ For binding generation, set the `type_name` an the options accordingly. The type
 - `OUTPUT_MESH`
 - `INPUT_POLYDATA`
 - `OUTPUT_POLYDATA`
+- `INPUT_TRANSFORM`
+- `OUTPUT_TRANSFORM`
