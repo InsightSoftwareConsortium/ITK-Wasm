@@ -31,10 +31,15 @@
 #include "itkPolyData.h"
 #include "itkInputPolyData.h"
 #include "itkOutputPolyData.h"
+#include "itkInputTransform.h"
+#include "itkAffineTransform.h"
+#include "itkHDF5TransformIOFactory.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
 {
+  itk::HDF5TransformIOFactory::RegisterOneFactory();
+
   itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", argc, argv);
   pipeline.set_version("10.8.1");
 
@@ -58,6 +63,7 @@ itkPipelineTest(int argc, char * argv[])
   using ImageType = itk::Image<PixelType, Dimension>;
   using MeshType = itk::Mesh<PixelType, 3>;
   using PolyDataType = itk::PolyData<PixelType>;
+  using TransformType = itk::AffineTransform<double, 3>;
 
   using InputImageType = itk::wasm::InputImage<ImageType>;
   InputImageType inputImage;
@@ -95,6 +101,10 @@ itkPipelineTest(int argc, char * argv[])
   using OutputPolyDataType = itk::wasm::OutputPolyData<PolyDataType>;
   OutputPolyDataType outputPolyData;
   pipeline.add_option("output-polydata", outputPolyData, "The output polydata")->required()->type_name("OUTPUT_POLYDATA");
+
+  using InputTransformType = itk::wasm::InputTransform<TransformType>;
+  InputTransformType inputTransform;
+  pipeline.add_option("input-transform", inputTransform, "The input transform")->required()->type_name("INPUT_TRANSFORM");
 
   ITK_WASM_PARSE(pipeline);
 

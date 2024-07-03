@@ -214,6 +214,8 @@ itk_add_test(NAME itkPipelineTest
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputMesh.vtk
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputPolyData.vtk
+      DATA{Input/LinearTransform.h5}
+      # ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputTransform.h5
 )
 
 itk_add_test(NAME itkPipelineMemoryIOTest
