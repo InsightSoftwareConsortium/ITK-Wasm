@@ -26,14 +26,14 @@ transformParameterizationString(const TransformTypeJSON & json)
   std::string transformParameterization;
   switch (json.transformParameterization)
   {
-    case JSONTransformParameterizationEnum::Identity:
-    {
-      transformParameterization = "Identity";
-      break;
-    }
     case JSONTransformParameterizationEnum::Composite:
     {
       transformParameterization = "Composite";
+      break;
+    }
+    case JSONTransformParameterizationEnum::Identity:
+    {
+      transformParameterization = "Identity";
       break;
     }
     case JSONTransformParameterizationEnum::Translation:

@@ -37,15 +37,25 @@
 #include "itkPolyData.h"
 #include "itkPolyDataToWasmPolyDataFilter.h"
 #include "itkOutputPolyData.h"
+#include "itkTransformToWasmTransformFilter.h"
+#include "itkAffineTransform.h"
+#include "itkCompositeTransform.h"
+#include "itkOutputTransform.h"
+#include "itkHDF5TransformIOFactory.h"
+#include "itkInputTransform.h"
 
 #include "itkImageFileReader.h"
 #include "itkMeshFileReader.h"
+#include "itkTransformFileReader.h"
+#include "itkHDF5TransformIOFactory.h"
 #include "itkMeshToPolyDataFilter.h"
 #include "itkPolyDataToMeshFilter.h"
 
 int
 itkPipelineMemoryIOTest(int argc, char * argv[])
 {
+  itk::HDF5TransformIOFactory::RegisterOneFactory();
+
   constexpr unsigned int Dimension = 2;
   using PixelType = float;
   using ImageType = itk::Image<PixelType, Dimension>;
@@ -128,8 +138,62 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   void * readWasmPolyDataPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 4, readPolyDataJSON.size()));
   std::memcpy(readWasmPolyDataPointer, readPolyDataJSON.data(), readPolyDataJSON.size());
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", NULL};
-  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", 12, const_cast< char ** >(mockArgv));
+  const char * inputTransformFile = argv[12];
+  using TransformType = itk::AffineTransform<double, 3>;
+  using ParametersValueType = typename TransformType::ParametersValueType;
+  using TransformReaderType = itk::TransformFileReaderTemplate<ParametersValueType>;
+  auto transformReader = TransformReaderType::New();
+  transformReader->SetFileName(inputTransformFile);
+  transformReader->Update();
+  auto inputTransformList = transformReader->GetTransformList();
+  auto readInputTransform = dynamic_cast<const TransformType *>(inputTransformList->front().GetPointer());
+  using TransformToWasmTransformFilterType = itk::TransformToWasmTransformFilter<TransformType>;
+  auto transformToWasmTransformFilter = TransformToWasmTransformFilterType::New();
+  transformToWasmTransformFilter->SetTransform(readInputTransform);
+  transformToWasmTransformFilter->Update();
+  auto readWasmTransform = transformToWasmTransformFilter->GetOutput();
+
+  auto readTransformJSON = readWasmTransform->GetJSON();
+  void * readWasmTransformPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 5, readTransformJSON.size()));
+  std::memcpy(readWasmTransformPointer, readTransformJSON.data(), readTransformJSON.size());
+
+  // auto readWasmTransformFixedParams = reinterpret_cast< const void * >(readWasmTransform->GetTransform()->GetFixedParameters().data_block());
+  // const auto readWasmTransformFixedParamsSize = readWasmTransform->GetTransform()->GetFixedParameters().Size();
+  // const size_t readWasmTransformFixedParamsAddress = itk_wasm_input_array_alloc(0, 0, 0, readWasmTransformFixedParamsSize);
+  // auto readWasmTransformFixedParamsPointer = reinterpret_cast< void * >(readWasmTransformFixedParamsAddress);
+  // std::memcpy(readWasmTransformFixedParamsPointer, readWasmTransformFixedParams, readWasmTransformFixedParamsSize);
+
+  // auto direction = reinterpret_cast< const void * >( readWasmTransform->GetTransform()->GetDirection().GetVnlMatrix().begin() );
+  // const auto directionSize = readWasmTransform->GetTransform()->GetDirection().GetVnlMatrix().size() * sizeof(double);
+  // const size_t readWasmTransformDirectionPointerAddress = itk_wasm_array_alloc(0, 0, 1, directionSize);
+  // auto readWasmTransformDirectionPointer = reinterpret_cast< void * >(readWasmTransformDirectionPointerAddress);
+  // std::memcpy(readWasmTransformDirectionPointer, direction, directionSize);
+
+  // auto readTransformJSON = readWasmTransform->GetJSON();
+  // void * readWasmTransformPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readTransformJSON.size()));
+  // std::memcpy(readWasmTransformPointer, readTransformJSON.data(), readTransformJSON.size());
+
+  const char * inputCompositeTransformFile = argv[14];
+  using CompositeTransformType = itk::CompositeTransform<double, 2>;
+  using CompositeParametersValueType = typename CompositeTransformType::ParametersValueType;
+  using CompositeTransformReaderType = itk::TransformFileReaderTemplate<CompositeParametersValueType>;
+  auto compositeTransformReader = CompositeTransformReaderType::New();
+  compositeTransformReader->SetFileName(inputCompositeTransformFile);
+  compositeTransformReader->Update();
+  auto inputCompositeTransformList = compositeTransformReader->GetTransformList();
+  auto readInputCompositeTransform = dynamic_cast<const CompositeTransformType *>(inputCompositeTransformList->front().GetPointer());
+  using CompositeTransformToWasmTransformFilterType = itk::TransformToWasmTransformFilter<CompositeTransformType>;
+  auto compositeTransformToWasmCompositeTransformFilter = CompositeTransformToWasmTransformFilterType::New();
+  compositeTransformToWasmCompositeTransformFilter->SetTransform(readInputCompositeTransform);
+  compositeTransformToWasmCompositeTransformFilter->Update();
+  auto readWasmCompositeTransform = compositeTransformToWasmCompositeTransformFilter->GetOutput();
+
+  auto readCompositeTransformJSON = readWasmCompositeTransform->GetJSON();
+  void * readWasmCompositeTransformPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 6, readCompositeTransformJSON.size()));
+  std::memcpy(readWasmCompositeTransformPointer, readCompositeTransformJSON.data(), readCompositeTransformJSON.size());
+
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6", NULL};
+  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", 16, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -182,6 +246,22 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   OutputPolyDataType outputPolyData;
   pipeline.add_option("output-polydata", outputPolyData, "The output polydata")->required()->type_name("OUTPUT_POLYDATA");
 
+  using InputTransformType = itk::wasm::InputTransform<TransformType>;
+  InputTransformType inputTransform;
+  pipeline.add_option("input-transform", inputTransform, "The input transform")->required()->type_name("INPUT_TRANSFORM");
+
+  using OutputTransformType = itk::wasm::OutputTransform<TransformType>;
+  OutputTransformType outputTransform;
+  pipeline.add_option("output-transform", outputTransform, "The output transform")->required()->type_name("OUTPUT_TRANSFORM");
+
+  using InputCompositeTransformType = itk::wasm::InputTransform<CompositeTransformType>;
+  InputCompositeTransformType inputCompositeTransform;
+  pipeline.add_option("input-composite-transform", inputCompositeTransform, "The input composite transform")->required()->type_name("INPUT_TRANSFORM");
+
+  using OutputCompositeTransformType = itk::wasm::OutputTransform<CompositeTransformType>;
+  OutputCompositeTransformType outputCompositeTransform;
+  pipeline.add_option("output-composite-transform", outputCompositeTransform, "The output composite transform")->required()->type_name("OUTPUT_TRANSFORM");
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -201,6 +281,9 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   outputMesh.Set(inputMesh.Get());
 
   outputPolyData.Set(inputPolyData.Get());
+
+  outputTransform.Set(inputTransform.Get());
+  outputCompositeTransform.Set(inputCompositeTransform.Get());
 
   return EXIT_SUCCESS;
 }

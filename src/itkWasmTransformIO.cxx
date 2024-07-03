@@ -170,13 +170,13 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
             const std::string transformParameterization(
               reinterpret_cast<char *>(cbor_string_handle(transformTypeHandle[kk].value)),
               cbor_string_length(transformTypeHandle[kk].value));
-            if (transformParameterization == "Identity")
-            {
-              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Identity;
-            }
-            else if (transformParameterization == "Composite")
+            if (transformParameterization == "Composite")
             {
               transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Composite;
+            }
+            else if (transformParameterization == "Identity")
+            {
+              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Identity;
             }
             else if (transformParameterization == "Translation")
             {

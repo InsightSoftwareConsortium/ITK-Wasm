@@ -215,7 +215,9 @@ itk_add_test(NAME itkPipelineTest
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputPolyData.vtk
       DATA{Input/LinearTransform.h5}
-      # ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputTransform.h5
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputTransform.h5
+      DATA{Input/CompositeTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineTestOutputCompositeTransform.h5
 )
 
 itk_add_test(NAME itkPipelineMemoryIOTest
@@ -232,6 +234,10 @@ itk_add_test(NAME itkPipelineMemoryIOTest
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputMesh.vtk
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputPolyData.vtk
+      DATA{Input/LinearTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputTransform.h5
+      DATA{Input/CompositeTransform.h5}
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputCompositeTransform.h5
 )
 
 itk_add_test(NAME itkPipelineInterfaceJSONTest

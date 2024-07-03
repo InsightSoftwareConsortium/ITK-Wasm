@@ -34,6 +34,8 @@
 #include "itkInputTransform.h"
 #include "itkAffineTransform.h"
 #include "itkHDF5TransformIOFactory.h"
+#include "itkOutputTransform.h"
+#include "itkCompositeTransform.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
@@ -64,6 +66,7 @@ itkPipelineTest(int argc, char * argv[])
   using MeshType = itk::Mesh<PixelType, 3>;
   using PolyDataType = itk::PolyData<PixelType>;
   using TransformType = itk::AffineTransform<double, 3>;
+  using CompositeTransformType = itk::CompositeTransform<double, 2>;
 
   using InputImageType = itk::wasm::InputImage<ImageType>;
   InputImageType inputImage;
@@ -106,6 +109,18 @@ itkPipelineTest(int argc, char * argv[])
   InputTransformType inputTransform;
   pipeline.add_option("input-transform", inputTransform, "The input transform")->required()->type_name("INPUT_TRANSFORM");
 
+  using OutputTransformType = itk::wasm::OutputTransform<TransformType>;
+  OutputTransformType outputTransform;
+  pipeline.add_option("output-transform", outputTransform, "The output transform")->required()->type_name("OUTPUT_TRANSFORM");
+
+  using InputCompositeTransformType = itk::wasm::InputTransform<CompositeTransformType>;
+  InputCompositeTransformType inputCompositeTransform;
+  pipeline.add_option("input-composite-transform", inputCompositeTransform, "The input composite transform")->required()->type_name("INPUT_TRANSFORM");
+
+  using OutputCompositeTransformType = itk::wasm::OutputTransform<CompositeTransformType>;
+  OutputCompositeTransformType outputCompositeTransform;
+  pipeline.add_option("output-composite-transform", outputCompositeTransform, "The output composite transform")->required()->type_name("OUTPUT_TRANSFORM");
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -125,6 +140,9 @@ itkPipelineTest(int argc, char * argv[])
   outputMesh.Set(inputMesh.Get());
 
   outputPolyData.Set(inputPolyData.Get());
+
+  outputTransform.Set(inputTransform.Get());
+  outputCompositeTransform.Set(inputCompositeTransform.Get());
 
   return EXIT_SUCCESS;
 }

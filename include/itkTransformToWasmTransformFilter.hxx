@@ -18,9 +18,6 @@
 #ifndef itkTransformToWasmTransformFilter_hxx
 #define itkTransformToWasmTransformFilter_hxx
 
-#include "itkCompositeTransform.h"
-#include "itkCompositeTransformIOHelper.h"
-
 #include "itkWasmMapComponentType.h"
 #include "itkWasmMapPixelType.h"
 #include "itkTransformJSON.h"

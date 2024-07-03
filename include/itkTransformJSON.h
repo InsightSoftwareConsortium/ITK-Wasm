@@ -30,8 +30,8 @@ namespace itk
 {
   enum class JSONTransformParameterizationEnum
   {
-    Identity,
     Composite,
+    Identity,
     Translation,
     Euler2D,
     Euler3D,
@@ -139,13 +139,13 @@ auto transformListToTransformListJSON(std::list<typename TTransformBase::ConstPo
     }
     tokens.push_back(transformType.substr(start));
     const std::string pString = tokens[0];
-    if (pString == "IdentityTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Identity;
-    }
-    else if (pString == "CompositeTransform")
+    if (pString == "CompositeTransform")
     {
       transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Composite;
+    }
+    else if (pString == "IdentityTransform")
+    {
+      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Identity;
     }
     else if (pString == "TranslationTransform")
     {
