@@ -18,6 +18,8 @@ jobs:
     with:
       itk-module-deps: 'MeshToPolyData@v0.11.0'
       ctest-options: '-E itkPipelineTest'
+      # release-5.4 2025-07-02
+      itk-git-tag: '276a52a5c0b1a5df67c9a2b0fdcd0bc75504e011'
 
   #python-build-workflow:
     ## itk-wasm branch
