@@ -135,10 +135,12 @@ WasmTransformToTransformFilter<TTransform>
 
   // Get the input and output pointers
   const WasmTransformType * wasmTransform = this->GetInput();
-  auto deserializedAttempt = glz::read_json<TransformListJSON>(wasmTransform->GetJSON());
+  const std::string json(wasmTransform->GetJSON());
+  auto deserializedAttempt = glz::read_json<TransformListJSON>(json);
   if (!deserializedAttempt)
   {
-    itkExceptionMacro("Failed to deserialize TransformListJSON");
+    const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
+    itkExceptionMacro("Failed to deserialize TransformListJSON: " << descriptiveError);
   }
   auto transformListJSON = deserializedAttempt.value();
   if (transformListJSON.size() < 1)

@@ -15,26 +15,39 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkFloatTypesJSON_h
-#define itkFloatTypesJSON_h
+#ifndef itkIntTypesJSON_h
+#define itkIntTypesJSON_h
 
 #include "glaze/glaze.hpp"
 
 namespace itk
 {
-  enum class JSONFloatTypesEnum
+  enum class JSONIntTypesEnum
   {
-    float32,
-    float64,
+    int8,
+    uint8,
+    int16,
+    uint16,
+    int32,
+    uint32,
+    int64,
+    uint64
   };
 } // end namespace itk
 
 template <>
-struct glz::meta<itk::JSONFloatTypesEnum> {
-  using enum itk::JSONFloatTypesEnum;
-  static constexpr auto value = glz::enumerate(float32,
-  float64
+struct glz::meta<itk::JSONIntTypesEnum> {
+  using enum itk::JSONIntTypesEnum;
+  static constexpr auto value = glz::enumerate(
+    int8,
+    uint8,
+    int16,
+    uint16,
+    int32,
+    uint32,
+    int64,
+    uint64
   );
 };
 
-#endif // itkFloatTypesJSON_h
+#endif // itkIntTypesJSON_h

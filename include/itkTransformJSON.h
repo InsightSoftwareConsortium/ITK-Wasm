@@ -87,8 +87,8 @@ namespace itk
     std::string name;
     std::string inputSpaceName;
     std::string outputSpaceName;
-    std::string fixedParameters{ "data:application/vnd.itk.path,data/fixed-parameters.raw" };
-    std::string parameters{ "data:application/vnd.itk.path,data/parameters.raw" };
+    std::string fixedParameters;
+    std::string parameters;
   };
 
   /** \class TransformListJSON

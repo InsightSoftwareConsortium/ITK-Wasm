@@ -18,16 +18,7 @@
 #ifndef itkMeshToWasmMeshFilter_hxx
 #define itkMeshToWasmMeshFilter_hxx
 
-#include "itkMeshToWasmMeshFilter.h"
-
-#include "itkMeshConvertPixelTraits.h"
-
-#include "itkWasmMapComponentType.h"
-#include "itkWasmMapPixelType.h"
-
-#include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
+#include "glaze/glaze.hpp"
 
 namespace itk
 {
@@ -135,134 +126,17 @@ MeshToWasmMeshFilter<TMesh>
   WasmMeshType * wasmMesh = this->GetOutput();
 
   wasmMesh->SetMesh(mesh);
-
-  rapidjson::Document document;
-  document.SetObject();
-  rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-
-  rapidjson::Value meshType;
-  meshType.SetObject();
-
-  constexpr unsigned int dimension = MeshType::PointDimension;
-  meshType.AddMember("dimension", rapidjson::Value(dimension).Move(), allocator );
-
-  rapidjson::Value pointComponentType;
-  pointComponentType.SetString( wasm::MapComponentType<typename MeshType::CoordRepType>::ComponentString.data(), allocator );
-  meshType.AddMember("pointComponentType", pointComponentType.Move(), allocator );
-
-  using PointPixelType = typename TMesh::PixelType;
-  using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
-  rapidjson::Value pointPixelComponentType;
-  pointPixelComponentType.SetString( wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::ComponentString.data(), allocator );
-  meshType.AddMember("pointPixelComponentType", pointPixelComponentType.Move(), allocator );
-
-  rapidjson::Value pointPixelType;
-  pointPixelType.SetString( wasm::MapPixelType<PointPixelType>::PixelString.data(), allocator );
-  meshType.AddMember("pointPixelType", pointPixelType.Move(), allocator );
-
-  meshType.AddMember("pointPixelComponents", rapidjson::Value( ConvertPointPixelTraits::GetNumberOfComponents() ).Move(), allocator );
-
-  rapidjson::Value cellComponentType;
-  cellComponentType.SetString( wasm::MapComponentType<typename MeshType::CellsVectorContainer::Element>::ComponentString.data(),allocator );
-  meshType.AddMember("cellComponentType", cellComponentType.Move(), allocator );
-
-  using CellPixelType = typename TMesh::CellPixelType;
-  using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
-  rapidjson::Value cellPixelComponentType;
-  cellPixelComponentType.SetString( wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::ComponentString.data(), allocator );
-  meshType.AddMember("cellPixelComponentType", cellPixelComponentType.Move(), allocator );
-
-  rapidjson::Value cellPixelType;
-  cellPixelType.SetString( wasm::MapPixelType<CellPixelType>::PixelString.data(), allocator );
-  meshType.AddMember("cellPixelType", cellPixelType, allocator );
-
-  meshType.AddMember("cellPixelComponents", rapidjson::Value( ConvertCellPixelTraits::GetNumberOfComponents() ).Move(), allocator );
-
-  document.AddMember( "meshType", meshType.Move(), allocator );
-
-  rapidjson::Value numberOfPoints;
-  numberOfPoints.SetInt( mesh->GetNumberOfPoints() );
-  document.AddMember( "numberOfPoints", numberOfPoints.Move(), allocator );
-
-  rapidjson::Value numberOfPointPixels;
-  if (mesh->GetPointData() == nullptr)
+  constexpr bool inMemory = true;
+  const auto meshJSON = meshToMeshJSON<MeshType>(mesh, wasmMesh, inMemory);
+  std::string serialized{};
+  auto ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
+  if (ec)
   {
-    numberOfPointPixels.SetInt( 0 );
+    itkExceptionMacro("Failed to serialize TransformListJSON");
   }
-  else
-  {
-    numberOfPointPixels.SetInt( mesh->GetPointData()->Size() );
-  }
-  document.AddMember( "numberOfPointPixels", numberOfPointPixels.Move(), allocator );
+  std::cout << "SERIALIZED: " << serialized << std::endl;
 
-  rapidjson::Value numberOfCells;
-  numberOfCells.SetInt( mesh->GetNumberOfCells() );
-  document.AddMember( "numberOfCells", numberOfCells.Move(), allocator );
-
-  rapidjson::Value numberOfCellPixels;
-  if (mesh->GetCellData() == nullptr)
-  {
-    numberOfCellPixels.SetInt( 0 );
-  }
-  else
-  {
-    numberOfCellPixels.SetInt( mesh->GetCellData()->Size() );
-  }
-  document.AddMember( "numberOfCellPixels", numberOfCellPixels.Move(), allocator );
-
-  rapidjson::Value cellBufferSizeMember;
-  cellBufferSizeMember.SetInt( wasmMesh->GetCellBuffer()->Size() );
-  document.AddMember( "cellBufferSize", cellBufferSizeMember.Move(), allocator );
-
-  const auto pointsAddress = reinterpret_cast< size_t >( &(mesh->GetPoints()->at(0)) );
-  std::ostringstream pointsStream;
-  pointsStream << "data:application/vnd.itk.address,0:";
-  pointsStream << pointsAddress;
-  rapidjson::Value pointsString;
-  pointsString.SetString( pointsStream.str().c_str(), allocator );
-  document.AddMember( "points", pointsString.Move(), allocator );
-
-  size_t cellsAddress = 0;
-  if (mesh->GetNumberOfCells() > 0)
-  {
-    cellsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetCellBuffer()->at(0)) );
-  }
-  std::ostringstream cellsStream;
-  cellsStream << "data:application/vnd.itk.address,0:";
-  cellsStream << cellsAddress;
-  rapidjson::Value cellsString;
-  cellsString.SetString( cellsStream.str().c_str(), allocator );
-  document.AddMember( "cells", cellsString.Move(), allocator );
-
-  size_t pointDataAddress = 0;
-  if (mesh->GetPointData() != nullptr && mesh->GetPointData()->Size() > 0)
-  {
-    pointDataAddress = reinterpret_cast< size_t >( &(mesh->GetPointData()->at(0)) );
-  }
-  std::ostringstream pointDataStream;
-  pointDataStream << "data:application/vnd.itk.address,0:";
-  pointDataStream << pointDataAddress;
-  rapidjson::Value pointDataString;
-  pointDataString.SetString( pointDataStream.str().c_str(), allocator );
-  document.AddMember( "pointData", pointDataString.Move(), allocator );
-
-  size_t cellDataAddress = 0;
-  if (mesh->GetCellData() != nullptr && mesh->GetCellData()->Size() > 0)
-  {
-    cellDataAddress = reinterpret_cast< size_t >( &(mesh->GetCellData()->at(0)) );
-  }
-  std::ostringstream cellDataStream;
-  cellDataStream <<  "data:application/vnd.itk.address,0:";
-  cellDataStream << cellDataAddress;
-  rapidjson::Value cellDataString;
-  cellDataString.SetString( cellDataStream.str().c_str(), allocator );
-  document.AddMember( "cellData", cellDataString.Move(), allocator );
-
-  rapidjson::StringBuffer stringBuffer;
-  rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
-  document.Accept(writer);
-
-  wasmMesh->SetJSON(stringBuffer.GetString());
+  wasmMesh->SetJSON(serialized);
 }
 
 template <typename TMesh>

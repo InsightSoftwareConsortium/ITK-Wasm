@@ -15,26 +15,55 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkFloatTypesJSON_h
-#define itkFloatTypesJSON_h
+#ifndef itkPixelTypesJSON_h
+#define itkPixelTypesJSON_h
 
 #include "glaze/glaze.hpp"
 
 namespace itk
 {
-  enum class JSONFloatTypesEnum
+  enum class JSONPixelTypesEnum
   {
-    float32,
-    float64,
+    Unknown,
+    Scalar,
+    RGB,
+    RGBA,
+    Offset,
+    Vector,
+    Point,
+    CovariantVector,
+    SymmetricSecondRankTensor,
+    DiffusionTensor3D,
+    Complex,
+    FixedArray,
+    Array,
+    Matrix,
+    VariableLengthVector,
+    VariableSizeMatrix
   };
 } // end namespace itk
 
 template <>
-struct glz::meta<itk::JSONFloatTypesEnum> {
-  using enum itk::JSONFloatTypesEnum;
-  static constexpr auto value = glz::enumerate(float32,
-  float64
+struct glz::meta<itk::JSONPixelTypesEnum> {
+  using enum itk::JSONPixelTypesEnum;
+  static constexpr auto value = glz::enumerate(
+    Unknown,
+    Scalar,
+    RGB,
+    RGBA,
+    Offset,
+    Vector,
+    Point,
+    CovariantVector,
+    SymmetricSecondRankTensor,
+    DiffusionTensor3D,
+    Complex,
+    FixedArray,
+    Array,
+    Matrix,
+    VariableLengthVector,
+    VariableSizeMatrix
   );
 };
 
-#endif // itkFloatTypesJSON_h
+#endif // itkPixelTypesJSON_h
