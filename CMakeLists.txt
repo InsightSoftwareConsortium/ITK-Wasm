@@ -9,6 +9,20 @@ endif()
 
 set(WebAssemblyInterface_LIBRARIES WebAssemblyInterface)
 
+if(MSVC) #-- Configure MSVC_STATIC_RUNTIME only if using MSVC environment
+  option(ITKWASM_MSVC_STATIC_RUNTIME_LIBRARY "Link to MSVC's static CRT (/MT and /MTd).
+OFF (default) means link to regular, dynamic CRT (/MD and /MDd)." ON)
+  mark_as_advanced(ITKWASM_MSVC_STATIC_RUNTIME_LIBRARY)
+  set(ITKWASM_MSVC_STATIC_RUNTIME_LIBRARY_value ${ITK_MSVC_STATIC_RUNTIME_LIBRARY})
+  if(ITKWASM_MSVC_STATIC_RUNTIME_LIBRARY)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    message(STATUS "Using MSVC's static CRT (/MT and /MTd)")
+  else()
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+    message(STATUS "Using MSVC's dynamic CRT (/MD and /MDd)")
+  endif()
+endif()
+
 include(FetchContent)
 set(_itk_build_testing ${BUILD_TESTING})
 set(BUILD_TESTING OFF)
