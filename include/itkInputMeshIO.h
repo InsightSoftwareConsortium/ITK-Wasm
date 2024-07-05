@@ -74,34 +74,36 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
 #ifndef ITK_WASM_NO_MEMORY_IO
     const unsigned int index = std::stoi(input);
     auto json = getMemoryStoreInputJSON(0, index);
-    rapidjson::Document document;
-    document.Parse(json.c_str());
+    auto        deserializedAttempt = glz::read_json<itk::MeshJSON>(json);
+    if (!deserializedAttempt)
+    {
+      const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
+      throw std::runtime_error("Failed to deserialize MeshJSON: " + descriptiveError);
+    }
+    auto meshJSON = deserializedAttempt.value();
 
     auto wasmMeshIO = itk::WasmMeshIO::New();
-    wasmMeshIO->SetJSON(document);
+    wasmMeshIO->SetJSON(meshJSON);
 
     const unsigned int dimension = wasmMeshIO->GetPointDimension();
 
     auto wasmMeshIOBase = itk::WasmMeshIOBase::New();
 
-    const rapidjson::Value & pointsJson = document["points"];
-    const std::string pointsString( pointsJson.GetString() );
+    const std::string & pointsString = meshJSON.points;
     const char * pointsPtr = reinterpret_cast< char * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
     WasmMeshIOBase::DataContainerType * pointsContainer = wasmMeshIOBase->GetPointsContainer();
     SizeValueType numberOfBytes = wasmMeshIO->GetNumberOfPoints() * wasmMeshIO->GetPointDimension() * ITKComponentSize( wasmMeshIO->GetPointComponentType() );
     pointsContainer->resize(numberOfBytes);
     pointsContainer->assign(pointsPtr, pointsPtr + numberOfBytes);
 
-    const rapidjson::Value & cellsJson = document["cells"];
-    const std::string cellsString( cellsJson.GetString() );
+    const std::string & cellsString = meshJSON.cells;
     const char * cellsPtr = reinterpret_cast< char * >( std::strtoull(cellsString.substr(35).c_str(), nullptr, 10) );
     WasmMeshIOBase::DataContainerType * cellsContainer = wasmMeshIOBase->GetCellsContainer();
     numberOfBytes = static_cast< SizeValueType >( wasmMeshIO->GetCellBufferSize() * ITKComponentSize( wasmMeshIO->GetCellComponentType() ));
     cellsContainer->resize(numberOfBytes);
     cellsContainer->assign(cellsPtr, cellsPtr + numberOfBytes);
 
-    const rapidjson::Value & pointDataJson = document["pointData"];
-    const std::string pointDataString( pointDataJson.GetString() );
+    const std::string & pointDataString = meshJSON.pointData;
     const char * pointDataPtr = reinterpret_cast< char * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
     WasmMeshIOBase::DataContainerType * pointDataContainer = wasmMeshIOBase->GetPointDataContainer();
     numberOfBytes =
@@ -111,8 +113,7 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
     pointDataContainer->resize(numberOfBytes);
     pointDataContainer->assign(pointDataPtr, pointDataPtr + numberOfBytes);
 
-    const rapidjson::Value & cellDataJson = document["cellData"];
-    const std::string cellDataString( cellDataJson.GetString() );
+    const std::string & cellDataString = meshJSON.cellData;
     const char * cellDataPtr = reinterpret_cast< char * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
     WasmMeshIOBase::DataContainerType * cellDataContainer = wasmMeshIOBase->GetCellDataContainer();
     numberOfBytes =

@@ -18,19 +18,19 @@
 
 #include "itkWasmMeshIO.h"
 
-#include "itkWasmComponentTypeFromIOComponentEnum.h"
-#include "itkIOComponentEnumFromWasmComponentType.h"
-#include "itkWasmPixelTypeFromIOPixelEnum.h"
+#include "itkioComponentEnumFromJSON.h"
+#include "itkioPixelEnumFromJSON.h"
+#include "itkjsonFromIOComponentEnum.h"
+#include "itkjsonFromIOPixelEnum.h"
 #include "itkIOPixelEnumFromWasmPixelType.h"
+#include "itkIOComponentEnumFromWasmComponentType.h"
+#include "itkWasmComponentTypeFromIOComponentEnum.h"
+#include "itkWasmPixelTypeFromIOPixelEnum.h"
 #include "itkWasmIOCommon.h"
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
 #include "itksys/SystemTools.hxx"
-
-#include "rapidjson/document.h"
-#include "rapidjson/prettywriter.h"
-#include "rapidjson/ostreamwrapper.h"
 
 #include "itksys/SystemTools.hxx"
 
@@ -269,148 +269,74 @@ WasmMeshIO
  }
 }
 
-rapidjson::Document
+auto
 WasmMeshIO
-::GetJSON()
+::GetJSON() -> MeshJSON
 {
-  rapidjson::Document document;
-  document.SetObject();
-  rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+  MeshJSON meshJSON;
 
-  rapidjson::Value meshType;
-  meshType.SetObject();
+  meshJSON.meshType.dimension = this->GetPointDimension();
 
-  const unsigned int dimension = this->GetPointDimension();
-  meshType.AddMember("dimension", rapidjson::Value(dimension).Move(), allocator );
+  const auto pointIOComponentType = this->GetPointComponentType();
+  meshJSON.meshType.pointComponentType = jsonFloatTypeFromIOComponentEnum( pointIOComponentType );
+  const auto pointPixelIOComponentType = this->GetPointPixelComponentType();
+  meshJSON.meshType.pointPixelComponentType = jsonComponentTypeFromIOComponentEnum( pointPixelIOComponentType );
+  const auto pointIOPixelType = this->GetPointPixelType();
+  meshJSON.meshType.pointPixelType = jsonFromIOPixelEnum( pointIOPixelType );
+  meshJSON.meshType.pointPixelComponents = this->GetNumberOfPointPixelComponents();
 
-  const std::string pointComponentString = WasmComponentTypeFromIOComponentEnum( this->GetPointComponentType() );
-  rapidjson::Value pointComponentType;
-  pointComponentType.SetString( pointComponentString.c_str(), allocator );
-  meshType.AddMember("pointComponentType", pointComponentType.Move(), allocator );
+  const auto cellIOComponentType = this->GetCellComponentType();
+  meshJSON.meshType.cellComponentType = jsonIntTypeFromIOComponentEnum( cellIOComponentType );
+  const auto cellPixelIOComponentType = this->GetCellPixelComponentType();
+  meshJSON.meshType.cellPixelComponentType = jsonComponentTypeFromIOComponentEnum( cellPixelIOComponentType );
+  const auto cellIOPixelType = this->GetCellPixelType();
+  meshJSON.meshType.cellPixelType = jsonFromIOPixelEnum( cellIOPixelType );
+  meshJSON.meshType.cellPixelComponents = this->GetNumberOfCellPixelComponents();
 
-  const std::string pointPixelComponentString = WasmComponentTypeFromIOComponentEnum( this->GetPointPixelComponentType() );
-  rapidjson::Value pointPixelComponentType;
-  pointPixelComponentType.SetString( pointPixelComponentString.c_str(), allocator );
-  meshType.AddMember("pointPixelComponentType", pointPixelComponentType.Move(), allocator );
+  meshJSON.numberOfPoints =this->GetNumberOfPoints();
+  meshJSON.numberOfPointPixels = this->GetNumberOfPointPixels();
+  meshJSON.numberOfCells = this->GetNumberOfCells();
+  meshJSON.numberOfCellPixels = this->GetNumberOfCellPixels();
+  meshJSON.cellBufferSize = this->GetCellBufferSize();
 
-  rapidjson::Value pointPixelType;
-  pointPixelType.SetString( WasmPixelTypeFromIOPixelEnum( this->GetPointPixelType()).c_str(), allocator );
-  meshType.AddMember("pointPixelType", pointPixelType.Move(), allocator );
+  meshJSON.points = "data:application/vnd.itk.path,data/points.raw";
+  meshJSON.cells = "data:application/vnd.itk.path,data/cells.raw";
+  meshJSON.pointData = "data:application/vnd.itk.path,data/point-data.raw";
+  meshJSON.cellData = "data:application/vnd.itk.path,data/cell-data.raw";
 
-  meshType.AddMember("pointPixelComponents", rapidjson::Value( this->GetNumberOfPointPixelComponents() ).Move(), allocator );
-
-  const std::string cellComponentString = WasmComponentTypeFromIOComponentEnum( this->GetCellComponentType() );
-  rapidjson::Value cellComponentType;
-  cellComponentType.SetString( cellComponentString.c_str(), allocator );
-  meshType.AddMember("cellComponentType", cellComponentType.Move(), allocator );
-
-  const std::string cellPixelComponentString = WasmComponentTypeFromIOComponentEnum( this->GetCellPixelComponentType() );
-  rapidjson::Value cellPixelComponentType;
-  cellPixelComponentType.SetString( cellPixelComponentString.c_str(), allocator );
-  meshType.AddMember("cellPixelComponentType", cellPixelComponentType.Move(), allocator );
-
-  rapidjson::Value cellPixelType;
-  cellPixelType.SetString(WasmPixelTypeFromIOPixelEnum( this->GetCellPixelType() ).c_str(), allocator);
-  meshType.AddMember("cellPixelType", cellPixelType, allocator );
-
-  meshType.AddMember("cellPixelComponents", rapidjson::Value( this->GetNumberOfCellPixelComponents() ).Move(), allocator );
-
-  document.AddMember( "meshType", meshType.Move(), allocator );
-
-  rapidjson::Value numberOfPoints;
-  numberOfPoints.SetInt( this->GetNumberOfPoints() );
-  document.AddMember( "numberOfPoints", numberOfPoints.Move(), allocator );
-
-  rapidjson::Value numberOfPointPixels;
-  numberOfPointPixels.SetInt( this->GetNumberOfPointPixels() );
-  document.AddMember( "numberOfPointPixels", numberOfPointPixels.Move(), allocator );
-
-  rapidjson::Value numberOfCells;
-  numberOfCells.SetInt( this->GetNumberOfCells() );
-  document.AddMember( "numberOfCells", numberOfCells.Move(), allocator );
-
-  rapidjson::Value numberOfCellPixels;
-  numberOfCellPixels.SetInt( this->GetNumberOfCellPixels() );
-  document.AddMember( "numberOfCellPixels", numberOfCellPixels.Move(), allocator );
-
-  rapidjson::Value cellBufferSize;
-  cellBufferSize.SetInt( this->GetCellBufferSize() );
-  document.AddMember( "cellBufferSize", cellBufferSize.Move(), allocator );
-
-  std::string pointsDataFileString( "data:application/vnd.itk.path,data/points.raw" );
-  rapidjson::Value pointsDataFile;
-  pointsDataFile.SetString( pointsDataFileString.c_str(), allocator );
-  document.AddMember( "points", pointsDataFile, allocator );
-
-  std::string cellsDataFileString( "data:application/vnd.itk.path,data/cells.raw" );
-  rapidjson::Value cellsDataFile;
-  cellsDataFile.SetString( cellsDataFileString.c_str(), allocator );
-  document.AddMember( "cells", cellsDataFile, allocator );
-
-  std::string pointDataDataFileString( "data:application/vnd.itk.path,data/point-data.raw" );
-  rapidjson::Value pointDataDataFile;
-  pointDataDataFile.SetString( pointDataDataFileString.c_str(), allocator );
-  document.AddMember( "pointData", pointDataDataFile, allocator );
-
-  std::string cellDataDataFileString( "data:application/vnd.itk.path,data/cell-data.raw" );
-  rapidjson::Value cellDataDataFile;
-  cellDataDataFile.SetString( cellDataDataFileString.c_str(), allocator );
-  document.AddMember( "cellData", cellDataDataFile, allocator );
-
-  return document;
+  return meshJSON;
 }
 
 
 void
 WasmMeshIO
-::SetJSON(rapidjson::Document & document)
+::SetJSON(const MeshJSON & meshJSON)
 {
-  const rapidjson::Value & meshType = document["meshType"];
-  const int dimension = meshType["dimension"].GetInt();
-  this->SetPointDimension( dimension );
+  const auto & meshType = meshJSON.meshType;
+  this->SetPointDimension( meshType.dimension );
 
-  const std::string pointComponentType( meshType["pointComponentType"].GetString() );
-  const CommonEnums::IOComponent pointIOComponentType = IOComponentEnumFromWasmComponentType( pointComponentType );
+  const auto pointIOComponentType = ioComponentEnumFromJSON( meshType.pointComponentType );
   this->SetPointComponentType( pointIOComponentType );
-
-  const std::string pointPixelComponentType( meshType["pointPixelComponentType"].GetString() );
-  const CommonEnums::IOComponent pointPixelIOComponentType = IOComponentEnumFromWasmComponentType( pointPixelComponentType );
+  const auto pointPixelIOComponentType = ioComponentEnumFromJSON( meshType.pointPixelComponentType );
   this->SetPointPixelComponentType( pointPixelIOComponentType );
-
-  const std::string pointPixelType( meshType["pointPixelType"].GetString() );
-  const CommonEnums::IOPixel pointIOPixelType = IOPixelEnumFromWasmPixelType( pointPixelType );
+  const auto pointIOPixelType = ioPixelEnumFromJSON( meshType.pointPixelType );
   this->SetPointPixelType( pointIOPixelType );
+  this->SetNumberOfPointPixelComponents( meshType.pointPixelComponents );
 
-  this->SetNumberOfPointPixelComponents( meshType["pointPixelComponents"].GetInt() );
-
-  const std::string cellComponentType( meshType["cellComponentType"].GetString() );
-  const CommonEnums::IOComponent cellIOComponentType = IOComponentEnumFromWasmComponentType( cellComponentType );
+  const auto cellIOComponentType = ioComponentEnumFromJSON( meshType.cellComponentType );
   this->SetCellComponentType( cellIOComponentType );
 
-  const std::string cellPixelComponentType( meshType["cellPixelComponentType"].GetString() );
-  const CommonEnums::IOComponent cellPixelIOComponentType = IOComponentEnumFromWasmComponentType( cellPixelComponentType );
+  const auto cellPixelIOComponentType = ioComponentEnumFromJSON( meshType.cellPixelComponentType );
   this->SetCellPixelComponentType( cellPixelIOComponentType );
-
-  const std::string cellPixelType( meshType["cellPixelType"].GetString() );
-  const CommonEnums::IOPixel cellIOPixelType = IOPixelEnumFromWasmPixelType( cellPixelType );
+  const auto cellIOPixelType = ioPixelEnumFromJSON( meshType.cellPixelType );
   this->SetCellPixelType( cellIOPixelType );
+  this->SetNumberOfCellPixelComponents( meshType.cellPixelComponents );
 
-  this->SetNumberOfCellPixelComponents( meshType["cellPixelComponents"].GetInt() );
-
-  const rapidjson::Value & numberOfPoints = document["numberOfPoints"];
-  this->SetNumberOfPoints( numberOfPoints.GetInt() );
-
-  const rapidjson::Value & numberOfPointPixels = document["numberOfPointPixels"];
-  this->SetNumberOfPointPixels( numberOfPointPixels.GetInt() );
-
-  const rapidjson::Value & numberOfCells = document["numberOfCells"];
-  this->SetNumberOfCells( numberOfCells.GetInt() );
-
-  const rapidjson::Value & numberOfCellPixels = document["numberOfCellPixels"];
-  this->SetNumberOfCellPixels( numberOfCellPixels.GetInt() );
-
-  const rapidjson::Value & cellBufferSize = document["cellBufferSize"];
-  this->SetCellBufferSize( cellBufferSize.GetInt() );
+  this->SetNumberOfPoints( meshJSON.numberOfPoints );
+  this->SetNumberOfPointPixels( meshJSON.numberOfPointPixels );
+  this->SetNumberOfCells( meshJSON.numberOfCells );
+  this->SetNumberOfCellPixels( meshJSON.numberOfCellPixels );
+  this->SetCellBufferSize( meshJSON.cellBufferSize );
 }
 
 
@@ -526,22 +452,22 @@ WasmMeshIO
     return;
   }
 
-  rapidjson::Document document;
   const std::string path = this->GetFileName();
   const auto indexPath = path + "/index.json";
   const auto dataPath = path + "/data";
 
   std::ifstream inputStream;
   openFileForReading( inputStream, indexPath.c_str(), true );
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                    std::istreambuf_iterator<char>());
-  if (document.Parse(str.c_str()).HasParseError())
-    {
-    itkExceptionMacro("Could not parse JSON");
-    return;
-    }
+  std::string str((std::istreambuf_iterator<char>(inputStream)), std::istreambuf_iterator<char>());
+  auto        deserializedAttempt = glz::read_json<itk::MeshJSON>(str);
+  if (!deserializedAttempt)
+  {
+    const std::string descriptiveError = glz::format_error(deserializedAttempt, str);
+    itkExceptionMacro("Failed to deserialize MeshJSON: " << descriptiveError);
+  }
+  auto meshJSON = deserializedAttempt.value();
 
-  this->SetJSON(document);
+  this->SetJSON(meshJSON);
 
   if ( this->GetNumberOfPoints() )
     {
@@ -730,7 +656,7 @@ WasmMeshIO
       itksys::SystemTools::MakeDirectory(dataPath);
     }
 
-  rapidjson::Document document = this->GetJSON();
+  const auto meshJSON = this->GetJSON();
 
   if ( this->GetNumberOfPoints() )
     {
@@ -752,11 +678,15 @@ WasmMeshIO
     this->m_UpdateCellData = true;
     }
 
+  std::string serialized{};
+  auto ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
+  if (ec)
+  {
+    itkExceptionMacro("Failed to serialize MeshJSON");
+  }
   std::ofstream outputStream;
-  openFileForWriting( outputStream, indexPath.c_str(), true, true );
-  rapidjson::OStreamWrapper ostreamWrapper( outputStream );
-  rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
-  document.Accept( writer );
+  openFileForWriting(outputStream, indexPath.c_str(), true, true);
+  outputStream << serialized;
   outputStream.close();
 }
 

@@ -117,42 +117,52 @@ auto meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool i
   {
     meshJSON.numberOfCellPixels = mesh->GetCellData()->Size();
   }
-  meshJSON.cellBufferSize = wasmMesh->GetCellBuffer()->Size();
-
-  const auto pointsAddress = reinterpret_cast< size_t >( &(mesh->GetPoints()->at(0)) );
-  std::ostringstream pointsStream;
-  pointsStream << "data:application/vnd.itk.address,0:";
-  pointsStream << pointsAddress;
-  meshJSON.points = pointsStream.str();
-  size_t cellsAddress = 0;
-  if (mesh->GetNumberOfCells() > 0)
+  if (inMemory)
   {
-    cellsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetCellBuffer()->at(0)) );
-  }
-  std::ostringstream cellsStream;
-  cellsStream << "data:application/vnd.itk.address,0:";
-  cellsStream << cellsAddress;
-  meshJSON.cells = cellsStream.str();
+    meshJSON.cellBufferSize = wasmMesh->GetCellBuffer()->Size();
 
-  size_t pointDataAddress = 0;
-  if (mesh->GetPointData() != nullptr && mesh->GetPointData()->Size() > 0)
-  {
-    pointDataAddress = reinterpret_cast< size_t >( &(mesh->GetPointData()->at(0)) );
-  }
-  std::ostringstream pointDataStream;
-  pointDataStream << "data:application/vnd.itk.address,0:";
-  pointDataStream << pointDataAddress;
-  meshJSON.pointData = pointDataStream.str();
+    const auto pointsAddress = reinterpret_cast< size_t >( &(mesh->GetPoints()->at(0)) );
+    std::ostringstream pointsStream;
+    pointsStream << "data:application/vnd.itk.address,0:";
+    pointsStream << pointsAddress;
+    meshJSON.points = pointsStream.str();
+    size_t cellsAddress = 0;
+    if (mesh->GetNumberOfCells() > 0)
+    {
+      cellsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetCellBuffer()->at(0)) );
+    }
+    std::ostringstream cellsStream;
+    cellsStream << "data:application/vnd.itk.address,0:";
+    cellsStream << cellsAddress;
+    meshJSON.cells = cellsStream.str();
 
-  size_t cellDataAddress = 0;
-  if (mesh->GetCellData() != nullptr && mesh->GetCellData()->Size() > 0)
-  {
-    cellDataAddress = reinterpret_cast< size_t >( &(mesh->GetCellData()->at(0)) );
+    size_t pointDataAddress = 0;
+    if (mesh->GetPointData() != nullptr && mesh->GetPointData()->Size() > 0)
+    {
+      pointDataAddress = reinterpret_cast< size_t >( &(mesh->GetPointData()->at(0)) );
+    }
+    std::ostringstream pointDataStream;
+    pointDataStream << "data:application/vnd.itk.address,0:";
+    pointDataStream << pointDataAddress;
+    meshJSON.pointData = pointDataStream.str();
+
+    size_t cellDataAddress = 0;
+    if (mesh->GetCellData() != nullptr && mesh->GetCellData()->Size() > 0)
+    {
+      cellDataAddress = reinterpret_cast< size_t >( &(mesh->GetCellData()->at(0)) );
+    }
+    std::ostringstream cellDataStream;
+    cellDataStream <<  "data:application/vnd.itk.address,0:";
+    cellDataStream << cellDataAddress;
+    meshJSON.cellData = cellDataStream.str();
   }
-  std::ostringstream cellDataStream;
-  cellDataStream <<  "data:application/vnd.itk.address,0:";
-  cellDataStream << cellDataAddress;
-  meshJSON.cellData = cellDataStream.str();
+  else
+  {
+    meshJSON.points = "data:application/vnd.itk.path,data/points.raw";
+    meshJSON.cells = "data:application/vnd.itk.path,data/cells.raw";
+    meshJSON.pointData = "data:application/vnd.itk.path,data/point-data.raw";
+    meshJSON.cellData = "data:application/vnd.itk.path,data/cell-data.raw";
+  }
 
   return meshJSON;
 }

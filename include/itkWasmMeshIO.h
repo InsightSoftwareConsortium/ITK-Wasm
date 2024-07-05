@@ -22,7 +22,7 @@
 #include "itkMeshIOBase.h"
 #include <fstream>
 
-#include "rapidjson/document.h"
+#include "itkMeshJSON.h"
 #include "cbor.h"
 
 namespace itk
@@ -70,7 +70,7 @@ public:
   void ReadCellData(void *buffer) override;
 
   /** Set the JSON representation of the image information. */
-  void SetJSON(rapidjson::Document & json);
+  void SetJSON(const MeshJSON & json);
 
   /*-------- This part of the interfaces deals with writing data ----- */
 
@@ -92,7 +92,7 @@ public:
 
 #if !defined(ITK_WRAPPING_PARSER)
   /** Get the JSON representation of the mesh information. */
-  rapidjson::Document GetJSON();
+  auto GetJSON() -> MeshJSON;
 #endif
 
 protected:

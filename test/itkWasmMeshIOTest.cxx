@@ -49,6 +49,8 @@ itkWasmMeshIOTest(int argc, char * argv[])
   meshReader->SetFileName(inputMeshFile);
   ITK_TRY_EXPECT_NO_EXCEPTION(meshReader->Update());
   auto inputMesh = meshReader->GetOutput();
+  std::cout << "inputMesh: " << inputMesh << std::endl;
+  inputMesh->Print(std::cout);
 
   auto meshIO = itk::WasmMeshIO::New();
 
