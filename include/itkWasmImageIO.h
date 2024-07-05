@@ -21,7 +21,8 @@
 
 #include "itkStreamingImageIOBase.h"
 #include <fstream>
-#include "rapidjson/document.h"
+
+#include "itkImageJSON.h"
 
 namespace itk
 {
@@ -71,7 +72,7 @@ public:
 
 #if !defined(ITK_WRAPPING_PARSER)
   /** Set the JSON representation of the image information. */
-  void SetJSON(rapidjson::Document & json);
+  void SetJSON(const ImageJSON & json);
 #endif
 
   /** Determine the file type. Returns true if this ImageIO can write the
@@ -83,7 +84,7 @@ public:
 
 #if !defined(ITK_WRAPPING_PARSER)
   /** Get the JSON representation of the image information. */
-  rapidjson::Document GetJSON();
+  auto GetJSON() -> ImageJSON;
 #endif
 
   /** Writes the data to disk from the memory buffer provided. Make sure

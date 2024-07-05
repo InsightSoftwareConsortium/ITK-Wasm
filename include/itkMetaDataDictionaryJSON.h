@@ -24,21 +24,25 @@
 #include "itkArray.h"
 #include "itkMatrix.h"
 
-#include "rapidjson/document.h"
+#include <string>
+#include <vector>
+#include <tuple>
 
 #include "WebAssemblyInterfaceExport.h"
+
+#include "glaze/glaze.hpp"
 
 namespace itk
 {
 
-namespace wasm
-{
+using MetadataEntryJSON = std::tuple<std::string, glz::json_t>;
+using MetadataJSON = std::vector<MetadataEntryJSON>;
 
-WebAssemblyInterface_EXPORT void ConvertMetaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, rapidjson::Value & metadataJson, rapidjson::Document::AllocatorType& allocator);
 
-WebAssemblyInterface_EXPORT void ConvertJSONToMetaDataDictionary(const rapidjson::Value & metadataJson, itk::MetaDataDictionary & dictionary);
+WebAssemblyInterface_EXPORT void metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSON & metadataJson);
 
-} // end namespace wasm
+WebAssemblyInterface_EXPORT void jsonToMetaDataDictionary(const MetadataJSON & metadataJson, itk::MetaDataDictionary & dictionary);
+
 } // end namespace itk
 
 #endif

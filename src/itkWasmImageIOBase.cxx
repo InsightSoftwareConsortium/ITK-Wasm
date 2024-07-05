@@ -20,7 +20,6 @@
 #include "itkWasmImageIO.h"
 
 #include <sstream>
-#include "rapidjson/prettywriter.h"
 
 namespace itk
 {
@@ -56,8 +55,7 @@ WasmImageIOBase::SetImageIO(ImageIOBase * imageIO, bool readImage)
     wasmImageIO->SetDimensions(dim, imageIO->GetDimensions(dim));
   }
 
-  rapidjson::Document document = wasmImageIO->GetJSON();
-  rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+  auto imageJSON = wasmImageIO->GetJSON();
 
   this->m_DirectionContainer->resize(dimension*dimension);
   for( unsigned int ii = 0; ii < dimension; ++ii )
@@ -72,10 +70,7 @@ WasmImageIOBase::SetImageIO(ImageIOBase * imageIO, bool readImage)
   std::ostringstream directionStream;
   directionStream << "data:application/vnd.itk.address,0:";
   directionStream << directionAddress;
-  rapidjson::Value directionString;
-  directionString.SetString( directionStream.str().c_str(), allocator );
-  document.RemoveMember( "direction" );
-  document.AddMember( "direction", directionString.Move(), allocator );
+  imageJSON.direction = directionStream.str();
 
   ImageIORegion ioRegion( dimension );
   for(unsigned int dim = 0; dim < dimension; ++dim)
@@ -90,15 +85,15 @@ WasmImageIOBase::SetImageIO(ImageIOBase * imageIO, bool readImage)
   std::ostringstream dataStream;
   dataStream << "data:application/vnd.itk.address,0:";
   dataStream << pixelDataAddress;
-  rapidjson::Value dataString;
-  dataString.SetString( dataStream.str().c_str(), allocator );
-  document.RemoveMember( "data" );
-  document.AddMember( "data", dataString.Move(), allocator );
+  imageJSON.data = dataStream.str();
 
-  rapidjson::StringBuffer stringBuffer;
-  rapidjson::Writer< rapidjson::StringBuffer > writer( stringBuffer );
-  document.Accept( writer );
-  this->SetJSON(stringBuffer.GetString());
+  std::string serialized{};
+  auto ec = glz::write<glz::opts{ .prettify = true }>(imageJSON, serialized);
+  if (ec)
+  {
+    itkExceptionMacro("Failed to serialize TransformListJSON");
+  }
+  this->SetJSON(serialized);
 }
 
 void

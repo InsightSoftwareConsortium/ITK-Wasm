@@ -465,7 +465,7 @@ WasmMeshIO
     const std::string descriptiveError = glz::format_error(deserializedAttempt, str);
     itkExceptionMacro("Failed to deserialize MeshJSON: " << descriptiveError);
   }
-  auto meshJSON = deserializedAttempt.value();
+  const auto meshJSON = deserializedAttempt.value();
 
   this->SetJSON(meshJSON);
 
