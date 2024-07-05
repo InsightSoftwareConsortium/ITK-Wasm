@@ -29,21 +29,15 @@
 #include "itkMeshIOFactory.h"
 #include "WebAssemblyInterfaceExport.h"
 
+#include "itkMeshJSON.h"
+
 namespace itk
 {
 
+WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, MeshTypeJSON & meshType);
+
 namespace wasm
 {
-
-struct InterfaceMeshType
-{
-  unsigned int dimension{2};
-  std::string componentType{"uint8"};
-  std::string pixelType{"Scalar"};
-  unsigned int components{1};
-};
-
-WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, InterfaceMeshType & meshType);
 
 /** \class SupportInputMeshTypes
  *
@@ -100,7 +94,7 @@ public:
   static int
   Dimensions(const std::string & inputMeshOptionName, Pipeline & pipeline)
   {
-    InterfaceMeshType meshType;
+    MeshTypeJSON meshType;
 
     const auto iwpArgc = pipeline.get_argc();
     const auto iwpArgv = pipeline.get_argv();
@@ -130,17 +124,19 @@ public:
 private:
   template<unsigned int VDimension, typename TPixel, typename ...TPixelsRest>
   static int
-  IteratePixelTypes(Pipeline & pipeline, const InterfaceMeshType & meshType, bool passThrough = false)
+  IteratePixelTypes(Pipeline & pipeline, const MeshTypeJSON & meshType, bool passThrough = false)
   {
     constexpr unsigned int Dimension = VDimension;
     using PixelType = TPixel;
     using ConvertPixelTraits = MeshConvertPixelTraits<PixelType>;
 
-    if (passThrough || meshType.components == 0
-     || meshType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString
-     && meshType.pixelType == MapPixelType<PixelType>::PixelString)
+    const auto components = meshType.pointPixelComponents ? meshType.pointPixelComponents : meshType.cellPixelComponents;
+
+    if (passThrough || components == 0
+     || meshType.pointPixelComponentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum
+     && meshType.pointPixelType == MapPixelType<PixelType>::JSONPixelEnum)
     {
-      if (meshType.pixelType == "VariableLengthVector" || meshType.pixelType == "VariableSizeMatrix" )
+      if (meshType.pointPixelType == JSONPixelTypesEnum::VariableLengthVector || meshType.pointPixelType == JSONPixelTypesEnum::VariableSizeMatrix)
       {
         // todo: VectorMesh support for ImportMeshFilter?
         // using MeshType = itk::VectorMesh<typename ConvertPixelTraits::ComponentType, Dimension>;
@@ -148,7 +144,7 @@ private:
         // using PipelineType = TPipelineFunctor<MeshType>;
         // return PipelineType()(pipeline);
       }
-      else if(passThrough || meshType.components == ConvertPixelTraits::GetNumberOfComponents() || meshType.components == 0 )
+      else if(passThrough || components == ConvertPixelTraits::GetNumberOfComponents() || components == 0 )
       {
         using MeshType = Mesh<PixelType, Dimension>;
 
@@ -162,14 +158,15 @@ private:
     }
 
     std::ostringstream ostrm;
-    ostrm << "Unsupported pixel type: " << meshType.pixelType << " with component type: " << meshType.componentType << " and components: " << meshType.components;
+    std::string meshTypeString = glz::write_json(meshType).value_or("error");
+    ostrm << "Unsupported mesh type: " << meshTypeString << std::endl;
     CLI::Error err("Runtime error", ostrm.str(), 1);
     return pipeline.exit(err);
   }
 
   template<unsigned int VDimension, unsigned int ...VDimensions>
   static int
-  IterateDimensions(Pipeline & pipeline, const InterfaceMeshType & meshType, bool passThrough = false)
+  IterateDimensions(Pipeline & pipeline, const MeshTypeJSON & meshType, bool passThrough = false)
   {
     if (passThrough || VDimension == meshType.dimension)
     {
