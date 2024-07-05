@@ -17,7 +17,7 @@ class Mesh {
   numberOfCellPixels: number
   cellData: null | TypedArray
 
-  constructor (public readonly meshType = new MeshType()) {
+  constructor(public readonly meshType = new MeshType()) {
     this.name = 'mesh'
 
     this.numberOfPoints = 0

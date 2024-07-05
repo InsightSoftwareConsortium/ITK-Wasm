@@ -36,7 +36,7 @@
 #include "itkWasmMapPixelType.h"
 #include "itkMeshConvertPixelTraits.h"
 
-#include "rapidjson/document.h"
+#include "itkPolyDataJSON.h"
 
 namespace itk
 {
@@ -140,128 +140,109 @@ WasmPolyDataToPolyDataFilter<TPolyData>
 ::GenerateData()
 {
   // Get the input and output pointers
-  const WasmPolyDataType * polyDataJSON = this->GetInput();
-  const std::string json(polyDataJSON->GetJSON());
+  const WasmPolyDataType * wasmPolyData = this->GetInput();
+  const std::string json(wasmPolyData->GetJSON());
   PolyDataType * polyData = this->GetOutput();
 
+  using PointType = typename TPolyData::PointType;
   using PointPixelType = typename PolyDataType::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
   using CellPixelType = typename PolyDataType::CellPixelType;
   using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
 
-  rapidjson::Document document;
-  if (document.Parse(json.c_str()).HasParseError())
-    {
-    throw std::runtime_error("Could not parse JSON");
-    }
+  auto deserializedAttempt = glz::read_json<PolyDataJSON>(json);
+  if (!deserializedAttempt)
+  {
+    const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
+    itkExceptionMacro("Failed to deserialize PolyDataJSON: " << descriptiveError);
+  }
+  const auto polyDataJSON = deserializedAttempt.value();
+  const auto & polyDataType = polyDataJSON.polyDataType;
 
-  const rapidjson::Value & polyDataType = document["polyDataType"];
-
-  const std::string pointPixelComponentType( polyDataType["pointPixelComponentType"].GetString() );
-  if ( pointPixelComponentType != itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::ComponentString )
+  if ( polyDataType.pointPixelComponentType != itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum )
   {
     throw std::runtime_error("Unexpected point pixel component type");
   }
 
-  const std::string pointPixelType( polyDataType["pointPixelType"].GetString() );
-  if ( pointPixelType != itk::wasm::MapPixelType<PointPixelType>::PixelString )
+  if ( polyDataType.pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum )
   {
     throw std::runtime_error("Unexpected point pixel type");
   }
 
-  const std::string cellPixelComponentType( polyDataType["cellPixelComponentType"].GetString() );
-  if ( cellPixelComponentType != itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::ComponentString )
+  if ( polyDataType.cellPixelComponentType != itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::JSONComponentEnum )
   {
     throw std::runtime_error("Unexpected cell pixel component type");
   }
 
-  const std::string cellPixelType( polyDataType["cellPixelType"].GetString() );
-  if ( cellPixelType != itk::wasm::MapPixelType<CellPixelType>::PixelString )
+  if ( polyDataType.cellPixelType != itk::wasm::MapPixelType<CellPixelType>::JSONPixelEnum )
   {
     throw std::runtime_error("Unexpected cell pixel type");
   }
 
-  const rapidjson::Value & numberOfPointsJson = document["numberOfPoints"];
-  const SizeValueType numberOfPoints = numberOfPointsJson.GetInt();
+  const SizeValueType numberOfPoints = polyDataJSON.numberOfPoints;
   if (numberOfPoints)
   {
-    using PointType = typename PolyDataType::PointType;
-    const rapidjson::Value & pointsJson = document["points"];
-    const std::string pointsString( pointsJson.GetString() );
+    const std::string pointsString = polyDataJSON.points;
     const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
     polyData->GetPoints()->resize(numberOfPoints);
     polyData->GetPoints()->assign(pointsPtr, pointsPtr + numberOfPoints);
   }
 
-  const rapidjson::Value & verticesBufferSizeJson = document["verticesBufferSize"];
-  const SizeValueType verticesBufferSize = verticesBufferSizeJson.GetInt();
+  const SizeValueType verticesBufferSize = polyDataJSON.verticesBufferSize;
   if (verticesBufferSize)
   {
-    const rapidjson::Value & verticesJson = document["vertices"];
-    const std::string verticesString( verticesJson.GetString() );
+    const std::string verticesString = polyDataJSON.vertices;
     auto verticesPtr = reinterpret_cast< uint32_t * >( std::strtoull(verticesString.substr(35).c_str(), nullptr, 10) );
     polyData->GetVertices()->resize(verticesBufferSize);
     polyData->GetVertices()->assign(verticesPtr, verticesPtr + verticesBufferSize);
   }
 
-  const rapidjson::Value & linesBufferSizeJson = document["linesBufferSize"];
-  const SizeValueType linesBufferSize = linesBufferSizeJson.GetInt();
+  const SizeValueType linesBufferSize = polyDataJSON.linesBufferSize;
   if (linesBufferSize)
   {
-    const rapidjson::Value & linesJson = document["lines"];
-    const std::string linesString( linesJson.GetString() );
+    const std::string linesString = polyDataJSON.lines;
     auto linesPtr = reinterpret_cast< uint32_t * >( std::strtoull(linesString.substr(35).c_str(), nullptr, 10) );
     polyData->GetLines()->resize(linesBufferSize);
     polyData->GetLines()->assign(linesPtr, linesPtr + linesBufferSize);
   }
 
-  const rapidjson::Value & polygonsBufferSizeJson = document["polygonsBufferSize"];
-  const SizeValueType polygonsBufferSize = polygonsBufferSizeJson.GetInt();
+  const SizeValueType polygonsBufferSize = polyDataJSON.polygonsBufferSize;
   if (polygonsBufferSize)
   {
-    const rapidjson::Value & polygonsJson = document["polygons"];
-    const std::string polygonsString( polygonsJson.GetString() );
+    const std::string polygonsString = polyDataJSON.polygons;
     auto polygonsPtr = reinterpret_cast< uint32_t * >( std::strtoull(polygonsString.substr(35).c_str(), nullptr, 10) );
     polyData->GetPolygons()->resize(polygonsBufferSize);
     polyData->GetPolygons()->assign(polygonsPtr, polygonsPtr + polygonsBufferSize);
   }
 
-  const rapidjson::Value & triangleStripsBufferSizeJson = document["triangleStripsBufferSize"];
-  const SizeValueType triangleStripsBufferSize = triangleStripsBufferSizeJson.GetInt();
+  const SizeValueType triangleStripsBufferSize = polyDataJSON.triangleStripsBufferSize;
   if (triangleStripsBufferSize)
   {
-    const rapidjson::Value & triangleStripsJson = document["triangleStrips"];
-    const std::string triangleStripsString( triangleStripsJson.GetString() );
+    const std::string triangleStripsString = polyDataJSON.triangleStrips;
     auto triangleStripsPtr = reinterpret_cast< uint32_t * >( std::strtoull(triangleStripsString.substr(35).c_str(), nullptr, 10) );
     polyData->GetTriangleStrips()->resize(triangleStripsBufferSize);
     polyData->GetTriangleStrips()->assign(triangleStripsPtr, triangleStripsPtr + triangleStripsBufferSize);
   }
 
-  const rapidjson::Value & numberOfPointPixelsJson = document["numberOfPointPixels"];
-  const SizeValueType numberOfPointPixels = numberOfPointPixelsJson.GetInt();
+  const SizeValueType numberOfPointPixels = polyDataJSON.numberOfPointPixels;
   if (numberOfPointPixels)
   {
-    const rapidjson::Value & pointPixelComponentsJson = polyDataType["pointPixelComponents"];
-    const SizeValueType pointPixelComponents = pointPixelComponentsJson.GetInt();
-    const rapidjson::Value & pointDataJson = document["pointData"];
+    const SizeValueType pointPixelComponents = polyDataType.pointPixelComponents;
     using PointPixelType = typename TPolyData::PixelType;
     using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
-    const std::string pointDataString( pointDataJson.GetString() );
+    const std::string pointDataString = polyDataJSON.pointData;
     auto pointDataPtr = reinterpret_cast< typename ConvertPointPixelTraits::ComponentType * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
     polyData->GetPointData()->resize(numberOfPointPixels * pointPixelComponents);
     polyData->GetPointData()->assign(pointDataPtr, pointDataPtr + numberOfPointPixels * pointPixelComponents);
   }
 
-  const rapidjson::Value & numberOfCellPixelsJson = document["numberOfCellPixels"];
-  const SizeValueType numberOfCellPixels = numberOfCellPixelsJson.GetInt();
+  const SizeValueType numberOfCellPixels = polyDataJSON.numberOfCellPixels;
   if (numberOfCellPixels)
   {
-    const rapidjson::Value & cellPixelComponentsJson = polyDataType["cellPixelComponents"];
-    const SizeValueType cellPixelComponents = cellPixelComponentsJson.GetInt();
-    const rapidjson::Value & cellDataJson = document["cellData"];
+    const SizeValueType cellPixelComponents = polyDataType.cellPixelComponents;
     using CellPixelType = typename TPolyData::CellPixelType;
     using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
-    const std::string cellDataString( cellDataJson.GetString() );
+    const std::string cellDataString = polyDataJSON.cellData;
     auto cellDataPtr = reinterpret_cast< typename ConvertCellPixelTraits::ComponentType * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
     if (polyData->GetCellData() == nullptr)
     {

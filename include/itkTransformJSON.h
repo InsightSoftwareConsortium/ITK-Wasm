@@ -84,9 +84,12 @@ namespace itk
     TransformTypeJSON transformType;
     uint64_t numberOfFixedParameters{ 0 };
     uint64_t numberOfParameters{ 0 };
-    std::string name;
+
+    std::string name { "transform" };
+
     std::string inputSpaceName;
     std::string outputSpaceName;
+
     std::string fixedParameters;
     std::string parameters;
   };

@@ -132,9 +132,8 @@ MeshToWasmMeshFilter<TMesh>
   auto ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
   if (ec)
   {
-    itkExceptionMacro("Failed to serialize TransformListJSON");
+    itkExceptionMacro("Failed to serialize MeshJSON");
   }
-  std::cout << "SERIALIZED: " << serialized << std::endl;
 
   wasmMesh->SetJSON(serialized);
 }

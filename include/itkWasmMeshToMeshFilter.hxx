@@ -368,7 +368,6 @@ WasmMeshToMeshFilter<TMesh>
   using CellPixelType = typename MeshType::CellPixelType;
   using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
 
-  std::cout << "meshJSON: " << wasmMesh->GetJSON() << "\n";
   const std::string json(wasmMesh->GetJSON());
   auto deserializedAttempt = glz::read_json<MeshJSON>(json);
   if (!deserializedAttempt)
@@ -406,7 +405,6 @@ WasmMeshToMeshFilter<TMesh>
 
   if (numberOfCellPixels && cellPixelComponentType != itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::JSONComponentEnum )
   {
-    std::cout << "numberOfCellPixels: " << numberOfCellPixels << "\n";
     throw std::runtime_error("Unexpected cell pixel component type");
   }
 

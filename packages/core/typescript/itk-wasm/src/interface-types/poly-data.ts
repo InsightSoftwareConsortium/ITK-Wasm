@@ -2,7 +2,7 @@ import PolyDataType from './poly-data-type.js'
 import TypedArray from '../typed-array.js'
 
 class PolyData {
-  name: string = 'PolyData'
+  name: string = 'polydata'
 
   numberOfPoints: number
   points: Float32Array
@@ -25,10 +25,10 @@ class PolyData {
   numberOfCellPixels: number
   cellData: null | TypedArray
 
-  constructor (public readonly polyDataType = new PolyDataType()) {
+  constructor(public readonly polyDataType = new PolyDataType()) {
     this.polyDataType = polyDataType
 
-    this.name = 'PolyData'
+    this.name = 'polydata'
 
     this.numberOfPoints = 0
     this.points = new Float32Array()
