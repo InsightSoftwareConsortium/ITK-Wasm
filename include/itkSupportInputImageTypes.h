@@ -31,21 +31,15 @@
 #include "itkSpecializedImagePipelineFunctor.h"
 #include "WebAssemblyInterfaceExport.h"
 
+#include "itkImageJSON.h"
+
 namespace itk
 {
 
+WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, ImageTypeJSON & imageType);
+
 namespace wasm
 {
-
-struct InterfaceImageType
-{
-  unsigned int dimension{2};
-  std::string componentType{"uint8"};
-  std::string pixelType{"Scalar"};
-  unsigned int components{1};
-};
-
-WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, InterfaceImageType & imageType);
 
 /** \class SupportInputImageTypes
  *
@@ -98,7 +92,7 @@ public:
   static int
   Dimensions(const std::string & inputImageOptionName, Pipeline & pipeline)
   {
-    InterfaceImageType imageType;
+    ImageTypeJSON imageType;
 
     const auto iwpArgc = pipeline.get_argc();
     const auto iwpArgv = pipeline.get_argv();
@@ -128,17 +122,20 @@ public:
 private:
   template<unsigned int VDimension, typename TPixel, typename ...TPixelsRest>
   static int
-  IteratePixelTypes(Pipeline & pipeline, const InterfaceImageType & imageType, bool passThrough = false)
+  IteratePixelTypes(Pipeline & pipeline, const ImageTypeJSON & imageType, bool passThrough = false)
   {
     constexpr unsigned int Dimension = VDimension;
     using PixelType = TPixel;
     using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
 
     if (passThrough ||
-        imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString &&
-        imageType.pixelType == MapPixelType<PixelType>::PixelString)
+        imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum &&
+        imageType.pixelType == MapPixelType<PixelType>::JSONPixelEnum)
     {
-      if (passThrough || imageType.pixelType == "VariableLengthVector" || imageType.pixelType == "VariableSizeMatrix" || imageType.components == ConvertPixelTraits::GetNumberOfComponents() )
+      if (passThrough ||
+         imageType.pixelType == JSONPixelTypesEnum::VariableLengthVector ||
+         imageType.pixelType == JSONPixelTypesEnum::VariableSizeMatrix ||
+         imageType.components == ConvertPixelTraits::GetNumberOfComponents() )
       {
         return SpecializedImagePipelineFunctor<TPipelineFunctor, Dimension, PixelType>()(pipeline);
       }
@@ -149,14 +146,15 @@ private:
     }
 
     std::ostringstream ostrm;
-    ostrm << "Unsupported pixel type: " << imageType.pixelType << " with component type: " << imageType.componentType << " and components: " << imageType.components;
+    std::string imageTypeString = glz::write_json(imageType).value_or("error");
+    ostrm << "Unsupported image type: " << imageTypeString << std::endl;
     CLI::Error err("Runtime error", ostrm.str(), 1);
     return pipeline.exit(err);
   }
 
   template<unsigned int VDimension, unsigned int ...VDimensions>
   static int
-  IterateDimensions(Pipeline & pipeline, const InterfaceImageType & imageType, bool passThrough = false)
+  IterateDimensions(Pipeline & pipeline, const ImageTypeJSON & imageType, bool passThrough = false)
   {
     if (passThrough || VDimension == imageType.dimension)
     {
