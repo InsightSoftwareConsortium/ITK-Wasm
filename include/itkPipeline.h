@@ -26,7 +26,7 @@
 #include "itkImage.h"
 #include "itkVectorImage.h"
 
-#include "rapidjson/document.h"
+#include "glaze/glaze.hpp"
 
 #include "WebAssemblyInterfaceExport.h"
 
@@ -119,22 +119,16 @@ using CLI::Success;
 using CLI::Config;
 
 /**
- * @brief Create a rapidjson kArrayType value from an STL style container.
+ * @brief Create a glaze arrat_t value from an STL style container.
  *
  * @tparam Iteratorable Any container type that supports STL style iterator.
  * @param container Container object.
- * @param allocator Rapidjson allocator.
- * @return rapidjson::Value rapidjson Value of kArrayType which contains all
- *  the values from the input container.
+ * @return glz::json_t::array_t with the values from the input container.
  */
 template<typename Iteratorable>
-rapidjson::Value getArrayJson(Iteratorable container, rapidjson::Document::AllocatorType& allocator)
+glz::json_t::array_t getArrayJson(Iteratorable container)
 {
-  rapidjson::Value value(rapidjson::kArrayType);
-  for(auto iter = container.begin(); iter != container.end(); ++iter)
-  {
-    value.PushBack(rapidjson::Value(*iter), allocator);
-  }
+  glz::json_t::array_t value(container.begin(), container.end());
   return value;
 }
 
