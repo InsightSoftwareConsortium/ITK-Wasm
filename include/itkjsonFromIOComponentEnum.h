@@ -15,34 +15,29 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkMetaDataDictionaryJSON_h
-#define itkMetaDataDictionaryJSON_h
-
-#include "itkMetaDataDictionary.h"
-#include "itkDefaultConvertPixelTraits.h"
-#include "itkMetaDataObject.h"
-#include "itkArray.h"
-#include "itkMatrix.h"
-
-#include <string>
-#include <vector>
-#include <tuple>
+#ifndef itkjsonFromIOComponentEnum_h
+#define itkjsonFromIOComponentEnum_h
 
 #include "WebAssemblyInterfaceExport.h"
 
-#include "glaze/glaze.hpp"
+#include "itkIOCommon.h"
+
+#include "itkIntTypesJSON.h"
+#include "itkFloatTypesJSON.h"
+#include "itkComponentTypesJSON.h"
+
 
 namespace itk
 {
 
-using MetadataEntryJSON = std::tuple<std::string, glz::json_t>;
-using MetadataJSON = std::vector<MetadataEntryJSON>;
+WebAssemblyInterface_EXPORT JSONIntTypesEnum
+jsonIntTypeFromIOComponentEnum(const IOComponentEnum & ioComponent);
 
+WebAssemblyInterface_EXPORT JSONFloatTypesEnum
+jsonFloatTypeFromIOComponentEnum(const IOComponentEnum & ioComponent);
 
-WebAssemblyInterface_EXPORT void metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSON & metadataJson);
-
-WebAssemblyInterface_EXPORT void jsonToMetaDataDictionary(const MetadataJSON & metadataJson, itk::MetaDataDictionary & dictionary);
+WebAssemblyInterface_EXPORT JSONComponentTypesEnum
+jsonComponentTypeFromIOComponentEnum(const IOComponentEnum & ioComponent);
 
 } // end namespace itk
-
 #endif

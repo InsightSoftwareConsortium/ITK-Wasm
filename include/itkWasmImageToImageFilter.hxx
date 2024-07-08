@@ -28,7 +28,7 @@
 #include "itkDefaultConvertPixelTraits.h"
 #include "itkMetaDataObject.h"
 
-#include "rapidjson/document.h"
+#include "itkImageJSON.h"
 
 namespace itk
 {
@@ -132,8 +132,8 @@ WasmImageToImageFilter<TImage>
 ::GenerateData()
 {
   // Get the input and output pointers
-  const WasmImageType * imageJSON = this->GetInput();
-  const std::string json(imageJSON->GetJSON());
+  const WasmImageType * wasmImage = this->GetInput();
+  const std::string json(wasmImage->GetJSON());
   ImageType * image = this->GetOutput();
 
   using IOPixelType = typename TImage::IOPixelType;
@@ -141,26 +141,30 @@ WasmImageToImageFilter<TImage>
   using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
   constexpr unsigned int Dimension = TImage::ImageDimension;
 
-  rapidjson::Document document;
-  if (document.Parse(json.c_str()).HasParseError())
-    {
-    throw std::runtime_error("Could not parse JSON");
-    }
+  auto deserializedAttempt = glz::read_json<ImageJSON>(json);
+  if (!deserializedAttempt)
+  {
+    const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
+    itkExceptionMacro("Failed to deserialize imageJSON: " << descriptiveError);
+  }
+  auto imageJSON = deserializedAttempt.value();
 
-  const rapidjson::Value & imageType = document["imageType"];
-  const int dimension = imageType["dimension"].GetInt();
+  const auto dimension = imageJSON.imageType.dimension;
+  const auto componentType = imageJSON.imageType.componentType;
+  const auto pixelType = imageJSON.imageType.pixelType;
+  const auto components = imageJSON.imageType.components;
+
   if (dimension != Dimension)
   {
     throw std::runtime_error("Unexpected dimension");
   }
-  const std::string componentType( imageType["componentType"].GetString() );
-  if ( componentType != itk::wasm::MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString )
+
+  if ( componentType != itk::wasm::MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum )
   {
     throw std::runtime_error("Unexpected component type");
   }
 
-  const std::string pixelType( imageType["pixelType"].GetString() );
-  if ( pixelType != itk::wasm::MapPixelType<PixelType>::PixelString )
+  if ( pixelType != itk::wasm::MapPixelType<PixelType>::JSONPixelEnum )
   {
     throw std::runtime_error("Unexpected pixel type");
   }
@@ -169,36 +173,29 @@ WasmImageToImageFilter<TImage>
   auto filter = FilterType::New();
 
   // Don't throw when PixelType is VariableLengthPixel where number of components is 0
-  if (ConvertPixelTraits::GetNumberOfComponents() != 0 && imageType["components"].GetInt() != ConvertPixelTraits::GetNumberOfComponents() )
+  if (ConvertPixelTraits::GetNumberOfComponents() != 0 && components != ConvertPixelTraits::GetNumberOfComponents() )
   {
     throw std::runtime_error("Unexpected number of components");
   }
 
   using OriginType = typename ImageType::PointType;
   OriginType origin;
-  const rapidjson::Value & originJson = document["origin"];
-  int count = 0;
-  for( rapidjson::Value::ConstValueIterator itr = originJson.Begin(); itr != originJson.End(); ++itr )
-    {
-    origin[count] = itr->GetDouble();
-    ++count;
-    }
+  for (unsigned int i = 0; i < Dimension; ++i)
+  {
+    origin[i] = imageJSON.origin[i];
+  }
   filter->SetOrigin( origin );
 
   using SpacingType = typename ImageType::SpacingType;
   SpacingType spacing;
-  const rapidjson::Value & spacingJson = document["spacing"];
-  count = 0;
-  for( rapidjson::Value::ConstValueIterator itr = spacingJson.Begin(); itr != spacingJson.End(); ++itr )
-    {
-    spacing[count] = itr->GetDouble();
-    ++count;
-    }
+  for (unsigned int i = 0; i < Dimension; ++i)
+  {
+    spacing[i] = imageJSON.spacing[i];
+  }
   filter->SetSpacing( spacing );
 
   using DirectionType = typename ImageType::DirectionType;
-  const rapidjson::Value & directionJson = document["direction"];
-  const std::string directionString( directionJson.GetString() );
+  const std::string directionString = imageJSON.direction;
   const double * directionPtr = reinterpret_cast< double * >( std::strtoull(directionString.substr(35).c_str(), nullptr, 10) );
   using VnlMatrixType = typename DirectionType::InternalMatrixType;
   const VnlMatrixType vnlMatrix(directionPtr);
@@ -207,42 +204,33 @@ WasmImageToImageFilter<TImage>
 
   using SizeType = typename ImageType::SizeType;
   SizeType size;
-  const rapidjson::Value & sizeJson = document["size"];
-  count = 0;
   SizeValueType totalSize = 1;
-  for( rapidjson::Value::ConstValueIterator itr = sizeJson.Begin(); itr != sizeJson.End(); ++itr )
-    {
-    size[count] = itr->GetInt();
-    totalSize *= size[count];
-    ++count;
-    }
+  for (unsigned int i = 0; i < Dimension; ++i)
+  {
+    size[i] = imageJSON.size[i];
+    totalSize *= size[i];
+  }
   using RegionType = typename ImageType::RegionType;
   RegionType region;
   region.SetSize( size );
   filter->SetRegion( region );
 
-  const rapidjson::Value & dataJson = document["data"];
-  const std::string dataString( dataJson.GetString() );
+  const std::string dataString = imageJSON.data;
   IOPixelType * dataPtr = reinterpret_cast< IOPixelType * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
   const bool letImageContainerManageMemory = false;
-  if (pixelType == "VariableLengthVector" || pixelType == "VariableSizeMatrix")
+  if (pixelType == JSONPixelTypesEnum::VariableLengthVector || pixelType == JSONPixelTypesEnum::VariableSizeMatrix)
     {
-    filter->SetImportPointer( dataPtr, totalSize, letImageContainerManageMemory, imageType["components"].GetInt());
+    filter->SetImportPointer(dataPtr, totalSize, letImageContainerManageMemory, components);
     }
   else
     {
-    filter->SetImportPointer( dataPtr, totalSize, letImageContainerManageMemory);
+    filter->SetImportPointer(dataPtr, totalSize, letImageContainerManageMemory);
     }
   filter->Update();
   image->Graft(filter->GetOutput());
 
-  if (document.HasMember("metadata"))
-  {
-    auto dictionary = image->GetMetaDataDictionary();
-    const rapidjson::Value & metadataJson = document["metadata"];
-    wasm::ConvertJSONToMetaDataDictionary(metadataJson, dictionary);
-  }
-
+  auto dictionary = image->GetMetaDataDictionary();
+  jsonToMetaDataDictionary(imageJSON.metadata, dictionary);
 }
 
 template <typename TImage>

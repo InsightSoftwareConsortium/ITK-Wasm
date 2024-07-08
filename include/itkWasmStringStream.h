@@ -19,13 +19,21 @@
 #define itkWasmStringStream_h
 
 #include "itkWasmDataObject.h"
-#include "rapidjson/document.h"
 #include <string_view>
 
 #include "WebAssemblyInterfaceExport.h"
 
+#include "glaze/glaze.hpp"
+
 namespace itk
 {
+  
+struct StringStreamJSON
+{
+  std::string data;
+  size_t size;
+};
+
 /**
  *\class WasmStringStream
  * \brief JSON representation for a std::stringstream
@@ -74,15 +82,17 @@ public:
   void SetJSON(const char * jsonChar) override
   {
     std::string json(jsonChar);
-    rapidjson::Document document;
-    if (document.Parse(json.c_str()).HasParseError())
-      {
-      throw std::runtime_error("Could not parse JSON");
-      }
-    const rapidjson::Value & dataJson = document["data"];
-    const std::string dataString( dataJson.GetString() );
+    std::string deserialized;
+    auto        deserializedAttempt = glz::read_json<StringStreamJSON>(json);
+    if (!deserializedAttempt)
+    {
+      const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
+      throw std::runtime_error("Failed to deserialize StringStreamJSON: " + descriptiveError);
+    }
+    auto stringStream = deserializedAttempt.value();
+    const std::string dataString = stringStream.data;
     const char * dataPtr = reinterpret_cast< char * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
-    size_t size = document["size"].GetInt();
+    size_t size = stringStream.size;
     const std::string_view string(dataPtr, size);
     m_StringStream.str(std::string{string});
 

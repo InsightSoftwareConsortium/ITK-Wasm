@@ -21,7 +21,6 @@
 #include "itkWasmIOCommon.h"
 
 #include <sstream>
-#include "rapidjson/prettywriter.h"
 
 namespace itk
 {
@@ -62,8 +61,7 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   wasmMeshIO->SetNumberOfCellPixels(meshIO->GetNumberOfCellPixels());
   wasmMeshIO->SetCellBufferSize(meshIO->GetCellBufferSize());
 
-  rapidjson::Document document = wasmMeshIO->GetJSON();
-  rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+  auto meshJSON = wasmMeshIO->GetJSON();
 
   size_t pointsAddress = 0;
   SizeValueType numberOfBytes = meshIO->GetNumberOfPoints() * meshIO->GetPointDimension() * ITKComponentSize( meshIO->GetPointComponentType() );
@@ -77,10 +75,7 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   std::ostringstream dataStream;
   dataStream << "data:application/vnd.itk.address,0:";
   dataStream << pointsAddress;
-  rapidjson::Value pointsString;
-  pointsString.SetString( dataStream.str().c_str(), allocator );
-  document.RemoveMember( "points" );
-  document.AddMember( "points", pointsString.Move(), allocator );
+  meshJSON.points = dataStream.str();
 
   numberOfBytes = static_cast< SizeValueType >( meshIO->GetCellBufferSize() * ITKComponentSize( meshIO->GetCellComponentType() ));
 
@@ -95,10 +90,7 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   dataStream.str("");
   dataStream << "data:application/vnd.itk.address,0:";
   dataStream << cellsAddress;
-  rapidjson::Value cellsString;
-  cellsString.SetString( dataStream.str().c_str(), allocator );
-  document.RemoveMember( "cells" );
-  document.AddMember( "cells", cellsString.Move(), allocator );
+  meshJSON.cells = dataStream.str();
 
   numberOfBytes =
     static_cast< SizeValueType >( meshIO->GetNumberOfPointPixels() * meshIO->GetNumberOfPointPixelComponents() * ITKComponentSize( meshIO->GetPointPixelComponentType() ));
@@ -114,10 +106,7 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   dataStream.str("");
   dataStream << "data:application/vnd.itk.address,0:";
   dataStream << pointDataAddress;
-  rapidjson::Value pointDataString;
-  pointDataString.SetString( dataStream.str().c_str(), allocator );
-  document.RemoveMember( "pointData" );
-  document.AddMember( "pointData", pointDataString.Move(), allocator );
+  meshJSON.pointData = dataStream.str();
 
   numberOfBytes =
     static_cast< SizeValueType >( meshIO->GetNumberOfCellPixels() * meshIO->GetNumberOfCellPixelComponents() * ITKComponentSize( meshIO->GetCellPixelComponentType() ));
@@ -133,15 +122,15 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   dataStream.str("");
   dataStream << "data:application/vnd.itk.address,0:";
   dataStream << cellDataAddress;
-  rapidjson::Value cellDataString;
-  cellDataString.SetString( dataStream.str().c_str(), allocator );
-  document.RemoveMember( "cellData" );
-  document.AddMember( "cellData", cellDataString.Move(), allocator );
+  meshJSON.cellData = dataStream.str();
 
-  rapidjson::StringBuffer stringBuffer;
-  rapidjson::Writer< rapidjson::StringBuffer > writer( stringBuffer );
-  document.Accept( writer );
-  this->SetJSON(stringBuffer.GetString());
+  std::string serialized{};
+  auto ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
+  if (ec)
+  {
+    itkExceptionMacro("Failed to serialize TransformListJSON");
+  }
+  this->SetJSON(serialized);
 }
 
 void

@@ -11,9 +11,7 @@ class MeshType {
     | (typeof FloatTypes)[keyof typeof FloatTypes] = FloatTypes.Float32,
     public readonly pointPixelType: (typeof PixelTypes)[keyof typeof PixelTypes] = PixelTypes.Scalar,
     public readonly pointPixelComponents: number = 1,
-    public readonly cellComponentType:
-    | (typeof IntTypes)[keyof typeof IntTypes]
-    | (typeof FloatTypes)[keyof typeof FloatTypes] = IntTypes.Int32,
+    public readonly cellComponentType: (typeof IntTypes)[keyof typeof IntTypes] = IntTypes.Int32,
     public readonly cellPixelComponentType:
     | (typeof IntTypes)[keyof typeof IntTypes]
     | (typeof FloatTypes)[keyof typeof FloatTypes] = FloatTypes.Float32,

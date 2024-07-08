@@ -2,7 +2,7 @@ import MeshType from './mesh-type.js'
 import type TypedArray from '../typed-array.js'
 
 class Mesh {
-  name: string = 'mesh'
+  name: string = 'Mesh'
 
   numberOfPoints: number
   points: null | TypedArray

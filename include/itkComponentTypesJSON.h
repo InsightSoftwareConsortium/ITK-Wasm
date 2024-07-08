@@ -15,34 +15,42 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkMetaDataDictionaryJSON_h
-#define itkMetaDataDictionaryJSON_h
-
-#include "itkMetaDataDictionary.h"
-#include "itkDefaultConvertPixelTraits.h"
-#include "itkMetaDataObject.h"
-#include "itkArray.h"
-#include "itkMatrix.h"
-
-#include <string>
-#include <vector>
-#include <tuple>
-
-#include "WebAssemblyInterfaceExport.h"
+#ifndef itkComponentTypesJSON_h
+#define itkComponentTypesJSON_h
 
 #include "glaze/glaze.hpp"
 
 namespace itk
 {
-
-using MetadataEntryJSON = std::tuple<std::string, glz::json_t>;
-using MetadataJSON = std::vector<MetadataEntryJSON>;
-
-
-WebAssemblyInterface_EXPORT void metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSON & metadataJson);
-
-WebAssemblyInterface_EXPORT void jsonToMetaDataDictionary(const MetadataJSON & metadataJson, itk::MetaDataDictionary & dictionary);
-
+enum class JSONComponentTypesEnum
+{
+    int8,
+    uint8,
+    int16,
+    uint16,
+    int32,
+    uint32,
+    int64,
+    uint64,
+    float32,
+    float64
+};
 } // end namespace itk
 
-#endif
+template <>
+struct glz::meta<itk::JSONComponentTypesEnum> {
+  using enum itk::JSONComponentTypesEnum;
+  static constexpr auto value = glz::enumerate(
+    int8,
+    uint8,
+    int16,
+    uint16,
+    int32,
+    uint32,
+    int64,
+    float32,
+    float64
+  );
+};
+
+#endif // itkComponentTypesJSON_h

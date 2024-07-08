@@ -36,7 +36,7 @@
 #include "itkWasmMapPixelType.h"
 #include "itkMeshConvertPixelTraits.h"
 
-#include "rapidjson/document.h"
+#include "itkMeshJSON.h"
 
 namespace
 {
@@ -360,8 +360,7 @@ WasmMeshToMeshFilter<TMesh>
 ::GenerateData()
 {
   // Get the input and output pointers
-  const WasmMeshType * meshJSON = this->GetInput();
-  const std::string json(meshJSON->GetJSON());
+  const WasmMeshType * wasmMesh = this->GetInput();
   MeshType * mesh = this->GetOutput();
 
   using PointPixelType = typename MeshType::PixelType;
@@ -369,76 +368,70 @@ WasmMeshToMeshFilter<TMesh>
   using CellPixelType = typename MeshType::CellPixelType;
   using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
 
-  rapidjson::Document document;
-  if (document.Parse(json.c_str()).HasParseError())
-    {
-    throw std::runtime_error("Could not parse JSON");
-    }
+  const std::string json(wasmMesh->GetJSON());
+  auto deserializedAttempt = glz::read_json<MeshJSON>(json);
+  if (!deserializedAttempt)
+  {
+    const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
+    itkExceptionMacro("Failed to deserialize meshJSON: " << descriptiveError);
+  }
+  auto meshJSON = deserializedAttempt.value();
 
-  const rapidjson::Value & meshType = document["meshType"];
+  const auto dimension = meshJSON.meshType.dimension;
+  const auto numberOfPointPixels = meshJSON.numberOfPointPixels;
+  const auto pointComponentType = meshJSON.meshType.pointComponentType;
+  const auto pointPixelComponentType = meshJSON.meshType.pointPixelComponentType;
+  const auto pointPixelType = meshJSON.meshType.pointPixelType;
+  const auto cellComponentType = meshJSON.meshType.cellComponentType;
+  const auto numberOfCellPixels = meshJSON.numberOfCellPixels;
+  const auto cellPixelComponentType = meshJSON.meshType.cellPixelComponentType;
+  const auto cellPixelType = meshJSON.meshType.cellPixelType;
+  const auto numberOfPoints = meshJSON.numberOfPoints;
+  const auto numberOfCells = meshJSON.numberOfCells;
 
-  const rapidjson::Value & numberOfPointsJson = document["numberOfPoints"];
-  const SizeValueType numberOfPoints = numberOfPointsJson.GetInt();
-
-  const rapidjson::Value & numberOfPointPixelsJson = document["numberOfPointPixels"];
-  const SizeValueType numberOfPointPixels = numberOfPointPixelsJson.GetInt();
-  // const rapidjson::Value & pointPixelComponentsJson = meshType["pointPixelComponents"];
-  // const SizeValueType pointPixelComponents = pointPixelComponentsJson.GetInt();
-
-  const rapidjson::Value & numberOfCellPixelsJson = document["numberOfCellPixels"];
-  const SizeValueType numberOfCellPixels = numberOfCellPixelsJson.GetInt();
-  // const rapidjson::Value & cellPixelComponentsJson = meshType["cellPixelComponents"];
-  // const SizeValueType cellPixelComponents = cellPixelComponentsJson.GetInt();
-
-  const int dimension = meshType["dimension"].GetInt();
   if (dimension != MeshType::PointDimension)
   {
     throw std::runtime_error("Unexpected dimension");
   }
-  const std::string pointPixelComponentType( meshType["pointPixelComponentType"].GetString() );
-  if (numberOfPointPixels && pointPixelComponentType != itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::ComponentString )
+  if (numberOfPointPixels && pointPixelComponentType != itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum )
   {
     throw std::runtime_error("Unexpected point pixel component type");
   }
 
-  const std::string pointPixelType( meshType["pointPixelType"].GetString() );
-  if (numberOfPointPixels && pointPixelType != itk::wasm::MapPixelType<PointPixelType>::PixelString )
+  if (numberOfPointPixels && pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum )
   {
     throw std::runtime_error("Unexpected point pixel type");
   }
 
-  const std::string cellPixelComponentType( meshType["cellPixelComponentType"].GetString() );
-  if (numberOfCellPixels && cellPixelComponentType != itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::ComponentString )
+  if (numberOfCellPixels && cellPixelComponentType != itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::JSONComponentEnum )
   {
     throw std::runtime_error("Unexpected cell pixel component type");
   }
 
-  const std::string cellPixelType( meshType["cellPixelType"].GetString() );
-  if (numberOfCellPixels && cellPixelType != itk::wasm::MapPixelType<CellPixelType>::PixelString )
+  if (numberOfCellPixels && cellPixelType != itk::wasm::MapPixelType<CellPixelType>::JSONPixelEnum )
   {
     throw std::runtime_error("Unexpected cell pixel type");
   }
 
-  mesh->GetPoints()->resize(numberOfPoints);
+  mesh->SetObjectName(meshJSON.name);
+  mesh->GetPoints()->resize(meshJSON.numberOfPoints);
   using PointType = typename MeshType::PointType;
-  const rapidjson::Value & pointsJson = document["points"];
-  const std::string pointsString( pointsJson.GetString() );
-  const std::string pointComponentType( meshType["pointComponentType"].GetString() );
+  const std::string pointsString = meshJSON.points;
   if (numberOfPoints)
   {
-    if (pointComponentType == itk::wasm::MapComponentType<typename MeshType::CoordRepType>::ComponentString )
+    if (pointComponentType == itk::wasm::MapComponentType<typename MeshType::CoordRepType>::JSONFloatTypeEnum)
     {
       const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
-      mesh->GetPoints()->assign(pointsPtr, pointsPtr + numberOfPoints);
+      mesh->GetPoints()->assign(pointsPtr, pointsPtr + meshJSON.numberOfPoints);
     }
-    else if (pointComponentType == itk::wasm::MapComponentType<float>::ComponentString)
+    else if (pointComponentType == itk::wasm::MapComponentType<float>::JSONFloatTypeEnum)
     {
       auto * pointsPtr = reinterpret_cast< float * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       const size_t pointComponents = numberOfPoints * dimension;
       auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordRepType *>(&(mesh->GetPoints()->at(0)) );
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
     }
-    else if (pointComponentType == itk::wasm::MapComponentType<double>::ComponentString)
+    else if (pointComponentType == itk::wasm::MapComponentType<double>::JSONFloatTypeEnum)
     {
       auto * pointsPtr = reinterpret_cast< double * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       const size_t pointComponents = numberOfPoints * dimension;
@@ -452,19 +445,16 @@ WasmMeshToMeshFilter<TMesh>
   }
 
 
-  const rapidjson::Value & cellBufferSizeJson = document["cellBufferSize"];
-  const SizeValueType cellBufferSize = cellBufferSizeJson.GetInt();
-  const rapidjson::Value & cellsJson = document["cells"];
-  const std::string cellsString( cellsJson.GetString() );
+  const SizeValueType cellBufferSize = meshJSON.cellBufferSize;
+  const std::string cellsString = meshJSON.cells;
   using CellBufferType = typename WasmMeshType::CellBufferContainerType::Element;
   CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
-  const std::string cellComponentType( meshType["cellComponentType"].GetString() );
-  if (cellComponentType == "uint32")
+  if (cellComponentType == JSONIntTypesEnum::uint32)
   {
     uint32_t * cellsBufferPtr = reinterpret_cast< uint32_t * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
     populateCells<MeshType, uint32_t>(mesh, cellBufferSize, cellsBufferPtr);
   }
-  else if (cellComponentType == "uint64")
+  else if (cellComponentType == JSONIntTypesEnum::uint64)
   {
     uint64_t * cellsBufferPtr = reinterpret_cast< uint64_t * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
     populateCells<MeshType, uint64_t>(mesh, cellBufferSize, cellsBufferPtr);
@@ -474,25 +464,23 @@ WasmMeshToMeshFilter<TMesh>
     throw std::runtime_error("Unexpected cell component type");
   }
 
-  const rapidjson::Value & pointDataJson = document["pointData"];
   using PointPixelType = typename TMesh::PixelType;
-  const std::string pointDataString( pointDataJson.GetString() );
+  const std::string pointDataString = meshJSON.pointData;
   auto pointDataPtr = reinterpret_cast< PointPixelType * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
   mesh->GetPointData()->resize(numberOfPointPixels);
   mesh->GetPointData()->assign(pointDataPtr, pointDataPtr + numberOfPointPixels);
 
-  const rapidjson::Value & cellDataJson = document["cellData"];
   using CellPixelType = typename TMesh::CellPixelType;
-  const std::string cellDataString( cellDataJson.GetString() );
+  const std::string cellDataString = meshJSON.cellData;
   auto cellDataPtr = reinterpret_cast< CellPixelType * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
   if (mesh->GetCellData() == nullptr)
   {
     mesh->SetCellData(MeshType::CellDataContainer::New());
   }
-  if (numberOfCellPixels)
+  if (meshJSON.numberOfCellPixels)
   {
-    mesh->GetCellData()->resize(numberOfCellPixels);
-    mesh->GetCellData()->assign(cellDataPtr, cellDataPtr + numberOfCellPixels);
+    mesh->GetCellData()->resize(meshJSON.numberOfCellPixels);
+    mesh->GetCellData()->assign(cellDataPtr, cellDataPtr + meshJSON.numberOfCellPixels);
   }
 }
 

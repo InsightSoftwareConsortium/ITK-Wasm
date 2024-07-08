@@ -92,9 +92,9 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
 )
 
-set(glaze_GIT_REPOSITORY "https://github.com/stephenberry/glaze")
-# glaze v2.9.3
-set(glaze_GIT_TAG fe49c8e1a057d11484e0bd88ffcbe60277e356fd)
+set(glaze_GIT_REPOSITORY "https://github.com/thewtex/glaze")
+# glaze v2.9.5
+set(glaze_GIT_TAG 19d492fa9fef206fcf61fc03f0981d17f8af8648)
 FetchContent_Declare(
   glaze
   GIT_REPOSITORY ${glaze_GIT_REPOSITORY}

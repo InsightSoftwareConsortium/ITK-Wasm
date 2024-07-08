@@ -4,7 +4,7 @@ import setMatrixElement from '../set-matrix-element.js'
 import Metadata from './metadata.js'
 
 class Image {
-  name: string = 'image'
+  name: string = 'Image'
 
   origin: number[]
 

@@ -73,24 +73,27 @@ bool lexical_cast(const std::string &input, InputImageIO &inputImageIO)
 #ifndef ITK_WASM_NO_MEMORY_IO
     const unsigned int index = std::stoi(input);
     auto json = getMemoryStoreInputJSON(0, index);
-    rapidjson::Document document;
-    document.Parse(json.c_str());
+    auto        deserializedAttempt = glz::read_json<itk::ImageJSON>(json);
+    if (!deserializedAttempt)
+    {
+      const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
+      throw std::runtime_error("Failed to deserialize ImageJSON: " + descriptiveError);
+    }
+    auto imageJSON = deserializedAttempt.value();
 
     auto wasmImageIO = itk::WasmImageIO::New();
-    wasmImageIO->SetJSON(document);
+    wasmImageIO->SetJSON(imageJSON);
 
     const unsigned int dimension = wasmImageIO->GetNumberOfDimensions();
 
     auto wasmImageIOBase = itk::WasmImageIOBase::New();
-    const rapidjson::Value & directionJson = document["direction"];
-    const std::string directionString( directionJson.GetString() );
+    const std::string directionString = imageJSON.direction;
     const double * directionPtr = reinterpret_cast< double * >( std::strtoull(directionString.substr(35).c_str(), nullptr, 10) );
     WasmImageIOBase::DirectionContainerType * directionContainer = wasmImageIOBase->GetDirectionContainer();
     directionContainer->resize(dimension*dimension);
     directionContainer->assign(directionPtr, directionPtr + dimension*dimension);
 
-    const rapidjson::Value & dataJson = document["data"];
-    const std::string dataString( dataJson.GetString() );
+    const std::string dataString = imageJSON.data;
     const char * dataPtr = reinterpret_cast< char * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
     if (dataPtr != nullptr)
     {

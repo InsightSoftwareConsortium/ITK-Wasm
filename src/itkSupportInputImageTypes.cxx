@@ -18,32 +18,28 @@
 #include "itkSupportInputImageTypes.h"
 #include "itkWasmExports.h"
 
-#include "rapidjson/document.h"
+#include "itkjsonFromIOComponentEnum.h"
+#include "itkjsonFromIOPixelEnum.h"
 
 namespace itk
 {
 
-namespace wasm
-{
-
-bool lexical_cast(const std::string &input, InterfaceImageType & imageType)
+bool lexical_cast(const std::string &input, ImageTypeJSON & imageType)
 {
   if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(0, index);
-    rapidjson::Document document;
-    if (document.Parse(json.c_str()).HasParseError())
-      {
-      throw std::runtime_error("Could not parse JSON");
-      }
-
-    const rapidjson::Value & jsonImageType = document["imageType"];
-    imageType.dimension = jsonImageType["dimension"].GetInt();
-    imageType.componentType = jsonImageType["componentType"].GetString();
-    imageType.pixelType = jsonImageType["pixelType"].GetString();
-    imageType.components = jsonImageType["components"].GetInt();
+    auto json = wasm::getMemoryStoreInputJSON(0, index);
+    std::string deserialized;
+    auto        deserializedAttempt = glz::read_json<itk::ImageJSON>(json);
+    if (!deserializedAttempt)
+    {
+      const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
+      throw std::runtime_error("Failed to deserialize ImageJSON: " + descriptiveError);
+    }
+    auto imageJSON = deserializedAttempt.value();
+    imageType = imageJSON.imageType;
 #else
     return false;
 #endif
@@ -64,11 +60,11 @@ bool lexical_cast(const std::string &input, InterfaceImageType & imageType)
 
     using IOComponentType = itk::IOComponentEnum;
     const IOComponentType ioComponentEnum = imageIO->GetComponentType();
-    imageType.componentType = WasmComponentTypeFromIOComponentEnum( ioComponentEnum );
+    imageType.componentType = itk::jsonComponentTypeFromIOComponentEnum( ioComponentEnum );
 
     using IOPixelType = itk::IOPixelEnum;
     const IOPixelType ioPixelEnum = imageIO->GetPixelType();
-    imageType.pixelType = WasmPixelTypeFromIOPixelEnum( ioPixelEnum );
+    imageType.pixelType = itk::jsonFromIOPixelEnum( ioPixelEnum );
 
     imageType.components = imageIO->GetNumberOfComponents();
 #else
@@ -78,5 +74,4 @@ bool lexical_cast(const std::string &input, InterfaceImageType & imageType)
   return true;
 }
 
-} // end namespace wasm
 } // end namespace itk

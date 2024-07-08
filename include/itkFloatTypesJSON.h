@@ -18,8 +18,6 @@
 #ifndef itkFloatTypesJSON_h
 #define itkFloatTypesJSON_h
 
-#include <vector>
-
 #include "glaze/glaze.hpp"
 
 namespace itk

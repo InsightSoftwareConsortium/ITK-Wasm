@@ -18,6 +18,10 @@
 
 #include "itkWasmImageIO.h"
 
+#include "itkioComponentEnumFromJSON.h"
+#include "itkioPixelEnumFromJSON.h"
+#include "itkjsonFromIOComponentEnum.h"
+#include "itkjsonFromIOPixelEnum.h"
 #include "itkWasmComponentTypeFromIOComponentEnum.h"
 #include "itkIOComponentEnumFromWasmComponentType.h"
 #include "itkWasmPixelTypeFromIOPixelEnum.h"
@@ -30,9 +34,6 @@
 #include "itksys/SystemTools.hxx"
 
 #include "itksys/SystemTools.hxx"
-
-#include "rapidjson/prettywriter.h"
-#include "rapidjson/ostreamwrapper.h"
 
 #include "cbor.h"
 
@@ -104,53 +105,56 @@ WasmImageIO
 
 void
 WasmImageIO
-::SetJSON(rapidjson::Document & document)
+::SetJSON(const ImageJSON & imageJSON)
 {
-  const rapidjson::Value & imageType = document["imageType"];
-  const unsigned int dimension = imageType["dimension"].GetInt();
+  const auto & imageType = imageJSON.imageType;
+
+  const unsigned int dimension = imageType.dimension;
   this->SetNumberOfDimensions( dimension );
 
-  const std::string componentType( imageType["componentType"].GetString() );
-  const ImageIOBase::IOComponentEnum ioComponentType = IOComponentEnumFromWasmComponentType( componentType );
+  const ImageIOBase::IOComponentEnum ioComponentType = ioComponentEnumFromJSON( imageType.componentType );
   this->SetComponentType( ioComponentType );
 
-  const std::string pixelType( imageType["pixelType"].GetString() );
-  const IOPixelEnum ioPixelType = IOPixelEnumFromWasmPixelType( pixelType );
+  const IOPixelEnum ioPixelType = ioPixelEnumFromJSON( imageType.pixelType );
   this->SetPixelType( ioPixelType );
 
-  this->SetNumberOfComponents( imageType["components"].GetInt() );
+  this->SetNumberOfComponents( imageType.components );
 
-  const rapidjson::Value & origin = document["origin"];
-  int count = 0;
-  for( rapidjson::Value::ConstValueIterator itr = origin.Begin(); itr != origin.End(); ++itr )
-    {
-    this->SetOrigin( count, itr->GetDouble() );
-    ++count;
-    }
-
-  const rapidjson::Value & spacing = document["spacing"];
-  count = 0;
-  for( rapidjson::Value::ConstValueIterator itr = spacing.Begin(); itr != spacing.End(); ++itr )
-    {
-    this->SetSpacing( count, itr->GetDouble() );
-    ++count;
-    }
-
-  const rapidjson::Value & size = document["size"];
-  count = 0;
-  for( rapidjson::Value::ConstValueIterator itr = size.Begin(); itr != size.End(); ++itr )
-    {
-    this->SetDimensions( count, itr->GetInt() );
-    ++count;
-    }
-
-  if (document.HasMember("metadata"))
+  for (unsigned int i = 0; i < dimension; ++i)
   {
-    auto dictionary = this->GetMetaDataDictionary();
-    const rapidjson::Value & metadataJson = document["metadata"];
-    wasm::ConvertJSONToMetaDataDictionary(metadataJson, dictionary);
-    this->SetMetaDataDictionary(dictionary);
+    this->SetOrigin(i, imageJSON.origin[i]);
   }
+
+  for (unsigned int i = 0; i < dimension; ++i)
+  {
+    this->SetSpacing(i, imageJSON.spacing[i]);
+  }
+
+  const std::string path = this->GetFileName();
+  const auto dataPath = path + "/data";
+  const auto directionPath = dataPath +  "/direction.raw";
+  std::ifstream directionStream;
+  this->OpenFileForReading( directionStream, directionPath.c_str(), false );
+  unsigned int count = 0;
+  for( unsigned int jj = 0; jj < dimension; ++jj )
+  {
+    std::vector< double > direction( dimension );
+    for( unsigned int ii = 0; ii < dimension; ++ii )
+      {
+      directionStream.read(reinterpret_cast< char * >(&(direction[ii])), sizeof(double));
+      }
+    this->SetDirection( count, direction );
+    ++count;
+  }
+
+  for (unsigned int i = 0; i < dimension; ++i)
+  {
+    this->SetDimensions(i, imageJSON.size[i]);
+  }
+
+  auto dictionary = this->GetMetaDataDictionary();
+  jsonToMetaDataDictionary(imageJSON.metadata, dictionary);
+  this->SetMetaDataDictionary(dictionary);
 }
 
 
@@ -506,37 +510,19 @@ WasmImageIO
     return;
   }
 
-  rapidjson::Document document;
   std::ifstream inputStream;
   const auto indexPath = path + "/index.json";
   this->OpenFileForReading( inputStream, indexPath.c_str(), true );
-  std::string str((std::istreambuf_iterator<char>(inputStream)),
-                    std::istreambuf_iterator<char>());
-  if (document.Parse(str.c_str()).HasParseError())
-    {
-    itkExceptionMacro("Could not parse JSON");
-    return;
-    }
-  this->SetJSON(document);
-
-  const unsigned int dimension = this->GetNumberOfDimensions();
-  const auto dataPath = path + "/data";
-  int count = 0;
-
-  const auto directionPath = dataPath +  "/direction.raw";
-  std::ifstream directionStream;
-  this->OpenFileForReading( directionStream, directionPath.c_str(), false );
-  count = 0;
-  for( unsigned int jj = 0; jj < dimension; ++jj )
+  std::string str((std::istreambuf_iterator<char>(inputStream)), std::istreambuf_iterator<char>());
+  auto        deserializedAttempt = glz::read_json<itk::ImageJSON>(str);
+  if (!deserializedAttempt)
   {
-    std::vector< double > direction( dimension );
-    for( unsigned int ii = 0; ii < dimension; ++ii )
-      {
-      directionStream.read(reinterpret_cast< char * >(&(direction[ii])), sizeof(double));
-      }
-    this->SetDirection( count, direction );
-    ++count;
+    const std::string descriptiveError = glz::format_error(deserializedAttempt, str);
+    itkExceptionMacro("Failed to deserialize ImageJSON: " << descriptiveError);
   }
+  const auto imageJSON = deserializedAttempt.value();
+
+  this->SetJSON(imageJSON);
 }
 
 
@@ -614,70 +600,45 @@ WasmImageIO
 }
 
 
-rapidjson::Document
+auto
 WasmImageIO
-::GetJSON()
+::GetJSON() -> ImageJSON
 {
-  rapidjson::Document document;
-  document.SetObject();
-  rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-
-  rapidjson::Value imageType;
-  imageType.SetObject();
+  ImageJSON imageJSON;
 
   const unsigned int dimension = this->GetNumberOfDimensions();
-  imageType.AddMember("dimension", rapidjson::Value(dimension).Move(), allocator );
+  imageJSON.imageType.dimension = dimension;
 
-  const std::string componentString = WasmComponentTypeFromIOComponentEnum( this->GetComponentType() );
-  rapidjson::Value componentType;
-  componentType.SetString( componentString.c_str(), allocator );
-  imageType.AddMember("componentType", componentType.Move(), allocator );
+  imageJSON.imageType.componentType = jsonComponentTypeFromIOComponentEnum( this->GetComponentType() );
+  imageJSON.imageType.pixelType = jsonFromIOPixelEnum( this->GetPixelType() );
+  imageJSON.imageType.components = this->GetNumberOfComponents();
 
-  const std::string pixelString = WasmPixelTypeFromIOPixelEnum( this->GetPixelType() );
-  rapidjson::Value pixelType;
-  pixelType.SetString( pixelString.c_str(), allocator );
-  imageType.AddMember("pixelType", pixelType.Move(), allocator );
-
-  imageType.AddMember("components", rapidjson::Value( this->GetNumberOfComponents() ).Move(), allocator );
-
-  document.AddMember( "imageType", imageType.Move(), allocator );
-
-  rapidjson::Value origin(rapidjson::kArrayType);
+  imageJSON.origin.clear();
   for( unsigned int ii = 0; ii < dimension; ++ii )
-    {
-    origin.PushBack(rapidjson::Value().SetDouble(this->GetOrigin( ii )), allocator);
-    }
-  document.AddMember( "origin", origin.Move(), allocator );
+  {
+    imageJSON.origin.push_back(this->GetOrigin( ii ));
+  }
 
-  rapidjson::Value spacing(rapidjson::kArrayType);
+  imageJSON.spacing.clear();
   for( unsigned int ii = 0; ii < dimension; ++ii )
-    {
-    spacing.PushBack(rapidjson::Value().SetDouble(this->GetSpacing( ii )), allocator);
-    }
-  document.AddMember( "spacing", spacing.Move(), allocator );
+  {
+    imageJSON.spacing.push_back(this->GetSpacing( ii ));
+  }
 
-  rapidjson::Value directionValue;
-  directionValue.SetString( "data:application/vnd.itk.path,data/direction.raw", allocator );
-  document.AddMember( "direction", directionValue.Move(), allocator );
+  imageJSON.direction = "data:application/vnd.itk.path,data/direction.raw";
 
-  rapidjson::Value size(rapidjson::kArrayType);
+  imageJSON.size.clear();
   for( unsigned int ii = 0; ii < dimension; ++ii )
-    {
-    size.PushBack(rapidjson::Value().SetInt( this->GetDimensions( ii ) ), allocator);
-    }
-  document.AddMember( "size", size.Move(), allocator );
+  {
+    imageJSON.size.push_back(this->GetDimensions( ii ));
+  }
 
-  std::string dataFileString( "data:application/vnd.itk.path,data/data.raw" );
-  rapidjson::Value dataFile;
-  dataFile.SetString( dataFileString.c_str(), allocator );
-  document.AddMember( "data", dataFile, allocator );
+  imageJSON.data = "data:application/vnd.itk.path,data/data.raw";
 
   auto dictionary = this->GetMetaDataDictionary();
-  rapidjson::Value metadataJson(rapidjson::kArrayType);
-  wasm::ConvertMetaDataDictionaryToJSON(dictionary, metadataJson, allocator);
-  document.AddMember( "metadata", metadataJson.Move(), allocator );
+  metaDataDictionaryToJSON(dictionary, imageJSON.metadata);
 
-  return document;
+  return imageJSON;
 }
 
 void
@@ -703,7 +664,7 @@ WasmImageIO
       itksys::SystemTools::MakeDirectory(dataPath);
     }
 
-  rapidjson::Document document = this->GetJSON();
+  const auto imageJSON = this->GetJSON();
   const unsigned int dimension = this->GetNumberOfDimensions();
 
   const auto directionPath = dataPath + "/direction.raw";
@@ -722,11 +683,15 @@ WasmImageIO
       }
     }
 
+  std::string serialized{};
+  auto ec = glz::write<glz::opts{ .prettify = true }>(imageJSON, serialized);
+  if (ec)
+  {
+    itkExceptionMacro("Failed to serialize ImageJSON");
+  }
   std::ofstream outputStream;
-  this->OpenFileForWriting( outputStream, indexPath.c_str(), true, true );
-  rapidjson::OStreamWrapper ostreamWrapper( outputStream );
-  rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
-  document.Accept( writer );
+  openFileForWriting(outputStream, indexPath.c_str(), true, true);
+  outputStream << serialized;
   outputStream.close();
 }
 

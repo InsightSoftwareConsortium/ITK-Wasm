@@ -29,20 +29,15 @@
 #include "itkMeshIOFactory.h"
 #include "WebAssemblyInterfaceExport.h"
 
+#include "itkPolyDataJSON.h"
+
 namespace itk
 {
 
+WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, PolyDataTypeJSON & polyDataType);
+
 namespace wasm
 {
-
-struct InterfacePolyDataType
-{
-  std::string componentType{"uint8"};
-  std::string pixelType{"Scalar"};
-  unsigned int components{1};
-};
-
-WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, InterfacePolyDataType & polyDataType);
 
 /** \class SupportInputPolyDataTypes
  *
@@ -96,7 +91,8 @@ public:
   static int
   PixelTypes(const std::string & inputPolyDataOptionName, Pipeline & pipeline)
   {
-    InterfacePolyDataType polyDataType;
+    PolyDataTypeJSON polyDataType;
+
     const auto iwpArgc = pipeline.get_argc();
     const auto iwpArgv = pipeline.get_argv();
     bool passThrough = false;
@@ -125,16 +121,18 @@ public:
 private:
   template<typename TPixel, typename ...TPixelsRest>
   static int
-  IteratePixelTypes(Pipeline & pipeline, const InterfacePolyDataType & polyDataType, bool passThrough = false)
+  IteratePixelTypes(Pipeline & pipeline, const PolyDataTypeJSON & polyDataType, bool passThrough = false)
   {
     using PixelType = TPixel;
     using ConvertPixelTraits = MeshConvertPixelTraits<PixelType>;
 
-    if (passThrough || polyDataType.components == 0
-     || polyDataType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::ComponentString
-     && polyDataType.pixelType == MapPixelType<PixelType>::PixelString)
+    const auto components = polyDataType.pointPixelComponents ? polyDataType.pointPixelComponents : polyDataType.cellPixelComponents;
+
+    if (passThrough || components == 0
+     || polyDataType.pointPixelComponentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum
+     && polyDataType.pointPixelType == MapPixelType<PixelType>::JSONPixelEnum)
     {
-      if (polyDataType.pixelType == "VariableLengthVector" || polyDataType.pixelType == "VariableSizeMatrix" )
+      if (polyDataType.pointPixelType == JSONPixelTypesEnum::VariableLengthVector || polyDataType.pointPixelType == JSONPixelTypesEnum::VariableSizeMatrix)
       {
         // todo: VectorMesh support for ImportMeshFilter?
         // using MeshType = itk::VectorMesh<typename ConvertPixelTraits::ComponentType, Dimension>;
@@ -142,7 +140,7 @@ private:
         // using PipelineType = TPipelineFunctor<MeshType>;
         // return PipelineType()(pipeline);
       }
-      else if(passThrough || polyDataType.components == ConvertPixelTraits::GetNumberOfComponents() || polyDataType.components == 0 )
+      else if(passThrough || components == ConvertPixelTraits::GetNumberOfComponents() || components == 0 )
       {
         using PolyDataType = PolyData<PixelType>;
 
@@ -156,7 +154,8 @@ private:
     }
 
     std::ostringstream ostrm;
-    ostrm << "Unsupported pixel type: " << polyDataType.pixelType << " with component type: " << polyDataType.componentType << " and components: " << polyDataType.components;
+    std::string polyDataTypeString = glz::write_json(polyDataType).value_or("error");
+    ostrm << "Unsupported polyData type: " << polyDataTypeString << std::endl;
     CLI::Error err("Runtime error", ostrm.str(), 1);
     return pipeline.exit(err);
   }

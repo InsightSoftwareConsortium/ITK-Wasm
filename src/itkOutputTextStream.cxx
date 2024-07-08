@@ -21,7 +21,6 @@
 #ifndef ITK_WASM_NO_MEMORY_IO
 #include "itkWasmExports.h"
 #include <sstream>
-#include "rapidjson/document.h"
 #include "itkWasmStringStream.h"
 #endif
 

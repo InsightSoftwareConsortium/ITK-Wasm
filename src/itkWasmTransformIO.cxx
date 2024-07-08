@@ -640,7 +640,8 @@ WasmTransformIOTemplate<TParametersValueType>::ReadTransformInformation() -> con
   auto        deserializedAttempt = glz::read_json<itk::TransformListJSON>(str);
   if (!deserializedAttempt)
   {
-    itkExceptionMacro("Failed to deserialize TransformListJSON");
+    const std::string descriptiveError = glz::format_error(deserializedAttempt, str);
+    itkExceptionMacro("Failed to deserialize TransformListJSON: " << descriptiveError);
   }
   auto transformListJSON = deserializedAttempt.value();
 

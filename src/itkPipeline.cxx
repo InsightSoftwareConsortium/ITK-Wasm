@@ -20,9 +20,6 @@
 #include <rang.hpp>
 #endif
 #include "CLI/Formatter.hpp"
-#include "rapidjson/document.h"
-#include "rapidjson/prettywriter.h"
-#include "rapidjson/ostreamwrapper.h"
 
 namespace itk
 {
@@ -284,82 +281,70 @@ Pipeline
 
 }
 
+struct CLIOptionJSON
+{
+  std::string description;
+  std::string name;
+  std::string type;
+  bool required;
+  int itemsExpected;
+  int itemsExpectedMin;
+  int itemsExpectedMax;
+  std::string defaultStr;
+};
+
+struct InterfaceJSON
+{
+  std::string description;
+  std::string name;
+  std::string version;
+  std::vector<CLIOptionJSON> inputs;
+  std::vector<CLIOptionJSON> outputs;
+  std::vector<CLIOptionJSON> parameters;
+};
+
 void
 Pipeline
 ::interface_json()
 {
-  rapidjson::Document document;
-  document.SetObject();
-  rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
 
-  rapidjson::Value description;
-  description.SetString(this->get_description().c_str(), allocator);
-  document.AddMember("description", description.Move(), allocator);
+  InterfaceJSON interfaceJSON;
 
-  rapidjson::Value name;
-  name.SetString(this->get_name().c_str(), allocator);
-  document.AddMember("name", name.Move(), allocator);
+  interfaceJSON.description = this->get_description();
+  interfaceJSON.name = this->get_name();
+  interfaceJSON.version = this->version();
 
-  rapidjson::Value version;
-  version.SetString(this->version().c_str(), allocator);
-  document.AddMember("version", version.Move(), allocator);
-
-  rapidjson::Value inputs(rapidjson::kArrayType);
-  rapidjson::Value outputs(rapidjson::kArrayType);
-  rapidjson::Value parameters(rapidjson::kArrayType);
   for(CLI::Option *opt : this->get_options({})) {
-    rapidjson::Value option;
-    option.SetObject();
-
-    rapidjson::Value optionDescription;
-    optionDescription.SetString(opt->get_description().c_str(), allocator);
-    option.AddMember("description", optionDescription.Move(), allocator);
-
-    auto singleName = opt->get_single_name();
+    CLIOptionJSON optionJSON;
+    optionJSON.description = opt->get_description();
+    const auto singleName = opt->get_single_name();
     if (singleName == "help")
     {
       continue;
     }
-
-    rapidjson::Value optionName;
-    optionName.SetString(opt->get_single_name().c_str(), allocator);
-    option.AddMember("name", optionName.Move(), allocator);
-
-    rapidjson::Value required;
-    required.SetBool(opt->get_required());
-    option.AddMember("required", required.Move(), allocator);
-
-    rapidjson::Value itemsExpected;
-    itemsExpected.SetInt(opt->get_items_expected());
-    option.AddMember("itemsExpected", itemsExpected.Move(), allocator);
-
-    rapidjson::Value itemsExpectedMin;
-    itemsExpectedMin.SetInt(opt->get_items_expected_min());
-    option.AddMember("itemsExpectedMin", itemsExpectedMin.Move(), allocator);
-
-    rapidjson::Value itemsExpectedMax;
-    itemsExpectedMax.SetInt(opt->get_items_expected_max());
-    option.AddMember("itemsExpectedMax", itemsExpectedMax.Move(), allocator);
-
-    auto typeName = opt->get_type_name();
-    // flag
+    optionJSON.name = opt->get_single_name();
+    optionJSON.required = opt->get_required();
+    optionJSON.itemsExpected = opt->get_items_expected();
+    optionJSON.itemsExpectedMin = opt->get_items_expected_min();
+    optionJSON.itemsExpectedMax = opt->get_items_expected_max();
+    optionJSON.type = opt->get_type_name();
     if (!opt->get_items_expected())
     {
-      typeName = "BOOL";
+      optionJSON.type = "BOOL";
     }
-    rapidjson::Value optionTypeName;
-    optionTypeName.SetString(typeName.c_str(), allocator);
-    option.AddMember("type", optionTypeName.Move(), allocator);
-
+    if (!opt->get_default_str().empty())
+    {
+      optionJSON.defaultStr = opt->get_default_str();
+    }
     if (opt->get_positional())
     {
-      if (typeName.rfind("OUTPUT", 0) != std::string::npos)
+      if (optionJSON.type.rfind("OUTPUT", 0) != std::string::npos)
       {
-        outputs.PushBack(option, allocator);
+        interfaceJSON.outputs.push_back(optionJSON);
       }
       else
       {
-        inputs.PushBack(option, allocator);
+        interfaceJSON.inputs.push_back(optionJSON);
       }
     }
     else
@@ -372,24 +357,39 @@ Pipeline
       }
       if (!opt->get_default_str().empty())
       {
-        rapidjson::Value defaultStr;
-        defaultStr.SetString(opt->get_default_str().c_str(), allocator);
-        option.AddMember("default", defaultStr.Move(), allocator);
+        optionJSON.defaultStr = opt->get_default_str();
       }
-      parameters.PushBack(option, allocator);
+      interfaceJSON.parameters.push_back(optionJSON);
     }
   }
-  document.AddMember("inputs", inputs.Move(), allocator);
-  document.AddMember("outputs", outputs.Move(), allocator);
-  document.AddMember("parameters", parameters.Move(), allocator);
 
-  rapidjson::OStreamWrapper ostreamWrapper( std::cout );
-  rapidjson::PrettyWriter< rapidjson::OStreamWrapper > writer( ostreamWrapper );
-  document.Accept( writer );
-  std::cout << std::endl;
+  std::string serialized{};
+  auto ec = glz::write<glz::opts{ .prettify = true, .concatenate = false }>(interfaceJSON, serialized);
+  if (ec)
+  {
+    const std::string descriptiveError = glz::format_error(ec, serialized);
+    std::cerr << "Error during interface JSON serialization: " << descriptiveError << std::endl;
+    return;
+  }
+  std::cout << serialized << std::endl;
 }
 
 bool Pipeline::m_UseMemoryIO{false};
 
 } // end namespace wasm
 } // end namespace itk
+
+template <>
+struct glz::meta<itk::wasm::CLIOptionJSON> {
+   using T = itk::wasm::CLIOptionJSON;
+   static constexpr auto value = glz::object(
+      "description", &T::description,
+      "name", &T::name,
+      "type", &T::type,
+      "required", &T::required,
+      "itemsExpected", &T::itemsExpected,
+      "itemsExpectedMin", &T::itemsExpectedMin,
+      "itemsExpectedMax", &T::itemsExpectedMax,
+      "default", &T::defaultStr
+   );
+};

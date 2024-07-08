@@ -15,34 +15,55 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkMetaDataDictionaryJSON_h
-#define itkMetaDataDictionaryJSON_h
-
-#include "itkMetaDataDictionary.h"
-#include "itkDefaultConvertPixelTraits.h"
-#include "itkMetaDataObject.h"
-#include "itkArray.h"
-#include "itkMatrix.h"
-
-#include <string>
-#include <vector>
-#include <tuple>
-
-#include "WebAssemblyInterfaceExport.h"
+#ifndef itkPixelTypesJSON_h
+#define itkPixelTypesJSON_h
 
 #include "glaze/glaze.hpp"
 
 namespace itk
 {
-
-using MetadataEntryJSON = std::tuple<std::string, glz::json_t>;
-using MetadataJSON = std::vector<MetadataEntryJSON>;
-
-
-WebAssemblyInterface_EXPORT void metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSON & metadataJson);
-
-WebAssemblyInterface_EXPORT void jsonToMetaDataDictionary(const MetadataJSON & metadataJson, itk::MetaDataDictionary & dictionary);
-
+  enum class JSONPixelTypesEnum
+  {
+    Unknown,
+    Scalar,
+    RGB,
+    RGBA,
+    Offset,
+    Vector,
+    Point,
+    CovariantVector,
+    SymmetricSecondRankTensor,
+    DiffusionTensor3D,
+    Complex,
+    FixedArray,
+    Array,
+    Matrix,
+    VariableLengthVector,
+    VariableSizeMatrix
+  };
 } // end namespace itk
 
-#endif
+template <>
+struct glz::meta<itk::JSONPixelTypesEnum> {
+  using enum itk::JSONPixelTypesEnum;
+  static constexpr auto value = glz::enumerate(
+    Unknown,
+    Scalar,
+    RGB,
+    RGBA,
+    Offset,
+    Vector,
+    Point,
+    CovariantVector,
+    SymmetricSecondRankTensor,
+    DiffusionTensor3D,
+    Complex,
+    FixedArray,
+    Array,
+    Matrix,
+    VariableLengthVector,
+    VariableSizeMatrix
+  );
+};
+
+#endif // itkPixelTypesJSON_h
