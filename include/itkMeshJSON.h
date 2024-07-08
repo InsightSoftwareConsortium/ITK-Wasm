@@ -60,7 +60,7 @@ namespace itk
   {
     MeshTypeJSON meshType;
 
-    std::string name { "mesh"};
+    std::string name { "Mesh"};
 
     size_t numberOfPoints{ 0 };
     std::string points;

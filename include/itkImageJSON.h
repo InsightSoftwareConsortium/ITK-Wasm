@@ -56,7 +56,7 @@ namespace itk
   {
     ImageTypeJSON imageType;
 
-    std::string name { "image" };
+    std::string name { "Image" };
 
     std::vector<double> origin { 0.0, 0.0 };
     std::vector<double> spacing { 1.0, 1.0 };

@@ -57,7 +57,7 @@ namespace itk
   {
     PolyDataTypeJSON polyDataType;
 
-    std::string name { "polydata" };
+    std::string name { "PolyData" };
 
     size_t numberOfPoints{ 0 };
     std::string points;

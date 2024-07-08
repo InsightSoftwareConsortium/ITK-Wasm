@@ -4,7 +4,7 @@ import setMatrixElement from '../set-matrix-element.js'
 import Metadata from './metadata.js'
 
 class Image {
-  name: string = 'image'
+  name: string = 'Image'
 
   origin: number[]
 
@@ -18,7 +18,7 @@ class Image {
 
   data: null | TypedArray
 
-  constructor(public readonly imageType = new ImageType()) {
+  constructor (public readonly imageType = new ImageType()) {
     const dimension = imageType.dimension
     this.origin = new Array(dimension)
     this.origin.fill(0.0)
