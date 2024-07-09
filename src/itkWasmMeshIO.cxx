@@ -32,8 +32,6 @@
 #include "itkIOCommon.h"
 #include "itksys/SystemTools.hxx"
 
-#include "itksys/SystemTools.hxx"
-
 #include "cbor.h"
 
 namespace itk
