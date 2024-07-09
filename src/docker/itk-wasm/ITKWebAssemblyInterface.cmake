@@ -36,6 +36,8 @@ set(_add_executable add_executable)
 function(add_executable target)
   set(wasm_target ${target})
   _add_executable(${wasm_target} ${ARGN})
+  # Suppress CLI11 Encoding_inl.hpp std::wstring_convert deprecation warning
+  target_compile_options(${wasm_target} PRIVATE "-Wno-deprecated-declarations")
   if(EMSCRIPTEN)
     kebab_to_camel(${target} targetCamel)
     get_property(_link_flags TARGET ${target} PROPERTY LINK_FLAGS)
