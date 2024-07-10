@@ -129,6 +129,26 @@ void safeSetString(Value &v, const char *s, Document::AllocatorType& alloc)
   }
 }
 
+/**
+ * @brief Create a rapidjson kArrayType value from an STL style container.
+ *
+ * @tparam Iteratorable Any container type that supports STL style iterator.
+ * @param container Container object.
+ * @param allocator Rapidjson allocator.
+ * @return rapidjson::Value rapidjson Value of kArrayType which contains all
+ *  the values from the input container.
+ */
+template<typename Iteratorable>
+rapidjson::Value getArrayJson(Iteratorable container, rapidjson::Document::AllocatorType& allocator)
+{
+  rapidjson::Value value(rapidjson::kArrayType);
+  for(auto iter = container.begin(); iter != container.end(); ++iter)
+  {
+    value.PushBack(rapidjson::Value(*iter), allocator);
+  }
+  return value;
+}
+
 static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationState &ps, const char *pstName = NULL)
 {
   size_t i, j, max;
@@ -221,13 +241,13 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
 
   std::array<int, 4> displayArea{0, 0, 0, 0};
   ps.getStandardDisplayedArea(displayArea[0], displayArea[1], displayArea[2], displayArea[3]);
-  auto dav = itk::wasm::getArrayJson(displayArea, alloc);
+  auto dav = getArrayJson(displayArea, alloc);
   doc.AddMember("StandardDisplayedArea", dav, alloc);
 
   std::array<double, 2> pixelSpacing{0.0, 0.0};
   if (EC_Normal == ps.getDisplayedAreaPresentationPixelSpacing(pixelSpacing[0], pixelSpacing[1]))
   {
-    auto psv = itk::wasm::getArrayJson(pixelSpacing, alloc);
+    auto psv = getArrayJson(pixelSpacing, alloc);
     doc.AddMember("DisplayedAreaPresentationPixelSpacing", psv, alloc);
   } else {
     auto aspectRatio = ps.getDisplayedAreaPresentationPixelAspectRatio();
@@ -267,7 +287,7 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
         vertices.push_back(polyY);
       }
     }
-    auto coordinates = itk::wasm::getArrayJson(vertices, alloc);
+    auto coordinates = getArrayJson(vertices, alloc);
     Value polyShutter(kObjectType);
 
     // rapidjson::Value doesn't have a default constructor for size_t (aka unsigned long).
@@ -308,7 +328,7 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
       if (EC_Normal == ps.getGraphicLayerRecommendedDisplayValueRGB(layer, r, g, b))
       {
         const std::array<Uint16, 3> rgb{r, g, b};
-        layerJson.AddMember("RecommendedDisplayValueRGB", itk::wasm::getArrayJson(rgb, alloc), alloc);
+        layerJson.AddMember("RecommendedDisplayValueRGB", getArrayJson(rgb, alloc), alloc);
       }
     }
 
@@ -332,7 +352,7 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
         if (ptext->haveAnchorPoint())
         {
           const std::array<double, 2> anchorPoint{ptext->getAnchorPoint_x(), ptext->getAnchorPoint_y()};
-          auto apv = itk::wasm::getArrayJson(anchorPoint, alloc);
+          auto apv = getArrayJson(anchorPoint, alloc);
           textObjectJson.AddMember("AnchorPoint", apv, alloc);
           Value anchorPointUnits;
           std::string anchorPointUnitsString(ptext->getAnchorPointAnnotationUnits()==DVPSA_display? "display" : "pixel");
@@ -344,8 +364,8 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
         if (ptext->haveBoundingBox())
         {
           const std::array<double, 4> box{ptext->getBoundingBoxTLHC_x(), ptext->getBoundingBoxTLHC_y(), ptext->getBoundingBoxBRHC_x(), ptext->getBoundingBoxBRHC_y()};
-          auto bv = itk::wasm::getArrayJson(box, alloc);
-          textObjectJson.AddMember("BoundingBox", itk::wasm::getArrayJson(box, alloc), alloc);
+          auto bv = getArrayJson(box, alloc);
+          textObjectJson.AddMember("BoundingBox", getArrayJson(box, alloc), alloc);
           Value boundingBoxUnits;
           std::string boundingBoxUnitsString(ptext->getBoundingBoxAnnotationUnits()==DVPSA_display ? "display" : "pixel");
           boundingBoxUnits.SetString(boundingBoxUnitsString.c_str(), boundingBoxUnitsString.length(), alloc);
@@ -416,7 +436,7 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
             points.push_back(fy);
           }
         }
-        graphicJson.AddMember("Points", itk::wasm::getArrayJson(points, alloc), alloc);
+        graphicJson.AddMember("Points", getArrayJson(points, alloc), alloc);
         graphicObjectsJsonArray.PushBack(graphicJson, alloc);
       }
     }
@@ -463,7 +483,7 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
             points.push_back(dy);
           }
         }
-        curveJson.AddMember("Points", itk::wasm::getArrayJson(points, alloc), alloc);
+        curveJson.AddMember("Points", getArrayJson(points, alloc), alloc);
         curvesJsonArray.PushBack(curveJson, alloc);
       }
     }
