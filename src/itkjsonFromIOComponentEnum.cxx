@@ -97,7 +97,7 @@ jsonComponentTypeFromIOComponentEnum(const IOComponentEnum & ioComponent)
       return JSONComponentTypesEnum::float64;
     case IOComponentEnum::UNKNOWNCOMPONENTTYPE:
       // default
-      return JSONComponentTypesEnum::float32;
+      return JSONComponentTypesEnum::uint8;
     default:
       throw std::invalid_argument("Unknown IOComponentEnum");
   }
