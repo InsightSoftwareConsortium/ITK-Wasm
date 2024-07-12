@@ -130,23 +130,6 @@ WasmImageIO
     this->SetSpacing(i, imageJSON.spacing[i]);
   }
 
-  const std::string path = this->GetFileName();
-  const auto dataPath = path + "/data";
-  const auto directionPath = dataPath +  "/direction.raw";
-  std::ifstream directionStream;
-  this->OpenFileForReading( directionStream, directionPath.c_str(), false );
-  unsigned int count = 0;
-  for( unsigned int jj = 0; jj < dimension; ++jj )
-  {
-    std::vector< double > direction( dimension );
-    for( unsigned int ii = 0; ii < dimension; ++ii )
-      {
-      directionStream.read(reinterpret_cast< char * >(&(direction[ii])), sizeof(double));
-      }
-    this->SetDirection( count, direction );
-    ++count;
-  }
-
   for (unsigned int i = 0; i < dimension; ++i)
   {
     this->SetDimensions(i, imageJSON.size[i]);
@@ -523,6 +506,24 @@ WasmImageIO
   const auto imageJSON = deserializedAttempt.value();
 
   this->SetJSON(imageJSON);
+
+  const unsigned int dimension = imageJSON.imageType.dimension;
+
+  const auto dataPath = path + "/data";
+  const auto directionPath = dataPath +  "/direction.raw";
+  std::ifstream directionStream;
+  this->OpenFileForReading( directionStream, directionPath.c_str(), false );
+  unsigned int count = 0;
+  for( unsigned int jj = 0; jj < dimension; ++jj )
+  {
+    std::vector< double > direction( dimension );
+    for( unsigned int ii = 0; ii < dimension; ++ii )
+      {
+      directionStream.read(reinterpret_cast< char * >(&(direction[ii])), sizeof(double));
+      }
+    this->SetDirection( count, direction );
+    ++count;
+  }
 }
 
 

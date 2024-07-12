@@ -19,6 +19,8 @@
 #include "itkWasmZstdMeshIO.h"
 #include "zstd.h"
 
+#include "itkWasmIOCommon.h"
+
 namespace itk
 {
 
@@ -73,7 +75,7 @@ WasmZstdMeshIO
        && ( zstdPos == path.length() - 4 ) )
   {
     std::ifstream dataStream;
-    this->OpenFileForReading( dataStream, this->GetFileName() );
+    openFileForReading( dataStream, this->GetFileName(), false );
 
     std::ostringstream ostrm;
     ostrm << dataStream.rdbuf();
@@ -146,7 +148,7 @@ WasmZstdMeshIO
     compressedBinary.resize(compressedSize);
 
     std::ofstream outputStream;
-    this->OpenFileForWriting( outputStream, path.c_str(), true, false );
+    openFileForWriting( outputStream, path.c_str(), true, false );
     std::ostream_iterator<char> oIt(outputStream);
     std::copy(compressedBinary.begin(), compressedBinary.end(), oIt);
     return;

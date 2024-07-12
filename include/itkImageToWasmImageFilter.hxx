@@ -146,8 +146,6 @@ ImageToWasmImageFilter<TImage>
   {
     itkExceptionMacro("Failed to serialize ImageJSON");
   }
-  std::cout << "serialized: " << serialized << std::endl;
-
   wasmImage->SetJSON(serialized);
 }
 

@@ -11,8 +11,8 @@ option(ZSTD_BUILD_LZ4 "BUILD_LZ4" OFF)
 option(ZSTD_BUILD_LZMA "BUILD_LZMA" OFF)
 option(ZSTD_BUILD_ZLIB "BUILD_ZLIB" OFF)
 set(zstd_GIT_REPOSITORY "https://github.com/facebook/zstd.git")
-# v1.5.5
-set(zstd_GIT_TAG 17ecb1e2df45a45be908b34aba34955199bf11b4)
+# v1.5.6
+set(zstd_GIT_TAG 794ea1b0afca0f020f4e57b6732332231fb23c70)
 FetchContent_Declare(
   zstd_lib
   GIT_REPOSITORY ${zstd_GIT_REPOSITORY}

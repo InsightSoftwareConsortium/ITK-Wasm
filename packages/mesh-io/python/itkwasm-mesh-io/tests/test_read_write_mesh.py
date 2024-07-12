@@ -11,7 +11,7 @@ test_output_file_path = test_output_path / "read-write-cow.vtk"
 def verify_mesh(mesh):
     assert mesh.meshType.dimension == 3
     assert mesh.meshType.pointComponentType == FloatTypes.Float32
-    assert mesh.meshType.pointPixelComponentType == IntTypes.Int8
+    assert mesh.meshType.pointPixelComponentType == IntTypes.UInt8
     assert mesh.numberOfPoints == 2903
     assert np.allclose(mesh.points[0],3.71636)
     assert np.allclose(mesh.points[1],2.34339)
