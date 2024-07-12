@@ -30,6 +30,216 @@
   <br /><br />
 
   <sl-tab-group>
+    <sl-tab slot="nav" panel="downsampleBinShrink-panel">downsampleBinShrink</sl-tab>
+    <sl-tab slot="nav" panel="downsampleLabelImage-panel">downsampleLabelImage</sl-tab>
+    <sl-tab slot="nav" panel="downsampleSigma-panel">downsampleSigma</sl-tab>
+    <sl-tab slot="nav" panel="downsample-panel">downsample</sl-tab>
+    <sl-tab slot="nav" panel="gaussianKernelRadius-panel">gaussianKernelRadius</sl-tab>
+
+
+    <sl-tab-panel name="downsampleBinShrink-panel">
+
+    <small><i>Apply local averaging and subsample the input image.</i></small><br /><br />
+
+    <div id="downsampleBinShrinkInputs"><form action="">
+      <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the input"><itk-image-details id="downsampleBinShrink-input-details" summary="input: Input image" disabled></itk-image-details></sl-tooltip>
+<br /><br />
+      <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
+<br />
+      <sl-checkbox name="information-only">informationOnly - <i>Generate output image information only. Do not process pixels.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="downsampleBinShrinkOutputs">
+      <itk-image-details disabled id="downsampleBinShrink-downsampled-details" summary="downsampled: Output downsampled image"></itk-image-details>
+      <sl-select id="downsampleBinShrink-downsampled-output-format" placeholder="Format">
+        <sl-option value="bmp">bmp</sl-option>
+        <sl-option value="dcm">dcm</sl-option>
+        <sl-option value="gipl">gipl</sl-option>
+        <sl-option value="hdf5">hdf5</sl-option>
+        <sl-option value="jpg">jpg</sl-option>
+        <sl-option value="lsm">lsm</sl-option>
+        <sl-option value="mnc">mnc</sl-option>
+        <sl-option value="mnc.gz">mnc.gz</sl-option>
+        <sl-option value="mgh">mgh</sl-option>
+        <sl-option value="mha">mha</sl-option>
+        <sl-option value="mrc">mrc</sl-option>
+        <sl-option value="nii">nii</sl-option>
+        <sl-option value="nii.gz">nii.gz</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="nrrd">nrrd</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="pic">pic</sl-option>
+        <sl-option value="tif">tif</sl-option>
+        <sl-option value="isq">isq</sl-option>
+        <sl-option value="fdf">fdf</sl-option>
+        <sl-option value="vtk">vtk</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="downsampled-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="downsampleLabelImage-panel">
+
+    <small><i>Subsample the input label image a according to weighted voting of local labels.</i></small><br /><br />
+
+    <div id="downsampleLabelImageInputs"><form action="">
+      <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the input"><itk-image-details id="downsampleLabelImage-input-details" summary="input: Input image" disabled></itk-image-details></sl-tooltip>
+<br /><br />
+      <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
+<br />
+      <sl-input name="crop-radius" type="text" value="{}" label="cropRadius" help-text="Optional crop radius in pixel units."></sl-input>
+<br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="downsampleLabelImageOutputs">
+      <itk-image-details disabled id="downsampleLabelImage-downsampled-details" summary="downsampled: Output downsampled image"></itk-image-details>
+      <sl-select id="downsampleLabelImage-downsampled-output-format" placeholder="Format">
+        <sl-option value="bmp">bmp</sl-option>
+        <sl-option value="dcm">dcm</sl-option>
+        <sl-option value="gipl">gipl</sl-option>
+        <sl-option value="hdf5">hdf5</sl-option>
+        <sl-option value="jpg">jpg</sl-option>
+        <sl-option value="lsm">lsm</sl-option>
+        <sl-option value="mnc">mnc</sl-option>
+        <sl-option value="mnc.gz">mnc.gz</sl-option>
+        <sl-option value="mgh">mgh</sl-option>
+        <sl-option value="mha">mha</sl-option>
+        <sl-option value="mrc">mrc</sl-option>
+        <sl-option value="nii">nii</sl-option>
+        <sl-option value="nii.gz">nii.gz</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="nrrd">nrrd</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="pic">pic</sl-option>
+        <sl-option value="tif">tif</sl-option>
+        <sl-option value="isq">isq</sl-option>
+        <sl-option value="fdf">fdf</sl-option>
+        <sl-option value="vtk">vtk</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="downsampled-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="downsampleSigma-panel">
+
+    <small><i>Compute gaussian kernel sigma values in pixel units for downsampling.</i></small><br /><br />
+
+    <div id="downsampleSigmaInputs"><form action="">
+      <sl-input name="shrink-factors" type="text" value="[2,2]" min="0" step="1" label="shrinkFactors" help-text="Shrink factors"></sl-input>
+<br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="downsampleSigmaOutputs">
+      <sl-details disabled id="downsampleSigma-sigma-details" summary="sigma: Output sigmas in pixel units."></sl-details>
+      <sl-button variant="neutral" outline name="sigma-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="downsample-panel">
+
+    <small><i>Apply a smoothing anti-alias filter and subsample the input image.</i></small><br /><br />
+
+    <div id="downsampleInputs"><form action="">
+      <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the input"><itk-image-details id="downsample-input-details" summary="input: Input image" disabled></itk-image-details></sl-tooltip>
+<br /><br />
+      <sl-input name="shrink-factors" type="text" value="[2,2]" label="shrinkFactors" help-text="Shrink factors"></sl-input>
+<br />
+      <sl-input name="crop-radius" type="text" value="{}" label="cropRadius" help-text="Optional crop radius in pixel units."></sl-input>
+<br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="downsampleOutputs">
+      <itk-image-details disabled id="downsample-downsampled-details" summary="downsampled: Output downsampled image"></itk-image-details>
+      <sl-select id="downsample-downsampled-output-format" placeholder="Format">
+        <sl-option value="bmp">bmp</sl-option>
+        <sl-option value="dcm">dcm</sl-option>
+        <sl-option value="gipl">gipl</sl-option>
+        <sl-option value="hdf5">hdf5</sl-option>
+        <sl-option value="jpg">jpg</sl-option>
+        <sl-option value="lsm">lsm</sl-option>
+        <sl-option value="mnc">mnc</sl-option>
+        <sl-option value="mnc.gz">mnc.gz</sl-option>
+        <sl-option value="mgh">mgh</sl-option>
+        <sl-option value="mha">mha</sl-option>
+        <sl-option value="mrc">mrc</sl-option>
+        <sl-option value="nii">nii</sl-option>
+        <sl-option value="nii.gz">nii.gz</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="nrrd">nrrd</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="pic">pic</sl-option>
+        <sl-option value="tif">tif</sl-option>
+        <sl-option value="isq">isq</sl-option>
+        <sl-option value="fdf">fdf</sl-option>
+        <sl-option value="vtk">vtk</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="downsampled-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="gaussianKernelRadius-panel">
+
+    <small><i>Radius in pixels required for effective discrete gaussian filtering.</i></small><br /><br />
+
+    <div id="gaussianKernelRadiusInputs"><form action="">
+      <sl-input name="size" type="text" value="[1,1]" min="0" step="1" label="size" help-text="Size in pixels"></sl-input>
+<br />
+      <sl-input name="sigma" type="text" value="[1,1]" step="any" label="sigma" help-text="Sigma in pixel units"></sl-input>
+<br />
+      <sl-input name="max-kernel-width" type="number" value="32" min="0" step="1" label="maxKernelWidth" help-text="Maximum kernel width in pixels."></sl-input>
+<br />
+      <sl-input name="max-kernel-error" type="number" value="0.01" step="any" label="maxKernelError" help-text="Maximum kernel error."></sl-input>
+<br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="gaussianKernelRadiusOutputs">
+      <sl-details disabled id="gaussianKernelRadius-radius-details" summary="radius: Output kernel radius."></sl-details>
+      <sl-button variant="neutral" outline name="radius-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
 
 
   </sl-tab-group>
