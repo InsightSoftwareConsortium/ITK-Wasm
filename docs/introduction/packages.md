@@ -77,9 +77,9 @@ request](https://github.com/InsightSoftwareConsortium/ITK-Wasm/compare) to add i
 [mesh-io-docs-py]: https://insightsoftwareconsortium.github.io/itk-wasm/mesh-io/py/docs/
 [mesh-io-package-py]: https://pypi.org/project/itkwasm-mesh-io/
 
-[morphological-contour-interpolation-repo]: https://github.com/KitwareMedical/ITKMorphologicalContourInterpolation/
-[morphological-contour-interpolation-demo-js]: https://kitwaremedical.github.io/ITKMorphologicalContourInterpolation/ts/app/
-[morphological-contour-interpolation-docs-js]: https://kitwaremedical.github.io/ITKMorphologicalContourInterpolation/ts/docs/
+[morphological-contour-interpolation-repo]: https://github.com/KitwareMedical/ITKContourInterpolation/
+[morphological-contour-interpolation-demo-js]: https://kitwaremedical.github.io/ITKContourInterpolation/ts/app/
+[morphological-contour-interpolation-docs-js]: https://kitwaremedical.github.io/ITKContourInterpolation/ts/docs/
 [morphological-contour-interpolation-package-js]: https://www.npmjs.com/package/@itk-wasm/morphological-contour-interpolation
-[morphological-contour-interpolation-docs-py]: https://kitwaremedical.github.io/ITKMorphologicalContourInterpolation/py/docs/
+[morphological-contour-interpolation-docs-py]: https://kitwaremedical.github.io/ITKContourInterpolation/py/docs/
 [morphological-contour-interpolation-package-py]: https://pypi.org/project/itkwasm-morphological-contour-interpolation/
