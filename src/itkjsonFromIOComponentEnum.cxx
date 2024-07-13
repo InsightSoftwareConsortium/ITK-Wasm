@@ -87,6 +87,10 @@ jsonComponentTypeFromIOComponentEnum(const IOComponentEnum & ioComponent)
       return JSONComponentTypesEnum::uint32;
     case IOComponentEnum::INT:
       return JSONComponentTypesEnum::int32;
+    case IOComponentEnum::ULONG:
+      return JSONComponentTypesEnum::uint64;
+    case IOComponentEnum::LONG:
+      return JSONComponentTypesEnum::int64;
     case IOComponentEnum::ULONGLONG:
       return JSONComponentTypesEnum::uint64;
     case IOComponentEnum::LONGLONG:
