@@ -151,7 +151,7 @@ Check the generated help output:
 npx itk-wasm run hello-pipeline.wasi.wasm -- -- --help
 ```
 
-![Hello pipeline help](/_static/tutorial/hello_pipeline.png)
+![Hello pipeline help](/static/tutorial/hello_pipeline.png)
 
 The two `--`'s are to separate arguments for the Wasm module from arguments to the `itk-wasm` CLI and the WebAssembly interpreter.
 

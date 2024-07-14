@@ -5,7 +5,7 @@ ITK-Wasm
 
 <div align="center">
 
-![itk-wasm](_static/itk-webassembly.png)
+![itk-wasm](static/itk-webassembly.png)
 
 [![Examples](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/examples.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/examples.yml) [![Toolchains](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/toolchains.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/toolchains.yml) [![JavaScript, TypeScript](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/javascript-typescript.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/javascript-typescript.yml) [![Python WASM](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/python-wasm.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/python-wasm.yml) [![C++,Native Python](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/cxx-python.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/cxx-python.yml) [![WASI](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/wasi.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/wasi.yml) [![Documentation](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/documentation.yml/badge.svg)](https://github.com/InsightSoftwareConsortium/ITK-Wasm/actions/workflows/documentation.yml)
 

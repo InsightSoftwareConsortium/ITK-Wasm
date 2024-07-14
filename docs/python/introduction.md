@@ -22,7 +22,7 @@ provides further background information and related hands-on experiences.
 
 There is a primary, pip-installable Python package. In browser environments, this will pull a corresponding [Emscripten](https://emscripten.org)-enabled Python package. For system Python distributions, this will bring in a corresponding [WASI](https://wasi.dev)-enabled Python package. When GPU-accelerated implementations of functions are available in other packages along with required hardware and software, simply pip-installing the accelerator package will cause function calls to invoke accelerated overrides registered with modern [package metadata](https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/#using-package-metadata).
 
-![environment dispatch diagram](/_static/environment-dispatch-mermaid.svg)
+![environment dispatch diagram](/static/environment-dispatch-mermaid.svg)
 
 
 ## Browser and system APIs

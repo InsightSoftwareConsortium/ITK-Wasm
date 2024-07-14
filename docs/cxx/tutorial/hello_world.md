@@ -153,6 +153,6 @@ http-server .
 
 And point your browser to `http://127.0.0.1:8080/`.
 
-![Hello Wasm World!](/_static/tutorial/hello_wasm_world.png)
+![Hello Wasm World!](/static/tutorial/hello_wasm_world.png)
 
 Congratulations! You just executed a C++ program in your web browser. 🎉

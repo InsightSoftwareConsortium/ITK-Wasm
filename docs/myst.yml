@@ -1,0 +1,22 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: 823d8bd8-d894-408c-bd81-bca17930fb73
+  title: "ITK-Wasm documentation"
+  subtitle: "Universal spatial analysis and visualization."
+  short_title: "ITK-Wasm"
+  description: "ITK-Wasm combines ITK and WebAssembly to enable high-performance spatial analysis in a web browser or system-level environments and reproducible execution across programming languages and hardware architectures."
+  keywords: ["ITK", "WebAssembly", "JavaScript", "Python", "Biomedical Imaging", "Scientific Computing", "Image Processing", "Visualization"]
+  authors: ["Matthew McCormick"]
+  github: https://github.com/InsightSoftwareConsortium/ITK-Wasm
+  license:
+    code: Apache-2.0
+    content: CC-BY-4.0
+  # To autogenerate a Table of Contents, run "myst init --write-toc"
+site:
+  title: "ITK-Wasm documentation"
+  template: book-theme
+  options:
+    favicon: static/icon/favicon.png
+    logo: static/logo-white.svg
+    logo_text: "ITK-Wasm"
