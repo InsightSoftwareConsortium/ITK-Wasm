@@ -10,7 +10,7 @@ import {
   InterfaceTypes
 } from '../../../dist/index-node.js'
 
-function readCthead1() {
+function readCthead1 () {
   const testInputImageDir = path.resolve(
     'test',
     'pipelines',
@@ -48,7 +48,7 @@ function readCthead1() {
   image.data = pixelData
   return image
 }
-function readCow() {
+function readCow () {
   const testInputMeshDir = path.resolve(
     'test',
     'pipelines',
