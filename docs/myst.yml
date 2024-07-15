@@ -23,9 +23,9 @@ project:
         - title: File Formats
           children:
             - file: introduction/file_formats/index.md
-            - file: introduction/file_formats/dicom.md
             - file: introduction/file_formats/images.md
             - file: introduction/file_formats/meshes.md
+            - file: introduction/file_formats/dicom.md
     - title: 🔗 Model
       children:
         - file: model/index.md

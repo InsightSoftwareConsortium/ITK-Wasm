@@ -4,21 +4,38 @@ Example packages built with itk-wasm can be found below. If you created a
 package, please [open a pull
 request](https://github.com/InsightSoftwareConsortium/ITK-Wasm/compare) to add it to the table!
 
-| <img width=100/> Repository | <img width=125/> Description <img width=125/> | <img width=200/> Links |
-|-----------------------------|:---------------------------------------------:|:----------------------:|
-| [@itk-wasm/compare-images][compare-images-repo] | [<img src="../static/packages/compare-images.png" width="128" />][compare-images-demo-js] <br /> *Compare images with a tolerance for regression testing.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][compare-images-demo-js] <br/>[🕮 Docs][compare-images-docs-js] <br/>[📦 Package][compare-images-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][compare-images-docs-py] <br/>[📦 Package][compare-images-package-py] |
-| [@itk-wasm/compress-stringify][compress-stringify-repo] | [<img src="../static/packages/compress-stringify.png" width="128" />][compress-stringify-demo-js]<br />  *Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][compress-stringify-demo-js] <br/>[🕮 Docs][compress-stringify-docs-js] <br/>[📦 Package][compress-stringify-package-js] <br/> <br/> ![py][py-logo] <br/>[👨‍💻 Demo][compress-stringify-demo-py] <br/>[🕮 Docs][compress-stringify-docs-py] <br/>[📦 Package][compress-stringify-package-py] |
-| [@itk-wasm/dicom][dicom-repo] | [<img src="../static/packages/dicom.png" width="128" />][dicom-demo-js] <br /> *Read files and images related to DICOM file format.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][dicom-demo-js] <br/>[🕮 Docs][dicom-docs-js] <br/>[📦 Package][dicom-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][dicom-docs-py] <br/>[📦 Package][dicom-package-py] |
-| [@itk-wasm/downsample][downsample-repo] | [<img src="../static/packages/downsample.png" width="128" />][downsample-demo-js] <br /> *Pipelines for downsampling images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][downsample-demo-js] <br/>[🕮 Docs][downsample-docs-js] <br/>[📦 Package][downsample-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][downsample-docs-py] <br/>[📦 Package][downsample-package-py] |
-| [@itk-wasm/elastix][elastix-repo] | [<img src="../static/packages/elastix.png" width="128" />][elastix-demo-js] <br /> *A toolbox for rigid and nonrigid registration of images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][elastix-demo-js] <br/>[🕮 Docs][elastix-docs-js] <br/>[📦 Package][elastix-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][elastix-docs-py] <br/>[📦 Package][elastix-package-py] |
-| [@itk-wasm/htj2k][htj2k-repo] | [<img src="../static/packages/htj2k.png" width="128" />][htj2k-demo-js] <br /> *Wasm-SIMD accelerated decoding and encoding High-throughput JPEG2000 (HTJ2K) images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][htj2k-demo-js] <br/>[🕮 Docs][htj2k-docs-js] <br/>[📦 Package][htj2k-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][htj2k-docs-py] <br/>[📦 Package][htj2k-package-py] |
-| [@itk-wasm/image-io][image-io-repo] | [<img src="../static/packages/image-io.png" width="128" />][image-io-demo-js] <br /> *Input and output for scientific and medical image file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][image-io-demo-js] <br/>[🕮 Docs][image-io-docs-js] <br/>[📦 Package][image-io-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][image-io-docs-py] <br/>[📦 Package][image-io-package-py] |
-| [@itk-wasm/mesh-io][mesh-io-repo] | [<img src="../static/packages/mesh-io.png" width="128" />][mesh-io-demo-js] <br /> *Input and output for scientific and medical mesh file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][mesh-io-demo-js] <br/>[🕮 Docs][mesh-io-docs-js] <br/>[📦 Package][mesh-io-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][mesh-io-docs-py] <br/>[📦 Package][mesh-io-package-py] |
-| [@itk-wasm/morphological-contour-interpolation][morphological-contour-interpolation-repo] | [<img src="../static/packages/morphological-contour-interpolation.png" width="128" />][morphological-contour-interpolation-demo-js] <br /> *Input and output for scientific and medical mesh file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][morphological-contour-interpolation-demo-js] <br/>[🕮 Docs][morphological-contour-interpolation-docs-js] <br/>[📦 Package][morphological-contour-interpolation-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][morphological-contour-interpolation-docs-py] <br/>[📦 Package][morphological-contour-interpolation-package-py] |
+```{list-table} Example packages
+:header-rows: 1
+:label: example-packages
+:class: text-center
 
-[js-logo]: /static/javascript-logo.svg
-[ts-logo]: /static/typescript-logo.svg
-[py-logo]: /static/python.svg
+* - Description
+  - Links 
+* - [![compare-images](../static/packages/compare-images.png)][compare-images-demo-js] [compare-images][compare-images-repo] <br /> *Compare images with a tolerance for regression testing.* 
+  - ![js][js-logo] [👨‍💻 Demo][compare-images-demo-js] <br />[🕮 Docs][compare-images-docs-js] <br />[📦 Package][compare-images-package-js] <br /><br /> ![py][py-logo] [🕮 Docs][compare-images-docs-py] <br />[📦 Package][compare-images-package-py] ![](../static/links-spacer.png) 
+* - [![compress-stringify](../static/packages/compress-stringify.png)][compress-stringify-demo-js] [compress-stringify][compress-stringify-repo] <br /> *Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.*
+  - ![js][js-logo] [👨‍💻 Demo][compress-stringify-demo-js] <br />[🕮 Docs][compress-stringify-docs-js] <br />[📦 Package][compress-stringify-package-js] <br/> <br/> ![py][py-logo] [👨‍💻 Demo][compress-stringify-demo-py] <br />[🕮 Docs][compress-stringify-docs-py] <br />[📦 Package][compress-stringify-package-py]
+* - [![dicom](../static/packages/dicom.png)][dicom-demo-js] [dicom][dicom-repo] <br /> *Read files and images related to DICOM file format.*
+  - ![js][js-logo] [👨‍💻 Demo][dicom-demo-js] <br/>[🕮 Docs][dicom-docs-js] <br/>[📦 Package][dicom-package-js] <br /><br/> ![py][py-logo] [🕮 Docs][dicom-docs-py] <br/>[📦 Package][dicom-package-py]
+* - [![downsample](../static/packages/downsample.png)][downsample-demo-js] [downsample][downsample-repo] <br /> *Pipelines for downsampling images.*
+  - ![js][js-logo] [👨‍💻 Demo][downsample-demo-js] <br/>[🕮 Docs][downsample-docs-js] <br/>[📦 Package][downsample-package-js] <br/> <br/> ![py][py-logo] [🕮 Docs][downsample-docs-py] <br/>[📦 Package][downsample-package-py]
+* - [![elastix](../static/packages/elastix.png)][elastix-demo-js] [elastix][elastix-repo] <br /> *A toolbox for rigid and nonrigid registration of images.*
+  - ![js][js-logo] [👨‍💻 Demo][elastix-demo-js] <br/>[🕮 Docs][elastix-docs-js] <br/>[📦 Package][elastix-package-js] <br/> <br/> ![py][py-logo] [🕮 Docs][elastix-docs-py] <br/>[📦 Package][elastix-package-py]
+* - [![htj2k](../static/packages/htj2k.png)][htj2k-demo-js] [htj2k][htj2k-repo] <br /> *Wasm-SIMD accelerated decoding and encoding High-throughput JPEG2000 (HTJ2K) images.*
+  - ![js][js-logo] [👨‍💻 Demo][htj2k-demo-js] <br/>[🕮 Docs][htj2k-docs-js] <br/>[📦 Package][htj2k-package-js] <br/> <br/> ![py][py-logo] [🕮 Docs][htj2k-docs-py] <br/>[📦 Package][htj2k-package-py]
+* - [![image-io](../static/packages/image-io.png)][image-io-demo-js] [image-io][image-io-repo] <br /> *Input and output for scientific and medical image file formats.*
+  - ![js][js-logo] [👨‍💻 Demo][image-io-demo-js] <br/>[🕮 Docs][image-io-docs-js] <br/>[📦 Package][image-io-package-js] <br/> <br/> ![py][py-logo] [🕮 Docs][image-io-docs-py] <br/>[📦 Package][image-io-package-py]
+* - [![mesh-io](../static/packages/mesh-io.png)][mesh-io-demo-js] [mesh-io][mesh-io-repo]<br /> *Input and output for scientific and medical mesh file formats.*
+  - ![js][js-logo] [👨‍💻 Demo][mesh-io-demo-js] <br/>[🕮 Docs][mesh-io-docs-js] <br/>[📦 Package][mesh-io-package-js] <br/> <br/> ![py][py-logo] [🕮 Docs][mesh-io-docs-py] <br/>[📦 Package][mesh-io-package-py]
+* - [![morphological-contour-interpolation](../static/packages/morphological-contour-interpolation.png)][morphological-contour-interpolation-demo-js] [morphological-contour-interpolation][morphological-contour-interpolation-repo] <br /> *Input and output for scientific and medical mesh file formats.*
+  -  ![js][js-logo] [👨‍💻 Demo][morphological-contour-interpolation-demo-js] <br/>[🕮 Docs][morphological-contour-interpolation-docs-js] <br/>[📦 Package][morphological-contour-interpolation-package-js] <br/> <br/> ![py][py-logo] [🕮 Docs][morphological-contour-interpolation-docs-py] <br/>[📦 Package][morphological-contour-interpolation-package-py]
+
+```
+
+[js-logo]: ../static/javascript-logo.svg
+[ts-logo]: ../static/typescript-logo.svg
+[py-logo]: ../static/python.svg
+[gh-logo]: ../static/github.svg
 
 [compare-images-repo]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/packages/compare-images
 [compare-images-demo-js]: https://insightsoftwareconsortium.github.io/ITK-Wasm/compare-images/ts/app/
