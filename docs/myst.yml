@@ -179,5 +179,5 @@ site:
   template: book-theme
   options:
     favicon: static/icon/favicon.png
-    logo: static/logo-white.svg
-    logo_text: "ITK-Wasm"
+    logo: static/logo-light.svg
+    logo_dark: static/logo-dark.svg
