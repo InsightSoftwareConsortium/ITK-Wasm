@@ -23,8 +23,7 @@ provides further background information and related hands-on experiences.
 There is a primary, pip-installable Python package. In browser environments, this will pull a corresponding [Emscripten](https://emscripten.org)-enabled Python package. For system Python distributions, this will bring in a corresponding [WASI](https://wasi.dev)-enabled Python package. When GPU-accelerated implementations of functions are available in other packages along with required hardware and software, simply pip-installing the accelerator package will cause function calls to invoke accelerated overrides registered with modern [package metadata](https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/#using-package-metadata).
 
 ```{figure}
-
-```{mermaid}
+:::{mermaid}
 flowchart TD
     A[fa:fa-box-open itkwasm-package-name] --> B{browser?}
     A -.-> |pip install| P[accelerator-package]
@@ -47,7 +46,7 @@ flowchart TD
     S --> T{browser?}
     T --> |yes| U[fa:fa-box-open accelerator-package-emscripten]
     T --> |no| V[fa:fa-box-open accelerator-package-native]
-```
+:::
 
 ITK-Wasm Python environmental dispatch
 ```
@@ -59,7 +58,7 @@ While synchronous functions are available in system packages, browser packages p
 
 For example, to install the [itkwasm-compress-stringify](https://pypi.org/project/itkwasm-compress-stringify/) package:
 
-::::{tab-set}
+````{tab-set}
 
 :::{tab-item} System
 ```shell
@@ -73,14 +72,15 @@ In Pyodide, e.g. the [Pyodide REPL](https://pyodide.org/en/stable/console.html) 
 ```python
 import micropip
 await micropip.install('itkwasm-compress-stringify')
+```
 :::
 
-::::
+````
 
 
 In the browser, call the async `*_async` function with the `await` keyword.
 
-::::{tab-set}
+````{tab-set}
 
 :::{tab-item} System
 ```python
@@ -100,4 +100,4 @@ compressed = await compress_stringify_async(data)
 ```
 :::
 
-::::
+````
