@@ -12,13 +12,3 @@ This tutorial will walk you through the process of *creating WebAssembly scienti
 
 This [Jupyter notebook
 tutorial](https://github.com/InsightSoftwareConsortium/ScientificImageAnalysisVisualizationAndArtificialIntelligenceCourse/blob/master/10_Create_Scientific_WebAssembly_Pipelines.ipynb) also provides an interactive walkthrough.
-
-```{toctree}
-:maxdepth: 2
-:caption: 📖 Tutorial Steps
-
-hello_world.md
-hello_pipeline.md
-inputs_outputs.md
-debugging.md
-```

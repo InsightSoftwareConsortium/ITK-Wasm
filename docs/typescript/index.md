@@ -12,13 +12,3 @@ JavaScript runtime.
 
 The **Processing Pipelines** sections describes how to execute processing
 pipelines written as C/C++ command line executables in Node.js or the browser.
-
-```{toctree}
-:maxdepth: 1
-:caption: 🌐 JavaScript/TypeScript
-
-browser_io.md
-browser_pipelines.md
-node_io.md
-node_pipelines.md
-```

@@ -133,25 +133,25 @@ project:
         - file: python/itk-webassemblyinterface.md
     - title: 🌐 JavaScript / Typescript
       children:
+        - file: typescript/index.md
         - file: typescript/browser_io.md
         - file: typescript/browser_pipelines.md
-        - file: typescript/index.md
         - file: typescript/node_io.md
         - file: typescript/node_pipelines.md
         - title: Distribution
           children:
             - file: typescript/distribution/index.md
+            - file: typescript/distribution/vite.md
             - file: typescript/distribution/node.md
             - file: typescript/distribution/umd.md
-            - file: typescript/distribution/vite.md
             - file: typescript/distribution/webpack.md
         - title: Interface Types
           children:
+            - file: typescript/interface_types/index.md
             - file: typescript/interface_types/BinaryFile.md
             - file: typescript/interface_types/BinaryStream.md
             - file: typescript/interface_types/Image.md
             - file: typescript/interface_types/ImageType.md
-            - file: typescript/interface_types/index.md
             - file: typescript/interface_types/JsonCompatible.md
             - file: typescript/interface_types/Mesh.md
             - file: typescript/interface_types/MeshType.md
@@ -164,11 +164,11 @@ project:
         - file: cxx/interface_types.md
         - title: Tutorial
           children:
-            - file: cxx/tutorial/debugging.md
-            - file: cxx/tutorial/hello_pipeline.md
-            - file: cxx/tutorial/hello_world.md
             - file: cxx/tutorial/index.md
+            - file: cxx/tutorial/hello_world.md
+            - file: cxx/tutorial/hello_pipeline.md
             - file: cxx/tutorial/inputs_outputs.md
+            - file: cxx/tutorial/debugging.md
     - title: 🔨 Development
       children:
         - file: development/hacking_itk_wasm.md
