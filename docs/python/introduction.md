@@ -1,18 +1,18 @@
 # Introduction
 
-`itkwasm` enables **universal spatial analysis and visualization** via [WebAssembly (wasm)](https://webassembly.org) {octicon}`telescope`.
+`itkwasm` enables **universal spatial analysis and visualization** via [WebAssembly (wasm)](https://webassembly.org) 🔭.
 
-`itkwasm` Python packages run on *all modern web browsers and at a system level across all major operating systems and hardware architectures* {octicon}`browser` {octicon}`codespaces`.
+`itkwasm` Python packages run on *all modern web browsers and at a system level across all major operating systems and hardware architectures* 🖥️.
 
-All versions of Python 3.8+ are supported {octicon}`globe`.
+All versions of Python 3.8+ are supported 🌐.
 
-Additionally, non-wasm packages accelerate performance via GPUs when available {octicon}`rocket`.
+Additionally, non-wasm packages accelerate performance via GPUs when available 🚀.
 
-In the browser, [Pyodide](https://pyodide.org/)-compatible packages provide client-side web app scripting in Python, including via [PyScript](https://pyscript.net/), and sustainable, scalable Jupyter deployments via [JupyterLite](https://jupyterlite-sphinx.readthedocs.io/) {octicon}`code-square` {octicon}`light-bulb`.
+In the browser, [Pyodide](https://pyodide.org/)-compatible packages provide client-side web app scripting in Python, including via [PyScript](https://pyscript.net/), and sustainable, scalable Jupyter deployments via [JupyterLite](https://jupyterlite-sphinx.readthedocs.io/) 🕸️.
 
-At a system level, Linux, macOS, and Windows operating systems are supported on x86_64 and ARM via [wasmtime-py](https://bytecodealliance.github.io/wasmtime-py/) {octicon}`zap`.
+At a system level, Linux, macOS, and Windows operating systems are supported on x86_64 and ARM via [wasmtime-py](https://bytecodealliance.github.io/wasmtime-py/) ⚡.
 
-`itkwasm` Python packages are *highly modular*, have *a tiny footprint*, and have *minimal dependencies*; they only depend on `itkwasm`, `numpy`, and `pyodide` or `wasmtime` {octicon}`container`.
+`itkwasm` Python packages are *highly modular*, have *a tiny footprint*, and have *minimal dependencies*; they only depend on `itkwasm`, `numpy`, and `pyodide` or `wasmtime` 📦.
 
 This [Jupyter notebook
 tutorial](https://github.com/InsightSoftwareConsortium/ScientificImageAnalysisVisualizationAndArtificialIntelligenceCourse/blob/master/9_WebAssembly_Introduction.ipynb)
