@@ -45,9 +45,8 @@ int main(argc, char * argv[])
 }
 ```
 
-<dl>
-  <dt><b><code>itk::wasm::InputTextStream</code></b><dt><dd>A string. To reader this data type in C++, using the resulting  <a href="https://www.cplusplus.com/reference/istream/istream/">std::istream</a>.</dd>
-</dl>
+`itk::wasm::InputTextStream`
+: A string. To reader this data type in C++, using the resulting [`std::istream`](https://www.cplusplus.com/reference/istream/istream/).
 
 *todo: document remaining CLI11 input and output classes.*
 

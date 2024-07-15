@@ -1,4 +1,4 @@
-# itk-wasm UMD module from a HTML script tag
+# ITK-Wasm UMD module from a HTML script tag
 
 This example demonstrates how to use *itk-wasm* in a web browser application via its pre-built [UMD](https://github.com/umdjs/umd) module. This is an alternative to bundling the modules with the Webpack application, as shown in the [Webpack example](./webpack). In this example, we re-use the itk-wasm IO modules published on [jsdelivr.com](https://jsdelivr.com). Find the full example in the `itk-wasm/examples/UMD` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/UMD).
 
@@ -13,7 +13,7 @@ Inside the HTML `head`, load the itk-wasm UMD script:
 
 Inside body JavaScript code, the `itk` object provides [itk-wasm API functions and objects](/typescript/index) as properties.
 
-```js
+```javascript
   [...]
   return itk.readFile(null, files[0]).then(function({ image, mesh, webWorker }) {
     webWorker.terminate();
@@ -31,7 +31,7 @@ Optionally, add an npm script that will start a local web server for development
 
 Next, define a `start` command to start a local development web server in the *scripts* section of the `package.json` file,
 
-```js
+```javascript
   "scripts": {
     "start": "http-server ./dist/"
   },
@@ -39,7 +39,7 @@ Next, define a `start` command to start a local development web server in the *s
 
 To start the development web server hosting the `./dist/` directory contents, run
 
-```sh
+```shell
 npm run start
 ```
 
@@ -51,7 +51,7 @@ This section described how to configure browser-based testing with the [Cypress]
 
 First, install Cypress and the `start-server-and-test` package.
 
-```sh
+```shell
 npm install --save-dev cypress start-server-and-test
 ```
 
@@ -59,13 +59,13 @@ The `start-server-and-test` tool can start our development server for testing wi
 
 Create directories to house our tests and test data:
 
-```sh
+```shell
 mkdir -p cypress/integration cypress/fixtures
 ```
 
 Provide a test dataset:
 
-```sh
+```shell
 cp /path/to/cow.vtk cypress/fixtures/cow.vtk
 ```
 
@@ -85,7 +85,7 @@ describe('Load data', () => {
 
 Then, specify npm scripts to develop and debug the tests and run them in an automated way.
 
-```js
+```javascript
   "scripts": {
     "start": "http-server ./dist/"
     "cypress:open": "pnpm exec cypress open",
@@ -97,7 +97,7 @@ Then, specify npm scripts to develop and debug the tests and run them in an auto
 
 To develop or debug tests, run
 
-```sh
+```shell
 npm run test:debug
 ```
 
@@ -112,7 +112,7 @@ This will load the selected browser to see the test status and web page that is 
 
 To run the tests during continuous integration:
 
-```sh
+```shell
 npm run test
 ```
 

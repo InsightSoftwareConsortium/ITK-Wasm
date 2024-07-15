@@ -8,7 +8,7 @@ The processing pipeline functions generated with `itk-wasm bindgen` return a [`P
 
 ## `runPipeline`
 
-```ts
+```typescript
 runPipeline(webWorker: Worker | null | boolean,
   pipelinePath: string | URL,
   args: string[],

@@ -146,7 +146,7 @@ Create an HTML file named `index.html` that will call the Wasm module through Ja
 
 Serve the web page and Wasm module with an http server:
 
-```sh
+```shell
 npm install http-server
 http-server .
 ```
