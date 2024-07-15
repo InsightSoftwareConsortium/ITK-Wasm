@@ -14,7 +14,8 @@ ITK-Wasm formats can be output in a directory or bundled in a single `.cbor` fil
 
 ITK-Wasm file formats are available in ITK-Wasm IO functions but also in C++ via the *WebAssemblyInterface* ITK module. This module can be enabled in an ITK build by setting the `-DModule_WebAssemblyInterface:BOOL=ON` flag in CMake. And, loading and conversion is also available native-binary Python bindings via the [*itk-webassemblyinterface* Python package](https://pypi.org/project/itk-webassemblyinterface/).
 
-<dl>
-  <dt><b>ITK-Wasm Image (.iwi, .iwi.cbor, .iwi.cbor.zst)</b><dt><dd>Serialization of an <a href="../../typescript/interface_types/Image.html"><code>Image</code></a>.</dd>
-  <dt><b>ITK-Wasm Mesh (.iwm, .iwm.cbor, .iwm.cbor.zst)</b><dt><dd>Serialization of a <a href="../../typescript/interface_types/Mesh.html"><code>Mesh</code></a>, or <a href="../../typescript/interface_types/PolyData.html"><code>PolyData</code></a>.</dd>
-</dl>
+ITK-Wasm Image (.iwi, .iwi.cbor, .iwi.cbor.zst)
+: Serialization of an [Image](../../model/Image).
+
+ITK-Wasm Mesh (.iwm, .iwm.cbor, .iwm.cbor.zst)
+: Serialization of a [Mesh](../../model/Mesh) or [PolyData](../../model/PolyData).
