@@ -1,0 +1,22 @@
+[project]
+name = "ITK-Wasm"
+version = "0.1.0"
+description = "Build environment for ITK-Wasm"
+authors = ["Matt McCormick <matt.mccormick@kitware.com>"]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tasks]
+
+[dependencies]
+
+[feature.docs.dependencies]
+mystmd = "*"
+
+[feature.docs.tasks]
+build-docs = { cmd = "myst build", cwd = "docs" }
+start-docs = { cmd = "myst start", cwd = "docs" }
+
+[environments]
+# Create a custom environment which only has the `lint` feature (numpy isn't part of that env).
+docs = {features = ["docs"], no-default-feature = true}
