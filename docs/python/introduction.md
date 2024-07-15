@@ -22,7 +22,35 @@ provides further background information and related hands-on experiences.
 
 There is a primary, pip-installable Python package. In browser environments, this will pull a corresponding [Emscripten](https://emscripten.org)-enabled Python package. For system Python distributions, this will bring in a corresponding [WASI](https://wasi.dev)-enabled Python package. When GPU-accelerated implementations of functions are available in other packages along with required hardware and software, simply pip-installing the accelerator package will cause function calls to invoke accelerated overrides registered with modern [package metadata](https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/#using-package-metadata).
 
-![environment dispatch diagram](/static/environment-dispatch-mermaid.svg)
+```{figure}
+
+```{mermaid}
+flowchart TD
+    A[fa:fa-box-open itkwasm-package-name] --> B{browser?}
+    A -.-> |pip install| P[accelerator-package]
+    B --> |yes| C[fa:fa-box-open itkwasm-package-name-emscripten]
+    C --> |any OS, architecture| D([Chromium-based browser])
+    C --> |any OS, architecture| E([Firefox])
+    C --> |macOS, x86_64, ARM| F([Safari])
+    B --> |no| wasi[fa:fa-box-open itkwasm-package-name-wasi]
+    wasi --> G{architecture?}
+    G --> H(x86_64)
+    G --> I(ARM)
+    H --> J(Linux)
+    H --> K(macOS)
+    H --> L(Windows)
+    I --> M(Linux)
+    I --> N(macOS)
+    P --> Q(CUDA)
+    P --> R(OpenCL)
+    P --> S(WebGPU)
+    S --> T{browser?}
+    T --> |yes| U[fa:fa-box-open accelerator-package-emscripten]
+    T --> |no| V[fa:fa-box-open accelerator-package-native]
+```
+
+ITK-Wasm Python environmental dispatch
+```
 
 
 ## Browser and system APIs

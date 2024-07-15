@@ -12,6 +12,7 @@ platforms = ["linux-64"]
 
 [feature.docs.dependencies]
 mystmd = "*"
+libwebp = ">=1.4.0,<1.5"
 
 [feature.docs.tasks]
 build-docs = { cmd = "myst build", cwd = "docs" }
