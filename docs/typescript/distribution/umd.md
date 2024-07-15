@@ -43,7 +43,7 @@ To start the development web server hosting the `./dist/` directory contents, ru
 npm run start
 ```
 
-![UMD Example](/static/umd/umd_example.gif)
+![UMD Example](../../static/umd/umd_example.gif)
 
 ## Testing with Cypress
 
@@ -104,11 +104,11 @@ npm run test:debug
 This will open Cypress. Select the test to run:
 
 
-![Select load_data_spec](/static/umd/umd_select_load_data_spec.png)
+![Select load_data_spec](../../static/umd/umd_select_load_data_spec.png)
 
 This will load the selected browser to see the test status and web page that is tested.  You can also open the browser's development console.
 
-![Develop and debug tests](/static/umd/umd_test_debug.png)
+![Develop and debug tests](../../static/umd/umd_test_debug.png)
 
 To run the tests during continuous integration:
 
@@ -118,8 +118,8 @@ npm run test
 
 This will output the tests results in the console:
 
-![Console test output](/static/umd/umd_run_tests.png)
+![Console test output](../../static/umd/umd_run_tests.png)
 
 And produce a video of the result at *cypress/videos/*.
 
-![Console test output](/static/umd/umd_cypress_video.gif)
+![Console test output](../../static/umd/umd_cypress_video.gif)
