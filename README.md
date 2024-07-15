@@ -13,7 +13,7 @@ ITK-Wasm
 [![npm version](https://badge.fury.io/py/itkwasm.svg)](https://pypi.org/project/itkwasm/)
 [![npm version](https://badge.fury.io/py/itk-webassemblyinterface.svg)](https://pypi.org/project/itk-webassemblyinterface/)
 
-[![DOI](https://zenodo.org/badge/45812381.svg)](https://zenodo.org/badge/latestdoi/45812381)
+[![DOI](https://zenodo.org/badge/45812381.svg)](https://zenodo.org/doi/10.5281/zenodo.3688880)
 
 ![License](https://img.shields.io/github/license/InsightSoftwareConsortium/ITK-Wasm) ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/InsightSoftwareConsortium/ITK-Wasm)
 
