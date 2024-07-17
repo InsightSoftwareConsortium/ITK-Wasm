@@ -13,11 +13,17 @@ platforms = ["linux-64"]
 [feature.docs.dependencies]
 mystmd = "*"
 libwebp = ">=1.4.0,<1.5"
+rich = ">=13.7.1,<13.8"
+typer = ">=0.12.3,<0.13"
 
 [feature.docs.tasks]
-build-docs = { cmd = "myst build", cwd = "docs" }
-start-docs = { cmd = "myst start", cwd = "docs" }
+build-docs = { cmd = "myst build", cwd = "docs", description = "Build documentation." }
+start-docs = { cmd = "myst start", cwd = "docs", description = "Start live documentation build." }
+autodoc2-db = { cmd = "autodoc2 create-db ../packages/core/python/itkwasm/itkwasm", cwd = "docs", description = "Create package API database."}
+autodoc2-write = { cmd = "autodoc2 write --output apidocs -r md ../packages/core/python/itkwasm/itkwasm", cwd = "docs", description = "Write package API doc markdown." }
 
 [environments]
-# Create a custom environment which only has the `lint` feature (numpy isn't part of that env).
 docs = {features = ["docs"], no-default-feature = true}
+
+[feature.docs.pypi-dependencies]
+autodoc2 = { path = "sphinx-autodoc2", editable = true }
