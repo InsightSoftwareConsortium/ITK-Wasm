@@ -19,7 +19,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 import { getDefaultWebWorker } from './default-web-worker.js'
 
 /**
- * Write DICOM segmentation object
+ * Write DICOM segmentation object.
  *
  * @param {Image} segImage - dicom segmentation object as an image
  * @param {JsonCompatible} metaInfo - JSON file containing the meta-information that describesthe measurements to be encoded. See DCMQI documentation for details.

@@ -1,4 +1,3 @@
-// Generated file. To retain edits, remove this comment.
 
 import {
   JsonCompatible,
@@ -15,7 +14,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 /**
- * Write DICOM segmentation object using multiple input images
+ * Write DICOM segmentation object using multiple input images.
  *
  * @param {JsonCompatible} metaInfo - JSON file containing the meta-information that describesthe measurements to be encoded. See DCMQI documentation for details.
  * @param {string} outputDicomFile - File name of the DICOM SEG object that will store theresult of conversion.

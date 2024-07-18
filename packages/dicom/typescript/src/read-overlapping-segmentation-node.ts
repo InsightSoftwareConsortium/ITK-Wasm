@@ -16,7 +16,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 /**
- * Read DICOM segmentation objects
+ * Read DICOM segmentation object with overlapping segments into a VectorImage.
  *
  * @param {string} dicomFile - Input DICOM file
  * @param {ReadOverlappingSegmentationNodeOptions} options - options object
