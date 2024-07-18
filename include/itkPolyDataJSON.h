@@ -26,6 +26,7 @@
 #include "itkFloatTypesJSON.h"
 #include "itkPixelTypesJSON.h"
 #include "itkWasmPolyData.h"
+#include "itkMetaDataDictionaryJSON.h"
 
 #include "glaze/glaze.hpp"
 
@@ -79,6 +80,8 @@ namespace itk
 
     size_t numberOfCellPixels { 0 };
     std::string cellData;
+
+    MetadataJSON metadata;
   };
 
 template<typename TPolyData>
@@ -202,6 +205,9 @@ auto polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDa
   cellDataStream <<  "data:application/vnd.itk.address,0:";
   cellDataStream << cellDataAddress;
   polyDataJSON.cellData = cellDataStream.str();
+
+  auto dictionary = polyData->GetMetaDataDictionary();
+  metaDataDictionaryToJSON(dictionary, polyDataJSON.metadata);
 
   return polyDataJSON;
 }

@@ -26,6 +26,7 @@
 #include "itkFloatTypesJSON.h"
 #include "itkPixelTypesJSON.h"
 #include "itkWasmMesh.h"
+#include "itkMetaDataDictionaryJSON.h"
 
 #include "glaze/glaze.hpp"
 
@@ -74,6 +75,8 @@ namespace itk
 
     size_t numberOfCellPixels{ 0 };
     std::string cellData;
+
+    MetadataJSON metadata;
   };
 
 template<typename TMesh>
@@ -163,6 +166,9 @@ auto meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool i
     meshJSON.pointData = "data:application/vnd.itk.path,data/point-data.raw";
     meshJSON.cellData = "data:application/vnd.itk.path,data/cell-data.raw";
   }
+
+  auto dictionary = mesh->GetMetaDataDictionary();
+  metaDataDictionaryToJSON(dictionary, meshJSON.metadata);
 
   return meshJSON;
 }

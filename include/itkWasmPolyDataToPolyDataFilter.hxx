@@ -251,6 +251,9 @@ WasmPolyDataToPolyDataFilter<TPolyData>
     polyData->GetCellData()->resize(numberOfCellPixels * cellPixelComponents);
     polyData->GetCellData()->assign(cellDataPtr, cellDataPtr + numberOfCellPixels * cellPixelComponents);
   }
+
+  auto dictionary = polyData->GetMetaDataDictionary();
+  jsonToMetaDataDictionary(polyDataJSON.metadata, dictionary);
 }
 
 template <typename TPolyData>

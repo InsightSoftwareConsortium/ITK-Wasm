@@ -63,8 +63,9 @@ namespace itk
     std::string         direction;
     std::vector<size_t> size { 0, 0 };
 
-    MetadataJSON metadata;
     std::string data;
+
+    MetadataJSON metadata;
   };
 
 template<typename TImage>
