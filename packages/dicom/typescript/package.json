@@ -44,6 +44,7 @@
     "itk-wasm": "workspace:^"
   },
   "devDependencies": {
+    "@itk-wasm/compare-images": "workspace:*",
     "@itk-wasm/dicom-build": "workspace:*",
     "@itk-wasm/image-io": "workspace:*",
     "@itk-wasm/demo-app": "workspace:*",

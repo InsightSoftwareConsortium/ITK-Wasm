@@ -159,7 +159,7 @@ int runPipeline(
 
 int main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("write-overlapping-segmentation", "Write DICOM segmentation object", argc, argv);
+  itk::wasm::Pipeline pipeline("write-overlapping-segmentation", "Write DICOM segmentation object for overlapping segments.", argc, argv);
 
   itk::wasm::InputImage<VectorImageType> inputImage;
   pipeline.add_option("seg-image", inputImage, "dicom segmentation object as an image")->required()->type_name("INPUT_IMAGE");

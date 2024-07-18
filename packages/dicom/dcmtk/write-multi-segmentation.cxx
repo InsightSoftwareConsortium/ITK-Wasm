@@ -205,7 +205,7 @@ int runPipeline(
 
 int main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("write-multi-segmentation", "Write DICOM segmentation object using multiple input images", argc, argv);
+  itk::wasm::Pipeline pipeline("write-multi-segmentation", "Write DICOM segmentation object using multiple input images.", argc, argv);
 
   //itk::wasm::InputImage<ScalarImageType> inputImage;
   //pipeline.add_option("seg-image", inputImage, "dicom segmentation object as an image")->required()->type_name("INPUT_IMAGE");
@@ -226,7 +226,7 @@ int main(int argc, char * argv[])
   pipeline.add_option("-i,--seg-images", segImageFiles, "List of input segmentation images." \
     "image that was segmented.")->required()->check(CLI::ExistingFile)->expected(1,-1)->type_name("INPUT_BINARY_FILE");
 
-  bool skipEmptySlices{true};
+  bool skipEmptySlices{false};
   pipeline.add_flag("-s,--skip-empty-slices", skipEmptySlices, "Skip empty slices while encoding segmentation image." \
     "By default, empty slices will not be encoded, resulting in a smaller output file size.");
 
@@ -236,7 +236,7 @@ int main(int argc, char * argv[])
 
   ITK_WASM_PARSE(pipeline);
 
-  runPipeline(
+  return runPipeline(
     metaInfo,
     refDicomSeriesFiles,
     segImageFiles,

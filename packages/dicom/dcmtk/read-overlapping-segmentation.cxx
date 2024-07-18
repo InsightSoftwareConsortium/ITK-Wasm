@@ -103,7 +103,7 @@ int runPipeline(
 
 int main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("read-overlapping-segmentation", "Read DICOM segmentation objects", argc, argv);
+  itk::wasm::Pipeline pipeline("read-overlapping-segmentation", "Read DICOM segmentation object with overlapping segments into a VectorImage.", argc, argv);
 
   std::string dicomFileName;
   pipeline.add_option("dicom-file", dicomFileName, "Input DICOM file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
