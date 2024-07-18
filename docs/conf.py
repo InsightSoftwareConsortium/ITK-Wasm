@@ -13,6 +13,14 @@ project = 'ITK-Wasm'
 copyright = f'{date.today().year}, NumFOCUS'
 author = 'Matt McCormick'
 
+# Define the canonical URL if you are using a custom domain on Read the Docs
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "wasm.itk.org")
+
+html_context = {}
+# Tell Jinja2 templates the build is running on Read the Docs
+if os.environ.get("READTHEDOCS", "") == "True":
+    html_context["READTHEDOCS"] = True
+
 extensions = [
     'sphinx.ext.napoleon',
     'autodoc2',
