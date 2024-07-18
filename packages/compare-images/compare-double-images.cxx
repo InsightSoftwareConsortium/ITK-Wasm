@@ -61,6 +61,9 @@ CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
   double differenceThreshold = 0.0;
   pipeline.add_option("-d,--difference-threshold", differenceThreshold, "Intensity difference for pixels to be considered different.");
 
+  double spatialTolerance = 1e-8;
+  pipeline.add_option("-s,--spatial-tolerance", spatialTolerance, "Tolerance for comparing spatial overlap (origin and direction matrix).");
+
   unsigned int radiusTolerance = 0;
   pipeline.add_option("-r,--radius-tolerance", radiusTolerance, "Radius of the neighborhood around a pixel to search for similar intensity values.");
 
@@ -71,6 +74,9 @@ CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
   pipeline.add_flag("-i,--ignore-boundary-pixels", ignoreBoundaryPixels, "Ignore boundary pixels. Useful when resampling may have introduced difference pixel values along the image edge.");
 
   ITK_WASM_PARSE(pipeline);
+
+  itk::ImageToImageFilterCommon::SetGlobalDefaultDirectionTolerance(spatialTolerance);
+  itk::ImageToImageFilterCommon::SetGlobalDefaultCoordinateTolerance(spatialTolerance);
 
   using DiffType = itk::Testing::ComparisonImageFilter<ImageType, ImageType>;
   auto diff = DiffType::New();

@@ -12,6 +12,7 @@ def compare_double_images(
     test_image: Image,
     baseline_images: List[Image] = [],
     difference_threshold: float = 0,
+    spatial_tolerance: float = 1e-08,
     radius_tolerance: int = 0,
     number_of_pixels_tolerance: int = 0,
     ignore_boundary_pixels: bool = False,
@@ -26,6 +27,9 @@ def compare_double_images(
 
     :param difference_threshold: Intensity difference for pixels to be considered different.
     :type  difference_threshold: float
+
+    :param spatial_tolerance: Tolerance for comparing spatial overlap (origin and direction matrix).
+    :type  spatial_tolerance: float
 
     :param radius_tolerance: Radius of the neighborhood around a pixel to search for similar intensity values.
     :type  radius_tolerance: int
@@ -46,5 +50,5 @@ def compare_double_images(
     :rtype:  Image
     """
     func = environment_dispatch("itkwasm_compare_images", "compare_double_images")
-    output = func(test_image, baseline_images=baseline_images, difference_threshold=difference_threshold, radius_tolerance=radius_tolerance, number_of_pixels_tolerance=number_of_pixels_tolerance, ignore_boundary_pixels=ignore_boundary_pixels)
+    output = func(test_image, baseline_images=baseline_images, difference_threshold=difference_threshold, spatial_tolerance=spatial_tolerance, radius_tolerance=radius_tolerance, number_of_pixels_tolerance=number_of_pixels_tolerance, ignore_boundary_pixels=ignore_boundary_pixels)
     return output

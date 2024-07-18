@@ -9,6 +9,9 @@ interface CompareDoubleImagesNodeOptions {
   /** Intensity difference for pixels to be considered different. */
   differenceThreshold?: number
 
+  /** Tolerance for comparing spatial overlap (origin and direction matrix). */
+  spatialTolerance?: number
+
   /** Radius of the neighborhood around a pixel to search for similar intensity values. */
   radiusTolerance?: number
 
