@@ -72,6 +72,11 @@ class CompareDoubleImagesController {
         model.options.set("differenceThreshold", parseFloat(differenceThresholdElement.value))
     })
 
+    const spatialToleranceElement = document.querySelector('#compareDoubleImagesInputs sl-input[name=spatial-tolerance]')
+    spatialToleranceElement.addEventListener('sl-change', (event) => {
+        model.options.set("spatialTolerance", parseFloat(spatialToleranceElement.value))
+    })
+
     const radiusToleranceElement = document.querySelector('#compareDoubleImagesInputs sl-input[name=radius-tolerance]')
     radiusToleranceElement.addEventListener('sl-change', (event) => {
         model.options.set("radiusTolerance", parseInt(radiusToleranceElement.value))

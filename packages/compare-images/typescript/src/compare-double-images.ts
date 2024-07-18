@@ -74,6 +74,10 @@ async function compareDoubleImages(
     args.push('--radius-tolerance', options.radiusTolerance.toString())
 
   }
+  if (typeof options.spatialTolerance !== "undefined") {
+    args.push('--spatial-tolerance', options.spatialTolerance.toString())
+
+  }
   if (typeof options.numberOfPixelsTolerance !== "undefined") {
     args.push('--number-of-pixels-tolerance', options.numberOfPixelsTolerance.toString())
 

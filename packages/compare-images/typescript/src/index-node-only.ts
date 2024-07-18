@@ -18,3 +18,6 @@ export type { VectorMagnitudeNodeResult }
 
 import vectorMagnitudeNode from './vector-magnitude-node.js'
 export { vectorMagnitudeNode }
+
+import toScalarDouble from './to-scalar-double.js'
+export { toScalarDouble }
