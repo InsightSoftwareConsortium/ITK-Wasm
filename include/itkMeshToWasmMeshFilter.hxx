@@ -18,6 +18,8 @@
 #ifndef itkMeshToWasmMeshFilter_hxx
 #define itkMeshToWasmMeshFilter_hxx
 
+#include "itkMetaDataDictionaryJSON.h"
+
 #include "glaze/glaze.hpp"
 
 namespace itk

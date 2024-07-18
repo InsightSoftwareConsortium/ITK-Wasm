@@ -375,7 +375,7 @@ WasmMeshToMeshFilter<TMesh>
     const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
     itkExceptionMacro("Failed to deserialize meshJSON: " << descriptiveError);
   }
-  auto meshJSON = deserializedAttempt.value();
+  const auto meshJSON = deserializedAttempt.value();
 
   const auto dimension = meshJSON.meshType.dimension;
   const auto numberOfPointPixels = meshJSON.numberOfPointPixels;
@@ -482,6 +482,9 @@ WasmMeshToMeshFilter<TMesh>
     mesh->GetCellData()->resize(meshJSON.numberOfCellPixels);
     mesh->GetCellData()->assign(cellDataPtr, cellDataPtr + meshJSON.numberOfCellPixels);
   }
+
+  auto dictionary = mesh->GetMetaDataDictionary();
+  jsonToMetaDataDictionary(meshJSON.metadata, dictionary);
 }
 
 template <typename TMesh>
