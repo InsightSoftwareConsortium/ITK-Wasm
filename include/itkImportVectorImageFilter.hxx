@@ -118,7 +118,7 @@ ImportVectorImageFilter<TOutputImage>::EnlargeOutputRequestedRegion(DataObject *
 
   // set the requested region to the largest possible region (in this case
   // the amount of data that we have)
-  outputPtr->SetRequestedRegion(outputPtr->GetLargestPossibleRegion());
+  outputPtr->SetRequestedRegion(m_BufferedRegion);
 }
 
 template <typename TOutputImage>
@@ -136,7 +136,7 @@ ImportVectorImageFilter<TOutputImage>::GenerateOutputInformation()
   outputPtr->SetSpacing(m_Spacing);
   outputPtr->SetOrigin(m_Origin);
   outputPtr->SetDirection(m_Direction);
-  outputPtr->SetLargestPossibleRegion(m_Region);
+  outputPtr->SetLargestPossibleRegion(m_LargestPossibleRegion);
 
   if (outputPtr->GetNameOfClass() == "VectorImage")
     {

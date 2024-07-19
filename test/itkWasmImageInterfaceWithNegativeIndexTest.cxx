@@ -60,7 +60,7 @@ itkWasmImageInterfaceWithNegativeIndexTest(int argc, char * argv[])
   using ImageToWasmImageFilterType = itk::ImageToWasmImageFilter<ImageType>;
   auto imageToJSON = ImageToWasmImageFilterType::New();
   imageToJSON->SetInput(constantPad->GetOutput());
-  imageToJSON->Update();
+  imageToJSON->UpdateLargestPossibleRegion();
   auto imageJSON = imageToJSON->GetOutput();
   std::cout << "Image JSON: " << imageJSON->GetJSON() << std::endl;
 

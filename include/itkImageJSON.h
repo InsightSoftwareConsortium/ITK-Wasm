@@ -30,6 +30,8 @@
 
 #include "glaze/glaze.hpp"
 
+#include <optional>
+
 namespace itk
 {
   /** \class ImageTypeJSON
@@ -44,6 +46,18 @@ namespace itk
     JSONComponentTypesEnum componentType { JSONComponentTypesEnum::float32 };
     JSONPixelTypesEnum pixelType { JSONPixelTypesEnum::Scalar };
     unsigned int components { 1 };
+  };
+
+  /** \class ImageRegionJSON
+   *
+   * \brief Image region JSON representation data structure.
+   *
+   * \ingroup WebAssemblyInterface
+   */
+  struct ImageRegionJSON
+  {
+    std::vector<IndexValueType> index {};
+    std::vector<SizeValueType>  size  {};
   };
 
   /** \class ImageJSON
@@ -61,7 +75,8 @@ namespace itk
     std::vector<double> origin { 0.0, 0.0 };
     std::vector<double> spacing { 1.0, 1.0 };
     std::string         direction;
-    std::vector<size_t> size { 0, 0 };
+    std::vector<SizeValueType> size { 0, 0 };
+    ImageRegionJSON bufferedRegion{};
 
     std::string data;
 
@@ -93,6 +108,7 @@ auto imageToImageJSON(const TImage * image, const WasmImage<TImage> * wasmImage,
 
   using PointType = typename ImageType::PointType;
   PointType imageOrigin;
+  // largest region index is implicitly zeros
   image->TransformIndexToPhysicalPoint(largestRegion.GetIndex(), imageOrigin);
   imageJSON.origin.clear();
   for (unsigned int ii = 0; ii < ImageType::ImageDimension; ++ii)
@@ -120,10 +136,17 @@ auto imageToImageJSON(const TImage * image, const WasmImage<TImage> * wasmImage,
     imageJSON.direction = "data:application/vnd.itk.path,data/direction.raw";
   }
 
+  imageJSON.bufferedRegion.index.clear();
+  imageJSON.bufferedRegion.size.clear();
   imageJSON.size.clear();
-  const auto imageSize = image->GetBufferedRegion().GetSize();
+  // largest region index is implicitly zeros
+  const auto bufferedRegionIndex = image->GetBufferedRegion().GetIndex() - largestRegion.GetIndex();
+  const auto bufferedRegionSize = image->GetBufferedRegion().GetSize();
+  const auto imageSize = image->GetLargestPossibleRegion().GetSize();
   for (unsigned int ii = 0; ii < ImageType::ImageDimension; ++ii)
   {
+    imageJSON.bufferedRegion.index.push_back(bufferedRegionIndex[ii]);
+    imageJSON.bufferedRegion.size.push_back(bufferedRegionSize[ii]);
     imageJSON.size.push_back(imageSize[ii]);
   }
 

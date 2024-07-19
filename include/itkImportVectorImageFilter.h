@@ -99,27 +99,47 @@ public:
    unsigned int vectorImageComponents = 1);
 
   /** Set the region object that defines the size and starting index
-   * for the imported image. This will serve as the LargestPossibleRegion,
+   * for the imported image. This will serve as
    * the BufferedRegion, and the RequestedRegion.
    * \sa ImageRegion */
   void
-  SetRegion(const RegionType & region)
+  SetBufferedRegion(const RegionType & region)
   {
-    if (m_Region != region)
+    if (m_BufferedRegion != region)
     {
-      m_Region = region;
+      m_BufferedRegion = region;
       this->Modified();
     }
   }
 
   /** Get the region object that defines the size and starting index
-   * for the imported image. This will serve as the LargestPossibleRegion,
+   * for the imported image. This will serve as the
    * the BufferedRegion, and the RequestedRegion.
    * \sa ImageRegion */
   const RegionType &
-  GetRegion() const
+  GetBufferedRegion() const
   {
-    return m_Region;
+    return m_BufferedRegion;
+  }
+
+  /** Set the LargestPossibleRegion
+   * \sa ImageRegion */
+  void
+  SetLargestPossibleRegion(const RegionType & region)
+  {
+    if (m_LargestPossibleRegion != region)
+    {
+      m_LargestPossibleRegion = region;
+      this->Modified();
+    }
+  }
+
+  /** Get the LargestPossibleRegion,
+   * \sa ImageRegion */
+  const RegionType &
+  GetLargestPossibleRegion() const
+  {
+    return m_LargestPossibleRegion;
   }
 
   /** Set the spacing (size of a pixel) of the image.
@@ -173,7 +193,8 @@ protected:
   EnlargeOutputRequestedRegion(DataObject * output) override;
 
 private:
-  RegionType    m_Region;
+  RegionType    m_BufferedRegion;
+  RegionType    m_LargestPossibleRegion;
   SpacingType   m_Spacing;
   OriginType    m_Origin;
   DirectionType m_Direction;

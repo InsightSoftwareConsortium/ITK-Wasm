@@ -202,18 +202,21 @@ WasmImageToImageFilter<TImage>
   const DirectionType direction(vnlMatrix);
   filter->SetDirection(direction);
 
+  using RegionType = typename ImageType::RegionType;
+  RegionType bufferedRegion;
+  RegionType largestRegion;
   using SizeType = typename ImageType::SizeType;
-  SizeType size;
+  SizeType largestSize;
   SizeValueType totalSize = 1;
   for (unsigned int i = 0; i < Dimension; ++i)
   {
-    size[i] = imageJSON.size[i];
-    totalSize *= size[i];
+    bufferedRegion.SetIndex(i, imageJSON.bufferedRegion.index[i]);
+    bufferedRegion.SetSize(i, imageJSON.bufferedRegion.size[i]);
+    largestRegion.SetSize(i, imageJSON.size[i]);
+    totalSize *= largestSize[i];
   }
-  using RegionType = typename ImageType::RegionType;
-  RegionType region;
-  region.SetSize( size );
-  filter->SetRegion( region );
+  filter->SetBufferedRegion(bufferedRegion);
+  filter->SetLargestPossibleRegion(largestRegion);
 
   const std::string dataString = imageJSON.data;
   IOPixelType * dataPtr = reinterpret_cast< IOPixelType * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
