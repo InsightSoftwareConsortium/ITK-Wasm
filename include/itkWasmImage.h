@@ -27,14 +27,14 @@ namespace itk
  * \brief JSON representation for an itk::ImageBase
  *
  * JSON representation for an itk::ImageBase for interfacing across programming languages and runtimes.
- * 
+ *
  * Pixel and Direction binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
- * 
+ *
  * Arrays:
- * 
+ *
  * - 0: Pixel buffer `data`
  * - 1: Orientation `direction`
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TImage>

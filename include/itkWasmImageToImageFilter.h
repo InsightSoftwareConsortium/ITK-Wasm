@@ -26,9 +26,9 @@ namespace itk
 /**
  *\class WasmImageToImageFilter
  * \brief Convert an WasmImage to an Image object.
- * 
+ *
  * TImage must match the type stored in the JSON representation or an exception will be shown.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TImage>
