@@ -31,6 +31,7 @@ set(WebAssemblyInterface_SRCS
   itkioPixelEnumFromJSON.cxx
   itkjsonFromIOComponentEnum.cxx
   itkjsonFromIOPixelEnum.cxx
+  itkSupportInputPointSetTypes.cxx
   )
 itk_module_add_library(WebAssemblyInterface ${WebAssemblyInterface_SRCS})
 target_link_libraries(WebAssemblyInterface LINK_PUBLIC cbor cpp-base64)
