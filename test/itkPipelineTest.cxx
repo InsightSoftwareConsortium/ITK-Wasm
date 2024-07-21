@@ -36,6 +36,9 @@
 #include "itkHDF5TransformIOFactory.h"
 #include "itkOutputTransform.h"
 #include "itkCompositeTransform.h"
+#include "itkInputPointSet.h"
+#include "itkOutputPointSet.h"
+#include "itkPointSet.h"
 
 int
 itkPipelineTest(int argc, char * argv[])
@@ -64,6 +67,7 @@ itkPipelineTest(int argc, char * argv[])
   using PixelType = float;
   using ImageType = itk::Image<PixelType, Dimension>;
   using MeshType = itk::Mesh<PixelType, 3>;
+  using PointSetType = itk::PointSet<PixelType, 3>;
   using PolyDataType = itk::PolyData<PixelType>;
   using TransformType = itk::AffineTransform<double, 3>;
   using CompositeTransformType = itk::CompositeTransform<double, 2>;
@@ -121,6 +125,14 @@ itkPipelineTest(int argc, char * argv[])
   OutputCompositeTransformType outputCompositeTransform;
   pipeline.add_option("output-composite-transform", outputCompositeTransform, "The output composite transform")->required()->type_name("OUTPUT_TRANSFORM");
 
+  using InputPointSetType = itk::wasm::InputPointSet<PointSetType>;
+  InputPointSetType inputPointSet;
+  pipeline.add_option("input-point-set", inputPointSet, "The input point-set")->required()->type_name("INPUT_POINTSET");
+
+  using OutputPointSetType = itk::wasm::OutputPointSet<PointSetType>;
+  OutputPointSetType outputPointSet;
+  pipeline.add_option("output-point-set", outputPointSet, "The output point-set")->required()->type_name("OUTPUT_POINTSET");
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -138,6 +150,7 @@ itkPipelineTest(int argc, char * argv[])
   outputBinaryStream.Get() << inputBinaryStreamContent;
 
   outputMesh.Set(inputMesh.Get());
+  outputPointSet.Set(inputPointSet.Get());
 
   outputPolyData.Set(inputPolyData.Get());
 

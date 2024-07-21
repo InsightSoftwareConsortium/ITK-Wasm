@@ -43,6 +43,9 @@
 #include "itkOutputTransform.h"
 #include "itkHDF5TransformIOFactory.h"
 #include "itkInputTransform.h"
+#include "itkPointSet.h"
+#include "itkInputPointSet.h"
+#include "itkOutputPointSet.h"
 
 #include "itkImageFileReader.h"
 #include "itkMeshFileReader.h"
@@ -109,6 +112,7 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   const char * inputMeshFile = argv[8];
   using MeshType = itk::Mesh<float, 3>;
+  using PointSetType = itk::PointSet<float, 3>;
   using MeshReaderType = itk::MeshFileReader<MeshType>;
   auto meshReader = MeshReaderType::New();
   meshReader->SetFileName(inputMeshFile);
@@ -192,8 +196,28 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   void * readWasmCompositeTransformPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 6, readCompositeTransformJSON.size()));
   std::memcpy(readWasmCompositeTransformPointer, readCompositeTransformJSON.data(), readCompositeTransformJSON.size());
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6", NULL};
-  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", 16, const_cast< char ** >(mockArgv));
+  const char * inputPointSetFile = argv[16];
+  using PointSetType = itk::PointSet<float, 3>;
+  using PointSetReaderType = itk::MeshFileReader<MeshType>;
+  auto pointSetReader = PointSetReaderType::New();
+  pointSetReader->SetFileName(inputPointSetFile);
+  pointSetReader->Update();
+  auto readInputPointSetMesh = pointSetReader->GetOutput();
+  PointSetType::Pointer readInputPointSet = PointSetType::New();
+  readInputPointSet->SetPoints(readInputPointSetMesh->GetPoints());
+  readInputPointSet->SetPointData(readInputPointSetMesh->GetPointData());
+  using PointSetToWasmPointSetFilterType = itk::PointSetToWasmPointSetFilter<PointSetType>;
+  auto pointSetToWasmPointSetFilter = PointSetToWasmPointSetFilterType::New();
+  pointSetToWasmPointSetFilter->SetInput(readInputPointSet);
+  pointSetToWasmPointSetFilter->Update();
+  auto readWasmPointSet = pointSetToWasmPointSetFilter->GetOutput();
+
+  auto readPointSetJSON = readWasmPointSet->GetJSON();
+  void * readWasmPointSetPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 7, readPointSetJSON.size()));
+  std::memcpy(readWasmPointSetPointer, readPointSetJSON.data(), readPointSetJSON.size());
+
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6", "7", "7", NULL};
+  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", 18, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -262,6 +286,14 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   OutputCompositeTransformType outputCompositeTransform;
   pipeline.add_option("output-composite-transform", outputCompositeTransform, "The output composite transform")->required()->type_name("OUTPUT_TRANSFORM");
 
+  using InputPointSetType = itk::wasm::InputPointSet<PointSetType>;
+  InputPointSetType inputPointSet;
+  pipeline.add_option("input-point-set", inputPointSet, "The input point set")->required()->type_name("INPUT_POINTSET");
+
+  using OutputPointSetType = itk::wasm::OutputPointSet<PointSetType>;
+  OutputPointSetType outputPointSet;
+  pipeline.add_option("output-point-set", outputPointSet, "The output point set")->required()->type_name("OUTPUT_POINTSET");
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -279,6 +311,7 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   outputBinaryStream.Get() << inputBinaryStreamContent;
 
   outputMesh.Set(inputMesh.Get());
+  outputPointSet.Set(inputPointSet.Get());
 
   outputPolyData.Set(inputPolyData.Get());
 
