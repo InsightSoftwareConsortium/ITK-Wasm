@@ -79,22 +79,27 @@ WasmTransformIOTemplate<TParametersValueType>::CanReadFile(const char * filename
 
 template <typename TParametersValueType>
 void
-WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
+WasmTransformIOTemplate<TParametersValueType>::ReadCBOR( void *buffer, unsigned char * cborBuffer, size_t cborBufferLength )
 {
-  FILE * file = fopen(this->GetFileName(), "rb");
-  if (file == NULL)
+  bool cborBufferAllocated = false;
+  size_t length = cborBufferLength;
+  if (cborBuffer == nullptr)
   {
-    itkExceptionMacro("Could not read file: " << this->GetFileName());
+    FILE* file = fopen(this->GetFileName(), "rb");
+    if (file == NULL) {
+      itkExceptionMacro("Could not read file: " << this->GetFileName());
+    }
+    fseek(file, 0, SEEK_END);
+    length = (size_t)ftell(file);
+    fseek(file, 0, SEEK_SET);
+    cborBuffer = static_cast< unsigned char *>(malloc(length));
+    cborBufferAllocated = true;
+    if (!fread(cborBuffer, length, 1, file))
+    {
+      itkExceptionMacro("Could not successfully read " << this->GetFileName());
+    }
+    fclose(file);
   }
-  fseek(file, 0, SEEK_END);
-  size_t length = (size_t)ftell(file);
-  fseek(file, 0, SEEK_SET);
-  unsigned char * cborBuffer = static_cast<unsigned char *>(malloc(length));
-  if (!fread(cborBuffer, length, 1, file))
-  {
-    itkExceptionMacro("Could not successfully read " << this->GetFileName());
-  }
-  fclose(file);
 
   if (this->m_CBORRoot != nullptr)
   {
@@ -102,7 +107,10 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
   }
   struct cbor_load_result result;
   this->m_CBORRoot = cbor_load(cborBuffer, length, &result);
-  free(cborBuffer);
+  if (cborBufferAllocated)
+  {
+    free(cborBuffer);
+  }
   if (result.error.code != CBOR_ERR_NONE)
   {
     std::string errorDescription;
@@ -436,12 +444,12 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
 
 template <typename TParametersValueType>
 auto
-WasmTransformIOTemplate<TParametersValueType>::GetJSON() -> TransformListJSON
+WasmTransformIOTemplate<TParametersValueType>::GetJSON(bool inMemory) -> TransformListJSON
 {
   ConstTransformListType & transformList = this->GetWriteTransformList();
 
-  constexpr bool inMemory = false;
   TransformListJSON transformListJSON = transformListToTransformListJSON<TransformType>(transformList, inMemory);
+
   return transformListJSON;
 }
 
@@ -491,8 +499,9 @@ WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON &
 }
 
 template <typename TParametersValueType>
-void
-WasmTransformIOTemplate<TParametersValueType>::WriteCBOR()
+size_t
+WasmTransformIOTemplate<TParametersValueType>
+::WriteCBOR(const void *buffer, unsigned char ** cborBufferPtr, bool allocateCBORBuffer )
 {
   auto transformListJSON = this->GetJSON();
 
@@ -614,16 +623,26 @@ WasmTransformIOTemplate<TParametersValueType>::WriteCBOR()
     ++count;
   }
 
+  size_t cborBufferSize;
+  size_t length;
   unsigned char * cborBuffer;
-  size_t          cborBufferSize;
-  size_t          length = cbor_serialize_alloc(this->m_CBORRoot, &cborBuffer, &cborBufferSize);
 
-  FILE * file = fopen(this->GetFileName(), "wb");
-  fwrite(cborBuffer, 1, length, file);
-  free(cborBuffer);
-  fclose(file);
+  if (allocateCBORBuffer)
+  {
+    length = cbor_serialize_alloc(index, cborBufferPtr, &cborBufferSize);
+  }
+  else
+  {
+    length = cbor_serialize_alloc(index, &cborBuffer, &cborBufferSize);
+    FILE* file = fopen(this->GetFileName(), "wb");
+    fwrite(cborBuffer, 1, length, file);
+    free(cborBuffer);
+    fclose(file);
+  }
 
   cbor_decref(&(this->m_CBORRoot));
+
+  return length;
 }
 
 template <typename TParametersValueType>

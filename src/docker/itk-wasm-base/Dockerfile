@@ -80,6 +80,7 @@ RUN mkdir ITK-build && \
     -DModule_IOScanco:BOOL=ON \
     -DModule_IOFDF:BOOL=ON \
     -DModule_ITKDCMTK:BOOL=ON \
+    -DModule_ITKIOTransformMINC:BOOL=ON \
     -DModule_ITKImageFunction:BOOL=ON \
     -DModule_MinimalPathExtraction:BOOL=ON \
     -DModule_MorphologicalContourInterpolation:BOOL=ON \

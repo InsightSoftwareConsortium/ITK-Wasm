@@ -32,11 +32,11 @@ namespace itk
  * \brief Read and write the an itk::Mesh in a format for interfacing in WebAssembly (Wasm).
  *
  * This format is intended to facilitate data exchange in itk-wasm.
- * It reads and writes an itk-wasm Mesh object where TypedArrays are
+ * It reads and writes an ITK-Wasm Mesh object where TypedArrays are
  * replaced by binary files on the filesystem or in a CBOR file.
  *
  * The file extensions used are .iwm and .iwm.cbor.
- * 
+ *
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */
