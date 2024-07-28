@@ -92,7 +92,7 @@ async function pnpmScript(name, extraArgs, options) {
             options,
             packageJson,
             undefined
-          ) ?? `itkwasm/emscripten:${defaultImageTag}`
+          ) ?? `quay.io/itkwasm/emscripten:${defaultImageTag}`
         pnpmCommand = pnpmCommand.concat(['-i', emscriptenDockerImage])
       }
       break
@@ -105,7 +105,7 @@ async function pnpmScript(name, extraArgs, options) {
             options,
             packageJson,
             undefined
-          ) ?? `itkwasm/emscripten:${defaultImageTag}`
+          ) ?? `quay.io/itkwasm/emscripten:${defaultImageTag}`
         // Currently, we expect the debug docker image to be tagged with -debug
         pnpmCommand = pnpmCommand.concat([
           '-i',
@@ -122,7 +122,7 @@ async function pnpmScript(name, extraArgs, options) {
         pnpmCommand = pnpmCommand.concat(['itk-wasm', 'build'])
         const wasiDockerImage =
           configValue('wasi-docker-image', options, packageJson, undefined) ??
-          `itkwasm/wasi:${defaultImageTag}`
+          `quay.io/itkwasm/wasi:${defaultImageTag}`
         pnpmCommand = pnpmCommand.concat(['-i', wasiDockerImage])
       }
       break
@@ -131,7 +131,7 @@ async function pnpmScript(name, extraArgs, options) {
         pnpmCommand = pnpmCommand.concat(['itk-wasm', 'build'])
         const wasiDockerImage =
           configValue('wasi-docker-image', options, packageJson, undefined) ??
-          `itkwasm/wasi:${defaultImageTag}`
+          `quay.io/itkwasm/wasi:${defaultImageTag}`
         // Currently, we expect the debug docker image to be tagged with -debug
         pnpmCommand = pnpmCommand.concat(['-i', `${wasiDockerImage}-debug`])
         pnpmCommand = pnpmCommand.concat([
