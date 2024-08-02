@@ -21,7 +21,7 @@ function generatePackageJson(project: ProjectSpec) {
     // @ts-ignore
     itkWasm.repository = project.repositoryUrl
   }
-  const packageManager = 'pnpm@9.4.0'
+  const packageManager = 'pnpm@9.6.0'
   let packageJson = {
     name: `${project.name}-build`,
     version: '0.1.0',

@@ -2,7 +2,7 @@
   "name": "@itk-wasm/compress-stringify-build",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@9.4.0",
+  "packageManager": "pnpm@9.6.0",
   "description": "scripts to generate @itk-wasm/compare-stringify itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {
