@@ -7,6 +7,8 @@ if (NOT TARGET libzstd_static)
   include(${CMAKE_CURRENT_SOURCE_DIR}/BuildZstd.cmake)
 endif()
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 if(WASI)
   set(WebAssemblyInterface_TransformIOModules
     "ITKIOTransformHDF5"
