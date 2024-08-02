@@ -50,17 +50,26 @@ async function runPipelineNode (
     pipelinePath
   )) as PipelineEmscriptenModule
   const mountedDirs: Set<string> = new Set()
+  const unmountable: Set<string> = new Set()
   if (typeof mountDirs !== 'undefined') {
     mountDirs.forEach((dir) => {
       mountedDirs.add(Module.mountDir(dir))
     })
+    /**
+     * Identify mountable dirs. Some paths may be parent to others.
+     * Only keep the parent paths, to avoid error when unmounting.
+     */
+    Array.from(mountedDirs)
+      .filter((x, _, a) => a.every((y) => x === y || !x.includes(y)))
+      .forEach((dir) => unmountable.add(dir)
+    )
   }
   if (typeof mountDirs !== 'undefined') {
     args = replaceArgumentsWithEmscriptenPaths(args, mountDirs)
   }
   const result = runPipelineEmscripten(Module, args, outputs, inputs)
   if (typeof mountDirs !== 'undefined') {
-    mountedDirs.forEach((dir) => {
+    unmountable.forEach((dir) => {
       Module.unmountDir(dir)
     })
   }

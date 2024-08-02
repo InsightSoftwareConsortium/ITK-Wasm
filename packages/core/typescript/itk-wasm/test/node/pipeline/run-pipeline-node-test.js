@@ -170,6 +170,84 @@ test('runPipelineNode uses input and output text and binary data via memory io',
   )
 })
 
+test('runPipelineNode uses input and output text and binary files', (t) => {
+  const pipelinePath = path.resolve(
+    'test',
+    'pipelines',
+    'emscripten-build',
+    'input-output-files-pipeline',
+    'input-output-files-test'
+  )
+  const testInputTextFile = path.resolve(
+    'test',
+    'data',
+    'cow.iwm',
+    'index.json'
+  )
+  const testInputBinFile = path.resolve(
+    'test',
+    'data',
+    'cow.iwm',
+    'data',
+    'cells.raw'
+  )
+  const testOutputTextFile = path.resolve(
+    'test',
+    'data',
+    'cow.iwm',
+    'data',
+    'output.txt'
+  )
+  const testOutputBinFile = path.resolve(
+    'test',
+    'data',
+    'cow.iwm',
+    'data',
+    'output.bin'
+  )
+
+  const args = [
+    '--memory-io',
+    '--input-text-stream',
+    '0',
+    '--input-binary-stream',
+    '1',
+    '0',
+    '1',
+    testOutputTextFile,
+    testOutputBinFile,
+    '-f',
+    '--input-text-file',
+    testInputTextFile,
+    '--input-binary-file',
+    testInputBinFile,
+  ]
+  const desiredOutputs = [
+    { type: InterfaceTypes.TextStream },
+    { type: InterfaceTypes.BinaryStream }
+  ]
+  const inputs = [
+    { type: InterfaceTypes.TextStream, data: { data: 'The answer is 42.' } },
+    {
+      type: InterfaceTypes.BinaryStream,
+      data: { data: new Uint8Array([222, 173, 190, 239]) }
+    }
+  ]
+
+  const mountDirs = new Set()
+  mountDirs.add(path.dirname(testInputTextFile))
+  mountDirs.add(path.dirname(testInputBinFile))
+  mountDirs.add(path.dirname(testOutputTextFile))
+  mountDirs.add(path.dirname(testOutputBinFile))
+
+  return runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs).then(
+    function ({ stdout, stderr, outputs }) {
+      t.is(outputs[0].type, InterfaceTypes.TextStream)
+      t.is(outputs[1].type, InterfaceTypes.BinaryStream)
+    }
+  )
+})
+
 test('runPipelineNode uses input and output json data via memory io', (t) => {
   const pipelinePath = path.resolve(
     'test',
