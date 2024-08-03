@@ -33,9 +33,9 @@ RUN curl -L https://api.github.com/repos/facebook/zstd/tarball/${zstd_GIT_TAG} |
   cd .. && \
   rm -rf zstd-build zstd
 
-# tag commit date: 2024-05-21
-ENV ITK_GIT_TAG d03c2616856b28f708002cd1eff9b79660c7c9b0
-ENV ITK_GIT_BRANCH itkwasm-2024-05-20-5db055d7ad3b
+# tag commit date: 2024-08-01
+ENV ITK_GIT_TAG 31b51f299ac12f9e4d56a18e6020127f359cb426
+ENV ITK_GIT_BRANCH itkwasm-2024-05-20-5db055d7ad3b-1
 RUN git clone --branch $ITK_GIT_BRANCH --single-branch --depth 1 https://github.com/KitwareMedical/ITK.git && \
   sed -i -e '/^option(OPJ_USE_THREAD/c\option(OPJ_USE_THREAD "use threads" OFF)' \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
