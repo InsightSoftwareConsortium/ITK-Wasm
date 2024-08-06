@@ -55,6 +55,8 @@ int readTransform(itk::wasm::Pipeline & pipeline, const std::string & inputFileN
 
   pipeline.get_option("serialized-transform")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
 
+  pipeline.get_option("could-read")->required();
+
   itk::wasm::OutputTransformIO<ParametersValueType> outputTransformIO;
   pipeline.add_option("transform", outputTransformIO, "Output transform")->required()->type_name("OUTPUT_TRANSFORM");
 
@@ -87,7 +89,7 @@ int main (int argc, char * argv[])
   pipeline.add_option("serialized-transform", inputFileName, "Input transform serialized in the file format");
 
   itk::wasm::OutputTextStream couldRead;
-  pipeline.add_option("could-read", couldRead, "Whether the input could be read. If false, the output transform is not valid.")->required()->type_name("OUTPUT_JSON");
+  pipeline.add_option("could-read", couldRead, "Whether the input could be read. If false, the output transform is not valid.")->type_name("OUTPUT_JSON");
 
   bool floatParameters = false;
   pipeline.add_flag("-f,--float-parameters", floatParameters, "Use float for the parameter value type. The default is double.");
