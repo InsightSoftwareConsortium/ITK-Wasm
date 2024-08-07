@@ -27,6 +27,7 @@
 
 #include "itkWasmIOCommon.h"
 #include "itktransformParameterizationString.h"
+#include "itkMetaDataDictionaryJSON.h"
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
@@ -202,18 +203,26 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR( void *buffer, unsigned 
             {
               transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Rigid2D;
             }
+            else if (transformParameterization == "Rigid3D")
+            {
+              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Rigid3D;
+            }
             else if (transformParameterization == "Rigid3DPerspective")
             {
               transformJSON.transformType.transformParameterization =
                 JSONTransformParameterizationEnum::Rigid3DPerspective;
             }
+            else if (transformParameterization == "Versor")
+            {
+              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Versor;
+            }
             else if (transformParameterization == "VersorRigid3D")
             {
               transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::VersorRigid3D;
             }
-            else if (transformParameterization == "Versor")
+            else if (transformParameterization == "Scale")
             {
-              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Versor;
+              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Scale;
             }
             else if (transformParameterization == "ScaleLogarithmic")
             {
@@ -224,10 +233,6 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR( void *buffer, unsigned 
             {
               transformJSON.transformType.transformParameterization =
                 JSONTransformParameterizationEnum::ScaleSkewVersor3D;
-            }
-            else if (transformParameterization == "Scale")
-            {
-              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Scale;
             }
             else if (transformParameterization == "Similarity2D")
             {
@@ -274,29 +279,29 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR( void *buffer, unsigned 
               transformJSON.transformType.transformParameterization =
                 JSONTransformParameterizationEnum::DisplacementField;
             }
-            else if (transformParameterization == "GaussianExponentialDiffeomorphic")
-            {
-              transformJSON.transformType.transformParameterization =
-                JSONTransformParameterizationEnum::GaussianExponentialDiffeomorphic;
-            }
             else if (transformParameterization == "GaussianSmoothingOnUpdateDisplacementField")
             {
               transformJSON.transformType.transformParameterization =
                 JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateDisplacementField;
             }
-            else if (transformParameterization == "GaussianSmoothingOnUpdateTimeVaryingVelocityField")
+            else if (transformParameterization == "GaussianExponentialDiffeomorphic")
             {
               transformJSON.transformType.transformParameterization =
-                JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateTimeVaryingVelocityField;
+                JSONTransformParameterizationEnum::GaussianExponentialDiffeomorphic;
+            }
+            else if (transformParameterization == "VelocityField")
+            {
+              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::VelocityField;
             }
             else if (transformParameterization == "TimeVaryingVelocityField")
             {
               transformJSON.transformType.transformParameterization =
                 JSONTransformParameterizationEnum::TimeVaryingVelocityField;
             }
-            else if (transformParameterization == "VelocityField")
+            else if (transformParameterization == "GaussianSmoothingOnUpdateTimeVaryingVelocityField")
             {
-              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::VelocityField;
+              transformJSON.transformType.transformParameterization =
+                JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateTimeVaryingVelocityField;
             }
             else
             {
@@ -491,6 +496,10 @@ WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON &
     TransformPointer transform;
     this->CreateTransform(transform, transformType);
     transform->SetObjectName(transformJSON.name);
+
+    auto dictionary = transform->GetMetaDataDictionary();
+    jsonToMetaDataDictionary(transformJSON.metadata, dictionary);
+
     // todo: ITK 5.4.1
     // transform->SetInputSpaceName(transformJSON.inputSpaceName);
     // transform->SetOutputSpaceName(transformJSON.outputSpaceName);

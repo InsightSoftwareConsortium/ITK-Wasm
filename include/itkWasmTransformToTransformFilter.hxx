@@ -251,6 +251,9 @@ WasmTransformToTransformFilter<TTransform>
       transform->CopyInFixedParameters(fixedPtr, fixedPtr + transformJSON.numberOfFixedParameters);
       ParametersValueType * paramsPtr = reinterpret_cast< ParametersValueType * >( std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10) );
       transform->CopyInParameters(paramsPtr, paramsPtr + transformJSON.numberOfParameters);
+
+      auto dictionary = transform->GetMetaDataDictionary();
+      jsonToMetaDataDictionary(transformJSON.metadata, dictionary);
     }
 
     ++count;
