@@ -17,6 +17,8 @@ const interfaceJsonTypeToTypeScriptType = new Map([
   ['OUTPUT_MESH', 'Mesh'],
   ['INPUT_POLYDATA', 'PolyData'],
   ['OUTPUT_POLYDATA', 'PolyData'],
+  ['INPUT_TRANSFORM', 'Transform'],
+  ['OUTPUT_TRANSFORM', 'Transform'],
   ['BOOL', 'boolean'],
   ['TEXT', 'string'],
   ['INT', 'number'],
@@ -26,7 +28,7 @@ const interfaceJsonTypeToTypeScriptType = new Map([
   ['FLOAT', 'number'],
   ['FLOAT:FLOAT', 'number'],
   ['INPUT_JSON', 'JsonCompatible'],
-  ['OUTPUT_JSON', 'JsonCompatible'],
+  ['OUTPUT_JSON', 'JsonCompatible']
 ])
 
 export default interfaceJsonTypeToTypeScriptType

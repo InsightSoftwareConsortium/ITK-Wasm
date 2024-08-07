@@ -1,16 +1,11 @@
-import IntTypes from './int-types.js'
-import FloatTypes from './float-types.js'
-import PixelTypes from './pixel-types.js'
+import TransformParameterizations from './transform-parameterizations.js'
 
-class ImageType {
+class TransformType {
   constructor(
-    public readonly dimension: number = 2,
-    public readonly componentType:
-      | (typeof IntTypes)[keyof typeof IntTypes]
-      | (typeof FloatTypes)[keyof typeof FloatTypes] = IntTypes.UInt8,
-    public readonly pixelType: (typeof PixelTypes)[keyof typeof PixelTypes] = PixelTypes.Scalar,
-    public readonly components: number = 1
+    public readonly inputDimension: number = 3,
+    public readonly outputDimension: number = 3,
+    public readonly transformParameterization: (typeof TransformParameterizations)[keyof typeof TransformParameterizations] = TransformParameterizations.Identity
   ) {}
 }
 
-export default ImageType
+export default TransformType
