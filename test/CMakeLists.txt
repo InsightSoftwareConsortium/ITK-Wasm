@@ -242,6 +242,8 @@ itk_add_test(NAME itkPipelineMemoryIOTest
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputCompositeTransform.h5
       DATA{Input/cow.vtk}
       ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputPointSet.vtk
+      DATA{Input/apple.jpg}
+      ${ITK_TEST_OUTPUT_DIR}/itkPipelineMemoryIOTestOutputVectorImage.mha
 )
 
 itk_add_test(NAME itkPipelineInterfaceJSONTest

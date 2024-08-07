@@ -84,7 +84,15 @@ public:
 
         const auto dataAddress = reinterpret_cast< size_t >( wasmImage->GetImage()->GetBufferPointer() );
         using ConvertPixelTraits = DefaultConvertPixelTraits<typename ImageType::PixelType>;
-        const auto dataSize = wasmImage->GetImage()->GetPixelContainer()->Size() * sizeof(typename ConvertPixelTraits::ComponentType) * ConvertPixelTraits::GetNumberOfComponents();
+        const auto dataSize =
+          wasmImage->GetImage()->GetBufferedRegion().GetNumberOfPixels()
+          * sizeof(typename ConvertPixelTraits::ComponentType)
+          * wasmImage->GetImage()->GetNumberOfComponentsPerPixel();
+        if (dataSize <= 0)
+        {
+          std::cerr << "dataSize cannot be zero or negative." << std::endl;
+          abort();
+        }
         setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);
 
         const auto directionAddress = reinterpret_cast< size_t >( wasmImage->GetImage()->GetDirection().GetVnlMatrix().begin() );
