@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Build environment for ITK-Wasm"
 authors = ["Matt McCormick <matt.mccormick@kitware.com>"]
 channels = ["conda-forge"]
-platforms = ["linux-64"]
+platforms = ["linux-aarch64", "linux-64"]
 
 [tasks]
 
@@ -26,4 +26,4 @@ autodoc2-write = { cmd = "autodoc2 write --output apidocs -r md ../packages/core
 docs = {features = ["docs"], no-default-feature = true}
 
 [feature.docs.pypi-dependencies]
-autodoc2 = { path = "sphinx-autodoc2", editable = true }
+sphinx-autodoc2 = { git = "https://github.com/thewtex/sphinx-autodoc2", rev = "write-md" }
