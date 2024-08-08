@@ -2,5 +2,4 @@ test/
 emscripten-build/
 micromamba/
 python/
-typescript/
 wasi-build/

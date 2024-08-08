@@ -778,18 +778,15 @@ importers:
   packages/transform-io/typescript:
     dependencies:
       itk-wasm:
-        specifier: 1.0.0-b.175
-        version: 1.0.0-b.175
+        specifier: workspace:^
+        version: link:../../core/typescript/itk-wasm
     devDependencies:
       '@itk-wasm/demo-app':
-        specifier: ^0.2.0
-        version: 0.2.0(@types/react@18.3.1)
-      '@itk-wasm/image-io':
-        specifier: ^1.2.0
-        version: 1.2.1
-      '@itk-wasm/mesh-io':
-        specifier: ^1.2.0
-        version: 1.2.1
+        specifier: workspace:*
+        version: link:../../core/typescript/demo-app
+      '@itk-wasm/transform-io-build':
+        specifier: workspace:*
+        version: link:..
       '@types/node':
         specifier: ^20.2.5
         version: 20.12.10
@@ -2112,17 +2109,8 @@ packages:
     resolution: {integrity: sha512-7+9L3lrLMKF4y6B6qjs8GqfbpxT0waOJUM14NdMNEA6M+BoBS8fdHREhQHo2s7QMA5O7I+Jv7m+dyqlisGnbdQ==}
     hasBin: true
 
-  '@itk-wasm/demo-app@0.2.0':
-    resolution: {integrity: sha512-nyteNJWsaeXv0+QHRJ8AYJWt8RSriJE2rZ7BYwDFmWCfp+et/xf2kULJXRE2GjCgHzpULHxE8LeWqS/usO+sAg==}
-
   '@itk-wasm/htj2k@2.1.0':
     resolution: {integrity: sha512-22+mWgXr/LYRCqzzfIJ5il5bgYdJjPD5jiP4XXPvSgCjp48bui5zvZSkvMmXy89bJbVinUB1O6KHuB3K0MUong==}
-
-  '@itk-wasm/image-io@1.2.1':
-    resolution: {integrity: sha512-BzkXi1uB+Mj/AJIfFUXSpWVWfwyJ5tSiJnp/jTfYKHPnoTh+/xEFy9kKEvh8EryS3PZKoVqHc0E1Ik5ffEH3Nw==}
-
-  '@itk-wasm/mesh-io@1.2.1':
-    resolution: {integrity: sha512-W0Xl2gqKKMR6rMTLgDqiWXOV1DozGSX3idd0Zs9HPJg0oy2hOQgAQfhBmmZb1iwDD7FKZyaBSUQqSr/77Eeyfw==}
 
   '@itk-wasm/mesh-to-poly-data@1.1.0':
     resolution: {integrity: sha512-c+OB8PEaJfUAysERCzA2ggXdYwNg0P6YniuPPmkhxCVJtz62XyQ6rq0bT6rF6Cq8FEljTP3Spl9174ZiLNskvw==}
@@ -4401,10 +4389,6 @@ packages:
 
   itk-wasm@1.0.0-b.175:
     resolution: {integrity: sha512-6vhMXur95FwAkd7XyvH39VWAXyAK6DCKb1SWPvhcKwDYGdpqyLZtfWs0qQp0BkyLMLBuCOD4sxA7ENcvZZpWCg==}
-    hasBin: true
-
-  itk-wasm@1.0.0-b.177:
-    resolution: {integrity: sha512-cgl+u6BMhe2Z3Nn37DxIkqCf2b4qHwUO0rpan01ftq47ksjmewTCBr96y2x+9eOeRxyvPygpBeHMcSSqM/c7tQ==}
     hasBin: true
 
   jest-worker@27.5.1:
@@ -7764,43 +7748,9 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itk-wasm/demo-app@0.2.0(@types/react@18.3.1)':
-    dependencies:
-      '@itk-viewer/element': 0.3.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.4.38))(webpack@5.91.0)(wslink@2.0.2)
-      '@itk-viewer/io': 0.1.8
-      '@shoelace-style/shoelace': 2.15.0(@types/react@18.3.1)
-      itk-wasm: 1.0.0-b.175
-      lit: 3.1.3
-    transitivePeerDependencies:
-      - '@babel/preset-env'
-      - '@material/web'
-      - '@types/react'
-      - autoprefixer
-      - bufferutil
-      - debug
-      - supports-color
-      - utf-8-validate
-      - webpack
-      - wslink
-
   '@itk-wasm/htj2k@2.1.0':
     dependencies:
       itk-wasm: 1.0.0-b.175
-    transitivePeerDependencies:
-      - debug
-
-  '@itk-wasm/image-io@1.2.1':
-    dependencies:
-      axios: 1.6.8(debug@4.3.5)
-      itk-wasm: 1.0.0-b.177
-      mime-types: 2.1.35
-    transitivePeerDependencies:
-      - debug
-
-  '@itk-wasm/mesh-io@1.2.1':
-    dependencies:
-      itk-wasm: 1.0.0-b.177
-      mime-types: 2.1.35
     transitivePeerDependencies:
       - debug
 
@@ -10494,23 +10444,6 @@ snapshots:
       - debug
 
   itk-wasm@1.0.0-b.175:
-    dependencies:
-      '@itk-wasm/dam': 1.1.1
-      '@thewtex/zstddec': 0.2.1
-      '@types/emscripten': 1.39.11
-      axios: 1.6.8(debug@4.3.5)
-      chalk: 5.3.0
-      comlink: 4.4.1
-      commander: 11.1.0
-      fs-extra: 11.2.0
-      glob: 8.1.0
-      markdown-table: 3.0.3
-      mime-types: 2.1.35
-      wasm-feature-detect: 1.6.1
-    transitivePeerDependencies:
-      - debug
-
-  itk-wasm@1.0.0-b.177:
     dependencies:
       '@itk-wasm/dam': 1.1.1
       '@thewtex/zstddec': 0.2.1
