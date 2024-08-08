@@ -1,12 +1,12 @@
 from enum import Enum
 
-
-class InterfaceTypes(Enum):
-    TextFile = "InterfaceTextFile"
-    BinaryFile = "InterfaceBinaryFile"
-    TextStream = "InterfaceTextStream"
-    BinaryStream = "InterfaceBinaryStream"
-    Image = "InterfaceImage"
-    Mesh = "InterfaceMesh"
-    PolyData = "InterfacePolyData"
-    JsonCompatible = "InterfaceJsonCompatible"
+class InterfaceTypes(str, Enum):
+    TextFile = "TextFile"
+    BinaryFile = "BinaryFile"
+    TextStream = "TextStream"
+    BinaryStream = "BinaryStream"
+    Image = "Image"
+    Mesh = "Mesh"
+    PolyData = "PolyData"
+    Transform = "Transform"
+    JsonCompatible = "JsonCompatible"
