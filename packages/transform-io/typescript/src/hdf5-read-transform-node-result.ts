@@ -1,6 +1,6 @@
 // Generated file. To retain edits, remove this comment.
 
-import { JsonCompatible } from 'itk-wasm'
+import { JsonCompatible, Transform } from 'itk-wasm'
 
 interface Hdf5ReadTransformNodeResult {
   /** Whether the input could be read. If false, the output transform is not valid. */
