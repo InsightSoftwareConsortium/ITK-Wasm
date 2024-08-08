@@ -3,3 +3,4 @@ emscripten-build/
 micromamba/
 python/
 wasi-build/
+typescript/dist
