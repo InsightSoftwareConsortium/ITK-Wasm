@@ -145,7 +145,11 @@ itkPipelineTest(int argc, char * argv[])
 
   const std::string inputBinaryStreamContent{ std::istreambuf_iterator<char>(inputBinaryStream.Get()),
                                             std::istreambuf_iterator<char>() };
+#if defined(_WIN64) || defined(_WIN32)
+  ITK_TEST_EXPECT_TRUE(inputBinaryStreamContent == "test 123\r\n");
+#else
   ITK_TEST_EXPECT_TRUE(inputBinaryStreamContent == "test 123\n");
+#endif
 
   outputBinaryStream.Get() << inputBinaryStreamContent;
 
