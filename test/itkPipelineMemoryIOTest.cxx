@@ -216,8 +216,28 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   void * readWasmPointSetPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 7, readPointSetJSON.size()));
   std::memcpy(readWasmPointSetPointer, readPointSetJSON.data(), readPointSetJSON.size());
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6", "7", "7", NULL};
-  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", 18, const_cast< char ** >(mockArgv));
+  using VectorImageType = itk::VectorImage<PixelType, Dimension>;
+  // VectorImage test
+  const char * inputVectorImageFile = argv[18];
+  auto readVectorInputImage = itk::ReadImage<VectorImageType>(inputVectorImageFile);
+  using VectorImageToWasmImageFilterType = itk::ImageToWasmImageFilter<VectorImageType>;
+  auto vectorImageToWasmImageFilter = VectorImageToWasmImageFilterType::New();
+  vectorImageToWasmImageFilter->SetInput(readVectorInputImage);
+  vectorImageToWasmImageFilter->Update();
+  auto readWasmVectorImage = vectorImageToWasmImageFilter->GetOutput();
+
+  auto readWasmVectorImageData = reinterpret_cast< const void * >(readWasmVectorImage->GetImage()->GetBufferPointer());
+  const auto readWasmVectorImageDataSize = readWasmVectorImage->GetImage()->GetPixelContainer()->Size();
+  const size_t readWasmVectorImageDataPointerAddress = itk_wasm_input_array_alloc(0, 8, 0, readWasmVectorImageDataSize);
+  auto readWasmVectorImageDataPointer = reinterpret_cast< void * >(readWasmVectorImageDataPointerAddress);
+  std::memcpy(readWasmVectorImageDataPointer, readWasmVectorImageData, readWasmVectorImageDataSize);
+
+  auto readVectorImageJSON = readWasmVectorImage->GetJSON();
+  void * readWasmVectorImagePointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 8, readVectorImageJSON.size()));
+  std::memcpy(readWasmVectorImagePointer, readVectorImageJSON.data(), readVectorImageJSON.size());
+
+  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6", "7", "7", "8", "8", NULL};
+  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", 20, const_cast< char ** >(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -294,6 +314,14 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   OutputPointSetType outputPointSet;
   pipeline.add_option("output-point-set", outputPointSet, "The output point set")->required()->type_name("OUTPUT_POINTSET");
 
+  using InputVectorImageType = itk::wasm::InputImage<VectorImageType>;
+  InputVectorImageType inputVectorImage;
+  pipeline.add_option("input-vector-image", inputVectorImage, "The inputImage")->required()->type_name("INPUT_IMAGE");
+
+  using OutputVectorImageType = itk::wasm::OutputImage<VectorImageType>;
+  OutputVectorImageType outputVectorImage;
+  pipeline.add_option("output-vector-image", outputVectorImage, "The outputVectorImage")->required()->type_name("OUTPUT_IMAGE");
+
   ITK_WASM_PARSE(pipeline);
 
   outputImage.Set(inputImage.Get());
@@ -317,6 +345,8 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   outputTransform.Set(inputTransform.Get());
   outputCompositeTransform.Set(inputCompositeTransform.Get());
+
+  outputVectorImage.Set(inputVectorImage.Get());
 
   return EXIT_SUCCESS;
 }

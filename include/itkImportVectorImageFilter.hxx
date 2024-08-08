@@ -138,7 +138,7 @@ ImportVectorImageFilter<TOutputImage>::GenerateOutputInformation()
   outputPtr->SetDirection(m_Direction);
   outputPtr->SetLargestPossibleRegion(m_LargestPossibleRegion);
 
-  if (outputPtr->GetNameOfClass() == "VectorImage")
+  if (outputPtr->GetNameOfClass() == std::string("VectorImage"))
     {
     outputPtr->SetNumberOfComponentsPerPixel(m_VectorImageComponentsPerPixel);
     }
