@@ -1,17 +1,17 @@
-# itk-wasm in a web browser application via Vite
+# ITK-Wasm in a web browser application via Vite
 
-This example demonstrates how to use *itk-wasm* in a web browser application built with [Vite](https://vitejs.dev/). Find the code in [itk-wasm/examples/Vite](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/Vite).
+This example demonstrates how to use *ITK-Wasm* in a web browser application built with [Vite](https://vitejs.dev/). Find the code in [itk-wasm/examples/Vite](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/Vite).
 
-*itk-wasm* **asynchronously** downloads web worker JavaScript and WebAssembly Emscripten modules **on demand**.  For *itk-wasm* to work:
+*ITK-Wasm* **asynchronously** downloads web worker JavaScript and WebAssembly Emscripten modules **on demand**.  For *ITK-Wasm* to work:
 
-* Copy *itk-wasm* Javascript and WebAssembly files to a public directory
-* Tell *itk-wasm* the location to download the Javascript and WebAssembly files in the public directory
+* Copy *ITK-Wasm* Javascript and WebAssembly files to a public directory
+* Tell *ITK-Wasm* the location to download the Javascript and WebAssembly files in the public directory
 
-## Copy *itk-wasm* Javascript and WebAssembly files to a public directory
+## Copy *ITK-Wasm* Javascript and WebAssembly files to a public directory
 
-In the Vite example, `vite.config.js` uses `vite-plugin-static-copy` to move prebuilt *itk-wasm* files to the `/dist` directory.
+In the Vite example, `vite.config.js` uses `vite-plugin-static-copy` to move prebuilt *ITK-Wasm* files to the `/dist` directory.
 
-```js
+```javascript
 import { defineConfig } from 'vite'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
@@ -39,13 +39,13 @@ export default defineConfig({
 
 The Vite config copies *web-workers* directory, which asynchronously perform IO or runs processing pipelines in a background thread.
 
-The config copies the complete *image-io* and *mesh-io* directories. You may want to copy a subset of *image-io* or *mesh-io* files, based on what features you use of *itk-wasm*.
+The config copies the complete *image-io* and *mesh-io* directories. You may want to copy a subset of *image-io* or *mesh-io* files, based on what features you use of *ITK-Wasm*.
 
-## Tell *itk-wasm* the location to download the Javascript and WebAssembly files
+## Tell *ITK-Wasm* the location to download the Javascript and WebAssembly files
 
-To change the location of the *itk-wasm* web worker and Emscripten modules, configure Vite's `resolve.alias` setting.
+To change the location of the *ITK-Wasm* web worker and Emscripten modules, configure Vite's `resolve.alias` setting.
 
-```js
+```javascript
 import { defineConfig } from 'vite'
 import path from 'path'
 
@@ -63,9 +63,9 @@ export default defineConfig({
 })
 ```
 
-The itkConfig.js file holds paths where *itk-wasm* fetches assets at runtime.
+The itkConfig.js file holds paths where *ITK-Wasm* fetches assets at runtime.
 
-```js
+```javascript
 const itkConfig = {
   pipelineWorkerUrl: '/itk/web-workers/min-bundles/pipeline.worker.js',
   imageIOUrl: '/itk/image-io',

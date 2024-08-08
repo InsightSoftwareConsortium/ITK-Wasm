@@ -8,7 +8,7 @@ Similar to the [web browser API](./browser_pipelines), most of these functions r
 
 ## `runPipelineNode`
 
-```ts
+```typescript
 runPipelineNode(pipelinePath: string,
   args: string[],
   outputs: PipelineOutput[],

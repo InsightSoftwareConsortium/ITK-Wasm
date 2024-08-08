@@ -8,7 +8,7 @@ Similar to the [web browser API](/typescript/browser_io), most of these function
 
 ## `readLocalFile`
 
-```ts
+```typescript
 readLocalFile(filePath: string): Promise<Image | Mesh>
 ```
 
@@ -16,7 +16,7 @@ readLocalFile(filePath: string): Promise<Image | Mesh>
 
 ## `writeLocalFile`
 
-```ts
+```typescript
 writeLocalFile(imageOrMesh: Image | Mesh, filePath: string, useCompression: boolean = false):
   Promise<null>
 ```
@@ -31,7 +31,7 @@ writeLocalFile(imageOrMesh: Image | Mesh, filePath: string, useCompression: bool
 
 ## `readImageLocalFile`
 
-```ts
+```typescript
 readImageLocalFile(filePath: string):
   Promise<Image>
 ```
@@ -40,7 +40,7 @@ readImageLocalFile(filePath: string):
 
 ## `readImageLocalDICOMFileSeries`
 
-```ts
+```typescript
 readImageLocalDICOMFileSeries(filePaths, singleSortedSeries: boolean = false):
   Promise<Image>
 ```
@@ -51,7 +51,7 @@ If the files are known to be from a single, sorted series, the last argument can
 
 ## `readDICOMTagsLocalFile`
 
-```ts
+```typescript
 readDICOMTagsLocalFile(fileName: string, tags: string[] | null = null):
   Promise<Map<string, string>>
 ```
@@ -65,7 +65,7 @@ Returns a [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ## `writeImageLocalFile`
 
-```ts
+```typescript
 writeImageLocalFile(image: Image, filePath: string, useCompression: boolean):
   null
 ```
@@ -80,7 +80,7 @@ writeImageLocalFile(image: Image, filePath: string, useCompression: boolean):
 
 ## `readMeshLocalFile`
 
-```ts
+```typescript
 readMeshLocalFile(filePath: string):
   Promise<Mesh>
 ```
@@ -89,7 +89,7 @@ readMeshLocalFile(filePath: string):
 
 ## `writeMeshLocalFile`
 
-```ts
+```typescript
 writeMeshLocalFile(Mesh, filePath: string, { useCompression?: boolean, binaryFileType?: boolean }):
   null
 ```

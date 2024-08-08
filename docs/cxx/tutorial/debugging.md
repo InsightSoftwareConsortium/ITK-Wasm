@@ -51,11 +51,11 @@ add_executable(DebugMe DebugMe.cxx)
 
 with standard CMake commands,
 
-![Native build](/_static/tutorial/debugging/native-build.png)
+![Native build](../../static/tutorial/debugging/native-build.png)
 
 The native binary can then be debugged in the standard way. For example, with `gdb` on Linux:
 
-![Native debug Linux](/_static/tutorial/debugging/native-debug-linux.png)
+![Native debug Linux](../../static/tutorial/debugging/native-debug-linux.png)
 
 ## WASI
 
@@ -63,17 +63,17 @@ The most direct way to debug WebAssembly is through the [WebAssembly System Inte
 
 First, build to WASI WebAssembly with debugging symbols available:
 
-![WASI debug build](/_static/tutorial/debugging/wasi-build-debug.png)
+![WASI debug build](../../static/tutorial/debugging/wasi-build-debug.png)
 
 Then, the `itk-wasm` CLI can conveniently run the Wasm binary with the included WASI runtime:
 
-![Run WASI debug](/_static/tutorial/debugging/run-wasi-debug.png)
+![Run WASI debug](../../static/tutorial/debugging/run-wasi-debug.png)
 
 We can see that `abort` is called in the `main` function at line 13 in `DebugMe.cxx`.
 
 A full debugging session is also possible after [LLDB](https://lldb.llvm.org/) >= 13 and [Wasmtime](https://wasmtime.dev/) are installed.
 
-![LLDB WASI debug](/_static/tutorial/debugging/lldb-wasi-debug.png)
+![LLDB WASI debug](../../static/tutorial/debugging/lldb-wasi-debug.png)
 
 **Note:** when calling `wasmtime` directly and passing local files into a pipeline, `--dir` arguments must be set. This gives `wasmtime` permission to access the directories containing the files. This is required due to WASI's [capability-based security](https://en.wikipedia.org/wiki/Capability-based_security) model. For example, if a file path starts with `./`, then add `--dir ./` arguments to the `wasmtime` invocation. `--dir` can be specified multiple times.
 
@@ -85,31 +85,31 @@ As with native builds, this builds debugging symbols, the human-readable names o
 
 When built with the default `Release` build type:
 
-![Emscripten build Release](/_static/tutorial/debugging/emscripten-build-release.png)
+![Emscripten build Release](../../static/tutorial/debugging/emscripten-build-release.png)
 
 the JavaScript support code is minified, and difficult to debug:
 
-![Run Node Release](/_static/tutorial/debugging/run-node-release.png)
+![Run Node Release](../../static/tutorial/debugging/run-node-release.png)
 
 However, when built with the `Debug` build type:
 
-![Emscripten build Debug](/_static/tutorial/debugging/emscripten-build-debug.png)
+![Emscripten build Debug](../../static/tutorial/debugging/emscripten-build-debug.png)
 
 a useful backtrace can be obtained:
 
-![Run Node Debug](/_static/tutorial/debugging/run-node-debug.png)
+![Run Node Debug](../../static/tutorial/debugging/run-node-debug.png)
 
 In order to run a debugger with Node, add the `--inspect-brk` flag when invoking `node`:
 
-![Node inspect](/_static/tutorial/debugging/node-inspect.png)
+![Node inspect](../../static/tutorial/debugging/node-inspect.png)
 
 This will pause execution on start a debugging remote interface. To connect to the remote interface with a Chromium browser, visit `chrome://inspect` and click the *inspect* link on the corresponding *Remote Target*:
 
-![Node inspect Remote Target](/_static/tutorial/debugging/node-inspect-remote-target.png)
+![Node inspect Remote Target](../../static/tutorial/debugging/node-inspect-remote-target.png)
 
 This will open the Chrome Dev Tools debugger:
 
-![Node inspect Chrome DevTools](/_static/tutorial/debugging/node-inspect-chrome-dev-tools.png)
+![Node inspect Chrome DevTools](../../static/tutorial/debugging/node-inspect-chrome-dev-tools.png)
 
 Other debugger interfaces [are also available](https://nodejs.org/en/docs/inspector), like a CLI debugger or the VSCode debugger.
 
@@ -127,21 +127,21 @@ Next, enable it in DevTools.
 
   Open DevTools -> Click the *gear (⚙)* icon in the top right corner -> go to the *Experiments* panel -> and tick *WebAssembly Debugging: Enable DWARF support*.
 
-![Enable Wasm Debugging](/_static/tutorial/debugging/enable-chrome-wasm-debugging.png)
+![Enable Wasm Debugging](../../static/tutorial/debugging/enable-chrome-wasm-debugging.png)
 
 After exitting Settings, you will be prompted to reload DevTools -- reload.
 
 Next, open the options for Chrome WebAssembly Debugging extension:
 
-![Wasm Debugging Options](/_static/tutorial/debugging/devtools-options.png)
+![Wasm Debugging Options](../../static/tutorial/debugging/devtools-options.png)
 
 Since itk-wasm performs builds in a clean Docker environment, the debugging source paths in the Docker environment are different than the paths on the host system. The debugging extension has a path substitution system that can account for these differences. In the Docker image, the directory where `itk-wasm` is invoked is mounted as `/work`. Substitute `/work` with the directory where the `itk-wasm` CLI is invoked. For example, if `itk-wasm` was invoked at `/home/matt/src/itk-wasm/examples/Debugging`, then:
 
-![Path substitution](/_static/tutorial/debugging/path-substitution.png)
+![Path substitution](../../static/tutorial/debugging/path-substitution.png)
 
 Build the project with itk-wasm and the `Debug` `CMAKE_BUILD_TYPE` to include DWARF debugging information:
 
-![Emscripten build Debug](/_static/tutorial/debugging/emscripten-build-debug.png)
+![Emscripten build Debug](../../static/tutorial/debugging/emscripten-build-debug.png)
 
 Here we load and run the WebAssembly with a simple HTML file and server:
 
@@ -167,8 +167,8 @@ Here we load and run the WebAssembly with a simple HTML file and server:
 </html>
 ```
 
-![HTTP Server](/_static/tutorial/debugging/http-server.png)
+![HTTP Server](../../static/tutorial/debugging/http-server.png)
 
 And we can debug the C++ code in Chrome's DevTools debugger along side the executing JavaScript!
 
-![Debug C++ DevTools](/_static/tutorial/debugging/debug-cxx-devtools.png)
+![Debug C++ DevTools](../../static/tutorial/debugging/debug-cxx-devtools.png)

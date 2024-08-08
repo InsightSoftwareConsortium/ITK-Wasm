@@ -84,7 +84,7 @@ Parse the command line arguments with the `ITK_WASM_PARSE` macro:
 
 The `-h` and `--help` flags are automatically generated from pipeline arguments to print usage information.
 
-![inputs-outputs help](/_static/tutorial/inputs_outputs_help.png)
+![inputs-outputs help](../../static/tutorial/inputs_outputs_help.png)
 
 Finally, process our data: 
 ```cpp
@@ -157,11 +157,11 @@ npx itk-wasm -b wasi-build run inputs-outputs.wasi.wasm -- -- --radius 2 cthead1
 
 The input image:
 
-![input image](/_static/tutorial/cthead1.png)
+![input image](../../static/tutorial/cthead1.png)
 
 has been smoothed:
 
-![smoothed](/_static/tutorial/smoothed.png)
+![smoothed](../../static/tutorial/smoothed.png)
 
 ## Run in Node.js
 

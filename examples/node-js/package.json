@@ -7,7 +7,7 @@
   },
   "type": "module",
   "scripts": {
-    "test:node": "node src/itk-convert.js ../../docs/_static/logo.png ./logo.tif",
+    "test:node": "node src/itk-convert.js ../../docs/static/logo.png ./logo.tif",
     "test": "pnpm test:node"
   },
   "repository": {

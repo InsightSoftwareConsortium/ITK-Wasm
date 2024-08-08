@@ -50,9 +50,9 @@ intersphinx_mapping = {
 }
 
 html_theme = 'furo'
-html_static_path = ['_static']
-html_logo = "_static/logo-white.svg"
-html_favicon = "_static/icon/favicon.png"
+htmlstatic_path = ['static']
+html_logo = "static/logo-white.svg"
+html_favicon = "static/icon/favicon.png"
 html_title = f"{project} documentation"
 html_baseurl = os.environ.get("SPHINX_BASE_URL", "")
 

@@ -12,7 +12,7 @@ These functions return the [`WebWorker`](https://developer.mozilla.org/en-US/doc
 
 ## `readFile`
 
-```ts
+```typescript
 readFile(webWorker: Worker | null, file: File):
  Promise<{ webWorker: Worker, image: Image, mesh: Mesh }>
 ```
@@ -22,7 +22,7 @@ readFile(webWorker: Worker | null, file: File):
 
 ## `readBlob`
 
-```ts
+```typescript
 readBlob(webWorker: Worker | null, blob: Blob, fileName: string,
     mimeType?: string):
   Promise<{ webWorker: Worker, image?: Image, mesh?: Mesh }>
@@ -32,7 +32,7 @@ readBlob(webWorker: Worker | null, blob: Blob, fileName: string,
 
 ## `readArrayBuffer`
 
-```ts
+```typescript
 readArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string,
     mimeType?: string):
   Promise<{ webWorker: Worker, image?: Image | mesh?: Mesh }>
@@ -42,7 +42,7 @@ readArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: st
 
 ## `writeArrayBuffer`
 
-```ts
+```typescript
 writeArrayBuffer(webWorker: Worker | null, imageOrMesh: Image | Mesh, fileName: string,
      mimeType: string = '', useCompression: boolean = false):
   Promise<{ webWorker: Worker, arrayBuffer: ArrayBuffer }>
@@ -59,7 +59,7 @@ writeArrayBuffer(webWorker: Worker | null, imageOrMesh: Image | Mesh, fileName: 
 
 ## `readImageFile`
 
-```ts
+```typescript
 readImageFile(webWorker: Worker | null, file: File):
   Promise<{ webWorker: Worker, image: Image }>
 ```
@@ -68,7 +68,7 @@ readImageFile(webWorker: Worker | null, file: File):
 
 ## `readImageBlob`
 
-```ts
+```typescript
 readImageBlob(webWorker: Worker | null, blob: Blob, fileName: string,
     options: { componentType?: IntTypes | FloatTypes, pixelType?: PixelTypes, mimeType?: string }):
   Promise<{ webWorker: Worker, image: Image }>
@@ -78,7 +78,7 @@ readImageBlob(webWorker: Worker | null, blob: Blob, fileName: string,
 
 ## `readImageArrayBuffer`
 
-```ts
+```typescript
 readImageArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string,
     options: { componentType?: IntTypes | FloatTypes, pixelType?: PixelTypes, mimeType?: string }):
   Promise<{ webWorker: Worker, image: Image }>
@@ -88,7 +88,7 @@ readImageArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileNam
 
 ## `readImageHTTP`
 
-```ts
+```typescript
 readImageHTTP(url: string):
   Promise<image: Image>
 ```
@@ -97,7 +97,7 @@ readImageHTTP(url: string):
 
 ## `readImageFileSeries`
 
-```ts
+```typescript
 readImageFileSeries(fileList: File[] | FileList,
     options: { zSpacing?: number = 1.0, zOrigin?: number = 0.0, sortedSeries?: boolean = false, }):
   Promise<{ image: Image, webWorkerPool: WorkerPool }>
@@ -113,7 +113,7 @@ The used `webWorkerPool` is returned to enable resource cleanup by calling `.ter
 
 ## `readImageDICOMFileSeries`
 
-```ts
+```typescript
 readImageDICOMFileSeries(fileList: File[] | FileList,
     options: { componentType?: IntTypes | FloatTypes, pixelType?: PixelTypes, singleSortedSeries?: boolean = false }):
   Promise<{ image: Image, webWorkerPool: WorkerPool }>
@@ -127,7 +127,7 @@ The used `webWorkerPool` is returned to enable resource cleanup by calling `.ter
 
 ## `readImageDICOMArrayBufferSeries`
 
-```ts
+```typescript
 readImageDICOMArrayBufferSeries(arrayBuffers: ArrayBuffer[],
     options: { componentType?: IntTypes | FloatTypes, pixelType?: PixelTypes, singleSortedSeries?: boolean = false }):
   Promise<{ image: Image, webWorkerPool: WorkerPool }>
@@ -141,7 +141,7 @@ The used `webWorkerPool` is returned to enable resource cleanup by calling `.ter
 
 ## `readDICOMTags`
 
-```ts
+```typescript
 readDICOMTags(webWorker: Worker | null, file: File, tags: string[] | null = null):
   Promise<{ tags: Map<string, string>, webWorker: Worker }>
 ```
@@ -159,7 +159,7 @@ Returns:
 
 ## `readDICOMTagsArrayBuffer`
 
-```ts
+```typescript
 readDICOMTagsArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer,
     tags: string[] | null = null):
   Promise<{ tags: Map<string, string>, webWorker: Worker }>
@@ -179,7 +179,7 @@ Returns:
 
 ## `writeImageArrayBuffer`
 
-```ts
+```typescript
 writeImageArrayBuffer(webWorker: Worker | null, image: Image, fileName: string,
     options: { mimeType?: string, useCompression?: boolean = false }):
   Promise<{ webWorker: Worker, arrayBuffer: ArrayBuffer }>
@@ -196,7 +196,7 @@ writeImageArrayBuffer(webWorker: Worker | null, image: Image, fileName: string,
 
 ## `readMeshFile`
 
-```ts
+```typescript
 readMeshFile(webWorker: Worker | null, file: File):
   Promise<{ webWorker: Worker, mesh: Mesh }>
 ```
@@ -205,7 +205,7 @@ readMeshFile(webWorker: Worker | null, file: File):
 
 ## `readMeshBlob`
 
-```ts
+```typescript
 readMeshBlob(webWorker: Worker | null, blob: Blob, fileName: string,
     mimeType?: string):
   Promise<{ webWorker: Worker, mesh: Mesh }>
@@ -215,7 +215,7 @@ readMeshBlob(webWorker: Worker | null, blob: Blob, fileName: string,
 
 ## `readMeshArrayBuffer`
 
-```ts
+```typescript
 readMeshArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName: string, mimeType?: string):
   Promise<{ webWorker: Worker, mesh: Mesh }>
 ```
@@ -225,7 +225,7 @@ readMeshArrayBuffer(webWorker: Worker | null, arrayBuffer: ArrayBuffer, fileName
 
 ## `writeMeshArrayBuffer`
 
-```ts
+```typescript
 writeMeshArrayBuffer(webWorker: Worker | null, mesh: Mesh, fileName: string,
     mimeType?f: string, options?: { useCompression?: boolean, binaryFileType?: boolean }):
   Promise<{ webWorker: Worker, arrayBuffer: ArrayBuffer }>

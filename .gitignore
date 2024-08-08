@@ -94,3 +94,6 @@ cypress/videos/
 packages/core/typescript/itk-wasm/dist
 
 CMakePresets.json
+# pixi environments
+.pixi
+*.egg-info

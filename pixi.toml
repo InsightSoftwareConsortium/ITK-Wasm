@@ -1,0 +1,29 @@
+[project]
+name = "ITK-Wasm"
+version = "0.1.0"
+description = "Build environment for ITK-Wasm"
+authors = ["Matt McCormick <matt.mccormick@kitware.com>"]
+channels = ["conda-forge"]
+platforms = ["linux-aarch64", "linux-64"]
+
+[tasks]
+
+[dependencies]
+
+[feature.docs.dependencies]
+mystmd = "*"
+libwebp = ">=1.4.0,<1.5"
+rich = ">=13.7.1,<13.8"
+typer = ">=0.12.3,<0.13"
+
+[feature.docs.tasks]
+build-docs = { cmd = "myst build", cwd = "docs", description = "Build documentation." }
+start-docs = { cmd = "myst start", cwd = "docs", description = "Start live documentation build." }
+autodoc2-db = { cmd = "autodoc2 create-db ../packages/core/python/itkwasm/itkwasm", cwd = "docs", description = "Create package API database."}
+autodoc2-write = { cmd = "autodoc2 write --output apidocs -r md ../packages/core/python/itkwasm/itkwasm", cwd = "docs", description = "Write package API doc markdown." }
+
+[environments]
+docs = {features = ["docs"], no-default-feature = true}
+
+[feature.docs.pypi-dependencies]
+sphinx-autodoc2 = { git = "https://github.com/thewtex/sphinx-autodoc2", rev = "write-md" }

@@ -1,4 +1,4 @@
-# itk-wasm in a browser application via Webpack
+# ITK-Wasm in a browser application via Webpack
 
 This example demonstrates how to use *itk-wasm* in a web browser application built with [Webpack](https://webpack.js.org/). Find the full example in the `itk-wasm/examples/Webpack` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/Webpack).
 
@@ -8,19 +8,19 @@ This example assumes you are creating a [Node.js package](https://docs.npmjs.com
 
 Add `itk-wasm` and the io-packages to your project's dependencies:
 
-```sh
+```shell
 npm install --save itk-wasm itk-image-io itk-mesh-io
 ```
 
 Then, install Webpack-related development dependencies:
 
-```sh
+```shell
 npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader babel-loader '@babel/preset-env' '@babel/core' copy-webpack-plugin
 ```
 
 Next, create a `webpack.config.js` file like the following:
 
-```js
+```javascript
 const path = require('path')
 
 const webpack = require('webpack')
@@ -80,7 +80,7 @@ Replace `src/index.js` by your [Webpack entry point](https://webpack.js.org/conc
 
 The [babel-loader](https://github.com/babel/babel-loader) rule will [transpile](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) JavaScript from the latest language syntax to a syntax supported by existing browser clients. Configure the target browsers to support with a `.babelrc` file like the following:
 
-```js
+```javascript
 {
   presets: [
     ['@babel/preset-env', {
@@ -98,7 +98,7 @@ The `CopyPlugin` copies *itk-wasm* Emscripten modules to distribute along with y
 
 To change the location of the *itk-wasm* web worker and Emscripten modules, set the Webpack `resolve.alias` setting for an `itkConfig.js` module so the bundle will use our included web worker and io WebAssembly modules. The `src/itkConfig.js` for this example is:
 
-```js
+```javascript
 const itkConfig = {
   pipelineWorkerUrl: '/itk/web-workers/min-bundles/pipeline.worker.js',
   imageIOUrl: '/itk/image-io',
@@ -111,7 +111,7 @@ export default itkConfig
 
 Define commands to build the project or build the project and start a local development web server in the *scripts* section of the `package.json` file,
 
-```js
+```javascript
   "scripts": {
     "build": "webpack --progress --colors -p",
     "start": "webpack-dev-server --content-base ./dist/ --watch-content-base"
@@ -120,13 +120,13 @@ Define commands to build the project or build the project and start a local deve
 
 Build the project with
 
-```sh
+```shell
 npm run build
 ```
 
 To start the development web server, run
 
-```sh
+```shell
 npm run start
 ```
 
@@ -136,7 +136,7 @@ This section described how to configure browser-based testing with the [Cypress]
 
 First, install Cypress and the `start-server-and-test` package.
 
-```sh
+```shell
 npm install --save-dev cypress start-server-and-test
 ```
 
@@ -144,19 +144,19 @@ The `start-server-and-test` tool can start our development server for testing wi
 
 Create directories to house our tests and test data:
 
-```sh
+```shell
 mkdir -p cypress/integration cypress/fixtures
 ```
 
 Provide a test dataset:
 
-```sh
+```shell
 cp /path/to/cow.vtk cypress/fixtures/cow.vtk
 ```
 
 Create our test script at *cypress/integration/load_data_spec.js*. The test files names should end in **_spec.js*.
 
-```js
+```javascript
 describe('Load data', () => {
   it('successfully loads a mesh', () => {
     cy.visit('http://localhost:8080/')
@@ -170,7 +170,7 @@ describe('Load data', () => {
 
 Then, specify npm scripts to develop and debug the tests and run them in an automated way.
 
-```js
+```javascript
   "scripts": {
     "start": "webpack-dev-server --mode development --static ./dist/",
     "cypress:open": "pnpm exec cypress open",
@@ -184,29 +184,29 @@ Note that [with webpack-dev-server](https://github.com/bahmutov/start-server-and
 
 To develop or debug tests, run
 
-```sh
+```shell
 npm run test:debug
 ```
 
 This will open Cypress. Select the test to run:
 
 
-![Select load_data_spec](/_static/umd/umd_select_load_data_spec.png)
+![Select load_data_spec](../../static/umd/umd_select_load_data_spec.png)
 
 This will load the selected browser to see the test status and web page that is tested.  You can also open the browser's development console.
 
-![Develop and debug tests](/_static/umd/umd_test_debug.png)
+![Develop and debug tests](../../static/umd/umd_test_debug.png)
 
 To run the tests during continuous integration:
 
-```sh
+```shell
 npm run test
 ```
 
 This will output the tests results in the console:
 
-![Console test output](/_static/umd/umd_run_tests.png)
+![Console test output](../../static/umd/umd_run_tests.png)
 
 And produce a video of the result at *cypress/videos/*.
 
-![Console test output](/_static/umd/umd_cypress_video.gif)
+![Console test output](../../static/umd/umd_cypress_video.gif)

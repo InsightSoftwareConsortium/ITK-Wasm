@@ -1,18 +1,18 @@
 # Introduction
 
-`itkwasm` enables **universal spatial analysis and visualization** via [WebAssembly (wasm)](https://webassembly.org) {octicon}`telescope`.
+`itkwasm` enables **universal spatial analysis and visualization** via [WebAssembly (wasm)](https://webassembly.org) 🔭.
 
-`itkwasm` Python packages run on *all modern web browsers and at a system level across all major operating systems and hardware architectures* {octicon}`browser` {octicon}`codespaces`.
+`itkwasm` Python packages run on *all modern web browsers and at a system level across all major operating systems and hardware architectures* 🖥️.
 
-All versions of Python 3.8+ are supported {octicon}`globe`.
+All versions of Python 3.8+ are supported 🌐.
 
-Additionally, non-wasm packages accelerate performance via GPUs when available {octicon}`rocket`.
+Additionally, non-wasm packages accelerate performance via GPUs when available 🚀.
 
-In the browser, [Pyodide](https://pyodide.org/)-compatible packages provide client-side web app scripting in Python, including via [PyScript](https://pyscript.net/), and sustainable, scalable Jupyter deployments via [JupyterLite](https://jupyterlite-sphinx.readthedocs.io/) {octicon}`code-square` {octicon}`light-bulb`.
+In the browser, [Pyodide](https://pyodide.org/)-compatible packages provide client-side web app scripting in Python, including via [PyScript](https://pyscript.net/), and sustainable, scalable Jupyter deployments via [JupyterLite](https://jupyterlite-sphinx.readthedocs.io/) 🕸️.
 
-At a system level, Linux, macOS, and Windows operating systems are supported on x86_64 and ARM via [wasmtime-py](https://bytecodealliance.github.io/wasmtime-py/) {octicon}`zap`.
+At a system level, Linux, macOS, and Windows operating systems are supported on x86_64 and ARM via [wasmtime-py](https://bytecodealliance.github.io/wasmtime-py/) ⚡.
 
-`itkwasm` Python packages are *highly modular*, have *a tiny footprint*, and have *minimal dependencies*; they only depend on `itkwasm`, `numpy`, and `pyodide` or `wasmtime` {octicon}`container`.
+`itkwasm` Python packages are *highly modular*, have *a tiny footprint*, and have *minimal dependencies*; they only depend on `itkwasm`, `numpy`, and `pyodide` or `wasmtime` 📦.
 
 This [Jupyter notebook
 tutorial](https://github.com/InsightSoftwareConsortium/ScientificImageAnalysisVisualizationAndArtificialIntelligenceCourse/blob/master/9_WebAssembly_Introduction.ipynb)
@@ -22,7 +22,34 @@ provides further background information and related hands-on experiences.
 
 There is a primary, pip-installable Python package. In browser environments, this will pull a corresponding [Emscripten](https://emscripten.org)-enabled Python package. For system Python distributions, this will bring in a corresponding [WASI](https://wasi.dev)-enabled Python package. When GPU-accelerated implementations of functions are available in other packages along with required hardware and software, simply pip-installing the accelerator package will cause function calls to invoke accelerated overrides registered with modern [package metadata](https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/#using-package-metadata).
 
-![environment dispatch diagram](/_static/environment-dispatch-mermaid.svg)
+```{figure}
+:::{mermaid}
+flowchart TD
+    A[fa:fa-box-open itkwasm-package-name] --> B{browser?}
+    A -.-> |pip install| P[accelerator-package]
+    B --> |yes| C[fa:fa-box-open itkwasm-package-name-emscripten]
+    C --> |any OS, architecture| D([Chromium-based browser])
+    C --> |any OS, architecture| E([Firefox])
+    C --> |macOS, x86_64, ARM| F([Safari])
+    B --> |no| wasi[fa:fa-box-open itkwasm-package-name-wasi]
+    wasi --> G{architecture?}
+    G --> H(x86_64)
+    G --> I(ARM)
+    H --> J(Linux)
+    H --> K(macOS)
+    H --> L(Windows)
+    I --> M(Linux)
+    I --> N(macOS)
+    P --> Q(CUDA)
+    P --> R(OpenCL)
+    P --> S(WebGPU)
+    S --> T{browser?}
+    T --> |yes| U[fa:fa-box-open accelerator-package-emscripten]
+    T --> |no| V[fa:fa-box-open accelerator-package-native]
+:::
+
+ITK-Wasm Python environmental dispatch
+```
 
 
 ## Browser and system APIs
@@ -31,7 +58,7 @@ While synchronous functions are available in system packages, browser packages p
 
 For example, to install the [itkwasm-compress-stringify](https://pypi.org/project/itkwasm-compress-stringify/) package:
 
-::::{tab-set}
+````{tab-set}
 
 :::{tab-item} System
 ```shell
@@ -45,14 +72,15 @@ In Pyodide, e.g. the [Pyodide REPL](https://pyodide.org/en/stable/console.html) 
 ```python
 import micropip
 await micropip.install('itkwasm-compress-stringify')
+```
 :::
 
-::::
+````
 
 
 In the browser, call the async `*_async` function with the `await` keyword.
 
-::::{tab-set}
+````{tab-set}
 
 :::{tab-item} System
 ```python
@@ -72,4 +100,4 @@ compressed = await compress_stringify_async(data)
 ```
 :::
 
-::::
+````
