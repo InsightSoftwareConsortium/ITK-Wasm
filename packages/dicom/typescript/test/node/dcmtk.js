@@ -7,13 +7,13 @@ import {
   readDicomEncapsulatedPdfNode,
   applyPresentationStateToImageNode,
 } from '../../dist/index-node.js'
-import { readImageNode } from '@itk-wasm/image-io'
 
 function arrayEquals(a, b) {
   return (a.length === b.length && a.every((val, idx) => val === b[idx]))
 }
 
 const testPathPrefix = '../test/data/input/';
+//const outputPathPrefix = '../test/data/output/';
 const baselinePathPrefix = '../test/data/baseline/';
 
 test('structuredReportToText', async t => {
