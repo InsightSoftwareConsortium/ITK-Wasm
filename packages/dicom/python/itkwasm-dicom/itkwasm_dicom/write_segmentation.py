@@ -17,7 +17,7 @@ def write_segmentation(
     skip_empty_slices: bool = False,
     use_labelid_as_segmentnumber: bool = False,
 ) -> os.PathLike:
-    """Write DICOM segmentation object
+    """Write DICOM segmentation object.
 
     :param seg_image: dicom segmentation object as an image
     :type  seg_image: Image

@@ -19,7 +19,7 @@ import { getPipelineWorkerUrl } from './pipeline-worker-url.js'
 import { getDefaultWebWorker } from './default-web-worker.js'
 
 /**
- * Read DICOM segmentation objects
+ * Read DICOM segmentation object with overlapping segments into a VectorImage.
  *
  * @param {File | BinaryFile} dicomFile - Input DICOM file
  * @param {ReadOverlappingSegmentationOptions} options - options object

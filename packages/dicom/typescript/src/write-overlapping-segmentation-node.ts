@@ -16,7 +16,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 /**
- * Write DICOM segmentation object
+ * Write DICOM segmentation object for overlapping segments.
  *
  * @param {Image} segImage - dicom segmentation object as an image
  * @param {JsonCompatible} metaInfo - JSON file containing the meta-information that describesthe measurements to be encoded. See DCMQI documentation for details.

@@ -13,7 +13,7 @@ def read_overlapping_segmentation(
     dicom_file: os.PathLike,
     merge_segments: bool = False,
 ) -> Tuple[Image, Any]:
-    """Read DICOM segmentation objects
+    """Read DICOM segmentation object with overlapping segments into a VectorImage.
 
     :param dicom_file: Input DICOM file
     :type  dicom_file: os.PathLike

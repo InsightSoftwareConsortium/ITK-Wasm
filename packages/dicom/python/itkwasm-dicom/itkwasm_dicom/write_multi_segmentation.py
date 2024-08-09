@@ -16,7 +16,7 @@ def write_multi_segmentation(
     skip_empty_slices: bool = False,
     use_labelid_as_segmentnumber: bool = False,
 ) -> os.PathLike:
-    """Write DICOM segmentation object using multiple input images
+    """Write DICOM segmentation object using multiple input images.
 
     :param meta_info: JSON file containing the meta-information that describesthe measurements to be encoded. See DCMQI documentation for details.
     :type  meta_info: Any
