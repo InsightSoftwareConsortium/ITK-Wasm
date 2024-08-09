@@ -17,6 +17,8 @@ const interfaceJsonTypeToPythonType = new Map([
   ['OUTPUT_MESH', 'Mesh'],
   ['INPUT_POLYDATA', 'PolyData'],
   ['OUTPUT_POLYDATA', 'PolyData'],
+  ['INPUT_TRANSFORM', 'Transform'],
+  ['OUTPUT_TRANSFORM', 'Transform'],
   ['BOOL', 'bool'],
   ['TEXT', 'str'],
   ['INT', 'int'],
@@ -26,7 +28,7 @@ const interfaceJsonTypeToPythonType = new Map([
   ['FLOAT', 'float'],
   ['FLOAT:FLOAT', 'float'],
   ['INPUT_JSON', 'Any'],
-  ['OUTPUT_JSON', 'Any'],
+  ['OUTPUT_JSON', 'Any']
 ])
 
 export default interfaceJsonTypeToPythonType

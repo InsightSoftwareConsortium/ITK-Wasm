@@ -9,6 +9,7 @@ itk-wasm execution pipelines support the following [interface types](https://git
 - [Image](../typescript/interface_types/Image)
 - [Mesh](../typescript/interface_types/Mesh)
 - [PolyData](../typescript/interface_types/PolyData)
+- [Transform](../typescript/interface_types/Transform)
 - [JsonCompatible](../typescript/interface_types/JsonCompatible)
 
 These interfaces types are supported in the [Emscripten interface](../typescript/browser_pipelines), [WASI](https://wasi.dev/) embedding interfaces, and native or virtual [filesystem IO](../introduction/file_formats/index). They are intended to be forward-compatible with the [WebAssembly Component Model](https://github.com/WebAssembly/component-model).

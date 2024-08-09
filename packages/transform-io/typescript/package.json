@@ -1,0 +1,52 @@
+{
+  "name": "@itk-wasm/transform-io",
+  "version": "0.1.0",
+  "description": "Input and output for scientific and medical coordinate transform file formats.",
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index-all.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index-all.d.ts",
+      "browser": "./dist/index.js",
+      "node": "./dist/index-node.js",
+      "default": "./dist/index-all.js"
+    }
+  },
+  "scripts": {
+    "start": "pnpm copyDemoAppAssets && vite",
+    "test": "echo \"Error: no test specified\"",
+    "build": "pnpm build:tsc && pnpm build:browser:workerEmbedded && pnpm build:browser:workerEmbeddedMin && pnpm build:demo",
+    "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
+    "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
+    "build:version": "node -p \"'const version = ' + JSON.stringify(require('./package.json').version) + '\\nexport default version\\n'\" > src/version.ts",
+    "build:tsc": "pnpm build:version && tsc --pretty",
+    "copyDemoAppAssets": "shx mkdir -p test/browser/demo-app/public && shx cp -r node_modules/@itk-wasm/demo-app/dist/assets test/browser/demo-app/public/",
+    "build:demo": "pnpm copyDemoAppAssets && vite build"
+  },
+  "keywords": [
+    "itk",
+    "wasm",
+    "webassembly",
+    "wasi"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "itk-wasm": "workspace:^"
+  },
+  "devDependencies": {
+    "@itk-wasm/transform-io-build": "workspace:*",
+    "@itk-wasm/demo-app": "workspace:*",
+    "@types/node": "^20.2.5",
+    "esbuild": "^0.19.8",
+    "shx": "^0.3.4",
+    "typescript": "^5.3.2",
+    "vite": "^4.5.0",
+    "vite-plugin-static-copy": "^0.17.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+  }
+}

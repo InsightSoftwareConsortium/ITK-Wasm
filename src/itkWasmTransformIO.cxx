@@ -27,6 +27,7 @@
 
 #include "itkWasmIOCommon.h"
 #include "itktransformParameterizationString.h"
+#include "itkMetaDataDictionaryJSON.h"
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
@@ -79,22 +80,27 @@ WasmTransformIOTemplate<TParametersValueType>::CanReadFile(const char * filename
 
 template <typename TParametersValueType>
 void
-WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
+WasmTransformIOTemplate<TParametersValueType>::ReadCBOR( void *buffer, unsigned char * cborBuffer, size_t cborBufferLength )
 {
-  FILE * file = fopen(this->GetFileName(), "rb");
-  if (file == NULL)
+  bool cborBufferAllocated = false;
+  size_t length = cborBufferLength;
+  if (cborBuffer == nullptr)
   {
-    itkExceptionMacro("Could not read file: " << this->GetFileName());
+    FILE* file = fopen(this->GetFileName(), "rb");
+    if (file == NULL) {
+      itkExceptionMacro("Could not read file: " << this->GetFileName());
+    }
+    fseek(file, 0, SEEK_END);
+    length = (size_t)ftell(file);
+    fseek(file, 0, SEEK_SET);
+    cborBuffer = static_cast< unsigned char *>(malloc(length));
+    cborBufferAllocated = true;
+    if (!fread(cborBuffer, length, 1, file))
+    {
+      itkExceptionMacro("Could not successfully read " << this->GetFileName());
+    }
+    fclose(file);
   }
-  fseek(file, 0, SEEK_END);
-  size_t length = (size_t)ftell(file);
-  fseek(file, 0, SEEK_SET);
-  unsigned char * cborBuffer = static_cast<unsigned char *>(malloc(length));
-  if (!fread(cborBuffer, length, 1, file))
-  {
-    itkExceptionMacro("Could not successfully read " << this->GetFileName());
-  }
-  fclose(file);
 
   if (this->m_CBORRoot != nullptr)
   {
@@ -102,7 +108,10 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
   }
   struct cbor_load_result result;
   this->m_CBORRoot = cbor_load(cborBuffer, length, &result);
-  free(cborBuffer);
+  if (cborBufferAllocated)
+  {
+    free(cborBuffer);
+  }
   if (result.error.code != CBOR_ERR_NONE)
   {
     std::string errorDescription;
@@ -194,18 +203,26 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
             {
               transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Rigid2D;
             }
+            else if (transformParameterization == "Rigid3D")
+            {
+              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Rigid3D;
+            }
             else if (transformParameterization == "Rigid3DPerspective")
             {
               transformJSON.transformType.transformParameterization =
                 JSONTransformParameterizationEnum::Rigid3DPerspective;
             }
+            else if (transformParameterization == "Versor")
+            {
+              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Versor;
+            }
             else if (transformParameterization == "VersorRigid3D")
             {
               transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::VersorRigid3D;
             }
-            else if (transformParameterization == "Versor")
+            else if (transformParameterization == "Scale")
             {
-              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Versor;
+              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Scale;
             }
             else if (transformParameterization == "ScaleLogarithmic")
             {
@@ -216,10 +233,6 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
             {
               transformJSON.transformType.transformParameterization =
                 JSONTransformParameterizationEnum::ScaleSkewVersor3D;
-            }
-            else if (transformParameterization == "Scale")
-            {
-              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Scale;
             }
             else if (transformParameterization == "Similarity2D")
             {
@@ -266,29 +279,29 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
               transformJSON.transformType.transformParameterization =
                 JSONTransformParameterizationEnum::DisplacementField;
             }
-            else if (transformParameterization == "GaussianExponentialDiffeomorphic")
-            {
-              transformJSON.transformType.transformParameterization =
-                JSONTransformParameterizationEnum::GaussianExponentialDiffeomorphic;
-            }
             else if (transformParameterization == "GaussianSmoothingOnUpdateDisplacementField")
             {
               transformJSON.transformType.transformParameterization =
                 JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateDisplacementField;
             }
-            else if (transformParameterization == "GaussianSmoothingOnUpdateTimeVaryingVelocityField")
+            else if (transformParameterization == "GaussianExponentialDiffeomorphic")
             {
               transformJSON.transformType.transformParameterization =
-                JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateTimeVaryingVelocityField;
+                JSONTransformParameterizationEnum::GaussianExponentialDiffeomorphic;
+            }
+            else if (transformParameterization == "VelocityField")
+            {
+              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::VelocityField;
             }
             else if (transformParameterization == "TimeVaryingVelocityField")
             {
               transformJSON.transformType.transformParameterization =
                 JSONTransformParameterizationEnum::TimeVaryingVelocityField;
             }
-            else if (transformParameterization == "VelocityField")
+            else if (transformParameterization == "GaussianSmoothingOnUpdateTimeVaryingVelocityField")
             {
-              transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::VelocityField;
+              transformJSON.transformType.transformParameterization =
+                JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateTimeVaryingVelocityField;
             }
             else
             {
@@ -436,12 +449,12 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR()
 
 template <typename TParametersValueType>
 auto
-WasmTransformIOTemplate<TParametersValueType>::GetJSON() -> TransformListJSON
+WasmTransformIOTemplate<TParametersValueType>::GetJSON(bool inMemory) -> TransformListJSON
 {
   ConstTransformListType & transformList = this->GetWriteTransformList();
 
-  constexpr bool inMemory = false;
   TransformListJSON transformListJSON = transformListToTransformListJSON<TransformType>(transformList, inMemory);
+
   return transformListJSON;
 }
 
@@ -483,6 +496,10 @@ WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON &
     TransformPointer transform;
     this->CreateTransform(transform, transformType);
     transform->SetObjectName(transformJSON.name);
+
+    auto dictionary = transform->GetMetaDataDictionary();
+    jsonToMetaDataDictionary(transformJSON.metadata, dictionary);
+
     // todo: ITK 5.4.1
     // transform->SetInputSpaceName(transformJSON.inputSpaceName);
     // transform->SetOutputSpaceName(transformJSON.outputSpaceName);
@@ -491,8 +508,9 @@ WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON &
 }
 
 template <typename TParametersValueType>
-void
-WasmTransformIOTemplate<TParametersValueType>::WriteCBOR()
+size_t
+WasmTransformIOTemplate<TParametersValueType>
+::WriteCBOR(const void *buffer, unsigned char ** cborBufferPtr, bool allocateCBORBuffer )
 {
   auto transformListJSON = this->GetJSON();
 
@@ -614,16 +632,26 @@ WasmTransformIOTemplate<TParametersValueType>::WriteCBOR()
     ++count;
   }
 
+  size_t cborBufferSize;
+  size_t length;
   unsigned char * cborBuffer;
-  size_t          cborBufferSize;
-  size_t          length = cbor_serialize_alloc(this->m_CBORRoot, &cborBuffer, &cborBufferSize);
 
-  FILE * file = fopen(this->GetFileName(), "wb");
-  fwrite(cborBuffer, 1, length, file);
-  free(cborBuffer);
-  fclose(file);
+  if (allocateCBORBuffer)
+  {
+    length = cbor_serialize_alloc(index, cborBufferPtr, &cborBufferSize);
+  }
+  else
+  {
+    length = cbor_serialize_alloc(index, &cborBuffer, &cborBufferSize);
+    FILE* file = fopen(this->GetFileName(), "wb");
+    fwrite(cborBuffer, 1, length, file);
+    free(cborBuffer);
+    fclose(file);
+  }
 
   cbor_decref(&(this->m_CBORRoot));
+
+  return length;
 }
 
 template <typename TParametersValueType>

@@ -644,12 +644,13 @@ enums:
       Euler2D:
       Euler3D:
       Rigid2D:
+      Rigid3D:
       Rigid3DPerspective:
-      VersorRigid3D:
       Versor:
+      VersorRigid3D:
+      Scale:
       ScaleLogarithmic:
       ScaleSkewVersor3D:
-      Scale:
       Similarity2D:
       Similarity3D:
       QuaternionRigid:
@@ -660,8 +661,8 @@ enums:
       BSplineSmoothingOnUpdateDisplacementField:
       ConstantVelocityField:
       DisplacementField:
-      GaussianExponentialDiffeomorphic:
       GaussianSmoothingOnUpdateDisplacementField:
-      GaussianSmoothingOnUpdateTimeVaryingVelocityField:
-      TimeVaryingVelocityField:
+      GaussianExponentialDiffeomorphic:
       VelocityField:
+      TimeVaryingVelocityField:
+      GaussianSmoothingOnUpdateTimeVaryingVelocityField:

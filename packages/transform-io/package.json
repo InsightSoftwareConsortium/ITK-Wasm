@@ -1,0 +1,45 @@
+{
+  "name": "@itk-wasm/transform-io-build",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.4.0",
+  "description": "scripts to generate @itk-wasm/transform-io itk-wasm artifacts.",
+  "type": "module",
+  "itk-wasm": {
+    "emscripten-docker-transform": "itkwasm/emscripten:latest",
+    "wasi-docker-transform": "itkwasm/wasi:latest",
+    "typescript-package-name": "@itk-wasm/transform-io",
+    "python-package-name": "itkwasm-transform-io",
+    "package-description": "Input and output for scientific and medical coordinate transform file formats.",
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+  },
+  "scripts": {
+    "build": "pnpm build:gen:typescript && pnpm build:gen:python",
+    "build:emscripten": "itk-wasm pnpm-script build:emscripten",
+    "build:emscripten:debug": "itk-wasm pnpm-script build:emscripten:debug",
+    "build:wasi": "itk-wasm pnpm-script build:wasi",
+    "build:wasi:debug": "itk-wasm pnpm-script build:wasi:debug",
+    "build:python:wasi": "itk-wasm pnpm-script build:python:wasi",
+    "bindgen:typescript": "itk-wasm pnpm-script bindgen:typescript",
+    "bindgen:python": "itk-wasm pnpm-script bindgen:python",
+    "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
+    "build:gen:python": "itk-wasm pnpm-script build:gen:python",
+    "build:micromamba": "itk-wasm pnpm-script build:micromamba",
+    "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
+    "publish:python": "itk-wasm pnpm-script publish:python",
+    "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreihranpzszz3q5bwgzsw6olqwh2e726wfnh4qblkjbng44yhqbfin4 https://bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme.ipfs.w3s.link/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz",
+    "test:data:pack": "dam pack test/data test/data.tar.gz",
+    "test:python:wasi": "itk-wasm pnpm-script test:python:wasi",
+    "test:python:emscripten": "itk-wasm pnpm-script test:python:emscripten",
+    "test:python:dispatch": "itk-wasm pnpm-script test:python:emscripten",
+    "test:python": "itk-wasm pnpm-script test:python",
+    "test:wasi": "itk-wasm pnpm-script test:wasi"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@itk-wasm/dam": "^1.1.1",
+    "@thewtex/setup-micromamba": "^1.9.7",
+    "itk-wasm": "workspace:^"
+  }
+}

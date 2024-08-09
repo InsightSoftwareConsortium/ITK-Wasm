@@ -30,11 +30,11 @@ namespace itk
  * This format is intended to facilitate data exchange in itk-wasm.
  * It reads and writes an itk-wasm Mesh object in a CBOR file on the
  * filesystem with JSON files and binary files for TypedArray's.
- * 
+ *
  * This class extends WasmMeshIO by adding support for zstandard compression.
  *
  * The file extensions used are .iwm, .iwm.cbor, and .iwm.cbor.zst.
- * 
+ *
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */

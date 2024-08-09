@@ -29,7 +29,6 @@
 #include "itkMetaDataDictionaryJSON.h"
 #include "itkWasmIOCommon.h"
 
-#include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
 #include "itksys/SystemTools.hxx"
 
@@ -472,7 +471,7 @@ WasmImageIO
   }
 
   cbor_decref(&index);
-  
+
   return length;
 }
 

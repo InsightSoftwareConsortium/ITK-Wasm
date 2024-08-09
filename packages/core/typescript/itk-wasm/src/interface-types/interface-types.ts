@@ -6,6 +6,7 @@ const InterfaceTypes = {
   Image: 'Image',
   Mesh: 'Mesh',
   PolyData: 'PolyData',
+  Transform: 'Transform',
   JsonCompatible: 'JsonCompatible'
 } as const
 

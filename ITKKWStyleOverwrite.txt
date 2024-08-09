@@ -6,3 +6,4 @@ itkSupportInputMeshTypesTest\.cxx Namespace Disable
 itkSupportInputMeshTypesMemoryIOTest\.cxx Namespace Disable
 itkSupportInputPolyDataTypesTest\.cxx Namespace Disable
 itkFloatTypesJSON\.h Namespace Disable
+itkOutputTransformIO\.h Namespace Disable

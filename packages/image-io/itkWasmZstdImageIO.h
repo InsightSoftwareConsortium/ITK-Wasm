@@ -30,11 +30,11 @@ namespace itk
  * This format is intended to facilitate data exchange in itk-wasm.
  * It reads and writes an itk-wasm Image object in a CbOR file on the
  * filesystem with JSON files and binary files for TypedArrays.
- * 
+ *
  * This class extends WasmImageIO by adding support for zstandard compression.
  *
- * The file extensions used are .iwi, .iwi.cbor, and .iwi.cbor.zstd.
- * 
+ * The file extensions used are .iwi, .iwi.cbor, and .iwi.cbor.zst.
+ *
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */
