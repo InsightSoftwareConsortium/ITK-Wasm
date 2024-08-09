@@ -2,10 +2,10 @@ import fs from 'fs'
 import test from 'ava'
 import path from 'path'
 import {
-  readOverlappingSegmentationNode,
   readSegmentationNode,
-  writeOverlappingSegmentationNode,
+  readOverlappingSegmentationNode,
   writeSegmentationNode,
+  writeOverlappingSegmentationNode,
   writeMultiSegmentationNode,
 } from '../../dist/index-node.js'
 import { readImageNode, writeImageNode } from '@itk-wasm/image-io'
@@ -55,7 +55,7 @@ test('DCMQI read DICOM segmentation object (read-overlapping-segmentation)', asy
   t.assert(arrayEquals(output.segImage.direction, [ 1, 0, 0, 0, 1, 0, 0, 0, 1 ]))
   t.deepEqual(output.segImage.size, [ 512, 512, 69 ])
   t.deepEqual(output.segImage.data.length, 72351744)
-/*
+
   t.deepEqual(output.segImage.imageType, {
     dimension: 3,
     componentType: 'int16',
@@ -63,44 +63,31 @@ test('DCMQI read DICOM segmentation object (read-overlapping-segmentation)', asy
     components: 4
   })
 
+  /*
   const baselineJsonFile = '/dicom-images/SEG/ABDLYMPH001_abdominal_lymph_seg.json'
   const baselineJsonFilePath = path.join(baselinePathPrefix, baselineJsonFile)
   const baselineJsonFileBuffer = fs.readFileSync(baselineJsonFilePath)
   const baselineJsonObject = JSON.parse(baselineJsonFileBuffer)
   t.assert(JSON.stringify(baselineJsonObject) === JSON.stringify(output.metaInfo))
   //await writeImageNode(output.segImage, outputPathPrefix + 'segVectorImage.nrrd');
-*/
+  */
 })
 
 test('DCMQI write DICOM segmentation object: non-overlapping labels', async t => {
 
   const inputSegImageFile = path.join(testPathPrefix, 'dicom-images/SEG/ReMIND-001/tumor_seg_MR_ref_3DSAGT2SPACE.nrrd')
   const inputSegImage = await readImageNode(inputSegImageFile)
-<<<<<<< Updated upstream
-  //console.log('inputSegImage: ', inputSegImage)
-=======
->>>>>>> Stashed changes
 
   const metaInfoFile = path.join(baselinePathPrefix, 'dicom-images/SEG/MR_ref_3DSAGT2SPACE_tumor_seg.json')
   const jsonFileBuffer = fs.readFileSync(metaInfoFile)
   const jsonObject = JSON.parse(jsonFileBuffer)
 
   const inputRefDicomSeriesPath = path.join(testPathPrefix, 'dicom-images/SEG/ReMIND-001/3DSAGT2SPACE')
-<<<<<<< Updated upstream
   const refDicomSeries = fs.readdirSync(inputRefDicomSeriesPath).map(x => path.join(testPathPrefix, 'dicom-images/SEG/ReMIND-001/3DSAGT2SPACE', x))
-  //console.log('refDicomSeries: ', refDicomSeries)
-
-=======
-  const refDicom = fs.readdirSync(inputRefDicomSeriesPath).map(x => path.join(testPathPrefix, 'dicom-images/SEG/ReMIND-001/3DSAGT2SPACE', x))
->>>>>>> Stashed changes
   const outputDicomFile = path.join(outputPathPrefix, 'writeSegmentationNode-output-seg.dcm')
 
   try {
-<<<<<<< Updated upstream
     const output = await writeSegmentationNode(inputSegImage, jsonObject, outputDicomFile, {refDicomSeries})
-=======
-    const output = await writeSegmentationNode(inputSegImage, jsonObject, outputDicomFile, {refDicomSeries: refDicom})
->>>>>>> Stashed changes
     t.assert(output != null)
   }
   catch (error) {
