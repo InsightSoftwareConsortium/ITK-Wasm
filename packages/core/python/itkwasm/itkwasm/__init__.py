@@ -1,6 +1,6 @@
 """itkwasm: Python interface to itk-wasm WebAssembly modules."""
 
-__version__ = "1.0b177"
+__version__ = "1.0b178"
 
 from .interface_types import InterfaceTypes
 from .image import Image, ImageType, ImageRegion
