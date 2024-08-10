@@ -34,6 +34,8 @@ class PointSet:
     numberOfPointPixels: int = 0
     pointData: Optional[ArrayLike] = None
 
+    metadata: Dict = field(default_factory=dict)
+
     def __post_init__(self):
         if isinstance(self.pointSetType, dict):
             self.pointSetType = PointSetType(**self.pointSetType)

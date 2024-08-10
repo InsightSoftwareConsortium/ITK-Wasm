@@ -58,7 +58,7 @@ class Transform:
     fixedParameters: Optional[ArrayLike] = None
     parameters: Optional[ArrayLike] = None
 
-    metadata: dict = field(default_factory=dict)
+    metadata: Dict = field(default_factory=dict)
 
     def __post_init__(self):
         if isinstance(self.transformType, dict):
