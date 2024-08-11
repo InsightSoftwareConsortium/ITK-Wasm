@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compare-images",
-  "version": "5.1.1",
+  "version": "5.2.0",
   "packageManager": "pnpm@9.6.0",
   "description": "Compare images with a tolerance for regression testing.",
   "type": "module",
