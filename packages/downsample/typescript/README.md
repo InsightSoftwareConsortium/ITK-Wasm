@@ -4,10 +4,10 @@
 
 > Pipelines for downsampling images.
 
-[💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/itk-wasm/downsample/ts/docs/
+[💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/ITK-Wasm/downsample/ts/docs/
  ':include :type=iframe width=100% height=800px')
 
-[🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/itk-wasm/downsample/ts/docs/)
+[🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/ITK-Wasm/downsample/ts/docs/)
 
 ## Installation
 
