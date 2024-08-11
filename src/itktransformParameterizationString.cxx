@@ -56,9 +56,19 @@ transformParameterizationString(const TransformTypeJSON & json)
       transformParameterization = "Rigid2D";
       break;
     }
+    case JSONTransformParameterizationEnum::Rigid3D:
+    {
+      transformParameterization = "Rigid3D";
+      break;
+    }
     case JSONTransformParameterizationEnum::Rigid3DPerspective:
     {
       transformParameterization = "Rigid3DPerspective";
+      break;
+    }
+    case JSONTransformParameterizationEnum::Versor:
+    {
+      transformParameterization = "Versor";
       break;
     }
     case JSONTransformParameterizationEnum::VersorRigid3D:
@@ -66,9 +76,9 @@ transformParameterizationString(const TransformTypeJSON & json)
       transformParameterization = "VersorRigid3D";
       break;
     }
-    case JSONTransformParameterizationEnum::Versor:
+    case JSONTransformParameterizationEnum::Scale:
     {
-      transformParameterization = "Versor";
+      transformParameterization = "Scale";
       break;
     }
     case JSONTransformParameterizationEnum::ScaleLogarithmic:
@@ -79,11 +89,6 @@ transformParameterizationString(const TransformTypeJSON & json)
     case JSONTransformParameterizationEnum::ScaleSkewVersor3D:
     {
       transformParameterization = "ScaleSkewVersor3D";
-      break;
-    }
-    case JSONTransformParameterizationEnum::Scale:
-    {
-      transformParameterization = "Scale";
       break;
     }
     case JSONTransformParameterizationEnum::Similarity2D:

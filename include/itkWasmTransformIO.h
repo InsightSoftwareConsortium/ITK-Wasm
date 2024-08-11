@@ -86,7 +86,7 @@ public:
 #if !defined(ITK_WRAPPING_PARSER)
   /** Get the JSON representation of the mesh information. */
   auto
-  GetJSON() -> TransformListJSON;
+  GetJSON(bool inMemory=false) -> TransformListJSON;
 #endif
 
 protected:
@@ -95,7 +95,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  auto
+  virtual auto
   ReadTransformInformation() -> const TransformListJSON;
   void
   ReadFixedParameters(const TransformListJSON & json);
@@ -109,12 +109,8 @@ protected:
   void
   WriteParameters();
 
-  /** Reads in the transform information and populates the related buffers. */
-  void
-  ReadCBOR();
-  /** Writes the buffers into the CBOR item and the buffer out to disk. */
-  void
-  WriteCBOR();
+  void ReadCBOR(void * buffer = nullptr, unsigned char * cborBuffer = nullptr, size_t cborBufferLength = 0);
+  size_t WriteCBOR(const void * buffer = nullptr, unsigned char ** cborBuffer = nullptr, bool allocateCBORBuffer = false);
 
   cbor_item_t * m_CBORRoot{ nullptr };
 

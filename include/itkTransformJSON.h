@@ -23,6 +23,7 @@
 #include <vector>
 
 #include "itkCompositeTransformIOHelper.h"
+#include "itkMetaDataDictionaryJSON.h"
 
 #include "glaze/glaze.hpp"
 
@@ -36,12 +37,13 @@ namespace itk
     Euler2D,
     Euler3D,
     Rigid2D,
+    Rigid3D,
     Rigid3DPerspective,
-    VersorRigid3D,
     Versor,
+    VersorRigid3D,
+    Scale,
     ScaleLogarithmic,
     ScaleSkewVersor3D,
-    Scale,
     Similarity2D,
     Similarity3D,
     QuaternionRigid,
@@ -52,11 +54,11 @@ namespace itk
     BSplineSmoothingOnUpdateDisplacementField,
     ConstantVelocityField,
     DisplacementField,
-    GaussianExponentialDiffeomorphic,
     GaussianSmoothingOnUpdateDisplacementField,
-    GaussianSmoothingOnUpdateTimeVaryingVelocityField,
-    TimeVaryingVelocityField,
+    GaussianExponentialDiffeomorphic,
     VelocityField,
+    TimeVaryingVelocityField,
+    GaussianSmoothingOnUpdateTimeVaryingVelocityField,
   };
 
   /** \class TransformTypeJSON
@@ -85,13 +87,15 @@ namespace itk
     uint64_t numberOfFixedParameters{ 0 };
     uint64_t numberOfParameters{ 0 };
 
-    std::string name { "transform" };
+    std::string name { "Transform" };
 
     std::string inputSpaceName;
     std::string outputSpaceName;
 
     std::string fixedParameters;
     std::string parameters;
+
+    MetadataJSON metadata;
   };
 
   /** \class TransformListJSON
@@ -166,6 +170,10 @@ auto transformListToTransformListJSON(std::list<typename TTransformBase::ConstPo
     {
       transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Rigid2D;
     }
+    else if (pString == "Rigid3DTransform")
+    {
+      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Rigid3D;
+    }
     else if (pString == "Rigid3DPerspectiveTransform")
     {
       transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Rigid3DPerspective;
@@ -178,6 +186,10 @@ auto transformListToTransformListJSON(std::list<typename TTransformBase::ConstPo
     {
       transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Versor;
     }
+    else if (pString == "ScaleTransform")
+    {
+      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Scale;
+    }
     else if (pString == "ScaleLogarithmicTransform")
     {
       transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::ScaleLogarithmic;
@@ -185,10 +197,6 @@ auto transformListToTransformListJSON(std::list<typename TTransformBase::ConstPo
     else if (pString == "ScaleSkewVersor3DTransform")
     {
       transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::ScaleSkewVersor3D;
-    }
-    else if (pString == "ScaleTransform")
-    {
-      transformJSON.transformType.transformParameterization = JSONTransformParameterizationEnum::Scale;
     }
     else if (pString == "Similarity2DTransform")
     {
@@ -315,6 +323,9 @@ auto transformListToTransformListJSON(std::list<typename TTransformBase::ConstPo
       transformJSON.parameters = "data:application/vnd.itk.path,data/" + std::to_string(count) + "/parameters.raw";
     }
 
+    auto dictionary = currentTransform->GetMetaDataDictionary();
+    metaDataDictionaryToJSON(dictionary, transformJSON.metadata);
+
     transformListJSON.push_back(transformJSON);
     ++count;
   }
@@ -327,33 +338,35 @@ auto transformListToTransformListJSON(std::list<typename TTransformBase::ConstPo
 template <>
 struct glz::meta<itk::JSONTransformParameterizationEnum> {
   using enum itk::JSONTransformParameterizationEnum;
-  static constexpr auto value = glz::enumerate(Identity,
-  Composite,
-  Translation,
-  Euler2D,
-  Euler3D,
-  Rigid2D,
-  Rigid3DPerspective,
-  VersorRigid3D,
-  Versor,
-  ScaleLogarithmic,
-  ScaleSkewVersor3D,
-  Scale,
-  Similarity2D,
-  Similarity3D,
-  QuaternionRigid,
-  Affine,
-  ScalableAffine,
-  AzimuthElevationToCartesian,
-  BSpline,
-  BSplineSmoothingOnUpdateDisplacementField,
-  ConstantVelocityField,
-  DisplacementField,
-  GaussianExponentialDiffeomorphic,
-  GaussianSmoothingOnUpdateDisplacementField,
-  GaussianSmoothingOnUpdateTimeVaryingVelocityField,
-  TimeVaryingVelocityField,
-  VelocityField
+  static constexpr auto value = glz::enumerate(
+    Composite,
+    Identity,
+    Translation,
+    Euler2D,
+    Euler3D,
+    Rigid2D,
+    Rigid3D,
+    Rigid3DPerspective,
+    Versor,
+    VersorRigid3D,
+    ScaleLogarithmic,
+    ScaleSkewVersor3D,
+    Scale,
+    Similarity2D,
+    Similarity3D,
+    QuaternionRigid,
+    Affine,
+    ScalableAffine,
+    AzimuthElevationToCartesian,
+    BSpline,
+    BSplineSmoothingOnUpdateDisplacementField,
+    ConstantVelocityField,
+    DisplacementField,
+    GaussianSmoothingOnUpdateDisplacementField,
+    GaussianExponentialDiffeomorphic,
+    VelocityField,
+    TimeVaryingVelocityField,
+    GaussianSmoothingOnUpdateTimeVaryingVelocityField
   );
 };
 

@@ -11,7 +11,7 @@ const demoSupportedInputTypes = new Set([
   'BOOL',
   'INPUT_JSON',
   'INPUT_IMAGE',
-  'INPUT_MESH',
+  'INPUT_MESH'
 ])
 const demoSupportedOutputTypes = new Set([
   'OUTPUT_TEXT_FILE',
@@ -20,14 +20,26 @@ const demoSupportedOutputTypes = new Set([
   'OUTPUT_BINARY_STREAM',
   'OUTPUT_JSON',
   'OUTPUT_IMAGE',
-  'OUTPUT_MESH',
+  'OUTPUT_MESH'
 ])
 
-function allDemoTypesSupported (interfaceJson) {
+function allDemoTypesSupported(interfaceJson) {
   let allTypesSupported = true
-  allTypesSupported = allTypesSupported && interfaceJson.inputs.every((input) => demoSupportedInputTypes.has(input.type.split(' ')[0].split(':')[0]))
-  allTypesSupported = allTypesSupported && interfaceJson.parameters.every((parameter) => demoSupportedInputTypes.has(parameter.type.split(' ')[0].split(':')[0]))
-  allTypesSupported = allTypesSupported && interfaceJson.outputs.every((parameter) => demoSupportedOutputTypes.has(parameter.type.split(' ')[0].split(':')[0]))
+  allTypesSupported =
+    allTypesSupported &&
+    interfaceJson.inputs.every((input) =>
+      demoSupportedInputTypes.has(input.type.split(' ')[0].split(':')[0])
+    )
+  allTypesSupported =
+    allTypesSupported &&
+    interfaceJson.parameters.every((parameter) =>
+      demoSupportedInputTypes.has(parameter.type.split(' ')[0].split(':')[0])
+    )
+  allTypesSupported =
+    allTypesSupported &&
+    interfaceJson.outputs.every((parameter) =>
+      demoSupportedOutputTypes.has(parameter.type.split(' ')[0].split(':')[0])
+    )
   return allTypesSupported
 }
 

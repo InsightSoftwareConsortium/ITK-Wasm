@@ -7,6 +7,8 @@ if (NOT TARGET libzstd_static)
   include(${CMAKE_CURRENT_SOURCE_DIR}/BuildZstd.cmake)
 endif()
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 # This list should be ordered from approximately most commonly to least
 # commonly used modules.
 set(WebAssemblyInterface_MeshIOModules
@@ -93,10 +95,10 @@ foreach(io_module ${WebAssemblyInterface_MeshIOModules} WebAssemblyInterface)
       list(APPEND extra_srcs itkWasmZstdMeshIO.cxx)
     endif()
 
-    add_executable(${read_binary} read-mesh.cxx ${extra_srcs})
+    add_executable(${read_binary} read-mesh.cxx itkWasmMeshIOBase.cxx ${extra_srcs})
     target_link_libraries(${read_binary} PUBLIC ${ITK_LIBRARIES})
     target_compile_definitions(${read_binary} PUBLIC -DMESH_IO_CLASS=${meshio_id_${meshio}} -DMESH_IO_KEBAB_NAME=${ioname})
-    add_executable(${write_binary} write-mesh.cxx ${extra_srcs})
+    add_executable(${write_binary} write-mesh.cxx itkWasmMeshIOBase.cxx ${extra_srcs})
     target_link_libraries(${write_binary} PUBLIC ${ITK_LIBRARIES})
     target_compile_definitions(${write_binary} PUBLIC -DMESH_IO_CLASS=${meshio_id_${meshio}} -DMESH_IO_KEBAB_NAME=${ioname})
     if (EMSCRIPTEN)

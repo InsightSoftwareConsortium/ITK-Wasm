@@ -6,10 +6,8 @@ set(WebAssemblyInterface_SRCS
   itkWasmExports.cxx
   itkWasmIOCommon.cxx
   itkWasmDataObject.cxx
-  itkWasmImageIOBase.cxx
   itkWasmImageIOFactory.cxx
   itkWasmImageIO.cxx
-  itkWasmMeshIOBase.cxx
   itkWasmMeshIOFactory.cxx
   itkWasmMeshIO.cxx
   itkWasmTransformIOFactory.cxx

@@ -20,4 +20,8 @@ export { default as MeshType } from './mesh-type.js'
 export { default as PolyData } from './poly-data.js'
 export { default as PolyDataType } from './poly-data-type.js'
 
+export { default as TransformParameterizations } from './transform-parameterizations.js'
+export { default as TransformType } from './transform-type.js'
+export { default as Transform } from './transform.js'
+
 export { default as InterfaceTypes } from './interface-types.js'

@@ -1,11 +1,12 @@
 """itkwasm: Python interface to itk-wasm WebAssembly modules."""
 
-__version__ = "1.0b175"
+__version__ = "1.0b178"
 
 from .interface_types import InterfaceTypes
 from .image import Image, ImageType, ImageRegion
 from .pointset import PointSet, PointSetType
 from .mesh import Mesh, MeshType
+from .transform import Transform, TransformType, TransformParameterizations
 from .polydata import PolyData, PolyDataType
 from .binary_file import BinaryFile
 from .binary_stream import BinaryStream
@@ -42,6 +43,9 @@ __all__ = [
     "MeshType",
     "PolyData",
     "PolyDataType",
+    "Transform",
+    "TransformType",
+    "TransformParameterizations",
     "BinaryFile",
     "BinaryStream",
     "TextFile",
