@@ -4,9 +4,9 @@
 
 > Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.
 
-[👨‍💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/itk-wasm/compress-stringify/ts/app/ ':include :type=iframe width=100% height=800px')
+[👨‍💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/ITK-Wasm/compress-stringify/ts/app/ ':include :type=iframe width=100% height=800px')
 
-[🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/itk-wasm/compress-stringify/ts/docs/)
+[🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/ITK-Wasm/compress-stringify/ts/docs/)
 
 ## Installation
 
