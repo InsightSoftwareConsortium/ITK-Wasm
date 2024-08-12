@@ -94,3 +94,6 @@ cypress/videos/
 packages/core/typescript/itk-wasm/dist
 
 CMakePresets.json
+
+packages/core/typescript/itk-wasm/test/data/cow.iwm
+packages/transform-io/typescript/demo-app/

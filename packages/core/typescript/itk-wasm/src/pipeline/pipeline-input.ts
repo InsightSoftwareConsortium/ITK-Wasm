@@ -12,17 +12,17 @@ import JsonCompatible from '../interface-types/json-compatible.js'
 interface PipelineInput {
   type: (typeof InterfaceTypes)[keyof typeof InterfaceTypes]
   data:
-    | string
-    | Uint8Array
-    | JsonCompatible
-    | TextStream
-    | BinaryStream
-    | TextFile
-    | BinaryFile
-    | Image
-    | Mesh
-    | PolyData
-    | Transform
+  | string
+  | Uint8Array
+  | JsonCompatible
+  | TextStream
+  | BinaryStream
+  | TextFile
+  | BinaryFile
+  | Image
+  | Mesh
+  | PolyData
+  | Transform
 }
 
 export default PipelineInput

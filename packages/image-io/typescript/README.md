@@ -4,10 +4,10 @@
 
 > Input and output for scientific and medical image file formats.
 
-[💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/itk-wasm/image-io/ts/app/
+[💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/ITK-Wasm/image-io/ts/app/
  ':include :type=iframe width=100% height=800px')
 
-[🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/itk-wasm/image-io/ts/docs/)
+[🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/ITK-Wasm/image-io/ts/docs/)
 
 ## Installation
 

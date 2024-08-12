@@ -13,7 +13,7 @@ class Transform {
   parameters: number[]
   fixedParameters: number[]
 
-  constructor(transformType = new TransformType()) {
+  constructor (transformType = new TransformType()) {
     this.transformType = transformType
     this.numberOfFixedParameters = 0
     this.numberOfParameters = 0
