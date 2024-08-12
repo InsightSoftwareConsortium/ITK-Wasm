@@ -105,12 +105,12 @@ and `@itk-wasm/mesh-io` package. Their interface changed in some cases.
 3. `readImageFileSeries` -> `readImageFileSeries`
 4. `readImageHTTP` -> `readImageHttp`
 5. `readImageLocalFile` -> `readImageNode`
-6. `readMeshArrayBuffer` -> `readMeshFile`
-7. `readMeshBlob` -> `readMeshFile`
+6. `readMeshArrayBuffer` -> `readMesh`
+7. `readMeshBlob` -> `readMesh`
 8. `readMeshLocalFile` -> `readMeshNode`
 9. `writeImageArrayBuffer` -> `writeImage`
 10. `writeImageLocalFile` -> `writeImageNode`
-11. `writeMeshArrayBuffer` -> `writeMeshFile`
+11. `writeMeshArrayBuffer` -> `writeMesh`
 12. `writeMeshLocalFile` -> `writeMeshNode`
 
 ### MeshToPolyData
