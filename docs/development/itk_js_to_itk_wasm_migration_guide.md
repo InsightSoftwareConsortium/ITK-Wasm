@@ -100,16 +100,16 @@ The following DICOM image IO functions have been migrated to the `@itk-wasm/dico
 The following image and mesh IO functions have been migrated to the `@itk-wasm/image-io`
 and `@itk-wasm/mesh-io` package. Their interface changed in some cases.
 
-1. `readImageArrayBuffer` -> `readImageFile`
-2. `readImageBlob` -> `readImageFile`
+1. `readImageArrayBuffer` -> `readImage`
+2. `readImageBlob` -> `readImage`
 3. `readImageFileSeries` -> `readImageFileSeries`
 4. `readImageHTTP` -> `readImageHttp`
 5. `readImageLocalFile` -> `readImageNode`
 6. `readMeshArrayBuffer` -> `readMeshFile`
 7. `readMeshBlob` -> `readMeshFile`
 8. `readMeshLocalFile` -> `readMeshNode`
-9. `writeImageArrayBuffer` -> `writeImageFile`
-10. `writeImageLocalFile` -> `writeImageFileNode`
+9. `writeImageArrayBuffer` -> `writeImage`
+10. `writeImageLocalFile` -> `writeImageNode`
 11. `writeMeshArrayBuffer` -> `writeMeshFile`
 12. `writeMeshLocalFile` -> `writeMeshNode`
 
