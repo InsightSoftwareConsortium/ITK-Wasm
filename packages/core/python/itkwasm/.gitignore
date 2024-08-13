@@ -1,1 +1,5 @@
 dist/
+# pixi environments
+.pixi
+*.egg-info
+pyodide.tar.bz2

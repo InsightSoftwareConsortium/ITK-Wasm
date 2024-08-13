@@ -42,6 +42,9 @@ Home = "https://itkwasm.readthedocs.io"
 Source = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 Issues = "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
 
+[project.optional-dependencies]
+test = ["itk", "pytest", "pytest-pyodide", "dask[array]", "hatch>=1.12.0,<2", "pyodide-py>=0.26.2,<0.27"]
+
 [tool.hatch.envs.default]
 dependencies = [
     "itk>=5.4.0",
@@ -68,3 +71,22 @@ path = "itkwasm/__init__.py"
 
 [tool.black]
 line-length = 120
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-aarch64"]
+
+[tool.pixi.pypi-dependencies]
+itkwasm = { path = ".", editable = true }
+test-accelerator = { path = "test/test-accelerator", editable = true }
+
+[tool.pixi.tasks]
+
+[tool.pixi.feature.test.tasks]
+download-pyodide = { cmd = "curl -L https://github.com/pyodide/pyodide/releases/download/0.26.2/pyodide-0.26.2.tar.bz2 -o pyodide.tar.bz2 && tar xjf pyodide.tar.bz2 && rm -rf dist/pyodide && mkdir -p dist && mv pyodide dist", description = "Download Pyodide", outputs = ["pyodide.tar.bz2"] }
+serve = { cmd = 'hatch build -t wheel ./dist/pyodide/ && echo "Visit http://localhost:8877/console.html" && python -m http.server --directory=./dist/pyodide 8877', description = "Serve the Pyodide distribution", depends-on = ["download-pyodide"] }
+test = { cmd = "hatch build -t wheel ./dist/pyodide/ && pytest --dist-dir=./dist/pyodide --rt=chrome", description = "Run the test suite", depends-on = ["download-pyodide"] }
+
+[tool.pixi.environments]
+default = {features = [], solve-group = "default"}
+test = {features = ["test"], solve-group = "default"}
