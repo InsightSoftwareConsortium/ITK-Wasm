@@ -35,16 +35,15 @@ depends-on = ["clone-itk"]
 
 [feature.native.tasks.configure-itk]
 cmd = '''cmake -B$ITK_WASM_ITK_BUILD_DIR -S$ITK_WASM_ITK_SOURCE_DIR -GNinja
-  -DBUILD_TESTING=OFF
   -DCMAKE_CXX_STANDARD:STRING=20
   -DCMAKE_BUILD_TYPE:STRING=Debug
   -DCMAKE_CONFIGURATION_TYPES:STRING=Debug
   -DBUILD_EXAMPLES:BOOL=OFF
   -DBUILD_TESTING:BOOL=OFF
-  -DBUILD_SHARED_LIBS=OFF
-  -DBUILD_STATIC_LIBS=ON
-  -DDCMTK_LINK_STATIC=ON
-  -DITK_LEGACY_REMOVE:BOOL=ON 
+  -DBUILD_SHARED_LIBS:BOOL=OFF
+  -DBUILD_STATIC_LIBS:BOOL=ON
+  -DDCMTK_LINK_STATIC:BOOL=ON
+  -DITK_LEGACY_REMOVE:BOOL=ON
   -DITK_BUILD_DEFAULT_MODULES:BOOL=ON
   -DITKGroup_IO:BOOL=ON
   -DH5_HAVE_GETPWUID:BOOL=OFF
@@ -72,11 +71,29 @@ cmd = '''cmake -B$ITK_WASM_ITK_BUILD_DIR -S$ITK_WASM_ITK_SOURCE_DIR -GNinja
 depends-on = ["switch-dcmtk"]
 # Note: pixi does not seem to reliably support activation environmental variables in task inputs / outputs
 # outputs = ["$ITK_WASM_ITK_BUILD_DIR/CMakeFiles/"]
-outputs = ["native/ITK-build/CMakeFiles/"]
+outputs = ["native/ITK-build/CMakeFiles/**"]
 
 [feature.native.tasks.build-itk]
 cmd = "cmake --build $ITK_WASM_ITK_BUILD_DIR"
 depends-on = ["configure-itk"]
+outputs = ["native/ITK-build/**"]
+
+[feature.native.tasks.configure-itk-wasm]
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build -S. -GNinja
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
+  -DBUILD_TESTING:BOOL=ON
+  -DCMAKE_CXX_STANDARD:STRING=20
+  -DCMAKE_BUILD_TYPE:STRING=Debug'''
+depends-on = ["build-itk"]
+outputs = ["native/ITK-Wasm-build/CMakeFiles/"]
+
+[feature.native.tasks.build-itk-wasm]
+cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build"
+depends-on = ["configure-itk-wasm"]
+
+[feature.native.tasks.test-itk-wasm]
+cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build"
+depends-on = ["build-itk-wasm"]
 
 [feature.native.dependencies]
 cmake = ">=3.30.2,<4"

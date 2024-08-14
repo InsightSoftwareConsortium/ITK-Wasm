@@ -101,6 +101,5 @@ packages/transform-io/typescript/demo-app/
 .pixi
 *.egg-info
 
-ITK/
-ITK-build/
+native/
 
