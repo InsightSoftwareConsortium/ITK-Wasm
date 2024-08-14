@@ -97,3 +97,10 @@ CMakePresets.json
 
 packages/core/typescript/itk-wasm/test/data/cow.iwm
 packages/transform-io/typescript/demo-app/
+# pixi environments
+.pixi
+*.egg-info
+
+ITK/
+ITK-build/
+
