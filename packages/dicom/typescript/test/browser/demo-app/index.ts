@@ -1,7 +1,11 @@
-// Generated file. To retain edits, remove this comment.
-
 import * as dicom from '../../../dist/index.js'
 globalThis.dicom = dicom
+
+import { readImage } from '@itk-wasm/image-io'
+globalThis.readImage = readImage
+
+import { castImage } from "itk-wasm"
+globalThis.castImage = castImage
 
 // Use local, vendored WebAssembly module assets
 const viteBaseUrl = import.meta.env.BASE_URL
