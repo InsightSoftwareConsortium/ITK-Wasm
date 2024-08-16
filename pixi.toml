@@ -22,6 +22,13 @@ depends-on = ["pnpm-install"]
 outputs = ["packages/dicom/test/data.tar.gz"]
 description = "Download DICOM test data"
 
+[tasks.mesh-io-test-data-download]
+cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_MESH_IO_TEST_DATA_HASH $ITK_WASM_MESH_IO_TEST_DATA_URLS"
+cwd = "packages/mesh-io"
+depends-on = ["pnpm-install"]
+outputs = ["packages/mesh-io/test/data.tar.gz"]
+description = "Download mesh-io test data"
+
 [dependencies]
 pnpm = ">=9.7.1,<10"
 nodejs = ">=22.6.0,<23"
@@ -132,6 +139,26 @@ description = "Build dicom native binaries"
 cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/dicom-build"
 depends-on = ["build-native-dicom"]
 description = "Test dicom native binaries"
+
+[feature.native.tasks.configure-native-mesh-io]
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/mesh-io-build -Spackages/mesh-io -GNinja
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
+  -DBUILD_TESTING:BOOL=ON
+  -DCMAKE_CXX_STANDARD:STRING=20
+  -DCMAKE_BUILD_TYPE:STRING=Debug'''
+depends-on = ["build-itk-wasm", "mesh-io-test-data-download"]
+outputs = ["native/mesh-io-build/CMakeFiles/"]
+description = "Configure mesh-io native binaries"
+
+[feature.native.tasks.build-native-mesh-io]
+cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/mesh-io-build"
+depends-on = ["configure-native-mesh-io"]
+description = "Build mesh-io native binaries"
+
+[feature.native.tasks.test-native-mesh-io]
+cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/mesh-io-build"
+depends-on = ["build-native-mesh-io"]
+description = "Test mesh-io native binaries"
 
 [feature.native.dependencies]
 cmake = ">=3.30.2,<4"
