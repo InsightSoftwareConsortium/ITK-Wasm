@@ -3,7 +3,7 @@ authors = ["Matt McCormick <matt.mccormick@kitware.com>"]
 channels = ["conda-forge"]
 description = "ITK-Wasm native build and test configuration."
 name = "ITK-Wasm"
-platforms = ["linux-64"]
+platforms = ["win-64", "linux-64", "linux-aarch64", "osx-arm64"]
 version = "0.1.0"
 license = "Apache-2.0"
 readme = "README.md"
@@ -32,6 +32,11 @@ description = "Download mesh-io test data"
 [dependencies]
 pnpm = ">=9.7.1,<10"
 nodejs = ">=22.6.0,<23"
+
+[target.win-64.dependencies]
+m2w64-jq = ">=1.6.0,<2"
+
+[target.unix.dependencies]
 jq = ">=1.7.1,<2"
 
 [feature.native.tasks.clone-itk]
