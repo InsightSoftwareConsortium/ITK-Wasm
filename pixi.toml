@@ -5,14 +5,27 @@ description = "ITK-Wasm native build and test configuration."
 name = "ITK-Wasm"
 platforms = ["linux-64"]
 version = "0.1.0"
+license = "Apache-2.0"
+readme = "README.md"
 
 [activation]
 scripts = ["itk_wasm_env.bash"]
 
 [tasks]
 clean = "git clean -fdx"
+pnpm-install = { cmd = "pnpm install", description = "Install Node.js dependencies" }
+
+[tasks.dicom-test-data-download]
+cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_DICOM_TEST_DATA_HASH $ITK_WASM_DICOM_TEST_DATA_URLS"
+cwd = "packages/dicom"
+depends-on = ["pnpm-install"]
+outputs = ["packages/dicom/test/data.tar.gz"]
+description = "Download DICOM test data"
 
 [dependencies]
+pnpm = ">=9.7.1,<10"
+nodejs = ">=22.6.0,<23"
+jq = ">=1.7.1,<2"
 
 [feature.native.tasks.clone-itk]
 cmd = ["stat", "$ITK_WASM_ITK_SOURCE_DIR", ">/dev/null", "||",
@@ -22,6 +35,7 @@ cmd = ["stat", "$ITK_WASM_ITK_SOURCE_DIR", ">/dev/null", "||",
     "$ITK_WASM_ITK_SOURCE_DIR"]
 # Note: pixi does not seem to reliably support activation environmental variables in task inputs / outputs
 outputs = ["native/ITK/LICENSE"]
+description = "Fetch ITK's source code"
 
 [feature.native.tasks.switch-dcmtk]
 cmd = ["sed", "-i", "-e",
@@ -32,17 +46,16 @@ cmd = ["sed", "-i", "-e",
   "/^set(DCMTK_GIT_TAG/c\\set(DCMTK_GIT_TAG \"$ITK_WASM_DCMTK_GIT_TAG\")",
   "$ITK_WASM_ITK_SOURCE_DIR/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake"]
 depends-on = ["clone-itk"]
+description = "Switch DCMTK to the WASM branch"
 
 [feature.native.tasks.configure-itk]
 cmd = '''cmake -B$ITK_WASM_ITK_BUILD_DIR -S$ITK_WASM_ITK_SOURCE_DIR -GNinja
   -DCMAKE_CXX_STANDARD:STRING=20
   -DCMAKE_BUILD_TYPE:STRING=Debug
-  -DCMAKE_CONFIGURATION_TYPES:STRING=Debug
   -DBUILD_EXAMPLES:BOOL=OFF
   -DBUILD_TESTING:BOOL=OFF
   -DBUILD_SHARED_LIBS:BOOL=OFF
   -DBUILD_STATIC_LIBS:BOOL=ON
-  -DDCMTK_LINK_STATIC:BOOL=ON
   -DITK_LEGACY_REMOVE:BOOL=ON
   -DITK_BUILD_DEFAULT_MODULES:BOOL=ON
   -DITKGroup_IO:BOOL=ON
@@ -72,11 +85,13 @@ depends-on = ["switch-dcmtk"]
 # Note: pixi does not seem to reliably support activation environmental variables in task inputs / outputs
 # outputs = ["$ITK_WASM_ITK_BUILD_DIR/CMakeFiles/"]
 outputs = ["native/ITK-build/CMakeFiles/**"]
+description = "Configure ITK"
 
 [feature.native.tasks.build-itk]
 cmd = "cmake --build $ITK_WASM_ITK_BUILD_DIR"
 depends-on = ["configure-itk"]
 outputs = ["native/ITK-build/**"]
+description = "Build ITK"
 
 [feature.native.tasks.configure-itk-wasm]
 cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build -S. -GNinja
@@ -86,14 +101,37 @@ cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build -S. -GNinja
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk"]
 outputs = ["native/ITK-Wasm-build/CMakeFiles/"]
+description = "Configure ITK-Wasm"
 
 [feature.native.tasks.build-itk-wasm]
 cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build"
 depends-on = ["configure-itk-wasm"]
+description = "Build ITK-Wasm"
 
 [feature.native.tasks.test-itk-wasm]
 cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build"
 depends-on = ["build-itk-wasm"]
+description = "Test ITK-Wasm"
+
+[feature.native.tasks.configure-native-dicom]
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/dicom-build -Spackages/dicom -GNinja
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
+  -DBUILD_TESTING:BOOL=ON
+  -DCMAKE_CXX_STANDARD:STRING=20
+  -DCMAKE_BUILD_TYPE:STRING=Debug'''
+depends-on = ["build-itk-wasm", "dicom-test-data-download"]
+outputs = ["native/dicom-build/CMakeFiles/"]
+description = "Configure dicom native binaries"
+
+[feature.native.tasks.build-native-dicom]
+cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/dicom-build"
+depends-on = ["configure-native-dicom"]
+description = "Build dicom native binaries"
+
+[feature.native.tasks.test-native-dicom]
+cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/dicom-build"
+depends-on = ["build-native-dicom"]
+description = "Test dicom native binaries"
 
 [feature.native.dependencies]
 cmake = ">=3.30.2,<4"
