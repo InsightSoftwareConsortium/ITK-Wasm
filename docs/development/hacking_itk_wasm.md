@@ -36,66 +36,12 @@ ITK-Wasm's [C++ core](../introduction/parts.md#cxx-core) can be developed with n
 2. Build the `WebAssemblyInterface` module from this module against ITK
 3. Run the tests
 
-We recommend using the scripts provided in [dev-utils](../../dev-utils/) folder
-to [grab the source code](../../dev-utils/itk-wasm-native-get-source.sh) and run [native build commands](../../dev-utils/itk-wasm-native-build.sh).
-Note that you will need to include certain CXX compiler flags for the native windows build as shown in the script.
-The build script also demonstrates how to native build sub-packages such as @itk-wasm/dicom with additional ITK dependencies turned on.
+We recommend using [pixi](https://pixi.sh) with a bash shell (including on Windows).
+The steps to build and test the C++ core with a native toolchain are:
 
-From a command line, these steps in brief are:
-
-```sh
-# For Windows build (with mingw-bash or git-bash terminal)
-export CXXFLAGS="/Zc:__cplusplus /DNOMINMAX"
-
-# Build ITK
-git clone https://github.com/InsightSoftwareConsortium/ITK --branch=itkwasm-main-mutable
-# cmake -BITK-build -SITK -DBUILD_TESTING=OFF -DModule_MeshToPolyData=ON -DITK_MSVC_STATIC_RUNTIME_LIBRARY=ON
-cmake -BITK-build -SITK \
-    -DBUILD_TESTING=OFF \
-    -DCMAKE_CXX_STANDARD:STRING=17 \
-    -DCMAKE_BUILD_TYPE:STRING=Debug \
-    -DCMAKE_CONFIGURATION_TYPES:STRING=Debug \
-    -DBUILD_EXAMPLES:BOOL=OFF \
-    -DBUILD_TESTING:BOOL=OFF \
-    -DBUILD_SHARED_LIBS=OFF \
-    -DBUILD_STATIC_LIBS=ON \
-    -DDCMTK_LINK_STATIC=ON \
-    -DITK_LEGACY_REMOVE:BOOL=ON \
-    -DITK_BUILD_DEFAULT_MODULES:BOOL=ON \
-    -DModule_MeshToPolyData=ON \
-    -DDO_NOT_BUILD_ITK_TEST_DRIVER:BOOL=ON \
-    -DOPJ_USE_THREAD:BOOL=OFF \
-    -DDCMTK_WITH_THREADS:BOOL=OFF \
-    -DDCMTK_BUILD_APPS:BOOL=OFF \
-    -DNO_FLOAT_EXCEPTIONS:BOOL=ON \
-    -DITK_MSVC_STATIC_RUNTIME_LIBRARY=ON
-cmake --build ITK-build --config Debug -j16
-
-# Build the WebAssemblyInterface module from this module against ITK
-git clone https://github.com/InsightSoftwareConsortium/ITK-Wasm
-cmake -BITK-Wasm-build \
-    -SITK-Wasm \
-    -DBUILD_TESTING=ON \
-    -DCMAKE_CXX_STANDARD:STRING=20 \
-    -DCMAKE_BUILD_TYPE:STRING=Debug \
-    -DCMAKE_CONFIGURATION_TYPES:STRING=Debug \
-    -DBUILD_SHARED_LIBS=OFF \
-    -DITK_DIR=$PWD/ITK-build
-cmake --build ITK-Wasm-build --config Debug -j16
-
-# Run the tests
-ctest --test-dir itk-wasm-build
-
-cmake -Bpackages-dicom \
-    -SITK-Wasm/packages/dicom \
-    -DBUILD_TESTING=ON \
-    -DCMAKE_CXX_STANDARD:STRING=20 \
-    -DCMAKE_BUILD_TYPE:STRING=Debug \
-    -DCMAKE_CONFIGURATION_TYPES:STRING=Debug \
-    -DITK_DIR=$PWD/ITK-build
-
-cmake --build packages-dicom --config Debug -j16
-```
+1. Install pixi: `curl -fsSL https://pixi.sh/install.sh | bash`
+2. Clone [the ITK-Wasm GitHub repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm)
+3. Run `pixi run test-itk-wasm`
 
 For additional guidance on C++ development, see the [ITK Software Guide].
 
