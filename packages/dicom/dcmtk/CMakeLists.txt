@@ -8,7 +8,8 @@ include(${ITK_USE_FILE})
 add_executable(structured-report-to-text structured-report-to-text.cxx)
 target_link_libraries(structured-report-to-text PUBLIC ${ITK_LIBRARIES})
 
-add_executable(apply-presentation-state-to-image apply-presentation-state-to-image.cxx)
+add_executable(apply-presentation-state-to-image
+  apply-presentation-state-to-image.cxx dcostrmb.cc)
 target_link_libraries(apply-presentation-state-to-image PUBLIC cpp-base64 ${ITK_LIBRARIES})
 #add_test(NAME apply-presentation-state-to-image-test
   #COMMAND apply-presentation-state-to-image
