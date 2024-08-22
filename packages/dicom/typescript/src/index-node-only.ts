@@ -87,3 +87,23 @@ export type { WriteSegmentationNodeOptions }
 
 import writeSegmentationNode from './write-segmentation-node.js'
 export { writeSegmentationNode }
+
+
+import ReadDicomTagsNodeResult from './read-dicom-tags-node-result.js'
+export type { ReadDicomTagsNodeResult }
+
+import ReadDicomTagsNodeOptions from './read-dicom-tags-node-options.js'
+export type { ReadDicomTagsNodeOptions }
+
+import readDicomTagsNode from './read-dicom-tags-node.js'
+export { readDicomTagsNode }
+
+
+import ReadImageDicomFileSeriesNodeResult from './read-image-dicom-file-series-node-result.js'
+export type { ReadImageDicomFileSeriesNodeResult }
+
+import ReadImageDicomFileSeriesNodeOptions from './read-image-dicom-file-series-node-options.js'
+export type { ReadImageDicomFileSeriesNodeOptions }
+
+import readImageDicomFileSeriesNode from './read-image-dicom-file-series-node.js'
+export { readImageDicomFileSeriesNode }
