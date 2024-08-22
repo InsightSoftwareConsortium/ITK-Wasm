@@ -31,6 +31,7 @@
   <sl-tab-group>
     <sl-tab slot="nav" panel="applyPresentationStateToImage-panel">applyPresentationStateToImage</sl-tab>
     <sl-tab slot="nav" panel="readDicomEncapsulatedPdf-panel">readDicomEncapsulatedPdf</sl-tab>
+    <sl-tab slot="nav" panel="readImageDicomFileSeries-panel">readImageDicomFileSeries</sl-tab>
     <sl-tab slot="nav" panel="readOverlappingSegmentation-panel">readOverlappingSegmentation</sl-tab>
     <sl-tab slot="nav" panel="readSegmentation-panel">readSegmentation</sl-tab>
     <sl-tab slot="nav" panel="structuredReportToHtml-panel">structuredReportToHtml</sl-tab>
@@ -154,6 +155,58 @@
     </div>
 
     </sl-tab-panel>
+
+
+    <sl-tab-panel name="readImageDicomFileSeries-panel">
+
+    <small><i>Read a DICOM image series and return the associated image volume</i></small><br /><br />
+
+      <div id="readImageDicomFileSeriesInputs"><form action="">
+        <sl-tooltip content="Use the Upload button to provide the inputImages"><sl-details id="readImageDicomFileSeries-input-images-details" summary="inputImages: File names in the series" disabled></sl-details></sl-tooltip>
+        <label for="input-images-file"><sl-button name="input-images-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file" multiple  name="input-images-file" style="display: none"/>
+  <br /><br />
+        <sl-checkbox name="single-sorted-series">singleSortedSeries - <i>The input files are a single sorted series</i></sl-checkbox>
+  <br /><br />
+      <sl-divider></sl-divider>
+        <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+        <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+      </form></div>
+      <sl-divider></sl-divider>
+
+      <div id="readImageDicomFileSeriesOutputs">
+        <itk-image-details disabled id="readImageDicomFileSeries-output-image-details" summary="outputImage: Output image volume"></itk-image-details>
+        <sl-select id="readImageDicomFileSeries-output-image-output-format" placeholder="Format">
+          <sl-option value="bmp">bmp</sl-option>
+          <sl-option value="dcm">dcm</sl-option>
+          <sl-option value="gipl">gipl</sl-option>
+          <sl-option value="hdf5">hdf5</sl-option>
+          <sl-option value="jpg">jpg</sl-option>
+          <sl-option value="lsm">lsm</sl-option>
+          <sl-option value="mnc">mnc</sl-option>
+          <sl-option value="mnc.gz">mnc.gz</sl-option>
+          <sl-option value="mgh">mgh</sl-option>
+          <sl-option value="mha">mha</sl-option>
+          <sl-option value="mrc">mrc</sl-option>
+          <sl-option value="nii">nii</sl-option>
+          <sl-option value="nii.gz">nii.gz</sl-option>
+          <sl-option value="png">png</sl-option>
+          <sl-option value="nrrd">nrrd</sl-option>
+          <sl-option value="png">png</sl-option>
+          <sl-option value="pic">pic</sl-option>
+          <sl-option value="tif">tif</sl-option>
+          <sl-option value="isq">isq</sl-option>
+          <sl-option value="fdf">fdf</sl-option>
+          <sl-option value="vtk">vtk</sl-option>
+        </sl-select>
+        <sl-button variant="neutral" outline name="output-image-download" disabled>Download</sl-button>
+  <br /><br />
+        <sl-details disabled id="readImageDicomFileSeries-sorted-filenames-details" summary="sortedFilenames: Output sorted filenames"></sl-details>
+        <sl-button variant="neutral" outline name="sorted-filenames-download" disabled>Download</sl-button>
+  <br /><br />
+      </div>
+
+      </sl-tab-panel>
 
 
     <sl-tab-panel name="readOverlappingSegmentation-panel">
