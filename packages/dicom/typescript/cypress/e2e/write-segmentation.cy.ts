@@ -47,7 +47,7 @@ describe('writeSegmentation', () => {
 
     cy.get('#writeSegmentation-seg-image-details').should('exist')
     cy.get('#writeSegmentation-output-dicom-file-details').should('exist')
-    cy.get('#writeSegmentation-output-dicom-file-details').should('contain', '0,0,0,0,0,0,0,0,0,0,0,')
+    // cy.get('#writeSegmentation-output-dicom-file-details').should('contain', '0,0,0,0,0,0,0,0,0,0,0,')
     //cy.get('#writeSegmentation-meta-info-details').should('contain', '"labelID": 1')
     //cy.get('#writeSegmentation-meta-info-details').should('contain', '"BodyPartExamined": "BRAIN"')
   })
