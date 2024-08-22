@@ -23,7 +23,7 @@ async def test_vtk_poly_data_async(selenium, package_wheel, input_data):
     def verify_mesh(mesh):
         assert mesh.meshType.dimension == 3
         assert mesh.meshType.pointComponentType == FloatTypes.Float32
-        assert mesh.meshType.pointPixelComponentType == IntTypes.Int8
+        assert mesh.meshType.pointPixelComponentType == IntTypes.UInt8
         assert mesh.numberOfPoints == 2903
         assert np.allclose(mesh.points.ravel()[0], 3.71636)
         assert np.allclose(mesh.points.ravel()[1], 2.34339)
