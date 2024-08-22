@@ -41,7 +41,7 @@ RUN git clone --branch $ITK_GIT_BRANCH --single-branch --depth 1 https://github.
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
 
 # Modify CMake variable to use patched DCMTK library
-# GIT_TAG refers to DCMTK branch: 20240311_DCMTK_PATCHES_FOR_ITK-wasm
+# GIT_TAG refers to DCMTK branch: 20240311_DCMTK_PATCHES_FOR_ITK-Wasm-1
 RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/DCMTK.git")' \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
