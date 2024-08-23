@@ -7,6 +7,8 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 
 WORKDIR /
 
+COPY itk_wasm_env_vars.sh /
+
 # Note: on entry, emsdk will prepend to the path with its own node, so add to an earlier path
 ENV NODE_TAG v20.12.2
 RUN curl -LO https://nodejs.org/dist/${NODE_TAG}/node-${NODE_TAG}-linux-x64.tar.xz && \
@@ -33,19 +35,16 @@ RUN curl -L https://api.github.com/repos/facebook/zstd/tarball/${zstd_GIT_TAG} |
   cd .. && \
   rm -rf zstd-build zstd
 
-# tag commit date: 2024-08-16
-ENV ITK_GIT_TAG eddb514e52a23e2b0987b71fda59780c6ad209ab
-ENV ITK_GIT_BRANCH itkwasm-2024-05-20-5db055d7ad3b-3
-RUN git clone --branch $ITK_GIT_BRANCH --single-branch --depth 1 https://github.com/KitwareMedical/ITK.git && \
+RUN . /itk_wasm_env_vars.sh && git clone --branch $ITK_WASM_ITK_BRANCH --single-branch --depth 1 $ITK_WASM_ITK_REPOSITORY && \
   sed -i -e '/^option(OPJ_USE_THREAD/c\option(OPJ_USE_THREAD "use threads" OFF)' \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
 
 # Modify CMake variable to use patched DCMTK library
 # GIT_TAG refers to DCMTK branch: 20240311_DCMTK_PATCHES_FOR_ITK-Wasm-1
-RUN sed -i -e '/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/DCMTK.git")' \
+RUN . /itk_wasm_env_vars.sh && sed -i -e "/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK_GIT_REPOSITORY \"${ITK_WASM_DCMTK_REPOSITORY}\")" \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
-RUN sed -i -e '/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG "93e6d1b20b476c388f0379245c8c6e96af7f16f4")' \
+RUN . /itk_wasm_env_vars.sh && sed -i -e "/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG \"${ITK_WASM_DCMTK_GIT_TAG}\")" \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
 
 RUN if test -e $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; fi

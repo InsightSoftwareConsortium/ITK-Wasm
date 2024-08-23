@@ -5,7 +5,7 @@ function die() {
     exit 1
 }
 
-if [$OSTYPE == "cygwin"] || [$OSTYPE == "msys"] || [$OSTYPE =="win32"]; then
+if test "$OSTYPE" = "cygwin" || test "$OSTYPE" = "msys" || test "$OSTYPE" = "win32"; then
     echo "Windows platform detected ... adding \"/Zc:__cplusplus /DNOMINMAX\" to \$CXXFLAGS"
     export CXXFLAGS="/Zc:__cplusplus /DNOMINMAX"
 fi
