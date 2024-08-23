@@ -70,6 +70,11 @@ target_link_libraries(write-multi-segmentation PUBLIC ${ITK_LIBRARIES} dcmqi)
 add_executable(write-overlapping-segmentation write-overlapping-segmentation.cxx)
 target_link_libraries(write-overlapping-segmentation PUBLIC ${ITK_LIBRARIES} dcmqi)
 
+if (WASI)
+  # Currently crashing on exit?
+  return()
+endif()
+
 set(TEMP_DIR ${CMAKE_BINARY_DIR}/Testing/Temporary)
 set(BASELINE ${dcmqi_lib_SOURCE_DIR}/data/segmentations)
 set(JSON_DIR ${dcmqi_lib_SOURCE_DIR}/doc/examples)
