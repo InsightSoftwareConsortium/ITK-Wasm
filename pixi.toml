@@ -29,6 +29,22 @@ depends-on = ["pnpm-install"]
 outputs = ["packages/mesh-io/test/data.tar.gz"]
 description = "Download mesh-io test data"
 
+[tasks.export-itk-wasm-env-vars]
+cmd = "bash -c ./itk_wasm_env.bash && env | grep ITK_WASM | grep -v TEST > ./src/docker/itk-wasm-base/itk_wasm_env_vars.sh"
+outputs = ["src/docker/itk-wasm-base/itk_wasm_env_vars.*"]
+inputs = ["itk_wasm_env.*"]
+description = "Provide ITK_WASM environmental variables to the Docker image"
+
+[tasks.update-default-image-tag]
+cmd = "sed -i \"s/const defaultImageTag = '.*'/const defaultImageTag = '$new_tag'/g\" packages/core/typescript/itk-wasm/src/cli/default-image-tag.js"
+outputs = ["packages/core/typescript/itk-wasm/src/cli/default-image-tag.*"]
+description = "Update the default Docker image tag"
+
+[tasks.build-docker-images]
+cmd = "src/docker/build.sh"
+description = "Build the ITK-Wasm docker images"
+depends-on = ["clean", "export-itk-wasm-env-vars", "update-default-image-tag"]
+
 [dependencies]
 pnpm = ">=9.7.1,<10"
 nodejs = ">=22.6.0,<23"

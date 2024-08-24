@@ -69,7 +69,7 @@ To pull the `latest` the build environment Docker images,
 To build the `latest` build environment Docker images from the Docker configuration and local C++ core,
 
 ```sh
-./src/docker/build.sh --with-debug
+pixi run build-docker-images --with-debug
 ```
 
 The `--with-debug` flag will also build the `latest-debug` tagged images.

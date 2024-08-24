@@ -102,4 +102,4 @@ packages/transform-io/typescript/demo-app/
 *.egg-info
 
 native/
-
+src/docker/itk-wasm-base/itk_wasm_env_vars.sh
