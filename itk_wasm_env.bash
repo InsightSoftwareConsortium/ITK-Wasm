@@ -7,7 +7,7 @@ function die() {
 
 if test "$OSTYPE" = "cygwin" || test "$OSTYPE" = "msys" || test "$OSTYPE" = "win32"; then
     echo "Windows platform detected ... adding \"/Zc:__cplusplus /DNOMINMAX\" to \$CXXFLAGS"
-    export CXXFLAGS="/Zc:__cplusplus /DNOMINMAX"
+    export CXXFLAGS="/Zc:__cplusplus /Zc:preprocessor /DNOMINMAX"
 fi
 
 export ITK_WASM_DCMTK_REPOSITORY=${ITK_WASM_DCMTK_REPOSITORY:-"https://github.com/InsightSoftwareConsortium/DCMTK"}
