@@ -17,41 +17,44 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
+      - uses: prefix-dev/setup-pixi@v0.8.1
+      - run: pixi run export-itk-wasm-env-vars
 
-    - name: Pull latest Docker images
-      run: |
-        ./src/docker/pull.sh --no-debug
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
 
-    - uses: actions/download-artifact@v4
-      continue-on-error: true
-      with:
-        name: docker-cache
-        path: ./docker-cache
+      - name: Pull latest Docker images
+        run: |
+          ./src/docker/pull.sh --no-debug
 
-    - name: Build itk-wasm-base
-      run: |
-        if [[ -e ./docker-cache/itk-wasm-emscripten-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-emscripten-base.tar.xz | docker load ; fi
-        ./src/docker/itk-wasm-base/build.sh
-        mkdir -p ./docker-cache
-        docker export itkwasm/emscripten-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-emscripten-base.tar.xz
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: docker-cache
+          path: ./docker-cache
 
-    - name: Build itk-wasm-base
-      run: |
-        if [[ -e ./docker-cache/itk-wasm-wasi-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-wasi-base.tar.xz | docker load ; fi
-        ./src/docker/itk-wasm-base/build.sh --with-wasi
-        mkdir -p ./docker-cache
-        docker export itkwasm/wasi-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-wasi-base.tar.xz
+      - name: Build itk-wasm-base
+        run: |
+          if [[ -e ./docker-cache/itk-wasm-emscripten-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-emscripten-base.tar.xz | docker load ; fi
+          ./src/docker/itk-wasm-base/build.sh
+          mkdir -p ./docker-cache
+          docker export itkwasm/emscripten-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-emscripten-base.tar.xz
 
-    - name: Cache docker results
-      uses: actions/upload-artifact@v4
-      with:
-        name: docker-cache
-        path: ./docker-cache
-        retention-days: 7
+      - name: Build itk-wasm-base
+        run: |
+          if [[ -e ./docker-cache/itk-wasm-wasi-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-wasi-base.tar.xz | docker load ; fi
+          ./src/docker/itk-wasm-base/build.sh --with-wasi
+          mkdir -p ./docker-cache
+          docker export itkwasm/wasi-base:latest | xz -e9 -T0 > ./docker-cache/itk-wasm-wasi-base.tar.xz
+
+      - name: Cache docker results
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-cache
+          path: ./docker-cache
+          retention-days: 7
 
   build-itk-wasm:
     name: "Build itk-wasm"
@@ -59,28 +62,31 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
+      - uses: prefix-dev/setup-pixi@v0.8.1
+      - run: pixi run export-itk-wasm-env-vars
 
-    - name: Pull latest Docker images
-      run: |
-        ./src/docker/pull.sh --no-debug
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
 
-    - uses: actions/download-artifact@v4
-      continue-on-error: true
-      with:
-        name: docker-cache
-        path: ./docker-cache
+      - name: Pull latest Docker images
+        run: |
+          ./src/docker/pull.sh --no-debug
 
-    - name: Build itk-wasm
-      run: |
-        sudo mkdir -p /var/lib/docker/tmp
-        if [[ -e ./docker-cache/itk-wasm-emscripten-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-emscripten-base.tar.xz | docker import - itkwasm/emscripten:latest ; fi
-        ./src/docker/itk-wasm/build.sh
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: docker-cache
+          path: ./docker-cache
 
-    - name: Build itk-wasi
-      run: |
-        if [[ -e ./docker-cache/itk-wasm-wasi-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-wasi-base.tar.xz | docker import - itkwasm/wasi:latest ; fi
-        ./src/docker/itk-wasm/build.sh --with-wasi
+      - name: Build itk-wasm
+        run: |
+          sudo mkdir -p /var/lib/docker/tmp
+          if [[ -e ./docker-cache/itk-wasm-emscripten-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-emscripten-base.tar.xz | docker import - itkwasm/emscripten:latest ; fi
+          ./src/docker/itk-wasm/build.sh
+
+      - name: Build itk-wasi
+        run: |
+          if [[ -e ./docker-cache/itk-wasm-wasi-base.tar.xz ]]; then xz -d -k < ./docker-cache/itk-wasm-wasi-base.tar.xz | docker import - itkwasm/wasi:latest ; fi
+          ./src/docker/itk-wasm/build.sh --with-wasi
