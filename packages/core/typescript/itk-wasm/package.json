@@ -44,7 +44,7 @@
     "test:buildTestPipelines:wasi": "node src/itk-wasm-cli.js -i itkwasm/wasi:latest -b wasi-build -s ./test/pipelines build",
     "test:buildTestPipelines:wasi:debug": "node src/itk-wasm-cli.js -i itkwasm/wasi:latest-debug -b wasi-build -s ./test/pipelines build -- -DCMAKE_BUILD_TYPE=Debug",
     "test:runTestPipelines": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines run -r wasmtime stdout-stderr-pipeline/stdout-stderr-test.wasi.wasm",
-    "test:bindgenTestPipelines:typescript": "node src/itk-wasm-cli.js -b emscripten-build -s ./test/pipelines/ bindgen --package-version 1.0.0 --package-name test-pipelines --package-description \"Exercise interface types for bindgen\"",
+    "test:bindgenTestPipelines:typescript": "node src/itk-wasm-cli.js -i itkwasm/emscripten:latest -b emscripten-build -s ./test/pipelines/ bindgen --package-version 1.0.0 --package-name test-pipelines --package-description \"Exercise interface types for bindgen\"",
     "test:bindgenTestPipelines:python": "node src/itk-wasm-cli.js -b wasi-build -s ./test/pipelines/ bindgen --interface python --package-version 1.0.0 --package-name test-pipelines --package-description \"Exercise interface types for bindgen\"",
     "test:browser:debug": "start-server-and-test start http-get://localhost:5180 cypress:open",
     "test:cypress": "start-server-and-test start http-get://localhost:5180 cypress:run",
