@@ -3,18 +3,10 @@
 Verify the source tree.
 
 ```
-git checkout main
-git pull upstream main
-git clean -fdx
-git checkout -b docker-bump
-pnpm i
+# Remove all old podman images
+podman rmi $(podman images -qa) -f && podman rmi $(podman images -qa) -f
+pixi run build-docker-images --with-debug --multiarch
 
-# Update the `defaultImageTag` in packages/core/typescript/itk-wasm/src/cli/default-image-tag.js
-# Based on:
-#
-#   echo $(date '+%Y%m%d')-$(git rev-parse --short HEAD)
-#
-./src/docker/build.sh --with-debug --multiarch
 # DockerHub credential environmental variables must be set
 ./src/docker/push.sh
 
