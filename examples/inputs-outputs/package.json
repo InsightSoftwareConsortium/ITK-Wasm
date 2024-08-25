@@ -36,8 +36,8 @@
     "test:python:dispatch": "itk-wasm pnpm-script test:python:emscripten",
     "test:python": "itk-wasm pnpm-script test:python",
     "test": "pnpm test:wasi && pnpm test:wasi:help",
-    "test:wasi": "itk-wasm -b wasi-build run inputs-outputs.wasi.wasm -- -- cthead1.png smoothed.png",
-    "test:wasi:help": "itk-wasm -b wasi-build run inputs-outputs.wasi.wasm -- -- --help"
+    "test:wasi": "itk-wasm -i itkwasm/wasi:latest -b wasi-build run inputs-outputs.wasi.wasm -- -- cthead1.png smoothed.png",
+    "test:wasi:help": "itk-wasm -i itkwasm/wasi:latest -b wasi-build run inputs-outputs.wasi.wasm -- -- --help"
   },
   "author": "Matt McCormick <matt.mccormick@kitware.com>",
   "license": "Apache-2.0",
