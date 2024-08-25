@@ -36,7 +36,7 @@ inputs = ["itk_wasm_env.*"]
 description = "Provide ITK_WASM environmental variables to the Docker image"
 
 [tasks.update-default-image-tag]
-cmd = "sed -i \"s/const defaultImageTag = '.*'/const defaultImageTag = '$new_tag'/g\" packages/core/typescript/itk-wasm/src/cli/default-image-tag.js"
+cmd = "sed -i \"s/const defaultImageTag = '.*'/const defaultImageTag = '$ITK_WASM_DEV_DOCKER_TAG'/g\" packages/core/typescript/itk-wasm/src/cli/default-image-tag.js"
 outputs = ["packages/core/typescript/itk-wasm/src/cli/default-image-tag.*"]
 description = "Update the default Docker image tag"
 
