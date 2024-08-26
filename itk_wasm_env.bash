@@ -10,6 +10,8 @@ if test "$OSTYPE" = "cygwin" || test "$OSTYPE" = "msys" || test "$OSTYPE" = "win
     export CXXFLAGS="/Zc:__cplusplus /Zc:preprocessor /DNOMINMAX"
 fi
 
+export ITK_WASM_DEV_DOCKER_TAG=${ITK_WASM_DEV_DOCKER_TAG:-$(echo $(date '+%Y%m%d')-$(git rev-parse --short HEAD))}
+
 export ITK_WASM_DCMTK_REPOSITORY=${ITK_WASM_DCMTK_REPOSITORY:-"https://github.com/InsightSoftwareConsortium/DCMTK"}
 export ITK_WASM_DCMTK_GIT_TAG=${ITK_WASM_DCMTK_GIT_TAG:-"93e6d1b20b476c388f0379245c8c6e96af7f16f4"}
 

@@ -37,7 +37,7 @@
     "test:python": "itk-wasm pnpm-script test:python",
     "test": "pnpm test:wasi:help",
     "test:wasi:long": "itk-wasm test -- -- -V",
-    "test:wasi:help": "itk-wasm run mean-squares-versor-registration.wasi.wasm -- -- --help"
+    "test:wasi:help": "itk-wasm -i itkwasm/wasi:latest run mean-squares-versor-registration.wasi.wasm -- -- --help"
   },
   "author": "Matt McCormick <matt.mccormick@kitware.com>",
   "license": "Apache-2.0",
