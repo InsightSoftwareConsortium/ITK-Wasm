@@ -56,7 +56,7 @@ def read_image_dicom_file_series(
     if len(input_images) > 0:
         args.append('--input-images')
         for value in input_images:
-            input_file = str(PurePosixPath(input_images))
+            input_file = str(PurePosixPath(value))
             pipeline_inputs.append(PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(value)))
             args.append(input_file)
 

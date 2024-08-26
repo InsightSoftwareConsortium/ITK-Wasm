@@ -38,7 +38,7 @@ async def read_image_dicom_file_series_async(
 
     kwargs = {}
     if input_images is not None:
-        kwargs["inputImages"] = to_js(BinaryFile(input_images))
+        kwargs["inputImages"] = [to_js(BinaryFile(f)) for f in input_images]
     if single_sorted_series:
         kwargs["singleSortedSeries"] = to_js(single_sorted_series)
 
