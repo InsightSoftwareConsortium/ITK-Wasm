@@ -8,8 +8,6 @@ enable_testing()
 add_subdirectory(gdcm)
 add_subdirectory(dcmtk)
 
-enable_testing()
-
 add_test(NAME image-sets-normalization-help COMMAND image-sets-normalization --help)
 
 add_test(NAME image-sets-normalization-smoke
