@@ -13,8 +13,8 @@ endif()
 
 include(FetchContent)
 # DCMQI
-set(DCMQI_GIT_REPOSITORY "https://github.com/jadh4v/dcmqi.git")
-set(DCMQI_GIT_TAG        "3d6401cf7a30c2c7db019784b8baee874590dea7")
+set(DCMQI_GIT_REPOSITORY "https://github.com/QIICR/dcmqi")
+set(DCMQI_GIT_TAG        "bf6d62266f302a46402a84cfbeeb251a05956bd8")
 set(DCMQI_SUPERBUILD OFF)
 set(DCMQI_BUILD_SLICER_EXTENSION OFF)
 set(DCMQI_BUILD_APPS OFF)
