@@ -370,7 +370,7 @@ importers:
         version: 8.57.0
       eslint-config-standard:
         specifier: ^17.1.0
-        version: 17.1.0(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)
+        version: 17.1.0(eslint-plugin-import@2.29.1(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
@@ -387,11 +387,11 @@ importers:
   packages/core/typescript/demo-app:
     dependencies:
       '@itk-viewer/element':
-        specifier: ^0.3.0
-        version: 0.3.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.4.38))(webpack@5.91.0)(wslink@2.0.2)
+        specifier: ^0.6.6
+        version: 0.6.6(@babel/preset-env@7.24.5(@babel/core@7.24.5))(@shoelace-style/shoelace@2.15.0(@types/react@18.3.1))(autoprefixer@10.4.19(postcss@8.4.38))(webpack@5.91.0)(wslink@2.0.2)
       '@itk-viewer/io':
-        specifier: ^0.1.8
-        version: 0.1.8
+        specifier: ^0.4.3
+        version: 0.4.3
       '@shoelace-style/shoelace':
         specifier: ^2.12.0
         version: 2.15.0(@types/react@18.3.1)
@@ -399,8 +399,8 @@ importers:
         specifier: workspace:^
         version: link:../itk-wasm
       lit:
-        specifier: ^3.1.2
-        version: 3.1.3
+        specifier: ^3.2.0
+        version: 3.2.0
     devDependencies:
       shx:
         specifier: ^0.3.4
@@ -2082,31 +2082,34 @@ packages:
   '@itk-viewer/arcball@0.0.1':
     resolution: {integrity: sha512-TpXNoKAOtmpVVULUbytEVLyGTjgtpAuitNLXRY5Avf6+Tcsiogj7Im+a7J9Jr2Vr6lGS4fp4B6Pd1hwKotW0vw==}
 
-  '@itk-viewer/blosc-zarr@0.1.3':
-    resolution: {integrity: sha512-O8REh/T8M99ADtE0Cr17FvhJtt++8MLP6giGcAaH35gbNqpMVJeg0gI2444HQplaJ4xicoeVrU5B0ja58+OfJA==}
+  '@itk-viewer/blosc-zarr@0.2.3':
+    resolution: {integrity: sha512-70CVcQurIEGDxM8nGkFQPtOoARywMIkE6NrBwt2SwsMocLBQ3KXW4/2+KGbqXymf34qrgdzifR7ezg0kWggBpw==}
 
-  '@itk-viewer/element@0.3.0':
-    resolution: {integrity: sha512-UUgrJ6k+tQphj+YJOMJLZUqnVSuZmzu7sYKNm3O2TE2e3Bjxp6duia5Qu2P+cLbtdF5kMN3mKckdVdy7FUUbqw==}
+  '@itk-viewer/element@0.6.6':
+    resolution: {integrity: sha512-sU8cvGwSp0NCRfGwOP3BO9wLe4UYDDcAL6Dz4RgvQ757S3IRSo+Hh1LwBCg09NCLdBxs8vQvL8AKQOOK5fhOVw==}
     peerDependencies:
-      '@material/web': ^1.3.0
+      '@shoelace-style/shoelace': ^2.12.0
     peerDependenciesMeta:
-      '@material/web':
+      '@shoelace-style/shoelace':
         optional: true
 
-  '@itk-viewer/io@0.1.8':
-    resolution: {integrity: sha512-soewY9nbLq0Z8HK2U8mdfzNZtmRPZbxcmzl7HWYdpmCu1cn5pp2y3cZsARjKTnuzsXrRr0DzfV29cBiJg21H8A==}
+  '@itk-viewer/io@0.4.3':
+    resolution: {integrity: sha512-LKJdmQDTqLodY6CUn0ZSK/lHnwjmbfLGHZV/35er2m3tdX9wXPjIq3E2LNlUXDexJuj5rX/+rrPDKGyybC9gLw==}
 
-  '@itk-viewer/remote-viewport@0.2.13':
-    resolution: {integrity: sha512-FYRNDpCrqsle/RUGSo0ot+skUYhfQz6zpL1/pjFwe6LDRnGyMMJuciTJfRiqhL32hsNSyFH3lKX7W4+PpXC2dQ==}
+  '@itk-viewer/remote-viewport@0.2.21':
+    resolution: {integrity: sha512-4jUAtqSBw+p52KyQsZZ58mw1HPZ/nYXIsaGQt+B1e0R4mVC9KyCTdGROf7fyg20lJ/IypBiGPb6syub3MrS2Fg==}
 
-  '@itk-viewer/utils@0.1.3':
-    resolution: {integrity: sha512-2liw+6wvTRI/eDqPAwVmi+lPT6vj9YiAMt2qdEirc4b6Lg4WpYdsExgaYVgYM9hJpH71xo2DkIlAn7ns2pPF9A==}
+  '@itk-viewer/transfer-function-editor@1.8.5':
+    resolution: {integrity: sha512-g9nTrWvo2H99v+wrNXwEjtezavUaKuG8gojou5tLN2oaVsPA0bPA/5ZxGNk313RagQmUN9xqiMrOaPBmGcKxHA==}
 
-  '@itk-viewer/viewer@0.3.0':
-    resolution: {integrity: sha512-gp9yIhk4o/QbRh/Ni1PXs2xabRtVB/4cpgWpkvHz9gXN+lJn8gvhaB9pXs5HOolgReiZlFcouciMhSz4j6Rntw==}
+  '@itk-viewer/utils@0.1.4':
+    resolution: {integrity: sha512-4q7d4nQWPa+CBAr1smlQ2i5qNkGOn10iIPrwwLvmgqDR+9Krwdv4HXHenJayYqA9WFNfRgGVqU9z5/y4UEqP/A==}
 
-  '@itk-viewer/vtkjs@0.1.0':
-    resolution: {integrity: sha512-tkJKiS4182bTPVLl/ECTqSztojUB3xNMP7QOzIFpvmdHdMtjNNXJaINfsPYc6kilsNhInL34bszQRz7QcPHJoA==}
+  '@itk-viewer/viewer@0.6.2':
+    resolution: {integrity: sha512-lS5l3+Wr9ZLeFKt9BxGJSjB0ja3BW/fnu5k3M85FVmGwG7mMkDfw4HdFeWQg3iRBmL9J3IyIJHW2BwMThXQ6Og==}
+
+  '@itk-viewer/vtkjs@0.4.6':
+    resolution: {integrity: sha512-qB9WtZ1spHgkLw3DftPCSGImYtWh1iIFwSr9WcOVWlj9JttVLuj9bH8FaVZW+lKQMv/l6kl2S3j85mMbFY1Xdw==}
 
   '@itk-wasm/dam@1.1.1':
     resolution: {integrity: sha512-7+9L3lrLMKF4y6B6qjs8GqfbpxT0waOJUM14NdMNEA6M+BoBS8fdHREhQHo2s7QMA5O7I+Jv7m+dyqlisGnbdQ==}
@@ -4386,6 +4389,9 @@ packages:
   iterator.prototype@1.1.2:
     resolution: {integrity: sha512-DR33HMMr8EzwuRL8Y9D3u2BMj8+RqSE850jfGu59kS7tbmPLzGkZmVSfyCFSDxuZiEY6Rzt3T2NA/qU+NwVj1w==}
 
+  itk-viewer-color-maps@1.2.0:
+    resolution: {integrity: sha512-Ny4LLvVtR2T0c6L9wT+R1MLO4YgsSUWjJZwfHmINiiNTQ5yMR+1tFLLXK5yI4rOudVUS+DoVXd5qAKFOZHRniw==}
+
   itk-wasm@1.0.0-b.160:
     resolution: {integrity: sha512-yrt0uRukqI9Q5s9HhzArxMNYvyU5CMbI1ddGzH0A4O3JWscnJug7J0RtY+RTl6nTHcqdrppNH7IRbnTXLZ79Rg==}
     hasBin: true
@@ -4521,14 +4527,14 @@ packages:
       enquirer:
         optional: true
 
-  lit-element@4.0.5:
-    resolution: {integrity: sha512-iTWskWZEtn9SyEf4aBG6rKT8GABZMrTWop1+jopsEOgEcugcXJGKuX5bEbkq9qfzY+XB4MAgCaSPwnNpdsNQ3Q==}
+  lit-element@4.1.0:
+    resolution: {integrity: sha512-gSejRUQJuMQjV2Z59KAS/D4iElUhwKpIyJvZ9w+DIagIQjfJnhR20h2Q5ddpzXGS+fF0tMZ/xEYGMnKmaI/iww==}
 
-  lit-html@3.1.3:
-    resolution: {integrity: sha512-FwIbqDD8O/8lM4vUZ4KvQZjPPNx7V1VhT7vmRB8RBAO0AU6wuTVdoXiu2CivVjEGdugvcbPNBLtPE1y0ifplHA==}
+  lit-html@3.2.0:
+    resolution: {integrity: sha512-pwT/HwoxqI9FggTrYVarkBKFN9MlTUpLrDHubTmW4SrkL3kkqW5gxwbxMMUnbbRHBC0WTZnYHcjDSCM559VyfA==}
 
-  lit@3.1.3:
-    resolution: {integrity: sha512-l4slfspEsnCcHVRTvaP7YnkTZEZggNFywLEIhQaGhYDczG+tu/vlgm/KaWIEjIp+ZyV20r2JnZctMb8LeLCG7Q==}
+  lit@3.2.0:
+    resolution: {integrity: sha512-s6tI33Lf6VpDu7u4YqsSX78D28bYQulM+VAzsGch4fx2H0eLZnJsUBsPWmGYSGoKDNbjtRv02rio1o+UdPVwvw==}
 
   load-json-file@5.3.0:
     resolution: {integrity: sha512-cJGP40Jc/VXUsp8/OrnyKyTZ1y6v/dphm3bioS+RrKXjK2BB6wHUd6JptZEFDGgGahMT+InnZO5i1Ei9mpC8Bw==}
@@ -6159,8 +6165,8 @@ packages:
   xstate@5.13.0:
     resolution: {integrity: sha512-Z0om784N5u8sAzUvQJBa32jiTCIGGF/2ZsmKkerQEqeeUktAeOMK20FIHFUMywC4GcAkNksSvaeX7lwoRNXPEQ==}
 
-  xstate@5.5.2:
-    resolution: {integrity: sha512-RLf9wc5HDO0pvj2TQQ+lY6tDW8CU8Entfgmtzzo6NhkC8qOEBXSN6WUSvnUM7NHZgdih06+by1b4nbaHVu1c+g==}
+  xstate@5.17.1:
+    resolution: {integrity: sha512-RNwcXdth+kboWZg+Zhf6f6iNP6CtAAiS4z4qwyTd/fWBH9PHXRqko6OdW3xOTwP62f0mVD+jsPOSqY4Ar8nZKQ==}
 
   xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
@@ -7652,27 +7658,30 @@ snapshots:
     dependencies:
       gl-matrix: 3.4.3
 
-  '@itk-viewer/blosc-zarr@0.1.3':
+  '@itk-viewer/blosc-zarr@0.2.3':
     dependencies:
-      '@itk-viewer/utils': 0.1.3
+      '@itk-viewer/utils': 0.1.4
       itk-wasm: 1.0.0-b.160
     transitivePeerDependencies:
       - debug
 
-  '@itk-viewer/element@0.3.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.4.38))(webpack@5.91.0)(wslink@2.0.2)':
+  '@itk-viewer/element@0.6.6(@babel/preset-env@7.24.5(@babel/core@7.24.5))(@shoelace-style/shoelace@2.15.0(@types/react@18.3.1))(autoprefixer@10.4.19(postcss@8.4.38))(webpack@5.91.0)(wslink@2.0.2)':
     dependencies:
       '@itk-viewer/arcball': 0.0.1
-      '@itk-viewer/io': 0.1.8
-      '@itk-viewer/remote-viewport': 0.2.13
-      '@itk-viewer/utils': 0.1.3
-      '@itk-viewer/viewer': 0.3.0
-      '@itk-viewer/vtkjs': 0.1.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.4.38))(webpack@5.91.0)(wslink@2.0.2)
+      '@itk-viewer/io': 0.4.3
+      '@itk-viewer/remote-viewport': 0.2.21
+      '@itk-viewer/transfer-function-editor': 1.8.5
+      '@itk-viewer/utils': 0.1.4
+      '@itk-viewer/viewer': 0.6.2
+      '@itk-viewer/vtkjs': 0.4.6(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.4.38))(webpack@5.91.0)(wslink@2.0.2)
       '@lit/context': 1.1.1
       gl-matrix: 3.4.3
       itk-wasm: 1.0.0-b.160
-      lit: 3.1.3
-      xstate: 5.5.2
-      xstate-lit: 2.0.5(@lit/context@1.1.1)(lit@3.1.3)(xstate@5.5.2)
+      lit: 3.2.0
+      xstate: 5.17.1
+      xstate-lit: 2.0.5(@lit/context@1.1.1)(lit@3.2.0)(xstate@5.17.1)
+    optionalDependencies:
+      '@shoelace-style/shoelace': 2.15.0(@types/react@18.3.1)
     transitivePeerDependencies:
       - '@babel/preset-env'
       - autoprefixer
@@ -7683,10 +7692,10 @@ snapshots:
       - webpack
       - wslink
 
-  '@itk-viewer/io@0.1.8':
+  '@itk-viewer/io@0.4.3':
     dependencies:
-      '@itk-viewer/blosc-zarr': 0.1.3
-      '@itk-viewer/utils': 0.1.3
+      '@itk-viewer/blosc-zarr': 0.2.3
+      '@itk-viewer/utils': 0.1.4
       axios: 1.6.8(debug@4.3.5)
       comlink: 4.4.1
       gl-matrix: 3.4.3
@@ -7696,43 +7705,47 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itk-viewer/remote-viewport@0.2.13':
+  '@itk-viewer/remote-viewport@0.2.21':
     dependencies:
-      '@itk-viewer/io': 0.1.8
-      '@itk-viewer/utils': 0.1.3
-      '@itk-viewer/viewer': 0.3.0
+      '@itk-viewer/io': 0.4.3
+      '@itk-viewer/utils': 0.1.4
+      '@itk-viewer/viewer': 0.6.2
       '@itk-wasm/htj2k': 2.1.0
       gl-matrix: 3.4.3
       imjoy-rpc: 0.5.48
-      xstate: 5.5.2
+      xstate: 5.17.1
     transitivePeerDependencies:
       - bufferutil
       - debug
       - supports-color
       - utf-8-validate
 
-  '@itk-viewer/utils@0.1.3':
+  '@itk-viewer/transfer-function-editor@1.8.5': {}
+
+  '@itk-viewer/utils@0.1.4':
     dependencies:
       itk-wasm: 1.0.0-b.160
     transitivePeerDependencies:
       - debug
 
-  '@itk-viewer/viewer@0.3.0':
+  '@itk-viewer/viewer@0.6.2':
     dependencies:
-      '@itk-viewer/io': 0.1.8
-      '@itk-viewer/utils': 0.1.3
+      '@itk-viewer/io': 0.4.3
+      '@itk-viewer/utils': 0.1.4
       gl-matrix: 3.4.3
-      xstate: 5.5.2
+      xstate: 5.17.1
     transitivePeerDependencies:
       - debug
 
-  '@itk-viewer/vtkjs@0.1.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.4.38))(webpack@5.91.0)(wslink@2.0.2)':
+  '@itk-viewer/vtkjs@0.4.6(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.4.38))(webpack@5.91.0)(wslink@2.0.2)':
     dependencies:
-      '@itk-viewer/io': 0.1.8
-      '@itk-viewer/viewer': 0.3.0
+      '@itk-viewer/io': 0.4.3
+      '@itk-viewer/transfer-function-editor': 1.8.5
+      '@itk-viewer/viewer': 0.6.2
       '@kitware/vtk.js': 30.4.1(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.4.38))(webpack@5.91.0)(wslink@2.0.2)
       gl-matrix: 3.4.3
-      xstate: 5.5.2
+      itk-viewer-color-maps: 1.2.0
+      xstate: 5.17.1
     transitivePeerDependencies:
       - '@babel/preset-env'
       - autoprefixer
@@ -8004,7 +8017,7 @@ snapshots:
       '@shoelace-style/animations': 1.1.0
       '@shoelace-style/localize': 3.1.2
       composed-offset-position: 0.0.4
-      lit: 3.1.3
+      lit: 3.2.0
       qr-creator: 1.0.0
     transitivePeerDependencies:
       - '@types/react'
@@ -9202,7 +9215,7 @@ snapshots:
   engine.io-client@6.5.3:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.5
       engine.io-parser: 5.2.2
       ws: 8.11.0
       xmlhttprequest-ssl: 2.0.0
@@ -9437,7 +9450,7 @@ snapshots:
       eslint-plugin-n: 15.7.0(eslint@8.57.0)
       eslint-plugin-promise: 6.1.1(eslint@8.57.0)
 
-  eslint-config-standard@17.1.0(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0):
+  eslint-config-standard@17.1.0(eslint-plugin-import@2.29.1(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
@@ -10431,6 +10444,8 @@ snapshots:
       reflect.getprototypeof: 1.0.6
       set-function-name: 2.0.2
 
+  itk-viewer-color-maps@1.2.0: {}
+
   itk-wasm@1.0.0-b.160:
     dependencies:
       '@thewtex/zstddec': 0.2.1
@@ -10583,21 +10598,21 @@ snapshots:
     optionalDependencies:
       enquirer: 2.4.1
 
-  lit-element@4.0.5:
+  lit-element@4.1.0:
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.2.0
       '@lit/reactive-element': 2.0.4
-      lit-html: 3.1.3
+      lit-html: 3.2.0
 
-  lit-html@3.1.3:
+  lit-html@3.2.0:
     dependencies:
       '@types/trusted-types': 2.0.7
 
-  lit@3.1.3:
+  lit@3.2.0:
     dependencies:
       '@lit/reactive-element': 2.0.4
-      lit-element: 4.0.5
-      lit-html: 3.1.3
+      lit-element: 4.1.0
+      lit-html: 3.2.0
 
   load-json-file@5.3.0:
     dependencies:
@@ -11531,7 +11546,7 @@ snapshots:
   socket.io-client@4.7.5:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.5
       engine.io-client: 6.5.3
       socket.io-parser: 4.2.4
     transitivePeerDependencies:
@@ -11542,7 +11557,7 @@ snapshots:
   socket.io-parser@4.2.4:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.5
     transitivePeerDependencies:
       - supports-color
 
@@ -11614,7 +11629,7 @@ snapshots:
   standard@17.1.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5)):
     dependencies:
       eslint: 8.57.0
-      eslint-config-standard: 17.1.0(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)
+      eslint-config-standard: 17.1.0(eslint-plugin-import@2.29.1(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)
       eslint-config-standard-jsx: 11.0.0(eslint-plugin-react@7.34.1(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
       eslint-plugin-n: 15.7.0(eslint@8.57.0)
@@ -12257,15 +12272,15 @@ snapshots:
 
   xmlhttprequest-ssl@2.0.0: {}
 
-  xstate-lit@2.0.5(@lit/context@1.1.1)(lit@3.1.3)(xstate@5.5.2):
+  xstate-lit@2.0.5(@lit/context@1.1.1)(lit@3.2.0)(xstate@5.17.1):
     dependencies:
       '@lit/context': 1.1.1
-      lit: 3.1.3
-      xstate: 5.5.2
+      lit: 3.2.0
+      xstate: 5.17.1
 
   xstate@5.13.0: {}
 
-  xstate@5.5.2: {}
+  xstate@5.17.1: {}
 
   xtend@4.0.2: {}
 
