@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/downsample",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "packageManager": "pnpm@9.6.0",
   "description": "Pipelines for downsampling images.",
   "type": "module",
