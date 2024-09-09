@@ -39,7 +39,7 @@
     "test:wasi:long": "itk-wasm test -- -- -V",
     "test:wasi:help": "itk-wasm -i itkwasm/wasi:latest run mean-squares-versor-registration.wasi.wasm -- -- --help"
   },
-  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "author": "Matt McCormick <matt@mmmccormick.com>",
   "license": "Apache-2.0",
   "devDependencies": {
     "@itk-wasm/image-io": "workspace:^",

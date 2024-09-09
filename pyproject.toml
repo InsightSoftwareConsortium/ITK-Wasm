@@ -9,7 +9,7 @@ description = "IO with the itk-wasm file formats"
 readme = "docs/itk-webassemblyinterface-description.md"
 license = {file = "LICENSE"}
 authors = [
-    { name = "Matthew M. McCormick", email = "matt.mccormick@kitware.com" },
+    { name = "Matthew M. McCormick", email = "matt@mmmccormick.com" },
 ]
 keywords = [
     "itk",

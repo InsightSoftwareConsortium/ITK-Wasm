@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "itkwasm"
 description = "Python interface to itk-wasm WebAssembly (Wasm) modules."
-authors = [{name = "Matt McCormick", email = "matt.mccormick@kitware.com"}]
+authors = [{name = "Matt McCormick", email = "matt@mmmccormick.com"}]
 readme = "README.md"
 license = {file = "LICENSE"}
 classifiers = [
