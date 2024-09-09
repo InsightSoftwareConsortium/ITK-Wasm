@@ -33,3 +33,11 @@ await micropip.install('itkwasm-dicom')
 apidocs/index.rst
 itkwasm docs <https://itkwasm.readthedocs.io/>
 ```
+
+```{toctree}
+:hidden:
+:maxdepth: 3
+:caption: 🙏 Acknowledgements
+
+acknowledgments
+```
