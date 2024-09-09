@@ -22,6 +22,13 @@ depends-on = ["pnpm-install"]
 outputs = ["packages/dicom/test/data.tar.gz"]
 description = "Download DICOM test data"
 
+[tasks.compare-images-test-data-download]
+cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_COMPARE_IMAGES_TEST_DATA_HASH $ITK_WASM_COMPARE_IMAGES_TEST_DATA_URLS"
+cwd = "packages/compare-images"
+depends-on = ["pnpm-install"]
+outputs = ["packages/compare-images/test/data.tar.gz"]
+description = "Download compare-images test data"
+
 [tasks.mesh-io-test-data-download]
 cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_MESH_IO_TEST_DATA_HASH $ITK_WASM_MESH_IO_TEST_DATA_URLS"
 cwd = "packages/mesh-io"
@@ -160,6 +167,26 @@ description = "Build dicom native binaries"
 cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/dicom-build"
 depends-on = ["build-native-dicom"]
 description = "Test dicom native binaries"
+
+[feature.native.tasks.configure-native-compare-images]
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/compare-images-build -Spackages/compare-images -GNinja
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
+  -DBUILD_TESTING:BOOL=ON
+  -DCMAKE_CXX_STANDARD:STRING=20
+  -DCMAKE_BUILD_TYPE:STRING=Debug'''
+depends-on = ["build-itk-wasm", "compare-images-test-data-download"]
+outputs = ["native/compare-images-build/CMakeFiles/"]
+description = "Configure compare-images native binaries"
+
+[feature.native.tasks.build-native-compare-images]
+cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/compare-images-build"
+depends-on = ["configure-native-compare-images"]
+description = "Build compare-images native binaries"
+
+[feature.native.tasks.test-native-compare-images]
+cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/compare-images-build"
+depends-on = ["build-native-compare-images"]
+description = "Test compare-images native binaries"
 
 [feature.native.tasks.configure-native-mesh-io]
 cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/mesh-io-build -Spackages/mesh-io -GNinja

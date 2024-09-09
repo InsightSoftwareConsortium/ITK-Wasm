@@ -8,6 +8,10 @@
   "itk-wasm": {
     "emscripten-docker-image": "itkwasm/emscripten:latest",
     "wasi-docker-image": "itkwasm/wasi:latest",
+    "test-data-hash": "bafybeiafli6egtmkcgany65po64w67hpqnmgwr5utqo6ycbbz7k5l33llu",
+    "test-data-urls": [
+      "https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.171/compare-images-test-data.tar.gz"
+    ],
     "typescript-package-name": "@itk-wasm/compare-images",
     "python-package-name": "itkwasm-compare-images",
     "package-description": "Compare images with a tolerance for regression testing.",
