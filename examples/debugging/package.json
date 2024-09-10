@@ -17,7 +17,7 @@
     "start": "http-server -o"
   },
   "type": "module",
-  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "author": "Matt McCormick <matt@mmmccormick.com>",
   "license": "Apache-2.0",
   "dependencies": {
     "http-server": "^14.1.0",

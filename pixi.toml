@@ -1,5 +1,5 @@
 [project]
-authors = ["Matt McCormick <matt.mccormick@kitware.com>"]
+authors = ["Matt McCormick <matt@mmmccormick.com>"]
 channels = ["conda-forge"]
 description = "ITK-Wasm native build and test configuration."
 name = "ITK-Wasm"

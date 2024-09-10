@@ -2,7 +2,7 @@ ARG BASE_IMAGE=docker.io/dockcross/web-wasm
 FROM $BASE_IMAGE:20240418-88c04a4
 ARG BASE_IMAGE
 
-LABEL maintainer="Matt McCormick <matt.mccormick@kitware.com>"
+LABEL maintainer="Matt McCormick <matt@mmmccormick.com>"
 LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 
 WORKDIR /

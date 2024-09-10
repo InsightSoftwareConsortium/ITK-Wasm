@@ -27,7 +27,7 @@
     "itk",
     "webpack"
   ],
-  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "author": "Matt McCormick <matt@mmmccormick.com>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
