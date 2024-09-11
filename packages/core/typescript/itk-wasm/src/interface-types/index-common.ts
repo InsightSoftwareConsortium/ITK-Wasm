@@ -14,6 +14,9 @@ export type { default as JsonCompatible } from './json-compatible.js'
 export { default as Image } from './image.js'
 export { default as ImageType } from './image-type.js'
 
+export { default as PointSet } from './point-set.js'
+export { default as PointSetType } from './point-set-type.js'
+
 export { default as Mesh } from './mesh.js'
 export { default as MeshType } from './mesh-type.js'
 
