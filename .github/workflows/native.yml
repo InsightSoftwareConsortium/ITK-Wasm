@@ -1,0 +1,22 @@
+name: Native C++
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  native-build-test-workflow:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: prefix-dev/setup-pixi
+
+      - name: Build and Test ITK-Wasm
+        run: |
+          pixi run test-itk-wasm
