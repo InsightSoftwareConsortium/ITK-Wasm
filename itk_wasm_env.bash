@@ -34,5 +34,8 @@ export ITK_WASM_COMPARE_IMAGES_TEST_DATA_URLS=${ITK_WASM_COMPARE_IMAGES_TEST_DAT
 export ITK_WASM_COMPARE_MESHES_TEST_DATA_HASH=${ITK_WASM_COMPARE_MESHES_TEST_DATA_HASH:-$(cat packages/compare-meshes/package.json | jq -e -r '."itk-wasm"."test-data-hash"')}
 export ITK_WASM_COMPARE_MESHES_TEST_DATA_URLS=${ITK_WASM_COMPARE_MESHES_TEST_DATA_URLS:-$(cat packages/compare-meshes/package.json | jq -e -r '."itk-wasm"."test-data-urls" | join(" ")')}
 
+export ITK_WASM_COMPRESS_STRINGIFY_TEST_DATA_HASH=${ITK_WASM_COMPRESS_STRINGIFY_TEST_DATA_HASH:-$(cat packages/compress-stringify/package.json | jq -e -r '."itk-wasm"."test-data-hash"')}
+export ITK_WASM_COMPRESS_STRINGIFY_TEST_DATA_URLS=${ITK_WASM_COMPRESS_STRINGIFY_TEST_DATA_URLS:-$(cat packages/compress-stringify/package.json | jq -e -r '."itk-wasm"."test-data-urls" | join(" ")')}
+
 export ITK_WASM_MESH_IO_TEST_DATA_HASH=${ITK_WASM_MESH_IO_TEST_DATA_HASH:-$(cat packages/mesh-io/package.json | jq -e -r '."itk-wasm"."test-data-hash"')}
 export ITK_WASM_MESH_IO_TEST_DATA_URLS=${ITK_WASM_MESH_IO_TEST_DATA_URLS:-$(cat packages/mesh-io/package.json | jq -e -r '."itk-wasm"."test-data-urls" | join(" ")')}

@@ -36,6 +36,13 @@ depends-on = ["pnpm-install"]
 outputs = ["packages/compare-meshes/test/data.tar.gz"]
 description = "Download compare-meshes test data"
 
+[tasks.compress-stringify-test-data-download]
+cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_COMPRESS_STRINGIFY_TEST_DATA_HASH $ITK_WASM_COMPRESS_STRINGIFY_TEST_DATA_URLS"
+cwd = "packages/compress-stringify"
+depends-on = ["pnpm-install"]
+outputs = ["packages/compress-stringify/test/data.tar.gz"]
+description = "Download compress-stringify test data"
+
 [tasks.mesh-io-test-data-download]
 cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_MESH_IO_TEST_DATA_HASH $ITK_WASM_MESH_IO_TEST_DATA_URLS"
 cwd = "packages/mesh-io"
@@ -214,6 +221,26 @@ description = "Build compare-meshes native binaries"
 cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/compare-meshes-build"
 depends-on = ["build-native-compare-meshes"]
 description = "Test compare-meshes native binaries"
+
+[feature.native.tasks.configure-native-compress-stringify]
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/compress-stringify-build -Spackages/compress-stringify -GNinja
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
+  -DBUILD_TESTING:BOOL=ON
+  -DCMAKE_CXX_STANDARD:STRING=20
+  -DCMAKE_BUILD_TYPE:STRING=Debug'''
+depends-on = ["build-itk-wasm", "compress-stringify-test-data-download"]
+outputs = ["native/compress-stringify-build/CMakeFiles/"]
+description = "Configure compress-stringify native binaries"
+
+[feature.native.tasks.build-native-compress-stringify]
+cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/compress-stringify-build"
+depends-on = ["configure-native-compress-stringify"]
+description = "Build compress-stringify native binaries"
+
+[feature.native.tasks.test-native-compress-stringify]
+cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/compress-stringify-build"
+depends-on = ["build-native-compress-stringify"]
+description = "Test compress-stringify native binaries"
 
 [feature.native.tasks.configure-native-mesh-io]
 cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/mesh-io-build -Spackages/mesh-io -GNinja

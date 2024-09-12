@@ -8,6 +8,10 @@
   "itk-wasm": {
     "emscripten-docker-image": "itkwasm/emscripten:latest",
     "wasi-docker-image": "itkwasm/wasi:latest",
+    "test-data-hash": "bafkreiha6oye3fd5cxfadnua5r2jlkaco2xuyeek454d2ihiffsx7rauqe",
+    "test-data-urls": [
+      "https://placeholder"
+    ],
     "typescript-package-name": "@itk-wasm/compress-stringify",
     "python-package-name": "itkwasm-compress-stringify",
     "package-description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
