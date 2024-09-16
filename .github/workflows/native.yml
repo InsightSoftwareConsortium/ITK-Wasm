@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: prefix-dev/setup-pixi
+      - uses: prefix-dev/setup-pixi@v0.8.1
 
       - name: Build and Test ITK-Wasm
         run: |
