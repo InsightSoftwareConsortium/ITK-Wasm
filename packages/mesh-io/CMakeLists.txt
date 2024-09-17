@@ -12,13 +12,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # This list should be ordered from approximately most commonly to least
 # commonly used modules.
 set(WebAssemblyInterface_MeshIOModules
-  "ITKIOMeshBYU"
-  "ITKIOMeshFreeSurfer"
+  "ITKIOMeshVTK"
+  "IOMeshSTL"
   "ITKIOMeshOBJ"
   "ITKIOMeshOFF"
-  "IOMeshSTL"
   "IOMeshSWC"
-  "ITKIOMeshVTK"
+  "ITKIOMeshBYU"
+  "ITKIOMeshFreeSurfer"
   CACHE STRING
   "String delimited list of ITK mesh IO modules to support.")
 
