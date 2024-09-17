@@ -131,3 +131,99 @@ add_test(NAME byu-write-mesh-test
   ${baseline_dir}/byu-read-mesh-test.iwm.cbor
   ${output_dir}/byu-write-mesh-test.could-write.json
   ${output_dir}/byu-write-mesh-test.byu)
+
+
+# This list should be ordered from approximately most commonly to least
+# commonly used modules.
+set(WebAssemblyInterface_PointSetIOModules
+  "ITKIOMeshVTK"
+  "ITKIOMeshOBJ"
+  "ITKIOMeshOFF"
+  CACHE STRING
+  "String delimited list of ITK point set IO modules to support.")
+
+set(pointsetios_ITKIOMeshVTK itkVTKPolyDataMeshIO)
+set(pointsetio_id_itkVTKPolyDataMeshIO 0)
+set(pointsetio_kebab_itkVTKPolyDataMeshIO "vtk-poly-data")
+
+set(pointsetios_ITKIOMeshOBJ itkOBJMeshIO)
+set(pointsetio_id_itkOBJMeshIO 1)
+set(pointsetio_kebab_itkOBJMeshIO "obj")
+
+set(pointsetios_ITKIOMeshOFF itkOFFMeshIO)
+set(pointsetio_id_itkOFFMeshIO 2)
+set(pointsetio_kebab_itkOFFMeshIO "off")
+
+set(pointsetios_WebAssemblyInterface itkWasmMeshIO itkWasmZstdMeshIO)
+set(pointsetio_id_itkWasmMeshIO 3)
+set(pointsetio_kebab_itkWasmMeshIO "wasm")
+set(pointsetio_id_itkWasmZstdMeshIO 4)
+set(pointsetio_kebab_itkWasmZstdMeshIO "wasm-zstd")
+
+set(ITK_NO_MESHIO_FACTORY_REGISTER_MANAGER 1)
+set(PointSetIOIndex_ARRAY "")
+foreach(io_module ${WebAssemblyInterface_PointSetIOModules} WebAssemblyInterface)
+  if (DEFINED WebAssemblyInterface_INCLUDE_DIRS)
+    if(${io_module} STREQUAL "WebAssemblyInterface")
+      find_package(ITK REQUIRED COMPONENTS ITKIOMeshBase)
+      include(${ITK_USE_FILE})
+      include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
+      include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+      list(APPEND ITK_LIBRARIES ${WebAssemblyInterface_LIBRARIES})
+    else()
+      find_package(ITK REQUIRED COMPONENTS ${io_module} WebAssemblyInterface)
+      include(${ITK_USE_FILE})
+    endif()
+  else()
+    find_package(ITK REQUIRED COMPONENTS ${io_module} WebAssemblyInterface)
+    include(${ITK_USE_FILE})
+  endif()
+
+  if(NOT DEFINED pointsetios_${io_module})
+    message(FATAL_ERROR "Unknown MeshIOBase classes for module ${io_module}")
+  endif()
+  foreach(pointsetio ${meshios_${io_module}})
+    string(SUBSTRING "${pointsetio}" 3 -1 ioname)
+    if(NOT DEFINED pointsetio_kebab_${pointsetio})
+      message(FATAL_ERROR "Unknown kebab name for pointsetio ${pointsetio}")
+    endif()
+    set(ioname ${pointsetio_kebab_${pointsetio}})
+    set(read_binary "${ioname}-read-point-set")
+    set(write_binary "${ioname}-write-point-set")
+    set(PointSetIOIndex_ARRAY "${PointSetIOIndex_ARRAY}'${ioname}', ")
+    set(extra_srcs)
+    if(${pointsetio} STREQUAL "itkWasmZstdMeshIO")
+      list(APPEND ITK_LIBRARIES libzstd_static)
+      list(APPEND extra_srcs itkWasmZstdMeshIO.cxx)
+    endif()
+
+    add_executable(${read_binary} read-point-set.cxx itkWasmMeshIOBase.cxx ${extra_srcs})
+    target_link_libraries(${read_binary} PUBLIC ${ITK_LIBRARIES})
+    target_compile_definitions(${read_binary} PUBLIC -DMESH_IO_CLASS=${pointsetio_id_${pointsetio}} -DPOINT_SET_IO_KEBAB_NAME=${ioname})
+    add_executable(${write_binary} write-point-set.cxx itkWasmMeshIOBase.cxx ${extra_srcs})
+    target_link_libraries(${write_binary} PUBLIC ${ITK_LIBRARIES})
+    target_compile_definitions(${write_binary} PUBLIC -DMESH_IO_CLASS=${pointsetio_id_${pointsetio}} -DPOINT_SET_IO_KEBAB_NAME=${ioname})
+    if (EMSCRIPTEN)
+      set(target_esm_read "${read_binary}")
+      set(target_esm_write "${write_binary}")
+      foreach(target ${target_esm_read} ${target_esm_write})
+        set(exception_catching )
+        set(pointsetio_common_link_flags " -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s SUPPORT_LONGJMP=1")
+        get_property(link_flags TARGET ${target} PROPERTY LINK_FLAGS)
+        set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${pointsetio_common_link_flags} ${link_flags}")
+      endforeach()
+    endif()
+  endforeach()
+endforeach()
+
+add_test(NAME obj-read-point-set-test
+  COMMAND obj-read-point-set
+  ${input_dir}/box-points.obj
+  ${output_dir}/obj-read-point-set-test.could-read.json
+  ${output_dir}/obj-read-point-set-test.iwm.cbor)
+
+add_test(NAME obj-write-point-set-test
+  COMMAND obj-write-point-set
+  ${baseline_dir}/obj-read-point-set-test.iwm.cbor
+  ${output_dir}/obj-write-point-set-test.could-write.json
+  ${output_dir}/obj-write-point-set-test.obj)

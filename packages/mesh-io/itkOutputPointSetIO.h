@@ -15,8 +15,8 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkOutputMeshIO_h
-#define itkOutputMeshIO_h
+#ifndef itkOutputPointSetIO_h
+#define itkOutputPointSetIO_h
 
 #include "itkPipeline.h"
 
@@ -35,19 +35,19 @@ namespace itk
   namespace wasm
   {
     /**
-     *\class OutputMeshIO
-     * \brief Output mesh for an itk::wasm::Pipeline from an itk::MeshIOBase
+     *\class OutputPointSetIO
+     * \brief Output point set for an itk::wasm::Pipeline from an itk::MeshIOBase
      *
-     * This mesh is written to the filesystem or memory when it goes out of scope.
+     * This ponit set is written to the filesystem or memory when it goes out of scope.
      *
-     * This class is for the ReadMesh itk-wasm pipeline. Most pipelines will use itk::wasm::OutputMesh.
+     * This class is for the ReadMesh ITK-Wasm pipeline. Most pipelines will use itk::wasm::OutputPointSet.
      *
      * \ingroup WebAssemblyInterface
      */
-    class OutputMeshIO
+    class OutputPointSetIO
     {
     public:
-      /** Set whether to only read mesh metadata. Do not read the points, points data. */
+      /** Set whether to only read point set metadata. Do not read the points, points data. */
       void SetInformationOnly(bool informationOnly)
       {
         this->m_InformationOnly = informationOnly;
@@ -73,8 +73,8 @@ namespace itk
         return this->m_Identifier;
       }
 
-      OutputMeshIO() = default;
-      ~OutputMeshIO()
+      OutputPointSetIO() = default;
+      ~OutputPointSetIO()
       {
         if (wasm::Pipeline::get_use_memory_io())
         {
@@ -98,25 +98,11 @@ namespace itk
               setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
             }
 
-            const auto cellsSize = wasmMeshIOBase->GetCellsContainer()->size();
-            if (cellsSize)
-            {
-              const auto cellsAddress = reinterpret_cast<size_t>(&(wasmMeshIOBase->GetCellsContainer()->at(0)));
-              setMemoryStoreOutputArray(0, index, 1, cellsAddress, cellsSize);
-            }
-
             const auto pointDataSize = wasmMeshIOBase->GetPointDataContainer()->size();
             if (pointDataSize)
             {
               const auto pointDataAddress = reinterpret_cast<size_t>(&(wasmMeshIOBase->GetPointDataContainer()->at(0)));
-              setMemoryStoreOutputArray(0, index, 2, pointDataAddress, pointDataSize);
-            }
-
-            const auto cellDataSize = wasmMeshIOBase->GetCellDataContainer()->size();
-            if (cellDataSize)
-            {
-              const auto cellDataAddress = reinterpret_cast<size_t>(&(wasmMeshIOBase->GetCellDataContainer()->at(0)));
-              setMemoryStoreOutputArray(0, index, 3, cellDataAddress, cellDataSize);
+              setMemoryStoreOutputArray(0, index, 1, pointDataAddress, pointDataSize);
             }
           }
 #else
@@ -140,15 +126,8 @@ namespace itk
             wasmMeshIO->SetPointPixelType(this->m_MeshIO->GetPointPixelType());
             wasmMeshIO->SetPointPixelComponentType(this->m_MeshIO->GetPointPixelComponentType());
             wasmMeshIO->SetNumberOfPointPixelComponents(this->m_MeshIO->GetNumberOfPointPixelComponents());
-            wasmMeshIO->SetCellComponentType(this->m_MeshIO->GetCellComponentType());
-            wasmMeshIO->SetCellPixelType(this->m_MeshIO->GetCellPixelType());
-            wasmMeshIO->SetCellPixelComponentType(this->m_MeshIO->GetCellPixelComponentType());
-            wasmMeshIO->SetNumberOfCellPixelComponents(this->m_MeshIO->GetNumberOfCellPixelComponents());
             wasmMeshIO->SetNumberOfPoints(this->m_MeshIO->GetNumberOfPoints());
             wasmMeshIO->SetNumberOfPointPixels(this->m_MeshIO->GetNumberOfPointPixels());
-            wasmMeshIO->SetNumberOfCells(this->m_MeshIO->GetNumberOfCells());
-            wasmMeshIO->SetNumberOfCellPixels(this->m_MeshIO->GetNumberOfCellPixels());
-            wasmMeshIO->SetCellBufferSize(this->m_MeshIO->GetCellBufferSize());
 
             wasmMeshIO->WriteMeshInformation();
 
@@ -165,14 +144,6 @@ namespace itk
               wasmMeshIO->WritePoints(reinterpret_cast<void *>(&(loadBuffer.at(0))));
             }
 
-            numberOfBytes = static_cast<SizeValueType>(this->m_MeshIO->GetCellBufferSize() * ITKComponentSize(this->m_MeshIO->GetCellComponentType()));
-            if (numberOfBytes)
-            {
-              loadBuffer.resize(numberOfBytes);
-              this->m_MeshIO->ReadCells(reinterpret_cast<void *>(&(loadBuffer.at(0))));
-              wasmMeshIO->WriteCells(reinterpret_cast<void *>(&(loadBuffer.at(0))));
-            }
-
             numberOfBytes =
                 static_cast<SizeValueType>(
                     this->m_MeshIO->GetNumberOfPointPixels() * this->m_MeshIO->GetNumberOfPointPixelComponents() * ITKComponentSize(this->m_MeshIO->GetPointPixelComponentType()));
@@ -181,16 +152,6 @@ namespace itk
               loadBuffer.resize(numberOfBytes);
               this->m_MeshIO->ReadPointData(reinterpret_cast<void *>(&(loadBuffer.at(0))));
               wasmMeshIO->WritePointData(reinterpret_cast<void *>(&(loadBuffer.at(0))));
-            }
-
-            numberOfBytes =
-                static_cast<SizeValueType>(
-                    this->m_MeshIO->GetNumberOfCellPixels() * this->m_MeshIO->GetNumberOfCellPixelComponents() * ITKComponentSize(this->m_MeshIO->GetCellPixelComponentType()));
-            if (numberOfBytes)
-            {
-              loadBuffer.resize(numberOfBytes);
-              this->m_MeshIO->ReadCellData(reinterpret_cast<void *>(&(loadBuffer.at(0))));
-              wasmMeshIO->WriteCellData(reinterpret_cast<void *>(&(loadBuffer.at(0))));
             }
 
             wasmMeshIO->Write();
@@ -210,7 +171,7 @@ namespace itk
       bool m_InformationOnly{false};
     };
 
-    bool lexical_cast(const std::string &input, OutputMeshIO &outputMeshIO)
+    bool lexical_cast(const std::string &input, OutputPointSetIO &outputMeshIO)
     {
       outputMeshIO.SetIdentifier(input);
       return true;
