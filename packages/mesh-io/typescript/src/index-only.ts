@@ -1,158 +1,207 @@
-import ReadMeshResult from './read-mesh-result.js'
-export type { ReadMeshResult }
+import ReadMeshResult from "./read-mesh-result.js";
+export type { ReadMeshResult };
 
-import readMesh from './read-mesh.js'
-export { readMesh }
+import readMesh from "./read-mesh.js";
+export { readMesh };
 
-import WriteMeshResult from './write-mesh-result.js'
-export type { WriteMeshResult }
+import WriteMeshResult from "./write-mesh-result.js";
+export type { WriteMeshResult };
 
-import writeMesh from './write-mesh.js'
-export { writeMesh }
+import writeMesh from "./write-mesh.js";
+export { writeMesh };
 
+import ReadPointSetResult from "./read-point-set-result.js";
+export type { ReadPointSetResult };
 
+import readPointSet from "./read-point-set.js";
+export { readPointSet };
 
+import WritePointSetResult from "./write-point-set-result.js";
+export type { WritePointSetResult };
 
-export * from './pipelines-base-url.js'
-export * from './pipeline-worker-url.js'
-export * from './default-web-worker.js'
+import writePointSet from "./write-point-set.js";
+export { writePointSet };
 
+export * from "./pipelines-base-url.js";
+export * from "./pipeline-worker-url.js";
+export * from "./default-web-worker.js";
 
-import ByuReadMeshResult from './byu-read-mesh-result.js'
-export type { ByuReadMeshResult }
+import ByuReadMeshResult from "./byu-read-mesh-result.js";
+export type { ByuReadMeshResult };
 
-import byuReadMesh from './byu-read-mesh.js'
-export { byuReadMesh }
+import byuReadMesh from "./byu-read-mesh.js";
+export { byuReadMesh };
 
+import ByuWriteMeshResult from "./byu-write-mesh-result.js";
+export type { ByuWriteMeshResult };
 
-import ByuWriteMeshResult from './byu-write-mesh-result.js'
-export type { ByuWriteMeshResult }
+import byuWriteMesh from "./byu-write-mesh.js";
+export { byuWriteMesh };
 
-import byuWriteMesh from './byu-write-mesh.js'
-export { byuWriteMesh }
+import FreeSurferAsciiReadMeshResult from "./free-surfer-ascii-read-mesh-result.js";
+export type { FreeSurferAsciiReadMeshResult };
 
+import freeSurferAsciiReadMesh from "./free-surfer-ascii-read-mesh.js";
+export { freeSurferAsciiReadMesh };
 
-import FreeSurferAsciiReadMeshResult from './free-surfer-ascii-read-mesh-result.js'
-export type { FreeSurferAsciiReadMeshResult }
+import FreeSurferAsciiWriteMeshResult from "./free-surfer-ascii-write-mesh-result.js";
+export type { FreeSurferAsciiWriteMeshResult };
 
-import freeSurferAsciiReadMesh from './free-surfer-ascii-read-mesh.js'
-export { freeSurferAsciiReadMesh }
+import freeSurferAsciiWriteMesh from "./free-surfer-ascii-write-mesh.js";
+export { freeSurferAsciiWriteMesh };
 
+import FreeSurferBinaryReadMeshResult from "./free-surfer-binary-read-mesh-result.js";
+export type { FreeSurferBinaryReadMeshResult };
 
-import FreeSurferAsciiWriteMeshResult from './free-surfer-ascii-write-mesh-result.js'
-export type { FreeSurferAsciiWriteMeshResult }
+import freeSurferBinaryReadMesh from "./free-surfer-binary-read-mesh.js";
+export { freeSurferBinaryReadMesh };
 
-import freeSurferAsciiWriteMesh from './free-surfer-ascii-write-mesh.js'
-export { freeSurferAsciiWriteMesh }
+import FreeSurferBinaryWriteMeshResult from "./free-surfer-binary-write-mesh-result.js";
+export type { FreeSurferBinaryWriteMeshResult };
 
+import freeSurferBinaryWriteMesh from "./free-surfer-binary-write-mesh.js";
+export { freeSurferBinaryWriteMesh };
 
-import FreeSurferBinaryReadMeshResult from './free-surfer-binary-read-mesh-result.js'
-export type { FreeSurferBinaryReadMeshResult }
+import ObjReadMeshResult from "./obj-read-mesh-result.js";
+export type { ObjReadMeshResult };
 
-import freeSurferBinaryReadMesh from './free-surfer-binary-read-mesh.js'
-export { freeSurferBinaryReadMesh }
+import objReadMesh from "./obj-read-mesh.js";
+export { objReadMesh };
 
+import ObjWriteMeshResult from "./obj-write-mesh-result.js";
+export type { ObjWriteMeshResult };
 
-import FreeSurferBinaryWriteMeshResult from './free-surfer-binary-write-mesh-result.js'
-export type { FreeSurferBinaryWriteMeshResult }
+import objWriteMesh from "./obj-write-mesh.js";
+export { objWriteMesh };
 
-import freeSurferBinaryWriteMesh from './free-surfer-binary-write-mesh.js'
-export { freeSurferBinaryWriteMesh }
+import OffReadMeshResult from "./off-read-mesh-result.js";
+export type { OffReadMeshResult };
 
+import offReadMesh from "./off-read-mesh.js";
+export { offReadMesh };
 
-import ObjReadMeshResult from './obj-read-mesh-result.js'
-export type { ObjReadMeshResult }
+import OffWriteMeshResult from "./off-write-mesh-result.js";
+export type { OffWriteMeshResult };
 
-import objReadMesh from './obj-read-mesh.js'
-export { objReadMesh }
+import offWriteMesh from "./off-write-mesh.js";
+export { offWriteMesh };
 
+import StlReadMeshResult from "./stl-read-mesh-result.js";
+export type { StlReadMeshResult };
 
-import ObjWriteMeshResult from './obj-write-mesh-result.js'
-export type { ObjWriteMeshResult }
+import stlReadMesh from "./stl-read-mesh.js";
+export { stlReadMesh };
 
-import objWriteMesh from './obj-write-mesh.js'
-export { objWriteMesh }
+import StlWriteMeshResult from "./stl-write-mesh-result.js";
+export type { StlWriteMeshResult };
 
+import stlWriteMesh from "./stl-write-mesh.js";
+export { stlWriteMesh };
 
-import OffReadMeshResult from './off-read-mesh-result.js'
-export type { OffReadMeshResult }
+import SwcReadMeshResult from "./swc-read-mesh-result.js";
+export type { SwcReadMeshResult };
 
-import offReadMesh from './off-read-mesh.js'
-export { offReadMesh }
+import swcReadMesh from "./swc-read-mesh.js";
+export { swcReadMesh };
 
+import SwcWriteMeshResult from "./swc-write-mesh-result.js";
+export type { SwcWriteMeshResult };
 
-import OffWriteMeshResult from './off-write-mesh-result.js'
-export type { OffWriteMeshResult }
+import swcWriteMesh from "./swc-write-mesh.js";
+export { swcWriteMesh };
 
-import offWriteMesh from './off-write-mesh.js'
-export { offWriteMesh }
+import VtkPolyDataReadMeshResult from "./vtk-poly-data-read-mesh-result.js";
+export type { VtkPolyDataReadMeshResult };
 
+import vtkPolyDataReadMesh from "./vtk-poly-data-read-mesh.js";
+export { vtkPolyDataReadMesh };
 
-import StlReadMeshResult from './stl-read-mesh-result.js'
-export type { StlReadMeshResult }
+import VtkPolyDataWriteMeshResult from "./vtk-poly-data-write-mesh-result.js";
+export type { VtkPolyDataWriteMeshResult };
 
-import stlReadMesh from './stl-read-mesh.js'
-export { stlReadMesh }
+import vtkPolyDataWriteMesh from "./vtk-poly-data-write-mesh.js";
+export { vtkPolyDataWriteMesh };
 
+import WasmReadMeshResult from "./wasm-read-mesh-result.js";
+export type { WasmReadMeshResult };
 
-import StlWriteMeshResult from './stl-write-mesh-result.js'
-export type { StlWriteMeshResult }
+import wasmReadMesh from "./wasm-read-mesh.js";
+export { wasmReadMesh };
 
-import stlWriteMesh from './stl-write-mesh.js'
-export { stlWriteMesh }
+import WasmWriteMeshResult from "./wasm-write-mesh-result.js";
+export type { WasmWriteMeshResult };
 
+import wasmWriteMesh from "./wasm-write-mesh.js";
+export { wasmWriteMesh };
 
-import SwcReadMeshResult from './swc-read-mesh-result.js'
-export type { SwcReadMeshResult }
+import WasmZstdReadMeshResult from "./wasm-zstd-read-mesh-result.js";
+export type { WasmZstdReadMeshResult };
 
-import swcReadMesh from './swc-read-mesh.js'
-export { swcReadMesh }
+import wasmZstdReadMesh from "./wasm-zstd-read-mesh.js";
+export { wasmZstdReadMesh };
 
+import WasmZstdWriteMeshResult from "./wasm-zstd-write-mesh-result.js";
+export type { WasmZstdWriteMeshResult };
 
-import SwcWriteMeshResult from './swc-write-mesh-result.js'
-export type { SwcWriteMeshResult }
+import wasmZstdWriteMesh from "./wasm-zstd-write-mesh.js";
+export { wasmZstdWriteMesh };
 
-import swcWriteMesh from './swc-write-mesh.js'
-export { swcWriteMesh }
+import ObjReadPointSetResult from "./obj-read-point-set-result.js";
+export type { ObjReadPointSetResult };
 
+import objReadPointSet from "./obj-read-point-set.js";
+export { objReadPointSet };
 
-import VtkPolyDataReadMeshResult from './vtk-poly-data-read-mesh-result.js'
-export type { VtkPolyDataReadMeshResult }
+import ObjWritePointSetResult from "./obj-write-point-set-result.js";
+export type { ObjWritePointSetResult };
 
-import vtkPolyDataReadMesh from './vtk-poly-data-read-mesh.js'
-export { vtkPolyDataReadMesh }
+import objWritePointSet from "./obj-write-point-set.js";
+export { objWritePointSet };
 
+import OffReadPointSetResult from "./off-read-point-set-result.js";
+export type { OffReadPointSetResult };
 
-import VtkPolyDataWriteMeshResult from './vtk-poly-data-write-mesh-result.js'
-export type { VtkPolyDataWriteMeshResult }
+import offReadPointSet from "./off-read-point-set.js";
+export { offReadPointSet };
 
-import vtkPolyDataWriteMesh from './vtk-poly-data-write-mesh.js'
-export { vtkPolyDataWriteMesh }
+import OffWritePointSetResult from "./off-write-point-set-result.js";
+export type { OffWritePointSetResult };
 
+import offWritePointSet from "./off-write-point-set.js";
+export { offWritePointSet };
 
-import WasmReadMeshResult from './wasm-read-mesh-result.js'
-export type { WasmReadMeshResult }
+import VtkPolyDataReadPointSetResult from "./vtk-poly-data-read-point-set-result.js";
+export type { VtkPolyDataReadPointSetResult };
 
-import wasmReadMesh from './wasm-read-mesh.js'
-export { wasmReadMesh }
+import vtkPolyDataReadPointSet from "./vtk-poly-data-read-point-set.js";
+export { vtkPolyDataReadPointSet };
 
+import VtkPolyDataWritePointSetResult from "./vtk-poly-data-write-point-set-result.js";
+export type { VtkPolyDataWritePointSetResult };
 
-import WasmWriteMeshResult from './wasm-write-mesh-result.js'
-export type { WasmWriteMeshResult }
+import vtkPolyDataWritePointSet from "./vtk-poly-data-write-point-set.js";
+export { vtkPolyDataWritePointSet };
 
-import wasmWriteMesh from './wasm-write-mesh.js'
-export { wasmWriteMesh }
+import WasmReadPointSetResult from "./wasm-read-point-set-result.js";
+export type { WasmReadPointSetResult };
 
+import wasmReadPointSet from "./wasm-read-point-set.js";
+export { wasmReadPointSet };
 
-import WasmZstdReadMeshResult from './wasm-zstd-read-mesh-result.js'
-export type { WasmZstdReadMeshResult }
+import WasmWritePointSetResult from "./wasm-write-point-set-result.js";
+export type { WasmWritePointSetResult };
 
-import wasmZstdReadMesh from './wasm-zstd-read-mesh.js'
-export { wasmZstdReadMesh }
+import wasmWritePointSet from "./wasm-write-point-set.js";
+export { wasmWritePointSet };
 
+import WasmZstdReadPointSetResult from "./wasm-zstd-read-point-set-result.js";
+export type { WasmZstdReadPointSetResult };
 
-import WasmZstdWriteMeshResult from './wasm-zstd-write-mesh-result.js'
-export type { WasmZstdWriteMeshResult }
+import wasmZstdReadPointSet from "./wasm-zstd-read-point-set.js";
+export { wasmZstdReadPointSet };
 
-import wasmZstdWriteMesh from './wasm-zstd-write-mesh.js'
-export { wasmZstdWriteMesh }
+import WasmZstdWritePointSetResult from "./wasm-zstd-write-point-set-result.js";
+export type { WasmZstdWritePointSetResult };
+
+import wasmZstdWritePointSet from "./wasm-zstd-write-point-set.js";
+export { wasmZstdWritePointSet };

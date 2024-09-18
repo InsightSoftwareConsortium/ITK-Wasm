@@ -3,7 +3,7 @@
 import { WorkerPoolFunctionOption } from 'itk-wasm'
 
 interface ByuWriteMeshOptions extends WorkerPoolFunctionOption {
-  /** Only write image metadata -- do not write pixel data. */
+  /** Only write mesh metadata -- do not write pixel data. */
   informationOnly?: boolean
 
   /** Use compression in the written file, if supported */

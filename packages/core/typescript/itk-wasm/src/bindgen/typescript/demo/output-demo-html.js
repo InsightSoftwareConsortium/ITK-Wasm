@@ -1,10 +1,10 @@
 import camelCase from '../../camel-case.js'
 
-function outputDemoHtml (functionName, prefix, indent, parameter) {
+function outputDemoHtml(functionName, prefix, indent, parameter) {
   let result = ''
   const description = parameter.description.replaceAll('"', '&quot;')
   const parameterType = parameter.type.split(' ')[0].split(':')[0]
-  switch(parameterType) {
+  switch (parameterType) {
     case 'OUTPUT_TEXT_FILE':
     case 'OUTPUT_TEXT_STREAM':
       result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
@@ -22,7 +22,11 @@ function outputDemoHtml (functionName, prefix, indent, parameter) {
       break
     case 'INT':
     case 'UINT':
-      if (parameter.itemsExpected !== 1 || parameter.itemsExpectedMin !== 1 || parameter.itemsExpectedMax !== 1) {
+      if (
+        parameter.itemsExpected !== 1 ||
+        parameter.itemsExpectedMin !== 1 ||
+        parameter.itemsExpectedMax !== 1
+      ) {
         // TODO
         console.error(`INT items != 1 are currently not supported`)
         process.exit(1)
@@ -39,30 +43,58 @@ function outputDemoHtml (functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
       result += `<br /><br />\n`
       break
-    case 'OUTPUT_IMAGE': {
-      result += `${prefix}${indent}<itk-image-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></itk-image-details>\n`
-      result += `${prefix}${indent}<sl-select id="${functionName}-${parameter.name}-output-format" placeholder="Format">\n`
-      const formats = ['bmp', 'dcm', 'gipl', 'hdf5', 'jpg', 'lsm', 'mnc', 'mnc.gz', 'mgh', 'mha', 'mrc', 'nii', 'nii.gz', 'png', 'nrrd', 'png', 'pic', 'tif', 'isq', 'fdf', 'vtk']
-      formats.forEach((format) => {
-        result += `${prefix}${indent}${indent}<sl-option value="${format}">${format}</sl-option>\n`
-      })
-      result += `${prefix}${indent}</sl-select>\n`
-      result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
-      result += `<br /><br />\n`
-    }
+    case 'OUTPUT_IMAGE':
+      {
+        result += `${prefix}${indent}<itk-image-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></itk-image-details>\n`
+        result += `${prefix}${indent}<sl-select id="${functionName}-${parameter.name}-output-format" placeholder="Format">\n`
+        const formats = [
+          'bmp',
+          'dcm',
+          'gipl',
+          'hdf5',
+          'jpg',
+          'lsm',
+          'mnc',
+          'mnc.gz',
+          'mgh',
+          'mha',
+          'mrc',
+          'nii',
+          'nii.gz',
+          'png',
+          'nrrd',
+          'png',
+          'pic',
+          'tif',
+          'isq',
+          'fdf',
+          'vtk'
+        ]
+        formats.forEach((format) => {
+          result += `${prefix}${indent}${indent}<sl-option value="${format}">${format}</sl-option>\n`
+        })
+        result += `${prefix}${indent}</sl-select>\n`
+        result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
+        result += `<br /><br />\n`
+      }
       break
-    case 'OUTPUT_MESH': {
-      result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
+    case 'OUTPUT_MESH':
+    case 'OUTPUT_POINT_SET':
+      {
+        result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
 
-      result += `${prefix}${indent}<sl-select id="${functionName}-${parameter.name}-output-format" placeholder="Format">\n`
-      const formats = ['vtk', 'byu', 'fsa', 'fsb', 'obj', 'off', 'stl', 'swc'];
-      formats.forEach((format) => {
-        result += `${prefix}${indent}${indent}<sl-option value="${format}">${format}</sl-option>\n`
-      })
-      result += `${prefix}${indent}</sl-select>\n`
-      result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
-      result += `<br /><br />\n`
-    }
+        result += `${prefix}${indent}<sl-select id="${functionName}-${parameter.name}-output-format" placeholder="Format">\n`
+        const formats =
+          parameterType === 'OUTPUT_MESH'
+            ? ['vtk', 'byu', 'fsa', 'fsb', 'obj', 'off', 'stl', 'swc']
+            : ['vtk', 'obj', 'off']
+        formats.forEach((format) => {
+          result += `${prefix}${indent}${indent}<sl-option value="${format}">${format}</sl-option>\n`
+        })
+        result += `${prefix}${indent}</sl-select>\n`
+        result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
+        result += `<br /><br />\n`
+      }
       break
     default:
       console.error(`Unexpected interface type: ${parameterType}`)
