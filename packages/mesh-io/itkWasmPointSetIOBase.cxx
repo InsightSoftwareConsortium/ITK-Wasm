@@ -25,19 +25,17 @@
 namespace itk
 {
 
-WasmMeshIOBase::WasmMeshIOBase()
+WasmPointSetIOBase::WasmPointSetIOBase()
 {
   this->m_PointsContainer = DataContainerType::New();
-  this->m_CellsContainer = DataContainerType::New();
   this->m_PointDataContainer = DataContainerType::New();
-  this->m_CellDataContainer = DataContainerType::New();
 }
 
 void
-WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
+WasmPointSetIOBase::SetMeshIO(MeshIOBase * meshIO, bool readPointSet)
 {
   this->m_MeshIOBase = meshIO;
-  if (!readMesh)
+  if (!readPointSet)
   {
     return;
   }
@@ -51,17 +49,10 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   wasmMeshIO->SetPointPixelType(meshIO->GetPointPixelType());
   wasmMeshIO->SetPointPixelComponentType(meshIO->GetPointPixelComponentType());
   wasmMeshIO->SetNumberOfPointPixelComponents(meshIO->GetNumberOfPointPixelComponents());
-  wasmMeshIO->SetCellComponentType(meshIO->GetCellComponentType());
-  wasmMeshIO->SetCellPixelType(meshIO->GetCellPixelType());
-  wasmMeshIO->SetCellPixelComponentType(meshIO->GetCellPixelComponentType());
-  wasmMeshIO->SetNumberOfCellPixelComponents(meshIO->GetNumberOfCellPixelComponents());
   wasmMeshIO->SetNumberOfPoints(meshIO->GetNumberOfPoints());
   wasmMeshIO->SetNumberOfPointPixels(meshIO->GetNumberOfPointPixels());
-  wasmMeshIO->SetNumberOfCells(meshIO->GetNumberOfCells());
-  wasmMeshIO->SetNumberOfCellPixels(meshIO->GetNumberOfCellPixels());
-  wasmMeshIO->SetCellBufferSize(meshIO->GetCellBufferSize());
 
-  auto meshJSON = wasmMeshIO->GetJSON();
+  auto pointSetJSON = wasmMeshIO->GetPointSetJSON();
 
   size_t pointsAddress = 0;
   SizeValueType numberOfBytes = meshIO->GetNumberOfPoints() * meshIO->GetPointDimension() * ITKComponentSize( meshIO->GetPointComponentType() );
@@ -75,22 +66,7 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   std::ostringstream dataStream;
   dataStream << "data:application/vnd.itk.address,0:";
   dataStream << pointsAddress;
-  meshJSON.points = dataStream.str();
-
-  numberOfBytes = static_cast< SizeValueType >( meshIO->GetCellBufferSize() * ITKComponentSize( meshIO->GetCellComponentType() ));
-
-  size_t cellsAddress = 0;
-  if (numberOfBytes)
-  {
-    this->m_CellsContainer->resize( numberOfBytes );
-    meshIO->ReadCells( reinterpret_cast< void * >( &(this->m_CellsContainer->at(0)) ));
-    cellsAddress = reinterpret_cast< size_t >( &(this->m_CellsContainer->at(0)) );
-  }
-
-  dataStream.str("");
-  dataStream << "data:application/vnd.itk.address,0:";
-  dataStream << cellsAddress;
-  meshJSON.cells = dataStream.str();
+  pointSetJSON.points = dataStream.str();
 
   numberOfBytes =
     static_cast< SizeValueType >( meshIO->GetNumberOfPointPixels() * meshIO->GetNumberOfPointPixelComponents() * ITKComponentSize( meshIO->GetPointPixelComponentType() ));
@@ -106,26 +82,10 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   dataStream.str("");
   dataStream << "data:application/vnd.itk.address,0:";
   dataStream << pointDataAddress;
-  meshJSON.pointData = dataStream.str();
-
-  numberOfBytes =
-    static_cast< SizeValueType >( meshIO->GetNumberOfCellPixels() * meshIO->GetNumberOfCellPixelComponents() * ITKComponentSize( meshIO->GetCellPixelComponentType() ));
-
-  size_t cellDataAddress = 0;
-  if (numberOfBytes)
-  {
-    this->m_CellDataContainer->resize( numberOfBytes );
-    meshIO->ReadCellData( reinterpret_cast< void * >( &(this->m_CellDataContainer->at(0)) ));
-    cellDataAddress = reinterpret_cast< size_t >( &(this->m_CellDataContainer->at(0)) );
-  }
-
-  dataStream.str("");
-  dataStream << "data:application/vnd.itk.address,0:";
-  dataStream << cellDataAddress;
-  meshJSON.cellData = dataStream.str();
+  pointSetJSON.pointData = dataStream.str();
 
   std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
+  auto ec = glz::write<glz::opts{ .prettify = true }>(pointSetJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize TransformListJSON");
@@ -134,23 +94,23 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
 }
 
 void
-WasmMeshIOBase::PrintSelf(std::ostream & os, Indent indent) const
+WasmPointSetIOBase::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "CellsContainer";
-  if (this->m_CellsContainer->size())
+  os << indent << "PointsContainer";
+  if (this->m_PointsContainer->size())
   {
-    this->m_CellsContainer->Print(os, indent);
+    this->m_PointsContainer->Print(os, indent);
   }
   else
   {
     os << ": (empty)" << std::endl;
   }
-  os << indent << "CellDataContainer";
-  if (this->m_CellDataContainer->size())
+  os << indent << "PointDataContainer";
+  if (this->m_PointDataContainer->size())
   {
-    this->m_CellDataContainer->Print(os, indent);
+    this->m_PointDataContainer->Print(os, indent);
   }
   else
   {

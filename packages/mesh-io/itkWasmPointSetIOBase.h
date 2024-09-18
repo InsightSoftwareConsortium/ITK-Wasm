@@ -15,79 +15,82 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef itkWasmMeshIOBase_h
-#define itkWasmMeshIOBase_h
+#ifndef itkWasmPointSetIOBase_h
+#define itkWasmPointSetIOBase_h
 #include "WebAssemblyInterfaceExport.h"
 
-#include "itkWasmPointSetIOBase.h"
+#include "itkWasmDataObject.h"
 #include "itkMeshIOBase.h"
 #include "itkVectorContainer.h"
 
 namespace itk
 {
 /**
- *\class WasmMeshIOBase
- * \brief JSON representation for an itk::MeshIOBase
+ *\class WasmPointSetIOBase
+ * \brief JSON representation for an itk::PointSetIOBase
  *
- * JSON representation for an itk::MeshIOBase for interfacing across programming languages and runtimes.
+ * JSON representation for an itk::PointSetIOBase for interfacing across programming languages and runtimes.
  *
  * Points, Cells, PointData, CellData binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
  *
  * Arrays:
  *
  * - 0: Points
- * - 1: Cells
- * - 2: PointData
- * - 3: CellData
+ * - 1: PointData
  *
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT WasmMeshIOBase : public WasmPointSetIOBase
+class WebAssemblyInterface_EXPORT WasmPointSetIOBase : public WasmDataObject
 {
 public:
-  ITK_DISALLOW_COPY_AND_MOVE(WasmMeshIOBase);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmPointSetIOBase);
 
   /** Standard class type aliases. */
-  using Self = WasmMeshIOBase;
-  using Superclass = WasmPointSetIOBase;
+  using Self = WasmPointSetIOBase;
+  using Superclass = WasmDataObject;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmMeshIOBase, WasmPointSetIOBase);
+  itkTypeMacro(WasmPointSetIOBase, WasmDataObject);
 
-  using DataContainerType = Superclass::DataContainerType;
+  using DataContainerType = VectorContainer<SizeValueType, char>;
 
-  void SetMeshIO(MeshIOBase * imageIO, bool readMesh = true);
-
-  const DataContainerType * GetCellsContainer() const
-  {
-    return this->m_CellsContainer.GetPointer();
-  }
-  DataContainerType * GetCellsContainer()
-  {
-    return this->m_CellsContainer.GetPointer();
+  void SetMeshIO(MeshIOBase * meshIO, bool readPointSet = true);
+  const MeshIOBase * GetMeshIO() const {
+    return m_MeshIOBase.GetPointer();
   }
 
-  const DataContainerType * GetCellDataContainer() const
+  const DataContainerType * GetPointsContainer() const
   {
-    return this->m_CellDataContainer.GetPointer();
+    return this->m_PointsContainer.GetPointer();
   }
-  DataContainerType * GetCellDataContainer()
+  DataContainerType * GetPointsContainer()
   {
-    return this->m_CellDataContainer.GetPointer();
+    return this->m_PointsContainer.GetPointer();
+  }
+
+  const DataContainerType * GetPointDataContainer() const
+  {
+    return this->m_PointDataContainer.GetPointer();
+  }
+  DataContainerType * GetPointDataContainer()
+  {
+    return this->m_PointDataContainer.GetPointer();
   }
 
 protected:
-  WasmMeshIOBase();
-  ~WasmMeshIOBase() override = default;
+  WasmPointSetIOBase();
+  ~WasmPointSetIOBase() override = default;
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  DataContainerType::Pointer m_CellsContainer;
-  DataContainerType::Pointer m_CellDataContainer;
+  DataContainerType::Pointer m_PointsContainer;
+  DataContainerType::Pointer m_PointDataContainer;
+
+  MeshIOBase::ConstPointer m_MeshIOBase;
 };
 
 } // namespace itk

@@ -7,7 +7,9 @@ import TextFile from '../../interface-types/text-file.js'
 import BinaryFile from '../../interface-types/binary-file.js'
 import Image from '../../interface-types/image.js'
 import Mesh from '../../interface-types/mesh.js'
+import PointSet from '../../interface-types/point-set.js'
 import PolyData from '../../interface-types/poly-data.js'
+// import Transform from '../../interface-types/transform.js'
 import FloatTypes from '../../interface-types/float-types.js'
 import IntTypes from '../../interface-types/int-types.js'
 
@@ -20,7 +22,7 @@ const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
 const encoder = new TextEncoder()
 const decoder = new TextDecoder('utf-8')
 
-function readFileSharedArray (
+function readFileSharedArray(
   emscriptenModule: PipelineEmscriptenModule,
   path: string
 ): Uint8Array {
@@ -40,7 +42,7 @@ function readFileSharedArray (
   return array
 }
 
-function memoryUint8SharedArray (
+function memoryUint8SharedArray(
   emscriptenModule: PipelineEmscriptenModule,
   byteOffset: number,
   length: number
@@ -61,7 +63,7 @@ function memoryUint8SharedArray (
   return array
 }
 
-function setPipelineModuleInputArray (
+function setPipelineModuleInputArray(
   emscriptenModule: PipelineEmscriptenModule,
   dataArray: TypedArray | null,
   inputIndex: number,
@@ -80,7 +82,7 @@ function setPipelineModuleInputArray (
   return dataPtr
 }
 
-function setPipelineModuleInputJSON (
+function setPipelineModuleInputJSON(
   emscriptenModule: PipelineEmscriptenModule,
   dataObject: object,
   inputIndex: number
@@ -96,13 +98,13 @@ function setPipelineModuleInputJSON (
   emscriptenModule.stringToUTF8(dataJSON, jsonPtr, length)
 }
 
-function getPipelineModuleOutputArray (
+function getPipelineModuleOutputArray(
   emscriptenModule: PipelineEmscriptenModule,
   outputIndex: number,
   subIndex: number,
   componentType:
-  | (typeof IntTypes)[keyof typeof IntTypes]
-  | (typeof FloatTypes)[keyof typeof FloatTypes]
+    | (typeof IntTypes)[keyof typeof IntTypes]
+    | (typeof FloatTypes)[keyof typeof FloatTypes]
 ): TypedArray | Float32Array | Uint32Array | null {
   const dataPtr = emscriptenModule.ccall(
     'itk_wasm_output_array_address',
@@ -121,7 +123,7 @@ function getPipelineModuleOutputArray (
   return data
 }
 
-function getPipelineModuleOutputJSON (
+function getPipelineModuleOutputJSON(
   emscriptenModule: PipelineEmscriptenModule,
   outputIndex: number
 ): object {
@@ -136,7 +138,7 @@ function getPipelineModuleOutputJSON (
   return dataObject
 }
 
-function runPipelineEmscripten (
+function runPipelineEmscripten(
   pipelineModule: PipelineEmscriptenModule,
   args: string[],
   outputs: PipelineOutput[] | null,
@@ -279,6 +281,33 @@ function runPipelineEmscripten (
             cellData: `data:application/vnd.itk.address,0:${cellDataPtr}`
           }
           setPipelineModuleInputJSON(pipelineModule, meshJSON, index)
+          break
+        }
+        case InterfaceTypes.PointSet: {
+          const pointSet = input.data as PointSet
+          const pointsPtr = setPipelineModuleInputArray(
+            pipelineModule,
+            pointSet.points,
+            index,
+            0
+          )
+          const pointDataPtr = setPipelineModuleInputArray(
+            pipelineModule,
+            pointSet.pointData,
+            index,
+            1
+          )
+          const pointSetJSON = {
+            pointSetType: pointSet.pointSetType,
+            name: pointSet.name,
+
+            numberOfPoints: pointSet.numberOfPoints,
+            points: `data:application/vnd.itk.address,0:${pointsPtr}`,
+
+            numberOfPointPixels: pointSet.numberOfPointPixels,
+            pointData: `data:application/vnd.itk.address,0:${pointDataPtr}`
+          }
+          setPipelineModuleInputJSON(pipelineModule, pointSetJSON, index)
           break
         }
         case InterfaceTypes.PolyData: {
@@ -553,6 +582,41 @@ function runPipelineEmscripten (
             )
           }
           outputData = mesh
+          break
+        }
+        case InterfaceTypes.PointSet: {
+          const pointSet = getPipelineModuleOutputJSON(
+            pipelineModule,
+            index
+          ) as PointSet
+          console.log(pointSet)
+          if (pointSet.numberOfPoints > 0) {
+            pointSet.points = getPipelineModuleOutputArray(
+              pipelineModule,
+              index,
+              0,
+              pointSet.pointSetType.pointComponentType
+            )
+          } else {
+            pointSet.points = bufferToTypedArray(
+              pointSet.pointSetType.pointComponentType,
+              new ArrayBuffer(0)
+            )
+          }
+          if (pointSet.numberOfPointPixels > 0) {
+            pointSet.pointData = getPipelineModuleOutputArray(
+              pipelineModule,
+              index,
+              1,
+              pointSet.pointSetType.pointPixelComponentType
+            )
+          } else {
+            pointSet.pointData = bufferToTypedArray(
+              pointSet.pointSetType.pointPixelComponentType,
+              new ArrayBuffer(0)
+            )
+          }
+          outputData = pointSet
           break
         }
         case InterfaceTypes.PolyData: {
