@@ -10,5 +10,6 @@ from .read_overlapping_segmentation import read_overlapping_segmentation
 from .write_segmentation import write_segmentation
 from .write_overlapping_segmentation import write_overlapping_segmentation
 from .write_multi_segmentation import write_multi_segmentation
+from .image_sets_normalization import image_sets_normalization
 
 from ._version import __version__
