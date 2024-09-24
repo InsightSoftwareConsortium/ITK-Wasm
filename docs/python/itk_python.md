@@ -41,6 +41,36 @@ itkwasm_image = Image(**image_dict)
 
 The file extensions for these formats are `.iwi` and `.iwm` for images and mesh-like data, respectively. When written, these will output directories with an `index.json` file and raw binary files. When `.iwi.cbor` or `.iwm.cbor` extensions are used, a single [CBOR](https://en.wikipedia.org/wiki/CBOR) file is created.
 
+### Wasm Python Packages
+
+These file formats can be use with the ITK-Wasm Python packages, both on the system
+or in the browser.
+
+Install the wasm Python IO packages:
+
+```shell
+pip install itkwasm-image-io
+pip install itkwasm-mesh-io
+```
+
+Then use with `itkwasm_image_io.imread`, `itkwasm_image_io.imwrite`,
+`itkwasm_mesh_io.meshread`, `itkwasm_mesh_io.meshwrite`. Example:
+
+```python
+from itkwasm_image_io import imread, imwrite
+from itkwasm_mesh_io import meshread, meshwrite
+
+image = imread('cthead1.png')
+imwrite(image, 'cthead1.iwi')
+imwrite(image, 'cthead1.iwi.cbor')
+
+mesh = meshread('cow.vtk')
+meshwrite(mesh, 'cow.iwm')
+meshwrite(mesh, 'cow.iwm.cbor')
+```
+
+### Native Python Packages
+
 These file formats can also be used with native ITK Python.
 
 Install the binary Python package:
@@ -52,13 +82,13 @@ pip install itk-webassemblyinterface
 Then use with `itk.imread`, `itk.imwrite`, `itk.meshread`, `itk.meshwrite`. Example:
 
 ```python
-import itk
+from itk import imread, imwrite, meshread, meshwrite
 
-image = itk.imread('cthead1.png')
-itk.imwrite(image, 'cthead1.iwi')
-itk.imwrite(image, 'cthead1.iwi.cbor')
+image = imread('cthead1.png')
+imwrite(image, 'cthead1.iwi')
+imwrite(image, 'cthead1.iwi.cbor')
 
-mesh = itk.meshread('cow.vtk')
-itk.meshwrite(mesh, 'cow.iwm')
-itk.meshwrite(mesh, 'cow.iwm.cbor')
+mesh = meshread('cow.vtk')
+meshwrite(mesh, 'cow.iwm')
+meshwrite(mesh, 'cow.iwm.cbor')
 ```

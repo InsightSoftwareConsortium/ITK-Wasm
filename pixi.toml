@@ -15,13 +15,6 @@ scripts = ["itk_wasm_env.bash"]
 clean = "git clean -fdx"
 pnpm-install = { cmd = "pnpm install", description = "Install Node.js dependencies" }
 
-[tasks.dicom-test-data-download]
-cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_DICOM_TEST_DATA_HASH $ITK_WASM_DICOM_TEST_DATA_URLS"
-cwd = "packages/dicom"
-depends-on = ["pnpm-install"]
-outputs = ["packages/dicom/test/data.tar.gz"]
-description = "Download DICOM test data"
-
 [tasks.compare-images-test-data-download]
 cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_COMPARE_IMAGES_TEST_DATA_HASH $ITK_WASM_COMPARE_IMAGES_TEST_DATA_URLS"
 cwd = "packages/compare-images"
@@ -42,6 +35,20 @@ cwd = "packages/compress-stringify"
 depends-on = ["pnpm-install"]
 outputs = ["packages/compress-stringify/test/data.tar.gz"]
 description = "Download compress-stringify test data"
+
+[tasks.dicom-test-data-download]
+cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_DICOM_TEST_DATA_HASH $ITK_WASM_DICOM_TEST_DATA_URLS"
+cwd = "packages/dicom"
+depends-on = ["pnpm-install"]
+outputs = ["packages/dicom/test/data.tar.gz"]
+description = "Download DICOM test data"
+
+[tasks.downsample-test-data-download]
+cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_DOWNSAMPLE_TEST_DATA_HASH $ITK_WASM_DOWNSAMPLE_TEST_DATA_URLS"
+cwd = "packages/downsample"
+depends-on = ["pnpm-install"]
+outputs = ["packages/downsample/test/data.tar.gz"]
+description = "Download downsample test data"
 
 [tasks.mesh-io-test-data-download]
 cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_MESH_IO_TEST_DATA_HASH $ITK_WASM_MESH_IO_TEST_DATA_URLS"
@@ -162,26 +169,6 @@ cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build"
 depends-on = ["build-itk-wasm"]
 description = "Test ITK-Wasm"
 
-[feature.native.tasks.configure-native-dicom]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/dicom-build -Spackages/dicom -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
-  -DCMAKE_BUILD_TYPE:STRING=Debug'''
-depends-on = ["build-itk-wasm", "dicom-test-data-download"]
-outputs = ["native/dicom-build/CMakeFiles/"]
-description = "Configure dicom native binaries"
-
-[feature.native.tasks.build-native-dicom]
-cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/dicom-build"
-depends-on = ["configure-native-dicom"]
-description = "Build dicom native binaries"
-
-[feature.native.tasks.test-native-dicom]
-cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/dicom-build"
-depends-on = ["build-native-dicom"]
-description = "Test dicom native binaries"
-
 [feature.native.tasks.configure-native-compare-images]
 cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/compare-images-build -Spackages/compare-images -GNinja
   -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
@@ -241,6 +228,46 @@ description = "Build compress-stringify native binaries"
 cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/compress-stringify-build"
 depends-on = ["build-native-compress-stringify"]
 description = "Test compress-stringify native binaries"
+
+[feature.native.tasks.configure-native-dicom]
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/dicom-build -Spackages/dicom -GNinja
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
+  -DBUILD_TESTING:BOOL=ON
+  -DCMAKE_CXX_STANDARD:STRING=20
+  -DCMAKE_BUILD_TYPE:STRING=Debug'''
+depends-on = ["build-itk-wasm", "dicom-test-data-download"]
+outputs = ["native/dicom-build/CMakeFiles/"]
+description = "Configure dicom native binaries"
+
+[feature.native.tasks.build-native-dicom]
+cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/dicom-build"
+depends-on = ["configure-native-dicom"]
+description = "Build dicom native binaries"
+
+[feature.native.tasks.test-native-dicom]
+cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/dicom-build"
+depends-on = ["build-native-dicom"]
+description = "Test dicom native binaries"
+
+[feature.native.tasks.configure-native-downsample]
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/downsample-build -Spackages/downsample -GNinja
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
+  -DBUILD_TESTING:BOOL=ON
+  -DCMAKE_CXX_STANDARD:STRING=20
+  -DCMAKE_BUILD_TYPE:STRING=Debug'''
+depends-on = ["build-itk-wasm", "downsample-test-data-download"]
+outputs = ["native/downsample-build/CMakeFiles/"]
+description = "Configure downsample native binaries"
+
+[feature.native.tasks.build-native-downsample]
+cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/downsample-build"
+depends-on = ["configure-native-downsample"]
+description = "Build downsample native binaries"
+
+[feature.native.tasks.test-native-downsample]
+cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/downsample-build"
+depends-on = ["build-native-downsample"]
+description = "Test downsample native binaries"
 
 [feature.native.tasks.configure-native-mesh-io]
 cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/mesh-io-build -Spackages/mesh-io -GNinja
