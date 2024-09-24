@@ -11,8 +11,12 @@ on:
       - main
 
 jobs:
-  native-build-test-workflow:
-    runs-on: ubuntu-22.04
+  itk-wasm-native-build-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        package: [compare-images]
+        os: [ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -22,3 +26,27 @@ jobs:
       - name: Build and Test ITK-Wasm
         run: |
           pixi run test-itk-wasm
+
+      - name: Upload ITK-Wasm build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: itk-wasm-build-${{ matrix.os }}
+          path: .
+
+  packages-native-build-test:
+    needs: itk-wasm-native-build-test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        package: [compare-images]
+        os: [ubuntu-latest]
+    steps:
+      - name: Download ITK-Wasm build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: itk-wasm-build-${{ matrix.os }}
+
+      - name: Build and Test Package
+        run: |
+          echo "Running on ${{ matrix.os }} for package ${{ matrix.package }}"
+          pixi run test-${{ matrix.package }}
