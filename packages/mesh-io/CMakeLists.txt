@@ -131,3 +131,9 @@ add_test(NAME byu-write-mesh-test
   ${baseline_dir}/byu-read-mesh-test.iwm.cbor
   ${output_dir}/byu-write-mesh-test.could-write.json
   ${output_dir}/byu-write-mesh-test.byu)
+
+add_test(NAME vtk-read-slicer-mesh-test
+  COMMAND vtk-poly-data-read-mesh
+  ${input_dir}/gourd.vtk
+  ${output_dir}/vtk-read-slicer-mesh-test.could-read.json
+  ${output_dir}/vtk-read-slicer-mesh-test.iwm)
