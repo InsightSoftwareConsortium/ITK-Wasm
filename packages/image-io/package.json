@@ -8,6 +8,11 @@
   "itk-wasm": {
     "emscripten-docker-image": "itkwasm/emscripten:latest",
     "wasi-docker-image": "itkwasm/wasi:latest",
+    "test-data-hash": "bafybeibyjhkcrinl2lotw5g2vngjs23aaenv3tjzxssm35jxaci5ylsqia",
+    "test-data-urls": [
+      "https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.155/image-io-test-data.tar.gz",
+      "https://w3s.link/ipfs/bafybeiewe4rankwwe7nw7qm2g3qclflhci2e53wthn3gukdlhbff64pua4/data.tar.gz"
+    ],
     "typescript-package-name": "@itk-wasm/image-io",
     "python-package-name": "itkwasm-image-io",
     "package-description": "Input and output for scientific and medical image file formats.",
