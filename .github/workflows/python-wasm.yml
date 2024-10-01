@@ -73,7 +73,7 @@ jobs:
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:python:wasi
 
-      - uses: pyodide/pyodide-actions/install-browser@e3edcb8db4f1ec4604e402013f3ae2ee9f114441
+      - uses: pyodide/pyodide-actions/install-browser@29efa4ea7d4f7c8b6e94e65418798457cc7f4b7f
         if: ${{ matrix.python-minor-version > 10 }}
         with:
           runner: selenium
