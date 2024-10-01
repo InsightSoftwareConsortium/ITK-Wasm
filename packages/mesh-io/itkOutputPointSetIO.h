@@ -21,7 +21,7 @@
 #include "itkPipeline.h"
 
 #include "itkMeshIOBase.h"
-#include "itkWasmMeshIOBase.h"
+#include "itkWasmPointSetIOBase.h"
 #include "itkWasmMeshIO.h"
 #include "itkWasmIOCommon.h"
 #ifndef ITK_WASM_NO_MEMORY_IO
@@ -38,7 +38,7 @@ namespace itk
      *\class OutputPointSetIO
      * \brief Output point set for an itk::wasm::Pipeline from an itk::MeshIOBase
      *
-     * This ponit set is written to the filesystem or memory when it goes out of scope.
+     * This point set is written to the filesystem or memory when it goes out of scope.
      *
      * This class is for the ReadMesh ITK-Wasm pipeline. Most pipelines will use itk::wasm::OutputPointSet.
      *
@@ -82,26 +82,26 @@ namespace itk
           if (!this->m_MeshIO.IsNull() && !this->m_Identifier.empty())
           {
             const auto index = std::stoi(this->m_Identifier);
-            auto wasmMeshIOBase = itk::WasmMeshIOBase::New();
-            wasmMeshIOBase->SetMeshIO(this->m_MeshIO);
-            setMemoryStoreOutputDataObject(0, index, wasmMeshIOBase);
+            auto wasmPointSetIOBase = itk::WasmPointSetIOBase::New();
+            wasmPointSetIOBase->SetMeshIO(this->m_MeshIO);
+            setMemoryStoreOutputDataObject(0, index, wasmPointSetIOBase);
 
             if (this->m_InformationOnly)
             {
               return;
             }
 
-            const auto pointsSize = wasmMeshIOBase->GetPointsContainer()->size();
+            const auto pointsSize = wasmPointSetIOBase->GetPointsContainer()->size();
             if (pointsSize)
             {
-              const auto pointsAddress = reinterpret_cast<size_t>(&(wasmMeshIOBase->GetPointsContainer()->at(0)));
+              const auto pointsAddress = reinterpret_cast<size_t>(&(wasmPointSetIOBase->GetPointsContainer()->at(0)));
               setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
             }
 
-            const auto pointDataSize = wasmMeshIOBase->GetPointDataContainer()->size();
+            const auto pointDataSize = wasmPointSetIOBase->GetPointDataContainer()->size();
             if (pointDataSize)
             {
-              const auto pointDataAddress = reinterpret_cast<size_t>(&(wasmMeshIOBase->GetPointDataContainer()->at(0)));
+              const auto pointDataAddress = reinterpret_cast<size_t>(&(wasmPointSetIOBase->GetPointDataContainer()->at(0)));
               setMemoryStoreOutputArray(0, index, 1, pointDataAddress, pointDataSize);
             }
           }
