@@ -19,6 +19,8 @@ if (!params.has('functionName')) {
 
 import './read-mesh-controller.js'
 import './write-mesh-controller.js'
+import './read-point-set-controller.js'
+import './write-point-set-controller.js'
 // End added content
 import './byu-read-mesh-controller.js'
 import './byu-write-mesh-controller.js'

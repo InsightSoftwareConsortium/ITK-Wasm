@@ -1,9 +1,9 @@
 import * as meshIo from "../../../dist/index.js";
-import readMeshLoadSampleInputs, {
+import readPointSetLoadSampleInputs, {
   usePreRun,
-} from "./read-mesh-load-sample-inputs.js";
+} from "./read-point-set-load-sample-inputs.js";
 
-class ReadMeshModel {
+class ReadPointSetModel {
   inputs: Map<string, any>;
   options: Map<string, any>;
   outputs: Map<string, any>;
@@ -15,18 +15,18 @@ class ReadMeshModel {
   }
 }
 
-class ReadMeshController {
+class ReadPointSetController {
   constructor(loadSampleInputs) {
     this.loadSampleInputs = loadSampleInputs;
 
-    this.model = new ReadMeshModel();
+    this.model = new ReadPointSetModel();
     const model = this.model;
 
     this.webWorker = null;
 
     if (loadSampleInputs) {
       const loadSampleInputsButton = document.querySelector(
-        "#readMeshInputs [name=loadSampleInputs]",
+        "#readPointSetInputs [name=loadSampleInputs]",
       );
       loadSampleInputsButton.setAttribute("style", "display: block-inline;");
       loadSampleInputsButton.addEventListener("click", async (event) => {
@@ -38,29 +38,29 @@ class ReadMeshController {
 
     // ----------------------------------------------
     // Inputs
-    const serializedMeshElement = document.querySelector(
-      "#readMeshInputs input[name=serialized-mesh-file]",
+    const serializedPointSetElement = document.querySelector(
+      "#readPointSetInputs input[name=serialized-point-set-file]",
     );
-    serializedMeshElement.addEventListener("change", async (event) => {
+    serializedPointSetElement.addEventListener("change", async (event) => {
       const dataTransfer = event.dataTransfer;
       const files = event.target.files || dataTransfer.files;
 
       const arrayBuffer = await files[0].arrayBuffer();
-      model.inputs.set("serializedMesh", {
+      model.inputs.set("serializedPointSet", {
         data: new Uint8Array(arrayBuffer),
         path: files[0].name,
       });
       const details = document.getElementById(
-        "readMesh-serialized-mesh-details",
+        "readPointSet-serialized-point-set-details",
       );
-      details.innerHTML = `<pre>${globalThis.escapeHtml(model.inputs.get("serializedMesh").data.subarray(0, 50).toString() + " ...")}</pre>`;
+      details.innerHTML = `<pre>${globalThis.escapeHtml(model.inputs.get("serializedPointSet").data.subarray(0, 50).toString() + " ...")}</pre>`;
       details.disabled = false;
     });
 
     // ----------------------------------------------
     // Options
     const informationOnlyElement = document.querySelector(
-      "#readMeshInputs sl-checkbox[name=information-only]",
+      "#readPointSetInputs sl-checkbox[name=information-only]",
     );
     informationOnlyElement.addEventListener("sl-change", (event) => {
       model.options.set("informationOnly", informationOnlyElement.checked);
@@ -68,24 +68,25 @@ class ReadMeshController {
 
     // ----------------------------------------------
     // Outputs
-    const meshOutputDownload = document.querySelector(
-      "#readMeshOutputs sl-button[name=mesh-download]",
+    const pointSetOutputDownload = document.querySelector(
+      "#readPointSetOutputs sl-button[name=point-set-download]",
     );
-    meshOutputDownload.addEventListener("click", async (event) => {
+    pointSetOutputDownload.addEventListener("click", async (event) => {
       event.preventDefault();
       event.stopPropagation();
-      if (model.outputs.has("mesh")) {
-        const meshDownloadFormat =
-          document.getElementById("mesh-output-format");
-        const downloadFormat = meshDownloadFormat.value || "nrrd";
-        const fileName = `mesh.${downloadFormat}`;
-        const { webWorker, serializedMesh } = await meshIo.writeMesh(
-          model.outputs.get("mesh"),
+      if (model.outputs.has("pointSet")) {
+        const pointSetDownloadFormat = document.getElementById(
+          "point-set-output-format",
+        );
+        const downloadFormat = pointSetDownloadFormat.value || "nrrd";
+        const fileName = `pointSet.${downloadFormat}`;
+        const { webWorker, serializedPointSet } = await meshIo.writePointSet(
+          model.outputs.get("pointSet"),
           fileName,
         );
 
         webWorker.terminate();
-        globalThis.downloadFile(serializedMesh, fileName);
+        globalThis.downloadFile(serializedPointSet, fileName);
       }
     });
 
@@ -97,16 +98,20 @@ class ReadMeshController {
     };
 
     const onSelectTab = async (event) => {
-      if (event.detail.name === "readMesh-panel") {
+      if (event.detail.name === "readPointSet-panel") {
         const params = new URLSearchParams(window.location.search);
         if (
           !params.has("functionName") ||
-          params.get("functionName") !== "readMesh"
+          params.get("functionName") !== "readPointSet"
         ) {
-          params.set("functionName", "readMesh");
+          params.set("functionName", "readPointSet");
           const url = new URL(document.location);
           url.search = params;
-          window.history.replaceState({ functionName: "readMesh" }, "", url);
+          window.history.replaceState(
+            { functionName: "readPointSet" },
+            "",
+            url,
+          );
           await preRun();
         }
       }
@@ -118,24 +123,24 @@ class ReadMeshController {
       const params = new URLSearchParams(window.location.search);
       if (
         params.has("functionName") &&
-        params.get("functionName") === "readMesh"
+        params.get("functionName") === "readPointSet"
       ) {
-        tabGroup.show("readMesh-panel");
+        tabGroup.show("readPointSet-panel");
         preRun();
       }
     }
     onInit();
 
     const runButton = document.querySelector(
-      '#readMeshInputs sl-button[name="run"]',
+      '#readPointSetInputs sl-button[name="run"]',
     );
     runButton.addEventListener("click", async (event) => {
       event.preventDefault();
 
-      if (!model.inputs.has("serializedMesh")) {
+      if (!model.inputs.has("serializedPointSet")) {
         globalThis.notify(
           "Required input not provided",
-          "serializedMesh",
+          "serializedPointSet",
           "danger",
           "exclamation-octagon",
         );
@@ -146,22 +151,26 @@ class ReadMeshController {
         runButton.loading = true;
 
         const t0 = performance.now();
-        const { mesh } = await this.run();
+        const { couldRead, pointSet } = await this.run();
         const t1 = performance.now();
         globalThis.notify(
-          "readMesh successfully completed",
+          "readPointSet successfully completed",
           `in ${t1 - t0} milliseconds.`,
           "success",
           "rocket-fill",
         );
 
-        model.outputs.set("mesh", mesh);
-        meshOutputDownload.variant = "success";
-        meshOutputDownload.disabled = false;
-        const meshDetails = document.getElementById("readMesh-mesh-details");
-        meshDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(mesh, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`;
-        meshDetails.disabled = false;
-        const meshOutput = document.getElementById("readMesh-mesh-details");
+        model.outputs.set("pointSet", pointSet);
+        pointSetOutputDownload.variant = "success";
+        pointSetOutputDownload.disabled = false;
+        const pointSetDetails = document.getElementById(
+          "readPointSet-point-set-details",
+        );
+        pointSetDetails.innerHTML = `<pre>${globalThis.escapeHtml(JSON.stringify(pointSet, globalThis.interfaceTypeJsonReplacer, 2))}</pre>`;
+        pointSetDetails.disabled = false;
+        const pointSetOutput = document.getElementById(
+          "readPointSet-point-set-details",
+        );
       } catch (error) {
         globalThis.notify(
           "Error while running pipeline",
@@ -179,17 +188,19 @@ class ReadMeshController {
   async run() {
     const options = Object.fromEntries(this.model.options.entries());
     options.webWorker = this.webWorker;
-    const { webWorker, mesh } = await meshIo.readMesh(
+    const { webWorker, pointSet } = await meshIo.readPointSet(
       {
-        data: this.model.inputs.get("serializedMesh").data.slice(),
-        path: this.model.inputs.get("serializedMesh").path,
+        data: this.model.inputs.get("serializedPointSet").data.slice(),
+        path: this.model.inputs.get("serializedPointSet").path,
       },
       options,
     );
     this.webWorker = webWorker;
 
-    return { mesh };
+    return { pointSet };
   }
 }
 
-const readMeshController = new ReadMeshController(readMeshLoadSampleInputs);
+const readPointSetController = new ReadPointSetController(
+  readPointSetLoadSampleInputs,
+);
