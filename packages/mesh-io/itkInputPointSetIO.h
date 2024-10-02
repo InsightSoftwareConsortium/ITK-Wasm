@@ -31,107 +31,108 @@
 
 namespace itk
 {
-namespace wasm
-{
-
-/**
- *\class InputPointSetIO
- * \brief Input point set for an itk::wasm::Pipeline from an itk::MeshIOBase
- *
- * This point set is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
- *
- * This class is for the write-point-set itk-wasm pipeline. Most pipelines will use itk::wasm::InputPointSet.
- *
- * \ingroup WebAssemblyInterface
- */
-class InputPointSetIO
-{
-public:
-  void Set(const WasmMeshIOBase * meshIO) {
-    this->m_WasmMeshIOBase = meshIO;
-  }
-
-  const WasmMeshIOBase * Get() const {
-    return this->m_WasmMeshIOBase.GetPointer();
-  }
-
-  InputPointSetIO() = default;
-  ~InputPointSetIO() = default;
-protected:
-  typename WasmMeshIOBase::ConstPointer m_WasmMeshIOBase;
-};
-
-
-bool lexical_cast(const std::string &input, InputPointSetIO &inputMeshIO)
-{
-  if (input.empty())
+  namespace wasm
   {
-    return false;
-  }
 
-  if (wasm::Pipeline::get_use_memory_io())
-  {
-#ifndef ITK_WASM_NO_MEMORY_IO
-    const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(0, index);
-    auto        deserializedAttempt = glz::read_json<itk::MeshJSON>(json);
-    if (!deserializedAttempt)
+    /**
+     *\class InputPointSetIO
+     * \brief Input point set for an itk::wasm::Pipeline from an itk::MeshIOBase
+     *
+     * This point set is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
+     *
+     * This class is for the write-point-set itk-wasm pipeline. Most pipelines will use itk::wasm::InputPointSet.
+     *
+     * \ingroup WebAssemblyInterface
+     */
+    class InputPointSetIO
     {
-      const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
-      throw std::runtime_error("Failed to deserialize MeshJSON: " + descriptiveError);
-    }
-    auto meshJSON = deserializedAttempt.value();
+    public:
+      void Set(const WasmPointSetIOBase *pointSetIO)
+      {
+        this->m_WasmPointSetIOBase = pointSetIO;
+      }
 
-    auto wasmMeshIO = itk::WasmMeshIO::New();
-    wasmMeshIO->SetJSON(meshJSON);
+      const WasmPointSetIOBase *Get() const
+      {
+        return this->m_WasmPointSetIOBase.GetPointer();
+      }
 
-    const unsigned int dimension = wasmMeshIO->GetPointDimension();
+      InputPointSetIO() = default;
+      ~InputPointSetIO() = default;
 
-    auto wasmMeshIOBase = itk::WasmMeshIOBase::New();
+    protected:
+      typename WasmPointSetIOBase::ConstPointer m_WasmPointSetIOBase;
+    };
 
-    const std::string & pointsString = meshJSON.points;
-    const char * pointsPtr = reinterpret_cast< char * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
-    WasmMeshIOBase::DataContainerType * pointsContainer = wasmMeshIOBase->GetPointsContainer();
-    SizeValueType numberOfBytes = wasmMeshIO->GetNumberOfPoints() * wasmMeshIO->GetPointDimension() * ITKComponentSize( wasmMeshIO->GetPointComponentType() );
-    pointsContainer->resize(numberOfBytes);
-    pointsContainer->assign(pointsPtr, pointsPtr + numberOfBytes);
+    bool lexical_cast(const std::string &input, InputPointSetIO &inputPointSetIO)
+    {
+      if (input.empty())
+      {
+        return false;
+      }
 
-    const std::string & pointDataString = meshJSON.pointData;
-    const char * pointDataPtr = reinterpret_cast< char * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
-    WasmMeshIOBase::DataContainerType * pointDataContainer = wasmMeshIOBase->GetPointDataContainer();
-    numberOfBytes =
-      static_cast< SizeValueType >(
-          wasmMeshIO->GetNumberOfPointPixels() * wasmMeshIO->GetNumberOfPointPixelComponents() * ITKComponentSize( wasmMeshIO->GetPointPixelComponentType() )
-          );
-    pointDataContainer->resize(numberOfBytes);
-    pointDataContainer->assign(pointDataPtr, pointDataPtr + numberOfBytes);
+      if (wasm::Pipeline::get_use_memory_io())
+      {
+#ifndef ITK_WASM_NO_MEMORY_IO
+        const unsigned int index = std::stoi(input);
+        auto json = getMemoryStoreInputJSON(0, index);
+        auto deserializedAttempt = glz::read_json<itk::PointSetJSON>(json);
+        if (!deserializedAttempt)
+        {
+          const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
+          throw std::runtime_error("Failed to deserialize PointSetJSON: " + descriptiveError);
+        }
+        auto pointSetJSON = deserializedAttempt.value();
 
-    wasmMeshIOBase->SetMeshIO(wasmMeshIO, false);
-    wasmMeshIOBase->SetJSON(json);
+        auto wasmMeshIO = itk::WasmMeshIO::New();
+        wasmMeshIO->SetJSON(pointSetJSON);
 
-    inputMeshIO.Set(wasmMeshIOBase);
+        const unsigned int dimension = wasmMeshIO->GetPointDimension();
+
+        auto wasmPointSetIOBase = itk::WasmPointSetIOBase::New();
+
+        const std::string &pointsString = pointSetJSON.points;
+        const char *pointsPtr = reinterpret_cast<char *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
+        WasmMeshIOBase::DataContainerType *pointsContainer = wasmPointSetIOBase->GetPointsContainer();
+        SizeValueType numberOfBytes = wasmMeshIO->GetNumberOfPoints() * wasmMeshIO->GetPointDimension() * ITKComponentSize(wasmMeshIO->GetPointComponentType());
+        pointsContainer->resize(numberOfBytes);
+        pointsContainer->assign(pointsPtr, pointsPtr + numberOfBytes);
+
+        const std::string &pointDataString = pointSetJSON.pointData;
+        const char *pointDataPtr = reinterpret_cast<char *>(std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10));
+        WasmPointSetIOBase::DataContainerType *pointDataContainer = wasmPointSetIOBase->GetPointDataContainer();
+        numberOfBytes =
+            static_cast<SizeValueType>(
+                wasmMeshIO->GetNumberOfPointPixels() * wasmMeshIO->GetNumberOfPointPixelComponents() * ITKComponentSize(wasmMeshIO->GetPointPixelComponentType()));
+        pointDataContainer->resize(numberOfBytes);
+        pointDataContainer->assign(pointDataPtr, pointDataPtr + numberOfBytes);
+
+        wasmPointSetIOBase->SetMeshIO(wasmMeshIO, false);
+        wasmPointSetIOBase->SetJSON(json);
+
+        inputPointSetIO.Set(wasmPointSetIOBase);
 #else
-    return false;
+        return false;
 #endif
-  }
-  else
-  {
+      }
+      else
+      {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    auto wasmMeshIO = itk::WasmMeshIO::New();
-    wasmMeshIO->SetFileName(input);
+        auto wasmMeshIO = itk::WasmMeshIO::New();
+        wasmMeshIO->SetFileName(input);
 
-    auto wasmMeshIOBase = itk::WasmMeshIOBase::New();
-    wasmMeshIOBase->SetMeshIO(wasmMeshIO);
+        auto wasmPointSetIOBase = itk::WasmPointSetIOBase::New();
+        wasmPointSetIOBase->SetMeshIO(wasmMeshIO);
 
-    inputMeshIO.Set(wasmMeshIOBase);
+        inputPointSetIO.Set(wasmPointSetIOBase);
 #else
-    return false;
+        return false;
 #endif
-  }
-  return true;
-}
+      }
+      return true;
+    }
 
-} // end namespace wasm
+  } // end namespace wasm
 } // end namespace itk
 
 #endif

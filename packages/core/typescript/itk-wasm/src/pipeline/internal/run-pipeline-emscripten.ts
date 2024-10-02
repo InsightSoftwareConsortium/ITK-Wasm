@@ -589,7 +589,6 @@ function runPipelineEmscripten (
             pipelineModule,
             index
           ) as PointSet
-          console.log(pointSet)
           if (pointSet.numberOfPoints > 0) {
             pointSet.points = getPipelineModuleOutputArray(
               pipelineModule,

@@ -43,11 +43,11 @@
 #define TO_LITERAL(string) VALUE(string)
 
 #include "itkPipeline.h"
-#include "itkWasmMeshIOBase.h"
+#include "itkWasmPointSetIOBase.h"
 #include "itkMeshIOBase.h"
 
 template <typename TMeshIO>
-int writePointSet(itk::wasm::InputPointSetIO & inputPointSetIO, itk::wasm::OutputTextStream & couldWrite, const std::string & outputFileName, bool informationOnly, bool useCompression, bool binaryFileType)
+int writePointSet(itk::wasm::InputPointSetIO &inputPointSetIO, itk::wasm::OutputTextStream &couldWrite, const std::string &outputFileName, bool informationOnly, bool useCompression, bool binaryFileType)
 {
   using MeshIOType = TMeshIO;
 
@@ -72,8 +72,8 @@ int writePointSet(itk::wasm::InputPointSetIO & inputPointSetIO, itk::wasm::Outpu
 
   meshIO->SetFileName(outputFileName);
 
-  const itk::WasmMeshIOBase * inputWasmMeshIOBase = inputPointSetIO.Get();
-  const itk::MeshIOBase * inputPointSetIOBase = inputWasmMeshIOBase->GetMeshIO();
+  const itk::WasmPointSetIOBase *inputWasmPointSetIOBase = inputPointSetIO.Get();
+  const itk::MeshIOBase *inputPointSetIOBase = inputWasmPointSetIOBase->GetMeshIO();
 
   const unsigned int dimension = inputPointSetIOBase->GetPointDimension();
   meshIO->SetPointDimension(dimension);
@@ -98,11 +98,11 @@ int writePointSet(itk::wasm::InputPointSetIO & inputPointSetIO, itk::wasm::Outpu
   {
     if (meshIO->GetNumberOfPoints())
     {
-      meshIO->WritePoints( reinterpret_cast< void * >( const_cast< char * >(&(inputWasmMeshIOBase->GetPointsContainer()->at(0))) ));
+      meshIO->WritePoints(reinterpret_cast<void *>(const_cast<char *>(&(inputWasmPointSetIOBase->GetPointsContainer()->at(0)))));
     }
     if (meshIO->GetNumberOfPointPixels())
     {
-      meshIO->WritePointData( reinterpret_cast< void * >( const_cast< char * >(&(inputWasmMeshIOBase->GetPointDataContainer()->at(0))) ));
+      meshIO->WritePointData(reinterpret_cast<void *>(const_cast<char *>(&(inputWasmPointSetIOBase->GetPointDataContainer()->at(0)))));
     }
 
     meshIO->Write();
@@ -111,9 +111,9 @@ int writePointSet(itk::wasm::InputPointSetIO & inputPointSetIO, itk::wasm::Outpu
   return EXIT_SUCCESS;
 }
 
-int main (int argc, char * argv[])
+int main(int argc, char *argv[])
 {
-  const char * pipelineName = TO_LITERAL(POINT_SET_IO_KEBAB_NAME) "-write-point-set";
+  const char *pipelineName = TO_LITERAL(POINT_SET_IO_KEBAB_NAME) "-write-point-set";
   itk::wasm::Pipeline pipeline(pipelineName, "Write an ITK-Wasm file format converted to a point set file format", argc, argv);
 
   itk::wasm::InputPointSetIO inputPointSetIO;
@@ -123,7 +123,8 @@ int main (int argc, char * argv[])
   pipeline.add_option("could-write", couldWrite, "Whether the input could be written. If false, the output mesh is not valid.")->type_name("OUTPUT_JSON");
 
   std::string outputFileName;
-  pipeline.add_option("serialized-point-set", outputFileName, "Output point set")->required()->type_name("OUTPUT_BINARY_FILE");;
+  pipeline.add_option("serialized-point-set", outputFileName, "Output point set")->required()->type_name("OUTPUT_BINARY_FILE");
+  ;
 
   bool informationOnly = false;
   pipeline.add_flag("-i,--information-only", informationOnly, "Only write point set metadata -- do not write pixel data.");
