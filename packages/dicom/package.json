@@ -33,7 +33,7 @@
     "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
     "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafybeicfhacth6jwhtqd2caxwtepoydf54kv3zzr36zpoj7og5iuzptv7u https://data.kitware.com/api/v1/file/66c62d8faf422925a42121ab/download",
+    "test:data:download": "dam download test/data test/data.tar.gz bafybeiaqmwshl3vrcp5soxvmsez4nfhugcv7p432k6ndmb3jecspnvvv6u https://data.kitware.com/api/v1/file/6706def5fb903c47575aa6cc/download",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "itk-wasm pnpm-script test:python:wasi",
     "test:python:emscripten": "itk-wasm pnpm-script test:python:emscripten",

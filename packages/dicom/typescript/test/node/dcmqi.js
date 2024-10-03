@@ -352,3 +352,35 @@ test('itk2dcm_makeSEG_seg_size', async t => {
     t.assert(r1.metrics.maximumDifference < 1e-8)
   }
 })
+
+// ========= IDC data tests =============
+test('IDC: DICOM segmentation', async t => {
+  const segFileName = 'dicom-images/IDC/nlst/100010/1.2.840.113654.2.55.236467930500313421847662756581858562399/SEG_1.2.276.0.7230010.3.1.3.313263360.35955.1706319184.882151/0ec3f890-c11a-4b33-8a37-17a68a5c7545.dcm'
+  const testFilePath = path.join(testPathPrefix, segFileName)
+  const output = await readSegmentationNode(testFilePath)
+  console.log(output)
+  console.log(output.segImage.imageType)
+  console.log(output.segImage.data)
+  console.log(JSON.stringify(output.metaInfo))
+
+  t.assert(output.segImage != null)
+  t.assert(output.segImage.data != null)
+  t.deepEqual(output.segImage.imageType, {
+    dimension: 3,
+    componentType: 'int16',
+    pixelType: 'Scalar',
+    components: 1
+  })
+  t.deepEqual(output.segImage.origin, [ -174.5, 174.316528, 9.04000854 ])
+  t.deepEqual(output.segImage.spacing, [ 0.683594, 0.683594, 2.5 ])
+  t.assert(arrayEquals(output.segImage.direction, [ 1, 0, 0, 0, -1, 0, 0, 0, -1 ]))
+  t.deepEqual(output.segImage.size, [ 512, 512, 137 ])
+  t.deepEqual(output.segImage.data.length, 35913728)
+
+  // The json file is simply generated from a previous call to readSegmentationNode. It is therefore, simply testing for regressions.
+  const baselineJsonFile = '/dicom-images/IDC/nlst/100010/1.2.840.113654.2.55.236467930500313421847662756581858562399/SEG_1.2.276.0.7230010.3.1.3.313263360.35955.1706319184.882151/metaInfo.json'
+  const baselineJsonFilePath = path.join(testPathPrefix, baselineJsonFile)
+  const baselineJsonFileBuffer = fs.readFileSync(baselineJsonFilePath)
+  const baselineJsonObject = JSON.parse(baselineJsonFileBuffer)
+  t.assert(JSON.stringify(baselineJsonObject) === JSON.stringify(output.metaInfo))
+})

@@ -14,6 +14,18 @@ function arrayEquals(a, b) {
   return (a.length === b.length && a.every((val, idx) => val === b[idx]))
 }
 
+function roundToThreePlaces(a) {
+  return Math.round((a + Number.EPSILON) * 1000) / 1000
+}
+
+function floatCompare(a, b) {
+  return (roundToThreePlaces(a) === roundToThreePlaces(b))
+}
+
+function floatCompareArray(a, b) {
+  return (a.length === b.length && a.every((val, idx) => floatCompare(val, b[idx])))
+}
+
 function verifyImage (t, image, expectedComponentType, expectedPixelType) {
   let componentType = IntTypes.Int16
   if (expectedComponentType) {
@@ -334,4 +346,49 @@ test('DICOM SOP: Nuclear Medicine Image.', async t => {
       0.9998040129533861
   ]))
   t.deepEqual(outputImage.size, [128, 128, 69])
+})
+
+// ========= IDC data tests =============
+test('IDC: Nuclear Medicine with negative SpacingBetweenSlices Test', async t => {
+  const nmFileName = 'dicom-images/IDC/acrin_nsclc_fdg_pet/ACRIN-NSCLC-FDG-PET-134/1.3.6.1.4.1.14519.5.2.1.7009.2403.154904565437993902842316547208/NM_1.3.6.1.4.1.14519.5.2.1.7009.2403.484725606860278331095617627781/0d6c2de3-168b-4ea5-a1c8-c7d7438faa15.dcm'
+  const testFilePath = path.join(testDataInputDirectory, nmFileName)
+  const output = await readImageDicomFileSeriesNode({inputImages: [testFilePath]})
+  t.assert(output)
+  const outputImage = output.outputImage
+  t.assert(outputImage != null)
+  t.assert(outputImage.imageType != null)
+  t.deepEqual(outputImage.imageType, {
+    dimension: 3,
+    componentType: 'uint16',
+    pixelType: 'Scalar',
+    components: 1
+  })
+  t.deepEqual(outputImage.origin, [ -204.60240003467, -399.60240003467, 1759.7 ])
+  t.deepEqual(outputImage.spacing, [ 2.8125, 2.8125, 2 ])
+  // Z-axis in direction matrix is flipped/negative due to the negative SpacingBetweenSlices
+  t.assert(arrayEquals(outputImage.direction, [ 1, 0, 0, 0, 1, 0, 0, 0, -1 ]))
+  t.deepEqual(outputImage.size, [ 128, 128, 196 ])
+  t.deepEqual(outputImage.data.length, 3211264)
+})
+
+test('IDC: CT with negative SpacingBetweenSlices Test', async t => {
+  const dirPath = 'dicom-images/IDC/nsclc_radiomics_genomics/LUNG3-49/1.3.6.1.4.1.32722.99.99.278496019127563640059579120768864824043/CT_1.3.6.1.4.1.32722.99.99.239963936032720978832553442140518002510'
+  const testDirPath = path.join(testDataInputDirectory, dirPath)
+  const testDicomSeriesFiles = glob.sync(`${testDirPath}/*.dcm`)
+  const output = await readImageDicomFileSeriesNode({inputImages: testDicomSeriesFiles})
+  t.assert(output)
+  const outputImage = output.outputImage
+  t.assert(outputImage != null)
+  t.assert(outputImage.imageType != null)
+  t.deepEqual(outputImage.imageType, {
+    dimension: 3,
+    componentType: 'int16',
+    pixelType: 'Scalar',
+    components: 1
+  })
+  t.assert(floatCompareArray(outputImage.origin, [ -171, -102, 673.300 ]))
+  t.assert(floatCompareArray(outputImage.spacing, [ 0.672, 0.672, 4.0]))
+  t.assert(arrayEquals(outputImage.direction, [ 1, 0, 0, 0, 1, 0, 0, 0, -1 ]))
+  t.deepEqual(outputImage.size, [ 512, 512, 89 ])
+  t.deepEqual(outputImage.data.length, 23330816)
 })
