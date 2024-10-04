@@ -2,7 +2,7 @@ from dataclasses import dataclass, asdict
 from typing import Optional
 
 from .image import Image, ImageType
-from .pointset import PointSet, PointSetType
+from .point_set import PointSet, PointSetType
 from .mesh import Mesh, MeshType
 from .polydata import PolyData, PolyDataType
 from .binary_file import BinaryFile
