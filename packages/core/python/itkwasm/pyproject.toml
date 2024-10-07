@@ -47,6 +47,7 @@ dependencies = [
     "itk>=5.4.0",
     "pytest >=2.7.3",
     "pytest-pyodide",
+    "pyodide-py",
     "dask[array]",
     "test_accelerator @ {root:uri}/test/test-accelerator",
 ]
