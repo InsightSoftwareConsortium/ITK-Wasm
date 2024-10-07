@@ -1,3 +1,3 @@
-const version = '1.0.0-b.178'
+const version = '1.0.0-b.179'
 
 export default version
