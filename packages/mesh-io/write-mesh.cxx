@@ -160,7 +160,7 @@ int main (int argc, char * argv[])
   pipeline.add_option("serialized-mesh", outputFileName, "Output mesh")->required()->type_name("OUTPUT_BINARY_FILE");;
 
   bool informationOnly = false;
-  pipeline.add_flag("-i,--information-only", informationOnly, "Only write image metadata -- do not write pixel data.");
+  pipeline.add_flag("-i,--information-only", informationOnly, "Only write mesh metadata -- do not write pixel data.");
 
   bool useCompression = false;
   pipeline.add_flag("-c,--use-compression", useCompression, "Use compression in the written file, if supported");

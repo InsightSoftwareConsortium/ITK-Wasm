@@ -1,6 +1,7 @@
 const typesRequireImport = [
   'Image',
   'Mesh',
+  'PointSet',
   'PolyData',
   'Transform',
   'TextFile',

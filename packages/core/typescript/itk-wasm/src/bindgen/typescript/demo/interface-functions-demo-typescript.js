@@ -1,27 +1,45 @@
 import path from 'path'
 
-import inputParametersDemoTypeScript from "./input-parameters-demo-typescript.js"
-import camelCase from "../../camel-case.js"
+import inputParametersDemoTypeScript from './input-parameters-demo-typescript.js'
+import camelCase from '../../camel-case.js'
 import pascalCase from '../../pascal-case.js'
-import packageToBundleName from "../package-to-bundle-name.js"
-import writeIfOverrideNotPresent from "../../write-if-override-not-present.js"
+import packageToBundleName from '../package-to-bundle-name.js'
+import writeIfOverrideNotPresent from '../../write-if-override-not-present.js'
 import outputDemoRunTypeScript from './output-demo-run-typescript.js'
 import outputDemoTypeScript from './output-demo-typescript.js'
 import ioPackagesNeeded from './io-packages-needed.js'
 
-function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath) {
+function interfaceFunctionsDemoTypeScript(
+  packageName,
+  interfaceJson,
+  outputPath
+) {
   let result = ''
   let indent = '    '
   const bundleName = packageToBundleName(packageName)
   const functionName = camelCase(interfaceJson.name)
   const functionNamePascalCase = pascalCase(interfaceJson.name)
 
-  const { needReadImage, needReadMesh, needWriteImage, needWriteMesh } = ioPackagesNeeded(interfaceJson)
+  const {
+    needReadImage,
+    needReadMesh,
+    needReadPointSet,
+    needWriteImage,
+    needWriteMesh,
+    needWritePointSet
+  } = ioPackagesNeeded(interfaceJson)
   if (needReadMesh) {
     if (packageName === '@itk-wasm/mesh-io') {
       result += `import { readMesh } from '../../../dist/index.js'\n`
     } else {
       result += `import { readMesh } from '@itk-wasm/mesh-io'\n`
+    }
+  }
+  if (needReadPointSet) {
+    if (packageName === '@itk-wasm/mesh-io') {
+      result += `import { readPointSet } from '../../../dist/index.js'\n`
+    } else {
+      result += `import { readPointSet } from '@itk-wasm/mesh-io'\n`
     }
   }
   if (needReadImage) {
@@ -38,6 +56,13 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
       result += `import { writeMesh } from '@itk-wasm/mesh-io'\n`
     }
   }
+  if (needWritePointSet) {
+    if (packageName === '@itk-wasm/mesh-io') {
+      result += `import { writePointSet } from '../../../dist/index.js'\n`
+    } else {
+      result += `import { writePointSet } from '@itk-wasm/mesh-io'\n`
+    }
+  }
   if (needWriteImage) {
     if (packageName === '@itk-wasm/image-io') {
       result += `import { writeImage } from '../../../dist/index.js'\n`
@@ -49,7 +74,10 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
   result += `import * as ${camelCase(bundleName)} from '../../../dist/index.js'\n`
 
   result += `import ${functionName}LoadSampleInputs, { usePreRun } from "./${interfaceJson.name}-load-sample-inputs.js"\n`
-  const loadSampleInputsModulePath = path.join(outputPath, `${interfaceJson.name}-load-sample-inputs.ts`)
+  const loadSampleInputsModulePath = path.join(
+    outputPath,
+    `${interfaceJson.name}-load-sample-inputs.ts`
+  )
   const loadSampleInputsModuleContent = `export default null
 // export default async function ${functionName}LoadSampleInputs (model, preRun=false) {
 
@@ -77,7 +105,10 @@ function interfaceFunctionsDemoTypeScript(packageName, interfaceJson, outputPath
 // Set this to \`false\` if sample inputs are very large or sample pipeline computation is long.
 export const usePreRun = true
 `
-  writeIfOverrideNotPresent(loadSampleInputsModulePath, loadSampleInputsModuleContent)
+  writeIfOverrideNotPresent(
+    loadSampleInputsModulePath,
+    loadSampleInputsModuleContent
+  )
 
   result += `
 class ${functionNamePascalCase}Model {
@@ -119,12 +150,24 @@ class ${functionNamePascalCase}Model {
     // Inputs
 `
   interfaceJson.inputs.forEach((input) => {
-    result += inputParametersDemoTypeScript(functionName, indent, input, true, 'inputs')
+    result += inputParametersDemoTypeScript(
+      functionName,
+      indent,
+      input,
+      true,
+      'inputs'
+    )
   })
 
   interfaceJson.outputs.forEach((output) => {
     if (output.type.includes('FILE')) {
-      result += inputParametersDemoTypeScript(functionName, indent, output, true, 'inputs')
+      result += inputParametersDemoTypeScript(
+        functionName,
+        indent,
+        output,
+        true,
+        'inputs'
+      )
     }
   })
 
@@ -132,10 +175,16 @@ class ${functionNamePascalCase}Model {
     result += `${indent}// ----------------------------------------------\n${indent}// Options\n`
     interfaceJson.parameters.forEach((parameter) => {
       // Internal
-      if (parameter.name === "memory-io" || parameter.name === "version") {
+      if (parameter.name === 'memory-io' || parameter.name === 'version') {
         return
       }
-      result += inputParametersDemoTypeScript(functionName, indent, parameter, parameter.required, 'options')
+      result += inputParametersDemoTypeScript(
+        functionName,
+        indent,
+        parameter,
+        parameter.required,
+        'options'
+      )
     })
   }
 
@@ -201,7 +250,8 @@ class ${functionNamePascalCase}Model {
   })
 
   result += '      } catch (error) {\n'
-  result += '        globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")\n'
+  result +=
+    '        globalThis.notify("Error while running pipeline", error.toString(), "danger", "exclamation-octagon")\n'
   result += '        throw error\n'
   result += '      } finally {\n'
   result += '        runButton.loading = false\n'
@@ -218,9 +268,15 @@ class ${functionNamePascalCase}Model {
   })
   result += `} = await ${camelCase(bundleName)}.${functionName}(`
   interfaceJson.inputs.forEach((input) => {
-    if (input.type === 'INPUT_TEXT_STREAM' || input.type === 'INPUT_BINARY_STREAM') {
+    if (
+      input.type === 'INPUT_TEXT_STREAM' ||
+      input.type === 'INPUT_BINARY_STREAM'
+    ) {
       result += `      this.model.inputs.get('${camelCase(input.name)}').slice(),\n`
-    } else if (input.type.startsWith('INPUT_BINARY_FILE') || input.type.startsWith('INPUT_TEXT_FILE')) {
+    } else if (
+      input.type.startsWith('INPUT_BINARY_FILE') ||
+      input.type.startsWith('INPUT_TEXT_FILE')
+    ) {
       result += `      { data: this.model.inputs.get('${camelCase(input.name)}').data.slice(), path: this.model.inputs.get('${camelCase(input.name)}').path },\n`
     } else if (input.type === 'INPUT_IMAGE') {
       result += `      this.model.inputs.get('${camelCase(input.name)}'),\n`
@@ -229,8 +285,13 @@ class ${functionNamePascalCase}Model {
     }
   })
   interfaceJson.outputs.forEach((output) => {
-    const defaultData = output.type.includes('BINARY') ? 'new Uint8Array()' : "''"
-    if (output.type.startsWith('OUTPUT_BINARY_FILE') || output.type.startsWith('OUTPUT_TEXT_FILE')) {
+    const defaultData = output.type.includes('BINARY')
+      ? 'new Uint8Array()'
+      : "''"
+    if (
+      output.type.startsWith('OUTPUT_BINARY_FILE') ||
+      output.type.startsWith('OUTPUT_TEXT_FILE')
+    ) {
       result += `      this.model.inputs.get('${camelCase(output.name)}'),\n`
     }
   })
@@ -247,7 +308,10 @@ class ${functionNamePascalCase}Model {
 
   result += `\nconst ${functionName}Controller = new ${controllerClassName}(${functionName}LoadSampleInputs)\n`
 
-  const modulePath = path.join(outputPath, `${interfaceJson.name}-controller.ts`)
+  const modulePath = path.join(
+    outputPath,
+    `${interfaceJson.name}-controller.ts`
+  )
   writeIfOverrideNotPresent(modulePath, result)
   return modulePath
 }

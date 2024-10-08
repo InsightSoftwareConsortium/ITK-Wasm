@@ -26,7 +26,7 @@ async def free_surfer_binary_read_mesh_async(
     :param serialized_mesh: Input mesh serialized in the file format
     :type  serialized_mesh: os.PathLike
 
-    :param information_only: Only read image metadata -- do not read pixel data.
+    :param information_only: Only read mesh metadata -- do not read pixel data.
     :type  information_only: bool
 
     :return: Whether the input could be read. If false, the output mesh is not valid.

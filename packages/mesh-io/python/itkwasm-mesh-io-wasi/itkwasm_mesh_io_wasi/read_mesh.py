@@ -11,7 +11,7 @@ def read_mesh(
     serialized_mesh: os.PathLike,
     information_only: bool = False,
 ) -> Mesh:
-    """Read an mesh file format and convert it to the itk-wasm file format.
+    """Read a mesh file format and convert it to the ITK-Wasm file format.
 
     :param serialized_mesh: Input mesh serialized in the file format
     :type  serialized_mesh: os.PathLike

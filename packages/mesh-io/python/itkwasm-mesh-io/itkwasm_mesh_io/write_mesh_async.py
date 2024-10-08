@@ -12,7 +12,7 @@ async def write_mesh_async(
     information_only: bool = False,
     use_compression: bool = False,
 ) -> None:
-    """Write an itk-wasm file format converted to an mesh file format
+    """Write an ITK-Wasm file format converted to a mesh file format.
 
     :param mesh: Input mesh
     :type  mesh: Mesh

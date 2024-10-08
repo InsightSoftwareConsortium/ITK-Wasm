@@ -36,9 +36,9 @@ namespace itk
   {
     /**
      *\class OutputMeshIO
-     * \brief Output image for an itk::wasm::Pipeline from an itk::MeshIOBase
+     * \brief Output mesh for an itk::wasm::Pipeline from an itk::MeshIOBase
      *
-     * This image is written to the filesystem or memory when it goes out of scope.
+     * This mesh is written to the filesystem or memory when it goes out of scope.
      *
      * This class is for the ReadMesh itk-wasm pipeline. Most pipelines will use itk::wasm::OutputMesh.
      *

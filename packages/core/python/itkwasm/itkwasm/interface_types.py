@@ -7,6 +7,7 @@ class InterfaceTypes(str, Enum):
     BinaryStream = "BinaryStream"
     Image = "Image"
     Mesh = "Mesh"
+    PointSet = "PointSet"
     PolyData = "PolyData"
     Transform = "Transform"
     JsonCompatible = "JsonCompatible"

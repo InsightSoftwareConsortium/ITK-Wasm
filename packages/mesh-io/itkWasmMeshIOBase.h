@@ -19,7 +19,7 @@
 #define itkWasmMeshIOBase_h
 #include "WebAssemblyInterfaceExport.h"
 
-#include "itkWasmDataObject.h"
+#include "itkWasmPointSetIOBase.h"
 #include "itkMeshIOBase.h"
 #include "itkVectorContainer.h"
 
@@ -30,48 +30,36 @@ namespace itk
  * \brief JSON representation for an itk::MeshIOBase
  *
  * JSON representation for an itk::MeshIOBase for interfacing across programming languages and runtimes.
- * 
+ *
  * Points, Cells, PointData, CellData binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
- * 
+ *
  * Arrays:
- * 
+ *
  * - 0: Points
  * - 1: Cells
  * - 2: PointData
  * - 3: CellData
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT WasmMeshIOBase : public WasmDataObject
+class WebAssemblyInterface_EXPORT WasmMeshIOBase : public WasmPointSetIOBase
 {
 public:
   ITK_DISALLOW_COPY_AND_MOVE(WasmMeshIOBase);
 
   /** Standard class type aliases. */
   using Self = WasmMeshIOBase;
-  using Superclass = WasmDataObject;
+  using Superclass = WasmPointSetIOBase;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmMeshIOBase, WasmDataObject);
+  itkTypeMacro(WasmMeshIOBase, WasmPointSetIOBase);
 
-  using DataContainerType = VectorContainer<SizeValueType, char>;
+  using DataContainerType = Superclass::DataContainerType;
 
   void SetMeshIO(MeshIOBase * imageIO, bool readMesh = true);
-  const MeshIOBase * GetMeshIO() const {
-    return m_MeshIOBase.GetPointer();
-  }
-
-  const DataContainerType * GetPointsContainer() const
-  {
-    return this->m_PointsContainer.GetPointer();
-  }
-  DataContainerType * GetPointsContainer()
-  {
-    return this->m_PointsContainer.GetPointer();
-  }
 
   const DataContainerType * GetCellsContainer() const
   {
@@ -80,15 +68,6 @@ public:
   DataContainerType * GetCellsContainer()
   {
     return this->m_CellsContainer.GetPointer();
-  }
-
-  const DataContainerType * GetPointDataContainer() const
-  {
-    return this->m_PointDataContainer.GetPointer();
-  }
-  DataContainerType * GetPointDataContainer()
-  {
-    return this->m_PointDataContainer.GetPointer();
   }
 
   const DataContainerType * GetCellDataContainer() const
@@ -107,12 +86,8 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  DataContainerType::Pointer m_PointsContainer;
   DataContainerType::Pointer m_CellsContainer;
-  DataContainerType::Pointer m_PointDataContainer;
   DataContainerType::Pointer m_CellDataContainer;
-
-  MeshIOBase::ConstPointer m_MeshIOBase;
 };
 
 } // namespace itk

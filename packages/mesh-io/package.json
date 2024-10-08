@@ -6,9 +6,9 @@
   "description": "scripts to generate @itk-wasm/compare-stringify itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {
-    "test-data-hash": "bafkreidvr5jnut7us3umgdm4gqrcqygvpd456z2duaiuiimby7mhvsniii",
+    "test-data-hash": "bafkreiahocrgb3p4xrjozr7cg5wdpdt6wp77kolnqyupae6awkplb5p4he",
     "test-data-urls": [
-      "https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.155/mesh-io-test-data.tar.gz"
+      "https://bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq.ipfs.w3s.link/ipfs/bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq/data.tar.gz"
     ],
     "emscripten-docker-image": "itkwasm/emscripten:latest",
     "wasi-docker-image": "itkwasm/wasi:latest",
@@ -32,7 +32,7 @@
     "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
     "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafkreidvr5jnut7us3umgdm4gqrcqygvpd456z2duaiuiimby7mhvsniii https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.155/mesh-io-test-data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreiahocrgb3p4xrjozr7cg5wdpdt6wp77kolnqyupae6awkplb5p4he https://bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq.ipfs.w3s.link/ipfs/bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "itk-wasm pnpm-script test:python:wasi",
     "test:python:emscripten": "itk-wasm pnpm-script test:python:emscripten",

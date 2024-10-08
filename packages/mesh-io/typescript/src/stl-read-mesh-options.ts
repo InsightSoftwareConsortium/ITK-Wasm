@@ -3,7 +3,7 @@
 import { WorkerPoolFunctionOption } from 'itk-wasm'
 
 interface StlReadMeshOptions extends WorkerPoolFunctionOption {
-  /** Only read image metadata -- do not read pixel data. */
+  /** Only read mesh metadata -- do not read pixel data. */
   informationOnly?: boolean
 
 }

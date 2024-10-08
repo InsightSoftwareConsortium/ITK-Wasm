@@ -32,7 +32,7 @@ async def free_surfer_binary_write_mesh_async(
     :param serialized_mesh: Output mesh
     :type  serialized_mesh: str
 
-    :param information_only: Only write image metadata -- do not write pixel data.
+    :param information_only: Only write mesh metadata -- do not write pixel data.
     :type  information_only: bool
 
     :param use_compression: Use compression in the written file, if supported

@@ -22,6 +22,7 @@ from .text_file import TextFile
 from .binary_file import BinaryFile
 from .image import Image
 from .mesh import Mesh
+from .point_set import PointSet
 from .polydata import PolyData
 from .json_compatible import JsonCompatible
 from .int_types import IntTypes
@@ -277,6 +278,27 @@ class Pipeline:
                     "cellData": f"data:application/vnd.itk.address,0:{cell_data_ptr}",
                 }
                 ri.set_input_json(mesh_json, index)
+            elif input_.type == InterfaceTypes.PointSet:
+                point_set = input_.data
+                if point_set.numberOfPoints:
+                    pv = array_like_to_bytes(point_set.points)
+                else:
+                    pv = bytes([])
+                points_ptr = ri.set_input_array(pv, index, 0)
+                if point_set.numberOfPointPixels:
+                    pdv = array_like_to_bytes(point_set.pointData)
+                else:
+                    pdv = bytes([])
+                point_data_ptr = ri.set_input_array(pdv, index, 1)
+                point_set_json = {
+                    "pointSetType": asdict(point_set.pointSetType),
+                    "name": point_set.name,
+                    "numberOfPoints": point_set.numberOfPoints,
+                    "points": f"data:application/vnd.itk.address,0:{points_ptr}",
+                    "numberOfPointPixels": point_set.numberOfPointPixels,
+                    "pointData": f"data:application/vnd.itk.address,0:{point_data_ptr}",
+                }
+                ri.set_input_json(point_set_json, index)
             elif input_.type == InterfaceTypes.PolyData:
                 polydata = input_.data
                 if polydata.numberOfPoints:
@@ -442,6 +464,31 @@ class Pipeline:
                         mesh.cellData = buffer_to_numpy_array(mesh.meshType.cellPixelComponentType, bytes([]))
 
                     output_data = PipelineOutput(InterfaceTypes.Mesh, mesh)
+                elif output.type == InterfaceTypes.PointSet:
+                    point_set_json = ri.get_output_json(index)
+                    point_set = PointSet(**point_set_json)
+
+                    if point_set.numberOfPoints > 0:
+                        data_ptr = ri.get_output_array_address(0, index, 0)
+                        data_size = ri.get_output_array_size(0, index, 0)
+                        point_set.points = buffer_to_numpy_array(
+                            point_set.pointSetType.pointComponentType,
+                            ri.wasmtime_lift(data_ptr, data_size),
+                        )
+                    else:
+                        point_set.points = buffer_to_numpy_array(point_set.pointSetType.pointComponentType, bytes([]))
+
+                    if point_set.numberOfPointPixels > 0:
+                        data_ptr = ri.get_output_array_address(0, index, 1)
+                        data_size = ri.get_output_array_size(0, index, 1)
+                        point_set.pointData = buffer_to_numpy_array(
+                            point_set.pointSetType.pointPixelComponentType,
+                            ri.wasmtime_lift(data_ptr, data_size),
+                        )
+                    else:
+                        point_set.pointData = buffer_to_numpy_array(point_set.pointSetType.pointPixelComponentType, bytes([]))
+
+                    output_data = PipelineOutput(InterfaceTypes.PointSet, point_set)
                 elif output.type == InterfaceTypes.PolyData:
                     polydata_json = ri.get_output_json(index)
                     polydata = PolyData(**polydata_json)

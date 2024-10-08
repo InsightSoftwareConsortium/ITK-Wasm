@@ -5,6 +5,11 @@ from .read_mesh import read_mesh, meshread
 from .write_mesh_async import write_mesh_async, meshwrite_async
 from .write_mesh import write_mesh, meshwrite
 
+from .read_point_set_async import read_point_set_async, pointsetread_async
+from .read_point_set import read_point_set, pointsetread
+from .write_point_set_async import write_point_set_async, pointsetwrite_async
+from .write_point_set import write_point_set, pointsetwrite
+
 from .byu_read_mesh_async import byu_read_mesh_async
 from .byu_read_mesh import byu_read_mesh
 from .byu_write_mesh_async import byu_write_mesh_async
