@@ -94,3 +94,12 @@ cypress/videos/
 packages/core/typescript/itk-wasm/dist
 
 CMakePresets.json
+
+packages/core/typescript/itk-wasm/test/data/cow.iwm
+packages/transform-io/typescript/demo-app/
+# pixi environments
+.pixi
+*.egg-info
+
+native/
+src/docker/itk-wasm-base/itk_wasm_env_vars.sh

@@ -6,8 +6,8 @@
   "description": "scripts to generate @itk-wasm/transform-io itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {
-    "emscripten-docker-transform": "itkwasm/emscripten:latest",
-    "wasi-docker-transform": "itkwasm/wasi:latest",
+    "emscripten-docker-image": "itkwasm/emscripten:latest",
+    "wasi-docker-image": "itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/transform-io",
     "python-package-name": "itkwasm-transform-io",
     "package-description": "Input and output for scientific and medical coordinate transform file formats.",

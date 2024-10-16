@@ -77,3 +77,10 @@ function enableInputs(inputId) {
   })
 }
 globalThis.enableInputs = enableInputs
+
+async function fetchToBinaryFile(filename, url) {
+  const dicomReponse = await fetch(url)
+  const dicomData = new Uint8Array(await dicomReponse.arrayBuffer())
+  return { data: dicomData, path: filename }
+}
+globalThis.fetchToBinaryFile = fetchToBinaryFile

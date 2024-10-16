@@ -5,10 +5,10 @@ import Image from '../interface-types/image.js'
 import CastImageOptions from '../cast-image-options.js'
 
 /**
- * @deprecated Use readImageFileNode from @itk-wasm/image-io instead
+ * @deprecated Use readImageNode from @itk-wasm/image-io instead
  */
 async function readImageLocalFile (filePath: string, options?: CastImageOptions): Promise<Image> {
-  throw new Error('readImageLocalFile is deprecated. Use readImageFileNode from @itk-wasm/image-io instead.')
+  throw new Error('readImageLocalFile is deprecated. Use readImageNode from @itk-wasm/image-io instead.')
 }
 
 export default readImageLocalFile

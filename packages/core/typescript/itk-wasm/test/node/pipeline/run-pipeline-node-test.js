@@ -220,7 +220,7 @@ test('runPipelineNode uses input and output text and binary files', (t) => {
     '--input-text-file',
     testInputTextFile,
     '--input-binary-file',
-    testInputBinFile,
+    testInputBinFile
   ]
   const desiredOutputs = [
     { type: InterfaceTypes.TextStream },

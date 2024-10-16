@@ -4,6 +4,7 @@ const InterfaceTypes = {
   TextStream: 'TextStream',
   BinaryStream: 'BinaryStream',
   Image: 'Image',
+  PointSet: 'PointSet',
   Mesh: 'Mesh',
   PolyData: 'PolyData',
   Transform: 'Transform',

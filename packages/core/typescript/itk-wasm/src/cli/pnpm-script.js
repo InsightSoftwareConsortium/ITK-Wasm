@@ -193,6 +193,13 @@ async function pnpmScript(name, extraArgs, options) {
           undefined,
           true
         )
+        const emscriptenDockerImage =
+          configValue(
+            'emscripten-docker-image',
+            options,
+            packageJson,
+            undefined
+          ) ?? `quay.io/itkwasm/emscripten:${defaultImageTag}`
         const packageDescription = configValue(
           'package-description',
           options,
@@ -204,6 +211,8 @@ async function pnpmScript(name, extraArgs, options) {
           'itk-wasm',
           '-b',
           'emscripten-build',
+          '-i',
+          emscriptenDockerImage,
           'bindgen',
           '--interface',
           'typescript',
@@ -247,10 +256,15 @@ async function pnpmScript(name, extraArgs, options) {
           undefined,
           true
         )
+        const wasiDockerImage =
+          configValue('wasi-docker-image', options, packageJson, undefined) ??
+          `quay.io/itkwasm/wasi:${defaultImageTag}`
         pnpmCommand = pnpmCommand.concat([
           'itk-wasm',
           '-b',
           'wasi-build',
+          '-i',
+          wasiDockerImage,
           'bindgen',
           '--interface',
           'python',

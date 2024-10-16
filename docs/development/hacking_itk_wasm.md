@@ -36,22 +36,12 @@ ITK-Wasm's [C++ core](../introduction/parts.md#cxx-core) can be developed with n
 2. Build the `WebAssemblyInterface` module from this module against ITK
 3. Run the tests
 
-From a command line, these steps in brief are:
+We recommend using [pixi](https://pixi.sh) with a bash shell (including on Windows).
+The steps to build and test the C++ core with a native toolchain are:
 
-```sh
-# Build ITK
-git clone https://github.com/InsightSoftwareConsortium/ITK
-cmake -BITK-build -SITK -DBUILD_TESTING=OFF -DModule_MeshToPolyData=ON
-cmake --build ITK-build
-
-# Build the WebAssemblyInterface module from this module against ITK
-git clone https://github.com/InsightSoftwareConsortium/ITK-Wasm
-cmake -Bitk-wasm-build -Sitk-wasm -DBUILD_TESTING=ON -DITK_DIR=$PWD/ITK-build
-cmake --build itk-wasm-build
-
-# Run the tests
-ctest --test-dir itk-wasm-build
-```
+1. Install pixi: `curl -fsSL https://pixi.sh/install.sh | bash`
+2. Clone [the ITK-Wasm GitHub repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm)
+3. Run `pixi run test-itk-wasm`
 
 For additional guidance on C++ development, see the [ITK Software Guide].
 
@@ -79,7 +69,7 @@ To pull the `latest` the build environment Docker images,
 To build the `latest` build environment Docker images from the Docker configuration and local C++ core,
 
 ```sh
-./src/docker/build.sh --with-debug
+pixi run build-docker-images --with-debug
 ```
 
 The `--with-debug` flag will also build the `latest-debug` tagged images.

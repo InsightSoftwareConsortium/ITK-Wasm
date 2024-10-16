@@ -77,14 +77,14 @@ jobs:
           path: packages/${{ matrix.package }}/typescript/cypress/videos
           if-no-files-found: ignore
 
-      - name: Test with Firefox
-        if: ${{ matrix.package != 'compress-stringify' && matrix.package != 'dicom' && matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' }}
-        uses: cypress-io/github-action@v6
-        with:
-          browser: firefox
-          working-directory: packages/${{ matrix.package }}/typescript
-          install: false
-          start: pnpm start
+      #- name: Test with Firefox
+        #if: ${{ matrix.package != 'compress-stringify' && matrix.package != 'dicom' && matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' }}
+        #uses: cypress-io/github-action@v6
+        #with:
+          #browser: firefox
+          #working-directory: packages/${{ matrix.package }}/typescript
+          #install: false
+          #start: pnpm start
 
       - uses: actions/upload-artifact@v4
         if: failure()

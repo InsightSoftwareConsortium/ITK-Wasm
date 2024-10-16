@@ -62,7 +62,7 @@ async function runPipelineNode (
     Array.from(mountedDirs)
       .filter((x, _, a) => a.every((y) => x === y || !x.includes(y)))
       .forEach((dir) => unmountable.add(dir)
-    )
+      )
   }
   if (typeof mountDirs !== 'undefined') {
     args = replaceArgumentsWithEmscriptenPaths(args, mountDirs)

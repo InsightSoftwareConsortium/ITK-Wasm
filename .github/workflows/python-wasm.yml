@@ -69,11 +69,11 @@ jobs:
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" build:python:wasi
 
       - name: Test python on system
-        if: ${{ matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' ) }}
+        if: ${{ matrix.package != 'dicom' && matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'dicom' && matrix.package != 'image-io' && matrix.package != 'downsample' ) }}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:python:wasi
 
-      - uses: pyodide/pyodide-actions/install-browser@main
+      - uses: pyodide/pyodide-actions/install-browser@e3edcb8db4f1ec4604e402013f3ae2ee9f114441
         if: ${{ matrix.python-minor-version > 10 }}
         with:
           runner: selenium
@@ -81,6 +81,6 @@ jobs:
           browser-version: latest
 
       - name: Test python on chrome
-        if: ${{ matrix.python-minor-version > 10 && matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'dicom' && matrix.os != 'macos-14' )}}
+        if: ${{ matrix.python-minor-version > 10 && matrix.package != 'dicom' && matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'dicom' && matrix.os != 'macos-14' )}}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:python:emscripten

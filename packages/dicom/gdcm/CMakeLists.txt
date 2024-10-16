@@ -43,6 +43,17 @@ else()
   set(Iconv_BUILD_COMMAND make)
 endif()
 
+if(${CMAKE_VERSION} VERSION_LESS 3.24)
+  set(download_extract_timestamp_flag)
+else()
+  set(download_extract_timestamp_flag
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+ endif()
+
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.23.0")
+	cmake_policy(SET CMP0135 NEW)
+endif()
+
 ExternalProject_Add(${Iconv_LIBRARY}
   PREFIX ${Iconv_DIR}
   URL "https://bafybeid2yl6aeunciy5rynjmaoxkhhau3jgjpv7x25pylby7hq6n23c57i.ipfs.dweb.link/libiconv-1.16.tar.gz"
@@ -52,6 +63,7 @@ ExternalProject_Add(${Iconv_LIBRARY}
   BUILD_COMMAND ${Iconv_BUILD_COMMAND}
   # needed for ninja generator
   BUILD_BYPRODUCTS ${Iconv_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}iconv${CMAKE_STATIC_LIBRARY_SUFFIX}
+  ${download_extract_timestamp_flag}
 )
 
 add_library(${Iconv} STATIC IMPORTED)

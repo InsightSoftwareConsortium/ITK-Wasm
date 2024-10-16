@@ -9,7 +9,7 @@
     "test:quiet": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- -- --quiet cthead1.png",
     "test:help": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- -- --help"
   },
-  "author": "Matt McCormick <matt.mccormick@kitware.com>",
+  "author": "Matt McCormick <matt@mmmccormick.com>",
   "license": "Apache-2.0",
   "dependencies": {
     "fs-extra": "^10.0.0",
