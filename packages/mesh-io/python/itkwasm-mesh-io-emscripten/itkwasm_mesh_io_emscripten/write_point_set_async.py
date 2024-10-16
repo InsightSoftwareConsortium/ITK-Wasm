@@ -81,7 +81,7 @@ async def write_point_set_async(
 
     to_py(outputs_object_map['serializedPointSet'])
 
-async def point_setwrite_async(
+async def pointsetwrite_async(
     point_set: PointSet,
     serialized_point_set: os.PathLike,
     information_only: bool = False,
@@ -89,6 +89,6 @@ async def point_setwrite_async(
 ) -> None:
     return write_point_set_async(point_set, serialized_point_set, information_only=information_only, use_compression=use_compression)
 
-point_setwrite_async.__doc__ = f"""{write_point_set_async.__doc__}
+pointsetwrite_async.__doc__ = f"""{write_point_set_async.__doc__}
     Alias for write_point_set.
     """

@@ -18,6 +18,7 @@ def input_data():
     input_base_path = Path('..', '..', 'test', 'data')
     test_files = [
         Path('input') / 'cow.vtk',
+        Path('input') / 'box-points.obj',
     ]
     data = {}
     for f in test_files:

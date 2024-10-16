@@ -43,6 +43,7 @@ path = "itkwasm_mesh_io_emscripten/_version.py"
 dependencies = [
   "pytest",
   "pytest-pyodide",
+  "pyodide-py",
 ]
 
 [project.urls]

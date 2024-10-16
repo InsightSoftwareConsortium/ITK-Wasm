@@ -56,7 +56,7 @@ async def read_point_set_async(
             js_resources.web_worker = web_worker
             could_read = to_py(outputs_object_map['couldRead'])
             if could_read:
-                point_set = to_py(outputs_object_map['point_set'])
+                point_set = to_py(outputs_object_map['pointSet'])
                 return point_set
 
     if io is None:
@@ -72,7 +72,7 @@ async def read_point_set_async(
 
     js_resources.web_worker = web_worker
 
-    point_set = to_py(outputs_object_map['point_set'])
+    point_set = to_py(outputs_object_map['pointSet'])
 
     return point_set
 

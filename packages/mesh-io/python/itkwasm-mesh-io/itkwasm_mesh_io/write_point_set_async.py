@@ -26,7 +26,7 @@ async def write_point_set_async(
     :param use_compression: Use compression in the written file
     :type  use_compression: bool
     """
-    func = environment_dispatch("itkwasm_point_set_io", "write_point_set_async")
+    func = environment_dispatch("itkwasm_mesh_io", "write_point_set_async")
     await func(point_set, serialized_point_set, information_only=information_only, use_compression=use_compression)
     return
 

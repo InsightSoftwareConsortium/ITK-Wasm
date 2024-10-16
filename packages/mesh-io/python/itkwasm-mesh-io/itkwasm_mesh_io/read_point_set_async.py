@@ -10,7 +10,7 @@ async def read_point_set_async(
     serialized_point_set: os.PathLike,
     information_only: bool = False,
 ) -> PointSet:
-    """Read n point set file format and convert it to the ITK-Wasm file format.
+    """Read a point set file format and convert it to the ITK-Wasm file format.
 
     :param serialized_point_set: Input point_set serialized in the file format
     :type  serialized_point_set: os.PathLike
@@ -21,7 +21,7 @@ async def read_point_set_async(
     :return: Output point_set
     :rtype:  PointSet
     """
-    func = environment_dispatch("itkwasm_point_set_io", "read_point_set_async")
+    func = environment_dispatch("itkwasm_mesh_io", "read_point_set_async")
     output = await func(serialized_point_set, information_only=information_only)
     return output
 
