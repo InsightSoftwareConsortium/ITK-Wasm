@@ -418,8 +418,8 @@ importers:
         specifier: ^1.39.10
         version: 1.39.11
       axios:
-        specifier: ^1.6.2
-        version: 1.6.8(debug@4.3.5)
+        specifier: ^1.7.4
+        version: 1.7.4(debug@4.3.5)
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
@@ -656,8 +656,8 @@ importers:
   packages/image-io/typescript:
     dependencies:
       axios:
-        specifier: ^1.6.2
-        version: 1.6.8(debug@4.3.5)
+        specifier: ^1.7.4
+        version: 1.7.4(debug@4.3.5)
       itk-wasm:
         specifier: workspace:^
         version: link:../../core/typescript/itk-wasm
@@ -851,6 +851,7 @@ packages:
   '@azure/core-http@3.0.4':
     resolution: {integrity: sha512-Fok9VVhMdxAFOtqiiAtg74fL0UJkt0z3D+ouUUxcRLzZNBioPRAMJFVxiWoJljYpXsRi4GDQHzQHDc9AiYaIUQ==}
     engines: {node: '>=14.0.0'}
+    deprecated: This package is no longer supported. Please migrate to use @azure/core-rest-pipeline
 
   '@azure/core-lro@2.7.2':
     resolution: {integrity: sha512-0YIpccoX8m/k00O7mDDMdJpbr6mf1yWo2dfmxt5A8XVZVVMz2SSKaEbMCeJRvgQ0IaSlqhjT47p4hVIRRy90xw==}
@@ -2048,6 +2049,7 @@ packages:
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -2055,6 +2057,7 @@ packages:
 
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
+    deprecated: Use @eslint/object-schema instead
 
   '@inquirer/figures@1.0.1':
     resolution: {integrity: sha512-mtup3wVKia3ZwULPHcbs4Mor8Voi+iIXEWD7wCNbIO6lYR62oPCTQyrddi5OMYVXHzeCSoneZwJuS8sBvlEwDw==}
@@ -2801,6 +2804,9 @@ packages:
 
   axios@1.6.8:
     resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
+
+  axios@1.7.4:
+    resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
 
   babel-plugin-polyfill-corejs2@0.4.11:
     resolution: {integrity: sha512-sMEJ27L0gRHShOh5G54uAAPaiCOygY/5ratXuiyb2G46FmlSpc9eFCzYVyDiPxfNbwzA7mYahmjQc5q+CZQ09Q==}
@@ -3597,6 +3603,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -5318,6 +5325,7 @@ packages:
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rollup@3.29.4:
@@ -7696,7 +7704,7 @@ snapshots:
     dependencies:
       '@itk-viewer/blosc-zarr': 0.2.3
       '@itk-viewer/utils': 0.1.4
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.6.8
       comlink: 4.4.1
       gl-matrix: 3.4.3
       itk-wasm: 1.0.0-b.160
@@ -7755,7 +7763,7 @@ snapshots:
 
   '@itk-wasm/dam@1.1.1':
     dependencies:
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.6.8
       commander: 10.0.1
       decompress: 4.2.1
       files-from-path: 1.0.4
@@ -8591,7 +8599,15 @@ snapshots:
 
   aws4@1.12.0: {}
 
-  axios@1.6.8(debug@4.3.5):
+  axios@1.6.8:
+    dependencies:
+      follow-redirects: 1.15.6(debug@4.3.5)
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.7.4(debug@4.3.5):
     dependencies:
       follow-redirects: 1.15.6(debug@4.3.5)
       form-data: 4.0.0
@@ -10450,7 +10466,7 @@ snapshots:
     dependencies:
       '@thewtex/zstddec': 0.2.1
       '@types/emscripten': 1.39.11
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
       comlink: 4.4.1
       commander: 11.1.0
       fs-extra: 11.2.0
@@ -10466,7 +10482,7 @@ snapshots:
       '@itk-wasm/dam': 1.1.1
       '@thewtex/zstddec': 0.2.1
       '@types/emscripten': 1.39.11
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
       chalk: 5.3.0
       comlink: 4.4.1
       commander: 11.1.0
@@ -12092,7 +12108,7 @@ snapshots:
 
   wait-on@7.2.0(debug@4.3.5):
     dependencies:
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
       joi: 17.13.1
       lodash: 4.17.21
       minimist: 1.2.8
