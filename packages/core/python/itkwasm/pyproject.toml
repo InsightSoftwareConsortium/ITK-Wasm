@@ -47,6 +47,7 @@ dependencies = [
     "itk>=5.4.0",
     "pytest >=2.7.3",
     "pytest-pyodide",
+    "pyodide-py",
     "dask[array]",
     "test_accelerator @ {root:uri}/test/test-accelerator",
 ]
@@ -57,7 +58,7 @@ test = [
     "pytest --dist-dir=./dist --rt=chrome",
 ]
 download-pyodide = [
-  "curl -L https://github.com/pyodide/pyodide/releases/download/0.25.1/pyodide-0.25.1.tar.bz2 -o pyodide.tar.bz2",
+  "curl -L https://github.com/pyodide/pyodide/releases/download/0.26.2/pyodide-0.26.2.tar.bz2 -o pyodide.tar.bz2",
   "tar xjf pyodide.tar.bz2",
   "rm -rf dist pyodide.tar.bz2",
   "mv pyodide dist",

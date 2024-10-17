@@ -34,7 +34,7 @@ keywords = [
 
 requires-python = ">=3.8"
 dependencies = [
-    "itkwasm >= 1.0.b145",
+    "itkwasm >= 1.0.b179",
     "itkwasm-mesh-io-wasi; sys_platform != \"emscripten\"",
     "itkwasm-mesh-io-emscripten; sys_platform == \"emscripten\"",
 
@@ -47,6 +47,7 @@ path = "itkwasm_mesh_io/_version.py"
 dependencies = [
   "pytest",
   "pytest-pyodide",
+  "pyodide-py",
 ]
 
 [project.urls]
@@ -59,7 +60,7 @@ test = [
   "pytest --dist-dir=./dist/pyodide --rt=chrome",
 ]
 download-pyodide = [
-  "curl -L https://github.com/pyodide/pyodide/releases/download/0.25.1/pyodide-0.25.1.tar.bz2 -o pyodide.tar.bz2",
+  "curl -L https://github.com/pyodide/pyodide/releases/download/0.26.2/pyodide-0.26.2.tar.bz2 -o pyodide.tar.bz2",
   "tar xjf pyodide.tar.bz2",
   "rm -rf dist/pyodide pyodide.tar.bz2",
   "mkdir -p dist",

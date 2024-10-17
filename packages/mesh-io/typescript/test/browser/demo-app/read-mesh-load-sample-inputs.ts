@@ -1,4 +1,4 @@
-export default async function readImageLoadSampleInputs (model, preRun=false) {
+export default async function readMeshLoadSampleInputs (model, preRun=false) {
   const inputButton = document.querySelector('#readMeshInputs sl-button[name=serialized-mesh-file-button]')
   if (!preRun) {
     inputButton.loading = true

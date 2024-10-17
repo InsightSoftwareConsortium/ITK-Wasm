@@ -138,15 +138,6 @@ WasmMeshIOBase::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "PointsContainer";
-  if (this->m_PointsContainer->size())
-  {
-    this->m_PointsContainer->Print(os, indent);
-  }
-  else
-  {
-    os << ": (empty)" << std::endl;
-  }
   os << indent << "CellsContainer";
   if (this->m_CellsContainer->size())
   {
@@ -157,15 +148,6 @@ WasmMeshIOBase::PrintSelf(std::ostream & os, Indent indent) const
     os << ": (empty)" << std::endl;
   }
   os << indent << "CellDataContainer";
-  if (this->m_PointDataContainer->size())
-  {
-    this->m_PointDataContainer->Print(os, indent);
-  }
-  else
-  {
-    os << ": (empty)" << std::endl;
-  }
-  os << indent << "PointDataContainer";
   if (this->m_CellDataContainer->size())
   {
     this->m_CellDataContainer->Print(os, indent);

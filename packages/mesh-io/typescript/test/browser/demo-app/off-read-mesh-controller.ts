@@ -78,8 +78,8 @@ class OffReadMeshController {
             const fileName = `mesh.${downloadFormat}`
             const { webWorker, serializedMesh } = await writeMesh(model.outputs.get("mesh"), fileName)
 
-            webWorker.terminate()
             globalThis.downloadFile(serializedMesh.data, fileName)
+            webWorker.terminate()
         }
     })
 

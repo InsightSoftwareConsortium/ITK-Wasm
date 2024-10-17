@@ -3,6 +3,9 @@
 from .read_mesh import read_mesh, meshread
 from .write_mesh import write_mesh, meshwrite
 
+from .read_point_set import read_point_set, pointsetread
+from .write_point_set import write_point_set, pointsetwrite
+
 from .byu_read_mesh import byu_read_mesh
 from .byu_write_mesh import byu_write_mesh
 from .free_surfer_ascii_read_mesh import free_surfer_ascii_read_mesh
@@ -23,5 +26,16 @@ from .wasm_read_mesh import wasm_read_mesh
 from .wasm_write_mesh import wasm_write_mesh
 from .wasm_zstd_read_mesh import wasm_zstd_read_mesh
 from .wasm_zstd_write_mesh import wasm_zstd_write_mesh
+
+from .obj_read_point_set import obj_read_point_set
+from .obj_write_point_set import obj_write_point_set
+from .off_read_point_set import off_read_point_set
+from .off_write_point_set import off_write_point_set
+from .vtk_poly_data_read_point_set import vtk_poly_data_read_point_set
+from .vtk_poly_data_write_point_set import vtk_poly_data_write_point_set
+from .wasm_read_point_set import wasm_read_point_set
+from .wasm_write_point_set import wasm_write_point_set
+from .wasm_zstd_read_point_set import wasm_zstd_read_point_set
+from .wasm_zstd_write_point_set import wasm_zstd_write_point_set
 
 from ._version import __version__

@@ -23,6 +23,7 @@
 #include <fstream>
 
 #include "itkMeshJSON.h"
+#include "itkPointSetJSON.h"
 #include "cbor.h"
 
 namespace itk
@@ -72,6 +73,9 @@ public:
   /** Set the JSON representation of the image information. */
   void SetJSON(const MeshJSON & json);
 
+  /** Set the JSON representation of the image information. */
+  void SetJSON(const PointSetJSON & json);
+
   /*-------- This part of the interfaces deals with writing data ----- */
 
   /** Writes the data to disk from the memory buffer provided. Make sure
@@ -93,6 +97,9 @@ public:
 #if !defined(ITK_WRAPPING_PARSER)
   /** Get the JSON representation of the mesh information. */
   auto GetJSON() -> MeshJSON;
+
+  /** Get the JSON representation of the point set information. */
+  auto GetPointSetJSON() -> PointSetJSON;
 #endif
 
 protected:

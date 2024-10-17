@@ -95,7 +95,7 @@ int main (int argc, char * argv[])
   pipeline.add_option("mesh", outputMeshIO, "Output mesh")->required()->type_name("OUTPUT_MESH");
 
   bool informationOnly = false;
-  pipeline.add_flag("-i,--information-only", informationOnly, "Only read image metadata -- do not read pixel data.");
+  pipeline.add_flag("-i,--information-only", informationOnly, "Only read mesh metadata -- do not read pixel data.");
 
   ITK_WASM_PARSE(pipeline);
 

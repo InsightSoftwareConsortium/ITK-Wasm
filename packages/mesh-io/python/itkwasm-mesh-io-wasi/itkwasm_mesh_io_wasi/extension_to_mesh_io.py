@@ -12,5 +12,4 @@ extension_to_mesh_io = OrderedDict([
     ('.iwm', 'wasm'),
     ('.iwm.cbor', 'wasm'),
     ('.iwm.cbor.zst', 'wasm_zstd'),
-    ('.bmp', 'bmp'),
 ])

@@ -1,10 +1,10 @@
 """itkwasm: Python interface to itk-wasm WebAssembly modules."""
 
-__version__ = "1.0b178"
+__version__ = "1.0b179"
 
 from .interface_types import InterfaceTypes
 from .image import Image, ImageType, ImageRegion
-from .pointset import PointSet, PointSetType
+from .point_set import PointSet, PointSetType
 from .mesh import Mesh, MeshType
 from .transform import Transform, TransformType, TransformParameterizations
 from .polydata import PolyData, PolyDataType

@@ -306,6 +306,32 @@ WasmMeshIO
 }
 
 
+auto
+WasmMeshIO
+::GetPointSetJSON() -> PointSetJSON
+{
+  PointSetJSON pointSetJSON;
+
+  pointSetJSON.pointSetType.dimension = this->GetPointDimension();
+
+  const auto pointIOComponentType = this->GetPointComponentType();
+  pointSetJSON.pointSetType.pointComponentType = jsonFloatTypeFromIOComponentEnum( pointIOComponentType );
+  const auto pointPixelIOComponentType = this->GetPointPixelComponentType();
+  pointSetJSON.pointSetType.pointPixelComponentType = jsonComponentTypeFromIOComponentEnum( pointPixelIOComponentType );
+  const auto pointIOPixelType = this->GetPointPixelType();
+  pointSetJSON.pointSetType.pointPixelType = jsonFromIOPixelEnum( pointIOPixelType );
+  pointSetJSON.pointSetType.pointPixelComponents = this->GetNumberOfPointPixelComponents();
+
+  pointSetJSON.numberOfPoints =this->GetNumberOfPoints();
+  pointSetJSON.numberOfPointPixels = this->GetNumberOfPointPixels();
+
+  pointSetJSON.points = "data:application/vnd.itk.path,data/points.raw";
+  pointSetJSON.pointData = "data:application/vnd.itk.path,data/point-data.raw";
+
+  return pointSetJSON;
+}
+
+
 void
 WasmMeshIO
 ::SetJSON(const MeshJSON & meshJSON)
@@ -335,6 +361,26 @@ WasmMeshIO
   this->SetNumberOfCells( meshJSON.numberOfCells );
   this->SetNumberOfCellPixels( meshJSON.numberOfCellPixels );
   this->SetCellBufferSize( meshJSON.cellBufferSize );
+}
+
+
+void
+WasmMeshIO
+::SetJSON(const PointSetJSON & pointSetJSON)
+{
+  const auto & pointSetType = pointSetJSON.pointSetType;
+  this->SetPointDimension( pointSetType.dimension );
+
+  const auto pointIOComponentType = ioComponentEnumFromJSON( pointSetType.pointComponentType );
+  this->SetPointComponentType( pointIOComponentType );
+  const auto pointPixelIOComponentType = ioComponentEnumFromJSON( pointSetType.pointPixelComponentType );
+  this->SetPointPixelComponentType( pointPixelIOComponentType );
+  const auto pointIOPixelType = ioPixelEnumFromJSON( pointSetType.pointPixelType );
+  this->SetPointPixelType( pointIOPixelType );
+  this->SetNumberOfPointPixelComponents( pointSetType.pointPixelComponents );
+
+  this->SetNumberOfPoints( pointSetJSON.numberOfPoints );
+  this->SetNumberOfPointPixels( pointSetJSON.numberOfPointPixels );
 }
 
 

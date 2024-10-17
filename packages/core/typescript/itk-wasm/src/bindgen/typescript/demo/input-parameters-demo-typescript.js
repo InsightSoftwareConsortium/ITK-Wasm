@@ -1,6 +1,12 @@
-import camelCase from "../../camel-case.js"
+import camelCase from '../../camel-case.js'
 
-function inputParametersDemoTypeScript(functionName, indent, parameter, required, modelProperty) {
+function inputParametersDemoTypeScript(
+  functionName,
+  indent,
+  parameter,
+  required,
+  modelProperty
+) {
   let result = ''
   const parameterName = camelCase(parameter.name)
   const inputIdentifier = `${parameterName}Element`
@@ -13,15 +19,23 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
       result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
       if (parameter.itemsExpectedMax > 1) {
-        const textValue = parameterType === 'INPUT_TEXT_STREAM' ? 'new TextDecoder().decode(new Uint8Array(arrayBuffer))' : '{ data: new TextDecoder().decode(new Uint8Array(arrayBuffer)), path: files[0].name }'
+        const textValue =
+          parameterType === 'INPUT_TEXT_STREAM'
+            ? 'new TextDecoder().decode(new Uint8Array(arrayBuffer))'
+            : '{ data: new TextDecoder().decode(new Uint8Array(arrayBuffer)), path: files[0].name }'
         result += `${indent}${indent}const inputStrings = await Promise.all(Array.from(files).map(async (file) => { const arrayBuffer = await file.arrayBuffer(); return ${textValue} }))\n`
         result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", inputStrings)\n`
         result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
-        const textDataProp = parameterType.includes('FILE') ? '.path' : '.substring(0,4)'
+        const textDataProp = parameterType.includes('FILE')
+          ? '.path'
+          : '.substring(0,4)'
         result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(model.${modelProperty}.get("${parameterName}").map((x) => x${textDataProp}).toString())}</pre>\`\n`
       } else {
         result += `${indent}${indent}const arrayBuffer = await files[0].arrayBuffer()\n`
-        const textValue = parameterType === 'INPUT_TEXT_STREAM' ? 'new TextDecoder().decode(new Uint8Array(arrayBuffer))' : '{ data: new TextDecoder().decode(new Uint8Array(arrayBuffer)), path: files[0].name }'
+        const textValue =
+          parameterType === 'INPUT_TEXT_STREAM'
+            ? 'new TextDecoder().decode(new Uint8Array(arrayBuffer))'
+            : '{ data: new TextDecoder().decode(new Uint8Array(arrayBuffer)), path: files[0].name }'
         result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", ${textValue})\n`
         result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
         result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(model.${modelProperty}.get("${parameterName}").data.substring(0, 50) + ' ...')}</pre>\`\n`
@@ -36,15 +50,23 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
       result += `${indent}${indent}const files = event.target.files || dataTransfer.files\n\n`
       if (parameter.itemsExpectedMax > 1) {
-        const binaryValue = parameterType === 'INPUT_BINARY_STREAM' ? 'new Uint8Array(arrayBuffer)' : '{ data: new Uint8Array(arrayBuffer), path: file.name }'
+        const binaryValue =
+          parameterType === 'INPUT_BINARY_STREAM'
+            ? 'new Uint8Array(arrayBuffer)'
+            : '{ data: new Uint8Array(arrayBuffer), path: file.name }'
         result += `${indent}${indent}const inputBinaries = await Promise.all(Array.from(files).map(async (file) => { const arrayBuffer = await file.arrayBuffer(); return ${binaryValue} }))\n`
         result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", inputBinaries)\n`
         result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
-        const binaryDataProp = parameterType.includes('FILE') ? '.path' : '.subarray(0,4)'
+        const binaryDataProp = parameterType.includes('FILE')
+          ? '.path'
+          : '.subarray(0,4)'
         result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(model.${modelProperty}.get("${parameterName}").map((x) => x${binaryDataProp}).toString())}</pre>\`\n`
       } else {
         result += `${indent}${indent}const arrayBuffer = await files[0].arrayBuffer()\n`
-        const binaryValue = parameterType === 'INPUT_BINARY_STREAM' ? 'new Uint8Array(arrayBuffer)' : '{ data: new Uint8Array(arrayBuffer), path: files[0].name }'
+        const binaryValue =
+          parameterType === 'INPUT_BINARY_STREAM'
+            ? 'new Uint8Array(arrayBuffer)'
+            : '{ data: new Uint8Array(arrayBuffer), path: files[0].name }'
         result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", ${binaryValue})\n`
         result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
         const binaryDataProp = parameterType.includes('FILE') ? '.data' : ''
@@ -91,6 +113,7 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
     case 'INPUT_JSON':
     case 'INPUT_IMAGE':
     case 'INPUT_MESH':
+    case 'INPUT_POINT_SET':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('change', async (event) => {\n`
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
@@ -133,6 +156,21 @@ function inputParametersDemoTypeScript(functionName, indent, parameter, required
           result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", mesh)\n`
           result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
           result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(mesh, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+        }
+      } else if (parameterType === 'INPUT_POINT_SET') {
+        if (parameter.itemsExpectedMax > 1) {
+          result += `${indent}${indent}const readPointSets = await Promise.all(Array.from(files).map(async (file) => readPointSet(file)))\n`
+          result += `${indent}${indent}readPointSets.forEach(ps => ps.webWorker.terminate())\n`
+          result += `${indent}${indent}const inputPointSets = readPointSets.map(ps => ps.pointSet)\n`
+          result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", inputPointSets)\n`
+          result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
+          result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(inputPointSets, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+        } else {
+          result += `${indent}${indent}const { pointSet, webWorker } = await readPointSet(files[0])\n`
+          result += `${indent}${indent}webWorker.terminate()\n`
+          result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", pointSet)\n`
+          result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
+          result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(pointSet, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
         }
       }
       result += `${indent}${indent}details.disabled = false\n`

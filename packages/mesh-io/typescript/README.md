@@ -25,6 +25,8 @@ Import:
 import {
   readMesh,
   writeMesh,
+  readPointSet,
+  writePointSet,
   byuReadMesh,
   byuWriteMesh,
   freeSurferAsciiReadMesh,
@@ -45,6 +47,16 @@ import {
   wasmWriteMesh,
   wasmZstdReadMesh,
   wasmZstdWriteMesh,
+  objReadPointSet,
+  objWritePointSet,
+  offReadPointSet,
+  offWritePointSet,
+  vtkPolyDataReadPointSet,
+  vtkPolyDataWritePointSet,
+  wasmReadPointSet,
+  wasmWritePointSet,
+  wasmZstdReadPointSet,
+  wasmZstdWritePointSet,
   setPipelinesBaseUrl,
   getPipelinesBaseUrl,
 } from "@itk-wasm/mesh-io"
@@ -113,6 +125,70 @@ async function writeMesh(
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |
 |    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+
+#### readPointSet
+
+*Read a pointSet file format and convert it to the itk-wasm file format*
+
+```ts
+async function readPointSet(
+  serializedPointSet: File | BinaryFile,
+  options: ReadPointSetOptions = {}
+) : Promise<ReadPointSetResult>
+```
+
+|     Parameter    |             Type            | Description                                                                                                                                                  |
+| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `serializedPointSet` |     *File | BinaryFile*     | Input pointSet serialized in the file format                                                                                                                     |
+
+**`ReadPointSetOptions` interface:**
+
+|      Property     |    Type   | Description                                         |
+| :---------------: | :-------: | :-------------------------------------------------- |
+| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.  
+
+**`ReadPointSetResult` interface:**
+
+|   Property  |       Type       | Description                                                              |
+| :---------: | :--------------: | :----------------------------------------------------------------------- |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
+|    `pointSet`   |      *PointSet*      | Output pointSet                                                              |
+
+#### writePointSet
+
+*Write an itk-wasm file format converted to an pointSet file format*
+
+```ts
+async function writePointSet(
+  pointSet: PointSet,
+  serializedPointSet: string,
+  options: WritePointSetOptions = {}
+) : Promise<WritePointSetResult>
+```
+
+|     Parameter    |             Type            | Description                                                                                                                                                  |
+| :--------------: | :-------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      `pointSet`      |            *PointSet*           | Input pointSet                                                                                                                                                   |
+| `serializedPointSet` |           *string*          | Output pointSet                                                                                                                                                  |
+
+**`WritePointSetOptions` interface:**
+
+|      Property     |    Type   | Description                                              |
+| :---------------: | :-------: | :------------------------------------------------------- |
+| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
+|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
+|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.  
+
+**`WritePointSetResult` interface:**
+
+|     Property     |       Type       | Description                                                                 |
+| :--------------: | :--------------: | :-------------------------------------------------------------------------- |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
+| `serializedPointSet` |   *BinaryFile*   | Output pointSet                                                                 |
 
 #### byuReadMesh
 
@@ -799,6 +875,10 @@ Import:
 
 ```js
 import {
+  readMeshNode,
+  writeMeshNode,
+  readPointSetNode,
+  writePointSetNode,
   byuReadMeshNode,
   byuWriteMeshNode,
   freeSurferAsciiReadMeshNode,
@@ -819,6 +899,16 @@ import {
   wasmWriteMeshNode,
   wasmZstdReadMeshNode,
   wasmZstdWriteMeshNode,
+  objReadPointSetNode,
+  objWritePointSetNode,
+  offReadPointSetNode,
+  offWritePointSetNode,
+  vtkPolyDataReadPointSetNode,
+  vtkPolyDataWritePointSetNode,
+  wasmReadPointSetNode,
+  wasmWritePointSetNode,
+  wasmZstdReadPointSetNode,
+  wasmZstdWritePointSetNode,
 } from "@itk-wasm/mesh-io"
 ```
 
