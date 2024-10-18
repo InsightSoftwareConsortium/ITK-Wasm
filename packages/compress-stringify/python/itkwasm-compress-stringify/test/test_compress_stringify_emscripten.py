@@ -38,7 +38,7 @@ async def test_we_can_stringify_during_compression(selenium, package_wheel):
     data = bytes([222, 173, 190, 239])
     compressed_data = await compress_stringify_async(data, compression_level=8, stringify=True)
     decoded = compressed_data.decode()
-    assert decoded.lower() == 'data:base64,kluv/saeiqaa3q2+7w=='
+    assert decoded.lower() == 'data:application/zstd;base64,kluv/saeiqaa3q2+7w=='
     decompressed_data = await parse_string_decompress_async(compressed_data, parse_string=True)
 
     assert decompressed_data[0] == 222

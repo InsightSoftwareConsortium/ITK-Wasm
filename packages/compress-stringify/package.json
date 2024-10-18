@@ -28,7 +28,6 @@
     "bindgen:python": "itk-wasm pnpm-script bindgen:python",
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "itk-wasm pnpm-script build:gen:python",
-    "build:micromamba": "itk-wasm pnpm-script build:micromamba",
     "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
     "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
@@ -43,7 +42,6 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@itk-wasm/dam": "^1.1.0",
-    "@thewtex/setup-micromamba": "^1.9.7",
     "itk-wasm": "workspace:^",
     "@itk-wasm/mesh-io-build": "workspace:^",
     "@itk-wasm/image-io-build": "workspace:^",
