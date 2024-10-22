@@ -31,6 +31,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: prefix-dev/setup-pixi@v0.8.1
+
       - name: Set up Python ${{ env.python-version }}
         uses: actions/setup-python@v5
         with:
