@@ -23,7 +23,7 @@
     "build:emscripten:debug": "itk-wasm pnpm-script build:emscripten:debug",
     "build:wasi": "itk-wasm pnpm-script build:wasi",
     "build:wasi:debug": "itk-wasm pnpm-script build:wasi:debug",
-    "build:python:wasi": "itk-wasm pnpm-script build:python:wasi",
+    "build:python:wasi": "echo 'No build:python:wasi script required with pixi'",
     "bindgen:typescript": "itk-wasm pnpm-script bindgen:typescript",
     "bindgen:python": "itk-wasm pnpm-script bindgen:python",
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
