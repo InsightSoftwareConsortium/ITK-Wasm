@@ -10,6 +10,7 @@ version = "0.1.0"
 
 [dependencies]
 python = "3.12.*"
+pnpm = ">=9.12.1,<10"
 
 [feature.python.dependencies]
 pytest = ">=8.3.3,<9"
