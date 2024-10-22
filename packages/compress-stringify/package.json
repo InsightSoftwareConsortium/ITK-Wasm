@@ -27,7 +27,7 @@
     "bindgen:typescript": "itk-wasm pnpm-script bindgen:typescript",
     "bindgen:python": "itk-wasm pnpm-script bindgen:python",
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
-    "build:gen:python": "itk-wasm pnpm-script build:gen:python",
+    "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
     "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
