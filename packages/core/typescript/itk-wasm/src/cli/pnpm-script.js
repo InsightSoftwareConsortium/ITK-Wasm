@@ -60,12 +60,12 @@ async function pnpmScript(name, extraArgs, options) {
   )
   const micromambaRootPath = path.resolve('micromamba')
   const environmentFile = path.resolve('environment.yml')
-  const environmentFileContents = fs.readFileSync(environmentFile, 'utf8')
-  const environmentName = environmentFileContents
+  const environmentFileContents =  fs.existsSync(environmentFile) ? fs.readFileSync(environmentFile, 'utf8') : null
+  const environmentName = fs.existsSync(environmentFile) ? environmentFileContents
     .split('\n')
     .filter((l) => l.includes('name:'))[0]
     .split(':')[1]
-    .trim()
+    .trim() : null
 
   const pnpmRootCommand = ['root']
   const pnpmRootProcess = spawnSync('pnpm', pnpmRootCommand, {
