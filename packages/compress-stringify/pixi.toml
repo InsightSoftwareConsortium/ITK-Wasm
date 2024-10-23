@@ -3,7 +3,7 @@ authors = ["Matt McCormick <matt@mmmccormick.com>"]
 channels = ["conda-forge"]
 description = "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly."
 name = "compress-stringify"
-platforms = ["linux-64"]
+platforms = ["win-64", "linux-64", "linux-aarch64", "osx-arm64"]
 version = "0.1.0"
 
 [tasks]
