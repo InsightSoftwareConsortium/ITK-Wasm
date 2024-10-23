@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compare-images-build",
-  "version": "5.2.2",
+  "version": "5.2.3",
   "private": true,
   "description": "@itk-wasm/compare-stringify build configuration",
   "type": "module",
