@@ -60,12 +60,16 @@ async function pnpmScript(name, extraArgs, options) {
   )
   const micromambaRootPath = path.resolve('micromamba')
   const environmentFile = path.resolve('environment.yml')
-  const environmentFileContents =  fs.existsSync(environmentFile) ? fs.readFileSync(environmentFile, 'utf8') : null
-  const environmentName = fs.existsSync(environmentFile) ? environmentFileContents
-    .split('\n')
-    .filter((l) => l.includes('name:'))[0]
-    .split(':')[1]
-    .trim() : null
+  const environmentFileContents = fs.existsSync(environmentFile)
+    ? fs.readFileSync(environmentFile, 'utf8')
+    : null
+  const environmentName = fs.existsSync(environmentFile)
+    ? environmentFileContents
+        .split('\n')
+        .filter((l) => l.includes('name:'))[0]
+        .split(':')[1]
+        .trim()
+    : null
 
   const pnpmRootCommand = ['root']
   const pnpmRootProcess = spawnSync('pnpm', pnpmRootCommand, {
@@ -301,20 +305,18 @@ async function pnpmScript(name, extraArgs, options) {
           'pnpm',
           'bindgen:typescript'
         ])
-        if (!fs.existsSync(path.join(typescriptOutputDir, 'package.json'))) {
-          pnpmCommand = pnpmCommand.concat([
-            '&&',
-            'pnpm',
-            '--filter',
-            `{${typescriptOutputDir}}`,
-            'install',
-            '&&',
-            'pnpm',
-            '--filter',
-            `{${typescriptOutputDir}}`,
-            'build'
-          ])
-        }
+        pnpmCommand = pnpmCommand.concat([
+          '&&',
+          'pnpm',
+          '--filter',
+          `{${typescriptOutputDir}}`,
+          'install',
+          '&&',
+          'pnpm',
+          '--filter',
+          `{${typescriptOutputDir}}`,
+          'build'
+        ])
       }
       break
     case 'build:gen:python':
