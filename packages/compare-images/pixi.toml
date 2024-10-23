@@ -45,6 +45,31 @@ cwd = "python/itkwasm-compare-images"
 depends-on = ["version-sync-typescript", "version-sync-python-wasi", "version-sync-python-emscripten", "version-sync-python-dispatch"]
 description = "Synchronize package versions"
 
+[tasks.publish-typescript]
+cmd = "pnpm publish --filter \"{typescript}\""
+
+[tasks.publish-python-user-check]
+cmd = "if [ -n \"$HATCH_INDEX_USER\"]; then echo \"HATCH_INDEX_USER is set\"; else echo \"HATCH_INDEX_USER is not set\"; exit 1; fi"
+
+[tasks.publish-python-wasi]
+cmd = '''hatch build &&
+  hatch publish'''
+cwd = "python/itkwasm-compare-images-wasi"
+
+[tasks.publish-python-emscripten]
+cmd = '''hatch build &&
+  hatch publish'''
+cwd = "python/itkwasm-compare-images-emscripten"
+
+[tasks.publish-python-dispatch]
+cmd = '''hatch build &&
+  hatch publish'''
+cwd = "python/itkwasm-compare-images"
+
+[tasks.publish]
+depends-on = ["publish-typescript", "publish-python-wasi", "publish-python-emscripten", "publish-python-dispatch"]
+description = "Synchronize package versions"
+
 [feature.python.dependencies]
 pytest = ">=8.3.3,<9"
 
