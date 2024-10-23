@@ -27,8 +27,6 @@
     "bindgen:python": "itk-wasm pnpm-script bindgen:python",
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
-    "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
-    "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
     "test:data:download": "dam download test/data test/data.tar.gz bafybeiafli6egtmkcgany65po64w67hpqnmgwr5utqo6ycbbz7k5l33llu https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.171/compare-images-test-data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
