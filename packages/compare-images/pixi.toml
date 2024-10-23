@@ -11,13 +11,44 @@ version = "0.1.0"
 [dependencies]
 python = "3.12.*"
 pnpm = ">=9.12.1,<10"
+hatch = ">=1.13.0,<2"
+pip = ">=24.2,<25"
+
+[target.win-64.dependencies]
+m2w64-jq = ">=1.6.0,<2"
+
+[target.unix.dependencies]
+jq = ">=1.7.1,<2"
+
+[tasks.version-sync-typescript]
+cmd = '''version=$(cat package.json | jq .version) &&
+  jq ".version = $version" typescript/package.json > typescript/package.json.tmp &&
+  mv typescript/package.json.tmp typescript/package.json'''
+
+[tasks.version-sync-python-wasi]
+cmd = '''version=$(cat ../../package.json | jq -r .version) &&
+  echo "version is $version" &&
+  hatch version $version'''
+cwd = "python/itkwasm-compare-images-wasi"
+
+[tasks.version-sync-python-emscripten]
+cmd = '''version=$(cat ../../package.json | jq -r .version) &&
+  hatch version $version'''
+cwd = "python/itkwasm-compare-images-emscripten"
+
+[tasks.version-sync-python-dispatch]
+cmd = '''version=$(cat ../../package.json | jq -r .version) &&
+  hatch version $version'''
+cwd = "python/itkwasm-compare-images"
+
+[tasks.version-sync]
+depends-on = ["version-sync-typescript", "version-sync-python-wasi", "version-sync-python-emscripten", "version-sync-python-dispatch"]
+description = "Synchronize package versions"
 
 [feature.python.dependencies]
 pytest = ">=8.3.3,<9"
-pip = ">=24.2,<25"
 
 [feature.python.pypi-dependencies]
-hatch = ">=1.13.0, <2"
 itkwasm-compare-images-wasi = { path = "python/itkwasm-compare-images-wasi", editable = true }
 itkwasm-compare-images = { path = "python/itkwasm-compare-images", editable = true }
 pyodide-py = ">=0.26.3, <0.27"
@@ -77,7 +108,6 @@ depends-on = ["download-pyodide"]
 description = "Serve itkwasm-compare-images for development"
 
 [feature.python.tasks.test-python]
-cmd = "echo 'Testing all Python packages'"
 depends-on = ["test-wasi", "test-emscripten", "test-dispatch"]
 description = "Run tests for all Python packages"
 

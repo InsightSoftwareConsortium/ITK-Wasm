@@ -1,8 +1,7 @@
 {
   "name": "@itk-wasm/compare-images-build",
-  "version": "1.0.0",
+  "version": "5.2.1",
   "private": true,
-  "packageManager": "pnpm@9.6.0",
   "description": "scripts to generate @itk-wasm/compare-stringify itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {
