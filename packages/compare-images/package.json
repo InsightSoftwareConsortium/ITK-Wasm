@@ -2,7 +2,7 @@
   "name": "@itk-wasm/compare-images-build",
   "version": "5.2.2",
   "private": true,
-  "description": "scripts to generate @itk-wasm/compare-stringify itk-wasm artifacts.",
+  "description": "@itk-wasm/compare-stringify build configuration",
   "type": "module",
   "itk-wasm": {
     "emscripten-docker-image": "itkwasm/emscripten:latest",
@@ -30,9 +30,9 @@
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
     "test:data:download": "dam download test/data test/data.tar.gz bafybeiafli6egtmkcgany65po64w67hpqnmgwr5utqo6ycbbz7k5l33llu https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.171/compare-images-test-data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
-    "test:python:wasi": "pixi run test-wasi",
-    "test:python:emscripten": "pixi run test-emscripten",
-    "test:python:dispatch": "pixi run test-dispatch",
+    "test:python:wasi": "pnpm test:data:download && pixi run test-wasi",
+    "test:python:emscripten": "pnpm test:data:download && pixi run test-emscripten",
+    "test:python:dispatch": "pnpm test:data:download && pixi run test-dispatch",
     "test:python": "pixi run test-python"
   },
   "license": "Apache-2.0",
