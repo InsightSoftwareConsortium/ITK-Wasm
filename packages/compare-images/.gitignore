@@ -4,4 +4,4 @@ dist/
 test/
 package-lock.json
 typescript/test/browser/demo-app/public
-micromamba/
+pyodide/

@@ -18,6 +18,7 @@ async def compare_double_images_async(
     test_image: Image,
     baseline_images: List[Image] = [],
     difference_threshold: float = 0,
+    spatial_tolerance: float = 1e-08,
     radius_tolerance: int = 0,
     number_of_pixels_tolerance: int = 0,
     ignore_boundary_pixels: bool = False,
@@ -32,6 +33,9 @@ async def compare_double_images_async(
 
     :param difference_threshold: Intensity difference for pixels to be considered different.
     :type  difference_threshold: float
+
+    :param spatial_tolerance: Tolerance for comparing spatial overlap (origin and direction matrix).
+    :type  spatial_tolerance: float
 
     :param radius_tolerance: Radius of the neighborhood around a pixel to search for similar intensity values.
     :type  radius_tolerance: int
@@ -59,6 +63,8 @@ async def compare_double_images_async(
         kwargs["baselineImages"] = to_js(baseline_images)
     if difference_threshold:
         kwargs["differenceThreshold"] = to_js(difference_threshold)
+    if spatial_tolerance:
+        kwargs["spatialTolerance"] = to_js(spatial_tolerance)
     if radius_tolerance:
         kwargs["radiusTolerance"] = to_js(radius_tolerance)
     if number_of_pixels_tolerance:

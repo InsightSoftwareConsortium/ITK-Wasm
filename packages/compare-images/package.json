@@ -23,26 +23,24 @@
     "build:emscripten:debug": "itk-wasm pnpm-script build:emscripten:debug",
     "build:wasi": "itk-wasm pnpm-script build:wasi",
     "build:wasi:debug": "itk-wasm pnpm-script build:wasi:debug",
-    "build:python:wasi": "itk-wasm pnpm-script build:python:wasi",
+    "build:python:wasi": "echo 'No build:python:wasi script required with pixi'",
     "bindgen:typescript": "itk-wasm pnpm-script bindgen:typescript",
     "bindgen:python": "itk-wasm pnpm-script bindgen:python",
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
-    "build:gen:python": "itk-wasm pnpm-script build:gen:python",
-    "build:micromamba": "itk-wasm pnpm-script build:micromamba",
+    "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
     "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
     "test:data:download": "dam download test/data test/data.tar.gz bafybeiafli6egtmkcgany65po64w67hpqnmgwr5utqo6ycbbz7k5l33llu https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.171/compare-images-test-data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
-    "test:python:wasi": "itk-wasm pnpm-script test:python:wasi",
-    "test:python:emscripten": "itk-wasm pnpm-script test:python:emscripten",
-    "test:python:dispatch": "itk-wasm pnpm-script test:python:emscripten",
-    "test:python": "itk-wasm pnpm-script test:python"
+    "test:python:wasi": "pixi run test-wasi",
+    "test:python:emscripten": "pixi run test-emscripten",
+    "test:python:dispatch": "pixi run test-dispatch",
+    "test:python": "pixi run test-python"
   },
   "license": "Apache-2.0",
   "devDependencies": {
     "@itk-wasm/dam": "^1.1.0",
-    "@thewtex/setup-micromamba": "^1.9.7",
     "itk-wasm": "workspace:^",
     "@itk-wasm/image-io-build": "workspace:^"
   }
