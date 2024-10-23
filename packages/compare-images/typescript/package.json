@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compare-images",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "description": "Compare images with a tolerance for regression testing.",
   "type": "module",
   "module": "./dist/index.js",
