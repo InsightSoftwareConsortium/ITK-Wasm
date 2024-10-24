@@ -1,9 +1,8 @@
 {
   "name": "@itk-wasm/compress-stringify-build",
-  "version": "1.0.0",
+  "version": "3.3.1",
   "private": true,
-  "packageManager": "pnpm@9.6.0",
-  "description": "scripts to generate @itk-wasm/compare-stringify itk-wasm artifacts.",
+  "description": "@itk-wasm/compare-stringify build configuration.",
   "type": "module",
   "itk-wasm": {
     "emscripten-docker-image": "itkwasm/emscripten:latest",
@@ -33,9 +32,9 @@
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
     "test:data:download": "dam download test/data test/data.tar.gz bafkreiha6oye3fd5cxfadnua5r2jlkaco2xuyeek454d2ihiffsx7rauqe https://placeholder",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
-    "test:python:wasi": "pixi run test-wasi",
-    "test:python:emscripten": "pixi run test-emscripten",
-    "test:python:dispatch": "pixi run test-dispatch",
+    "test:python:wasi": "pnpm test:data:download && pixi run test-wasi",
+    "test:python:emscripten": "pnpm test:data:download && pixi run test-emscripten",
+    "test:python:dispatch": "pnpm test:data:download && pixi run test-dispatch",
     "test:python": "pixi run test-python",
     "test:wasi": "itk-wasm pnpm-script test:wasi"
   },
