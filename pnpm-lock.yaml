@@ -573,9 +573,6 @@ importers:
       '@itk-wasm/dam':
         specifier: ^1.1.0
         version: 1.1.1
-      '@thewtex/setup-micromamba':
-        specifier: ^1.9.7
-        version: 1.9.7
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm

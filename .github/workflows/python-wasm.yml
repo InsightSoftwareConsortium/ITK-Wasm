@@ -61,10 +61,6 @@ jobs:
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" bindgen:python
 
-      - name: Build build:micromamba
-        run: |
-          pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" build:micromamba
-
       - name: Build build:python:wasi
         if: ${{ matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' ) }}
         run: |
