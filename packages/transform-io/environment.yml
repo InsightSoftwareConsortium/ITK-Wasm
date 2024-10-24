@@ -1,9 +1,0 @@
-name: transform-io
-channels:
-  - conda-forge
-dependencies:
-  - pytest
-  - python=3.11
-  - pip
-  - pip:
-    - hatch
