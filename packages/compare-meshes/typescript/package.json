@@ -1,7 +1,6 @@
 {
   "name": "@itk-wasm/compare-meshes",
   "version": "0.4.0",
-  "packageManager": "pnpm@9.6.0",
   "description": "Compare meshes and polydata for regression testing.",
   "type": "module",
   "module": "./dist/index.js",
@@ -37,7 +36,7 @@
     "itk-wasm": "workspace:^"
   },
   "devDependencies": {
-    "@itk-wasm/mesh-io": "workspace:^",
+    "@itk-wasm/mesh-io": "workspace:*",
     "@itk-wasm/demo-app": "workspace:*",
     "@types/node": "^20.2.5",
     "esbuild": "^0.19.8",

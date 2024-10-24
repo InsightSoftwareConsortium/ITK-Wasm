@@ -206,9 +206,6 @@ importers:
       '@itk-wasm/mesh-io-build':
         specifier: workspace:^
         version: link:../mesh-io
-      '@thewtex/setup-micromamba':
-        specifier: ^1.9.7
-        version: 1.9.7
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
@@ -223,7 +220,7 @@ importers:
         specifier: workspace:*
         version: link:../../core/typescript/demo-app
       '@itk-wasm/mesh-io':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../mesh-io/typescript
       '@types/node':
         specifier: ^20.2.5

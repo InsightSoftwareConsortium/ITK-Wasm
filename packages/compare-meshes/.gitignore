@@ -7,3 +7,4 @@ test
 typescript/src/version.ts
 typescript/dist
 typescript/demo-app
+pyodide/
