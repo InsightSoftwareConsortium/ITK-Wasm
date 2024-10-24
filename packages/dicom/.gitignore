@@ -1,5 +1,6 @@
 dist
 emscripten-build
 test/
-micromamba/
 typescript/src/version.ts
+pyodide.tar.bz2
+pyodide/
