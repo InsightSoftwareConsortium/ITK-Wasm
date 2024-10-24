@@ -4,11 +4,12 @@ if sys.version_info < (3,10):
     pytest.skip("Skipping pyodide tests on older Python", allow_module_level=True)
 
 from pytest_pyodide import run_in_pyodide
-from .fixtures import package_wheel, input_data
+from .fixtures import emscripten_package_wheel, package_wheel, input_data
 
 @run_in_pyodide(packages=['micropip', 'numpy'])
-async def test_vtk_poly_data_async(selenium, package_wheel, input_data):
+async def test_vtk_poly_data_async(selenium, emscripten_package_wheel, package_wheel, input_data):
     import micropip
+    await micropip.install(emscripten_package_wheel)
     await micropip.install(package_wheel)
     def write_input_data_to_fs(input_data, filename):
         with open(filename, 'wb') as fp:
