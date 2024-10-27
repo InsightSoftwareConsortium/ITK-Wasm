@@ -46,6 +46,10 @@ jobs:
       run: |
         pnpm run --aggregate-output --filter itk-wasm build
 
+    - name: Build @itk-wasm/demo-app
+      run: |
+        pnpm run --aggregate-output --filter '@itk-wasm/demo-app' build
+
     - name: Build build:gen:typescript
       run: |
         pnpm run --aggregate-output build:gen:typescript
