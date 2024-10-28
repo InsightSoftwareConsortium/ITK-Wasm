@@ -41,6 +41,7 @@
   "devDependencies": {
     "@itk-wasm/dam": "^1.1.0",
     "itk-wasm": "workspace:^",
+    "@itk-wasm/compare-images-build": "workspace:^",
     "@itk-wasm/image-io-build": "workspace:^"
   }
 }
