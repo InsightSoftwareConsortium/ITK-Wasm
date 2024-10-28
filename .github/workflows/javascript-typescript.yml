@@ -52,7 +52,7 @@ jobs:
 
     - name: Build build:gen:typescript
       run: |
-        pnpm run --aggregate-output build:gen:typescript
+        pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build..." build:gen:typescript
 
     - name: Build typescript
       run: |
