@@ -506,6 +506,9 @@ importers:
 
   packages/dicom:
     devDependencies:
+      '@itk-wasm/compare-images-build':
+        specifier: workspace:^
+        version: link:../compare-images
       '@itk-wasm/dam':
         specifier: ^1.1.0
         version: 1.1.1
