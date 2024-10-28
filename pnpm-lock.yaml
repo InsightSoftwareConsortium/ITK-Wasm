@@ -148,9 +148,6 @@ importers:
       '@itk-wasm/image-io-build':
         specifier: workspace:^
         version: link:../image-io
-      '@thewtex/setup-micromamba':
-        specifier: ^1.9.7
-        version: 1.9.7
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
@@ -209,9 +206,6 @@ importers:
       '@itk-wasm/mesh-io-build':
         specifier: workspace:^
         version: link:../mesh-io
-      '@thewtex/setup-micromamba':
-        specifier: ^1.9.7
-        version: 1.9.7
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
@@ -226,7 +220,7 @@ importers:
         specifier: workspace:*
         version: link:../../core/typescript/demo-app
       '@itk-wasm/mesh-io':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../mesh-io/typescript
       '@types/node':
         specifier: ^20.2.5
@@ -264,9 +258,6 @@ importers:
       '@itk-wasm/mesh-io-build':
         specifier: workspace:^
         version: link:../mesh-io
-      '@thewtex/setup-micromamba':
-        specifier: ^1.9.7
-        version: 1.9.7
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
@@ -515,15 +506,15 @@ importers:
 
   packages/dicom:
     devDependencies:
+      '@itk-wasm/compare-images-build':
+        specifier: workspace:^
+        version: link:../compare-images
       '@itk-wasm/dam':
         specifier: ^1.1.0
         version: 1.1.1
       '@itk-wasm/image-io-build':
         specifier: workspace:^
         version: link:../image-io
-      '@thewtex/setup-micromamba':
-        specifier: ^1.9.7
-        version: 1.9.7
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
@@ -582,12 +573,15 @@ importers:
 
   packages/downsample:
     devDependencies:
+      '@itk-wasm/compare-images-build':
+        specifier: workspace:^
+        version: link:../compare-images
       '@itk-wasm/dam':
         specifier: ^1.1.0
         version: 1.1.1
-      '@thewtex/setup-micromamba':
-        specifier: ^1.9.7
-        version: 1.9.7
+      '@itk-wasm/image-io-build':
+        specifier: workspace:^
+        version: link:../image-io
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
@@ -646,9 +640,6 @@ importers:
       '@itk-wasm/dam':
         specifier: ^1.1.0
         version: 1.1.1
-      '@thewtex/setup-micromamba':
-        specifier: ^1.9.7
-        version: 1.9.7
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
@@ -710,9 +701,6 @@ importers:
       '@itk-wasm/dam':
         specifier: ^1.1.0
         version: 1.1.1
-      '@thewtex/setup-micromamba':
-        specifier: ^1.9.7
-        version: 1.9.7
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
@@ -771,9 +759,6 @@ importers:
       '@itk-wasm/dam':
         specifier: ^1.1.1
         version: 1.1.1
-      '@thewtex/setup-micromamba':
-        specifier: ^1.9.7
-        version: 1.9.7
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
@@ -5318,6 +5303,7 @@ packages:
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rollup@3.29.4:

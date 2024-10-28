@@ -1,8 +1,7 @@
 {
   "name": "@itk-wasm/mesh-io-build",
-  "version": "1.0.0",
+  "version": "1.4.2",
   "private": true,
-  "packageManager": "pnpm@9.6.0",
   "description": "scripts to generate @itk-wasm/compare-stringify itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {
@@ -23,27 +22,23 @@
     "build:emscripten:debug": "itk-wasm pnpm-script build:emscripten:debug",
     "build:wasi": "itk-wasm pnpm-script build:wasi",
     "build:wasi:debug": "itk-wasm pnpm-script build:wasi:debug",
-    "build:python:wasi": "itk-wasm pnpm-script build:python:wasi",
+    "build:python:wasi": "echo 'No build:python:wasi script required with pixi'",
     "bindgen:typescript": "itk-wasm pnpm-script bindgen:typescript",
     "bindgen:python": "itk-wasm pnpm-script bindgen:python",
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
-    "build:gen:python": "itk-wasm pnpm-script build:gen:python",
-    "build:micromamba": "itk-wasm pnpm-script build:micromamba",
-    "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
-    "publish:python": "itk-wasm pnpm-script publish:python",
+    "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
     "test:data:download": "dam download test/data test/data.tar.gz bafkreiahocrgb3p4xrjozr7cg5wdpdt6wp77kolnqyupae6awkplb5p4he https://bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq.ipfs.w3s.link/ipfs/bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
-    "test:python:wasi": "itk-wasm pnpm-script test:python:wasi",
-    "test:python:emscripten": "itk-wasm pnpm-script test:python:emscripten",
-    "test:python:dispatch": "itk-wasm pnpm-script test:python:emscripten",
+    "test:python:wasi": "pnpm test:data:download && pixi run test-wasi",
+    "test:python:emscripten": "pnpm test:data:download && pixi run test-emscripten",
+    "test:python:dispatch": "pnpm test:data:download && pixi run test-dispatch",
     "test:python": "itk-wasm pnpm-script test:python",
     "test:wasi": "itk-wasm pnpm-script test:wasi"
   },
   "license": "Apache-2.0",
   "devDependencies": {
     "@itk-wasm/dam": "^1.1.0",
-    "@thewtex/setup-micromamba": "^1.9.7",
     "itk-wasm": "workspace:^"
   }
 }

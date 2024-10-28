@@ -5,12 +5,13 @@ if sys.version_info < (3,10):
 
 import pytest
 from pytest_pyodide import run_in_pyodide
-from .fixtures import package_wheel, input_data
+from .fixtures import emscripten_package_wheel, package_wheel, input_data
 
 @pytest.mark.driver_timeout(30)
 @run_in_pyodide(packages=['micropip', 'numpy'])
-async def test_read_write_point_set_async(selenium, package_wheel, input_data):
+async def test_read_write_point_set_async(selenium, emscripten_package_wheel, package_wheel, input_data):
     import micropip
+    await micropip.install(emscripten_package_wheel)
     await micropip.install(package_wheel)
     def write_input_data_to_fs(input_data, filename):
         with open(filename, 'wb') as fp:

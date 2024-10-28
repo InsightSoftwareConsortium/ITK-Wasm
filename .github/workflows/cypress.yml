@@ -45,6 +45,10 @@ jobs:
         run: |
           pnpm run --aggregate-output --filter itk-wasm build
 
+      - name: Build @itk-wasm/demo-app
+        run: |
+          pnpm run --aggregate-output --filter '@itk-wasm/demo-app' build
+
       - name: Build build:gen:typescript
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build..." build:gen:typescript
@@ -119,6 +123,10 @@ jobs:
       - name: Build itk-wasm
         run: |
           pnpm run --aggregate-output --filter itk-wasm build
+
+      - name: Build @itk-wasm/demo-app
+        run: |
+          pnpm run --aggregate-output --filter '@itk-wasm/demo-app' build
 
       - name: Build build:gen:typescript
         run: |

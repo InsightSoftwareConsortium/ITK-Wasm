@@ -13,6 +13,10 @@ def package_wheel():
     return f"itkwasm_image_io-{test_package_version}-py3-none-any.whl"
 
 @pytest.fixture
+def emscripten_package_wheel():
+    return f"itkwasm_image_io_emscripten-{test_package_version}-py3-none-any.whl"
+
+@pytest.fixture
 def input_data():
     from pathlib import Path
     input_base_path = Path('..', '..', 'test', 'data')

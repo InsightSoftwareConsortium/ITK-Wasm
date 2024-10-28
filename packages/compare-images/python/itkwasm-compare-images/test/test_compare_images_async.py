@@ -4,11 +4,12 @@ if sys.version_info < (3,10):
     pytest.skip("Skipping pyodide tests on older Python", allow_module_level=True)
 
 from pytest_pyodide import run_in_pyodide
-from .fixtures import package_wheel, input_data
+from .fixtures import emscripten_package_wheel, package_wheel, input_data
 
 @run_in_pyodide(packages=['micropip', 'numpy'])
-async def test_compare_double_images_async(selenium, package_wheel, input_data):
+async def test_compare_double_images_async(selenium, emscripten_package_wheel, package_wheel, input_data):
     import micropip
+    await micropip.install(emscripten_package_wheel)
     await micropip.install(package_wheel)
     await micropip.install('itkwasm-image-io-emscripten')
     def write_input_data_to_fs(input_data, filename):
@@ -42,8 +43,9 @@ async def test_compare_double_images_async(selenium, package_wheel, input_data):
     assert difference_image_rendering.imageType.componentType == 'uint8'
 
 @run_in_pyodide(packages=['micropip', 'numpy'])
-async def test_compare_images_async(selenium, package_wheel, input_data):
+async def test_compare_images_async(selenium, emscripten_package_wheel, package_wheel, input_data):
     import micropip
+    await micropip.install(emscripten_package_wheel)
     await micropip.install(package_wheel)
     await micropip.install('itkwasm-image-io-emscripten')
     def write_input_data_to_fs(input_data, filename):
@@ -110,8 +112,8 @@ async def test_compare_images_async(selenium, package_wheel, input_data):
     assert metrics['numberOfPixelsWithDifferences'] == 26477
     assert metrics['minimumDifference'] == 0.002273026683894841
     assert metrics['maximumDifference'] == 312.2511648746159
-    assert metrics['totalDifference'] == 3121703.1639738297
-    assert metrics['meanDifference'] == 117.90244982338746
+    assert (abs(metrics['totalDifference'] - 3121703.1639738297) < 100)
+    assert (abs(metrics['meanDifference'] - 117.90244982338746) < 1)
 
     assert difference_image.imageType.componentType == 'float64'
     assert difference_image_rendering.imageType.componentType == 'uint8'

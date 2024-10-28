@@ -1,4 +1,3 @@
-micromamba/
 emscripten-build/
 wasi-build/
 python/itkwasm-downsample-wasi/itkwasm_downsample_wasi/wasm_modules/
@@ -14,3 +13,4 @@ test/data/python/
 python/itkwasm-downsample-emscripten/dist/
 python/itkwasm-downsample-wasi/dist/
 python/itkwasm-downsample/dist/
+pyodide/

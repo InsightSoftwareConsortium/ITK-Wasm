@@ -31,6 +31,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: prefix-dev/setup-pixi@v0.8.1
+
       - name: Set up Python ${{ env.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -58,10 +60,6 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-22.04' }}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" bindgen:python
-
-      - name: Build build:micromamba
-        run: |
-          pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" build:micromamba
 
       - name: Build build:python:wasi
         if: ${{ matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' ) }}
