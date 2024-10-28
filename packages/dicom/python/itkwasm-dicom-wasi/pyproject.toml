@@ -45,17 +45,6 @@ Issues = "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
 [tool.hatch.version]
 path = "itkwasm_dicom_wasi/_version.py"
 
-[tool.hatch.envs.default]
-dependencies = [
-  "pytest",
-  "pillow",
-]
-
-
-[tool.hatch.envs.default.scripts]
-test = "pytest"
-
-
 [tool.hatch.build]
 exclude = [
   "/examples",

@@ -40,13 +40,6 @@ dependencies = [
 [tool.hatch.version]
 path = "itkwasm_downsample_cucim/_version.py"
 
-[tool.hatch.envs.default]
-dependencies = [
-  "pytest",
-  "itkwasm-image-io",
-  "itkwasm-compare-images",
-]
-
 [project.urls]
 Home = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 Source = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
@@ -56,10 +49,6 @@ Source = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 
 [project.entry-points."itkwasm_downsample.downsample"]
 "itkwasm_downsample-downsample.priority.10" = "itkwasm_downsample_cucim.downsample:downsample"
-
-[tool.hatch.envs.default.scripts]
-test = "pytest"
-
 
 [tool.hatch.build]
 exclude = [
