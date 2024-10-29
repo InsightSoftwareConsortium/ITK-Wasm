@@ -213,13 +213,14 @@ WasmImageToImageFilter<TImage>
     {
       bufferedRegion.SetIndex(i, imageJSON.bufferedRegion.index[i]);
       bufferedRegion.SetSize(i, imageJSON.bufferedRegion.size[i]);
+      totalSize *= imageJSON.bufferedRegion.size[i];
     }
     else
     {
       bufferedRegion.SetIndex(i, 0);
       bufferedRegion.SetSize(i, imageJSON.size[i]);
+      totalSize *= imageJSON.size[i];
     }
-    totalSize *= imageJSON.bufferedRegion.size[i];
     largestRegion.SetSize(i, imageJSON.size[i]);
   }
   filter->SetBufferedRegion(bufferedRegion);
