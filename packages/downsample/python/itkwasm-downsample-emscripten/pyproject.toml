@@ -39,36 +39,9 @@ dependencies = [
 [tool.hatch.version]
 path = "itkwasm_downsample_emscripten/_version.py"
 
-[tool.hatch.envs.default]
-dependencies = [
-  "pytest",
-  "pytest-pyodide",
-  "itkwasm-image-io",
-  "itkwasm-compare-images",
-]
-
 [project.urls]
 Home = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 Source = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
-
-[tool.hatch.envs.default.scripts]
-test = [
-  "hatch build -t wheel ./dist/pyodide/",
-  "pytest --dist-dir=./dist/pyodide --rt=chrome",
-]
-download-pyodide = [
-  "curl -L https://github.com/pyodide/pyodide/releases/download/0.25.1/pyodide-0.25.1.tar.bz2 -o pyodide.tar.bz2",
-  "tar xjf pyodide.tar.bz2",
-  "rm -rf dist/pyodide pyodide.tar.bz2",
-  "mkdir -p dist",
-  "mv pyodide dist",
-]
-serve = [
-  "hatch build -t wheel ./dist/pyodide/",
-  'echo "Visit http://localhost:8877/console.html"',
-  "python -m http.server --directory=./dist/pyodide 8877",
-]
-
 
 [tool.hatch.build]
 exclude = [

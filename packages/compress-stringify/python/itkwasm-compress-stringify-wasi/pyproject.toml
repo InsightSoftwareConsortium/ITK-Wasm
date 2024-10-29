@@ -34,7 +34,6 @@ requires-python = ">=3.8"
 dependencies = [
     "itkwasm >= 1.0.b171",
     "importlib_resources",
-
 ]
 
 [project.urls]
@@ -44,16 +43,6 @@ Issues = "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
 
 [tool.hatch.version]
 path = "itkwasm_compress_stringify_wasi/_version.py"
-
-[tool.hatch.envs.default]
-dependencies = [
-  "pytest",
-]
-
-
-[tool.hatch.envs.default.scripts]
-test = "pytest"
-
 
 [tool.hatch.build]
 exclude = [

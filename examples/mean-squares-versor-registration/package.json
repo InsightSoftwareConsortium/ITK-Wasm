@@ -2,7 +2,6 @@
   "name": "mean-squares-versor-registration-build",
   "version": "2.0.0",
   "private": true,
-  "packageManager": "pnpm@9.6.0",
   "description": "Illustrate the use of the VersorRigid3DTransform for 3D image registration.",
   "type": "module",
   "itk-wasm": {
