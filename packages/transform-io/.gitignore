@@ -1,6 +1,5 @@
 test/
 emscripten-build/
-python/
 wasi-build/
 typescript/dist
 typescript/src/version.ts

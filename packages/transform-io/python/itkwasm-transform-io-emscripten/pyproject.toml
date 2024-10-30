@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "itkwasm-transform-io-emscripten"
+readme = "README.md"
+license = "Apache-2.0"
+dynamic = ["version"]
+description = "Input and output for scientific and medical coordinate transform file formats."
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python",
+  "Programming Language :: C++",
+  "Environment :: WebAssembly",
+  "Environment :: WebAssembly :: Emscripten",
+  "Environment :: WebAssembly :: WASI",
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+keywords = [
+  "itkwasm",
+  "webassembly",
+  "emscripten",
+]
+
+requires-python = ">=3.8"
+dependencies = [
+    "itkwasm >= 1.0.b171",
+]
+
+[tool.hatch.version]
+path = "itkwasm_transform_io_emscripten/_version.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+  "pytest-pyodide",
+]
+
+[project.urls]
+Home = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+Source = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+
+[tool.hatch.envs.default.scripts]
+test = [
+  "hatch build -t wheel ./dist/pyodide/",
+  "pytest --dist-dir=./dist/pyodide --rt=chrome",
+]
+download-pyodide = [
+  "curl -L https://github.com/pyodide/pyodide/releases/download/0.25.1/pyodide-0.25.1.tar.bz2 -o pyodide.tar.bz2",
+  "tar xjf pyodide.tar.bz2",
+  "rm -rf dist/pyodide pyodide.tar.bz2",
+  "mkdir -p dist",
+  "mv pyodide dist",
+]
+serve = [
+  "hatch build -t wheel ./dist/pyodide/",
+  'echo "Visit http://localhost:8877/console.html"',
+  "python -m http.server --directory=./dist/pyodide 8877",
+]
+
+
+[tool.hatch.build]
+exclude = [
+  "/examples",
+]
