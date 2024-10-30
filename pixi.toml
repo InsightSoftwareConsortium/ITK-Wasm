@@ -11,9 +11,23 @@ readme = "README.md"
 [activation]
 scripts = ["itk_wasm_env.bash"]
 
-[tasks]
-clean = "git clean -fdx"
-pnpm-install = { cmd = "pnpm install", description = "Install Node.js dependencies" }
+[tasks.clean]
+cmd = "git clean -fdx"
+description = "Clean the workspace from build artifacts"
+
+[tasks.pnpm-install]
+cmd = "pnpm install"
+description = "Install Node.js dependencies"
+
+[tasks.build]
+cmd = "pnpm run build"
+description = "Build ITK-Wasm"
+depends-on = ["pnpm-install", "build-itk-wasm", "build-native-compare-images", "build-native-compare-meshes", "build-native-compress-stringify", "build-native-dicom", "build-native-downsample", "build-native-mesh-io"]
+
+[tasks.test]
+cmd = "pnpm run test"
+description = "Test ITK-Wasm"
+depends-on = ["test-itk-wasm", "test-native-compare-images", "test-native-compare-meshes", "test-native-compress-stringify", "test-native-dicom", "test-native-downsample", "test-native-mesh-io"]
 
 [tasks.compare-images-test-data-download]
 cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_COMPARE_IMAGES_TEST_DATA_HASH $ITK_WASM_COMPARE_IMAGES_TEST_DATA_URLS"
@@ -74,7 +88,7 @@ description = "Build the ITK-Wasm docker images"
 depends-on = ["clean", "export-itk-wasm-env-vars", "update-default-image-tag"]
 
 [dependencies]
-pnpm = ">=9.7.1,<10"
+pnpm = ">=9.12.2,<10"
 nodejs = ">=22.6.0,<23"
 
 [target.win-64.dependencies]

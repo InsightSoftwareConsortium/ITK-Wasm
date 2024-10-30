@@ -2345,9 +2345,9 @@ packages:
   requires_python: '>=3.8'
 - kind: pypi
   name: itkwasm-downsample
-  version: 1.4.2
+  version: 1.4.3
   path: python/itkwasm-downsample
-  sha256: 181969a8c8cf9a43160b9e5e334f0e148242a85f6c3b4b1bb11f0184e7f72be3
+  sha256: 59344f4edfb5f71bb1440ed4ddecec91d47d3a0864e13ee1ef455778d61c002f
   requires_dist:
   - itkwasm-downsample-emscripten ; sys_platform == 'emscripten'
   - itkwasm-downsample-wasi ; sys_platform != 'emscripten'
@@ -2356,9 +2356,9 @@ packages:
   editable: true
 - kind: pypi
   name: itkwasm-downsample-wasi
-  version: 1.4.2
+  version: 1.4.3
   path: python/itkwasm-downsample-wasi
-  sha256: 18330eed06b715a5800ede3c6af06aac9d53d9eea199ccf26cfe54c31bb0bfad
+  sha256: e3506d269901206f2eb89a1fac0d0e5b60eb785bf4e0a85b30d5afeee174e938
   requires_dist:
   - importlib-resources
   - itkwasm>=1.0b145

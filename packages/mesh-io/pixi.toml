@@ -6,13 +6,19 @@ name = "mesh-io"
 platforms = ["win-64", "linux-64", "linux-aarch64", "osx-arm64"]
 version = "0.1.0"
 
-[tasks]
-
 [dependencies]
 python = "3.12.*"
 pnpm = ">=9.12.1,<10"
 hatch = ">=1.13.0,<2"
 pip = ">=24.2,<25"
+
+[tasks.build]
+cmd = "pnpm run build"
+description = "Build the project"
+
+[tasks.test]
+cmd = "pnpm run test"
+description = "Run tests"
 
 [target.win-64.dependencies]
 m2w64-jq = ">=1.6.0,<2"

@@ -5,10 +5,8 @@
 Install [Podman] and [Pixi], and
 
 ```sh
-npm i -g pnpm
-pnpm install
-pnpm build
-pnpm test
+pixi run build
+pixi run test
 ```
 
 and contribute the patch with standard GitHub best practices.
@@ -74,14 +72,13 @@ pixi run build-docker-images --with-debug
 
 The `--with-debug` flag will also build the `latest-debug` tagged images.
 
-To use these locally built images in the pnpm build, remove (*clean*) the old build artifacts from the repository first.
+To use these locally built images in the pixi build, remove (*clean*) the old build artifacts from the repository first.
 
 ```sh
 # Remove old build artifacts
-pnpm clean
+pixi run clean
 
-pnpm install
-pnpm build
+pixi run build
 ```
 
 ## Command line interface (CLI)
@@ -137,10 +134,8 @@ hatch run test
 To develop these packages, at the top level, run:
 
 ```sh
-npm i -g pnpm
-pnpm install
-pnpm build
-pnpm test
+pixi run build
+pixi run test
 ```
 
 This will build and test the packages in order, according to their dependency topology, and the packages will use local workspace dependencies, including the `itk-wasm` CLI.
@@ -152,7 +147,8 @@ The `build` and `test` targets are high-level targets that call other targets. T
 In development, it often useful to [build the wasm in debug mode](../cxx/tutorial/debugging.md). To create a debug build, at the root level, clean the tree, call `build:emscripten:debug` and `build:wasi:debug`, then `build` and `test` as usual:
 
 ```sh
-pnpm clean
+pixi run clean
+pixi shell
 pnpm build:emscripten:debug
 pnpm build:wasi:debug
 pnpm build

@@ -30,10 +30,10 @@
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
     "test:data:download": "dam download test/data test/data.tar.gz bafybeiafli6egtmkcgany65po64w67hpqnmgwr5utqo6ycbbz7k5l33llu https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.171/compare-images-test-data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
-    "test:python:wasi": "pnpm test:data:download && pixi run test-wasi",
-    "test:python:emscripten": "pnpm test:data:download && pixi run test-emscripten",
-    "test:python:dispatch": "pnpm test:data:download && pixi run test-dispatch",
-    "test:python": "pixi run test-python"
+    "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
+    "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
+    "test:python:dispatch": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-dispatch",
+    "test:python": "pixi run --manifest-path=./pixi.toml test-python"
   },
   "license": "Apache-2.0",
   "devDependencies": {

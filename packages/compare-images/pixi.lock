@@ -2193,9 +2193,9 @@ packages:
   requires_python: '>=3.8'
 - kind: pypi
   name: itkwasm-compare-images
-  version: 5.2.0
+  version: 5.2.3
   path: python/itkwasm-compare-images
-  sha256: 47b330e63029dcf0decb7b6f3f867bb4bbf75b4fc5b844e309a1904a10867b55
+  sha256: 47579294ddf275b91898e9733c9b83c522f9d958384eafd348047dd5fa882f33
   requires_dist:
   - itkwasm-compare-images-emscripten>=1.0.1 ; sys_platform == 'emscripten'
   - itkwasm-compare-images-wasi>=1.0.1 ; sys_platform != 'emscripten'
@@ -2204,9 +2204,9 @@ packages:
   editable: true
 - kind: pypi
   name: itkwasm-compare-images-wasi
-  version: 5.2.0
+  version: 5.2.3
   path: python/itkwasm-compare-images-wasi
-  sha256: 67108cf7b8817613d84babadf297ff4bbf61623de2fb7f9573e865a0de560382
+  sha256: b80c17a13e5b370ede5cc557c6cf4e1a8fe06247a3373b7ea3fed9b63b033814
   requires_dist:
   - importlib-resources
   - itkwasm>=1.0b171
@@ -3665,24 +3665,6 @@ packages:
   - wheel
   license: MIT
   license_family: MIT
-  size: 1237976
-  timestamp: 1724954490262
-- kind: conda
-  name: pip
-  version: '24.2'
-  build: pyh8b19718_1
-  build_number: 1
-  subdir: noarch
-  noarch: python
-  url: https://conda.anaconda.org/conda-forge/noarch/pip-24.2-pyh8b19718_1.conda
-  sha256: d820e5358bcb117fa6286e55d4550c60b0332443df62121df839eab2d11c890b
-  md5: 6c78fbb8ddfd64bcb55b5cbafd2d2c43
-  depends:
-  - python >=3.8,<3.13.0a0
-  - setuptools
-  - wheel
-  license: MIT
-  license_family: MIT
   purls:
   - pkg:pypi/pip?source=hash-mapping
   size: 1237976
@@ -4309,21 +4291,6 @@ packages:
   - python >=3.8
   license: MIT
   license_family: MIT
-  size: 777462
-  timestamp: 1727249510532
-- kind: conda
-  name: setuptools
-  version: 75.1.0
-  build: pyhd8ed1ab_0
-  subdir: noarch
-  noarch: python
-  url: https://conda.anaconda.org/conda-forge/noarch/setuptools-75.1.0-pyhd8ed1ab_0.conda
-  sha256: 6725235722095c547edd24275053c615158d6163f396550840aebd6e209e4738
-  md5: d5cd48392c67fb6849ba459c2c2b671f
-  depends:
-  - python >=3.8
-  license: MIT
-  license_family: MIT
   purls:
   - pkg:pypi/setuptools?source=hash-mapping
   size: 777462
@@ -4812,21 +4779,6 @@ packages:
   - wsaccel ; extra == 'optional'
   - websockets ; extra == 'test'
   requires_python: '>=3.8'
-- kind: conda
-  name: wheel
-  version: 0.44.0
-  build: pyhd8ed1ab_0
-  subdir: noarch
-  noarch: python
-  url: https://conda.anaconda.org/conda-forge/noarch/wheel-0.44.0-pyhd8ed1ab_0.conda
-  sha256: d828764736babb4322b8102094de38074dedfc71f5ff405c9dfee89191c14ebc
-  md5: d44e3b085abcaef02983c6305b84b584
-  depends:
-  - python >=3.8
-  license: MIT
-  license_family: MIT
-  size: 58585
-  timestamp: 1722797131787
 - kind: conda
   name: wheel
   version: 0.44.0

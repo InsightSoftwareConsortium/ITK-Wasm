@@ -30,9 +30,9 @@
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
     "test:data:download": "dam download test/data test/data.tar.gz bafkreiahocrgb3p4xrjozr7cg5wdpdt6wp77kolnqyupae6awkplb5p4he https://bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq.ipfs.w3s.link/ipfs/bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
-    "test:python:wasi": "pnpm test:data:download && pixi run test-wasi",
-    "test:python:emscripten": "pnpm test:data:download && pixi run test-emscripten",
-    "test:python:dispatch": "pnpm test:data:download && pixi run test-dispatch",
+    "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
+    "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
+    "test:python:dispatch": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-dispatch",
     "test:python": "itk-wasm pnpm-script test:python",
     "test:wasi": "itk-wasm pnpm-script test:wasi"
   },
