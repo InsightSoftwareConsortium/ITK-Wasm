@@ -5,6 +5,10 @@
   "description": "scripts to generate @itk-wasm/transform-io itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {
+    "test-data-hash": "bafkreiahocrgb3p4xrjozr7cg5wdpdt6wp77kolnqyupae6awkplb5p4he",
+    "test-data-urls": [
+      "https://bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq.ipfs.w3s.link/ipfs/bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq/data.tar.gz"
+    ],
     "emscripten-docker-image": "itkwasm/emscripten:latest",
     "wasi-docker-image": "itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/transform-io",
@@ -23,13 +27,12 @@
     "bindgen:python": "itk-wasm pnpm-script bindgen:python",
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
-    "publish:python": "itk-wasm pnpm-script publish:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
     "test:data:download": "dam download test/data test/data.tar.gz bafkreihranpzszz3q5bwgzsw6olqwh2e726wfnh4qblkjbng44yhqbfin4 https://bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme.ipfs.w3s.link/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
-    "test:python:wasi": "pnpm test:data:download && pixi run test-wasi",
-    "test:python:emscripten": "pnpm test:data:download && pixi run test-emscripten",
-    "test:python:dispatch": "pnpm test:data:download && pixi run test-dispatch",
+    "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
+    "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
+    "test:python:dispatch": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-dispatch",
     "test:python": "itk-wasm pnpm-script test:python",
     "test:wasi": "itk-wasm pnpm-script test:wasi"
   },

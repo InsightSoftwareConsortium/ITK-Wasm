@@ -42,3 +42,6 @@ export ITK_WASM_DOWNSAMPLE_TEST_DATA_URLS=${ITK_WASM_DOWNSAMPLE_TEST_DATA_URLS:-
 
 export ITK_WASM_MESH_IO_TEST_DATA_HASH=${ITK_WASM_MESH_IO_TEST_DATA_HASH:-$(cat packages/mesh-io/package.json | jq -e -r '."itk-wasm"."test-data-hash"')}
 export ITK_WASM_MESH_IO_TEST_DATA_URLS=${ITK_WASM_MESH_IO_TEST_DATA_URLS:-$(cat packages/mesh-io/package.json | jq -e -r '."itk-wasm"."test-data-urls" | join(" ")')}
+
+export ITK_WASM_TRANSFORM_IO_TEST_DATA_HASH=${ITK_WASM_TRANSFORM_IO_TEST_DATA_HASH:-$(cat packages/mesh-io/package.json | jq -e -r '."itk-wasm"."test-data-hash"')}
+export ITK_WASM_TRANSFORM_IO_TEST_DATA_URLS=${ITK_WASM_TRANSFORM_IO_TEST_DATA_URLS:-$(cat packages/mesh-io/package.json | jq -e -r '."itk-wasm"."test-data-urls" | join(" ")')}
