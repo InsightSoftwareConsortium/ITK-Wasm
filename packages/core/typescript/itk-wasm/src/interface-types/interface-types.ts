@@ -7,7 +7,7 @@ const InterfaceTypes = {
   PointSet: 'PointSet',
   Mesh: 'Mesh',
   PolyData: 'PolyData',
-  Transform: 'Transform',
+  TransformList: 'TransformList',
   JsonCompatible: 'JsonCompatible'
 } as const
 

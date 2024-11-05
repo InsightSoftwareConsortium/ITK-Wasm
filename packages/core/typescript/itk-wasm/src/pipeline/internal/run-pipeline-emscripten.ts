@@ -9,7 +9,7 @@ import Image from '../../interface-types/image.js'
 import Mesh from '../../interface-types/mesh.js'
 import PointSet from '../../interface-types/point-set.js'
 import PolyData from '../../interface-types/poly-data.js'
-// import Transform from '../../interface-types/transform.js'
+import TransformList from '../../interface-types/transform-list.js'
 import FloatTypes from '../../interface-types/float-types.js'
 import IntTypes from '../../interface-types/int-types.js'
 
@@ -308,6 +308,42 @@ function runPipelineEmscripten (
             pointData: `data:application/vnd.itk.address,0:${pointDataPtr}`
           }
           setPipelineModuleInputJSON(pipelineModule, pointSetJSON, index)
+          break
+        }
+        case InterfaceTypes.TransformList: {
+          const transformList = input.data as TransformList
+          const transformListJSON: any = []
+          transformList.forEach((transform, transformIndex) => {
+            const fixedParameterPtr = setPipelineModuleInputArray(
+              pipelineModule,
+              transform.fixedParameters,
+              index,
+              transformIndex * 2
+            )
+            const fixedParameters = `data:application/vnd.itk.address,0:${fixedParameterPtr}`
+            const parameterPtr = setPipelineModuleInputArray(
+              pipelineModule,
+              transform.parameters,
+              index,
+              transformIndex * 2 + 1
+            )
+            const parameters = `data:application/vnd.itk.address,0:${parameterPtr}`
+            const transformJSON = {
+              transformType: transform.transformType,
+              numberOfFixedParameters: transform.numberOfFixedParameters,
+              numberOfParameters: transform.numberOfParameters,
+
+              name: transform.name,
+
+              inputSpaceName: transform.inputSpaceName,
+              outputSpaceName: transform.outputSpaceName,
+
+              parameters,
+              fixedParameters
+            }
+            transformListJSON.push(transformJSON)
+          })
+          setPipelineModuleInputJSON(pipelineModule, transformListJSON, index)
           break
         }
         case InterfaceTypes.PolyData: {
@@ -616,6 +652,34 @@ function runPipelineEmscripten (
             )
           }
           outputData = pointSet
+          break
+        }
+        case InterfaceTypes.TransformList: {
+          const transformList = getPipelineModuleOutputJSON(
+            pipelineModule,
+            index
+          ) as TransformList
+          transformList.forEach((transform, transformIndex) => {
+            if (transform.numberOfFixedParameters > 0) {
+              transformList[transformIndex].fixedParameters =
+                getPipelineModuleOutputArray(
+                  pipelineModule,
+                  index,
+                  transformIndex * 2,
+                  transform.transformType.parametersValueType
+                ) as TypedArray
+            }
+            if (transform.numberOfFixedParameters > 0) {
+              transformList[transformIndex].parameters =
+                getPipelineModuleOutputArray(
+                  pipelineModule,
+                  index,
+                  transformIndex * 2 + 1,
+                  transform.transformType.parametersValueType
+                ) as TypedArray
+            }
+          })
+          outputData = transformList
           break
         }
         case InterfaceTypes.PolyData: {

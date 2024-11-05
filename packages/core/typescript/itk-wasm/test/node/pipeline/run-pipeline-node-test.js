@@ -86,6 +86,43 @@ function readCow () {
   mesh.cellData = null
   return mesh
 }
+function readLinearTransform () {
+  const testInputTransformDir = path.resolve(
+    'test',
+    'pipelines',
+    'transform-read-write-pipeline',
+    'LinearTransform.iwt'
+  )
+  const transformList = JSON.parse(
+    fs.readFileSync(path.join(testInputTransformDir, 'index.json'), {
+      encoding: 'utf8'
+    })
+  )
+  const fixedParametersBuffer = fs.readFileSync(
+    path.join(testInputTransformDir, 'data', '0', 'fixed-parameters.raw'),
+    null
+  )
+  const fixedParameters = new Float64Array(
+    fixedParametersBuffer.buffer.slice(
+      fixedParametersBuffer.byteOffset,
+      fixedParametersBuffer.byteOffset + fixedParametersBuffer.byteLength
+    )
+  )
+  transformList[0].fixedParameters = fixedParameters
+
+  const parametersBuffer = fs.readFileSync(
+    path.join(testInputTransformDir, 'data', '0', 'parameters.raw'),
+    null
+  )
+  const parameters = new Float64Array(
+    parametersBuffer.buffer.slice(
+      parametersBuffer.byteOffset,
+      parametersBuffer.byteOffset + parametersBuffer.byteLength
+    )
+  )
+  transformList[0].parameters = parameters
+  return transformList
+}
 
 test('runPipelineNode captures stdout and stderr', (t) => {
   const args = []
@@ -240,12 +277,16 @@ test('runPipelineNode uses input and output text and binary files', (t) => {
   mountDirs.add(path.dirname(testOutputTextFile))
   mountDirs.add(path.dirname(testOutputBinFile))
 
-  return runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs).then(
-    function ({ stdout, stderr, outputs }) {
-      t.is(outputs[0].type, InterfaceTypes.TextStream)
-      t.is(outputs[1].type, InterfaceTypes.BinaryStream)
-    }
-  )
+  return runPipelineNode(
+    pipelinePath,
+    args,
+    desiredOutputs,
+    inputs,
+    mountDirs
+  ).then(function ({ stdout, stderr, outputs }) {
+    t.is(outputs[0].type, InterfaceTypes.TextStream)
+    t.is(outputs[1].type, InterfaceTypes.BinaryStream)
+  })
 })
 
 test('runPipelineNode uses input and output json data via memory io', (t) => {
@@ -332,4 +373,37 @@ test('runPipelineNode writes and reads an itk.Mesh via memory io', async (t) => 
     inputs
   )
   verifyMesh(outputs[0].data)
+})
+
+test('runPipelineNode writes and reads an itk.TransformList via memory io', async (t) => {
+  const verifyTransform = (transformList) => {
+    t.is(transformList.length, 1)
+    t.is(transformList[0].transformType.transformParameterization, 'Affine')
+    t.is(transformList[0].transformType.parametersValueType, 'float64')
+    t.is(transformList[0].transformType.inputDimension, 3)
+    t.is(transformList[0].transformType.outputDimension, 3)
+    t.is(transformList[0].numberOfFixedParameters, 3)
+    t.is(transformList[0].fixedParameters.length, 3)
+    t.is(transformList[0].numberOfParameters, 12)
+    t.is(transformList[0].parameters.length, 12)
+  }
+
+  const transformList = readLinearTransform()
+  const pipelinePath = path.resolve(
+    'test',
+    'pipelines',
+    'emscripten-build',
+    'transform-read-write-pipeline',
+    'transform-read-write-test'
+  )
+  const args = ['0', '0', '--memory-io']
+  const desiredOutputs = [{ type: InterfaceTypes.TransformList }]
+  const inputs = [{ type: InterfaceTypes.TransformList, data: transformList }]
+  const { outputs } = await runPipelineNode(
+    pipelinePath,
+    args,
+    desiredOutputs,
+    inputs
+  )
+  verifyTransform(outputs[0].data)
 })

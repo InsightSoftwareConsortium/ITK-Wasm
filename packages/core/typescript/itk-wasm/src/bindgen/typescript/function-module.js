@@ -471,7 +471,7 @@ function functionModule(
           functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: value } })\n`
           functionContent += '      args.push(inputCountString)\n\n'
         } else {
-          // Image, Mesh, PointSet, PolyData, Transform, JsonCompatible
+          // Image, Mesh, PointSet, PolyData, TransformList, JsonCompatible
           functionContent +=
             '      const inputCountString = inputs.length.toString()\n'
           functionContent += `      inputs.push({ type: InterfaceTypes.${interfaceType}, data: value as ${interfaceType} })\n`
@@ -511,7 +511,7 @@ function functionModule(
           functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: { data: options.${camel} } })\n`
           functionContent += `    args.push('--${parameter.name}', inputCountString)\n\n`
         } else {
-          // Image, Mesh, PointSet, PolyData, Transform, JsonCompatible
+          // Image, Mesh, PointSet, PolyData, TransformList, JsonCompatible
           functionContent +=
             '    const inputCountString = inputs.length.toString()\n'
           functionContent += `    inputs.push({ type: InterfaceTypes.${interfaceType}, data: options.${camel} as ${interfaceType} })\n`

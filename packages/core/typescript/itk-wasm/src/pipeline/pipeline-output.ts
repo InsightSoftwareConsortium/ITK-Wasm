@@ -7,7 +7,7 @@ import Image from '../interface-types/image.js'
 import Mesh from '../interface-types/mesh.js'
 import PointSet from '../interface-types/point-set.js'
 import PolyData from '../interface-types/poly-data.js'
-import Transform from '../interface-types/transform.js'
+import TransformList from '../interface-types/transform-list.js'
 import JsonCompatible from '../interface-types/json-compatible.js'
 
 interface PipelineOutput {
@@ -24,7 +24,7 @@ interface PipelineOutput {
   | Mesh
   | PointSet
   | PolyData
-  | Transform
+  | TransformList
 }
 
 export default PipelineOutput
