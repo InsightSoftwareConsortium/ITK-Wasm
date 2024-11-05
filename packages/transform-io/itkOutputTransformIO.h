@@ -113,6 +113,8 @@ public:
 #ifndef ITK_WASM_NO_MEMORY_IO
     if (!this->m_TransformIO.IsNull() && !this->m_Identifier.empty())
     {
+      this->m_TransformIO->Read();
+
       const auto index = std::stoi(this->m_Identifier);
       auto wasmTransformIOBase = WasmTransformIOBase<ParametersValueType>::New();
       wasmTransformIOBase->SetTransformIO(this->m_TransformIO);
