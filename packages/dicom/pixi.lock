@@ -2345,9 +2345,9 @@ packages:
   requires_python: '>=3.8'
 - kind: pypi
   name: itkwasm-dicom
-  version: 7.2.2
+  version: 7.2.3
   path: python/itkwasm-dicom
-  sha256: b52b567c0273ff9f0161cc76185724d04430b179fb39174a886b3912fd65997c
+  sha256: 8e6753f48ec4cb21e653bc8162bb586019494ab84e026e38c9992d276514abf7
   requires_dist:
   - itkwasm-dicom-emscripten ; sys_platform == 'emscripten'
   - itkwasm-dicom-wasi ; sys_platform != 'emscripten'
@@ -2356,9 +2356,9 @@ packages:
   editable: true
 - kind: pypi
   name: itkwasm-dicom-wasi
-  version: 7.2.2
+  version: 7.2.3
   path: python/itkwasm-dicom-wasi
-  sha256: 7e3f72e73af083ebb6e8ccccae9beb63a8966fe1977ebb7cac49a28433271eae
+  sha256: 45f639b2f9834eb4fccc7d2927c305968c44d8eeeec26bbe1ad9cf7e3b8c7de6
   requires_dist:
   - importlib-resources
   - itkwasm-compare-images
