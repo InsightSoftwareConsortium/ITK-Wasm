@@ -5,12 +5,12 @@ from typing import Dict, Tuple, Optional, List, Any
 
 from itkwasm import (
     environment_dispatch,
-    Transform,
+    TransformList,
     BinaryFile,
 )
 
 def mat_write_transform(
-    transform: Transform,
+    transform: TransformList,
     serialized_transform: str,
     float_parameters: bool = False,
     use_compression: bool = False,
@@ -18,7 +18,7 @@ def mat_write_transform(
     """Write an ITK-Wasm transform file format converted to a transform file format
 
     :param transform: Input transform
-    :type  transform: Transform
+    :type  transform: TransformList
 
     :param serialized_transform: Output transform serialized in the file format.
     :type  serialized_transform: str

@@ -1,7 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import {
-  Transform,
+  TransformList,
   JsonCompatible,
   InterfaceTypes,
   PipelineOutput,
@@ -18,14 +18,14 @@ import { fileURLToPath } from 'url'
 /**
  * Write an ITK-Wasm transform file format converted to a transform file format
  *
- * @param {Transform} transform - Input transform
+ * @param {TransformList} transform - Input transform
  * @param {string} serializedTransform - Output transform serialized in the file format.
  * @param {TxtWriteTransformNodeOptions} options - options object
  *
  * @returns {Promise<TxtWriteTransformNodeResult>} - result object
  */
 async function txtWriteTransformNode(
-  transform: Transform,
+  transform: TransformList,
   serializedTransform: string,
   options: TxtWriteTransformNodeOptions = {}
 ) : Promise<TxtWriteTransformNodeResult> {
@@ -37,7 +37,7 @@ async function txtWriteTransformNode(
   ]
 
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.Transform, data: transform },
+    { type: InterfaceTypes.TransformList, data: transform },
   ]
 
   const args = []

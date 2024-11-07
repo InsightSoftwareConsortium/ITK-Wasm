@@ -3,7 +3,7 @@
 import {
   BinaryFile,
   JsonCompatible,
-  Transform,
+  TransformList,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -33,7 +33,7 @@ async function wasmReadTransform(
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonCompatible },
-    { type: InterfaceTypes.Transform },
+    { type: InterfaceTypes.TransformList },
   ]
 
   let serializedTransformFile = serializedTransform
@@ -82,7 +82,7 @@ async function wasmReadTransform(
   const result = {
     webWorker: usedWebWorker as Worker,
     couldRead: outputs[0]?.data as JsonCompatible,
-    transform: outputs[1]?.data as Transform,
+    transform: outputs[1]?.data as TransformList,
   }
   return result
 }

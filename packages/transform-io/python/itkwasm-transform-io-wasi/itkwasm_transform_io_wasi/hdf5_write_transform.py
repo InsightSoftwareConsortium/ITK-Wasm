@@ -13,12 +13,12 @@ from itkwasm import (
     PipelineOutput,
     PipelineInput,
     Pipeline,
-    Transform,
+    TransformList,
     BinaryFile,
 )
 
 def hdf5_write_transform(
-    transform: Transform,
+    transform: TransformList,
     serialized_transform: str,
     float_parameters: bool = False,
     use_compression: bool = False,
@@ -26,7 +26,7 @@ def hdf5_write_transform(
     """Write an ITK-Wasm transform file format converted to a transform file format
 
     :param transform: Input transform
-    :type  transform: Transform
+    :type  transform: TransformList
 
     :param serialized_transform: Output transform serialized in the file format.
     :type  serialized_transform: str
@@ -50,7 +50,7 @@ def hdf5_write_transform(
     ]
 
     pipeline_inputs: List[PipelineInput] = [
-        PipelineInput(InterfaceTypes.Transform, transform),
+        PipelineInput(InterfaceTypes.TransformList, transform),
     ]
 
     args: List[str] = ['--memory-io',]
