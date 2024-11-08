@@ -1,4 +1,5 @@
 import TransformType from './transform-type.js'
+import type TypedArray from '../typed-array.js'
 
 class Transform {
   transformType: TransformType
@@ -10,8 +11,8 @@ class Transform {
   inputSpaceName: string
   outputSpaceName: string
 
-  parameters: number[]
-  fixedParameters: number[]
+  parameters: TypedArray
+  fixedParameters: TypedArray
 
   constructor (transformType = new TransformType()) {
     this.transformType = transformType
@@ -21,8 +22,8 @@ class Transform {
     this.inputSpaceName = ''
     this.outputSpaceName = ''
 
-    this.parameters = new Array(0)
-    this.fixedParameters = new Array(0)
+    this.parameters = new Uint8Array(0)
+    this.fixedParameters = new Uint8Array(0)
   }
 }
 

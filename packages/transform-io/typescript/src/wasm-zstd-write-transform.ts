@@ -1,7 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import {
-  Transform,
+  TransformList,
   JsonCompatible,
   BinaryFile,
   InterfaceTypes,
@@ -21,14 +21,14 @@ import { getDefaultWebWorker } from './default-web-worker.js'
 /**
  * Write an ITK-Wasm transform file format converted to a transform file format
  *
- * @param {Transform} transform - Input transform
+ * @param {TransformList} transform - Input transform
  * @param {string} serializedTransform - Output transform serialized in the file format.
  * @param {WasmZstdWriteTransformOptions} options - options object
  *
  * @returns {Promise<WasmZstdWriteTransformResult>} - result object
  */
 async function wasmZstdWriteTransform(
-  transform: Transform,
+  transform: TransformList,
   serializedTransform: string,
   options: WasmZstdWriteTransformOptions = {}
 ) : Promise<WasmZstdWriteTransformResult> {
@@ -39,7 +39,7 @@ async function wasmZstdWriteTransform(
   ]
 
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.Transform, data: transform },
+    { type: InterfaceTypes.TransformList, data: transform },
   ]
 
   const args = []

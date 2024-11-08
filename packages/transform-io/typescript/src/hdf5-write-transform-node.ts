@@ -1,7 +1,7 @@
 // Generated file. To retain edits, remove this comment.
 
 import {
-  Transform,
+  TransformList,
   JsonCompatible,
   InterfaceTypes,
   PipelineOutput,
@@ -18,14 +18,14 @@ import { fileURLToPath } from 'url'
 /**
  * Write an ITK-Wasm transform file format converted to a transform file format
  *
- * @param {Transform} transform - Input transform
+ * @param {TransformList} transform - Input transform
  * @param {string} serializedTransform - Output transform serialized in the file format.
  * @param {Hdf5WriteTransformNodeOptions} options - options object
  *
  * @returns {Promise<Hdf5WriteTransformNodeResult>} - result object
  */
 async function hdf5WriteTransformNode(
-  transform: Transform,
+  transform: TransformList,
   serializedTransform: string,
   options: Hdf5WriteTransformNodeOptions = {}
 ) : Promise<Hdf5WriteTransformNodeResult> {
@@ -37,7 +37,7 @@ async function hdf5WriteTransformNode(
   ]
 
   const inputs: Array<PipelineInput> = [
-    { type: InterfaceTypes.Transform, data: transform },
+    { type: InterfaceTypes.TransformList, data: transform },
   ]
 
   const args = []

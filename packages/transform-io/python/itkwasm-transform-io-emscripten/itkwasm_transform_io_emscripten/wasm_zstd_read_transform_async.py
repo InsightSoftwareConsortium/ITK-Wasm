@@ -14,13 +14,13 @@ from itkwasm.pyodide import (
 from itkwasm import (
     InterfaceTypes,
     BinaryFile,
-    Transform,
+    TransformList,
 )
 
 async def wasm_zstd_read_transform_async(
     serialized_transform: os.PathLike,
     float_parameters: bool = False,
-) -> Tuple[Any, Transform]:
+) -> Tuple[Any, TransformList]:
     """Read an transform file format and convert it to the ITK-Wasm transform file format
 
     :param serialized_transform: Input transform serialized in the file format
@@ -33,7 +33,7 @@ async def wasm_zstd_read_transform_async(
     :rtype:  Any
 
     :return: Output transform
-    :rtype:  Transform
+    :rtype:  TransformList
     """
     js_module = await js_package.js_module
     web_worker = js_resources.web_worker

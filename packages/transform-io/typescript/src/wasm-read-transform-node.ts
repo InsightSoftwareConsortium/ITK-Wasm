@@ -2,7 +2,7 @@
 
 import {
   JsonCompatible,
-  Transform,
+  TransformList,
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
@@ -32,7 +32,7 @@ async function wasmReadTransformNode(
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonCompatible },
-    { type: InterfaceTypes.Transform },
+    { type: InterfaceTypes.TransformList },
   ]
 
   mountDirs.add(path.dirname(serializedTransform as string))
@@ -71,7 +71,7 @@ async function wasmReadTransformNode(
 
   const result = {
     couldRead: outputs[0]?.data as JsonCompatible,
-    transform: outputs[1]?.data as Transform,
+    transform: outputs[1]?.data as TransformList,
   }
   return result
 }

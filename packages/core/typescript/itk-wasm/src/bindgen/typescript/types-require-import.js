@@ -3,7 +3,7 @@ const typesRequireImport = [
   'Mesh',
   'PointSet',
   'PolyData',
-  'Transform',
+  'TransformList',
   'TextFile',
   'BinaryFile',
   'TextFile',

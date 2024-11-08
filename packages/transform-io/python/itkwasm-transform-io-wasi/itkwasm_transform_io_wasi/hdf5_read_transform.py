@@ -14,13 +14,13 @@ from itkwasm import (
     PipelineInput,
     Pipeline,
     BinaryFile,
-    Transform,
+    TransformList,
 )
 
 def hdf5_read_transform(
     serialized_transform: os.PathLike,
     float_parameters: bool = False,
-) -> Tuple[Any, Transform]:
+) -> Tuple[Any, TransformList]:
     """Read an transform file format and convert it to the ITK-Wasm transform file format
 
     :param serialized_transform: Input transform serialized in the file format
@@ -33,7 +33,7 @@ def hdf5_read_transform(
     :rtype:  Any
 
     :return: Output transform
-    :rtype:  Transform
+    :rtype:  TransformList
     """
     global _pipeline
     if _pipeline is None:
@@ -41,7 +41,7 @@ def hdf5_read_transform(
 
     pipeline_outputs: List[PipelineOutput] = [
         PipelineOutput(InterfaceTypes.JsonCompatible),
-        PipelineOutput(InterfaceTypes.Transform),
+        PipelineOutput(InterfaceTypes.TransformList),
     ]
 
     pipeline_inputs: List[PipelineInput] = [

@@ -81,10 +81,10 @@ public:
     wasmTransformIO->SetTransformList(*(reinterpret_cast<ConstTransformListType *>(&(transformIO->GetTransformList()))));
 
     constexpr bool inMemory = true;
-    auto transformJSON = wasmTransformIO->GetJSON(inMemory);
+    this->m_TransformListJSON = wasmTransformIO->GetJSON(inMemory);
 
     std::string serialized{};
-    auto ec = glz::write<glz::opts{ .prettify = true }>(transformJSON, serialized);
+    auto ec = glz::write<glz::opts{ .prettify = true }>(this->m_TransformListJSON, serialized);
     if (ec)
     {
       itkExceptionMacro("Failed to serialize TransformListJSON");

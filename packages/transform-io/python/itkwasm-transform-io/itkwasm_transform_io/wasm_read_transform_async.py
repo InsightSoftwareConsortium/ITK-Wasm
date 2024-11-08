@@ -6,13 +6,13 @@ from typing import Dict, Tuple, Optional, List, Any
 from itkwasm import (
     environment_dispatch,
     BinaryFile,
-    Transform,
+    TransformList,
 )
 
 async def wasm_read_transform_async(
     serialized_transform: os.PathLike,
     float_parameters: bool = False,
-) -> Tuple[Any, Transform]:
+) -> Tuple[Any, TransformList]:
     """Read an transform file format and convert it to the ITK-Wasm transform file format
 
     :param serialized_transform: Input transform serialized in the file format
@@ -25,7 +25,7 @@ async def wasm_read_transform_async(
     :rtype:  Any
 
     :return: Output transform
-    :rtype:  Transform
+    :rtype:  TransformList
     """
     func = environment_dispatch("itkwasm_transform_io", "wasm_read_transform_async")
     output = await func(serialized_transform, float_parameters=float_parameters)

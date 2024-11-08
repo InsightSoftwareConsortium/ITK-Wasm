@@ -26,5 +26,6 @@ export { default as PolyDataType } from './poly-data-type.js'
 export { default as TransformParameterizations } from './transform-parameterizations.js'
 export { default as TransformType } from './transform-type.js'
 export { default as Transform } from './transform.js'
+export type { default as TransformList } from './transform-list.js'
 
 export { default as InterfaceTypes } from './interface-types.js'

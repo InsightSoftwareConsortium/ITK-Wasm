@@ -5,12 +5,12 @@ from typing import Dict, Tuple, Optional, List, Any
 
 from itkwasm import (
     environment_dispatch,
-    Transform,
+    TransformList,
     BinaryFile,
 )
 
 async def hdf5_write_transform_async(
-    transform: Transform,
+    transform: TransformList,
     serialized_transform: str,
     float_parameters: bool = False,
     use_compression: bool = False,
@@ -18,7 +18,7 @@ async def hdf5_write_transform_async(
     """Write an ITK-Wasm transform file format converted to a transform file format
 
     :param transform: Input transform
-    :type  transform: Transform
+    :type  transform: TransformList
 
     :param serialized_transform: Output transform serialized in the file format.
     :type  serialized_transform: str

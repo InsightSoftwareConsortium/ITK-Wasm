@@ -13,12 +13,12 @@ from itkwasm.pyodide import (
 )
 from itkwasm import (
     InterfaceTypes,
-    Transform,
+    TransformList,
     BinaryFile,
 )
 
 async def wasm_zstd_write_transform_async(
-    transform: Transform,
+    transform: TransformList,
     serialized_transform: str,
     float_parameters: bool = False,
     use_compression: bool = False,
@@ -26,7 +26,7 @@ async def wasm_zstd_write_transform_async(
     """Write an ITK-Wasm transform file format converted to a transform file format
 
     :param transform: Input transform
-    :type  transform: Transform
+    :type  transform: TransformList
 
     :param serialized_transform: Output transform serialized in the file format.
     :type  serialized_transform: str
