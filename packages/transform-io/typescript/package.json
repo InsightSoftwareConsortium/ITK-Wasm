@@ -34,12 +34,14 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "workspace:^"
+    "itk-wasm": "workspace:^",
+    "mime-types": "^2.1.35"
   },
   "devDependencies": {
     "@itk-wasm/demo-app": "workspace:*",
     "@itk-wasm/transform-io-build": "workspace:*",
     "@types/node": "^20.2.5",
+    "@types/mime-types": "^2.1.4",
     "ava": "^6.1.3",
     "esbuild": "^0.19.8",
     "shx": "^0.3.4",

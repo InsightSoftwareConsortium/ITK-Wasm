@@ -768,6 +768,9 @@ importers:
       itk-wasm:
         specifier: workspace:^
         version: link:../../core/typescript/itk-wasm
+      mime-types:
+        specifier: ^2.1.35
+        version: 2.1.35
     devDependencies:
       '@itk-wasm/demo-app':
         specifier: workspace:*
@@ -775,6 +778,9 @@ importers:
       '@itk-wasm/transform-io-build':
         specifier: workspace:*
         version: link:..
+      '@types/mime-types':
+        specifier: ^2.1.4
+        version: 2.1.4
       '@types/node':
         specifier: ^20.2.5
         version: 20.12.10
@@ -2580,6 +2586,7 @@ packages:
 
   acorn-import-assertions@1.9.0:
     resolution: {integrity: sha512-cmMwop9x+8KFhxvKrKfPYmN6/pKTYYHBqLa0DfvVZcKMJWNyWLnaqND7dx/qn66R7ewM1UX5XMaDVP5wlVTaVA==}
+    deprecated: package has been renamed to acorn-import-attributes
     peerDependencies:
       acorn: ^8
 
