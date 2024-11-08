@@ -22,7 +22,7 @@ const haveSharedArrayBuffer = typeof globalThis.SharedArrayBuffer === 'function'
 const encoder = new TextEncoder()
 const decoder = new TextDecoder('utf-8')
 
-function readFileSharedArray (
+function readFileSharedArray(
   emscriptenModule: PipelineEmscriptenModule,
   path: string
 ): Uint8Array {
@@ -42,7 +42,7 @@ function readFileSharedArray (
   return array
 }
 
-function memoryUint8SharedArray (
+function memoryUint8SharedArray(
   emscriptenModule: PipelineEmscriptenModule,
   byteOffset: number,
   length: number
@@ -63,7 +63,7 @@ function memoryUint8SharedArray (
   return array
 }
 
-function setPipelineModuleInputArray (
+function setPipelineModuleInputArray(
   emscriptenModule: PipelineEmscriptenModule,
   dataArray: TypedArray | null,
   inputIndex: number,
@@ -82,7 +82,7 @@ function setPipelineModuleInputArray (
   return dataPtr
 }
 
-function setPipelineModuleInputJSON (
+function setPipelineModuleInputJSON(
   emscriptenModule: PipelineEmscriptenModule,
   dataObject: object,
   inputIndex: number
@@ -98,13 +98,13 @@ function setPipelineModuleInputJSON (
   emscriptenModule.stringToUTF8(dataJSON, jsonPtr, length)
 }
 
-function getPipelineModuleOutputArray (
+function getPipelineModuleOutputArray(
   emscriptenModule: PipelineEmscriptenModule,
   outputIndex: number,
   subIndex: number,
   componentType:
-  | (typeof IntTypes)[keyof typeof IntTypes]
-  | (typeof FloatTypes)[keyof typeof FloatTypes]
+    | (typeof IntTypes)[keyof typeof IntTypes]
+    | (typeof FloatTypes)[keyof typeof FloatTypes]
 ): TypedArray | Float32Array | Uint32Array | null {
   const dataPtr = emscriptenModule.ccall(
     'itk_wasm_output_array_address',
@@ -123,7 +123,7 @@ function getPipelineModuleOutputArray (
   return data
 }
 
-function getPipelineModuleOutputJSON (
+function getPipelineModuleOutputJSON(
   emscriptenModule: PipelineEmscriptenModule,
   outputIndex: number
 ): object {
@@ -138,7 +138,7 @@ function getPipelineModuleOutputJSON (
   return dataObject
 }
 
-function runPipelineEmscripten (
+function runPipelineEmscripten(
   pipelineModule: PipelineEmscriptenModule,
   args: string[],
   outputs: PipelineOutput[] | null,
