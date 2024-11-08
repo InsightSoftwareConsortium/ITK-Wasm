@@ -3,7 +3,7 @@ import path from "path";
 
 import { matReadTransformNode } from "../../dist/index-node.js";
 
-import { testInputPath } from "./common.js";
+import { testInputPath, verifyTestLinearTransform } from "./common.js";
 
 const testInputFilePath = path.join(testInputPath, "LinearTransform.mat");
 
@@ -12,5 +12,5 @@ test("Test reading a .mat file", async (t) => {
     testInputFilePath
   );
   t.true(couldRead);
-  console.log(transform);
+  verifyTestLinearTransform(t, transform);
 });
