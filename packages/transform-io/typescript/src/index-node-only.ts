@@ -4,6 +4,12 @@ export type { ReadTransformOptions };
 import readTransformNode from "./read-transform-node.js";
 export { readTransformNode };
 
+import WriteTransformOptions from "./write-transform-options.js";
+export type { WriteTransformOptions };
+
+import writeTransformNode from "./write-transform-node.js";
+export { writeTransformNode };
+
 import Hdf5ReadTransformNodeResult from "./hdf5-read-transform-node-result.js";
 export type { Hdf5ReadTransformNodeResult };
 

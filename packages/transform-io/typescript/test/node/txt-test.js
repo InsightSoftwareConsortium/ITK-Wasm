@@ -39,7 +39,7 @@ test("Test writing an Insight Legacy TXT transform file", async (t) => {
   t.true(couldWrite);
 
   const { couldRead: couldReadBack, transform: transformBack } =
-    await txtReadTransformNode(testInputFilePath);
+    await txtReadTransformNode(testOutputFilePath);
   t.true(couldReadBack);
   verifyTestLinearTransform(t, transformBack);
 });

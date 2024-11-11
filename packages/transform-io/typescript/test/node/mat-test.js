@@ -39,7 +39,7 @@ test("Test writing .mat transform file", async (t) => {
   t.true(couldWrite);
 
   const { couldRead: couldReadBack, transform: transformBack } =
-    await matReadTransformNode(testInputFilePath);
+    await matReadTransformNode(testOutputFilePath);
   t.true(couldReadBack);
   verifyTestLinearTransform(t, transformBack);
 });

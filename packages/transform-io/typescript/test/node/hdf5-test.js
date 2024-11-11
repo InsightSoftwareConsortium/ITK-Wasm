@@ -39,7 +39,7 @@ test("Test writing a HDF5 transform file", async (t) => {
   t.true(couldWrite);
 
   const { couldRead: couldReadBack, transform: transformBack } =
-    await hdf5ReadTransformNode(testInputFilePath);
+    await hdf5ReadTransformNode(testOutputFilePath);
   t.true(couldReadBack);
   verifyTestLinearTransform(t, transformBack);
 });

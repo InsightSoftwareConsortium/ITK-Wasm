@@ -73,7 +73,7 @@ public:
 
   /** Set the JSON representation of the image information. */
   void
-  SetJSON(const TransformListJSON & json);
+  SetJSON(const TransformListJSON & json, bool inMemory=false);
 
   /*-------- This part of the interfaces deals with writing data ----- */
 

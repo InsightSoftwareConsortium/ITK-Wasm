@@ -28,6 +28,7 @@
 #include "itkWasmIOCommon.h"
 #include "itktransformParameterizationString.h"
 #include "itkMetaDataDictionaryJSON.h"
+#include "itkTransformFactoryBase.h"
 
 #include "itkMetaDataObject.h"
 #include "itkIOCommon.h"
@@ -460,7 +461,7 @@ WasmTransformIOTemplate<TParametersValueType>::GetJSON(bool inMemory) -> Transfo
 
 template <typename TParametersValueType>
 void
-WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON & json)
+WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON & json, bool inMemory)
 {
   // iterate over the JSON and set the transform list
   TransformListType transformList;
@@ -496,13 +497,31 @@ WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON &
     TransformPointer transform;
     this->CreateTransform(transform, transformType);
     transform->SetObjectName(transformJSON.name);
+    // todo: ITK 5.4.1
+    // transform->SetInputSpaceName(transformJSON.inputSpaceName);
+    // transform->SetOutputSpaceName(transformJSON.outputSpaceName);
 
     auto dictionary = transform->GetMetaDataDictionary();
     jsonToMetaDataDictionary(transformJSON.metadata, dictionary);
 
-    // todo: ITK 5.4.1
-    // transform->SetInputSpaceName(transformJSON.inputSpaceName);
-    // transform->SetOutputSpaceName(transformJSON.outputSpaceName);
+    if (inMemory)
+    {
+      if (transformJSON.transformType.transformParameterization == JSONTransformParameterizationEnum::Composite)
+      {
+        continue;
+      }
+
+      using ParametersValueType = TParametersValueType;
+
+      FixedParametersValueType * fixedPtr = reinterpret_cast< FixedParametersValueType * >( std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10) );
+      transform->CopyInFixedParameters(fixedPtr, fixedPtr + transformJSON.numberOfFixedParameters);
+      ParametersValueType * paramsPtr = reinterpret_cast< ParametersValueType * >( std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10) );
+      transform->CopyInParameters(paramsPtr, paramsPtr + transformJSON.numberOfParameters);
+
+      auto dictionary = transform->GetMetaDataDictionary();
+      jsonToMetaDataDictionary(transformJSON.metadata, dictionary);
+    }
+
     this->GetReadTransformList().push_back(transform);
   }
 }
