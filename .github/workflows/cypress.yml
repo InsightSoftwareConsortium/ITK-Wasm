@@ -20,7 +20,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        package: [compress-stringify, compare-images, dicom, mesh-io, image-io, downsample]
+        package: [compress-stringify, compare-images, dicom, mesh-io, image-io, transform-io, downsample]
 
     steps:
       - name: Checkout
@@ -138,6 +138,7 @@ jobs:
           # Test deps
           pnpm run --aggregate-output --filter "@itk-wasm/demo-app" build
           pnpm run --aggregate-output --filter "@itk-wasm/mesh-io" build
+          pnpm run --aggregate-output --filter "@itk-wasm/transform-io" build
           pnpm run --aggregate-output --filter "@itk-wasm/image-io" build
 
       - name: Test itk-wasm with Chrome
