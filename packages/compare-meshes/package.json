@@ -7,9 +7,9 @@
   "itk-wasm": {
     "emscripten-docker-image": "itkwasm/emscripten:latest",
     "wasi-docker-image": "itkwasm/wasi:latest",
-    "test-data-hash": "bafybeigcqagjt67v4uutyrdefftxu23ihgnmjbgelxnkfy4x3zcfsfg3xm",
+    "test-data-hash": "bafkreibsonywg3w3gscmookip3elsyydfsn2cbubk6dukatkmjgeguhiri",
     "test-data-urls": [
-      "https://bafybeiabirl7i5shb6sajmfkqycpi67i3vshpcto7d3x3up2w5h64yibji.ipfs.w3s.link/ipfs/bafybeiabirl7i5shb6sajmfkqycpi67i3vshpcto7d3x3up2w5h64yibji/data.tar.gz"
+      "https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.178/compare-meshes-data.tar.gz"
     ],
     "package-description": "Compare meshes and polydata for regression testing.",
     "typescript-package-name": "@itk-wasm/compare-meshes",
@@ -29,7 +29,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafkreidioh62iouwzrrpavx7g72fdjxze7gp4cqpf36t4pdafcpcmx4zye https://bafybeiabirl7i5shb6sajmfkqycpi67i3vshpcto7d3x3up2w5h64yibji.ipfs.w3s.link/ipfs/bafybeiabirl7i5shb6sajmfkqycpi67i3vshpcto7d3x3up2w5h64yibji/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreibsonywg3w3gscmookip3elsyydfsn2cbubk6dukatkmjgeguhiri https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.178/compare-meshes-data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
