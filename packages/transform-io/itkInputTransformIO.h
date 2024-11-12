@@ -96,11 +96,11 @@ bool lexical_cast(const std::string &input, InputTransformIO<TParametersValueTyp
     }
 
     auto wasmTransformIO = WasmTransformIOType::New();
-    wasmTransformIO->SetJSON(transformListJSON);
+    constexpr bool inMemory = true;
+    wasmTransformIO->SetJSON(transformListJSON, inMemory);
 
     auto wasmTransformIOBase = WasmTransformIOBaseType::New();
-    wasmTransformIOBase->SetTransformIO(wasmTransformIO, false);
-    wasmTransformIOBase->SetJSON(json);
+    wasmTransformIOBase->SetTransformIO(wasmTransformIO, inMemory);
 
     inputTransformIO.Set(wasmTransformIOBase);
 #else

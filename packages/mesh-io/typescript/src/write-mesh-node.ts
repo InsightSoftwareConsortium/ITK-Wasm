@@ -1,25 +1,25 @@
-import path from 'path'
+import path from "path";
 
-import {
-  Mesh,
-  getFileExtension,
-} from 'itk-wasm'
+import { Mesh, getFileExtension } from "itk-wasm";
 
-import mimeToMeshIo from './mime-to-mesh-io.js'
-import extensionToMeshIo from './extension-to-mesh-io.js'
-import meshIoIndexNode from './mesh-io-index-node.js'
+import mimeToMeshIo from "./mime-to-mesh-io.js";
+import extensionToMeshIo from "./extension-to-mesh-io.js";
+import meshIoIndexNode from "./mesh-io-index-node.js";
 
-import WriteMeshOptions from './write-mesh-options.js'
+import WriteMeshOptions from "./write-mesh-options.js";
 
 interface WriterOptions {
-  useCompression?: boolean
-  binaryFileType?: boolean
+  useCompression?: boolean;
+  binaryFileType?: boolean;
 }
 interface WriterResult {
-  couldWrite: boolean
+  couldWrite: boolean;
 }
-type Writer = (mesh: Mesh, serializedImage: string, options: WriterOptions) => Promise<WriterResult>
-
+type Writer = (
+  mesh: Mesh,
+  serializedMesh: string,
+  options: WriterOptions
+) => Promise<WriterResult>;
 
 /**
  * Write a mesh to a serialized file format and from an the itk-wasm Mesh
@@ -34,38 +34,47 @@ async function writeMeshNode(
   mesh: Mesh,
   serializedMesh: string,
   options: WriteMeshOptions = {}
-) : Promise<void> {
-  const absoluteFilePath = path.resolve(serializedMesh)
-  const mimeType = options.mimeType
-  const extension = getFileExtension(absoluteFilePath)
+): Promise<void> {
+  const absoluteFilePath = path.resolve(serializedMesh);
+  const mimeType = options.mimeType;
+  const extension = getFileExtension(absoluteFilePath);
 
-  let inputMesh = mesh
+  let inputMesh = mesh;
 
-  let io = null
-  if (typeof mimeType !== 'undefined' && mimeToMeshIo.has(mimeType)) {
-    io = mimeToMeshIo.get(mimeType)
+  let io = null;
+  if (typeof mimeType !== "undefined" && mimeToMeshIo.has(mimeType)) {
+    io = mimeToMeshIo.get(mimeType);
   } else if (extensionToMeshIo.has(extension)) {
-    io = extensionToMeshIo.get(extension)
+    io = extensionToMeshIo.get(extension);
   } else {
     for (const readerWriter of meshIoIndexNode.values()) {
       if (readerWriter[1] !== null) {
-        let { couldWrite } = await (readerWriter[1] as Writer)(inputMesh, absoluteFilePath, { useCompression: options.useCompression, binaryFileType: options.binaryFileType })
+        let { couldWrite } = await (readerWriter[1] as Writer)(
+          inputMesh,
+          absoluteFilePath,
+          {
+            useCompression: options.useCompression,
+            binaryFileType: options.binaryFileType,
+          }
+        );
         if (couldWrite) {
-          return
+          return;
         }
       }
     }
   }
-  if (io === null ) {
-    throw Error('Could not find IO for: ' + absoluteFilePath)
+  if (io === null) {
+    throw Error("Could not find IO for: " + absoluteFilePath);
   }
-  const readerWriter = meshIoIndexNode.get(io as string)
+  const readerWriter = meshIoIndexNode.get(io as string);
 
-  const writer = (readerWriter as Array<Writer>)[1]
-  let { couldWrite } = await writer(inputMesh, absoluteFilePath, { useCompression: options.useCompression })
+  const writer = (readerWriter as Array<Writer>)[1];
+  let { couldWrite } = await writer(inputMesh, absoluteFilePath, {
+    useCompression: options.useCompression,
+  });
   if (!couldWrite) {
-    throw Error('Could not write: ' + absoluteFilePath)
+    throw Error("Could not write: " + absoluteFilePath);
   }
 }
 
-export default writeMeshNode
+export default writeMeshNode;
