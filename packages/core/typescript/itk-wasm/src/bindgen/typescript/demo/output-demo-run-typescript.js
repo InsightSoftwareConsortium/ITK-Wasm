@@ -48,6 +48,7 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
     case 'OUTPUT_IMAGE':
     case 'OUTPUT_MESH':
     case 'OUTPUT_POINT_SET':
+    case 'OUTPUT_TRANSFORM':
       result += `${prefix}${indent}${parameterName}OutputDownload.variant = "success"\n`
       result += `${prefix}${indent}${parameterName}OutputDownload.disabled = false\n`
       result += `${indent}${indent}const ${parameterName}Details = document.getElementById("${functionName}-${parameter.name}-details")\n`
@@ -62,7 +63,9 @@ function outputDemoRunTypeScript(functionName, prefix, indent, parameter) {
       }
       break
     default:
-      console.error(`Unexpected interface type: ${parameter.type}`)
+      console.error(
+        `outputDemoRunTypeScript: Unexpected interface type: ${parameter.type}`
+      )
       process.exit(1)
   }
   return result

@@ -1,4 +1,4 @@
-import snakeCase from "../snake-case.js"
+import snakeCase from '../snake-case.js'
 
 function outputPython(functionName, prefix, indent, parameter) {
   const parameterName = snakeCase(parameter.name)
@@ -6,13 +6,13 @@ function outputPython(functionName, prefix, indent, parameter) {
   let methodResult = ''
   let runResult = ''
 
-  switch(parameter.type) {
+  switch (parameter.type) {
     // case 'OUTPUT_TEXT_FILE:FILE':
     // case 'OUTPUT_TEXT_STREAM':
-      // result += `${indent}<sl-textarea disabled name="${parameter.name}" label="${snakeCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
-      // result += `${indent}<sl-button variant="neutral" name="${parameter.name}-download">${snakeCase(parameter.name)}</sl-button>\n`
-      // result += `<br /><br />\n`
-      // break
+    // result += `${indent}<sl-textarea disabled name="${parameter.name}" label="${snakeCase(parameter.name)}" help-text="${parameter.description}"></sl-textarea>\n`
+    // result += `${indent}<sl-button variant="neutral" name="${parameter.name}-download">${snakeCase(parameter.name)}</sl-button>\n`
+    // result += `<br /><br />\n`
+    // break
     case 'OUTPUT_BINARY_FILE:FILE':
     case 'OUTPUT_BINARY_STREAM':
       initResult += `${indent}    ${parameterName}_download_element = js.document.querySelector('#${functionName}-outputs sl-button[name=${parameter.name}-download]')\n`
@@ -53,7 +53,9 @@ function outputPython(functionName, prefix, indent, parameter) {
     //   result += `<br /><br />\n`
     //   break
     default:
-      console.error(`Unexpected interface type: ${parameter.type}`)
+      console.error(
+        `outputPython: Unexpected interface type: ${parameter.type}`
+      )
       process.exit(1)
   }
   return { init: initResult, method: methodResult, run: runResult }

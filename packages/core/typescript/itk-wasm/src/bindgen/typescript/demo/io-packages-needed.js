@@ -4,6 +4,7 @@ function ioPackagesNeeded(interfaceJson) {
   let needReadMesh = false
   let needReadImage = false
   let needReadPointSet = false
+  let needReadTransform = false
   const pipelineComponents = ['inputs', 'parameters']
   pipelineComponents.forEach((pipelineComponent) => {
     needReadMesh =
@@ -22,6 +23,12 @@ function ioPackagesNeeded(interfaceJson) {
       interfaceJson[pipelineComponent].filter(
         (value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Image'
       ).length > 0
+    needReadTransform =
+      needReadTransform ||
+      interfaceJson[pipelineComponent].filter(
+        (value) =>
+          interfaceJsonTypeToInterfaceType.get(value.type) === 'TransformList'
+      ).length > 0
   })
   const needWriteMesh =
     interfaceJson.outputs.filter(
@@ -35,13 +42,20 @@ function ioPackagesNeeded(interfaceJson) {
     interfaceJson.outputs.filter(
       (value) => interfaceJsonTypeToInterfaceType.get(value.type) === 'Image'
     ).length > 0
+  const needWriteTransform =
+    interfaceJson.outputs.filter(
+      (value) =>
+        interfaceJsonTypeToInterfaceType.get(value.type) === 'TransformList'
+    ).length > 0
   return {
     needReadImage,
     needReadMesh,
     needReadPointSet,
+    needReadTransform,
     needWriteImage,
     needWriteMesh,
-    needWritePointSet
+    needWritePointSet,
+    needWriteTransform
   }
 }
 

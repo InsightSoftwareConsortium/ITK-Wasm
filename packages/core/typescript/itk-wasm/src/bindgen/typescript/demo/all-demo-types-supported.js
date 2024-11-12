@@ -12,7 +12,8 @@ const demoSupportedInputTypes = new Set([
   'INPUT_JSON',
   'INPUT_IMAGE',
   'INPUT_MESH',
-  'INPUT_POINT_SET'
+  'INPUT_POINT_SET',
+  'INPUT_TRANSFORM'
 ])
 const demoSupportedOutputTypes = new Set([
   'OUTPUT_TEXT_FILE',
@@ -22,7 +23,8 @@ const demoSupportedOutputTypes = new Set([
   'OUTPUT_JSON',
   'OUTPUT_IMAGE',
   'OUTPUT_MESH',
-  'OUTPUT_POINT_SET'
+  'OUTPUT_POINT_SET',
+  'OUTPUT_TRANSFORM'
 ])
 
 function allDemoTypesSupported(interfaceJson) {

@@ -114,6 +114,7 @@ function inputParametersDemoTypeScript(
     case 'INPUT_IMAGE':
     case 'INPUT_MESH':
     case 'INPUT_POINT_SET':
+    case 'INPUT_TRANSFORM':
       result += `${indent}const ${inputIdentifier} = document.querySelector('#${functionName}Inputs input[name=${parameter.name}-file]')\n`
       result += `${indent}${inputIdentifier}.addEventListener('change', async (event) => {\n`
       result += `${indent}${indent}const dataTransfer = event.dataTransfer\n`
@@ -172,12 +173,29 @@ function inputParametersDemoTypeScript(
           result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
           result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(pointSet, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
         }
+      } else if (parameterType === 'INPUT_TRANSFORM') {
+        if (parameter.itemsExpectedMax > 1) {
+          result += `${indent}${indent}const readTransform = await Promise.all(Array.from(files).map(async (file) => readTransform(file)))\n`
+          result += `${indent}${indent}readTransform.forEach(t => t.webWorker.terminate())\n`
+          result += `${indent}${indent}const inputTransform = readTransform.map(t => t.transform)\n`
+          result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", inputTransform)\n`
+          result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
+          result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(inputTransform, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+        } else {
+          result += `${indent}${indent}const { transform, webWorker } = await readTransform(files[0])\n`
+          result += `${indent}${indent}webWorker.terminate()\n`
+          result += `${indent}${indent}model.${modelProperty}.set("${parameterName}", transform)\n`
+          result += `${indent}${indent}const details = document.getElementById("${functionName}-${parameter.name}-details")\n`
+          result += `${indent}${indent}details.innerHTML = \`<pre>$\{globalThis.escapeHtml(JSON.stringify(transform, globalThis.interfaceTypeJsonReplacer, 2))}</pre>\`\n`
+        }
       }
       result += `${indent}${indent}details.disabled = false\n`
       result += `${indent}})\n\n`
       break
     default:
-      console.error(`Unexpected interface type: ${parameterType}`)
+      console.error(
+        `inputParametersDemoTypeScript: Unexpected interface type: ${parameterType}`
+      )
       process.exit(1)
   }
   return result
