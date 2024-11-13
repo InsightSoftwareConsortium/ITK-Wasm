@@ -196,3 +196,32 @@ foreach(seg_size ${TEST_SEG_SIZES})
     )
 
 endforeach()
+
+# Plastimatch
+# set(PLM_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/plastimatch")
+# set(PLM_GIT_TAG        "5036f97b213d37a0a07dd232c827fb5f35049ae4")
+# set(PLM_GIT_REPOSITORY "/home/matt/src/plastimatch")
+set(PLM_GIT_REPOSITORY "git@github.com:thewtex/plastimatch")
+set(PLM_GIT_TAG        "origin/itk-wasm")
+set(PLM_CONFIG_ENABLE_DCMTK ON)
+set(PLM_CONFIG_ENABLE_OPENMP OFF)
+set(PLM_CONFIG_ENABLE_OPENCL OFF)
+set(PLM_CONFIG_ENABLE_CUDA OFF)
+set(PLM_CONFIG_ENABLE_PLASTIMATCH OFF)
+set(PLM_CONFIG_ENABLE_QT OFF)
+set(PLM_CONFIG_ENABLE_CLI OFF)
+set(PLM_CONFIG_ENABLE_CLP OFF)
+set(PLM_CONFIG_ENABLE_DOSE OFF)
+set(PLM_CONFIG_ENABLE_RECONSTRUCT OFF)
+set(PLM_CONFIG_ENABLE_REGISTER OFF)
+set(PLM_CONFIG_ENABLE_SEGMENT OFF)
+set(PLM_CONFIG_ENABLE_STANDALONE OFF)
+set(PLM_CONFIG_ENABLE_TEST OFF)
+set(PLM_BUILD_TESTING OFF)
+set(DCMTK_DIR ${ITK_DIR}/Modules/ThirdParty/DCMTK/ITKDCMTK_ExtProject-build)
+FetchContent_Declare(
+  plastimatch_lib
+  GIT_REPOSITORY ${PLM_GIT_REPOSITORY}
+  GIT_TAG ${PLM_GIT_TAG}
+)
+FetchContent_MakeAvailable(plastimatch_lib)
