@@ -38,6 +38,7 @@
   "devDependencies": {
     "@itk-wasm/image-io": "workspace:*",
     "@itk-wasm/mesh-io": "workspace:*",
+    "@itk-wasm/transform-io": "workspace:*",
     "@itk-wasm/demo-app": "workspace:*",
     "@types/node": "^20.2.5",
     "esbuild": "^0.19.8",

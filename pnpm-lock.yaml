@@ -485,6 +485,9 @@ importers:
       '@itk-wasm/mesh-io':
         specifier: workspace:*
         version: link:../../../../../../mesh-io/typescript
+      '@itk-wasm/transform-io':
+        specifier: workspace:*
+        version: link:../../../../../../transform-io/typescript
       '@types/node':
         specifier: ^20.2.5
         version: 20.12.10
