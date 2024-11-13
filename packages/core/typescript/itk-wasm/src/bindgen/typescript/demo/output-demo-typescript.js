@@ -102,8 +102,25 @@ function outputDemoTypeScript(functionName, prefix, indent, parameter) {
       result += `${prefix}${indent}${indent}}\n`
       result += `${prefix}${indent}})\n`
       break
+    case 'OUTPUT_TRANSFORM':
+      result += `${prefix}${indent}const ${parameterName}OutputDownload = document.querySelector('#${functionName}Outputs sl-button[name=${parameter.name}-download]')\n`
+      result += `${prefix}${indent}${parameterName}OutputDownload.addEventListener('click', async (event) => {\n`
+      result += `${prefix}${indent}${indent}event.preventDefault()\n`
+      result += `${prefix}${indent}${indent}event.stopPropagation()\n`
+      result += `${prefix}${indent}${indent}if (model.outputs.has("${parameterName}")) {\n`
+      result += `${prefix}${indent}${indent}${indent}const ${parameterName}DownloadFormat = document.getElementById('${functionName}-${parameter.name}-output-format')\n`
+      result += `${prefix}${indent}${indent}${indent}const downloadFormat = ${parameterName}DownloadFormat.value || 'h5'\n`
+      result += `${prefix}${indent}${indent}${indent}const fileName = \`${parameterName}.\${downloadFormat}\`\n`
+      result += `${prefix}${indent}${indent}${indent}const { webWorker, serializedTransform } = await writeTransform(model.outputs.get("${parameterName}"), fileName)\n\n`
+      result += `${prefix}${indent}${indent}${indent}webWorker.terminate()\n`
+      result += `${prefix}${indent}${indent}${indent}globalThis.downloadFile(serializedTransform.data, fileName)\n`
+      result += `${prefix}${indent}${indent}}\n`
+      result += `${prefix}${indent}})\n`
+      break
     default:
-      console.error(`Unexpected interface type: ${parameter.type}`)
+      console.error(
+        `outputDemoTypeScript: Unexpected interface type: ${parameter.type}`
+      )
       process.exit(1)
   }
   return result

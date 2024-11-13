@@ -24,9 +24,11 @@ function interfaceFunctionsDemoTypeScript(
     needReadImage,
     needReadMesh,
     needReadPointSet,
+    needReadTransform,
     needWriteImage,
     needWriteMesh,
-    needWritePointSet
+    needWritePointSet,
+    needWriteTransform
   } = ioPackagesNeeded(interfaceJson)
   if (needReadMesh) {
     if (packageName === '@itk-wasm/mesh-io') {
@@ -49,6 +51,13 @@ function interfaceFunctionsDemoTypeScript(
       result += `import { readImage } from '@itk-wasm/image-io'\n`
     }
   }
+  if (needReadTransform) {
+    if (packageName === '@itk-wasm/transform-io') {
+      result += `import { readTransform } from '../../../dist/index.js'\n`
+    } else {
+      result += `import { readTransform } from '@itk-wasm/transform-io'\n`
+    }
+  }
   if (needWriteMesh) {
     if (packageName === '@itk-wasm/mesh-io') {
       result += `import { writeMesh } from '../../../dist/index.js'\n`
@@ -68,6 +77,13 @@ function interfaceFunctionsDemoTypeScript(
       result += `import { writeImage } from '../../../dist/index.js'\n`
     } else {
       result += `import { writeImage } from '@itk-wasm/image-io'\n`
+    }
+  }
+  if (needWriteTransform) {
+    if (packageName === '@itk-wasm/transform-io') {
+      result += `import { writeTransform } from '../../../dist/index.js'\n`
+    } else {
+      result += `import { writeTransform } from '@itk-wasm/transform-io'\n`
     }
   }
 

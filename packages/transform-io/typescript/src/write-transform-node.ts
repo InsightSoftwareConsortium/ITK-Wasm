@@ -69,8 +69,6 @@ async function writeTransformNode(
   const readerWriter = transformIoIndexNode.get(io as string);
 
   const writer = (readerWriter as Array<Writer>)[1];
-  console.log("writer", writer);
-  console.log("inputTransform", inputTransform);
   let { couldWrite } = await writer(inputTransform, absoluteFilePath, {
     useCompression: options.useCompression,
   });

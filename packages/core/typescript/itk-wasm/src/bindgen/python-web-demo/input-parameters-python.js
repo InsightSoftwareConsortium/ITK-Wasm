@@ -1,4 +1,4 @@
-import snakeCase from "../snake-case.js"
+import snakeCase from '../snake-case.js'
 
 function inputParametersPython(functionName, indent, parameter, required) {
   let initResult = ''
@@ -54,7 +54,9 @@ function inputParametersPython(functionName, indent, parameter, required) {
       methodResult += `${indent}    self.model.${modelProperty}['${parameterName}'] = int(self.${inputIdentifier}.value)\n\n`
       break
     default:
-      console.error(`Unexpected interface type: ${parameter.type}`)
+      console.error(
+        `inputParametersPython: Unexpected interface type: ${parameter.type}`
+      )
       process.exit(1)
   }
   return { init: initResult, method: methodResult }

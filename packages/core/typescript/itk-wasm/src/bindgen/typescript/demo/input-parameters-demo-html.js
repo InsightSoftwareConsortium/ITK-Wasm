@@ -67,6 +67,7 @@ function inputParametersDemoHtml(
     case 'INPUT_JSON':
     case 'INPUT_MESH':
     case 'INPUT_POINT_SET':
+    case 'INPUT_TRANSFORM':
       result += `${prefix}${indent}<label for="${parameter.name}-file"><sl-button name="${parameter.name}-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="${parameter.name}-file" style="display: none"/>\n`
       result += `${prefix}${indent}<sl-tooltip ${tooltipContent}><sl-details id="${functionName}-${parameter.name}-details" summary="${label}: ${description}" disabled></sl-details></sl-tooltip>\n`
       result += '<br /><br />\n'
@@ -76,8 +77,11 @@ function inputParametersDemoHtml(
       result += `${prefix}${indent}<sl-tooltip ${tooltipContent}><itk-image-details id="${functionName}-${parameter.name}-details" summary="${label}: ${description}" disabled></itk-image-details></sl-tooltip>\n`
       result += '<br /><br />\n'
       break
+      break
     default:
-      console.error(`Unexpected interface type: ${parameterType}`)
+      console.error(
+        `inputParametersDemoHtml: Unexpected interface type: ${parameterType}`
+      )
       process.exit(1)
   }
   return result

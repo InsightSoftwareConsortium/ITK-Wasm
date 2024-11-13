@@ -96,8 +96,24 @@ function outputDemoHtml(functionName, prefix, indent, parameter) {
         result += `<br /><br />\n`
       }
       break
+    case 'OUTPUT_TRANSFORM':
+      {
+        result += `${prefix}${indent}<sl-details disabled id="${functionName}-${parameter.name}-details" summary="${camelCase(parameter.name)}: ${description}"></sl-details>\n`
+
+        result += `${prefix}${indent}<sl-select id="${functionName}-${parameter.name}-output-format" placeholder="Format">\n`
+        const formats = ['h5', 'txt', 'mat', 'xfm']
+        formats.forEach((format) => {
+          result += `${prefix}${indent}${indent}<sl-option value="${format}">${format}</sl-option>\n`
+        })
+        result += `${prefix}${indent}</sl-select>\n`
+        result += `${prefix}${indent}<sl-button variant="neutral" outline name="${parameter.name}-download" disabled>Download</sl-button>\n`
+        result += `<br /><br />\n`
+      }
+      break
     default:
-      console.error(`Unexpected interface type: ${parameterType}`)
+      console.error(
+        `outputDemoHtml: Unexpected interface type: ${parameterType}`
+      )
       process.exit(1)
   }
   return result

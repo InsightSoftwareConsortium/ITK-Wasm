@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css" />
+
+<script type="module">
+  import '@itk-wasm/demo-app/demo-app.js'
+</script>
+
+  <title>@itk-wasm/transform-io<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></title>
+</head>
+<body>
+
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/InsightSoftwareConsortium/ITK-Wasm" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<div id="app">
+  <a href="https://wasm.itk.org/" target="_blank">
+    <img src="./logo.svg" class="logo vanilla" alt="ITK Wasm logo" />
+  </a>
+
+  <h2>@itk-wasm/transform-io<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></h2>
+  <i>Input and output for scientific and medical coordinate transform file formats.</i>
+  <h3>👨‍💻 Live API Demo ✨</h3>
+  <br /><br />
+
+  <sl-tab-group>
+    <!-- Begin added content -->
+    <sl-tab slot="nav" panel="readTransform-panel">readTransform</sl-tab>
+    <sl-tab slot="nav" panel="writeTransform-panel">writeTransform</sl-tab>
+    <!-- End added content -->
+    <sl-tab slot="nav" panel="hdf5ReadTransform-panel">hdf5ReadTransform</sl-tab>
+    <sl-tab slot="nav" panel="hdf5WriteTransform-panel">hdf5WriteTransform</sl-tab>
+    <sl-tab slot="nav" panel="matReadTransform-panel">matReadTransform</sl-tab>
+    <sl-tab slot="nav" panel="matWriteTransform-panel">matWriteTransform</sl-tab>
+    <sl-tab slot="nav" panel="mncReadTransform-panel">mncReadTransform</sl-tab>
+    <sl-tab slot="nav" panel="mncWriteTransform-panel">mncWriteTransform</sl-tab>
+    <sl-tab slot="nav" panel="txtReadTransform-panel">txtReadTransform</sl-tab>
+    <sl-tab slot="nav" panel="txtWriteTransform-panel">txtWriteTransform</sl-tab>
+    <sl-tab slot="nav" panel="wasmReadTransform-panel">wasmReadTransform</sl-tab>
+    <sl-tab slot="nav" panel="wasmWriteTransform-panel">wasmWriteTransform</sl-tab>
+    <sl-tab slot="nav" panel="wasmZstdReadTransform-panel">wasmZstdReadTransform</sl-tab>
+    <sl-tab slot="nav" panel="wasmZstdWriteTransform-panel">wasmZstdWriteTransform</sl-tab>
+
+      <!-- Begin added content -->
+      <sl-tab-panel name="readTransform-panel">
+
+            <small><i>Read a transform file</i></small><br /><br />
+
+            <div id="readTransformInputs">
+                  <form action="">
+                        <sl-tooltip
+                              content="Use the Upload button to provide the serializedTransform"><sl-details
+                                    id="readTransform-serialized-transform-details"
+                                    summary="serializedTransform: Input transform serialized in the file format"
+                                    disabled></sl-details></sl-tooltip>
+                        <label for="serialized-transform-file"><sl-button name="serialized-transform-file-button"
+                                    required variant="primary" outline
+                                    onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input
+                              type="file" name="serialized-transform-file" style="display: none" />
+                        <br /><br />
+                        <sl-checkbox name="float-parameters">floatParameters - <i>Only read transform metadata --
+                                    do not read points and point and cell data.</i></sl-checkbox>
+                        <br /><br />
+                        <sl-divider></sl-divider>
+                        <br /><sl-tooltip
+                              content="Load example input data. This will overwrite data any existing input data."><sl-button
+                                    name="loadSampleInputs" variant="default" style="display: none;">Load
+                                    sample inputs</sl-button></sl-tooltip>
+                        <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+                  </form>
+            </div>
+            <sl-divider></sl-divider>
+
+            <div id="readTransformOutputs">
+                  <sl-details disabled id="readTransform-transform-details" summary="transform: Output transform"></sl-details>
+                  <sl-select id="transform-output-format" placeholder="Format">
+                        <sl-option value="h5">h5</sl-option>
+                        <sl-option value="txt">txt</sl-option>
+                        <sl-option value="mat">mat</sl-option>
+                        <sl-option value="xfm">xfm</sl-option>
+                  </sl-select>
+                  <sl-button variant="neutral" outline name="transform-download" disabled>Download</sl-button>
+                  <br /><br />
+            </div>
+
+      </sl-tab-panel>
+
+
+      <sl-tab-panel name="writeTransform-panel">
+
+            <small><i>Write an itk-wasm file format converted to an transform file format</i></small><br /><br />
+
+            <div id="writeTransformInputs">
+                  <form action="">
+                        <sl-tooltip content="Use the Upload button to provide the transform"><sl-details
+                                    id="writeTransform-transform-details" summary="transform: Input transform"
+                                    disabled></sl-details></sl-tooltip>
+                        <label for="transform-file"><sl-button name="transform-file-button" variant="primary" outline
+                                    onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input
+                              type="file" name="transform-file" style="display: none" />
+                        <br /><br />
+                        <sl-checkbox name="float-parameters">floatParameters - <i>Only write image metadata
+                                    -- do not write pixel data.</i></sl-checkbox>
+                        <br /><br />
+                        <sl-checkbox name="use-compression">useCompression - <i>Use compression in the written file</i></sl-checkbox>
+                        <br /><br />
+                        <sl-input required name="serialized-transform" type="text" label="serializedTransform"
+                              help-text="Output transform"></sl-input>
+                        <sl-divider></sl-divider>
+                        <br /><sl-tooltip
+                              content="Load example input data. This will overwrite data any existing input data."><sl-button
+                                    name="loadSampleInputs" variant="default" style="display: none;">Load
+                                    sample inputs</sl-button></sl-tooltip>
+                        <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+                  </form>
+            </div>
+            <sl-divider></sl-divider>
+
+            <div id="writeTransformOutputs">
+                  <sl-details disabled id="writeTransform-serialized-transform-details"
+                        summary="serializedTransform: Output transform"></sl-details>
+                  <sl-button variant="neutral" outline name="serialized-transform-download"
+                        disabled>Download</sl-button>
+                  <br /><br />
+            </div>
+
+      </sl-tab-panel>
+
+      <!-- End added content -->
+
+    <sl-tab-panel name="hdf5ReadTransform-panel">
+
+    <small><i>Read an transform file format and convert it to the ITK-Wasm transform file format</i></small><br /><br />
+
+    <div id="hdf5ReadTransformInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the serializedTransform"><sl-details id="hdf5ReadTransform-serialized-transform-details" summary="serializedTransform: Input transform serialized in the file format" disabled></sl-details></sl-tooltip>
+      <label for="serialized-transform-file"><sl-button name="serialized-transform-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="serialized-transform-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="hdf5ReadTransformOutputs">
+      <sl-details disabled id="hdf5ReadTransform-could-read-details" summary="couldRead: Whether the input could be read. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="hdf5ReadTransform-transform-details" summary="transform: Output transform"></sl-details>
+      <sl-select id="hdf5ReadTransform-transform-output-format" placeholder="Format">
+        <sl-option value="h5">h5</sl-option>
+        <sl-option value="txt">txt</sl-option>
+        <sl-option value="mat">mat</sl-option>
+        <sl-option value="xfm">xfm</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="hdf5WriteTransform-panel">
+
+    <small><i>Write an ITK-Wasm transform file format converted to a transform file format</i></small><br /><br />
+
+    <div id="hdf5WriteTransformInputs"><form action="">
+      <label for="transform-file"><sl-button name="transform-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="transform-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the transform"><sl-details id="hdf5WriteTransform-transform-details" summary="transform: Input transform" disabled></sl-details></sl-tooltip>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="use-compression">useCompression - <i>Use compression in the written file</i></sl-checkbox>
+<br /><br />
+      <sl-input required name="serialized-transform" type="text" label="serializedTransform" help-text="Output transform serialized in the file format."></sl-input>
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="hdf5WriteTransformOutputs">
+      <sl-details disabled id="hdf5WriteTransform-could-write-details" summary="couldWrite: Whether the input could be written. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-write-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="hdf5WriteTransform-serialized-transform-details" summary="serializedTransform: Output transform serialized in the file format."></sl-details>
+      <sl-button variant="neutral" outline name="serialized-transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="matReadTransform-panel">
+
+    <small><i>Read an transform file format and convert it to the ITK-Wasm transform file format</i></small><br /><br />
+
+    <div id="matReadTransformInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the serializedTransform"><sl-details id="matReadTransform-serialized-transform-details" summary="serializedTransform: Input transform serialized in the file format" disabled></sl-details></sl-tooltip>
+      <label for="serialized-transform-file"><sl-button name="serialized-transform-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="serialized-transform-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="matReadTransformOutputs">
+      <sl-details disabled id="matReadTransform-could-read-details" summary="couldRead: Whether the input could be read. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="matReadTransform-transform-details" summary="transform: Output transform"></sl-details>
+      <sl-select id="matReadTransform-transform-output-format" placeholder="Format">
+        <sl-option value="h5">h5</sl-option>
+        <sl-option value="txt">txt</sl-option>
+        <sl-option value="mat">mat</sl-option>
+        <sl-option value="xfm">xfm</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="matWriteTransform-panel">
+
+    <small><i>Write an ITK-Wasm transform file format converted to a transform file format</i></small><br /><br />
+
+    <div id="matWriteTransformInputs"><form action="">
+      <label for="transform-file"><sl-button name="transform-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="transform-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the transform"><sl-details id="matWriteTransform-transform-details" summary="transform: Input transform" disabled></sl-details></sl-tooltip>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="use-compression">useCompression - <i>Use compression in the written file</i></sl-checkbox>
+<br /><br />
+      <sl-input required name="serialized-transform" type="text" label="serializedTransform" help-text="Output transform serialized in the file format."></sl-input>
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="matWriteTransformOutputs">
+      <sl-details disabled id="matWriteTransform-could-write-details" summary="couldWrite: Whether the input could be written. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-write-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="matWriteTransform-serialized-transform-details" summary="serializedTransform: Output transform serialized in the file format."></sl-details>
+      <sl-button variant="neutral" outline name="serialized-transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="mncReadTransform-panel">
+
+    <small><i>Read an transform file format and convert it to the ITK-Wasm transform file format</i></small><br /><br />
+
+    <div id="mncReadTransformInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the serializedTransform"><sl-details id="mncReadTransform-serialized-transform-details" summary="serializedTransform: Input transform serialized in the file format" disabled></sl-details></sl-tooltip>
+      <label for="serialized-transform-file"><sl-button name="serialized-transform-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="serialized-transform-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="mncReadTransformOutputs">
+      <sl-details disabled id="mncReadTransform-could-read-details" summary="couldRead: Whether the input could be read. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="mncReadTransform-transform-details" summary="transform: Output transform"></sl-details>
+      <sl-select id="mncReadTransform-transform-output-format" placeholder="Format">
+        <sl-option value="h5">h5</sl-option>
+        <sl-option value="txt">txt</sl-option>
+        <sl-option value="mat">mat</sl-option>
+        <sl-option value="xfm">xfm</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="mncWriteTransform-panel">
+
+    <small><i>Write an ITK-Wasm transform file format converted to a transform file format</i></small><br /><br />
+
+    <div id="mncWriteTransformInputs"><form action="">
+      <label for="transform-file"><sl-button name="transform-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="transform-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the transform"><sl-details id="mncWriteTransform-transform-details" summary="transform: Input transform" disabled></sl-details></sl-tooltip>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="use-compression">useCompression - <i>Use compression in the written file</i></sl-checkbox>
+<br /><br />
+      <sl-input required name="serialized-transform" type="text" label="serializedTransform" help-text="Output transform serialized in the file format."></sl-input>
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="mncWriteTransformOutputs">
+      <sl-details disabled id="mncWriteTransform-could-write-details" summary="couldWrite: Whether the input could be written. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-write-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="mncWriteTransform-serialized-transform-details" summary="serializedTransform: Output transform serialized in the file format."></sl-details>
+      <sl-button variant="neutral" outline name="serialized-transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="txtReadTransform-panel">
+
+    <small><i>Read an transform file format and convert it to the ITK-Wasm transform file format</i></small><br /><br />
+
+    <div id="txtReadTransformInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the serializedTransform"><sl-details id="txtReadTransform-serialized-transform-details" summary="serializedTransform: Input transform serialized in the file format" disabled></sl-details></sl-tooltip>
+      <label for="serialized-transform-file"><sl-button name="serialized-transform-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="serialized-transform-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="txtReadTransformOutputs">
+      <sl-details disabled id="txtReadTransform-could-read-details" summary="couldRead: Whether the input could be read. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="txtReadTransform-transform-details" summary="transform: Output transform"></sl-details>
+      <sl-select id="txtReadTransform-transform-output-format" placeholder="Format">
+        <sl-option value="h5">h5</sl-option>
+        <sl-option value="txt">txt</sl-option>
+        <sl-option value="mat">mat</sl-option>
+        <sl-option value="xfm">xfm</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="txtWriteTransform-panel">
+
+    <small><i>Write an ITK-Wasm transform file format converted to a transform file format</i></small><br /><br />
+
+    <div id="txtWriteTransformInputs"><form action="">
+      <label for="transform-file"><sl-button name="transform-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="transform-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the transform"><sl-details id="txtWriteTransform-transform-details" summary="transform: Input transform" disabled></sl-details></sl-tooltip>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="use-compression">useCompression - <i>Use compression in the written file</i></sl-checkbox>
+<br /><br />
+      <sl-input required name="serialized-transform" type="text" label="serializedTransform" help-text="Output transform serialized in the file format."></sl-input>
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="txtWriteTransformOutputs">
+      <sl-details disabled id="txtWriteTransform-could-write-details" summary="couldWrite: Whether the input could be written. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-write-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="txtWriteTransform-serialized-transform-details" summary="serializedTransform: Output transform serialized in the file format."></sl-details>
+      <sl-button variant="neutral" outline name="serialized-transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="wasmReadTransform-panel">
+
+    <small><i>Read an transform file format and convert it to the ITK-Wasm transform file format</i></small><br /><br />
+
+    <div id="wasmReadTransformInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the serializedTransform"><sl-details id="wasmReadTransform-serialized-transform-details" summary="serializedTransform: Input transform serialized in the file format" disabled></sl-details></sl-tooltip>
+      <label for="serialized-transform-file"><sl-button name="serialized-transform-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="serialized-transform-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="wasmReadTransformOutputs">
+      <sl-details disabled id="wasmReadTransform-could-read-details" summary="couldRead: Whether the input could be read. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="wasmReadTransform-transform-details" summary="transform: Output transform"></sl-details>
+      <sl-select id="wasmReadTransform-transform-output-format" placeholder="Format">
+        <sl-option value="h5">h5</sl-option>
+        <sl-option value="txt">txt</sl-option>
+        <sl-option value="mat">mat</sl-option>
+        <sl-option value="xfm">xfm</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="wasmWriteTransform-panel">
+
+    <small><i>Write an ITK-Wasm transform file format converted to a transform file format</i></small><br /><br />
+
+    <div id="wasmWriteTransformInputs"><form action="">
+      <label for="transform-file"><sl-button name="transform-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="transform-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the transform"><sl-details id="wasmWriteTransform-transform-details" summary="transform: Input transform" disabled></sl-details></sl-tooltip>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="use-compression">useCompression - <i>Use compression in the written file</i></sl-checkbox>
+<br /><br />
+      <sl-input required name="serialized-transform" type="text" label="serializedTransform" help-text="Output transform serialized in the file format."></sl-input>
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="wasmWriteTransformOutputs">
+      <sl-details disabled id="wasmWriteTransform-could-write-details" summary="couldWrite: Whether the input could be written. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-write-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="wasmWriteTransform-serialized-transform-details" summary="serializedTransform: Output transform serialized in the file format."></sl-details>
+      <sl-button variant="neutral" outline name="serialized-transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="wasmZstdReadTransform-panel">
+
+    <small><i>Read an transform file format and convert it to the ITK-Wasm transform file format</i></small><br /><br />
+
+    <div id="wasmZstdReadTransformInputs"><form action="">
+      <sl-tooltip content="Use the Upload button to provide the serializedTransform"><sl-details id="wasmZstdReadTransform-serialized-transform-details" summary="serializedTransform: Input transform serialized in the file format" disabled></sl-details></sl-tooltip>
+      <label for="serialized-transform-file"><sl-button name="serialized-transform-file-button" required variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sl-button></label><input type="file"  name="serialized-transform-file" style="display: none"/>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="wasmZstdReadTransformOutputs">
+      <sl-details disabled id="wasmZstdReadTransform-could-read-details" summary="couldRead: Whether the input could be read. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-read-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="wasmZstdReadTransform-transform-details" summary="transform: Output transform"></sl-details>
+      <sl-select id="wasmZstdReadTransform-transform-output-format" placeholder="Format">
+        <sl-option value="h5">h5</sl-option>
+        <sl-option value="txt">txt</sl-option>
+        <sl-option value="mat">mat</sl-option>
+        <sl-option value="xfm">xfm</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="wasmZstdWriteTransform-panel">
+
+    <small><i>Write an ITK-Wasm transform file format converted to a transform file format</i></small><br /><br />
+
+    <div id="wasmZstdWriteTransformInputs"><form action="">
+      <label for="transform-file"><sl-button name="transform-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="transform-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the transform"><sl-details id="wasmZstdWriteTransform-transform-details" summary="transform: Input transform" disabled></sl-details></sl-tooltip>
+<br /><br />
+      <sl-checkbox name="float-parameters">floatParameters - <i>Use float for the parameter value type. The default is double.</i></sl-checkbox>
+<br /><br />
+      <sl-checkbox name="use-compression">useCompression - <i>Use compression in the written file</i></sl-checkbox>
+<br /><br />
+      <sl-input required name="serialized-transform" type="text" label="serializedTransform" help-text="Output transform serialized in the file format."></sl-input>
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="wasmZstdWriteTransformOutputs">
+      <sl-details disabled id="wasmZstdWriteTransform-could-write-details" summary="couldWrite: Whether the input could be written. If false, the output transform is not valid."></sl-details>
+      <sl-button variant="neutral" outline name="could-write-download" disabled>Download</sl-button>
+<br /><br />
+      <sl-details disabled id="wasmZstdWriteTransform-serialized-transform-details" summary="serializedTransform: Output transform serialized in the file format."></sl-details>
+      <sl-button variant="neutral" outline name="serialized-transform-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+  </sl-tab-group>
+</div>
+
+<script type="module" src="./index.ts"></script>
+
+</body>
+</html>
