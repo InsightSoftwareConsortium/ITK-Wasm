@@ -86,6 +86,7 @@ depends-on = ["download-pyodide"]
 description = "Run tests"
 
 [tool.pixi.tasks.publish]
-cmd = "hatch publish"
-depends-on = ["build"]
+cmd = '''rm -rf dist &&
+  hatch build &&
+  hatch publish'''
 description = "Publish package wheels"
