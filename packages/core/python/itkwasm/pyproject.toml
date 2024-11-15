@@ -15,11 +15,11 @@ classifiers = [
     'Intended Audience :: Developers',
     'Intended Audience :: Science/Research',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
 ]
 keywords = [
     "itk",
@@ -28,13 +28,13 @@ keywords = [
 ]
 dynamic = ["version"]
 
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
     "numpy",
     "typing_extensions",
     "platformdirs; sys_platform != \"emscripten\"",
     "wasmtime >= 13.0.2; sys_platform != \"emscripten\"",
-    "importlib_metadata; python_version < \"3.10\"",
+    "importlib_metadata; python_version < \"3.10\"", "dask[array]>=2024.11.2,<2025",
 ]
 
 [project.urls]
@@ -42,30 +42,50 @@ Home = "https://itkwasm.readthedocs.io"
 Source = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 Issues = "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
 
-[tool.hatch.envs.default]
-dependencies = [
-    "itk>=5.4.0",
-    "pytest >=2.7.3",
-    "pytest-pyodide",
-    "pyodide-py",
-    "dask[array]",
-    "test_accelerator @ {root:uri}/test/test-accelerator",
-]
-
-[tool.hatch.envs.default.scripts]
-test = [
-    "hatch build -t wheel",
-    "pytest --dist-dir=./dist --rt=chrome",
-]
-download-pyodide = [
-  "curl -L https://github.com/pyodide/pyodide/releases/download/0.26.2/pyodide-0.26.2.tar.bz2 -o pyodide.tar.bz2",
-  "tar xjf pyodide.tar.bz2",
-  "rm -rf dist pyodide.tar.bz2",
-  "mv pyodide dist",
-]
-
 [tool.hatch.version]
 path = "itkwasm/__init__.py"
 
 [tool.black]
 line-length = 120
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+# platforms = ["win-64", "linux-64", "linux-aarch64", "osx-arm64"]
+platforms = ["linux-64"]
+
+[tool.pixi.dependencies]
+python = "3.13.*"
+hatch = ">=1.13.0,<2"
+pip = ">=24.2,<25"
+pytest = ">=8.3.3,<9"
+
+[tool.pixi.pypi-dependencies]
+itkwasm = { path = ".", editable = true }
+pyodide-py = ">=0.26.3, <0.27"
+pytest-pyodide = ">=0.58.3, <0.59"
+itk = ">=5.4.0"
+test_accelerator = { path = "test/test-accelerator", editable = true }
+
+[tool.pixi.tasks.build]
+cmd = "hatch build"
+description = "Build package wheels"
+
+[tool.pixi.tasks.download-pyodide]
+cmd = '''curl -L https://github.com/pyodide/pyodide/releases/download/0.26.3/pyodide-0.26.3.tar.bz2 -o pyodide.tar.bz2 &&
+  tar xjf pyodide.tar.bz2 &&
+  rm pyodide.tar.bz2'''
+outputs = ["pyodide"]
+description = "Download Pyodide"
+
+[tool.pixi.tasks.test]
+cmd = '''mkdir -p dist/pyodide &&
+  cp -r pyodide dist/ &&
+  hatch build -t wheel ./dist/pyodide/ &&
+  pytest --dist-dir=./dist/pyodide --rt=chrome'''
+depends-on = ["download-pyodide"]
+description = "Run tests"
+
+[tool.pixi.tasks.publish]
+cmd = "hatch publish"
+depends-on = ["build"]
+description = "Publish package wheels"

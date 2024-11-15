@@ -1,1 +1,6 @@
 dist/
+pyodide/
+
+# pixi environments
+.pixi
+*.egg-info
