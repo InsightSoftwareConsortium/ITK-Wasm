@@ -225,3 +225,6 @@ FetchContent_Declare(
   GIT_TAG ${PLM_GIT_TAG}
 )
 FetchContent_MakeAvailable(plastimatch_lib)
+
+add_executable(write-rt-struct write-rt-struct.cxx)
+target_link_libraries(write-rt-struct PUBLIC ${ITK_LIBRARIES} plmbase)
