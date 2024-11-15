@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Sequence, Union, Dict, Optional
+from typing import Sequence, Union, Dict, Optional, List
 
 try:
     from numpy.typing import ArrayLike
@@ -63,3 +63,5 @@ class Transform:
     def __post_init__(self):
         if isinstance(self.transformType, dict):
             self.transformType = TransformType(**self.transformType)
+
+TransformList = List[Transform]
