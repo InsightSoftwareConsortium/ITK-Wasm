@@ -50,8 +50,7 @@ line-length = 120
 
 [tool.pixi.project]
 channels = ["conda-forge"]
-# platforms = ["win-64", "linux-64", "linux-aarch64", "osx-arm64"]
-platforms = ["linux-64"]
+platforms = ["win-64", "linux-64", "linux-aarch64", "osx-arm64"]
 
 [tool.pixi.dependencies]
 python = "3.13.*"
