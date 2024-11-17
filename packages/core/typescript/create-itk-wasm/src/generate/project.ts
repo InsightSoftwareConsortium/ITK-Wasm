@@ -11,6 +11,7 @@ import die from '../die.js'
 import generateReadme from './readme.js'
 import generatePackageJson from './package-json.js'
 import generatePixiToml from './pixi-toml.js'
+import generateItkWasmEnvBash from './itk-wasm-env-bash.js'
 import generateCMakelists from './cmakelists.js'
 import generatePipeline from './pipeline.js'
 import generatePnpmWorkspace from './pnpm-workspace.js'
@@ -44,6 +45,7 @@ function generateProject(
   generateReadme(project)
   generatePackageJson(project)
   generatePixiToml(project)
+  generateItkWasmEnvBash(project)
   generateCMakelists(project)
   generatePnpmWorkspace(project)
 

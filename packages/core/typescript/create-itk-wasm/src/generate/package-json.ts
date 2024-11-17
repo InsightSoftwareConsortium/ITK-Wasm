@@ -14,8 +14,11 @@ function generatePackageJson(project: ProjectSpec) {
 
   const itkWasm = {
     'test-data-hash':
-      'bafkreiha6oye3fd5cxfadnua5r2jlkaco2xuyeek454d2ihiffsx7rauqe',
-    'test-data-urls': ['https://placeholder'],
+      'bafkreidnoz54py66bn56uq6itwkfgngflaqilflfvwkxlps4ycmygstzja',
+    'test-data-urls': [
+      'https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.179/sample-data.tar.gz',
+      'https://bafybeidxatrsrrphfmntdyze6ec3jbiak527wj3kalwjptv4bimpcnzxdq.ipfs.w3s.link/ipfs/bafybeidxatrsrrphfmntdyze6ec3jbiak527wj3kalwjptv4bimpcnzxdq/sample-data.tar.gz'
+    ],
     'package-description': project.packageDescription,
     'typescript-package-name': project.typescriptPackageName,
     'python-package-name': project.pythonPackageName,
@@ -47,7 +50,7 @@ function generatePackageJson(project: ProjectSpec) {
       'bindgen:python': 'itk-wasm pnpm-script bindgen:python',
       'build:gen:typescript': 'itk-wasm pnpm-script build:gen:typescript',
       'build:gen:python': 'itk-wasm pnpm-script build:gen:python',
-      test: 'pixi run test-data-download && pnpm build:gen:python && pnpm test:python',
+      test: 'pixi run download-test-data && pnpm build:gen:python && pnpm test:python',
       'test:python:wasi': 'itk-wasm pnpm-script test:python:wasi',
       'test:python:emscripten': 'itk-wasm pnpm-script test:python:emscripten',
       'test:python:dispatch': 'itk-wasm pnpm-script test:python:emscripten',
