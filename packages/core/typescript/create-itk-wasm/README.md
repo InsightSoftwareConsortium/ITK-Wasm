@@ -10,6 +10,12 @@ CLI to create a new [ITK-Wasm](https://wasm.itk.org) project or add a pipeline t
 npm install -g pnpm
 ```
 
+and [pixi](https://pixi.sh/latest/), e.g.
+
+```sh
+curl -fsSL https://pixi.sh/install.sh | bash
+```
+
 Then,
 
 ```sh
@@ -19,16 +25,15 @@ cd my-project
 pnpm create itk-wasm
 # Answers the questions
 
-pnpm install
-pnpm build
-pnpm test
+pixi run build
+pixi run test
 
 # Add your C++ logic code to the *.cxx files
-pnpm build
-pnpm test
+pixi run build
+pixi run test
 
 # For more granular targets, see the output of
-pnpm run
+pixi task list
 ```
 
 For more information, see the [ITK-Wasm documentation](https://wasm.itk.org).

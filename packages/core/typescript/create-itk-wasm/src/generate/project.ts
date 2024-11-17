@@ -64,9 +64,8 @@ function generateProject(
     )
     console.log(chalk.magentaBright(`\n🚀  Next steps:`))
     console.log(chalk.green(`\ncd ${project.directory}`))
-    console.log(chalk.green(`pnpm install`))
-    console.log(chalk.green(`pnpm build`))
-    console.log(chalk.green(`pnpm test\n`))
+    console.log(chalk.green(`pixi run build`))
+    console.log(chalk.green(`pixi run test\n`))
   }
 }
 
