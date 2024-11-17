@@ -326,10 +326,13 @@ async function pnpmScript(name, extraArgs, options) {
           'build:wasi',
           '&&',
           'pnpm',
-          'bindgen:python',
-          '&&',
+          'bindgen:python'
+        ])
+        if (environmentFileContents) {
+          pnpmCommand = pnpmCommand.concat(['&&', 'pnpm', 'build:micromamba'])
+        }
+        pnpmCommand = pnpmCommand.concat([
           'pnpm',
-          'build:micromamba',
           '&&',
           'pnpm',
           'build:python:wasi'
