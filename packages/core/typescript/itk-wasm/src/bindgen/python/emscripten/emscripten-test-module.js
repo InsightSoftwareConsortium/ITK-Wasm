@@ -4,7 +4,8 @@ import path from 'path'
 import mkdirP from '../../mkdir-p.js'
 
 function emscriptenTestModule(packageDir, pypackage) {
-  mkdirP(path.join(packageDir, 'test'))
+  const testDir = path.join(packageDir, 'tests')
+  mkdirP(testDir)
 
   let moduleContent = `import pytest
 import sys
@@ -28,11 +29,14 @@ async def test_example(selenium, package_wheel):
     # Write your test code here
 `
 
-  const modulePath = path.join(packageDir, 'test', `test_${pypackage.replace('_emscripten', '')}.py`)
+  const modulePath = path.join(
+    testDir,
+    `test_${pypackage.replace('_emscripten', '')}.py`
+  )
   if (!fs.existsSync(modulePath)) {
     fs.writeFileSync(modulePath, moduleContent)
   }
-  const initPath = path.join(packageDir, 'test', '__init__.py')
+  const initPath = path.join(testDir, '__init__.py')
   if (!fs.existsSync(initPath)) {
     fs.writeFileSync(initPath, '')
   }
