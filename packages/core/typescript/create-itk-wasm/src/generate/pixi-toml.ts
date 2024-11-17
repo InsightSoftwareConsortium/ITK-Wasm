@@ -31,6 +31,16 @@ description = "Build the project"
 cmd = "pnpm run test"
 description = "Run tests"
 
+[tasks.pnpm-install]
+cmd = "pnpm install"
+description = "Install Node.js dependencies"
+
+[tasks.test-data-download]
+cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_TEST_DATA_HASH $ITK_WASM_TEST_DATA_URLS"
+depends-on = ["pnpm-install"]
+outputs = ["test/data.tar.gz"]
+description = "Download test data"
+
 [target.win-64.dependencies]
 m2w64-jq = ">=1.6.0,<2"
 
@@ -63,10 +73,10 @@ depends-on = ["version-sync-typescript", "version-sync-python-wasi", "version-sy
 description = "Synchronize package versions"
 
 [tasks.publish-typescript]
-cmd = "pnpm publish --filter \"{typescript}\""
+cmd = "pnpm publish --filter \\"{typescript}\\""
 
 [tasks.publish-python-user-check]
-cmd = "if [ -n \"$HATCH_INDEX_USER\"]; then echo \"HATCH_INDEX_USER is set\"; else echo \"HATCH_INDEX_USER is not set\"; exit 1; fi"
+cmd = "if [ -n \\"$HATCH_INDEX_USER\\"]; then echo \\"HATCH_INDEX_USER is set\\"; else echo \\"HATCH_INDEX_USER is not set\\"; exit 1; fi"
 
 [tasks.publish-python-wasi]
 cmd = '''hatch build &&
@@ -120,7 +130,7 @@ description = "Run tests for itkwasm-${project.pythonPackageName}-emscripten"
 cmd = '''mkdir -p dist/pyodide &&
   cp -r ../../pyodide dist/ &&
   hatch build -t wheel ./dist/pyodide/ &&
-  echo \"\nVisit http://localhost:8877/console.html\n\" &&
+  echo \\"\\nVisit http://localhost:8877/console.html\\n\\" &&
   python -m http.server --directory=./dist/pyodide 8877'''
 cwd = "python/itkwasm-${project.pythonPackageName}-emscripten"
 depends-on = ["download-pyodide"]
@@ -140,7 +150,7 @@ description = "Run tests for itkwasm-${project.pythonPackageName}"
 cmd = '''mkdir -p dist/pyodide &&
   cp -r ../../pyodide dist/ &&
   hatch build -t wheel ./dist/pyodide/ &&
-  echo \"\nVisit http://localhost:8877/console.html\n\" &&
+  echo \\"\\nVisit http://localhost:8877/console.html\\n\\" &&
   python -m http.server --directory=./dist/pyodide 8877'''
 cwd = "python/itkwasm-${project.pythonPackageName}"
 depends-on = ["download-pyodide"]
@@ -149,6 +159,9 @@ description = "Serve itkwasm-${project.pythonPackageName} for development"
 [feature.python.tasks.test-python]
 depends-on = ["test-wasi", "test-emscripten", "test-dispatch"]
 description = "Run tests for all Python packages"
+
+[environments]
+python = ["python"]
 `
   fs.writeFileSync(pixiTomlPath, content)
 }

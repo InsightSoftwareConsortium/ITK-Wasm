@@ -13,9 +13,13 @@ function generatePackageJson(project: ProjectSpec) {
   }
 
   const itkWasm = {
+    'test-data-hash':
+      'bafkreiha6oye3fd5cxfadnua5r2jlkaco2xuyeek454d2ihiffsx7rauqe',
+    'test-data-urls': ['https://placeholder'],
     'package-description': project.packageDescription,
     'typescript-package-name': project.typescriptPackageName,
-    'python-package-name': project.pythonPackageName
+    'python-package-name': project.pythonPackageName,
+    repository: project.repositoryUrl
   }
   if (project.repositoryUrl) {
     // @ts-ignore
@@ -25,7 +29,7 @@ function generatePackageJson(project: ProjectSpec) {
     name: `${project.name}-build`,
     version: '0.1.0',
     private: true,
-    description: `Scripts to generate ${project.name} itk-wasm artifacts.`,
+    description: `Scripts to generate ${project.name} ITK-Wasm artifacts.`,
     type: 'module',
     'itk-wasm': itkWasm,
     license: project.license,
@@ -33,21 +37,17 @@ function generatePackageJson(project: ProjectSpec) {
       build: 'pnpm build:gen:typescript && pnpm build:gen:python',
       'build:emscripten': 'itk-wasm pnpm-script build:emscripten',
       'build:emscripten:debug': 'itk-wasm pnpm-script build:emscripten:debug',
+      'build:micromamba':
+        'echo "No build:micromamba script required with pixi"',
       'build:wasi': 'itk-wasm pnpm-script build:wasi',
       'build:wasi:debug': 'itk-wasm pnpm-script build:wasi:debug',
-      'build:python:wasi': 'itk-wasm pnpm-script build:python:wasi',
+      'build:python:wasi':
+        "echo 'No build:python:wasi script required with pixi'",
       'bindgen:typescript': 'itk-wasm pnpm-script bindgen:typescript',
       'bindgen:python': 'itk-wasm pnpm-script bindgen:python',
       'build:gen:typescript': 'itk-wasm pnpm-script build:gen:typescript',
       'build:gen:python': 'itk-wasm pnpm-script build:gen:python',
-      'build:micromamba': 'itk-wasm pnpm-script build:micromamba',
-      'build:python:versionSync':
-        'itk-wasm pnpm-script build:python:versionSync',
-      'publish:python': 'itk-wasm pnpm-script publish:python',
-      test: 'pnpm test:data:download && pnpm build:gen:python && pnpm test:python',
-      'test:data:download':
-        'dam download test/data test/data.tar.gz bafkreigpkk3pqcoqzjzcauogw6dml52yig3ksmcrobau5pkoictymizzri https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.163/create-itk-wasm-test-data.tar.gz https://bafybeiczuxeuma5cjuli5mtapqnjqypeaum5ikd45zcmfhtt2emp365tca.ipfs.w3s.link/ipfs/bafybeiczuxeuma5cjuli5mtapqnjqypeaum5ikd45zcmfhtt2emp365tca/create-itk-wasm-test-data.tar.gz https://ipfs.filebase.io/ipfs/QmcxyvUKnaoTTwUqEPXwp1sdcbrFh3XnnwckLKVRpctJx9',
-      'test:data:pack': 'dam pack test/data test/data.tar.gz',
+      test: 'pixi run test-data-download && pnpm build:gen:python && pnpm test:python',
       'test:python:wasi': 'itk-wasm pnpm-script test:python:wasi',
       'test:python:emscripten': 'itk-wasm pnpm-script test:python:emscripten',
       'test:python:dispatch': 'itk-wasm pnpm-script test:python:emscripten',
@@ -56,8 +56,7 @@ function generatePackageJson(project: ProjectSpec) {
     },
     devDependencies: {
       '@itk-wasm/dam': '^1.1.1',
-      '@thewtex/setup-micromamba': '^1.9.7',
-      'itk-wasm': '1.0.0-b.178'
+      'itk-wasm': '1.0.0-b.180'
     }
   }
   if (project.author) {

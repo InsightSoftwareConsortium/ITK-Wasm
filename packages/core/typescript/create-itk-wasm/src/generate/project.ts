@@ -10,7 +10,7 @@ import die from '../die.js'
 
 import generateReadme from './readme.js'
 import generatePackageJson from './package-json.js'
-import generateEnvironmentYml from './environment-yml.js'
+import generatePixiToml from './pixi-toml.js'
 import generateCMakelists from './cmakelists.js'
 import generatePipeline from './pipeline.js'
 import generatePnpmWorkspace from './pnpm-workspace.js'
@@ -43,7 +43,7 @@ function generateProject(
 
   generateReadme(project)
   generatePackageJson(project)
-  generateEnvironmentYml(project)
+  generatePixiToml(project)
   generateCMakelists(project)
   generatePnpmWorkspace(project)
 
