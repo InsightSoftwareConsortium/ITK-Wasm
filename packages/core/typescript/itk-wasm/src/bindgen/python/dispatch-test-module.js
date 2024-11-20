@@ -29,7 +29,7 @@ def package_wheel():
 
 @pytest.fixture
 def emscripten_package_wheel():
-    return f"${pypackage}-emscripten-{test_package_version}-py3-none-any.whl"
+    return f"${pypackage}_emscripten-{test_package_version}-py3-none-any.whl"
 
 @pytest.fixture
 def input_data():
