@@ -1,9 +1,9 @@
 import fs from 'fs-extra'
 import path from 'path'
 
-import mkdirP from '../../mkdir-p.js'
+import mkdirP from '../mkdir-p.js'
 
-function emscriptenTestModule(packageDir, pypackage) {
+function dispatchTestModule(packageDir, pypackage) {
   const testDir = path.join(packageDir, 'tests')
   mkdirP(testDir)
 
@@ -28,6 +28,10 @@ def package_wheel():
     return f"${pypackage}-{test_package_version}-py3-none-any.whl"
 
 @pytest.fixture
+def emscripten_package_wheel():
+    return f"${pypackage}-emscripten-{test_package_version}-py3-none-any.whl"
+
+@pytest.fixture
 def input_data():
     from pathlib import Path
     input_base_path = Path(__file__).parent.parent / 'test' / 'data'
@@ -44,4 +48,4 @@ def input_data():
   }
 }
 
-export default emscriptenTestModule
+export default dispatchTestModule
