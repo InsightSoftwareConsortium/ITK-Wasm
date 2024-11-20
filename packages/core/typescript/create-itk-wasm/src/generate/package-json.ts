@@ -40,8 +40,6 @@ function generatePackageJson(project: ProjectSpec) {
       build: 'pnpm build:gen:typescript && pnpm build:gen:python',
       'build:emscripten': 'itk-wasm pnpm-script build:emscripten',
       'build:emscripten:debug': 'itk-wasm pnpm-script build:emscripten:debug',
-      'build:micromamba':
-        'echo "No build:micromamba script required with pixi"',
       'build:wasi': 'itk-wasm pnpm-script build:wasi',
       'build:wasi:debug': 'itk-wasm pnpm-script build:wasi:debug',
       'build:python:wasi':
@@ -50,16 +48,12 @@ function generatePackageJson(project: ProjectSpec) {
       'bindgen:python': 'itk-wasm pnpm-script bindgen:python',
       'build:gen:typescript': 'itk-wasm pnpm-script build:gen:typescript',
       'build:gen:python': 'itk-wasm pnpm-script build:gen:python',
-      test: 'pixi run download-test-data && pnpm build:gen:python && pnpm test:python',
-      'test:python:wasi': 'itk-wasm pnpm-script test:python:wasi',
-      'test:python:emscripten': 'itk-wasm pnpm-script test:python:emscripten',
-      'test:python:dispatch': 'itk-wasm pnpm-script test:python:emscripten',
-      'test:python': 'itk-wasm pnpm-script test:python',
+      test: 'pixi run download-test-data && pnpm build:gen:python',
       'test:wasi': 'itk-wasm pnpm-script test:wasi'
     },
     devDependencies: {
       '@itk-wasm/dam': '^1.1.1',
-      'itk-wasm': '1.0.0-b.181'
+      'itk-wasm': '1.0.0-b.182'
     }
   }
   if (project.author) {
