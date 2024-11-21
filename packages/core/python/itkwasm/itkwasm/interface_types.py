@@ -9,5 +9,5 @@ class InterfaceTypes(str, Enum):
     Mesh = "Mesh"
     PointSet = "PointSet"
     PolyData = "PolyData"
-    Transform = "Transform"
+    TransformList = "TransformList"
     JsonCompatible = "JsonCompatible"
