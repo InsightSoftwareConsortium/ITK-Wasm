@@ -19,6 +19,10 @@ from itkwasm import (
     BinaryFile,
     Image,
     Mesh,
+    Transform,
+    TransformList,
+    TransformParameterizations,
+    FloatTypes,
 )
 
 test_input_dir = Path(__file__).resolve().parent / "input"
@@ -297,3 +301,41 @@ def test_pipeline_write_read_polydata():
 
     assert out_mesh.GetNumberOfPoints() == 2903
     assert out_mesh.GetNumberOfCells() == 3263
+
+def test_pipeline_write_read_transform():
+    pipeline = Pipeline(test_input_dir / "transform-read-write-test.wasi.wasm")
+
+    data = test_input_dir / "LinearTransform.h5"
+    itk_transform = itk.transformread(data)
+    itk_transform_list = itk.dict_from_transform(itk_transform)
+    itkwasm_transform_list = [Transform(**t) for t in itk_transform_list]
+
+    pipeline_inputs = [
+        PipelineInput(InterfaceTypes.TransformList, itkwasm_transform_list),
+    ]
+
+    pipeline_outputs = [
+        PipelineOutput(InterfaceTypes.TransformList),
+    ]
+
+    args = [
+        "--memory-io",
+        "0",
+        "0",
+    ]
+
+    outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
+    transform_list = outputs[0].data
+
+    assert len(transform_list) == 1
+    transform = transform_list[0]
+    assert transform.transformType.transformParameterization == TransformParameterizations.Affine
+    assert transform.transformType.parametersValueType == FloatTypes.Float64
+    assert transform.numberOfParameters == 12
+    assert transform.numberOfFixedParameters == 3
+    np.testing.assert_allclose(transform.fixedParameters, np.array([0.0, 0.0, 0.0]))
+    np.testing.assert_allclose(transform.parameters, np.array([
+      0.65631490118447, 0.5806583745824385, -0.4817536741017158,
+      -0.7407986817430222, 0.37486398378429736, -0.5573995934598175,
+      -0.14306664045479867, 0.7227121458012518, 0.676179776908723,
+      -65.99999999999997, 69.00000000000004, 32.000000000000036]))
