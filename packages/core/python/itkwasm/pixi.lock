@@ -968,7 +968,7 @@ packages:
   - lz4>=4.3.2 ; extra == 'complete'
   - dask[array] ; extra == 'dataframe'
   - pandas>=2.0 ; extra == 'dataframe'
-  - dask-expr>=1.1,<1.2 ; extra == 'dataframe'
+  - dask-expr<1.2,>=1.1 ; extra == 'dataframe'
   - bokeh>=3.1.0 ; extra == 'diagnostics'
   - jinja2>=2.10.3 ; extra == 'diagnostics'
   - distributed==2024.11.2 ; extra == 'distributed'
@@ -1178,10 +1178,10 @@ packages:
   - pytest-recording ; extra == 'test'
   - pytest-rerunfailures ; extra == 'test'
   - requests ; extra == 'test'
-  - aiobotocore>=2.5.4,<3.0.0 ; extra == 'test-downstream'
+  - aiobotocore<3.0.0,>=2.5.4 ; extra == 'test-downstream'
   - dask-expr ; extra == 'test-downstream'
   - dask[dataframe,test] ; extra == 'test-downstream'
-  - moto[server]>4,<5 ; extra == 'test-downstream'
+  - moto[server]<5,>4 ; extra == 'test-downstream'
   - pytest-timeout ; extra == 'test-downstream'
   - xarray ; extra == 'test-downstream'
   - adlfs ; extra == 'test-full'
@@ -1466,7 +1466,7 @@ packages:
   sha256: 77ff76a995ef40999b96e70abb6ab839d077df2f6127230f36bf9ed24c67473b
   requires_dist:
   - attrs>=22.2.0
-  - sortedcontainers>=2.1.0,<3.0.0
+  - sortedcontainers<3.0.0,>=2.1.0
   - exceptiongroup>=1.0.0 ; python_full_version < '3.11'
   - black>=19.10b0 ; extra == 'all'
   - click>=7.0 ; extra == 'all'
@@ -1824,16 +1824,15 @@ packages:
   requires_python: '>=3.8'
 - kind: pypi
   name: itkwasm
-  version: 1.0b181
+  version: 1.0b182
   path: .
-  sha256: 6169e32016887dc38a107a72bc4ebf82a85c1be565c846a67026d9f4f22f4a15
+  sha256: b6470d69a25239c0a623ee231eb535b406cb0713a83b92520249cfceaa855b97
   requires_dist:
-  - dask[array]>=2024.11.2,<2025
   - importlib-metadata ; python_full_version < '3.10'
   - numpy
   - platformdirs ; sys_platform != 'emscripten'
   - typing-extensions
-  - wasmtime>=27.0.0 ; sys_platform != 'emscripten'
+  - wasmtime>=13.0.2 ; sys_platform != 'emscripten'
   requires_python: '>=3.9'
   editable: true
 - kind: conda
@@ -3147,7 +3146,7 @@ packages:
   url: https://files.pythonhosted.org/packages/96/31/6607dab48616902f76885dfcf62c08d929796fc3b2d2318faf9fd54dbed9/pytest_asyncio-0.24.0-py3-none-any.whl
   sha256: a811296ed596b69bf0b6f3dc40f83bcaf341b155a269052d82efa2b25ac7037b
   requires_dist:
-  - pytest>=8.2,<9
+  - pytest<9,>=8.2
   - sphinx>=5.3 ; extra == 'docs'
   - sphinx-rtd-theme>=1.0 ; extra == 'docs'
   - coverage>=6.2 ; extra == 'testing'
@@ -3790,8 +3789,8 @@ packages:
   requires_dist:
   - brotli>=1.0.9 ; platform_python_implementation == 'CPython' and extra == 'brotli'
   - brotlicffi>=0.8.0 ; platform_python_implementation != 'CPython' and extra == 'brotli'
-  - h2>=4,<5 ; extra == 'h2'
-  - pysocks>=1.5.6,!=1.5.7,<2.0 ; extra == 'socks'
+  - h2<5,>=4 ; extra == 'h2'
+  - pysocks!=1.5.7,<2.0,>=1.5.6 ; extra == 'socks'
   - zstandard>=0.18.0 ; extra == 'zstd'
   requires_python: '>=3.8'
 - kind: conda
@@ -4023,7 +4022,7 @@ packages:
   url: https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl
   sha256: b9acddd652b585d75b20477888c56642fdade28bdfd3579aa24a4d2c037dd736
   requires_dist:
-  - h11>=0.9.0,<1
+  - h11<1,>=0.9.0
   requires_python: '>=3.7.0'
 - kind: conda
   name: xz

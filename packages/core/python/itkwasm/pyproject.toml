@@ -33,8 +33,8 @@ dependencies = [
     "numpy",
     "typing_extensions",
     "platformdirs; sys_platform != \"emscripten\"",
-    "wasmtime >= 27.0.0; sys_platform != \"emscripten\"",
-    "importlib_metadata; python_version < \"3.10\"", "dask[array]>=2024.11.2,<2025",
+    "wasmtime >= 13.0.2; sys_platform != \"emscripten\"",
+    "importlib_metadata; python_version < \"3.10\"",
 ]
 
 [project.urls]
@@ -60,17 +60,18 @@ pytest = ">=8.3.3,<9"
 
 [tool.pixi.pypi-dependencies]
 itkwasm = { path = ".", editable = true }
-pyodide-py = ">=0.26.4, <0.27"
+pyodide-py = ">=0.26.3, <0.27"
 pytest-pyodide = ">=0.58.3, <0.59"
 itk = ">=5.4.0"
 test_accelerator = { path = "test/test-accelerator", editable = true }
+dask = { extras = ["array"], version = ">=2024.11.2,<2025" }
 
 [tool.pixi.tasks.build]
 cmd = "hatch build"
 description = "Build package wheels"
 
 [tool.pixi.tasks.download-pyodide]
-cmd = '''curl -L https://github.com/pyodide/pyodide/releases/download/0.26.4/pyodide-0.26.4.tar.bz2 -o pyodide.tar.bz2 &&
+cmd = '''curl -L https://github.com/pyodide/pyodide/releases/download/0.26.3/pyodide-0.26.3.tar.bz2 -o pyodide.tar.bz2 &&
   tar xjf pyodide.tar.bz2 &&
   rm pyodide.tar.bz2'''
 outputs = ["pyodide"]
