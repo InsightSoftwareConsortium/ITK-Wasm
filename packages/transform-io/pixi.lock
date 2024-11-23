@@ -483,12 +483,12 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/dc/58/ec1bf790ed9657fd8a651189d40eedd765bf1cd75355ffa3f8f9bd67f4df/itk_registration-5.4.0-cp311-abi3-manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/1a/e5/94a596fba3dbecdea33059b455294fbfea91fcfc0d6cfd92372e10a6da93/itk_segmentation-5.4.0-cp311-abi3-manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/a6/3c/ac3bad4ff24fe2b07064be5e44db8f4ed32a4e3708dff084e3b58c5b608c/itk_webassemblyinterface-1.0b175-cp311-abi3-manylinux_2_28_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/7f/17/ddc4e1c2a1f25425696b6f5904abde09af852b7ea85e0af52f175adaf056/itkwasm-1.0b184-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/f3/db24f14dfed1f631e4568440542dce7330b1c17a5c098666164872db4404/itkwasm-1.0b185-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/9b/b4/e3c7e6fab0f77fff6194afa173d1f2342073d91b1d3b4b30b17c3fb4407a/numpy-2.1.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/55/8b/5ab7257531a5d830fc8000c476e63c935488d74609b50f9384a643ec0a62/outcome-1.3.0.post0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f9/0c/8cde1a86a9a7449a0ba95197f42156198083be1749b717831fba16ab2b5f/playwright-1.48.0-py3-none-manylinux1_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/1d/0d/95993c08c721ec68892547f2117e8f9dfbcef2ca71e098533541b4a54d5f/pyee-12.0.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/6f/ec/70457045923b005761b19f78b85b467a64808e886c10c449f7758a1ba5f7/pyodide_py-0.26.3-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/2e/4a/970d2604a72e9d44904533b5438135187aa3b08b8d6fc75e5404cd8a1dd1/pyodide_py-0.26.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/8d/59/b4572118e098ac8e46e399a1dd0f2d85403ce8bbaad9ec79373ed6badaf9/PySocks-1.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/96/31/6607dab48616902f76885dfcf62c08d929796fc3b2d2318faf9fd54dbed9/pytest_asyncio-0.24.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/cd/98/7a2d160bd1a997c6fc422647ccf907fcc1b14b8e4a89790fa1427b8f4d16/pytest_pyodide-0.58.3-py3-none-any.whl
@@ -624,12 +624,12 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/e7/f0/a21ddf56263ad6c5f87164032aaeb2235ee2de688cb8a8eeec01a5f01bd7/itk_registration-5.4.0-cp311-abi3-manylinux_2_28_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/79/b9/ba9598bb8b7ee3962980d481065a58f75569c5a2df1d01520083288894b0/itk_segmentation-5.4.0-cp311-abi3-manylinux_2_28_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/f2/f5/cd8ed297bd1b9f816d7492bfa857c53bd8fd68aefc2aa9bef7a0d5a61d85/itk_webassemblyinterface-1.0b175-cp311-abi3-manylinux_2_28_aarch64.whl
-      - pypi: https://files.pythonhosted.org/packages/7f/17/ddc4e1c2a1f25425696b6f5904abde09af852b7ea85e0af52f175adaf056/itkwasm-1.0b184-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/f3/db24f14dfed1f631e4568440542dce7330b1c17a5c098666164872db4404/itkwasm-1.0b185-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c4/a7/af3329fda3c3ec31d9b650e42bbcd3422fc62a765cbb1405fde4177a0996/numpy-2.1.2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/55/8b/5ab7257531a5d830fc8000c476e63c935488d74609b50f9384a643ec0a62/outcome-1.3.0.post0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/31/dc/121be574222fc74d12ac42921728fb6ba8ac17264a1fdab1993263389082/playwright-1.48.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/1d/0d/95993c08c721ec68892547f2117e8f9dfbcef2ca71e098533541b4a54d5f/pyee-12.0.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/6f/ec/70457045923b005761b19f78b85b467a64808e886c10c449f7758a1ba5f7/pyodide_py-0.26.3-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/2e/4a/970d2604a72e9d44904533b5438135187aa3b08b8d6fc75e5404cd8a1dd1/pyodide_py-0.26.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/8d/59/b4572118e098ac8e46e399a1dd0f2d85403ce8bbaad9ec79373ed6badaf9/PySocks-1.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/96/31/6607dab48616902f76885dfcf62c08d929796fc3b2d2318faf9fd54dbed9/pytest_asyncio-0.24.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/cd/98/7a2d160bd1a997c6fc422647ccf907fcc1b14b8e4a89790fa1427b8f4d16/pytest_pyodide-0.58.3-py3-none-any.whl
@@ -748,12 +748,12 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/88/99/3db052a349efaf1ddbb51252e7e4c7a6a10ed5b3b87e2076afb622b711fd/itk_registration-5.4.0-cp311-abi3-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/3a/92/7d32413898fe4068f0b2da97ab783057e6af84123aa6c54af3706476fed9/itk_segmentation-5.4.0-cp311-abi3-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/77/66/73fa21a0439eacae5156c73611b35eec2c9c3d83ae4f987754043fce1d67/itk_webassemblyinterface-1.0b175-cp311-abi3-macosx_11_0_arm64.whl
-      - pypi: https://files.pythonhosted.org/packages/7f/17/ddc4e1c2a1f25425696b6f5904abde09af852b7ea85e0af52f175adaf056/itkwasm-1.0b184-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/f3/db24f14dfed1f631e4568440542dce7330b1c17a5c098666164872db4404/itkwasm-1.0b185-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b0/29/cb48a402ea879e645b16218718f3f7d9588a77d674a9dcf22e4c43487636/numpy-2.1.2-cp312-cp312-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/55/8b/5ab7257531a5d830fc8000c476e63c935488d74609b50f9384a643ec0a62/outcome-1.3.0.post0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/64/41/d77c47743800fbeb86657611e651e56a17cbb4ebfefa1da0318dc39092df/playwright-1.48.0-py3-none-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/1d/0d/95993c08c721ec68892547f2117e8f9dfbcef2ca71e098533541b4a54d5f/pyee-12.0.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/6f/ec/70457045923b005761b19f78b85b467a64808e886c10c449f7758a1ba5f7/pyodide_py-0.26.3-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/2e/4a/970d2604a72e9d44904533b5438135187aa3b08b8d6fc75e5404cd8a1dd1/pyodide_py-0.26.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/8d/59/b4572118e098ac8e46e399a1dd0f2d85403ce8bbaad9ec79373ed6badaf9/PySocks-1.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/96/31/6607dab48616902f76885dfcf62c08d929796fc3b2d2318faf9fd54dbed9/pytest_asyncio-0.24.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/cd/98/7a2d160bd1a997c6fc422647ccf907fcc1b14b8e4a89790fa1427b8f4d16/pytest_pyodide-0.58.3-py3-none-any.whl
@@ -877,12 +877,12 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/89/f6/686c2d2650065495720889c2e6ebcf6af2e5c2692fc6d8768793b08c641a/itk_registration-5.4.0-cp311-abi3-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/77/8d/916c078544ac29a5ac215d2e5a2b07c9314b515b63136be92d6856a41f55/itk_segmentation-5.4.0-cp311-abi3-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/6c/cf/af6554bd0fd831ba2f8ed7840904a1b0828b1ea348b5000b78ad34c5688f/itk_webassemblyinterface-1.0b175-cp311-abi3-win_amd64.whl
-      - pypi: https://files.pythonhosted.org/packages/7f/17/ddc4e1c2a1f25425696b6f5904abde09af852b7ea85e0af52f175adaf056/itkwasm-1.0b184-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/f3/db24f14dfed1f631e4568440542dce7330b1c17a5c098666164872db4404/itkwasm-1.0b185-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4c/79/73735a6a5dad6059c085f240a4e74c9270feccd2bc66e4d31b5ca01d329c/numpy-2.1.2-cp312-cp312-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/55/8b/5ab7257531a5d830fc8000c476e63c935488d74609b50f9384a643ec0a62/outcome-1.3.0.post0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/45/88/b6459c93a8bc0b96e7a33b6744bbef2740a0b78b0534542a037d220427f0/playwright-1.48.0-py3-none-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/1d/0d/95993c08c721ec68892547f2117e8f9dfbcef2ca71e098533541b4a54d5f/pyee-12.0.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/6f/ec/70457045923b005761b19f78b85b467a64808e886c10c449f7758a1ba5f7/pyodide_py-0.26.3-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/2e/4a/970d2604a72e9d44904533b5438135187aa3b08b8d6fc75e5404cd8a1dd1/pyodide_py-0.26.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/8d/59/b4572118e098ac8e46e399a1dd0f2d85403ce8bbaad9ec79373ed6badaf9/PySocks-1.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/96/31/6607dab48616902f76885dfcf62c08d929796fc3b2d2318faf9fd54dbed9/pytest_asyncio-0.24.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/cd/98/7a2d160bd1a997c6fc422647ccf907fcc1b14b8e4a89790fa1427b8f4d16/pytest_pyodide-0.58.3-py3-none-any.whl
@@ -1812,7 +1812,7 @@ packages:
   sha256: d7b7173934753b9624680b38a85749de4fce367c44acb36c08b62765cc0a7a19
   requires_dist:
   - attrs>=22.2.0
-  - sortedcontainers>=2.1.0,<3.0.0
+  - sortedcontainers<3.0.0,>=2.1.0
   - exceptiongroup>=1.0.0 ; python_full_version < '3.11'
   - black>=19.10b0 ; extra == 'all'
   - click>=7.0 ; extra == 'all'
@@ -2290,9 +2290,9 @@ packages:
   requires_python: '>=3.8'
 - kind: pypi
   name: itkwasm
-  version: 1.0b184
-  url: https://files.pythonhosted.org/packages/7f/17/ddc4e1c2a1f25425696b6f5904abde09af852b7ea85e0af52f175adaf056/itkwasm-1.0b184-py3-none-any.whl
-  sha256: 41e2c1102fa6fad2559edfc43c864acbb1bcbe1087ffd6519a8f13f770a6bc61
+  version: 1.0b185
+  url: https://files.pythonhosted.org/packages/bc/f3/db24f14dfed1f631e4568440542dce7330b1c17a5c098666164872db4404/itkwasm-1.0b185-py3-none-any.whl
+  sha256: 5d976f244f645e8c1700d59a32dd4461f9ade152693b64d6ebefdfe6b97a2413
   requires_dist:
   - importlib-metadata ; python_full_version < '3.10'
   - numpy
@@ -4774,9 +4774,9 @@ packages:
   timestamp: 1714846885370
 - kind: pypi
   name: pyodide-py
-  version: 0.26.3
-  url: https://files.pythonhosted.org/packages/6f/ec/70457045923b005761b19f78b85b467a64808e886c10c449f7758a1ba5f7/pyodide_py-0.26.3-py3-none-any.whl
-  sha256: b63b6847c8906aa8f3c17df362135d0407aabf1d4b023557aed721d822e347a8
+  version: 0.26.4
+  url: https://files.pythonhosted.org/packages/2e/4a/970d2604a72e9d44904533b5438135187aa3b08b8d6fc75e5404cd8a1dd1/pyodide_py-0.26.4-py3-none-any.whl
+  sha256: a5bc814aba54a25f3292b91de44ff05629c941d5c27483f43d9e85775a6bf158
   requires_python: '>=3.12'
 - kind: pypi
   name: pysocks
@@ -4815,7 +4815,7 @@ packages:
   url: https://files.pythonhosted.org/packages/96/31/6607dab48616902f76885dfcf62c08d929796fc3b2d2318faf9fd54dbed9/pytest_asyncio-0.24.0-py3-none-any.whl
   sha256: a811296ed596b69bf0b6f3dc40f83bcaf341b155a269052d82efa2b25ac7037b
   requires_dist:
-  - pytest>=8.2,<9
+  - pytest<9,>=8.2
   - sphinx>=5.3 ; extra == 'docs'
   - sphinx-rtd-theme>=1.0 ; extra == 'docs'
   - coverage>=6.2 ; extra == 'testing'
@@ -5436,8 +5436,8 @@ packages:
   requires_dist:
   - brotli>=1.0.9 ; platform_python_implementation == 'CPython' and extra == 'brotli'
   - brotlicffi>=0.8.0 ; platform_python_implementation != 'CPython' and extra == 'brotli'
-  - h2>=4,<5 ; extra == 'h2'
-  - pysocks>=1.5.6,!=1.5.7,<2.0 ; extra == 'socks'
+  - h2<5,>=4 ; extra == 'h2'
+  - pysocks!=1.5.7,<2.0,>=1.5.6 ; extra == 'socks'
   - zstandard>=0.18.0 ; extra == 'zstd'
   requires_python: '>=3.8'
 - kind: conda
@@ -5686,7 +5686,7 @@ packages:
   url: https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl
   sha256: b9acddd652b585d75b20477888c56642fdade28bdfd3579aa24a4d2c037dd736
   requires_dist:
-  - h11>=0.9.0,<1
+  - h11<1,>=0.9.0
   requires_python: '>=3.7.0'
 - kind: conda
   name: xorg-libxau
