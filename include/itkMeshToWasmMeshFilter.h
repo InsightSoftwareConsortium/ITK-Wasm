@@ -20,13 +20,14 @@
 
 #include "itkProcessObject.h"
 #include "itkWasmMesh.h"
+#include "itkMeshJSON.h"
 
 namespace itk
 {
 /**
  *\class MeshToWasmMeshFilter
  * \brief Convert an Mesh to an WasmMesh object.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TMesh>
