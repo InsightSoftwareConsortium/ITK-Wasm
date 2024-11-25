@@ -5,6 +5,7 @@ from .image import Image, ImageType
 from .point_set import PointSet, PointSetType
 from .mesh import Mesh, MeshType
 from .polydata import PolyData, PolyDataType
+from .transform import Transform, TransformType
 from .binary_file import BinaryFile
 from .binary_stream import BinaryStream
 from .text_file import TextFile
@@ -147,6 +148,20 @@ def to_py(js_proxy):
         if polydata_dict["cellData"] is not None:
             polydata_dict["cellData"] = buffer_to_numpy_array(cell_pixel_component_type, polydata_dict["cellData"])
         return PolyData(**polydata_dict)
+    elif hasattr(js_proxy, "transformType"):
+        transform_dict = js_proxy.to_py()
+        transform_type = TransformType(**transform_dict["transformType"])
+        transform_dict["transformType"] = transform_type
+        parameters_value_type = transform_type.parametersValueType
+        if transform_dict["fixedParameters"] is not None:
+            transform_dict["fixedParameters"] = buffer_to_numpy_array(
+                parameters_value_type, transform_dict["fixedParameters"]
+            )
+        if transform_dict["parameters"] is not None:
+            transform_dict["parameters"] = buffer_to_numpy_array(
+                parameters_value_type, transform_dict["parameters"]
+            )
+        return Transform(**transform_dict)
     elif hasattr(js_proxy, "path") and hasattr(js_proxy, "data") and isinstance(js_proxy.data, str):
         with open(js_proxy.path, "w") as fp:
             fp.write(js_proxy.data)
@@ -222,6 +237,13 @@ def to_js(py, **kwargs):
         if polydata_dict["cellData"] is not None:
             polydata_dict["cellData"] = polydata_dict["cellData"].ravel()
         return pyodide.ffi.to_js(polydata_dict, dict_converter=js.Object.fromEntries)
+    elif isinstance(py, Transform):
+        transform_dict = asdict(py)
+        if transform_dict["fixedParameters"] is not None:
+            transform_dict["fixedParameters"] = transform_dict["fixedParameters"].ravel()
+        if transform_dict["parameters"] is not None:
+            transform_dict["parameters"] = transform_dict["parameters"].ravel()
+        return pyodide.ffi.to_js(transform_dict, dict_converter=js.Object.fromEntries)
     elif isinstance(py, TextStream):
         text_stream_dict = asdict(py)
         return pyodide.ffi.to_js(text_stream_dict, dict_converter=js.Object.fromEntries)

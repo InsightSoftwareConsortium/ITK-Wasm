@@ -198,6 +198,41 @@ async def test_polydata_conversion(selenium, package_wheel):
     assert polydata.numberOfPointPixels == polydata_py.numberOfPointPixels
     assert np.array_equal(polydata.pointData, polydata_py.pointData)
 
+@run_in_pyodide(packages=["micropip", "numpy"])
+async def test_transform_conversion(selenium, package_wheel):
+    import micropip
+
+    await micropip.install(package_wheel)
+
+    from itkwasm import Transform, TransformType, TransformParameterizations
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+
+    dimension = 3
+    transform_type = TransformType(TransformParameterizations.Affine)
+    fixed_parameters = np.array([0.0, 0.0, 0.0]).astype(np.float64)
+    parameters = np.array([
+      0.65631490118447, 0.5806583745824385, -0.4817536741017158,
+      -0.7407986817430222, 0.37486398378429736, -0.5573995934598175,
+      -0.14306664045479867, 0.7227121458012518, 0.676179776908723,
+      -65.99999999999997, 69.00000000000004, 32.000000000000036]).astype(np.float64)
+    transform = Transform(transform_type, dimension, 12, fixedParameters=fixed_parameters, parameters=parameters)
+    transform_list = [transform,]
+
+    transform_list_js = to_js(transform_list)
+    transform_list_py = to_py(transform_list_js)
+
+    transform_py = transform_list_py[0]
+    assert transform_py.transformType.transformParameterization == TransformParameterizations.Affine
+    assert transform_py.numberOfParameters == 12
+    assert transform_py.numberOfFixedParameters == 3
+    np.testing.assert_allclose(transform_py.fixedParameters, np.array([0.0, 0.0, 0.0]))
+    np.testing.assert_allclose(transform_py.parameters, np.array([
+        0.65631490118447, 0.5806583745824385, -0.4817536741017158,
+        -0.7407986817430222, 0.37486398378429736, -0.5573995934598175,
+        -0.14306664045479867, 0.7227121458012518, 0.676179776908723,
+        -65.99999999999997, 69.00000000000004, 32.000000000000036]))
+    print('transform_py', transform_py)
 
 @run_in_pyodide(packages=["micropip", "numpy"])
 async def test_binary_stream_conversion(selenium, package_wheel):
