@@ -94,7 +94,7 @@ pytest = ">=8.3.3,<9"
 [feature.python.pypi-dependencies]
 pyodide-py = ">=0.26.3, <0.27"
 pytest-pyodide = ">=0.58.3, <0.59"
-itkwasm = ">=1.0b180, <2"
+itkwasm = ">=1.0b185, <2"
 
 [tasks.build-python]
 cmd = "pnpm run build:gen:python"
