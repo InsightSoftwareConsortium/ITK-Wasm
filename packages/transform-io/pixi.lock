@@ -2308,7 +2308,7 @@ packages:
   name: itkwasm-transform-io-wasi
   version: 0.1.1
   path: python/itkwasm-transform-io-wasi
-  sha256: b23e2fac5297bd8d40cdff5fa28cffb3dae675de420923a40c17bea27c8a332e
+  sha256: 21ef72cc91a6d86bbd3bd2382298a91ac15c667baac37e946c4e112f76234bac
   requires_dist:
   - importlib-resources
   - itkwasm>=1.0b185
