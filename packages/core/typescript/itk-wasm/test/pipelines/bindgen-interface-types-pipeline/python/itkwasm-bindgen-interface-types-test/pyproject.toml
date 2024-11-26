@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "itkwasm-bindgen-interface-types-test"
 readme = "README.md"
-license = "Apache-2.0"
+license-expression = "Apache-2.0"
 dynamic = ["version"]
 description = "Exercise interface types for bindgen"
 classifiers = [
