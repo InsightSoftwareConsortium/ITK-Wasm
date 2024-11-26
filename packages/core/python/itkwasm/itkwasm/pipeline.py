@@ -22,6 +22,7 @@ from .text_file import TextFile
 from .binary_file import BinaryFile
 from .image import Image
 from .mesh import Mesh
+from .transform import Transform
 from .point_set import PointSet
 from .polydata import PolyData
 from .json_compatible import JsonCompatible
@@ -45,6 +46,8 @@ if sys.platform != "emscripten":
         WasiConfig,
         Linker,
         WasmtimeError,
+        DirPerms,
+        FilePerms
     )
 
     # Get the value of the ITKWASM_CACHE_DIR environment variable
@@ -83,7 +86,7 @@ class RunInstance:
         wasi_config.argv = args
 
         for preopen in preopen_directories:
-            wasi_config.preopen_dir(preopen, preopen)
+            wasi_config.preopen_dir(preopen, preopen, DirPerms.READ_WRITE, FilePerms.READ_WRITE)
 
         store.set_wasi(wasi_config)
 
@@ -299,6 +302,34 @@ class Pipeline:
                     "pointData": f"data:application/vnd.itk.address,0:{point_data_ptr}",
                 }
                 ri.set_input_json(point_set_json, index)
+            elif input_.type == InterfaceTypes.TransformList:
+                transform_list = input_.data
+                transform_list_json = []
+                for idx, transform in enumerate(transform_list):
+                    if transform.numberOfFixedParameters:
+                        fpv = array_like_to_bytes(transform.fixedParameters)
+                    else:
+                        fpv = bytes([])
+                    fixed_parameters_ptr = ri.set_input_array(fpv, index, idx * 2)
+                    fixed_parameters  = f"data:application/vnd.itk.address,0:{fixed_parameters_ptr}"
+                    if transform.numberOfParameters:
+                        pv = array_like_to_bytes(transform.parameters)
+                    else:
+                        pv = bytes([])
+                    parameters_ptr = ri.set_input_array(pv, index, idx * 2 + 1)
+                    parameters = f"data:application/vnd.itk.address,0:{parameters_ptr}"
+                    transform_json = {
+                        "transformType": asdict(transform.transformType),
+                        "numberOfFixedParameters": transform.numberOfFixedParameters,
+                        "numberOfParameters": transform.numberOfParameters,
+                        "name": transform.name,
+                        "inputSpaceName": transform.inputSpaceName,
+                        "outputSpaceName": transform.outputSpaceName,
+                        "fixedParameters": fixed_parameters,
+                        "parameters": parameters,
+                    }
+                    transform_list_json.append(transform_json)
+                ri.set_input_json(transform_list_json, index)
             elif input_.type == InterfaceTypes.PolyData:
                 polydata = input_.data
                 if polydata.numberOfPoints:
@@ -489,6 +520,27 @@ class Pipeline:
                         point_set.pointData = buffer_to_numpy_array(point_set.pointSetType.pointPixelComponentType, bytes([]))
 
                     output_data = PipelineOutput(InterfaceTypes.PointSet, point_set)
+                elif output.type == InterfaceTypes.TransformList:
+                    transform_list_json = ri.get_output_json(index)
+                    transform_list = []
+                    for idx, transform_json in enumerate(transform_list_json):
+                        transform = Transform(**transform_json)
+                        if transform.numberOfFixedParameters > 0:
+                            data_ptr = ri.get_output_array_address(0, index, idx * 2)
+                            data_size = ri.get_output_array_size(0, index, idx * 2)
+                            transform.fixedParameters = buffer_to_numpy_array(
+                                transform.transformType.parametersValueType,
+                                ri.wasmtime_lift(data_ptr, data_size),
+                            )
+                        if transform.numberOfParameters > 0:
+                            data_ptr = ri.get_output_array_address(0, index, idx * 2 + 1)
+                            data_size = ri.get_output_array_size(0, index, idx * 2 + 1)
+                            transform.parameters = buffer_to_numpy_array(
+                                transform.transformType.parametersValueType,
+                                ri.wasmtime_lift(data_ptr, data_size),
+                            )
+                        transform_list.append(transform)
+                    output_data = PipelineOutput(InterfaceTypes.TransformList, transform_list)
                 elif output.type == InterfaceTypes.PolyData:
                     polydata_json = ri.get_output_json(index)
                     polydata = PolyData(**polydata_json)

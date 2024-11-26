@@ -81,10 +81,11 @@ pytest = ">=8.3.3,<9"
 pillow = ">=10.4.0,<12"
 
 [feature.python.pypi-dependencies]
-pyodide-py = ">=0.26.3, <0.27"
+pyodide-py = ">=0.26.4, <0.27"
 pytest-pyodide = ">=0.58.3, <0.59"
 itk-webassemblyinterface = ">=1.0b175, <2"
-itkwasm = ">=1.0b180, <2"
+itkwasm = ">=1.0b185, <2"
+itkwasm-transform-io-wasi = { path = "python/itkwasm-transform-io-wasi", editable = true }
 
 [feature.python.tasks.test-wasi]
 cmd = "pytest"
@@ -92,7 +93,7 @@ cwd = "python/itkwasm-transform-io-wasi"
 description = "Run tests for itkwasm-transform-io-wasi"
 
 [feature.python.tasks.download-pyodide]
-cmd = '''curl -L https://github.com/pyodide/pyodide/releases/download/0.26.3/pyodide-0.26.3.tar.bz2 -o pyodide.tar.bz2 &&
+cmd = '''curl -L https://github.com/pyodide/pyodide/releases/download/0.26.4/pyodide-0.26.4.tar.bz2 -o pyodide.tar.bz2 &&
   tar xjf pyodide.tar.bz2 &&
   rm pyodide.tar.bz2'''
 outputs = ["pyodide"]

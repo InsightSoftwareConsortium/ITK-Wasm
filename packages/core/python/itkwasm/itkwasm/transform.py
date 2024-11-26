@@ -8,6 +8,8 @@ except ImportError:
     from numpy import ndarray as ArrayLike
 import numpy as np
 
+from .float_types import FloatTypes
+
 class TransformParameterizations(str, Enum):
     Composite = "Composite"
     Identity = "Identity"
@@ -40,9 +42,10 @@ class TransformParameterizations(str, Enum):
 
 @dataclass
 class TransformType:
+    transformParameterization: TransformParameterizations = TransformParameterizations.Identity
+    parametersValueType: FloatTypes = FloatTypes.Float64
     inputDimension: int = 3
     outputDimension: int = 3
-    transformParameterization: TransformParameterizations = TransformParameterizations.Identity
 
 @dataclass
 class Transform:

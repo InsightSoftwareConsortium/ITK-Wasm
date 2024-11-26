@@ -33,8 +33,8 @@ dependencies = [
     "numpy",
     "typing_extensions",
     "platformdirs; sys_platform != \"emscripten\"",
-    "wasmtime >= 13.0.2; sys_platform != \"emscripten\"",
-    "importlib_metadata; python_version < \"3.10\"", "dask[array]>=2024.11.2,<2025",
+    "wasmtime >= 27.0.1; sys_platform != \"emscripten\"",
+    "importlib_metadata; python_version < \"3.10\"",
 ]
 
 [project.urls]
@@ -64,6 +64,7 @@ pyodide-py = ">=0.26.3, <0.27"
 pytest-pyodide = ">=0.58.3, <0.59"
 itk = ">=5.4.0"
 test_accelerator = { path = "test/test-accelerator", editable = true }
+dask = { extras = ["array"], version = ">=2024.11.2,<2025" }
 
 [tool.pixi.tasks.build]
 cmd = "hatch build"

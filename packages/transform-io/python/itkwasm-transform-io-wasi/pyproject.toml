@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "itkwasm-transform-io-wasi"
 readme = "README.md"
-license = "Apache-2.0"
+license-expression = "Apache-2.0"
 dynamic = ["version"]
 description = "Input and output for scientific and medical coordinate transform file formats."
 classifiers = [
@@ -19,11 +19,11 @@ classifiers = [
   "Intended Audience :: Developers",
   "Intended Audience :: Science/Research",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
 keywords = [
   "itkwasm",
@@ -31,9 +31,9 @@ keywords = [
   "wasi",
 ]
 
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
-    "itkwasm >= 1.0.b171",
+    "itkwasm >= 1.0.b185",
     "importlib_resources",
 
 ]
