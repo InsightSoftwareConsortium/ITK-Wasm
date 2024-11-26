@@ -501,6 +501,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/5e/24/806c5bd1b5e30c83cc9d182795edebfbfe24483f82fb18823b309a6656b5/wasmtime-27.0.1-py3-none-manylinux1_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl
+      - pypi: python/itkwasm-transform-io-wasi
       linux-aarch64:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/_openmp_mutex-4.5-2_gnu.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/noarch/anyio-4.6.2.post1-pyhd8ed1ab_0.conda
@@ -642,6 +643,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/3a/57/cd877b4797be239b4433f89a5a85c7bf2c5319dd91c7777b1867bebb664e/wasmtime-27.0.1-py3-none-manylinux2014_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl
+      - pypi: python/itkwasm-transform-io-wasi
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/anyio-4.6.2.post1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/backports-1.0-pyhd8ed1ab_4.conda
@@ -766,6 +768,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/6e/d8/38d1af31c1787e09642354c81215920a5bf59722a6786ed7e9622fd1f033/wasmtime-27.0.1-py3-none-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl
+      - pypi: python/itkwasm-transform-io-wasi
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/anyio-4.6.2.post1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/backports-1.0-pyhd8ed1ab_4.conda
@@ -895,6 +898,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/14/6f/f6b99d9ab1511398686e00d2a26371d99a7949531514379d731b3b7e6309/wasmtime-27.0.1-py3-none-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl
+      - pypi: python/itkwasm-transform-io-wasi
 packages:
 - kind: conda
   name: _libgcc_mutex
@@ -2300,6 +2304,16 @@ packages:
   - typing-extensions
   - wasmtime>=27.0.1 ; sys_platform != 'emscripten'
   requires_python: '>=3.9'
+- kind: pypi
+  name: itkwasm-transform-io-wasi
+  version: 0.1.1
+  path: python/itkwasm-transform-io-wasi
+  sha256: b23e2fac5297bd8d40cdff5fa28cffb3dae675de420923a40c17bea27c8a332e
+  requires_dist:
+  - importlib-resources
+  - itkwasm>=1.0b185
+  requires_python: '>=3.9'
+  editable: true
 - kind: conda
   name: jaraco.classes
   version: 3.4.0

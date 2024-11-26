@@ -85,6 +85,7 @@ pyodide-py = ">=0.26.3, <0.27"
 pytest-pyodide = ">=0.58.3, <0.59"
 itk-webassemblyinterface = ">=1.0b175, <2"
 itkwasm = ">=1.0b179, <2"
+itkwasm-mesh-io-wasi = { path = "python/itkwasm-mesh-io-wasi", editable = true }
 
 [feature.python.tasks.test-wasi]
 cmd = "pytest"

@@ -1,19 +1,12 @@
-import pytest
-import sys
+from pathlib import Path
 
-if sys.version_info < (3,10):
-    pytest.skip("Skipping pyodide tests on older Python", allow_module_level=True)
+from itkwasm_transform_io import hdf5_read_transform
 
-from pytest_pyodide import run_in_pyodide
+from .common import test_input_path, test_output_path, verify_test_linear_transform
 
-from .fixtures import emscripten_package_wheel, package_wheel, input_data
+test_input_file_path = test_input_path / "LinearTransform.h5"
 
-@run_in_pyodide(packages=['micropip'])
-async def test_hdf5_read_transform(selenium, package_wheel, emscripten_package_wheel):
-    import micropip
-    await micropip.install(emscripten_package_wheel)
-    await micropip.install(package_wheel)
-
-    from itkwasm_transform_io import hdf5_read_transform
-
-    # Write your test code here
+def test_hdf5_read_transform():
+    could_read, transform_list = hdf5_read_transform(test_input_file_path)
+    assert could_read
+    verify_test_linear_transform(transform_list)

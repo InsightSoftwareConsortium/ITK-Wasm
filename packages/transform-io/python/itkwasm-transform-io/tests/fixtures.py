@@ -20,7 +20,7 @@ def emscripten_package_wheel():
 @pytest.fixture
 def input_data():
     from pathlib import Path
-    input_base_path = Path(__file__).parent.parent / 'test' / 'data'
+    input_base_path = Path(__file__).parent.parent.parent.parent / 'test' / 'data' / 'input'
     test_files = list(input_base_path.glob('*'))
     data = {}
     for test_file in test_files:

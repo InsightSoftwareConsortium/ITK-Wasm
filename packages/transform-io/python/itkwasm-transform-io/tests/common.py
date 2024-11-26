@@ -5,7 +5,7 @@ from itkwasm import TransformList, TransformParameterizations, FloatTypes
 
 test_input_path = Path(__file__).parent / ".." / ".." / ".." / "test" / "data" / "input"
 test_baseline_path = Path(__file__).parent / ".." / ".." / ".." / "test" / "data" / "baseline"
-test_output_path = Path(__file__).parent / ".." / ".." / ".." / "test" / "data" / "output" / "python-wasi"
+test_output_path = Path(__file__).parent / ".." / ".." / ".." / "test" / "data" / "output" / "python-dispatch"
 test_output_path.mkdir(parents=True, exist_ok=True)
 
 def verify_test_linear_transform(transform_list: TransformList):
