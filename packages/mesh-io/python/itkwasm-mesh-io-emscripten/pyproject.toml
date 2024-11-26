@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "itkwasm-mesh-io-emscripten"
 readme = "README.md"
-license = "Apache-2.0"
+license-expression = "Apache-2.0"
 dynamic = ["version"]
 description = "Input and output for scientific and medical image file formats."
 classifiers = [

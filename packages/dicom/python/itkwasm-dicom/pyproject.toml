@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "itkwasm-dicom"
 readme = "README.md"
-license = "Apache-2.0"
+license-expression = "Apache-2.0"
 dynamic = ["version"]
 description = "Read files and images related to DICOM file format."
 classifiers = [
