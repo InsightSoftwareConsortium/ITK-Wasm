@@ -4,3 +4,6 @@ wasi-build/
 typescript/dist
 typescript/src/version.ts
 pyodide/
+python/itkwasm-transform-io-emscripten/dist/
+python/itkwasm-transform-io-wasi/dist/
+python/itkwasm-transform-io/dist/
