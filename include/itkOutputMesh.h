@@ -20,6 +20,7 @@
 
 #include "itkPipeline.h"
 #include "itkMeshConvertPixelTraits.h"
+#include "itkMesh.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
 #include "itkWasmExports.h"
@@ -39,9 +40,9 @@ namespace wasm
  * \brief Output mesh for an itk::wasm::Pipeline
  *
  * This mesh is written to the filesystem or memory when it goes out of scope.
- * 
+ *
  * Call `GetMesh()` to get the TMesh * to use an input to a pipeline.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TMesh>
