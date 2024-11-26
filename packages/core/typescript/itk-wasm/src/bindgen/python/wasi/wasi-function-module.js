@@ -53,8 +53,8 @@ from itkwasm import (
       const interfaceType = interfaceJsonTypeToInterfaceType.get(output.type)
       const isArray = output.itemsExpectedMax > 1
       switch (interfaceType) {
-        case "TextFile":
-        case "BinaryFile":
+        case 'TextFile':
+        case 'BinaryFile':
           if (isArray) {
             haveArray = true
             pipelineOutputs += `        *${snakeCase(output.name)}_pipeline_outputs,\n`
@@ -97,12 +97,12 @@ from itkwasm import (
     if (interfaceJsonTypeToInterfaceType.has(input.type)) {
       const interfaceType = interfaceJsonTypeToInterfaceType.get(input.type)
       switch (interfaceType) {
-        case "TextFile":
-        case "BinaryFile":
+        case 'TextFile':
+        case 'BinaryFile':
           pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(PurePosixPath(${snakeCase(input.name)}))),\n`
           break
-        case "TextStream":
-        case "BinaryStream":
+        case 'TextStream':
+        case 'BinaryStream':
           pipelineInputs += `        PipelineInput(InterfaceTypes.${interfaceType}, ${interfaceType}(${snakeCase(input.name)})),\n`
           break
         default:
@@ -113,7 +113,7 @@ from itkwasm import (
 
   let args = `    args: List[str] = ['--memory-io',]\n`
   let inputCount = 0
-  args += "    # Inputs\n"
+  args += '    # Inputs\n'
   interfaceJson.inputs.forEach((input) => {
     const snakeName = snakeCase(input.name)
     if (interfaceJsonTypeToInterfaceType.has(input.type)) {
@@ -122,7 +122,9 @@ from itkwasm import (
         args += `    if not Path(${snakeName}).exists():\n`
         args += `        raise FileNotFoundError("${snakeName} does not exist")\n`
       }
-      const name = interfaceType.includes('File') ? `str(PurePosixPath(${snakeName}))` : `'${inputCount.toString()}'`
+      const name = interfaceType.includes('File')
+        ? `str(PurePosixPath(${snakeName}))`
+        : `'${inputCount.toString()}'`
       args += `    args.append(${name})\n`
       inputCount++
     } else {
@@ -131,7 +133,7 @@ from itkwasm import (
   })
 
   let outputCount = 0
-  args += "    # Outputs\n"
+  args += '    # Outputs\n'
   interfaceJson.outputs.forEach((output) => {
     const snake = snakeCase(output.name)
     if (interfaceJsonTypeToInterfaceType.has(output.type)) {
@@ -158,7 +160,7 @@ from itkwasm import (
     }
   })
 
-  args += "    # Options\n"
+  args += '    # Options\n'
   args += `    input_count = len(pipeline_inputs)\n`
   interfaceJson.parameters.forEach((parameter) => {
     if (parameter.name === 'memory-io' || parameter.name === 'version') {
@@ -166,7 +168,7 @@ from itkwasm import (
       return
     }
     const snake = snakeCase(parameter.name)
-    if (parameter.type === "BOOL") {
+    if (parameter.type === 'BOOL') {
       args += `    if ${snake}:\n`
       args += `        args.append('--${parameter.name}')\n`
     } else if (parameter.itemsExpectedMax > 1) {
@@ -177,7 +179,9 @@ from itkwasm import (
       args += `        args.append('--${parameter.name}')\n`
       args += `        for value in ${snake}:\n`
       if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
-        const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
+        const interfaceType = interfaceJsonTypeToInterfaceType.get(
+          parameter.type
+        )
         if (interfaceType.includes('File')) {
           // for files
           args += `            input_file = str(PurePosixPath(value))\n`
@@ -195,12 +199,19 @@ from itkwasm import (
           args += `            input_count += 1\n`
         }
       } else {
+        if (parameter.type.startsWith('TEXT:{')) {
+          const choices = parameter.type.split('{')[1].split('}')[0].split(',')
+          args += `            if ${snake} not in (${choices.map((c) => `'${c}'`).join(',')}):\n`
+          args += `                raise ValueError(f'${snake} must be one of ${choices.join(', ')}')\n`
+        }
         args += `            args.append(str(value))\n`
       }
     } else {
       if (interfaceJsonTypeToInterfaceType.has(parameter.type)) {
         args += `    if ${snake} is not None:\n`
-        const interfaceType = interfaceJsonTypeToInterfaceType.get(parameter.type)
+        const interfaceType = interfaceJsonTypeToInterfaceType.get(
+          parameter.type
+        )
         if (interfaceType.includes('File')) {
           // for files
           args += `        input_file = str(PurePosixPath(${snakeCase(parameter.name)}))\n`
@@ -222,6 +233,11 @@ from itkwasm import (
         }
       } else {
         args += `    if ${snake}:\n`
+        if (parameter.type.startsWith('TEXT:{')) {
+          const choices = parameter.type.split('{')[1].split('}')[0].split(',')
+          args += `    if ${snake} not in (${choices.map((c) => `'${c}'`).join(',')}):\n`
+          args += `        raise ValueError(f'${snake} must be one of ${choices.join(', ')}')\n`
+        }
         args += `        args.append('--${parameter.name}')\n`
         args += `        args.append(str(${snake}))\n`
       }
@@ -234,23 +250,23 @@ from itkwasm import (
     const canonical = canonicalType(type)
     const pythonType = interfaceJsonTypeToPythonType.get(canonical)
     switch (pythonType) {
-      case "os.PathLike":
+      case 'os.PathLike':
         return `Path(${value}.data.path)`
-      case "str":
+      case 'str':
         if (type === 'TEXT') {
           return `${value}`
         } else {
           return `${value}.data.data`
         }
-      case "bytes":
+      case 'bytes':
         return `${value}.data.data`
-      case "int":
+      case 'int':
         return `int(${value})`
-      case "bool":
+      case 'bool':
         return `bool(${value})`
-      case "float":
+      case 'float':
         return `float(${value})`
-      case "Any":
+      case 'Any':
         return `${value}.data`
       default:
         return `${value}.data`
@@ -258,10 +274,12 @@ from itkwasm import (
   }
   outputCount = 0
   const jsonOutputs = interfaceJson['outputs']
-  const numOutputs = interfaceJson.outputs.filter(o => !o.type.includes('FILE')).length
+  const numOutputs = interfaceJson.outputs.filter(
+    (o) => !o.type.includes('FILE')
+  ).length
   if (numOutputs > 1) {
     postOutput += '    result = (\n'
-  } else if (numOutputs === 1){
+  } else if (numOutputs === 1) {
     postOutput = '    result = '
   }
 
