@@ -201,8 +201,8 @@ from itkwasm import (
       } else {
         if (parameter.type.startsWith('TEXT:{')) {
           const choices = parameter.type.split('{')[1].split('}')[0].split(',')
-          args += `            if ${snake} not in (${choices.map((c) => `'${c}'`).join(',')}):\n`
-          args += `                raise ValueError(f'${snake} must be one of ${choices.join(', ')}')\n`
+          args += `                if ${snake} not in (${choices.map((c) => `'${c}'`).join(',')}):\n`
+          args += `                    raise ValueError(f'${snake} must be one of ${choices.join(', ')}')\n`
         }
         args += `            args.append(str(value))\n`
       }
