@@ -48,8 +48,8 @@ FetchContent_Declare(
   )
 
 set(CLI11_GIT_REPOSITORY "https://github.com/CLIUtils/CLI11")
-# v2.4.2
-set(CLI11_GIT_TAG "3306c444f293f739f0c48afaafdb110a1e2a507b")
+# v2.4.2+, 2024-11-28 main
+set(CLI11_GIT_TAG "8260578fd276c8ed6aa46f0fbc946b7685dd2c36")
 FetchContent_Declare(
   cli11
   GIT_REPOSITORY ${CLI11_GIT_REPOSITORY}
