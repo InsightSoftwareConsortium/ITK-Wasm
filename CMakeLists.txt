@@ -54,7 +54,6 @@ FetchContent_Declare(
   cli11
   GIT_REPOSITORY ${CLI11_GIT_REPOSITORY}
   GIT_TAG        ${CLI11_GIT_TAG}
-  GIT_SHALLOW TRUE
 )
 
 set(rang_GIT_REPOSITORY "https://github.com/agauniyal/rang.git")
