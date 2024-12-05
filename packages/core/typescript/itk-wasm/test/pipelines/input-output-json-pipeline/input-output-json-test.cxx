@@ -28,6 +28,9 @@ int main( int argc, char * argv[] )
   itk::wasm::InputTextStream inputJson;
   pipeline.add_option("input-json", inputJson, "The input json")->type_name("INPUT_JSON");
 
+  std::string stringChoice = "valuea";
+  pipeline.add_option("--string-choice", stringChoice, "A string choice, one of: valuea, valueb, or valuec")->check(CLI::IsMember({"valuea", "valueb", "valuec"}));
+
   itk::wasm::OutputTextStream outputJson;
   pipeline.add_option("output-json", outputJson, "The output json")->type_name("OUTPUT_JSON");
 

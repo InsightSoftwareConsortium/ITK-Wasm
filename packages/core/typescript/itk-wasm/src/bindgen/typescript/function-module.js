@@ -478,7 +478,13 @@ function functionModule(
           functionContent += '      args.push(inputCountString)\n\n'
         }
       } else {
-        functionContent += '      args.push(value.toString())\n\n'
+        if (parameter.type.startsWith('TEXT:{')) {
+          const choices = parameter.type.split('{')[1].split('}')[0].split(',')
+          functionContent += `    if (![${choices.map((c) => `'${c}'`).join(', ')}].includes(options.${camel})) {\n`
+          functionContent += `      throw new Error('"${parameter.name}" option must be one of ${choices.join(', ')}')\n`
+          functionContent += '    }\n'
+        }
+        functionContent += '      args.push(value.toString())\n'
       }
       functionContent += forNode ? '    })\n' : '    }))\n'
     } else {
@@ -518,6 +524,12 @@ function functionModule(
           functionContent += `    args.push('--${parameter.name}', inputCountString)\n\n`
         }
       } else {
+        if (parameter.type.startsWith('TEXT:{')) {
+          const choices = parameter.type.split('{')[1].split('}')[0].split(',')
+          functionContent += `    if (![${choices.map((c) => `'${c}'`).join(', ')}].includes(options.${camel})) {\n`
+          functionContent += `      throw new Error('"${parameter.name}" option must be one of ${choices.join(', ')}')\n`
+          functionContent += '    }\n'
+        }
         functionContent += `    args.push('--${parameter.name}', options.${camel}.toString())\n\n`
       }
     }

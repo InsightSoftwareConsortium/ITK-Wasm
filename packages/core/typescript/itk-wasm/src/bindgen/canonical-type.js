@@ -1,6 +1,7 @@
 function canonicalType(parameterType) {
   // Strip extras
-  const canonical = parameterType.split(' ')[0]
+  let canonical = parameterType.split(' ')[0]
+  canonical = canonical.split(':')[0]
   return canonical
 }
 

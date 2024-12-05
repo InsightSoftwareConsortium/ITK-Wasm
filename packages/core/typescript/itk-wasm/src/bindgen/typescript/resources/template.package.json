@@ -33,7 +33,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "1.0.0-b.177"
+    "itk-wasm": "1.0.0-b.183"
   },
   "devDependencies": {
     "@itk-wasm/demo-app": "^0.2.0",
