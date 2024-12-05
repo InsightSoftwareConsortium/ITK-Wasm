@@ -5,8 +5,8 @@
   "description": "@itk-wasm/compare-meshes build configuration.",
   "type": "module",
   "itk-wasm": {
-    "emscripten-docker-image": "itkwasm/emscripten:latest",
-    "wasi-docker-image": "itkwasm/wasi:latest",
+    "emscripten-docker-image": "localhost/itkwasm/emscripten:latest",
+    "wasi-docker-image": "localhost/itkwasm/wasi:latest",
     "test-data-hash": "bafkreibsonywg3w3gscmookip3elsyydfsn2cbubk6dukatkmjgeguhiri",
     "test-data-urls": [
       "https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.178/compare-meshes-data.tar.gz"

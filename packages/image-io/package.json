@@ -5,8 +5,8 @@
   "description": "Input and output for scientific and medical image file formats.",
   "type": "module",
   "itk-wasm": {
-    "emscripten-docker-image": "itkwasm/emscripten:latest",
-    "wasi-docker-image": "itkwasm/wasi:latest",
+    "emscripten-docker-image": "localhost/itkwasm/emscripten:latest",
+    "wasi-docker-image": "localhost/itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/image-io",
     "python-package-name": "itkwasm-image-io",
     "package-description": "Input and output for scientific and medical image file formats.",
