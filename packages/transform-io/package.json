@@ -5,9 +5,9 @@
   "description": "scripts to generate @itk-wasm/transform-io itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {
-    "test-data-hash": "bafkreiahocrgb3p4xrjozr7cg5wdpdt6wp77kolnqyupae6awkplb5p4he",
+    "test-data-hash": "bafkreihranpzszz3q5bwgzsw6olqwh2e726wfnh4qblkjbng44yhqbfin4",
     "test-data-urls": [
-      "https://bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq.ipfs.w3s.link/ipfs/bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq/data.tar.gz"
+      "https://bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme.ipfs.w3s.link/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz"
     ],
     "emscripten-docker-image": "localhost/itkwasm/emscripten:latest",
     "wasi-docker-image": "localhost/itkwasm/wasi:latest",
