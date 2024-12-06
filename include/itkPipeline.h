@@ -42,7 +42,8 @@
             const std::string arg(iwpArgv[ii]); \
             if (arg == "-h" || arg == "--help") \
             { \
-              (pipeline).exit(CLI::CallForAllHelp()); \
+              const auto parseResult = CLI::CallForHelp(); \
+              (pipeline).exit(parseResult); \
               std::exit(0); \
             } \
             if (arg == "--interface-json") \

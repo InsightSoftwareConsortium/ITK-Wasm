@@ -48,13 +48,12 @@ FetchContent_Declare(
   )
 
 set(CLI11_GIT_REPOSITORY "https://github.com/CLIUtils/CLI11")
-# v2.4.2
-set(CLI11_GIT_TAG "6c7b07a878ad834957b98d0f9ce1dbe0cb204fc9")
+# v2.4.2+, 2024-11-28 main
+set(CLI11_GIT_TAG "8260578fd276c8ed6aa46f0fbc946b7685dd2c36")
 FetchContent_Declare(
   cli11
   GIT_REPOSITORY ${CLI11_GIT_REPOSITORY}
   GIT_TAG        ${CLI11_GIT_TAG}
-  GIT_SHALLOW TRUE
 )
 
 set(rang_GIT_REPOSITORY "https://github.com/agauniyal/rang.git")
