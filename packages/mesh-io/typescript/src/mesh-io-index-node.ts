@@ -1,5 +1,7 @@
 import vtkPolyDataReadMeshNode from "./vtk-poly-data-read-mesh-node.js";
 import vtkPolyDataWriteMeshNode from "./vtk-poly-data-write-mesh-node.js";
+import mz3ReadMeshNode from "./mz3-read-mesh-node.js";
+import mz3WriteMeshNode from "./mz3-write-mesh-node.js";
 import objReadMeshNode from "./obj-read-mesh-node.js";
 import objWriteMeshNode from "./obj-write-mesh-node.js";
 import stlReadMeshNode from "./stl-read-mesh-node.js";
@@ -24,6 +26,7 @@ const meshIoIndexNode = new Map([
   ["obj", [objReadMeshNode, objWriteMeshNode]],
   ["stl", [stlReadMeshNode, stlWriteMeshNode]],
   ["off", [offReadMeshNode, offWriteMeshNode]],
+  ["mz3", [mz3ReadMeshNode, mz3WriteMeshNode]],
   ["wasm", [wasmReadMeshNode, wasmWriteMeshNode]],
   ["wasmZstd", [wasmZstdReadMeshNode, wasmZstdWriteMeshNode]],
   ["swc", [swcReadMeshNode, swcWriteMeshNode]],
