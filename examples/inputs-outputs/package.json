@@ -5,8 +5,8 @@
   "description": "An itk-wasm pipeline example for inputs/outputs",
   "type": "module",
   "itk-wasm": {
-    "emscripten-docker-image": "itkwasm/emscripten:latest",
-    "wasi-docker-image": "itkwasm/wasi:latest",
+    "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
+    "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/inputs-outputs-example",
     "python-package-name": "itkwasm-inputs-outputs-example",
     "package-description": "An example that has non-trivial inputs and outputs.",
