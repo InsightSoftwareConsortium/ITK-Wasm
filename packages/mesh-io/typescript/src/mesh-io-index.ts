@@ -6,6 +6,8 @@ import stlReadMesh from "./stl-read-mesh.js";
 import stlWriteMesh from "./stl-write-mesh.js";
 import offReadMesh from "./off-read-mesh.js";
 import offWriteMesh from "./off-write-mesh.js";
+import mz3ReadMesh from "./mz3-read-mesh.js";
+import mz3WriteMesh from "./mz3-write-mesh.js";
 import wasmReadMesh from "./wasm-read-mesh.js";
 import wasmWriteMesh from "./wasm-write-mesh.js";
 import wasmZstdReadMesh from "./wasm-zstd-read-mesh.js";
@@ -24,6 +26,7 @@ const meshIoIndex = new Map([
   ["obj", [objReadMesh, objWriteMesh]],
   ["stl", [stlReadMesh, stlWriteMesh]],
   ["off", [offReadMesh, offWriteMesh]],
+  ["mz3", [mz3ReadMesh, mz3WriteMesh]],
   ["wasm", [wasmReadMesh, wasmWriteMesh]],
   ["wasmZstd", [wasmZstdReadMesh, wasmZstdWriteMesh]],
   ["swc", [swcReadMesh, swcWriteMesh]],

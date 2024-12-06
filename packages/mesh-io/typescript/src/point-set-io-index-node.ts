@@ -1,5 +1,7 @@
 import vtkPolyDataReadPointSetNode from "./vtk-poly-data-read-point-set-node.js";
 import vtkPolyDataWritePointSetNode from "./vtk-poly-data-write-point-set-node.js";
+import mz3ReadPointSetNode from "./mz3-read-point-set-node.js";
+import mz3WritePointSetNode from "./mz3-write-point-set-node.js";
 import objReadPointSetNode from "./obj-read-point-set-node.js";
 import objWritePointSetNode from "./obj-write-point-set-node.js";
 import offReadPointSetNode from "./off-read-point-set-node.js";
@@ -11,6 +13,7 @@ import wasmZstdWritePointSetNode from "./wasm-zstd-write-point-set-node.js";
 
 const pointSetIoIndexNode = new Map([
   ["vtk", [vtkPolyDataReadPointSetNode, vtkPolyDataWritePointSetNode]],
+  ["mz3", [mz3ReadPointSetNode, mz3WritePointSetNode]],
   ["obj", [objReadPointSetNode, objWritePointSetNode]],
   ["off", [offReadPointSetNode, offWritePointSetNode]],
   ["wasm", [wasmReadPointSetNode, wasmWritePointSetNode]],

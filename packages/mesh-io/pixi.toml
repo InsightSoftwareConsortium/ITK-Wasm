@@ -74,7 +74,7 @@ cwd = "python/itkwasm-mesh-io"
 
 [tasks.publish]
 depends-on = ["publish-typescript", "publish-python-wasi", "publish-python-emscripten", "publish-python-dispatch"]
-description = "Synchronize package versions"
+description = "Publish packages"
 
 [feature.python.dependencies]
 pytest = ">=8.3.3,<9"

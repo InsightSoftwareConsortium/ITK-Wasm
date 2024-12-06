@@ -12,6 +12,8 @@ from .free_surfer_ascii_read_mesh import free_surfer_ascii_read_mesh
 from .free_surfer_ascii_write_mesh import free_surfer_ascii_write_mesh
 from .free_surfer_binary_read_mesh import free_surfer_binary_read_mesh
 from .free_surfer_binary_write_mesh import free_surfer_binary_write_mesh
+from .mz3_read_mesh import mz3_read_mesh
+from .mz3_write_mesh import mz3_write_mesh
 from .obj_read_mesh import obj_read_mesh
 from .obj_write_mesh import obj_write_mesh
 from .off_read_mesh import off_read_mesh
@@ -27,6 +29,8 @@ from .wasm_write_mesh import wasm_write_mesh
 from .wasm_zstd_read_mesh import wasm_zstd_read_mesh
 from .wasm_zstd_write_mesh import wasm_zstd_write_mesh
 
+from .mz3_read_point_set import mz3_read_point_set
+from .mz3_write_point_set import mz3_write_point_set
 from .obj_read_point_set import obj_read_point_set
 from .obj_write_point_set import obj_write_point_set
 from .off_read_point_set import off_read_point_set

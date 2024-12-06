@@ -87,6 +87,7 @@ RUN mkdir ITK-build && \
     -DModule_Cuberille:BOOL=ON \
     -DModule_TotalVariation:BOOL=ON \
     -DModule_IOMeshSTL:BOOL=ON \
+    -DModule_IOMeshMZ3:BOOL=ON \
     -DModule_GenericLabelInterpolator:BOOL=ON \
     -DDO_NOT_BUILD_ITK_TEST_DRIVER:BOOL=ON \
     -DOPJ_USE_THREAD:BOOL=OFF \

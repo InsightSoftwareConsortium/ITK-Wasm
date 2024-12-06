@@ -62,6 +62,18 @@ export type { FreeSurferBinaryWriteMeshResult };
 import freeSurferBinaryWriteMesh from "./free-surfer-binary-write-mesh.js";
 export { freeSurferBinaryWriteMesh };
 
+import Mz3ReadMeshResult from "./mz3-read-mesh-result.js";
+export type { Mz3ReadMeshResult };
+
+import mz3ReadMesh from "./mz3-read-mesh.js";
+export { mz3ReadMesh };
+
+import Mz3WriteMeshResult from "./mz3-write-mesh-result.js";
+export type { Mz3WriteMeshResult };
+
+import mz3WriteMesh from "./mz3-write-mesh.js";
+export { mz3WriteMesh };
+
 import ObjReadMeshResult from "./obj-read-mesh-result.js";
 export type { ObjReadMeshResult };
 
@@ -145,6 +157,18 @@ export type { WasmZstdWriteMeshResult };
 
 import wasmZstdWriteMesh from "./wasm-zstd-write-mesh.js";
 export { wasmZstdWriteMesh };
+
+import Mz3ReadPointSetResult from "./mz3-read-point-set-result.js";
+export type { Mz3ReadPointSetResult };
+
+import mz3ReadPointSet from "./mz3-read-point-set.js";
+export { mz3ReadPointSet };
+
+import Mz3WritePointSetResult from "./mz3-write-point-set-result.js";
+export type { Mz3WritePointSetResult };
+
+import mz3WritePointSet from "./mz3-write-point-set.js";
+export { mz3WritePointSet };
 
 import ObjReadPointSetResult from "./obj-read-point-set-result.js";
 export type { ObjReadPointSetResult };

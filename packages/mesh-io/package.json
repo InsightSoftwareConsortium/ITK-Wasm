@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/mesh-io-build",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "private": true,
   "description": "scripts to generate @itk-wasm/compare-stringify itk-wasm artifacts.",
   "type": "module",
