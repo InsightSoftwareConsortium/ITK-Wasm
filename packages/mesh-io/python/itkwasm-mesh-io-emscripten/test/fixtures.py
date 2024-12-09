@@ -19,6 +19,7 @@ def input_data():
     test_files = [
         Path('input') / 'cow.vtk',
         Path('input') / 'box-points.obj',
+        Path('input') / '11ScalarMesh.mz3',
     ]
     data = {}
     for f in test_files:

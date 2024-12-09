@@ -34,6 +34,8 @@
 #elif MESH_IO_CLASS == 3
 #elif MESH_IO_CLASS == 4
 #include "itkWasmZstdMeshIO.h"
+#elif MESH_IO_CLASS == 5
+#include "itkMZ3MeshIO.h"
 #else
 #error "Unsupported MESH_IO_CLASS"
 #endif
@@ -147,6 +149,8 @@ int main(int argc, char *argv[])
   return writePointSet<itk::WasmMeshIO>(inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 4
   return writePointSet<itk::WasmZstdMeshIO>(inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+#elif MESH_IO_CLASS == 5
+  return writePointSet<itk::MZ3MeshIO>(inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #else
 #error "Unsupported MESH_IO_CLASS"
 #endif

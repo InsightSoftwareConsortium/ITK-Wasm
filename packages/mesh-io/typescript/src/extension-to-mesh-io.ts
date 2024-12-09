@@ -3,6 +3,7 @@ const extensionToMeshIo = new Map([
   ['byu', 'byu'],
   ['fsa', 'free-surfer-ascii'],
   ['fsb', 'free-surfer-binary'],
+  ['mz3', 'mz3'],
   ['obj', 'obj'],
   ['off', 'off'],
   ['stl', 'stl'],

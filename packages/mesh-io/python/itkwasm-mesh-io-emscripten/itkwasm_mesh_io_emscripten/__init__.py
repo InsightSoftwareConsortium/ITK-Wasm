@@ -12,6 +12,8 @@ from .free_surfer_ascii_read_mesh_async import free_surfer_ascii_read_mesh_async
 from .free_surfer_ascii_write_mesh_async import free_surfer_ascii_write_mesh_async
 from .free_surfer_binary_read_mesh_async import free_surfer_binary_read_mesh_async
 from .free_surfer_binary_write_mesh_async import free_surfer_binary_write_mesh_async
+from .mz3_read_mesh_async import mz3_read_mesh_async
+from .mz3_write_mesh_async import mz3_write_mesh_async
 from .obj_read_mesh_async import obj_read_mesh_async
 from .obj_write_mesh_async import obj_write_mesh_async
 from .off_read_mesh_async import off_read_mesh_async
@@ -27,6 +29,8 @@ from .wasm_write_mesh_async import wasm_write_mesh_async
 from .wasm_zstd_read_mesh_async import wasm_zstd_read_mesh_async
 from .wasm_zstd_write_mesh_async import wasm_zstd_write_mesh_async
 
+from .mz3_read_point_set_async import mz3_read_point_set_async
+from .mz3_write_point_set_async import mz3_write_point_set_async
 from .obj_read_point_set_async import obj_read_point_set_async
 from .obj_write_point_set_async import obj_write_point_set_async
 from .off_read_point_set_async import off_read_point_set_async

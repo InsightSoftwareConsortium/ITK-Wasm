@@ -33,6 +33,8 @@ import {
   freeSurferAsciiWriteMesh,
   freeSurferBinaryReadMesh,
   freeSurferBinaryWriteMesh,
+  mz3ReadMesh,
+  mz3WriteMesh,
   objReadMesh,
   objWriteMesh,
   offReadMesh,
@@ -47,6 +49,8 @@ import {
   wasmWriteMesh,
   wasmZstdReadMesh,
   wasmZstdWriteMesh,
+  mz3ReadPointSet,
+  mz3WritePointSet,
   objReadPointSet,
   objWritePointSet,
   offReadPointSet,
@@ -387,6 +391,73 @@ async function freeSurferBinaryWriteMesh(
 |   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
 | `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
 |    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
+
+#### mz3ReadMesh
+
+*Read a mesh file format and convert it to the itk-wasm file format*
+
+```ts
+async function mz3ReadMesh(
+  serializedMesh: File | BinaryFile,
+  options: Mz3ReadMeshOptions = {}
+) : Promise<Mz3ReadMeshResult>
+```
+
+|     Parameter    |         Type        | Description                              |
+| :--------------: | :-----------------: | :--------------------------------------- |
+| `serializedMesh` | *File | BinaryFile* | Input mesh serialized in the file format |
+
+**`Mz3ReadMeshOptions` interface:**
+
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only read image metadata -- do not read pixel data.                                                                                                   |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
+
+**`Mz3ReadMeshResult` interface:**
+
+|   Property  |       Type       | Description                                                              |
+| :---------: | :--------------: | :----------------------------------------------------------------------- |
+| `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
+|    `mesh`   |      *Mesh*      | Output mesh                                                              |
+| `webWorker` |     *Worker*     | WebWorker used for computation.                                          |
+
+#### mz3WriteMesh
+
+*Write an itk-wasm file format converted to an mesh file format*
+
+```ts
+async function mz3WriteMesh(
+  mesh: Mesh,
+  serializedMesh: string,
+  options: Mz3WriteMeshOptions = {}
+) : Promise<Mz3WriteMeshResult>
+```
+
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
+
+**`Mz3WriteMeshOptions` interface:**
+
+|      Property     |             Type            | Description                                                                                                                                           |
+| :---------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `informationOnly` |          *boolean*          | Only write image metadata -- do not write pixel data.                                                                                                 |
+|  `useCompression` |          *boolean*          | Use compression in the written file, if supported                                                                                                     |
+|  `binaryFileType` |          *boolean*          | Use a binary file type in the written file, if supported                                                                                              |
+|    `webWorker`    | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker. |
+|      `noCopy`     |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                       |
+
+**`Mz3WriteMeshResult` interface:**
+
+|     Property     |       Type       | Description                                                                 |
+| :--------------: | :--------------: | :-------------------------------------------------------------------------- |
+|   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
+| `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+|    `webWorker`   |     *Worker*     | WebWorker used for computation.                                             |
+
 
 #### objReadMesh
 
@@ -885,6 +956,8 @@ import {
   freeSurferAsciiWriteMeshNode,
   freeSurferBinaryReadMeshNode,
   freeSurferBinaryWriteMeshNode,
+  mz3ReadMeshNode,
+  mz3WriteMeshNode,
   objReadMeshNode,
   objWriteMeshNode,
   offReadMeshNode,
@@ -899,6 +972,8 @@ import {
   wasmWriteMeshNode,
   wasmZstdReadMeshNode,
   wasmZstdWriteMeshNode,
+  mz3ReadPointSetNode,
+  mz3WritePointSetNode,
   objReadPointSetNode,
   objWritePointSetNode,
   offReadPointSetNode,
@@ -1086,6 +1161,66 @@ async function freeSurferBinaryWriteMeshNode(
 |  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
 
 **`FreeSurferBinaryWriteMeshNodeResult` interface:**
+
+|     Property     |       Type       | Description                                                                 |
+| :--------------: | :--------------: | :-------------------------------------------------------------------------- |
+|   `couldWrite`   | *JsonCompatible* | Whether the input could be written. If false, the output mesh is not valid. |
+| `serializedMesh` |   *BinaryFile*   | Output mesh                                                                 |
+
+#### mz3ReadMeshNode
+
+*Read a mesh file format and convert it to the itk-wasm file format*
+
+```ts
+async function mz3ReadMeshNode(
+  serializedMesh: string,
+  options: Mz3ReadMeshNodeOptions = {}
+) : Promise<Mz3ReadMeshNodeResult>
+```
+
+|     Parameter    |   Type   | Description                              |
+| :--------------: | :------: | :--------------------------------------- |
+| `serializedMesh` | *string* | Input mesh serialized in the file format |
+
+**`Mz3ReadMeshNodeOptions` interface:**
+
+|      Property     |    Type   | Description                                         |
+| :---------------: | :-------: | :-------------------------------------------------- |
+| `informationOnly` | *boolean* | Only read image metadata -- do not read pixel data. |
+
+**`Mz3ReadMeshNodeResult` interface:**
+
+|   Property  |       Type       | Description                                                              |
+| :---------: | :--------------: | :----------------------------------------------------------------------- |
+| `couldRead` | *JsonCompatible* | Whether the input could be read. If false, the output mesh is not valid. |
+|    `mesh`   |      *Mesh*      | Output mesh                                                              |
+
+#### mz3WriteMeshNode
+
+*Write an itk-wasm file format converted to an mesh file format*
+
+```ts
+async function mz3WriteMeshNode(
+  mesh: Mesh,
+  serializedMesh: string,
+  options: Mz3WriteMeshNodeOptions = {}
+) : Promise<Mz3WriteMeshNodeResult>
+```
+
+|     Parameter    |   Type   | Description |
+| :--------------: | :------: | :---------- |
+|      `mesh`      |  *Mesh*  | Input mesh  |
+| `serializedMesh` | *string* | Output mesh |
+
+**`Mz3WriteMeshNodeOptions` interface:**
+
+|      Property     |    Type   | Description                                              |
+| :---------------: | :-------: | :------------------------------------------------------- |
+| `informationOnly` | *boolean* | Only write image metadata -- do not write pixel data.    |
+|  `useCompression` | *boolean* | Use compression in the written file, if supported        |
+|  `binaryFileType` | *boolean* | Use a binary file type in the written file, if supported |
+
+**`Mz3WriteMeshNodeResult` interface:**
 
 |     Property     |       Type       | Description                                                                 |
 | :--------------: | :--------------: | :-------------------------------------------------------------------------- |

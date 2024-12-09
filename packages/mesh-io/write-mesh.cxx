@@ -44,6 +44,8 @@
 #elif MESH_IO_CLASS == 8
 #elif MESH_IO_CLASS == 9
 #include "itkWasmZstdMeshIO.h"
+#elif MESH_IO_CLASS == 10
+#include "itkMZ3MeshIO.h"
 #else
 #error "Unsupported MESH_IO_CLASS"
 #endif
@@ -190,6 +192,8 @@ int main (int argc, char * argv[])
   return writeMesh<itk::WasmMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 9
   return writeMesh<itk::WasmZstdMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+#elif MESH_IO_CLASS == 10
+  return writeMesh<itk::MZ3MeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #else
 #error "Unsupported MESH_IO_CLASS"
 #endif

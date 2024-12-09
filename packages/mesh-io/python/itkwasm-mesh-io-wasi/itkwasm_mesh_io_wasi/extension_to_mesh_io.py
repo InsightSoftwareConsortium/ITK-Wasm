@@ -5,6 +5,7 @@ extension_to_mesh_io = OrderedDict([
     ('.byu', 'byu'),
     ('.fsa', 'free_surfer_ascii'),
     ('.fsb', 'free_surfer_binary'),
+    ('.mz3', 'mz3'),
     ('.obj', 'obj'),
     ('.off', 'off'),
     ('.stl', 'stl'),

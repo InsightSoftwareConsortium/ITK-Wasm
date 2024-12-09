@@ -19,6 +19,7 @@ set(WebAssemblyInterface_MeshIOModules
   "IOMeshSWC"
   "ITKIOMeshBYU"
   "ITKIOMeshFreeSurfer"
+  "IOMeshMZ3"
   CACHE STRING
   "String delimited list of ITK mesh IO modules to support.")
 
@@ -57,6 +58,10 @@ set(meshio_id_itkWasmMeshIO 8)
 set(meshio_kebab_itkWasmMeshIO "wasm")
 set(meshio_id_itkWasmZstdMeshIO 9)
 set(meshio_kebab_itkWasmZstdMeshIO "wasm-zstd")
+
+set(meshios_IOMeshMZ3 itkMZ3MeshIO)
+set(meshio_id_itkMZ3MeshIO 10)
+set(meshio_kebab_itkMZ3MeshIO "mz3")
 
 set(ITK_NO_MESHIO_FACTORY_REGISTER_MANAGER 1)
 set(MeshIOIndex_ARRAY "")
@@ -132,6 +137,17 @@ add_test(NAME byu-write-mesh-test
   ${output_dir}/byu-write-mesh-test.could-write.json
   ${output_dir}/byu-write-mesh-test.byu)
 
+add_test(NAME mz3-read-mesh-test
+  COMMAND mz3-read-mesh
+  ${input_dir}/11ScalarMesh.mz3
+  ${output_dir}/mz3-read-mesh-test.could-read.json
+  ${output_dir}/mz3-read-mesh-test.iwm.cbor)
+
+add_test(NAME mz3-write-mesh-test
+  COMMAND mz3-write-mesh
+  ${baseline_dir}/mz3-read-mesh-test.iwm.cbor
+  ${output_dir}/mz3-write-mesh-test.could-write.json
+  ${output_dir}/mz3-write-mesh-test.mz3)
 
 # This list should be ordered from approximately most commonly to least
 # commonly used modules.
@@ -139,6 +155,7 @@ set(WebAssemblyInterface_PointSetIOModules
   "ITKIOMeshVTK"
   "ITKIOMeshOBJ"
   "ITKIOMeshOFF"
+  "IOMeshMZ3"
   CACHE STRING
   "String delimited list of ITK point set IO modules to support.")
 
@@ -159,6 +176,10 @@ set(pointsetio_id_itkWasmMeshIO 3)
 set(pointsetio_kebab_itkWasmMeshIO "wasm")
 set(pointsetio_id_itkWasmZstdMeshIO 4)
 set(pointsetio_kebab_itkWasmZstdMeshIO "wasm-zstd")
+
+set(pointsetios_IOMeshMZ3 itkMZ3MeshIO)
+set(pointsetio_id_itkMZ3MeshIO 5)
+set(pointsetio_kebab_itkMZ3MeshIO "mz3")
 
 set(ITK_NO_MESHIO_FACTORY_REGISTER_MANAGER 1)
 set(PointSetIOIndex_ARRAY "")
@@ -227,3 +248,15 @@ add_test(NAME obj-write-point-set-test
   ${baseline_dir}/obj-read-point-set-test.iwm.cbor
   ${output_dir}/obj-write-point-set-test.could-write.json
   ${output_dir}/obj-write-point-set-test.obj)
+
+add_test(NAME mz3-read-point-set-test
+  COMMAND mz3-read-point-set
+  ${input_dir}/11ScalarMesh.mz3
+  ${output_dir}/mz3-read-point-set-test.could-read.json
+  ${output_dir}/mz3-read-point-set-test.iwm.cbor)
+
+add_test(NAME mz3-write-point-set-test
+  COMMAND mz3-write-point-set
+  ${baseline_dir}/mz3-read-point-set-test.iwm.cbor
+  ${output_dir}/mz3-write-point-set-test.could-write.json
+  ${output_dir}/mz3-write-point-set-test.mz3)
