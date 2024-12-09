@@ -17,11 +17,15 @@ done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
 $exe pull quay.io/itkwasm/emscripten:latest
+$exe tag quay.io/itkwasm/emscripten:latest localhost/itkwasm/emscripten:latest
 if $debug; then
   $exe pull quay.io/itkwasm/emscripten:latest-debug
+  $exe tag quay.io/itkwasm/emscripten:latest-debug localhost/itkwasm/emscripten:latest-debug
 fi
 
 $exe pull quay.io/itkwasm/wasi:latest
+$exe tag quay.io/itkwasm/wasi:latest localhost/itkwasm/wasi:latest
 if $debug; then
   $exe pull quay.io/itkwasm/wasi:latest-debug
+  $exe tag quay.io/itkwasm/wasi:latest-debug localhost/itkwasm/wasi:latest-debug
 fi
