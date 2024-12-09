@@ -72,13 +72,13 @@ jobs:
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:python:wasi
 
       - uses: thewtex/pyodide-actions/install-browser@1e32e8a037a3e99a845dd7ebad6b057a40b7e2c0
-        if: ${{ matrix.python-minor-version > 10 }}
+        if: ${{ matrix.python-minor-version > 11 }}
         with:
           runner: selenium
           browser: chrome
           browser-version: latest
 
       - name: Test python on chrome
-        if: ${{ matrix.python-minor-version > 10 && matrix.package != 'dicom' && matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'dicom' && matrix.os != 'macos-14' )}}
+        if: ${{ matrix.python-minor-version > 11 && matrix.package != 'dicom' && matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'dicom' && matrix.os != 'macos-14' )}}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:python:emscripten
