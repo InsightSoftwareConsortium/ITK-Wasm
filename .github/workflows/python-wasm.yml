@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  pyodide-version: 0.24.1
+  pyodide-version: 0.26.3
 
 defaults:
   run:
@@ -44,7 +44,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install
         uses: pnpm/action-setup@v4

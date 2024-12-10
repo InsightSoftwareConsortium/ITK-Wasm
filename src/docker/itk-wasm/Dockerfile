@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=itkwasm/emscripten-base
+ARG BASE_IMAGE=quay.io/itkwasm/emscripten-base
 ARG BASE_TAG=latest
 
 FROM $BASE_IMAGE:$BASE_TAG
@@ -44,7 +44,7 @@ RUN if [ $BASE_IMAGE = "itkwasm/emscripten-base" ]; then cd /median-filter-pipel
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=itkwasm/emscripten
+ARG IMAGE=quay.io/itkwasm/emscripten
 ARG VERSION=latest
 ARG VCS_REF
 ARG VCS_URL

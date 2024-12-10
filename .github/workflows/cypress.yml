@@ -32,6 +32,10 @@ jobs:
           large-packages: false
           tool-cache: true
 
+      - name: Pull latest Docker images
+        run: |
+          ./src/docker/pull.sh --no-debug
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -110,6 +114,10 @@ jobs:
         with:
           large-packages: false
           tool-cache: true
+
+      - name: Pull latest Docker images
+        run: |
+          ./src/docker/pull.sh --no-debug
 
       - uses: actions/setup-node@v4
         with:
