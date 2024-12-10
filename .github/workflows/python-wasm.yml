@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  pyodide-version: 0.24.1
+  pyodide-version: 0.26.3
 
 defaults:
   run:
