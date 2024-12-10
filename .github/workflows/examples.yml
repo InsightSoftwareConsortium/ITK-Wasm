@@ -22,9 +22,13 @@ jobs:
         large-packages: false
         tool-cache: true
 
+    - name: Pull latest Docker images
+      run: |
+        ./src/docker/pull.sh --no-debug
+
     - uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '22'
 
     - name: Install
       uses: pnpm/action-setup@v4
@@ -60,7 +64,7 @@ jobs:
 
     - uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '22'
 
     - name: Install
       run: |
@@ -125,7 +129,7 @@ jobs:
 
     - uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '22'
 
     - name: Install
       run: |
@@ -158,9 +162,13 @@ jobs:
         large-packages: false
         tool-cache: true
 
+    - name: Pull latest Docker images
+      run: |
+        ../../src/docker/pull.sh --no-debug
+
     - uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '22'
 
     - name: Install
       uses: pnpm/action-setup@v4
@@ -261,6 +269,10 @@ jobs:
         large-packages: false
         tool-cache: true
 
+    - name: Pull latest Docker images
+      run: |
+        ../../src/docker/pull.sh --no-debug
+
     - name: Install
       uses: pnpm/action-setup@v4
       with:
@@ -268,7 +280,7 @@ jobs:
 
     - uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '22'
 
     - name: Build dependencies
       run: |
@@ -301,9 +313,13 @@ jobs:
         large-packages: false
         tool-cache: true
 
+    - name: Pull latest Docker images
+      run: |
+        ../../src/docker/pull.sh --no-debug
+
     - uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '22'
 
     - name: Install
       run: |
@@ -330,9 +346,13 @@ jobs:
         large-packages: false
         tool-cache: true
 
+    - name: Pull latest Docker images
+      run: |
+        ./src/docker/pull.sh --no-debug
+
     - uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '22'
 
     - name: Install
       uses: pnpm/action-setup@v4

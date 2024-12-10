@@ -5,6 +5,7 @@
 Install [Podman] and [Pixi], and
 
 ```sh
+./src/docker/pull.sh
 pixi run build
 pixi run test
 ```
