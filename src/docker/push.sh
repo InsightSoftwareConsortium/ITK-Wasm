@@ -25,11 +25,11 @@ function push_image() {
   local image=$1
   local tag=$2
   local debug=$3
-  $exe push localhost/${image}:${tag} docker://docker.io/${image}:${tag}
-  $exe push localhost/${image}:${tag} docker://quay.io/${image}:${tag}
+  $exe push quay.io/${image}:${tag} docker://docker.io/${image}:${tag}
+  $exe push quay.io/${image}:${tag} docker://quay.io/${image}:${tag}
   if $debug; then
-    $exe push localhost/${image}:${tag}-debug docker://docker.io/${image}:${tag}-debug
-    $exe push localhost/${image}:${tag}-debug docker://quay.io/${image}:${tag}-debug
+    $exe push quay.io/${image}:${tag}-debug docker://docker.io/${image}:${tag}-debug
+    $exe push quay.io/${image}:${tag}-debug docker://quay.io/${image}:${tag}-debug
   fi
 }
 

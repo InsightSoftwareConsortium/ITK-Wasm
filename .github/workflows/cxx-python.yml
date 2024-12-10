@@ -14,7 +14,7 @@ env:
 jobs:
   cxx-build-workflow:
     # itk-wasm branch
-    uses: thewtex/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@l@6868c9879405def5d7532e0437b57e78cbe0b6ea
+    uses: thewtex/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@6868c9879405def5d7532e0437b57e78cbe0b6ea
     with:
       itk-module-deps: 'MeshToPolyData@v0.11.0'
       ctest-options: '-E itkPipelineTest'
