@@ -46,14 +46,14 @@ wasi_debug_ld_flags="-fno-lto -lwasi-emulated-process-clocks -lwasi-emulated-sig
 wasi_debug_c_flags="-fno-lto -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_SIGNAL"
 
 if $create_manifest; then
-  for list in itkwasm/emscripten-base:latest \
-      itkwasm/emscripten-base:${TAG} \
-      itkwasm/emscripten-base:latest-debug \
-      itkwasm/emscripten-base:${TAG}-debug \
-      itkwasm/wasi-base:latest \
-      itkwasm/wasi-base:${TAG} \
-      itkwasm/wasi-base:latest-debug \
-      itkwasm/wasi-base:${TAG}-debug; do
+  for list in quay.io/itkwasm/emscripten-base:latest \
+      quay.io/itkwasm/emscripten-base:${TAG} \
+      quay.io/itkwasm/emscripten-base:latest-debug \
+      quay.io/itkwasm/emscripten-base:${TAG}-debug \
+      quay.io/itkwasm/wasi-base:latest \
+      quay.io/itkwasm/wasi-base:${TAG} \
+      quay.io/itkwasm/wasi-base:latest-debug \
+      quay.io/itkwasm/wasi-base:${TAG}-debug; do
     if $(buildah manifest exists $list); then
       buildah manifest rm $list
     fi
@@ -61,16 +61,16 @@ if $create_manifest; then
   done
 fi
 
-$exe $build_cmd $tag_flag itkwasm/emscripten-base:latest \
-        --build-arg IMAGE=itkwasm/emscripten-base \
+$exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:latest \
+        --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VCS_REF=${VCS_REF} \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
 if $version_tag; then
-        $exe $build_cmd $tag_flag itkwasm/emscripten-base:${TAG} \
-                --build-arg IMAGE=itkwasm/emscripten-base \
+        $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:${TAG} \
+                --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
                 --build-arg CMAKE_BUILD_TYPE=Release \
                 --build-arg VERSION=${TAG} \
                 --build-arg VCS_REF=${VCS_REF} \
@@ -80,8 +80,8 @@ if $version_tag; then
 fi
 
 if $wasi; then
-  $exe $build_cmd $tag_flag itkwasm/wasi-base:latest \
-          --build-arg IMAGE=itkwasm/wasi-base \
+  $exe $build_cmd $tag_flag quay.io/itkwasm/wasi-base:latest \
+          --build-arg IMAGE=quay.io/itkwasm/wasi-base \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
@@ -91,7 +91,7 @@ if $wasi; then
           --build-arg CFLAGS="${wasi_c_flags}" \
           $script_dir $@
         if $version_tag; then
-                $exe $build_cmd $tag_flag itkwasm/wasi-base:${TAG} \
+                $exe $build_cmd $tag_flag quay.io/itkwasm/wasi-base:${TAG} \
                         --build-arg IMAGE=itkwasm/wasi-base \
                         --build-arg CMAKE_BUILD_TYPE=Release \
                         --build-arg VERSION=${TAG} \
@@ -107,8 +107,8 @@ fi
 
 
 if $debug; then
-  $exe $build_cmd $tag_flag itkwasm/emscripten-base:latest-debug \
-          --build-arg IMAGE=itkwasm/emscripten-base \
+  $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:latest-debug \
+          --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg USE_DCMTK=OFF \
           --build-arg VCS_REF=${VCS_REF} \
@@ -118,8 +118,8 @@ if $debug; then
           --build-arg CFLAGS="${emscripten_debug_c_flags}" \
           $script_dir $@
   if $version_tag; then
-        $exe $build_cmd $tag_flag itkwasm/emscripten-base:${TAG}-debug \
-                --build-arg IMAGE=itkwasm/emscripten-base \
+        $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:${TAG}-debug \
+                --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg USE_DCMTK=OFF \
                 --build-arg VERSION=${TAG}-debug \
@@ -131,8 +131,8 @@ if $debug; then
                 $script_dir $@
   fi
   if $wasi; then
-    $exe $build_cmd $tag_flag itkwasm/wasi-base:latest-debug \
-            --build-arg IMAGE=itkwasm/wasi-base \
+    $exe $build_cmd $tag_flag quay.io/itkwasm/wasi-base:latest-debug \
+            --build-arg IMAGE=quay.io/itkwasm/wasi-base \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg VCS_REF=${VCS_REF} \
             --build-arg VCS_URL=${VCS_URL} \
@@ -142,8 +142,8 @@ if $debug; then
             --build-arg CFLAGS="${wasi_debug_c_flags}" \
             $script_dir $@
     if $version_tag; then
-        $exe $build_cmd $tag_flag itkwasm/wasi-base:${TAG}-debug \
-                --build-arg IMAGE=itkwasm/wasi-base \
+        $exe $build_cmd $tag_flag quay.io/itkwasm/wasi-base:${TAG}-debug \
+                --build-arg IMAGE=quay.io/itkwasm/wasi-base \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG} \
                 --build-arg VCS_REF=${VCS_REF} \
