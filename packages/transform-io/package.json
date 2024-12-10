@@ -9,8 +9,8 @@
     "test-data-urls": [
       "https://bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme.ipfs.w3s.link/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz"
     ],
-    "emscripten-docker-image": "localhost/itkwasm/emscripten:latest",
-    "wasi-docker-image": "localhost/itkwasm/wasi:latest",
+    "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
+    "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/transform-io",
     "python-package-name": "itkwasm-transform-io",
     "package-description": "Input and output for scientific and medical coordinate transform file formats.",

@@ -10,8 +10,8 @@
       "https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.119/dicom-test-data.tar.gz",
       "https://w3s.link/ipfs/bafybeiby67winzvozowf4moqthwunuxxscssitnb6wahxv4ugvfxhu2vki/data.tar.gz"
     ],
-    "emscripten-docker-image": "localhost/itkwasm/emscripten:latest",
-    "wasi-docker-image": "localhost/itkwasm/wasi:latest",
+    "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
+    "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/dicom",
     "python-package-name": "itkwasm-dicom",
     "package-description": "Read and write files and images related to DICOM file format.",
