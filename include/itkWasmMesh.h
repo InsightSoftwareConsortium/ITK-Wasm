@@ -20,6 +20,7 @@
 
 #include "itkWasmDataObject.h"
 #include "itkVectorContainer.h"
+#include "itkQuadEdgeMesh.h"
 
 namespace itk
 {
@@ -79,6 +80,54 @@ protected:
 
   typename CellBufferContainerType::Pointer m_CellBufferContainer;
 };
+
+template <typename TPixel, unsigned int VDimension>
+class WasmMesh<QuadEdgeMesh<TPixel, VDimension>> : public WasmDataObject
+{
+public:
+  ITK_DISALLOW_COPY_AND_MOVE(WasmMesh);
+
+  /** Standard class type aliases. */
+  using Self = WasmMesh;
+  using Superclass = WasmDataObject;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
+
+  itkNewMacro(Self);
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(WasmMesh, WasmDataObject);
+
+  using MeshType = QuadEdgeMesh<TPixel, VDimension>;
+
+  using PointIdentifier = typename MeshType::PointIdentifier;
+  using CellIdentifier = typename MeshType::CellIdentifier;
+
+  using PointsBufferContainerType = std::vector<PointIdentifier>;
+  using CellBufferContainerType = std::vector<CellIdentifier>;
+  using PointDataBufferContainerType = std::vector<typename MeshType::PointDataContainer::Element>;
+  using CellDataBufferContainerType = std::vector<typename MeshType::CellDataContainer::Element>;
+
+  void SetMesh(const MeshType * mesh);
+
+  const MeshType * GetMesh() const {
+    return static_cast< const MeshType * >(this->GetDataObject());
+  }
+
+  const PointsBufferContainerType & GetPointsBufferContainer() const {
+    return this->m_PointsBufferContainer;
+  }
+
+  const CellBufferContainerType & GetCellBufferContainer() const {
+    return this->m_CellBufferContainer;
+  }
+
+  WasmMesh() = default;
+  ~WasmMesh() override = default;
+
+  PointsBufferContainerType m_PointsBufferContainer;
+  CellBufferContainerType m_CellBufferContainer;
+};
+
 
 } // namespace itk
 

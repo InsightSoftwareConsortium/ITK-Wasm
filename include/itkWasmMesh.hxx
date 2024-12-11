@@ -32,6 +32,27 @@ WasmMesh<TMesh>
   this->SetDataObject(const_cast<MeshType *>(mesh));
 }
 
+template <typename TPixel, unsigned int VDimension>
+void
+WasmMesh<itk::QuadEdgeMesh<TPixel, VDimension>>
+::SetMesh(const MeshType * mesh)
+{
+  m_PointsBufferContainer.resize(mesh->GetNumberOfPoints() * VDimension);
+  for (unsigned int i = 0; i < mesh->GetNumberOfPoints(); ++i)
+  {
+    const auto & point = mesh->GetPoint(i);
+    for (unsigned int d = 0; d < VDimension; ++d)
+    {
+      m_PointsBufferContainer[i * VDimension + d] = point[d];
+    }
+  }
+  // m_CellBufferContainer.reserve(mesh->GetNumberOfCells() * 5);
+  auto cellsArray = const_cast<MeshType *>(mesh)->GetCellsArray();
+  
+  this->SetDataObject(const_cast<MeshType *>(mesh));
+}
+
+
 } // end namespace itk
 
 #endif
