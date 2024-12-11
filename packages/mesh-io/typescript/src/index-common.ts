@@ -25,6 +25,12 @@ export type { FreeSurferBinaryReadMeshOptions };
 import FreeSurferBinaryWriteMeshOptions from "./free-surfer-binary-write-mesh-options.js";
 export type { FreeSurferBinaryWriteMeshOptions };
 
+import offReadMeshOptions from "./off-read-mesh-options.js";
+export type { offReadMeshOptions };
+
+import offWriteMeshOptions from "./off-write-mesh-options.js";
+export type { offWriteMeshOptions };
+
 import ObjReadMeshOptions from "./obj-read-mesh-options.js";
 export type { ObjReadMeshOptions };
 
@@ -105,6 +111,13 @@ export type { WasmZstdReadPointSetOptions };
 
 import WasmZstdWritePointSetOptions from "./wasm-zstd-write-point-set-options.js";
 export type { WasmZstdWritePointSetOptions };
+
+import Mz3ReadPointSetOptions from "./mz3-read-point-set-options.js";
+export type { Mz3ReadPointSetOptions };
+
+import Mz3WritePointSetOptions from "./mz3-write-point-set-options.js";
+export type { Mz3WritePointSetOptions };
+
 
 export type { JsonCompatible } from "itk-wasm";
 export type { Mesh } from "itk-wasm";

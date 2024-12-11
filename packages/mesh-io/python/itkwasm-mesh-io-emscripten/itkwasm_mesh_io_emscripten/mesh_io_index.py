@@ -3,6 +3,7 @@ mesh_io_index = [
     'byu',
     'free_surfer_ascii',
     'free_surfer_binary',
+    'mz3',
     'obj',
     'off',
     'stl',
