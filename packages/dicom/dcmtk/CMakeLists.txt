@@ -229,3 +229,16 @@ FetchContent_MakeAvailable(plastimatch_lib)
 
 add_executable(write-rt-struct write-rt-struct.cxx)
 target_link_libraries(write-rt-struct PUBLIC ${ITK_LIBRARIES} plmbase)
+
+add_test(
+  NAME write-rt-struct-help
+  COMMAND write-rt-struct --help
+)
+
+add_test(
+  NAME write-rt-struct-synth-lung-1
+  COMMAND write-rt-struct
+    ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/synth-lung-1
+    ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/synth-lung-1.cxt
+    ${CMAKE_CURRENT_BINARY_DIR}/synth-lung-1
+)
