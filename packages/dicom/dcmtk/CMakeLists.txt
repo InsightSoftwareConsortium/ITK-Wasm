@@ -13,8 +13,9 @@ endif()
 
 include(FetchContent)
 # DCMQI
+# 2024-12-10 master
 set(DCMQI_GIT_REPOSITORY "https://github.com/QIICR/dcmqi")
-set(DCMQI_GIT_TAG        "bf6d62266f302a46402a84cfbeeb251a05956bd8")
+set(DCMQI_GIT_TAG        "011237d7c2d294ef960c31384d92db23d826f7bc")
 set(DCMQI_SUPERBUILD OFF)
 set(DCMQI_BUILD_SLICER_EXTENSION OFF)
 set(DCMQI_BUILD_APPS OFF)
