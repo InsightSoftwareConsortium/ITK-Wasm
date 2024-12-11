@@ -150,6 +150,7 @@ cmd = '''cmake -B$ITK_WASM_ITK_BUILD_DIR -S$ITK_WASM_ITK_SOURCE_DIR -GNinja
   -DModule_Cuberille:BOOL=ON
   -DModule_TotalVariation:BOOL=ON
   -DModule_IOMeshSTL:BOOL=ON
+  -DModule_IOMeshMZ3:BOOL=ON
   -DModule_GenericLabelInterpolator:BOOL=ON
   -DModule_MeshToPolyData:BOOL=ON
   -DModule_ITKIOTransformMINC:BOOL=ON
