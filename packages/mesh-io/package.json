@@ -5,9 +5,9 @@
   "description": "scripts to generate @itk-wasm/compare-stringify itk-wasm artifacts.",
   "type": "module",
   "itk-wasm": {
-    "test-data-hash": "bafkreigfosnsfhwp3vmxo2j7h5imiqvgclxfe54yqgj3x7xcawizjnsrre",
+    "test-data-hash": "bafkreiey5fjpunmy6lkmfa5a4mc4ghyfxogfuwcixm7jdtf65pjxmwhaim",
     "test-data-urls": [
-      "https://bafybeicxaxoc5pw7wxburihopybrtzhoz4c6y36tvw7nbmzruj7xndly74.ipfs.w3s.link/ipfs/bafybeicxaxoc5pw7wxburihopybrtzhoz4c6y36tvw7nbmzruj7xndly74/data.tar.gz"
+      "https://bafybeibc5xkdxpu2vwpcmbmu34jfdnr4grnpcrhnnjoeq546zovvfeuixu.ipfs.w3s.link/ipfs/bafybeibc5xkdxpu2vwpcmbmu34jfdnr4grnpcrhnnjoeq546zovvfeuixu/data.tar.gz"
     ],
     "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
     "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
@@ -28,7 +28,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafkreigfosnsfhwp3vmxo2j7h5imiqvgclxfe54yqgj3x7xcawizjnsrre https://bafybeicxaxoc5pw7wxburihopybrtzhoz4c6y36tvw7nbmzruj7xndly74.ipfs.w3s.link/ipfs/bafybeicxaxoc5pw7wxburihopybrtzhoz4c6y36tvw7nbmzruj7xndly74/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreiey5fjpunmy6lkmfa5a4mc4ghyfxogfuwcixm7jdtf65pjxmwhaim https://bafybeibc5xkdxpu2vwpcmbmu34jfdnr4grnpcrhnnjoeq546zovvfeuixu.ipfs.w3s.link/ipfs/bafybeibc5xkdxpu2vwpcmbmu34jfdnr4grnpcrhnnjoeq546zovvfeuixu/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
