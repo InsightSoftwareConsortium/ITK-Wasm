@@ -34,9 +34,6 @@ int main (int argc, char * argv[])
   // std::vector<std::string> inputFileNames;
   // pipeline.add_option("-i,--input-images", inputFileNames, "File names in the series")->required()->check(CLI::ExistingFile)->expected(1,-1)->type_name("INPUT_BINARY_FILE");
 
-  std::string referenceDicomSeries;
-  auto referenceDicomSeriesOption = pipeline.add_option("reference-dicom-series", referenceDicomSeries, "Directory with the reference image DICOM series");
-
   std::string inputCxt;
   auto inputCxtOption = pipeline.add_option("input-cxt", inputCxt, "Input CXT structure set file");
 
@@ -50,8 +47,19 @@ int main (int argc, char * argv[])
 
   Rt_study rt_study;
 
-  rt_study.load_dicom_dir(referenceDicomSeries.c_str());
   rt_study.load_cxt(inputCxt.c_str());
+
+  Rt_study_metadata::Pointer rt_study_metadata = rt_study.get_rt_study_metadata();
+  rt_study_metadata->set_study_description("A Test Prostate Lesion RT Struct Study");
+  rt_study_metadata->set_patient_birth_date("19700101");
+  rt_study_metadata->print();
+  // rt_study.set_rt_study_metadata(rt_study_metadata);
+  // rt_study_metadata->set_study_instance_uid("
+  Metadata::Pointer study_metadata = rt_study_metadata->get_study_metadata();
+  study_metadata->print_metadata();
+
+  Metadata::Pointer rtstruct_metadata = rt_study_metadata->get_rtstruct_metadata();
+  rtstruct_metadata->print_metadata();
 
   rt_study.save_dicom(outputDicom.c_str(), fileNamesWithUids);
 

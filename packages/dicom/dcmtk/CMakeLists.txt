@@ -238,7 +238,6 @@ add_test(
 add_test(
   NAME write-rt-struct-synth-lung-1
   COMMAND write-rt-struct
-    ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/synth-lung-1
     ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/synth-lung-1.cxt
     ${CMAKE_CURRENT_BINARY_DIR}/synth-lung-1
 )
