@@ -103,7 +103,8 @@ public:
   using CellIdentifier = typename MeshType::CellIdentifier;
 
   using PointsBufferContainerType = std::vector<PointIdentifier>;
-  using CellBufferContainerType = std::vector<CellIdentifier>;
+  using CellBufferContainerType = typename MeshType::CellsVectorContainer;
+
   using PointDataBufferContainerType = std::vector<typename MeshType::PointDataContainer::Element>;
   using CellDataBufferContainerType = std::vector<typename MeshType::CellDataContainer::Element>;
 
@@ -117,15 +118,28 @@ public:
     return this->m_PointsBufferContainer;
   }
 
-  const CellBufferContainerType & GetCellBufferContainer() const {
-    return this->m_CellBufferContainer;
+  const CellBufferContainerType * GetCellBuffer() const {
+    return this->m_CellBufferContainer.GetPointer();
   }
 
-  WasmMesh() = default;
+  const PointDataBufferContainerType & GetPointDataBufferContainer() const {
+    return this->m_PointDataBufferContainer;
+  }
+
+  const CellDataBufferContainerType & GetCellDataBufferContainer() const {
+    return this->m_CellDataBufferContainer;
+  }
+
+  WasmMesh()
+  {
+    this->m_CellBufferContainer = CellBufferContainerType::New();
+  }
   ~WasmMesh() override = default;
 
   PointsBufferContainerType m_PointsBufferContainer;
-  CellBufferContainerType m_CellBufferContainer;
+  typename CellBufferContainerType::Pointer m_CellBufferContainer;
+  PointDataBufferContainerType m_PointDataBufferContainer;
+  CellDataBufferContainerType m_CellDataBufferContainer;
 };
 
 

@@ -494,6 +494,261 @@ WasmMeshToMeshFilter<TMesh>
 {
   Superclass::PrintSelf(os, indent);
 }
+
+template <typename TPixel, unsigned int VDimension>
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::WasmMeshToMeshFilter()
+{
+  this->SetNumberOfRequiredInputs(1);
+
+  typename MeshType::Pointer output = static_cast<MeshType *>(this->MakeOutput(0).GetPointer());
+  this->ProcessObject::SetNumberOfRequiredOutputs(1);
+  this->ProcessObject::SetNthOutput(0, output.GetPointer());
+}
+
+template <typename TPixel, unsigned int VDimension>
+ProcessObject::DataObjectPointer
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+{
+  return MeshType::New().GetPointer();
+}
+
+template <typename TPixel, unsigned int VDimension>
+ProcessObject::DataObjectPointer
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+{
+  return MeshType::New().GetPointer();
+}
+
+template <typename TPixel, unsigned int VDimension>
+auto
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GetOutput() -> MeshType *
+{
+  // we assume that the first output is of the templated type
+  return itkDynamicCastInDebugMode<MeshType *>(this->GetPrimaryOutput());
+}
+
+template <typename TPixel, unsigned int VDimension>
+auto
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GetOutput() const -> const MeshType *
+{
+  // we assume that the first output is of the templated type
+  return itkDynamicCastInDebugMode<const MeshType *>(this->GetPrimaryOutput());
+}
+
+template <typename TPixel, unsigned int VDimension>
+auto
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GetOutput(unsigned int idx) -> MeshType *
+{
+  auto * out = dynamic_cast<MeshType *>(this->ProcessObject::GetOutput(idx));
+
+  if (out == nullptr && this->ProcessObject::GetOutput(idx) != nullptr)
+  {
+    itkWarningMacro(<< "Unable to convert output number " << idx << " to type " << typeid(MeshType).name());
+  }
+  return out;
+}
+
+template <typename TPixel, unsigned int VDimension>
+void
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::SetInput(const WasmMeshType * input)
+{
+  // Process object is not const-correct so the const_cast is required here
+  this->ProcessObject::SetNthInput(0, const_cast<WasmMeshType *>(input));
+}
+
+template <typename TPixel, unsigned int VDimension>
+void
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::SetInput(unsigned int index, const WasmMeshType * mesh)
+{
+  // Process object is not const-correct so the const_cast is required here
+  this->ProcessObject::SetNthInput(index, const_cast<WasmMeshType *>(mesh));
+}
+
+template <typename TPixel, unsigned int VDimension>
+const typename WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::WasmMeshType *
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GetInput()
+{
+  return itkDynamicCastInDebugMode<const WasmMeshType *>(this->GetPrimaryInput());
+}
+
+template <typename TPixel, unsigned int VDimension>
+const typename WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::WasmMeshType *
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GetInput(unsigned int idx)
+{
+  return itkDynamicCastInDebugMode<const MeshType *>(this->ProcessObject::GetInput(idx));
+}
+
+template <typename TPixel, unsigned int VDimension>
+void
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GenerateData()
+{
+  // Get the input and output pointers
+  const WasmMeshType * wasmMesh = this->GetInput();
+  MeshType * mesh = this->GetOutput();
+
+  using PointPixelType = typename MeshType::PixelType;
+  using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
+  using CellPixelType = typename MeshType::CellPixelType;
+  using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
+
+  const std::string json(wasmMesh->GetJSON());
+  auto deserializedAttempt = glz::read_json<MeshJSON>(json);
+  if (!deserializedAttempt)
+  {
+    const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
+    itkExceptionMacro("Failed to deserialize meshJSON: " << descriptiveError);
+  }
+  const auto meshJSON = deserializedAttempt.value();
+
+  const auto dimension = meshJSON.meshType.dimension;
+  const auto numberOfPointPixels = meshJSON.numberOfPointPixels;
+  const auto pointComponentType = meshJSON.meshType.pointComponentType;
+  const auto pointPixelComponentType = meshJSON.meshType.pointPixelComponentType;
+  const auto pointPixelType = meshJSON.meshType.pointPixelType;
+  const auto cellComponentType = meshJSON.meshType.cellComponentType;
+  const auto numberOfCellPixels = meshJSON.numberOfCellPixels;
+  const auto cellPixelComponentType = meshJSON.meshType.cellPixelComponentType;
+  const auto cellPixelType = meshJSON.meshType.cellPixelType;
+  const auto numberOfPoints = meshJSON.numberOfPoints;
+  const auto numberOfCells = meshJSON.numberOfCells;
+
+  if (dimension != MeshType::PointDimension)
+  {
+    throw std::runtime_error("Unexpected dimension");
+  }
+  if (numberOfPointPixels && pointPixelComponentType != itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum )
+  {
+    throw std::runtime_error("Unexpected point pixel component type");
+  }
+
+  if (numberOfPointPixels && pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum )
+  {
+    throw std::runtime_error("Unexpected point pixel type");
+  }
+
+  if (numberOfCellPixels && cellPixelComponentType != itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::JSONComponentEnum )
+  {
+    throw std::runtime_error("Unexpected cell pixel component type");
+  }
+
+  if (numberOfCellPixels && cellPixelType != itk::wasm::MapPixelType<CellPixelType>::JSONPixelEnum )
+  {
+    throw std::runtime_error("Unexpected cell pixel type");
+  }
+
+  mesh->SetObjectName(meshJSON.name);
+  mesh->GetPoints()->Reserve(meshJSON.numberOfPoints);
+  using PointType = typename MeshType::PointType;
+  const std::string pointsString = meshJSON.points;
+  if (numberOfPoints)
+  {
+    if (pointComponentType == itk::wasm::MapComponentType<typename MeshType::CoordRepType>::JSONFloatTypeEnum)
+    {
+      const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      for (SizeValueType i = 0; i < meshJSON.numberOfPoints; ++i)
+      {
+        mesh->SetPoint(i, pointsPtr[i]);
+      }
+    }
+    else if (pointComponentType == itk::wasm::MapComponentType<float>::JSONFloatTypeEnum)
+    {
+      auto * pointsPtr = reinterpret_cast< float * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      for (SizeValueType i = 0; i < meshJSON.numberOfPoints; ++i)
+      {
+        PointType point;
+        for (unsigned int d = 0; d < dimension; ++d)
+        {
+          point[d] = pointsPtr[i * dimension + d];
+        }
+        mesh->SetPoint(i, point);
+      }
+    }
+    else if (pointComponentType == itk::wasm::MapComponentType<double>::JSONFloatTypeEnum)
+    {
+      auto * pointsPtr = reinterpret_cast< double * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      for (SizeValueType i = 0; i < meshJSON.numberOfPoints; ++i)
+      {
+        PointType point;
+        for (unsigned int d = 0; d < dimension; ++d)
+        {
+          point[d] = pointsPtr[i * dimension + d];
+        }
+        mesh->SetPoint(i, point);
+      }
+    }
+    else
+    {
+      throw std::runtime_error("Unexpected point component type");
+    }
+  }
+
+
+  const SizeValueType cellBufferSize = meshJSON.cellBufferSize;
+  const std::string cellsString = meshJSON.cells;
+  using CellBufferType = typename WasmMeshType::CellIdentifier;
+  CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+  if (cellComponentType == JSONIntTypesEnum::uint32)
+  {
+    uint32_t * cellsBufferPtr = reinterpret_cast< uint32_t * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+    populateCells<MeshType, uint32_t>(mesh, cellBufferSize, cellsBufferPtr);
+  }
+  else if (cellComponentType == JSONIntTypesEnum::uint64)
+  {
+    uint64_t * cellsBufferPtr = reinterpret_cast< uint64_t * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+    populateCells<MeshType, uint64_t>(mesh, cellBufferSize, cellsBufferPtr);
+  }
+  else
+  {
+    throw std::runtime_error("Unexpected cell component type");
+  }
+
+  using PointPixelType = typename MeshType::PixelType;
+  const std::string pointDataString = meshJSON.pointData;
+  auto pointDataPtr = reinterpret_cast< PointPixelType * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
+  mesh->GetPointData()->Reserve(numberOfPointPixels);
+  for (SizeValueType i = 0; i < numberOfPointPixels; ++i)
+  {
+    mesh->SetPointData(i, pointDataPtr[i]);
+  }
+
+  using CellPixelType = typename MeshType::CellPixelType;
+  const std::string cellDataString = meshJSON.cellData;
+  auto cellDataPtr = reinterpret_cast< CellPixelType * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
+  if (mesh->GetCellData() == nullptr)
+  {
+    mesh->SetCellData(MeshType::CellDataContainer::New());
+  }
+  if (meshJSON.numberOfCellPixels)
+  {
+    mesh->GetCellData()->Reserve(meshJSON.numberOfCellPixels);
+    for (SizeValueType i = 0; i < meshJSON.numberOfCellPixels; ++i)
+    {
+      mesh->SetCellData(i, cellDataPtr[i]);
+    }
+  }
+
+  auto dictionary = mesh->GetMetaDataDictionary();
+  jsonToMetaDataDictionary(meshJSON.metadata, dictionary);
+}
+
+template <typename TPixel, unsigned int VDimension>
+void
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::PrintSelf(std::ostream & os, Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+}
 } // end namespace itk
 
 #endif

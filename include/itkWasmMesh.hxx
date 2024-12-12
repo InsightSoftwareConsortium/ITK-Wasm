@@ -46,9 +46,21 @@ WasmMesh<itk::QuadEdgeMesh<TPixel, VDimension>>
       m_PointsBufferContainer[i * VDimension + d] = point[d];
     }
   }
-  // m_CellBufferContainer.reserve(mesh->GetNumberOfCells() * 5);
-  auto cellsArray = const_cast<MeshType *>(mesh)->GetCellsArray();
-  
+
+  this->m_CellBufferContainer = const_cast<MeshType *>(mesh)->GetCellsArray();
+
+  m_PointDataBufferContainer.resize(mesh->GetPointData()->Size());
+  for (SizeValueType i = 0; i < mesh->GetPointData()->Size(); ++i)
+  {
+    m_PointDataBufferContainer[i] = mesh->GetPointData()->ElementAt(i);
+  }
+
+  m_CellDataBufferContainer.resize(mesh->GetCellData()->Size());
+  for (SizeValueType i = 0; i < mesh->GetCellData()->Size(); ++i)
+  {
+    m_CellDataBufferContainer[i] = mesh->GetCellData()->ElementAt(i);
+  }
+
   this->SetDataObject(const_cast<MeshType *>(mesh));
 }
 
