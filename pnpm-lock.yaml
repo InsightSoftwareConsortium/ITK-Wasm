@@ -409,8 +409,8 @@ importers:
         specifier: ^1.39.10
         version: 1.39.11
       axios:
-        specifier: ^1.6.2
-        version: 1.6.8(debug@4.3.5)
+        specifier: ^1.7.4
+        version: 1.7.4(debug@4.3.5)
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
@@ -650,8 +650,8 @@ importers:
   packages/image-io/typescript:
     dependencies:
       axios:
-        specifier: ^1.6.2
-        version: 1.6.8(debug@4.3.5)
+        specifier: ^1.7.4
+        version: 1.7.4(debug@4.3.5)
       itk-wasm:
         specifier: workspace:^
         version: link:../../core/typescript/itk-wasm
@@ -2590,6 +2590,9 @@ packages:
 
   axios@1.6.8:
     resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
+
+  axios@1.7.4:
+    resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
 
   babel-plugin-polyfill-corejs2@0.4.11:
     resolution: {integrity: sha512-sMEJ27L0gRHShOh5G54uAAPaiCOygY/5ratXuiyb2G46FmlSpc9eFCzYVyDiPxfNbwzA7mYahmjQc5q+CZQ09Q==}
@@ -7380,7 +7383,7 @@ snapshots:
     dependencies:
       '@itk-viewer/blosc-zarr': 0.2.3
       '@itk-viewer/utils': 0.1.4
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.6.8
       comlink: 4.4.1
       gl-matrix: 3.4.3
       itk-wasm: 1.0.0-b.160
@@ -7439,7 +7442,7 @@ snapshots:
 
   '@itk-wasm/dam@1.1.1':
     dependencies:
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
       commander: 10.0.1
       decompress: 4.2.1
       files-from-path: 1.0.4
@@ -8227,7 +8230,15 @@ snapshots:
 
   aws4@1.12.0: {}
 
-  axios@1.6.8(debug@4.3.5):
+  axios@1.6.8:
+    dependencies:
+      follow-redirects: 1.15.6(debug@4.3.5)
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.7.4(debug@4.3.5):
     dependencies:
       follow-redirects: 1.15.6(debug@4.3.5)
       form-data: 4.0.0
@@ -10060,7 +10071,7 @@ snapshots:
     dependencies:
       '@thewtex/zstddec': 0.2.1
       '@types/emscripten': 1.39.11
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
       comlink: 4.4.1
       commander: 11.1.0
       fs-extra: 11.2.0
@@ -10076,7 +10087,7 @@ snapshots:
       '@itk-wasm/dam': 1.1.1
       '@thewtex/zstddec': 0.2.1
       '@types/emscripten': 1.39.11
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
       chalk: 5.3.0
       comlink: 4.4.1
       commander: 11.1.0
@@ -11670,7 +11681,7 @@ snapshots:
 
   wait-on@7.2.0(debug@4.3.5):
     dependencies:
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
       joi: 17.13.1
       lodash: 4.17.21
       minimist: 1.2.8
