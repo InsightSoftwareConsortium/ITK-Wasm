@@ -21,6 +21,8 @@
 #include "itkOutputMesh.h"
 #include "itkPipeline.h"
 
+#include "itkmeshToGeogramMesh.h"
+
 int main( int argc, char * argv[] )
 {
   itk::wasm::Pipeline pipeline("mesh-read-write-test", "A test for reading and writing meshes", argc, argv);

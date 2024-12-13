@@ -68,11 +68,12 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(pmp geogram)
 include_directories(${pmp_SOURCE_DIR}/src)
+include_directories(${geogram_SOURCE_DIR}/src/lib)
 
 foreach(pipeline geogram-conversion)
 # foreach(pipeline mesh-filters mesh-filters-sigma gaussian-kernel-radius mesh-filters-bin-shrink mesh-filters-label-image)
   add_executable(${pipeline} ${pipeline}.cxx)
-  target_link_libraries(${pipeline} PUBLIC ${ITK_LIBRARIES} pmp)
+  target_link_libraries(${pipeline} PUBLIC ${ITK_LIBRARIES} geogram)
   target_include_directories(${pipeline} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 endforeach()
 
