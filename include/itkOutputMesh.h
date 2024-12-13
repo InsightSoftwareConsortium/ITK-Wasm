@@ -188,35 +188,35 @@ public:
 
         if (this->m_Mesh->GetNumberOfPoints() > 0)
         {
-          const auto pointsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetPointsBufferContainer().at(0)) );
-          const auto pointsSize = wasmMesh->GetPointsBufferContainer().size() * sizeof(typename MeshType::PointIdentifier);
+          const auto pointsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetPointsBuffer().at(0)) );
+          const auto pointsSize = wasmMesh->GetPointsBuffer().size() * sizeof(typename MeshType::PointIdentifier);
           setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
         }
 
-        // if (this->m_Mesh->GetNumberOfCells() > 0)
-        // {
-        //   const auto cellsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetCellBuffer()->at(0)) );
-        //   const auto cellsSize = wasmMesh->GetCellBuffer()->Size() * sizeof(typename MeshType::CellIdentifier);
-        //   setMemoryStoreOutputArray(0, index, 1, cellsAddress, cellsSize);
-        // }
+        if (this->m_Mesh->GetNumberOfCells() > 0)
+        {
+          const auto cellsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetCellBuffer()->at(0)) );
+          const auto cellsSize = wasmMesh->GetCellBuffer()->Size() * sizeof(typename MeshType::CellIdentifier);
+          setMemoryStoreOutputArray(0, index, 1, cellsAddress, cellsSize);
+        }
 
-        // if (this->m_Mesh->GetPointData() != nullptr && this->m_Mesh->GetPointData()->Size() > 0)
-        // {
-        //   using PointPixelType = typename MeshType::PixelType;
-        //   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
-        //   const auto pointDataAddress = reinterpret_cast< size_t >( &(wasmMesh->GetMesh()->GetPointData()->at(0)) );
-        //   const auto pointDataSize = wasmMesh->GetMesh()->GetPointData()->Size() * sizeof(typename ConvertPointPixelTraits::ComponentType) * ConvertPointPixelTraits::GetNumberOfComponents();
-        //   setMemoryStoreOutputArray(0, index, 2, pointDataAddress, pointDataSize);
-        // }
+        if (this->m_Mesh->GetPointData() != nullptr && this->m_Mesh->GetPointData()->Size() > 0)
+        {
+          using PointPixelType = typename MeshType::PixelType;
+          using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
+          const auto pointDataAddress = reinterpret_cast< size_t >( &(wasmMesh->GetPointDataBuffer().at(0)) );
+          const auto pointDataSize = wasmMesh->GetPointDataBuffer().size() * sizeof(typename ConvertPointPixelTraits::ComponentType);
+          setMemoryStoreOutputArray(0, index, 2, pointDataAddress, pointDataSize);
+        }
 
-        // if (this->m_Mesh->GetCellData() != nullptr && this->m_Mesh->GetCellData()->Size() > 0)
-        // {
-        //   using CellPixelType = typename MeshType::CellPixelType;
-        //   using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
-        //   const auto cellDataAddress = reinterpret_cast< size_t >( &(wasmMesh->GetMesh()->GetCellData()->at(0)) );
-        //   const auto cellDataSize = wasmMesh->GetMesh()->GetCellData()->Size() * sizeof(typename ConvertCellPixelTraits::ComponentType) * ConvertCellPixelTraits::GetNumberOfComponents();
-        //   setMemoryStoreOutputArray(0, index, 3, cellDataAddress, cellDataSize);
-        // }
+        if (this->m_Mesh->GetCellData() != nullptr && this->m_Mesh->GetCellData()->Size() > 0)
+        {
+          using CellPixelType = typename MeshType::CellPixelType;
+          using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
+          const auto cellDataAddress = reinterpret_cast< size_t >( &(wasmMesh->GetCellDataBuffer().at(0)) );
+          const auto cellDataSize = wasmMesh->GetCellDataBuffer().size() * sizeof(typename ConvertCellPixelTraits::ComponentType);
+          setMemoryStoreOutputArray(0, index, 3, cellDataAddress, cellDataSize);
+        }
       }
 #else
     std::cerr << "Memory IO not supported" << std::endl;

@@ -59,7 +59,7 @@ public:
 
   using PointIdentifier = typename MeshType::PointIdentifier;
   using CellIdentifier = typename MeshType::CellIdentifier;
-  using CellBufferContainerType = typename MeshType::CellsVectorContainer;
+  using CellBufferType = typename MeshType::CellsVectorContainer;
 
   void SetMesh(const MeshType * mesh);
 
@@ -67,18 +67,18 @@ public:
     return static_cast< const MeshType * >(this->GetDataObject());
   }
 
-  const CellBufferContainerType * GetCellBuffer() const {
-    return this->m_CellBufferContainer.GetPointer();
+  const CellBufferType * GetCellBuffer() const {
+    return this->m_CellBuffer.GetPointer();
   }
 
 protected:
   WasmMesh()
   {
-    this->m_CellBufferContainer = CellBufferContainerType::New();
+    this->m_CellBuffer = CellBufferType::New();
   }
   ~WasmMesh() override = default;
 
-  typename CellBufferContainerType::Pointer m_CellBufferContainer;
+  typename CellBufferType::Pointer m_CellBuffer;
 };
 
 template <typename TPixel, unsigned int VDimension>
@@ -102,11 +102,11 @@ public:
   using PointIdentifier = typename MeshType::PointIdentifier;
   using CellIdentifier = typename MeshType::CellIdentifier;
 
-  using PointsBufferContainerType = std::vector<PointIdentifier>;
-  using CellBufferContainerType = typename MeshType::CellsVectorContainer;
+  using PointsBufferType = std::vector<PointIdentifier>;
+  using CellBufferType = typename MeshType::CellsVectorContainer;
 
-  using PointDataBufferContainerType = std::vector<typename MeshType::PointDataContainer::Element>;
-  using CellDataBufferContainerType = std::vector<typename MeshType::CellDataContainer::Element>;
+  using PointDataBufferType = std::vector<typename MeshType::PointDataContainer::Element>;
+  using CellDataBufferType = std::vector<typename MeshType::CellDataContainer::Element>;
 
   void SetMesh(const MeshType * mesh);
 
@@ -114,32 +114,32 @@ public:
     return static_cast< const MeshType * >(this->GetDataObject());
   }
 
-  const PointsBufferContainerType & GetPointsBufferContainer() const {
-    return this->m_PointsBufferContainer;
+  const PointsBufferType & GetPointsBuffer() const {
+    return this->m_PointsBuffer;
   }
 
-  const CellBufferContainerType * GetCellBuffer() const {
-    return this->m_CellBufferContainer.GetPointer();
+  const CellBufferType * GetCellBuffer() const {
+    return this->m_CellBuffer.GetPointer();
   }
 
-  const PointDataBufferContainerType & GetPointDataBufferContainer() const {
-    return this->m_PointDataBufferContainer;
+  const PointDataBufferType & GetPointDataBuffer() const {
+    return this->m_PointDataBuffer;
   }
 
-  const CellDataBufferContainerType & GetCellDataBufferContainer() const {
-    return this->m_CellDataBufferContainer;
+  const CellDataBufferType & GetCellDataBuffer() const {
+    return this->m_CellDataBuffer;
   }
 
   WasmMesh()
   {
-    this->m_CellBufferContainer = CellBufferContainerType::New();
+    this->m_CellBuffer = CellBufferType::New();
   }
   ~WasmMesh() override = default;
 
-  PointsBufferContainerType m_PointsBufferContainer;
-  typename CellBufferContainerType::Pointer m_CellBufferContainer;
-  PointDataBufferContainerType m_PointDataBufferContainer;
-  CellDataBufferContainerType m_CellDataBufferContainer;
+  PointsBufferType m_PointsBuffer;
+  typename CellBufferType::Pointer m_CellBuffer;
+  PointDataBufferType m_PointDataBuffer;
+  CellDataBufferType m_CellDataBuffer;
 };
 
 

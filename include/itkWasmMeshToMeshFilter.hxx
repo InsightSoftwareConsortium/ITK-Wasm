@@ -447,7 +447,7 @@ WasmMeshToMeshFilter<TMesh>
 
   const SizeValueType cellBufferSize = meshJSON.cellBufferSize;
   const std::string cellsString = meshJSON.cells;
-  using CellBufferType = typename WasmMeshType::CellBufferContainerType::Element;
+  using CellBufferType = typename WasmMeshType::CellBufferType::Element;
   CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
   if (cellComponentType == JSONIntTypesEnum::uint32)
   {

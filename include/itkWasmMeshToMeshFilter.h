@@ -18,7 +18,6 @@
 #ifndef itkWasmMeshToMeshFilter_h
 #define itkWasmMeshToMeshFilter_h
 
-#include "itkQuadEdgeMesh.h"
 #include "itkProcessObject.h"
 #include "itkWasmMesh.h"
 
@@ -26,7 +25,7 @@ namespace itk
 {
 /**
  *\class WasmMeshToMeshFilter
- * \brief Convert an WasmMesh to an Mesh object.
+ * \brief Convert an WasmMesh to a Mesh or QuadEdgeMesh object.
  *
  * TMesh must match the type stored in the JSON representation or an exception will be shown.
  *
@@ -98,7 +97,7 @@ protected:
 };
 
 template <typename TPixel, unsigned int VDimension>
-class WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>> : public ProcessObject
+class ITK_TEMPLATE_EXPORT WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>> : public ProcessObject
 {
 public:
   ITK_DISALLOW_COPY_AND_MOVE(WasmMeshToMeshFilter);
@@ -137,7 +136,6 @@ public:
 
   MeshType *
   GetOutput();
-
   const MeshType *
   GetOutput() const;
 
@@ -162,7 +160,6 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 };
-
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
