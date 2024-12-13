@@ -22,6 +22,7 @@
 #include "itkPipeline.h"
 
 #include "itkmeshToGeogramMesh.h"
+#include "itkgeogramMeshToMesh.h"
 
 int main( int argc, char * argv[] )
 {
@@ -41,7 +42,10 @@ int main( int argc, char * argv[] )
 
   ITK_WASM_PARSE(pipeline);
 
-  outputMesh.Set(inputMesh.Get());
+  auto geoMesh = itk::meshToGeogramMesh<MeshType>(inputMesh.Get());
+  auto itkMesh = itk::geogramMeshToMesh<MeshType>(geoMesh.get());
+
+  outputMesh.Set(itkMesh);
 
   return EXIT_SUCCESS;
 }
