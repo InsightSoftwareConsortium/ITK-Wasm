@@ -30,6 +30,7 @@
 #include "itkTetrahedronCell.h"
 #include "itkTriangleCell.h"
 #include "itkVertexCell.h"
+#include "itkPolyLineCell.h"
 
 #include <exception>
 #include "itkWasmMapComponentType.h"
@@ -53,6 +54,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
   using VertexCellType = itk::VertexCell<CellType>;
   using LineCellType = itk::LineCell<CellType>;
   using TriangleCellType = itk::TriangleCell<CellType>;
+  using PolyLineCellType = itk::PolyLineCell<CellType>;
   using PolygonCellType = itk::PolygonCell<CellType>;
   using TetrahedronCellType = itk::TetrahedronCell<CellType>;
   using HexahedronCellType = itk::HexahedronCell<CellType>;
@@ -122,6 +124,25 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
         }
 
         cell.TakeOwnership(triangleCell);
+        mesh->SetCell(id++, cell);
+        break;
+      }
+      case itk::CellGeometryEnum::POLYLINE_CELL:
+      {
+        auto cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        if (cellPoints < 2)
+        {
+          throw std::runtime_error("Invalid Line Cell number of points");
+        }
+
+        CellAutoPointer cell;
+        auto *                polylineCell = new PolyLineCellType;
+        for (unsigned int jj = 0; jj < cellPoints; ++jj)
+        {
+          polylineCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
+        }
+
+        cell.TakeOwnership(polylineCell);
         mesh->SetCell(id++, cell);
         break;
       }
