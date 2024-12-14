@@ -18,29 +18,25 @@
 #ifndef itkmeshToGeogramMesh_h
 #define itkmeshToGeogramMesh_h
 
-#include <memory>
-
 #include "geogram/mesh/mesh.h"
 
 namespace itk
 {
 
 template <typename TMesh>
-auto
-meshToGeogramMesh(const TMesh * itkMesh) -> std::unique_ptr<GEO::Mesh>
+void
+meshToGeogramMesh(const TMesh * itkMesh, GEO::Mesh & geoMesh)
 {
   using MeshType = TMesh;
   using PixelType = typename MeshType::PixelType;
   static constexpr unsigned int Dimension = MeshType::PointDimension;
-  static constexpr bool SinglePrecision = std::is_same<typename MeshType::CoordRepType, float>::value;
-
-  std::unique_ptr<GEO::Mesh> geoMesh = std::make_unique<GEO::Mesh>(Dimension, SinglePrecision);
+  static constexpr bool ITKSinglePrecision = std::is_same<typename MeshType::CoordRepType, float>::value;
 
   // Copy vertices
   auto points = itkMesh->GetPoints();
-  geoMesh->vertices.create_vertices(points->Size());
+  geoMesh.vertices.create_vertices(points->Size());
 
-  if (SinglePrecision)
+  if (geoMesh.vertices.single_precision() && ITKSinglePrecision)
   {
     using CoordType = float;
     for(auto it = points->Begin(); it != points->End(); ++it)
@@ -49,7 +45,7 @@ meshToGeogramMesh(const TMesh * itkMesh) -> std::unique_ptr<GEO::Mesh>
       GEO::index_t v = it.Index();
       for (unsigned int d = 0; d < Dimension; ++d)
       {
-        geoMesh->vertices.single_precision_point_ptr(v)[d] = static_cast<CoordType>(point[d]);
+        geoMesh.vertices.single_precision_point_ptr(v)[d] = static_cast<CoordType>(point[d]);
       }
     }
   }
@@ -62,19 +58,10 @@ meshToGeogramMesh(const TMesh * itkMesh) -> std::unique_ptr<GEO::Mesh>
       GEO::index_t v = it.Index();
       for (unsigned int d = 0; d < Dimension; ++d)
       {
-        geoMesh->vertices.point_ptr(v)[d] = static_cast<CoordType>(point[d]);
+        geoMesh.vertices.point_ptr(v)[d] = static_cast<CoordType>(point[d]);
       }
     }
   }
-  // for(auto it = points->Begin(); it != points->End(); ++it)
-  // {
-  //   const auto& point = it.Value();
-  //   GEO::index_t v = it.Index();
-  //   for (unsigned int d = 0; d < Dimension; ++d)
-  //   {
-  //     geoMesh->vertices.point(v)[d] = point[d];
-  //   }
-  // }
 
   // Copy faces/cells
   auto cells = itkMesh->GetCells();
@@ -85,14 +72,14 @@ meshToGeogramMesh(const TMesh * itkMesh) -> std::unique_ptr<GEO::Mesh>
     for(auto* pit = cell->PointIdsBegin(); pit != cell->PointIdsEnd(); ++pit) {
         vertices.push_back(*pit);
     }
-    geoMesh->facets.create_polygon(vertices);
+    geoMesh.facets.create_polygon(vertices);
   }
 
   // Copy point data
   auto pointData = itkMesh->GetPointData();
   if (pointData && pointData->Size() > 0)
   {
-    GEO::Attribute<PixelType> vertexAttribute(geoMesh->vertices.attributes(), "PointData");
+    GEO::Attribute<PixelType> vertexAttribute(geoMesh.vertices.attributes(), "PointData");
     for(auto it = pointData->Begin(); it != pointData->End(); ++it)
     {
       vertexAttribute[it.Index()] = static_cast<PixelType>(it.Value());
@@ -103,14 +90,12 @@ meshToGeogramMesh(const TMesh * itkMesh) -> std::unique_ptr<GEO::Mesh>
   auto cellData = itkMesh->GetCellData();
   if (cellData && cellData->Size() > 0)
   {
-    GEO::Attribute<PixelType> facetAttribute(geoMesh->facets.attributes(), "CellData");
+    GEO::Attribute<PixelType> facetAttribute(geoMesh.facets.attributes(), "CellData");
     for(auto it = cellData->Begin(); it != cellData->End(); ++it)
     {
       facetAttribute[it.Index()] = static_cast<PixelType>(it.Value());
     }
   }
-
-  return geoMesh;
 }
 
 } // namespace itk

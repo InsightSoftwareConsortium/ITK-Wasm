@@ -70,7 +70,7 @@ FetchContent_MakeAvailable(pmp geogram)
 include_directories(${pmp_SOURCE_DIR}/src)
 include_directories(${geogram_SOURCE_DIR}/src/lib)
 
-foreach(pipeline geogram-conversion)
+foreach(pipeline geogram-conversion repair)
 # foreach(pipeline mesh-filters mesh-filters-sigma gaussian-kernel-radius mesh-filters-bin-shrink mesh-filters-label-image)
   add_executable(${pipeline} ${pipeline}.cxx)
   target_link_libraries(${pipeline} PUBLIC ${ITK_LIBRARIES} geogram)
@@ -78,10 +78,31 @@ foreach(pipeline geogram-conversion)
 endforeach()
 
 enable_testing()
+
 add_test(NAME geogram-conversion
   COMMAND geogram-conversion
     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/suzanne.off
     ${CMAKE_CURRENT_BINARY_DIR}/suzanne-geogram.off
+    )
+
+add_test(NAME repair-help
+  COMMAND repair
+    --help
+    )
+add_test(NAME repair-suzanne
+  COMMAND repair
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/suzanne.off
+    ${CMAKE_CURRENT_BINARY_DIR}/suzanne-repair.off
+    )
+add_test(NAME repair-cow
+  COMMAND repair
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cow.off
+    ${CMAKE_CURRENT_BINARY_DIR}/cow-repair.off
+    )
+add_test(NAME repair-brain
+  COMMAND repair
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/brain.off
+    ${CMAKE_CURRENT_BINARY_DIR}/brain-repair.off
     )
 # # Interesting backtrace on exit
 # if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
