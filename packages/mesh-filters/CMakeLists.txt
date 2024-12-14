@@ -70,8 +70,7 @@ FetchContent_MakeAvailable(pmp geogram)
 include_directories(${pmp_SOURCE_DIR}/src)
 include_directories(${geogram_SOURCE_DIR}/src/lib)
 
-foreach(pipeline geogram-conversion repair)
-# foreach(pipeline mesh-filters mesh-filters-sigma gaussian-kernel-radius mesh-filters-bin-shrink mesh-filters-label-image)
+foreach(pipeline geogram-conversion repair smooth-remesh)
   add_executable(${pipeline} ${pipeline}.cxx)
   target_link_libraries(${pipeline} PUBLIC ${ITK_LIBRARIES} geogram)
   target_include_directories(${pipeline} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -103,6 +102,27 @@ add_test(NAME repair-brain
   COMMAND repair
     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/brain.off
     ${CMAKE_CURRENT_BINARY_DIR}/brain-repair.off
+    )
+
+add_test(NAME smooth-remesh-help
+  COMMAND smooth-remesh
+    --help
+    )
+add_test(NAME smooth-remesh-suzanne
+  COMMAND smooth-remesh
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline/suzanne-repair.off
+    ${CMAKE_CURRENT_BINARY_DIR}/suzanne-smooth-remesh.off
+    )
+add_test(NAME smooth-remesh-cow
+  COMMAND smooth-remesh
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline/cow-repair.off
+    ${CMAKE_CURRENT_BINARY_DIR}/cow-smooth-remesh.off
+    )
+add_test(NAME smooth-remesh-brain
+  COMMAND smooth-remesh
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline/brain-repair.off
+    ${CMAKE_CURRENT_BINARY_DIR}/brain-smooth-remesh.off
+    --number-points 30
     )
 # # Interesting backtrace on exit
 # if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")

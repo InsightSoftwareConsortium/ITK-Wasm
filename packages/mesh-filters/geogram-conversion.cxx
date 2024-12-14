@@ -32,6 +32,8 @@ int main( int argc, char * argv[] )
   constexpr unsigned int Dimension = 3;
   using MeshType = itk::QuadEdgeMesh< PixelType, Dimension >;
 
+  static constexpr bool SinglePrecision = std::is_same<typename MeshType::CoordRepType, float>::value;
+
   using InputMeshType = itk::wasm::InputMesh<MeshType>;
   InputMeshType inputMesh;
   pipeline.add_option("input-mesh", inputMesh, "The input mesh")->required()->type_name("INPUT_MESH");
@@ -42,8 +44,11 @@ int main( int argc, char * argv[] )
 
   ITK_WASM_PARSE(pipeline);
 
-  auto geoMesh = itk::meshToGeogramMesh<MeshType>(inputMesh.Get());
-  auto itkMesh = itk::geogramMeshToMesh<MeshType>(geoMesh.get());
+  GEO::Mesh geoMesh(Dimension, SinglePrecision);
+  itk::meshToGeogramMesh<MeshType>(inputMesh.Get(), geoMesh);
+
+  MeshType::Pointer itkMesh = MeshType::New();
+  itk::geogramMeshToMesh<MeshType>(geoMesh, itkMesh);
 
   outputMesh.Set(itkMesh);
 

@@ -47,10 +47,10 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   double pointMergeTolerance = 1e-6;
   pipeline.add_option("--merge-tolerance", pointMergeTolerance, "Point merging tolerance as a percent of the bounding box diagonal.");
 
-  double minimumComponentArea = 0.03;
+  double minimumComponentArea = 3.0;
   pipeline.add_option("--minimum-component-area", minimumComponentArea, "Minimum component area as a percent of the total area. Components smaller than this are removed.");
 
-  double maximumHoleArea = 1e-3;
+  double maximumHoleArea = 1e-1;
   pipeline.add_option("--maximum-hole-area", maximumHoleArea, "Maximum area of a hole as a percent of the total area. Holes smaller than this are filled.");
 
   uint64_t maximumHoleEdges = 2000;
@@ -63,7 +63,10 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   pipeline.add_option("--remove-intersecting-triangles", removeIntersectingTriangles, "Remove intersecting triangles.");
 
   bool noTriangulate = false;
-  pipeline.add_option("--no-triangulate", noTriangulate, "Do not triangulate the mesh.");
+  // TODO: See if we can add this option, disable auto-repair in fill_holes, and successfully
+  // repair with mesh_repair afterwards without triangulation.
+  // remove_degree3_vertices and mesh_remove_intersections also need to be checked for compatibility.
+  // pipeline.add_option("--no-triangulate", noTriangulate, "Do not triangulate the mesh.");
 
   itk::wasm::OutputMesh<MeshType> outputMesh;
   pipeline.add_option("output-mesh", outputMesh, "The output repaired mesh.")->type_name("OUTPUT_MESH");
@@ -85,8 +88,8 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   const double bboxDiagonal = GEO::bbox_diagonal(geoMesh);
   pointMergeTolerance *= (0.01 * bboxDiagonal);
   const double area = GEO::Geom::mesh_area(geoMesh, Dimension);
-  minimumComponentArea *= area;
-  maximumHoleArea *= area;
+  minimumComponentArea *= (0.01 * area);
+  maximumHoleArea *= (0.01 * area);
 
   if (noTriangulate)
   {
@@ -126,9 +129,7 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
 
   if (removeIntersectingTriangles)
   {
-    std::cout << "Removing intersections" << std::endl;
     GEO::mesh_remove_intersections(geoMesh);
-    std::cout << "Removed intersections" << std::endl;
   }
 
   typename MeshType::Pointer itkMesh = MeshType::New();
@@ -162,14 +163,13 @@ int main(int argc, char *argv[])
   itk::wasm::Pipeline pipeline("repair", "Repair a mesh so it is 2-manifold and optionally watertight.", argc, argv);
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
-                                          // uint8_t,
+                                          uint8_t,
                                           // int8_t,
                                           // uint16_t,
                                           // int16_t,
                                           // uint32_t,
                                           // int32_t,
-                                          // float,
-                                          // double>::Dimensions<
-                                          float>::Dimensions<
+                                          float,
+                                          double>::Dimensions<
       3U>("input-mesh", pipeline);
 }
