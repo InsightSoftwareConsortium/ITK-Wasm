@@ -20,127 +20,136 @@
 #include "itkInputMesh.h"
 #include "itkOutputMesh.h"
 #include "itkSupportInputMeshTypes.h"
+#include "itkInputTextStream.h"
+#include "itkPolyLineCell.h"
 
-#include "itkmeshToGeogramMesh.h"
-#include "itkgeogramMeshToMesh.h"
+#include "MeshPlaneIntersect.hpp"
 
-#include <geogram/mesh/mesh_remesh.h>
-#include <geogram/mesh/mesh_geometry.h>
-#include <geogram/basic/command_line.h>
-#include <geogram/basic/command_line_args.h>
-
-#include <geogram/basic/common.h>
-#include <geogram/basic/process.h>
-#include <geogram/basic/logger.h>
-#include <geogram/basic/command_line.h>
+#include "glaze/glaze.hpp"
 
 template <typename TMesh>
-int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
+int sliceMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
 {
   using MeshType = TMesh;
   constexpr unsigned int Dimension = MeshType::PointDimension;
   using PixelType = typename MeshType::PixelType;
+  using PointIdentifierType = typename MeshType::PointIdentifier;
+  using CellIdentifierType = typename MeshType::CellIdentifier;
+
+  using FloatType = typename MeshType::CoordRepType;
+  using IndexType = typename MeshType::CellIdentifier;
+  using MeshPlaneIntersectType = MeshPlaneIntersect<FloatType, IndexType>;
+  using Vec3D = typename MeshPlaneIntersectType::Vec3D;
+  using Face = typename MeshPlaneIntersectType::Face;
+  using Plane = typename MeshPlaneIntersectType::Plane;
+  using Planes = std::vector<Plane>;
+
+  using OutputMeshType = itk::Mesh<uint16_t, Dimension>;
+  using CellAutoPointer = typename OutputMeshType::CellAutoPointer;
+  using PolyLineCellType = itk::PolyLineCell<typename OutputMeshType::CellType>;
+  using PointDataContainer = typename OutputMeshType::PointDataContainer;
+  using CellDataContainer = typename OutputMeshType::CellDataContainer;
 
   pipeline.get_option("input-mesh")->required()->type_name("INPUT_MESH");
 
-  double numberPointsPercent = 75.0;
-  pipeline.add_option("--number-points", numberPointsPercent, "Number of points as a percent of the bounding box diagonal. Output may have slightly more points.");
+  itk::wasm::InputTextStream planesJson;
+  pipeline.add_option("planes", planesJson, "An array of plane locations to slice the mesh. Each plane is defined by an array of 'origin' and 'spacing' values.")->required()->type_name("INPUT_JSON");
 
-  double triangleShapeAdaptation = 1.0;
-  pipeline.add_option("--triangle-shape-adaptation", triangleShapeAdaptation, "Triangle shape adaptation factor. Use 0.0 to disable.");
-
-  double triangleSizeAdaptation = 0.0;
-  pipeline.add_option("--triangle-size-adaptation", triangleSizeAdaptation, "Triangle size adaptation factor. Use 0.0 to disable.");
-
-  uint32_t normalIterations = 3;
-  pipeline.add_option("--normal-iterations", normalIterations, "Number of normal smoothing iterations.");
-
-  uint32_t lloydIterations = 5;
-  pipeline.add_option("--lloyd-iterations", lloydIterations, "Number of Lloyd relaxation iterations.");
-
-  uint32_t newtonIterations = 30;
-  pipeline.add_option("--newton-iterations", newtonIterations, "Number of Newton iterations.");
-
-  uint32_t newtonM = 7;
-  pipeline.add_option("--newton-m", newtonM, "Number of Newton evaluations per step for Hessian approximation.");
-
-  uint64_t lfsSamples = 10000;
-  pipeline.add_option("--lfs-samples", lfsSamples, "Number of samples for size adaptation if triangle size adaptation is not 0.0.");
-
-  itk::wasm::OutputMesh<MeshType> outputMesh;
-  pipeline.add_option("output-mesh", outputMesh, "The output repaired mesh.")->type_name("OUTPUT_MESH");
+  itk::wasm::OutputMesh<OutputMeshType> outputMesh;
+  pipeline.add_option("polylines", outputMesh, "The output mesh comprised of polylines. Cell data indicates whether part of a closed line. Point data indicates the slice index.")->type_name("OUTPUT_MESH");
 
   ITK_WASM_PARSE(pipeline);
 
-  // GEO::initialize(GEO::GEOGRAM_INSTALL_ALL);
-
-  GEO::Logger::initialize(); GEO::Logger::instance()->set_quiet(true);
-  GEO::CmdLine::initialize();
-  const auto flags = GEO::GEOGRAM_INSTALL_ALL;
-  GEO::Process::initialize(flags);
-  GEO::CmdLine::import_arg_group("algo");
-
-  GEO::Mesh geoMesh(Dimension, false);
-  itk::meshToGeogramMesh<MeshType>(inputMesh, geoMesh);
-
-  if (geoMesh.facets.nb() == 0)
+  std::vector<Vec3D> vertices;
+  vertices.resize(inputMesh->GetNumberOfPoints());
+  for (itk::SizeValueType i = 0; i < inputMesh->GetNumberOfPoints(); ++i)
   {
-    std::cerr << "The input mesh has no facets." << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  if (!geoMesh.facets.are_simplices())
-  {
-    std::cerr << "The mesh needs to be simplicial. Use repair." << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  uint64_t numberPoints = static_cast<uint64_t>(std::ceil(numberPointsPercent * 0.01 * geoMesh.vertices.nb()));
-
-  std::cout << "Remeshing with " << numberPoints << " points" << std::endl;
-
-  if(triangleShapeAdaptation != 0.0)
-  {
-   triangleShapeAdaptation *= 0.02;
-   GEO::compute_normals(geoMesh);
-   if(normalIterations != 0)
-   {
-    GEO::simple_Laplacian_smooth(geoMesh, normalIterations, true);
-   }
-   GEO::set_anisotropy(geoMesh, triangleShapeAdaptation);
-  }
-  else
-  {
-    geoMesh.vertices.set_dimension(3);
-  }
-
-  if(triangleSizeAdaptation != 0.0)
-  {
-    GEO::compute_sizing_field(geoMesh, triangleSizeAdaptation, lfsSamples);
-  }
-  else
-  {
-    GEO::AttributesManager& attributes = geoMesh.vertices.attributes();
-    if(attributes.is_defined("weight"))
+    typename MeshType::PointType point = inputMesh->GetPoint(i);
+    Vec3D vertex;
+    for (unsigned int d = 0; d < Dimension; d++)
     {
-      attributes.delete_attribute_store("weight");
+      vertex[d] = point[d];
     }
+    vertices[i] = vertex;
   }
 
-  GEO::Mesh remesh;
+  std::vector<Face> faces;
+  faces.resize(inputMesh->GetNumberOfCells());
+  using CellIterator = typename MeshType::CellsContainer::ConstIterator;
+  CellIterator cellIterator = inputMesh->GetCells()->Begin();
+  CellIterator cellEnd = inputMesh->GetCells()->End();
 
-  GEO::remesh_smooth(geoMesh, remesh, numberPoints, 0, lloydIterations, newtonIterations, newtonM);
+  while (cellIterator != cellEnd)
+  {
+    const auto cell = cellIterator.Value();
+    if (cell->GetNumberOfPoints() != 3)
+    {
+      std::cerr << "Only triangle cells are supported." << std::endl;
+      return EXIT_FAILURE;
+    }
+    typename MeshType::CellType::PointIdIterator pointIdIterator = cell->PointIdsBegin();
+    Face face;
+    for (unsigned int j = 0; j < cell->GetNumberOfPoints(); ++j)
+    {
+      face[j] = *pointIdIterator;
+      ++pointIdIterator;
+    }
+    faces[cellIterator.Index()] = face;
+    ++cellIterator;
+  }
 
-  GEO::MeshElementsFlags what = GEO::MeshElementsFlags(
-      GEO::MESH_VERTICES | GEO::MESH_EDGES | GEO::MESH_FACETS | GEO::MESH_CELLS
-  );
-  geoMesh.clear();
-  geoMesh.copy(remesh, true, what);
+  const std::string planesJsonString(std::istreambuf_iterator<char>(planesJson.Get()), {});
+  auto deserializedAttempt = glz::read_json<Planes>(planesJsonString);
+  if (!deserializedAttempt)
+  {
+    const std::string descriptiveError = glz::format_error(deserializedAttempt, planesJsonString);
+    std::cerr << "Failed to deserialize planes: " << descriptiveError << std::endl;
+    return EXIT_FAILURE;
+  }
+  const auto planes = deserializedAttempt.value();
 
-  typename MeshType::Pointer itkMesh = MeshType::New();
-  itk::geogramMeshToMesh<MeshType>(geoMesh, itkMesh);
+  typename OutputMeshType::Pointer outputMeshPtr = OutputMeshType::New();
 
-  outputMesh.Set(itkMesh);
+  PointIdentifierType pointId = 0;
+  CellIdentifierType cellId = 0;
+  size_t sliceIndex = 0;
+  PointDataContainer *pointData = outputMeshPtr->GetPointData();
+  CellDataContainer *cellData = outputMeshPtr->GetCellData();
+
+  typename MeshPlaneIntersectType::Mesh meshPlaneIntersect(vertices, faces);
+  for (const auto &plane : planes)
+  {
+    const auto paths = meshPlaneIntersect.Intersect(plane);
+    for (const auto &path : paths)
+    {
+      CellAutoPointer cell;
+      cell.TakeOwnership(new PolyLineCellType);
+      PointIdentifierType polyPointId = 0;
+      const auto initialPointId = pointId;
+      for (const auto &point : path.points)
+      {
+        typename OutputMeshType::PointType outputPoint;
+        for (unsigned int d = 0; d < Dimension; d++)
+        {
+          outputPoint[d] = point[d];
+        }
+        outputMeshPtr->SetPoint(pointId, outputPoint);
+        cell->SetPointId(polyPointId++, pointId);
+        pointId++;
+        pointData->push_back(static_cast<uint16_t>(sliceIndex));
+      }
+      if (path.isClosed)
+      {
+        cell->SetPointId(polyPointId++, initialPointId);
+      }
+      outputMeshPtr->SetCell(cellId++, cell);
+      const uint16_t isClosed = path.isClosed ? 1 : 0;
+      cellData->push_back(isClosed);
+    }
+    ++sliceIndex;
+  }
+
+  outputMesh.Set(outputMeshPtr);
 
   return EXIT_SUCCESS;
 }
@@ -154,18 +163,18 @@ public:
     using MeshType = TMesh;
 
     itk::wasm::InputMesh<MeshType> testMesh;
-    pipeline.add_option("input-mesh", testMesh, "The input mesh")->type_name("INPUT_MESH");
+    pipeline.add_option("input-mesh", testMesh, "The input triangle mesh.")->type_name("INPUT_MESH");
 
     ITK_WASM_PRE_PARSE(pipeline);
 
     typename MeshType::ConstPointer inputMeshRef = testMesh.Get();
-    return repairMesh<MeshType>(pipeline, inputMeshRef);
+    return sliceMesh<MeshType>(pipeline, inputMeshRef);
   }
 };
 
 int main(int argc, char *argv[])
 {
-  itk::wasm::Pipeline pipeline("remesh", "Smooth and remesh a mesh to improve quality.", argc, argv);
+  itk::wasm::Pipeline pipeline("slice-mesh", "Slice a mesh along planes into polylines.", argc, argv);
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
                                           // uint8_t,

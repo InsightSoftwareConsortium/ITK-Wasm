@@ -66,15 +66,30 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
 )
 
-FetchContent_MakeAvailable(pmp geogram)
+set(MESH_PLANE_INTERSECTION_GIT_REPOSITORY "https://github.com/intents-software/mesh-plane-intersection.git")
+# 2024-12-14 master
+set(MESH_PLANE_INTERSECTION_GIT_TAG "b632819a0027e8c3a6e64036c4984fe0f5c2c0d4")
+FetchContent_Declare(
+  mesh_plane_intersection
+  GIT_REPOSITORY ${MESH_PLANE_INTERSECTION_GIT_REPOSITORY}
+  GIT_TAG        ${MESH_PLANE_INTERSECTION_GIT_TAG}
+  GIT_SHALLOW TRUE
+)
+
+FetchContent_MakeAvailable(pmp geogram mesh_plane_intersection)
 include_directories(${pmp_SOURCE_DIR}/src)
 include_directories(${geogram_SOURCE_DIR}/src/lib)
+include_directories(${mesh_plane_intersection_SOURCE_DIR}/src)
 
 foreach(pipeline geogram-conversion repair smooth-remesh)
   add_executable(${pipeline} ${pipeline}.cxx)
   target_link_libraries(${pipeline} PUBLIC ${ITK_LIBRARIES} geogram)
   target_include_directories(${pipeline} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 endforeach()
+
+add_executable(slice-mesh slice-mesh.cxx)
+target_link_libraries(slice-mesh PUBLIC ${ITK_LIBRARIES})
+target_include_directories(slice-mesh PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 enable_testing()
 
@@ -123,6 +138,29 @@ add_test(NAME smooth-remesh-brain
     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline/brain-repair.off
     ${CMAKE_CURRENT_BINARY_DIR}/brain-smooth-remesh.off
     --number-points 30
+    )
+
+add_test(NAME slice-mesh-help
+  COMMAND slice-mesh
+    --help
+    )
+add_test(NAME slice-mesh-suzanne
+  COMMAND slice-mesh
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline/suzanne-repair.off
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/slice-mesh-plane.json
+    ${CMAKE_CURRENT_BINARY_DIR}/slice-mesh-suzanne.vtk
+    )
+add_test(NAME slice-mesh-cow
+  COMMAND slice-mesh
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline/cow-repair.off
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/slice-mesh-plane.json
+    ${CMAKE_CURRENT_BINARY_DIR}/slice-mesh-cow.vtk
+    )
+add_test(NAME slice-mesh-brain
+  COMMAND slice-mesh
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline/brain-repair.off
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/slice-mesh-plane.json
+    ${CMAKE_CURRENT_BINARY_DIR}/slice-mesh-brain.vtk
     )
 # # Interesting backtrace on exit
 # if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
