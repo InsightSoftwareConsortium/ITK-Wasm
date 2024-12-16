@@ -7,9 +7,9 @@
   "itk-wasm": {
     "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
     "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
-    "test-data-hash": "bafkreiahocrgb3p4xrjozr7cg5wdpdt6wp77kolnqyupae6awkplb5p4he",
+    "test-data-hash": "bafybeihswmu3dwoclp43l72mopgzqipqnktkdfbyzltzonnjtb4gxhnf5y",
     "test-data-urls": [
-      "https://bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq.ipfs.w3s.link/ipfs/bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq/data.tar.gz"
+      "https://bafybeigf5ew5pyzyprvmbdey7vhvff57qnkaszowbjcyepvgzs46cmj5c4.ipfs.w3s.link/ipfs/bafybeigf5ew5pyzyprvmbdey7vhvff57qnkaszowbjcyepvgzs46cmj5c4/data.tar.gz"
     ],
     "typescript-package-name": "@itk-wasm/mesh-filters",
     "python-package-name": "itkwasm-mesh-filters",
@@ -28,7 +28,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafkreiahocrgb3p4xrjozr7cg5wdpdt6wp77kolnqyupae6awkplb5p4he https://bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq.ipfs.w3s.link/ipfs/bafybeian677gvnngces3pbcv6zpzauf3yn5bedxdis4smwzwh5xeewazuq/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafybeihswmu3dwoclp43l72mopgzqipqnktkdfbyzltzonnjtb4gxhnf5y https://bafybeigf5ew5pyzyprvmbdey7vhvff57qnkaszowbjcyepvgzs46cmj5c4.ipfs.w3s.link/ipfs/bafybeigf5ew5pyzyprvmbdey7vhvff57qnkaszowbjcyepvgzs46cmj5c4/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
