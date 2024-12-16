@@ -72,7 +72,18 @@ meshToGeogramMesh(const TMesh * itkMesh, GEO::Mesh & geoMesh)
     for(auto* pit = cell->PointIdsBegin(); pit != cell->PointIdsEnd(); ++pit) {
         vertices.push_back(*pit);
     }
+    if (vertices.size() == 3)
+    {
+      geoMesh.facets.create_triangle(vertices[0], vertices[1], vertices[2]);
+    }
+    else if (vertices.size() == 4)
+    {
+      geoMesh.facets.create_quad(vertices[0], vertices[1], vertices[2], vertices[3]);
+    }
+    else
+    {
     geoMesh.facets.create_polygon(vertices);
+    }
   }
 
   // Copy point data
@@ -96,6 +107,8 @@ meshToGeogramMesh(const TMesh * itkMesh, GEO::Mesh & geoMesh)
       facetAttribute[it.Index()] = static_cast<PixelType>(it.Value());
     }
   }
+
+  geoMesh.facets.connect();
 }
 
 } // namespace itk

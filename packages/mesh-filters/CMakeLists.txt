@@ -81,7 +81,7 @@ include_directories(${pmp_SOURCE_DIR}/src)
 include_directories(${geogram_SOURCE_DIR}/src/lib)
 include_directories(${mesh_plane_intersection_SOURCE_DIR}/src)
 
-foreach(pipeline geogram-conversion repair smooth-remesh)
+foreach(pipeline geogram-conversion repair smooth-remesh keep-largest-component)
   add_executable(${pipeline} ${pipeline}.cxx)
   target_link_libraries(${pipeline} PUBLIC ${ITK_LIBRARIES} geogram)
   target_include_directories(${pipeline} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -162,39 +162,13 @@ add_test(NAME slice-mesh-brain
     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/slice-mesh-plane.json
     ${CMAKE_CURRENT_BINARY_DIR}/slice-mesh-brain.vtk
     )
-# # Interesting backtrace on exit
-# if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-#   add_test(NAME mesh-filters
-#     COMMAND mesh-filters
-#       ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
-#       ${CMAKE_CURRENT_BINARY_DIR}/cthead1_mesh-filtersd.png
-#       --shrink-factors 2 2
-#       )
-# endif()
 
-# add_test(NAME mesh-filters-sigma
-#   COMMAND mesh-filters-sigma
-#     ${CMAKE_CURRENT_BINARY_DIR}/mesh-filters-sigma.json
-#     --shrink-factors 2 4
-#     )
-
-# add_test(NAME gaussian-kernel-radius
-#   COMMAND gaussian-kernel-radius
-#     ${CMAKE_CURRENT_BINARY_DIR}/gaussian-kernel-radius.json
-#     --size 64 64 32
-#     --sigma 2.0 4.0 2.0
-#     )
-
-# add_test(NAME mesh-filters-bin-shrink
-#   COMMAND mesh-filters-bin-shrink
-#     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
-#     ${CMAKE_CURRENT_BINARY_DIR}/cthead1_mesh-filtersd_bin_shrink.png
-#     --shrink-factors 2 2
-#     )
-
-# add_test(NAME mesh-filters-label-image
-#   COMMAND mesh-filters-label-image
-#     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/2th_cthead1.png
-#     ${CMAKE_CURRENT_BINARY_DIR}/cthead1_mesh-filtersd_label_image.png
-#     --shrink-factors 2 2
-#     )
+add_test(NAME keep-largest-component-help
+  COMMAND keep-largest-component
+    --help
+    )
+add_test(NAME keep-largest-component-suzanne
+  COMMAND keep-largest-component
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/suzanne.off
+    ${CMAKE_CURRENT_BINARY_DIR}/suzanne-keep-largest-component.off
+    )

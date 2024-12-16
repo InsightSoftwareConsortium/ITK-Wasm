@@ -168,14 +168,13 @@ int main(int argc, char *argv[])
   itk::wasm::Pipeline pipeline("remesh", "Smooth and remesh a mesh to improve quality.", argc, argv);
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
-                                          // uint8_t,
+                                          uint8_t,
                                           // int8_t,
-                                          // uint16_t,
+                                          uint16_t,
                                           // int16_t,
                                           // uint32_t,
                                           // int32_t,
-                                          // float,
-                                          // double>::Dimensions<
-                                          float>::Dimensions<
+                                          float,
+                                          double>::Dimensions<
       3U>("input-mesh", pipeline);
 }
