@@ -33,16 +33,20 @@ set(PMP_BUILD_TESTS OFF)
 set(PMP_BUILD_VIS OFF)
 set(PMP_INSTALL OFF)
 
-set(PMP_GIT_REPOSITORY "https://github.com/pmp-library/pmp-library.git")
+# set(PMP_GIT_REPOSITORY "https://github.com/pmp-library/pmp-library.git")
+set(PMP_GIT_REPOSITORY "https://github.com/thewtex/pmp-library.git")
 # v3.0.0
-set(PMP_GIT_TAG "f2fb04f4a4188a5c1ab137e83b96e62fa99c639f")
+set(PMP_GIT_TAG "ff39b57af6bf2c3b15b69e5bb187483bd51e3cda")
 set(BUILD_SHARED_LIBS OFF)
+# re-enable after WASI threading enabled
+if (NOT WASI)
 FetchContent_Declare(
   pmp
   GIT_REPOSITORY ${PMP_GIT_REPOSITORY}
   GIT_TAG        ${PMP_GIT_TAG}
   GIT_SHALLOW TRUE
 )
+endif()
 
 if (POLICY CMP0077)
   cmake_policy(SET CMP0077 NEW)
@@ -60,10 +64,14 @@ if (EMSCRIPTEN)
   set(VORPALINE_PLATFORM "Emscripten-clang" CACHE STRING "Vorpaline platform")
   set(EMSCRIPTEN_DIR "/emsdk/upstream/emscripten" CACHE PATH "Emscripten directory")
 endif()
+if (WASI)
+  set(VORPALINE_PLATFORM "Wasi-clang" CACHE STRING "Vorpaline platform")
+endif()
 
-set(GEOGRAM_GIT_REPOSITORY "https://github.com/BrunoLevy/geogram.git")
+# set(GEOGRAM_GIT_REPOSITORY "https://github.com/BrunoLevy/geogram.git")
+set(GEOGRAM_GIT_REPOSITORY "https://github.com/thewtex/geogram.git")
 # v1.9.1
-set(GEOGRAM_GIT_TAG "fd3db7f141e570ebc68585e15d01a2f2c8ddb02e")
+set(GEOGRAM_GIT_TAG "e555e37d9ac6ab7c270afa3dbcfeb6c723550430")
 set(BUILD_SHARED_LIBS OFF)
 FetchContent_Declare(
   geogram
@@ -82,10 +90,16 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
 )
 
-FetchContent_MakeAvailable(pmp geogram mesh_plane_intersection)
-include_directories(${pmp_SOURCE_DIR}/src)
+# Re-enable after WASI threading enabled
+# FetchContent_MakeAvailable(pmp geogram mesh_plane_intersection)
+# include_directories(${pmp_SOURCE_DIR}/src)
+FetchContent_MakeAvailable(geogram mesh_plane_intersection)
 include_directories(${geogram_SOURCE_DIR}/src/lib)
 include_directories(${mesh_plane_intersection_SOURCE_DIR}/src)
+
+if (EMSCRIPTEN)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unsafe-buffer-usage")
+endif()
 
 foreach(pipeline geogram-conversion repair smooth-remesh keep-largest-component)
   add_executable(${pipeline} ${pipeline}.cxx)
