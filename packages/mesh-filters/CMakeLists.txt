@@ -54,6 +54,12 @@ set(GEOGRAM_WITH_LUA OFF CACHE BOOL "Lua scripting")
 set(GEOGRAM_WITH_TBB OFF CACHE BOOL "Intel TBB")
 set(GEOGRAM_WITH_TETGEN OFF CACHE BOOL "Tetrahedral mesh generation (Hang Si's TetGen)")
 set(GEOGRAM_WITH_TRIANGLE OFF CACHE BOOL "Triangle mesher (Jonathan Shewchuk's Triangle)")
+set(GEOGRAM_VORPALINE OFF CACHE BOOL "Vorpaline library")
+set(GEOGRAM_LIB_ONLY ON CACHE BOOL "Only build the geogram library")
+if (EMSCRIPTEN)
+  set(VORPALINE_PLATFORM "Emscripten-clang" CACHE STRING "Vorpaline platform")
+  set(EMSCRIPTEN_DIR "/emsdk/upstream/emscripten" CACHE PATH "Emscripten directory")
+endif()
 
 set(GEOGRAM_GIT_REPOSITORY "https://github.com/BrunoLevy/geogram.git")
 # v1.9.1
