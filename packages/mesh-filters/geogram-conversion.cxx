@@ -26,7 +26,7 @@
 
 int main( int argc, char * argv[] )
 {
-  itk::wasm::Pipeline pipeline("mesh-read-write-test", "A test for reading and writing meshes", argc, argv);
+  itk::wasm::Pipeline pipeline("geogram-conversion", "A test for reading and writing with geogram, itk::QuadEdgeMesh meshes", argc, argv);
 
   using PixelType = float;
   constexpr unsigned int Dimension = 3;
