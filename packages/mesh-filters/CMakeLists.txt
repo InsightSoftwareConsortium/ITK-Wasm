@@ -8,7 +8,7 @@ if(EMSCRIPTEN)
     )
 elseif(WASI)
   set(io_components
-    ITKIOOFF
+    ITKIOMeshOFF
     )
 else()
   set(io_components
