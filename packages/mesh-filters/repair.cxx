@@ -60,7 +60,7 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   pipeline.add_option("--maximum-degree3-distance", maximumDegree3VerticesDistance, "Maximum distance as a percent of the bounding box diagonal. Vertices with degree 3 that are closer than this are merged.");
 
   bool removeIntersectingTriangles = false;
-  pipeline.add_option("--remove-intersecting-triangles", removeIntersectingTriangles, "Remove intersecting triangles.");
+  pipeline.add_flag("--remove-intersecting-triangles", removeIntersectingTriangles, "Remove intersecting triangles.");
 
   bool noTriangulate = false;
   // TODO: See if we can add this option, disable auto-repair in fill_holes, and successfully
