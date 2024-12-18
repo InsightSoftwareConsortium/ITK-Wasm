@@ -97,8 +97,6 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
 
   uint64_t numberPoints = static_cast<uint64_t>(std::ceil(numberPointsPercent * 0.01 * geoMesh.vertices.nb()));
 
-  std::cout << "Remeshing with " << numberPoints << " points" << std::endl;
-
   if(triangleShapeAdaptation != 0.0)
   {
    triangleShapeAdaptation *= 0.02;
@@ -169,11 +167,11 @@ int main(int argc, char *argv[])
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
                                           uint8_t,
-                                          // int8_t,
+                                          int8_t,
                                           uint16_t,
-                                          // int16_t,
-                                          // uint32_t,
-                                          // int32_t,
+                                          int16_t,
+                                          uint32_t,
+                                          int32_t,
                                           float,
                                           double>::Dimensions<
       3U>("input-mesh", pipeline);

@@ -15,7 +15,8 @@
   },
   "scripts": {
     "start": "pnpm copyDemoAppAssets && vite",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "pnpm test:node",
+    "test:node": "ava",
     "build": "pnpm build:tsc && pnpm build:browser:workerEmbedded && pnpm build:browser:workerEmbeddedMin && pnpm build:demo",
     "build:browser:workerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.js ./src/index-worker-embedded.ts",
     "build:browser:workerEmbeddedMin": "esbuild --minify --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundle/index-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
@@ -36,11 +37,12 @@
     "itk-wasm": "1.0.0-b.183"
   },
   "devDependencies": {
-    "@itk-wasm/demo-app": "^0.2.0",
+    "@itk-wasm/compare-meshes": "workspace:*",
+    "@itk-wasm/demo-app": "workspace:*",
     "@itk-wasm/image-io": "^1.3.1",
-    "@itk-wasm/mesh-io": "^1.4.2",
-    "@itk-wasm/transform-io": "^0.1.1",
+    "@itk-wasm/mesh-io": "workspace:*",
     "@types/node": "^20.2.5",
+    "ava": "^6.1.3",
     "esbuild": "^0.19.8",
     "shx": "^0.3.4",
     "typescript": "^5.3.2",
@@ -50,5 +52,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+  },
+  "ava": {
+    "files": [
+      "test/node/**/*.js",
+      "!test/node/common.js"
+    ]
   }
 }
