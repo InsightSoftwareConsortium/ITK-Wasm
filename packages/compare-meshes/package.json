@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compare-meshes-build",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "private": true,
   "description": "@itk-wasm/compare-meshes build configuration.",
   "type": "module",
