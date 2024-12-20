@@ -8,7 +8,7 @@ import { compareMeshesNode } from "@itk-wasm/compare-meshes";
 import { testBaselinePath } from "./common.js";
 
 test("sliceMeshNode extracts polylines at planes", async (t) => {
-  const inputMeshPath = `${testBaselinePath}/suzanne-repair.off`;
+  const inputMeshPath = `${testBaselinePath}/suzanne-repair.iwm.cbor`;
   const inputMesh = await readMeshNode(inputMeshPath);
 
   const planes = [

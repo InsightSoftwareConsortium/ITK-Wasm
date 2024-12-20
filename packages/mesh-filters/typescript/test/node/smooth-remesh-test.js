@@ -12,8 +12,6 @@ test("repair makes the mesh manifold", async (t) => {
   const inputMesh = await readMeshNode(inputMeshPath);
 
   const { outputMesh } = await smoothRemeshNode(inputMesh);
-  writeMeshNode(outputMesh, `/tmp/suzanne-smooth-remesh.off`);
-  writeMeshNode(outputMesh, `/tmp/suzanne-smooth-remesh.iwm.cbor`);
 
   const baselineMeshPath = `${testBaselinePath}/suzanne-smooth-remesh.iwm.cbor`;
   const baselineMesh = await readMeshNode(baselineMeshPath);

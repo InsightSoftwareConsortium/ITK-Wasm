@@ -1,15 +1,15 @@
 {
   "name": "@itk-wasm/mesh-filters-build",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "private": true,
   "description": "Mesh filters to repair, remesh, subdivide, decimate, smooth, triangulate, etc.",
   "type": "module",
   "itk-wasm": {
     "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
     "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
-    "test-data-hash": "bafybeihswmu3dwoclp43l72mopgzqipqnktkdfbyzltzonnjtb4gxhnf5y",
+    "test-data-hash": "bafybeifwrjzye5jvpsrqd5jsjvo5oyly7yfj3f7csqclpcehrhhlj4r2qm",
     "test-data-urls": [
-      "https://bafybeigf5ew5pyzyprvmbdey7vhvff57qnkaszowbjcyepvgzs46cmj5c4.ipfs.w3s.link/ipfs/bafybeigf5ew5pyzyprvmbdey7vhvff57qnkaszowbjcyepvgzs46cmj5c4/data.tar.gz"
+      "https://bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by.ipfs.w3s.link/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz"
     ],
     "typescript-package-name": "@itk-wasm/mesh-filters",
     "python-package-name": "itkwasm-mesh-filters",
@@ -28,7 +28,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafybeihswmu3dwoclp43l72mopgzqipqnktkdfbyzltzonnjtb4gxhnf5y https://bafybeigf5ew5pyzyprvmbdey7vhvff57qnkaszowbjcyepvgzs46cmj5c4.ipfs.w3s.link/ipfs/bafybeigf5ew5pyzyprvmbdey7vhvff57qnkaszowbjcyepvgzs46cmj5c4/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafybeifwrjzye5jvpsrqd5jsjvo5oyly7yfj3f7csqclpcehrhhlj4r2qm https://bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by.ipfs.w3s.link/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
