@@ -177,14 +177,13 @@ int main(int argc, char *argv[])
   itk::wasm::Pipeline pipeline("slice-mesh", "Slice a mesh along planes into polylines.", argc, argv);
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
-                                          // uint8_t,
-                                          // int8_t,
-                                          // uint16_t,
-                                          // int16_t,
-                                          // uint32_t,
-                                          // int32_t,
-                                          // float,
-                                          // double>::Dimensions<
-                                          float>::Dimensions<
+                                          uint8_t,
+                                          int8_t,
+                                          uint16_t,
+                                          int16_t,
+                                          uint32_t,
+                                          int32_t,
+                                          float,
+                                          double>::Dimensions<
       3U>("input-mesh", pipeline);
 }
