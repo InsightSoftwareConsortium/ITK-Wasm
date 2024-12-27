@@ -54,7 +54,6 @@ async function downsampleBinShrinkNode(
 
     options.shrinkFactors.forEach((value) => {
       args.push(value.toString())
-
     })
   }
   if (options.informationOnly) {

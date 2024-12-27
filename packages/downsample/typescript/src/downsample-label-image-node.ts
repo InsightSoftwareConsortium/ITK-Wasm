@@ -54,7 +54,6 @@ async function downsampleLabelImageNode(
 
     options.shrinkFactors.forEach((value) => {
       args.push(value.toString())
-
     })
   }
   if (options.cropRadius) {
@@ -65,7 +64,6 @@ async function downsampleLabelImageNode(
 
     options.cropRadius.forEach((value) => {
       args.push(value.toString())
-
     })
   }
 
