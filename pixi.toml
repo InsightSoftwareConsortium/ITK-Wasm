@@ -95,7 +95,7 @@ description = "Build the ITK-Wasm docker images"
 depends-on = ["clean", "export-itk-wasm-env-vars", "update-default-image-tag"]
 
 [dependencies]
-pnpm = ">=9.12.2,<10"
+pnpm = ">=9.15.1,<10"
 nodejs = ">=22.6.0,<23"
 
 [target.win-64.dependencies]
