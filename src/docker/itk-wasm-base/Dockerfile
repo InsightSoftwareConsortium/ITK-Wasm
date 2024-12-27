@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=docker.io/dockcross/web-wasm
-FROM $BASE_IMAGE:20240418-88c04a4
+FROM $BASE_IMAGE:20241227-d0e5a43
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick <matt@mmmccormick.com>"
@@ -46,9 +46,6 @@ RUN . /itk_wasm_env_vars.sh && sed -i -e "/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK
 
 RUN . /itk_wasm_env_vars.sh && sed -i -e "/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG \"${ITK_WASM_DCMTK_GIT_TAG}\")" \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
-
-RUN if test -e $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; fi
-RUN if test -e $WASI_SDK_PATH/share/cmake/wasi-sdk-threads.cmake; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk-threads.cmake; fi
 
 ARG CMAKE_BUILD_TYPE=Release
 
