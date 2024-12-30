@@ -11,7 +11,7 @@ pixi run build-docker-images --with-debug
 
 # on a linux arm64 system
 pixi run build-docker-images --with-debug --multiarch
-./src/docker/push.sh
+./src/docker/push.sh --push-manifest
 
 pnpm build && pnpm test
 
