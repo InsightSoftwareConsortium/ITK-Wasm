@@ -2,7 +2,7 @@
 
 set -exo pipefail
 
-if test -n "$EMSCRIPTEN_VERSION"; then
+if test -n "$EMSDK"; then
   cd /median-filter-pipelineCopy
   /usr/local/bin/web-build emscripten-build -DCMAKE_EXE_LINKER_FLAGS='-flto=thin -s DISABLE_EXCEPTION_CATCHING=0'
   rm -rf ./web-build
