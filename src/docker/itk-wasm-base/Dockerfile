@@ -1,8 +1,9 @@
 ARG BASE_IMAGE=docker.io/dockcross/web-wasm
-FROM $BASE_IMAGE:20241227-d0e5a43
+ARG HOST_ARCH=amd64
+FROM $BASE_IMAGE:20241229-8cdda7e-$HOST_ARCH
 ARG BASE_IMAGE
 
-LABEL maintainer="Matt McCormick <matt@mmmccormick.com>"
+LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 
 WORKDIR /
@@ -10,14 +11,9 @@ WORKDIR /
 COPY itk_wasm_env_vars.sh /
 
 # Note: on entry, emsdk will prepend to the path with its own node, so add to an earlier path
-ENV NODE_TAG v20.12.2
-RUN curl -LO https://nodejs.org/dist/${NODE_TAG}/node-${NODE_TAG}-linux-x64.tar.xz && \
-  tar xvJf node-${NODE_TAG}-linux-x64.tar.xz && \
-  rm node-${NODE_TAG}-linux-x64.tar.xz && \
-  mkdir -p /emsdk/upstream/emscripten/ && \
-  ln -s /node-${NODE_TAG}-linux-x64/bin/node /emsdk/upstream/emscripten && \
-  ln -s /node-${NODE_TAG}-linux-x64/bin/npm /emsdk/upstream/emscripten && \
-  ln -s /node-${NODE_TAG}-linux-x64/bin/npx /emsdk/upstream/emscripten
+ENV NODE_TAG v22.9.0
+COPY install-node-js.sh /usr/local/bin/
+RUN /usr/local/bin/install-node-js.sh && rm /usr/local/bin/install-node-js.sh
 ENV PATH /emsdk/upstream/emscripten:${PATH}
 
 ENV zstd_GIT_TAG v1.5.5

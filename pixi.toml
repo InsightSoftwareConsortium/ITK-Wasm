@@ -92,7 +92,7 @@ description = "Update the default Docker image tag"
 [tasks.build-docker-images]
 cmd = "src/docker/build.sh"
 description = "Build the ITK-Wasm docker images"
-depends-on = ["clean", "export-itk-wasm-env-vars", "update-default-image-tag"]
+depends-on = ["export-itk-wasm-env-vars", "update-default-image-tag"]
 
 [dependencies]
 pnpm = ">=9.15.1,<10"
@@ -103,6 +103,9 @@ m2w64-jq = ">=1.6.0,<2"
 
 [target.unix.dependencies]
 jq = ">=1.7.1,<2"
+
+[target.osx-arm64.dependencies]
+sed = ">=4.8,<5"
 
 [feature.native.tasks.clone-itk]
 cmd = ["stat", "$ITK_WASM_ITK_SOURCE_DIR", ">/dev/null", "||",
