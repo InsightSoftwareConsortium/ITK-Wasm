@@ -1,8 +1,9 @@
+ARG HOST_ARCH=amd64
 ARG BASE_IMAGE=quay.io/itkwasm/emscripten-base
-ARG BASE_TAG=latest
+ARG BASE_TAG=latest-$HOST_ARCH
 
 FROM $BASE_IMAGE:$BASE_TAG
-MAINTAINER Insight Software Consortium <community@itk.org>
+LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 ARG BASE_IMAGE
 ARG CMAKE_BUILD_TYPE=Release
 
@@ -12,12 +13,12 @@ ADD ITKWebAssemblyInterfaceModuleCopy /ITKWebAssemblyInterface
 COPY ITKWebAssemblyInterface.cmake /usr/src/
 RUN mv /usr/src/ITKWebAssemblyInterface.cmake /usr/share/cmake-*/Modules/
 # For non-default toolchain file location
-ENV EMSCRIPTEN /emsdk/upstream/emscripten
-ENV CMAKE_TOOLCHAIN_FILE_DOCKCROSS ${CMAKE_TOOLCHAIN_FILE}
-ENV CMAKE_TOOLCHAIN_FILE_ITK /ITKWebAssemblyInterface/toolchain.cmake
+ENV EMSCRIPTEN=/emsdk/upstream/emscripten
+ENV CMAKE_TOOLCHAIN_FILE_DOCKCROSS=${CMAKE_TOOLCHAIN_FILE}
+ENV CMAKE_TOOLCHAIN_FILE_ITK=/ITKWebAssemblyInterface/toolchain.cmake
 RUN cp ${CMAKE_TOOLCHAIN_FILE} ${CMAKE_TOOLCHAIN_FILE_ITK}
 RUN echo "include(ITKWebAssemblyInterface)" >> ${CMAKE_TOOLCHAIN_FILE_ITK}
-ENV CMAKE_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE_ITK}
+ENV CMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE_ITK}
 RUN cd / && \
   mkdir ITKWebAssemblyInterface-build && \
   cd ITKWebAssemblyInterface-build && \
@@ -40,7 +41,8 @@ COPY web-build /usr/local/bin/
 
 # Trigger Emscripten to cache builds of required system libraries
 ADD median-filter-pipelineCopy /median-filter-pipelineCopy
-RUN if [ $BASE_IMAGE = "itkwasm/emscripten-base" ]; then cd /median-filter-pipelineCopy; /usr/local/bin/web-build emscripten-build -DCMAKE_EXE_LINKER_FLAGS='-flto=thin -s DISABLE_EXCEPTION_CATCHING=0'; rm -rf ./web-build; /usr/local/bin/web-build emscripten-build -DCMAKE_EXE_LINKER_FLAGS='-flto -s DISABLE_EXCEPTION_CATCHING=0'; rm -rf ./web-build; /usr/local/bin/web-build emscripten-build -DCMAKE_EXE_LINKER_FLAGS='-fno-lto -s DISABLE_EXCEPTION_CATCHING=1'; rm -rf /median-filter-pipelineCopy; chmod -R 777 /emsdk/upstream/emscripten/cache; fi
+COPY warm-emscripten-cache.sh /usr/local/bin
+RUN /usr/local/bin/warm-emscripten-cache.sh
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
@@ -54,5 +56,5 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url=$VCS_URL \
       org.label-schema.schema-version="1.0"
-ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}
+ENV DEFAULT_DOCKCROSS_IMAGE=${IMAGE}:${VERSION}
 WORKDIR /work
