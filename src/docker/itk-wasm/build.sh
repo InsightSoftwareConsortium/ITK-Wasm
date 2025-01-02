@@ -161,6 +161,6 @@ if $create_manifest; then
     buildah manifest create $list
     buildah manifest add ${list} ${list}-amd64
     buildah pull $list-arm64
-    buildah manifest add ${list} docker://${list}-arm64
+    buildah manifest add ${list} ${list}-arm64
   done
 fi
