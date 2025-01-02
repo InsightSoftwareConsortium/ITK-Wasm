@@ -150,12 +150,17 @@ if $create_manifest; then
       quay.io/itkwasm/wasi:${TAG} \
       quay.io/itkwasm/wasi:latest-debug \
       quay.io/itkwasm/wasi:${TAG}-debug; do
+    if [ "$(buildah images -q $list 2>/dev/null)" != "" ]; then
+      if ! $(buildah manifest exists $list); then
+        buildah rmi $list
+      fi
+    fi
     if $(buildah manifest exists $list); then
       buildah manifest rm $list
     fi
     buildah manifest create $list
     buildah manifest add ${list} ${list}-amd64
     buildah pull $list-arm64
-    buildah manifest add ${list} docker://${list}-arm64
+    buildah manifest add ${list} ${list}-arm64
   done
 fi
