@@ -27,14 +27,11 @@ version_tag=false
 build_cmd="build"
 tag_flag="--tag"
 host_arch=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
-create_manifest=false
 for param; do
   if [[ $param == '--with-debug' ]]; then
     debug=true
   elif [[ $param == '--with-wasi' ]]; then
     wasi=true
-  elif [[ $param == '--multiarch' ]]; then
-    create_manifest=true
   elif [[ $param == '--version-tag' ]]; then
     version_tag=true
   else
@@ -140,27 +137,3 @@ fi
 
 
 rm -rf ITKWebAssemblyInterfaceModuleCopy median-filter-pipelineCopy
-
-if $create_manifest; then
-  for list in quay.io/itkwasm/emscripten:latest \
-      quay.io/itkwasm/emscripten:${TAG} \
-      quay.io/itkwasm/emscripten:latest-debug \
-      quay.io/itkwasm/emscripten:${TAG}-debug \
-      quay.io/itkwasm/wasi:latest \
-      quay.io/itkwasm/wasi:${TAG} \
-      quay.io/itkwasm/wasi:latest-debug \
-      quay.io/itkwasm/wasi:${TAG}-debug; do
-    if [ "$(buildah images -q $list 2>/dev/null)" != "" ]; then
-      if ! $(buildah manifest exists $list); then
-        buildah rmi $list
-      fi
-    fi
-    if $(buildah manifest exists $list); then
-      buildah manifest rm $list
-    fi
-    buildah manifest create $list
-    buildah manifest add ${list} ${list}-amd64
-    buildah pull $list-arm64
-    buildah manifest add ${list} ${list}-arm64
-  done
-fi

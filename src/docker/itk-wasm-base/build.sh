@@ -22,8 +22,6 @@ for param; do
     debug=true
   elif [[ $param == '--with-wasi' ]]; then
     wasi=true
-  elif [[ $param == '--multiarch' ]]; then
-    echo "Multiarch not supported"
   elif [[ $param == '--version-tag' ]]; then
     version_tag=true
   else

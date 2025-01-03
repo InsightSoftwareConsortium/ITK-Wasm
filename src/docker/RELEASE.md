@@ -10,7 +10,9 @@ pixi run build-docker-images --with-debug
 ./src/docker/push.sh
 
 # on a linux arm64 system
-pixi run build-docker-images --with-debug --multiarch
+export OCI_EXE=docker
+pixi run build-docker-images --with-debug
+# requires manifest-tool, see https://github.com/estesp/manifest-tool/releases/
 ./src/docker/push.sh --push-manifest
 
 pnpm build && pnpm test
