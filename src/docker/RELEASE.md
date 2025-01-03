@@ -3,13 +3,17 @@
 Verify the source tree.
 
 ```
-# Remove all old podman images
-podman rmi $(podman images -qa) -f
-podman rmi $(podman images -qa) -f
-pixi run build-docker-images --with-debug --multiarch
 
-# DockerHub credential environmental variables must be set
+# on an amd64 system
+# DockerHub, quay.io login required
+pixi run build-docker-images --with-debug
 ./src/docker/push.sh
+
+# on a linux arm64 system
+export OCI_EXE=docker
+pixi run build-docker-images --with-debug
+# requires manifest-tool, see https://github.com/estesp/manifest-tool/releases/
+./src/docker/push.sh --push-manifest
 
 pnpm build && pnpm test
 

@@ -103,3 +103,13 @@ packages/transform-io/typescript/demo-app/
 
 native/
 src/docker/itk-wasm-base/itk_wasm_env_vars.sh
+
+packages/compare-images/python/itkwasm-compare-images-emscripten/tests/
+packages/compare-images/python/itkwasm-compare-images/tests/
+packages/compress-stringify/python/itkwasm-compress-stringify-emscripten/tests/
+packages/compress-stringify/python/itkwasm-compress-stringify/tests/
+packages/dicom/python/itkwasm-dicom-emscripten/tests/
+packages/dicom/python/itkwasm-dicom/tests/
+packages/downsample/python/itkwasm-downsample-emscripten/tests/
+packages/downsample/python/itkwasm-downsample/tests/
+packages/image-io/python/itkwasm-image-io-emscripten/tests/

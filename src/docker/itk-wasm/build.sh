@@ -26,18 +26,12 @@ wasi=false
 version_tag=false
 build_cmd="build"
 tag_flag="--tag"
-create_manifest=false
+host_arch=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
 for param; do
   if [[ $param == '--with-debug' ]]; then
     debug=true
   elif [[ $param == '--with-wasi' ]]; then
     wasi=true
-  elif [[ $param == '--multiarch' ]]; then
-    # Newer buildah (1.28.2) required for multiarch
-    exe=buildah
-    build_cmd="build --platform linux/amd64,linux/arm64"
-    tag_flag="--manifest"
-    create_manifest=true
   elif [[ $param == '--version-tag' ]]; then
     version_tag=true
   else
@@ -46,24 +40,9 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
-if $create_manifest; then
-  for list in quay.io/itk-wasm/emscripten:latest \
-      quay.io/itk-wasm/emscripten:${TAG} \
-      quay.io/itk-wasm/emscripten:latest-debug \
-      quay.io/itk-wasm/emscripten:${TAG}-debug \
-      quay.io/itk-wasm/wasi:latest \
-      quay.io/itk-wasm/wasi:${TAG} \
-      quay.io/itk-wasm/wasi:latest-debug \
-      quay.io/itk-wasm/wasi:${TAG}-debug; do
-    if $(buildah manifest exists $list); then
-      buildah manifest rm $list
-    fi
-    buildah manifest create $list
-  done
-fi
-
-$exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest \
+$exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest-$host_arch \
         --build-arg IMAGE=quay.io/itkwasm/emscripten \
+        --build-arg HOST_ARCH=$host_arch \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg BASE_IMAGE=quay.io/itkwasm/emscripten-base \
         --build-arg VCS_REF=${VCS_REF} \
@@ -71,11 +50,12 @@ $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
 if $version_tag; then
-        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:${TAG} \
+        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:${TAG}-$host_arch \
                 --build-arg IMAGE=quay.io/itkwasm/emscripten \
+                --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Release \
                 --build-arg BASE_IMAGE=quay.io/itkwasm/emscripten-base \
-                --build-arg BASE_TAG=${TAG} \
+                --build-arg BASE_TAG=${TAG}-$host_arch \
                 --build-arg VERSION=${TAG} \
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
@@ -84,8 +64,9 @@ if $version_tag; then
 fi
 
 if $wasi; then
-  $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:latest  \
+  $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:latest-$host_arch  \
           --build-arg IMAGE=quay.io/itkwasm/wasi \
+          --build-arg HOST_ARCH=$host_arch \
           --build-arg CMAKE_BUILD_TYPE=Release \
           --build-arg BASE_IMAGE=quay.io/itkwasm/wasi-base \
           --build-arg VCS_REF=${VCS_REF} \
@@ -93,11 +74,12 @@ if $wasi; then
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $version_tag; then
-        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:${TAG} \
+        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:${TAG}-$host_arch \
                 --build-arg IMAGE=quay.io/itkwasm/wasi \
+                --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Release \
                 --build-arg VERSION=${TAG} \
-                --build-arg BASE_TAG=${TAG} \
+                --build-arg BASE_TAG=${TAG}-$host_arch \
                 --build-arg BASE_IMAGE=quay.io/itkwasm/wasi-base \
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
@@ -107,27 +89,30 @@ if $wasi; then
 fi
 
 if $debug; then
-  $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest-debug \
+  $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest-debug-$host_arch \
           --build-arg IMAGE=quay.io/itkwasm/emscripten \
+          --build-arg HOST_ARCH=$host_arch \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $version_tag; then
-        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:${TAG}-debug \
+        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:${TAG}-debug-$host_arch \
                 --build-arg IMAGE=quay.io/itkwasm/emscripten \
+                --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG}-debug \
-                --build-arg BASE_TAG=${TAG}-debug \
+                --build-arg BASE_TAG=${TAG}-debug-$host_arch \
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
                 --build-arg BUILD_DATE=${BUILD_DATE} \
                 $script_dir $@
   fi
   if $wasi; then
-    $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:latest-debug  \
+    $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:latest-debug-$host_arch  \
             --build-arg IMAGE=quay.io/itkwasm/wasi \
+            --build-arg HOST_ARCH=$host_arch \
             --build-arg CMAKE_BUILD_TYPE=Debug \
             --build-arg BASE_IMAGE=quay.io/itkwasm/wasi-base \
             --build-arg VCS_REF=${VCS_REF} \
@@ -135,11 +120,12 @@ if $debug; then
             --build-arg BUILD_DATE=${BUILD_DATE} \
             $script_dir $@
     if $version_tag; then
-        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:${TAG}-debug \
+        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:${TAG}-debug-$host_arch \
                 --build-arg IMAGE=quay.io/itkwasm/wasi \
+                --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG} \
-                --build-arg BASE_TAG=${TAG}-debug \
+                --build-arg BASE_TAG=${TAG}-debug-$host_arch \
                 --build-arg BASE_IMAGE=quay.io/itkwasm/wasi-base \
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \

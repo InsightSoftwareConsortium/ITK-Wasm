@@ -361,7 +361,7 @@ importers:
         version: 8.57.0
       eslint-config-standard:
         specifier: ^17.1.0
-        version: 17.1.0(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)
+        version: 17.1.0(eslint-plugin-import@2.29.1(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
@@ -409,8 +409,8 @@ importers:
         specifier: ^1.39.10
         version: 1.39.11
       axios:
-        specifier: ^1.6.2
-        version: 1.6.8(debug@4.3.5)
+        specifier: ^1.7.4
+        version: 1.7.4(debug@4.3.5)
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
@@ -650,8 +650,8 @@ importers:
   packages/image-io/typescript:
     dependencies:
       axios:
-        specifier: ^1.6.2
-        version: 1.6.8(debug@4.3.5)
+        specifier: ^1.7.4
+        version: 1.7.4(debug@4.3.5)
       itk-wasm:
         specifier: workspace:^
         version: link:../../core/typescript/itk-wasm
@@ -717,23 +717,20 @@ importers:
   packages/mesh-filters/typescript:
     dependencies:
       itk-wasm:
-        specifier: workspace:^
-        version: link:../../core/typescript/itk-wasm
+        specifier: 1.0.0-b.183
+        version: 1.0.0-b.183
     devDependencies:
-      '@itk-wasm/compare-images':
-        specifier: workspace:^
-        version: link:../../compare-images/typescript
+      '@itk-wasm/compare-meshes':
+        specifier: workspace:*
+        version: link:../../compare-meshes/typescript
       '@itk-wasm/demo-app':
         specifier: workspace:*
         version: link:../../core/typescript/demo-app
-      '@itk-wasm/downsample-build':
-        specifier: workspace:^
-        version: link:../../downsample
       '@itk-wasm/image-io':
-        specifier: workspace:^
-        version: link:../../image-io/typescript
+        specifier: ^1.3.1
+        version: 1.3.1
       '@itk-wasm/mesh-io':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../mesh-io/typescript
       '@types/node':
         specifier: ^20.2.5
@@ -741,23 +738,17 @@ importers:
       ava:
         specifier: ^6.1.3
         version: 6.1.3
-      cypress:
-        specifier: ^13.11.0
-        version: 13.11.0
       esbuild:
         specifier: ^0.19.8
         version: 0.19.12
       shx:
         specifier: ^0.3.4
         version: 0.3.4
-      start-server-and-test:
-        specifier: ^2.0.4
-        version: 2.0.4
       typescript:
         specifier: ^5.3.2
         version: 5.4.5
       vite:
-        specifier: ^4.5.5
+        specifier: ^4.5.0
         version: 4.5.5(@types/node@20.12.10)(terser@5.31.0)
       vite-plugin-static-copy:
         specifier: ^0.17.0
@@ -2050,6 +2041,9 @@ packages:
   '@itk-wasm/htj2k@2.1.0':
     resolution: {integrity: sha512-22+mWgXr/LYRCqzzfIJ5il5bgYdJjPD5jiP4XXPvSgCjp48bui5zvZSkvMmXy89bJbVinUB1O6KHuB3K0MUong==}
 
+  '@itk-wasm/image-io@1.3.1':
+    resolution: {integrity: sha512-PJBNyez1qJD4+rkFG5/BQ6G/4yzs1uKgPPw6n+i8yEF6qzN07aY444R6bV6nkWuvbLpXe6XxGPmfRqkJKM8PWw==}
+
   '@itk-wasm/mesh-to-poly-data@1.1.0':
     resolution: {integrity: sha512-c+OB8PEaJfUAysERCzA2ggXdYwNg0P6YniuPPmkhxCVJtz62XyQ6rq0bT6rF6Cq8FEljTP3Spl9174ZiLNskvw==}
 
@@ -2654,6 +2648,9 @@ packages:
 
   axios@1.6.8:
     resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
+
+  axios@1.7.4:
+    resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
 
   babel-plugin-polyfill-corejs2@0.4.11:
     resolution: {integrity: sha512-sMEJ27L0gRHShOh5G54uAAPaiCOygY/5ratXuiyb2G46FmlSpc9eFCzYVyDiPxfNbwzA7mYahmjQc5q+CZQ09Q==}
@@ -4249,6 +4246,10 @@ packages:
     resolution: {integrity: sha512-6vhMXur95FwAkd7XyvH39VWAXyAK6DCKb1SWPvhcKwDYGdpqyLZtfWs0qQp0BkyLMLBuCOD4sxA7ENcvZZpWCg==}
     hasBin: true
 
+  itk-wasm@1.0.0-b.183:
+    resolution: {integrity: sha512-B3/W8MqKZ3KOl+96W1CvgAJjOmlqsac7iaEooP98k3yzH04oAsuyh3xZooOxDVNCucEdIj2Zt7lALbdFv+BoPQ==}
+    hasBin: true
+
   jest-worker@27.5.1:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
@@ -5170,8 +5171,8 @@ packages:
     deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
-  rollup@3.29.4:
-    resolution: {integrity: sha512-oWzmBZwvYrU0iJHtDmhsm662rC15FRXmcjCk1xD771dFDx5jJ02ufAQQTn0etB2emNk4J9EZg/yWKpsn9BWGRw==}
+  rollup@3.29.5:
+    resolution: {integrity: sha512-GVsDdsbJzzy4S/v3dqWPJ7EfvZJfCHiDqe80IyrF59LYuP+e6U1LJoUqeuqRbwAWoMNoXivMNeNAOf5E22VA1w==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
 
@@ -6191,7 +6192,7 @@ snapshots:
       '@babel/traverse': 7.24.5
       '@babel/types': 7.24.5
       convert-source-map: 2.0.0
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@8.1.1)
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -6246,7 +6247,7 @@ snapshots:
       '@babel/core': 7.24.5
       '@babel/helper-compilation-targets': 7.23.6
       '@babel/helper-plugin-utils': 7.24.5
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@8.1.1)
       lodash.debounce: 4.0.8
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -6873,7 +6874,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.24.5
       '@babel/parser': 7.24.5
       '@babel/types': 7.24.5
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@8.1.1)
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -7325,7 +7326,7 @@ snapshots:
   '@eslint/eslintrc@2.1.4':
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.4
       espree: 9.6.1
       globals: 13.24.0
       ignore: 5.3.1
@@ -7360,7 +7361,7 @@ snapshots:
   '@humanwhocodes/config-array@0.11.14':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.3
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.4
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -7444,7 +7445,7 @@ snapshots:
     dependencies:
       '@itk-viewer/blosc-zarr': 0.2.3
       '@itk-viewer/utils': 0.1.4
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.6.8
       comlink: 4.4.1
       gl-matrix: 3.4.3
       itk-wasm: 1.0.0-b.160
@@ -7503,7 +7504,7 @@ snapshots:
 
   '@itk-wasm/dam@1.1.1':
     dependencies:
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
       commander: 10.0.1
       decompress: 4.2.1
       files-from-path: 1.0.4
@@ -7514,7 +7515,15 @@ snapshots:
 
   '@itk-wasm/htj2k@2.1.0':
     dependencies:
-      itk-wasm: 1.0.0-b.175
+      itk-wasm: 1.0.0-b.183
+    transitivePeerDependencies:
+      - debug
+
+  '@itk-wasm/image-io@1.3.1':
+    dependencies:
+      axios: 1.7.4(debug@4.3.5)
+      itk-wasm: 1.0.0-b.183
+      mime-types: 2.1.35
     transitivePeerDependencies:
       - debug
 
@@ -7838,7 +7847,7 @@ snapshots:
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/type-utils': 5.62.0(eslint@8.57.0)(typescript@5.4.5)
       '@typescript-eslint/utils': 5.62.0(eslint@8.57.0)(typescript@5.4.5)
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.4
       eslint: 8.57.0
       graphemer: 1.4.0
       ignore: 5.3.1
@@ -7855,7 +7864,7 @@ snapshots:
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.4.5)
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.4
       eslint: 8.57.0
     optionalDependencies:
       typescript: 5.4.5
@@ -7871,7 +7880,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.4.5)
       '@typescript-eslint/utils': 5.62.0(eslint@8.57.0)(typescript@5.4.5)
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.4
       eslint: 8.57.0
       tsutils: 3.21.0(typescript@5.4.5)
     optionalDependencies:
@@ -7885,7 +7894,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/visitor-keys': 5.62.0
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.6.1
@@ -8054,7 +8063,7 @@ snapshots:
 
   agent-base@6.0.2:
     dependencies:
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
 
@@ -8256,7 +8265,7 @@ snapshots:
       common-path-prefix: 3.0.0
       concordance: 5.0.4
       currently-unhandled: 0.4.1
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.4
       emittery: 1.0.3
       figures: 6.1.0
       globby: 14.0.1
@@ -8291,7 +8300,15 @@ snapshots:
 
   aws4@1.12.0: {}
 
-  axios@1.6.8(debug@4.3.5):
+  axios@1.6.8:
+    dependencies:
+      follow-redirects: 1.15.6(debug@4.3.5)
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.7.4(debug@4.3.5):
     dependencies:
       follow-redirects: 1.15.6(debug@4.3.5)
       form-data: 4.0.0
@@ -8697,7 +8714,7 @@ snapshots:
       commander: 6.2.1
       common-tags: 1.8.2
       dayjs: 1.11.11
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.5(supports-color@8.1.1)
       enquirer: 2.4.1
       eventemitter2: 6.4.7
       execa: 4.1.0
@@ -8792,15 +8809,15 @@ snapshots:
     optionalDependencies:
       supports-color: 8.1.1
 
-  debug@4.3.4(supports-color@8.1.1):
+  debug@4.3.4:
+    dependencies:
+      ms: 2.1.2
+
+  debug@4.3.5(supports-color@8.1.1):
     dependencies:
       ms: 2.1.2
     optionalDependencies:
       supports-color: 8.1.1
-
-  debug@4.3.5:
-    dependencies:
-      ms: 2.1.2
 
   decamelize-keys@1.1.1:
     dependencies:
@@ -8915,7 +8932,7 @@ snapshots:
   engine.io-client@6.5.3:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@8.1.1)
       engine.io-parser: 5.2.2
       ws: 8.11.0
       xmlhttprequest-ssl: 2.0.0
@@ -9124,7 +9141,7 @@ snapshots:
       eslint-plugin-n: 15.7.0(eslint@8.57.0)
       eslint-plugin-promise: 6.1.1(eslint@8.57.0)
 
-  eslint-config-standard@17.1.0(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0):
+  eslint-config-standard@17.1.0(eslint-plugin-import@2.29.1(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
@@ -9258,7 +9275,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.4
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.2.2
@@ -9384,7 +9401,7 @@ snapshots:
 
   extract-zip@2.0.1(supports-color@8.1.1):
     dependencies:
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.5(supports-color@8.1.1)
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -9492,7 +9509,7 @@ snapshots:
 
   follow-redirects@1.15.6(debug@4.3.5):
     optionalDependencies:
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@8.1.1)
 
   for-each@0.3.3:
     dependencies:
@@ -9787,7 +9804,7 @@ snapshots:
   https-proxy-agent@5.0.1:
     dependencies:
       agent-base: 6.0.2
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
 
@@ -10124,7 +10141,7 @@ snapshots:
     dependencies:
       '@thewtex/zstddec': 0.2.1
       '@types/emscripten': 1.39.11
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
       comlink: 4.4.1
       commander: 11.1.0
       fs-extra: 11.2.0
@@ -10140,7 +10157,24 @@ snapshots:
       '@itk-wasm/dam': 1.1.1
       '@thewtex/zstddec': 0.2.1
       '@types/emscripten': 1.39.11
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
+      chalk: 5.3.0
+      comlink: 4.4.1
+      commander: 11.1.0
+      fs-extra: 11.2.0
+      glob: 8.1.0
+      markdown-table: 3.0.3
+      mime-types: 2.1.35
+      wasm-feature-detect: 1.6.1
+    transitivePeerDependencies:
+      - debug
+
+  itk-wasm@1.0.0-b.183:
+    dependencies:
+      '@itk-wasm/dam': 1.1.1
+      '@thewtex/zstddec': 0.2.1
+      '@types/emscripten': 1.39.11
+      axios: 1.7.4(debug@4.3.5)
       chalk: 5.3.0
       comlink: 4.4.1
       commander: 11.1.0
@@ -11036,7 +11070,7 @@ snapshots:
     dependencies:
       glob: 7.2.3
 
-  rollup@3.29.4:
+  rollup@3.29.5:
     optionalDependencies:
       fsevents: 2.3.3
 
@@ -11198,7 +11232,7 @@ snapshots:
   socket.io-client@4.7.5:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@8.1.1)
       engine.io-client: 6.5.3
       socket.io-parser: 4.2.4
     transitivePeerDependencies:
@@ -11209,7 +11243,7 @@ snapshots:
   socket.io-parser@4.2.4:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -11281,7 +11315,7 @@ snapshots:
   standard@17.1.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5)):
     dependencies:
       eslint: 8.57.0
-      eslint-config-standard: 17.1.0(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)
+      eslint-config-standard: 17.1.0(eslint-plugin-import@2.29.1(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint-plugin-n@15.7.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)
       eslint-config-standard-jsx: 11.0.0(eslint-plugin-react@7.34.1(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
       eslint-plugin-n: 15.7.0(eslint@8.57.0)
@@ -11300,7 +11334,7 @@ snapshots:
       arg: 5.0.2
       bluebird: 3.7.2
       check-more-types: 2.24.0
-      debug: 4.3.5
+      debug: 4.3.5(supports-color@8.1.1)
       execa: 5.1.1
       lazy-ass: 1.6.0
       ps-tree: 1.2.0
@@ -11726,7 +11760,7 @@ snapshots:
     dependencies:
       esbuild: 0.18.20
       postcss: 8.4.38
-      rollup: 3.29.4
+      rollup: 3.29.5
     optionalDependencies:
       '@types/node': 20.12.10
       fsevents: 2.3.3
@@ -11734,7 +11768,7 @@ snapshots:
 
   wait-on@7.2.0(debug@4.3.5):
     dependencies:
-      axios: 1.6.8(debug@4.3.5)
+      axios: 1.7.4(debug@4.3.5)
       joi: 17.13.1
       lodash: 4.17.21
       minimist: 1.2.8

@@ -56,7 +56,6 @@ async function downsampleBinShrink(
 
     await Promise.all(options.shrinkFactors.map(async (value) => {
       args.push(value.toString())
-
     }))
   }
   if (options.informationOnly) {

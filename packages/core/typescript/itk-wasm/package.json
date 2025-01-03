@@ -90,7 +90,7 @@
     "@itk-wasm/dam": "^1.1.1",
     "@thewtex/zstddec": "^0.2.1",
     "@types/emscripten": "^1.39.10",
-    "axios": "^1.6.2",
+    "axios": "^1.7.4",
     "chalk": "^5.3.0",
     "comlink": "^4.4.1",
     "commander": "^11.1.0",
