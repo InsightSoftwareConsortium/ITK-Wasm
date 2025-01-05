@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/transform-io",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Input and output for scientific and medical coordinate transform file formats.",
   "type": "module",
   "module": "./dist/index.js",

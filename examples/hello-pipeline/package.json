@@ -1,18 +1,18 @@
 {
   "name": "itk-wasm-hello-pipeline",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An itk-wasm Hello Pipeline World! example",
   "type": "module",
   "scripts": {
     "build": "itk-wasm -i itkwasm/wasi build",
-    "test": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- -- cthead1.png",
-    "test:quiet": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- -- --quiet cthead1.png",
-    "test:help": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- -- --help"
+    "test": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- cthead1.png",
+    "test:quiet": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- --quiet cthead1.png",
+    "test:help": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- --help"
   },
   "author": "Matt McCormick <matt@mmmccormick.com>",
   "license": "Apache-2.0",
   "dependencies": {
     "fs-extra": "^10.0.0",
-    "itk-wasm": "^1.0.0-b.76"
+    "itk-wasm": "^1.0.0-b.185"
   }
 }

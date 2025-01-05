@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compress-stringify",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
   "module": "./dist/index.js",
