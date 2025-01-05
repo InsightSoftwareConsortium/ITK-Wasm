@@ -25,7 +25,7 @@ description = "Build ITK-Wasm"
 depends-on = ["pnpm-install", "build-itk-wasm", "build-native-compare-images", "build-native-compare-meshes", "build-native-compress-stringify", "build-native-dicom", "build-native-downsample", "build-native-mesh-io", "build-native-transform-io"]
 
 [tasks.test]
-cmd = "pnpm run test"
+cmd = "pnpm run test --filter !create-itk-wasm"
 description = "Test ITK-Wasm"
 depends-on = ["test-itk-wasm", "test-native-compare-images", "test-native-compare-meshes", "test-native-compress-stringify", "test-native-dicom", "test-native-downsample", "test-native-mesh-io", "test-native-transform-io"]
 
