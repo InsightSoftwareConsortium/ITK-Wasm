@@ -32,8 +32,8 @@ jobs:
 
     - name: Build
       run: |
-        pnpm run --sequential --aggregate-output build:wasi
+        pnpm run --aggregate-output build:wasi
 
     - name: Test
       run: |
-        pnpm run --sequential --aggregate-output test:wasi
+        pnpm run --aggregate-output test:wasi
