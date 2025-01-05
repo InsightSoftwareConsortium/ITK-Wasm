@@ -32,7 +32,7 @@ jobs:
 
     - name: Build
       run: |
-        pnpm run --sequential --aggregate-output build:wasi:debug
+        pnpm run --sequential --aggregate-output build:wasi
 
     - name: Test
       run: |
