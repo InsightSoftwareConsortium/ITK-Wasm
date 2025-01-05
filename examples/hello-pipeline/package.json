@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "itk-wasm -i itkwasm/wasi build",
-    "test": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- -- cthead1.png",
-    "test:quiet": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- -- --quiet cthead1.png",
-    "test:help": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- -- --help"
+    "test": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- cthead1.png",
+    "test:quiet": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- --quiet cthead1.png",
+    "test:help": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- --help"
   },
   "author": "Matt McCormick <matt@mmmccormick.com>",
   "license": "Apache-2.0",
