@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/transform-io-build",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "private": true,
   "description": "scripts to generate @itk-wasm/transform-io itk-wasm artifacts.",
   "type": "module",
