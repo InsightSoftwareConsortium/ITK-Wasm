@@ -20,6 +20,8 @@
 
 #include <pthread.h>
 
+extern "C" {
+
 int pthread_attr_setscope(pthread_attr_t *attr, int contentionscope)
 {}
 
@@ -30,3 +32,4 @@ int pthread_atfork(
 )
 {}
 
+} // end extern "C"

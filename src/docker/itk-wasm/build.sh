@@ -11,7 +11,7 @@ cd $script_dir
 mkdir -p ITKWebAssemblyInterfaceModuleCopy/src
 cp_exe=$(which rsync 2>/dev/null || which cp)
 $cp_exe -a ../../../{include,CMakeLists.txt,itk-module.cmake} ./ITKWebAssemblyInterfaceModuleCopy/
-$cp_exe -a ../../../src/{*.cxx,*.c,CMakeLists.txt} ./ITKWebAssemblyInterfaceModuleCopy/src/
+$cp_exe -a ../../../src/{*.cxx,CMakeLists.txt} ./ITKWebAssemblyInterfaceModuleCopy/src/
 $cp_exe -a ../../../src/emscripten-module ./ITKWebAssemblyInterfaceModuleCopy/src/
 mkdir -p median-filter-pipelineCopy
 $cp_exe -a ../../../packages/core/typescript/itk-wasm/test/pipelines/median-filter-pipeline/{CMakeLists.txt,median-filter-test.cxx} ./median-filter-pipelineCopy
