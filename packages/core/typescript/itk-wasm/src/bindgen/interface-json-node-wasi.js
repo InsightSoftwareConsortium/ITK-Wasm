@@ -1,11 +1,10 @@
 import { readFile } from 'node:fs/promises'
 import { WASI } from 'wasi'
-import { argv, env } from 'node:process'
 
 const wasi = new WASI({
   version: 'preview1',
   args: ['--interface-json'],
-  env,
+  env: process.env,
   preopens: {}
 })
 
