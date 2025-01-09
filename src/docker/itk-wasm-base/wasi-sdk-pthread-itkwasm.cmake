@@ -12,7 +12,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "-Wl,--import-memory ${CMAKE_EXE_LINKER_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "-Wl,--export-memory ${CMAKE_EXE_LINKER_FLAGS}")
 # ITK-Wasm
-set(CMAKE_EXE_LINKER_FLAGS "-flto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-printscan-long-double ${CMAKE_EXE_LINKER_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,--initial-memory=8388608,--max-memory=4294967296,--shared-memory -flto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-printscan-long-double ${CMAKE_EXE_LINKER_FLAGS}")
 
 if(WIN32)
 	set(WASI_HOST_EXE_SUFFIX ".exe")
