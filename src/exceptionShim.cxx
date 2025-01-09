@@ -33,6 +33,11 @@ void __cxa_throw(void *, void *, void *)
   abort();
 }
 
+// Only triggered with Debug wasi-threads builds
+void __cxa_init_primary_exception(void *, void *, void *)
+{
+}
+
 }
 
 #endif // __cplusplus
