@@ -23,13 +23,17 @@
 extern "C" {
 
 int pthread_attr_setscope(pthread_attr_t *attr, int contentionscope)
-{}
+{
+  return 0;
+}
 
 int pthread_atfork(
     void (*prepare)(void),    // Called before fork
     void (*parent)(void),     // Called in parent after fork
     void (*child)(void)       // Called in child after fork
 )
-{}
+{
+  return 0;
+}
 
 } // end extern "C"
