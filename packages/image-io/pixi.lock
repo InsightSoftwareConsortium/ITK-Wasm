@@ -483,7 +483,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/dc/58/ec1bf790ed9657fd8a651189d40eedd765bf1cd75355ffa3f8f9bd67f4df/itk_registration-5.4.0-cp311-abi3-manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/1a/e5/94a596fba3dbecdea33059b455294fbfea91fcfc0d6cfd92372e10a6da93/itk_segmentation-5.4.0-cp311-abi3-manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/a6/3c/ac3bad4ff24fe2b07064be5e44db8f4ed32a4e3708dff084e3b58c5b608c/itk_webassemblyinterface-1.0b175-cp311-abi3-manylinux_2_28_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/1b/81/6e07b81113d403ecc01599496351905531fa8d852a833952600db7a092ec/itkwasm-1.0b179-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/f3/db24f14dfed1f631e4568440542dce7330b1c17a5c098666164872db4404/itkwasm-1.0b185-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/9b/b4/e3c7e6fab0f77fff6194afa173d1f2342073d91b1d3b4b30b17c3fb4407a/numpy-2.1.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/55/8b/5ab7257531a5d830fc8000c476e63c935488d74609b50f9384a643ec0a62/outcome-1.3.0.post0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f9/0c/8cde1a86a9a7449a0ba95197f42156198083be1749b717831fba16ab2b5f/playwright-1.48.0-py3-none-manylinux1_x86_64.whl
@@ -498,7 +498,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/3c/83/ec3196c360afffbc5b342ead48d1eb7393dd74fa70bca75d33905a86f211/trio-0.27.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/48/be/a9ae5f50cad5b6f85bd2574c2c923730098530096e170c1ce7452394d7aa/trio_websocket-0.11.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ce/d9/5f4c13cecde62396b0d3fe530a50ccea91e7dfc1ccf0e09c228841bb5ba8/urllib3-2.2.3-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/5c/ba/f551b829378d65d0e0494fdb492942a0ed2dc7f40681b2438a47d1f4af86/wasmtime-25.0.0-py3-none-manylinux1_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/44/1a/2916f63b10ebfb314e01627280181f9d7fa8b434a23e28958b351ef463c0/wasmtime-28.0.0-py3-none-manylinux1_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl
       - pypi: python/itkwasm-image-io-wasi
@@ -625,7 +625,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/e7/f0/a21ddf56263ad6c5f87164032aaeb2235ee2de688cb8a8eeec01a5f01bd7/itk_registration-5.4.0-cp311-abi3-manylinux_2_28_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/79/b9/ba9598bb8b7ee3962980d481065a58f75569c5a2df1d01520083288894b0/itk_segmentation-5.4.0-cp311-abi3-manylinux_2_28_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/f2/f5/cd8ed297bd1b9f816d7492bfa857c53bd8fd68aefc2aa9bef7a0d5a61d85/itk_webassemblyinterface-1.0b175-cp311-abi3-manylinux_2_28_aarch64.whl
-      - pypi: https://files.pythonhosted.org/packages/1b/81/6e07b81113d403ecc01599496351905531fa8d852a833952600db7a092ec/itkwasm-1.0b179-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/f3/db24f14dfed1f631e4568440542dce7330b1c17a5c098666164872db4404/itkwasm-1.0b185-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c4/a7/af3329fda3c3ec31d9b650e42bbcd3422fc62a765cbb1405fde4177a0996/numpy-2.1.2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/55/8b/5ab7257531a5d830fc8000c476e63c935488d74609b50f9384a643ec0a62/outcome-1.3.0.post0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/31/dc/121be574222fc74d12ac42921728fb6ba8ac17264a1fdab1993263389082/playwright-1.48.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
@@ -640,7 +640,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/3c/83/ec3196c360afffbc5b342ead48d1eb7393dd74fa70bca75d33905a86f211/trio-0.27.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/48/be/a9ae5f50cad5b6f85bd2574c2c923730098530096e170c1ce7452394d7aa/trio_websocket-0.11.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ce/d9/5f4c13cecde62396b0d3fe530a50ccea91e7dfc1ccf0e09c228841bb5ba8/urllib3-2.2.3-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/b7/36/5e83b5f7858fe1003cbb89d0d5716f628b9a00fafc3762665f06ca4ef75d/wasmtime-25.0.0-py3-none-manylinux2014_aarch64.whl
+      - pypi: https://files.pythonhosted.org/packages/09/47/13e0ab420bdbaaf2dfa495847e626b5652f420893f67567a6c606f097c58/wasmtime-28.0.0-py3-none-manylinux2014_aarch64.whl
       - pypi: https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl
       - pypi: python/itkwasm-image-io-wasi
@@ -750,7 +750,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/88/99/3db052a349efaf1ddbb51252e7e4c7a6a10ed5b3b87e2076afb622b711fd/itk_registration-5.4.0-cp311-abi3-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/3a/92/7d32413898fe4068f0b2da97ab783057e6af84123aa6c54af3706476fed9/itk_segmentation-5.4.0-cp311-abi3-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/77/66/73fa21a0439eacae5156c73611b35eec2c9c3d83ae4f987754043fce1d67/itk_webassemblyinterface-1.0b175-cp311-abi3-macosx_11_0_arm64.whl
-      - pypi: https://files.pythonhosted.org/packages/1b/81/6e07b81113d403ecc01599496351905531fa8d852a833952600db7a092ec/itkwasm-1.0b179-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/f3/db24f14dfed1f631e4568440542dce7330b1c17a5c098666164872db4404/itkwasm-1.0b185-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b0/29/cb48a402ea879e645b16218718f3f7d9588a77d674a9dcf22e4c43487636/numpy-2.1.2-cp312-cp312-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/55/8b/5ab7257531a5d830fc8000c476e63c935488d74609b50f9384a643ec0a62/outcome-1.3.0.post0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/64/41/d77c47743800fbeb86657611e651e56a17cbb4ebfefa1da0318dc39092df/playwright-1.48.0-py3-none-macosx_11_0_arm64.whl
@@ -765,7 +765,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/3c/83/ec3196c360afffbc5b342ead48d1eb7393dd74fa70bca75d33905a86f211/trio-0.27.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/48/be/a9ae5f50cad5b6f85bd2574c2c923730098530096e170c1ce7452394d7aa/trio_websocket-0.11.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ce/d9/5f4c13cecde62396b0d3fe530a50ccea91e7dfc1ccf0e09c228841bb5ba8/urllib3-2.2.3-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/cc/f0/d415d6b31ba69cfca04b2d5e83fbb5fc05335323712fd91948a1a53d13be/wasmtime-25.0.0-py3-none-macosx_11_0_arm64.whl
+      - pypi: https://files.pythonhosted.org/packages/89/1c/7f12d6b94cd4894cfa74312823a52ad63339c01442d414507cdfbcaaff5b/wasmtime-28.0.0-py3-none-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl
       - pypi: python/itkwasm-image-io-wasi
@@ -880,7 +880,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/89/f6/686c2d2650065495720889c2e6ebcf6af2e5c2692fc6d8768793b08c641a/itk_registration-5.4.0-cp311-abi3-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/77/8d/916c078544ac29a5ac215d2e5a2b07c9314b515b63136be92d6856a41f55/itk_segmentation-5.4.0-cp311-abi3-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/6c/cf/af6554bd0fd831ba2f8ed7840904a1b0828b1ea348b5000b78ad34c5688f/itk_webassemblyinterface-1.0b175-cp311-abi3-win_amd64.whl
-      - pypi: https://files.pythonhosted.org/packages/1b/81/6e07b81113d403ecc01599496351905531fa8d852a833952600db7a092ec/itkwasm-1.0b179-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/f3/db24f14dfed1f631e4568440542dce7330b1c17a5c098666164872db4404/itkwasm-1.0b185-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4c/79/73735a6a5dad6059c085f240a4e74c9270feccd2bc66e4d31b5ca01d329c/numpy-2.1.2-cp312-cp312-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/55/8b/5ab7257531a5d830fc8000c476e63c935488d74609b50f9384a643ec0a62/outcome-1.3.0.post0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/45/88/b6459c93a8bc0b96e7a33b6744bbef2740a0b78b0534542a037d220427f0/playwright-1.48.0-py3-none-win_amd64.whl
@@ -895,7 +895,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/3c/83/ec3196c360afffbc5b342ead48d1eb7393dd74fa70bca75d33905a86f211/trio-0.27.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/48/be/a9ae5f50cad5b6f85bd2574c2c923730098530096e170c1ce7452394d7aa/trio_websocket-0.11.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/ce/d9/5f4c13cecde62396b0d3fe530a50ccea91e7dfc1ccf0e09c228841bb5ba8/urllib3-2.2.3-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/1b/21/c0f3e031efe5f009215975eb7dbea86b55a69c4f02420965d1f45f43865e/wasmtime-25.0.0-py3-none-win_amd64.whl
+      - pypi: https://files.pythonhosted.org/packages/84/61/d57e9d0a6176c5c9288ddfc46a0b00a8017f95c4856fd03d8e7ffe161ac6/wasmtime-28.0.0-py3-none-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/78/58/e860788190eba3bcce367f74d29c4675466ce8dddfba85f7827588416f01/wsproto-1.2.0-py3-none-any.whl
       - pypi: python/itkwasm-image-io-wasi
@@ -1954,20 +1954,20 @@ packages:
   - itk==5.4.*
   - itk-meshtopolydata==0.11.*
   requires_python: '>=3.8'
-- pypi: https://files.pythonhosted.org/packages/1b/81/6e07b81113d403ecc01599496351905531fa8d852a833952600db7a092ec/itkwasm-1.0b179-py3-none-any.whl
+- pypi: https://files.pythonhosted.org/packages/bc/f3/db24f14dfed1f631e4568440542dce7330b1c17a5c098666164872db4404/itkwasm-1.0b185-py3-none-any.whl
   name: itkwasm
-  version: 1.0b179
-  sha256: 43558ccd082f3dc3c9b3b2379cdb197635b33620d41dbc6c1fa9186d03c22a7e
+  version: 1.0b185
+  sha256: 5d976f244f645e8c1700d59a32dd4461f9ade152693b64d6ebefdfe6b97a2413
   requires_dist:
   - importlib-metadata ; python_full_version < '3.10'
   - numpy
   - platformdirs ; sys_platform != 'emscripten'
   - typing-extensions
-  - wasmtime>=13.0.2 ; sys_platform != 'emscripten'
-  requires_python: '>=3.8'
+  - wasmtime>=27.0.1 ; sys_platform != 'emscripten'
+  requires_python: '>=3.9'
 - pypi: python/itkwasm-image-io-wasi
   name: itkwasm-image-io-wasi
-  version: 1.3.1
+  version: 1.4.0
   sha256: 9eda8da9213efd7e3b239fc432dfed2beb36b6dc72a1a98b074477bfe5492e2e
   requires_dist:
   - importlib-resources
@@ -4277,10 +4277,10 @@ packages:
   purls: []
   size: 17453
   timestamp: 1728400827536
-- pypi: https://files.pythonhosted.org/packages/1b/21/c0f3e031efe5f009215975eb7dbea86b55a69c4f02420965d1f45f43865e/wasmtime-25.0.0-py3-none-win_amd64.whl
+- pypi: https://files.pythonhosted.org/packages/09/47/13e0ab420bdbaaf2dfa495847e626b5652f420893f67567a6c606f097c58/wasmtime-28.0.0-py3-none-manylinux2014_aarch64.whl
   name: wasmtime
-  version: 25.0.0
-  sha256: f8a2a213b9179965db2d2eedececd69a37e287e902330509afae51c71a3a6842
+  version: 28.0.0
+  sha256: 99f4b16ab33cd3877fa00ca80ecd7aebf44bbb3ac8101b064fe46fdfe09e737b
   requires_dist:
   - importlib-resources>=5.10
   - coverage ; extra == 'testing'
@@ -4288,11 +4288,11 @@ packages:
   - pycparser ; extra == 'testing'
   - pytest-mypy ; extra == 'testing'
   - componentize-py ; extra == 'testing'
-  requires_python: '>=3.8'
-- pypi: https://files.pythonhosted.org/packages/5c/ba/f551b829378d65d0e0494fdb492942a0ed2dc7f40681b2438a47d1f4af86/wasmtime-25.0.0-py3-none-manylinux1_x86_64.whl
+  requires_python: '>=3.9'
+- pypi: https://files.pythonhosted.org/packages/44/1a/2916f63b10ebfb314e01627280181f9d7fa8b434a23e28958b351ef463c0/wasmtime-28.0.0-py3-none-manylinux1_x86_64.whl
   name: wasmtime
-  version: 25.0.0
-  sha256: b4364e14d44e3b7afe6a40bf608e9d0d2c40b09dece441d20f4f6e31906b729c
+  version: 28.0.0
+  sha256: e2656429c13f408f8cb42b60dc49b96103525ca5e746e948c2cbd6052a86b047
   requires_dist:
   - importlib-resources>=5.10
   - coverage ; extra == 'testing'
@@ -4300,11 +4300,11 @@ packages:
   - pycparser ; extra == 'testing'
   - pytest-mypy ; extra == 'testing'
   - componentize-py ; extra == 'testing'
-  requires_python: '>=3.8'
-- pypi: https://files.pythonhosted.org/packages/b7/36/5e83b5f7858fe1003cbb89d0d5716f628b9a00fafc3762665f06ca4ef75d/wasmtime-25.0.0-py3-none-manylinux2014_aarch64.whl
+  requires_python: '>=3.9'
+- pypi: https://files.pythonhosted.org/packages/84/61/d57e9d0a6176c5c9288ddfc46a0b00a8017f95c4856fd03d8e7ffe161ac6/wasmtime-28.0.0-py3-none-win_amd64.whl
   name: wasmtime
-  version: 25.0.0
-  sha256: a07445073cf36a6e5d1dc28246a897dcbdaa537ba8be8805be65422ecca297eb
+  version: 28.0.0
+  sha256: 74996ca26e5726615dd8d5bd91b855d16373033687e8fe6bc60d5be222da33eb
   requires_dist:
   - importlib-resources>=5.10
   - coverage ; extra == 'testing'
@@ -4312,11 +4312,11 @@ packages:
   - pycparser ; extra == 'testing'
   - pytest-mypy ; extra == 'testing'
   - componentize-py ; extra == 'testing'
-  requires_python: '>=3.8'
-- pypi: https://files.pythonhosted.org/packages/cc/f0/d415d6b31ba69cfca04b2d5e83fbb5fc05335323712fd91948a1a53d13be/wasmtime-25.0.0-py3-none-macosx_11_0_arm64.whl
+  requires_python: '>=3.9'
+- pypi: https://files.pythonhosted.org/packages/89/1c/7f12d6b94cd4894cfa74312823a52ad63339c01442d414507cdfbcaaff5b/wasmtime-28.0.0-py3-none-macosx_11_0_arm64.whl
   name: wasmtime
-  version: 25.0.0
-  sha256: 5bdf1214ee3ee78a4a8a92da339f4c4c8c109e65af881b37f4adfc05d02af426
+  version: 28.0.0
+  sha256: 85959652ba04d07b0b5d33d41c3146d556f38fc9153ea696d2eee2d22af54739
   requires_dist:
   - importlib-resources>=5.10
   - coverage ; extra == 'testing'
@@ -4324,7 +4324,7 @@ packages:
   - pycparser ; extra == 'testing'
   - pytest-mypy ; extra == 'testing'
   - componentize-py ; extra == 'testing'
-  requires_python: '>=3.8'
+  requires_python: '>=3.9'
 - pypi: https://files.pythonhosted.org/packages/5a/84/44687a29792a70e111c5c477230a72c4b957d88d16141199bf9acb7537a3/websocket_client-1.8.0-py3-none-any.whl
   name: websocket-client
   version: 1.8.0
