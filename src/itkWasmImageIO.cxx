@@ -27,6 +27,7 @@
 #include "itkWasmPixelTypeFromIOPixelEnum.h"
 #include "itkIOPixelEnumFromWasmPixelType.h"
 #include "itkMetaDataDictionaryJSON.h"
+#include "itkMetaDataDictionaryCBOR.h"
 #include "itkWasmIOCommon.h"
 
 #include "itkIOCommon.h"
@@ -301,7 +302,10 @@ WasmImageIO
     }
     else if (key == "metadata")
     {
-      // todo
+      const cbor_item_t * metaDataItem = indexHandle[ii].value;
+      itk::MetaDataDictionary dictionary;
+      cborToMetaDataDictionary(metaDataItem, dictionary);
+      this->SetMetaDataDictionary(dictionary);
     }
     else
     {
@@ -391,11 +395,17 @@ WasmImageIO
       cbor_move(cbor_build_string("size")),
       cbor_move(sizeItem)});
 
-  cbor_item_t * metaDataItem = cbor_new_definite_map(0);
-  cbor_map_add(index,
+  const itk::MetaDataDictionary & dictionary = this->GetMetaDataDictionary();
+  cbor_item_t * metaDataItem = cbor_new_definite_map(dictionary.GetKeys().size());
+  metaDataDictionaryToCBOR(dictionary, metaDataItem);
+
+  cbor_map_add(
+    index,
     cbor_pair{
       cbor_move(cbor_build_string("metadata")),
-      cbor_move(metaDataItem)});
+      cbor_move(metaDataItem)
+    }
+  );
 
   if( buffer != nullptr )
   {

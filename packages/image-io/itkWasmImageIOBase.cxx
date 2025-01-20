@@ -54,6 +54,7 @@ WasmImageIOBase::SetImageIO(ImageIOBase * imageIO, bool readImage)
     wasmImageIO->SetSpacing(dim, imageIO->GetSpacing(dim));
     wasmImageIO->SetDimensions(dim, imageIO->GetDimensions(dim));
   }
+  wasmImageIO->SetMetaDataDictionary(imageIO->GetMetaDataDictionary());
 
   auto imageJSON = wasmImageIO->GetJSON();
 
@@ -91,7 +92,7 @@ WasmImageIOBase::SetImageIO(ImageIOBase * imageIO, bool readImage)
   auto ec = glz::write<glz::opts{ .prettify = true }>(imageJSON, serialized);
   if (ec)
   {
-    itkExceptionMacro("Failed to serialize TransformListJSON");
+    itkExceptionMacro("Failed to serialize ImageJSON");
   }
   this->SetJSON(serialized);
 }
