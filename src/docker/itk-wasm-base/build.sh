@@ -68,7 +68,7 @@ if $wasi; then
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
-          --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-threads \
+          --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-emulated-threads \
           --build-arg LDFLAGS="${wasi_ld_flags}" \
           --build-arg CFLAGS="${wasi_c_flags}" \
           $script_dir $@
@@ -81,7 +81,7 @@ if $wasi; then
                         --build-arg VCS_REF=${VCS_REF} \
                         --build-arg VCS_URL=${VCS_URL} \
                         --build-arg BUILD_DATE=${BUILD_DATE} \
-                        --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-threads \
+                        --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-emulated-threads \
                         --build-arg LDFLAGS="${wasi_ld_flags}" \
                         --build-arg CFLAGS="${wasi_c_flags}" \
                         $script_dir $@
@@ -123,7 +123,7 @@ if $debug; then
             --build-arg VCS_REF=${VCS_REF} \
             --build-arg VCS_URL=${VCS_URL} \
             --build-arg BUILD_DATE=${BUILD_DATE} \
-            --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-threads \
+            --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-emulated-threads \
             --build-arg LDFLAGS="${wasi_debug_ld_flags}" \
             --build-arg CFLAGS="${wasi_debug_c_flags}" \
             $script_dir $@
@@ -136,7 +136,7 @@ if $debug; then
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
                 --build-arg BUILD_DATE=${BUILD_DATE} \
-                --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-threads \
+                --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-emulated-threads \
                 --build-arg LDFLAGS="${wasi_debug_ld_flags}" \
                 --build-arg CFLAGS="${wasi_debug_c_flags}" \
                 $script_dir $@

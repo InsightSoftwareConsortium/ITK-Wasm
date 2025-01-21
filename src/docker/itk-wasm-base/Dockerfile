@@ -1,6 +1,6 @@
 ARG BASE_IMAGE=docker.io/dockcross/web-wasm
 ARG HOST_ARCH=amd64
-FROM $BASE_IMAGE:20250107-aac97df-$HOST_ARCH
+FROM $BASE_IMAGE:20250123-74d1a0b-$HOST_ARCH
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
@@ -51,8 +51,6 @@ ARG CXXFLAGS
 ENV LDFLAGS=${LDFLAGS:-"-flto -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB"}
 ENV CFLAGS=${CFLAGS:-"-msimd128 -flto -Wno-warn-absolute-paths -DITK_WASM_NO_FILESYSTEM_IO"}
 ENV CXXFLAGS=${CXXFLAGS:-"${CFLAGS}"}
-# Add our flags to the toolchain file
-COPY ./wasi-sdk-pthread-itkwasm.cmake /opt/wasi-sdk/share/cmake/wasi-sdk-pthread.cmake
 
 RUN mkdir ITK-build && \
   cd ITK-build && \
@@ -89,6 +87,9 @@ RUN mkdir ITK-build && \
     -DDCMTK_WITH_THREADS:BOOL=OFF \
     -DDCMTK_BUILD_APPS:BOOL=OFF \
     -DNO_FLOAT_EXCEPTIONS:BOOL=ON \
+    -DCMAKE_C_FLAGS:STRING="${CFLAGS}" \
+    -DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="${LDFLAGS}" \
     ../ITK && \
   ninja && \
   find . -name '*.o' -delete && \
