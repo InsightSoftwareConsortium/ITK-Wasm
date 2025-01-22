@@ -22,12 +22,29 @@ description = "Install Node.js dependencies"
 [tasks.build]
 cmd = "pnpm run build"
 description = "Build ITK-Wasm"
-depends-on = ["pnpm-install", "build-itk-wasm", "build-native-compare-images", "build-native-compare-meshes", "build-native-compress-stringify", "build-native-dicom", "build-native-downsample", "build-native-mesh-io", "build-native-transform-io"]
+depends-on = ["pnpm-install",
+  "build-itk-wasm",
+  "build-native-compare-images",
+  "build-native-compare-meshes",
+  "build-native-compress-stringify",
+  "build-native-dicom",
+  "build-native-downsample",
+  "build-native-image-io",
+  "build-native-mesh-io",
+  "build-native-transform-io"]
 
 [tasks.test]
 cmd = "pnpm run test --filter !create-itk-wasm"
 description = "Test ITK-Wasm"
-depends-on = ["test-itk-wasm", "test-native-compare-images", "test-native-compare-meshes", "test-native-compress-stringify", "test-native-dicom", "test-native-downsample", "test-native-mesh-io", "test-native-transform-io"]
+depends-on = ["test-itk-wasm",
+  "test-native-compare-images",
+  "test-native-compare-meshes",
+  "test-native-compress-stringify",
+  "test-native-dicom",
+  "test-native-downsample",
+  "test-native-image-io",
+  "test-native-mesh-io",
+  "test-native-transform-io"]
 
 [tasks.compare-images-test-data-download]
 cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_COMPARE_IMAGES_TEST_DATA_HASH $ITK_WASM_COMPARE_IMAGES_TEST_DATA_URLS"
@@ -63,6 +80,13 @@ cwd = "packages/downsample"
 depends-on = ["pnpm-install"]
 outputs = ["packages/downsample/test/data.tar.gz"]
 description = "Download downsample test data"
+
+[tasks.image-io-test-data-download]
+cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_IMAGE_IO_TEST_DATA_HASH $ITK_WASM_IMAGE_IO_TEST_DATA_URLS"
+cwd = "packages/image-io"
+depends-on = ["pnpm-install"]
+outputs = ["packages/image-io/test/data.tar.gz"]
+description = "Download image-io test data"
 
 [tasks.mesh-io-test-data-download]
 cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_MESH_IO_TEST_DATA_HASH $ITK_WASM_MESH_IO_TEST_DATA_URLS"
@@ -296,6 +320,26 @@ description = "Build downsample native binaries"
 cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/downsample-build"
 depends-on = ["build-native-downsample"]
 description = "Test downsample native binaries"
+
+[feature.native.tasks.configure-native-image-io]
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/image-io-build -Spackages/image-io -GNinja
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
+  -DBUILD_TESTING:BOOL=ON
+  -DCMAKE_CXX_STANDARD:STRING=20
+  -DCMAKE_BUILD_TYPE:STRING=Debug'''
+depends-on = ["build-itk-wasm", "image-io-test-data-download"]
+outputs = ["native/image-io-build/CMakeFiles/"]
+description = "Configure image-io native binaries"
+
+[feature.native.tasks.build-native-image-io]
+cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/image-io-build"
+depends-on = ["configure-native-image-io"]
+description = "Build image-io native binaries"
+
+[feature.native.tasks.test-native-image-io]
+cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/image-io-build"
+depends-on = ["build-native-image-io"]
+description = "Test image-io native binaries"
 
 [feature.native.tasks.configure-native-mesh-io]
 cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/mesh-io-build -Spackages/mesh-io -GNinja
