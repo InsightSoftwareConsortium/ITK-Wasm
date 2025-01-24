@@ -67,7 +67,7 @@ jobs:
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" build:python:wasi
 
       - name: Test python on system
-        if: ${{ matrix.package != 'dicom' && matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'dicom' && matrix.package != 'image-io' && matrix.package != 'downsample' ) }}
+        if: ${{ matrix.os == 'ubuntu-22.04' }}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:python:wasi
 
