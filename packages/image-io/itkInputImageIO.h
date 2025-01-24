@@ -39,7 +39,7 @@ namespace wasm
  *
  * This image is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
  *
- * This class is for the WriteImage itk-wasm pipeline. Most pipelines will use itk::wasm::InputImage.
+ * This class is for the write-image ITK-Wasm pipeline. Most pipelines will use itk::wasm::InputImage.
  *
  * \ingroup WebAssemblyInterface
  */

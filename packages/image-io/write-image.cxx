@@ -124,6 +124,7 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, itk::wasm::OutputTextStre
     imageIO->SetSpacing(dim, inputImageIOBase->GetSpacing(dim));
     imageIO->SetDimensions(dim, inputImageIOBase->GetDimensions(dim));
   };
+  imageIO->SetMetaDataDictionary(inputImageIOBase->GetMetaDataDictionary());
   itk::ImageIORegion ioRegion( dimension );
   for(unsigned int dim = 0; dim < dimension; ++dim)
     {
