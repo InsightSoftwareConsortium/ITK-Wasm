@@ -25,7 +25,7 @@
 extern "C" {
 
 // Only triggered with Debug wasi-threads builds
-void __cxa_init_primary_exception(void *, void *, void *)
+int __cxa_init_primary_exception(void *, void *, void *)
 {
 }
 
