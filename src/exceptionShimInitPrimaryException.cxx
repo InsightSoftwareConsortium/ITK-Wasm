@@ -16,6 +16,7 @@
  *
  *=========================================================================*/
 // Workaround for current lack of exception support
+// Needs separate flags.
 
 #ifdef __cplusplus
 
@@ -23,14 +24,9 @@
 
 extern "C" {
 
-void * __cxa_allocate_exception(void *)
+// Only triggered with Debug wasi-threads builds
+void __cxa_init_primary_exception(void *, void *, void *)
 {
-  abort();
-}
-
-void __cxa_throw(void *, void *, void *)
-{
-  abort();
 }
 
 }

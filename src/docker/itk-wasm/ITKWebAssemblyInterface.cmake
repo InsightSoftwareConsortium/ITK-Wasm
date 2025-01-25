@@ -64,8 +64,10 @@ function(add_executable target)
     # WASI
     set_property(TARGET ${wasm_target} PROPERTY SUFFIX ".wasi.wasm")
     if (NOT TARGET wasi-itk-extras AND DEFINED CMAKE_CXX_COMPILE_OBJECT)
+      set_source_files_properties(/ITKWebAssemblyInterface/src/exceptionShimInitPrimaryException.cxx PROPERTIES COMPILE_FLAGS "-fno-lto")
       add_library(wasi-itk-extras STATIC
         /ITKWebAssemblyInterface/src/exceptionShim.cxx
+        /ITKWebAssemblyInterface/src/exceptionShimInitPrimaryException.cxx
         /ITKWebAssemblyInterface/src/cxaThreadAtExitShim.cxx
         /ITKWebAssemblyInterface/src/pthreadShim.cxx
         /ITKWebAssemblyInterface/src/initialization.cxx)
