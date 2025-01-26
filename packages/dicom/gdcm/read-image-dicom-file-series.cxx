@@ -52,7 +52,7 @@ template <typename TOutputImage>
 class ITK_TEMPLATE_EXPORT QuickDICOMImageSeriesReader : public ImageSeriesReader<TOutputImage>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(QuickDICOMImageSeriesReader);
+  ITK_DISALLOW_COPY_AND_MOVE(QuickDICOMImageSeriesReader);
 
   /** Standard class type aliases. */
   using Self = QuickDICOMImageSeriesReader;

@@ -70,7 +70,7 @@ protected:
   ~WasmZstdMeshIO() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmZstdMeshIO);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmZstdMeshIO);
 };
 } // end namespace itk
 

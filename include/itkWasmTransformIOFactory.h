@@ -66,7 +66,7 @@ protected:
   ~WasmTransformIOFactory() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmTransformIOFactory);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmTransformIOFactory);
 };
 } // end namespace itk
 
