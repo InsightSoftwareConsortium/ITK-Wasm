@@ -48,7 +48,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmImageIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(WasmImageIOFactory);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)

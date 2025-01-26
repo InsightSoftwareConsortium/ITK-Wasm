@@ -47,7 +47,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmPolyDataToPolyDataFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(WasmPolyDataToPolyDataFilter);
 
   using DataObjectIdentifierType = Superclass::DataObjectIdentifierType;
   using DataObjectPointerArraySizeType = Superclass::DataObjectPointerArraySizeType;

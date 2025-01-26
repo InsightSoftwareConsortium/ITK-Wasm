@@ -53,7 +53,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmPointSetIOBase, WasmDataObject);
+  itkOverrideGetNameOfClassMacro(WasmPointSetIOBase);
 
   using DataContainerType = VectorContainer<SizeValueType, char>;
 

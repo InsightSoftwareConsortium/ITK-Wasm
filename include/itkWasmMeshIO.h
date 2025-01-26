@@ -53,7 +53,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmMeshIO, MeshIOBase);
+  itkOverrideGetNameOfClassMacro(WasmMeshIO);
 
   bool CanReadFile(const char *) override;
 
