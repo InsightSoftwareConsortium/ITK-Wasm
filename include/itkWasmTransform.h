@@ -57,7 +57,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmTransform, WasmDataObject);
+  itkOverrideGetNameOfClassMacro(WasmTransform);
 
   using TransformType = TTransform;
   using DecoratorType = DataObjectDecorator<TransformType>;

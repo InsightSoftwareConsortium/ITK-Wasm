@@ -51,7 +51,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmImage, WasmDataObject);
+  itkOverrideGetNameOfClassMacro(WasmImage);
 
   using ImageType = TImage;
 
