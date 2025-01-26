@@ -63,7 +63,7 @@ protected:
   ~WasmMeshIOFactory() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmMeshIOFactory);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmMeshIOFactory);
 };
 } // end namespace itk
 

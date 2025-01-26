@@ -74,7 +74,7 @@ protected:
   ~WasmZstdTransformIOTemplate() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmZstdTransformIOTemplate);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmZstdTransformIOTemplate);
 };
 } // end namespace itk
 

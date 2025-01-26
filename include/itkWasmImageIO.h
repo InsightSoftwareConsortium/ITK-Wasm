@@ -105,7 +105,7 @@ protected:
   size_t WriteCBOR(const void * buffer = nullptr, unsigned char ** cborBuffer = nullptr, bool allocateCBORBuffer = false);
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmImageIO);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmImageIO);
 };
 } // end namespace itk
 

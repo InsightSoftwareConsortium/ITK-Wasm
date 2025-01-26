@@ -63,7 +63,7 @@ protected:
   ~WasmImageIOFactory() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmImageIOFactory);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmImageIOFactory);
 };
 } // end namespace itk
 

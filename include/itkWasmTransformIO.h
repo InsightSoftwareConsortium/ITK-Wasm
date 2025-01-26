@@ -115,7 +115,7 @@ protected:
   cbor_item_t * m_CBORRoot{ nullptr };
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmTransformIOTemplate);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmTransformIOTemplate);
 };
 } // end namespace itk
 
