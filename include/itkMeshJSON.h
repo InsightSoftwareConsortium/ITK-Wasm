@@ -89,7 +89,7 @@ auto meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool i
 
   meshJSON.meshType.dimension = MeshType::PointDimension;
 
-  meshJSON.meshType.pointComponentType = wasm::MapComponentType<typename MeshType::CoordRepType>::JSONFloatTypeEnum;
+  meshJSON.meshType.pointComponentType = wasm::MapComponentType<typename MeshType::CoordinateType>::JSONFloatTypeEnum;
   using PointPixelType = typename TMesh::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
   meshJSON.meshType.pointPixelComponentType = wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
