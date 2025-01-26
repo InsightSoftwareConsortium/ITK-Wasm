@@ -87,7 +87,7 @@ public:
         if (this->m_PointSet->GetNumberOfPoints() > 0)
         {
           const auto pointsAddress = reinterpret_cast< size_t >( &(wasmPointSet->GetPointSet()->GetPoints()->at(0)) );
-          const auto pointsSize = wasmPointSet->GetPointSet()->GetPoints()->Size() * sizeof(typename PointSetType::CoordRepType) * PointSetType::PointDimension;
+          const auto pointsSize = wasmPointSet->GetPointSet()->GetPoints()->Size() * sizeof(typename PointSetType::CoordinateType) * PointSetType::PointDimension;
           setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
         }
 

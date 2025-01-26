@@ -440,7 +440,7 @@ WasmMeshToMeshFilter<TMesh>
   const std::string pointsString = meshJSON.points;
   if (numberOfPoints)
   {
-    if (pointComponentType == itk::wasm::MapComponentType<typename MeshType::CoordRepType>::JSONFloatTypeEnum)
+    if (pointComponentType == itk::wasm::MapComponentType<typename MeshType::CoordinateType>::JSONFloatTypeEnum)
     {
       const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       mesh->GetPoints()->assign(pointsPtr, pointsPtr + meshJSON.numberOfPoints);
@@ -449,14 +449,14 @@ WasmMeshToMeshFilter<TMesh>
     {
       auto * pointsPtr = reinterpret_cast< float * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       const size_t pointComponents = numberOfPoints * dimension;
-      auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordRepType *>(&(mesh->GetPoints()->at(0)) );
+      auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordinateType *>(&(mesh->GetPoints()->at(0)) );
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
     }
     else if (pointComponentType == itk::wasm::MapComponentType<double>::JSONFloatTypeEnum)
     {
       auto * pointsPtr = reinterpret_cast< double * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       const size_t pointComponents = numberOfPoints * dimension;
-      auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordRepType *>(&(mesh->GetPoints()->at(0)) );
+      auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordinateType *>(&(mesh->GetPoints()->at(0)) );
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
     }
     else
