@@ -53,7 +53,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmImageIOBase, WasmDataObject);
+  itkOverrideGetNameOfClassMacro(WasmImageIOBase);
 
   using DirectionContainerType = VectorContainer<SizeValueType, double>;
   using PixelDataContainerType = VectorContainer<SizeValueType, char>;

@@ -55,7 +55,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmPolyData, WasmDataObject);
+  itkOverrideGetNameOfClassMacro(WasmPolyData);
 
   using PolyDataType = TPolyData;
 

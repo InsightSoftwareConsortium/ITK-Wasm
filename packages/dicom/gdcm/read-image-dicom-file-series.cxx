@@ -63,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(QuickDICOMImageSeriesReader, ImageSeriesReader);
+  itkOverrideGetNameOfClassMacro(QuickDICOMImageSeriesReader);
 
   /** The size of the output image. */
   using SizeType = typename TOutputImage::SizeType;

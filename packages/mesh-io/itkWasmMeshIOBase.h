@@ -55,7 +55,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmMeshIOBase, WasmPointSetIOBase);
+  itkOverrideGetNameOfClassMacro(WasmMeshIOBase);
 
   using DataContainerType = Superclass::DataContainerType;
 
