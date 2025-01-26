@@ -77,7 +77,7 @@ auto pointSetToPointSetJSON(const TPointSet * pointSet, const WasmPointSet<TPoin
 
   pointSetJSON.pointSetType.dimension = PointSetType::PointDimension;
 
-  pointSetJSON.pointSetType.pointComponentType = wasm::MapComponentType<typename PointSetType::CoordRepType>::JSONFloatTypeEnum;
+  pointSetJSON.pointSetType.pointComponentType = wasm::MapComponentType<typename PointSetType::CoordinateType>::JSONFloatTypeEnum;
   using PointPixelType = typename TPointSet::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
   pointSetJSON.pointSetType.pointPixelComponentType = wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;

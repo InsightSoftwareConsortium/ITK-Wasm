@@ -173,7 +173,7 @@ WasmPointSetToPointSetFilter<TPointSet>
   const std::string pointsString = pointSetJSON.points;
   if (numberOfPoints)
   {
-    if (pointComponentType == itk::wasm::MapComponentType<typename PointSetType::CoordRepType>::JSONFloatTypeEnum)
+    if (pointComponentType == itk::wasm::MapComponentType<typename PointSetType::CoordinateType>::JSONFloatTypeEnum)
     {
       const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       pointSet->GetPoints()->assign(pointsPtr, pointsPtr + pointSetJSON.numberOfPoints);
@@ -182,14 +182,14 @@ WasmPointSetToPointSetFilter<TPointSet>
     {
       auto * pointsPtr = reinterpret_cast< float * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       const size_t pointComponents = numberOfPoints * dimension;
-      auto * pointsContainerPtr = reinterpret_cast<typename PointSetType::CoordRepType *>(&(pointSet->GetPoints()->at(0)) );
+      auto * pointsContainerPtr = reinterpret_cast<typename PointSetType::CoordinateType *>(&(pointSet->GetPoints()->at(0)) );
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
     }
     else if (pointComponentType == itk::wasm::MapComponentType<double>::JSONFloatTypeEnum)
     {
       auto * pointsPtr = reinterpret_cast< double * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
       const size_t pointComponents = numberOfPoints * dimension;
-      auto * pointsContainerPtr = reinterpret_cast<typename PointSetType::CoordRepType *>(&(pointSet->GetPoints()->at(0)) );
+      auto * pointsContainerPtr = reinterpret_cast<typename PointSetType::CoordinateType *>(&(pointSet->GetPoints()->at(0)) );
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
     }
     else
