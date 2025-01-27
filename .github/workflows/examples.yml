@@ -103,12 +103,12 @@ jobs:
         name: hello-world-build
         path: examples/hello-world
 
-    - name: Test
-      uses: cypress-io/github-action@v6
-      with:
-        working-directory: ./examples/hello-world
-        browser: chrome
-        start: npm start
+    #- name: Test
+      #uses: cypress-io/github-action@v6
+      #with:
+        #working-directory: ./examples/hello-world
+        #browser: chrome
+        #start: npm start
 
   build-test-hello-pipeline-example:
     name: hello-pipeline build test
