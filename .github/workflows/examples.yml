@@ -317,21 +317,22 @@ jobs:
       run: |
         ../../src/docker/pull.sh --no-debug
 
+    - name: Install
+      uses: pnpm/action-setup@v4
+      with:
+        run_install: true
+
     - uses: actions/setup-node@v4
       with:
         node-version: '22'
 
-    - name: Install
-      run: |
-        npm install
-
     - name: Build
       run: |
-        npm run build
+        pnpm run build
 
     - name: Test
       run: |
-        npm run test
+        pnpm run test
 
   test-mean-squares-versor-registration:
     name: mean-squares-versor-registration
