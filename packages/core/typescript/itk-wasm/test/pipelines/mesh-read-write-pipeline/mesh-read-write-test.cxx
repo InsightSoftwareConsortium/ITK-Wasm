@@ -20,13 +20,14 @@
 #include "itkOutputMesh.h"
 #include "itkPipeline.h"
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("mesh-read-write-test", "A test for reading and writing meshes", argc, argv);
 
   using PixelType = float;
   constexpr unsigned int Dimension = 3;
-  using MeshType = itk::Mesh< PixelType, Dimension >;
+  using MeshType = itk::Mesh<PixelType, Dimension>;
 
   using InputMeshType = itk::wasm::InputMesh<MeshType>;
   InputMeshType inputMesh;

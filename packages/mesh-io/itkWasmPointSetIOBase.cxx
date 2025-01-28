@@ -54,13 +54,14 @@ WasmPointSetIOBase::SetMeshIO(MeshIOBase * meshIO, bool readPointSet)
 
   auto pointSetJSON = wasmMeshIO->GetPointSetJSON();
 
-  size_t pointsAddress = 0;
-  SizeValueType numberOfBytes = meshIO->GetNumberOfPoints() * meshIO->GetPointDimension() * ITKComponentSize( meshIO->GetPointComponentType() );
+  size_t        pointsAddress = 0;
+  SizeValueType numberOfBytes =
+    meshIO->GetNumberOfPoints() * meshIO->GetPointDimension() * ITKComponentSize(meshIO->GetPointComponentType());
   if (numberOfBytes)
   {
-    this->m_PointsContainer->resize( numberOfBytes );
-    meshIO->ReadPoints( reinterpret_cast< void * >( &(this->m_PointsContainer->at(0)) ));
-    pointsAddress = reinterpret_cast< size_t >( &(this->m_PointsContainer->at(0)) );
+    this->m_PointsContainer->resize(numberOfBytes);
+    meshIO->ReadPoints(reinterpret_cast<void *>(&(this->m_PointsContainer->at(0))));
+    pointsAddress = reinterpret_cast<size_t>(&(this->m_PointsContainer->at(0)));
   }
 
   std::ostringstream dataStream;
@@ -69,14 +70,15 @@ WasmPointSetIOBase::SetMeshIO(MeshIOBase * meshIO, bool readPointSet)
   pointSetJSON.points = dataStream.str();
 
   numberOfBytes =
-    static_cast< SizeValueType >( meshIO->GetNumberOfPointPixels() * meshIO->GetNumberOfPointPixelComponents() * ITKComponentSize( meshIO->GetPointPixelComponentType() ));
+    static_cast<SizeValueType>(meshIO->GetNumberOfPointPixels() * meshIO->GetNumberOfPointPixelComponents() *
+                               ITKComponentSize(meshIO->GetPointPixelComponentType()));
 
   size_t pointDataAddress = 0;
   if (numberOfBytes)
   {
-    this->m_PointDataContainer->resize( numberOfBytes );
-    meshIO->ReadPointData( reinterpret_cast< void * >( &(this->m_PointDataContainer->at(0)) ));
-    pointDataAddress = reinterpret_cast< size_t >( &(this->m_PointDataContainer->at(0)) );
+    this->m_PointDataContainer->resize(numberOfBytes);
+    meshIO->ReadPointData(reinterpret_cast<void *>(&(this->m_PointDataContainer->at(0))));
+    pointDataAddress = reinterpret_cast<size_t>(&(this->m_PointDataContainer->at(0)));
   }
 
   dataStream.str("");
@@ -85,7 +87,7 @@ WasmPointSetIOBase::SetMeshIO(MeshIOBase * meshIO, bool readPointSet)
   pointSetJSON.pointData = dataStream.str();
 
   std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true }>(pointSetJSON, serialized);
+  auto        ec = glz::write<glz::opts{ .prettify = true }>(pointSetJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize TransformListJSON");

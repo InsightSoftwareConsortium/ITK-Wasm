@@ -21,12 +21,12 @@
 #include "itkPipeline.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
-#include "itkWasmTransform.h"
-#include "itkWasmTransformToTransformFilter.h"
+#  include "itkWasmExports.h"
+#  include "itkWasmTransform.h"
+#  include "itkWasmTransformToTransformFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#include "itkTransformFileReader.h"
+#  include "itkTransformFileReader.h"
 #endif
 
 namespace itk
@@ -50,23 +50,29 @@ class ITK_TEMPLATE_EXPORT InputTransform
 public:
   using TransformType = TTransform;
 
-  void Set(const TransformType * transform) {
+  void
+  Set(const TransformType * transform)
+  {
     this->m_Transform = transform;
   }
 
-  const TransformType * Get() const {
+  const TransformType *
+  Get() const
+  {
     return this->m_Transform.GetPointer();
   }
 
   InputTransform() = default;
   ~InputTransform() = default;
+
 protected:
   typename TTransform::ConstPointer m_Transform;
 };
 
 
 template <typename TTransform>
-bool lexical_cast(const std::string &input, InputTransform<TTransform> &inputTransform)
+bool
+lexical_cast(const std::string & input, InputTransform<TTransform> & inputTransform)
 {
   if (input.empty())
   {
@@ -77,10 +83,10 @@ bool lexical_cast(const std::string &input, InputTransform<TTransform> &inputTra
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     using WasmTransformToTransformFilterType = WasmTransformToTransformFilter<TTransform>;
-    auto wasmTransformToTransformFilter = WasmTransformToTransformFilterType::New();
-    auto wasmTransform = WasmTransformToTransformFilterType::WasmTransformType::New();
+    auto               wasmTransformToTransformFilter = WasmTransformToTransformFilterType::New();
+    auto               wasmTransform = WasmTransformToTransformFilterType::WasmTransformType::New();
     const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(0, index);
+    auto               json = getMemoryStoreInputJSON(0, index);
     wasmTransform->SetJSON(json);
     wasmTransformToTransformFilter->SetInput(wasmTransform);
     wasmTransformToTransformFilter->Update();

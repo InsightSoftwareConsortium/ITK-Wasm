@@ -60,7 +60,7 @@
  *  Authors: Joerg Riesmeier, Marco Eichelberg
  */
 
- /*
+/*
  *  Description
  *    This is a modified version of what was originally a DCMTK
  *    application (dcm2pgm). It takes two inputs:
@@ -79,22 +79,22 @@
 #include "itkPipeline.h"
 #include "itkImageAlgorithm.h"
 
-#include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
+#include "dcmtk/config/osconfig.h" /* make sure OS specific configuration is included first */
 
 #include "dcmtk/ofstd/ofstream.h"
 // Fix warning for redefinition of __STDC_FORMAT_MACROS in the header include tree for dviface.h
 #ifdef __STDC_FORMAT_MACROS
-  #undef __STDC_FORMAT_MACROS
+#  undef __STDC_FORMAT_MACROS
 #endif
 #include "dcmtk/dcmpstat/dviface.h"
-#include "dcmtk/dcmpstat/dvpstx.h"    /* for DVPSTextObject */
-#include "dcmtk/dcmpstat/dvpsgr.h"    /* for DVPSGraphicObject */
-#include "dcmtk/dcmpstat/dvpscu.h"    /* for DVPSCurve */
+#include "dcmtk/dcmpstat/dvpstx.h" /* for DVPSTextObject */
+#include "dcmtk/dcmpstat/dvpsgr.h" /* for DVPSGraphicObject */
+#include "dcmtk/dcmpstat/dvpscu.h" /* for DVPSCurve */
 #include "dcmtk/dcmimgle/dcmimage.h"
 #include "dcmtk/dcmdata/cmdlnarg.h"
 #include "dcmtk/ofstd/ofcmdln.h"
 #include "dcmtk/ofstd/ofconapp.h"
-#include "dcmtk/dcmdata/dcuid.h"      /* for dcmtk version name */
+#include "dcmtk/dcmdata/dcuid.h" /* for dcmtk version name */
 
 #include "dcmtk/ofstd/ofvector.h"
 
@@ -109,22 +109,25 @@ using namespace rapidjson;
 #include <cstring>
 
 #ifdef WITH_ZLIB
-#include "itk_zlib.h"     /* for zlibVersion() */
+#  include "itk_zlib.h" /* for zlibVersion() */
 #endif
 
 #define OFFIS_CONSOLE_APPLICATION "apply-presentation-state-to-image"
 
 static OFLogger appLogger = OFLog::getLogger("dcmtk.apps." OFFIS_CONSOLE_APPLICATION);
 
-static char rcsid[] = "$dcmtk: " OFFIS_CONSOLE_APPLICATION " v"
-  OFFIS_DCMTK_VERSION " " OFFIS_DCMTK_RELEASEDATE " $";
+static char rcsid[] = "$dcmtk: " OFFIS_CONSOLE_APPLICATION " v" OFFIS_DCMTK_VERSION " " OFFIS_DCMTK_RELEASEDATE " $";
 
 /** Set rapidjson Value to c const char * string if not null. */
-void safeSetString(Value &v, const char *s, Document::AllocatorType& alloc)
+void
+safeSetString(Value & v, const char * s, Document::AllocatorType & alloc)
 {
-  if (s) {
+  if (s)
+  {
     v.SetString(s, std::strlen(s), alloc);
-  } else {
+  }
+  else
+  {
     v.SetString("", 0, alloc);
   }
 }
@@ -138,40 +141,39 @@ void safeSetString(Value &v, const char *s, Document::AllocatorType& alloc)
  * @return rapidjson::Value rapidjson Value of kArrayType which contains all
  *  the values from the input container.
  */
-template<typename Iteratorable>
-rapidjson::Value getArrayJson(Iteratorable container, rapidjson::Document::AllocatorType& allocator)
+template <typename Iteratorable>
+rapidjson::Value
+getArrayJson(Iteratorable container, rapidjson::Document::AllocatorType & allocator)
 {
   rapidjson::Value value(rapidjson::kArrayType);
-  for(auto iter = container.begin(); iter != container.end(); ++iter)
+  for (auto iter = container.begin(); iter != container.end(); ++iter)
   {
     value.PushBack(rapidjson::Value(*iter), allocator);
   }
   return value;
 }
 
-static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationState &ps, const char *pstName = NULL)
+static void
+dumpPresentationState(STD_NAMESPACE ostream & out, DVPresentationState & ps, const char * pstName = NULL)
 {
   size_t i, j, max;
 
   // START JSON structure
-  Document doc(kObjectType);
-  Document::AllocatorType& alloc = doc.GetAllocator();
+  Document                  doc(kObjectType);
+  Document::AllocatorType & alloc = doc.GetAllocator();
 
   Value presentationLabel;
   safeSetString(presentationLabel, ps.getPresentationLabel(), alloc);
-  doc.AddMember("PresentationLabel",
-    presentationLabel, alloc);
+  doc.AddMember("PresentationLabel", presentationLabel, alloc);
   Value presentationDescription;
   safeSetString(presentationDescription, ps.getPresentationDescription(), alloc);
-  doc.AddMember("PresentationDescription",
-    presentationDescription, alloc);
+  doc.AddMember("PresentationDescription", presentationDescription, alloc);
   Value presentationCreatorsName;
   safeSetString(presentationCreatorsName, ps.getPresentationCreatorsName(), alloc);
-  doc.AddMember("PresentationCreatorsName",
-    presentationCreatorsName, alloc);
+  doc.AddMember("PresentationCreatorsName", presentationCreatorsName, alloc);
   if (ps.haveActiveVOIWindow())
   {
-    double width=0.0, center=0.0;
+    double width = 0.0, center = 0.0;
     ps.getCurrentWindowWidth(width);
     ps.getCurrentWindowCenter(center);
     doc.AddMember("CurrentWindowCenter", Value(center), alloc);
@@ -189,10 +191,10 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
 
   // ICC color Profile
   DcmFileFormat imageFF;
-  OFCondition cond = imageFF.loadFile(pstName);
+  OFCondition   cond = imageFF.loadFile(pstName);
   if (cond.good())
   {
-    const Uint8* iccProfile;
+    const Uint8 * iccProfile;
     unsigned long iccProfileSize = 0;
     cond = imageFF.getDataset()->findAndGetUint8Array(DCM_ICCProfile, iccProfile, &iccProfileSize);
     if (cond.good() && iccProfileSize > 0)
@@ -221,8 +223,8 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   doc.AddMember("Rotation", Value(rotation), alloc);
 
   DVPSPresentationSizeMode sizemode = ps.getDisplayedAreaPresentationSizeMode();
-  double factor=1.0;
-  std::string presentationSizeMode;
+  double                   factor = 1.0;
+  std::string              presentationSizeMode;
   switch (sizemode)
   {
     case DVPSD_scaleToFit:
@@ -239,17 +241,19 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   doc.AddMember("PresentationSizeMode", Value(presentationSizeMode.c_str(), alloc), alloc);
   doc.AddMember("DisplayedAreaPresentationPixelMagnificationRatio", Value(factor), alloc);
 
-  std::array<int, 4> displayArea{0, 0, 0, 0};
+  std::array<int, 4> displayArea{ 0, 0, 0, 0 };
   ps.getStandardDisplayedArea(displayArea[0], displayArea[1], displayArea[2], displayArea[3]);
   auto dav = getArrayJson(displayArea, alloc);
   doc.AddMember("StandardDisplayedArea", dav, alloc);
 
-  std::array<double, 2> pixelSpacing{0.0, 0.0};
+  std::array<double, 2> pixelSpacing{ 0.0, 0.0 };
   if (EC_Normal == ps.getDisplayedAreaPresentationPixelSpacing(pixelSpacing[0], pixelSpacing[1]))
   {
     auto psv = getArrayJson(pixelSpacing, alloc);
     doc.AddMember("DisplayedAreaPresentationPixelSpacing", psv, alloc);
-  } else {
+  }
+  else
+  {
     auto aspectRatio = ps.getDisplayedAreaPresentationPixelAspectRatio();
     doc.AddMember("DisplayedAreaPresentationPixelAspectRatio", Value(aspectRatio), alloc);
   }
@@ -276,10 +280,10 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   if (ps.haveShutter(DVPSU_polygonal))
   {
     j = ps.getNumberOfPolyShutterVertices();
-    Sint32 polyX, polyY;
+    Sint32              polyX, polyY;
     std::vector<Sint32> vertices;
-    vertices.reserve(j*2);
-    for (i=0; i<j; i++)
+    vertices.reserve(j * 2);
+    for (i = 0; i < j; i++)
     {
       if (EC_Normal == ps.getPolyShutterVertex(i, polyX, polyY))
       {
@@ -287,13 +291,14 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
         vertices.push_back(polyY);
       }
     }
-    auto coordinates = getArrayJson(vertices, alloc);
+    auto  coordinates = getArrayJson(vertices, alloc);
     Value polyShutter(kObjectType);
 
     // rapidjson::Value doesn't have a default constructor for size_t (aka unsigned long).
     // However, we can safely type-cast this value into a 32-bit unsigned integer (uint32_t)
     // based on DICOM standards value representation "Integer String" (IS).
-    polyShutter.AddMember("NumberOfPolyShutterVertices", Value(static_cast<uint32_t>(ps.getNumberOfPolyShutterVertices())), alloc);
+    polyShutter.AddMember(
+      "NumberOfPolyShutterVertices", Value(static_cast<uint32_t>(ps.getNumberOfPolyShutterVertices())), alloc);
 
     polyShutter.AddMember("Coordinates", coordinates, alloc);
     doc.AddMember("PolygonalShutter", polyShutter, alloc);
@@ -306,9 +311,9 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   }
   doc.AddMember("ShutterPresentationValue", Value(ps.getShutterPresentationValue()), alloc);
 
-  ps.sortGraphicLayers();  // to order of display
+  ps.sortGraphicLayers(); // to order of display
   Value graphicsLayersJsonArray(kArrayType);
-  for (size_t layer=0; layer<ps.getNumberOfGraphicLayers(); layer++)
+  for (size_t layer = 0; layer < ps.getNumberOfGraphicLayers(); layer++)
   {
     Value layerJson(kObjectType);
     Value graphicLayerName;
@@ -327,19 +332,19 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
 
       if (EC_Normal == ps.getGraphicLayerRecommendedDisplayValueRGB(layer, r, g, b))
       {
-        const std::array<Uint16, 3> rgb{r, g, b};
+        const std::array<Uint16, 3> rgb{ r, g, b };
         layerJson.AddMember("RecommendedDisplayValueRGB", getArrayJson(rgb, alloc), alloc);
       }
     }
 
     // text objects
     max = ps.getNumberOfTextObjects(layer);
-    DVPSTextObject *ptext = NULL;
+    DVPSTextObject * ptext = NULL;
 
     // TextObjects[]
     Value textObjectsJsonArray(kArrayType);
 
-    for (size_t textidx=0; textidx<max; textidx++)
+    for (size_t textidx = 0; textidx < max; textidx++)
     {
       ptext = ps.getTextObject(layer, textidx);
       if (ptext)
@@ -351,11 +356,12 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
         textObjectJson.AddMember("Text", textObjectText, alloc);
         if (ptext->haveAnchorPoint())
         {
-          const std::array<double, 2> anchorPoint{ptext->getAnchorPoint_x(), ptext->getAnchorPoint_y()};
-          auto apv = getArrayJson(anchorPoint, alloc);
+          const std::array<double, 2> anchorPoint{ ptext->getAnchorPoint_x(), ptext->getAnchorPoint_y() };
+          auto                        apv = getArrayJson(anchorPoint, alloc);
           textObjectJson.AddMember("AnchorPoint", apv, alloc);
-          Value anchorPointUnits;
-          std::string anchorPointUnitsString(ptext->getAnchorPointAnnotationUnits()==DVPSA_display? "display" : "pixel");
+          Value       anchorPointUnits;
+          std::string anchorPointUnitsString(ptext->getAnchorPointAnnotationUnits() == DVPSA_display ? "display"
+                                                                                                     : "pixel");
           anchorPointUnits.SetString(anchorPointUnitsString.c_str(), anchorPointUnitsString.length(), alloc);
           textObjectJson.AddMember("AnchorPointUnits", anchorPointUnits, alloc);
           textObjectJson.AddMember("AnchorPointVisible", Value(ptext->anchorPointIsVisible()), alloc);
@@ -363,16 +369,20 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
 
         if (ptext->haveBoundingBox())
         {
-          const std::array<double, 4> box{ptext->getBoundingBoxTLHC_x(), ptext->getBoundingBoxTLHC_y(), ptext->getBoundingBoxBRHC_x(), ptext->getBoundingBoxBRHC_y()};
-          auto bv = getArrayJson(box, alloc);
+          const std::array<double, 4> box{ ptext->getBoundingBoxTLHC_x(),
+                                           ptext->getBoundingBoxTLHC_y(),
+                                           ptext->getBoundingBoxBRHC_x(),
+                                           ptext->getBoundingBoxBRHC_y() };
+          auto                        bv = getArrayJson(box, alloc);
           textObjectJson.AddMember("BoundingBox", getArrayJson(box, alloc), alloc);
-          Value boundingBoxUnits;
-          std::string boundingBoxUnitsString(ptext->getBoundingBoxAnnotationUnits()==DVPSA_display ? "display" : "pixel");
+          Value       boundingBoxUnits;
+          std::string boundingBoxUnitsString(ptext->getBoundingBoxAnnotationUnits() == DVPSA_display ? "display"
+                                                                                                     : "pixel");
           boundingBoxUnits.SetString(boundingBoxUnitsString.c_str(), boundingBoxUnitsString.length(), alloc);
           textObjectJson.AddMember("BoundingBoxUnits", boundingBoxUnits, alloc);
 
           DVPSTextJustification justification = ptext->getBoundingBoxHorizontalJustification();
-          std::string horizontalJustification;
+          std::string           horizontalJustification;
           switch (justification)
           {
             case DVPSX_left:
@@ -385,7 +395,8 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
               horizontalJustification = "center";
               break;
           }
-          textObjectJson.AddMember("BoundingBoxHorizontalJustification", Value(horizontalJustification.c_str(), alloc), alloc);
+          textObjectJson.AddMember(
+            "BoundingBoxHorizontalJustification", Value(horizontalJustification.c_str(), alloc), alloc);
         }
         textObjectsJsonArray.PushBack(textObjectJson, alloc);
       }
@@ -395,42 +406,52 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
 
     // graphic objects
     max = ps.getNumberOfGraphicObjects(layer);
-    DVPSGraphicObject *pgraphic = NULL;
+    DVPSGraphicObject * pgraphic = NULL;
 
     // GraphicObjects[]
     Value graphicObjectsJsonArray(kArrayType);
 
-    for (size_t graphicidx=0; graphicidx<max; graphicidx++)
+    for (size_t graphicidx = 0; graphicidx < max; graphicidx++)
     {
       pgraphic = ps.getGraphicObject(layer, graphicidx);
       if (pgraphic)
       {
-        Value graphicJson(kObjectType);
+        Value       graphicJson(kObjectType);
         std::string graphicTypeString = "none";
         switch (pgraphic->getGraphicType())
         {
-          case DVPST_polyline: graphicTypeString = "polyline"; break;
-          case DVPST_interpolated: graphicTypeString = "interpolated"; break;
-          case DVPST_circle: graphicTypeString = "circle"; break;
-          case DVPST_ellipse: graphicTypeString = "ellipse"; break;
-          case DVPST_point: graphicTypeString = "point"; break;
+          case DVPST_polyline:
+            graphicTypeString = "polyline";
+            break;
+          case DVPST_interpolated:
+            graphicTypeString = "interpolated";
+            break;
+          case DVPST_circle:
+            graphicTypeString = "circle";
+            break;
+          case DVPST_ellipse:
+            graphicTypeString = "ellipse";
+            break;
+          case DVPST_point:
+            graphicTypeString = "point";
+            break;
         }
 
         Value graphicType;
         graphicType.SetString(graphicTypeString.c_str(), graphicTypeString.length(), alloc);
         graphicJson.AddMember("GraphicType", graphicType, alloc);
         graphicJson.AddMember("IsFilled", Value(pgraphic->isFilled()), alloc);
-        Value units;
-        std::string unitsString(pgraphic->getAnnotationUnits()==DVPSA_display? "display" : "pixel");
+        Value       units;
+        std::string unitsString(pgraphic->getAnnotationUnits() == DVPSA_display ? "display" : "pixel");
         units.SetString(unitsString.c_str(), unitsString.length(), alloc);
         graphicJson.AddMember("Units", units, alloc);
 
         j = pgraphic->getNumberOfPoints();
-        Float32 fx=0.0, fy=0.0;
+        Float32            fx = 0.0, fy = 0.0;
         std::vector<float> points;
-        for (i=0; i<j; i++)
+        for (i = 0; i < j; i++)
         {
-          if (EC_Normal==pgraphic->getPoint(i,fx,fy))
+          if (EC_Normal == pgraphic->getPoint(i, fx, fy))
           {
             points.push_back(fx);
             points.push_back(fy);
@@ -444,22 +465,26 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
 
     // curve objects
     max = ps.getNumberOfCurves(layer);
-    DVPSCurve *pcurve = NULL;
+    DVPSCurve * pcurve = NULL;
 
     // Curves[]
     Value curvesJsonArray(kArrayType);
 
-    for (size_t curveidx=0; curveidx<max; curveidx++)
+    for (size_t curveidx = 0; curveidx < max; curveidx++)
     {
       pcurve = ps.getCurve(layer, curveidx);
       if (pcurve)
       {
-        Value curveJson(kObjectType); // curve{}
+        Value       curveJson(kObjectType); // curve{}
         std::string type;
         switch (pcurve->getTypeOfData())
         {
-          case DVPSL_roiCurve: type = "roiCurve"; break;
-          case DVPSL_polylineCurve: type = "polylineCurve"; break;
+          case DVPSL_roiCurve:
+            type = "roiCurve";
+            break;
+          case DVPSL_polylineCurve:
+            type = "polylineCurve";
+            break;
         }
         curveJson.AddMember("Type", Value(type.c_str(), alloc), alloc);
         curveJson.AddMember("AxisUnitsX", Value(pcurve->getCurveAxisUnitsX(), alloc), alloc);
@@ -472,12 +497,12 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
         curveJson.AddMember("Description", description, alloc);
 
         j = pcurve->getNumberOfPoints();
-        double dx=0.0, dy=0.0;
+        double              dx = 0.0, dy = 0.0;
         std::vector<double> points;
-        points.reserve(j*2);
-        for (i=0; i<j; i++)
+        points.reserve(j * 2);
+        for (i = 0; i < j; i++)
         {
-          if (EC_Normal==pcurve->getPoint(i,dx,dy))
+          if (EC_Normal == pcurve->getPoint(i, dx, dy))
           {
             points.push_back(dx);
             points.push_back(dy);
@@ -491,23 +516,23 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
     layerJson.AddMember("Curves", curvesJsonArray, alloc);
 
     // overlay objects
-    const void *overlayData=NULL;
-    unsigned int overlayWidth=0, overlayHeight=0, overlayLeft=0, overlayTop=0;
-    OFBool overlayROI=OFFalse;
-    Uint16 overlayTransp=0;
-    char overlayfile[100];
-    FILE *ofile=NULL;
+    const void * overlayData = NULL;
+    unsigned int overlayWidth = 0, overlayHeight = 0, overlayLeft = 0, overlayTop = 0;
+    OFBool       overlayROI = OFFalse;
+    Uint16       overlayTransp = 0;
+    char         overlayfile[100];
+    FILE *       ofile = NULL;
 
     max = ps.getNumberOfActiveOverlays(layer);
 
     // Overlays[]
     Value overlaysJsonArray(kArrayType);
 
-    for (size_t ovlidx=0; ovlidx<max; ovlidx++)
+    for (size_t ovlidx = 0; ovlidx < max; ovlidx++)
     {
       Value overlayJson(kObjectType);
       overlayJson.AddMember("Index", Value(static_cast<uint32_t>(ovlidx)), alloc);
-      std::stringstream value;
+      std::stringstream              value;
       value << "0x" << STD_NAMESPACE hex << ps.getActiveOverlayGroup(layer, ovlidx) << STD_NAMESPACE dec;
       overlayJson.AddMember("Group", Value(value.str().c_str(), alloc), alloc);
       Value label;
@@ -516,14 +541,21 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
       Value description;
       safeSetString(description, ps.getActiveOverlayDescription(layer, ovlidx), alloc);
       overlayJson.AddMember("Description", description, alloc);
-      Value type;
+      Value       type;
       std::string typeString(ps.activeOverlayIsROI(layer, ovlidx) ? "ROI" : "graphic");
       type.SetString(typeString.c_str(), typeString.length(), alloc);
       overlayJson.AddMember("Type", type, alloc);
 
       /* get overlay data */
-      if (EC_Normal == ps.getOverlayData(layer, ovlidx, overlayData, overlayWidth, overlayHeight,
-          overlayLeft, overlayTop, overlayROI, overlayTransp))
+      if (EC_Normal == ps.getOverlayData(layer,
+                                         ovlidx,
+                                         overlayData,
+                                         overlayWidth,
+                                         overlayHeight,
+                                         overlayLeft,
+                                         overlayTop,
+                                         overlayROI,
+                                         overlayTransp))
       {
         overlayJson.AddMember("Width", Value(overlayWidth), alloc);
         overlayJson.AddMember("Height", Value(overlayHeight), alloc);
@@ -532,11 +564,13 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
 
         std::stringstream buff;
         buff << "P5\n" << overlayWidth << " " << overlayHeight << " " << "255\n";
-        buff.write((const char*)overlayData, overlayWidth * overlayHeight);
+        buff.write((const char *)overlayData, overlayWidth * overlayHeight);
 
         constexpr bool urlFriendly = false;
         overlayJson.AddMember("OverlayData", Value(base64_encode(buff.str(), urlFriendly).c_str(), alloc), alloc);
-      } else {
+      }
+      else
+      {
         OFLOG_ERROR(appLogger, "unable to access overlay data!");
       }
       overlaysJsonArray.PushBack(overlayJson, alloc);
@@ -547,7 +581,7 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   doc.AddMember("GraphicsLayers", graphicsLayersJsonArray, alloc); // GraphicsLayers[]
 
   // Pretty print the json into output stream.
-  StringBuffer buffer;
+  StringBuffer               buffer;
   PrettyWriter<StringBuffer> writer(buffer);
   doc.Accept(writer);
   out << buffer.GetString();
@@ -562,11 +596,16 @@ using ColorPixelType = itk::RGBPixel<uint8_t>;
 using ColorImageType = itk::Image<ColorPixelType, Dimension>;
 using OutputColorImageType = itk::wasm::OutputImage<ColorImageType>;
 
-template<typename OutputImageType, typename PixelType, unsigned int Dim>
-int GenerateOutputImage(typename OutputImageType::Pointer & outputImage, const unsigned long width, const unsigned long height, const std::array<double, 2>& pixelSpacing, const void* pixelData)
+template <typename OutputImageType, typename PixelType, unsigned int Dim>
+int
+GenerateOutputImage(typename OutputImageType::Pointer & outputImage,
+                    const unsigned long                 width,
+                    const unsigned long                 height,
+                    const std::array<double, 2> &       pixelSpacing,
+                    const void *                        pixelData)
 {
   using ImportFilterType = itk::ImportImageFilter<PixelType, Dim>;
-  auto importFilter = itk::ImportImageFilter<PixelType, Dim>::New();
+  auto                                importFilter = itk::ImportImageFilter<PixelType, Dim>::New();
   typename ImportFilterType::SizeType size;
   size[0] = width;
   size[1] = height;
@@ -585,21 +624,36 @@ int GenerateOutputImage(typename OutputImageType::Pointer & outputImage, const u
   importFilter->SetSpacing(spacing);
   const unsigned int numberOfPixels = size[0] * size[1];
   // ColorImageType::Internal
-  importFilter->SetImportPointer((PixelType*)pixelData, numberOfPixels, false);
+  importFilter->SetImportPointer((PixelType *)pixelData, numberOfPixels, false);
   importFilter->Update();
   outputImage = importFilter->GetOutput();
   return EXIT_SUCCESS;
 }
 
-template int GenerateOutputImage<GrayImageType,  GrayPixelType,  2U>(typename GrayImageType::Pointer &,  const unsigned long, const unsigned long, const std::array<double, 2>&, const void*);
-template int GenerateOutputImage<ColorImageType, ColorPixelType, 2U>(typename ColorImageType::Pointer &, const unsigned long, const unsigned long, const std::array<double, 2>&, const void*);
+template int
+GenerateOutputImage<GrayImageType, GrayPixelType, 2U>(typename GrayImageType::Pointer &,
+                                                      const unsigned long,
+                                                      const unsigned long,
+                                                      const std::array<double, 2> &,
+                                                      const void *);
+template int
+GenerateOutputImage<ColorImageType, ColorPixelType, 2U>(typename ColorImageType::Pointer &,
+                                                        const unsigned long,
+                                                        const unsigned long,
+                                                        const std::array<double, 2> &,
+                                                        const void *);
 
-int main(int argc, char *argv[])
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("apply-presentation-state-to-image", "Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "apply-presentation-state-to-image",
+    "Apply a presentation state to a given DICOM image and render output as bitmap, or dicom file.",
+    argc,
+    argv);
 
   // Expecting color output
-  bool colorOutput{false};
+  bool colorOutput{ false };
   pipeline.add_flag("--color-output", colorOutput, "output image as RGB (default: false)");
 
   // pre-parse command line to determine if we need color or gray output image
@@ -607,15 +661,22 @@ int main(int argc, char *argv[])
 
   // Inputs
   std::string imageIn;
-  pipeline.add_option("image-in", imageIn, "Input DICOM file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+  pipeline.add_option("image-in", imageIn, "Input DICOM file")
+    ->required()
+    ->check(CLI::ExistingFile)
+    ->type_name("INPUT_BINARY_FILE");
 
   std::string pstateFile;
-  pipeline.add_option("presentation-state-file", pstateFile, "Process using presentation state file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+  pipeline.add_option("presentation-state-file", pstateFile, "Process using presentation state file")
+    ->required()
+    ->check(CLI::ExistingFile)
+    ->type_name("INPUT_BINARY_FILE");
 
   // Outputs
   // Metadata output regarding overlays
   itk::wasm::OutputTextStream pstateOutStream;
-  pipeline.add_option("presentation-state-out-stream", pstateOutStream, "Output overlay information")->type_name("OUTPUT_JSON");
+  pipeline.add_option("presentation-state-out-stream", pstateOutStream, "Output overlay information")
+    ->type_name("OUTPUT_JSON");
 
   // Parameters
   std::string configFile;
@@ -625,13 +686,14 @@ int main(int argc, char *argv[])
   pipeline.add_option("--frame", frame, "frame: integer. Process using image frame f (default: 1)");
 
   // addGroup "output format:"
-  bool noPstateOutput{false};
-  pipeline.add_flag("--no-presentation-state-output", noPstateOutput, "Do not get presentation state information in text stream.");
-  bool noBitmapOutput{false};
+  bool noPstateOutput{ false };
+  pipeline.add_flag(
+    "--no-presentation-state-output", noPstateOutput, "Do not get presentation state information in text stream.");
+  bool noBitmapOutput{ false };
   pipeline.add_flag("--no-bitmap-output", noBitmapOutput, "Do not get resulting image as bitmap output stream.");
 
   // Define output image and bind to CLI option
-  OutputGrayImageType outputGrayImage;
+  OutputGrayImageType  outputGrayImage;
   OutputColorImageType outputColorImage;
   if (colorOutput)
   {
@@ -652,21 +714,24 @@ int main(int argc, char *argv[])
   ITK_WASM_PARSE(pipeline);
 
   // OFBool opt_dump_pstate     = OFFalse;              /* default: do not dump presentation state */
-  OFBool opt_dicom_mode      = OFFalse;                 /* default: create PGM, not DICOM SC */
-  OFCmdUnsignedInt opt_frame = frame;                   /* default: first frame */
-  const char *opt_pstName    = NULL;                    /* pstate read file name */
-  const char *opt_imgName    = imageIn.c_str();         /* image read file name */
-  const char *opt_pgmName    = NULL;                    /* pgm save file name */
-  const char *opt_cfgName    = NULL;                    /* config read file name */
+  OFBool           opt_dicom_mode = OFFalse;      /* default: create PGM, not DICOM SC */
+  OFCmdUnsignedInt opt_frame = frame;             /* default: first frame */
+  const char *     opt_pstName = NULL;            /* pstate read file name */
+  const char *     opt_imgName = imageIn.c_str(); /* image read file name */
+  const char *     opt_pgmName = NULL;            /* pgm save file name */
+  const char *     opt_cfgName = NULL;            /* config read file name */
 
   /* command line parameters and options */
   if (noPstateOutput && noBitmapOutput)
   {
-    OFLOG_FATAL(appLogger, "No output form requested. Do not specify both --no-presentation-state-output and --no-bitmap-output.");
+    OFLOG_FATAL(appLogger,
+                "No output form requested. Do not specify both --no-presentation-state-output and --no-bitmap-output.");
   }
 
-  if(!pstateFile.empty()) opt_pstName = pstateFile.c_str();
-  if(!configFile.empty()) opt_cfgName = configFile.c_str();
+  if (!pstateFile.empty())
+    opt_pstName = pstateFile.c_str();
+  if (!configFile.empty())
+    opt_cfgName = configFile.c_str();
 
   // DICOM output is currently not supported
   // if (outputFormatPGM)         opt_dicom_mode = OFFalse;
@@ -677,24 +742,28 @@ int main(int argc, char *argv[])
 
   if (opt_cfgName)
   {
-    FILE *cfgfile = fopen(opt_cfgName, "rb");
-    if (cfgfile) fclose(cfgfile); else
+    FILE * cfgfile = fopen(opt_cfgName, "rb");
+    if (cfgfile)
+      fclose(cfgfile);
+    else
     {
       OFLOG_FATAL(appLogger, "can't open configuration file '" << opt_cfgName << "'");
       return 10;
     }
   }
-  DVInterface dvi(opt_cfgName);
-  OFCondition status = EC_Normal;
-  const void *pixelData = NULL;
-  GrayImageType::Pointer grayImage;
+  DVInterface             dvi(opt_cfgName);
+  OFCondition             status = EC_Normal;
+  const void *            pixelData = NULL;
+  GrayImageType::Pointer  grayImage;
   ColorImageType::Pointer colorImage;
 
   if (opt_pstName == NULL)
   {
     OFLOG_DEBUG(appLogger, "reading DICOM image file: " << opt_imgName);
     status = dvi.loadImage(opt_imgName);
-  } else {
+  }
+  else
+  {
     OFLOG_DEBUG(appLogger, "reading DICOM presentation-state file: " << opt_pstName);
     OFLOG_DEBUG(appLogger, "reading DICOM image file: " << opt_imgName);
     status = dvi.loadPState(opt_pstName, opt_imgName);
@@ -702,7 +771,8 @@ int main(int argc, char *argv[])
 
   if (status == EC_Normal)
   {
-    if (!noPstateOutput) dumpPresentationState(pstateOutStream.Get(), dvi.getCurrentPState(), opt_pstName);
+    if (!noPstateOutput)
+      dumpPresentationState(pstateOutStream.Get(), dvi.getCurrentPState(), opt_pstName);
     if (!noBitmapOutput)
     {
       unsigned long width = 0;
@@ -711,8 +781,9 @@ int main(int argc, char *argv[])
       if ((opt_frame > 0) && (dvi.getCurrentPState().selectImageFrameNumber(opt_frame) != EC_Normal))
         OFLOG_ERROR(appLogger, "cannot select frame " << opt_frame);
 
-      std::array<double, 2> pixelSpacing{0.0, 0.0};
-      if (EC_Normal != dvi.getCurrentPState().getDisplayedAreaPresentationPixelSpacing(pixelSpacing[0], pixelSpacing[1]))
+      std::array<double, 2> pixelSpacing{ 0.0, 0.0 };
+      if (EC_Normal !=
+          dvi.getCurrentPState().getDisplayedAreaPresentationPixelSpacing(pixelSpacing[0], pixelSpacing[1]))
         OFLOG_ERROR(appLogger, "cannot read pixel spacing from presentation state.");
 
       if ((dvi.getCurrentPState().getPixelData(pixelData, width, height) == EC_Normal) && (pixelData != NULL))
@@ -725,13 +796,15 @@ int main(int argc, char *argv[])
         {
           if (colorOutput)
           {
-            auto result =  GenerateOutputImage<ColorImageType, ColorPixelType, 2U>(colorImage, width, height, pixelSpacing, pixelData);
+            auto result = GenerateOutputImage<ColorImageType, ColorPixelType, 2U>(
+              colorImage, width, height, pixelSpacing, pixelData);
             outputColorImage.Set(colorImage);
             return result;
           }
           else
           {
-            auto result = GenerateOutputImage<GrayImageType, GrayPixelType, 2U>(grayImage, width, height, pixelSpacing, pixelData);
+            auto result =
+              GenerateOutputImage<GrayImageType, GrayPixelType, 2U>(grayImage, width, height, pixelSpacing, pixelData);
             outputGrayImage.Set(grayImage);
             return result;
           }
@@ -751,7 +824,7 @@ int main(int argc, char *argv[])
   }
 
 #ifdef DEBUG
-  dcmDataDict.clear();  /* useful for debugging with dmalloc */
+  dcmDataDict.clear(); /* useful for debugging with dmalloc */
 #endif
 
   return (status != EC_Normal);

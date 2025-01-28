@@ -54,15 +54,15 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     using MetaDataMatrixDoubleType = MetaDataObject<Matrix<double>>;
 
     MetaDataObjectBase::Pointer entry = itr->second;
-    const std::string key = itr->first;
+    const std::string           key = itr->first;
 
     const auto boolValue = dynamic_cast<MetaDataBoolType *>(entry.GetPointer());
     if (boolValue)
     {
-      const bool value = boolValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_bool(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      const bool    value = boolValue->GetMetaDataObjectValue();
+      cbor_item_t * keyItem = cbor_build_string(key.c_str());
+      cbor_item_t * valueItem = cbor_build_bool(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
@@ -70,10 +70,10 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     const auto doubleValue = dynamic_cast<MetaDataDoubleType *>(entry.GetPointer());
     if (doubleValue)
     {
-      const double value = doubleValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_float8(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      const double  value = doubleValue->GetMetaDataObjectValue();
+      cbor_item_t * keyItem = cbor_build_string(key.c_str());
+      cbor_item_t * valueItem = cbor_build_float8(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
@@ -82,9 +82,9 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (stringValue)
     {
       const std::string value = stringValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_string(value.c_str());
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      cbor_item_t *     keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *     valueItem = cbor_build_string(value.c_str());
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
@@ -92,16 +92,16 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     const auto doubleVectorValue = dynamic_cast<MetaDataVectorDoubleType *>(entry.GetPointer());
     if (doubleVectorValue)
     {
-      const std::vector<double>& value = doubleVectorValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* arrayItem = cbor_new_definite_array(value.size());
+      const std::vector<double> & value = doubleVectorValue->GetMetaDataObjectValue();
+      cbor_item_t *               keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *               arrayItem = cbor_new_definite_array(value.size());
 
-      for (const auto& v : value)
+      for (const auto & v : value)
       {
         cbor_array_push(arrayItem, cbor_build_float8(v));
       }
 
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(arrayItem)});
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(arrayItem) });
       ++itr;
       continue;
     }
@@ -109,16 +109,16 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     const auto stringVectorValue = dynamic_cast<MetaDataVectorStringType *>(entry.GetPointer());
     if (stringVectorValue)
     {
-      const std::vector<std::string>& value = stringVectorValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* arrayItem = cbor_new_definite_array(value.size());
+      const std::vector<std::string> & value = stringVectorValue->GetMetaDataObjectValue();
+      cbor_item_t *                    keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *                    arrayItem = cbor_new_definite_array(value.size());
 
-      for (const auto& s : value)
+      for (const auto & s : value)
       {
         cbor_array_push(arrayItem, cbor_build_string(s.c_str()));
       }
 
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(arrayItem)});
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(arrayItem) });
       ++itr;
       continue;
     }
@@ -127,20 +127,20 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (doubleVectorVectorValue)
     {
       const std::vector<std::vector<double>> value = doubleVectorVectorValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* arrayItem = cbor_new_definite_array(value.size());
+      cbor_item_t *                          keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *                          arrayItem = cbor_new_definite_array(value.size());
 
-      for (const auto& v : value)
+      for (const auto & v : value)
       {
-        cbor_item_t* innerArrayItem = cbor_new_definite_array(v.size());
-        for (const auto& vv : v)
+        cbor_item_t * innerArrayItem = cbor_new_definite_array(v.size());
+        for (const auto & vv : v)
         {
           cbor_array_push(innerArrayItem, cbor_build_float8(vv));
         }
         cbor_array_push(arrayItem, innerArrayItem);
       }
 
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(arrayItem)});
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(arrayItem) });
       ++itr;
       continue;
     }
@@ -149,19 +149,19 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (ucharValue)
     {
       const unsigned char value = ucharValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_uint8(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      cbor_item_t *       keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *       valueItem = cbor_build_uint8(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
     const auto charValue = dynamic_cast<MetaDataCharType *>(entry.GetPointer());
     if (charValue)
     {
-      const char value = charValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_uint8(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      const char    value = charValue->GetMetaDataObjectValue();
+      cbor_item_t * keyItem = cbor_build_string(key.c_str());
+      cbor_item_t * valueItem = cbor_build_uint8(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
@@ -169,9 +169,9 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (signedCharValue)
     {
       const signed char value = signedCharValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_uint8(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      cbor_item_t *     keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *     valueItem = cbor_build_uint8(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
@@ -179,19 +179,19 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (ushortValue)
     {
       const unsigned short value = ushortValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_uint16(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      cbor_item_t *        keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *        valueItem = cbor_build_uint16(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
     const auto shortValue = dynamic_cast<MetaDataShortType *>(entry.GetPointer());
     if (shortValue)
     {
-      const short value = shortValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_uint16(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      const short   value = shortValue->GetMetaDataObjectValue();
+      cbor_item_t * keyItem = cbor_build_string(key.c_str());
+      cbor_item_t * valueItem = cbor_build_uint16(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
@@ -199,19 +199,19 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (ulongValue)
     {
       const unsigned long value = ulongValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_uint32(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      cbor_item_t *       keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *       valueItem = cbor_build_uint32(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
     const auto longValue = dynamic_cast<MetaDataLongType *>(entry.GetPointer());
     if (longValue)
     {
-      const long value = longValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_uint32(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      const long    value = longValue->GetMetaDataObjectValue();
+      cbor_item_t * keyItem = cbor_build_string(key.c_str());
+      cbor_item_t * valueItem = cbor_build_uint32(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
@@ -219,9 +219,9 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (ulongLongValue)
     {
       const unsigned long long value = ulongLongValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_uint64(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      cbor_item_t *            keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *            valueItem = cbor_build_uint64(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
@@ -229,9 +229,9 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (longLongValue)
     {
       const long long value = longLongValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* valueItem = cbor_build_uint64(value);
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(valueItem)});
+      cbor_item_t *   keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *   valueItem = cbor_build_uint64(value);
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(valueItem) });
       ++itr;
       continue;
     }
@@ -239,15 +239,15 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (arrayCharValue)
     {
       const Array<char> valueArray = arrayCharValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* arrayItem = cbor_new_definite_array(valueArray.Size());
+      cbor_item_t *     keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *     arrayItem = cbor_new_definite_array(valueArray.Size());
 
-      for (const auto& v : valueArray)
+      for (const auto & v : valueArray)
       {
         cbor_array_push(arrayItem, cbor_build_uint8(v));
       }
 
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(arrayItem)});
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(arrayItem) });
       ++itr;
       continue;
     }
@@ -255,15 +255,15 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (arrayFloatValue)
     {
       const Array<float> valueArray = arrayFloatValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* arrayItem = cbor_new_definite_array(valueArray.Size());
+      cbor_item_t *      keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *      arrayItem = cbor_new_definite_array(valueArray.Size());
 
-      for (const auto& v : valueArray)
+      for (const auto & v : valueArray)
       {
         cbor_array_push(arrayItem, cbor_build_float8(v));
       }
 
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(arrayItem)});
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(arrayItem) });
       ++itr;
       continue;
     }
@@ -271,15 +271,15 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (arrayDoubleValue)
     {
       const Array<double> valueArray = arrayDoubleValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* arrayItem = cbor_new_definite_array(valueArray.Size());
+      cbor_item_t *       keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *       arrayItem = cbor_new_definite_array(valueArray.Size());
 
-      for (const auto& v : valueArray)
+      for (const auto & v : valueArray)
       {
         cbor_array_push(arrayItem, cbor_build_float8(v));
       }
 
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(arrayItem)});
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(arrayItem) });
       ++itr;
       continue;
     }
@@ -287,12 +287,12 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (matrixFloat44Value)
     {
       const Matrix<float, 4, 4> valueArray = matrixFloat44Value->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* arrayItem = cbor_new_definite_array(4);
+      cbor_item_t *             keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *             arrayItem = cbor_new_definite_array(4);
 
       for (unsigned int i = 0; i < 4; ++i)
       {
-        cbor_item_t* innerArrayItem = cbor_new_definite_array(4);
+        cbor_item_t * innerArrayItem = cbor_new_definite_array(4);
         for (unsigned int j = 0; j < 4; ++j)
         {
           cbor_array_push(innerArrayItem, cbor_build_float8(valueArray[i][j]));
@@ -300,7 +300,7 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
         cbor_array_push(arrayItem, innerArrayItem);
       }
 
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(arrayItem)});
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(arrayItem) });
       ++itr;
       continue;
     }
@@ -308,12 +308,12 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
     if (matrixDoubleValue)
     {
       const Matrix<double, 3, 3> valueArray = matrixDoubleValue->GetMetaDataObjectValue();
-      cbor_item_t* keyItem = cbor_build_string(key.c_str());
-      cbor_item_t* arrayItem = cbor_new_definite_array(3);
+      cbor_item_t *              keyItem = cbor_build_string(key.c_str());
+      cbor_item_t *              arrayItem = cbor_new_definite_array(3);
 
       for (unsigned int i = 0; i < 3; ++i)
       {
-        cbor_item_t* innerArrayItem = cbor_new_definite_array(3);
+        cbor_item_t * innerArrayItem = cbor_new_definite_array(3);
         for (unsigned int j = 0; j < 3; ++j)
         {
           cbor_array_push(innerArrayItem, cbor_build_float8(valueArray[i][j]));
@@ -321,7 +321,7 @@ metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t
         cbor_array_push(arrayItem, innerArrayItem);
       }
 
-      cbor_map_add(metaDataCBOR, cbor_pair{cbor_move(keyItem), cbor_move(arrayItem)});
+      cbor_map_add(metaDataCBOR, cbor_pair{ cbor_move(keyItem), cbor_move(arrayItem) });
       ++itr;
       continue;
     }
@@ -334,17 +334,16 @@ cborToMetaDataDictionary(const cbor_item_t * metaDataCBOR, itk::MetaDataDictiona
 {
   dictionary.Clear();
 
-  size_t mapLength = cbor_map_size(metaDataCBOR);
-  struct cbor_pair *pairs = cbor_map_handle(metaDataCBOR);
+  size_t             mapLength = cbor_map_size(metaDataCBOR);
+  struct cbor_pair * pairs = cbor_map_handle(metaDataCBOR);
 
   for (size_t i = 0; i < mapLength; i++)
   {
-    cbor_item_t *key = pairs[i].key;
-    cbor_item_t *value = pairs[i].value;
+    cbor_item_t * key = pairs[i].key;
+    cbor_item_t * value = pairs[i].value;
 
     // Extract key string
-    std::string keyStr(reinterpret_cast<const char*>(cbor_string_handle(key)),
-                      cbor_string_length(key));
+    std::string keyStr(reinterpret_cast<const char *>(cbor_string_handle(key)), cbor_string_length(key));
 
     if (cbor_is_bool(value))
     {
@@ -358,8 +357,7 @@ cborToMetaDataDictionary(const cbor_item_t * metaDataCBOR, itk::MetaDataDictiona
     }
     else if (cbor_isa_string(value))
     {
-      std::string stringValue(reinterpret_cast<const char*>(cbor_string_handle(value)),
-                            cbor_string_length(value));
+      std::string stringValue(reinterpret_cast<const char *>(cbor_string_handle(value)), cbor_string_length(value));
       EncapsulateMetaData<std::string>(dictionary, keyStr, stringValue);
     }
     else if (cbor_isa_array(value))
@@ -367,14 +365,14 @@ cborToMetaDataDictionary(const cbor_item_t * metaDataCBOR, itk::MetaDataDictiona
       size_t arrayLength = cbor_array_size(value);
       if (arrayLength > 0)
       {
-        cbor_item_t *firstItem = cbor_array_get(value, 0);
+        cbor_item_t * firstItem = cbor_array_get(value, 0);
 
         if (cbor_is_float(firstItem))
         {
           std::vector<double> doubleVector;
           for (size_t j = 0; j < arrayLength; j++)
           {
-            cbor_item_t *item = cbor_array_get(value, j);
+            cbor_item_t * item = cbor_array_get(value, j);
             doubleVector.push_back(cbor_float_get_float(item));
           }
           EncapsulateMetaData<std::vector<double>>(dictionary, keyStr, doubleVector);
@@ -384,9 +382,9 @@ cborToMetaDataDictionary(const cbor_item_t * metaDataCBOR, itk::MetaDataDictiona
           std::vector<std::string> stringVector;
           for (size_t j = 0; j < arrayLength; j++)
           {
-            cbor_item_t *item = cbor_array_get(value, j);
-            stringVector.emplace_back(reinterpret_cast<const char*>(cbor_string_handle(item)),
-                                    cbor_string_length(item));
+            cbor_item_t * item = cbor_array_get(value, j);
+            stringVector.emplace_back(reinterpret_cast<const char *>(cbor_string_handle(item)),
+                                      cbor_string_length(item));
           }
           EncapsulateMetaData<std::vector<std::string>>(dictionary, keyStr, stringVector);
         }
@@ -395,13 +393,13 @@ cborToMetaDataDictionary(const cbor_item_t * metaDataCBOR, itk::MetaDataDictiona
           std::vector<std::vector<double>> doubleVectorVector;
           for (size_t j = 0; j < arrayLength; j++)
           {
-            cbor_item_t *innerArray = cbor_array_get(value, j);
-            size_t innerLength = cbor_array_size(innerArray);
+            cbor_item_t * innerArray = cbor_array_get(value, j);
+            size_t        innerLength = cbor_array_size(innerArray);
 
             std::vector<double> innerVector;
             for (size_t k = 0; k < innerLength; k++)
             {
-              cbor_item_t *item = cbor_array_get(innerArray, k);
+              cbor_item_t * item = cbor_array_get(innerArray, k);
               innerVector.push_back(cbor_float_get_float(item));
             }
             doubleVectorVector.push_back(std::move(innerVector));

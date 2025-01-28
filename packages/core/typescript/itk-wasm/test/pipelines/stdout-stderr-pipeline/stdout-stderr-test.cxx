@@ -19,7 +19,8 @@
 
 #include "itkPipeline.h"
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("stdout-stderr-test", "Test writing to stdout and stderr", argc, argv);
 

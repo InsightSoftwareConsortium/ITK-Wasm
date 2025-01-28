@@ -39,13 +39,13 @@ namespace itk
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT WasmImageIO: public StreamingImageIOBase
+class WebAssemblyInterface_EXPORT WasmImageIO : public StreamingImageIOBase
 {
 public:
   /** Standard class typedefs. */
   typedef WasmImageIO          Self;
   typedef StreamingImageIOBase Superclass;
-  typedef SmartPointer< Self > Pointer;
+  typedef SmartPointer<Self>   Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -58,51 +58,64 @@ public:
    * while others can support 2D, 3D, or even n-D. This method returns
    * true/false as to whether the ImageIO can support the dimension
    * indicated. */
-  bool SupportsDimension(unsigned long) override;
+  bool
+  SupportsDimension(unsigned long) override;
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  bool CanReadFile(const char *) override;
+  bool
+  CanReadFile(const char *) override;
 
   /** Set the spacing and dimension information for the set filename. */
-  void ReadImageInformation() override;
+  void
+  ReadImageInformation() override;
 
   /** Reads the data from disk into the memory buffer provided. */
-  void Read(void *buffer) override;
+  void
+  Read(void * buffer) override;
 
 #if !defined(ITK_WRAPPING_PARSER)
   /** Set the JSON representation of the image information. */
-  void SetJSON(const ImageJSON & json);
+  void
+  SetJSON(const ImageJSON & json);
 #endif
 
   /** Determine the file type. Returns true if this ImageIO can write the
    * file specified. */
-  bool CanWriteFile(const char *) override;
+  bool
+  CanWriteFile(const char *) override;
 
   /** Set the spacing and dimension information for the set filename. */
-  void WriteImageInformation() override;
+  void
+  WriteImageInformation() override;
 
 #if !defined(ITK_WRAPPING_PARSER)
   /** Get the JSON representation of the image information. */
-  auto GetJSON() -> ImageJSON;
+  auto
+  GetJSON() -> ImageJSON;
 #endif
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. */
-  void Write(const void *buffer) override;
+  void
+  Write(const void * buffer) override;
 
 protected:
   WasmImageIO();
   ~WasmImageIO() override;
-  void PrintSelf(std::ostream & os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
-  Superclass::SizeType GetHeaderSize() const override
+  Superclass::SizeType
+  GetHeaderSize() const override
   {
     return 0;
   }
 
-  void ReadCBOR(void * buffer = nullptr, unsigned char * cborBuffer = nullptr, size_t cborBufferLength = 0);
-  size_t WriteCBOR(const void * buffer = nullptr, unsigned char ** cborBuffer = nullptr, bool allocateCBORBuffer = false);
+  void
+  ReadCBOR(void * buffer = nullptr, unsigned char * cborBuffer = nullptr, size_t cborBufferLength = 0);
+  size_t
+  WriteCBOR(const void * buffer = nullptr, unsigned char ** cborBuffer = nullptr, bool allocateCBORBuffer = false);
 
 private:
   ITK_DISALLOW_COPY_AND_MOVE(WasmImageIO);

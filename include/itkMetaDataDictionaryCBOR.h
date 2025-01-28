@@ -35,9 +35,11 @@
 namespace itk
 {
 
-WebAssemblyInterface_EXPORT void metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t * metadataCbor);
+WebAssemblyInterface_EXPORT void
+metaDataDictionaryToCBOR(const itk::MetaDataDictionary & dictionary, cbor_item_t * metadataCbor);
 
-WebAssemblyInterface_EXPORT void cborToMetaDataDictionary(const cbor_item_t * metadataCbor, itk::MetaDataDictionary & dictionary);
+WebAssemblyInterface_EXPORT void
+cborToMetaDataDictionary(const cbor_item_t * metadataCbor, itk::MetaDataDictionary & dictionary);
 
 } // end namespace itk
 

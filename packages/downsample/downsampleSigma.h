@@ -35,10 +35,11 @@ using ShrinkFactorsType = std::vector<unsigned int>;
  *   Note: If input spacing / output sigma in physical units, the function would be
  *      sigma = sqrt((input_spacing^2*(k^2 - 1^2))/(2*sqrt(2*ln(2)))^2)
  */
-auto downsampleSigma(const ShrinkFactorsType & scaleFactors)
+auto
+downsampleSigma(const ShrinkFactorsType & scaleFactors)
 {
   // denominator = (2 * ((2 * math.log(2)) ** 0.5)) ** 2
-  constexpr double denominator = 5.545177444479562; 
+  constexpr double denominator = 5.545177444479562;
 
   SigmaType sigma;
   for (auto k : scaleFactors)

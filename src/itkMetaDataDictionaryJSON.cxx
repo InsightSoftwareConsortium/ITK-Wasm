@@ -56,7 +56,7 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     using MetaDataMatrixDoubleType = MetaDataObject<Matrix<double>>;
 
     MetaDataObjectBase::Pointer entry = itr->second;
-    const std::string key = itr->first;
+    const std::string           key = itr->first;
 
     const auto boolValue = dynamic_cast<MetaDataBoolType *>(entry.GetPointer());
     if (boolValue)
@@ -86,7 +86,7 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     const auto doubleVectorValue = dynamic_cast<MetaDataVectorDoubleType *>(entry.GetPointer());
     if (doubleVectorValue)
     {
-      const std::vector<double> value = doubleVectorValue->GetMetaDataObjectValue();
+      const std::vector<double>  value = doubleVectorValue->GetMetaDataObjectValue();
       const glz::json_t::array_t valueDouble(value.begin(), value.end());
       metaDataJSON.push_back({ key, valueDouble });
       ++itr;
@@ -96,7 +96,7 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     if (stringVectorValue)
     {
       const std::vector<std::string> value = stringVectorValue->GetMetaDataObjectValue();
-      const glz::json_t::array_t valueString(value.begin(), value.end());
+      const glz::json_t::array_t     valueString(value.begin(), value.end());
       metaDataJSON.push_back({ key, valueString });
       ++itr;
       continue;
@@ -106,7 +106,7 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     if (doubleVectorVectorValue)
     {
       const std::vector<std::vector<double>> value = doubleVectorVectorValue->GetMetaDataObjectValue();
-      glz::json_t::array_t valueDouble;
+      glz::json_t::array_t                   valueDouble;
       for (const auto & v : value)
       {
         valueDouble.push_back(glz::json_t::array_t(v.begin(), v.end()));
@@ -191,7 +191,7 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     const auto arrayCharValue = dynamic_cast<MetaDataArrayCharType *>(entry.GetPointer());
     if (arrayCharValue)
     {
-      const Array<char> valueArray = arrayCharValue->GetMetaDataObjectValue();
+      const Array<char>          valueArray = arrayCharValue->GetMetaDataObjectValue();
       const glz::json_t::array_t valueDouble(valueArray.begin(), valueArray.end());
       metaDataJSON.push_back({ key, valueDouble });
       ++itr;
@@ -200,7 +200,7 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     const auto arrayFloatValue = dynamic_cast<MetaDataArrayFloatType *>(entry.GetPointer());
     if (arrayFloatValue)
     {
-      const Array<float> valueArray = arrayFloatValue->GetMetaDataObjectValue();
+      const Array<float>         valueArray = arrayFloatValue->GetMetaDataObjectValue();
       const glz::json_t::array_t valueDouble(valueArray.begin(), valueArray.end());
       metaDataJSON.push_back({ key, valueDouble });
       ++itr;
@@ -209,7 +209,7 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     const auto arrayDoubleValue = dynamic_cast<MetaDataArrayDoubleType *>(entry.GetPointer());
     if (arrayDoubleValue)
     {
-      const Array<double> valueArray = arrayDoubleValue->GetMetaDataObjectValue();
+      const Array<double>        valueArray = arrayDoubleValue->GetMetaDataObjectValue();
       const glz::json_t::array_t valueDouble(valueArray.begin(), valueArray.end());
       metaDataJSON.push_back({ key, valueDouble });
       ++itr;
@@ -219,7 +219,7 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     if (matrixFloat44Value)
     {
       const Matrix<float, 4, 4> valueArray = matrixFloat44Value->GetMetaDataObjectValue();
-      glz::json_t::array_t valueDouble;
+      glz::json_t::array_t      valueDouble;
       for (unsigned int i = 0; i < 4; ++i)
       {
         valueDouble.push_back(glz::json_t::array_t(valueArray[i], valueArray[i] + 4));
@@ -232,7 +232,7 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     if (matrixDoubleValue)
     {
       const Matrix<double, 3, 3> valueArray = matrixDoubleValue->GetMetaDataObjectValue();
-      glz::json_t::array_t valueDouble;
+      glz::json_t::array_t       valueDouble;
       for (unsigned int i = 0; i < 3; ++i)
       {
         valueDouble.push_back(glz::json_t::array_t(valueArray[i], valueArray[i] + 3));

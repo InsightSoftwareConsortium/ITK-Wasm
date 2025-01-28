@@ -26,14 +26,16 @@
 #include "rapidjson/writer.h"
 
 
-int main(int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("gaussian-kernel-radius", "Radius in pixels required for effective discrete gaussian filtering.", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "gaussian-kernel-radius", "Radius in pixels required for effective discrete gaussian filtering.", argc, argv);
 
-  std::vector<uint64_t> size { 1, 1 };
+  std::vector<uint64_t> size{ 1, 1 };
   pipeline.add_option("--size", size, "Size in pixels")->required()->expected(1, -1);
 
-  std::vector<double> sigma { 1.0, 1.0 };
+  std::vector<double> sigma{ 1.0, 1.0 };
   pipeline.add_option("--sigma", sigma, "Sigma in pixel units")->required()->expected(1, -1);
 
   uint64_t maxKernelWidth = 32;
@@ -57,7 +59,7 @@ int main(int argc, char * argv[])
 
   rapidjson::Document radiusArray;
   radiusArray.SetArray();
-  rapidjson::Document::AllocatorType& allocator = radiusArray.GetAllocator();
+  rapidjson::Document::AllocatorType & allocator = radiusArray.GetAllocator();
   for (size_t i = 0; i < size.size(); ++i)
   {
     auto gaussianOperator = itk::GaussianOperator<double, 1>();
@@ -72,7 +74,7 @@ int main(int argc, char * argv[])
     radiusArray.PushBack(rapidjson::Value().SetInt(gaussianOperator.GetRadius(0)), allocator);
   }
 
-  rapidjson::StringBuffer stringBuffer;
+  rapidjson::StringBuffer                    stringBuffer;
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
   radiusArray.Accept(writer);
 
@@ -80,4 +82,3 @@ int main(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-

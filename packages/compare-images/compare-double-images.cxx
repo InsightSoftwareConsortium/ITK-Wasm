@@ -33,7 +33,7 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
-template<typename TImage>
+template <typename TImage>
 int
 CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
 {
@@ -43,10 +43,15 @@ CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
 
   using InputImageType = itk::wasm::InputImage<ImageType>;
   std::vector<InputImageType> baselineImages;
-  pipeline.add_option("-b,--baseline-images", baselineImages, "Baseline images to compare against")->required()->expected(1,-1)->type_name("INPUT_IMAGE");
+  pipeline.add_option("-b,--baseline-images", baselineImages, "Baseline images to compare against")
+    ->required()
+    ->expected(1, -1)
+    ->type_name("INPUT_IMAGE");
 
   itk::wasm::OutputTextStream metrics;
-  pipeline.add_option("metrics", metrics, "Metrics for the baseline with the fewest number of pixels outside the tolerances.")->type_name("OUTPUT_JSON");
+  pipeline
+    .add_option("metrics", metrics, "Metrics for the baseline with the fewest number of pixels outside the tolerances.")
+    ->type_name("OUTPUT_JSON");
 
   using OutputImageType = itk::wasm::OutputImage<ImageType>;
   OutputImageType differenceImage;
@@ -56,22 +61,34 @@ CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
   using Uchar2DImageType = itk::Image<unsigned char, 2>;
   using OutputUchar2DImageType = itk::wasm::OutputImage<Uchar2DImageType>;
   OutputUchar2DImageType differenceUchar2DImage;
-  pipeline.add_option("difference-uchar-2d-image", differenceUchar2DImage, "Unsigned char, 2D difference image for rendering")->type_name("OUTPUT_IMAGE");
+  pipeline
+    .add_option("difference-uchar-2d-image", differenceUchar2DImage, "Unsigned char, 2D difference image for rendering")
+    ->type_name("OUTPUT_IMAGE");
 
   double differenceThreshold = 0.0;
-  pipeline.add_option("-d,--difference-threshold", differenceThreshold, "Intensity difference for pixels to be considered different.");
+  pipeline.add_option(
+    "-d,--difference-threshold", differenceThreshold, "Intensity difference for pixels to be considered different.");
 
   double spatialTolerance = 1e-8;
-  pipeline.add_option("-s,--spatial-tolerance", spatialTolerance, "Tolerance for comparing spatial overlap (origin and direction matrix).");
+  pipeline.add_option("-s,--spatial-tolerance",
+                      spatialTolerance,
+                      "Tolerance for comparing spatial overlap (origin and direction matrix).");
 
   unsigned int radiusTolerance = 0;
-  pipeline.add_option("-r,--radius-tolerance", radiusTolerance, "Radius of the neighborhood around a pixel to search for similar intensity values.");
+  pipeline.add_option("-r,--radius-tolerance",
+                      radiusTolerance,
+                      "Radius of the neighborhood around a pixel to search for similar intensity values.");
 
   uint64_t numberOfPixelsTolerance = 0;
-  pipeline.add_option("-n,--number-of-pixels-tolerance", numberOfPixelsTolerance, "Number of pixels that can be different before the test fails.");
+  pipeline.add_option("-n,--number-of-pixels-tolerance",
+                      numberOfPixelsTolerance,
+                      "Number of pixels that can be different before the test fails.");
 
   bool ignoreBoundaryPixels = false;
-  pipeline.add_flag("-i,--ignore-boundary-pixels", ignoreBoundaryPixels, "Ignore boundary pixels. Useful when resampling may have introduced difference pixel values along the image edge.");
+  pipeline.add_flag(
+    "-i,--ignore-boundary-pixels",
+    ignoreBoundaryPixels,
+    "Ignore boundary pixels. Useful when resampling may have introduced difference pixel values along the image edge.");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -86,10 +103,10 @@ CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
   diff->SetToleranceRadius(radiusTolerance);
   diff->SetIgnoreBoundaryPixels(ignoreBoundaryPixels);
 
-  double minimumDifference = itk::NumericTraits<double>::max();
-  double maximumDifference = itk::NumericTraits<double>::NonpositiveMin();
-  double totalDifference = 0.0;
-  double meanDifference = 0.0;
+  double   minimumDifference = itk::NumericTraits<double>::max();
+  double   maximumDifference = itk::NumericTraits<double>::NonpositiveMin();
+  double   totalDifference = 0.0;
+  double   meanDifference = 0.0;
   uint64_t numberOfPixelsWithDifferences = itk::NumericTraits<uint64_t>::max();
 
   size_t bestBaselineIndex = 0;
@@ -126,7 +143,7 @@ CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
 
   rapidjson::Document metricsJson;
   metricsJson.SetObject();
-  rapidjson::Document::AllocatorType& allocator = metricsJson.GetAllocator();
+  rapidjson::Document::AllocatorType & allocator = metricsJson.GetAllocator();
 
   rapidjson::Value almostEqualValue;
   almostEqualValue.SetBool(almostEqual);
@@ -152,7 +169,7 @@ CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
   meanDifferenceValue.SetDouble(meanDifference);
   metricsJson.AddMember("meanDifference", meanDifferenceValue, allocator);
 
-  rapidjson::StringBuffer stringBuffer;
+  rapidjson::StringBuffer                    stringBuffer;
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
   metricsJson.Accept(writer);
 
@@ -165,7 +182,7 @@ CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
   using RescaleType = itk::RescaleIntensityImageFilter<Image2DType, Uchar2DImageType>;
 
   using RegionType = typename ImageType::RegionType;
-  RegionType region;
+  RegionType                    region;
   typename ImageType::IndexType index;
   index.Fill(0);
   typename ImageType::SizeType size;
@@ -201,11 +218,12 @@ CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
   return EXIT_SUCCESS;
 }
 
-template<typename TImage>
+template <typename TImage>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using ImageType = TImage;
 
@@ -220,12 +238,13 @@ public:
   }
 };
 
-int main(int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("compare-double-images", "Compare double pixel type images with a tolerance for regression testing.", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "compare-double-images", "Compare double pixel type images with a tolerance for regression testing.", argc, argv);
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
 
-   double>
-  ::Dimensions<2U,3U,4U,5U,6U>("test-image", pipeline);
+                                           double>::Dimensions<2U, 3U, 4U, 5U, 6U>("test-image", pipeline);
 }

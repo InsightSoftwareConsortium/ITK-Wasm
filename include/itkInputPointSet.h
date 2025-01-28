@@ -21,13 +21,13 @@
 #include "itkPipeline.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
-#include "itkWasmPointSet.h"
-#include "itkWasmPointSetToPointSetFilter.h"
+#  include "itkWasmExports.h"
+#  include "itkWasmPointSet.h"
+#  include "itkWasmPointSetToPointSetFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#include "itkMesh.h"
-#include "itkMeshFileReader.h"
+#  include "itkMesh.h"
+#  include "itkMeshFileReader.h"
 #endif
 
 namespace itk
@@ -51,23 +51,29 @@ class ITK_TEMPLATE_EXPORT InputPointSet
 public:
   using PointSetType = TPointSet;
 
-  void Set(const PointSetType * pointSet) {
+  void
+  Set(const PointSetType * pointSet)
+  {
     this->m_PointSet = pointSet;
   }
 
-  const PointSetType * Get() const {
+  const PointSetType *
+  Get() const
+  {
     return this->m_PointSet.GetPointer();
   }
 
   InputPointSet() = default;
   ~InputPointSet() = default;
+
 protected:
   typename TPointSet::ConstPointer m_PointSet;
 };
 
 
 template <typename TPointSet>
-bool lexical_cast(const std::string &input, InputPointSet<TPointSet> &inputPointSet)
+bool
+lexical_cast(const std::string & input, InputPointSet<TPointSet> & inputPointSet)
 {
   if (input.empty())
   {
@@ -78,10 +84,10 @@ bool lexical_cast(const std::string &input, InputPointSet<TPointSet> &inputPoint
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     using WasmPointSetToPointSetFilterType = WasmPointSetToPointSetFilter<TPointSet>;
-    auto wasmPointSetToPointSetFilter = WasmPointSetToPointSetFilterType::New();
-    auto wasmPointSet = WasmPointSetToPointSetFilterType::WasmPointSetType::New();
+    auto               wasmPointSetToPointSetFilter = WasmPointSetToPointSetFilterType::New();
+    auto               wasmPointSet = WasmPointSetToPointSetFilterType::WasmPointSetType::New();
     const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(0, index);
+    auto               json = getMemoryStoreInputJSON(0, index);
     wasmPointSet->SetJSON(json);
     wasmPointSetToPointSetFilter->SetInput(wasmPointSet);
     wasmPointSetToPointSetFilter->Update();

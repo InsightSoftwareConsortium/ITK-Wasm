@@ -22,33 +22,25 @@
 namespace itk
 {
 
-WasmImageIOFactory
-::WasmImageIOFactory()
+WasmImageIOFactory ::WasmImageIOFactory()
 {
-  this->RegisterOverride( "itkImageIOBase",
-                          "itkWasmImageIO",
-                          "Wasm Image IO",
-                          1,
-                          CreateObjectFunction< WasmImageIO >::New() );
+  this->RegisterOverride(
+    "itkImageIOBase", "itkWasmImageIO", "Wasm Image IO", 1, CreateObjectFunction<WasmImageIO>::New());
 }
 
 
-WasmImageIOFactory
-::~WasmImageIOFactory()
-{}
+WasmImageIOFactory ::~WasmImageIOFactory() {}
 
 
 const char *
-WasmImageIOFactory
-::GetITKSourceVersion() const
+WasmImageIOFactory ::GetITKSourceVersion() const
 {
   return ITK_SOURCE_VERSION;
 }
 
 
 const char *
-WasmImageIOFactory
-::GetDescription() const
+WasmImageIOFactory ::GetDescription() const
 {
   return "Wasm ImageIO Factory, allows the loading of ITK Wasm images into Insight";
 }
@@ -59,13 +51,14 @@ WasmImageIOFactory
 
 static bool WasmImageIOFactoryHasBeenRegistered;
 
-void WebAssemblyInterface_EXPORT WasmImageIOFactoryRegister__Private(void)
+void WebAssemblyInterface_EXPORT
+WasmImageIOFactoryRegister__Private(void)
 {
-  if( ! WasmImageIOFactoryHasBeenRegistered )
-    {
+  if (!WasmImageIOFactoryHasBeenRegistered)
+  {
     WasmImageIOFactoryHasBeenRegistered = true;
     WasmImageIOFactory::RegisterOneFactory();
-    }
+  }
 }
 
 } // end namespace itk

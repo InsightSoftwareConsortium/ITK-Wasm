@@ -25,15 +25,16 @@
 namespace itk
 {
 
-bool lexical_cast(const std::string &input, PolyDataTypeJSON & polyDataType)
+bool
+lexical_cast(const std::string & input, PolyDataTypeJSON & polyDataType)
 {
   if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     const unsigned int index = std::stoi(input);
-    auto json = wasm::getMemoryStoreInputJSON(0, index);
-    std::string deserialized;
-    auto        deserializedAttempt = glz::read_json<itk::PolyDataJSON>(json);
+    auto               json = wasm::getMemoryStoreInputJSON(0, index);
+    std::string        deserialized;
+    auto               deserializedAttempt = glz::read_json<itk::PolyDataJSON>(json);
     if (!deserializedAttempt)
     {
       const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
@@ -59,19 +60,19 @@ bool lexical_cast(const std::string &input, PolyDataTypeJSON & polyDataType)
 
     using IOComponentType = itk::IOComponentEnum;
     const IOComponentType ioComponentEnum = meshIO->GetPointPixelComponentType();
-    const auto pointPixelIOComponentType = meshIO->GetPointPixelComponentType();
-    polyDataType.pointPixelComponentType = itk::jsonComponentTypeFromIOComponentEnum( pointPixelIOComponentType );
+    const auto            pointPixelIOComponentType = meshIO->GetPointPixelComponentType();
+    polyDataType.pointPixelComponentType = itk::jsonComponentTypeFromIOComponentEnum(pointPixelIOComponentType);
     const auto pointIOPixelType = meshIO->GetPointPixelType();
-    polyDataType.pointPixelType = itk::jsonFromIOPixelEnum( pointIOPixelType );
+    polyDataType.pointPixelType = itk::jsonFromIOPixelEnum(pointIOPixelType);
     polyDataType.pointPixelComponents = meshIO->GetNumberOfPointPixelComponents();
 
     using IOPixelType = itk::IOPixelEnum;
     const IOPixelType ioPixelEnum = meshIO->GetPointPixelType();
 
     const auto cellPixelIOComponentType = meshIO->GetCellPixelComponentType();
-    polyDataType.cellPixelComponentType = itk::jsonComponentTypeFromIOComponentEnum( cellPixelIOComponentType );
+    polyDataType.cellPixelComponentType = itk::jsonComponentTypeFromIOComponentEnum(cellPixelIOComponentType);
     const auto cellIOPixelType = meshIO->GetCellPixelType();
-    polyDataType.cellPixelType = itk::jsonFromIOPixelEnum( cellIOPixelType );
+    polyDataType.cellPixelType = itk::jsonFromIOPixelEnum(cellIOPixelType);
     polyDataType.cellPixelComponents = meshIO->GetNumberOfCellPixelComponents();
 #else
     return false;

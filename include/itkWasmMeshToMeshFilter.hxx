@@ -42,7 +42,7 @@
 namespace
 {
 
-template<typename TMesh, typename TCellBufferType>
+template <typename TMesh, typename TCellBufferType>
 void
 populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType * cellsBufferPtr)
 {
@@ -63,7 +63,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
   using QuadraticTriangleCellType = itk::QuadraticTriangleCell<CellType>;
   using CellAutoPointer = typename MeshType::CellAutoPointer;
   itk::SizeValueType index = itk::NumericTraits<itk::SizeValueType>::ZeroValue();
-  CellIdentifier id = itk::NumericTraits<CellIdentifier>::ZeroValue();
+  CellIdentifier     id = itk::NumericTraits<CellIdentifier>::ZeroValue();
   while (index < cellBufferSize)
   {
     auto type = static_cast<itk::CellGeometryEnum>(static_cast<int>(cellsBufferPtr[index++]));
@@ -77,7 +77,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
           throw std::runtime_error("Invalid Vertex Cell number of points");
         }
         CellAutoPointer cell;
-        auto *                vertexCell = new VertexCellType;
+        auto *          vertexCell = new VertexCellType;
         for (unsigned int jj = 0; jj < VertexCellType::NumberOfPoints; ++jj)
         {
           vertexCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
@@ -99,7 +99,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
         for (unsigned int jj = 1; jj < cellPoints; ++jj)
         {
           CellAutoPointer cell;
-          auto *                lineCell = new LineCellType;
+          auto *          lineCell = new LineCellType;
           lineCell->SetPointId(0, pointIDBuffer);
           pointIDBuffer = static_cast<PointIdentifier>(cellsBufferPtr[index++]);
           lineCell->SetPointId(1, pointIDBuffer);
@@ -117,7 +117,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
         }
 
         CellAutoPointer cell;
-        auto *                triangleCell = new TriangleCellType;
+        auto *          triangleCell = new TriangleCellType;
         for (unsigned int jj = 0; jj < TriangleCellType::NumberOfPoints; ++jj)
         {
           triangleCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
@@ -155,7 +155,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
         }
 
         CellAutoPointer cell;
-        auto *                quadrilateralCell = new QuadrilateralCellType;
+        auto *          quadrilateralCell = new QuadrilateralCellType;
         for (unsigned int jj = 0; jj < QuadrilateralCellType::NumberOfPoints; ++jj)
         {
           quadrilateralCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
@@ -170,7 +170,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
         // For polyhedron, if the number of points is 3, then we treat it as
         // triangle cell
         CellAutoPointer cell;
-        auto                  cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
+        auto            cellPoints = static_cast<unsigned int>(cellsBufferPtr[index++]);
         if (cellPoints == TriangleCellType::NumberOfPoints)
         {
           auto * triangleCell = new TriangleCellType;
@@ -202,7 +202,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
         }
 
         CellAutoPointer cell;
-        auto *                tetrahedronCell = new TetrahedronCellType;
+        auto *          tetrahedronCell = new TetrahedronCellType;
         for (unsigned int jj = 0; jj < TetrahedronCellType::NumberOfPoints; ++jj)
         {
           tetrahedronCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
@@ -221,7 +221,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
         }
 
         CellAutoPointer cell;
-        auto *                hexahedronCell = new HexahedronCellType;
+        auto *          hexahedronCell = new HexahedronCellType;
         for (unsigned int jj = 0; jj < HexahedronCellType::NumberOfPoints; ++jj)
         {
           hexahedronCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
@@ -240,7 +240,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
         }
 
         CellAutoPointer cell;
-        auto *                quadraticEdgeCell = new QuadraticEdgeCellType;
+        auto *          quadraticEdgeCell = new QuadraticEdgeCellType;
         for (unsigned int jj = 0; jj < QuadraticEdgeCellType::NumberOfPoints; ++jj)
         {
           quadraticEdgeCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
@@ -259,7 +259,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
         }
 
         CellAutoPointer cell;
-        auto *                quadraticTriangleCell = new QuadraticTriangleCellType;
+        auto *          quadraticTriangleCell = new QuadraticTriangleCellType;
         for (unsigned int jj = 0; jj < QuadraticTriangleCellType::NumberOfPoints; ++jj)
         {
           quadraticTriangleCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
@@ -283,8 +283,7 @@ namespace itk
 {
 
 template <typename TMesh>
-WasmMeshToMeshFilter<TMesh>
-::WasmMeshToMeshFilter()
+WasmMeshToMeshFilter<TMesh>::WasmMeshToMeshFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -295,24 +294,21 @@ WasmMeshToMeshFilter<TMesh>
 
 template <typename TMesh>
 ProcessObject::DataObjectPointer
-WasmMeshToMeshFilter<TMesh>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+WasmMeshToMeshFilter<TMesh>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return MeshType::New().GetPointer();
 }
 
 template <typename TMesh>
 ProcessObject::DataObjectPointer
-WasmMeshToMeshFilter<TMesh>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+WasmMeshToMeshFilter<TMesh>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return MeshType::New().GetPointer();
 }
 
 template <typename TMesh>
 auto
-WasmMeshToMeshFilter<TMesh>
-::GetOutput() -> MeshType *
+WasmMeshToMeshFilter<TMesh>::GetOutput() -> MeshType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<MeshType *>(this->GetPrimaryOutput());
@@ -320,8 +316,7 @@ WasmMeshToMeshFilter<TMesh>
 
 template <typename TMesh>
 auto
-WasmMeshToMeshFilter<TMesh>
-::GetOutput() const -> const MeshType *
+WasmMeshToMeshFilter<TMesh>::GetOutput() const -> const MeshType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const MeshType *>(this->GetPrimaryOutput());
@@ -329,8 +324,7 @@ WasmMeshToMeshFilter<TMesh>
 
 template <typename TMesh>
 auto
-WasmMeshToMeshFilter<TMesh>
-::GetOutput(unsigned int idx) -> MeshType *
+WasmMeshToMeshFilter<TMesh>::GetOutput(unsigned int idx) -> MeshType *
 {
   auto * out = dynamic_cast<MeshType *>(this->ProcessObject::GetOutput(idx));
 
@@ -343,8 +337,7 @@ WasmMeshToMeshFilter<TMesh>
 
 template <typename TMesh>
 void
-WasmMeshToMeshFilter<TMesh>
-::SetInput(const WasmMeshType * input)
+WasmMeshToMeshFilter<TMesh>::SetInput(const WasmMeshType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<WasmMeshType *>(input));
@@ -352,8 +345,7 @@ WasmMeshToMeshFilter<TMesh>
 
 template <typename TMesh>
 void
-WasmMeshToMeshFilter<TMesh>
-::SetInput(unsigned int index, const WasmMeshType * mesh)
+WasmMeshToMeshFilter<TMesh>::SetInput(unsigned int index, const WasmMeshType * mesh)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<WasmMeshType *>(mesh));
@@ -361,28 +353,25 @@ WasmMeshToMeshFilter<TMesh>
 
 template <typename TMesh>
 const typename WasmMeshToMeshFilter<TMesh>::WasmMeshType *
-WasmMeshToMeshFilter<TMesh>
-::GetInput()
+WasmMeshToMeshFilter<TMesh>::GetInput()
 {
   return itkDynamicCastInDebugMode<const WasmMeshType *>(this->GetPrimaryInput());
 }
 
 template <typename TMesh>
 const typename WasmMeshToMeshFilter<TMesh>::WasmMeshType *
-WasmMeshToMeshFilter<TMesh>
-::GetInput(unsigned int idx)
+WasmMeshToMeshFilter<TMesh>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TMesh *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TMesh>
 void
-WasmMeshToMeshFilter<TMesh>
-::GenerateData()
+WasmMeshToMeshFilter<TMesh>::GenerateData()
 {
   // Get the input and output pointers
   const WasmMeshType * wasmMesh = this->GetInput();
-  MeshType * mesh = this->GetOutput();
+  MeshType *           mesh = this->GetOutput();
 
   using PointPixelType = typename MeshType::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
@@ -390,7 +379,7 @@ WasmMeshToMeshFilter<TMesh>
   using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
 
   const std::string json(wasmMesh->GetJSON());
-  auto deserializedAttempt = glz::read_json<MeshJSON>(json);
+  auto              deserializedAttempt = glz::read_json<MeshJSON>(json);
   if (!deserializedAttempt)
   {
     const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
@@ -414,22 +403,26 @@ WasmMeshToMeshFilter<TMesh>
   {
     throw std::runtime_error("Unexpected dimension");
   }
-  if (numberOfPointPixels && pointPixelComponentType != itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum )
+  if (numberOfPointPixels &&
+      pointPixelComponentType !=
+        itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum)
   {
     throw std::runtime_error("Unexpected point pixel component type");
   }
 
-  if (numberOfPointPixels && pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum )
+  if (numberOfPointPixels && pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum)
   {
     throw std::runtime_error("Unexpected point pixel type");
   }
 
-  if (numberOfCellPixels && cellPixelComponentType != itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::JSONComponentEnum )
+  if (numberOfCellPixels &&
+      cellPixelComponentType !=
+        itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::JSONComponentEnum)
   {
     throw std::runtime_error("Unexpected cell pixel component type");
   }
 
-  if (numberOfCellPixels && cellPixelType != itk::wasm::MapPixelType<CellPixelType>::JSONPixelEnum )
+  if (numberOfCellPixels && cellPixelType != itk::wasm::MapPixelType<CellPixelType>::JSONPixelEnum)
   {
     throw std::runtime_error("Unexpected cell pixel type");
   }
@@ -442,21 +435,22 @@ WasmMeshToMeshFilter<TMesh>
   {
     if (pointComponentType == itk::wasm::MapComponentType<typename MeshType::CoordinateType>::JSONFloatTypeEnum)
     {
-      const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      const auto * pointsPtr =
+        reinterpret_cast<PointType *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
       mesh->GetPoints()->assign(pointsPtr, pointsPtr + meshJSON.numberOfPoints);
     }
     else if (pointComponentType == itk::wasm::MapComponentType<float>::JSONFloatTypeEnum)
     {
-      auto * pointsPtr = reinterpret_cast< float * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      auto *       pointsPtr = reinterpret_cast<float *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
       const size_t pointComponents = numberOfPoints * dimension;
-      auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordinateType *>(&(mesh->GetPoints()->at(0)) );
+      auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordinateType *>(&(mesh->GetPoints()->at(0)));
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
     }
     else if (pointComponentType == itk::wasm::MapComponentType<double>::JSONFloatTypeEnum)
     {
-      auto * pointsPtr = reinterpret_cast< double * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      auto *       pointsPtr = reinterpret_cast<double *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
       const size_t pointComponents = numberOfPoints * dimension;
-      auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordinateType *>(&(mesh->GetPoints()->at(0)) );
+      auto * pointsContainerPtr = reinterpret_cast<typename MeshType::CoordinateType *>(&(mesh->GetPoints()->at(0)));
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
     }
     else
@@ -472,12 +466,14 @@ WasmMeshToMeshFilter<TMesh>
   CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
   if (cellComponentType == JSONIntTypesEnum::uint32)
   {
-    uint32_t * cellsBufferPtr = reinterpret_cast< uint32_t * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+    uint32_t * cellsBufferPtr =
+      reinterpret_cast<uint32_t *>(static_cast<size_t>(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)));
     populateCells<MeshType, uint32_t>(mesh, cellBufferSize, cellsBufferPtr);
   }
   else if (cellComponentType == JSONIntTypesEnum::uint64)
   {
-    uint64_t * cellsBufferPtr = reinterpret_cast< uint64_t * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+    uint64_t * cellsBufferPtr =
+      reinterpret_cast<uint64_t *>(static_cast<size_t>(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)));
     populateCells<MeshType, uint64_t>(mesh, cellBufferSize, cellsBufferPtr);
   }
   else
@@ -487,13 +483,14 @@ WasmMeshToMeshFilter<TMesh>
 
   using PointPixelType = typename TMesh::PixelType;
   const std::string pointDataString = meshJSON.pointData;
-  auto pointDataPtr = reinterpret_cast< PointPixelType * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
+  auto              pointDataPtr =
+    reinterpret_cast<PointPixelType *>(std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10));
   mesh->GetPointData()->resize(numberOfPointPixels);
   mesh->GetPointData()->assign(pointDataPtr, pointDataPtr + numberOfPointPixels);
 
   using CellPixelType = typename TMesh::CellPixelType;
   const std::string cellDataString = meshJSON.cellData;
-  auto cellDataPtr = reinterpret_cast< CellPixelType * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
+  auto cellDataPtr = reinterpret_cast<CellPixelType *>(std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10));
   if (mesh->GetCellData() == nullptr)
   {
     mesh->SetCellData(MeshType::CellDataContainer::New());
@@ -510,8 +507,7 @@ WasmMeshToMeshFilter<TMesh>
 
 template <typename TMesh>
 void
-WasmMeshToMeshFilter<TMesh>
-::PrintSelf(std::ostream & os, Indent indent) const
+WasmMeshToMeshFilter<TMesh>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

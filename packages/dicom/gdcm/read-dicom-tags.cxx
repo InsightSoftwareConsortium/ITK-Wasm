@@ -579,18 +579,33 @@ private:
 
 } // end namespace itk
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("read-dicom-tags", "Read the tags from a DICOM file", argc, argv);
 
   std::string dicomFile;
-  pipeline.add_option("dicom-file", dicomFile, "Input DICOM file.")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+  pipeline.add_option("dicom-file", dicomFile, "Input DICOM file.")
+    ->required()
+    ->check(CLI::ExistingFile)
+    ->type_name("INPUT_BINARY_FILE");
 
   itk::wasm::InputTextStream tagsToReadStream;
-  pipeline.add_option("--tags-to-read", tagsToReadStream, "A JSON object with a \"tags\" array of the tags to read. If not provided, all tags are read. Example tag: \"0008|103e\".")->type_name("INPUT_JSON");
+  pipeline
+    .add_option("--tags-to-read",
+                tagsToReadStream,
+                "A JSON object with a \"tags\" array of the tags to read. If not provided, all tags are read. Example "
+                "tag: \"0008|103e\".")
+    ->type_name("INPUT_JSON");
 
   itk::wasm::OutputTextStream tagsStream;
-  pipeline.add_option("tags", tagsStream, "Output tags in the file. JSON object an array of [tag, value] arrays. Values are encoded as UTF-8 strings.")->required()->type_name("OUTPUT_JSON");
+  pipeline
+    .add_option(
+      "tags",
+      tagsStream,
+      "Output tags in the file. JSON object an array of [tag, value] arrays. Values are encoded as UTF-8 strings.")
+    ->required()
+    ->type_name("OUTPUT_JSON");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -609,8 +624,9 @@ int main( int argc, char * argv[] )
 
     rapidjson::Document tagsArray;
     tagsArray.SetArray();
-    rapidjson::Document::AllocatorType& allocator = tagsArray.GetAllocator();
-    for (const auto& [tag, value] : dicomTags) {
+    rapidjson::Document::AllocatorType & allocator = tagsArray.GetAllocator();
+    for (const auto & [tag, value] : dicomTags)
+    {
       rapidjson::Value tagArray(rapidjson::kArrayType);
 
       rapidjson::Value tagName;
@@ -624,7 +640,7 @@ int main( int argc, char * argv[] )
       tagsArray.PushBack(tagArray.Move(), allocator);
     }
 
-    rapidjson::StringBuffer stringBuffer;
+    rapidjson::StringBuffer                    stringBuffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
     tagsArray.Accept(writer);
 
@@ -633,35 +649,35 @@ int main( int argc, char * argv[] )
   else
   {
     rapidjson::Document inputTagsDocument;
-    const std::string inputTagsString((std::istreambuf_iterator<char>(tagsToReadStream.Get())),
-                                       std::istreambuf_iterator<char>());
+    const std::string   inputTagsString((std::istreambuf_iterator<char>(tagsToReadStream.Get())),
+                                      std::istreambuf_iterator<char>());
     if (inputTagsDocument.Parse(inputTagsString.c_str()).HasParseError())
-      {
+    {
       CLI::Error err("Runtime error", "Could not parse input tags JSON.", 1);
       return pipeline.exit(err);
-      }
+    }
     if (!inputTagsDocument.HasMember("tags"))
-      {
+    {
       CLI::Error err("Runtime error", "Input tags does not have expected \"tags\" member", 1);
       return pipeline.exit(err);
-      }
+    }
 
     rapidjson::Document tagsArray;
     tagsArray.SetArray();
-    rapidjson::Document::AllocatorType& allocator = tagsArray.GetAllocator();
-    const rapidjson::Value & inputTagsArray = inputTagsDocument["tags"];
+    rapidjson::Document::AllocatorType & allocator = tagsArray.GetAllocator();
+    const rapidjson::Value &             inputTagsArray = inputTagsDocument["tags"];
 
-    for( rapidjson::Value::ConstValueIterator itr = inputTagsArray.Begin(); itr != inputTagsArray.End(); ++itr )
+    for (rapidjson::Value::ConstValueIterator itr = inputTagsArray.Begin(); itr != inputTagsArray.End(); ++itr)
     {
       rapidjson::Value tagArray(rapidjson::kArrayType);
 
       const std::string tagString(itr->GetString());
-      rapidjson::Value tagName;
+      rapidjson::Value  tagName;
       tagName.SetString(tagString.c_str(), allocator);
       tagArray.PushBack(tagName, allocator);
 
       rapidjson::Value tagValue;
-      std::string tagLower(tagString);
+      std::string      tagLower(tagString);
       std::transform(tagLower.begin(), tagLower.end(), tagLower.begin(), ::tolower);
       tagValue.SetString(dicomTagReader.ReadTag(tagLower).c_str(), allocator);
       tagArray.PushBack(tagValue, allocator);
@@ -669,7 +685,7 @@ int main( int argc, char * argv[] )
       tagsArray.PushBack(tagArray.Move(), allocator);
     }
 
-    rapidjson::StringBuffer stringBuffer;
+    rapidjson::StringBuffer                    stringBuffer;
     rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
     tagsArray.Accept(writer);
 

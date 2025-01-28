@@ -25,15 +25,16 @@
 namespace itk
 {
 
-bool lexical_cast(const std::string &input, PointSetTypeJSON & pointSetType)
+bool
+lexical_cast(const std::string & input, PointSetTypeJSON & pointSetType)
 {
   if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     const unsigned int index = std::stoi(input);
-    auto json = wasm::getMemoryStoreInputJSON(0, index);
-    std::string deserialized;
-    auto        deserializedAttempt = glz::read_json<itk::PointSetJSON>(json);
+    auto               json = wasm::getMemoryStoreInputJSON(0, index);
+    std::string        deserialized;
+    auto               deserializedAttempt = glz::read_json<itk::PointSetJSON>(json);
     if (!deserializedAttempt)
     {
       const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
@@ -61,12 +62,12 @@ bool lexical_cast(const std::string &input, PointSetTypeJSON & pointSetType)
 
     using IOComponentType = itk::IOComponentEnum;
     const IOComponentType ioComponentEnum = pointSetIO->GetPointPixelComponentType();
-    const auto pointIOComponentType = pointSetIO->GetPointComponentType();
-    pointSetType.pointComponentType = itk::jsonFloatTypeFromIOComponentEnum( pointIOComponentType );
+    const auto            pointIOComponentType = pointSetIO->GetPointComponentType();
+    pointSetType.pointComponentType = itk::jsonFloatTypeFromIOComponentEnum(pointIOComponentType);
     const auto pointPixelIOComponentType = pointSetIO->GetPointPixelComponentType();
-    pointSetType.pointPixelComponentType = itk::jsonComponentTypeFromIOComponentEnum( pointPixelIOComponentType );
+    pointSetType.pointPixelComponentType = itk::jsonComponentTypeFromIOComponentEnum(pointPixelIOComponentType);
     const auto pointIOPixelType = pointSetIO->GetPointPixelType();
-    pointSetType.pointPixelType = itk::jsonFromIOPixelEnum( pointIOPixelType );
+    pointSetType.pointPixelType = itk::jsonFromIOPixelEnum(pointIOPixelType);
     pointSetType.pointPixelComponents = pointSetIO->GetNumberOfPointPixelComponents();
 
     using IOPixelType = itk::IOPixelEnum;

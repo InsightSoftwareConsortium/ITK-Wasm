@@ -21,11 +21,12 @@
 #include "itkOutputImage.h"
 #include "itkSupportInputImageTypes.h"
 
-template<typename TImage>
+template <typename TImage>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using ImageType = TImage;
 
@@ -48,11 +49,9 @@ public:
 int
 itkSupportInputImageTypesTest(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("support-input-image-types-test", "Test supporting multiple input image types", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "support-input-image-types-test", "Test supporting multiple input image types", argc, argv);
 
-  return itk::wasm::SupportInputImageTypes<PipelineFunctor,
-   uint8_t,
-   float,
-   itk::VariableLengthVector<uint8_t>>
-  ::Dimensions<2U,3U>("input-image", pipeline);
+  return itk::wasm::SupportInputImageTypes<PipelineFunctor, uint8_t, float, itk::VariableLengthVector<uint8_t>>::
+    Dimensions<2U, 3U>("input-image", pipeline);
 }

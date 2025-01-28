@@ -22,56 +22,56 @@
 #include "itkOutputTextStream.h"
 
 #ifndef IMAGE_IO_CLASS
-#error "IMAGE_IO_CLASS definition must be provided"
+#  error "IMAGE_IO_CLASS definition must be provided"
 #endif
 
 #if IMAGE_IO_CLASS == 0
-#include "itkPNGImageIO.h"
+#  include "itkPNGImageIO.h"
 #elif IMAGE_IO_CLASS == 1
-#include "itkMetaImageIO.h"
+#  include "itkMetaImageIO.h"
 #elif IMAGE_IO_CLASS == 2
-#include "itkTIFFImageIO.h"
+#  include "itkTIFFImageIO.h"
 #elif IMAGE_IO_CLASS == 3
-#include "itkNiftiImageIO.h"
+#  include "itkNiftiImageIO.h"
 #elif IMAGE_IO_CLASS == 4
-#include "itkJPEGImageIO.h"
+#  include "itkJPEGImageIO.h"
 #elif IMAGE_IO_CLASS == 5
-#include "itkNrrdImageIO.h"
+#  include "itkNrrdImageIO.h"
 #elif IMAGE_IO_CLASS == 6
-#include "itkVTKImageIO.h"
+#  include "itkVTKImageIO.h"
 #elif IMAGE_IO_CLASS == 7
-#include "itkBMPImageIO.h"
+#  include "itkBMPImageIO.h"
 #elif IMAGE_IO_CLASS == 8
-#include "itkHDF5ImageIO.h"
+#  include "itkHDF5ImageIO.h"
 #elif IMAGE_IO_CLASS == 9
-#include "itkMINCImageIO.h"
+#  include "itkMINCImageIO.h"
 #elif IMAGE_IO_CLASS == 10
-#include "itkMRCImageIO.h"
+#  include "itkMRCImageIO.h"
 #elif IMAGE_IO_CLASS == 11
-#include "itkLSMImageIO.h"
+#  include "itkLSMImageIO.h"
 #elif IMAGE_IO_CLASS == 12
-#include "itkMGHImageIO.h"
+#  include "itkMGHImageIO.h"
 #elif IMAGE_IO_CLASS == 13
-#include "itkBioRadImageIO.h"
+#  include "itkBioRadImageIO.h"
 #elif IMAGE_IO_CLASS == 14
-#include "itkGiplImageIO.h"
+#  include "itkGiplImageIO.h"
 #elif IMAGE_IO_CLASS == 15
-#include "itkGE4ImageIO.h"
+#  include "itkGE4ImageIO.h"
 #elif IMAGE_IO_CLASS == 16
-#include "itkGE5ImageIO.h"
+#  include "itkGE5ImageIO.h"
 #elif IMAGE_IO_CLASS == 17
-#include "itkGEAdwImageIO.h"
+#  include "itkGEAdwImageIO.h"
 #elif IMAGE_IO_CLASS == 18
-#include "itkGDCMImageIO.h"
+#  include "itkGDCMImageIO.h"
 #elif IMAGE_IO_CLASS == 19
-#include "itkScancoImageIO.h"
+#  include "itkScancoImageIO.h"
 #elif IMAGE_IO_CLASS == 20
-#include "itkFDFImageIO.h"
+#  include "itkFDFImageIO.h"
 #elif IMAGE_IO_CLASS == 21
 #elif IMAGE_IO_CLASS == 22
-#include "itkWasmZstdImageIO.h"
+#  include "itkWasmZstdImageIO.h"
 #else
-#error "Unsupported IMAGE_IO_CLASS"
+#  error "Unsupported IMAGE_IO_CLASS"
 #endif
 #include "itkWasmImageIO.h"
 
@@ -84,7 +84,12 @@
 #include "itkImageIOBase.h"
 
 template <typename TImageIO>
-int writeImage(itk::wasm::InputImageIO & inputImageIO, itk::wasm::OutputTextStream & couldWrite, const std::string & outputFileName, bool informationOnly, bool useCompression)
+int
+writeImage(itk::wasm::InputImageIO &     inputImageIO,
+           itk::wasm::OutputTextStream & couldWrite,
+           const std::string &           outputFileName,
+           bool                          informationOnly,
+           bool                          useCompression)
 {
   using ImageIOType = TImageIO;
 
@@ -104,7 +109,7 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, itk::wasm::OutputTextStre
   imageIO->SetUseCompression(useCompression);
 
   const itk::WasmImageIOBase * inputWasmImageIOBase = inputImageIO.Get();
-  const itk::ImageIOBase * inputImageIOBase = inputWasmImageIOBase->GetImageIO();
+  const itk::ImageIOBase *     inputImageIOBase = inputWasmImageIOBase->GetImageIO();
 
   const unsigned int dimension = inputImageIOBase->GetNumberOfDimensions();
   imageIO->SetNumberOfDimensions(dimension);
@@ -112,12 +117,12 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, itk::wasm::OutputTextStre
   imageIO->SetNumberOfComponents(inputImageIOBase->GetNumberOfComponents());
   imageIO->SetPixelType(inputImageIOBase->GetPixelType());
   std::vector<double> direction(dimension);
-  const auto directionContainer = inputWasmImageIOBase->GetDirectionContainer();
+  const auto          directionContainer = inputWasmImageIOBase->GetDirectionContainer();
   for (unsigned int dim = 0; dim < dimension; ++dim)
   {
     for (unsigned int dd = 0; dd < dimension; ++dd)
     {
-      direction[dd] = directionContainer->GetElement(dim + dimension*dd);
+      direction[dd] = directionContainer->GetElement(dim + dimension * dd);
     }
     imageIO->SetDirection(dim, direction);
     imageIO->SetOrigin(dim, inputImageIOBase->GetOrigin(dim));
@@ -125,36 +130,43 @@ int writeImage(itk::wasm::InputImageIO & inputImageIO, itk::wasm::OutputTextStre
     imageIO->SetDimensions(dim, inputImageIOBase->GetDimensions(dim));
   };
   imageIO->SetMetaDataDictionary(inputImageIOBase->GetMetaDataDictionary());
-  itk::ImageIORegion ioRegion( dimension );
-  for(unsigned int dim = 0; dim < dimension; ++dim)
-    {
-    ioRegion.SetSize(dim, inputImageIOBase->GetDimensions( dim ));
-    }
-  imageIO->SetIORegion( ioRegion );
+  itk::ImageIORegion ioRegion(dimension);
+  for (unsigned int dim = 0; dim < dimension; ++dim)
+  {
+    ioRegion.SetSize(dim, inputImageIOBase->GetDimensions(dim));
+  }
+  imageIO->SetIORegion(ioRegion);
 
   imageIO->WriteImageInformation();
   if (!informationOnly)
   {
-    imageIO->Write( reinterpret_cast< const void * >( &(inputWasmImageIOBase->GetPixelDataContainer()->at(0)) ));
+    imageIO->Write(reinterpret_cast<const void *>(&(inputWasmImageIOBase->GetPixelDataContainer()->at(0))));
   }
 
   return EXIT_SUCCESS;
 }
 
-int main (int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  const char * pipelineName = TO_LITERAL(IMAGE_IO_KEBAB_NAME) "-write-image";
-  itk::wasm::Pipeline pipeline(pipelineName, "Write an itk-wasm file format converted to an image file format", argc, argv);
+  const char *        pipelineName = TO_LITERAL(IMAGE_IO_KEBAB_NAME) "-write-image";
+  itk::wasm::Pipeline pipeline(
+    pipelineName, "Write an itk-wasm file format converted to an image file format", argc, argv);
 
   itk::wasm::InputImageIO inputImageIO;
   pipeline.add_option("image", inputImageIO, "Input image")->required()->type_name("INPUT_IMAGE");
 
   itk::wasm::OutputTextStream couldWrite;
-  pipeline.add_option("could-write", couldWrite, "Whether the input could be written. If false, the output image is not valid.")->type_name("OUTPUT_JSON");
+  pipeline
+    .add_option(
+      "could-write", couldWrite, "Whether the input could be written. If false, the output image is not valid.")
+    ->type_name("OUTPUT_JSON");
 
 
   std::string outputFileName;
-  pipeline.add_option("serialized-image", outputFileName, "Output image serialized in the file format.")->required()->type_name("OUTPUT_BINARY_FILE");
+  pipeline.add_option("serialized-image", outputFileName, "Output image serialized in the file format.")
+    ->required()
+    ->type_name("OUTPUT_BINARY_FILE");
 
   bool informationOnly = false;
   pipeline.add_flag("-i,--information-only", informationOnly, "Only write image metadata -- do not write pixel data.");
@@ -211,7 +223,7 @@ int main (int argc, char * argv[])
 #elif IMAGE_IO_CLASS == 22
   return writeImage<itk::WasmZstdImageIO>(inputImageIO, couldWrite, outputFileName, informationOnly, useCompression);
 #else
-#error "Unsupported IMAGE_IO_CLASS"
+#  error "Unsupported IMAGE_IO_CLASS"
 #endif
   return EXIT_SUCCESS;
 }

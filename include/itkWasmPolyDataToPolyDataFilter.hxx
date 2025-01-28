@@ -42,8 +42,7 @@ namespace itk
 {
 
 template <typename TPolyData>
-WasmPolyDataToPolyDataFilter<TPolyData>
-::WasmPolyDataToPolyDataFilter()
+WasmPolyDataToPolyDataFilter<TPolyData>::WasmPolyDataToPolyDataFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -54,24 +53,21 @@ WasmPolyDataToPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 ProcessObject::DataObjectPointer
-WasmPolyDataToPolyDataFilter<TPolyData>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+WasmPolyDataToPolyDataFilter<TPolyData>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return PolyDataType::New().GetPointer();
 }
 
 template <typename TPolyData>
 ProcessObject::DataObjectPointer
-WasmPolyDataToPolyDataFilter<TPolyData>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+WasmPolyDataToPolyDataFilter<TPolyData>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return PolyDataType::New().GetPointer();
 }
 
 template <typename TPolyData>
 auto
-WasmPolyDataToPolyDataFilter<TPolyData>
-::GetOutput() -> PolyDataType *
+WasmPolyDataToPolyDataFilter<TPolyData>::GetOutput() -> PolyDataType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<PolyDataType *>(this->GetPrimaryOutput());
@@ -79,8 +75,7 @@ WasmPolyDataToPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 auto
-WasmPolyDataToPolyDataFilter<TPolyData>
-::GetOutput() const -> const PolyDataType *
+WasmPolyDataToPolyDataFilter<TPolyData>::GetOutput() const -> const PolyDataType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const PolyDataType *>(this->GetPrimaryOutput());
@@ -88,8 +83,7 @@ WasmPolyDataToPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 auto
-WasmPolyDataToPolyDataFilter<TPolyData>
-::GetOutput(unsigned int idx) -> PolyDataType *
+WasmPolyDataToPolyDataFilter<TPolyData>::GetOutput(unsigned int idx) -> PolyDataType *
 {
   auto * out = dynamic_cast<PolyDataType *>(this->ProcessObject::GetOutput(idx));
 
@@ -102,8 +96,7 @@ WasmPolyDataToPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 void
-WasmPolyDataToPolyDataFilter<TPolyData>
-::SetInput(const WasmPolyDataType * input)
+WasmPolyDataToPolyDataFilter<TPolyData>::SetInput(const WasmPolyDataType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<WasmPolyDataType *>(input));
@@ -111,8 +104,7 @@ WasmPolyDataToPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 void
-WasmPolyDataToPolyDataFilter<TPolyData>
-::SetInput(unsigned int index, const WasmPolyDataType * polyData)
+WasmPolyDataToPolyDataFilter<TPolyData>::SetInput(unsigned int index, const WasmPolyDataType * polyData)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<WasmPolyDataType *>(polyData));
@@ -120,29 +112,26 @@ WasmPolyDataToPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 const typename WasmPolyDataToPolyDataFilter<TPolyData>::WasmPolyDataType *
-WasmPolyDataToPolyDataFilter<TPolyData>
-::GetInput()
+WasmPolyDataToPolyDataFilter<TPolyData>::GetInput()
 {
   return itkDynamicCastInDebugMode<const WasmPolyDataType *>(this->GetPrimaryInput());
 }
 
 template <typename TPolyData>
 const typename WasmPolyDataToPolyDataFilter<TPolyData>::WasmPolyDataType *
-WasmPolyDataToPolyDataFilter<TPolyData>
-::GetInput(unsigned int idx)
+WasmPolyDataToPolyDataFilter<TPolyData>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TPolyData *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TPolyData>
 void
-WasmPolyDataToPolyDataFilter<TPolyData>
-::GenerateData()
+WasmPolyDataToPolyDataFilter<TPolyData>::GenerateData()
 {
   // Get the input and output pointers
   const WasmPolyDataType * wasmPolyData = this->GetInput();
-  const std::string json(wasmPolyData->GetJSON());
-  PolyDataType * polyData = this->GetOutput();
+  const std::string        json(wasmPolyData->GetJSON());
+  PolyDataType *           polyData = this->GetOutput();
 
   using PointType = typename TPolyData::PointType;
   using PointPixelType = typename PolyDataType::PixelType;
@@ -156,25 +145,27 @@ WasmPolyDataToPolyDataFilter<TPolyData>
     const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
     itkExceptionMacro("Failed to deserialize PolyDataJSON: " << descriptiveError);
   }
-  const auto polyDataJSON = deserializedAttempt.value();
+  const auto   polyDataJSON = deserializedAttempt.value();
   const auto & polyDataType = polyDataJSON.polyDataType;
 
-  if ( polyDataType.pointPixelComponentType != itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum )
+  if (polyDataType.pointPixelComponentType !=
+      itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum)
   {
     throw std::runtime_error("Unexpected point pixel component type");
   }
 
-  if ( polyDataType.pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum )
+  if (polyDataType.pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum)
   {
     throw std::runtime_error("Unexpected point pixel type");
   }
 
-  if ( polyDataType.cellPixelComponentType != itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::JSONComponentEnum )
+  if (polyDataType.cellPixelComponentType !=
+      itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::JSONComponentEnum)
   {
     throw std::runtime_error("Unexpected cell pixel component type");
   }
 
-  if ( polyDataType.cellPixelType != itk::wasm::MapPixelType<CellPixelType>::JSONPixelEnum )
+  if (polyDataType.cellPixelType != itk::wasm::MapPixelType<CellPixelType>::JSONPixelEnum)
   {
     throw std::runtime_error("Unexpected cell pixel type");
   }
@@ -183,7 +174,7 @@ WasmPolyDataToPolyDataFilter<TPolyData>
   if (numberOfPoints)
   {
     const std::string pointsString = polyDataJSON.points;
-    const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+    const auto * pointsPtr = reinterpret_cast<PointType *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
     polyData->GetPoints()->resize(numberOfPoints);
     polyData->GetPoints()->assign(pointsPtr, pointsPtr + numberOfPoints);
   }
@@ -192,7 +183,7 @@ WasmPolyDataToPolyDataFilter<TPolyData>
   if (verticesBufferSize)
   {
     const std::string verticesString = polyDataJSON.vertices;
-    auto verticesPtr = reinterpret_cast< uint32_t * >( std::strtoull(verticesString.substr(35).c_str(), nullptr, 10) );
+    auto verticesPtr = reinterpret_cast<uint32_t *>(std::strtoull(verticesString.substr(35).c_str(), nullptr, 10));
     polyData->GetVertices()->resize(verticesBufferSize);
     polyData->GetVertices()->assign(verticesPtr, verticesPtr + verticesBufferSize);
   }
@@ -201,7 +192,7 @@ WasmPolyDataToPolyDataFilter<TPolyData>
   if (linesBufferSize)
   {
     const std::string linesString = polyDataJSON.lines;
-    auto linesPtr = reinterpret_cast< uint32_t * >( std::strtoull(linesString.substr(35).c_str(), nullptr, 10) );
+    auto linesPtr = reinterpret_cast<uint32_t *>(std::strtoull(linesString.substr(35).c_str(), nullptr, 10));
     polyData->GetLines()->resize(linesBufferSize);
     polyData->GetLines()->assign(linesPtr, linesPtr + linesBufferSize);
   }
@@ -210,7 +201,7 @@ WasmPolyDataToPolyDataFilter<TPolyData>
   if (polygonsBufferSize)
   {
     const std::string polygonsString = polyDataJSON.polygons;
-    auto polygonsPtr = reinterpret_cast< uint32_t * >( std::strtoull(polygonsString.substr(35).c_str(), nullptr, 10) );
+    auto polygonsPtr = reinterpret_cast<uint32_t *>(std::strtoull(polygonsString.substr(35).c_str(), nullptr, 10));
     polyData->GetPolygons()->resize(polygonsBufferSize);
     polyData->GetPolygons()->assign(polygonsPtr, polygonsPtr + polygonsBufferSize);
   }
@@ -219,7 +210,8 @@ WasmPolyDataToPolyDataFilter<TPolyData>
   if (triangleStripsBufferSize)
   {
     const std::string triangleStripsString = polyDataJSON.triangleStrips;
-    auto triangleStripsPtr = reinterpret_cast< uint32_t * >( std::strtoull(triangleStripsString.substr(35).c_str(), nullptr, 10) );
+    auto              triangleStripsPtr =
+      reinterpret_cast<uint32_t *>(std::strtoull(triangleStripsString.substr(35).c_str(), nullptr, 10));
     polyData->GetTriangleStrips()->resize(triangleStripsBufferSize);
     polyData->GetTriangleStrips()->assign(triangleStripsPtr, triangleStripsPtr + triangleStripsBufferSize);
   }
@@ -231,7 +223,8 @@ WasmPolyDataToPolyDataFilter<TPolyData>
     using PointPixelType = typename TPolyData::PixelType;
     using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
     const std::string pointDataString = polyDataJSON.pointData;
-    auto pointDataPtr = reinterpret_cast< typename ConvertPointPixelTraits::ComponentType * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
+    auto              pointDataPtr = reinterpret_cast<typename ConvertPointPixelTraits::ComponentType *>(
+      std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10));
     polyData->GetPointData()->resize(numberOfPointPixels * pointPixelComponents);
     polyData->GetPointData()->assign(pointDataPtr, pointDataPtr + numberOfPointPixels * pointPixelComponents);
   }
@@ -243,7 +236,8 @@ WasmPolyDataToPolyDataFilter<TPolyData>
     using CellPixelType = typename TPolyData::CellPixelType;
     using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
     const std::string cellDataString = polyDataJSON.cellData;
-    auto cellDataPtr = reinterpret_cast< typename ConvertCellPixelTraits::ComponentType * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
+    auto              cellDataPtr = reinterpret_cast<typename ConvertCellPixelTraits::ComponentType *>(
+      std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10));
     if (polyData->GetCellData() == nullptr)
     {
       polyData->SetCellData(PolyDataType::CellDataContainer::New());
@@ -258,8 +252,7 @@ WasmPolyDataToPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 void
-WasmPolyDataToPolyDataFilter<TPolyData>
-::PrintSelf(std::ostream & os, Indent indent) const
+WasmPolyDataToPolyDataFilter<TPolyData>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

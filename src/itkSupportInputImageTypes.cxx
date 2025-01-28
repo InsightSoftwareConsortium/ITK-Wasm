@@ -24,15 +24,16 @@
 namespace itk
 {
 
-bool lexical_cast(const std::string &input, ImageTypeJSON & imageType)
+bool
+lexical_cast(const std::string & input, ImageTypeJSON & imageType)
 {
   if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     const unsigned int index = std::stoi(input);
-    auto json = wasm::getMemoryStoreInputJSON(0, index);
-    std::string deserialized;
-    auto        deserializedAttempt = glz::read_json<itk::ImageJSON>(json);
+    auto               json = wasm::getMemoryStoreInputJSON(0, index);
+    std::string        deserialized;
+    auto               deserializedAttempt = glz::read_json<itk::ImageJSON>(json);
     if (!deserializedAttempt)
     {
       const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
@@ -60,11 +61,11 @@ bool lexical_cast(const std::string &input, ImageTypeJSON & imageType)
 
     using IOComponentType = itk::IOComponentEnum;
     const IOComponentType ioComponentEnum = imageIO->GetComponentType();
-    imageType.componentType = itk::jsonComponentTypeFromIOComponentEnum( ioComponentEnum );
+    imageType.componentType = itk::jsonComponentTypeFromIOComponentEnum(ioComponentEnum);
 
     using IOPixelType = itk::IOPixelEnum;
     const IOPixelType ioPixelEnum = imageIO->GetPixelType();
-    imageType.pixelType = itk::jsonFromIOPixelEnum( ioPixelEnum );
+    imageType.pixelType = itk::jsonFromIOPixelEnum(ioPixelEnum);
 
     imageType.components = imageIO->GetNumberOfComponents();
 #else

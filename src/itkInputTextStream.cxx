@@ -19,7 +19,7 @@
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
+#  include "itkWasmExports.h"
 #endif
 
 namespace itk
@@ -27,7 +27,8 @@ namespace itk
 namespace wasm
 {
 
-bool lexical_cast(const std::string &input, InputTextStream &inputStream)
+bool
+lexical_cast(const std::string & input, InputTextStream & inputStream)
 {
   if (input.empty())
   {
@@ -37,7 +38,7 @@ bool lexical_cast(const std::string &input, InputTextStream &inputStream)
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     const unsigned int index = std::stoi(input);
-    const auto json = getMemoryStoreInputJSON(0, index);
+    const auto         json = getMemoryStoreInputJSON(0, index);
     inputStream.SetJSON(json);
 #else
     return false;
