@@ -21,6 +21,7 @@
     "test:wasi": "pnpm -r test:wasi",
     "test:lint": "pnpm -r test:lint",
     "test:commitlint": "commitlint",
+    "test:data:download": "pnpm -r test:data:download",
     "test:node": "pnpm -r test:node",
     "test:browser:chrome": "pnpm -r test:browser:chrome",
     "test:browser:firefox": "pnpm -r test:browser:firefox",
