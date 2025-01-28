@@ -21,12 +21,12 @@
 #include "itkPipeline.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
-#include "itkWasmImage.h"
-#include "itkWasmImageToImageFilter.h"
+#  include "itkWasmExports.h"
+#  include "itkWasmImage.h"
+#  include "itkWasmImageToImageFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#include "itkImageFileReader.h"
+#  include "itkImageFileReader.h"
 #endif
 
 namespace itk
@@ -50,23 +50,29 @@ class ITK_TEMPLATE_EXPORT InputImage
 public:
   using ImageType = TImage;
 
-  void Set(const ImageType * image) {
+  void
+  Set(const ImageType * image)
+  {
     this->m_Image = image;
   }
 
-  const ImageType * Get() const {
+  const ImageType *
+  Get() const
+  {
     return this->m_Image.GetPointer();
   }
 
   InputImage() = default;
   ~InputImage() = default;
+
 protected:
   typename TImage::ConstPointer m_Image;
 };
 
 
 template <typename TImage>
-bool lexical_cast(const std::string &input, InputImage<TImage> &inputImage)
+bool
+lexical_cast(const std::string & input, InputImage<TImage> & inputImage)
 {
   if (input.empty())
   {
@@ -77,10 +83,10 @@ bool lexical_cast(const std::string &input, InputImage<TImage> &inputImage)
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     using WasmImageToImageFilterType = WasmImageToImageFilter<TImage>;
-    auto wasmImageToImageFilter = WasmImageToImageFilterType::New();
-    auto wasmImage = WasmImageToImageFilterType::WasmImageType::New();
+    auto               wasmImageToImageFilter = WasmImageToImageFilterType::New();
+    auto               wasmImage = WasmImageToImageFilterType::WasmImageType::New();
     const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(0, index);
+    auto               json = getMemoryStoreInputJSON(0, index);
     wasmImage->SetJSON(json);
     wasmImageToImageFilter->SetInput(wasmImage);
     wasmImageToImageFilter->Update();

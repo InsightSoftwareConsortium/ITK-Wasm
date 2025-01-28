@@ -22,13 +22,13 @@
 #include "itkMeshConvertPixelTraits.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
-#include "itkWasmPointSet.h"
-#include "itkPointSetToWasmPointSetFilter.h"
+#  include "itkWasmExports.h"
+#  include "itkWasmPointSet.h"
+#  include "itkPointSetToWasmPointSetFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#include "itkMesh.h"
-#include "itkMeshFileWriter.h"
+#  include "itkMesh.h"
+#  include "itkMeshFileWriter.h"
 #endif
 
 namespace itk
@@ -40,9 +40,9 @@ namespace wasm
  * \brief Output point set for an itk::wasm::Pipeline
  *
  * This point set is written to the filesystem or memory when it goes out of scope.
- * 
+ *
  * Call `GetPointSet()` to get the TPointSet * to use an input to a pipeline.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TPointSet>
@@ -51,43 +51,51 @@ class ITK_TEMPLATE_EXPORT OutputPointSet
 public:
   using PointSetType = TPointSet;
 
-  void Set(const PointSetType * pointSet) {
+  void
+  Set(const PointSetType * pointSet)
+  {
     this->m_PointSet = pointSet;
   }
 
-  const PointSetType * Get() const {
+  const PointSetType *
+  Get() const
+  {
     return this->m_PointSet.GetPointer();
   }
 
   /** FileName or output index. */
-  void SetIdentifier(const std::string & identifier)
+  void
+  SetIdentifier(const std::string & identifier)
   {
     this->m_Identifier = identifier;
   }
-  const std::string & GetIdentifier() const
+  const std::string &
+  GetIdentifier() const
   {
     return this->m_Identifier;
   }
 
   OutputPointSet() = default;
-  ~OutputPointSet() {
-    if(wasm::Pipeline::get_use_memory_io())
+  ~OutputPointSet()
+  {
+    if (wasm::Pipeline::get_use_memory_io())
     {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    if (!this->m_PointSet.IsNull() && !this->m_Identifier.empty())
+      if (!this->m_PointSet.IsNull() && !this->m_Identifier.empty())
       {
         using PointSetToWasmPointSetFilterType = PointSetToWasmPointSetFilter<PointSetType>;
         auto pointSetToWasmPointSetFilter = PointSetToWasmPointSetFilterType::New();
         pointSetToWasmPointSetFilter->SetInput(this->m_PointSet);
         pointSetToWasmPointSetFilter->Update();
-        auto wasmPointSet = pointSetToWasmPointSetFilter->GetOutput();
+        auto       wasmPointSet = pointSetToWasmPointSetFilter->GetOutput();
         const auto index = std::stoi(this->m_Identifier);
         setMemoryStoreOutputDataObject(0, index, wasmPointSet);
 
         if (this->m_PointSet->GetNumberOfPoints() > 0)
         {
-          const auto pointsAddress = reinterpret_cast< size_t >( &(wasmPointSet->GetPointSet()->GetPoints()->at(0)) );
-          const auto pointsSize = wasmPointSet->GetPointSet()->GetPoints()->Size() * sizeof(typename PointSetType::CoordinateType) * PointSetType::PointDimension;
+          const auto pointsAddress = reinterpret_cast<size_t>(&(wasmPointSet->GetPointSet()->GetPoints()->at(0)));
+          const auto pointsSize = wasmPointSet->GetPointSet()->GetPoints()->Size() *
+                                  sizeof(typename PointSetType::CoordinateType) * PointSetType::PointDimension;
           setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
         }
 
@@ -95,37 +103,40 @@ public:
         {
           using PointPixelType = typename PointSetType::PixelType;
           using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
-          const auto pointDataAddress = reinterpret_cast< size_t >( &(wasmPointSet->GetPointSet()->GetPointData()->at(0)) );
-          const auto pointDataSize = wasmPointSet->GetPointSet()->GetPointData()->Size() * sizeof(typename ConvertPointPixelTraits::ComponentType) * ConvertPointPixelTraits::GetNumberOfComponents();
+          const auto pointDataAddress = reinterpret_cast<size_t>(&(wasmPointSet->GetPointSet()->GetPointData()->at(0)));
+          const auto pointDataSize = wasmPointSet->GetPointSet()->GetPointData()->Size() *
+                                     sizeof(typename ConvertPointPixelTraits::ComponentType) *
+                                     ConvertPointPixelTraits::GetNumberOfComponents();
           setMemoryStoreOutputArray(0, index, 1, pointDataAddress, pointDataSize);
         }
       }
 #else
-    std::cerr << "Memory IO not supported" << std::endl;
-    abort();
+      std::cerr << "Memory IO not supported" << std::endl;
+      abort();
 #endif
     }
     else
     {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    if (!this->m_PointSet.IsNull() && !this->m_Identifier.empty())
+      if (!this->m_PointSet.IsNull() && !this->m_Identifier.empty())
       {
-      using MeshType = Mesh<typename TPointSet::PixelType, TPointSet::PointDimension>;
-      using PointSetWriterType = itk::MeshFileWriter<MeshType>;
-      auto pointSetWriter = PointSetWriterType::New();
-      pointSetWriter->SetFileName(this->m_Identifier);
-      typename MeshType::Pointer mesh = MeshType::New();
-      mesh->SetPoints(const_cast<typename MeshType::PointsContainer *>(this->m_PointSet->GetPoints()));
-      mesh->SetPointData(const_cast<typename MeshType::PointDataContainer *>(this->m_PointSet->GetPointData()));
-      pointSetWriter->SetInput(mesh);
-      pointSetWriter->Update();
+        using MeshType = Mesh<typename TPointSet::PixelType, TPointSet::PointDimension>;
+        using PointSetWriterType = itk::MeshFileWriter<MeshType>;
+        auto pointSetWriter = PointSetWriterType::New();
+        pointSetWriter->SetFileName(this->m_Identifier);
+        typename MeshType::Pointer mesh = MeshType::New();
+        mesh->SetPoints(const_cast<typename MeshType::PointsContainer *>(this->m_PointSet->GetPoints()));
+        mesh->SetPointData(const_cast<typename MeshType::PointDataContainer *>(this->m_PointSet->GetPointData()));
+        pointSetWriter->SetInput(mesh);
+        pointSetWriter->Update();
       }
 #else
-    std::cerr << "Filesystem IO not supported" << std::endl;
-    abort();
+      std::cerr << "Filesystem IO not supported" << std::endl;
+      abort();
 #endif
     }
   }
+
 protected:
   typename TPointSet::ConstPointer m_PointSet;
 
@@ -133,7 +144,8 @@ protected:
 };
 
 template <typename TPointSet>
-bool lexical_cast(const std::string &input, OutputPointSet<TPointSet> &outputPointSet)
+bool
+lexical_cast(const std::string & input, OutputPointSet<TPointSet> & outputPointSet)
 {
   outputPointSet.SetIdentifier(input);
   return true;

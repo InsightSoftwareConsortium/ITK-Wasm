@@ -20,9 +20,9 @@
 
 #ifndef ITK_WASM_NO_MEMORY_IO
 
-#include <map>
-#include <utility>
-#include <vector>
+#  include <map>
+#  include <utility>
+#  include <vector>
 
 namespace itk
 {
@@ -35,12 +35,14 @@ static InputArrayStoreType inputArrayStore;
 using InputJSONStoreType = std::map<uint32_t, std::string>;
 static InputJSONStoreType inputJSONStore;
 
-const std::string & getMemoryStoreInputJSON(uint32_t memoryIndex, uint32_t index)
+const std::string &
+getMemoryStoreInputJSON(uint32_t memoryIndex, uint32_t index)
 {
   return inputJSONStore[index];
 }
 
-const InputArrayStoreType & getMemoryInputArrayStore()
+const InputArrayStoreType &
+getMemoryInputArrayStore()
 {
   return inputArrayStore;
 }
@@ -48,7 +50,8 @@ const InputArrayStoreType & getMemoryInputArrayStore()
 using OutputWasmDataObjectStoreType = std::map<uint32_t, WasmDataObject::ConstPointer>;
 static OutputWasmDataObjectStoreType outputWasmDataObjectStore;
 
-void setMemoryStoreOutputDataObject(uint32_t memoryIndex, uint32_t index, const WasmDataObject * dataObject)
+void
+setMemoryStoreOutputDataObject(uint32_t memoryIndex, uint32_t index, const WasmDataObject * dataObject)
 {
   WasmDataObject::ConstPointer smartPointer(dataObject);
   outputWasmDataObjectStore[index] = smartPointer;
@@ -61,7 +64,8 @@ using OutputArrayStoreValueType = std::pair<size_t, size_t>;
 using OutputArrayStoreType = std::map<OutputArrayStoreKeyType, OutputArrayStoreValueType>;
 static OutputArrayStoreType outputArrayStore;
 
-void setMemoryStoreOutputArray(uint32_t memoryIndex, uint32_t index, uint32_t subIndex, size_t address, size_t size)
+void
+setMemoryStoreOutputArray(uint32_t memoryIndex, uint32_t index, uint32_t subIndex, size_t address, size_t size)
 {
   const auto key = std::make_pair(index, subIndex);
   const auto value = std::make_pair(address, size);
@@ -71,7 +75,8 @@ void setMemoryStoreOutputArray(uint32_t memoryIndex, uint32_t index, uint32_t su
 } // end namespace wasm
 } // end namespace itk
 
-size_t itk_wasm_input_array_alloc(uint32_t memoryIndex, uint32_t index, uint32_t subIndex, size_t size)
+size_t
+itk_wasm_input_array_alloc(uint32_t memoryIndex, uint32_t index, uint32_t subIndex, size_t size)
 {
   using namespace itk::wasm;
   const auto key = std::make_pair(index, subIndex);
@@ -83,10 +88,11 @@ size_t itk_wasm_input_array_alloc(uint32_t memoryIndex, uint32_t index, uint32_t
   {
     inputArrayStore[key].resize(size);
   }
-  return reinterpret_cast< size_t >(inputArrayStore[key].data());
+  return reinterpret_cast<size_t>(inputArrayStore[key].data());
 }
 
-size_t itk_wasm_input_json_alloc(uint32_t memoryIndex, uint32_t index, size_t size)
+size_t
+itk_wasm_input_json_alloc(uint32_t memoryIndex, uint32_t index, size_t size)
 {
   using namespace itk::wasm;
   if (inputJSONStore.count(index))
@@ -97,22 +103,25 @@ size_t itk_wasm_input_json_alloc(uint32_t memoryIndex, uint32_t index, size_t si
   {
     inputJSONStore[index].resize(size);
   }
-  return reinterpret_cast< size_t >(inputJSONStore[index].data());
+  return reinterpret_cast<size_t>(inputJSONStore[index].data());
 }
 
-size_t itk_wasm_output_json_address(uint32_t memoryIndex, uint32_t index)
+size_t
+itk_wasm_output_json_address(uint32_t memoryIndex, uint32_t index)
 {
   using namespace itk::wasm;
-  return reinterpret_cast< size_t >(outputWasmDataObjectStore[index]->GetJSON().data());
+  return reinterpret_cast<size_t>(outputWasmDataObjectStore[index]->GetJSON().data());
 }
 
-size_t itk_wasm_output_json_size(uint32_t memoryIndex, uint32_t index)
+size_t
+itk_wasm_output_json_size(uint32_t memoryIndex, uint32_t index)
 {
   using namespace itk::wasm;
   return outputWasmDataObjectStore[index]->GetJSON().size();
 }
 
-size_t itk_wasm_output_array_address(uint32_t memoryIndex, uint32_t index, uint32_t subIndex)
+size_t
+itk_wasm_output_array_address(uint32_t memoryIndex, uint32_t index, uint32_t subIndex)
 {
   using namespace itk::wasm;
   const auto key = std::make_pair(index, subIndex);
@@ -120,7 +129,8 @@ size_t itk_wasm_output_array_address(uint32_t memoryIndex, uint32_t index, uint3
   return value.first;
 }
 
-size_t itk_wasm_output_array_size(uint32_t memoryIndex, uint32_t index, uint32_t subIndex)
+size_t
+itk_wasm_output_array_size(uint32_t memoryIndex, uint32_t index, uint32_t subIndex)
 {
   using namespace itk::wasm;
   const auto key = std::make_pair(index, subIndex);
@@ -128,7 +138,8 @@ size_t itk_wasm_output_array_size(uint32_t memoryIndex, uint32_t index, uint32_t
   return value.second;
 }
 
-void itk_wasm_free_all()
+void
+itk_wasm_free_all()
 {
   using namespace itk::wasm;
   inputJSONStore.clear();

@@ -27,11 +27,12 @@
 
 #include "downsampleSigma.h"
 
-template<typename TImage>
+template <typename TImage>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using ImageType = TImage;
     constexpr unsigned int ImageDimension = ImageType::ImageDimension;
@@ -40,15 +41,18 @@ public:
     InputImageType inputImage;
     pipeline.add_option("input", inputImage, "Input image")->required()->type_name("INPUT_IMAGE");
 
-    std::vector<unsigned int> shrinkFactors { 2, 2 };
+    std::vector<unsigned int> shrinkFactors{ 2, 2 };
     pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->type_size(ImageDimension);
 
     std::vector<unsigned int> cropRadius;
-    pipeline.add_option("-r,--crop-radius", cropRadius, "Optional crop radius in pixel units.")->type_size(ImageDimension);
+    pipeline.add_option("-r,--crop-radius", cropRadius, "Optional crop radius in pixel units.")
+      ->type_size(ImageDimension);
 
     using OutputImageType = itk::wasm::OutputImage<ImageType>;
     OutputImageType downsampledImage;
-    pipeline.add_option("downsampled", downsampledImage, "Output downsampled image")->required()->type_name("OUTPUT_IMAGE");
+    pipeline.add_option("downsampled", downsampledImage, "Output downsampled image")
+      ->required()
+      ->type_name("OUTPUT_IMAGE");
 
     ITK_WASM_PARSE(pipeline);
 
@@ -56,9 +60,9 @@ public:
     const auto inputSpacing = inputImage.Get()->GetSpacing();
     const auto inputSize = inputImage.Get()->GetLargestPossibleRegion().GetSize();
 
-    typename ImageType::PointType outputOrigin;
+    typename ImageType::PointType   outputOrigin;
     typename ImageType::SpacingType outputSpacing;
-    typename ImageType::SizeType outputSize;
+    typename ImageType::SizeType    outputSize;
     for (unsigned int i = 0; i < ImageDimension; ++i)
     {
       const double cropRadiusValue = cropRadius.size() ? cropRadius[i] : 0.0;
@@ -68,7 +72,8 @@ public:
       outputSize[i] = std::max<itk::SizeValueType>(0, (inputSize[i] - 2 * cropRadiusValue) / shrinkFactors[i]);
     }
 
-    using InterpolatorType = itk::LabelImageGenericInterpolateImageFunction<ImageType, itk::LinearInterpolateImageFunction>;
+    using InterpolatorType =
+      itk::LabelImageGenericInterpolateImageFunction<ImageType, itk::LinearInterpolateImageFunction>;
     auto interpolator = InterpolatorType::New();
 
     using ResampleFilterType = itk::ResampleImageFilter<ImageType, ImageType>;
@@ -90,20 +95,22 @@ public:
   }
 };
 
-int main(int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("downsample-label-image", "Subsample the input label image a according to weighted voting of local labels.", argc, argv);
+  itk::wasm::Pipeline pipeline("downsample-label-image",
+                               "Subsample the input label image a according to weighted voting of local labels.",
+                               argc,
+                               argv);
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
-    int8_t,
-    uint8_t,
-    int16_t,
-    uint16_t,
-    int32_t,
-    uint32_t,
-    int64_t,
-    uint64_t,
-    float
-    >
-  ::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
+                                           int8_t,
+                                           uint8_t,
+                                           int16_t,
+                                           uint16_t,
+                                           int32_t,
+                                           uint32_t,
+                                           int64_t,
+                                           uint64_t,
+                                           float>::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
 }

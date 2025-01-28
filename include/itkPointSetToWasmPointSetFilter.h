@@ -26,7 +26,7 @@ namespace itk
 /**
  *\class PointSetToWasmPointSetFilter
  * \brief Convert an PointSet to an WasmPointSet object.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TPointSet>

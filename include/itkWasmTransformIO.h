@@ -73,7 +73,7 @@ public:
 
   /** Set the JSON representation of the image information. */
   void
-  SetJSON(const TransformListJSON & json, bool inMemory=false);
+  SetJSON(const TransformListJSON & json, bool inMemory = false);
 
   /*-------- This part of the interfaces deals with writing data ----- */
 
@@ -86,7 +86,7 @@ public:
 #if !defined(ITK_WRAPPING_PARSER)
   /** Get the JSON representation of the mesh information. */
   auto
-  GetJSON(bool inMemory=false) -> TransformListJSON;
+  GetJSON(bool inMemory = false) -> TransformListJSON;
 #endif
 
 protected:
@@ -109,8 +109,10 @@ protected:
   void
   WriteParameters();
 
-  void ReadCBOR(void * buffer = nullptr, unsigned char * cborBuffer = nullptr, size_t cborBufferLength = 0);
-  size_t WriteCBOR(const void * buffer = nullptr, unsigned char ** cborBuffer = nullptr, bool allocateCBORBuffer = false);
+  void
+  ReadCBOR(void * buffer = nullptr, unsigned char * cborBuffer = nullptr, size_t cborBufferLength = 0);
+  size_t
+  WriteCBOR(const void * buffer = nullptr, unsigned char ** cborBuffer = nullptr, bool allocateCBORBuffer = false);
 
   cbor_item_t * m_CBORRoot{ nullptr };
 

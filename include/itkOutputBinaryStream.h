@@ -23,10 +23,10 @@
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include <sstream>
+#  include <sstream>
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#include <fstream>
+#  include <fstream>
 #endif
 
 #include "WebAssemblyInterfaceExport.h"
@@ -41,19 +41,22 @@ namespace wasm
  * \brief Output text std::ostream for an itk::wasm::Pipeline
  *
  * This stream is written to the filesystem or memory when the object goes out of scope.
- * 
+ *
  * Call `Get()` to get the std::ostream & to use an output for a pipeline.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 class WebAssemblyInterface_EXPORT OutputBinaryStream
 {
 public:
-  std::ostream & Get() {
+  std::ostream &
+  Get()
+  {
     return *m_OStream;
   }
 
-  void SetFileName(const std::string & fileName)
+  void
+  SetFileName(const std::string & fileName)
   {
     if (m_DeleteOStream && m_OStream != nullptr)
     {
@@ -67,7 +70,8 @@ public:
   ~OutputBinaryStream();
 
   /** Output index. */
-  void SetIdentifier(const std::string & identifier)
+  void
+  SetIdentifier(const std::string & identifier)
   {
     if (m_DeleteOStream && m_OStream != nullptr)
     {
@@ -79,14 +83,15 @@ public:
     m_OStream = &(m_WasmStringStream->GetStringStream());
     this->m_Identifier = identifier;
   }
-  const std::string & GetIdentifier() const
+  const std::string &
+  GetIdentifier() const
   {
     return this->m_Identifier;
   }
 
 protected:
-  std::ostream * m_OStream{nullptr};
-  bool m_DeleteOStream{false};
+  std::ostream * m_OStream{ nullptr };
+  bool           m_DeleteOStream{ false };
 
   std::string m_Identifier;
 
@@ -94,7 +99,8 @@ protected:
 };
 
 
-WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &output, OutputBinaryStream &outputStream);
+WebAssemblyInterface_EXPORT bool
+lexical_cast(const std::string & output, OutputBinaryStream & outputStream);
 
 } // end namespace wasm
 } // end namespace itk

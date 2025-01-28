@@ -64,34 +64,33 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   using ImageType = itk::Image<PixelType, Dimension>;
 
   const char * inputImageFile = argv[2];
-  auto readInputImage = itk::ReadImage<ImageType>(inputImageFile);
+  auto         readInputImage = itk::ReadImage<ImageType>(inputImageFile);
   using ImageToWasmImageFilterType = itk::ImageToWasmImageFilter<ImageType>;
   auto imageToWasmImageFilter = ImageToWasmImageFilterType::New();
   imageToWasmImageFilter->SetInput(readInputImage);
   imageToWasmImageFilter->Update();
   auto readWasmImage = imageToWasmImageFilter->GetOutput();
 
-  auto readWasmImageData = reinterpret_cast< const void * >(readWasmImage->GetImage()->GetBufferPointer());
-  const auto readWasmImageDataSize = readWasmImage->GetImage()->GetPixelContainer()->Size();
+  auto         readWasmImageData = reinterpret_cast<const void *>(readWasmImage->GetImage()->GetBufferPointer());
+  const auto   readWasmImageDataSize = readWasmImage->GetImage()->GetPixelContainer()->Size();
   const size_t readWasmImageDataPointerAddress = itk_wasm_input_array_alloc(0, 0, 0, readWasmImageDataSize);
-  auto readWasmImageDataPointer = reinterpret_cast< void * >(readWasmImageDataPointerAddress);
+  auto         readWasmImageDataPointer = reinterpret_cast<void *>(readWasmImageDataPointerAddress);
   std::memcpy(readWasmImageDataPointer, readWasmImageData, readWasmImageDataSize);
 
-  // auto direction = reinterpret_cast< const void * >( readWasmImage->GetImage()->GetDirection().GetVnlMatrix().begin() );
-  // const auto directionSize = readWasmImage->GetImage()->GetDirection().GetVnlMatrix().size() * sizeof(double);
+  // auto direction = reinterpret_cast< const void * >( readWasmImage->GetImage()->GetDirection().GetVnlMatrix().begin()
+  // ); const auto directionSize = readWasmImage->GetImage()->GetDirection().GetVnlMatrix().size() * sizeof(double);
   // const size_t readWasmImageDirectionPointerAddress = itk_wasm_array_alloc(0, 0, 1, directionSize);
   // auto readWasmImageDirectionPointer = reinterpret_cast< void * >(readWasmImageDirectionPointerAddress);
   // std::memcpy(readWasmImageDirectionPointer, direction, directionSize);
 
-  auto readImageJSON = readWasmImage->GetJSON();
-  void * readWasmImagePointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readImageJSON.size()));
+  auto   readImageJSON = readWasmImage->GetJSON();
+  void * readWasmImagePointer = reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 0, readImageJSON.size()));
   std::memcpy(readWasmImagePointer, readImageJSON.data(), readImageJSON.size());
 
-  std::ifstream mockTextFStream( argv[4] );
-  const std::string mockTextStream{ std::istreambuf_iterator<char>(mockTextFStream),
-                                    std::istreambuf_iterator<char>() };
-  const size_t textStreamInputAddress = itk_wasm_input_array_alloc(0, 2, 0, mockTextStream.size());
-  auto textStreamInputPointer = reinterpret_cast< void * >(textStreamInputAddress);
+  std::ifstream     mockTextFStream(argv[4]);
+  const std::string mockTextStream{ std::istreambuf_iterator<char>(mockTextFStream), std::istreambuf_iterator<char>() };
+  const size_t      textStreamInputAddress = itk_wasm_input_array_alloc(0, 2, 0, mockTextStream.size());
+  auto              textStreamInputPointer = reinterpret_cast<void *>(textStreamInputAddress);
   std::memcpy(textStreamInputPointer, mockTextStream.data(), mockTextStream.size());
 
   std::ostringstream textStreamStream;
@@ -100,14 +99,16 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   textStreamStream << "\", \"size\": ";
   textStreamStream << mockTextStream.size();
   textStreamStream << "}";
-  void * textStreamInputJSONPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 2, textStreamStream.str().size()));
+  void * textStreamInputJSONPointer =
+    reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 2, textStreamStream.str().size()));
   std::memcpy(textStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size());
 
   const size_t binaryStreamInputAddress = itk_wasm_input_array_alloc(0, 1, 0, mockTextStream.size());
-  auto binaryStreamInputPointer = reinterpret_cast< void * >(textStreamInputAddress);
+  auto         binaryStreamInputPointer = reinterpret_cast<void *>(textStreamInputAddress);
   std::memcpy(binaryStreamInputPointer, mockTextStream.data(), mockTextStream.size());
 
-  void * binaryStreamInputJSONPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 1, textStreamStream.str().size()));
+  void * binaryStreamInputJSONPointer =
+    reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 1, textStreamStream.str().size()));
   std::memcpy(binaryStreamInputJSONPointer, textStreamStream.str().data(), textStreamStream.str().size());
 
   const char * inputMeshFile = argv[8];
@@ -124,8 +125,8 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   meshToWasmMeshFilter->Update();
   auto readWasmMesh = meshToWasmMeshFilter->GetOutput();
 
-  auto readMeshJSON = readWasmMesh->GetJSON();
-  void * readWasmMeshPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 3, readMeshJSON.size()));
+  auto   readMeshJSON = readWasmMesh->GetJSON();
+  void * readWasmMeshPointer = reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 3, readMeshJSON.size()));
   std::memcpy(readWasmMeshPointer, readMeshJSON.data(), readMeshJSON.size());
 
   using PolyDataType = itk::PolyData<float>;
@@ -138,8 +139,8 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   polyDataToWasmPolyDataFilter->Update();
   auto readWasmPolyData = polyDataToWasmPolyDataFilter->GetOutput();
 
-  auto readPolyDataJSON = readWasmPolyData->GetJSON();
-  void * readWasmPolyDataPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 4, readPolyDataJSON.size()));
+  auto   readPolyDataJSON = readWasmPolyData->GetJSON();
+  void * readWasmPolyDataPointer = reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 4, readPolyDataJSON.size()));
   std::memcpy(readWasmPolyDataPointer, readPolyDataJSON.data(), readPolyDataJSON.size());
 
   const char * inputTransformFile = argv[12];
@@ -157,25 +158,28 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   transformToWasmTransformFilter->Update();
   auto readWasmTransform = transformToWasmTransformFilter->GetOutput();
 
-  auto readTransformJSON = readWasmTransform->GetJSON();
-  void * readWasmTransformPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 5, readTransformJSON.size()));
+  auto   readTransformJSON = readWasmTransform->GetJSON();
+  void * readWasmTransformPointer = reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 5, readTransformJSON.size()));
   std::memcpy(readWasmTransformPointer, readTransformJSON.data(), readTransformJSON.size());
 
-  // auto readWasmTransformFixedParams = reinterpret_cast< const void * >(readWasmTransform->GetTransform()->GetFixedParameters().data_block());
-  // const auto readWasmTransformFixedParamsSize = readWasmTransform->GetTransform()->GetFixedParameters().Size();
-  // const size_t readWasmTransformFixedParamsAddress = itk_wasm_input_array_alloc(0, 0, 0, readWasmTransformFixedParamsSize);
-  // auto readWasmTransformFixedParamsPointer = reinterpret_cast< void * >(readWasmTransformFixedParamsAddress);
+  // auto readWasmTransformFixedParams = reinterpret_cast< const void *
+  // >(readWasmTransform->GetTransform()->GetFixedParameters().data_block()); const auto
+  // readWasmTransformFixedParamsSize = readWasmTransform->GetTransform()->GetFixedParameters().Size(); const size_t
+  // readWasmTransformFixedParamsAddress = itk_wasm_input_array_alloc(0, 0, 0, readWasmTransformFixedParamsSize); auto
+  // readWasmTransformFixedParamsPointer = reinterpret_cast< void * >(readWasmTransformFixedParamsAddress);
   // std::memcpy(readWasmTransformFixedParamsPointer, readWasmTransformFixedParams, readWasmTransformFixedParamsSize);
 
-  // auto direction = reinterpret_cast< const void * >( readWasmTransform->GetTransform()->GetDirection().GetVnlMatrix().begin() );
-  // const auto directionSize = readWasmTransform->GetTransform()->GetDirection().GetVnlMatrix().size() * sizeof(double);
-  // const size_t readWasmTransformDirectionPointerAddress = itk_wasm_array_alloc(0, 0, 1, directionSize);
-  // auto readWasmTransformDirectionPointer = reinterpret_cast< void * >(readWasmTransformDirectionPointerAddress);
+  // auto direction = reinterpret_cast< const void * >(
+  // readWasmTransform->GetTransform()->GetDirection().GetVnlMatrix().begin() ); const auto directionSize =
+  // readWasmTransform->GetTransform()->GetDirection().GetVnlMatrix().size() * sizeof(double); const size_t
+  // readWasmTransformDirectionPointerAddress = itk_wasm_array_alloc(0, 0, 1, directionSize); auto
+  // readWasmTransformDirectionPointer = reinterpret_cast< void * >(readWasmTransformDirectionPointerAddress);
   // std::memcpy(readWasmTransformDirectionPointer, direction, directionSize);
 
   // auto readTransformJSON = readWasmTransform->GetJSON();
-  // void * readWasmTransformPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readTransformJSON.size()));
-  // std::memcpy(readWasmTransformPointer, readTransformJSON.data(), readTransformJSON.size());
+  // void * readWasmTransformPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0,
+  // readTransformJSON.size())); std::memcpy(readWasmTransformPointer, readTransformJSON.data(),
+  // readTransformJSON.size());
 
   const char * inputCompositeTransformFile = argv[14];
   using CompositeTransformType = itk::CompositeTransform<double, 2>;
@@ -185,15 +189,17 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   compositeTransformReader->SetFileName(inputCompositeTransformFile);
   compositeTransformReader->Update();
   auto inputCompositeTransformList = compositeTransformReader->GetTransformList();
-  auto readInputCompositeTransform = dynamic_cast<const CompositeTransformType *>(inputCompositeTransformList->front().GetPointer());
+  auto readInputCompositeTransform =
+    dynamic_cast<const CompositeTransformType *>(inputCompositeTransformList->front().GetPointer());
   using CompositeTransformToWasmTransformFilterType = itk::TransformToWasmTransformFilter<CompositeTransformType>;
   auto compositeTransformToWasmCompositeTransformFilter = CompositeTransformToWasmTransformFilterType::New();
   compositeTransformToWasmCompositeTransformFilter->SetTransform(readInputCompositeTransform);
   compositeTransformToWasmCompositeTransformFilter->Update();
   auto readWasmCompositeTransform = compositeTransformToWasmCompositeTransformFilter->GetOutput();
 
-  auto readCompositeTransformJSON = readWasmCompositeTransform->GetJSON();
-  void * readWasmCompositeTransformPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 6, readCompositeTransformJSON.size()));
+  auto   readCompositeTransformJSON = readWasmCompositeTransform->GetJSON();
+  void * readWasmCompositeTransformPointer =
+    reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 6, readCompositeTransformJSON.size()));
   std::memcpy(readWasmCompositeTransformPointer, readCompositeTransformJSON.data(), readCompositeTransformJSON.size());
 
   const char * inputPointSetFile = argv[16];
@@ -202,7 +208,7 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   auto pointSetReader = PointSetReaderType::New();
   pointSetReader->SetFileName(inputPointSetFile);
   pointSetReader->Update();
-  auto readInputPointSetMesh = pointSetReader->GetOutput();
+  auto                  readInputPointSetMesh = pointSetReader->GetOutput();
   PointSetType::Pointer readInputPointSet = PointSetType::New();
   readInputPointSet->SetPoints(readInputPointSetMesh->GetPoints());
   readInputPointSet->SetPointData(readInputPointSetMesh->GetPointData());
@@ -212,32 +218,53 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   pointSetToWasmPointSetFilter->Update();
   auto readWasmPointSet = pointSetToWasmPointSetFilter->GetOutput();
 
-  auto readPointSetJSON = readWasmPointSet->GetJSON();
-  void * readWasmPointSetPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 7, readPointSetJSON.size()));
+  auto   readPointSetJSON = readWasmPointSet->GetJSON();
+  void * readWasmPointSetPointer = reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 7, readPointSetJSON.size()));
   std::memcpy(readWasmPointSetPointer, readPointSetJSON.data(), readPointSetJSON.size());
 
   using VectorImageType = itk::VectorImage<PixelType, Dimension>;
   // VectorImage test
   const char * inputVectorImageFile = argv[18];
-  auto readVectorInputImage = itk::ReadImage<VectorImageType>(inputVectorImageFile);
+  auto         readVectorInputImage = itk::ReadImage<VectorImageType>(inputVectorImageFile);
   using VectorImageToWasmImageFilterType = itk::ImageToWasmImageFilter<VectorImageType>;
   auto vectorImageToWasmImageFilter = VectorImageToWasmImageFilterType::New();
   vectorImageToWasmImageFilter->SetInput(readVectorInputImage);
   vectorImageToWasmImageFilter->Update();
   auto readWasmVectorImage = vectorImageToWasmImageFilter->GetOutput();
 
-  auto readWasmVectorImageData = reinterpret_cast< const void * >(readWasmVectorImage->GetImage()->GetBufferPointer());
-  const auto readWasmVectorImageDataSize = readWasmVectorImage->GetImage()->GetPixelContainer()->Size();
+  auto readWasmVectorImageData = reinterpret_cast<const void *>(readWasmVectorImage->GetImage()->GetBufferPointer());
+  const auto   readWasmVectorImageDataSize = readWasmVectorImage->GetImage()->GetPixelContainer()->Size();
   const size_t readWasmVectorImageDataPointerAddress = itk_wasm_input_array_alloc(0, 8, 0, readWasmVectorImageDataSize);
-  auto readWasmVectorImageDataPointer = reinterpret_cast< void * >(readWasmVectorImageDataPointerAddress);
+  auto         readWasmVectorImageDataPointer = reinterpret_cast<void *>(readWasmVectorImageDataPointerAddress);
   std::memcpy(readWasmVectorImageDataPointer, readWasmVectorImageData, readWasmVectorImageDataSize);
 
-  auto readVectorImageJSON = readWasmVectorImage->GetJSON();
-  void * readWasmVectorImagePointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 8, readVectorImageJSON.size()));
+  auto   readVectorImageJSON = readWasmVectorImage->GetJSON();
+  void * readWasmVectorImagePointer =
+    reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 8, readVectorImageJSON.size()));
   std::memcpy(readWasmVectorImagePointer, readVectorImageJSON.data(), readVectorImageJSON.size());
 
-  const char * mockArgv[] = {"itkPipelineMemoryIOTest", "--memory-io", "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6", "7", "7", "8", "8", NULL};
-  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", 20, const_cast< char ** >(mockArgv));
+  const char *        mockArgv[] = { "itkPipelineMemoryIOTest",
+                                     "--memory-io",
+                                     "0",
+                                     "0",
+                                     "1",
+                                     "1",
+                                     "2",
+                                     "2",
+                                     "3",
+                                     "3",
+                                     "4",
+                                     "4",
+                                     "5",
+                                     "5",
+                                     "6",
+                                     "6",
+                                     "7",
+                                     "7",
+                                     "8",
+                                     "8",
+                                     NULL };
+  itk::wasm::Pipeline pipeline("pipeline-test", "A test ITK Wasm Pipeline", 20, const_cast<char **>(mockArgv));
 
   std::string example_string_option = "default";
   pipeline.add_option("-s,--string", example_string_option, "A help string");
@@ -248,7 +275,7 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   double example_double_option = 3.5;
   pipeline.add_option("-d,--double", example_double_option, "Example double option");
 
-  std::vector<double> example_vector_double_option = {3.5, 8.8};
+  std::vector<double> example_vector_double_option = { 3.5, 8.8 };
   pipeline.add_option("-v,--vector", example_vector_double_option, "Example double vector option");
 
   bool flag = false;
@@ -269,7 +296,9 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   pipeline.add_option("output-text", outputTextStream, "The output text")->required()->type_name("OUTPUT_TEXT_STREAM");
 
   itk::wasm::InputBinaryStream inputBinaryStream;
-  pipeline.add_option("input-binary", inputBinaryStream, "The input text")->required()->type_name("OUTPUT_BINARY_STREAM");
+  pipeline.add_option("input-binary", inputBinaryStream, "The input text")
+    ->required()
+    ->type_name("OUTPUT_BINARY_STREAM");
 
   itk::wasm::OutputBinaryStream outputBinaryStream;
   pipeline.add_option("output-binary", outputBinaryStream, "The output binary")->required()->type_name("OUTPUT_BINARY");
@@ -288,23 +317,33 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   using OutputPolyDataType = itk::wasm::OutputPolyData<PolyDataType>;
   OutputPolyDataType outputPolyData;
-  pipeline.add_option("output-polydata", outputPolyData, "The output polydata")->required()->type_name("OUTPUT_POLYDATA");
+  pipeline.add_option("output-polydata", outputPolyData, "The output polydata")
+    ->required()
+    ->type_name("OUTPUT_POLYDATA");
 
   using InputTransformType = itk::wasm::InputTransform<TransformType>;
   InputTransformType inputTransform;
-  pipeline.add_option("input-transform", inputTransform, "The input transform")->required()->type_name("INPUT_TRANSFORM");
+  pipeline.add_option("input-transform", inputTransform, "The input transform")
+    ->required()
+    ->type_name("INPUT_TRANSFORM");
 
   using OutputTransformType = itk::wasm::OutputTransform<TransformType>;
   OutputTransformType outputTransform;
-  pipeline.add_option("output-transform", outputTransform, "The output transform")->required()->type_name("OUTPUT_TRANSFORM");
+  pipeline.add_option("output-transform", outputTransform, "The output transform")
+    ->required()
+    ->type_name("OUTPUT_TRANSFORM");
 
   using InputCompositeTransformType = itk::wasm::InputTransform<CompositeTransformType>;
   InputCompositeTransformType inputCompositeTransform;
-  pipeline.add_option("input-composite-transform", inputCompositeTransform, "The input composite transform")->required()->type_name("INPUT_TRANSFORM");
+  pipeline.add_option("input-composite-transform", inputCompositeTransform, "The input composite transform")
+    ->required()
+    ->type_name("INPUT_TRANSFORM");
 
   using OutputCompositeTransformType = itk::wasm::OutputTransform<CompositeTransformType>;
   OutputCompositeTransformType outputCompositeTransform;
-  pipeline.add_option("output-composite-transform", outputCompositeTransform, "The output composite transform")->required()->type_name("OUTPUT_TRANSFORM");
+  pipeline.add_option("output-composite-transform", outputCompositeTransform, "The output composite transform")
+    ->required()
+    ->type_name("OUTPUT_TRANSFORM");
 
   using InputPointSetType = itk::wasm::InputPointSet<PointSetType>;
   InputPointSetType inputPointSet;
@@ -312,7 +351,9 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   using OutputPointSetType = itk::wasm::OutputPointSet<PointSetType>;
   OutputPointSetType outputPointSet;
-  pipeline.add_option("output-point-set", outputPointSet, "The output point set")->required()->type_name("OUTPUT_POINTSET");
+  pipeline.add_option("output-point-set", outputPointSet, "The output point set")
+    ->required()
+    ->type_name("OUTPUT_POINTSET");
 
   using InputVectorImageType = itk::wasm::InputImage<VectorImageType>;
   InputVectorImageType inputVectorImage;
@@ -320,7 +361,9 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   using OutputVectorImageType = itk::wasm::OutputImage<VectorImageType>;
   OutputVectorImageType outputVectorImage;
-  pipeline.add_option("output-vector-image", outputVectorImage, "The outputVectorImage")->required()->type_name("OUTPUT_IMAGE");
+  pipeline.add_option("output-vector-image", outputVectorImage, "The outputVectorImage")
+    ->required()
+    ->type_name("OUTPUT_IMAGE");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -333,7 +376,7 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
   outputTextStream.Get() << inputTextStreamContent;
 
   const std::string inputBinaryStreamContent{ std::istreambuf_iterator<char>(inputBinaryStream.Get()),
-                                            std::istreambuf_iterator<char>() };
+                                              std::istreambuf_iterator<char>() };
   ITK_TEST_EXPECT_TRUE(inputBinaryStreamContent == "test 123\n");
 
   outputBinaryStream.Get() << inputBinaryStreamContent;

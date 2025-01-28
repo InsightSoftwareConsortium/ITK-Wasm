@@ -31,7 +31,8 @@
 #include "itkOutputTextStream.h"
 #include "itkOutputBinaryStream.h"
 
-int compress(itk::wasm::Pipeline & pipeline, itk::wasm::InputBinaryStream & inputBinaryStream, int compressionLevel)
+int
+compress(itk::wasm::Pipeline & pipeline, itk::wasm::InputBinaryStream & inputBinaryStream, int compressionLevel)
 {
   itk::wasm::OutputBinaryStream outputBinaryStream;
   pipeline.add_option("output", outputBinaryStream, "Output compressed binary")->type_name("OUTPUT_BINARY_STREAM");
@@ -39,14 +40,14 @@ int compress(itk::wasm::Pipeline & pipeline, itk::wasm::InputBinaryStream & inpu
   ITK_WASM_PARSE(pipeline);
 
   std::string inputBinary;
-  inputBinary.assign( (std::istreambuf_iterator<char>(inputBinaryStream.Get()) ), 
-                      (std::istreambuf_iterator<char>()) ); 
+  inputBinary.assign((std::istreambuf_iterator<char>(inputBinaryStream.Get())), (std::istreambuf_iterator<char>()));
 
 
-  const size_t compressedBufferSize = ZSTD_compressBound(inputBinary.size());
+  const size_t      compressedBufferSize = ZSTD_compressBound(inputBinary.size());
   std::vector<char> compressedBinary(compressedBufferSize);
 
-  const size_t compressedSize = ZSTD_compress(compressedBinary.data(), compressedBufferSize, inputBinary.data(), inputBinary.size(), compressionLevel);
+  const size_t compressedSize = ZSTD_compress(
+    compressedBinary.data(), compressedBufferSize, inputBinary.data(), inputBinary.size(), compressionLevel);
   compressedBinary.resize(compressedSize);
 
   std::ostream_iterator<char> oIt(outputBinaryStream.Get());
@@ -55,28 +56,33 @@ int compress(itk::wasm::Pipeline & pipeline, itk::wasm::InputBinaryStream & inpu
   return EXIT_SUCCESS;
 }
 
-int compressStringify(itk::wasm::Pipeline & pipeline, itk::wasm::InputBinaryStream & inputBinaryStream, int compressionLevel, const std::string & dataURLPrefix)
+int
+compressStringify(itk::wasm::Pipeline &          pipeline,
+                  itk::wasm::InputBinaryStream & inputBinaryStream,
+                  int                            compressionLevel,
+                  const std::string &            dataURLPrefix)
 {
   itk::wasm::OutputTextStream outputTextStream;
-  pipeline.add_option("output", outputTextStream, "Output dataURL+base64 compressed binary")->type_name("OUTPUT_TEXT_STREAM");
+  pipeline.add_option("output", outputTextStream, "Output dataURL+base64 compressed binary")
+    ->type_name("OUTPUT_TEXT_STREAM");
 
   ITK_WASM_PARSE(pipeline);
 
   std::string inputBinary;
-  inputBinary.assign( (std::istreambuf_iterator<char>(inputBinaryStream.Get()) ), 
-                      (std::istreambuf_iterator<char>()) );
+  inputBinary.assign((std::istreambuf_iterator<char>(inputBinaryStream.Get())), (std::istreambuf_iterator<char>()));
 
 
   const size_t compressedBufferSize = ZSTD_compressBound(inputBinary.size());
-  std::string compressedBinary;
+  std::string  compressedBinary;
   compressedBinary.resize(compressedBufferSize);
 
-  const size_t compressedSize = ZSTD_compress(compressedBinary.data(), compressedBufferSize, inputBinary.data(), inputBinary.size(), compressionLevel);
+  const size_t compressedSize = ZSTD_compress(
+    compressedBinary.data(), compressedBufferSize, inputBinary.data(), inputBinary.size(), compressionLevel);
   compressedBinary.resize(compressedSize);
 
   // Do we want/need this?
   constexpr bool urlFriendly = false;
-  auto outputText = base64_encode(compressedBinary, urlFriendly);
+  auto           outputText = base64_encode(compressedBinary, urlFriendly);
 
   outputTextStream.Get() << dataURLPrefix;
   outputTextStream.Get() << outputText;
@@ -84,9 +90,11 @@ int compressStringify(itk::wasm::Pipeline & pipeline, itk::wasm::InputBinaryStre
   return EXIT_SUCCESS;
 }
 
-int main(int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("compress-stringify", "Given a binary, compress and optionally base64 encode.", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "compress-stringify", "Given a binary, compress and optionally base64 encode.", argc, argv);
 
   itk::wasm::InputBinaryStream inputBinaryStream;
   pipeline.add_option("input", inputBinaryStream, "Input binary")->type_name("INPUT_BINARY_STREAM");
@@ -102,7 +110,7 @@ int main(int argc, char * argv[])
 
   ITK_WASM_PRE_PARSE(pipeline);
 
-  if(stringify)
+  if (stringify)
   {
     return compressStringify(pipeline, inputBinaryStream, compressionLevel, dataURLPrefix);
   }

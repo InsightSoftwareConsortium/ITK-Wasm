@@ -22,22 +22,22 @@
 #include "itkOutputTextStream.h"
 
 #ifndef TRANSFORM_IO_CLASS
-#error "TRANSFORM_IO_CLASS definition must be provided"
+#  error "TRANSFORM_IO_CLASS definition must be provided"
 #endif
 
 #if TRANSFORM_IO_CLASS == 0
-#include "itkHDF5TransformIO.h"
+#  include "itkHDF5TransformIO.h"
 #elif TRANSFORM_IO_CLASS == 1
-#include "itkTxtTransformIO.h"
+#  include "itkTxtTransformIO.h"
 #elif TRANSFORM_IO_CLASS == 2
-#include "itkMatlabTransformIO.h"
+#  include "itkMatlabTransformIO.h"
 #elif TRANSFORM_IO_CLASS == 3
-#include "itkMINCTransformIO.h"
+#  include "itkMINCTransformIO.h"
 #elif TRANSFORM_IO_CLASS == 4
 #elif TRANSFORM_IO_CLASS == 5
-#include "itkWasmZstdTransformIO.h"
+#  include "itkWasmZstdTransformIO.h"
 #else
-#error "Unsupported TRANSFORM_IO_CLASS"
+#  error "Unsupported TRANSFORM_IO_CLASS"
 #endif
 #include "itkWasmTransformIO.h"
 
@@ -50,7 +50,8 @@
 #include "itkTransformIOBase.h"
 
 template <typename TTransformIO>
-int writeTransform(itk::wasm::Pipeline & pipeline)
+int
+writeTransform(itk::wasm::Pipeline & pipeline)
 {
   using TransformIOType = TTransformIO;
   using ParametersValueType = typename TransformIOType::ParametersValueType;
@@ -59,10 +60,15 @@ int writeTransform(itk::wasm::Pipeline & pipeline)
   pipeline.add_option("transform", inputTransformIO, "Input transform")->required()->type_name("INPUT_TRANSFORM");
 
   itk::wasm::OutputTextStream couldWrite;
-  pipeline.add_option("could-write", couldWrite, "Whether the input could be written. If false, the output transform is not valid.")->type_name("OUTPUT_JSON");
+  pipeline
+    .add_option(
+      "could-write", couldWrite, "Whether the input could be written. If false, the output transform is not valid.")
+    ->type_name("OUTPUT_JSON");
 
   std::string outputFileName;
-  pipeline.add_option("serialized-transform", outputFileName, "Output transform serialized in the file format.")->required()->type_name("OUTPUT_BINARY_FILE");
+  pipeline.add_option("serialized-transform", outputFileName, "Output transform serialized in the file format.")
+    ->required()
+    ->type_name("OUTPUT_BINARY_FILE");
 
   bool useCompression = false;
   pipeline.add_flag("-c,--use-compression", useCompression, "Use compression in the written file");
@@ -87,21 +93,26 @@ int writeTransform(itk::wasm::Pipeline & pipeline)
   using WasmTransformIOType = itk::WasmTransformIOBase<ParametersValueType>;
   WasmTransformIOType * inputWasmTransformIOBase = const_cast<WasmTransformIOType *>(inputTransformIO.Get());
   using TransformIOBaseType = itk::TransformIOBaseTemplate<ParametersValueType>;
-  TransformIOBaseType * inputTransformIOBase = const_cast<TransformIOBaseType *>(inputWasmTransformIOBase->GetTransformIO());
+  TransformIOBaseType * inputTransformIOBase =
+    const_cast<TransformIOBaseType *>(inputWasmTransformIOBase->GetTransformIO());
 
-  transformIO->SetTransformList(*(reinterpret_cast<typename TransformIOType::ConstTransformListType *>(&(inputTransformIOBase->GetTransformList()))));
+  transformIO->SetTransformList(*(
+    reinterpret_cast<typename TransformIOType::ConstTransformListType *>(&(inputTransformIOBase->GetTransformList()))));
   ITK_WASM_CATCH_EXCEPTION(pipeline, transformIO->Write());
 
   return EXIT_SUCCESS;
 }
 
-int main (int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  const char * pipelineName = TO_LITERAL(TRANSFORM_IO_KEBAB_NAME) "-write-transform";
-  itk::wasm::Pipeline pipeline(pipelineName, "Write an ITK-Wasm transform file format converted to a transform file format", argc, argv);
+  const char *        pipelineName = TO_LITERAL(TRANSFORM_IO_KEBAB_NAME) "-write-transform";
+  itk::wasm::Pipeline pipeline(
+    pipelineName, "Write an ITK-Wasm transform file format converted to a transform file format", argc, argv);
 
   bool floatParameters = false;
-  pipeline.add_flag("-f,--float-parameters", floatParameters, "Use float for the parameter value type. The default is double.");
+  pipeline.add_flag(
+    "-f,--float-parameters", floatParameters, "Use float for the parameter value type. The default is double.");
 
   ITK_WASM_PRE_PARSE(pipeline);
 
@@ -160,7 +171,7 @@ int main (int argc, char * argv[])
     return writeTransform<itk::WasmZstdTransformIOTemplate<double>>(pipeline);
   }
 #else
-#error "Unsupported TRANSFORM_IO_CLASS"
+#  error "Unsupported TRANSFORM_IO_CLASS"
 #endif
   return EXIT_SUCCESS;
 }

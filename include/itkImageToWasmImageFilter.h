@@ -26,7 +26,7 @@ namespace itk
 /**
  *\class ImageToWasmImageFilter
  * \brief Convert an Image to an WasmImage object.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TImage>

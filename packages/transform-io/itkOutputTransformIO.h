@@ -27,7 +27,7 @@
 #include "itkWasmTransformIO.h"
 #include "itkTransformJSON.h"
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
+#  include "itkWasmExports.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #endif
@@ -45,18 +45,20 @@ addTransformBuffersToMemoryStore(const itk::TransformListJSON & transformListJSO
 
   unsigned int dataCount = 0;
   // iterate through the transform list and store each transfrom's fixed parameters and parameters
-  for (const auto & transformJSON: transformListJSON)
+  for (const auto & transformJSON : transformListJSON)
   {
     if (transformJSON.transformType.transformParameterization == itk::JSONTransformParameterizationEnum::Composite)
     {
       continue;
     }
-    const auto fixedParamsAddress = static_cast< size_t >( std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10) );
+    const auto fixedParamsAddress =
+      static_cast<size_t>(std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10));
     const auto fixedParamsSize = transformJSON.numberOfFixedParameters * sizeof(FixedParametersValueType);
     itk::wasm::setMemoryStoreOutputArray(0, index, dataCount, fixedParamsAddress, fixedParamsSize);
     ++dataCount;
 
-    const auto paramsAddress = static_cast< size_t >( std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10) );
+    const auto paramsAddress =
+      static_cast<size_t>(std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10));
     const auto paramsSize = transformJSON.numberOfParameters * sizeof(ParametersValueType);
     itk::wasm::setMemoryStoreOutputArray(0, index, dataCount, paramsAddress, paramsSize);
     ++dataCount;
@@ -86,78 +88,88 @@ public:
   using ParametersValueType = TParametersValueType;
   using TransformIOBaseType = itk::TransformIOBaseTemplate<ParametersValueType>;
 
-  void Set(TransformIOBaseType * transformIO) {
+  void
+  Set(TransformIOBaseType * transformIO)
+  {
     this->m_TransformIO = transformIO;
   }
 
-  TransformIOBaseType * Get() const {
+  TransformIOBaseType *
+  Get() const
+  {
     return this->m_TransformIO.GetPointer();
   }
 
   /** FileName or output index. */
-  void SetIdentifier(const std::string & identifier)
+  void
+  SetIdentifier(const std::string & identifier)
   {
     this->m_Identifier = identifier;
   }
-  const std::string & GetIdentifier() const
+  const std::string &
+  GetIdentifier() const
   {
     return this->m_Identifier;
   }
 
   OutputTransformIO() = default;
-  ~OutputTransformIO() {
-    if(wasm::Pipeline::get_use_memory_io())
+  ~OutputTransformIO()
+  {
+    if (wasm::Pipeline::get_use_memory_io())
     {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    if (!this->m_TransformIO.IsNull() && !this->m_Identifier.empty())
-    {
-      this->m_TransformIO->Read();
-
-      const auto index = std::stoi(this->m_Identifier);
-      auto wasmTransformIOBase = WasmTransformIOBase<ParametersValueType>::New();
-      wasmTransformIOBase->SetTransformIO(this->m_TransformIO);
-      setMemoryStoreOutputDataObject(0, index, wasmTransformIOBase);
-
-      const auto transformListJSON = wasmTransformIOBase->GetTransformListJSON();
-
-      if (transformListJSON.size() > 0)
+      if (!this->m_TransformIO.IsNull() && !this->m_Identifier.empty())
       {
-        addTransformBuffersToMemoryStore<ParametersValueType>(transformListJSON, index);
+        this->m_TransformIO->Read();
+
+        const auto index = std::stoi(this->m_Identifier);
+        auto       wasmTransformIOBase = WasmTransformIOBase<ParametersValueType>::New();
+        wasmTransformIOBase->SetTransformIO(this->m_TransformIO);
+        setMemoryStoreOutputDataObject(0, index, wasmTransformIOBase);
+
+        const auto transformListJSON = wasmTransformIOBase->GetTransformListJSON();
+
+        if (transformListJSON.size() > 0)
+        {
+          addTransformBuffersToMemoryStore<ParametersValueType>(transformListJSON, index);
+        }
       }
-    }
 #else
-    std::cerr << "Memory IO not supported" << std::endl;
-    abort();
+      std::cerr << "Memory IO not supported" << std::endl;
+      abort();
 #endif
     }
     else
     {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    if (!this->m_TransformIO.IsNull() && !this->m_Identifier.empty())
-    {
-      this->m_TransformIO->Read();
+      if (!this->m_TransformIO.IsNull() && !this->m_Identifier.empty())
+      {
+        this->m_TransformIO->Read();
 
-      using WasmTransformIOType = itk::WasmTransformIOTemplate<ParametersValueType>;
-      auto wasmTransformIO = WasmTransformIOType::New();
+        using WasmTransformIOType = itk::WasmTransformIOTemplate<ParametersValueType>;
+        auto wasmTransformIO = WasmTransformIOType::New();
 
-      wasmTransformIO->SetTransformList(*(reinterpret_cast<typename WasmTransformIOType::ConstTransformListType *>(&(this->m_TransformIO->GetTransformList()))));
-      wasmTransformIO->SetFileName(this->m_Identifier);
-      wasmTransformIO->Write();
-    }
+        wasmTransformIO->SetTransformList(*(reinterpret_cast<typename WasmTransformIOType::ConstTransformListType *>(
+          &(this->m_TransformIO->GetTransformList()))));
+        wasmTransformIO->SetFileName(this->m_Identifier);
+        wasmTransformIO->Write();
+      }
 #else
-    std::cerr << "Filesystem IO not supported" << std::endl;
-    abort();
+      std::cerr << "Filesystem IO not supported" << std::endl;
+      abort();
 #endif
     }
   }
+
 protected:
   typename TransformIOBaseType::Pointer m_TransformIO;
 
   std::string m_Identifier;
 };
 
-template<typename TParametersValueType>
-bool lexical_cast(const std::string &input, OutputTransformIO<TParametersValueType> &outputTransformIO)
+template <typename TParametersValueType>
+bool
+lexical_cast(const std::string & input, OutputTransformIO<TParametersValueType> & outputTransformIO)
 {
   outputTransformIO.SetIdentifier(input);
   return true;

@@ -25,8 +25,7 @@ namespace itk
 
 template <typename TMesh>
 void
-WasmMesh<TMesh>
-::SetMesh(const MeshType * mesh)
+WasmMesh<TMesh>::SetMesh(const MeshType * mesh)
 {
   this->m_CellBuffer = const_cast<MeshType *>(mesh)->GetCellsArray();
   this->SetDataObject(const_cast<MeshType *>(mesh));

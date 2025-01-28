@@ -26,8 +26,7 @@ namespace itk
 {
 
 template <typename TTransform>
-TransformToWasmTransformFilter<TTransform>
-::TransformToWasmTransformFilter()
+TransformToWasmTransformFilter<TTransform>::TransformToWasmTransformFilter()
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetPrimaryInputName("Transform");
@@ -39,24 +38,21 @@ TransformToWasmTransformFilter<TTransform>
 
 template <typename TTransform>
 ProcessObject::DataObjectPointer
-TransformToWasmTransformFilter<TTransform>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+TransformToWasmTransformFilter<TTransform>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return WasmTransformType::New().GetPointer();
 }
 
 template <typename TTransform>
 ProcessObject::DataObjectPointer
-TransformToWasmTransformFilter<TTransform>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+TransformToWasmTransformFilter<TTransform>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return WasmTransformType::New().GetPointer();
 }
 
 template <typename TTransform>
 auto
-TransformToWasmTransformFilter<TTransform>
-::GetOutput() -> WasmTransformType *
+TransformToWasmTransformFilter<TTransform>::GetOutput() -> WasmTransformType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<WasmTransformType *>(this->GetPrimaryOutput());
@@ -64,8 +60,7 @@ TransformToWasmTransformFilter<TTransform>
 
 template <typename TTransform>
 auto
-TransformToWasmTransformFilter<TTransform>
-::GetOutput() const -> const WasmTransformType *
+TransformToWasmTransformFilter<TTransform>::GetOutput() const -> const WasmTransformType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const WasmTransformType *>(this->GetPrimaryOutput());
@@ -73,8 +68,7 @@ TransformToWasmTransformFilter<TTransform>
 
 template <typename TTransform>
 auto
-TransformToWasmTransformFilter<TTransform>
-::GetOutput(unsigned int idx) -> WasmTransformType *
+TransformToWasmTransformFilter<TTransform>::GetOutput(unsigned int idx) -> WasmTransformType *
 {
   auto * out = dynamic_cast<WasmTransformType *>(this->ProcessObject::GetOutput(idx));
 
@@ -87,24 +81,24 @@ TransformToWasmTransformFilter<TTransform>
 
 template <typename TTransform>
 void
-TransformToWasmTransformFilter<TTransform>
-::GenerateData()
+TransformToWasmTransformFilter<TTransform>::GenerateData()
 {
   // Get the input and output pointers
   const TransformType * transform = this->GetTransform();
-  WasmTransformType * wasmTransform = this->GetOutput();
+  WasmTransformType *   wasmTransform = this->GetOutput();
 
   wasmTransform->SetTransform(transform);
 
   using TransformType = TTransform;
   using ParametersValueType = typename TransformType::ParametersValueType;
   using TransformBaseType = TransformBaseTemplate<ParametersValueType>;
-  std::list<typename TransformBaseType::ConstPointer> transformList { transform };
-  constexpr bool inMemory = true;
-  const TransformListJSON transformListJSON = transformListToTransformListJSON<TransformBaseType>(transformList, inMemory);
+  std::list<typename TransformBaseType::ConstPointer> transformList{ transform };
+  constexpr bool                                      inMemory = true;
+  const TransformListJSON                             transformListJSON =
+    transformListToTransformListJSON<TransformBaseType>(transformList, inMemory);
 
   std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true }>(transformListJSON, serialized);
+  auto        ec = glz::write<glz::opts{ .prettify = true }>(transformListJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize TransformListJSON");
@@ -115,8 +109,7 @@ TransformToWasmTransformFilter<TTransform>
 
 template <typename TTransform>
 void
-TransformToWasmTransformFilter<TTransform>
-::PrintSelf(std::ostream & os, Indent indent) const
+TransformToWasmTransformFilter<TTransform>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

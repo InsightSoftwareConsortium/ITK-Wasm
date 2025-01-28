@@ -26,7 +26,7 @@ namespace itk
 {
 
 WebAssemblyInterface_EXPORT std::string
-WasmComponentTypeFromIOComponentEnum(const IOComponentEnum ioComponent );
+                            WasmComponentTypeFromIOComponentEnum(const IOComponentEnum ioComponent);
 
 } // end namespace itk
 #endif

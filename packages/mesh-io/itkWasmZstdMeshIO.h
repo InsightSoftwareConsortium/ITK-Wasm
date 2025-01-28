@@ -38,13 +38,13 @@ namespace itk
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT WasmZstdMeshIO: public WasmMeshIO
+class WebAssemblyInterface_EXPORT WasmZstdMeshIO : public WasmMeshIO
 {
 public:
   /** Standard class typedefs. */
-  typedef WasmZstdMeshIO      Self;
-  typedef WasmMeshIO          Superclass;
-  typedef SmartPointer< Self > Pointer;
+  typedef WasmZstdMeshIO     Self;
+  typedef WasmMeshIO         Superclass;
+  typedef SmartPointer<Self> Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,16 +54,20 @@ public:
 
   /** Determine the file type. Returns true if this MeshIO can read the
    * file specified. */
-  bool CanReadFile(const char *) override;
+  bool
+  CanReadFile(const char *) override;
 
   /** Set the spacing and dimension information for the set filename. */
-  void ReadMeshInformation() override;
+  void
+  ReadMeshInformation() override;
 
   /** Determine the file type. Returns true if this MeshIO can write the
    * file specified. */
-  bool CanWriteFile(const char *) override;
+  bool
+  CanWriteFile(const char *) override;
 
-  void Write() override;
+  void
+  Write() override;
 
 protected:
   WasmZstdMeshIO();

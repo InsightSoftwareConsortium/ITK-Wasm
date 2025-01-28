@@ -32,44 +32,46 @@
 
 namespace itk
 {
-  /** \class PointSetTypeJSON
-   *
-   * \brief PointSet type JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct PointSetTypeJSON
-  {
-    unsigned int dimension { 2 };
-    JSONFloatTypesEnum pointComponentType { JSONFloatTypesEnum::float32 };
-    JSONComponentTypesEnum pointPixelComponentType { JSONComponentTypesEnum::float32 };
-    JSONPixelTypesEnum pointPixelType { JSONPixelTypesEnum::Scalar };
-    unsigned int pointPixelComponents { 1 };
-  };
+/** \class PointSetTypeJSON
+ *
+ * \brief PointSet type JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct PointSetTypeJSON
+{
+  unsigned int           dimension{ 2 };
+  JSONFloatTypesEnum     pointComponentType{ JSONFloatTypesEnum::float32 };
+  JSONComponentTypesEnum pointPixelComponentType{ JSONComponentTypesEnum::float32 };
+  JSONPixelTypesEnum     pointPixelType{ JSONPixelTypesEnum::Scalar };
+  unsigned int           pointPixelComponents{ 1 };
+};
 
-  /** \class PointSetJSON
-   *
-   * \brief PointSet JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct PointSetJSON
-  {
-    PointSetTypeJSON pointSetType;
+/** \class PointSetJSON
+ *
+ * \brief PointSet JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct PointSetJSON
+{
+  PointSetTypeJSON pointSetType;
 
-    std::string name { "PointSet"};
+  std::string name{ "PointSet" };
 
-    size_t numberOfPoints{ 0 };
-    std::string points;
+  size_t      numberOfPoints{ 0 };
+  std::string points;
 
-    size_t numberOfPointPixels{ 0 };
-    std::string pointData;
+  size_t      numberOfPointPixels{ 0 };
+  std::string pointData;
 
-    MetadataJSON metadata;
-  };
+  MetadataJSON metadata;
+};
 
-template<typename TPointSet>
-auto pointSetToPointSetJSON(const TPointSet * pointSet, const WasmPointSet<TPointSet> * wasmPointSet, bool inMemory) -> PointSetJSON
+template <typename TPointSet>
+auto
+pointSetToPointSetJSON(const TPointSet * pointSet, const WasmPointSet<TPointSet> * wasmPointSet, bool inMemory)
+  -> PointSetJSON
 {
   using PointSetType = TPointSet;
 
@@ -77,10 +79,12 @@ auto pointSetToPointSetJSON(const TPointSet * pointSet, const WasmPointSet<TPoin
 
   pointSetJSON.pointSetType.dimension = PointSetType::PointDimension;
 
-  pointSetJSON.pointSetType.pointComponentType = wasm::MapComponentType<typename PointSetType::CoordinateType>::JSONFloatTypeEnum;
+  pointSetJSON.pointSetType.pointComponentType =
+    wasm::MapComponentType<typename PointSetType::CoordinateType>::JSONFloatTypeEnum;
   using PointPixelType = typename TPointSet::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
-  pointSetJSON.pointSetType.pointPixelComponentType = wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
+  pointSetJSON.pointSetType.pointPixelComponentType =
+    wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
   pointSetJSON.pointSetType.pointPixelType = wasm::MapPixelType<PointPixelType>::JSONPixelEnum;
   pointSetJSON.pointSetType.pointPixelComponents = ConvertPointPixelTraits::GetNumberOfComponents();
 
@@ -96,7 +100,7 @@ auto pointSetToPointSetJSON(const TPointSet * pointSet, const WasmPointSet<TPoin
   }
   if (inMemory)
   {
-    const auto pointsAddress = reinterpret_cast< size_t >( &(pointSet->GetPoints()->at(0)) );
+    const auto         pointsAddress = reinterpret_cast<size_t>(&(pointSet->GetPoints()->at(0)));
     std::ostringstream pointsStream;
     pointsStream << "data:application/vnd.itk.address,0:";
     pointsStream << pointsAddress;
@@ -105,7 +109,7 @@ auto pointSetToPointSetJSON(const TPointSet * pointSet, const WasmPointSet<TPoin
     size_t pointDataAddress = 0;
     if (pointSet->GetPointData() != nullptr && pointSet->GetPointData()->Size() > 0)
     {
-      pointDataAddress = reinterpret_cast< size_t >( &(pointSet->GetPointData()->at(0)) );
+      pointDataAddress = reinterpret_cast<size_t>(&(pointSet->GetPointData()->at(0)));
     }
     std::ostringstream pointDataStream;
     pointDataStream << "data:application/vnd.itk.address,0:";

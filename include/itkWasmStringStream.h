@@ -27,11 +27,11 @@
 
 namespace itk
 {
-  
+
 struct StringStreamJSON
 {
   std::string data;
-  size_t size;
+  size_t      size;
 };
 
 /**
@@ -39,15 +39,16 @@ struct StringStreamJSON
  * \brief JSON representation for a std::stringstream
  *
  * JSON representation for a std::stringstream for interfacing across programming languages and runtimes.
- * 
+ *
  * { size: sizeInBytes, data: stringDataURI }
- * 
- * When representing text objects, `data` is not expected to include a C null termination character and sizeInBytes does not include this character.
- * 
+ *
+ * When representing text objects, `data` is not expected to include a C null termination character and sizeInBytes does
+ *not include this character.
+ *
  * Arrays:
- * 
+ *
  * - 0: The associated std::string data.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 class WebAssemblyInterface_EXPORT WasmStringStream : public WasmDataObject
@@ -65,21 +66,28 @@ public:
   /** Run-time type information (and related methods). */
   itkOverrideGetNameOfClassMacro(WasmStringStream);
 
-  void SetString(const std::string & string) {
+  void
+  SetString(const std::string & string)
+  {
     this->m_StringStream.str(string);
     this->UpdateJSON();
   }
 
-  const std::string & GetString() {
+  const std::string &
+  GetString()
+  {
     this->m_String = m_StringStream.str();
     return this->m_String;
   }
 
-  std::stringstream & GetStringStream() {
+  std::stringstream &
+  GetStringStream()
+  {
     return this->m_StringStream;
   }
 
-  void SetJSON(const char * jsonChar) override
+  void
+  SetJSON(const char * jsonChar) override
   {
     std::string json(jsonChar);
     std::string deserialized;
@@ -89,24 +97,26 @@ public:
       const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
       throw std::runtime_error("Failed to deserialize StringStreamJSON: " + descriptiveError);
     }
-    auto stringStream = deserializedAttempt.value();
+    auto              stringStream = deserializedAttempt.value();
     const std::string dataString = stringStream.data;
-    const char * dataPtr = reinterpret_cast< char * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
-    size_t size = stringStream.size;
+    const char *      dataPtr = reinterpret_cast<char *>(std::strtoull(dataString.substr(35).c_str(), nullptr, 10));
+    size_t            size = stringStream.size;
     const std::string_view string(dataPtr, size);
-    m_StringStream.str(std::string{string});
+    m_StringStream.str(std::string{ string });
 
     Superclass::SetJSON(jsonChar);
   }
+
 protected:
   WasmStringStream() = default;
   ~WasmStringStream() override = default;
 
-  void UpdateJSON()
+  void
+  UpdateJSON()
   {
     std::ostringstream jsonStream;
     jsonStream << "{ \"data\": \"data:application/vnd.itk.address,0:";
-    jsonStream << reinterpret_cast< size_t >( m_StringStream.str().data() );
+    jsonStream << reinterpret_cast<size_t>(m_StringStream.str().data());
     jsonStream << "\", \"size\": ";
     jsonStream << m_StringStream.str().size() + 1;
     jsonStream << "}";
@@ -114,7 +124,7 @@ protected:
   }
 
   std::stringstream m_StringStream;
-  std::string m_String;
+  std::string       m_String;
 
   void
   PrintSelf(std::ostream & os, Indent indent) const override;

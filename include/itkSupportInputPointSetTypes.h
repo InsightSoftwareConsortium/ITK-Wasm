@@ -34,17 +34,20 @@
 namespace itk
 {
 
-WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, PointSetTypeJSON & pointSetType);
+WebAssemblyInterface_EXPORT bool
+lexical_cast(const std::string & input, PointSetTypeJSON & pointSetType);
 
 namespace wasm
 {
 
 /** \class SupportInputPointSetTypes
  *
- * \brief Instantiatiate a Pipeline functor over multiple pixel types and dimensions and match to the input pointSet type.
+ * \brief Instantiatiate a Pipeline functor over multiple pixel types and dimensions and match to the input pointSet
+type.
  *
  * Instantiate the PipelineFunctor (function object) over multiple pixel types and pointSet dimensions.
- *  If the input pointSet matches these pixel types or dimensions, use the compile-time optimized pipeline for that pointSet type.
+ *  If the input pointSet matches these pixel types or dimensions, use the compile-time optimized pipeline for that
+pointSet type.
  *  Otherwise, exit the pipeline with an error identifying the unsupported pointSet type.
  *
  * Example usage:
@@ -84,12 +87,11 @@ main(int argc, char * argv[])
  *
  * \ingroup WebAssemblyInterface
  */
-template<template <typename TPointSet> class TPipelineFunctor, typename ...TPixels>
-class
-SupportInputPointSetTypes
+template <template <typename TPointSet> class TPipelineFunctor, typename... TPixels>
+class SupportInputPointSetTypes
 {
 public:
-  template<unsigned int ...VDimensions>
+  template <unsigned int... VDimensions>
   static int
   Dimensions(const std::string & inputPointSetOptionName, Pipeline & pipeline)
   {
@@ -97,15 +99,15 @@ public:
 
     const auto iwpArgc = pipeline.get_argc();
     const auto iwpArgv = pipeline.get_argv();
-    bool passThrough = false;
+    bool       passThrough = false;
     for (int ii = 0; ii < iwpArgc; ++ii)
+    {
+      const std::string arg(iwpArgv[ii]);
+      if (arg == "-h" || arg == "--help" || arg == "--interface-json" || arg == "--version")
       {
-        const std::string arg(iwpArgv[ii]);
-        if (arg == "-h" || arg == "--help" || arg == "--interface-json" || arg == "--version")
-        {
-          passThrough = true;
-        }
+        passThrough = true;
       }
+    }
     if (passThrough)
     {
       return IterateDimensions<VDimensions...>(pipeline, pointSetType, passThrough);
@@ -121,7 +123,7 @@ public:
   }
 
 private:
-  template<unsigned int VDimension, typename TPixel, typename ...TPixelsRest>
+  template <unsigned int VDimension, typename TPixel, typename... TPixelsRest>
   static int
   IteratePixelTypes(Pipeline & pipeline, const PointSetTypeJSON & pointSetType, bool passThrough = false)
   {
@@ -131,11 +133,13 @@ private:
 
     const auto components = pointSetType.pointPixelComponents;
 
-    if (passThrough || components == 0
-     || pointSetType.pointPixelComponentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum
-     && pointSetType.pointPixelType == MapPixelType<PixelType>::JSONPixelEnum)
+    if (passThrough || components == 0 ||
+        pointSetType.pointPixelComponentType ==
+            MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum &&
+          pointSetType.pointPixelType == MapPixelType<PixelType>::JSONPixelEnum)
     {
-      if (pointSetType.pointPixelType == JSONPixelTypesEnum::VariableLengthVector || pointSetType.pointPixelType == JSONPixelTypesEnum::VariableSizeMatrix)
+      if (pointSetType.pointPixelType == JSONPixelTypesEnum::VariableLengthVector ||
+          pointSetType.pointPixelType == JSONPixelTypesEnum::VariableSizeMatrix)
       {
         // todo: VectorPointSet support for ImportPointSetFilter?
         // using PointSetType = itk::VectorPointSet<typename ConvertPixelTraits::ComponentType, Dimension>;
@@ -143,7 +147,7 @@ private:
         // using PipelineType = TPipelineFunctor<PointSetType>;
         // return PipelineType()(pipeline);
       }
-      else if(passThrough || components == ConvertPixelTraits::GetNumberOfComponents() || components == 0 )
+      else if (passThrough || components == ConvertPixelTraits::GetNumberOfComponents() || components == 0)
       {
         using PointSetType = PointSet<PixelType, Dimension>;
 
@@ -152,18 +156,19 @@ private:
       }
     }
 
-    if constexpr (sizeof...(TPixelsRest) > 0) {
+    if constexpr (sizeof...(TPixelsRest) > 0)
+    {
       return IteratePixelTypes<VDimension, TPixelsRest...>(pipeline, pointSetType);
     }
 
     std::ostringstream ostrm;
-    std::string pointSetTypeString = glz::write_json(pointSetType).value_or("error");
+    std::string        pointSetTypeString = glz::write_json(pointSetType).value_or("error");
     ostrm << "Unsupported pointSet type: " << pointSetTypeString << std::endl;
     CLI::Error err("Runtime error", ostrm.str(), 1);
     return pipeline.exit(err);
   }
 
-  template<unsigned int VDimension, unsigned int ...VDimensions>
+  template <unsigned int VDimension, unsigned int... VDimensions>
   static int
   IterateDimensions(Pipeline & pipeline, const PointSetTypeJSON & pointSetType, bool passThrough = false)
   {
@@ -172,7 +177,8 @@ private:
       return IteratePixelTypes<VDimension, TPixels...>(pipeline, pointSetType);
     }
 
-    if constexpr (sizeof...(VDimensions) > 0) {
+    if constexpr (sizeof...(VDimensions) > 0)
+    {
       return IterateDimensions<VDimensions...>(pipeline, pointSetType);
     }
 

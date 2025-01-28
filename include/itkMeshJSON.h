@@ -33,55 +33,56 @@
 
 namespace itk
 {
-  /** \class MeshTypeJSON
-   *
-   * \brief Mesh type JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct MeshTypeJSON
-  {
-    unsigned int dimension { 2 };
-    JSONFloatTypesEnum pointComponentType { JSONFloatTypesEnum::float32 };
-    JSONComponentTypesEnum pointPixelComponentType { JSONComponentTypesEnum::float32 };
-    JSONPixelTypesEnum pointPixelType { JSONPixelTypesEnum::Scalar };
-    unsigned int pointPixelComponents { 1 };
-    JSONIntTypesEnum cellComponentType { JSONIntTypesEnum::uint32 };
-    JSONComponentTypesEnum cellPixelComponentType { JSONComponentTypesEnum::float32 };
-    JSONPixelTypesEnum cellPixelType { JSONPixelTypesEnum::Scalar };
-    unsigned int cellPixelComponents { 1 };
-  };
+/** \class MeshTypeJSON
+ *
+ * \brief Mesh type JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct MeshTypeJSON
+{
+  unsigned int           dimension{ 2 };
+  JSONFloatTypesEnum     pointComponentType{ JSONFloatTypesEnum::float32 };
+  JSONComponentTypesEnum pointPixelComponentType{ JSONComponentTypesEnum::float32 };
+  JSONPixelTypesEnum     pointPixelType{ JSONPixelTypesEnum::Scalar };
+  unsigned int           pointPixelComponents{ 1 };
+  JSONIntTypesEnum       cellComponentType{ JSONIntTypesEnum::uint32 };
+  JSONComponentTypesEnum cellPixelComponentType{ JSONComponentTypesEnum::float32 };
+  JSONPixelTypesEnum     cellPixelType{ JSONPixelTypesEnum::Scalar };
+  unsigned int           cellPixelComponents{ 1 };
+};
 
-  /** \class MeshJSON
-   *
-   * \brief Mesh JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct MeshJSON
-  {
-    MeshTypeJSON meshType;
+/** \class MeshJSON
+ *
+ * \brief Mesh JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct MeshJSON
+{
+  MeshTypeJSON meshType;
 
-    std::string name { "Mesh"};
+  std::string name{ "Mesh" };
 
-    size_t numberOfPoints{ 0 };
-    std::string points;
+  size_t      numberOfPoints{ 0 };
+  std::string points;
 
-    size_t numberOfPointPixels{ 0 };
-    std::string pointData;
+  size_t      numberOfPointPixels{ 0 };
+  std::string pointData;
 
-    size_t numberOfCells{ 0 };
-    std::string cells;
-    size_t cellBufferSize{ 0 };
+  size_t      numberOfCells{ 0 };
+  std::string cells;
+  size_t      cellBufferSize{ 0 };
 
-    size_t numberOfCellPixels{ 0 };
-    std::string cellData;
+  size_t      numberOfCellPixels{ 0 };
+  std::string cellData;
 
-    MetadataJSON metadata;
-  };
+  MetadataJSON metadata;
+};
 
-template<typename TMesh>
-auto meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool inMemory) -> MeshJSON
+template <typename TMesh>
+auto
+meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool inMemory) -> MeshJSON
 {
   using MeshType = TMesh;
 
@@ -92,13 +93,15 @@ auto meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool i
   meshJSON.meshType.pointComponentType = wasm::MapComponentType<typename MeshType::CoordinateType>::JSONFloatTypeEnum;
   using PointPixelType = typename TMesh::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
-  meshJSON.meshType.pointPixelComponentType = wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
+  meshJSON.meshType.pointPixelComponentType =
+    wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
   meshJSON.meshType.pointPixelType = wasm::MapPixelType<PointPixelType>::JSONPixelEnum;
   meshJSON.meshType.pointPixelComponents = ConvertPointPixelTraits::GetNumberOfComponents();
   meshJSON.meshType.cellComponentType = wasm::MapComponentType<typename MeshType::CellIdentifier>::JSONIntTypeEnum;
   using CellPixelType = typename TMesh::CellPixelType;
   using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
-  meshJSON.meshType.cellPixelComponentType = wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
+  meshJSON.meshType.cellPixelComponentType =
+    wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
   meshJSON.meshType.cellPixelType = wasm::MapPixelType<CellPixelType>::JSONPixelEnum;
   meshJSON.meshType.cellPixelComponents = ConvertCellPixelTraits::GetNumberOfComponents();
 
@@ -125,7 +128,7 @@ auto meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool i
   {
     meshJSON.cellBufferSize = wasmMesh->GetCellBuffer()->Size();
 
-    const auto pointsAddress = reinterpret_cast< size_t >( &(mesh->GetPoints()->at(0)) );
+    const auto         pointsAddress = reinterpret_cast<size_t>(&(mesh->GetPoints()->at(0)));
     std::ostringstream pointsStream;
     pointsStream << "data:application/vnd.itk.address,0:";
     pointsStream << pointsAddress;
@@ -133,7 +136,7 @@ auto meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool i
     size_t cellsAddress = 0;
     if (mesh->GetNumberOfCells() > 0)
     {
-      cellsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetCellBuffer()->at(0)) );
+      cellsAddress = reinterpret_cast<size_t>(&(wasmMesh->GetCellBuffer()->at(0)));
     }
     std::ostringstream cellsStream;
     cellsStream << "data:application/vnd.itk.address,0:";
@@ -143,7 +146,7 @@ auto meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool i
     size_t pointDataAddress = 0;
     if (mesh->GetPointData() != nullptr && mesh->GetPointData()->Size() > 0)
     {
-      pointDataAddress = reinterpret_cast< size_t >( &(mesh->GetPointData()->at(0)) );
+      pointDataAddress = reinterpret_cast<size_t>(&(mesh->GetPointData()->at(0)));
     }
     std::ostringstream pointDataStream;
     pointDataStream << "data:application/vnd.itk.address,0:";
@@ -153,10 +156,10 @@ auto meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool i
     size_t cellDataAddress = 0;
     if (mesh->GetCellData() != nullptr && mesh->GetCellData()->Size() > 0)
     {
-      cellDataAddress = reinterpret_cast< size_t >( &(mesh->GetCellData()->at(0)) );
+      cellDataAddress = reinterpret_cast<size_t>(&(mesh->GetCellData()->at(0)));
     }
     std::ostringstream cellDataStream;
-    cellDataStream <<  "data:application/vnd.itk.address,0:";
+    cellDataStream << "data:application/vnd.itk.address,0:";
     cellDataStream << cellDataAddress;
     meshJSON.cellData = cellDataStream.str();
   }

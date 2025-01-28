@@ -25,39 +25,34 @@ namespace itk
 {
 
 template <typename TParametersValueType>
-WasmZstdTransformIOTemplate<TParametersValueType>
-::WasmZstdTransformIOTemplate()
-{
-}
+WasmZstdTransformIOTemplate<TParametersValueType>::WasmZstdTransformIOTemplate()
+{}
 
 
 template <typename TParametersValueType>
-WasmZstdTransformIOTemplate<TParametersValueType>
-::~WasmZstdTransformIOTemplate()
-{
-}
+WasmZstdTransformIOTemplate<TParametersValueType>::~WasmZstdTransformIOTemplate()
+{}
 
 
 template <typename TParametersValueType>
 bool
-WasmZstdTransformIOTemplate<TParametersValueType>
-::CanReadFile(const char *filename)
+WasmZstdTransformIOTemplate<TParametersValueType>::CanReadFile(const char * filename)
 {
   std::string fname = filename;
 
-  bool extensionFound = false;
+  bool                   extensionFound = false;
   std::string::size_type extensionPos = fname.rfind(".iwt");
   std::string::size_type zstdPos = fname.rfind(".zst");
-  if ( extensionPos != std::string::npos && zstdPos != std::string::npos )
-    {
+  if (extensionPos != std::string::npos && zstdPos != std::string::npos)
+  {
     extensionFound = true;
-    }
+  }
 
-  if ( !extensionFound )
-    {
+  if (!extensionFound)
+  {
     itkDebugMacro(<< "The filename extension is not recognized");
     return false;
-    }
+  }
 
   return true;
 }
@@ -65,13 +60,11 @@ WasmZstdTransformIOTemplate<TParametersValueType>
 
 template <typename TParametersValueType>
 void
-WasmZstdTransformIOTemplate<TParametersValueType>
-::Read()
+WasmZstdTransformIOTemplate<TParametersValueType>::Read()
 {
-  const std::string path = this->GetFileName();
+  const std::string      path = this->GetFileName();
   std::string::size_type zstdPos = path.rfind(".zst");
-  if ( ( zstdPos != std::string::npos )
-       && ( zstdPos == path.length() - 4 ) )
+  if ((zstdPos != std::string::npos) && (zstdPos == path.length() - 4))
   {
     std::ifstream dataStream;
     openFileForReading(dataStream, path.c_str());
@@ -81,13 +74,14 @@ WasmZstdTransformIOTemplate<TParametersValueType>
     auto inputBinary = ostrm.str();
 
 
-    const size_t decompressedBufferSize = ZSTD_getFrameContentSize(inputBinary.data(), inputBinary.size());
+    const size_t      decompressedBufferSize = ZSTD_getFrameContentSize(inputBinary.data(), inputBinary.size());
     std::vector<char> decompressedBinary(decompressedBufferSize);
 
-    const size_t decompressedSize = ZSTD_decompress(decompressedBinary.data(), decompressedBufferSize, inputBinary.data(), inputBinary.size());
+    const size_t decompressedSize =
+      ZSTD_decompress(decompressedBinary.data(), decompressedBufferSize, inputBinary.data(), inputBinary.size());
     decompressedBinary.resize(decompressedSize);
 
-    this->ReadCBOR(nullptr, reinterpret_cast< unsigned char *>(&(decompressedBinary.at(0))), decompressedSize);
+    this->ReadCBOR(nullptr, reinterpret_cast<unsigned char *>(&(decompressedBinary.at(0))), decompressedSize);
     return;
   }
 
@@ -97,29 +91,28 @@ WasmZstdTransformIOTemplate<TParametersValueType>
 
 template <typename TParametersValueType>
 bool
-WasmZstdTransformIOTemplate<TParametersValueType>
-::CanWriteFile(const char *name)
+WasmZstdTransformIOTemplate<TParametersValueType>::CanWriteFile(const char * name)
 {
   std::string filename = name;
 
-  if( filename == "" )
-    {
+  if (filename == "")
+  {
     return false;
-    }
+  }
 
-  bool extensionFound = false;
+  bool                   extensionFound = false;
   std::string::size_type iwtPos = filename.rfind(".iwt");
   std::string::size_type zstdPos = filename.rfind(".zst");
-  if ( iwtPos != std::string::npos && zstdPos != std::string::npos )
-    {
+  if (iwtPos != std::string::npos && zstdPos != std::string::npos)
+  {
     extensionFound = true;
-    }
+  }
 
-  if ( !extensionFound )
-    {
+  if (!extensionFound)
+  {
     itkDebugMacro(<< "The filename extension is not recognized");
     return false;
-    }
+  }
 
   return true;
 }
@@ -127,28 +120,27 @@ WasmZstdTransformIOTemplate<TParametersValueType>
 
 template <typename TParametersValueType>
 void
-WasmZstdTransformIOTemplate<TParametersValueType>
-::Write()
+WasmZstdTransformIOTemplate<TParametersValueType>::Write()
 {
   const std::string path(this->GetFileName());
 
   std::string::size_type cborPos = path.rfind(".zst");
-  if ( ( cborPos != std::string::npos )
-       && ( cborPos == path.length() - 4 ) )
+  if ((cborPos != std::string::npos) && (cborPos == path.length() - 4))
   {
     unsigned char * inputBinary;
-    const size_t inputBinarySize = this->WriteCBOR(nullptr, &inputBinary, true);
+    const size_t    inputBinarySize = this->WriteCBOR(nullptr, &inputBinary, true);
 
-    const size_t compressedBufferSize = ZSTD_compressBound(inputBinarySize);
+    const size_t      compressedBufferSize = ZSTD_compressBound(inputBinarySize);
     std::vector<char> compressedBinary(compressedBufferSize);
 
     constexpr int compressionLevel = 3;
-    const size_t compressedSize = ZSTD_compress(compressedBinary.data(), compressedBufferSize, inputBinary, inputBinarySize, compressionLevel);
+    const size_t  compressedSize =
+      ZSTD_compress(compressedBinary.data(), compressedBufferSize, inputBinary, inputBinarySize, compressionLevel);
     free(inputBinary);
     compressedBinary.resize(compressedSize);
 
     std::ofstream outputStream;
-    openFileForWriting(outputStream, path.c_str(), true, false );
+    openFileForWriting(outputStream, path.c_str(), true, false);
     std::ostream_iterator<char> oIt(outputStream);
     std::copy(compressedBinary.begin(), compressedBinary.end(), oIt);
     return;

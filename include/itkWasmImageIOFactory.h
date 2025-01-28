@@ -30,19 +30,21 @@ namespace itk
  *
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT WasmImageIOFactory: public ObjectFactoryBase
+class WebAssemblyInterface_EXPORT WasmImageIOFactory : public ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef WasmImageIOFactory         Self;
-  typedef ObjectFactoryBase          Superclass;
-  typedef SmartPointer< Self >       Pointer;
-  typedef SmartPointer< const Self > ConstPointer;
+  typedef WasmImageIOFactory       Self;
+  typedef ObjectFactoryBase        Superclass;
+  typedef SmartPointer<Self>       Pointer;
+  typedef SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
-  const char * GetITKSourceVersion(void) const override;
+  const char *
+  GetITKSourceVersion(void) const override;
 
-  const char * GetDescription(void) const override;
+  const char *
+  GetDescription(void) const override;
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
@@ -51,7 +53,8 @@ public:
   itkOverrideGetNameOfClassMacro(WasmImageIOFactory);
 
   /** Register one factory of this type  */
-  static void RegisterOneFactory(void)
+  static void
+  RegisterOneFactory(void)
   {
     WasmImageIOFactory::Pointer jsonFactory = WasmImageIOFactory::New();
 

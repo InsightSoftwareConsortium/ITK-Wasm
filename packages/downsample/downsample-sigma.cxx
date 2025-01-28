@@ -24,12 +24,14 @@
 
 #include "downsampleSigma.h"
 
-int main(int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("downsample-sigma", "Compute gaussian kernel sigma values in pixel units for downsampling.", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "downsample-sigma", "Compute gaussian kernel sigma values in pixel units for downsampling.", argc, argv);
 
-  std::vector<unsigned int> shrinkFactors { 2, 2 };
-  pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->expected(1,-1);
+  std::vector<unsigned int> shrinkFactors{ 2, 2 };
+  pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->expected(1, -1);
 
   itk::wasm::OutputTextStream sigmaStream;
   pipeline.add_option("sigma", sigmaStream, "Output sigmas in pixel units.")->required()->type_name("OUTPUT_JSON");
@@ -40,13 +42,13 @@ int main(int argc, char * argv[])
 
   rapidjson::Document sigmaArray;
   sigmaArray.SetArray();
-  rapidjson::Document::AllocatorType& allocator = sigmaArray.GetAllocator();
+  rapidjson::Document::AllocatorType & allocator = sigmaArray.GetAllocator();
   for (const auto & sigmaValue : sigmaValues)
   {
     sigmaArray.PushBack(sigmaValue, allocator);
   }
 
-  rapidjson::StringBuffer stringBuffer;
+  rapidjson::StringBuffer                    stringBuffer;
   rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
   sigmaArray.Accept(writer);
 

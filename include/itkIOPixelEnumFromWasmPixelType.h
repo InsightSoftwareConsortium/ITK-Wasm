@@ -26,7 +26,7 @@ namespace itk
 {
 
 WebAssemblyInterface_EXPORT IOPixelEnum
-IOPixelEnumFromWasmPixelType( const std::string & wasmPixelType );
+IOPixelEnumFromWasmPixelType(const std::string & wasmPixelType);
 
 } // end namespace itk
 #endif

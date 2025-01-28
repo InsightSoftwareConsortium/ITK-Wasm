@@ -33,7 +33,8 @@ namespace itk
  *
  * JSON representation for an itk::TransformIOBase for interfacing across programming languages and runtimes.
  *
- * Pixel and Direction binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
+ * Pixel and Direction binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual
+ *filesystem.
  *
  * Arrays:
  *
@@ -47,7 +48,7 @@ namespace itk
  *
  * \ingroup WebAssemblyInterface
  */
-template<typename TParametersValueType>
+template <typename TParametersValueType>
 class WebAssemblyInterface_EXPORT WasmTransformIOBase : public WasmDataObject
 {
 public:
@@ -69,7 +70,8 @@ public:
   /** Run-time type information (and related methods). */
   itkOverrideGetNameOfClassMacro(WasmTransformIOBase);
 
-  void SetTransformIO(TransformIOBaseType * transformIO, bool readTransform = true)
+  void
+  SetTransformIO(TransformIOBaseType * transformIO, bool readTransform = true)
   {
     this->m_TransformIOBase = transformIO;
     if (!readTransform)
@@ -78,13 +80,14 @@ public:
     }
 
     auto wasmTransformIO = WasmTransformIOType::New();
-    wasmTransformIO->SetTransformList(*(reinterpret_cast<ConstTransformListType *>(&(transformIO->GetTransformList()))));
+    wasmTransformIO->SetTransformList(
+      *(reinterpret_cast<ConstTransformListType *>(&(transformIO->GetTransformList()))));
 
     constexpr bool inMemory = true;
     this->m_TransformListJSON = wasmTransformIO->GetJSON(inMemory);
 
     std::string serialized{};
-    auto ec = glz::write<glz::opts{ .prettify = true }>(this->m_TransformListJSON, serialized);
+    auto        ec = glz::write<glz::opts{ .prettify = true }>(this->m_TransformListJSON, serialized);
     if (ec)
     {
       itkExceptionMacro("Failed to serialize TransformListJSON");
@@ -92,16 +95,19 @@ public:
     this->SetJSON(serialized);
   }
 
-  const TransformIOBaseType * GetTransformIO() const
+  const TransformIOBaseType *
+  GetTransformIO() const
   {
     return static_cast<const TransformIOBaseType *>(m_TransformIOBase.GetPointer());
   }
 
-  const TransformListJSON & GetTransformListJSON() const
+  const TransformListJSON &
+  GetTransformListJSON() const
   {
     return this->m_TransformListJSON;
   }
-  TransformListJSON & GetTransformListJSON()
+  TransformListJSON &
+  GetTransformListJSON()
   {
     return this->m_TransformListJSON;
   }

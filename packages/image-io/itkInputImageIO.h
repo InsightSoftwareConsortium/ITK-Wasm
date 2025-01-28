@@ -23,7 +23,7 @@
 #include "itkWasmImageIO.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
+#  include "itkWasmExports.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #endif
@@ -46,22 +46,28 @@ namespace wasm
 class InputImageIO
 {
 public:
-  void Set(const WasmImageIOBase * imageIO) {
+  void
+  Set(const WasmImageIOBase * imageIO)
+  {
     this->m_WasmImageIOBase = imageIO;
   }
 
-  const WasmImageIOBase * Get() const {
+  const WasmImageIOBase *
+  Get() const
+  {
     return this->m_WasmImageIOBase.GetPointer();
   }
 
   InputImageIO() = default;
   ~InputImageIO() = default;
+
 protected:
   typename WasmImageIOBase::ConstPointer m_WasmImageIOBase;
 };
 
 
-bool lexical_cast(const std::string &input, InputImageIO &inputImageIO)
+bool
+lexical_cast(const std::string & input, InputImageIO & inputImageIO)
 {
   if (input.empty())
   {
@@ -72,8 +78,8 @@ bool lexical_cast(const std::string &input, InputImageIO &inputImageIO)
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(0, index);
-    auto        deserializedAttempt = glz::read_json<itk::ImageJSON>(json);
+    auto               json = getMemoryStoreInputJSON(0, index);
+    auto               deserializedAttempt = glz::read_json<itk::ImageJSON>(json);
     if (!deserializedAttempt)
     {
       const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
@@ -86,19 +92,20 @@ bool lexical_cast(const std::string &input, InputImageIO &inputImageIO)
 
     const unsigned int dimension = wasmImageIO->GetNumberOfDimensions();
 
-    auto wasmImageIOBase = itk::WasmImageIOBase::New();
+    auto              wasmImageIOBase = itk::WasmImageIOBase::New();
     const std::string directionString = imageJSON.direction;
-    const double * directionPtr = reinterpret_cast< double * >( std::strtoull(directionString.substr(35).c_str(), nullptr, 10) );
+    const double *    directionPtr =
+      reinterpret_cast<double *>(std::strtoull(directionString.substr(35).c_str(), nullptr, 10));
     WasmImageIOBase::DirectionContainerType * directionContainer = wasmImageIOBase->GetDirectionContainer();
-    directionContainer->resize(dimension*dimension);
-    directionContainer->assign(directionPtr, directionPtr + dimension*dimension);
+    directionContainer->resize(dimension * dimension);
+    directionContainer->assign(directionPtr, directionPtr + dimension * dimension);
 
     const std::string dataString = imageJSON.data;
-    const char * dataPtr = reinterpret_cast< char * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
+    const char *      dataPtr = reinterpret_cast<char *>(std::strtoull(dataString.substr(35).c_str(), nullptr, 10));
     if (dataPtr != nullptr)
     {
       WasmImageIOBase::PixelDataContainerType * pixelDataContainer = wasmImageIOBase->GetPixelDataContainer();
-      const size_t pixelDataBytes = wasmImageIO->GetImageSizeInBytes();
+      const size_t                              pixelDataBytes = wasmImageIO->GetImageSizeInBytes();
       pixelDataContainer->resize(pixelDataBytes);
       pixelDataContainer->assign(dataPtr, dataPtr + pixelDataBytes);
     }

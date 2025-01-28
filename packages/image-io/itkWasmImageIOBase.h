@@ -30,14 +30,15 @@ namespace itk
  * \brief JSON representation for an itk::ImageIOBase
  *
  * JSON representation for an itk::ImageIOBase for interfacing across programming languages and runtimes.
- * 
- * Pixel and Direction binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
- * 
+ *
+ * Pixel and Direction binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual
+ *filesystem.
+ *
  * Arrays:
- * 
+ *
  * - 0: Pixel buffer `data`
  * - 1: Orientation `direction`
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 class WebAssemblyInterface_EXPORT WasmImageIOBase : public WasmDataObject
@@ -58,25 +59,32 @@ public:
   using DirectionContainerType = VectorContainer<SizeValueType, double>;
   using PixelDataContainerType = VectorContainer<SizeValueType, char>;
 
-  void SetImageIO(ImageIOBase * imageIO, bool readImage = true);
-  const ImageIOBase * GetImageIO() const {
+  void
+  SetImageIO(ImageIOBase * imageIO, bool readImage = true);
+  const ImageIOBase *
+  GetImageIO() const
+  {
     return m_ImageIOBase.GetPointer();
   }
 
-  const DirectionContainerType * GetDirectionContainer() const
+  const DirectionContainerType *
+  GetDirectionContainer() const
   {
     return this->m_DirectionContainer.GetPointer();
   }
-  DirectionContainerType * GetDirectionContainer()
+  DirectionContainerType *
+  GetDirectionContainer()
   {
     return this->m_DirectionContainer.GetPointer();
   }
 
-  const PixelDataContainerType * GetPixelDataContainer() const
+  const PixelDataContainerType *
+  GetPixelDataContainer() const
   {
     return this->m_PixelDataContainer.GetPointer();
   }
-  PixelDataContainerType * GetPixelDataContainer()
+  PixelDataContainerType *
+  GetPixelDataContainer()
   {
     return this->m_PixelDataContainer.GetPointer();
   }
