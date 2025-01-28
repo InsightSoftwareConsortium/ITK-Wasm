@@ -39,6 +39,25 @@ importers:
         specifier: workspace:^
         version: link:../../packages/core/typescript/itk-wasm
 
+  examples/hello-world:
+    dependencies:
+      fs-extra:
+        specifier: ^11.1.0
+        version: 11.2.0
+      itk-wasm:
+        specifier: workspace:^
+        version: link:../../packages/core/typescript/itk-wasm
+    devDependencies:
+      cypress:
+        specifier: ^13.17.0
+        version: 13.17.0
+      http-server:
+        specifier: ^14.1.1
+        version: 14.1.1
+      start-server-and-test:
+        specifier: ^2.0.4
+        version: 2.0.4
+
   examples/inputs-outputs:
     devDependencies:
       '@itk-wasm/image-io':
