@@ -38,18 +38,18 @@ namespace wasm
 template <typename TComponent>
 struct MapComponentType
 {
-  static constexpr std::string_view ComponentString = "Unknown";
+  static constexpr std::string_view       ComponentString = "Unknown";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::uint8;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::uint8;
-  static constexpr JSONFloatTypesEnum JSONFloatTypeEnum = JSONFloatTypesEnum::float32;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::uint8;
+  static constexpr JSONFloatTypesEnum     JSONFloatTypeEnum = JSONFloatTypesEnum::float32;
 };
 
 template <>
 struct MapComponentType<signed char>
 {
-  static constexpr std::string_view ComponentString = "int8";
+  static constexpr std::string_view       ComponentString = "int8";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::int8;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::int8;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::int8;
 };
 
 template <>
@@ -57,66 +57,66 @@ struct MapComponentType<char>
 {
   // Todo: does not compile:
   // std::numeric_limits<char>::is_signed ? "int8" : "uint8_
-  static constexpr std::string_view ComponentString = "int8";
+  static constexpr std::string_view       ComponentString = "int8";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::int8;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::int8;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::int8;
 };
 
 template <>
 struct MapComponentType<unsigned char>
 {
-  static constexpr std::string_view ComponentString = "uint8";
+  static constexpr std::string_view       ComponentString = "uint8";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::uint8;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::uint8;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::uint8;
 };
 
 template <>
 struct MapComponentType<short>
 {
-  static constexpr std::string_view ComponentString = "int16";
+  static constexpr std::string_view       ComponentString = "int16";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::int16;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::int16;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::int16;
 };
 
 template <>
 struct MapComponentType<unsigned short>
 {
-  static constexpr std::string_view ComponentString = "uint16";
+  static constexpr std::string_view       ComponentString = "uint16";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::uint16;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::uint16;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::uint16;
 };
 
 template <>
 struct MapComponentType<int>
 {
-  static constexpr std::string_view ComponentString = "int32";
+  static constexpr std::string_view       ComponentString = "int32";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::int32;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::int32;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::int32;
 };
 
 template <>
 struct MapComponentType<unsigned int>
 {
-  static constexpr std::string_view ComponentString = "uint32";
+  static constexpr std::string_view       ComponentString = "uint32";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::uint32;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::uint32;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::uint32;
 };
 
 #if ((LLONG_MAX != LONG_MAX))
 template <>
 struct MapComponentType<long>
 {
-  static constexpr std::string_view ComponentString = "int32";
+  static constexpr std::string_view       ComponentString = "int32";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::int32;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::int32;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::int32;
 };
 #else
 template <>
 struct MapComponentType<long>
 {
-  static constexpr std::string_view ComponentString = "int64";
+  static constexpr std::string_view       ComponentString = "int64";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::int64;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::int64;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::int64;
 };
 #endif
 
@@ -124,50 +124,50 @@ struct MapComponentType<long>
 template <>
 struct MapComponentType<unsigned long>
 {
-  static constexpr std::string_view ComponentString = "uint32";
+  static constexpr std::string_view       ComponentString = "uint32";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::uint32;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::uint32;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::uint32;
 };
 #else
 template <>
 struct MapComponentType<unsigned long>
 {
-  static constexpr std::string_view ComponentString = "uint64";
+  static constexpr std::string_view       ComponentString = "uint64";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::uint64;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::uint64;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::uint64;
 };
 #endif
 
 template <>
 struct MapComponentType<long long>
 {
-  static constexpr std::string_view ComponentString = "int64";
+  static constexpr std::string_view       ComponentString = "int64";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::int64;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::int64;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::int64;
 };
 
 template <>
 struct MapComponentType<unsigned long long>
 {
-  static constexpr std::string_view ComponentString = "uint64";
+  static constexpr std::string_view       ComponentString = "uint64";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::uint64;
-  static constexpr JSONIntTypesEnum JSONIntTypeEnum = JSONIntTypesEnum::uint64;
+  static constexpr JSONIntTypesEnum       JSONIntTypeEnum = JSONIntTypesEnum::uint64;
 };
 
 template <>
 struct MapComponentType<float>
 {
-  static constexpr std::string_view ComponentString = "float32";
+  static constexpr std::string_view       ComponentString = "float32";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::float32;
-  static constexpr JSONFloatTypesEnum JSONFloatTypeEnum = JSONFloatTypesEnum::float32;
+  static constexpr JSONFloatTypesEnum     JSONFloatTypeEnum = JSONFloatTypesEnum::float32;
 };
 
 template <>
 struct MapComponentType<double>
 {
-  static constexpr std::string_view ComponentString = "float64";
+  static constexpr std::string_view       ComponentString = "float64";
   static constexpr JSONComponentTypesEnum JSONComponentEnum = JSONComponentTypesEnum::float64;
-  static constexpr JSONFloatTypesEnum JSONFloatTypeEnum = JSONFloatTypesEnum::float64;
+  static constexpr JSONFloatTypesEnum     JSONFloatTypeEnum = JSONFloatTypesEnum::float64;
 };
 
 } // end namespace wasm

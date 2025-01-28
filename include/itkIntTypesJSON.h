@@ -22,32 +22,24 @@
 
 namespace itk
 {
-  enum class JSONIntTypesEnum
-  {
-    int8,
-    uint8,
-    int16,
-    uint16,
-    int32,
-    uint32,
-    int64,
-    uint64
-  };
+enum class JSONIntTypesEnum
+{
+  int8,
+  uint8,
+  int16,
+  uint16,
+  int32,
+  uint32,
+  int64,
+  uint64
+};
 } // end namespace itk
 
 template <>
-struct glz::meta<itk::JSONIntTypesEnum> {
+struct glz::meta<itk::JSONIntTypesEnum>
+{
   using enum itk::JSONIntTypesEnum;
-  static constexpr auto value = glz::enumerate(
-    int8,
-    uint8,
-    int16,
-    uint16,
-    int32,
-    uint32,
-    int64,
-    uint64
-  );
+  static constexpr auto value = glz::enumerate(int8, uint8, int16, uint16, int32, uint32, int64, uint64);
 };
 
 #endif // itkIntTypesJSON_h

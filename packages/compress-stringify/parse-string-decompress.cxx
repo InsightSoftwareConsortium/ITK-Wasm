@@ -31,7 +31,8 @@
 #include "itkInputTextStream.h"
 #include "itkOutputBinaryStream.h"
 
-int decompress(itk::wasm::Pipeline & pipeline)
+int
+decompress(itk::wasm::Pipeline & pipeline)
 {
   itk::wasm::InputBinaryStream inputBinaryStream;
   pipeline.add_option("input", inputBinaryStream, "Compressed input")->type_name("INPUT_BINARY_STREAM");
@@ -42,14 +43,14 @@ int decompress(itk::wasm::Pipeline & pipeline)
   ITK_WASM_PARSE(pipeline);
 
   std::string inputBinary;
-  inputBinary.assign( (std::istreambuf_iterator<char>(inputBinaryStream.Get()) ), 
-                      (std::istreambuf_iterator<char>()) ); 
+  inputBinary.assign((std::istreambuf_iterator<char>(inputBinaryStream.Get())), (std::istreambuf_iterator<char>()));
 
 
-  const size_t decompressedBufferSize = ZSTD_getFrameContentSize(inputBinary.data(), inputBinary.size());
+  const size_t      decompressedBufferSize = ZSTD_getFrameContentSize(inputBinary.data(), inputBinary.size());
   std::vector<char> decompressedBinary(decompressedBufferSize);
 
-  const size_t decompressedSize = ZSTD_decompress(decompressedBinary.data(), decompressedBufferSize, inputBinary.data(), inputBinary.size());
+  const size_t decompressedSize =
+    ZSTD_decompress(decompressedBinary.data(), decompressedBufferSize, inputBinary.data(), inputBinary.size());
   decompressedBinary.resize(decompressedSize);
 
   std::ostream_iterator<char> oIt(outputBinaryStream.Get());
@@ -58,7 +59,8 @@ int decompress(itk::wasm::Pipeline & pipeline)
   return EXIT_SUCCESS;
 }
 
-int decodeDecompress(itk::wasm::Pipeline & pipeline)
+int
+decodeDecompress(itk::wasm::Pipeline & pipeline)
 {
   itk::wasm::InputTextStream inputTextStream;
   pipeline.add_option("input", inputTextStream, "Compressed input")->type_name("INPUT_TEXT_STREAM");
@@ -77,15 +79,15 @@ int decodeDecompress(itk::wasm::Pipeline & pipeline)
   inputTextIt++;
 
   std::string inputText;
-  inputText.assign( (inputTextIt), 
-                    (std::istream_iterator<char>()) ); 
+  inputText.assign((inputTextIt), (std::istream_iterator<char>()));
 
   auto inputBinary = base64_decode(inputText);
 
-  const size_t decompressedBufferSize = ZSTD_getFrameContentSize(inputBinary.data(), inputBinary.size());
+  const size_t      decompressedBufferSize = ZSTD_getFrameContentSize(inputBinary.data(), inputBinary.size());
   std::vector<char> decompressedBinary(decompressedBufferSize);
 
-  const size_t decompressedSize = ZSTD_decompress(decompressedBinary.data(), decompressedBufferSize, inputBinary.data(), inputBinary.size());
+  const size_t decompressedSize =
+    ZSTD_decompress(decompressedBinary.data(), decompressedBufferSize, inputBinary.data(), inputBinary.size());
   decompressedBinary.resize(decompressedSize);
 
   std::ostream_iterator<char> oIt(outputBinaryStream.Get());
@@ -94,19 +96,23 @@ int decodeDecompress(itk::wasm::Pipeline & pipeline)
   return EXIT_SUCCESS;
 }
 
-int main(int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("parse-string-decompress", "Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "parse-string-decompress",
+    "Given a binary or string produced with compress-stringify, decompress and optionally base64 decode.",
+    argc,
+    argv);
 
   bool parseString = false;
   pipeline.add_flag("-s,--parse-string", parseString, "Parse the input string before decompression");
 
   ITK_WASM_PRE_PARSE(pipeline);
 
-  if(parseString)
+  if (parseString)
   {
     return decodeDecompress(pipeline);
   }
   return decompress(pipeline);
 }
-

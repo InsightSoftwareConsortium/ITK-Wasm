@@ -90,13 +90,13 @@ public:
    * not free the memory in its destructor and the application providing the
    * buffer retains the responsibility of freeing the memory for this image
    * data.  If "LetImageContainerManageMemory" is true, then the ImageContainer
-   * will free the memory when it is destroyed. If it is a VectorImage, set the 
+   * will free the memory when it is destroyed. If it is a VectorImage, set the
    * vectorImageComponents to the NumberOfComponentsPerPixel. */
   void
   SetImportPointer(OutputImageInternalPixelType * ptr,
-   SizeValueType num,
-   bool letImageContainerManageMemory,
-   unsigned int vectorImageComponents = 1);
+                   SizeValueType                  num,
+                   bool                           letImageContainerManageMemory,
+                   unsigned int                   vectorImageComponents = 1);
 
   /** Set the region object that defines the size and starting index
    * for the imported image. This will serve as
@@ -200,8 +200,8 @@ private:
   DirectionType m_Direction;
 
   typename ImportImageContainerType::Pointer m_ImportImageContainer;
-  SizeValueType                              m_Size{0};
-  unsigned int                               m_VectorImageComponentsPerPixel{1};
+  SizeValueType                              m_Size{ 0 };
+  unsigned int                               m_VectorImageComponentsPerPixel{ 1 };
 };
 
 } // end namespace itk

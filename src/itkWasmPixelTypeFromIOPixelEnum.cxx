@@ -23,8 +23,8 @@ namespace itk
 std::string
 WasmPixelTypeFromIOPixelEnum(const IOPixelEnum ioPixel)
 {
-  switch ( ioPixel )
-    {
+  switch (ioPixel)
+  {
     case IOPixelEnum::UNKNOWNPIXELTYPE:
       return "Unknown";
     case IOPixelEnum::SCALAR:
@@ -57,7 +57,7 @@ WasmPixelTypeFromIOPixelEnum(const IOPixelEnum ioPixel)
       return "VariableLengthVector";
     case IOPixelEnum::VARIABLESIZEMATRIX:
       return "VariableSizeMatrix";
-    }
+  }
 
   return "Unknown";
 }

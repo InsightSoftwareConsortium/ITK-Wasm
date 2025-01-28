@@ -34,7 +34,8 @@
 namespace itk
 {
 
-WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, PolyDataTypeJSON & polyDataType);
+WebAssemblyInterface_EXPORT bool
+lexical_cast(const std::string & input, PolyDataTypeJSON & polyDataType);
 
 namespace wasm
 {
@@ -82,12 +83,11 @@ main(int argc, char * argv[])
  *
  * \ingroup WebAssemblyInterface
  */
-template<template <typename TPolyData> class TPipelineFunctor>
-class
-SupportInputPolyDataTypes
+template <template <typename TPolyData> class TPipelineFunctor>
+class SupportInputPolyDataTypes
 {
 public:
-  template<typename ...TPixels>
+  template <typename... TPixels>
   static int
   PixelTypes(const std::string & inputPolyDataOptionName, Pipeline & pipeline)
   {
@@ -95,15 +95,15 @@ public:
 
     const auto iwpArgc = pipeline.get_argc();
     const auto iwpArgv = pipeline.get_argv();
-    bool passThrough = false;
+    bool       passThrough = false;
     for (int ii = 0; ii < iwpArgc; ++ii)
+    {
+      const std::string arg(iwpArgv[ii]);
+      if (arg == "-h" || arg == "--help" || arg == "--interface-json" || arg == "--version")
       {
-        const std::string arg(iwpArgv[ii]);
-        if (arg == "-h" || arg == "--help" || arg == "--interface-json" || arg == "--version")
-        {
-          passThrough = true;
-        }
+        passThrough = true;
       }
+    }
     if (passThrough)
     {
       return IteratePixelTypes<TPixels...>(pipeline, polyDataType, passThrough);
@@ -119,20 +119,23 @@ public:
   }
 
 private:
-  template<typename TPixel, typename ...TPixelsRest>
+  template <typename TPixel, typename... TPixelsRest>
   static int
   IteratePixelTypes(Pipeline & pipeline, const PolyDataTypeJSON & polyDataType, bool passThrough = false)
   {
     using PixelType = TPixel;
     using ConvertPixelTraits = MeshConvertPixelTraits<PixelType>;
 
-    const auto components = polyDataType.pointPixelComponents ? polyDataType.pointPixelComponents : polyDataType.cellPixelComponents;
+    const auto components =
+      polyDataType.pointPixelComponents ? polyDataType.pointPixelComponents : polyDataType.cellPixelComponents;
 
-    if (passThrough || components == 0
-     || polyDataType.pointPixelComponentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum
-     && polyDataType.pointPixelType == MapPixelType<PixelType>::JSONPixelEnum)
+    if (passThrough || components == 0 ||
+        polyDataType.pointPixelComponentType ==
+            MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum &&
+          polyDataType.pointPixelType == MapPixelType<PixelType>::JSONPixelEnum)
     {
-      if (polyDataType.pointPixelType == JSONPixelTypesEnum::VariableLengthVector || polyDataType.pointPixelType == JSONPixelTypesEnum::VariableSizeMatrix)
+      if (polyDataType.pointPixelType == JSONPixelTypesEnum::VariableLengthVector ||
+          polyDataType.pointPixelType == JSONPixelTypesEnum::VariableSizeMatrix)
       {
         // todo: VectorMesh support for ImportMeshFilter?
         // using MeshType = itk::VectorMesh<typename ConvertPixelTraits::ComponentType, Dimension>;
@@ -140,7 +143,7 @@ private:
         // using PipelineType = TPipelineFunctor<MeshType>;
         // return PipelineType()(pipeline);
       }
-      else if(passThrough || components == ConvertPixelTraits::GetNumberOfComponents() || components == 0 )
+      else if (passThrough || components == ConvertPixelTraits::GetNumberOfComponents() || components == 0)
       {
         using PolyDataType = PolyData<PixelType>;
 
@@ -149,12 +152,13 @@ private:
       }
     }
 
-    if constexpr (sizeof...(TPixelsRest) > 0) {
+    if constexpr (sizeof...(TPixelsRest) > 0)
+    {
       return IteratePixelTypes<TPixelsRest...>(pipeline, polyDataType);
     }
 
     std::ostringstream ostrm;
-    std::string polyDataTypeString = glz::write_json(polyDataType).value_or("error");
+    std::string        polyDataTypeString = glz::write_json(polyDataType).value_or("error");
     ostrm << "Unsupported polyData type: " << polyDataTypeString << std::endl;
     CLI::Error err("Runtime error", ostrm.str(), 1);
     return pipeline.exit(err);

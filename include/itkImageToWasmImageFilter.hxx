@@ -35,8 +35,7 @@ namespace itk
 {
 
 template <typename TImage>
-ImageToWasmImageFilter<TImage>
-::ImageToWasmImageFilter()
+ImageToWasmImageFilter<TImage>::ImageToWasmImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -47,24 +46,21 @@ ImageToWasmImageFilter<TImage>
 
 template <typename TImage>
 ProcessObject::DataObjectPointer
-ImageToWasmImageFilter<TImage>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+ImageToWasmImageFilter<TImage>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return WasmImageType::New().GetPointer();
 }
 
 template <typename TImage>
 ProcessObject::DataObjectPointer
-ImageToWasmImageFilter<TImage>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+ImageToWasmImageFilter<TImage>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return WasmImageType::New().GetPointer();
 }
 
 template <typename TImage>
 auto
-ImageToWasmImageFilter<TImage>
-::GetOutput() -> WasmImageType *
+ImageToWasmImageFilter<TImage>::GetOutput() -> WasmImageType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<WasmImageType *>(this->GetPrimaryOutput());
@@ -72,8 +68,7 @@ ImageToWasmImageFilter<TImage>
 
 template <typename TImage>
 auto
-ImageToWasmImageFilter<TImage>
-::GetOutput() const -> const WasmImageType *
+ImageToWasmImageFilter<TImage>::GetOutput() const -> const WasmImageType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const WasmImageType *>(this->GetPrimaryOutput());
@@ -81,8 +76,7 @@ ImageToWasmImageFilter<TImage>
 
 template <typename TImage>
 auto
-ImageToWasmImageFilter<TImage>
-::GetOutput(unsigned int idx) -> WasmImageType *
+ImageToWasmImageFilter<TImage>::GetOutput(unsigned int idx) -> WasmImageType *
 {
   auto * out = dynamic_cast<WasmImageType *>(this->ProcessObject::GetOutput(idx));
 
@@ -95,8 +89,7 @@ ImageToWasmImageFilter<TImage>
 
 template <typename TImage>
 void
-ImageToWasmImageFilter<TImage>
-::SetInput(const ImageType * input)
+ImageToWasmImageFilter<TImage>::SetInput(const ImageType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<ImageType *>(input));
@@ -104,8 +97,7 @@ ImageToWasmImageFilter<TImage>
 
 template <typename TImage>
 void
-ImageToWasmImageFilter<TImage>
-::SetInput(unsigned int index, const ImageType * image)
+ImageToWasmImageFilter<TImage>::SetInput(unsigned int index, const ImageType * image)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<ImageType *>(image));
@@ -113,35 +105,32 @@ ImageToWasmImageFilter<TImage>
 
 template <typename TImage>
 const typename ImageToWasmImageFilter<TImage>::ImageType *
-ImageToWasmImageFilter<TImage>
-::GetInput()
+ImageToWasmImageFilter<TImage>::GetInput()
 {
   return itkDynamicCastInDebugMode<const ImageType *>(this->GetPrimaryInput());
 }
 
 template <typename TImage>
 const typename ImageToWasmImageFilter<TImage>::ImageType *
-ImageToWasmImageFilter<TImage>
-::GetInput(unsigned int idx)
+ImageToWasmImageFilter<TImage>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TImage *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TImage>
 void
-ImageToWasmImageFilter<TImage>
-::GenerateData()
+ImageToWasmImageFilter<TImage>::GenerateData()
 {
   // Get the input and output pointers
   const ImageType * image = this->GetInput();
-  WasmImageType * wasmImage = this->GetOutput();
+  WasmImageType *   wasmImage = this->GetOutput();
 
   wasmImage->SetImage(image);
 
-  constexpr bool inMemory = true;
+  constexpr bool  inMemory = true;
   const ImageJSON imageJSON = imageToImageJSON<ImageType>(image, wasmImage, inMemory);
-  std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true, .concatenate = false }>(imageJSON, serialized);
+  std::string     serialized{};
+  auto            ec = glz::write<glz::opts{ .prettify = true, .concatenate = false }>(imageJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize ImageJSON");
@@ -151,8 +140,7 @@ ImageToWasmImageFilter<TImage>
 
 template <typename TImage>
 void
-ImageToWasmImageFilter<TImage>
-::PrintSelf(std::ostream & os, Indent indent) const
+ImageToWasmImageFilter<TImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

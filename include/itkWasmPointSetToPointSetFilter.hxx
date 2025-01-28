@@ -33,8 +33,7 @@ namespace itk
 {
 
 template <typename TPointSet>
-WasmPointSetToPointSetFilter<TPointSet>
-::WasmPointSetToPointSetFilter()
+WasmPointSetToPointSetFilter<TPointSet>::WasmPointSetToPointSetFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -45,24 +44,21 @@ WasmPointSetToPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 ProcessObject::DataObjectPointer
-WasmPointSetToPointSetFilter<TPointSet>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+WasmPointSetToPointSetFilter<TPointSet>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return PointSetType::New().GetPointer();
 }
 
 template <typename TPointSet>
 ProcessObject::DataObjectPointer
-WasmPointSetToPointSetFilter<TPointSet>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+WasmPointSetToPointSetFilter<TPointSet>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return PointSetType::New().GetPointer();
 }
 
 template <typename TPointSet>
 auto
-WasmPointSetToPointSetFilter<TPointSet>
-::GetOutput() -> PointSetType *
+WasmPointSetToPointSetFilter<TPointSet>::GetOutput() -> PointSetType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<PointSetType *>(this->GetPrimaryOutput());
@@ -70,8 +66,7 @@ WasmPointSetToPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 auto
-WasmPointSetToPointSetFilter<TPointSet>
-::GetOutput() const -> const PointSetType *
+WasmPointSetToPointSetFilter<TPointSet>::GetOutput() const -> const PointSetType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const PointSetType *>(this->GetPrimaryOutput());
@@ -79,8 +74,7 @@ WasmPointSetToPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 auto
-WasmPointSetToPointSetFilter<TPointSet>
-::GetOutput(unsigned int idx) -> PointSetType *
+WasmPointSetToPointSetFilter<TPointSet>::GetOutput(unsigned int idx) -> PointSetType *
 {
   auto * out = dynamic_cast<PointSetType *>(this->ProcessObject::GetOutput(idx));
 
@@ -93,8 +87,7 @@ WasmPointSetToPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 void
-WasmPointSetToPointSetFilter<TPointSet>
-::SetInput(const WasmPointSetType * input)
+WasmPointSetToPointSetFilter<TPointSet>::SetInput(const WasmPointSetType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<WasmPointSetType *>(input));
@@ -102,8 +95,7 @@ WasmPointSetToPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 void
-WasmPointSetToPointSetFilter<TPointSet>
-::SetInput(unsigned int index, const WasmPointSetType * pointSet)
+WasmPointSetToPointSetFilter<TPointSet>::SetInput(unsigned int index, const WasmPointSetType * pointSet)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<WasmPointSetType *>(pointSet));
@@ -111,34 +103,31 @@ WasmPointSetToPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 const typename WasmPointSetToPointSetFilter<TPointSet>::WasmPointSetType *
-WasmPointSetToPointSetFilter<TPointSet>
-::GetInput()
+WasmPointSetToPointSetFilter<TPointSet>::GetInput()
 {
   return itkDynamicCastInDebugMode<const WasmPointSetType *>(this->GetPrimaryInput());
 }
 
 template <typename TPointSet>
 const typename WasmPointSetToPointSetFilter<TPointSet>::WasmPointSetType *
-WasmPointSetToPointSetFilter<TPointSet>
-::GetInput(unsigned int idx)
+WasmPointSetToPointSetFilter<TPointSet>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TPointSet *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TPointSet>
 void
-WasmPointSetToPointSetFilter<TPointSet>
-::GenerateData()
+WasmPointSetToPointSetFilter<TPointSet>::GenerateData()
 {
   // Get the input and output pointers
   const WasmPointSetType * wasmPointSet = this->GetInput();
-  PointSetType * pointSet = this->GetOutput();
+  PointSetType *           pointSet = this->GetOutput();
 
   using PointPixelType = typename PointSetType::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
 
   const std::string json(wasmPointSet->GetJSON());
-  auto deserializedAttempt = glz::read_json<PointSetJSON>(json);
+  auto              deserializedAttempt = glz::read_json<PointSetJSON>(json);
   if (!deserializedAttempt)
   {
     const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
@@ -157,12 +146,14 @@ WasmPointSetToPointSetFilter<TPointSet>
   {
     throw std::runtime_error("Unexpected dimension");
   }
-  if (numberOfPointPixels && pointPixelComponentType != itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum )
+  if (numberOfPointPixels &&
+      pointPixelComponentType !=
+        itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum)
   {
     throw std::runtime_error("Unexpected point pixel component type");
   }
 
-  if (numberOfPointPixels && pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum )
+  if (numberOfPointPixels && pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum)
   {
     throw std::runtime_error("Unexpected point pixel type");
   }
@@ -175,21 +166,24 @@ WasmPointSetToPointSetFilter<TPointSet>
   {
     if (pointComponentType == itk::wasm::MapComponentType<typename PointSetType::CoordinateType>::JSONFloatTypeEnum)
     {
-      const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      const auto * pointsPtr =
+        reinterpret_cast<PointType *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
       pointSet->GetPoints()->assign(pointsPtr, pointsPtr + pointSetJSON.numberOfPoints);
     }
     else if (pointComponentType == itk::wasm::MapComponentType<float>::JSONFloatTypeEnum)
     {
-      auto * pointsPtr = reinterpret_cast< float * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      auto *       pointsPtr = reinterpret_cast<float *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
       const size_t pointComponents = numberOfPoints * dimension;
-      auto * pointsContainerPtr = reinterpret_cast<typename PointSetType::CoordinateType *>(&(pointSet->GetPoints()->at(0)) );
+      auto *       pointsContainerPtr =
+        reinterpret_cast<typename PointSetType::CoordinateType *>(&(pointSet->GetPoints()->at(0)));
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
     }
     else if (pointComponentType == itk::wasm::MapComponentType<double>::JSONFloatTypeEnum)
     {
-      auto * pointsPtr = reinterpret_cast< double * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      auto *       pointsPtr = reinterpret_cast<double *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
       const size_t pointComponents = numberOfPoints * dimension;
-      auto * pointsContainerPtr = reinterpret_cast<typename PointSetType::CoordinateType *>(&(pointSet->GetPoints()->at(0)) );
+      auto *       pointsContainerPtr =
+        reinterpret_cast<typename PointSetType::CoordinateType *>(&(pointSet->GetPoints()->at(0)));
       std::copy(pointsPtr, pointsPtr + pointComponents, pointsContainerPtr);
     }
     else
@@ -201,7 +195,8 @@ WasmPointSetToPointSetFilter<TPointSet>
 
   using PointPixelType = typename TPointSet::PixelType;
   const std::string pointDataString = pointSetJSON.pointData;
-  auto pointDataPtr = reinterpret_cast< PointPixelType * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
+  auto              pointDataPtr =
+    reinterpret_cast<PointPixelType *>(std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10));
   pointSet->GetPointData()->resize(numberOfPointPixels);
   pointSet->GetPointData()->assign(pointDataPtr, pointDataPtr + numberOfPointPixels);
 
@@ -211,8 +206,7 @@ WasmPointSetToPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 void
-WasmPointSetToPointSetFilter<TPointSet>
-::PrintSelf(std::ostream & os, Indent indent) const
+WasmPointSetToPointSetFilter<TPointSet>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

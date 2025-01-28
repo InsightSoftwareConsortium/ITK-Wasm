@@ -23,7 +23,7 @@
 #include "itkWasmTransformIO.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
+#  include "itkWasmExports.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #endif
@@ -50,23 +50,29 @@ public:
   using ParametersValueType = TParametersValueType;
   using WasmTransformIOBaseType = WasmTransformIOBase<ParametersValueType>;
 
-  void Set(const WasmTransformIOBaseType * transformIO) {
+  void
+  Set(const WasmTransformIOBaseType * transformIO)
+  {
     this->m_WasmTransformIOBase = transformIO;
   }
 
-  const WasmTransformIOBaseType * Get() const {
+  const WasmTransformIOBaseType *
+  Get() const
+  {
     return this->m_WasmTransformIOBase.GetPointer();
   }
 
   InputTransformIO() = default;
   ~InputTransformIO() = default;
+
 protected:
   typename WasmTransformIOBaseType::ConstPointer m_WasmTransformIOBase;
 };
 
 
 template <typename TParametersValueType>
-bool lexical_cast(const std::string &input, InputTransformIO<TParametersValueType> &inputTransformIO)
+bool
+lexical_cast(const std::string & input, InputTransformIO<TParametersValueType> & inputTransformIO)
 {
   using ParametersValueType = TParametersValueType;
   using WasmTransformIOType = itk::WasmTransformIOTemplate<ParametersValueType>;
@@ -82,8 +88,8 @@ bool lexical_cast(const std::string &input, InputTransformIO<TParametersValueTyp
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(0, index);
-    auto        deserializedAttempt = glz::read_json<itk::TransformListJSON>(json);
+    auto               json = getMemoryStoreInputJSON(0, index);
+    auto               deserializedAttempt = glz::read_json<itk::TransformListJSON>(json);
     if (!deserializedAttempt)
     {
       const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
@@ -95,7 +101,7 @@ bool lexical_cast(const std::string &input, InputTransformIO<TParametersValueTyp
       throw std::runtime_error("Expected at least one transform in the list");
     }
 
-    auto wasmTransformIO = WasmTransformIOType::New();
+    auto           wasmTransformIO = WasmTransformIOType::New();
     constexpr bool inMemory = true;
     wasmTransformIO->SetJSON(transformListJSON, inMemory);
 

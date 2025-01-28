@@ -29,89 +29,91 @@
 
 namespace itk
 {
-  enum class JSONTransformParameterizationEnum
-  {
-    Composite,
-    Identity,
-    Translation,
-    Euler2D,
-    Euler3D,
-    Rigid2D,
-    Rigid3D,
-    Rigid3DPerspective,
-    Versor,
-    VersorRigid3D,
-    Scale,
-    ScaleLogarithmic,
-    ScaleSkewVersor3D,
-    Similarity2D,
-    Similarity3D,
-    QuaternionRigid,
-    Affine,
-    ScalableAffine,
-    AzimuthElevationToCartesian,
-    BSpline,
-    BSplineSmoothingOnUpdateDisplacementField,
-    ConstantVelocityField,
-    DisplacementField,
-    GaussianSmoothingOnUpdateDisplacementField,
-    GaussianExponentialDiffeomorphic,
-    VelocityField,
-    TimeVaryingVelocityField,
-    GaussianSmoothingOnUpdateTimeVaryingVelocityField,
-  };
+enum class JSONTransformParameterizationEnum
+{
+  Composite,
+  Identity,
+  Translation,
+  Euler2D,
+  Euler3D,
+  Rigid2D,
+  Rigid3D,
+  Rigid3DPerspective,
+  Versor,
+  VersorRigid3D,
+  Scale,
+  ScaleLogarithmic,
+  ScaleSkewVersor3D,
+  Similarity2D,
+  Similarity3D,
+  QuaternionRigid,
+  Affine,
+  ScalableAffine,
+  AzimuthElevationToCartesian,
+  BSpline,
+  BSplineSmoothingOnUpdateDisplacementField,
+  ConstantVelocityField,
+  DisplacementField,
+  GaussianSmoothingOnUpdateDisplacementField,
+  GaussianExponentialDiffeomorphic,
+  VelocityField,
+  TimeVaryingVelocityField,
+  GaussianSmoothingOnUpdateTimeVaryingVelocityField,
+};
 
-  /** \class TransformTypeJSON
-   *
-   * \brief Transform type JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct TransformTypeJSON
-  {
-    JSONTransformParameterizationEnum transformParameterization{ JSONTransformParameterizationEnum::Identity };
-    JSONFloatTypesEnum parametersValueType { JSONFloatTypesEnum::float64 };
-    unsigned int inputDimension { 3 };
-    unsigned int outputDimension { 3 };
-  };
+/** \class TransformTypeJSON
+ *
+ * \brief Transform type JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct TransformTypeJSON
+{
+  JSONTransformParameterizationEnum transformParameterization{ JSONTransformParameterizationEnum::Identity };
+  JSONFloatTypesEnum                parametersValueType{ JSONFloatTypesEnum::float64 };
+  unsigned int                      inputDimension{ 3 };
+  unsigned int                      outputDimension{ 3 };
+};
 
-  /** \class TransformJSON
-   *
-   * \brief Transform JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct TransformJSON
-  {
-    TransformTypeJSON transformType;
-    uint64_t numberOfFixedParameters{ 0 };
-    uint64_t numberOfParameters{ 0 };
+/** \class TransformJSON
+ *
+ * \brief Transform JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct TransformJSON
+{
+  TransformTypeJSON transformType;
+  uint64_t          numberOfFixedParameters{ 0 };
+  uint64_t          numberOfParameters{ 0 };
 
-    std::string name { "Transform" };
+  std::string name{ "Transform" };
 
-    std::string inputSpaceName;
-    std::string outputSpaceName;
+  std::string inputSpaceName;
+  std::string outputSpaceName;
 
-    std::string fixedParameters;
-    std::string parameters;
+  std::string fixedParameters;
+  std::string parameters;
 
-    MetadataJSON metadata;
-  };
+  MetadataJSON metadata;
+};
 
-  /** \class TransformListJSON
-   *
-   * \brief Transform list JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  using TransformListJSON = std::list<TransformJSON>;
+/** \class TransformListJSON
+ *
+ * \brief Transform list JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+using TransformListJSON = std::list<TransformJSON>;
 
-template<typename TTransformBase>
-auto transformListToTransformListJSON(std::list<typename TTransformBase::ConstPointer> & transformList, bool inMemory) -> TransformListJSON
+template <typename TTransformBase>
+auto
+transformListToTransformListJSON(std::list<typename TTransformBase::ConstPointer> & transformList, bool inMemory)
+  -> TransformListJSON
 {
   TransformListJSON transformListJSON;
 
-  std::string              compositeTransformType = transformList.front()->GetTransformTypeAsString();
+  std::string compositeTransformType = transformList.front()->GetTransformTypeAsString();
   using TransformBaseType = TTransformBase;
   using ParametersValueType = typename TransformBaseType::ParametersValueType;
   CompositeTransformIOHelperTemplate<ParametersValueType> helper;
@@ -128,17 +130,17 @@ auto transformListToTransformListJSON(std::list<typename TTransformBase::ConstPo
     usedTransformList = helper.GetTransformList(transformList.front().GetPointer());
   }
 
-  unsigned int count = 0;
+  unsigned int                                    count = 0;
   typename ConstTransformListType::const_iterator end = usedTransformList.end();
   for (typename ConstTransformListType::const_iterator it = usedTransformList.begin(); it != end; ++it)
   {
-    TransformJSON            transformJSON;
-    const TransformBaseType *    currentTransform = it->GetPointer();
-    const std::string        transformType = currentTransform->GetTransformTypeAsString();
-    const std::string        delim = "_";
-    std::vector<std::string> tokens;
-    size_t                   start = 0;
-    size_t                   end = 0;
+    TransformJSON             transformJSON;
+    const TransformBaseType * currentTransform = it->GetPointer();
+    const std::string         transformType = currentTransform->GetTransformTypeAsString();
+    const std::string         delim = "_";
+    std::vector<std::string>  tokens;
+    size_t                    start = 0;
+    size_t                    end = 0;
     while ((end = transformType.find(delim, start)) != std::string::npos)
     {
       tokens.push_back(transformType.substr(start, end - start));
@@ -306,20 +308,21 @@ auto transformListToTransformListJSON(std::list<typename TTransformBase::ConstPo
       {
         std::ostringstream fixedParametersStream;
         fixedParametersStream << "data:application/vnd.itk.address,0:";
-        const auto fixedParametersAddr = reinterpret_cast< size_t >( currentTransform->GetFixedParameters().data_block() );
+        const auto fixedParametersAddr = reinterpret_cast<size_t>(currentTransform->GetFixedParameters().data_block());
         fixedParametersStream << fixedParametersAddr;
         transformJSON.fixedParameters = fixedParametersStream.str();
 
         std::ostringstream parametersStream;
         parametersStream << "data:application/vnd.itk.address,0:";
-        const auto parametersAddr = reinterpret_cast< size_t >( currentTransform->GetParameters().data_block() );
+        const auto parametersAddr = reinterpret_cast<size_t>(currentTransform->GetParameters().data_block());
         parametersStream << parametersAddr;
         transformJSON.parameters = parametersStream.str();
       }
     }
     else
     {
-      transformJSON.fixedParameters = "data:application/vnd.itk.path,data/" + std::to_string(count) + "/fixed-parameters.raw";
+      transformJSON.fixedParameters =
+        "data:application/vnd.itk.path,data/" + std::to_string(count) + "/fixed-parameters.raw";
       transformJSON.parameters = "data:application/vnd.itk.path,data/" + std::to_string(count) + "/parameters.raw";
     }
 
@@ -336,38 +339,37 @@ auto transformListToTransformListJSON(std::list<typename TTransformBase::ConstPo
 } // end namespace itk
 
 template <>
-struct glz::meta<itk::JSONTransformParameterizationEnum> {
+struct glz::meta<itk::JSONTransformParameterizationEnum>
+{
   using enum itk::JSONTransformParameterizationEnum;
-  static constexpr auto value = glz::enumerate(
-    Composite,
-    Identity,
-    Translation,
-    Euler2D,
-    Euler3D,
-    Rigid2D,
-    Rigid3D,
-    Rigid3DPerspective,
-    Versor,
-    VersorRigid3D,
-    ScaleLogarithmic,
-    ScaleSkewVersor3D,
-    Scale,
-    Similarity2D,
-    Similarity3D,
-    QuaternionRigid,
-    Affine,
-    ScalableAffine,
-    AzimuthElevationToCartesian,
-    BSpline,
-    BSplineSmoothingOnUpdateDisplacementField,
-    ConstantVelocityField,
-    DisplacementField,
-    GaussianSmoothingOnUpdateDisplacementField,
-    GaussianExponentialDiffeomorphic,
-    VelocityField,
-    TimeVaryingVelocityField,
-    GaussianSmoothingOnUpdateTimeVaryingVelocityField
-  );
+  static constexpr auto value = glz::enumerate(Composite,
+                                               Identity,
+                                               Translation,
+                                               Euler2D,
+                                               Euler3D,
+                                               Rigid2D,
+                                               Rigid3D,
+                                               Rigid3DPerspective,
+                                               Versor,
+                                               VersorRigid3D,
+                                               ScaleLogarithmic,
+                                               ScaleSkewVersor3D,
+                                               Scale,
+                                               Similarity2D,
+                                               Similarity3D,
+                                               QuaternionRigid,
+                                               Affine,
+                                               ScalableAffine,
+                                               AzimuthElevationToCartesian,
+                                               BSpline,
+                                               BSplineSmoothingOnUpdateDisplacementField,
+                                               ConstantVelocityField,
+                                               DisplacementField,
+                                               GaussianSmoothingOnUpdateDisplacementField,
+                                               GaussianExponentialDiffeomorphic,
+                                               VelocityField,
+                                               TimeVaryingVelocityField,
+                                               GaussianSmoothingOnUpdateTimeVaryingVelocityField);
 };
 
 #endif // itkTransformJSON_h

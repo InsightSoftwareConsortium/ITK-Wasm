@@ -20,21 +20,26 @@
 #include "itkOutputTransform.h"
 #include "itkPipeline.h"
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("transform-read-write-test", "A test for reading and writing transforms", argc, argv);
 
   using ParametersValueType = double;
   constexpr unsigned int Dimension = 3;
-  using TransformType = itk::AffineTransform< ParametersValueType, Dimension >;
+  using TransformType = itk::AffineTransform<ParametersValueType, Dimension>;
 
   using InputTransformType = itk::wasm::InputTransform<TransformType>;
   InputTransformType inputTransform;
-  pipeline.add_option("input-transform", inputTransform, "The input transform")->required()->type_name("INPUT_TRANSFORM");
+  pipeline.add_option("input-transform", inputTransform, "The input transform")
+    ->required()
+    ->type_name("INPUT_TRANSFORM");
 
   using OutputTransformType = itk::wasm::OutputTransform<TransformType>;
   OutputTransformType outputTransform;
-  pipeline.add_option("output-transform", outputTransform, "The output transform")->required()->type_name("OUTPUT_TRANSFORM");
+  pipeline.add_option("output-transform", outputTransform, "The output transform")
+    ->required()
+    ->type_name("OUTPUT_TRANSFORM");
 
   ITK_WASM_PARSE(pipeline);
 

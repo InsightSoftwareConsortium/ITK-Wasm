@@ -24,70 +24,63 @@
 namespace itk
 {
 
-WasmZstdMeshIO
-::WasmZstdMeshIO()
+WasmZstdMeshIO ::WasmZstdMeshIO()
 {
   this->AddSupportedWriteExtension(".iwm.cbor.zst");
   this->AddSupportedReadExtension(".iwm.cbor.zst");
 }
 
 
-WasmZstdMeshIO
-::~WasmZstdMeshIO()
-{
-}
+WasmZstdMeshIO ::~WasmZstdMeshIO() {}
 
 
 bool
-WasmZstdMeshIO
-::CanReadFile(const char *filename)
+WasmZstdMeshIO ::CanReadFile(const char * filename)
 {
   std::string fname = filename;
 
-  bool extensionFound = false;
+  bool                   extensionFound = false;
   std::string::size_type extensionPos = fname.rfind(".iwm");
-  if ( extensionPos != std::string::npos )
-    {
+  if (extensionPos != std::string::npos)
+  {
     extensionFound = true;
-    }
+  }
 
-  if ( !extensionFound )
-    {
+  if (!extensionFound)
+  {
     itkDebugMacro(<< "The filename extension is not recognized");
     return false;
-    }
+  }
 
   return true;
 }
 
 
-
 void
-WasmZstdMeshIO
-::ReadMeshInformation()
+WasmZstdMeshIO ::ReadMeshInformation()
 {
   this->SetByteOrderToLittleEndian();
 
   const std::string path = this->GetFileName();
 
   std::string::size_type zstdPos = path.rfind(".zst");
-  if ( ( zstdPos != std::string::npos )
-       && ( zstdPos == path.length() - 4 ) )
+  if ((zstdPos != std::string::npos) && (zstdPos == path.length() - 4))
   {
     std::ifstream dataStream;
-    openFileForReading( dataStream, this->GetFileName(), false );
+    openFileForReading(dataStream, this->GetFileName(), false);
 
     std::ostringstream ostrm;
     ostrm << dataStream.rdbuf();
     auto inputBinary = ostrm.str();
 
-    const size_t decompressedBufferSize = ZSTD_getFrameContentSize(inputBinary.data(), inputBinary.size());
+    const size_t      decompressedBufferSize = ZSTD_getFrameContentSize(inputBinary.data(), inputBinary.size());
     std::vector<char> decompressedBinary(decompressedBufferSize);
 
-    const size_t decompressedSize = ZSTD_decompress(decompressedBinary.data(), decompressedBufferSize, inputBinary.data(), inputBinary.size());
+    const size_t decompressedSize =
+      ZSTD_decompress(decompressedBinary.data(), decompressedBufferSize, inputBinary.data(), inputBinary.size());
     decompressedBinary.resize(decompressedSize);
 
-    this->ReadCBOR(nullptr, reinterpret_cast< unsigned char *>(&(decompressedBinary.at(0))), decompressedSize);
+    this->ReadCBOR(nullptr, reinterpret_cast<unsigned char *>(&(decompressedBinary.at(0))), decompressedSize);
     return;
   }
 
@@ -96,59 +89,57 @@ WasmZstdMeshIO
 
 
 bool
-WasmZstdMeshIO
-::CanWriteFile(const char *name)
+WasmZstdMeshIO ::CanWriteFile(const char * name)
 {
   std::string filename = name;
 
-  if( filename == "" )
-    {
+  if (filename == "")
+  {
     return false;
-    }
+  }
 
-  bool extensionFound = false;
+  bool                   extensionFound = false;
   std::string::size_type iwiPos = filename.rfind(".iwm");
-  if ( iwiPos != std::string::npos )
-    {
+  if (iwiPos != std::string::npos)
+  {
     extensionFound = true;
-    }
+  }
 
-  if ( !extensionFound )
-    {
+  if (!extensionFound)
+  {
     itkDebugMacro(<< "The filename extension is not recognized");
     return false;
-    }
+  }
 
   return true;
 }
 
 
 void
-WasmZstdMeshIO
-::Write()
+WasmZstdMeshIO ::Write()
 {
   const std::string path(this->GetFileName());
 
   std::string::size_type cborPos = path.rfind(".zst");
-  if ( ( cborPos != std::string::npos )
-       && ( cborPos == path.length() - 4 ) )
+  if ((cborPos != std::string::npos) && (cborPos == path.length() - 4))
   {
-    unsigned char* cborBuffer;
-    size_t cborBufferSize;
-    size_t length = cbor_serialize_alloc(this->m_CBORRoot, &cborBuffer, &cborBufferSize);
+    unsigned char * cborBuffer;
+    size_t          cborBufferSize;
+    size_t          length = cbor_serialize_alloc(this->m_CBORRoot, &cborBuffer, &cborBufferSize);
 
-    const size_t compressedBufferSize = ZSTD_compressBound(cborBufferSize);
+    const size_t      compressedBufferSize = ZSTD_compressBound(cborBufferSize);
     std::vector<char> compressedBinary(compressedBufferSize);
 
     constexpr int compressionLevel = 3;
-    const size_t compressedSize = ZSTD_compress(compressedBinary.data(), compressedBufferSize, cborBuffer, cborBufferSize, compressionLevel);
+    const size_t  compressedSize =
+      ZSTD_compress(compressedBinary.data(), compressedBufferSize, cborBuffer, cborBufferSize, compressionLevel);
     free(cborBuffer);
     cbor_decref(&(this->m_CBORRoot));
 
     compressedBinary.resize(compressedSize);
 
     std::ofstream outputStream;
-    openFileForWriting( outputStream, path.c_str(), true, false );
+    openFileForWriting(outputStream, path.c_str(), true, false);
     std::ostream_iterator<char> oIt(outputStream);
     std::copy(compressedBinary.begin(), compressedBinary.end(), oIt);
     return;

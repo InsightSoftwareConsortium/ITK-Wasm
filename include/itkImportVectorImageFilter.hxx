@@ -38,8 +38,7 @@ ImportVectorImageFilter<TOutputImage>::ImportVectorImageFilter()
 
 template <typename TOutputImage>
 ImportVectorImageFilter<TOutputImage>::~ImportVectorImageFilter()
-{
-}
+{}
 
 template <typename TOutputImage>
 void
@@ -84,17 +83,18 @@ ImportVectorImageFilter<TOutputImage>::PrintSelf(std::ostream & os, Indent inden
 
 template <typename TOutputImage>
 void
-ImportVectorImageFilter<TOutputImage>::SetImportPointer(OutputImageInternalPixelType *  ptr,
-                                                        SizeValueType num,
-                                                        bool          letImageContainerManageMemory,
-                                                        unsigned int  vectorImageComponents)
+ImportVectorImageFilter<TOutputImage>::SetImportPointer(OutputImageInternalPixelType * ptr,
+                                                        SizeValueType                  num,
+                                                        bool                           letImageContainerManageMemory,
+                                                        unsigned int                   vectorImageComponents)
 {
-  if (!m_ImportImageContainer || ptr != m_ImportImageContainer->GetImportPointer() || m_Size != num || m_VectorImageComponentsPerPixel != vectorImageComponents)
+  if (!m_ImportImageContainer || ptr != m_ImportImageContainer->GetImportPointer() || m_Size != num ||
+      m_VectorImageComponentsPerPixel != vectorImageComponents)
   {
     m_Size = num;
     m_VectorImageComponentsPerPixel = vectorImageComponents;
     m_ImportImageContainer = ImportImageContainerType::New();
-    m_ImportImageContainer->SetImportPointer(ptr, m_Size*vectorImageComponents, letImageContainerManageMemory);
+    m_ImportImageContainer->SetImportPointer(ptr, m_Size * vectorImageComponents, letImageContainerManageMemory);
     this->Modified();
   }
 }
@@ -139,9 +139,9 @@ ImportVectorImageFilter<TOutputImage>::GenerateOutputInformation()
   outputPtr->SetLargestPossibleRegion(m_LargestPossibleRegion);
 
   if (outputPtr->GetNameOfClass() == std::string("VectorImage"))
-    {
+  {
     outputPtr->SetNumberOfComponentsPerPixel(m_VectorImageComponentsPerPixel);
-    }
+  }
 }
 
 template <typename TOutputImage>

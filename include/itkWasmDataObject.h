@@ -27,9 +27,9 @@ namespace itk
  * \brief JSON representation for an itk::DataObject
  *
  * JSON-based Wasm representation for itk::DataObject's for interfacing across programming languages and runtimes.
- * 
+ *
  * Binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 class WebAssemblyInterface_EXPORT WasmDataObject : public DataObject
@@ -47,13 +47,14 @@ public:
 
   /** Get/Set the DataObject JSON representation. */
   itkSetStringMacro(JSON);
-  virtual const std::string & GetJSON() const
+  virtual const std::string &
+  GetJSON() const
   {
     return this->m_JSON;
   }
 
   /** Get/Set the DataObject used to generate the JSON representation.
-   * 
+   *
    * We hold a reference to this object. */
   itkGetConstObjectMacro(DataObject, DataObject);
   itkSetObjectMacro(DataObject, DataObject);
@@ -64,7 +65,7 @@ protected:
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
 
-  std::string m_JSON;
+  std::string              m_JSON;
   DataObject::ConstPointer m_DataObject;
 };
 

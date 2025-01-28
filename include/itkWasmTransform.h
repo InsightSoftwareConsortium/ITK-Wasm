@@ -29,7 +29,8 @@ namespace itk
  *
  * JSON representation for an itk::Transform for interfacing across programming languages and runtimes.
  *
- * FixedParameters and Parameters binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
+ * FixedParameters and Parameters binary array buffer's are stored as strings with memory addresses or paths on disks or
+ *a virtual filesystem.
  *
  * - 0: FixedParameters for transform 0
  * - 1: Parameters for transform 0
@@ -38,7 +39,7 @@ namespace itk
  * - 4: FixedParameters for transform 2
  * - 5: Parameters for transform 2
  * [...]
- * 
+ *
  * where multiple FixedParameters/Parameters pairs are present for CompositeTransform's.
  *
  * \ingroup WebAssemblyInterface
@@ -62,17 +63,18 @@ public:
   using TransformType = TTransform;
   using DecoratorType = DataObjectDecorator<TransformType>;
 
-  void SetTransform(const TransformType * transform);
+  void
+  SetTransform(const TransformType * transform);
 
-  const TransformType * GetTransform() const {
-    return static_cast< const DecoratorType * >(this->GetDataObject())->Get();
+  const TransformType *
+  GetTransform() const
+  {
+    return static_cast<const DecoratorType *>(this->GetDataObject())->Get();
   }
 
 protected:
-  WasmTransform()
-  {}
+  WasmTransform() {}
   ~WasmTransform() override = default;
-
 };
 
 } // namespace itk

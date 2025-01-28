@@ -19,9 +19,9 @@
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
-#include <sstream>
-#include "itkWasmStringStream.h"
+#  include "itkWasmExports.h"
+#  include <sstream>
+#  include "itkWasmStringStream.h"
 #endif
 
 namespace itk
@@ -29,22 +29,21 @@ namespace itk
 namespace wasm
 {
 
-OutputTextStream
-::~OutputTextStream()
+OutputTextStream ::~OutputTextStream()
 {
-  if(wasm::Pipeline::get_use_memory_io())
+  if (wasm::Pipeline::get_use_memory_io())
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     if (this->m_Identifier.empty())
-      {
+    {
       return;
-      }
+    }
     const auto index = std::stoi(this->m_Identifier);
     setMemoryStoreOutputDataObject(0, index, this->m_WasmStringStream);
 
     const std::string & string = this->m_WasmStringStream->GetString();
-    const auto dataAddress = reinterpret_cast< size_t >( string.data() );
-    const auto dataSize = string.size();
+    const auto          dataAddress = reinterpret_cast<size_t>(string.data());
+    const auto          dataSize = string.size();
     setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);
 #else
     std::cerr << "Memory IO not supported" << std::endl;
@@ -55,18 +54,19 @@ OutputTextStream
   {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
     // ofstream will close when deleted
-# else
+#else
     std::cerr << "Filesystem IO not supported" << std::endl;
     abort();
 #endif
-  if (m_DeleteOStream && m_OStream != nullptr)
+    if (m_DeleteOStream && m_OStream != nullptr)
     {
       delete m_OStream;
     }
   }
 }
 
-bool lexical_cast(const std::string &output, OutputTextStream &outputStream)
+bool
+lexical_cast(const std::string & output, OutputTextStream & outputStream)
 {
   if (wasm::Pipeline::get_use_memory_io())
   {

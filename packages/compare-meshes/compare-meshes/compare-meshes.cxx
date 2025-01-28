@@ -32,20 +32,19 @@
 
 template <typename TMesh, typename TDifference>
 std::tuple<bool, uint64_t, double, double, double>
-comparePoints(
-    const typename TMesh::PointsContainer *points0,
-    const typename TMesh::PointsContainer *points1,
-    const double pointsDifferenceThreshold,
-    TDifference *pointsDifference)
+comparePoints(const typename TMesh::PointsContainer * points0,
+              const typename TMesh::PointsContainer * points1,
+              const double                            pointsDifferenceThreshold,
+              TDifference *                           pointsDifference)
 {
   using MeshType = TMesh;
   using PointsContainerConstIterator = typename MeshType::PointsContainerConstIterator;
 
-  bool sameNumberOfPoints = false;
+  bool     sameNumberOfPoints = false;
   uint64_t numberOfPointsWithDifferences = 0;
-  double pointsMinimumDifference = itk::NumericTraits<double>::max();
-  double pointsMaximumDifference = 0.0;
-  double pointsMeanDifference = 0.0;
+  double   pointsMinimumDifference = itk::NumericTraits<double>::max();
+  double   pointsMaximumDifference = 0.0;
+  double   pointsMeanDifference = 0.0;
 
   if (points0 != nullptr && points1 != nullptr)
   {
@@ -89,24 +88,27 @@ comparePoints(
     pointsMinimumDifference = 0.0;
   }
 
-  return {sameNumberOfPoints, numberOfPointsWithDifferences, pointsMinimumDifference, pointsMaximumDifference, pointsMeanDifference};
+  return { sameNumberOfPoints,
+           numberOfPointsWithDifferences,
+           pointsMinimumDifference,
+           pointsMaximumDifference,
+           pointsMeanDifference };
 }
 
 template <typename TMesh, typename TDifference>
 std::tuple<uint64_t, double, double, double>
-comparePointData(
-    const typename TMesh::PointDataContainer *pointData0,
-    const typename TMesh::PointDataContainer *pointData1,
-    const double pointDataDifferenceThreshold,
-    TDifference *pointDataDifference)
+comparePointData(const typename TMesh::PointDataContainer * pointData0,
+                 const typename TMesh::PointDataContainer * pointData1,
+                 const double                               pointDataDifferenceThreshold,
+                 TDifference *                              pointDataDifference)
 {
   using MeshType = TMesh;
   using PointDataContainerConstIterator = typename MeshType::PointDataContainer::ConstIterator;
 
   uint64_t numberOfPointDataWithDifferences = 0;
-  double pointDataMinimumDifference = itk::NumericTraits<double>::max();
-  double pointDataMaximumDifference = 0.0;
-  double pointDataMeanDifference = 0.0;
+  double   pointDataMinimumDifference = itk::NumericTraits<double>::max();
+  double   pointDataMaximumDifference = 0.0;
+  double   pointDataMeanDifference = 0.0;
 
   if (pointData0 != nullptr && pointData1 != nullptr)
   {
@@ -148,21 +150,23 @@ comparePointData(
     pointDataMinimumDifference = 0.0;
   }
 
-  return {numberOfPointDataWithDifferences, pointDataMinimumDifference, pointDataMaximumDifference, pointDataMeanDifference};
+  return {
+    numberOfPointDataWithDifferences, pointDataMinimumDifference, pointDataMaximumDifference, pointDataMeanDifference
+  };
 }
 
 template <typename TMesh>
 std::tuple<bool, bool, uint64_t, bool, uint64_t>
-compareCellsContainer(const typename TMesh::CellsContainer *cells0, const typename TMesh::CellsContainer *cells1)
+compareCellsContainer(const typename TMesh::CellsContainer * cells0, const typename TMesh::CellsContainer * cells1)
 {
   using MeshType = TMesh;
   using CellsContainerConstIterator = typename MeshType::CellsContainerConstIterator;
   using CellPointIdIterator = typename MeshType::CellType::PointIdIterator;
 
-  bool sameNumberOfCells = false;
-  bool sameCellTypes = true;
+  bool     sameNumberOfCells = false;
+  bool     sameCellTypes = true;
   uint64_t numberOfDifferentCellsTypes = 0;
-  bool sameCellPoints = true;
+  bool     sameCellPoints = true;
   uint64_t numberOfDifferentCellPoints = 0;
 
   if (cells0 != nullptr && cells1 != nullptr)
@@ -199,24 +203,23 @@ compareCellsContainer(const typename TMesh::CellsContainer *cells0, const typena
     }
   }
 
-  return {sameNumberOfCells, sameCellTypes, numberOfDifferentCellsTypes, sameCellPoints, numberOfDifferentCellPoints};
+  return { sameNumberOfCells, sameCellTypes, numberOfDifferentCellsTypes, sameCellPoints, numberOfDifferentCellPoints };
 }
 
 template <typename TMesh, typename TDifference>
 std::tuple<uint64_t, double, double, double>
-compareCellData(
-    const typename TMesh::CellDataContainer *cellData0,
-    const typename TMesh::CellDataContainer *cellData1,
-    const double cellDataDifferenceThreshold,
-    TDifference *cellDataDifference)
+compareCellData(const typename TMesh::CellDataContainer * cellData0,
+                const typename TMesh::CellDataContainer * cellData1,
+                const double                              cellDataDifferenceThreshold,
+                TDifference *                             cellDataDifference)
 {
   using MeshType = TMesh;
   using CellDataContainerConstIterator = typename MeshType::CellDataContainer::ConstIterator;
 
   uint64_t numberOfCellDataWithDifferences = 0;
-  double cellDataMinimumDifference = itk::NumericTraits<double>::max();
-  double cellDataMaximumDifference = 0.0;
-  double cellDataMeanDifference = 0.0;
+  double   cellDataMinimumDifference = itk::NumericTraits<double>::max();
+  double   cellDataMaximumDifference = 0.0;
+  double   cellDataMeanDifference = 0.0;
 
   if (cellData0 != nullptr && cellData1 != nullptr)
   {
@@ -258,11 +261,14 @@ compareCellData(
     cellDataMinimumDifference = 0.0;
   }
 
-  return {numberOfCellDataWithDifferences, cellDataMinimumDifference, cellDataMaximumDifference, cellDataMeanDifference};
+  return {
+    numberOfCellDataWithDifferences, cellDataMinimumDifference, cellDataMaximumDifference, cellDataMeanDifference
+  };
 }
 
 template <typename TMesh>
-int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
+int
+compareMeshes(itk::wasm::Pipeline & pipeline, const TMesh * testMesh)
 {
   using MeshType = TMesh;
   constexpr unsigned int Dimension = MeshType::PointDimension;
@@ -271,25 +277,41 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
   pipeline.get_option("test-mesh")->required()->type_name("INPUT_MESH");
 
   std::vector<itk::wasm::InputMesh<MeshType>> baselineMeshes;
-  pipeline.add_option("--baseline-meshes", baselineMeshes, "Baseline images to compare against")->required()->type_size(1, -1)->type_name("INPUT_MESH");
+  pipeline.add_option("--baseline-meshes", baselineMeshes, "Baseline images to compare against")
+    ->required()
+    ->type_size(1, -1)
+    ->type_name("INPUT_MESH");
 
   double pointsDifferenceThreshold = 1e-8;
-  pipeline.add_option("--points-difference-threshold", pointsDifferenceThreshold, "Difference for point components to be considered different.");
+  pipeline.add_option("--points-difference-threshold",
+                      pointsDifferenceThreshold,
+                      "Difference for point components to be considered different.");
 
   uint64_t numberOfDifferentPointsTolerance = 0;
-  pipeline.add_option("--number-of-different-points-tolerance", numberOfDifferentPointsTolerance, "Number of points whose points exceed the difference threshold that can be different before the test fails.");
+  pipeline.add_option(
+    "--number-of-different-points-tolerance",
+    numberOfDifferentPointsTolerance,
+    "Number of points whose points exceed the difference threshold that can be different before the test fails.");
 
   double pointDataDifferenceThreshold = 1e-8;
-  pipeline.add_option("--point-data-difference-threshold", pointDataDifferenceThreshold, "Difference for point data components to be considered different. ");
+  pipeline.add_option("--point-data-difference-threshold",
+                      pointDataDifferenceThreshold,
+                      "Difference for point data components to be considered different. ");
 
   uint64_t numberOfPointDataTolerance = 0;
-  pipeline.add_option("--number-of-point-data-tolerance", numberOfPointDataTolerance, "Number of point data that can exceed the difference threshold before the test fails.");
+  pipeline.add_option("--number-of-point-data-tolerance",
+                      numberOfPointDataTolerance,
+                      "Number of point data that can exceed the difference threshold before the test fails.");
 
   double cellDataDifferenceThreshold = 1e-8;
-  pipeline.add_option("--cell-data-difference-threshold", cellDataDifferenceThreshold, "Difference for cell data components to be considered different.");
+  pipeline.add_option("--cell-data-difference-threshold",
+                      cellDataDifferenceThreshold,
+                      "Difference for cell data components to be considered different.");
 
   uint64_t numberOfCellDataTolerance = 0;
-  pipeline.add_option("--number-of-cell-data-tolerance", numberOfCellDataTolerance, "Number of cell data that can exceed the difference threshold before the test fails.");
+  pipeline.add_option("--number-of-cell-data-tolerance",
+                      numberOfCellDataTolerance,
+                      "Number of cell data that can exceed the difference threshold before the test fails.");
 
   itk::wasm::OutputTextStream metrics;
   pipeline.add_option("metrics", metrics, "Metrics for the closest baseline.")->required()->type_name("OUTPUT_JSON");
@@ -299,64 +321,85 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
   using DifferenceMeshPointer = typename DifferenceMeshType::Pointer;
 
   itk::wasm::OutputMesh<DifferenceMeshType> pointsDifferenceMesh;
-  pipeline.add_option("points-difference-mesh", pointsDifferenceMesh, "Mesh with the differences between the points of the test mesh and the closest baseline.")->type_name("OUTPUT_MESH");
+  pipeline
+    .add_option("points-difference-mesh",
+                pointsDifferenceMesh,
+                "Mesh with the differences between the points of the test mesh and the closest baseline.")
+    ->type_name("OUTPUT_MESH");
 
   itk::wasm::OutputMesh<DifferenceMeshType> pointDataDifferenceMesh;
-  pipeline.add_option("point-data-difference-mesh", pointDataDifferenceMesh, "Mesh with the differences between the point data of the test mesh and the closest baseline.")->type_name("OUTPUT_MESH");
+  pipeline
+    .add_option("point-data-difference-mesh",
+                pointDataDifferenceMesh,
+                "Mesh with the differences between the point data of the test mesh and the closest baseline.")
+    ->type_name("OUTPUT_MESH");
 
   itk::wasm::OutputMesh<DifferenceMeshType> cellDataDifferenceMesh;
-  pipeline.add_option("cell-data-difference-mesh", cellDataDifferenceMesh, "Mesh with the differences between the cell data of the test mesh and the closest baseline.")->type_name("OUTPUT_MESH");
+  pipeline
+    .add_option("cell-data-difference-mesh",
+                cellDataDifferenceMesh,
+                "Mesh with the differences between the cell data of the test mesh and the closest baseline.")
+    ->type_name("OUTPUT_MESH");
 
   ITK_WASM_PARSE(pipeline);
 
-  bool sameNumberOfPoints = false;
+  bool     sameNumberOfPoints = false;
   uint64_t numberOfPointsWithDifferences = itk::NumericTraits<uint64_t>::max();
-  double pointsMinimumDifference = 0.0;
-  double pointsMaximumDifference = 0.0;
-  double pointsMeanDifference = 0.0;
+  double   pointsMinimumDifference = 0.0;
+  double   pointsMaximumDifference = 0.0;
+  double   pointsMeanDifference = 0.0;
 
   uint64_t numberOfPointDataWithDifferences = itk::NumericTraits<uint64_t>::max();
-  double pointDataMinimumDifference = 0.0;
-  double pointDataMaximumDifference = 0.0;
-  double pointDataMeanDifference = 0.0;
+  double   pointDataMinimumDifference = 0.0;
+  double   pointDataMaximumDifference = 0.0;
+  double   pointDataMeanDifference = 0.0;
 
-  bool sameNumberOfCells = false;
-  bool sameCellTypes = false;
+  bool     sameNumberOfCells = false;
+  bool     sameCellTypes = false;
   uint64_t numberOfDifferentCellsTypes = itk::NumericTraits<uint64_t>::max();
-  bool sameCellPoints = false;
+  bool     sameCellPoints = false;
   uint64_t numberOfDifferentCellPoints = itk::NumericTraits<uint64_t>::max();
 
   uint64_t numberOfCellDataWithDifferences = itk::NumericTraits<uint64_t>::max();
-  double cellDataMinimumDifference = 0.0;
-  double cellDataMaximumDifference = 0.0;
-  double cellDataMeanDifference = 0.0;
+  double   cellDataMinimumDifference = 0.0;
+  double   cellDataMaximumDifference = 0.0;
+  double   cellDataMeanDifference = 0.0;
 
-  typename DifferenceMeshType::PointDataContainerPointer pointsDifference = DifferenceMeshType::PointDataContainer::New();
+  typename DifferenceMeshType::PointDataContainerPointer pointsDifference =
+    DifferenceMeshType::PointDataContainer::New();
   DifferenceMeshPointer pointsDifferenceMeshPointer = DifferenceMeshType::New();
-  pointsDifferenceMeshPointer->SetPoints(const_cast<typename DifferenceMeshType::PointsContainer *>(const_cast<MeshType *>(testMesh)->GetPoints()));
+  pointsDifferenceMeshPointer->SetPoints(
+    const_cast<typename DifferenceMeshType::PointsContainer *>(const_cast<MeshType *>(testMesh)->GetPoints()));
   pointsDifferenceMeshPointer->SetCellsArray(const_cast<MeshType *>(testMesh)->GetCellsArray());
 
-  typename DifferenceMeshType::PointDataContainerPointer pointDataDifference = DifferenceMeshType::PointDataContainer::New();
+  typename DifferenceMeshType::PointDataContainerPointer pointDataDifference =
+    DifferenceMeshType::PointDataContainer::New();
   DifferenceMeshPointer pointDataDifferenceMeshPointer = DifferenceMeshType::New();
-  pointDataDifferenceMeshPointer->SetPoints(const_cast<typename DifferenceMeshType::PointsContainer *>(const_cast<MeshType *>(testMesh)->GetPoints()));
+  pointDataDifferenceMeshPointer->SetPoints(
+    const_cast<typename DifferenceMeshType::PointsContainer *>(const_cast<MeshType *>(testMesh)->GetPoints()));
   pointDataDifferenceMeshPointer->SetCellsArray(const_cast<MeshType *>(testMesh)->GetCellsArray());
 
-  typename DifferenceMeshType::PointDataContainerPointer cellDataDifference = DifferenceMeshType::PointDataContainer::New();
+  typename DifferenceMeshType::PointDataContainerPointer cellDataDifference =
+    DifferenceMeshType::PointDataContainer::New();
   DifferenceMeshPointer cellDataDifferenceMeshPointer = DifferenceMeshType::New();
-  cellDataDifferenceMeshPointer->SetPoints(const_cast<typename DifferenceMeshType::PointsContainer *>(const_cast<MeshType *>(testMesh)->GetPoints()));
+  cellDataDifferenceMeshPointer->SetPoints(
+    const_cast<typename DifferenceMeshType::PointsContainer *>(const_cast<MeshType *>(testMesh)->GetPoints()));
   cellDataDifferenceMeshPointer->SetCellsArray(const_cast<MeshType *>(testMesh)->GetCellsArray());
 
   for (unsigned int baselineIndex = 0; baselineIndex < baselineMeshes.size(); ++baselineIndex)
   {
-    typename DifferenceMeshType::PointDataContainerPointer baselinePointsDifference = DifferenceMeshType::PointDataContainer::New();
+    typename DifferenceMeshType::PointDataContainerPointer baselinePointsDifference =
+      DifferenceMeshType::PointDataContainer::New();
     const auto [baselineSameNumberOfPoints,
                 baselineNumberOfPointsWithDifferences,
                 baselinePointsMinimumDifference,
                 baselinePointsMaximumDifference,
-                baselinePointsMeanDifference] = comparePoints<MeshType, typename DifferenceMeshType::PointDataContainer>(testMesh->GetPoints(),
-                                                                                                                         baselineMeshes[baselineIndex].Get()->GetPoints(),
-                                                                                                                         pointsDifferenceThreshold,
-                                                                                                                         baselinePointsDifference);
+                baselinePointsMeanDifference] =
+      comparePoints<MeshType, typename DifferenceMeshType::PointDataContainer>(
+        testMesh->GetPoints(),
+        baselineMeshes[baselineIndex].Get()->GetPoints(),
+        pointsDifferenceThreshold,
+        baselinePointsDifference);
     if (baselineSameNumberOfPoints && baselineNumberOfPointsWithDifferences <= numberOfPointsWithDifferences)
     {
       sameNumberOfPoints = baselineSameNumberOfPoints;
@@ -367,14 +410,17 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
       pointsDifference = baselinePointsDifference;
       pointsDifferenceMeshPointer->SetPointData(pointsDifference);
 
-      typename DifferenceMeshType::PointDataContainerPointer baselinePointDataDifference = DifferenceMeshType::PointDataContainer::New();
+      typename DifferenceMeshType::PointDataContainerPointer baselinePointDataDifference =
+        DifferenceMeshType::PointDataContainer::New();
       const auto [baselineNumberOfPointDataWithDifferences,
                   baselinePointDataMinimumDifference,
                   baselinePointDataMaximumDifference,
-                  baselinePointDataMeanDifference] = comparePointData<MeshType, typename DifferenceMeshType::PointDataContainer>(testMesh->GetPointData(),
-                                                                                                                                 baselineMeshes[baselineIndex].Get()->GetPointData(),
-                                                                                                                                 pointDataDifferenceThreshold,
-                                                                                                                                 baselinePointDataDifference);
+                  baselinePointDataMeanDifference] =
+        comparePointData<MeshType, typename DifferenceMeshType::PointDataContainer>(
+          testMesh->GetPointData(),
+          baselineMeshes[baselineIndex].Get()->GetPointData(),
+          pointDataDifferenceThreshold,
+          baselinePointDataDifference);
       if (baselineNumberOfPointDataWithDifferences <= numberOfPointDataWithDifferences)
       {
         numberOfPointDataWithDifferences = baselineNumberOfPointDataWithDifferences;
@@ -389,8 +435,8 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
                   baselineSameCellTypes,
                   baselineNumberOfDifferentCellsTypes,
                   baselineSameCellPoints,
-                  baselineNumberOfDifferentCellPoints] = compareCellsContainer<MeshType>(testMesh->GetCells(),
-                                                                                         baselineMeshes[baselineIndex].Get()->GetCells());
+                  baselineNumberOfDifferentCellPoints] =
+        compareCellsContainer<MeshType>(testMesh->GetCells(), baselineMeshes[baselineIndex].Get()->GetCells());
       if (baselineSameNumberOfCells)
       {
         if (baselineSameCellTypes)
@@ -410,14 +456,17 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
           numberOfDifferentCellPoints = baselineNumberOfDifferentCellPoints;
         }
 
-        typename DifferenceMeshType::PointDataContainerPointer baselineCellDataDifference = DifferenceMeshType::CellDataContainer::New();
+        typename DifferenceMeshType::PointDataContainerPointer baselineCellDataDifference =
+          DifferenceMeshType::CellDataContainer::New();
         const auto [baselineNumberOfCellDataWithDifferences,
                     baselineCellDataMinimumDifference,
                     baselineCellDataMaximumDifference,
-                    baselineCellDataMeanDifference] = compareCellData<MeshType, typename DifferenceMeshType::CellDataContainer>(testMesh->GetCellData(),
-                                                                                                                                baselineMeshes[baselineIndex].Get()->GetCellData(),
-                                                                                                                                cellDataDifferenceThreshold,
-                                                                                                                                baselineCellDataDifference);
+                    baselineCellDataMeanDifference] =
+          compareCellData<MeshType, typename DifferenceMeshType::CellDataContainer>(
+            testMesh->GetCellData(),
+            baselineMeshes[baselineIndex].Get()->GetCellData(),
+            cellDataDifferenceThreshold,
+            baselineCellDataDifference);
         if (baselineNumberOfCellDataWithDifferences <= numberOfCellDataWithDifferences)
         {
           numberOfCellDataWithDifferences = baselineNumberOfCellDataWithDifferences;
@@ -461,11 +510,15 @@ int compareMeshes(itk::wasm::Pipeline &pipeline, const TMesh *testMesh)
   pointDataDifferenceMesh.Set(pointDataDifferenceMeshPointer);
   cellDataDifferenceMesh.Set(cellDataDifferenceMeshPointer);
 
-  const bool almostEqual = sameNumberOfPoints && sameCellTypes && sameCellPoints && numberOfPointsWithDifferences <= numberOfDifferentPointsTolerance && numberOfPointDataWithDifferences <= numberOfPointDataTolerance && numberOfDifferentCellsTypes <= 0 && numberOfDifferentCellPoints <= 0 && numberOfCellDataWithDifferences <= numberOfCellDataTolerance;
+  const bool almostEqual = sameNumberOfPoints && sameCellTypes && sameCellPoints &&
+                           numberOfPointsWithDifferences <= numberOfDifferentPointsTolerance &&
+                           numberOfPointDataWithDifferences <= numberOfPointDataTolerance &&
+                           numberOfDifferentCellsTypes <= 0 && numberOfDifferentCellPoints <= 0 &&
+                           numberOfCellDataWithDifferences <= numberOfCellDataTolerance;
 
   rapidjson::Document metricsJson;
   metricsJson.SetObject();
-  rapidjson::Document::AllocatorType &allocator = metricsJson.GetAllocator();
+  rapidjson::Document::AllocatorType & allocator = metricsJson.GetAllocator();
 
   rapidjson::Value almostEqualValue;
   almostEqualValue.SetBool(almostEqual);
@@ -570,7 +623,8 @@ template <typename TMesh>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline &pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using MeshType = TMesh;
 
@@ -584,7 +638,8 @@ public:
   }
 };
 
-int main(int argc, char *argv[])
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("compare-meshes", "Compare meshes with a tolerance for regression testing.", argc, argv);
 
@@ -596,7 +651,8 @@ int main(int argc, char *argv[])
                                           uint32_t,
                                           int32_t,
                                           float,
-                                          double>::Dimensions<
+                                          double>::
+    Dimensions<
       // 2U,
       3U>("test-mesh", pipeline);
 }

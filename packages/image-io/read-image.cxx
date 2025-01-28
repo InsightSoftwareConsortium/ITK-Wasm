@@ -22,56 +22,56 @@
 #include "itkOutputTextStream.h"
 
 #ifndef IMAGE_IO_CLASS
-#error "IMAGE_IO_CLASS definition must be provided"
+#  error "IMAGE_IO_CLASS definition must be provided"
 #endif
 
 #if IMAGE_IO_CLASS == 0
-#include "itkPNGImageIO.h"
+#  include "itkPNGImageIO.h"
 #elif IMAGE_IO_CLASS == 1
-#include "itkMetaImageIO.h"
+#  include "itkMetaImageIO.h"
 #elif IMAGE_IO_CLASS == 2
-#include "itkTIFFImageIO.h"
+#  include "itkTIFFImageIO.h"
 #elif IMAGE_IO_CLASS == 3
-#include "itkNiftiImageIO.h"
+#  include "itkNiftiImageIO.h"
 #elif IMAGE_IO_CLASS == 4
-#include "itkJPEGImageIO.h"
+#  include "itkJPEGImageIO.h"
 #elif IMAGE_IO_CLASS == 5
-#include "itkNrrdImageIO.h"
+#  include "itkNrrdImageIO.h"
 #elif IMAGE_IO_CLASS == 6
-#include "itkVTKImageIO.h"
+#  include "itkVTKImageIO.h"
 #elif IMAGE_IO_CLASS == 7
-#include "itkBMPImageIO.h"
+#  include "itkBMPImageIO.h"
 #elif IMAGE_IO_CLASS == 8
-#include "itkHDF5ImageIO.h"
+#  include "itkHDF5ImageIO.h"
 #elif IMAGE_IO_CLASS == 9
-#include "itkMINCImageIO.h"
+#  include "itkMINCImageIO.h"
 #elif IMAGE_IO_CLASS == 10
-#include "itkMRCImageIO.h"
+#  include "itkMRCImageIO.h"
 #elif IMAGE_IO_CLASS == 11
-#include "itkLSMImageIO.h"
+#  include "itkLSMImageIO.h"
 #elif IMAGE_IO_CLASS == 12
-#include "itkMGHImageIO.h"
+#  include "itkMGHImageIO.h"
 #elif IMAGE_IO_CLASS == 13
-#include "itkBioRadImageIO.h"
+#  include "itkBioRadImageIO.h"
 #elif IMAGE_IO_CLASS == 14
-#include "itkGiplImageIO.h"
+#  include "itkGiplImageIO.h"
 #elif IMAGE_IO_CLASS == 15
-#include "itkGE4ImageIO.h"
+#  include "itkGE4ImageIO.h"
 #elif IMAGE_IO_CLASS == 16
-#include "itkGE5ImageIO.h"
+#  include "itkGE5ImageIO.h"
 #elif IMAGE_IO_CLASS == 17
-#include "itkGEAdwImageIO.h"
+#  include "itkGEAdwImageIO.h"
 #elif IMAGE_IO_CLASS == 18
-#include "itkGDCMImageIO.h"
+#  include "itkGDCMImageIO.h"
 #elif IMAGE_IO_CLASS == 19
-#include "itkScancoImageIO.h"
+#  include "itkScancoImageIO.h"
 #elif IMAGE_IO_CLASS == 20
-#include "itkFDFImageIO.h"
+#  include "itkFDFImageIO.h"
 #elif IMAGE_IO_CLASS == 21
 #elif IMAGE_IO_CLASS == 22
-#include "itkWasmZstdImageIO.h"
+#  include "itkWasmZstdImageIO.h"
 #else
-#error "Unsupported IMAGE_IO_CLASS"
+#  error "Unsupported IMAGE_IO_CLASS"
 #endif
 #include "itkWasmImageIO.h"
 
@@ -82,7 +82,11 @@
 #include "itkOutputImage.h"
 
 template <typename TImageIO>
-int readImage(const std::string & inputFileName, itk::wasm::OutputTextStream & couldRead, itk::wasm::OutputImageIO & outputImageIO, bool informationOnly)
+int
+readImage(const std::string &           inputFileName,
+          itk::wasm::OutputTextStream & couldRead,
+          itk::wasm::OutputImageIO &    outputImageIO,
+          bool                          informationOnly)
 {
   using ImageIOType = TImageIO;
 
@@ -106,16 +110,24 @@ int readImage(const std::string & inputFileName, itk::wasm::OutputTextStream & c
   return EXIT_SUCCESS;
 }
 
-int main (int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  const char * pipelineName = TO_LITERAL(IMAGE_IO_KEBAB_NAME) "-read-image";
-  itk::wasm::Pipeline pipeline(pipelineName, "Read an image file format and convert it to the itk-wasm file format", argc, argv);
+  const char *        pipelineName = TO_LITERAL(IMAGE_IO_KEBAB_NAME) "-read-image";
+  itk::wasm::Pipeline pipeline(
+    pipelineName, "Read an image file format and convert it to the itk-wasm file format", argc, argv);
 
   std::string inputFileName;
-  pipeline.add_option("serialized-image", inputFileName, "Input image serialized in the file format")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+  pipeline.add_option("serialized-image", inputFileName, "Input image serialized in the file format")
+    ->required()
+    ->check(CLI::ExistingFile)
+    ->type_name("INPUT_BINARY_FILE");
 
   itk::wasm::OutputTextStream couldRead;
-  pipeline.add_option("could-read", couldRead, "Whether the input could be read. If false, the output image is not valid.")->required()->type_name("OUTPUT_JSON");
+  pipeline
+    .add_option("could-read", couldRead, "Whether the input could be read. If false, the output image is not valid.")
+    ->required()
+    ->type_name("OUTPUT_JSON");
 
   itk::wasm::OutputImageIO outputImageIO;
   pipeline.add_option("image", outputImageIO, "Output image")->required()->type_name("OUTPUT_IMAGE");
@@ -172,7 +184,7 @@ int main (int argc, char * argv[])
 #elif IMAGE_IO_CLASS == 22
   return readImage<itk::WasmZstdImageIO>(inputFileName, couldRead, outputImageIO, informationOnly);
 #else
-#error "Unsupported IMAGE_IO_CLASS"
+#  error "Unsupported IMAGE_IO_CLASS"
 #endif
   return EXIT_SUCCESS;
 }

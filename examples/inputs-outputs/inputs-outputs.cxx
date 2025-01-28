@@ -22,7 +22,9 @@
 #include "itkImage.h"
 #include "itkMedianImageFilter.h"
 
-int main(int argc, char * argv[]) {
+int
+main(int argc, char * argv[])
+{
   // Create the pipeline for parsing arguments. Provide a description.
   itk::wasm::Pipeline pipeline("inputs-outputs", "An example with non-trivial inputs and outputs", argc, argv);
 
@@ -51,7 +53,7 @@ int main(int argc, char * argv[]) {
   ITK_WASM_PARSE(pipeline);
 
   // Process our data
-  using FilterType = itk::MedianImageFilter< ImageType, ImageType >;
+  using FilterType = itk::MedianImageFilter<ImageType, ImageType>;
   auto filter = FilterType::New();
   filter->SetInput(inputImage.Get());
   filter->SetRadius(radius);

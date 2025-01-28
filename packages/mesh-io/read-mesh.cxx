@@ -22,32 +22,32 @@
 #include "itkOutputTextStream.h"
 
 #ifndef MESH_IO_CLASS
-#error "MESH_IO_CLASS definition must be provided"
+#  error "MESH_IO_CLASS definition must be provided"
 #endif
 
 #if MESH_IO_CLASS == 0
-#include "itkBYUMeshIO.h"
+#  include "itkBYUMeshIO.h"
 #elif MESH_IO_CLASS == 1
-#include "itkFreeSurferAsciiMeshIO.h"
+#  include "itkFreeSurferAsciiMeshIO.h"
 #elif MESH_IO_CLASS == 2
-#include "itkFreeSurferBinaryMeshIO.h"
+#  include "itkFreeSurferBinaryMeshIO.h"
 #elif MESH_IO_CLASS == 3
-#include "itkVTKPolyDataMeshIO.h"
+#  include "itkVTKPolyDataMeshIO.h"
 #elif MESH_IO_CLASS == 4
-#include "itkOBJMeshIO.h"
+#  include "itkOBJMeshIO.h"
 #elif MESH_IO_CLASS == 5
-#include "itkOFFMeshIO.h"
+#  include "itkOFFMeshIO.h"
 #elif MESH_IO_CLASS == 6
-#include "itkSTLMeshIO.h"
+#  include "itkSTLMeshIO.h"
 #elif MESH_IO_CLASS == 7
-#include "itkSWCMeshIO.h"
+#  include "itkSWCMeshIO.h"
 #elif MESH_IO_CLASS == 8
 #elif MESH_IO_CLASS == 9
-#include "itkWasmZstdMeshIO.h"
+#  include "itkWasmZstdMeshIO.h"
 #elif MESH_IO_CLASS == 10
-#include "itkMZ3MeshIO.h"
+#  include "itkMZ3MeshIO.h"
 #else
-#error "Unsupported MESH_IO_CLASS"
+#  error "Unsupported MESH_IO_CLASS"
 #endif
 #include "itkWasmMeshIO.h"
 
@@ -58,7 +58,11 @@
 #include "itkOutputMesh.h"
 
 template <typename TMeshIO>
-int readMesh(const std::string & inputFileName, itk::wasm::OutputTextStream & couldRead, itk::wasm::OutputMeshIO & outputMeshIO, bool informationOnly)
+int
+readMesh(const std::string &           inputFileName,
+         itk::wasm::OutputTextStream & couldRead,
+         itk::wasm::OutputMeshIO &     outputMeshIO,
+         bool                          informationOnly)
 {
   using MeshIOType = TMeshIO;
 
@@ -82,16 +86,24 @@ int readMesh(const std::string & inputFileName, itk::wasm::OutputTextStream & co
   return EXIT_SUCCESS;
 }
 
-int main (int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  const char * pipelineName = TO_LITERAL(MESH_IO_KEBAB_NAME) "-read-mesh";
-  itk::wasm::Pipeline pipeline(pipelineName, "Read a mesh file format and convert it to the itk-wasm file format", argc, argv);
+  const char *        pipelineName = TO_LITERAL(MESH_IO_KEBAB_NAME) "-read-mesh";
+  itk::wasm::Pipeline pipeline(
+    pipelineName, "Read a mesh file format and convert it to the itk-wasm file format", argc, argv);
 
   std::string inputFileName;
-  pipeline.add_option("serialized-mesh", inputFileName, "Input mesh serialized in the file format")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+  pipeline.add_option("serialized-mesh", inputFileName, "Input mesh serialized in the file format")
+    ->required()
+    ->check(CLI::ExistingFile)
+    ->type_name("INPUT_BINARY_FILE");
 
   itk::wasm::OutputTextStream couldRead;
-  pipeline.add_option("could-read", couldRead, "Whether the input could be read. If false, the output mesh is not valid.")->required()->type_name("OUTPUT_JSON");
+  pipeline
+    .add_option("could-read", couldRead, "Whether the input could be read. If false, the output mesh is not valid.")
+    ->required()
+    ->type_name("OUTPUT_JSON");
 
   itk::wasm::OutputMeshIO outputMeshIO;
   pipeline.add_option("mesh", outputMeshIO, "Output mesh")->required()->type_name("OUTPUT_MESH");
@@ -124,7 +136,7 @@ int main (int argc, char * argv[])
 #elif MESH_IO_CLASS == 10
   return readMesh<itk::MZ3MeshIO>(inputFileName, couldRead, outputMeshIO, informationOnly);
 #else
-#error "Unsupported MESH_IO_CLASS"
+#  error "Unsupported MESH_IO_CLASS"
 #endif
   return EXIT_SUCCESS;
 }

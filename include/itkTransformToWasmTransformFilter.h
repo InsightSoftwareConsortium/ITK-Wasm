@@ -28,7 +28,7 @@ namespace itk
 /**
  *\class TransformToWasmTransformFilter
  * \brief Convert an Transform to an WasmTransform object.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TTransform>

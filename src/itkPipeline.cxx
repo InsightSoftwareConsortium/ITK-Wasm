@@ -17,7 +17,7 @@
  *=========================================================================*/
 #include "itkPipeline.h"
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#include <rang.hpp>
+#  include <rang.hpp>
 #endif
 #include "CLI/Formatter.hpp"
 
@@ -26,12 +26,11 @@ namespace itk
 namespace wasm
 {
 
-Pipeline
-::Pipeline(std::string name, std::string description, int argc, char **argv):
-  App(description, name),
-  m_argc(argc),
-  m_argv(argv),
-  m_Version("0.1.0")
+Pipeline ::Pipeline(std::string name, std::string description, int argc, char ** argv)
+  : App(description, name)
+  , m_argc(argc)
+  , m_argv(argv)
+  , m_Version("0.1.0")
 {
   this->footer("Enjoy ITK!");
 
@@ -41,9 +40,8 @@ Pipeline
   this->set_version_flag("--version", m_Version);
 
   // Set m_UseMemoryIO before it is used by other memory parsers
-  this->preparse_callback([this](size_t arg)
-   {
-   m_UseMemoryIO = false;
+  this->preparse_callback([this](size_t arg) {
+    m_UseMemoryIO = false;
     for (int ii = 0; ii < this->m_argc; ++ii)
     {
       const std::string arg(this->m_argv[ii]);
@@ -52,27 +50,26 @@ Pipeline
         m_UseMemoryIO = true;
       }
     }
-   });
+  });
 
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#ifdef __wasi__
+#  ifdef __wasi__
   rang::setControlMode(rang::control::Force);
-#endif
+#  endif
 #endif
 }
 
 auto
-Pipeline
-::exit(const CLI::Error &e) -> int
+Pipeline ::exit(const CLI::Error & e) -> int
 {
   /// Avoid printing anything if this is a CLI::RuntimeError
-  if(e.get_name() == "RuntimeError")
-      return e.get_exit_code();
+  if (e.get_name() == "RuntimeError")
+    return e.get_exit_code();
 
-  if(e.get_name() == "CallForHelp" || e.get_name() == "CallForAllHelp")
+  if (e.get_name() == "CallForHelp" || e.get_name() == "CallForAllHelp")
   {
     std::string outputString;
-    if(e.get_name() == "CallForHelp")
+    if (e.get_name() == "CallForHelp")
     {
       outputString = help();
     }
@@ -101,20 +98,24 @@ Pipeline
 
     std::cout << rang::fg::reset << rang::style::bold;
     bool cur_yellow = false;
-    for(int i = 0; i < splash.size(); i++) {
-        const char splash_char = splash[i];
-        bool is_letter = splash_char == '/' || splash_char == '\\';
+    for (int i = 0; i < splash.size(); i++)
+    {
+      const char splash_char = splash[i];
+      bool       is_letter = splash_char == '/' || splash_char == '\\';
 
-        if(is_letter && !cur_yellow) {
-            std::cout << rang::fg::reset << rang::fgB::yellow;
-            cur_yellow = true;
-        } else if(!is_letter && cur_yellow) {
-            std::cout << rang::fg::reset << rang::fgB::blue;
-            cur_yellow = false;
-        }
-        std::cout << splash[i];
-        if(splash[i] == '\n')
-            std::cout << std::flush;
+      if (is_letter && !cur_yellow)
+      {
+        std::cout << rang::fg::reset << rang::fgB::yellow;
+        cur_yellow = true;
+      }
+      else if (!is_letter && cur_yellow)
+      {
+        std::cout << rang::fg::reset << rang::fgB::blue;
+        cur_yellow = false;
+      }
+      std::cout << splash[i];
+      if (splash[i] == '\n')
+        std::cout << std::flush;
     }
     std::cout << rang::style::reset << rang::bg::reset << rang::fg::reset;
     std::cout << std::endl;
@@ -122,14 +123,16 @@ Pipeline
     std::cout << "       Welcome to ITK\n" << std::endl;
 #endif
     std::istringstream stream(outputString);
-    std::string line;
-    bool description = true;
-    bool usage = false;
-    bool positionals = false;
-    bool options = false;
-    bool optionGroup = false;
-    while (std::getline(stream, line)) {
-      if (description) {
+    std::string        line;
+    bool               description = true;
+    bool               usage = false;
+    bool               positionals = false;
+    bool               options = false;
+    bool               optionGroup = false;
+    while (std::getline(stream, line))
+    {
+      if (description)
+      {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fgB::magenta << rang::style::bold;
 #endif
@@ -139,7 +142,9 @@ Pipeline
 #endif
         description = false;
         usage = true;
-      } else if(usage) {
+      }
+      else if (usage)
+      {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::yellow;
 #endif
@@ -176,11 +181,16 @@ Pipeline
         std::cout << rang::fg::reset << rang::style::reset;
 #endif
         usage = false;
-      } else if(positionals) {
-        if (line == "") {
+      }
+      else if (positionals)
+      {
+        if (line == "")
+        {
           std::cout << line << std::endl;
           positionals = false;
-        } else {
+        }
+        else
+        {
           const size_t loc = line.find(' ', 3);
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::cyan;
@@ -191,11 +201,16 @@ Pipeline
 #endif
           std::cout << line.substr(loc) << std::endl;
         }
-      } else if(options) {
-        if (line == "") {
+      }
+      else if (options)
+      {
+        if (line == "")
+        {
           std::cout << line << std::endl;
           options = false;
-        } else {
+        }
+        else
+        {
           const size_t loc = line.find(' ', 3);
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::green;
@@ -204,15 +219,21 @@ Pipeline
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::reset;
 #endif
-          if (loc != std::string::npos) {
+          if (loc != std::string::npos)
+          {
             std::cout << line.substr(loc) << std::endl;
           }
         }
-      } else if(optionGroup) {
-        if (line == "") {
+      }
+      else if (optionGroup)
+      {
+        if (line == "")
+        {
           std::cout << line << std::endl;
           optionGroup = false;
-        } else {
+        }
+        else
+        {
           const size_t loc = line.find(' ', 3);
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
           std::cout << rang::fg::green;
@@ -223,7 +244,9 @@ Pipeline
 #endif
           std::cout << line.substr(loc) << std::endl;
         }
-      } else if(line == "Positionals:") {
+      }
+      else if (line == "Positionals:")
+      {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::yellow;
 #endif
@@ -232,7 +255,9 @@ Pipeline
         std::cout << rang::fg::reset;
 #endif
         positionals = true;
-      } else if(line == "Options:") {
+      }
+      else if (line == "Options:")
+      {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::yellow;
 #endif
@@ -241,7 +266,9 @@ Pipeline
         std::cout << rang::fg::reset;
 #endif
         options = true;
-      } else if(line == "Enjoy ITK!") {
+      }
+      else if (line == "Enjoy ITK!")
+      {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::blue << rang::style::italic;
 #endif
@@ -250,7 +277,9 @@ Pipeline
         std::cout << rang::fg::reset << rang::style::reset;
 #endif
         options = true;
-      } else if(!line.empty() && line.back() == ':') {
+      }
+      else if (!line.empty() && line.back() == ':')
+      {
         optionGroup = true;
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::yellow;
@@ -259,7 +288,9 @@ Pipeline
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
         std::cout << rang::fg::reset;
 #endif
-      } else {
+      }
+      else
+      {
         std::cout << line << std::endl;
       }
     }
@@ -275,37 +306,32 @@ Pipeline
   return rval;
 }
 
-Pipeline
-::~Pipeline()
-{
-
-}
+Pipeline ::~Pipeline() {}
 
 struct CLIOptionJSON
 {
   std::string description;
   std::string name;
   std::string type;
-  bool required;
-  int itemsExpected;
-  int itemsExpectedMin;
-  int itemsExpectedMax;
+  bool        required;
+  int         itemsExpected;
+  int         itemsExpectedMin;
+  int         itemsExpectedMax;
   std::string defaultStr;
 };
 
 struct InterfaceJSON
 {
-  std::string description;
-  std::string name;
-  std::string version;
+  std::string                description;
+  std::string                name;
+  std::string                version;
   std::vector<CLIOptionJSON> inputs;
   std::vector<CLIOptionJSON> outputs;
   std::vector<CLIOptionJSON> parameters;
 };
 
 void
-Pipeline
-::interface_json()
+Pipeline ::interface_json()
 {
 
   InterfaceJSON interfaceJSON;
@@ -314,7 +340,8 @@ Pipeline
   interfaceJSON.name = this->get_name();
   interfaceJSON.version = this->version();
 
-  for(CLI::Option *opt : this->get_options({})) {
+  for (CLI::Option * opt : this->get_options({}))
+  {
     CLIOptionJSON optionJSON;
     optionJSON.description = opt->get_description();
     const auto singleName = opt->get_single_name();
@@ -364,7 +391,7 @@ Pipeline
   }
 
   std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true, .concatenate = false }>(interfaceJSON, serialized);
+  auto        ec = glz::write<glz::opts{ .prettify = true, .concatenate = false }>(interfaceJSON, serialized);
   if (ec)
   {
     const std::string descriptiveError = glz::format_error(ec, serialized);
@@ -374,22 +401,29 @@ Pipeline
   std::cout << serialized << std::endl;
 }
 
-bool Pipeline::m_UseMemoryIO{false};
+bool Pipeline::m_UseMemoryIO{ false };
 
 } // end namespace wasm
 } // end namespace itk
 
 template <>
-struct glz::meta<itk::wasm::CLIOptionJSON> {
-   using T = itk::wasm::CLIOptionJSON;
-   static constexpr auto value = glz::object(
-      "description", &T::description,
-      "name", &T::name,
-      "type", &T::type,
-      "required", &T::required,
-      "itemsExpected", &T::itemsExpected,
-      "itemsExpectedMin", &T::itemsExpectedMin,
-      "itemsExpectedMax", &T::itemsExpectedMax,
-      "default", &T::defaultStr
-   );
+struct glz::meta<itk::wasm::CLIOptionJSON>
+{
+  using T = itk::wasm::CLIOptionJSON;
+  static constexpr auto value = glz::object("description",
+                                            &T::description,
+                                            "name",
+                                            &T::name,
+                                            "type",
+                                            &T::type,
+                                            "required",
+                                            &T::required,
+                                            "itemsExpected",
+                                            &T::itemsExpected,
+                                            "itemsExpectedMin",
+                                            &T::itemsExpectedMin,
+                                            "itemsExpectedMax",
+                                            &T::itemsExpectedMax,
+                                            "default",
+                                            &T::defaultStr);
 };

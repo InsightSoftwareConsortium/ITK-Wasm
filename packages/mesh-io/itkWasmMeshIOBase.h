@@ -31,7 +31,8 @@ namespace itk
  *
  * JSON representation for an itk::MeshIOBase for interfacing across programming languages and runtimes.
  *
- * Points, Cells, PointData, CellData binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
+ * Points, Cells, PointData, CellData binary array buffer's are stored as strings with memory addresses or paths on
+ *disks or a virtual filesystem.
  *
  * Arrays:
  *
@@ -59,22 +60,27 @@ public:
 
   using DataContainerType = Superclass::DataContainerType;
 
-  void SetMeshIO(MeshIOBase * imageIO, bool readMesh = true);
+  void
+  SetMeshIO(MeshIOBase * imageIO, bool readMesh = true);
 
-  const DataContainerType * GetCellsContainer() const
+  const DataContainerType *
+  GetCellsContainer() const
   {
     return this->m_CellsContainer.GetPointer();
   }
-  DataContainerType * GetCellsContainer()
+  DataContainerType *
+  GetCellsContainer()
   {
     return this->m_CellsContainer.GetPointer();
   }
 
-  const DataContainerType * GetCellDataContainer() const
+  const DataContainerType *
+  GetCellDataContainer() const
   {
     return this->m_CellDataContainer.GetPointer();
   }
-  DataContainerType * GetCellDataContainer()
+  DataContainerType *
+  GetCellDataContainer()
   {
     return this->m_CellDataContainer.GetPointer();
   }

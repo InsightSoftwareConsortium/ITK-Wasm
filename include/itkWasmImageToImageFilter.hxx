@@ -34,8 +34,7 @@ namespace itk
 {
 
 template <typename TImage>
-WasmImageToImageFilter<TImage>
-::WasmImageToImageFilter()
+WasmImageToImageFilter<TImage>::WasmImageToImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -46,24 +45,21 @@ WasmImageToImageFilter<TImage>
 
 template <typename TImage>
 ProcessObject::DataObjectPointer
-WasmImageToImageFilter<TImage>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+WasmImageToImageFilter<TImage>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return ImageType::New().GetPointer();
 }
 
 template <typename TImage>
 ProcessObject::DataObjectPointer
-WasmImageToImageFilter<TImage>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+WasmImageToImageFilter<TImage>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return ImageType::New().GetPointer();
 }
 
 template <typename TImage>
 auto
-WasmImageToImageFilter<TImage>
-::GetOutput() -> ImageType *
+WasmImageToImageFilter<TImage>::GetOutput() -> ImageType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<ImageType *>(this->GetPrimaryOutput());
@@ -71,8 +67,7 @@ WasmImageToImageFilter<TImage>
 
 template <typename TImage>
 auto
-WasmImageToImageFilter<TImage>
-::GetOutput() const -> const ImageType *
+WasmImageToImageFilter<TImage>::GetOutput() const -> const ImageType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const ImageType *>(this->GetPrimaryOutput());
@@ -80,8 +75,7 @@ WasmImageToImageFilter<TImage>
 
 template <typename TImage>
 auto
-WasmImageToImageFilter<TImage>
-::GetOutput(unsigned int idx) -> ImageType *
+WasmImageToImageFilter<TImage>::GetOutput(unsigned int idx) -> ImageType *
 {
   auto * out = dynamic_cast<ImageType *>(this->ProcessObject::GetOutput(idx));
 
@@ -94,8 +88,7 @@ WasmImageToImageFilter<TImage>
 
 template <typename TImage>
 void
-WasmImageToImageFilter<TImage>
-::SetInput(const WasmImageType * input)
+WasmImageToImageFilter<TImage>::SetInput(const WasmImageType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<WasmImageType *>(input));
@@ -103,8 +96,7 @@ WasmImageToImageFilter<TImage>
 
 template <typename TImage>
 void
-WasmImageToImageFilter<TImage>
-::SetInput(unsigned int index, const WasmImageType * image)
+WasmImageToImageFilter<TImage>::SetInput(unsigned int index, const WasmImageType * image)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<WasmImageType *>(image));
@@ -112,29 +104,26 @@ WasmImageToImageFilter<TImage>
 
 template <typename TImage>
 const typename WasmImageToImageFilter<TImage>::WasmImageType *
-WasmImageToImageFilter<TImage>
-::GetInput()
+WasmImageToImageFilter<TImage>::GetInput()
 {
   return itkDynamicCastInDebugMode<const WasmImageType *>(this->GetPrimaryInput());
 }
 
 template <typename TImage>
 const typename WasmImageToImageFilter<TImage>::WasmImageType *
-WasmImageToImageFilter<TImage>
-::GetInput(unsigned int idx)
+WasmImageToImageFilter<TImage>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TImage *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TImage>
 void
-WasmImageToImageFilter<TImage>
-::GenerateData()
+WasmImageToImageFilter<TImage>::GenerateData()
 {
   // Get the input and output pointers
   const WasmImageType * wasmImage = this->GetInput();
-  const std::string json(wasmImage->GetJSON());
-  ImageType * image = this->GetOutput();
+  const std::string     json(wasmImage->GetJSON());
+  ImageType *           image = this->GetOutput();
 
   using IOPixelType = typename TImage::IOPixelType;
   using PixelType = typename TImage::PixelType;
@@ -159,21 +148,21 @@ WasmImageToImageFilter<TImage>
     throw std::runtime_error("Unexpected dimension");
   }
 
-  if ( componentType != itk::wasm::MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum )
+  if (componentType != itk::wasm::MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum)
   {
     throw std::runtime_error("Unexpected component type");
   }
 
-  if ( pixelType != itk::wasm::MapPixelType<PixelType>::JSONPixelEnum )
+  if (pixelType != itk::wasm::MapPixelType<PixelType>::JSONPixelEnum)
   {
     throw std::runtime_error("Unexpected pixel type");
   }
 
-  using FilterType = ImportVectorImageFilter< TImage >;
+  using FilterType = ImportVectorImageFilter<TImage>;
   auto filter = FilterType::New();
 
   // Don't throw when PixelType is VariableLengthPixel where number of components is 0
-  if (ConvertPixelTraits::GetNumberOfComponents() != 0 && components != ConvertPixelTraits::GetNumberOfComponents() )
+  if (ConvertPixelTraits::GetNumberOfComponents() != 0 && components != ConvertPixelTraits::GetNumberOfComponents())
   {
     throw std::runtime_error("Unexpected number of components");
   }
@@ -184,7 +173,7 @@ WasmImageToImageFilter<TImage>
   {
     origin[i] = imageJSON.origin[i];
   }
-  filter->SetOrigin( origin );
+  filter->SetOrigin(origin);
 
   using SpacingType = typename ImageType::SpacingType;
   SpacingType spacing;
@@ -192,11 +181,12 @@ WasmImageToImageFilter<TImage>
   {
     spacing[i] = imageJSON.spacing[i];
   }
-  filter->SetSpacing( spacing );
+  filter->SetSpacing(spacing);
 
   using DirectionType = typename ImageType::DirectionType;
   const std::string directionString = imageJSON.direction;
-  const double * directionPtr = reinterpret_cast< double * >( std::strtoull(directionString.substr(35).c_str(), nullptr, 10) );
+  const double *    directionPtr =
+    reinterpret_cast<double *>(std::strtoull(directionString.substr(35).c_str(), nullptr, 10));
   using VnlMatrixType = typename DirectionType::InternalMatrixType;
   const VnlMatrixType vnlMatrix(directionPtr);
   const DirectionType direction(vnlMatrix);
@@ -227,16 +217,16 @@ WasmImageToImageFilter<TImage>
   filter->SetLargestPossibleRegion(largestRegion);
 
   const std::string dataString = imageJSON.data;
-  IOPixelType * dataPtr = reinterpret_cast< IOPixelType * >( std::strtoull(dataString.substr(35).c_str(), nullptr, 10) );
-  const bool letImageContainerManageMemory = false;
+  IOPixelType * dataPtr = reinterpret_cast<IOPixelType *>(std::strtoull(dataString.substr(35).c_str(), nullptr, 10));
+  const bool    letImageContainerManageMemory = false;
   if (pixelType == JSONPixelTypesEnum::VariableLengthVector || pixelType == JSONPixelTypesEnum::VariableSizeMatrix)
-    {
+  {
     filter->SetImportPointer(dataPtr, totalSize, letImageContainerManageMemory, components);
-    }
+  }
   else
-    {
+  {
     filter->SetImportPointer(dataPtr, totalSize, letImageContainerManageMemory);
-    }
+  }
   filter->Update();
   image->Graft(filter->GetOutput());
 
@@ -246,8 +236,7 @@ WasmImageToImageFilter<TImage>
 
 template <typename TImage>
 void
-WasmImageToImageFilter<TImage>
-::PrintSelf(std::ostream & os, Indent indent) const
+WasmImageToImageFilter<TImage>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

@@ -21,14 +21,14 @@
 #include "itkPipeline.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
-#include "itkWasmPolyData.h"
-#include "itkWasmPolyDataToPolyDataFilter.h"
+#  include "itkWasmExports.h"
+#  include "itkWasmPolyData.h"
+#  include "itkWasmPolyDataToPolyDataFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#include "itkMeshFileReader.h"
-#include "itkMeshToPolyDataFilter.h"
-#include "itkPolyDataToMeshFilter.h"
+#  include "itkMeshFileReader.h"
+#  include "itkMeshToPolyDataFilter.h"
+#  include "itkPolyDataToMeshFilter.h"
 #endif
 
 namespace itk
@@ -52,23 +52,29 @@ class ITK_TEMPLATE_EXPORT InputPolyData
 public:
   using PolyDataType = TPolyData;
 
-  void Set(const PolyDataType * polyData) {
+  void
+  Set(const PolyDataType * polyData)
+  {
     this->m_PolyData = polyData;
   }
 
-  const PolyDataType * Get() const {
+  const PolyDataType *
+  Get() const
+  {
     return this->m_PolyData.GetPointer();
   }
 
   InputPolyData() = default;
   ~InputPolyData() = default;
+
 protected:
   typename TPolyData::ConstPointer m_PolyData;
 };
 
 
 template <typename TPolyData>
-bool lexical_cast(const std::string &input, InputPolyData<TPolyData> &inputPolyData)
+bool
+lexical_cast(const std::string & input, InputPolyData<TPolyData> & inputPolyData)
 {
   if (input.empty())
   {
@@ -79,10 +85,10 @@ bool lexical_cast(const std::string &input, InputPolyData<TPolyData> &inputPolyD
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     using WasmPolyDataToPolyDataFilterType = WasmPolyDataToPolyDataFilter<TPolyData>;
-    auto wasmPolyDataToPolyDataFilter = WasmPolyDataToPolyDataFilterType::New();
-    auto wasmPolyData = WasmPolyDataToPolyDataFilterType::WasmPolyDataType::New();
+    auto               wasmPolyDataToPolyDataFilter = WasmPolyDataToPolyDataFilterType::New();
+    auto               wasmPolyData = WasmPolyDataToPolyDataFilterType::WasmPolyDataType::New();
     const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(0, index);
+    auto               json = getMemoryStoreInputJSON(0, index);
     wasmPolyData->SetJSON(json);
     wasmPolyDataToPolyDataFilter->SetInput(wasmPolyData);
     wasmPolyDataToPolyDataFilter->Update();

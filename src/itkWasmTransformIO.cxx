@@ -81,20 +81,23 @@ WasmTransformIOTemplate<TParametersValueType>::CanReadFile(const char * filename
 
 template <typename TParametersValueType>
 void
-WasmTransformIOTemplate<TParametersValueType>::ReadCBOR( void *buffer, unsigned char * cborBuffer, size_t cborBufferLength )
+WasmTransformIOTemplate<TParametersValueType>::ReadCBOR(void *          buffer,
+                                                        unsigned char * cborBuffer,
+                                                        size_t          cborBufferLength)
 {
-  bool cborBufferAllocated = false;
+  bool   cborBufferAllocated = false;
   size_t length = cborBufferLength;
   if (cborBuffer == nullptr)
   {
-    FILE* file = fopen(this->GetFileName(), "rb");
-    if (file == NULL) {
+    FILE * file = fopen(this->GetFileName(), "rb");
+    if (file == NULL)
+    {
       itkExceptionMacro("Could not read file: " << this->GetFileName());
     }
     fseek(file, 0, SEEK_END);
     length = (size_t)ftell(file);
     fseek(file, 0, SEEK_SET);
-    cborBuffer = static_cast< unsigned char *>(malloc(length));
+    cborBuffer = static_cast<unsigned char *>(malloc(length));
     cborBufferAllocated = true;
     if (!fread(cborBuffer, length, 1, file))
     {
@@ -383,7 +386,7 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR( void *buffer, unsigned 
        transformIt != readTransformList.end();
        ++transformIt, ++jsonIt)
   {
-    const auto          transformJSON = *jsonIt;
+    const auto transformJSON = *jsonIt;
     if (transformJSON.transformType.transformParameterization == JSONTransformParameterizationEnum::Composite)
     {
       ++count;
@@ -513,9 +516,11 @@ WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON &
 
       using ParametersValueType = TParametersValueType;
 
-      FixedParametersValueType * fixedPtr = reinterpret_cast< FixedParametersValueType * >( std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10) );
+      FixedParametersValueType * fixedPtr = reinterpret_cast<FixedParametersValueType *>(
+        std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10));
       transform->CopyInFixedParameters(fixedPtr, fixedPtr + transformJSON.numberOfFixedParameters);
-      ParametersValueType * paramsPtr = reinterpret_cast< ParametersValueType * >( std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10) );
+      ParametersValueType * paramsPtr = reinterpret_cast<ParametersValueType *>(
+        std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10));
       transform->CopyInParameters(paramsPtr, paramsPtr + transformJSON.numberOfParameters);
 
       auto dictionary = transform->GetMetaDataDictionary();
@@ -528,8 +533,9 @@ WasmTransformIOTemplate<TParametersValueType>::SetJSON(const TransformListJSON &
 
 template <typename TParametersValueType>
 size_t
-WasmTransformIOTemplate<TParametersValueType>
-::WriteCBOR(const void *buffer, unsigned char ** cborBufferPtr, bool allocateCBORBuffer )
+WasmTransformIOTemplate<TParametersValueType>::WriteCBOR(const void *     buffer,
+                                                         unsigned char ** cborBufferPtr,
+                                                         bool             allocateCBORBuffer)
 {
   auto transformListJSON = this->GetJSON();
 
@@ -544,7 +550,7 @@ WasmTransformIOTemplate<TParametersValueType>
   cbor_item_t * index = this->m_CBORRoot;
   // write the transformListJSON into the cbor array
   ConstTransformListType & writeTransformList = this->GetWriteTransformList();
-  const std::string    compositeTransformType = writeTransformList.front()->GetTransformTypeAsString();
+  const std::string        compositeTransformType = writeTransformList.front()->GetTransformTypeAsString();
   CompositeTransformIOHelperTemplate<TParametersValueType> helper;
 
   //
@@ -651,8 +657,8 @@ WasmTransformIOTemplate<TParametersValueType>
     ++count;
   }
 
-  size_t cborBufferSize;
-  size_t length;
+  size_t          cborBufferSize;
+  size_t          length;
   unsigned char * cborBuffer;
 
   if (allocateCBORBuffer)
@@ -662,7 +668,7 @@ WasmTransformIOTemplate<TParametersValueType>
   else
   {
     length = cbor_serialize_alloc(index, &cborBuffer, &cborBufferSize);
-    FILE* file = fopen(this->GetFileName(), "wb");
+    FILE * file = fopen(this->GetFileName(), "wb");
     fwrite(cborBuffer, 1, length, file);
     free(cborBuffer);
     fclose(file);
@@ -707,7 +713,7 @@ WasmTransformIOTemplate<TParametersValueType>::ReadFixedParameters(const Transfo
        transformIt != readTransformList.end();
        ++transformIt, ++jsonIt)
   {
-    const auto          transformJSON = *jsonIt;
+    const auto transformJSON = *jsonIt;
     if ((*jsonIt).transformType.transformParameterization == itk::JSONTransformParameterizationEnum::Composite)
     {
       ++count;
@@ -859,7 +865,7 @@ WasmTransformIOTemplate<TParametersValueType>::WriteTransformInformation()
   auto transformListJSON = this->GetJSON();
 
   std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true }>(transformListJSON, serialized);
+  auto        ec = glz::write<glz::opts{ .prettify = true }>(transformListJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize TransformListJSON");
@@ -896,7 +902,7 @@ WasmTransformIOTemplate<TParametersValueType>::WriteFixedParameters()
     {
       continue;
     }
-    auto                  fixedParams = currentTransform->GetFixedParameters();
+    auto fixedParams = currentTransform->GetFixedParameters();
     // Fixed parameters are always double per itk::TransformBaseTemplate
     const SizeValueType numberOfBytes = fixedParams.Size() * sizeof(FixedParametersValueType);
 
@@ -945,8 +951,8 @@ WasmTransformIOTemplate<TParametersValueType>::WriteParameters()
     {
       continue;
     }
-    auto                  params = currentTransform->GetParameters();
-    const SizeValueType   numberOfBytes = params.Size() * sizeof(ParametersValueType);
+    auto                params = currentTransform->GetParameters();
+    const SizeValueType numberOfBytes = params.Size() * sizeof(ParametersValueType);
 
     std::string path(this->GetFileName());
     path = path + "/data/" + std::to_string(count);

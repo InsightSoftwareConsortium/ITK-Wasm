@@ -19,7 +19,9 @@
 #include "itkInputImage.h"
 #include "itkImage.h"
 
-int main(int argc, char * argv[]) {
+int
+main(int argc, char * argv[])
+{
   // Create the pipeline for parsing arguments. Provide a description.
   itk::wasm::Pipeline pipeline("hello-pipeline", "A hello world itk::wasm::Pipeline", argc, argv);
 

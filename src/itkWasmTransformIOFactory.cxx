@@ -22,8 +22,7 @@
 namespace itk
 {
 
-WasmTransformIOFactory
-::WasmTransformIOFactory()
+WasmTransformIOFactory ::WasmTransformIOFactory()
 {
   this->RegisterOverride("itkTransformIOBaseTemplate",
                          "itkWasmTransformIOTemplate",
@@ -39,22 +38,18 @@ WasmTransformIOFactory
 }
 
 
-WasmTransformIOFactory
-::~WasmTransformIOFactory()
-{}
+WasmTransformIOFactory ::~WasmTransformIOFactory() {}
 
 
 const char *
-WasmTransformIOFactory
-::GetITKSourceVersion() const
+WasmTransformIOFactory ::GetITKSourceVersion() const
 {
   return ITK_SOURCE_VERSION;
 }
 
 
 const char *
-WasmTransformIOFactory
-::GetDescription() const
+WasmTransformIOFactory ::GetDescription() const
 {
   return "Wasm TransformIO Factory, allows the loading of Wasm transforms into Insight";
 }
@@ -65,13 +60,14 @@ WasmTransformIOFactory
 
 static bool WasmTransformIOFactoryHasBeenRegistered;
 
-void WebAssemblyInterface_EXPORT WasmTransformIOFactoryRegister__Private(void)
+void WebAssemblyInterface_EXPORT
+WasmTransformIOFactoryRegister__Private(void)
 {
-  if( ! WasmTransformIOFactoryHasBeenRegistered )
-    {
+  if (!WasmTransformIOFactoryHasBeenRegistered)
+  {
     WasmTransformIOFactoryHasBeenRegistered = true;
     WasmTransformIOFactory::RegisterOneFactory();
-    }
+  }
 }
 
 } // end namespace itk

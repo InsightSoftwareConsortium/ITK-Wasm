@@ -32,60 +32,61 @@
 
 namespace itk
 {
-  /** \class PolyDataTypeJSON
-   *
-   * \brief PolyData type JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct PolyDataTypeJSON
-  {
-    JSONComponentTypesEnum pointPixelComponentType { JSONComponentTypesEnum::float32 };
-    JSONPixelTypesEnum pointPixelType { JSONPixelTypesEnum::Scalar };
-    unsigned int pointPixelComponents { 1 };
-    JSONComponentTypesEnum cellPixelComponentType { JSONComponentTypesEnum::float32 };
-    JSONPixelTypesEnum cellPixelType { JSONPixelTypesEnum::Scalar };
-    unsigned int cellPixelComponents { 1 };
-  };
+/** \class PolyDataTypeJSON
+ *
+ * \brief PolyData type JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct PolyDataTypeJSON
+{
+  JSONComponentTypesEnum pointPixelComponentType{ JSONComponentTypesEnum::float32 };
+  JSONPixelTypesEnum     pointPixelType{ JSONPixelTypesEnum::Scalar };
+  unsigned int           pointPixelComponents{ 1 };
+  JSONComponentTypesEnum cellPixelComponentType{ JSONComponentTypesEnum::float32 };
+  JSONPixelTypesEnum     cellPixelType{ JSONPixelTypesEnum::Scalar };
+  unsigned int           cellPixelComponents{ 1 };
+};
 
-  /** \class PolyDataJSON
-   *
-   * \brief PolyData JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct PolyDataJSON
-  {
-    PolyDataTypeJSON polyDataType;
+/** \class PolyDataJSON
+ *
+ * \brief PolyData JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct PolyDataJSON
+{
+  PolyDataTypeJSON polyDataType;
 
-    std::string name { "PolyData" };
+  std::string name{ "PolyData" };
 
-    size_t numberOfPoints{ 0 };
-    std::string points;
+  size_t      numberOfPoints{ 0 };
+  std::string points;
 
-    size_t verticesBufferSize { 0 };
-    std::string vertices;
+  size_t      verticesBufferSize{ 0 };
+  std::string vertices;
 
-    size_t linesBufferSize { 0 };
-    std::string lines;
+  size_t      linesBufferSize{ 0 };
+  std::string lines;
 
-    size_t polygonsBufferSize { 0 };
-    std::string polygons;
+  size_t      polygonsBufferSize{ 0 };
+  std::string polygons;
 
-    size_t triangleStripsBufferSize { 0 };
-    std::string triangleStrips;
+  size_t      triangleStripsBufferSize{ 0 };
+  std::string triangleStrips;
 
-    size_t numberOfPointPixels { 0 };
-    std::string pointData;
+  size_t      numberOfPointPixels{ 0 };
+  std::string pointData;
 
-    size_t numberOfCellPixels { 0 };
-    std::string cellData;
+  size_t      numberOfCellPixels{ 0 };
+  std::string cellData;
 
-    MetadataJSON metadata;
-  };
+  MetadataJSON metadata;
+};
 
-template<typename TPolyData>
-auto polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDataJSON
+template <typename TPolyData>
+auto
+polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDataJSON
 {
   using PolyDataType = TPolyData;
 
@@ -93,13 +94,15 @@ auto polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDa
 
   using PointPixelType = typename TPolyData::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
-  polyDataJSON.polyDataType.pointPixelComponentType = wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
+  polyDataJSON.polyDataType.pointPixelComponentType =
+    wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
   polyDataJSON.polyDataType.pointPixelType = wasm::MapPixelType<PointPixelType>::JSONPixelEnum;
   polyDataJSON.polyDataType.pointPixelComponents = ConvertPointPixelTraits::GetNumberOfComponents();
 
   using CellPixelType = typename TPolyData::CellPixelType;
   using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
-  polyDataJSON.polyDataType.cellPixelComponentType = wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
+  polyDataJSON.polyDataType.cellPixelComponentType =
+    wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
   polyDataJSON.polyDataType.cellPixelType = wasm::MapPixelType<CellPixelType>::JSONPixelEnum;
   polyDataJSON.polyDataType.cellPixelComponents = ConvertCellPixelTraits::GetNumberOfComponents();
 
@@ -139,7 +142,7 @@ auto polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDa
   size_t pointsAddress = 0;
   if (polyData->GetNumberOfPoints())
   {
-    pointsAddress = reinterpret_cast< size_t >( &(polyData->GetPoints()->at(0)) );
+    pointsAddress = reinterpret_cast<size_t>(&(polyData->GetPoints()->at(0)));
   }
   std::ostringstream pointsStream;
   pointsStream << "data:application/vnd.itk.address,0:";
@@ -149,7 +152,7 @@ auto polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDa
   size_t verticesAddress = 0;
   if (polyData->GetVertices() != nullptr && polyData->GetVertices()->Size() > 0)
   {
-    verticesAddress = reinterpret_cast< size_t >( &(polyData->GetVertices()->at(0)) );
+    verticesAddress = reinterpret_cast<size_t>(&(polyData->GetVertices()->at(0)));
   }
   std::ostringstream verticesStream;
   verticesStream << "data:application/vnd.itk.address,0:";
@@ -159,7 +162,7 @@ auto polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDa
   size_t linesAddress = 0;
   if (polyData->GetLines() != nullptr && polyData->GetLines()->Size() > 0)
   {
-    linesAddress = reinterpret_cast< size_t >( &(polyData->GetLines()->at(0)) );
+    linesAddress = reinterpret_cast<size_t>(&(polyData->GetLines()->at(0)));
   }
   std::ostringstream linesStream;
   linesStream << "data:application/vnd.itk.address,0:";
@@ -169,7 +172,7 @@ auto polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDa
   size_t polygonsAddress = 0;
   if (polyData->GetPolygons() != nullptr && polyData->GetPolygons()->Size() > 0)
   {
-    polygonsAddress = reinterpret_cast< size_t >( &(polyData->GetPolygons()->at(0)) );
+    polygonsAddress = reinterpret_cast<size_t>(&(polyData->GetPolygons()->at(0)));
   }
   std::ostringstream polygonsStream;
   polygonsStream << "data:application/vnd.itk.address,0:";
@@ -179,7 +182,7 @@ auto polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDa
   size_t triangleStripsAddress = 0;
   if (polyData->GetTriangleStrips() != nullptr && polyData->GetTriangleStrips()->Size() > 0)
   {
-    triangleStripsAddress = reinterpret_cast< size_t >( &(polyData->GetTriangleStrips()->at(0)) );
+    triangleStripsAddress = reinterpret_cast<size_t>(&(polyData->GetTriangleStrips()->at(0)));
   }
   std::ostringstream triangleStripsStream;
   triangleStripsStream << "data:application/vnd.itk.address,0:";
@@ -189,7 +192,7 @@ auto polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDa
   size_t pointDataAddress = 0;
   if (polyData->GetPointData() != nullptr && polyData->GetPointData()->Size() > 0)
   {
-    pointDataAddress = reinterpret_cast< size_t >( &(polyData->GetPointData()->at(0)) );
+    pointDataAddress = reinterpret_cast<size_t>(&(polyData->GetPointData()->at(0)));
   }
   std::ostringstream pointDataStream;
   pointDataStream << "data:application/vnd.itk.address,0:";
@@ -199,10 +202,10 @@ auto polyDataToPolyDataJSON(const TPolyData * polyData, bool inMemory) -> PolyDa
   size_t cellDataAddress = 0;
   if (polyData->GetCellData() != nullptr && polyData->GetCellData()->Size() > 0)
   {
-    cellDataAddress = reinterpret_cast< size_t >( &(polyData->GetCellData()->at(0)) );
+    cellDataAddress = reinterpret_cast<size_t>(&(polyData->GetCellData()->at(0)));
   }
   std::ostringstream cellDataStream;
-  cellDataStream <<  "data:application/vnd.itk.address,0:";
+  cellDataStream << "data:application/vnd.itk.address,0:";
   cellDataStream << cellDataAddress;
   polyDataJSON.cellData = cellDataStream.str();
 
