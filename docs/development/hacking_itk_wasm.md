@@ -24,7 +24,7 @@ We are glad you are here and appreciate your contribution. Please keep in mind o
 
 We follow [standard GitHub contribution best practices]: pull requests made from forks are tested with continuous integration tests, and updates are made via code review before integration.
 
-We use the [conventional commit] standard for our commit message format in the *itk-wasm* repository.
+We use the [conventional commit] standard for our commit message format in the *ITK-Wasm* repository.
 
 The C++ core and Docker build environment can be developed independently from the CLI, language-specific libraries, and example packages. The latter are developed as a [pnpm workspace]. Individual packages in the workspace can be developed independently after `pnpm install` is executed at the root.
 
