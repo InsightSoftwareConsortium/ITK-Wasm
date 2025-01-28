@@ -26,7 +26,7 @@ namespace itk
 /**
  *\class PolyDataToWasmPolyDataFilter
  * \brief Convert an PolyData to an WasmPolyData object.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TPolyData>
@@ -45,7 +45,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PolyDataToWasmPolyDataFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(PolyDataToWasmPolyDataFilter);
 
   using DataObjectIdentifierType = Superclass::DataObjectIdentifierType;
   using DataObjectPointerArraySizeType = Superclass::DataObjectPointerArraySizeType;

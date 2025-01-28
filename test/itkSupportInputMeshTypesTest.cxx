@@ -22,11 +22,12 @@
 #include "itkSupportInputMeshTypes.h"
 #include "itkWasmMeshIOFactory.h"
 
-template<typename TMesh>
+template <typename TMesh>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using MeshType = TMesh;
 
@@ -49,12 +50,10 @@ public:
 int
 itkSupportInputMeshTypesTest(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("support-input-mesh-types-test", "Test supporting multiple input mesh types", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "support-input-mesh-types-test", "Test supporting multiple input mesh types", argc, argv);
 
   itk::WasmMeshIOFactory::RegisterOneFactory();
 
-  return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
-   uint8_t,
-   float>
-  ::Dimensions<2U,3U>("input-mesh", pipeline);
+  return itk::wasm::SupportInputMeshTypes<PipelineFunctor, uint8_t, float>::Dimensions<2U, 3U>("input-mesh", pipeline);
 }

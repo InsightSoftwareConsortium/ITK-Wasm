@@ -28,7 +28,8 @@ itkWasmMeshIOTest(int argc, char * argv[])
   if (argc < 6)
   {
     std::cerr << "Missing parameters" << std::endl;
-    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " InputMesh MeshDirectory ConvertedDirectory MeshZip ConvertedZip" << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv)
+              << " InputMesh MeshDirectory ConvertedDirectory MeshZip ConvertedZip" << std::endl;
     return EXIT_FAILURE;
   }
   const char * inputMeshFile = argv[1];
@@ -45,7 +46,7 @@ itkWasmMeshIOTest(int argc, char * argv[])
   using MeshPointer = MeshType::Pointer;
 
   using ReaderType = itk::MeshFileReader<MeshType>;
-  auto meshReader = ReaderType::New(); 
+  auto meshReader = ReaderType::New();
   meshReader->SetFileName(inputMeshFile);
   ITK_TRY_EXPECT_NO_EXCEPTION(meshReader->Update());
   auto inputMesh = meshReader->GetOutput();
@@ -56,15 +57,15 @@ itkWasmMeshIOTest(int argc, char * argv[])
 
   using WriterType = itk::MeshFileWriter<MeshType>;
   auto wasmWriter = WriterType::New();
-  //wasmWriter->SetMeshIO( meshIO );
-  wasmWriter->SetFileName( meshDirectory );
-  wasmWriter->SetInput( inputMesh );
+  // wasmWriter->SetMeshIO( meshIO );
+  wasmWriter->SetFileName(meshDirectory);
+  wasmWriter->SetInput(inputMesh);
 
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmWriter->Update());
 
   auto wasmReader = ReaderType::New();
-  //wasmReader->SetMeshIO( meshIO );
-  wasmReader->SetFileName( meshDirectory );
+  // wasmReader->SetMeshIO( meshIO );
+  wasmReader->SetFileName(meshDirectory);
 
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
 
@@ -73,10 +74,10 @@ itkWasmMeshIOTest(int argc, char * argv[])
   meshWriter->SetFileName(convertedDirectoryFile);
   ITK_TRY_EXPECT_NO_EXCEPTION(meshWriter->Update());
 
-  wasmWriter->SetFileName( meshZip );
+  wasmWriter->SetFileName(meshZip);
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmWriter->Update());
 
-  wasmReader->SetFileName( meshZip );
+  wasmReader->SetFileName(meshZip);
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
 
   meshWriter->SetFileName(convertedZipFile);

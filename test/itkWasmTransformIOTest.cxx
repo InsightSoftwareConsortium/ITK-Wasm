@@ -23,19 +23,21 @@
 #include "itkTransform.h"
 #include "itkHDF5TransformIOFactory.h"
 
-int itkWasmTransformIOTest(int argc, char *argv[])
+int
+itkWasmTransformIOTest(int argc, char * argv[])
 {
   if (argc < 6)
   {
     std::cerr << "Missing parameters" << std::endl;
-    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " InputTransform TransformDirectory ConvertedDirectory TransformZip ConvertedZip" << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv)
+              << " InputTransform TransformDirectory ConvertedDirectory TransformZip ConvertedZip" << std::endl;
     return EXIT_FAILURE;
   }
-  const char *inputTransformFile = argv[1];
-  const char *transformDirectory = argv[2];
-  const char *convertedDirectoryFile = argv[3];
-  const char *transformCbor = argv[4];
-  const char *convertedCbor = argv[5];
+  const char * inputTransformFile = argv[1];
+  const char * transformDirectory = argv[2];
+  const char * convertedDirectoryFile = argv[3];
+  const char * transformCbor = argv[4];
+  const char * convertedCbor = argv[5];
 
   itk::WasmTransformIOFactory::RegisterOneFactory();
   itk::HDF5TransformIOFactory::RegisterOneFactory();

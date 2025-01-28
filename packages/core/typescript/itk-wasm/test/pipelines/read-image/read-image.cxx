@@ -22,11 +22,12 @@
 #include "itkOutputImage.h"
 #include "itkPipeline.h"
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
   using PixelType = itk::RGBPixel<unsigned char>;
   constexpr unsigned int Dimension = 2;
-  using ImageType = itk::Image< PixelType, Dimension >;
+  using ImageType = itk::Image<PixelType, Dimension>;
 
   itk::wasm::Pipeline pipeline("read-image", "Read and write an image", argc, argv);
 
@@ -40,7 +41,7 @@ int main( int argc, char * argv[] )
 
   ITK_WASM_PARSE(pipeline);
 
-  outputImage.Set( inputImage.Get() );
+  outputImage.Set(inputImage.Get());
 
   return EXIT_SUCCESS;
 }

@@ -50,7 +50,7 @@ itkWasmImageInterfaceWithNegativeIndexTest(int argc, char * argv[])
   ImageType::SizeType upperExtendRegion;
   upperExtendRegion.Fill(1);
 
-  using ConstantPadImageFilterType = itk::ConstantPadImageFilter<ImageType,ImageType>;
+  using ConstantPadImageFilterType = itk::ConstantPadImageFilter<ImageType, ImageType>;
   auto constantPad = ConstantPadImageFilterType::New();
   constantPad->SetInput(inputImage);
   constantPad->SetPadLowerBound(lowerExtendRegion);

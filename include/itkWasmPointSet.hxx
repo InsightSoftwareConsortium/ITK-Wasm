@@ -25,8 +25,7 @@ namespace itk
 
 template <typename TPointSet>
 void
-WasmPointSet<TPointSet>
-::SetPointSet(const PointSetType * pointSet)
+WasmPointSet<TPointSet>::SetPointSet(const PointSetType * pointSet)
 {
   this->SetDataObject(const_cast<PointSetType *>(pointSet));
 }

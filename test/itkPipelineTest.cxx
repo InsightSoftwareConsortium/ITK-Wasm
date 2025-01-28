@@ -57,7 +57,7 @@ itkPipelineTest(int argc, char * argv[])
   double example_double_option = 3.5;
   pipeline.add_option("-d,--double", example_double_option, "Example double option");
 
-  std::vector<double> example_vector_double_option = {3.5, 8.8};
+  std::vector<double> example_vector_double_option = { 3.5, 8.8 };
   pipeline.add_option("-v,--vector", example_vector_double_option, "Example double vector option");
 
   bool flag = false;
@@ -87,11 +87,15 @@ itkPipelineTest(int argc, char * argv[])
   pipeline.add_option("output-text", outputTextStream, "The output text")->required()->type_name("OUTPUT_TEXT_STREAM");
 
   itk::wasm::InputBinaryStream inputBinaryStream;
-  pipeline.add_option("input-binary", inputBinaryStream, "The input text")->required()->type_name("INPUT_BINARY_STREAM");
+  pipeline.add_option("input-binary", inputBinaryStream, "The input text")
+    ->required()
+    ->type_name("INPUT_BINARY_STREAM");
 
   using InputImageType = itk::wasm::InputImage<ImageType>;
   itk::wasm::OutputBinaryStream outputBinaryStream;
-  pipeline.add_option("output-binary", outputBinaryStream, "The output binary")->required()->type_name("OUTPUT_BINARY_STREAM");
+  pipeline.add_option("output-binary", outputBinaryStream, "The output binary")
+    ->required()
+    ->type_name("OUTPUT_BINARY_STREAM");
 
   using InputMeshType = itk::wasm::InputMesh<MeshType>;
   InputMeshType inputMesh;
@@ -107,23 +111,33 @@ itkPipelineTest(int argc, char * argv[])
 
   using OutputPolyDataType = itk::wasm::OutputPolyData<PolyDataType>;
   OutputPolyDataType outputPolyData;
-  pipeline.add_option("output-polydata", outputPolyData, "The output polydata")->required()->type_name("OUTPUT_POLYDATA");
+  pipeline.add_option("output-polydata", outputPolyData, "The output polydata")
+    ->required()
+    ->type_name("OUTPUT_POLYDATA");
 
   using InputTransformType = itk::wasm::InputTransform<TransformType>;
   InputTransformType inputTransform;
-  pipeline.add_option("input-transform", inputTransform, "The input transform")->required()->type_name("INPUT_TRANSFORM");
+  pipeline.add_option("input-transform", inputTransform, "The input transform")
+    ->required()
+    ->type_name("INPUT_TRANSFORM");
 
   using OutputTransformType = itk::wasm::OutputTransform<TransformType>;
   OutputTransformType outputTransform;
-  pipeline.add_option("output-transform", outputTransform, "The output transform")->required()->type_name("OUTPUT_TRANSFORM");
+  pipeline.add_option("output-transform", outputTransform, "The output transform")
+    ->required()
+    ->type_name("OUTPUT_TRANSFORM");
 
   using InputCompositeTransformType = itk::wasm::InputTransform<CompositeTransformType>;
   InputCompositeTransformType inputCompositeTransform;
-  pipeline.add_option("input-composite-transform", inputCompositeTransform, "The input composite transform")->required()->type_name("INPUT_TRANSFORM");
+  pipeline.add_option("input-composite-transform", inputCompositeTransform, "The input composite transform")
+    ->required()
+    ->type_name("INPUT_TRANSFORM");
 
   using OutputCompositeTransformType = itk::wasm::OutputTransform<CompositeTransformType>;
   OutputCompositeTransformType outputCompositeTransform;
-  pipeline.add_option("output-composite-transform", outputCompositeTransform, "The output composite transform")->required()->type_name("OUTPUT_TRANSFORM");
+  pipeline.add_option("output-composite-transform", outputCompositeTransform, "The output composite transform")
+    ->required()
+    ->type_name("OUTPUT_TRANSFORM");
 
   using InputPointSetType = itk::wasm::InputPointSet<PointSetType>;
   InputPointSetType inputPointSet;
@@ -131,7 +145,9 @@ itkPipelineTest(int argc, char * argv[])
 
   using OutputPointSetType = itk::wasm::OutputPointSet<PointSetType>;
   OutputPointSetType outputPointSet;
-  pipeline.add_option("output-point-set", outputPointSet, "The output point-set")->required()->type_name("OUTPUT_POINTSET");
+  pipeline.add_option("output-point-set", outputPointSet, "The output point-set")
+    ->required()
+    ->type_name("OUTPUT_POINTSET");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -144,7 +160,7 @@ itkPipelineTest(int argc, char * argv[])
   outputTextStream.Get() << inputTextStreamContent;
 
   const std::string inputBinaryStreamContent{ std::istreambuf_iterator<char>(inputBinaryStream.Get()),
-                                            std::istreambuf_iterator<char>() };
+                                              std::istreambuf_iterator<char>() };
 #if defined(_WIN64) || defined(_WIN32)
   ITK_TEST_EXPECT_TRUE(inputBinaryStreamContent == "test 123\r\n");
 #else

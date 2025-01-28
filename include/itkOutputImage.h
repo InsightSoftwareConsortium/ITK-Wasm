@@ -21,12 +21,12 @@
 #include "itkPipeline.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
-#include "itkWasmImage.h"
-#include "itkImageToWasmImageFilter.h"
+#  include "itkWasmExports.h"
+#  include "itkWasmImage.h"
+#  include "itkImageToWasmImageFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#include "itkImageFileWriter.h"
+#  include "itkImageFileWriter.h"
 #endif
 
 namespace itk
@@ -38,9 +38,9 @@ namespace wasm
  * \brief Output image for an itk::wasm::Pipeline
  *
  * This image is written to the filesystem or memory when it goes out of scope.
- * 
+ *
  * Call `GetImage()` to get the TImage * to use an input to a pipeline.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TImage>
@@ -49,45 +49,51 @@ class ITK_TEMPLATE_EXPORT OutputImage
 public:
   using ImageType = TImage;
 
-  void Set(const ImageType * image) {
+  void
+  Set(const ImageType * image)
+  {
     this->m_Image = image;
   }
 
-  const ImageType * Get() const {
+  const ImageType *
+  Get() const
+  {
     return this->m_Image.GetPointer();
   }
 
   /** FileName or output index. */
-  void SetIdentifier(const std::string & identifier)
+  void
+  SetIdentifier(const std::string & identifier)
   {
     this->m_Identifier = identifier;
   }
-  const std::string & GetIdentifier() const
+  const std::string &
+  GetIdentifier() const
   {
     return this->m_Identifier;
   }
 
   OutputImage() = default;
-  ~OutputImage() {
-    if(wasm::Pipeline::get_use_memory_io())
+  ~OutputImage()
+  {
+    if (wasm::Pipeline::get_use_memory_io())
     {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    if (!this->m_Image.IsNull() && !this->m_Identifier.empty())
+      if (!this->m_Image.IsNull() && !this->m_Identifier.empty())
       {
         using ImageToWasmImageFilterType = ImageToWasmImageFilter<ImageType>;
         auto imageToWasmImageFilter = ImageToWasmImageFilterType::New();
         imageToWasmImageFilter->SetInput(this->m_Image);
         imageToWasmImageFilter->Update();
-        auto wasmImage = imageToWasmImageFilter->GetOutput();
+        auto       wasmImage = imageToWasmImageFilter->GetOutput();
         const auto index = std::stoi(this->m_Identifier);
         setMemoryStoreOutputDataObject(0, index, wasmImage);
 
-        const auto dataAddress = reinterpret_cast< size_t >( wasmImage->GetImage()->GetBufferPointer() );
+        const auto dataAddress = reinterpret_cast<size_t>(wasmImage->GetImage()->GetBufferPointer());
         using ConvertPixelTraits = DefaultConvertPixelTraits<typename ImageType::PixelType>;
-        const auto dataSize =
-          wasmImage->GetImage()->GetBufferedRegion().GetNumberOfPixels()
-          * sizeof(typename ConvertPixelTraits::ComponentType)
-          * wasmImage->GetImage()->GetNumberOfComponentsPerPixel();
+        const auto dataSize = wasmImage->GetImage()->GetBufferedRegion().GetNumberOfPixels() *
+                              sizeof(typename ConvertPixelTraits::ComponentType) *
+                              wasmImage->GetImage()->GetNumberOfComponentsPerPixel();
         if (dataSize <= 0)
         {
           std::cerr << "dataSize cannot be zero or negative." << std::endl;
@@ -95,28 +101,30 @@ public:
         }
         setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);
 
-        const auto directionAddress = reinterpret_cast< size_t >( wasmImage->GetImage()->GetDirection().GetVnlMatrix().begin() );
+        const auto directionAddress =
+          reinterpret_cast<size_t>(wasmImage->GetImage()->GetDirection().GetVnlMatrix().begin());
         const auto directionSize = wasmImage->GetImage()->GetDirection().GetVnlMatrix().size() * sizeof(double);
         setMemoryStoreOutputArray(0, index, 1, directionAddress, directionSize);
       }
 #else
-    std::cerr << "Memory IO not supported" << std::endl;
-    abort();
+      std::cerr << "Memory IO not supported" << std::endl;
+      abort();
 #endif
     }
     else
     {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    if (!this->m_Image.IsNull() && !this->m_Identifier.empty())
+      if (!this->m_Image.IsNull() && !this->m_Identifier.empty())
       {
-      itk::WriteImage(this->m_Image, this->m_Identifier);
+        itk::WriteImage(this->m_Image, this->m_Identifier);
       }
 #else
-    std::cerr << "Filesystem IO not supported" << std::endl;
-    abort();
+      std::cerr << "Filesystem IO not supported" << std::endl;
+      abort();
 #endif
     }
   }
+
 protected:
   typename TImage::ConstPointer m_Image;
 
@@ -124,7 +132,8 @@ protected:
 };
 
 template <typename TImage>
-bool lexical_cast(const std::string &input, OutputImage<TImage> &outputImage)
+bool
+lexical_cast(const std::string & input, OutputImage<TImage> & outputImage)
 {
   outputImage.SetIdentifier(input);
   return true;

@@ -50,7 +50,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmTransformIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(WasmTransformIOFactory);
 
   /** Register one factory of this type  */
   static void
@@ -66,7 +66,7 @@ protected:
   ~WasmTransformIOFactory() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmTransformIOFactory);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmTransformIOFactory);
 };
 } // end namespace itk
 

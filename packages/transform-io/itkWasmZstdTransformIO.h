@@ -38,7 +38,7 @@ namespace itk
  * \ingroup WebAssemblyInterface
  */
 template <typename TParametersValueType>
-class ITK_TEMPLATE_EXPORT WasmZstdTransformIOTemplate: public WasmTransformIOTemplate<TParametersValueType>
+class ITK_TEMPLATE_EXPORT WasmZstdTransformIOTemplate : public WasmTransformIOTemplate<TParametersValueType>
 {
 public:
   /** Standard class typedefs. */
@@ -52,29 +52,33 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmZstdTransformIOTemplate, WasmTransformIOTemplate);
+  itkOverrideGetNameOfClassMacro(WasmZstdTransformIOTemplate);
 
   /** Determine the file type. Returns true if this TransformIO can read the
    * file specified. */
-  bool CanReadFile(const char *) override;
+  bool
+  CanReadFile(const char *) override;
 
   /** Reads the data from disk into the memory buffer provided. */
-  void Read() override;
+  void
+  Read() override;
 
   /** Determine the file type. Returns true if this TransformIO can write the
    * file specified. */
-  bool CanWriteFile(const char *) override;
+  bool
+  CanWriteFile(const char *) override;
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. */
-  void Write() override;
+  void
+  Write() override;
 
 protected:
   WasmZstdTransformIOTemplate();
   ~WasmZstdTransformIOTemplate() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmZstdTransformIOTemplate);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmZstdTransformIOTemplate);
 };
 } // end namespace itk
 

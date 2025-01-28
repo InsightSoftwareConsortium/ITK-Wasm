@@ -43,10 +43,8 @@ namespace itk
  * The stream is closed if it's already opened. If an error is
  * encountered than an exception will be thrown.
  */
-WebAssemblyInterface_EXPORT
-void
-openFileForReading(std::ifstream & inputStream, const std::string & filename,
-                                bool ascii = false);
+WebAssemblyInterface_EXPORT void
+openFileForReading(std::ifstream & inputStream, const std::string & filename, bool ascii = false);
 
 /** \brief Opens a file for writing and random access
  *
@@ -63,30 +61,31 @@ openFileForReading(std::ifstream & inputStream, const std::string & filename,
  * The stream is closed if it's already opened. If an error is
  * encountered than an exception will be thrown.
  */
-WebAssemblyInterface_EXPORT
-void
-openFileForWriting(std::ofstream & outputStream, const std::string & filename,
-                                bool truncate = true, bool ascii = false);
+WebAssemblyInterface_EXPORT void
+openFileForWriting(std::ofstream &     outputStream,
+                   const std::string & filename,
+                   bool                truncate = true,
+                   bool                ascii = false);
 
 /** Convenient method to read a buffer as binary. Return true on success. */
-WebAssemblyInterface_EXPORT
-bool
-readBufferAsBinary(std::istream & os, void *buffer, SizeValueType numberOfBytesToBeRead);
+WebAssemblyInterface_EXPORT bool
+readBufferAsBinary(std::istream & os, void * buffer, SizeValueType numberOfBytesToBeRead);
 
-WebAssemblyInterface_EXPORT
-bool fileNameIsCBOR(const char * fileName);
+WebAssemblyInterface_EXPORT bool
+fileNameIsCBOR(const char * fileName);
 
-WebAssemblyInterface_EXPORT
-void
+WebAssemblyInterface_EXPORT void
 readCBORBuffer(const cbor_item_t * index, const char * dataName, void * buffer, SizeValueType numberOfBytesToBeRead);
 
-WebAssemblyInterface_EXPORT
-void
-writeCBORBuffer(cbor_item_t * index, const char * dataName, const void * buffer, SizeValueType numberOfBytesToWrite, IOComponentEnum ioComponent);
+WebAssemblyInterface_EXPORT void
+writeCBORBuffer(cbor_item_t *   index,
+                const char *    dataName,
+                const void *    buffer,
+                SizeValueType   numberOfBytesToWrite,
+                IOComponentEnum ioComponent);
 
-WebAssemblyInterface_EXPORT
-size_t
-ITKComponentSize( const CommonEnums::IOComponent );
+WebAssemblyInterface_EXPORT size_t
+ITKComponentSize(const CommonEnums::IOComponent);
 
 } // end namespace itk
 

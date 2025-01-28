@@ -22,33 +22,24 @@
 namespace itk
 {
 
-WasmMeshIOFactory
-::WasmMeshIOFactory()
+WasmMeshIOFactory ::WasmMeshIOFactory()
 {
-  this->RegisterOverride( "itkMeshIOBase",
-                          "itkWasmMeshIO",
-                          "Wasm Mesh IO",
-                          1,
-                          CreateObjectFunction< WasmMeshIO >::New() );
+  this->RegisterOverride("itkMeshIOBase", "itkWasmMeshIO", "Wasm Mesh IO", 1, CreateObjectFunction<WasmMeshIO>::New());
 }
 
 
-WasmMeshIOFactory
-::~WasmMeshIOFactory()
-{}
+WasmMeshIOFactory ::~WasmMeshIOFactory() {}
 
 
 const char *
-WasmMeshIOFactory
-::GetITKSourceVersion() const
+WasmMeshIOFactory ::GetITKSourceVersion() const
 {
   return ITK_SOURCE_VERSION;
 }
 
 
 const char *
-WasmMeshIOFactory
-::GetDescription() const
+WasmMeshIOFactory ::GetDescription() const
 {
   return "Wasm MeshIO Factory, allows the loading of Wasm meshes into Insight";
 }
@@ -59,13 +50,14 @@ WasmMeshIOFactory
 
 static bool WasmMeshIOFactoryHasBeenRegistered;
 
-void WebAssemblyInterface_EXPORT WasmMeshIOFactoryRegister__Private(void)
+void WebAssemblyInterface_EXPORT
+WasmMeshIOFactoryRegister__Private(void)
 {
-  if( ! WasmMeshIOFactoryHasBeenRegistered )
-    {
+  if (!WasmMeshIOFactoryHasBeenRegistered)
+  {
     WasmMeshIOFactoryHasBeenRegistered = true;
     WasmMeshIOFactory::RegisterOneFactory();
-    }
+  }
 }
 
 } // end namespace itk

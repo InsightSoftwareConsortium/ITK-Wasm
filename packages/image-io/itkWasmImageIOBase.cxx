@@ -58,38 +58,38 @@ WasmImageIOBase::SetImageIO(ImageIOBase * imageIO, bool readImage)
 
   auto imageJSON = wasmImageIO->GetJSON();
 
-  this->m_DirectionContainer->resize(dimension*dimension);
-  for( unsigned int ii = 0; ii < dimension; ++ii )
+  this->m_DirectionContainer->resize(dimension * dimension);
+  for (unsigned int ii = 0; ii < dimension; ++ii)
   {
-    const std::vector< double > dimensionDirection = imageIO->GetDirection( ii );
-    for( unsigned int jj = 0; jj < dimension; ++jj )
+    const std::vector<double> dimensionDirection = imageIO->GetDirection(ii);
+    for (unsigned int jj = 0; jj < dimension; ++jj)
     {
-      this->m_DirectionContainer->SetElement(ii+dimension*jj, dimensionDirection[jj]);
+      this->m_DirectionContainer->SetElement(ii + dimension * jj, dimensionDirection[jj]);
     }
   }
-  const auto directionAddress = reinterpret_cast< size_t >( &(this->m_DirectionContainer->at(0)) );
+  const auto         directionAddress = reinterpret_cast<size_t>(&(this->m_DirectionContainer->at(0)));
   std::ostringstream directionStream;
   directionStream << "data:application/vnd.itk.address,0:";
   directionStream << directionAddress;
   imageJSON.direction = directionStream.str();
 
-  ImageIORegion ioRegion( dimension );
-  for(unsigned int dim = 0; dim < dimension; ++dim)
-    {
-    ioRegion.SetSize(dim, imageIO->GetDimensions( dim ));
-    }
-  imageIO->SetIORegion( ioRegion );
-  this->m_PixelDataContainer->resize( imageIO->GetImageSizeInBytes() );
-  imageIO->Read( reinterpret_cast< void * >( &(this->m_PixelDataContainer->at(0)) ));
+  ImageIORegion ioRegion(dimension);
+  for (unsigned int dim = 0; dim < dimension; ++dim)
+  {
+    ioRegion.SetSize(dim, imageIO->GetDimensions(dim));
+  }
+  imageIO->SetIORegion(ioRegion);
+  this->m_PixelDataContainer->resize(imageIO->GetImageSizeInBytes());
+  imageIO->Read(reinterpret_cast<void *>(&(this->m_PixelDataContainer->at(0))));
 
-  const auto pixelDataAddress = reinterpret_cast< size_t >( &(this->m_PixelDataContainer->at(0)) );
+  const auto         pixelDataAddress = reinterpret_cast<size_t>(&(this->m_PixelDataContainer->at(0)));
   std::ostringstream dataStream;
   dataStream << "data:application/vnd.itk.address,0:";
   dataStream << pixelDataAddress;
   imageJSON.data = dataStream.str();
 
   std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true }>(imageJSON, serialized);
+  auto        ec = glz::write<glz::opts{ .prettify = true }>(imageJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize ImageJSON");

@@ -23,46 +23,46 @@ namespace itk
 IOComponentEnum
 IOComponentEnumFromWasmComponentType(const std::string & wasmComponentType)
 {
-  if( wasmComponentType == "int8" )
-    {
+  if (wasmComponentType == "int8")
+  {
     return IOComponentEnum::CHAR;
-    }
-  else if( wasmComponentType == "uint8" )
-    {
+  }
+  else if (wasmComponentType == "uint8")
+  {
     return IOComponentEnum::UCHAR;
-    }
-  else if( wasmComponentType == "int16" )
-    {
+  }
+  else if (wasmComponentType == "int16")
+  {
     return IOComponentEnum::SHORT;
-    }
-  else if( wasmComponentType == "uint16" )
-    {
+  }
+  else if (wasmComponentType == "uint16")
+  {
     return IOComponentEnum::USHORT;
-    }
-  else if( wasmComponentType == "int32" )
-    {
+  }
+  else if (wasmComponentType == "int32")
+  {
     return IOComponentEnum::INT;
-    }
-  else if( wasmComponentType == "uint32" )
-    {
+  }
+  else if (wasmComponentType == "uint32")
+  {
     return IOComponentEnum::UINT;
-    }
-  else if( wasmComponentType == "int64" )
-    {
+  }
+  else if (wasmComponentType == "int64")
+  {
     return IOComponentEnum::LONGLONG;
-    }
-  else if( wasmComponentType == "uint64" )
-    {
+  }
+  else if (wasmComponentType == "uint64")
+  {
     return IOComponentEnum::ULONGLONG;
-    }
-  else if( wasmComponentType == "float32" )
-    {
+  }
+  else if (wasmComponentType == "float32")
+  {
     return IOComponentEnum::FLOAT;
-    }
-  else if( wasmComponentType == "float64" )
-    {
+  }
+  else if (wasmComponentType == "float64")
+  {
     return IOComponentEnum::DOUBLE;
-    }
+  }
   return IOComponentEnum::UNKNOWNCOMPONENTTYPE;
 }
 

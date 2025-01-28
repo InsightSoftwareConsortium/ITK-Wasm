@@ -134,7 +134,10 @@ public:
 int
 main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("mean-squares-versor-registration", "Illustrate the use of the VersorRigid3DTransform for 3D image registration.", argc, argv);
+  itk::wasm::Pipeline pipeline("mean-squares-versor-registration",
+                               "Illustrate the use of the VersorRigid3DTransform for 3D image registration.",
+                               argc,
+                               argv);
 
   constexpr unsigned int Dimension = 3;
   using PixelType = float;
@@ -173,10 +176,8 @@ main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   using OptimizerType = itk::RegularStepGradientDescentOptimizerv4<double>;
-  using MetricType =
-    itk::MeanSquaresImageToImageMetricv4<FixedImageType, MovingImageType>;
-  using RegistrationType = itk::
-    ImageRegistrationMethodv4<FixedImageType, MovingImageType, TransformType>;
+  using MetricType = itk::MeanSquaresImageToImageMetricv4<FixedImageType, MovingImageType>;
+  using RegistrationType = itk::ImageRegistrationMethodv4<FixedImageType, MovingImageType, TransformType>;
 
   auto metric = MetricType::New();
   auto optimizer = OptimizerType::New();
@@ -222,10 +223,7 @@ main(int argc, char * argv[])
 
 
   // Software Guide : BeginCodeSnippet
-  using TransformInitializerType =
-    itk::CenteredTransformInitializer<TransformType,
-                                      FixedImageType,
-                                      MovingImageType>;
+  using TransformInitializerType = itk::CenteredTransformInitializer<TransformType, FixedImageType, MovingImageType>;
   auto initializer = TransformInitializerType::New();
   // Software Guide : EndCodeSnippet
 
@@ -310,9 +308,8 @@ main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   using OptimizerScalesType = OptimizerType::ScalesType;
-  OptimizerScalesType optimizerScales(
-    initialTransform->GetNumberOfParameters());
-  const double translationScale = 1.0 / 1000.0;
+  OptimizerScalesType optimizerScales(initialTransform->GetNumberOfParameters());
+  const double        translationScale = 1.0 / 1000.0;
   optimizerScales[0] = 1.0;
   optimizerScales[1] = 1.0;
   optimizerScales[2] = 1.0;
@@ -349,8 +346,7 @@ main(int argc, char * argv[])
   try
   {
     registration->Update();
-    std::cout << "Optimizer stop condition: "
-              << registration->GetOptimizer()->GetStopConditionDescription()
+    std::cout << "Optimizer stop condition: " << registration->GetOptimizer()->GetStopConditionDescription()
               << std::endl;
   }
   catch (const itk::ExceptionObject & err)
@@ -360,8 +356,7 @@ main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  const TransformType::ParametersType finalParameters =
-    registration->GetOutput()->Get()->GetParameters();
+  const TransformType::ParametersType finalParameters = registration->GetOutput()->Get()->GetParameters();
 
   const double       versorX = finalParameters[0];
   const double       versorY = finalParameters[1];
@@ -443,8 +438,7 @@ main(int argc, char * argv[])
 
   auto finalTransform = TransformType::New();
 
-  finalTransform->SetFixedParameters(
-    registration->GetOutput()->Get()->GetFixedParameters());
+  finalTransform->SetFixedParameters(registration->GetOutput()->Get()->GetFixedParameters());
   finalTransform->SetParameters(finalParameters);
 
   // Software Guide : BeginCodeSnippet
@@ -551,8 +545,7 @@ main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex
 
-  using ResampleFilterType =
-    itk::ResampleImageFilter<MovingImageType, FixedImageType>;
+  using ResampleFilterType = itk::ResampleImageFilter<MovingImageType, FixedImageType>;
 
   auto resampler = ResampleFilterType::New();
 
@@ -567,8 +560,7 @@ main(int argc, char * argv[])
   resampler->SetOutputDirection(fixedImage->GetDirection());
   resampler->SetDefaultPixelValue(100);
 
-  using CastFilterType =
-    itk::CastImageFilter<FixedImageType, OutputImageType>;
+  using CastFilterType = itk::CastImageFilter<FixedImageType, OutputImageType>;
 
   auto caster = CastFilterType::New();
 

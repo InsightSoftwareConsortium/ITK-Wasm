@@ -36,7 +36,8 @@
 namespace itk
 {
 
-WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, ImageTypeJSON & imageType);
+WebAssemblyInterface_EXPORT bool
+lexical_cast(const std::string & input, ImageTypeJSON & imageType);
 
 namespace wasm
 {
@@ -46,7 +47,8 @@ namespace wasm
  * \brief Instantiatiate a Pipeline functor over multiple pixel types and dimensions and match to the input image type.
  *
  * Instantiate the PipelineFunctor (function object) over multiple pixel types and image dimensions.
- *  If the input image matches these pixel types or dimensions, use the compile-time optimized pipeline for that image type.
+ *  If the input image matches these pixel types or dimensions, use the compile-time optimized pipeline for that image
+type.
  *  Otherwise, exit the pipeline with an error identifying the unsupported image type.
  *
  * Example usage:
@@ -83,12 +85,11 @@ main(int argc, char * argv[])
  *
  * \ingroup WebAssemblyInterface
  */
-template<template <typename TImage> class TPipelineFunctor, typename ...TPixels>
-class
-SupportInputImageTypes
+template <template <typename TImage> class TPipelineFunctor, typename... TPixels>
+class SupportInputImageTypes
 {
 public:
-  template<unsigned int ...VDimensions>
+  template <unsigned int... VDimensions>
   static int
   Dimensions(const std::string & inputImageOptionName, Pipeline & pipeline)
   {
@@ -96,15 +97,15 @@ public:
 
     const auto iwpArgc = pipeline.get_argc();
     const auto iwpArgv = pipeline.get_argv();
-    bool passThrough = false;
+    bool       passThrough = false;
     for (int ii = 0; ii < iwpArgc; ++ii)
+    {
+      const std::string arg(iwpArgv[ii]);
+      if (arg == "-h" || arg == "--help" || arg == "--interface-json" || arg == "--version")
       {
-        const std::string arg(iwpArgv[ii]);
-        if (arg == "-h" || arg == "--help" || arg == "--interface-json" || arg == "--version")
-        {
-          passThrough = true;
-        }
+        passThrough = true;
       }
+    }
     if (passThrough)
     {
       return IterateDimensions<VDimensions...>(pipeline, imageType, passThrough);
@@ -120,7 +121,7 @@ public:
   }
 
 private:
-  template<unsigned int VDimension, typename TPixel, typename ...TPixelsRest>
+  template <unsigned int VDimension, typename TPixel, typename... TPixelsRest>
   static int
   IteratePixelTypes(Pipeline & pipeline, const ImageTypeJSON & imageType, bool passThrough = false)
   {
@@ -130,29 +131,29 @@ private:
 
     if (passThrough ||
         imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum &&
-        imageType.pixelType == MapPixelType<PixelType>::JSONPixelEnum)
+          imageType.pixelType == MapPixelType<PixelType>::JSONPixelEnum)
     {
-      if (passThrough ||
-         imageType.pixelType == JSONPixelTypesEnum::VariableLengthVector ||
-         imageType.pixelType == JSONPixelTypesEnum::VariableSizeMatrix ||
-         imageType.components == ConvertPixelTraits::GetNumberOfComponents() )
+      if (passThrough || imageType.pixelType == JSONPixelTypesEnum::VariableLengthVector ||
+          imageType.pixelType == JSONPixelTypesEnum::VariableSizeMatrix ||
+          imageType.components == ConvertPixelTraits::GetNumberOfComponents())
       {
         return SpecializedImagePipelineFunctor<TPipelineFunctor, Dimension, PixelType>()(pipeline);
       }
     }
 
-    if constexpr (sizeof...(TPixelsRest) > 0) {
+    if constexpr (sizeof...(TPixelsRest) > 0)
+    {
       return IteratePixelTypes<VDimension, TPixelsRest...>(pipeline, imageType);
     }
 
     std::ostringstream ostrm;
-    std::string imageTypeString = glz::write_json(imageType).value_or("error");
+    std::string        imageTypeString = glz::write_json(imageType).value_or("error");
     ostrm << "Unsupported image type: " << imageTypeString << std::endl;
     CLI::Error err("Runtime error", ostrm.str(), 1);
     return pipeline.exit(err);
   }
 
-  template<unsigned int VDimension, unsigned int ...VDimensions>
+  template <unsigned int VDimension, unsigned int... VDimensions>
   static int
   IterateDimensions(Pipeline & pipeline, const ImageTypeJSON & imageType, bool passThrough = false)
   {
@@ -161,7 +162,8 @@ private:
       return IteratePixelTypes<VDimension, TPixels...>(pipeline, imageType, passThrough);
     }
 
-    if constexpr (sizeof...(VDimensions) > 0) {
+    if constexpr (sizeof...(VDimensions) > 0)
+    {
       return IterateDimensions<VDimensions...>(pipeline, imageType);
     }
 

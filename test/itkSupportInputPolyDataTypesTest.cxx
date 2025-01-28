@@ -22,11 +22,12 @@
 #include "itkSupportInputPolyDataTypes.h"
 #include "itkWasmMeshIOFactory.h"
 
-template<typename TPolyData>
+template <typename TPolyData>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using PolyDataType = TPolyData;
 
@@ -36,7 +37,9 @@ public:
 
     using OutputPolyDataType = itk::wasm::OutputPolyData<PolyDataType>;
     OutputPolyDataType outputPolyData;
-    pipeline.add_option("output-polydata", outputPolyData, "The output polydata")->required()->type_name("OUTPUT_POLYDATA");
+    pipeline.add_option("output-polydata", outputPolyData, "The output polydata")
+      ->required()
+      ->type_name("OUTPUT_POLYDATA");
 
     ITK_WASM_PARSE(pipeline);
 
@@ -49,10 +52,10 @@ public:
 int
 itkSupportInputPolyDataTypesTest(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("support-input-polydata-types-test", "Test supporting multiple input mesh types", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "support-input-polydata-types-test", "Test supporting multiple input mesh types", argc, argv);
 
   itk::WasmMeshIOFactory::RegisterOneFactory();
 
-  return itk::wasm::SupportInputPolyDataTypes<PipelineFunctor>
-  ::PixelTypes<uint8_t, float>("input-polydata", pipeline);
+  return itk::wasm::SupportInputPolyDataTypes<PipelineFunctor>::PixelTypes<uint8_t, float>("input-polydata", pipeline);
 }

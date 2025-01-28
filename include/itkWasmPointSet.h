@@ -29,7 +29,8 @@ namespace itk
  *
  * JSON representation for an itk::PointSet for interfacing across programming languages and runtimes.
  *
- * Point and PointData binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
+ * Point and PointData binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual
+ *filesystem.
  *
  * - 0: Point buffer
  * - 1: Point data buffer
@@ -50,16 +51,19 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmPointSet, WasmDataObject);
+  itkOverrideGetNameOfClassMacro(WasmPointSet);
 
   using PointSetType = TPointSet;
 
   using PointIdentifier = typename PointSetType::PointIdentifier;
 
-  void SetPointSet(const PointSetType * pointSet);
+  void
+  SetPointSet(const PointSetType * pointSet);
 
-  const PointSetType * GetPointSet() const {
-    return static_cast< const PointSetType * >(this->GetDataObject());
+  const PointSetType *
+  GetPointSet() const
+  {
+    return static_cast<const PointSetType *>(this->GetDataObject());
   }
 
 protected:

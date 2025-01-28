@@ -26,7 +26,7 @@ namespace itk
 /**
  *\class ImageToWasmImageFilter
  * \brief Convert an Image to an WasmImage object.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TImage>
@@ -45,7 +45,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToWasmImageFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(ImageToWasmImageFilter);
 
   using DataObjectIdentifierType = Superclass::DataObjectIdentifierType;
   using DataObjectPointerArraySizeType = Superclass::DataObjectPointerArraySizeType;
