@@ -110,6 +110,9 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_TESTING:BOOL=OFF \
     -DITK_DIR:PATH=/ITK-build \
+    -DCMAKE_C_FLAGS:STRING="${CFLAGS}" \
+    -DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="${LDFLAGS}" \
     ../ITKMeshToPolyData && \
   ninja && \
   find . -name '*.o' -delete && \
