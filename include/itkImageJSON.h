@@ -34,57 +34,58 @@
 
 namespace itk
 {
-  /** \class ImageTypeJSON
-   *
-   * \brief Image type JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct ImageTypeJSON
-  {
-    unsigned int dimension { 2 };
-    JSONComponentTypesEnum componentType { JSONComponentTypesEnum::float32 };
-    JSONPixelTypesEnum pixelType { JSONPixelTypesEnum::Scalar };
-    unsigned int components { 1 };
-  };
+/** \class ImageTypeJSON
+ *
+ * \brief Image type JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct ImageTypeJSON
+{
+  unsigned int           dimension{ 2 };
+  JSONComponentTypesEnum componentType{ JSONComponentTypesEnum::float32 };
+  JSONPixelTypesEnum     pixelType{ JSONPixelTypesEnum::Scalar };
+  unsigned int           components{ 1 };
+};
 
-  /** \class ImageRegionJSON
-   *
-   * \brief Image region JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct ImageRegionJSON
-  {
-    std::vector<IndexValueType> index {};
-    std::vector<SizeValueType>  size  {};
-  };
+/** \class ImageRegionJSON
+ *
+ * \brief Image region JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct ImageRegionJSON
+{
+  std::vector<IndexValueType> index{};
+  std::vector<SizeValueType>  size{};
+};
 
-  /** \class ImageJSON
-   *
-   * \brief Image JSON representation data structure.
-   *
-   * \ingroup WebAssemblyInterface
-   */
-  struct ImageJSON
-  {
-    ImageTypeJSON imageType;
+/** \class ImageJSON
+ *
+ * \brief Image JSON representation data structure.
+ *
+ * \ingroup WebAssemblyInterface
+ */
+struct ImageJSON
+{
+  ImageTypeJSON imageType;
 
-    std::string name { "Image" };
+  std::string name{ "Image" };
 
-    std::vector<double> origin { 0.0, 0.0 };
-    std::vector<double> spacing { 1.0, 1.0 };
-    std::string         direction;
-    std::vector<SizeValueType> size { 0, 0 };
-    ImageRegionJSON bufferedRegion{};
+  std::vector<double>        origin{ 0.0, 0.0 };
+  std::vector<double>        spacing{ 1.0, 1.0 };
+  std::string                direction;
+  std::vector<SizeValueType> size{ 0, 0 };
+  ImageRegionJSON            bufferedRegion{};
 
-    std::string data;
+  std::string data;
 
-    MetadataJSON metadata;
-  };
+  MetadataJSON metadata;
+};
 
-template<typename TImage>
-auto imageToImageJSON(const TImage * image, const WasmImage<TImage> * wasmImage, bool inMemory) -> ImageJSON
+template <typename TImage>
+auto
+imageToImageJSON(const TImage * image, const WasmImage<TImage> * wasmImage, bool inMemory) -> ImageJSON
 {
   using ImageType = TImage;
 
@@ -97,7 +98,8 @@ auto imageToImageJSON(const TImage * image, const WasmImage<TImage> * wasmImage,
   using IOPixelType = typename TImage::IOPixelType;
   using ConvertPixelTraits = DefaultConvertPixelTraits<IOPixelType>;
   using ComponentType = typename ConvertPixelTraits::ComponentType;
-  imageJSON.imageType.componentType = wasm::MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum;
+  imageJSON.imageType.componentType =
+    wasm::MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum;
   imageJSON.imageType.pixelType = wasm::MapPixelType<PixelType>::JSONPixelEnum;
   imageJSON.imageType.components = image->GetNumberOfComponentsPerPixel();
 
@@ -125,7 +127,7 @@ auto imageToImageJSON(const TImage * image, const WasmImage<TImage> * wasmImage,
 
   if (inMemory)
   {
-    const auto direction = reinterpret_cast< size_t >( image->GetDirection().GetVnlMatrix().begin() );
+    const auto         direction = reinterpret_cast<size_t>(image->GetDirection().GetVnlMatrix().begin());
     std::ostringstream directionStream;
     directionStream << "data:application/vnd.itk.address,0:";
     directionStream << direction;
@@ -152,7 +154,7 @@ auto imageToImageJSON(const TImage * image, const WasmImage<TImage> * wasmImage,
 
   if (inMemory)
   {
-    const auto data = reinterpret_cast< size_t >( image->GetBufferPointer() );
+    const auto         data = reinterpret_cast<size_t>(image->GetBufferPointer());
     std::ostringstream dataStream;
     dataStream << "data:application/vnd.itk.address,0:";
     dataStream << data;

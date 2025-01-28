@@ -30,7 +30,7 @@ namespace itk
  * JSON representation for an itk::PolyData for interfacing across programming languages and runtimes.
  *
  * Array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
- * 
+ *
  * - 0: Point buffer
  * - 1: Vertices buffer
  * - 2: Lines buffer
@@ -59,12 +59,16 @@ public:
 
   using PolyDataType = TPolyData;
 
-  void SetPolyData(const PolyDataType * polyData) {
+  void
+  SetPolyData(const PolyDataType * polyData)
+  {
     this->SetDataObject(const_cast<PolyDataType *>(polyData));
   }
 
-  const PolyDataType * GetPolyData() const {
-    return static_cast< const PolyDataType * >(this->GetDataObject());
+  const PolyDataType *
+  GetPolyData() const
+  {
+    return static_cast<const PolyDataType *>(this->GetDataObject());
   }
 
 protected:

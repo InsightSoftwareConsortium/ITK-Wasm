@@ -26,7 +26,7 @@ namespace itk
 /**
  *\class PolyDataToWasmPolyDataFilter
  * \brief Convert an PolyData to an WasmPolyData object.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TPolyData>

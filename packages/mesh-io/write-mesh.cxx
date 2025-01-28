@@ -22,32 +22,32 @@
 #include "itkOutputTextStream.h"
 
 #ifndef MESH_IO_CLASS
-#error "MESH_IO_CLASS definition must be provided"
+#  error "MESH_IO_CLASS definition must be provided"
 #endif
 
 #if MESH_IO_CLASS == 0
-#include "itkBYUMeshIO.h"
+#  include "itkBYUMeshIO.h"
 #elif MESH_IO_CLASS == 1
-#include "itkFreeSurferAsciiMeshIO.h"
+#  include "itkFreeSurferAsciiMeshIO.h"
 #elif MESH_IO_CLASS == 2
-#include "itkFreeSurferBinaryMeshIO.h"
+#  include "itkFreeSurferBinaryMeshIO.h"
 #elif MESH_IO_CLASS == 3
-#include "itkVTKPolyDataMeshIO.h"
+#  include "itkVTKPolyDataMeshIO.h"
 #elif MESH_IO_CLASS == 4
-#include "itkOBJMeshIO.h"
+#  include "itkOBJMeshIO.h"
 #elif MESH_IO_CLASS == 5
-#include "itkOFFMeshIO.h"
+#  include "itkOFFMeshIO.h"
 #elif MESH_IO_CLASS == 6
-#include "itkSTLMeshIO.h"
+#  include "itkSTLMeshIO.h"
 #elif MESH_IO_CLASS == 7
-#include "itkSWCMeshIO.h"
+#  include "itkSWCMeshIO.h"
 #elif MESH_IO_CLASS == 8
 #elif MESH_IO_CLASS == 9
-#include "itkWasmZstdMeshIO.h"
+#  include "itkWasmZstdMeshIO.h"
 #elif MESH_IO_CLASS == 10
-#include "itkMZ3MeshIO.h"
+#  include "itkMZ3MeshIO.h"
 #else
-#error "Unsupported MESH_IO_CLASS"
+#  error "Unsupported MESH_IO_CLASS"
 #endif
 #include "itkWasmMeshIO.h"
 
@@ -60,7 +60,13 @@
 #include "itkMeshIOBase.h"
 
 template <typename TMeshIO>
-int writeMesh(itk::wasm::InputMeshIO & inputMeshIO, itk::wasm::OutputTextStream & couldWrite, const std::string & outputFileName, bool informationOnly, bool useCompression, bool binaryFileType)
+int
+writeMesh(itk::wasm::InputMeshIO &      inputMeshIO,
+          itk::wasm::OutputTextStream & couldWrite,
+          const std::string &           outputFileName,
+          bool                          informationOnly,
+          bool                          useCompression,
+          bool                          binaryFileType)
 {
   using MeshIOType = TMeshIO;
 
@@ -86,7 +92,7 @@ int writeMesh(itk::wasm::InputMeshIO & inputMeshIO, itk::wasm::OutputTextStream 
   meshIO->SetFileName(outputFileName);
 
   const itk::WasmMeshIOBase * inputWasmMeshIOBase = inputMeshIO.Get();
-  const itk::MeshIOBase * inputMeshIOBase = inputWasmMeshIOBase->GetMeshIO();
+  const itk::MeshIOBase *     inputMeshIOBase = inputWasmMeshIOBase->GetMeshIO();
 
   const unsigned int dimension = inputMeshIOBase->GetPointDimension();
   meshIO->SetPointDimension(dimension);
@@ -126,19 +132,23 @@ int writeMesh(itk::wasm::InputMeshIO & inputMeshIO, itk::wasm::OutputTextStream 
   {
     if (meshIO->GetNumberOfPoints())
     {
-      meshIO->WritePoints( reinterpret_cast< void * >( const_cast< char * >(&(inputWasmMeshIOBase->GetPointsContainer()->at(0))) ));
+      meshIO->WritePoints(
+        reinterpret_cast<void *>(const_cast<char *>(&(inputWasmMeshIOBase->GetPointsContainer()->at(0)))));
     }
     if (meshIO->GetNumberOfCells())
     {
-      meshIO->WriteCells( reinterpret_cast< void * >( const_cast< char * >(&(inputWasmMeshIOBase->GetCellsContainer()->at(0))) ));
+      meshIO->WriteCells(
+        reinterpret_cast<void *>(const_cast<char *>(&(inputWasmMeshIOBase->GetCellsContainer()->at(0)))));
     }
     if (meshIO->GetNumberOfPointPixels())
     {
-      meshIO->WritePointData( reinterpret_cast< void * >( const_cast< char * >(&(inputWasmMeshIOBase->GetPointDataContainer()->at(0))) ));
+      meshIO->WritePointData(
+        reinterpret_cast<void *>(const_cast<char *>(&(inputWasmMeshIOBase->GetPointDataContainer()->at(0)))));
     }
     if (meshIO->GetNumberOfCellPixels())
     {
-      meshIO->WriteCellData( reinterpret_cast< void * >( const_cast< char * >(&(inputWasmMeshIOBase->GetCellDataContainer()->at(0))) ));
+      meshIO->WriteCellData(
+        reinterpret_cast<void *>(const_cast<char *>(&(inputWasmMeshIOBase->GetCellDataContainer()->at(0)))));
     }
 
     meshIO->Write();
@@ -147,19 +157,25 @@ int writeMesh(itk::wasm::InputMeshIO & inputMeshIO, itk::wasm::OutputTextStream 
   return EXIT_SUCCESS;
 }
 
-int main (int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  const char * pipelineName = TO_LITERAL(MESH_IO_KEBAB_NAME) "-write-mesh";
-  itk::wasm::Pipeline pipeline(pipelineName, "Write an itk-wasm file format converted to an mesh file format", argc, argv);
+  const char *        pipelineName = TO_LITERAL(MESH_IO_KEBAB_NAME) "-write-mesh";
+  itk::wasm::Pipeline pipeline(
+    pipelineName, "Write an itk-wasm file format converted to an mesh file format", argc, argv);
 
   itk::wasm::InputMeshIO inputMeshIO;
   pipeline.add_option("mesh", inputMeshIO, "Input mesh")->required()->type_name("INPUT_MESH");
 
   itk::wasm::OutputTextStream couldWrite;
-  pipeline.add_option("could-write", couldWrite, "Whether the input could be written. If false, the output mesh is not valid.")->type_name("OUTPUT_JSON");
+  pipeline
+    .add_option(
+      "could-write", couldWrite, "Whether the input could be written. If false, the output mesh is not valid.")
+    ->type_name("OUTPUT_JSON");
 
   std::string outputFileName;
-  pipeline.add_option("serialized-mesh", outputFileName, "Output mesh")->required()->type_name("OUTPUT_BINARY_FILE");;
+  pipeline.add_option("serialized-mesh", outputFileName, "Output mesh")->required()->type_name("OUTPUT_BINARY_FILE");
+  ;
 
   bool informationOnly = false;
   pipeline.add_flag("-i,--information-only", informationOnly, "Only write mesh metadata -- do not write pixel data.");
@@ -168,34 +184,46 @@ int main (int argc, char * argv[])
   pipeline.add_flag("-c,--use-compression", useCompression, "Use compression in the written file, if supported");
 
   bool binaryFileType = false;
-  pipeline.add_flag("-b,--binary-file-type", binaryFileType, "Use a binary file type in the written file, if supported");
+  pipeline.add_flag(
+    "-b,--binary-file-type", binaryFileType, "Use a binary file type in the written file, if supported");
 
   ITK_WASM_PARSE(pipeline);
 
 #if MESH_IO_CLASS == 0
-  return writeMesh<itk::BYUMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::BYUMeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 1
-  return writeMesh<itk::FreeSurferAsciiMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::FreeSurferAsciiMeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 2
-  return writeMesh<itk::FreeSurferBinaryMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::FreeSurferBinaryMeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 3
-  return writeMesh<itk::VTKPolyDataMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::VTKPolyDataMeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 4
-  return writeMesh<itk::OBJMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::OBJMeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 5
-  return writeMesh<itk::OFFMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::OFFMeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 6
-  return writeMesh<itk::STLMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::STLMeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 7
-  return writeMesh<itk::SWCMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::SWCMeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 8
-  return writeMesh<itk::WasmMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::WasmMeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 9
-  return writeMesh<itk::WasmZstdMeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::WasmZstdMeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 10
-  return writeMesh<itk::MZ3MeshIO>(inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writeMesh<itk::MZ3MeshIO>(
+    inputMeshIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #else
-#error "Unsupported MESH_IO_CLASS"
+#  error "Unsupported MESH_IO_CLASS"
 #endif
   return EXIT_SUCCESS;
 }

@@ -26,7 +26,7 @@
 #include "itkRGBToLuminanceImageFilter.h"
 #include "itkNumericTraits.h"
 
-template<typename TImage>
+template <typename TImage>
 int
 MedianFilter(itk::wasm::Pipeline & pipeline, const TImage * inputImage)
 {
@@ -49,12 +49,12 @@ MedianFilter(itk::wasm::Pipeline & pipeline, const TImage * inputImage)
 
   ITK_WASM_PARSE(pipeline);
 
-  using SmoothingFilterType = itk::MedianImageFilter< ImageType, ImageType >;
+  using SmoothingFilterType = itk::MedianImageFilter<ImageType, ImageType>;
   auto smoother = SmoothingFilterType::New();
-  smoother->SetInput( inputImage );
-  smoother->SetRadius( radius );
+  smoother->SetInput(inputImage);
+  smoother->SetRadius(radius);
 
-  using ROIFilterType = itk::ExtractImageFilter< ImageType, ImageType >;
+  using ROIFilterType = itk::ExtractImageFilter<ImageType, ImageType>;
   auto roiFilter = ROIFilterType::New();
   roiFilter->InPlaceOn();
   if (maxTotalSplits > 1)
@@ -62,38 +62,40 @@ MedianFilter(itk::wasm::Pipeline & pipeline, const TImage * inputImage)
     smoother->UpdateOutputInformation();
     using RegionType = typename ImageType::RegionType;
     smoother->UpdateOutputInformation();
-    const RegionType largestRegion( smoother->GetOutput()->GetLargestPossibleRegion() );
+    const RegionType largestRegion(smoother->GetOutput()->GetLargestPossibleRegion());
 
     using SplitterType = itk::ImageRegionSplitterSlowDimension;
-    auto splitter = SplitterType::New();
-    const unsigned int numberOfSplits = splitter->GetNumberOfSplits( largestRegion, maxTotalSplits );
+    auto               splitter = SplitterType::New();
+    const unsigned int numberOfSplits = splitter->GetNumberOfSplits(largestRegion, maxTotalSplits);
     if (split >= numberOfSplits)
     {
-      std::cerr << "Error: requested split: " << split << " is outside the number of splits: " << numberOfSplits << std::endl;
+      std::cerr << "Error: requested split: " << split << " is outside the number of splits: " << numberOfSplits
+                << std::endl;
       return EXIT_FAILURE;
     }
 
-    RegionType requestedRegion( largestRegion );
-    splitter->GetSplit( split, numberOfSplits, requestedRegion );
-    roiFilter->SetInput( smoother->GetOutput() );
-    roiFilter->SetExtractionRegion( requestedRegion );
+    RegionType requestedRegion(largestRegion);
+    splitter->GetSplit(split, numberOfSplits, requestedRegion);
+    roiFilter->SetInput(smoother->GetOutput());
+    roiFilter->SetExtractionRegion(requestedRegion);
     roiFilter->UpdateLargestPossibleRegion();
-    outputImage.Set( roiFilter->GetOutput() );
+    outputImage.Set(roiFilter->GetOutput());
   }
   else
   {
     smoother->UpdateLargestPossibleRegion();
-    outputImage.Set( smoother->GetOutput() );
+    outputImage.Set(smoother->GetOutput());
   }
 
   return EXIT_SUCCESS;
 }
 
-template<typename TImage>
+template <typename TImage>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using ImageType = TImage;
 
@@ -108,11 +110,12 @@ public:
   }
 };
 
-template<unsigned int VDimension>
+template <unsigned int VDimension>
 class PipelineFunctor<itk::Image<itk::RGBPixel<uint8_t>, VDimension>>
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     constexpr unsigned int Dimension = VDimension;
     using PixelType = itk::RGBPixel<uint8_t>;
@@ -128,20 +131,18 @@ public:
 
     using LuminanceFilterType = itk::RGBToLuminanceImageFilter<ImageType, ScalarImageType>;
     auto luminanceFilter = LuminanceFilterType::New();
-    luminanceFilter->SetInput( inputImage.Get() );
+    luminanceFilter->SetInput(inputImage.Get());
     luminanceFilter->Update();
 
     return MedianFilter<ScalarImageType>(pipeline, luminanceFilter->GetOutput());
   }
 };
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("median-filter", "Apply a median filter to an image", argc, argv);
 
-  return itk::wasm::SupportInputImageTypes<PipelineFunctor,
-   uint8_t,
-   itk::RGBPixel< uint8_t >,
-   float>
-  ::Dimensions<2U,3U>("input-image", pipeline);
+  return itk::wasm::SupportInputImageTypes<PipelineFunctor, uint8_t, itk::RGBPixel<uint8_t>, float>::Dimensions<2U, 3U>(
+    "input-image", pipeline);
 }

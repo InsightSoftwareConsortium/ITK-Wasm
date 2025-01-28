@@ -21,10 +21,10 @@ namespace itk
 {
 
 std::string
-WasmComponentTypeFromIOComponentEnum(const IOComponentEnum ioComponent )
+WasmComponentTypeFromIOComponentEnum(const IOComponentEnum ioComponent)
 {
-  switch ( ioComponent )
-    {
+  switch (ioComponent)
+  {
     case IOComponentEnum::CHAR:
       return "int8";
 
@@ -63,7 +63,7 @@ WasmComponentTypeFromIOComponentEnum(const IOComponentEnum ioComponent )
 
     default:
       return "int8";
-    }
+  }
 }
 
 } // end namespace itk

@@ -22,22 +22,22 @@
 #include "itkOutputTextStream.h"
 
 #ifndef MESH_IO_CLASS
-#error "MESH_IO_CLASS definition must be provided"
+#  error "MESH_IO_CLASS definition must be provided"
 #endif
 
 #if MESH_IO_CLASS == 0
-#include "itkVTKPolyDataMeshIO.h"
+#  include "itkVTKPolyDataMeshIO.h"
 #elif MESH_IO_CLASS == 1
-#include "itkOBJMeshIO.h"
+#  include "itkOBJMeshIO.h"
 #elif MESH_IO_CLASS == 2
-#include "itkOFFMeshIO.h"
+#  include "itkOFFMeshIO.h"
 #elif MESH_IO_CLASS == 3
 #elif MESH_IO_CLASS == 4
-#include "itkWasmZstdMeshIO.h"
+#  include "itkWasmZstdMeshIO.h"
 #elif MESH_IO_CLASS == 5
-#include "itkMZ3MeshIO.h"
+#  include "itkMZ3MeshIO.h"
 #else
-#error "Unsupported MESH_IO_CLASS"
+#  error "Unsupported MESH_IO_CLASS"
 #endif
 #include "itkWasmMeshIO.h"
 
@@ -49,7 +49,13 @@
 #include "itkMeshIOBase.h"
 
 template <typename TMeshIO>
-int writePointSet(itk::wasm::InputPointSetIO &inputPointSetIO, itk::wasm::OutputTextStream &couldWrite, const std::string &outputFileName, bool informationOnly, bool useCompression, bool binaryFileType)
+int
+writePointSet(itk::wasm::InputPointSetIO &  inputPointSetIO,
+              itk::wasm::OutputTextStream & couldWrite,
+              const std::string &           outputFileName,
+              bool                          informationOnly,
+              bool                          useCompression,
+              bool                          binaryFileType)
 {
   using MeshIOType = TMeshIO;
 
@@ -74,8 +80,8 @@ int writePointSet(itk::wasm::InputPointSetIO &inputPointSetIO, itk::wasm::Output
 
   meshIO->SetFileName(outputFileName);
 
-  const itk::WasmPointSetIOBase *inputWasmPointSetIOBase = inputPointSetIO.Get();
-  const itk::MeshIOBase *inputPointSetIOBase = inputWasmPointSetIOBase->GetMeshIO();
+  const itk::WasmPointSetIOBase * inputWasmPointSetIOBase = inputPointSetIO.Get();
+  const itk::MeshIOBase *         inputPointSetIOBase = inputWasmPointSetIOBase->GetMeshIO();
 
   const unsigned int dimension = inputPointSetIOBase->GetPointDimension();
   meshIO->SetPointDimension(dimension);
@@ -100,11 +106,13 @@ int writePointSet(itk::wasm::InputPointSetIO &inputPointSetIO, itk::wasm::Output
   {
     if (meshIO->GetNumberOfPoints())
     {
-      meshIO->WritePoints(reinterpret_cast<void *>(const_cast<char *>(&(inputWasmPointSetIOBase->GetPointsContainer()->at(0)))));
+      meshIO->WritePoints(
+        reinterpret_cast<void *>(const_cast<char *>(&(inputWasmPointSetIOBase->GetPointsContainer()->at(0)))));
     }
     if (meshIO->GetNumberOfPointPixels())
     {
-      meshIO->WritePointData(reinterpret_cast<void *>(const_cast<char *>(&(inputWasmPointSetIOBase->GetPointDataContainer()->at(0)))));
+      meshIO->WritePointData(
+        reinterpret_cast<void *>(const_cast<char *>(&(inputWasmPointSetIOBase->GetPointDataContainer()->at(0)))));
     }
 
     meshIO->Write();
@@ -113,46 +121,61 @@ int writePointSet(itk::wasm::InputPointSetIO &inputPointSetIO, itk::wasm::Output
   return EXIT_SUCCESS;
 }
 
-int main(int argc, char *argv[])
+int
+main(int argc, char * argv[])
 {
-  const char *pipelineName = TO_LITERAL(POINT_SET_IO_KEBAB_NAME) "-write-point-set";
-  itk::wasm::Pipeline pipeline(pipelineName, "Write an ITK-Wasm file format converted to a point set file format", argc, argv);
+  const char *        pipelineName = TO_LITERAL(POINT_SET_IO_KEBAB_NAME) "-write-point-set";
+  itk::wasm::Pipeline pipeline(
+    pipelineName, "Write an ITK-Wasm file format converted to a point set file format", argc, argv);
 
   itk::wasm::InputPointSetIO inputPointSetIO;
   pipeline.add_option("point-set", inputPointSetIO, "Input point set")->required()->type_name("INPUT_POINT_SET");
 
   itk::wasm::OutputTextStream couldWrite;
-  pipeline.add_option("could-write", couldWrite, "Whether the input could be written. If false, the output mesh is not valid.")->type_name("OUTPUT_JSON");
+  pipeline
+    .add_option(
+      "could-write", couldWrite, "Whether the input could be written. If false, the output mesh is not valid.")
+    ->type_name("OUTPUT_JSON");
 
   std::string outputFileName;
-  pipeline.add_option("serialized-point-set", outputFileName, "Output point set")->required()->type_name("OUTPUT_BINARY_FILE");
+  pipeline.add_option("serialized-point-set", outputFileName, "Output point set")
+    ->required()
+    ->type_name("OUTPUT_BINARY_FILE");
   ;
 
   bool informationOnly = false;
-  pipeline.add_flag("-i,--information-only", informationOnly, "Only write point set metadata -- do not write pixel data.");
+  pipeline.add_flag(
+    "-i,--information-only", informationOnly, "Only write point set metadata -- do not write pixel data.");
 
   bool useCompression = false;
   pipeline.add_flag("-c,--use-compression", useCompression, "Use compression in the written file, if supported");
 
   bool binaryFileType = false;
-  pipeline.add_flag("-b,--binary-file-type", binaryFileType, "Use a binary file type in the written file, if supported");
+  pipeline.add_flag(
+    "-b,--binary-file-type", binaryFileType, "Use a binary file type in the written file, if supported");
 
   ITK_WASM_PARSE(pipeline);
 
 #if MESH_IO_CLASS == 0
-  return writePointSet<itk::VTKPolyDataMeshIO>(inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writePointSet<itk::VTKPolyDataMeshIO>(
+    inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 1
-  return writePointSet<itk::OBJMeshIO>(inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writePointSet<itk::OBJMeshIO>(
+    inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 2
-  return writePointSet<itk::OFFMeshIO>(inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writePointSet<itk::OFFMeshIO>(
+    inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 3
-  return writePointSet<itk::WasmMeshIO>(inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writePointSet<itk::WasmMeshIO>(
+    inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 4
-  return writePointSet<itk::WasmZstdMeshIO>(inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writePointSet<itk::WasmZstdMeshIO>(
+    inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #elif MESH_IO_CLASS == 5
-  return writePointSet<itk::MZ3MeshIO>(inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
+  return writePointSet<itk::MZ3MeshIO>(
+    inputPointSetIO, couldWrite, outputFileName, informationOnly, useCompression, binaryFileType);
 #else
-#error "Unsupported MESH_IO_CLASS"
+#  error "Unsupported MESH_IO_CLASS"
 #endif
   return EXIT_SUCCESS;
 }

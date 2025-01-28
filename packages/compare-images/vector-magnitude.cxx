@@ -25,11 +25,12 @@
 #include "itkVectorImage.h"
 #include "itkVectorMagnitudeImageFilter.h"
 
-template<typename TImage>
+template <typename TImage>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using ImageType = TImage;
     using ScalarType = typename ImageType::PixelType::ValueType;
@@ -42,7 +43,9 @@ public:
 
     using OutputImageType = itk::wasm::OutputImage<ScalarImageType>;
     OutputImageType magnitudeImage;
-    pipeline.add_option("magnitude-image", magnitudeImage, "Output magnitude image")->required()->type_name("OUTPUT_IMAGE");
+    pipeline.add_option("magnitude-image", magnitudeImage, "Output magnitude image")
+      ->required()
+      ->type_name("OUTPUT_IMAGE");
 
     ITK_WASM_PARSE(pipeline);
 
@@ -57,11 +60,12 @@ public:
   }
 };
 
-int main(int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("vector-magnitude", "Generate a scalar magnitude image based on the input vector's norm.", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "vector-magnitude", "Generate a scalar magnitude image based on the input vector's norm.", argc, argv);
 
-  return itk::wasm::SupportInputImageTypes<PipelineFunctor,
-  itk::VariableLengthVector<double> >
-  ::Dimensions<2U,3U,4U,5U,6U>("vector-image", pipeline);
+  return itk::wasm::SupportInputImageTypes<PipelineFunctor, itk::VariableLengthVector<double>>::
+    Dimensions<2U, 3U, 4U, 5U, 6U>("vector-image", pipeline);
 }

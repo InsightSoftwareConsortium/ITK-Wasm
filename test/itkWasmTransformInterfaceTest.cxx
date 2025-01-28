@@ -78,7 +78,8 @@ itkWasmTransformInterfaceTest(int argc, char * argv[])
   ITK_TEST_EXPECT_EQUAL(numParams, numParamsInput);
   for (unsigned int i = 0; i < numFixedParams; ++i)
   {
-    ITK_TEST_EXPECT_EQUAL(convertedTransform->GetFixedParameters()[i], inputTransforms->front()->GetFixedParameters()[i]);
+    ITK_TEST_EXPECT_EQUAL(convertedTransform->GetFixedParameters()[i],
+                          inputTransforms->front()->GetFixedParameters()[i]);
   }
   for (unsigned int i = 0; i < numParams; ++i)
   {

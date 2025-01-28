@@ -38,13 +38,13 @@ namespace itk
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT WasmZstdImageIO: public WasmImageIO
+class WebAssemblyInterface_EXPORT WasmZstdImageIO : public WasmImageIO
 {
 public:
   /** Standard class typedefs. */
-  typedef WasmZstdImageIO      Self;
-  typedef WasmImageIO          Superclass;
-  typedef SmartPointer< Self > Pointer;
+  typedef WasmZstdImageIO    Self;
+  typedef WasmImageIO        Superclass;
+  typedef SmartPointer<Self> Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,24 +54,30 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  bool CanReadFile(const char *) override;
+  bool
+  CanReadFile(const char *) override;
 
   /** Set the spacing and dimension information for the set filename. */
-  void ReadImageInformation() override;
+  void
+  ReadImageInformation() override;
 
   /** Reads the data from disk into the memory buffer provided. */
-  void Read(void *buffer) override;
+  void
+  Read(void * buffer) override;
 
   /** Determine the file type. Returns true if this ImageIO can write the
    * file specified. */
-  bool CanWriteFile(const char *) override;
+  bool
+  CanWriteFile(const char *) override;
 
   /** Set the spacing and dimension information for the set filename. */
-  void WriteImageInformation() override;
+  void
+  WriteImageInformation() override;
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. */
-  void Write(const void *buffer) override;
+  void
+  Write(const void * buffer) override;
 
 protected:
   WasmZstdImageIO();

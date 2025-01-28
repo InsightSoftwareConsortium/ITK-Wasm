@@ -21,12 +21,12 @@
 #include "itkPipeline.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
-#include "itkWasmMesh.h"
-#include "itkWasmMeshToMeshFilter.h"
+#  include "itkWasmExports.h"
+#  include "itkWasmMesh.h"
+#  include "itkWasmMeshToMeshFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#include "itkMeshFileReader.h"
+#  include "itkMeshFileReader.h"
 #endif
 
 namespace itk
@@ -50,23 +50,29 @@ class ITK_TEMPLATE_EXPORT InputMesh
 public:
   using MeshType = TMesh;
 
-  void Set(const MeshType * mesh) {
+  void
+  Set(const MeshType * mesh)
+  {
     this->m_Mesh = mesh;
   }
 
-  const MeshType * Get() const {
+  const MeshType *
+  Get() const
+  {
     return this->m_Mesh.GetPointer();
   }
 
   InputMesh() = default;
   ~InputMesh() = default;
+
 protected:
   typename TMesh::ConstPointer m_Mesh;
 };
 
 
 template <typename TMesh>
-bool lexical_cast(const std::string &input, InputMesh<TMesh> &inputMesh)
+bool
+lexical_cast(const std::string & input, InputMesh<TMesh> & inputMesh)
 {
   if (input.empty())
   {
@@ -77,10 +83,10 @@ bool lexical_cast(const std::string &input, InputMesh<TMesh> &inputMesh)
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     using WasmMeshToMeshFilterType = WasmMeshToMeshFilter<TMesh>;
-    auto wasmMeshToMeshFilter = WasmMeshToMeshFilterType::New();
-    auto wasmMesh = WasmMeshToMeshFilterType::WasmMeshType::New();
+    auto               wasmMeshToMeshFilter = WasmMeshToMeshFilterType::New();
+    auto               wasmMesh = WasmMeshToMeshFilterType::WasmMeshType::New();
     const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(0, index);
+    auto               json = getMemoryStoreInputJSON(0, index);
     wasmMesh->SetJSON(json);
     wasmMeshToMeshFilter->SetInput(wasmMesh);
     wasmMeshToMeshFilter->Update();

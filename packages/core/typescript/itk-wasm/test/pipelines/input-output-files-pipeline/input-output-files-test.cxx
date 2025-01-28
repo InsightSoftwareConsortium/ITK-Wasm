@@ -24,7 +24,8 @@
 #include <iostream>
 #include <iomanip>
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("input-output-files-test", "A pipeline to test general binary and text IO", argc, argv);
 
@@ -33,47 +34,63 @@ int main( int argc, char * argv[] )
 
 
   itk::wasm::InputTextStream inputTextStream;
-  pipeline.add_option("--input-text-stream", inputTextStream, "The input text stream")->group("Streams")->type_name("INPUT_TEXT_STREAM");
+  pipeline.add_option("--input-text-stream", inputTextStream, "The input text stream")
+    ->group("Streams")
+    ->type_name("INPUT_TEXT_STREAM");
 
   itk::wasm::OutputTextStream outputTextStream;
-  pipeline.add_option("output-text-stream", outputTextStream, "The output text stream")->group("Streams")->type_name("OUTPUT_TEXT_STREAM");
+  pipeline.add_option("output-text-stream", outputTextStream, "The output text stream")
+    ->group("Streams")
+    ->type_name("OUTPUT_TEXT_STREAM");
 
   itk::wasm::InputBinaryStream inputBinaryStream;
-  pipeline.add_option("--input-binary-stream", inputBinaryStream, "The input binary stream")->group("Streams")->type_name("INPUT_BINARY_STREAM");
+  pipeline.add_option("--input-binary-stream", inputBinaryStream, "The input binary stream")
+    ->group("Streams")
+    ->type_name("INPUT_BINARY_STREAM");
 
   itk::wasm::OutputBinaryStream outputBinaryStream;
-  pipeline.add_option("output-binary-stream", outputBinaryStream, "The output binary stream")->group("Streams")->type_name("OUTPUT_BINARY_STREAM");
+  pipeline.add_option("output-binary-stream", outputBinaryStream, "The output binary stream")
+    ->group("Streams")
+    ->type_name("OUTPUT_BINARY_STREAM");
 
 
   std::string inputTextFile;
-  pipeline.add_option("--input-text-file", inputTextFile, "The input text file")->group("Files")->type_name("INPUT_TEXT_FILE");
+  pipeline.add_option("--input-text-file", inputTextFile, "The input text file")
+    ->group("Files")
+    ->type_name("INPUT_TEXT_FILE");
 
   std::string outputTextFile;
-  pipeline.add_option("output-text-file", outputTextFile, "The output text file")->group("Files")->type_name("OUTPUT_TEXT_FILE");
+  pipeline.add_option("output-text-file", outputTextFile, "The output text file")
+    ->group("Files")
+    ->type_name("OUTPUT_TEXT_FILE");
 
   std::string inputBinaryFile;
-  pipeline.add_option("--input-binary-file", inputBinaryFile, "The input binary file")->group("Files")->type_name("INPUT_BINARY_FILE");
+  pipeline.add_option("--input-binary-file", inputBinaryFile, "The input binary file")
+    ->group("Files")
+    ->type_name("INPUT_BINARY_FILE");
 
   std::string outputBinaryFile;
-  pipeline.add_option("output-binary-file", outputBinaryFile, "The output binary file")->group("Files")->type_name("OUTPUT_BINARY_FILE");
+  pipeline.add_option("output-binary-file", outputBinaryFile, "The output binary file")
+    ->group("Files")
+    ->type_name("OUTPUT_BINARY_FILE");
 
 
   ITK_WASM_PARSE(pipeline);
 
   const size_t bufferLength = 2048;
-  char * buffer = new char[bufferLength];
-  size_t readLength = 0;
+  char *       buffer = new char[bufferLength];
+  size_t       readLength = 0;
 
   if (useFiles)
   {
-    std::ifstream inputTxt( inputTextFile, std::ifstream::in );
-    if( !inputTxt.is_open() )
-      {
+    std::ifstream inputTxt(inputTextFile, std::ifstream::in);
+    if (!inputTxt.is_open())
+    {
       std::cerr << "Could not open inputTextFile." << std::endl;
       delete[] buffer;
       return EXIT_FAILURE;
-      }
-    inputTxt.read( buffer, bufferLength );
+    }
+    inputTxt.read(buffer, bufferLength);
     readLength = inputTxt.gcount();
     inputTxt.close();
     buffer[readLength] = '\0';
@@ -81,7 +98,7 @@ int main( int argc, char * argv[] )
   else
   {
     std::istream & inputTxt = inputTextStream.Get();
-    inputTxt.read( buffer, bufferLength );
+    inputTxt.read(buffer, bufferLength);
     readLength = inputTxt.gcount();
     buffer[readLength] = '\0';
   }
@@ -91,64 +108,64 @@ int main( int argc, char * argv[] )
 
   if (useFiles)
   {
-    std::ofstream outputTxt( outputTextFile, std::ofstream::out );
-    if( !outputTxt.is_open() )
-      {
+    std::ofstream outputTxt(outputTextFile, std::ofstream::out);
+    if (!outputTxt.is_open())
+    {
       std::cerr << "Could not open outputTxtFile." << std::endl;
       delete[] buffer;
       return EXIT_FAILURE;
-      }
-    outputTxt.write( buffer, readLength );
+    }
+    outputTxt.write(buffer, readLength);
     outputTxt.close();
   }
   else
   {
-    outputTextStream.Get().write( buffer, readLength );
+    outputTextStream.Get().write(buffer, readLength);
   }
 
 
   if (useFiles)
   {
-    std::ifstream inputBin( inputBinaryFile, std::ifstream::in | std::ifstream::binary );
-    if( !inputBin.is_open() )
-      {
+    std::ifstream inputBin(inputBinaryFile, std::ifstream::in | std::ifstream::binary);
+    if (!inputBin.is_open())
+    {
       std::cerr << "Could not open inputBinFile." << std::endl;
       delete[] buffer;
       return EXIT_FAILURE;
-      }
-    inputBin.read( buffer, bufferLength );
+    }
+    inputBin.read(buffer, bufferLength);
     readLength = inputBin.gcount();
     inputBin.close();
   }
   else
   {
-    inputBinaryStream.Get().read( buffer, bufferLength );
+    inputBinaryStream.Get().read(buffer, bufferLength);
     readLength = inputBinaryStream.Get().gcount();
   }
 
   std::cerr << "Input binary: ";
-  for( size_t ii = 0; ii < readLength; ++ii )
-    {
+  for (size_t ii = 0; ii < readLength; ++ii)
+  {
     std::cerr << std::hex << std::setfill('0') << std::setw(2) << int(buffer[ii]);
-    }
+  }
   std::cerr << std::endl;
 
 
   if (useFiles)
   {
-    std::ofstream outputBin( outputBinaryFile, std::ofstream::out | std::ofstream::binary );
-    if( !outputBin.is_open() )
-      {
+    std::ofstream outputBin(outputBinaryFile, std::ofstream::out | std::ofstream::binary);
+    if (!outputBin.is_open())
+    {
       std::cerr << "Could not open outputBinFile." << std::endl;
       delete[] buffer;
       return EXIT_FAILURE;
-      }
-    outputBin.write( buffer, readLength );
+    }
+    outputBin.write(buffer, readLength);
     outputBin.close();
   }
   else
   {
-    outputBinaryStream.Get().write( buffer, readLength );
+    outputBinaryStream.Get().write(buffer, readLength);
   }
 
   delete[] buffer;

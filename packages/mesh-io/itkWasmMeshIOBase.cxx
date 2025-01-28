@@ -63,13 +63,14 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
 
   auto meshJSON = wasmMeshIO->GetJSON();
 
-  size_t pointsAddress = 0;
-  SizeValueType numberOfBytes = meshIO->GetNumberOfPoints() * meshIO->GetPointDimension() * ITKComponentSize( meshIO->GetPointComponentType() );
+  size_t        pointsAddress = 0;
+  SizeValueType numberOfBytes =
+    meshIO->GetNumberOfPoints() * meshIO->GetPointDimension() * ITKComponentSize(meshIO->GetPointComponentType());
   if (numberOfBytes)
   {
-    this->m_PointsContainer->resize( numberOfBytes );
-    meshIO->ReadPoints( reinterpret_cast< void * >( &(this->m_PointsContainer->at(0)) ));
-    pointsAddress = reinterpret_cast< size_t >( &(this->m_PointsContainer->at(0)) );
+    this->m_PointsContainer->resize(numberOfBytes);
+    meshIO->ReadPoints(reinterpret_cast<void *>(&(this->m_PointsContainer->at(0))));
+    pointsAddress = reinterpret_cast<size_t>(&(this->m_PointsContainer->at(0)));
   }
 
   std::ostringstream dataStream;
@@ -77,14 +78,15 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   dataStream << pointsAddress;
   meshJSON.points = dataStream.str();
 
-  numberOfBytes = static_cast< SizeValueType >( meshIO->GetCellBufferSize() * ITKComponentSize( meshIO->GetCellComponentType() ));
+  numberOfBytes =
+    static_cast<SizeValueType>(meshIO->GetCellBufferSize() * ITKComponentSize(meshIO->GetCellComponentType()));
 
   size_t cellsAddress = 0;
   if (numberOfBytes)
   {
-    this->m_CellsContainer->resize( numberOfBytes );
-    meshIO->ReadCells( reinterpret_cast< void * >( &(this->m_CellsContainer->at(0)) ));
-    cellsAddress = reinterpret_cast< size_t >( &(this->m_CellsContainer->at(0)) );
+    this->m_CellsContainer->resize(numberOfBytes);
+    meshIO->ReadCells(reinterpret_cast<void *>(&(this->m_CellsContainer->at(0))));
+    cellsAddress = reinterpret_cast<size_t>(&(this->m_CellsContainer->at(0)));
   }
 
   dataStream.str("");
@@ -93,14 +95,15 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   meshJSON.cells = dataStream.str();
 
   numberOfBytes =
-    static_cast< SizeValueType >( meshIO->GetNumberOfPointPixels() * meshIO->GetNumberOfPointPixelComponents() * ITKComponentSize( meshIO->GetPointPixelComponentType() ));
+    static_cast<SizeValueType>(meshIO->GetNumberOfPointPixels() * meshIO->GetNumberOfPointPixelComponents() *
+                               ITKComponentSize(meshIO->GetPointPixelComponentType()));
 
   size_t pointDataAddress = 0;
   if (numberOfBytes)
   {
-    this->m_PointDataContainer->resize( numberOfBytes );
-    meshIO->ReadPointData( reinterpret_cast< void * >( &(this->m_PointDataContainer->at(0)) ));
-    pointDataAddress = reinterpret_cast< size_t >( &(this->m_PointDataContainer->at(0)) );
+    this->m_PointDataContainer->resize(numberOfBytes);
+    meshIO->ReadPointData(reinterpret_cast<void *>(&(this->m_PointDataContainer->at(0))));
+    pointDataAddress = reinterpret_cast<size_t>(&(this->m_PointDataContainer->at(0)));
   }
 
   dataStream.str("");
@@ -109,14 +112,15 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   meshJSON.pointData = dataStream.str();
 
   numberOfBytes =
-    static_cast< SizeValueType >( meshIO->GetNumberOfCellPixels() * meshIO->GetNumberOfCellPixelComponents() * ITKComponentSize( meshIO->GetCellPixelComponentType() ));
+    static_cast<SizeValueType>(meshIO->GetNumberOfCellPixels() * meshIO->GetNumberOfCellPixelComponents() *
+                               ITKComponentSize(meshIO->GetCellPixelComponentType()));
 
   size_t cellDataAddress = 0;
   if (numberOfBytes)
   {
-    this->m_CellDataContainer->resize( numberOfBytes );
-    meshIO->ReadCellData( reinterpret_cast< void * >( &(this->m_CellDataContainer->at(0)) ));
-    cellDataAddress = reinterpret_cast< size_t >( &(this->m_CellDataContainer->at(0)) );
+    this->m_CellDataContainer->resize(numberOfBytes);
+    meshIO->ReadCellData(reinterpret_cast<void *>(&(this->m_CellDataContainer->at(0))));
+    cellDataAddress = reinterpret_cast<size_t>(&(this->m_CellDataContainer->at(0)));
   }
 
   dataStream.str("");
@@ -125,7 +129,7 @@ WasmMeshIOBase::SetMeshIO(MeshIOBase * meshIO, bool readMesh)
   meshJSON.cellData = dataStream.str();
 
   std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
+  auto        ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize TransformListJSON");

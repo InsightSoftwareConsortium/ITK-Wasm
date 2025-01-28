@@ -41,13 +41,13 @@ namespace itk
  * \ingroup IOFilters
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT WasmMeshIO: public MeshIOBase
+class WebAssemblyInterface_EXPORT WasmMeshIO : public MeshIOBase
 {
 public:
   /** Standard class typedefs. */
-  typedef WasmMeshIO           Self;
-  typedef MeshIOBase           Superclass;
-  typedef SmartPointer< Self > Pointer;
+  typedef WasmMeshIO         Self;
+  typedef MeshIOBase         Superclass;
+  typedef SmartPointer<Self> Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -55,62 +55,82 @@ public:
   /** Run-time type information (and related methods). */
   itkOverrideGetNameOfClassMacro(WasmMeshIO);
 
-  bool CanReadFile(const char *) override;
+  bool
+  CanReadFile(const char *) override;
 
   /** Determine the required information and whether need to ReadPoints,
     ReadCells, ReadPointData and ReadCellData */
-  void ReadMeshInformation() override;
+  void
+  ReadMeshInformation() override;
 
   /** Reads the data from disk into the memory buffer provided. */
-  void ReadPoints(void *buffer) override;
+  void
+  ReadPoints(void * buffer) override;
 
-  void ReadCells(void *buffer) override;
+  void
+  ReadCells(void * buffer) override;
 
-  void ReadPointData(void *buffer) override;
+  void
+  ReadPointData(void * buffer) override;
 
-  void ReadCellData(void *buffer) override;
+  void
+  ReadCellData(void * buffer) override;
 
   /** Set the JSON representation of the image information. */
-  void SetJSON(const MeshJSON & json);
+  void
+  SetJSON(const MeshJSON & json);
 
   /** Set the JSON representation of the image information. */
-  void SetJSON(const PointSetJSON & json);
+  void
+  SetJSON(const PointSetJSON & json);
 
   /*-------- This part of the interfaces deals with writing data ----- */
 
   /** Writes the data to disk from the memory buffer provided. Make sure
-     * that the IORegions has been set properly. */
-  bool CanWriteFile(const char *)  override;
+   * that the IORegions has been set properly. */
+  bool
+  CanWriteFile(const char *) override;
 
-  void WriteMeshInformation() override;
+  void
+  WriteMeshInformation() override;
 
-  void WritePoints(void *buffer) override;
+  void
+  WritePoints(void * buffer) override;
 
-  void WriteCells(void *buffer) override;
+  void
+  WriteCells(void * buffer) override;
 
-  void WritePointData(void *buffer) override;
+  void
+  WritePointData(void * buffer) override;
 
-  void WriteCellData(void *buffer) override;
+  void
+  WriteCellData(void * buffer) override;
 
-  void Write() override;
+  void
+  Write() override;
 
 #if !defined(ITK_WRAPPING_PARSER)
   /** Get the JSON representation of the mesh information. */
-  auto GetJSON() -> MeshJSON;
+  auto
+  GetJSON() -> MeshJSON;
 
   /** Get the JSON representation of the point set information. */
-  auto GetPointSetJSON() -> PointSetJSON;
+  auto
+  GetPointSetJSON() -> PointSetJSON;
 #endif
 
 protected:
   WasmMeshIO();
   ~WasmMeshIO() override;
-  void PrintSelf(std::ostream & os, Indent indent) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   /** Reads in the mesh information and populates the related buffers. */
-  void ReadCBOR(void * buffer = nullptr, unsigned char * cborBuffer = nullptr, size_t cborBufferLength = 0);
+  void
+  ReadCBOR(void * buffer = nullptr, unsigned char * cborBuffer = nullptr, size_t cborBufferLength = 0);
   /** Writes the buffers into the CBOR item and the buffer out to disk. */
-  void WriteCBOR();
+  void
+  WriteCBOR();
 
   cbor_item_t * m_CBORRoot{ nullptr };
 

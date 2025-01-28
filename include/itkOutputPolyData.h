@@ -22,13 +22,13 @@
 #include "itkMeshConvertPixelTraits.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
-#include "itkWasmPolyData.h"
-#include "itkPolyDataToWasmPolyDataFilter.h"
+#  include "itkWasmExports.h"
+#  include "itkWasmPolyData.h"
+#  include "itkPolyDataToWasmPolyDataFilter.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-#include "itkMeshFileWriter.h"
-#include "itkPolyDataToMeshFilter.h"
+#  include "itkMeshFileWriter.h"
+#  include "itkPolyDataToMeshFilter.h"
 #endif
 
 namespace itk
@@ -40,9 +40,9 @@ namespace wasm
  * \brief Output polyData for an itk::wasm::Pipeline
  *
  * This polyData is written to the filesystem or memory when it goes out of scope.
- * 
+ *
  * Call `GetPolyData()` to get the TPolyData * to use an input to a pipeline.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TPolyData>
@@ -51,70 +51,79 @@ class ITK_TEMPLATE_EXPORT OutputPolyData
 public:
   using PolyDataType = TPolyData;
 
-  void Set(const PolyDataType * polyData) {
+  void
+  Set(const PolyDataType * polyData)
+  {
     this->m_PolyData = polyData;
   }
 
-  const PolyDataType * Get() const {
+  const PolyDataType *
+  Get() const
+  {
     return this->m_PolyData.GetPointer();
   }
 
   /** FileName or output index. */
-  void SetIdentifier(const std::string & identifier)
+  void
+  SetIdentifier(const std::string & identifier)
   {
     this->m_Identifier = identifier;
   }
-  const std::string & GetIdentifier() const
+  const std::string &
+  GetIdentifier() const
   {
     return this->m_Identifier;
   }
 
   OutputPolyData() = default;
-  ~OutputPolyData() {
-    if(wasm::Pipeline::get_use_memory_io())
+  ~OutputPolyData()
+  {
+    if (wasm::Pipeline::get_use_memory_io())
     {
 #ifndef ITK_WASM_NO_MEMORY_IO
-    if (!this->m_PolyData.IsNull() && !this->m_Identifier.empty())
+      if (!this->m_PolyData.IsNull() && !this->m_Identifier.empty())
       {
         using PolyDataToWasmPolyDataFilterType = PolyDataToWasmPolyDataFilter<PolyDataType>;
         auto polyDataToWasmPolyDataFilter = PolyDataToWasmPolyDataFilterType::New();
         polyDataToWasmPolyDataFilter->SetInput(this->m_PolyData);
         polyDataToWasmPolyDataFilter->Update();
-        auto wasmPolyData = polyDataToWasmPolyDataFilter->GetOutput();
+        auto       wasmPolyData = polyDataToWasmPolyDataFilter->GetOutput();
         const auto index = std::stoi(this->m_Identifier);
         setMemoryStoreOutputDataObject(0, index, wasmPolyData);
 
         if (this->m_PolyData->GetNumberOfPoints() > 0)
         {
-          const auto pointsAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetPoints()->at(0)) );
-          const auto pointsSize = wasmPolyData->GetPolyData()->GetPoints()->Size() * PolyDataType::PointDimension * sizeof(typename PolyDataType::CoordinateType);
+          const auto pointsAddress = reinterpret_cast<size_t>(&(wasmPolyData->GetPolyData()->GetPoints()->at(0)));
+          const auto pointsSize = wasmPolyData->GetPolyData()->GetPoints()->Size() * PolyDataType::PointDimension *
+                                  sizeof(typename PolyDataType::CoordinateType);
           setMemoryStoreOutputArray(0, index, 0, pointsAddress, pointsSize);
         }
 
         if (this->m_PolyData->GetVertices() && this->m_PolyData->GetVertices()->Size() > 0)
         {
-          const auto verticesAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetVertices()->at(0)) );
+          const auto verticesAddress = reinterpret_cast<size_t>(&(wasmPolyData->GetPolyData()->GetVertices()->at(0)));
           const auto verticesSize = wasmPolyData->GetPolyData()->GetVertices()->Size() * sizeof(uint32_t);
           setMemoryStoreOutputArray(0, index, 1, verticesAddress, verticesSize);
         }
 
         if (this->m_PolyData->GetLines() && this->m_PolyData->GetLines()->Size() > 0)
         {
-          const auto linesAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetLines()->at(0)) );
+          const auto linesAddress = reinterpret_cast<size_t>(&(wasmPolyData->GetPolyData()->GetLines()->at(0)));
           const auto linesSize = wasmPolyData->GetPolyData()->GetLines()->Size() * sizeof(uint32_t);
           setMemoryStoreOutputArray(0, index, 2, linesAddress, linesSize);
         }
 
         if (this->m_PolyData->GetPolygons() && this->m_PolyData->GetPolygons()->Size() > 0)
         {
-          const auto polygonsAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetPolygons()->at(0)) );
+          const auto polygonsAddress = reinterpret_cast<size_t>(&(wasmPolyData->GetPolyData()->GetPolygons()->at(0)));
           const auto polygonsSize = wasmPolyData->GetPolyData()->GetPolygons()->Size() * sizeof(uint32_t);
           setMemoryStoreOutputArray(0, index, 3, polygonsAddress, polygonsSize);
         }
 
         if (this->m_PolyData->GetTriangleStrips() && this->m_PolyData->GetTriangleStrips()->Size() > 0)
         {
-          const auto triangleStripsAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetTriangleStrips()->at(0)) );
+          const auto triangleStripsAddress =
+            reinterpret_cast<size_t>(&(wasmPolyData->GetPolyData()->GetTriangleStrips()->at(0)));
           const auto triangleStripsSize = wasmPolyData->GetPolyData()->GetTriangleStrips()->Size() * sizeof(uint32_t);
           setMemoryStoreOutputArray(0, index, 4, triangleStripsAddress, triangleStripsSize);
         }
@@ -123,8 +132,10 @@ public:
         {
           using PointPixelType = typename PolyDataType::PixelType;
           using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
-          const auto pointDataAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetPointData()->at(0)) );
-          const auto pointDataSize = wasmPolyData->GetPolyData()->GetPointData()->Size() * sizeof(typename ConvertPointPixelTraits::ComponentType) * ConvertPointPixelTraits::GetNumberOfComponents();
+          const auto pointDataAddress = reinterpret_cast<size_t>(&(wasmPolyData->GetPolyData()->GetPointData()->at(0)));
+          const auto pointDataSize = wasmPolyData->GetPolyData()->GetPointData()->Size() *
+                                     sizeof(typename ConvertPointPixelTraits::ComponentType) *
+                                     ConvertPointPixelTraits::GetNumberOfComponents();
           setMemoryStoreOutputArray(0, index, 5, pointDataAddress, pointDataSize);
         }
 
@@ -132,37 +143,40 @@ public:
         {
           using CellPixelType = typename PolyDataType::CellPixelType;
           using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
-          const auto cellDataAddress = reinterpret_cast< size_t >( &(wasmPolyData->GetPolyData()->GetCellData()->at(0)) );
-          const auto cellDataSize = wasmPolyData->GetPolyData()->GetCellData()->Size() * sizeof(typename ConvertCellPixelTraits::ComponentType) * ConvertCellPixelTraits::GetNumberOfComponents();
+          const auto cellDataAddress = reinterpret_cast<size_t>(&(wasmPolyData->GetPolyData()->GetCellData()->at(0)));
+          const auto cellDataSize = wasmPolyData->GetPolyData()->GetCellData()->Size() *
+                                    sizeof(typename ConvertCellPixelTraits::ComponentType) *
+                                    ConvertCellPixelTraits::GetNumberOfComponents();
           setMemoryStoreOutputArray(0, index, 6, cellDataAddress, cellDataSize);
         }
       }
 #else
-    std::cerr << "Memory IO not supported" << std::endl;
-    abort();
+      std::cerr << "Memory IO not supported" << std::endl;
+      abort();
 #endif
     }
     else
     {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
-    if (!this->m_PolyData.IsNull() && !this->m_Identifier.empty())
+      if (!this->m_PolyData.IsNull() && !this->m_Identifier.empty())
       {
-      using PolyDataToMeshFilterType = PolyDataToMeshFilter<TPolyData>;
-      auto polyDataToMeshFilter = PolyDataToMeshFilterType::New();
-      polyDataToMeshFilter->SetInput(this->m_PolyData);
-      using MeshType = typename PolyDataToMeshFilterType::OutputMeshType;
-      using MeshWriterType = MeshFileWriter<MeshType>;
-      auto meshWriter = MeshWriterType::New();
-      meshWriter->SetFileName(this->m_Identifier);
-      meshWriter->SetInput(polyDataToMeshFilter->GetOutput());
-      meshWriter->Update();
+        using PolyDataToMeshFilterType = PolyDataToMeshFilter<TPolyData>;
+        auto polyDataToMeshFilter = PolyDataToMeshFilterType::New();
+        polyDataToMeshFilter->SetInput(this->m_PolyData);
+        using MeshType = typename PolyDataToMeshFilterType::OutputMeshType;
+        using MeshWriterType = MeshFileWriter<MeshType>;
+        auto meshWriter = MeshWriterType::New();
+        meshWriter->SetFileName(this->m_Identifier);
+        meshWriter->SetInput(polyDataToMeshFilter->GetOutput());
+        meshWriter->Update();
       }
 #else
-    std::cerr << "Filesystem IO not supported" << std::endl;
-    abort();
+      std::cerr << "Filesystem IO not supported" << std::endl;
+      abort();
 #endif
     }
   }
+
 protected:
   typename TPolyData::ConstPointer m_PolyData;
 
@@ -170,7 +184,8 @@ protected:
 };
 
 template <typename TPolyData>
-bool lexical_cast(const std::string &input, OutputPolyData<TPolyData> &outputPolyData)
+bool
+lexical_cast(const std::string & input, OutputPolyData<TPolyData> & outputPolyData)
 {
   outputPolyData.SetIdentifier(input);
   return true;

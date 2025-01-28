@@ -25,16 +25,16 @@ itkTransformJSONTest(int argc, char * argv[])
 {
 
   itk::JSONTransformParameterizationEnum parameterization = itk::JSONTransformParameterizationEnum::Affine;
-  itk::JSONFloatTypesEnum floatType = itk::JSONFloatTypesEnum::float64;
+  itk::JSONFloatTypesEnum                floatType = itk::JSONFloatTypesEnum::float64;
 
-  itk::TransformTypeJSON transformType{parameterization, floatType, 3, 3};
+  itk::TransformTypeJSON transformType{ parameterization, floatType, 3, 3 };
 
-  itk::TransformJSON transform{transformType, 3, 12};
+  itk::TransformJSON transform{ transformType, 3, 12 };
 
   itk::TransformListJSON transformList{ transform };
 
   std::string serialized{};
-  auto ec = glz::write<glz::opts{.prettify = true}>(transformList, serialized);
+  auto        ec = glz::write<glz::opts{ .prettify = true }>(transformList, serialized);
   if (ec)
   {
     std::cerr << "Failed to serialize TransformListJSON" << std::endl;
@@ -53,7 +53,8 @@ itkTransformJSONTest(int argc, char * argv[])
 
   ITK_TEST_EXPECT_EQUAL(deserialized.size(), 1);
   const auto & deserializedTransform = deserialized.front();
-  ITK_TEST_EXPECT_TRUE(deserializedTransform.transformType.transformParameterization == itk::JSONTransformParameterizationEnum::Affine);
+  ITK_TEST_EXPECT_TRUE(deserializedTransform.transformType.transformParameterization ==
+                       itk::JSONTransformParameterizationEnum::Affine);
   ITK_TEST_EXPECT_TRUE(deserializedTransform.transformType.parametersValueType == itk::JSONFloatTypesEnum::float64);
   ITK_TEST_EXPECT_EQUAL(deserializedTransform.transformType.inputDimension, 3);
   ITK_TEST_EXPECT_EQUAL(deserializedTransform.transformType.outputDimension, 3);

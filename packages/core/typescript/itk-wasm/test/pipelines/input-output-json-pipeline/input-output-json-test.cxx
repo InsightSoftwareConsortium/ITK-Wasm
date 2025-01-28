@@ -21,7 +21,8 @@
 
 #include <sstream>
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("input-output-json-test", "A pipeline to test JSON IO", argc, argv);
 
@@ -29,7 +30,8 @@ int main( int argc, char * argv[] )
   pipeline.add_option("input-json", inputJson, "The input json")->type_name("INPUT_JSON");
 
   std::string stringChoice = "valuea";
-  pipeline.add_option("--string-choice", stringChoice, "A string choice, one of: valuea, valueb, or valuec")->check(CLI::IsMember({"valuea", "valueb", "valuec"}));
+  pipeline.add_option("--string-choice", stringChoice, "A string choice, one of: valuea, valueb, or valuec")
+    ->check(CLI::IsMember({ "valuea", "valueb", "valuec" }));
 
   itk::wasm::OutputTextStream outputJson;
   pipeline.add_option("output-json", outputJson, "The output json")->type_name("OUTPUT_JSON");
@@ -37,15 +39,15 @@ int main( int argc, char * argv[] )
   ITK_WASM_PARSE(pipeline);
 
   const size_t bufferLength = 2048;
-  char * buffer = new char[bufferLength];
-  size_t readLength = 0;
+  char *       buffer = new char[bufferLength];
+  size_t       readLength = 0;
 
   std::istream & inputTxt = inputJson.Get();
-  inputTxt.read( buffer, bufferLength );
+  inputTxt.read(buffer, bufferLength);
   readLength = inputTxt.gcount();
   buffer[readLength] = '\0';
 
-  outputJson.Get().write( buffer, readLength );
+  outputJson.Get().write(buffer, readLength);
 
   delete[] buffer;
 

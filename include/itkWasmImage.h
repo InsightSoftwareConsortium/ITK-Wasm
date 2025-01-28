@@ -28,7 +28,8 @@ namespace itk
  *
  * JSON representation for an itk::ImageBase for interfacing across programming languages and runtimes.
  *
- * Pixel and Direction binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
+ * Pixel and Direction binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual
+ *filesystem.
  *
  * Arrays:
  *
@@ -55,12 +56,16 @@ public:
 
   using ImageType = TImage;
 
-  void SetImage(const ImageType * image) {
+  void
+  SetImage(const ImageType * image)
+  {
     this->SetDataObject(const_cast<ImageType *>(image));
   }
 
-  const ImageType * GetImage() const {
-    return static_cast< const ImageType * >(this->GetDataObject());
+  const ImageType *
+  GetImage() const
+  {
+    return static_cast<const ImageType *>(this->GetDataObject());
   }
 
 protected:

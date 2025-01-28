@@ -26,8 +26,7 @@ namespace itk
 {
 
 template <typename TPointSet>
-PointSetToWasmPointSetFilter<TPointSet>
-::PointSetToWasmPointSetFilter()
+PointSetToWasmPointSetFilter<TPointSet>::PointSetToWasmPointSetFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -38,24 +37,21 @@ PointSetToWasmPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 ProcessObject::DataObjectPointer
-PointSetToWasmPointSetFilter<TPointSet>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+PointSetToWasmPointSetFilter<TPointSet>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return WasmPointSetType::New().GetPointer();
 }
 
 template <typename TPointSet>
 ProcessObject::DataObjectPointer
-PointSetToWasmPointSetFilter<TPointSet>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+PointSetToWasmPointSetFilter<TPointSet>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return WasmPointSetType::New().GetPointer();
 }
 
 template <typename TPointSet>
 auto
-PointSetToWasmPointSetFilter<TPointSet>
-::GetOutput() -> WasmPointSetType *
+PointSetToWasmPointSetFilter<TPointSet>::GetOutput() -> WasmPointSetType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<WasmPointSetType *>(this->GetPrimaryOutput());
@@ -63,8 +59,7 @@ PointSetToWasmPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 auto
-PointSetToWasmPointSetFilter<TPointSet>
-::GetOutput() const -> const WasmPointSetType *
+PointSetToWasmPointSetFilter<TPointSet>::GetOutput() const -> const WasmPointSetType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const WasmPointSetType *>(this->GetPrimaryOutput());
@@ -72,8 +67,7 @@ PointSetToWasmPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 auto
-PointSetToWasmPointSetFilter<TPointSet>
-::GetOutput(unsigned int idx) -> WasmPointSetType *
+PointSetToWasmPointSetFilter<TPointSet>::GetOutput(unsigned int idx) -> WasmPointSetType *
 {
   auto * out = dynamic_cast<WasmPointSetType *>(this->ProcessObject::GetOutput(idx));
 
@@ -86,8 +80,7 @@ PointSetToWasmPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 void
-PointSetToWasmPointSetFilter<TPointSet>
-::SetInput(const PointSetType * input)
+PointSetToWasmPointSetFilter<TPointSet>::SetInput(const PointSetType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<PointSetType *>(input));
@@ -95,8 +88,7 @@ PointSetToWasmPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 void
-PointSetToWasmPointSetFilter<TPointSet>
-::SetInput(unsigned int index, const PointSetType * pointSet)
+PointSetToWasmPointSetFilter<TPointSet>::SetInput(unsigned int index, const PointSetType * pointSet)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<PointSetType *>(pointSet));
@@ -104,34 +96,31 @@ PointSetToWasmPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 const typename PointSetToWasmPointSetFilter<TPointSet>::PointSetType *
-PointSetToWasmPointSetFilter<TPointSet>
-::GetInput()
+PointSetToWasmPointSetFilter<TPointSet>::GetInput()
 {
   return itkDynamicCastInDebugMode<const PointSetType *>(this->GetPrimaryInput());
 }
 
 template <typename TPointSet>
 const typename PointSetToWasmPointSetFilter<TPointSet>::PointSetType *
-PointSetToWasmPointSetFilter<TPointSet>
-::GetInput(unsigned int idx)
+PointSetToWasmPointSetFilter<TPointSet>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TPointSet *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TPointSet>
 void
-PointSetToWasmPointSetFilter<TPointSet>
-::GenerateData()
+PointSetToWasmPointSetFilter<TPointSet>::GenerateData()
 {
   // Get the input and output pointers
   const PointSetType * pointSet = this->GetInput();
-  WasmPointSetType * wasmPointSet = this->GetOutput();
+  WasmPointSetType *   wasmPointSet = this->GetOutput();
 
   wasmPointSet->SetPointSet(pointSet);
   constexpr bool inMemory = true;
-  const auto pointSetJSON = pointSetToPointSetJSON<PointSetType>(pointSet, wasmPointSet, inMemory);
-  std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true }>(pointSetJSON, serialized);
+  const auto     pointSetJSON = pointSetToPointSetJSON<PointSetType>(pointSet, wasmPointSet, inMemory);
+  std::string    serialized{};
+  auto           ec = glz::write<glz::opts{ .prettify = true }>(pointSetJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize PointSetJSON");
@@ -142,8 +131,7 @@ PointSetToWasmPointSetFilter<TPointSet>
 
 template <typename TPointSet>
 void
-PointSetToWasmPointSetFilter<TPointSet>
-::PrintSelf(std::ostream & os, Indent indent) const
+PointSetToWasmPointSetFilter<TPointSet>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

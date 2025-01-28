@@ -29,8 +29,7 @@ namespace itk
 {
 
 template <typename TTransform>
-WasmTransformToTransformFilter<TTransform>
-::WasmTransformToTransformFilter()
+WasmTransformToTransformFilter<TTransform>::WasmTransformToTransformFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -41,8 +40,7 @@ WasmTransformToTransformFilter<TTransform>
 
 template <typename TTransform>
 ProcessObject::DataObjectPointer
-WasmTransformToTransformFilter<TTransform>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+WasmTransformToTransformFilter<TTransform>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   typename DecoratorType::Pointer decorator = DecoratorType::New();
   this->m_OutputTransform = TransformType::New();
@@ -52,8 +50,7 @@ WasmTransformToTransformFilter<TTransform>
 
 template <typename TTransform>
 ProcessObject::DataObjectPointer
-WasmTransformToTransformFilter<TTransform>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+WasmTransformToTransformFilter<TTransform>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   typename DecoratorType::Pointer decorator = DecoratorType::New();
   this->m_OutputTransform = TransformType::New();
@@ -63,24 +60,21 @@ WasmTransformToTransformFilter<TTransform>
 
 template <typename TTransform>
 auto
-WasmTransformToTransformFilter<TTransform>
-::GetOutput() -> TransformType *
+WasmTransformToTransformFilter<TTransform>::GetOutput() -> TransformType *
 {
   return this->m_OutputTransform;
 }
 
 template <typename TTransform>
 auto
-WasmTransformToTransformFilter<TTransform>
-::GetOutput() const -> const TransformType *
+WasmTransformToTransformFilter<TTransform>::GetOutput() const -> const TransformType *
 {
   return const_cast<const TransformType *>(this->m_OutputTransform);
 }
 
 template <typename TTransform>
 auto
-WasmTransformToTransformFilter<TTransform>
-::GetOutput(unsigned int idx) -> TransformType *
+WasmTransformToTransformFilter<TTransform>::GetOutput(unsigned int idx) -> TransformType *
 {
   auto * out = dynamic_cast<DecoratorType *>(this->ProcessObject::GetOutput(idx));
 
@@ -93,8 +87,7 @@ WasmTransformToTransformFilter<TTransform>
 
 template <typename TTransform>
 void
-WasmTransformToTransformFilter<TTransform>
-::SetInput(const WasmTransformType * input)
+WasmTransformToTransformFilter<TTransform>::SetInput(const WasmTransformType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<WasmTransformType *>(input));
@@ -102,8 +95,7 @@ WasmTransformToTransformFilter<TTransform>
 
 template <typename TTransform>
 void
-WasmTransformToTransformFilter<TTransform>
-::SetInput(unsigned int index, const WasmTransformType * transform)
+WasmTransformToTransformFilter<TTransform>::SetInput(unsigned int index, const WasmTransformType * transform)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<WasmTransformType *>(transform));
@@ -111,32 +103,29 @@ WasmTransformToTransformFilter<TTransform>
 
 template <typename TTransform>
 const typename WasmTransformToTransformFilter<TTransform>::WasmTransformType *
-WasmTransformToTransformFilter<TTransform>
-::GetInput()
+WasmTransformToTransformFilter<TTransform>::GetInput()
 {
   return itkDynamicCastInDebugMode<const WasmTransformType *>(this->GetPrimaryInput());
 }
 
 template <typename TTransform>
 const typename WasmTransformToTransformFilter<TTransform>::WasmTransformType *
-WasmTransformToTransformFilter<TTransform>
-::GetInput(unsigned int idx)
+WasmTransformToTransformFilter<TTransform>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TTransform *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TTransform>
 void
-WasmTransformToTransformFilter<TTransform>
-::GenerateData()
+WasmTransformToTransformFilter<TTransform>::GenerateData()
 {
   using ParametersValueType = typename TTransform::ParametersValueType;
   using FixedParametersValueType = typename TTransform::FixedParametersValueType;
 
   // Get the input and output pointers
   const WasmTransformType * wasmTransform = this->GetInput();
-  const std::string json(wasmTransform->GetJSON());
-  auto deserializedAttempt = glz::read_json<TransformListJSON>(json);
+  const std::string         json(wasmTransform->GetJSON());
+  auto                      deserializedAttempt = glz::read_json<TransformListJSON>(json);
   if (!deserializedAttempt)
   {
     const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
@@ -148,8 +137,8 @@ WasmTransformToTransformFilter<TTransform>
     itkExceptionMacro("Expected at least one transform in the list");
   }
   TransformType * transform = this->GetOutput();
-  unsigned int count = 0;
-  bool isComposite = false;
+  unsigned int    count = 0;
+  bool            isComposite = false;
   for (const auto & transformJSON : transformListJSON)
   {
     transform->SetObjectName(transformJSON.name);
@@ -209,7 +198,8 @@ WasmTransformToTransformFilter<TTransform>
     {
       // call to GetFactory has side effect of initializing the
       // TransformFactory overrides
-      using ComponentTransformType = Transform<ParametersValueType, TransformType::InputSpaceDimension, TransformType::OutputSpaceDimension>;
+      using ComponentTransformType =
+        Transform<ParametersValueType, TransformType::InputSpaceDimension, TransformType::OutputSpaceDimension>;
       typename ComponentTransformType::Pointer ptr;
       // TransformIOBaseTemplate::CreateTransform(ptr, transformType);
       TransformFactoryBase * theFactory = TransformFactoryBase::GetFactory();
@@ -236,9 +226,11 @@ WasmTransformToTransformFilter<TTransform>
       // Correct extra reference count from CreateInstance()
       ptr->UnRegister();
 
-      FixedParametersValueType * fixedPtr = reinterpret_cast< FixedParametersValueType * >( std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10) );
+      FixedParametersValueType * fixedPtr = reinterpret_cast<FixedParametersValueType *>(
+        std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10));
       ptr->CopyInFixedParameters(fixedPtr, fixedPtr + transformJSON.numberOfFixedParameters);
-      ParametersValueType * paramsPtr = reinterpret_cast< ParametersValueType * >( std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10) );
+      ParametersValueType * paramsPtr = reinterpret_cast<ParametersValueType *>(
+        std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10));
       ptr->CopyInParameters(paramsPtr, paramsPtr + transformJSON.numberOfParameters);
 
       using CompositeTransformType = CompositeTransform<ParametersValueType, TransformType::InputSpaceDimension>;
@@ -247,9 +239,11 @@ WasmTransformToTransformFilter<TTransform>
     }
     else
     {
-      FixedParametersValueType * fixedPtr = reinterpret_cast< FixedParametersValueType * >( std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10) );
+      FixedParametersValueType * fixedPtr = reinterpret_cast<FixedParametersValueType *>(
+        std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10));
       transform->CopyInFixedParameters(fixedPtr, fixedPtr + transformJSON.numberOfFixedParameters);
-      ParametersValueType * paramsPtr = reinterpret_cast< ParametersValueType * >( std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10) );
+      ParametersValueType * paramsPtr = reinterpret_cast<ParametersValueType *>(
+        std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10));
       transform->CopyInParameters(paramsPtr, paramsPtr + transformJSON.numberOfParameters);
 
       auto dictionary = transform->GetMetaDataDictionary();
@@ -262,8 +256,7 @@ WasmTransformToTransformFilter<TTransform>
 
 template <typename TTransform>
 void
-WasmTransformToTransformFilter<TTransform>
-::PrintSelf(std::ostream & os, Indent indent) const
+WasmTransformToTransformFilter<TTransform>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

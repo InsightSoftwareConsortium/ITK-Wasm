@@ -32,13 +32,13 @@ namespace wasm
  * \brief Internal class to dispatch for pipeline execution on itk::Image or itk::VectorImage.
  *
  * \ingroup ITKWebAssemblyInterface
-*/
-template<template <typename TImage> class TPipelineFunctor, unsigned int VDimension, typename TPixel>
-class
-SpecializedImagePipelineFunctor
+ */
+template <template <typename TImage> class TPipelineFunctor, unsigned int VDimension, typename TPixel>
+class SpecializedImagePipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using ImageType = itk::Image<TPixel, VDimension>;
 
@@ -50,15 +50,15 @@ public:
 /** \class SpecializedImagePipelineFunctor
  *
  * \brief Internal class to dispatch for pipeline execution on itk::Image or itk::VectorImage.
- * 
+ *
  * \ingroup ITKWebAssemblyInterface
-*/
-template<template <typename TImage> class TPipelineFunctor, unsigned int VDimension, typename TComponent>
-class
-SpecializedImagePipelineFunctor<TPipelineFunctor, VDimension, itk::VariableLengthVector<TComponent>>
+ */
+template <template <typename TImage> class TPipelineFunctor, unsigned int VDimension, typename TComponent>
+class SpecializedImagePipelineFunctor<TPipelineFunctor, VDimension, itk::VariableLengthVector<TComponent>>
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using ImageType = itk::VectorImage<TComponent, VDimension>;
 
