@@ -30,6 +30,7 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
+# Note: also need to set in wasi-sdk-pthread-itkwasm.cmake
 wasi_ld_flags="-flto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-printscan-long-double"
 wasi_c_flags="-flto -msimd128 -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_SIGNAL"
 
@@ -67,7 +68,7 @@ if $wasi; then
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
-          --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi \
+          --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-emulated-threads \
           --build-arg LDFLAGS="${wasi_ld_flags}" \
           --build-arg CFLAGS="${wasi_c_flags}" \
           $script_dir $@
@@ -80,7 +81,7 @@ if $wasi; then
                         --build-arg VCS_REF=${VCS_REF} \
                         --build-arg VCS_URL=${VCS_URL} \
                         --build-arg BUILD_DATE=${BUILD_DATE} \
-                        --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi \
+                        --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-emulated-threads \
                         --build-arg LDFLAGS="${wasi_ld_flags}" \
                         --build-arg CFLAGS="${wasi_c_flags}" \
                         $script_dir $@
@@ -122,7 +123,7 @@ if $debug; then
             --build-arg VCS_REF=${VCS_REF} \
             --build-arg VCS_URL=${VCS_URL} \
             --build-arg BUILD_DATE=${BUILD_DATE} \
-            --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi \
+            --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-emulated-threads \
             --build-arg LDFLAGS="${wasi_debug_ld_flags}" \
             --build-arg CFLAGS="${wasi_debug_c_flags}" \
             $script_dir $@
@@ -135,7 +136,7 @@ if $debug; then
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
                 --build-arg BUILD_DATE=${BUILD_DATE} \
-                --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi \
+                --build-arg BASE_IMAGE=docker.io/dockcross/web-wasi-emulated-threads \
                 --build-arg LDFLAGS="${wasi_debug_ld_flags}" \
                 --build-arg CFLAGS="${wasi_debug_c_flags}" \
                 $script_dir $@

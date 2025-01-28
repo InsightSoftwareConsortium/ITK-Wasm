@@ -1,30 +1,30 @@
 {
   "name": "itk-wasm-hello-world",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "An itk-wasm Hello World!",
   "main": "index.mjs",
   "type": "module",
   "scripts": {
-    "build": "npm run build:wasi && npm run build:emscripten",
-    "build:wasi": "itk-wasm -i itkwasm/wasi build",
+    "build": "pnpm run build:wasi && pnpm run build:emscripten",
+    "build:wasi": "itk-wasm -i quay.io/itkwasm/wasi:latest build",
     "build:emscripten": "itk-wasm build",
-    "test": "npm run test:wasi && npm run test:node && npm run test:browser",
-    "test:wasi": "npx itk-wasm run wasi-build/hello.wasi.wasm",
+    "test": "pnpm run test:wasi && pnpm run test:node && pnpm run test:browser",
+    "test:wasi": "pnpx itk-wasm run wasi-build/hello.wasi.wasm",
     "test:node": "node ./index.mjs",
     "cypress:open": "pnpm exec cypress open",
     "cypress:run": "pnpm exec cypress run",
-    "start": "http-server -p 8083",
+    "start": "http-server --cors -p 8083",
     "test:browser": "start-server-and-test start http://localhost:8083 cypress:run"
   },
   "author": "Matt McCormick <matt@mmmccormick.com>",
   "license": "Apache-2.0",
   "dependencies": {
     "fs-extra": "^11.1.0",
-    "itk-wasm": "^1.0.0-b.106"
+    "itk-wasm": "workspace:^"
   },
   "devDependencies": {
-    "cypress": "^13.2.0",
+    "cypress": "^14.0.0",
     "http-server": "^14.1.1",
-    "start-server-and-test": "^1.15.2"
+    "start-server-and-test": "^2.0.10"
   }
 }

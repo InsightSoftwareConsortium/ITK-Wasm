@@ -33,6 +33,31 @@ importers:
         specifier: workspace:^
         version: link:../../packages/core/typescript/itk-wasm
 
+  examples/different-input-types:
+    dependencies:
+      itk-wasm:
+        specifier: workspace:^
+        version: link:../../packages/core/typescript/itk-wasm
+
+  examples/hello-world:
+    dependencies:
+      fs-extra:
+        specifier: ^11.1.0
+        version: 11.2.0
+      itk-wasm:
+        specifier: workspace:^
+        version: link:../../packages/core/typescript/itk-wasm
+    devDependencies:
+      cypress:
+        specifier: ^13.17.0
+        version: 13.17.0
+      http-server:
+        specifier: ^14.1.1
+        version: 14.1.1
+      start-server-and-test:
+        specifier: ^2.0.4
+        version: 2.0.4
+
   examples/inputs-outputs:
     devDependencies:
       '@itk-wasm/image-io':
@@ -399,6 +424,9 @@ importers:
 
   packages/core/typescript/itk-wasm:
     dependencies:
+      '@emnapi/wasi-threads':
+        specifier: ^1.0.1
+        version: 1.0.1
       '@itk-wasm/dam':
         specifier: ^1.1.1
         version: 1.1.1
@@ -1588,6 +1616,9 @@ packages:
 
   '@cypress/xvfb@1.2.4':
     resolution: {integrity: sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q==}
+
+  '@emnapi/wasi-threads@1.0.1':
+    resolution: {integrity: sha512-iIBu7mwkq4UQGeMEM8bLwNK962nXdhodeScX4slfQnRhEMMzvYivHhutCIk8uojvmASXXPC2WNEjwxFWk72Oqw==}
 
   '@esbuild/aix-ppc64@0.19.12':
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -7166,6 +7197,10 @@ snapshots:
       lodash.once: 4.1.1
     transitivePeerDependencies:
       - supports-color
+
+  '@emnapi/wasi-threads@1.0.1':
+    dependencies:
+      tslib: 2.6.2
 
   '@esbuild/aix-ppc64@0.19.12':
     optional: true

@@ -4,6 +4,8 @@ packages:
   - 'examples/node-js'
   - 'examples/inputs-outputs'
   - 'examples/inputs-outputs/typescript'
+  - 'examples/different-input-types'
+  - 'examples/hello-world'
   - 'examples/mean-squares-versor-registration'
   - 'examples/mean-squares-versor-registration/typescript'
   - '!packages/core/typescript/create-itk-wasm/test/**'

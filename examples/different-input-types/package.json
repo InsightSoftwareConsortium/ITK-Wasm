@@ -4,15 +4,15 @@
   "description": "An itk-wasm pipeline example that demonstrates accepting different input types",
   "type": "module",
   "scripts": {
-    "build": "npm run build:wasi",
-    "build:wasi": "itk-wasm -b wasi-build -i itkwasm/wasi:latest-debug build",
-    "test": "npm run test:wasi && npm run test:wasi:help",
+    "build": "pnpm run build:wasi",
+    "build:wasi": "itk-wasm -b wasi-build -i quay.io/itkwasm/wasi:latest build",
+    "test": "pnpm run test:wasi",
     "test:wasi": "itk-wasm -b wasi-build run different-input-types.wasi.wasm -- ./Gourds.png label.png overlay.png",
     "test:wasi:help": "itk-wasm -b wasi-build run different-input-types.wasi.wasm -- --help"
   },
   "author": "Matt McCormick <matt@mmmccormick.com>",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "^1.0.0-b.185"
+    "itk-wasm": "workspace:^"
   }
 }

@@ -13,10 +13,11 @@ fi
 export ITK_WASM_DEV_DOCKER_TAG=${ITK_WASM_DEV_DOCKER_TAG:-$(echo $(date '+%Y%m%d')-$(git rev-parse --short HEAD))}
 
 export ITK_WASM_DCMTK_REPOSITORY=${ITK_WASM_DCMTK_REPOSITORY:-"https://github.com/InsightSoftwareConsortium/DCMTK"}
-export ITK_WASM_DCMTK_GIT_TAG=${ITK_WASM_DCMTK_GIT_TAG:-"93e6d1b20b476c388f0379245c8c6e96af7f16f4"}
+# 20240311_DCMTK_PATCHES_FOR_ITK-wasm-3
+export ITK_WASM_DCMTK_GIT_TAG=${ITK_WASM_DCMTK_GIT_TAG:-"2fe4dacbe9c343dba350fcff6eab365241636623"}
 
-export ITK_WASM_ITK_REPOSITORY=${ITK_WASM_ITK_REPOSITORY:-"https://github.com/KitwareMedical/ITK"}
-export ITK_WASM_ITK_BRANCH=${ITK_WASM_ITK_BRANCH:-"itkwasm-2024-05-20-5db055d7ad3b-5"}
+export ITK_WASM_ITK_REPOSITORY=${ITK_WASM_ITK_REPOSITORY:-"https://github.com/thewtex/ITK"}
+export ITK_WASM_ITK_BRANCH=${ITK_WASM_ITK_BRANCH:-"itkwasm-2024-05-20-5db055d7ad3b-6"}
 
 export ITK_WASM_NATIVE_WORKSPACE=${ITK_WASM_NATIVE_WORKSPACE:-$(pwd)/native}
 
