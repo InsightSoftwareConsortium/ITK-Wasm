@@ -40,7 +40,8 @@ function(add_executable target)
   set(wasm_target ${target})
   _add_executable(${wasm_target} ${ARGN})
   # Suppress CLI11 Encoding_inl.hpp std::wstring_convert deprecation warning
-  set_property(TARGET ${wasm_target} APPEND PROPERTY COMPILE_OPTIONS -msimd128 -flto -Wno-deprecated-declarations)
+  # Suppress glaze warning about warning: 'static_assert' with a user-generated message is a C++26 extension [-Wc++26-extensions]
+  set_property(TARGET ${wasm_target} APPEND PROPERTY COMPILE_OPTIONS -msimd128 -flto -Wno-deprecated-declarations -Wno-c++26-extensions)
   if(EMSCRIPTEN)
     set_property(TARGET ${wasm_target} APPEND PROPERTY COMPILE_OPTIONS -Wno-warn-absolute-paths -DITK_WASM_NO_FILESYSTEM_IO)
     kebab_to_camel(${target} targetCamel)
