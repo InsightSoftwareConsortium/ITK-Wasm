@@ -33,6 +33,11 @@ FetchContent_MakeAvailable(dcmqi_lib)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
+if(WASI)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_PTHREAD")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINK_FLAGS} -lwasi-emulated-process-clocks -lwasi-emulated-pthread")
+endif()
+
 list(APPEND DCMQI_INCLUDE_DIRS "${dcmqi_lib_SOURCE_DIR}/include" "${dcmqi_lib_SOURCE_DIR}/jsoncpp" "${dcmqi_lib_BINARY_DIR}/include")
 include_directories(${DCMQI_INCLUDE_DIRS})
 

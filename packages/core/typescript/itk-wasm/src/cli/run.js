@@ -30,7 +30,9 @@ function run(wasmBinary, options) {
       wasmRuntimeArgs = [
         '--args',
         `${quotes}-e WASMTIME_BACKTRACE_DETAILS=1${quotes}`,
-        'wasmtime-pwd.sh'
+        'wasmtime-pwd.sh',
+        '-W', 'threads',
+        '-S', 'threads,cli'
       ]
       break
     case 'wasmer':

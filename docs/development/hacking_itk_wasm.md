@@ -2,10 +2,14 @@
 
 ## TLDR
 
-Install [Podman] and [Pixi], and
+Install:
+
+- [Podman] or [Docker Engine]
+- [Pixi]
+- [Google Chrome]
+- [Firefox]
 
 ```sh
-./src/docker/pull.sh
 pixi run build
 pixi run test
 ```
@@ -225,7 +229,10 @@ and rebuild whenever the documentation changes.
 [conventional commit]: https://www.conventionalcommits.org/en/v1.0.0/#summary
 [current repository and branch]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/src/docker/itk-wasm-base/Dockerfile#L39-L41
 [data.kitware.com]: https://data.kitware.com/
+[Docker Engine]: https://docs.docker.com/engine/install/
 [FileBase]: https://filebase.com/
+[Firefox]: https://www.mozilla.org/
+[Google Chrome]: https://www.google.com/chrome/
 [hatch]: https://hatch.pypa.io/latest/
 [`itk-wasm` package]: https://www.npmjs.com/package/itk-wasm
 [`itkwasm` Python package]: https://pypi.org/project/itkwasm/

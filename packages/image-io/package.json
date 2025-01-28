@@ -1,10 +1,14 @@
 {
   "name": "@itk-wasm/image-io-build",
-  "version": "1.3.1",
+  "version": "1.5.0",
   "private": true,
   "description": "Input and output for scientific and medical image file formats.",
   "type": "module",
   "itk-wasm": {
+    "test-data-hash": "bafybeic6giblbbrpbjllto2jdsa53uqejherjvhvid364z25bs2h7eqjae",
+    "test-data-urls": [
+      "https://w3s.link/ipfs/bafybeidxwcsazmgzcejlhm233y5rkaphhfxvgbnqfw3ckrrly3tv6vrtnu/data.tar.gz"
+    ],
     "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
     "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/image-io",
@@ -24,7 +28,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafybeibyjhkcrinl2lotw5g2vngjs23aaenv3tjzxssm35jxaci5ylsqia https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.155/image-io-test-data.tar.gz https://w3s.link/ipfs/bafybeiewe4rankwwe7nw7qm2g3qclflhci2e53wthn3gukdlhbff64pua4/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafybeic6giblbbrpbjllto2jdsa53uqejherjvhvid364z25bs2h7eqjae https://w3s.link/ipfs/bafybeidxwcsazmgzcejlhm233y5rkaphhfxvgbnqfw3ckrrly3tv6vrtnu/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",

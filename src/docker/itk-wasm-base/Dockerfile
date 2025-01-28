@@ -1,6 +1,6 @@
 ARG BASE_IMAGE=docker.io/dockcross/web-wasm
 ARG HOST_ARCH=amd64
-FROM $BASE_IMAGE:20241229-8cdda7e-$HOST_ARCH
+FROM $BASE_IMAGE:20250123-74d1a0b-$HOST_ARCH
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
@@ -11,12 +11,12 @@ WORKDIR /
 COPY itk_wasm_env_vars.sh /
 
 # Note: on entry, emsdk will prepend to the path with its own node, so add to an earlier path
-ENV NODE_TAG v22.9.0
+ENV NODE_TAG=v22.9.0
 COPY install-node-js.sh /usr/local/bin/
 RUN /usr/local/bin/install-node-js.sh && rm /usr/local/bin/install-node-js.sh
-ENV PATH /emsdk/upstream/emscripten:${PATH}
+ENV PATH=/emsdk/upstream/emscripten:${PATH}
 
-ENV zstd_GIT_TAG v1.5.5
+ENV zstd_GIT_TAG=v1.5.5
 RUN curl -L https://api.github.com/repos/facebook/zstd/tarball/${zstd_GIT_TAG} | tar xz --strip=1 --one-top-level=zstd && \
   mkdir zstd-build && \
   cd zstd-build && \
@@ -87,12 +87,15 @@ RUN mkdir ITK-build && \
     -DDCMTK_WITH_THREADS:BOOL=OFF \
     -DDCMTK_BUILD_APPS:BOOL=OFF \
     -DNO_FLOAT_EXCEPTIONS:BOOL=ON \
+    -DCMAKE_C_FLAGS:STRING="${CFLAGS}" \
+    -DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="${LDFLAGS}" \
     ../ITK && \
   ninja && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
-ENV ITKMeshToPolyData_GIT_TAG 1e594b7437a43be348b0ccea827c66fb5aa13e1f
+ENV ITKMeshToPolyData_GIT_TAG=1e594b7437a43be348b0ccea827c66fb5aa13e1f
 RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git && \
   cd ITKMeshToPolyData && \
   git checkout ${ITKMeshToPolyData_GIT_TAG} && \
@@ -124,5 +127,5 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url=$VCS_URL \
       org.label-schema.schema-version="1.0"
-ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}
+ENV DEFAULT_DOCKCROSS_IMAGE=${IMAGE}:${VERSION}
 WORKDIR /work

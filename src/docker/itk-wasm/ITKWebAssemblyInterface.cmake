@@ -40,12 +40,12 @@ function(add_executable target)
   set(wasm_target ${target})
   _add_executable(${wasm_target} ${ARGN})
   # Suppress CLI11 Encoding_inl.hpp std::wstring_convert deprecation warning
-  set_property(TARGET ${wasm_target} APPEND PROPERTY COMPILE_OPTIONS "-Wno-deprecated-declarations")
+  set_property(TARGET ${wasm_target} APPEND PROPERTY COMPILE_OPTIONS -msimd128 -flto -Wno-deprecated-declarations)
   if(EMSCRIPTEN)
+    set_property(TARGET ${wasm_target} APPEND PROPERTY COMPILE_OPTIONS -Wno-warn-absolute-paths -DITK_WASM_NO_FILESYSTEM_IO)
     kebab_to_camel(${target} targetCamel)
     get_property(_link_flags TARGET ${target} PROPERTY LINK_FLAGS)
-    set(common_link_flags " -s FORCE_FILESYSTEM=1 -s
-    EXPORTED_RUNTIME_METHODS='[\"callMain\",\"cwrap\",\"ccall\",\"writeArrayToMemory\",\"lengthBytesUTF8\",\"stringToUTF8\",\"UTF8ToString\", \"stackSave\", \"stackRestore\"]' -flto -s  ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=1 -s EXPORT_NAME=${targetCamel} -s MODULARIZE=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPipelinePre.js --post-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPost.js -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORTED_FUNCTIONS='[\"_main\"]' ${_link_flags}")
+    set(common_link_flags "-flto -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s FORCE_FILESYSTEM=1 -s EXPORTED_RUNTIME_METHODS='[\"callMain\",\"cwrap\",\"ccall\",\"writeArrayToMemory\",\"lengthBytesUTF8\",\"stringToUTF8\",\"UTF8ToString\", \"stackSave\", \"stackRestore\"]' -flto -s  ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -s WASM=1 -lnodefs.js -s WASM_ASYNC_COMPILATION=1 -s EXPORT_NAME=${targetCamel} -s MODULARIZE=1 -s EXIT_RUNTIME=0 -s INVOKE_RUN=0 --pre-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPipelinePre.js --post-js /ITKWebAssemblyInterface/src/emscripten-module/itkJSPost.js -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s EXPORTED_FUNCTIONS='[\"_main\"]' ${_link_flags}")
     set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS "${common_link_flags} -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=1")
 
     get_property(_include_dirs TARGET ${target} PROPERTY INCLUDE_DIRECTORIES)
@@ -64,14 +64,24 @@ function(add_executable target)
     # WASI
     set_property(TARGET ${wasm_target} PROPERTY SUFFIX ".wasi.wasm")
     if (NOT TARGET wasi-itk-extras AND DEFINED CMAKE_CXX_COMPILE_OBJECT)
-      add_library(wasi-itk-extras STATIC /ITKWebAssemblyInterface/src/exceptionShim.cxx /ITKWebAssemblyInterface/src/cxaThreadAtExitShim.cxx /ITKWebAssemblyInterface/src/initialization.cxx)
+      set_source_files_properties(/ITKWebAssemblyInterface/src/exceptionShimInitPrimaryException.cxx PROPERTIES COMPILE_FLAGS "-fno-lto")
+      add_library(wasi-itk-extras STATIC
+        /ITKWebAssemblyInterface/src/exceptionShim.cxx
+        /ITKWebAssemblyInterface/src/exceptionShimInitPrimaryException.cxx
+        /ITKWebAssemblyInterface/src/cxaThreadAtExitShim.cxx
+        /ITKWebAssemblyInterface/src/pthreadShim.cxx
+        /ITKWebAssemblyInterface/src/initialization.cxx)
     endif()
     get_property(_is_imported TARGET ${wasm_target} PROPERTY IMPORTED)
     if (NOT ${_is_imported})
       _target_link_libraries(${target} PRIVATE $<$<LINK_LANGUAGE:CXX>:wasi-itk-extras>)
+      set_property(TARGET ${wasm_target} APPEND PROPERTY COMPILE_OPTIONS -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_SIGNAL)
+      target_compile_options(${wasm_target} PRIVATE $<$<CONFIG:Debug>:-fno-lto -g>)
       get_property(_link_flags TARGET ${wasm_target} PROPERTY LINK_FLAGS)
       set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS
-        "-mexec-model=reactor -Wl,--export-if-defined=itk_wasm_input_array_alloc -Wl,--export-if-defined=itk_wasm_input_json_alloc -Wl,--export-if-defined=itk_wasm_output_json_address -Wl,--export-if-defined=itk_wasm_output_json_size -Wl,--export-if-defined=itk_wasm_output_array_address -Wl,--export-if-defined=itk_wasm_output_array_size -Wl,--export-if-defined=itk_wasm_free_all -Wl,--export-if-defined=_start -Wl,--export-if-defined=itk_wasm_delayed_start -Wl,--export-if-defined=itk_wasm_delayed_exit ${_link_flags}")
+        "-flto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-printscan-long-double -mexec-model=reactor -Wl,--export-if-defined=itk_wasm_input_array_alloc -Wl,--export-if-defined=itk_wasm_input_json_alloc -Wl,--export-if-defined=itk_wasm_output_json_address -Wl,--export-if-defined=itk_wasm_output_json_size -Wl,--export-if-defined=itk_wasm_output_array_address -Wl,--export-if-defined=itk_wasm_output_array_size -Wl,--export-if-defined=itk_wasm_free_all -Wl,--export-if-defined=_start -Wl,--export-if-defined=itk_wasm_delayed_start -Wl,--export-if-defined=itk_wasm_delayed_exit ${_link_flags}")
+      set_property(TARGET ${wasm_target} PROPERTY LINK_FLAGS_DEBUG
+        "-fno-lto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-printscan-long-double -mexec-model=reactor -Wl,--export-if-defined=itk_wasm_input_array_alloc -Wl,--export-if-defined=itk_wasm_input_json_alloc -Wl,--export-if-defined=itk_wasm_output_json_address -Wl,--export-if-defined=itk_wasm_output_json_size -Wl,--export-if-defined=itk_wasm_output_array_address -Wl,--export-if-defined=itk_wasm_output_array_size -Wl,--export-if-defined=itk_wasm_free_all -Wl,--export-if-defined=_start -Wl,--export-if-defined=itk_wasm_delayed_start -Wl,--export-if-defined=itk_wasm_delayed_exit ${_link_flags}")
       if(NOT ITK_WASM_NO_INTERFACE_LINK)
         if(NOT TARGET WebAssemblyInterface)
           find_package(ITK QUIET COMPONENTS WebAssemblyInterface)
