@@ -70,7 +70,7 @@ if (WASI)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lwasi-emulated-process-clocks -lwasi-emulated-signal")
 endif()
 if(EMSCRIPTEN OR WASI)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-include-dirs -Wno-unsafe-buffer-usage -Wno-switch-default -Wno-undefined-reinterpret-cast -Wno-deprecated-declarations -Wno-documentation")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -msimd128 -Wno-missing-include-dirs -Wno-unsafe-buffer-usage -Wno-switch-default -Wno-undefined-reinterpret-cast -Wno-deprecated-declarations -Wno-documentation")
 endif()
 
 # set(GEOGRAM_GIT_REPOSITORY "https://github.com/BrunoLevy/geogram.git")
