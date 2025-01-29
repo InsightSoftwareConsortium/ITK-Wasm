@@ -63,16 +63,20 @@ set(GEOGRAM_LIB_ONLY ON CACHE BOOL "Only build the geogram library")
 if (EMSCRIPTEN)
   set(VORPALINE_PLATFORM "Emscripten-clang" CACHE STRING "Vorpaline platform")
   set(EMSCRIPTEN_DIR "/emsdk/upstream/emscripten" CACHE PATH "Emscripten directory")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unsafe-buffer-usage -Wno-switch-default -Wno-undefined-reinterpret-cast")
 endif()
 if (WASI)
   set(VORPALINE_PLATFORM "Wasi-clang" CACHE STRING "Vorpaline platform")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WASI_EMULATED_SIGNAL")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lwasi-emulated-signal")
+endif()
+if(EMSCRIPTEN OR WASI)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-include-dirs -Wno-unsafe-buffer-usage -Wno-switch-default -Wno-undefined-reinterpret-cast -Wno-deprecated-declarations -Wno-documentation")
 endif()
 
 # set(GEOGRAM_GIT_REPOSITORY "https://github.com/BrunoLevy/geogram.git")
 set(GEOGRAM_GIT_REPOSITORY "https://github.com/thewtex/geogram.git")
-# v1.9.1
-set(GEOGRAM_GIT_TAG "4fec5761e60009baf35ba0412dde5b9b60437388")
+# wasi-2025-01-28
+set(GEOGRAM_GIT_TAG "e47b29fb83cb5d5df6031ab1e8a2a9130f8722ed")
 set(BUILD_SHARED_LIBS OFF)
 FetchContent_Declare(
   geogram
@@ -97,10 +101,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(geogram mesh_plane_intersection)
 include_directories(${geogram_SOURCE_DIR}/src/lib)
 include_directories(${mesh_plane_intersection_SOURCE_DIR}/src)
-
-if (EMSCRIPTEN)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unsafe-buffer-usage")
-endif()
 
 foreach(pipeline geogram-conversion repair smooth-remesh keep-largest-component)
   add_executable(${pipeline} ${pipeline}.cxx)
