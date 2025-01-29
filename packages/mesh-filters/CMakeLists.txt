@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(itkwasm-mesh-filters LANGUAGES CXX)
+project(itkwasm-mesh-filters)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -72,7 +72,7 @@ endif()
 # set(GEOGRAM_GIT_REPOSITORY "https://github.com/BrunoLevy/geogram.git")
 set(GEOGRAM_GIT_REPOSITORY "https://github.com/thewtex/geogram.git")
 # v1.9.1
-set(GEOGRAM_GIT_TAG "e555e37d9ac6ab7c270afa3dbcfeb6c723550430")
+set(GEOGRAM_GIT_TAG "4fec5761e60009baf35ba0412dde5b9b60437388")
 set(BUILD_SHARED_LIBS OFF)
 FetchContent_Declare(
   geogram
