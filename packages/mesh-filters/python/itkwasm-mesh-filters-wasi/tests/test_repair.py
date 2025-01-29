@@ -5,8 +5,7 @@ from itkwasm_compare_meshes import compare_meshes
 
 from itkwasm_mesh_filters_wasi import repair
 
-
-from .common import test_input_path, test_baseline_path, test_output_path
+from .common import test_input_path, test_baseline_path
 
 def test_repair():
     input_mesh_path = test_input_path / "suzanne.off"
