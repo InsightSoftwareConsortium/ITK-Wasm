@@ -14,3 +14,6 @@ python/itkwasm-mesh-filters-emscripten/dist/
 python/itkwasm-mesh-filters-wasi/dist/
 python/itkwasm-mesh-filters/dist/
 pyodide/
+test/data.tar.gz
+test/data/
+test/output/
