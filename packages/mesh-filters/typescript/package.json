@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/mesh-filters",
-  "version": "0.2.0",
+  "version": "1.6.0",
   "description": "Mesh filters to repair, remesh, subdivide, decimate, smooth, triangulate, etc.",
   "type": "module",
   "module": "./dist/index.js",
