@@ -1,0 +1,247 @@
+<!-- Generated file. To retain edits, remove this comment. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css" />
+
+<script type="module">
+  import '@itk-wasm/demo-app/demo-app.js'
+</script>
+
+  <title>@itk-wasm/mesh-filters<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></title>
+</head>
+<body>
+
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/InsightSoftwareConsortium/ITK-Wasm" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<div id="app">
+  <a href="https://wasm.itk.org/" target="_blank">
+    <img src="./logo.svg" class="logo vanilla" alt="ITK Wasm logo" />
+  </a>
+
+  <h2>@itk-wasm/mesh-filters<img src="./javascript-logo.svg" alt="JavaScript logo" class="language-logo"/><img src="./typescript-logo.svg" alt="TypeScript logo" class="language-logo"/></h2>
+  <i>Mesh filters to repair, remesh, subdivide, decimate, smooth, triangulate, etc.</i>
+  <h3>👨‍💻 Live API Demo ✨</h3>
+  <br /><br />
+
+  <sl-tab-group>
+    <sl-tab slot="nav" panel="geogramConversion-panel">geogramConversion</sl-tab>
+    <sl-tab slot="nav" panel="keepLargestComponent-panel">keepLargestComponent</sl-tab>
+    <sl-tab slot="nav" panel="repair-panel">repair</sl-tab>
+    <sl-tab slot="nav" panel="sliceMesh-panel">sliceMesh</sl-tab>
+    <sl-tab slot="nav" panel="remesh-panel">remesh</sl-tab>
+
+
+    <sl-tab-panel name="geogramConversion-panel">
+
+    <small><i>A test for reading and writing with geogram, itk::QuadEdgeMesh meshes</i></small><br /><br />
+
+    <div id="geogramConversionInputs"><form action="">
+      <label for="input-mesh-file"><sl-button name="input-mesh-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-mesh-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the inputMesh"><sl-details id="geogramConversion-input-mesh-details" summary="inputMesh: The input mesh" disabled></sl-details></sl-tooltip>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="geogramConversionOutputs">
+      <sl-details disabled id="geogramConversion-output-mesh-details" summary="outputMesh: The output mesh"></sl-details>
+      <sl-select id="geogramConversion-output-mesh-output-format" placeholder="Format">
+        <sl-option value="vtk">vtk</sl-option>
+        <sl-option value="byu">byu</sl-option>
+        <sl-option value="fsa">fsa</sl-option>
+        <sl-option value="fsb">fsb</sl-option>
+        <sl-option value="obj">obj</sl-option>
+        <sl-option value="off">off</sl-option>
+        <sl-option value="stl">stl</sl-option>
+        <sl-option value="swc">swc</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="output-mesh-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="keepLargestComponent-panel">
+
+    <small><i>Keep only the largest component in the mesh.</i></small><br /><br />
+
+    <div id="keepLargestComponentInputs"><form action="">
+      <label for="input-mesh-file"><sl-button name="input-mesh-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-mesh-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the inputMesh"><sl-details id="keepLargestComponent-input-mesh-details" summary="inputMesh: The input mesh." disabled></sl-details></sl-tooltip>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="keepLargestComponentOutputs">
+      <sl-details disabled id="keepLargestComponent-output-mesh-details" summary="outputMesh: The output mesh with only the largest component."></sl-details>
+      <sl-select id="keepLargestComponent-output-mesh-output-format" placeholder="Format">
+        <sl-option value="vtk">vtk</sl-option>
+        <sl-option value="byu">byu</sl-option>
+        <sl-option value="fsa">fsa</sl-option>
+        <sl-option value="fsb">fsb</sl-option>
+        <sl-option value="obj">obj</sl-option>
+        <sl-option value="off">off</sl-option>
+        <sl-option value="stl">stl</sl-option>
+        <sl-option value="swc">swc</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="output-mesh-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="repair-panel">
+
+    <small><i>Repair a mesh so it is 2-manifold and optionally watertight.</i></small><br /><br />
+
+    <div id="repairInputs"><form action="">
+      <label for="input-mesh-file"><sl-button name="input-mesh-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-mesh-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the inputMesh"><sl-details id="repair-input-mesh-details" summary="inputMesh: The input mesh" disabled></sl-details></sl-tooltip>
+<br /><br />
+      <sl-input name="merge-tolerance" type="number" value="1e-06" step="any" label="mergeTolerance" help-text="Point merging tolerance as a percent of the bounding box diagonal."></sl-input>
+<br />
+      <sl-input name="minimum-component-area" type="number" value="3" step="any" label="minimumComponentArea" help-text="Minimum component area as a percent of the total area. Components smaller than this are removed."></sl-input>
+<br />
+      <sl-input name="maximum-hole-area" type="number" value="0.1" step="any" label="maximumHoleArea" help-text="Maximum area of a hole as a percent of the total area. Holes smaller than this are filled."></sl-input>
+<br />
+      <sl-input name="maximum-hole-edges" type="number" value="2000" min="0" step="1" label="maximumHoleEdges" help-text="Maximum number of edges in a hole. Holes with fewer edges than this are filled."></sl-input>
+<br />
+      <sl-input name="maximum-degree3-distance" type="number" value="0" step="any" label="maximumDegree3Distance" help-text="Maximum distance as a percent of the bounding box diagonal. Vertices with degree 3 that are closer than this are merged."></sl-input>
+<br />
+      <sl-checkbox name="remove-intersecting-triangles">removeIntersectingTriangles - <i>Remove intersecting triangles.</i></sl-checkbox>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="repairOutputs">
+      <sl-details disabled id="repair-output-mesh-details" summary="outputMesh: The output repaired mesh."></sl-details>
+      <sl-select id="repair-output-mesh-output-format" placeholder="Format">
+        <sl-option value="vtk">vtk</sl-option>
+        <sl-option value="byu">byu</sl-option>
+        <sl-option value="fsa">fsa</sl-option>
+        <sl-option value="fsb">fsb</sl-option>
+        <sl-option value="obj">obj</sl-option>
+        <sl-option value="off">off</sl-option>
+        <sl-option value="stl">stl</sl-option>
+        <sl-option value="swc">swc</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="output-mesh-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="sliceMesh-panel">
+
+    <small><i>Slice a mesh along planes into polylines.</i></small><br /><br />
+
+    <div id="sliceMeshInputs"><form action="">
+      <label for="input-mesh-file"><sl-button name="input-mesh-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-mesh-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the inputMesh"><sl-details id="sliceMesh-input-mesh-details" summary="inputMesh: The input triangle mesh." disabled></sl-details></sl-tooltip>
+<br /><br />
+      <label for="planes-file"><sl-button name="planes-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="planes-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the planes"><sl-details id="sliceMesh-planes-details" summary="planes: An array of plane locations to slice the mesh. Each plane is defined by an array of 'origin' and 'spacing' values." disabled></sl-details></sl-tooltip>
+<br /><br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="sliceMeshOutputs">
+      <sl-details disabled id="sliceMesh-polylines-details" summary="polylines: The output mesh comprised of polylines. Cell data indicates whether part of a closed line. Point data indicates the slice index."></sl-details>
+      <sl-select id="sliceMesh-polylines-output-format" placeholder="Format">
+        <sl-option value="vtk">vtk</sl-option>
+        <sl-option value="byu">byu</sl-option>
+        <sl-option value="fsa">fsa</sl-option>
+        <sl-option value="fsb">fsb</sl-option>
+        <sl-option value="obj">obj</sl-option>
+        <sl-option value="off">off</sl-option>
+        <sl-option value="stl">stl</sl-option>
+        <sl-option value="swc">swc</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="polylines-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="remesh-panel">
+
+    <small><i>Smooth and remesh a mesh to improve quality.</i></small><br /><br />
+
+    <div id="remeshInputs"><form action="">
+      <label for="input-mesh-file"><sl-button name="input-mesh-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-mesh-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the inputMesh"><sl-details id="remesh-input-mesh-details" summary="inputMesh: The input mesh" disabled></sl-details></sl-tooltip>
+<br /><br />
+      <sl-input name="number-points" type="number" value="75" step="any" label="numberPoints" help-text="Number of points as a percent of the bounding box diagonal. Output may have slightly more points."></sl-input>
+<br />
+      <sl-input name="triangle-shape-adaptation" type="number" value="1" step="any" label="triangleShapeAdaptation" help-text="Triangle shape adaptation factor. Use 0.0 to disable."></sl-input>
+<br />
+      <sl-input name="triangle-size-adaptation" type="number" value="0" step="any" label="triangleSizeAdaptation" help-text="Triangle size adaptation factor. Use 0.0 to disable."></sl-input>
+<br />
+      <sl-input name="normal-iterations" type="number" value="3" min="0" step="1" label="normalIterations" help-text="Number of normal smoothing iterations."></sl-input>
+<br />
+      <sl-input name="lloyd-iterations" type="number" value="5" min="0" step="1" label="lloydIterations" help-text="Number of Lloyd relaxation iterations."></sl-input>
+<br />
+      <sl-input name="newton-iterations" type="number" value="30" min="0" step="1" label="newtonIterations" help-text="Number of Newton iterations."></sl-input>
+<br />
+      <sl-input name="newton-m" type="number" value="7" min="0" step="1" label="newtonM" help-text="Number of Newton evaluations per step for Hessian approximation."></sl-input>
+<br />
+      <sl-input name="lfs-samples" type="number" value="10000" min="0" step="1" label="lfsSamples" help-text="Number of samples for size adaptation if triangle size adaptation is not 0.0."></sl-input>
+<br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="remeshOutputs">
+      <sl-details disabled id="remesh-output-mesh-details" summary="outputMesh: The output repaired mesh."></sl-details>
+      <sl-select id="remesh-output-mesh-output-format" placeholder="Format">
+        <sl-option value="vtk">vtk</sl-option>
+        <sl-option value="byu">byu</sl-option>
+        <sl-option value="fsa">fsa</sl-option>
+        <sl-option value="fsb">fsb</sl-option>
+        <sl-option value="obj">obj</sl-option>
+        <sl-option value="off">off</sl-option>
+        <sl-option value="stl">stl</sl-option>
+        <sl-option value="swc">swc</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="output-mesh-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+  </sl-tab-group>
+</div>
+
+<script type="module" src="./index.ts"></script>
+
+</body>
+</html>
