@@ -34,7 +34,7 @@
     <sl-tab slot="nav" panel="keepLargestComponent-panel">keepLargestComponent</sl-tab>
     <sl-tab slot="nav" panel="repair-panel">repair</sl-tab>
     <sl-tab slot="nav" panel="sliceMesh-panel">sliceMesh</sl-tab>
-    <sl-tab slot="nav" panel="remesh-panel">remesh</sl-tab>
+    <sl-tab slot="nav" panel="smoothRemesh-panel">smoothRemesh</sl-tab>
 
 
     <sl-tab-panel name="geogramConversion-panel">
@@ -188,13 +188,13 @@
     </sl-tab-panel>
 
 
-    <sl-tab-panel name="remesh-panel">
+    <sl-tab-panel name="smoothRemesh-panel">
 
     <small><i>Smooth and remesh a mesh to improve quality.</i></small><br /><br />
 
-    <div id="remeshInputs"><form action="">
+    <div id="smoothRemeshInputs"><form action="">
       <label for="input-mesh-file"><sl-button name="input-mesh-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-mesh-file" style="display: none"/>
-      <sl-tooltip content="Use the Upload button to provide the inputMesh"><sl-details id="remesh-input-mesh-details" summary="inputMesh: The input mesh" disabled></sl-details></sl-tooltip>
+      <sl-tooltip content="Use the Upload button to provide the inputMesh"><sl-details id="smoothRemesh-input-mesh-details" summary="inputMesh: The input mesh" disabled></sl-details></sl-tooltip>
 <br /><br />
       <sl-input name="number-points" type="number" value="75" step="any" label="numberPoints" help-text="Number of points as a percent of the bounding box diagonal. Output may have slightly more points."></sl-input>
 <br />
@@ -219,9 +219,9 @@
     </form></div>
     <sl-divider></sl-divider>
 
-    <div id="remeshOutputs">
-      <sl-details disabled id="remesh-output-mesh-details" summary="outputMesh: The output repaired mesh."></sl-details>
-      <sl-select id="remesh-output-mesh-output-format" placeholder="Format">
+    <div id="smoothRemeshOutputs">
+      <sl-details disabled id="smoothRemesh-output-mesh-details" summary="outputMesh: The output repaired mesh."></sl-details>
+      <sl-select id="smoothRemesh-output-mesh-output-format" placeholder="Format">
         <sl-option value="vtk">vtk</sl-option>
         <sl-option value="byu">byu</sl-option>
         <sl-option value="fsa">fsa</sl-option>

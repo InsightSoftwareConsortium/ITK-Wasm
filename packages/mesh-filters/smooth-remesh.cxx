@@ -163,7 +163,7 @@ public:
 
 int main(int argc, char *argv[])
 {
-  itk::wasm::Pipeline pipeline("remesh", "Smooth and remesh a mesh to improve quality.", argc, argv);
+  itk::wasm::Pipeline pipeline("smooth-remesh", "Smooth and remesh a mesh to improve quality.", argc, argv);
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
                                           uint8_t,

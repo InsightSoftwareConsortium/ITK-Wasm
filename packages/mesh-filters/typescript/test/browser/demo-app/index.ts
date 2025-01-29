@@ -20,5 +20,5 @@ import './geogram-conversion-controller.js'
 import './keep-largest-component-controller.js'
 import './repair-controller.js'
 import './slice-mesh-controller.js'
-import './remesh-controller.js'
+import './smooth-remesh-controller.js'
 
