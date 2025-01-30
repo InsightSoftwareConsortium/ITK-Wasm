@@ -204,10 +204,18 @@ foreach(seg_size ${TEST_SEG_SIZES})
 endforeach()
 
 # Plastimatch
+find_package(ITK REQUIRED
+  COMPONENTS
+    ITKDCMTK
+    ITKImageIntensity
+    ITKDistanceMap
+    ITKRegistrationCommon
+    WebAssemblyInterface
+  )
 # set(PLM_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/plastimatch")
 # set(PLM_GIT_TAG        "5036f97b213d37a0a07dd232c827fb5f35049ae4")
 # set(PLM_GIT_REPOSITORY "/home/matt/src/plastimatch")
-set(PLM_GIT_REPOSITORY "git@github.com:thewtex/plastimatch")
+set(PLM_GIT_REPOSITORY "https://github.com/thewtex/plastimatch")
 set(PLM_GIT_TAG        "origin/itk-wasm")
 set(PLM_CONFIG_ENABLE_DCMTK ON)
 set(PLM_CONFIG_ENABLE_OPENMP OFF)
@@ -223,6 +231,7 @@ set(PLM_CONFIG_ENABLE_REGISTER OFF)
 set(PLM_CONFIG_ENABLE_SEGMENT OFF)
 set(PLM_CONFIG_ENABLE_STANDALONE OFF)
 set(PLM_CONFIG_ENABLE_TEST OFF)
+set(PLM_SYSTEM_ITK ON)
 set(PLM_BUILD_TESTING OFF)
 set(DCMTK_DIR ${ITK_DIR}/Modules/ThirdParty/DCMTK/ITKDCMTK_ExtProject-build)
 FetchContent_Declare(
