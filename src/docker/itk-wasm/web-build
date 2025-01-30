@@ -17,6 +17,7 @@ cmake \
    -B$build_dir \
    -H. \
    -DCMAKE_BUILD_TYPE:STRING=Release \
+   -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${CMAKE_TOOLCHAIN_FILE} \
    -DITK_DIR:PATH=/ITK-build \
    -GNinja \
      "$@" && \
