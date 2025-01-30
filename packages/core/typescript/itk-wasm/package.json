@@ -1,6 +1,6 @@
 {
   "name": "itk-wasm",
-  "version": "1.0.0-b.184",
+  "version": "1.0.0-b.185",
   "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
   "type": "module",
   "module": "./dist/index.js",
@@ -18,10 +18,12 @@
     "test": "test"
   },
   "scripts": {
-    "build": "pnpm build:tsc && pnpm build:bundle && pnpm build:minBundle && pnpm build:workerBundle && pnpm build:workerMinBundle && pnpm test:buildTestPipelines:emscripten && pnpm test:bindgenTestPipelines:typescript",
+    "build": "pnpm build:tsc && pnpm build:bundle && pnpm build:minBundle && pnpm build:bundleWorkerEmbedded && pnpm build:minBundleWorkerEmbedded && pnpm build:workerBundle && pnpm build:workerMinBundle && pnpm test:buildTestPipelines:emscripten && pnpm test:bindgenTestPipelines:typescript",
     "build:tsc": "tsc --pretty",
     "build:bundle": "esbuild --bundle --format=esm --outfile=./dist/bundles/itk-wasm.js ./dist/index.js",
     "build:minBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/bundles/itk-wasm.min.js ./dist/index.js",
+    "build:bundleWorkerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundles/itk-wasm-worker-embedded.js ./dist/index-worker-embedded.js",
+    "build:minBundleWorkerEmbedded": "esbuild --loader:.worker.js=dataurl --minify --bundle --format=esm --outfile=./dist/bundles/itk-wasm-worker-embedded.min.js ./dist/index-worker-embedded.js",
     "build:workerBundle": "esbuild --bundle --format=esm --outfile=./dist/pipeline/web-workers/bundles/itk-wasm-pipeline.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js",
     "build:workerBundleForTesting": "esbuild --bundle --format=esm --outfile=./test/pipelines/typescript/test/browser/demo-app/public/itk-wasm-pipeline.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js && shx cp -r ./test/data/ ./test/pipelines/typescript/test/browser/demo-app/public/",
     "build:workerMinBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/pipeline/web-workers/bundles/itk-wasm-pipeline.min.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js",
@@ -87,10 +89,11 @@
     "typescript": "^5.3.2"
   },
   "dependencies": {
+    "@emnapi/wasi-threads": "^1.0.1",
     "@itk-wasm/dam": "^1.1.1",
     "@thewtex/zstddec": "^0.2.1",
     "@types/emscripten": "^1.39.10",
-    "axios": "^1.6.2",
+    "axios": "^1.7.4",
     "chalk": "^5.3.0",
     "comlink": "^4.4.1",
     "commander": "^11.1.0",

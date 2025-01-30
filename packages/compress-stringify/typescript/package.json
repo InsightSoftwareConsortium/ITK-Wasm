@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compress-stringify",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly.",
   "type": "module",
   "module": "./dist/index.js",
@@ -57,7 +57,7 @@
     "shx": "^0.3.4",
     "start-server-and-test": "^2.0.0",
     "typescript": "^5.4.3",
-    "vite": "^4.5.5",
+    "vite": "^4.5.6",
     "vite-plugin-static-copy": "^0.17.0"
   },
   "repository": {

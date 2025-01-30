@@ -590,11 +590,11 @@ int main(int argc, char *argv[])
 
   return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
                                           uint8_t,
-                                          // int8_t,
-                                          // uint16_t,
-                                          // int16_t,
-                                          // uint32_t,
-                                          // int32_t,
+                                          int8_t,
+                                          uint16_t,
+                                          int16_t,
+                                          uint32_t,
+                                          int32_t,
                                           float,
                                           double>::Dimensions<
       // 2U,

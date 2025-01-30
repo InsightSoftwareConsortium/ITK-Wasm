@@ -1,26 +1,23 @@
 ARG BASE_IMAGE=docker.io/dockcross/web-wasm
-FROM $BASE_IMAGE:20240418-88c04a4
+ARG HOST_ARCH=amd64
+FROM $BASE_IMAGE:20250123-74d1a0b-$HOST_ARCH
 ARG BASE_IMAGE
 
-LABEL maintainer="Matt McCormick <matt@mmmccormick.com>"
+LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 
 WORKDIR /
 
 COPY itk_wasm_env_vars.sh /
+COPY wasi-toolchain.cmake /opt/wasi-sdk/Toolchain.cmake
 
 # Note: on entry, emsdk will prepend to the path with its own node, so add to an earlier path
-ENV NODE_TAG v20.12.2
-RUN curl -LO https://nodejs.org/dist/${NODE_TAG}/node-${NODE_TAG}-linux-x64.tar.xz && \
-  tar xvJf node-${NODE_TAG}-linux-x64.tar.xz && \
-  rm node-${NODE_TAG}-linux-x64.tar.xz && \
-  mkdir -p /emsdk/upstream/emscripten/ && \
-  ln -s /node-${NODE_TAG}-linux-x64/bin/node /emsdk/upstream/emscripten && \
-  ln -s /node-${NODE_TAG}-linux-x64/bin/npm /emsdk/upstream/emscripten && \
-  ln -s /node-${NODE_TAG}-linux-x64/bin/npx /emsdk/upstream/emscripten
-ENV PATH /emsdk/upstream/emscripten:${PATH}
+ENV NODE_TAG=v22.9.0
+COPY install-node-js.sh /usr/local/bin/
+RUN /usr/local/bin/install-node-js.sh && rm /usr/local/bin/install-node-js.sh
+ENV PATH=/emsdk/upstream/emscripten:${PATH}
 
-ENV zstd_GIT_TAG v1.5.5
+ENV zstd_GIT_TAG=v1.5.5
 RUN curl -L https://api.github.com/repos/facebook/zstd/tarball/${zstd_GIT_TAG} | tar xz --strip=1 --one-top-level=zstd && \
   mkdir zstd-build && \
   cd zstd-build && \
@@ -46,9 +43,6 @@ RUN . /itk_wasm_env_vars.sh && sed -i -e "/^set(DCMTK_GIT_REPOSITORY/c\set(DCMTK
 
 RUN . /itk_wasm_env_vars.sh && sed -i -e "/^set(DCMTK_GIT_TAG/c\set(DCMTK_GIT_TAG \"${ITK_WASM_DCMTK_GIT_TAG}\")" \
     /ITK/Modules/ThirdParty/DCMTK/DCMTKGitTag.cmake
-
-RUN if test -e $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk.cmake; fi
-RUN if test -e $WASI_SDK_PATH/share/cmake/wasi-sdk-threads.cmake; then sed -i '/cmake_minimum_required/d' $WASI_SDK_PATH/share/cmake/wasi-sdk-threads.cmake; fi
 
 ARG CMAKE_BUILD_TYPE=Release
 
@@ -94,12 +88,15 @@ RUN mkdir ITK-build && \
     -DDCMTK_WITH_THREADS:BOOL=OFF \
     -DDCMTK_BUILD_APPS:BOOL=OFF \
     -DNO_FLOAT_EXCEPTIONS:BOOL=ON \
+    -DCMAKE_C_FLAGS:STRING="${CFLAGS}" \
+    -DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="${LDFLAGS}" \
     ../ITK && \
   ninja && \
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
-ENV ITKMeshToPolyData_GIT_TAG 1e594b7437a43be348b0ccea827c66fb5aa13e1f
+ENV ITKMeshToPolyData_GIT_TAG=1e594b7437a43be348b0ccea827c66fb5aa13e1f
 RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git && \
   cd ITKMeshToPolyData && \
   git checkout ${ITKMeshToPolyData_GIT_TAG} && \
@@ -114,6 +111,9 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_TESTING:BOOL=OFF \
     -DITK_DIR:PATH=/ITK-build \
+    -DCMAKE_C_FLAGS:STRING="${CFLAGS}" \
+    -DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="${LDFLAGS}" \
     ../ITKMeshToPolyData && \
   ninja && \
   find . -name '*.o' -delete && \
@@ -131,5 +131,5 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url=$VCS_URL \
       org.label-schema.schema-version="1.0"
-ENV DEFAULT_DOCKCROSS_IMAGE ${IMAGE}:${VERSION}
+ENV DEFAULT_DOCKCROSS_IMAGE=${IMAGE}:${VERSION}
 WORKDIR /work

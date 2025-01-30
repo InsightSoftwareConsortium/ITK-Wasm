@@ -147,6 +147,130 @@ MeshToWasmMeshFilter<TMesh>
 {
   Superclass::PrintSelf(os, indent);
 }
+
+template <typename TPixel, unsigned int VDimension>
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::MeshToWasmMeshFilter()
+{
+  this->SetNumberOfRequiredInputs(1);
+
+  typename WasmMeshType::Pointer output = static_cast<WasmMeshType *>(this->MakeOutput(0).GetPointer());
+  this->ProcessObject::SetNumberOfRequiredOutputs(1);
+  this->ProcessObject::SetNthOutput(0, output.GetPointer());
+}
+
+template <typename TPixel, unsigned int VDimension>
+ProcessObject::DataObjectPointer
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+{
+  return WasmMeshType::New().GetPointer();
+}
+
+template <typename TPixel, unsigned int VDimension>
+ProcessObject::DataObjectPointer
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+{
+  return WasmMeshType::New().GetPointer();
+}
+
+template <typename TPixel, unsigned int VDimension>
+auto
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GetOutput() -> WasmMeshType *
+{
+  // we assume that the first output is of the templated type
+  return itkDynamicCastInDebugMode<WasmMeshType *>(this->GetPrimaryOutput());
+}
+
+template <typename TPixel, unsigned int VDimension>
+auto
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GetOutput() const -> const WasmMeshType *
+{
+  // we assume that the first output is of the templated type
+  return itkDynamicCastInDebugMode<const WasmMeshType *>(this->GetPrimaryOutput());
+}
+
+template <typename TPixel, unsigned int VDimension>
+auto
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GetOutput(unsigned int idx) -> WasmMeshType *
+{
+  auto * out = dynamic_cast<WasmMeshType *>(this->ProcessObject::GetOutput(idx));
+
+  if (out == nullptr && this->ProcessObject::GetOutput(idx) != nullptr)
+  {
+    itkWarningMacro(<< "Unable to convert output number " << idx << " to type " << typeid(WasmMeshType).name());
+  }
+  return out;
+}
+
+template <typename TPixel, unsigned int VDimension>
+void
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::SetInput(const MeshType * input)
+{
+  // Process object is not const-correct so the const_cast is required here
+  this->ProcessObject::SetNthInput(0, const_cast<MeshType *>(input));
+}
+
+template <typename TPixel, unsigned int VDimension>
+void
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::SetInput(unsigned int index, const MeshType * mesh)
+{
+  // Process object is not const-correct so the const_cast is required here
+  this->ProcessObject::SetNthInput(index, const_cast<MeshType *>(mesh));
+}
+
+template <typename TPixel, unsigned int VDimension>
+const typename MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::MeshType *
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GetInput()
+{
+  return itkDynamicCastInDebugMode<const MeshType *>(this->GetPrimaryInput());
+}
+
+template <typename TPixel, unsigned int VDimension>
+const typename MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::MeshType *
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GetInput(unsigned int idx)
+{
+  return itkDynamicCastInDebugMode<const MeshType *>(this->ProcessObject::GetInput(idx));
+}
+
+template <typename TPixel, unsigned int VDimension>
+void
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::GenerateData()
+{
+  // Get the input and output pointers
+  const MeshType * mesh = this->GetInput();
+  WasmMeshType * wasmMesh = this->GetOutput();
+
+  wasmMesh->SetMesh(mesh);
+  constexpr bool inMemory = true;
+  const auto meshJSON = meshToMeshJSON<TPixel, VDimension>(mesh, wasmMesh, inMemory);
+  std::string serialized{};
+  auto ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
+  if (ec)
+  {
+    itkExceptionMacro("Failed to serialize MeshJSON");
+  }
+
+  wasmMesh->SetJSON(serialized);
+}
+
+template <typename TPixel, unsigned int VDimension>
+void
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
+::PrintSelf(std::ostream & os, Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+}
+
 } // end namespace itk
 
 #endif

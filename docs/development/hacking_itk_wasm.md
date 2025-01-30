@@ -2,10 +2,14 @@
 
 ## TLDR
 
-Install [Podman] and [Pixi], and
+Install:
+
+- [Podman] or [Docker Engine]
+- [Pixi]
+- [Google Chrome]
+- [Firefox]
 
 ```sh
-./src/docker/pull.sh
 pixi run build
 pixi run test
 ```
@@ -20,7 +24,7 @@ We are glad you are here and appreciate your contribution. Please keep in mind o
 
 We follow [standard GitHub contribution best practices]: pull requests made from forks are tested with continuous integration tests, and updates are made via code review before integration.
 
-We use the [conventional commit] standard for our commit message format in the *itk-wasm* repository.
+We use the [conventional commit] standard for our commit message format in the *ITK-Wasm* repository.
 
 The C++ core and Docker build environment can be developed independently from the CLI, language-specific libraries, and example packages. The latter are developed as a [pnpm workspace]. Individual packages in the workspace can be developed independently after `pnpm install` is executed at the root.
 
@@ -225,7 +229,10 @@ and rebuild whenever the documentation changes.
 [conventional commit]: https://www.conventionalcommits.org/en/v1.0.0/#summary
 [current repository and branch]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/src/docker/itk-wasm-base/Dockerfile#L39-L41
 [data.kitware.com]: https://data.kitware.com/
+[Docker Engine]: https://docs.docker.com/engine/install/
 [FileBase]: https://filebase.com/
+[Firefox]: https://www.mozilla.org/
+[Google Chrome]: https://www.google.com/chrome/
 [hatch]: https://hatch.pypa.io/latest/
 [`itk-wasm` package]: https://www.npmjs.com/package/itk-wasm
 [`itkwasm` Python package]: https://pypi.org/project/itkwasm/

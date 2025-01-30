@@ -1,6 +1,10 @@
 # Packages
 
-Example packages built with itk-wasm can be found below. If you created a
+Example packages built with itk-wasm can be found below.
+
+To create your own package, use [`create-itk-wasm`](https://www.npmjs.com/package/create-itk-wasm).
+
+If you created a
 package, please [open a pull
 request](https://github.com/InsightSoftwareConsortium/ITK-Wasm/compare) to add it to the table!
 

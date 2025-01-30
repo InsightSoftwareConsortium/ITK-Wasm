@@ -3,6 +3,7 @@ include_directories(${WebAssemblyInterface_INCLUDE_DIRS})
 set(WebAssemblyInterface_SRCS
   itkPipeline.cxx
   itkMetaDataDictionaryJSON.cxx
+  itkMetaDataDictionaryCBOR.cxx
   itkWasmExports.cxx
   itkWasmIOCommon.cxx
   itkWasmDataObject.cxx

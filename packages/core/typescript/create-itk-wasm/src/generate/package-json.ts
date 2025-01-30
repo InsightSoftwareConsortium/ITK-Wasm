@@ -53,7 +53,7 @@ function generatePackageJson(project: ProjectSpec) {
     },
     devDependencies: {
       '@itk-wasm/dam': '^1.1.1',
-      'itk-wasm': '1.0.0-b.182'
+      'itk-wasm': '1.0.0-b.185'
     }
   }
   if (project.author) {

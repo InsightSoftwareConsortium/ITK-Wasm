@@ -235,6 +235,10 @@ class Pipeline:
                 data_ptr = ri.set_input_array(mv, index, 0)
                 dv = array_like_to_bytes(image.direction)
                 direction_ptr = ri.set_input_array(dv, index, 1)
+                metadata = []
+                if image.metadata:
+                    for key, value in image.metadata.items():
+                        metadata.append((key, value))
                 image_json = {
                     "imageType": asdict(image.imageType),
                     "name": image.name,
@@ -242,6 +246,7 @@ class Pipeline:
                     "spacing": image.spacing,
                     "direction": f"data:application/vnd.itk.address,0:{direction_ptr}",
                     "size": image.size,
+                    "metadata": metadata,
                     "data": f"data:application/vnd.itk.address,0:{data_ptr}",
                 }
                 ri.set_input_json(image_json, index)
@@ -426,6 +431,12 @@ class Pipeline:
                     output_data = PipelineOutput(InterfaceTypes.BinaryFile, BinaryFile(output.data.path))
                 elif output.type == InterfaceTypes.Image:
                     image_json = ri.get_output_json(index)
+
+                    if 'metadata' in image_json and isinstance(image_json['metadata'], list):
+                        metadata = image_json['metadata']
+                        image_json['metadata'] = {}
+                        for key, value in metadata:
+                            image_json['metadata'][key] = value
 
                     image = Image(**image_json)
 

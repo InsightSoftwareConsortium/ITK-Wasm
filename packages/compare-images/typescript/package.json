@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compare-images",
-  "version": "5.2.3",
+  "version": "5.3.1",
   "description": "Compare images with a tolerance for regression testing.",
   "type": "module",
   "module": "./dist/index.js",
@@ -54,7 +54,7 @@
     "shx": "^0.3.4",
     "start-server-and-test": "^2.0.3",
     "typescript": "^5.3.3",
-    "vite": "^4.5.5",
+    "vite": "^4.5.6",
     "vite-plugin-static-copy": "^1.0.0"
   },
   "repository": {

@@ -122,6 +122,7 @@ public:
         wasmImageIO->SetSpacing(dim, this->m_ImageIO->GetSpacing(dim));
         wasmImageIO->SetDimensions(dim, this->m_ImageIO->GetDimensions(dim));
       }
+      wasmImageIO->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
 
       std::vector<char> pixelData(this->m_ImageIO->GetImageSizeInBytes());
       itk::ImageIORegion ioRegion( dimension );

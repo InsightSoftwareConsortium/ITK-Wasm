@@ -8,16 +8,12 @@ on:
     branches:
       - main
 
-defaults:
-  run:
-    shell: bash -leo pipefail {0} {0}
-
 env:
   OCI_EXE: docker
 
 jobs:
   build-test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
     - uses: actions/checkout@v4
@@ -25,13 +21,9 @@ jobs:
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
 
-    - name: Pull latest Docker images
-      run: |
-        ./src/docker/pull.sh --no-debug
-
     - uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '22'
 
     - name: Install
       uses: pnpm/action-setup@v4
@@ -40,7 +32,11 @@ jobs:
 
     - name: Build
       run: |
-        pnpm run --aggregate-output build:wasi:debug
+        pnpm run --aggregate-output build:wasi
+
+    - name: Download test data
+      run: |
+        pnpm run --aggregate-output test:data:download
 
     - name: Test
       run: |

@@ -56,7 +56,6 @@ async function downsampleLabelImage(
 
     await Promise.all(options.shrinkFactors.map(async (value) => {
       args.push(value.toString())
-
     }))
   }
   if (options.cropRadius) {
@@ -67,7 +66,6 @@ async function downsampleLabelImage(
 
     await Promise.all(options.cropRadius.map(async (value) => {
       args.push(value.toString())
-
     }))
   }
 

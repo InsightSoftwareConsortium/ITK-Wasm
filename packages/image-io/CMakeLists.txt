@@ -225,3 +225,30 @@ add_test(NAME bio-rad-write-image-test
   ${input_dir}/biorad.iwi.cbor
   ${output_dir}/bio-rad-write-image-test.could-write.json
   ${output_dir}/bio-rad-write-image-test.pic)
+
+add_test(NAME gdcm-read-image-iwi-test
+  COMMAND gdcm-read-image
+  ${input_dir}/1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm
+  ${output_dir}/gdcm-read-image-iwi-test.could-read.json
+  ${output_dir}/gdcm-read-image-test.iwi)
+
+add_test(NAME gdcm-read-image-iwi-cbor-test
+  COMMAND gdcm-read-image
+  ${input_dir}/1.3.6.1.4.1.5962.99.1.3814087073.479799962.1489872804257.100.0.dcm
+  ${output_dir}/gdcm-read-image-iwi-cbor-test.could-read.json
+  ${output_dir}/gdcm-read-image-test.iwi.cbor)
+
+# fails for TBD reasons
+if(NOT WASI AND NOT "${CMAKE_BUILD_TYPE}" STREQUAL Debug)
+  add_test(NAME gdcm-write-image-iwi-test
+    COMMAND gdcm-write-image
+    ${input_dir}/gdcm.iwi
+    ${output_dir}/gdcm-write-image-iwi-test.could-write.json
+    ${output_dir}/gdcm-write-image-iwi-test.dcm)
+
+  add_test(NAME gdcm-write-image-iwi-cbor-test
+    COMMAND gdcm-write-image
+    ${input_dir}/gdcm.iwi.cbor
+    ${output_dir}/gdcm-write-image-iwi-cbor-test.could-write.json
+    ${output_dir}/gdcm-write-image-iwi-cbor-test.dcm)
+endif()

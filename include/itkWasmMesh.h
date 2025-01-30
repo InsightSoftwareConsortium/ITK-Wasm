@@ -20,6 +20,7 @@
 
 #include "itkWasmDataObject.h"
 #include "itkVectorContainer.h"
+#include "itkQuadEdgeMesh.h"
 
 namespace itk
 {
@@ -58,7 +59,7 @@ public:
 
   using PointIdentifier = typename MeshType::PointIdentifier;
   using CellIdentifier = typename MeshType::CellIdentifier;
-  using CellBufferContainerType = typename MeshType::CellsVectorContainer;
+  using CellBufferType = typename MeshType::CellsVectorContainer;
 
   void SetMesh(const MeshType * mesh);
 
@@ -66,19 +67,81 @@ public:
     return static_cast< const MeshType * >(this->GetDataObject());
   }
 
-  const CellBufferContainerType * GetCellBuffer() const {
-    return this->m_CellBufferContainer.GetPointer();
+  const CellBufferType * GetCellBuffer() const {
+    return this->m_CellBuffer.GetPointer();
   }
 
 protected:
   WasmMesh()
   {
-    this->m_CellBufferContainer = CellBufferContainerType::New();
+    this->m_CellBuffer = CellBufferType::New();
   }
   ~WasmMesh() override = default;
 
-  typename CellBufferContainerType::Pointer m_CellBufferContainer;
+  typename CellBufferType::Pointer m_CellBuffer;
 };
+
+template <typename TPixel, unsigned int VDimension>
+class WasmMesh<QuadEdgeMesh<TPixel, VDimension>> : public WasmDataObject
+{
+public:
+  ITK_DISALLOW_COPY_AND_MOVE(WasmMesh);
+
+  /** Standard class type aliases. */
+  using Self = WasmMesh;
+  using Superclass = WasmDataObject;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
+
+  itkNewMacro(Self);
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(WasmMesh, WasmDataObject);
+
+  using MeshType = QuadEdgeMesh<TPixel, VDimension>;
+
+  using PointIdentifier = typename MeshType::PointIdentifier;
+  using CellIdentifier = typename MeshType::CellIdentifier;
+
+  using PointsBufferType = std::vector<PointIdentifier>;
+  using CellBufferType = typename MeshType::CellsVectorContainer;
+
+  using PointDataBufferType = std::vector<typename MeshType::PointDataContainer::Element>;
+  using CellDataBufferType = std::vector<typename MeshType::CellDataContainer::Element>;
+
+  void SetMesh(const MeshType * mesh);
+
+  const MeshType * GetMesh() const {
+    return static_cast< const MeshType * >(this->GetDataObject());
+  }
+
+  const PointsBufferType & GetPointsBuffer() const {
+    return this->m_PointsBuffer;
+  }
+
+  const CellBufferType * GetCellBuffer() const {
+    return this->m_CellBuffer.GetPointer();
+  }
+
+  const PointDataBufferType & GetPointDataBuffer() const {
+    return this->m_PointDataBuffer;
+  }
+
+  const CellDataBufferType & GetCellDataBuffer() const {
+    return this->m_CellDataBuffer;
+  }
+
+  WasmMesh()
+  {
+    this->m_CellBuffer = CellBufferType::New();
+  }
+  ~WasmMesh() override = default;
+
+  PointsBufferType m_PointsBuffer;
+  typename CellBufferType::Pointer m_CellBuffer;
+  PointDataBufferType m_PointDataBuffer;
+  CellDataBufferType m_CellDataBuffer;
+};
+
 
 } // namespace itk
 
