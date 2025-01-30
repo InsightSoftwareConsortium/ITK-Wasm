@@ -16,7 +16,7 @@ include(FetchContent)
 # 2024-12-10 master
 set(DCMQI_GIT_REPOSITORY "https://github.com/QIICR/dcmqi")
 set(DCMQI_GIT_TAG        "011237d7c2d294ef960c31384d92db23d826f7bc")
-set(DCMQI_SUPERBUILD OFF)
+option(DCMQI_SUPERBUILD "Build dcmqi as a superbuild" OFF)
 set(DCMQI_BUILD_SLICER_EXTENSION OFF)
 set(DCMQI_BUILD_APPS OFF)
 set(DCMQI_BUILD_DOC OFF)
@@ -212,6 +212,17 @@ find_package(ITK REQUIRED
     ITKRegistrationCommon
     WebAssemblyInterface
   )
+# Todo: fix invocation of the dockcross/ITK-Wasm wasm-compatible CMake CheckTypeSize
+if (EMSCRIPTEN OR WASI)
+  set(CMAKE_SIZEOF_SIZE_T 4 CACHE STRING "Size of size_t")
+  set(CMAKE_SIZEOF_UINT 4 CACHE STRING "Size of unsigned int")
+  set(CMAKE_SIZEOF_ULONG 4 CACHE STRING "Size of unsigned long")
+  set(CMAKE_SIZEOF_ULONGLONG 8 CACHE STRING "Size of unsigned long long")
+  set(HAVE_CMAKE_SIZEOF_SIZE_T TRUE CACHE STRING "Have size of size_t")
+  set(HAVE_CMAKE_SIZEOF_UINT TRUE CACHE STRING "Have size of unsigned int")
+  set(HAVE_CMAKE_SIZEOF_ULONG TRUE CACHE STRING "Have size of unsigned long")
+  set(HAVE_CMAKE_SIZEOF_ULONGLONG TRUE CACHE STRING "Have size of unsigned long long")
+endif()
 # set(PLM_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/plastimatch")
 # set(PLM_GIT_TAG        "5036f97b213d37a0a07dd232c827fb5f35049ae4")
 # set(PLM_GIT_REPOSITORY "/home/matt/src/plastimatch")
