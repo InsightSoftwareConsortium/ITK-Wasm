@@ -169,19 +169,19 @@ add_test(NAME slice-mesh-suzanne
   COMMAND slice-mesh
     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline/suzanne-repair.off
     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/slice-mesh-plane.json
-    ${CMAKE_CURRENT_BINARY_DIR}/slice-mesh-suzanne.vtk
+    ${CMAKE_CURRENT_BINARY_DIR}/slice-mesh-suzanne.off
     )
 add_test(NAME slice-mesh-cow
   COMMAND slice-mesh
     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline/cow-repair.off
     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/slice-mesh-plane.json
-    ${CMAKE_CURRENT_BINARY_DIR}/slice-mesh-cow.vtk
+    ${CMAKE_CURRENT_BINARY_DIR}/slice-mesh-cow.off
     )
 add_test(NAME slice-mesh-brain
   COMMAND slice-mesh
     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/baseline/brain-repair.off
     ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/slice-mesh-plane.json
-    ${CMAKE_CURRENT_BINARY_DIR}/slice-mesh-brain.vtk
+    ${CMAKE_CURRENT_BINARY_DIR}/slice-mesh-brain.off
     )
 
 add_test(NAME keep-largest-component-help
