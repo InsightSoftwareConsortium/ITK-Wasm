@@ -1,2 +1,2 @@
-const defaultImageTag = '20250128-660258ac'
+const defaultImageTag = '20250130-11f6cb11'
 export default defaultImageTag
