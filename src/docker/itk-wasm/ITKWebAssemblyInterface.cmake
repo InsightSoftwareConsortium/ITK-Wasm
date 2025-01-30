@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 20)
 # Not compatible
 set(CMAKE_DISABLE_FIND_PACKAGE_OpenMP TRUE)
 
+if(DEFINED ENV{WASI_VERSION})
+  set(WASI ON)
+endif()
+
 if(NOT _ITKWebAssemblyInterface_INCLUDED)
 
 function(kebab_to_camel kebab camel)
