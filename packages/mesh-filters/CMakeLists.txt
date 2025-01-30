@@ -76,7 +76,7 @@ endif()
 # set(GEOGRAM_GIT_REPOSITORY "https://github.com/BrunoLevy/geogram.git")
 set(GEOGRAM_GIT_REPOSITORY "https://github.com/thewtex/geogram.git")
 # wasi-2025-01-28
-set(GEOGRAM_GIT_TAG "e47b29fb83cb5d5df6031ab1e8a2a9130f8722ed")
+set(GEOGRAM_GIT_TAG "db55d1ead1bcfcef658e8868956b3abcea193dd5")
 set(BUILD_SHARED_LIBS OFF)
 FetchContent_Declare(
   geogram
