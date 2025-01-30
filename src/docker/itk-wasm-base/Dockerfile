@@ -9,6 +9,7 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 WORKDIR /
 
 COPY itk_wasm_env_vars.sh /
+COPY wasi-toolchain.cmake /opt/wasi-sdk/Toolchain.cmake
 
 # Note: on entry, emsdk will prepend to the path with its own node, so add to an earlier path
 ENV NODE_TAG=v22.9.0
