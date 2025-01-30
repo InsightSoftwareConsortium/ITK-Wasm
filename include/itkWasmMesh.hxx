@@ -28,9 +28,42 @@ void
 WasmMesh<TMesh>
 ::SetMesh(const MeshType * mesh)
 {
-  this->m_CellBufferContainer = const_cast<MeshType *>(mesh)->GetCellsArray();
+  this->m_CellBuffer = const_cast<MeshType *>(mesh)->GetCellsArray();
   this->SetDataObject(const_cast<MeshType *>(mesh));
 }
+
+template <typename TPixel, unsigned int VDimension>
+void
+WasmMesh<itk::QuadEdgeMesh<TPixel, VDimension>>
+::SetMesh(const MeshType * mesh)
+{
+  m_PointsBuffer.resize(mesh->GetNumberOfPoints() * VDimension);
+  for (unsigned int i = 0; i < mesh->GetNumberOfPoints(); ++i)
+  {
+    const auto & point = mesh->GetPoint(i);
+    for (unsigned int d = 0; d < VDimension; ++d)
+    {
+      m_PointsBuffer[i * VDimension + d] = point[d];
+    }
+  }
+
+  this->m_CellBuffer = const_cast<MeshType *>(mesh)->GetCellsArray();
+
+  m_PointDataBuffer.resize(mesh->GetPointData()->Size());
+  for (SizeValueType i = 0; i < mesh->GetPointData()->Size(); ++i)
+  {
+    m_PointDataBuffer[i] = mesh->GetPointData()->ElementAt(i);
+  }
+
+  m_CellDataBuffer.resize(mesh->GetCellData()->Size());
+  for (SizeValueType i = 0; i < mesh->GetCellData()->Size(); ++i)
+  {
+    m_CellDataBuffer[i] = mesh->GetCellData()->ElementAt(i);
+  }
+
+  this->SetDataObject(const_cast<MeshType *>(mesh));
+}
+
 
 } // end namespace itk
 

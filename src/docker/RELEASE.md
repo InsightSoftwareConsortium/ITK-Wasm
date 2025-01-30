@@ -13,9 +13,9 @@ pixi run build-docker-images --with-debug
 export OCI_EXE=docker
 pixi run build-docker-images --with-debug
 # requires manifest-tool, see https://github.com/estesp/manifest-tool/releases/
-./src/docker/push.sh --push-manifest
+./src/docker/push.sh --push-manifest && ./src/docker/pull.sh
 
-pnpm build && pnpm test
+pnpm clean && pnpm install && pnpm build && pnpm test
 
 git add -- packages/core/typescript/itk-wasm/src/cli/default-image-tag.js
 git commit -m "feat(itk-wasm-cli): Update default Docker image for $(date '+%Y%m%d')-$(git rev-parse --short HEAD)"

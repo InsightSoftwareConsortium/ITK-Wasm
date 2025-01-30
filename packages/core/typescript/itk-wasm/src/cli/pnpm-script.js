@@ -225,7 +225,7 @@ async function pnpmScript(name, extraArgs, options) {
           '--package-name',
           typescriptPackageName,
           '--package-description',
-          packageDescription
+          `"${packageDescription}"`
         ])
         const repositoryUrl = configValue(
           'repository',

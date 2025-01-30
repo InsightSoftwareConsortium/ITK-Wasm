@@ -31,7 +31,7 @@ function optionsModule (srcOutputDir, interfaceJson, modulePascalCase, nodeTextC
 
     const canonical = canonicalType(parameter.type)
     if (!interfaceJsonTypeToTypeScriptType.has(canonical)) {
-      console.error(`Unexpected parameter type: ${canonical}`)
+      console.error(`typescript/options-module: Unexpected parameter type: ${canonical}`)
       process.exit(1)
     }
     optionsInterfaceContent += `  /** ${parameter.description} */\n`

@@ -29,6 +29,7 @@ depends-on = ["pnpm-install",
   "build-native-compress-stringify",
   "build-native-dicom",
   "build-native-downsample",
+  "build-native-mesh-filters",
   "build-native-image-io",
   "build-native-mesh-io",
   "build-native-transform-io"]
@@ -42,6 +43,7 @@ depends-on = ["test-itk-wasm",
   "test-native-compress-stringify",
   "test-native-dicom",
   "test-native-downsample",
+  "test-native-mesh-filters",
   "test-native-image-io",
   "test-native-mesh-io",
   "test-native-transform-io"]
@@ -80,6 +82,13 @@ cwd = "packages/downsample"
 depends-on = ["pnpm-install"]
 outputs = ["packages/downsample/test/data.tar.gz"]
 description = "Download downsample test data"
+
+[tasks.mesh-filters-test-data-download]
+cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_MESH_FILTERS_TEST_DATA_HASH $ITK_WASM_MESH_FILTERS_TEST_DATA_URLS"
+cwd = "packages/mesh-filters"
+depends-on = ["pnpm-install"]
+outputs = ["packages/mesh-filters/test/data.tar.gz"]
+description = "Download mesh-filters test data"
 
 [tasks.image-io-test-data-download]
 cmd = "npx dam download test/data test/data.tar.gz $ITK_WASM_IMAGE_IO_TEST_DATA_HASH $ITK_WASM_IMAGE_IO_TEST_DATA_URLS"
@@ -320,6 +329,26 @@ description = "Build downsample native binaries"
 cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/downsample-build"
 depends-on = ["build-native-downsample"]
 description = "Test downsample native binaries"
+
+[feature.native.tasks.configure-native-mesh-filters]
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/mesh-filters-build -Spackages/mesh-filters -GNinja
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
+  -DBUILD_TESTING:BOOL=ON
+  -DCMAKE_CXX_STANDARD:STRING=20
+  -DCMAKE_BUILD_TYPE:STRING=Debug'''
+depends-on = ["build-itk-wasm", "mesh-filters-test-data-download"]
+outputs = ["native/mesh-filters-build/CMakeFiles/"]
+description = "Configure mesh-filters native binaries"
+
+[feature.native.tasks.build-native-mesh-filters]
+cmd = "cmake --build $ITK_WASM_NATIVE_WORKSPACE/mesh-filters-build"
+depends-on = ["configure-native-mesh-filters"]
+description = "Build mesh-filters native binaries"
+
+[feature.native.tasks.test-native-mesh-filters]
+cmd = "ctest --test-dir $ITK_WASM_NATIVE_WORKSPACE/mesh-filters-build"
+depends-on = ["build-native-mesh-filters"]
+description = "Test mesh-filters native binaries"
 
 [feature.native.tasks.configure-native-image-io]
 cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/image-io-build -Spackages/image-io -GNinja

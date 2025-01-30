@@ -9,6 +9,7 @@ LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsort
 WORKDIR /
 
 COPY itk_wasm_env_vars.sh /
+COPY wasi-toolchain.cmake /opt/wasi-sdk/Toolchain.cmake
 
 # Note: on entry, emsdk will prepend to the path with its own node, so add to an earlier path
 ENV NODE_TAG=v22.9.0
@@ -110,6 +111,9 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git
     -DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
     -DBUILD_TESTING:BOOL=OFF \
     -DITK_DIR:PATH=/ITK-build \
+    -DCMAKE_C_FLAGS:STRING="${CFLAGS}" \
+    -DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="${LDFLAGS}" \
     ../ITKMeshToPolyData && \
   ninja && \
   find . -name '*.o' -delete && \

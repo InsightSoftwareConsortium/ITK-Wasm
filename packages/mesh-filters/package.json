@@ -1,0 +1,46 @@
+{
+  "name": "@itk-wasm/mesh-filters-build",
+  "version": "1.6.0",
+  "private": true,
+  "description": "Mesh filters to repair, remesh, subdivide, decimate, smooth, triangulate, etc.",
+  "type": "module",
+  "itk-wasm": {
+    "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
+    "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
+    "test-data-hash": "bafybeifwrjzye5jvpsrqd5jsjvo5oyly7yfj3f7csqclpcehrhhlj4r2qm",
+    "test-data-urls": [
+      "https://bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by.ipfs.w3s.link/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz"
+    ],
+    "typescript-package-name": "@itk-wasm/mesh-filters",
+    "python-package-name": "itkwasm-mesh-filters",
+    "package-description": "Mesh filters to repair, remesh, subdivide, decimate, smooth, triangulate, etc.",
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+  },
+  "scripts": {
+    "build": "pnpm build:gen:typescript && pnpm build:gen:python",
+    "build:emscripten": "itk-wasm pnpm-script build:emscripten",
+    "build:emscripten:debug": "itk-wasm pnpm-script build:emscripten:debug",
+    "build:wasi": "itk-wasm pnpm-script build:wasi",
+    "build:wasi:debug": "itk-wasm pnpm-script build:wasi:debug",
+    "build:python:wasi": "echo 'No build:python:wasi script required with pixi'",
+    "bindgen:typescript": "itk-wasm pnpm-script bindgen:typescript",
+    "bindgen:python": "itk-wasm pnpm-script bindgen:python",
+    "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
+    "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
+    "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
+    "test:data:download": "dam download test/data test/data.tar.gz bafybeifwrjzye5jvpsrqd5jsjvo5oyly7yfj3f7csqclpcehrhhlj4r2qm https://bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by.ipfs.w3s.link/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz",
+    "test:data:pack": "dam pack test/data test/data.tar.gz",
+    "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
+    "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
+    "test:python:dispatch": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-dispatch",
+    "test:python": "itk-wasm pnpm-script test:python",
+    "test:wasi": "itk-wasm pnpm-script test:wasi -- -V"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@itk-wasm/dam": "^1.1.0",
+    "itk-wasm": "workspace:^",
+    "@itk-wasm/compare-meshes-build": "workspace:^",
+    "@itk-wasm/mesh-io-build": "workspace:^"
+  }
+}
