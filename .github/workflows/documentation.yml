@@ -19,13 +19,13 @@ concurrency:
 
 jobs:
   build-main-documentation:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v5.4.0
       with:
         python-version: '3.11'
 
@@ -47,10 +47,10 @@ jobs:
         path: docs/_build/html
 
   build-package-documentation:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -94,7 +94,7 @@ jobs:
         done
 
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v5.4.0
       with:
         python-version: '3.11'
 
@@ -120,7 +120,7 @@ jobs:
 
   consolidate-documentation:
     needs: [build-main-documentation, build-package-documentation]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Download main documentation
@@ -143,7 +143,7 @@ jobs:
 
   deploy-gh-pages:
     needs: consolidate-documentation
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
