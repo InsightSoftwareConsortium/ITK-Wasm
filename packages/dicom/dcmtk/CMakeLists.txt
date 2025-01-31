@@ -256,6 +256,8 @@ FetchContent_MakeAvailable(plastimatch_lib)
 add_executable(write-rt-struct write-rt-struct.cxx)
 target_link_libraries(write-rt-struct PUBLIC ${ITK_LIBRARIES} plmbase)
 
+if (NOT WASI) # currently crashes on exit
+
 add_test(
   NAME write-rt-struct-help
   COMMAND write-rt-struct --help
@@ -267,3 +269,5 @@ add_test(
     ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/synth-lung-1.cxt
     ${CMAKE_CURRENT_BINARY_DIR}/synth-lung-1
 )
+
+endif()
