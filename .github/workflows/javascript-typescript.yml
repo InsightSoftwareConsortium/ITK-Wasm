@@ -17,14 +17,14 @@ env:
 
 jobs:
   itkwasm-node-js:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       max-parallel: 3
       matrix:
         package: [compress-stringify, compare-images, dicom, mesh-io, image-io, transform-io, downsample]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main

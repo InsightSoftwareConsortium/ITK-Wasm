@@ -11,10 +11,10 @@ on:
 jobs:
   test-node-example:
     name: node-js
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -49,14 +49,14 @@ jobs:
 
   build-hello-world-example:
     name: hello-world build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     defaults:
       run:
         working-directory: ./examples/hello-world
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -96,7 +96,7 @@ jobs:
   test-hello-world-example:
     name: hello-world test
     needs: build-hello-world-example
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     container: cypress/browsers:node18.12.0-chrome107
 
     defaults:
@@ -104,7 +104,7 @@ jobs:
         working-directory: ./examples/hello-world
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Load wasm builds
       uses: actions/download-artifact@v4
@@ -121,14 +121,14 @@ jobs:
 
   build-test-hello-pipeline-example:
     name: hello-pipeline build test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     defaults:
       run:
         working-directory: ./examples/hello-pipeline
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -156,14 +156,14 @@ jobs:
 
   build-test-inputs-outputs-example:
     name: inputs-outputs
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     defaults:
       run:
         working-directory: ./examples/inputs-outputs
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -212,10 +212,10 @@ jobs:
 
   test-webpack-example:
     name: webpack
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -239,10 +239,10 @@ jobs:
 
   test-vite-example:
     name: vite
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -266,13 +266,13 @@ jobs:
 
   test-debugging-example:
     name: debugging
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: ./examples/debugging
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -312,13 +312,13 @@ jobs:
 
   test-different-input-types-example:
     name: different-input-types
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: ./examples/different-input-types
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -351,10 +351,10 @@ jobs:
 
   test-mean-squares-versor-registration:
     name: mean-squares-versor-registration
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.2
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
