@@ -16,7 +16,7 @@ jobs:
 
   test-cypress:
     name: browser tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       max-parallel: 3
       matrix:
@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -103,11 +103,11 @@ jobs:
 
   test-itk-wasm-cypress:
     name: itk-wasm browser tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
