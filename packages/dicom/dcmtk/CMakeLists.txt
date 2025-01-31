@@ -76,10 +76,8 @@ target_link_libraries(write-multi-segmentation PUBLIC ${ITK_LIBRARIES} dcmqi)
 add_executable(write-overlapping-segmentation write-overlapping-segmentation.cxx)
 target_link_libraries(write-overlapping-segmentation PUBLIC ${ITK_LIBRARIES} dcmqi)
 
-if (WASI)
+if (NOT WASI)
   # Currently crashing on exit?
-  return()
-endif()
 
 set(TEMP_DIR ${CMAKE_BINARY_DIR}/Testing/Temporary)
 set(BASELINE ${dcmqi_lib_SOURCE_DIR}/data/segmentations)
@@ -203,6 +201,8 @@ foreach(seg_size ${TEST_SEG_SIZES})
 
 endforeach()
 
+endif() # wasi guard
+
 # Plastimatch
 find_package(ITK REQUIRED
   COMPONENTS
@@ -228,22 +228,23 @@ endif()
 # set(PLM_GIT_REPOSITORY "/home/matt/src/plastimatch")
 set(PLM_GIT_REPOSITORY "https://github.com/thewtex/plastimatch")
 set(PLM_GIT_TAG        "origin/itk-wasm")
-set(PLM_CONFIG_ENABLE_DCMTK ON)
-set(PLM_CONFIG_ENABLE_OPENMP OFF)
-set(PLM_CONFIG_ENABLE_OPENCL OFF)
-set(PLM_CONFIG_ENABLE_CUDA OFF)
-set(PLM_CONFIG_ENABLE_PLASTIMATCH OFF)
-set(PLM_CONFIG_ENABLE_QT OFF)
-set(PLM_CONFIG_ENABLE_CLI OFF)
-set(PLM_CONFIG_ENABLE_CLP OFF)
-set(PLM_CONFIG_ENABLE_DOSE OFF)
-set(PLM_CONFIG_ENABLE_RECONSTRUCT OFF)
-set(PLM_CONFIG_ENABLE_REGISTER OFF)
-set(PLM_CONFIG_ENABLE_SEGMENT OFF)
-set(PLM_CONFIG_ENABLE_STANDALONE OFF)
-set(PLM_CONFIG_ENABLE_TEST OFF)
-set(PLM_SYSTEM_ITK ON)
-set(PLM_BUILD_TESTING OFF)
+option(PLM_CONFIG_ENABLE_DCMTK "Enable DCMTK support" ON)
+option(PLM_CONFIG_ENABLE_OPENMP "Enable OpenMP support" OFF)
+option(PLM_CONFIG_ENABLE_OPENCL "Enable OpenCL support" OFF)
+option(PLM_CONFIG_ENABLE_CUDA "Enable CUDA support" OFF)
+option(PLM_CONFIG_ENABLE_PLASTIMATCH "Enable Plastimatch" OFF)
+option(PLM_CONFIG_ENABLE_QT "Enable Qt support" OFF)
+option(PLM_CONFIG_ENABLE_CLI "Enable CLI support" OFF)
+option(PLM_CONFIG_ENABLE_CLP "Enable CLP support" OFF)
+option(PLM_CONFIG_ENABLE_DOSE "Enable dose calculation" OFF)
+option(PLM_CONFIG_ENABLE_RECONSTRUCT "Enable reconstruction" OFF)
+option(PLM_CONFIG_ENABLE_REGISTER "Enable registration" OFF)
+option(PLM_CONFIG_ENABLE_SEGMENT "Enable segmentation" OFF)
+option(PLM_CONFIG_ENABLE_STANDALONE "Enable standalone build" OFF)
+option(PLM_CONFIG_ENABLE_TEST "Enable testing" OFF)
+set(PLM_SYSTEM_ITK YES CACHE BOOL "Use system ITK")
+set(PLM_SYSTEM_DCMTK YES CACHE BOOL "Use system DCMTK")
+option(PLM_BUILD_TESTING "Build tests" OFF)
 set(DCMTK_DIR ${ITK_DIR}/Modules/ThirdParty/DCMTK/ITKDCMTK_ExtProject-build)
 FetchContent_Declare(
   plastimatch_lib
