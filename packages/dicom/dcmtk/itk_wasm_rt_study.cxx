@@ -29,7 +29,7 @@ Itk_wasm_rt_study::~Itk_wasm_rt_study ()
 }
 
 void
-Itk_wasm_rt_study::save_rtss (const char* fname, const ItkWasmRtStudyMetadata& metadata)
+Itk_wasm_rt_study::save_rtss (const char* fname, const ItkWasmRtStudyMetadata& metadata, bool quiet)
 {
   // Modified:
   // rt_study.cxx Rt_study::save_dicom
@@ -53,7 +53,7 @@ Itk_wasm_rt_study::save_rtss (const char* fname, const ItkWasmRtStudyMetadata& m
     logic should be improved to better keep track of
     when structure names are valid to avoid this. */
     this->d_ptr->m_seg->prune_empty ();
-    this->d_ptr->m_seg->keyholize ();
+    this->d_ptr->m_seg->keyholize (quiet);
     drs.set_rtss (this->d_ptr->m_seg->get_structure_set());
   }
   drs.set_dose (this->d_ptr->m_dose);

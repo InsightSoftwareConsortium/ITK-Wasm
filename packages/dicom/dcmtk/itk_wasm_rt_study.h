@@ -33,42 +33,13 @@
 class PLMBASE_API Itk_wasm_rt_study: public Rt_study {
 public:
     SMART_POINTER_SUPPORT (Itk_wasm_rt_study);
-public:
-    // Itk_wasm_rt_study_private *d_ptr;
 
-public:
     Itk_wasm_rt_study ();
     ~Itk_wasm_rt_study ();
 
-    void save_rtss (const char *fname, const ItkWasmRtStudyMetadata &metadata);
-
-    // /*! \brief Get the Rt_study_metadata */
-    // const Rt_study_metadata::Pointer& get_rt_study_metadata () const;
-    // Rt_study_metadata::Pointer& get_rt_study_metadata ();
-    // /*! \brief Set metadata items into study_metadata portion of Rt_study_metadata */
-    // void set_study_metadata (const std::vector<std::string>& metadata);
-    // /*! \brief Get the study_metadata portion of Rt_study_metadata */
-    // Metadata::Pointer& get_study_metadata ();
-    // /*! \brief Set metadata items into image portion of Rt_study_metadata */
-    // void set_image_metadata (const std::vector<std::string>& metadata);
-    // /*! \brief Get the image portion of Rt_study_metadata */
-    // Metadata::Pointer& get_image_metadata ();
-    // /*! \brief Set metadata items into dose portion of Rt_study_metadata */
-    // void set_dose_metadata (const std::vector<std::string>& metadata);
-    // /*! \brief Get the dose portion of Rt_study_metadata */
-    // Metadata::Pointer& get_dose_metadata ();
-    // /*! \brief Set metadata items into rtstruct portion 
-    //   of Rt_study_metadata */
-    // void set_rtstruct_metadata (const std::vector<std::string>& metadata);
-    // /*! \brief Get the rtstruct portion of Rt_study_metadata */
-    // Metadata::Pointer& get_rtstruct_metadata ();
-    // /*! \brief Create new StudyInstanceUID and FrameOfReferenceUID for the study */
-    // void generate_new_study_uids ();
-    // /*! \brief Force the CT series UID to a certain value when saving */
-    // void force_ct_series_uid (const std::string& series_uid);
+    void save_rtss (const char *fname, const ItkWasmRtStudyMetadata &metadata, bool quiet = true);
 
 protected:
-    // void save_dcmtk (const char *dicom_dir, bool filenames_with_uid);
 };
 
 #endif

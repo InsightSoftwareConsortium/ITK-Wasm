@@ -48,7 +48,6 @@ int main (int argc, char * argv[])
   std::string dicomMetadataString("{}");
   if (dicomMetadataOption->count() > 0)
   {
-    std::cout << "Reading DICOM metadata from JSON: " << dicomMetadataOption->count() << std::endl;
     dicomMetadataString = std::string(std::istreambuf_iterator<char>(dicomMetadataJson.Get()), {});
   }
   auto deserializedAttempt = glz::read_json<ItkWasmRtStudyMetadata>(dicomMetadataString);
@@ -60,26 +59,12 @@ int main (int argc, char * argv[])
   }
   const auto dicomMetadata = deserializedAttempt.value();
 
-  std::cout << "UID Prefix: " << dicomMetadata.uidPrefix << std::endl;
-
   PlmUidPrefix::getInstance().set(dicomMetadata.uidPrefix);
 
   Itk_wasm_rt_study rt_study;
 
-  rt_study.load_cxt(inputCxt.c_str());
-
-  Rt_study_metadata::Pointer rt_study_metadata = rt_study.get_rt_study_metadata();
-  rt_study_metadata->set_study_description("A Test Prostate Lesion RT Struct Study");
-  rt_study_metadata->set_patient_birth_date("19700101");
-  rt_study_metadata->print();
-  // rt_study.set_rt_study_metadata(rt_study_metadata);
-  // rt_study_metadata->set_study_instance_uid("
-  Metadata::Pointer study_metadata = rt_study_metadata->get_study_metadata();
-  study_metadata->print_metadata();
-
-  Metadata::Pointer rtstruct_metadata = rt_study_metadata->get_rtstruct_metadata();
-  rtstruct_metadata->print_metadata();
-
+  constexpr bool quiet{ true };
+  rt_study.load_cxt(inputCxt.c_str(), quiet);
 
   rt_study.save_rtss(outputDicom.c_str(), dicomMetadata);
 

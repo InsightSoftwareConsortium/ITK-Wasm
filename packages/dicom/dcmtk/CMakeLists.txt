@@ -225,7 +225,7 @@ if (EMSCRIPTEN OR WASI)
 endif()
 set(PLM_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/plastimatch")
 # plastimatch-2024-10-30-5036f97-itk-wasm-2025-02-03
-set(PLM_GIT_TAG        "a8e899092d52f6c7146592730c5dcd8e9331200b")
+set(PLM_GIT_TAG        "babc354f210ba86a91cb6def718b45583c604e74")
 option(PLM_CONFIG_ENABLE_DCMTK "Enable DCMTK support" ON)
 option(PLM_CONFIG_ENABLE_OPENMP "Enable OpenMP support" OFF)
 option(PLM_CONFIG_ENABLE_OPENCL "Enable OpenCL support" OFF)
