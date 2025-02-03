@@ -223,11 +223,9 @@ if (EMSCRIPTEN OR WASI)
   set(HAVE_CMAKE_SIZEOF_ULONG TRUE CACHE STRING "Have size of unsigned long")
   set(HAVE_CMAKE_SIZEOF_ULONGLONG TRUE CACHE STRING "Have size of unsigned long long")
 endif()
-# set(PLM_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/plastimatch")
-# set(PLM_GIT_TAG        "5036f97b213d37a0a07dd232c827fb5f35049ae4")
-# set(PLM_GIT_REPOSITORY "/home/matt/src/plastimatch")
-set(PLM_GIT_REPOSITORY "https://github.com/thewtex/plastimatch")
-set(PLM_GIT_TAG        "origin/itk-wasm")
+set(PLM_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/plastimatch")
+# plastimatch-2024-10-30-5036f97-itk-wasm-2025-02-03
+set(PLM_GIT_TAG        "a8e899092d52f6c7146592730c5dcd8e9331200b")
 option(PLM_CONFIG_ENABLE_DCMTK "Enable DCMTK support" ON)
 option(PLM_CONFIG_ENABLE_OPENMP "Enable OpenMP support" OFF)
 option(PLM_CONFIG_ENABLE_OPENCL "Enable OpenCL support" OFF)
@@ -253,7 +251,11 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(plastimatch_lib)
 
-add_executable(write-rt-struct write-rt-struct.cxx)
+add_executable(write-rt-struct
+  write-rt-struct.cxx
+  itk_wasm_rt_study.cxx
+  itk_wasm_dcmtk_rt_study.cxx
+  )
 target_link_libraries(write-rt-struct PUBLIC ${ITK_LIBRARIES} plmbase)
 
 if (NOT WASI) # currently crashes on exit
@@ -267,7 +269,15 @@ add_test(
   NAME write-rt-struct-synth-lung-1
   COMMAND write-rt-struct
     ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/synth-lung-1.cxt
-    ${CMAKE_CURRENT_BINARY_DIR}/synth-lung-1
+    ${CMAKE_CURRENT_BINARY_DIR}/synth-lung-1/rtss.dcm
+)
+
+add_test(
+  NAME write-rt-struct-synth-lung-1-metadata
+  COMMAND write-rt-struct
+    ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/synth-lung-1.cxt
+    ${CMAKE_CURRENT_BINARY_DIR}/synth-lung-1/rtss-added-metadata.dcm
+    --dicom-metadata ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/dicom-metadata.json
 )
 
 endif()

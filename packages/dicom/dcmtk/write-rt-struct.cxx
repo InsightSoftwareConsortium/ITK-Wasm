@@ -20,32 +20,51 @@
 #include <fstream>
 #include <memory>
 
-#include "rt_study.h"
+#include "itk_wasm_rt_study.h"
+#include "itk_wasm_rt_study_metadata.h"
+#include "plm_uid_prefix.h"
 
 #include "itkPipeline.h"
-#include "itkOutputImage.h"
-#include "itkOutputTextStream.h"
+#include "itkInputTextStream.h"
+
+#include "glaze/glaze.hpp"
 
 int main (int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("write-rt-struct", "Write a DICOM RT Struct file for the given reference dicom series and ROI contours", argc, argv);
-  pipeline.set_version("1.0.0");
-
-  // std::vector<std::string> inputFileNames;
-  // pipeline.add_option("-i,--input-images", inputFileNames, "File names in the series")->required()->check(CLI::ExistingFile)->expected(1,-1)->type_name("INPUT_BINARY_FILE");
+  itk::wasm::Pipeline pipeline("write-rt-struct", "Write a DICOM RT Struct Structured Set for the given ROI contours and DICOM metadata", argc, argv);
+  pipeline.set_version("0.1.0");
 
   std::string inputCxt;
-  auto inputCxtOption = pipeline.add_option("input-cxt", inputCxt, "Input CXT structure set file");
-
-  bool fileNamesWithUids = false;
-  auto fileNamesWithUidsOption = pipeline.add_flag("--file-names-with-uids", fileNamesWithUids, "Use file names with UIDs");
+  auto inputCxtOption = pipeline.add_option("input-cxt", inputCxt, "Input Plastimatch CXT structure set file")->required()->check(CLI::ExistingFile)->type_name("INPUT_TEXT_FILE");
 
   std::string outputDicom;
-  auto outputDicomOption = pipeline.add_option("output-dicom", outputDicom, "Output DICOM directory");
+  auto outputDicomOption = pipeline.add_option("output-dicom", outputDicom, "Output DICOM RT Struct Structure Set file")->required()->type_name("OUTPUT_BINARY_FILE");
+
+  itk::wasm::InputTextStream dicomMetadataJson;
+  auto dicomMetadataOption = pipeline.add_option("--dicom-metadata", dicomMetadataJson, "Additional DICOM metadata")->type_name("INPUT_JSON");
 
   ITK_WASM_PARSE(pipeline);
 
-  Rt_study rt_study;
+  std::string dicomMetadataString("{}");
+  if (dicomMetadataOption->count() > 0)
+  {
+    std::cout << "Reading DICOM metadata from JSON: " << dicomMetadataOption->count() << std::endl;
+    dicomMetadataString = std::string(std::istreambuf_iterator<char>(dicomMetadataJson.Get()), {});
+  }
+  auto deserializedAttempt = glz::read_json<ItkWasmRtStudyMetadata>(dicomMetadataString);
+  if (!deserializedAttempt)
+  {
+    const std::string descriptiveError = glz::format_error(deserializedAttempt, dicomMetadataString);
+    std::cerr << "Failed to deserialize dicom metadata: " << descriptiveError << std::endl;
+    return EXIT_FAILURE;
+  }
+  const auto dicomMetadata = deserializedAttempt.value();
+
+  std::cout << "UID Prefix: " << dicomMetadata.uidPrefix << std::endl;
+
+  PlmUidPrefix::getInstance().set(dicomMetadata.uidPrefix);
+
+  Itk_wasm_rt_study rt_study;
 
   rt_study.load_cxt(inputCxt.c_str());
 
@@ -61,7 +80,8 @@ int main (int argc, char * argv[])
   Metadata::Pointer rtstruct_metadata = rt_study_metadata->get_rtstruct_metadata();
   rtstruct_metadata->print_metadata();
 
-  rt_study.save_dicom(outputDicom.c_str(), fileNamesWithUids);
+
+  rt_study.save_rtss(outputDicom.c_str(), dicomMetadata);
 
   return EXIT_SUCCESS;
 }
