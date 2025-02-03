@@ -66,7 +66,7 @@ int main (int argc, char * argv[])
   constexpr bool quiet{ true };
   rt_study.load_cxt(inputCxt.c_str(), quiet);
 
-  rt_study.save_rtss(outputDicom.c_str(), dicomMetadata);
+  rt_study.save_rtss(outputDicom.c_str(), dicomMetadata, quiet);
 
   return EXIT_SUCCESS;
 }
