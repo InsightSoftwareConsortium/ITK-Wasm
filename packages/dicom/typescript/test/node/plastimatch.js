@@ -5,7 +5,6 @@ import { writeRtStructNode } from "../../dist/index-node.js";
 
 const testPathPrefix = "../test/data/input/";
 const outputPathPrefix = "../test/data/output/";
-const baselinePathPrefix = "../test/data/baseline/";
 
 test("writeRtStructNode creates an RT Struct Structured Set", async (t) => {
   const fileName = "rt-struct/synth-lung-1.cxt";

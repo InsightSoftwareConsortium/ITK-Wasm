@@ -20,5 +20,7 @@ from .write_overlapping_segmentation import write_overlapping_segmentation
 from .write_overlapping_segmentation_async import write_overlapping_segmentation_async
 from .write_multi_segmentation import write_multi_segmentation
 from .write_multi_segmentation_async import write_multi_segmentation_async
+from .write_rt_struct import write_rt_struct
+from .write_rt_struct_async import write_rt_struct_async
 
 from ._version import __version__
