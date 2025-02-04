@@ -117,7 +117,7 @@ Itk_wasm_dcmtk_rt_study::save_rtss (const char * fname, const ItkWasmRtStudyMeta
     dataset->putAndInsertString (DCM_PatientBirthDate, "");
     dcmtk_copy_from_metadata (dataset, rtstruct_metadata, DCM_PatientSex, "O");
     dataset->putAndInsertString (DCM_SoftwareVersions,
-        PLASTIMATCH_VERSION_STRING);
+        metadata.softwareVersions.c_str());
 
     dataset->putAndInsertString (DCM_StudyInstanceUID, 
         d_ptr->rt_study_metadata->get_study_uid().c_str());
@@ -126,8 +126,8 @@ Itk_wasm_dcmtk_rt_study::save_rtss (const char * fname, const ItkWasmRtStudyMeta
     dcmtk_copy_from_metadata (dataset, rtstruct_metadata, DCM_StudyID, "10001");
     dcmtk_copy_from_metadata (dataset, rtstruct_metadata, DCM_SeriesNumber, "1");
     dataset->putAndInsertString (DCM_InstanceNumber, "1");
-    dataset->putAndInsertString (DCM_StructureSetLabel, "AutoSS");
-    dataset->putAndInsertString (DCM_StructureSetName, "AutoSS");
+    dataset->putAndInsertString (DCM_StructureSetLabel, metadata.structureSetLabel.c_str());
+    dataset->putAndInsertString (DCM_StructureSetName, metadata.structureSetName.c_str());
     dataset->putAndInsertOFStringArray (DCM_StructureSetDate, 
         d_ptr->rt_study_metadata->get_study_date());
     dataset->putAndInsertOFStringArray (DCM_StructureSetTime, 

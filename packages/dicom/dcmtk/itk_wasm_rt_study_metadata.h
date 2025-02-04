@@ -33,6 +33,9 @@ struct ItkWasmRtStudyMetadata
   std::string uidPrefix{ "1.2.826.0.1.3680043.10.1541.1" };
   std::string manufacturer{ "ITK-Wasm" };
   std::string manufacturerModelName{ "ITK-Wasm RT Struct" };
+  std::string structureSetLabel{ "AutoSS" };
+  std::string structureSetName{ "AutoSS" };
+  std::string softwareVersions{ "" };
   std::vector<ItkWasmRoiMetadata> roiMetadata;
 };
 

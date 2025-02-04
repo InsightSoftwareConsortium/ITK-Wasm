@@ -32,7 +32,7 @@
 int main (int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("write-rt-struct", "Write a DICOM RT Struct Structured Set for the given ROI contours and DICOM metadata", argc, argv);
-  pipeline.set_version("0.1.0");
+  pipeline.set_version("0.2.0");
 
   std::string inputCxt;
   auto inputCxtOption = pipeline.add_option("input-cxt", inputCxt, "Input Plastimatch CXT structure set file")->required()->check(CLI::ExistingFile)->type_name("INPUT_TEXT_FILE");
