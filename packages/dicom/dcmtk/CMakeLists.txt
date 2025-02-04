@@ -224,8 +224,8 @@ if (EMSCRIPTEN OR WASI)
   set(HAVE_CMAKE_SIZEOF_ULONGLONG TRUE CACHE STRING "Have size of unsigned long long")
 endif()
 set(PLM_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/plastimatch")
-# plastimatch-2024-10-30-5036f97-itk-wasm-2025-02-03
-set(PLM_GIT_TAG        "babc354f210ba86a91cb6def718b45583c604e74")
+# plastimatch-2024-10-30-5036f97-itk-wasm-2025-02-04
+set(PLM_GIT_TAG        "66157a7c08e7bd5be7cdd99606d2ca63ab88e5c7")
 option(PLM_CONFIG_ENABLE_DCMTK "Enable DCMTK support" ON)
 option(PLM_CONFIG_ENABLE_OPENMP "Enable OpenMP support" OFF)
 option(PLM_CONFIG_ENABLE_OPENCL "Enable OpenCL support" OFF)
