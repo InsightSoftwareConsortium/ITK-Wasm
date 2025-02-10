@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmImageIO, StreamingImageIOBase);
+  itkOverrideGetNameOfClassMacro(WasmImageIO);
 
   /** The different types of ImageIO's can support data of varying
    * dimensionality. For example, some file formats are strictly 2D
@@ -105,7 +105,7 @@ protected:
   size_t WriteCBOR(const void * buffer = nullptr, unsigned char ** cborBuffer = nullptr, bool allocateCBORBuffer = false);
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmImageIO);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmImageIO);
 };
 } // end namespace itk
 

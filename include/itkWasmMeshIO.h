@@ -53,7 +53,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmMeshIO, MeshIOBase);
+  itkOverrideGetNameOfClassMacro(WasmMeshIO);
 
   bool CanReadFile(const char *) override;
 
@@ -115,7 +115,7 @@ protected:
   cbor_item_t * m_CBORRoot{ nullptr };
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmMeshIO);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmMeshIO);
 };
 } // end namespace itk
 

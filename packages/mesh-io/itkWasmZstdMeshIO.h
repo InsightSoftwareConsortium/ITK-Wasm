@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmZstdMeshIO, WasmMeshIO);
+  itkOverrideGetNameOfClassMacro(WasmZstdMeshIO);
 
   /** Determine the file type. Returns true if this MeshIO can read the
    * file specified. */
@@ -70,7 +70,7 @@ protected:
   ~WasmZstdMeshIO() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmZstdMeshIO);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmZstdMeshIO);
 };
 } // end namespace itk
 

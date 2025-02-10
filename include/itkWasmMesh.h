@@ -53,7 +53,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmMesh, WasmDataObject);
+  itkOverrideGetNameOfClassMacro(WasmMesh);
 
   using MeshType = TMesh;
 

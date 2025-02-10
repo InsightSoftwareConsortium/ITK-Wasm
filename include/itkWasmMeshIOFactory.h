@@ -48,7 +48,7 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmMeshIOFactory, ObjectFactoryBase);
+  itkOverrideGetNameOfClassMacro(WasmMeshIOFactory);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory()
@@ -63,7 +63,7 @@ protected:
   ~WasmMeshIOFactory() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmMeshIOFactory);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmMeshIOFactory);
 };
 } // end namespace itk
 
