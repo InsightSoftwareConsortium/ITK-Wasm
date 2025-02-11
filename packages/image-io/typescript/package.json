@@ -57,7 +57,7 @@
     "ava": "^5.3.1",
     "concurrently": "^8.2.2",
     "cypress": "^13.6.1",
-    "esbuild": "^0.19.9",
+    "esbuild": "^0.25.0",
     "shx": "^0.3.4",
     "start-server-and-test": "^2.0.3",
     "typescript": "^5.3.3",
