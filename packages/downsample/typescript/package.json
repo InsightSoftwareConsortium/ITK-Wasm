@@ -52,7 +52,7 @@
     "@types/node": "^20.2.5",
     "ava": "^6.1.0",
     "cypress": "^13.6.3",
-    "esbuild": "^0.19.8",
+    "esbuild": "^0.25.0",
     "shx": "^0.3.4",
     "start-server-and-test": "^2.0.3",
     "typescript": "^5.3.2",
