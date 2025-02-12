@@ -114,10 +114,6 @@ function typescriptBindings(
       if (err.code !== 'EEXIST') throw err
     }
     fs.copyFileSync(
-      wasmBinaryRelativePath,
-      path.join(distPipelinesDir, path.basename(wasmBinaryRelativePath))
-    )
-    fs.copyFileSync(
       `${wasmBinaryRelativePath}.zst`,
       path.join(
         distPipelinesDir,

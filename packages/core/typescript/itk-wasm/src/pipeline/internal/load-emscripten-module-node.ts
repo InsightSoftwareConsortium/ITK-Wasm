@@ -6,7 +6,7 @@ import { ZSTDDecoder } from '@thewtex/zstddec'
 const zstdDecoder = new ZSTDDecoder()
 await zstdDecoder.init()
 
-async function loadEmscriptenModuleNode(
+async function loadEmscriptenModuleNode (
   modulePath: string
 ): Promise<EmscriptenModule> {
   let modulePrefix = modulePath
