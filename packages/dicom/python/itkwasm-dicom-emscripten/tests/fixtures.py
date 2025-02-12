@@ -1,21 +1,22 @@
-import pytest
 import sys
+from pathlib import Path
+
+import pytest
 
 if sys.version_info < (3,10):
     pytest.skip("Skipping pyodide tests on older Python", allow_module_level=True)
 
-from pytest_pyodide import run_in_pyodide
-
 from itkwasm_dicom_emscripten import __version__ as test_package_version
 
-@pytest.fixture
 def package_wheel():
-    return f"itkwasm_dicom_emscripten-{test_package_version}-py3-none-any.whl"
+    wheel_stem = f"itkwasm_dicom_emscripten-{test_package_version}-py3-none-any.whl"
+    wheel_path = Path(__file__).parent.parent / 'dist' / 'pyodide' / wheel_stem
+    return wheel_path, wheel_stem
 
-@pytest.fixture
 def input_data():
-    from pathlib import Path
-    input_base_path = Path('..', '..', 'test', 'data')
+    input_base_path = Path(__file__).parent.parent / 'tests' / 'data'
+    # test_files = [f for f in (input_base_path / 'input').rglob('*') if f.is_file()]
+    # test_files += [f for f in (input_base_path / 'baseline').rglob('*') if f.is_file()]
     test_files = [
         Path('input') / 'csps-input-image.dcm',
         Path('input') / 'csps-input-pstate.dcm',
@@ -31,9 +32,7 @@ def input_data():
         Path('input') / '88.59-KeyObjectSelection-SR.dcm',
         Path('input') / 'test-style.css',
     ]
-    data = {}
-    for f in test_files:
-        with open(input_base_path / f, 'rb') as fp:
-            print(str(f.name))
-            data[str(f.name)] = fp.read()
-    return data
+    return [(input_base_path / f, f.name) for f in test_files]
+
+def input_file_list():
+    return input_data() + [package_wheel()]
