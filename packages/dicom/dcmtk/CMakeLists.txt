@@ -16,7 +16,7 @@ include(FetchContent)
 # 2024-12-10 master
 set(DCMQI_GIT_REPOSITORY "https://github.com/QIICR/dcmqi")
 set(DCMQI_GIT_TAG        "011237d7c2d294ef960c31384d92db23d826f7bc")
-set(DCMQI_SUPERBUILD OFF)
+option(DCMQI_SUPERBUILD "Build dcmqi as a superbuild" OFF)
 set(DCMQI_BUILD_SLICER_EXTENSION OFF)
 set(DCMQI_BUILD_APPS OFF)
 set(DCMQI_BUILD_DOC OFF)
@@ -76,10 +76,8 @@ target_link_libraries(write-multi-segmentation PUBLIC ${ITK_LIBRARIES} dcmqi)
 add_executable(write-overlapping-segmentation write-overlapping-segmentation.cxx)
 target_link_libraries(write-overlapping-segmentation PUBLIC ${ITK_LIBRARIES} dcmqi)
 
-if (WASI)
+if (NOT WASI)
   # Currently crashing on exit?
-  return()
-endif()
 
 set(TEMP_DIR ${CMAKE_BINARY_DIR}/Testing/Temporary)
 set(BASELINE ${dcmqi_lib_SOURCE_DIR}/data/segmentations)
@@ -202,3 +200,84 @@ foreach(seg_size ${TEST_SEG_SIZES})
     )
 
 endforeach()
+
+endif() # wasi guard
+
+# Plastimatch
+find_package(ITK REQUIRED
+  COMPONENTS
+    ITKDCMTK
+    ITKImageIntensity
+    ITKDistanceMap
+    ITKRegistrationCommon
+    WebAssemblyInterface
+  )
+# Todo: fix invocation of the dockcross/ITK-Wasm wasm-compatible CMake CheckTypeSize
+if (EMSCRIPTEN OR WASI)
+  set(CMAKE_SIZEOF_SIZE_T 4 CACHE STRING "Size of size_t")
+  set(CMAKE_SIZEOF_UINT 4 CACHE STRING "Size of unsigned int")
+  set(CMAKE_SIZEOF_ULONG 4 CACHE STRING "Size of unsigned long")
+  set(CMAKE_SIZEOF_ULONGLONG 8 CACHE STRING "Size of unsigned long long")
+  set(HAVE_CMAKE_SIZEOF_SIZE_T TRUE CACHE STRING "Have size of size_t")
+  set(HAVE_CMAKE_SIZEOF_UINT TRUE CACHE STRING "Have size of unsigned int")
+  set(HAVE_CMAKE_SIZEOF_ULONG TRUE CACHE STRING "Have size of unsigned long")
+  set(HAVE_CMAKE_SIZEOF_ULONGLONG TRUE CACHE STRING "Have size of unsigned long long")
+endif()
+set(PLM_GIT_REPOSITORY "https://github.com/InsightSoftwareConsortium/plastimatch")
+# plastimatch-2024-10-30-5036f97-itk-wasm-2025-02-04
+set(PLM_GIT_TAG        "66157a7c08e7bd5be7cdd99606d2ca63ab88e5c7")
+option(PLM_CONFIG_ENABLE_DCMTK "Enable DCMTK support" ON)
+option(PLM_CONFIG_ENABLE_OPENMP "Enable OpenMP support" OFF)
+option(PLM_CONFIG_ENABLE_OPENCL "Enable OpenCL support" OFF)
+option(PLM_CONFIG_ENABLE_CUDA "Enable CUDA support" OFF)
+option(PLM_CONFIG_ENABLE_PLASTIMATCH "Enable Plastimatch" OFF)
+option(PLM_CONFIG_ENABLE_QT "Enable Qt support" OFF)
+option(PLM_CONFIG_ENABLE_CLI "Enable CLI support" OFF)
+option(PLM_CONFIG_ENABLE_CLP "Enable CLP support" OFF)
+option(PLM_CONFIG_ENABLE_DOSE "Enable dose calculation" OFF)
+option(PLM_CONFIG_ENABLE_RECONSTRUCT "Enable reconstruction" OFF)
+option(PLM_CONFIG_ENABLE_REGISTER "Enable registration" OFF)
+option(PLM_CONFIG_ENABLE_SEGMENT "Enable segmentation" OFF)
+option(PLM_CONFIG_ENABLE_STANDALONE "Enable standalone build" OFF)
+option(PLM_CONFIG_ENABLE_TEST "Enable testing" OFF)
+set(PLM_SYSTEM_ITK YES CACHE BOOL "Use system ITK")
+set(PLM_SYSTEM_DCMTK YES CACHE BOOL "Use system DCMTK")
+option(PLM_BUILD_TESTING "Build tests" OFF)
+set(DCMTK_DIR ${ITK_DIR}/Modules/ThirdParty/DCMTK/ITKDCMTK_ExtProject-build)
+FetchContent_Declare(
+  plastimatch_lib
+  GIT_REPOSITORY ${PLM_GIT_REPOSITORY}
+  GIT_TAG ${PLM_GIT_TAG}
+)
+FetchContent_MakeAvailable(plastimatch_lib)
+
+add_executable(write-rt-struct
+  write-rt-struct.cxx
+  itk_wasm_rt_study.cxx
+  itk_wasm_dcmtk_rt_study.cxx
+  )
+target_link_libraries(write-rt-struct PUBLIC ${ITK_LIBRARIES} plmbase)
+
+if (NOT WASI) # currently crashes on exit
+
+add_test(
+  NAME write-rt-struct-help
+  COMMAND write-rt-struct --help
+)
+
+add_test(
+  NAME write-rt-struct-synth-lung-1
+  COMMAND write-rt-struct
+    ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/synth-lung-1.cxt
+    ${CMAKE_CURRENT_BINARY_DIR}/synth-lung-1/rtss.dcm
+)
+
+add_test(
+  NAME write-rt-struct-synth-lung-1-metadata
+  COMMAND write-rt-struct
+    ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/synth-lung-1.cxt
+    ${CMAKE_CURRENT_BINARY_DIR}/synth-lung-1/rtss-added-metadata.dcm
+    --dicom-metadata ${CMAKE_CURRENT_SOURCE_DIR}/../test/data/input/rt-struct/dicom-metadata.json
+)
+
+endif()

@@ -118,3 +118,12 @@ export type { WriteMultiSegmentationOptions }
 
 import writeMultiSegmentation from './write-multi-segmentation.js'
 export { writeMultiSegmentation }
+
+import WriteRtStructResult from './write-rt-struct-result.js'
+export type { WriteRtStructResult }
+
+import WriteRtStructOptions from './write-rt-struct-options.js'
+export type { WriteRtStructOptions }
+
+import writeRtStruct from './write-rt-struct.js'
+export { writeRtStruct }

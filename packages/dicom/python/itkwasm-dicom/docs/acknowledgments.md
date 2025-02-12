@@ -6,6 +6,7 @@
 - [GDCM](https://sourceforge.net/projects/gdcm/)
 - [DCMTK](https://dicom.offis.de/dcmtk.php.en)
 - [DCMQI](https://github.com/QIICR/dcmqi)
+- [Plastimatch](https://plastimatch.org/)
 
 The versions of libraries are the following:
 

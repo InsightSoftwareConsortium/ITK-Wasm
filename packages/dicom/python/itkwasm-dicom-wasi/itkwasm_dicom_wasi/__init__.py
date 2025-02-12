@@ -10,5 +10,6 @@ from .read_overlapping_segmentation import read_overlapping_segmentation
 from .write_segmentation import write_segmentation
 from .write_overlapping_segmentation import write_overlapping_segmentation
 from .write_multi_segmentation import write_multi_segmentation
+from .write_rt_struct import write_rt_struct
 
 from ._version import __version__
