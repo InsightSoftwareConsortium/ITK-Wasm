@@ -119,6 +119,10 @@ RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git
   find . -name '*.o' -delete && \
   cd .. && chmod -R 777 ITK-build
 
+ENV wasm_tools_GIT_TAG=1.224.1
+COPY install-wasm-tools.sh /usr/local/bin/
+RUN /usr/local/bin/install-wasm-tools.sh && rm /usr/local/bin/install-wasm-tools.sh
+
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
 ARG IMAGE=itkwasm/base

@@ -95,6 +95,17 @@ function(add_executable target)
           _target_link_libraries(${wasm_target} PRIVATE WebAssemblyInterface)
         endif()
       endif()
+      if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL Debug)
+        add_custom_command(TARGET ${wasm_target}
+          POST_BUILD
+          COMMAND /usr/local/bin/wasm-tools strip -d "\.debug"
+            "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasi.wasm"
+            -o "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.stripped.wasm"
+          COMMAND mv
+            "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.stripped.wasm"
+            "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasi.wasm"
+          )
+      endif()
     endif()
   endif()
 endfunction()
