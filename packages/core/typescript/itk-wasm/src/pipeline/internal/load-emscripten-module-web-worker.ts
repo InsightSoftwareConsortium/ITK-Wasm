@@ -12,7 +12,11 @@ let decoderInitialized = false
 //
 // baseUrl is usually taken from 'getPipelinesBaseUrl()', but a different value
 // could be passed.
-async function loadEmscriptenModuleWebWorker (moduleRelativePathOrURL: string | URL, baseUrl: string, queryParams?: RunPipelineOptions['pipelineQueryParams']): Promise<ITKWasmEmscriptenModule> {
+async function loadEmscriptenModuleWebWorker(
+  moduleRelativePathOrURL: string | URL,
+  baseUrl: string,
+  queryParams?: RunPipelineOptions['pipelineQueryParams']
+): Promise<ITKWasmEmscriptenModule> {
   let modulePrefix = null
   if (typeof moduleRelativePathOrURL !== 'string') {
     modulePrefix = moduleRelativePathOrURL.href
@@ -27,8 +31,14 @@ async function loadEmscriptenModuleWebWorker (moduleRelativePathOrURL: string | 
   if (modulePrefix.endsWith('.wasm')) {
     modulePrefix = modulePrefix.substring(0, modulePrefix.length - 5)
   }
+  if (modulePrefix.endsWith('.wasm.zst')) {
+    modulePrefix = modulePrefix.substring(0, modulePrefix.length - 9)
+  }
   const wasmBinaryPath = `${modulePrefix}.wasm`
-  const response = await axios.get(`${wasmBinaryPath}.zst`, { responseType: 'arraybuffer', params: queryParams })
+  const response = await axios.get(`${wasmBinaryPath}.zst`, {
+    responseType: 'arraybuffer',
+    params: queryParams
+  })
   if (!decoderInitialized) {
     await decoder.init()
     decoderInitialized = true
@@ -36,8 +46,12 @@ async function loadEmscriptenModuleWebWorker (moduleRelativePathOrURL: string | 
   const decompressedArray = decoder.decode(new Uint8Array(response.data))
   const wasmBinary = decompressedArray.buffer
   const modulePath = `${modulePrefix}.js`
-  const result = await import(/* webpackIgnore: true */ /* @vite-ignore */ modulePath)
-  const emscriptenModule = result.default({ wasmBinary }) as ITKWasmEmscriptenModule
+  const result = await import(
+    /* webpackIgnore: true */ /* @vite-ignore */ modulePath
+  )
+  const emscriptenModule = result.default({
+    wasmBinary
+  }) as ITKWasmEmscriptenModule
   return emscriptenModule
 }
 
