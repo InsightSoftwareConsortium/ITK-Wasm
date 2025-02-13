@@ -22,9 +22,11 @@ jobs:
         large-packages: false
         tool-cache: true
 
-    - name: Pull latest Docker images
-      run: |
-        ./src/docker/pull.sh --no-debug
+    - uses: nick-fields/retry@v3
+      with:
+        max_attempts: 5
+        timeout_minutes: 10
+        command: ./src/docker/pull.sh --no-debug
 
     - uses: actions/setup-node@v4
       with:
@@ -163,9 +165,11 @@ jobs:
         large-packages: false
         tool-cache: true
 
-    - name: Pull latest Docker images
-      run: |
-        ../../src/docker/pull.sh --no-debug
+    - uses: nick-fields/retry@v3
+      with:
+        max_attempts: 5
+        timeout_minutes: 10
+        command: ./src/docker/pull.sh --no-debug
 
     - uses: actions/setup-node@v4
       with:
@@ -270,9 +274,11 @@ jobs:
         large-packages: false
         tool-cache: true
 
-    - name: Pull latest Docker images
-      run: |
-        ../../src/docker/pull.sh --no-debug
+    - uses: nick-fields/retry@v3
+      with:
+        max_attempts: 5
+        timeout_minutes: 10
+        command: ./src/docker/pull.sh --no-debug
 
     - name: Install
       uses: pnpm/action-setup@v4
@@ -314,9 +320,11 @@ jobs:
         large-packages: false
         tool-cache: true
 
-    - name: Pull latest Docker images
-      run: |
-        ../../src/docker/pull.sh --no-debug
+    - uses: nick-fields/retry@v3
+      with:
+        max_attempts: 5
+        timeout_minutes: 10
+        command: ./src/docker/pull.sh --no-debug
 
     - name: Install
       uses: pnpm/action-setup@v4
@@ -348,9 +356,11 @@ jobs:
         large-packages: false
         tool-cache: true
 
-    - name: Pull latest Docker images
-      run: |
-        ./src/docker/pull.sh --no-debug
+    - uses: nick-fields/retry@v3
+      with:
+        max_attempts: 5
+        timeout_minutes: 10
+        command: ./src/docker/pull.sh --no-debug
 
     - uses: actions/setup-node@v4
       with:
