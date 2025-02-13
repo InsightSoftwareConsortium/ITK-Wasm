@@ -50,7 +50,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmZstdImageIO, WasmImageIO);
+  itkOverrideGetNameOfClassMacro(WasmZstdImageIO);
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
@@ -78,7 +78,7 @@ protected:
   ~WasmZstdImageIO() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmZstdImageIO);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmZstdImageIO);
 };
 } // end namespace itk
 

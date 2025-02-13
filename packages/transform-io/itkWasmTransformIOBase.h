@@ -67,7 +67,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmTransformIOBase, WasmDataObject);
+  itkOverrideGetNameOfClassMacro(WasmTransformIOBase);
 
   void SetTransformIO(TransformIOBaseType * transformIO, bool readTransform = true)
   {

@@ -62,7 +62,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmTransformIOTemplate, TransformIOBaseTemplate);
+  itkOverrideGetNameOfClassMacro(WasmTransformIOTemplate);
 
   /** Reads the data from disk into the memory buffer provided. */
   void
@@ -115,7 +115,7 @@ protected:
   cbor_item_t * m_CBORRoot{ nullptr };
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmTransformIOTemplate);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmTransformIOTemplate);
 };
 } // end namespace itk
 

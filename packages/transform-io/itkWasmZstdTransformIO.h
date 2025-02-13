@@ -52,7 +52,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmZstdTransformIOTemplate, WasmTransformIOTemplate);
+  itkOverrideGetNameOfClassMacro(WasmZstdTransformIOTemplate);
 
   /** Determine the file type. Returns true if this TransformIO can read the
    * file specified. */
@@ -74,7 +74,7 @@ protected:
   ~WasmZstdTransformIOTemplate() override;
 
 private:
-  ITK_DISALLOW_COPY_AND_ASSIGN(WasmZstdTransformIOTemplate);
+  ITK_DISALLOW_COPY_AND_MOVE(WasmZstdTransformIOTemplate);
 };
 } // end namespace itk
 

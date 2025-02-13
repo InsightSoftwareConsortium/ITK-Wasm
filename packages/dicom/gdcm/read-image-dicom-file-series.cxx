@@ -52,7 +52,7 @@ template <typename TOutputImage>
 class ITK_TEMPLATE_EXPORT QuickDICOMImageSeriesReader : public ImageSeriesReader<TOutputImage>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(QuickDICOMImageSeriesReader);
+  ITK_DISALLOW_COPY_AND_MOVE(QuickDICOMImageSeriesReader);
 
   /** Standard class type aliases. */
   using Self = QuickDICOMImageSeriesReader;
@@ -63,7 +63,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(QuickDICOMImageSeriesReader, ImageSeriesReader);
+  itkOverrideGetNameOfClassMacro(QuickDICOMImageSeriesReader);
 
   /** The size of the output image. */
   using SizeType = typename TOutputImage::SizeType;
