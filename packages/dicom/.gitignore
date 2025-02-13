@@ -1,6 +1,6 @@
 dist
 emscripten-build
-test/
+test/data/
 typescript/src/version.ts
 pyodide.tar.bz2
 pyodide/

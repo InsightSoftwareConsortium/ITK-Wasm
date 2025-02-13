@@ -79,6 +79,16 @@ import writeOverlappingSegmentationNode from './write-overlapping-segmentation-n
 export { writeOverlappingSegmentationNode }
 
 
+import WriteRtStructNodeResult from './write-rt-struct-node-result.js'
+export type { WriteRtStructNodeResult }
+
+import WriteRtStructNodeOptions from './write-rt-struct-node-options.js'
+export type { WriteRtStructNodeOptions }
+
+import writeRtStructNode from './write-rt-struct-node.js'
+export { writeRtStructNode }
+
+
 import WriteSegmentationNodeResult from './write-segmentation-node-result.js'
 export type { WriteSegmentationNodeResult }
 
