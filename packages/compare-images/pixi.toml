@@ -102,6 +102,7 @@ description = "Download Pyodide"
 [feature.python.tasks.test-emscripten]
 cmd = '''mkdir -p dist/pyodide &&
   cp -r ../../pyodide dist/ &&
+  cp -r ../../test/data tests/ &&
   hatch build -t wheel ./dist/pyodide/ &&
   pytest --dist-dir=./dist/pyodide --rt=chrome'''
 cwd = "python/itkwasm-compare-images-emscripten"
@@ -121,6 +122,7 @@ description = "Serve itkwasm-compare-images-emscripten for development"
 [feature.python.tasks.test-dispatch]
 cmd = '''mkdir -p dist/pyodide &&
   cp -r ../../pyodide dist/ &&
+  cp -r ../../test/data tests/ &&
   hatch build -t wheel ./dist/pyodide/ &&
   cp ../itkwasm-compare-images-emscripten/dist/pyodide/itkwasm_compare_images_emscripten*.whl ./dist/pyodide/ &&
   pytest --dist-dir=./dist/pyodide --rt=chrome'''
