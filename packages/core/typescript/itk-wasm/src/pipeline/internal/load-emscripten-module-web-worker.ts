@@ -12,7 +12,7 @@ let decoderInitialized = false
 //
 // baseUrl is usually taken from 'getPipelinesBaseUrl()', but a different value
 // could be passed.
-async function loadEmscriptenModuleWebWorker(
+async function loadEmscriptenModuleWebWorker (
   moduleRelativePathOrURL: string | URL,
   baseUrl: string,
   queryParams?: RunPipelineOptions['pipelineQueryParams']

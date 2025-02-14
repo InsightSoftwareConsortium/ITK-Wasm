@@ -8,7 +8,7 @@ import RunPipelineOptions from '../run-pipeline-options.js'
 const decoder = new ZSTDDecoder()
 let decoderInitialized = false
 
-async function loadEmscriptenModuleMainThread(
+async function loadEmscriptenModuleMainThread (
   moduleRelativePathOrURL: string | URL,
   baseUrl?: string,
   queryParams?: RunPipelineOptions['pipelineQueryParams']
