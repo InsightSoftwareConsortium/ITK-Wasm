@@ -76,7 +76,7 @@ jobs:
 
     - name: Build package typescript documentation
       run: |
-        for package in compare-images compress-stringify dicom downsample image-io mesh-io; do
+        for package in compare-images compress-stringify dicom downsample image-io mesh-filters mesh-io transform-io; do
           mkdir -p docs/$package/ts/docs
           mkdir -p docs/$package/ts/app
 
@@ -100,7 +100,7 @@ jobs:
 
     - name: Build package python documentation
       run: |
-        for package in compare-images compress-stringify dicom downsample image-io mesh-io; do
+        for package in compare-images compress-stringify dicom downsample image-io mesh-filters mesh-io transform-io; do
           mkdir -p docs/$package/py/docs
           mkdir -p docs/$package/py/app
 
