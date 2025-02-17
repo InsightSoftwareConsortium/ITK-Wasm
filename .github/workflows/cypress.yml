@@ -36,14 +36,19 @@ jobs:
         run: |
           ./src/docker/pull.sh --no-debug
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
       - name: Install
         uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
         with:
-          run_install: true
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: ./pnpm-lock.yaml
+
+      - name: Install node, cypress
+        run: |
+          pnpm install --frozen-lockfile
+          pnpx cypress install
 
       - name: Build itk-wasm
         run: |
@@ -119,14 +124,19 @@ jobs:
         run: |
           ./src/docker/pull.sh --no-debug
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
       - name: Install
         uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
         with:
-          run_install: true
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: ./pnpm-lock.yaml
+
+      - name: Install node, cypress
+        run: |
+          pnpm install --frozen-lockfile
+          pnpx cypress install
 
       - name: Build itk-wasm
         run: |
