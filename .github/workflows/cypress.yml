@@ -16,7 +16,7 @@ jobs:
 
   test-cypress:
     name: browser tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       max-parallel: 3
       matrix:
@@ -36,14 +36,19 @@ jobs:
         run: |
           ./src/docker/pull.sh --no-debug
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
       - name: Install
         uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
         with:
-          run_install: true
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: ./pnpm-lock.yaml
+
+      - name: Install node, cypress
+        run: |
+          pnpm install --frozen-lockfile
+          pnpx cypress install
 
       - name: Build itk-wasm
         run: |
@@ -103,7 +108,7 @@ jobs:
 
   test-itk-wasm-cypress:
     name: itk-wasm browser tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout
@@ -119,14 +124,19 @@ jobs:
         run: |
           ./src/docker/pull.sh --no-debug
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
       - name: Install
         uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
         with:
-          run_install: true
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: ./pnpm-lock.yaml
+
+      - name: Install node, cypress
+        run: |
+          pnpm install --frozen-lockfile
+          pnpx cypress install
 
       - name: Build itk-wasm
         run: |
