@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>itk-wasm Browser Hello World!</title>
+    <title>ITK-Wasm Browser Hello World!</title>
     <meta charset="UTF-8" />
-    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.106/dist/umd/itk-wasm.min.js"></script>
   </head>
 
   <body>
     <textarea readonly>WebAssembly output...</textarea>
 
-    <script>
+    <script type="module">
+      import { runPipeline } from "https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.187/dist/bundles/itk-wasm-worker-embedded.js";
       const outputTextArea = document.querySelector("textarea");
       outputTextArea.textContent = "Loading...";
 
@@ -17,7 +17,7 @@
       const args = []
       const inputs = null
       const outputs = null
-      itk.runPipeline(null, wasmURL, args, inputs, outputs).then(
+      runPipeline(wasmURL, args, outputs, inputs).then(
         ({ stdout, webWorker }) => {
           webWorker.terminate()
           outputTextArea.textContent = stdout

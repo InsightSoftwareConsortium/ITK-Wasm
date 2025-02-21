@@ -278,7 +278,7 @@ jobs:
       with:
         max_attempts: 5
         timeout_minutes: 10
-        command: ./src/docker/pull.sh --no-debug
+        command: ./src/docker/pull.sh
 
     - name: Install
       uses: pnpm/action-setup@v4

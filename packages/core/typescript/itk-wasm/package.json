@@ -1,6 +1,6 @@
 {
   "name": "itk-wasm",
-  "version": "1.0.0-b.186",
+  "version": "1.0.0-b.187",
   "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
   "type": "module",
   "module": "./dist/index.js",
@@ -18,12 +18,12 @@
     "test": "test"
   },
   "scripts": {
-    "build": "pnpm build:tsc && pnpm build:bundle && pnpm build:minBundle && pnpm build:bundleWorkerEmbedded && pnpm build:minBundleWorkerEmbedded && pnpm build:workerBundle && pnpm build:workerMinBundle && pnpm test:buildTestPipelines:emscripten && pnpm test:bindgenTestPipelines:typescript",
+    "build": "pnpm build:tsc && pnpm build:bundle && pnpm build:workerBundle && pnpm build:workerMinBundle && pnpm build:minBundle && pnpm build:bundleWorkerEmbedded && pnpm build:minBundleWorkerEmbedded && pnpm test:buildTestPipelines:emscripten && pnpm test:bindgenTestPipelines:typescript",
     "build:tsc": "tsc --pretty",
     "build:bundle": "esbuild --bundle --format=esm --outfile=./dist/bundles/itk-wasm.js ./dist/index.js",
     "build:minBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/bundles/itk-wasm.min.js ./dist/index.js",
-    "build:bundleWorkerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundles/itk-wasm-worker-embedded.js ./dist/index-worker-embedded.js",
-    "build:minBundleWorkerEmbedded": "esbuild --loader:.worker.js=dataurl --minify --bundle --format=esm --outfile=./dist/bundles/itk-wasm-worker-embedded.min.js ./dist/index-worker-embedded.js",
+    "build:bundleWorkerEmbedded": "esbuild --loader:.worker.js=dataurl --bundle --format=esm --outfile=./dist/bundles/itk-wasm-worker-embedded.js ./src/index-worker-embedded.ts",
+    "build:minBundleWorkerEmbedded": "esbuild --loader:.worker.js=dataurl --minify --bundle --format=esm --outfile=./dist/bundles/itk-wasm-worker-embedded.min.js ./src/index-worker-embedded.min.ts",
     "build:workerBundle": "esbuild --bundle --format=esm --outfile=./dist/pipeline/web-workers/bundles/itk-wasm-pipeline.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js",
     "build:workerBundleForTesting": "esbuild --bundle --format=esm --outfile=./test/pipelines/typescript/test/browser/demo-app/public/itk-wasm-pipeline.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js && shx cp -r ./test/data/ ./test/pipelines/typescript/test/browser/demo-app/public/",
     "build:workerMinBundle": "esbuild --minify --bundle --format=esm --outfile=./dist/pipeline/web-workers/bundles/itk-wasm-pipeline.min.worker.js ./dist/pipeline/web-workers/itk-wasm-pipeline.worker.js",
@@ -52,7 +52,7 @@
     "test:browser:chrome": "start-server-and-test start http-get://localhost:5180 cypress:runChrome",
     "test:browser:firefox:ci": "start-server-and-test start http-get://localhost:5180 cypress:runFirefox:ci",
     "test:browser:firefox": "start-server-and-test start http-get://localhost:5180 cypress:runFirefox",
-    "prepublishOnly": "pnpm build:tsc && node ./src/update-versions.cjs && pnpm build:bundle && pnpm build:minBundle && pnpm build:workerBundle && pnpm build:workerMinBundle",
+    "prepublishOnly": "pnpm build:tsc && node ./src/update-versions.cjs && pnpm build:workerBundle && pnpm build:workerMinBundle && pnpm build:bundle && pnpm build:minBundle",
     "clean": "git clean -fdx"
   },
   "repository": {
