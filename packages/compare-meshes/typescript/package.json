@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/compare-meshes",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Compare meshes and polydata for regression testing.",
   "type": "module",
   "module": "./dist/index.js",
