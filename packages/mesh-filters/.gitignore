@@ -16,4 +16,5 @@ python/itkwasm-mesh-filters/dist/
 pyodide/
 test/data.tar.gz
 test/data/
+tests/data/
 test/output/

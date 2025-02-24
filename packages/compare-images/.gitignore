@@ -2,6 +2,7 @@ typescript/demo-app/
 typescript/src/version.ts
 dist/
 test/data
+tests/data
 package-lock.json
 typescript/test/browser/demo-app/public
 pyodide/

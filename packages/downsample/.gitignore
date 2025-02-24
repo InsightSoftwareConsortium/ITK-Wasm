@@ -7,6 +7,8 @@ typescript/demo-app/
 typescript/src/version.ts
 test/pyodide-dispatch.tar.bz2
 test/pyodide-emscripten.tar.bz2
+test/data/
+tests/data/
 test/data.tar.gz
 test/data/baseline/
 test/data/python/

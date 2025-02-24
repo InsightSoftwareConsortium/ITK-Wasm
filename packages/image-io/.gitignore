@@ -3,5 +3,6 @@ emscripten-build/
 wasi-build/
 package-lock.json
 test/data/
+tests/data/
 typescript/src/version.ts
 pyodide/
