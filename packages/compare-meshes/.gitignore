@@ -3,7 +3,8 @@ micromamba
 wasi-build
 
 python
-test
+test/data
+tests/data
 typescript/src/version.ts
 typescript/dist
 typescript/demo-app

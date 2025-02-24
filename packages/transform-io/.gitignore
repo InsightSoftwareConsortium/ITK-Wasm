@@ -1,4 +1,5 @@
-test/
+test/data/
+tests/data/
 emscripten-build/
 wasi-build/
 typescript/dist
