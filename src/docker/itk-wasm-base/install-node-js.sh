@@ -11,3 +11,4 @@ mkdir -p /emsdk/upstream/emscripten/
 ln -s /node-${NODE_TAG}-linux-${host_arch}/bin/node /emsdk/upstream/emscripten
 ln -s /node-${NODE_TAG}-linux-${host_arch}/bin/npm /emsdk/upstream/emscripten
 ln -s /node-${NODE_TAG}-linux-${host_arch}/bin/npx /emsdk/upstream/emscripten
+ln -s /node-${NODE_TAG}-linux-${host_arch}/bin/corepack /emsdk/upstream/emscripten

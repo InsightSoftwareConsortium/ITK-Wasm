@@ -16,6 +16,9 @@ ENV NODE_TAG=v22.9.0
 COPY install-node-js.sh /usr/local/bin/
 RUN /usr/local/bin/install-node-js.sh && rm /usr/local/bin/install-node-js.sh
 ENV PATH=/emsdk/upstream/emscripten:${PATH}
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN npm install -g corepack@latest && corepack enable
 
 ENV zstd_GIT_TAG=v1.5.5
 RUN curl -L https://api.github.com/repos/facebook/zstd/tarball/${zstd_GIT_TAG} | tar xz --strip=1 --one-top-level=zstd && \
