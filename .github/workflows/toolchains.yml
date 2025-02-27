@@ -14,7 +14,7 @@ env:
 jobs:
   build-itk-wasm-base:
     name: "Build itk-wasm-base"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -25,9 +25,11 @@ jobs:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
 
-      - name: Pull latest Docker images
-        run: |
-          ./src/docker/pull.sh --no-debug
+      - uses: nick-fields/retry@v3
+        with:
+          max_attempts: 5
+          timeout_minutes: 10
+          command: ./src/docker/pull.sh --no-debug
 
       - uses: actions/download-artifact@v4
         continue-on-error: true
@@ -59,7 +61,7 @@ jobs:
   build-itk-wasm:
     name: "Build itk-wasm"
     needs: build-itk-wasm-base
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -70,9 +72,11 @@ jobs:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
 
-      - name: Pull latest Docker images
-        run: |
-          ./src/docker/pull.sh --no-debug
+      - uses: nick-fields/retry@v3
+        with:
+          max_attempts: 5
+          timeout_minutes: 10
+          command: ./src/docker/pull.sh --no-debug
 
       - uses: actions/download-artifact@v4
         continue-on-error: true
