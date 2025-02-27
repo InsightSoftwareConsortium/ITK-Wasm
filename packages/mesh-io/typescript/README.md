@@ -4,8 +4,7 @@
 
 > Input and output for mesh file formats.
 
-[💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/ITK-Wasm/mesh-io/ts/docs/
- ':include :type=iframe width=100% height=800px')
+[💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/ITK-Wasm/mesh-io/ts/app/ ':include :type=iframe width=100% height=800px')
 
 [🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/ITK-Wasm/mesh-io/ts/docs/)
 

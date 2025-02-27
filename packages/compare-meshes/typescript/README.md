@@ -4,6 +4,10 @@
 
 > Compare meshes and polydata for regression testing.
 
+[👨‍💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/ITK-Wasm/compare-meshes/ts/app/ ':include :type=iframe width=100% height=800px')
+
+[🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/ITK-Wasm/compare-meshes/ts/docs/)
+
 ## Installation
 
 ```sh

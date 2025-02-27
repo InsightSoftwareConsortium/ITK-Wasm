@@ -4,6 +4,10 @@
 
 > Mesh filters to repair, remesh, subdivide, decimate, smooth, triangulate, etc.
 
+[💻 **Live API Demo** ✨](https://insightsoftwareconsortium.github.io/ITK-Wasm/mesh-filters/ts/app/ ':include :type=iframe width=100% height=800px')
+
+[🕮 **Documentation** 📚](https://insightsoftwareconsortium.github.io/ITK-Wasm/mesh-filters/ts/docs/)
+
 ## Installation
 
 ```sh

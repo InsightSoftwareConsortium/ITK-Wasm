@@ -17,6 +17,7 @@ request](https://github.com/InsightSoftwareConsortium/ITK-Wasm/compare) to add i
 | [@itk-wasm/elastix][elastix-repo] | [<img src="../_static/packages/elastix.png" width="128" />][elastix-demo-js] <br /> *A toolbox for rigid and nonrigid registration of images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][elastix-demo-js] <br/>[🕮 Docs][elastix-docs-js] <br/>[📦 Package][elastix-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][elastix-docs-py] <br/>[📦 Package][elastix-package-py] |
 | [@itk-wasm/htj2k][htj2k-repo] | [<img src="../_static/packages/htj2k.png" width="128" />][htj2k-demo-js] <br /> *Wasm-SIMD accelerated decoding and encoding High-throughput JPEG2000 (HTJ2K) images.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][htj2k-demo-js] <br/>[🕮 Docs][htj2k-docs-js] <br/>[📦 Package][htj2k-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][htj2k-docs-py] <br/>[📦 Package][htj2k-package-py] |
 | [@itk-wasm/image-io][image-io-repo] | [<img src="../_static/packages/image-io.png" width="128" />][image-io-demo-js] <br /> *Input and output for scientific and medical image file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][image-io-demo-js] <br/>[🕮 Docs][image-io-docs-js] <br/>[📦 Package][image-io-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][image-io-docs-py] <br/>[📦 Package][image-io-package-py] |
+| [@itk-wasm/mesh-filters][mesh-filters-repo] | [<img src="../_static/packages/mesh-filters.png" width="128" />][mesh-filters-demo-js] <br /> *Mesh filters to repair, remesh, subdivide, decimate, smooth, triangulate, etc.* Thumbnail from [ct2print.org](https://ct2print.org). | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][mesh-filters-demo-js] <br/>[🕮 Docs][mesh-filters-docs-js] <br/>[📦 Package][mesh-filters-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][mesh-filters-docs-py] <br/>[📦 Package][mesh-filters-package-py] |
 | [@itk-wasm/mesh-io][mesh-io-repo] | [<img src="../_static/packages/mesh-io.png" width="128" />][mesh-io-demo-js] <br /> *Input and output for scientific and medical mesh file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][mesh-io-demo-js] <br/>[🕮 Docs][mesh-io-docs-js] <br/>[📦 Package][mesh-io-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][mesh-io-docs-py] <br/>[📦 Package][mesh-io-package-py] |
 | [@itk-wasm/morphological-contour-interpolation][morphological-contour-interpolation-repo] | [<img src="../_static/packages/morphological-contour-interpolation.png" width="128" />][morphological-contour-interpolation-demo-js] <br /> *Input and output for scientific and medical mesh file formats.* | ![js][js-logo] ![ts][ts-logo] <br/>[👨‍💻 Demo][morphological-contour-interpolation-demo-js] <br/>[🕮 Docs][morphological-contour-interpolation-docs-js] <br/>[📦 Package][morphological-contour-interpolation-package-js] <br/> <br/> ![py][py-logo] <br/>[🕮 Docs][morphological-contour-interpolation-docs-py] <br/>[📦 Package][morphological-contour-interpolation-package-py] |
 
@@ -73,6 +74,13 @@ request](https://github.com/InsightSoftwareConsortium/ITK-Wasm/compare) to add i
 [image-io-package-js]: https://www.npmjs.com/package/@itk-wasm/image-io
 [image-io-docs-py]: https://insightsoftwareconsortium.github.io/ITK-Wasm/image-io/py/docs/
 [image-io-package-py]: https://pypi.org/project/itkwasm-image-io/
+
+[mesh-filters-repo]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/packages/mesh-filters
+[mesh-filters-demo-js]: https://insightsoftwareconsortium.github.io/ITK-Wasm/mesh-filters/ts/app/
+[mesh-filters-docs-js]: https://insightsoftwareconsortium.github.io/ITK-Wasm/mesh-filters/ts/docs/
+[mesh-filters-package-js]: https://www.npmjs.com/package/@itk-wasm/mesh-filters
+[mesh-filters-docs-py]: https://insightsoftwareconsortium.github.io/ITK-Wasm/mesh-filters/py/docs/
+[mesh-filters-package-py]: https://pypi.org/project/itkwasm-mesh-filters/
 
 [mesh-io-repo]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/packages/mesh-io
 [mesh-io-demo-js]: https://insightsoftwareconsortium.github.io/ITK-Wasm/mesh-io/ts/app/
