@@ -165,7 +165,13 @@ class Pipeline:
         self.config = Config()
         self.config.wasm_bulk_memory = True
         self.config.wasm_simd = True
+        self.config.wasm_relaxed_simd = True
+        self.config.wasm_relaxed_simd_deterministic = True
         self.config.wasm_memory64 = True
+        self.config.cranelift_opt_level = "speed"
+        self.config.strategy = "cranelift"
+        self.config.cache = True
+        self.config.parallel_compilation = True
         self.engine = Engine(self.config)
         if isinstance(pipeline, bytes):
             wasm_bytes = pipeline
