@@ -23,7 +23,7 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        os: [ubuntu-22.04, windows-2022, macos-14]
+        os: [ubuntu-24.04, windows-2022, macos-14]
         python-minor-version: [11, 12]
         package: [compress-stringify, compare-images, dicom, mesh-io, image-io, transform-io, downsample]
 
@@ -39,7 +39,7 @@ jobs:
           python-version: ${{ env.python-version }}
 
       - name: Free Disk Space (Ubuntu)
-        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
         uses: jlumbroso/free-disk-space@main
 
       - uses: actions/setup-node@v4
@@ -52,33 +52,33 @@ jobs:
           run_install: true
 
       - name: Build build:gen:python
-        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" build:wasi
 
       - name: Build bindgen:python
-        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" bindgen:python
 
       - name: Build build:python:wasi
-        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" build:python:wasi
 
       - name: Test python on system
-        if: ${{ matrix.package != 'dicom' && matrix.os == 'ubuntu-22.04' || (matrix.package != 'mesh-io' && matrix.package != 'dicom' && matrix.package != 'image-io' && matrix.package != 'downsample' ) }}
+        if: ${{ matrix.package != 'dicom' && matrix.os == 'ubuntu-24.04' || (matrix.package != 'mesh-io' && matrix.package != 'dicom' && matrix.package != 'image-io' && matrix.package != 'downsample' ) }}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:python:wasi
 
       - uses: thewtex/pyodide-actions/install-browser@1e32e8a037a3e99a845dd7ebad6b057a40b7e2c0
-        if: ${{ matrix.python-minor-version > 11 && matrix.os == 'ubuntu-22.04' }}
+        if: ${{ matrix.python-minor-version > 11 && matrix.os == 'ubuntu-24.04' }}
         with:
           runner: selenium
           browser: chrome
           browser-version: latest
 
       - name: Test python on chrome
-        if: ${{ matrix.python-minor-version > 11 && matrix.package != 'dicom' && matrix.os == 'ubuntu-22.04' }}
+        if: ${{ matrix.python-minor-version > 11 && matrix.package != 'dicom' && matrix.os == 'ubuntu-24.04' }}
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:python:emscripten
