@@ -51,6 +51,13 @@ jobs:
         with:
           run_install: true
 
+      - uses: nick-fields/retry@v3
+        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        with:
+          max_attempts: 5
+          timeout_minutes: 10
+          command: ./src/docker/pull.sh --no-debug
+
       - name: Build build:gen:python
         if: ${{ matrix.os == 'ubuntu-24.04' }}
         run: |
