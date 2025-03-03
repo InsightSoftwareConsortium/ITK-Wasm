@@ -1,25 +1,27 @@
 import pytest
 import sys
+from pathlib import Path
 
 if sys.version_info < (3, 10):
     pytest.skip("Skipping pyodide tests on older Python", allow_module_level=True)
 
-from pytest_pyodide import run_in_pyodide
+from pytest_pyodide import run_in_pyodide, copy_files_to_pyodide
 
-from itkwasm import __version__ as test_package_version
+#from itkwasm import __version__ as test_package_version
+test_package_version = '1.0b188'
 
 
-@pytest.fixture
 def package_wheel():
-    return f"itkwasm-{test_package_version}-py3-none-any.whl"
+    wheel_stem = f"itkwasm-{test_package_version}-py3-none-any.whl"
+    wheel_path = Path(__file__).parent.parent / 'dist' / 'pyodide' / wheel_stem
+    return wheel_path, wheel_stem
+
+file_list = [package_wheel(),]
 
 
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_image_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_image_conversion(selenium):
     from itkwasm import Image
     from itkwasm.pyodide import to_js, to_py
     import numpy as np
@@ -71,13 +73,9 @@ async def test_image_conversion(selenium, package_wheel):
     assert isinstance(image_py.metadata, dict)
     assert np.array_equal(image_py.data, np.arange(16, dtype=np.uint8).reshape((4, 4)))
 
-
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_point_set_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_point_set_conversion(selenium):
     from itkwasm import PointSet, PointSetType, PixelTypes, FloatTypes
     from itkwasm.pyodide import to_js, to_py
     import numpy as np
@@ -115,12 +113,9 @@ async def test_point_set_conversion(selenium, package_wheel):
     assert np.array_equal(point_set.pointData, point_set_py.pointData)
 
 
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_mesh_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_mesh_conversion(selenium):
     from itkwasm import Mesh, MeshType
     from itkwasm.pyodide import to_js, to_py
     import numpy as np
@@ -158,12 +153,9 @@ async def test_mesh_conversion(selenium, package_wheel):
     assert np.array_equal(mesh.pointData, mesh_py.pointData)
 
 
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_polydata_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_polydata_conversion(selenium):
     from itkwasm import PolyData, PolyDataType
     from itkwasm.pyodide import to_js, to_py
     import numpy as np
@@ -198,12 +190,9 @@ async def test_polydata_conversion(selenium, package_wheel):
     assert polydata.numberOfPointPixels == polydata_py.numberOfPointPixels
     assert np.array_equal(polydata.pointData, polydata_py.pointData)
 
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_transform_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_transform_conversion(selenium):
     from itkwasm import Transform, TransformType, TransformParameterizations
     from itkwasm.pyodide import to_js, to_py
     import numpy as np
@@ -234,12 +223,9 @@ async def test_transform_conversion(selenium, package_wheel):
         -65.99999999999997, 69.00000000000004, 32.000000000000036]))
     print('transform_py', transform_py)
 
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_binary_stream_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_binary_stream_conversion(selenium):
     from itkwasm import BinaryStream
     from itkwasm.pyodide import to_js, to_py
 
@@ -255,12 +241,9 @@ async def test_binary_stream_conversion(selenium, package_wheel):
     assert binary_stream_py.data[3], 239
 
 
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_text_stream_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_text_stream_conversion(selenium):
     from itkwasm import TextStream
     from itkwasm.pyodide import to_js, to_py
 
@@ -273,12 +256,9 @@ async def test_text_stream_conversion(selenium, package_wheel):
     assert text_stream_py.data == data
 
 
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_binary_file_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_binary_file_conversion(selenium):
     from itkwasm import BinaryFile
     from itkwasm.pyodide import to_js, to_py
     import numpy as np
@@ -302,12 +282,9 @@ async def test_binary_file_conversion(selenium, package_wheel):
     assert data_py[3], 239
 
 
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_text_file_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_text_file_conversion(selenium):
     from itkwasm import TextFile
     from itkwasm.pyodide import to_js, to_py
     import numpy as np
@@ -328,12 +305,9 @@ async def test_text_file_conversion(selenium, package_wheel):
     assert data_py == data
 
 
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_list_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_list_conversion(selenium):
     from itkwasm import TextFile
     from itkwasm.pyodide import to_js, to_py
     import numpy as np
@@ -363,12 +337,9 @@ async def test_list_conversion(selenium, package_wheel):
         verify_text_file(text_file)
 
 
-@run_in_pyodide(packages=["micropip", "numpy"])
-async def test_uint8array_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_uint8array_conversion(selenium):
     from itkwasm.pyodide import to_js, to_py
 
     data = bytes([222, 173, 190, 239])
@@ -390,12 +361,9 @@ async def test_uint8array_conversion(selenium, package_wheel):
     assert ivalue == ivalue_py
 
 
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
 @run_in_pyodide(packages=["micropip"])
-async def test_json_object_conversion(selenium, package_wheel):
-    import micropip
-
-    await micropip.install(package_wheel)
-
+async def test_json_object_conversion(selenium):
     from itkwasm.pyodide import to_js, to_py
 
     data = {"a": 1, "b": True, "c": {"nested": True}}
