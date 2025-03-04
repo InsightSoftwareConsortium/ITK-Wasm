@@ -7,7 +7,12 @@ if test -n "$EMSDK"; then
   /usr/local/bin/web-build emscripten-build -DCMAKE_EXE_LINKER_FLAGS='-flto=thin -s DISABLE_EXCEPTION_CATCHING=0'
   rm -rf ./web-build
   /usr/local/bin/web-build emscripten-build -DCMAKE_EXE_LINKER_FLAGS='-flto -s DISABLE_EXCEPTION_CATCHING=0'
-  rm -rf ./web-build; /usr/local/bin/web-build emscripten-build -DCMAKE_EXE_LINKER_FLAGS='-fno-lto -s DISABLE_EXCEPTION_CATCHING=1'
+  rm -rf ./web-build
+  /usr/local/bin/web-build emscripten-build -DCMAKE_EXE_LINKER_FLAGS='-fno-lto -s DISABLE_EXCEPTION_CATCHING=1'
+  rm -rf ./web-build
+  /usr/local/bin/web-build emscripten-build
+  rm -rf ./web-build
+  /usr/local/bin/web-build emscripten-build
   rm -rf /median-filter-pipelineCopy
   mkdir -p /emsdk/upstream/emscripten/cache/symbol_lists
   touch /emsdk/upstream/emscripten/cache/symbol_lists.lock
