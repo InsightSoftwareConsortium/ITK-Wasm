@@ -66,8 +66,8 @@ if $version_tag; then
                 $script_dir $@
 fi
 
-$exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-threads-base:latest-$host_arch \
-        --build-arg IMAGE=quay.io/itkwasm/emscripten-threads-base \
+$exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:latest-threads-$host_arch \
+        --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
         --build-arg HOST_ARCH=$host_arch \
         --build-arg CMAKE_BUILD_TYPE=Release \
         --build-arg VCS_REF=${VCS_REF} \
@@ -77,8 +77,8 @@ $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-threads-base:latest-$host_a
         --build-arg CFLAGS="${emscripten_threads_c_flags}" \
         $script_dir $@
 if $version_tag; then
-        $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-threads-base:${TAG}-$host_arch \
-                --build-arg IMAGE=quay.io/itkwasm/emscripten-threads-base \
+        $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:${TAG}-threads-$host_arch \
+                --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
                 --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Release \
                 --build-arg VERSION=${TAG} \
@@ -145,8 +145,8 @@ if $debug; then
                 --build-arg CFLAGS="${emscripten_debug_c_flags}" \
                 $script_dir $@
   fi
-  $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-threads-base:latest-debug-$host_arch \
-          --build-arg IMAGE=quay.io/itkwasm/emscripten-threads-base \
+  $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:latest-threads-debug-$host_arch \
+          --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
           --build-arg HOST_ARCH=$host_arch \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg USE_DCMTK=OFF \
@@ -157,8 +157,8 @@ if $debug; then
           --build-arg CFLAGS="${emscripten_threads_debug_c_flags}" \
           $script_dir $@
   if $version_tag; then
-        $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-threads-base:${TAG}-debug-$host_arch \
-                --build-arg IMAGE=quay.io/itkwasm/emscripten-threads-base \
+        $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:${TAG}-threads-debug-$host_arch \
+                --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
                 --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg USE_DCMTK=OFF \
