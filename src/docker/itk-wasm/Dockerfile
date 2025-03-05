@@ -5,10 +5,14 @@ ARG BASE_TAG=latest-$HOST_ARCH
 FROM $BASE_IMAGE:$BASE_TAG
 LABEL maintainer="Matt McCormick matt@mmmccormick.com"
 ARG BASE_IMAGE
+ARG HOST_ARCH=amd64
+ARG BASE_IMAGE=quay.io/itkwasm/emscripten-base
+ARG BASE_TAG=latest-$HOST_ARCH
 ARG CMAKE_BUILD_TYPE=Release
 
 WORKDIR /
 
+ENV BASE_TAG=$BASE_TAG
 ADD ITKWebAssemblyInterfaceModuleCopy /ITKWebAssemblyInterface
 COPY ITKWebAssemblyInterface.cmake /usr/src/
 RUN mv /usr/src/ITKWebAssemblyInterface.cmake /usr/share/cmake-*/Modules/

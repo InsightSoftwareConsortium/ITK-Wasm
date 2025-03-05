@@ -46,11 +46,6 @@ function(add_executable target)
   # Suppress CLI11 Encoding_inl.hpp std::wstring_convert deprecation warning
   # Suppress glaze warning about warning: 'static_assert' with a user-generated message is a C++26 extension [-Wc++26-extensions]
   set_property(TARGET ${wasm_target} APPEND PROPERTY COMPILE_OPTIONS -msimd128 -flto -Wno-deprecated-declarations -Wno-c++26-extensions)
-  set (suffix ".wasm")
-  if("$ENV{CFLAGS}" MATCHES "thread")
-    set(suffix ".threads.wasm")
-    set_property(TARGET ${wasm_target} PROPERTY SUFFIX ${suffix})
-  endif()
   if(EMSCRIPTEN)
     set_property(TARGET ${wasm_target} APPEND PROPERTY COMPILE_OPTIONS -Wno-warn-absolute-paths -DITK_WASM_NO_FILESYSTEM_IO)
     kebab_to_camel(${target} targetCamel)
@@ -65,10 +60,17 @@ function(add_executable target)
 
     get_property(_is_imported TARGET ${target} PROPERTY IMPORTED)
     if (NOT ${_is_imported})
-      add_custom_command(TARGET ${target}
-        POST_BUILD
-        COMMAND /usr/bin/zstd -f "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>${suffix}" -o "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>${suffix}.zst"
-        )
+      if("$ENV{BASE_TAG}" MATCHES "thread")
+        add_custom_command(TARGET ${target}
+          POST_BUILD
+          COMMAND /usr/bin/zstd -f "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm" -o "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.threads.wasm.zst"
+          )
+      else()
+        add_custom_command(TARGET ${target}
+          POST_BUILD
+          COMMAND /usr/bin/zstd -f "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm" -o "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm.zst"
+          )
+      endif()
     endif()
   else()
     # WASI
