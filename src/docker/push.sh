@@ -61,13 +61,17 @@ function push_image() {
 
 push_image itkwasm/wasi ${TAG} ${debug}
 push_image itkwasm/emscripten ${TAG} ${debug}
+push_image itkwasm/emscripten ${TAG}-threads ${debug}
 push_image itkwasm/wasi latest ${debug}
 push_image itkwasm/emscripten latest ${debug}
+push_image itkwasm/emscripten latest-threads ${debug}
 if ! $push_manifest; then
   push_image itkwasm/emscripten-base ${TAG} ${debug}
+  push_image itkwasm/emscripten-base ${TAG}-threads ${debug}
   push_image itkwasm/wasi-base ${TAG} ${debug}
   push_image itkwasm/wasi-base latest ${debug}
   push_image itkwasm/emscripten-base latest ${debug}
+  push_image itkwasm/emscripten-base latest-threads ${debug}
 fi
 
 echo "Success."
