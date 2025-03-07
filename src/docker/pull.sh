@@ -18,9 +18,13 @@ set -- "${newparams[@]}"  # overwrites the original positional params
 
 $exe pull quay.io/itkwasm/emscripten:latest
 $exe tag quay.io/itkwasm/emscripten:latest localhost/itkwasm/emscripten:latest
+$exe pull quay.io/itkwasm/emscripten:latest-threads
+$exe tag quay.io/itkwasm/emscripten:latest-threads localhost/itkwasm/emscripten:latest-threads
 if $debug; then
   $exe pull quay.io/itkwasm/emscripten:latest-debug
   $exe tag quay.io/itkwasm/emscripten:latest-debug localhost/itkwasm/emscripten:latest-debug
+  $exe pull quay.io/itkwasm/emscripten:latest-threads-debug
+  $exe tag quay.io/itkwasm/emscripten:latest-threads-debug localhost/itkwasm/emscripten:latest-threads-debug
 fi
 
 $exe pull quay.io/itkwasm/wasi:latest

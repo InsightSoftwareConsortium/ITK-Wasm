@@ -62,6 +62,30 @@ if $version_tag; then
                 --build-arg BUILD_DATE=${BUILD_DATE} \
                 $script_dir $@
 fi
+$exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest-threads-$host_arch \
+        --build-arg IMAGE=quay.io/itkwasm/emscripten \
+        --build-arg HOST_ARCH=$host_arch \
+        --build-arg CMAKE_BUILD_TYPE=Release \
+        --build-arg BASE_IMAGE=quay.io/itkwasm/emscripten-base \
+        --build-arg BASE_TAG=latest-threads-$host_arch \
+        --build-arg VCS_REF=${VCS_REF} \
+        --build-arg VCS_URL=${VCS_URL} \
+        --build-arg BUILD_DATE=${BUILD_DATE} \
+        $script_dir $@
+if $version_tag; then
+        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:${TAG}-threads-$host_arch \
+                --build-arg IMAGE=quay.io/itkwasm/emscripten \
+                --build-arg HOST_ARCH=$host_arch \
+                --build-arg CMAKE_BUILD_TYPE=Release \
+                --build-arg BASE_IMAGE=quay.io/itkwasm/emscripten-base \
+                --build-arg BASE_TAG=${TAG}-threads-$host_arch \
+                --build-arg VERSION=${TAG} \
+                --build-arg VCS_REF=${VCS_REF} \
+                --build-arg VCS_URL=${VCS_URL} \
+                --build-arg BUILD_DATE=${BUILD_DATE} \
+                $script_dir $@
+fi
+
 
 if $wasi; then
   $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:latest-$host_arch  \
@@ -93,6 +117,7 @@ if $debug; then
           --build-arg IMAGE=quay.io/itkwasm/emscripten \
           --build-arg HOST_ARCH=$host_arch \
           --build-arg CMAKE_BUILD_TYPE=Debug \
+          --build-arg BASE_TAG=latest-debug-$host_arch \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
@@ -104,6 +129,27 @@ if $debug; then
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG}-debug \
                 --build-arg BASE_TAG=${TAG}-debug-$host_arch \
+                --build-arg VCS_REF=${VCS_REF} \
+                --build-arg VCS_URL=${VCS_URL} \
+                --build-arg BUILD_DATE=${BUILD_DATE} \
+                $script_dir $@
+  fi
+  $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest-threads-debug-$host_arch \
+          --build-arg IMAGE=quay.io/itkwasm/emscripten \
+          --build-arg HOST_ARCH=$host_arch \
+          --build-arg CMAKE_BUILD_TYPE=Debug \
+          --build-arg BASE_TAG=latest-threads-debug-$host_arch \
+          --build-arg VCS_REF=${VCS_REF} \
+          --build-arg VCS_URL=${VCS_URL} \
+          --build-arg BUILD_DATE=${BUILD_DATE} \
+          $script_dir $@
+  if $version_tag; then
+        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:${TAG}-threads-debug-$host_arch \
+                --build-arg IMAGE=quay.io/itkwasm/emscripten \
+                --build-arg HOST_ARCH=$host_arch \
+                --build-arg CMAKE_BUILD_TYPE=Debug \
+                --build-arg VERSION=${TAG}-debug \
+                --build-arg BASE_TAG=${TAG}-threads-debug-$host_arch \
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
                 --build-arg BUILD_DATE=${BUILD_DATE} \

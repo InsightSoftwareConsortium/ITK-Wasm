@@ -35,10 +35,16 @@ wasi_ld_flags="-flto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-p
 wasi_c_flags="-flto -msimd128 -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_SIGNAL"
 
 emscripten_debug_ld_flags="-fno-lto -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB"
-emscripten_debug_c_flags="-fno-lto -Wno-warn-absolute-paths"
+emscripten_debug_c_flags="-msimd128 -fno-lto -Wno-warn-absolute-paths"
 
 wasi_debug_ld_flags="-fno-lto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-printscan-long-double"
 wasi_debug_c_flags="-fno-lto -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_SIGNAL"
+
+emscripten_threads_ld_flags="-pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency -s MALLOC=mimalloc -flto -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB"
+emscripten_threads_c_flags="-pthread -msimd128 -flto -Wno-warn-absolute-paths -DITK_WASM_NO_FILESYSTEM_IO"
+
+emscripten_threads_debug_ld_flags="-pthread -s MALLOC=mimalloc -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency -fno-lto -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB"
+emscripten_threads_debug_c_flags="-pthread -msimd128 -fno-lto -Wno-warn-absolute-paths"
 
 $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:latest-$host_arch \
         --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
@@ -57,6 +63,30 @@ if $version_tag; then
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
                 --build-arg BUILD_DATE=${BUILD_DATE} \
+                $script_dir $@
+fi
+
+$exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:latest-threads-$host_arch \
+        --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
+        --build-arg HOST_ARCH=$host_arch \
+        --build-arg CMAKE_BUILD_TYPE=Release \
+        --build-arg VCS_REF=${VCS_REF} \
+        --build-arg VCS_URL=${VCS_URL} \
+        --build-arg BUILD_DATE=${BUILD_DATE} \
+        --build-arg LDFLAGS="${emscripten_threads_ld_flags}" \
+        --build-arg CFLAGS="${emscripten_threads_c_flags}" \
+        $script_dir $@
+if $version_tag; then
+        $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:${TAG}-threads-$host_arch \
+                --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
+                --build-arg HOST_ARCH=$host_arch \
+                --build-arg CMAKE_BUILD_TYPE=Release \
+                --build-arg VERSION=${TAG} \
+                --build-arg VCS_REF=${VCS_REF} \
+                --build-arg VCS_URL=${VCS_URL} \
+                --build-arg BUILD_DATE=${BUILD_DATE} \
+                --build-arg LDFLAGS="${emscripten_threads_ld_flags}" \
+                --build-arg CFLAGS="${emscripten_threads_c_flags}" \
                 $script_dir $@
 fi
 
@@ -113,6 +143,31 @@ if $debug; then
                 --build-arg BUILD_DATE=${BUILD_DATE} \
                 --build-arg LDFLAGS="${emscripten_debug_ld_flags}" \
                 --build-arg CFLAGS="${emscripten_debug_c_flags}" \
+                $script_dir $@
+  fi
+  $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:latest-threads-debug-$host_arch \
+          --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
+          --build-arg HOST_ARCH=$host_arch \
+          --build-arg CMAKE_BUILD_TYPE=Debug \
+          --build-arg USE_DCMTK=OFF \
+          --build-arg VCS_REF=${VCS_REF} \
+          --build-arg VCS_URL=${VCS_URL} \
+          --build-arg BUILD_DATE=${BUILD_DATE} \
+          --build-arg LDFLAGS="${emscripten_threads_debug_ld_flags}" \
+          --build-arg CFLAGS="${emscripten_threads_debug_c_flags}" \
+          $script_dir $@
+  if $version_tag; then
+        $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:${TAG}-threads-debug-$host_arch \
+                --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
+                --build-arg HOST_ARCH=$host_arch \
+                --build-arg CMAKE_BUILD_TYPE=Debug \
+                --build-arg USE_DCMTK=OFF \
+                --build-arg VERSION=${TAG}-debug \
+                --build-arg VCS_REF=${VCS_REF} \
+                --build-arg VCS_URL=${VCS_URL} \
+                --build-arg BUILD_DATE=${BUILD_DATE} \
+                --build-arg LDFLAGS="${emscripten_threads_debug_ld_flags}" \
+                --build-arg CFLAGS="${emscripten_threads_debug_c_flags}" \
                 $script_dir $@
   fi
   if $wasi; then

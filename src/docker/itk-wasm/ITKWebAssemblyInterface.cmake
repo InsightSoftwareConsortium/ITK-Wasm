@@ -60,10 +60,17 @@ function(add_executable target)
 
     get_property(_is_imported TARGET ${target} PROPERTY IMPORTED)
     if (NOT ${_is_imported})
-      add_custom_command(TARGET ${target}
-        POST_BUILD
-        COMMAND /usr/bin/zstd -f "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm" -o "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm.zst"
-        )
+      if("$ENV{BASE_TAG}" MATCHES "thread")
+        add_custom_command(TARGET ${target}
+          POST_BUILD
+          COMMAND /usr/bin/zstd -f "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm" -o "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.threads.wasm.zst"
+          )
+      else()
+        add_custom_command(TARGET ${target}
+          POST_BUILD
+          COMMAND /usr/bin/zstd -f "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm" -o "$<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.wasm.zst"
+          )
+      endif()
     endif()
   else()
     # WASI
