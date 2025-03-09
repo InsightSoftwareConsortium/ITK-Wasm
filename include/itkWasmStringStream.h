@@ -63,7 +63,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmStringStream, WasmDataObject);
+  itkOverrideGetNameOfClassMacro(WasmStringStream);
 
   void SetString(const std::string & string) {
     this->m_StringStream.str(string);
