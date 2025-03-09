@@ -23,11 +23,12 @@
 
 #include "itkBinShrinkImageFilter.h"
 
-template<typename TImage>
+template <typename TImage>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using ImageType = TImage;
     constexpr unsigned int ImageDimension = ImageType::ImageDimension;
@@ -36,15 +37,18 @@ public:
     InputImageType inputImage;
     pipeline.add_option("input", inputImage, "Input image")->required()->type_name("INPUT_IMAGE");
 
-    std::vector<unsigned int> shrinkFactors { 2, 2 };
+    std::vector<unsigned int> shrinkFactors{ 2, 2 };
     pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->type_size(ImageDimension);
 
     bool informationOnly = false;
-    pipeline.add_flag("-i,--information-only", informationOnly, "Generate output image information only. Do not process pixels.");
+    pipeline.add_flag(
+      "-i,--information-only", informationOnly, "Generate output image information only. Do not process pixels.");
 
     using OutputImageType = itk::wasm::OutputImage<ImageType>;
     OutputImageType downsampledImage;
-    pipeline.add_option("downsampled", downsampledImage, "Output downsampled image")->required()->type_name("OUTPUT_IMAGE");
+    pipeline.add_option("downsampled", downsampledImage, "Output downsampled image")
+      ->required()
+      ->type_name("OUTPUT_IMAGE");
 
     ITK_WASM_PARSE(pipeline);
 
@@ -72,21 +76,21 @@ public:
   }
 };
 
-int main(int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("downsample-bin-shrink", "Apply local averaging and subsample the input image.", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "downsample-bin-shrink", "Apply local averaging and subsample the input image.", argc, argv);
 
   return itk::wasm::SupportInputImageTypes<PipelineFunctor,
-    uint8_t,
-    int8_t,
-    uint16_t,
-    int16_t,
-    uint32_t,
-    int32_t,
-    uint64_t,
-    int64_t,
-    float,
-    double
-    >
-  ::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
+                                           uint8_t,
+                                           int8_t,
+                                           uint16_t,
+                                           int16_t,
+                                           uint32_t,
+                                           int32_t,
+                                           uint64_t,
+                                           int64_t,
+                                           float,
+                                           double>::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
 }

@@ -22,22 +22,22 @@
 #include "itkOutputTextStream.h"
 
 #ifndef TRANSFORM_IO_CLASS
-#error "TRANSFORM_IO_CLASS definition must be provided"
+#  error "TRANSFORM_IO_CLASS definition must be provided"
 #endif
 
 #if TRANSFORM_IO_CLASS == 0
-#include "itkHDF5TransformIO.h"
+#  include "itkHDF5TransformIO.h"
 #elif TRANSFORM_IO_CLASS == 1
-#include "itkTxtTransformIO.h"
+#  include "itkTxtTransformIO.h"
 #elif TRANSFORM_IO_CLASS == 2
-#include "itkMatlabTransformIO.h"
+#  include "itkMatlabTransformIO.h"
 #elif TRANSFORM_IO_CLASS == 3
-#include "itkMINCTransformIO.h"
+#  include "itkMINCTransformIO.h"
 #elif TRANSFORM_IO_CLASS == 4
 #elif TRANSFORM_IO_CLASS == 5
-#include "itkWasmZstdTransformIO.h"
+#  include "itkWasmZstdTransformIO.h"
 #else
-#error "Unsupported TRANSFORM_IO_CLASS"
+#  error "Unsupported TRANSFORM_IO_CLASS"
 #endif
 #include "itkWasmTransformIO.h"
 
@@ -48,7 +48,10 @@
 #include "itkOutputTransform.h"
 
 template <typename TTransformIO>
-int readTransform(itk::wasm::Pipeline & pipeline, const std::string & inputFileName, itk::wasm::OutputTextStream & couldRead)
+int
+readTransform(itk::wasm::Pipeline &         pipeline,
+              const std::string &           inputFileName,
+              itk::wasm::OutputTextStream & couldRead)
 {
   using TransformIOType = TTransformIO;
   using ParametersValueType = typename TransformIOType::ParametersValueType;
@@ -80,19 +83,25 @@ int readTransform(itk::wasm::Pipeline & pipeline, const std::string & inputFileN
   return EXIT_SUCCESS;
 }
 
-int main (int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  const char * pipelineName = TO_LITERAL(TRANSFORM_IO_KEBAB_NAME) "-read-transform";
-  itk::wasm::Pipeline pipeline(pipelineName, "Read an transform file format and convert it to the ITK-Wasm transform file format", argc, argv);
+  const char *        pipelineName = TO_LITERAL(TRANSFORM_IO_KEBAB_NAME) "-read-transform";
+  itk::wasm::Pipeline pipeline(
+    pipelineName, "Read an transform file format and convert it to the ITK-Wasm transform file format", argc, argv);
 
   std::string inputFileName;
   pipeline.add_option("serialized-transform", inputFileName, "Input transform serialized in the file format");
 
   itk::wasm::OutputTextStream couldRead;
-  pipeline.add_option("could-read", couldRead, "Whether the input could be read. If false, the output transform is not valid.")->type_name("OUTPUT_JSON");
+  pipeline
+    .add_option(
+      "could-read", couldRead, "Whether the input could be read. If false, the output transform is not valid.")
+    ->type_name("OUTPUT_JSON");
 
   bool floatParameters = false;
-  pipeline.add_flag("-f,--float-parameters", floatParameters, "Use float for the parameter value type. The default is double.");
+  pipeline.add_flag(
+    "-f,--float-parameters", floatParameters, "Use float for the parameter value type. The default is double.");
 
   ITK_WASM_PRE_PARSE(pipeline);
 
@@ -151,7 +160,7 @@ int main (int argc, char * argv[])
     return readTransform<itk::WasmZstdTransformIOTemplate<double>>(pipeline, inputFileName, couldRead);
   }
 #else
-#error "Unsupported TRANSFORM_IO_CLASS"
+#  error "Unsupported TRANSFORM_IO_CLASS"
 #endif
   return EXIT_SUCCESS;
 }

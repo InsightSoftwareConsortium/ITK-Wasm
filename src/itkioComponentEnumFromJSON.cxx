@@ -21,14 +21,16 @@ namespace itk
 {
 
 IOComponentEnum
-ioComponentEnumFromJSON(const std::variant<JSONIntTypesEnum, JSONFloatTypesEnum, JSONComponentTypesEnum> & jsonComponentType)
+ioComponentEnumFromJSON(
+  const std::variant<JSONIntTypesEnum, JSONFloatTypesEnum, JSONComponentTypesEnum> & jsonComponentType)
 {
   switch (jsonComponentType.index())
   {
     case 0:
     {
       const auto intType = std::get<JSONIntTypesEnum>(jsonComponentType);
-      switch (intType) {
+      switch (intType)
+      {
         case JSONIntTypesEnum::int8:
           return IOComponentEnum::CHAR;
         case JSONIntTypesEnum::uint8:
@@ -53,7 +55,8 @@ ioComponentEnumFromJSON(const std::variant<JSONIntTypesEnum, JSONFloatTypesEnum,
     case 1:
     {
       const auto floatType = std::get<JSONFloatTypesEnum>(jsonComponentType);
-      switch (floatType) {
+      switch (floatType)
+      {
         case JSONFloatTypesEnum::float32:
           return IOComponentEnum::FLOAT;
         case JSONFloatTypesEnum::float64:

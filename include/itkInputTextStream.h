@@ -45,15 +45,20 @@ namespace wasm
 class WebAssemblyInterface_EXPORT InputTextStream
 {
 public:
-  std::istream & Get() {
+  std::istream &
+  Get()
+  {
     return *m_IStream;
   }
 
-  std::istream * GetPointer() {
+  std::istream *
+  GetPointer()
+  {
     return m_IStream;
   }
 
-  void SetJSON(const std::string & json)
+  void
+  SetJSON(const std::string & json)
   {
     if (m_DeleteIStream && m_IStream != nullptr)
     {
@@ -66,7 +71,8 @@ public:
     m_IStream = &(m_WasmStringStream->GetStringStream());
   }
 
-  void SetFileName(const std::string & fileName)
+  void
+  SetFileName(const std::string & fileName)
   {
     if (m_DeleteIStream && m_IStream != nullptr)
     {
@@ -84,15 +90,17 @@ public:
       delete m_IStream;
     }
   }
+
 protected:
-  std::istream * m_IStream{nullptr};
-  bool m_DeleteIStream{false};
+  std::istream * m_IStream{ nullptr };
+  bool           m_DeleteIStream{ false };
 
   WasmStringStream::Pointer m_WasmStringStream;
 };
 
 
-WebAssemblyInterface_EXPORT bool lexical_cast(const std::string &input, InputTextStream &inputStream);
+WebAssemblyInterface_EXPORT bool
+lexical_cast(const std::string & input, InputTextStream & inputStream);
 
 } // end namespace wasm
 } // end namespace itk

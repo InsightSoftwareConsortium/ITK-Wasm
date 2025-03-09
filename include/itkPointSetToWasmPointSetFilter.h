@@ -26,7 +26,7 @@ namespace itk
 /**
  *\class PointSetToWasmPointSetFilter
  * \brief Convert an PointSet to an WasmPointSet object.
- * 
+ *
  * \ingroup WebAssemblyInterface
  */
 template <typename TPointSet>
@@ -45,7 +45,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PointSetToWasmPointSetFilter, ProcessObject);
+  itkOverrideGetNameOfClassMacro(PointSetToWasmPointSetFilter);
 
   using DataObjectIdentifierType = Superclass::DataObjectIdentifierType;
   using DataObjectPointerArraySizeType = Superclass::DataObjectPointerArraySizeType;

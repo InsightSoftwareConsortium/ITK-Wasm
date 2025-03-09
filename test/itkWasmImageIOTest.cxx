@@ -28,7 +28,8 @@ itkWasmImageIOTest(int argc, char * argv[])
   if (argc < 6)
   {
     std::cerr << "Missing parameters" << std::endl;
-    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv) << " InputImage ImageDirectory ConvertedDirectory ImageCBOR ConvertedCBOR" << std::endl;
+    std::cerr << "Usage: " << itkNameOfTestExecutableMacro(argv)
+              << " InputImage ImageDirectory ConvertedDirectory ImageCBOR ConvertedCBOR" << std::endl;
     return EXIT_FAILURE;
   }
   const char * inputImageFile = argv[1];
@@ -52,21 +53,21 @@ itkWasmImageIOTest(int argc, char * argv[])
   const auto metaDataDict = inputImage->GetMetaDataDictionary();
   using MetaDataStringType = itk::MetaDataObject<std::string>;
   const std::string testEntryKey = "MetaTestEntry";
-  std::string testEntryValue = "ItsThere";
+  std::string       testEntryValue = "ItsThere";
   itk::EncapsulateMetaData<std::string>(inputImage->GetMetaDataDictionary(), testEntryKey, testEntryValue);
 
   using WriterType = itk::ImageFileWriter<ImageType>;
   auto wasmWriter = WriterType::New();
-  //wasmWriter->SetImageIO( imageIO );
-  wasmWriter->SetFileName( imageDirectory );
-  wasmWriter->SetInput( inputImage );
+  // wasmWriter->SetImageIO( imageIO );
+  wasmWriter->SetFileName(imageDirectory);
+  wasmWriter->SetInput(inputImage);
 
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmWriter->Update());
 
   using ReaderType = itk::ImageFileReader<ImageType>;
   auto wasmReader = ReaderType::New();
-  //wasmReader->SetImageIO( imageIO );
-  wasmReader->SetFileName( imageDirectory );
+  // wasmReader->SetImageIO( imageIO );
+  wasmReader->SetFileName(imageDirectory);
 
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
 
@@ -82,10 +83,10 @@ itkWasmImageIOTest(int argc, char * argv[])
 
   ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(writtenReadImage, convertedDirectoryFile));
 
-  wasmWriter->SetFileName( imageCBOR );
+  wasmWriter->SetFileName(imageCBOR);
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmWriter->Update());
 
-  wasmReader->SetFileName( imageCBOR );
+  wasmReader->SetFileName(imageCBOR);
   ITK_TRY_EXPECT_NO_EXCEPTION(wasmReader->Update());
 
   ITK_TRY_EXPECT_NO_EXCEPTION(itk::WriteImage(wasmReader->GetOutput(), convertedCBORFile));

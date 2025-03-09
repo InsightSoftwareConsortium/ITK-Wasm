@@ -22,11 +22,12 @@
 #include "itkMeshToWasmMeshFilter.h"
 #include "itkWasmMeshIOFactory.h"
 
-template<typename TMesh>
+template <typename TMesh>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using MeshType = TMesh;
 
@@ -68,16 +69,16 @@ itkSupportInputMeshTypesMemoryIOTest(int argc, char * argv[])
   meshToWasmMeshFilter->Update();
   auto readWasmMesh = meshToWasmMeshFilter->GetOutput();
 
-  auto readMeshJSON = readWasmMesh->GetJSON();
-  void * readWasmMeshPointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readMeshJSON.size()));
+  auto   readMeshJSON = readWasmMesh->GetJSON();
+  void * readWasmMeshPointer = reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 0, readMeshJSON.size()));
   std::memcpy(readWasmMeshPointer, readMeshJSON.data(), readMeshJSON.size());
 
-  const char * mockArgv[] = {"itkSupportInputMeshTypesMemoryIOTest", "--memory-io", "0", "0", NULL};
+  const char * mockArgv[] = { "itkSupportInputMeshTypesMemoryIOTest", "--memory-io", "0", "0", NULL };
 
-  itk::wasm::Pipeline pipeline("support-input-mesh-types-memory-io-test", "Test supporting multiple input mesh types in memory", 4, const_cast< char ** >(mockArgv));
+  itk::wasm::Pipeline pipeline("support-input-mesh-types-memory-io-test",
+                               "Test supporting multiple input mesh types in memory",
+                               4,
+                               const_cast<char **>(mockArgv));
 
-  return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
-   uint8_t,
-   float>
-  ::Dimensions<2U,3U>("input-mesh", pipeline);
+  return itk::wasm::SupportInputMeshTypes<PipelineFunctor, uint8_t, float>::Dimensions<2U, 3U>("input-mesh", pipeline);
 }

@@ -33,22 +33,22 @@
 #include "itkOutputImage.h"
 #include "itkOutputTextStream.h"
 
-typedef dcmqi::Helper helper;
+typedef dcmqi::Helper  helper;
 constexpr unsigned int Dimension = 3;
 using PixelType = short;
 using ScalarImageType = itk::Image<PixelType, Dimension>;
 
-int runPipeline(
-  const std::string & inputSEGFileName,
-  itk::wasm::OutputImage<ScalarImageType>& outputImage,
-  itk::wasm::OutputTextStream& outputMetaInfoJSON)
+int
+runPipeline(const std::string &                       inputSEGFileName,
+            itk::wasm::OutputImage<ScalarImageType> & outputImage,
+            itk::wasm::OutputTextStream &             outputMetaInfoJSON)
 {
 #if !defined(NDEBUG) || defined(_DEBUG)
   // Display DCMTK debug, warning, and error logs in the console
   dcmtk::log4cplus::BasicConfigurator::doConfigure();
 #endif
 
-  if(helper::isUndefinedOrPathDoesNotExist(inputSEGFileName, "Input DICOM file"))
+  if (helper::isUndefinedOrPathDoesNotExist(inputSEGFileName, "Input DICOM file"))
   {
     std::cerr << "ERROR: " << inputSEGFileName.c_str() << " is undefined or path does not exist." << std::endl;
     return EXIT_FAILURE;
@@ -59,13 +59,13 @@ int runPipeline(
   DcmFileFormat sliceFF;
   // std::cout << "Loading DICOM SEG file " << inputSEGFileName << std::endl;
   CHECK_COND(sliceFF.loadFile(inputSEGFileName.c_str()));
-  DcmDataset* dataset = sliceFF.getDataset();
+  DcmDataset * dataset = sliceFF.getDataset();
 
   try
   {
     dcmqi::Dicom2ItkConverter converter;
-    std::string metaInfo;
-    OFCondition result = converter.dcmSegmentation2itkimage(dataset, metaInfo, /*mergeSegments*/true);
+    std::string               metaInfo;
+    OFCondition               result = converter.dcmSegmentation2itkimage(dataset, metaInfo, /*mergeSegments*/ true);
     if (result.bad())
     {
       std::cerr << "ERROR: Failed to convert DICOM SEG to ITK image: " << result.text() << std::endl;
@@ -74,7 +74,7 @@ int runPipeline(
 
     // DCMQI doesn't provide an easy API to get the count, so we iterate over the outputs to count them.
     int outputImageCount = 0;
-    for (auto itkImage = converter.begin(); itkImage != nullptr; itkImage = converter.next()) 
+    for (auto itkImage = converter.begin(); itkImage != nullptr; itkImage = converter.next())
     {
       ++outputImageCount;
     }
@@ -95,15 +95,21 @@ int runPipeline(
   }
 }
 
-int main(int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("read-segmentation", "Read DICOM segmentation objects", argc, argv);
 
   std::string dicomFileName;
-  pipeline.add_option("dicom-file", dicomFileName, "Input DICOM file")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+  pipeline.add_option("dicom-file", dicomFileName, "Input DICOM file")
+    ->required()
+    ->check(CLI::ExistingFile)
+    ->type_name("INPUT_BINARY_FILE");
 
   itk::wasm::OutputImage<ScalarImageType> outputImage;
-  pipeline.add_option("seg-image", outputImage, "dicom segmentation object as an image")->required()->type_name("OUTPUT_IMAGE");
+  pipeline.add_option("seg-image", outputImage, "dicom segmentation object as an image")
+    ->required()
+    ->type_name("OUTPUT_IMAGE");
 
   itk::wasm::OutputTextStream outputMetaInfoJSON;
   pipeline.add_option("meta-info", outputMetaInfoJSON, "Output overlay information")->type_name("OUTPUT_JSON");
@@ -115,4 +121,3 @@ int main(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-  

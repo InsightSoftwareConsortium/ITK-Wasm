@@ -31,8 +31,7 @@ namespace itk
 {
 
 template <typename TPolyData>
-PolyDataToWasmPolyDataFilter<TPolyData>
-::PolyDataToWasmPolyDataFilter()
+PolyDataToWasmPolyDataFilter<TPolyData>::PolyDataToWasmPolyDataFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -43,24 +42,21 @@ PolyDataToWasmPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 ProcessObject::DataObjectPointer
-PolyDataToWasmPolyDataFilter<TPolyData>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+PolyDataToWasmPolyDataFilter<TPolyData>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return WasmPolyDataType::New().GetPointer();
 }
 
 template <typename TPolyData>
 ProcessObject::DataObjectPointer
-PolyDataToWasmPolyDataFilter<TPolyData>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+PolyDataToWasmPolyDataFilter<TPolyData>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return WasmPolyDataType::New().GetPointer();
 }
 
 template <typename TPolyData>
 auto
-PolyDataToWasmPolyDataFilter<TPolyData>
-::GetOutput() -> WasmPolyDataType *
+PolyDataToWasmPolyDataFilter<TPolyData>::GetOutput() -> WasmPolyDataType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<WasmPolyDataType *>(this->GetPrimaryOutput());
@@ -68,8 +64,7 @@ PolyDataToWasmPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 auto
-PolyDataToWasmPolyDataFilter<TPolyData>
-::GetOutput() const -> const WasmPolyDataType *
+PolyDataToWasmPolyDataFilter<TPolyData>::GetOutput() const -> const WasmPolyDataType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const WasmPolyDataType *>(this->GetPrimaryOutput());
@@ -77,8 +72,7 @@ PolyDataToWasmPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 auto
-PolyDataToWasmPolyDataFilter<TPolyData>
-::GetOutput(unsigned int idx) -> WasmPolyDataType *
+PolyDataToWasmPolyDataFilter<TPolyData>::GetOutput(unsigned int idx) -> WasmPolyDataType *
 {
   auto * out = dynamic_cast<WasmPolyDataType *>(this->ProcessObject::GetOutput(idx));
 
@@ -91,8 +85,7 @@ PolyDataToWasmPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 void
-PolyDataToWasmPolyDataFilter<TPolyData>
-::SetInput(const PolyDataType * input)
+PolyDataToWasmPolyDataFilter<TPolyData>::SetInput(const PolyDataType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<PolyDataType *>(input));
@@ -100,8 +93,7 @@ PolyDataToWasmPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 void
-PolyDataToWasmPolyDataFilter<TPolyData>
-::SetInput(unsigned int index, const PolyDataType * polyData)
+PolyDataToWasmPolyDataFilter<TPolyData>::SetInput(unsigned int index, const PolyDataType * polyData)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<PolyDataType *>(polyData));
@@ -109,35 +101,32 @@ PolyDataToWasmPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 const typename PolyDataToWasmPolyDataFilter<TPolyData>::PolyDataType *
-PolyDataToWasmPolyDataFilter<TPolyData>
-::GetInput()
+PolyDataToWasmPolyDataFilter<TPolyData>::GetInput()
 {
   return itkDynamicCastInDebugMode<const PolyDataType *>(this->GetPrimaryInput());
 }
 
 template <typename TPolyData>
 const typename PolyDataToWasmPolyDataFilter<TPolyData>::PolyDataType *
-PolyDataToWasmPolyDataFilter<TPolyData>
-::GetInput(unsigned int idx)
+PolyDataToWasmPolyDataFilter<TPolyData>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TPolyData *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TPolyData>
 void
-PolyDataToWasmPolyDataFilter<TPolyData>
-::GenerateData()
+PolyDataToWasmPolyDataFilter<TPolyData>::GenerateData()
 {
   // Get the input and output pointers
   const PolyDataType * polyData = this->GetInput();
-  WasmPolyDataType * wasmPolyData = this->GetOutput();
+  WasmPolyDataType *   wasmPolyData = this->GetOutput();
 
   wasmPolyData->SetPolyData(polyData);
 
   constexpr bool inMemory = true;
-  const auto polyDataJSON = polyDataToPolyDataJSON<PolyDataType>(polyData, inMemory);
-  std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true }>(polyDataJSON, serialized);
+  const auto     polyDataJSON = polyDataToPolyDataJSON<PolyDataType>(polyData, inMemory);
+  std::string    serialized{};
+  auto           ec = glz::write<glz::opts{ .prettify = true }>(polyDataJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize PolyDataJSON");
@@ -148,8 +137,7 @@ PolyDataToWasmPolyDataFilter<TPolyData>
 
 template <typename TPolyData>
 void
-PolyDataToWasmPolyDataFilter<TPolyData>
-::PrintSelf(std::ostream & os, Indent indent) const
+PolyDataToWasmPolyDataFilter<TPolyData>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

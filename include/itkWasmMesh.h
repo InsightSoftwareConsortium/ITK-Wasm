@@ -30,7 +30,8 @@ namespace itk
  *
  * JSON representation for an itk::Mesh for interfacing across programming languages and runtimes.
  *
- * Point, CellBuffer, PointData, and CellData binary array buffer's are stored as strings with memory addresses or paths on disks or a virtual filesystem.
+ * Point, CellBuffer, PointData, and CellData binary array buffer's are stored as strings with memory addresses or paths
+ *on disks or a virtual filesystem.
  *
  * - 0: Point buffer
  * - 1: Cell buffer
@@ -53,7 +54,7 @@ public:
 
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WasmMesh, WasmDataObject);
+  itkOverrideGetNameOfClassMacro(WasmMesh);
 
   using MeshType = TMesh;
 
@@ -61,13 +62,17 @@ public:
   using CellIdentifier = typename MeshType::CellIdentifier;
   using CellBufferType = typename MeshType::CellsVectorContainer;
 
-  void SetMesh(const MeshType * mesh);
+  void
+  SetMesh(const MeshType * mesh);
 
-  const MeshType * GetMesh() const {
-    return static_cast< const MeshType * >(this->GetDataObject());
+  const MeshType *
+  GetMesh() const
+  {
+    return static_cast<const MeshType *>(this->GetDataObject());
   }
 
-  const CellBufferType * GetCellBuffer() const {
+  const CellBufferType * GetCellBuffer() const
+  {
     return this->m_CellBuffer.GetPointer();
   }
 

@@ -19,20 +19,22 @@
 
 #ifdef __cplusplus
 
-#include <stdlib.h>
+#  include <stdlib.h>
 
-extern "C" {
-
-void * __cxa_allocate_exception(void *)
+extern "C"
 {
-  abort();
-}
 
-void __cxa_throw(void *, void *, void *)
-{
-  abort();
-}
+  void *
+  __cxa_allocate_exception(void *)
+  {
+    abort();
+  }
 
+  void
+  __cxa_throw(void *, void *, void *)
+  {
+    abort();
+  }
 }
 
 #endif // __cplusplus

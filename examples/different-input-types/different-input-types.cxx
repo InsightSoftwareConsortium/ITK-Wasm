@@ -26,7 +26,7 @@
 #include "itkLabelImageToLabelMapFilter.h"
 #include "itkLabelMapOverlayImageFilter.h"
 
-template<typename TImage, typename TLabelImage>
+template <typename TImage, typename TLabelImage>
 int
 OverlayLabelMap(itk::wasm::Pipeline & pipeline, const TImage * inputImage, const TLabelImage * labelImage)
 {
@@ -65,11 +65,12 @@ OverlayLabelMap(itk::wasm::Pipeline & pipeline, const TImage * inputImage, const
   return EXIT_SUCCESS;
 }
 
-template<typename TImage>
+template <typename TImage>
 class InputImagePipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using InputImageType = itk::wasm::InputImage<TImage>;
     InputImageType inputImage;
@@ -80,16 +81,17 @@ public:
     typename TImage::ConstPointer image = inputImage.Get();
     parsedImage = image;
     return itk::wasm::SupportInputImageTypes<LabelImagePipelineFunctor,
-      uint8_t>
-      ::template Dimensions<TImage::ImageDimension>("label-image", pipeline);
+                                             uint8_t>::template Dimensions<TImage::ImageDimension>("label-image",
+                                                                                                   pipeline);
   }
 
 private:
-  template<typename TLabelImage>
+  template <typename TLabelImage>
   class LabelImagePipelineFunctor
   {
   public:
-    int operator()(itk::wasm::Pipeline & pipeline)
+    int
+    operator()(itk::wasm::Pipeline & pipeline)
     {
       using LabelImageType = itk::wasm::InputImage<TLabelImage>;
       LabelImageType labelImage;
@@ -105,13 +107,15 @@ private:
   static inline const TImage * parsedImage;
 };
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
   // Create the pipeline for parsing arguments. Provide a description.
-  itk::wasm::Pipeline pipeline("different-input-types", "An itk-wasm pipeline example that demonstrates accepting different input types", argc, argv);
+  itk::wasm::Pipeline pipeline("different-input-types",
+                               "An itk-wasm pipeline example that demonstrates accepting different input types",
+                               argc,
+                               argv);
 
-  return itk::wasm::SupportInputImageTypes<InputImagePipelineFunctor,
-   uint8_t,
-   uint16_t>
-  ::Dimensions<2U>("input-image", pipeline);
+  return itk::wasm::SupportInputImageTypes<InputImagePipelineFunctor, uint8_t, uint16_t>::Dimensions<2U>("input-image",
+                                                                                                         pipeline);
 }

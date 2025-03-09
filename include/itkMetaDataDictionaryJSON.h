@@ -39,9 +39,11 @@ using MetadataEntryJSON = std::tuple<std::string, glz::json_t>;
 using MetadataJSON = std::vector<MetadataEntryJSON>;
 
 
-WebAssemblyInterface_EXPORT void metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSON & metadataJson);
+WebAssemblyInterface_EXPORT void
+metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSON & metadataJson);
 
-WebAssemblyInterface_EXPORT void jsonToMetaDataDictionary(const MetadataJSON & metadataJson, itk::MetaDataDictionary & dictionary);
+WebAssemblyInterface_EXPORT void
+jsonToMetaDataDictionary(const MetadataJSON & metadataJson, itk::MetaDataDictionary & dictionary);
 
 } // end namespace itk
 

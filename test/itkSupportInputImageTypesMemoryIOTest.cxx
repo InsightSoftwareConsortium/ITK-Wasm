@@ -21,11 +21,12 @@
 #include "itkSupportInputImageTypes.h"
 #include "itkImageToWasmImageFilter.h"
 
-template<typename TImage>
+template <typename TImage>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using ImageType = TImage;
 
@@ -54,29 +55,30 @@ itkSupportInputImageTypesMemoryIOTest(int argc, char * argv[])
   using ImageType = itk::Image<PixelType, Dimension>;
 
   const char * inputImageFile = argv[1];
-  auto readInputImage = itk::ReadImage<ImageType>(inputImageFile);
+  auto         readInputImage = itk::ReadImage<ImageType>(inputImageFile);
   using ImageToWasmImageFilterType = itk::ImageToWasmImageFilter<ImageType>;
   auto imageToWasmImageFilter = ImageToWasmImageFilterType::New();
   imageToWasmImageFilter->SetInput(readInputImage);
   imageToWasmImageFilter->Update();
   auto readWasmImage = imageToWasmImageFilter->GetOutput();
 
-  auto readWasmImageData = reinterpret_cast< const void * >(readWasmImage->GetImage()->GetBufferPointer());
-  const auto readWasmImageDataSize = readWasmImage->GetImage()->GetPixelContainer()->Size();
+  auto         readWasmImageData = reinterpret_cast<const void *>(readWasmImage->GetImage()->GetBufferPointer());
+  const auto   readWasmImageDataSize = readWasmImage->GetImage()->GetPixelContainer()->Size();
   const size_t readWasmImageDataPointerAddress = itk_wasm_input_array_alloc(0, 0, 0, readWasmImageDataSize);
-  auto readWasmImageDataPointer = reinterpret_cast< void * >(readWasmImageDataPointerAddress);
+  auto         readWasmImageDataPointer = reinterpret_cast<void *>(readWasmImageDataPointerAddress);
   std::memcpy(readWasmImageDataPointer, readWasmImageData, readWasmImageDataSize);
 
-  auto readImageJSON = readWasmImage->GetJSON();
-  void * readWasmImagePointer = reinterpret_cast< void * >( itk_wasm_input_json_alloc(0, 0, readImageJSON.size()));
+  auto   readImageJSON = readWasmImage->GetJSON();
+  void * readWasmImagePointer = reinterpret_cast<void *>(itk_wasm_input_json_alloc(0, 0, readImageJSON.size()));
   std::memcpy(readWasmImagePointer, readImageJSON.data(), readImageJSON.size());
 
-  const char * mockArgv[] = {"itkSupportInputImageTypesMemoryIOTest", "--memory-io", "0", "0", NULL};
+  const char * mockArgv[] = { "itkSupportInputImageTypesMemoryIOTest", "--memory-io", "0", "0", NULL };
 
-  itk::wasm::Pipeline pipeline("support-input-image-type-memory-io-test", "Test supporting multiple input image types in memory", 4, const_cast< char ** >(mockArgv));
+  itk::wasm::Pipeline pipeline("support-input-image-type-memory-io-test",
+                               "Test supporting multiple input image types in memory",
+                               4,
+                               const_cast<char **>(mockArgv));
 
-  return itk::wasm::SupportInputImageTypes<PipelineFunctor,
-   uint8_t,
-   float>
-  ::Dimensions<2U,3U>("input-image", pipeline);
+  return itk::wasm::SupportInputImageTypes<PipelineFunctor, uint8_t, float>::Dimensions<2U, 3U>("input-image",
+                                                                                                pipeline);
 }

@@ -22,19 +22,18 @@
 
 namespace itk
 {
-  enum class JSONFloatTypesEnum
-  {
-    float32,
-    float64,
-  };
+enum class JSONFloatTypesEnum
+{
+  float32,
+  float64,
+};
 } // end namespace itk
 
 template <>
-struct glz::meta<itk::JSONFloatTypesEnum> {
+struct glz::meta<itk::JSONFloatTypesEnum>
+{
   using enum itk::JSONFloatTypesEnum;
-  static constexpr auto value = glz::enumerate(float32,
-  float64
-  );
+  static constexpr auto value = glz::enumerate(float32, float64);
 };
 
 #endif // itkFloatTypesJSON_h

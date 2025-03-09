@@ -21,72 +21,72 @@ namespace itk
 {
 
 IOPixelEnum
-IOPixelEnumFromWasmPixelType( const std::string & wasmPixelType )
+IOPixelEnumFromWasmPixelType(const std::string & wasmPixelType)
 {
-  if ( wasmPixelType == "Unknown" )
-    {
+  if (wasmPixelType == "Unknown")
+  {
     return IOPixelEnum::UNKNOWNPIXELTYPE;
-    }
-  else if ( wasmPixelType == "Scalar" )
-    {
+  }
+  else if (wasmPixelType == "Scalar")
+  {
     return IOPixelEnum::SCALAR;
-    }
-  else if ( wasmPixelType == "RGB" )
-    {
+  }
+  else if (wasmPixelType == "RGB")
+  {
     return IOPixelEnum::RGB;
-    }
-  else if ( wasmPixelType == "RGBA" )
-    {
+  }
+  else if (wasmPixelType == "RGBA")
+  {
     return IOPixelEnum::RGBA;
-    }
-  else if ( wasmPixelType == "Offset" )
-    {
+  }
+  else if (wasmPixelType == "Offset")
+  {
     return IOPixelEnum::OFFSET;
-    }
-  else if ( wasmPixelType == "Vector" )
-    {
+  }
+  else if (wasmPixelType == "Vector")
+  {
     return IOPixelEnum::VECTOR;
-    }
-  else if ( wasmPixelType == "Point" )
-    {
+  }
+  else if (wasmPixelType == "Point")
+  {
     return IOPixelEnum::POINT;
-    }
-  else if ( wasmPixelType == "CovariantVector" )
-    {
+  }
+  else if (wasmPixelType == "CovariantVector")
+  {
     return IOPixelEnum::COVARIANTVECTOR;
-    }
-  else if ( wasmPixelType == "SymmetricSecondRankTensor" )
-    {
+  }
+  else if (wasmPixelType == "SymmetricSecondRankTensor")
+  {
     return IOPixelEnum::SYMMETRICSECONDRANKTENSOR;
-    }
-  else if ( wasmPixelType == "DiffusionTensor3D" )
-    {
+  }
+  else if (wasmPixelType == "DiffusionTensor3D")
+  {
     return IOPixelEnum::DIFFUSIONTENSOR3D;
-    }
-  else if ( wasmPixelType == "Complex" )
-    {
+  }
+  else if (wasmPixelType == "Complex")
+  {
     return IOPixelEnum::COMPLEX;
-    }
-  else if ( wasmPixelType == "FixedArray" )
-    {
+  }
+  else if (wasmPixelType == "FixedArray")
+  {
     return IOPixelEnum::FIXEDARRAY;
-    }
-  else if ( wasmPixelType == "Array" )
-    {
+  }
+  else if (wasmPixelType == "Array")
+  {
     return IOPixelEnum::ARRAY;
-    }
-  else if ( wasmPixelType == "Matrix" )
-    {
+  }
+  else if (wasmPixelType == "Matrix")
+  {
     return IOPixelEnum::MATRIX;
-    }
-  else if ( wasmPixelType == "VariableLengthVector" )
-    {
+  }
+  else if (wasmPixelType == "VariableLengthVector")
+  {
     return IOPixelEnum::VARIABLELENGTHVECTOR;
-    }
-  else if ( wasmPixelType == "VariableSizeMatrix" )
-    {
+  }
+  else if (wasmPixelType == "VariableSizeMatrix")
+  {
     return IOPixelEnum::VARIABLESIZEMATRIX;
-    }
+  }
 
   return IOPixelEnum::UNKNOWNPIXELTYPE;
 }

@@ -24,7 +24,7 @@
 #include "itkWasmIOCommon.h"
 
 #ifndef ITK_WASM_NO_MEMORY_IO
-#include "itkWasmExports.h"
+#  include "itkWasmExports.h"
 #endif
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
 #endif
@@ -47,22 +47,28 @@ namespace wasm
 class InputMeshIO
 {
 public:
-  void Set(const WasmMeshIOBase * meshIO) {
+  void
+  Set(const WasmMeshIOBase * meshIO)
+  {
     this->m_WasmMeshIOBase = meshIO;
   }
 
-  const WasmMeshIOBase * Get() const {
+  const WasmMeshIOBase *
+  Get() const
+  {
     return this->m_WasmMeshIOBase.GetPointer();
   }
 
   InputMeshIO() = default;
   ~InputMeshIO() = default;
+
 protected:
   typename WasmMeshIOBase::ConstPointer m_WasmMeshIOBase;
 };
 
 
-bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
+bool
+lexical_cast(const std::string & input, InputMeshIO & inputMeshIO)
 {
   if (input.empty())
   {
@@ -73,8 +79,8 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
   {
 #ifndef ITK_WASM_NO_MEMORY_IO
     const unsigned int index = std::stoi(input);
-    auto json = getMemoryStoreInputJSON(0, index);
-    auto        deserializedAttempt = glz::read_json<itk::MeshJSON>(json);
+    auto               json = getMemoryStoreInputJSON(0, index);
+    auto               deserializedAttempt = glz::read_json<itk::MeshJSON>(json);
     if (!deserializedAttempt)
     {
       const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
@@ -90,36 +96,37 @@ bool lexical_cast(const std::string &input, InputMeshIO &inputMeshIO)
     auto wasmMeshIOBase = itk::WasmMeshIOBase::New();
 
     const std::string & pointsString = meshJSON.points;
-    const char * pointsPtr = reinterpret_cast< char * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+    const char * pointsPtr = reinterpret_cast<char *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
     WasmMeshIOBase::DataContainerType * pointsContainer = wasmMeshIOBase->GetPointsContainer();
-    SizeValueType numberOfBytes = wasmMeshIO->GetNumberOfPoints() * wasmMeshIO->GetPointDimension() * ITKComponentSize( wasmMeshIO->GetPointComponentType() );
+    SizeValueType numberOfBytes = wasmMeshIO->GetNumberOfPoints() * wasmMeshIO->GetPointDimension() *
+                                  ITKComponentSize(wasmMeshIO->GetPointComponentType());
     pointsContainer->resize(numberOfBytes);
     pointsContainer->assign(pointsPtr, pointsPtr + numberOfBytes);
 
     const std::string & cellsString = meshJSON.cells;
-    const char * cellsPtr = reinterpret_cast< char * >( std::strtoull(cellsString.substr(35).c_str(), nullptr, 10) );
+    const char *        cellsPtr = reinterpret_cast<char *>(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10));
     WasmMeshIOBase::DataContainerType * cellsContainer = wasmMeshIOBase->GetCellsContainer();
-    numberOfBytes = static_cast< SizeValueType >( wasmMeshIO->GetCellBufferSize() * ITKComponentSize( wasmMeshIO->GetCellComponentType() ));
+    numberOfBytes = static_cast<SizeValueType>(wasmMeshIO->GetCellBufferSize() *
+                                               ITKComponentSize(wasmMeshIO->GetCellComponentType()));
     cellsContainer->resize(numberOfBytes);
     cellsContainer->assign(cellsPtr, cellsPtr + numberOfBytes);
 
     const std::string & pointDataString = meshJSON.pointData;
-    const char * pointDataPtr = reinterpret_cast< char * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
+    const char *        pointDataPtr =
+      reinterpret_cast<char *>(std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10));
     WasmMeshIOBase::DataContainerType * pointDataContainer = wasmMeshIOBase->GetPointDataContainer();
     numberOfBytes =
-      static_cast< SizeValueType >(
-          wasmMeshIO->GetNumberOfPointPixels() * wasmMeshIO->GetNumberOfPointPixelComponents() * ITKComponentSize( wasmMeshIO->GetPointPixelComponentType() )
-          );
+      static_cast<SizeValueType>(wasmMeshIO->GetNumberOfPointPixels() * wasmMeshIO->GetNumberOfPointPixelComponents() *
+                                 ITKComponentSize(wasmMeshIO->GetPointPixelComponentType()));
     pointDataContainer->resize(numberOfBytes);
     pointDataContainer->assign(pointDataPtr, pointDataPtr + numberOfBytes);
 
     const std::string & cellDataString = meshJSON.cellData;
-    const char * cellDataPtr = reinterpret_cast< char * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
+    const char * cellDataPtr = reinterpret_cast<char *>(std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10));
     WasmMeshIOBase::DataContainerType * cellDataContainer = wasmMeshIOBase->GetCellDataContainer();
     numberOfBytes =
-      static_cast< SizeValueType >(
-          wasmMeshIO->GetNumberOfPointPixels() * wasmMeshIO->GetNumberOfPointPixelComponents() * ITKComponentSize( wasmMeshIO->GetPointPixelComponentType() )
-          );
+      static_cast<SizeValueType>(wasmMeshIO->GetNumberOfPointPixels() * wasmMeshIO->GetNumberOfPointPixelComponents() *
+                                 ITKComponentSize(wasmMeshIO->GetPointPixelComponentType()));
     cellDataContainer->resize(numberOfBytes);
     cellDataContainer->assign(cellDataPtr, cellDataPtr + numberOfBytes);
 

@@ -22,22 +22,22 @@
 #include "itkOutputTextStream.h"
 
 #ifndef MESH_IO_CLASS
-#error "MESH_IO_CLASS definition must be provided"
+#  error "MESH_IO_CLASS definition must be provided"
 #endif
 
 #if MESH_IO_CLASS == 0
-#include "itkVTKPolyDataMeshIO.h"
+#  include "itkVTKPolyDataMeshIO.h"
 #elif MESH_IO_CLASS == 1
-#include "itkOBJMeshIO.h"
+#  include "itkOBJMeshIO.h"
 #elif MESH_IO_CLASS == 2
-#include "itkOFFMeshIO.h"
+#  include "itkOFFMeshIO.h"
 #elif MESH_IO_CLASS == 3
 #elif MESH_IO_CLASS == 4
-#include "itkWasmZstdMeshIO.h"
+#  include "itkWasmZstdMeshIO.h"
 #elif MESH_IO_CLASS == 5
-#include "itkMZ3MeshIO.h"
+#  include "itkMZ3MeshIO.h"
 #else
-#error "Unsupported MESH_IO_CLASS"
+#  error "Unsupported MESH_IO_CLASS"
 #endif
 #include "itkWasmMeshIO.h"
 
@@ -47,7 +47,11 @@
 #include "itkPipeline.h"
 
 template <typename TMeshIO>
-int readPointSet(const std::string & inputFileName, itk::wasm::OutputTextStream & couldRead, itk::wasm::OutputPointSetIO & pointSetIO, bool informationOnly)
+int
+readPointSet(const std::string &           inputFileName,
+             itk::wasm::OutputTextStream & couldRead,
+             itk::wasm::OutputPointSetIO & pointSetIO,
+             bool                          informationOnly)
 {
   using MeshIOType = TMeshIO;
 
@@ -71,22 +75,32 @@ int readPointSet(const std::string & inputFileName, itk::wasm::OutputTextStream 
   return EXIT_SUCCESS;
 }
 
-int main (int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  const char * pipelineName = TO_LITERAL(POINT_SET_IO_KEBAB_NAME) "-read-point-set";
-  itk::wasm::Pipeline pipeline(pipelineName, "Read a point set file format and convert it to the itk-wasm file format", argc, argv);
+  const char *        pipelineName = TO_LITERAL(POINT_SET_IO_KEBAB_NAME) "-read-point-set";
+  itk::wasm::Pipeline pipeline(
+    pipelineName, "Read a point set file format and convert it to the itk-wasm file format", argc, argv);
 
   std::string inputFileName;
-  pipeline.add_option("serialized-point-set", inputFileName, "Input point set serialized in the file format")->required()->check(CLI::ExistingFile)->type_name("INPUT_BINARY_FILE");
+  pipeline.add_option("serialized-point-set", inputFileName, "Input point set serialized in the file format")
+    ->required()
+    ->check(CLI::ExistingFile)
+    ->type_name("INPUT_BINARY_FILE");
 
   itk::wasm::OutputTextStream couldRead;
-  pipeline.add_option("could-read", couldRead, "Whether the input could be read. If false, the output point set is not valid.")->required()->type_name("OUTPUT_JSON");
+  pipeline
+    .add_option(
+      "could-read", couldRead, "Whether the input could be read. If false, the output point set is not valid.")
+    ->required()
+    ->type_name("OUTPUT_JSON");
 
   itk::wasm::OutputPointSetIO pointSetIO;
   pipeline.add_option("point-set", pointSetIO, "Output point set")->required()->type_name("OUTPUT_POINT_SET");
 
   bool informationOnly = false;
-  pipeline.add_flag("-i,--information-only", informationOnly, "Only read point set metadata -- do not read pixel data.");
+  pipeline.add_flag(
+    "-i,--information-only", informationOnly, "Only read point set metadata -- do not read pixel data.");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -103,7 +117,7 @@ int main (int argc, char * argv[])
 #elif MESH_IO_CLASS == 5
   return readPointSet<itk::MZ3MeshIO>(inputFileName, couldRead, pointSetIO, informationOnly);
 #else
-#error "Unsupported MESH_IO_CLASS"
+#  error "Unsupported MESH_IO_CLASS"
 #endif
   return EXIT_SUCCESS;
 }

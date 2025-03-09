@@ -31,7 +31,8 @@ namespace itk
 {
 
 WebAssemblyInterface_EXPORT IOComponentEnum
-ioComponentEnumFromJSON(const std::variant<JSONIntTypesEnum, JSONFloatTypesEnum, JSONComponentTypesEnum> & jsonComponentType);
+ioComponentEnumFromJSON(
+  const std::variant<JSONIntTypesEnum, JSONFloatTypesEnum, JSONComponentTypesEnum> & jsonComponentType);
 
 } // end namespace itk
 #endif

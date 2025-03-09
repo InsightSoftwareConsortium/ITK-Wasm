@@ -26,8 +26,7 @@ namespace itk
 
 template <typename TTransform>
 void
-WasmTransform<TTransform>
-::SetTransform(const TransformType * transform)
+WasmTransform<TTransform>::SetTransform(const TransformType * transform)
 {
   using DecoratorType = DataObjectDecorator<TransformType>;
   typename DecoratorType::Pointer decorator = DecoratorType::New();

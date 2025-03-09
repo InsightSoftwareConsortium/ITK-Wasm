@@ -26,8 +26,7 @@ namespace itk
 {
 
 template <typename TMesh>
-MeshToWasmMeshFilter<TMesh>
-::MeshToWasmMeshFilter()
+MeshToWasmMeshFilter<TMesh>::MeshToWasmMeshFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -38,24 +37,21 @@ MeshToWasmMeshFilter<TMesh>
 
 template <typename TMesh>
 ProcessObject::DataObjectPointer
-MeshToWasmMeshFilter<TMesh>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+MeshToWasmMeshFilter<TMesh>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return WasmMeshType::New().GetPointer();
 }
 
 template <typename TMesh>
 ProcessObject::DataObjectPointer
-MeshToWasmMeshFilter<TMesh>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+MeshToWasmMeshFilter<TMesh>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return WasmMeshType::New().GetPointer();
 }
 
 template <typename TMesh>
 auto
-MeshToWasmMeshFilter<TMesh>
-::GetOutput() -> WasmMeshType *
+MeshToWasmMeshFilter<TMesh>::GetOutput() -> WasmMeshType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<WasmMeshType *>(this->GetPrimaryOutput());
@@ -63,8 +59,7 @@ MeshToWasmMeshFilter<TMesh>
 
 template <typename TMesh>
 auto
-MeshToWasmMeshFilter<TMesh>
-::GetOutput() const -> const WasmMeshType *
+MeshToWasmMeshFilter<TMesh>::GetOutput() const -> const WasmMeshType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const WasmMeshType *>(this->GetPrimaryOutput());
@@ -72,8 +67,7 @@ MeshToWasmMeshFilter<TMesh>
 
 template <typename TMesh>
 auto
-MeshToWasmMeshFilter<TMesh>
-::GetOutput(unsigned int idx) -> WasmMeshType *
+MeshToWasmMeshFilter<TMesh>::GetOutput(unsigned int idx) -> WasmMeshType *
 {
   auto * out = dynamic_cast<WasmMeshType *>(this->ProcessObject::GetOutput(idx));
 
@@ -86,8 +80,7 @@ MeshToWasmMeshFilter<TMesh>
 
 template <typename TMesh>
 void
-MeshToWasmMeshFilter<TMesh>
-::SetInput(const MeshType * input)
+MeshToWasmMeshFilter<TMesh>::SetInput(const MeshType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<MeshType *>(input));
@@ -95,8 +88,7 @@ MeshToWasmMeshFilter<TMesh>
 
 template <typename TMesh>
 void
-MeshToWasmMeshFilter<TMesh>
-::SetInput(unsigned int index, const MeshType * mesh)
+MeshToWasmMeshFilter<TMesh>::SetInput(unsigned int index, const MeshType * mesh)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<MeshType *>(mesh));
@@ -104,34 +96,31 @@ MeshToWasmMeshFilter<TMesh>
 
 template <typename TMesh>
 const typename MeshToWasmMeshFilter<TMesh>::MeshType *
-MeshToWasmMeshFilter<TMesh>
-::GetInput()
+MeshToWasmMeshFilter<TMesh>::GetInput()
 {
   return itkDynamicCastInDebugMode<const MeshType *>(this->GetPrimaryInput());
 }
 
 template <typename TMesh>
 const typename MeshToWasmMeshFilter<TMesh>::MeshType *
-MeshToWasmMeshFilter<TMesh>
-::GetInput(unsigned int idx)
+MeshToWasmMeshFilter<TMesh>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const TMesh *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TMesh>
 void
-MeshToWasmMeshFilter<TMesh>
-::GenerateData()
+MeshToWasmMeshFilter<TMesh>::GenerateData()
 {
   // Get the input and output pointers
   const MeshType * mesh = this->GetInput();
-  WasmMeshType * wasmMesh = this->GetOutput();
+  WasmMeshType *   wasmMesh = this->GetOutput();
 
   wasmMesh->SetMesh(mesh);
   constexpr bool inMemory = true;
-  const auto meshJSON = meshToMeshJSON<MeshType>(mesh, wasmMesh, inMemory);
-  std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
+  const auto     meshJSON = meshToMeshJSON<MeshType>(mesh, wasmMesh, inMemory);
+  std::string    serialized{};
+  auto           ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize MeshJSON");
@@ -142,8 +131,7 @@ MeshToWasmMeshFilter<TMesh>
 
 template <typename TMesh>
 void
-MeshToWasmMeshFilter<TMesh>
-::PrintSelf(std::ostream & os, Indent indent) const
+MeshToWasmMeshFilter<TMesh>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
