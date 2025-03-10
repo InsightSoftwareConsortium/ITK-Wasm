@@ -53,6 +53,8 @@ class PolyData:
     numberOfCellPixels: int = 0
     cellData: Optional[ArrayLike] = None
 
+    metadata: Dict = field(default_factory=dict)
+
     def __post_init__(self):
         if isinstance(self.polyDataType, dict):
             self.polyDataType = PolyDataType(**self.polyDataType)
