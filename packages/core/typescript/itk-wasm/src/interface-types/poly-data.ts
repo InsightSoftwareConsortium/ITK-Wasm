@@ -1,5 +1,6 @@
 import PolyDataType from './poly-data-type.js'
 import TypedArray from '../typed-array.js'
+import Metadata from './metadata.js'
 
 class PolyData {
   name: string = 'PolyData'
@@ -25,7 +26,9 @@ class PolyData {
   numberOfCellPixels: number
   cellData: null | TypedArray
 
-  constructor (public readonly polyDataType = new PolyDataType()) {
+  metadata: Metadata
+
+  constructor(public readonly polyDataType = new PolyDataType()) {
     this.polyDataType = polyDataType
 
     this.name = 'PolyData'
@@ -50,6 +53,8 @@ class PolyData {
 
     this.numberOfCellPixels = 0
     this.cellData = null
+
+    this.metadata = new Map()
   }
 }
 
