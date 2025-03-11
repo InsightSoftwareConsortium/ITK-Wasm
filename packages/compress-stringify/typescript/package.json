@@ -45,7 +45,6 @@
   "devDependencies": {
     "@itk-wasm/compare-images": "workspace:*",
     "@itk-wasm/compare-meshes": "workspace:*",
-    "@itk-wasm/compress-stringify-build": "workspace:*",
     "@itk-wasm/image-io": "workspace:*",
     "@itk-wasm/mesh-io": "workspace:*",
     "@itk-wasm/mesh-to-poly-data": "^1.1.0",

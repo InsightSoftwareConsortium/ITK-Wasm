@@ -299,9 +299,6 @@ importers:
       '@itk-wasm/compare-meshes':
         specifier: workspace:*
         version: link:../../compare-meshes/typescript
-      '@itk-wasm/compress-stringify-build':
-        specifier: workspace:*
-        version: link:..
       '@itk-wasm/demo-app':
         specifier: workspace:*
         version: link:../../core/typescript/demo-app
