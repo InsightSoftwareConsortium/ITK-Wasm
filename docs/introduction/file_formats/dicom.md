@@ -40,5 +40,4 @@ There also certain SOP classes that store non-image related medical information.
 - Encapsulated PDF Storage
 - Grayscale Softcopy Presentation State Storage SOP Class (GSPS)
 - Color Softcopy Presentation State Storage SOP Class (CSPS)
-
-
+- Radiotherapy Structure Set Storage (RT Struct)
