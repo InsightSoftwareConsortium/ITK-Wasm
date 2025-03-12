@@ -15,6 +15,10 @@ ImageType.md
 Mesh.md
 MeshType.md
 PolyData.md
+TransformList.md
+Transform.md
+TransformType.md
+TransformParameterizations.md
 JsonCompatible.md
 ```
 

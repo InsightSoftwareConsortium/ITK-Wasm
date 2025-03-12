@@ -28,7 +28,7 @@ class PolyData {
 
   metadata: Metadata
 
-  constructor(public readonly polyDataType = new PolyDataType()) {
+  constructor (public readonly polyDataType = new PolyDataType()) {
     this.polyDataType = polyDataType
 
     this.name = 'PolyData'

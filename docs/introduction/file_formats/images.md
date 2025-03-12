@@ -1,6 +1,6 @@
 # Supported Image File Formats
 
-Read and write to and from [`Image`](/typescript/interface_types/Image.html) is supported. For visualization with [vtk.js](https://kitware.github.io/vtk-js/index.html), use [`convertItkToVtkImage`](https://kitware.github.io/vtk-js/api/Common_DataModel_ITKHelper.html).
+Read and write to and from an [`Image`](../../typescript/interface_types/Image).
 
 - [AIM,ISQ](https://www.scanco.ch/en/support/customer-login/faq-customers/faq-customers-import-export.html)
 - [BioRad](https://www.bio-rad.com/)
@@ -19,5 +19,3 @@ Read and write to and from [`Image`](/typescript/interface_types/Image.html) is 
 - [NRRD](http://teem.sourceforge.net/nrrd/format.html)
 - [VTK legacy file format for images](https://www.vtk.org/VTK/img/file-formats.pdf)
 - [Varian FDF](https://github.com/InsightSoftwareConsortium/ITKIOFDF)
-
-For visualization with [vtk.js](https://kitware.github.io/vtk-js/index.html), use [`vtkITKHelper.convertItkToVtkImage`](https://kitware.github.io/vtk-js/api/Common_DataModel_ITKHelper.html) ([example](https://kitware.github.io/vtk-js/examples/ItkWasmVolume.html)).
