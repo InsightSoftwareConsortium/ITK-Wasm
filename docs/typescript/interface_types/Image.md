@@ -1,6 +1,6 @@
 # Image
 
-An `Image` is the N-dimensional image data structure for *itk-wasm*.
+An `Image` is the N-dimensional image data structure for *ITK-Wasm*.
 
 `Image` is a JavaScript object with the following properties:
 
@@ -20,5 +20,3 @@ Note that the `origin`, `spacing`, `direction`, and `size` are indexed with an `
 ```
 const tensor = tf.tensor(image.data, image.size.reverse())
 ```
-
-To visualize an `Image` with [vtk.js](https://kitware.github.io/vtk-js) use `convertItkToVtkImage` from [`vtk.js/Sources/Common/DataModel/ITKHelper`](https://kitware.github.io/vtk-js/api/Common_DataModel_ITKHelper.html).
