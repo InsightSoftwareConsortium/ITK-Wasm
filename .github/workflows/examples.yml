@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -56,7 +56,7 @@ jobs:
         working-directory: ./examples/hello-world
 
     steps:
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -104,7 +104,7 @@ jobs:
         working-directory: ./examples/hello-world
 
     steps:
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4
 
     - name: Load wasm builds
       uses: actions/download-artifact@v4
@@ -128,7 +128,7 @@ jobs:
         working-directory: ./examples/hello-pipeline
 
     steps:
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -163,7 +163,7 @@ jobs:
         working-directory: ./examples/inputs-outputs
 
     steps:
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -215,7 +215,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -242,7 +242,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -272,7 +272,7 @@ jobs:
         working-directory: ./examples/debugging
 
     steps:
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -318,7 +318,7 @@ jobs:
         working-directory: ./examples/different-input-types
 
     steps:
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -354,7 +354,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4.2.2
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main

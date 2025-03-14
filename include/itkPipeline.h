@@ -130,13 +130,13 @@ using CLI::Config;
 /**
  * @brief Create a glaze arrat_t value from an STL style container.
  *
- * @tparam Iteratorable Any container type that supports STL style iterator.
+ * @tparam TIteratorable Any container type that supports STL style iterator.
  * @param container Container object.
  * @return glz::json_t::array_t with the values from the input container.
  */
-template <typename Iteratorable>
+template <typename TIteratorable>
 glz::json_t::array_t
-getArrayJson(Iteratorable container)
+getArrayJson(TIteratorable container)
 {
   glz::json_t::array_t value(container.begin(), container.end());
   return value;
