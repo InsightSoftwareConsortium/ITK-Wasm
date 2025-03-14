@@ -10,3 +10,5 @@ jobs:
     - uses: actions/checkout@v4
 
     - uses: InsightSoftwareConsortium/ITKClangFormatLinterAction@master
+      with:
+        itk-branch: master
