@@ -2,21 +2,76 @@
 
 ITK-Wasm's goal is **to work harmoniously with WebAssembly (wasm) community standards to make the new stack for scientific computing a reality**.
 
-ITK-Wasm adds the glue that enables *simple, performant, easy-to-reason about, composable, interoperable, and universally deployable* wasm modules to be created by your average [research software engineer](https://ukrse.github.io/who.html). This includes the ability to operate performantly on scientific datasets, with an emphasis on multi-dimensional spatial data.
+ITK-Wasm adds the glue that enables _simple, performant, easy-to-reason about, composable, interoperable, and universally deployable_ wasm modules to be created by your average [research software engineer](https://ukrse.github.io/who.html). This includes the ability to operate performantly on scientific datasets, with an emphasis on multi-dimensional spatial data.
 
-Towards that end, ITK-Wasm provides powerful, joyful tooling for scientific computation in wasm through a number of distinct but related parts.
+Towards that end, ITK-Wasm provides **powerful, joyful** tooling for *scientific computation* in wasm through a number of distinct but related parts.
 
-1. C++ core tooling
-2. Build environment Docker images
-3. A Node.js CLI to build wasm, generate language bindings, etc.
-4. Small, language-specific libraries that facilicate idiomatic integration
-5. Example packages built with ITK-Wasm
-6. File format support
+1. Example packages built with ITK-Wasm
+2. File format support
+3. TypeScript / JavaScript core tooling
+4. Python core tooling
+5. C++ core tooling
+
+Support for additional languages is planned, and the architecture is easily extensible to support new languages. There interest in [Java](https://github.com/InsightSoftwareConsortium/ITK-Wasm/pull/855) and Rust in particular -- if you are interested in contributing code or funding to this effort, [please reach out](https://github.com/thewtex).
 
 This section provides a high level overview of these constituent parts.
 
+(packages)=
+## Example packages
+
+While most ITK-Wasm packages are not developed in the `InsightSoftwareConsortium/ITK-Wasm` repository -- a package built with ITK-Wasm can be developed by anyone and maintained in any repository -- there are a number of packages developed in the `ITK-Wasm` repository. These packages
+
+- provide common functionality for other packages, such as testing and IO functionality
+- demonstrate capabilities
+- and continuously exercise and test the base functionality
+
+To create your own ITK-Wasm package, an [interactive command line setup tool](https://www.npmjs.com/package/create-itk-wasm) is available.
+
+Descriptions of these packages can be found in the [package listing page](./packages.md).
+
+(file-format)=
+## File format support
+
+Assistance for handling data serialized in file formats plays a crucial role in enabling comprehensive analysis using a variety of software tools.
+
+ITK-Wasm offers IO modules designed to interact with various standard scientific image, mesh, and spatial transformation file formats. These modules allow for the loading of data into language-native interface types through bindings like TypeScript and Python.
+
+In addition to supporting external file formats, ITK-Wasm also introduces its own file formats. These ITK-Wasm file formats are optimized and offer a direct correspondence to spatial interface types, utilizing a straightforward JSON + binary array buffer format.
+
+More information can be found in the [File Format Section](./file_formats/index.md).
+
+(typescript-core)=
+## 🌐 TypeScript / JavaScript core
+
+In TypeScript / JavaScript, the NPM [`itk-wasm`](https://www.npmjs.com/search?q=itk-wasm) package provides:
+
+1. Support for Node.js and browser environments
+2. A Command Line Interface (CLI)
+3. A Web Worker pool for parallel processing
+
+The `itk-wasm` *command line interface (CLI)* drives
+
+1. Builds
+2. Generation of language bindings and language package configuration
+3. Testing for wasm binaries
+
+To create your own ITK-Wasm package, an [interactive command line setup tool](https://www.npmjs.com/package/create-itk-wasm) is also available.
+
+(python-core)=
+## 🐍 Python core
+
+A small, Pythonic library, [itkwasm](https://pypi.org/project/itkwasm/), is used by generated bindings to provide simple, clean, performant, and idiomatic interfaces in Python.
+
+The `itkwasm` Python package provides:
+
+1. A simple, Pythonic interface
+2. A bridge to NumPy and ITK
+3. A plugin system for accelerator packages
+
+Both system execution and browser execution are supported, with the latter enabled by [Pyodide](https://pyodide.org).
+
 (cxx-core)=
-## C++ core
+## 🧑‍💻 C++ core
 
 ITK-Wasm's C++ core tooling provides:
 
@@ -29,7 +84,7 @@ These are embodied in the C++ core with:
 
 1. [ITK]
 2. [CLI11]
-3. [RapidJSON]
+3. [glaze]
 4. [libcbor]
 
 The Insight Toolkit ([ITK]) is an open-source, cross-platform library that provides developers with an extensive suite of software tools based on a proven, spatially-oriented architecture for processing scientific data in two, three, or more dimensions.
@@ -39,12 +94,12 @@ The *itk-wasm* GitHub repository is also an [ITK Remote Module](https://github.c
 
 Wasm module C++ processing pipelines are written with [CLI11]'s simple and intuitive interface.
 
-[RapidJSON] provides [JSON](https://json.org)-related functionality since it is not only [extremely fast](https://github.com/miloyip/nativejson-benchmark?tab=readme-ov-file#parsing-time) but also [extremely small](https://github.com/miloyip/nativejson-benchmark?tab=readme-ov-file#code-size), which is critical for WebAssembly.
+[glaze] provides elegant, modern C++ interfaces via compile-time reflection for [JSON](https://json.org)-related functionality that is not only [extremely fast](https://github.com/stephenberry/glaze?tab=readme-ov-file#performance) but also extremely small, which is critical for WebAssembly.
 
 The ability to read and write to files, providing a bridge to [Web3] and traditional desktop computing, is built on [libcbor], which is another tiny footprint library.
 
 (docker)=
-## Build environment Docker images
+### Build environment Docker images
 
 Build environment Docker images encapsulate
 
@@ -56,54 +111,10 @@ These [`itkwasm/emscripten`] and  [`itkwasm/wasi`] Docker images are [dockcross]
 
 These images include not only the CMake pre-configured toolchains, but pre-built versions of the ITK-Wasm C++ core. Moreover, wasm tools for optimization, debugging, emulation and system execution, testing, are bundled. A number of build and system configurations are included to make optimized and debuggable builds for scientific codebases a breeze.
 
-(cli)=
-## Command line interface (CLI)
-
-An `itk-wasm` *command line interface (CLI)* drives
-
-- builds,
-- generation of language bindings and language package configuration,
-- and testing for wasm binaries.
-
-The CLI can be installed via
-[Node.js / NPM](https://nodejs.org/en/download/)
-
-```sh
-npm install -g itk-wasm
-```
-
-(language-libraries)=
-## Language-specific libraries
-
-Small, language-specific libraries are used by generated bindings to provide simple, clean, performant, and idiomatic interfaces in the host languages.
-
-In TypeScript / JavaScript, this is the NPM [itk-wasm](https://www.npmjs.com/search?q=itk-wasm) package and in Python this is the PyPI [itkwasm](https://pypi.org/project/itkwasm/) package.
-
-(packages)=
-## Example packages
-
-While most ITK-Wasm packages are not developed in the `InsightSoftwareConsortium/ITK-Wasm` repository -- a package built with ITK-Wasm can be developed by anyone and maintained in any repository -- there are a number of packages developed in the `itk-wasm` repository. These packages
-
-- provide common functionality for other packages, such as testing and IO functionality,
-- demonstrate capabilities,
-- and continuously exercise and test the base functionality.
-
-Descriptions of these packages can be found in the [package listing page](./packages.md).
-
-(file-format)=
-## File format support
-
-Assistance for handling data serialized in file formats plays a crucial role in enabling comprehensive analysis using a variety of software tools.
-
-ITK-Wasm offers IO modules designed to interact with various standard scientific image and mesh file formats. These modules allow for the loading of data into language-native interface types through bindings like TypeScript and Python.
-
-In addition to supporting external file formats, ITK-Wasm also introduces its own file formats. These ITK-Wasm file formats are optimized and offer a direct correspondence to spatial interface types, utilizing a straightforward JSON + binary array buffer format.
-
-More information can be found in the [File Format Section](./file_formats/index.md).
 
 [ITK]: https://docs.itk.org
 [CLI11]: https://github.com/CLIUtils/CLI11
-[RapidJSON]: https://rapidjson.org/
+[glaze]: https://github.com/stephenberry/glaze
 [libcbor]: https://libcbor.readthedocs.io/
 [Emscripten]: https://emscripten.org/
 [WASI]: https://wasi.dev
