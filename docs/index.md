@@ -70,7 +70,7 @@ apidocs/index.rst
 ```{toctree}
 :hidden:
 :maxdepth: 3
-:caption: 📖 C++ Wasm Processing Pipelines
+:caption: 🧑‍💻 C++
 
 cxx/installation.md
 cxx/tutorial/index.md
