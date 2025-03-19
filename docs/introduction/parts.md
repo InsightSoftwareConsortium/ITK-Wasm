@@ -68,7 +68,7 @@ The `itkwasm` Python package provides:
 2. A bridge to NumPy and ITK
 3. A plugin system for accelerator packages
 
-Both system execution and browser execution are supported, with the latter enabled by [Pyodide](https://pyodide.org).
+Both system execution and browser execution are supported, with the former enabled by [wasmtime-py](https://github.com/bytecodealliance/wasmtime-py) and latter enabled by [Pyodide](https://pyodide.org).
 
 (cxx-core)=
 ## 🧑‍💻 C++ core
