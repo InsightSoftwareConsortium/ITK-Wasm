@@ -12,9 +12,9 @@ Towards that end, ITK-Wasm provides **powerful, joyful** tooling for *scientific
 4. Python core tooling
 5. C++ core tooling
 
-Support for additional languages is planned, and the architecture is easily extensible to support new languages. There interest in [Java](https://github.com/InsightSoftwareConsortium/ITK-Wasm/pull/855) and Rust in particular -- if you are interested in contributing code or funding to this effort, [please reach out](https://github.com/thewtex).
+Support for additional languages is planned, and the architecture is easily extensible to support new languages. There is interest in [Java](https://github.com/InsightSoftwareConsortium/ITK-Wasm/pull/855) and Rust in particular -- if you would like to contribute code or funding to this effort, [please reach out](https://github.com/thewtex).
 
-This section provides a high level overview of these constituent parts.
+This section provides a high-level overview of these constituent parts.
 
 (packages)=
 ## Example packages
@@ -27,7 +27,7 @@ While most ITK-Wasm packages are not developed in the `InsightSoftwareConsortium
 
 To create your own ITK-Wasm package, an [interactive command line setup tool](https://www.npmjs.com/package/create-itk-wasm) is available.
 
-Descriptions of these packages can be found in the [package listing page](./packages.md).
+Descriptions of these packages can be found on the [package listing page](./packages.md).
 
 (file-format)=
 ## File format support
@@ -68,7 +68,7 @@ The `itkwasm` Python package provides:
 2. A bridge to NumPy and ITK
 3. A plugin system for accelerator packages
 
-Both system execution and browser execution are supported, with the former enabled by [wasmtime-py](https://github.com/bytecodealliance/wasmtime-py) and latter enabled by [Pyodide](https://pyodide.org).
+Both system execution and browser execution are supported, with the former enabled by [wasmtime-py](https://github.com/bytecodealliance/wasmtime-py) and the latter enabled by [Pyodide](https://pyodide.org).
 
 (cxx-core)=
 ## 🧑‍💻 C++ core
@@ -109,7 +109,7 @@ Build environment Docker images encapsulate
 
 These [`itkwasm/emscripten`] and  [`itkwasm/wasi`] Docker images are [dockcross] images -- Docker images with pre-configured C++ cross-compiling toolchains that enable easy-application, reproducible builds, and a clean separation of the build environment, source tree, and build artifacts.
 
-These images include not only the CMake pre-configured toolchains, but pre-built versions of the ITK-Wasm C++ core. Moreover, wasm tools for optimization, debugging, emulation and system execution, testing, are bundled. A number of build and system configurations are included to make optimized and debuggable builds for scientific codebases a breeze.
+These images include not only the CMake pre-configured toolchains but also pre-built versions of the ITK-Wasm C++ core. Moreover, wasm tools for optimization, debugging, emulation, and system execution, testing, are bundled. Several build and system configurations are included to make optimized and debuggable builds for scientific codebases a breeze.
 
 
 [ITK]: https://docs.itk.org
