@@ -70,6 +70,7 @@ $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:latest-threads-$host_a
         --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
         --build-arg HOST_ARCH=$host_arch \
         --build-arg CMAKE_BUILD_TYPE=Release \
+        --build-arg VERSION=latest-threads \
         --build-arg VCS_REF=${VCS_REF} \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
@@ -81,7 +82,7 @@ if $version_tag; then
                 --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
                 --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Release \
-                --build-arg VERSION=${TAG} \
+                --build-arg VERSION=${TAG}-threads \
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
                 --build-arg BUILD_DATE=${BUILD_DATE} \
@@ -125,6 +126,7 @@ if $debug; then
           --build-arg HOST_ARCH=$host_arch \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg USE_DCMTK=OFF \
+          --build-arg VERSION=latest-debug \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
@@ -150,6 +152,7 @@ if $debug; then
           --build-arg HOST_ARCH=$host_arch \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg USE_DCMTK=OFF \
+          --build-arg VERSION=${TAG}-threads-debug \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \

@@ -42,6 +42,8 @@
     "test:testPipelines": "pnpm test:buildTestPipelines:emscripten && pnpm test:buildTestPipelines:wasi && pnpm test:runTestPipelines",
     "test:buildTestPipelines:emscripten:debug": "node src/itk-wasm-cli.js -i quay.io/itkwasm/emscripten:latest-debug -b emscripten-build -s ./test/pipelines build -- -DCMAKE_BUILD_TYPE=Debug",
     "test:buildTestPipelines:emscripten": "node src/itk-wasm-cli.js -i quay.io/itkwasm/emscripten:latest -b emscripten-build -s ./test/pipelines build",
+    "test:buildTestPipelines:emscriptenThreads:debug": "node src/itk-wasm-cli.js -i quay.io/itkwasm/emscripten:latest-threads-debug -b emscripten-threads-build -s ./test/pipelines build -- -DCMAKE_BUILD_TYPE=Debug",
+    "test:buildTestPipelines:emscriptenThreads": "node src/itk-wasm-cli.js -i quay.io/itkwasm/emscripten:latest-threads -b emscripten-threads-build -s ./test/pipelines build",
     "test:buildTestPipelines:wasi": "node src/itk-wasm-cli.js -i quay.io/itkwasm/wasi:latest -b wasi-build -s ./test/pipelines build",
     "test:buildTestPipelines:wasi:debug": "node src/itk-wasm-cli.js -i quay.io/itkwasm/wasi:latest-debug -b wasi-build -s ./test/pipelines build -- -DCMAKE_BUILD_TYPE=Debug",
     "test:runTestPipelines": "node src/itk-wasm-cli.js -i quay.io/itkwasm/wasi:latest -b wasi-build -s ./test/pipelines run -r wasmtime stdout-stderr-pipeline/stdout-stderr-test.wasi.wasm",
