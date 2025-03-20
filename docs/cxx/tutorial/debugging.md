@@ -1,8 +1,8 @@
 # Debugging WebAssembly
 
-Effective debugging results in effective programming. **itk-wasm** makes effective debugging of WebAssembly possible.
+Effective debugging results in effective programming. **ITK-Wasm** makes effective debugging of WebAssembly possible.
 
-This example walks through the different techniques that can be used with itk-wasm to debug WebAssembly during development.
+This example walks through the different techniques that can be used with ITK-Wasm to debug WebAssembly during development.
 
 We will debug the following C++ code:
 
@@ -29,7 +29,7 @@ int main() {
 To run these examples, first [install and test](./hello_world) Podman or Docker and Node/NPM. Then, install the package dependencies and run the example commands.
 
 ```
-cd itk-wasm/examples/Debugging/
+cd ITK-Wasm/examples/Debugging/
 npm install
 npm run <name>
 ```
@@ -38,7 +38,7 @@ where `<name>` is the npm script. Available names can be found by calling `npm r
 
 ## Native
 
-The CMake-based itk-wasm build system tooling enables the same C++ build system configuration and code to be reused when building a native system binary or a WebAssembly binary. As a result, native binary debugging tools, such as [GDB](https://sourceware.org/gdb/), [LLDB](https://lldb.llvm.org/), or the [Visual Studio debugger](https://docs.microsoft.com/en-us/visualstudio/debugger/?view=vs-2022).
+The CMake-based ITK-Wasm build system tooling enables the same C++ build system configuration and code to be reused when building a native system binary or a WebAssembly binary. As a result, native binary debugging tools, such as [GDB](https://sourceware.org/gdb/), [LLDB](https://lldb.llvm.org/), or the [Visual Studio debugger](https://docs.microsoft.com/en-us/visualstudio/debugger/?view=vs-2022).
 
 We can build the project's standard CMake build configuration,
 
@@ -59,13 +59,13 @@ The native binary can then be debugged in the standard way. For example, with `g
 
 ## WASI
 
-The most direct way to debug WebAssembly is through the [WebAssembly System Interface (WASI)](https://wasi.dev/). In itk-wasm we can build to WASI with the [WASI SDK](https://github.com/WebAssembly/wasi-sdk) by specifying the `itkwasm/wasi` toolchain image. A backtrace can quickly be obtained with the `itk-wasm` CLI. Or, a fully fledged debugger session can be started with LLDB.
+The most direct way to debug WebAssembly is through the [WebAssembly System Interface (WASI)](https://wasi.dev/). In ITK-Wasm we can build to WASI with the [WASI SDK](https://github.com/WebAssembly/wasi-sdk) by specifying the `itkwasm/wasi` toolchain image. A backtrace can quickly be obtained with the `ITK-Wasm` CLI. Or, a fully fledged debugger session can be started with LLDB.
 
 First, build to WASI WebAssembly with debugging symbols available:
 
 ![WASI debug build](/_static/tutorial/debugging/wasi-build-debug.png)
 
-Then, the `itk-wasm` CLI can conveniently run the Wasm binary with the included WASI runtime:
+Then, the `ITK-Wasm` CLI can conveniently run the Wasm binary with the included WASI runtime:
 
 ![Run WASI debug](/_static/tutorial/debugging/run-wasi-debug.png)
 
@@ -79,9 +79,9 @@ A full debugging session is also possible after [LLDB](https://lldb.llvm.org/) >
 
 ## Node.js
 
-When debugging WebAssembly built with the itk-wasm Emscripten toolchain, set the `CMAKE_BUILD_TYPE` to `Debug` as is required to debug native builds.
+When debugging WebAssembly built with the ITK-Wasm Emscripten toolchain, set the `CMAKE_BUILD_TYPE` to `Debug` as is required to debug native builds.
 
-As with native builds, this builds debugging symbols, the human-readable names of functions, variables, etc., into the binary.  This also adds support for C++ exceptions and retrieving the string name associated with exceptions. Without this itk-wasm instrumentation, a C++ exception will through an error with an opaque integer value. And, Emscripten JavaScript WebAssembly bindings will not be minified, which facilitates debugging.
+As with native builds, this builds debugging symbols, the human-readable names of functions, variables, etc., into the binary.  This also adds support for C++ exceptions and retrieving the string name associated with exceptions. Without this ITK-Wasm instrumentation, a C++ exception will through an error with an opaque integer value. And, Emscripten JavaScript WebAssembly bindings will not be minified, which facilitates debugging.
 
 When built with the default `Release` build type:
 
@@ -135,7 +135,7 @@ Next, open the options for Chrome WebAssembly Debugging extension:
 
 ![Wasm Debugging Options](/_static/tutorial/debugging/devtools-options.png)
 
-Since itk-wasm performs builds in a clean Docker environment, the debugging source paths in the Docker environment are different than the paths on the host system. The debugging extension has a path substitution system that can account for these differences. In the Docker image, the directory where `itk-wasm` is invoked is mounted as `/work`. Substitute `/work` with the directory where the `itk-wasm` CLI is invoked. For example, if `itk-wasm` was invoked at `/home/matt/src/itk-wasm/examples/Debugging`, then:
+Since ITK-Wasm performs builds in a clean Docker environment, the debugging source paths in the Docker environment are different than the paths on the host system. The debugging extension has a path substitution system that can account for these differences. In the Docker image, the directory where `ITK-Wasm` is invoked is mounted as `/work`. Substitute `/work` with the directory where the `ITK-Wasm` CLI is invoked. For example, if `ITK-Wasm` was invoked at `/home/matt/src/itk-wasm/examples/Debugging`, then:
 
 ![Path substitution](/_static/tutorial/debugging/path-substitution.png)
 
