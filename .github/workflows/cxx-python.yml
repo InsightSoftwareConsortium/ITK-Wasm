@@ -13,11 +13,12 @@ env:
 
 jobs:
   cxx-build-workflow:
-    uses: InsightSoftwareConsortium/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@v5.4.2
+    uses: thewtex/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-cxx.yml@cxx-platforms-9
     with:
       itk-module-deps: 'MeshToPolyData@v0.11.1'
       ctest-options: '-E itkPipelineTest'
       itk-cmake-options: '-DCMAKE_CXX_STANDARD:BOOL=20'
+      github-runners: '["ubuntu-24.04", "macos-15", "windows-2022"]'
 
   #python-build-workflow:
     ## itk-wasm branch
