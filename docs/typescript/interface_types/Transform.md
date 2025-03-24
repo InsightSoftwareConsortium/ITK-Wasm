@@ -8,5 +8,7 @@ A `Transform` specifies a spatial transformation that maps points from one coord
 - `name`: An optional name string that describes this transform.
 - `inputSpaceName`: An optional name string that describes the input space.
 - `outputSpaceName`: An optional name string that describes the output space.
-- `parameters`: A [`TypedArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) containing the transform parameters.
-- `fixedParameters`: A [`TypedArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) containing the fixed transform parameters.
+- `parameters`: A [`TypedArray`] containing the transform parameters.
+- `fixedParameters`: A [`TypedArray`] containing the fixed transform parameters.
+
+[`TypedArray`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
