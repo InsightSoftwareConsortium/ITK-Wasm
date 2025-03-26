@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+import crossOriginIsolation from 'vite-plugin-cross-origin-isolation'
 import path from 'path'
 
 const base = process.env.VITE_BASE_URL || '/'
@@ -21,6 +22,8 @@ export default defineConfig({
     exclude: ['itk-wasm', '@itk-wasm/image-io', '@itk-wasm/mesh-io', '@itk-wasm/transform-io', '@thewtex/zstddec']
   },
   plugins: [
+    // wasm threading
+    crossOriginIsolation(),
     // put lazy loaded JavaScript and Wasm bundles in dist directory
     viteStaticCopy({
       targets: [
