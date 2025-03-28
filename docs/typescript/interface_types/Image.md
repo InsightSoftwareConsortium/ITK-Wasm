@@ -4,7 +4,7 @@ An `Image` is the N-dimensional image data structure for *ITK-Wasm*.
 
 `Image` is a JavaScript object with the following properties:
 
-- `imageType`: The [ImageType](/api/ImageType) for this image.
+- `imageType`: The [ImageType](./ImageType) for this image.
 - `name`: An optional name string that describes this image.
 - `origin` An Array with length `imageType.dimension` that describes the location of the center of the lower left pixel in physical units.
 - `spacing`: An Array with length `dimension` that describes the spacing between pixel in physical units.
