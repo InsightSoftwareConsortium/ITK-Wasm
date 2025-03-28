@@ -1,4 +1,4 @@
-// itk-wasm Browser pipeline functions
+// ITK-Wasm Browser pipeline functions
 
 export { default as runPipeline } from './run-pipeline.js'
 export { default as createWebWorker } from './create-web-worker.js'
