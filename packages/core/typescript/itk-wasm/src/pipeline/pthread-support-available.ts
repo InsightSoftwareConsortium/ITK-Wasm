@@ -4,11 +4,11 @@ function pthreadSupportAvailable(): boolean {
 
   // Emscripten ENVIRONMENT_IS_NODE
   const isNode =
-    typeof process == 'object' &&
-    typeof process.versions == 'object' &&
-    typeof process.versions.node == 'string' &&
+    typeof process === 'object' &&
+    typeof process.versions === 'object' &&
+    typeof process.versions.node === 'string' &&
     // @ts-ignore: ts(2339)
-    process.type != 'renderer'
+    process.type !== 'renderer'
 
   const isCrossOriginIsolated =
     typeof crossOriginIsolated !== 'undefined'
