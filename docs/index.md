@@ -28,6 +28,8 @@ The project provides tools to
 
 *ITK-Wasm* can be used to execute [ITK](https://www.itk.org/) or arbitrary C++ codes in the browser, on the command line, and in languages like Python via [WASI](https://wasi.dev/) and [Emscripten](https://emscripten.org) runtimes.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Ixz4NDk9kqU?si=uxWdjC7uebzv2RSK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 If you use ITK-Wasm in your research, please cite [the following paper](https://doi.org/10.25080/TCFJ5130):
 
 > McCormick, M., Elliott, P. (2024).
