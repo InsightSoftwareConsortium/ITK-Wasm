@@ -1,7 +1,6 @@
 
 # Slot: componentType
 
-
 Type of binary data components in a pixel.
 
 URI: [wasm:componentType](https://w3id.org/itk/wasmcomponentType)

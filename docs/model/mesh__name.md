@@ -1,7 +1,6 @@
 
 # Slot: name
 
-
 Name of the mesh.
 
 URI: [wasm:mesh__name](https://w3id.org/itk/wasmmesh__name)

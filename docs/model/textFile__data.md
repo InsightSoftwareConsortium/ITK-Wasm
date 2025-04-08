@@ -1,7 +1,6 @@
 
 # Slot: data
 
-
 The content of the text file.
 
 URI: [wasm:textFile__data](https://w3id.org/itk/wasmtextFile__data)

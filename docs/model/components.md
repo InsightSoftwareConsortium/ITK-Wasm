@@ -1,7 +1,6 @@
 
 # Slot: components
 
-
 Number of components in a pixels.
 
 URI: [wasm:components](https://w3id.org/itk/wasmcomponents)

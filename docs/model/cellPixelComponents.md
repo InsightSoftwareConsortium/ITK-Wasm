@@ -1,7 +1,6 @@
 
 # Slot: cellPixelComponents
 
-
 Number of components in a cell data attribute.
 
 URI: [wasm:cellPixelComponents](https://w3id.org/itk/wasmcellPixelComponents)

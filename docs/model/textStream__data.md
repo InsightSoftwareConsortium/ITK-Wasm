@@ -1,7 +1,6 @@
 
 # Slot: data
 
-
 The content of the text stream.
 
 URI: [wasm:textStream__data](https://w3id.org/itk/wasmtextStream__data)

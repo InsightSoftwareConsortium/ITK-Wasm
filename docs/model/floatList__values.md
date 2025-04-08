@@ -1,7 +1,6 @@
 
 # Slot: values
 
-
 The content of the float sequence.
 
 URI: [wasm:floatList__values](https://w3id.org/itk/wasmfloatList__values)

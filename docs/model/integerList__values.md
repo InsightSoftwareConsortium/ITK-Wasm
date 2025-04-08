@@ -1,7 +1,6 @@
 
 # Slot: values
 
-
 The content of the integer sequence.
 
 URI: [wasm:integerList__values](https://w3id.org/itk/wasmintegerList__values)

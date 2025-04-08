@@ -1,7 +1,6 @@
 
 # Slot: cells
 
-
 Connectivity of the cells.
 
 URI: [wasm:mesh__cells](https://w3id.org/itk/wasmmesh__cells)

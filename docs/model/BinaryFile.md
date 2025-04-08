@@ -1,7 +1,6 @@
 
 # Class: BinaryFile
 
-
 Representation of a binary file on a filesystem. For performance reasons, use BinaryStream when possible, instead of BinaryFile.
 
 URI: [wasm:BinaryFile](https://w3id.org/itk/wasmBinaryFile)
@@ -30,4 +29,3 @@ URI: [wasm:BinaryFile](https://w3id.org/itk/wasmBinaryFile)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:BinaryFile |
-

@@ -1,7 +1,6 @@
 
 # Slot: direction
 
-
 Orientation of the pixel grid in physical space.
 Encoded as float64 binary data in column-major order of length NxN where N is the spatial dimension of the image. x, y, z, ... order.
 

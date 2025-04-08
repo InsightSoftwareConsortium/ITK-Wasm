@@ -1,7 +1,6 @@
 
 # Class: MetadataEntry
 
-
 Representation of a generic key-value metadata entry.
 
 URI: [wasm:MetadataEntry](https://w3id.org/itk/wasmMetadataEntry)
@@ -30,4 +29,3 @@ URI: [wasm:MetadataEntry](https://w3id.org/itk/wasmMetadataEntry)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:MetadataEntry |
-

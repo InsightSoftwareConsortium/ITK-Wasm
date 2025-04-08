@@ -1,7 +1,6 @@
 
 # Slot: value
 
-
 The value of the metadata entry.
 
 URI: [wasm:metadataEntry__value](https://w3id.org/itk/wasmmetadataEntry__value)

@@ -1,7 +1,6 @@
 
 # Slot: pointPixelComponents
 
-
 Number of components in a point data attribute.
 
 URI: [wasm:pointPixelComponents](https://w3id.org/itk/wasmpointPixelComponents)

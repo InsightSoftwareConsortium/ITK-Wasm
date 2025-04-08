@@ -1,7 +1,6 @@
 
 # Slot: pixelType
 
-
 Type of the pixel or attribute.
 
 URI: [wasm:pixelType](https://w3id.org/itk/wasmpixelType)

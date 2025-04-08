@@ -1,7 +1,6 @@
 
 # Class: PolyData
 
-
 Representation of a polydata, 3D geometric data for rendering that represents a collection of points, lines, polygons, and/or triangle strips.
 
 URI: [wasm:PolyData](https://w3id.org/itk/wasmPolyData)
@@ -57,4 +56,3 @@ URI: [wasm:PolyData](https://w3id.org/itk/wasmPolyData)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:PolyData |
-

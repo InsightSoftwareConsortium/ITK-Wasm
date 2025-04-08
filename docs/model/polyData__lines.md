@@ -1,7 +1,6 @@
 
 # Slot: lines
 
-
 Connectivity of the lines. Binary data with int32 components.
 
 URI: [wasm:polyData__lines](https://w3id.org/itk/wasmpolyData__lines)

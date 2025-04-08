@@ -1,7 +1,6 @@
 
 # Slot: cellComponentType
 
-
 Type of binary data components used to represent a cell. Typically int32.
 
 URI: [wasm:cellComponentType](https://w3id.org/itk/wasmcellComponentType)

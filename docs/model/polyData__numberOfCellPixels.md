@@ -1,7 +1,6 @@
 
 # Slot: numberOfCellPixels
 
-
 Number of cell data attributes.
 
 URI: [wasm:polyData__numberOfCellPixels](https://w3id.org/itk/wasmpolyData__numberOfCellPixels)

@@ -1,4 +1,5 @@
-# Interface Type Model
+
+# LinkML Model
 
 
 **[LinkML](https://linkml.io) metamodel version:** 1.7.0
@@ -25,10 +26,13 @@ The ITK-Wasm LinkML model provides FAIR definitions of the interface types that 
      * [PolyData](PolyData.md) - Representation of a polydata, 3D geometric data for rendering that represents a collection of points, lines, polygons, and/or triangle strips.
      * [TextFile](TextFile.md) - Representation of a text file on a filesystem. For performance reasons, use TextStream when possible, instead of TextFile.
      * [TextStream](TextStream.md) - Representation of a text stream. For performance reasons, use TextStream when possible, instead of TextFile.
+     * [TransformList](TransformList.md) - Representation of a sequence of transforms.
  * [MeshType](MeshType.md) - Representation of a mesh type. Here "Pixel" refers to the data attributes associated with the mesh.
  * [Metadata](Metadata.md) - Representation of generic key-value metadata.
  * [MetadataEntry](MetadataEntry.md) - Representation of a generic key-value metadata entry.
  * [StringList](StringList.md) - Representation of a sequence of strings.
+ * [Transform](Transform.md) - Representation of a spatial transformation.
+ * [TransformType](TransformType.md) - Representation of an N-dimensional scientific spatial transformation.
 
 ### Mixins
 
@@ -69,6 +73,7 @@ The ITK-Wasm LinkML model provides FAIR definitions of the interface types that 
  * [➞key](metadataEntry__key.md) - The key of the metadata entry.
  * [➞value](metadataEntry__value.md) - The value of the metadata entry.
  * [➞entries](metadata__entries.md) - The content of the metadata.
+ * [parametersValueType](parametersValueType.md) - Type of binary data components in a transform.
  * [path](path.md) - The filename or path.
  * [pixelType](pixelType.md) - Type of the pixel or attribute.
  * [pointComponentType](pointComponentType.md) - Type of binary data components in a point. Typically float32.
@@ -89,12 +94,25 @@ The ITK-Wasm LinkML model provides FAIR definitions of the interface types that 
  * [➞values](stringList__values.md) - The content of the string sequence.
  * [➞data](textFile__data.md) - The content of the text file.
  * [➞data](textStream__data.md) - The content of the text stream.
+ * [➞values](transformList__values.md) - The content of the transform sequence.
+ * [➞inputDimension](transformType__inputDimension.md) - Dimension of the input space.
+ * [➞outputDimension](transformType__outputDimension.md) - Dimension of the output space.
+ * [➞transformParameterization](transformType__transformParameterization.md) - How the transform is parameterized.
+ * [➞fixedParameters](transform__fixedParameters.md) - Fixed parameters of the transform. These are always double / float64.
+ * [➞inputSpaceName](transform__inputSpaceName.md) - Name of the input space.
+ * [➞name](transform__name.md) - Name of the transform.
+ * [➞numberOfFixedParameters](transform__numberOfFixedParameters.md) - Number of fixed parameters in the transform.
+ * [➞numberOfParameters](transform__numberOfParameters.md) - Number of parameters in the transform.
+ * [➞outputSpaceName](transform__outputSpaceName.md) - Name of the output space.
+ * [➞parameters](transform__parameters.md) - Parameters of the transform.
+ * [➞transformType](transform__transformType.md) - Type of the transform.
 
 ### Enums
 
  * [FloatTypes](FloatTypes.md) - Float types.
  * [IntTypes](IntTypes.md) - Integer types.
  * [PixelTypes](PixelTypes.md) - Pixel or attribute types.
+ * [TransformParameterizations](TransformParameterizations.md) - How a transform is parameterized, defining how its parameters should be interpreted.
 
 ### Subsets
 

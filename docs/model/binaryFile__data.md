@@ -1,7 +1,6 @@
 
 # Slot: data
 
-
 The content of the binary file.
 
 URI: [wasm:binaryFile__data](https://w3id.org/itk/wasmbinaryFile__data)

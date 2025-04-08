@@ -1,7 +1,6 @@
 
 # Slot: cellData
 
-
 Cell data attributes.
 
 URI: [wasm:polyData__cellData](https://w3id.org/itk/wasmpolyData__cellData)

@@ -1,7 +1,6 @@
 
 # Slot: pointComponentType
 
-
 Type of binary data components in a point. Typically float32.
 
 URI: [wasm:pointComponentType](https://w3id.org/itk/wasmpointComponentType)

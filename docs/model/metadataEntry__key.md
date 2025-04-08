@@ -1,7 +1,6 @@
 
 # Slot: key
 
-
 The key of the metadata entry.
 
 URI: [wasm:metadataEntry__key](https://w3id.org/itk/wasmmetadataEntry__key)

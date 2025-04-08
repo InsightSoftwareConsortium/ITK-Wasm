@@ -1,7 +1,6 @@
 
 # Slot: pointPixelComponentType
 
-
 Type of binary data components associated with a point data attribute.
 
 URI: [wasm:pointPixelComponentType](https://w3id.org/itk/wasmpointPixelComponentType)

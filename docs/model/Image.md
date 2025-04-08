@@ -1,7 +1,6 @@
 
 # Class: Image
 
-
 Representation of an N-dimensional scientific image.
 
 URI: [wasm:Image](https://w3id.org/itk/wasmImage)
@@ -53,4 +52,3 @@ Encoded in column-major order, i.e. contiguous x. Multi-component pixels are int
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:Image |
-

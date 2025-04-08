@@ -1,7 +1,6 @@
 
 # Slot: numberOfCells
 
-
 Number of cells in the mesh.
 
 URI: [wasm:mesh__numberOfCells](https://w3id.org/itk/wasmmesh__numberOfCells)

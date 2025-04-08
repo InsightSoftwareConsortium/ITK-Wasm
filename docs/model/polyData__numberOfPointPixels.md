@@ -1,7 +1,6 @@
 
 # Slot: numberOfPointPixels
 
-
 Number of point data attributes.
 
 URI: [wasm:polyData__numberOfPointPixels](https://w3id.org/itk/wasmpolyData__numberOfPointPixels)

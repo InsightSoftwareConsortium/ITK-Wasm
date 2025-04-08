@@ -1,7 +1,6 @@
 
 # Class: FloatList
 
-
 Representation of a sequence of floats.
 
 URI: [wasm:FloatList](https://w3id.org/itk/wasmFloatList)
@@ -23,4 +22,3 @@ URI: [wasm:FloatList](https://w3id.org/itk/wasmFloatList)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:FloatList |
-

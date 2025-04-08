@@ -1,7 +1,6 @@
 
 # Class: IntegerList
 
-
 Representation of a sequence of integers.
 
 URI: [wasm:IntegerList](https://w3id.org/itk/wasmIntegerList)
@@ -23,4 +22,3 @@ URI: [wasm:IntegerList](https://w3id.org/itk/wasmIntegerList)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:IntegerList |
-

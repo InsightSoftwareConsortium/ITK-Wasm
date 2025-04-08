@@ -1,7 +1,6 @@
 
 # Slot: dimension
 
-
 Number of spatial dimensions.
 
 URI: [wasm:dimension](https://w3id.org/itk/wasmdimension)

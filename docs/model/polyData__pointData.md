@@ -1,7 +1,6 @@
 
 # Slot: pointData
 
-
 Point data attributes.
 
 URI: [wasm:polyData__pointData](https://w3id.org/itk/wasmpolyData__pointData)
