@@ -1,5 +1,4 @@
-
-# LinkML Model
+# Interface Type Model
 
 
 **[LinkML](https://linkml.io) metamodel version:** 1.7.0
