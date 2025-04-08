@@ -36,15 +36,16 @@
     "itk-wasm": "workspace:*"
   },
   "devDependencies": {
+    "@itk-wasm/demo-app": "workspace:*",
     "@itk-wasm/image-io": "workspace:*",
     "@itk-wasm/mesh-io": "workspace:*",
     "@itk-wasm/transform-io": "workspace:*",
-    "@itk-wasm/demo-app": "workspace:*",
     "@types/node": "^20.2.5",
     "esbuild": "^0.25.0",
     "shx": "^0.3.4",
     "typescript": "^5.3.2",
     "vite": "^4.5.11",
+    "vite-plugin-cross-origin-isolation": "^0.1.6",
     "vite-plugin-static-copy": "^0.17.0"
   }
 }

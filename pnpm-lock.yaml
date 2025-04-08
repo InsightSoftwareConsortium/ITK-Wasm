@@ -532,6 +532,9 @@ importers:
       vite:
         specifier: ^6.2.3
         version: 6.2.5(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.0)
+      vite-plugin-cross-origin-isolation:
+        specifier: ^0.1.6
+        version: 0.1.6
       vite-plugin-static-copy:
         specifier: ^0.17.0
         version: 0.17.1(vite@6.2.5(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.0))
@@ -5927,6 +5930,9 @@ packages:
   version-guard@1.1.2:
     resolution: {integrity: sha512-D8d+YxCUpoqtCnQzDxm6SF7DLU3gr2535T4khAtMq4osBahsQnmSxuwXFdrbAdDGG8Uokzfis/jvyeFPdmlc7w==}
     engines: {node: '>=0.10.48'}
+
+  vite-plugin-cross-origin-isolation@0.1.6:
+    resolution: {integrity: sha512-OY0naW9nPUDrKTffYnY7FRYXOgZdHoNwMGpPxUmj/n32mGZi01fcq+J536jkmwGWX7DLT95XBQVHHbrAJzTvrw==}
 
   vite-plugin-static-copy@0.17.1:
     resolution: {integrity: sha512-9h3iaVs0bqnqZOM5YHJXGHqdC5VAVlTZ2ARYsuNpzhEJUHmFqXY7dAK4ZFpjEQ4WLFKcaN8yWbczr81n01U4sQ==}
@@ -12063,6 +12069,8 @@ snapshots:
       extsprintf: 1.3.0
 
   version-guard@1.1.2: {}
+
+  vite-plugin-cross-origin-isolation@0.1.6: {}
 
   vite-plugin-static-copy@0.17.1(vite@6.2.5(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.0)):
     dependencies:
