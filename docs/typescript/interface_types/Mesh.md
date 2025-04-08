@@ -1,6 +1,6 @@
 # Mesh
 
-An `Mesh` is the N-dimensional data structure to represent points sets and meshes for *itk-wasm*. It is intended to be used for data transfer and exchange as opposed to processing.
+An [`Mesh`] is the N-dimensional data structure to represent points sets and meshes for *itk-wasm*. It is intended to be used for data transfer and exchange as opposed to processing.
 
 A Mesh is a JavaScript object with the following properties:
 
@@ -19,3 +19,5 @@ A Mesh is a JavaScript object with the following properties:
 For more information, see [the description](https://itk.org/ITKSoftwareGuide/html/Book1/ITKSoftwareGuide-Book1ch4.html#x38-640004.3) of an `itk::Mesh` in the ITK Software Guide.
 
 `TypedArray`: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
+
+[`Mesh`]: ../../model/Mesh.md

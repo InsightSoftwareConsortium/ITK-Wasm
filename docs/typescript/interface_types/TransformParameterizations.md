@@ -1,6 +1,6 @@
 # TransformParameterizations
 
-The enumeration of transform parameterization values is:
+The enumeration of [`TransformParameterizations`] values is:
 
 - `Composite`
 - `Identity`
@@ -32,3 +32,5 @@ The enumeration of transform parameterization values is:
 - `GaussianSmoothingOnUpdateTimeVaryingVelocityField`
 
 The definition of these transform and the meaning of their parameters is described in detail in the [ITK Software Guide, Book 2, Section 3.9](https://github.com/InsightSoftwareConsortium/ITKSoftwareGuide/releases).
+
+[`TransformParameterizations`]: ../../model/TransformParameterizations.md
