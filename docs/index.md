@@ -53,7 +53,6 @@ introduction/file_formats/index.md
 :caption: 🌐 JavaScript/TypeScript
 
 typescript/interface_types/index.md
-typescript/index.md
 typescript/distribution/index.md
 ```
 
