@@ -30,6 +30,12 @@ jobs:
       with:
         run_install: true
 
+    - uses: nick-fields/retry@v3
+      with:
+        max_attempts: 5
+        timeout_minutes: 10
+        command: ./src/docker/pull.sh --no-debug
+
     - name: Build
       run: |
         pnpm run --aggregate-output build:wasi
