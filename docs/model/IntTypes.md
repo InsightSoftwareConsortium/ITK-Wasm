@@ -1,16 +1,10 @@
 
 # Enum: IntTypes
 
-
 Integer types.
 
 URI: [wasm:IntTypes](https://w3id.org/itk/wasmIntTypes)
 
-
-## Other properties
-
-|  |  |  |
-| --- | --- | --- |
 
 ## Permissible Values
 

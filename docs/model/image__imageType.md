@@ -1,7 +1,6 @@
 
 # Slot: imageType
 
-
 Type of the image.
 
 URI: [wasm:image__imageType](https://w3id.org/itk/wasmimage__imageType)

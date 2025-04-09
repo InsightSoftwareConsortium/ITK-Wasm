@@ -1,7 +1,6 @@
 
 # Class: InterfaceType
 
-
 An interface type is a higher-level type that represents the structure of data that can be passed between WebAssembly modules and the host environment.
 The higher level abstract types that are defined in this model have an idiomatic and efficient representation in WebAssembly and programming languages that compile to or embed WebAssembly modules.
 There are idiomatic representations and one-to-one mappings between:
@@ -10,7 +9,7 @@ There are idiomatic representations and one-to-one mappings between:
 URI: [wasm:InterfaceType](https://w3id.org/itk/wasmInterfaceType)
 
 
-[![img](https://yuml.me/diagram/nofunky;dir:TB/class/[TextStream],[TextFile],[PolyData],[Mesh],[JsonCompatible],[InterfaceType]^-[TextStream],[InterfaceType]^-[TextFile],[InterfaceType]^-[PolyData],[InterfaceType]^-[Mesh],[InterfaceType]^-[JsonCompatible],[InterfaceType]^-[Image],[InterfaceType]^-[BinaryStream],[InterfaceType]^-[BinaryFile],[Image],[BinaryStream],[BinaryFile])](https://yuml.me/diagram/nofunky;dir:TB/class/[TextStream],[TextFile],[PolyData],[Mesh],[JsonCompatible],[InterfaceType]^-[TextStream],[InterfaceType]^-[TextFile],[InterfaceType]^-[PolyData],[InterfaceType]^-[Mesh],[InterfaceType]^-[JsonCompatible],[InterfaceType]^-[Image],[InterfaceType]^-[BinaryStream],[InterfaceType]^-[BinaryFile],[Image],[BinaryStream],[BinaryFile])
+[![img](https://yuml.me/diagram/nofunky;dir:TB/class/[TransformList],[TextStream],[TextFile],[PolyData],[Mesh],[JsonCompatible],[InterfaceType]^-[TransformList],[InterfaceType]^-[TextStream],[InterfaceType]^-[TextFile],[InterfaceType]^-[PolyData],[InterfaceType]^-[Mesh],[InterfaceType]^-[JsonCompatible],[InterfaceType]^-[Image],[InterfaceType]^-[BinaryStream],[InterfaceType]^-[BinaryFile],[Image],[BinaryStream],[BinaryFile])](https://yuml.me/diagram/nofunky;dir:TB/class/[TransformList],[TextStream],[TextFile],[PolyData],[Mesh],[JsonCompatible],[InterfaceType]^-[TransformList],[InterfaceType]^-[TextStream],[InterfaceType]^-[TextFile],[InterfaceType]^-[PolyData],[InterfaceType]^-[Mesh],[InterfaceType]^-[JsonCompatible],[InterfaceType]^-[Image],[InterfaceType]^-[BinaryStream],[InterfaceType]^-[BinaryFile],[Image],[BinaryStream],[BinaryFile])
 
 ## Children
 
@@ -22,6 +21,7 @@ URI: [wasm:InterfaceType](https://w3id.org/itk/wasmInterfaceType)
  * [PolyData](PolyData.md) - Representation of a polydata, 3D geometric data for rendering that represents a collection of points, lines, polygons, and/or triangle strips.
  * [TextFile](TextFile.md) - Representation of a text file on a filesystem. For performance reasons, use TextStream when possible, instead of TextFile.
  * [TextStream](TextStream.md) - Representation of a text stream. For performance reasons, use TextStream when possible, instead of TextFile.
+ * [TransformList](TransformList.md) - Representation of a sequence of transforms.
 
 ## Referenced by Class
 
@@ -34,4 +34,3 @@ URI: [wasm:InterfaceType](https://w3id.org/itk/wasmInterfaceType)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:InterfaceType |
-

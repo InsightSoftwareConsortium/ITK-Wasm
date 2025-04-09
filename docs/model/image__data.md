@@ -1,7 +1,6 @@
 
 # Slot: data
 
-
 Content of the image pixels.
 Encoded in column-major order, i.e. contiguous x. Multi-component pixels are interleaved.
 

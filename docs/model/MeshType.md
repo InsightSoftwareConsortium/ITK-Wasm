@@ -1,7 +1,6 @@
 
 # Class: MeshType
 
-
 Representation of a mesh type. Here "Pixel" refers to the data attributes associated with the mesh.
 
 URI: [wasm:MeshType](https://w3id.org/itk/wasmMeshType)
@@ -60,4 +59,3 @@ URI: [wasm:MeshType](https://w3id.org/itk/wasmMeshType)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:MeshType |
-

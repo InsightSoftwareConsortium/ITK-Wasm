@@ -1,7 +1,6 @@
 
 # Class: Metadata
 
-
 Representation of generic key-value metadata.
 
 URI: [wasm:Metadata](https://w3id.org/itk/wasmMetadata)
@@ -23,4 +22,3 @@ URI: [wasm:Metadata](https://w3id.org/itk/wasmMetadata)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:Metadata |
-

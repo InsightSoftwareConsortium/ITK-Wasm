@@ -1,7 +1,6 @@
 
 # Slot: name
 
-
 Name of the polydata.
 
 URI: [wasm:polyData__name](https://w3id.org/itk/wasmpolyData__name)

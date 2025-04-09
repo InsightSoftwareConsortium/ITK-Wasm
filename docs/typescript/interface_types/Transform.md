@@ -1,6 +1,6 @@
 # Transform
 
-A `Transform` specifies a spatial transformation that maps points from one coordinate system to another. The `Transform` interface is a JavaScript object with the following properties:
+A [`Transform`] specifies a spatial transformation that maps points from one coordinate system to another. The [`Transform`] interface is a JavaScript object with the following properties:
 
 - `transformType`: The [TransformType](./TransformType) for this transform.
 - `numberOfFixedParameters`: The number of fixed parameters for the transform. Fixed parameters are not optimized during registration.
@@ -12,3 +12,5 @@ A `Transform` specifies a spatial transformation that maps points from one coord
 - `fixedParameters`: A [`TypedArray`] containing the fixed transform parameters.
 
 [`TypedArray`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
+
+[`Transform`]: ../../model/Transform.md

@@ -1,7 +1,6 @@
 
 # Class: BinaryStream
 
-
 Representation of a binary stream. For performance reasons, use BinaryStream when possible, instead of BinaryFile.
 
 URI: [wasm:BinaryStream](https://w3id.org/itk/wasmBinaryStream)
@@ -27,4 +26,3 @@ URI: [wasm:BinaryStream](https://w3id.org/itk/wasmBinaryStream)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:BinaryStream |
-

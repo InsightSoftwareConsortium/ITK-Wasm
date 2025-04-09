@@ -1,7 +1,6 @@
 
 # Slot: entries
 
-
 The content of the metadata.
 
 URI: [wasm:metadata__entries](https://w3id.org/itk/wasmmetadata__entries)

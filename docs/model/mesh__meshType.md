@@ -1,7 +1,6 @@
 
 # Slot: meshType
 
-
 The type of the mesh.
 
 URI: [wasm:mesh__meshType](https://w3id.org/itk/wasmmesh__meshType)

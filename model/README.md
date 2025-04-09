@@ -1,5 +1,5 @@
-# itk-wasm model
+# ITK-Wasm model
 
-A [LinkML] model of itk-wasm's architecture.
+A [LinkML] model of ITK-Wasm's architecture.
 
 .. LinkML: https://linkml.io/

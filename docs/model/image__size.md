@@ -1,7 +1,6 @@
 
 # Slot: size
 
-
 Number of image pixels in each dimension.
 x, y, z, ... order.
 

@@ -1,7 +1,6 @@
 
 # Class: StringList
 
-
 Representation of a sequence of strings.
 
 URI: [wasm:StringList](https://w3id.org/itk/wasmStringList)
@@ -23,4 +22,3 @@ URI: [wasm:StringList](https://w3id.org/itk/wasmStringList)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:StringList |
-

@@ -1,7 +1,6 @@
 
 # Class: BinaryData
 
-
 Represents a contiguous array of bytes.
 The data in representations are encoded as:
 
@@ -14,7 +13,7 @@ The data in representations are encoded as:
 URI: [wasm:BinaryData](https://w3id.org/itk/wasmBinaryData)
 
 
-[![img](https://yuml.me/diagram/nofunky;dir:TB/class/[BinaryFile]++-%20data%201..1>[BinaryData],[BinaryStream]++-%20data%201..1>[BinaryData],[Image]++-%20data%200..1>[BinaryData],[Image]++-%20direction%201..1>[BinaryData],[Mesh]++-%20cellData%200..1>[BinaryData],[Mesh]++-%20cells%200..1>[BinaryData],[Mesh]++-%20pointData%200..1>[BinaryData],[Mesh]++-%20points%200..1>[BinaryData],[PolyData]++-%20cellData%200..1>[BinaryData],[PolyData]++-%20lines%200..1>[BinaryData],[PolyData]++-%20pointData%200..1>[BinaryData],[PolyData]++-%20points%200..1>[BinaryData],[PolyData]++-%20polygons%200..1>[BinaryData],[PolyData],[Mesh],[Image],[BinaryStream],[BinaryFile])](https://yuml.me/diagram/nofunky;dir:TB/class/[BinaryFile]++-%20data%201..1>[BinaryData],[BinaryStream]++-%20data%201..1>[BinaryData],[Image]++-%20data%200..1>[BinaryData],[Image]++-%20direction%201..1>[BinaryData],[Mesh]++-%20cellData%200..1>[BinaryData],[Mesh]++-%20cells%200..1>[BinaryData],[Mesh]++-%20pointData%200..1>[BinaryData],[Mesh]++-%20points%200..1>[BinaryData],[PolyData]++-%20cellData%200..1>[BinaryData],[PolyData]++-%20lines%200..1>[BinaryData],[PolyData]++-%20pointData%200..1>[BinaryData],[PolyData]++-%20points%200..1>[BinaryData],[PolyData]++-%20polygons%200..1>[BinaryData],[PolyData],[Mesh],[Image],[BinaryStream],[BinaryFile])
+[![img](https://yuml.me/diagram/nofunky;dir:TB/class/[BinaryFile]++-%20data%201..1>[BinaryData],[BinaryStream]++-%20data%201..1>[BinaryData],[Image]++-%20data%200..1>[BinaryData],[Image]++-%20direction%201..1>[BinaryData],[Mesh]++-%20cellData%200..1>[BinaryData],[Mesh]++-%20cells%200..1>[BinaryData],[Mesh]++-%20pointData%200..1>[BinaryData],[Mesh]++-%20points%200..1>[BinaryData],[PolyData]++-%20cellData%200..1>[BinaryData],[PolyData]++-%20lines%200..1>[BinaryData],[PolyData]++-%20pointData%200..1>[BinaryData],[PolyData]++-%20points%200..1>[BinaryData],[PolyData]++-%20polygons%200..1>[BinaryData],[Transform]++-%20fixedParameters%201..1>[BinaryData],[Transform]++-%20parameters%201..1>[BinaryData],[Transform],[PolyData],[Mesh],[Image],[BinaryStream],[BinaryFile])](https://yuml.me/diagram/nofunky;dir:TB/class/[BinaryFile]++-%20data%201..1>[BinaryData],[BinaryStream]++-%20data%201..1>[BinaryData],[Image]++-%20data%200..1>[BinaryData],[Image]++-%20direction%201..1>[BinaryData],[Mesh]++-%20cellData%200..1>[BinaryData],[Mesh]++-%20cells%200..1>[BinaryData],[Mesh]++-%20pointData%200..1>[BinaryData],[Mesh]++-%20points%200..1>[BinaryData],[PolyData]++-%20cellData%200..1>[BinaryData],[PolyData]++-%20lines%200..1>[BinaryData],[PolyData]++-%20pointData%200..1>[BinaryData],[PolyData]++-%20points%200..1>[BinaryData],[PolyData]++-%20polygons%200..1>[BinaryData],[Transform]++-%20fixedParameters%201..1>[BinaryData],[Transform]++-%20parameters%201..1>[BinaryData],[Transform],[PolyData],[Mesh],[Image],[BinaryStream],[BinaryFile])
 
 ## Referenced by Class
 
@@ -31,6 +30,8 @@ URI: [wasm:BinaryData](https://w3id.org/itk/wasmBinaryData)
  *  **None** *[➞pointData](polyData__pointData.md)*  <sub>0..1</sub>  **[BinaryData](BinaryData.md)**
  *  **None** *[➞points](polyData__points.md)*  <sub>0..1</sub>  **[BinaryData](BinaryData.md)**
  *  **None** *[➞polygons](polyData__polygons.md)*  <sub>0..1</sub>  **[BinaryData](BinaryData.md)**
+ *  **None** *[➞fixedParameters](transform__fixedParameters.md)*  <sub>1..1</sub>  **[BinaryData](BinaryData.md)**
+ *  **None** *[➞parameters](transform__parameters.md)*  <sub>1..1</sub>  **[BinaryData](BinaryData.md)**
 
 ## Attributes
 
@@ -40,4 +41,3 @@ URI: [wasm:BinaryData](https://w3id.org/itk/wasmBinaryData)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:BinaryData |
-

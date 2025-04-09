@@ -1,7 +1,6 @@
 
 # Class: ImageType
 
-
 Representation of an N-dimensional scientific image type.
 
 URI: [wasm:ImageType](https://w3id.org/itk/wasmImageType)
@@ -36,4 +35,3 @@ URI: [wasm:ImageType](https://w3id.org/itk/wasmImageType)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:ImageType |
-

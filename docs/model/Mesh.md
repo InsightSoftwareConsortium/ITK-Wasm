@@ -1,7 +1,6 @@
 
 # Class: Mesh
 
-
 Representation of an N-dimensional mesh.
 
 URI: [wasm:Mesh](https://w3id.org/itk/wasmMesh)
@@ -57,4 +56,3 @@ URI: [wasm:Mesh](https://w3id.org/itk/wasmMesh)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:Mesh |
-

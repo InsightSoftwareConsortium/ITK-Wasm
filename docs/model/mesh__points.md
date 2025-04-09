@@ -1,7 +1,6 @@
 
 # Slot: points
 
-
 Spatial coordinates of the points.
 
 URI: [wasm:mesh__points](https://w3id.org/itk/wasmmesh__points)

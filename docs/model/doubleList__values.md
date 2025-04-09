@@ -1,7 +1,6 @@
 
 # Slot: values
 
-
 The content of the double sequence.
 
 URI: [wasm:doubleList__values](https://w3id.org/itk/wasmdoubleList__values)

@@ -1,7 +1,6 @@
 
 # Class: TextStream
 
-
 Representation of a text stream. For performance reasons, use TextStream when possible, instead of TextFile.
 
 URI: [wasm:TextStream](https://w3id.org/itk/wasmTextStream)
@@ -27,4 +26,3 @@ URI: [wasm:TextStream](https://w3id.org/itk/wasmTextStream)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:TextStream |
-

@@ -1,8 +1,8 @@
 # Image
 
-An `Image` is the N-dimensional image data structure for *ITK-Wasm*.
+An [`Image`] is the N-dimensional image data structure for *ITK-Wasm*.
 
-`Image` is a JavaScript object with the following properties:
+[`Image`] is a JavaScript object with the following properties:
 
 - `imageType`: The [ImageType](./ImageType) for this image.
 - `name`: An optional name string that describes this image.
@@ -20,3 +20,5 @@ Note that the `origin`, `spacing`, `direction`, and `size` are indexed with an `
 ```
 const tensor = tf.tensor(image.data, image.size.reverse())
 ```
+
+[`Image`]: ../../model/Image.md

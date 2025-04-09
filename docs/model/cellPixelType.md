@@ -1,7 +1,6 @@
 
 # Slot: cellPixelType
 
-
 Type of the cell data attribute.
 
 URI: [wasm:cellPixelType](https://w3id.org/itk/wasmcellPixelType)

@@ -1,7 +1,6 @@
 
 # Slot: metadata
 
-
 Metadata for the image.
 
 URI: [wasm:image__metadata](https://w3id.org/itk/wasmimage__metadata)

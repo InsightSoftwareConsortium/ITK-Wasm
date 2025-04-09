@@ -1,7 +1,6 @@
 
 # Slot: numberOfPoints
 
-
 Number of points in the mesh.
 
 URI: [wasm:mesh__numberOfPoints](https://w3id.org/itk/wasmmesh__numberOfPoints)

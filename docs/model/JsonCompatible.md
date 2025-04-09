@@ -1,7 +1,6 @@
 
 # Class: JsonCompatible
 
-
 A type that can be represented in JSON.
 
 URI: [wasm:JsonCompatible](https://w3id.org/itk/wasmJsonCompatible)
@@ -21,4 +20,3 @@ URI: [wasm:JsonCompatible](https://w3id.org/itk/wasmJsonCompatible)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:JsonCompatible |
-

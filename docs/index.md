@@ -44,7 +44,6 @@ If you use ITK-Wasm in your research, please cite [the following paper](https://
 
 introduction/packages.md
 introduction/parts.md
-model/index.md
 introduction/file_formats/index.md
 ```
 
@@ -84,6 +83,7 @@ cxx/interface_types.md
 :maxdepth: 3
 :caption: 🔨 ITK-Wasm Development
 
+model/index.md
 development/hacking_itk_wasm.md
 development/itk_js_to_itk_wasm_migration_guide.md
 ```

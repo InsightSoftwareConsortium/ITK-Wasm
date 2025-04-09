@@ -1,7 +1,6 @@
 
 # Slot: polygons
 
-
 Connectivity of the polygons. Binary data with int32 components.
 
 URI: [wasm:polyData__polygons](https://w3id.org/itk/wasmpolyData__polygons)

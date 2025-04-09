@@ -1,7 +1,6 @@
 
 # Slot: cellBufferSize
 
-
 Size of the cell buffer.
 
 URI: [wasm:mesh__cellBufferSize](https://w3id.org/itk/wasmmesh__cellBufferSize)

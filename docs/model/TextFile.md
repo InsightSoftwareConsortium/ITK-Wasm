@@ -1,7 +1,6 @@
 
 # Class: TextFile
 
-
 Representation of a text file on a filesystem. For performance reasons, use TextStream when possible, instead of TextFile.
 
 URI: [wasm:TextFile](https://w3id.org/itk/wasmTextFile)
@@ -30,4 +29,3 @@ URI: [wasm:TextFile](https://w3id.org/itk/wasmTextFile)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:TextFile |
-

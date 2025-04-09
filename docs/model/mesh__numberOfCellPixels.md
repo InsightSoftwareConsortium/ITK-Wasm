@@ -1,7 +1,6 @@
 
 # Slot: numberOfCellPixels
 
-
 Number of cell data attributes.
 
 URI: [wasm:mesh__numberOfCellPixels](https://w3id.org/itk/wasmmesh__numberOfCellPixels)

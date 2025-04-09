@@ -1,7 +1,6 @@
 
 # Slot: linesBufferSize
 
-
 Size of the lines buffer.
 
 URI: [wasm:polyData__linesBufferSize](https://w3id.org/itk/wasmpolyData__linesBufferSize)

@@ -1,6 +1,6 @@
 # ImageType
 
-An `ImageType` describes the type of an [`Image`](./Image). It is a
+An [`ImageType`] describes the type of an [`Image`](./Image). It is a
 JSON object with the following attributes:
 
 - `dimension`: An integer that describes the dimension for the image, typically 2 or 3.
@@ -11,3 +11,5 @@ JSON object with the following attributes:
 [`PixelType`]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/packages/core/typescript/itk-wasm/src/interface-types/pixel-types.ts
 [`IntTypes`]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/packages/core/typescript/itk-wasm/src/interface-types/int-types.ts
 [`FloatTypes`]: https://github.com/InsightSoftwareConsortium/ITK-Wasm/blob/main/packages/core/typescript/itk-wasm/src/interface-types/float-types.ts
+
+[`ImageType`]: ../../model/ImageType.md

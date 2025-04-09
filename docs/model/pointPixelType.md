@@ -1,7 +1,6 @@
 
 # Slot: pointPixelType
 
-
 Type of the point data attribute.
 
 URI: [wasm:pointPixelType](https://w3id.org/itk/wasmpointPixelType)

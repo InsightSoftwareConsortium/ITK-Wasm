@@ -1,7 +1,6 @@
 
 # Slot: values
 
-
 The content of the string sequence.
 
 URI: [wasm:stringList__values](https://w3id.org/itk/wasmstringList__values)

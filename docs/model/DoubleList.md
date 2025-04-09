@@ -1,7 +1,6 @@
 
 # Class: DoubleList
 
-
 Representation of a sequence of doubles.
 
 URI: [wasm:DoubleList](https://w3id.org/itk/wasmDoubleList)
@@ -23,4 +22,3 @@ URI: [wasm:DoubleList](https://w3id.org/itk/wasmDoubleList)
 |  |  |  |
 | --- | --- | --- |
 | **Mappings:** | | wasm:DoubleList |
-

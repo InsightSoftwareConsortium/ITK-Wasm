@@ -1,6 +1,6 @@
 # API Overview
 
-This documentation provides more detailed information about the *itk-wasm* JavaScript and TypeScript interface.
+This documentation provides more detailed information about the *ITK-Wasm* JavaScript and TypeScript interface.
 
 The **Interface Types** section describes data structures produced and consumed
 by both the *Input/Output* and *Processing Pipelines* functions.

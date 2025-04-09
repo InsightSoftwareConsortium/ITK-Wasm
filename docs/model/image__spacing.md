@@ -1,7 +1,6 @@
 
 # Slot: spacing
 
-
 Size of a pixel in physical space.
 x, y, z, ... order.
 

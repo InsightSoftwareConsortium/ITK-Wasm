@@ -1,7 +1,6 @@
 
 # Slot: polygonsBufferSize
 
-
 Size of the polygons buffer.
 
 URI: [wasm:polyData__polygonsBufferSize](https://w3id.org/itk/wasmpolyData__polygonsBufferSize)

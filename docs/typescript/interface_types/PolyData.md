@@ -1,6 +1,6 @@
 # PolyData
 
-A `PolyData` is represents renderable geometry.
+A [`PolyData`] is represents renderable geometry.
 
 A PolyData is a JavaScript object with the following properties:
 
@@ -26,3 +26,5 @@ A PolyData is a JavaScript object with the following properties:
 
 - `numberOfCellPixels`: Integer number of cell pixels.
 - `cellData`: `null | TypedArray` data associated with cells.
+
+[`PolyData`]: ../../model/PolyData.md

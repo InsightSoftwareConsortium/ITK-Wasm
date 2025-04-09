@@ -1,7 +1,6 @@
 
 # Slot: path
 
-
 The filename or path.
 
 URI: [wasm:path](https://w3id.org/itk/wasmpath)

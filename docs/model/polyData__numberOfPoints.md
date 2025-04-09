@@ -1,7 +1,6 @@
 
 # Slot: numberOfPoints
 
-
 Number of points in the polydata.
 
 URI: [wasm:polyData__numberOfPoints](https://w3id.org/itk/wasmpolyData__numberOfPoints)

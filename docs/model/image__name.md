@@ -1,7 +1,6 @@
 
 # Slot: name
 
-
 Name of the image.
 
 URI: [wasm:image__name](https://w3id.org/itk/wasmimage__name)

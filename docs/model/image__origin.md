@@ -1,7 +1,6 @@
 
 # Slot: origin
 
-
 Location of the center of the first pixel in physical space.
 x, y, z, ... order.
 
