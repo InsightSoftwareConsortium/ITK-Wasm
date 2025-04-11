@@ -1,6 +1,7 @@
 # Distribution
 
-This sections walks through examples on how to distribution applications for deployment that depend on itk-wasm packages.
+This section provides examples of how to distribute applications
+for deployment that rely on [ITK-Wasm packages](../../introduction/packages.md).
 
 ```{toctree}
 :maxdepth: 1
