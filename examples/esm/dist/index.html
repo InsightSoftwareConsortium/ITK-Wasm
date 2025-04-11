@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ITK-Wasm ESM Example</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <!-- Selector -->
+    <div>
+      <label>Select image:</label>
+      <input name="input-file" type="file">
+    </div>
+
+    <!-- Image visualization -->
+    <div id="viewer">
+      <canvas height="600"></canvas>
+    </div>
+
+    <!-- Image information -->
+    <textarea readonly name="image-information">Image information...</textarea>
+
+    <!-- Javascript -->
+    <script type="module">
+      // Example ITK-Wasm package, @itk-wasm/image-io
+      import { readImage } from "https://cdn.jsdelivr.net/npm/@itk-wasm/image-io@1.6.0/dist/bundle/index-worker-embedded.min.js";
+
+      // Visualization
+      import { Niivue, MULTIPLANAR_TYPE } from "https://cdn.jsdelivr.net/npm/@niivue/niivue@0.56.0/dist/index.js";
+      // Convert ITK-Wasm Image to Niivue Image
+      import { iwi2niiCore } from "https://cdn.jsdelivr.net/npm/@niivue/cbor-loader@1.2.1/+esm";
+
+      async function processImage(event) {
+        const outputTextArea = document.querySelector("textarea");
+        outputTextArea.textContent = "Loading...";
+
+        const dataTransfer = event.dataTransfer;
+        const files = event.target.files || dataTransfer.files;
+
+        const { image } = await readImage(files[0]);
+
+        function replacer(key, value) {
+          if (!!value && value.byteLength !== undefined) {
+            return String(value.slice(0, 6)) + "...";
+          }
+          return value;
+        }
+        outputTextArea.textContent = JSON.stringify(image, replacer, 4);
+
+        const canvas = document.querySelector('#viewer > canvas');
+        const nv = new Niivue({ multiplanarLayout: MULTIPLANAR_TYPE.GRID });
+        await nv.attachToCanvas(canvas);
+        const niiImage = iwi2niiCore(image);
+        await nv.loadVolumes([{ url: niiImage, name: 'image.nii' }])
+      }
+
+      const imageInput = document.querySelector("input[name='input-file']");
+      imageInput.addEventListener("change", processImage);
+    </script>
+
+  </body>
+</html>
+

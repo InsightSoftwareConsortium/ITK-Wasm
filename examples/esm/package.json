@@ -1,0 +1,36 @@
+{
+  "name": "itk-wasm-esm-example",
+  "version": "1.0.0",
+  "private": true,
+  "description": "This example demonstrates how to use an ITK-Wasm package ESM module from an HTML script tag.",
+  "scripts": {
+    "start": "http-server -c-1 ./dist/",
+    "test:browser": "pnpm exec playwright test",
+    "test:browser:ui": "pnpm exec playwright test --ui",
+    "test:browser:debug": "pnpm exec playwright test --debug",
+    "test:browser:report": "pnpm exec playwright show-report",
+    "test:debug": "start-server-and-test start http://localhost:8080 test:browser:debug",
+    "test:ui": "start-server-and-test start http://localhost:8080 test:browser:ui",
+    "test": "start-server-and-test start http://localhost:8080 test:browser"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm.git"
+  },
+  "keywords": [
+    "itk",
+    "esm"
+  ],
+  "author": "Matt McCormick <matt@fideus.io>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
+  },
+  "homepage": "https://github.com/InsightSoftwareConsortium/ITK-Wasm#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.13.13",
+    "http-server": "^14.1.1",
+    "start-server-and-test": "^2.0.11"
+  }
+}
