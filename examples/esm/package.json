@@ -5,10 +5,10 @@
   "description": "This example demonstrates how to use an ITK-Wasm package ESM module from an HTML script tag.",
   "scripts": {
     "start": "http-server -c-1 ./dist/",
-    "test:browser": "pnpm exec playwright test",
-    "test:browser:ui": "pnpm exec playwright test --ui",
-    "test:browser:debug": "pnpm exec playwright test --debug",
-    "test:browser:report": "pnpm exec playwright show-report",
+    "test:browser": "npx playwright test",
+    "test:browser:ui": "npx playwright test --ui",
+    "test:browser:debug": "npx playwright test --debug",
+    "test:browser:report": "npx playwright show-report",
     "test:debug": "start-server-and-test start http://localhost:8080 test:browser:debug",
     "test:ui": "start-server-and-test start http://localhost:8080 test:browser:ui",
     "test": "start-server-and-test start http://localhost:8080 test:browser"
