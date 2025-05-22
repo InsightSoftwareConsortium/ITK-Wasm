@@ -7,7 +7,7 @@ for deployment that rely on [ITK-Wasm packages](../../introduction/packages.md).
 :maxdepth: 1
 :caption: 📦 Distribution
 
-umd.md
+esm.md
 vite.md
 webpack.md
 node.md
