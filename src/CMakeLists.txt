@@ -25,6 +25,7 @@ set(WebAssemblyInterface_SRCS
   itkSupportInputImageTypes.cxx
   itkSupportInputMeshTypes.cxx
   itkSupportInputPolyDataTypes.cxx
+  itkSupportInputTransformTypes.cxx
   itktransformParameterizationString.cxx
   itkioComponentEnumFromJSON.cxx
   itkioPixelEnumFromJSON.cxx
