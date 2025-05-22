@@ -61,7 +61,7 @@ public:
 
     using InputPolyDataType = itk::wasm::InputPolyData<PolyDataType>;
     InputPolyDataType inputPolyData;
-    pipeline.add_option("InputPolyData", inputPolyData, "The input polydata")->required();
+    pipeline.add_option("input-polydata", inputPolyData, "The input polydata")->required();
 ```
 [...]
 

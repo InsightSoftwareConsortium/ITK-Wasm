@@ -70,6 +70,7 @@ set(WebAssemblyInterfaceTests
   itkSupportInputMeshTypesTest.cxx
   itkSupportInputMeshTypesMemoryIOTest.cxx
   itkSupportInputPolyDataTypesTest.cxx
+  itkSupportInputTransformTypesTest.cxx
   itkTransformJSONTest.cxx
   itkWasmTransformInterfaceTest.cxx
   itkWasmTransformInterfaceCompositeTest.cxx
@@ -285,6 +286,13 @@ itk_add_test(NAME itkSupportInputPolyDataTypesTest
     itkSupportInputPolyDataTypesTest
       DATA{Input/cow.iwm.cbor}
       ${ITK_TEST_OUTPUT_DIR}/itkSupportInputPolyDataTypesTest.iwm
+)
+
+itk_add_test(NAME itkSupportInputTransformTypesTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkSupportInputTransformTypesTest
+      DATA{Input/LinearTransform.iwt.cbor}
+      ${ITK_TEST_OUTPUT_DIR}/itkSupportInputTransformTypesTest.iwt
 )
 
 itk_add_test(NAME itkTransformJSONTest
