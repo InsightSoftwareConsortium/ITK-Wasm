@@ -11,9 +11,9 @@
     "test:browser:ui": "npx playwright test --ui",
     "test:browser:debug": "npx playwright test --debug",
     "test:browser:report": "npx playwright show-report",
-    "test:debug": "start-server-and-test start:production http-get://localhost:4173 test:browser:debug",
-    "test:ui": "start-server-and-test start:production http-get://localhost:4173 test:browser:ui",
-    "test": "start-server-and-test start:production http-get://localhost:4173 test:browser"
+    "test:debug": "start-server-and-test start:production http://localhost:4173 test:browser:debug",
+    "test:ui": "start-server-and-test start:production http://localhost:4173 test:browser:ui",
+    "test": "start-server-and-test start:production http://localhost:4173 test:browser"
   },
   "repository": {
     "type": "git",
