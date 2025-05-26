@@ -1,45 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>itk-wasm Vite Example</title>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <style>
-      html, body {
-        height: 90%;
-      }
-
-      textarea {
-        resize: none;
-        overflow-y: scroll;
-        position: absolute;
-        box-sizing: border-box;
-        width: 600px;
-        height: 400px;
-        bottom: 0px;
-        left: 0px;
-        top: 50px;
-      }
-
-      #viewer {
-        position: relative;
-        box-sizing: border-box;
-        height: 500px;
-        width: 600px;
-        left: 5px;
-        top: 450px;
-      }
-    </style>
+    <title>ITK-Wasm Vite Example</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./styles.css">
   </head>
 
   <body>
     <!-- Input selector -->
     <div>
-      <label>Select image or mesh:</label>
-      <input name="inputFile" type="file" />
+      <label>Select image:</label>
+      <input name="input-file" type="file" />
     </div>
 
-    <!-- File information -->
-    <textarea readonly name="fileInformation">File information...</textarea>
+    <!-- Image visualization -->
+    <div id="viewer">
+      <canvas height="600"></canvas>
+    </div>
+
+    <!-- Image information -->
+    <textarea readonly name="image-information">Image information...</textarea>
 
     <!-- Javascript -->
     <script type="module" src="./src/main.js"></script>

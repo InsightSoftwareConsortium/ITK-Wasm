@@ -23,5 +23,6 @@ And visit [http://localhost:8080/](http://localhost:8080/).
 
 ```
 npm install
+npx playwright install --with-deps
 npm test
 ```

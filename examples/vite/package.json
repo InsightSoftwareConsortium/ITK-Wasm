@@ -1,20 +1,19 @@
 {
-  "name": "itk-vite-example",
-  "version": "1.0.3",
-  "description": "This example demonstrates how to use itk-wasm in a Rollup project that targets the browser.",
-  "main": "index.js",
+  "name": "itk-wasm-vite-example",
+  "version": "2.0.0",
+  "description": "This example demonstrates how to use an ITK-Wasm project in a Vite/Rollup project that targets the browser.",
+  "type": "module",
   "scripts": {
-    "start": "vite --port 8085",
+    "start": "vite",
     "build": "vite build",
-    "start:production": "vite preview --port 8085",
-    "cypress:open": "pnpm exec cypress open",
-    "cypress:run": "pnpm exec cypress run",
-    "cypress:runChrome": "pnpm exec cypress run --browser chrome",
-    "cypress:runFirefox": "pnpm exec cypress run --browser firefox",
-    "test:debug": "start-server-and-test start http-get://localhost:8085 cypress:open",
-    "test": "start-server-and-test start:production http-get://localhost:8085 cypress:run",
-    "test:chrome": "start-server-and-test start:production http-get://localhost:8085 cypress:runChrome",
-    "test:firefox": "start-server-and-test start:production http-get://localhost:8085 cypress:runFirefox"
+    "start:production": "vite preview",
+    "test:browser": "npx playwright test",
+    "test:browser:ui": "npx playwright test --ui",
+    "test:browser:debug": "npx playwright test --debug",
+    "test:browser:report": "npx playwright show-report",
+    "test:debug": "start-server-and-test start:production http-get://localhost:4173 test:browser:debug",
+    "test:ui": "start-server-and-test start:production http-get://localhost:4173 test:browser:ui",
+    "test": "start-server-and-test start:production http-get://localhost:4173 test:browser"
   },
   "repository": {
     "type": "git",
@@ -25,22 +24,22 @@
     "rollup",
     "vite"
   ],
-  "author": "Matt McCormick <matt@mmmccormick.com>",
+  "author": "Matt McCormick <matt@fideus.io>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
   },
   "homepage": "https://github.com/InsightSoftwareConsortium/ITK-Wasm#readme",
   "dependencies": {
-    "curry": "^1.2.0",
-    "itk-image-io": "^1.0.0-b.37",
-    "itk-mesh-io": "^1.0.0-b.37",
-    "itk-wasm": "^1.0.0-b.37"
+    "@itk-wasm/image-io": "^1.6.0",
+    "@niivue/cbor-loader": "^1.2.1",
+    "@niivue/niivue": "^0.57.0"
   },
   "devDependencies": {
-    "cypress": "^13.2.0",
-    "start-server-and-test": "^1.15.2",
-    "vite": "^4.5.14",
-    "vite-plugin-static-copy": "^0.13.0"
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.13.13",
+    "start-server-and-test": "^2.0.11",
+    "vite": "^6.3.5",
+    "vite-plugin-static-copy": "^3.0.0"
   }
 }
