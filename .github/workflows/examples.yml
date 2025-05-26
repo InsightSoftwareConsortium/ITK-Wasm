@@ -236,34 +236,6 @@ jobs:
         #working-directory: ./examples/webpack
         #browser: firefox
         #start: npm start
-
-  test-vite-example:
-    name: vite
-    runs-on: ubuntu-24.04
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
-      with:
-        large-packages: false
-        tool-cache: true
-
-    - name: Test Vite Example on Chrome
-      uses: cypress-io/github-action@v6
-      with:
-        working-directory: ./examples/vite
-        browser: chrome
-        start: npm start
-
-    #- name: Test Vite Example on Firefox
-      #uses: cypress-io/github-action@v6
-      #with:
-        #working-directory: ./examples/vite
-        #browser: firefox
-        #start: npm start
-
   test-debugging-example:
     name: debugging
     runs-on: ubuntu-24.04
