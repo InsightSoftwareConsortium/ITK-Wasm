@@ -2,7 +2,7 @@
 import { test, expect } from "@playwright/test";
 
 test("loads an image", async ({ page }) => {
-  await page.goto("http://localhost:4173/");
+  await page.goto("http://localhost:8085/");
 
   await expect(page).toHaveTitle(/ITK-Wasm Vite/);
 

@@ -6,14 +6,14 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "start:production": "vite preview",
+    "preview": "vite preview",
     "test:browser": "npx playwright test",
     "test:browser:ui": "npx playwright test --ui",
     "test:browser:debug": "npx playwright test --debug",
     "test:browser:report": "npx playwright show-report",
-    "test:debug": "start-server-and-test start:production http://localhost:4173 test:browser:debug",
-    "test:ui": "start-server-and-test start:production http://localhost:4173 test:browser:ui",
-    "test": "start-server-and-test start:production http://localhost:4173 test:browser"
+    "test:debug": "start-server-and-test start http://localhost:8085 test:browser:debug",
+    "test:ui": "start-server-and-test start http://localhost:8085 test:browser:ui",
+    "test": "start-server-and-test start http://localhost:8085 test:browser"
   },
   "repository": {
     "type": "git",
