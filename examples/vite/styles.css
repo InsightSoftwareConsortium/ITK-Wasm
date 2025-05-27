@@ -1,0 +1,11 @@
+html, body {
+  height: 90%;
+}
+
+textarea {
+  resize: none;
+  overflow-y: scroll;
+  box-sizing: border-box;
+  width: 600px;
+  height: 400px;
+}

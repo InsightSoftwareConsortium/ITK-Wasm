@@ -1,32 +1,27 @@
-import { defineConfig } from 'vite'
-import path from 'path'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
+import path from "path";
 
-const itkConfig = path.resolve(__dirname, 'src', 'itkConfig.js')
+import { defineConfig } from "vite";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
+  server: {
+    port: 8085,
+  },
+  worker: {
+    format: "es",
+  },
+  optimizeDeps: {
+    exclude: ["itk-wasm", "@itk-wasm/image-io", "@thewtex/zstddec"],
+  },
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory
     viteStaticCopy({
       targets: [
-        { src: 'node_modules/itk-wasm/dist/web-workers/*', dest: 'dist/itk/web-workers' },
         {
-          src: 'node_modules/itk-image-io/*',
-          dest: 'dist/itk/image-io',
+          src: "node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}",
+          dest: "pipelines/",
         },
-        {
-          src: 'node_modules/itk-mesh-io/*',
-          dest: 'dist/itk/mesh-io',
-          rename: 'mesh-io'
-        }
       ],
-    })
+    }),
   ],
-  resolve: {
-    // where itk-wasm code has 'import ../itkConfig.js` point to the path of itkConfig
-    alias: {
-      '../itkConfig.js': itkConfig,
-      '../../itkConfig.js': itkConfig
-    }
-  }
-})
+});
