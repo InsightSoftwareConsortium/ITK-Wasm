@@ -1,23 +1,19 @@
 {
-  "name": "itk-webpack-example",
-  "version": "2.1.1",
-  "description": "This example demonstrates how to use itk-wasm in a Webpack project that targets the browser.",
-  "main": "index.js",
+  "name": "itk-wasm-webpack-example",
+  "version": "3.0.0",
+  "description": "This example demonstrates how to use an ITK-Wasm project in a Webpack project that targets the browser.",
+  "type": "module",
   "scripts": {
     "build": "webpack --progress --color --mode production",
     "start": "webpack-dev-server --port 8686 --mode development --static ./dist/",
-    "start:production": "webpack-dev-server --port 8686 --mode production --static ./dist/",
-    "cypress:open": "pnpm exec cypress open",
-    "cypress:run": "pnpm exec cypress run --config defaultCommandTimeout=8000",
-    "cypress:install": "pnpm exec cypress install",
-    "cypress:runChrome": "pnpm exec cypress run --config defaultCommandTimeout=8000 --browser chrome",
-    "cypress:runFirefox": "pnpm exec cypress run --config defaultCommandTimeout=8000 --browser firefox",
-    "cypress:runFirefox:ci": "npm run cypress:install && pnpm exec cypress run --config defaultCommandTimeout=8000 --browser firefox",
-    "test:debug": "start-server-and-test start http-get://localhost:8686 cypress:open",
-    "test": "start-server-and-test start:production http-get://localhost:8686 cypress:run",
-    "test:chrome": "start-server-and-test start:production http-get://localhost:8686 cypress:runChrome",
-    "test:firefox:ci": "start-server-and-test start:production http-get://localhost:8686 cypress:runFirefox:ci",
-    "test:firefox": "start-server-and-test start:production http-get://localhost:8686 cypress:runFirefox"
+    "preview": "webpack-dev-server --port 8686 --mode production --static ./dist/",
+    "test:browser": "npx playwright test",
+    "test:browser:ui": "npx playwright test --ui",
+    "test:browser:debug": "npx playwright test --debug",
+    "test:browser:report": "npx playwright show-report",
+    "test:debug": "start-server-and-test start http://localhost:8686 test:browser:debug",
+    "test:ui": "start-server-and-test start http://localhost:8686 test:browser:ui",
+    "test": "start-server-and-test start http://localhost:8686 test:browser"
   },
   "repository": {
     "type": "git",
@@ -27,27 +23,27 @@
     "itk",
     "webpack"
   ],
-  "author": "Matt McCormick <matt@mmmccormick.com>",
+  "author": "Matt McCormick <matt@fideus.io>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues"
   },
   "homepage": "https://github.com/InsightSoftwareConsortium/ITK-Wasm#readme",
   "dependencies": {
-    "curry": "^1.2.0",
-    "itk-image-io": "^1.0.0-b.18",
-    "itk-mesh-io": "^1.0.0-b.18",
-    "itk-wasm": "^1.0.0-b.18"
+    "@itk-wasm/image-io": "^1.6.0",
+    "@niivue/cbor-loader": "^1.2.1",
+    "@niivue/niivue": "^0.57.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.1",
-    "@babel/preset-env": "^7.13.5",
-    "babel-loader": "^8.2.3",
-    "copy-webpack-plugin": "^9.0.1",
-    "cypress": "^13.2.0",
-    "start-server-and-test": "^1.14.0",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.7.2"
+    "@babel/core": "^7.27.3",
+    "@babel/preset-env": "^7.27.2",
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.13.13",
+    "babel-loader": "^10.0.0",
+    "copy-webpack-plugin": "^13.0.0",
+    "start-server-and-test": "^2.0.11",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
   }
 }
