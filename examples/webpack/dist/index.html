@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>itk-wasm Webpack Example</title>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <title>ITK-Wasm Webpack Example</title>
+    <meta charset="UTF-8" />
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/itk-vtk-viewer@11.12.3/dist/itkVtkViewer.js"></script>
   </head>
 
   <body>
     <!-- Input selector -->
     <div>
-      <label>Select image or mesh:</label>
-      <input name="inputFile" type="file">
+      <label>Select image:</label>
+      <input name="input-file" type="file" />
     </div>
 
-    <!-- File information -->
-    <textarea readonly name="fileInformation">File information...</textarea>
+    <!-- Image visualization -->
+    <div id="viewer">
+      <canvas height="600"></canvas>
+    </div>
 
-    <!-- File visualization -->
-    <div id="viewer"></div>
+    <!-- Image information -->
+    <textarea readonly name="image-information">Image information...</textarea>
 
     <!-- Javascript -->
-    <script src="index.js"></script>
-    <script>
-      const outputTextArea = document.querySelector('textarea')
-      const handleFile = bundle.outputFileInformation(outputTextArea)
-      const fileInput = document.querySelector('input')
-      fileInput.addEventListener('change', handleFile);
-    </script>
+    <script type="module" src="index.js"></script>
   </body>
 </html>
