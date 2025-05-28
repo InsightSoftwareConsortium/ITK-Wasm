@@ -1,15 +1,25 @@
-# itk-wasm in a web browser application via Vite
+# ITK-Wasm package bundled with Vite
 
-This example demonstrates how to use *itk-wasm* in a web browser application built with [Vite](https://vitejs.dev/). Find the code in [itk-wasm/examples/Vite](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/Vite).
+This example demonstrates how to use an ITK-wasm package in a web browser application bundled with [Vite](https://vitejs.dev/).
 
-*itk-wasm* **asynchronously** downloads web worker JavaScript and WebAssembly Emscripten modules **on demand**.  For *itk-wasm* to work:
+Find the full example in the `ITK-Wasm/examples/vite` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/vite).
 
-* Copy *itk-wasm* Javascript and WebAssembly files to a public directory
-* Tell *itk-wasm* the location to download the Javascript and WebAssembly files in the public directory
+ITK-Wasm **asynchronously** downloads web worker JavaScript and WebAssembly Emscripten modules **on demand**. This allows the main application to load quickly, while the ITK-Wasm modules are loaded in the background when needed. It also allows the application to use only the ITK-Wasm modules that it needs, rather than loading all of them at once. Finally, computation-intensive tasks can be offloaded to web workers, which run in a separate thread from the main application, preventing the UI from freezing during long-running tasks.
 
-## Copy *itk-wasm* Javascript and WebAssembly files to a public directory
+A few steps are required to configure Vite to work with ITK-Wasm packages:
 
-In the Vite example, `vite.config.js` uses `vite-plugin-static-copy` to move prebuilt *itk-wasm* files to the `/dist` directory.
+1. Copy ITK-Wasm Javascript and WebAssembly assets to a public directory.
+2. Tell ITK-Wasm the location of the assets.
+3. Prevent Vite from pre-bundling ITK-Wasm packages.
+
+## Copy Javascript and WebAssembly assets to a public directory
+
+In the Vite example, `vite.config.js` uses `vite-plugin-static-copy` to copy prebuilt *ITK-Wasm* pipeline assets to the `/dist` directory.
+
+```sh
+npm install @itk-wasm/image-io
+npm install -D vite-plugin-static-copy
+```
 
 ```js
 import { defineConfig } from 'vite'
@@ -20,84 +30,99 @@ export default defineConfig({
     // put lazy loaded JavaScript and Wasm bundles in dist directory
     viteStaticCopy({
       targets: [
-        { src: 'node_modules/itk-wasm/dist/web-workers/*', dest: 'dist/itk/web-workers' },
         {
-          src: 'node_modules/itk-image-io/*',
-          dest: 'dist/itk/image-io',
+          src: "node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}",
+          dest: "pipelines/",
         },
-        {
-          src: 'node_modules/itk-mesh-io/*',
-          dest: 'dist/itk/mesh-io',
-          rename: 'mesh-io'
-        }
       ],
-    })
+    }),
   ],
   ...
 })
 ```
 
-The Vite config copies *web-workers* directory, which asynchronously perform IO or runs processing pipelines in a background thread.
+## Tell ITK-Wasm the location of the WebAssembly assets
 
-The config copies the complete *image-io* and *mesh-io* directories. You may want to copy a subset of *image-io* or *mesh-io* files, based on what features you use of *itk-wasm*.
-
-## Tell *itk-wasm* the location to download the Javascript and WebAssembly files
-
-To change the location of the *itk-wasm* web worker and Emscripten modules, configure Vite's `resolve.alias` setting.
+Call `setPipelinesBaseUrl` to tell the ITK-Wasm package where to find the WebAssembly assets. This is typically done in the main JavaScript file of your application, after importing the ITK-Wasm package.
 
 ```js
-import { defineConfig } from 'vite'
-import path from 'path'
+// Example ITK-Wasm package, @itk-wasm/image-io
+import { readImage, setPipelinesBaseUrl } from "@itk-wasm/image-io";
 
-const itkConfig = path.resolve(__dirname, 'src', 'itkConfig.js')
+// Use app-vendored WebAssembly module assets copied by viteStaticCopy
+const viteBaseUrl = import.meta.env.BASE_URL || "/";
+const pipelinesBaseUrl = new URL(
+  `${viteBaseUrl}pipelines`,
+  document.location.origin
+).href;
+setPipelinesBaseUrl(pipelinesBaseUrl);
+
+[...]
+  // Call the readImage function from the package
+  const { image } = await readImage(files[0]);
+[...]
+```
+
+## Prevent Vite from pre-bundling ITK-Wasm packages
+
+Ensure that Vite does try to pre-bundle the ITK-Wasm packages, which can break lazy loading of the web worker and Emscripten modules. This is done by adding associated packages the `optimizeDeps.exclude` array in `vite.config.js`. This is more important when an ITK-Wasm package is a transitive dependency.
+
+```js
+import { defineConfig } from "vite";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
-  ...
-  resolve: {
-    // where itk-wasm code has 'import ../itkConfig.js` point to the path of itkConfig
-    alias: {
-      '../itkConfig.js': itkConfig,
-      '../../itkConfig.js': itkConfig
-    }
-  }
-})
+
+  // @thewtex/zstddec is used to decompress the WebAssembly modules
+  optimizeDeps: {
+    exclude: ["itk-wasm", "@itk-wasm/image-io", "@thewtex/zstddec"],
+  },
+
+  plugins: [
+    // put lazy loaded JavaScript and Wasm bundles in dist directory
+    viteStaticCopy({
+      targets: [
+        {
+          src: "node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}",
+          dest: "pipelines/",
+        },
+      ],
+    }),
+  ],
+});
 ```
 
-The itkConfig.js file holds paths where *itk-wasm* fetches assets at runtime.
-
-```js
-const itkConfig = {
-  pipelineWorkerUrl: '/itk/web-workers/min-bundles/pipeline.worker.js',
-  imageIOUrl: '/itk/image-io',
-  meshIOUrl: '/itk/mesh-io',
-  pipelinesUrl: '/itk/pipelines'
-}
-
-export default itkConfig
-```
 
 ## Test the example
 
-In the example [directory](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/Vite)
+In the [example directory](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/Vite):
 
 ### Development
 
 ```sh
 npm install
-npm run start
+npm start
 ```
-And visit [http://localhost:8080/](http://localhost:8080/).
 
-### Test static bundled assets
+And visit [http://localhost:8085/](http://localhost:8085/).
+
+<video width="480" autoplay muted loop>
+  <source src="../../_static/videos/vite.webm" type="video/webm">
+  Sorry, your browser doesn't support embedded videos.
+</video>
+
+### Build for production and preview
 
 ```sh
 npm run build
-npm run start:production
+npm run preview
 ```
 
-### Run Cypress end to end tests
+### Run Playwright end to end tests
+
+The full example is configured for browser-based testing with the [Playwright](https://playwright.dev/) library.
 
 ```sh
-npm run build
-npm run test
+npx playwright install --with-deps
+npm test
 ```

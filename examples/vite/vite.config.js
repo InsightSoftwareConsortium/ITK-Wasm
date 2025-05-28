@@ -1,14 +1,9 @@
-import path from "path";
-
 import { defineConfig } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
   server: {
     port: 8085,
-  },
-  worker: {
-    format: "es",
   },
   optimizeDeps: {
     exclude: ["itk-wasm", "@itk-wasm/image-io", "@thewtex/zstddec"],
