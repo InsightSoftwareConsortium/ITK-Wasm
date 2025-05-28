@@ -1,28 +1,41 @@
-import { readFile } from 'itk-wasm'
-import curry from 'curry'
+// Example ITK-Wasm package, @itk-wasm/image-io
+import { readImage, setPipelinesBaseUrl } from "@itk-wasm/image-io";
+// Use local, vendored WebAssembly module assets copied by viteStaticCopy
+const webpackPublicPath = __webpack_public_path__ || "/";
+const pipelinesBaseUrl = new URL(
+  `${webpackPublicPath}pipelines`,
+  document.location.origin
+).href;
+setPipelinesBaseUrl(pipelinesBaseUrl);
 
-const outputFileInformation = curry(function outputFileInformation (outputTextArea, event) {
-  outputTextArea.textContent = 'Loading...'
+// Visualization
+import { Niivue, MULTIPLANAR_TYPE } from "@niivue/niivue";
+// Convert ITK-Wasm Image to Niivue Image
+import { iwi2niiCore } from "@niivue/cbor-loader";
 
-  const dataTransfer = event.dataTransfer
-  const files = event.target.files || dataTransfer.files
+async function processImage(event) {
+  const outputTextArea = document.querySelector("textarea");
+  outputTextArea.textContent = "Loading...";
 
-  const viewerElement = document.getElementById('viewer')
-  !!viewerElement && itkVtkViewer.createViewerFromFiles(viewerElement, files)
+  const dataTransfer = event.dataTransfer;
+  const files = event.target.files || dataTransfer.files;
 
-  return readFile(null, files[0])
-    .then(function ({ image, mesh, webWorker }) {
-      webWorker.terminate()
-      const imageOrMesh = image || mesh
+  const { image } = await readImage(files[0]);
 
-      function replacer (key, value) {
-        if (!!value && value.byteLength !== undefined) {
-          return String(value.slice(0, 6)) + '...'
-        }
-        return value
-      }
-      outputTextArea.textContent = JSON.stringify(imageOrMesh, replacer, 4)
-    })
-})
+  function replacer(key, value) {
+    if (!!value && value.byteLength !== undefined) {
+      return String(value.slice(0, 6)) + "...";
+    }
+    return value;
+  }
+  outputTextArea.textContent = JSON.stringify(image, replacer, 4);
 
-export { outputFileInformation }
+  const canvas = document.querySelector("#viewer > canvas");
+  const nv = new Niivue({ multiplanarLayout: MULTIPLANAR_TYPE.GRID });
+  await nv.attachToCanvas(canvas);
+  const niiImage = iwi2niiCore(image);
+  await nv.loadVolumes([{ url: niiImage, name: "image.nii" }]);
+}
+
+const imageInput = document.querySelector("input[name='input-file']");
+imageInput.addEventListener("change", processImage);

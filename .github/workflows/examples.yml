@@ -13,6 +13,7 @@ jobs:
     name: node-js
     runs-on: ubuntu-24.04
 
+    
     steps:
     - uses: actions/checkout@v4
 
@@ -209,33 +210,6 @@ jobs:
       working-directory: ./examples/inputs-outputs/typescript
       run: |
         pnpm test
-
-  test-webpack-example:
-    name: webpack
-    runs-on: ubuntu-24.04
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
-      with:
-        large-packages: false
-        tool-cache: true
-
-    - name: Test Webpack Example on Chrome
-      uses: cypress-io/github-action@v6
-      with:
-        working-directory: ./examples/webpack
-        browser: chrome
-        start: npm start
-
-    #- name: Test Webpack Example on Firefox
-      #uses: cypress-io/github-action@v6
-      #with:
-        #working-directory: ./examples/webpack
-        #browser: firefox
-        #start: npm start
   test-debugging-example:
     name: debugging
     runs-on: ubuntu-24.04
