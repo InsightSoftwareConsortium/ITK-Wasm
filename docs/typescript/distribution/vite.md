@@ -6,7 +6,7 @@ Find the full example in the `ITK-Wasm/examples/vite` [directory of the GitHub r
 
 ITK-Wasm **asynchronously** downloads web worker JavaScript and WebAssembly Emscripten modules **on demand**. This allows the main application to load quickly, while the ITK-Wasm modules are loaded in the background when needed. It also allows the application to use only the ITK-Wasm modules that it needs, rather than loading all of them at once. Finally, computation-intensive tasks can be offloaded to web workers, which run in a separate thread from the main application, preventing the UI from freezing during long-running tasks.
 
-A few steps are required to configure Vite to work with ITK-Wasm packages:
+A few configuration steps enhance how Vite works with ITK-Wasm packages:
 
 1. Copy ITK-Wasm Javascript and WebAssembly assets to a public directory.
 2. Tell ITK-Wasm the location of the assets.
@@ -95,7 +95,7 @@ export default defineConfig({
 
 ## Test the example
 
-In the [example directory](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/Vite):
+In the [example directory](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/vite):
 
 ### Development
 

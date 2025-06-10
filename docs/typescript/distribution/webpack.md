@@ -1,212 +1,99 @@
-# itk-wasm in a browser application via Webpack
+# ITK-Wasm package bundled with Webpack
 
-This example demonstrates how to use *itk-wasm* in a web browser application built with [Webpack](https://webpack.js.org/). Find the full example in the `itk-wasm/examples/Webpack` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/Webpack).
+This example demonstrates how to use an ITK-wasm package in a web browser application bundled with [Webpack](https://webpack.js.org/).
+
+Find the full example in the `ITK-Wasm/examples/webpack` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/webpack).
 
 Since we asynchronously download the *itk-wasm* JavaScript and WebAssembly Emscripten modules, a few extra configuration steps are required.
 
-This example assumes you are creating a [Node.js package](https://docs.npmjs.com/getting-started/what-is-npm). If you do not already have a `package.json` file, [create one](https://docs.npmjs.com/getting-started/using-a-package.json), first.
+ITK-Wasm **asynchronously** downloads web worker JavaScript and WebAssembly Emscripten modules **on demand**. This allows the main application to load quickly, while the ITK-Wasm modules are loaded in the background when needed. It also allows the application to use only the ITK-Wasm modules that it needs, rather than loading all of them at once. Finally, computation-intensive tasks can be offloaded to web workers, which run in a separate thread from the main application, preventing the UI from freezing during long-running tasks.
 
-Add `itk-wasm` and the io-packages to your project's dependencies:
+A few configuration steps enhance how Webpack works with ITK-Wasm packages:
+
+1. Copy ITK-Wasm Javascript and WebAssembly assets to a public directory.
+2. Tell ITK-Wasm the location of the assets.
+
+## Copy Javascript and WebAssembly assets to a public directory
+
+In the Webpack example, `webpack.config.js` uses `copy-webpack-plugin` to copy prebuilt *ITK-Wasm* pipeline assets to the `/dist` directory.
 
 ```sh
-npm install --save itk-wasm itk-image-io itk-mesh-io
+npm install @itk-wasm/image-io
+npm install -D copy-webpack-plugin
 ```
-
-Then, install Webpack-related development dependencies:
-
-```sh
-npm install --save-dev webpack webpack-cli webpack-dev-server worker-loader babel-loader '@babel/preset-env' '@babel/core' copy-webpack-plugin
-```
-
-Next, create a `webpack.config.js` file like the following:
 
 ```js
-const path = require('path')
+[...]
 
-const webpack = require('webpack')
-const CopyPlugin = require('copy-webpack-plugin')
+import CopyPlugin from "copy-webpack-plugin";
 
-const entry = path.join(__dirname, 'src', 'index.js')
-const outputPath = path.join(__dirname, './dist')
-const itkConfig = path.resolve(__dirname, 'src', 'itkConfig.js')
-
-module.exports = {
-  entry,
-  output: {
-    path: outputPath,
-    filename: 'index.js',
-    library: {
-      type: 'umd',
-      name: 'bundle',
-    },
-  },
-  module: {
-    rules: [
-      { test: /\.js$/, loader: 'babel-loader' }
-    ]
-  },
+export default {
+  [...]
   plugins: [
     new CopyPlugin({
       patterns: [
         {
-          from: path.join(__dirname, 'node_modules', 'itk-wasm', 'dist', 'web-workers'),
-          to: path.join(__dirname, 'dist', 'itk', 'web-workers')
+          from: "node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}",
+          to: "pipelines/[name][ext]",
         },
-        {
-          from: path.join(__dirname, 'node_modules', 'itk-image-io'),
-          to: path.join(__dirname, 'dist', 'itk', 'image-io')
-        },
-        {
-          from: path.join(__dirname, 'node_modules', 'itk-mesh-io'),
-          to: path.join(__dirname, 'dist', 'itk', 'mesh-io')
-        }
-    ]})
+      ],
+    }),
   ],
-  resolve: {
-    fallback: { fs: false, path: false, url: false, module: false },
-    alias: {
-      '../itkConfig.js': itkConfig,
-      '../../itkConfig.js': itkConfig,
-    },
-  },
-  performance: {
-    maxAssetSize: 10000000
-  }
-}
+  [...]
+};
 ```
 
-Replace `src/index.js` by your [Webpack entry point](https://webpack.js.org/concepts/#entry). Replace `./dist/` and the output filename with where you [want Webpack to place the generated JavaScript bundle](https://webpack.js.org/concepts/#output).
+## Tell ITK-Wasm the location of the WebAssembly assets
 
-
-The [babel-loader](https://github.com/babel/babel-loader) rule will [transpile](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) JavaScript from the latest language syntax to a syntax supported by existing browser clients. Configure the target browsers to support with a `.babelrc` file like the following:
+Call `setPipelinesBaseUrl` to tell the ITK-Wasm package where to find the WebAssembly assets. This is typically done in the main JavaScript file of your application, after importing the ITK-Wasm package.
 
 ```js
-{
-  presets: [
-    ['@babel/preset-env', {
-      targets: {
-        browsers: ['last 2 versions'],
-      },
-    }],
-  ],
-}
+// Example ITK-Wasm package, @itk-wasm/image-io
+import { readImage, setPipelinesBaseUrl } from "@itk-wasm/image-io";
+// Use local, vendored WebAssembly module assets copied by copy-webpack-plugin
+const webpackPublicPath = __webpack_public_path__ || "/";
+const pipelinesBaseUrl = new URL(
+  `${webpackPublicPath}pipelines`,
+  document.location.origin
+).href;
+setPipelinesBaseUrl(pipelinesBaseUrl);
+
+[...]
+  // Call the readImage function from the package
+  const { image } = await readImage(files[0]);
+[...]
 ```
 
-The *itk-wasm* Emscripten modules are loaded and executed **asynchronously** and **on demand**. This means the client only download the content it needs and the user does not experience interruption of the main user interface thread during computation. However, a few extra configuration steps are required since the modules are not bundled by Webpack.
+## Test the example
 
-The `CopyPlugin` copies *itk-wasm* Emscripten modules to distribute along with your Webpack bundle. In this example, we copy all *image-io*, and *mesh-io*. In your project, you may want to copy only the *image-io* or a subset of the *image-io*, based on your needs. We also copy the *web-workers*, which asynchronously perform IO or run processing pipelines in a background thread.
+In the [example directory](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/webpack):
 
-To change the location of the *itk-wasm* web worker and Emscripten modules, set the Webpack `resolve.alias` setting for an `itkConfig.js` module so the bundle will use our included web worker and io WebAssembly modules. The `src/itkConfig.js` for this example is:
+### Development
 
-```js
-const itkConfig = {
-  pipelineWorkerUrl: '/itk/web-workers/min-bundles/pipeline.worker.js',
-  imageIOUrl: '/itk/image-io',
-  meshIOUrl: '/itk/mesh-io',
-  pipelinesUrl: '/itk/pipelines',
-}
-
-export default itkConfig
+```sh
+npm install
+npm start
 ```
 
-Define commands to build the project or build the project and start a local development web server in the *scripts* section of the `package.json` file,
+And visit [http://localhost:8686/](http://localhost:8686/).
 
-```js
-  "scripts": {
-    "build": "webpack --progress --colors -p",
-    "start": "webpack-dev-server --content-base ./dist/ --watch-content-base"
-  },
-```
+<video width="480" autoplay muted loop>
+  <source src="../../_static/videos/vite.webm" type="video/webm">
+  Sorry, your browser doesn't support embedded videos.
+</video>
 
-Build the project with
+### Build for production and preview
 
 ```sh
 npm run build
+npm run preview
 ```
 
-To start the development web server, run
+### Run Playwright end to end tests
+
+The full example is configured for browser-based testing with the [Playwright](https://playwright.dev/) library.
 
 ```sh
-npm run start
+npx playwright install --with-deps
+npm test
 ```
-
-## Testing with Cypress
-
-This section described how to configure browser-based testing with the [Cypress](https://www.cypress.io/)
-
-First, install Cypress and the `start-server-and-test` package.
-
-```sh
-npm install --save-dev cypress start-server-and-test
-```
-
-The `start-server-and-test` tool can start our development server for testing with Cypress.
-
-Create directories to house our tests and test data:
-
-```sh
-mkdir -p cypress/integration cypress/fixtures
-```
-
-Provide a test dataset:
-
-```sh
-cp /path/to/cow.vtk cypress/fixtures/cow.vtk
-```
-
-Create our test script at *cypress/integration/load_data_spec.js*. The test files names should end in **_spec.js*.
-
-```js
-describe('Load data', () => {
-  it('successfully loads a mesh', () => {
-    cy.visit('http://localhost:8080/')
-    cy.fixture('cow.vtk', null).then((cowBuffer) => {
-      cy.get('input[type=file]').selectFile({ contents: cowBuffer, fileName: 'cow.vtk' })
-      cy.get('textarea').contains('"numberOfPoints": 2903,')
-    })
-  })
-})
-```
-
-Then, specify npm scripts to develop and debug the tests and run them in an automated way.
-
-```js
-  "scripts": {
-    "start": "webpack-dev-server --mode development --static ./dist/",
-    "cypress:open": "pnpm exec cypress open",
-    "cypress:run": "pnpm exec cypress run",
-    "test:debug": "start-server-and-test start http-get://localhost:8080 cypress:open",
-    "test": "start-server-and-test start http-get://localhost:8080 cypress:run"
-  },
-```
-
-Note that [with webpack-dev-server](https://github.com/bahmutov/start-server-and-test#note-for-webpack-dev-server-users) we need to use `http-get` with `start-server-and-test`.
-
-To develop or debug tests, run
-
-```sh
-npm run test:debug
-```
-
-This will open Cypress. Select the test to run:
-
-
-![Select load_data_spec](/_static/umd/umd_select_load_data_spec.png)
-
-This will load the selected browser to see the test status and web page that is tested.  You can also open the browser's development console.
-
-![Develop and debug tests](/_static/umd/umd_test_debug.png)
-
-To run the tests during continuous integration:
-
-```sh
-npm run test
-```
-
-This will output the tests results in the console:
-
-![Console test output](/_static/umd/umd_run_tests.png)
-
-And produce a video of the result at *cypress/videos/*.
-
-![Console test output](/_static/umd/umd_cypress_video.gif)
