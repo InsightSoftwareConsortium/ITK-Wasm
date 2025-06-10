@@ -845,6 +845,21 @@ importers:
         specifier: ^0.17.0
         version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
+  packages/transform:
+    devDependencies:
+      '@itk-wasm/compare-images-build':
+        specifier: workspace:^
+        version: link:../compare-images
+      '@itk-wasm/dam':
+        specifier: ^1.1.0
+        version: 1.1.1
+      '@itk-wasm/image-io-build':
+        specifier: workspace:^
+        version: link:../image-io
+      itk-wasm:
+        specifier: workspace:^
+        version: link:../core/typescript/itk-wasm
+
   packages/transform-io:
     devDependencies:
       '@itk-wasm/dam':
@@ -890,6 +905,43 @@ importers:
       start-server-and-test:
         specifier: ^2.0.12
         version: 2.0.12
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+      vite:
+        specifier: ^6.2.3
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
+      vite-plugin-static-copy:
+        specifier: ^0.17.0
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
+
+  packages/transform/typescript:
+    dependencies:
+      itk-wasm:
+        specifier: 1.0.0-b.188
+        version: 1.0.0-b.188
+    devDependencies:
+      '@itk-wasm/demo-app':
+        specifier: ^0.2.0
+        version: 0.2.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(@types/react@18.3.1)(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)
+      '@itk-wasm/image-io':
+        specifier: ^1.3.1
+        version: 1.3.1
+      '@itk-wasm/mesh-io':
+        specifier: ^1.4.2
+        version: 1.7.0
+      '@itk-wasm/transform-io':
+        specifier: ^0.1.1
+        version: 0.1.1
+      '@types/node':
+        specifier: ^24.0.3
+        version: 24.0.3
+      esbuild:
+        specifier: ^0.25.1
+        version: 0.25.2
+      shx:
+        specifier: ^0.4.0
+        version: 0.4.0
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -1899,8 +1951,19 @@ packages:
   '@itk-viewer/arcball@0.0.1':
     resolution: {integrity: sha512-TpXNoKAOtmpVVULUbytEVLyGTjgtpAuitNLXRY5Avf6+Tcsiogj7Im+a7J9Jr2Vr6lGS4fp4B6Pd1hwKotW0vw==}
 
+  '@itk-viewer/blosc-zarr@0.1.3':
+    resolution: {integrity: sha512-O8REh/T8M99ADtE0Cr17FvhJtt++8MLP6giGcAaH35gbNqpMVJeg0gI2444HQplaJ4xicoeVrU5B0ja58+OfJA==}
+
   '@itk-viewer/blosc-zarr@0.2.3':
     resolution: {integrity: sha512-70CVcQurIEGDxM8nGkFQPtOoARywMIkE6NrBwt2SwsMocLBQ3KXW4/2+KGbqXymf34qrgdzifR7ezg0kWggBpw==}
+
+  '@itk-viewer/element@0.3.0':
+    resolution: {integrity: sha512-UUgrJ6k+tQphj+YJOMJLZUqnVSuZmzu7sYKNm3O2TE2e3Bjxp6duia5Qu2P+cLbtdF5kMN3mKckdVdy7FUUbqw==}
+    peerDependencies:
+      '@material/web': ^1.3.0
+    peerDependenciesMeta:
+      '@material/web':
+        optional: true
 
   '@itk-viewer/element@0.6.6':
     resolution: {integrity: sha512-sU8cvGwSp0NCRfGwOP3BO9wLe4UYDDcAL6Dz4RgvQ757S3IRSo+Hh1LwBCg09NCLdBxs8vQvL8AKQOOK5fhOVw==}
@@ -1909,6 +1972,9 @@ packages:
     peerDependenciesMeta:
       '@shoelace-style/shoelace':
         optional: true
+
+  '@itk-viewer/io@0.1.8':
+    resolution: {integrity: sha512-soewY9nbLq0Z8HK2U8mdfzNZtmRPZbxcmzl7HWYdpmCu1cn5pp2y3cZsARjKTnuzsXrRr0DzfV29cBiJg21H8A==}
 
   '@itk-viewer/io@0.4.3':
     resolution: {integrity: sha512-LKJdmQDTqLodY6CUn0ZSK/lHnwjmbfLGHZV/35er2m3tdX9wXPjIq3E2LNlUXDexJuj5rX/+rrPDKGyybC9gLw==}
@@ -1922,8 +1988,14 @@ packages:
   '@itk-viewer/utils@0.1.4':
     resolution: {integrity: sha512-4q7d4nQWPa+CBAr1smlQ2i5qNkGOn10iIPrwwLvmgqDR+9Krwdv4HXHenJayYqA9WFNfRgGVqU9z5/y4UEqP/A==}
 
+  '@itk-viewer/viewer@0.3.0':
+    resolution: {integrity: sha512-gp9yIhk4o/QbRh/Ni1PXs2xabRtVB/4cpgWpkvHz9gXN+lJn8gvhaB9pXs5HOolgReiZlFcouciMhSz4j6Rntw==}
+
   '@itk-viewer/viewer@0.6.2':
     resolution: {integrity: sha512-lS5l3+Wr9ZLeFKt9BxGJSjB0ja3BW/fnu5k3M85FVmGwG7mMkDfw4HdFeWQg3iRBmL9J3IyIJHW2BwMThXQ6Og==}
+
+  '@itk-viewer/vtkjs@0.1.0':
+    resolution: {integrity: sha512-tkJKiS4182bTPVLl/ECTqSztojUB3xNMP7QOzIFpvmdHdMtjNNXJaINfsPYc6kilsNhInL34bszQRz7QcPHJoA==}
 
   '@itk-viewer/vtkjs@0.4.6':
     resolution: {integrity: sha512-qB9WtZ1spHgkLw3DftPCSGImYtWh1iIFwSr9WcOVWlj9JttVLuj9bH8FaVZW+lKQMv/l6kl2S3j85mMbFY1Xdw==}
@@ -1932,14 +2004,23 @@ packages:
     resolution: {integrity: sha512-7+9L3lrLMKF4y6B6qjs8GqfbpxT0waOJUM14NdMNEA6M+BoBS8fdHREhQHo2s7QMA5O7I+Jv7m+dyqlisGnbdQ==}
     hasBin: true
 
+  '@itk-wasm/demo-app@0.2.0':
+    resolution: {integrity: sha512-nyteNJWsaeXv0+QHRJ8AYJWt8RSriJE2rZ7BYwDFmWCfp+et/xf2kULJXRE2GjCgHzpULHxE8LeWqS/usO+sAg==}
+
   '@itk-wasm/htj2k@2.1.0':
     resolution: {integrity: sha512-22+mWgXr/LYRCqzzfIJ5il5bgYdJjPD5jiP4XXPvSgCjp48bui5zvZSkvMmXy89bJbVinUB1O6KHuB3K0MUong==}
 
   '@itk-wasm/image-io@1.3.1':
     resolution: {integrity: sha512-PJBNyez1qJD4+rkFG5/BQ6G/4yzs1uKgPPw6n+i8yEF6qzN07aY444R6bV6nkWuvbLpXe6XxGPmfRqkJKM8PWw==}
 
+  '@itk-wasm/mesh-io@1.7.0':
+    resolution: {integrity: sha512-D7LIgk7/SPuzBJm2k8Xp4ScjkVlB/UW4wZH9VncUk41JYADH5TR596Ml0ECk+NjbTpeB9XaiB8vs1sZASF4JLw==}
+
   '@itk-wasm/mesh-to-poly-data@1.1.0':
     resolution: {integrity: sha512-c+OB8PEaJfUAysERCzA2ggXdYwNg0P6YniuPPmkhxCVJtz62XyQ6rq0bT6rF6Cq8FEljTP3Spl9174ZiLNskvw==}
+
+  '@itk-wasm/transform-io@0.1.1':
+    resolution: {integrity: sha512-PdvzYPyKBwGKm/1dENIDpkx4Cgw5JhpcmRWupzxMYpb6VEYQxVJSiyCzTRJoS5YocZQbdVhTIanYeId3MbRxZg==}
 
   '@jridgewell/gen-mapping@0.3.8':
     resolution: {integrity: sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA==}
@@ -4329,6 +4410,10 @@ packages:
     resolution: {integrity: sha512-B3/W8MqKZ3KOl+96W1CvgAJjOmlqsac7iaEooP98k3yzH04oAsuyh3xZooOxDVNCucEdIj2Zt7lALbdFv+BoPQ==}
     hasBin: true
 
+  itk-wasm@1.0.0-b.188:
+    resolution: {integrity: sha512-7bQI43DoHg0MIumr9yE5VfVQlSv3B/VtsLqrB0RC3tUKnkMeL71rSRiCav3bxQJoCRYv+/Cb0ZZFZ/sVCa4imw==}
+    hasBin: true
+
   jest-worker@27.5.1:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
@@ -6135,6 +6220,9 @@ packages:
   xstate@5.17.1:
     resolution: {integrity: sha512-RNwcXdth+kboWZg+Zhf6f6iNP6CtAAiS4z4qwyTd/fWBH9PHXRqko6OdW3xOTwP62f0mVD+jsPOSqY4Ar8nZKQ==}
 
+  xstate@5.5.2:
+    resolution: {integrity: sha512-RLf9wc5HDO0pvj2TQQ+lY6tDW8CU8Entfgmtzzo6NhkC8qOEBXSN6WUSvnUM7NHZgdih06+by1b4nbaHVu1c+g==}
+
   xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
     engines: {node: '>=0.4'}
@@ -7511,12 +7599,43 @@ snapshots:
     dependencies:
       gl-matrix: 3.4.3
 
+  '@itk-viewer/blosc-zarr@0.1.3':
+    dependencies:
+      '@itk-viewer/utils': 0.1.4
+      itk-wasm: 1.0.0-b.160
+    transitivePeerDependencies:
+      - debug
+
   '@itk-viewer/blosc-zarr@0.2.3':
     dependencies:
       '@itk-viewer/utils': 0.1.4
       itk-wasm: 1.0.0-b.160
     transitivePeerDependencies:
       - debug
+
+  '@itk-viewer/element@0.3.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)':
+    dependencies:
+      '@itk-viewer/arcball': 0.0.1
+      '@itk-viewer/io': 0.1.8
+      '@itk-viewer/remote-viewport': 0.2.21
+      '@itk-viewer/utils': 0.1.4
+      '@itk-viewer/viewer': 0.3.0
+      '@itk-viewer/vtkjs': 0.1.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)
+      '@lit/context': 1.1.1
+      gl-matrix: 3.4.3
+      itk-wasm: 1.0.0-b.160
+      lit: 3.2.0
+      xstate: 5.5.2
+      xstate-lit: 2.0.5(@lit/context@1.1.1)(lit@3.2.0)(xstate@5.5.2)
+    transitivePeerDependencies:
+      - '@babel/preset-env'
+      - autoprefixer
+      - bufferutil
+      - debug
+      - supports-color
+      - utf-8-validate
+      - webpack
+      - wslink
 
   '@itk-viewer/element@0.6.6(@babel/preset-env@7.24.5(@babel/core@7.24.5))(@shoelace-style/shoelace@2.15.0(@types/react@18.3.1))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0)(wslink@2.0.2)':
     dependencies:
@@ -7544,6 +7663,19 @@ snapshots:
       - utf-8-validate
       - webpack
       - wslink
+
+  '@itk-viewer/io@0.1.8':
+    dependencies:
+      '@itk-viewer/blosc-zarr': 0.1.3
+      '@itk-viewer/utils': 0.1.4
+      axios: 1.8.4(debug@4.4.1)
+      comlink: 4.4.1
+      gl-matrix: 3.4.3
+      itk-wasm: 1.0.0-b.160
+      p-queue: 8.0.1
+      zod: 3.23.7
+    transitivePeerDependencies:
+      - debug
 
   '@itk-viewer/io@0.4.3':
     dependencies:
@@ -7581,6 +7713,15 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  '@itk-viewer/viewer@0.3.0':
+    dependencies:
+      '@itk-viewer/io': 0.1.8
+      '@itk-viewer/utils': 0.1.4
+      gl-matrix: 3.4.3
+      xstate: 5.5.2
+    transitivePeerDependencies:
+      - debug
+
   '@itk-viewer/viewer@0.6.2':
     dependencies:
       '@itk-viewer/io': 0.4.3
@@ -7589,6 +7730,20 @@ snapshots:
       xstate: 5.17.1
     transitivePeerDependencies:
       - debug
+
+  '@itk-viewer/vtkjs@0.1.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)':
+    dependencies:
+      '@itk-viewer/io': 0.1.8
+      '@itk-viewer/viewer': 0.3.0
+      '@kitware/vtk.js': 30.4.1(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)
+      gl-matrix: 3.4.3
+      xstate: 5.5.2
+    transitivePeerDependencies:
+      - '@babel/preset-env'
+      - autoprefixer
+      - debug
+      - webpack
+      - wslink
 
   '@itk-viewer/vtkjs@0.4.6(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0)(wslink@2.0.2)':
     dependencies:
@@ -7617,9 +7772,28 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  '@itk-wasm/demo-app@0.2.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(@types/react@18.3.1)(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)':
+    dependencies:
+      '@itk-viewer/element': 0.3.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)
+      '@itk-viewer/io': 0.1.8
+      '@shoelace-style/shoelace': 2.15.0(@types/react@18.3.1)
+      itk-wasm: 1.0.0-b.188
+      lit: 3.2.0
+    transitivePeerDependencies:
+      - '@babel/preset-env'
+      - '@material/web'
+      - '@types/react'
+      - autoprefixer
+      - bufferutil
+      - debug
+      - supports-color
+      - utf-8-validate
+      - webpack
+      - wslink
+
   '@itk-wasm/htj2k@2.1.0':
     dependencies:
-      itk-wasm: 1.0.0-b.183
+      itk-wasm: 1.0.0-b.188
     transitivePeerDependencies:
       - debug
 
@@ -7631,9 +7805,23 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  '@itk-wasm/mesh-io@1.7.0':
+    dependencies:
+      itk-wasm: 1.0.0-b.188
+      mime-types: 2.1.35
+    transitivePeerDependencies:
+      - debug
+
   '@itk-wasm/mesh-to-poly-data@1.1.0':
     dependencies:
       itk-wasm: 1.0.0-b.175
+    transitivePeerDependencies:
+      - debug
+
+  '@itk-wasm/transform-io@0.1.1':
+    dependencies:
+      itk-wasm: 1.0.0-b.188
+      mime-types: 2.1.35
     transitivePeerDependencies:
       - debug
 
@@ -7658,6 +7846,30 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@kitware/vtk.js@30.4.1(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)':
+    dependencies:
+      '@babel/preset-env': 7.24.5(@babel/core@7.24.5)
+      '@babel/runtime': 7.22.11
+      '@types/webxr': 0.5.16
+      autoprefixer: 10.4.19(postcss@8.5.3)
+      commander: 9.2.0
+      d3-scale: 4.0.2
+      fast-deep-equal: 3.1.3
+      fflate: 0.7.3
+      gl-matrix: 3.4.3
+      globalthis: 1.0.3
+      seedrandom: 3.0.5
+      shader-loader: 1.3.1
+      shelljs: 0.8.5
+      spark-md5: 3.0.2
+      stream-browserify: 3.0.0
+      webworker-promise: 0.5.0
+      worker-loader: 3.0.8(webpack@5.91.0(esbuild@0.25.2))
+      wslink: 2.0.2
+      xmlbuilder2: 3.0.2
+    transitivePeerDependencies:
+      - webpack
 
   '@kitware/vtk.js@30.4.1(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0)(wslink@2.0.2)':
     dependencies:
@@ -10416,6 +10628,24 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  itk-wasm@1.0.0-b.188:
+    dependencies:
+      '@emnapi/wasi-threads': 1.0.1
+      '@itk-wasm/dam': 1.1.1
+      '@thewtex/zstddec': 0.2.1
+      '@types/emscripten': 1.39.11
+      axios: 1.8.4(debug@4.4.1)
+      chalk: 5.3.0
+      comlink: 4.4.1
+      commander: 11.1.0
+      fs-extra: 11.2.0
+      glob: 8.1.0
+      markdown-table: 3.0.3
+      mime-types: 2.1.35
+      wasm-feature-detect: 1.6.1
+    transitivePeerDependencies:
+      - debug
+
   jest-worker@27.5.1:
     dependencies:
       '@types/node': 24.0.3
@@ -11790,6 +12020,17 @@ snapshots:
 
   term-size@2.2.1: {}
 
+  terser-webpack-plugin@5.3.14(esbuild@0.25.2)(webpack@5.91.0(esbuild@0.25.2)):
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.25
+      jest-worker: 27.5.1
+      schema-utils: 4.3.2
+      serialize-javascript: 6.0.2
+      terser: 5.39.2
+      webpack: 5.91.0(esbuild@0.25.2)
+    optionalDependencies:
+      esbuild: 0.25.2
+
   terser-webpack-plugin@5.3.14(webpack@5.91.0):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
@@ -12130,6 +12371,37 @@ snapshots:
       - esbuild
       - uglify-js
 
+  webpack@5.91.0(esbuild@0.25.2):
+    dependencies:
+      '@types/eslint-scope': 3.7.7
+      '@types/estree': 1.0.7
+      '@webassemblyjs/ast': 1.14.1
+      '@webassemblyjs/wasm-edit': 1.14.1
+      '@webassemblyjs/wasm-parser': 1.14.1
+      acorn: 8.14.1
+      acorn-import-assertions: 1.9.0(acorn@8.14.1)
+      browserslist: 4.24.5
+      chrome-trace-event: 1.0.4
+      enhanced-resolve: 5.18.1
+      es-module-lexer: 1.7.0
+      eslint-scope: 5.1.1
+      events: 3.3.0
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.11
+      json-parse-even-better-errors: 2.3.1
+      loader-runner: 4.3.0
+      mime-types: 2.1.35
+      neo-async: 2.6.2
+      schema-utils: 3.3.0
+      tapable: 2.2.2
+      terser-webpack-plugin: 5.3.14(esbuild@0.25.2)(webpack@5.91.0(esbuild@0.25.2))
+      watchpack: 2.4.4
+      webpack-sources: 3.2.3
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+
   webworker-promise@0.5.0: {}
 
   well-known-symbols@2.0.0: {}
@@ -12206,6 +12478,12 @@ snapshots:
 
   word-wrap@1.2.5: {}
 
+  worker-loader@3.0.8(webpack@5.91.0(esbuild@0.25.2)):
+    dependencies:
+      loader-utils: 2.0.4
+      schema-utils: 3.3.0
+      webpack: 5.91.0(esbuild@0.25.2)
+
   worker-loader@3.0.8(webpack@5.91.0):
     dependencies:
       loader-utils: 2.0.4
@@ -12262,9 +12540,17 @@ snapshots:
       lit: 3.2.0
       xstate: 5.17.1
 
+  xstate-lit@2.0.5(@lit/context@1.1.1)(lit@3.2.0)(xstate@5.5.2):
+    dependencies:
+      '@lit/context': 1.1.1
+      lit: 3.2.0
+      xstate: 5.5.2
+
   xstate@5.13.0: {}
 
   xstate@5.17.1: {}
+
+  xstate@5.5.2: {}
 
   xtend@4.0.2: {}
 

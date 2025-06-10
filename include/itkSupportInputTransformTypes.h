@@ -67,7 +67,7 @@ public:
 int
 main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("support-multiple", "Test supporting multiple input polydata types", argc, argv);
+  itk::wasm::Pipeline pipeline("support-multiple", "Test supporting multiple input transform types", argc, argv);
 
   // Supports the parameters types float, double, and dimensions 2 and 3
   return itk::wasm::SupportInputTransformTypes<PipelineFunctor, float, double>
