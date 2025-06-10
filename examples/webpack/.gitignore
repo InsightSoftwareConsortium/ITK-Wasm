@@ -1,1 +1,5 @@
-cypress/videos/
+dist/*.js
+dist/*LICENSE*
+dist/pipelines/
+playwright-report/
+test-results/

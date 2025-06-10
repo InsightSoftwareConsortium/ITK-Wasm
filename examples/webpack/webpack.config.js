@@ -1,52 +1,38 @@
-const path = require('path')
+import path from "path";
+import { fileURLToPath } from "url";
 
-const webpack = require('webpack')
-const CopyPlugin = require('copy-webpack-plugin')
+import CopyPlugin from "copy-webpack-plugin";
 
-const entry = path.join(__dirname, 'src', 'index.js')
-const outputPath = path.join(__dirname, './dist')
-const itkConfig = path.resolve(__dirname, 'src', 'itkConfig.js')
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-module.exports = {
+const entry = path.join(__dirname, "src", "index.js");
+const outputPath = path.join(__dirname, "./dist");
+
+export default {
   entry,
   output: {
     path: outputPath,
-    filename: 'index.js',
-    library: {
-      type: 'umd',
-      name: 'bundle',
-    },
+    filename: "index.js",
   },
   module: {
-    rules: [
-      { test: /\.js$/, loader: 'babel-loader' }
-    ]
+    rules: [{ test: /\.js$/, loader: "babel-loader" }],
   },
   plugins: [
     new CopyPlugin({
       patterns: [
         {
-          from: path.join(__dirname, 'node_modules', 'itk-wasm', 'dist', 'web-workers'),
-          to: path.join(__dirname, 'dist', 'itk', 'web-workers')
+          from: "node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}",
+          to: "pipelines/[name][ext]",
         },
-        {
-          from: path.join(__dirname, 'node_modules', 'itk-image-io'),
-          to: path.join(__dirname, 'dist', 'itk', 'image-io')
-        },
-        {
-          from: path.join(__dirname, 'node_modules', 'itk-mesh-io'),
-          to: path.join(__dirname, 'dist', 'itk', 'mesh-io')
-        }
-    ]})
+      ],
+    }),
   ],
   resolve: {
     fallback: { fs: false, path: false, url: false, module: false },
-    alias: {
-      '../itkConfig.js': itkConfig,
-      '../../itkConfig.js': itkConfig,
-    },
   },
   performance: {
-    maxAssetSize: 10000000
-  }
-}
+    maxAssetSize: 10000000,
+    maxEntrypointSize: 10000000,
+  },
+};

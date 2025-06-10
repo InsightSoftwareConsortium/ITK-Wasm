@@ -1,16 +1,17 @@
-itk-webpack-example
-===================
+ITK-Wasm Webpack Example
+========================
 
 This example demonstrates how to configure Webpack to build a project that
-uses [itk-wasm](https://wasm.itk.org/).
+uses an [ITK-Wasm](https://wasm.itk.org/) package.
+
 More information can be found in the [example
-documentation](https://wasm.itk.org/examples/webpack.html).
+documentation](https://docs.itk.org/projects/wasm/en/latest/typescript/distribution/webpack.html).
 
 ## Run Locally
 
 ```
 npm install
-npm run start
+npm start
 ```
 
 And visit [http://localhost:8686/](http://localhost:8686/).
@@ -19,6 +20,6 @@ And visit [http://localhost:8686/](http://localhost:8686/).
 
 ```
 npm install
-npm run build
+npx playwright install --with-deps
 npm test
 ```
