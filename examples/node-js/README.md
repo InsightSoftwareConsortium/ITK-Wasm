@@ -5,7 +5,7 @@ Convert an image or mesh from one file format to another.
 
 This package provides a command line executable, `itk-convert` to convert
 image file formats with
-[itk-wasm](https://github.com/InsightSoftwareConsortium/ITK-Wasm.git).
+[ITK-Wasm](https://github.com/InsightSoftwareConsortium/ITK-Wasm.git).
 
 ## Installation
 
@@ -32,6 +32,6 @@ pnpm test
 ## More Information
 
 This example demonstrates how to use
-[itk-wasm](https://wasm.itk.org/) in a Node.js
+[ITK-Wasm](https://wasm.itk.org/) in a Node.js
 application. More information can be found in the [example
-documentation](https://wasm.itk.org/examples/node.html).
+documentation](https://docs.itk.org/projects/wasm/en/latest/typescript/distribution/node.html).
