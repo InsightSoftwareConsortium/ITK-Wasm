@@ -1,16 +1,16 @@
-# itk-wasm in a Node.js application
+# ITK-Wasm in a Node.js application
 
-An `itk-convert` command line interface (CLI) example demonstrates how to use *itk-wasm* in a Node.js application. Find the full example in the `itk-wasm/examples/node-js` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/node-js).
+An `itk-convert` command line interface (CLI) example demonstrates how to use ITK-Wasm in a Node.js application. Find the full example in the `ITK-Wasm/examples/node-js` [directory of the GitHub repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/node-js).
 
 This example assumes you are creating a [Node.js package](https://docs.npmjs.com/getting-started/what-is-npm). If you do not already have a `package.json` file, [create one](https://docs.npmjs.com/getting-started/using-a-package.json), first.
 
-Add `itk-wasm` to your project's dependencies:
+Add packages to your project's dependencies:
 
 ```sh
 npm install --save itk-wasm @itk-wasm/image-io @itk-wasm/mesh-io
 ```
 
-This adds `itk-wasm` and `itk-wasm` IO packages to the `dependencies` section of your *package.json* file:
+This adds `itk-wasm` and ITK-Wasm IO packages to the `dependencies` section of your *package.json* file:
 
 ```js
 {
@@ -20,10 +20,10 @@ This adds `itk-wasm` and `itk-wasm` IO packages to the `dependencies` section of
   "type": "module",
 [...]
   "dependencies": {
-    "@itk-wasm/image-io": "^1.1.0",
-    "@itk-wasm/mesh-io": "^1.1.0",
+    "@itk-wasm/image-io": "^1.6.0",
+    "@itk-wasm/mesh-io": "^1.7.0",
     "commander": "^11.1.0",
-    "itk-wasm": "^1.0.0-b.162"
+    "itk-wasm": "^1.0.0-b.188"
   }
 }
 ```
