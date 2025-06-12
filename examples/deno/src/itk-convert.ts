@@ -39,5 +39,9 @@ try {
   }
 } catch (error) {
   console.error("Error during conversion:\n");
-  console.error(error);
+  if (error instanceof Error && error.stack) {
+    console.error(error.stack);
+  } else {
+    console.error(error);
+  }
 }
