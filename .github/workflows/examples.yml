@@ -341,3 +341,22 @@ jobs:
       working-directory: ./examples/mean-squares-versor-registration/typescript
       run: |
         pnpm build
+
+  test-deno-example:
+    name: deno
+    runs-on: ubuntu-24.04
+
+    defaults:
+      run:
+        working-directory: ./examples/deno
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: denoland/setup-deno@v1
+      with:
+        deno-version: v2.x
+
+    - name: Test
+      run: |
+        deno task test

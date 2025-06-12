@@ -11,4 +11,5 @@ esm.md
 vite.md
 webpack.md
 node.md
+deno.md
 ```
