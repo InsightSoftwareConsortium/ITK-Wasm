@@ -11,9 +11,7 @@
     "test:browser:ui": "npx playwright test --ui",
     "test:browser:debug": "npx playwright test --debug",
     "test:browser:report": "npx playwright show-report",
-    "test:debug": "start-server-and-test start http://localhost:8686 test:browser:debug",
-    "test:ui": "start-server-and-test start http://localhost:8686 test:browser:ui",
-    "test": "start-server-and-test start http://localhost:8686 test:browser"
+    "test": "npm run test:browser"
   },
   "repository": {
     "type": "git",
@@ -37,11 +35,10 @@
   "devDependencies": {
     "@babel/core": "^7.27.3",
     "@babel/preset-env": "^7.27.2",
-    "@playwright/test": "^1.52.0",
+    "@playwright/test": "^1.53.0",
     "@types/node": "^22.13.13",
     "babel-loader": "^10.0.0",
     "copy-webpack-plugin": "^13.0.0",
-    "start-server-and-test": "^2.0.11",
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.1"
