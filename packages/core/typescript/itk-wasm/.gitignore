@@ -3,4 +3,5 @@ test/pipelines/wasi-build
 test/pipelines/typescript
 test/pipelines/python
 
-cypress/screenshots
+playwright-report/
+test-results/
