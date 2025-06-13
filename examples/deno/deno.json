@@ -1,0 +1,17 @@
+{
+  "name": "itk-convert",
+  "version": "1.0.0",
+  "description": "Convert image or mesh files from one format to another.",
+  "exports": "./src/itk-convert.ts",
+  "tasks": {
+    "test": "deno run --allow-read --allow-write src/itk-convert.ts ../../docs/_static/logo.png ./logo.tif"
+  },
+  "imports": {
+    "@itk-wasm/image-io": "npm:@itk-wasm/image-io",
+    "@itk-wasm/mesh-io": "npm:@itk-wasm/mesh-io",
+    "itk-wasm": "npm:itk-wasm@1.0.0-b.188"
+  },
+  "compilerOptions": {
+    "strict": true
+  }
+}
