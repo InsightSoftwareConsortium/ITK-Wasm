@@ -16,11 +16,17 @@
  *
  *=========================================================================*/
 
+#ifndef TRANSFORM_NAME
+#error "TRANSFORM_NAME must be defined"
+#endif
+
+#define VALUE(string) #string
+#define TO_LITERAL(string) VALUE(string)
+
 #include "itkPipeline.h"
 #include "itkOutputTransform.h"
 #include "itkTransformJSON.h"
 #include "itkWasmTransform.h"
-#include "itkInputTextStream.h"
 
 #include "itkCompositeTransform.h"
 #include "itkIdentityTransform.h"
@@ -31,6 +37,7 @@
 #include "itkRigid3DTransform.h"
 #include "itkRigid3DPerspectiveTransform.h"
 #include "itkVersorRigid3DTransform.h"
+#include "itkVersorTransform.h"
 #include "itkScaleTransform.h"
 #include "itkScaleLogarithmicTransform.h"
 #include "itkScaleSkewVersor3DTransform.h"
@@ -66,101 +73,63 @@ int CreateTransformParameterization(
   ITK_WASM_PARSE(pipeline);
 
   auto transform = TransformType::New();
-  // call SetIdentity() to initialize the transform if the method exists
-  if constexpr (std::is_same_v<TransformType, itk::IdentityTransform<ParametersValueType>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::TranslationTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::Euler2DTransform<ParametersValueType>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::Euler3DTransform<ParametersValueType>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::Rigid2DTransform<ParametersValueType>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::Rigid3DTransform<ParametersValueType>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::Rigid3DPerspectiveTransform<ParametersValueType>>)
-  {
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::VersorRigid3DTransform<ParametersValueType>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::ScaleTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::ScaleLogarithmicTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::ScaleSkewVersor3DTransform<ParametersValueType>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::Similarity2DTransform<ParametersValueType>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::Similarity3DTransform<ParametersValueType>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::QuaternionRigidTransform<ParametersValueType>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::AffineTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::ScalableAffineTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::CompositeTransform<ParametersValueType, 3>>)
-  {
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::BSplineTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::BSplineSmoothingOnUpdateDisplacementFieldTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::ConstantVelocityFieldTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::DisplacementFieldTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::GaussianSmoothingOnUpdateDisplacementFieldTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::GaussianExponentialDiffeomorphicTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
-  else if constexpr (std::is_same_v<TransformType, itk::VelocityFieldTransform<ParametersValueType, 3>>)
-  {
-    transform->SetIdentity();
-  }
+#ifdef TRANSFORM_COMPOSITE
+#elif defined(TRANSFORM_IDENTITY)
+#elif defined(TRANSFORM_TRANSLATION)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_EULER_2D)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_EULER_3D)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_RIGID_2D)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_RIGID_3D)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_RIGID_3D_PERSPECTIVE)
+#elif defined(TRANSFORM_VERSOR_RIGID_3D)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_VERSOR)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_SCALE)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_SCALE_LOGARITHMIC)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_SCALE_SKEW_VERSOR_3D)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_SIMILARITY_2D)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_SIMILARITY_3D)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_QUATERNION_RIGID)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_AFFINE)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_SCALABLE_AFFINE)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_BSPLINE)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_BSPLINE_SMOOTHING_ON_UPDATE_DISPLACEMENT_FIELD)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_CONSTANT_VELOCITY_FIELD)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_DISPLACEMENT_FIELD)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_GAUSSIAN_SMOOTHING_ON_UPDATE_DISPLACEMENT_FIELD)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_GAUSSIAN_EXPONENTIAL_DIFFEOMORPHIC)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_VELOCITY_FIELD)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_TIME_VARYING_VELOCITY_FIELD)
+  transform->SetIdentity();
+#elif defined(TRANSFORM_GAUSSIAN_SMOOTHING_ON_UPDATE_TIME_VARYING_VELOCITY_FIELD)
+  transform->SetIdentity();
+#else
+  std::cerr << "Unsupported transform parameterization: " << TO_LITERAL(TRANSFORM_NAME) << std::endl;
+  throw std::logic_error("Unsupported transform parameterization");
+#endif
 
   outputTransform.Set(transform);
 
@@ -169,109 +138,109 @@ int CreateTransformParameterization(
 
 template <typename TParameterValues, unsigned int VDimension>
 int CreateTransformDimension(
-  itk::wasm::Pipeline & pipeline,
-  const itk::TransformTypeJSON & transformType)
+  itk::wasm::Pipeline & pipeline)
 {
   using ParametersValueType = TParameterValues;
 
-  switch (transformType.transformParameterization)
-  {
-    case itk::JSONTransformParameterizationEnum::Composite:
+#ifdef TRANSFORM_COMPOSITE
       return CreateTransformParameterization<itk::CompositeTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Identity:
+#elif defined(TRANSFORM_IDENTITY)
       return CreateTransformParameterization<itk::IdentityTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Translation:
+#elif defined(TRANSFORM_TRANSLATION)
       return CreateTransformParameterization<itk::TranslationTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Euler2D:
+#elif defined(TRANSFORM_EULER_2D)
       return CreateTransformParameterization<itk::Euler2DTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Euler3D:
+#elif defined(TRANSFORM_EULER_3D)
       return CreateTransformParameterization<itk::Euler3DTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Rigid2D:
+#elif defined(TRANSFORM_RIGID_2D)
       return CreateTransformParameterization<itk::Rigid2DTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Rigid3D:
+#elif defined(TRANSFORM_RIGID_3D)
       return CreateTransformParameterization<itk::Rigid3DTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Rigid3DPerspective:
+#elif defined(TRANSFORM_RIGID_3D_PERSPECTIVE)
       return CreateTransformParameterization<itk::Rigid3DPerspectiveTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::VersorRigid3D:
+#elif defined(TRANSFORM_VERSOR_RIGID_3D)
       return CreateTransformParameterization<itk::VersorRigid3DTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Versor:
+#elif defined(TRANSFORM_VERSOR)
       return CreateTransformParameterization<itk::VersorTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Scale:
+#elif defined(TRANSFORM_SCALE)
       return CreateTransformParameterization<itk::ScaleTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::ScaleLogarithmic:
+#elif defined(TRANSFORM_SCALE_LOGARITHMIC)
       return CreateTransformParameterization<itk::ScaleLogarithmicTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::ScaleSkewVersor3D:
+#elif defined(TRANSFORM_SCALE_SKEW_VERSOR_3D)
       return CreateTransformParameterization<itk::ScaleSkewVersor3DTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Similarity2D:
+#elif defined(TRANSFORM_SIMILARITY_2D)
       return CreateTransformParameterization<itk::Similarity2DTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Similarity3D:
+#elif defined(TRANSFORM_SIMILARITY_3D)
       return CreateTransformParameterization<itk::Similarity3DTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::QuaternionRigid:
+#elif defined(TRANSFORM_QUATERNION_RIGID)
       return CreateTransformParameterization<itk::QuaternionRigidTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::Affine:
+#elif defined(TRANSFORM_AFFINE)
       return CreateTransformParameterization<itk::AffineTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::ScalableAffine:
+#elif defined(TRANSFORM_SCALABLE_AFFINE)
       return CreateTransformParameterization<itk::ScalableAffineTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::AzimuthElevationToCartesian:
+#elif defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
       return CreateTransformParameterization<itk::AzimuthElevationToCartesianTransform<ParametersValueType>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::BSpline:
+#elif defined(TRANSFORM_BSPLINE)
       return CreateTransformParameterization<itk::BSplineTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::BSplineSmoothingOnUpdateDisplacementField:
+#elif defined(TRANSFORM_BSPLINE_SMOOTHING_ON_UPDATE_DISPLACEMENT_FIELD)
       return CreateTransformParameterization<
         itk::BSplineSmoothingOnUpdateDisplacementFieldTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::ConstantVelocityField:
-      return CreateTransformParameterization<itk::ConstantVelocityFieldTransform<ParametersValueType, VDimension>>(
-        pipeline);
-    case itk::JSONTransformParameterizationEnum::DisplacementField:
-      return CreateTransformParameterization<itk::DisplacementFieldTransform<ParametersValueType, VDimension>>(
-        pipeline);
-    case itk::JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateDisplacementField:
+#elif defined(TRANSFORM_CONSTANT_VELOCITY_FIELD)
+      return CreateTransformParameterization<itk::ConstantVelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
+#elif defined(TRANSFORM_DISPLACEMENT_FIELD)
+      return CreateTransformParameterization<itk::DisplacementFieldTransform<ParametersValueType, VDimension>>(pipeline);
+#elif defined(TRANSFORM_GAUSSIAN_SMOOTHING_ON_UPDATE_DISPLACEMENT_FIELD)
       return CreateTransformParameterization<
         itk::GaussianSmoothingOnUpdateDisplacementFieldTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::GaussianExponentialDiffeomorphic:
+#elif defined(TRANSFORM_GAUSSIAN_EXPONENTIAL_DIFFEOMORPHIC)
       return CreateTransformParameterization<
         itk::GaussianExponentialDiffeomorphicTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::VelocityField:
+#elif defined(TRANSFORM_VELOCITY_FIELD)
       return CreateTransformParameterization<itk::VelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::TimeVaryingVelocityField:
-      return CreateTransformParameterization<
-        itk::TimeVaryingVelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
-    case itk::JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateTimeVaryingVelocityField:
+#elif defined(TRANSFORM_TIME_VARYING_VELOCITY_FIELD)
+      return CreateTransformParameterization<itk::TimeVaryingVelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
+#elif defined(TRANSFORM_GAUSSIAN_SMOOTHING_ON_UPDATE_TIME_VARYING_VELOCITY_FIELD)
       return CreateTransformParameterization<
         itk::GaussianSmoothingOnUpdateTimeVaryingVelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
-    default:
-      std::cerr << "Unsupported transform parameterization: "
-                << static_cast<int>(transformType.transformParameterization) << std::endl;
+#else
+      std::cerr << "Unsupported transform parameterization: " << TO_LITERAL(TRANSFORM_NAME) << std::endl;
       throw std::logic_error("Unsupported transform parameterization");
-  }
-
-  return EXIT_SUCCESS;
+#endif
 }
 
 template <typename TParameterValues>
 int CreateTransformParameterValues(
   itk::wasm::Pipeline & pipeline,
-  const itk::TransformTypeJSON & transformType)
+  unsigned int dimension)
 {
   using ParametersValueType = TParameterValues;
 
-  if (transformType.outputDimension != transformType.inputDimension)
+  switch (dimension)
   {
-    std::cerr << "Output dimension (" << transformType.outputDimension
-              << ") must match input dimension (" << transformType.inputDimension << ")." << std::endl;
-    throw std::logic_error("Output dimension must match input dimension");
-  }
-
-  const unsigned int inputDimension = transformType.inputDimension;
-  switch (inputDimension)
-  {
+#if defined(TRANSFORM_EULER_2D) || defined(TRANSFORM_RIGID_2D) || defined(TRANSFORM_SIMILARITY_2D)
     case 2:
-      return CreateTransformDimension<ParametersValueType, 2>(pipeline, transformType);
-    case 3:
-      return CreateTransformDimension<ParametersValueType, 3>(pipeline, transformType);
+      return CreateTransformDimension<ParametersValueType, 2>(pipeline);
     default:
-      std::cerr << "Unsupported input dimension: " << inputDimension << std::endl;
-      throw std::logic_error("Unsupported input dimension");
+      std::cerr << "Transform " << TO_LITERAL(TRANSFORM_NAME) << " only supports 2D. Unsupported dimension: " << dimension << std::endl;
+      throw std::logic_error("Unsupported dimension");
+#elif defined(TRANSFORM_EULER_3D) || defined(TRANSFORM_RIGID_3D) || defined(TRANSFORM_VERSOR_RIGID_3D) || defined(TRANSFORM_VERSOR) || defined(TRANSFORM_SCALE_SKEW_VERSOR_3D) || defined(TRANSFORM_SIMILARITY_3D) || defined(TRANSFORM_QUATERNION_RIGID) || defined(TRANSFORM_RIGID_3D_PERSPECTIVE) || defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
+    case 3:
+      return CreateTransformDimension<ParametersValueType, 3>(pipeline);
+    default:
+      std::cerr << "Transform " << TO_LITERAL(TRANSFORM_NAME) << " only supports 3D. Unsupported dimension: " << dimension << std::endl;
+      throw std::logic_error("Unsupported dimension");
+#else
+    // Multi-dimensional transforms (2D, 3D, 4D)
+    case 2:
+      return CreateTransformDimension<ParametersValueType, 2>(pipeline);
+    case 3:
+      return CreateTransformDimension<ParametersValueType, 3>(pipeline);
+    case 4:
+      return CreateTransformDimension<ParametersValueType, 4>(pipeline);
+    default:
+      std::cerr << "Unsupported dimension: " << dimension << std::endl;
+      throw std::logic_error("Unsupported dimension");
+#endif
   }
 
   return EXIT_FAILURE;
@@ -280,46 +249,36 @@ int CreateTransformParameterValues(
 int
 main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("create-transform", "Create a spatial transformation.", argc, argv);
+  const char *        pipelineName = "create-" TO_LITERAL(TRANSFORM_NAME) "-transform";
+  const char *        pipelineDescription = "Create a " TO_LITERAL(TRANSFORM_NAME) " spatial transformation.";
+  itk::wasm::Pipeline pipeline(pipelineName, pipelineDescription, argc, argv);
 
-  itk::wasm::InputTextStream transformTypeText;
-  pipeline.add_option("transform-type", transformTypeText, "Desired TransformType")->type_name("INPUT_JSON");
+#if defined(TRANSFORM_EULER_2D) || defined(TRANSFORM_RIGID_2D) || defined(TRANSFORM_SIMILARITY_2D)
+  constexpr unsigned int dimension = 2;
+#elif defined(TRANSFORM_EULER_3D) || defined(TRANSFORM_RIGID_3D) || defined(TRANSFORM_VERSOR_RIGID_3D) || defined(TRANSFORM_VERSOR) || defined(TRANSFORM_SCALE_SKEW_VERSOR_3D) || defined(TRANSFORM_SIMILARITY_3D) || defined(TRANSFORM_QUATERNION_RIGID) || defined(TRANSFORM_RIGID_3D_PERSPECTIVE) || defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
+  constexpr unsigned int dimension = 3;
+#else
+  unsigned int dimension = 3;
+  pipeline.add_option("-d,--dimension", dimension, "Dimension of the transform (2, 3, or 4)");
+#endif
+
+  std::string parametersType = "float32";
+  pipeline.add_option("-p,--parameters-type", parametersType, "Type of the transform parameters (float32 or float64)");
 
   ITK_WASM_PRE_PARSE(pipeline);
 
-  auto transformType = itk::TransformTypeJSON
+  if (parametersType == "float32")
   {
-    itk::JSONTransformParameterizationEnum::Identity,
-    itk::JSONFloatTypesEnum::float32, // parametersValueType
-    3, // inputDimension
-    3  // outputDimension
-  };
-  if (transformTypeText.GetPointer() != nullptr)
-  {
-    const std::string transformTypeString(std::istreambuf_iterator<char>(transformTypeText.Get()), {});
-    auto deserializedAttempt = glz::read_json<itk::TransformTypeJSON>(transformTypeString);
-    if (!deserializedAttempt)
-    {
-      const std::string descriptiveError = glz::format_error(deserializedAttempt, transformTypeString);
-      std::cerr << "Failed to deserialize transform type: " << descriptiveError << std::endl;
-      return EXIT_FAILURE;
-    }
-    transformType = deserializedAttempt.value();
+    return CreateTransformParameterValues<float>(pipeline, dimension);
   }
-
-  if (transformType.parametersValueType == itk::JSONFloatTypesEnum::float32)
+  else if (parametersType == "float64")
   {
-    return CreateTransformParameterValues<float>(pipeline, transformType);
-  }
-  else if (transformType.parametersValueType == itk::JSONFloatTypesEnum::float64)
-  {
-    return CreateTransformParameterValues<double>(pipeline, transformType);
+    return CreateTransformParameterValues<double>(pipeline, dimension);
   }
   else
   {
-    std::cerr << "Unsupported parameters value type: " << static_cast<int>(transformType.parametersValueType)
-              << std::endl;
-    throw std::logic_error("Unknown parameters value type");
+    std::cerr << "Unsupported parameters type: " << parametersType << std::endl;
+    throw std::logic_error("Unknown parameters type");
   }
 
   return EXIT_FAILURE;
