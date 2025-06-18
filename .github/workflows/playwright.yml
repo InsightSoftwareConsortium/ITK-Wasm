@@ -105,6 +105,10 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpx playwright install --with-deps
 
+      - name: Install dependencies for itk-wasm
+        run: pnpm install
+        working-directory: packages/core/typescript/itk-wasm
+
       - name: Build itk-wasm
         run: |
           pnpm run --aggregate-output --filter itk-wasm build
