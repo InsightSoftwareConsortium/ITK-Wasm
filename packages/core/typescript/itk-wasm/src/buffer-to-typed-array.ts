@@ -2,7 +2,14 @@ import IntTypes from './interface-types/int-types.js'
 import FloatTypes from './interface-types/float-types.js'
 import type TypedArray from './typed-array.js'
 
-function bufferToTypedArray (wasmType: typeof IntTypes[keyof typeof IntTypes] | typeof FloatTypes[keyof typeof FloatTypes] | 'null' | null, buffer: ArrayBuffer): null | TypedArray {
+function bufferToTypedArray(
+  wasmType:
+    | (typeof IntTypes)[keyof typeof IntTypes]
+    | (typeof FloatTypes)[keyof typeof FloatTypes]
+    | 'null'
+    | null,
+  buffer: ArrayBuffer | SharedArrayBuffer
+): null | TypedArray {
   let typedArray: null | TypedArray = null
   switch (wasmType) {
     case IntTypes.UInt8: {

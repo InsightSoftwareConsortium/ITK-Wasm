@@ -43,7 +43,12 @@ export async function imageToJson(
     noCopy: options.noCopy,
   });
   const usedWebWorker = direction.webWorker;
-  encoded.direction = decoder.decode(direction.output.buffer);
+  // Convert ArrayBufferLike to a compatible type for TextDecoder
+  const directionBuffer =
+    direction.output.buffer instanceof ArrayBuffer
+      ? direction.output.buffer
+      : direction.output;
+  encoded.direction = decoder.decode(directionBuffer);
 
   if (image.data === null) {
     encoded.data = null;
@@ -55,7 +60,12 @@ export async function imageToJson(
       webWorker: usedWebWorker,
       noCopy: options.noCopy,
     });
-    encoded.data = decoder.decode(encodedData.output.buffer);
+    // Convert ArrayBufferLike to a compatible type for TextDecoder
+    const dataBuffer =
+      encodedData.output.buffer instanceof ArrayBuffer
+        ? encodedData.output.buffer
+        : encodedData.output;
+    encoded.data = decoder.decode(dataBuffer);
   }
 
   return { encoded, webWorker: usedWebWorker };
