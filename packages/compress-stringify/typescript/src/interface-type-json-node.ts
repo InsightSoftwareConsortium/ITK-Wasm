@@ -30,7 +30,12 @@ export async function imageToJsonNode(
     compressionLevel: level,
     stringify: true,
   });
-  encoded.direction = decoder.decode(direction.output.buffer);
+  // Convert ArrayBufferLike to a compatible type for TextDecoder
+  const directionBuffer =
+    direction.output.buffer instanceof ArrayBuffer
+      ? direction.output.buffer
+      : direction.output;
+  encoded.direction = decoder.decode(directionBuffer);
 
   if (image.data === null) {
     encoded.data = null;
@@ -40,7 +45,12 @@ export async function imageToJsonNode(
       compressionLevel: level,
       stringify: true,
     });
-    encoded.data = decoder.decode(encodedData.output.buffer);
+    // Convert ArrayBufferLike to a compatible type for TextDecoder
+    const dataBuffer =
+      encodedData.output.buffer instanceof ArrayBuffer
+        ? encodedData.output.buffer
+        : encodedData.output;
+    encoded.data = decoder.decode(dataBuffer);
   }
 
   return { encoded };
@@ -109,8 +119,13 @@ export async function meshToJsonNode(
         compressionLevel: level,
         stringify: true,
       });
+      // Convert ArrayBufferLike to a compatible type for TextDecoder
+      const propBuffer =
+        encodedProp.output.buffer instanceof ArrayBuffer
+          ? encodedProp.output.buffer
+          : encodedProp.output;
       // @ts-ignore
-      encoded[prop] = decoder.decode(encodedProp.output.buffer);
+      encoded[prop] = decoder.decode(propBuffer);
     }
   }
 
@@ -201,8 +216,13 @@ export async function polyDataToJsonNode(
         compressionLevel: level,
         stringify: true,
       });
+      // Convert ArrayBufferLike to a compatible type for TextDecoder
+      const propBuffer =
+        encodedProp.output.buffer instanceof ArrayBuffer
+          ? encodedProp.output.buffer
+          : encodedProp.output;
       // @ts-ignore
-      encoded[prop] = decoder.decode(encodedProp.output.buffer);
+      encoded[prop] = decoder.decode(propBuffer);
     }
   }
 
