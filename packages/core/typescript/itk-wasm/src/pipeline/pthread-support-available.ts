@@ -1,4 +1,4 @@
-function pthreadSupportAvailable(): boolean {
+function pthreadSupportAvailable (): boolean {
   const haveSharedArrayBuffer =
     typeof globalThis.SharedArrayBuffer === 'function'
 
@@ -7,7 +7,7 @@ function pthreadSupportAvailable(): boolean {
     typeof process === 'object' &&
     typeof process.versions === 'object' &&
     typeof process.versions.node === 'string' &&
-    // @ts-ignore: ts(2339)
+    // @ts-expect-error: ts(2339)
     process.type !== 'renderer'
 
   const isCrossOriginIsolated =
