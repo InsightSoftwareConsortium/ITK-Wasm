@@ -6,7 +6,7 @@ settings:
 
 overrides:
   '@shoelace-style/shoelace': ^2.12.0
-  '@types/node': ^22.13.13
+  '@types/node': ^24.0.3
   esbuild: ^0.25.1
   start-server-and-test: ^2.0.12
   ava: ^6.1.3
@@ -24,10 +24,13 @@ importers:
         version: 2.27.1
       '@commitlint/cli':
         specifier: ^19.3.0
-        version: 19.3.0(@types/node@22.15.21)(typescript@5.8.3)
+        version: 19.3.0(@types/node@24.0.3)(typescript@5.8.3)
       '@commitlint/config-conventional':
         specifier: ^19.2.2
         version: 19.2.2
+      '@playwright/test':
+        specifier: ^1.53.0
+        version: 1.53.1
 
   examples/debugging:
     dependencies:
@@ -91,8 +94,8 @@ importers:
         specifier: workspace:^
         version: link:../../../packages/mesh-io/typescript
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       esbuild:
         specifier: ^0.25.1
         version: 0.25.2
@@ -104,10 +107,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^0.17.0
-        version: 0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   examples/mean-squares-versor-registration:
     devDependencies:
@@ -137,8 +140,8 @@ importers:
         specifier: workspace:^
         version: link:../../../packages/mesh-io/typescript
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       esbuild:
         specifier: ^0.25.1
         version: 0.25.2
@@ -150,10 +153,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^0.17.0
-        version: 0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   examples/node-js:
     dependencies:
@@ -198,8 +201,8 @@ importers:
         specifier: workspace:^
         version: link:../../image-io/typescript
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
@@ -220,10 +223,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^1.0.0
-        version: 1.0.6(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 1.0.6(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   packages/compare-meshes:
     devDependencies:
@@ -253,8 +256,8 @@ importers:
         specifier: workspace:*
         version: link:../../mesh-io/typescript
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       esbuild:
         specifier: ^0.25.1
         version: 0.25.2
@@ -266,10 +269,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^0.17.0
-        version: 0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   packages/compress-stringify:
     devDependencies:
@@ -317,8 +320,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
@@ -339,10 +342,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^0.17.0
-        version: 0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   packages/core/typescript/create-itk-wasm:
     dependencies:
@@ -378,8 +381,8 @@ importers:
         specifier: ^9.0.7
         version: 9.0.7
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       '@types/validate-npm-package-name':
         specifier: ^4.0.2
         version: 4.0.2
@@ -466,15 +469,15 @@ importers:
         specifier: ^1.6.1
         version: 1.6.1
     devDependencies:
+      '@playwright/test':
+        specifier: ^1.53.0
+        version: 1.53.1
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
-      cypress:
-        specifier: ^14.5.0
-        version: 14.5.0
       esbuild:
         specifier: ^0.25.1
         version: 0.25.2
@@ -490,9 +493,6 @@ importers:
       standard:
         specifier: ^17.1.0
         version: 17.1.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.8.3))
-      start-server-and-test:
-        specifier: ^2.0.12
-        version: 2.0.12
       ts-standard:
         specifier: ^12.0.2
         version: 12.0.2(typescript@5.8.3)
@@ -519,8 +519,8 @@ importers:
         specifier: workspace:*
         version: link:../../../../../../transform-io/typescript
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       esbuild:
         specifier: ^0.25.1
         version: 0.25.2
@@ -532,13 +532,13 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-cross-origin-isolation:
         specifier: ^0.1.6
         version: 0.1.6
       vite-plugin-static-copy:
         specifier: ^0.17.0
-        version: 0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   packages/dicom:
     devDependencies:
@@ -574,8 +574,8 @@ importers:
         specifier: workspace:*
         version: link:../../image-io/typescript
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
@@ -602,10 +602,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^0.17.0
-        version: 0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   packages/downsample:
     devDependencies:
@@ -644,8 +644,8 @@ importers:
         specifier: workspace:^
         version: link:../../mesh-io/typescript
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
@@ -666,10 +666,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^0.17.0
-        version: 0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   packages/image-io:
     devDependencies:
@@ -702,8 +702,8 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
@@ -727,10 +727,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^1.0.0
-        version: 1.0.6(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 1.0.6(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   packages/mesh-filters:
     devDependencies:
@@ -766,8 +766,8 @@ importers:
         specifier: workspace:*
         version: link:../../mesh-io/typescript
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
@@ -782,10 +782,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^0.17.0
-        version: 0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   packages/mesh-io:
     devDependencies:
@@ -818,8 +818,8 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
@@ -840,10 +840,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^0.17.0
-        version: 0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
   packages/transform-io:
     devDependencies:
@@ -873,8 +873,8 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4
       '@types/node':
-        specifier: ^22.13.13
-        version: 22.14.0
+        specifier: ^24.0.3
+        version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
@@ -895,10 +895,10 @@ importers:
         version: 5.8.3
       vite:
         specifier: ^6.2.3
-        version: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+        version: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
       vite-plugin-static-copy:
         specifier: ^0.17.0
-        version: 0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2))
+        version: 0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2))
 
 packages:
 
@@ -2050,6 +2050,11 @@ packages:
   '@perma/map@1.0.3':
     resolution: {integrity: sha512-Bf5njk0fnJGTFE2ETntq0N1oJ6YdCPIpTDn3R3KYZJQdeYSOCNL7mBrFlGnbqav8YQhJA/p81pvHINX9vAtHkQ==}
 
+  '@playwright/test@1.53.1':
+    resolution: {integrity: sha512-Z4c23LHV0muZ8hfv4jw6HngPJkbbtZxTkxPNIg7cJcTc9C28N/p2q7g3JZS2SiKBBHJ3uM1dgDye66bB7LEk5w==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   '@protobufjs/aspromise@1.1.2':
     resolution: {integrity: sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==}
 
@@ -2257,11 +2262,8 @@ packages:
   '@types/node-fetch@2.6.11':
     resolution: {integrity: sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==}
 
-  '@types/node@22.14.0':
-    resolution: {integrity: sha512-Kmpl+z84ILoG+3T/zQFyAJsU6EPTmOCj8/2+83fSN6djd6I4o7uOuGIH6vq3PrjY5BGitSbFuMN18j3iknubbA==}
-
-  '@types/node@22.15.21':
-    resolution: {integrity: sha512-EV/37Td6c+MgKAbkcLG6vqZ2zEYHD7bvSrzqqs2RIhbA6w3x+Dqz8MZM3sP6kGTeLrdoOgKZe+Xja7tUB2DNkQ==}
+  '@types/node@24.0.3':
+    resolution: {integrity: sha512-R4I/kzCYAdRLzfiCabn9hxWfbuHS573x+r0dJMkkzThEa7pbrcDWK+9zu3e7aBOouf+rQAciqPFMnxwr0aWgKg==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -3027,7 +3029,7 @@ packages:
     resolution: {integrity: sha512-+8cK7jRAReYkMwMiG+bxhcNKiHJDM6bR9FD/nGBXOWdMLuYawjF5cGrtLilJ+LGd3ZjCXnJjR5DkfWPoIVlqJA==}
     engines: {node: '>=v16'}
     peerDependencies:
-      '@types/node': ^22.13.13
+      '@types/node': ^24.0.3
       cosmiconfig: '>=8.2'
       typescript: ^5.8.3
 
@@ -3751,6 +3753,11 @@ packages:
 
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
+
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -5022,6 +5029,16 @@ packages:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
 
+  playwright-core@1.53.1:
+    resolution: {integrity: sha512-Z46Oq7tLAyT0lGoFx4DOuB1IA9D1TPj0QkYxpPVUnGDqHHvDpCftu1J2hM2PiWsNMoZh8+LQaarAWcDfPBc6zg==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.53.1:
+    resolution: {integrity: sha512-LJ13YLr/ocweuwxyGf1XNFWIU4M2zUSo149Qbp+A4cpwDjsxRPj7k6H25LBrEHiEwxvRbD8HdwvQmRMSvquhYw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   plur@5.1.0:
     resolution: {integrity: sha512-VP/72JeXqak2KiOzjgKtQen5y3IZHn+9GOuLDafPv0eXa47xq0At93XahYBs26MsifCQ4enGKwbjBTKgb9QJXg==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -5812,8 +5829,8 @@ packages:
   unbzip2-stream@1.4.3:
     resolution: {integrity: sha512-mlExGW4w71ebDJviH16lQLtZS32VKqsSfk80GCfUlwT/4/hNRFsoscrF/c++9xinkMzECL1uL9DDwXqFWkruPg==}
 
-  undici-types@6.21.0:
-    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+  undici-types@7.8.0:
+    resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
   undici@5.28.4:
     resolution: {integrity: sha512-72RFADWFqKmUb2hmmvNODKL3p9hcB6Gt2DOQMis1SEBaV6a4MH8soBvzg+95CYhCKPFedut2JY9bMfrDl9D23g==}
@@ -5925,7 +5942,7 @@ packages:
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
-      '@types/node': ^22.13.13
+      '@types/node': ^24.0.3
       jiti: '>=1.21.0'
       less: '*'
       lightningcss: ^1.21.0
@@ -7183,11 +7200,11 @@ snapshots:
     dependencies:
       commander: 12.0.0
 
-  '@commitlint/cli@19.3.0(@types/node@22.15.21)(typescript@5.8.3)':
+  '@commitlint/cli@19.3.0(@types/node@24.0.3)(typescript@5.8.3)':
     dependencies:
       '@commitlint/format': 19.3.0
       '@commitlint/lint': 19.2.2
-      '@commitlint/load': 19.2.0(@types/node@22.15.21)(typescript@5.8.3)
+      '@commitlint/load': 19.2.0(@types/node@24.0.3)(typescript@5.8.3)
       '@commitlint/read': 19.2.1
       '@commitlint/types': 19.0.3
       execa: 8.0.1
@@ -7234,7 +7251,7 @@ snapshots:
       '@commitlint/rules': 19.0.3
       '@commitlint/types': 19.0.3
 
-  '@commitlint/load@19.2.0(@types/node@22.15.21)(typescript@5.8.3)':
+  '@commitlint/load@19.2.0(@types/node@24.0.3)(typescript@5.8.3)':
     dependencies:
       '@commitlint/config-validator': 19.0.3
       '@commitlint/execute-rule': 19.0.0
@@ -7242,7 +7259,7 @@ snapshots:
       '@commitlint/types': 19.0.3
       chalk: 5.3.0
       cosmiconfig: 9.0.0(typescript@5.8.3)
-      cosmiconfig-typescript-loader: 5.0.0(@types/node@22.15.21)(cosmiconfig@9.0.0(typescript@5.8.3))(typescript@5.8.3)
+      cosmiconfig-typescript-loader: 5.0.0(@types/node@24.0.3)(cosmiconfig@9.0.0(typescript@5.8.3))(typescript@5.8.3)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -7687,7 +7704,7 @@ snapshots:
   '@manypkg/find-root@1.1.0':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@types/node': 22.14.0
+      '@types/node': 24.0.3
       find-up: 4.1.0
       fs-extra: 8.1.0
 
@@ -7772,6 +7789,10 @@ snapshots:
     dependencies:
       '@multiformats/murmur3': 2.1.8
       murmurhash3js-revisited: 3.0.0
+
+  '@playwright/test@1.53.1':
+    dependencies:
+      playwright: 1.53.1
 
   '@protobufjs/aspromise@1.1.2': {}
 
@@ -7911,7 +7932,7 @@ snapshots:
 
   '@types/conventional-commits-parser@5.0.0':
     dependencies:
-      '@types/node': 22.14.0
+      '@types/node': 24.0.3
 
   '@types/emscripten@1.39.11': {}
 
@@ -7944,16 +7965,12 @@ snapshots:
 
   '@types/node-fetch@2.6.11':
     dependencies:
-      '@types/node': 22.14.0
+      '@types/node': 24.0.3
       form-data: 4.0.2
 
-  '@types/node@22.14.0':
+  '@types/node@24.0.3':
     dependencies:
-      undici-types: 6.21.0
-
-  '@types/node@22.15.21':
-    dependencies:
-      undici-types: 6.21.0
+      undici-types: 7.8.0
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -7972,13 +7989,13 @@ snapshots:
 
   '@types/through@0.0.33':
     dependencies:
-      '@types/node': 22.14.0
+      '@types/node': 24.0.3
 
   '@types/trusted-types@2.0.7': {}
 
   '@types/tunnel@0.0.3':
     dependencies:
-      '@types/node': 22.14.0
+      '@types/node': 24.0.3
 
   '@types/validate-npm-package-name@4.0.2': {}
 
@@ -7986,7 +8003,7 @@ snapshots:
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 22.15.21
+      '@types/node': 24.0.3
     optional: true
 
   '@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.8.3))(eslint@8.57.0)(typescript@5.8.3)':
@@ -8831,9 +8848,9 @@ snapshots:
 
   corser@2.0.1: {}
 
-  cosmiconfig-typescript-loader@5.0.0(@types/node@22.15.21)(cosmiconfig@9.0.0(typescript@5.8.3))(typescript@5.8.3):
+  cosmiconfig-typescript-loader@5.0.0(@types/node@24.0.3)(cosmiconfig@9.0.0(typescript@5.8.3))(typescript@5.8.3):
     dependencies:
-      '@types/node': 22.15.21
+      '@types/node': 24.0.3
       cosmiconfig: 9.0.0(typescript@5.8.3)
       jiti: 1.21.0
       typescript: 5.8.3
@@ -9767,6 +9784,9 @@ snapshots:
 
   fs.realpath@1.0.0: {}
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -10398,7 +10418,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.15.21
+      '@types/node': 24.0.3
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -11033,6 +11053,14 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
+  playwright-core@1.53.1: {}
+
+  playwright@1.53.1:
+    dependencies:
+      playwright-core: 1.53.1
+    optionalDependencies:
+      fsevents: 2.3.2
+
   plur@5.1.0:
     dependencies:
       irregular-plurals: 3.5.0
@@ -11102,7 +11130,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 22.14.0
+      '@types/node': 24.0.3
       long: 5.2.3
 
   protons-runtime@5.4.0:
@@ -11949,7 +11977,7 @@ snapshots:
       buffer: 5.7.1
       through: 2.3.8
 
-  undici-types@6.21.0: {}
+  undici-types@7.8.0: {}
 
   undici@5.28.4:
     dependencies:
@@ -12019,29 +12047,29 @@ snapshots:
 
   vite-plugin-cross-origin-isolation@0.1.6: {}
 
-  vite-plugin-static-copy@0.17.1(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)):
+  vite-plugin-static-copy@0.17.1(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)):
     dependencies:
       chokidar: 3.6.0
       fast-glob: 3.3.2
       fs-extra: 11.2.0
       picocolors: 1.1.1
-      vite: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+      vite: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
 
-  vite-plugin-static-copy@1.0.6(vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)):
+  vite-plugin-static-copy@1.0.6(vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)):
     dependencies:
       chokidar: 3.6.0
       fast-glob: 3.3.2
       fs-extra: 11.2.0
       picocolors: 1.1.1
-      vite: 6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2)
+      vite: 6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2)
 
-  vite@6.2.7(@types/node@22.14.0)(jiti@1.21.0)(terser@5.39.2):
+  vite@6.2.7(@types/node@24.0.3)(jiti@1.21.0)(terser@5.39.2):
     dependencies:
       esbuild: 0.25.2
       postcss: 8.5.3
       rollup: 4.41.0
     optionalDependencies:
-      '@types/node': 22.14.0
+      '@types/node': 24.0.3
       fsevents: 2.3.3
       jiti: 1.21.0
       terser: 5.39.2
@@ -12221,7 +12249,7 @@ snapshots:
       '@oozcitak/dom': 1.15.10
       '@oozcitak/infra': 1.0.8
       '@oozcitak/util': 8.3.8
-      '@types/node': 22.14.0
+      '@types/node': 24.0.3
       js-yaml: 3.14.0
 
   xmlbuilder@11.0.1: {}

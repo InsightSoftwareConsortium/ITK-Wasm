@@ -1,9 +1,7 @@
-export const demoServer = 'http://localhost:5180'
+export const pipelineBaseUrl = '/pipelines'
+export const pipelineWorkerUrl = '/itk-wasm-pipeline.worker.js'
 
-export const pipelineBaseUrl = new URL('/pipelines', demoServer)
-export const pipelineWorkerUrl = new URL('/itk-wasm-pipeline.worker.js', demoServer)
-
-export async function readIwi(baseUrl: string) {
+export async function readIwi(baseUrl) {
   const imageResponse = await fetch(`${baseUrl}index.json`)
   const image = await imageResponse.json()
   const directionResponse = await fetch(`${baseUrl}data/direction.raw`)
@@ -17,7 +15,7 @@ export async function readIwi(baseUrl: string) {
   return image
 }
 
-export async function readIwm (baseUrl: string) {
+export async function readIwm(baseUrl) {
   const meshResponse = await fetch(`${baseUrl}index.json`)
   const mesh = await meshResponse.json()
   const pointsResponse = await fetch(`${baseUrl}data/points.raw`)
