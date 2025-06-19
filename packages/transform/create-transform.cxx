@@ -77,16 +77,16 @@ int CreateTransformParameterization(
 #elif defined(TRANSFORM_IDENTITY)
 #elif defined(TRANSFORM_TRANSLATION)
   transform->SetIdentity();
-#elif defined(TRANSFORM_EULER_2D)
+#elif defined(TRANSFORM_EULER2D)
   transform->SetIdentity();
-#elif defined(TRANSFORM_EULER_3D)
+#elif defined(TRANSFORM_EULER3D)
   transform->SetIdentity();
-#elif defined(TRANSFORM_RIGID_2D)
+#elif defined(TRANSFORM_RIGID2D)
   transform->SetIdentity();
-#elif defined(TRANSFORM_RIGID_3D)
+#elif defined(TRANSFORM_RIGID3D)
   transform->SetIdentity();
-#elif defined(TRANSFORM_RIGID_3D_PERSPECTIVE)
-#elif defined(TRANSFORM_VERSOR_RIGID_3D)
+#elif defined(TRANSFORM_RIGID3D_PERSPECTIVE)
+#elif defined(TRANSFORM_VERSOR_RIGID3D)
   transform->SetIdentity();
 #elif defined(TRANSFORM_VERSOR)
   transform->SetIdentity();
@@ -94,11 +94,11 @@ int CreateTransformParameterization(
   transform->SetIdentity();
 #elif defined(TRANSFORM_SCALE_LOGARITHMIC)
   transform->SetIdentity();
-#elif defined(TRANSFORM_SCALE_SKEW_VERSOR_3D)
+#elif defined(TRANSFORM_SCALE_SKEW_VERSOR3D)
   transform->SetIdentity();
-#elif defined(TRANSFORM_SIMILARITY_2D)
+#elif defined(TRANSFORM_SIMILARITY2D)
   transform->SetIdentity();
-#elif defined(TRANSFORM_SIMILARITY_3D)
+#elif defined(TRANSFORM_SIMILARITY3D)
   transform->SetIdentity();
 #elif defined(TRANSFORM_QUATERNION_RIGID)
   transform->SetIdentity();
@@ -148,17 +148,17 @@ int CreateTransformDimension(
       return CreateTransformParameterization<itk::IdentityTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_TRANSLATION)
       return CreateTransformParameterization<itk::TranslationTransform<ParametersValueType, VDimension>>(pipeline);
-#elif defined(TRANSFORM_EULER_2D)
+#elif defined(TRANSFORM_EULER2D)
       return CreateTransformParameterization<itk::Euler2DTransform<ParametersValueType>>(pipeline);
-#elif defined(TRANSFORM_EULER_3D)
+#elif defined(TRANSFORM_EULER3D)
       return CreateTransformParameterization<itk::Euler3DTransform<ParametersValueType>>(pipeline);
-#elif defined(TRANSFORM_RIGID_2D)
+#elif defined(TRANSFORM_RIGID2D)
       return CreateTransformParameterization<itk::Rigid2DTransform<ParametersValueType>>(pipeline);
-#elif defined(TRANSFORM_RIGID_3D)
+#elif defined(TRANSFORM_RIGID3D)
       return CreateTransformParameterization<itk::Rigid3DTransform<ParametersValueType>>(pipeline);
-#elif defined(TRANSFORM_RIGID_3D_PERSPECTIVE)
+#elif defined(TRANSFORM_RIGID3D_PERSPECTIVE)
       return CreateTransformParameterization<itk::Rigid3DPerspectiveTransform<ParametersValueType>>(pipeline);
-#elif defined(TRANSFORM_VERSOR_RIGID_3D)
+#elif defined(TRANSFORM_VERSOR_RIGID3D)
       return CreateTransformParameterization<itk::VersorRigid3DTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_VERSOR)
       return CreateTransformParameterization<itk::VersorTransform<ParametersValueType>>(pipeline);
@@ -166,11 +166,11 @@ int CreateTransformDimension(
       return CreateTransformParameterization<itk::ScaleTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_SCALE_LOGARITHMIC)
       return CreateTransformParameterization<itk::ScaleLogarithmicTransform<ParametersValueType, VDimension>>(pipeline);
-#elif defined(TRANSFORM_SCALE_SKEW_VERSOR_3D)
+#elif defined(TRANSFORM_SCALE_SKEW_VERSOR3D)
       return CreateTransformParameterization<itk::ScaleSkewVersor3DTransform<ParametersValueType>>(pipeline);
-#elif defined(TRANSFORM_SIMILARITY_2D)
+#elif defined(TRANSFORM_SIMILARITY2D)
       return CreateTransformParameterization<itk::Similarity2DTransform<ParametersValueType>>(pipeline);
-#elif defined(TRANSFORM_SIMILARITY_3D)
+#elif defined(TRANSFORM_SIMILARITY3D)
       return CreateTransformParameterization<itk::Similarity3DTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_QUATERNION_RIGID)
       return CreateTransformParameterization<itk::QuaternionRigidTransform<ParametersValueType>>(pipeline);
@@ -217,13 +217,13 @@ int CreateTransformParameterValues(
 
   switch (dimension)
   {
-#if defined(TRANSFORM_EULER_2D) || defined(TRANSFORM_RIGID_2D) || defined(TRANSFORM_SIMILARITY_2D)
+#if defined(TRANSFORM_EULER2D) || defined(TRANSFORM_RIGID2D) || defined(TRANSFORM_SIMILARITY2D)
     case 2:
       return CreateTransformDimension<ParametersValueType, 2>(pipeline);
     default:
       std::cerr << "Transform " << TO_LITERAL(TRANSFORM_NAME) << " only supports 2D. Unsupported dimension: " << dimension << std::endl;
       throw std::logic_error("Unsupported dimension");
-#elif defined(TRANSFORM_EULER_3D) || defined(TRANSFORM_RIGID_3D) || defined(TRANSFORM_VERSOR_RIGID_3D) || defined(TRANSFORM_VERSOR) || defined(TRANSFORM_SCALE_SKEW_VERSOR_3D) || defined(TRANSFORM_SIMILARITY_3D) || defined(TRANSFORM_QUATERNION_RIGID) || defined(TRANSFORM_RIGID_3D_PERSPECTIVE) || defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
+#elif defined(TRANSFORM_EULER3D) || defined(TRANSFORM_RIGID3D) || defined(TRANSFORM_VERSOR_RIGID3D) || defined(TRANSFORM_VERSOR) || defined(TRANSFORM_SCALE_SKEW_VERSOR3D) || defined(TRANSFORM_SIMILARITY3D) || defined(TRANSFORM_QUATERNION_RIGID) || defined(TRANSFORM_RIGID3D_PERSPECTIVE) || defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
     case 3:
       return CreateTransformDimension<ParametersValueType, 3>(pipeline);
     default:
@@ -253,9 +253,9 @@ main(int argc, char * argv[])
   const char *        pipelineDescription = "Create a " TO_LITERAL(TRANSFORM_NAME) " spatial transformation.";
   itk::wasm::Pipeline pipeline(pipelineName, pipelineDescription, argc, argv);
 
-#if defined(TRANSFORM_EULER_2D) || defined(TRANSFORM_RIGID_2D) || defined(TRANSFORM_SIMILARITY_2D)
+#if defined(TRANSFORM_EULER2D) || defined(TRANSFORM_RIGID2D) || defined(TRANSFORM_SIMILARITY2D)
   constexpr unsigned int dimension = 2;
-#elif defined(TRANSFORM_EULER_3D) || defined(TRANSFORM_RIGID_3D) || defined(TRANSFORM_VERSOR_RIGID_3D) || defined(TRANSFORM_VERSOR) || defined(TRANSFORM_SCALE_SKEW_VERSOR_3D) || defined(TRANSFORM_SIMILARITY_3D) || defined(TRANSFORM_QUATERNION_RIGID) || defined(TRANSFORM_RIGID_3D_PERSPECTIVE) || defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
+#elif defined(TRANSFORM_EULER) || defined(TRANSFORM_RIGID) || defined(TRANSFORM_VERSOR_RIGID) || defined(TRANSFORM_VERSOR) || defined(TRANSFORM_SCALE_SKEW_VERSOR) || defined(TRANSFORM_SIMILARITY) || defined(TRANSFORM_QUATERNION_RIGID) || defined(TRANSFORM_RIGID_PERSPECTIVE) || defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
   constexpr unsigned int dimension = 3;
 #else
   unsigned int dimension = 3;

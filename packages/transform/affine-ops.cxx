@@ -182,7 +182,7 @@ public:
     itk::wasm::InputTextStream operationsStream;
     pipeline.add_option("operations", operationsStream, "JSON array of operations to apply")
       ->required()
-      ->type_name("INPUT_TEXT_STREAM");
+      ->type_name("INPUT_JSON");
 
     using OutputTransformType = itk::wasm::OutputTransform<AffineTransformType>;
     OutputTransformType outputTransform;
