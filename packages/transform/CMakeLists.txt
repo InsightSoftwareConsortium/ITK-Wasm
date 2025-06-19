@@ -67,6 +67,11 @@ foreach(transform
     )
 endforeach()
 
+# Add affine-ops pipeline
+add_executable(affine-ops affine-ops.cxx)
+target_link_libraries(affine-ops PUBLIC ${ITK_LIBRARIES})
+target_include_directories(affine-ops PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 enable_testing()
 add_test(NAME create-translation-transform
   COMMAND create-translation-transform
@@ -86,3 +91,12 @@ add_test(NAME create-affine-defaults
   COMMAND create-affine-transform
     ${CMAKE_CURRENT_BINARY_DIR}/create-affine-defaults.iwt
     )
+
+add_test(NAME affine-ops-test
+  COMMAND affine-ops
+    ${CMAKE_CURRENT_BINARY_DIR}/create-affine.iwt
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/affine-ops-input.json
+    ${CMAKE_CURRENT_BINARY_DIR}/affine-ops-output.iwt
+  )
+
+set_tests_properties(affine-ops-test PROPERTIES DEPENDS create-affine-transform)
