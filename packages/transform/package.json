@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/transform-build",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Common operations with and on spatial transformations.",
   "type": "module",
