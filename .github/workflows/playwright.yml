@@ -137,6 +137,78 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: playwright-report-itk-wasm
           path: packages/core/typescript/itk-wasm/playwright-report/
+          retention-days: 30
+
+  test-packages:
+    name: browser tests
+    runs-on: ubuntu-24.04
+    strategy:
+      max-parallel: 3
+      matrix:
+        package: [compare-images]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          large-packages: false
+          tool-cache: true
+
+      - uses: nick-fields/retry@v3
+        name: Pull latest Docker images
+        with:
+          max_attempts: 5
+          timeout_minutes: 10
+          command: ./src/docker/pull.sh --no-debug
+
+      - name: Install
+        uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      - name: Install Playwright Browsers
+        run: pnpx playwright install --with-deps
+
+      - name: pnpm install
+        run: pnpm install --frozen-lockfile
+      - name: Build itk-wasm
+        run: |
+          pnpm run --aggregate-output --filter itk-wasm build
+
+      - name: Build @itk-wasm/demo-app
+        run: |
+          pnpm run --aggregate-output --filter '@itk-wasm/demo-app' build
+
+      - name: Build build:gen:typescript
+        run: |
+          pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build..." build:gen:typescript
+
+      - name: Build typescript
+        run: |
+          pnpm install
+          # Build the generated TypeScript package
+          pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}..." build:tsc
+          pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}" build
+
+      - name: Download test data
+        run: |
+          pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:data:download
+
+      - name: Run Playwright tests
+        working-directory: packages/${{ matrix.package }}/typescript
+        run: pnpm run test:browser
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ matrix.package }}
+          path: packages/${{ matrix.package }}/typescript/playwright-report/
           retention-days: 30

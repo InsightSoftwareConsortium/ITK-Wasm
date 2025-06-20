@@ -10,7 +10,7 @@ import FloatTypes from './interface-types/float-types.js'
  * @param {Image} image - The input image
  * @param {CastImageOptions} options - specify the componentType and/or pixelType of the output
  */
-function castImage(inputImage: Image, options?: CastImageOptions): Image {
+function castImage (inputImage: Image, options?: CastImageOptions): Image {
   const outputImageType = { ...inputImage.imageType }
 
   if (

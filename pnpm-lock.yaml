@@ -200,15 +200,15 @@ importers:
       '@itk-wasm/image-io':
         specifier: workspace:^
         version: link:../../image-io/typescript
+      '@playwright/test':
+        specifier: ^1.42.1
+        version: 1.53.1
       '@types/node':
         specifier: ^24.0.3
         version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
-      cypress:
-        specifier: ^14.5.0
-        version: 14.5.0
       esbuild:
         specifier: ^0.25.1
         version: 0.25.2
