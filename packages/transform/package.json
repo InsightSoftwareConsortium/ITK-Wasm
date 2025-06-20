@@ -7,8 +7,9 @@
   "itk-wasm": {
     "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
     "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
-    "test-data-hash": "",
+    "test-data-hash": "bafkreidkya6zzlqxf2c5w4suxmoiz5x7f4vgdopd5nguymqdh2leafh7zu",
     "test-data-urls": [
+      "https://bafybeibrqarlknigdc37zwm6hpmknpvhnr6wblpli42zdpe47c24o7jlby.ipfs.w3s.link/ipfs/bafybeibrqarlknigdc37zwm6hpmknpvhnr6wblpli42zdpe47c24o7jlby/data.tar.gz"
     ],
     "typescript-package-name": "@itk-wasm/transform",
     "python-package-name": "itkwasm-transform",
@@ -27,7 +28,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafkreic7utwwa32sc7ekhouzdlnla4kffytphcwc7qwam5ndhixwjulydq https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.163/itkwasm-transform-test-data.tar.gz https://w3s.link/ipfs/bafybeifwebok64osjl2i3zc6rkn3izgon333wsjotqzqlxorkkvrbldjcy/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreidkya6zzlqxf2c5w4suxmoiz5x7f4vgdopd5nguymqdh2leafh7zu https://bafybeibrqarlknigdc37zwm6hpmknpvhnr6wblpli42zdpe47c24o7jlby.ipfs.w3s.link/ipfs/bafybeibrqarlknigdc37zwm6hpmknpvhnr6wblpli42zdpe47c24o7jlby/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
