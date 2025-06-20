@@ -1,0 +1,46 @@
+{
+  "name": "@itk-wasm/transform-build",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Common operations with and on spatial transformations.",
+  "type": "module",
+  "itk-wasm": {
+    "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
+    "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
+    "test-data-hash": "bafkreidkya6zzlqxf2c5w4suxmoiz5x7f4vgdopd5nguymqdh2leafh7zu",
+    "test-data-urls": [
+      "https://bafybeibrqarlknigdc37zwm6hpmknpvhnr6wblpli42zdpe47c24o7jlby.ipfs.w3s.link/ipfs/bafybeibrqarlknigdc37zwm6hpmknpvhnr6wblpli42zdpe47c24o7jlby/data.tar.gz"
+    ],
+    "typescript-package-name": "@itk-wasm/transform",
+    "python-package-name": "itkwasm-transform",
+    "package-description": "Common operations with and on spatial transformations.",
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+  },
+  "scripts": {
+    "build": "pnpm build:gen:typescript && pnpm build:gen:python",
+    "build:emscripten": "itk-wasm pnpm-script build:emscripten",
+    "build:emscripten:debug": "itk-wasm pnpm-script build:emscripten:debug",
+    "build:wasi": "itk-wasm pnpm-script build:wasi",
+    "build:wasi:debug": "itk-wasm pnpm-script build:wasi:debug",
+    "build:python:wasi": "echo 'No build:python:wasi script required with pixi'",
+    "bindgen:typescript": "itk-wasm pnpm-script bindgen:typescript",
+    "bindgen:python": "itk-wasm pnpm-script bindgen:python",
+    "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
+    "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
+    "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreidkya6zzlqxf2c5w4suxmoiz5x7f4vgdopd5nguymqdh2leafh7zu https://bafybeibrqarlknigdc37zwm6hpmknpvhnr6wblpli42zdpe47c24o7jlby.ipfs.w3s.link/ipfs/bafybeibrqarlknigdc37zwm6hpmknpvhnr6wblpli42zdpe47c24o7jlby/data.tar.gz",
+    "test:data:pack": "dam pack test/data test/data.tar.gz",
+    "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
+    "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
+    "test:python:dispatch": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-dispatch",
+    "test:python": "itk-wasm pnpm-script test:python",
+    "test:wasi": "itk-wasm pnpm-script test:wasi -- -V"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@itk-wasm/dam": "^1.1.0",
+    "itk-wasm": "workspace:^",
+    "@itk-wasm/compare-images-build": "workspace:^",
+    "@itk-wasm/image-io-build": "workspace:^"
+  }
+}

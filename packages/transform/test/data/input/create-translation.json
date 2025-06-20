@@ -1,0 +1,6 @@
+{
+  "transformParameterization": "Translation",
+  "parametersValueType": "float32",
+  "inputDimension": 3,
+  "outputDimension": 3
+}

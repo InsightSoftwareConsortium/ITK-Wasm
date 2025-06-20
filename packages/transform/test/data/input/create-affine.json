@@ -1,0 +1,6 @@
+{
+  "transformParameterization": "Affine",
+  "parametersValueType": "float64",
+  "inputDimension": 3,
+  "outputDimension": 3
+}
