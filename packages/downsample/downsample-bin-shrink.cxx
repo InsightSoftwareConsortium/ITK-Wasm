@@ -21,6 +21,7 @@
 #include "itkOutputImage.h"
 #include "itkSupportInputImageTypes.h"
 
+#include "itkVectorImage.h"
 #include "itkBinShrinkImageFilter.h"
 
 template <typename TImage>
@@ -92,5 +93,11 @@ main(int argc, char * argv[])
                                            uint64_t,
                                            int64_t,
                                            float,
-                                           double>::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
+                                           double,
+                                           itk::VariableLengthVector<uint8_t>,
+                                           itk::VariableLengthVector<uint16_t>,
+                                           itk::VariableLengthVector<int16_t>,
+                                           itk::VariableLengthVector<float>,
+                                           itk::VariableLengthVector<double>
+                                           >::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
 }

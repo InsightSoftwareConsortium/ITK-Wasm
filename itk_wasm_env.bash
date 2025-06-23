@@ -52,3 +52,6 @@ export ITK_WASM_MESH_IO_TEST_DATA_URLS=${ITK_WASM_MESH_IO_TEST_DATA_URLS:-$(cat 
 
 export ITK_WASM_TRANSFORM_IO_TEST_DATA_HASH=${ITK_WASM_TRANSFORM_IO_TEST_DATA_HASH:-$(cat packages/transform-io/package.json | jq -e -r '."itk-wasm"."test-data-hash"')}
 export ITK_WASM_TRANSFORM_IO_TEST_DATA_URLS=${ITK_WASM_TRANSFORM_IO_TEST_DATA_URLS:-$(cat packages/transform-io/package.json | jq -e -r '."itk-wasm"."test-data-urls" | join(" ")')}
+
+export ITK_WASM_TRANSFORM_TEST_DATA_HASH=${ITK_WASM_TRANSFORM_TEST_DATA_HASH:-$(cat packages/transform/package.json | jq -e -r '."itk-wasm"."test-data-hash"')}
+export ITK_WASM_TRANSFORM_TEST_DATA_URLS=${ITK_WASM_TRANSFORM_TEST_DATA_URLS:-$(cat packages/transform/package.json | jq -e -r '."itk-wasm"."test-data-urls" | join(" ")')}
