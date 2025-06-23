@@ -20,7 +20,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        package: [compress-stringify, dicom, mesh-io, image-io, transform-io, downsample]
+        package: [dicom, mesh-io, image-io, transform-io, downsample]
 
     steps:
       - name: Checkout
