@@ -319,24 +319,21 @@ importers:
       '@itk-wasm/mesh-to-poly-data':
         specifier: ^1.1.0
         version: 1.1.0
+      '@playwright/test':
+        specifier: ^1.42.1
+        version: 1.53.1
       '@types/node':
         specifier: ^24.0.3
         version: 24.0.3
       ava:
         specifier: ^6.1.3
         version: 6.1.3
-      cypress:
-        specifier: ^14.5.0
-        version: 14.5.0
       esbuild:
         specifier: ^0.25.1
         version: 0.25.2
       shx:
         specifier: ^0.4.0
         version: 0.4.0
-      start-server-and-test:
-        specifier: ^2.0.12
-        version: 2.0.12
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -923,7 +920,7 @@ importers:
     devDependencies:
       '@itk-wasm/demo-app':
         specifier: ^0.2.0
-        version: 0.2.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(@types/react@18.3.1)(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)
+        version: 0.2.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(wslink@2.0.2)
       '@itk-wasm/image-io':
         specifier: ^1.3.1
         version: 1.3.1
@@ -7613,14 +7610,14 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itk-viewer/element@0.3.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)':
+  '@itk-viewer/element@0.3.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(wslink@2.0.2)':
     dependencies:
       '@itk-viewer/arcball': 0.0.1
       '@itk-viewer/io': 0.1.8
       '@itk-viewer/remote-viewport': 0.2.21
       '@itk-viewer/utils': 0.1.4
       '@itk-viewer/viewer': 0.3.0
-      '@itk-viewer/vtkjs': 0.1.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)
+      '@itk-viewer/vtkjs': 0.1.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(wslink@2.0.2)
       '@lit/context': 1.1.1
       gl-matrix: 3.4.3
       itk-wasm: 1.0.0-b.160
@@ -7731,11 +7728,11 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itk-viewer/vtkjs@0.1.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)':
+  '@itk-viewer/vtkjs@0.1.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(wslink@2.0.2)':
     dependencies:
       '@itk-viewer/io': 0.1.8
       '@itk-viewer/viewer': 0.3.0
-      '@kitware/vtk.js': 30.4.1(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)
+      '@kitware/vtk.js': 30.4.1(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0)(wslink@2.0.2)
       gl-matrix: 3.4.3
       xstate: 5.5.2
     transitivePeerDependencies:
@@ -7772,9 +7769,9 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itk-wasm/demo-app@0.2.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(@types/react@18.3.1)(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)':
+  '@itk-wasm/demo-app@0.2.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(wslink@2.0.2)':
     dependencies:
-      '@itk-viewer/element': 0.3.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)
+      '@itk-viewer/element': 0.3.0(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(wslink@2.0.2)
       '@itk-viewer/io': 0.1.8
       '@shoelace-style/shoelace': 2.15.0(@types/react@18.3.1)
       itk-wasm: 1.0.0-b.188
@@ -7846,30 +7843,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
-
-  '@kitware/vtk.js@30.4.1(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0(esbuild@0.25.2))(wslink@2.0.2)':
-    dependencies:
-      '@babel/preset-env': 7.24.5(@babel/core@7.24.5)
-      '@babel/runtime': 7.22.11
-      '@types/webxr': 0.5.16
-      autoprefixer: 10.4.19(postcss@8.5.3)
-      commander: 9.2.0
-      d3-scale: 4.0.2
-      fast-deep-equal: 3.1.3
-      fflate: 0.7.3
-      gl-matrix: 3.4.3
-      globalthis: 1.0.3
-      seedrandom: 3.0.5
-      shader-loader: 1.3.1
-      shelljs: 0.8.5
-      spark-md5: 3.0.2
-      stream-browserify: 3.0.0
-      webworker-promise: 0.5.0
-      worker-loader: 3.0.8(webpack@5.91.0(esbuild@0.25.2))
-      wslink: 2.0.2
-      xmlbuilder2: 3.0.2
-    transitivePeerDependencies:
-      - webpack
 
   '@kitware/vtk.js@30.4.1(@babel/preset-env@7.24.5(@babel/core@7.24.5))(autoprefixer@10.4.19(postcss@8.5.3))(webpack@5.91.0)(wslink@2.0.2)':
     dependencies:
@@ -12020,17 +11993,6 @@ snapshots:
 
   term-size@2.2.1: {}
 
-  terser-webpack-plugin@5.3.14(esbuild@0.25.2)(webpack@5.91.0(esbuild@0.25.2)):
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.25
-      jest-worker: 27.5.1
-      schema-utils: 4.3.2
-      serialize-javascript: 6.0.2
-      terser: 5.39.2
-      webpack: 5.91.0(esbuild@0.25.2)
-    optionalDependencies:
-      esbuild: 0.25.2
-
   terser-webpack-plugin@5.3.14(webpack@5.91.0):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
@@ -12371,37 +12333,6 @@ snapshots:
       - esbuild
       - uglify-js
 
-  webpack@5.91.0(esbuild@0.25.2):
-    dependencies:
-      '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.7
-      '@webassemblyjs/ast': 1.14.1
-      '@webassemblyjs/wasm-edit': 1.14.1
-      '@webassemblyjs/wasm-parser': 1.14.1
-      acorn: 8.14.1
-      acorn-import-assertions: 1.9.0(acorn@8.14.1)
-      browserslist: 4.24.5
-      chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.18.1
-      es-module-lexer: 1.7.0
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      glob-to-regexp: 0.4.1
-      graceful-fs: 4.2.11
-      json-parse-even-better-errors: 2.3.1
-      loader-runner: 4.3.0
-      mime-types: 2.1.35
-      neo-async: 2.6.2
-      schema-utils: 3.3.0
-      tapable: 2.2.2
-      terser-webpack-plugin: 5.3.14(esbuild@0.25.2)(webpack@5.91.0(esbuild@0.25.2))
-      watchpack: 2.4.4
-      webpack-sources: 3.2.3
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - uglify-js
-
   webworker-promise@0.5.0: {}
 
   well-known-symbols@2.0.0: {}
@@ -12477,12 +12408,6 @@ snapshots:
       string-width: 4.2.3
 
   word-wrap@1.2.5: {}
-
-  worker-loader@3.0.8(webpack@5.91.0(esbuild@0.25.2)):
-    dependencies:
-      loader-utils: 2.0.4
-      schema-utils: 3.3.0
-      webpack: 5.91.0(esbuild@0.25.2)
 
   worker-loader@3.0.8(webpack@5.91.0):
     dependencies:

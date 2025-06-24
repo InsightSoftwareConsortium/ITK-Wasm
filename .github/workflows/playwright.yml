@@ -147,7 +147,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        package: [compare-images]
+        package: [compare-images, compress-stringify]
 
     steps:
       - name: Checkout
