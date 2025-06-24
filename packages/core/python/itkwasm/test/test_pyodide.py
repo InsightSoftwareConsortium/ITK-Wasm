@@ -225,6 +225,56 @@ async def test_transform_conversion(selenium):
 
 @copy_files_to_pyodide(file_list=file_list, install_wheels=True)
 @run_in_pyodide(packages=["numpy"])
+async def test_transform_list_conversion(selenium):
+    from itkwasm import Transform, TransformType, TransformParameterizations, TransformList
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+
+    # Create multiple transforms
+
+    # First transform - Affine
+    affine_type = TransformType(TransformParameterizations.Affine)
+    affine_fixed_parameters = np.array([0.0, 0.0, 0.0]).astype(np.float64)
+    affine_parameters = np.array([
+        0.65631490118447, 0.5806583745824385, -0.4817536741017158,
+        -0.7407986817430222, 0.37486398378429736, -0.5573995934598175,
+        -0.14306664045479867, 0.7227121458012518, 0.676179776908723,
+        -65.99999999999997, 69.00000000000004, 32.000000000000036]).astype(np.float64)
+    affine_transform = Transform(affine_type, 3, 12, fixedParameters=affine_fixed_parameters, parameters=affine_parameters)
+
+    # Second transform - Translation
+    translation_type = TransformType(TransformParameterizations.Translation)
+    translation_fixed_parameters = np.array([]).astype(np.float64)
+    translation_parameters = np.array([10.0, 20.0, 30.0]).astype(np.float64)
+    translation_transform = Transform(translation_type, 0, 3, fixedParameters=translation_fixed_parameters, parameters=translation_parameters)
+
+    # Create TransformList
+    transform_list: TransformList = [affine_transform, translation_transform]
+
+    # Convert to JS and back
+    transform_list_js = to_js(transform_list)
+    transform_list_py = to_py(transform_list_js)
+
+    # Verify the list structure
+    assert len(transform_list_py) == 2
+
+    # Verify first transform (Affine)
+    affine_py = transform_list_py[0]
+    assert affine_py.transformType.transformParameterization == TransformParameterizations.Affine
+    assert affine_py.numberOfParameters == 12
+    assert affine_py.numberOfFixedParameters == 3
+    np.testing.assert_allclose(affine_py.fixedParameters, affine_fixed_parameters)
+    np.testing.assert_allclose(affine_py.parameters, affine_parameters)
+
+    # Verify second transform (Translation)
+    translation_py = transform_list_py[1]
+    assert translation_py.transformType.transformParameterization == TransformParameterizations.Translation
+    assert translation_py.numberOfParameters == 3
+    assert translation_py.numberOfFixedParameters == 0
+    np.testing.assert_allclose(translation_py.parameters, translation_parameters)
+
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
 async def test_binary_stream_conversion(selenium):
     from itkwasm import BinaryStream
     from itkwasm.pyodide import to_js, to_py
