@@ -20,7 +20,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        package: [dicom, mesh-io, image-io, transform-io, downsample]
+        package: [mesh-io, image-io, transform-io, downsample]
 
     steps:
       - name: Checkout
@@ -77,7 +77,6 @@ jobs:
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:data:download
 
       - name: Test with Chrome
-        if: ${{ matrix.package != 'dicom' }}
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
@@ -94,7 +93,7 @@ jobs:
           if-no-files-found: ignore
 
       #- name: Test with Firefox
-        #if: ${{ matrix.package != 'compress-stringify' && matrix.package != 'dicom' && matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' }}
+        #if: ${{ matrix.package != 'compress-stringify' && matrix.package != 'mesh-io' && matrix.package != 'image-io' && matrix.package != 'downsample' }}
         #uses: cypress-io/github-action@v6
         #with:
           #browser: firefox
