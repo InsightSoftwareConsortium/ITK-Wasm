@@ -1,5 +1,4 @@
-cypress/screenshots/
-cypress/videos/
-
 demo-app/
 test/browser/demo-app/public/
+test-results/
+playwright-report/
