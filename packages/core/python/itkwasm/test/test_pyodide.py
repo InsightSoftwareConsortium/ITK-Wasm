@@ -8,7 +8,7 @@ if sys.version_info < (3, 10):
 from pytest_pyodide import run_in_pyodide, copy_files_to_pyodide
 
 #from itkwasm import __version__ as test_package_version
-test_package_version = '1.0b188'
+test_package_version = '1.0b190'
 
 
 def package_wheel():

@@ -73,12 +73,7 @@ def to_py(js_proxy):
     if hasattr(js_proxy, "constructor") and js_proxy.constructor.name == "Uint8Array":
         return js_proxy.to_bytes()
     elif isinstance(js_proxy, pyodide.ffi.JsArray):
-        # Check if this might be a TransformList by validating all elements in the list
-        converted_list = [to_py(value) for value in js_proxy]
-        # If all elements are transforms, this is likely a TransformList
-        if converted_list and all(isinstance(item, Transform) for item in converted_list):
-            return converted_list  # This is effectively a TransformList
-        return converted_list
+        return [to_py(value) for value in js_proxy]
     elif hasattr(js_proxy, "imageType"):
         image_dict = js_proxy.to_py()
         image_type = ImageType(**image_dict["imageType"])
@@ -193,17 +188,10 @@ def to_js(py, **kwargs):
     import js
 
     if isinstance(py, list):
-        # Check if it's a TransformList (list of Transform objects)
-        if py and all(isinstance(item, Transform) for item in py):
-            js_array = pyodide.ffi.to_js([])
-            for transform in py:
-                js_array.append(to_js(transform))
-            return js_array
-        else:
-            js_array = pyodide.ffi.to_js([])
-            for value in py:
-                js_array.append(to_js(value))
-            return js_array
+        js_array = pyodide.ffi.to_js([])
+        for value in py:
+            js_array.append(to_js(value))
+        return js_array
     elif isinstance(py, Image):
         image_dict = asdict(py)
         image_dict["direction"] = image_dict["direction"].ravel()
