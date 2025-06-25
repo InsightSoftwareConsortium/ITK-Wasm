@@ -426,3 +426,39 @@ async def test_json_object_conversion(selenium):
     assert data_py["a"] == 1
     assert data_py["b"] == True
     assert data_py["c"]["nested"] == True
+
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["micropip"])
+async def test_parameter_object_conversion(selenium):
+    from itkwasm.pyodide import to_js, to_py
+    params = [
+        {
+            "AutomaticScalesEstimation": [
+                "true"
+            ],
+            "AutomaticTransformInitialization": [
+                "true"
+            ]
+        },
+        {
+            "AutomaticScalesEstimation": [
+                "true"
+            ],
+            "AutomaticTransformInitialization": [
+                "true"
+            ],
+            "BSplineInterpolationOrder": [
+                "1"
+            ]
+        }
+    ]
+
+    params_js = to_js(params)
+    params_py = to_py(params_js)
+
+    assert len(params_py) == 2
+    assert params_py[0]["AutomaticScalesEstimation"][0] == "true"
+    assert params_py[0]["AutomaticTransformInitialization"][0] == "true"
+    assert params_py[1]["AutomaticScalesEstimation"][0] == "true"
+    assert params_py[1]["AutomaticTransformInitialization"][0] == "true"
+    assert params_py[1]["BSplineInterpolationOrder"][0] == "1"

@@ -5,7 +5,7 @@ from .image import Image, ImageType
 from .point_set import PointSet, PointSetType
 from .mesh import Mesh, MeshType
 from .polydata import PolyData, PolyDataType
-from .transform import Transform, TransformType, TransformList
+from .transform import Transform, TransformType
 from .binary_file import BinaryFile
 from .binary_stream import BinaryStream
 from .text_file import TextFile
@@ -263,4 +263,4 @@ def to_js(py, **kwargs):
         text_file_dict["data"] = data
         return pyodide.ffi.to_js(text_file_dict, dict_converter=js.Object.fromEntries)
 
-    return pyodide.ffi.to_js(py, **kwargs)
+    return pyodide.ffi.to_js(py, **kwargs, dict_converter=js.Object.fromEntries)
