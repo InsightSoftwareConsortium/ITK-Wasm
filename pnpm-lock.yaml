@@ -255,6 +255,9 @@ importers:
       '@itk-wasm/mesh-io':
         specifier: workspace:*
         version: link:../../mesh-io/typescript
+      '@playwright/test':
+        specifier: ^1.53.1
+        version: 1.53.1
       '@types/node':
         specifier: ^24.0.3
         version: 24.0.3
