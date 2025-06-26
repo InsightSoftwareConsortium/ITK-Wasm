@@ -546,7 +546,7 @@ class Pipeline:
                             data_ptr = ri.get_output_array_address(0, index, idx * 2)
                             data_size = ri.get_output_array_size(0, index, idx * 2)
                             transform.fixedParameters = buffer_to_numpy_array(
-                                transform.transformType.parametersValueType,
+                                FloatTypes.Float64,
                                 ri.wasmtime_lift(data_ptr, data_size),
                             )
                         if transform.numberOfParameters > 0:

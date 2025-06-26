@@ -666,7 +666,7 @@ function runPipelineEmscripten (
                   pipelineModule,
                   index,
                   transformIndex * 2,
-                  transform.transformType.parametersValueType
+                  FloatTypes.Float64
                 ) as TypedArray
             }
             if (transform.numberOfParameters > 0) {
