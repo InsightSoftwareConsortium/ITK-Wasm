@@ -263,4 +263,4 @@ def to_js(py, **kwargs):
         text_file_dict["data"] = data
         return pyodide.ffi.to_js(text_file_dict, dict_converter=js.Object.fromEntries)
 
-    return pyodide.ffi.to_js(py, **kwargs)
+    return pyodide.ffi.to_js(py, **kwargs, dict_converter=js.Object.fromEntries)
