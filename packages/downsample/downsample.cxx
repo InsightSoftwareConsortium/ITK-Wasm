@@ -80,7 +80,7 @@ public:
     {
       const double cropRadiusValue = cropRadius.size() ? cropRadius[i] : 0.0;
 
-      outputOrigin[i] = inputOrigin[i] + cropRadiusValue * inputSpacing[i];
+      outputOrigin[i] = inputOrigin[i] + cropRadiusValue * inputSpacing[i] + 0.5 * (shrinkFactors[i] - 1) * inputSpacing[i];
       outputSpacing[i] = inputSpacing[i] * shrinkFactors[i];
       outputSize[i] = std::max<itk::SizeValueType>(0, (inputSize[i] - 2 * cropRadiusValue) / shrinkFactors[i]);
     }
