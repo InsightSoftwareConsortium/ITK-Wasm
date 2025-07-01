@@ -692,6 +692,9 @@ importers:
       '@itk-wasm/image-io-build':
         specifier: workspace:*
         version: link:..
+      '@playwright/test':
+        specifier: ^1.48.2
+        version: 1.53.1
       '@types/mime-types':
         specifier: ^2.1.4
         version: 2.1.4
@@ -704,18 +707,12 @@ importers:
       concurrently:
         specifier: ^8.2.2
         version: 8.2.2
-      cypress:
-        specifier: ^14.5.0
-        version: 14.5.0
       esbuild:
         specifier: ^0.25.1
         version: 0.25.2
       shx:
         specifier: ^0.4.0
         version: 0.4.0
-      start-server-and-test:
-        specifier: ^2.0.12
-        version: 2.0.12
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
