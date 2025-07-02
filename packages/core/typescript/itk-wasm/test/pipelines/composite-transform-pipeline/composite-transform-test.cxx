@@ -29,7 +29,7 @@ main(int argc, char * argv[])
 
   using ParametersValueType = float;
   constexpr unsigned int Dimension = 2;
-  
+
   // Define transform types
   using CompositeTransformType = itk::CompositeTransform<ParametersValueType, Dimension>;
   using Rigid2DTransformType = itk::Rigid2DTransform<ParametersValueType>;
@@ -48,18 +48,18 @@ main(int argc, char * argv[])
 
   // Create and configure the Rigid2D transform
   auto rigid2DTransform = Rigid2DTransformType::New();
-  
+
   // Set non-trivial parameters for Rigid2D transform
   // Rotation angle of 30 degrees and translation of (5.0, 3.0)
   const double angleInRadians = 30.0 * std::atan(1.0) * 4.0 / 180.0; // 30 degrees to radians
   rigid2DTransform->SetAngle(angleInRadians);
-  
+
   // Set center of rotation (fixed parameters)
   Rigid2DTransformType::CenterType center;
   center[0] = 10.0;
   center[1] = 15.0;
   rigid2DTransform->SetCenter(center);
-  
+
   // Set translation
   Rigid2DTransformType::TranslationType translation;
   translation[0] = 5.0;
@@ -68,19 +68,19 @@ main(int argc, char * argv[])
 
   // Create and configure the Affine transform
   auto affineTransform = AffineTransformType::New();
-  
+
   // Set non-trivial matrix parameters
   AffineTransformType::MatrixType matrix;
   matrix(0, 0) = 1.2; matrix(0, 1) = 0.3;
   matrix(1, 0) = 0.2; matrix(1, 1) = 1.1;
   affineTransform->SetMatrix(matrix);
-  
+
   // Set center for affine transform (fixed parameters)
   AffineTransformType::CenterType affineCenter;
   affineCenter[0] = 20.0;
   affineCenter[1] = 25.0;
   affineTransform->SetCenter(affineCenter);
-  
+
   // Set translation for affine transform
   AffineTransformType::TranslationType affineTranslation;
   affineTranslation[0] = 2.5;
@@ -90,7 +90,7 @@ main(int argc, char * argv[])
   // Add transforms to the composite transform in order
   compositeTransform->AppendTransform(rigid2DTransform);
   compositeTransform->AppendTransform(affineTransform);
-  
+
   // Optimize the composite transform
   compositeTransform->FlattenTransformQueue();
 
