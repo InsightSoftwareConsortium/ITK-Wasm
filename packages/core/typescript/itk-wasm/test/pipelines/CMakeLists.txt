@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(itkwasm-test-pipelines)
 
 add_subdirectory("bindgen-interface-types-pipeline")
+add_subdirectory("composite-transform-pipeline")
 add_subdirectory("input-output-files-pipeline")
 add_subdirectory("input-output-json-pipeline")
 add_subdirectory("median-filter-pipeline")
