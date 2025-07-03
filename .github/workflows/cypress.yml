@@ -20,7 +20,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        package: [mesh-io, image-io, transform-io, downsample]
+        package: [mesh-io, transform-io]
 
     steps:
       - name: Checkout
