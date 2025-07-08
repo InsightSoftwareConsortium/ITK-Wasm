@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Browser Tests
 on:
   push:
     branches: [ main ]
@@ -147,7 +147,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        package: [compare-images, compare-meshes, compress-stringify, dicom, downsample, image-io, mesh-io]
+        package: [compare-images, compare-meshes, compress-stringify, dicom, downsample, image-io, mesh-io, transform-io]
 
     steps:
       - name: Checkout

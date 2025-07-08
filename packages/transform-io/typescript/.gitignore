@@ -1,1 +1,2 @@
-cypress/screenshots/
+test-results/
+playwright-report/
