@@ -212,3 +212,43 @@ jobs:
           name: playwright-report-${{ matrix.package }}
           path: packages/${{ matrix.package }}/typescript/playwright-report/
           retention-days: 30
+
+  test-hello-world-example:
+    defaults:
+      run:
+        working-directory: ./examples/hello-world
+    timeout-minutes: 60
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v4
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+
+    - name: Pull latest Docker images
+      run: |
+        ./src/docker/pull.sh --no-debug
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - name: Install
+      uses: pnpm/action-setup@v4
+      with:
+        run_install: true
+
+    - name: Build itk-wasm
+      run: |
+        pnpm run --aggregate-output --filter itk-wasm build
+    - name: Install dependencies
+      run: pnpm install
+    - name: Install Playwright Browsers
+      run: pnpx playwright install --with-deps
+    - name: Run Playwright tests
+      run: pnpm run test
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report-hello-world
+        path: playwright-report/
+        retention-days: 30
