@@ -102,11 +102,12 @@ jobs:
           node-version: '22'
           cache: pnpm
 
-      - name: Install Playwright Browsers
-        run: pnpx playwright install --with-deps
-
       - name: Install dependencies for itk-wasm
         run: pnpm install
+        working-directory: packages/core/typescript/itk-wasm
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
         working-directory: packages/core/typescript/itk-wasm
 
       - name: Build itk-wasm
@@ -177,9 +178,6 @@ jobs:
       - name: pnpm install
         run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-
       - name: Build itk-wasm
         run: |
           pnpm run --aggregate-output --filter itk-wasm build
@@ -202,6 +200,10 @@ jobs:
       - name: Download test data
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:data:download
+
+      - name: Install Playwright Browsers
+        working-directory: packages/${{ matrix.package }}/typescript
+        run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
         working-directory: packages/${{ matrix.package }}/typescript
@@ -226,6 +228,7 @@ jobs:
       uses: jlumbroso/free-disk-space@main
 
     - name: Pull latest Docker images
+      working-directory: ./
       run: |
         ./src/docker/pull.sh --no-debug
 
@@ -241,8 +244,12 @@ jobs:
     - name: Build itk-wasm
       run: |
         pnpm run --aggregate-output --filter itk-wasm build
+
     - name: Install dependencies
       run: pnpm install
+
+    - name: Build
+      run: pnpm run build
 
     - name: Install Playwright Browsers
       run: pnpm exec playwright install --with-deps
