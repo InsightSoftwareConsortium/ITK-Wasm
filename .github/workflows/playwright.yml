@@ -174,11 +174,12 @@ jobs:
           node-version: '22'
           cache: pnpm
 
-      - name: Install Playwright Browsers
-        run: pnpx playwright install --with-deps
-
       - name: pnpm install
         run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
       - name: Build itk-wasm
         run: |
           pnpm run --aggregate-output --filter itk-wasm build
@@ -242,10 +243,13 @@ jobs:
         pnpm run --aggregate-output --filter itk-wasm build
     - name: Install dependencies
       run: pnpm install
+
     - name: Install Playwright Browsers
-      run: pnpx playwright install --with-deps
+      run: pnpm exec playwright install --with-deps
+
     - name: Run Playwright tests
       run: pnpm run test
+
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
