@@ -94,32 +94,6 @@ jobs:
           examples/hello-world/wasi-build
 
 
-  test-hello-world-example:
-    name: hello-world test
-    needs: build-hello-world-example
-    runs-on: ubuntu-24.04
-    container: cypress/browsers:node18.12.0-chrome107
-
-    defaults:
-      run:
-        working-directory: ./examples/hello-world
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Load wasm builds
-      uses: actions/download-artifact@v4
-      with:
-        name: hello-world-build
-        path: examples/hello-world
-
-    #- name: Test
-      #uses: cypress-io/github-action@v6
-      #with:
-        #working-directory: ./examples/hello-world
-        #browser: chrome
-        #start: pnpm start
-
   build-test-hello-pipeline-example:
     name: hello-pipeline build test
     runs-on: ubuntu-24.04
