@@ -20,7 +20,6 @@ dist/*
 !dist/dicom
 
 dist/dicom/*
-!dist/dicom/cypress
 !dist/dicom/dist
 !dist/dicom/src
 !dist/dicom/test
@@ -35,7 +34,6 @@ packages/compress-stringify/typescript/dist/pipelines/
 packages/compress-stringify/typescript/dist/*.d.ts
 packages/compress-stringify/typescript/dist/*.js
 packages/compress-stringify/typescript/dist/*.map
-packages/compress-stringify/typescript/cypress/videos/
 packages/compress-stringify/emscripten-build/
 packages/compress-stringify/wasi-build/
 packages/compress-stringify/typescript/demo/
@@ -60,7 +58,6 @@ examples/HelloWorld/wasi-build
 examples/HelloWorld/package-lock.json
 examples/UMD/package-lock.json
 examples/Webpack/package-lock.json
-examples/Webpack/cypress/videos/
 
 test/median-filter-pipeline/itk-wasm
 test/pipelines/median-filter-pipeline/emscripten-build
@@ -88,8 +85,6 @@ packages/image-io/python/itkwasm-image-io-wasi/itkwasm_image_io_wasi/wasm_module
 packages/mesh-io/test/
 packages/mesh-io/python/itkwasm-mesh-io-wasi/itkwasm_mesh_io_wasi/wasm_modules/
 
-cypress/screenshots/
-cypress/videos/
 
 packages/core/typescript/itk-wasm/dist
 
