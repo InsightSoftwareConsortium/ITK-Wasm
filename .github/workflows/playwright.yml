@@ -102,11 +102,12 @@ jobs:
           node-version: '22'
           cache: pnpm
 
-      - name: Install Playwright Browsers
-        run: pnpx playwright install --with-deps
-
       - name: Install dependencies for itk-wasm
         run: pnpm install
+        working-directory: packages/core/typescript/itk-wasm
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
         working-directory: packages/core/typescript/itk-wasm
 
       - name: Build itk-wasm
@@ -174,11 +175,9 @@ jobs:
           node-version: '22'
           cache: pnpm
 
-      - name: Install Playwright Browsers
-        run: pnpx playwright install --with-deps
-
       - name: pnpm install
         run: pnpm install --frozen-lockfile
+
       - name: Build itk-wasm
         run: |
           pnpm run --aggregate-output --filter itk-wasm build
@@ -202,6 +201,10 @@ jobs:
         run: |
           pnpm run --aggregate-output --filter "@itk-wasm/${{ matrix.package }}-build" test:data:download
 
+      - name: Install Playwright Browsers
+        working-directory: packages/${{ matrix.package }}/typescript
+        run: pnpm exec playwright install --with-deps
+
       - name: Run Playwright tests
         working-directory: packages/${{ matrix.package }}/typescript
         run: pnpm run test:browser
@@ -212,3 +215,51 @@ jobs:
           name: playwright-report-${{ matrix.package }}
           path: packages/${{ matrix.package }}/typescript/playwright-report/
           retention-days: 30
+
+  test-hello-world-example:
+    defaults:
+      run:
+        working-directory: ./examples/hello-world
+    timeout-minutes: 60
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v4
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+
+    - name: Pull latest Docker images
+      working-directory: ./
+      run: |
+        ./src/docker/pull.sh --no-debug
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - name: Install
+      uses: pnpm/action-setup@v4
+      with:
+        run_install: true
+
+    - name: Build itk-wasm
+      run: |
+        pnpm run --aggregate-output --filter itk-wasm build
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Build
+      run: pnpm run build
+
+    - name: Install Playwright Browsers
+      run: pnpm exec playwright install --with-deps
+
+    - name: Run Playwright tests
+      run: pnpm run test
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report-hello-world
+        path: playwright-report/
+        retention-days: 30

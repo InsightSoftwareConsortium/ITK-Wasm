@@ -2,7 +2,7 @@
   "name": "itk-wasm-workspace",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@10.12.2",
+  "packageManager": "pnpm@10.13.1",
   "description": "High-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.",
   "type": "module",
   "directories": {
@@ -36,7 +36,7 @@
     "@changesets/cli": "^2.27.1",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@playwright/test": "^1.53.0"
+    "@playwright/test": "^1.54.1"
   },
   "pnpm": {
     "overrides": {
