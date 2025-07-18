@@ -91,7 +91,7 @@ public:
     }
   }
 
-protected:
+private:
   std::istream * m_IStream{ nullptr };
   bool           m_DeleteIStream{ false };
 

@@ -123,11 +123,12 @@ protected:
     this->m_JSON = jsonStream.str();
   }
 
-  std::stringstream m_StringStream;
-  std::string       m_String;
-
   void
   PrintSelf(std::ostream & os, Indent indent) const override;
+
+private:
+  std::stringstream m_StringStream;
+  std::string       m_String;
 };
 
 } // namespace itk
