@@ -1,6 +1,6 @@
 # Interface Types
 
-itk-wasm execution pipelines support the following [interface types](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/src/core/InterfaceTypes.ts):
+ITK-Wasm execution pipelines support the following [interface types](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/src/core/InterfaceTypes.ts):
 
 - [TextFile](../typescript/interface_types/TextFile)
 - [BinaryFile](../typescript/interface_types/BinaryFile)
@@ -47,10 +47,40 @@ int main(argc, char * argv[])
 ```
 
 <dl>
-  <dt><b><code>itk::wasm::InputTextStream</code></b><dt><dd>A string. To reader this data type in C++, using the resulting  <a href="https://www.cplusplus.com/reference/istream/istream/">std::istream</a>.</dd>
+  <dt><b><code>itk::wasm::InputTextStream</code></b><dt><dd>A text stream input. To read this data type in C++, use the resulting <a href="https://www.cplusplus.com/reference/istream/istream/">std::istream</a> from <code>Get()</code>.</dd>
+  
+  <dt><b><code>itk::wasm::OutputTextStream</code></b><dt><dd>A text stream output. To write to this data type in C++, use the resulting <a href="https://www.cplusplus.com/reference/ostream/ostream/">std::ostream</a> from <code>Get()</code>.</dd>
+  
+  <dt><b><code>itk::wasm::InputBinaryStream</code></b><dt><dd>A binary stream input. To read this data type in C++, use the resulting <a href="https://www.cplusplus.com/reference/istream/istream/">std::istream</a> from <code>Get()</code>.</dd>
+  
+  <dt><b><code>itk::wasm::OutputBinaryStream</code></b><dt><dd>A binary stream output. To write to this data type in C++, use the resulting <a href="https://www.cplusplus.com/reference/ostream/ostream/">std::ostream</a> from <code>Get()</code>.</dd>
+  
+  <dt><b><code>itk::wasm::InputImage&lt;TImage&gt;</code></b><dt><dd>An input image of type <code>TImage</code>. To access the image in C++, use <code>Get()</code> to get a pointer to the <code>TImage</code>.</dd>
+  
+  <dt><b><code>itk::wasm::OutputImage&lt;TImage&gt;</code></b><dt><dd>An output image of type <code>TImage</code>. To set the output image in C++, use <code>Set(image)</code> with a pointer to the <code>TImage</code>.</dd>
+  
+  <dt><b><code>itk::wasm::InputMesh&lt;TMesh&gt;</code></b><dt><dd>An input mesh of type <code>TMesh</code>. To access the mesh in C++, use <code>Get()</code> to get a pointer to the <code>TMesh</code>.</dd>
+  
+  <dt><b><code>itk::wasm::OutputMesh&lt;TMesh&gt;</code></b><dt><dd>An output mesh of type <code>TMesh</code>. To set the output mesh in C++, use <code>Set(mesh)</code> with a pointer to the <code>TMesh</code>.</dd>
+  
+  <dt><b><code>itk::wasm::InputPointSet&lt;TPointSet&gt;</code></b><dt><dd>An input point set of type <code>TPointSet</code>. To access the point set in C++, use <code>Get()</code> to get a pointer to the <code>TPointSet</code>.</dd>
+  
+  <dt><b><code>itk::wasm::OutputPointSet&lt;TPointSet&gt;</code></b><dt><dd>An output point set of type <code>TPointSet</code>. To set the output point set in C++, use <code>Set(pointSet)</code> with a pointer to the <code>TPointSet</code>.</dd>
+  
+  <dt><b><code>itk::wasm::InputPolyData&lt;TPolyData&gt;</code></b><dt><dd>An input polydata of type <code>TPolyData</code>. To access the polydata in C++, use <code>Get()</code> to get a pointer to the <code>TPolyData</code>.</dd>
+  
+  <dt><b><code>itk::wasm::OutputPolyData&lt;TPolyData&gt;</code></b><dt><dd>An output polydata of type <code>TPolyData</code>. To set the output polydata in C++, use <code>Set(polyData)</code> with a pointer to the <code>TPolyData</code>.</dd>
+  
+  <dt><b><code>itk::wasm::InputTransform&lt;TTransform&gt;</code></b><dt><dd>An input transform of type <code>TTransform</code>. To access the transform in C++, use <code>Get()</code> to get a pointer to the <code>TTransform</code>.</dd>
+  
+  <dt><b><code>itk::wasm::OutputTransform&lt;TTransform&gt;</code></b><dt><dd>An output transform of type <code>TTransform</code>. To set the output transform in C++, use <code>Set(transform)</code> with a pointer to the <code>TTransform</code>.</dd>
+  
+  <dt><b><code>std::string</code> (for files)</b><dt><dd>File paths for input and output files. Use the type names <code>INPUT_TEXT_FILE</code>, <code>OUTPUT_TEXT_FILE</code>, <code>INPUT_BINARY_FILE</code>, or <code>OUTPUT_BINARY_FILE</code>. The string contains the file path that can be used with standard file I/O operations.</dd>
+  
+  <dt><b><code>itk::wasm::InputTextStream</code> (for JSON)</b><dt><dd>JSON input data. Use the type name <code>INPUT_JSON</code>. To read the JSON data in C++, use the resulting <a href="https://www.cplusplus.com/reference/istream/istream/">std::istream</a> from <code>Get()</code> and parse the JSON content.</dd>
+  
+  <dt><b><code>itk::wasm::OutputTextStream</code> (for JSON)</b><dt><dd>JSON output data. Use the type name <code>OUTPUT_JSON</code>. To write JSON data in C++, use the resulting <a href="https://www.cplusplus.com/reference/ostream/ostream/">std::ostream</a> from <code>Get()</code> and write the JSON content.</dd>
 </dl>
-
-*todo: document remaining CLI11 input and output classes.*
 
 For binding generation, set the `type_name` an the options accordingly. The type names are:
 
@@ -66,7 +96,11 @@ For binding generation, set the `type_name` an the options accordingly. The type
 - `OUTPUT_IMAGE`
 - `INPUT_MESH`
 - `OUTPUT_MESH`
+- `INPUT_POINTSET`
+- `OUTPUT_POINTSET`
 - `INPUT_POLYDATA`
 - `OUTPUT_POLYDATA`
 - `INPUT_TRANSFORM`
 - `OUTPUT_TRANSFORM`
+- `INPUT_JSON`
+- `OUTPUT_JSON`
