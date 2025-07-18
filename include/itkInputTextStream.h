@@ -21,6 +21,7 @@
 #include "itkPipeline.h"
 #include "itkWasmStringStream.h"
 
+#include <memory> // For unique_ptr.
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -48,54 +49,35 @@ public:
   std::istream &
   Get()
   {
-    return *m_IStream;
+    return *GetPointer();
   }
 
   std::istream *
   GetPointer()
   {
-    return m_IStream;
+    using ReturnType = std::istream *;
+    return m_WasmStringStream ? ReturnType{ &(m_WasmStringStream->GetStringStream()) }
+                              : ReturnType{ m_InputFileStream.get() };
   }
 
   void
   SetJSON(const std::string & json)
   {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
-    m_DeleteIStream = false;
+    m_InputFileStream.reset();
     m_WasmStringStream = WasmStringStream::New();
     m_WasmStringStream->SetJSON(json.c_str());
-
-    m_IStream = &(m_WasmStringStream->GetStringStream());
   }
 
   void
   SetFileName(const std::string & fileName)
   {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
-    m_IStream = new std::ifstream(fileName, std::ifstream::in);
-    m_DeleteIStream = true;
-  }
-
-  InputTextStream() = default;
-  ~InputTextStream()
-  {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
+    m_WasmStringStream = nullptr;
+    m_InputFileStream = std::make_unique<std::ifstream>(fileName);
   }
 
 private:
-  std::istream * m_IStream{ nullptr };
-  bool           m_DeleteIStream{ false };
-
-  WasmStringStream::Pointer m_WasmStringStream;
+  std::unique_ptr<std::ifstream> m_InputFileStream;
+  WasmStringStream::Pointer      m_WasmStringStream;
 };
 
 
