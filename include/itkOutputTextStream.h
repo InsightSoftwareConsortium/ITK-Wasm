@@ -89,7 +89,7 @@ public:
     return this->m_Identifier;
   }
 
-protected:
+private:
   std::ostream * m_OStream{ nullptr };
   bool           m_DeleteOStream{ false };
 
