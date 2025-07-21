@@ -5,7 +5,7 @@ try:
 except ImportError:
     from numpy import ndarray as ArrayLike
 
-from .image import Image, ImageType
+from .image import Image, ImageType, ImageRegion
 from .to_numpy_array import _dtype_to_component_type
 
 from .pixel_types import PixelTypes
@@ -42,5 +42,9 @@ def image_from_array(arr, is_vector: bool = False, image_type: Optional[ImageTyp
     image = Image(imageType=image_type)
     image.size = arr.shape[:dimension][::-1]
     image.data = arr
+    image.bufferedRegion = ImageRegion(
+        index=(0,) * dimension,
+        size=image.size,
+    )
 
     return image
