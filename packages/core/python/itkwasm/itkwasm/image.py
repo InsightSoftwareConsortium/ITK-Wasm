@@ -34,11 +34,15 @@ class ImageRegion:
 @dataclass
 class Image:
     imageType: Union[ImageType, Dict] = field(default_factory=ImageType)
+
     name: str = "Image"
+
     origin: Sequence[float] = field(default_factory=list)
     spacing: Sequence[float] = field(default_factory=list)
     direction: ArrayLike = field(default_factory=_default_direction)
+
     size: Sequence[int] = field(default_factory=list)
+
     metadata: Dict = field(default_factory=dict)
     data: Optional[ArrayLike] = None
     bufferedRegion: Optional[ImageRegion] = None
@@ -67,10 +71,18 @@ class Image:
             ] * dimension
 
         if self.bufferedRegion is None:
-            self.bufferedRegion = ImageRegion(
-                index=[
-                    0,
-                ]
-                * dimension,
-                size=self.size,
-            )
+            if self.data is not None:
+                self.bufferedRegion = ImageRegion(
+                    index=(0,) * dimension,
+                    size=self.data.shape[:dimension][::-1],
+                )
+            else:
+                self.bufferedRegion = ImageRegion(
+                    index=[
+                        0,
+                    ]
+                    * dimension,
+                    size=self.size,
+                )
+        elif isinstance(self.bufferedRegion, dict):
+            self.bufferedRegion = ImageRegion(**self.bufferedRegion)

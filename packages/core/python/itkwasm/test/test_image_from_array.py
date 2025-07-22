@@ -50,3 +50,16 @@ def test_image_from_array_explicit():
     assert image.imageType.componentType == FloatTypes.Float32
     assert image.imageType.pixelType == PixelTypes.VariableLengthVector
     assert image.imageType.components == 3
+
+def test_image_from_array_buffered_region():
+    arr = np.random.rand(9, 9, 3)
+    image = image_from_array(arr, is_vector=True)
+    assert np.array_equal(arr, image.data)
+    assert image.imageType.dimension == 2
+    assert image.imageType.componentType == FloatTypes.Float64
+    assert image.imageType.pixelType == PixelTypes.VariableLengthVector
+    assert image.imageType.components == 3
+    assert image.bufferedRegion.index[0] == 0
+    assert image.bufferedRegion.index[1] == 0
+    assert image.bufferedRegion.size[0] == 9
+    assert image.bufferedRegion.size[1] == 9

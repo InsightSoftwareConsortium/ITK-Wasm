@@ -1,6 +1,7 @@
 from dataclasses import asdict
 
 from itkwasm import PolyData
+import itkwasm
 
 
 def test_polydata():
