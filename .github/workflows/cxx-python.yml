@@ -17,7 +17,7 @@ jobs:
     with:
       itk-module-deps: 'MeshToPolyData@v0.11.1'
       ctest-options: '-E itkPipelineTest'
-      itk-cmake-options: '-DCMAKE_CXX_STANDARD:BOOL=20'
+      itk-cmake-options: '-DCMAKE_CXX_STANDARD:STRING=20'
 
   #python-build-workflow:
     ## itk-wasm branch
