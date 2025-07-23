@@ -1,0 +1,28 @@
+[project]
+name = "hello-world"
+authors = ["Matt McCormick <matt@mmmccormick.com>"]
+channels = ["conda-forge", "pyviz"]
+platforms = ["linux-64", "osx-arm64", "osx-64", "win-64"]
+
+[dependencies]
+python = ">=3.10"
+pip = "*"
+pnpm = "*"
+cmake = "*"
+ninja = "*"
+
+[tasks]
+build = { cmd = "pnpm build", depends-on = ["install-js"] }
+build-emscripten = { cmd = "pnpm build:emscripten", depends-on = ["install-js"] }
+build-wasi = { cmd = "pnpm build:wasi", depends-on = ["install-js"] }
+build-gen-typescript = { cmd = "pnpm build:gen:typescript", depends-on = ["install-js"] }
+build-gen-python = { cmd = "pnpm build:gen:python", depends-on = ["install-js"] }
+bindgen-typescript = { cmd = "pnpm bindgen:typescript", depends-on = ["install-js"] }
+bindgen-python = { cmd = "pnpm bindgen:python", depends-on = ["install-js"] }
+test = { cmd = "pnpm test", depends-on = ["install-js"] }
+test-node = { cmd = "pnpm test:node", depends-on = ["install-js"] }
+test-wasi = { cmd = "pnpm test:wasi", depends-on = ["install-js"] }
+test-browser = { cmd = "pnpm test:browser", depends-on = ["install-js"] }
+start = { cmd = "pnpm start", depends-on = ["install-js"] }
+install-js = "pnpm install"
+download-test-data = { cmd = "pnpm download-test-data", depends-on = ["install-js"] }

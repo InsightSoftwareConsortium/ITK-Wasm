@@ -4,155 +4,184 @@
 
 This example walks through how to compile a *hello world* executable written in C++ to [WebAssembly](https://webassembly.org/) and how to execute it with standalone WebAssembly runtimes, the Node.js JavaScript runtime, and web browser runtimes!
 
-Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Podman (recommended)](https://podman.io/docs/installation) or [Docker](https://docs.docker.com/install/) are installed. On Linux, make sure you can run [`podman` or `docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo). On Windows, we highly recommend [Podman](https://podman.io/docs/installation).
+**Updated for create-itk-wasm**: This tutorial now demonstrates the modern ITK-Wasm development workflow using the `create-itk-wasm` CLI tool, which provides a complete development environment with automated build configurations, testing infrastructure, and language binding generation.
+
+Before getting started, make sure [Node.js](https://nodejs.org/en/download/) and [Docker](https://docs.docker.com/install/) or [Podman](https://podman.io/docs/installation) are installed. On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo).
 
 While we recommend following along step-by-step, the complete example can also be found in the [`examples/` directory of the project repository](https://github.com/InsightSoftwareConsortium/ITK-Wasm/tree/main/examples/hello-world).
 
 Let's get started! 🚀
 
-## Write the code
+## Create the project
 
-First, let's create a new directory to house our project.
+The easiest way to get started with ITK-Wasm is using the `create-itk-wasm` CLI tool, which scaffolds a complete development environment with all necessary build configurations and toolchains.
+
+First, make sure [Node.js](https://nodejs.org/en/download/) and [Docker](https://docs.docker.com/install/) or [Podman](https://podman.io/docs/installation) are installed. On Linux, make sure you can run [`docker` without `sudo`](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo).
+
+Create a new project:
 
 ```sh
-mkdir HelloWorld
-cd HelloWorld
+npx create-itk-wasm hello-world
+cd hello-world
 ```
 
-Let's write some code! Populate *hello.cxx* with our Hello World program:
+This creates a complete project structure with:
+- **Native C++ build** - Traditional compiled executables for development and testing  
+- **Emscripten toolchain** - WebAssembly compilation for browser environments
+- **WASI toolchain** - WebAssembly System Interface for server-side execution
+- **Language bindings** - Automatic TypeScript and Python wrapper generation
+- **Testing infrastructure** - Example tests for all target platforms
+
+## Write the code
+
+The `create-itk-wasm` tool generates a pipeline template. Let's modify it to create our Hello World program. Edit the generated C++ file in the pipeline directory (e.g., `hello-world/hello-world.cxx`):
 
 ```cpp
+#include "itkPipeline.h"
+#include "itkOutputTextStream.h"
 #include <iostream>
 
-int main() {
-  std::cout << "Hello Wasm world!" << std::endl;
-  return 0;
+int main(int argc, char * argv[])
+{
+  itk::wasm::Pipeline pipeline("hello", "A simple hello world pipeline", argc, argv);
+
+  // Add an optional message parameter
+  std::string message = "Hello Wasm world!";
+  pipeline.add_option("--message", message, "Message to display");
+
+  // Add text output for the message
+  itk::wasm::OutputTextStream textOutput;
+  pipeline.add_option("text-output", textOutput, "Text output")->required()->type_name("OUTPUT_TEXT");
+
+  ITK_WASM_PARSE(pipeline);
+
+  // Output the message to both stdout and the text output stream
+  std::cout << message << std::endl;
+  
+  textOutput.Get() << message << std::endl;
+
+  return EXIT_SUCCESS;
 }
 ```
 
-Next, provide a [CMake](https://cmake.org/) build configuration at *CMakeLists.txt*:
+The ITK-Wasm pipeline structure provides:
+- **CLI11 integration** for robust command-line argument parsing
+- **Standardized I/O** through the `itk::wasm::Pipeline` interface  
+- **Cross-platform compatibility** with the same code running natively and in WebAssembly
 
-```cmake
-cmake_minimum_required(VERSION 3.16)
-project(HelloWorld)
+## Project structure
 
-add_executable(hello hello.cxx)
+The `create-itk-wasm` tool generates a complete project structure:
+
+```
+hello-world/
+├── pixi.toml              # Pixi environment and task configuration
+├── package.json           # Node.js dependencies and scripts  
+├── CMakeLists.txt         # Main CMake configuration
+├── hello/                 # Pipeline directory
+│   ├── hello.cxx         # Pipeline C++ source code
+│   └── CMakeLists.txt    # Pipeline-specific CMake config
+├── tests/                 # Test files
+├── index.html            # Browser demo page
+├── index.mjs             # Node.js example
+└── README.md             # Project documentation
 ```
 
-## Install itk-wasm
+This structure supports:
+- **Multiple pipelines** - Add more pipelines as subdirectories
+- **Automatic binding generation** - TypeScript and Python wrappers are generated
+- **Comprehensive testing** - Native, WASI, Node.js, and browser tests
+- **Modern tooling** - Pixi for dependency management, pnpm for JavaScript packages
 
-We use the `add_executable` command to build executables with itk-wasm. The [Emscripten](https://kripken.github.io/emscripten-site/) and [WASI](https://github.com/WebAssembly/wasi-sdk) toolchains along with itk-wasm build and execution configurations are contained in itk-wasm [dockcross](https://github.com/dockcross/dockcross) Docker images invoked by the itk-wasm command line interface (CLI).  Note that the same code can also be built and tested with native operating system toolchains. This is useful for development and debugging.
+## Build and run
 
-Build the program with the itk-wasm CLI, `itk-wasm`. This is shipped with the `itk-wasm` Node.js package. First install *itk-wasm* with the Node Package Manager, `npm`, the CLI that ships with Node.js.
+The generated project includes [pixi](https://pixi.sh/) for seamless dependency management and build orchestration. Pixi handles the installation of all required toolchains and provides consistent commands across platforms.
+
+### WASI
+
+Build and test the WASI WebAssembly binary:
 
 ```sh
-# Initialize an empty project in the current directory
-npm init --yes
-npm install itk-wasm@1.0.0-b.106
+pixi run build:wasi
+pixi run test:wasi
 ```
 
-## WASI
-
-Build the project with the WASI `itkwasm/wasi` toolchain in the `./wasi-build/` directory:
+This creates a `hello.wasi.wasm` binary that can be executed with WASI runtimes.
 
 ```sh
-npx itk-wasm -i itkwasm/wasi build
-```
-
-A `hello.wasi.wasm` WebAssembly binary is built in the `./wasi-build/` directory.
-
-```sh
-❯ ls wasi-build
-build.ninja          CMakeFiles          libwasi-exception-shim.a
-cmake_install.cmake  hello.wasi.wasm
-```
-
-Execute the binary with the `run` `itk-wasm` subcommand.
-
-```sh
-❯ npx itk-wasm run wasi-build/hello.wasi.wasm
+❯ pixi run test:wasi
 Hello Wasm world!
 ```
 
-Congratulations! You just executed a C++ program compiled to WebAssembly. 🎉
+## Next steps
+
+Now that you have a working ITK-Wasm pipeline, you can:
+
+1. **Add more functionality** - Modify the C++ code to perform image processing, analysis, or other computational tasks
+2. **Add inputs and outputs** - Use `create-itk-wasm` again to add more pipelines or modify the existing one to handle images, meshes, or other data types
+3. **Integrate with your application** - Use the generated TypeScript or Python bindings to integrate your pipeline into web applications, desktop software, or data analysis workflows
+4. **Publish your package** - Share your pipeline with the community by publishing it as an npm package or Python package
+
+For more advanced examples and comprehensive documentation, visit [wasm.itk.org](https://wasm.itk.org).
+
+Consider adding your project to the [ITK-Wasm packages list](https://wasm.itk.org/en/latest/introduction/packages.html) to help others discover your work!
 
 The binary can also be executed with other [WASI runtimes](https://github.com/mbasso/awesome-wasm#non-web-embeddings).
 
 ## Node.js
 
-For Node.js or the Browser, build the project with the default [Emscripten](https://emscripten.org/) toolchain. The project is built in the `./emscripten-build` directory by default.
+Build and test with Node.js:
 
 ```sh
-npx itk-wasm build
+pixi run build:emscripten
+pixi run test:node
 ```
 
-To execute the project, create an `index.mjs` JavaScript file to [invoke the module](../api/node_pipelines.html):
-
-```js
-import path from 'path'
-import { runPipelineNode } from 'itk-wasm'
-
-const pipelinePath = path.resolve('emscripten-build', 'hello')
-const args = []
-await runPipelineNode(pipelinePath, args)
-```
-
-**Important**: Inside the *package.json* file, we must also add `"type": "module",` to tell Node.js that we have a modern JavaScript project that uses [ES modules](https://nodejs.org/api/esm.html#modules-ecmascript-modules).
-
-And run it!
+This builds the Emscripten WebAssembly module and tests it in Node.js using the generated TypeScript bindings.
 
 ```sh
-❯ npx node ./index.mjs
+❯ pixi run test:node
 Hello Wasm world!
 ```
 
-Congratulations! You just executed a C++ program in JavaScript. 🎉
+The `create-itk-wasm` tool automatically generates TypeScript bindings that provide a clean, type-safe API for calling your pipeline from JavaScript/TypeScript.
 
 ## Browser
 
-The same Emscripten Wasm module can be executed in a web browser.
+The same Emscripten WebAssembly module can be executed in a web browser using the generated web examples.
 
-Create an HTML file named `index.html` that will call the Wasm module through JavaScript and display its output in the HTML DOM:
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>itk-wasm Browser Hello World!</title>
-    <meta charset="UTF-8" />
-    <script src="https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.106/dist/umd/itk-wasm.min.js"></script>
-  </head>
-
-  <body>
-    <textarea readonly>WebAssembly output...</textarea>
-
-    <script>
-      const outputTextArea = document.querySelector("textarea");
-      outputTextArea.textContent = "Loading...";
-
-      const wasmURL = new URL('emscripten-build/hello', document.location)
-      const args = []
-      const inputs = null
-      const outputs = null
-      itk.runPipeline(null, wasmURL, args, inputs, outputs).then(
-        ({ stdout, webWorker }) => {
-          webWorker.terminate()
-          outputTextArea.textContent = stdout
-          })
-    </script>
-  </body>
-</html>
-```
-
-Serve the web page and Wasm module with an http server:
+Start the development server:
 
 ```sh
-npm install http-server
-http-server .
+pixi run start
 ```
 
-And point your browser to `http://127.0.0.1:8080/`.
+Then open your browser to the URL shown (typically `http://localhost:8080`) to see the pipeline running in the browser.
 
 ![Hello Wasm World!](/_static/tutorial/hello_wasm_world.png)
 
-Congratulations! You just executed a C++ program in your web browser. 🎉
+The `create-itk-wasm` tool generates complete web examples demonstrating how to use your pipeline in browser environments.
+
+## Native development
+
+For development and debugging, you can also build and run the pipeline natively:
+
+```sh
+pixi run build:native
+pixi run test:native
+```
+
+This builds a traditional C++ executable that can be debugged with standard tools like `gdb` or IDE debuggers.
+
+## Next steps
+
+Now that you have a working ITK-Wasm pipeline, you can:
+
+1. **Add more functionality** - Modify the C++ code to perform image processing, analysis, or other computational tasks
+2. **Add inputs and outputs** - Use `create-itk-wasm` again to add more pipelines or modify the existing one to handle images, meshes, or other data types
+3. **Integrate with your application** - Use the generated TypeScript or Python bindings to integrate your pipeline into web applications, desktop software, or data analysis workflows
+4. **Publish your package** - Share your pipeline with the community by publishing it as an npm package or Python package
+
+For more advanced examples and comprehensive documentation, visit [wasm.itk.org](https://wasm.itk.org).
+
+Consider adding your project to the [ITK-Wasm packages list](https://wasm.itk.org/en/latest/introduction/packages.html) to help others discover your work!

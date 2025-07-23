@@ -1,6 +1,25 @@
-itk-wasm-hello-world
-wasi-build
+# Build directories
+emscripten-build/
+wasi-build/
+native-build/
+.pixi/
+
+# Generated files
+typescript/
+python/
+pyodide/
+test-data/
+
+# Dependencies
+node_modules/
+*.lock
+
+# Test outputs
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Output files
+*.txt
+*.json

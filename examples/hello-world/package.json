@@ -1,28 +1,47 @@
 {
   "name": "itk-wasm-hello-world",
-  "version": "2.0.6",
-  "description": "An itk-wasm Hello World!",
-  "main": "index.mjs",
+  "version": "2.0.7",
+  "private": true,
+  "description": "An ITK-Wasm Hello World example using create-itk-wasm",
   "type": "module",
+  "itk-wasm": {
+    "test-data-hash": "bafkreidnoz54py66bn56uq6itwkfgngflaqilflfvwkxlps4ycmygstzja",
+    "test-data-urls": [
+      "https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.179/sample-data.tar.gz"
+    ],
+    "package-description": "An ITK-Wasm Hello World example",
+    "typescript-package-name": "hello-world",
+    "python-package-name": "hello-world",
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+  },
+  "license": "Apache-2.0",
   "scripts": {
-    "build": "pnpm run build:wasi && pnpm run build:emscripten",
-    "build:wasi": "itk-wasm -i quay.io/itkwasm/wasi:latest build",
-    "build:emscripten": "itk-wasm build",
-    "test": "pnpm run test:wasi && pnpm run test:node && pnpm run test:browser",
-    "test:wasi": "pnpx itk-wasm run wasi-build/hello.wasi.wasm",
-    "test:node": "node ./index.mjs",
+    "build": "pnpm build:gen:typescript && pnpm build:gen:python",
+    "build:emscripten": "itk-wasm pnpm-script build:emscripten",
+    "build:emscripten:debug": "itk-wasm pnpm-script build:emscripten:debug",
+    "build:wasi": "itk-wasm pnpm-script build:wasi",
+    "build:wasi:debug": "itk-wasm pnpm-script build:wasi:debug",
+    "build:python:wasi": "echo 'No build:python:wasi script required with pixi'",
+    "bindgen:typescript": "itk-wasm pnpm-script bindgen:typescript",
+    "bindgen:python": "itk-wasm pnpm-script bindgen:python",
+    "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
+    "build:gen:python": "itk-wasm pnpm-script build:gen:python",
+    "test": "pixi run download-test-data && pnpm build:gen:python",
+    "test:wasi": "itk-wasm pnpm-script test:wasi",
+    "test:node": "node tests/hello-world.test.mjs",
     "start": "http-server --cors -p 8083",
     "test:browser": "playwright test",
     "test:browser:debug": "playwright test --debug"
   },
-  "author": "Matt McCormick <matt@mmmccormick.com>",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "fs-extra": "^11.1.0",
-    "itk-wasm": "workspace:^"
-  },
   "devDependencies": {
+    "@itk-wasm/dam": "^1.1.1",
+    "itk-wasm": "workspace:^",
     "@playwright/test": "^1.48.2",
     "http-server": "^14.1.1"
+  },
+  "author": "Matt McCormick <matt@mmmccormick.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
   }
 }
