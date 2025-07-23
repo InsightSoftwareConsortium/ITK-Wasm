@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkInputTextStream.h"
+#include "itkInputStreamBase.h"
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
@@ -28,7 +28,7 @@ namespace wasm
 {
 
 bool
-lexical_cast(const std::string & input, InputTextStream & inputStream)
+lexical_cast(const std::string & input, InputStreamBase & inputStream)
 {
   if (input.empty())
   {

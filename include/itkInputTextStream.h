@@ -18,14 +18,10 @@
 #ifndef itkInputTextStream_h
 #define itkInputTextStream_h
 
-#include "itkPipeline.h"
-#include "itkWasmStringStream.h"
+#include "itkInputStreamBase.h"
 
+#include <ios>
 #include <string>
-#include <sstream>
-#include <fstream>
-
-#include "WebAssemblyInterfaceExport.h"
 
 namespace itk
 {
@@ -36,71 +32,17 @@ namespace wasm
  *\class InputTextStream
  * \brief Input text std::istream for an itk::wasm::Pipeline
  *
- * This stream is read from the filesystem or memory when ITK_WASM_PARSE_ARGS is called.
- *
- * Call `Get()` to get the std::istream & to use an input to a pipeline.
- *
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT InputTextStream
+class InputTextStream: public InputStreamBase
 {
 public:
-  std::istream &
-  Get()
-  {
-    return *m_IStream;
-  }
-
-  std::istream *
-  GetPointer()
-  {
-    return m_IStream;
-  }
-
   void
-  SetJSON(const std::string & json)
+  SetFileName(const std::string & fileName) override
   {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
-    m_DeleteIStream = false;
-    m_WasmStringStream = WasmStringStream::New();
-    m_WasmStringStream->SetJSON(json.c_str());
-
-    m_IStream = &(m_WasmStringStream->GetStringStream());
+    InputStreamBase::SetFile(fileName, std::ios_base::openmode{});
   }
-
-  void
-  SetFileName(const std::string & fileName)
-  {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
-    m_IStream = new std::ifstream(fileName, std::ifstream::in);
-    m_DeleteIStream = true;
-  }
-
-  InputTextStream() = default;
-  ~InputTextStream()
-  {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
-  }
-
-private:
-  std::istream * m_IStream{ nullptr };
-  bool           m_DeleteIStream{ false };
-
-  WasmStringStream::Pointer m_WasmStringStream;
 };
-
-
-WebAssemblyInterface_EXPORT bool
-lexical_cast(const std::string & input, InputTextStream & inputStream);
 
 } // end namespace wasm
 } // end namespace itk
