@@ -18,12 +18,10 @@
 #ifndef itkInputStreamBase_h
 #define itkInputStreamBase_h
 
-#include "itkPipeline.h"
-#include "itkWasmStringStream.h"
-
+#include <ios>
+#include <iosfwd> // For istream.
+#include <memory> // For unique_ptr.
 #include <string>
-#include <sstream>
-#include <fstream>
 
 #include "WebAssemblyInterfaceExport.h"
 
@@ -58,22 +56,14 @@ public:
   }
 
   void
-  SetJSON(const std::string & json)
-  {
-    const auto wasmStringStream = WasmStringStream::New();
-    wasmStringStream->SetJSON(json.c_str());
-    m_IStream = std::make_unique<std::stringstream>(std::move(wasmStringStream->GetStringStream()));
-  }
+  SetJSON(const std::string & json);
 
   virtual void
   SetFileName(const std::string & fileName) = 0;
 
 protected:
   void
-  SetFile(const std::string & fileName, const std::ios_base::openmode openMode)
-  {
-    m_IStream = std::make_unique<std::ifstream>(fileName, openMode);
-  }
+  SetFile(const std::string & fileName, const std::ios_base::openmode openMode);
 
   InputStreamBase() = default;
 
@@ -82,7 +72,7 @@ protected:
   InputStreamBase &
   operator=(InputStreamBase &&) = default;
 
-  virtual ~InputStreamBase() = default;
+  virtual ~InputStreamBase();
 
 private:
   std::unique_ptr<std::istream> m_IStream;
