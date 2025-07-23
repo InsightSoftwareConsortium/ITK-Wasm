@@ -54,21 +54,15 @@ public:
   std::istream *
   GetPointer()
   {
-    return m_IStream;
+    return m_IStream.get();
   }
 
   void
   SetJSON(const std::string & json)
   {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
-    m_DeleteIStream = false;
-    m_WasmStringStream = WasmStringStream::New();
-    m_WasmStringStream->SetJSON(json.c_str());
-
-    m_IStream = &(m_WasmStringStream->GetStringStream());
+    const auto wasmStringStream = WasmStringStream::New();
+    wasmStringStream->SetJSON(json.c_str());
+    m_IStream = std::make_unique<std::stringstream>(std::move(wasmStringStream->GetStringStream()));
   }
 
   virtual void
@@ -78,28 +72,20 @@ protected:
   void
   SetFile(const std::string & fileName, const std::ios_base::openmode openMode)
   {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
-    m_IStream = new std::ifstream(fileName, openMode);
-    m_DeleteIStream = true;
+    m_IStream = std::make_unique<std::ifstream>(fileName, openMode);
   }
 
   InputStreamBase() = default;
-  virtual ~InputStreamBase()
-  {
-    if (m_DeleteIStream && m_IStream != nullptr)
-    {
-      delete m_IStream;
-    }
-  }
+
+  // Move semantics for its derived classes:
+  InputStreamBase(InputStreamBase &&) = default;
+  InputStreamBase &
+  operator=(InputStreamBase &&) = default;
+
+  virtual ~InputStreamBase() = default;
 
 private:
-  std::istream * m_IStream{ nullptr };
-  bool           m_DeleteIStream{ false };
-
-  WasmStringStream::Pointer m_WasmStringStream;
+  std::unique_ptr<std::istream> m_IStream;
 };
 
 
