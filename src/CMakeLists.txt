@@ -15,7 +15,7 @@ set(WebAssemblyInterface_SRCS
   itkWasmTransformIO.cxx
   itkWasmStringStream.cxx
   itkInputStreamBase.cxx
-  itkOutputTextStream.cxx
+  itkOutputStreamBase.cxx
   itkOutputBinaryStream.cxx
   itkIOComponentEnumFromWasmComponentType.cxx
   itkIOPixelEnumFromWasmPixelType.cxx

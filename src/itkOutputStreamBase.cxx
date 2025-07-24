@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkOutputTextStream.h"
+#include "itkOutputStreamBase.h"
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
@@ -29,7 +29,7 @@ namespace itk
 namespace wasm
 {
 
-OutputTextStream ::~OutputTextStream()
+OutputStreamBase ::~OutputStreamBase()
 {
   if (wasm::Pipeline::get_use_memory_io())
   {
@@ -66,7 +66,7 @@ OutputTextStream ::~OutputTextStream()
 }
 
 bool
-lexical_cast(const std::string & output, OutputTextStream & outputStream)
+lexical_cast(const std::string & output, OutputStreamBase & outputStream)
 {
   if (wasm::Pipeline::get_use_memory_io())
   {
