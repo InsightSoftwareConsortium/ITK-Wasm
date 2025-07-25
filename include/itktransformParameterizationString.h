@@ -27,7 +27,7 @@
 namespace itk
 {
 
-const std::string WebAssemblyInterface_EXPORT
+std::string WebAssemblyInterface_EXPORT
 transformParameterizationString(const TransformTypeJSON & json);
 
 } // namespace itk

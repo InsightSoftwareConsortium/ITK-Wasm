@@ -20,7 +20,7 @@
 namespace itk
 {
 
-const std::string
+std::string
 transformParameterizationString(const TransformTypeJSON & json)
 {
   std::string transformParameterization;
