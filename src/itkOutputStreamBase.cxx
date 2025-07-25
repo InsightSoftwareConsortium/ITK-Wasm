@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#include "itkOutputBinaryStream.h"
+#include "itkOutputStreamBase.h"
 
 #include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
@@ -29,15 +29,15 @@ namespace itk
 namespace wasm
 {
 
-OutputBinaryStream ::~OutputBinaryStream()
+OutputStreamBase ::~OutputStreamBase()
 {
   if (wasm::Pipeline::get_use_memory_io())
   {
+#ifndef ITK_WASM_NO_MEMORY_IO
     if (this->m_Identifier.empty())
     {
       return;
     }
-#ifndef ITK_WASM_NO_MEMORY_IO
     const auto index = std::stoi(this->m_Identifier);
     setMemoryStoreOutputDataObject(0, index, this->m_WasmStringStream);
 
@@ -66,7 +66,7 @@ OutputBinaryStream ::~OutputBinaryStream()
 }
 
 bool
-lexical_cast(const std::string & output, OutputBinaryStream & outputStream)
+lexical_cast(const std::string & output, OutputStreamBase & outputStream)
 {
   if (wasm::Pipeline::get_use_memory_io())
   {

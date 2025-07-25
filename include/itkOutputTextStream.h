@@ -18,18 +18,10 @@
 #ifndef itkOutputTextStream_h
 #define itkOutputTextStream_h
 
-#include "itkPipeline.h"
-#include "itkWasmStringStream.h"
+#include "itkOutputStreamBase.h"
 
+#include <ios>
 #include <string>
-#ifndef ITK_WASM_NO_MEMORY_IO
-#  include <sstream>
-#endif
-#ifndef ITK_WASM_NO_FILESYSTEM_IO
-#  include <fstream>
-#endif
-
-#include "WebAssemblyInterfaceExport.h"
 
 namespace itk
 {
@@ -40,67 +32,17 @@ namespace wasm
  *\class OutputTextStream
  * \brief Output text std::ostream for an itk::wasm::Pipeline
  *
- * This stream is written to the filesystem or memory when the object goes out of scope.
- *
- * Call `Get()` to get the std::ostream & to use an output for a pipeline.
- *
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT OutputTextStream
+class OutputTextStream: public OutputStreamBase
 {
 public:
-  std::ostream &
-  Get()
-  {
-    return *m_OStream;
-  }
-
   void
-  SetFileName(const std::string & fileName)
+  SetFileName(const std::string & fileName) override
   {
-    if (m_DeleteOStream && m_OStream != nullptr)
-    {
-      delete m_OStream;
-    }
-    m_OStream = new std::ofstream(fileName, std::ofstream::out);
-    m_DeleteOStream = true;
+    OutputStreamBase::SetFile(fileName, std::ios_base::openmode{});
   }
-
-  OutputTextStream() = default;
-  ~OutputTextStream();
-
-  /** Output index. */
-  void
-  SetIdentifier(const std::string & identifier)
-  {
-    if (m_DeleteOStream && m_OStream != nullptr)
-    {
-      delete m_OStream;
-    }
-    m_DeleteOStream = false;
-    m_WasmStringStream = WasmStringStream::New();
-
-    m_OStream = &(m_WasmStringStream->GetStringStream());
-    this->m_Identifier = identifier;
-  }
-  const std::string &
-  GetIdentifier() const
-  {
-    return this->m_Identifier;
-  }
-
-private:
-  std::ostream * m_OStream{ nullptr };
-  bool           m_DeleteOStream{ false };
-
-  std::string m_Identifier;
-
-  WasmStringStream::Pointer m_WasmStringStream;
 };
-
-
-WebAssemblyInterface_EXPORT bool
-lexical_cast(const std::string & output, OutputTextStream & outputStream);
 
 } // end namespace wasm
 } // end namespace itk
