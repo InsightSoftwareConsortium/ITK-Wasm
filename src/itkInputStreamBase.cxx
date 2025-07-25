@@ -16,16 +16,38 @@
  *
  *=========================================================================*/
 #include "itkInputStreamBase.h"
+#include "itkPipeline.h"
+#include "itkWasmStringStream.h"
 
-#include <string>
 #ifndef ITK_WASM_NO_MEMORY_IO
 #  include "itkWasmExports.h"
 #endif
+
+#include <fstream>
+#include <sstream>
 
 namespace itk
 {
 namespace wasm
 {
+void
+InputStreamBase::SetJSON(const std::string & json)
+{
+  const auto wasmStringStream = WasmStringStream::New();
+  wasmStringStream->SetJSON(json.c_str());
+  m_IStream = std::make_unique<std::stringstream>(std::move(wasmStringStream->GetStringStream()));
+}
+
+
+void
+InputStreamBase::SetFile(const std::string & fileName, const std::ios_base::openmode openMode)
+{
+  m_IStream = std::make_unique<std::ifstream>(fileName, openMode);
+}
+
+
+InputStreamBase::~InputStreamBase() = default;
+
 
 bool
 lexical_cast(const std::string & input, InputStreamBase & inputStream)
