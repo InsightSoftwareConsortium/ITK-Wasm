@@ -20,159 +20,126 @@
 namespace itk
 {
 
-const std::string
+std::string
 transformParameterizationString(const TransformTypeJSON & json)
 {
-  std::string transformParameterization;
   switch (json.transformParameterization)
   {
     case JSONTransformParameterizationEnum::Composite:
     {
-      transformParameterization = "Composite";
-      break;
+      return "Composite";
     }
     case JSONTransformParameterizationEnum::Identity:
     {
-      transformParameterization = "Identity";
-      break;
+      return "Identity";
     }
     case JSONTransformParameterizationEnum::Translation:
     {
-      transformParameterization = "Translation";
-      break;
+      return "Translation";
     }
     case JSONTransformParameterizationEnum::Euler2D:
     {
-      transformParameterization = "Euler2D";
-      break;
+      return "Euler2D";
     }
     case JSONTransformParameterizationEnum::Euler3D:
     {
-      transformParameterization = "Euler3D";
-      break;
+      return "Euler3D";
     }
     case JSONTransformParameterizationEnum::Rigid2D:
     {
-      transformParameterization = "Rigid2D";
-      break;
+      return "Rigid2D";
     }
     case JSONTransformParameterizationEnum::Rigid3D:
     {
-      transformParameterization = "Rigid3D";
-      break;
+      return "Rigid3D";
     }
     case JSONTransformParameterizationEnum::Rigid3DPerspective:
     {
-      transformParameterization = "Rigid3DPerspective";
-      break;
+      return "Rigid3DPerspective";
     }
     case JSONTransformParameterizationEnum::Versor:
     {
-      transformParameterization = "Versor";
-      break;
+      return "Versor";
     }
     case JSONTransformParameterizationEnum::VersorRigid3D:
     {
-      transformParameterization = "VersorRigid3D";
-      break;
+      return "VersorRigid3D";
     }
     case JSONTransformParameterizationEnum::Scale:
     {
-      transformParameterization = "Scale";
-      break;
+      return "Scale";
     }
     case JSONTransformParameterizationEnum::ScaleLogarithmic:
     {
-      transformParameterization = "ScaleLogarithmic";
-      break;
+      return "ScaleLogarithmic";
     }
     case JSONTransformParameterizationEnum::ScaleSkewVersor3D:
     {
-      transformParameterization = "ScaleSkewVersor3D";
-      break;
+      return "ScaleSkewVersor3D";
     }
     case JSONTransformParameterizationEnum::Similarity2D:
     {
-      transformParameterization = "Similarity2D";
-      break;
+      return "Similarity2D";
     }
     case JSONTransformParameterizationEnum::Similarity3D:
     {
-      transformParameterization = "Similarity3D";
-      break;
+      return "Similarity3D";
     }
     case JSONTransformParameterizationEnum::QuaternionRigid:
     {
-      transformParameterization = "QuaternionRigid";
-      break;
+      return "QuaternionRigid";
     }
     case JSONTransformParameterizationEnum::Affine:
     {
-      transformParameterization = "Affine";
-      break;
+      return "Affine";
     }
     case JSONTransformParameterizationEnum::ScalableAffine:
     {
-      transformParameterization = "ScalableAffine";
-      break;
+      return "ScalableAffine";
     }
     case JSONTransformParameterizationEnum::AzimuthElevationToCartesian:
     {
-      transformParameterization = "AzimuthElevationToCartesian";
-      break;
+      return "AzimuthElevationToCartesian";
     }
     case JSONTransformParameterizationEnum::BSpline:
     {
-      transformParameterization = "BSpline";
-      break;
+      return "BSpline";
     }
     case JSONTransformParameterizationEnum::BSplineSmoothingOnUpdateDisplacementField:
     {
-      transformParameterization = "BSplineSmoothingOnUpdateDisplacementField";
-      break;
+      return "BSplineSmoothingOnUpdateDisplacementField";
     }
     case JSONTransformParameterizationEnum::ConstantVelocityField:
     {
-      transformParameterization = "ConstantVelocityField";
-      break;
+      return "ConstantVelocityField";
     }
     case JSONTransformParameterizationEnum::DisplacementField:
     {
-      transformParameterization = "DisplacementField";
-      break;
+      return "DisplacementField";
     }
     case JSONTransformParameterizationEnum::GaussianExponentialDiffeomorphic:
     {
-      transformParameterization = "GaussianExponentialDiffeomorphic";
-      break;
+      return "GaussianExponentialDiffeomorphic";
     }
     case JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateDisplacementField:
     {
-      transformParameterization = "GaussianSmoothingOnUpdateDisplacementField";
-      break;
+      return "GaussianSmoothingOnUpdateDisplacementField";
     }
     case JSONTransformParameterizationEnum::GaussianSmoothingOnUpdateTimeVaryingVelocityField:
     {
-      transformParameterization = "GaussianSmoothingOnUpdateTimeVaryingVelocityField";
-      break;
+      return "GaussianSmoothingOnUpdateTimeVaryingVelocityField";
     }
     case JSONTransformParameterizationEnum::TimeVaryingVelocityField:
     {
-      transformParameterization = "TimeVaryingVelocityField";
-      break;
+      return "TimeVaryingVelocityField";
     }
     case JSONTransformParameterizationEnum::VelocityField:
     {
-      transformParameterization = "VelocityField";
-      break;
-    }
-    default:
-    {
-      throw std::invalid_argument("Unknown transform parameterization");
+      return "VelocityField";
     }
   }
 
-  return transformParameterization;
+  throw std::invalid_argument("Unknown transform parameterization");
 }
 
 } // namespace itk
