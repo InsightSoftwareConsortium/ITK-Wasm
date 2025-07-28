@@ -18,18 +18,10 @@
 #ifndef itkOutputBinaryStream_h
 #define itkOutputBinaryStream_h
 
-#include "itkPipeline.h"
-#include "itkWasmStringStream.h"
+#include "itkOutputStreamBase.h"
 
+#include <ios>
 #include <string>
-#ifndef ITK_WASM_NO_MEMORY_IO
-#  include <sstream>
-#endif
-#ifndef ITK_WASM_NO_FILESYSTEM_IO
-#  include <fstream>
-#endif
-
-#include "WebAssemblyInterfaceExport.h"
 
 namespace itk
 {
@@ -38,69 +30,19 @@ namespace wasm
 
 /**
  *\class OutputBinaryStream
- * \brief Output text std::ostream for an itk::wasm::Pipeline
- *
- * This stream is written to the filesystem or memory when the object goes out of scope.
- *
- * Call `Get()` to get the std::ostream & to use an output for a pipeline.
+ * \brief Output binary std::ostream for an itk::wasm::Pipeline
  *
  * \ingroup WebAssemblyInterface
  */
-class WebAssemblyInterface_EXPORT OutputBinaryStream
+class OutputBinaryStream: public OutputStreamBase
 {
 public:
-  std::ostream &
-  Get()
-  {
-    return *m_OStream;
-  }
-
   void
-  SetFileName(const std::string & fileName)
+  SetFileName(const std::string & fileName) override
   {
-    if (m_DeleteOStream && m_OStream != nullptr)
-    {
-      delete m_OStream;
-    }
-    m_OStream = new std::ofstream(fileName, std::ofstream::out | std::ofstream::binary);
-    m_DeleteOStream = true;
+    OutputStreamBase::SetFile(fileName, std::ios_base::binary);
   }
-
-  OutputBinaryStream() = default;
-  ~OutputBinaryStream();
-
-  /** Output index. */
-  void
-  SetIdentifier(const std::string & identifier)
-  {
-    if (m_DeleteOStream && m_OStream != nullptr)
-    {
-      delete m_OStream;
-    }
-    m_DeleteOStream = false;
-    m_WasmStringStream = WasmStringStream::New();
-
-    m_OStream = &(m_WasmStringStream->GetStringStream());
-    this->m_Identifier = identifier;
-  }
-  const std::string &
-  GetIdentifier() const
-  {
-    return this->m_Identifier;
-  }
-
-private:
-  std::ostream * m_OStream{ nullptr };
-  bool           m_DeleteOStream{ false };
-
-  std::string m_Identifier;
-
-  WasmStringStream::Pointer m_WasmStringStream;
 };
-
-
-WebAssemblyInterface_EXPORT bool
-lexical_cast(const std::string & output, OutputBinaryStream & outputStream);
 
 } // end namespace wasm
 } // end namespace itk
