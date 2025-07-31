@@ -1,0 +1,50 @@
+[
+   {
+      "transformType": {
+         "transformParameterization": "Composite",
+         "parametersValueType": "float32",
+         "inputDimension": 2,
+         "outputDimension": 2
+      },
+      "numberOfFixedParameters": 4,
+      "numberOfParameters": 9,
+      "name": "",
+      "inputSpaceName": "",
+      "outputSpaceName": "",
+      "fixedParameters": "data:application/vnd.itk.path,data/0/fixed-parameters.raw",
+      "parameters": "data:application/vnd.itk.path,data/0/parameters.raw",
+      "metadata": []
+   },
+   {
+      "transformType": {
+         "transformParameterization": "Rigid2D",
+         "parametersValueType": "float32",
+         "inputDimension": 2,
+         "outputDimension": 2
+      },
+      "numberOfFixedParameters": 2,
+      "numberOfParameters": 3,
+      "name": "",
+      "inputSpaceName": "",
+      "outputSpaceName": "",
+      "fixedParameters": "data:application/vnd.itk.path,data/1/fixed-parameters.raw",
+      "parameters": "data:application/vnd.itk.path,data/1/parameters.raw",
+      "metadata": []
+   },
+   {
+      "transformType": {
+         "transformParameterization": "Affine",
+         "parametersValueType": "float32",
+         "inputDimension": 2,
+         "outputDimension": 2
+      },
+      "numberOfFixedParameters": 2,
+      "numberOfParameters": 6,
+      "name": "",
+      "inputSpaceName": "",
+      "outputSpaceName": "",
+      "fixedParameters": "data:application/vnd.itk.path,data/2/fixed-parameters.raw",
+      "parameters": "data:application/vnd.itk.path,data/2/parameters.raw",
+      "metadata": []
+   }
+]

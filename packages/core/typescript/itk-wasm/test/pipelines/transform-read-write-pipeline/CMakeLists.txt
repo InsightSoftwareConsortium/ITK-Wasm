@@ -37,3 +37,8 @@ add_test(NAME transformReadWriteWasmInputTest
   COMMAND transform-read-write-test ${CMAKE_CURRENT_BINARY_DIR}/LinearTransform.iwt
   ${CMAKE_CURRENT_BINARY_DIR}/LinearTransform.out.iwt
   )
+
+add_test(NAME transformReadWriteWasmCompositeTest
+  COMMAND transform-read-write-test ${CMAKE_CURRENT_SOURCE_DIR}/CompositeTransform.iwt
+  ${CMAKE_CURRENT_BINARY_DIR}/CompositeTransform.out.iwt
+  )
