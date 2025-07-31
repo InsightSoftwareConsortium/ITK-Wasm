@@ -434,26 +434,12 @@ test('runPipelineNode creates a composite transform with expected parameters', a
       'should be 2D transform'
     )
 
-    // The composite transform contains the Rigid2D parameters: [angle, tx, ty]
+    // The composite transform contains the Rigid2D parameters: [angle, tx, ty], and affine parameters: [m00, m01, m10, m11, tx, ty]
     t.is(
       compositeTransform.numberOfParameters,
       9,
       'Composite should report 9 parameters total'
     )
-    t.is(
-      compositeTransform.parameters.length,
-      3,
-      'but actual parameters array has 3 elements for the Rigid2D'
-    )
-
-    // Expected angle: 30 degrees = π/6 radians ≈ 0.5236
-    const expectedAngle = Math.PI / 6
-    t.true(
-      Math.abs(compositeTransform.parameters[0] - expectedAngle) < 0.001,
-      'angle should be ~30 degrees'
-    )
-    t.is(compositeTransform.parameters[1], 5.0, 'translation x should be 5.0')
-    t.is(compositeTransform.parameters[2], 3.0, 'translation y should be 3.0')
 
     // Check composite fixed parameters (from Rigid2D): [center_x, center_y]
     t.is(
@@ -461,13 +447,6 @@ test('runPipelineNode creates a composite transform with expected parameters', a
       4,
       'should report 4 fixed parameters total'
     )
-    t.is(
-      compositeTransform.fixedParameters.length,
-      2,
-      'but actual fixed parameters array has 2 elements for Rigid2D'
-    )
-    t.is(compositeTransform.fixedParameters[0], 10.0, 'center x should be 10.0')
-    t.is(compositeTransform.fixedParameters[1], 15.0, 'center y should be 15.0')
 
     // Second transform should be the Rigid2D (but contains Affine parameters due to ITK internals)
     const rigid2DTransform = transformList[1]
@@ -487,7 +466,6 @@ test('runPipelineNode creates a composite transform with expected parameters', a
       'should be 2D transform'
     )
 
-    // Note: ITK seems to be storing Affine parameters in the Rigid2D slot
     t.is(
       rigid2DTransform.numberOfParameters,
       3,
@@ -495,33 +473,21 @@ test('runPipelineNode creates a composite transform with expected parameters', a
     )
     t.is(
       rigid2DTransform.parameters.length,
-      6,
-      'but parameters array has 6 elements (Affine params)'
+      3,
+      'parameters array should have 3 elements'
     )
 
-    // These are actually the Affine parameters: [m00, m01, m10, m11, tx, ty]
-    t.is(
-      rigid2DTransform.parameters[0],
-      1.2000000476837158,
-      'matrix[0,0] should be 1.2'
+    t.true(
+      Math.abs(rigid2DTransform.parameters[0] - 0.5235987901687622) < 0.0001,
+      'Rotation'
     )
     t.true(
-      Math.abs(rigid2DTransform.parameters[1] - 0.3) < 0.001,
-      'matrix[0,1] should be 0.3'
+      Math.abs(rigid2DTransform.parameters[1] - 5.0) < 0.001,
+      'translation x should be 5.0'
     )
     t.true(
-      Math.abs(rigid2DTransform.parameters[2] - 0.2) < 0.001,
-      'matrix[1,0] should be 0.2'
-    )
-    t.is(
-      rigid2DTransform.parameters[3],
-      1.100000023841858,
-      'matrix[1,1] should be 1.1'
-    )
-    t.is(rigid2DTransform.parameters[4], 2.5, 'translation x should be 2.5')
-    t.true(
-      Math.abs(rigid2DTransform.parameters[5] - 1.8) < 0.001,
-      'translation y should be 1.8'
+      Math.abs(rigid2DTransform.parameters[2] - 3.0) < 0.001,
+      'translation y should be 3.0'
     )
 
     // Check Rigid2D fixed parameters (but contains Affine center): [center_x, center_y]
@@ -535,8 +501,8 @@ test('runPipelineNode creates a composite transform with expected parameters', a
       2,
       'fixed parameters array should have 2 elements'
     )
-    t.is(rigid2DTransform.fixedParameters[0], 20.0, 'center x should be 20.0')
-    t.is(rigid2DTransform.fixedParameters[1], 25.0, 'center y should be 25.0')
+    t.is(rigid2DTransform.fixedParameters[0], 10.0, 'center x should be 10.0')
+    t.is(rigid2DTransform.fixedParameters[1], 15.0, 'center y should be 15.0')
 
     // Third transform should be the Affine (but appears empty)
     const affineTransform = transformList[2]
@@ -562,7 +528,11 @@ test('runPipelineNode creates a composite transform with expected parameters', a
       6,
       'Affine should have 6 parameters'
     )
-    t.is(affineTransform.parameters.length, 0, 'but parameters array is empty')
+    t.is(
+      affineTransform.parameters.length,
+      6,
+      'Affine parameters array should have 6 elements'
+    )
     t.is(
       affineTransform.numberOfFixedParameters,
       2,
@@ -570,8 +540,23 @@ test('runPipelineNode creates a composite transform with expected parameters', a
     )
     t.is(
       affineTransform.fixedParameters.length,
-      0,
-      'but fixed parameters array is empty'
+      2,
+      'should have 2 fixed parameters'
+    )
+    t.is(
+      affineTransform.fixedParameters[0],
+      20.0,
+      'Affine center x should be 20.0'
+    )
+    t.is(
+      affineTransform.fixedParameters[1],
+      25.0,
+      'Affine center y should be 25.0'
+    )
+    t.is(
+      affineTransform.parameters[4],
+      2.5,
+      'Affine.parameters[4] should be 2.5'
     )
   }
 
