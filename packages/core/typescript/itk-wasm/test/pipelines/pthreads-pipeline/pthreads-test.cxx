@@ -27,8 +27,8 @@
 static std::atomic<int> createdThreads(0);
 
 void *thread_entry_point(void *ctx) {
-  int id = (int) ctx;
-  printf(" in thread %d\n", id);
+  size_t id = *((size_t*) ctx);
+  printf(" in thread %zu\n", id);
   createdThreads++;
   return 0;
 }
@@ -46,10 +46,12 @@ int main( int argc, char * argv[] )
   ITK_WASM_PARSE(pipeline);
 
   // Based on: https://bytecodealliance.org/articles/wasi-threads
-  pthread_t threads[256];
+  pthread_t threads[512];
+  size_t thread_ids[512];
   createdThreads = 0;
   for (int i = 0; i < numberOfThreads; i++) {
-    int ret = pthread_create(&threads[i], NULL, &thread_entry_point, (void *) i);
+    thread_ids[i] = i;
+    int ret = pthread_create(&threads[i], NULL, &thread_entry_point, &thread_ids[i]);
     if (ret) {
       printf("failed to spawn thread: %s", strerror(ret));
     }
