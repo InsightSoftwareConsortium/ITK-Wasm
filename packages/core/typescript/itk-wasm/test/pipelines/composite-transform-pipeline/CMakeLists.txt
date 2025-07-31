@@ -22,8 +22,3 @@ add_test(NAME composite-transform-test
   COMMAND composite-transform-test
   ${CMAKE_CURRENT_BINARY_DIR}/CompositeTransform.iwt
   )
-
-add_test(NAME compositeTransformWasmTest
-  COMMAND composite-transform-test
-  ${CMAKE_CURRENT_BINARY_DIR}/CompositeTransform.iwt
-  )
