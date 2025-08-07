@@ -10,7 +10,7 @@ import {
   InterfaceTypes
 } from '../../../dist/index-node.js'
 
-function readCthead1 () {
+function readCthead1() {
   const testInputImageDir = path.resolve(
     'test',
     'pipelines',
@@ -48,7 +48,8 @@ function readCthead1 () {
   image.data = pixelData
   return image
 }
-function readCow () {
+
+function readCow() {
   const testInputMeshDir = path.resolve(
     'test',
     'pipelines',
@@ -86,7 +87,8 @@ function readCow () {
   mesh.cellData = null
   return mesh
 }
-function readLinearTransform () {
+
+function readLinearTransform() {
   const testInputTransformDir = path.resolve(
     'test',
     'pipelines',
@@ -121,6 +123,73 @@ function readLinearTransform () {
     )
   )
   transformList[0].parameters = parameters
+  return transformList
+}
+
+function readCompositeTransform() {
+  const testInputTransformDir = path.resolve(
+    'test',
+    'pipelines',
+    'transform-read-write-pipeline',
+    'CompositeTransform.iwt'
+  )
+  const transformList = JSON.parse(
+    fs.readFileSync(path.join(testInputTransformDir, 'index.json'), {
+      encoding: 'utf8'
+    })
+  )
+
+  // Process each transform that has actual data files
+  for (let i = 0; i < transformList.length; i++) {
+    const transform = transformList[i]
+
+    // Skip the composite transform (index 0) as it doesn't have separate data files
+    if (transform.transformType.transformParameterization === 'Composite') {
+      // transform.fixedParameters = new Float64Array(0)
+      // transform.parameters = new Float32Array(0)
+      transform.fixedParameters = null
+      transform.parameters = null
+      continue
+    }
+
+    // Determine the data directory index (1 for Rigid2D, 2 for Affine)
+    const dataIndex =
+      transform.transformType.transformParameterization === 'Rigid2D'
+        ? '1'
+        : '2'
+
+    // Read fixed parameters
+    const fixedParametersBuffer = fs.readFileSync(
+      path.join(
+        testInputTransformDir,
+        'data',
+        dataIndex,
+        'fixed-parameters.raw'
+      ),
+      null
+    )
+    const fixedParameters = new Float64Array(
+      fixedParametersBuffer.buffer.slice(
+        fixedParametersBuffer.byteOffset,
+        fixedParametersBuffer.byteOffset + fixedParametersBuffer.byteLength
+      )
+    )
+    transform.fixedParameters = fixedParameters
+
+    // Read parameters
+    const parametersBuffer = fs.readFileSync(
+      path.join(testInputTransformDir, 'data', dataIndex, 'parameters.raw'),
+      null
+    )
+    const parameters = new Float32Array(
+      parametersBuffer.buffer.slice(
+        parametersBuffer.byteOffset,
+        parametersBuffer.byteOffset + parametersBuffer.byteLength
+      )
+    )
+    transform.parameters = parameters
+  }
+
   return transformList
 }
 
@@ -406,4 +475,343 @@ test('runPipelineNode writes and reads an itk.TransformList via memory io', asyn
     inputs
   )
   verifyTransform(outputs[0].data)
+})
+
+test.only('runPipelineNode writes and reads a CompositeTransform itk.TransformList via memory io', async (t) => {
+  const verifyTransform = (transformList) => {
+    t.is(
+      transformList.length,
+      3,
+      'should have composite + 2 component transforms'
+    )
+
+    // First transform should be the composite
+    const compositeTransform = transformList[0]
+    t.is(
+      compositeTransform.transformType.transformParameterization,
+      'Composite',
+      'first should be composite transform'
+    )
+    t.is(
+      compositeTransform.transformType.parametersValueType,
+      'float32',
+      'should use float32 parameters'
+    )
+    t.is(
+      compositeTransform.transformType.inputDimension,
+      2,
+      'should be 2D transform'
+    )
+    t.is(
+      compositeTransform.transformType.outputDimension,
+      2,
+      'should be 2D transform'
+    )
+    t.is(
+      compositeTransform.numberOfParameters,
+      9,
+      'Composite should report 9 parameters total'
+    )
+    t.is(
+      compositeTransform.numberOfFixedParameters,
+      4,
+      'should report 4 fixed parameters total'
+    )
+
+    // Second transform should be the Rigid2D
+    const rigid2DTransform = transformList[1]
+    t.is(
+      rigid2DTransform.transformType.transformParameterization,
+      'Rigid2D',
+      'second should be Rigid2D transform'
+    )
+    t.is(
+      rigid2DTransform.transformType.parametersValueType,
+      'float32',
+      'should use float32 parameters'
+    )
+    t.is(
+      rigid2DTransform.transformType.inputDimension,
+      2,
+      'should be 2D transform'
+    )
+    t.is(
+      rigid2DTransform.transformType.outputDimension,
+      2,
+      'should be 2D transform'
+    )
+    t.is(
+      rigid2DTransform.numberOfParameters,
+      3,
+      'Rigid2D should report 3 parameters'
+    )
+    t.is(
+      rigid2DTransform.parameters.length,
+      3,
+      'parameters array should have 3 elements'
+    )
+    t.is(
+      rigid2DTransform.numberOfFixedParameters,
+      2,
+      'should have 2 fixed parameters'
+    )
+    t.is(
+      rigid2DTransform.fixedParameters.length,
+      2,
+      'fixed parameters array should have 2 elements'
+    )
+
+    // Third transform should be the Affine
+    const affineTransform = transformList[2]
+    t.is(
+      affineTransform.transformType.transformParameterization,
+      'Affine',
+      'third should be Affine transform'
+    )
+    t.is(
+      affineTransform.transformType.parametersValueType,
+      'float32',
+      'should use float32 parameters'
+    )
+    t.is(
+      affineTransform.transformType.inputDimension,
+      2,
+      'should be 2D transform'
+    )
+    t.is(
+      affineTransform.transformType.outputDimension,
+      2,
+      'should be 2D transform'
+    )
+    t.is(
+      affineTransform.numberOfParameters,
+      6,
+      'Affine should have 6 parameters'
+    )
+    t.is(
+      affineTransform.parameters.length,
+      6,
+      'Affine parameters array should have 6 elements'
+    )
+    t.is(
+      affineTransform.numberOfFixedParameters,
+      2,
+      'should have 2 fixed parameters'
+    )
+    t.is(
+      affineTransform.fixedParameters.length,
+      2,
+      'should have 2 fixed parameters'
+    )
+
+    // Verify that parameters and fixedParameters are typed arrays (Float32Array)
+    t.true(
+      rigid2DTransform.parameters instanceof Float32Array,
+      'Rigid2D parameters should be Float32Array'
+    )
+    t.true(
+      rigid2DTransform.fixedParameters instanceof Float64Array,
+      'Rigid2D fixedParameters should be Float64Array'
+    )
+    t.true(
+      affineTransform.parameters instanceof Float32Array,
+      'Affine parameters should be Float32Array'
+    )
+    t.true(
+      affineTransform.fixedParameters instanceof Float64Array,
+      'Affine fixedParameters should be Float64Array'
+    )
+  }
+
+  const transformList = readCompositeTransform()
+  const pipelinePath = path.resolve(
+    'test',
+    'pipelines',
+    'emscripten-build',
+    'transform-read-write-pipeline',
+    'transform-read-write-composite-test'
+  )
+  const args = ['0', '0', '--memory-io']
+  const desiredOutputs = [{ type: InterfaceTypes.TransformList }]
+  const inputs = [{ type: InterfaceTypes.TransformList, data: transformList }]
+  const { outputs } = await runPipelineNode(
+    pipelinePath,
+    args,
+    desiredOutputs,
+    inputs
+  )
+  verifyTransform(outputs[0].data)
+})
+
+test('runPipelineNode creates a composite transform with expected parameters', async (t) => {
+  const verifyCompositeTransform = (transformList) => {
+    t.is(
+      transformList.length,
+      3,
+      'should have composite + 2 component transforms'
+    )
+
+    // First transform should be the composite
+    const compositeTransform = transformList[0]
+    t.is(
+      compositeTransform.transformType.transformParameterization,
+      'Composite',
+      'first should be composite transform'
+    )
+    t.is(
+      compositeTransform.transformType.inputDimension,
+      2,
+      'should be 2D transform'
+    )
+    t.is(
+      compositeTransform.transformType.outputDimension,
+      2,
+      'should be 2D transform'
+    )
+
+    // The composite transform contains the Rigid2D parameters: [angle, tx, ty], and affine parameters: [m00, m01, m10, m11, tx, ty]
+    t.is(
+      compositeTransform.numberOfParameters,
+      9,
+      'Composite should report 9 parameters total'
+    )
+
+    // Check composite fixed parameters (from Rigid2D): [center_x, center_y]
+    t.is(
+      compositeTransform.numberOfFixedParameters,
+      4,
+      'should report 4 fixed parameters total'
+    )
+
+    // Second transform should be the Rigid2D (but contains Affine parameters due to ITK internals)
+    const rigid2DTransform = transformList[1]
+    t.is(
+      rigid2DTransform.transformType.transformParameterization,
+      'Rigid2D',
+      'second should be Rigid2D transform'
+    )
+    t.is(
+      rigid2DTransform.transformType.inputDimension,
+      2,
+      'should be 2D transform'
+    )
+    t.is(
+      rigid2DTransform.transformType.outputDimension,
+      2,
+      'should be 2D transform'
+    )
+
+    t.is(
+      rigid2DTransform.numberOfParameters,
+      3,
+      'Rigid2D should report 3 parameters'
+    )
+    t.is(
+      rigid2DTransform.parameters.length,
+      3,
+      'parameters array should have 3 elements'
+    )
+
+    t.true(
+      Math.abs(rigid2DTransform.parameters[0] - 0.5235987901687622) < 0.0001,
+      'Rotation'
+    )
+    t.true(
+      Math.abs(rigid2DTransform.parameters[1] - 5.0) < 0.001,
+      'translation x should be 5.0'
+    )
+    t.true(
+      Math.abs(rigid2DTransform.parameters[2] - 3.0) < 0.001,
+      'translation y should be 3.0'
+    )
+
+    // Check Rigid2D fixed parameters (but contains Affine center): [center_x, center_y]
+    t.is(
+      rigid2DTransform.numberOfFixedParameters,
+      2,
+      'should have 2 fixed parameters'
+    )
+    t.is(
+      rigid2DTransform.fixedParameters.length,
+      2,
+      'fixed parameters array should have 2 elements'
+    )
+    t.is(rigid2DTransform.fixedParameters[0], 10.0, 'center x should be 10.0')
+    t.is(rigid2DTransform.fixedParameters[1], 15.0, 'center y should be 15.0')
+
+    // Third transform should be the Affine (but appears empty)
+    const affineTransform = transformList[2]
+    t.is(
+      affineTransform.transformType.transformParameterization,
+      'Affine',
+      'third should be Affine transform'
+    )
+    t.is(
+      affineTransform.transformType.inputDimension,
+      2,
+      'should be 2D transform'
+    )
+    t.is(
+      affineTransform.transformType.outputDimension,
+      2,
+      'should be 2D transform'
+    )
+
+    // The Affine transform appears to be empty (parameters moved to Rigid2D slot)
+    t.is(
+      affineTransform.numberOfParameters,
+      6,
+      'Affine should have 6 parameters'
+    )
+    t.is(
+      affineTransform.parameters.length,
+      6,
+      'Affine parameters array should have 6 elements'
+    )
+    t.is(
+      affineTransform.numberOfFixedParameters,
+      2,
+      'should have 2 fixed parameters'
+    )
+    t.is(
+      affineTransform.fixedParameters.length,
+      2,
+      'should have 2 fixed parameters'
+    )
+    t.is(
+      affineTransform.fixedParameters[0],
+      20.0,
+      'Affine center x should be 20.0'
+    )
+    t.is(
+      affineTransform.fixedParameters[1],
+      25.0,
+      'Affine center y should be 25.0'
+    )
+    t.is(
+      affineTransform.parameters[4],
+      2.5,
+      'Affine.parameters[4] should be 2.5'
+    )
+  }
+
+  const pipelinePath = path.resolve(
+    'test',
+    'pipelines',
+    'emscripten-build',
+    'composite-transform-pipeline',
+    'composite-transform-test'
+  )
+  const args = ['0', '--memory-io']
+  const desiredOutputs = [{ type: InterfaceTypes.TransformList }]
+  const inputs = []
+
+  const { outputs } = await runPipelineNode(
+    pipelinePath,
+    args,
+    desiredOutputs,
+    inputs
+  )
+
+  verifyCompositeTransform(outputs[0].data)
 })

@@ -71,16 +71,16 @@ class Image:
             ] * dimension
 
         if self.bufferedRegion is None:
-            if self.data is not None:
+            if self.data is not None and hasattr(self.data, 'shape'):
                 self.bufferedRegion = ImageRegion(
                     index=(0,) * dimension,
                     size=self.data.shape[:dimension][::-1],
                 )
             else:
                 self.bufferedRegion = ImageRegion(
-                    index=[
+                    index=(
                         0,
-                    ]
+                    )
                     * dimension,
                     size=self.size,
                 )

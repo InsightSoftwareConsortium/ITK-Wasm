@@ -313,21 +313,34 @@ function runPipelineEmscripten (
         case InterfaceTypes.TransformList: {
           const transformList = input.data as TransformList
           const transformListJSON: any = []
-          transformList.forEach((transform, transformIndex) => {
-            const fixedParameterPtr = setPipelineModuleInputArray(
-              pipelineModule,
-              transform.fixedParameters,
-              index,
-              transformIndex * 2
-            )
-            const fixedParameters = `data:application/vnd.itk.address,0:${fixedParameterPtr}`
-            const parameterPtr = setPipelineModuleInputArray(
-              pipelineModule,
-              transform.parameters,
-              index,
-              transformIndex * 2 + 1
-            )
-            const parameters = `data:application/vnd.itk.address,0:${parameterPtr}`
+          let inputArrayIndex = 0
+          transformList.forEach((transform) => {
+            let fixedParameters = ''
+            let parameters = ''
+
+            // Skip setting input arrays for Composite transforms as they don't have array data
+            if (
+              transform.transformType.transformParameterization !== 'Composite'
+            ) {
+              const fixedParameterPtr = setPipelineModuleInputArray(
+                pipelineModule,
+                transform.fixedParameters,
+                index,
+                inputArrayIndex
+              )
+              fixedParameters = `data:application/vnd.itk.address,0:${fixedParameterPtr}`
+              inputArrayIndex += 1
+
+              const parameterPtr = setPipelineModuleInputArray(
+                pipelineModule,
+                transform.parameters,
+                index,
+                inputArrayIndex
+              )
+              parameters = `data:application/vnd.itk.address,0:${parameterPtr}`
+              inputArrayIndex += 1
+            }
+
             const transformJSON = {
               transformType: transform.transformType,
               numberOfFixedParameters: transform.numberOfFixedParameters,
@@ -659,25 +672,33 @@ function runPipelineEmscripten (
             pipelineModule,
             index
           ) as TransformList
+          let outputArrayIndex = 0
           transformList.forEach((transform, transformIndex) => {
+            if (
+              transform.transformType.transformParameterization === 'Composite'
+            ) {
+              return
+            }
             if (transform.numberOfFixedParameters > 0) {
               transformList[transformIndex].fixedParameters =
                 getPipelineModuleOutputArray(
                   pipelineModule,
                   index,
-                  transformIndex * 2,
-                  transform.transformType.parametersValueType
+                  outputArrayIndex,
+                  FloatTypes.Float64
                 ) as TypedArray
             }
-            if (transform.numberOfFixedParameters > 0) {
+            outputArrayIndex += 1
+            if (transform.numberOfParameters > 0) {
               transformList[transformIndex].parameters =
                 getPipelineModuleOutputArray(
                   pipelineModule,
                   index,
-                  transformIndex * 2 + 1,
+                  outputArrayIndex,
                   transform.transformType.parametersValueType
                 ) as TypedArray
             }
+            outputArrayIndex += 1
           })
           outputData = transformList
           break
