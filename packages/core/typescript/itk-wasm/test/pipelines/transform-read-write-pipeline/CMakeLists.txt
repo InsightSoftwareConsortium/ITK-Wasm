@@ -17,6 +17,9 @@ include(${ITK_USE_FILE})
 add_executable(transform-read-write-test transform-read-write-test.cxx)
 target_link_libraries(transform-read-write-test PUBLIC ${ITK_LIBRARIES})
 
+add_executable(transform-read-write-composite-test transform-read-write-composite-test.cxx)
+target_link_libraries(transform-read-write-composite-test PUBLIC ${ITK_LIBRARIES})
+
 enable_testing()
 add_test(NAME transform-read-write-test
   COMMAND transform-read-write-test ${CMAKE_CURRENT_SOURCE_DIR}/LinearTransform.h5

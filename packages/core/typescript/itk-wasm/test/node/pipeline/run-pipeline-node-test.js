@@ -145,6 +145,10 @@ function readCompositeTransform() {
 
     // Skip the composite transform (index 0) as it doesn't have separate data files
     if (transform.transformType.transformParameterization === 'Composite') {
+      // transform.fixedParameters = new Float64Array(0)
+      // transform.parameters = new Float32Array(0)
+      transform.fixedParameters = null
+      transform.parameters = null
       continue
     }
 
@@ -164,7 +168,7 @@ function readCompositeTransform() {
       ),
       null
     )
-    const fixedParameters = new Float32Array(
+    const fixedParameters = new Float64Array(
       fixedParametersBuffer.buffer.slice(
         fixedParametersBuffer.byteOffset,
         fixedParametersBuffer.byteOffset + fixedParametersBuffer.byteLength
@@ -606,16 +610,16 @@ test.only('runPipelineNode writes and reads a CompositeTransform itk.TransformLi
       'Rigid2D parameters should be Float32Array'
     )
     t.true(
-      rigid2DTransform.fixedParameters instanceof Float32Array,
-      'Rigid2D fixedParameters should be Float32Array'
+      rigid2DTransform.fixedParameters instanceof Float64Array,
+      'Rigid2D fixedParameters should be Float64Array'
     )
     t.true(
       affineTransform.parameters instanceof Float32Array,
       'Affine parameters should be Float32Array'
     )
     t.true(
-      affineTransform.fixedParameters instanceof Float32Array,
-      'Affine fixedParameters should be Float32Array'
+      affineTransform.fixedParameters instanceof Float64Array,
+      'Affine fixedParameters should be Float64Array'
     )
   }
 
@@ -625,7 +629,7 @@ test.only('runPipelineNode writes and reads a CompositeTransform itk.TransformLi
     'pipelines',
     'emscripten-build',
     'transform-read-write-pipeline',
-    'transform-read-write-test'
+    'transform-read-write-composite-test'
   )
   const args = ['0', '0', '--memory-io']
   const desiredOutputs = [{ type: InterfaceTypes.TransformList }]
