@@ -33,13 +33,13 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "1.0.0-b.188"
+    "itk-wasm": "workspace:^"
   },
   "devDependencies": {
-    "@itk-wasm/demo-app": "^0.2.0",
-    "@itk-wasm/image-io": "^1.3.1",
-    "@itk-wasm/mesh-io": "^1.4.2",
-    "@itk-wasm/transform-io": "^0.1.1",
+    "@itk-wasm/demo-app": "workspace:*",
+    "@itk-wasm/image-io": "workspace:^",
+    "@itk-wasm/mesh-io": "workspace:^",
+    "@itk-wasm/transform-io": "workspace:^",
     "@types/node": "^20.2.5",
     "esbuild": "^0.19.8",
     "shx": "^0.3.4",
@@ -50,5 +50,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+  },
+  "ava": {
+    "files": [
+      "test/node/**/*.js",
+      "!test/node/common.js"
+    ]
   }
 }
