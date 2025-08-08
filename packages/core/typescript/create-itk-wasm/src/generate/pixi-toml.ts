@@ -23,7 +23,7 @@ python = ["python"]
 
 [dependencies]
 python = "3.12.*"
-pnpm = ">=10.12.1,<11"
+pnpm = ">=10.14.0,<11"
 hatch = ">=1.13.0,<2"
 pip = ">=24.2,<25"
 
