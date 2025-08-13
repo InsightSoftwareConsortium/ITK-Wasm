@@ -102,6 +102,7 @@ ENV ITKMeshToPolyData_GIT_TAG=45454052790b9f01bc1e1baf0e9400f68a3f1363
 RUN git clone https://github.com/InsightSoftwareConsortium/ITKMeshToPolyData.git && \
   cd ITKMeshToPolyData && \
   git checkout ${ITKMeshToPolyData_GIT_TAG} && \
+  echo "" > wasm/CMakeLists.txt && \
   cd / && \
   mkdir ITKMeshToPolyData-build && \
   cd ITKMeshToPolyData-build && \
