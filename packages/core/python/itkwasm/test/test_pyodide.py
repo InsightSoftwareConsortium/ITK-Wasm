@@ -8,7 +8,7 @@ if sys.version_info < (3, 10):
 from pytest_pyodide import run_in_pyodide, copy_files_to_pyodide
 
 #from itkwasm import __version__ as test_package_version
-test_package_version = '1.0b194'
+test_package_version = '1.0b195'
 
 
 def package_wheel():
@@ -272,6 +272,160 @@ async def test_transform_list_conversion(selenium):
     assert translation_py.numberOfParameters == 3
     assert translation_py.numberOfFixedParameters == 0
     np.testing.assert_allclose(translation_py.parameters, translation_parameters)
+
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_linear_transform_conversion(selenium):
+    from itkwasm import Transform, TransformType, TransformParameterizations, FloatTypes, TransformList
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+
+    # Create a single linear (affine) transform
+    transform_type = TransformType(
+        transformParameterization=TransformParameterizations.Affine,
+        parametersValueType=FloatTypes.Float64,
+        inputDimension=3,
+        outputDimension=3
+    )
+
+    fixed_parameters = np.array([0.0, 0.0, 0.0]).astype(np.float64)
+    parameters = np.array([
+        1.0, 0.0, 0.0,   # 3x3 matrix row 1
+        0.0, 1.0, 0.0,   # 3x3 matrix row 2
+        0.0, 0.0, 1.0,   # 3x3 matrix row 3
+        10.0, 20.0, 30.0  # translation vector
+    ]).astype(np.float64)
+
+    transform = Transform(
+        transformType=transform_type,
+        numberOfParameters=12,
+        numberOfFixedParameters=3,
+        fixedParameters=fixed_parameters,
+        parameters=parameters
+    )
+
+    transform_list: TransformList = [transform]
+
+    # Convert to JS and back
+    transform_list_js = to_js(transform_list)
+    transform_list_py = to_py(transform_list_js)
+
+    # Verify the conversion
+    assert len(transform_list_py) == 1
+
+    transform_py = transform_list_py[0]
+    assert transform_py.transformType.transformParameterization == TransformParameterizations.Affine
+    assert transform_py.transformType.parametersValueType == FloatTypes.Float64
+    assert transform_py.transformType.inputDimension == 3
+    assert transform_py.transformType.outputDimension == 3
+    assert transform_py.numberOfFixedParameters == 3
+    assert transform_py.numberOfParameters == 12
+
+    np.testing.assert_allclose(transform_py.fixedParameters, fixed_parameters)
+    np.testing.assert_allclose(transform_py.parameters, parameters)
+
+
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
+async def test_composite_transform_conversion(selenium):
+    from itkwasm import Transform, TransformType, TransformParameterizations, FloatTypes, TransformList
+    from itkwasm.pyodide import to_js, to_py
+    import numpy as np
+
+    # Create a composite transform
+    composite_transform_type = TransformType(
+        transformParameterization=TransformParameterizations.Composite,
+        parametersValueType=FloatTypes.Float32,
+        inputDimension=2,
+        outputDimension=2
+    )
+
+    composite_transform = Transform(
+        transformType=composite_transform_type,
+        numberOfParameters=9,  # Sum of parameters from component transforms
+        numberOfFixedParameters=4,  # Sum of fixed parameters from component transforms
+        fixedParameters=np.array([64.0, 64.0, 64.0, 64.0]).astype(np.float32),
+        parameters=np.array([
+            # Rigid2D parameters (3)
+            0.0, 64.0, 64.0,
+            # Affine parameters (6)
+            1.0, 0.0, 0.0, 1.0, 0.0, 0.0
+        ]).astype(np.float32)
+    )
+
+    # Create first component transform (Rigid2D)
+    rigid_transform_type = TransformType(
+        transformParameterization=TransformParameterizations.Rigid2D,
+        parametersValueType=FloatTypes.Float32,
+        inputDimension=2,
+        outputDimension=2
+    )
+
+    rigid_transform = Transform(
+        transformType=rigid_transform_type,
+        numberOfParameters=3,
+        numberOfFixedParameters=2,
+        fixedParameters=np.array([64.0, 64.0]).astype(np.float32),
+        parameters=np.array([0.0, 64.0, 64.0]).astype(np.float32)
+    )
+
+    # Create second component transform (Affine)
+    affine_transform_type = TransformType(
+        transformParameterization=TransformParameterizations.Affine,
+        parametersValueType=FloatTypes.Float32,
+        inputDimension=2,
+        outputDimension=2
+    )
+
+    affine_transform = Transform(
+        transformType=affine_transform_type,
+        numberOfParameters=6,
+        numberOfFixedParameters=2,
+        fixedParameters=np.array([64.0, 64.0]).astype(np.float32),
+        parameters=np.array([1.0, 0.0, 0.0, 1.0, 0.0, 0.0]).astype(np.float32)
+    )
+
+    # Create transform list with composite + components
+    transform_list: TransformList = [composite_transform, rigid_transform, affine_transform]
+
+    # Convert to JS and back
+    transform_list_js = to_js(transform_list)
+    transform_list_py = to_py(transform_list_js)
+
+    # Verify the conversion
+    assert len(transform_list_py) == 3
+
+    # Verify composite transform
+    composite_py = transform_list_py[0]
+    assert composite_py.transformType.transformParameterization == TransformParameterizations.Composite
+    assert composite_py.transformType.parametersValueType == FloatTypes.Float32
+    assert composite_py.transformType.inputDimension == 2
+    assert composite_py.transformType.outputDimension == 2
+    assert composite_py.numberOfFixedParameters == 4
+    assert composite_py.numberOfParameters == 9
+
+    # Verify rigid transform
+    rigid_py = transform_list_py[1]
+    assert rigid_py.transformType.transformParameterization == TransformParameterizations.Rigid2D
+    assert rigid_py.transformType.parametersValueType == FloatTypes.Float32
+    assert rigid_py.transformType.inputDimension == 2
+    assert rigid_py.transformType.outputDimension == 2
+    assert rigid_py.numberOfFixedParameters == 2
+    assert rigid_py.numberOfParameters == 3
+    np.testing.assert_allclose(rigid_py.fixedParameters, np.array([64.0, 64.0]))
+    np.testing.assert_allclose(rigid_py.parameters, np.array([0.0, 64.0, 64.0]))
+
+    # Verify affine transform
+    affine_py = transform_list_py[2]
+    assert affine_py.transformType.transformParameterization == TransformParameterizations.Affine
+    assert affine_py.transformType.parametersValueType == FloatTypes.Float32
+    assert affine_py.transformType.inputDimension == 2
+    assert affine_py.transformType.outputDimension == 2
+    assert affine_py.numberOfFixedParameters == 2
+    assert affine_py.numberOfParameters == 6
+    np.testing.assert_allclose(affine_py.fixedParameters, np.array([64.0, 64.0]))
+    np.testing.assert_allclose(affine_py.parameters, np.array([1.0, 0.0, 0.0, 1.0, 0.0, 0.0]))
+
 
 @copy_files_to_pyodide(file_list=file_list, install_wheels=True)
 @run_in_pyodide(packages=["numpy"])

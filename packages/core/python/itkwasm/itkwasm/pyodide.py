@@ -5,7 +5,7 @@ from .image import Image, ImageType
 from .point_set import PointSet, PointSetType
 from .mesh import Mesh, MeshType
 from .polydata import PolyData, PolyDataType
-from .transform import Transform, TransformType
+from .transform import Transform, TransformType, TransformList
 from .binary_file import BinaryFile
 from .binary_stream import BinaryStream
 from .text_file import TextFile
