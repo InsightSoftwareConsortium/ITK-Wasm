@@ -4,12 +4,12 @@ Verify the source tree.
 
 ```
 
-# on an amd64 system
+# on an arm64 system
 # DockerHub, quay.io login required
 pixi run build-docker-images --with-debug
 ./src/docker/push.sh
 
-# on a linux arm64 system
+# on a linux amd64 system
 export OCI_EXE=docker
 pixi run build-docker-images --with-debug
 # requires manifest-tool, see https://github.com/estesp/manifest-tool/releases/
