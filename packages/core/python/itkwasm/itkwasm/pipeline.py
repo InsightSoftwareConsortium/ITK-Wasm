@@ -316,19 +316,29 @@ class Pipeline:
             elif input_.type == InterfaceTypes.TransformList:
                 transform_list = input_.data
                 transform_list_json = []
-                for idx, transform in enumerate(transform_list):
-                    if transform.numberOfFixedParameters:
-                        fpv = array_like_to_bytes(transform.fixedParameters)
-                    else:
-                        fpv = bytes([])
-                    fixed_parameters_ptr = ri.set_input_array(fpv, index, idx * 2)
-                    fixed_parameters  = f"data:application/vnd.itk.address,0:{fixed_parameters_ptr}"
-                    if transform.numberOfParameters:
-                        pv = array_like_to_bytes(transform.parameters)
-                    else:
-                        pv = bytes([])
-                    parameters_ptr = ri.set_input_array(pv, index, idx * 2 + 1)
-                    parameters = f"data:application/vnd.itk.address,0:{parameters_ptr}"
+                input_array_index = 0
+                for transform in transform_list:
+                    fixed_parameters = ""
+                    parameters = ""
+                    
+                    # Skip setting input arrays for Composite transforms as they don't have array data
+                    if transform.transformType.transformParameterization != "Composite":
+                        if transform.numberOfFixedParameters:
+                            fpv = array_like_to_bytes(transform.fixedParameters)
+                        else:
+                            fpv = bytes([])
+                        fixed_parameters_ptr = ri.set_input_array(fpv, index, input_array_index)
+                        fixed_parameters = f"data:application/vnd.itk.address,0:{fixed_parameters_ptr}"
+                        input_array_index += 1
+                        
+                        if transform.numberOfParameters:
+                            pv = array_like_to_bytes(transform.parameters)
+                        else:
+                            pv = bytes([])
+                        parameters_ptr = ri.set_input_array(pv, index, input_array_index)
+                        parameters = f"data:application/vnd.itk.address,0:{parameters_ptr}"
+                        input_array_index += 1
+                    
                     transform_json = {
                         "transformType": asdict(transform.transformType),
                         "numberOfFixedParameters": transform.numberOfFixedParameters,
@@ -540,22 +550,33 @@ class Pipeline:
                 elif output.type == InterfaceTypes.TransformList:
                     transform_list_json = ri.get_output_json(index)
                     transform_list = []
-                    for idx, transform_json in enumerate(transform_list_json):
+                    output_array_index = 0
+                    for transform_json in transform_list_json:
                         transform = Transform(**transform_json)
+                        
+                        # Skip array reading for Composite transforms as they don't have array data
+                        if transform.transformType.transformParameterization == "Composite":
+                            transform_list.append(transform)
+                            continue
+                            
                         if transform.numberOfFixedParameters > 0:
-                            data_ptr = ri.get_output_array_address(0, index, idx * 2)
-                            data_size = ri.get_output_array_size(0, index, idx * 2)
+                            data_ptr = ri.get_output_array_address(0, index, output_array_index)
+                            data_size = ri.get_output_array_size(0, index, output_array_index)
                             transform.fixedParameters = buffer_to_numpy_array(
                                 FloatTypes.Float64,
                                 ri.wasmtime_lift(data_ptr, data_size),
                             )
+                        output_array_index += 1
+                        
                         if transform.numberOfParameters > 0:
-                            data_ptr = ri.get_output_array_address(0, index, idx * 2 + 1)
-                            data_size = ri.get_output_array_size(0, index, idx * 2 + 1)
+                            data_ptr = ri.get_output_array_address(0, index, output_array_index)
+                            data_size = ri.get_output_array_size(0, index, output_array_index)
                             transform.parameters = buffer_to_numpy_array(
                                 transform.transformType.parametersValueType,
                                 ri.wasmtime_lift(data_ptr, data_size),
                             )
+                        output_array_index += 1
+                        
                         transform_list.append(transform)
                     output_data = PipelineOutput(InterfaceTypes.TransformList, transform_list)
                 elif output.type == InterfaceTypes.PolyData:
