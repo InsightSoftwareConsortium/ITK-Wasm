@@ -1,0 +1,18 @@
+[
+   {
+      "transformType": {
+         "transformParameterization": "Affine",
+         "parametersValueType": "float64",
+         "inputDimension": 3,
+         "outputDimension": 3
+      },
+      "numberOfFixedParameters": 3,
+      "numberOfParameters": 12,
+      "name": "",
+      "inputSpaceName": "",
+      "outputSpaceName": "",
+      "fixedParameters": "data:application/vnd.itk.path,data/0/fixed-parameters.raw",
+      "parameters": "data:application/vnd.itk.path,data/0/parameters.raw",
+      "metadata": []
+   }
+]
