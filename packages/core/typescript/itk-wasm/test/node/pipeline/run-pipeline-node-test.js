@@ -477,7 +477,7 @@ test('runPipelineNode writes and reads an itk.TransformList via memory io', asyn
   verifyTransform(outputs[0].data)
 })
 
-test.only('runPipelineNode writes and reads a CompositeTransform itk.TransformList via memory io', async (t) => {
+test('runPipelineNode writes and reads a CompositeTransform itk.TransformList via memory io', async (t) => {
   const verifyTransform = (transformList) => {
     t.is(
       transformList.length,
@@ -641,6 +641,39 @@ test.only('runPipelineNode writes and reads a CompositeTransform itk.TransformLi
     inputs
   )
   verifyTransform(outputs[0].data)
+})
+
+test('runPipelineNode runs pthreads-enabled pipeline', async (t) => {
+  const pipelinePath = path.resolve(
+    'test',
+    'pipelines',
+    'emscripten-threads-build',
+    'pthreads-pipeline',
+    'pthreads-test'
+  )
+  const args = ['--memory-io', '--number-of-threads', '4', '0']
+  const desiredOutputs = [{ type: InterfaceTypes.JsonCompatible }]
+  const inputs = []
+
+  const { outputs } = await runPipelineNode(
+    pipelinePath,
+    args,
+    desiredOutputs,
+    inputs
+  )
+
+  const result = outputs[0].data
+  t.is(typeof result, 'object', 'output should be an object')
+  t.is(
+    typeof result.createdThreads,
+    'number',
+    'createdThreads should be a number'
+  )
+  t.true(result.createdThreads >= 0, 'should have created at least 0 threads')
+  t.true(
+    result.createdThreads <= 4,
+    'should not have created more than 4 threads'
+  )
 })
 
 test('runPipelineNode creates a composite transform with expected parameters', async (t) => {
