@@ -108,3 +108,13 @@ packages/dicom/python/itkwasm-dicom/tests/
 packages/downsample/python/itkwasm-downsample-emscripten/tests/
 packages/downsample/python/itkwasm-downsample/tests/
 packages/image-io/python/itkwasm-image-io-emscripten/tests/
+
+packages/compare-meshes/typescript/test/browser/demo-app/
+packages/mesh-filters/python/itkwasm-mesh-filters-emscripten/
+packages/mesh-filters/python/itkwasm-mesh-filters-wasi/README.md
+packages/mesh-filters/python/itkwasm-mesh-filters-wasi/itkwasm_mesh_filters_wasi/
+packages/mesh-filters/python/itkwasm-mesh-filters-wasi/pyproject.toml
+packages/mesh-filters/python/itkwasm-mesh-filters/
+
+examples/different-input-types/overlay.png
+examples/hello-world/emscripten-build/
