@@ -9,7 +9,7 @@ import die from './die.js'
 function findOciExe() {
   // Check for OCI_EXE environmental variable
   const ociExe = process.env.OCI_EXE
-  if (ociExe && fs.existsSync(ociExe)) {
+  if (ociExe) {
     return ociExe
   }
 
