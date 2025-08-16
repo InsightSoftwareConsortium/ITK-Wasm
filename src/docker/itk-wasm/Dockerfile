@@ -3,7 +3,7 @@ ARG BASE_IMAGE=quay.io/itkwasm/emscripten-base
 ARG BASE_TAG=latest-$HOST_ARCH
 
 FROM $BASE_IMAGE:$BASE_TAG
-LABEL maintainer="Matt McCormick matt@mmmccormick.com"
+LABEL maintainer="Matt McCormick matt@fideus.io"
 ARG BASE_IMAGE
 ARG HOST_ARCH=amd64
 ARG BASE_IMAGE=quay.io/itkwasm/emscripten-base

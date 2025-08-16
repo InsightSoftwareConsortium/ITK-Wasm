@@ -10,7 +10,7 @@
     "test:wasi": "itk-wasm -b wasi-build run different-input-types.wasi.wasm -- ./Gourds.png label.png overlay.png",
     "test:wasi:help": "itk-wasm -b wasi-build run different-input-types.wasi.wasm -- --help"
   },
-  "author": "Matt McCormick <matt@mmmccormick.com>",
+  "author": "Matt McCormick <matt@fideus.io>",
   "license": "Apache-2.0",
   "dependencies": {
     "itk-wasm": "workspace:^"
