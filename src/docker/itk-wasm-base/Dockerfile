@@ -3,7 +3,7 @@ ARG HOST_ARCH=amd64
 FROM $BASE_IMAGE:20250123-74d1a0b-$HOST_ARCH
 ARG BASE_IMAGE
 
-LABEL maintainer="Matt McCormick matt@mmmccormick.com"
+LABEL maintainer="Matt McCormick matt@fideus.io"
 LABEL org.opencontainers.image.source="https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 
 WORKDIR /
