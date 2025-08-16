@@ -1,5 +1,5 @@
 [workspace]
-authors = ["Matt McCormick <matt@mmmccormick.com>"]
+authors = ["Matt McCormick <matt@fideus.io>"]
 channels = ["conda-forge"]
 description = "Input and output for scientific and medical transform file formats."
 name = "transform-io"
