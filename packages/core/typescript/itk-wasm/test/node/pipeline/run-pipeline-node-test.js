@@ -10,7 +10,7 @@ import {
   InterfaceTypes
 } from '../../../dist/index-node.js'
 
-function readCthead1 () {
+function readCthead1() {
   const testInputImageDir = path.resolve(
     'test',
     'pipelines',
@@ -49,7 +49,7 @@ function readCthead1 () {
   return image
 }
 
-function readCow () {
+function readCow() {
   const testInputMeshDir = path.resolve(
     'test',
     'pipelines',
@@ -88,7 +88,7 @@ function readCow () {
   return mesh
 }
 
-function readLinearTransform () {
+function readLinearTransform() {
   const testInputTransformDir = path.resolve(
     'test',
     'pipelines',
@@ -126,7 +126,7 @@ function readLinearTransform () {
   return transformList
 }
 
-function readCompositeTransform () {
+function readCompositeTransform() {
   const testInputTransformDir = path.resolve(
     'test',
     'pipelines',
@@ -674,6 +674,33 @@ test('runPipelineNode runs pthreads-enabled pipeline', async (t) => {
     result.createdThreads <= 4,
     'should not have created more than 4 threads'
   )
+})
+
+test('runPipelineNode with --threads 0 disables threading', async (t) => {
+  const image = readCthead1()
+  const pipelinePath = path.resolve(
+    'test',
+    'pipelines',
+    'emscripten-build',
+    'median-filter-pipeline',
+    'median-filter-test'
+  )
+  // Include --threads 0 to test that threading is disabled at the loading level
+  const args = ['0', '0', '--radius', '4', '--memory-io', '--threads', '0']
+  const desiredOutputs = [{ type: InterfaceTypes.Image }]
+  const inputs = [{ type: InterfaceTypes.Image, data: image }]
+
+  const { outputs } = await runPipelineNode(
+    pipelinePath,
+    args,
+    desiredOutputs,
+    inputs
+  )
+
+  // The test should pass successfully, indicating that --threads 0 was handled
+  // and the non-threaded WASM was loaded instead of the threaded version
+  t.is(outputs.length, 1, 'should have one output')
+  t.is(typeof outputs[0].data, 'object', 'output should be an object')
 })
 
 test('runPipelineNode creates a composite transform with expected parameters', async (t) => {

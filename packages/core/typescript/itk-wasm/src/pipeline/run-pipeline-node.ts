@@ -8,7 +8,7 @@ import PipelineOutput from './pipeline-output.js'
 import PipelineInput from './pipeline-input.js'
 import RunPipelineResult from './run-pipeline-result.js'
 
-function windowsToEmscriptenPath (filePath: string): string {
+function windowsToEmscriptenPath(filePath: string): string {
   // Following mount logic in itkJSPost.js
   const fileBasename = path.basename(filePath)
   const containingDir = path.dirname(filePath)
@@ -22,7 +22,7 @@ function windowsToEmscriptenPath (filePath: string): string {
   return mountedPath
 }
 
-function replaceArgumentsWithEmscriptenPaths (
+function replaceArgumentsWithEmscriptenPaths(
   args: string[],
   mountDirs: Set<string>
 ): string[] {
@@ -39,15 +39,26 @@ function replaceArgumentsWithEmscriptenPaths (
   })
 }
 
-async function runPipelineNode (
+function shouldDisableThreads(args: string[]): boolean {
+  for (let i = 0; i < args.length - 1; i++) {
+    if (args[i] === '--threads' && args[i + 1] === '0') {
+      return true
+    }
+  }
+  return false
+}
+
+async function runPipelineNode(
   pipelinePath: string,
   args: string[],
   outputs: PipelineOutput[],
   inputs: PipelineInput[] | null,
   mountDirs?: Set<string>
 ): Promise<RunPipelineResult> {
+  const disableThreads = shouldDisableThreads(args)
   const Module = (await loadEmscriptenModuleNode(
-    pipelinePath
+    pipelinePath,
+    disableThreads
   )) as PipelineEmscriptenModule
   const mountedDirs: Set<string> = new Set()
   const unmountable: Set<string> = new Set()
@@ -61,8 +72,7 @@ async function runPipelineNode (
      */
     Array.from(mountedDirs)
       .filter((x, _, a) => a.every((y) => x === y || !x.includes(y)))
-      .forEach((dir) => unmountable.add(dir)
-      )
+      .forEach((dir) => unmountable.add(dir))
   }
   if (typeof mountDirs !== 'undefined') {
     args = replaceArgumentsWithEmscriptenPaths(args, mountDirs)
