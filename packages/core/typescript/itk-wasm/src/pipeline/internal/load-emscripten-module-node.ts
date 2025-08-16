@@ -7,8 +7,9 @@ import pthreadSupportAvailable from '../pthread-support-available.js'
 const zstdDecoder = new ZSTDDecoder()
 await zstdDecoder.init()
 
-async function loadEmscriptenModuleNode (
-  modulePath: string
+async function loadEmscriptenModuleNode(
+  modulePath: string,
+  disableThreads?: boolean
 ): Promise<EmscriptenModule> {
   let modulePrefix = modulePath
   if (modulePath.endsWith('.js')) {
@@ -22,7 +23,7 @@ async function loadEmscriptenModuleNode (
   }
 
   // Check for pthread support and use the appropriate WASM file
-  const hasPthreadSupport = pthreadSupportAvailable()
+  const hasPthreadSupport = pthreadSupportAvailable() && !disableThreads
   let wasmFileName = `${modulePrefix}.wasm.zst`
   let wasmBinary: Uint8Array
 
