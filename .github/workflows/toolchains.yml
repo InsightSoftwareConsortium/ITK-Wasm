@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: prefix-dev/setup-pixi@v0.8.14
+      - uses: prefix-dev/setup-pixi@v0.9.0
       - run: pixi run export-itk-wasm-env-vars
 
       - name: Free Disk Space (Ubuntu)
@@ -31,7 +31,7 @@ jobs:
           timeout_minutes: 10
           command: ./src/docker/pull.sh --no-debug
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         continue-on-error: true
         with:
           name: docker-cache
@@ -64,9 +64,9 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: prefix-dev/setup-pixi@v0.8.14
+      - uses: prefix-dev/setup-pixi@v0.9.0
       - run: pixi run export-itk-wasm-env-vars
 
       - name: Free Disk Space (Ubuntu)
@@ -78,7 +78,7 @@ jobs:
           timeout_minutes: 10
           command: ./src/docker/pull.sh --no-debug
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         continue-on-error: true
         with:
           name: docker-cache
