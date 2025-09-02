@@ -11,11 +11,11 @@ function processCommonOptions(program, wasiDefault = false) {
 
   const ociExePath = findOciExe()
 
-  let dockerImage = `quay.io/itkwasm/emscripten:${defaultImageTag}`
+  let dockerImage = `docker.io/itkwasm/emscripten:${defaultImageTag}`
   if (options.image) {
     dockerImage = options.image
     if (dockerImage === 'itkwasm/wasi') {
-      dockerImage = `quay.io/itkwasm/wasi:${defaultImageTag}`
+      dockerImage = `docker.io/itkwasm/wasi:${defaultImageTag}`
     }
   }
 

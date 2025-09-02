@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm run build:wasi && pnpm run build:emscripten",
-    "build:wasi": "itk-wasm -i quay.io/itkwasm/wasi:latest build",
+    "build:wasi": "itk-wasm -i docker.io/itkwasm/wasi:latest build",
     "build:emscripten": "itk-wasm build",
     "test": "pnpm run test:wasi && pnpm run test:node && pnpm run test:browser",
     "test:wasi": "pnpx itk-wasm run wasi-build/hello.wasi.wasm",

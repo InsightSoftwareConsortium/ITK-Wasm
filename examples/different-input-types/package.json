@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm run build:wasi",
-    "build:wasi": "itk-wasm -b wasi-build -i quay.io/itkwasm/wasi:latest build",
+    "build:wasi": "itk-wasm -b wasi-build -i docker.io/itkwasm/wasi:latest build",
     "test": "pnpm run test:wasi",
     "test:wasi": "itk-wasm -b wasi-build run different-input-types.wasi.wasm -- ./Gourds.png label.png overlay.png",
     "test:wasi:help": "itk-wasm -b wasi-build run different-input-types.wasi.wasm -- --help"
