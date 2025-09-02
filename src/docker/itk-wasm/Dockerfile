@@ -1,12 +1,12 @@
 ARG HOST_ARCH=amd64
-ARG BASE_IMAGE=quay.io/itkwasm/emscripten-base
+ARG BASE_IMAGE=docker.io/itkwasm/emscripten-base
 ARG BASE_TAG=latest-$HOST_ARCH
 
 FROM $BASE_IMAGE:$BASE_TAG
 LABEL maintainer="Matt McCormick matt@fideus.io"
 ARG BASE_IMAGE
 ARG HOST_ARCH=amd64
-ARG BASE_IMAGE=quay.io/itkwasm/emscripten-base
+ARG BASE_IMAGE=docker.io/itkwasm/emscripten-base
 ARG BASE_TAG=latest-$HOST_ARCH
 ARG CMAKE_BUILD_TYPE=Release
 
@@ -50,7 +50,7 @@ RUN /usr/local/bin/warm-emscripten-cache.sh
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
-ARG IMAGE=quay.io/itkwasm/emscripten
+ARG IMAGE=docker.io/itkwasm/emscripten
 ARG VERSION=latest
 ARG VCS_REF
 ARG VCS_URL
