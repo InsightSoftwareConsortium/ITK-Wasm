@@ -49,11 +49,11 @@ function push_image() {
   fi
 
   if $push_manifest; then
-    manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template quay.io/${image}:${tag}-ARCH --target quay.io/${image}:${tag}
+    #manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template quay.io/${image}:${tag}-ARCH --target quay.io/${image}:${tag}
     manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template docker.io/${image}:${tag}-ARCH --target docker.io/${image}:${tag}
 
     if $debug; then
-      manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template quay.io/${image}:${tag}-debug-ARCH --target quay.io/${image}:${tag}-debug
+      #manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template quay.io/${image}:${tag}-debug-ARCH --target quay.io/${image}:${tag}-debug
       manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template docker.io/${image}:${tag}-debug-ARCH --target docker.io/${image}:${tag}-debug
     fi
   fi
