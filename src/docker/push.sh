@@ -32,7 +32,7 @@ function push_image() {
   local tag=$2
   local debug=$3
 
-  $exe tag quay.io/${image}:${tag}-${host_arch} docker.io/${image}:${tag}-${host_arch}
+  $exe tag docker.io/${image}:${tag}-${host_arch} quay.io/${image}:${tag}-${host_arch}
   $exe push docker.io/${image}:${tag}-${host_arch}
   $exe push quay.io/${image}:${tag}-${host_arch}
   if $push_manifest; then
@@ -40,7 +40,7 @@ function push_image() {
   fi
 
   if $debug; then
-    $exe tag quay.io/${image}:${tag}-debug-${host_arch} docker.io/${image}:${tag}-debug-${host_arch}
+    $exe tag docker.io/${image}:${tag}-debug-${host_arch} quay.io/${image}:${tag}-debug-${host_arch}
     $exe push docker.io/${image}:${tag}-debug-${host_arch}
     $exe push quay.io/${image}:${tag}-debug-${host_arch}
     if $push_manifest; then
