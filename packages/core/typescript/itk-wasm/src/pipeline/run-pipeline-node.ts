@@ -8,7 +8,7 @@ import PipelineOutput from './pipeline-output.js'
 import PipelineInput from './pipeline-input.js'
 import RunPipelineResult from './run-pipeline-result.js'
 
-function windowsToEmscriptenPath(filePath: string): string {
+function windowsToEmscriptenPath (filePath: string): string {
   // Following mount logic in itkJSPost.js
   const fileBasename = path.basename(filePath)
   const containingDir = path.dirname(filePath)
@@ -22,7 +22,7 @@ function windowsToEmscriptenPath(filePath: string): string {
   return mountedPath
 }
 
-function replaceArgumentsWithEmscriptenPaths(
+function replaceArgumentsWithEmscriptenPaths (
   args: string[],
   mountDirs: Set<string>
 ): string[] {
@@ -39,7 +39,7 @@ function replaceArgumentsWithEmscriptenPaths(
   })
 }
 
-function shouldDisableThreads(args: string[]): boolean {
+function shouldDisableThreads (args: string[]): boolean {
   for (let i = 0; i < args.length - 1; i++) {
     if (args[i] === '--threads' && args[i + 1] === '0') {
       return true
@@ -48,7 +48,7 @@ function shouldDisableThreads(args: string[]): boolean {
   return false
 }
 
-async function runPipelineNode(
+async function runPipelineNode (
   pipelinePath: string,
   args: string[],
   outputs: PipelineOutput[],
