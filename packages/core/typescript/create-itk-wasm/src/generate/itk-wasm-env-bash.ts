@@ -20,7 +20,7 @@ export ITK_WASM_TEST_DATA_HASH=\${ITK_WASM_TEST_DATA_HASH:-$(cat package.json | 
 export ITK_WASM_TEST_DATA_URLS=\${ITK_WASM_TEST_DATA_URLS:-$(cat package.json | jq -e -r '."itk-wasm"."test-data-urls" | join(" ")')}
 
 export ITK_WASM_ITK_REPOSITORY=\${ITK_WASM_ITK_REPOSITORY:-"https://github.com/thewtex/ITK"}
-export ITK_WASM_ITK_BRANCH=\${ITK_WASM_ITK_BRANCH:-"itkwasm-2025-03-19-25d3162371"}
+export ITK_WASM_ITK_BRANCH=\${ITK_WASM_ITK_BRANCH:-"itkwasm-2025-03-19-25d3162371-1"}
 
 export ITK_WASM_NATIVE_WORKSPACE=\${ITK_WASM_NATIVE_WORKSPACE:-$(pwd)/native}
 

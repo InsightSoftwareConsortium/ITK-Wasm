@@ -59,10 +59,10 @@ emscripten_debug_c_flags="-msimd128 -fno-lto -Wno-warn-absolute-paths"
 wasi_debug_ld_flags="-fno-lto -lwasi-emulated-process-clocks -lwasi-emulated-signal -lc-printscan-long-double"
 wasi_debug_c_flags="-fno-lto -D_WASI_EMULATED_PROCESS_CLOCKS -D_WASI_EMULATED_SIGNAL"
 
-emscripten_threads_ld_flags="-pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency -s MALLOC=mimalloc -flto -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB"
+emscripten_threads_ld_flags="-pthread -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency -s MALLOC=mimalloc -flto -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -Wno-pthreads-mem-growth"
 emscripten_threads_c_flags="-pthread -msimd128 -flto -Wno-warn-absolute-paths -DITK_WASM_NO_FILESYSTEM_IO"
 
-emscripten_threads_debug_ld_flags="-pthread -s MALLOC=mimalloc -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency -fno-lto -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB"
+emscripten_threads_debug_ld_flags="-pthread -s MALLOC=mimalloc -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency -fno-lto -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -Wno-pthreads-mem-growth"
 emscripten_threads_debug_c_flags="-pthread -msimd128 -fno-lto -Wno-warn-absolute-paths"
 
 <<<<<<< HEAD
@@ -127,6 +127,7 @@ $exe $build_cmd $tag_flag docker.io/itkwasm/emscripten-base:latest-threads-$host
         --build-arg BUILD_DATE=${BUILD_DATE} \
         --build-arg LDFLAGS="${emscripten_threads_ld_flags}" \
         --build-arg CFLAGS="${emscripten_threads_c_flags}" \
+        --build-arg ITK_USE_EMSCRIPTEN_THREADS=1 \
         $local_itk_build_arg \
         $script_dir $@
 if $version_tag; then
@@ -140,6 +141,7 @@ if $version_tag; then
                 --build-arg BUILD_DATE=${BUILD_DATE} \
                 --build-arg LDFLAGS="${emscripten_threads_ld_flags}" \
                 --build-arg CFLAGS="${emscripten_threads_c_flags}" \
+                --build-arg ITK_USE_EMSCRIPTEN_THREADS=1 \
                 $local_itk_build_arg \
                 $script_dir $@
 fi
