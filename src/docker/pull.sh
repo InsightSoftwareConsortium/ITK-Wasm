@@ -16,20 +16,20 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
-$exe pull quay.io/itkwasm/emscripten:latest
-$exe tag quay.io/itkwasm/emscripten:latest localhost/itkwasm/emscripten:latest
-$exe pull quay.io/itkwasm/emscripten:latest-threads
-$exe tag quay.io/itkwasm/emscripten:latest-threads localhost/itkwasm/emscripten:latest-threads
+$exe pull docker.io/itkwasm/emscripten:latest
+$exe tag docker.io/itkwasm/emscripten:latest localhost/itkwasm/emscripten:latest
+$exe pull docker.io/itkwasm/emscripten:latest-threads
+$exe tag docker.io/itkwasm/emscripten:latest-threads localhost/itkwasm/emscripten:latest-threads
 if $debug; then
-  $exe pull quay.io/itkwasm/emscripten:latest-debug
-  $exe tag quay.io/itkwasm/emscripten:latest-debug localhost/itkwasm/emscripten:latest-debug
-  $exe pull quay.io/itkwasm/emscripten:latest-threads-debug
-  $exe tag quay.io/itkwasm/emscripten:latest-threads-debug localhost/itkwasm/emscripten:latest-threads-debug
+  $exe pull docker.io/itkwasm/emscripten:latest-debug
+  $exe tag docker.io/itkwasm/emscripten:latest-debug localhost/itkwasm/emscripten:latest-debug
+  $exe pull docker.io/itkwasm/emscripten:latest-threads-debug
+  $exe tag docker.io/itkwasm/emscripten:latest-threads-debug localhost/itkwasm/emscripten:latest-threads-debug
 fi
 
-$exe pull quay.io/itkwasm/wasi:latest
-$exe tag quay.io/itkwasm/wasi:latest localhost/itkwasm/wasi:latest
+$exe pull docker.io/itkwasm/wasi:latest
+$exe tag docker.io/itkwasm/wasi:latest localhost/itkwasm/wasi:latest
 if $debug; then
-  $exe pull quay.io/itkwasm/wasi:latest-debug
-  $exe tag quay.io/itkwasm/wasi:latest-debug localhost/itkwasm/wasi:latest-debug
+  $exe pull docker.io/itkwasm/wasi:latest-debug
+  $exe tag docker.io/itkwasm/wasi:latest-debug localhost/itkwasm/wasi:latest-debug
 fi
