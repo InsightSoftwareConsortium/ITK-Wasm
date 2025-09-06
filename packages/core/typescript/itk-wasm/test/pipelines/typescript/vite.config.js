@@ -13,13 +13,19 @@ export default defineConfig({
   },
   build: {
     outDir: '../../../demo-app',
-    emptyOutDir: true,
+    emptyOutDir: true
   },
   worker: {
     format: 'es'
   },
   optimizeDeps: {
-    exclude: ['itk-wasm', '@itk-wasm/image-io', '@itk-wasm/mesh-io', '@itk-wasm/transform-io', '@thewtex/zstddec']
+    exclude: [
+      'itk-wasm',
+      '@itk-wasm/image-io',
+      '@itk-wasm/mesh-io',
+      '@itk-wasm/transform-io',
+      '@thewtex/zstddec'
+    ]
   },
   plugins: [
     // wasm threading
@@ -28,10 +34,19 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         { src: '../../../dist/pipelines/*', dest: 'pipelines' },
-        { src: '../../../node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
-        { src: '../../../node_modules/@itk-wasm/mesh-io/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
-        { src: '../../../node_modules/@itk-wasm/transform-io/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
-      ],
+        {
+          src: '../../../node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}',
+          dest: 'pipelines'
+        },
+        {
+          src: '../../../node_modules/@itk-wasm/mesh-io/dist/pipelines/*.{js,wasm,wasm.zst}',
+          dest: 'pipelines'
+        },
+        {
+          src: '../../../node_modules/@itk-wasm/transform-io/dist/pipelines/*.{js,wasm,wasm.zst}',
+          dest: 'pipelines'
+        }
+      ]
     })
-  ],
+  ]
 })
