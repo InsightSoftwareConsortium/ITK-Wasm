@@ -499,4 +499,55 @@ Click. Perfect success.
       verifyMesh(outputs[0].data)
     })
   })
+
+  test('handles --threads 0 argument to disable threading', async ({
+    page
+  }) => {
+    await page.evaluate(async () => {
+      const itk = window.itk
+
+      const args = ['--memory-io', '--threads', '0', '0']
+      const desiredOutputs = [{ type: itk.InterfaceTypes.JsonCompatible }]
+      const inputs = []
+      const pipelinePath = 'median-filter-test'
+
+      // Should not throw an error when --threads 0 is used
+      const { outputs } = await itk.runPipeline(
+        pipelinePath,
+        args,
+        desiredOutputs,
+        inputs,
+        { webWorker: false }
+      )
+
+      // Verify that the pipeline ran successfully
+      expect(outputs).toBeDefined()
+      expect(outputs.length).toBe(1)
+    })
+  })
+
+  test('handles --threads 0 argument in web worker', async ({ page }) => {
+    await page.evaluate(async () => {
+      const itk = window.itk
+
+      const args = ['--memory-io', '--threads', '0', '0']
+      const desiredOutputs = [{ type: itk.InterfaceTypes.JsonCompatible }]
+      const inputs = []
+      const pipelinePath = 'median-filter-test'
+
+      // Should not throw an error when --threads 0 is used in web worker
+      const { webWorker, outputs } = await itk.runPipeline(
+        pipelinePath,
+        args,
+        desiredOutputs,
+        inputs
+      )
+
+      webWorker.terminate()
+
+      // Verify that the pipeline ran successfully
+      expect(outputs).toBeDefined()
+      expect(outputs.length).toBe(1)
+    })
+  })
 })
