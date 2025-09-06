@@ -10,7 +10,7 @@ import {
   InterfaceTypes
 } from '../../../dist/index-node.js'
 
-function readCthead1 () {
+function readCthead1() {
   const testInputImageDir = path.resolve(
     'test',
     'pipelines',
@@ -49,7 +49,7 @@ function readCthead1 () {
   return image
 }
 
-function readCow () {
+function readCow() {
   const testInputMeshDir = path.resolve(
     'test',
     'pipelines',
@@ -88,7 +88,7 @@ function readCow () {
   return mesh
 }
 
-function readLinearTransform () {
+function readLinearTransform() {
   const testInputTransformDir = path.resolve(
     'test',
     'pipelines',
@@ -126,7 +126,7 @@ function readLinearTransform () {
   return transformList
 }
 
-function readCompositeTransform () {
+function readCompositeTransform() {
   const testInputTransformDir = path.resolve(
     'test',
     'pipelines',
@@ -651,7 +651,7 @@ test('runPipelineNode runs pthreads-enabled pipeline', async (t) => {
     'pthreads-pipeline',
     'pthreads-test'
   )
-  const args = ['--memory-io', '--number-of-threads', '4', '0']
+  const args = ['--memory-io', '--threads', '3', '0']
   const desiredOutputs = [{ type: InterfaceTypes.JsonCompatible }]
   const inputs = []
 
