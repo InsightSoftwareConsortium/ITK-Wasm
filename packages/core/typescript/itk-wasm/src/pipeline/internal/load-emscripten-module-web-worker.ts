@@ -85,7 +85,7 @@ async function loadEmscriptenModuleWebWorker(
       }
 
       const wasmBinary = decompressedArray.buffer
-      const modulePath = `${modulePrefix}.js`
+      const modulePath = `${modulePrefix}.threads.js`
       const result = await import(
         /* webpackIgnore: true */ /* @vite-ignore */ modulePath
       )
