@@ -125,15 +125,13 @@ private:
     using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
 
     if (passThrough ||
-        imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum &&
-          imageType.pixelType == MapPixelType<PixelType>::JSONPixelEnum)
-    {
-      if (passThrough || imageType.pixelType == JSONPixelTypesEnum::VariableLengthVector ||
+        (imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum &&
+         imageType.pixelType == MapPixelType<PixelType>::JSONPixelEnum &&
+         (imageType.pixelType == JSONPixelTypesEnum::VariableLengthVector ||
           imageType.pixelType == JSONPixelTypesEnum::VariableSizeMatrix ||
-          imageType.components == ConvertPixelTraits::GetNumberOfComponents())
-      {
-        return SpecializedImagePipelineFunctor<TPipelineFunctor, Dimension, PixelType>()(pipeline);
-      }
+          imageType.components == ConvertPixelTraits::GetNumberOfComponents())))
+    {
+      return SpecializedImagePipelineFunctor<TPipelineFunctor, Dimension, PixelType>()(pipeline);
     }
 
     if constexpr (sizeof...(TPixelsRest) > 0)
