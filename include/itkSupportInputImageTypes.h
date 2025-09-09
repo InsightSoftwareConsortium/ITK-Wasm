@@ -97,18 +97,13 @@ public:
 
     const auto iwpArgc = pipeline.get_argc();
     const auto iwpArgv = pipeline.get_argv();
-    bool       passThrough = false;
     for (int ii = 0; ii < iwpArgc; ++ii)
     {
       const std::string arg(iwpArgv[ii]);
       if (arg == "-h" || arg == "--help" || arg == "--interface-json" || arg == "--version")
       {
-        passThrough = true;
+        return IterateDimensions<VDimensions...>(pipeline, imageType, true);
       }
-    }
-    if (passThrough)
-    {
-      return IterateDimensions<VDimensions...>(pipeline, imageType, passThrough);
     }
 
     auto tempOption = pipeline.add_option(inputImageOptionName, imageType, "Read image type.");
@@ -130,15 +125,13 @@ private:
     using ConvertPixelTraits = DefaultConvertPixelTraits<PixelType>;
 
     if (passThrough ||
-        imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum &&
-          imageType.pixelType == MapPixelType<PixelType>::JSONPixelEnum)
-    {
-      if (passThrough || imageType.pixelType == JSONPixelTypesEnum::VariableLengthVector ||
+        (imageType.componentType == MapComponentType<typename ConvertPixelTraits::ComponentType>::JSONComponentEnum &&
+         imageType.pixelType == MapPixelType<PixelType>::JSONPixelEnum &&
+         (imageType.pixelType == JSONPixelTypesEnum::VariableLengthVector ||
           imageType.pixelType == JSONPixelTypesEnum::VariableSizeMatrix ||
-          imageType.components == ConvertPixelTraits::GetNumberOfComponents())
-      {
-        return SpecializedImagePipelineFunctor<TPipelineFunctor, Dimension, PixelType>()(pipeline);
-      }
+          imageType.components == ConvertPixelTraits::GetNumberOfComponents())))
+    {
+      return SpecializedImagePipelineFunctor<TPipelineFunctor, Dimension, PixelType>()(pipeline);
     }
 
     if constexpr (sizeof...(TPixelsRest) > 0)
