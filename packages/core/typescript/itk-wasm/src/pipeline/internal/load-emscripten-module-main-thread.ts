@@ -84,7 +84,7 @@ async function loadEmscriptenModuleMainThread(
       }
 
       const wasmBinary = decompressedArray.buffer
-      const fullModulePath = `${modulePrefix}.js`
+      const fullModulePath = `${modulePrefix}.threads.js`
       const result = await import(
         /* webpackIgnore: true */ /* @vite-ignore */ fullModulePath
       )

@@ -129,6 +129,35 @@ function typescriptBindings(
       path.join(distPipelinesDir, `${path.basename(prefix)}.js`)
     )
 
+    // Check for and copy threaded WASM files if present
+    const wasmBinaryNameWithoutFirstDir = wasmBinaryName
+      .split(path.sep)
+      .slice(1)
+      .join(path.sep)
+    const threadsWasmPath = path.join(
+      'emscripten-threads-build',
+      wasmBinaryNameWithoutFirstDir
+    )
+    const threadsThreadsWasmPath =
+      threadsWasmPath.substring(0, threadsWasmPath.length - 5) +
+      '.threads.wasm.zst'
+    const jsThreadsWasmPath =
+      threadsWasmPath.substring(0, threadsWasmPath.length - 5) + '.js'
+    if (fs.existsSync(threadsThreadsWasmPath)) {
+      fs.copyFileSync(
+        threadsThreadsWasmPath,
+        path.join(distPipelinesDir, path.basename(threadsThreadsWasmPath))
+      )
+      const jsThreadsWasmBasename = path.basename(jsThreadsWasmPath)
+      const jsThreadsWasm =
+        jsThreadsWasmBasename.substring(0, jsThreadsWasmBasename.length - 3) +
+        '.threads.js'
+      fs.copyFileSync(
+        jsThreadsWasmPath,
+        path.join(distPipelinesDir, jsThreadsWasm)
+      )
+    }
+
     const { interfaceJson, parsedPath } = wasmBinaryInterfaceJson(
       outputDir,
       buildDir,
