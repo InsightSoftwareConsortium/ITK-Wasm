@@ -5,8 +5,8 @@
   "description": "An itk-wasm pipeline example for inputs/outputs",
   "type": "module",
   "itk-wasm": {
-    "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
-    "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
+    "emscripten-docker-image": "docker.io/itkwasm/emscripten:latest",
+    "wasi-docker-image": "docker.io/itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/inputs-outputs-example",
     "python-package-name": "itkwasm-inputs-outputs-example",
     "package-description": "An example that has non-trivial inputs and outputs.",
@@ -38,7 +38,7 @@
     "test:wasi": "itk-wasm -i itkwasm/wasi:latest -b wasi-build run inputs-outputs.wasi.wasm -- -- cthead1.png smoothed.png",
     "test:wasi:help": "itk-wasm -i itkwasm/wasi:latest -b wasi-build run inputs-outputs.wasi.wasm -- -- --help"
   },
-  "author": "Matt McCormick <matt@mmmccormick.com>",
+  "author": "Matt McCormick <matt@fideus.io>",
   "license": "Apache-2.0",
   "devDependencies": {
     "@itk-wasm/image-io": "workspace:^",
