@@ -36,7 +36,7 @@
   "devDependencies": {
     "@playwright/test": "^1.53.0",
     "@types/node": "^22.13.13",
-    "vite": "^6.3.5",
+    "vite": "^6.3.6",
     "vite-plugin-static-copy": "^3.1.2"
   }
 }
