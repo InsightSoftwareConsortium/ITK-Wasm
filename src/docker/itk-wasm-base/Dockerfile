@@ -1,6 +1,6 @@
 ARG BASE_IMAGE=docker.io/dockcross/web-wasm
 ARG HOST_ARCH=amd64
-FROM $BASE_IMAGE:20250123-74d1a0b-$HOST_ARCH
+FROM $BASE_IMAGE:20251001-98e6c48-$HOST_ARCH
 ARG BASE_IMAGE
 
 LABEL maintainer="Matt McCormick matt@fideus.io"
