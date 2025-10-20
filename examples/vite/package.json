@@ -34,7 +34,7 @@
     "@niivue/niivue": "^0.57.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.53.0",
+    "@playwright/test": "^1.56.1",
     "@types/node": "^22.13.13",
     "vite": "^6.3.6",
     "vite-plugin-static-copy": "^3.1.2"
