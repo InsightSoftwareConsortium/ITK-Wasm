@@ -20,6 +20,60 @@
 namespace itk
 {
 
+namespace {
+  // Sanitize string for JSON: replace invalid UTF-8 and control characters with U+FFFD
+  // See: https://github.com/nlohmann/json/pull/1314
+  std::string sanitizeForJSON(const std::string& input) {
+    std::string output;
+    output.reserve(input.size());
+
+    for (size_t i = 0; i < input.size(); ++i) {
+      const unsigned char c = static_cast<unsigned char>(input[i]);
+
+      // Control characters (except tab, newline, CR) and DEL break JSON
+      if ((c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) || c == 0x7F) {
+        output.append("\xEF\xBF\xBD");
+        continue;
+      }
+      else if (c < 0x80) {
+        output.push_back(c);
+      }
+      else {
+        size_t bytes_needed = 0;
+        if ((c & 0xE0) == 0xC0) bytes_needed = 1;
+        else if ((c & 0xF0) == 0xE0) bytes_needed = 2;
+        else if ((c & 0xF8) == 0xF0) bytes_needed = 3;
+        else {
+          // Invalid UTF-8 start byte - replace with U+FFFD (UTF-8: 0xEF 0xBF 0xBD)
+          output.append("\xEF\xBF\xBD");
+          continue;
+        }
+
+        bool valid = (i + bytes_needed < input.size());
+        for (size_t j = 1; j <= bytes_needed && valid; ++j) {
+          const unsigned char cont = static_cast<unsigned char>(input[i + j]);
+          if ((cont & 0xC0) != 0x80) {
+            valid = false;
+          }
+        }
+
+        if (valid) {
+          for (size_t j = 0; j <= bytes_needed; ++j) {
+            output.push_back(input[i + j]);
+          }
+          i += bytes_needed;
+        }
+        else {
+          // Invalid UTF-8 sequence - replace with U+FFFD
+          output.append("\xEF\xBF\xBD");
+        }
+      }
+    }
+
+    return output;
+  }
+}
+
 void
 metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSON & metaDataJSON)
 {
@@ -77,7 +131,7 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     const auto stringValue = dynamic_cast<MetaDataStringType *>(entry.GetPointer());
     if (stringValue)
     {
-      const std::string value = stringValue->GetMetaDataObjectValue();
+      const std::string value = sanitizeForJSON(stringValue->GetMetaDataObjectValue());
       metaDataJSON.push_back({ key, value });
       ++itr;
       continue;
@@ -95,8 +149,12 @@ metaDataDictionaryToJSON(const itk::MetaDataDictionary & dictionary, MetadataJSO
     const auto stringVectorValue = dynamic_cast<MetaDataVectorStringType *>(entry.GetPointer());
     if (stringVectorValue)
     {
-      const std::vector<std::string> value = stringVectorValue->GetMetaDataObjectValue();
-      const glz::json_t::array_t     valueString(value.begin(), value.end());
+      const std::vector<std::string> values = stringVectorValue->GetMetaDataObjectValue();
+      glz::json_t::array_t valueString;
+      valueString.reserve(values.size());
+      for (const auto& str : values) {
+        valueString.push_back(sanitizeForJSON(str));
+      }
       metaDataJSON.push_back({ key, valueString });
       ++itr;
       continue;
