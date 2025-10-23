@@ -29,7 +29,7 @@ jobs:
         timeout_minutes: 10
         command: ./src/docker/pull.sh --no-debug
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: '22'
 
@@ -76,7 +76,7 @@ jobs:
       with:
         run_install: true
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: '22'
 
@@ -111,7 +111,7 @@ jobs:
         large-packages: false
         tool-cache: true
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: '22'
 
@@ -152,7 +152,7 @@ jobs:
         timeout_minutes: 10
         command: ./src/docker/pull.sh --no-debug
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: '22'
 
@@ -211,7 +211,7 @@ jobs:
       with:
         run_install: true
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: '22'
 
@@ -257,7 +257,7 @@ jobs:
       with:
         run_install: true
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: '22'
 
@@ -288,7 +288,7 @@ jobs:
         timeout_minutes: 10
         command: ./src/docker/pull.sh --no-debug
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version: '22'
 
