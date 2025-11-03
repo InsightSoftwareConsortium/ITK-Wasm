@@ -7,6 +7,9 @@
   "itk-wasm": {
     "test-data-hash": "bafybeibqq72bvmnjodjrsmbfk2nwj7sqxh5wazxegmfjdhlww4rwj3ul6e",
     "test-data-urls": [
+      "https://itk.mypinata.cloud/ipfs/bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa/data.tar.gz",
+      "https://gateway.lighthouse.storage/ipfs/bafybeihcaibp7l6cakgm6hwskyfcfal52udzh6zbdz75j23zmyxe772to4",
+      "https://bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa.ipfs.w3s.link/data.tar.gz",
       "https://bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa.ipfs.w3s.link/ipfs/bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa/data.tar.gz"
     ],
     "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
@@ -28,7 +31,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafybeibqq72bvmnjodjrsmbfk2nwj7sqxh5wazxegmfjdhlww4rwj3ul6e https://bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa.ipfs.w3s.link/ipfs/bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafybeibqq72bvmnjodjrsmbfk2nwj7sqxh5wazxegmfjdhlww4rwj3ul6e https://itk.mypinata.cloud/ipfs/bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa/data.tar.gz https://gateway.lighthouse.storage/ipfs/bafybeihcaibp7l6cakgm6hwskyfcfal52udzh6zbdz75j23zmyxe772to4 https://bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa.ipfs.w3s.link/data.tar.gz https://bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa.ipfs.w3s.link/ipfs/bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
