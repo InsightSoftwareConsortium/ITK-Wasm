@@ -9,6 +9,8 @@
     "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
     "test-data-hash": "bafybeifwrjzye5jvpsrqd5jsjvo5oyly7yfj3f7csqclpcehrhhlj4r2qm",
     "test-data-urls": [
+      "https://itk.mypinata.cloud/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz",
+      "https://bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by.ipfs.w3s.link/data.tar.gz",
       "https://bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by.ipfs.w3s.link/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz"
     ],
     "typescript-package-name": "@itk-wasm/mesh-filters",
