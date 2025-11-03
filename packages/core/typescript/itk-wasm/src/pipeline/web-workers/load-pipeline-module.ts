@@ -3,9 +3,17 @@ import PipelineEmscriptenModule from '../pipeline-emscripten-module.js'
 import RunPipelineOptions from '../run-pipeline-options.js'
 
 // To cache loaded pipeline modules wrapped in a Promise
-const pipelineToModule: Map<string, Promise<PipelineEmscriptenModule>> = new Map()
+const pipelineToModule: Map<
+string,
+Promise<PipelineEmscriptenModule>
+> = new Map()
 
-async function loadPipelineModule (pipelinePath: string | object, baseUrl: string, queryParams?: RunPipelineOptions['pipelineQueryParams']): Promise<PipelineEmscriptenModule> {
+async function loadPipelineModule (
+  pipelinePath: string | object,
+  baseUrl: string,
+  queryParams?: RunPipelineOptions['pipelineQueryParams'],
+  disableThreads?: boolean
+): Promise<PipelineEmscriptenModule> {
   let moduleRelativePathOrURL: string | URL = pipelinePath as string
   let pipeline = pipelinePath as string
   let pipelineModule = null
@@ -14,10 +22,22 @@ async function loadPipelineModule (pipelinePath: string | object, baseUrl: strin
     pipeline = moduleRelativePathOrURL.href
   }
   if (pipelineToModule.has(pipeline)) {
-    pipelineModule = await pipelineToModule.get(pipeline) as PipelineEmscriptenModule
+    pipelineModule = (await pipelineToModule.get(
+      pipeline
+    )) as PipelineEmscriptenModule
   } else {
-    pipelineToModule.set(pipeline, loadEmscriptenModule(moduleRelativePathOrURL, baseUrl, queryParams) as Promise<PipelineEmscriptenModule>)
-    pipelineModule = await pipelineToModule.get(pipeline) as PipelineEmscriptenModule
+    pipelineToModule.set(
+      pipeline,
+      loadEmscriptenModule(
+        moduleRelativePathOrURL,
+        baseUrl,
+        queryParams,
+        disableThreads
+      ) as Promise<PipelineEmscriptenModule>
+    )
+    pipelineModule = (await pipelineToModule.get(
+      pipeline
+    )) as PipelineEmscriptenModule
   }
   return pipelineModule
 }

@@ -25,6 +25,13 @@
 #include "itkMacro.h"
 #include "itkImage.h"
 #include "itkVectorImage.h"
+#include "itkConfigure.h"
+#if defined(ITK_USE_PTHREADS) || defined(ITK_USE_WIN32_THREADS)
+#define ITK_WASM_PIPELINE_USE_THREADS 1
+#endif
+#ifdef ITK_WASM_PIPELINE_USE_THREADS
+#include "itkMultiThreaderBase.h"
+#endif
 
 #include "glaze/glaze.hpp"
 
@@ -165,6 +172,16 @@ public:
   }
 
   int
+  get_threads() const
+  {
+#ifdef ITK_WASM_PIPELINE_USE_THREADS
+    return m_Threads;
+#else
+    return 1;
+#endif
+  }
+
+  int
   get_argc() const
   {
     return m_argc;
@@ -198,6 +215,9 @@ private:
   int         m_argc;
   char **     m_argv;
   std::string m_Version;
+#ifdef ITK_WASM_PIPELINE_USE_THREADS
+  int         m_Threads;
+#endif
 };
 
 
