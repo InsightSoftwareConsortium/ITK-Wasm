@@ -7,6 +7,7 @@
   "itk-wasm": {
     "test-data-hash": "bafkreiey5fjpunmy6lkmfa5a4mc4ghyfxogfuwcixm7jdtf65pjxmwhaim",
     "test-data-urls": [
+      "https://itk.mypinata.cloud/ipfs/bafybeibc5xkdxpu2vwpcmbmu34jfdnr4grnpcrhnnjoeq546zovvfeuixu/data.tar.gz",
       "https://bafybeibc5xkdxpu2vwpcmbmu34jfdnr4grnpcrhnnjoeq546zovvfeuixu.ipfs.w3s.link/ipfs/bafybeibc5xkdxpu2vwpcmbmu34jfdnr4grnpcrhnnjoeq546zovvfeuixu/data.tar.gz"
     ],
     "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
