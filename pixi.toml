@@ -1,4 +1,4 @@
-[project]
+[workspace]
 authors = ["Matt McCormick <matt@mmmccormick.com>"]
 channels = ["conda-forge"]
 description = "ITK-Wasm native build and test configuration."
@@ -36,7 +36,7 @@ depends-on = ["pnpm-install",
   "build-native-transform"]
 
 [tasks.test]
-cmd = "pnpm run test --filter !create-itk-wasm"
+cmd = "pnpm run --filter !create-itk-wasm test"
 description = "Test ITK-Wasm"
 depends-on = ["test-itk-wasm",
   "test-native-compare-images",
