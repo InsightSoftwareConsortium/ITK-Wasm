@@ -35,7 +35,7 @@
   "devDependencies": {
     "@babel/core": "^7.27.3",
     "@babel/preset-env": "^7.27.2",
-    "@playwright/test": "^1.53.0",
+    "@playwright/test": "^1.56.1",
     "@types/node": "^22.13.13",
     "babel-loader": "^10.0.0",
     "copy-webpack-plugin": "^13.0.0",
