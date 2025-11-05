@@ -184,16 +184,18 @@ public:
 
     auto composeFilter = ComposeFilterType::New();
 
+    auto extractFilter = ExtractFilterType::New();
+    extractFilter->SetInput(inputImage.Get());
+
+    using GaussianFilterType = itk::DiscreteGaussianImageFilter<ScalarImageType, ScalarImageType>;
+    auto gaussianFilter = GaussianFilterType::New();
+
     for (unsigned int component = 0; component < numberOfComponents; ++component)
     {
       // Extract component
-      auto extractFilter = ExtractFilterType::New();
-      extractFilter->SetInput(inputImage.Get());
       extractFilter->SetIndex(component);
 
       // Smooth component
-      using GaussianFilterType = itk::DiscreteGaussianImageFilter<ScalarImageType, ScalarImageType>;
-      auto gaussianFilter = GaussianFilterType::New();
       gaussianFilter->SetInput(extractFilter->GetOutput());
       typename GaussianFilterType::ArrayType sigmaArray;
       for (unsigned int i = 0; i < Dimension; ++i)
@@ -216,6 +218,7 @@ public:
       shrinkFilter->SetOutputDirection(inputImage.Get()->GetDirection());
       shrinkFilter->SetSize(outputSize);
       shrinkFilter->SetOutputStartIndex(inputImage.Get()->GetLargestPossibleRegion().GetIndex());
+      shrinkFilter->UpdateLargestPossibleRegion();
 
       // Add to compose filter
       composeFilter->SetInput(component, shrinkFilter->GetOutput());
