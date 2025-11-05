@@ -36,7 +36,7 @@
     "@changesets/cli": "^2.27.1",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@playwright/test": "^1.54.1"
+    "@playwright/test": "^1.56.1"
   },
   "pnpm": {
     "overrides": {
@@ -48,7 +48,11 @@
       "shx": "^0.4.0",
       "typescript": "^5.8.3",
       "vite": "^6.2.3"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "protobufjs"
+    ]
   },
   "commitlint": {
     "extends": [

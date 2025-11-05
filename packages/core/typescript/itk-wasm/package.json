@@ -69,7 +69,7 @@
   },
   "homepage": "https://wasm.itk.org/",
   "devDependencies": {
-    "@playwright/test": "^1.53.0",
+    "@playwright/test": "^1.56.1",
     "@types/node": "^22.13.13",
     "ava": "^5.3.1",
     "esbuild": "^0.25.0",
