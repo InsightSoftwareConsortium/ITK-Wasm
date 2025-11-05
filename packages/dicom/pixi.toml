@@ -1,5 +1,5 @@
-[project]
-authors = ["Matt McCormick <matt@mmmccormick.com>"]
+[workspace]
+authors = ["Matt McCormick <matt@fideus.io>"]
 channels = ["conda-forge"]
 description = "Read and write files and images related to DICOM file format."
 name = "dicom"

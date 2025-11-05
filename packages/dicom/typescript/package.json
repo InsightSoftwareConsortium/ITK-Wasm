@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/dicom",
-  "version": "7.6.2",
+  "version": "7.6.3",
   "description": "Read files and images related to DICOM file format.",
   "type": "module",
   "module": "./dist/index.js",
