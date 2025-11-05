@@ -21,7 +21,7 @@
 #include "itkOutputImage.h"
 #include "itkSupportInputImageTypes.h"
 
-#include "itkDiscreteGaussianImageFilter.h"
+#include "itkSmoothingRecursiveGaussianImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkResampleImageFilter.h"
 
@@ -58,16 +58,15 @@ public:
 
     auto sigmaValues = downsampleSigma(shrinkFactors);
 
-    using GaussianFilterType = itk::DiscreteGaussianImageFilter<ImageType, ImageType>;
+    using GaussianFilterType = itk::SmoothingRecursiveGaussianImageFilter<ImageType, ImageType>;
     auto gaussianFilter = GaussianFilterType::New();
     gaussianFilter->SetInput(inputImage.Get());
-    typename GaussianFilterType::ArrayType sigmaArray;
+    typename GaussianFilterType::SigmaArrayType sigmaArray;
     for (unsigned int i = 0; i < ImageDimension; ++i)
     {
       sigmaArray[i] = sigmaValues[i];
     }
     gaussianFilter->SetSigmaArray(sigmaArray);
-    gaussianFilter->SetUseImageSpacingOff();
 
     const auto inputOrigin = inputImage.Get()->GetOrigin();
     const auto inputSpacing = inputImage.Get()->GetSpacing();
@@ -123,5 +122,11 @@ main(int argc, char * argv[])
                                            uint64_t,
                                            int64_t,
                                            float,
-                                           double>::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
+                                           double,
+                                           itk::VariableLengthVector<uint8_t>,
+                                           itk::VariableLengthVector<uint16_t>,
+                                           itk::VariableLengthVector<int16_t>,
+                                           itk::VariableLengthVector<float>,
+                                           itk::VariableLengthVector<double>
+                                           >::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
 }
