@@ -1,5 +1,5 @@
-[project]
-authors = ["Matt McCormick <matt@mmmccormick.com>"]
+[workspace]
+authors = ["Matt McCormick <matt@fideus.io>"]
 channels = ["conda-forge"]
 description = "Pipelines for downsampling images."
 name = "downsample"
