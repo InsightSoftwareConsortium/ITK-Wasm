@@ -1,16 +1,15 @@
 {
   "name": "@itk-wasm/downsample-build",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "private": true,
   "description": "Pipelines for downsampling images.",
   "type": "module",
   "itk-wasm": {
     "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
     "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
-    "test-data-hash": "bafkreic7utwwa32sc7ekhouzdlnla4kffytphcwc7qwam5ndhixwjulydq",
+    "test-data-hash": "bafkreigtrr3oeqaunbyhrpuvvhc5hfmpbddc4u52jvonsvr2m2xe5ni3jq",
     "test-data-urls": [
-      "https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.163/itkwasm-downsample-test-data.tar.gz https://w3s.link/ipfs/bafybeifwebok64osjl2i3zc6rkn3izgon333wsjotqzqlxorkkvrbldjcy/data.tar.gz",
-      "https://w3s.link/ipfs/bafybeifwebok64osjl2i3zc6rkn3izgon333wsjotqzqlxorkkvrbldjcy/data.tar.gz"
+      "https://itk.mypinata.cloud/ipfs/bafkreigtrr3oeqaunbyhrpuvvhc5hfmpbddc4u52jvonsvr2m2xe5ni3jq"
     ],
     "typescript-package-name": "@itk-wasm/downsample",
     "python-package-name": "itkwasm-downsample",
@@ -29,7 +28,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafkreic7utwwa32sc7ekhouzdlnla4kffytphcwc7qwam5ndhixwjulydq https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.163/itkwasm-downsample-test-data.tar.gz https://w3s.link/ipfs/bafybeifwebok64osjl2i3zc6rkn3izgon333wsjotqzqlxorkkvrbldjcy/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreigtrr3oeqaunbyhrpuvvhc5hfmpbddc4u52jvonsvr2m2xe5ni3jq https://itk.mypinata.cloud/ipfs/bafkreigtrr3oeqaunbyhrpuvvhc5hfmpbddc4u52jvonsvr2m2xe5ni3jq",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
