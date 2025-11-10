@@ -147,6 +147,7 @@ ITK_GCC_PRAGMA_DIAG(ignored "-Wattributes")
 
 extern template class WebAssemblyInterface_EXPORT_EXPLICIT WasmTransformIOTemplate<double>;
 extern template class WebAssemblyInterface_EXPORT_EXPLICIT WasmTransformIOTemplate<float>;
+using WasmTransformIO = WasmTransformIOTemplate<double>;
 
 ITK_GCC_PRAGMA_DIAG_POP()
 
