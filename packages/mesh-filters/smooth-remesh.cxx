@@ -35,7 +35,8 @@
 #include <geogram/basic/command_line.h>
 
 template <typename TMesh>
-int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
+int
+repairMesh(itk::wasm::Pipeline & pipeline, const TMesh * inputMesh)
 {
   using MeshType = TMesh;
   constexpr unsigned int Dimension = MeshType::PointDimension;
@@ -44,13 +45,18 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   pipeline.get_option("input-mesh")->required()->type_name("INPUT_MESH");
 
   double numberPointsPercent = 75.0;
-  pipeline.add_option("--number-points", numberPointsPercent, "Number of points as a percent of the bounding box diagonal. Output may have slightly more points.");
+  pipeline.add_option(
+    "--number-points",
+    numberPointsPercent,
+    "Number of points as a percent of the bounding box diagonal. Output may have slightly more points.");
 
   double triangleShapeAdaptation = 1.0;
-  pipeline.add_option("--triangle-shape-adaptation", triangleShapeAdaptation, "Triangle shape adaptation factor. Use 0.0 to disable.");
+  pipeline.add_option(
+    "--triangle-shape-adaptation", triangleShapeAdaptation, "Triangle shape adaptation factor. Use 0.0 to disable.");
 
   double triangleSizeAdaptation = 0.0;
-  pipeline.add_option("--triangle-size-adaptation", triangleSizeAdaptation, "Triangle size adaptation factor. Use 0.0 to disable.");
+  pipeline.add_option(
+    "--triangle-size-adaptation", triangleSizeAdaptation, "Triangle size adaptation factor. Use 0.0 to disable.");
 
   uint32_t normalIterations = 3;
   pipeline.add_option("--normal-iterations", normalIterations, "Number of normal smoothing iterations.");
@@ -65,7 +71,8 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   pipeline.add_option("--newton-m", newtonM, "Number of Newton evaluations per step for Hessian approximation.");
 
   uint64_t lfsSamples = 10000;
-  pipeline.add_option("--lfs-samples", lfsSamples, "Number of samples for size adaptation if triangle size adaptation is not 0.0.");
+  pipeline.add_option(
+    "--lfs-samples", lfsSamples, "Number of samples for size adaptation if triangle size adaptation is not 0.0.");
 
   itk::wasm::OutputMesh<MeshType> outputMesh;
   pipeline.add_option("output-mesh", outputMesh, "The output repaired mesh.")->type_name("OUTPUT_MESH");
@@ -74,7 +81,8 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
 
   // GEO::initialize(GEO::GEOGRAM_INSTALL_ALL);
 
-  GEO::Logger::initialize(); GEO::Logger::instance()->set_quiet(true);
+  GEO::Logger::initialize();
+  GEO::Logger::instance()->set_quiet(true);
   GEO::CmdLine::initialize();
   const auto flags = GEO::GEOGRAM_INSTALL_ALL;
   GEO::Process::initialize(flags);
@@ -97,29 +105,29 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
 
   uint64_t numberPoints = static_cast<uint64_t>(std::ceil(numberPointsPercent * 0.01 * geoMesh.vertices.nb()));
 
-  if(triangleShapeAdaptation != 0.0)
+  if (triangleShapeAdaptation != 0.0)
   {
-   triangleShapeAdaptation *= 0.02;
-   GEO::compute_normals(geoMesh);
-   if(normalIterations != 0)
-   {
-    GEO::simple_Laplacian_smooth(geoMesh, normalIterations, true);
-   }
-   GEO::set_anisotropy(geoMesh, triangleShapeAdaptation);
+    triangleShapeAdaptation *= 0.02;
+    GEO::compute_normals(geoMesh);
+    if (normalIterations != 0)
+    {
+      GEO::simple_Laplacian_smooth(geoMesh, normalIterations, true);
+    }
+    GEO::set_anisotropy(geoMesh, triangleShapeAdaptation);
   }
   else
   {
     geoMesh.vertices.set_dimension(3);
   }
 
-  if(triangleSizeAdaptation != 0.0)
+  if (triangleSizeAdaptation != 0.0)
   {
     GEO::compute_sizing_field(geoMesh, triangleSizeAdaptation, lfsSamples);
   }
   else
   {
-    GEO::AttributesManager& attributes = geoMesh.vertices.attributes();
-    if(attributes.is_defined("weight"))
+    GEO::AttributesManager & attributes = geoMesh.vertices.attributes();
+    if (attributes.is_defined("weight"))
     {
       attributes.delete_attribute_store("weight");
     }
@@ -129,9 +137,8 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
 
   GEO::remesh_smooth(geoMesh, remesh, numberPoints, 0, lloydIterations, newtonIterations, newtonM);
 
-  GEO::MeshElementsFlags what = GEO::MeshElementsFlags(
-      GEO::MESH_VERTICES | GEO::MESH_EDGES | GEO::MESH_FACETS | GEO::MESH_CELLS
-  );
+  GEO::MeshElementsFlags what =
+    GEO::MeshElementsFlags(GEO::MESH_VERTICES | GEO::MESH_EDGES | GEO::MESH_FACETS | GEO::MESH_CELLS);
   geoMesh.clear();
   geoMesh.copy(remesh, true, what);
 
@@ -147,7 +154,8 @@ template <typename TMesh>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline &pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using MeshType = TMesh;
 
@@ -161,18 +169,12 @@ public:
   }
 };
 
-int main(int argc, char *argv[])
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("smooth-remesh", "Smooth and remesh a mesh to improve quality.", argc, argv);
 
-  return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
-                                          uint8_t,
-                                          int8_t,
-                                          uint16_t,
-                                          int16_t,
-                                          uint32_t,
-                                          int32_t,
-                                          float,
-                                          double>::Dimensions<
-      3U>("input-mesh", pipeline);
+  return itk::wasm::
+    SupportInputMeshTypes<PipelineFunctor, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, float, double>::
+      Dimensions<3U>("input-mesh", pipeline);
 }

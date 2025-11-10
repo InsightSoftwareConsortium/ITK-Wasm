@@ -25,7 +25,8 @@
 int
 main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("composite-transform-test", "A test for creating and writing composite transforms", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "composite-transform-test", "A test for creating and writing composite transforms", argc, argv);
 
   using ParametersValueType = float;
   constexpr unsigned int Dimension = 2;
@@ -71,8 +72,10 @@ main(int argc, char * argv[])
 
   // Set non-trivial matrix parameters
   AffineTransformType::MatrixType matrix;
-  matrix(0, 0) = 1.2; matrix(0, 1) = 0.3;
-  matrix(1, 0) = 0.2; matrix(1, 1) = 1.1;
+  matrix(0, 0) = 1.2;
+  matrix(0, 1) = 0.3;
+  matrix(1, 0) = 0.2;
+  matrix(1, 1) = 1.1;
   affineTransform->SetMatrix(matrix);
 
   // Set center for affine transform (fixed parameters)

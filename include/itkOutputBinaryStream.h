@@ -34,7 +34,7 @@ namespace wasm
  *
  * \ingroup WebAssemblyInterface
  */
-class OutputBinaryStream: public OutputStreamBase
+class OutputBinaryStream : public OutputStreamBase
 {
 public:
   void

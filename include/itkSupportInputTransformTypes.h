@@ -40,10 +40,12 @@ namespace wasm
 
 /** \class SupportInputTransformTypes
  *
- * \brief Instantiatiate a Pipeline functor over multiple transform parameter types and dimensions and match to the input transform type.
+ * \brief Instantiatiate a Pipeline functor over multiple transform parameter types and dimensions and match to the
+input transform type.
  *
  *  Instantiate the PipelineFunctor (function object) over multiple transform types.
- *  If the input transform matches these parameter types and dimensions, use the compile-time optimized pipeline for that transform type.
+ *  If the input transform matches these parameter types and dimensions, use the compile-time optimized pipeline for
+that transform type.
  *  Otherwise, exit the pipeline with an error identifying the unsupported transform type.
  *
  * Example usage:
@@ -120,8 +122,7 @@ private:
   {
     using ParameterValueType = TParameterValues;
 
-    if (passThrough ||
-        transformType.parametersValueType == MapComponentType<ParameterValueType>::JSONFloatTypeEnum)
+    if (passThrough || transformType.parametersValueType == MapComponentType<ParameterValueType>::JSONFloatTypeEnum)
     {
       using TransformType = Transform<ParameterValueType, VDimension, VDimension>;
 

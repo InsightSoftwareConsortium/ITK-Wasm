@@ -178,7 +178,10 @@ meshToMeshJSON(const TMesh * mesh, const WasmMesh<TMesh> * wasmMesh, bool inMemo
 }
 
 template <typename TPixel, unsigned int VDimension>
-auto meshToMeshJSON(const QuadEdgeMesh<TPixel, VDimension> * mesh, const WasmMesh<QuadEdgeMesh<TPixel, VDimension>> * wasmMesh, bool inMemory) -> MeshJSON
+auto
+meshToMeshJSON(const QuadEdgeMesh<TPixel, VDimension> *           mesh,
+               const WasmMesh<QuadEdgeMesh<TPixel, VDimension>> * wasmMesh,
+               bool                                               inMemory) -> MeshJSON
 {
   using MeshType = QuadEdgeMesh<TPixel, VDimension>;
 
@@ -189,13 +192,15 @@ auto meshToMeshJSON(const QuadEdgeMesh<TPixel, VDimension> * mesh, const WasmMes
   meshJSON.meshType.pointComponentType = wasm::MapComponentType<typename MeshType::CoordRepType>::JSONFloatTypeEnum;
   using PointPixelType = typename MeshType::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
-  meshJSON.meshType.pointPixelComponentType = wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
+  meshJSON.meshType.pointPixelComponentType =
+    wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
   meshJSON.meshType.pointPixelType = wasm::MapPixelType<PointPixelType>::JSONPixelEnum;
   meshJSON.meshType.pointPixelComponents = ConvertPointPixelTraits::GetNumberOfComponents();
   meshJSON.meshType.cellComponentType = wasm::MapComponentType<typename MeshType::CellIdentifier>::JSONIntTypeEnum;
   using CellPixelType = typename MeshType::CellPixelType;
   using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
-  meshJSON.meshType.cellPixelComponentType = wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
+  meshJSON.meshType.cellPixelComponentType =
+    wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum;
   meshJSON.meshType.cellPixelType = wasm::MapPixelType<CellPixelType>::JSONPixelEnum;
   meshJSON.meshType.cellPixelComponents = ConvertCellPixelTraits::GetNumberOfComponents();
 
@@ -222,7 +227,7 @@ auto meshToMeshJSON(const QuadEdgeMesh<TPixel, VDimension> * mesh, const WasmMes
   {
     meshJSON.cellBufferSize = wasmMesh->GetCellBuffer()->Size();
 
-    const auto pointsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetPointsBuffer().at(0)) );
+    const auto         pointsAddress = reinterpret_cast<size_t>(&(wasmMesh->GetPointsBuffer().at(0)));
     std::ostringstream pointsStream;
     pointsStream << "data:application/vnd.itk.address,0:";
     pointsStream << pointsAddress;
@@ -230,7 +235,7 @@ auto meshToMeshJSON(const QuadEdgeMesh<TPixel, VDimension> * mesh, const WasmMes
     size_t cellsAddress = 0;
     if (mesh->GetNumberOfCells() > 0)
     {
-      cellsAddress = reinterpret_cast< size_t >( &(wasmMesh->GetCellBuffer()->at(0)) );
+      cellsAddress = reinterpret_cast<size_t>(&(wasmMesh->GetCellBuffer()->at(0)));
     }
     std::ostringstream cellsStream;
     cellsStream << "data:application/vnd.itk.address,0:";
@@ -240,7 +245,7 @@ auto meshToMeshJSON(const QuadEdgeMesh<TPixel, VDimension> * mesh, const WasmMes
     size_t pointDataAddress = 0;
     if (mesh->GetPointData() != nullptr && mesh->GetPointData()->Size() > 0)
     {
-      pointDataAddress = reinterpret_cast< size_t >( &(wasmMesh->GetPointDataBuffer().at(0)) );
+      pointDataAddress = reinterpret_cast<size_t>(&(wasmMesh->GetPointDataBuffer().at(0)));
     }
     std::ostringstream pointDataStream;
     pointDataStream << "data:application/vnd.itk.address,0:";
@@ -250,10 +255,10 @@ auto meshToMeshJSON(const QuadEdgeMesh<TPixel, VDimension> * mesh, const WasmMes
     size_t cellDataAddress = 0;
     if (mesh->GetCellData() != nullptr && mesh->GetCellData()->Size() > 0)
     {
-      cellDataAddress = reinterpret_cast< size_t >( &(wasmMesh->GetCellDataBuffer().at(0)) );
+      cellDataAddress = reinterpret_cast<size_t>(&(wasmMesh->GetCellDataBuffer().at(0)));
     }
     std::ostringstream cellDataStream;
-    cellDataStream <<  "data:application/vnd.itk.address,0:";
+    cellDataStream << "data:application/vnd.itk.address,0:";
     cellDataStream << cellDataAddress;
     meshJSON.cellData = cellDataStream.str();
   }

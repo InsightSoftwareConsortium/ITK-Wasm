@@ -17,7 +17,7 @@
  *=========================================================================*/
 
 #ifndef TRANSFORM_NAME
-#error "TRANSFORM_NAME must be defined"
+#  error "TRANSFORM_NAME must be defined"
 #endif
 
 #define VALUE(string) #string
@@ -58,17 +58,15 @@
 #include "itkVelocityFieldTransform.h"
 
 template <typename TTransform>
-int CreateTransformParameterization(
-  itk::wasm::Pipeline & pipeline)
+int
+CreateTransformParameterization(itk::wasm::Pipeline & pipeline)
 {
   using TransformType = TTransform;
   using ParametersValueType = typename TransformType::ParametersValueType;
 
   using OutputTransformType = itk::wasm::OutputTransform<TransformType>;
   OutputTransformType outputTransform;
-  pipeline.add_option("transform", outputTransform, "Output transform")
-    ->type_name("OUTPUT_TRANSFORM")
-    ->required();
+  pipeline.add_option("transform", outputTransform, "Output transform")->type_name("OUTPUT_TRANSFORM")->required();
 
   ITK_WASM_PARSE(pipeline);
 
@@ -137,81 +135,82 @@ int CreateTransformParameterization(
 }
 
 template <typename TParameterValues, unsigned int VDimension>
-int CreateTransformDimension(
-  itk::wasm::Pipeline & pipeline)
+int
+CreateTransformDimension(itk::wasm::Pipeline & pipeline)
 {
   using ParametersValueType = TParameterValues;
 
 #ifdef TRANSFORM_COMPOSITE
-      return CreateTransformParameterization<itk::CompositeTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::CompositeTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_IDENTITY)
-      return CreateTransformParameterization<itk::IdentityTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::IdentityTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_TRANSLATION)
-      return CreateTransformParameterization<itk::TranslationTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::TranslationTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_EULER2D)
-      return CreateTransformParameterization<itk::Euler2DTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::Euler2DTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_EULER3D)
-      return CreateTransformParameterization<itk::Euler3DTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::Euler3DTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_RIGID2D)
-      return CreateTransformParameterization<itk::Rigid2DTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::Rigid2DTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_RIGID3D)
-      return CreateTransformParameterization<itk::Rigid3DTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::Rigid3DTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_RIGID3D_PERSPECTIVE)
-      return CreateTransformParameterization<itk::Rigid3DPerspectiveTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::Rigid3DPerspectiveTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_VERSOR_RIGID3D)
-      return CreateTransformParameterization<itk::VersorRigid3DTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::VersorRigid3DTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_VERSOR)
-      return CreateTransformParameterization<itk::VersorTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::VersorTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_SCALE)
-      return CreateTransformParameterization<itk::ScaleTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::ScaleTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_SCALE_LOGARITHMIC)
-      return CreateTransformParameterization<itk::ScaleLogarithmicTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::ScaleLogarithmicTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_SCALE_SKEW_VERSOR3D)
-      return CreateTransformParameterization<itk::ScaleSkewVersor3DTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::ScaleSkewVersor3DTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_SIMILARITY2D)
-      return CreateTransformParameterization<itk::Similarity2DTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::Similarity2DTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_SIMILARITY3D)
-      return CreateTransformParameterization<itk::Similarity3DTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::Similarity3DTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_QUATERNION_RIGID)
-      return CreateTransformParameterization<itk::QuaternionRigidTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::QuaternionRigidTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_AFFINE)
-      return CreateTransformParameterization<itk::AffineTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::AffineTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_SCALABLE_AFFINE)
-      return CreateTransformParameterization<itk::ScalableAffineTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::ScalableAffineTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
-      return CreateTransformParameterization<itk::AzimuthElevationToCartesianTransform<ParametersValueType>>(pipeline);
+  return CreateTransformParameterization<itk::AzimuthElevationToCartesianTransform<ParametersValueType>>(pipeline);
 #elif defined(TRANSFORM_BSPLINE)
-      return CreateTransformParameterization<itk::BSplineTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::BSplineTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_BSPLINE_SMOOTHING_ON_UPDATE_DISPLACEMENT_FIELD)
-      return CreateTransformParameterization<
-        itk::BSplineSmoothingOnUpdateDisplacementFieldTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<
+    itk::BSplineSmoothingOnUpdateDisplacementFieldTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_CONSTANT_VELOCITY_FIELD)
-      return CreateTransformParameterization<itk::ConstantVelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::ConstantVelocityFieldTransform<ParametersValueType, VDimension>>(
+    pipeline);
 #elif defined(TRANSFORM_DISPLACEMENT_FIELD)
-      return CreateTransformParameterization<itk::DisplacementFieldTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::DisplacementFieldTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_GAUSSIAN_SMOOTHING_ON_UPDATE_DISPLACEMENT_FIELD)
-      return CreateTransformParameterization<
-        itk::GaussianSmoothingOnUpdateDisplacementFieldTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<
+    itk::GaussianSmoothingOnUpdateDisplacementFieldTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_GAUSSIAN_EXPONENTIAL_DIFFEOMORPHIC)
-      return CreateTransformParameterization<
-        itk::GaussianExponentialDiffeomorphicTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<
+    itk::GaussianExponentialDiffeomorphicTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_VELOCITY_FIELD)
-      return CreateTransformParameterization<itk::VelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::VelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
 #elif defined(TRANSFORM_TIME_VARYING_VELOCITY_FIELD)
-      return CreateTransformParameterization<itk::TimeVaryingVelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<itk::TimeVaryingVelocityFieldTransform<ParametersValueType, VDimension>>(
+    pipeline);
 #elif defined(TRANSFORM_GAUSSIAN_SMOOTHING_ON_UPDATE_TIME_VARYING_VELOCITY_FIELD)
-      return CreateTransformParameterization<
-        itk::GaussianSmoothingOnUpdateTimeVaryingVelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
+  return CreateTransformParameterization<
+    itk::GaussianSmoothingOnUpdateTimeVaryingVelocityFieldTransform<ParametersValueType, VDimension>>(pipeline);
 #else
-      std::cerr << "Unsupported transform parameterization: " << TO_LITERAL(TRANSFORM_NAME) << std::endl;
-      throw std::logic_error("Unsupported transform parameterization");
+  std::cerr << "Unsupported transform parameterization: " << TO_LITERAL(TRANSFORM_NAME) << std::endl;
+  throw std::logic_error("Unsupported transform parameterization");
 #endif
 }
 
 template <typename TParameterValues>
-int CreateTransformParameterValues(
-  itk::wasm::Pipeline & pipeline,
-  unsigned int dimension)
+int
+CreateTransformParameterValues(itk::wasm::Pipeline & pipeline, unsigned int dimension)
 {
   using ParametersValueType = TParameterValues;
 
@@ -221,13 +220,18 @@ int CreateTransformParameterValues(
     case 2:
       return CreateTransformDimension<ParametersValueType, 2>(pipeline);
     default:
-      std::cerr << "Transform " << TO_LITERAL(TRANSFORM_NAME) << " only supports 2D. Unsupported dimension: " << dimension << std::endl;
+      std::cerr << "Transform " << TO_LITERAL(TRANSFORM_NAME)
+                << " only supports 2D. Unsupported dimension: " << dimension << std::endl;
       throw std::logic_error("Unsupported dimension");
-#elif defined(TRANSFORM_EULER3D) || defined(TRANSFORM_RIGID3D) || defined(TRANSFORM_VERSOR_RIGID3D) || defined(TRANSFORM_VERSOR) || defined(TRANSFORM_SCALE_SKEW_VERSOR3D) || defined(TRANSFORM_SIMILARITY3D) || defined(TRANSFORM_QUATERNION_RIGID) || defined(TRANSFORM_RIGID3D_PERSPECTIVE) || defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
+#elif defined(TRANSFORM_EULER3D) || defined(TRANSFORM_RIGID3D) || defined(TRANSFORM_VERSOR_RIGID3D) ||      \
+  defined(TRANSFORM_VERSOR) || defined(TRANSFORM_SCALE_SKEW_VERSOR3D) || defined(TRANSFORM_SIMILARITY3D) || \
+  defined(TRANSFORM_QUATERNION_RIGID) || defined(TRANSFORM_RIGID3D_PERSPECTIVE) ||                          \
+  defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
     case 3:
       return CreateTransformDimension<ParametersValueType, 3>(pipeline);
     default:
-      std::cerr << "Transform " << TO_LITERAL(TRANSFORM_NAME) << " only supports 3D. Unsupported dimension: " << dimension << std::endl;
+      std::cerr << "Transform " << TO_LITERAL(TRANSFORM_NAME)
+                << " only supports 3D. Unsupported dimension: " << dimension << std::endl;
       throw std::logic_error("Unsupported dimension");
 #else
     // Multi-dimensional transforms (2D, 3D, 4D)
@@ -255,7 +259,10 @@ main(int argc, char * argv[])
 
 #if defined(TRANSFORM_EULER2D) || defined(TRANSFORM_RIGID2D) || defined(TRANSFORM_SIMILARITY2D)
   constexpr unsigned int dimension = 2;
-#elif defined(TRANSFORM_EULER) || defined(TRANSFORM_RIGID) || defined(TRANSFORM_VERSOR_RIGID) || defined(TRANSFORM_VERSOR) || defined(TRANSFORM_SCALE_SKEW_VERSOR) || defined(TRANSFORM_SIMILARITY) || defined(TRANSFORM_QUATERNION_RIGID) || defined(TRANSFORM_RIGID_PERSPECTIVE) || defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
+#elif defined(TRANSFORM_EULER) || defined(TRANSFORM_RIGID) || defined(TRANSFORM_VERSOR_RIGID) ||        \
+  defined(TRANSFORM_VERSOR) || defined(TRANSFORM_SCALE_SKEW_VERSOR) || defined(TRANSFORM_SIMILARITY) || \
+  defined(TRANSFORM_QUATERNION_RIGID) || defined(TRANSFORM_RIGID_PERSPECTIVE) ||                        \
+  defined(TRANSFORM_AZIMUTH_ELEVATION_TO_CARTESIAN)
   constexpr unsigned int dimension = 3;
 #else
   unsigned int dimension = 3;

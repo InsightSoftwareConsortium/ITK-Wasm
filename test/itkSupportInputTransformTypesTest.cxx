@@ -30,11 +30,14 @@ public:
   int
   operator()(itk::wasm::Pipeline & pipeline)
   {
-    using TransformType = itk::AffineTransform<typename TTransform::ParametersValueType, TTransform::InputSpaceDimension>;
+    using TransformType =
+      itk::AffineTransform<typename TTransform::ParametersValueType, TTransform::InputSpaceDimension>;
 
     using InputTransformType = itk::wasm::InputTransform<TransformType>;
     InputTransformType inputTransform;
-    pipeline.add_option("input-transform", inputTransform, "The input transform")->required()->type_name("INPUT_TRANSFORM");
+    pipeline.add_option("input-transform", inputTransform, "The input transform")
+      ->required()
+      ->type_name("INPUT_TRANSFORM");
 
     using OutputTransformType = itk::wasm::OutputTransform<TransformType>;
     OutputTransformType outputTransform;
@@ -58,5 +61,6 @@ itkSupportInputTransformTypesTest(int argc, char * argv[])
 
   itk::WasmTransformIOFactory::RegisterOneFactory();
 
-  return itk::wasm::SupportInputTransformTypes<PipelineFunctor, float, double>::Dimensions<2U, 3U>("input-transform", pipeline);
+  return itk::wasm::SupportInputTransformTypes<PipelineFunctor, float, double>::Dimensions<2U, 3U>("input-transform",
+                                                                                                   pipeline);
 }

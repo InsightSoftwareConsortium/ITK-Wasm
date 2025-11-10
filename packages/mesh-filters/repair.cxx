@@ -34,7 +34,8 @@
 #include <geogram/basic/command_line_args.h>
 
 template <typename TMesh>
-int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
+int
+repairMesh(itk::wasm::Pipeline & pipeline, const TMesh * inputMesh)
 {
   using MeshType = TMesh;
   constexpr unsigned int Dimension = MeshType::PointDimension;
@@ -45,19 +46,30 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   pipeline.get_option("input-mesh")->required()->type_name("INPUT_MESH");
 
   double pointMergeTolerance = 1e-6;
-  pipeline.add_option("--merge-tolerance", pointMergeTolerance, "Point merging tolerance as a percent of the bounding box diagonal.");
+  pipeline.add_option(
+    "--merge-tolerance", pointMergeTolerance, "Point merging tolerance as a percent of the bounding box diagonal.");
 
   double minimumComponentArea = 3.0;
-  pipeline.add_option("--minimum-component-area", minimumComponentArea, "Minimum component area as a percent of the total area. Components smaller than this are removed.");
+  pipeline.add_option(
+    "--minimum-component-area",
+    minimumComponentArea,
+    "Minimum component area as a percent of the total area. Components smaller than this are removed.");
 
   double maximumHoleArea = 1e-1;
-  pipeline.add_option("--maximum-hole-area", maximumHoleArea, "Maximum area of a hole as a percent of the total area. Holes smaller than this are filled.");
+  pipeline.add_option("--maximum-hole-area",
+                      maximumHoleArea,
+                      "Maximum area of a hole as a percent of the total area. Holes smaller than this are filled.");
 
   uint64_t maximumHoleEdges = 2000;
-  pipeline.add_option("--maximum-hole-edges", maximumHoleEdges, "Maximum number of edges in a hole. Holes with fewer edges than this are filled.");
+  pipeline.add_option("--maximum-hole-edges",
+                      maximumHoleEdges,
+                      "Maximum number of edges in a hole. Holes with fewer edges than this are filled.");
 
   double maximumDegree3VerticesDistance = 0.0;
-  pipeline.add_option("--maximum-degree3-distance", maximumDegree3VerticesDistance, "Maximum distance as a percent of the bounding box diagonal. Vertices with degree 3 that are closer than this are merged.");
+  pipeline.add_option("--maximum-degree3-distance",
+                      maximumDegree3VerticesDistance,
+                      "Maximum distance as a percent of the bounding box diagonal. Vertices with degree 3 that are "
+                      "closer than this are merged.");
 
   bool removeIntersectingTriangles = false;
   pipeline.add_flag("--remove-intersecting-triangles", removeIntersectingTriangles, "Remove intersecting triangles.");
@@ -93,27 +105,31 @@ int repairMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
 
   if (noTriangulate)
   {
-    GEO::mesh_repair(geoMesh, GEO::MeshRepairMode(GEO::MESH_REPAIR_COLOCATE | GEO::MESH_REPAIR_DUP_F), pointMergeTolerance);
+    GEO::mesh_repair(
+      geoMesh, GEO::MeshRepairMode(GEO::MESH_REPAIR_COLOCATE | GEO::MESH_REPAIR_DUP_F), pointMergeTolerance);
   }
   else
   {
     GEO::mesh_repair(geoMesh, GEO::MESH_REPAIR_DEFAULT, pointMergeTolerance);
   }
 
-  if(minimumComponentArea != 0.0) {
-      double numberOfFacesRemoved = geoMesh.facets.nb();
-      GEO::remove_small_connected_components(geoMesh, minimumComponentArea);
-      numberOfFacesRemoved -= geoMesh.facets.nb();
-      if(numberOfFacesRemoved != 0) {
-          if (noTriangulate)
-          {
-            GEO::mesh_repair(geoMesh, GEO::MeshRepairMode(GEO::MESH_REPAIR_COLOCATE | GEO::MESH_REPAIR_DUP_F), pointMergeTolerance);
-          }
-          else
-          {
-            GEO::mesh_repair(geoMesh, GEO::MESH_REPAIR_DEFAULT, pointMergeTolerance);
-          }
+  if (minimumComponentArea != 0.0)
+  {
+    double numberOfFacesRemoved = geoMesh.facets.nb();
+    GEO::remove_small_connected_components(geoMesh, minimumComponentArea);
+    numberOfFacesRemoved -= geoMesh.facets.nb();
+    if (numberOfFacesRemoved != 0)
+    {
+      if (noTriangulate)
+      {
+        GEO::mesh_repair(
+          geoMesh, GEO::MeshRepairMode(GEO::MESH_REPAIR_COLOCATE | GEO::MESH_REPAIR_DUP_F), pointMergeTolerance);
       }
+      else
+      {
+        GEO::mesh_repair(geoMesh, GEO::MESH_REPAIR_DEFAULT, pointMergeTolerance);
+      }
+    }
   }
 
   if (maximumHoleArea != 0.0 && maximumHoleEdges != 0)
@@ -144,7 +160,8 @@ template <typename TMesh>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline &pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using MeshType = TMesh;
 
@@ -158,18 +175,12 @@ public:
   }
 };
 
-int main(int argc, char *argv[])
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("repair", "Repair a mesh so it is 2-manifold and optionally watertight.", argc, argv);
 
-  return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
-                                          uint8_t,
-                                          int8_t,
-                                          uint16_t,
-                                          int16_t,
-                                          uint32_t,
-                                          int32_t,
-                                          float,
-                                          double>::Dimensions<
-      3U>("input-mesh", pipeline);
+  return itk::wasm::
+    SupportInputMeshTypes<PipelineFunctor, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, float, double>::
+      Dimensions<3U>("input-mesh", pipeline);
 }

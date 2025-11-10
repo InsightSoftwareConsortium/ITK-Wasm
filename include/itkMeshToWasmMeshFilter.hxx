@@ -137,8 +137,7 @@ MeshToWasmMeshFilter<TMesh>::PrintSelf(std::ostream & os, Indent indent) const
 }
 
 template <typename TPixel, unsigned int VDimension>
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::MeshToWasmMeshFilter()
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::MeshToWasmMeshFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -149,24 +148,21 @@ MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 ProcessObject::DataObjectPointer
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return WasmMeshType::New().GetPointer();
 }
 
 template <typename TPixel, unsigned int VDimension>
 ProcessObject::DataObjectPointer
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return WasmMeshType::New().GetPointer();
 }
 
 template <typename TPixel, unsigned int VDimension>
 auto
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GetOutput() -> WasmMeshType *
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GetOutput() -> WasmMeshType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<WasmMeshType *>(this->GetPrimaryOutput());
@@ -174,8 +170,7 @@ MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 auto
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GetOutput() const -> const WasmMeshType *
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GetOutput() const -> const WasmMeshType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const WasmMeshType *>(this->GetPrimaryOutput());
@@ -183,8 +178,7 @@ MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 auto
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GetOutput(unsigned int idx) -> WasmMeshType *
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GetOutput(unsigned int idx) -> WasmMeshType *
 {
   auto * out = dynamic_cast<WasmMeshType *>(this->ProcessObject::GetOutput(idx));
 
@@ -197,8 +191,7 @@ MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 void
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::SetInput(const MeshType * input)
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::SetInput(const MeshType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<MeshType *>(input));
@@ -206,8 +199,7 @@ MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 void
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::SetInput(unsigned int index, const MeshType * mesh)
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::SetInput(unsigned int index, const MeshType * mesh)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<MeshType *>(mesh));
@@ -215,34 +207,31 @@ MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 const typename MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::MeshType *
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GetInput()
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GetInput()
 {
   return itkDynamicCastInDebugMode<const MeshType *>(this->GetPrimaryInput());
 }
 
 template <typename TPixel, unsigned int VDimension>
 const typename MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::MeshType *
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GetInput(unsigned int idx)
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const MeshType *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TPixel, unsigned int VDimension>
 void
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GenerateData()
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GenerateData()
 {
   // Get the input and output pointers
   const MeshType * mesh = this->GetInput();
-  WasmMeshType * wasmMesh = this->GetOutput();
+  WasmMeshType *   wasmMesh = this->GetOutput();
 
   wasmMesh->SetMesh(mesh);
   constexpr bool inMemory = true;
-  const auto meshJSON = meshToMeshJSON<TPixel, VDimension>(mesh, wasmMesh, inMemory);
-  std::string serialized{};
-  auto ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
+  const auto     meshJSON = meshToMeshJSON<TPixel, VDimension>(mesh, wasmMesh, inMemory);
+  std::string    serialized{};
+  auto           ec = glz::write<glz::opts{ .prettify = true }>(meshJSON, serialized);
   if (ec)
   {
     itkExceptionMacro("Failed to serialize MeshJSON");
@@ -253,8 +242,7 @@ MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 void
-MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::PrintSelf(std::ostream & os, Indent indent) const
+MeshToWasmMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

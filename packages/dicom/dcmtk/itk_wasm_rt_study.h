@@ -30,14 +30,16 @@
  * Itk_wasm_rt_study supports writing to an output RT Struct file and setting
  * additional metadata.
  */
-class PLMBASE_API Itk_wasm_rt_study: public Rt_study {
+class PLMBASE_API Itk_wasm_rt_study : public Rt_study
+{
 public:
-    SMART_POINTER_SUPPORT (Itk_wasm_rt_study);
+  SMART_POINTER_SUPPORT(Itk_wasm_rt_study);
 
-    Itk_wasm_rt_study ();
-    ~Itk_wasm_rt_study ();
+  Itk_wasm_rt_study();
+  ~Itk_wasm_rt_study();
 
-    void save_rtss (const char *fname, const ItkWasmRtStudyMetadata &metadata, bool quiet = true);
+  void
+  save_rtss(const char * fname, const ItkWasmRtStudyMetadata & metadata, bool quiet = true);
 
 protected:
 };

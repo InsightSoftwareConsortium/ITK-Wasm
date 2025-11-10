@@ -20,16 +20,17 @@
 
 #ifdef __cplusplus
 
-#include <stdlib.h>
+#  include <stdlib.h>
 
-extern "C" {
-
-// Only triggered with Debug wasi-threads builds
-int __cxa_init_primary_exception(void *, void *, void *)
+extern "C"
 {
-  return 0;
-}
 
+  // Only triggered with Debug wasi-threads builds
+  int
+  __cxa_init_primary_exception(void *, void *, void *)
+  {
+    return 0;
+  }
 }
 
 #endif // __cplusplus

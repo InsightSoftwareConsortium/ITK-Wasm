@@ -643,16 +643,9 @@ main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("compare-meshes", "Compare meshes with a tolerance for regression testing.", argc, argv);
 
-  return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
-                                          uint8_t,
-                                          int8_t,
-                                          uint16_t,
-                                          int16_t,
-                                          uint32_t,
-                                          int32_t,
-                                          float,
-                                          double>::
-    Dimensions<
-      // 2U,
-      3U>("test-mesh", pipeline);
+  return itk::wasm::
+    SupportInputMeshTypes<PipelineFunctor, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, float, double>::
+      Dimensions<
+        // 2U,
+        3U>("test-mesh", pipeline);
 }

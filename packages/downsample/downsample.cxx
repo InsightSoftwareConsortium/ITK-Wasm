@@ -146,8 +146,7 @@ public:
     pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->type_size(Dimension);
 
     std::vector<unsigned int> cropRadius;
-    pipeline.add_option("-r,--crop-radius", cropRadius, "Optional crop radius in pixel units.")
-      ->type_size(Dimension);
+    pipeline.add_option("-r,--crop-radius", cropRadius, "Optional crop radius in pixel units.")->type_size(Dimension);
 
     using OutputImageType = itk::wasm::OutputImage<VectorImageType>;
     OutputImageType downsampledImage;
@@ -253,6 +252,6 @@ main(int argc, char * argv[])
                                            itk::VariableLengthVector<uint16_t>,
                                            itk::VariableLengthVector<int16_t>,
                                            itk::VariableLengthVector<float>,
-                                           itk::VariableLengthVector<double>
-                                           >::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
+                                           itk::VariableLengthVector<double>>::Dimensions<2U, 3U, 4U, 5U>("input",
+                                                                                                          pipeline);
 }

@@ -136,7 +136,7 @@ populateCells(TMesh * mesh, itk::SizeValueType cellBufferSize, TCellBufferType *
         }
 
         CellAutoPointer cell;
-        auto *                polylineCell = new PolyLineCellType;
+        auto *          polylineCell = new PolyLineCellType;
         for (unsigned int jj = 0; jj < cellPoints; ++jj)
         {
           polylineCell->SetPointId(jj, static_cast<PointIdentifier>(cellsBufferPtr[index++]));
@@ -461,9 +461,10 @@ WasmMeshToMeshFilter<TMesh>::GenerateData()
 
 
   const SizeValueType cellBufferSize = meshJSON.cellBufferSize;
-  const std::string cellsString = meshJSON.cells;
+  const std::string   cellsString = meshJSON.cells;
   using CellBufferType = typename WasmMeshType::CellBufferType::Element;
-  CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+  CellBufferType * cellsBufferPtr =
+    reinterpret_cast<CellBufferType *>(static_cast<size_t>(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)));
   if (cellComponentType == JSONIntTypesEnum::uint32)
   {
     uint32_t * cellsBufferPtr =
@@ -513,8 +514,7 @@ WasmMeshToMeshFilter<TMesh>::PrintSelf(std::ostream & os, Indent indent) const
 }
 
 template <typename TPixel, unsigned int VDimension>
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::WasmMeshToMeshFilter()
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::WasmMeshToMeshFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
@@ -525,24 +525,21 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 ProcessObject::DataObjectPointer
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::MakeOutput(ProcessObject::DataObjectPointerArraySizeType)
 {
   return MeshType::New().GetPointer();
 }
 
 template <typename TPixel, unsigned int VDimension>
 ProcessObject::DataObjectPointer
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::MakeOutput(const ProcessObject::DataObjectIdentifierType &)
 {
   return MeshType::New().GetPointer();
 }
 
 template <typename TPixel, unsigned int VDimension>
 auto
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GetOutput() -> MeshType *
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GetOutput() -> MeshType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<MeshType *>(this->GetPrimaryOutput());
@@ -550,8 +547,7 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 auto
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GetOutput() const -> const MeshType *
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GetOutput() const -> const MeshType *
 {
   // we assume that the first output is of the templated type
   return itkDynamicCastInDebugMode<const MeshType *>(this->GetPrimaryOutput());
@@ -559,8 +555,7 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 auto
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GetOutput(unsigned int idx) -> MeshType *
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GetOutput(unsigned int idx) -> MeshType *
 {
   auto * out = dynamic_cast<MeshType *>(this->ProcessObject::GetOutput(idx));
 
@@ -573,8 +568,7 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 void
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::SetInput(const WasmMeshType * input)
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::SetInput(const WasmMeshType * input)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(0, const_cast<WasmMeshType *>(input));
@@ -582,8 +576,7 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 void
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::SetInput(unsigned int index, const WasmMeshType * mesh)
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::SetInput(unsigned int index, const WasmMeshType * mesh)
 {
   // Process object is not const-correct so the const_cast is required here
   this->ProcessObject::SetNthInput(index, const_cast<WasmMeshType *>(mesh));
@@ -591,28 +584,25 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 const typename WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::WasmMeshType *
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GetInput()
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GetInput()
 {
   return itkDynamicCastInDebugMode<const WasmMeshType *>(this->GetPrimaryInput());
 }
 
 template <typename TPixel, unsigned int VDimension>
 const typename WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::WasmMeshType *
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GetInput(unsigned int idx)
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GetInput(unsigned int idx)
 {
   return itkDynamicCastInDebugMode<const MeshType *>(this->ProcessObject::GetInput(idx));
 }
 
 template <typename TPixel, unsigned int VDimension>
 void
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::GenerateData()
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::GenerateData()
 {
   // Get the input and output pointers
   const WasmMeshType * wasmMesh = this->GetInput();
-  MeshType * mesh = this->GetOutput();
+  MeshType *           mesh = this->GetOutput();
 
   using PointPixelType = typename MeshType::PixelType;
   using ConvertPointPixelTraits = MeshConvertPixelTraits<PointPixelType>;
@@ -620,7 +610,7 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
   using ConvertCellPixelTraits = MeshConvertPixelTraits<CellPixelType>;
 
   const std::string json(wasmMesh->GetJSON());
-  auto deserializedAttempt = glz::read_json<MeshJSON>(json);
+  auto              deserializedAttempt = glz::read_json<MeshJSON>(json);
   if (!deserializedAttempt)
   {
     const std::string descriptiveError = glz::format_error(deserializedAttempt, json);
@@ -644,22 +634,26 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
   {
     throw std::runtime_error("Unexpected dimension");
   }
-  if (numberOfPointPixels && pointPixelComponentType != itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum )
+  if (numberOfPointPixels &&
+      pointPixelComponentType !=
+        itk::wasm::MapComponentType<typename ConvertPointPixelTraits::ComponentType>::JSONComponentEnum)
   {
     throw std::runtime_error("Unexpected point pixel component type");
   }
 
-  if (numberOfPointPixels && pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum )
+  if (numberOfPointPixels && pointPixelType != itk::wasm::MapPixelType<PointPixelType>::JSONPixelEnum)
   {
     throw std::runtime_error("Unexpected point pixel type");
   }
 
-  if (numberOfCellPixels && cellPixelComponentType != itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::JSONComponentEnum )
+  if (numberOfCellPixels &&
+      cellPixelComponentType !=
+        itk::wasm::MapComponentType<typename ConvertCellPixelTraits::ComponentType>::JSONComponentEnum)
   {
     throw std::runtime_error("Unexpected cell pixel component type");
   }
 
-  if (numberOfCellPixels && cellPixelType != itk::wasm::MapPixelType<CellPixelType>::JSONPixelEnum )
+  if (numberOfCellPixels && cellPixelType != itk::wasm::MapPixelType<CellPixelType>::JSONPixelEnum)
   {
     throw std::runtime_error("Unexpected cell pixel type");
   }
@@ -672,7 +666,8 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
   {
     if (pointComponentType == itk::wasm::MapComponentType<typename MeshType::CoordRepType>::JSONFloatTypeEnum)
     {
-      const auto * pointsPtr = reinterpret_cast< PointType * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      const auto * pointsPtr =
+        reinterpret_cast<PointType *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
       for (SizeValueType i = 0; i < meshJSON.numberOfPoints; ++i)
       {
         mesh->SetPoint(i, pointsPtr[i]);
@@ -680,7 +675,7 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
     }
     else if (pointComponentType == itk::wasm::MapComponentType<float>::JSONFloatTypeEnum)
     {
-      auto * pointsPtr = reinterpret_cast< float * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      auto * pointsPtr = reinterpret_cast<float *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
       for (SizeValueType i = 0; i < meshJSON.numberOfPoints; ++i)
       {
         PointType point;
@@ -693,7 +688,7 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
     }
     else if (pointComponentType == itk::wasm::MapComponentType<double>::JSONFloatTypeEnum)
     {
-      auto * pointsPtr = reinterpret_cast< double * >( std::strtoull(pointsString.substr(35).c_str(), nullptr, 10) );
+      auto * pointsPtr = reinterpret_cast<double *>(std::strtoull(pointsString.substr(35).c_str(), nullptr, 10));
       for (SizeValueType i = 0; i < meshJSON.numberOfPoints; ++i)
       {
         PointType point;
@@ -712,17 +707,20 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 
   const SizeValueType cellBufferSize = meshJSON.cellBufferSize;
-  const std::string cellsString = meshJSON.cells;
+  const std::string   cellsString = meshJSON.cells;
   using CellBufferType = typename WasmMeshType::CellIdentifier;
-  CellBufferType * cellsBufferPtr = reinterpret_cast< CellBufferType * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+  CellBufferType * cellsBufferPtr =
+    reinterpret_cast<CellBufferType *>(static_cast<size_t>(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)));
   if (cellComponentType == JSONIntTypesEnum::uint32)
   {
-    uint32_t * cellsBufferPtr = reinterpret_cast< uint32_t * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+    uint32_t * cellsBufferPtr =
+      reinterpret_cast<uint32_t *>(static_cast<size_t>(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)));
     populateCells<MeshType, uint32_t>(mesh, cellBufferSize, cellsBufferPtr);
   }
   else if (cellComponentType == JSONIntTypesEnum::uint64)
   {
-    uint64_t * cellsBufferPtr = reinterpret_cast< uint64_t * >( static_cast< size_t >(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)) );
+    uint64_t * cellsBufferPtr =
+      reinterpret_cast<uint64_t *>(static_cast<size_t>(std::strtoull(cellsString.substr(35).c_str(), nullptr, 10)));
     populateCells<MeshType, uint64_t>(mesh, cellBufferSize, cellsBufferPtr);
   }
   else
@@ -732,7 +730,8 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
   using PointPixelType = typename MeshType::PixelType;
   const std::string pointDataString = meshJSON.pointData;
-  auto pointDataPtr = reinterpret_cast< PointPixelType * >( std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10) );
+  auto              pointDataPtr =
+    reinterpret_cast<PointPixelType *>(std::strtoull(pointDataString.substr(35).c_str(), nullptr, 10));
   mesh->GetPointData()->Reserve(numberOfPointPixels);
   for (SizeValueType i = 0; i < numberOfPointPixels; ++i)
   {
@@ -741,7 +740,7 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
   using CellPixelType = typename MeshType::CellPixelType;
   const std::string cellDataString = meshJSON.cellData;
-  auto cellDataPtr = reinterpret_cast< CellPixelType * >( std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10) );
+  auto cellDataPtr = reinterpret_cast<CellPixelType *>(std::strtoull(cellDataString.substr(35).c_str(), nullptr, 10));
   if (mesh->GetCellData() == nullptr)
   {
     mesh->SetCellData(MeshType::CellDataContainer::New());
@@ -761,8 +760,7 @@ WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
 
 template <typename TPixel, unsigned int VDimension>
 void
-WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>
-::PrintSelf(std::ostream & os, Indent indent) const
+WasmMeshToMeshFilter<QuadEdgeMesh<TPixel, VDimension>>::PrintSelf(std::ostream & os, Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

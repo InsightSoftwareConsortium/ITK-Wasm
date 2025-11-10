@@ -23,7 +23,8 @@
 int
 main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("transform-read-write-composite-test", "A test for reading and writing composite transforms", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "transform-read-write-composite-test", "A test for reading and writing composite transforms", argc, argv);
 
   using ParametersValueType = float;
   constexpr unsigned int Dimension = 2;
