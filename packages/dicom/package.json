@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/dicom-build",
-  "version": "7.6.3",
+  "version": "7.6.4",
   "private": true,
   "description": "@itk-wasm/dicom build configuration.",
   "type": "module",

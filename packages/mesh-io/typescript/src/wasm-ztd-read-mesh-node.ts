@@ -6,13 +6,14 @@ import {
   InterfaceTypes,
   PipelineOutput,
   PipelineInput,
-  runPipelineNode
-} from 'itk-wasm'
+  runPipelineNode,
+} from "itk-wasm";
 
-import WasmZtdReadMeshOptions from './wasm-ztd-read-mesh-options.js'
-import WasmZtdReadMeshNodeResult from './wasm-ztd-read-mesh-node-result.js'
+import WasmZtdReadMeshOptions from "./wasm-ztd-read-mesh-options.js";
+import WasmZtdReadMeshNodeResult from "./wasm-ztd-read-mesh-node-result.js";
 
-import path from 'path'
+import path from "path";
+import { fileURLToPath } from "url";
 
 /**
  * Read a mesh file format and convert it to the itk-wasm file format
@@ -25,54 +26,58 @@ import path from 'path'
 async function wasmZtdReadMeshNode(
   serializedMesh: string,
   options: WasmZtdReadMeshOptions = {}
-) : Promise<WasmZtdReadMeshNodeResult> {
-
-  const mountDirs: Set<string> = new Set()
+): Promise<WasmZtdReadMeshNodeResult> {
+  const mountDirs: Set<string> = new Set();
 
   const desiredOutputs: Array<PipelineOutput> = [
     { type: InterfaceTypes.JsonCompatible },
     { type: InterfaceTypes.Mesh },
-  ]
+  ];
 
-  mountDirs.add(path.dirname(serializedMesh as string))
-  const inputs: Array<PipelineInput> = [
-  ]
+  mountDirs.add(path.dirname(serializedMesh as string));
+  const inputs: Array<PipelineInput> = [];
 
-  const args = []
+  const args = [];
   // Inputs
-  const serializedMeshName = serializedMesh
-  args.push(serializedMeshName)
-  mountDirs.add(path.dirname(serializedMeshName))
+  const serializedMeshName = serializedMesh;
+  args.push(serializedMeshName);
+  mountDirs.add(path.dirname(serializedMeshName));
 
   // Outputs
-  const couldReadName = '0'
-  args.push(couldReadName)
+  const couldReadName = "0";
+  args.push(couldReadName);
 
-  const meshName = '1'
-  args.push(meshName)
+  const meshName = "1";
+  args.push(meshName);
 
   // Options
-  args.push('--memory-io')
+  args.push("--memory-io");
   if (typeof options.informationOnly !== "undefined") {
-    options.informationOnly && args.push('--information-only')
+    options.informationOnly && args.push("--information-only");
   }
 
-  const pipelinePath = path.join(path.dirname(import.meta.url.substring(7)), 'pipelines', 'wasm-ztd-read-mesh')
+  const pipelinePath = path.join(
+    fileURLToPath(import.meta.url),
+    "pipelines",
+    "wasm-ztd-read-mesh"
+  );
 
-  const {
-    returnValue,
-    stderr,
-    outputs
-  } = await runPipelineNode(pipelinePath, args, desiredOutputs, inputs, mountDirs)
+  const { returnValue, stderr, outputs } = await runPipelineNode(
+    pipelinePath,
+    args,
+    desiredOutputs,
+    inputs,
+    mountDirs
+  );
   if (returnValue !== 0 && stderr !== "") {
-    throw new Error(stderr)
+    throw new Error(stderr);
   }
 
   const result = {
     couldRead: outputs[0]?.data as JsonCompatible,
     mesh: outputs[1]?.data as Mesh,
-  }
-  return result
+  };
+  return result;
 }
 
-export default wasmZtdReadMeshNode
+export default wasmZtdReadMeshNode;
