@@ -98,6 +98,6 @@ main(int argc, char * argv[])
                                            itk::VariableLengthVector<uint16_t>,
                                            itk::VariableLengthVector<int16_t>,
                                            itk::VariableLengthVector<float>,
-                                           itk::VariableLengthVector<double>
-                                           >::Dimensions<2U, 3U, 4U, 5U>("input", pipeline);
+                                           itk::VariableLengthVector<double>>::Dimensions<2U, 3U, 4U, 5U>("input",
+                                                                                                          pipeline);
 }

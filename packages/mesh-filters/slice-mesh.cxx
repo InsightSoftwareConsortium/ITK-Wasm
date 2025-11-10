@@ -28,7 +28,8 @@
 #include "glaze/glaze.hpp"
 
 template <typename TMesh>
-int sliceMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
+int
+sliceMesh(itk::wasm::Pipeline & pipeline, const TMesh * inputMesh)
 {
   using MeshType = TMesh;
   constexpr unsigned int Dimension = MeshType::PointDimension;
@@ -53,10 +54,21 @@ int sliceMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   pipeline.get_option("input-mesh")->required()->type_name("INPUT_MESH");
 
   itk::wasm::InputTextStream planesJson;
-  pipeline.add_option("planes", planesJson, "An array of plane locations to slice the mesh. Each plane is defined by an array of 'origin' and 'spacing' values.")->required()->type_name("INPUT_JSON");
+  pipeline
+    .add_option("planes",
+                planesJson,
+                "An array of plane locations to slice the mesh. Each plane is defined by an array of 'origin' and "
+                "'spacing' values.")
+    ->required()
+    ->type_name("INPUT_JSON");
 
   itk::wasm::OutputMesh<OutputMeshType> outputMesh;
-  pipeline.add_option("polylines", outputMesh, "The output mesh comprised of polylines. Cell data indicates whether part of a closed line. Point data indicates the slice index.")->type_name("OUTPUT_MESH");
+  pipeline
+    .add_option("polylines",
+                outputMesh,
+                "The output mesh comprised of polylines. Cell data indicates whether part of a closed line. Point data "
+                "indicates the slice index.")
+    ->type_name("OUTPUT_MESH");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -65,7 +77,7 @@ int sliceMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   for (itk::SizeValueType i = 0; i < inputMesh->GetNumberOfPoints(); ++i)
   {
     typename MeshType::PointType point = inputMesh->GetPoint(i);
-    Vec3D vertex;
+    Vec3D                        vertex;
     for (unsigned int d = 0; d < Dimension; d++)
     {
       vertex[d] = point[d];
@@ -88,7 +100,7 @@ int sliceMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
       return EXIT_FAILURE;
     }
     typename MeshType::CellType::PointIdIterator pointIdIterator = cell->PointIdsBegin();
-    Face face;
+    Face                                         face;
     for (unsigned int j = 0; j < cell->GetNumberOfPoints(); ++j)
     {
       face[j] = *pointIdIterator;
@@ -99,7 +111,7 @@ int sliceMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   }
 
   const std::string planesJsonString(std::istreambuf_iterator<char>(planesJson.Get()), {});
-  auto deserializedAttempt = glz::read_json<Planes>(planesJsonString);
+  auto              deserializedAttempt = glz::read_json<Planes>(planesJsonString);
   if (!deserializedAttempt)
   {
     const std::string descriptiveError = glz::format_error(deserializedAttempt, planesJsonString);
@@ -110,23 +122,23 @@ int sliceMesh(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
 
   typename OutputMeshType::Pointer outputMeshPtr = OutputMeshType::New();
 
-  PointIdentifierType pointId = 0;
-  CellIdentifierType cellId = 0;
-  size_t sliceIndex = 0;
-  PointDataContainer *pointData = outputMeshPtr->GetPointData();
-  CellDataContainer *cellData = outputMeshPtr->GetCellData();
+  PointIdentifierType  pointId = 0;
+  CellIdentifierType   cellId = 0;
+  size_t               sliceIndex = 0;
+  PointDataContainer * pointData = outputMeshPtr->GetPointData();
+  CellDataContainer *  cellData = outputMeshPtr->GetCellData();
 
   typename MeshPlaneIntersectType::Mesh meshPlaneIntersect(vertices, faces);
-  for (const auto &plane : planes)
+  for (const auto & plane : planes)
   {
     const auto paths = meshPlaneIntersect.Intersect(plane);
-    for (const auto &path : paths)
+    for (const auto & path : paths)
     {
       CellAutoPointer cell;
       cell.TakeOwnership(new PolyLineCellType);
       PointIdentifierType polyPointId = 0;
-      const auto initialPointId = pointId;
-      for (const auto &point : path.points)
+      const auto          initialPointId = pointId;
+      for (const auto & point : path.points)
       {
         typename OutputMeshType::PointType outputPoint;
         for (unsigned int d = 0; d < Dimension; d++)
@@ -158,7 +170,8 @@ template <typename TMesh>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline &pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using MeshType = TMesh;
 
@@ -172,18 +185,12 @@ public:
   }
 };
 
-int main(int argc, char *argv[])
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("slice-mesh", "Slice a mesh along planes into polylines.", argc, argv);
 
-  return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
-                                          uint8_t,
-                                          int8_t,
-                                          uint16_t,
-                                          int16_t,
-                                          uint32_t,
-                                          int32_t,
-                                          float,
-                                          double>::Dimensions<
-      3U>("input-mesh", pipeline);
+  return itk::wasm::
+    SupportInputMeshTypes<PipelineFunctor, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, float, double>::
+      Dimensions<3U>("input-mesh", pipeline);
 }

@@ -71,16 +71,14 @@ public:
     return static_cast<const MeshType *>(this->GetDataObject());
   }
 
-  const CellBufferType * GetCellBuffer() const
+  const CellBufferType *
+  GetCellBuffer() const
   {
     return this->m_CellBuffer.GetPointer();
   }
 
 protected:
-  WasmMesh()
-  {
-    this->m_CellBuffer = CellBufferType::New();
-  }
+  WasmMesh() { this->m_CellBuffer = CellBufferType::New(); }
   ~WasmMesh() override = default;
 
   typename CellBufferType::Pointer m_CellBuffer;
@@ -113,38 +111,46 @@ public:
   using PointDataBufferType = std::vector<typename MeshType::PointDataContainer::Element>;
   using CellDataBufferType = std::vector<typename MeshType::CellDataContainer::Element>;
 
-  void SetMesh(const MeshType * mesh);
+  void
+  SetMesh(const MeshType * mesh);
 
-  const MeshType * GetMesh() const {
-    return static_cast< const MeshType * >(this->GetDataObject());
+  const MeshType *
+  GetMesh() const
+  {
+    return static_cast<const MeshType *>(this->GetDataObject());
   }
 
-  const PointsBufferType & GetPointsBuffer() const {
+  const PointsBufferType &
+  GetPointsBuffer() const
+  {
     return this->m_PointsBuffer;
   }
 
-  const CellBufferType * GetCellBuffer() const {
+  const CellBufferType *
+  GetCellBuffer() const
+  {
     return this->m_CellBuffer.GetPointer();
   }
 
-  const PointDataBufferType & GetPointDataBuffer() const {
+  const PointDataBufferType &
+  GetPointDataBuffer() const
+  {
     return this->m_PointDataBuffer;
   }
 
-  const CellDataBufferType & GetCellDataBuffer() const {
+  const CellDataBufferType &
+  GetCellDataBuffer() const
+  {
     return this->m_CellDataBuffer;
   }
 
-  WasmMesh()
-  {
-    this->m_CellBuffer = CellBufferType::New();
-  }
+  WasmMesh() { this->m_CellBuffer = CellBufferType::New(); }
   ~WasmMesh() override = default;
 
-  PointsBufferType m_PointsBuffer;
+  PointsBufferType                 m_PointsBuffer;
   typename CellBufferType::Pointer m_CellBuffer;
-  PointDataBufferType m_PointDataBuffer;
-  CellDataBufferType m_CellDataBuffer;
+  PointDataBufferType              m_PointDataBuffer;
+  CellDataBufferType               m_CellDataBuffer;
 };
 
 

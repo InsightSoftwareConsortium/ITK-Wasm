@@ -33,8 +33,7 @@ WasmMesh<TMesh>::SetMesh(const MeshType * mesh)
 
 template <typename TPixel, unsigned int VDimension>
 void
-WasmMesh<itk::QuadEdgeMesh<TPixel, VDimension>>
-::SetMesh(const MeshType * mesh)
+WasmMesh<itk::QuadEdgeMesh<TPixel, VDimension>>::SetMesh(const MeshType * mesh)
 {
   m_PointsBuffer.resize(mesh->GetNumberOfPoints() * VDimension);
   for (unsigned int i = 0; i < mesh->GetNumberOfPoints(); ++i)

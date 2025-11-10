@@ -22,12 +22,15 @@
 
 #include "itk_wasm_rt_study_metadata.h"
 
-class PLMBASE_API Itk_wasm_dcmtk_rt_study: public Dcmtk_rt_study {
+class PLMBASE_API Itk_wasm_dcmtk_rt_study : public Dcmtk_rt_study
+{
 public:
-    Itk_wasm_dcmtk_rt_study ();
-    ~Itk_wasm_dcmtk_rt_study ();
+  Itk_wasm_dcmtk_rt_study();
+  ~Itk_wasm_dcmtk_rt_study();
 
-    void save_rtss (const char *fname, const ItkWasmRtStudyMetadata& metadata);
+  void
+  save_rtss(const char * fname, const ItkWasmRtStudyMetadata & metadata);
+
 protected:
 };
 

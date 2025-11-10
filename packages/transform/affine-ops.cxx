@@ -33,49 +33,49 @@
 // Define operation structures for JSON parsing
 struct TranslateOperation
 {
-  std::string method = "Translate";
+  std::string         method = "Translate";
   std::vector<double> translation;
-  bool pre = false;
+  bool                pre = false;
 };
 
 struct ScaleOperation
 {
-  std::string method = "Scale";
+  std::string                               method = "Scale";
   std::variant<double, std::vector<double>> factor;
-  bool pre = false;
+  bool                                      pre = false;
 };
 
 struct RotateOperation
 {
   std::string method = "Rotate";
-  int axis1;
-  int axis2;
-  double angle;
-  bool pre = false;
+  int         axis1;
+  int         axis2;
+  double      angle;
+  bool        pre = false;
 };
 
 struct Rotate2DOperation
 {
   std::string method = "Rotate2D";
-  double angle;
-  bool pre = false;
+  double      angle;
+  bool        pre = false;
 };
 
 struct Rotate3DOperation
 {
-  std::string method = "Rotate3D";
+  std::string         method = "Rotate3D";
   std::vector<double> axis;
-  double angle;
-  bool pre = false;
+  double              angle;
+  bool                pre = false;
 };
 
 struct ShearOperation
 {
   std::string method = "Shear";
-  int axis1;
-  int axis2;
-  double coef;
-  bool pre = false;
+  int         axis1;
+  int         axis2;
+  double      coef;
+  bool        pre = false;
 };
 
 struct SetIdentityOperation
@@ -84,94 +84,67 @@ struct SetIdentityOperation
 };
 
 // Glaze metadata for JSON operations
-template<>
+template <>
 struct glz::meta<TranslateOperation>
 {
   using T = TranslateOperation;
-  static constexpr auto value = object(
-    "method", &T::method,
-    "translation", &T::translation,
-    "pre", &T::pre
-  );
+  static constexpr auto value = object("method", &T::method, "translation", &T::translation, "pre", &T::pre);
 };
 
-template<>
+template <>
 struct glz::meta<ScaleOperation>
 {
   using T = ScaleOperation;
-  static constexpr auto value = object(
-    "method", &T::method,
-    "factor", &T::factor,
-    "pre", &T::pre
-  );
+  static constexpr auto value = object("method", &T::method, "factor", &T::factor, "pre", &T::pre);
 };
 
-template<>
+template <>
 struct glz::meta<RotateOperation>
 {
   using T = RotateOperation;
-  static constexpr auto value = object(
-    "method", &T::method,
-    "axis1", &T::axis1,
-    "axis2", &T::axis2,
-    "angle", &T::angle,
-    "pre", &T::pre
-  );
+  static constexpr auto value =
+    object("method", &T::method, "axis1", &T::axis1, "axis2", &T::axis2, "angle", &T::angle, "pre", &T::pre);
 };
 
-template<>
+template <>
 struct glz::meta<Rotate2DOperation>
 {
   using T = Rotate2DOperation;
-  static constexpr auto value = object(
-    "method", &T::method,
-    "angle", &T::angle,
-    "pre", &T::pre
-  );
+  static constexpr auto value = object("method", &T::method, "angle", &T::angle, "pre", &T::pre);
 };
 
-template<>
+template <>
 struct glz::meta<Rotate3DOperation>
 {
   using T = Rotate3DOperation;
-  static constexpr auto value = object(
-    "method", &T::method,
-    "axis", &T::axis,
-    "angle", &T::angle,
-    "pre", &T::pre
-  );
+  static constexpr auto value = object("method", &T::method, "axis", &T::axis, "angle", &T::angle, "pre", &T::pre);
 };
 
-template<>
+template <>
 struct glz::meta<ShearOperation>
 {
   using T = ShearOperation;
-  static constexpr auto value = object(
-    "method", &T::method,
-    "axis1", &T::axis1,
-    "axis2", &T::axis2,
-    "coef", &T::coef,
-    "pre", &T::pre
-  );
+  static constexpr auto value =
+    object("method", &T::method, "axis1", &T::axis1, "axis2", &T::axis2, "coef", &T::coef, "pre", &T::pre);
 };
 
-template<>
+template <>
 struct glz::meta<SetIdentityOperation>
 {
   using T = SetIdentityOperation;
-  static constexpr auto value = object(
-    "method", &T::method
-  );
+  static constexpr auto value = object("method", &T::method);
 };
 
-template<typename TTransform>
+template <typename TTransform>
 class AffineOpsPipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline & pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using TransformType = TTransform;
-    using AffineTransformType = itk::AffineTransform<typename TransformType::ScalarType, TransformType::InputSpaceDimension>;
+    using AffineTransformType =
+      itk::AffineTransform<typename TransformType::ScalarType, TransformType::InputSpaceDimension>;
 
     using InputTransformType = itk::wasm::InputTransform<AffineTransformType>;
     InputTransformType inputTransform;
@@ -193,12 +166,12 @@ public:
     ITK_WASM_PARSE(pipeline);
 
     // Read the operations JSON
-    std::string operationsJson{std::istreambuf_iterator<char>(operationsStream.Get()),
-                               std::istreambuf_iterator<char>()};
+    std::string operationsJson{ std::istreambuf_iterator<char>(operationsStream.Get()),
+                                std::istreambuf_iterator<char>() };
 
     // Parse as a vector of generic JSON objects first
     std::vector<glz::json_t> operations;
-    auto parseResult = glz::read_json(operations, operationsJson);
+    auto                     parseResult = glz::read_json(operations, operationsJson);
     if (parseResult)
     {
       std::cerr << "Error parsing operations JSON: " << glz::format_error(parseResult, operationsJson) << std::endl;
@@ -209,7 +182,7 @@ public:
     auto affineTransform = AffineTransformType::New();
 
     // Try to cast input transform to affine transform first, otherwise copy parameters
-    auto inputAffineTransform = dynamic_cast<const AffineTransformType*>(inputTransform.Get());
+    auto inputAffineTransform = dynamic_cast<const AffineTransformType *>(inputTransform.Get());
     if (inputAffineTransform)
     {
       affineTransform->SetParameters(inputAffineTransform->GetParameters());
@@ -223,7 +196,7 @@ public:
     }
 
     // Process each operation
-    for (const auto& opJson : operations)
+    for (const auto & opJson : operations)
     {
       try
       {
@@ -232,7 +205,7 @@ public:
 
         // Parse the operation as a generic object to extract the method
         std::map<std::string, glz::json_t> opMap;
-        auto parseResult = glz::read_json(opMap, opJsonStr);
+        auto                               parseResult = glz::read_json(opMap, opJsonStr);
         if (parseResult)
         {
           std::cerr << "Error parsing operation object: " << glz::format_error(parseResult, opJsonStr) << std::endl;
@@ -247,7 +220,7 @@ public:
         }
 
         std::string method;
-        auto methodResult = glz::read_json(method, glz::write_json(methodIter->second).value_or(""));
+        auto        methodResult = glz::read_json(method, glz::write_json(methodIter->second).value_or(""));
         if (methodResult)
         {
           std::cerr << "Error parsing method field" << std::endl;
@@ -257,7 +230,7 @@ public:
         if (method == "Translate")
         {
           TranslateOperation op;
-          auto result = glz::read_json(op, opJsonStr);
+          auto               result = glz::read_json(op, opJsonStr);
           if (result)
           {
             std::cerr << "Error parsing Translate operation: " << glz::format_error(result, opJsonStr) << std::endl;
@@ -266,7 +239,8 @@ public:
 
           if (op.translation.size() != AffineTransformType::InputSpaceDimension)
           {
-            std::cerr << "Translation vector must have " << AffineTransformType::InputSpaceDimension << " elements" << std::endl;
+            std::cerr << "Translation vector must have " << AffineTransformType::InputSpaceDimension << " elements"
+                      << std::endl;
             return EXIT_FAILURE;
           }
 
@@ -281,7 +255,7 @@ public:
         else if (method == "Scale")
         {
           ScaleOperation op;
-          auto result = glz::read_json(op, opJsonStr);
+          auto           result = glz::read_json(op, opJsonStr);
           if (result)
           {
             std::cerr << "Error parsing Scale operation: " << glz::format_error(result, opJsonStr) << std::endl;
@@ -298,7 +272,8 @@ public:
             auto factorVec = std::get<std::vector<double>>(op.factor);
             if (factorVec.size() != AffineTransformType::InputSpaceDimension)
             {
-              std::cerr << "Scale factor vector must have " << AffineTransformType::InputSpaceDimension << " elements" << std::endl;
+              std::cerr << "Scale factor vector must have " << AffineTransformType::InputSpaceDimension << " elements"
+                        << std::endl;
               return EXIT_FAILURE;
             }
 
@@ -313,21 +288,22 @@ public:
         else if (method == "Rotate")
         {
           RotateOperation op;
-          auto result = glz::read_json(op, opJsonStr);
+          auto            result = glz::read_json(op, opJsonStr);
           if (result)
           {
             std::cerr << "Error parsing Rotate operation: " << glz::format_error(result, opJsonStr) << std::endl;
             return EXIT_FAILURE;
           }
 
-          affineTransform->Rotate(op.axis1, op.axis2, static_cast<typename AffineTransformType::ScalarType>(op.angle), op.pre);
+          affineTransform->Rotate(
+            op.axis1, op.axis2, static_cast<typename AffineTransformType::ScalarType>(op.angle), op.pre);
         }
         else if (method == "Rotate2D")
         {
           if constexpr (AffineTransformType::InputSpaceDimension == 2)
           {
             Rotate2DOperation op;
-            auto result = glz::read_json(op, opJsonStr);
+            auto              result = glz::read_json(op, opJsonStr);
             if (result)
             {
               std::cerr << "Error parsing Rotate2D operation: " << glz::format_error(result, opJsonStr) << std::endl;
@@ -347,7 +323,7 @@ public:
           if constexpr (AffineTransformType::InputSpaceDimension == 3)
           {
             Rotate3DOperation op;
-            auto result = glz::read_json(op, opJsonStr);
+            auto              result = glz::read_json(op, opJsonStr);
             if (result)
             {
               std::cerr << "Error parsing Rotate3D operation: " << glz::format_error(result, opJsonStr) << std::endl;
@@ -377,14 +353,15 @@ public:
         else if (method == "Shear")
         {
           ShearOperation op;
-          auto result = glz::read_json(op, opJsonStr);
+          auto           result = glz::read_json(op, opJsonStr);
           if (result)
           {
             std::cerr << "Error parsing Shear operation: " << glz::format_error(result, opJsonStr) << std::endl;
             return EXIT_FAILURE;
           }
 
-          affineTransform->Shear(op.axis1, op.axis2, static_cast<typename AffineTransformType::ScalarType>(op.coef), op.pre);
+          affineTransform->Shear(
+            op.axis1, op.axis2, static_cast<typename AffineTransformType::ScalarType>(op.coef), op.pre);
         }
         else if (method == "SetIdentity")
         {
@@ -396,7 +373,7 @@ public:
           return EXIT_FAILURE;
         }
       }
-      catch (const std::exception& e)
+      catch (const std::exception & e)
       {
         std::cerr << "Error processing operation: " << e.what() << std::endl;
         return EXIT_FAILURE;
@@ -415,6 +392,6 @@ main(int argc, char * argv[])
   itk::wasm::Pipeline pipeline("affine-ops", "Apply operations to an affine transform", argc, argv);
 
   // Support float and double parameter types, and dimensions 2, 3, and 4
-  return itk::wasm::SupportInputTransformTypes<AffineOpsPipelineFunctor, float, double>
-    ::Dimensions<2U, 3U, 4U>("input-transform", pipeline);
+  return itk::wasm::SupportInputTransformTypes<AffineOpsPipelineFunctor, float, double>::Dimensions<2U, 3U, 4U>(
+    "input-transform", pipeline);
 }

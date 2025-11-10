@@ -29,19 +29,30 @@
 
 #include "glaze/glaze.hpp"
 
-int main (int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("write-rt-struct", "Write a DICOM RT Struct Structured Set for the given ROI contours and DICOM metadata", argc, argv);
+  itk::wasm::Pipeline pipeline("write-rt-struct",
+                               "Write a DICOM RT Struct Structured Set for the given ROI contours and DICOM metadata",
+                               argc,
+                               argv);
   pipeline.set_version("0.2.0");
 
   std::string inputCxt;
-  auto inputCxtOption = pipeline.add_option("input-cxt", inputCxt, "Input Plastimatch CXT structure set file")->required()->check(CLI::ExistingFile)->type_name("INPUT_TEXT_FILE");
+  auto        inputCxtOption = pipeline.add_option("input-cxt", inputCxt, "Input Plastimatch CXT structure set file")
+                          ->required()
+                          ->check(CLI::ExistingFile)
+                          ->type_name("INPUT_TEXT_FILE");
 
   std::string outputDicom;
-  auto outputDicomOption = pipeline.add_option("output-dicom", outputDicom, "Output DICOM RT Struct Structure Set file")->required()->type_name("OUTPUT_BINARY_FILE");
+  auto        outputDicomOption =
+    pipeline.add_option("output-dicom", outputDicom, "Output DICOM RT Struct Structure Set file")
+      ->required()
+      ->type_name("OUTPUT_BINARY_FILE");
 
   itk::wasm::InputTextStream dicomMetadataJson;
-  auto dicomMetadataOption = pipeline.add_option("--dicom-metadata", dicomMetadataJson, "Additional DICOM metadata")->type_name("INPUT_JSON");
+  auto                       dicomMetadataOption =
+    pipeline.add_option("--dicom-metadata", dicomMetadataJson, "Additional DICOM metadata")->type_name("INPUT_JSON");
 
   ITK_WASM_PARSE(pipeline);
 

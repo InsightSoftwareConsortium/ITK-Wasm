@@ -24,13 +24,15 @@
 #include "itkmeshToGeogramMesh.h"
 #include "itkgeogramMeshToMesh.h"
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
-  itk::wasm::Pipeline pipeline("geogram-conversion", "A test for reading and writing with geogram, itk::QuadEdgeMesh meshes", argc, argv);
+  itk::wasm::Pipeline pipeline(
+    "geogram-conversion", "A test for reading and writing with geogram, itk::QuadEdgeMesh meshes", argc, argv);
 
   using PixelType = float;
   constexpr unsigned int Dimension = 3;
-  using MeshType = itk::QuadEdgeMesh< PixelType, Dimension >;
+  using MeshType = itk::QuadEdgeMesh<PixelType, Dimension>;
 
   static constexpr bool SinglePrecision = std::is_same<typename MeshType::CoordRepType, float>::value;
 

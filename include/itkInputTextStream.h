@@ -34,7 +34,7 @@ namespace wasm
  *
  * \ingroup WebAssemblyInterface
  */
-class InputTextStream: public InputStreamBase
+class InputTextStream : public InputStreamBase
 {
 public:
   void

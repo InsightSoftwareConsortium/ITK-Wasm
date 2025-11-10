@@ -50,7 +50,8 @@ lexical_cast(const std::string & input, TransformTypeJSON & transformType)
   {
 #ifndef ITK_WASM_NO_FILESYSTEM_IO
     using TransformIOFactoryFloatType = itk::TransformIOFactoryTemplate<float>;
-    TransformIOBaseTemplate<float>::Pointer transformIOFloat = TransformIOFactoryFloatType::CreateTransformIO(input.c_str(), CommonEnums::IOFileMode::ReadMode);
+    TransformIOBaseTemplate<float>::Pointer transformIOFloat =
+      TransformIOFactoryFloatType::CreateTransformIO(input.c_str(), CommonEnums::IOFileMode::ReadMode);
     if (transformIOFloat.IsNull())
     {
       std::cerr << "IO not available for: " << input << std::endl;
@@ -60,8 +61,8 @@ lexical_cast(const std::string & input, TransformTypeJSON & transformType)
     transformIOFloat->SetFileName(input);
     transformIOFloat->Read();
 
-    const auto transformList = transformIOFloat->GetReadTransformList();
-    const auto firstTransform = transformList.front();
+    const auto        transformList = transformIOFloat->GetReadTransformList();
+    const auto        firstTransform = transformList.front();
     const std::string transformName = firstTransform->GetTransformTypeAsString();
     // if the transformName contains "float", then set the transformType to float
     if (transformName.find("float") != std::string::npos)

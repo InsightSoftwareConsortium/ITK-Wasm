@@ -26,7 +26,8 @@
 
 static std::atomic<int> createdThreads(0);
 
-int main(int argc, char * argv[])
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("cxx-threads-test", "A pipeline to test C++11 threads support", argc, argv);
 
@@ -44,14 +45,13 @@ int main(int argc, char * argv[])
 
   for (int i = 0; i < numberOfThreads; ++i)
   {
-    threads.emplace_back([i]()
-    {
+    threads.emplace_back([i]() {
       std::cout << " in thread " << i << std::endl;
       createdThreads++;
     });
   }
 
-  for (auto &t : threads)
+  for (auto & t : threads)
   {
     t.join();
   }

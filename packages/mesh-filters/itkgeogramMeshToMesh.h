@@ -52,19 +52,19 @@ geogramMeshToMesh(const GEO::Mesh & geoMesh, TMesh * itkMesh)
   // Copy vertices
   if (singlePrecision)
   {
-    for(GEO::index_t v = 0; v < geoMesh.vertices.nb(); ++v)
+    for (GEO::index_t v = 0; v < geoMesh.vertices.nb(); ++v)
     {
       PointType point;
       for (unsigned int d = 0; d < Dimension; ++d)
-        {
+      {
         point[d] = static_cast<CoordinateType>(geoMesh.vertices.single_precision_point_ptr(v)[d]);
-        }
+      }
       itkMesh->SetPoint(v, point);
     }
   }
   else
   {
-    for(GEO::index_t v = 0; v < geoMesh.vertices.nb(); ++v)
+    for (GEO::index_t v = 0; v < geoMesh.vertices.nb(); ++v)
     {
       PointType point;
       for (unsigned int d = 0; d < Dimension; ++d)
@@ -76,23 +76,24 @@ geogramMeshToMesh(const GEO::Mesh & geoMesh, TMesh * itkMesh)
   }
 
   // Copy facets
-  for(GEO::index_t f = 0; f < geoMesh.facets.nb(); ++f) {
-    auto numVertices = geoMesh.facets.nb_vertices(f);
+  for (GEO::index_t f = 0; f < geoMesh.facets.nb(); ++f)
+  {
+    auto            numVertices = geoMesh.facets.nb_vertices(f);
     CellAutoPointer cell;
 
-    if(numVertices == 3)
+    if (numVertices == 3)
     {
       auto * triangleCell = new TriangleCellType;
-      for(GEO::index_t lv = 0; lv < 3; ++lv)
+      for (GEO::index_t lv = 0; lv < 3; ++lv)
       {
         triangleCell->SetPointId(lv, geoMesh.facets.vertex(f, lv));
       }
       cell.TakeOwnership(triangleCell);
     }
-    else if(numVertices == 4)
+    else if (numVertices == 4)
     {
       auto * quadCell = new QuadCellType;
-      for(GEO::index_t lv = 0; lv < 4; ++lv)
+      for (GEO::index_t lv = 0; lv < 4; ++lv)
       {
         quadCell->SetPointId(lv, geoMesh.facets.vertex(f, lv));
       }
@@ -101,7 +102,7 @@ geogramMeshToMesh(const GEO::Mesh & geoMesh, TMesh * itkMesh)
     else
     {
       auto * polygonCell = new PolygonCellType;
-      for(GEO::index_t lv = 0; lv < numVertices; ++lv)
+      for (GEO::index_t lv = 0; lv < numVertices; ++lv)
       {
         polygonCell->SetPointId(lv, geoMesh.facets.vertex(f, lv));
       }
@@ -110,20 +111,20 @@ geogramMeshToMesh(const GEO::Mesh & geoMesh, TMesh * itkMesh)
   }
 
   // Copy vertex attributes if they exist
-  if(geoMesh.vertices.attributes().is_defined("PointData"))
+  if (geoMesh.vertices.attributes().is_defined("PointData"))
   {
     auto vertexAttribute = GEO::Attribute<PixelType>(geoMesh.vertices.attributes(), "PointData");
-    for(GEO::index_t v = 0; v < geoMesh.vertices.nb(); ++v)
+    for (GEO::index_t v = 0; v < geoMesh.vertices.nb(); ++v)
     {
       itkMesh->SetPointData(v, static_cast<PixelType>(vertexAttribute[v]));
     }
   }
 
   // Copy facet attributes if they exist
-  if(geoMesh.facets.attributes().is_defined("CellData"))
+  if (geoMesh.facets.attributes().is_defined("CellData"))
   {
     auto facetAttribute = GEO::Attribute<PixelType>(geoMesh.facets.attributes(), "CellData");
-    for(GEO::index_t f = 0; f < geoMesh.facets.nb(); ++f)
+    for (GEO::index_t f = 0; f < geoMesh.facets.nb(); ++f)
     {
       itkMesh->SetCellData(f, static_cast<PixelType>(facetAttribute[f]));
     }

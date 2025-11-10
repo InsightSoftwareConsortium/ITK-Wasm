@@ -26,14 +26,17 @@
 
 static std::atomic<int> createdThreads(0);
 
-void *thread_entry_point(void *ctx) {
-  size_t id = *((size_t*) ctx);
+void *
+thread_entry_point(void * ctx)
+{
+  size_t id = *((size_t *)ctx);
   printf(" in thread %zu\n", id);
   createdThreads++;
   return 0;
 }
 
-int main( int argc, char * argv[] )
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("pthreads-test", "A pipeline to test pthreads support", argc, argv);
 
@@ -47,12 +50,14 @@ int main( int argc, char * argv[] )
 
   // Based on: https://bytecodealliance.org/articles/wasi-threads
   pthread_t threads[512];
-  size_t thread_ids[512];
+  size_t    thread_ids[512];
   createdThreads = 0;
-  for (int i = 0; i < numberOfThreads; i++) {
+  for (int i = 0; i < numberOfThreads; i++)
+  {
     thread_ids[i] = i;
     int ret = pthread_create(&threads[i], NULL, &thread_entry_point, &thread_ids[i]);
-    if (ret) {
+    if (ret)
+    {
       printf("failed to spawn thread: %s", strerror(ret));
     }
   }

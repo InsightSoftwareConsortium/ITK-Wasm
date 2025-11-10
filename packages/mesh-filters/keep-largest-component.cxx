@@ -37,7 +37,8 @@
 #include <geogram/basic/command_line.h>
 
 template <typename TMesh>
-int keepLargestComponent(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
+int
+keepLargestComponent(itk::wasm::Pipeline & pipeline, const TMesh * inputMesh)
 {
   using MeshType = TMesh;
   constexpr unsigned int Dimension = MeshType::PointDimension;
@@ -48,13 +49,15 @@ int keepLargestComponent(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
   pipeline.get_option("input-mesh")->required()->type_name("INPUT_MESH");
 
   itk::wasm::OutputMesh<MeshType> outputMesh;
-  pipeline.add_option("output-mesh", outputMesh, "The output mesh with only the largest component.")->type_name("OUTPUT_MESH");
+  pipeline.add_option("output-mesh", outputMesh, "The output mesh with only the largest component.")
+    ->type_name("OUTPUT_MESH");
 
   ITK_WASM_PARSE(pipeline);
 
   // GEO::initialize(GEO::GEOGRAM_INSTALL_ALL);
 
-  GEO::Logger::initialize(); GEO::Logger::instance()->set_quiet(true);
+  GEO::Logger::initialize();
+  GEO::Logger::instance()->set_quiet(true);
   GEO::CmdLine::initialize();
   const auto flags = GEO::GEOGRAM_INSTALL_ALL;
   GEO::Process::initialize(flags);
@@ -65,60 +68,65 @@ int keepLargestComponent(itk::wasm::Pipeline &pipeline, const TMesh *inputMesh)
 
   // component[f] will correspond to the component id of facet f
   GEO::vector<index_t> component(geoMesh.facets.nb(), index_t(-1));
-  index_t nb_comp = 0;
+  index_t              nb_comp = 0;
 
   // Iterates on all the facets of M
   // (equivalent to for(index_t f = 0; f < M.facets.nb(); ++f))
-  for(index_t f: geoMesh.facets) {
-      if(component[f] == index_t(-1)) {
-          // recursive traversal of the connected component
-          // incident to facet f (if it was not already traversed)
-          component[f] = nb_comp;
-          std::stack<index_t> S;
-          S.push(f);
-          while(!S.empty()) {
-              index_t top_f = S.top();
-              S.pop();
-              // Push the neighbors of facet top_f onto the stack if
-              // they were not already visited
-              for(
-                  index_t le=0;
-                  le<geoMesh.facets.nb_vertices(top_f); ++le
-              ) {
-                  index_t adj_f = geoMesh.facets.adjacent(top_f,le);
-                  if(adj_f != index_t(-1) &&
-                      component[adj_f] == index_t(-1)) {
-                      component[adj_f] = nb_comp;
-                      S.push(adj_f);
-                  }
-              }
+  for (index_t f : geoMesh.facets)
+  {
+    if (component[f] == index_t(-1))
+    {
+      // recursive traversal of the connected component
+      // incident to facet f (if it was not already traversed)
+      component[f] = nb_comp;
+      std::stack<index_t> S;
+      S.push(f);
+      while (!S.empty())
+      {
+        index_t top_f = S.top();
+        S.pop();
+        // Push the neighbors of facet top_f onto the stack if
+        // they were not already visited
+        for (index_t le = 0; le < geoMesh.facets.nb_vertices(top_f); ++le)
+        {
+          index_t adj_f = geoMesh.facets.adjacent(top_f, le);
+          if (adj_f != index_t(-1) && component[adj_f] == index_t(-1))
+          {
+            component[adj_f] = nb_comp;
+            S.push(adj_f);
           }
-          ++nb_comp;
+        }
       }
+      ++nb_comp;
+    }
   }
 
   // Now compute the number of facets in each connected component
-  GEO::vector<index_t> comp_size(nb_comp,0);
-  for(index_t f: geoMesh.facets) {
-      ++comp_size[component[f]];
+  GEO::vector<index_t> comp_size(nb_comp, 0);
+  for (index_t f : geoMesh.facets)
+  {
+    ++comp_size[component[f]];
   }
 
   // Determine the id of the largest component
   index_t largest_comp = 0;
   index_t largest_comp_size = 0;
-  for(index_t comp=0; comp<nb_comp; ++comp) {
-      if(comp_size[comp] >= largest_comp_size) {
-          largest_comp_size = comp_size[comp];
-          largest_comp = comp;
-      }
+  for (index_t comp = 0; comp < nb_comp; ++comp)
+  {
+    if (comp_size[comp] >= largest_comp_size)
+    {
+      largest_comp_size = comp_size[comp];
+      largest_comp = comp;
+    }
   }
   // Remove all the facets that are not in the largest component
   // component[] is now used as follows:
   //   component[f] = 0 if f should be kept
   //   component[f] = 1 if f should be deleted
   // See GEO::MeshElements::delete_elements() documentation.
-  for(index_t f: geoMesh.facets) {
-      component[f] = (component[f] != largest_comp) ? 1 : 0;
+  for (index_t f : geoMesh.facets)
+  {
+    component[f] = (component[f] != largest_comp) ? 1 : 0;
   }
   geoMesh.facets.delete_elements(component);
 
@@ -134,7 +142,8 @@ template <typename TMesh>
 class PipelineFunctor
 {
 public:
-  int operator()(itk::wasm::Pipeline &pipeline)
+  int
+  operator()(itk::wasm::Pipeline & pipeline)
   {
     using MeshType = TMesh;
 
@@ -148,18 +157,12 @@ public:
   }
 };
 
-int main(int argc, char *argv[])
+int
+main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("keep-largest-component", "Keep only the largest component in the mesh.", argc, argv);
 
-  return itk::wasm::SupportInputMeshTypes<PipelineFunctor,
-                                          uint8_t,
-                                          int8_t,
-                                          uint16_t,
-                                          int16_t,
-                                          uint32_t,
-                                          int32_t,
-                                          float,
-                                          double>::Dimensions<
-      3U>("input-mesh", pipeline);
+  return itk::wasm::
+    SupportInputMeshTypes<PipelineFunctor, uint8_t, int8_t, uint16_t, int16_t, uint32_t, int32_t, float, double>::
+      Dimensions<3U>("input-mesh", pipeline);
 }
