@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "itk-webassemblyinterface"
-version = "1.0b176"
+version = "1.0b177"
 description = "IO with the itk-wasm file formats"
 readme = "docs/itk-webassemblyinterface-description.md"
 license = {file = "LICENSE"}
@@ -47,7 +47,7 @@ Homepage = "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 # The versions of CMake to allow. If CMake is not present on the system or does
 # not pass this specifier, it will be downloaded via PyPI if possible. An empty
 # string will disable this check.
-cmake.version = ">=3.16.3"
+cmake.version = ">=3.22.1"
 
 # A list of args to pass to CMake when configuring the project. Setting this in
 # config or envvar will override toml. See also ``cmake.define``.
@@ -102,7 +102,7 @@ editable.mode = "redirect"
 # set.
 editable.rebuild = false
 
-# If set, this will provide a method for backward compatibility.
+# If set, this will provide a method for scikit-build-core backward compatibility.
 minimum-version = "0.8.2"
 
 # The build directory. Defaults to a temporary directory, but can be set.
