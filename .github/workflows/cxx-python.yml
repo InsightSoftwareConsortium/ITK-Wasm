@@ -21,7 +21,7 @@ jobs:
 
   #python-build-workflow:
     ## itk-wasm branch
-    #uses: thewtex/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@v5.4.2
+    #uses: thewtex/ITKRemoteModuleBuildTestPackageAction/.github/workflows/build-test-package-python.yml@v5.4.4
     #with:
       #itk-module-deps: 'InsightSoftwareConsortium/ITKMeshToPolyData@v0.11.0'
       #manylinux-platforms: '["_2_28-x64","_2_28-aarch64"]'
