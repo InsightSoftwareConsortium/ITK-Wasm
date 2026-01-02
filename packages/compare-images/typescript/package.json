@@ -49,7 +49,7 @@
     "start-server-and-test": "^2.0.3",
     "typescript": "^5.3.3",
     "vite": "^6.4.1",
-    "vite-plugin-static-copy": "^1.0.0"
+    "vite-plugin-static-copy": "^2.3.2"
   },
   "repository": {
     "type": "git",
