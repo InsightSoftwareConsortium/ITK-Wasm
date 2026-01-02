@@ -12,7 +12,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.1
     - uses: actions/setup-node@v6
       with:
         node-version: lts/*
@@ -22,7 +22,7 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npm run test
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
@@ -35,7 +35,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.1
     - uses: actions/setup-node@v6
       with:
         node-version: lts/*
@@ -45,7 +45,7 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npm run test
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
@@ -59,7 +59,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.1
     - uses: actions/setup-node@v6
       with:
         node-version: lts/*
@@ -69,7 +69,7 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npm run test
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
@@ -82,7 +82,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.1
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -135,7 +135,7 @@ jobs:
         working-directory: ./packages/core/typescript/itk-wasm
         run: pnpm run test:browser
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
         with:
           name: playwright-report-itk-wasm
@@ -152,7 +152,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.1
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -209,7 +209,7 @@ jobs:
         working-directory: packages/${{ matrix.package }}/typescript
         run: pnpm run test:browser
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
         with:
           name: playwright-report-${{ matrix.package }}
@@ -223,7 +223,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.1
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
 
@@ -257,7 +257,7 @@ jobs:
     - name: Run Playwright tests
       run: pnpm run test
 
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       if: ${{ !cancelled() }}
       with:
         name: playwright-report-hello-world
