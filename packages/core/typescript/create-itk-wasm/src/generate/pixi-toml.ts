@@ -9,7 +9,7 @@ function generatePixiToml(project: ProjectSpec) {
     return
   }
 
-  const content = `[project]
+  const content = `[workspace]
 authors = ["${project.author}"]
 channels = ["conda-forge"]
 description = "${project.packageDescription}"

@@ -1,4 +1,4 @@
-[project]
+[workspace]
 authors = ["Matt McCormick <matt@mmmccormick.com>"]
 channels = ["conda-forge"]
 description = "Input and output for scientific and medical image file formats."

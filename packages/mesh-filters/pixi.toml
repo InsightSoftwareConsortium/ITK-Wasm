@@ -1,4 +1,4 @@
-[project]
+[workspace]
 authors = ["Matt McCormick <matt@mmmccormick.com>"]
 channels = ["conda-forge"]
 description = "Mesh filters to repair, remesh, subdivide, decimate, smooth, triangulate, etc."
