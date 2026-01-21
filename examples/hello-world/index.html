@@ -1,27 +1,50 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ITK-Wasm Browser Hello World!</title>
+    <title>ITK-Wasm Hello World Example</title>
     <meta charset="UTF-8" />
   </head>
 
   <body>
-    <textarea readonly>WebAssembly output...</textarea>
+    <h1>ITK-Wasm Hello World Example</h1>
+    <p>This example demonstrates a pipeline created with <code>create-itk-wasm</code>.</p>
+    
+    <div>
+      <label for="messageInput">Custom Message:</label>
+      <input type="text" id="messageInput" value="Hello Wasm world!" />
+      <button onclick="runPipeline()">Run Pipeline</button>
+    </div>
+    
+    <h3>Output:</h3>
+    <textarea id="output" readonly rows="10" cols="80">Loading...</textarea>
 
     <script type="module">
       import { runPipeline } from "https://cdn.jsdelivr.net/npm/itk-wasm@1.0.0-b.187/dist/bundles/itk-wasm-worker-embedded.js";
-      const outputTextArea = document.querySelector("textarea");
-      outputTextArea.textContent = "Loading...";
-
-      const wasmURL = new URL('emscripten-build/hello', document.location)
-      const args = []
-      const inputs = null
-      const outputs = null
-      runPipeline(wasmURL, args, outputs, inputs).then(
-        ({ stdout, webWorker }) => {
-          webWorker.terminate()
-          outputTextArea.textContent = stdout
-          })
+      
+      const outputTextArea = document.getElementById("output");
+      const messageInput = document.getElementById("messageInput");
+      
+      window.runPipeline = async function() {
+        try {
+          outputTextArea.textContent = "Running pipeline...";
+          
+          const wasmURL = new URL('emscripten-build/hello', document.location);
+          const message = messageInput.value || "Hello Wasm world!";
+          const args = ['--message', message, 'output.txt'];
+          const inputs = null;
+          const outputs = null;
+          
+          const result = await runPipeline(wasmURL, args, outputs, inputs);
+          result.webWorker.terminate();
+          
+          outputTextArea.textContent = `Exit code: ${result.returnValue}\n\nStdout:\n${result.stdout}\n\nStderr:\n${result.stderr}`;
+        } catch (error) {
+          outputTextArea.textContent = `Error: ${error.message}`;
+        }
+      };
+      
+      // Run pipeline on page load
+      document.addEventListener('DOMContentLoaded', window.runPipeline);
     </script>
   </body>
 </html>
