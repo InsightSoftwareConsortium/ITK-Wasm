@@ -35,7 +35,20 @@ RUN curl -L https://api.github.com/repos/facebook/zstd/tarball/${zstd_GIT_TAG} |
   cd .. && \
   rm -rf zstd-build zstd
 
-RUN . /itk_wasm_env_vars.sh && git clone --branch $ITK_WASM_ITK_BRANCH --single-branch --depth 1 $ITK_WASM_ITK_REPOSITORY && \
+# Support using a local ITK source directory instead of cloning from git
+ARG USE_LOCAL_ITK=0
+COPY ITKLocalCopy /ITKLocalCopy
+
+# Either use local ITK source or clone from git repository
+RUN . /itk_wasm_env_vars.sh && \
+  if [ "$USE_LOCAL_ITK" = "1" ] && [ -d /ITKLocalCopy ] && [ "$(ls -A /ITKLocalCopy 2>/dev/null | grep -v .gitkeep)" ]; then \
+    echo "Using local ITK source" && \
+    mv /ITKLocalCopy /ITK; \
+  else \
+    echo "Cloning ITK from $ITK_WASM_ITK_REPOSITORY branch $ITK_WASM_ITK_BRANCH" && \
+    rm -rf /ITKLocalCopy && \
+    git clone --branch $ITK_WASM_ITK_BRANCH --single-branch --depth 1 $ITK_WASM_ITK_REPOSITORY; \
+  fi && \
   sed -i -e '/^option(OPJ_USE_THREAD/c\option(OPJ_USE_THREAD "use threads" OFF)' \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
 
