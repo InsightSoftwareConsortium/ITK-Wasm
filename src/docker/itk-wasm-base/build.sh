@@ -65,7 +65,6 @@ emscripten_threads_c_flags="-pthread -msimd128 -flto -Wno-warn-absolute-paths -D
 emscripten_threads_debug_ld_flags="-pthread -s MALLOC=mimalloc -s PTHREAD_POOL_SIZE=navigator.hardwareConcurrency -fno-lto -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=4GB -Wno-pthreads-mem-growth"
 emscripten_threads_debug_c_flags="-pthread -msimd128 -fno-lto -Wno-warn-absolute-paths"
 
-<<<<<<< HEAD
 # Handle local ITK source
 local_itk_build_arg=""
 if [[ -n "$local_itk" ]]; then
