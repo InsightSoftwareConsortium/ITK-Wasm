@@ -80,14 +80,19 @@ if [[ -n "$local_itk" ]]; then
   local_itk_build_arg="--build-arg USE_LOCAL_ITK=1"
 fi
 
-# Cleanup function to restore ITKLocalCopy to placeholder state
-cleanup_local_itk() {
+# Generate environment variables file for Docker
+"$script_dir/generate-env-vars.sh"
+
+# Cleanup function to restore ITKLocalCopy to placeholder state and remove generated files
+cleanup_build_artifacts() {
   if [[ -n "$local_itk" ]]; then
     rm -rf "$script_dir/ITKLocalCopy"/*
     touch "$script_dir/ITKLocalCopy/.gitkeep"
   fi
+  # Remove generated env vars file
+  rm -f "$script_dir/itk_wasm_env_vars.sh"
 }
-trap cleanup_local_itk EXIT
+trap cleanup_build_artifacts EXIT
 
 $exe $build_cmd $tag_flag quay.io/itkwasm/emscripten-base:latest-$host_arch \
         --build-arg IMAGE=quay.io/itkwasm/emscripten-base \
