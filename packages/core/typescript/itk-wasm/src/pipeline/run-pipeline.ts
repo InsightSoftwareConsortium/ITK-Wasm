@@ -55,10 +55,31 @@ function defaultPipelinesQueryParams (): RunPipelineOptions['pipelineQueryParams
   return result
 }
 
+function processThreadsArgs (args: string[]): {
+  disableThreads: boolean
+  filteredArgs: string[]
+} {
+  const filteredArgs: string[] = []
+  let disableThreads = false
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--threads' && i + 1 < args.length && args[i + 1] === '0') {
+      disableThreads = true
+      // Skip both '--threads' and '0'
+      i++ // Skip the next element ('0')
+    } else {
+      filteredArgs.push(args[i])
+    }
+  }
+
+  return { disableThreads, filteredArgs }
+}
+
 async function loadPipelineModule (
   pipelinePath: string | URL,
   pipelineBaseUrl?: string | URL,
-  pipelineQueryParams?: RunPipelineOptions['pipelineQueryParams']
+  pipelineQueryParams?: RunPipelineOptions['pipelineQueryParams'],
+  disableThreads?: boolean
 ): Promise<PipelineEmscriptenModule> {
   let moduleRelativePathOrURL: string | URL = pipelinePath as string
   let pipeline = pipelinePath as string
@@ -72,7 +93,8 @@ async function loadPipelineModule (
     const pipelineModule = (await loadEmscriptenModuleMainThread(
       pipelinePath,
       pipelineBaseUrl?.toString() ?? defaultPipelinesBaseUrl(),
-      pipelineQueryParams ?? defaultPipelinesQueryParams()
+      pipelineQueryParams ?? defaultPipelinesQueryParams(),
+      disableThreads
     )) as PipelineEmscriptenModule
     pipelineToModule.set(pipeline, pipelineModule)
     return pipelineModule
@@ -86,25 +108,39 @@ async function runPipeline (
   inputs: PipelineInput[] | null,
   options?: RunPipelineOptions
 ): Promise<RunPipelineResult> {
-  if (!await simd()) {
-    const simdErrorMessage = 'WebAssembly SIMD support is required -- please update your browser.'
+  if (!(await simd())) {
+    const simdErrorMessage =
+      'WebAssembly SIMD support is required -- please update your browser.'
     alert(simdErrorMessage)
     throw new Error(simdErrorMessage)
   }
+
+  const { disableThreads, filteredArgs } = processThreadsArgs(args)
   const webWorker = options?.webWorker ?? null
 
   if (webWorker === false) {
     const pipelineModule = await loadPipelineModule(
       pipelinePath.toString(),
       options?.pipelineBaseUrl,
-      options?.pipelineQueryParams ?? defaultPipelinesQueryParams()
+      options?.pipelineQueryParams ?? defaultPipelinesQueryParams(),
+      disableThreads
     )
-    const result = runPipelineEmscripten(pipelineModule, args, outputs, inputs)
+    const result = runPipelineEmscripten(
+      pipelineModule,
+      filteredArgs,
+      outputs,
+      inputs
+    )
     return result
   }
   let worker = webWorker
-  const pipelineWorkerUrl = options?.pipelineWorkerUrl ?? defaultPipelineWorkerUrl()
-  const pipelineWorkerUrlString = typeof pipelineWorkerUrl !== 'string' && typeof pipelineWorkerUrl?.href !== 'undefined' ? pipelineWorkerUrl.href : pipelineWorkerUrl
+  const pipelineWorkerUrl =
+    options?.pipelineWorkerUrl ?? defaultPipelineWorkerUrl()
+  const pipelineWorkerUrlString =
+    typeof pipelineWorkerUrl !== 'string' &&
+    typeof pipelineWorkerUrl?.href !== 'undefined'
+      ? pipelineWorkerUrl.href
+      : pipelineWorkerUrl
   const { workerProxy, worker: usedWorker } = await createWorkerProxy(
     worker as Worker | null,
     pipelineWorkerUrlString as string | undefined | null,
@@ -140,12 +176,22 @@ async function runPipeline (
     })
   }
   const pipelineBaseUrl = options?.pipelineBaseUrl ?? defaultPipelinesBaseUrl()
-  const pipelineBaseUrlString = typeof pipelineBaseUrl !== 'string' && typeof pipelineBaseUrl?.href !== 'undefined' ? pipelineBaseUrl.href : pipelineBaseUrl
-  const transferedInputs = (inputs != null) ? Comlink.transfer(inputs, getTransferables(transferables, options?.noCopy)) : null
+  const pipelineBaseUrlString =
+    typeof pipelineBaseUrl !== 'string' &&
+    typeof pipelineBaseUrl?.href !== 'undefined'
+      ? pipelineBaseUrl.href
+      : pipelineBaseUrl
+  const transferedInputs =
+    inputs != null
+      ? Comlink.transfer(
+        inputs,
+        getTransferables(transferables, options?.noCopy)
+      )
+      : null
   const result: RunPipelineWorkerResult = await workerProxy.runPipeline(
     pipelinePath.toString(),
     pipelineBaseUrlString as string,
-    args,
+    filteredArgs,
     outputs,
     transferedInputs,
     options?.pipelineQueryParams ?? defaultPipelinesQueryParams()

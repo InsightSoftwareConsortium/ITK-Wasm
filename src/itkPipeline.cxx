@@ -31,6 +31,9 @@ Pipeline ::Pipeline(std::string name, std::string description, int argc, char **
   , m_argc(argc)
   , m_argv(argv)
   , m_Version("0.1.0")
+#ifdef ITK_WASM_PIPELINE_USE_THREADS
+  , m_Threads(8)
+#endif
 {
   this->footer("Enjoy ITK!");
 
@@ -39,9 +42,16 @@ Pipeline ::Pipeline(std::string name, std::string description, int argc, char **
   this->add_flag("--memory-io", m_UseMemoryIO, "Use itk-wasm memory IO")->group("");
   this->set_version_flag("--version", m_Version);
 
+#ifdef ITK_WASM_PIPELINE_USE_THREADS
+  this->add_option("--threads", m_Threads, "Number of threads to use for processing")->group("");
+#endif
+
   // Set m_UseMemoryIO before it is used by other memory parsers
   this->preparse_callback([this](size_t arg) {
     m_UseMemoryIO = false;
+#ifdef ITK_WASM_PIPELINE_USE_THREADS
+    m_Threads = 8; // Reset to default
+#endif
     for (int ii = 0; ii < this->m_argc; ++ii)
     {
       const std::string arg(this->m_argv[ii]);
@@ -49,7 +59,21 @@ Pipeline ::Pipeline(std::string name, std::string description, int argc, char **
       {
         m_UseMemoryIO = true;
       }
+#ifdef ITK_WASM_PIPELINE_USE_THREADS
+      if (arg == "--threads" && ii + 1 < this->m_argc)
+      {
+        try {
+          m_Threads = std::stoi(this->m_argv[ii + 1]);
+        } catch (...) {
+          // Keep default value if parsing fails
+        }
+      }
+#endif
     }
+#ifdef ITK_WASM_PIPELINE_USE_THREADS
+    // Set ITK's global number of threads
+    itk::MultiThreaderBase::SetGlobalDefaultNumberOfThreads(m_Threads);
+#endif
   });
 
 #ifndef ITK_WASM_NO_FILESYSTEM_IO

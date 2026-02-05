@@ -10,8 +10,8 @@
       "https://itk.mypinata.cloud/ipfs/bafybeibc5xkdxpu2vwpcmbmu34jfdnr4grnpcrhnnjoeq546zovvfeuixu/data.tar.gz",
       "https://bafybeibc5xkdxpu2vwpcmbmu34jfdnr4grnpcrhnnjoeq546zovvfeuixu.ipfs.w3s.link/ipfs/bafybeibc5xkdxpu2vwpcmbmu34jfdnr4grnpcrhnnjoeq546zovvfeuixu/data.tar.gz"
     ],
-    "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
-    "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
+    "emscripten-docker-image": "docker.io/itkwasm/emscripten:latest",
+    "wasi-docker-image": "docker.io/itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/mesh-io",
     "python-package-name": "itkwasm-mesh-io",
     "package-description": "Input and output for mesh file formats.",

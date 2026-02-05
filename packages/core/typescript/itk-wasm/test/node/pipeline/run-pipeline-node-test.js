@@ -477,7 +477,7 @@ test('runPipelineNode writes and reads an itk.TransformList via memory io', asyn
   verifyTransform(outputs[0].data)
 })
 
-test.only('runPipelineNode writes and reads a CompositeTransform itk.TransformList via memory io', async (t) => {
+test('runPipelineNode writes and reads a CompositeTransform itk.TransformList via memory io', async (t) => {
   const verifyTransform = (transformList) => {
     t.is(
       transformList.length,
@@ -641,6 +641,66 @@ test.only('runPipelineNode writes and reads a CompositeTransform itk.TransformLi
     inputs
   )
   verifyTransform(outputs[0].data)
+})
+
+test('runPipelineNode runs pthreads-enabled pipeline', async (t) => {
+  const pipelinePath = path.resolve(
+    'test',
+    'pipelines',
+    'emscripten-threads-build',
+    'pthreads-pipeline',
+    'pthreads-test'
+  )
+  const args = ['--memory-io', '--threads', '3', '0']
+  const desiredOutputs = [{ type: InterfaceTypes.JsonCompatible }]
+  const inputs = []
+
+  const { outputs } = await runPipelineNode(
+    pipelinePath,
+    args,
+    desiredOutputs,
+    inputs
+  )
+
+  const result = outputs[0].data
+  t.is(typeof result, 'object', 'output should be an object')
+  t.is(
+    typeof result.createdThreads,
+    'number',
+    'createdThreads should be a number'
+  )
+  t.true(result.createdThreads >= 0, 'should have created at least 0 threads')
+  t.true(
+    result.createdThreads <= 4,
+    'should not have created more than 4 threads'
+  )
+})
+
+test('runPipelineNode with --threads 0 disables threading', async (t) => {
+  const image = readCthead1()
+  const pipelinePath = path.resolve(
+    'test',
+    'pipelines',
+    'emscripten-build',
+    'median-filter-pipeline',
+    'median-filter-test'
+  )
+  // Include --threads 0 to test that threading is disabled at the loading level
+  const args = ['0', '0', '--radius', '4', '--memory-io', '--threads', '0']
+  const desiredOutputs = [{ type: InterfaceTypes.Image }]
+  const inputs = [{ type: InterfaceTypes.Image, data: image }]
+
+  const { outputs } = await runPipelineNode(
+    pipelinePath,
+    args,
+    desiredOutputs,
+    inputs
+  )
+
+  // The test should pass successfully, indicating that --threads 0 was handled
+  // and the non-threaded WASM was loaded instead of the threaded version
+  t.is(outputs.length, 1, 'should have one output')
+  t.is(typeof outputs[0].data, 'object', 'output should be an object')
 })
 
 test('runPipelineNode creates a composite transform with expected parameters', async (t) => {

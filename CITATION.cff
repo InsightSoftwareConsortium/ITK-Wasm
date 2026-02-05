@@ -10,7 +10,7 @@ type: software
 authors:
   - given-names: Matthew
     family-names: McCormick
-    email: matt@mmmccormick.com
+    email: matt@fideus.io
     affiliation: 'Kitware, Inc'
     orcid: 'https://orcid.org/0000-0001-9475-3756'
 keywords:

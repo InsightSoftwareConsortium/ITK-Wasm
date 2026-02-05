@@ -39,6 +39,26 @@ function replaceArgumentsWithEmscriptenPaths (
   })
 }
 
+function processThreadsArgs (args: string[]): {
+  disableThreads: boolean
+  filteredArgs: string[]
+} {
+  const filteredArgs: string[] = []
+  let disableThreads = false
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--threads' && i + 1 < args.length && args[i + 1] === '0') {
+      disableThreads = true
+      // Skip both '--threads' and '0'
+      i++ // Skip the next element ('0')
+    } else {
+      filteredArgs.push(args[i])
+    }
+  }
+
+  return { disableThreads, filteredArgs }
+}
+
 async function runPipelineNode (
   pipelinePath: string,
   args: string[],
@@ -46,8 +66,10 @@ async function runPipelineNode (
   inputs: PipelineInput[] | null,
   mountDirs?: Set<string>
 ): Promise<RunPipelineResult> {
+  const { disableThreads, filteredArgs } = processThreadsArgs(args)
   const Module = (await loadEmscriptenModuleNode(
-    pipelinePath
+    pipelinePath,
+    disableThreads
   )) as PipelineEmscriptenModule
   const mountedDirs: Set<string> = new Set()
   const unmountable: Set<string> = new Set()
@@ -61,13 +83,13 @@ async function runPipelineNode (
      */
     Array.from(mountedDirs)
       .filter((x, _, a) => a.every((y) => x === y || !x.includes(y)))
-      .forEach((dir) => unmountable.add(dir)
-      )
+      .forEach((dir) => unmountable.add(dir))
   }
+  let processedArgs = filteredArgs
   if (typeof mountDirs !== 'undefined') {
-    args = replaceArgumentsWithEmscriptenPaths(args, mountDirs)
+    processedArgs = replaceArgumentsWithEmscriptenPaths(filteredArgs, mountDirs)
   }
-  const result = runPipelineEmscripten(Module, args, outputs, inputs)
+  const result = runPipelineEmscripten(Module, processedArgs, outputs, inputs)
   if (typeof mountDirs !== 'undefined') {
     unmountable.forEach((dir) => {
       Module.unmountDir(dir)

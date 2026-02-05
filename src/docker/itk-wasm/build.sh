@@ -40,21 +40,21 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
-$exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest-$host_arch \
-        --build-arg IMAGE=quay.io/itkwasm/emscripten \
+$exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/emscripten:latest-$host_arch \
+        --build-arg IMAGE=docker.io/itkwasm/emscripten \
         --build-arg HOST_ARCH=$host_arch \
         --build-arg CMAKE_BUILD_TYPE=Release \
-        --build-arg BASE_IMAGE=quay.io/itkwasm/emscripten-base \
+        --build-arg BASE_IMAGE=docker.io/itkwasm/emscripten-base \
         --build-arg VCS_REF=${VCS_REF} \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
 if $version_tag; then
-        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:${TAG}-$host_arch \
-                --build-arg IMAGE=quay.io/itkwasm/emscripten \
+        $exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/emscripten:${TAG}-$host_arch \
+                --build-arg IMAGE=docker.io/itkwasm/emscripten \
                 --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Release \
-                --build-arg BASE_IMAGE=quay.io/itkwasm/emscripten-base \
+                --build-arg BASE_IMAGE=docker.io/itkwasm/emscripten-base \
                 --build-arg BASE_TAG=${TAG}-$host_arch \
                 --build-arg VERSION=${TAG} \
                 --build-arg VCS_REF=${VCS_REF} \
@@ -62,23 +62,23 @@ if $version_tag; then
                 --build-arg BUILD_DATE=${BUILD_DATE} \
                 $script_dir $@
 fi
-$exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest-threads-$host_arch \
-        --build-arg IMAGE=quay.io/itkwasm/emscripten \
+$exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/emscripten:latest-threads-$host_arch \
+        --build-arg IMAGE=docker.io/itkwasm/emscripten \
         --build-arg HOST_ARCH=$host_arch \
         --build-arg VERSION=latest-threads \
         --build-arg CMAKE_BUILD_TYPE=Release \
-        --build-arg BASE_IMAGE=quay.io/itkwasm/emscripten-base \
+        --build-arg BASE_IMAGE=docker.io/itkwasm/emscripten-base \
         --build-arg BASE_TAG=latest-threads-$host_arch \
         --build-arg VCS_REF=${VCS_REF} \
         --build-arg VCS_URL=${VCS_URL} \
         --build-arg BUILD_DATE=${BUILD_DATE} \
         $script_dir $@
 if $version_tag; then
-        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:${TAG}-threads-$host_arch \
-                --build-arg IMAGE=quay.io/itkwasm/emscripten \
+        $exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/emscripten:${TAG}-threads-$host_arch \
+                --build-arg IMAGE=docker.io/itkwasm/emscripten \
                 --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Release \
-                --build-arg BASE_IMAGE=quay.io/itkwasm/emscripten-base \
+                --build-arg BASE_IMAGE=docker.io/itkwasm/emscripten-base \
                 --build-arg BASE_TAG=${TAG}-threads-$host_arch \
                 --build-arg VERSION=${TAG}-threads \
                 --build-arg VCS_REF=${VCS_REF} \
@@ -89,23 +89,23 @@ fi
 
 
 if $wasi; then
-  $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:latest-$host_arch  \
-          --build-arg IMAGE=quay.io/itkwasm/wasi \
+  $exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/wasi:latest-$host_arch  \
+          --build-arg IMAGE=docker.io/itkwasm/wasi \
           --build-arg HOST_ARCH=$host_arch \
           --build-arg CMAKE_BUILD_TYPE=Release \
-          --build-arg BASE_IMAGE=quay.io/itkwasm/wasi-base \
+          --build-arg BASE_IMAGE=docker.io/itkwasm/wasi-base \
           --build-arg VCS_REF=${VCS_REF} \
           --build-arg VCS_URL=${VCS_URL} \
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $version_tag; then
-        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:${TAG}-$host_arch \
-                --build-arg IMAGE=quay.io/itkwasm/wasi \
+        $exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/wasi:${TAG}-$host_arch \
+                --build-arg IMAGE=docker.io/itkwasm/wasi \
                 --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Release \
                 --build-arg VERSION=${TAG} \
                 --build-arg BASE_TAG=${TAG}-$host_arch \
-                --build-arg BASE_IMAGE=quay.io/itkwasm/wasi-base \
+                --build-arg BASE_IMAGE=docker.io/itkwasm/wasi-base \
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
                 --build-arg BUILD_DATE=${BUILD_DATE} \
@@ -114,8 +114,8 @@ if $wasi; then
 fi
 
 if $debug; then
-  $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest-debug-$host_arch \
-          --build-arg IMAGE=quay.io/itkwasm/emscripten \
+  $exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/emscripten:latest-debug-$host_arch \
+          --build-arg IMAGE=docker.io/itkwasm/emscripten \
           --build-arg HOST_ARCH=$host_arch \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg VERSION=latest-debug \
@@ -125,8 +125,8 @@ if $debug; then
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $version_tag; then
-        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:${TAG}-debug-$host_arch \
-                --build-arg IMAGE=quay.io/itkwasm/emscripten \
+        $exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/emscripten:${TAG}-debug-$host_arch \
+                --build-arg IMAGE=docker.io/itkwasm/emscripten \
                 --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG}-debug \
@@ -136,8 +136,8 @@ if $debug; then
                 --build-arg BUILD_DATE=${BUILD_DATE} \
                 $script_dir $@
   fi
-  $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:latest-threads-debug-$host_arch \
-          --build-arg IMAGE=quay.io/itkwasm/emscripten \
+  $exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/emscripten:latest-threads-debug-$host_arch \
+          --build-arg IMAGE=docker.io/itkwasm/emscripten \
           --build-arg HOST_ARCH=$host_arch \
           --build-arg CMAKE_BUILD_TYPE=Debug \
           --build-arg BASE_TAG=latest-threads-debug-$host_arch \
@@ -147,8 +147,8 @@ if $debug; then
           --build-arg BUILD_DATE=${BUILD_DATE} \
           $script_dir $@
   if $version_tag; then
-        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/emscripten:${TAG}-threads-debug-$host_arch \
-                --build-arg IMAGE=quay.io/itkwasm/emscripten \
+        $exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/emscripten:${TAG}-threads-debug-$host_arch \
+                --build-arg IMAGE=docker.io/itkwasm/emscripten \
                 --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG}-threads-debug \
@@ -159,23 +159,23 @@ if $debug; then
                 $script_dir $@
   fi
   if $wasi; then
-    $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:latest-debug-$host_arch  \
-            --build-arg IMAGE=quay.io/itkwasm/wasi \
+    $exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/wasi:latest-debug-$host_arch  \
+            --build-arg IMAGE=docker.io/itkwasm/wasi \
             --build-arg HOST_ARCH=$host_arch \
             --build-arg CMAKE_BUILD_TYPE=Debug \
-            --build-arg BASE_IMAGE=quay.io/itkwasm/wasi-base \
+            --build-arg BASE_IMAGE=docker.io/itkwasm/wasi-base \
             --build-arg VCS_REF=${VCS_REF} \
             --build-arg VCS_URL=${VCS_URL} \
             --build-arg BUILD_DATE=${BUILD_DATE} \
             $script_dir $@
     if $version_tag; then
-        $exe $build_cmd --pull=false $tag_flag quay.io/itkwasm/wasi:${TAG}-debug-$host_arch \
-                --build-arg IMAGE=quay.io/itkwasm/wasi \
+        $exe $build_cmd --pull=false $tag_flag docker.io/itkwasm/wasi:${TAG}-debug-$host_arch \
+                --build-arg IMAGE=docker.io/itkwasm/wasi \
                 --build-arg HOST_ARCH=$host_arch \
                 --build-arg CMAKE_BUILD_TYPE=Debug \
                 --build-arg VERSION=${TAG} \
                 --build-arg BASE_TAG=${TAG}-debug-$host_arch \
-                --build-arg BASE_IMAGE=quay.io/itkwasm/wasi-base \
+                --build-arg BASE_IMAGE=docker.io/itkwasm/wasi-base \
                 --build-arg VCS_REF=${VCS_REF} \
                 --build-arg VCS_URL=${VCS_URL} \
                 --build-arg BUILD_DATE=${BUILD_DATE} \
