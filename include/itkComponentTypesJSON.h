@@ -41,7 +41,7 @@ template <>
 struct glz::meta<itk::JSONComponentTypesEnum>
 {
   using enum itk::JSONComponentTypesEnum;
-  static constexpr auto value = glz::enumerate(int8, uint8, int16, uint16, int32, uint32, int64, float32, float64);
+  static constexpr auto value = glz::enumerate(int8, uint8, int16, uint16, int32, uint32, int64, uint64, float32, float64);
 };
 
 #endif // itkComponentTypesJSON_h

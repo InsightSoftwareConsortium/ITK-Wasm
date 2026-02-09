@@ -204,6 +204,11 @@ WasmImageIO ::ReadCBOR(void * buffer, unsigned char * cborBuffer, size_t cborBuf
 
   const size_t             indexCount = cbor_map_size(index);
   const struct cbor_pair * indexHandle = cbor_map_handle(index);
+  // Defer the pixel data copy until after all metadata keys have been processed,
+  // so that GetImageSizeInBytes() returns the correct value regardless of CBOR
+  // map key ordering. This is important for interoperability with third-party
+  // CBOR writers (e.g. NiiVue's cbor-x) that may serialize keys in a different order.
+  const cbor_item_t * deferredDataValue = nullptr;
   for (size_t ii = 0; ii < indexCount; ++ii)
   {
     const std::string_view key(reinterpret_cast<char *>(cbor_string_handle(indexHandle[ii].key)),
@@ -295,13 +300,8 @@ WasmImageIO ::ReadCBOR(void * buffer, unsigned char * cborBuffer, size_t cborBuf
     }
     else if (key == "data")
     {
-      if (buffer != nullptr)
-      {
-        const SizeValueType numberOfBytesToBeRead = static_cast<SizeValueType>(this->GetImageSizeInBytes());
-        const cbor_item_t * dataItem = cbor_tag_item(indexHandle[ii].value);
-        const char *        dataHandle = reinterpret_cast<char *>(cbor_bytestring_handle(dataItem));
-        std::memcpy(buffer, dataHandle, numberOfBytesToBeRead);
-      }
+      // Save the data value for deferred processing after all metadata is set
+      deferredDataValue = indexHandle[ii].value;
     }
     else if (key == "metadata")
     {
@@ -312,8 +312,20 @@ WasmImageIO ::ReadCBOR(void * buffer, unsigned char * cborBuffer, size_t cborBuf
     }
     else
     {
-      itkExceptionMacro("Unexpected cbor map key: " << key);
+      // Skip unknown keys for forward compatibility and interoperability
+      // with third-party CBOR writers (e.g. NiiVue) that may include
+      // additional fields.
     }
+  }
+
+  // Now that all metadata (imageType, size, etc.) has been processed,
+  // copy the pixel data with the correct buffer size.
+  if (buffer != nullptr && deferredDataValue != nullptr)
+  {
+    const SizeValueType numberOfBytesToBeRead = static_cast<SizeValueType>(this->GetImageSizeInBytes());
+    const cbor_item_t * dataItem = cbor_tag_item(deferredDataValue);
+    const char *        dataHandle = reinterpret_cast<char *>(cbor_bytestring_handle(dataItem));
+    std::memcpy(buffer, dataHandle, numberOfBytesToBeRead);
   }
 
   cbor_decref(&index);
