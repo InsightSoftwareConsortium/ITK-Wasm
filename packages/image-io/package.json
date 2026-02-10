@@ -10,8 +10,8 @@
       "https://itk.mypinata.cloud/ipfs/bafybeidxwcsazmgzcejlhm233y5rkaphhfxvgbnqfw3ckrrly3tv6vrtnu/data.tar.gz",
       "https://w3s.link/ipfs/bafybeidxwcsazmgzcejlhm233y5rkaphhfxvgbnqfw3ckrrly3tv6vrtnu/data.tar.gz"
     ],
-    "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
-    "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
+    "emscripten-docker-image": "docker.io/itkwasm/emscripten:latest",
+    "wasi-docker-image": "docker.io/itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/image-io",
     "python-package-name": "itkwasm-image-io",
     "package-description": "Input and output for scientific and medical image file formats.",
