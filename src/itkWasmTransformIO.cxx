@@ -342,7 +342,8 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR(void *          buffer,
           }
           else
           {
-            itkExceptionMacro("Unexpected transformType cbor map key: " << transformTypeKey);
+            // Skip unknown keys for forward compatibility and interoperability
+            // with third-party CBOR writers that may include additional fields.
           }
         }
       }
@@ -373,6 +374,11 @@ WasmTransformIOTemplate<TParametersValueType>::ReadCBOR(void *          buffer,
         const std::string outputSpaceName(reinterpret_cast<char *>(cbor_string_handle(transformHandle[jj].value)),
                                           cbor_string_length(transformHandle[jj].value));
         transformJSON.outputSpaceName = outputSpaceName;
+      }
+      else
+      {
+        // Skip unknown keys for forward compatibility and interoperability
+        // with third-party CBOR writers that may include additional fields.
       }
     }
     transformListJSON.push_back(transformJSON);
