@@ -248,7 +248,8 @@ WasmImageIO ::ReadCBOR(void * buffer, unsigned char * cborBuffer, size_t cborBuf
         }
         else
         {
-          itkExceptionMacro("Unexpected imageType cbor map key: " << imageTypeKey);
+          // Skip unknown keys for forward compatibility and interoperability
+          // with third-party CBOR writers that may include additional fields.
         }
       }
     }
