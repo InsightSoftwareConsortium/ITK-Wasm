@@ -16,8 +16,8 @@ $cp_exe -a ../../../src/emscripten-module ./ITKWebAssemblyInterfaceModuleCopy/sr
 mkdir -p median-filter-pipelineCopy
 $cp_exe -a ../../../packages/core/typescript/itk-wasm/test/pipelines/median-filter-pipeline/{CMakeLists.txt,median-filter-test.cxx} ./median-filter-pipelineCopy
 
-TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
-VCS_REF=$(git rev-parse --short HEAD)
+TAG=$(date '+%Y%m%d')-$(git rev-parse --short=9 HEAD)
+VCS_REF=$(git rev-parse --short=9 HEAD)
 VCS_URL="https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 

@@ -18,7 +18,7 @@ pixi run build-docker-images --with-debug
 pnpm clean && pnpm install && pnpm build && pnpm test
 
 git add -- packages/core/typescript/itk-wasm/src/cli/default-image-tag.js
-git commit -m "feat(itk-wasm-cli): update default Docker image for $(date '+%Y%m%d')-$(git rev-parse --short HEAD)"
+git commit -m "feat(itk-wasm-cli): update default Docker image for $(date '+%Y%m%d')-$(git rev-parse --short=9 HEAD)"
 ```
 
 ## Building with a Local ITK Repository

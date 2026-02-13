@@ -19,7 +19,7 @@ for param; do
 done
 set -- "${newparams[@]}"  # overwrites the original positional params
 
-TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
+TAG=$(date '+%Y%m%d')-$(git rev-parse --short=9 HEAD)
 host_arch=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
 other_arch=$(if [ "$host_arch" == "amd64" ]; then echo "arm64"; else echo "amd64"; fi)
 
