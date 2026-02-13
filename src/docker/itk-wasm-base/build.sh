@@ -6,8 +6,8 @@ script_dir="`cd $(dirname $0); pwd`"
 source "$script_dir/../oci_exe.sh"
 exe=$(ociExe)
 
-TAG=$(date '+%Y%m%d')-$(git rev-parse --short HEAD)
-VCS_REF=$(git rev-parse --short HEAD)
+TAG=$(date '+%Y%m%d')-$(git rev-parse --short=9 HEAD)
+VCS_REF=$(git rev-parse --short=9 HEAD)
 VCS_URL="https://github.com/InsightSoftwareConsortium/ITK-Wasm"
 BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
