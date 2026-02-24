@@ -7,6 +7,8 @@
   "itk-wasm": {
     "test-data-hash": "bafkreihranpzszz3q5bwgzsw6olqwh2e726wfnh4qblkjbng44yhqbfin4",
     "test-data-urls": [
+      "https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/test-data/transform-io-test-data-2026-02-24-bafkreihranpzszz3q5bwgzsw6olqwh2e726wfnh4qblkjbng44yhqbfin4.tar.gz",
+      "https://fideus.myfilebase.com/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz",
       "https://itk.mypinata.cloud/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz",
       "https://bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme.ipfs.w3s.link/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz"
     ],
@@ -29,7 +31,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafkreihranpzszz3q5bwgzsw6olqwh2e726wfnh4qblkjbng44yhqbfin4 https://itk.mypinata.cloud/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz https://bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme.ipfs.w3s.link/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreihranpzszz3q5bwgzsw6olqwh2e726wfnh4qblkjbng44yhqbfin4 https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/test-data/transform-io-test-data-2026-02-24-bafkreihranpzszz3q5bwgzsw6olqwh2e726wfnh4qblkjbng44yhqbfin4.tar.gz https://fideus.myfilebase.com/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz https://itk.mypinata.cloud/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz https://bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme.ipfs.w3s.link/ipfs/bafybeihn3n52vhja45ds3d4wsch3i77rej2oylorjgevt55w3aqirgxzme/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
