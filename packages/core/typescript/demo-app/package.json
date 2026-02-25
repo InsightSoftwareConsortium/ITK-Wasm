@@ -7,7 +7,7 @@
     "./*": "./src/*"
   },
   "scripts": {
-    "build": "shx mkdir -p dist && shx cp -r node_modules/@shoelace-style/shoelace/dist/assets dist/",
+    "build": "node ./scripts/copy-shoelace-assets.mjs",
     "build:tsc": "pnpm build"
   },
   "keywords": [
