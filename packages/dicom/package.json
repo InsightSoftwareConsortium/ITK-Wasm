@@ -12,8 +12,8 @@
       "https://bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa.ipfs.w3s.link/data.tar.gz",
       "https://bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa.ipfs.w3s.link/ipfs/bafybeiaqy5uzmsxkssdwu66foicuodlrxueczmtouz254hgr2azx6xnjwa/data.tar.gz"
     ],
-    "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
-    "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
+    "emscripten-docker-image": "docker.io/itkwasm/emscripten:latest",
+    "wasi-docker-image": "docker.io/itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/dicom",
     "python-package-name": "itkwasm-dicom",
     "package-description": "Read and write files and images related to DICOM file format.",

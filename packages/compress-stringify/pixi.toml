@@ -1,5 +1,5 @@
 [workspace]
-authors = ["Matt McCormick <matt@mmmccormick.com>"]
+authors = ["Matt McCormick <matt@fideus.io>"]
 channels = ["conda-forge"]
 description = "Zstandard compression and decompression and base64 encoding and decoding in WebAssembly."
 name = "compress-stringify"

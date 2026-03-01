@@ -40,13 +40,12 @@ main(int argc, char * argv[])
 {
   itk::wasm::Pipeline pipeline("pthreads-test", "A pipeline to test pthreads support", argc, argv);
 
-  int numberOfThreads = 4;
-  pipeline.add_option("-n,--number-of-threads", numberOfThreads, "The number of threads to use");
-
   itk::wasm::OutputTextStream outputJson;
   pipeline.add_option("output-json", outputJson, "The output json with test results")->type_name("OUTPUT_JSON");
 
   ITK_WASM_PARSE(pipeline);
+
+  const int numberOfThreads = pipeline.get_threads();
 
   // Based on: https://bytecodealliance.org/articles/wasi-threads
   pthread_t threads[512];
