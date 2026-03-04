@@ -29,6 +29,7 @@ export default defineConfig({
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory
     viteStaticCopy({
+      silent: true,
       targets: [
         { src: "../../../dist/pipelines/*", dest: "pipelines" },
         {
