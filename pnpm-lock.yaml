@@ -491,46 +491,6 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
 
-  packages/core/typescript/itk-wasm/test/pipelines/typescript:
-    dependencies:
-      itk-wasm:
-        specifier: workspace:*
-        version: link:../../..
-    devDependencies:
-      '@itk-wasm/demo-app':
-        specifier: workspace:*
-        version: link:../../../../demo-app
-      '@itk-wasm/image-io':
-        specifier: workspace:*
-        version: link:../../../../../../image-io/typescript
-      '@itk-wasm/mesh-io':
-        specifier: workspace:*
-        version: link:../../../../../../mesh-io/typescript
-      '@itk-wasm/transform-io':
-        specifier: workspace:*
-        version: link:../../../../../../transform-io/typescript
-      '@types/node':
-        specifier: ^24.0.3
-        version: 24.0.3
-      esbuild:
-        specifier: ^0.25.1
-        version: 0.25.2
-      shx:
-        specifier: ^0.4.0
-        version: 0.4.0
-      typescript:
-        specifier: ^5.8.3
-        version: 5.8.3
-      vite:
-        specifier: ^6.2.3
-        version: 6.4.1(@types/node@24.0.3)(jiti@1.21.0)(terser@5.46.0)
-      vite-plugin-cross-origin-isolation:
-        specifier: ^0.1.6
-        version: 0.1.6
-      vite-plugin-static-copy:
-        specifier: ^2.3.2
-        version: 2.3.2(vite@6.4.1(@types/node@24.0.3)(jiti@1.21.0)(terser@5.46.0))
-
   packages/dicom:
     devDependencies:
       '@itk-wasm/compare-images-build':
@@ -5911,9 +5871,6 @@ packages:
   version-guard@1.1.2:
     resolution: {integrity: sha512-D8d+YxCUpoqtCnQzDxm6SF7DLU3gr2535T4khAtMq4osBahsQnmSxuwXFdrbAdDGG8Uokzfis/jvyeFPdmlc7w==}
     engines: {node: '>=0.10.48'}
-
-  vite-plugin-cross-origin-isolation@0.1.6:
-    resolution: {integrity: sha512-OY0naW9nPUDrKTffYnY7FRYXOgZdHoNwMGpPxUmj/n32mGZi01fcq+J536jkmwGWX7DLT95XBQVHHbrAJzTvrw==}
 
   vite-plugin-static-copy@2.3.2:
     resolution: {integrity: sha512-iwrrf+JupY4b9stBttRWzGHzZbeMjAHBhkrn67MNACXJVjEMRpCI10Q3AkxdBkl45IHaTfw/CNVevzQhP7yTwg==}
@@ -12042,8 +11999,6 @@ snapshots:
   vary@1.1.2: {}
 
   version-guard@1.1.2: {}
-
-  vite-plugin-cross-origin-isolation@0.1.6: {}
 
   vite-plugin-static-copy@2.3.2(vite@6.4.1(@types/node@24.0.3)(jiti@1.21.0)(terser@5.46.0)):
     dependencies:

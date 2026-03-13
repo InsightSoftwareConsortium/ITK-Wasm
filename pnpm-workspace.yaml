@@ -9,6 +9,7 @@ packages:
   - 'examples/mean-squares-versor-registration'
   - 'examples/mean-squares-versor-registration/typescript'
   - '!packages/core/typescript/create-itk-wasm/test/**'
+  - '!packages/core/typescript/itk-wasm/test/**'
   - '!**/src'
   - '!**/dist'
   - '!**/pyodide'

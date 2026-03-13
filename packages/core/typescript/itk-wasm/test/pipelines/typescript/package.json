@@ -33,13 +33,13 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "workspace:*"
+    "itk-wasm": "link:../../.."
   },
   "devDependencies": {
-    "@itk-wasm/demo-app": "workspace:*",
-    "@itk-wasm/image-io": "workspace:*",
-    "@itk-wasm/mesh-io": "workspace:*",
-    "@itk-wasm/transform-io": "workspace:*",
+    "@itk-wasm/demo-app": "link:../../../../demo-app",
+    "@itk-wasm/image-io": "link:../../../../../../image-io/typescript",
+    "@itk-wasm/mesh-io": "link:../../../../../../mesh-io/typescript",
+    "@itk-wasm/transform-io": "link:../../../../../../transform-io/typescript",
     "@types/node": "^20.2.5",
     "esbuild": "^0.25.0",
     "shx": "^0.3.4",
