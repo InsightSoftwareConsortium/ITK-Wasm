@@ -96,7 +96,6 @@ description = "Run tests for itkwasm-image-io-wasi"
 cmd = '''curl -L https://github.com/pyodide/pyodide/releases/download/0.26.3/pyodide-0.26.3.tar.bz2 -o pyodide.tar.bz2 &&
   tar xjf pyodide.tar.bz2 &&
   rm pyodide.tar.bz2'''
-outputs = ["pyodide"]
 description = "Download Pyodide"
 
 [feature.python.tasks.test-emscripten]

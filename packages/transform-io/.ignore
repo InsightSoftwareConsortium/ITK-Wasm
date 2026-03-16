@@ -1,0 +1,3 @@
+# Prevent pixi's directory walker (ignore crate) from traversing into
+# node_modules, which can contain circular workspace symlinks.
+node_modules
