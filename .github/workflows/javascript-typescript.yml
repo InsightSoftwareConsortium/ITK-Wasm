@@ -38,7 +38,7 @@ jobs:
         node-version: '22'
 
     - name: Install
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v5
       with:
         run_install: true
 
