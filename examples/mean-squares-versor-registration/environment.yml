@@ -1,9 +1,0 @@
-name: mean-squares-versor-registration
-channels:
-  - conda-forge
-dependencies:
-  - pytest
-  - python=3.11
-  - pip
-  - pip:
-    - hatch

@@ -5,6 +5,11 @@
   "description": "An itk-wasm pipeline example for inputs/outputs",
   "type": "module",
   "itk-wasm": {
+    "test-data-hash": "bafkreidnoz54py66bn56uq6itwkfgngflaqilflfvwkxlps4ycmygstzja",
+    "test-data-urls": [
+      "https://github.com/InsightSoftwareConsortium/ITK-Wasm/releases/download/itk-wasm-v1.0.0-b.179/sample-data.tar.gz",
+      "https://bafybeidxatrsrrphfmntdyze6ec3jbiak527wj3kalwjptv4bimpcnzxdq.ipfs.w3s.link/ipfs/bafybeidxatrsrrphfmntdyze6ec3jbiak527wj3kalwjptv4bimpcnzxdq/sample-data.tar.gz"
+    ],
     "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
     "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
     "typescript-package-name": "@itk-wasm/inputs-outputs-example",
@@ -18,12 +23,11 @@
     "build:emscripten:debug": "itk-wasm pnpm-script build:emscripten:debug",
     "build:wasi": "itk-wasm pnpm-script build:wasi",
     "build:wasi:debug": "itk-wasm pnpm-script build:wasi:debug",
-    "build:python:wasi": "itk-wasm pnpm-script build:python:wasi",
+    "build:python:wasi": "echo 'No build:python:wasi script required with pixi'",
     "bindgen:typescript": "itk-wasm pnpm-script bindgen:typescript",
     "bindgen:python": "itk-wasm pnpm-script bindgen:python",
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "itk-wasm pnpm-script build:gen:python",
-    "build:micromamba": "itk-wasm pnpm-script build:micromamba",
     "build:python:versionSync": "itk-wasm pnpm-script build:python:versionSync",
     "publish:python": "itk-wasm pnpm-script publish:python",
     "test:data:download": "echo skip",
@@ -34,15 +38,14 @@
     "test:pyodide:download:dispatch": "itk-wasm pnpm-script test:pyodide:download:dispatch",
     "test:python:dispatch": "itk-wasm pnpm-script test:python:emscripten",
     "test:python": "itk-wasm pnpm-script test:python",
-    "test": "pnpm test:wasi && pnpm test:wasi:help",
+    "test": "pnpm build:gen:python && pnpm test:wasi && pnpm test:wasi:help",
     "test:wasi": "itk-wasm -i itkwasm/wasi:latest -b wasi-build run inputs-outputs.wasi.wasm -- -- cthead1.png smoothed.png",
     "test:wasi:help": "itk-wasm -i itkwasm/wasi:latest -b wasi-build run inputs-outputs.wasi.wasm -- -- --help"
   },
-  "author": "Matt McCormick <matt@mmmccormick.com>",
+  "author": "Matt McCormick <matt@fideus.io>",
   "license": "Apache-2.0",
   "devDependencies": {
     "@itk-wasm/image-io": "workspace:^",
-    "@thewtex/setup-micromamba": "^1.9.7",
     "itk-wasm": "workspace:^"
   }
 }

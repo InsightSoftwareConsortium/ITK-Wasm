@@ -18,11 +18,12 @@ export default defineConfig({
     format: 'es'
   },
   optimizeDeps: {
-    exclude: ['itk-wasm', '@itk-wasm/image-io', '@thewtex/zstddec', '@itk-wasm/mesh-io', '@itk-wasm/compare-images', '@itk-wasm/compare-meshes', '@itk-viewer/io']
+    exclude: ['itk-wasm', '@itk-wasm/image-io', '@thewtex/zstddec', '@itk-wasm/mesh-io', '@itk-wasm/compare-images', '@itk-wasm/compare-meshes', '@itk-wasm/mesh-to-poly-data', '@itk-viewer/io']
   },
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory
     viteStaticCopy({
+      silent: true,
       targets: [
         { src: '../../../dist/pipelines/*', dest: 'pipelines' },
         { src: '../../../node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },

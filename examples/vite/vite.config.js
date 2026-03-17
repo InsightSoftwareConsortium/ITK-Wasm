@@ -11,6 +11,7 @@ export default defineConfig({
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory
     viteStaticCopy({
+      silent: true,
       targets: [
         {
           src: "node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}",

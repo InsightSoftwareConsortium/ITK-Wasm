@@ -50,7 +50,7 @@
     "shx": "^0.3.4",
     "typescript": "^5.1.6",
     "vite": "^6.4.1",
-    "vite-plugin-static-copy": "^0.17.0"
+    "vite-plugin-static-copy": "^2.3.2"
   },
   "repository": {
     "type": "git",
