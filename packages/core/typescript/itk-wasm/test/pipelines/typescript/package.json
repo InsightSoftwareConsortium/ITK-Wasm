@@ -33,19 +33,19 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "itk-wasm": "link:../../.."
+    "itk-wasm": "workspace:*"
   },
   "devDependencies": {
-    "@itk-wasm/demo-app": "link:../../../../demo-app",
-    "@itk-wasm/image-io": "link:../../../../../../image-io/typescript",
-    "@itk-wasm/mesh-io": "link:../../../../../../mesh-io/typescript",
-    "@itk-wasm/transform-io": "link:../../../../../../transform-io/typescript",
+    "@itk-wasm/demo-app": "workspace:*",
+    "@itk-wasm/image-io": "workspace:*",
+    "@itk-wasm/mesh-io": "workspace:*",
+    "@itk-wasm/transform-io": "workspace:*",
     "@types/node": "^20.2.5",
     "esbuild": "^0.25.0",
     "shx": "^0.3.4",
     "typescript": "^5.3.2",
     "vite": "^6.4.1",
     "vite-plugin-cross-origin-isolation": "^0.1.6",
-    "vite-plugin-static-copy": "^2.3.2"
+    "vite-plugin-static-copy": "^0.17.0"
   }
 }

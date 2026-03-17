@@ -31,8 +31,6 @@ export default defineConfig({
         { src: '../../../node_modules/@itk-wasm/compare-images/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
         { src: '../../../node_modules/@itk-wasm/compare-meshes/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
         { src: '../../../node_modules/@itk-wasm/mesh-to-poly-data/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
-        // Also check root node_modules for hoisted external deps (pnpm node-linker=hoisted)
-        { src: '../../../../../../node_modules/@itk-wasm/mesh-to-poly-data/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
       ],
     })
   ],
