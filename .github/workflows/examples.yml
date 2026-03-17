@@ -34,7 +34,7 @@ jobs:
         node-version: '22'
 
     - name: Install
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v5
       with:
         run_install: true
 
@@ -72,7 +72,7 @@ jobs:
         command: ./src/docker/pull.sh --no-debug
 
     - name: Install
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v5
       with:
         run_install: true
 
@@ -85,7 +85,7 @@ jobs:
         pnpm build
 
     - name: Save wasm builds
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: hello-world-build
         if-no-files-found: error
@@ -157,7 +157,7 @@ jobs:
         node-version: '22'
 
     - name: Install
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v5
       with:
         run_install: true
 
@@ -207,7 +207,7 @@ jobs:
         command: ./src/docker/pull.sh
 
     - name: Install
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v5
       with:
         run_install: true
 
@@ -253,7 +253,7 @@ jobs:
         command: ./src/docker/pull.sh --no-debug
 
     - name: Install
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v5
       with:
         run_install: true
 
@@ -293,7 +293,7 @@ jobs:
         node-version: '22'
 
     - name: Install
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v5
       with:
         run_install: true
 
