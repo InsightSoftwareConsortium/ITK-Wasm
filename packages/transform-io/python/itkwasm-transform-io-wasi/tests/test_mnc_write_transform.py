@@ -43,7 +43,7 @@ def test_mnc_write_transform():
     transform_list = [transform]
 
     xfm_path = test_output_path / "mnc-write-test-LinearTransform.xfm"
-    could_write = mnc_write_transform(transform_list, str(xfm_path))
+    could_write = mnc_write_transform(transform_list, xfm_path)
     assert could_write
 
     could_read, transform_list_back = mnc_read_transform(xfm_path)

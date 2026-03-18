@@ -46,7 +46,7 @@ def test_wasm_zstd_read_transform():
     transform_list = [transform]
 
     zstd_path = test_output_path / "zstd-read-test-LinearTransform.iwt.cbor.zst"
-    could_write = wasm_zstd_write_transform(transform_list, str(zstd_path))
+    could_write = wasm_zstd_write_transform(transform_list, zstd_path)
     assert could_write
 
     could_read, transform_list_back = wasm_zstd_read_transform(zstd_path)
