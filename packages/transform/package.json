@@ -5,8 +5,8 @@
   "description": "Common operations with and on spatial transformations.",
   "type": "module",
   "itk-wasm": {
-    "emscripten-docker-image": "quay.io/itkwasm/emscripten:latest",
-    "wasi-docker-image": "quay.io/itkwasm/wasi:latest",
+    "emscripten-docker-image": "docker.io/itkwasm/emscripten:latest",
+    "wasi-docker-image": "docker.io/itkwasm/wasi:latest",
     "test-data-hash": "bafkreidkya6zzlqxf2c5w4suxmoiz5x7f4vgdopd5nguymqdh2leafh7zu",
     "test-data-urls": [
       "https://itk.mypinata.cloud/ipfs/bafybeibrqarlknigdc37zwm6hpmknpvhnr6wblpli42zdpe47c24o7jlby/data.tar.gz",

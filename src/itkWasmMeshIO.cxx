@@ -234,7 +234,8 @@ WasmMeshIO ::ReadCBOR(void * buffer, unsigned char * cborBuffer, size_t cborBuff
         }
         else
         {
-          itkExceptionMacro("Unexpected meshType cbor map key: " << meshTypeKey);
+          // Skip unknown keys for forward compatibility and interoperability
+          // with third-party CBOR writers that may include additional fields.
         }
       }
     }
@@ -278,6 +279,11 @@ WasmMeshIO ::ReadCBOR(void * buffer, unsigned char * cborBuffer, size_t cborBuff
     {
       const auto components = cbor_get_uint64(indexHandle[ii].value);
       this->SetCellBufferSize(components);
+    }
+    else
+    {
+      // Skip unknown keys for forward compatibility and interoperability
+      // with third-party CBOR writers that may include additional fields.
     }
   }
 }
