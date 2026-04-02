@@ -19,13 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
 
-      - uses: prefix-dev/setup-pixi@v0.9.4
+      - uses: prefix-dev/setup-pixi@v0.9.5
       - run: pixi run export-itk-wasm-env-vars
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
 
-      - uses: nick-fields/retry@v3
+      - uses: nick-fields/retry@v4
         with:
           max_attempts: 5
           timeout_minutes: 10
@@ -66,13 +66,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
 
-      - uses: prefix-dev/setup-pixi@v0.9.4
+      - uses: prefix-dev/setup-pixi@v0.9.5
       - run: pixi run export-itk-wasm-env-vars
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
 
-      - uses: nick-fields/retry@v3
+      - uses: nick-fields/retry@v4
         with:
           max_attempts: 5
           timeout_minutes: 10
