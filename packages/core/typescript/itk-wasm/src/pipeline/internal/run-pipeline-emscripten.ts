@@ -76,7 +76,7 @@ function setPipelineModuleInputArray (
       'number',
       ['number', 'number', 'number', 'number'],
       [0, inputIndex, subIndex, dataArray.buffer.byteLength]
-    )
+    ) >>> 0
     emscriptenModule.HEAPU8.set(new Uint8Array(dataArray.buffer), dataPtr)
   }
   return dataPtr
@@ -94,7 +94,7 @@ function setPipelineModuleInputJSON (
     'number',
     ['number', 'number', 'number'],
     [0, inputIndex, length]
-  )
+  ) >>> 0
   emscriptenModule.stringToUTF8(dataJSON, jsonPtr, length)
 }
 
@@ -111,7 +111,7 @@ function getPipelineModuleOutputArray (
     'number',
     ['number', 'number', 'number'],
     [0, outputIndex, subIndex]
-  )
+  ) >>> 0
   const dataSize = emscriptenModule.ccall(
     'itk_wasm_output_array_size',
     'number',
@@ -132,7 +132,7 @@ function getPipelineModuleOutputJSON (
     'number',
     ['number', 'number'],
     [0, outputIndex]
-  )
+  ) >>> 0
   const dataJSON = emscriptenModule.UTF8ToString(jsonPtr)
   const dataObject = JSON.parse(dataJSON)
   return dataObject
@@ -479,7 +479,7 @@ function runPipelineEmscripten (
             'number',
             ['number', 'number', 'number'],
             [0, index, 0]
-          )
+          ) >>> 0
           const dataSize = pipelineModule.ccall(
             'itk_wasm_output_array_size',
             'number',
@@ -500,7 +500,7 @@ function runPipelineEmscripten (
             'number',
             ['number', 'number', 'number'],
             [0, index, 0]
-          )
+          ) >>> 0
           const dataSize = pipelineModule.ccall(
             'itk_wasm_output_array_size',
             'number',
@@ -521,7 +521,7 @@ function runPipelineEmscripten (
             'number',
             ['number', 'number', 'number'],
             [0, index, 0]
-          )
+          ) >>> 0
           const dataSize = pipelineModule.ccall(
             'itk_wasm_output_array_size',
             'number',
