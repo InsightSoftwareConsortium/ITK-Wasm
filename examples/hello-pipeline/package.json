@@ -4,7 +4,7 @@
   "description": "An itk-wasm Hello Pipeline World! example",
   "type": "module",
   "scripts": {
-    "build": "itk-wasm -i itkwasm/wasi build",
+    "build": "itk-wasm -i docker.io/itkwasm/wasi build",
     "test": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- cthead1.png",
     "test:quiet": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- --quiet cthead1.png",
     "test:help": "itk-wasm run wasi-build/hello-pipeline.wasi.wasm -- --help"
