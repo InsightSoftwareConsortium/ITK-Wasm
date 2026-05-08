@@ -34,6 +34,11 @@ if(NOT ITK_FORBID_DOWNLOADS)
     # Local IPFS gateway
     "http://127.0.0.1:8080/ipfs/%(hash)"
 
+    # Primary CID source: ITKTestingData gh-pages mirror.
+    # %(algo) substitutes the uppercase algorithm name (CID, MD5, SHA512),
+    # matching the case-sensitive directory layout on the gh-pages branch.
+    "https://insightsoftwareconsortium.github.io/ITKTestingData/%(algo)/%(hash)"
+
     # Released data rsync'd to Kitware's Apache web server
     "https://itk.org/files/ExternalData/%(algo)/%(hash)"
 
