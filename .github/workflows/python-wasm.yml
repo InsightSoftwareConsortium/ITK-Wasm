@@ -31,7 +31,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
-      - uses: prefix-dev/setup-pixi@v0.9.5
+      - uses: prefix-dev/setup-pixi@v0.9.6
 
       - name: Set up Python ${{ env.python-version }}
         uses: actions/setup-python@v6.2.0
@@ -47,7 +47,7 @@ jobs:
           node-version: '22'
 
       - name: Install
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
         with:
           run_install: true
 
