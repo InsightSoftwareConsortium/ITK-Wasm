@@ -204,21 +204,21 @@ outputs = ["native/ITK/LICENSE"]
 description = "Fetch ITK's source code"
 
 [feature.native.tasks.configure-itk]
-cmd = '''cmake -B$ITK_WASM_ITK_BUILD_DIR -S$ITK_WASM_ITK_SOURCE_DIR -GNinja
-  -DCMAKE_CXX_STANDARD:STRING=20
-  -DCMAKE_BUILD_TYPE:STRING=Debug
-  -DBUILD_EXAMPLES:BOOL=OFF
-  -DBUILD_TESTING:BOOL=OFF
-  -DBUILD_SHARED_LIBS:BOOL=OFF
-  -DBUILD_STATIC_LIBS:BOOL=ON
-  -DITK_LEGACY_REMOVE:BOOL=ON
-  -DITK_BUILD_DEFAULT_MODULES:BOOL=ON
-  -DITKGroup_IO:BOOL=ON
-  -DH5_HAVE_GETPWUID:BOOL=OFF
-  -DModule_MeshToPolyData:BOOL=ON
-  -DDO_NOT_BUILD_ITK_TEST_DRIVER:BOOL=ON
-  -DOPJ_USE_THREAD:BOOL=OFF
-  -DNO_FLOAT_EXCEPTIONS:BOOL=ON
+cmd = '''cmake -B$ITK_WASM_ITK_BUILD_DIR -S$ITK_WASM_ITK_SOURCE_DIR -GNinja \\
+  -DCMAKE_CXX_STANDARD:STRING=20 \\
+  -DCMAKE_BUILD_TYPE:STRING=Debug \\
+  -DBUILD_EXAMPLES:BOOL=OFF \\
+  -DBUILD_TESTING:BOOL=OFF \\
+  -DBUILD_SHARED_LIBS:BOOL=OFF \\
+  -DBUILD_STATIC_LIBS:BOOL=ON \\
+  -DITK_LEGACY_REMOVE:BOOL=ON \\
+  -DITK_BUILD_DEFAULT_MODULES:BOOL=ON \\
+  -DITKGroup_IO:BOOL=ON \\
+  -DH5_HAVE_GETPWUID:BOOL=OFF \\
+  -DModule_MeshToPolyData:BOOL=ON \\
+  -DDO_NOT_BUILD_ITK_TEST_DRIVER:BOOL=ON \\
+  -DOPJ_USE_THREAD:BOOL=OFF \\
+  -DNO_FLOAT_EXCEPTIONS:BOOL=ON \\
   -DITK_MSVC_STATIC_RUNTIME_LIBRARY=ON'''
 depends-on = ["clone-itk"]
 # Note: pixi does not seem to reliably support activation environmental variables in task inputs / outputs
@@ -244,12 +244,12 @@ outputs = ["native/ITK-Wasm/LICENSE"]
 description = "Fetch ITK's source code"
 
 [feature.native.tasks.configure-itk-wasm]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build
-  -S$ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm
-  -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=OFF
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build \\
+  -S$ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm \\
+  -GNinja \\
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \\
+  -DBUILD_TESTING:BOOL=OFF \\
+  -DCMAKE_CXX_STANDARD:STRING=20 \\
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk", "clone-itk-wasm"]
 outputs = ["native/ITK-Wasm-build/CMakeFiles/"]
@@ -261,10 +261,10 @@ depends-on = ["configure-itk-wasm"]
 description = "Build ITK-Wasm"
 
 [feature.native.tasks.configure-native]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/${project.name}-build -S. -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/${project.name}-build -S. -GNinja \\
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \\
+  -DBUILD_TESTING:BOOL=ON \\
+  -DCMAKE_CXX_STANDARD:STRING=20 \\
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm"]
 description = "Configure native build"

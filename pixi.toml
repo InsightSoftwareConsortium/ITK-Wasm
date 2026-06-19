@@ -173,39 +173,39 @@ depends-on = ["clone-itk"]
 description = "Switch DCMTK to the WASM branch"
 
 [feature.native.tasks.configure-itk]
-cmd = '''cmake -B$ITK_WASM_ITK_BUILD_DIR -S$ITK_WASM_ITK_SOURCE_DIR -GNinja
-  -DCMAKE_CXX_STANDARD:STRING=20
-  -DCMAKE_BUILD_TYPE:STRING=Debug
-  -DBUILD_EXAMPLES:BOOL=OFF
-  -DBUILD_TESTING:BOOL=OFF
-  -DBUILD_SHARED_LIBS:BOOL=OFF
-  -DBUILD_STATIC_LIBS:BOOL=ON
-  -DITK_LEGACY_REMOVE:BOOL=ON
-  -DITK_BUILD_DEFAULT_MODULES:BOOL=ON
-  -DITKGroup_IO:BOOL=ON
-  -DH5_HAVE_GETPWUID:BOOL=OFF
-  -DModule_ITKIOMINC:BOOL=ON
-  -DModule_MGHIO:BOOL=ON
-  -DModule_IOMeshSWC:BOOL=ON
-  -DModule_IOScanco:BOOL=ON
-  -DModule_IOFDF:BOOL=ON
-  -DModule_ITKDCMTK:BOOL=ON
-  -DModule_ITKImageFunction:BOOL=ON
-  -DModule_MinimalPathExtraction:BOOL=ON
-  -DModule_MorphologicalContourInterpolation:BOOL=ON
-  -DModule_SmoothingRecursiveYvvGaussianFilter:BOOL=ON
-  -DModule_Cuberille:BOOL=ON
-  -DModule_TotalVariation:BOOL=ON
-  -DModule_IOMeshSTL:BOOL=ON
-  -DModule_IOMeshMZ3:BOOL=ON
-  -DModule_GenericLabelInterpolator:BOOL=ON
-  -DModule_MeshToPolyData:BOOL=ON
-  -DModule_ITKIOTransformMINC:BOOL=ON
-  -DDO_NOT_BUILD_ITK_TEST_DRIVER:BOOL=ON
-  -DOPJ_USE_THREAD:BOOL=OFF
-  -DDCMTK_WITH_THREADS:BOOL=OFF
-  -DDCMTK_BUILD_APPS:BOOL=OFF
-  -DNO_FLOAT_EXCEPTIONS:BOOL=ON
+cmd = '''cmake -B$ITK_WASM_ITK_BUILD_DIR -S$ITK_WASM_ITK_SOURCE_DIR -GNinja \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
+  -DCMAKE_BUILD_TYPE:STRING=Debug \
+  -DBUILD_EXAMPLES:BOOL=OFF \
+  -DBUILD_TESTING:BOOL=OFF \
+  -DBUILD_SHARED_LIBS:BOOL=OFF \
+  -DBUILD_STATIC_LIBS:BOOL=ON \
+  -DITK_LEGACY_REMOVE:BOOL=ON \
+  -DITK_BUILD_DEFAULT_MODULES:BOOL=ON \
+  -DITKGroup_IO:BOOL=ON \
+  -DH5_HAVE_GETPWUID:BOOL=OFF \
+  -DModule_ITKIOMINC:BOOL=ON \
+  -DModule_MGHIO:BOOL=ON \
+  -DModule_IOMeshSWC:BOOL=ON \
+  -DModule_IOScanco:BOOL=ON \
+  -DModule_IOFDF:BOOL=ON \
+  -DModule_ITKDCMTK:BOOL=ON \
+  -DModule_ITKImageFunction:BOOL=ON \
+  -DModule_MinimalPathExtraction:BOOL=ON \
+  -DModule_MorphologicalContourInterpolation:BOOL=ON \
+  -DModule_SmoothingRecursiveYvvGaussianFilter:BOOL=ON \
+  -DModule_Cuberille:BOOL=ON \
+  -DModule_TotalVariation:BOOL=ON \
+  -DModule_IOMeshSTL:BOOL=ON \
+  -DModule_IOMeshMZ3:BOOL=ON \
+  -DModule_GenericLabelInterpolator:BOOL=ON \
+  -DModule_MeshToPolyData:BOOL=ON \
+  -DModule_ITKIOTransformMINC:BOOL=ON \
+  -DDO_NOT_BUILD_ITK_TEST_DRIVER:BOOL=ON \
+  -DOPJ_USE_THREAD:BOOL=OFF \
+  -DDCMTK_WITH_THREADS:BOOL=OFF \
+  -DDCMTK_BUILD_APPS:BOOL=OFF \
+  -DNO_FLOAT_EXCEPTIONS:BOOL=ON \
   -DITK_MSVC_STATIC_RUNTIME_LIBRARY=ON'''
 depends-on = ["switch-dcmtk"]
 # Note: pixi does not seem to reliably support activation environmental variables in task inputs / outputs
@@ -220,10 +220,10 @@ outputs = ["native/ITK-build/**"]
 description = "Build ITK"
 
 [feature.native.tasks.configure-itk-wasm]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build -S. -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/ITK-Wasm-build -S. -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk"]
 outputs = ["native/ITK-Wasm-build/CMakeFiles/"]
@@ -240,10 +240,10 @@ depends-on = ["build-itk-wasm"]
 description = "Test ITK-Wasm"
 
 [feature.native.tasks.configure-native-compare-images]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/compare-images-build -Spackages/compare-images -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/compare-images-build -Spackages/compare-images -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm", "compare-images-test-data-download"]
 outputs = ["native/compare-images-build/CMakeFiles/"]
@@ -260,10 +260,10 @@ depends-on = ["build-native-compare-images"]
 description = "Test compare-images native binaries"
 
 [feature.native.tasks.configure-native-compare-meshes]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/compare-meshes-build -Spackages/compare-meshes -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/compare-meshes-build -Spackages/compare-meshes -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm", "compare-meshes-test-data-download"]
 outputs = ["native/compare-meshes-build/CMakeFiles/"]
@@ -280,10 +280,10 @@ depends-on = ["build-native-compare-meshes"]
 description = "Test compare-meshes native binaries"
 
 [feature.native.tasks.configure-native-compress-stringify]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/compress-stringify-build -Spackages/compress-stringify -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/compress-stringify-build -Spackages/compress-stringify -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm", "compress-stringify-test-data-download"]
 outputs = ["native/compress-stringify-build/CMakeFiles/"]
@@ -300,10 +300,10 @@ depends-on = ["build-native-compress-stringify"]
 description = "Test compress-stringify native binaries"
 
 [feature.native.tasks.configure-native-dicom]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/dicom-build -Spackages/dicom -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/dicom-build -Spackages/dicom -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm", "dicom-test-data-download"]
 outputs = ["native/dicom-build/CMakeFiles/"]
@@ -320,10 +320,10 @@ depends-on = ["build-native-dicom"]
 description = "Test dicom native binaries"
 
 [feature.native.tasks.configure-native-downsample]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/downsample-build -Spackages/downsample -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/downsample-build -Spackages/downsample -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm", "downsample-test-data-download"]
 outputs = ["native/downsample-build/CMakeFiles/"]
@@ -340,10 +340,10 @@ depends-on = ["build-native-downsample"]
 description = "Test downsample native binaries"
 
 [feature.native.tasks.configure-native-mesh-filters]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/mesh-filters-build -Spackages/mesh-filters -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/mesh-filters-build -Spackages/mesh-filters -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm", "mesh-filters-test-data-download"]
 outputs = ["native/mesh-filters-build/CMakeFiles/"]
@@ -360,10 +360,10 @@ depends-on = ["build-native-mesh-filters"]
 description = "Test mesh-filters native binaries"
 
 [feature.native.tasks.configure-native-image-io]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/image-io-build -Spackages/image-io -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/image-io-build -Spackages/image-io -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm", "image-io-test-data-download"]
 outputs = ["native/image-io-build/CMakeFiles/"]
@@ -380,10 +380,10 @@ depends-on = ["build-native-image-io"]
 description = "Test image-io native binaries"
 
 [feature.native.tasks.configure-native-mesh-io]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/mesh-io-build -Spackages/mesh-io -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/mesh-io-build -Spackages/mesh-io -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm", "mesh-io-test-data-download"]
 outputs = ["native/mesh-io-build/CMakeFiles/"]
@@ -400,10 +400,10 @@ depends-on = ["build-native-mesh-io"]
 description = "Test mesh-io native binaries"
 
 [feature.native.tasks.configure-native-transform-io]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/transform-io-build -Spackages/transform-io -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/transform-io-build -Spackages/transform-io -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm", "transform-io-test-data-download"]
 outputs = ["native/transform-io-build/CMakeFiles/"]
@@ -420,10 +420,10 @@ depends-on = ["build-native-transform-io"]
 description = "Test transform-io native binaries"
 
 [feature.native.tasks.configure-native-transform]
-cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/transform-build -Spackages/transform -GNinja
-  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR
-  -DBUILD_TESTING:BOOL=ON
-  -DCMAKE_CXX_STANDARD:STRING=20
+cmd = '''cmake -B$ITK_WASM_NATIVE_WORKSPACE/transform-build -Spackages/transform -GNinja \
+  -DITK_DIR:PATH=$ITK_WASM_ITK_BUILD_DIR \
+  -DBUILD_TESTING:BOOL=ON \
+  -DCMAKE_CXX_STANDARD:STRING=20 \
   -DCMAKE_BUILD_TYPE:STRING=Debug'''
 depends-on = ["build-itk-wasm", "transform-test-data-download"]
 outputs = ["native/transform-build/CMakeFiles/"]
