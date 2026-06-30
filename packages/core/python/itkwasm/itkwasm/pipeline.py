@@ -462,7 +462,7 @@ class Pipeline:
                         image.imageType.componentType,
                         ri.wasmtime_lift(data_ptr, data_size),
                     )
-                    shape = list(image.size)[::-1]
+                    shape = list(image.bufferedRegion.size)[::-1]
                     if image.imageType.components > 1:
                         shape.append(image.imageType.components)
                     image.data = data_array.reshape(tuple(shape))

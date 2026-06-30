@@ -367,6 +367,20 @@ itkPipelineMemoryIOTest(int argc, char * argv[])
 
   ITK_WASM_PARSE(pipeline);
 
+  auto                  informationOnlyImage = ImageType::New();
+  ImageType::RegionType informationOnlyRegion;
+  ImageType::SizeType   informationOnlySize;
+  informationOnlySize.Fill(8);
+  informationOnlyRegion.SetSize(informationOnlySize);
+  informationOnlyImage->SetLargestPossibleRegion(informationOnlyRegion);
+  {
+    OutputImageType informationOnlyOutput;
+    informationOnlyOutput.SetIdentifier("9");
+    informationOnlyOutput.Set(informationOnlyImage);
+  }
+  ITK_TEST_EXPECT_EQUAL(itk_wasm_output_array_address(0, 9, 0), 0);
+  ITK_TEST_EXPECT_EQUAL(itk_wasm_output_array_size(0, 9, 0), 0);
+
   outputImage.Set(inputImage.Get());
 
   const std::string inputTextStreamContent{ std::istreambuf_iterator<char>(inputTextStream.Get()),

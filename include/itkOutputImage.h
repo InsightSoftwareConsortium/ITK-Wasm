@@ -94,11 +94,6 @@ public:
         const auto dataSize = wasmImage->GetImage()->GetBufferedRegion().GetNumberOfPixels() *
                               sizeof(typename ConvertPixelTraits::ComponentType) *
                               wasmImage->GetImage()->GetNumberOfComponentsPerPixel();
-        if (dataSize <= 0)
-        {
-          std::cerr << "dataSize cannot be zero or negative." << std::endl;
-          abort();
-        }
         setMemoryStoreOutputArray(0, index, 0, dataAddress, dataSize);
 
         const auto directionAddress =

@@ -22,7 +22,7 @@ file_list = [package_wheel(),]
 @copy_files_to_pyodide(file_list=file_list, install_wheels=True)
 @run_in_pyodide(packages=["numpy"])
 async def test_image_conversion(selenium):
-    from itkwasm import Image
+    from itkwasm import Image, ImageRegion
     from itkwasm.pyodide import to_js, to_py
     import numpy as np
 
@@ -72,6 +72,18 @@ async def test_image_conversion(selenium):
 
     assert isinstance(image_py.metadata, dict)
     assert np.array_equal(image_py.data, np.arange(16, dtype=np.uint8).reshape((4, 4)))
+
+    information_only_image = Image(
+        size=[4, 4],
+        bufferedRegion=ImageRegion(index=[0, 0], size=[0, 0]),
+        data=np.empty((0, 0), dtype=np.uint8),
+    )
+    information_only_image_py = to_py(to_js(information_only_image))
+
+    assert information_only_image_py.size == [4, 4]
+    assert information_only_image_py.bufferedRegion.size == [0, 0]
+    assert information_only_image_py.data.shape == (0, 0)
+
 
 @copy_files_to_pyodide(file_list=file_list, install_wheels=True)
 @run_in_pyodide(packages=["numpy"])
