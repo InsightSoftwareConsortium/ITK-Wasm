@@ -1,34 +1,42 @@
-From e9d5280ab45ed82550bde6c81a920774ba0fd1b9 Mon Sep 17 00:00:00 2001
+From 1f3573abfa0726ae26ec6376a5e8fbcc798cd5b8 Mon Sep 17 00:00:00 2001
 From: Matt McCormick <matt@fideus.io>
-Date: Thu, 2 Jul 2026 18:57:57 +0000
-Subject: [PATCH] BUG: Support reading and writing 32-bit integer
- (uint32/int32) TIFF images
+Date: Thu, 2 Jul 2026 15:26:09 -0400
+Subject: [PATCH] BUG: Support reading and writing 32-bit integer TIFF images
 
-itk::TIFFImageIO advertised uint32/int32 as supported component types and
-its metadata reader already mapped 32-bit samples with SAMPLEFORMAT_UINT
-and SAMPLEFORMAT_INT to IOComponentEnum::UINT / ::INT.  However:
+itk::TIFFImageIO advertised uint32/int32 as supported component types, and
+its metadata reader already mapped 32-bit samples with SAMPLEFORMAT_UINT and
+SAMPLEFORMAT_INT to IOComponentEnum::UINT / IOComponentEnum::INT. However, the
+pixel paths did not handle these types:
 
-* InternalWrite() only handled 8-/16-bit integers and 32-bit float, so
-  writing a uint32 or int32 image threw an itk::ExceptionObject
-  ("TIFF supports unsigned/signed char, unsigned/signed short, and
-  float").  In WebAssembly builds this surfaced to callers as an
-  unrecoverable abort.
+* InternalWrite() only handled 8-/16-bit integers and 32-bit float, so writing
+  a uint32 or int32 image threw an itk::ExceptionObject ("TIFF supports
+  unsigned/signed char, unsigned/signed short, and float"). In WebAssembly
+  builds this surfaced to callers as an unrecoverable abort.
 
-* The pixel-reading dispatch in ReadGenericImage(void*, ...) and
-  ReadCurrentPage() had no UINT/INT case, so reading a 32-bit integer
-  TIFF silently left the output buffer zero-filled.
+* The pixel-reading dispatch in ReadGenericImage(void *, ...) and
+  ReadCurrentPage() had no UINT/INT case, so reading a 32-bit integer TIFF
+  silently left the output buffer zero-filled.
 
-libtiff fully supports 32-bit integer samples (BITSPERSAMPLE=32 with
-SAMPLEFORMAT_UINT / SAMPLEFORMAT_INT), so add the missing UINT and INT
-cases to the write (bits-per-sample, sample-format and row-length) and
-read (component dispatch) paths.  uint32/int32 images now round-trip
-with full 32-bit fidelity in both 2-D and multi-page (3-D) TIFFs.
+libtiff fully supports 32-bit integer samples (BITSPERSAMPLE = 32 with
+SAMPLEFORMAT_UINT / SAMPLEFORMAT_INT), so add the missing UINT and INT cases to
+the write (bits-per-sample, sample-format, and row-length) and read (component
+dispatch) paths. The multi-page reader branch uses a correctly typed pointer so
+the per-page pixel offset arithmetic stays correct.
+
+Add itkTIFFImageIOInt32Test, a GoogleTest that round-trips uint32 and int32
+images with values exceeding the 16-bit range in both 2-D and multi-page (3-D)
+TIFFs, asserting both the on-disk component type and full-fidelity pixel values.
+
+Reported at https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues/1544
+
+Co-authored-by: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+Signed-off-by: Matt McCormick <matt@fideus.io>
 ---
- Modules/IO/TIFF/src/itkTIFFImageIO.cxx | 52 ++++++++++++++++++++++++--
- 1 file changed, 48 insertions(+), 4 deletions(-)
+ Modules/IO/TIFF/src/itkTIFFImageIO.cxx | 48 +++++++++++++++++++++++---
+ 1 file changed, 44 insertions(+), 4 deletions(-)
 
 diff --git a/Modules/IO/TIFF/src/itkTIFFImageIO.cxx b/Modules/IO/TIFF/src/itkTIFFImageIO.cxx
-index 37df52e..b4ca55e 100644
+index feaffc0bc2..c76ab30232 100644
 --- a/Modules/IO/TIFF/src/itkTIFFImageIO.cxx
 +++ b/Modules/IO/TIFF/src/itkTIFFImageIO.cxx
 @@ -72,6 +72,14 @@ TIFFImageIO::ReadGenericImage(void * out, unsigned int width, unsigned int heigh
@@ -46,13 +54,11 @@ index 37df52e..b4ca55e 100644
    else if (m_ComponentType == IOComponentEnum::FLOAT)
    {
      this->ReadGenericImage<float>(out, width, height);
-@@ -600,11 +608,18 @@ TIFFImageIO::InternalWrite(const void * buffer)
+@@ -603,11 +611,16 @@ TIFFImageIO::InternalWrite(const void * buffer)
      case IOComponentEnum::SHORT:
        bps = 16;
        break;
 +    case IOComponentEnum::UINT:
-+      bps = 32;
-+      break;
 +    case IOComponentEnum::INT:
 +      bps = 32;
 +      break;
@@ -66,7 +72,7 @@ index 37df52e..b4ca55e 100644
    }
  
    uint16_t predictor;
-@@ -635,10 +650,15 @@ TIFFImageIO::InternalWrite(const void * buffer)
+@@ -638,10 +651,15 @@ TIFFImageIO::InternalWrite(const void * buffer)
                                                                        << itksys::SystemTools::GetLastSystemError());
    }
  
@@ -83,7 +89,7 @@ index 37df52e..b4ca55e 100644
    else if (this->GetComponentType() == IOComponentEnum::FLOAT)
    {
      TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
-@@ -660,10 +680,15 @@ TIFFImageIO::InternalWrite(const void * buffer)
+@@ -663,10 +681,15 @@ TIFFImageIO::InternalWrite(const void * buffer)
      TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, scomponents);
      TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps); // Fix for stype
      TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
@@ -100,15 +106,13 @@ index 37df52e..b4ca55e 100644
      else if (this->GetComponentType() == IOComponentEnum::FLOAT)
      {
        TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
-@@ -811,11 +836,18 @@ TIFFImageIO::InternalWrite(const void * buffer)
+@@ -814,11 +837,16 @@ TIFFImageIO::InternalWrite(const void * buffer)
        case IOComponentEnum::SHORT:
          rowLength = sizeof(short);
          break;
 +      case IOComponentEnum::UINT:
-+        rowLength = sizeof(unsigned int);
-+        break;
 +      case IOComponentEnum::INT:
-+        rowLength = sizeof(int);
++        rowLength = sizeof(unsigned int);
 +        break;
        case IOComponentEnum::FLOAT:
          rowLength = sizeof(float);
@@ -120,7 +124,7 @@ index 37df52e..b4ca55e 100644
      }
  
      rowLength *= this->GetNumberOfComponents();
-@@ -1327,6 +1359,18 @@ TIFFImageIO::ReadCurrentPage(void * buffer, size_t pixelOffset)
+@@ -1330,6 +1358,18 @@ TIFFImageIO::ReadCurrentPage(void * buffer, size_t pixelOffset)
        volume += pixelOffset;
        this->ReadGenericImage(volume, width, height);
      }
@@ -140,5 +144,5 @@ index 37df52e..b4ca55e 100644
      {
        auto * volume = static_cast<char *>(buffer);
 -- 
-2.42.0
+2.43.0
 
