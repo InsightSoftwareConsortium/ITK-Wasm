@@ -174,6 +174,56 @@ def test_pipeline_write_read_image():
     assert difference == 0.0
 
 
+def test_pipeline_information_only_image(monkeypatch):
+    import itkwasm.pipeline as pipeline_module
+
+    direction = np.eye(2, dtype=np.float64).tobytes()
+
+    class InformationOnlyRunInstance:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def delayed_start(self):
+            return 0
+
+        def get_output_json(self, output_index):
+            return {
+                "imageType": {
+                    "dimension": 2,
+                    "componentType": "uint8",
+                    "pixelType": "Scalar",
+                    "components": 1,
+                },
+                "size": [8, 8],
+                "bufferedRegion": {"index": [0, 0], "size": [0, 0]},
+            }
+
+        def get_output_array_address(self, memory, output_index, output_sub_index):
+            return output_sub_index
+
+        def get_output_array_size(self, memory, output_index, output_sub_index):
+            return 0 if output_sub_index == 0 else len(direction)
+
+        def wasmtime_lift(self, ptr, size):
+            return bytes() if size == 0 else direction
+
+        def delayed_exit(self, return_code):
+            pass
+
+    monkeypatch.setattr(pipeline_module, "RunInstance", InformationOnlyRunInstance)
+    pipeline = object.__new__(Pipeline)
+    pipeline.engine = None
+    pipeline.linker = None
+    pipeline.module = None
+
+    outputs = pipeline.run([], [PipelineOutput(InterfaceTypes.Image)])
+    image = outputs[0].data
+
+    assert image.size == [8, 8]
+    assert image.bufferedRegion.size == [0, 0]
+    assert image.data.shape == (0, 0)
+
+
 def test_pipeline_dask_array_input():
     pipeline = Pipeline(test_input_dir / "median-filter-test.wasi.wasm")
 

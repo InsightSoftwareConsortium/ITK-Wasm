@@ -83,7 +83,8 @@ def to_py(js_proxy):
         image_dict["direction"] = buffer_to_numpy_array(str(FloatTypes.Float64), image_dict["direction"]).reshape(
             (dimension, dimension)
         )
-        shape = list(image_dict["size"])[::-1]
+        buffered_region = image_dict.get("bufferedRegion")
+        shape = list(buffered_region["size"] if buffered_region is not None else image_dict["size"])[::-1]
         if image_type.components > 1:
             shape.append(image_type.components)
         if image_dict["data"] is not None:
