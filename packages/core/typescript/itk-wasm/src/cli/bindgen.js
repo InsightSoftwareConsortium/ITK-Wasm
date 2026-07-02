@@ -37,6 +37,28 @@ function bindgen(options) {
     (binary) => !path.basename(binary).startsWith('lib')
   )
 
+  // Honor an optional, opt-in exclude list so build-only helper executables (e.g. self-contained
+  // test-input generators used by C++ CTests) are not emitted as public language bindings. The list is
+  // configured as string pipeline names under "itk-wasm.bindgen-exclude" in the package's package.json,
+  // where each name matches a binary's stem after stripping the toolchain and .wasm suffixes
+  // (e.g. "foo-generate-inputs" matches both "foo-generate-inputs.wasm" and "foo-generate-inputs.wasi.wasm").
+  let bindgenExclude = []
+  try {
+    const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+    bindgenExclude = packageJson['itk-wasm']?.['bindgen-exclude'] ?? []
+  } catch (err) {
+    // No package.json or no config in the current directory: nothing to exclude.
+  }
+  if (bindgenExclude.length > 0) {
+    filteredWasmBinaries = filteredWasmBinaries.filter((binary) => {
+      const stem = path
+        .basename(binary)
+        .replace(/\.wasm$/, '')
+        .replace(/\.(wasi|emscripten)$/, '')
+      return !bindgenExclude.includes(stem)
+    })
+  }
+
   switch (iface) {
     case 'typescript':
       typescriptBindgen(outputDir, buildDir, filteredWasmBinaries, options)

@@ -7,5 +7,6 @@ from .downsample_label_image import downsample_label_image
 from .downsample_sigma import downsample_sigma
 from .downsample import downsample
 from .gaussian_kernel_radius import gaussian_kernel_radius
+from .resample_bounding_box import resample_bounding_box
 
 from ._version import __version__

@@ -46,9 +46,9 @@ async def gaussian_kernel_radius_async(
         kwargs["size"] = to_js(size)
     if sigma:
         kwargs["sigma"] = to_js(sigma)
-    if max_kernel_width:
+    if max_kernel_width is not None:
         kwargs["maxKernelWidth"] = to_js(max_kernel_width)
-    if max_kernel_error:
+    if max_kernel_error is not None:
         kwargs["maxKernelError"] = to_js(max_kernel_error)
 
     outputs = await js_module.gaussianKernelRadius(webWorker=web_worker, noCopy=True, **kwargs)
