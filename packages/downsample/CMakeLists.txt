@@ -13,6 +13,7 @@ elseif(WASI)
 else()
   set(io_components
     ITKImageIO
+    ITKTransformIO
     )
 endif()
 
@@ -21,12 +22,13 @@ find_package(ITK REQUIRED
    WebAssemblyInterface
    ITKSmoothing
    ITKImageGrid
+   ITKTransform
    GenericLabelInterpolator
    ${io_components}
  )
 include(${ITK_USE_FILE})
 
-foreach(pipeline downsample downsample-sigma gaussian-kernel-radius downsample-bin-shrink downsample-label-image)
+foreach(pipeline downsample downsample-sigma gaussian-kernel-radius downsample-bin-shrink downsample-label-image resample-bounding-box resample-bounding-box-generate-inputs)
   add_executable(${pipeline} ${pipeline}.cxx)
   target_link_libraries(${pipeline} PUBLIC ${ITK_LIBRARIES})
   target_include_directories(${pipeline} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -69,3 +71,24 @@ add_test(NAME downsample-label-image
     ${CMAKE_CURRENT_BINARY_DIR}/cthead1_downsampled_label_image.png
     --shrink-factors 2 2
     )
+
+# Generate the resample-bounding-box inputs (fixed image, moving image, transform), then feed them
+# to the pipeline. The pipeline's positional argument order (transform, fixed, moving, output) matches
+# the option declaration order in resample-bounding-box.cxx.
+add_test(NAME resample-bounding-box-generate-inputs
+  COMMAND resample-bounding-box-generate-inputs
+    ${CMAKE_CURRENT_BINARY_DIR}/rbb-fixed.iwi
+    ${CMAKE_CURRENT_BINARY_DIR}/rbb-moving.iwi
+    ${CMAKE_CURRENT_BINARY_DIR}/rbb-transform.iwt
+    )
+
+add_test(NAME resample-bounding-box
+  COMMAND resample-bounding-box
+    ${CMAKE_CURRENT_BINARY_DIR}/rbb-transform.iwt
+    ${CMAKE_CURRENT_BINARY_DIR}/rbb-fixed.iwi
+    ${CMAKE_CURRENT_BINARY_DIR}/rbb-moving.iwi
+    ${CMAKE_CURRENT_BINARY_DIR}/rbb-output.json
+    --padding 1
+    )
+
+set_tests_properties(resample-bounding-box PROPERTIES DEPENDS resample-bounding-box-generate-inputs)
