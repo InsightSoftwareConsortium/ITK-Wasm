@@ -37,13 +37,14 @@ set(pipelines
   resample-bounding-box
   )
 
-# resample-bounding-box-generate-inputs only fabricates the self-contained inputs (fixed image, moving
-# image, transform) for the resample-bounding-box C++ CTest, which runs under the WASI/native toolchains.
-# It is deliberately NOT built for Emscripten: itk-wasm bindgen scans the Emscripten build for pipeline
-# .wasm files, so building it there would expose it as a public browser/Node binding. The real, public
-# pipeline is resample-bounding-box.
+# resample-bounding-box-generate-inputs fabricates the self-contained inputs (fixed image, moving image,
+# transform) for the resample-bounding-box C++ CTests, and resample-bounding-box-test is an in-process unit
+# test that asserts the computed regions directly. Both run under the WASI/native toolchains and are
+# deliberately NOT built for Emscripten: itk-wasm bindgen scans the Emscripten build for pipeline .wasm files,
+# so building them there would expose them as public browser/Node bindings. The real, public pipeline is
+# resample-bounding-box.
 if(NOT EMSCRIPTEN)
-  list(APPEND pipelines resample-bounding-box-generate-inputs)
+  list(APPEND pipelines resample-bounding-box-generate-inputs resample-bounding-box-test)
 endif()
 
 foreach(pipeline ${pipelines})
@@ -113,4 +114,50 @@ if(NOT EMSCRIPTEN)
       )
 
   set_tests_properties(resample-bounding-box PROPERTIES DEPENDS resample-bounding-box-generate-inputs)
+
+  # 3D translation: generate the 3D inputs, then run the pipeline end-to-end through the dimension dispatch.
+  add_test(NAME resample-bounding-box-generate-inputs-3d
+    COMMAND resample-bounding-box-generate-inputs
+      --case 3d-translation
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-3d-fixed.iwi
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-3d-moving.iwi
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-3d-transform.iwt
+      )
+
+  add_test(NAME resample-bounding-box-3d
+    COMMAND resample-bounding-box
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-3d-transform.iwt
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-3d-fixed.iwi
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-3d-moving.iwi
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-3d-output.json
+      --padding 1
+      )
+
+  set_tests_properties(resample-bounding-box-3d PROPERTIES DEPENDS resample-bounding-box-generate-inputs-3d)
+
+  # 2D affine rotation: transformed grid corners are non-axis-aligned, stressing full-boundary sampling.
+  add_test(NAME resample-bounding-box-generate-inputs-rotation
+    COMMAND resample-bounding-box-generate-inputs
+      --case 2d-rotation
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-rot-fixed.iwi
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-rot-moving.iwi
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-rot-transform.iwt
+      )
+
+  add_test(NAME resample-bounding-box-rotation
+    COMMAND resample-bounding-box
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-rot-transform.iwt
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-rot-fixed.iwi
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-rot-moving.iwi
+      ${CMAKE_CURRENT_BINARY_DIR}/rbb-rot-output.json
+      --padding 1
+      )
+
+  set_tests_properties(resample-bounding-box-rotation PROPERTIES DEPENDS resample-bounding-box-generate-inputs-rotation)
+
+  # In-process unit test: asserts the exact regions for the 2D/3D/rotation cases and the Phase-04 hardening
+  # (full-boundary sampling, symmetric padding, padding-independent corners, degenerate axis, instance reuse).
+  add_test(NAME resample-bounding-box-test
+    COMMAND resample-bounding-box-test
+      )
 endif()

@@ -39,6 +39,11 @@ struct ResampleBoundingBoxResult
   std::vector<double>       paddedCornersMax;
   std::vector<double>       cornersMin;
   std::vector<double>       cornersMax;
+
+  // Diagnostic only (NOT part of the serialized JSON contract): the number of fixed-image boundary pixels that
+  // were sampled and transformed. Exposed so tests can confirm the algorithm walks the full boundary -- every
+  // face and edge -- rather than only the 2^Dimension corners, which is what keeps nonlinear transforms bounded.
+  std::size_t numberOfBoundaryPoints = 0;
 };
 
 /** \class ResampleBoundingBoxComputer
@@ -89,16 +94,35 @@ public:
     }
     const itk::SizeValueType boundaryCount = totalCount - interiorCount;
 
-    // Reuse the member vector's storage across calls.
-    m_BoundaryPoints.resize(boundaryCount);
+    // A degenerate fixed region (any axis with size 0, so totalCount and boundaryCount are 0) has no boundary
+    // pixels to sample. Report an empty region instead of dereferencing the (empty) min/max accumulators below,
+    // whose sentinels would otherwise floor/ceil into garbage indices.
+    if (boundaryCount == 0)
+    {
+      result.paddedStartIndex.assign(Dimension, 0);
+      result.paddedSize.assign(Dimension, 0u);
+      result.paddedCornersMin.assign(Dimension, 0.0);
+      result.paddedCornersMax.assign(Dimension, 0.0);
+      result.cornersMin.assign(Dimension, 0.0);
+      result.cornersMax.assign(Dimension, 0.0);
+      result.numberOfBoundaryPoints = 0;
+      return;
+    }
+
+    // Reuse the member vector's storage across calls: clear() keeps the existing capacity, reserve() grows it only
+    // when this call needs more room than a previous one, and push_back() leaves the vector holding EXACTLY the
+    // points enumerated below. This is what keeps a reused instance correct when the boundary count changes between
+    // calls (e.g. shrinking then growing the fixed image): the size always matches the current call, so no stale
+    // point from an earlier, larger call can leak into the bounding box.
+    m_BoundaryPoints.clear();
+    m_BoundaryPoints.reserve(boundaryCount);
 
     // Enumerate every boundary pixel (at least one component equal to 0 or size_d - 1) and store
     // its physical location. This includes all faces/edges, not just the 2^N corners, so nonlinear
     // transforms remain correctly bounded. An odometer walks the grid, but whenever a fully interior
     // pixel is reached the fastest axis is fast-forwarded to its last (boundary) column: this keeps
     // enumeration proportional to the number of boundary pixels rather than the total pixel count.
-    itk::SizeValueType count = 0;
-    IndexType          index = startIndex;
+    IndexType index = startIndex;
     while (true)
     {
       bool onBoundary = false;
@@ -118,8 +142,9 @@ public:
         index[0] = startIndex[0] + static_cast<itk::IndexValueType>(size[0]) - 1;
       }
 
-      fixedImage->TransformIndexToPhysicalPoint(index, m_BoundaryPoints[count]);
-      ++count;
+      PointType physicalPoint;
+      fixedImage->TransformIndexToPhysicalPoint(index, physicalPoint);
+      m_BoundaryPoints.push_back(physicalPoint);
 
       // Odometer increment, fastest axis first.
       unsigned int d = 0;
@@ -137,6 +162,7 @@ public:
         break;
       }
     }
+    result.numberOfBoundaryPoints = m_BoundaryPoints.size();
 
     // Apply the transform to each boundary point, accumulating the tight physical-space min/max
     // (in moving image physical space) and the moving-image continuous-index min/max, per axis.
