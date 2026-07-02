@@ -1,0 +1,144 @@
+From e9d5280ab45ed82550bde6c81a920774ba0fd1b9 Mon Sep 17 00:00:00 2001
+From: Matt McCormick <matt@fideus.io>
+Date: Thu, 2 Jul 2026 18:57:57 +0000
+Subject: [PATCH] BUG: Support reading and writing 32-bit integer
+ (uint32/int32) TIFF images
+
+itk::TIFFImageIO advertised uint32/int32 as supported component types and
+its metadata reader already mapped 32-bit samples with SAMPLEFORMAT_UINT
+and SAMPLEFORMAT_INT to IOComponentEnum::UINT / ::INT.  However:
+
+* InternalWrite() only handled 8-/16-bit integers and 32-bit float, so
+  writing a uint32 or int32 image threw an itk::ExceptionObject
+  ("TIFF supports unsigned/signed char, unsigned/signed short, and
+  float").  In WebAssembly builds this surfaced to callers as an
+  unrecoverable abort.
+
+* The pixel-reading dispatch in ReadGenericImage(void*, ...) and
+  ReadCurrentPage() had no UINT/INT case, so reading a 32-bit integer
+  TIFF silently left the output buffer zero-filled.
+
+libtiff fully supports 32-bit integer samples (BITSPERSAMPLE=32 with
+SAMPLEFORMAT_UINT / SAMPLEFORMAT_INT), so add the missing UINT and INT
+cases to the write (bits-per-sample, sample-format and row-length) and
+read (component dispatch) paths.  uint32/int32 images now round-trip
+with full 32-bit fidelity in both 2-D and multi-page (3-D) TIFFs.
+---
+ Modules/IO/TIFF/src/itkTIFFImageIO.cxx | 52 ++++++++++++++++++++++++--
+ 1 file changed, 48 insertions(+), 4 deletions(-)
+
+diff --git a/Modules/IO/TIFF/src/itkTIFFImageIO.cxx b/Modules/IO/TIFF/src/itkTIFFImageIO.cxx
+index 37df52e..b4ca55e 100644
+--- a/Modules/IO/TIFF/src/itkTIFFImageIO.cxx
++++ b/Modules/IO/TIFF/src/itkTIFFImageIO.cxx
+@@ -72,6 +72,14 @@ TIFFImageIO::ReadGenericImage(void * out, unsigned int width, unsigned int heigh
+   {
+     this->ReadGenericImage<short>(out, width, height);
+   }
++  else if (m_ComponentType == IOComponentEnum::UINT)
++  {
++    this->ReadGenericImage<unsigned int>(out, width, height);
++  }
++  else if (m_ComponentType == IOComponentEnum::INT)
++  {
++    this->ReadGenericImage<int>(out, width, height);
++  }
+   else if (m_ComponentType == IOComponentEnum::FLOAT)
+   {
+     this->ReadGenericImage<float>(out, width, height);
+@@ -600,11 +608,18 @@ TIFFImageIO::InternalWrite(const void * buffer)
+     case IOComponentEnum::SHORT:
+       bps = 16;
+       break;
++    case IOComponentEnum::UINT:
++      bps = 32;
++      break;
++    case IOComponentEnum::INT:
++      bps = 32;
++      break;
+     case IOComponentEnum::FLOAT:
+       bps = 32;
+       break;
+     default:
+-      itkExceptionMacro("TIFF supports unsigned/signed char, unsigned/signed short, and float");
++      itkExceptionMacro(
++        "TIFF supports unsigned/signed char, unsigned/signed short, unsigned/signed int (32-bit), and float");
+   }
+ 
+   uint16_t predictor;
+@@ -635,10 +650,15 @@ TIFFImageIO::InternalWrite(const void * buffer)
+                                                                       << itksys::SystemTools::GetLastSystemError());
+   }
+ 
+-  if (this->GetComponentType() == IOComponentEnum::SHORT || this->GetComponentType() == IOComponentEnum::CHAR)
++  if (this->GetComponentType() == IOComponentEnum::SHORT || this->GetComponentType() == IOComponentEnum::CHAR ||
++      this->GetComponentType() == IOComponentEnum::INT)
+   {
+     TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_INT);
+   }
++  else if (this->GetComponentType() == IOComponentEnum::UINT)
++  {
++    TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
++  }
+   else if (this->GetComponentType() == IOComponentEnum::FLOAT)
+   {
+     TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
+@@ -660,10 +680,15 @@ TIFFImageIO::InternalWrite(const void * buffer)
+     TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, scomponents);
+     TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps); // Fix for stype
+     TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+-    if (this->GetComponentType() == IOComponentEnum::SHORT || this->GetComponentType() == IOComponentEnum::CHAR)
++    if (this->GetComponentType() == IOComponentEnum::SHORT || this->GetComponentType() == IOComponentEnum::CHAR ||
++        this->GetComponentType() == IOComponentEnum::INT)
+     {
+       TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_INT);
+     }
++    else if (this->GetComponentType() == IOComponentEnum::UINT)
++    {
++      TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
++    }
+     else if (this->GetComponentType() == IOComponentEnum::FLOAT)
+     {
+       TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
+@@ -811,11 +836,18 @@ TIFFImageIO::InternalWrite(const void * buffer)
+       case IOComponentEnum::SHORT:
+         rowLength = sizeof(short);
+         break;
++      case IOComponentEnum::UINT:
++        rowLength = sizeof(unsigned int);
++        break;
++      case IOComponentEnum::INT:
++        rowLength = sizeof(int);
++        break;
+       case IOComponentEnum::FLOAT:
+         rowLength = sizeof(float);
+         break;
+       default:
+-        itkExceptionMacro("TIFF supports unsigned/signed char, unsigned/signed short, and float");
++        itkExceptionMacro(
++          "TIFF supports unsigned/signed char, unsigned/signed short, unsigned/signed int (32-bit), and float");
+     }
+ 
+     rowLength *= this->GetNumberOfComponents();
+@@ -1327,6 +1359,18 @@ TIFFImageIO::ReadCurrentPage(void * buffer, size_t pixelOffset)
+       volume += pixelOffset;
+       this->ReadGenericImage(volume, width, height);
+     }
++    else if (m_ComponentType == IOComponentEnum::UINT)
++    {
++      auto * volume = static_cast<unsigned int *>(buffer);
++      volume += pixelOffset;
++      this->ReadGenericImage(volume, width, height);
++    }
++    else if (m_ComponentType == IOComponentEnum::INT)
++    {
++      auto * volume = static_cast<int *>(buffer);
++      volume += pixelOffset;
++      this->ReadGenericImage(volume, width, height);
++    }
+     else if (m_ComponentType == IOComponentEnum::CHAR)
+     {
+       auto * volume = static_cast<char *>(buffer);
+-- 
+2.42.0
+
