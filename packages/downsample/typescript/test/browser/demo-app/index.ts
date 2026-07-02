@@ -22,4 +22,5 @@ import './downsample-label-image-controller.js'
 import './downsample-sigma-controller.js'
 import './downsample-controller.js'
 import './gaussian-kernel-radius-controller.js'
+import './resample-bounding-box-controller.js'
 

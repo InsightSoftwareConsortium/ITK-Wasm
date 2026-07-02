@@ -50,3 +50,13 @@ export type { GaussianKernelRadiusNodeOptions }
 
 import gaussianKernelRadiusNode from './gaussian-kernel-radius-node.js'
 export { gaussianKernelRadiusNode }
+
+
+import ResampleBoundingBoxNodeResult from './resample-bounding-box-node-result.js'
+export type { ResampleBoundingBoxNodeResult }
+
+import ResampleBoundingBoxNodeOptions from './resample-bounding-box-node-options.js'
+export type { ResampleBoundingBoxNodeOptions }
+
+import resampleBoundingBoxNode from './resample-bounding-box-node.js'
+export { resampleBoundingBoxNode }

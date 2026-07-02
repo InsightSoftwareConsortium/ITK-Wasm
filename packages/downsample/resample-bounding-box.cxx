@@ -19,46 +19,44 @@
 // Design constraint: only image metadata (size, origin, spacing, direction) is read. The fixed and
 // moving pixel buffers are NEVER dereferenced, so both images may arrive with empty data buffers.
 //
-// Transform reading: SupportInputTransformTypes dispatches with TTransform = itk::Transform<ScalarType,
-// Dim, Dim>, the ABSTRACT base. That base is exactly what the bounding box math needs (TransformPoint is
-// virtual), but itk-wasm's InputTransform<T> cannot be used with it: the memory-IO reconstruction calls
-// T::New() / CopyInParameters, which require a concrete, instantiable T. So the transform is read
-// generically -- for any parameterization -- with the ITK transform file reader into the abstract base.
-// (This reads from the filesystem, which is the path exercised by the C++ CTest; wiring the in-memory
-// interface for arbitrary transforms is left to a later phase.)
+// Dispatch and transform reading: the pipeline supports any transform parameterization at dimensions 2, 3, and
+// 4. We dispatch on the transform DIMENSION ourselves (main() below) rather than with
+// itk::wasm::SupportInputTransformTypes because that helper's memory-IO type detection deserializes the
+// transform input -- which is a TransformList (a JSON array) -- as a single transform object, and so throws for
+// every in-memory transform. Instead, readInputTransformDimension() peeks the dimension, and readInputTransform()
+// reconstructs the transform generically into the abstract itk::Transform base (both in
+// resampleReadInputTransform.h): from the wasm memory store under --memory-io (the path the TypeScript and Python
+// bindings use), or from the filesystem otherwise (the path the C++ CTest exercises). The math is always done at
+// double precision -- lossless for float32 and float64 inputs, and robust to itk-wasm's .iwt scalar-type
+// detection, which can misreport a float64 transform as float32.
 
 #include "itkPipeline.h"
 #include "itkInputImage.h"
 #include "itkOutputTextStream.h"
-#include "itkSupportInputTransformTypes.h"
 
 #include "itkImage.h"
-#include "itkTransformFileReader.h"
+#include "itkTransform.h"
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
+#include "resampleReadInputTransform.h"
 #include "resampleBoundingBox.h"
 
-template <typename TTransform>
+template <unsigned int VDimension>
 class PipelineFunctor
 {
 public:
   int
   operator()(itk::wasm::Pipeline & pipeline)
   {
-    // SupportInputTransformTypes reliably dispatches the transform DIMENSION, but the itk-wasm .iwt
-    // filesystem transform-type detection can misreport a float64 transform's scalar type as float32
-    // (it inspects the type string of a transform read with a float-templated IO). Reading a float64
-    // transform at single precision drops parameters, so always read at double precision, which is
-    // lossless for both float32 and float64 inputs.
-    constexpr unsigned int Dimension = TTransform::InputSpaceDimension;
+    constexpr unsigned int Dimension = VDimension;
     using ScalarType = double;
     using TransformType = itk::Transform<ScalarType, Dimension, Dimension>;
     using ImageType = itk::Image<uint8_t, Dimension>;
 
-    // Declaration order defines the positional CLI argument order: transform, fixed, moving, output.
+    // Declaration order defines the positional CLI argument order: transform, fixed, moving, bounding-box.
     std::string transformFileName;
     pipeline
       .add_option(
@@ -76,32 +74,20 @@ public:
       ->required()
       ->type_name("INPUT_IMAGE");
 
-    itk::wasm::OutputTextStream output;
-    pipeline.add_option("output", output, "Output bounding box JSON")->required()->type_name("OUTPUT_JSON");
+    itk::wasm::OutputTextStream boundingBox;
+    pipeline.add_option("bounding-box", boundingBox, "The padded moving-image region needed to resample the fixed image grid, as a bounding box (JSON)")
+      ->required()
+      ->type_name("OUTPUT_JSON");
 
     int padding = 1;
     pipeline.add_option("-p,--padding", padding, "Pixels of padding added per side (default 1 for linear interpolation)");
 
     ITK_WASM_PARSE(pipeline);
 
-    // Read the transform generically into the abstract itk::Transform base.
-    using TransformReaderType = itk::TransformFileReaderTemplate<ScalarType>;
-    auto transformReader = TransformReaderType::New();
-    transformReader->SetFileName(transformFileName);
-    ITK_WASM_CATCH_EXCEPTION(pipeline, transformReader->Update());
-
-    const auto transformList = transformReader->GetTransformList();
-    if (transformList == nullptr || transformList->empty())
-    {
-      CLI::Error err("Runtime error", "No transform found in the input transform file.", 1);
-      return pipeline.exit(err);
-    }
-    const TransformType * transform = dynamic_cast<const TransformType *>(transformList->front().GetPointer());
-    if (transform == nullptr)
-    {
-      CLI::Error err("Runtime error", "The input transform dimension or scalar type is not supported.", 1);
-      return pipeline.exit(err);
-    }
+    // Read the transform generically into the abstract itk::Transform base, from the wasm memory store under
+    // --memory-io or from the filesystem otherwise. The returned smart pointer keeps the transform alive.
+    typename TransformType::ConstPointer transform;
+    ITK_WASM_CATCH_EXCEPTION(pipeline, transform = readInputTransform<Dimension>(transformFileName));
 
     ResampleBoundingBoxComputer<TransformType> computer;
     ResampleBoundingBoxResult                  result;
@@ -162,7 +148,7 @@ public:
     rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
     document.Accept(writer);
 
-    output.Get() << stringBuffer.GetString();
+    boundingBox.Get() << stringBuffer.GetString();
 
     return EXIT_SUCCESS;
   }
@@ -177,6 +163,43 @@ main(int argc, char * argv[])
     argc,
     argv);
 
-  return itk::wasm::SupportInputTransformTypes<PipelineFunctor, float, double>::Dimensions<2U, 3U, 4U>("transform",
-                                                                                                       pipeline);
+  // --help / --interface-json / --version do not read any input: dispatch to a default dimension so the functor
+  // can emit help / the interface JSON (this is the path itk-wasm bindgen exercises) and exit.
+  const auto argCount = pipeline.get_argc();
+  const auto argValues = pipeline.get_argv();
+  for (int ii = 0; ii < argCount; ++ii)
+  {
+    const std::string arg(argValues[ii]);
+    if (arg == "-h" || arg == "--help" || arg == "--interface-json" || arg == "--version")
+    {
+      return PipelineFunctor<2U>()(pipeline);
+    }
+  }
+
+  // Pre-parse just the (positional) transform argument to determine its dimension, then dispatch to the
+  // dimension-specialized functor. This mirrors itk::wasm::SupportInputTransformTypes but reads the transform
+  // list correctly under --memory-io.
+  std::string transformArg;
+  auto        transformOption = pipeline.add_option("transform", transformArg, "Input transform");
+  ITK_WASM_PRE_PARSE(pipeline);
+  pipeline.remove_option(transformOption);
+
+  unsigned int dimension = 0;
+  ITK_WASM_CATCH_EXCEPTION(pipeline, dimension = readInputTransformDimension(transformArg));
+
+  switch (dimension)
+  {
+    case 2U:
+      return PipelineFunctor<2U>()(pipeline);
+    case 3U:
+      return PipelineFunctor<3U>()(pipeline);
+    case 4U:
+      return PipelineFunctor<4U>()(pipeline);
+    default:
+    {
+      CLI::Error err(
+        "Runtime error", "Unsupported transform dimension: only dimensions 2, 3, and 4 are supported.", 1);
+      return pipeline.exit(err);
+    }
+  }
 }

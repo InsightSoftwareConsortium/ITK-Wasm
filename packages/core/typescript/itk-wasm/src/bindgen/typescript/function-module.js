@@ -429,7 +429,9 @@ function functionModule(
       return
     }
     const camel = camelCase(parameter.name)
-    functionContent += `  if (options.${camel}) {\n`
+    // Use a presence check (not truthiness) so that valid falsy values -- notably 0 for a numeric option --
+    // are still forwarded. BOOL options are additionally guarded below, so an explicit `false` is a no-op.
+    functionContent += `  if (typeof options.${camel} !== "undefined") {\n`
     if (parameter.type === 'BOOL') {
       functionContent += `    options.${camel} && args.push('--${parameter.name}')\n`
     } else if (parameter.itemsExpectedMax > 1) {
