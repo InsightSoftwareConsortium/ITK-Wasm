@@ -16,7 +16,8 @@
     "package-description": "Pipelines for downsampling images.",
     "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm",
     "bindgen-exclude": [
-      "resample-bounding-box-generate-inputs"
+      "resample-bounding-box-generate-inputs",
+      "resample-bounding-box-test"
     ]
   },
   "scripts": {

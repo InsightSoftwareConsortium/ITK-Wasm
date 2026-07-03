@@ -40,8 +40,10 @@ set(pipelines
 # resample-bounding-box-generate-inputs fabricates the self-contained inputs (fixed image, moving image,
 # transform) for the resample-bounding-box C++ CTests, and resample-bounding-box-test is an in-process unit
 # test that asserts the computed regions directly. Both run under the WASI/native toolchains and are
-# deliberately NOT built for Emscripten: itk-wasm bindgen scans the Emscripten build for pipeline .wasm files,
-# so building them there would expose them as public browser/Node bindings. The real, public pipeline is
+# deliberately NOT built for Emscripten so they never leak into the browser/Node bindings (TypeScript bindgen
+# scans the Emscripten build). They ARE present in the WASI build, however, which the Python bindgen scans --
+# neither is an itk-wasm pipeline, so both MUST also be listed under "itk-wasm.bindgen-exclude" in package.json
+# or Python bindgen crashes trying to read their (empty) interface JSON. The real, public pipeline is
 # resample-bounding-box.
 if(NOT EMSCRIPTEN)
   list(APPEND pipelines resample-bounding-box-generate-inputs resample-bounding-box-test)
