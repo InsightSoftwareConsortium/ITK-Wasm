@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v6.0.2
+    - uses: actions/checkout@v7.0.0
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -26,7 +26,7 @@ jobs:
         node-version: '22'
 
     - name: Install
-      uses: pnpm/action-setup@v5
+      uses: pnpm/action-setup@v6
       with:
         run_install: true
 
