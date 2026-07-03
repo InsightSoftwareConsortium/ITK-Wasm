@@ -606,6 +606,9 @@ importers:
       '@itk-wasm/image-io-build':
         specifier: workspace:^
         version: link:../image-io
+      '@itk-wasm/transform-io-build':
+        specifier: workspace:^
+        version: link:../transform-io
       itk-wasm:
         specifier: workspace:^
         version: link:../core/typescript/itk-wasm
