@@ -1,4 +1,4 @@
-From 1f3573abfa0726ae26ec6376a5e8fbcc798cd5b8 Mon Sep 17 00:00:00 2001
+From b9a1b03e58c064c1609580fbffbfb4ddbee72fcb Mon Sep 17 00:00:00 2001
 From: Matt McCormick <matt@fideus.io>
 Date: Thu, 2 Jul 2026 15:26:09 -0400
 Subject: [PATCH] BUG: Support reading and writing 32-bit integer TIFF images
@@ -23,6 +23,12 @@ the write (bits-per-sample, sample-format, and row-length) and read (component
 dispatch) paths. The multi-page reader branch uses a correctly typed pointer so
 the per-page pixel offset arithmetic stays correct.
 
+Also set SAMPLEFORMAT_UINT explicitly for the unsigned 8- and 16-bit cases
+(UCHAR/USHORT). These previously relied on libtiff's default sample format,
+which is also SAMPLEFORMAT_UINT, so this is behavior-preserving (verified: the
+byte-exact --compare-MD5 tests are unchanged) but makes the signed / unsigned /
+float grouping explicit and self-documenting.
+
 Add itkTIFFImageIOInt32Test, a GoogleTest that round-trips uint32 and int32
 images with values exceeding the 16-bit range in both 2-D and multi-page (3-D)
 TIFFs, asserting both the on-disk component type and full-fidelity pixel values.
@@ -32,11 +38,11 @@ Reported at https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues/1544
 Co-authored-by: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
 Signed-off-by: Matt McCormick <matt@fideus.io>
 ---
- Modules/IO/TIFF/src/itkTIFFImageIO.cxx | 48 +++++++++++++++++++++++---
- 1 file changed, 44 insertions(+), 4 deletions(-)
+ Modules/IO/TIFF/src/itkTIFFImageIO.cxx | 50 +++++++++++++++++++++++---
+ 1 file changed, 46 insertions(+), 4 deletions(-)
 
 diff --git a/Modules/IO/TIFF/src/itkTIFFImageIO.cxx b/Modules/IO/TIFF/src/itkTIFFImageIO.cxx
-index feaffc0bc2..c76ab30232 100644
+index feaffc0bc2..02cdee6a41 100644
 --- a/Modules/IO/TIFF/src/itkTIFFImageIO.cxx
 +++ b/Modules/IO/TIFF/src/itkTIFFImageIO.cxx
 @@ -72,6 +72,14 @@ TIFFImageIO::ReadGenericImage(void * out, unsigned int width, unsigned int heigh
@@ -72,7 +78,7 @@ index feaffc0bc2..c76ab30232 100644
    }
  
    uint16_t predictor;
-@@ -638,10 +651,15 @@ TIFFImageIO::InternalWrite(const void * buffer)
+@@ -638,10 +651,16 @@ TIFFImageIO::InternalWrite(const void * buffer)
                                                                        << itksys::SystemTools::GetLastSystemError());
    }
  
@@ -82,14 +88,15 @@ index feaffc0bc2..c76ab30232 100644
    {
      TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_INT);
    }
-+  else if (this->GetComponentType() == IOComponentEnum::UINT)
++  else if (this->GetComponentType() == IOComponentEnum::UCHAR || this->GetComponentType() == IOComponentEnum::USHORT ||
++           this->GetComponentType() == IOComponentEnum::UINT)
 +  {
 +    TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
 +  }
    else if (this->GetComponentType() == IOComponentEnum::FLOAT)
    {
      TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
-@@ -663,10 +681,15 @@ TIFFImageIO::InternalWrite(const void * buffer)
+@@ -663,10 +682,16 @@ TIFFImageIO::InternalWrite(const void * buffer)
      TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, scomponents);
      TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps); // Fix for stype
      TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
@@ -99,14 +106,15 @@ index feaffc0bc2..c76ab30232 100644
      {
        TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_INT);
      }
-+    else if (this->GetComponentType() == IOComponentEnum::UINT)
++    else if (this->GetComponentType() == IOComponentEnum::UCHAR ||
++             this->GetComponentType() == IOComponentEnum::USHORT || this->GetComponentType() == IOComponentEnum::UINT)
 +    {
 +      TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
 +    }
      else if (this->GetComponentType() == IOComponentEnum::FLOAT)
      {
        TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
-@@ -814,11 +837,16 @@ TIFFImageIO::InternalWrite(const void * buffer)
+@@ -814,11 +839,16 @@ TIFFImageIO::InternalWrite(const void * buffer)
        case IOComponentEnum::SHORT:
          rowLength = sizeof(short);
          break;
@@ -124,7 +132,7 @@ index feaffc0bc2..c76ab30232 100644
      }
  
      rowLength *= this->GetNumberOfComponents();
-@@ -1330,6 +1358,18 @@ TIFFImageIO::ReadCurrentPage(void * buffer, size_t pixelOffset)
+@@ -1330,6 +1360,18 @@ TIFFImageIO::ReadCurrentPage(void * buffer, size_t pixelOffset)
        volume += pixelOffset;
        this->ReadGenericImage(volume, width, height);
      }
