@@ -631,6 +631,9 @@ importers:
       '@itk-wasm/mesh-io':
         specifier: workspace:^
         version: link:../../mesh-io/typescript
+      '@itk-wasm/transform-io':
+        specifier: workspace:^
+        version: link:../../transform-io/typescript
       '@playwright/test':
         specifier: ^1.57.0
         version: 1.57.0
