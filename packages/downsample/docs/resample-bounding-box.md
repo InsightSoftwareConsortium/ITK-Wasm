@@ -56,13 +56,18 @@ and only then move real pixels.
 
 For a fixed image of dimension *N*:
 
-1. **Boundary-pixel sampling.** Enumerate every *boundary* pixel of the fixed grid — every pixel with at least one
-   index component equal to `0` or `size_d - 1`. This is all faces and edges, not merely the `2^N` corners.
-   Interior pixels are skipped efficiently (the fastest axis is fast-forwarded to its last column), so the cost is
-   proportional to the number of boundary pixels, not the total pixel count.
-2. **Transform.** Map each boundary pixel's physical location through the transform into moving-image physical
-   space, and convert to a continuous index in the moving image (`TransformPhysicalPointToContinuousIndex`). All
-   math is done at double precision.
+1. **Sample selection.** Ask the transform whether it is linear (`itk::Transform::IsLinear()`, i.e.
+   `GetTransformCategory() == Linear` — true for translation, rigid, similarity, and affine transforms).
+   - **Linear (fast path).** Sample only the `2^N` grid *corners* (4 in 2D, 8 in 3D, …). A linear map sends the
+     fixed rectangle to a convex region, so its axis-aligned bound is already attained at the transformed corners —
+     the corners give the exact same box as the full boundary would, at `2^N` transforms independent of image size.
+   - **Nonlinear.** Enumerate every *boundary* pixel of the fixed grid — every pixel with at least one index
+     component equal to `0` or `size_d - 1` (all faces and edges, not merely the corners). Interior pixels are
+     skipped efficiently (the fastest axis is fast-forwarded to its last column), so the cost is proportional to the
+     number of boundary pixels, not the total pixel count.
+2. **Transform.** Map each sampled point's physical location (corners on the linear fast path, boundary pixels
+   otherwise) through the transform into moving-image physical space, and convert to a continuous index in the
+   moving image (`TransformPhysicalPointToContinuousIndex`). All math is done at double precision.
 3. **Bounding box.** Accumulate the per-axis min/max of the transformed physical points (`corners`) and of the
    moving-image continuous indices.
 4. **Moving index region.** Convert the continuous-index bounds to an integer region: `floor` the min and `ceil`
@@ -70,15 +75,20 @@ For a fixed image of dimension *N*:
 5. **Padding.** Expand the integer region outward by `--padding` on every side (`start -= padding`,
    `end += padding`). The resulting per-axis size is clamped to a minimum of `0` (never negative).
 
-### Why the full boundary, not just corners
+### Corner fast path vs. full-boundary sampling
 
-For a purely **affine** transform (translation, rotation, scale, shear) the image of the fixed rectangle is convex,
-so its axis-aligned bound is already achieved at the `2^N` transformed corners and sampling the full boundary gives
-the same answer. Enumerating the entire boundary matters for **nonlinear** transforms (e.g. B-spline, displacement
-field), where an interior edge pixel can map outside the hull of the transformed corners; sampling only the corners
-would then *under-bound* the region and the later resample would read outside the fetched block. The algorithm
-therefore always walks the full boundary. (The C++ unit test asserts the boundary-pixel count directly — e.g. 56
-for a 20×10 grid versus 4 if only corners were sampled — to guard against a regression to corners-only sampling.)
+For a **linear** transform (translation, rigid, similarity, affine — rotation, scale, shear) the image of the fixed
+rectangle is convex, so its axis-aligned bound is already achieved at the `2^N` transformed corners. The pipeline
+detects this via `itk::Transform::IsLinear()` and samples **only the corners** — a `2^N`-point computation
+independent of image size, and provably identical to what a full-boundary walk would return.
+
+Enumerating the entire boundary is required only for **nonlinear** transforms (e.g. B-spline, displacement field),
+where an interior edge pixel can map *outside* the hull of the transformed corners; sampling only the corners would
+then *under-bound* the region and the later resample would read outside the fetched block. The pipeline therefore
+walks the full boundary whenever the transform is not linear. (The C++ unit test covers both paths: it asserts the
+linear cases sample exactly `2^N` corners yet reproduce the same region a boundary walk gives, and includes a
+nonlinear "bulge" transform whose right-edge midpoint maps beyond the transformed corners — confirming the full
+boundary is walked, and matters, precisely when the transform is nonlinear.)
 
 ### Edge cases
 

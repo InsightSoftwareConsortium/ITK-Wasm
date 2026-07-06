@@ -40,10 +40,15 @@ struct ResampleBoundingBoxResult
   std::vector<double>       cornersMin;
   std::vector<double>       cornersMax;
 
-  // Diagnostic only (NOT part of the serialized JSON contract): the number of fixed-image boundary pixels that
-  // were sampled and transformed. Exposed so tests can confirm the algorithm walks the full boundary -- every
-  // face and edge -- rather than only the 2^Dimension corners, which is what keeps nonlinear transforms bounded.
+  // Diagnostic only (NOT part of the serialized JSON contract): the number of fixed-image points that were
+  // sampled and transformed. On the linear fast path this is the 2^Dimension corners; otherwise it is every
+  // boundary pixel (all faces and edges). Exposed so tests can confirm which path ran and, for nonlinear
+  // transforms, that the algorithm walks the full boundary rather than only the corners.
   std::size_t numberOfBoundaryPoints = 0;
+
+  // Diagnostic only (NOT part of the serialized JSON contract): true when the transform reported itself linear
+  // (itk::Transform::IsLinear()) and the corners-only fast path was taken; false when the full boundary was walked.
+  bool usedLinearCornerPath = false;
 };
 
 /** \class ResampleBoundingBoxComputer
@@ -56,8 +61,16 @@ struct ResampleBoundingBoxResult
  * data buffers.
  *
  * TTransform is expected to be the abstract itk::Transform<ScalarType, Dimension, Dimension>
- * base instantiated by itk::wasm::SupportInputTransformTypes, so TransformPoint() is
- * dispatched polymorphically to the concrete transform.
+ * base instantiated by itk::wasm::SupportInputTransformTypes, so TransformPoint() and
+ * IsLinear() are dispatched polymorphically to the concrete transform.
+ *
+ * Sampling strategy: the fixed grid's bounding box in moving-image space is the min/max of the
+ * transformed fixed-grid samples. For a LINEAR (affine, rigid, translation, ...) transform the
+ * image of the fixed rectangle is convex, so its axis-aligned bound is attained at the
+ * 2^Dimension transformed corners -- the computer detects this via itk::Transform::IsLinear()
+ * and samples only the corners. For a NONLINEAR transform an interior boundary pixel can map
+ * outside the hull of the transformed corners, so the computer instead walks every boundary
+ * pixel (all faces and edges). Both paths feed the identical min/max accumulation below.
  */
 template <typename TTransform>
 class ResampleBoundingBoxComputer
@@ -111,55 +124,86 @@ public:
 
     // Reuse the member vector's storage across calls: clear() keeps the existing capacity, reserve() grows it only
     // when this call needs more room than a previous one, and push_back() leaves the vector holding EXACTLY the
-    // points enumerated below. This is what keeps a reused instance correct when the boundary count changes between
-    // calls (e.g. shrinking then growing the fixed image): the size always matches the current call, so no stale
-    // point from an earlier, larger call can leak into the bounding box.
+    // points enumerated below. This is what keeps a reused instance correct when the sample count changes between
+    // calls (e.g. shrinking then growing the fixed image, or switching between the linear and boundary paths): the
+    // size always matches the current call, so no stale point from an earlier, larger call can leak into the box.
     m_BoundaryPoints.clear();
-    m_BoundaryPoints.reserve(boundaryCount);
 
-    // Enumerate every boundary pixel (at least one component equal to 0 or size_d - 1) and store
-    // its physical location. This includes all faces/edges, not just the 2^N corners, so nonlinear
-    // transforms remain correctly bounded. An odometer walks the grid, but whenever a fully interior
-    // pixel is reached the fastest axis is fast-forwarded to its last (boundary) column: this keeps
-    // enumeration proportional to the number of boundary pixels rather than the total pixel count.
-    IndexType index = startIndex;
-    while (true)
+    // Linear (affine, rigid, translation, ...) transforms map the fixed rectangle to a convex region, whose
+    // axis-aligned bound is attained at the transformed corners. Detect that via itk::Transform::IsLinear()
+    // (a virtual dispatched to the concrete transform) and take the corners-only fast path -- 2^Dimension samples
+    // instead of every boundary pixel. Both paths produce the identical bounding box for a linear transform;
+    // the boundary walk is only needed to keep NONLINEAR transforms correctly bounded (an interior edge pixel can
+    // map outside the transformed-corner hull).
+    const bool linear = transform->IsLinear();
+    result.usedLinearCornerPath = linear;
+
+    if (linear)
     {
-      bool onBoundary = false;
-      for (unsigned int d = 0; d < Dimension; ++d)
+      // Enumerate the 2^Dimension corners with a bitmask: bit d selects the low (0) or high (size_d - 1) index
+      // component. When an axis has size 1 the low and high indices coincide, harmlessly duplicating corners.
+      const std::size_t cornerCount = std::size_t(1) << Dimension;
+      m_BoundaryPoints.reserve(cornerCount);
+      for (std::size_t mask = 0; mask < cornerCount; ++mask)
       {
-        const itk::IndexValueType rel = index[d] - startIndex[d];
-        if (rel == 0 || rel == static_cast<itk::IndexValueType>(size[d]) - 1)
+        IndexType index;
+        for (unsigned int d = 0; d < Dimension; ++d)
         {
-          onBoundary = true;
+          const itk::IndexValueType last = startIndex[d] + static_cast<itk::IndexValueType>(size[d]) - 1;
+          index[d] = (mask & (std::size_t(1) << d)) ? last : startIndex[d];
+        }
+        PointType physicalPoint;
+        fixedImage->TransformIndexToPhysicalPoint(index, physicalPoint);
+        m_BoundaryPoints.push_back(physicalPoint);
+      }
+    }
+    else
+    {
+      // Enumerate every boundary pixel (at least one component equal to 0 or size_d - 1) and store
+      // its physical location. This includes all faces/edges, not just the 2^N corners, so nonlinear
+      // transforms remain correctly bounded. An odometer walks the grid, but whenever a fully interior
+      // pixel is reached the fastest axis is fast-forwarded to its last (boundary) column: this keeps
+      // enumeration proportional to the number of boundary pixels rather than the total pixel count.
+      m_BoundaryPoints.reserve(boundaryCount);
+      IndexType index = startIndex;
+      while (true)
+      {
+        bool onBoundary = false;
+        for (unsigned int d = 0; d < Dimension; ++d)
+        {
+          const itk::IndexValueType rel = index[d] - startIndex[d];
+          if (rel == 0 || rel == static_cast<itk::IndexValueType>(size[d]) - 1)
+          {
+            onBoundary = true;
+            break;
+          }
+        }
+        if (!onBoundary)
+        {
+          // Every component is interior, so the fastest axis is interior too; jump it to the last
+          // column, which is on the boundary, skipping the interior run in between.
+          index[0] = startIndex[0] + static_cast<itk::IndexValueType>(size[0]) - 1;
+        }
+
+        PointType physicalPoint;
+        fixedImage->TransformIndexToPhysicalPoint(index, physicalPoint);
+        m_BoundaryPoints.push_back(physicalPoint);
+
+        // Odometer increment, fastest axis first.
+        unsigned int d = 0;
+        for (; d < Dimension; ++d)
+        {
+          ++index[d];
+          if (index[d] < startIndex[d] + static_cast<itk::IndexValueType>(size[d]))
+          {
+            break;
+          }
+          index[d] = startIndex[d];
+        }
+        if (d == Dimension)
+        {
           break;
         }
-      }
-      if (!onBoundary)
-      {
-        // Every component is interior, so the fastest axis is interior too; jump it to the last
-        // column, which is on the boundary, skipping the interior run in between.
-        index[0] = startIndex[0] + static_cast<itk::IndexValueType>(size[0]) - 1;
-      }
-
-      PointType physicalPoint;
-      fixedImage->TransformIndexToPhysicalPoint(index, physicalPoint);
-      m_BoundaryPoints.push_back(physicalPoint);
-
-      // Odometer increment, fastest axis first.
-      unsigned int d = 0;
-      for (; d < Dimension; ++d)
-      {
-        ++index[d];
-        if (index[d] < startIndex[d] + static_cast<itk::IndexValueType>(size[d]))
-        {
-          break;
-        }
-        index[d] = startIndex[d];
-      }
-      if (d == Dimension)
-      {
-        break;
       }
     }
     result.numberOfBoundaryPoints = m_BoundaryPoints.size();
