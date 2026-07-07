@@ -37,12 +37,35 @@
 #include "itkImage.h"
 #include "itkTransform.h"
 
-#include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
+#include "glaze/glaze.hpp"
 
 #include "resampleReadInputTransform.h"
 #include "resampleBoundingBox.h"
+
+// JSON shape of the bounding-box output. glaze serializes an aggregate's public members by name, in declaration
+// order, via compile-time reflection -- so these two structs ARE the output schema:
+//   { "paddedStartIndex": [...], "paddedSize": [...],
+//     "paddedCorners": { "min": [...], "max": [...] }, "corners": { "min": [...], "max": [...] } }
+// The tight/padded corners are grouped under min/max sub-objects; the flat vectors from ResampleBoundingBoxResult
+// are mapped into that nesting at serialization time. These types are given a NAMED namespace (external linkage)
+// on purpose: glaze's compile-time member-name reflection cannot be applied to a type with internal linkage
+// (e.g. one declared in an anonymous namespace), so the names are scoped here instead.
+namespace resampleBoundingBoxJSON
+{
+struct CornersJSON
+{
+  std::vector<double> min;
+  std::vector<double> max;
+};
+
+struct BoundingBox
+{
+  std::vector<int>          paddedStartIndex;
+  std::vector<unsigned int> paddedSize;
+  CornersJSON               paddedCorners;
+  CornersJSON               corners;
+};
+} // namespace resampleBoundingBoxJSON
 
 template <unsigned int VDimension>
 class PipelineFunctor
@@ -93,62 +116,26 @@ public:
     ResampleBoundingBoxResult                  result;
     ITK_WASM_CATCH_EXCEPTION(pipeline, computer.Compute(fixed.Get(), moving.Get(), transform, padding, result));
 
-    // Serialize the result to JSON:
-    // { "paddedStartIndex": [...], "paddedSize": [...],
-    //   "paddedCorners": { "min": [...], "max": [...] }, "corners": { "min": [...], "max": [...] } }
-    rapidjson::Document document;
-    document.SetObject();
-    rapidjson::Document::AllocatorType & allocator = document.GetAllocator();
+    // Map the computer's flat result vectors into the nested output schema and serialize with glaze. glaze
+    // emits members in declaration order, so the object key order matches the schema above. Numbers use the
+    // shortest round-trippable form (an integer-valued double like 20.0 renders as 20); the value is identical
+    // and every binding parses it numerically.
+    const resampleBoundingBoxJSON::BoundingBox output{ result.paddedStartIndex,
+                                                       result.paddedSize,
+                                                       { result.paddedCornersMin, result.paddedCornersMax },
+                                                       { result.cornersMin, result.cornersMax } };
 
-    auto intArray = [&allocator](const std::vector<int> & values) {
-      rapidjson::Value array(rapidjson::kArrayType);
-      for (const auto value : values)
-      {
-        array.PushBack(rapidjson::Value().SetInt(value), allocator);
-      }
-      return array;
-    };
-    auto uintArray = [&allocator](const std::vector<unsigned int> & values) {
-      rapidjson::Value array(rapidjson::kArrayType);
-      for (const auto value : values)
-      {
-        array.PushBack(rapidjson::Value().SetUint(value), allocator);
-      }
-      return array;
-    };
-    auto doubleArray = [&allocator](const std::vector<double> & values) {
-      rapidjson::Value array(rapidjson::kArrayType);
-      for (const auto value : values)
-      {
-        array.PushBack(rapidjson::Value().SetDouble(value), allocator);
-      }
-      return array;
-    };
+    std::string serialized;
+    const auto  writeError = glz::write_json(output, serialized);
+    if (writeError)
+    {
+      CLI::Error err("Runtime error",
+                     "Failed to serialize the bounding box JSON: " + glz::format_error(writeError, serialized),
+                     1);
+      return pipeline.exit(err);
+    }
 
-    rapidjson::Value paddedStartIndex = intArray(result.paddedStartIndex);
-    document.AddMember("paddedStartIndex", paddedStartIndex, allocator);
-    rapidjson::Value paddedSize = uintArray(result.paddedSize);
-    document.AddMember("paddedSize", paddedSize, allocator);
-
-    rapidjson::Value paddedCorners(rapidjson::kObjectType);
-    rapidjson::Value paddedCornersMin = doubleArray(result.paddedCornersMin);
-    paddedCorners.AddMember("min", paddedCornersMin, allocator);
-    rapidjson::Value paddedCornersMax = doubleArray(result.paddedCornersMax);
-    paddedCorners.AddMember("max", paddedCornersMax, allocator);
-    document.AddMember("paddedCorners", paddedCorners, allocator);
-
-    rapidjson::Value corners(rapidjson::kObjectType);
-    rapidjson::Value cornersMin = doubleArray(result.cornersMin);
-    corners.AddMember("min", cornersMin, allocator);
-    rapidjson::Value cornersMax = doubleArray(result.cornersMax);
-    corners.AddMember("max", cornersMax, allocator);
-    document.AddMember("corners", corners, allocator);
-
-    rapidjson::StringBuffer                    stringBuffer;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(stringBuffer);
-    document.Accept(writer);
-
-    boundingBox.Get() << stringBuffer.GetString();
+    boundingBox.Get() << serialized;
 
     return EXIT_SUCCESS;
   }

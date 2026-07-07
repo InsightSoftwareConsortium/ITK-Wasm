@@ -125,13 +125,13 @@ Fixed `16×16`, spacing `(2, 2)`, origin `(10, 20)`; moving `64×64`, spacing `(
 translation `(10, 5)`; `--padding 1`:
 
 ```json
-{
-  "paddedStartIndex": [19, 24],
-  "paddedSize": [33, 33],
-  "paddedCorners": { "min": [19.0, 24.0], "max": [51.0, 56.0] },
-  "corners":       { "min": [20.0, 25.0], "max": [50.0, 55.0] }
-}
+{"paddedStartIndex":[19,24],"paddedSize":[33,33],"paddedCorners":{"min":[19,24],"max":[51,56]},"corners":{"min":[20,25],"max":[50,55]}}
 ```
+
+The output is compact (no whitespace). The `corners` / `paddedCorners` values are JSON numbers of type *double*, but
+an integer-valued coordinate is emitted without a trailing `.0` (e.g. `19`, not `19.0`) — the value is identical and
+every binding parses it as a floating-point number. A non-integer coordinate keeps its fraction at full precision:
+the 2D affine rotation below yields, for example, `"corners":{"min":[9.2,5.200000000000001],"max":[29.799999999999997,23.800000000000004]}`.
 
 The tight corners `[20,25]–[50,55]` are the translated fixed grid; padding 1 grows the integer region outward by
 one pixel per side. A 3D translation and a 2D affine rotation (non-axis-aligned corners `[9.2,5.2]–[29.8,23.8]`)
