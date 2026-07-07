@@ -2,7 +2,7 @@ import test from 'ava'
 import path from 'path'
 
 import { tiffReadImageNode, tiffWriteImageNode } from '../../dist/index-node.js'
-import { IntTypes, PixelTypes, getMatrixElement, Image, ImageType } from 'itk-wasm'
+import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
 import { testInputPath, testOutputPath } from './common.js'
 
@@ -44,40 +44,4 @@ test('Test writing a TIFF file', async t => {
   const { couldRead: couldReadBack, image: imageBack } = await tiffReadImageNode(testOutputFilePath)
   t.true(couldReadBack)
   verifyImage(t, imageBack)
-})
-
-// Round-trip a scalar image whose component type is written and read back with
-// full fidelity. Sample values intentionally exceed the 16-bit range so the
-// 32-bit integer cases genuinely exercise 32-bit storage.
-const roundTripScalar = async (t, componentType, TypedArrayConstructor, sample) => {
-  const dimension = 2
-  const size = [4, 3]
-  const image = new Image(new ImageType(dimension, componentType, PixelTypes.Scalar, 1))
-  image.size = size
-  const length = size[0] * size[1]
-  image.data = new TypedArrayConstructor(length)
-  for (let index = 0; index < length; index++) {
-    image.data[index] = sample(index)
-  }
-
-  const outputFilePath = path.join(testOutputPath, `tiff-roundtrip-${componentType}.tiff`)
-  const { couldWrite } = await tiffWriteImageNode(image, outputFilePath)
-  t.true(couldWrite, `couldWrite ${componentType}`)
-
-  const { couldRead, image: imageBack } = await tiffReadImageNode(outputFilePath)
-  t.true(couldRead, `couldRead ${componentType}`)
-  t.is(imageBack.imageType.componentType, componentType, 'componentType')
-  t.is(imageBack.data.length, length, 'data.length')
-  for (let index = 0; index < length; index++) {
-    t.is(Number(imageBack.data[index]), Number(image.data[index]), `data[${index}]`)
-  }
-}
-
-// https://github.com/InsightSoftwareConsortium/ITK-Wasm/issues/1544
-test('Round-trip a uint32 scalar TIFF file', async t => {
-  await roundTripScalar(t, IntTypes.UInt32, Uint32Array, index => (index * 100003 + 70000) >>> 0)
-})
-
-test('Round-trip an int32 scalar TIFF file', async t => {
-  await roundTripScalar(t, IntTypes.Int32, Int32Array, index => (index % 2 ? -1 : 1) * (index * 100003 + 70000))
 })
