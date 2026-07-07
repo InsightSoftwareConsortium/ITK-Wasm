@@ -46,7 +46,7 @@ async function downsampleBinShrinkNode(
 
   // Options
   args.push('--memory-io')
-  if (options.shrinkFactors) {
+  if (typeof options.shrinkFactors !== "undefined") {
     if(options.shrinkFactors.length < 2) {
       throw new Error('"shrink-factors" option must have a length > 2')
     }
@@ -56,7 +56,7 @@ async function downsampleBinShrinkNode(
       args.push(value.toString())
     })
   }
-  if (options.informationOnly) {
+  if (typeof options.informationOnly !== "undefined") {
     options.informationOnly && args.push('--information-only')
   }
 

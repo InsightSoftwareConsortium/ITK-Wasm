@@ -35,6 +35,7 @@
     <sl-tab slot="nav" panel="downsampleSigma-panel">downsampleSigma</sl-tab>
     <sl-tab slot="nav" panel="downsample-panel">downsample</sl-tab>
     <sl-tab slot="nav" panel="gaussianKernelRadius-panel">gaussianKernelRadius</sl-tab>
+    <sl-tab slot="nav" panel="resampleBoundingBox-panel">resampleBoundingBox</sl-tab>
 
 
     <sl-tab-panel name="downsampleBinShrink-panel">
@@ -236,6 +237,38 @@
     <div id="gaussianKernelRadiusOutputs">
       <sl-details disabled id="gaussianKernelRadius-radius-details" summary="radius: Output kernel radius."></sl-details>
       <sl-button variant="neutral" outline name="radius-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="resampleBoundingBox-panel">
+
+    <small><i>Compute the padded moving-image region needed to resample the fixed image grid through a transform</i></small><br /><br />
+
+    <div id="resampleBoundingBoxInputs"><form action="">
+      <label for="transform-file"><sl-button name="transform-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="transform-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the transform"><sl-details id="resampleBoundingBox-transform-details" summary="transform: Spatial transform mapping fixed image points into moving image space" disabled></sl-details></sl-tooltip>
+<br /><br />
+      <label for="fixed-file"><sl-button name="fixed-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="fixed-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the fixed"><itk-image-details id="resampleBoundingBox-fixed-details" summary="fixed: Fixed image whose grid is resampled (metadata only)" disabled></itk-image-details></sl-tooltip>
+<br /><br />
+      <label for="moving-file"><sl-button name="moving-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="moving-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the moving"><itk-image-details id="resampleBoundingBox-moving-details" summary="moving: Moving image to be sampled (metadata only)" disabled></itk-image-details></sl-tooltip>
+<br /><br />
+      <sl-input name="padding" type="number" value="1" step="1" label="padding" help-text="Pixels of padding added per side (default 1 for linear interpolation)"></sl-input>
+<br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="resampleBoundingBoxOutputs">
+      <sl-details disabled id="resampleBoundingBox-bounding-box-details" summary="boundingBox: The padded moving-image region needed to resample the fixed image grid, as a bounding box (JSON)"></sl-details>
+      <sl-button variant="neutral" outline name="bounding-box-download" disabled>Download</sl-button>
 <br /><br />
     </div>
 

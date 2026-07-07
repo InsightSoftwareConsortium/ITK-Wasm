@@ -43,6 +43,7 @@
     "@itk-wasm/compare-images": "workspace:^",
     "@itk-wasm/image-io": "workspace:^",
     "@itk-wasm/mesh-io": "workspace:^",
+    "@itk-wasm/transform-io": "workspace:^",
     "@itk-wasm/demo-app": "workspace:*",
     "@playwright/test": "^1.48.2",
     "@types/node": "^20.2.5",

@@ -14,7 +14,11 @@
     "typescript-package-name": "@itk-wasm/downsample",
     "python-package-name": "itkwasm-downsample",
     "package-description": "Pipelines for downsampling images.",
-    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm"
+    "repository": "https://github.com/InsightSoftwareConsortium/ITK-Wasm",
+    "bindgen-exclude": [
+      "resample-bounding-box-generate-inputs",
+      "resample-bounding-box-test"
+    ]
   },
   "scripts": {
     "build": "pnpm build:gen:typescript && pnpm build:gen:python",
@@ -41,6 +45,7 @@
     "@itk-wasm/dam": "^1.1.0",
     "itk-wasm": "workspace:^",
     "@itk-wasm/compare-images-build": "workspace:^",
-    "@itk-wasm/image-io-build": "workspace:^"
+    "@itk-wasm/image-io-build": "workspace:^",
+    "@itk-wasm/transform-io-build": "workspace:^"
   }
 }

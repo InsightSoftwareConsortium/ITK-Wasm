@@ -53,3 +53,13 @@ export type { GaussianKernelRadiusOptions }
 
 import gaussianKernelRadius from './gaussian-kernel-radius.js'
 export { gaussianKernelRadius }
+
+
+import ResampleBoundingBoxResult from './resample-bounding-box-result.js'
+export type { ResampleBoundingBoxResult }
+
+import ResampleBoundingBoxOptions from './resample-bounding-box-options.js'
+export type { ResampleBoundingBoxOptions }
+
+import resampleBoundingBox from './resample-bounding-box.js'
+export { resampleBoundingBox }

@@ -46,7 +46,7 @@ async function downsampleNode(
 
   // Options
   args.push('--memory-io')
-  if (options.shrinkFactors) {
+  if (typeof options.shrinkFactors !== "undefined") {
     if(options.shrinkFactors.length < 2) {
       throw new Error('"shrink-factors" option must have a length > 2')
     }
@@ -56,7 +56,7 @@ async function downsampleNode(
       args.push(value.toString())
     })
   }
-  if (options.cropRadius) {
+  if (typeof options.cropRadius !== "undefined") {
     if(options.cropRadius.length < 2) {
       throw new Error('"crop-radius" option must have a length > 2')
     }

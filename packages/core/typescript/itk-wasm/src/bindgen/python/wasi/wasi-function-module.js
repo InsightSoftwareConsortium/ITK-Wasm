@@ -232,7 +232,12 @@ from itkwasm import (
           args += `        input_count += 1\n`
         }
       } else {
-        args += `    if ${snake}:\n`
+        // Use a presence check (not truthiness) for numeric scalar options so that valid falsy values --
+        // notably 0 for an integer/float option -- are still forwarded to the pipeline. TEXT options keep the
+        // truthiness guard so an unset (empty-string) option is not forwarded.
+        args += parameter.type.startsWith('TEXT')
+          ? `    if ${snake}:\n`
+          : `    if ${snake} is not None:\n`
         if (parameter.type.startsWith('TEXT:{')) {
           const choices = parameter.type.split('{')[1].split('}')[0].split(', ')
           args += `        if ${snake} not in (${choices.map((c) => `'${c}'`).join(',')}):\n`

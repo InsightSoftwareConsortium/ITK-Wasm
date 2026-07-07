@@ -79,7 +79,16 @@ from itkwasm import (
           addKwargs += `        kwargs["${camelCase(parameter.name)}"] = to_js(${snakeCase(parameter.name)})\n`
       }
     } else {
-      addKwargs += `    if ${snakeCase(parameter.name)}:\n`
+      // Use a presence check (not truthiness) for numeric scalar options so that valid falsy values --
+      // notably 0 for an integer/float option -- are still forwarded. BOOL, list, and TEXT options keep the
+      // truthiness guard (an explicit False, an empty list, or an unset string is a no-op).
+      const numericScalar =
+        parameter.itemsExpectedMax <= 1 &&
+        parameter.type !== 'BOOL' &&
+        !parameter.type.startsWith('TEXT')
+      addKwargs += numericScalar
+        ? `    if ${snakeCase(parameter.name)} is not None:\n`
+        : `    if ${snakeCase(parameter.name)}:\n`
       addKwargs += `        kwargs["${camelCase(parameter.name)}"] = to_js(${snakeCase(parameter.name)})\n`
     }
   })
