@@ -14,6 +14,8 @@ else()
   set(io_components
     ITKImageIO
     ITKTransformIO
+    ITKIOTransformInsightLegacy
+    ITKIOTransformHDF5
     )
 endif()
 
@@ -22,6 +24,7 @@ find_package(ITK REQUIRED
    WebAssemblyInterface
    ITKSmoothing
    ITKImageGrid
+   ITKImageFunction
    ITKTransform
    GenericLabelInterpolator
    ${io_components}
@@ -35,6 +38,7 @@ set(pipelines
   downsample-bin-shrink
   downsample-label-image
   resample-bounding-box
+  resample-to-reference
   )
 
 # resample-bounding-box-generate-inputs fabricates the self-contained inputs (fixed image, moving image,
@@ -163,3 +167,67 @@ if(NOT EMSCRIPTEN)
     COMMAND resample-bounding-box-test
       )
 endif()
+
+# Interpolator coverage: one self-contained test per interpolator, using
+# cthead1.png as both the moving image and the reference geometry (identity
+# transform), so every interpolator selection is exercised. Needs no new data.
+# The linear case doubles as the pipeline smoke test.
+add_test(NAME resample-to-reference-linear
+  COMMAND resample-to-reference
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resampled_linear.png
+    --interpolator linear
+    )
+
+add_test(NAME resample-to-reference-nearest-neighbor
+  COMMAND resample-to-reference
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resampled_nearest_neighbor.png
+    --interpolator nearest_neighbor
+    )
+
+add_test(NAME resample-to-reference-b-spline
+  COMMAND resample-to-reference
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resampled_b_spline.png
+    --interpolator b_spline
+    )
+
+add_test(NAME resample-to-reference-windowed-sinc
+  COMMAND resample-to-reference
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resampled_windowed_sinc.png
+    --interpolator windowed_sinc
+    )
+
+add_test(NAME resample-to-reference-gaussian
+  COMMAND resample-to-reference
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resampled_gaussian.png
+    --interpolator gaussian
+    )
+
+# Label-image interpolator on the existing multi-label test image.
+add_test(NAME resample-to-reference-label-image
+  COMMAND resample-to-reference
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/2th_cthead1.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/2th_cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/2th_cthead1_resampled_label_image.png
+    --interpolator label_image
+    )
+
+# Background value: exercise the --default-value flag on the filesystem/CLI path (the memory-IO
+# pixel-value assertions live in the Node and Python suites). Identity resample onto the same grid.
+add_test(NAME resample-to-reference-default-value
+  COMMAND resample-to-reference
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resampled_default_value.png
+    --interpolator linear
+    --default-value 128
+    )

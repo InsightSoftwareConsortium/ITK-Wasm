@@ -18,7 +18,7 @@ export default defineConfig({
     format: 'es'
   },
   optimizeDeps: {
-    exclude: ['itk-wasm', '@itk-wasm/image-io', '@itk-wasm/mesh-io', '@thewtex/zstddec', '@itk-viewer/io']
+    exclude: ['itk-wasm', '@itk-wasm/image-io', '@itk-wasm/mesh-io', '@itk-wasm/transform-io', '@thewtex/zstddec', '@itk-viewer/io']
   },
   plugins: [
     // put lazy loaded JavaScript and Wasm bundles in dist directory
@@ -28,6 +28,7 @@ export default defineConfig({
         { src: '../../../dist/pipelines/*', dest: 'pipelines' },
         { src: '../../../node_modules/@itk-wasm/image-io/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
         { src: '../../../node_modules/@itk-wasm/mesh-io/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
+        { src: '../../../node_modules/@itk-wasm/transform-io/dist/pipelines/*.{js,wasm,wasm.zst}', dest: 'pipelines' },
       ],
     })
   ],

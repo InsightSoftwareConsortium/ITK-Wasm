@@ -60,3 +60,13 @@ export type { ResampleBoundingBoxNodeOptions }
 
 import resampleBoundingBoxNode from './resample-bounding-box-node.js'
 export { resampleBoundingBoxNode }
+
+
+import ResampleToReferenceNodeResult from './resample-to-reference-node-result.js'
+export type { ResampleToReferenceNodeResult }
+
+import ResampleToReferenceNodeOptions from './resample-to-reference-node-options.js'
+export type { ResampleToReferenceNodeOptions }
+
+import resampleToReferenceNode from './resample-to-reference-node.js'
+export { resampleToReferenceNode }

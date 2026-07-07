@@ -36,6 +36,7 @@
     <sl-tab slot="nav" panel="downsample-panel">downsample</sl-tab>
     <sl-tab slot="nav" panel="gaussianKernelRadius-panel">gaussianKernelRadius</sl-tab>
     <sl-tab slot="nav" panel="resampleBoundingBox-panel">resampleBoundingBox</sl-tab>
+    <sl-tab slot="nav" panel="resampleToReference-panel">resampleToReference</sl-tab>
 
 
     <sl-tab-panel name="downsampleBinShrink-panel">
@@ -269,6 +270,62 @@
     <div id="resampleBoundingBoxOutputs">
       <sl-details disabled id="resampleBoundingBox-bounding-box-details" summary="boundingBox: The padded moving-image region needed to resample the fixed image grid, as a bounding box (JSON)"></sl-details>
       <sl-button variant="neutral" outline name="bounding-box-download" disabled>Download</sl-button>
+<br /><br />
+    </div>
+
+    </sl-tab-panel>
+
+
+    <sl-tab-panel name="resampleToReference-panel">
+
+    <small><i>Resample an image onto a reference image's grid with an optional transform and a selectable interpolator.</i></small><br /><br />
+
+    <div id="resampleToReferenceInputs"><form action="">
+      <label for="input-file"><sl-button name="input-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="input-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the input"><itk-image-details id="resampleToReference-input-details" summary="input: The moving image to resample." disabled></itk-image-details></sl-tooltip>
+<br /><br />
+      <label for="reference-image-file"><sl-button name="reference-image-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="reference-image-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the referenceImage"><itk-image-details id="resampleToReference-reference-image-details" summary="referenceImage: Reference image whose geometry defines the output grid. Only the geometry (origin, spacing, direction, size) is used; the pixel values are ignored." disabled></itk-image-details></sl-tooltip>
+<br /><br />
+      <label for="transform-file"><sl-button name="transform-file-button" variant="primary" outline onclick="this.parentElement.nextElementSibling.click()">Upload</sp-button></label><input type="file" name="transform-file" style="display: none"/>
+      <sl-tooltip content="Use the Upload button to provide the transform"><sl-details id="resampleToReference-transform-details" summary="transform: Optional transform mapping output-grid points into the moving-image space. A multi-entry or composite list is composed with itk::CompositeTransform semantics: the last entry is applied to the point first. Defaults to identity." disabled></sl-details></sl-tooltip>
+<br /><br />
+      <sl-input name="interpolator" type="text" label="interpolator" help-text="Interpolation method used to sample the moving image."></sl-input>
+      <sl-input name="default-value" type="number" value="0" step="any" label="defaultValue" help-text="Pixel value assigned to output samples that map outside the moving image (the background value), cast to the output pixel type. Defaults to 0."></sl-input>
+<br />
+    <sl-divider></sl-divider>
+      <br /><sl-tooltip content="Load example input data. This will overwrite data any existing input data."><sl-button name="loadSampleInputs" variant="default" style="display: none;">Load sample inputs</sl-button></sl-tooltip>
+      <sl-button type="button" variant="success" name="run">Run</sl-button><br /><br />
+
+    </form></div>
+    <sl-divider></sl-divider>
+
+    <div id="resampleToReferenceOutputs">
+      <itk-image-details disabled id="resampleToReference-output-details" summary="output: The resampled output image."></itk-image-details>
+      <sl-select id="resampleToReference-output-output-format" placeholder="Format">
+        <sl-option value="bmp">bmp</sl-option>
+        <sl-option value="dcm">dcm</sl-option>
+        <sl-option value="gipl">gipl</sl-option>
+        <sl-option value="hdf5">hdf5</sl-option>
+        <sl-option value="jpg">jpg</sl-option>
+        <sl-option value="lsm">lsm</sl-option>
+        <sl-option value="mnc">mnc</sl-option>
+        <sl-option value="mnc.gz">mnc.gz</sl-option>
+        <sl-option value="mgh">mgh</sl-option>
+        <sl-option value="mha">mha</sl-option>
+        <sl-option value="mrc">mrc</sl-option>
+        <sl-option value="nii">nii</sl-option>
+        <sl-option value="nii.gz">nii.gz</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="nrrd">nrrd</sl-option>
+        <sl-option value="png">png</sl-option>
+        <sl-option value="pic">pic</sl-option>
+        <sl-option value="tif">tif</sl-option>
+        <sl-option value="isq">isq</sl-option>
+        <sl-option value="fdf">fdf</sl-option>
+        <sl-option value="vtk">vtk</sl-option>
+      </sl-select>
+      <sl-button variant="neutral" outline name="output-download" disabled>Download</sl-button>
 <br /><br />
     </div>
 

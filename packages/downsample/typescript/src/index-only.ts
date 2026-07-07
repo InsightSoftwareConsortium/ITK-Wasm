@@ -63,3 +63,13 @@ export type { ResampleBoundingBoxOptions }
 
 import resampleBoundingBox from './resample-bounding-box.js'
 export { resampleBoundingBox }
+
+
+import ResampleToReferenceResult from './resample-to-reference-result.js'
+export type { ResampleToReferenceResult }
+
+import ResampleToReferenceOptions from './resample-to-reference-options.js'
+export type { ResampleToReferenceOptions }
+
+import resampleToReference from './resample-to-reference.js'
+export { resampleToReference }

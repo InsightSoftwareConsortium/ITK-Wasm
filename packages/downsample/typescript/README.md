@@ -185,6 +185,40 @@ async function gaussianKernelRadius(
 |   `radius`  | *JsonCompatible* | Output kernel radius.           |
 | `webWorker` |     *Worker*     | WebWorker used for computation. |
 
+#### resampleToReference
+
+*Resample an image onto a reference image's grid with an optional transform and a selectable interpolator.*
+
+```ts
+async function resampleToReference(
+  input: Image,
+  referenceImage: Image,
+  options: ResampleToReferenceOptions = {}
+) : Promise<ResampleToReferenceResult>
+```
+
+|     Parameter    |   Type  | Description                                                                                                                                         |
+| :--------------: | :-----: | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      `input`     | *Image* | The moving image to resample.                                                                                                                       |
+| `referenceImage` | *Image* | Reference image whose geometry defines the output grid. Only the geometry (origin, spacing, direction, size) is used; the pixel values are ignored. |
+
+**`ResampleToReferenceOptions` interface:**
+
+|    Property    |             Type            | Description                                                                                                                                                                                                                        |
+| :------------: | :-------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|   `transform`  |       *TransformList*       | Optional transform mapping output-grid points into the moving-image space. A multi-entry or composite list is composed with itk::CompositeTransform semantics: the last entry is applied to the point first. Defaults to identity. |
+| `interpolator` |           *string*          | Interpolation method used to sample the moving image.                                                                                                                                                                              |
+| `defaultValue` |           *number*          | Pixel value assigned to output samples that map outside the moving image (the background value), cast to the output pixel type. Defaults to 0.                                                                                     |
+|   `webWorker`  | *null or Worker or boolean* | WebWorker for computation. Set to null to create a new worker. Or, pass an existing worker. Or, set to `false` to run in the current thread / worker.                                                                              |
+|    `noCopy`    |          *boolean*          | When SharedArrayBuffer's are not available, do not copy inputs.                                                                                                                                                                    |
+
+**`ResampleToReferenceResult` interface:**
+
+|   Property  |   Type   | Description                     |
+| :---------: | :------: | :------------------------------ |
+|   `output`  |  *Image* | The resampled output image.     |
+| `webWorker` | *Worker* | WebWorker used for computation. |
+
 #### setPipelinesBaseUrl
 
 *Set base URL for WebAssembly assets when vendored.*
@@ -354,3 +388,34 @@ async function gaussianKernelRadiusNode(
 | Property |       Type       | Description           |
 | :------: | :--------------: | :-------------------- |
 | `radius` | *JsonCompatible* | Output kernel radius. |
+
+#### resampleToReferenceNode
+
+*Resample an image onto a reference image's grid with an optional transform and a selectable interpolator.*
+
+```ts
+async function resampleToReferenceNode(
+  input: Image,
+  referenceImage: Image,
+  options: ResampleToReferenceNodeOptions = {}
+) : Promise<ResampleToReferenceNodeResult>
+```
+
+|     Parameter    |   Type  | Description                                                                                                                                         |
+| :--------------: | :-----: | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      `input`     | *Image* | The moving image to resample.                                                                                                                       |
+| `referenceImage` | *Image* | Reference image whose geometry defines the output grid. Only the geometry (origin, spacing, direction, size) is used; the pixel values are ignored. |
+
+**`ResampleToReferenceNodeOptions` interface:**
+
+|    Property    |       Type      | Description                                                                                                                                                                                                                        |
+| :------------: | :-------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|   `transform`  | *TransformList* | Optional transform mapping output-grid points into the moving-image space. A multi-entry or composite list is composed with itk::CompositeTransform semantics: the last entry is applied to the point first. Defaults to identity. |
+| `interpolator` |     *string*    | Interpolation method used to sample the moving image.                                                                                                                                                                              |
+| `defaultValue` |     *number*    | Pixel value assigned to output samples that map outside the moving image (the background value), cast to the output pixel type. Defaults to 0.                                                                                     |
+
+**`ResampleToReferenceNodeResult` interface:**
+
+| Property |   Type  | Description                 |
+| :------: | :-----: | :-------------------------- |
+| `output` | *Image* | The resampled output image. |
