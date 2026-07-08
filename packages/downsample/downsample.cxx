@@ -29,6 +29,39 @@
 
 #include "downsampleSigma.h"
 
+// Groups the CLI options shared by the scalar and vector downsample paths so both declare exactly one
+// option surface -- identical names, order, type_names, and help text. The option-target members must
+// outlive ITK_WASM_PARSE (CLI11 binds them by reference), so the caller owns this struct on its own stack
+// and passes it to addDownsampleOptions() before parsing.
+template <typename TImage>
+struct DownsampleOptions
+{
+  std::vector<unsigned int>      shrinkFactors{ 2, 2 };
+  std::vector<unsigned int>      cropRadius;
+  itk::wasm::OutputImage<TImage> downsampledImage;
+};
+
+// Declares the shared downsample option surface into `pipeline`, binding each option to the corresponding
+// member of `options`. The `input` option is declared separately by each functor (the scalar path adds it
+// before pre-parse dispatch), so it is not part of this shared surface.
+template <typename TImage>
+void
+addDownsampleOptions(itk::wasm::Pipeline & pipeline, DownsampleOptions<TImage> & options)
+{
+  constexpr unsigned int ImageDimension = TImage::ImageDimension;
+
+  pipeline.add_option("-s,--shrink-factors", options.shrinkFactors, "Shrink factors")
+    ->required()
+    ->type_size(ImageDimension);
+
+  pipeline.add_option("-r,--crop-radius", options.cropRadius, "Optional crop radius in pixel units.")
+    ->type_size(ImageDimension);
+
+  pipeline.add_option("downsampled", options.downsampledImage, "Output downsampled image")
+    ->required()
+    ->type_name("OUTPUT_IMAGE");
+}
+
 // Scalar image processing
 template <typename TImage>
 int
@@ -39,20 +72,14 @@ DownsampleScalarImage(itk::wasm::Pipeline & pipeline, const TImage * inputImage)
 
   pipeline.get_option("input")->required()->type_name("INPUT_IMAGE");
 
-  std::vector<unsigned int> shrinkFactors{ 2, 2 };
-  pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->type_size(ImageDimension);
-
-  std::vector<unsigned int> cropRadius;
-  pipeline.add_option("-r,--crop-radius", cropRadius, "Optional crop radius in pixel units.")
-    ->type_size(ImageDimension);
-
-  using OutputImageType = itk::wasm::OutputImage<ImageType>;
-  OutputImageType downsampledImage;
-  pipeline.add_option("downsampled", downsampledImage, "Output downsampled image")
-    ->required()
-    ->type_name("OUTPUT_IMAGE");
+  DownsampleOptions<ImageType> options;
+  addDownsampleOptions(pipeline, options);
 
   ITK_WASM_PARSE(pipeline);
+
+  const std::vector<unsigned int> & shrinkFactors = options.shrinkFactors;
+  const std::vector<unsigned int> & cropRadius = options.cropRadius;
+  auto &                            downsampledImage = options.downsampledImage;
 
   auto sigmaValues = downsampleSigma(shrinkFactors);
 
@@ -142,19 +169,14 @@ public:
     InputImageType inputImage;
     pipeline.add_option("input", inputImage, "Input image")->required()->type_name("INPUT_IMAGE");
 
-    std::vector<unsigned int> shrinkFactors{ 2, 2 };
-    pipeline.add_option("-s,--shrink-factors", shrinkFactors, "Shrink factors")->required()->type_size(Dimension);
-
-    std::vector<unsigned int> cropRadius;
-    pipeline.add_option("-r,--crop-radius", cropRadius, "Optional crop radius in pixel units.")->type_size(Dimension);
-
-    using OutputImageType = itk::wasm::OutputImage<VectorImageType>;
-    OutputImageType downsampledImage;
-    pipeline.add_option("downsampled", downsampledImage, "Output downsampled image")
-      ->required()
-      ->type_name("OUTPUT_IMAGE");
+    DownsampleOptions<VectorImageType> options;
+    addDownsampleOptions(pipeline, options);
 
     ITK_WASM_PARSE(pipeline);
+
+    const std::vector<unsigned int> & shrinkFactors = options.shrinkFactors;
+    const std::vector<unsigned int> & cropRadius = options.cropRadius;
+    auto &                            downsampledImage = options.downsampledImage;
 
     // Get number of components
     const unsigned int numberOfComponents = inputImage.Get()->GetNumberOfComponentsPerPixel();

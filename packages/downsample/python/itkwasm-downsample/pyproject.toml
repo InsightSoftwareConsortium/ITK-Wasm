@@ -34,7 +34,7 @@ keywords = [
 
 requires-python = ">=3.8"
 dependencies = [
-    "itkwasm >= 1.0.b145",
+    "itkwasm >= 1.0.b185",
     "itkwasm-downsample-wasi; sys_platform != \"emscripten\"",
     "itkwasm-downsample-emscripten; sys_platform == \"emscripten\"",
 ]
