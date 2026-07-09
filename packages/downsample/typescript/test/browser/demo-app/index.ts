@@ -24,4 +24,5 @@ import './downsample-controller.js'
 import './gaussian-kernel-radius-controller.js'
 import './resample-bounding-box-controller.js'
 import './resample-to-reference-controller.js'
+import './resample-controller.js'
 

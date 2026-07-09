@@ -16,5 +16,7 @@ from .resample_bounding_box_async import resample_bounding_box_async
 from .resample_bounding_box import resample_bounding_box
 from .resample_to_reference_async import resample_to_reference_async
 from .resample_to_reference import resample_to_reference
+from .resample_async import resample_async
+from .resample import resample
 
 from ._version import __version__
