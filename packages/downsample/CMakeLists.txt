@@ -39,6 +39,7 @@ set(pipelines
   downsample-label-image
   resample-bounding-box
   resample-to-reference
+  resample
   )
 
 # resample-bounding-box-generate-inputs fabricates the self-contained inputs (fixed image, moving image,
@@ -230,4 +231,62 @@ add_test(NAME resample-to-reference-default-value
     ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resampled_default_value.png
     --interpolator linear
     --default-value 128
+    )
+
+# Parameter-driven resample onto an explicitly parameterized output grid. Each test exercises one
+# grid-defaulting branch of resample.cxx using the already-present cthead1.png (256x256). The names are
+# distinct from the resample-to-reference-* / resample-bounding-box-* tests so they can be run in
+# isolation with an anchored -R regex.
+
+# Auto-size branch: only --output-spacing is given, so the size is auto-computed to preserve the input's
+# physical extent (256 * 1 / 2 = 128, so 128x128).
+add_test(NAME resample-spacing-only
+  COMMAND resample
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resample_spacing_only.png
+    --output-spacing 2 2
+    )
+
+# Fully explicit grid: all four grid parameters provided (identity direction, origin at zero, 128x128).
+add_test(NAME resample-explicit-grid
+  COMMAND resample
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resample_explicit_grid.png
+    --size 128 128
+    --output-spacing 2 2
+    --output-origin 0 0
+    --output-direction 1 0 0 1
+    )
+
+# Full input-geometry fallback: no grid options, so the output reproduces the input grid (identity).
+add_test(NAME resample-defaults
+  COMMAND resample
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resample_defaults.png
+    )
+
+# Nearest-neighbor interpolator on the auto-size branch.
+add_test(NAME resample-nearest-neighbor
+  COMMAND resample
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resample_nearest_neighbor.png
+    --output-spacing 2 2
+    --interpolator nearest_neighbor
+    )
+
+# Background value on the CLI/filesystem path; spacing 1 1 keeps the input size.
+add_test(NAME resample-default-value
+  COMMAND resample
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/cthead1_resample_default_value.png
+    --output-spacing 1 1
+    --default-value 128
+    )
+
+# Label-image interpolator on the existing multi-label test image (full input-geometry fallback).
+add_test(NAME resample-label-image
+  COMMAND resample
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/data/input/2th_cthead1.png
+    ${CMAKE_CURRENT_BINARY_DIR}/2th_cthead1_resample_label_image.png
+    --interpolator label_image
     )
