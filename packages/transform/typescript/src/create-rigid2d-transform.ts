@@ -42,7 +42,7 @@ async function createRigid2dTransform(
 
   // Options
   args.push('--memory-io')
-  if (options.parametersType) {
+  if (typeof options.parametersType !== "undefined") {
     args.push('--parameters-type', options.parametersType.toString())
 
   }

@@ -58,7 +58,7 @@ async function writeSegmentation(
 
   // Options
   args.push('--memory-io')
-  if (options.refDicomSeries) {
+  if (typeof options.refDicomSeries !== "undefined") {
     if(options.refDicomSeries.length < 1) {
       throw new Error('"ref-dicom-series" option must have a length > 1')
     }
@@ -75,10 +75,10 @@ async function writeSegmentation(
       args.push(name)
     }))
   }
-  if (options.skipEmptySlices) {
+  if (typeof options.skipEmptySlices !== "undefined") {
     options.skipEmptySlices && args.push('--skip-empty-slices')
   }
-  if (options.useLabelidAsSegmentnumber) {
+  if (typeof options.useLabelidAsSegmentnumber !== "undefined") {
     options.useLabelidAsSegmentnumber && args.push('--use-labelid-as-segmentnumber')
   }
 

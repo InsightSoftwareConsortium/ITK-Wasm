@@ -46,27 +46,27 @@ async function repairNode(
 
   // Options
   args.push('--memory-io')
-  if (options.mergeTolerance) {
+  if (typeof options.mergeTolerance !== "undefined") {
     args.push('--merge-tolerance', options.mergeTolerance.toString())
 
   }
-  if (options.minimumComponentArea) {
+  if (typeof options.minimumComponentArea !== "undefined") {
     args.push('--minimum-component-area', options.minimumComponentArea.toString())
 
   }
-  if (options.maximumHoleArea) {
+  if (typeof options.maximumHoleArea !== "undefined") {
     args.push('--maximum-hole-area', options.maximumHoleArea.toString())
 
   }
-  if (options.maximumHoleEdges) {
+  if (typeof options.maximumHoleEdges !== "undefined") {
     args.push('--maximum-hole-edges', options.maximumHoleEdges.toString())
 
   }
-  if (options.maximumDegree3Distance) {
+  if (typeof options.maximumDegree3Distance !== "undefined") {
     args.push('--maximum-degree3-distance', options.maximumDegree3Distance.toString())
 
   }
-  if (options.removeIntersectingTriangles) {
+  if (typeof options.removeIntersectingTriangles !== "undefined") {
     options.removeIntersectingTriangles && args.push('--remove-intersecting-triangles')
   }
 

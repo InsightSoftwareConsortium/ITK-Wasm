@@ -56,10 +56,10 @@ async function mrcWriteImage(
 
   // Options
   args.push('--memory-io')
-  if (options.informationOnly) {
+  if (typeof options.informationOnly !== "undefined") {
     options.informationOnly && args.push('--information-only')
   }
-  if (options.useCompression) {
+  if (typeof options.useCompression !== "undefined") {
     options.useCompression && args.push('--use-compression')
   }
 

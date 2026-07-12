@@ -54,7 +54,7 @@ async function matReadTransformNode(
 
   // Options
   args.push('--memory-io')
-  if (options.floatParameters) {
+  if (typeof options.floatParameters !== "undefined") {
     options.floatParameters && args.push('--float-parameters')
   }
 

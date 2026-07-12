@@ -48,35 +48,35 @@ async function smoothRemesh(
 
   // Options
   args.push('--memory-io')
-  if (options.numberPoints) {
+  if (typeof options.numberPoints !== "undefined") {
     args.push('--number-points', options.numberPoints.toString())
 
   }
-  if (options.triangleShapeAdaptation) {
+  if (typeof options.triangleShapeAdaptation !== "undefined") {
     args.push('--triangle-shape-adaptation', options.triangleShapeAdaptation.toString())
 
   }
-  if (options.triangleSizeAdaptation) {
+  if (typeof options.triangleSizeAdaptation !== "undefined") {
     args.push('--triangle-size-adaptation', options.triangleSizeAdaptation.toString())
 
   }
-  if (options.normalIterations) {
+  if (typeof options.normalIterations !== "undefined") {
     args.push('--normal-iterations', options.normalIterations.toString())
 
   }
-  if (options.lloydIterations) {
+  if (typeof options.lloydIterations !== "undefined") {
     args.push('--lloyd-iterations', options.lloydIterations.toString())
 
   }
-  if (options.newtonIterations) {
+  if (typeof options.newtonIterations !== "undefined") {
     args.push('--newton-iterations', options.newtonIterations.toString())
 
   }
-  if (options.newtonM) {
+  if (typeof options.newtonM !== "undefined") {
     args.push('--newton-m', options.newtonM.toString())
 
   }
-  if (options.lfsSamples) {
+  if (typeof options.lfsSamples !== "undefined") {
     args.push('--lfs-samples', options.lfsSamples.toString())
 
   }

@@ -55,84 +55,84 @@ async function structuredReportToHtml(
 
   // Options
   args.push('--memory-io')
-  if (options.readFileOnly) {
+  if (typeof options.readFileOnly !== "undefined") {
     options.readFileOnly && args.push('--read-file-only')
   }
-  if (options.readDataset) {
+  if (typeof options.readDataset !== "undefined") {
     options.readDataset && args.push('--read-dataset')
   }
-  if (options.readXferAuto) {
+  if (typeof options.readXferAuto !== "undefined") {
     options.readXferAuto && args.push('--read-xfer-auto')
   }
-  if (options.readXferDetect) {
+  if (typeof options.readXferDetect !== "undefined") {
     options.readXferDetect && args.push('--read-xfer-detect')
   }
-  if (options.readXferLittle) {
+  if (typeof options.readXferLittle !== "undefined") {
     options.readXferLittle && args.push('--read-xfer-little')
   }
-  if (options.readXferBig) {
+  if (typeof options.readXferBig !== "undefined") {
     options.readXferBig && args.push('--read-xfer-big')
   }
-  if (options.readXferImplicit) {
+  if (typeof options.readXferImplicit !== "undefined") {
     options.readXferImplicit && args.push('--read-xfer-implicit')
   }
-  if (options.processingDetails) {
+  if (typeof options.processingDetails !== "undefined") {
     options.processingDetails && args.push('--processing-details')
   }
-  if (options.unknownRelationship) {
+  if (typeof options.unknownRelationship !== "undefined") {
     options.unknownRelationship && args.push('--unknown-relationship')
   }
-  if (options.invalidItemValue) {
+  if (typeof options.invalidItemValue !== "undefined") {
     options.invalidItemValue && args.push('--invalid-item-value')
   }
-  if (options.ignoreConstraints) {
+  if (typeof options.ignoreConstraints !== "undefined") {
     options.ignoreConstraints && args.push('--ignore-constraints')
   }
-  if (options.ignoreItemErrors) {
+  if (typeof options.ignoreItemErrors !== "undefined") {
     options.ignoreItemErrors && args.push('--ignore-item-errors')
   }
-  if (options.skipInvalidItems) {
+  if (typeof options.skipInvalidItems !== "undefined") {
     options.skipInvalidItems && args.push('--skip-invalid-items')
   }
-  if (options.disableVrChecker) {
+  if (typeof options.disableVrChecker !== "undefined") {
     options.disableVrChecker && args.push('--disable-vr-checker')
   }
-  if (options.charsetRequire) {
+  if (typeof options.charsetRequire !== "undefined") {
     options.charsetRequire && args.push('--charset-require')
   }
-  if (options.charsetAssume) {
+  if (typeof options.charsetAssume !== "undefined") {
     args.push('--charset-assume', options.charsetAssume.toString())
 
   }
-  if (options.charsetCheckAll) {
+  if (typeof options.charsetCheckAll !== "undefined") {
     options.charsetCheckAll && args.push('--charset-check-all')
   }
-  if (options.convertToUtf8) {
+  if (typeof options.convertToUtf8 !== "undefined") {
     options.convertToUtf8 && args.push('--convert-to-utf8')
   }
-  if (options.urlPrefix) {
+  if (typeof options.urlPrefix !== "undefined") {
     args.push('--url-prefix', options.urlPrefix.toString())
 
   }
-  if (options.html32) {
+  if (typeof options.html32 !== "undefined") {
     options.html32 && args.push('--html-32')
   }
-  if (options.html40) {
+  if (typeof options.html40 !== "undefined") {
     options.html40 && args.push('--html-40')
   }
-  if (options.xhtml11) {
+  if (typeof options.xhtml11 !== "undefined") {
     options.xhtml11 && args.push('--xhtml-11')
   }
-  if (options.addDocumentType) {
+  if (typeof options.addDocumentType !== "undefined") {
     options.addDocumentType && args.push('--add-document-type')
   }
-  if (options.cssReference) {
+  if (typeof options.cssReference !== "undefined") {
     const inputCountString = inputs.length.toString()
     inputs.push({ type: InterfaceTypes.TextStream, data: { data: options.cssReference } })
     args.push('--css-reference', inputCountString)
 
   }
-  if (options.cssFile) {
+  if (typeof options.cssFile !== "undefined") {
     const cssFile = options.cssFile
     let cssFileFile = cssFile
     if (cssFile instanceof File) {
@@ -146,49 +146,49 @@ async function structuredReportToHtml(
     args.push(name)
 
   }
-  if (options.expandInline) {
+  if (typeof options.expandInline !== "undefined") {
     options.expandInline && args.push('--expand-inline')
   }
-  if (options.neverExpandInline) {
+  if (typeof options.neverExpandInline !== "undefined") {
     options.neverExpandInline && args.push('--never-expand-inline')
   }
-  if (options.alwaysExpandInline) {
+  if (typeof options.alwaysExpandInline !== "undefined") {
     options.alwaysExpandInline && args.push('--always-expand-inline')
   }
-  if (options.renderFullData) {
+  if (typeof options.renderFullData !== "undefined") {
     options.renderFullData && args.push('--render-full-data')
   }
-  if (options.sectionTitleInline) {
+  if (typeof options.sectionTitleInline !== "undefined") {
     options.sectionTitleInline && args.push('--section-title-inline')
   }
-  if (options.documentTypeTitle) {
+  if (typeof options.documentTypeTitle !== "undefined") {
     options.documentTypeTitle && args.push('--document-type-title')
   }
-  if (options.patientInfoTitle) {
+  if (typeof options.patientInfoTitle !== "undefined") {
     options.patientInfoTitle && args.push('--patient-info-title')
   }
-  if (options.noDocumentHeader) {
+  if (typeof options.noDocumentHeader !== "undefined") {
     options.noDocumentHeader && args.push('--no-document-header')
   }
-  if (options.renderInlineCodes) {
+  if (typeof options.renderInlineCodes !== "undefined") {
     options.renderInlineCodes && args.push('--render-inline-codes')
   }
-  if (options.conceptNameCodes) {
+  if (typeof options.conceptNameCodes !== "undefined") {
     options.conceptNameCodes && args.push('--concept-name-codes')
   }
-  if (options.numericUnitCodes) {
+  if (typeof options.numericUnitCodes !== "undefined") {
     options.numericUnitCodes && args.push('--numeric-unit-codes')
   }
-  if (options.codeValueUnit) {
+  if (typeof options.codeValueUnit !== "undefined") {
     options.codeValueUnit && args.push('--code-value-unit')
   }
-  if (options.codeMeaningUnit) {
+  if (typeof options.codeMeaningUnit !== "undefined") {
     options.codeMeaningUnit && args.push('--code-meaning-unit')
   }
-  if (options.renderAllCodes) {
+  if (typeof options.renderAllCodes !== "undefined") {
     options.renderAllCodes && args.push('--render-all-codes')
   }
-  if (options.codeDetailsTooltip) {
+  if (typeof options.codeDetailsTooltip !== "undefined") {
     options.codeDetailsTooltip && args.push('--code-details-tooltip')
   }
 

@@ -45,7 +45,7 @@ async def compress_stringify_async(
     kwargs = {}
     if stringify:
         kwargs["stringify"] = to_js(stringify)
-    if compression_level:
+    if compression_level is not None:
         kwargs["compressionLevel"] = to_js(compression_level)
     if data_url_prefix:
         kwargs["dataUrlPrefix"] = to_js(data_url_prefix)
