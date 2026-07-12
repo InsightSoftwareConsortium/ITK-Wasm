@@ -70,3 +70,13 @@ export type { ResampleToReferenceNodeOptions }
 
 import resampleToReferenceNode from './resample-to-reference-node.js'
 export { resampleToReferenceNode }
+
+
+import ResampleNodeResult from './resample-node-result.js'
+export type { ResampleNodeResult }
+
+import ResampleNodeOptions from './resample-node-options.js'
+export type { ResampleNodeOptions }
+
+import resampleNode from './resample-node.js'
+export { resampleNode }

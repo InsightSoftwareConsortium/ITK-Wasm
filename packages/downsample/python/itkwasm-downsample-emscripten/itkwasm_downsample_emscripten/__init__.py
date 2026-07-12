@@ -9,5 +9,6 @@ from .downsample_async import downsample_async
 from .gaussian_kernel_radius_async import gaussian_kernel_radius_async
 from .resample_bounding_box_async import resample_bounding_box_async
 from .resample_to_reference_async import resample_to_reference_async
+from .resample_async import resample_async
 
 from ._version import __version__

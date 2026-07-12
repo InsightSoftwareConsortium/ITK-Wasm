@@ -73,3 +73,13 @@ export type { ResampleToReferenceOptions }
 
 import resampleToReference from './resample-to-reference.js'
 export { resampleToReference }
+
+
+import ResampleResult from './resample-result.js'
+export type { ResampleResult }
+
+import ResampleOptions from './resample-options.js'
+export type { ResampleOptions }
+
+import resample from './resample.js'
+export { resample }

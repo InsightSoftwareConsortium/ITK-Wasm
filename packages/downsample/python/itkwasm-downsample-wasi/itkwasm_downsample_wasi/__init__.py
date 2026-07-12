@@ -9,5 +9,6 @@ from .downsample import downsample
 from .gaussian_kernel_radius import gaussian_kernel_radius
 from .resample_bounding_box import resample_bounding_box
 from .resample_to_reference import resample_to_reference
+from .resample import resample
 
 from ._version import __version__
