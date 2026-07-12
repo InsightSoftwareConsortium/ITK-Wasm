@@ -10,8 +10,7 @@
     "test-data-hash": "bafybeifwrjzye5jvpsrqd5jsjvo5oyly7yfj3f7csqclpcehrhhlj4r2qm",
     "test-data-urls": [
       "https://itk.mypinata.cloud/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz",
-      "https://bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by.ipfs.w3s.link/data.tar.gz",
-      "https://bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by.ipfs.w3s.link/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz"
+      "https://fideus.myfilebase.com/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz"
     ],
     "typescript-package-name": "@itk-wasm/mesh-filters",
     "python-package-name": "itkwasm-mesh-filters",
@@ -30,7 +29,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafybeifwrjzye5jvpsrqd5jsjvo5oyly7yfj3f7csqclpcehrhhlj4r2qm https://bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by.ipfs.w3s.link/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz",
+    "test:data:download": "dam download test/data test/data.tar.gz bafybeifwrjzye5jvpsrqd5jsjvo5oyly7yfj3f7csqclpcehrhhlj4r2qm https://fideus.myfilebase.com/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz https://itk.mypinata.cloud/ipfs/bafybeiap5odqqkh5rmplnkrlk4yme75mvvsubceoco3kelmr77zd77v4by/data.tar.gz",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",
