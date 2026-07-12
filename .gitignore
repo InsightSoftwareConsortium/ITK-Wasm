@@ -8,6 +8,7 @@
 *.pdf
 *.ps
 *.toc
+.serena/
 
 build-emscripten
 build-wasi
