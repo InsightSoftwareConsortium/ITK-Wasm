@@ -63,7 +63,7 @@ def compress_stringify(
     if stringify:
         args.append('--stringify')
 
-    if compression_level:
+    if compression_level is not None:
         args.append('--compression-level')
         args.append(str(compression_level))
 

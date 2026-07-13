@@ -61,7 +61,7 @@ async function compareMeshes(
 
   // Options
   args.push('--memory-io')
-  if (options.baselineMeshes) {
+  if (typeof options.baselineMeshes !== "undefined") {
     if(options.baselineMeshes.length < 1) {
       throw new Error('"baseline-meshes" option must have a length > 1')
     }
@@ -74,27 +74,27 @@ async function compareMeshes(
 
     }))
   }
-  if (options.pointsDifferenceThreshold) {
+  if (typeof options.pointsDifferenceThreshold !== "undefined") {
     args.push('--points-difference-threshold', options.pointsDifferenceThreshold.toString())
 
   }
-  if (options.numberOfDifferentPointsTolerance) {
+  if (typeof options.numberOfDifferentPointsTolerance !== "undefined") {
     args.push('--number-of-different-points-tolerance', options.numberOfDifferentPointsTolerance.toString())
 
   }
-  if (options.pointDataDifferenceThreshold) {
+  if (typeof options.pointDataDifferenceThreshold !== "undefined") {
     args.push('--point-data-difference-threshold', options.pointDataDifferenceThreshold.toString())
 
   }
-  if (options.numberOfPointDataTolerance) {
+  if (typeof options.numberOfPointDataTolerance !== "undefined") {
     args.push('--number-of-point-data-tolerance', options.numberOfPointDataTolerance.toString())
 
   }
-  if (options.cellDataDifferenceThreshold) {
+  if (typeof options.cellDataDifferenceThreshold !== "undefined") {
     args.push('--cell-data-difference-threshold', options.cellDataDifferenceThreshold.toString())
 
   }
-  if (options.numberOfCellDataTolerance) {
+  if (typeof options.numberOfCellDataTolerance !== "undefined") {
     args.push('--number-of-cell-data-tolerance', options.numberOfCellDataTolerance.toString())
 
   }

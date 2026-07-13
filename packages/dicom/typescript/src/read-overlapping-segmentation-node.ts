@@ -54,7 +54,7 @@ async function readOverlappingSegmentationNode(
 
   // Options
   args.push('--memory-io')
-  if (options.mergeSegments) {
+  if (typeof options.mergeSegments !== "undefined") {
     options.mergeSegments && args.push('--merge-segments')
   }
 

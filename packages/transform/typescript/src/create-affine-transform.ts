@@ -42,11 +42,11 @@ async function createAffineTransform(
 
   // Options
   args.push('--memory-io')
-  if (options.dimension) {
+  if (typeof options.dimension !== "undefined") {
     args.push('--dimension', options.dimension.toString())
 
   }
-  if (options.parametersType) {
+  if (typeof options.parametersType !== "undefined") {
     args.push('--parameters-type', options.parametersType.toString())
 
   }

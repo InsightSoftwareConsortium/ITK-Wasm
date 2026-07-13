@@ -56,10 +56,10 @@ async function matWriteTransform(
 
   // Options
   args.push('--memory-io')
-  if (options.floatParameters) {
+  if (typeof options.floatParameters !== "undefined") {
     options.floatParameters && args.push('--float-parameters')
   }
-  if (options.useCompression) {
+  if (typeof options.useCompression !== "undefined") {
     options.useCompression && args.push('--use-compression')
   }
 

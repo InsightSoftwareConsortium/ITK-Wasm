@@ -70,21 +70,21 @@ async function applyPresentationStateToImage(
 
   // Options
   args.push('--memory-io')
-  if (options.colorOutput) {
+  if (typeof options.colorOutput !== "undefined") {
     options.colorOutput && args.push('--color-output')
   }
-  if (options.configFile) {
+  if (typeof options.configFile !== "undefined") {
     args.push('--config-file', options.configFile.toString())
 
   }
-  if (options.frame) {
+  if (typeof options.frame !== "undefined") {
     args.push('--frame', options.frame.toString())
 
   }
-  if (options.noPresentationStateOutput) {
+  if (typeof options.noPresentationStateOutput !== "undefined") {
     options.noPresentationStateOutput && args.push('--no-presentation-state-output')
   }
-  if (options.noBitmapOutput) {
+  if (typeof options.noBitmapOutput !== "undefined") {
     options.noBitmapOutput && args.push('--no-bitmap-output')
   }
 

@@ -57,7 +57,7 @@ async function writeRtStruct(
 
   // Options
   args.push('--memory-io')
-  if (options.dicomMetadata) {
+  if (typeof options.dicomMetadata !== "undefined") {
     const inputCountString = inputs.length.toString()
     inputs.push({ type: InterfaceTypes.JsonCompatible, data: options.dicomMetadata as JsonCompatible })
     args.push('--dicom-metadata', inputCountString)

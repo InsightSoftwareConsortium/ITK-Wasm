@@ -54,7 +54,7 @@ async function mincReadImageNode(
 
   // Options
   args.push('--memory-io')
-  if (options.informationOnly) {
+  if (typeof options.informationOnly !== "undefined") {
     options.informationOnly && args.push('--information-only')
   }
 

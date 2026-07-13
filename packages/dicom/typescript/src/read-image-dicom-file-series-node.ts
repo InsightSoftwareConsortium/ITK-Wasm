@@ -47,7 +47,7 @@ async function readImageDicomFileSeriesNode(
 
   // Options
   args.push('--memory-io')
-  if (options.inputImages) {
+  if (typeof options.inputImages !== "undefined") {
     if(options.inputImages.length < 1) {
       throw new Error('"input-images" option must have a length > 1')
     }
@@ -58,7 +58,7 @@ async function readImageDicomFileSeriesNode(
       args.push(value as string)
     })
   }
-  if (options.singleSortedSeries) {
+  if (typeof options.singleSortedSeries !== "undefined") {
     options.singleSortedSeries && args.push('--single-sorted-series')
   }
 

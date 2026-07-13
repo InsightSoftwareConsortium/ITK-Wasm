@@ -54,55 +54,55 @@ async function structuredReportToText(
 
   // Options
   args.push('--memory-io')
-  if (options.unknownRelationship) {
+  if (typeof options.unknownRelationship !== "undefined") {
     options.unknownRelationship && args.push('--unknown-relationship')
   }
-  if (options.invalidItemValue) {
+  if (typeof options.invalidItemValue !== "undefined") {
     options.invalidItemValue && args.push('--invalid-item-value')
   }
-  if (options.ignoreConstraints) {
+  if (typeof options.ignoreConstraints !== "undefined") {
     options.ignoreConstraints && args.push('--ignore-constraints')
   }
-  if (options.ignoreItemErrors) {
+  if (typeof options.ignoreItemErrors !== "undefined") {
     options.ignoreItemErrors && args.push('--ignore-item-errors')
   }
-  if (options.skipInvalidItems) {
+  if (typeof options.skipInvalidItems !== "undefined") {
     options.skipInvalidItems && args.push('--skip-invalid-items')
   }
-  if (options.noDocumentHeader) {
+  if (typeof options.noDocumentHeader !== "undefined") {
     options.noDocumentHeader && args.push('--no-document-header')
   }
-  if (options.numberNestedItems) {
+  if (typeof options.numberNestedItems !== "undefined") {
     options.numberNestedItems && args.push('--number-nested-items')
   }
-  if (options.shortenLongValues) {
+  if (typeof options.shortenLongValues !== "undefined") {
     options.shortenLongValues && args.push('--shorten-long-values')
   }
-  if (options.printInstanceUid) {
+  if (typeof options.printInstanceUid !== "undefined") {
     options.printInstanceUid && args.push('--print-instance-uid')
   }
-  if (options.printSopclassShort) {
+  if (typeof options.printSopclassShort !== "undefined") {
     options.printSopclassShort && args.push('--print-sopclass-short')
   }
-  if (options.printSopclassLong) {
+  if (typeof options.printSopclassLong !== "undefined") {
     options.printSopclassLong && args.push('--print-sopclass-long')
   }
-  if (options.printSopclassUid) {
+  if (typeof options.printSopclassUid !== "undefined") {
     options.printSopclassUid && args.push('--print-sopclass-uid')
   }
-  if (options.printAllCodes) {
+  if (typeof options.printAllCodes !== "undefined") {
     options.printAllCodes && args.push('--print-all-codes')
   }
-  if (options.printInvalidCodes) {
+  if (typeof options.printInvalidCodes !== "undefined") {
     options.printInvalidCodes && args.push('--print-invalid-codes')
   }
-  if (options.printTemplateId) {
+  if (typeof options.printTemplateId !== "undefined") {
     options.printTemplateId && args.push('--print-template-id')
   }
-  if (options.indicateEnhanced) {
+  if (typeof options.indicateEnhanced !== "undefined") {
     options.indicateEnhanced && args.push('--indicate-enhanced')
   }
-  if (options.printColor) {
+  if (typeof options.printColor !== "undefined") {
     options.printColor && args.push('--print-color')
   }
 
