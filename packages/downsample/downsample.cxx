@@ -21,6 +21,7 @@
 #include "itkOutputImage.h"
 #include "itkSupportInputImageTypes.h"
 
+#include "itkContinuousIndex.h"
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkResampleImageFilter.h"
@@ -94,21 +95,24 @@ DownsampleScalarImage(itk::wasm::Pipeline & pipeline, const TImage * inputImage)
   gaussianFilter->SetSigmaArray(sigmaArray);
   gaussianFilter->SetUseImageSpacingOff();
 
-  const auto inputOrigin = inputImage->GetOrigin();
   const auto inputSpacing = inputImage->GetSpacing();
   const auto inputSize = inputImage->GetLargestPossibleRegion().GetSize();
+  const auto inputStartIndex = inputImage->GetLargestPossibleRegion().GetIndex();
 
-  typename ImageType::PointType   outputOrigin;
-  typename ImageType::SpacingType outputSpacing;
-  typename ImageType::SizeType    outputSize;
+  typename ImageType::PointType                outputOrigin;
+  typename ImageType::SpacingType              outputSpacing;
+  typename ImageType::SizeType                 outputSize;
+  itk::ContinuousIndex<double, ImageDimension> outputOriginIndex;
   for (unsigned int i = 0; i < ImageDimension; ++i)
   {
     const double cropRadiusValue = cropRadius.size() ? cropRadius[i] : 0.0;
 
-    outputOrigin[i] = inputOrigin[i] + cropRadiusValue * inputSpacing[i];
+    // Origin lands at the center of the first bin, matching itk::BinShrinkImageFilter
+    outputOriginIndex[i] = inputStartIndex[i] + cropRadiusValue + (shrinkFactors[i] - 1.0) / 2.0;
     outputSpacing[i] = inputSpacing[i] * shrinkFactors[i];
     outputSize[i] = std::max<itk::SizeValueType>(0, (inputSize[i] - 2 * cropRadiusValue) / shrinkFactors[i]);
   }
+  inputImage->TransformContinuousIndexToPhysicalPoint(outputOriginIndex, outputOrigin);
 
   using InterpolatorType = itk::LinearInterpolateImageFunction<ImageType, double>;
   auto interpolator = InterpolatorType::New();
@@ -187,21 +191,24 @@ public:
 
     auto sigmaValues = downsampleSigma(shrinkFactors);
 
-    const auto inputOrigin = inputImage.Get()->GetOrigin();
     const auto inputSpacing = inputImage.Get()->GetSpacing();
     const auto inputSize = inputImage.Get()->GetLargestPossibleRegion().GetSize();
+    const auto inputStartIndex = inputImage.Get()->GetLargestPossibleRegion().GetIndex();
 
-    typename VectorImageType::PointType   outputOrigin;
-    typename VectorImageType::SpacingType outputSpacing;
-    typename VectorImageType::SizeType    outputSize;
+    typename VectorImageType::PointType     outputOrigin;
+    typename VectorImageType::SpacingType   outputSpacing;
+    typename VectorImageType::SizeType      outputSize;
+    itk::ContinuousIndex<double, Dimension> outputOriginIndex;
     for (unsigned int i = 0; i < Dimension; ++i)
     {
       const double cropRadiusValue = cropRadius.size() ? cropRadius[i] : 0.0;
 
-      outputOrigin[i] = inputOrigin[i] + cropRadiusValue * inputSpacing[i];
+      // Origin lands at the center of the first bin, matching itk::BinShrinkImageFilter
+      outputOriginIndex[i] = inputStartIndex[i] + cropRadiusValue + (shrinkFactors[i] - 1.0) / 2.0;
       outputSpacing[i] = inputSpacing[i] * shrinkFactors[i];
       outputSize[i] = std::max<itk::SizeValueType>(0, (inputSize[i] - 2 * cropRadiusValue) / shrinkFactors[i]);
     }
+    inputImage.Get()->TransformContinuousIndexToPhysicalPoint(outputOriginIndex, outputOrigin);
 
     auto composeFilter = ComposeFilterType::New();
 
