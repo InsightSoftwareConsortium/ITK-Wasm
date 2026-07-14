@@ -7,9 +7,9 @@
   "itk-wasm": {
     "emscripten-docker-image": "docker.io/itkwasm/emscripten:latest",
     "wasi-docker-image": "docker.io/itkwasm/wasi:latest",
-    "test-data-hash": "bafkreiesjpg3sjqkyjb77djrffdvznjjsgvudd2y44iqjrfgnd45uyyprq",
+    "test-data-hash": "bafkreie3b4xdvf4cqykvagruaivwtb3oi55hwt4egzlhppu2o3hw2eudhi",
     "test-data-urls": [
-      "https://itk.mypinata.cloud/ipfs/bafkreiesjpg3sjqkyjb77djrffdvznjjsgvudd2y44iqjrfgnd45uyyprq"
+      "https://itk.mypinata.cloud/ipfs/bafkreie3b4xdvf4cqykvagruaivwtb3oi55hwt4egzlhppu2o3hw2eudhi"
     ],
     "typescript-package-name": "@itk-wasm/downsample",
     "python-package-name": "itkwasm-downsample",
@@ -32,7 +32,7 @@
     "build:gen:typescript": "itk-wasm pnpm-script build:gen:typescript",
     "build:gen:python": "pnpm build:wasi && pnpm bindgen:python",
     "test": "pnpm test:data:download && pnpm build:gen:python && pnpm test:python",
-    "test:data:download": "dam download test/data test/data.tar.gz bafkreiesjpg3sjqkyjb77djrffdvznjjsgvudd2y44iqjrfgnd45uyyprq https://itk.mypinata.cloud/ipfs/bafkreiesjpg3sjqkyjb77djrffdvznjjsgvudd2y44iqjrfgnd45uyyprq",
+    "test:data:download": "dam download test/data test/data.tar.gz bafkreie3b4xdvf4cqykvagruaivwtb3oi55hwt4egzlhppu2o3hw2eudhi https://itk.mypinata.cloud/ipfs/bafkreie3b4xdvf4cqykvagruaivwtb3oi55hwt4egzlhppu2o3hw2eudhi",
     "test:data:pack": "dam pack test/data test/data.tar.gz",
     "test:python:wasi": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-wasi",
     "test:python:emscripten": "pnpm test:data:download && pixi run --manifest-path=./pixi.toml test-emscripten",

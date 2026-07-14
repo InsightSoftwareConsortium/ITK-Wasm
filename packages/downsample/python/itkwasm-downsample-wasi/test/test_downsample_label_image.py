@@ -1,3 +1,5 @@
+import pytest
+
 from itkwasm_compare_images import compare_images
 from itkwasm_image_io import read_image, write_image
 
@@ -17,3 +19,6 @@ def test_downsample_label_image():
     baseline = read_image(test_baseline_file_path)
     metrics, _, _ = compare_images(downsampled, [baseline,])
     assert metrics['almostEqual']
+
+    # Downsampling shifts the origin to the coarse-grid pixel centers
+    assert downsampled.origin == pytest.approx([0.5, 0.5], abs=1e-6)
