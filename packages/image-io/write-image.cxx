@@ -63,6 +63,7 @@
 #  include "itkGEAdwImageIO.h"
 #elif IMAGE_IO_CLASS == 18
 #  include "itkGDCMImageIO.h"
+#  include "itkMetaDataDictionary.h"
 #elif IMAGE_IO_CLASS == 19
 #  include "itkScancoImageIO.h"
 #elif IMAGE_IO_CLASS == 20
@@ -130,6 +131,18 @@ writeImage(itk::wasm::InputImageIO &     inputImageIO,
     imageIO->SetDimensions(dim, inputImageIOBase->GetDimensions(dim));
   };
   imageIO->SetMetaDataDictionary(inputImageIOBase->GetMetaDataDictionary());
+#if IMAGE_IO_CLASS == 18
+  // Issue #1470: itk::GDCMImageIO regenerates the StudyInstanceUID (0020|000d) and
+  // SeriesInstanceUID (0020|000e) when writing DICOM because m_KeepOriginalUID defaults to
+  // false. When the input image metadata already carries a Study or Series Instance UID,
+  // preserve the original UIDs rather than generating new ones. The trigger is scoped to the
+  // Study/Series UID tags; no SOPInstanceUID (0008|0018) handling is added here.
+  const itk::MetaDataDictionary & inputMetaDataDictionary = inputImageIOBase->GetMetaDataDictionary();
+  if (inputMetaDataDictionary.HasKey("0020|000d") || inputMetaDataDictionary.HasKey("0020|000e"))
+  {
+    imageIO->SetKeepOriginalUID(true);
+  }
+#endif
   itk::ImageIORegion ioRegion(dimension);
   for (unsigned int dim = 0; dim < dimension; ++dim)
   {
