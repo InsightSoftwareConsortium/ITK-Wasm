@@ -10,6 +10,9 @@ from .fixtures import package_wheel, input_data
 async def test_downsample_bin_shrink_async(selenium, package_wheel, input_data):
     import micropip
     await micropip.install([package_wheel, 'itkwasm-image-io', 'itkwasm-compare-images'])
+    import js
+    from itkwasm_downsample_emscripten.js_package import js_package
+    js_package.config.pipelines_base_url = f"{js.location.origin}/pipelines"
     def write_input_data_to_fs(input_data, filename):
         with open(filename, 'wb') as fp:
             fp.write(input_data[filename])

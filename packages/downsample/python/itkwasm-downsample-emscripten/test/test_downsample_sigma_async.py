@@ -10,6 +10,9 @@ from .fixtures import package_wheel, input_data
 async def test_downsample_sigma_async(selenium, package_wheel, input_data):
     import micropip
     await micropip.install([package_wheel,])
+    import js
+    from itkwasm_downsample_emscripten.js_package import js_package
+    js_package.config.pipelines_base_url = f"{js.location.origin}/pipelines"
 
     from itkwasm_downsample_emscripten import downsample_sigma_async
 

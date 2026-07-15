@@ -104,6 +104,8 @@ description = "Download Pyodide"
 [feature.python.tasks.test-emscripten]
 cmd = '''mkdir -p dist/pyodide &&
   cp -r ../../pyodide dist/ &&
+  mkdir -p dist/pyodide/pipelines &&
+  cp ../../emscripten-build/*.js ../../emscripten-build/*.wasm.zst dist/pyodide/pipelines/ &&
   hatch build -t wheel ./dist/pyodide/ &&
   pytest --dist-dir=./dist/pyodide --rt=chrome'''
 cwd = "python/itkwasm-downsample-emscripten"
