@@ -21,6 +21,7 @@
 #include "itkOutputImage.h"
 #include "itkSupportInputImageTypes.h"
 
+#include "itkContinuousIndex.h"
 #include "itkLabelImageGenericInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkResampleImageFilter.h"
@@ -56,21 +57,24 @@ public:
 
     ITK_WASM_PARSE(pipeline);
 
-    const auto inputOrigin = inputImage.Get()->GetOrigin();
     const auto inputSpacing = inputImage.Get()->GetSpacing();
     const auto inputSize = inputImage.Get()->GetLargestPossibleRegion().GetSize();
+    const auto inputStartIndex = inputImage.Get()->GetLargestPossibleRegion().GetIndex();
 
-    typename ImageType::PointType   outputOrigin;
-    typename ImageType::SpacingType outputSpacing;
-    typename ImageType::SizeType    outputSize;
+    typename ImageType::PointType                outputOrigin;
+    typename ImageType::SpacingType              outputSpacing;
+    typename ImageType::SizeType                 outputSize;
+    itk::ContinuousIndex<double, ImageDimension> outputOriginIndex;
     for (unsigned int i = 0; i < ImageDimension; ++i)
     {
       const double cropRadiusValue = cropRadius.size() ? cropRadius[i] : 0.0;
 
-      outputOrigin[i] = inputOrigin[i] + cropRadiusValue * inputSpacing[i];
+      // Origin lands at the center of the first bin, matching itk::BinShrinkImageFilter
+      outputOriginIndex[i] = inputStartIndex[i] + cropRadiusValue + (shrinkFactors[i] - 1.0) / 2.0;
       outputSpacing[i] = inputSpacing[i] * shrinkFactors[i];
       outputSize[i] = std::max<itk::SizeValueType>(0, (inputSize[i] - 2 * cropRadiusValue) / shrinkFactors[i]);
     }
+    inputImage.Get()->TransformContinuousIndexToPhysicalPoint(outputOriginIndex, outputOrigin);
 
     using InterpolatorType =
       itk::LabelImageGenericInterpolateImageFunction<ImageType, itk::LinearInterpolateImageFunction>;

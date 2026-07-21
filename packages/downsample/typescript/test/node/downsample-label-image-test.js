@@ -5,7 +5,7 @@ import { readImageNode, writeImageNode } from '@itk-wasm/image-io'
 import { compareImagesNode } from '@itk-wasm/compare-images'
 
 import { downsampleLabelImageNode } from '../../dist/index-node.js'
-import { testInputPath, testBaselinePath } from './common.js'
+import { testInputPath, testBaselinePath, arraysAlmostEqual } from './common.js'
 
 test('Test downsampleNode', async t => {
   const testInputFilePath = path.join(testInputPath, '2th_cthead1.png')
@@ -18,4 +18,6 @@ test('Test downsampleNode', async t => {
   const { metrics } = await compareImagesNode(downsampled, { baselineImages: [baseline, ] })
 
   t.true(metrics.almostEqual)
+  // Downsampling shifts the origin to the coarse-grid pixel centers
+  t.true(arraysAlmostEqual(downsampled.origin, [0.5, 0.5]), `origin was ${downsampled.origin}`)
 })
