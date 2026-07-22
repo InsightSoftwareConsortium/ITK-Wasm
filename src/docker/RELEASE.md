@@ -5,7 +5,7 @@ Verify the source tree.
 ```
 
 # on an arm64 system
-# DockerHub, quay.io login required
+# DockerHub login required
 pixi run src/docker/build-docker-images.sh --with-debug
 ./src/docker/push.sh
 
