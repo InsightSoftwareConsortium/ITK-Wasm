@@ -34,3 +34,13 @@ execution and wrapped in [WASI](https://wasi.dev/) runtimes.
 
 For more information, please see [the project
 documentation](https://wasm.itk.org/).
+
+Citation
+--------
+
+If you use ITK-Wasm in your research, please cite [the following paper](https://doi.org/10.25080/TCFJ5130):
+
+> McCormick, M., Elliott, P. (2024).
+> ITK-Wasm: Universal spatial analysis and visualization.
+> Proceedings of the 23rd Python in Science Conference (SciPy 2024), 256-279.
+> Published July 10, 2024. https://doi.org/10.25080/TCFJ5130
