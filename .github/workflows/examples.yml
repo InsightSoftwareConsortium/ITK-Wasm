@@ -15,7 +15,7 @@ jobs:
 
 
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -29,7 +29,7 @@ jobs:
         timeout_minutes: 10
         command: ./src/docker/pull.sh --no-debug
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       with:
         node-version: '22'
 
@@ -57,7 +57,7 @@ jobs:
         working-directory: ./examples/hello-world
 
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -76,7 +76,7 @@ jobs:
       with:
         run_install: true
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       with:
         node-version: '22'
 
@@ -103,7 +103,7 @@ jobs:
         working-directory: ./examples/hello-pipeline
 
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -111,7 +111,7 @@ jobs:
         large-packages: false
         tool-cache: true
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       with:
         node-version: '22'
 
@@ -138,7 +138,7 @@ jobs:
         working-directory: ./examples/inputs-outputs
 
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -152,7 +152,7 @@ jobs:
         timeout_minutes: 10
         command: ./src/docker/pull.sh --no-debug
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       with:
         node-version: '22'
 
@@ -192,7 +192,7 @@ jobs:
         working-directory: ./examples/debugging
 
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -211,7 +211,7 @@ jobs:
       with:
         run_install: true
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       with:
         node-version: '22'
 
@@ -238,7 +238,7 @@ jobs:
         working-directory: ./examples/different-input-types
 
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -257,7 +257,7 @@ jobs:
       with:
         run_install: true
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       with:
         node-version: '22'
 
@@ -274,7 +274,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -288,7 +288,7 @@ jobs:
         timeout_minutes: 10
         command: ./src/docker/pull.sh --no-debug
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       with:
         node-version: '22'
 
@@ -325,7 +325,7 @@ jobs:
         working-directory: ./examples/deno
 
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
 
     - uses: denoland/setup-deno@v2
       with:
