@@ -4,14 +4,14 @@
 cff-version: 1.2.0
 title: 'itk-wasm: high-performance spatial analysis in a web browser, Node.js, and reproducible execution across programming languages and hardware architectures.'
 message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
+  If you use this software, please cite both the article from
+  preferred-citation and the software itself.
 type: software
 authors:
   - given-names: Matthew
     family-names: McCormick
-    email: matt@mmmccormick.com
-    affiliation: 'Kitware, Inc'
+    email: matt@fideus.io
+    affiliation: 'Fideus Labs LLC'
     orcid: 'https://orcid.org/0000-0001-9475-3756'
 keywords:
   - webassembly
@@ -33,3 +33,34 @@ repository-code: >-
 url: 'https://wasm.itk.org'
 repository-artifact: 'https://www.npmjs.com/package/itk-wasm'
 license: Apache-2.0
+preferred-citation:
+  type: conference-paper
+  title: 'ITK-Wasm: Universal spatial analysis and visualization'
+  authors:
+    - given-names: Matthew
+      family-names: McCormick
+      email: matt@fideus.io
+      affiliation: 'Fideus Labs LLC'
+      orcid: 'https://orcid.org/0000-0001-9475-3756'
+    - given-names: Paul
+      family-names: Elliott
+      affiliation: 'Kitware, Inc.'
+      orcid: 'https://orcid.org/0009-0000-8749-3327'
+  collection-title: 'Proceedings of the 23rd Python in Science Conference'
+  collection-type: proceedings
+  conference:
+    name: '23rd Python in Science Conference (SciPy 2024)'
+    city: Tacoma
+    region: Washington
+    country: US
+    date-start: 2024-07-08
+    date-end: 2024-07-14
+  publisher:
+    name: SciPy
+  year: 2024
+  month: 7
+  start: 256
+  end: 279
+  issn: 2575-9752
+  doi: 10.25080/TCFJ5130
+  url: 'https://doi.org/10.25080/TCFJ5130'

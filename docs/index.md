@@ -34,8 +34,8 @@ The project provides tools to
 If you use ITK-Wasm in your research, please cite [the following paper](https://doi.org/10.25080/TCFJ5130):
 
 > McCormick, M., Elliott, P. (2024).
-  ITK-Wasm: High-Performance Spatial Analysis Across Programming Languages and Hardware Architectures.
-  Proceedings of the 23rd Python in Science Conference (SciPy 2024), 268-279.
+  ITK-Wasm: Universal spatial analysis and visualization.
+  Proceedings of the 23rd Python in Science Conference (SciPy 2024), 256-279.
   Published July 10, 2024. https://doi.org/10.25080/TCFJ5130
 
 ```{toctree}
