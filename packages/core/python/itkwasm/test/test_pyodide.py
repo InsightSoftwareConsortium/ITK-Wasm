@@ -8,16 +8,20 @@ if sys.version_info < (3, 10):
 from pytest_pyodide import run_in_pyodide, copy_files_to_pyodide
 
 from itkwasm import __version__ as test_package_version
+
 # manual override
 # test_package_version = '1.0b195'
 
 
 def package_wheel():
     wheel_stem = f"itkwasm-{test_package_version}-py3-none-any.whl"
-    wheel_path = Path(__file__).parent.parent / 'dist' / 'pyodide' / wheel_stem
+    wheel_path = Path(__file__).parent.parent / "dist" / "pyodide" / wheel_stem
     return wheel_path, wheel_stem
 
-file_list = [package_wheel(),]
+
+file_list = [
+    package_wheel(),
+]
 
 
 @copy_files_to_pyodide(file_list=file_list, install_wheels=True)
@@ -203,6 +207,7 @@ async def test_polydata_conversion(selenium):
     assert polydata.numberOfPointPixels == polydata_py.numberOfPointPixels
     assert np.array_equal(polydata.pointData, polydata_py.pointData)
 
+
 @copy_files_to_pyodide(file_list=file_list, install_wheels=True)
 @run_in_pyodide(packages=["numpy"])
 async def test_transform_conversion(selenium):
@@ -213,13 +218,26 @@ async def test_transform_conversion(selenium):
     dimension = 3
     transform_type = TransformType(TransformParameterizations.Affine)
     fixed_parameters = np.array([0.0, 0.0, 0.0]).astype(np.float64)
-    parameters = np.array([
-      0.65631490118447, 0.5806583745824385, -0.4817536741017158,
-      -0.7407986817430222, 0.37486398378429736, -0.5573995934598175,
-      -0.14306664045479867, 0.7227121458012518, 0.676179776908723,
-      -65.99999999999997, 69.00000000000004, 32.000000000000036]).astype(np.float64)
+    parameters = np.array(
+        [
+            0.65631490118447,
+            0.5806583745824385,
+            -0.4817536741017158,
+            -0.7407986817430222,
+            0.37486398378429736,
+            -0.5573995934598175,
+            -0.14306664045479867,
+            0.7227121458012518,
+            0.676179776908723,
+            -65.99999999999997,
+            69.00000000000004,
+            32.000000000000036,
+        ]
+    ).astype(np.float64)
     transform = Transform(transform_type, dimension, 12, fixedParameters=fixed_parameters, parameters=parameters)
-    transform_list = [transform,]
+    transform_list = [
+        transform,
+    ]
 
     transform_list_js = to_js(transform_list)
     transform_list_py = to_py(transform_list_js)
@@ -229,12 +247,27 @@ async def test_transform_conversion(selenium):
     assert transform_py.numberOfParameters == 12
     assert transform_py.numberOfFixedParameters == 3
     np.testing.assert_allclose(transform_py.fixedParameters, np.array([0.0, 0.0, 0.0]))
-    np.testing.assert_allclose(transform_py.parameters, np.array([
-        0.65631490118447, 0.5806583745824385, -0.4817536741017158,
-        -0.7407986817430222, 0.37486398378429736, -0.5573995934598175,
-        -0.14306664045479867, 0.7227121458012518, 0.676179776908723,
-        -65.99999999999997, 69.00000000000004, 32.000000000000036]))
-    print('transform_py', transform_py)
+    np.testing.assert_allclose(
+        transform_py.parameters,
+        np.array(
+            [
+                0.65631490118447,
+                0.5806583745824385,
+                -0.4817536741017158,
+                -0.7407986817430222,
+                0.37486398378429736,
+                -0.5573995934598175,
+                -0.14306664045479867,
+                0.7227121458012518,
+                0.676179776908723,
+                -65.99999999999997,
+                69.00000000000004,
+                32.000000000000036,
+            ]
+        ),
+    )
+    print("transform_py", transform_py)
+
 
 @copy_files_to_pyodide(file_list=file_list, install_wheels=True)
 @run_in_pyodide(packages=["numpy"])
@@ -248,18 +281,33 @@ async def test_transform_list_conversion(selenium):
     # First transform - Affine
     affine_type = TransformType(TransformParameterizations.Affine)
     affine_fixed_parameters = np.array([0.0, 0.0, 0.0]).astype(np.float64)
-    affine_parameters = np.array([
-        0.65631490118447, 0.5806583745824385, -0.4817536741017158,
-        -0.7407986817430222, 0.37486398378429736, -0.5573995934598175,
-        -0.14306664045479867, 0.7227121458012518, 0.676179776908723,
-        -65.99999999999997, 69.00000000000004, 32.000000000000036]).astype(np.float64)
-    affine_transform = Transform(affine_type, 3, 12, fixedParameters=affine_fixed_parameters, parameters=affine_parameters)
+    affine_parameters = np.array(
+        [
+            0.65631490118447,
+            0.5806583745824385,
+            -0.4817536741017158,
+            -0.7407986817430222,
+            0.37486398378429736,
+            -0.5573995934598175,
+            -0.14306664045479867,
+            0.7227121458012518,
+            0.676179776908723,
+            -65.99999999999997,
+            69.00000000000004,
+            32.000000000000036,
+        ]
+    ).astype(np.float64)
+    affine_transform = Transform(
+        affine_type, 3, 12, fixedParameters=affine_fixed_parameters, parameters=affine_parameters
+    )
 
     # Second transform - Translation
     translation_type = TransformType(TransformParameterizations.Translation)
     translation_fixed_parameters = np.array([]).astype(np.float64)
     translation_parameters = np.array([10.0, 20.0, 30.0]).astype(np.float64)
-    translation_transform = Transform(translation_type, 0, 3, fixedParameters=translation_fixed_parameters, parameters=translation_parameters)
+    translation_transform = Transform(
+        translation_type, 0, 3, fixedParameters=translation_fixed_parameters, parameters=translation_parameters
+    )
 
     # Create TransformList
     transform_list: TransformList = [affine_transform, translation_transform]
@@ -286,6 +334,7 @@ async def test_transform_list_conversion(selenium):
     assert translation_py.numberOfFixedParameters == 0
     np.testing.assert_allclose(translation_py.parameters, translation_parameters)
 
+
 @copy_files_to_pyodide(file_list=file_list, install_wheels=True)
 @run_in_pyodide(packages=["numpy"])
 async def test_linear_transform_conversion(selenium):
@@ -298,23 +347,33 @@ async def test_linear_transform_conversion(selenium):
         transformParameterization=TransformParameterizations.Affine,
         parametersValueType=FloatTypes.Float64,
         inputDimension=3,
-        outputDimension=3
+        outputDimension=3,
     )
 
     fixed_parameters = np.array([0.0, 0.0, 0.0]).astype(np.float64)
-    parameters = np.array([
-        1.0, 0.0, 0.0,   # 3x3 matrix row 1
-        0.0, 1.0, 0.0,   # 3x3 matrix row 2
-        0.0, 0.0, 1.0,   # 3x3 matrix row 3
-        10.0, 20.0, 30.0  # translation vector
-    ]).astype(np.float64)
+    parameters = np.array(
+        [
+            1.0,
+            0.0,
+            0.0,  # 3x3 matrix row 1
+            0.0,
+            1.0,
+            0.0,  # 3x3 matrix row 2
+            0.0,
+            0.0,
+            1.0,  # 3x3 matrix row 3
+            10.0,
+            20.0,
+            30.0,  # translation vector
+        ]
+    ).astype(np.float64)
 
     transform = Transform(
         transformType=transform_type,
         numberOfParameters=12,
         numberOfFixedParameters=3,
         fixedParameters=fixed_parameters,
-        parameters=parameters
+        parameters=parameters,
     )
 
     transform_list: TransformList = [transform]
@@ -350,7 +409,7 @@ async def test_composite_transform_conversion(selenium):
         transformParameterization=TransformParameterizations.Composite,
         parametersValueType=FloatTypes.Float32,
         inputDimension=2,
-        outputDimension=2
+        outputDimension=2,
     )
 
     composite_transform = Transform(
@@ -358,12 +417,21 @@ async def test_composite_transform_conversion(selenium):
         numberOfParameters=9,  # Sum of parameters from component transforms
         numberOfFixedParameters=4,  # Sum of fixed parameters from component transforms
         fixedParameters=np.array([64.0, 64.0, 64.0, 64.0]).astype(np.float32),
-        parameters=np.array([
-            # Rigid2D parameters (3)
-            0.0, 64.0, 64.0,
-            # Affine parameters (6)
-            1.0, 0.0, 0.0, 1.0, 0.0, 0.0
-        ]).astype(np.float32)
+        parameters=np.array(
+            [
+                # Rigid2D parameters (3)
+                0.0,
+                64.0,
+                64.0,
+                # Affine parameters (6)
+                1.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+            ]
+        ).astype(np.float32),
     )
 
     # Create first component transform (Rigid2D)
@@ -371,7 +439,7 @@ async def test_composite_transform_conversion(selenium):
         transformParameterization=TransformParameterizations.Rigid2D,
         parametersValueType=FloatTypes.Float32,
         inputDimension=2,
-        outputDimension=2
+        outputDimension=2,
     )
 
     rigid_transform = Transform(
@@ -379,7 +447,7 @@ async def test_composite_transform_conversion(selenium):
         numberOfParameters=3,
         numberOfFixedParameters=2,
         fixedParameters=np.array([64.0, 64.0]).astype(np.float32),
-        parameters=np.array([0.0, 64.0, 64.0]).astype(np.float32)
+        parameters=np.array([0.0, 64.0, 64.0]).astype(np.float32),
     )
 
     # Create second component transform (Affine)
@@ -387,7 +455,7 @@ async def test_composite_transform_conversion(selenium):
         transformParameterization=TransformParameterizations.Affine,
         parametersValueType=FloatTypes.Float32,
         inputDimension=2,
-        outputDimension=2
+        outputDimension=2,
     )
 
     affine_transform = Transform(
@@ -395,7 +463,7 @@ async def test_composite_transform_conversion(selenium):
         numberOfParameters=6,
         numberOfFixedParameters=2,
         fixedParameters=np.array([64.0, 64.0]).astype(np.float32),
-        parameters=np.array([1.0, 0.0, 0.0, 1.0, 0.0, 0.0]).astype(np.float32)
+        parameters=np.array([1.0, 0.0, 0.0, 1.0, 0.0, 0.0]).astype(np.float32),
     )
 
     # Create transform list with composite + components
@@ -594,30 +662,19 @@ async def test_json_object_conversion(selenium):
     assert data_py["b"] == True
     assert data_py["c"]["nested"] == True
 
+
 @copy_files_to_pyodide(file_list=file_list, install_wheels=True)
 @run_in_pyodide(packages=["micropip"])
 async def test_parameter_object_conversion(selenium):
     from itkwasm.pyodide import to_js, to_py
+
     params = [
+        {"AutomaticScalesEstimation": ["true"], "AutomaticTransformInitialization": ["true"]},
         {
-            "AutomaticScalesEstimation": [
-                "true"
-            ],
-            "AutomaticTransformInitialization": [
-                "true"
-            ]
+            "AutomaticScalesEstimation": ["true"],
+            "AutomaticTransformInitialization": ["true"],
+            "BSplineInterpolationOrder": ["1"],
         },
-        {
-            "AutomaticScalesEstimation": [
-                "true"
-            ],
-            "AutomaticTransformInitialization": [
-                "true"
-            ],
-            "BSplineInterpolationOrder": [
-                "1"
-            ]
-        }
     ]
 
     params_js = to_js(params)
