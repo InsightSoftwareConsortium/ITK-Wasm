@@ -22,10 +22,10 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
 
     - name: Set up Python
-      uses: actions/setup-python@v6.3.0
+      uses: actions/setup-python@v7.0.0
       with:
         python-version: '3.11'
 
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -61,7 +61,7 @@ jobs:
       run: |
         ./src/docker/pull.sh --no-debug
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       with:
         node-version: '20'
 
@@ -94,7 +94,7 @@ jobs:
         done
 
     - name: Set up Python
-      uses: actions/setup-python@v6.3.0
+      uses: actions/setup-python@v7.0.0
       with:
         python-version: '3.11'
 

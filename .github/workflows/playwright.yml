@@ -12,8 +12,8 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v7.0.0
-    - uses: actions/setup-node@v6
+    - uses: actions/checkout@v7.0.1
+    - uses: actions/setup-node@v7
       with:
         node-version: lts/*
     - name: Install dependencies
@@ -35,8 +35,8 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v7.0.0
-    - uses: actions/setup-node@v6
+    - uses: actions/checkout@v7.0.1
+    - uses: actions/setup-node@v7
       with:
         node-version: lts/*
     - name: Install dependencies
@@ -59,8 +59,8 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v7.0.0
-    - uses: actions/setup-node@v6
+    - uses: actions/checkout@v7.0.1
+    - uses: actions/setup-node@v7
       with:
         node-version: lts/*
     - name: Install dependencies
@@ -82,7 +82,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -99,7 +99,7 @@ jobs:
       - name: Install
         uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: pnpm
@@ -154,7 +154,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -172,7 +172,7 @@ jobs:
       - name: Install
         uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: pnpm
@@ -225,7 +225,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
 
@@ -237,7 +237,7 @@ jobs:
         timeout_minutes: 10
         command: ./src/docker/pull.sh --no-debug
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       with:
         node-version: '22'
 
