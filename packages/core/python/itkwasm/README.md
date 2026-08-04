@@ -15,7 +15,7 @@ We are glad you are here and appreciate your contribution. Please keep in mind o
 ```
 git clone https://github.com/InsightSoftwareConsortium/ITK-Wasm
 cd itk-wasm/packages/core/python/itkwasm
-pip install hatch
-hatch run download-pyodide
-hatch run test
+pixi global install hatch
+pixi run download-pyodide
+pixi run test
 ```
