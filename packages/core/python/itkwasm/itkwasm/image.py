@@ -34,8 +34,10 @@ class ImageRegion:
 def _buffered_region_size(data, dimension: int) -> Optional[Sequence[int]]:
     """The buffered region size implied by the shape of a pixel data buffer.
 
-    None if the shape does not describe the buffered region, e.g. the data is a
-    data: URI string or a raveled buffer.
+    None when the buffer does not describe the region, so the current region is
+    kept. This is the case for a raveled buffer, and for the data: URI that
+    transiently occupies the field while pipeline output JSON is deserialized,
+    before the buffer it addresses is read into an array.
     """
     shape = getattr(data, "shape", None)
     if shape is None or len(shape) < dimension:
