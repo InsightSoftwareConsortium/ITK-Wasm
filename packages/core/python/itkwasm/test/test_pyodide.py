@@ -92,6 +92,37 @@ async def test_image_conversion(selenium):
 
 @copy_files_to_pyodide(file_list=file_list, install_wheels=True)
 @run_in_pyodide(packages=["numpy"])
+async def test_image_conversion_without_buffered_region(selenium):
+    """Producers that leave the buffered region empty still reshape from size.
+
+    itkwasm-image-io returns images with an empty buffered region, so reading
+    them would otherwise reshape to an empty tuple and raise.
+    """
+    import js
+    import numpy as np
+    import pyodide.ffi
+
+    from itkwasm import Image
+    from itkwasm.pyodide import to_js, to_py
+
+    image = Image()
+    image.size = [4, 4]
+    image.data = np.arange(16, dtype=np.uint8).reshape((4, 4))
+
+    image_js = to_js(image)
+    image_js.bufferedRegion = pyodide.ffi.to_js(
+        {"index": [], "size": []}, dict_converter=js.Object.fromEntries
+    )
+
+    image_py = to_py(image_js)
+    assert image_py.size[0] == 4
+    assert image_py.size[1] == 4
+    assert image_py.data.shape == (4, 4)
+    assert np.array_equal(image_py.data, np.arange(16, dtype=np.uint8).reshape((4, 4)))
+
+
+@copy_files_to_pyodide(file_list=file_list, install_wheels=True)
+@run_in_pyodide(packages=["numpy"])
 async def test_point_set_conversion(selenium):
     from itkwasm import PointSet, PointSetType, PixelTypes, FloatTypes
     from itkwasm.pyodide import to_js, to_py
