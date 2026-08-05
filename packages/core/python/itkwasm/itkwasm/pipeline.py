@@ -462,7 +462,11 @@ class Pipeline:
                         image.imageType.componentType,
                         ri.wasmtime_lift(data_ptr, data_size),
                     )
-                    shape = list(image.bufferedRegion.size)[::-1]
+                    # Producers that predate the buffered region becoming the source
+                    # of the pixel shape leave it empty; fall back to the largest
+                    # possible region. Information-only outputs set it explicitly to
+                    # zeros, which is a non-empty list and so still wins.
+                    shape = list(image.bufferedRegion.size or image.size)[::-1]
                     if image.imageType.components > 1:
                         shape.append(image.imageType.components)
                     image.data = data_array.reshape(tuple(shape))
