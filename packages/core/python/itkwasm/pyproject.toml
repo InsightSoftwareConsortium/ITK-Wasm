@@ -48,7 +48,7 @@ path = "itkwasm/__init__.py"
 [tool.black]
 line-length = 120
 
-[tool.pixi.project]
+[tool.pixi.workspace]
 channels = ["conda-forge"]
 platforms = ["win-64", "linux-64", "linux-aarch64", "osx-arm64"]
 

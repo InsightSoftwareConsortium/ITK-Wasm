@@ -31,6 +31,20 @@ class ImageRegion:
     size: Sequence[int] = field(default_factory=list)
 
 
+def _buffered_region_size(data, dimension: int) -> Optional[Sequence[int]]:
+    """The buffered region size implied by the shape of a pixel data buffer.
+
+    None when the buffer does not describe the region, so the current region is
+    kept. This is the case for a raveled buffer, and for the data: URI that
+    transiently occupies the field while pipeline output JSON is deserialized,
+    before the buffer it addresses is read into an array.
+    """
+    shape = getattr(data, "shape", None)
+    if shape is None or len(shape) < dimension:
+        return None
+    return list(shape[:dimension][::-1])
+
+
 @dataclass
 class Image:
     imageType: Union[ImageType, Dict] = field(default_factory=ImageType)
@@ -48,9 +62,6 @@ class Image:
     bufferedRegion: Optional[ImageRegion] = None
 
     def __post_init__(self):
-        if isinstance(self.imageType, dict):
-            self.imageType = ImageType(**self.imageType)
-
         dimension = self.imageType.dimension
         if len(self.origin) == 0:
             self.origin += [
@@ -71,18 +82,36 @@ class Image:
             ] * dimension
 
         if self.bufferedRegion is None:
-            if self.data is not None and hasattr(self.data, 'shape'):
-                self.bufferedRegion = ImageRegion(
-                    index=(0,) * dimension,
-                    size=self.data.shape[:dimension][::-1],
-                )
-            else:
-                self.bufferedRegion = ImageRegion(
-                    index=(
-                        0,
-                    )
-                    * dimension,
-                    size=self.size,
-                )
-        elif isinstance(self.bufferedRegion, dict):
-            self.bufferedRegion = ImageRegion(**self.bufferedRegion)
+            size = _buffered_region_size(self.data, dimension)
+            if size is None:
+                # A copy, so the buffered region does not track subsequent
+                # changes to the largest possible region
+                size = list(self.size)
+            self.bufferedRegion = ImageRegion(
+                index=[
+                    0,
+                ]
+                * dimension,
+                size=size,
+            )
+
+    def __setattr__(self, name, value):
+        # Dicts, e.g. from JSON, are converted however they are assigned
+        if name == "imageType" and isinstance(value, dict):
+            value = ImageType(**value)
+        elif name == "bufferedRegion" and isinstance(value, dict):
+            value = ImageRegion(**value)
+
+        super().__setattr__(name, value)
+
+        # The data buffer holds the buffered region -- keep the region
+        # consistent when data is assigned after construction.
+        if name == "data" and value is not None:
+            buffered_region = getattr(self, "bufferedRegion", None)
+            if buffered_region is None:
+                return
+            size = _buffered_region_size(value, self.imageType.dimension)
+            if size is not None and list(buffered_region.size) != size:
+                # A new region, so a shallow copy of the image does not modify
+                # the region of the image it was copied from
+                self.bufferedRegion = ImageRegion(index=list(buffered_region.index), size=size)
