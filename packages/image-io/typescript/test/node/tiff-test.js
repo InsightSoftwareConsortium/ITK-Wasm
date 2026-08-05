@@ -1,7 +1,7 @@
 import test from 'ava'
 import path from 'path'
 
-import { tiffReadImageNode, tiffWriteImageNode } from '../../dist/index-node.js'
+import { tiffReadImageNode, tiffWriteImageNode, writeImageNode } from '../../dist/index-node.js'
 import { IntTypes, PixelTypes, getMatrixElement } from 'itk-wasm'
 
 import { testInputPath, testOutputPath } from './common.js'
@@ -44,4 +44,33 @@ test('Test writing a TIFF file', async t => {
   const { couldRead: couldReadBack, image: imageBack } = await tiffReadImageNode(testOutputFilePath)
   t.true(couldReadBack)
   verifyImage(t, imageBack)
+})
+
+
+test('Test TIFF integer pixel types', async t => {
+  const dtypes = [
+      {componentType: 'uint8', data: new Uint8Array(100*100), name: 'uint8_test'},
+      {componentType: 'uint16', data: new Uint16Array(100*100), name: 'uint16_test'},
+      {componentType: 'uint32', data: new Uint32Array(100*100), name: 'uint32_test'},
+  ]
+
+  dtypes.forEach(async (d) => {
+      console.log("Writing", d.name)
+
+      const res = await writeImageNode(
+          {
+              imageType: {
+                  dimension: 2,
+                  pixelType: 'Scalar',
+                  componentType: d.componentType,
+                  components: 1
+              },
+              name: d.name,
+              direction: new Float64Array([1.0, 0.0, 0.0, 1.0]),
+              size: [100, 100],
+              data: d.data, // <- !!! Will crash if Uint32Array
+          },d.name + '.tif')
+
+      console.log(d.name, res)
+  })
 })
