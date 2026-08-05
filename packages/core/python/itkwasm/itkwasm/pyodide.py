@@ -83,8 +83,12 @@ def to_py(js_proxy):
         image_dict["direction"] = buffer_to_numpy_array(str(FloatTypes.Float64), image_dict["direction"]).reshape(
             (dimension, dimension)
         )
-        buffered_region = image_dict.get("bufferedRegion")
-        shape = list(buffered_region["size"] if buffered_region is not None else image_dict["size"])[::-1]
+        # Producers that predate the buffered region becoming the source
+        # of the pixel shape leave it absent or empty; fall back to the
+        # largest possible region. Information-only outputs set it
+        # explicitly to zeros, which is a non-empty list and so still wins.
+        buffered_region = image_dict.get("bufferedRegion") or {}
+        shape = list(buffered_region.get("size") or image_dict["size"])[::-1]
         if image_type.components > 1:
             shape.append(image_type.components)
         if image_dict["data"] is not None:
