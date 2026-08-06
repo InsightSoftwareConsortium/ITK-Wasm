@@ -51,6 +51,7 @@
 // the filesystem path robust to itk-wasm's .iwt scalar-type detection, which can misreport a float64 transform
 // as float32 (reading such a transform at single precision silently drops parameters).
 
+#include <algorithm>
 #include <cstdlib>
 #include <stdexcept>
 #include <string>
@@ -153,12 +154,22 @@ reconstructTransformEntry(const itk::TransformJSON & transformJSON)
   // The JSON encodes the parameter arrays as wasm memory addresses: "data:application/vnd.itk.address,0:<ptr>".
   constexpr std::string::size_type addressPrefixLength = 35;
 
+  // CopyIn*Parameters std::copy into m_FixedParameters/m_Parameters without resizing them.
+  // itk::BSplineTransform never sizes the base m_Parameters, so that overruns a zero-length buffer.
+  using FixedParametersType = typename TransformType::FixedParametersType;
+  using ParametersType = typename TransformType::ParametersType;
+
   // Fixed parameters are stored at double precision (itk::Transform::FixedParametersValueType is double).
+  // Set first: for a B-spline they define the grid, and hence the number of parameters.
   if (transformJSON.numberOfFixedParameters > 0)
   {
     const double * fixedParametersPtr = reinterpret_cast<const double *>(
       std::strtoull(transformJSON.fixedParameters.substr(addressPrefixLength).c_str(), nullptr, 10));
-    transform->CopyInFixedParameters(fixedParametersPtr, fixedParametersPtr + transformJSON.numberOfFixedParameters);
+    FixedParametersType fixedParameters(transformJSON.numberOfFixedParameters);
+    std::copy(fixedParametersPtr,
+              fixedParametersPtr + transformJSON.numberOfFixedParameters,
+              fixedParameters.data_block());
+    transform->SetFixedParameters(fixedParameters);
   }
 
   // Parameters are stored at the transform's own precision; cast into a double buffer so the double-precision
@@ -166,8 +177,8 @@ reconstructTransformEntry(const itk::TransformJSON & transformJSON)
   const std::size_t numberOfParameters = static_cast<std::size_t>(transformJSON.numberOfParameters);
   if (numberOfParameters > 0)
   {
-    std::vector<double> parameters(numberOfParameters);
-    const std::string   parametersAddress = transformJSON.parameters.substr(addressPrefixLength);
+    ParametersType    parameters(numberOfParameters);
+    const std::string parametersAddress = transformJSON.parameters.substr(addressPrefixLength);
     if (transformJSON.transformType.parametersValueType == itk::JSONFloatTypesEnum::float32)
     {
       const float * source = reinterpret_cast<const float *>(std::strtoull(parametersAddress.c_str(), nullptr, 10));
@@ -184,7 +195,13 @@ reconstructTransformEntry(const itk::TransformJSON & transformJSON)
         parameters[ii] = source[ii];
       }
     }
-    transform->CopyInParameters(parameters.data(), parameters.data() + numberOfParameters);
+    if (parameters.Size() != transform->GetNumberOfParameters())
+    {
+      throw std::runtime_error("The input transform carries " + std::to_string(parameters.Size()) +
+                               " parameters but " + typeString + " expects " +
+                               std::to_string(transform->GetNumberOfParameters()) + ".");
+    }
+    transform->SetParametersByValue(parameters);
   }
 
   return transform;
