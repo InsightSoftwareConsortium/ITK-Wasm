@@ -21,6 +21,7 @@
 #include "itkTransformFactoryBase.h"
 
 #include "itktransformParameterizationString.h"
+#include <algorithm>
 #include <exception>
 #include "itkWasmMapComponentType.h"
 #include "itkWasmMapPixelType.h"
@@ -226,12 +227,30 @@ WasmTransformToTransformFilter<TTransform>::GenerateData()
       // Correct extra reference count from CreateInstance()
       ptr->UnRegister();
 
-      FixedParametersValueType * fixedPtr = reinterpret_cast<FixedParametersValueType *>(
+      // CopyIn*Parameters std::copy into m_FixedParameters/m_Parameters without resizing them.
+      // itk::BSplineTransform never sizes the base m_Parameters, so that overruns a zero-length
+      // buffer. Fixed parameters are set first: for a B-spline they define the grid, and hence
+      // the number of parameters.
+      const FixedParametersValueType * fixedPtr = reinterpret_cast<const FixedParametersValueType *>(
         std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10));
-      ptr->CopyInFixedParameters(fixedPtr, fixedPtr + transformJSON.numberOfFixedParameters);
-      ParametersValueType * paramsPtr = reinterpret_cast<ParametersValueType *>(
+      typename ComponentTransformType::FixedParametersType componentFixedParameters(
+        transformJSON.numberOfFixedParameters);
+      std::copy(fixedPtr,
+                fixedPtr + transformJSON.numberOfFixedParameters,
+                componentFixedParameters.data_block());
+      ptr->SetFixedParameters(componentFixedParameters);
+
+      const ParametersValueType * paramsPtr = reinterpret_cast<const ParametersValueType *>(
         std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10));
-      ptr->CopyInParameters(paramsPtr, paramsPtr + transformJSON.numberOfParameters);
+      typename ComponentTransformType::ParametersType componentParameters(transformJSON.numberOfParameters);
+      std::copy(paramsPtr, paramsPtr + transformJSON.numberOfParameters, componentParameters.data_block());
+      if (componentParameters.Size() != ptr->GetNumberOfParameters())
+      {
+        itkExceptionMacro("The input transform carries " << componentParameters.Size() << " parameters but "
+                                                         << transformType << " expects "
+                                                         << ptr->GetNumberOfParameters() << '.');
+      }
+      ptr->SetParametersByValue(componentParameters);
 
       using CompositeTransformType = CompositeTransform<ParametersValueType, TransformType::InputSpaceDimension>;
       CompositeTransformType * compositeTransform = dynamic_cast<CompositeTransformType *>(transform);
@@ -239,12 +258,24 @@ WasmTransformToTransformFilter<TTransform>::GenerateData()
     }
     else
     {
-      FixedParametersValueType * fixedPtr = reinterpret_cast<FixedParametersValueType *>(
+      // Same reasoning as the composite branch above.
+      const FixedParametersValueType * fixedPtr = reinterpret_cast<const FixedParametersValueType *>(
         std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10));
-      transform->CopyInFixedParameters(fixedPtr, fixedPtr + transformJSON.numberOfFixedParameters);
-      ParametersValueType * paramsPtr = reinterpret_cast<ParametersValueType *>(
+      typename TransformType::FixedParametersType fixedParameters(transformJSON.numberOfFixedParameters);
+      std::copy(fixedPtr, fixedPtr + transformJSON.numberOfFixedParameters, fixedParameters.data_block());
+      transform->SetFixedParameters(fixedParameters);
+
+      const ParametersValueType * paramsPtr = reinterpret_cast<const ParametersValueType *>(
         std::strtoull(transformJSON.parameters.substr(35).c_str(), nullptr, 10));
-      transform->CopyInParameters(paramsPtr, paramsPtr + transformJSON.numberOfParameters);
+      typename TransformType::ParametersType parameters(transformJSON.numberOfParameters);
+      std::copy(paramsPtr, paramsPtr + transformJSON.numberOfParameters, parameters.data_block());
+      if (parameters.Size() != transform->GetNumberOfParameters())
+      {
+        itkExceptionMacro("The input transform carries " << parameters.Size() << " parameters but "
+                                                         << transformType << " expects "
+                                                         << transform->GetNumberOfParameters() << '.');
+      }
+      transform->SetParametersByValue(parameters);
 
       auto dictionary = transform->GetMetaDataDictionary();
       jsonToMetaDataDictionary(transformJSON.metadata, dictionary);

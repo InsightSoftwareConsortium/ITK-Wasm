@@ -74,6 +74,7 @@ set(WebAssemblyInterfaceTests
   itkTransformJSONTest.cxx
   itkWasmTransformInterfaceTest.cxx
   itkWasmTransformInterfaceCompositeTest.cxx
+  itkWasmTransformInterfaceBSplineTest.cxx
 )
 
 if (EMSCRIPTEN)
@@ -312,6 +313,11 @@ itk_add_test(NAME itkWasmTransformInterfaceCompositeTest
     itkWasmTransformInterfaceCompositeTest
       DATA{Input/CompositeTransform.h5}
       ${ITK_TEST_OUTPUT_DIR}/itkWasmTransformInterfaceCompositeTest.h5
+)
+
+itk_add_test(NAME itkWasmTransformInterfaceBSplineTest
+    COMMAND WebAssemblyInterfaceTestDriver
+    itkWasmTransformInterfaceBSplineTest
 )
 
 if(EMSCRIPTEN)
