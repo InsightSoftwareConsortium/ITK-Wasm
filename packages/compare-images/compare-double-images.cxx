@@ -198,7 +198,10 @@ CompareImages(itk::wasm::Pipeline & pipeline, const TImage * testImage)
   region.SetSize(size);
 
   auto extract = ExtractType::New();
-  extract->SetDirectionCollapseToSubmatrix();
+  // Collapsing to the sub-matrix throws when it is singular, which it is for
+  // the axis permutations common in 3D medical images. The slice only feeds a
+  // rescaled preview, so its direction carries no meaning.
+  extract->SetDirectionCollapseToGuess();
 
   extract->SetInput(diff->GetOutput());
   extract->SetExtractionRegion(region);
