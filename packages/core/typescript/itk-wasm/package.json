@@ -13,6 +13,10 @@
       "default": "./dist/index-all.js"
     }
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "directories": {
     "doc": "docs",
     "test": "test"

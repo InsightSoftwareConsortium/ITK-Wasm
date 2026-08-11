@@ -6,6 +6,10 @@
   "exports": {
     "./*": "./src/*"
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "build": "node ./scripts/copy-shoelace-assets.mjs",
     "build:tsc": "pnpm build"

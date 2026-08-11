@@ -12,6 +12,10 @@
   "bin": {
     "create-itk-wasm": "./dist/create-itk-wasm.js"
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "build": "tsc --pretty",
     "build:watch": "tsc --pretty --watch",
