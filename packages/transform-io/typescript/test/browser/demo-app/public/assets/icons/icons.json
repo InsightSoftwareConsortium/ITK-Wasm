@@ -2310,7 +2310,8 @@
     ],
     "tags": [
       "no",
-      "not allowed"
+      "not allowed",
+      "block"
     ]
   },
   {
@@ -19415,7 +19416,8 @@
     "tags": [
       "wifi",
       "internet",
-      "wireless"
+      "wireless",
+      "network"
     ]
   },
   {
@@ -19427,7 +19429,8 @@
     "tags": [
       "wifi",
       "internet",
-      "wireless"
+      "wireless",
+      "network"
     ]
   },
   {

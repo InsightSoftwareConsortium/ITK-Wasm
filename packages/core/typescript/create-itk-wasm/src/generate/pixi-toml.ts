@@ -23,7 +23,14 @@ python = ["python"]
 
 [dependencies]
 python = "3.12.*"
-pnpm = ">=10.14.0,<11"
+# Keep this major in step with the pnpm that drives the project from outside
+# pixi (create-itk-wasm --build-and-test, CI). node_modules records the pnpm
+# that wrote it, so alternating majors makes every install want to purge it,
+# which aborts outright when there is no TTY.
+pnpm = ">=11.21.0,<12"
+# conda-forge's pnpm 11 requires nodejs >= 24.19; pin the major so every
+# platform resolves the same node.
+nodejs = ">=24.19.0,<25"
 hatch = ">=1.13.0,<2"
 pip = ">=24.2,<25"
 
