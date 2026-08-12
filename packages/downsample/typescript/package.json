@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/downsample",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Pipelines for downsampling images.",
   "type": "module",
   "module": "./dist/index.js",
