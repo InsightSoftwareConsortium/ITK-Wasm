@@ -46,8 +46,6 @@ if sys.platform != "emscripten":
         WasiConfig,
         Linker,
         WasmtimeError,
-        DirPerms,
-        FilePerms
     )
 
     # Get the value of the ITKWASM_CACHE_DIR environment variable
@@ -86,7 +84,10 @@ class RunInstance:
         wasi_config.argv = args
 
         for preopen in preopen_directories:
-            wasi_config.preopen_dir(preopen, preopen, DirPerms.READ_WRITE, FilePerms.READ_WRITE)
+            # Read-write access is the default in every supported wasmtime; passing
+            # it explicitly is not portable -- wasmtime 48 replaced the DirPerms /
+            # FilePerms arguments with a single fs_mutable flag.
+            wasi_config.preopen_dir(preopen, preopen)
 
         store.set_wasi(wasi_config)
 

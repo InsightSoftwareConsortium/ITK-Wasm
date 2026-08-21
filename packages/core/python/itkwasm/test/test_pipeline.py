@@ -1,4 +1,5 @@
 from pathlib import Path, PurePosixPath
+import shutil
 import tempfile
 from dataclasses import asdict
 import sys
@@ -130,6 +131,66 @@ def test_pipeline_input_output_files():
             content = fp.read()
             assert content == "The answer is 42."
         assert outputs[1].type, InterfaceTypes.BinaryFile
+        with open(outputs[1].data.path, "rb") as fp:
+            content = fp.read()
+            assert content[0] == 222
+            assert content[1] == 173
+            assert content[2] == 190
+            assert content[3] == 239
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Windows tempfile resource, https://github.com/bytecodealliance/wasmtime-py/issues/132",
+)
+def test_pipeline_input_output_files_same_directory():
+    """A directory preopened for both input and output is read-write.
+
+    Inputs and outputs in the same directory collapse to a single preopen, so
+    that one preopen must serve reads and writes. This pins the read-write
+    default relied on by RunInstance.preopen_dir.
+    """
+    pipeline = Pipeline(test_input_dir / "input-output-files-test.wasi.wasm")
+
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        tmpdir = Path(tmpdirname)
+        shutil.copy(test_input_dir / "input.txt", tmpdir / "input.txt")
+        shutil.copy(test_input_dir / "input.bin", tmpdir / "input.bin")
+
+        input_text_file = PurePosixPath(tmpdir / "input.txt")
+        input_binary_file = PurePosixPath(tmpdir / "input.bin")
+        output_text_file = PurePosixPath(tmpdir / "output.txt")
+        output_binary_file = PurePosixPath(tmpdir / "output.bin")
+
+        pipeline_inputs = [
+            PipelineInput(InterfaceTypes.TextFile, TextFile(input_text_file)),
+            PipelineInput(InterfaceTypes.BinaryFile, BinaryFile(input_binary_file)),
+        ]
+
+        pipeline_outputs = [
+            PipelineOutput(InterfaceTypes.TextFile, TextFile(output_text_file)),
+            PipelineOutput(InterfaceTypes.BinaryFile, BinaryFile(output_binary_file)),
+        ]
+
+        args = [
+            "--memory-io",
+            "--use-files",
+            "--input-text-file",
+            str(input_text_file),
+            "--input-binary-file",
+            str(input_binary_file),
+            "--output-text-file",
+            str(output_text_file),
+            "--output-binary-file",
+            str(output_binary_file),
+        ]
+
+        outputs = pipeline.run(args, pipeline_outputs, pipeline_inputs)
+
+        assert outputs[0].type == InterfaceTypes.TextFile
+        with open(outputs[0].data.path, "r") as fp:
+            assert fp.read() == "The answer is 42."
+        assert outputs[1].type == InterfaceTypes.BinaryFile
         with open(outputs[1].data.path, "rb") as fp:
             content = fp.read()
             assert content[0] == 222
