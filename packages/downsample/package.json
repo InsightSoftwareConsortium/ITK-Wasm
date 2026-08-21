@@ -1,6 +1,6 @@
 {
   "name": "@itk-wasm/downsample-build",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "private": true,
   "description": "Pipelines for downsampling images.",
   "type": "module",
