@@ -27,9 +27,9 @@ const TransformParameterizations = {
     'GaussianSmoothingOnUpdateDisplacementField',
   GaussianExponentialDiffeomorphic: 'GaussianExponentialDiffeomorphic',
   VelocityField: 'VelocityField',
-  TimeVaringVelocityField: 'TimeVaringVelocityField',
-  GaussianSmoothingOnUpdateTimeVaringVelocityField:
-    'GaussianSmoothingOnUpdateTimeVaringVelocityField'
+  TimeVaryingVelocityField: 'TimeVaryingVelocityField',
+  GaussianSmoothingOnUpdateTimeVaryingVelocityField:
+    'GaussianSmoothingOnUpdateTimeVaryingVelocityField'
 } as const
 
 export default TransformParameterizations
