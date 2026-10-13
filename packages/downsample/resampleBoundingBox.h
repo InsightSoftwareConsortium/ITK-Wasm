@@ -27,6 +27,8 @@
 #include "itkImage.h"
 #include "itkContinuousIndex.h"
 
+#include "resampleStageBound.h"
+
 /** Plain-data result of a resample bounding box computation.
  *
  * Physical corners (min/max) are stored as separate std::vector<double> members.
@@ -41,14 +43,17 @@ struct ResampleBoundingBoxResult
   std::vector<double>       cornersMax;
 
   // Diagnostic only (NOT part of the serialized JSON contract): the number of fixed-image points that were
-  // sampled and transformed. On the linear fast path this is the 2^Dimension corners; otherwise it is every
-  // boundary pixel (all faces and edges). Exposed so tests can confirm which path ran and, for nonlinear
-  // transforms, that the algorithm walks the full boundary rather than only the corners.
+  // sampled and transformed. On the linear fast path this is the 2^Dimension corners; under the stage bound it
+  // is the lattice points of the B-spline stages; otherwise it is every boundary pixel (all faces and edges).
   std::size_t numberOfBoundaryPoints = 0;
 
   // Diagnostic only (NOT part of the serialized JSON contract): true when the transform reported itself linear
   // (itk::Transform::IsLinear()) and the corners-only fast path was taken; false when the full boundary was walked.
   bool usedLinearCornerPath = false;
+
+  // Diagnostic only (NOT part of the serialized JSON contract): true when the box was carried through the
+  // transform's stages (resampleStageBound.h), false on the linear fast path and on the boundary walk.
+  bool usedStageBound = false;
 };
 
 /** \class ResampleBoundingBoxComputer
@@ -68,9 +73,11 @@ struct ResampleBoundingBoxResult
  * transformed fixed-grid samples. For a LINEAR (affine, rigid, translation, ...) transform the
  * image of the fixed rectangle is convex, so its axis-aligned bound is attained at the
  * 2^Dimension transformed corners -- the computer detects this via itk::Transform::IsLinear()
- * and samples only the corners. For a NONLINEAR transform an interior boundary pixel can map
- * outside the hull of the transformed corners, so the computer instead walks every boundary
- * pixel (all faces and edges). Both paths feed the identical min/max accumulation below.
+ * and samples only the corners. A NONLINEAR transform made of linear, cubic B-spline and
+ * displacement-field stages is bounded stage by stage (resampleStageBound.h), which holds for a
+ * displacement that peaks strictly inside the grid. For any other nonlinear transform the computer
+ * walks every boundary pixel (all faces and edges), which bounds the grid only when its extremes
+ * lie on its faces.
  */
 template <typename TTransform>
 class ResampleBoundingBoxComputer
@@ -119,6 +126,8 @@ public:
       result.cornersMin.assign(Dimension, 0.0);
       result.cornersMax.assign(Dimension, 0.0);
       result.numberOfBoundaryPoints = 0;
+      result.usedLinearCornerPath = false;
+      result.usedStageBound = false;
       return;
     }
 
@@ -137,6 +146,33 @@ public:
     // map outside the transformed-corner hull).
     const bool linear = transform->IsLinear();
     result.usedLinearCornerPath = linear;
+
+    // The fixed grid's box in physical space and the extent of one voxel along the physical axes.
+    resampleStageBound::Box<Dimension>        stageBox;
+    resampleStageBound::VectorType<Dimension> voxel;
+    for (std::size_t mask = 0; mask < (std::size_t(1) << Dimension); ++mask)
+    {
+      ContinuousIndexType corner;
+      for (unsigned int d = 0; d < Dimension; ++d)
+      {
+        corner[d] = static_cast<double>(startIndex[d]) +
+                    ((mask & (std::size_t(1) << d)) ? static_cast<double>(size[d]) - 1.0 : 0.0);
+      }
+      PointType physicalPoint;
+      fixedImage->TransformContinuousIndexToPhysicalPoint(corner, physicalPoint);
+      stageBox.Include(physicalPoint);
+    }
+    for (unsigned int i = 0; i < Dimension; ++i)
+    {
+      voxel[i] = 0.0;
+      for (unsigned int d = 0; d < Dimension; ++d)
+      {
+        voxel[i] += std::abs(fixedImage->GetDirection()[i][d]) * fixedImage->GetSpacing()[d];
+      }
+    }
+    std::size_t latticePoints = 0;
+    result.usedStageBound = !linear && resampleStageBound::Compute<typename TTransform::ScalarType, Dimension>(
+                                         transform, stageBox, voxel, latticePoints);
 
     if (linear)
     {
@@ -157,7 +193,7 @@ public:
         m_BoundaryPoints.push_back(physicalPoint);
       }
     }
-    else
+    else if (!result.usedStageBound)
     {
       // Enumerate every boundary pixel (at least one component equal to 0 or size_d - 1) and store
       // its physical location. This includes all faces/edges, not just the 2^N corners, so nonlinear
@@ -206,7 +242,7 @@ public:
         }
       }
     }
-    result.numberOfBoundaryPoints = m_BoundaryPoints.size();
+    result.numberOfBoundaryPoints = result.usedStageBound ? latticePoints : m_BoundaryPoints.size();
 
     // Apply the transform to each boundary point, accumulating the tight physical-space min/max
     // (in moving image physical space) and the moving-image continuous-index min/max, per axis.
@@ -227,6 +263,27 @@ public:
         continuousIndexMin[d] = std::min(continuousIndexMin[d], static_cast<double>(continuousIndex[d]));
         continuousIndexMax[d] = std::max(continuousIndexMax[d], static_cast<double>(continuousIndex[d]));
       }
+    }
+
+    if (result.usedStageBound)
+    {
+      // The box stands for the grid: its corners are accumulated in place of transformed samples.
+      resampleStageBound::ForEachCorner(stageBox, [&](const resampleStageBound::VectorType<Dimension> & corner) {
+        PointType movingPoint;
+        for (unsigned int d = 0; d < Dimension; ++d)
+        {
+          movingPoint[d] = corner[d];
+        }
+        ContinuousIndexType continuousIndex;
+        movingImage->TransformPhysicalPointToContinuousIndex(movingPoint, continuousIndex);
+        for (unsigned int d = 0; d < Dimension; ++d)
+        {
+          physMin[d] = std::min(physMin[d], corner[d]);
+          physMax[d] = std::max(physMax[d], corner[d]);
+          continuousIndexMin[d] = std::min(continuousIndexMin[d], static_cast<double>(continuousIndex[d]));
+          continuousIndexMax[d] = std::max(continuousIndexMax[d], static_cast<double>(continuousIndex[d]));
+        }
+      });
     }
 
     // Convert the continuous-index bounds to an integer index region and pad outward per side.
