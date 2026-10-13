@@ -174,3 +174,40 @@ def test_resample_bounding_box_region(case):
     # Persist each case's padded result next to the other Python test outputs for inspection.
     with open(test_output_path / f"resample-bounding-box-{case['name']}.json", "w") as fp:
         json.dump(padded, fp)
+
+
+def test_a_bspline_is_bounded_through_its_stages():
+    """A cubic B-spline whose displacement peaks inside the grid: the region holds what the boundary misses.
+
+    resample-bounding-box-test.cxx and the TypeScript suite assert the same regions for the same blocks.
+    """
+    grid_size = [7, 6]
+    ix, iy = np.meshgrid(np.arange(grid_size[0]), np.arange(grid_size[1]), indexing="xy")
+    cx = 6.0 * np.sin(ix * 1.1 + iy * 0.7) + 2.0 * np.cos(iy * 0.5)
+    cy = -5.0 * np.cos(ix * 0.9 - iy * 0.6) + 3.0 * np.sin(ix * 0.4)
+    # ITK lays the parameters out one component after the other, x fastest.
+    parameters = np.round(np.concatenate([cx.ravel(), cy.ravel()]), 6)
+    transform = Transform(
+        transformType=TransformType(
+            transformParameterization=TransformParameterizations.BSpline,
+            parametersValueType=FloatTypes.Float64,
+            inputDimension=2,
+            outputDimension=2,
+        ),
+        numberOfFixedParameters=10,
+        numberOfParameters=parameters.size,
+        # Grid size, origin, spacing, direction.
+        fixedParameters=np.array([*grid_size, -16.0, -16.0, 16.0, 16.0, 1.0, 0.0, 0.0, 1.0]),
+        parameters=parameters,
+        name="BSplineTransform",
+    )
+    moving = metadata_only_image([128, 128], [1, 1], [-32, -32])
+    blocks = [
+        ([0, 0], [32, 32], [30, 28], [34, 38]),
+        ([24, 20], [40, 24], [50, 50], [52, 33]),
+        ([8, 40], [48, 16], [31, 67], [66, 30]),
+    ]
+    for origin, size, start, padded_size in blocks:
+        region = resample_bounding_box([transform], metadata_only_image(size, [1, 1], origin), moving)
+        assert region["paddedStartIndex"] == start
+        assert region["paddedSize"] == padded_size
