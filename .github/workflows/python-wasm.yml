@@ -23,7 +23,7 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        os: [ubuntu-24.04, windows-2022, macos-14]
+        os: [ubuntu-24.04, windows-2022, macos-15]
         python-minor-version: [11, 12]
         package: [compress-stringify, compare-images, dicom, mesh-io, image-io, transform-io, downsample]
 
