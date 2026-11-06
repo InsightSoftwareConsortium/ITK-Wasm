@@ -166,9 +166,8 @@ reconstructTransformEntry(const itk::TransformJSON & transformJSON)
     const double * fixedParametersPtr = reinterpret_cast<const double *>(
       std::strtoull(transformJSON.fixedParameters.substr(addressPrefixLength).c_str(), nullptr, 10));
     FixedParametersType fixedParameters(transformJSON.numberOfFixedParameters);
-    std::copy(fixedParametersPtr,
-              fixedParametersPtr + transformJSON.numberOfFixedParameters,
-              fixedParameters.data_block());
+    std::copy(
+      fixedParametersPtr, fixedParametersPtr + transformJSON.numberOfFixedParameters, fixedParameters.data_block());
     transform->SetFixedParameters(fixedParameters);
   }
 
@@ -197,9 +196,8 @@ reconstructTransformEntry(const itk::TransformJSON & transformJSON)
     }
     if (parameters.Size() != transform->GetNumberOfParameters())
     {
-      throw std::runtime_error("The input transform carries " + std::to_string(parameters.Size()) +
-                               " parameters but " + typeString + " expects " +
-                               std::to_string(transform->GetNumberOfParameters()) + ".");
+      throw std::runtime_error("The input transform carries " + std::to_string(parameters.Size()) + " parameters but " +
+                               typeString + " expects " + std::to_string(transform->GetNumberOfParameters()) + ".");
     }
     transform->SetParametersByValue(parameters);
   }

@@ -235,9 +235,7 @@ WasmTransformToTransformFilter<TTransform>::GenerateData()
         std::strtoull(transformJSON.fixedParameters.substr(35).c_str(), nullptr, 10));
       typename ComponentTransformType::FixedParametersType componentFixedParameters(
         transformJSON.numberOfFixedParameters);
-      std::copy(fixedPtr,
-                fixedPtr + transformJSON.numberOfFixedParameters,
-                componentFixedParameters.data_block());
+      std::copy(fixedPtr, fixedPtr + transformJSON.numberOfFixedParameters, componentFixedParameters.data_block());
       ptr->SetFixedParameters(componentFixedParameters);
 
       const ParametersValueType * paramsPtr = reinterpret_cast<const ParametersValueType *>(
@@ -247,8 +245,8 @@ WasmTransformToTransformFilter<TTransform>::GenerateData()
       if (componentParameters.Size() != ptr->GetNumberOfParameters())
       {
         itkExceptionMacro("The input transform carries " << componentParameters.Size() << " parameters but "
-                                                         << transformType << " expects "
-                                                         << ptr->GetNumberOfParameters() << '.');
+                                                         << transformType << " expects " << ptr->GetNumberOfParameters()
+                                                         << '.');
       }
       ptr->SetParametersByValue(componentParameters);
 
@@ -271,9 +269,8 @@ WasmTransformToTransformFilter<TTransform>::GenerateData()
       std::copy(paramsPtr, paramsPtr + transformJSON.numberOfParameters, parameters.data_block());
       if (parameters.Size() != transform->GetNumberOfParameters())
       {
-        itkExceptionMacro("The input transform carries " << parameters.Size() << " parameters but "
-                                                         << transformType << " expects "
-                                                         << transform->GetNumberOfParameters() << '.');
+        itkExceptionMacro("The input transform carries " << parameters.Size() << " parameters but " << transformType
+                                                         << " expects " << transform->GetNumberOfParameters() << '.');
       }
       transform->SetParametersByValue(parameters);
 
