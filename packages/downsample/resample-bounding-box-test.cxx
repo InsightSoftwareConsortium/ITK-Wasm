@@ -31,8 +31,10 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
+#include <algorithm>
 #include <array>
 #include <iostream>
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -40,6 +42,10 @@
 #include "itkTransform.h"
 #include "itkTranslationTransform.h"
 #include "itkAffineTransform.h"
+#include "itkBSplineTransform.h"
+#include "itkCompositeTransform.h"
+#include "itkDisplacementFieldTransform.h"
+#include "itkEuler2DTransform.h"
 
 #include "resampleBoundingBox.h"
 
@@ -371,6 +377,229 @@ test2DNonlinearBoundary()
   checkIntVec(result.paddedSize, { 25, 12 }, "nonlinear paddedSize");
 }
 
+// A 2D cubic B-spline over a control grid of the given size, origin and spacing (identity direction), with
+// coefficients(c, ix, iy) the displacement of control point (ix, iy) along component c.
+template <typename TCoefficients>
+itk::BSplineTransform<double, 2, 3>::Pointer
+makeBSpline(const std::array<unsigned int, 2> & gridSize, double origin, double spacing, TCoefficients && coefficients)
+{
+  using BSplineType = itk::BSplineTransform<double, 2, 3>;
+  auto                             bspline = BSplineType::New();
+  BSplineType::FixedParametersType fixedParameters(10);
+  const double                     fixedValues[10] = {
+    double(gridSize[0]), double(gridSize[1]), origin, origin, spacing, spacing, 1, 0, 0, 1
+  };
+  std::copy(fixedValues, fixedValues + 10, fixedParameters.data_block());
+  bspline->SetFixedParameters(fixedParameters);
+  // ITK lays the parameters out one component after the other, x fastest.
+  BSplineType::ParametersType parameters(2 * gridSize[0] * gridSize[1]);
+  for (unsigned int c = 0; c < 2; ++c)
+  {
+    for (unsigned int iy = 0; iy < gridSize[1]; ++iy)
+    {
+      for (unsigned int ix = 0; ix < gridSize[0]; ++ix)
+      {
+        parameters[(c * gridSize[1] + iy) * gridSize[0] + ix] = coefficients(c, ix, iy);
+      }
+    }
+  }
+  bspline->SetParametersByValue(parameters);
+  return bspline;
+}
+
+// The exact answer the bound must contain: every pixel of the fixed grid mapped, not its boundary alone.
+// With boundaryOnly, the pixels the boundary walk samples.
+void
+denseBox(const itk::Image<uint8_t, 2> *       fixed,
+         const itk::Transform<double, 2, 2> * transform,
+         bool                                 boundaryOnly,
+         std::vector<double> &                low,
+         std::vector<double> &                high)
+{
+  low.assign(2, std::numeric_limits<double>::max());
+  high.assign(2, std::numeric_limits<double>::lowest());
+  const auto size = fixed->GetLargestPossibleRegion().GetSize();
+  for (itk::IndexValueType y = 0; y < static_cast<itk::IndexValueType>(size[1]); ++y)
+  {
+    for (itk::IndexValueType x = 0; x < static_cast<itk::IndexValueType>(size[0]); ++x)
+    {
+      if (boundaryOnly && x > 0 && y > 0 && x + 1 < static_cast<itk::IndexValueType>(size[0]) &&
+          y + 1 < static_cast<itk::IndexValueType>(size[1]))
+      {
+        continue;
+      }
+      itk::Point<double, 2> point;
+      fixed->TransformIndexToPhysicalPoint(itk::Index<2>{ { x, y } }, point);
+      const auto mapped = transform->TransformPoint(point);
+      for (unsigned int d = 0; d < 2; ++d)
+      {
+        low[d] = std::min(low[d], mapped[d]);
+        high[d] = std::max(high[d], mapped[d]);
+      }
+    }
+  }
+}
+
+// The reported corners hold every mapped pixel of the grid, and stay within `slack` of them.
+void
+checkHoldsEveryPixel(const itk::Image<uint8_t, 2> *       fixed,
+                     const itk::Transform<double, 2, 2> * transform,
+                     double                               slack,
+                     const std::string &                  label)
+{
+  using TransformType = itk::Transform<double, 2, 2>;
+  auto                                       moving = makeImage<2>({ 512, 512 }, { 1.0, 1.0 }, { -128.0, -128.0 });
+  ResampleBoundingBoxComputer<TransformType> computer;
+  ResampleBoundingBoxResult                  result;
+  computer.Compute(fixed, moving, transform, 1, result);
+  checkTrue(result.usedStageBound, label + ": bounded through the stages");
+
+  std::vector<double> low;
+  std::vector<double> high;
+  denseBox(fixed, transform, false, low, high);
+  for (unsigned int d = 0; d < 2; ++d)
+  {
+    checkTrue(result.cornersMin[d] <= low[d] + 1e-9 && result.cornersMax[d] >= high[d] - 1e-9,
+              label + ": the corners hold every mapped pixel");
+    checkTrue(result.cornersMin[d] >= low[d] - slack && result.cornersMax[d] <= high[d] + slack,
+              label + ": the corners stay close to the mapped pixels");
+  }
+}
+
+double
+waveCoefficient(unsigned int c, unsigned int ix, unsigned int iy)
+{
+  const double value = c == 0 ? 6.0 * std::sin(ix * 1.1 + iy * 0.7) + 2.0 * std::cos(iy * 0.5)
+                              : -5.0 * std::cos(ix * 0.9 - iy * 0.6) + 3.0 * std::sin(ix * 0.4);
+  return std::round(value * 1e6) / 1e6;
+}
+
+// The regions the Python and TypeScript ports in fideus-labs/ngff-zarr report for the same B-spline and blocks
+// (its py/test/test_lattice_bound.py and ts/test/resample_bounding_box_test.ts): one algorithm, three
+// implementations. The TypeScript and Python tests of this package assert them through the bindings.
+void
+testBSplineMatchesTheOtherPorts()
+{
+  using TransformType = itk::Transform<double, 2, 2>;
+  const auto bspline = makeBSpline({ 7, 6 }, -16.0, 16.0, waveCoefficient);
+  auto       moving = makeImage<2>({ 128, 128 }, { 1.0, 1.0 }, { -32.0, -32.0 });
+
+  struct Case
+  {
+    std::array<double, 2>             origin; // x, y
+    std::array<itk::SizeValueType, 2> size;
+    std::vector<long>                 start;
+    std::vector<long>                 paddedSize;
+  };
+  const Case cases[] = { { { 0.0, 0.0 }, { 32, 32 }, { 30, 28 }, { 34, 38 } },
+                         { { 24.0, 20.0 }, { 40, 24 }, { 50, 50 }, { 52, 33 } },
+                         { { 8.0, 40.0 }, { 48, 16 }, { 31, 67 }, { 66, 30 } } };
+  for (const auto & c : cases)
+  {
+    auto                                       fixed = makeImage<2>(c.size, { 1.0, 1.0 }, c.origin);
+    ResampleBoundingBoxComputer<TransformType> computer;
+    ResampleBoundingBoxResult                  result;
+    computer.Compute(fixed, moving, bspline.GetPointer(), 1, result);
+    checkTrue(result.usedStageBound && !result.usedLinearCornerPath, "a B-spline is bounded through its stages");
+    checkIntVec(result.paddedStartIndex, c.start, "B-spline paddedStartIndex matches the other ports");
+    checkIntVec(result.paddedSize, c.paddedSize, "B-spline paddedSize matches the other ports");
+  }
+}
+
+// One control point displaced, its support strictly inside the fixed grid: every boundary pixel maps to itself,
+// so the boundary walk reports the grid unmoved, and the pixels at the bump read outside that region.
+void
+testBSplineBumpInsideTheGrid()
+{
+  const auto bspline = makeBSpline({ 24, 24 }, -16.0, 4.0, [](unsigned int c, unsigned int ix, unsigned int iy) {
+    return (c == 0 && ix == 17 && iy == 12) ? 60.0 : 0.0;
+  });
+  auto       fixed = makeImage<2>({ 64, 64 }, { 1.0, 1.0 }, { 0.0, 0.0 });
+
+  std::vector<double> low;
+  std::vector<double> high;
+  denseBox(fixed, bspline.GetPointer(), true, low, high);
+  checkDoubleVec(high, { 63.0, 63.0 }, 1e-9, "the boundary pixels do not see the bump");
+  denseBox(fixed, bspline.GetPointer(), false, low, high);
+  checkTrue(high[0] > 65.0, "pixels at the bump land past the grid");
+  checkHoldsEveryPixel(fixed, bspline.GetPointer(), 4.0, "bump inside the grid");
+}
+
+// A grid that reaches past the B-spline's valid region, where ITK leaves points unmoved.
+void
+testBSplineGridPastTheDomain()
+{
+  const auto bspline = makeBSpline({ 7, 6 }, -16.0, 16.0, waveCoefficient);
+  auto       fixed = makeImage<2>({ 96, 40 }, { 1.0, 1.0 }, { -40.0, 10.0 });
+  checkHoldsEveryPixel(fixed, bspline.GetPointer(), 12.0, "grid past the B-spline domain");
+}
+
+// A rotation applied before the B-spline (the last transform added is applied first), and one after it.
+void
+testLinearStagesAroundABSpline()
+{
+  const auto            bspline = makeBSpline({ 12, 12 }, -32.0, 12.0, waveCoefficient);
+  auto                  rotation = itk::Euler2DTransform<double>::New();
+  itk::Point<double, 2> center;
+  center[0] = 30.0;
+  center[1] = 30.0;
+  rotation->SetCenter(center);
+  rotation->SetAngle(0.3);
+  auto fixed = makeImage<2>({ 40, 32 }, { 1.0, 1.0 }, { 12.0, 14.0 });
+
+  auto rotationFirst = itk::CompositeTransform<double, 2>::New();
+  rotationFirst->AddTransform(bspline);
+  rotationFirst->AddTransform(rotation);
+  checkHoldsEveryPixel(fixed, rotationFirst.GetPointer(), 3.0, "rotation then B-spline");
+
+  auto rotationLast = itk::CompositeTransform<double, 2>::New();
+  rotationLast->AddTransform(rotation);
+  rotationLast->AddTransform(bspline);
+  checkHoldsEveryPixel(fixed, rotationLast.GetPointer(), 6.0, "B-spline then rotation");
+
+  // A linear stage that flattens the grid onto a line leaves no lattice step to derive.
+  auto                                        flatten = itk::AffineTransform<double, 2>::New();
+  itk::AffineTransform<double, 2>::MatrixType matrix;
+  matrix.SetIdentity();
+  matrix[1][1] = 0.0;
+  flatten->SetMatrix(matrix);
+  auto flattenFirst = itk::CompositeTransform<double, 2>::New();
+  flattenFirst->AddTransform(bspline);
+  flattenFirst->AddTransform(flatten);
+  checkHoldsEveryPixel(fixed, flattenFirst.GetPointer(), 20.0, "singular stage then B-spline");
+}
+
+// A displacement field sampled on the fixed grid itself: the landing points of its samples are the answer.
+void
+testDisplacementFieldOnTheFixedGrid()
+{
+  using FieldTransformType = itk::DisplacementFieldTransform<double, 2>;
+  using FieldType = FieldTransformType::DisplacementFieldType;
+  auto                field = FieldType::New();
+  FieldType::SizeType size;
+  size.Fill(48);
+  field->SetRegions(FieldType::RegionType(size));
+  field->Allocate();
+  for (itk::IndexValueType y = 0; y < 48; ++y)
+  {
+    for (itk::IndexValueType x = 0; x < 48; ++x)
+    {
+      FieldType::PixelType vector;
+      vector[0] = 9.0 * std::exp(-((x - 20.0) * (x - 20.0) + (y - 26.0) * (y - 26.0)) / 30.0);
+      vector[1] = -4.0 * std::sin(x * 0.3) * std::cos(y * 0.2);
+      field->SetPixel(itk::Index<2>{ { x, y } }, vector);
+    }
+  }
+  auto transform = FieldTransformType::New();
+  transform->SetDisplacementField(field);
+
+  auto inside = makeImage<2>({ 24, 20 }, { 1.0, 1.0 }, { 8.0, 14.0 });
+  checkHoldsEveryPixel(inside, transform.GetPointer(), 1e-9, "displacement field on the fixed grid");
+  auto past = makeImage<2>({ 30, 30 }, { 1.0, 1.0 }, { 30.0, 30.0 });
+  checkHoldsEveryPixel(past, transform.GetPointer(), 5.0, "grid past the displacement field");
+}
+
+
 // ---- Padding is symmetric per side, and the unpadded (tight) corners are padding-independent. ----
 void
 testPaddingSymmetry()
@@ -493,6 +722,11 @@ main()
   test3DTranslation();
   test2DRotation();
   test2DNonlinearBoundary();
+  testBSplineMatchesTheOtherPorts();
+  testBSplineBumpInsideTheGrid();
+  testBSplineGridPastTheDomain();
+  testLinearStagesAroundABSpline();
+  testDisplacementFieldOnTheFixedGrid();
   testPaddingSymmetry();
   testDegenerateAxis();
   testInstanceReuse();

@@ -26,6 +26,7 @@ find_package(ITK REQUIRED
    ITKImageGrid
    ITKImageFunction
    ITKTransform
+   ITKDisplacementField
    GenericLabelInterpolator
    ${io_components}
  )

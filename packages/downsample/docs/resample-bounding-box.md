@@ -61,7 +61,9 @@ For a fixed image of dimension *N*:
    - **Linear (fast path).** Sample only the `2^N` grid *corners* (4 in 2D, 8 in 3D, …). A linear map sends the
      fixed rectangle to a convex region, so its axis-aligned bound is already attained at the transformed corners —
      the corners give the exact same box as the full boundary would, at `2^N` transforms independent of image size.
-   - **Nonlinear.** Enumerate every *boundary* pixel of the fixed grid — every pixel with at least one index
+   - **Nonlinear, made of linear, cubic B-spline and displacement-field stages.** No fixed-grid samples are
+     selected: the grid's box is carried through the stages, see [Stage bound](#stage-bound) below.
+   - **Any other nonlinear transform.** Enumerate every *boundary* pixel of the fixed grid — every pixel with at least one index
      component equal to `0` or `size_d - 1` (all faces and edges, not merely the corners). Interior pixels are
      skipped efficiently (the fastest axis is fast-forwarded to its last column), so the cost is proportional to the
      number of boundary pixels, not the total pixel count.
@@ -82,13 +84,39 @@ rectangle is convex, so its axis-aligned bound is already achieved at the `2^N` 
 detects this via `itk::Transform::IsLinear()` and samples **only the corners** — a `2^N`-point computation
 independent of image size, and provably identical to what a full-boundary walk would return.
 
-Enumerating the entire boundary is required only for **nonlinear** transforms (e.g. B-spline, displacement field),
-where an interior edge pixel can map *outside* the hull of the transformed corners; sampling only the corners would
-then *under-bound* the region and the later resample would read outside the fetched block. The pipeline therefore
-walks the full boundary whenever the transform is not linear. (The C++ unit test covers both paths: it asserts the
+Enumerating the entire boundary is kept for **nonlinear** transforms the stage bound does not cover (a
+thin-plate spline, a custom transform), where an interior edge pixel can map *outside* the hull
+of the transformed corners; sampling only the corners would then *under-bound* the region and the later resample
+would read outside the fetched block. The walk itself bounds the grid only when the transform's extremes lie on
+the grid's faces. (The C++ unit test covers both paths: it asserts the
 linear cases sample exactly `2^N` corners yet reproduce the same region a boundary walk gives, and includes a
 nonlinear "bulge" transform whose right-edge midpoint maps beyond the transformed corners — confirming the full
 boundary is walked, and matters, precisely when the transform is nonlinear.)
+
+### Stage bound
+
+The boundary of the fixed grid does not bound a B-spline or a displacement field: a displacement that peaks
+strictly inside the grid moves interior pixels past everything the faces reach, and the later resample reads
+outside the fetched block. For these transforms the pipeline carries the grid's physical box through the
+transform one stage at a time, in the order ITK applies them, with a rule per stage that holds for every point of
+the box:
+
+- **Linear stage.** Composed with the linear stages around it, and applied exactly to the points a later stage
+  samples, so a rotation ahead of a B-spline does not widen the box.
+- **Cubic B-spline stage.** The transform is sampled on a lattice over the box, and the lattice's box is widened
+  by the interpolation error between lattice points, `s^2 / 8` times a bound on the second derivative read off
+  the second differences of the control points. The result is intersected with the box plus the signed range of
+  the control points whose support meets it. The lattice step is half a control cell at most and a voxel at
+  least, shortened in between until the margin fits in a voxel; a stage maps at most 2^14 points. Where the box
+  leaves the B-spline's valid region, ITK displaces nothing, and the box plus the signed range with zero in it is
+  taken alone.
+- **Displacement-field stage.** The box of the landing points of the samples under the box, intersected with the
+  box plus the signed range of those samples; half a sample wider where the box reaches past the field.
+
+Each rule holds because a point moves by a convex combination of the control points or the samples around it.
+The `corners` output is then this box, and the index region is the box of its corners in the moving image.
+[ngff-zarr](https://github.com/fideus-labs/ngff-zarr) implements the same rules in Python and TypeScript, and the
+three test suites assert the same regions for the same B-spline.
 
 ### Edge cases
 
