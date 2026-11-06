@@ -38,7 +38,7 @@ itkWasmTransformInterfaceBSplineTest(int, char *[])
   using AffineTransformType = itk::AffineTransform<ParametersValueType, Dimension>;
   using TransformType = itk::CompositeTransform<ParametersValueType, Dimension>;
 
-  auto bsplineTransform = BSplineTransformType::New();
+  auto                             bsplineTransform = BSplineTransformType::New();
   BSplineTransformType::OriginType meshOrigin;
   meshOrigin.Fill(0.0);
   BSplineTransformType::PhysicalDimensionsType meshPhysicalDimensions;
@@ -60,7 +60,7 @@ itkWasmTransformInterfaceBSplineTest(int, char *[])
   }
   bsplineTransform->SetParametersByValue(coefficients);
 
-  auto affineTransform = AffineTransformType::New();
+  auto                                  affineTransform = AffineTransformType::New();
   AffineTransformType::OutputVectorType translation;
   translation[0] = 3.0;
   translation[1] = -1.5;
@@ -86,9 +86,8 @@ itkWasmTransformInterfaceBSplineTest(int, char *[])
 
   // The mapping itself must survive, not just the parameter count.
   TransformType::InputPointType point;
-  for (const auto & coordinates : { std::array<double, 2>{ 0.0, 0.0 },
-                                    std::array<double, 2>{ 16.0, 48.0 },
-                                    std::array<double, 2>{ 63.0, 63.0 } })
+  for (const auto & coordinates :
+       { std::array<double, 2>{ 0.0, 0.0 }, std::array<double, 2>{ 16.0, 48.0 }, std::array<double, 2>{ 63.0, 63.0 } })
   {
     point[0] = coordinates[0];
     point[1] = coordinates[1];

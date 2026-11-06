@@ -98,12 +98,16 @@ public:
       ->type_name("INPUT_IMAGE");
 
     itk::wasm::OutputTextStream boundingBox;
-    pipeline.add_option("bounding-box", boundingBox, "The padded moving-image region needed to resample the fixed image grid, as a bounding box (JSON)")
+    pipeline
+      .add_option("bounding-box",
+                  boundingBox,
+                  "The padded moving-image region needed to resample the fixed image grid, as a bounding box (JSON)")
       ->required()
       ->type_name("OUTPUT_JSON");
 
     int padding = 1;
-    pipeline.add_option("-p,--padding", padding, "Pixels of padding added per side (default 1 for linear interpolation)");
+    pipeline.add_option(
+      "-p,--padding", padding, "Pixels of padding added per side (default 1 for linear interpolation)");
 
     ITK_WASM_PARSE(pipeline);
 
@@ -129,9 +133,8 @@ public:
     const auto  writeError = glz::write_json(output, serialized);
     if (writeError)
     {
-      CLI::Error err("Runtime error",
-                     "Failed to serialize the bounding box JSON: " + glz::format_error(writeError, serialized),
-                     1);
+      CLI::Error err(
+        "Runtime error", "Failed to serialize the bounding box JSON: " + glz::format_error(writeError, serialized), 1);
       return pipeline.exit(err);
     }
 
@@ -184,8 +187,7 @@ main(int argc, char * argv[])
       return PipelineFunctor<4U>()(pipeline);
     default:
     {
-      CLI::Error err(
-        "Runtime error", "Unsupported transform dimension: only dimensions 2, 3, and 4 are supported.", 1);
+      CLI::Error err("Runtime error", "Unsupported transform dimension: only dimensions 2, 3, and 4 are supported.", 1);
       return pipeline.exit(err);
     }
   }

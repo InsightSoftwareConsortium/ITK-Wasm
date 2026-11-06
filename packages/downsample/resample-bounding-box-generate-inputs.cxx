@@ -92,7 +92,9 @@ runTranslation2D(itk::wasm::Pipeline & pipeline)
   itk::wasm::OutputImage<ImageType> movingImage;
   pipeline.add_option("moving", movingImage, "Output moving metadata image")->required()->type_name("OUTPUT_IMAGE");
   itk::wasm::OutputTransform<TransformType> transform;
-  pipeline.add_option("transform", transform, "Output translation transform")->required()->type_name("OUTPUT_TRANSFORM");
+  pipeline.add_option("transform", transform, "Output translation transform")
+    ->required()
+    ->type_name("OUTPUT_TRANSFORM");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -120,7 +122,9 @@ runTranslation3D(itk::wasm::Pipeline & pipeline)
   itk::wasm::OutputImage<ImageType> movingImage;
   pipeline.add_option("moving", movingImage, "Output moving metadata image")->required()->type_name("OUTPUT_IMAGE");
   itk::wasm::OutputTransform<TransformType> transform;
-  pipeline.add_option("transform", transform, "Output translation transform")->required()->type_name("OUTPUT_TRANSFORM");
+  pipeline.add_option("transform", transform, "Output translation transform")
+    ->required()
+    ->type_name("OUTPUT_TRANSFORM");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -149,7 +153,9 @@ runRotation2D(itk::wasm::Pipeline & pipeline)
   itk::wasm::OutputImage<ImageType> movingImage;
   pipeline.add_option("moving", movingImage, "Output moving metadata image")->required()->type_name("OUTPUT_IMAGE");
   itk::wasm::OutputTransform<TransformType> transform;
-  pipeline.add_option("transform", transform, "Output affine rotation transform")->required()->type_name("OUTPUT_TRANSFORM");
+  pipeline.add_option("transform", transform, "Output affine rotation transform")
+    ->required()
+    ->type_name("OUTPUT_TRANSFORM");
 
   ITK_WASM_PARSE(pipeline);
 
@@ -157,7 +163,7 @@ runRotation2D(itk::wasm::Pipeline & pipeline)
   movingImage.Set(makeMetadataImage<2>({ 64, 64 }, { 1.0, 1.0 }, { 0.0, 0.0 }));
 
   // Rotation by (cos 0.8, sin 0.6) about the fixed grid center, then a translation to keep the region positive.
-  auto                       affine = TransformType::New();
+  auto                          affine = TransformType::New();
   TransformType::InputPointType center;
   center[0] = 9.5;
   center[1] = 4.5;
