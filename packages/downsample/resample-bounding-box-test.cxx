@@ -140,8 +140,8 @@ itk::AffineTransform<double, 2>::Pointer
 rotationAffine()
 {
   using AffineType = itk::AffineTransform<double, 2>;
-  auto                        affine = AffineType::New();
-  AffineType::InputPointType  center;
+  auto                       affine = AffineType::New();
+  AffineType::InputPointType center;
   center[0] = 9.5;
   center[1] = 4.5;
   affine->SetCenter(center);
@@ -238,7 +238,7 @@ test2DTranslation()
   auto fixed = makeImage<2>({ 16, 16 }, { 2.0, 2.0 }, { 10.0, 20.0 });
   auto moving = makeImage<2>({ 64, 64 }, { 1.0, 1.0 }, { 0.0, 0.0 });
 
-  auto                            translation = itk::TranslationTransform<double, 2>::New();
+  auto                                                   translation = itk::TranslationTransform<double, 2>::New();
   itk::TranslationTransform<double, 2>::OutputVectorType offset;
   offset[0] = 10.0;
   offset[1] = 5.0;
@@ -269,7 +269,7 @@ test3DTranslation()
   auto fixed = makeImage<3>({ 8, 8, 8 }, { 2.0, 2.0, 2.0 }, { 10.0, 20.0, 30.0 });
   auto moving = makeImage<3>({ 64, 64, 64 }, { 1.0, 1.0, 1.0 }, { 0.0, 0.0, 0.0 });
 
-  auto                            translation = itk::TranslationTransform<double, 3>::New();
+  auto                                                   translation = itk::TranslationTransform<double, 3>::New();
   itk::TranslationTransform<double, 3>::OutputVectorType offset;
   offset[0] = 10.0;
   offset[1] = 5.0;
@@ -376,9 +376,9 @@ void
 testPaddingSymmetry()
 {
   using TransformType = itk::Transform<double, 2, 2>;
-  auto fixed = makeImage<2>({ 16, 16 }, { 2.0, 2.0 }, { 10.0, 20.0 });
-  auto moving = makeImage<2>({ 64, 64 }, { 1.0, 1.0 }, { 0.0, 0.0 });
-  auto                            translation = itk::TranslationTransform<double, 2>::New();
+  auto                                                   fixed = makeImage<2>({ 16, 16 }, { 2.0, 2.0 }, { 10.0, 20.0 });
+  auto                                                   moving = makeImage<2>({ 64, 64 }, { 1.0, 1.0 }, { 0.0, 0.0 });
+  auto                                                   translation = itk::TranslationTransform<double, 2>::New();
   itk::TranslationTransform<double, 2>::OutputVectorType offset;
   offset[0] = 10.0;
   offset[1] = 5.0;
@@ -402,9 +402,13 @@ testPaddingSymmetry()
                 "padding size symmetry axis " + std::to_string(d) + " padding " + std::to_string(padding));
     }
     // The tight corners never move with padding.
-    checkDoubleVec(padded.cornersMin, base.cornersMin, 1e-12,
+    checkDoubleVec(padded.cornersMin,
+                   base.cornersMin,
+                   1e-12,
                    "corners.min padding-independent (padding " + std::to_string(padding) + ")");
-    checkDoubleVec(padded.cornersMax, base.cornersMax, 1e-12,
+    checkDoubleVec(padded.cornersMax,
+                   base.cornersMax,
+                   1e-12,
                    "corners.max padding-independent (padding " + std::to_string(padding) + ")");
   }
 }
@@ -416,7 +420,7 @@ testDegenerateAxis()
   using TransformType = itk::Transform<double, 2, 2>;
   auto fixed = makeImage<2>({ 16, 0 }, { 2.0, 2.0 }, { 10.0, 20.0 }); // zero-size second axis
   auto moving = makeImage<2>({ 64, 64 }, { 1.0, 1.0 }, { 0.0, 0.0 });
-  auto                            translation = itk::TranslationTransform<double, 2>::New();
+  auto translation = itk::TranslationTransform<double, 2>::New();
   itk::TranslationTransform<double, 2>::OutputVectorType offset;
   offset[0] = 10.0;
   offset[1] = 5.0;
