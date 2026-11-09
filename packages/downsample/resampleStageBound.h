@@ -40,7 +40,9 @@
 #include "itkBSplineTransform.h"
 #include "itkCompositeTransform.h"
 #include "itkDisplacementFieldTransform.h"
+#include "itkImageRegion.h"
 #include "itkIndex.h"
+#include "itkIndexRange.h"
 #include "itkMatrix.h"
 #include "itkPoint.h"
 #include "itkTransform.h"
@@ -95,36 +97,17 @@ ForEachCorner(const Box<VDimension> & box, TVisitor && visit)
   }
 }
 
-// Visit every index from first to last inclusive, the first axis fastest.
-template <unsigned int VDimension, typename TVisitor>
-void
-ForEachIndex(const itk::Index<VDimension> & first, const itk::Index<VDimension> & last, TVisitor && visit)
+// The indices from first to last inclusive.
+template <unsigned int VDimension>
+itk::ImageRegionIndexRange<VDimension>
+Indices(const itk::Index<VDimension> & first, const itk::Index<VDimension> & last)
 {
+  itk::Size<VDimension> size;
   for (unsigned int d = 0; d < VDimension; ++d)
   {
-    if (last[d] < first[d])
-    {
-      return;
-    }
+    size[d] = static_cast<itk::SizeValueType>(last[d] - first[d] + 1);
   }
-  itk::Index<VDimension> index = first;
-  while (true)
-  {
-    visit(index);
-    unsigned int d = 0;
-    for (; d < VDimension; ++d)
-    {
-      if (++index[d] <= last[d])
-      {
-        break;
-      }
-      index[d] = first[d];
-    }
-    if (d == VDimension)
-    {
-      return;
-    }
-  }
+  return itk::ImageRegionIndexRange<VDimension>(itk::ImageRegion<VDimension>(first, size));
 }
 
 template <unsigned int VDimension>
@@ -197,11 +180,12 @@ BSplineStage(const itk::BSplineTransform<TScalar, VDimension, 3> * bspline,
   Box<VDimension> range;
   for (unsigned int c = 0; c < VDimension; ++c)
   {
-    ForEachIndex(first, last, [&](const IndexType & at) {
+    for (const IndexType & at : Indices(first, last))
+    {
       const double value = coefficients[c]->GetPixel(at);
       range.low[c] = std::min(range.low[c], value);
       range.high[c] = std::max(range.high[c], value);
-    });
+    }
   }
 
   // The grid index of a block point moves by `derivative` per unit of block coordinate.
@@ -233,7 +217,8 @@ BSplineStage(const itk::BSplineTransform<TScalar, VDimension, 3> * bspline,
   {
     double       bound[VDimension][VDimension] = {};
     const auto * image = coefficients[c].GetPointer();
-    ForEachIndex(first, last, [&](const IndexType & at) {
+    for (const IndexType & at : Indices(first, last))
+    {
       for (unsigned int i = 0; i < VDimension; ++i)
       {
         for (unsigned int m = i; m < VDimension; ++m)
@@ -254,7 +239,7 @@ BSplineStage(const itk::BSplineTransform<TScalar, VDimension, 3> * bspline,
           bound[i][m] = bound[m][i] = std::max(bound[i][m], std::abs(difference));
         }
       }
-    });
+    }
     for (unsigned int j = 0; j < VDimension; ++j)
     {
       factor[c][j] = 0.0;
@@ -315,7 +300,8 @@ BSplineStage(const itk::BSplineTransform<TScalar, VDimension, 3> * bspline,
   }
 
   Box<VDimension> lattice;
-  ForEachIndex(lowest, count, [&](const IndexType & at) {
+  for (const IndexType & at : Indices(lowest, count))
+  {
     VectorType<VDimension> blockPoint;
     for (unsigned int d = 0; d < VDimension; ++d)
     {
@@ -328,7 +314,7 @@ BSplineStage(const itk::BSplineTransform<TScalar, VDimension, 3> * bspline,
       point[d] = mapped[d];
     }
     lattice.Include(bspline->TransformPoint(point));
-  });
+  }
 
   // Interpolation error between lattice points: s^2/8 times the bound, per block axis.
   const Box<VDimension> source = block;
@@ -377,7 +363,8 @@ FieldStage(const itk::DisplacementFieldTransform<TScalar, VDimension> * transfor
 
   Box<VDimension> landing;
   Box<VDimension> range;
-  ForEachIndex(first, last, [&](const IndexType & at) {
+  for (const IndexType & at : Indices(first, last))
+  {
     const auto sample = field->GetPixel(at);
     const auto position = field->template TransformIndexToPhysicalPoint<double>(at);
     range.Include(sample);
@@ -387,7 +374,7 @@ FieldStage(const itk::DisplacementFieldTransform<TScalar, VDimension> * transfor
       landed[d] = position[d] + sample[d];
     }
     landing.Include(landed);
-  });
+  }
 
   for (unsigned int c = 0; c < VDimension; ++c)
   {

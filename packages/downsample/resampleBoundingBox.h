@@ -147,20 +147,30 @@ public:
     const bool linear = transform->IsLinear();
     result.usedLinearCornerPath = linear;
 
+    // The fixed grid's corners in physical space: bit d of the mask selects the low (0) or high (size_d - 1)
+    // index along axis d. When an axis has size 1 the low and high indices coincide, harmlessly duplicating
+    // corners.
+    std::vector<PointType> corners;
+    corners.reserve(std::size_t(1) << Dimension);
+    for (std::size_t mask = 0; mask < (std::size_t(1) << Dimension); ++mask)
+    {
+      IndexType index;
+      for (unsigned int d = 0; d < Dimension; ++d)
+      {
+        const itk::IndexValueType last = startIndex[d] + static_cast<itk::IndexValueType>(size[d]) - 1;
+        index[d] = (mask & (std::size_t(1) << d)) ? last : startIndex[d];
+      }
+      PointType physicalPoint;
+      fixedImage->TransformIndexToPhysicalPoint(index, physicalPoint);
+      corners.push_back(physicalPoint);
+    }
+
     // The fixed grid's box in physical space and the extent of one voxel along the physical axes.
     resampleStageBound::Box<Dimension>        stageBox;
     resampleStageBound::VectorType<Dimension> voxel;
-    for (std::size_t mask = 0; mask < (std::size_t(1) << Dimension); ++mask)
+    for (const PointType & corner : corners)
     {
-      ContinuousIndexType corner;
-      for (unsigned int d = 0; d < Dimension; ++d)
-      {
-        corner[d] = static_cast<double>(startIndex[d]) +
-                    ((mask & (std::size_t(1) << d)) ? static_cast<double>(size[d]) - 1.0 : 0.0);
-      }
-      PointType physicalPoint;
-      fixedImage->TransformContinuousIndexToPhysicalPoint(corner, physicalPoint);
-      stageBox.Include(physicalPoint);
+      stageBox.Include(corner);
     }
     for (unsigned int i = 0; i < Dimension; ++i)
     {
@@ -176,22 +186,7 @@ public:
 
     if (linear)
     {
-      // Enumerate the 2^Dimension corners with a bitmask: bit d selects the low (0) or high (size_d - 1) index
-      // component. When an axis has size 1 the low and high indices coincide, harmlessly duplicating corners.
-      const std::size_t cornerCount = std::size_t(1) << Dimension;
-      m_BoundaryPoints.reserve(cornerCount);
-      for (std::size_t mask = 0; mask < cornerCount; ++mask)
-      {
-        IndexType index;
-        for (unsigned int d = 0; d < Dimension; ++d)
-        {
-          const itk::IndexValueType last = startIndex[d] + static_cast<itk::IndexValueType>(size[d]) - 1;
-          index[d] = (mask & (std::size_t(1) << d)) ? last : startIndex[d];
-        }
-        PointType physicalPoint;
-        fixedImage->TransformIndexToPhysicalPoint(index, physicalPoint);
-        m_BoundaryPoints.push_back(physicalPoint);
-      }
+      m_BoundaryPoints = corners;
     }
     else if (!result.usedStageBound)
     {
