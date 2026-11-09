@@ -1,2 +1,7 @@
 # GitHub syntax highlighting
 pixi.lock linguist-language=YAML linguist-generated=true
+
+# C++ sources checked by the clang-format linter workflow
+*.h   hooks.style=clangformat
+*.hxx hooks.style=clangformat
+*.cxx hooks.style=clangformat

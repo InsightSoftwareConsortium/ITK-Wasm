@@ -23,7 +23,7 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        os: [ubuntu-24.04, windows-2022, macos-14]
+        os: [ubuntu-24.04, windows-2022, macos-15]
         python-minor-version: [11, 12]
         package: [compress-stringify, compare-images, dicom, mesh-io, image-io, transform-io, downsample]
 
@@ -31,10 +31,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7.0.1
 
-      - uses: prefix-dev/setup-pixi@v0.10.2
+      - uses: prefix-dev/setup-pixi@v0.11.2
 
       - name: Set up Python ${{ env.python-version }}
-        uses: actions/setup-python@v7.0.0
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: ${{ env.python-version }}
 
