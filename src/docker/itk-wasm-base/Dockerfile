@@ -39,6 +39,9 @@ RUN curl -L https://api.github.com/repos/facebook/zstd/tarball/${zstd_GIT_TAG} |
 ARG USE_LOCAL_ITK=0
 COPY ITKLocalCopy /ITKLocalCopy
 
+# ITK source patches applied on top of $ITK_WASM_ITK_BRANCH.
+COPY patches /itk-wasm-patches
+
 # Either use local ITK source or clone from git repository
 RUN . /itk_wasm_env_vars.sh && \
   if [ "$USE_LOCAL_ITK" = "1" ] && [ -d /ITKLocalCopy ] && [ "$(ls -A /ITKLocalCopy 2>/dev/null | grep -v .gitkeep)" ]; then \
@@ -51,6 +54,17 @@ RUN . /itk_wasm_env_vars.sh && \
   fi && \
   sed -i -e '/^option(OPJ_USE_THREAD/c\option(OPJ_USE_THREAD "use threads" OFF)' \
     /ITK/Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/CMakeLists.txt
+
+# Apply ITK source patches (idempotent, so a local ITK that already carries a
+# fix is left untouched). Remove a patch here once it lands in $ITK_WASM_ITK_BRANCH.
+RUN cd /ITK && for patch in /itk-wasm-patches/*.patch; do \
+    [ -e "$patch" ] || continue; \
+    if git apply --reverse --check "$patch" 2>/dev/null; then \
+      echo "Skipping already-applied patch: $patch"; \
+    else \
+      echo "Applying patch: $patch" && git apply --verbose "$patch"; \
+    fi; \
+  done
 
 # Modify CMake variable to use patched DCMTK library
 # GIT_TAG refers to DCMTK branch: 20240311_DCMTK_PATCHES_FOR_ITK-Wasm-1
