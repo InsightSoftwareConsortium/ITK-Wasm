@@ -146,3 +146,40 @@ for (const c of cases) {
     }
   })
 }
+
+test('resampleBoundingBoxNode bounds a B-spline through its stages', async t => {
+  // A cubic B-spline whose displacement peaks inside the grid: the region holds what the boundary misses.
+  // resample-bounding-box-test.cxx and the Python suite assert the same regions for the same blocks.
+  const gridSize = [7, 6]
+  const round = value => Math.round(value * 1e6) / 1e6
+  const x = []
+  const y = []
+  // ITK lays the parameters out one component after the other, x fastest.
+  for (let iy = 0; iy < gridSize[1]; iy++) {
+    for (let ix = 0; ix < gridSize[0]; ix++) {
+      x.push(round(6.0 * Math.sin(ix * 1.1 + iy * 0.7) + 2.0 * Math.cos(iy * 0.5)))
+      y.push(round(-5.0 * Math.cos(ix * 0.9 - iy * 0.6) + 3.0 * Math.sin(ix * 0.4)))
+    }
+  }
+  const transformType = new TransformType(TransformParameterizations.BSpline, FloatTypes.Float64, 2, 2)
+  const transform = new Transform(transformType)
+  transform.name = 'BSplineTransform'
+  // Grid size, origin, spacing, direction.
+  transform.fixedParameters = Float64Array.from([...gridSize, -16, -16, 16, 16, 1, 0, 0, 1])
+  transform.numberOfFixedParameters = 10
+  transform.parameters = Float64Array.from([...x, ...y])
+  transform.numberOfParameters = transform.parameters.length
+
+  const moving = () => metadataOnlyImage([128, 128], [1, 1], [-32, -32])
+  const blocks = [
+    { origin: [0, 0], size: [32, 32], start: [30, 28], paddedSize: [34, 38] },
+    { origin: [24, 20], size: [40, 24], start: [50, 50], paddedSize: [52, 33] },
+    { origin: [8, 40], size: [48, 16], start: [31, 67], paddedSize: [66, 30] }
+  ]
+  for (const block of blocks) {
+    const fixed = metadataOnlyImage(block.size, [1, 1], block.origin)
+    const { boundingBox } = await resampleBoundingBoxNode([transform], fixed, moving())
+    t.deepEqual(boundingBox.paddedStartIndex, block.start)
+    t.deepEqual(boundingBox.paddedSize, block.paddedSize)
+  }
+})
